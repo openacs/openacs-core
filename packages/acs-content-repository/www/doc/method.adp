@@ -28,14 +28,14 @@
           </table></blockquote>
         </if>
         <else>
-          <i>Not yet documented</i>
+          <em>Not yet documented</em>
         </else></td>
       </tr>
       <tr><th align="left" colspan="2">Declaration:</th></tr>
       <tr align="left"><td colspan="2" align="left">
-<pre><tt>
+<pre><kbd>
 @code@
-</tt></pre>
+</kbd></pre>
       </td></tr>
       <if @info.see@ not nil>
         <tr><th align="left" valign="top">See Also:</th><td>@info.see@</td></tr>

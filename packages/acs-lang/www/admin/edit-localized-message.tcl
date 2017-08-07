@@ -14,7 +14,7 @@ ad_page_contract {
     message_key
     show:optional
     {usage_p:boolean "f"}
-    {return_url {}}
+    {return_url:localurl {}}
 }
 
 if { [string length $locale] == 2 } {
@@ -191,3 +191,9 @@ ad_form -extend -name message_form -form {
     ad_returnredirect $return_url
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

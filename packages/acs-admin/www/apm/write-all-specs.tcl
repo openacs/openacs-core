@@ -8,9 +8,10 @@ ad_page_contract {
 
 set title "Generate Package Specifications"
 set context [list [list "." "Package Manager"] $title]
-set template [parameter::get -package_id [ad_conn subsite_id] -parameter StreamingHead] 
-ad_return_top_of_page [ad_parse_template -params [list context title] $template]
 
+ad_return_top_of_page [ad_parse_template \
+                           -params [list context title] \
+                           [template::streaming_template]]
 ns_write {
     Regenerating all package specifications for locally maintained packages.
     <ul>
@@ -41,3 +42,9 @@ db_foreach apm_get_all_packages {
 ns_write [subst {</ul>
 <a href="./">Return to the Package Manager</a>
 }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

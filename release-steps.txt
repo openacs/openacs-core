@@ -4,16 +4,19 @@ Alpha Release
 - branch core packages
     cvs tag -b oacs-5-8 
 
+- get new updated version info latest branch
+    cvs update -dP
+
 - bump version numbers in oacs-5-8 branch to e.g. 5.8.0a1
 
 - bump version numbers in HEAD to 5.9.0d1
 
 - update build-repository "head_channel" apm_build_repository 
-  (packages/acs-admin/tcl/apm-admin-procs/tcl/) to 5-9
+  (packages/acs-admin/tcl/apm-admin-procs.tcl/) to 5-9
 
-- tag core-packages in oacs-5-8 branch
-    cvs tag -F openacs-5-8
-    cvs -q  tag -F openacs-5-8-compat 
+- tag core-packages in oacs-5-9 branch
+    cvs tag -F openacs-5-9
+    cvs -q  tag -F openacs-5-9-compat 
 
 - optionally branch and tag application packages (non-core)
      xowiki xotcl-core xotcl-request-monitor categories acs-events 
@@ -29,47 +32,105 @@ Alpha Release
    * checkout cvs -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-8 acs-core
    * sudo chown -R nsadmin openacs-4; sudo chmod -R g+w openacs-4
    * mv openacs-4 openacs-5.8.0a0
-   * tar zcvf openacs-5.8.0a0.tar.gz --exclude CVS openacs-5.8.0a0
+   * tar zcvf openacs-5.8.0a0.tar.gz  --disable-copyfile --exclude CVS openacs-5.8.0a0
 
 
 Beta Release
 
  - all in oacs-5-8 branch:
 
- - bump version numbers to e.g. 5.8.0b1
+ - produce change summary
+   5.8.0 Brian.Fenton@quest.ie helped
 
- - regenerate xml documentation
+ - bump version numbers to e.g. 5.8.0b1
 
  - produce raw change summary of core packages
 
-     cvs -q log -d "2011/08/02<2014/01/01" > /tmp/changes-core
-     ~/scripts/log2changelog <  /tmp/changes-core > ~/changes-5.8 
+     cvs -qz6 log -d "2014/10/25<2015/12/31" > /tmp/changes-core
+     cvs -1z6 log -d "2013/08/30<2014/11/01" > /tmp/changes-core
+    
+     ~/scripts/log2changelog <  /tmp/changes-core > ~/oacs-changes-5.9.0 
 
- - produce change summary
-   5.8.0 Brian.Fenton@quest.ie helped
+     cvs -qz9 log -d "2015/12/01<2017/08/07" > /tmp/changes-core
+     ~/scripts/log2changelog <  /tmp/changes-core > ~/ChangeLog-5.9.1
+
+
+ - produce diffstats
+     cvs -q diff -u -D "2013-08-30"  |diffstat
+     cvs -q diff -u -D "2014-10-25"  |diffstat
+     cvs -qz9 diff -u -D "2015/12/01" |diffstat
+     
+     3340 files changed, 106491 insertions(+), 85942 deletions(-)
+
+ - update release notes
+    packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
+
+ - regenerate xml documentation
+    cd openacs-4/packages/acs-core-docs/www/xml
+    make
+    # unsolved changelog-latest
+    cd openacs-4
+    /usr/local/ns/bin/tclsh /Users/neumann/scripts/change-html-files.tcl 
+
+    cd openacs-4
+    /usr/local/ns/bin/tclsh ~/scripts/change-html-files.tcl 
 
  - update version number in readme.txt
 
  - retag
-   cvs -q  tag -F openacs-5-8-compat 
+   cvs -qz6 tag -F openacs-5-9-compat
+   cvs -qz6 tag -F openacs-5-9-1b3
+
 
  - produce tar
-   * checkout cvs -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-8 acs-core
-   * sudo chown -R nsadmin openacs-4; sudo chmod -R g+w openacs-4
-   * mv openacs-4 openacs-5.8.0b0
-   * tar zcvf openacs-5.8.0b0.tar.gz --exclude CVS openacs-5.8.0b0
+   * cd /usr/local
+   * 10MB: cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 acs-core
+   * 30MB: cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 openacs-4
+   * sudo chown -R nsadmin:nsadmin openacs-4; sudo chmod -R g+w openacs-4
+   * mv openacs-4 openacs-5.9.1b3
+   * tar zcvf openacs-5.9.1b3.tar.gz --disable-copyfile --exclude CVS openacs-5.9.1b3
+
+Software Name OpenACS 5.9.1 Beta 3 core
+summary: OpenACS Core Packages
+Description; oacs-core
+
+Software Name OpenACS 5.9.1 Beta 3 full
+summary: OpenACS Core and Application Packages
+Description The tar file contains all packages from the oacs-5-9 branch
+
 
 
 Final Release
    
  - bump version numbers to e.g. 5.8.0
 
- - testing (automated testing, install xowiki + forums from repository, 
+    - make sure, no requires or provides with *d version numbers
+      (except ajaxhelper and oacs-dav)
+    
+      fgrep -r --include=*.info '<provides' .|egrep '[0-9][abd]'
+      fgrep -r --include=*.info '<requires' .|egrep '[0-9][abd]'
+      
+    check missed dependencies
+      fgrep -r --include=*.info '<requires' .| fgrep 5.9| fgrep -v 5.9.1
+
+ - testing
+
+      DB=oacs-5-9-1
+      $PGBIN/psql -U nsadmin -d $DB
+   
+      sudo -u postgres $PGBIN/dropdb -U nsadmin $DB
+      sudo -u postgres $PGBIN/createdb -U nsadmin $DB
+
+   (automated testing, install xowiki + forums from repository, 
    create xowiki page, forum entry)
 
- - rerun: cvs tag -F openacs-5-8-compat
+ - regenerate xml documentation (to get right version numbers into documentation)
 
  - update raw ChangeLog
+
+     cvs -qz9 log  > /tmp/changes-all
+     ~/scripts/log2changelog <  /tmp/changes-all > ChangeLog
+
 
  - update Summary
 
@@ -78,15 +139,37 @@ Final Release
 
  - regenerate xml documentation
 
+ - raw changelogs on openacs.org:
+       www/Announce-5.9.*
+       www/changelogs/ChangeLog-5.9.*
+       www/ChangeLog
+
+- rerun: 
+    cvs -qz9 tag -F openacs-5-9-compat
+
  - tag with final:
-   cvs -q  tag -F openacs-5-8-0-final
+   cvs -qz9 tag -F openacs-5-9-1-final
 
  - produce tar
-   * checkout cvs -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-8 acs-core
-   * sudo chown -R nsadmin openacs-4; sudo chmod -R g+w openacs-4
-   * mv openacs-4 openacs-5.8.0
-   * tar zcvf openacs-5.8.0.tar.gz --exclude CVS openacs-5.8.0
+    cd /usr/local
+    version=openacs-5.9.1
+    
+    * 10MB: cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 acs-core
+    * 30MB: cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 openacs-4
+    sudo chown -R nsadmin:nsadmin openacs-4; sudo chmod -R g+w openacs-4
+    sudo mv openacs-4 $version
+    tar zcvf $version.tar.gz --disable-copyfile --exclude CVS $version
 
  - update web site (tar, announce, links on start page)
+
+Software Name: OpenACS 5.9.1 Final core
+summary: OpenACS Core Packages
+Description: The tar file contains the OpenACS Core Packages of the OpenACS 5.9.1 Final release
+
+Software Name: OpenACS 5.9.1 Final full
+summary: OpenACS Core and Application Packages
+Description: The tar file contains all packages from the oacs-5-9 branch of the OpenACS 5.9.1 Final release
+
+ - upadate install-ns and http://openacs.org/xowiki/naviserver-openacs
 
  - merge changes of release branch to HEAD

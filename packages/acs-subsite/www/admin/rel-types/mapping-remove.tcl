@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     { group_rel_type_id:naturalnum "" }
     { group_rel_id:naturalnum "" }
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     rel_pretty_name:onevalue
@@ -35,3 +35,9 @@ set export_vars [export_vars -form {group_rel_type_id return_url}]
 set context [list [list "" "Group types"] [[export_vars -base one {group_type}] "One type"] "Remove relation type"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

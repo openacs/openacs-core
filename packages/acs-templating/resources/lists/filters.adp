@@ -9,14 +9,14 @@
         </td>
       </tr>
       <group column="filter_name">
-        <if @filters.selected_p@ true>
+        <if @filters.selected_p;literal@ true>
           <tr class="list-filter-selected">
         </if>
         <else>
           <tr>
         </else>
           <td class="list-filter">
-            <if @filters.selected_p@ true><strong><span class="list-filter-selected">@filters.label@</span></strong></if>
+            <if @filters.selected_p;literal@ true><strong><span class="list-filter-selected">@filters.label@</span></strong></if>
             <else><a href="@filters.url@" title="@filters.url_html_title@">@filters.label@</a></else>
           </td>
           <td align="right" class="list-filter">

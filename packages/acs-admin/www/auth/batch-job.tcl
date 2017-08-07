@@ -75,7 +75,7 @@ ad_form \
             } elseif { $element_name eq "creation_user" && $batch_job($element_name) ne "" } {
                 set $element_name [acs_community_member_link -user_id $batch_job($element_name)]
             } else {
-                set $element_name [ad_quotehtml $batch_job($element_name)]
+                set $element_name [ns_quotehtml $batch_job($element_name)]
             }               
         }
 
@@ -175,3 +175,9 @@ db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch
     
     set entry_time_pretty [lc_time_fmt $entry_time_ansi "%x %X"]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

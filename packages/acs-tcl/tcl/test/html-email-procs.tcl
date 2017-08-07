@@ -15,3 +15,8 @@ aa_register_case -cats {api smoke} build_mime_message {
 
 
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

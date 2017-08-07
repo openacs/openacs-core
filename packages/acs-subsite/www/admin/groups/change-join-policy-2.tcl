@@ -10,7 +10,7 @@ ad_page_contract {
 } {
     group_id:naturalnum,notnull
     join_policy:notnull
-    {return_url ""}
+    {return_url:localurl ""}
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
 	if { ![group::permission_p -privilege admin $group_id] } {
@@ -37,3 +37,8 @@ if {$return_url eq ""} {
 }
 
 ad_returnredirect $return_url
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

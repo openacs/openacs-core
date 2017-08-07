@@ -11,7 +11,7 @@ ad_page_contract {
 
 } {
     group_rel_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     rel_pretty_name:onevalue
@@ -19,13 +19,7 @@ ad_page_contract {
     export_vars:onevalue
 }
 
-if { ![db_0or1row select_info {
-    select g.rel_type, g.group_id, acs_object.name(g.group_id) as group_name,
-           t.pretty_name as rel_pretty_name
-      from acs_object_types t, group_rels g
-     where g.group_rel_id = :group_rel_id
-       and t.object_type = g.rel_type
-}] } {
+if { ![db_0or1row select_info {}] } {
     ad_return_error "Relation already removed." "Please back up and reload"
     return
 }
@@ -36,3 +30,9 @@ set export_vars [export_vars -form {group_rel_id return_url}]
 set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list [export_vars -base one {group_id}] "One group"] "Remove relation type"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

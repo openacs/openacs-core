@@ -1,7 +1,7 @@
 ad_page_contract {
 } {
     object_id:naturalnum,notnull
-    return_url
+    return_url:localurl
     page:naturalnum,optional
 }
 
@@ -55,3 +55,9 @@ db_multirow -extend { add_url } users users_who_dont_have_any_permissions {} {
 set img_path "[ad_conn package_url]images"
 
 set form_export_vars [export_vars -form {object_id return_url }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

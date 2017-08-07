@@ -37,11 +37,11 @@ template::multirow create group_types group_type group_type_enc type_pretty_name
 # permission on 10 groups).  I think the group-types/groups-display page 
 # should tell you total number of groups, and tell you "these are the ones
 # you have read privilege on", so you don't get confused.
+
 db_foreach select_group_types {
-    select /*+ ORDERED */ 
-           t.object_type, t.pretty_name, count(g.group_id) as number_groups
-      from groups g, acs_objects o, acs_object_types t,
-           application_group_element_map app_group
+     select t.object_type, t.pretty_name, count(g.group_id) as number_groups
+     from   groups g, acs_objects o, acs_object_types t,
+            application_group_element_map app_group
      where o.object_id = g.group_id
        and o.object_type = t.object_type
        and app_group.package_id = :package_id
@@ -51,3 +51,9 @@ db_foreach select_group_types {
 } {
     template::multirow append group_types $object_type [ad_urlencode $object_type] $pretty_name $number_groups
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -34,7 +34,7 @@ aa_register_case -cats {api smoke} -procs {oacs_util::csv_foreach} csv_foreach {
 				       {Charlie Parker - Saxo}\
 				       {Thelonius Monk - Piano}}
     } -teardown_code { 
-	file delete -force $file_loc
+	file delete -force -- $file_loc
     }
 }
 
@@ -69,6 +69,12 @@ aa_register_case -cats {api smoke} -procs {oacs_util::process_objects_csv} proce
                                        {Miles Davis}\
                                        {Charlie Parker}}
     } -teardown_code {
-        file delete -force $file_loc
+        file delete -force -- $file_loc
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

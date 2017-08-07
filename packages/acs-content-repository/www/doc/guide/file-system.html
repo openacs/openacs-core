@@ -6,8 +6,8 @@
   </head>
   <body>
   <h2>Organizing Content Items</h2>
-  <b><a href="/doc">ACS Documentation</a> :
-     <a href="../index.html">Content Repository</a> : Developer Guide</b>
+  <strong><a href="/doc">ACS Documentation</a> :
+     <a href="../index.html">Content Repository</a> : Developer Guide</strong>
 <hr>
 
 <p>The content repository organizes content items in a hierarchical
@@ -16,7 +16,7 @@ repository using the same basic operations as in a file system:</p>
 
 <ul>
   <li>A freshly installed content repository consists of a single "root"
-      folder (analogous to the root directory <tt>/</tt> in UNIX or an
+      folder (analogous to the root directory <kbd>/</kbd> in UNIX or an
       empty partition in Windows or MacOS).
 
   <li>You organize items by creating subfolders under the root.
@@ -29,8 +29,8 @@ repository using the same basic operations as in a file system:</p>
   <li>Each item has a "file name" and an absolute "path" that is
       determined by its location on a particular branch of the
       repository tree.  For example, the path to an item named
-      <tt>widget</tt> in the folder <tt>products</tt> would be
-      <tt>/products/widget</tt>.
+      <kbd>widget</kbd> in the folder <kbd>products</kbd> would be
+      <kbd>/products/widget</kbd>.
 </ul>
 
 <p>The content repository adds an additional twist to a traditional
@@ -54,25 +54,25 @@ that are not necessarily part of a greater whole.</p>
 <p>Consider a simple repository structure with the following
 contents:</p>
 
-<img src="organization.gif" height=360 width=440 border=1>
+<img src="organization.gif" height=360 width=440 border="1">
 
 <p>Note the following:</p>
 
 <ul>
   <li>The root folder of the content repository has a special ID which is
-      returned by the function <tt>content_item.get_root_folder</tt>.
+      returned by the function <kbd>content_item.get_root_folder</kbd>.
 
-  <li>Regular content items such as <tt>index</tt> and <tt>about</tt>
+  <li>Regular content items such as <kbd>index</kbd> and <kbd>about</kbd>
       may be stored directly under the root folder.
 
   <li>The "About Us" page has a photo as a child item.  Note that the
-      path to the photo is <tt>/about/photo</tt>.  Internally, the
-      photo's <tt>parent_id</tt> (in the <tt>cr_items</tt> table) is set to
-      the <tt>item_id</tt> of the "About Us" page.
+      path to the photo is <kbd>/about/photo</kbd>.  Internally, the
+      photo's <kbd>parent_id</kbd> (in the <kbd>cr_items</kbd> table) is set to
+      the <kbd>item_id</kbd> of the "About Us" page.
 
   <li>The "Press" folder contains two items.  Internally, the 
-      <tt>parent_id</tt> of the "Press Index" and "Release One" items
-      are set to the <tt>item_id</tt> of the "Press" folder.
+      <kbd>parent_id</kbd> of the "Press Index" and "Release One" items
+      are set to the <kbd>item_id</kbd> of the "Press" folder.
 </ul>
 
 <p>Note that the same effective organization could have been achieved
@@ -82,7 +82,7 @@ following advantages:</p>
 
 <ul>
   <li>Content management systems can take advantage of the folder structure
-      to implement an intuitive user interface analagous to familiar desktop
+      to implement an intuitive user interface analogous to familiar desktop
       tools (Windows Explorer, MacOS Finder, etc.).
 
   <li>You can use the content repository API to constraint the type of
@@ -108,7 +108,7 @@ following advantages:</p>
     
     <p> We only talk about creating content roots from here on &mdash;
       creating template roots is completely analogous. You create your own
-      content root by calling <tt>content_folder.new</tt> in PL/SQL:
+      content root by calling <kbd>content_folder.new</kbd> in PL/SQL:
     </p>
     <pre>
 declare
@@ -122,22 +122,22 @@ begin
   -- Store v_my_content_root in a safe place
 end;
 / </pre>
-    <p> The important point is that you have to pass in <tt>0</tt> for the
-      <tt>parent_id</tt>. This <tt>parent_id</tt> is special in that it
+    <p> The important point is that you have to pass in <kbd>0</kbd> for the
+      <kbd>parent_id</kbd>. This <kbd>parent_id</kbd> is special in that it
       indicates folders with no parent.</p>
     
     <p> The content repository does not keep track of who created what root
       folders. You have to do that yourself. In the above example, you need
-      to store the value <tt>v_my_content_root</tt> somewhere, for example
+      to store the value <kbd>v_my_content_root</kbd> somewhere, for example
       a table that is specific for your package, otherwise you won't have a
       reliable way of accessing your new content root.
     </p>
     <p> With multiple content roots, there can be many items with
-      <tt>item_path</tt> <tt>'/news/article'</tt> and you need to tell the
+      <kbd>item_path</kbd> <kbd>'/news/article'</kbd> and you need to tell the
       content repository which root you are talking about. For example, to
-      retrieve content through <tt>content_item.get_id</tt>, you pass the
-      id of your content root as the <tt>root_folder_id</tt> parameter to
-      specify the content root under which the <tt>item_path</tt> should be
+      retrieve content through <kbd>content_item.get_id</kbd>, you pass the
+      id of your content root as the <kbd>root_folder_id</kbd> parameter to
+      specify the content root under which the <kbd>item_path</kbd> should be
       resolved.
     </p>
 <hr>

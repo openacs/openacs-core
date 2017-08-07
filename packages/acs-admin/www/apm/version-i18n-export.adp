@@ -7,9 +7,9 @@
 </p>
 
 <p>
-  Catalog files are stored in the directory <b>@catalog_dir@</b>.
+  Catalog files are stored in the directory <strong>@catalog_dir@</strong>.
 </p>
 
 <p>
-  <b>&raquo;</b> <a href="@return_url@">Return</a>
+  <strong>&raquo;</strong> <a href="@return_url@">Return</a>
 </p>

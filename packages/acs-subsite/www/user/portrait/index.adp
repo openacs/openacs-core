@@ -5,12 +5,12 @@
 <switch @return_code@>
 
 <case value="no_error">
-<if @admin_p@ eq 1>
+<if @admin_p;literal@ true>
 <p>#acs-subsite.lt_This_is_the_image_that#:</p>
 </if>
 
 <div style="text-align:center">
-<img @widthheight@ src="@subsite_url@shared/portrait-bits.tcl?@export_vars@" alt="@doc.title@">
+<img @widthheight@ src="@portrait_image_url;noi18n@" alt="@doc.title@">
 </div>
 
 <ul>
@@ -20,7 +20,7 @@
 </li>
 </ul>
 
-<if @admin_p@ eq 1>
+<if @admin_p;literal@ true>
 #acs-subsite.Options#:
 
 <ul>
@@ -46,7 +46,7 @@
 
 <case value="no_portrait">
 <p>
-<if @admin_p@ eq "0">
+<if @admin_p;literal@ false>
 #acs-subsite.lt_This_user_doesnt_have#
 <a href="upload?@export_edit_vars@">#acs-subsite.go_upload_the_users_por#</a>.
 </if>

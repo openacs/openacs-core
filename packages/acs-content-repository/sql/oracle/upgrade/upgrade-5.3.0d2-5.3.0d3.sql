@@ -564,7 +564,7 @@ begin
   -- Drop the attribute
   acs_attribute.drop_attribute(content_type, attribute_name);
 
-  -- Drop the column if neccessary
+  -- Drop the column if necessary
   if drop_column = 't' then
     begin
       execute immediate 'alter table ' || v_table || ' drop column ' ||

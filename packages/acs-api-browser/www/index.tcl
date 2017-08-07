@@ -10,7 +10,7 @@ ad_page_contract {
     @author Lars Pind (lars@pinds.com)
     @cvs-id $Id$
 } {
-    about_package_key:optional
+    about_package_key:token,trim,optional
 } -properties {
     title:onevalue
     context:onevalue
@@ -61,3 +61,9 @@ if  { [info exists about_package_key] } {
     }
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

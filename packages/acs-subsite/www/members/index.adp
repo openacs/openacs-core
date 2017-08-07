@@ -2,7 +2,8 @@
 <property name="context">@context;literal@</property>
 <property name="doc(title)">@page_title;literal@</property>
 
-<if @show_member_list_p@ true>
+<h3>@page_title@</h3>
+<if @show_member_list_p;literal@ true>
   <table cellpadding="3" cellspacing="3">
     <tr>
       <td class="list-filter-pane" valign="top" style="width:200px">
@@ -15,6 +16,5 @@
   </table>
 </if>
 <else>
-  <h4>@title@</h4>
   #acs-subsite.Mem_list_not_allowed#
 </else>

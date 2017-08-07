@@ -1,11 +1,11 @@
 <table bgcolor="#6699CC" cellspacing="0" cellpadding="4" border="0" width="95%">
 <tr bgcolor="#FFFFFF">
-  <td align="left"><b>@form_properties.title@</b></td>
+  <td align="left"><strong>@form_properties.title@</strong></td>
   <td align="right">&nbsp;</td>
 </tr>
 
 <if @elements:rowcount@ le 0>
-  <tr><td colspan="2"><i>No items</i></td></tr>
+  <tr><td colspan="2"><em>No items</em></td></tr>
 </if>
 <else>
 
@@ -42,7 +42,7 @@
               </noparse>
             </tr>
           </table>
-          <noparse><formerror id="@elements.id@"><br><font color="red"><b>\@formerror.@elements.id@\@<b></font></formerror></noparse>
+          <noparse><formerror id="@elements.id@"><br><font color="red"><strong>\@formerror.@elements.id@\@<strong></font></formerror></noparse>
         </if>
           
         <else>         
@@ -52,8 +52,8 @@
           <else>
             <noparse>
               <formwidget id="@elements.id@">
-              <formerror id="@elements.id@"><br><font color="red"><b>
-                \@formerror.@elements.id@\@<b></font></formerror>
+              <formerror id="@elements.id@"><br><font color="red"><strong>
+                \@formerror.@elements.id@\@<strong></font></formerror>
             </noparse>
           </else>
         </else>

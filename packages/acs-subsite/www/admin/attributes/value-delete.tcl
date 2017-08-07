@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     attribute_id:naturalnum,notnull
     enum_value:trim,notnull
-    { return_url [export_vars -base one attribute_id] }    
+    { return_url:localurl "[export_vars -base one attribute_id]" }
 } -properties {
     context:onevalue
     export_vars:onevalue
@@ -33,3 +33,9 @@ set context [list [list [export_vars -base one attribute_id] "One attribute"] "D
 set export_vars [export_vars -form {attribute_id enum_value return_url}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

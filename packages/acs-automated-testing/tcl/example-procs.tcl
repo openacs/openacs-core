@@ -42,3 +42,9 @@ ad_proc -public aa_example_write_audit_entries {
   }
   return 1;
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

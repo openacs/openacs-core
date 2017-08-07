@@ -17,7 +17,7 @@
       <formalpara>
         <title>Special characters in Tcl</title>
         <para>
-Try strings starting with a <computeroutput>-Bad</computeroutput> and strings containing <computeroutput>[BAD]</computeroutput>, <computeroutput>{</computeroutput>, <computeroutput>\077</computeroutput>, and <computeroutput>$Bad</computeroutput>.  For user input, <computeroutput>[BAD]</computeroutput> should never be evaluated, <computeroutput>\077</computeroutput> should not be turned into a <computeroutput>?</computeroutput> and <computeroutput>$Bad</computeroutput> should not be interpolated.  The string <computeroutput>-Bad [BAD] \077 { $Bad</computeroutput> should be valid user input, should pass through the system unaltered, and if it isn't that's a bug.
+Try strings starting with a <computeroutput>-Bad</computeroutput> and strings containing <computeroutput>[BAD]</computeroutput>, <computeroutput>{</computeroutput>, <computeroutput>\077</computeroutput>, and <computeroutput>$Bad</computeroutput>.  For user input, <computeroutput>[BAD]</computeroutput> should never be evaluated, <computeroutput>\077</computeroutput> should not be turned into a <computeroutput>?</computeroutput> and <computeroutput>$Bad</computeroutput> should not be interpolated.  The string <computeroutput>-Bad [BAD] \077 { $Bad</computeroutput> should be valid user input, should pass through the system unaltered, and if it isn&#39;t that&#39;s a bug.
 </para>
       </formalpara>
     </listitem>
@@ -29,9 +29,9 @@ properly quoted anywhere it shows up (I use "&lt;b&gt;bold&lt;/b&gt;"
 usually).  Look out especially for quoting errors in the context bar
 and in round trips via an edit form. For fields that disallow html
 tags you can use <computeroutput>&amp;amp;</computeroutput> to check that the field is quoted
-properly.  If it is not displayed as <computeroutput>&amp;amp;</computeroutput> then the quoting for the field is incorrect. (It's not clear whether this
+properly.  If it is not displayed as <computeroutput>&amp;amp;</computeroutput> then the quoting for the field is incorrect. (It&#39;s not clear whether this
 should be considered an error but given that data for text fields can
-come from various sources if it's text it should be properly quoted
+come from various sources if it&#39;s text it should be properly quoted
 and we should not rely on input validation to prevent XSS security
 holes.)</para>
       </formalpara>

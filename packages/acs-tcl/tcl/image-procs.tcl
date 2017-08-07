@@ -14,7 +14,7 @@ ad_proc -public image::get_info {
 } {
     Get the width and height of an image file. 
     The width and height are returned as 'height' and 'width' entries in the array named in the parameter.
-    Uses ImageMagick instead of aolserver function because it can handle more than
+    Uses ImageMagick instead of AOLserver function because it can handle more than
     just gifs and jpegs. The plan is to add the ability to get more details later.
 
     @param filename Name of the image file in the file system.
@@ -34,3 +34,9 @@ ad_proc -public image::get_info {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

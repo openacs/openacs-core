@@ -67,7 +67,10 @@ aa_register_case content_item {
             aa_true "First item's revision exists" \
                 [expr \
                      {![string equal "" \
-                            [db_string get_revision "select latest_revision from cr_items, cr_revisions where latest_revision=revision_id and cr_items.item_id=:first_item_id" -default ""]]}]
+                            [db_string get_revision {
+                                select latest_revision from cr_items, cr_revisions
+                                where latest_revision=revision_id and cr_items.item_id = :first_item_id
+                            } -default ""]]}]
 
             # check the folder is not empty now.
             set is_empty [content::folder::is_empty -folder_id $first_folder_id]
@@ -103,7 +106,7 @@ aa_register_case content_item {
             # delete the evil_name item
             #########################################################
             
-            # in oracle content_item.del is not a fucntion and cannot
+            # in oracle content_item.del is not a function and cannot
             # return true or false so we have to rely on a query to
             # see if the item exists or not
             
@@ -266,3 +269,9 @@ aa_register_case content_item {
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

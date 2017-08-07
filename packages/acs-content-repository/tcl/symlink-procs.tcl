@@ -134,3 +134,9 @@ ad_proc -public -deprecated content_symlink::resolve_content_type {
 	return [db_exec_plsql resolve_content_type ""]
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

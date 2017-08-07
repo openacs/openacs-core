@@ -8,12 +8,12 @@
   
   <multiple name="elements">
     <li> @elements.name@
-       <if @elements.direct_p@ eq 1>
+       <if @elements.direct_p;literal@ true>
          (direct relationship)
        </if><else>
          (through @elements.container_name@)
        </else> 
-       <if @write_p@ eq "1"> 
+       <if @write_p;literal@ true> 
           (<a href="../relations/remove?rel_id=@elements.rel_id@">remove</a>)
        </if>
     </li>

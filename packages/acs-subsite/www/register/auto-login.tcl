@@ -6,7 +6,7 @@ ad_page_contract {
 } {
     email
     password
-    {return_url "/"}
+    {return_url:localurl "/"}
 }
 
 array set auth_info [auth::authenticate \
@@ -21,3 +21,9 @@ if {$auth_info(auth_status) eq "ok"} {
     # Login problem - redirect to login form
     ad_returnredirect [export_vars -base /register { email return_url }]    
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

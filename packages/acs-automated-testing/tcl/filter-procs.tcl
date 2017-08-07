@@ -22,3 +22,9 @@ ad_page_contract_filter aa_test_category { name value } {
   ad_complain "$value is not a valid acs-automated-testing testcase category"
   return 0
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

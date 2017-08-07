@@ -55,8 +55,8 @@ namespace eval plsql_utility {
                         then 1
                         else 0
                    end
-              from dual
-	}]
+              from dual            
+        }]
     }
 
 
@@ -181,13 +181,13 @@ object_type    => group,
 
 	<p>Example:
 <pre>
-set group_id -2
-set sql "select acs_group.name(:group_id) from dual"
-ns_write [plsql_utility::parse_sql $sql]
+   set group_id -2
+   set sql {select acs_group.name(:group_id) from dual}
+   ns_write [plsql_utility::parse_sql $sql]
 </pre>
 would write the following to the browser:
 <pre>
-select acs_group.name('-2') from dual
+   select acs_group.name('-2') from dual
 </pre>
 
 	@author Michael Bryzek (mbryzek@arsdigita.com)
@@ -319,3 +319,9 @@ select acs_group.name('-2') from dual
 
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

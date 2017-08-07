@@ -43,6 +43,7 @@
   <msg key="lt_name_does_not_appear__1">%name% does not appear to be a valid US phone number.</msg>
   <msg key="lt_name_does_not_appear__2">%name% does not appear to be a boolean value.</msg>
   <msg key="lt_name_is_not_a_natural">%name% is not a natural number, that is an integer greater than or equal to 0.</msg>
+  <msg key="lt_name_is_not_valid">%name% is not valid</msg>
   <msg key="lt_name_is_not_a_valid_S">%name% is not a valid SQL identifier</msg>
   <msg key="lt_name_is_not_an_intege">%name% is not an integer</msg>
   <msg key="lt_name_is_not_a_word">%name% contains non-word characters</msg>
@@ -85,7 +86,6 @@
   <msg key="lt_You_must_supply_a_val">You must supply a value for %formal_name%</msg>
   <msg key="lt_You_specified_a_path_">You specified a path to a file that is not allowed on the system.</msg>
   <msg key="lt_Youve_supplied_two_va">You've supplied two values for '%formal_name%'</msg>
-  <msg key="maturity_deprecated">Deprecated</msg>
   <msg key="maturity_immature">Immature</msg>
   <description key="maturity_immature">Maturity level is visible in the Installer and when browsing the repository
 
@@ -99,6 +99,15 @@ Source code is available at published location.
 http://openacs.org/forums/message-view?message%5fid=161393</description>
 
   <msg key="maturity_incompatible">Compatibility problems</msg>
+  <msg key="maturity_deprecated">Deprecated</msg>
+  <description key="maturity_mature">Maturity level is visible in the Installer and when browsing the repository. 
+
+Level 4: Deprecated
+The package was in some earlier version
+is use, but was probably replaced by a another package. The
+package description should point to a preferred version. 
+</description>
+
   <msg key="maturity_mature">Mature</msg>
   <description key="maturity_mature">Maturity level is visible in the Installer and when browsing the repository. 
 

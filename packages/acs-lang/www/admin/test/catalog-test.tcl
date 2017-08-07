@@ -31,3 +31,8 @@ set language_name [ad_locale_language_name $language]
 
 
 ad_return_template
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

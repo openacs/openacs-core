@@ -95,21 +95,24 @@ ad_proc apm_shell_wrap { cmd } {
 
 ad_proc -private apm_package_selection_widget {
     pkg_info_list
-    {to_install ""} 
+    {to_install ""}
+    {operation "all"}
 } {
 
     Provides a widget for selecting packages.  Displays dependency information if available.
 
     @param pkg_info_list list of package infos for all packages to be listed
     @param to_install list of package_keys to install
+    @param operation filter for added operations (all, upgrade, install)
 } {
     if {$pkg_info_list eq ""} {
         return ""
     }
 
+    set label [dict get {install Install upgrade Upgrade all Install/Update} $operation]
     set counter 0
-    set widget "<blockquote><table class='list-table' cellpadding='3' cellspacing='5' summary='Available Packages'>
-      <tr class='list-header'><th>Install</th><th>Package</th><th>Package Key</th><th>Comment</th></tr>"
+    set widget [subst {<blockquote><table class='list-table' cellpadding='3' cellspacing='5' summary='Available Packages'>
+        <tr class='list-header'><th>$label</th><th>Package</th><th>Package Key</th><th>Comment</th></tr>}]
 
     foreach pkg_info $pkg_info_list {
         
@@ -162,8 +165,10 @@ ad_proc -private apm_package_selection_widget {
                 set higher_version_p 2
             }
             if {$higher_version_p == 2 } {
+                if {$operation eq "upgrade"} continue
                 set comment "New install."
             } elseif {$higher_version_p == 1 } {
+                if {$operation eq "install"} continue
                 set comment "Upgrade."
             } elseif {$higher_version_p == 0} {
                 set comment "Package version already installed."
@@ -218,7 +223,7 @@ ad_proc -private apm_higher_version_installed_p {
 ad_proc -private apm_build_repository {
     {-debug:boolean 0} 
     {-channels *} 
-    {-head_channel 5-9} 
+    {-head_channel 5-10} 
 } {    
 
     Rebuild the repository on the local machine.  
@@ -246,10 +251,10 @@ ad_proc -private apm_build_repository {
     set repository_dir         $::acs::rootdir/www/repository/
     set repository_url         http://openacs.org/repository/
 
-    set channel_index_template /packages/acs-admin/www/apm/repository-channel-index
-    set index_template         /packages/acs-admin/www/apm/repository-index
-
     set exclude_package_list {}
+
+    set channel_index_template [template::themed_template /packages/acs-admin/www/apm/repository-channel-index]
+    set index_template         [template::themed_template /packages/acs-admin/www/apm/repository-index]
 
     #----------------------------------------------------------------------
     # Prepare output
@@ -295,6 +300,14 @@ ad_proc -private apm_build_repository {
                 ns_log Notice "Repository: Found channel $channel using tag $tag_name"
                 set channel_tag($channel) $tag_name
             }
+        } elseif { [regexp {^openacs-([1-9][0-9]*-[0-9]+-[0-9]+)-final$} $tag_name match oacs_version] } {
+            lassign [split $oacs_version "-"] major_version minor_version patch_version
+            #ns_log Notice "Repository: tag <$tag_name> oacs version <$oacs_version> split into /$major_version/$minor_version/$patch_version/"
+            if { $major_version >= 5 && $minor_version >= 8} {
+                set channel "${major_version}-${minor_version}-$patch_version"
+                ns_log Notice "Repository: Found channel $channel using tag $tag_name"
+                set channel_tag($channel) $tag_name
+            }
         }
     }
 
@@ -307,7 +320,7 @@ ad_proc -private apm_build_repository {
     #----------------------------------------------------------------------
 
     # Wipe and re-create the working directory
-    file delete -force $work_dir
+    file delete -force -- $work_dir
     file mkdir ${work_dir}
     set update_pretty_date [lc_time_fmt [clock format [clock seconds] -format "%Y-%m-%d %T"] %c]
     
@@ -319,8 +332,8 @@ ad_proc -private apm_build_repository {
         ns_log Notice "Repository: Channel $channel using tag $channel_tag($channel)"
         
         # Wipe and re-create the checkout directory
-        file delete -force "${work_dir}openacs-4"
-        file delete -force "${work_dir}dotlrn"
+        file delete -force -- "${work_dir}openacs-4"
+        file delete -force -- "${work_dir}dotlrn"
         file mkdir "${work_dir}dotlrn/packages"
         
         # Prepare channel directory
@@ -392,18 +405,18 @@ ad_proc -private apm_build_repository {
                         
                         append manifest \
                             "  <package>" \n \
-                            "    <package-key>[ad_quotehtml $pkg_info(package.key)]</package-key>\n" \
-                            "    <version>[ad_quotehtml $pkg_info(name)]</version>\n" \
-                            "    <pretty-name>[ad_quotehtml $pkg_info(package-name)]</pretty-name>\n" \
-                            "    <package-type>[ad_quotehtml $pkg_info(package.type)]</package-type>\n" \
-                            "    <summary>[ad_quotehtml $pkg_info(summary)]</summary>\n" \
-                            "    <description format=\"[ad_quotehtml $pkg_info(description.format)]\">" \
-                            [ad_quotehtml $pkg_info(description)] "</description>\n" \
-                            "    <release-date>[ad_quotehtml $pkg_info(release-date)]</release-date>\n" \
-                            "    <vendor url=\"[ad_quotehtml $pkg_info(vendor.url)]\">" \
-                            [ad_quotehtml $pkg_info(vendor)] "</vendor>\n" \
-                            "    <license url=\"[ad_quotehtml $pkg_info(license.url)]\">" \
-                            [ad_quotehtml $pkg_info(license)] "</license>\n" \
+                            "    <package-key>[ns_quotehtml $pkg_info(package.key)]</package-key>\n" \
+                            "    <version>[ns_quotehtml $pkg_info(name)]</version>\n" \
+                            "    <pretty-name>[ns_quotehtml $pkg_info(package-name)]</pretty-name>\n" \
+                            "    <package-type>[ns_quotehtml $pkg_info(package.type)]</package-type>\n" \
+                            "    <summary>[ns_quotehtml $pkg_info(summary)]</summary>\n" \
+                            "    <description format=\"[ns_quotehtml $pkg_info(description.format)]\">" \
+                            [ns_quotehtml $pkg_info(description)] "</description>\n" \
+                            "    <release-date>[ns_quotehtml $pkg_info(release-date)]</release-date>\n" \
+                            "    <vendor url=\"[ns_quotehtml $pkg_info(vendor.url)]\">" \
+                            [ns_quotehtml $pkg_info(vendor)] "</vendor>\n" \
+                            "    <license url=\"[ns_quotehtml $pkg_info(license.url)]\">" \
+                            [ns_quotehtml $pkg_info(license)] "</license>\n" \
                             "    <maturity>$pkg_info(maturity)</maturity>\n"
 
                         foreach e $pkg_info(install) {
@@ -452,7 +465,7 @@ ad_proc -private apm_build_repository {
                                   file ${channel_dir}$pkg_info(package.key)-$pkg_info(name).apm:\
                                   \n$errmsg\n$::errorCode,$::errorInfo"
                             }
-                            file delete $tmp_filename
+                            file delete -- $tmp_filename
                         }
                         
                         set apm_url "${repository_url}$channel/$pkg_info(package.key)-$pkg_info(name).apm"
@@ -460,14 +473,14 @@ ad_proc -private apm_build_repository {
                         append manifest "    <download-url>$apm_url</download-url>\n"
                         foreach elm $pkg_info(provides) {
                             append manifest "    <provides " \
-                                "url=\"[ad_quotehtml [lindex $elm 0]]\" " \
-                                "version=\"[ad_quotehtml [lindex $elm 1]]\" />\n"
+                                "url=\"[ns_quotehtml [lindex $elm 0]]\" " \
+                                "version=\"[ns_quotehtml [lindex $elm 1]]\" />\n"
                         }
                         
                         foreach elm $pkg_info(requires) {
                             append manifest "    <requires " \
-                                "url=\"[ad_quotehtml [lindex $elm 0]]\" " \
-                                "version=\"[ad_quotehtml [lindex $elm 1]]\" />\n"
+                                "url=\"[ns_quotehtml [lindex $elm 0]]\" " \
+                                "version=\"[ns_quotehtml [lindex $elm 1]]\" />\n"
                         }
                         append manifest "  </package>\n"
                     }
@@ -487,7 +500,7 @@ ad_proc -private apm_build_repository {
         set fw [open "${channel_dir}index.adp" w]
         set packages [lsort $packages]
         puts $fw "<master>\n<property name=\"doc(title)\">OpenACS $channel Compatible Packages</property>\n\n"
-        puts $fw "<h2>OpenACS $channel Core and compatibile packages</h2>
+        puts $fw "<h1>OpenACS $channel Core and compatible packages</h1>
            <p>Packages can be installed with the OpenACS Automated Installer on
            your OpenACS site at <code>/acs-admin/install</code>.  Only packages
            designated compatible with your OpenACS kernel will be shown.</p>
@@ -571,11 +584,31 @@ ad_proc -private apm_build_repository {
 
     ns_log Notice "Repository: Finishing Repository"
 
+    foreach channel [array names channel_tag] {
+        if {[regexp {^([1-9][0-9]*)-([0-9]+)$} $channel . major minor]} {
+            #
+            # *-compat channels: The "patchlevel" of these channels is
+            # the highest possible value, higher than the released
+            # -final channels.
+            #
+            set tag_order([format %.3d $major]-[format %.3d $minor]-999) $channel
+            set tag_label($channel) "OpenACS $major.$minor"
+        } elseif {[regexp {^([1-9][0-9]*)-([0-9]+)-([0-9]+)$} $channel . major minor patch]} {
+            #
+            # *-final channels: a concrete patchlevel is provided.
+            #
+            set tag_order([format %.3d $major]-[format %.3d $minor]-[format %.3d $patch]) $channel
+            set tag_label($channel) "OpenACS $major.$minor.$patch"
+        }
+    }
+
+    
     # Write the index page
     ns_log Notice "Repository: Writing repository index page to ${work_dir}repository/index.adp"
-    template::multirow create channels name tag
-    foreach channel [lsort -decreasing [array names channel_tag]] {
-        template::multirow append channels $channel $channel_tag($channel)
+    template::multirow create channels name tag label
+    foreach key [lsort -decreasing [array names tag_order]] {
+        set channel $tag_order($key)
+        template::multirow append channels $channel $channel_tag($channel) $tag_label($channel)
     }
     set fw [open "${work_dir}repository/index.adp" w]
     puts $fw "<master>\n<property name=\"doc(title)\">OpenACS Package Repository</property>\n\n"
@@ -583,6 +616,10 @@ ad_proc -private apm_build_repository {
                   [list &channels channels update_pretty_date $update_pretty_date]]
     close $fw
 
+    # Add a redirector for outdated releases
+    set fw [open "${work_dir}repository/index.vuh" w]
+    puts $fw "ns_returnredirect /repository/"
+    close $fw
 
     # Without the trailing slash
     set work_repository_dirname "${work_dir}repository"
@@ -592,12 +629,12 @@ ad_proc -private apm_build_repository {
     ns_log Notice "Repository: Moving work repository $work_repository_dirname to live repository dir at <a href=\"/repository\/>$repository_dir</a>\n"
 
     if { [file exists $repository_bak] } {
-        file delete -force $repository_bak
+        file delete -force -- $repository_bak
     }
     if { [file exists $repository_dirname] } {
-        file rename $repository_dirname $repository_bak
+        file rename -- $repository_dirname $repository_bak
     }
-    file rename $work_repository_dirname  $repository_dirname
+    file rename -- $work_repository_dirname  $repository_dirname
 
     ns_log Debug "Repository: DONE"
 

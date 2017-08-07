@@ -1,4 +1,7 @@
 <html>
+<head>
+<title>Demo: Templates</title>
+</head>
   <body>
     <h1>Food</h1>
     <table>

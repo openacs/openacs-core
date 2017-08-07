@@ -25,7 +25,7 @@ ad_proc -private install_input_widget {
     set type_attribute [ad_decode $type "" "" "type=\"$type\""]
 
     if { $value ne "" } {
-        append extra_attributes " value=\"[ad_quotehtml $value]\""
+        append extra_attributes " value=\"[ns_quotehtml $value]\""
     }
     
     set input_widget "<input name=\"$param_name\" size=\"$size\" $type_attribute $extra_attributes>"
@@ -298,9 +298,8 @@ your URL and try again.
     } error] } {
         # In case of an error, don't forget to unlock the mutex.
         ns_mutex unlock [nsv_get acs_installer mutex]
-        global errorInfo
         install_return 500 "Error" "The following error occurred in an installation script:\n\
-        <blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>\n"
+        <blockquote><pre>[ns_quotehtml $::errorInfo]</pre></blockquote>\n"
     }
     if {[array size errors] > 0} {
         install_return 500 "Error" [install_load_errors_formatted errors]
@@ -318,6 +317,17 @@ proc install_admin_widget {} {
     </center>
 "
 
+}
+
+proc install_back_button_widget {} {    
+    return [subst {Please <a id="install-back-button" href="#">try again</a>.
+    <script type='text/javascript' nonce='[security::csp::nonce]'>
+     var e = document.getElementById('install-back-button');
+     e.addEventListener('click', function (event) {
+        event.preventDefault();
+        history.back();
+     }, false);
+    </script>}]
 }
 
 proc install_redefine_ad_conn {} {
@@ -341,12 +351,7 @@ ad_proc -public ad_windows_p {} {
     Returns 1 if the ACS is running under Windows.
     Note,  this procedure is a best guess, not sure of a better way of determining:
 } {
-    set thisplatform [ns_info platform]
-    if {$thisplatform eq "win32"} {
-        return 1
-    } else {
-        return 0
-    }
+    return [expr {[ns_info platform] in {win32 win64}}]
 }
 
 ad_proc -private install_load_errors_formatted {errorVarName} {
@@ -359,10 +364,10 @@ ad_proc -private install_load_errors_formatted {errorVarName} {
     set result ""
     if {[array size errors] > 0} {
         append result "<blockquote><pre>\n"
-        foreach {package errorInfos} [array get errors] {
+        foreach {package error_infos} [array get errors] {
             append result "<h4>Error in Package $package:</h4>\n"
-            foreach {fileName backTrace} $errorInfos {
-                append result "<strong>Error in File $fileName</strong>\n\n[ad_quotehtml $backTrace]\n\n\n"
+            foreach {fileName backTrace} $error_infos {
+                append result "<strong>Error in File $fileName</strong>\n\n[ns_quotehtml $backTrace]\n\n\n"
             }
         }
         append result "</pre></blockquote>\n"
@@ -409,6 +414,7 @@ ad_proc -private install_do_data_model_install {} {
     Done installing the OpenACS kernel data model.<p>
 
     "
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 
     # Some APM procedures use util_memoize, so initialize the cache 
     # before starting APM install
@@ -430,7 +436,8 @@ ad_proc -private install_do_data_model_install {} {
     # Preload all the .info files so the next page is snappy.
     apm_dependency_check -initial_install [apm_scan_packages -new [file join $::acs::rootdir packages]]
 
-    ns_write "Done loading package .info files<p>"    
+    ns_write "Done loading package .info files<p>"
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 }
 
 ad_proc -private install_do_packages_install {} {
@@ -446,6 +453,8 @@ ad_proc -private install_do_packages_install {} {
             } -default 0]
             if {$kernel_id > 0} {
                 proc ad_acs_kernel_id {} "return $kernel_id"
+                ns_log notice "installer: setting ::acs::kernel_id to $kernel_id"
+                set ::acs::kernel_id $kernel_id
             }
             return $kernel_id
         } else {
@@ -481,12 +490,20 @@ ad_proc -private install_do_packages_install {} {
         ns_write "<p><b><i>At least one core package has an unsatisifed dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:</i></b>"
-
+        
         ns_write "\n<ul>"
+        set deps ""
         foreach dep $pkg_list {
             lassign $dep _name _path _a _b _pkg _deps _flag _msg
             ns_write "<li>[lindex $_pkg 0]: $_msg</li>"
+            append deps "[lindex $_pkg 0]: $_msg\n"
         }
+        ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
+        
+        ns_log Error "At least one core package has an unsatisifed dependency.\
+              No packages have been installed missing: [lindex $dependency_results 2]. \
+              Here's what the APM has computed:\n$deps"
+
         return
     }
 
@@ -515,6 +532,7 @@ ad_proc -private install_do_packages_install {} {
     }
 
     ns_write "All Packages Installed."
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 }
 
 # Register the install handler.

@@ -18,3 +18,9 @@ set system_name [ad_system_name]
 set login_url [ad_get_login_url]
 
 auth::verify_account_status
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

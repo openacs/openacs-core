@@ -23,7 +23,7 @@ set user_info(by_ip_url) [export_vars -base "complex-search" { { target one } { 
 set return_url [ad_return_url]
 
 set delete_user_url [export_vars -base delete-user { user_id return_url {permanent f}}]
-set delete_user_permanent_url [export_vars -base delete-user { user_id return_url {permanent t}}]
+set delete_user_permanent_url [export_vars -base delete-user { user_id {return_url /acs-admin/users} {permanent t}}]
 
 #
 # RBM: Check if the requested user is a site-wide admin and warn the 
@@ -34,32 +34,29 @@ set site_wide_admin_p [acs_user::site_wide_admin_p -user_id $user_id]
 set warning_p 0
 set ad_conn_user_id [ad_conn user_id]
 
+#
+# Define the url for switching side-wide admin privileges with a timeout of 60 seconds
+#
 if { $site_wide_admin_p } {
+    set modify_admin_url [export_vars -base modify-admin-privileges {user_id:sign(max_age=60) {action:sign revoke}}]
     set warning_p 1
+} else {
+    set modify_admin_url [export_vars -base modify-admin-privileges {user_id:sign(max_age=60) {action:sign grant}}]
 }
 
 
 set context [list [list "./" "Users"] "One User"]
 
-if {[db_0or1row get_item_id "select live_revision as revision_id, nvl(title,'view this portrait') portrait_title
-from acs_rels a, cr_items c, cr_revisions cr 
-where a.object_id_two = c.item_id
-and c.live_revision = cr.revision_id
-and a.object_id_one = :user_id
-and a.rel_type = 'user_portrait_rel'"]} {
+if {[db_0or1row get_item_id {}]} {
     set portrait_url [export_vars -base /shared/portrait { user_id }]
 }
 
-set user_finite_state_links "[join [ad_registration_finite_state_machine_admin_links $user_info(member_state) $user_info(email_verified_p) $user_id] " | "]"
+set user_finite_state_links [join [ad_registration_finite_state_machine_admin_links $user_info(member_state) $user_info(email_verified_p) $user_id] " | "]
 
 
 # XXX Make sure to make the following into links and this looks okay
 
-db_multirow user_contributions  user_contributions "select at.pretty_name, at.pretty_plural, a.creation_date, acs_object.name(a.object_id) object_name
-from acs_objects a, acs_object_types at
-where a.object_type = at.object_type
-and a.creation_user = :user_id
-order by object_name, creation_date"
+db_multirow user_contributions user_contributions {}
 
 # cro@ncacasi.org 2002-02-20 
 # Boy is this query wacked, but I think I am starting to understand
@@ -67,26 +64,16 @@ order by object_name, creation_date"
 # Find out which groups this user belongs to where he was added to the group
 # directly (e.g. his membership is not by virtue of the group being
 # a component of another group).
-db_multirow direct_group_membership direct_group_membership "
-  select group_id, rel_id, party_names.party_name as group_name
-    from (select /*+ ORDERED */ DISTINCT rels.rel_id, object_id_one as group_id, 
-                 object_id_two
-            from acs_rels rels, all_object_party_privilege_map perm
-           where perm.object_id = rels.rel_id
-                 and perm.privilege = 'read'
-                 and rels.rel_type = 'membership_rel'
-                 and rels.object_id_two = :user_id) r, 
-         party_names 
-   where r.group_id = party_names.party_id
-order by lower(party_names.party_name)"
+db_multirow direct_group_membership direct_group_membership {}
 
 # And also get the list of all groups he is a member of, direct or
 # inherited.
-db_multirow all_group_membership all_group_membership "
+db_multirow all_group_membership all_group_membership {
   select groups.group_id, groups.group_name
-     from groups, group_member_map gm
-     where groups.group_id = gm.group_id and gm.member_id=:user_id
-  order by lower(groups.group_name)"
+  from groups, group_member_map gm
+  where groups.group_id = gm.group_id and gm.member_id=:user_id
+  order by lower(groups.group_name)
+}
 
 if { [auth::password::can_reset_p -authority_id $user_info(authority_id)] } {
     set password_reset_url [export_vars -base "password-reset" { user_id return_url }]
@@ -98,5 +85,8 @@ set portrait_manage_url [export_vars -base /user/portrait/ { user_id return_url 
 
 ad_return_template
 
-
-
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     segment_id:naturalnum,notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 set operation [string trim [string tolower $operation]]
@@ -25,3 +25,9 @@ if {$operation eq "yes"} {
     ad_returnredirect $return_url
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

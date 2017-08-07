@@ -13,10 +13,65 @@ create table acs_magic_objects (
                         references acs_objects(object_id)
 );
 
-comment on table acs_magic_objects is '
+comment on table acs_magic_objects is $$
  This table allows us to provide semantic names for certain special
  objects like the site-wide organization, and the all users party.
-';
+$$;
+
+-- The very first thing we must do is create the security_context_root
+-- object.
+
+-- added
+select define_function_args('acs__magic_object_id','name');
+
+--
+-- procedure acs__magic_object_id/1
+--
+CREATE OR REPLACE FUNCTION acs__magic_object_id(
+   magic_object_id__name varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
+    return object_id
+    from acs_magic_objects
+    where name = magic_object_id__name;
+END;
+$$ LANGUAGE plpgsql stable strict;
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
+  root_id integer;
+BEGIN
+
+  root_id := acs_object__new (
+    -4,
+    'acs_object',
+    now(),
+    null,
+    null,
+    null,
+    't',
+    '#acs-kernel.lt_Security_context_root#',
+    null
+    );
+
+  insert into acs_magic_objects
+   (name, object_id)
+  values
+   ('security_context_root', -4);
+
+  return root_id;
+
+END;
+$$ LANGUAGE plpgsql;
+
+select inline_0();
+drop function inline_0 ();
 
 
 
@@ -127,22 +182,7 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
-select define_function_args('acs__magic_object_id','name');
 
---
--- procedure acs__magic_object_id/1
---
-CREATE OR REPLACE FUNCTION acs__magic_object_id(
-   magic_object_id__name varchar
-) RETURNS integer AS $$
-DECLARE
-BEGIN
-    return object_id
-    from acs_magic_objects
-    where name = magic_object_id__name;
-END;
-$$ LANGUAGE plpgsql stable strict;
 
 -- ******************************************************************
 -- * Community Core API
@@ -189,51 +229,6 @@ where o.object_id = pa.party_id
 -----------------------------------
 -- Community Core Initialization --
 -----------------------------------
-
--- The very first thing we must do is create the security_context_root
--- object.
-
-
-
---
--- procedure inline_0/0
---
-CREATE OR REPLACE FUNCTION inline_0(
-
-) RETURNS integer AS $$
-DECLARE
-  root_id integer;
-BEGIN
-
-  root_id := acs_object__new (
-    -4,
-    'acs_object',
-    now(),
-    null,
-    null,
-    null,
-    't',
-    '#acs-kernel.lt_Security_context_root#',
-    null
-    );
-
-  insert into acs_magic_objects
-   (name, object_id)
-  values
-   ('security_context_root', -4);
-
-
-  return root_id;
-
-END;
-$$ LANGUAGE plpgsql;
-
-select inline_0 ();
-
-drop function inline_0 ();
-
-
--- show errors
 
 begin;
 
@@ -283,6 +278,15 @@ BEGIN
   values
     (0, 'user', '#acs-kernel.Unregistered_Visitor#');
 
+  --
+  -- Create an "identity relationship" (needs acs-object 0 and magic object 'unregistered_visitor')
+  --
+  perform acs_object__new(-10, 'relationship');
+  insert into acs_rels (rel_id, rel_type, object_id_one, object_id_two) values (-10, 'relationship', 0, 0);
+
+  --
+  -- Insert user 0 into parties, persons, users and acs_magic_objects
+  --
   insert into parties
     (party_id)
   values
@@ -334,12 +338,10 @@ BEGIN
     null);
 
   return 0;
-
 END;
 $$ LANGUAGE plpgsql;
 
 select inline_2 ();
-
 drop function inline_2 ();
 
 
@@ -379,12 +381,13 @@ BEGIN
   -- Users" group
 
   perform composition_rel__new (
-    null,
+    null,     -- rel_id
     'composition_rel',
     acs__magic_object_id('the_public'),
     acs__magic_object_id('registered_users'),
-    null,
-    null);
+    null,     -- creation_user
+    null      -- creation_ip
+    );
 
   return 0;
 END;

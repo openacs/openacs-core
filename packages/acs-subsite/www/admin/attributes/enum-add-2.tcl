@@ -12,14 +12,10 @@ ad_page_contract {
     attribute_id:naturalnum,notnull
     attribute_enum_values:array,trim,optional
     { operation:trim "Finish adding values" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
-set max_sort_order [db_string select_max_sort_order {
-    select nvl(max(v.sort_order),0)
-      from acs_enum_values v
-     where v.attribute_id = :attribute_id
-}]
+set max_sort_order [db_string select_max_sort_order {}]
 
 db_transaction {
     foreach ideal_sort_order [array names attribute_enum_values] {
@@ -42,16 +38,7 @@ db_transaction {
 	    if { [db_resultrows] == 0 } {
 		# No update - insert the row. Set the enum_value to
 		# the pretty_name
-		db_dml insert_enum_value {
-		    insert into acs_enum_values v
-		    (attribute_id, sort_order, enum_value, pretty_name)
-		    select :attribute_id, :sort_order, :pretty_name, :pretty_name
-		    from dual
-		    where not exists (select 1 
-                                        from acs_enum_values v2
-                                       where v2.pretty_name = :pretty_name
-                                         and v2.attribute_id = :attribute_id)
-		}
+		db_dml insert_enum_value {}
 	    }
 	}
     }
@@ -67,3 +54,9 @@ if {$operation eq "Add more values"} {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

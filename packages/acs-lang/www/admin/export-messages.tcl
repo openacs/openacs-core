@@ -5,7 +5,7 @@ ad_page_contract {
 } {
     {locale:multiple ""}
     {package_key ""}
-    {return_url "/acs-lang/admin"}
+    {return_url:localurl "/acs-lang/admin"}
 }
 
 set page_title "Export messages"
@@ -20,3 +20,9 @@ lang::catalog::export \
     -locales $locale
 
 set catalog_dir [lang::catalog::package_catalog_dir $package_key]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -6,7 +6,7 @@ ad_page_contract {
   @creation-date 2000-10-23
   @cvs-id $Id$
 } -query {
-  orderby:optional
+  orderby:optional,token,notnull
 } -properties {
   notes:multirow
   context:onevalue
@@ -58,3 +58,9 @@ template::list::create -name notes \
 db_multirow template_demo_notes template_demo_notes {}
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -3,7 +3,7 @@
 <property name="context_bar">@context_bar;literal@</property>
 
 <p>
-  <b>Current File:</b> @file@
+  <strong>Current File:</strong> @file@
 </p>
 
 <blockquote>

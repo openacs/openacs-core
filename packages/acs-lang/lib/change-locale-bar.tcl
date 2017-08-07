@@ -85,3 +85,9 @@ if { $enabled_locale_count > 1 } {
 } else {
     set lang_admin_text "Add Locales"
 }    
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

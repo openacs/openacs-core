@@ -1,12 +1,11 @@
 ad_page_contract {
-    Displays form for currently logged in user to update his/her
- personal information
+    Displays form for currently logged in user to update his/her personal information
 
     @author Unknown
     @creation-date Unknown
     @cvs-id $Id$
 } {
-    {return_url ""}
+    {return_url:localurl ""}
     {user_id:naturalnum ""}
     {edit_p:boolean 0}
     {message ""}
@@ -29,3 +28,9 @@ if {$user_info_template eq ""} {
     set user_info_template "/packages/acs-subsite/lib/user-info"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

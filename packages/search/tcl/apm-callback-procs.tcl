@@ -19,3 +19,9 @@ ad_proc search::install::after_instantiate {
     }
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

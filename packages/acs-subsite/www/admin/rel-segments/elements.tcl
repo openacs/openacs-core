@@ -24,13 +24,7 @@ ad_page_contract {
     }
 }
 
-db_1row select_segment_info {
-    select s.segment_name, s.group_id,
-           acs_rel_type.role_pretty_plural(r.role_two) as role_pretty_plural
-      from rel_segments s, acs_rel_types r
-     where s.segment_id = :segment_id
-       and s.rel_type = r.rel_type
-}
+db_1row select_segment_info {}
 
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
@@ -41,3 +35,9 @@ set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational s
 # Expects segment_id, segment_name, group_id, role to be passed in 
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -8,4 +8,4 @@
   <div class="general-message">@message@</div>
 </if>
 
-<include src="@user_info_template;literal@" user_id="@user_id;literal@" return_url="@return_url;literal@" &="__adp_properties" edit_p="@edit_p;literal@" message="@message;literal@">
+<include src="@user_info_template;literal@" &="user_id" &="return_url" &="__adp_properties" &="edit_p" &="message">

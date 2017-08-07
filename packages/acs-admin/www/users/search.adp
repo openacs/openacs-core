@@ -12,14 +12,14 @@
 </else></else>
 
 
-<if @only_authorized_p@ false>
+<if @only_authorized_p;literal@ false>
   <p>
-    <b>Show</b> | <a href="search?@export_authorize@&amp;only_authorized_p=1">Hide</a> unapproved users.
+    <strong>Show</strong> | <a href="search?@export_authorize@&amp;only_authorized_p=1">Hide</a> unapproved users.
   </p>
 </if>
 <else>
   <p>
-    <a href="search?@export_authorize@&amp;only_authorized_p=0">Show</a> | <b>Hide</b> unapproved users.
+    <a href="search?@export_authorize@&amp;only_authorized_p=0">Show</a> | <strong>Hide</strong> unapproved users.
   </p>
 </else>
 

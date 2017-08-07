@@ -14,7 +14,7 @@ set return_url [ad_pvt_home]
 
 # Get the password and user ID
 
-if {![db_0or1row password "select password from users where user_id=$user_id"]} {
+if {![db_0or1row password {select password from users where user_id = :user_id}]} {
     ad_return_error "Couldn't find user $user_id" "Couldn't find user $user_id."
     return
 }
@@ -30,3 +30,9 @@ set expire_state "s"
 ad_user_login $user_id
 ad_returnredirect $return_url
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

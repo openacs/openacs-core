@@ -11,7 +11,7 @@
 <ul>
   <multiple name="results">
   <li> <if @results.score@ lt 10>&nbsp;&nbsp;</if>@results.score@: <a href="@results.url@">@results.proc@</a>
-   <i>@results.args;noquote@</i>
+   <em>@results.args;noquote@</em>
    </multiple>
 </ul>
 
@@ -21,40 +21,40 @@ No results found
 
 
 <if @private_results:rowcount@ gt 0>
-  <if @show_private_p@ true>
+  <if @show_private_p;literal@ true>
     <p>
-      <b>Show</b> | <a href="@hide_private_url@">Hide</a> <b>@private_results:rowcount@ private</b> procedure matches
+      <strong>Show</strong> | <a href="@hide_private_url@">Hide</a> <strong>@private_results:rowcount@ private</strong> procedure matches
     </p>
     <ul>
       <multiple name="private_results">
         <li><if @private_results.score@ lt 10>&nbsp;&nbsp;</if>@private_results.score@: <a href="@private_results.url@">@private_results.proc@</a>
-         <i>@private_results.args;noquote@</i>
+         <em>@private_results.args;noquote@</em>
        </multiple>
     </ul>
   </if>
   <else>
     <p>
-      <a href="@show_private_url@">Show</a> | <b>Hide</b> <b>@private_results:rowcount@ private</b> procedure matches
+      <a href="@show_private_url@">Show</a> | <strong>Hide</strong> <strong>@private_results:rowcount@ private</strong> procedure matches
     </p>
   </else>
 </if>
 
 
 <if @deprecated_results:rowcount@ gt 0>
-  <if @show_deprecated_p@ true>
+  <if @show_deprecated_p;literal@ true>
     <p>
-      <b>Show</b> | <a href="@hide_deprecated_url@">Hide</a> <b>@deprecated_results:rowcount@ deprecated</b> procedure matches
+      <strong>Show</strong> | <a href="@hide_deprecated_url@">Hide</a> <strong>@deprecated_results:rowcount@ deprecated</strong> procedure matches
     </p>
     <ul>
       <multiple name="deprecated_results">
         <li><if @deprecated_results.score@ lt 10>&nbsp;&nbsp;</if>@deprecated_results.score@: <a href="@deprecated_results.url@">@deprecated_results.proc@</a>
-         <i>@deprecated_results.args;noquote@</i>
+         <em>@deprecated_results.args;noquote@</em>
        </multiple>
     </ul>
   </if>
   <else>
     <p>
-      <a href="@show_deprecated_url@">Show</a> | <b>Hide</b> <b>@deprecated_results:rowcount@ deprecated</b> procedure matches
+      <a href="@show_deprecated_url@">Show</a> | <strong>Hide</strong> <strong>@deprecated_results:rowcount@ deprecated</strong> procedure matches
     </p>
   </else>
 </if>

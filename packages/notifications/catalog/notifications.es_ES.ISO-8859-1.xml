@@ -20,6 +20,8 @@
   <msg key="lt_Notification_Delivery">Modo de Entrega de Notificaciones</msg>
   <msg key="lt_Notification_Delivery_1">Modos de Entrega de Notificaciones</msg>
   <msg key="lt_Notification_Interval">Intervalo de notificación</msg>
+  <msg key="lt_Notification_Interval_1">Intervalos de notificación</msg>
+  <msg key="lt_Notification_Requests">Solicitudes de notificación</msg>
   <msg key="lt_Notifications_Interval">Intervalo de notificación</msg>
   <msg key="lt_Request_Notification_">Pedir notificación para %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Notificación en Batch]</msg>

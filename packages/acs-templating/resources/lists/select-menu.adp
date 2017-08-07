@@ -22,13 +22,14 @@
 #	   where_clause { filter_where_cluse }
 #     }
 #  }
-#  - The recieving page variable must be of the type :multiple
+#  - The receiving page variable must be of the type :multiple
 #    since the filter sends the values in the following way:
 #    filter_name=filter_value&amp;filter_name=filter_value&....&amp;extra_variables=extra_values
 %>
 
 
-<SCRIPT>
+<tcl>
+template::add_body_script -script {
 function getSelectedValues (select_name, filter_url, filter_name) {
 
   var r = new Array();
@@ -57,7 +58,7 @@ function getSelectedValues (select_name, filter_url, filter_name) {
       }	
 
   if (extra_vars.length > 0 ) {
-      // There are extra variables, so we send then using along wiht the filter value
+      // There are extra variables, so we send then using along with the filter value
       return (url+'?'+filter_name+'='+r.join('&'+filter_name+'=')+'&'+extra_vars);
   } 
   else 
@@ -93,7 +94,8 @@ function getPageURL (filter_url) {
    var url = filter_array[0];
    return url;
 }
-</SCRIPT>
+}
+</tcl>
 
 <table border="0">
 <tr>
@@ -111,16 +113,22 @@ function getPageURL (filter_url) {
                 <tr>
                     <td>
 		        <if @filters.type@ eq "multival">
- 	                    <select name="@filters.filter_label@" onchange="window.location = getSelectedValues(this,'@filters.url@','@filters.filter_name@')" multiple size="3">    
+ 	                    <select id="list-filter-@filters.rownum;literal@" name="@filters.filter_label@" multiple size="3">
+			    <tcl>template::add_event_listener -id "list-filter-$filters(rownum)" -event change -script [subst {
+	                          window.location = getSelectedValues(this,'$filters(url)','$filters(filter_name)');
+	                    }]</tcl>
 			</if>
 		        <else>
- 	                    <select name="@filters.filter_label@" onchange="window.location = this.options[this.selectedIndex].value">
+ 	                    <select id="list-filter-@filters.rownum;literal@" name="@filters.filter_label@">
+			    <tcl>template::add_event_listener -id "list-filter-$filters(rownum)" -event change -script {
+	                          window.location = this.options[this.selectedIndex].value;
+	                    }</tcl>
 			</else>
 			    <if @filters.filter_clear_url@ nil>
 		               <option value="#">- - - - -</option>
 			    </if>
       	                    <group column="filter_name">
-	                    <if @filters.selected_p@ true>
+	                    <if @filters.selected_p;literal@ true>
 			         <option value="@filters.url@" selected>
 			             @filters.label@
                                  </option>

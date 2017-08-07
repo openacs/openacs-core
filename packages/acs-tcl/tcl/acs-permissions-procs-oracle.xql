@@ -47,13 +47,12 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="permission::permission_p_not_cached.select_permission_p">
-        <querytext>
-            begin
-            :1 := acs_permission.permission_p(:object_id, :party_id, :privilege);
-            end;
-        </querytext>
+    <fullquery name="permission::get_parties_with_permission.get_parties">
+      <querytext>
+        select distinct o.title, p.party_id
+        from acs_object_party_privilege_map p, acs_objects o
+        where p.object_id = :object_id and p.privilege = :privilege and o.object_id = p.party_id	
+      </querytext>
     </fullquery>
-
 
 </queryset>

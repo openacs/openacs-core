@@ -192,7 +192,7 @@
       <!-- vinodk: Include a link back to canonical docs on openacs.org
                    Will need to remove this section on the actual
                    openacs.org website -->
-      <center>
+      <!-- <center>
         <a>
           <xsl:attribute name="href">
             <xsl:text>http://openacs.org/doc/current/</xsl:text>
@@ -203,7 +203,7 @@
           </xsl:attribute>
           <xsl:text>View comments on this page at openacs.org</xsl:text>
         </a>
-      </center>
+      </center> -->
     </xsl:if>
   </xsl:template>
   

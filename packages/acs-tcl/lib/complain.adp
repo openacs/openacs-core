@@ -3,9 +3,9 @@
 
 <p>
   #acs-tcl.We_had#
-  <if @complaints:rowcount@ gt 1>#acs-tcl.some_problems#</if>
-  <else>#acs-tcl.a_problem#</else>
+  <if @complaints:rowcount@ gt 1>#acs-tcl.some_problems#</if><else>#acs-tcl.a_problem#</else>
   #acs-tcl.with_your_input#
+  <if @context;literal@ ne "">(@context@)</if>
 </p>
 
 <ul>
@@ -21,4 +21,5 @@
 <p>
   #acs-tcl.Thank_you#
 </p>
+<if @prev_url@ defined and @prev_url@ not nil><p> <a href="@prev_url@">#acs-tcl.Return_prev#</a></if></p>
 

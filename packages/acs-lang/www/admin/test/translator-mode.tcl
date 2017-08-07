@@ -35,3 +35,9 @@ lang::message::register \
 
 set contained_message [_ acs-lang.German]
 set complete_message [_ acs-lang.Test_Contained_Message]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -1,15 +1,19 @@
-# Interface to the ACS for the ArsDigita Templating System
-# Procedures in this file only make sense if you use the template system
-# together with the ArsDigita Community System
+ad_library {
+    Interface to the ACS for the ArsDigita Templating System
+    Procedures in this file only make sense if you use the template system
+    together with the ArsDigita Community System
+    
+    @author Christian Brechbuehler <christian@arsdigita.com>
+    
+    @cvs-id $Id$
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Christian Brechbuehler <christian@arsdigita.com
-
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 ad_proc -public ad_return_template {
     -string:boolean
@@ -89,13 +93,26 @@ ad_proc -public get_server_root {} {
 
 
 ad_proc adp_parse_ad_conn_file {} {
-    handle a request for an adp and/or tcl file in the template system.
+    
+    Handle a request for an adp and/or Tcl file in the template system
+    based on the current setting of [ad_conn file]. This file is
+    registered via rp_register_extension_handler
+
+    @see rp_register_extension_handler
 } {
     set ::template::parse_level ""
     #ns_log debug "adp_parse_ad_conn_file => file '[file rootname [ad_conn file]]'"
     template::reset_request_vars
 
-    set parsed_template [template::adp_parse [file rootname [ad_conn file]] {}]
+    #
+    # [ad_conn file] is always an absolute name, remove the
+    # acs::rootdir, compute the template and add the acs::rootdir
+    # again.
+    #
+    set absolute_file [ad_conn file]
+    set relative_name [string range $absolute_file [string length $::acs::rootdir] end]
+    set themed_template $::acs::rootdir/[template::themed_template [file rootname $relative_name]]
+    set parsed_template [template::adp_parse $themed_template {}]
 
     if {$parsed_template ne ""} {
         
@@ -107,15 +124,15 @@ ad_proc adp_parse_ad_conn_file {} {
             set apm_package_url [apm_package_url_from_key "acs-lang"]
             
             # Attempt to move all message keys outside of tags
-            while { [regsub -all {(<[^>]*)(\x002\(\x001[^\x001]*\x001\)\x002)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
+            while { [regsub -all {(<[^>]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
             
             # Attempt to move all message keys outside of <select>...</select> statements
-            regsub -all -nocase {(<option\s[^>]*>[^<]*)(\x002\(\x001[^\x001]*\x001\)\x002)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
+            regsub -all -nocase {(<option\s[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
 
-            while { [regsub -all -nocase {(<select[^>]*>[^<]*)(\x002\(\x001[^\x001]*\x001\)\x002)} $parsed_template {\2\1} parsed_template] } {}
+            while { [regsub -all -nocase {(<select[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template {\2\1} parsed_template] } {}
 
             set start 0
-            while { [regexp -nocase -indices -start $start {(<select[^\x002]*)(\x002\(\x001[^\x001]*\x001\)\x002)} $parsed_template indices select_idx message_idx] } {
+            while { [regexp -nocase -indices -start $start {(<select[^\x02]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template indices select_idx message_idx] } {
                 set select [string range $parsed_template [lindex $select_idx 0] [lindex $select_idx 1]]
 
                 if { [string first "</select" [string tolower $select]] != -1 } {
@@ -130,7 +147,7 @@ ad_proc adp_parse_ad_conn_file {} {
 
             # TODO: We could also move message keys out of <head>...</head>
 
-            while { [regexp -indices {\x002\(\x001([^\x001]*)\x001\)\x002} $parsed_template indices key] } {
+            while { [regexp -indices {\x02\(\x01([^\x01]*)\x01\)\x02} $parsed_template indices key] } {
                 set before [string range $parsed_template 0 [lindex $indices 0]-1]
                 set after [string range $parsed_template [lindex $indices 1]+1 end]
 

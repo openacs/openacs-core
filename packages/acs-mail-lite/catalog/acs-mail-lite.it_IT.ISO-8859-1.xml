@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-mail-lite" locale="it_IT" charset="ISO-8859-1">
+
+  <msg key="Associated_files">File Associati:</msg>
+  <msg key="BCC">CCN</msg>
+  <msg key="Bounce_disabled">Mail bouncing impostati come disabilitati. Riceverai la mail nuovamente.</msg>
+  <msg key="Bouncing_users">Utenti bouncing</msg>
+  <msg key="CC">CC</msg>
+  <msg key="cc_help">Spedisci una copia ad indirizzi multipli separandoli tramite &#34;;&#34;</msg>
+  <msg key="check_uncheck">Selezionato/Deselezionato</msg>
+  <msg key="lt_there_was_an_error_processing">Si é verificato un errore processando questa richiesta.</msg>
+  <msg key="Message">Messaggio</msg>
+  <msg key="Queue_server">Server di coda</msg>
+  <msg key="Queueing_time">Tempo di accodamento</msg>
+  <msg key="Recipients">Riceventi</msg>
+  <msg key="Send">Spedisci</msg>
+  <msg key="Sender">Mittente</msg>
+  <msg key="Subject">Oggetto</msg>
+  <msg key="Unbounce">Non rifiutare</msg>
+  <msg key="Untitled">Senza titolo</msg>
+  <msg key="Upload_file">Carica File</msg>
+  <msg key="Your_message_was_sent_to">Il tuo messaggio é stato spedito a: &amp;lt;strong&amp;gt;%recipients%&amp;lt;/strong&amp;gt;</msg>
+</message_catalog>

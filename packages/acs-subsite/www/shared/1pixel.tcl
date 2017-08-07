@@ -31,7 +31,7 @@ if { [catch {
     seek $file 0
     ns_writefp $file
     close $file
-    file delete $file_name
+    file delete -- $file_name
 
     set file [open [acs_package_root_dir "acs-subsite"]/www/shared/1pixel.footer]
     ns_writefp $file
@@ -41,7 +41,12 @@ if { [catch {
     # Ignore simple i/o errors, which probably just mean that the user surfed on 
     # to some other page before we finished serving 
     if { ![string equal $errMsg {i/o failed}] } {
-        global errorInfo
-        ns_log Error "$errMsg\n$errorInfo"
+        ns_log Error "$errMsg\n$::errorInfo"
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

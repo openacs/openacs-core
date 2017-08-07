@@ -8,7 +8,7 @@ ad_page_contract {
     @creation-date 2007-09-29
     @cvs-id $Id$
 } {
-    {return_url ""}
+    {return_url:localurl ""}
     {css_list}
 } -properties {
 } -validate {
@@ -35,3 +35,9 @@ foreach css $css_list {
     }
     template::multirow append css_multirow $css $file_location $edit_location
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

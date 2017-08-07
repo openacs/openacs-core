@@ -1,18 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="subsite::default::create_app_group.group_exists">      
-      <querytext>
-      
-	    select 1
-            from dual
-            where exists (select 1
-                          from application_groups
-                          where package_id = :package_id)
-	
-      </querytext>
-</fullquery>
-
 <fullquery name="subsite::default::create_app_group.subsite_name_query">      
       <querytext>
       
@@ -85,9 +73,13 @@
   <fullquery name="subsite::new_subsite_theme.insert_subsite_theme">
     <querytext>
       insert into subsite_themes
-        (key, name, template, css, form_template, list_template, list_filter_template)
+        (key, name, template, css, js, form_template, list_template,
+	list_filter_template, dimensional_template, resource_dir,
+	streaming_head, local_p)
       values
-        (:key, :name, :template, :css, :form_template, :list_template, :list_filter_template)
+        (:key, :name, :template, :css, :js, :form_template, :list_template,
+	:list_filter_template, :dimensional_template, :resource_dir,
+	:streaming_head, :local_p)
     </querytext>
   </fullquery>
   

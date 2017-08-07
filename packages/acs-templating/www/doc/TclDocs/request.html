@@ -40,13 +40,13 @@ Listing of public methods:<br>
 </blockquote>
 
 <h3>Method Detail</h3>
-<p align=right>
+<p align="right">
 <font color=red>*</font> indicates required
 </p>
 
 
-<b>Public Methods:</b><br>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<strong>Public Methods:</strong><br>
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
@@ -57,19 +57,19 @@ Checks for any param errors. If errors are found, sets the display template to t
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>url</code>
+  <td align="right"><code>url</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The URL of the template to use to display error messages. The special value { self} may be used to indicate that the template for the requested page itself will handle reporting error conditions.</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   1 if no error conditions exist, 0 otherwise.
 
@@ -79,7 +79,7 @@ Checks for any param errors. If errors are found, sets the display template to t
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
@@ -90,11 +90,11 @@ Create the request data structure. Typically called at the beginning of the code
 </blockquote>
 <dl>
 
-  <dt><b>Options:</b>
+  <dt><strong>Options:</strong>
   <table>
   
-  <tr><td align=right><code>params</code></td>
-  <td align=left>
+  <tr><td align="right"><code>params</code></td>
+  <td align="left">
   
   A block of parameter declarations, separated by newlines. Equivalent to calling set_param for each parameter, but requiring slightly less typing.</td></tr>
   
@@ -106,7 +106,7 @@ Create the request data structure. Typically called at the beginning of the code
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
@@ -117,49 +117,49 @@ Declares a query parameter as part of the page request. Validates the values ass
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>name</code>
+  <td align="right"><code>name</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The name of the parameter to declare.</td></tr>
   
    </table>
 
-  <dt><b>Options:</b>
+  <dt><strong>Options:</strong>
   <table>
   
-  <tr><td align=right><code>name</code></td>
-  <td align=left>
+  <tr><td align="right"><code>name</code></td>
+  <td align="left">
   
   The name of parameter in the query (may be different from the reference name).</td></tr>
   
-  <tr><td align=right><code>multiple</code></td>
-  <td align=left>
+  <tr><td align="right"><code>multiple</code></td>
+  <td align="left">
   
   A flag indicating that multiple values may be specified for this parameter.</td></tr>
   
-  <tr><td align=right><code>datatype</code></td>
-  <td align=left>
+  <tr><td align="right"><code>datatype</code></td>
+  <td align="left">
   
-  The name of a datatype for the element values. Valid datatypes must have a validation procedure defined in the <tt>template::data::validate</tt> namespace.</td></tr>
+  The name of a datatype for the element values. Valid datatypes must have a validation procedure defined in the <kbd>template::data::validate</kbd> namespace.</td></tr>
   
-  <tr><td align=right><code>optional</code></td>
-  <td align=left>
+  <tr><td align="right"><code>optional</code></td>
+  <td align="left">
   
   A flag indicating that no value is required for this element. If a default value is specified, the default is used instead.</td></tr>
   
-  <tr><td align=right><code>validate</code></td>
-  <td align=left>
+  <tr><td align="right"><code>validate</code></td>
+  <td align="left">
   
   A list of custom validation blocks in the form { name { expression } { message } \ name { expression } { message } ...} where name is a unique identifier for the validation step, expression is a block to Tcl code that evaluates to 1 or 0, and message is to be displayed to the user when the validation step fails.</td></tr>
   
   </table>
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>element::create - <a href=""></a></br>
 </dl>
@@ -168,7 +168,7 @@ Declares a query parameter as part of the page request. Validates the values ass
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
@@ -179,20 +179,20 @@ Manually report request error(s) by setting error messages and then calling is_v
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>name</code>
+  <td align="right"><code>name</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   A unique identifier for the error condition, which may be used for layout purposes.</td></tr>
   
   <tr>
-  <td align=right><code>msg</code>
+  <td align="right"><code>msg</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The message text associated with the condition.</td></tr>
   
@@ -204,7 +204,7 @@ Manually report request error(s) by setting error messages and then calling is_v
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name=""><font size="+1" weight=bold></font></a>
   
 </td>
@@ -215,19 +215,19 @@ Retrieves the value(s) of the specified parameter.
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>name</code>
+  <td align="right"><code>name</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The name of the parameter.</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The value of the specified parameter.
 
@@ -243,7 +243,7 @@ Retrieves the value(s) of the specified parameter.
 
 
 
-<p align=right>
+<p align="right">
 <font color=red>*</font> indicates required
 </p>
 

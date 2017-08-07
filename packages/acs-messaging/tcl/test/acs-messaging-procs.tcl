@@ -34,3 +34,9 @@ aa_register_case acs_messaging_message_p {
 
         }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

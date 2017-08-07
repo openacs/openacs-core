@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 22 Jun 2000
     @cvs-id $Id$
 } {
-    {return_url "" }
+    {return_url:localurl "" }
     {user_id:naturalnum ""}
 } -properties {
     context:onevalue
@@ -62,3 +62,9 @@ ad_form -name comment_edit -export {user_id return_url} -form {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

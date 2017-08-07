@@ -8,7 +8,7 @@ ad_page_contract {
     package_key
     message_key
     locale
-    {return_url {[export_vars -base "message-conflicts" { package_key locale }]}}
+    {return_url:localurl {[export_vars -base "message-conflicts" { package_key locale }]}}
 }
 
 db_transaction {
@@ -21,3 +21,9 @@ db_transaction {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

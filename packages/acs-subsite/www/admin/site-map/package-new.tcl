@@ -26,7 +26,9 @@ if {$package_key eq "/new"} {
 }
 
 if { $instance_name eq "" } {
-        set instance_name [db_string instance_default_name "select pretty_name from apm_package_types where package_key = :package_key"]
+    set instance_name [db_string instance_default_name {
+        select pretty_name from apm_package_types where package_key = :package_key
+    }]
 }
 
 db_transaction {
@@ -62,9 +64,15 @@ db_transaction {
 	ad_return_complaint 1 "Error Creating Package: The following error was generated
 		when attempting to create the package
 	<blockquote><pre>
-		[ad_quotehtml $errmsg]
+		[ns_quotehtml $errmsg]
 	</pre></blockquote>"
     }
 }
 
 ad_returnredirect [export_vars -base . {expand:multiple root_id}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

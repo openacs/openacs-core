@@ -356,10 +356,7 @@ aa_register_case  \
     Test the auth::password::change proc.
 } {
     aa_stub acs_mail_lite::send {
-	acs_mail_lite::send__arg_parser
-
-        global ns_sendmail_to
-        set ns_sendmail_to $to_addr
+        set ::ns_sendmail_to $to_addr
     }
 
     aa_run_with_teardown \
@@ -376,8 +373,7 @@ aa_register_case  \
                     -secret_answer "no_answer"]
             set user_id $user_info(user_id)
 
-            global ns_sendmail_to
-            set ns_sendmail_to {ns_sendmail_UNCALLED}
+            set ::ns_sendmail_to {ns_sendmail_UNCALLED}
 
             parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP  -package_id [ad_acs_kernel_id] -value 1
             aa_true "Send email" [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1]
@@ -394,8 +390,8 @@ aa_register_case  \
                 "ok"
             
             # Check that user gets email about changed password
-            aa_equals "Email sent to user" $ns_sendmail_to $email
-            set ns_sendmail_to {}
+            aa_equals "Email sent to user" $::ns_sendmail_to $email
+            set ::ns_sendmail_to {}
 
             # check that the new password is actually set correctly
             set password_correct_p [ad_check_password $user_id $new_password]
@@ -686,8 +682,9 @@ aa_register_case  \
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {}
             aa_true "Param UseEmailForLoginP {} -> true" [auth::UseEmailForLoginP]
 
+            # "foo" is an invalid value, it can't be true
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {foo}
-            aa_true "Param UseEmailForLoginP foo -> true" [auth::UseEmailForLoginP]
+            aa_false "Param UseEmailForLoginP foo -> false" [auth::UseEmailForLoginP]
             
             # Test login/registration
             
@@ -731,10 +728,7 @@ aa_register_case  \
     Test acs-kernel.EmailAccountOwnerOnPasswordChangeP parameter
 } {
     aa_stub acs_mail_lite::send {
-	acs_mail_lite::send__arg_parser
-
-        global ns_sendmail_to
-        set ns_sendmail_to $to_addr
+        set ::ns_sendmail_to $to_addr
     }
 
     aa_run_with_teardown \
@@ -742,8 +736,7 @@ aa_register_case  \
         -test_code {
             parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -value 1
             
-            global ns_sendmail_to
-            set ns_sendmail_to {}
+            set ::ns_sendmail_to {}
            
             # Create a dummy local user
             set username [ad_generate_random_string]
@@ -779,8 +772,8 @@ aa_register_case  \
             }
             
             # Check that we get email
-            aa_equals "Email sent to user" $ns_sendmail_to $email
-            set ns_sendmail_to {ns_sendmail_UNCALLED}
+            aa_equals "Email sent to user" $::ns_sendmail_to $email
+            set ::ns_sendmail_to {ns_sendmail_UNCALLED}
 
             # Set parameter to false
             parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -value 0
@@ -795,7 +788,7 @@ aa_register_case  \
             aa_equals "Password change OK" $result(password_status) "ok"
             
             # Check that we do not get an email
-            aa_equals "Email NOT sent to user" $ns_sendmail_to {ns_sendmail_UNCALLED}
+            aa_equals "Email NOT sent to user" $::ns_sendmail_to {ns_sendmail_UNCALLED}
 
             ad_parameter_cache -delete [ad_acs_kernel_id] EmailAccountOwnerOnPasswordChangeP
         }
@@ -827,3 +820,9 @@ ad_proc -private auth::test::get_password_vars {
 
     db_1row select_vars {} -column_array test_vars
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

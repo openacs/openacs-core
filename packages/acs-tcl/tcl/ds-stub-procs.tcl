@@ -21,3 +21,9 @@ if {[info commands ds_collect_db_call] eq ""} {
 if {[info commands ds_collect_connection_info] eq ""} {
     proc ds_collect_connection_info {} {}
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

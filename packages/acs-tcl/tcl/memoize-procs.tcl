@@ -26,7 +26,7 @@ if {[ns_info name] eq "NaviServer"} {
     #
     # Flush the existing util memoize cache to get rid of any previous
     # caching conventions.  This is actually just needed for the
-    # upgrade from an aolserver based util_memoize cache to the
+    # upgrade from an AOLserver based util_memoize cache to the
     # NaviServer based one, since the old version kept pairs of values
     # and timestamps, which are not needed, but which might cause
     # confusions, when retrieved later.
@@ -309,3 +309,9 @@ ad_proc -public util_memoize_flush_regexp {
 	}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

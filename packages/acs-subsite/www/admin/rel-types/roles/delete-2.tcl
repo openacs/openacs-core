@@ -11,17 +11,14 @@ ad_page_contract {
 } {
     role:notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 
 if {$operation eq "Yes, I really want to delete this role"} {
     db_transaction {
-	if { [catch {db_exec_plsql drop_role {begin acs_rel_type.drop_role(:role);end;}} errmsg] } {
-	    if { [db_string role_used_p {
-		select case when exists (select 1 from acs_rel_types where role_one = :role or role_two = :role) then 1 else 0 end
-		from dual
-	    }] } {
+	if { [catch {db_exec_plsql drop_role {}} errmsg] } {
+	    if { [db_string role_used_p {}] } {
 		ad_return_complaint 1 "<li> The role \"$role\" is still in use. You must remove all relationship types that use this role before you can remove this role."
 		return
 	    } else {
@@ -33,3 +30,9 @@ if {$operation eq "Yes, I really want to delete this role"} {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

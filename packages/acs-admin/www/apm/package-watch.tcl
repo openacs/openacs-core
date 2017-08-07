@@ -6,9 +6,15 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     package_key
-    {return_url "index"}
+    {return_url:localurl "index"}
 } 
 
 apm_watch_all_files $package_key
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

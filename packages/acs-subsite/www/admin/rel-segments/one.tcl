@@ -54,16 +54,15 @@ db_multirow constraints constraints_select {
      where c.rel_segment = :segment_id
 }
 
-db_1row select_segment_info {
-    select count(*) as number_elements
-      from rel_segment_party_map map, acs_object_party_privilege_map perm
-     where perm.object_id = map.party_id
-       and perm.party_id = :user_id
-       and perm.privilege = 'read' 
-       and map.segment_id = :segment_id
-}
+db_1row select_segment_info {}
 set number_elements [util_commify_number $number_elements]
 
 set admin_p [permission::permission_p -object_id $segment_id -privilege "admin"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

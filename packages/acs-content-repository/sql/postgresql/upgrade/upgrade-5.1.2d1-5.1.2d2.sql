@@ -40,7 +40,7 @@ begin
   PERFORM acs_attribute__drop_attribute(drop_attribute__content_type, 
                                         drop_attribute__attribute_name);
 
-  -- Drop the column if neccessary
+  -- Drop the column if necessary
   if drop_attribute__drop_column then
       execute ''alter table '' || v_table || '' drop column '' ||
 	drop_attribute__attribute_name || '' cascade'';

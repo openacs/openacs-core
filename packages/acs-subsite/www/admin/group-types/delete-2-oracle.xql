@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-
 <queryset>
-   <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
+  <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
 <fullquery name="package_exists">      
       <querytext>
@@ -62,6 +61,19 @@ begin
 delete from group_types where group_type=:group_type;
 end;
 </querytext>
-</partialquery> 
+</partialquery>
+
+<fullquery name="select_group_ids">      
+      <querytext>
+      
+	    select distinct o.object_id
+	    from acs_objects o, acs_object_party_privilege_map perm
+	    where perm.object_id = o.object_id
+              and perm.party_id = :user_id
+              and perm.privilege = 'delete'
+	      and o.object_type = :group_type
+	
+      </querytext>
+</fullquery>
 
 </queryset>

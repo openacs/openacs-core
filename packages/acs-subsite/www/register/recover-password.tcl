@@ -8,6 +8,12 @@ ad_page_contract {
     {authority_id:naturalnum ""}
     {username ""}
     {email ""}
+} -validate {
+    valid_email -requires email {
+        if {![regexp {^[\w.@+/=$%!*~-]+$} $email]} {
+            ad_complain "invalid email address"
+        }
+    }
 }
 
 set page_title [_ acs-subsite.Reset_Password]
@@ -90,3 +96,9 @@ if { [form is_valid recover] || (![form is_submission recover] && (([info exists
 }
 
 set system_owner [ad_system_owner]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

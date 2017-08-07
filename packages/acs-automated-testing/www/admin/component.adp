@@ -1,19 +1,19 @@
 <master>
+<property name="head">
+   <style>
+   dl {background-color: #e4e4e4;}
+   dl dd {margin: 0px 0px 10px 40px;}
+   </style>
+</property>
 <property name="doc(title)">@title;literal@</property>
 <property name="context">@context;literal@</property>
 
-<html>
-  <body>
-  <table width="100%"><tr><td bgcolor="#e4e4e4">
-    <h2> @title@ </h2>
-    <blockquote>
-    <dt><b>Description:</b></dt><dd>@component_desc@</dd>
-    <dt><b>Defined in file:</b></dt><dd>@component_file@</dd>
-    <dt><b> Component body </b> </dt>
+<h2> @title@ </h2>
+<dl>
+    <dt><strong>Description:</strong></dt><dd>@component_desc;noquote@</dd>
+    <dt><strong>Defined in file:</strong></dt><dd>@component_file@</dd>
+    <dt><strong> Component body </strong> </dt>
     <dd><pre>
       @component_body@
     </pre></dd>
-    </blockquote>
-  </td></tr></table>
-  </body>
-</html>
+</dl>

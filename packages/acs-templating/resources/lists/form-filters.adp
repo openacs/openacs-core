@@ -1,7 +1,7 @@
 <formtemplate id="list-filters-@name@">
 <p><formwidget id="submit"></p>
 <multiple name="filters">
-<if @filters.selected_p@ eq "t">
+<if @filters.selected_p;literal@ true>
     <if @filters.widget@ not nil and @filters.widget@ ne "hidden">
          <p>
          @filters.filter_label@

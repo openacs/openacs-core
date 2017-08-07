@@ -7,7 +7,7 @@
 
 <ul>
 <group column="type">
-<li><a href="plsql-subprogram-one?type=<%= [ns_urlencode @all_subprograms.type@] %>&name=<%= [ns_urlencode @all_subprograms.name@] %>"><code><%= [string tolower @all_subprograms.name@] %></code></a></li>
+<li><a href="@all_subprograms.url;noi18n@"><code>@all_subprograms.label@</code></a></li>
 </group>
 </ul>
 

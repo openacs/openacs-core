@@ -14,7 +14,7 @@
     <para>Starting with Version 4.5, all OpenACS core packages support
     automatic upgrade.  That means that, if you have OpenACS 4.5
     or better, you should always be able to upgrade all of your core
-    packages automatically.  If you haven't changed anything, no
+    packages automatically.  If you haven&#39;t changed anything, no
     manual intervention should be required.  If you are running
     OpenACS prior to 4.5, upgrading will require manual effort.</para>
     <para>If all of these conditions are true:</para>
@@ -50,7 +50,7 @@
         </mediaobject>
       </figure>
 
-    <para>It's always a good idea to precede an upgrade attempt with a <link linkend="snapshot-backup">snapshot backup</link>.</para>
+    <para>It&#39;s always a good idea to precede an upgrade attempt with a <link linkend="snapshot-backup">snapshot backup</link>.</para>
     <table>
       <title>Assumptions in this section</title>
       <tgroup cols="2">
@@ -83,7 +83,7 @@
         <tertiary>Linux/Unix</tertiary>
       </indexterm>
       <para>The required platform for OpenACS 4.6 is the same as
-      4.5, with the exception of OpenFTS.  OpenACS 4.6 and later require OpenFTS 0.3.2 for full text search on PostGreSQL.  If you have OpenFTS 0.2, you'll need to upgrade.  </para>
+      4.5, with the exception of OpenFTS.  OpenACS 4.6 and later require OpenFTS 0.3.2 for full text search on PostGreSQL.  If you have OpenFTS 0.2, you&#39;ll need to upgrade.  </para>
       <para>If upgrading from 4.4, you need to manually run acs-kernel/sql/postgres/upgrade-4.4-4.5.sql.  See <ulink url="http://openacs.org/bugtracker/openacs/bug?bug_number=632">Bug #632</ulink></para>
       <itemizedlist mark="circle">
         <listitem><para>A computer with OpenACS 4.5.</para>
@@ -140,7 +140,7 @@
               <para>Select the packages you want to install.  This should
               be everything that says
               <computeroutput>upgrade</computeroutput>, plus any new
-              packages you want.  It's safest to upgrade the kernel by
+              packages you want.  It&#39;s safest to upgrade the kernel by
               itself, and then come back and upgrade the rest of the
               desired packages in a second pass.</para>
             </listitem>
@@ -197,7 +197,7 @@
           </formalpara>
         </listitem>
             <listitem>
-              <para>Upgrade the kernel manually. (There is a script to do most of the rest: <ulink url="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</ulink>).  You'll still have to do a lot of stuff manually, but automated trial and error is much more fun.)</para>
+              <para>Upgrade the kernel manually. (There is a script to do most of the rest: <ulink url="http://cvs.openacs.org/browse/OpenACS/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?r=1.6">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</ulink>).  You&#39;ll still have to do a lot of stuff manually, but automated trial and error is much more fun.)</para>
               <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/ <replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-kernel/sql/postgresql/upgrade</userinput></screen>
               <para>
@@ -233,7 +233,7 @@ psql -f upgrade-4.7d2-4.7d3.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
               <screen><userinput>psql -f /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-lang/sql/postgresql/acs-lang-create.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput></screen>
             </listitem>
             <listitem>
-              <para>(This step may overlap with the two previous steps, but I think it's harmless?) Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <replaceable>$OPENACS_SERVICE_NAME</replaceable>/tcl/zzz-postload.tcl containing:</para>
+              <para>(This step may overlap with the two previous steps, but I think it&#39;s harmless?) Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <replaceable>$OPENACS_SERVICE_NAME</replaceable>/tcl/zzz-postload.tcl containing:</para>
               <programlisting>if {![apm_package_installed_p acs-lang]} {
 apm_package_install -enable -mount_path acs-lang $::acs::rootdir/packages/acs-lang/acs-lang.info
 lang::catalog::import -locales [list "en_US"]
@@ -263,7 +263,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
           See also these forum posts: <ulink url="http://openacs.org/forums/message-view?message_id=143497">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final results</ulink>, <ulink url="http://openacs.org/forums/message-view?message_id=152200">OpenACS 5.0 Upgrade Experiences</ulink>.</para>
 
         <para>
-          There are a few things you might want to do once you've
+          There are a few things you might want to do once you&#39;ve
           upgraded. First, the acs-kernel parameters need to be set to
           allow HREF and IMG tags, if you want users who can edit HTML
           to be able to insert HREF and IMG tags. Also, you might need
@@ -406,21 +406,21 @@ exit</action></screen>
 
               <para>To get your OpenACS code into your local CVS
                 repository, you will set up a working CVS checkout of
-                OpenACS. When you want to update your site, you'll
+                OpenACS. When you want to update your site, you&#39;ll
                 update the working CVS checkout, import those changes
                 into your local CVS checkout, create a temporary CVS
                 checkout to merge your local changes, fix any
                 conflicts, commit your changes, and then update your
-                site. It sounds complicated, but it's not too bad, and
-                it is the best way to work around CVS's limitations.</para>
+                site. It sounds complicated, but it&#39;s not too bad, and
+                it is the best way to work around CVS&#39;s limitations.</para>
               </formalpara>
               <para>This part describes how to set up your working CVS
-        checkout. Once it is set up, you'll be able to update any
+        checkout. Once it is set up, you&#39;ll be able to update any
         packages using the existing working CVS checkout. We use one
         dedicated directory for each branch of OpenACS - if you are
         using OpenACS 5.1,x, you will need a 5.1 checkout. That will
         be good for 5.1, 5.11, 5.12, and so on. But when you want to
-        upgrade to OpenACS 5.2, you'll need to check out another
+        upgrade to OpenACS 5.2, you&#39;ll need to check out another
         branch.</para>
               
               <para>The <replaceable>openacs-5-1-compat</replaceable> tag identifies the latest released version of OpenACS 5.1 (ie, 5.1.3 or 5.1.4) and the latest compatible version of each package.  Each minor release of OpenACS since 5.0 has this tagging structure.  For example, OpenACS 5.1.x has <computeroutput>openacs-5-1-compat</computeroutput>.</para>
@@ -437,7 +437,7 @@ exit</action></screen>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd ../..</userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>mv openacs-4 <replaceable>openacs-5-1</replaceable></userinput></screen>
 
-              <para>Make sure your working CVS checkout doesn't have
+              <para>Make sure your working CVS checkout doesn&#39;t have
               the entire CVS tree from OpenACS. A good way to check
               this is if it has a contrib directory. If it does, you
               probably checked out the entire tree. You might want to
@@ -460,7 +460,7 @@ exit</action></screen>
                     </formalpara>
                   <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-1</replaceable></userinput>
-[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs up -Pd ChangeLog *.txt bin etc tcl www packages/*</userinput></screen>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs up -Pd ChangeLog *.txt bin etc Tcl www packages/*</userinput></screen>
                 </listitem>
               <listitem>
                 <formalpara>
@@ -496,7 +496,7 @@ exit</action></screen>
             <para>Create a new directory as temporary working space to
             reconcile conflicts between the new files and your current
             work.  The example uses the cvs keyword yesterday, making
-            the assumption that you haven't checked in new code to
+            the assumption that you haven&#39;t checked in new code to
             your local tree in the last day. This section should be
             improved to use tags instead of the keyword yesterday!</para>
             <screen>[$OPENACS_SERVICE_NAME openacs-5.1]$ <userinput> cd /var/lib/aolserver</userinput>
@@ -507,11 +507,11 @@ exit</action></screen>
           <para>The file /var/tmp/openacs-upgrade/cvs.txt contains the
             results of the upgrade.  If you changed files that are
             part of the OpenACS tarball and those changes conflict,
-            you'll have to manually reconcile them.  Use the emacs
+            you&#39;ll have to manually reconcile them.  Use the emacs
             command <computeroutput>M-x sort-lines</computeroutput>
             (you may have to click Ctrl-space at the beginning of the
-            file, and go to the end, and then try M-x sort-lines) and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</para>
-            <para>Once you've fixed any conflicts, commit the new code
+            file, and go to the end, and then try M-x sort-lines) and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you&#39;re finished, or if there aren&#39;t any conflicts, save and exit.</para>
+            <para>Once you&#39;ve fixed any conflicts, commit the new code
             to your local tree.  </para>
             <screen>[$OPENACS_SERVICE_NAME tmp]$ <userinput>cd <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade</userinput>
 [$OPENACS_SERVICE_NAME <replaceable>$OPENACS_SERVICE_NAME</replaceable>-upgrade]$ <userinput>cvs commit -m "Upgraded to 5.1"</userinput></screen>          </listitem>
@@ -616,7 +616,7 @@ exit</action></screen>
           </orderedlist>
         </listitem>
         <listitem>
-          <para>Build and install the new OpenFTS driver and supporting tcl procedures.  (This section of shell code is not fully documented; please exercise care.)</para>
+          <para>Build and install the new OpenFTS driver and supporting Tcl procedures.  (This section of shell code is not fully documented; please exercise care.)</para>
           <screen>cd /usr/local/src/
           tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
           chown -R root.root Search-OpenFTS-tcl-0.3.2/
@@ -699,7 +699,7 @@ exit</action></screen>
       function creation and at function calling, so they still match.
       But if you use a database created in 7.2 in 7.3, the function
       names in the database remain truncated but the function calls
-      are not, and so they don't match.  Also some functions use
+      are not, and so they don&#39;t match.  Also some functions use
       casting commands that no longer work in 7.3 and these functions
       must be recreated.</para>
       <para>
@@ -727,7 +727,7 @@ exit</action></screen>
           </screen>
         </listitem>
         <listitem>
-            <para>Use perl to replace <computeroutput>timestamp</computeroutput> with <computeroutput>timestamptz</computeroutput> in the dump file.  See example perl code in step two in <ulink url="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD">/contrib/misc/upgrade_4.6_to_5.0.sh</ulink></para>
+            <para>Use perl to replace <computeroutput>timestamp</computeroutput> with <computeroutput>timestamptz</computeroutput> in the dump file.  See example perl code in step two in <ulink url="http://cvs.openacs.org/browse/OpenACS/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?r=1.6">/contrib/misc/upgrade_4.6_to_5.0.sh</ulink></para>
           
         </listitem>
         <listitem>
@@ -736,7 +736,7 @@ exit</action></screen>
           installation location is different, and your startup script
           (/etc/init.d/postgres73 should be named differently. You
           might even need to edit that file to make the paths
-          correct). You'll also need to add <computeroutput>export
+          correct). You&#39;ll also need to add <computeroutput>export
           PGPORT=5434</computeroutput> to the .bashrc and/or
           .bash_profile for the postgres73 user.
           </para> 
@@ -744,13 +744,13 @@ exit</action></screen>
         <listitem>
           <para>Install PostgreSQL 7.3.x. Note that you PostgreSQL
           must listen on a different port in order to work
-          correctly, so you'll need to edit the configuration file
+          correctly, so you&#39;ll need to edit the configuration file
           (/usr/local/pgsql73/data/postgresql.conf) and
           change the port (to 5433, say). create a second postgres
           user to differentiate between the two postgres
-          installs. When you do ./configure, you'll need to include
+          installs. When you do ./configure, you&#39;ll need to include
           --prefix=$HOME to ensure that it is installed in the
-          postgres73 user's home directory.</para> 
+          postgres73 user&#39;s home directory.</para> 
         </listitem>
         <listitem>
           <para>Change the path in

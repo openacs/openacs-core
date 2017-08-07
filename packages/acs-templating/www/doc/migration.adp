@@ -1,56 +1,71 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating an Existing Tcl Page}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating an Existing Tcl Page}</property>
 <property name="doc(title)">Templating an Existing Tcl Page</property>
 <master>
-
-<body>
-<h2>Templating an Existing Tcl Page</h2><a href="">Templating System</a> : Migration
+<h2>Templating an Existing Tcl Page</h2>
+<a href="">Templating System</a>
+ : Migration
 <h3>In a Nutshell</h3>
-When templatizing a legacy tcl page, your task is to
-<b>separate</b> code and graphical presentation. The latter goes
-into an ADP file; it contains essentially HTML, augmented by a few
-special tags and the <code>\@<i>variable</i>\@</code> construct. The
-code goes into a Tcl script. In other words, a templated page
-consists of two files, a Tcl part that puts its results in data
-sources, and an ADP page (the template), into which these data
-sources will be interpolated to yield a complete HTML page.
-<h3>General</h3><p>As usual, the Tcl page should start with a call to
+
+When templatizing a legacy Tcl page, your task is to
+<strong>separate</strong>
+ code and graphical presentation. The
+latter goes into an ADP file; it contains essentially HTML,
+augmented by a few special tags and the
+<code>\@<em>variable</em>\@</code>
+ construct. The code goes into a
+Tcl script. In other words, a templated page consists of two files,
+a Tcl part that puts its results in data sources, and an ADP page
+(the template), into which these data sources will be interpolated
+to yield a complete HTML page.
+<h3>General</h3>
+<p>As usual, the Tcl page should start with a call to
 <code>ad_page_contract</code>. In its <code>-properties</code>
 block you promise the data sources that your script will provide;
 they were earlier called <em>page properties</em>, hence the name
 of the option. Then your script performs all the computations and
 queries needed to define these data sources. There are special
-mechanisms for handling multirow data sources; see below.</p><p>At the end of the Tcl script, you should call
-<code>ad_return_template</code>. The template runs after the tcl
-script, and can use these data sources.</p><p>Make sure that the fancy adp parser is enabled in your AOL ini
-file.</p><pre>
+mechanisms for handling multirow data sources; see below.</p>
+<p>At the end of the Tcl script, you should call
+<code>ad_return_template</code>. The template runs after the Tcl
+script, and can use these data sources.</p>
+<p>Make sure that the fancy adp parser is enabled in your AOL ini
+file.</p>
+<pre>
       [ns/server/myserver/adp]
       DefaultParser=fancy
-</pre><p>A few more hints</p><ul>
+</pre>
+<p>A few more hints</p>
+<ul>
 <li>Do not write to the connection directly. Avoid
-<code>ns_puts</code>, <code>ns_write</code> etc., which don't wait
-till the headers are written or the page is completed; they may act
-differently than you expect.</li><li>If you can, put code in the tcl file, not between <code>&lt;%
-%&gt;</code> in the adp page.</li><li>Put HTML in the adp page, not int the tcl program. Put reusable
+<code>ns_puts</code>, <code>ns_write</code> etc., which don&#39;t
+wait till the headers are written or the page is completed; they
+may act differently than you expect.</li><li>If you can, put code in the Tcl file, not between <code>&lt;%
+%&gt;</code> in the adp page.</li><li>Put HTML in the adp page, not int the Tcl program. Put reusable
 HTML fragments in a separate adp file (think of it as a widget)
 that will be <code>&lt;include&gt;</code>d from several pages.
-Prefer this to writing a tcl proc that returns HTML.</li><li>Remember to remove backslashes where you had to escape special
+Prefer this to writing a Tcl proc that returns HTML.</li><li>Remember to remove backslashes where you had to escape special
 characters, as in
 <blockquote><pre>
-Nuts  <font color="red">\</font>$2.70 <font color="red">\</font>[&lt;a href=<font color="red">\</font>"shoppe<font color="red">\</font>"&gt;buy&lt;/a&gt;<font color="red">\</font>]
+Nuts  <font color="red">\</font>$2.70 <font color="red">\</font>[&lt;a href="<font color="red">\</font>"shoppe<font color="red">\</font>"&gt;buy&lt;/a&gt;<font color="red">\</font>]
           
 </pre></blockquote>
 </li>
-</ul><h3>Forms</h3>
+</ul>
+<h3>Forms</h3>
+
 There is nothing special about building forms; just use the
-<code>&lt;form&gt;</code> tag as always. All HTML tags can be used
+<code>&lt;form&gt;</code>
+ tag as always. All HTML tags can be used
 in the ADP file (template).
-<h3>A simple page</h3><p>First I take a page from the news package as an example. For
+<h3>A simple page</h3>
+<p>First I take a page from the news package as an example. For
 simplicity, I pick <code>item-view</code>, which does not use a
 <code>&lt;form&gt;</code>. I reformatted it a bit to make three
-panes fit next to each other and to line up corresponding code.</p><table cellspacing="5" bgcolor="#CCDDFF">
+panes fit next to each other and to line up corresponding code.</p>
+<table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
-<th rowspan="2">old tcl code</th><th colspan="2">new</th>
+<th rowspan="2">old Tcl code</th><th colspan="2">new</th>
 </tr><tr bgcolor="#CCCCCC">
 <th><code>packages/news/www/item-view.tcl</code></th><th><code>packages/news/www/item-view.adp</code></th>
 </tr><tr>
@@ -62,7 +77,7 @@ ad_page_contract {
 
     \@author Jon Salz (jsalz\@arsdigita.com)
     \@creation-date 11 Aug 2000
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id$
 
 } {
     news_item_id:integer,notnull
@@ -107,7 +122,7 @@ ad_page_contract {
 
     \@author Jon Salz (jsalz\@arsdigita.com)
     \@creation-date 11 Aug 2000
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id$
 
 } {
     news_item_id:integer,notnull
@@ -186,16 +201,21 @@ ad_return_template
           
 </pre></td>
 </tr>
-</table><h3>Multi-Row Data Sources</h3>
+</table>
+<h3>Multi-Row Data Sources</h3>
+
 Technically, the result of a query that may return multiple rows is
 stored in several arrays. This datasource is filled by a call to
-<code>db_multirow</code>, and the repeating part of the HTML output
-is produced by the <code>&lt;multiple&gt;</code> tag. The following
-example shows the part of the <code>index</code> page of the News
+<code>db_multirow</code>
+, and the repeating part of the HTML output
+is produced by the <code>&lt;multiple&gt;</code>
+ tag. The following
+example shows the part of the <code>index</code>
+ page of the News
 module that uses the mechanism, not a whole page.
 <table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
-<th rowspan="2">old tcl code</th><th colspan="2">new</th>
+<th rowspan="2">old Tcl code</th><th colspan="2">new</th>
 </tr><tr bgcolor="#CCCCCC">
 <th><code>packages/news/www/index.tcl</code></th><th><code>packages/news/www/index.adp</code></th>
 </tr><tr>
@@ -208,7 +228,7 @@ module that uses the mechanism, not a whole page.
                       news items?
     \@author Jon Salz (jsalz\@mit.edu)
     \@creation-date 11 Aug 2000
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id$
 } {
 }</font></pre></td><td valign="top"><pre>
 <font color="#999999">ad_page_contract {
@@ -220,19 +240,19 @@ module that uses the mechanism, not a whole page.
                       news items?
     \@author Jon Salz (jsalz\@mit.edu)
     \@creation-date 11 Aug 2000
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id$
 } {
 } -properties {
   header:onevalue
   context_bar:onevalue
   subsite_id:onevalue
   subsite:multirow
-</font><b>item</b>:multirow<font color="#999999">
+</font><strong>item</strong>:multirow<font color="#999999">
   footer:onevalue
 }</font>
 </pre></td><td> </td>
 </tr><tr bgcolor="#CCCCCC">
-<td align="center"><b>...</b></td><td align="center"><b>...</b></td><td align="center"><b>...</b></td>
+<td align="center"><strong>...</strong></td><td align="center"><strong>...</strong></td><td align="center"><strong>...</strong></td>
 </tr><tr>
 <td valign="top"><pre>
 append body "
@@ -247,8 +267,8 @@ append body "
     and (   expiration_date is null
          or expiration_date &gt; sysdate)
 } {
-    append body "&lt;li&gt;&lt;a href=
-        \"item-view?news_item_id=<font color="blue">"\
+    append body "&lt;li&gt;&lt;a href="
+        \"item-view?news_item_id=<font color="b" lue="">"\
         "</font>$news_item_id\"
         &gt;$title&lt;/a&gt;\n"
 
@@ -263,13 +283,13 @@ append body "
 &lt;p&gt;&lt;li&gt;You can use the &lt;a href=
     \"admin/\"&gt;administration
     interface&lt;/a&gt; to post a new
-    item (there's currently no
+    item (there&#39;s currently no
     security in place).
 
 &lt;/ul&gt;
 "
 </pre></td><td valign="top"><pre>
-<font color="green">db_multirow <b>item</b>
+<font color="green">db_multirow <strong>item</strong>
 </font> news_items_select {
     select news_item_id, title
     from news_items_obj
@@ -284,7 +304,7 @@ append body "
 &lt;ul&gt;
 
 
-&lt;multiple name=<b>item</b>&gt;
+&lt;multiple name=<strong>item</strong>&gt;
 
 
 
@@ -293,12 +313,12 @@ append body "
 
 
   &lt;li&gt;&lt;a href=
-      "item-view?news_item_id=<font color="blue">&lt;%
-      %&gt;</font>\@<b>item</b>.news_item_id\@"
-      &gt;\@<b>item</b>.title\@&lt;/a&gt;
+      "item-view?news_item_id=<font color="b" lue="">&lt;%
+      %&gt;</font>\@<strong>item</strong>.news_item_id\@"
+      &gt;\@<strong>item</strong>.title\@&lt;/a&gt;
 &lt;/multiple&gt;
 
-&lt;if \@<b>item</b>:rowcount\@ eq 0&gt;
+&lt;if \@<strong>item</strong>:rowcount\@ eq 0&gt;
   &lt;li&gt;There are
   currently no news items
   available.
@@ -308,7 +328,7 @@ append body "
 &lt;p&gt;&lt;li&gt;You can use the &lt;a href=
   "admin/"&gt;administration
   interface&lt;/a&gt; to post a new
-  item (there's currently no
+  item (there&#39;s currently no
   security in place).
 
 &lt;/ul&gt;
@@ -316,6 +336,7 @@ append body "
 </pre></td>
 </tr>
 </table>
+
 Notes:
 <ul>
 <li>I use the general <code>&lt;if&gt;</code> construct to handle
@@ -324,26 +345,28 @@ the case when no lines are returned. (The
 documentation</a>.</li><li>Blue color marks additional syntax necessary to wrap lines
 short.</li><li>The proc <code>db_multirow</code> does have a code block and an
 optional <code>if_no_rows</code> block, just like
-<code>db_foreach</code>. They aren't used in the example,
+<code>db_foreach</code>. They aren&#39;t used in the example,
 though.</li>
-</ul><p>If you have a more complicated db_foreach, where logic is
+</ul>
+<p>If you have a more complicated db_foreach, where logic is
 performed inside the body, then it might be helpful to build your
 own multirow variable. In the excert below, taken from
 /pvt/alerts.tcl and /pvt/alerts.adp, the foreach logic made it hard
 to use the db_multirow because it needed a combination of the
-output from sql and also the output of tcl procedures using that
-value.</p><table cellspacing="5" bgcolor="#CCDDFF">
+output from sql and also the output of Tcl procedures using that
+value.</p>
+<table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
-<th rowspan="2">old tcl code</th><th colspan="2">new</th>
+<th rowspan="2">old Tcl code</th><th colspan="2">new</th>
 </tr><tr bgcolor="#CCCCCC">
 <th><code>packages/acs-core-ui/www/pvt/alerts.tcl</code></th><th><code>packages/acs-core-ui/www/pvt/alerts.adp</code></th>
 </tr><tr>
 <td valign="top"><pre><font color="#999999">ad_page_contract {
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id: migration.html,v 1.3.2.2 2017/04/22 18:30:26 gustafn Exp $
 } {
 }</font></pre></td><td valign="top"><pre>
 <font color="#999999">ad_page_contract {
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id: migration.html,v 1.3.2.2 2017/04/22 18:30:26 gustafn Exp $
 } {
 } -properties {
     header:onevalue
@@ -358,7 +381,7 @@ value.</p><table cellspacing="5" bgcolor="#CCDDFF">
 }</font>
 </pre></td><td> </td>
 </tr><tr bgcolor="#CCCCCC">
-<td align="center"><b>...</b></td><td align="center"><b>...</b></td><td align="center"><b>...</b></td>
+<td align="center"><strong>...</strong></td><td align="center"><strong>...</strong></td><td align="center"><strong>...</strong></td>
 </tr><tr>
 <td valign="top"><pre>
 
@@ -540,11 +563,13 @@ if { [db_table_exists "bboard_email_alerts"] } {
           
 </pre></td>
 </tr>
-</table><hr><address>
+</table>
+<hr>
+<address>
 <a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a>, <a href="mailto:iwashima\@mit.edu">Hiro
 Iwashima</a>
 </address>
-Last modified: $Id: migration.html,v 1.2.22.2 2014/09/09 08:32:02
+
+Last modified: $&zwnj;Id: migration.html,v 1.3.2.2 2017/04/22 18:30:26
 gustafn Exp $
-</body>

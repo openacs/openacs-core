@@ -47,3 +47,9 @@ if {[ns_info version] eq "4.5"} {
 	}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

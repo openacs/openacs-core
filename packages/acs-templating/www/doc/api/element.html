@@ -4,7 +4,7 @@
   </head>
   <body bgcolor="#ffffff">
   <h2>Form Element</h2>
-  <b><a href="../index.html">Templating System</a> : API Reference</b>
+  <strong><a href="../index.html">Templating System</a> : API Reference</strong>
   <hr>
 
 <h3>Summary</h3>
@@ -31,23 +31,23 @@ template::element create <em>form_name element_name \
 <p>Append a new element to the specified form.</p>
 
 <ul>
-  <li>The <tt>html</tt> switch may be used to include additional HTML 
+  <li>The <kbd>html</kbd> switch may be used to include additional HTML 
       attributes
-      in the <tt>input</tt>, <tt>select</tt>, or <tt>textarea</tt> tag
+      in the <kbd>input</kbd>, <kbd>select</kbd>, or <kbd>textarea</kbd> tag
       used to ultimately render the element.
 
-  <li>The <tt>validate</tt> switch may be used to perform simple
-  custom validation of each element value.  <tt>type</tt> is a keyword
+  <li>The <kbd>validate</kbd> switch may be used to perform simple
+  custom validation of each element value.  <kbd>type</kbd> is a keyword
   for the type of validation being performed.  This same keyword must
-  be referenced by the <tt><a
-  href="../tagref/formerror.html">formerror</a></tt> tag to customize
+  be referenced by the <kbd><a
+  href="../tagref/formerror.html">formerror</a></kbd> tag to customize
   the presentation and layout of the error message for this validation
-  step.  <tt>expression</tt> must be a block of arbitrary Tcl code
+  step.  <kbd>expression</kbd> must be a block of arbitrary Tcl code
   that evaluates to 1 (valid) or 0 (not valid). The variable
-  <tt>$value</tt> may be used in the expression to reference the
-  element value. <tt>message</tt> is simply a string containing a
+  <kbd>$value</kbd> may be used in the expression to reference the
+  element value. <kbd>message</kbd> is simply a string containing a
   message to return to the user if validation fails. The variables
-  <tt>$value</tt> and <tt>$label</tt> may be used in the message to
+  <kbd>$value</kbd> and <kbd>$label</kbd> may be used in the message to
   reference the parameter value and label (or name if no label is
   supplied).
 </ul>
@@ -76,7 +76,7 @@ template::element get_values <em>form_name element_name</em></pre>
 <h3>Note(s)</h3>
 
 <hr>
-<a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a>
+<!-- <a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a> -->
 </body>
 </html>
 

@@ -67,3 +67,9 @@ if {$system_time eq $tokyo_utc_time } {
 
 ad_return_template
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

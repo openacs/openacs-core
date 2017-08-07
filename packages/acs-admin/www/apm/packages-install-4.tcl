@@ -17,19 +17,18 @@ set sql_file_paths [ad_get_client_property apm sql_file_paths]
 
 set title "Package Installation"
 set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
-set template [parameter::get -package_id [ad_conn subsite_id] \
-		  -parameter StreamingHead \
-		  -default /packages/openacs-default-theme/lib/plain-streaming-head]
 
-ad_return_top_of_page [ad_parse_template -params [list context title] $template]
+ad_return_top_of_page [ad_parse_template \
+                           -params [list context title] \
+                           [template::streaming_template]]
 
-ns_write {
+ns_write [subst {
     <h2>Installing packages...</h2>
-    <script>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
+    <script nonce='$::__csp_nonce'>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
     </script>
     <p>
     <ul>
-}
+}]
 
 
 # We have a set of SQL files that need to be sourced at the appropriate time.
@@ -48,17 +47,18 @@ foreach pkg_info $pkg_install_list {
 	array set version [apm_read_package_info_file $spec_file]
     } errmsg] } {
 	ns_write "<li> Unable to install the [pkg_info_key $pkg_info] package because its specification
-	file is invalid: <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
-	continue
-    }
-
-    if {[apm_package_version_installed_p $version(package.key) $version(name)] } {
-	ns_log notice "===== ALREADY-installed $version(package.key)"
-	# Already installed.
+	file is invalid: <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
 	continue
     }
 
     set package_key $version(package.key)
+
+    if {[apm_package_version_installed_p $package_key $version(name)] } {
+	#ns_log notice "===== ALREADY installed $package_key"
+	# Already installed.
+	continue
+    }
+
     set version_files $version(files)
 
     set data_model_files [list]
@@ -87,7 +87,7 @@ foreach pkg_info $pkg_install_list {
     set enable_p 1
 
     if {[catch {
-	ns_log notice "===== INSTALL $version(package.key)"
+	ns_log notice "===== INSTALL $package_key"
 	set version_id [apm_package_install \
 			    -enable=$enable_p \
 			    -package_path $package_path \
@@ -96,12 +96,7 @@ foreach pkg_info $pkg_install_list {
 			    -data_model_files $data_model_files \
 			    -mount_path $selected_mount_path \
 			    $spec_file]
-
-	if {[file exists $::acs::rootdir/packages/$version(package.key)/install.xml]} {
-	    ns_log notice "===== RUN /packages/$version(package.key)/install.xml"
-	    apm::process_install_xml /packages/$version(package.key)/install.xml ""
-	}
-	ns_log notice "===== INSTALL $version(package.key) DONE"
+	ns_log notice "===== INSTALL $package_key DONE"
 
     } errorMsg]} {
 	ns_write "Error: $errorMsg\n"
@@ -113,10 +108,11 @@ foreach pkg_info $pkg_install_list {
         # Installation of the package failed and we shouldn't continue with installation
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
-        ns_write {
+        ns_write [subst {
 	    </ul>
-	    <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
-	}
+	    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);
+            </script>
+	}]
         ad_script_abort
     }
 
@@ -132,10 +128,16 @@ if {$installed_count < 1} {
 } else {
     ns_write {</ul><p>
 	Done installing packages.
-	<p>You should restart the server now to make installed and upgraded packages available. 
-	<a href="../server-restart">Click here</a> to restart the server now.</p>
+	<p>You should restart the server now to make installed and upgraded packages available.</p>
+        <p><a href="../server-restart" class="button">Click here</a> to restart the server now.</p>
     }
 }
-ns_write {
-    <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
-}
+ns_write [subst {
+    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
+}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

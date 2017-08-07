@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     request_id:naturalnum,notnull
-    return_url
+    return_url:localurl
 }
 
 set user_id [ad_conn user_id]
@@ -36,3 +36,9 @@ ad_form -name change_frequency -export {request_id return_url} -form {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

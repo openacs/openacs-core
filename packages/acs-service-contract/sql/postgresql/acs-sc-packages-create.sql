@@ -433,11 +433,12 @@ CREATE OR REPLACE FUNCTION acs_sc_impl__delete(
    p_impl_name varchar
 ) RETURNS integer AS $$
 DECLARE
+  v_impl_id integer;
 BEGIN
 
-    delete from acs_sc_impls
-    where impl_contract_name = p_impl_contract_name
-    and impl_name = p_impl_name;
+    v_impl_id := acs_sc_impl__get_id(p_impl_contract_name,p_impl_name);
+
+    perform acs_object__delete(v_impl_id);
 
     return 0;
 

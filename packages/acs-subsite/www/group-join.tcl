@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-08-07
     @cvs-id $Id$
 } {
-    {return_url "."}
+    {return_url:localurl "."}
 }
 
 auth::require_login
@@ -35,3 +35,9 @@ if { !$member_p } {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

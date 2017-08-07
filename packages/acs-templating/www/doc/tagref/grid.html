@@ -12,7 +12,7 @@
 
 <h3>Summary</h3>
 
-<p>The <tt>grid</tt> tag is used to output each row of a multirow
+<p>The <kbd>grid</kbd> tag is used to output each row of a multirow
 datasource as a cell of an <var>n</var> column grid.</p>
 
 <h3>Usage</h3>
@@ -63,7 +63,7 @@ columns, the rows from the datasource will appear in the following
 order:</p>
 
 <p>
-<table cellpadding=2 cellspacing=0 border=1 bgcolor=#eeeeee>
+<table cellpadding="2" cellspacing="0" border="1" bgcolor="#eeeeee">
 <tr>  <td width=30>1</td>  <td width=30>5</td>  <td width=30>9</td></tr>
 <tr>  <td width=30>2</td>  <td width=30>6</td>  <td width=30>10</td></tr>
 <tr>  <td width=30>3</td>  <td width=30>7</td>  <td width=30>&nbsp;</td></tr>
@@ -71,24 +71,24 @@ order:</p>
 </table>
 </p>
 
-<li><p>The <tt>@datasource.row@</tt> variable can be used to band grid
+<li><p>The <kbd>@datasource.row@</kbd> variable can be used to band grid
 rows:
 
 <pre>
   &lt;if @datasource.col@ eq 1 and @datasource.row@ odd>
-    &lt;tr bgcolor=#eeeeee>
+    &lt;tr bgcolor="#eeeeee">
   &lt;/if>
 
   &lt;if @datasource.col@ eq 1 and @datasource.row@ even>
-    &lt;tr bgcolor=#ffffff>
+    &lt;tr bgcolor="#ffffff">
   &lt;/if>
 </pre>
 
 <p>Note that this is different from the <a
-href="multiple.html"><tt>multiple</tt></a> tag, where the
-<tt>@datasource.rownum@</tt> is used for this effect.</p>
+href="multiple.html"><kbd>multiple</kbd></a> tag, where the
+<kbd>@datasource.rownum@</kbd> is used for this effect.</p>
 </ul>
 
 <hr>
 
-<a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a>
+<!-- <a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a> -->

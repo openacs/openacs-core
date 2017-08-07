@@ -36,3 +36,22 @@ if { [set __form__ [ns_getform]] ne "" } {
     }
 
 }
+
+template::add_body_script -script [subst {
+    document.getElementById('confirm-button').addEventListener('click', function (event) {
+        event.preventDefault();
+        history.back();
+        return false;
+    });
+    document.getElementById('confirm-button').addEventListener('keypress', function (event) {
+        event.preventDefault();
+        acs_KeypressGoto(document.referrer,event);
+        return false;
+    });
+}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

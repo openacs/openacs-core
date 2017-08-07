@@ -6,9 +6,8 @@ ad_page_contract {
     @cvs-id $Id$
 }
 
-set page_title "[_ acs-subsite.Subsite_Configuration]"
-
-set context [list "[_ acs-subsite.Configuration]"]
+set page_title [_ acs-subsite.Subsite_Configuration]
+set context [list [_ acs-subsite.Configuration]]
 
 set group_id [application_group::group_id_from_package_id]
 
@@ -32,7 +31,7 @@ ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     }
     {description:text(textarea),optional
         {label "[_ acs-subsite.Description]"}
-	{html { rows 6 cols 80 }}
+        {html { rows 6 cols 80 }}
     }
 } -on_request {
     set instance_name [ad_conn instance_name]
@@ -67,3 +66,9 @@ ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     ad_returnredirect [ad_conn url]
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

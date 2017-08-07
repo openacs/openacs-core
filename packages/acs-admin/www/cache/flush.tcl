@@ -5,7 +5,7 @@ ad_page_contract {
     pattern
     raw_date
     key:allhtml
-    {return_url "show-util-memoize?pattern=$pattern"}
+    {return_url:localurl "show-util-memoize?pattern=$pattern"}
 }
 
 if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
@@ -17,7 +17,7 @@ if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
 	    set pair [ns_cache get util_memoize $name]
 	    set raw_time [lindex $pair 0]
 	    if {$raw_time == $raw_date} {
-		set value [ad_quotehtml [lindex $pair 1]]
+		set value [ns_quotehtml [lindex $pair 1]]
 		set time [clock format $raw_time]
 		set key $name
 		break
@@ -34,3 +34,9 @@ if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
 ns_cache flush util_memoize $key
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

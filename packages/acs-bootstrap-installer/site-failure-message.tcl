@@ -12,3 +12,9 @@ proc site_failure_handler { conn arg why } {
 ns_register_filter preauth GET * site_failure_handler
 ns_register_filter preauth POST * site_failure_handler
 ns_register_filter preauth HEAD * site_failure_handler
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

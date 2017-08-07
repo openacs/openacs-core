@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-
 <queryset>
-   <rdbms><type>postgresql</type><version>7.1</version></rdbms>
+  <rdbms><type>postgresql</type><version>9.0</version></rdbms>
 
 <fullquery name="package_exists">      
       <querytext>
@@ -70,6 +69,17 @@ delete from group_types where group_type=:group_type;
 return 1;
 end;
 </querytext>
-</partialquery> 
+</partialquery>
+
+<fullquery name="select_group_ids">      
+      <querytext>
+      
+	    select o.object_id
+	    from acs_objects o
+	    where o.object_type = :group_type
+	    and   acs_permission__permission_p(o.object_id, :user_id, 'delete')
+	
+      </querytext>
+</fullquery>
 
 </queryset>

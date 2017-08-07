@@ -20,18 +20,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_package_list_search_order.get_dependencies">
-    <querytext>
-      select apd.service_uri
-      from apm_package_versions apv, apm_package_dependencies apd
-      where apv.package_key = :package_key
-        and apv.installed_p = 't'
-        and apd.version_id = apv.version_id
-        and apd.dependency_type in ('extends', 'embeds')
-      order by apd.dependency_id
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_package_list_url_resolution.get_inherit_templates_p">
     <querytext>
       select inherit_templates_p
@@ -126,14 +114,6 @@
     </querytext>
   </fullquery>
   
-  <fullquery name="apm_package_installed_p_not_cached.apm_package_installed_p">      
-    <querytext>
-      select 1 from apm_package_versions
-      where package_key = :package_key
-      and installed_p = 't'
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_package_enabled_p.apm_package_enabled_p">      
     <querytext>
       select 1 from apm_package_versions
@@ -206,10 +186,18 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_version_id_from_package_key.get_id">      
+  <fullquery name="apm_version_id_from_package_key.get_enabled_id">      
     <querytext>
         select version_id 
         from apm_enabled_package_versions 
+        where package_key = :package_key
+    </querytext>
+  </fullquery>
+  
+  <fullquery name="apm_version_id_from_package_key.get_id">      
+    <querytext>
+        select version_id 
+        from apm_package_versions 
         where package_key = :package_key
     </querytext>
   </fullquery>

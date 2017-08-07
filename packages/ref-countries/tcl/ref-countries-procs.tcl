@@ -40,3 +40,9 @@ ad_proc -public ref_countries::get_country_code {
     
     return $country_code
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -14,7 +14,7 @@ ad_proc -public search::queue {
     Add an object to the search_observer_queue table with
     an event.
 
-    You should excercise care that the entry is not being
+    You should exercise care that the entry is not being
     created from a trigger (although search is robust for multiple
     entries so it will not insert or update the same object
     more than once per sweep).
@@ -302,7 +302,7 @@ ad_proc -private search::content_filter {
     #ns_log notice "search::content_filter txt len [string length $txt]"
 
     if {[info exists tmp_filename]} {
-	file delete $tmp_filename
+	file delete -- $tmp_filename
     }
 }
 
@@ -481,3 +481,9 @@ ad_proc search::extra_args {
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

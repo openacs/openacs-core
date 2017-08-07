@@ -8,8 +8,14 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {watch_file ""}
-    {return_url ""}
+    {return_url:localurl ""}
 }
 apm_file_watch_cancel $watch_file
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

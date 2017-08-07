@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     object_type:notnull,trim
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_vars:onevalue
@@ -55,3 +55,9 @@ if { $ctr == 0 } {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

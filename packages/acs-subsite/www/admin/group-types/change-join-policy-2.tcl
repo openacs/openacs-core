@@ -10,7 +10,7 @@ ad_page_contract {
 } {
     group_type:notnull
     default_join_policy:notnull
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 if { ![db_0or1row select_pretty_name {
@@ -49,3 +49,9 @@ if {$return_url eq ""} {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -36,7 +36,7 @@ if {$version_id ne ""} {
          where version_id = :version_id
     }
     if {[info exists pretty_name]} {
-	lappend context [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
+	lappend context [list [export_vars -base package-view {version_id {kind sql_files}}] "$pretty_name $version_name"]
     }
 }
 lappend context [file tail $url]
@@ -74,3 +74,9 @@ if { $safe_p } {
 } else {
     ad_return_warning "Invalid file location" "Can only display files in package or doc directory"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

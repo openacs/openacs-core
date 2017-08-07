@@ -61,8 +61,7 @@ ad_proc -private lang::util::get_hash_indices { multilingual_string } {
 
     @author Peter marklund (peter@collaboraid.biz)
 } {
-    set regexp_pattern {(?:^|[^\\])(\#[-a-zA-Z0-9_:]+\.[-a-zA-Z0-9_:]+\#)}
-    return [get_regexp_indices $multilingual_string $regexp_pattern]
+    return [regexp -inline -indices -all {\#[a-zA-Z0-9_:-]+\.[a-zA-Z0-9_:-]+\#} $multilingual_string]
 }
 
 ad_proc lang::util::message_tag_regexp {} {
@@ -72,9 +71,18 @@ ad_proc lang::util::message_tag_regexp {} {
     is the message key, and the third sub match is the message text in en_US locale.
 
     @author Peter marklund (peter@collaboraid.biz)
+    @see lang::util::message_key_regexp
 } {
     return {(<#\s*?([-a-zA-Z0-9_:\.]+)\s+(.+?)\s*?#>)}
 }
+
+ad_proc lang::util::message_key_regexp {} {
+    Regular expression for recognizing message keys in the form <span>#</span>package_name.key#.
+    @see lang::util::message_tag_regexp
+} {
+    return {\#([-a-zA-Z0-9_]+[.][-a-zA-Z0-9_]+)\#}
+}
+
 
 ad_proc lang::util::get_temporary_tags_indices { adp_file_string } {
     Given the contents of an adp file return the indices of the
@@ -133,7 +141,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     file per default) of the package that the files belong to, the database 
     is not accessed in any way.
 
-    @param file_list         A list of paths to adp or tcl files to do replacements in. The
+    @param file_list         A list of paths to adp or Tcl files to do replacements in. The
                              paths should be relative to $::acs::rootdir. All files must
                              belong to the same package.
 
@@ -161,7 +169,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     if { [file exists $catalog_file_path] } {
         set catalog_file_contents [lang::catalog::read_file $catalog_file_path]
         array set catalog_array [lang::catalog::parse $catalog_file_contents]            
-        array set messages_array [lindex [array get catalog_array messages] 1]            
+        array set messages_array $catalog_array(messages)
     } else {
         array set messages_array {}
     }
@@ -224,12 +232,11 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
             set key_comp_counter "0"
             set unique_key $message_key
             while { 1 } {
-                set existing_text [lindex [array get messages_array $unique_key] 1]
 
-                if { $existing_text ne "" } {
+                if { [info exists messages_array($unique_key)] } {
                     # The key already exists
-
-                    if {$existing_text eq $new_text} {
+                    
+                    if {$messages_array($unique_key) eq $new_text} {
                         # New and old texts are identical - don't add the key
                         ns_log Notice [list lang::util::replace_temporary_tags_with_lookups - \
                                        message key $unique_key already exists in catalog \
@@ -660,13 +667,20 @@ ad_proc -public lang::util::translator_mode_p {} {
 
     @see lang::util::translator_mode_set
 } {
+    if {[info exists ::acs_translator_mode_p]} {
+        return $::acs_translator_mode_p
+    }
     if { [ad_conn isconnected] } {
-        # THere is an HTTP connection - return the client property
-        return [ad_get_client_property -default 0 acs-lang translator_mode_p]
+        # There is an HTTP connection - return the client property
+        set ::acs_translator_mode_p [ad_get_client_property -default 0 acs-lang translator_mode_p]
+        if {$::acs_translator_mode_p eq ""} {
+            set ::acs_translator_mode_p 0
+        }
     } else {
         # No HTTP connection
-        return 0
+        set ::acs_translator_mode_p 0
     }
+    return $::acs_translator_mode_p
 }
 
 ad_proc -public lang::util::translator_mode_set {
@@ -827,7 +841,9 @@ ad_proc -public lang::util::edit_lang_key_url {
 } {
 } {
     if { [regsub "^${package_key}." [string trim $message "\#"] {} message_key] } {
-	 set edit_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/edit-localized-message" { { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
+        set edit_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/edit-localized-message" {
+            { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] }
+        }]
      } else {
 	 set edit_url ""
      }
@@ -905,3 +921,9 @@ ad_proc -public lang::util::language_label {
 
     return $lang_label
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

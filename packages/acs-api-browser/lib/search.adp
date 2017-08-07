@@ -10,6 +10,7 @@
        <input type="text" name="query_string" value="@query_string@"><br>
        <input type="submit" value="All matches" name="search_type">
        <input type="submit" value="Only best match" name="search_type">
+       <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
        </div>
        <p><a href="@openacs_browse_url@">Browse OpenACS Tcl API</a></p>
       </td>
@@ -49,12 +50,13 @@
   <tr style="background:#DDDDDD">
    <td colspan="2">
     <form action="@aolserver_search_url@" method="get">
-    <h4>AOLserver Tcl API Search</h4>
+    <h4>NaviServer/AOLserver Tcl API Search</h4>
     <div>
     <input type="text" name="tcl_proc">
     <input type="submit" value="Go"><br>
+    <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
     (enter <em>exact</em> procedure name)<br>
-    <a href="@aolserver_tcl_api_root@">Browse AOLserver Tcl API</a>
+    <a href="@server_tcl_api_root@">Browse NaviServer Tcl API</a>
     </div>
      </form>
    </td>
@@ -66,6 +68,7 @@
     <h4>Tcl Documentation Search</h4>
     <div>
     <input type="text" name="tcl_proc">
+    <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
     <input type="submit" value="Go"><br>
     (enter <em>exact</em> procedure name)<br>
     <a href="@tcl_docs_root@">Browse the Tcl documentation</a>

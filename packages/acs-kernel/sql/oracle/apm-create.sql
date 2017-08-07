@@ -143,11 +143,11 @@ create table apm_packages (
 -- create bitmap index apm_packages_package_key_idx on apm_packages (package_key);
 create index apm_packages_package_key_idx on apm_packages (package_key);
 
--- This cant be added at table create time since acs_objects is created before apm_packages;
+-- This can't be added at table create time since acs_objects is created before apm_packages;
 alter table acs_objects add constraint acs_objects_package_id_fk foreign key (package_id) references apm_packages(package_id) on delete set null;
 
 comment on table apm_packages is '
-   This table maintains the list of all package instances in the sytem. 
+   This table maintains the list of all package instances in the system. 
 ';
 
 comment on column apm_packages.instance_name is '
@@ -515,7 +515,7 @@ comment on column apm_package_callbacks.type is '
   values are given by the Tcl proc apm_supported_callback_types.
 ';
 
--- Ths view faciliates accessing information about package versions by joining
+-- Ths view facilitates accessing information about package versions by joining
 -- the apm_package_types information and acs_object_types information (which is
 -- invariant across versions) with the specific version information.
 

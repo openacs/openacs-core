@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     rel_id:naturalnum,notnull
     member_state:notnull
-    {return_url ""}
+    {return_url:localurl ""}
 } -validate {
     permission_p -requires {rel_id:notnull} {
 	if { ![relation_permission_p -privilege admin $rel_id] } {
@@ -36,3 +36,8 @@ if {$return_url eq ""} {
     set return_url "one?rel_id=$rel_id"
 }
 ad_returnredirect $return_url
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

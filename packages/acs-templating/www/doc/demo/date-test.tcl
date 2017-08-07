@@ -64,3 +64,9 @@ set tomorrow_date [template::util::date set_property clock $today_date $clock_va
 
 # Get the SQL value
 set tomorrow_sql [template::util::date::get_property sql_date $tomorrow_date]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

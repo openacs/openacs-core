@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     version_id:naturalnum,notnull
     paths:multiple
-    {return_url ""}
+    {return_url:localurl ""}
 } 
 
 set package_key [apm_package_key_from_version_id $version_id]
@@ -19,3 +19,9 @@ foreach path $paths {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

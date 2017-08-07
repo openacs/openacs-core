@@ -12,7 +12,7 @@ if { ![nsv_exists ds_properties enabled_p] } {
 
     nsv_set ds_properties enabled_p [parameter::get -package_id [ds_instance_id] -parameter EnabledOnStartupP -default 0]
 
-    # Take the IP list (space or comma seperated) and turn it into a tcl list.
+    # Take the IP list (space or comma separated) and turn it into a Tcl list.
     set IPs [list]
     foreach ip [lsort -unique [split [parameter::get -package_id [ds_instance_id] -parameter EnabledIPs -default *] { ,}]] { 
         if {$ip eq "*"} {
@@ -40,3 +40,9 @@ if { ![nsv_exists ds_properties enabled_p] } {
 }
 
 ds_watch_packages
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -2620,7 +2620,7 @@ function is_assigned (
 ) return varchar2;
 
 function get_path (
-  --/** Retreives a path to the keyword/subject category, with the most general 
+  --/** Retrieves a path to the keyword/subject category, with the most general 
   --    category at the root of the path
   --    @author Karl Goldstein
   --    @param keyword_id         The keyword id 

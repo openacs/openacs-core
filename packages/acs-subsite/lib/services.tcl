@@ -39,3 +39,9 @@ foreach elm $services {
         [lindex $elm 3] \
         [lindex $elm 4]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

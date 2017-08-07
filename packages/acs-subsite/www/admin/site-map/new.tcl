@@ -57,7 +57,7 @@ db_transaction {
         "Error Creating Site Node" \
         "The following error was generated when attempting to create the site node:
         <blockquote><pre>
-                [ad_quotehtml $errmsg]
+                [ns_quotehtml $errmsg]
         </pre></blockquote>"
 }
 
@@ -66,3 +66,9 @@ if {[lsearch $expand $parent_id] == -1} {
 }
 
 ad_returnredirect [export_vars -base . {expand:multiple root_id}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

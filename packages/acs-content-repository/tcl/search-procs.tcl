@@ -149,3 +149,9 @@ ad_proc content_search__search_ids {
 
     return $result(ids)
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -156,9 +156,9 @@ namespace eval acs_mail_lite {
 	}
 
         ns_log Debug "send cmd: $cmd"
-        if {[catch $cmd errorInfo]} {
-	    ns_log Error "acs-mail-lite::smtp: error $errorInfo while executing\n$cmd"
-	    error $errorInfo
+        if {[catch $cmd errorMsg]} {
+	    ns_log Error "acs-mail-lite::smtp: error $errorMsg while executing\n$cmd"
+	    error $errorMsg
 	}
     }
 
@@ -329,6 +329,7 @@ namespace eval acs_mail_lite {
                             -subject $subject \
                             -body $body \
                             -package_id $package_id \
+                            -object_id $object_id \
                             -file_ids $file_ids \
                             -filesystem_files $filesystem_files \
                             -delete_filesystem_files_p $delete_filesystem_files_p \
@@ -460,7 +461,7 @@ namespace eval acs_mail_lite {
 
             db_foreach get_file_info {} {
                 lappend tokens [mime::initialize \
-                                    -param [list name [ad_quotehtml $title]] \
+                                    -param [list name [ns_quotehtml $title]] \
                                     -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
                                     -header [list Content-Description $title] \
                                     -canonical $mime_type \
@@ -593,7 +594,9 @@ namespace eval acs_mail_lite {
                             -package_id $package_id \
                             -message_id $message_id]
 
-
+        set errorMsg ""
+        set status ok
+        
         if { $send_mode eq "log" } {
 
             # Add recipients to headers
@@ -611,10 +614,12 @@ namespace eval acs_mail_lite {
             ns_log Notice "acs-mail-lite::send: $notice\n\n**********\nEnvelope sender: $originator\n\n$packaged\n**********"
 
         } else {
-
-            acs_mail_lite::smtp -multi_token $tokens \
-                -headers $headers_list \
-                -originator $originator
+            
+            if {[catch {acs_mail_lite::smtp -multi_token $tokens \
+                       -headers $headers_list \
+                            -originator $originator} errorMsg]} {
+                set status error
+            }
             
             # Close all mime tokens
             mime::finalize $tokens -subordinates all
@@ -635,7 +640,9 @@ namespace eval acs_mail_lite {
                 -file_ids $file_ids \
                 -filesystem_files $filesystem_files \
                 -delete_filesystem_files_p $delete_filesystem_files_p \
-                -object_id $object_id
+                -object_id $object_id \
+                -status $status \
+                -errorMsg $errorMsg
         }
         
 	# Attachment files can now be deleted, if so required.
@@ -643,9 +650,12 @@ namespace eval acs_mail_lite {
 	# could need to look at files for their own purposes.
         if {[string is true $delete_filesystem_files_p]} {
 	    foreach f $filesystem_files {
-		file delete $f
+		file delete -- $f
 	    }
 	}
+        if {$status ne "ok"} {
+            error $errorMsg
+        }
     }
 
     #---------------------------------------
@@ -678,7 +688,7 @@ namespace eval acs_mail_lite {
         {bcc {}}
     } {
 
-        Replacement for ns_sendmail for backward compability.
+        Replacement for ns_sendmail for backward compatibility.
 
     } {
 
@@ -702,3 +712,9 @@ namespace eval acs_mail_lite {
     }
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

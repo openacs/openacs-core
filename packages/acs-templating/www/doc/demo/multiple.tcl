@@ -16,3 +16,9 @@ set query "select
 
 
 db_multirow users users_query $query
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

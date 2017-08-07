@@ -24,8 +24,7 @@
            sum([join $privs "_p + "]_p) as any_perm_p_
     from   (select grantee_id,
                    [join $from_all_clauses ", "]
-            from   acs_permissions_all
-            where  object_id = :object_id
+            from   acs_permission.permissions_all(:object_id)
             union all
             select grantee_id,
                    [join $from_direct_clauses ", "]
@@ -57,12 +56,10 @@
            ) ptab,
            acs_objects o
     where  o.object_id = ptab.grantee_id
-    and    not exists (select 1 from acs_object_party_privilege_map p where p.object_id =  acs__magic_object_id('security_context_root') and p.party_id = ptab.grantee_id and p.privilege =  'admin')
+    and    not acs_permission__permission_p(acs__magic_object_id('security_context_root'), ptab.grantee_id, 'admin')
     group  by ptab.grantee_id, grantee_name, object_type
     order  by object_type desc, grantee_name
       </querytext>
 </fullquery>
-
-
  
 </queryset>

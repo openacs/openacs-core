@@ -62,8 +62,7 @@ ad_form -extend -name user_search -on_submit {
                 -rel_type $rel_type
         } {
             form set_error user_search user_id "Error adding user to community: $errmsg"
-            global errorInfo
-            ns_log Error "Error adding user $user_id to community group $group_id: $errmsg\n$errorInfo"
+            ns_log Error "Error adding user $user_id to community group $group_id: $errmsg\n$::errorInfo"
             break
         }
     }
@@ -80,3 +79,9 @@ ad_form -action user-new -name user_create -cancel_url . -form {
         {html {size 50}}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

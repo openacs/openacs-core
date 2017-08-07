@@ -36,7 +36,7 @@ ad_proc -public acs_sc::msg_type::delete {
     # It seems like delete by ID doesn't work, because our PG bind thing turns all integers into strings
     # by wrapping them in single quotes, causing PG to invoke the function for deleting by name
 
-    if { $name eq "") } {
+    if { $name eq "" } {
         # get msg_type name
         db_1row select_name {        
 	    select msg_type_name as name
@@ -122,3 +122,9 @@ ad_proc -public acs_sc::msg_type::element::new {
     db_exec_plsql insert_msg_type_element {}
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

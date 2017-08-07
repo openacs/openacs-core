@@ -42,14 +42,14 @@ ad_proc -public notification::display::request_widget {
         set icon /resources/acs-subsite/email_delete.gif
         set icon_alt [_ acs-subsite.icon_of_envelope]
         set sub_url [unsubscribe_url -request_id $request_id -url $url]
-        set pretty_name [ad_quotehtml $pretty_name]
+        set pretty_name [ns_quotehtml $pretty_name]
         set title [_ notifications.lt_Ubsubscribe_Notification_]
         set sub_chunk [_ notifications.lt_You_have_requested_no]
     } else {
         set icon /resources/acs-subsite/email_add.gif
         set icon_alt [_ acs-subsite.icon_of_envelope]
         set sub_url [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]
-        set pretty_name [ad_quotehtml $pretty_name]
+        set pretty_name [ns_quotehtml $pretty_name]
         set title [_ notifications.lt_Request_Notification_]
         set sub_chunk [_ notifications.lt_You_may_a_hrefsub_url]
     }
@@ -57,7 +57,7 @@ ad_proc -public notification::display::request_widget {
        <img src=\"$icon\" alt=\"$icon_alt\" style=\"border:0\">$sub_chunk</a>"
     # if they are an admin give them to view all subscribers
     if { [permission::permission_p -object_id $object_id -privilege admin] } {
-	set href [export_vars -base /notifications/subscribers -url {object_id}]
+        set href [export_vars -base /notifications/subscribers -url {object_id}]
         append notif_chunk " \[<a href=\"[ns_quotehtml $href]\">[_ notifications.Subscribers]</a>\]"
     }
 
@@ -96,7 +96,7 @@ ad_proc -public notification::display::unsubscribe_url {
     {-request_id:required}
     {-url:required}
 } {
-    Returns the URL that allows one to unsubscribe from a particular request.	
+    Returns the URL that allows one to unsubscribe from a particular request.
 } {
     set root_path [apm_package_url_from_key [notification::package_key]]
 
@@ -151,3 +151,9 @@ ad_proc -public notification::display::get_urls {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

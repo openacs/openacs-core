@@ -6,11 +6,17 @@ ad_page_contract {
   @creation-date 2000-10-23
   @cvs-id $Id$
 } -query {
-  orderby:optional
+  orderby:token,optional
 } -properties {
   notes:multirow
   context:onevalue
   create_p:onevalue
+} -validate {
+    valid_orderby -requires orderby {
+        if {![regexp {,(asc|desc)$} $orderby]} {
+            ad_complain "Invalid value for orderby"
+        }
+    }
 }
 
 set package_id [ad_conn package_id]
@@ -81,3 +87,9 @@ db_multirow -extend { view_url } template_demo_notes template_demo_notes {} {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

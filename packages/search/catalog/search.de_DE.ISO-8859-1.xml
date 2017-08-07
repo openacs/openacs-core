@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="search" locale="de_DE" charset="ISO-8859-1">
 
+  <msg key="________Search_took">. Suche dauerte</msg>
   <msg key="Advanced_Search">Erweiterte Suche</msg>
+  <msg key="advanced_search">&#34;fortgeschrittene Suche&#34;</msg>
   <msg key="anytime">jederzeit</msg>
   <msg key="Date_Range">Datumsspanne</msg>
   <msg key="details">Details</msg>
+  <msg key="Enter_keywords_to_search_for">Geben Sie Suchbegriffe ein</msg>
   <msg key="Feeling_Lucky">Auf gut Glück</msg>
-  <msg key="lt_bstopwordsb_is_a_very">'&lt;b&gt;%stopwords%&lt;/b&gt;' is ein sehr gebräuchliches Wort und ist daher in der Suche nicht verwendet worden</msg>
+  <msg key="lt_bstopwordsb_is_a_very">&#39;&lt;b&gt;%stopwords%&lt;/b&gt;&#39; is ein sehr gebräuchliches Wort und ist daher in der Suche nicht verwendet worden</msg>
   <msg key="lt_FtsEngineDriver_not_a">FtsEngineDriver ist nicht verfügbar</msg>
   <msg key="lt_Make_sure_all_words_a">Stellen Sie sicher das alle Worte richtig geschrieben sind.</msg>
+  <msg key="lt_No_pages_were_found_c">Keine Seiten wurden gefunden mit &#34;</msg>
+  <msg key="lt_The_following_words_a">Die folgenden häufigen Worte wurden bei der Suche nicht berücksichtigt:</msg>
+  <msg key="lt_Tip_In_most_browsers_">Tipp: In den meisten Browsern können Sie den Entertaste drücken anstelle auf den Suchbutton zu klicken.</msg>
   <msg key="lt_Try_different_keyword">Versuchen Sie unterschiedliche Schlüsselwörter</msg>
   <msg key="lt_Try_more_general_keyw">Versuchen Sie mehr generelle Schlüsselwörter</msg>
-  <msg key="lt_Try_your_query_on_stw">Versuchen Sie Ihre Suche mit '%stw;noquote%'</msg>
+  <msg key="lt_Try_your_query_on_stw">Versuchen Sie Ihre Suche mit &#39;%stw;noquote%&#39;</msg>
   <msg key="lt_You_must_specify_some">Sie müssen wenigstens ein Schlüsselwort spezifizieren</msg>
+  <msg key="nbspDisplay">&amp;nbsp;Anzeige</msg>
   <msg key="Next">Nächste</msg>
+  <msg key="of_about">Über</msg>
   <msg key="past_3_months">letzten 3 Monate</msg>
   <msg key="past_6_months">letzten 6 Monate</msg>
   <msg key="past_year">letztes Jahr</msg>
   <msg key="Previous">Vorhergehendes</msg>
   <msg key="Result_page">Seite mit den Resultaten:</msg>
+  <msg key="Results">Resultate</msg>
   <msg key="results">Resultate</msg>
   <msg key="Search">Suche</msg>
   <msg key="Searched_for_query">Gesucht wurde nach: &lt;b&gt;%query%&lt;/b&gt;</msg>
+  <msg key="seconds">Sekunden.</msg>
+  <msg key="selected">ausgewählt</msg>
   <msg key="Suggestions">Vorschläge:</msg>
+  <msg key="The">Der Operator &#34;&lt;b&gt;AND&lt;/b&gt;&#34; ist unnötig und wird in allen Suchbegriffen als Standard verwendett</msg>
   <msg key="Try_fewer_keywords">Versuchen Sie es mit weniger Schlüsselworten</msg>
   <msg key="Untitled">Unbenannt</msg>
 </message_catalog>

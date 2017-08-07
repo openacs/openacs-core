@@ -21,16 +21,16 @@ ad_proc -public ad_print_stack_trace {} {
     @see ad_get_tcl_call_stack
 } {
     uplevel {
-        global errorInfo
-        if {$errorInfo ne ""} { 
-            set callStack [list $errorInfo "invoked from within"]
-        } else { 
+        if {$::errorInfo ne ""} {
+            set callStack [list $::errorInfo "invoked from within"]
+        } else {
             set callStack {}
         }
-        for {set i [info level]} {$i > 0} {set i [expr {$i - 1}]} {
+        for {set i [info level]} {$i > 0} {incr i -1} {
             set call [info level $i]
             if {[string length $call] > 160} {
-                set call "[string range $call 0 150]..."            }
+                set call "[string range $call 0 150]..."
+            }
             regsub -all {\n} $call {\\n} call
             lappend callStack "   $call"
             if {$i > 1} {
@@ -46,3 +46,9 @@ ad_proc -public ad_log_stack_trace {} {
 } {
     ns_log Error [ad_print_stack_trace]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

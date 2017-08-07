@@ -30,7 +30,7 @@
       from cr_items
      where parent_id = :parent_id
   </querytext>
-</fullquery>
+  </fullquery>
 
   <fullquery name="content::item::get.get_item_folder">
     <querytext>
@@ -50,14 +50,6 @@
     </querytext>
   </fullquery>
     
-  <fullquery name="content::item::upload_file.get_parent_existing_filenames">
-  <querytext>
-    select name
-      from cr_items
-     where parent_id = :parent_id
-  </querytext>
-</fullquery>
-
   <fullquery name="content::item::get_id_by_name.get_item_id_by_name">
   <querytext>
     select item_id

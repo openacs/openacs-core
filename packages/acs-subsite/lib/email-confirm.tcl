@@ -12,3 +12,9 @@ if {![db_0or1row userp {select 1 from users where user_id = :user_id}]
     set site_link [ad_site_home_link]
     set system_name [ad_system_name]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -11,7 +11,7 @@
         <a href="/xowiki/@pkgs.package_key@">@pkgs.package_key@</a>
       </td>
       <td style="border-color:gray;">
-        <b>@pkgs.pretty_name@:</b><br><em>@pkgs.summary@</em>
+        <strong>@pkgs.pretty_name@:</strong><br><em>@pkgs.summary@</em>
         <p>@pkgs.description;noquote@
         <p><small>@pkgs.package_key@ @pkgs.version@ released @pkgs.release_date@ 
         <if @pkgs.license@ not nil>

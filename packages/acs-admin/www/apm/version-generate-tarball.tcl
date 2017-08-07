@@ -14,10 +14,16 @@ db_transaction {
     ad_return_complaint 1 "APM Generation Error: The database returned the following error message:
 <pre>
 <blockquote>
-[ad_quotehtml $errmsg]
+[ns_quotehtml $errmsg]
 </blockquote>
 </pre>
 "
 }
 
 ad_returnredirect "version-view?version_id=$version_id"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

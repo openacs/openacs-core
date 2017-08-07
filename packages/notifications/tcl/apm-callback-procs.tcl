@@ -243,3 +243,9 @@ ad_proc -public notification::apm::delete_notification_type_contract {} {
 } {
     acs_sc::contract::delete -name "NotificationType"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -21,3 +21,9 @@ set user_id [ad_conn user_id]
 set admin_p [permission::permission_p -object_id $package_id -privilege admin]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

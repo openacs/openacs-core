@@ -31,7 +31,7 @@
                   </else>
               </noparse>
                     @elements.label;noquote@
-                <if @form_properties.show_required_p@ true>
+                <if @form_properties.show_required_p;literal@ true>
                 <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select"><span class="form-required-mark">*</span></if>
                 </if>
               </span>
@@ -77,7 +77,7 @@
                 <formerror id="@elements.id@">
                   <br>
                   <font face="tahoma,verdana,arial,helvetica,sans-serif" color="red">
-                    <b>\@formerror.@elements.id@;noquote\@<b>
+                    <strong>\@formerror.@elements.id@;noquote\@<strong>
                   </font>
                 </formerror>
               </noparse>
@@ -86,7 +86,7 @@
                 <p style="margin-top: 4px; margin-bottom: 2px;">
                   <font face="tahoma,verdana,arial,helvetica,sans-serif">
                     <noparse>
-                      <i><formhelp id="@elements.id@"></i>
+                      <em><formhelp id="@elements.id@"></em>
                     </noparse>
                   </font>
                 </p>

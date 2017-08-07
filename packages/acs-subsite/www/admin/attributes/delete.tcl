@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     attribute_id:notnull,naturalnum,attribute_dynamic_p
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     attribute_id:onevalue
@@ -30,3 +30,9 @@ db_1row select_object_type {
 set export_form_vars [export_vars -form {attribute_id return_url}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -12,3 +12,9 @@ set selector_type "image"
 set file_selector_link [export_vars -base file-selector \
 			    {fs_package_id folder_id selector_type}]
 set fs_found 1
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

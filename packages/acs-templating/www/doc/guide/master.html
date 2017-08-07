@@ -20,16 +20,16 @@ where the actual unique content of the page is displayed.  Surrounding
 the content area is a <em>frame</em> with common elements that are
 consistent from page to page:</p>
 
-<table cellspacing=0 cellpadding=10 border=1>
+<table cellspacing="0" cellpadding="10" border="1">
 <tr>
-<td align=center bgcolor=#cccccc>Logo</td><td bgcolor=#cccccc width=300 align=center colspan=2>Ad Banner</td>
+<td align="center" bgcolor="#cccccc">Logo</td><td bgcolor="#cccccc" width=300 align="center" colspan="2">Ad Banner</td>
 </tr>
 <tr>
-<tr><td bgcolor=#cccccc align=center colspan=3>Navigation/Context Bar</td></tr>
-<td bgcolor=#cccccc>Section<br>Links</td>
-<td bgcolor=#ffcccc align=center colspan=2><p>&nbsp;</p><p>&nbsp;</p>CONTENT<br>AREA<p>&nbsp;</p><p>&nbsp;</p></td>
+<tr><td bgcolor="#cccccc" align="center" colspan="3">Navigation/Context Bar</td></tr>
+<td bgcolor="#cccccc">Section<br>Links</td>
+<td bgcolor="#ffcccc" align="center" colspan="2"><p>&nbsp;</p><p>&nbsp;</p>CONTENT<br>AREA<p>&nbsp;</p><p>&nbsp;</p></td>
 </tr>
-<tr><td align=center colspan=3 bgcolor=#cccccc>Footer</td></tr>
+<tr><td align="center" colspan="3" bgcolor="#cccccc">Footer</td></tr>
 </table>
 
 <p>Most sites use an HTML table to delineate the content area within
@@ -50,39 +50,39 @@ formatting preferences may also be applied for registered users.</p>
 <p>A master template to implement the page layout shown above would
 have this basic structure:</p>
 
-<blockquote><pre>&lt;html>&lt;body>&lt;table width=100% cellspacing=0 cellpadding=0 border=0>
+<blockquote><pre>&lt;html>&lt;body>&lt;table width="100%" cellspacing="0" cellpadding="0" border="0">
 
 &lt;tr>
   &lt;td>&lt;!-- LOGO -->&lt;/td>
-  &lt;td colspan=2>&lt;!-- AD BANNER -->&lt;/td>
+  &lt;td colspan="2">&lt;!-- AD BANNER -->&lt;/td>
 &lt;/tr>
 
-&lt;tr>&lt;td colspan=3>&lt;!-- NAVIGATION/CONTEXT BAR -->&lt;/td>&lt;/tr>
+&lt;tr>&lt;td colspan="3">&lt;!-- NAVIGATION/CONTEXT BAR -->&lt;/td>&lt;/tr>
 
 &lt;tr>
   &lt;td>&lt;!-- SECTION LINKS -->&lt;/td>
-  &lt;td colspan=2>
+  &lt;td colspan="2">
     &lt;!-- CONTENT -->
-    <b>&lt;slave></b>
+    <strong>&lt;slave></strong>
   &lt;/td>
 &lt;/tr>
 
-&lt;tr>&lt;td colspan=3>&lt;!-- FOOTER -->&lt;/td>&lt;/tr>
+&lt;tr>&lt;td colspan="3">&lt;!-- FOOTER -->&lt;/td>&lt;/tr>
 
 &lt;/table>&lt;/body>&lt;/html></pre></blockquote>
 
 <p>The only special feature of this master template is the
-<tt>slave</tt> tag, which marks the location of the content area.
+<kbd>slave</kbd> tag, which marks the location of the content area.
 Note that the content is inserted into the master template as a single
 passage of HTML or plain text.  The master template should always
-frame the content area within a <tt>td</tt> tag when using a table to
+frame the content area within a <kbd>td</kbd> tag when using a table to
 specify the overall layout of the page.  Page layouts that do not rely
-on tables often use <tt>hr</tt> tags to demarcate the content area
+on tables often use <kbd>hr</kbd> tags to demarcate the content area
 from the header and footer.</p>
 
 <h3>Write the Page Template(s)</h3>
 
-<p>A page template must include a <tt>master</tt> tag to specify that
+<p>A page template must include a <kbd>master</kbd> tag to specify that
 its output should be enclosed in a master template:</p>
 
 <blockquote><pre>&lt;master src="/templates/master">
@@ -93,7 +93,7 @@ its output should be enclosed in a master template:</p>
 &lt;p>&lt;b>@byline@&lt/b>: @text&lt/p>
 ...</pre></blockquote>
 
-<p>The <tt>master</tt> tag may be included anywhere in the body of the page
+<p>The <kbd>master</kbd> tag may be included anywhere in the body of the page
 template, although usually the top of the file is the best location
 for it.</p>
 
@@ -122,7 +122,7 @@ Template</h3>
 
 <p>As mentioned above, in many cases the dynamic elements of the
 master template depend on whatever is appearing in the content area
-for a particular request.  The <tt>property</tt> tag may be used in
+for a particular request.  The <kbd>property</kbd> tag may be used in
 the page template to specify values that should be passed to the
 master template:</p>
 
@@ -132,7 +132,7 @@ master template:</p>
 &lt;!--Begin layout of page content-->
 ...</pre></blockquote>
 
-<p>In this case, the <tt>property</tt> tag establishes <tt>title</tt>
+<p>In this case, the <kbd>property</kbd> tag establishes <kbd>title</kbd>
 as a data source for the master template.  Properties are set as
 regular Tcl variables prior to executing the Tcl script associated
 with the master template.  This allows the page template to pass an
@@ -140,7 +140,7 @@ ID which the Tcl script associated with the master template may use to
 query for additional information.</p>
 
 <hr>
-<a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a>
+<!-- <a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a> -->
 </body>
 </html>
 

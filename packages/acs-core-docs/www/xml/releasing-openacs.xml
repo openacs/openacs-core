@@ -31,7 +31,7 @@ cvs2cl -F <replaceable>oacs-5-0</replaceable> --delta <replaceable>openacs-5-0-1
           <title>Update Version Numbers</title>
           <para>The version numbers in the documentation and in the packages must be updated.  This should only happen after a release candidate is approved.</para>
         </formalpara>
-        <remark>.LRN: this must be repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and for any modified modules in the .LRN prerequisites (dotlrn-prereq in openacs cvs tree).  My current working model is that I bulk-update .LRN and OpenACS core but that I don't touch dotlrn-prereq modules - I just use the most recent release and it's up to individual package developers to tag and <link linkend="releasing-package">release those packages</link> when they change.  This model is already broken because following it means that dotlrn-prereqs don't get new translations.</remark>
+        <remark>.LRN: this must be repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and for any modified modules in the .LRN prerequisites (dotlrn-prereq in OpenACS cvs tree).  My current working model is that I bulk-update .LRN and OpenACS core but that I don&#39;t touch dotlrn-prereq modules - I just use the most recent release and it&#39;s up to individual package developers to tag and <link linkend="releasing-package">release those packages</link> when they change.  This model is already broken because following it means that dotlrn-prereqs don&#39;t get new translations.</remark>
         <orderedlist>
           <listitem>
             <para>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/variables.ent with the new version number.
@@ -88,7 +88,7 @@ cvs -d /dotlrn-cvsroot checkout -r <replaceable>dotlrn-2-0</replaceable> dotlrn-
 </action></screen>
       </listitem>
       <listitem>
-        <para>Tag the tree.  If it's a final release of core, move or create the appropriate openacs-major-minor-compat tag.  (Ie, if releasing 5.0.3 final, move the openacs-5-0-compat flag.)</para>
+        <para>Tag the tree.  If it&#39;s a final release of core, move or create the appropriate openacs-major-minor-compat tag.  (Ie, if releasing 5.0.3 final, move the openacs-5-0-compat flag.)</para>
         <screen><action>cd /var/tmp/openacs-4
 cvs tag -F <replaceable>openacs-5-0-0a1</replaceable>
 cvs tag -F <replaceable>openacs-5-0-compat</replaceable>
@@ -98,18 +98,18 @@ cvs tag -F <replaceable>openacs-5-0-compat</replaceable>
           <para>When we feature-freeze on HEAD as part of the release process, we are blocking new development.  To avoid this, we branch the code at this point, so that new work can continue on HEAD while the branch is stabilized for release. However, branching means that bug fixes have to be synchronized between HEAD and the branch, and bug fixes tend to be more frequent right at this time.  Therefore, our actual branch point is as late as possible - essentially, we do not branch until and unless new feature work is actively blocked by the feature freeze.  Branching is almost the same as tagging, except for the flag and slightly different tag nomenclature.  To see the list of old branches, <computeroutput>cvs status -v somefile</computeroutput>.</para>
               <screen>cvs tag -b <replaceable>oacs-5-0</replaceable></screen>
         </tip>
-        <para>If doing .LRN: Since the .LRN packages aren't all in one
+        <para>If doing .LRN: Since the .LRN packages aren&#39;t all in one
           module, we iterate through all of the modules.  Log in first
-          (cvs login) so that you don't have to log in for each
+          (cvs login) so that you don&#39;t have to log in for each
           module.</para>
         <screen><action>cd /var/tmp/dotlrn-packages
 for dir in *; do ( cd $dir &amp;&amp; cvs tag <replaceable>dotlrn-2-0-2-final</replaceable> ); done
 for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>openacs-5-0-compat</replaceable> ); done
 </action></screen>
         <para>Note that for the compat tag we use the <action>-F</action> flag which will force the tag to the new version (just in 
-          case someone has created the tag already on another version).  Excercise care when doing this since 
-          you don't want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
-          for some reason you can delete the tag via "<command>cvs tag -d &lt;symbolic_tag&gt;</command>".</para>
+          case someone has created the tag already on another version).  Exercise care when doing this since 
+          you don&#39;t want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
+          for some reason you can delete the tag via <command>cvs tag -d &lt;symbolic_tag&gt;</command>.</para>
       </listitem>
           <listitem>
             <para>Apply the <computeroutput>final</computeroutput> tag across the tree.  First, check out the entire OpenACS tree, getting the most recent stable version of each package.  This is most simply done on openacs.org:</para>
@@ -159,7 +159,7 @@ tar cz -f <replaceable>openacs-5.0.0a1.tar.gz</replaceable> openacs-<replaceable
                 <para>Go to a new working space and export the tagged
                 files. (was getting errors here trying to use -d, so
                 gave up and just moved things from openacs-4 to
-                openacs at the end)</para>
+                OpenACS at the end)</para>
             <screen><action>mkdir /var/tmp/dotlrn-tarball
 cd /var/tmp/dotlrn-tarball
 cvs -d /cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> acs-core
@@ -223,7 +223,7 @@ rm -rf /var/tmp/openacs-4</action></screen>
     </orderedlist>
 
     <para>
-      Here is a shell script that automates packaging the tarball (it's a bit out of date with the new steps - I've been doing everything manually or with little throwaway scripts as detailed above until the process is stabilized).
+      Here is a shell script that automates packaging the tarball (it&#39;s a bit out of date with the new steps - I&#39;ve been doing everything manually or with little throwaway scripts as detailed above until the process is stabilized).
     </para>
 
     <programlisting><xi:include href="../../../../etc/install/build-release.sh" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>release script missing</xi:fallback></xi:include></programlisting>
@@ -258,19 +258,19 @@ rm -rf /var/tmp/openacs-4</action></screen>
           </listitem>  	
           <listitem>
             <para>
-              For each channel, it'll do an anonymous checkout of packges and contrib/packages, then build .apm files for each package in the checkout.
+              For each channel, it&#39;ll do an anonymous checkout of packges and contrib/packages, then build .apm files for each package in the checkout.
             </para>
           </listitem>
           <listitem>
             <para>
-              The files will be stored on the server's hard drive in the directory specified by the 'repository_dir' variable in the page script, by default "$::acs::rootdir/www/repository/".
+              The files will be stored on the server&#39;s hard drive in the directory specified by the 'repository_dir' variable in the page script, by default "$::acs::rootdir/www/repository/".
             </para>
           </listitem>
         </orderedlist>
       </listitem>
       <listitem>
         <para>
-          If you're on openacs.org, everything should now be fine. Otherwise, you need to move the entire directory tree to openacs.org:/web/openacs/www/repository, replacing what was already there.
+          If you&#39;re on openacs.org, everything should now be fine. Otherwise, you need to move the entire directory tree to openacs.org:/web/openacs/www/repository, replacing what was already there.
         </para>
         <para>This is automated on OpenACS.org by having a dedicated site just for building the repository, invoked with this shell script.  Since the page circumvents security checks for ease of use, the entire site is limited to local requests.  The script is called daily with a cron job.</para>
         <programlisting>#!/bin/sh

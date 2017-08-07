@@ -110,8 +110,7 @@ ad_proc -public oacs_util::csv_foreach {
         ns_getcsv $csv_stream headers
     }
 
-    # provide access to errorInfo and errorCode
-    global errorInfo errorCode
+    # provide access to errorCode
 
     # Upvar Magic!
     upvar 1 $array_name row_array
@@ -143,8 +142,8 @@ ad_proc -public oacs_util::csv_foreach {
 	# (source: http://wiki.tcl.tk/unless last case)
 	switch -exact -- $errno {
 	    0   {}
-	    1   {return -code error -errorinfo $errorInfo \
-		     -errorcode $errorCode $error}
+	    1   {return -code error -errorinfo $::errorInfo \
+		     -errorcode $::errorCode $error}
 	    2   {return $error}
 	    3   {break}
 	    4   {}
@@ -167,3 +166,9 @@ ad_proc -public oacs_util::vars_to_ns_set {
         ns_set put $ns_set $var $one_var
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

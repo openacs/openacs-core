@@ -1,19 +1,17 @@
- # $Id$
- # File:        developer-support-procs.tcl
- # Author:      Jon Salz <jsalz@mit.edu>
- # Date:        22 Apr 2000
- # Description: Provides routines used to aggregate request/response information for debugging.
+ad_library {
+
+    Provides routines used to aggregate request/response information for debugging.
+
+    @author Jon Salz <jsalz@mit.edu>
+    @creation-date 22 Apr 2000
+}
 
  ad_proc -private ds_instance_id {} {
 
      @return The instance of a running acs developer support.
 
  } {
-     return [util_memoize [list db_string acs_kernel_id_get {
-         select package_id from apm_packages
-         where package_key = 'acs-developer-support'
-         and rownum=1
-     } -default 0]]
+     return [util_memoize [list db_string acs_kernel_id_get {} -default 0]]
  }
 
  ad_proc -public ds_permission_p {} {
@@ -45,7 +43,7 @@
      } else {
        ns_log Warning "$user_id doesn't have $privilege on object $object_id"
        ad_return_forbidden "Permission Denied" "<blockquote>
-       <p>You don't have permission to $privilege [db_string name {select acs_object.name(:object_id) from dual}].</p>
+       <p>You don't have permission to $privilege [db_string name {}].</p>
        </blockquote>"
      }
      ad_script_abort
@@ -55,10 +53,20 @@
  ad_proc -public ds_enabled_p {} { 
      Returns true if developer-support facilities are enabled.
  } {
-     if { ![nsv_exists ds_properties enabled_p] || ![nsv_get ds_properties enabled_p] } {
-         return 0
+     #
+     # On busy sites, frequent calls to [ds_enabled_p] leads to huge
+     # number of mutex locks for the nsv ds_properties. Therefore,
+     # cache its results in a per-thead variable.
+     #
+     if {[info exists ::ds_enabled_p]} {
+         return $::ds_enabled_p
      }
-     return 1
+     if { ![nsv_exists ds_properties enabled_p] || ![nsv_get ds_properties enabled_p] } {
+         set ::ds_enabled_p 0
+     } else {
+         set ::ds_enabled_p 1
+     }
+     return $::ds_enabled_p
  }
 
  ad_proc -public ds_collection_enabled_p {} {
@@ -173,7 +181,7 @@
      @return A link to the first instance of the developer-support information available in the site node, \
              the empty_string if none are available.
  } {
-     return "[ad_url][apm_package_url_from_key acs-developer-support]"
+     return [apm_package_url_from_key acs-developer-support]
  }
 
  ad_proc ds_link {} { 
@@ -195,7 +203,7 @@
          if {$ds_url ne ""} {
              append out [subst {
 		 <a href="$ds_url">Developer Support Home</a> -
-		 <a href="$ds_urlrequest-info?request=$::ad_conn(request)">Request Information</a><br>
+		 <a href="${ds_url}request-info?request=$::ad_conn(request)">Request Information</a><br>
 	     }]
          } else {
              ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
@@ -219,7 +227,8 @@
          if { [nsv_exists ds_request $::ad_conn(request).conn] } {
              array set conn [nsv_get ds_request $::ad_conn(request).conn]
              if { [info exists conn(startclicks)] } {
-                 append out "Page served in [format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]] ms<br>\n"
+                 set time [format "%.f" [expr { ([clock clicks -microseconds] - $conn(startclicks))/1000.0 }]]
+                 append out "Page served in $time ms<br>\n"
              }
          }
 
@@ -268,7 +277,7 @@
          if { [nsv_exists ds_request $::ad_conn(request).conn] } {
              array set conn [nsv_get ds_request $::ad_conn(request).conn]
              if { [info exists conn(startclicks)] } {
-                 set result [format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]]
+                 set result [format "%.f" [expr { ([clock clicks -microseconds] - $conn(startclicks))/1000.0 }]]
              }
          }
      }
@@ -278,7 +287,7 @@
  ad_proc -public ds_get_db_command_info {} {
      Get a Tcl list with { num_commands total_ms } for the database commands for the request.
 
-     Returns the empty string if the information is not available.
+     @return list containing num_commands and total_ms, or empty string if the information is not available.
  } { 
      set result {}
      if { [ds_enabled_p] && [ds_collection_enabled_p] } {
@@ -308,6 +317,7 @@
 
          ds_add start [ns_time]
          ds_add conn startclicks [ad_conn start_clicks]
+
          for { set i 0 } { $i < [ns_set size [ad_conn headers]] } { incr i } {
              ds_add headers [ns_set key [ad_conn headers] $i] [ns_set value [ad_conn headers] $i]
          }
@@ -359,8 +369,7 @@
  ad_proc -private ds_add { name args } { 
      Sets a developer-support property for the current request. 
  } {
-
-     if { [ds_enabled_p] && [ds_collection_enabled_p] } { 
+     if { [ds_enabled_p] && [ds_collection_enabled_p] } {
          if { [catch { nsv_exists ds_request . }] } {
              ns_log "Warning" "ds_request NSVs not initialized"
              return
@@ -402,7 +411,8 @@
      set kill_count 0
      foreach name $names {
          if { [regexp {^([0-9]+)\.} $name "" request]
-              && [expr {$request <= $max_request}] } {
+              && $request <= $max_request
+          } {
              incr kill_count
              nsv_unset ds_request $name
          }
@@ -432,7 +442,7 @@
 
  ad_proc -public ds_user_select_widget {} {
      Build a select widget for all users in the system, for quick user switching.  Very
-     expensive (returns a big file) for openacs instances with a large number of users,
+     expensive (returns a big file) for OpenACS instances with a large number of users,
      so perhaps best used on test instances.
  } {
      set user_id [ad_conn user_id]
@@ -479,7 +489,7 @@
      set ds_url [ds_support_url]
      if {$ds_url ne ""} {
          return [subst {
-	     <form action="$ds_url/set-user" method="get">
+	     <form action="${ds_url}set-user" method="get">
 	     $you_are
 	     $you_are_really
 	     Change user: <select name="user_id">
@@ -600,7 +610,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 }
 
 ad_proc -private ds_watch_packages {} {
-    Watch tcl libraries and xql files for packages listed
+    Watch Tcl libraries and xql files for packages listed
     in the PackageWatchList parameter on server startup.
 
     @author Peter Marklund
@@ -659,13 +669,13 @@ ad_proc -public ds_profile { command {tag {}} } {
             if { $tag eq "" } {
                 error "Tag parameter is required"
             }
-            set ::ds_profile__start_clock($tag) [clock clicks -milliseconds]
+            set ::ds_profile__start_clock($tag) [clock clicks -microseconds]
         }
         stop {
             if { [info exists ::ds_profile__start_clock($tag)] 
                  && $::ds_profile__start_clock($tag) ne "" } {
                 ds_add prof $tag \
-                    [expr {[clock clicks -milliseconds] - $::ds_profile__start_clock($tag)}]
+                    [expr {[clock clicks -microseconds] - $::ds_profile__start_clock($tag)}]
                 unset ::ds_profile__start_clock($tag)
             } else {
                 ns_log Warning "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"
@@ -692,9 +702,14 @@ ad_proc -public ds_init { } {
 	# variables, which are deleted automatically after every
 	# request.
 	#
-	set ::ds_enabled_p 1
 	if {[::ds_collection_enabled_p] } {set ::ds_collection_enabled_p 1}
 	if {[::ds_profiling_enabled_p] } {set ::ds_profiling_enabled_p 1}
 	if {[::ds_show_p]} {set ::ds_show_p 1}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

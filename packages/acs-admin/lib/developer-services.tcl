@@ -10,3 +10,9 @@ set acs_core_docs_url [site_node::get_package_url -package_key "acs-core-docs"]
 
 set acs_developer_support_url [site_node::get_package_url -package_key "acs-developer-support"]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

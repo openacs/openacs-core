@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     group_id:naturalnum,notnull
-    {return_url ""}
+    {return_url:localurl ""}
 } -properties {
     context:onevalue
     group_id:onevalue
@@ -44,5 +44,10 @@ db_1row group_info {
 }
 
 set possible_join_policies [list open "needs approval" closed]
-set QQreturn_url [ad_quotehtml $return_url]
+set QQreturn_url [ns_quotehtml $return_url]
 ad_return_template
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

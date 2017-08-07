@@ -7,7 +7,7 @@
 Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="Search">
 </formtemplate>
 
-<if @submit_p@ true>
+<if @submit_p;literal@ true>
   <h2>Search Results</h2>
 
   <if @other_search_url@ not nil>
@@ -52,6 +52,6 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
     </table>
   </if>
   <else>
-    <i>No messages found.</i>
+    <em>No messages found.</em>
   </else>
 </if>

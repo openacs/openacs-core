@@ -9,7 +9,7 @@
 
         <group column="filter_name">
 
-          <if @filters.selected_p@ true>
+          <if @filters.selected_p;literal@ true>
             <span class="list-inline-filter-selected">@filters.label@</span>
           </if>
           <else>
@@ -22,7 +22,7 @@
             <a href="@filters.add_url@" class="list-inline-filter">+</a>
           </if>
 
-          <if @filters.groupnum_last_p@ false> | </if>
+          <if @filters.groupnum_last_p;literal@ false> | </if>
         </group>
       <span class="list-inline-filter">]</span>
     </p>

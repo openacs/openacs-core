@@ -12,7 +12,7 @@ ad_page_contract {
     attribute_id:naturalnum,notnull
     enum_value:trim,notnull
     { operation:trim "No, I want to cancel my request" } 
-    { return_url [export_vars -base one attribute_id] }    
+    { return_url:localurl "[export_vars -base one attribute_id]" }
 }
 
 if {$operation eq "Yes, I really want to delete this attribute value"} {
@@ -22,3 +22,9 @@ if {$operation eq "Yes, I really want to delete this attribute value"} {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

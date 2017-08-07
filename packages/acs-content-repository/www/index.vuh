@@ -31,3 +31,9 @@ if { [content::init the_url the_root $content_root $template_root public $revisi
   rp_internal_redirect -absolute_path $file
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

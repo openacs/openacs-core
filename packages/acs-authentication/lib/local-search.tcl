@@ -72,3 +72,9 @@ set direction [string map {asc -increasing desc -decreasing} $direction]
 if {$orderby_column ne ""} {
     template::multirow -ulevel 2 -local sort users $direction $orderby_column
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

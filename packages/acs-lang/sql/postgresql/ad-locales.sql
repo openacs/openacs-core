@@ -71,6 +71,8 @@ create table ad_locale_user_prefs (
                         references ad_locales (locale) on delete cascade
 );
 
+create index ad_locale_user_prefs_user_id_idx on ad_locale_user_prefs(user_id);
+
 -- alter user_preferences to add the locale column
 
 alter table user_preferences add
@@ -391,7 +393,7 @@ insert into ad_locales
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
         nls_charset, mime_charset, default_p, enabled_p)
- values ('uk_UA', 'Ukranian (UA)', 'uk', 'UA', 'Ukranian', 'Ukraine', 'UTF8', 'UTF-8', 'f', 'f');
+ values ('uk_UA', 'Ukrainian (UA)', 'uk', 'UA', 'Ukrainian', 'Ukraine', 'UTF8', 'UTF-8', 'f', 'f');
 
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,

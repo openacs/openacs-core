@@ -40,14 +40,7 @@ set rel_type_enc [ad_urlencode $rel_type]
 # Select out the group name and the group's object type. Note we can
 # use 1row because the validate filter above will catch missing groups
 
-db_1row group_and_rel_info {
-    select acs_group.name(:group_id) as group_name,
-           acs_object_type.pretty_name(:rel_type) as rel_type_pretty_name,
-           acs_rel_type.role_pretty_plural(rel_types.role_two) as role_pretty_plural,
-           acs_rel_type.role_pretty_name(rel_types.role_two) as role_pretty_name
-      from acs_rel_types rel_types
-     where rel_types.rel_type = :rel_type
-}
+db_1row group_and_rel_info {}
 
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
@@ -57,3 +50,9 @@ set role_pretty_plural [lang::util::localize $role_pretty_plural]
 set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list [export_vars -base one group_id] "One Group"] "All $role_pretty_plural"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

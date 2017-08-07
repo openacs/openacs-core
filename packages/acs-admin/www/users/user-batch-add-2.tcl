@@ -35,8 +35,11 @@ while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
 	append exception_text "<li>Couldn't find a valid email address in ($row).</li>\n"
 	continue
     } else {
-	set email_count [db_string unused "select count(email)
-from parties where email = lower(:email)"]
+	set email_count [db_string unused {
+            select count(email)
+            from parties
+            where email = lower(:email)
+        }]
 	
 	if {$email_count > 0} {
 	    append exception_text "<li> $email was already in the database.</li>\n"
@@ -83,7 +86,7 @@ from parties where email = lower(:email)"]
     if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $from -subject $subject -body $sub_message} errmsg]} {
 	ad_return_error "Mail Failed" "<p>The system was unable to send email.  Please notify the user personally.  This problem is probably caused by a misconfiguration of your email system.  Here is the error:</p> 
 <div><code>
-[ad_quotehtml $errmsg]
+[ns_quotehtml $errmsg]
 </code></div>"
         return
     }
@@ -93,3 +96,9 @@ from parties where email = lower(:email)"]
 ad_return_template
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

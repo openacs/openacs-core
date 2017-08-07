@@ -4,7 +4,7 @@
   </head>
   <body>
   <h2>Applying Workflow to Content Items</h2>
-  <b><a href="../index.html">Content Repository</a> : Developer Guide</b>
+  <strong><a href="../index.html">Content Repository</a> : Developer Guide</strong>
 <hr>
 
 <p>This document describes the workflow API calls necessary to apply a
@@ -14,7 +14,7 @@ simple workflow to a content item.</p>
 
 <p>Most publishers wish to follow some variation of the following workflow:</p>
 
-<table border=1 cellspacing=0 cellpadding=4>
+<table border="1" cellspacing="0" cellpadding="4">
 <tr bgcolor="#CCCCCC"><th>State</th><th>Task</th><th>Description</th></tr>
 <tr><td>Created</td><td>Authoring</td><td>
 The publisher has created the item.
@@ -46,7 +46,7 @@ three options:</p>
 </ol>
 
 <p>This simple workflow is defined in
-<tt>sql/workflows/author-edit-publish.sql</tt>.</p>
+<kbd>sql/workflows/author-edit-publish.sql</kbd>.</p>
 
 <h3>Workflow Creation</h3>
 
@@ -80,16 +80,16 @@ end;
 <p>In this case, only one assignment is made per task.  You can make
 as many assignments per task as desired.  There is currently no
 workflow API to set deadlines, so you must write your own DML to
-insert a row into <tt>wf_case_deadlines</tt> if you wish to allow the
+insert a row into <kbd>wf_case_deadlines</kbd> if you wish to allow the
 publisher to set deadlines ahead of time.</p>
 
-<p>The above workflow is created in the <b>Default</b> context.  In
+<p>The above workflow is created in the <strong>Default</strong> context.  In
 practice, you may wish to create one or more contexts in which to
 create your workflows.  Contexts may be used to represent different
 departments within an organization.</p>
 
-<p>The <tt>start_case</tt> enables the first task in the workflow,
-in this case <b>Authoring</b>.</p>
+<p>The <kbd>start_case</kbd> enables the first task in the workflow,
+in this case <strong>Authoring</strong>.</p>
 
 <h3>Check Out Item</h3>
 
@@ -144,8 +144,8 @@ end;
 <p>Upon finishing a task, you must notify the workflow engine where to
 go next.  In this case, an author wishes to simply check an item back
 in without actually completing the authoring task.  The
-<tt>set_attribute_value</tt> procedure must thus be used to set
-<tt>next_place</tt> to the starting place of the workflow.</p>
+<kbd>set_attribute_value</kbd> procedure must thus be used to set
+<kbd>next_place</kbd> to the starting place of the workflow.</p>
 
 <h3>Finish Task</h3>
 
@@ -177,9 +177,9 @@ end;
 /
 </pre>
 
-<p>In this case an author is finishing the <b>Authoring</b> task, upon
-which the workflow engine will move the workflow to the <b>Authored</b>
-state (as indicated by the <tt>next_place</tt> attribute).  If the author
+<p>In this case an author is finishing the <strong>Authoring</strong> task, upon
+which the workflow engine will move the workflow to the <strong>Authored</strong>
+state (as indicated by the <kbd>next_place</kbd> attribute).  If the author
 had previously checked out the item, then only the second step is
 required.</p>
 
@@ -210,10 +210,10 @@ end;
 </pre>
 
 <p>Note the distinction between approval or rejection is determined solely
-by the value of the <tt>next_place</tt> attribute.</p>
+by the value of the <kbd>next_place</kbd> attribute.</p>
 
 <hr>
 <a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
-Last Modified: <tt>$Id$</tt>
+Last Modified: <kbd>$Id$</kbd>
 
 

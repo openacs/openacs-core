@@ -73,9 +73,7 @@ ad_proc -public template::data::validate::richtext {
 } {
 
     upvar 2 $message_ref message $value_ref richtext_list
-
-    set contents    [lindex $richtext_list 0]
-    set format      [lindex $richtext_list 1]
+    lassign $richtext_list contents format
 
     if { $contents ne "" && [lsearch -exact [template::util::richtext::formats] $format] == -1 } {
 	set message "Invalid format, '$format'."
@@ -83,7 +81,7 @@ ad_proc -public template::data::validate::richtext {
     }
 
     # enhanced text and HTML needs to be security checked
-    if { [lsearch { text/enhanced text/html } $format] != -1 } {
+    if { $format in { text/enhanced text/html } } {
 
         set check_result [ad_html_security_check $contents]
         if { $check_result ne "" } {
@@ -224,7 +222,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
   set output {}
 
   if {$element(mode) eq "edit"} {
-      append output {<script type="text/javascript"><!--} \n {acs_RichText_WriteButtons();  //--></script>}
+      append output {<script type="text/javascript" nonce='$::__csp_nonce'><!--} \n {acs_RichText_WriteButtons();  //--></script>}
       
       set attributes(id) "richtext__$element(form_id)__$element(id)"
       
@@ -260,28 +258,33 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
 
       if { $htmlarea_p } {
           # Tell the blank-master to include the special stuff for htmlArea in the page header
-          global acs_blank_master__htmlareas
-          lappend acs_blank_master__htmlareas $attributes(id)
+          lappend ::acs_blank_master__htmlareas $attributes(id)
       }
 
-      append output [textarea_internal "$element(id)" attributes $contents]
+      append output [textarea_internal $element(id) attributes $contents]
       if { $htmlarea_p } {
-          append output "<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">"
+          append output [subst {<input name="$element(id).format" value="text/html" type="hidden">}]
       } else {
-          append output "<br>[_ acs-templating.Format]: [menu $element(id).format [template::util::richtext::format_options] $format attributes]"
+          append output \
+              [subst {<br>[_ acs-templating.Format]:}] \
+              [menu $element(id).format [template::util::richtext::format_options] $format attributes]
       }
           
       # Spell-checker
       array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
       if { $spellcheck(render_p) } {
-          append output " [_ acs-templating.Spellcheck]: [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) attributes]"
+          append output \
+              [subst { [_ acs-templating.Spellcheck]: }] \
+              [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
+                   $spellcheck(selected_option) attributes]
       }
   } else {
       # Display mode
       if { [info exists element(value)] } {
-          append output [template::util::richtext::get_property html_value $element(value)]
-          append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
-          append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
+          append output \
+              [template::util::richtext::get_property html_value $element(value)] \
+              [subst {<input type="hidden" name="$element(id)" value="[ns_quotehtml $contents]">}] \
+              [subst {<input type="hidden" name="$element(id).format" value="[ns_quotehtml $format]">}]
       }
   }
       
@@ -289,14 +292,83 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
 }
 
 
+# ----------------------------------------------------------------------
+#
+# Richtext plugin interface
+#
+# ----------------------------------------------------------------------
+
+ad_proc -public template::util::richtext::initialize_widget {
+    -form_id
+    -text_id
+    -editor
+    {-options {}}
+} {
+
+    Initialize a single text input (textarea with the id "text_id"
+    part of a form with "form_id") for the specified richtext editor
+    via a richtext-editor plugin (e.g. ckeditor4, tinymce, or xinha)
+
+    @param form_id   ID of the form containing the textarea
+    @param text_id   ID of the textarea
+    @param editor    Editor, which should be used
+    @param options   Options passed in from the widget spec
+
+    @return          On success, this function returns a dict with success 1
+                                                                                                     
+} {
+    if {$editor ni $::template::util::richtext::editors} {
+        ns_log warning "richtext: no editor with name $editor is registered"
+        return {success 0}
+    }
+
+    set result {success 1}
+    lappend result {*}[::richtext::${editor}::initialize_widget \
+                           -form_id $form_id \
+                           -text_id $text_id \
+                           -options $options]
+    return $result
+}
+
+set ::template::util::richtext::editors {}
+
+ad_proc -public template::util::richtext::register_editor { editor } {
+
+    Make an rich-text editor known to the templating system.
+
+    @param editor  Editor to be registered
+    @return        List of editors registered so far
+    
+} {
+    lappend ::template::util::richtext::editors $editor
+}
+
+ad_proc -public template::util::richtext::render_widgets { } {
+
+    Render all rich-text editors with their their widget spefic
+    code. Every editor might have multiple instances on the page,
+    which are accessible to "render_widgets" via the global variable
+    acs_blank_master__htmlareas. This function can be used to perform
+    a single (customization) operation relevant for multiple widgets.
+    
+} {
+    
+    ns_log debug "we have the following editors registered: $::template::util::richtext::editors"
+    
+    foreach editor $::template::util::richtext::editors {
+        ::richtext::${editor}::render_widgets
+    }
+}
+
 
 ad_proc -public template::widget::richtext { element_reference tag_attributes } {
 
     <p>
     Implements the richtext widget, which offers rich text editing options.
 
-    This version supports the <strong>xinha</strong> and <strong>tinymce</strong>
-    editors.
+    This version integrates support for the <strong>xinha</strong> and 
+    <strong>tinymce</strong> editors out of the box, but other richtext editors
+    can be used including and configuring them in your custom template.
 
     If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), 
     this will use the WYSIWYG editor widget set in the acs-templating.RichTextEditor 
@@ -318,14 +390,16 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     You can also parameterize the richtext widget with a 'htmlarea_p' attribute, 
     which can be true or false, and which will override the parameter setting.
     <p>
-    The available editors in wysigwig mode are xinha and tinymce. In order to 
-    use xinha, one has to use 'editor xinha' in the options of the form field. 
+    The richtext widget can be extended with several plugins, which are OpenACS
+    packages named richtex-EDITOR. Plugins are available e.g. for xinha, tinymce
+    and ckeditor4. When the plugins are installed, one can use e.g. xinha
+    by sepcifying 'editor xinha' in the options of the widget spec.
     The following options for xinha may be specified:
     <ul>
     <li> <em>editor</em>: xinha
     <li> <em>height</em>: height of the xinha widget (e.g. 350px)
     <li> <em>width</em>: width of the xinha widget (e.g. 500px)
-    <li> <em>plugins</em>: tcl list of plugins to be used in xinha. There
+    <li> <em>plugins</em>: Tcl list of plugins to be used in xinha. There
     is an a special plugin for the oacs file selector available, called OacsFs. 
     If no options are specified, the following plugins will be loaded:
     <code>
@@ -395,6 +469,21 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     Caveat: the scripts needed for the oacsimage and oacslink plugins require 
     acs-templating to be mounted. This is a temporary situation until we find 
     a better way to handle plugins.
+    
+    <p>
+    Example for the use of a custom editor widget: 
+    <pre>
+    text:richtext(richtext),nospell,optional 
+    {label #acs-subsite.Biography#} 
+    {options {editor custom ...custom configuration...}}
+    {html {rows 15 cols 50 style {width: 100%}}}
+    </pre>
+    <p>
+    If provided with a WYSIWYG editor different than 'xinha' or 'tinymce',
+    system will just collect formfield ids and supplied options for the 
+    richtext field and will provide them as-is to the blank-master environment.
+    When using a custom editor, funcional meaning of the options is totally up 
+    to the user.
 
     <p>
     Note that the richtext editors interact with <code>blank-master.tcl</code> and 
@@ -402,7 +491,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     <p>
     Derived from the htmlarea richtext widget for htmlarea by lars@pinds.com<br>
     modified for RTE http://www.kevinroth.com/ by davis@xarg.net<br>
-    xinha support by gustaf.neumann@wu-wien.ac.at<br>
+    xinha and ckeditor4 support by gustaf.neumann@wu-wien.ac.at<br>
     tinymce support by oct@openacs.org
 } {
 
@@ -431,22 +520,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
         set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
 
-        if {[string first "chrome" $user_agent] != -1} {
-            # vguerra: google chrome browser
-            # needs more testing in order to check if chrome fully
-            # supports xinha
-            # roc: this check has to go first since safari use applewebkit, 
-            # so the agent always contain safari word
-            # once xinha officially support chrome (already supports safari), we 
-            # can remove this if and add the check at the next if.
-        } elseif {[string first "safari" $user_agent] != -1} {
-            regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version
-            if {$user_agent_version < 3} {
+	if {[string first "safari" $user_agent] != -1} {
+            if {[regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version]
+                && $user_agent_version < 3} {
                 set element(htmlarea_p) false
             }
         } elseif {[string first "opera" $user_agent] != -1} {
-            regexp {^[^/]+/([0-9]+)[.]} $user_agent _ user_agent_version
-            if {$user_agent_version < 9} {
+            if {[regexp {^[^/]+/([0-9]+)[.]} $user_agent _ user_agent_version]
+                && $user_agent_version < 9} {
                 set element(htmlarea_p) false
             }
         }
@@ -474,136 +555,76 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                                                               -package_id $package_id_templating \
                                                               -parameter "RichTextEditor" \
                                                               -default "xinha"]}]
+            #
             # Tell the blank-master to include the special stuff 
             # for the richtext widget in the page header
+            #
             set ::acs_blank_master($richtextEditor) 1
 
-            if {$richtextEditor eq "xinha"} {
-                
-                # we have a xinha richtext widget, specified by "options {editor xinha}"
-                # The following options are supported: 
-                #      editor plugins width height folder_id fs_package_id
+            #
+            # Collect ids of richtext form fields
+            #
+	    lappend ::acs_blank_master__htmlareas $attributes(id)
+
+            #
+            # Try to initialize the widget via richtext plugins
+            #
+            set result [::template::util::richtext::initialize_widget \
+                            -form_id $element(form_id) \
+                            -text_id $attributes(id) \
+                            -editor $richtextEditor \
+                            -options [array get options]]
+            ns_log debug "::template::util::richtext::initialize_widget -> $result"
+            
+            if {[dict get $result success] == 1} {
                 #
-                if {[info exists options(plugins)]} {
-                    set plugins $options(plugins)
-                } else {
-                    set plugins [parameter::get \
-                                     -package_id $package_id_templating \
-                                     -parameter "XinhaDefaultPlugins" \
-                                     -default ""]
+                # Everything is set-up via the editor plugin. In
+                # general, we can pass back more information back from
+                # the plugins via the dict "result" without extending
+                # the interface, but that feature is not used yet.
+                #
+            } else {
+		# Editor is custom. All options are passed as-is to
+		# the blank master and their meaning will be defined
+		# in a custom template.
 
-                    # GetHtml CharacterMap ContextMenu FullScreen 
-                    # ListType TableOperations EditTag LangMarks Abbreviation
-                }
-                set quoted [list]
-                foreach e $plugins {lappend quoted '$e'}
-                set ::acs_blank_master(xinha.plugins) [join $quoted ", "]
+		set ::acs_blank_master(${richtextEditor}.options) [array get options]
+	    }
 
-                set xinha_options ""
-                foreach e {width height folder_id fs_package_id script_dir file_types attach_parent_id wiki_p} {
-                    if {[info exists options($e)]} {
-                        append xinha_options "xinha_config.$e = '$options($e)';\n"
-                    }
-                }
-                # DAVEB add package_id
-                append xinha_options "xinha_config.package_id = '[ad_conn package_id]';\n"
-                # DAVEB find out if there is a key datatype in the form
-
-                global af_key_name
-                if {[info exists af_key_name(${element(form_id)})]} {
-                    append xinha_options "xinha_config.key = '[template::element get_value $element(form_id) $af_key_name(${element(form_id)})]';\n"
-                }
-                if {[info exists options(javascript)]} {
-                    append xinha_options $options(javascript) \n
-                }
-                set ::acs_blank_master(xinha.options) $xinha_options
-                lappend ::acs_blank_master__htmlareas $attributes(id)
-
-            } elseif {$richtextEditor eq "tinymce"} {
-
-                lappend ::acs_blank_master__htmlareas $attributes(id)
-
-                # get default configs
-                set tinymce_default_config {
-                    {mode "exact" } 
-                    {relative_urls "false"}
-                    {height "450px" }
-                    {width "100%"}
-                    {plugins "style,layer,table,save,iespell,preview,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras" }        
-                    {browsers "msie,gecko,safari,opera" }
-                    {apply_source_formatting "true" }
-                    {paste_auto_cleanup_on_paste true}
-                    {paste_convert_headers_to_strong true}
-                    {fix_list_elements true}
-                    {fix_table_elements true}
-                    {theme "openacs"}
-                    {theme_openacs_toolbar_location "top" }
-                    {theme_openacs_toolbar_align "left" }
-                    {theme_openacs_statusbar_location "bottom" }
-                    {theme_openacs_resizing true}
-                    {theme_openacs_disable "styleselect"}
-                    {theme_openacs_buttons1_add_before "save,separator"} 
-                    {theme_openacs_buttons2_add "separator,preview,separator,forecolor,backcolor"} 
-                    {theme_openacs_buttons2_add_before "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator"} 
-                    {theme_openacs_buttons3_add_before "tablecontrols,separator"} 
-                    {theme_openacs_buttons3_add "iespell,media,separator,print,separator,fullscreen"}
-                    {extended_valid_elements "img[id|class|style|title|lang|onmouseover|onmouseout|src|alt|name|width|height],hr[id|class|style|title],span[id|class|style|title|lang]"}
-                    {element_format "html"}}
-                set tinymce_configs_list [parameter::get \
-                                              -package_id [apm_package_id_from_key "acs-templating"] \
-                                              -parameter "TinyMCEDefaultConfig" \
-                                              -default $tinymce_default_config]
-                set pairslist [list]
-                ns_log debug "tinymce: options [array get options]"
-
-                foreach config_pair $tinymce_configs_list {
-                    set config_key [lindex $config_pair 0]
-                    if {[info exists options($config_key)]} {
-                        # override default values with individual
-                        # widget specification
-                        set config_value $options($config_key)
-                        unset options($config_key)
-                    } else {
-                        set config_value [lindex $config_pair 1]
-                    }
-                    ns_log debug "tinymce: key $config_key value $config_value"
-                    if  {$config_value eq "true" || $config_value eq "false"} {
-                        lappend pairslist "${config_key}:${config_value}"
-                    } else {
-                        lappend pairslist "${config_key}:\"${config_value}\""
-                    }
-                }
-
-                foreach name [array names options] {
-                    ns_log debug "tinymce: NAME $name"
-                    # add any additional options not specified in the
-                    # default config
-                    lappend pairslist "${name}:\"$options($name)\""
-                }
-
-                lappend pairslist "elements : \"[join $::acs_blank_master__htmlareas ","]\""
-                set tinymce_configs_js [join $pairslist ","]
-                set ::acs_blank_master(tinymce.config) $tinymce_configs_js
-            }
-
-            append output "</span></label>\n<script type='text/javascript'>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
-            append output "<noscript><div><label for=\"$element(id).format\"><span class=\"form-widget\">[_ acs-templating.Format]: $format_menu</span></label></div></noscript>"
+            #
+            # The following trick with document.write is for providing
+            # reasonable behavior when javascript is turned completely
+            # off.
+            #
+            append output \
+		"</span>\n<script type='text/javascript' nonce='$::__csp_nonce'>\n" \
+		[subst {document.write("<input name='$element(id).format' value='text/html' type='hidden'>");}] \
+		"</script>\n<noscript><div>" \
+		[subst {<span class="form-widget"><label for="$element(id).format">[_ acs-templating.Format]: </label>}] \
+		$format_menu "</span></div></noscript>\n" \
+		"<span>"
 
             if { $spellcheck(render_p) } {
-                append output "<label for=\"$element(id).spellcheck\"><span class=\"form-widget\">[_  acs-templating.Spellcheck]: " \
+                append output [subst {</span>
+		    <span class="form-widget"><label for="$element(id).spellcheck">[_  acs-templating.Spellcheck]: </label>
                     [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
                          $spellcheck(selected_option) {}]
+		}]
             }
 
         } else {
             # htmlarea_p is false
 
-            append output "</span></label>\n<label for=\"$element(id).format\"><span class=\"form-widget\">[_ acs-templating.Format]: $format_menu"
+	    append output [subst {</span>
+		<span class="form-widget"><label for="$element(id).format">[_ acs-templating.Format]: </label>$format_menu
+	    }]
 
             if { $spellcheck(render_p) } {
-                append output "</span></label>\n<label for=\"$element(id).spellcheck\"><span class=\"form-widget\">[_  acs-templating.Spellcheck]: " \
+                append output [subst {</span>
+		    <span class="form-widget"><label for="$element(id).spellcheck">[_  acs-templating.Spellcheck]: </label>
                     [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
                          $spellcheck(selected_option) {}]
+		}]
             }
 
         }
@@ -612,11 +633,11 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         # Display mode
         if { $element(mode) eq "display" && [info exists element(value)] } {
             append output [template::util::richtext::get_property html_value $element(value)]
-            append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
-            append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
+            append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ns_quotehtml $contents]\">"
+            append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ns_quotehtml $format]\">"
         }
     }
-    
+
     return $output
 }
 
@@ -629,3 +650,9 @@ ad_proc template::data::to_sql::richtext { value } {
                                [template::util::richtext::get_property format $value]]]'"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

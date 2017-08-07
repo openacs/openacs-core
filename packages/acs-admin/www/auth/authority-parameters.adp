@@ -3,7 +3,7 @@
   <property name="doc(title)">@page_title;literal@</property>
   <property name="focus">parameters.@first_param_name;noquote@</property>
 
-<if @has_parameters_p@>
+<if @has_parameters_p;literal@ true>
   <formtemplate id="parameters"></formtemplate>
 </if>
 <else>

@@ -18,3 +18,9 @@ set bool_1_p 1
 
 set bool_f_p f
 set bool_0_p 0
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -24,7 +24,13 @@ if { [catch {
     }
 } errmsg] } {
     ad_return_error "Database Error" "The parameters could not be set.  The database error was:<p>
-<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>."
+<blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>."
 } else {
     ad_returnredirect $return_url
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

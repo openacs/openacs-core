@@ -42,3 +42,9 @@ if { [form is_valid add_entry] } {
     template::forward index.html
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

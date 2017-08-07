@@ -117,3 +117,9 @@ ad_proc -public content::extlink::name {
 } {
     return [db_string get {}]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

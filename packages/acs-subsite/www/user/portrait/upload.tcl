@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {user_id:naturalnum ""}
-    {return_url ""}
+    {return_url:localurl ""}
 } -properties {
     first_names:onevalue
     last_name:onevalue
@@ -15,15 +15,15 @@ ad_page_contract {
 
 set current_user_id [ad_conn user_id]
 
-set portrait_p [db_0or1row "checkportrait" {}]
+set portrait_p [db_0or1row checkportrait {}]
 
 if { $portrait_p } {
     set doc(title) [_ acs-subsite.upload_a_replacement_por]
-	set description [db_string "getstory" {}]
+    set description [db_string getstory {}]
 } else {
     set doc(title) [_ acs-subsite.Upload_Portrait]
-	set description ""
-	set revision_id ""
+    set description ""
+    set revision_id ""
 }
 
 if {$user_id eq ""} {
@@ -185,3 +185,9 @@ ad_form -extend -name "portrait_upload" -validate {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {user_id:naturalnum,notnull {[ad_conn untrusted_user_id]}}
-    {return_url ""}
+    {return_url:localurl ""}
     {password_hash ""}
     {message ""}
 }
@@ -98,3 +98,9 @@ ad_form -extend -name reset -form {
 
     ad_return_template /packages/acs-subsite/www/register/display-message
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

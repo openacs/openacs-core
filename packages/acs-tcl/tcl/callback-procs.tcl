@@ -36,3 +36,9 @@ ad_proc -public callback::get_object_type_impl {
 
     return ""
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -2,15 +2,18 @@
   <property name="doc(title)">@page_title;literal@</property>
   <property name="context">@context;literal@</property>
 
-<p> The server has been shut down. Normally, it should come back up by itself after a minute or so. </p>
+<p> The server has been shut down.</p>
 
-<p> If not, please check your server error log, or contact your system administrator. </p>
+<p>When this OpenACS instance is installed as a service (recommended),
+the server should come back up by itself after a minute or so.  If
+not, please check your server error log, or contact your system
+administrator. </p>
 
 <p> 
-  Please wait for your server to get back up, then ...
+  Please wait for your server to get back up, or start the server again manually...
 </p>
 
 <p>
-  <b>&raquo;</b> <a href="/acs-admin/">Return to site-wide administration</a><br>
-  <b>&raquo;</b> <a href="/acs-admin/apm">Go to package manager</a>
+  <strong>&raquo;</strong> <a href="/acs-admin/">Return to site-wide administration</a><br>
+  <strong>&raquo;</strong> <a href="/acs-admin/apm">Go to package manager</a>
 </p>

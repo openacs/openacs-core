@@ -11,8 +11,8 @@ ad_page_contract {
 } {
     version_id:naturalnum,notnull
     { public_p:boolean "" }
-    { kind "procs_files" }
-    { about_package_key ""}
+    { kind:word "procs_files" }
+    { about_package_key:token ""}
 } -properties {
     title:onevalue
     context:onevalue
@@ -60,10 +60,8 @@ set dimensional_list {
 
 set title "$pretty_name $version_name"
 set context [list $title]
-set dimensional_slider "[ad_dimensional \
-        $dimensional_list \
-        "" \
-        [ad_tcl_vars_to_ns_set version_id kind public_p about_package_key]]"
+set dimensional_slider [ad_dimensional $dimensional_list "" \
+                            [ad_tcl_vars_to_ns_set version_id kind public_p about_package_key]]
 
 switch $kind {
     procs_files {
@@ -79,7 +77,12 @@ switch $kind {
                 set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
                 set view procs-file-view
             } else {
-                set first_sentence ""
+                array set doc_elements [api_read_script_documentation $full_path]
+                if { [info exists doc_elements(main)] } {
+                    set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
+                } else {
+                    set first_sentence ""
+                }
                 set view content-page-view
             }
 
@@ -102,7 +105,7 @@ switch $kind {
         foreach proc [lsort [array names procs]] {
             array set doc_elements [nsv_get api_proc_doc $proc]
             if { $public_p } {
-                if { !$doc_elements(public_p) } {
+                if { $doc_elements(protection) ne "public"} {
                     continue
                 }
             }
@@ -171,3 +174,9 @@ switch $kind {
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

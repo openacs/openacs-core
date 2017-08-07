@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="relation_remove.select_rel_info">      
+<fullquery name="relation_remove.select_rel_info_rm">
       <querytext>
 
 	select s.segment_id, r.object_id_two as party_id, t.package_name
@@ -15,7 +15,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="relation_segment_has_dependant.select_rel_info">      
+<fullquery name="relation_segment_has_dependent.select_rel_info">      
       <querytext>
 	    select s.segment_id, r.object_id_two as party_id
   	      from rel_segments s, acs_rels r

@@ -6,7 +6,7 @@
 <fullquery name="all_subprograms">      
       <querytext>
 
-    select object_type as type, object_name as name
+    select object_type as type, object_name as name, 0 as nargs
     from user_objects
     where object_type in ('PACKAGE', 'PROCEDURE', 'FUNCTION')
     order by

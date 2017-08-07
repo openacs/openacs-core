@@ -20,3 +20,9 @@ template::multirow append test II 1 a
 template::multirow append test II 1 b
 template::multirow append test II 2 a
 template::multirow append test II 2 b
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

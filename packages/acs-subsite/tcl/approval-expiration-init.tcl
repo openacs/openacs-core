@@ -15,3 +15,9 @@ if { $ApprovalExpirationDays > 0 } {
     # Schedule proc to run once nightly
     ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 0 0] subsite::sweep_expired_approvals -days $ApprovalExpirationDays
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

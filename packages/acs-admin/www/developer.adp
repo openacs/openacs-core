@@ -46,28 +46,29 @@
       
       <ul>
       <li>
-	<b>Customize the front page</b>. Edit the files
+	<strong>Customize the front page</strong>. Edit the files
       <code>@acs::rootdir@/www/index.adp</code> and
-      <code>@acs::rootdir@/www/index.tcl</code>.  (<a
-      href="/doc/templates.html">More information</a>)
+      <code>@acs::rootdir@/www/index.tcl</code> (for more information, look into
+      <a href="/doc/templates.html" title="Using Templates in OpenACS">Using Templates in OpenACS</a>).
       </li>
-      <li>Change the site's overall appearance by <b>editing the master template</b> that wraps every page. The master template is <code>@acs::rootdir@/www/default-master.adp</code>.       An ADP file is almost like HTML, except with a few extra bells
-      and whistles (<a href="/doc/acs-templating/designer-guide.html"
-      title="Templating Designer's Guide">more information</a>).</li>
+      <li>Change the site's overall appearance by <strong>editing the master template</strong> that wraps every page. The master template is <code>@acs::rootdir@/www/default-master.adp</code>.       An ADP file is almost like HTML, except with a few extra bells
+      and whistles (for more details, look into the <a href="/doc/acs-templating/designer-guide"
+      title="Templating Designer's Guide">Templating Designer's Guide</a>).</li>
 
       <li><a href="/admin/" title="Package and User
       administration">Site Administration</a>
       <ul>
-      <li>Invite <a href="/acs-admin/users/">Users</a> or create <a href="/admin/groups/">Groups</a> (<a href="doc/permissions.html">More information</a>)</li>
-      <li><b>Download contributed  packages</b> at the <a href="http://openacs.org/software/" 
+      <li>Invite <a href="/acs-admin/users/">Users</a> or create <a href="/admin/groups/">Groups</a>
+      (for more information, see the documentation about <a href="/doc/permissions">Groups, Context and Permissions</a>)</li>
+      <li><strong>Download contributed  packages</strong> at the <a href="http://openacs.org/software/" 
       title="Software Page on openacs.org">OpenACS Software Page</a>.</li>
-      <li><b>Install packages</b>. In addition to the Core packages,
+      <li><strong>Install packages</strong>. In addition to the Core packages,
       which are already installed, OpenACS ships with many Standard
       packages with additional functionality.  Install these packages
       with the <a href="/acs-admin/apm/" title="OpenACS Package Manager on your server">Package Manager</a>.</li>
 
       <li>Use the <a href="/admin/site-map/" 
-      title="The Site Map on your server">Site Map</a> to <b>mount and configure packages</b>. </li>
+      title="The Site Map on your server">Site Map</a> to <strong>mount and configure packages</strong>. </li>
       </ul>
 </ul> 
       
@@ -75,11 +76,11 @@
       <h3>Learn More</h3>
       <ul>
       <li>OpenACS <a href="/doc/" title="Documentation Home on your
-      server"><b>Documentation</b></a> on this server. 
+      server"><strong>Documentation</strong></a> on this server. 
       <li><a href="/api-doc/" 
       title="API Documentation">API documentation</a>.
       </li>
-      <li>The home of the <b>OpenACS community</b> is
+      <li>The home of the <strong>OpenACS community</strong> is
       at <a href="http://openacs.org/" 
       title="OpenACS Developer Community">http://openacs.org</a>.</li>
       <li>Visit the <a href="http://openacs.org/forums/"
@@ -88,7 +89,7 @@
       href="http://openacs.org/forums/forum-view?forum_id=14013"
       title="OpenACS discussion forum on openacs.org">OpenACS Q&amp;A
       forum</a>.</li>
-      <li>Post <b>bugs</b> and <b>feature requests</b> in the <a href="http://openacs.org/bugtracker/openacs/" 
+      <li>Post <strong>bugs</strong> and <strong>feature requests</strong> in the <a href="http://openacs.org/bugtracker/openacs/" 
       title="Software Development Manager on openacs.org">Bug
       Tracker</a>. 
       </li>

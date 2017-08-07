@@ -2,3 +2,9 @@
 set query_string [string range [ad_conn extra_url] [string length "proc/"] end]
 set url [export_vars -base [ad_conn package_url]proc-search { query_string { search_type "Feeling Lucky" } }]
 ad_returnredirect $url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

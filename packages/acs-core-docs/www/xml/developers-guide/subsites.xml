@@ -19,11 +19,11 @@
 
 
 <para>
-In this document, we'll examine the user interface pages of the Notes
+In this document, we&#39;ll examine the user interface pages of the Notes
 application in more detail, covering two separate aspects of page
-development in OpenACS. First, we'll talk about the code needed to make
+development in OpenACS. First, we&#39;ll talk about the code needed to make
 your pages aware of which application instance they are running
-in. Second, we'll talk about using the form builder to develop
+in. Second, we&#39;ll talk about using the form builder to develop
 form-based user interfaces in OpenACS. While these seem like unrelated
 topics, they both come up in the example page that we are going to
 look at, so it makes sense to address them at the same time.
@@ -44,7 +44,7 @@ files, or entire applications. The APM uses the site map to map
 application instances to particular URLs within a site. We call
 creating such a mapping <emphasis>mounting</emphasis> the application instance at a
 particular URL.  The tutorial also showed how a given URL is
-translated into a physical file to serve using the site map. We'll
+translated into a physical file to serve using the site map. We&#39;ll
 repeat this description here, assuming that you have mounted an
 instance of Notes at the URL <computeroutput>/notes</computeroutput> as we did in the <link linkend="packages-looks">packages-example</link>:
 </para>
@@ -134,7 +134,7 @@ following the part that matched a site map entry.
 <para>
 In the Notes example, we are particularly interested in the
 <computeroutput>package_id</computeroutput> field.  If you study the data model and code,
-you'll see why. As we said before in the <link linkend="objects">data modeling</link> tutorial, the Notes application points the
+you&#39;ll see why. As we said before in the <link linkend="objects">data modeling</link> tutorial, the Notes application points the
 <computeroutput>context_id</computeroutput> of each Note object that it creates to the
 package instance that created it. That is, the <computeroutput>context_id</computeroutput>
 corresponds exactly to the <computeroutput>package_id</computeroutput> that comes in from
@@ -207,7 +207,7 @@ The rest of this page makes calls to the form builder part of the
 template system. This API allows you to write forms-based pages
 without generating a lot of duplicated HTML in your pages. It also
 encapsulates most of the common logic that we use in dealing with
-forms, which we'll discuss next.
+forms, which we&#39;ll discuss next.
 </para>
 
 </sect2>
@@ -372,7 +372,7 @@ if {[template::form is_valid new_note]} {
 
 
 <para>
-In this simple example, we don't do any custom validation. The nice
+In this simple example, we don&#39;t do any custom validation. The nice
 thing about using this API is that the forms library handles all of
 the HTML rendering, input validation and database transaction logic on
 your behalf. This means that you can write pages without duplicating
@@ -391,7 +391,7 @@ package with the new code that you grabbed out of CVS or the package
 repository, mount an instance of Notes somewhere in your server and
 then try out the user interface pages. It should become clear that in
 a real site, you would be able to, say, create a custom instance of
-Notes for every registered user, mount that instance at the user's
+Notes for every registered user, mount that instance at the user&#39;s
 home page, and set up the permissions so that the instance is only
 visible to that user. The end result is a site where users can come
 and write notes to themselves.
@@ -428,7 +428,7 @@ database.
 </para>
 
 <para>
-We also saw how to use the templating system's forms API in a simple
+We also saw how to use the templating system&#39;s forms API in a simple
 way, to create forms based pages with minimal duplication of code.
 </para>
 

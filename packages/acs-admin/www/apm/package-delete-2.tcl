@@ -31,7 +31,7 @@ if {![apm_version_installed_p $version_id]} {
 		     -callback apm_body_callback $package_key} errmsg] } {
 	append body [subst {
 	    We encountered the following error when deleting package "$package_key":
-	    <pre><blockquote>[ad_quotehtml $errmsg]</blockquote></pre>
+	    <pre><blockquote>[ns_quotehtml $errmsg]</blockquote></pre>
 	}]
 	append body $::__apm_body
 	
@@ -49,3 +49,9 @@ ad_return_template apm
 
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

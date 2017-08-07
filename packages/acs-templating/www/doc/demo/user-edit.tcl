@@ -13,8 +13,8 @@ if { ! [request is_valid] } { return }
 # allows us to set error messages more easily.
 
 form create user_search -elements {
-  user_search -datatype text -html { size 40 } -label "Search Text"
-  submit -datatype text -widget submit -label "Go"
+    user_search -datatype text -html { size 40 } -label "Search Text" -validate {chars {regexp {^\w*$} $value} "invalid search string"}
+    submit -datatype text -widget submit -label "Go"
 }
 set user_search [element get_value user_search user_search]
 
@@ -124,3 +124,9 @@ if { [form is_valid user_edit] } {
 
   template::forward multiple
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

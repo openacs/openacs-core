@@ -22,22 +22,22 @@
       <title>Installing OpenACS packages</title>
 
       <para>An OpenACS package extends your website and lets it do
-      things it wasn't able to do before. You can have a weblog, a
+      things it wasn&#39;t able to do before. You can have a weblog, a
       forums, a calendar, or even do sophisticated project-management
       via your website.</para>
 
-      <para>After you've installed OpenACS, you can congratulate
-      yourself for a job well done. Then, you'll probably want to
+      <para>After you&#39;ve installed OpenACS, you can congratulate
+      yourself for a job well done. Then, you&#39;ll probably want to
       install a couple of packages.</para>
 
       <para>To install packages, you have to be an administrator on
-      the OpenACS webserver. Log in, and you'll see a link to Admin or
+      the OpenACS webserver. Log in, and you&#39;ll see a link to Admin or
       the Control Panel. Click on that, then click on 'Install
       software'. Packages are sometimes also referred to as
       applications or software.</para>
 
-      <para>At this point, you'll need to determine whether or not
-      you're able to install from the repository, or whether you
+      <para>At this point, you&#39;ll need to determine whether or not
+      you&#39;re able to install from the repository, or whether you
       should install from local files.</para>
 
       <para>Basically, if you have a local CVS repository, or have
@@ -48,7 +48,7 @@
       from Repository' or 'Install from Local'. Select the package,
       and click 'Install checked applications'. The system will check
       to make sure you have all necessary packages that the package
-      you want depends on. If you're installing from Local Files, and
+      you want depends on. If you&#39;re installing from Local Files, and
       you are missing any packages, you may have to add the packages
       your desired package depends on: 
         <xref linkend="upgrade-openacs-files"></xref>
@@ -71,12 +71,12 @@
     <sect2>
       <title>Mounting OpenACS packages</title>
 
-      <para>After you've installed your packages, you have to 'mount'
+      <para>After you&#39;ve installed your packages, you have to 'mount'
       them in order to make them appear on your website.</para>
 
       <para>Make sure you are logged in, and then click on the
       'Admin' or 'Control Panel' link to get to the Site-Wide
-      Administration page (at /acs-admin). Click on the subsite you'd
+      Administration page (at /acs-admin). Click on the subsite you&#39;d
       like the application to be available at.</para>
 
       <para>Subsites are a way of dividing your website into logical
@@ -84,10 +84,10 @@
       of an organization. </para>
 
       <para>Now click on 'Applications' (applications are the same
-      thing as packages). You'll see a list of Applications and the
+      thing as packages). You&#39;ll see a list of Applications and the
       URLs that each is located at. To mount a new application, you
       click on 'Add application', enter the Application, title
-      (application name), and URL (URL folder name), and you're
+      (application name), and URL (URL folder name), and you&#39;re
       done.</para>
 
       <para>Test it out now. The URL is based on a combination of the
@@ -109,7 +109,7 @@
     </authorblurb>
     <sect2>
       <title>Configuring an OpenACS package</title>
-      <para>After you've installed and mounted your package, you can
+      <para>After you&#39;ve installed and mounted your package, you can
       configure each instance to act as you would like. </para>
 
       <para>This is done from the Applications page. Log in, go to the
@@ -127,7 +127,7 @@
     </authorblurb>
     <sect2>
       <title>Setting Permission on an OpenACS package</title>
-      <para>After you've installed and mounted your package, you can
+      <para>After you&#39;ve installed and mounted your package, you can
       configure each instance to act as you would like. </para>
 
       <para>This is done from the Applications page. Log in, go to the
@@ -196,20 +196,20 @@
     <screen><userinput>cp <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-subsite/www/index*</computeroutput> <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www</computeroutput></userinput></screen>
         </listitem>
         <listitem>
-          <para>Edit the new <computeroutput>index.adp</computeroutput> to change the text; you shouldn't need to edit <computeroutput>index.tcl</computeroutput> unless you are adding new functionality.</para>
+          <para>Edit the new <computeroutput>index.adp</computeroutput> to change the text; you shouldn&#39;t need to edit <computeroutput>index.tcl</computeroutput> unless you are adding new functionality.</para>
         </listitem>
       </orderedlist>
     </sect2>
     <sect2>
       <title>How do I change the site-wide style?</title>
-      <para>Almost all pages on an OpenACS site use <ulink url="/doc/acs-templating">ACS Templating</ulink>, and so their appearance is driven by a layer of different files.  Let's examine how this works:</para>
+      <para>Almost all pages on an OpenACS site use <ulink url="/doc/acs-templating">ACS Templating</ulink>, and so their appearance is driven by a layer of different files.  Let&#39;s examine how this works:</para>
       <itemizedlist>
         <listitem>
           <para>
           A templated page uses an ADP/Tcl pair.  The first line in the ADP file is usually:
           </para>
           <programlisting>&lt;master&gt;</programlisting>  
-          <para>If it appears exactly like this, without any arguments, the template processer uses <computeroutput>default-master</computeroutput> for that subsite.  For pages in <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www</computeroutput>, this is <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www/default-master.adp</computeroutput> and the associated .tcl file.
+          <para>If it appears exactly like this, without any arguments, the template processor uses <computeroutput>default-master</computeroutput> for that subsite.  For pages in <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www</computeroutput>, this is <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www/default-master.adp</computeroutput> and the associated .tcl file.
           </para>
         </listitem>
         <listitem>
@@ -261,12 +261,12 @@
         <listitem>
           <formalpara>
             <title>Finding the problem</title>
-            <para>We start with the page that has the error.  In the URL it's <computeroutput>http://myserver.net/events/event-info.tcl</computeroutput>, so open the file <computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/events/www/event-info.tcl</computeroutput>.  It contains this line:</para>
+            <para>We start with the page that has the error.  In the URL it&#39;s <computeroutput>http://myserver.net/events/event-info.tcl</computeroutput>, so open the file <computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/events/www/event-info.tcl</computeroutput>.  It contains this line:</para>
           </formalpara>
           <programlisting>set can_register_p [events::security::can_register_for_event_p -event_id $event_id]</programlisting>
           <para>We need to know what that procedure does, so go to <ulink url="/api-doc">/api-doc</ulink>, paste events::security::can_register_for_event_p into the ACS Tcl API Search box, and click Feeling Lucky.  The next pages shows the proc, and we click "show source" to see more information.  The body of the proc is simply</para>
           <programlisting>return [permission::permission_p -party_id $user_id -object_id $event_id -privilege write]</programlisting>
-          <para>This means that a given user must have the write privilige on the event in order to register.  Let's assume that the priviliges inherit, so that if a user has the write privilige on the whole package, they will have the write privilege on the event.</para>
+          <para>This means that a given user must have the write privilige on the event in order to register.  Let&#39;s assume that the priviliges inherit, so that if a user has the write privilige on the whole package, they will have the write privilege on the event.</para>
         </listitem>
         <listitem>
           <formalpara>

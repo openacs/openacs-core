@@ -1,7 +1,7 @@
 ad_page_contract {
   @cvs-id $Id$
 } {
-  component_id:naturalnum,notnull
+  component_id:token,notnull
   package_key:nohtml
 } -properties {
   title:onevalue
@@ -24,3 +24,9 @@ foreach component [nsv_get aa_test components] {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -56,15 +56,6 @@
       </querytext>
 </fullquery>
  
-<fullquery name="apm_generate_package_spec.callback_info">      
-      <querytext>
-        select type,
-               proc
-        from apm_package_callbacks
-        where version_id = :version_id
-      </querytext>
-</fullquery>
- 
 <fullquery name="apm_generate_package_spec.parameter_info">      
       <querytext>
       

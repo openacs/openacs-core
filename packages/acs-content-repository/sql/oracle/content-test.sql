@@ -192,8 +192,8 @@ dbms_output.put_line('This is the path to a folder from a subfolder');
 dbms_output.put_line('Path for ' || sub_folder_id || ' from sub_sub_folder_id: ' || 
   sub_sub_folder_id || ' is ' || 
   content_item.get_path(sub_folder_id,sub_sub_folder_id));
-dbms_output.put_line('This is a path to an item from a non-existant item');
-dbms_output.put_line('Path for ' || item_id || ' from nonexistant_id: ' || 
+dbms_output.put_line('This is a path to an item from a non-existent item');
+dbms_output.put_line('Path for ' || item_id || ' from nonexistent_id: ' || 
   -200 || ' is ' || 
   content_item.get_path(item_id,-200));
 dbms_output.put_line('This is a path to an item from a non-related branch');

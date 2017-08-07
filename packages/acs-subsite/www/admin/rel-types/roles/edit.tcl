@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     role:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     
@@ -62,3 +62,9 @@ if { [template::form is_valid role_form] } {
     ad_returnredirect $return_url
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

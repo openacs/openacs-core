@@ -658,8 +658,7 @@ ad_proc -private lang::message::format {
                     append formated_message $percent_match
                 } else {
                     # Do the substitution
-                
-                    append formated_message [lindex [array get value_array $variable_string] 1]
+                    append formated_message $value_array($variable_string)
                 }
             } else {
                 regexp {^([^.]+)(?:\.([^.]+))?$} $variable_string match variable_name array_key
@@ -833,16 +832,11 @@ ad_proc -public lang::message::lookup {
                     if { [message_exists_p $locale $key] } {
                         set message [nsv_get lang_message_$locale $key]
                     } else {
-			if {"TRANSLATION MISSING" != $default} {
+			if {"TRANSLATION MISSING" ne $default} {
 			    set message $default
 			} else {
-			    if {[string match "acs-translations.*" $key]} {
-				ns_log Debug "lang::message::lookup: Key '$key' does not exist in en_US"
-				set message "MESSAGE KEY MISSING: '$key'"
-			    } else {
-				ns_log Error "lang::message::lookup: Key '$key' does not exist in en_US"
-				set message "MESSAGE KEY MISSING: '$key'"
-			    }
+                            ad_log Error "lang::message::lookup: Key '$key' does not exist in en_US"
+                            set message "MESSAGE KEY MISSING: '$key'"
 			}
 		    }
                 }
@@ -869,7 +863,7 @@ ad_proc -public lang::message::lookup {
             }
             
             # encode the key in the page
-            set message "$message\x002(\x001$key\x001)\x002"
+            set message "$message\x02(\x01$key\x01)\x02"
         }
     }
 
@@ -951,7 +945,7 @@ ad_proc -public _mr { locale key message } {
     Inserts the message into the table lang_messages
     if it does not exist and updates if it does.
 
-    For backward compability - it assumes that the key 
+    For backward compatibility - it assumes that the key 
     is the concatenation of message and package key
     like this:
 
@@ -1031,3 +1025,9 @@ ad_proc -public lang::message::update_description {
         db_dml update_description {} -clobs [list $description]
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

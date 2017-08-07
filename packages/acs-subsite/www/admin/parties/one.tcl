@@ -34,12 +34,7 @@ ad_page_contract {
 # Select out the party name and the party's object type. Note we can
 # use 1row because the validate filter above will catch missing parties
 
-db_1row party_info {
-    select acs_object.name(:party_id) as party_name,
-           object_type as party_type
-      from acs_objects
-     where object_id = :party_id
-}
+db_1row party_info {}
 
 ### This page redirects to different pages for groups or rel_segments.
 ### We have to check whether the party_type is a type of group or rel_segment.
@@ -71,3 +66,9 @@ attribute::multirow \
 	-object_type $party_type \
 	$party_id
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -9,7 +9,7 @@
             <tr bgcolor="#5F6090">
               <td colspan="3" align="center" class="textstyle1">
                 <font face="Verdana, Arial, Helvetica, sans-serif" size="2" color="#FFFFCC">
-                  <b>@elements.section@</font></b>
+                  <strong>@elements.section@</font></strong>
                 </font>
               </td>
             </tr>
@@ -73,7 +73,7 @@
   	                <td width="40%" class="textstyle1" align="center">
                       </else>
                       <font face="Verdana, Arial, Helvetica, sans-serif" size="2" color="#FFFFCC">
-  		        <b><noparse><formwidget id=@elements.id@></noparse><b>
+  		        <strong><noparse><formwidget id=@elements.id@></noparse><strong>
                       </font>
   	              </td>
   	            </if>

@@ -3,46 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="application_group::contains_party_p.app_group_contains_party_p">      
-      <querytext>
-      
-	    select case when exists (
-	        select 1
-	        from application_group_element_map
-	        where package_id = :package_id
-	          and element_id = :party_id
-	      union all
-	        select 1
-	        from application_groups
-	        where package_id = :package_id
-	          and group_id = :party_id
-	    ) then 1 else 0 end
-            from dual
-	
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="application_group::contains_party_p.app_group_contains_party_p">      
-      <querytext>
-      
-	    select case when exists (
-	        select 1
-	        from application_group_element_map
-	        where package_id = :package_id
-	          and element_id = :party_id
-	      union all
-	        select 1
-	        from application_groups
-	        where package_id = :package_id
-	          and group_id = :party_id
-	    ) then 1 else 0 end
-            from dual
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="application_group::contains_relation_p.app_group_contains_rel_p">      
       <querytext>
       
@@ -76,12 +36,7 @@
 <fullquery name="application_group::group_id_from_package_id.application_group_from_package_id_query">      
       <querytext>
       
-	    begin
-	    :1 := application_group.group_id_from_package_id (
-	        package_id => :package_id,
-	        no_complain_p => :no_complain_p
-	    );
-	    end;
+       select application_group.group_id_from_package_id(:package_id, :no_complain_p) from dual;
 	
       </querytext>
 </fullquery>

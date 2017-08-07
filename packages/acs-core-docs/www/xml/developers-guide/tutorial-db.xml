@@ -65,7 +65,7 @@
         <title>The Database Creation Script</title>
     <programlisting><xi:include href="../../files/tutorial/myfirstpackage-create.sql" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
       </figure>
-    <para>The creation script calls a function in PL/pgSQL (PL/pgSQL is a procedural language extention to sql),
+    <para>The creation script calls a function in PL/pgSQL (PL/pgSQL is a procedural language extension to sql),
     <computeroutput><ulink url="/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fcreate%5ftype">content_type__create_type</ulink></computeroutput>, which
     in turn creates the necessary database changes to support our data
     object.  Notice the use of "mfp."  This is derived from "My
@@ -89,7 +89,7 @@ psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE will create implicit tr
 (1 row)
 
 [$OPENACS_SERVICE_NAME postgresql]$</screen>
-      <para>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it's trying to drop may be missing.  They can be ignored.</para>
+      <para>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it&#39;s trying to drop may be missing.  They can be ignored.</para>
       <para>Once you get the same output as shown above, test the drop script:</para>
       <screen>[$OPENACS_SERVICE_NAME postgresql]$ <userinput>psql service0 -f myfirstpackage-drop.sql</userinput>
 

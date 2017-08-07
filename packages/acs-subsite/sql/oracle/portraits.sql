@@ -29,7 +29,8 @@ begin
     max_n_rels_one => 1,
     object_type_two => 'content_item',
     min_n_rels_two => 0,
-    max_n_rels_two => 1
+    max_n_rels_two => 1,
+    composable_p => 'f'
   );
 
   commit;

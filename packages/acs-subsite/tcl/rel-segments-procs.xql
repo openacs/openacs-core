@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="rel_segments_delete.select_dependant_constraints">      
+<fullquery name="rel_segments_delete.select_dependent_constraints">      
       <querytext>
       
 	select c.constraint_id

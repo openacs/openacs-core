@@ -272,7 +272,7 @@ begin
   rel_constraint.del(side_one_constraint);
   rel_constraint.del(side_two_constraint);
 
-  -- Remove the test memebership relations
+  -- Remove the test membership relations
   for r in (select * from blah_member_rels) loop
     blah_member_rel.del(r.rel_id);
   end loop;

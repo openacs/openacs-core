@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {user_id:naturalnum,notnull {[ad_conn untrusted_user_id]}}
-    {return_url ""}
+    {return_url:localurl ""}
     {old_password ""}
     {message ""}
 }
@@ -173,3 +173,9 @@ ad_form -extend -name update -form {
     ad_returnredirect -message $message -- $return_url
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

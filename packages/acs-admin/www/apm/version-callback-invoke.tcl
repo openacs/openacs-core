@@ -9,7 +9,11 @@ ad_page_contract {
     type:notnull
 }
 
-db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
+db_1row package_version_info {
+    select pretty_name, version_name
+    from apm_package_version_info
+    where version_id = :version_id
+}
 
 set return_url [export_vars -base version-callbacks { version_id }]
 
@@ -24,8 +28,13 @@ set context [list \
                  [list $return_url "Tcl Callbacks"] $page_title]
 
 if { [catch $proc_value result] } {
-    global errorInfo
-    ns_log Error "Error invoking callback $proc_value: $result\n$errorInfo"
+    ns_log Error "Error invoking callback $proc_value: $result\n$::errorInfo"
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

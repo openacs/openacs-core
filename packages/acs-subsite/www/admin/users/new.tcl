@@ -12,7 +12,7 @@ ad_page_contract {
     { user_type:notnull "user" }
     { user_type_exact_p:boolean t }
     { user_id:naturalnum "" }
-    { return_url "" }
+    { return_url:localurl "" }
     {add_to_group_id:naturalnum ""}
     {add_with_rel_type "user_profile"}
     {group_rel_type_list ""}
@@ -36,16 +36,7 @@ db_1row group_info {
 }
 
 # We assume the group is on side 1... 
-db_1row rel_type_info {
-    select object_type as ancestor_rel_type
-      from acs_object_types
-     where supertype = 'relationship'
-       and object_type in (
-               select object_type from acs_object_types
-               start with object_type = :add_with_rel_type
-               connect by object_type = prior supertype
-           )
-}
+db_1row rel_type_info {}
 
 set create_p [group::permission_p -privilege create $add_to_group_id]
 
@@ -160,12 +151,7 @@ if { [template::form is_valid add_user] } {
 	set email_verified_p "t"
     }
 
-    set double_click_p [db_string user_exists {
-	select case when exists
-	                 (select 1 from users where user_id = :user_id)
-	       then 1 else 0 end
-	from dual
-    }]
+    set double_click_p [db_string user_exists {}]
 
     if {!$double_click_p} {
 
@@ -245,7 +231,7 @@ The user was added by $creation_name from [ad_conn url]."
 
 	if { $email_verified_p == "f" } {
 	
-	    set row_id [db_string user_new_2_rowid_for_email "select rowid from users where user_id = :user_id"]
+	    set row_id [db_string user_new_2_rowid_for_email {select rowid from users where user_id = :user_id}]
 	    # the user has to come back and activate their account
 
             set href [export_vars \
@@ -290,3 +276,9 @@ Password:  $password
 
 ad_return_template
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

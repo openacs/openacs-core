@@ -49,7 +49,7 @@ ad_proc -public template::data::transform::spellcheck {
     -element_ref:required
     -values:required
 } {
-    Tranform submitted and previously validated input into a spellcheck datastructure.
+    Transform submitted and previously validated input into a spellcheck datastructure.
 
     @param element_ref Reference variable to the form element.
     @param values The set of values for that element.
@@ -61,7 +61,8 @@ ad_proc -public template::data::transform::spellcheck {
     # case 2, submission of the page showing errors: returns the corrected text.
     set merge_text [template::util::spellcheck::merge_text $element(id)]
 
-    if { [set richtext_p $element(datatype) eq "richtext"] } {
+    set richtext_p [expr {$element(datatype) eq "richtext"}]
+    if { $richtext_p } {
 	# special treatment for the "richtext" datatype.
     	set format [template::util::richtext::get_property format [lindex $values 0]]
 	if { $merge_text ne "" } {
@@ -256,7 +257,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	}
     }
 
-    file delete $tmpfile
+    file delete -- $tmpfile
 
     ####
     #
@@ -342,7 +343,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     regsub -all {<a [^<]*>} $formtext_to_display "<u>" formtext_to_display
     regsub -all {</a>} $formtext_to_display "</u>" formtext_to_display
 
-    append formtext_to_display "<input type=\"hidden\" name=\"${var_to_spellcheck}.merge_text\" value=\"[ad_quotehtml $processed_text]\" >"
+    append formtext_to_display "<input type=\"hidden\" name=\"${var_to_spellcheck}.merge_text\" value=\"[ns_quotehtml $processed_text]\" >"
 
 
     ####
@@ -439,3 +440,9 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 
     return [array get spellcheck]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

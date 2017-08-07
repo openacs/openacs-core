@@ -18,10 +18,10 @@ set comment_action 0
 set return_url $prev_url
 
 if {$user_id eq 0} {
-    set user_name "[_ acs-tcl.Public_User]"
+    set user_name [_ acs-tcl.Public_User]
     set public_userm_email [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator -default ""]
 } else {
-    db_1row get_user_info { *SQL* }
+    db_1row get_user_info {}
     set public_userm_email $user_email
 }
 
@@ -40,13 +40,13 @@ set error_desc_email "
 <strong>[_ acs-tcl.File]</strong> [ns_quotehtml $error_file]<br>
 <strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]<br>
 <strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ns_quotehtml $user_id]<br>
-<strong>IP:</strong> [ad_quotehtml [ns_conn peeraddr]]<br>
+<strong>IP:</strong> [ns_quotehtml [ns_conn peeraddr]]<br>
 <strong>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
 <br>
 -----------------------------<br>
 [_ acs-tcl.Error_details]<br>
 -----------------------------<br>
-<pre>[ad_quotehtml $error_info]</pre>
+<pre>[ns_quotehtml $error_info]</pre>
 <br>
 ------------------------------<br>
 <br>
@@ -103,7 +103,7 @@ if {$auto_submit_p && $user_id > 0} {
 	    -user_id $user_id
 	
 	bug_tracker::bugs_exist_p_set_true -package_id $bt_package_id
-        db_dml insert_auto_bug { *SQL* }
+        db_dml insert_auto_bug {}
     } else {
 	
 	#Comment on the Existing Bug even if the user dont want to add
@@ -113,7 +113,7 @@ if {$auto_submit_p && $user_id > 0} {
 	set bug_id $exist_bug
 	
 	if {$bug_number eq ""} {
-	    db_dml increase_reported_times { *SQL* }
+	    db_dml increase_reported_times {}
 	}
 	
 	# Get the bug data
@@ -262,15 +262,15 @@ if {$auto_submit_p && $user_id > 0} {
  -------------------------------------------------------- <br>
                    [_ acs-tcl.Error_Report] <br>
  -------------------------------------------------------- <br>
-<br><strong>[_ acs-tcl.Previus]</strong> [ad_quotehtml $prev_url]
-<br><strong>[_ acs-tcl.Page]</strong> [ad_quotehtml $error_url]
-<br><strong>[_ acs-tcl.File]</strong> [ad_quotehtml $error_file]
-<br><strong>[_ acs-tcl.User_Name]</strong> [ad_quotehtml $user_name]
-<br><strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ad_quotehtml $user_id]
-<br>[_ acs-tcl.Browser_of_the_user]</strong> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]
+<br><strong>[_ acs-tcl.Previus]</strong> [ns_quotehtml $prev_url]
+<br><strong>[_ acs-tcl.Page]</strong> [ns_quotehtml $error_url]
+<br><strong>[_ acs-tcl.File]</strong> [ns_quotehtml $error_file]
+<br><strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]
+<br><strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ns_quotehtml $user_id]
+<br>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set get [ns_conn headers] User-Agent]]
 <br><br><strong>[_ acs-tcl.User_comments]</strong>  
 <br>
-[ad_quotehtml [template::util::richtext::get_property contents $description]]<br>
+[ns_quotehtml [template::util::richtext::get_property contents $description]]<br>
 <br>"
  
   foreach available_enabled_action_id [workflow::case::get_available_enabled_action_ids -case_id $case_id] {
@@ -405,3 +405,9 @@ if { ![form is_valid bug_edit] } {
 }    
     
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

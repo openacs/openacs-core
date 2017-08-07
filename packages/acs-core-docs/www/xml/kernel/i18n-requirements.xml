@@ -47,7 +47,7 @@
         <term>locale</term>
 	<listitem>
           <para>
-            The definition of the subset of a user's environment that depends on
+            The definition of the subset of a user&#39;s environment that depends on
             language and cultural conventions.
           </para>
         </listitem>
@@ -278,14 +278,14 @@ http://www.li18nux.net/</ulink></para>
 i18N Guidelines:
 http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</ulink></para>
 
-<para><ulink url="http://sunsite.berkeley.edu/amher/iso_639.html">ISO
+<para><ulink url="https://www.iso.org/standard/4766.html">ISO
 639:1988 Code for the representation of names of languages
-http://sunsite.berkeley.edu/amher/iso_639.html</ulink></para>
+</ulink></para>
 
-<para><ulink url="http://www.niso.org/3166.html">ISO 3166-1:1997
+<para><ulink url="https://www.iso.org/standard/24591.html">ISO 3166-1:1997
 Codes for the representation of names of countries and their
 subdivisions Part 1: Country codes
-http://www.niso.org/3166.html</ulink></para>
+</ulink></para>
 
 <para><ulink url="http://www.isi.edu/in-notes/iana/assignments/character-sets">IANA
 Registry of Character Sets</ulink></para>
@@ -489,14 +489,14 @@ filesystem</para>
 <para>Acs-templating does the following.</para>
 <itemizedlist>
         <listitem>
-          <para>When the acs-templating package opens an an ADP or Tcl file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it's that charset.  
+          <para>When the acs-templating package opens an an ADP or Tcl file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it&#39;s that charset.  
 Writing Files</para>
         </listitem>
         <listitem>
           <para>When the acs-templating package writes an an ADP or
           Tcl file, it assumes the file is iso-8859-1.  If the output
           charset (OutputCharset) in the AOLserver config file is set,
-          then acs-templating assumes it's that charset.  </para>
+          then acs-templating assumes it&#39;s that charset.  </para>
         </listitem>
       </itemizedlist>
 
@@ -535,7 +535,7 @@ Writing Files</para>
           override the default system choice of character set when parsing
           and validating user form data. <remark>INCOMPLETE - form
           widgets in acs-templating/tcl/date-procs.tcl are not
-          internationalized.  Also, acs-templating's UI needs to be
+          internationalized.  Also, acs-templating&#39;s UI needs to be
           internationalized by replacing all user-visible strings with
           message keys.</remark></para>
 
@@ -681,7 +681,7 @@ universal time zone such as GMT.</para>
 <para><emphasis>100.10</emphasis> Since UTF8 strings can use up to
 three (UCS2) or six (UCS4) bytes per character, make sure that
 column size declarations in the schema are large enough to
-accomodate required data (such as email addresses in
+accommodate required data (such as email addresses in
 Japanese).  <remark>Since 5.0.0, this is covered in the database
 install instructions for both PostgreSQL and Oracle.</remark></para>
 </blockquote>

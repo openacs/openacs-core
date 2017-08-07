@@ -9,22 +9,22 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
 }
 
 
-db_multirow supertypes select_supertypes {
-    select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name as name,
-           t.object_type
-      from acs_object_types t
-   connect by prior t.object_type = t.supertype
-     start with t.object_type in ('membership_rel','composition_rel')
-}
+db_multirow supertypes select_supertypes {}
 
 set context [list [list "[ad_conn package_url]admin/rel-types/" [_ acs-subsite.Relationship_Types]] [_ acs-subsite.Create_relation_type]]
 
 set export_vars [export_vars -form {return_url}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

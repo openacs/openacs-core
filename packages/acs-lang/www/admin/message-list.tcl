@@ -114,7 +114,7 @@ db_multirow -extend {
     delete_url
     message_key_pretty
 } messages select_messages {} {
-    set edit_url [export_vars -base { locale package_key message_key show {return_url [ad_return_url]} }]
+    set edit_url [export_vars -base edit-localized-message { locale package_key message_key show {return_url [ad_return_url]} }]
     set delete_url [export_vars -base message-delete { locale package_key message_key show {return_url [ad_return_url]} }]
     set message_key_pretty "$package_key.$message_key"
 }
@@ -159,3 +159,9 @@ ad_form -name locale_form -action [ad_conn url] -export { tree_id category_id } 
 }
 
 set form_vars [export_ns_set_vars form {locale form:mode form:id __confirmed_p __refreshing_p formbutton:ok} [ad_conn form]]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

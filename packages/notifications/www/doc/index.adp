@@ -186,5 +186,7 @@ There are some additional docs and discussions on the forums in the following th
 <li><a href="http://openacs.org/forums/message-view?message_id=108283">Notifications tutorial</a></li>
 <li><a href="http://openacs.org/forums/message-view?message_id=155375">How do I use notifications?</a></li>
 </ul>
+<h2>Release Notes</h2>
 
+<p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 <p>&copy; 2002 OpenForce, Inc.</p>

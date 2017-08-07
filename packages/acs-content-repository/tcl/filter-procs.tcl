@@ -164,11 +164,7 @@ ad_proc -public content::get_content_value { revision_id } {
     @return content element corresponding to the provided revision_id
 } { 
     db_transaction {
-        db_exec_plsql gcv_get_revision_id {
-            begin
-	    content_revision.to_temporary_clob(:revision_id);
-            end;
-        }
+        db_exec_plsql gcv_get_revision_id {}
 
         # Query for values from a previous revision
         set content [db_string gcv_get_previous_content ""]
@@ -326,3 +322,9 @@ ad_proc -public content::deploy { url_stub } {
 
     template::util::write_file $output_path $output
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

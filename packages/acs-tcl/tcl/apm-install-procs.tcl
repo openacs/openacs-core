@@ -85,11 +85,12 @@ ad_proc -public apm_dependency_provided_p {
     set old_version_p 0
     set found_p 0
     ns_log Debug "apm_dependency_provided_p: Scanning for $dependency_uri version $dependency_version"
-    db_foreach apm_dependency_check {} {
-        if { $version_p >= 0 } {
+    foreach service_version [db_list get_service_versions {}] {
+        set version_p [expr {[apm_version_names_compare $service_version $dependency_version] >= 0}]
+        if { $version_p } {
             ns_log Debug "apm_dependency_provided_p: Dependency satisfied by previously installed package"
             set found_p 1
-        } elseif { $version_p == -1 } {
+        } else {
             set old_version_p 1
         }
     }
@@ -105,9 +106,8 @@ ad_proc -public apm_dependency_provided_p {
             if {$dependency_uri eq [lindex $prov 0]} {
 
                 set provided_version [lindex $prov 1]
-                set provided_p [db_string version_greater_p {}]
-
-                if { $provided_p >= 0 } {
+                set provided_p [expr {[apm_version_names_compare $provided_version $dependency_version] >= 0}]
+                if { $provided_p } {
                     ns_log Debug "apm_dependency_provided_p: Dependency satisfied in list of provisions."
                     return 1
                 } else { 
@@ -124,7 +124,10 @@ ad_proc -public apm_dependency_provided_p {
     }
 }
 
-ad_proc -private pkg_info_new { package_key spec_file_path embeds extends provides requires {dependency_p ""} {comment ""}} {
+ad_proc -private pkg_info_new {
+    package_key spec_file_path embeds extends provides requires
+    {dependency_p ""} {comment ""}
+} {
 
     Returns a datastructure that maintains information about a package.
     @param package_key The key of the package.
@@ -534,8 +537,9 @@ ad_proc -private apm_dependency_check_new {
                         lassign $prov prov_uri prov_version
                         # If what we provide is not already provided, or the alredady provided version is
                         # less than what we provide, record this new provision
-                        if { ![info exists provided($prov_uri)] || \
-                                 [apm_version_names_compare $provided($prov_uri) $prov_version] == -1 } {
+                        if { ![info exists provided($prov_uri)]
+                             || [apm_version_names_compare $provided($prov_uri) $prov_version] == -1
+                         } {
                             set provided($prov_uri) $prov_version
                         }
                         # If what we provide is required, and the required version is less than what we provide,
@@ -751,6 +755,7 @@ ad_proc -private apm_package_install {
     {-enable:boolean}
     {-callback apm_dummy_callback}
     {-load_data_model:boolean}
+    {-install_from_repository:boolean}
     {-data_model_files 0}
     {-package_path ""}
     {-mount_path ""}
@@ -765,13 +770,30 @@ ad_proc -private apm_package_install {
 } {
     set version_id 0
     array set version [apm_read_package_info_file $spec_file_path]
-    set package_key $version(package.key)
-
-    apm_callback_and_log $callback "<h3>Installing $version(package-name) $version(name)</h3>"
+    set package_key  $version(package.key)
+    set version_name $version(name)
 
     # Determine if we are upgrading or installing.
     set upgrade_from_version_name [apm_package_upgrade_from $package_key $version(name)]
+    
+    if {$upgrade_from_version_name ne "" && $upgrade_from_version_name eq $version_name} {
+        #
+        # nothing to do.
+        #
+        ns_log notice "apm_package_install package $package_key already installed in version $version_name"
+        return [apm_version_id_from_package_key $package_key]
+    }
+    
     set upgrade_p [expr {$upgrade_from_version_name ne ""}] 
+
+    if {$upgrade_p} {
+        set operations {Upgrading Upgraded}
+    } else {
+        set operations {Installing Installed}
+    }
+
+    
+    apm_callback_and_log $callback "<h3>[lindex $operations 0] $version(package-name) $version(name)</h3>"
 
     if { [string match "[apm_workspace_install_dir]*" $package_path] } {
         # Package is being installed from the apm_workspace dir (expanded from .apm file)
@@ -783,8 +805,7 @@ ad_proc -private apm_package_install {
         }
 
         # Move the package into the packages dir        
-        #exec "mv" "$package_path" "$::acs::rootdir/packages"
-        file rename $package_path $::acs::rootdir/packages
+        file rename -- $package_path $::acs::rootdir/packages
 
         # We moved the spec file, so update its path
         set package_path $old_package_path
@@ -801,7 +822,6 @@ ad_proc -private apm_package_install {
         set implements_subsite_p $version(implements-subsite-p)
         set inherit_templates_p $version(inherit-templates-p)
         set auto_mount $version(auto-mount)
-        set version_name $version(name)
         set version_uri $version(url)
         set summary $version(summary)
         set description_format $version(description.format)
@@ -831,7 +851,7 @@ ad_proc -private apm_package_install {
         # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
         # is only done in the Tcl interpreter of this particular request.
         # Note that acs-tcl is a special case as its procs are always sourced on startup from boostrap.tcl
-        if { $package_key ne "acs-tcl" } {
+        if { 1 || $package_key ne "acs-tcl" } {
             apm_load_libraries -procs -force_reload -packages $package_key
             apm_load_queries -packages $package_key
         }
@@ -839,7 +859,7 @@ ad_proc -private apm_package_install {
         # Get the callbacks in an array, since we can't rely on the 
         # before-upgrade being in the db (since it might have changed)
         # and the before-install definitely won't be there since 
-        # it's not added til later here.
+        # it's not added until later here.
 
         array set callbacks $version(callbacks)
 
@@ -914,15 +934,14 @@ ad_proc -private apm_package_install {
         apm_package_install_owners -callback $callback $version(owners) $version_id
         apm_package_install_callbacks -callback $callback $version(callbacks) $version_id
         apm_build_subsite_packages_list
-
-        apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
+        
+        apm_callback_and_log $callback "<p>[lindex $operations 1] $version(package-name), version $version(name).</p>"
     } {
-        global errorInfo
-        ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$errorInfo"
+        ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$::errorInfo"
 
         apm_callback_and_log -severity Error $callback [subst {<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
             <pre><blockquote>
-            [ad_quotehtml $errmsg]
+            [ns_quotehtml $errmsg]
             </blockquote></pre>
 
             <p>
@@ -977,9 +996,8 @@ ad_proc -private apm_package_install {
                 apm_callback_and_log $callback "<p> Mounted an instance of the package at /${priority_mount_path} </p>"
             } {
                 # Another package is mounted at the path so we cannot mount
-                global errorInfo
                 set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already be a package mounted there, the error is: $error"
-                ns_log Error "apm_package_install: $error_text \n\n$errorInfo"
+                ns_log Error "apm_package_install: $error_text \n\n$::errorInfo"
                 apm_callback_and_log $callback "<p> $error_text </p>"
             } 
 
@@ -990,9 +1008,20 @@ ad_proc -private apm_package_install {
             apm_package_instance_new -instance_name $version(package-name) \
                 -package_key $package_key
         }
+
+        
+        if {[file exists $::acs::rootdir/packages/$package_key/install.xml]} {
+            #
+            # Run install.xml only for new installs
+            #
+            ns_log notice "===== RUN /packages/$package_key/install.xml"
+            apm::process_install_xml -install_from_repository=$install_from_repository_p /packages/$package_key/install.xml ""
+        }
+
     } else {
         # After upgrade Tcl proc callback
-        apm_invoke_callback_proc -version_id $version_id -type after-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
+        apm_invoke_callback_proc -version_id $version_id -type after-upgrade \
+            -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
     }
 
     # Flush the installed_p cache
@@ -1004,7 +1033,7 @@ ad_proc -private apm_package_install {
 ad_proc apm_unregister_disinherited_params { package_key dependency_id } {
 
     Remove parameters for package_key that have been disinherited (i.e., the
-                                                                   dependency that caused them to be inherited have been removed).  Called only
+    dependency that caused them to be inherited have been removed).  Called only
     by the APM and keep it that way, please.
 
 } {
@@ -1094,14 +1123,14 @@ ad_proc -private apm_package_deinstall {
 
     # Obtain the portion of the email address before the at sign. We'll use this in the name of
     # the backup directory for the package.
-    regsub {@.+} [cc_email_from_party [ad_conn user_id]] "" my_email_name
+    regsub {@.+} [party::email -party_id [ad_conn user_id]] "" my_email_name
 
-    set backup_dir "[apm_workspace_dir]/$package_key-removed-$my_email_name-[ns_fmttime [ns_time] "%Y%m%d-%H:%M:%S"]"
+    set backup_dir "[apm_workspace_dir]/$package_key-removed-$my_email_name-[ns_fmttime [ns_time] {%Y%m%d-%H:%M:%S}]"
 
     apm_callback_and_log $callback "
     <li>Moving <tt>packages/$package_key</tt> to $backup_dir... "
 
-    if { [catch { file rename "$::acs::rootdir/packages/$package_key" $backup_dir } error] } {
+    if { [catch { file rename -- "$::acs::rootdir/packages/$package_key" $backup_dir } error] } {
         apm_callback_and_log $callback "<font color=red>[ns_quotehtml $error]</font>"
     } else {
         apm_callback_and_log $callback "moved."
@@ -1120,19 +1149,18 @@ ad_proc -private apm_package_deinstall {
 
 ad_proc -private apm_package_delete {
     {-sql_drop_scripts ""}
-    { 
-        -callback apm_dummy_callback
-    }
+    {-callback apm_dummy_callback}
     {-remove_files:boolean}
     package_key
 } {
 
-    Deinstall a package from the system. Will unmount and uninstantiate
+    De-install a package from the system. Will unmount and uninstantiate
     package instances, invoke any before-uninstall callback, source any
     provided sql drop scripts, remove message keys, and delete
     the package from the APM tables.
 
 } {
+    # get the supposedly unique enabled version of this package
     set version_id [apm_version_id_from_package_key $package_key]
 
     # Unmount all instances of this package with the Tcl API that 
@@ -1168,14 +1196,7 @@ ad_proc -private apm_package_delete {
 
         # Remove package from APM tables
         apm_callback_and_log $callback "<li>Deleting $package_key..."
-        db_exec_plsql apm_package_delete {
-            begin
-            apm_package_type.drop_type(
-                                       package_key => :package_key,
-                                       cascade_p => 't'
-                                       );
-            end;
-        }
+        db_exec_plsql apm_package_delete {}
     }
 
     # Source SQL drop scripts
@@ -1194,7 +1215,7 @@ ad_proc -private apm_package_delete {
     # Optionally remove the files from the filesystem
     if {$remove_files_p==1} {
         if { [catch { 
-            file delete -force [acs_package_root_dir $package_key] 
+            file delete -force -- [acs_package_root_dir $package_key] 
         } error] } {
             apm_callback_and_log $callback "<li>Unable to delete [acs_package_root_dir $package_key]:<font color=red>$error</font>"
         }
@@ -1214,11 +1235,7 @@ ad_proc -private apm_package_version_delete {
 } {
     Deletes a version from the database.
 } {
-    db_exec_plsql apm_version_delete {
-        begin
-        apm_package_version.del(version_id => :version_id);     
-        end;
-    }
+    db_exec_plsql apm_version_delete {}
 }
 
 ad_proc -public apm_package_version_count {package_key} {
@@ -1263,6 +1280,7 @@ ad_proc -private apm_package_install_data_model {
 
     foreach item $data_model_files {
         lassign $item file_path file_type
+
         ns_log Debug "apm_package_install_data_model: Now processing $file_path of type $file_type"
         if {$file_type eq "data_model_create" || 
             $file_type eq "data_model_upgrade" } {
@@ -1270,9 +1288,7 @@ ad_proc -private apm_package_install_data_model {
                 apm_callback_and_log $callback "<ul>\n"
                 set ul_p 1
             }
-            apm_callback_and_log $callback "<li>Loading data model $path/$file_path...
-<blockquote><pre>
-"
+            apm_callback_and_log $callback "<li>Loading data model $path/$file_path...\n<blockquote><pre>\n"
             db_source_sql_file -callback $callback $path/$file_path
             apm_callback_and_log $callback "</pre></blockquote>\n"
         } elseif { $file_type eq "sqlj_code" } {
@@ -1280,9 +1296,7 @@ ad_proc -private apm_package_install_data_model {
                 apm_callback_and_log $callback "<ul>\n"
                 set ul_p 1
             }
-            apm_callback_and_log $callback "<li>Loading SQLJ code $path/$file_path...
-<blockquote><pre>
-"
+            apm_callback_and_log $callback "<li>Loading SQLJ code $path/$file_path...\n<blockquote><pre>\n"
             db_source_sqlj_file -callback $callback "$path/$file_path"
             apm_callback_and_log $callback "</pre></blockquote>\n"
         } elseif {$file_type eq "ctl_file"} {
@@ -1291,8 +1305,7 @@ ad_proc -private apm_package_install_data_model {
                 apm_callback_and_log $callback "<ul>\n"
                 set ul_p 1
             }
-            apm_callback_and_log $callback "<li>Loading data file $path/$file_path...
-<blockquote><pre>"
+            apm_callback_and_log $callback "<li>Loading data file $path/$file_path...\n<blockquote><pre>\n"
             db_load_sql_data -callback $callback $path/$file_path
             apm_callback_and_log $callback "</pre></blockquote>\n"
         }
@@ -1511,11 +1524,7 @@ ad_proc -private apm_package_install_spec { version_id } {
         }
 
         # Mark $version_id as the only installed version of the package.
-        db_dml version_mark_installed {
-            update apm_package_versions
-            set    installed_p = decode(version_id, :version_id, 't', 'f')
-            where  package_key = :package_key
-        }
+        db_dml version_mark_installed {}
     }
     ns_log Debug "apm_package_install_spec: Done updating .info file."
 }
@@ -1527,13 +1536,7 @@ ad_proc -public apm_version_enable { {-callback apm_dummy_callback} version_id }
     Enables a version of a package (disabling any other version of the package).
     @param version_id The id of the version to be enabled.
 } {
-    db_exec_plsql apm_package_version_enable {
-        begin
-        apm_package_version.enable(
-                                   version_id => :version_id
-                                   );
-        end;
-    }
+    db_exec_plsql apm_package_version_enable {}
     apm_callback_and_log $callback  "<p>Package enabled."
 }
 
@@ -1543,13 +1546,7 @@ ad_proc -public apm_version_disable { {-callback apm_dummy_callback} version_id 
 
     @param version_id The id of the version to be disabled.
 } {
-    db_exec_plsql apm_package_version_disable {
-        begin
-        apm_package_version.disable(
-                                    version_id => :version_id
-                                    );
-        end;
-    }
+    db_exec_plsql apm_package_version_disable {}
     apm_callback_and_log $callback  "<p>Package disabled."
 }
 
@@ -1630,10 +1627,9 @@ ad_proc -private apm_packages_full_install {
                 $spec_file
 
         } errmsg] } {
-            global errorInfo
             apm_callback_and_log -severity Error $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
 <p> Error:
-<pre><blockquote>[ad_quotehtml $errmsg]</blockquote><blockquote>[ad_quotehtml $errorInfo]</blockquote></pre>"
+<pre><blockquote>[ns_quotehtml $errmsg]</blockquote><blockquote>[ns_quotehtml $::errorInfo]</blockquote></pre>"
         } 
     }
 }
@@ -1642,12 +1638,7 @@ ad_proc -private apm_package_upgrade_p {package_key version_name} {
     @return 1 if a version of the indicated package_key of version lower than version_name \
         is already installed in the system, 0 otherwise.
 } {
-    return [db_string apm_package_upgrade_p {
-        select apm_package_version.version_name_greater(:version_name, version_name) upgrade_p
-        from apm_package_versions
-        where package_key = :package_key
-        and version_id = apm_package.highest_version (:package_key)
-    } -default 0]
+    return [db_string apm_package_upgrade_p {} -default 0]
 }
 
 ad_proc -private apm_package_upgrade_from { package_key version_name } {
@@ -1656,13 +1647,7 @@ ad_proc -private apm_package_upgrade_from { package_key version_name } {
     @return the version of the package currently installed, which we're upgrading from, if it's 
     different from the version_name passed in. If this is not an upgrade, returns the empty string.
 } {
-    return [db_string apm_package_upgrade_from {
-        select version_name 
-        from   apm_package_versions
-        where  package_key = :package_key
-        and    version_id = apm_package.highest_version(:package_key)
-        and    version_name != :version_name
-    } -default ""]
+    return [db_string apm_package_upgrade_from {} -default ""]
 }
 
 
@@ -1671,12 +1656,7 @@ ad_proc -private apm_version_upgrade {version_id} {
     Upgrade a package to a locally maintained later version.
 
 } {
-    db_exec_plsql apm_version_upgrade {
-        begin
-        apm_package_version.upgrade(version_id => :version_id);
-        end;
-
-    }
+    db_exec_plsql apm_version_upgrade {}
 } 
 
 ad_proc -private apm_upgrade_for_version_p {path initial_version_name final_version_name} {
@@ -1686,15 +1666,7 @@ ad_proc -private apm_upgrade_for_version_p {path initial_version_name final_vers
 
 } {
     ns_log Debug "apm_upgrade_for_version_p: upgrade_p $path, $initial_version_name $final_version_name"
-    return [db_exec_plsql apm_upgrade_for_version_p {
-        begin
-        :1 := apm_package_version.upgrade_p(
-                                            path => :path,
-                                            initial_version_name => :initial_version_name,
-                                            final_version_name => :final_version_name
-                                            );
-        end;
-    }]
+    return [db_exec_plsql apm_upgrade_for_version_p {}]
 }
 
 ad_proc -private apm_order_upgrade_scripts {upgrade_script_names} {
@@ -2037,7 +2009,7 @@ ad_proc -private apm_get_package_repository {
     or the local file system.
 
     @param repository_url The URL for the repository channel to get from, or the empty string to
-    seach the local file system instead.
+    search the local file system instead.
 
     @param array          Name of an array where you want the repository stored. It will be keyed by package-key,
     and each entry will be an array list list what's returned by apm_read_package_info_file.
@@ -2049,11 +2021,15 @@ ad_proc -private apm_get_package_repository {
     # This will be a list of array-lists of packages available for install
     upvar 1 $array repository
 
+    #ns_log notice "apm_get_package_repository repository_url=$repository_url"
+    
     apm_get_installed_versions -array installed_version
 
     if { $repository_url ne "" } {
         set manifest_url "${repository_url}manifest.xml"
 
+        #ns_log notice "apm_get_package_repository manifest_url=$manifest_url"
+        
         # See if we already have it in a client property
         set manifest [ad_get_client_property acs-admin [string range $manifest_url end-49 end]]
 
@@ -2124,6 +2100,9 @@ ad_proc -private apm_get_package_repository {
                              [xml_node_get_attribute $dependency_node "version"]]
                 }
             }
+            foreach install_node [xml_node_get_children_by_name $package_node "install"] {
+                lappend version(install) [xml_node_get_attribute $install_node "package"] 
+            }
 
             if { ![info exists installed_version($version(package.key))] } {
                 # Package is not installed
@@ -2145,7 +2124,9 @@ ad_proc -private apm_get_package_repository {
         }
     } else {
         # Parse spec files
-        foreach spec_file [apm_scan_packages "$::acs::rootdir/packages"] {
+        set spec_files [apm_scan_packages "$::acs::rootdir/packages"]
+        lappend spec_files {*}[apm_scan_packages]
+        foreach spec_file $spec_files {
             with_catch errmsg {
                 array unset version
                 array set version [apm_read_package_info_file $spec_file]
@@ -2172,8 +2153,7 @@ ad_proc -private apm_get_package_repository {
             } {
                 # We don't error hard here, because we don't want the whole process to fail if there's just one
                 # package with a bad .info file
-                global errorInfo
-                ns_log Error "apm_get_package_repository: Error while checking package info file $spec_file: $errmsg\n$errorInfo"
+                ns_log Error "apm_get_package_repository: Error while checking package info file $spec_file: $errmsg\n$::errorInfo"
             }
         }
     }
@@ -2193,19 +2173,24 @@ ad_proc -public apm_get_repository_channels { {repository_url http://openacs.org
 } {
     set result [util::http::get -url $repository_url]
     set status [dict get $result status]
+    #ns_log notice "GOT\n$repository_url\n[dict get $result page]"
     if {$status != 200} {
         return -code error "unexpected result code $status from url $repository_url"
     }
     set repositories ""
     dom parse -simple -html [dict get $result page] doc
     $doc documentElement root
-    foreach node [$root selectNodes //ul/li] {
-        set txt [$node asText]
-        if {![regexp {^(\S+)\s[\(]([^\)]+)\)} $txt _ name tag]} {
+    foreach node [$root selectNodes {//ul/li/a}] {
+        set href [$node getAttribute href]
+        if {[regexp {(\d+[-]\d+)} $href . version]} {
+            set name $version
+            set tag oacs-$version
+            lappend repositories [list $name $tag]
+        } else {
+            set txt [string trim [$node asText]]
             ns_log warning "unexpected li found in repository $repository_url: $txt"
             continue
         }
-        lappend repositories [list $name $tag]
     }
     return $repositories
 }
@@ -2236,7 +2221,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
     # Interpolate the vars.
     if {$binds ne ""} { 
         foreach {var val} $binds {
-            set $var [ad_quotehtml $val]
+            set $var [ns_quotehtml $val]
         }
         if {![info exists Id]} { 
             set Id {$Id}
@@ -2252,6 +2237,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
 
 ad_proc -public apm::process_install_xml {
     -nested:boolean
+    -install_from_repository:boolean
     filename binds
 } {
     process an xml install definition file which is expected to contain 
@@ -2299,7 +2285,7 @@ ad_proc -public apm::process_install_xml {
     set actions [xml_node_get_children [lindex $actions 0]]
 
     foreach action $actions {
-        set install_proc_out [apm_invoke_install_proc -node $action]
+        set install_proc_out [apm_invoke_install_proc -install_from_repository=$install_from_repository_p -node $action]
         set out [concat $out $install_proc_out]
     }
 
@@ -2310,6 +2296,7 @@ ad_proc -public apm::process_install_xml {
 }
 
 ad_proc -private apm_invoke_install_proc {
+    {-install_from_repository:boolean}
     {-type "action"}
     {-node:required}
 } {
@@ -2332,7 +2319,13 @@ ad_proc -private apm_invoke_install_proc {
     }
 
     ns_log notice "apm_invoke_install_proc: call [list ::install::xml::${type}::${name} $node]"
-    return [::install::xml::${type}::${name} $node]
+    if {$install_from_repository_p && $name eq "install"} {
+        ns_log notice "apm_invoke_install_proc: skip [list ::install::xml::${type}::${name} $node] (install from repo)"
+        set result 1
+    } else {
+        set result [::install::xml::${type}::${name} $node]
+    }
+    return $result
 }
 
 ##############
@@ -2490,7 +2483,12 @@ ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturi
         set maturity_key(3) "#acs-tcl.maturity_mature_and_standard#"
         set maturity_key(4) "#acs-tcl.maturity_deprecated#"
 
-        set result [lang::util::localize $maturity_key($maturity)]
+        if {[catch {
+            set result [lang::util::localize $maturity_key($maturity)]
+        } errorMsg]} {
+            ns_log warning "Couldn't localize maturity key $maturity: $errorMsg"
+            set result $maturity
+        }
 
     } else {
 
@@ -2633,9 +2631,9 @@ ad_proc -private apm::package_version::attributes::generate_xml_element {
         }
     } else {
         if {$attribute_name eq ""} {
-            set xml_string "${indentation}<${element_name}>[ad_quotehtml $value]</${element_name}>\n"
+            set xml_string "${indentation}<${element_name}>[ns_quotehtml $value]</${element_name}>\n"
         } else {
-            set xml_string "${indentation}<$element_name $attribute_name=\"[ad_quotehtml $value]\"/>\n"
+            set xml_string "${indentation}<$element_name $attribute_name=\"[ns_quotehtml $value]\"/>\n"
         }
     }
     return $xml_string 

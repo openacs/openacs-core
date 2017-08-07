@@ -311,7 +311,7 @@ begin
   -- Drop the attribute
   acs_attribute.drop_attribute(content_type, attribute_name);
 
-  -- Drop the column if neccessary
+  -- Drop the column if necessary
   if drop_column = 't' then
     begin
       execute immediate 'alter table ' || v_table || ' drop column ' ||
@@ -556,6 +556,7 @@ begin
                    revision_id   => :new.revision_id,
                    title         => :new.title,
                    description   => :new.description,
+                   publish_date  => :new.publish_date,
                    mime_type     => :new.mime_type,
                    nls_language  => :new.nls_language,
                    item_id       => content_symlink.resolve(:new.item_id),
@@ -571,6 +572,7 @@ begin
                    revision_id   => :new.revision_id,
                    title         => :new.title,
                    description   => :new.description,
+                   publish_date  => :new.publish_date,
                    mime_type     => :new.mime_type,
                    nls_language  => :new.nls_language,
                    item_id       => content_symlink.resolve(:new.item_id),

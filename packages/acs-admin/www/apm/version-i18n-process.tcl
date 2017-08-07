@@ -11,7 +11,11 @@ ad_page_contract {
     {file_action:multiple}
 }
 
-db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
+db_1row package_version_info {
+    select pretty_name, version_name
+    from apm_package_version_info
+    where version_id = :version_id
+}
 
 set page_title "Internationalization of $pretty_name $version_name"
 set context_bar [ad_context_bar $page_title]
@@ -53,3 +57,9 @@ foreach key_pair $adp_replace_list {
 set hidden_form_vars [export_vars -form {version_id files:multiple file_action:multiple}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

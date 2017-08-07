@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>OpenACS 4.6.2 Release Notes</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="general-documents.html" title="Chapter 1. High level information: What is OpenACS?"><link rel="previous" href="openacs-overview.html" title="Overview"><link rel="next" href="acs-admin.html" title="Part II. Administrator's Guide"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><center>4.6.x DRAFT IN PROGRESS</center><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="release-notes"></a>OpenACS 4.6.2 Release Notes</h2></div></div><div class="authorblurb"><p>
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>OpenACS 4.6.2 Release Notes</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><link rel="home" href="index.html" title="OpenACS Documentation"><link rel="up" href="general-documents.html" title="Chapter 1. High level information: What is OpenACS?"><link rel="previous" href="openacs-overview.html" title="Overview"><link rel="next" href="acs-admin.html" title="Part II. Administrator&#39;s Guide"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="images/alex.jpg" border="0"></a><center>4.6.x DRAFT IN PROGRESS</center><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="release-notes"></a>OpenACS 4.6.2 Release Notes</h2></div></div><div class="authorblurb"><p>
 	  by <a href="mailto:dhogaza@pacifier.com" target="_top">Don Baccus</a><br>
           OpenACS docs are written by the named authors, but may be edited
           by OpenACS documentation staff.
@@ -32,26 +32,26 @@
 	You may want to begin by reading our installation documentation for
 	<a href="unix-install.html" title="Chapter 3. Installing on Unix/Linux">Chapter 3</a>.  Note that the Windows documentation is
 	not current for OpenACS 4.6.2, but an alternative is to use John
-	Sequeira's <a href="http://www.pobox.com/~johnseq/projects/oasisvm/" target="_top">Oasis VM
+	Sequeira&#39;s <a href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM
 	project</a>.
   </p><p>
 	After installation, the full documentation set can be found by visiting
 	http://[your-host]/doc. Not all pieces are updated for OpenACS 4.6.2 at
 	this moment.
   </p><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="release-notes-sws"></a>Site Wide Searching</h3></div></div><p>
-	  If you're using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want
+	  If you&#39;re using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want
 	  to uncomment the SQL that causes InterMedia to keep online searching
-	  online while indexing.  The feature doesn't exist in Standard Edition
+	  online while indexing.  The feature doesn&#39;t exist in Standard Edition
 	  and OpenACS 4.6.2 now defaults to being loadable in SE.  Just grep for
 	  'sync' to find the code.  
 	</p><p>
 	  Also be sure to read the documentation in the Site Wide Search
-	  package's sql/oracle directory.  The APM doesn't execute the SQL for
+	  package&#39;s sql/oracle directory.  The APM doesn&#39;t execute the SQL for
 	  this package, in part due to the fact that some steps need to be run
 	  as the Oracle user 'ctxsys'.
 	</p><p>
-	  If you're using PostgreSQL be sure to read the documentation on
-	  installing the Open FTS driver for OpenACS.  It's included in the
+	  If you&#39;re using PostgreSQL be sure to read the documentation on
+	  installing the Open FTS driver for OpenACS.  It&#39;s included in the
 	  package as a text file and is also summarized at the end of the
 	  installation documentation in the section, <a href="openacs.html#install-next-openfts" title="">4</a>.  As with the Oracle version, there
 	  are steps you must take manually in order to get this feature
@@ -62,6 +62,6 @@
 	  OpenACS 4.6.2 testing process with test servers provided by
 	  <a href="http:hub.org" target="_top">Hub.org</a>. Visit the <a href="http://213.107.207.131:8000/" target="_top">acceptance test server</a> to
 	  see the current status of various packages. This may not be a
-	  permanent link. If it's not working, do a search of the <a href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.
+	  permanent link. If it&#39;s not working, do a search of the <a href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.
 
     </p></div><p><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><hr><address>rmello at fslc.usu.edu</address><address><a href="mailto:vinod@kurup.com">vinod@kurup.com</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/openacs-4/release-notes.html#comments">View comments on this page at openacs.org</a></center></body></html>

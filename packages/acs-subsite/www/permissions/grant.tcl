@@ -9,7 +9,7 @@ ad_page_contract {
     object_id:naturalnum,notnull
     privileges:multiple,optional
     {application_url ""}
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 permission::require_permission -object_id $object_id -privilege admin
@@ -26,7 +26,7 @@ set context [list [list [export_vars -base one {object_id}] "[_ acs-subsite.Perm
 # acs_privileges. Note that nodes can appear more than one time in the
 # tree.
 
-set existing_privs [db_list select_privileges_list { }]
+set existing_privs [db_list select_privileges_list {}]
 
 # The maximum level that has been reached within the hierarchy.
 set maxlevel 1
@@ -41,7 +41,7 @@ foreach privilege $existing_privs {
 
 # Loop through each row in acs_privilege_hierarchy and shuffle the
 # $hierarchy list accordingly.
-db_foreach select_privileges_hierarchy { } {
+db_foreach select_privileges_hierarchy {} {
 
     if { [set start_pos [lsearch -regexp $hierarchy "\\m$child_privilege\\M"]] == -1 } {
         # child_privilege of this relation not in privileges - skip.
@@ -103,11 +103,14 @@ incr maxlevel
 
 foreach element $hierarchy {
     lassign $element level privilege
-
-    lappend select_list [list "[string repeat "&nbsp;&nbsp;&nbsp;" $level] $privilege" $privilege]
+    lappend select_list [list "[string repeat {&nbsp;&nbsp;&nbsp;} $level] $privilege" $privilege]
 }
 
-ad_form -name grant -export {return_url} -form {
+ad_form \
+    -name grant \
+    -export {return_url} \
+    -has_submit 1 \
+    -form {
     {object_id:text(hidden)
         {value $object_id}
     }
@@ -168,3 +171,9 @@ if { [form is_valid grant] } {
 
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

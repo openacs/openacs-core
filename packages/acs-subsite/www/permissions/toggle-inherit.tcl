@@ -10,7 +10,7 @@ ad_page_contract {
 } {
     object_id:naturalnum,notnull
     {application_url ""}
-    {return_url {[export_vars -base "one" {application_url object_id}]}}
+    {return_url:localurl {[export_vars -base "one" {application_url object_id}]}}
 }
 
 permission::require_permission -object_id $object_id -privilege admin
@@ -28,3 +28,9 @@ if { ![permission::permission_p -object_id $object_id -privilege admin] } {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

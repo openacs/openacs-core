@@ -31,3 +31,9 @@ nsv_set acs_mail_lite check_bounce_p 0
 #ns_log Notice "acs-mail-lite: renaming acs_mail_lite::sendmail to ns_sendmail"
 #rename ns_sendmail _old_ns_sendmail
 #rename acs_mail_lite::sendmail ns_sendmail
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

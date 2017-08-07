@@ -179,14 +179,11 @@ ad_proc -public doc_adp_execute {
 
     set errno [catch { doc_eval_in_separate_frame $compiled_adp } error]
     incr doc_adp_depth -1
-
-    global errorCode
-    if { $errno == 0 || $errorCode eq "doc_adp_abort" } {
+    if { $errno == 0 || $::errorCode eq "doc_adp_abort" } {
 	return $adp_var
     }
 
-    global errorInfo
-    return -code $errno -errorcode $errorCode -errorinfo $errorInfo $error
+    return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
 }
 
 ad_proc -public doc_adp_puts { value } {
@@ -408,3 +405,9 @@ ad_proc -public doc_adp_compile { adp } {
 
     return $code
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

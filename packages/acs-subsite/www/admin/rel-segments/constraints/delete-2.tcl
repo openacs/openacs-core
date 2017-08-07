@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     constraint_id:naturalnum,notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 permission::require_permission -object_id $constraint_id -privilege delete
@@ -44,9 +44,7 @@ if {$operation eq "Yes, I really want to delete this constraint"} {
         ad_script_abort
     }
     
-    db_exec_plsql delete_constraint {
-	begin rel_constraint.del(constraint_id => :constraint_id); end;
-    }
+    db_exec_plsql delete_constraint {}
     db_release_unused_handles
 
 } elseif { $return_url eq "" } {
@@ -56,3 +54,9 @@ if {$operation eq "Yes, I really want to delete this constraint"} {
 
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

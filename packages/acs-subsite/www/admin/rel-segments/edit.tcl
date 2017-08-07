@@ -51,3 +51,9 @@ ad_form -name segment -cancel_url $view_url -form {
     ad_returnredirect $view_url
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

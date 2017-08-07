@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     type_id:naturalnum,notnull
     object_id:naturalnum,notnull
-    return_url
+    return_url:localurl
 }
 
 set user_id [ad_conn user_id]
@@ -28,3 +28,9 @@ notification::request::new \
 ad_returnredirect $return_url
 
         
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

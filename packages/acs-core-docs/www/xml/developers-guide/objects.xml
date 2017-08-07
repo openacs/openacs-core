@@ -38,7 +38,7 @@ create table notes (
 
 
 <para>
-We've omitted constraint names for the purpose of clarity.
+We&#39;ve omitted constraint names for the purpose of clarity.
 </para>
 
 <para>
@@ -51,7 +51,7 @@ things with Notes as well:
 <listitem><para>Attach user comments on notes.</para></listitem>
 <listitem><para>Allow users to define custom fields to store on their notes.</para></listitem>
 <listitem><para>Automatically generate input forms or output displays for notes.</para></listitem>
-<listitem><para>Allow other applications to use notes in ways we don't know of yet.</para></listitem>
+<listitem><para>Allow other applications to use notes in ways we don&#39;t know of yet.</para></listitem>
 </itemizedlist>
 
 <para>
@@ -59,7 +59,7 @@ In OpenACS, the key to enabling these types of services on your
 application data is to take advantage of the Object System.  The first
 question, then, is "Just what are objects, and what do
 you use them for anyway?".  The short answer: objects are anything
-represented in the application's data model that will need to be
+represented in the application&#39;s data model that will need to be
 managed by any central service in OpenACS, or that may be reusable in
 the context of future applications. Every object in the system is
 represented using a row in the <computeroutput>acs_objects</computeroutput> table. This
@@ -96,7 +96,7 @@ than in the ACS 3.x days. What you get for this extra work includes:
 <sect2 id="objects-how-to-use"><title>How to Use Objects</title>
 
 <para>
-Using ACS objects is straightforward: all that's required are a few
+Using ACS objects is straightforward: all that&#39;s required are a few
 extra steps in the design of your application data model. 
 </para>
 
@@ -119,7 +119,7 @@ similar to the data dictionary in Oracle. As in Java, object types can
 inherit attributes from a parent type, so the type system forms a
 hierarchy. Unlike Java, Oracle does not support this inheritance
 transparently, so we have to make sure we add our own bookkeeping code to
-keep everything consistent. Below you'll find the code needed to describe a
+keep everything consistent. Below you&#39;ll find the code needed to describe a
 new object type called <computeroutput>notes</computeroutput> in your
 system.
 </para>
@@ -161,7 +161,7 @@ This PL/SQL call tells the system that we would like to use the table
 <computeroutput>note</computeroutput>. This type is a subtype of the 
 <computeroutput>acs_object</computeroutput> type, which means that we want to inherit all
 of the basic attributes of all ACS objects. As mentioned, it will take
-some work on our part to make this happen, since Oracle can't do it
+some work on our part to make this happen, since Oracle can&#39;t do it
 automatically.  In general, most basic applications will define types
 that are simple subtypes of <computeroutput>acs_object</computeroutput>.
 </para>
@@ -170,7 +170,7 @@ that are simple subtypes of <computeroutput>acs_object</computeroutput>.
 Add entries to the <computeroutput>acs_attributes</computeroutput> table to describe
 the data attributes of the new type. This data can eventually be used
 to do things like automatically generate user interfaces to manipulate
-the <computeroutput>notes</computeroutput> table, though that functionality isn't yet
+the <computeroutput>notes</computeroutput> table, though that functionality isn&#39;t yet
 available.
 </para>
 
@@ -287,9 +287,9 @@ show errors
 
 <para>
 You might be wondering what all the extra parameters are to these
-calls, since we haven't mentioned them before.  These parameters are
+calls, since we haven&#39;t mentioned them before.  These parameters are
 needed to fill out information that will be stored about the object
-that's not stored directly in the table you defined. The OpenACS Object
+that&#39;s not stored directly in the table you defined. The OpenACS Object
 System defines these attributes on the type <computeroutput>acs_object</computeroutput>
 since all objects should have these attributes. Internally, there are
 tables that store this information for you. Most of the data is pretty
@@ -306,7 +306,7 @@ this way: if no permissions are explicitly attached to the object,
 then the object inherits its permissions from the context. For
 example, if I had told you how to use the <link linkend="permissions">permissions</link> system to specify that an
 object OBJ was "read only", then any other object that used OBJ as its
-context would also be "read only" by default. We'll talk about this more
+context would also be "read only" by default. We&#39;ll talk about this more
 later.
 </para>
 </sect3>
@@ -379,17 +379,17 @@ show errors;
 </programlisting>
 
 <para>
-That's pretty much it! As long as you use the <computeroutput>note.new</computeroutput>
+That&#39;s pretty much it! As long as you use the <computeroutput>note.new</computeroutput>
 function to create notes, and the <computeroutput>note.delete</computeroutput> function to
-delete them, you'll be assured that the relationship each
+delete them, you&#39;ll be assured that the relationship each
 <computeroutput>note</computeroutput> has with its corresponding <computeroutput>acs_object</computeroutput>
 is preserved.
 </para>
 
 <para>
 The last thing to do is to make a file
-<computeroutput>ROOT/packages/notes/sql/notes-drop.sql</computeroutput> so it's easy to
-drop the data model when, say, you're testing:
+<computeroutput>ROOT/packages/notes/sql/notes-drop.sql</computeroutput> so it&#39;s easy to
+drop the data model when, say, you&#39;re testing:
 </para>
 
 
@@ -435,7 +435,7 @@ object system.
 For example, for most applications, you will want to use objects to
 represent the data in your application that is user visible and thus
 requires access control. But other internal tables, views, mapping
-tables and so on probably don't need to be objects. As before, this
+tables and so on probably don&#39;t need to be objects. As before, this
 kind of design decision is mostly made on an
 application-by-application basis, but this is a good baseline from
 which to start.
@@ -475,7 +475,7 @@ application act strangely.
 </para>
 
 <para>
-As we'll see later, the Notes example will point each note object's
+As we&#39;ll see later, the Notes example will point each note object&#39;s
 <computeroutput>context_id</computeroutput> to the package instance in which the note was
 created. The idea will be that in a real site, the administrator would
 create one package instance for every separate set of Notes (say, one
@@ -509,9 +509,9 @@ In the Notes example,  the result of applying these rules is that we
 are careful to define our own attribute for <computeroutput>owner_id</computeroutput>
 rather than overloading <computeroutput>creation_user</computeroutput> from the objects
 table. But, since we will probably use <computeroutput>creation_date</computeroutput> and
-so on for their intended purposes, we don't bother to define our own
+so on for their intended purposes, we don&#39;t bother to define our own
 attributes to store that data again. This will entail joins with
-<computeroutput>acs_objects</computeroutput> but that's OK because it makes the overall
+<computeroutput>acs_objects</computeroutput> but that&#39;s OK because it makes the overall
 data model cleaner. The real lesson is that deciding exactly how and
 when to use inherited attributes is fairly straightforward, but
 requires a good amount of thought at design time even for simple

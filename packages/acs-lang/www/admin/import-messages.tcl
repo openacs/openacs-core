@@ -5,7 +5,7 @@ ad_page_contract {
 } {
     {locale ""}
     {package_key ""}
-    {return_url "/acs-lang/admin"}
+    {return_url:localurl "/acs-lang/admin"}
 }
 
 set page_title "Import messages"
@@ -30,3 +30,9 @@ set errors_list "<ul>
 "
 
 set conflict_url [export_vars -base message-conflicts { package_key locale }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -26,13 +26,13 @@ set context [list [list "./" "Merge"] "Merge"]
 #
 # Information of user_id_one
 #
-if { [db_0or1row one_user_portrait { *SQL* }] } {
+if { [db_0or1row one_user_portrait {}] } {
     set one_img_src "[subsite::get_element -element url]shared/portrait-bits.tcl?user_id=$user_id"
 } else {
     set one_img_src "/resources/acs-admin/not_available.gif"
 }
 
-db_1row one_get_info { *SQL* }
+db_1row one_get_info {}
 
 db_multirow -extend {one_item_object_url} one_user_contributions one_user_contributions { *SQL* } {
     set one_item_object_url  "[site_node::get_url_from_object_id -object_id $object_id]"
@@ -57,13 +57,13 @@ if { $user_id_one_items ne "" } {
 #
 # Information of user_id_two
 #
-if { [db_0or1row two_user_portrait { *SQL* }] } {
+if { [db_0or1row two_user_portrait {}] } {
     set two_img_src "[subsite::get_element -element url]shared/portrait-bits.tcl?user_id=$user_id_from_search"
 } else {
     set two_img_src "/resources/acs-admin/not_available.gif"
 }
 
-db_1row two_get_info { *SQL* }
+db_1row two_get_info {}
 
 db_multirow -extend {two_item_object_url} two_user_contributions two_user_contributions { *SQL* } {
     set two_item_object_url "[site_node::get_url_from_object_id -object_id $object_id]"
@@ -88,3 +88,27 @@ if { $user_id_two_items ne "" } {
 template::head::add_css \
     -href "/resources/acs-admin/um-more-info.css" \
     -media all
+
+template::add_body_script -script {
+    function toggle_footer(event) {
+        event.preventDefault();
+        var el = document.getElementsByTagName('div');
+        for(i = 0; i < el.length; i++) {
+          if (el[i].className=='um-more-info') {
+              el[i].className='um-more-info-off';
+          } else {
+              if (el[i].className=='um-more-info-off') {
+                  el[i].className='um-more-info';
+              }
+          }
+      };
+      return false;
+    };
+    document.getElementById('toggle-footer-display-control-1').addEventListener('click', toggle_footer, false);
+    document.getElementById('toggle-footer-display-control-2').addEventListener('click', toggle_footer, false);    
+}
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

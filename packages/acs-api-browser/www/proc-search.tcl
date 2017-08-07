@@ -3,7 +3,7 @@
 ad_page_contract {
     Searches for procedures with containing query_string
     if lucky redirects to best match
-    Weight the different hits with the propper weights
+    Weight the different hits with the proper weights
 
     Shows a list of returned procs with links to proc-view
 
@@ -13,14 +13,14 @@ ad_page_contract {
     @creation-date Jul 14, 2000
     @cvs-id $Id$
 } {
-    {name_weight:optional 0}
-    {doc_weight:integer,optional 0}
-    {param_weight:integer,optional 0}
-    {source_weight:integer,optional 0}
+    {name_weight:notnull 0}
+    {doc_weight:integer,notnull 0}
+    {param_weight:integer,notnull 0}
+    {source_weight:integer,notnull 0}
     {search_type:optional 0}
-    {show_deprecated_p:boolean 0}
-    {show_private_p:boolean 0}
-    query_string
+    {show_deprecated_p:boolean,notnull 0}
+    {show_private_p:boolean,notnull 0}
+    {query_string:token,notnull}
 } -properties {
     title:onevalue
     context:onevalue
@@ -30,6 +30,8 @@ ad_page_contract {
     source_weight:onevalue
     query_string:onevalue
     results:multirow
+} -validate {
+    csrf { csrf::validate }
 }
 
 ##########################################################
@@ -132,7 +134,7 @@ foreach proc [nsv_array names api_proc_doc] {
         if { $doc_elements(deprecated_p) } {
             lappend deprecated_matches [list $proc $score $args]
         } else {
-            if { $doc_elements(public_p) } { 
+            if { $doc_elements(protection) eq "public" } { 
                 lappend matches [list $proc $score $args]
             } else {
                 lappend private_matches [list $proc $score $args]
@@ -168,10 +170,15 @@ foreach output $deprecated_matches {
     set url [api_proc_url $proc]
     multirow append deprecated_results $score $proc $args $url
 }
+global __csrf_token
 
-set show_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 1 } } { name_weight doc_weight param_weight source_weight search_type query_string show_private_p }]
+set show_deprecated_url [export_vars -base [ad_conn url] -override {{ show_deprecated_p 1 }} {
+    name_weight doc_weight param_weight source_weight search_type query_string show_private_p __csrf_token
+}]
 
-set hide_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 0 } } { name_weight doc_weight param_weight source_weight search_type query_string show_private_p }]
+set hide_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 0 } } {
+    name_weight doc_weight param_weight source_weight search_type query_string show_private_p __csrf_token
+}]
 
 
 multirow create private_results score proc args url
@@ -183,6 +190,15 @@ foreach output $private_matches {
     multirow append private_results $score $proc $args $url
 }
 
-set show_private_url [export_vars -base [ad_conn url] -override { { show_private_p 1 } } { name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p }]
+set show_private_url [export_vars -base [ad_conn url] -override { { show_private_p 1 } } {
+    name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p __csrf_token
+}]
+set hide_private_url [export_vars -base [ad_conn url] -override { { show_private_p 0 } } {
+    name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p __csrf_token
+}]
 
-set hide_private_url [export_vars -base [ad_conn url] -override { { show_private_p 0 } } { name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p }]
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

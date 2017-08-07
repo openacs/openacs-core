@@ -74,7 +74,7 @@ happened, please contact the
 and let them know what happened.\n"
 }
 
-if { $exception_count != 00 } {
+if { $exception_count != 0 } {
     ad_return_complaint $exception_count $exception_text
     return
 }
@@ -103,8 +103,11 @@ set rowcount 0
 
 if {$limit_to_users_in_group_id ne "" 
     && ![regexp {[^-0-9]} $limit_to_users_in_group_id] } {
-    set group_name [db_string user_group_name_from_id \
-			"select group_name from groups where group_id = :limit_to_users_in_group_id"]
+    set group_name [db_string user_group_name_from_id {
+        select group_name
+        from groups
+        where group_id = :limit_to_users_in_group_id
+    }]
     incr rowcount
     set criteria:[set rowcount](data) \
         "Is a member of '$group_name'"
@@ -194,26 +197,23 @@ set criteria:rowcount $rowcount
 
 
 if { $limit_to_users_in_group_id ne "" } {
-    set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
-	from cc_users cu, group_member_map gm
-	where (cu.user_id = gm.member_id
-        and gm.group_id = :limit_to_users_in_group_id)"
+    set query {
+        select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
+        from cc_users cu, group_member_map gm
+        where (cu.user_id = gm.member_id
+               and gm.group_id = :limit_to_users_in_group_id)
+    }
     if {[llength $where_clause] > 0} {
         append query \
             "\n$where_conjunction [join $where_clause "\n$where_conjunction "]"
     }
 } else {
-    set query "select user_id, email_verified_p, first_names, last_name, email, member_state
-	from cc_users"
+    set query {select user_id, email_verified_p, first_names, last_name, email, member_state from cc_users}
     if {[llength $where_clause] > 0} {
         append query "\nwhere [join $where_clause "\n$where_conjunction "]"
     }
 }
 append query "\norder by first_names, last_name"
-
-set i 0
-
-set user_items ""
 
 set rowcount 0
 
@@ -229,18 +229,20 @@ db_foreach user_search_admin $query {
     set user_search:[set rowcount](first_names) $first_names
     set user_search:[set rowcount](last_name) $last_name
     set user_search:[set rowcount](email) $email
-    set user_search:[set rowcount](export_vars) [export_vars {user_id_from_search first_names_from_search last_name_from_search email_from_search}]
+    set user_search:[set rowcount](export_vars) [export_vars {
+        user_id_from_search first_names_from_search last_name_from_search email_from_search
+    }]
     set user_search:[set rowcount](member_state) $member_state
     
     if { $member_state ne "approved" } {
-	set user_search:[set rowcount](user_finite_state_links) \
-	    [join [ad_registration_finite_state_machine_admin_links \
-		       $member_state $email_verified_p $user_id_from_search \
-		       [export_vars -base complex-search {
-			   email last_name keyword target passthrough limit_to_users_in_group_id only_authorized_p
-		       }]] " | "]
+        set user_search:[set rowcount](user_finite_state_links) \
+            [join [ad_registration_finite_state_machine_admin_links \
+                       $member_state $email_verified_p $user_id_from_search \
+                       [export_vars -base /acs-admin/users/complex-search {
+                           email last_name keyword target passthrough limit_to_users_in_group_id only_authorized_p
+                       }]] " | "]
     } else {
-	set user_search:[set rowcount](user_finite_state_links) ""
+        set user_search:[set rowcount](user_finite_state_links) ""
     }
 }
 
@@ -250,3 +252,9 @@ set export_authorize [export_ns_set_vars {url} {only_authorized_p}]
 
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

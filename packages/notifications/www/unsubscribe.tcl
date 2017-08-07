@@ -7,15 +7,21 @@ ad_page_contract {
     object_id:naturalnum,notnull
     request_id:naturalnum,multiple
     type_id:naturalnum,notnull
-    return_url         
+    return_url:localurl         
 } 
 
 set request_count [llength $request_id]
 for { set i 0} { $i < $request_count } { incr i } {
     db_transaction {
 	set r_id [lindex $request_id $i]
-	db_dml remove_notify { *SQL* }
+	db_dml remove_notify {}
     }
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

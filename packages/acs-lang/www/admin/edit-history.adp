@@ -1,6 +1,6 @@
 <master>
 
-<b>Displaying:</b>
+<strong>Displaying:</strong>
 <p>
   <ul>
     <li>Locale: @locale@</li>

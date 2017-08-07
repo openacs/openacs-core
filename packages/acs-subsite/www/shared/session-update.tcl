@@ -22,7 +22,7 @@ ad_page_contract {
     is signed and verified.
 } {
     session_property:array,verify
-    return_url
+    return_url:localurl
 } -validate {
     referrer_error {
         if { $session_property(referrer) ne [get_referrer] } {
@@ -33,3 +33,9 @@ ad_page_contract {
 
 ad_set_client_property $session_property(package) $session_property(key) $session_property(value)
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

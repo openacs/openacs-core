@@ -16,12 +16,8 @@
         acs_objects o,
         persons p
       where n.template_demo_note_id = o.object_id
-        and o.creation_user = p.person_id
-        and exists (select 1
-                    from acs_object_party_privilege_map
-                    where object_id = template_demo_note_id
-                      and party_id = :user_id
-                      and privilege = 'read')
+      and   o.creation_user = p.person_id
+      and   acs_permission__permission_p(template_demo_note_id, :user_id, 'read')
 
     </querytext>
   </fullquery>

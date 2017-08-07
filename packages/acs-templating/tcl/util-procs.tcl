@@ -1,14 +1,18 @@
-# Utility procedures for the ArsDigita Templating System
+ad_library {
+    Utility procedures for the ArsDigita Templating System
+
+    @author Karl Goldstein    (karlg@arsdigita.com)
+    @author Stanislav Freidin (sfreidin@arsdigita.com)
+
+    @cvs-id $Id$
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein    (karlg@arsdigita.com)
-#          Stanislav Freidin (sfreidin@arsdigita.com)
-
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 namespace eval template::util {}
@@ -134,7 +138,9 @@ ad_proc -public template::util::is_true { x } {
     @return 0 if the variable can be interpreted as false; 
             1 for true if it can't.
 } {
-    expr {[string tolower $x] ni {0 f false n no off ""}}
+    #expr {[string tolower $x] ni {0 f false n no off ""}}
+    #ns_log notice "TRUE [expr {[string tolower $x] ni {0 f false n no off ""}}] [string is true -strict $x]"
+    string is true -strict $x
 }
 
 ad_proc -public template::util::lpop { ref } {
@@ -482,20 +488,39 @@ ad_proc -public template::util::write_file { path text } {
   close $fd
 }
 
+ad_proc -public template::util::master_to_file { url {reference_url ""} } {
+    
+    Resolve a URL into an absolute file path, but respect styled
+    master configuration for named masters
+    (e.g. acs-templating/resources/masters/... containing 2cols.adp)
+    
+} {
+    if { [string index $url 0] ne "/" } {
+	set master_stub [template::resource_path -type masters -style $url]
+
+	if {[file exists $master_stub.adp]} {
+	    set path $master_stub
+	} else {
+	    set path [file dirname $reference_url]/$url
+	}
+	
+    } else {
+	set path $::acs::rootdir/$url
+    }
+    return [ns_normalizepath $path]
+}
+
 ad_proc -public template::util::url_to_file { url {reference_url ""} } {
     Resolve a URL into an absolute file path.
 } {
 
-  if { [string index $url 0] ne "/" } {
+    if { [string index $url 0] ne "/" } {
+        set path [file dirname $reference_url]/$url
+    } else {
+        set path $::acs::rootdir/$url
+    }
 
-    set path [file dirname $reference_url]/$url
-
-  } else {
-
-    set path $::acs::rootdir/$url
-  }
-
-  return [ns_normalizepath $path]
+    return [ns_normalizepath $path]
 }
 
 ad_proc -public template::util::resolve_directory_url { url } {
@@ -538,7 +563,6 @@ ad_proc -public -deprecated template::util::get_cookie { name {default_value ""}
     @see ad_get_cookie
 } {
   set headers [ns_conn headers]    
-
   set cookie [ns_set iget $headers Cookie]
 
   if { [regexp "$name=(\[^;\]+)" $cookie match value] } {
@@ -606,7 +630,7 @@ ad_proc -deprecated -public template::util::quote_html {
   Quote possible HTML tags in the contents of the html parameter.  
 } {
 
-  return [ad_quotehtml $html]
+  return [ns_quotehtml $html]
 }
 
 ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
@@ -622,7 +646,7 @@ ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
 
     for { set i 1 } { $i <= $rowcount } { incr i} {
         upvar $multirow_ref:$i arr
-        set arr($column_ref) [ad_quotehtml [set arr($column_ref)]]
+        set arr($column_ref) [ns_quotehtml [set arr($column_ref)]]
     }
 
 }
@@ -681,7 +705,7 @@ ad_proc -deprecated -public template::util::get_param {
     {section ""} 
     {key ""} 
 } {
-    Retreive a stored parameter, or "" if no such parameter
+    Retrieve a stored parameter, or "" if no such parameter
     If section/key are present, read the parameter from the specified
     section.key in the INI file, and cache them under the given name
 } {
@@ -757,14 +781,112 @@ ad_proc -public template::util::tcl_to_sql_list { lst } {
     }
 }
 
-ad_proc -public template::get_resource_path {} {
+ad_proc -deprecated template::get_resource_path {} {
     Get the template directory
     The body is doublequoted, so it is interpreted when this file is read
+    @see template::resource_path
 } "
   return \"[file dirname [file dirname [info script]]]/resources\"
 "
 
+ad_proc -public template::themed_template {
+    path
+} {
+    
+    Given a path like /packages/acs-admin/www/index pointing to an
+    .adp file, this function tries to locate this path in the
+    ResourceDir of the subsite (determined by the theme). If found the
+    themed template is returned, otherwse the passed template path.
 
+    @param path absolute path within the open acs tree (without extension)
+    @return path to themed template or input value (without extension)
+    
+} {
+    if {[string index $path 0] eq "/"} {
+	set style [string range $path 1 end]
+    } else {
+	set style $path
+    }
+    set stub [template::resource_path -type templates -style $style -relative]
+    if {[file readable $::acs::rootdir/$stub.adp]} {
+	return $stub
+    }
+    return $path
+}
+
+ad_proc -public template::streaming_template {
+    -subsite_id
+} {
+    Return the path of the streaming template
+    @param subsite_id id of the subsite. Defaults to [ad_conn subsite_id]
+    @return path to themed template
+} {
+    if { ![info exists subsite_id] } {
+        set subsite_id [ad_conn subsite_id]
+    }
+    set template [parameter::get -package_id $subsite_id \
+                      -parameter StreamingHead \
+                      -default "/packages/openacs-default-theme/lib/plain-streaming-head"]
+    return [template::resource_path -type masters -style $template -relative]
+}
+
+ad_proc -public template::resource_path {
+    -type:required
+    -style:required
+    -relative:boolean
+    -subsite_id
+    -theme_dir
+} {
+    
+    Process the templating "style" and return the stub (path without
+    extensions). When the style is not an abolute path, check if the
+    resource can be obtained from the theme, if not fallback to the
+    resources directory of acs-templating.
+
+    @param type type of resource (e.g. "forms" or "lists")
+    @param style name of the resource within the type (e.g. "standard")
+    @param relative return optionally the path relative to the OpenACS root directory
+    @param theme_dir theming directory (alternative to determination via subsite), higher priority
+    @param subsite_id subsite_id to determine theming information
+
+    @return path of the resource (without extension)
+    @author Gustaf Neumann
+} {
+    
+    if {![regexp {^/(.*)} $style path]} {
+
+	if { ![info exists theme_dir] } {
+	    if { ![info exists subsite_id] } {
+		set subsite_id [ad_conn subsite_id]
+	    }
+	    set theme_dir [parameter::get -parameter ResourceDir -package_id $subsite_id]
+	}
+
+	if {$theme_dir ne ""} {
+            if {![file isdir $::acs::rootdir/$theme_dir]} {
+                ns_log warning "ResourceDir '$theme_dir' does not exist under '$::acs::rootdir';\
+                    ignore parameter setting of subsite $subsite_id"
+                set theme_dir ""
+            }
+        }
+        
+	if {$theme_dir ne ""} {
+	    set path $theme_dir/$type/$style
+	    if {![file exists $::acs::rootdir/$path.adp]} {
+		unset path
+	    }
+	}
+	if {![info exists path]} {
+	    set path /packages/acs-templating/resources/$type/$style
+	}
+    }
+    
+    if {$relative_p} {
+	return $path
+    } else {
+	return $::acs::rootdir/$path
+    }
+}
 
 ad_proc -public stack_frame_values {level} {
     return the variables and arrays of one frame as HTML
@@ -788,7 +910,7 @@ ad_proc -public stack_frame_values {level} {
 	}
 	append varlist "        </ul>\n"
       } else {
-	if [catch {append varlist "'[uplevel #$level set $i]'\n"}] {
+          if {[catch {append varlist "'[uplevel #$level set $i]'\n"}]} {
 	  append varlist "<em>bad string value</em>\n"
 	}
       }
@@ -814,3 +936,9 @@ ad_proc -public stack_dump {} {
   <h2>Globals</h2>
   <ul> [stack_frame_values 0] </ul>\n"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

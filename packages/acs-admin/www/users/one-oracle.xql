@@ -3,24 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="user_info">      
-      <querytext>
-      select first_names, 
-             last_name, 
-             username, 
-             email,
-             nvl(screen_name,'&lt; none set up &gt;') as screen_name,
-             creation_date, 
-             creation_ip, 
-             to_char(last_visit, 'YYYY-MM-DD HH24:MI:SS') as last_visit_ansi, 
-             member_state,
-             email_verified_p, 
-             url
-      from   cc_users
-      where  user_id = :user_id
-      </querytext>
-</fullquery>
-
 <fullquery name="get_item_id">      
       <querytext>
       select live_revision as revision_id, nvl(title,'view this portrait') portrait_title

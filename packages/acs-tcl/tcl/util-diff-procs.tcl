@@ -189,11 +189,11 @@ ad_proc -public util::html_diff {
         }
         if { $action eq "changed" } {
 	    if {$show_old_p} {
-		ns_log notice "adding <@d@>"
+		#ns_log notice "adding <@d@>"
 		lappend output <@d@>
 		foreach item [lrange $old_list $old_index1 $old_index2] {
 		    if {![string match "<*>" [string trim $item]]} {
-		    ns_log notice "deleting item '${item}'"
+                        #ns_log notice "deleting item '${item}'"
 			# showing deleted tags is a bad idea.
 			lappend output [string trim $item]
 		    } else {
@@ -201,21 +201,21 @@ ad_proc -public util::html_diff {
 		    }
 
 		}
-		ns_log notice "adding </@d@>"
+		#ns_log notice "adding </@d@>"
 		lappend output </@d@>
 	    }
-	    ns_log notice "adding <@a@>"
+	    #ns_log notice "adding <@a@>"
 	    lappend output <@a@>
             foreach item [lrange $new_list $new_index1 $new_index2] {
 	        if {![string match "<*>" [string trim $item]]} {
-		    ns_log notice "adding item '${item}'"
+		    #ns_log notice "adding item '${item}'"
 		    lappend output [string trim $item]
 		} else {
 		    lappend output </@a@>${item}<@a@>
-		    ns_log notice "adding</@a@>${item}<@a@>"
+		    #ns_log notice "adding</@a@>${item}<@a@>"
 		}
             }
-	    ns_log notice "adding </@a@>"
+	    #ns_log notice "adding </@a@>"
 	    lappend output </@a@>
             incr i [expr {$old_index2 - $old_index1 + 1}]
         } elseif { $action eq "deleted" } {
@@ -227,14 +227,14 @@ ad_proc -public util::html_diff {
             incr i [expr {$old_index2 - $old_index1 + 1}]
         } elseif { $action eq "added" } {
             while {$i < $old_index2} {
-		ns_log notice "unchanged item"
-		    lappend output [lindex $old_list $i]
+		#ns_log notice "unchanged item"
+                lappend output [lindex $old_list $i]
                 incr i
             }
             lappend output <@a@>
             foreach item [lrange $new_list $new_index1 $new_index2] {
 	        if {![string match "<*>" [string trim $item]]} {
-		    ns_log notice "adding item"
+		    #ns_log notice "adding item"
 		    lappend output [string trim $item]
 		}
             }
@@ -256,3 +256,9 @@ ad_proc -public util::html_diff {
 
     return "$output"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

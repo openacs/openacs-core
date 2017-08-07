@@ -15,9 +15,9 @@ ad_proc -private db_available_pools {dbn} {
     @creation-date 2003/03/16
 } {
     if { $dbn eq "" } {
-        set dbn [nsv_get {db_default_database} .]
+        set dbn $::acs::default_database
     }
-    return [nsv_get {db_available_pools} $dbn]
+    return [nsv_get db_available_pools $dbn]
 }
 
 ad_proc -private db_pool_to_dbn_init {} {
@@ -29,9 +29,9 @@ ad_proc -private db_pool_to_dbn_init {} {
 
     @see db_driverkey
 } {
-    foreach dbn [nsv_array names {db_available_pools}] {
+    foreach dbn [nsv_array names db_available_pools] {
         foreach pool [db_available_pools $dbn] {
-            nsv_set {db_pool_to_dbn} $pool $dbn
+            nsv_set db_pool_to_dbn $pool $dbn
         }
     }
 }
@@ -92,17 +92,17 @@ ad_proc db_bootstrap_set_db_type { errors } {
     # connecting to the same database and user in each pool, but at the moment
     # that's seems anal even by DRB's standards.
 
-    # Initialize the list of known database types .  User code should use the database
-    # API routine db_known_database_types rather than reference the nsv list directly.
-    # We might change the way this is implemented later.  Each database type is
-    # represented by a list consisting of the internal name, driver name, and
-    # "pretty name" (used by the APM to list the available database engines that 
-    # one's package can choose to support).  The driver name and "pretty name" happen
-    # to be the same for Postgres and Oracle but let's not depend on that being true
-    # in all cases...
+    # The same information is as well in 0-acs-init.tcl; it is kept
+    # here for a while to guarantee a smooth migration, since the
+    # db-interface is essential and we have to deal with situations,
+    # where still an old 0-acs-init.tcl is active. This could be
+    # removed around OpenACS 6.*
+    #
+    set ::acs::known_database_types {
+        {oracle Oracle Oracle}
+        {postgresql PostgreSQL PostgreSQL}
+    }
 
-    nsv_set ad_known_database_types . \
-        [list [list "oracle" "Oracle" "Oracle"] [list "postgresql" "PostgreSQL" "PostgreSQL"]]
 
     #
     # Initialize the list of available pools
@@ -133,7 +133,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 # all_pools to ensure that the pool is valid.
 
                 set dbn_pools [ns_config $config_path "pools_${dbn}"]
-                nsv_set {db_available_pools} $dbn $dbn_pools
+                nsv_set db_available_pools $dbn $dbn_pools
                 ns_log Notice "$proc_name: For database '$dbn', the following pools are available: $dbn_pools"
             }
 
@@ -144,7 +144,8 @@ ad_proc db_bootstrap_set_db_type { errors } {
         }
     }
 
-    nsv_set {db_default_database} . $default_dbn
+    set ::acs::default_database $default_dbn
+
     ns_log Notice "$proc_name: Default database (dbn) is: '$default_dbn'"
 
     if { $old_availablepool_p } {
@@ -178,11 +179,9 @@ ad_proc db_bootstrap_set_db_type { errors } {
     # them in plain english
 
     if { [llength $pools] == 0 } {
-        set database_problem "There are no database pools specified in your OpenNSD
-    configuration file."
+        set database_problem "There are no database pools specified in your NaviServer configuration file."
     } elseif { [llength $pools] < 3 } {
-        set database_problem "OpenACS requires three database pools in order to
-    run correctly."
+        set database_problem "OpenACS requires three database pools in order to run correctly."
     }
 
     # We're done with the mult-db dbn stuff, from now on we deal only
@@ -206,7 +205,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     set bad_pools [list]
     set long_error 0
     foreach pool $pools {
-        if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || $db eq "" } {
+        if { [catch { set db [ns_db gethandle -timeout 15 $pool]} errorMsg] || $db eq "" } {
             ns_log Warning "$proc_name: couldn't allocate a handle from database pool \"$pool\"."
             lappend bad_pools "<li>OpenACS could not allocate a handle from database pool \"$pool\"."
             set long_error 1
@@ -217,7 +216,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 set database_problem "RDBMS type could not be determined: $errmsg"
                 ns_log Error "$proc_name: RDBMS type could not be determined: $errmsg"
             } else {
-                foreach known_database_type [nsv_get ad_known_database_types .] {
+                foreach known_database_type $::acs::known_database_types {
 
                     set this_type [lindex $known_database_type 1]
 
@@ -233,14 +232,19 @@ ad_proc db_bootstrap_set_db_type { errors } {
             ns_db releasehandle $db
             if { $this_suffix eq "" } {
                 ns_log Notice "$proc_name: couldn't determine RDBMS type of database pool \"$pool\"."
-                lappend bad_pools "<li>OpenACS could not determine the RDBMS type associated with
-    pool \"$pool\"."
+                lappend bad_pools "<li>OpenACS could not determine the RDBMS type associated with pool \"$pool\"."
                 set long_error 1
             } elseif { [nsv_get ad_database_type .] eq "" } {
                 nsv_set ad_database_type . $this_suffix
+                #
+                # For the time being, keep the info in the nsv for
+                # backwards compatibility and and a version in a
+                # per-thead (namespaced) variable
+                #
+                set ::acs::database_type $this_suffix
+                
             } elseif { ![string match $this_suffix [nsv_get ad_database_type .]] } {
-                ns_log Notice "$proc_name: Database pool \"$pool\" type \"$this_suffix\" differs from
-    \"[nsv_get ad_database_type .]\"."
+                ns_log Notice "$proc_name: Database pool \"$pool\" type \"$this_suffix\" differs from \"[nsv_get ad_database_type .]\"."
                 lappend bad_pools "<li>Database pool \"$pool\" is of type \"$this_suffix\".  The
     first database pool available to OpenACS was of type \"[nsv_get ad_database_type .]\".  All database
     pools must be configured to use the same RDMBS engine, user and database."
@@ -267,3 +271,9 @@ ad_proc db_bootstrap_set_db_type { errors } {
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

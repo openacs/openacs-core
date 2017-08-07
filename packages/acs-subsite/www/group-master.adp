@@ -18,7 +18,7 @@
           <if @untrusted_user_id@ ne 0>#acs-subsite.Welcome_user#</if>
           <else>#acs-subsite.Not_logged_in#</else> | 
         </li>
-        <li><a href="@whos_online_url@" title="#acs-subsite.view_all_online_members#">@num_users_online@ <if @num_users_online@ eq 1>#acs-subsite.Member#</if><else>#acs-subsite.Members#</else> #acs-subsite.Online#</a> |</li>
+        <li><a href="@whos_online_url@" title="#acs-subsite.view_all_online_members#">@num_users_online@ <if @num_users_online;literal@ true>#acs-subsite.Member#</if><else>#acs-subsite.Members#</else> #acs-subsite.Online#</a> |</li>
         <if @pvt_home_url@ not nil>
           <li><a href="@pvt_home_url@" title="#acs-subsite.Change_pass_email_por#">@pvt_home_name@</a> |</li>
         </if>
@@ -69,9 +69,9 @@
        <div id="navbar-container">
          <div id="navbar"> 
            <multiple name="sections">
-             <if @sections.selected_p@ true>
+             <if @sections.selected_p;literal@ true>
                <div class="tab" id="navbar-here">
-                 <if @sections.link_p@ true>
+                 <if @sections.link_p;literal@ true>
                    <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
                  </if>
                  <else>        
@@ -81,7 +81,7 @@
              </if>
              <else>
                <div class="tab">
-                 <if @sections.link_p@ true>
+                 <if @sections.link_p;literal@ true>
                    <a href="@sections.url@" title="@sections.title@">@sections.label@</a>
                  </if>
                  <else>        
@@ -100,9 +100,9 @@
            <div id="subnavbar-container">
              <div id="subnavbar">
                <multiple name="subsections">
-                 <if @subsections.selected_p@ true>
+                 <if @subsections.selected_p;literal@ true>
                    <div class="tab" id="subnavbar-here">
-                     <if @subsections.link_p@ true>
+                     <if @subsections.link_p;literal@ true>
                        <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
                      </if>
                      <else>        
@@ -112,7 +112,7 @@
                  </if>
                  <else>
                    <div class="tab">
-                     <if @subsections.link_p@ true>
+                     <if @subsections.link_p;literal@ true>
                        <a href="@subsections.url@" title="@subsections.title@">@subsections.label@</a>
                      </if>
                      <else>        
@@ -146,7 +146,7 @@
     TODO: remove this and add a more systematic / package independent way 
     TODO  of getting this content here
   </comment>
-  <if @curriculum_bar_p@ true><include src="/packages/curriculum/lib/bar" /></if>
+  <if @curriculum_bar_p;literal@ true><include src="/packages/curriculum/lib/bar" ></if>
 
   <div id="footer">
     <div class="block-marker">Begin footer</div>

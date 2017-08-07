@@ -12,7 +12,7 @@ ad_page_contract {
 } {
     { group_rel_id:naturalnum "" }
     { group_type_rel_id:naturalnum "" }
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
 }
@@ -34,3 +34,9 @@ if { $group_rel_id ne "" } {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

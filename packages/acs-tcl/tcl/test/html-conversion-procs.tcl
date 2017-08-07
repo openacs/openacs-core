@@ -93,7 +93,7 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     set string "What?\nNever mind, buddy"
     
     aa_equals "" [ad_html_text_convert -from "text/plain" -to "text/html" -truncate_len 14 -- $string] \
-        [ad_text_to_html "What?\nNever..."]
+        "What?<br>\nNever..."
     
     aa_equals "" [ad_html_text_convert -from "text/plain" -to "text/plain" -truncate_len 14 -- $string] \
         "What?\nNever..."
@@ -191,10 +191,10 @@ aa_register_case -cats {api smoke} -procs {ad_quotehtml ad_unquotehtml} quote_un
     Test if it quote and unquote html
 } {
     #quote html
-    set html "\"<&text>\""
+    set html {"<&text>"}
     aa_log "Unquote html=$html"
-    set result [ad_quotehtml $html]
-    aa_true "Quoute html=$result" [string equal "&quot;&lt;&amp;text&gt;&quot;" $result]
+    set result [ns_quotehtml $html]
+    aa_true "Quoute html=$result" [string equal "&#34;&lt;&amp;text&gt;&#34;" $result]
 
     #unquote html
     set html $result
@@ -297,3 +297,9 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
 
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

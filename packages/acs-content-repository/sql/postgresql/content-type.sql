@@ -454,7 +454,7 @@ BEGIN
                                         drop_attribute__attribute_name);
 
   -- FIXME: postgresql does not support drop column.
-  -- Drop the column if neccessary
+  -- Drop the column if necessary
   if drop_attribute__drop_column then
       execute 'alter table ' || v_table || ' drop column ' ||
         drop_attribute__attribute_name || ' cascade';
@@ -698,8 +698,8 @@ $$ LANGUAGE plpgsql stable;
 -- into the input view when a new content revision is added.  Pg locks the 
 -- underlying table when the rule is dropped, so the dropping and recreating
 -- of the new content revisons seems like it would be reliable, but the 
--- possiblity of a race condition exists for either the initial creation
--- of dropping of a type.  I'm not sure if the possiblity of a race condition
+-- possibility of a race condition exists for either the initial creation
+-- of dropping of a type.  I'm not sure if the possibility of a race condition
 -- acually exists in practice.  The thing to do here might be to just create 
 -- a function that dynamically builds the insert strings and does the 
 -- each time an insert is done on the content_type view.  Trade-off being
@@ -750,7 +750,7 @@ BEGIN
                select content_revision__new(
                                      p_new.title,
                                      p_new.description,
-                                     now(),
+                                     p_new.publish_date,
                                      p_new.mime_type,
                                      p_new.nls_language,
                                      case when p_new.text is null 
@@ -762,6 +762,7 @@ BEGIN
                                      now(),
                                      p_new.creation_user, 
                                      p_new.creation_ip,
+                                     null,                   -- content_length
                                      p_new.object_package_id
                 ) into v_revision_id;
                 ';
@@ -777,13 +778,13 @@ BEGIN
                     and ot1.table_name is not null
                   order by level asc
   LOOP
-    function_text := function_text || ' ' || content_type__trigger_insert_statement(type_rec.object_type) || ';
+    function_text := function_text || content_type__trigger_insert_statement(type_rec.object_type) || ';
     ';
   end loop;
 
   function_text := function_text || '
    return;
-   end;'' language ''plpgsql''; 
+   end;'' language plpgsql; 
    ';
   -- end building the rule definition code
 

@@ -113,7 +113,7 @@ namespace eval notification {
         
         This is useful in two situations. One is when you have multiple notification types that cover the 
         same event, for example notification for an entire forum, and for a single thread within that forum.
-        In this situation, you typically want people to recieve only one notification per event (per delivery 
+        In this situation, you typically want people to receive only one notification per event (per delivery 
         method and interval). The 'already_notified' and 'return_notified' switches help you do this.
 
         <p>
@@ -367,3 +367,9 @@ namespace eval notification {
         db_dml insert_notification_user_map {}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

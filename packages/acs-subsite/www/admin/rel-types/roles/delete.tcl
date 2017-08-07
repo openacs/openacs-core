@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     role:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     pretty_name:onevalue
@@ -26,3 +26,9 @@ set pretty_name [db_string select_role_pretty_name {
 }]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

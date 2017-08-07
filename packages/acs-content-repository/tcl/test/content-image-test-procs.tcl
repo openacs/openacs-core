@@ -1,5 +1,5 @@
 ad_library {
-    Procedures to test content::image tcl API
+    Procedures to test content::image Tcl API
 
     @author Hugh Brock
     @creation-date 2006-01-17

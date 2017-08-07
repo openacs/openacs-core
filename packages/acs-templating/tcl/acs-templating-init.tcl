@@ -106,3 +106,9 @@ namespace eval template {
   namespace export form element request
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

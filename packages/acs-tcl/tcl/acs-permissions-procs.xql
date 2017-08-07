@@ -2,14 +2,6 @@
 
 <queryset>
 
-    <fullquery name="ad_permission_p.n_privs">      
-        <querytext>
-            select count(*)
-            from acs_privileges
-            where privilege = :privilege
-        </querytext>
-    </fullquery>
-
     <fullquery name="permission::inherit_p.select_inherit_p">
         <querytext>
             select case when security_inherit_p = 't' then 1 else 0 end

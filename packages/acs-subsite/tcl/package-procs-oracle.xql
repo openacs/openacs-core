@@ -3,20 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="package_type_dynamic_p.object_type_dynamic_p">      
-      <querytext>
-      
-	select case when exists (select 1 
-                                   from acs_object_types t
-                                  where t.dynamic_p = 't'
-                                    and t.object_type = :object_type)
-	            then 1 else 0 end
-	  from dual
-    
-      </querytext>
-</fullquery>
 
- 
 <fullquery name="package_create_attribute_list.select_all_attributes">      
       <querytext>
       
@@ -84,17 +71,6 @@
 	 start with t.object_type = :object_type 
        connect by prior t.object_type = t.supertype
     
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="package_insert_default_comment.select_comments">      
-      <querytext>
-      
-	    select acs_object.name(:user_id) as author,
-	           sysdate as creation_date
-	      from dual
-	
       </querytext>
 </fullquery>
 
@@ -196,7 +172,17 @@
       </querytext>
 </fullquery>
 
- 
+
+<fullquery name="package_generate_body.select_supertype_function_params">      
+      <querytext>
+        select args.argument_name
+          from user_arguments args
+        where args.package_name =upper(:supertype_package_name)
+          and args.object_name='NEW'
+      </querytext>
+</fullquery>
+
+
 <partialquery name="package_generate_body.body">      
       <querytext>
 

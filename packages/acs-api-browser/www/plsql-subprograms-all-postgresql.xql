@@ -6,11 +6,11 @@
 <fullquery name="all_subprograms">      
       <querytext>
 
-	select proname as name, 'FUNCTION' as type 
+	select proname as name, 'FUNCTION' as type, pronargs as nargs 
 	from pg_proc 
 	where proowner=(select usesysid from pg_user
 	                where usename = current_user) 
-	order by proname
+	order by proname, pronargs
     
       </querytext>
 </fullquery>

@@ -7,3 +7,9 @@ ad_page_contract {
 } {}
 
 ad_returnredirect "home"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

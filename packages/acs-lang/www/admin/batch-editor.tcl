@@ -129,7 +129,9 @@ if { $show ne "untranslated" && $page_start > 0 } {
 
 lappend edit_buttons { "Update" "ok" }
 
-if { $show ne "untranslated" && $page_end < [expr {$total}] } { 
+if { $show ne "untranslated"
+     && $page_end < $total
+ } {
     lappend edit_buttons { "Update and next >" "next" }
 }
 
@@ -185,7 +187,7 @@ db_foreach get_messages {} {
         ad_form -extend -name batch_editor -form \
             [list [list "default_locale_message_$count:text(inform),optional" \
                        {label $default_locale_label} \
-                       {value {[ad_quotehtml $default_message]}}]]
+                       {value {[ns_quotehtml $default_message]}}]]
     }
     
     if { [string length $translated_message] > 80 } {
@@ -255,7 +257,7 @@ multirow create pagination text hint url selected group
 
 for {set count 0} {$count < $total} {incr count 10 } {
     set end_page [expr {$count + 9}]
-    if { $end_page > [expr {$total-1}] } {
+    if { $end_page > $total-1 } {
         set end_page [expr {$total-1}]
     }
     
@@ -308,3 +310,9 @@ multirow foreach show_opts {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

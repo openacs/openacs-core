@@ -2,7 +2,7 @@
 <property name="header">&lt;master&gt; and &lt;slave&gt; Demo:</property>
 <p align="center">
 
-<b>Okay, I think you get the point.</b>
+<strong>Okay, I think you get the point.</strong>
 
 <p align="center">
 

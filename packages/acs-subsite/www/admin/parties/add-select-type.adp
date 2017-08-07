@@ -13,7 +13,7 @@ What type of <strong>@object_type_pretty_name@</strong> do you want to create?
 
   @object_types.indent;noquote@ 
 
-  <if @object_types.valid_p@ eq 1>
+  <if @object_types.valid_p;literal@ true>
   <a href="@this_url@?@export_url_vars@&amp;@object_type_variable@=@object_types.object_type_enc@">@object_types.pretty_name@</a>
   </if>
   <else>

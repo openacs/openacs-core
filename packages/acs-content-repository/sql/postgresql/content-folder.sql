@@ -210,9 +210,6 @@ $$ LANGUAGE plpgsql;
 -- new
 select define_function_args('content_folder__new','name,label,description;null,parent_id;null,context_id;null,folder_id;null,creation_date;now,creation_user;null,creation_ip;null,security_inherit_p;t,package_id;null');
 
-
-
-
 --
 -- procedure content_folder__new/11
 --
@@ -624,55 +621,22 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 -- procedure copy
 
-
 -- added
+select define_function_args('content_folder__copy','folder_id,target_folder_id,creation_user,creation_ip;null,name;null,label;null');
 
 --
--- procedure content_folder__copy/4
+-- procedure content_folder__copy/6
 --
 CREATE OR REPLACE FUNCTION content_folder__copy(
    copy__folder_id integer,
    copy__target_folder_id integer,
    copy__creation_user integer,
-   copy__creation_ip varchar -- default null
-
-) RETURNS integer AS $$
-DECLARE
-  v_valid_folders_p            integer;        
-  v_current_folder_id          cr_folders.folder_id%TYPE;
-  v_name                       cr_items.name%TYPE;
-  v_label                      cr_folders.label%TYPE;
-  v_description                cr_folders.description%TYPE;
-  v_new_folder_id              cr_folders.folder_id%TYPE;
-  v_folder_contents_val        record;
-BEGIN
-	v_new_folder_id := content_folder__copy (
-			copy__folder_id,
-			copy__target_folder_id,
-			copy__creation_user,
-			copy__creation_ip,
-			NULL
-			);
-	return v_new_folder_id;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
--- added
-select define_function_args('content_folder__copy','folder_id,target_folder_id,creation_user,creation_ip;null,name;null');
-
---
--- procedure content_folder__copy/5
---
-CREATE OR REPLACE FUNCTION content_folder__copy(
-   copy__folder_id integer,
-   copy__target_folder_id integer,
-   copy__creation_user integer,
-   copy__creation_ip varchar, -- default null
-   copy__name varchar         -- default null
+   copy__creation_ip varchar default null,
+   copy__name cr_items.name%TYPE default null,
+   copy__label cr_folders.label%TYPE default null
 
 ) RETURNS integer AS $$
 DECLARE
@@ -738,7 +702,7 @@ BEGIN
       -- create the new folder
       v_new_folder_id := content_folder__new(
           coalesce (copy__name, v_name),
-	  v_label,
+	  coalesce (copy__label, v_label),
 	  v_description,
 	  copy__target_folder_id,
 	  copy__target_folder_id,
@@ -904,7 +868,7 @@ CREATE OR REPLACE FUNCTION content_folder__register_content_type(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_is_registered                               varchar;  
+  v_is_registered boolean;  
 BEGIN
 
   if register_content_type__include_subtypes = 'f' then

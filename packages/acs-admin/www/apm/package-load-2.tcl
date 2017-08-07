@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     {url ""}
     {file_path ""}
-    {delete 0}
+    {delete:boolean 0}
 } -validate {
     
     url_xor_file_path {
@@ -24,13 +24,15 @@ ad_page_contract {
 }
 
 if {$delete} {
-    file delete -force [apm_workspace_install_dir]
+    file delete -force -- [apm_workspace_install_dir]
 }
 
 set title "Contents of Loaded Package"
 set context [list [list "." "Package Manager"] [list "package-load" "Load a New Package"] $title]
-set template [parameter::get -package_id [ad_conn subsite_id] -parameter StreamingHead] 
-ad_return_top_of_page [ad_parse_template -params [list context title] $template]
+
+ad_return_top_of_page [ad_parse_template \
+                           -params [list context title] \
+                           [template::streaming_template]]
 
 if {$file_path eq ""} {
     #
@@ -53,7 +55,7 @@ if {$file_path eq ""} {
 ns_log Debug "APM: Loading $file_path"
 
 # If file_path ends in .apm, then load the single package.
-if { [file extension $file_path] eq "apm" || $url_param ne ""} {
+if { [file extension $file_path] eq ".apm" || $url_param ne ""} {
     apm_load_apm_file {*}$url_param -callback apm_ns_write_callback $file_path
 } else {
     # See if this is a directory.
@@ -86,3 +88,9 @@ ns_write [subst {
 The package(s) are now extracted into your filesystem.  You can <a href="package-load">load 
 another new package</a> from a URL or proceed to <a href="packages-install">install</a> the package(s).
 }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

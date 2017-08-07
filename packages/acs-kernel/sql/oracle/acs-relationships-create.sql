@@ -52,6 +52,7 @@ create table acs_rel_types (
 	max_n_rels_two	integer
 			constraint acs_rel_types_max_n_2_ck
 			check (max_n_rels_two >= 0),
+    composable_p boolean default 't' not null,
 	constraint acs_rel_types_n_rels_one_ck
 	check (min_n_rels_one <= max_n_rels_one),
 	constraint acs_rel_types_n_rels_two_ck

@@ -17,7 +17,7 @@
     <if @elements.section@ not nil>
       <tr>
         <td colspan="2">
-          <a name="@elements.section@"><b>@elements.section@</b></a>
+          <a name="@elements.section@"><strong>@elements.section@</strong></a>
           <hr>
         </td>
       </tr>
@@ -49,7 +49,7 @@
                 <span class="form-configuration-label">@elements.label;noquote@:</span>
                 <br>
               </if>
-              <if @form_properties.show_required_p@ true>
+              <if @form_properties.show_required_p;literal@ true>
                 <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select"><font color="red">*</font></if>
               </if>
 

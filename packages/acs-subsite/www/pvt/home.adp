@@ -4,4 +4,4 @@
   <property name="focus">user_info.first_names</property>
   <property name="displayed_object_id">@user_id;literal@</property>
 
- <include src="@user_home_template;literal@" user_id="@user_id;literal@"/>
+ <include src="@user_home_template;literal@" user_id="@user_id;literal@">

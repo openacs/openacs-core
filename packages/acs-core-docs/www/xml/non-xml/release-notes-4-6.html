@@ -19,26 +19,26 @@
 	You may want to begin by reading our installation documentation for
 	<a href="unix-install.html">Installing on Unix/Linux</a> or <a href="win2k-installation.html">Installing on Windows</a>.  Note
 	that the Windows documentation is not current for OpenACS 4.6,
-	but an alternative is to use John Sequeira's <a href="http://www.pobox.com/~johnseq/projects/oasisvm/" target="_top">Oasis VM
+	but an alternative is to use John Sequeira&#39;s <a href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM
 	project</a>.
   </p><p>
 	After installation, the full documentation set can be found by visiting
 	http://[your-host]/doc. Not all pieces are updated for OpenACS 4.6 at
 	this moment.
   </p><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="release-notes-sws"></a>Site Wide Searching</h3></div></div><p>
-	  If you're using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want
+	  If you&#39;re using Oracle 8.1.6 or 8.1.7 Enterprise Edition you may want
 	  to uncomment the SQL that causes InterMedia to keep online searching
-	  online while indexing.  The feature doesn't exist in Standard Edition
+	  online while indexing.  The feature doesn&#39;t exist in Standard Edition
 	  and OpenACS 4.6 now defaults to being loadable in SE.  Just grep for
 	  'sync' to find the code.  
 	</p><p>
 	  Also be sure to read the documentation in the Site Wide Search
-	  package's sql/oracle directory.  The APM doesn't execute the SQL for
+	  package&#39;s sql/oracle directory.  The APM doesn&#39;t execute the SQL for
 	  this package, in part due to the fact that some steps need to be run
 	  as the Oracle user 'ctxsys'.
 	</p><p>
-	  If you're using PostgreSQL be sure to read the documentation on
-	  installing the Open FTS driver for OpenACS.  It's included in the
+	  If you&#39;re using PostgreSQL be sure to read the documentation on
+	  installing the Open FTS driver for OpenACS.  It&#39;s included in the
 	  package as a text file and is also summarized at the end of the
 	  installation documentation in the section, <a href="install-full-text-search.html">Set Up OpenFTS</a>.  As with the Oracle version, there
 	  are steps you must take manually in order to get this feature

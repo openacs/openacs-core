@@ -26,7 +26,7 @@
                 <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a>
               </if>
               <else>
-                <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><b>\@paginator_pages.page@</b>
+                <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><strong>\@paginator_pages.page@</strong>
               </else>
             </multiple>
 
@@ -47,15 +47,19 @@
           </if>
 
           <if \@list_properties.page_size_variable_p@ eq 1>
-            </td><td align="right" width="5%">
-            <form name="\@list_properties.name@_resize" method="GET">
+            <div align="right" width="5%">
+            <form name="\@list_properties.name@_resize" method="GET" action="">
               \@list_properties.page_size_export_chunk;noquote@
-              <select name="page_size" onChange="acs_ListBulkActionClick('\@list_properties.name@_resize', '\@list_properties.url@'); return false;">
+	      <tcl>template::add_event_listener -event change -id "$list_properties(name)_resize-control" -script [subst {
+                  acs_ListBulkActionClick('$list_properties(name)_resize', '$list_properties(url)');
+	      }]</tcl>
+              <select id='\@list_properties.name@_resize-control' name="page_size">
                 <multiple name="page_sizes">
                   <option value="\@page_sizes.value@"<if \@list_properties.page_size@ eq \@page_sizes.value@> selected</if>>\@page_sizes.name@
                 </multiple>
               </select>
             </form>
+	    </div>
           </if>
 
         </td></tr></table></td>
@@ -90,7 +94,7 @@
       <group column="subrownum">
         <th class="@elements.class@"@elements.cell_attributes;noquote@>
           <if @elements.orderby_url@ not nil>
-            <if @elements.ordering_p@ true>
+            <if @elements.ordering_p;literal@ true>
               <a href="@elements.orderby_url@">@elements.label;noquote@</a>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" border="0"></if><else><img src="/resources/acs-templating/sort-ascending.png" border="0"></else></a>
             </if>
@@ -184,7 +188,7 @@
       </noparse>
   </if>
 
-  <if @list_properties.aggregates_p@ true>
+  <if @list_properties.aggregates_p;literal@ true>
     <noparse><if \@@list_properties.multirow@.rownum@ eq \@@list_properties.multirow@:rowcount@></noparse>
       <multiple name="elements">
         <tr class="list-subheader last">
@@ -234,7 +238,7 @@
               <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a>
             </if>
             <else>
-              <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><b>\@paginator_pages.page@</b>
+              <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><strong>\@paginator_pages.page@</strong>
             </else>
           </multiple>
 
@@ -263,8 +267,11 @@
     <tr class="list-button-bar">
       <td colspan="@elements:rowcount@" class="list-button-bar">
         <multiple name="bulk_actions">
+	  <% template::add_event_listener -id "$list_properties(name)-bulk_action-$bulk_actions(rownum)" -script [subst {
+	    $list_properties(bulk_action_click_function)('$list_properties(name)', '$bulk_actions(url)');
+	  }] %>
           <a href="#" title="@bulk_actions.title@" class="button"
-          onclick="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a>
+	  id="@list_properties.name;literal@-bulk_action-@bulk_actions.rownum;literal@">@bulk_actions.label@</a>
         </multiple>
       </td>
     </tr>

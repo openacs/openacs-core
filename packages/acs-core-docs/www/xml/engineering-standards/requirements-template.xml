@@ -38,7 +38,7 @@
       <emphasis>Very broadly, describe how the system meets a need of a business,
 	group, the OpenACS as a whole, etc.  Make sure that technical and
 	non-technical readers alike would understand what the system would do
-	and why it's useful.  Whenever applicable, you should explicitly state
+	and why it&#39;s useful.  Whenever applicable, you should explicitly state
 	what the business value of the system is. </emphasis>
     </para>
 
@@ -56,7 +56,7 @@
 
     <para>
       <emphasis>You should also state the context and dependencies of the system
-	here, e.g. if it's an application-level package for OpenACS 4, briefly
+	here, e.g. if it&#39;s an application-level package for OpenACS 4, briefly
 	describe how it uses kernel services, like permissions or subsites. </emphasis>
     </para>
 
@@ -81,7 +81,7 @@
 
     <para>
       <emphasis>Describe other systems or services that are comparable to what
-	you're building.  If applicable, say why your implementation will be
+	you&#39;re building.  If applicable, say why your implementation will be
 	superior, where it will match the competition, and where/why it will
 	lack existing best-of-breed capabilities.  This section is also in the
 	Design doc, so write about it where you deem most appropriate.</emphasis>
@@ -98,8 +98,8 @@
     <itemizedlist>
       <listitem><para> System/Package "coversheet" - where all documentation for this software is linked off of</para></listitem>
       <listitem><para> Design document</para></listitem>
-      <listitem><para> Developer's guide</para></listitem>
-      <listitem><para> User's guide</para></listitem>
+      <listitem><para> Developer&#39;s guide</para></listitem>
+      <listitem><para> User&#39;s guide</para></listitem>
       <listitem><para> Other-cool-system-related-to-this-one document</para></listitem>
       <listitem><para> Test plan </para></listitem>
       <listitem><para> Competitive system(s)</para></listitem>
@@ -118,7 +118,7 @@
 	create a list denominated with unique identifiers that reflect any
 	functional hierarchy present, e.g. 20.5.13. - for the first number,
 	leave generous gaps on the first writing of requirements (e.g. 1, 10,
-	20, 30, 40, etc.) because you'll want to leave room for any missing
+	20, 30, 40, etc.) because you&#39;ll want to leave room for any missing
 	key requirements that may arise.  </emphasis>
     </para>
     <itemizedlist>
@@ -154,9 +154,10 @@
     </itemizedlist>
 
     <para>
-      For guidelines writing requirements, take a 
-      <ulink url="http://www.arsdigita.com/ad-sepg/process/requirements-quality.html">look
-	at the quality standards</ulink>, along with a good example, such as <xref linkend="apm-requirements"/>.
+      For guidelines writing requirements, take a look at <ulink url="http://www.utm.mx/~caff/doc/OpenUPWeb/openup/guidances/guidelines/writing_good_requirements_48248536.html">
+	quality standards</ulink> or <ulink
+	url="https://ep.jhu.edu/about-us/news-and-media/writing-good-requirements-checklists">requirements
+	checklist</ulink>, along with a good example, such as <xref linkend="apm-requirements"/>.
     </para>
 
     <para>

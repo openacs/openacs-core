@@ -12,19 +12,13 @@ ad_page_contract {
 } {
     group_type:trim,notnull
     rel_type:trim,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -validate {
     rel_type_acceptable_p -requires {group_type:notnull rel_type:notnull} {
 	# This test makes sure this group_type can accept the
 	# specified rel type. This means the group type is itself a
 	# type (or subtype) of rel_type.object_type_one
-	if { ![db_string types_match_p {
-	    select count(*)
-	      from acs_rel_types t
-	     where (t.object_type_one = :group_type 
-                    or acs_object_type.is_subtype_p(t.object_type_one, :group_type) = 't')
-               and t.rel_type = :rel_type
-	}] } {
+	if { ![db_string types_match_p {}] } {
 	    ad_complain "Groups of type \"$group_type\" cannot use relationships of type \"$rel_type.\""
 	}
     }
@@ -54,3 +48,9 @@ if { $return_url eq "" } {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

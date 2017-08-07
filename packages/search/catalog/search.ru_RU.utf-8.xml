@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="search" locale="ru_RU" charset="utf-8">
+
+  <msg key="________Search_took">.Диапазон поиска</msg>
+  <msg key="Advanced_Search">Расширенный поиск</msg>
+  <msg key="advanced_search">&quot;расширенный поиск&quot;</msg>
+  <msg key="anytime">в любое время</msg>
+  <msg key="Date_Range">Диапазон дат</msg>
+  <msg key="details">подробности</msg>
+  <msg key="Enter_keywords_to_search_for">Ввести ключевые слова для поиска</msg>
+  <msg key="Feeling_Lucky">Мне повезёт</msg>
+  <msg key="lt_bstopwordsb_is_a_very">&quot;&lt;b&gt;%stopwords%&lt;/b&gt;&quot; очень общее слово и оно не было включено в ваш поисковый запрос.</msg>
+  <msg key="lt_FtsEngineDriver_not_a">FtsEngineDriver отсутствует!</msg>
+  <msg key="lt_Make_sure_all_words_a">Проверьте правильность написания всех слов.</msg>
+  <msg key="lt_No_pages_were_found_c">Не найдено страниц, содержащих &quot;</msg>
+  <msg key="lt_The_following_words_a">Следующие слова слишком общие и не были включены в ваш поисковый запрос:</msg>
+  <msg key="lt_Tip_In_most_browsers_">Подсказка: В большинстве броузеров вы можете нажать клавишу Назад вместо кнопки поиск.</msg>
+  <msg key="lt_Try_different_keyword">Попробуйте разные ключевые слова.</msg>
+  <msg key="lt_Try_more_general_keyw">Попробуйте использовать более общие ключевые слова.</msg>
+  <msg key="lt_Try_your_query_on_stw">Попробуйте ваши запросы на: %stw;noquote%</msg>
+  <msg key="lt_You_must_specify_some">Вы должны определить несколько ключевых слов</msg>
+  <msg key="nbspDisplay">&amp;nbsp;Дисплей</msg>
+  <msg key="Next">Следующий</msg>
+  <msg key="of_about">о(об)</msg>
+  <msg key="past_3_months">за последние три месяца</msg>
+  <msg key="past_6_months">за последние 6 месяцев</msg>
+  <msg key="past_year">последний год</msg>
+  <msg key="Previous">Предыдущий</msg>
+  <msg key="Result_page">Последняя страница:</msg>
+  <msg key="Results">Результаты</msg>
+  <msg key="results">результаты</msg>
+  <msg key="Search">Поиск</msg>
+  <msg key="Searched_for_query">Результаты поисков для &lt;strong&gt;%query%&lt;/strong&gt;</msg>
+  <msg key="seconds">секунд.</msg>
+  <msg key="selected">выбрано</msg>
+  <msg key="Suggestions">Предложения:</msg>
+  <msg key="The">&quot;&lt;b&gt;AND&lt;/b&gt;&quot; лишняя операция -- все элементы поиска включены по умолчанию.</msg>
+  <msg key="Try_fewer_keywords">Попробуйте сократить количество ключевых слов.</msg>
+  <msg key="Untitled">Без названия </msg>
+</message_catalog>

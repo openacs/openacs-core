@@ -21,3 +21,9 @@ if { $success_p } {
 
 set context [list [list "." "Install Software"] [list $parent_page_url $parent_page_title] $page_title]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

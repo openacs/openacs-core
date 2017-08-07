@@ -8,3 +8,9 @@ ad_library {
 
 # Cache I18N messages in memory for fast lookups
 lang::message::cache
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -20,13 +20,12 @@ ad_page_contract {
     member_link:onevalue
     pvt_home_url:onevalue
 }
-
+set login_url [ad_get_login_url]
 set user_id [auth::require_login -account_status closed]
 
 acs_user::get -array user -include_bio -user_id $user_id
 
 set account_status [ad_conn account_status]
-set login_url [ad_get_login_url]
 set subsite_url [ad_conn vhost_subsite_url]
 
 set page_title [ad_pvt_home_name]
@@ -49,15 +48,7 @@ set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_
 
 if {[parameter::get -parameter SolicitPortraitP -default 0]} {
     # we have portraits for some users 
-    if {![db_0or1row get_portrait_info "
-    select cr.publish_date, nvl(cr.title,'your portrait') as portrait_title,
-    nvl(cr.description,'no description') as portrait_description 
-    from cr_revisions cr, cr_items ci, acs_rels a
-    where cr.revision_id = ci.live_revision
-    and  ci.item_id = a.object_id_two
-    and a.object_id_one = :user_id
-    and a.rel_type = 'user_portrait_rel'
-    "]} {
+    if {![db_0or1row get_portrait_info {}]} {
 	set portrait_state "upload"
     } else {
         if { $portrait_title eq "" } {
@@ -83,3 +74,9 @@ set user_info_template [parameter::get -parameter "UserInfoTemplate" -package_id
 if {$user_info_template eq ""} {
     set user_info_template "/packages/acs-subsite/lib/user-info"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

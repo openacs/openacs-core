@@ -16,7 +16,8 @@ BEGIN
 		'party',
                 'member',
 		0,
-		null
+		null,
+        't'
 		);
 
 
@@ -35,7 +36,8 @@ BEGIN
 		'party',
                 'member',
 		0,
-		null
+		null,
+        't'
 		);
 
         return null;

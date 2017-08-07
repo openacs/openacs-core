@@ -928,7 +928,7 @@ proc sgml::DTD:ELEMENT {id value} {
 #	A syntax tree is constructed.
 #	A transition table is built next.
 #
-#	This is going to need alot of work!
+#	This is going to need a lot of work!
 #
 # Arguments:
 #	state	state array variable
@@ -1692,3 +1692,9 @@ proc sgml::dbgputs {where text} {
 
     catch {if {$dbg} {puts stdout "DBG: $where ($text)"}}
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

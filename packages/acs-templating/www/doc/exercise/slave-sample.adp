@@ -8,7 +8,7 @@ in the master page -->
 
 
 <p align="center">
-<b>The point of all this clicking about is just to show how this text area can be varied...</b>
+<strong>The point of all this clicking about is just to show how this text area can be varied...</strong>
 
 <p align="center">
 

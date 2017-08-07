@@ -194,8 +194,7 @@ Job message       : $job(message)
 To view the complete log, please visit\n$job(log_url)"
         } {
             # We don't fail hard here, just log an error
-            global errorInfo
-            ns_log Error "Error sending registration confirmation to [ad_system_owner].\n$errorInfo"
+            ns_log Error "Error sending registration confirmation to [ad_system_owner].\n$::errorInfo"
         }
     }
     
@@ -455,10 +454,9 @@ ad_proc -public auth::sync::job::action {
                 }
             } {
                 # Get errorInfo and log it
-                global errorInfo
-                ns_log Error "Error during batch syncrhonization job:\n$errorInfo"
+                ns_log Error "Error during batch syncrhonization job:\n$::errorInfo"
                 set success_p 0
-                set result(message) $errorInfo
+                set result(message) $::errorInfo
             }
         }
 
@@ -723,9 +721,9 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     
     array set param $parameters
     
-    if { ($param(SnapshotURL) ne "" && [clock format [clock seconds] -format "%d"] eq "01") || \
-             $param(IncrementalURL) eq "" } {
-
+    if { ($param(SnapshotURL) ne "" && [clock format [clock seconds] -format "%d"] eq "01")
+         || $param(IncrementalURL) eq ""
+     } {
         # On the first day of the month, we get a snapshot
         set url $param(SnapshotURL)
         set result(snapshot_p) "t"
@@ -801,9 +799,9 @@ ad_proc -private auth::sync::get_doc::file::GetDocument {
     
     array set param $parameters
     
-    if { ($param(SnapshotPath) ne "" && [clock format [clock seconds] -format "%d"] eq "01") || \
-             $param(IncrementalPath) eq "" } {
-
+    if { ($param(SnapshotPath) ne "" && [clock format [clock seconds] -format "%d"] eq "01")
+         || $param(IncrementalPath) eq ""
+     } {
         # On the first day of the month, we get a snapshot
         set path $param(SnapshotPath)
         set result(snapshot_p) "t"
@@ -988,3 +986,9 @@ ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
     
     return $doc
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

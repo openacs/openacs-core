@@ -397,3 +397,9 @@ ad_proc -public content::type::content_type_p_not_cached {
 } {
     return [db_string content_type_p "" -default 0]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

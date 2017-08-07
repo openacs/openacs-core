@@ -1,14 +1,18 @@
-# Form management for the ArsDigita Templating System
+ad_library {
+    Form management for the ArsDigita Templating System
+
+    @author Karl Goldstein    (karlg@arsdigita.com)
+    @author Stanislav Freidin (sfreidin@arsdigita.com)
+
+    @cvs-id $Id$
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein    (karlg@arsdigita.com)
-#          Stanislav Freidin (sfreidin@arsdigita.com)
-
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 # Commands for managing dynamic templated forms.
 namespace eval template {}
@@ -64,9 +68,11 @@ ad_proc -public template::form::create { id args } {
 
     @option html            A list of additional name-value attribute pairs to
                             include in the HTML FORM tag at the beginning of the 
-                            rendered form. Common attributes include JavaScript 
-                            event handlers and multipart form encoding.  For example, 
-                            "-html { enctype multipart/form-data onSubmit validate() }"
+                            rendered form. Common use for this option is to set multipart
+                            form encoding by specifying "-html { enctype multipart/form-data }".
+                            Please note that to comply with newer security features, such as CSP,
+                            one should not specify javascript event handlers here, as they will
+                            be rendered inline.
     
     @option mode            If set to 'display', the form is shown in display-only mode, where 
                             the user cannot edit the fields. Each widget knows how to display its contents
@@ -171,10 +177,8 @@ ad_proc -public template::form::create { id args } {
     regsub -all {\r} $opts(elements) {} element_data
 
     foreach element [split $element_data "\n"] {
-
       set element [string trim $element]
       if {$element eq {}} { continue }
-
       template::element create $id {*}$element
     }
   }
@@ -338,22 +342,20 @@ ad_proc -private template::form::template { id { style "" } } {
                                    -default "standard-lars"]]
   }
 
-    # Added support for storing form templates outside acs-templating
-    if {[regexp {^/(.*)} $style path]} {
-        set file_stub "$::acs::rootdir$path"
-    } else {
-        set file_stub [template::get_resource_path]/forms/$style  
-    }
-  
-  if { ![file exists "${file_stub}.adp"] } {
+  set file_stub [template::resource_path -type forms -style $style]
+
+  if { ![file exists "$file_stub.adp"] } {
       # We always have a template named 'standard'
-      set file_stub "[template::get_resource_path]/forms/standard"
+      set file_stub [template::resource_path -type forms -style standard]
   }
 
-  # set the asset url for images
-  set assets "[template::get_resource_path]/assets"
-  # assume resources are under page root (not safe)
-  regsub "^$::acs::pageroot" $assets {} assets
+  # the following block seems useless, deactivated for the time being
+  if {0} {
+      # set the asset url for images
+      set assets "[template::get_resource_path]/assets"
+      # assume resources are under page root (not safe)
+      regsub "^$::acs::pageroot" $assets {} assets
+  }
 
   # ensure that the style template has been compiled and is up-to-date
   template::adp_init adp $file_stub
@@ -421,7 +423,7 @@ ad_proc -public template::form::section {
 
     # legend can't be empty
     if { $section ne "" && $legendtext eq "" } {
-        ns_log Warning "template::form::section (form: $id, section: $section): The section legend is empty. You must provide text for the legend otherwise the section fieldset won't be created."
+        ad_log Warning "template::form::section (form: $id, section: $section): The legend-text of this section is empty. You must provide text for the legend-text otherwise the section fieldset won't be created."
         return
     }
 
@@ -512,7 +514,7 @@ ad_proc -private template::form::render { id tag_attributes } {
   }
 
   if { [info exists form_properties(actions)] 
-       && [template::util::is_true $form_properties(actions)] 
+       && $form_properties(actions) ne "" 
      } {
     set form_properties(display_buttons) $form_properties(actions)
   }
@@ -558,7 +560,7 @@ ad_proc -private template::form::render { id tag_attributes } {
       # Submitting invalid data to hidden elements is a common attack vector.  
       # This does not give them much information in the response.
       ad_return_complaint 1 "Your request is invalid."
-      ns_log Warning "Validation error in hidden form element.\
+      ad_log Warning "Validation error in hidden form element.\
 	This may be part of a vulnerability scan or attack reconnaissance: \
 	'[set $id:error($element(id))]' on element '$element(id)'."
       ad_script_abort
@@ -587,9 +589,27 @@ ad_proc -private template::form::render { id tag_attributes } {
       append output " class=\"margin-form\""
   }
 
+  # make sure, that event handlers have IDs
+  foreach name [array names attributes] {
+      if {[regexp -nocase {^on(.*)%} $name . event]} {
+          if {![info exists attributes(id)]} {
+              set attributes(id) "id[clock clicks -microseconds]"
+          }
+      }
+  }
+    
   # append attributes to form tag
   foreach name [array names attributes] {
-    if {$attributes($name) eq {}} {
+    if {[regexp -nocase {^on(.*)%} $name . event]} {
+        #
+        # Convert automatically on$event attribute into event listener
+        #
+        ns_log notice "automatically adding event listener for attribute $name in form with id $id"
+        template::add_event_listener \
+            -event $event
+            -id $attributes(id) \
+            -script $attributes($name)
+    } elseif {$attributes($name) eq {}} {
       append output " $name"
     } else {
       append output " $name=\"$attributes($name)\""
@@ -661,7 +681,7 @@ ad_proc -private template::form::check_elements { id } {
 
       } else {
 
-        ns_log Warning "template::form::check_elements: MISSING FORMWIDGET: $id\:$element_ref"
+        ad_log Warning "template::form::check_elements: MISSING FORMWIDGET: $id\:$element_ref"
         # Throw an error ?
       }
     }
@@ -863,7 +883,7 @@ ad_proc -public template::form::export {} {
     set value [ns_set value $form $i]
 
     append export_data "
-      <div><input type=\"hidden\" name=\"$key\" value=\"[ad_quotehtml $value]\"></div>"
+      <div><input type=\"hidden\" name=\"$key\" value=\"[ns_quotehtml $value]\"></div>"
   }
 
   return $export_data
@@ -919,3 +939,9 @@ ad_proc -public template::form::set_error {
     set formerror($element) $error
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

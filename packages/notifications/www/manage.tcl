@@ -67,3 +67,9 @@ template::list::create \
     -no_data [_ notifications.lt_You_have_no_notificat] \
     -elements $elements
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

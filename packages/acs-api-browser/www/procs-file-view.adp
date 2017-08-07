@@ -3,7 +3,8 @@
   <property name="context">@context;literal@</property>
   <property name="head">
   <style type="text/css">
-  td.doc {background: #e4e4e4;}
+  div.api-doc {background: #e4e4e4;}
+  dd {margin-left: 2em;}
   </style>
   </property>
 
@@ -23,13 +24,12 @@
   <h3>Detailed information</h3>
 
   <multiple name="proc_doc_list">
-    <table width="100%">
-      <tr><td class="doc">@proc_doc_list.doc;noquote@</td></tr>
-    </table>
-    &nbsp;<p>
+    <div class="api-doc">
+      @proc_doc_list.doc;noquote@
+    </div>
   </multiple>
 
-  <if @source_p@ eq 0>
+  <if @source_p;literal@ false>
     [ <a href="procs-file-view?@url_vars@&amp;source_p=1">show source</a> ]
   </if>
   <else>
@@ -42,7 +42,7 @@
     the default</a> ]
   </if>
 
-  <if @source_p@ eq 1>
+  <if @source_p;literal@ true>
     <h4>Content File Source</h4>
 
     <!-- directly display file contents var to avoid translating i18n strings etc -->

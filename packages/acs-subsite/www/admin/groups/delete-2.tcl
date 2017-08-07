@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     group_id:naturalnum,notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
 	if { ![group::permission_p $group_id] } {
@@ -35,3 +35,9 @@ if {$operation eq "Yes, I really want to delete this group"} {
 
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

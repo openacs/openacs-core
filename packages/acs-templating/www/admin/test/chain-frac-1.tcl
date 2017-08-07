@@ -272,3 +272,9 @@ set r18 [expr {int (  $xf    ) }];	# keep the integer part in r18
 set xf  [expr {1 / ($xf - $r18) }];	# invert the fractional part
 set r19 [expr {int (  $xf    ) }];	# keep the integer part in r19
 set xf  [expr {1 / ($xf - $r19) }];	# invert the fractional part
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

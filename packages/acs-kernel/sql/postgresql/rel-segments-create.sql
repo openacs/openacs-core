@@ -170,21 +170,25 @@ create table party_approved_member_map (
                     constraint party_member_member_fk
                     references parties
                     on delete cascade,
-    tag             integer
-                    constraint party_member_tag_nn
-                    not null,
+    originating_rel_id integer
+                    constraint party_member_rel_id_fk
+                    references acs_rels
+                    on delete cascade,
     constraint party_approved_member_map_pk
-    primary key (party_id, member_id, tag)
+    primary key (party_id, member_id, originating_rel_id)
 );
 
 -- Need this to speed referential integrity 
 create index party_member_member_idx on party_approved_member_map(member_id);
+create index party_member_party_idx on party_approved_member_map(party_id);
+create index party_member_originating_idx on party_approved_member_map(originating_rel_id);
 
 -- Helper functions to maintain the materialized party_approved_member_map. 
 
 
 
--- added
+
+
 select define_function_args('party_approved_member__add_one','party_id,member_id,rel_id');
 
 --
@@ -199,7 +203,7 @@ DECLARE
 BEGIN
 
   insert into party_approved_member_map
-    (party_id, member_id, tag)
+    (party_id, member_id, originating_rel_id)
   values
     (p_party_id, p_member_id, p_rel_id);
 
@@ -210,7 +214,6 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
 select define_function_args('party_approved_member__add','party_id,member_id,rel_id,rel_type');
 
 --
@@ -248,7 +251,6 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
 select define_function_args('party_approved_member__remove_one','party_id,member_id,rel_id');
 
 --
@@ -265,7 +267,7 @@ BEGIN
   delete from party_approved_member_map
   where party_id = p_party_id
     and member_id = p_member_id
-    and tag = p_rel_id;
+    and originating_rel_id = p_rel_id;
 
   return 1;
 
@@ -275,7 +277,6 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
 select define_function_args('party_approved_member__remove','party_id,member_id,rel_id,rel_type');
 
 --
@@ -320,17 +321,17 @@ CREATE OR REPLACE FUNCTION parties_in_tr () RETURNS trigger AS $$
 BEGIN
 
   insert into party_approved_member_map
-    (party_id, member_id, tag)
+    (party_id, member_id, originating_rel_id)
   values
-    (new.party_id, new.party_id, 0);
+    (new.party_id, new.party_id, -10);
 
   return new;
 
 END;
 $$ LANGUAGE plpgsql;
 
-create trigger parties_in_tr after insert on parties
-for each row execute procedure parties_in_tr ();
+ create trigger parties_in_tr after insert on parties
+ for each row execute procedure parties_in_tr ();
 
 CREATE OR REPLACE FUNCTION parties_del_tr () RETURNS trigger AS $$
 BEGIN
@@ -357,7 +358,7 @@ CREATE OR REPLACE FUNCTION rel_segments_in_tr () RETURNS trigger AS $$
 BEGIN
 
   insert into party_approved_member_map
-    (party_id, member_id, tag)
+    (party_id, member_id, originating_rel_id)
   select new.segment_id, element_id, rel_id
     from group_element_index
     where group_id = new.group_id

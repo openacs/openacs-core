@@ -1,18 +1,21 @@
 ad_library {
     ADP to Tcl Compiler for the ArsDigita Templating System,
-    Based on the original ADP to Tcl compiler by Jon Salz (jsalz@mit.edu)
-
-    Copyright (C) 1999-2000 ArsDigita Corporation
-
-    This is free software distributed under the terms of the GNU Public
-    License.  Full text of the license is available from the GNU Project:
-    http://www.fsf.org/copyleft/gpl.html
 
     @author Karl Goldstein
     @author Stanislav Freidin
+    @author Jon Salz
 
     @cvs-id $Id$
 }
+
+# Based on the original ADP to Tcl compiler by Jon Salz (jsalz@mit.edu)
+
+# Copyright (C) 1999-2000 ArsDigita Corporation
+
+# This is free software distributed under the terms of the GNU Public
+# License.  Full text of the license is available from the GNU Project:
+# http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 
@@ -32,7 +35,7 @@ ad_proc -public template::adp_include {
     </pre>
 
     The [list &book "bookdata" ...] tells adp_include to pass the book array by reference to the adp include, where it is
-    refered to via @book.field@.
+    referred to via @book.field@.
 
     @param uplevel how far up the stack should the adp_level be set to
     (default is the calling procedures level)
@@ -478,25 +481,26 @@ ad_proc -public template::expand_percentage_signs { message } {
     return $formatted_message
 }
 
-ad_proc -public template::adp_compile { source_type source } {
+ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     Converts an ADP template into a chunk of Tcl code.  Caching this code
     avoids the need to reparse the ADP template with each request.
 
-    @param source_type Indicates the source of the Tcl code to compile.
-    Valid options are -string or -file
-    @param source      A string containing either the template itself 
-                      (for -string) or the path to the file containing the template (for -file)
-
+    @param file The file name of the source
+    @param string string to be compliled
     @return The compiled code.
+
+    Valid options are either -string or -file
 } {
     variable parse_list
     # initialize the compiled code
     set parse_list [list "set __adp_output {}; set __ad_conn_locale \[ad_conn locale\]"]
 
-    switch -exact -- $source_type {
-        -file { set chunk [template::util::read_file $source] }
-        -string { set chunk $source }
-        default { error "Source type must be -string or -file" } 
+    if {$file ne "" && $string ne ""} {
+        error "you must specify either -file or -string"
+    } elseif {$file ne ""} {
+        set chunk [template::util::read_file $file]
+    } else {
+        set chunk $string
     }
 
     # substitute <% ... %> blocks with registered tags so they can be handled 
@@ -506,7 +510,7 @@ ad_proc -public template::adp_compile { source_type source } {
     # avoid substituting when it is a percentage attribute to an HTML tag.
     regsub -all {([^0-9])%>} $chunk {\1</tcl>} chunk
     # warn about the first ambiguity in the source
-    if [regexp {[0-9]+%>} $chunk match] {
+    if {[regexp {[0-9]+%>} $chunk match]} {
         ns_log warning "ambiguous '$match'; write Tcl escapes with a space like\
       <% set x 50 %> and HTML tags with proper quoting, like <hr width=\"50%\">\
       when compiling ADP source: template::adp_compile $source_type {$source}"
@@ -527,11 +531,15 @@ ad_proc -public template::adp_compile { source_type source } {
 
     # Since messages may read the variables of the adp page they go trough
     # expand_percentage_signs which amongst other things does an uplevel subst
-    while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[template::expand_percentage_signs [lang::message::lookup $__ad_conn_locale {\2} {TRANSLATION MISSING} {} -1]]} code]} {}
+    while {[regsub -all \
+                {([^\\])\#([-a-zA-Z0-9_:]+[.][-a-zA-Z0-9_:]+)\#} \
+                $code \
+                {\1[template::expand_percentage_signs [lang::message::lookup $__ad_conn_locale {\2} {TRANSLATION MISSING} {} -1]]} \
+                code]} {}
 
     # We do each substitution set in two pieces, separately for normal
     # variables and for variables with ";noquote" attached to them.
-    # Specifically, @x@ gets translated to [ad_quotehtml ${x}], whereas
+    # Specifically, @x@ gets translated to [ns_quotehtml ${x}], whereas
     # @x;noquote@ gets translated to ${x}.  The same goes for array
     # variable references.
 
@@ -550,7 +558,7 @@ ad_proc -public template::adp_compile { source_type source } {
     if {[ns_quotehtml ""] eq ""} {
         while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
     } else {
-        while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ad_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
+        while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
     }
 
     # substitute simple variable references
@@ -560,7 +568,7 @@ ad_proc -public template::adp_compile { source_type source } {
     if {[ns_quotehtml ""] eq ""} {
         while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
     } else {
-        while {[regsub -all [template::adp_variable_regexp] $code {\1[ad_quotehtml [lang::util::localize ${\2}]]} code]} {}
+        while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
     }
 
     # unescape protected # references
@@ -572,7 +580,7 @@ ad_proc -public template::adp_compile { source_type source } {
 
 ad_proc -public template::adp_array_variable_regexp {} {
     The regexp pattern used to find adp array variables in 
-    a piece of text (i.e. @array_name.variable_name@). Captures the character preceeding
+    a piece of text (i.e. @array_name.variable_name@). Captures the character preceding
     the first @ in \1, the array_name in \2, and variable_name in \3
     
     @author Peter Marklund (peter@collaboraid.biz)
@@ -611,7 +619,7 @@ ad_proc -public template::adp_array_variable_regexp_noi18n {} {
 ad_proc -public template::adp_variable_regexp {} {
     The regexp pattern used to find adp variables in
     a piece of text, i.e. occurenceis of @variable_name@. 
-    Captures the character preceeding the first @ in \1 and
+    Captures the character preceding the first @ in \1 and
     the variable_name in \2.
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -647,7 +655,7 @@ ad_proc -public template::adp_variable_regexp_noi18n {} {
     return {(^|[^\\])@([a-zA-Z0-9_:]+);noi18n@}
 }
 
-# Naviserver requires for disambiguation of flags and values at the
+# NaviServer requires for disambiguation of flags and values at the
 # end of the argument processing a terminating "--" (like for other
 # commands). AOLserver does not allow the "--".
 if {[ns_info name] eq "NaviServer"} {

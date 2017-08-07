@@ -26,7 +26,7 @@ set body [subst {
 
     <hr>
     Are you sure you want to remove the following entries from the access
-    control list of [db_string name {select acs_object.name(:object_id) from dual}]?
+    control list of [db_string name {}]?
     <ul>
 }]
 
@@ -34,7 +34,7 @@ foreach item $revoke_list {
     set party_id [lindex $item 0]
     set privilege [lindex $item 1]
     append body [subst {
-	<li>[db_string party_name {select acs_object.name(:party_id) from dual}]</li>
+	<li>[db_string party_name {}]</li>
     }]
 }
 
@@ -55,3 +55,9 @@ append body {
     </form>
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

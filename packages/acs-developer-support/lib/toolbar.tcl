@@ -1,14 +1,13 @@
 
 # TODO: Handle the case when developer-support is not mounted
+set ip_address [ns_info address]:[ns_config [ns_driversection] port]
 
-set ip_address [ns_config ns/server/[ns_info server]/module/nssock address]
 
 set show_p [ds_show_p]
 
 if { $show_p } {
-    set ds_url [ds_support_url]
 
-    set base_url [ad_url]
+    set ds_url [ds_support_url]
     set num_comments [llength [ds_get_comments]]
 
     multirow create ds_buttons label title toggle_url state
@@ -40,38 +39,49 @@ if { $show_p } {
 
     multirow append ds_buttons TRN \
         "Toggle translation mode" \
-        [export_vars -base "[ad_url]/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url]}}] \
+        [export_vars -base "/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url]}}] \
         [ad_decode [lang::util::translator_mode_p] 1 "on" "off"]
 
     multirow append ds_buttons ADP \
         "Toggle ADP reveal" \
-        {javascript:void(d=document);void(el=d.getElementsByTagName('span'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}} \
+        \# \
         [ad_decode [ds_adp_reveal_enabled_p] 1 "on" "off"]
+
+    template::add_body_script -script {
+        document.getElementById('ACS_DS_ADP').addEventListener('click', function (event) {
+            var el=document.getElementsByTagName('span');
+            event.preventDefault();
+            for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=document.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}
+        });
+    }
 
     multirow append ds_buttons FOT \
         "Toggle Footer display" \
-        {javascript:void(d=document);void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-footer'){void(el[i].className='developer-support-footer-off')}else{if(el[i].className=='developer-support-footer-off'){void(el[i].className='developer-support-footer')}}};} \
+        \# \
         off
 
-
-    set oacs_shell_url "${ds_url}shell"
-
-    set auto_test_url [site_node::get_package_url -package_key acs-automated-testing]
-
-    set request_info_url [export_vars -base "${ds_url}request-info" { { request {[ad_conn request]} } }]
-
-    set page_ms [lc_numeric [ds_get_page_serve_time_ms]]
-
-    set db_info [ds_get_db_command_info]
-
-    set db_num_cmds [lindex $db_info 0]
-    if {[lindex $db_info 1] eq ""} {
-	set db_num_ms [lc_numeric [lindex $db_info 1]]
-    } else {
-	set db_num_ms [lc_numeric [format %.1f [lindex $db_info 1]]]
+    template::add_body_script -script {
+        document.getElementById('ACS_DS_FOT').addEventListener('click', function (event) {
+            var el=document.getElementsByTagName('div');
+            event.preventDefault();
+            for(i=0;i<el.length;i++){if(el[i].className=='developer-support-footer'){void(el[i].className='developer-support-footer-off')}else{if(el[i].className=='developer-support-footer-off'){void(el[i].className='developer-support-footer')}}};
+        });
     }
 
-    set flush_url [export_vars -base "[ad_url]/acs-admin/cache/flush-cache" { { suffix util_memoize } { return_url [ad_return_url] } }]
+    set oacs_shell_url "${ds_url}shell"
+    set auto_test_url [site_node::get_package_url -package_key acs-automated-testing]
+    set request_info_url [export_vars -base "${ds_url}request-info" { { request {[ad_conn request]} } }]
+    set page_ms [lc_numeric [ds_get_page_serve_time_ms]]
+    
+    lassign [ds_get_db_command_info] db_num_cmds db_num_ms
+    if {$db_num_ms ne ""} {
+        set db_num_ms [lc_numeric [format %.1f $db_num_ms]]
+    }
+
+    set flush_url [export_vars -base "/acs-admin/cache/flush-cache" {
+        { suffix util_memoize }
+        { return_url [ad_return_url]}
+    }]
 
     if { $page_ms eq "" } {
         set request_info_label "Request info"
@@ -96,7 +106,7 @@ if {[array exists links]} {
             if {$type eq "text/css"} {
                 lappend css_list $href
             }
-	}
+        }
     }
 }
 
@@ -104,12 +114,23 @@ if {$css_list ne ""} {
     multirow append ds_buttons CSS \
         "Show CSS" \
         [export_vars -base "/ds/css-list" { css_list { return_url [ad_return_url] } }] \
-	off
+        off
 }
 
-set rm_package_id [apm_package_id_from_key xotcl-request-monitor]
-if {$rm_package_id > 0} {
-    set rm_url "${base_url}[apm_package_url_from_id $rm_package_id]"
-} else {
-    set rm_url ""
+#get url for xotcl-core and xotcl-request-monitor
+foreach {package_name package_url} {xotcl-core xocore_url xotcl-request-monitor rm_url} {
+    set package_id [apm_package_id_from_key $package_name]
+    if {$package_id > 0} {
+        set $package_url [apm_package_url_from_id $package_id]
+    } else {
+        set $package_url ""
+    }
 }
+
+set this_side_node [site_node_id [ad_conn url]]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

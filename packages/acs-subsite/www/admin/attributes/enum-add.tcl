@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     attribute_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_vars:onevalue
@@ -54,3 +54,9 @@ set context [list [list [export_vars -base one {attribute_id}] "One attribute"] 
 set export_vars [export_vars -form {attribute_id return_url}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -1,4 +1,4 @@
-<ul>
+<ol>
 
 <if @rels:rowcount@ eq 0>
   <li>There are no allowable relationship types for this group</li>
@@ -7,7 +7,7 @@
 <else>
   <multiple name="rels">
 
-    <li><strong>@rels.role_pretty_plural@ (@rels.rel_type_pretty_name@)</strong>
+    <li><strong>@rels.rel_type@: @rels.role_pretty_plural@ (@rels.rel_type_pretty_name@)</strong>
 
       <group column="rel_type">
         <if @rels.num_rels@ nil>
@@ -31,7 +31,7 @@
       <ul>
         <li>#acs-subsite.Administration#
           <ul>
-            <if @create_p@ eq 1 and @rels.rel_type_valid_p@ eq 1>
+            <if @create_p@ true and @rels.rel_type_valid_p@ true>
               <li><a href="@relations_add_url@">Add @rels.role_pretty_name@</a> </li>
             </if>
             <li>Relational segment: 
@@ -42,7 +42,7 @@
                 <a href="../rel-segments/one?segment_id=@rels.segment_id@">@rels.segment_name@</a>
               </else>
             </li>
-            <if @admin_p@ eq "1">
+            <if @admin_p;literal@ true>
               <li><a href="rel-type-remove?group_rel_id=@rels.group_rel_id@">Remove this relationship type</a></li>
             </if>
           </ul>
@@ -53,6 +53,6 @@
   </multiple>
 </else>
 
-  <li> <a href="rel-type-add?group_id=@group_id@">#acs-subsite.Add_a_permissible_relationship_type#</a> </li>
+  <li> <a href="rel-type-add?group_id=@group_id@" class="button">#acs-subsite.Add_a_permissible_relationship_type#</a> </li>
 
-</ul>
+</ol>

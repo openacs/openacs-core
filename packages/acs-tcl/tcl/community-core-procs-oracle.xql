@@ -23,18 +23,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="user_search">
-  <querytext>
-      select distinct u.first_names || ' ' || u.last_name || ' (' || u.email || ')' as name, u.user_id
-      from   cc_users u
-      where  lower(nvl(u.first_names || ' ', '')  ||
-             nvl(u.last_name || ' ', '') ||
-             u.email || ' ' ||
-             nvl(u.screen_name, '')) like lower('%'||:value||'%')
-      order  by name
-  </querytext>
-</fullquery>
- 
 <fullquery name="acs_user::get_from_user_id_not_cached.select_user_info">      
       <querytext>
 

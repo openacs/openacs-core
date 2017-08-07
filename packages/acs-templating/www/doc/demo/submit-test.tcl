@@ -17,3 +17,9 @@ if { [form is_valid submit_test] } {
   set text "SUBMIT already !"
 }
   
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

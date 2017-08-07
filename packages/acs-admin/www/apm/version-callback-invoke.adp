@@ -13,5 +13,5 @@
 </else>
 
 <p>
-  <b>&raquo;</b> <a href="@return_url@">Go back</a>
+  <strong>&raquo;</strong> <a href="@return_url@">Go back</a>
 </p>

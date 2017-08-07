@@ -37,3 +37,8 @@ aa_register_case content_keyword {
                 [string equal [db_string confirm_delete "" -default ""] ""]
      }
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

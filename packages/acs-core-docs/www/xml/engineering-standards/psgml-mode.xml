@@ -43,7 +43,7 @@ things you can do:</para>
 psgml rpm</ulink> from <ulink url="http://sources.redhat.com/docbook-tools/">RedHat&#39;s
 docbook-tools</ulink> and install it as usual.</para></listitem>
 
-<listitem><para>On other systems: Get the tarball from the <ulink url="http://www.lysator.liu.se/~lenst/about_psgml/">PSGML Website.</ulink>
+<listitem><para>On other systems: Get the tarball from the <ulink url="https://www.emacswiki.org/emacs/PsgmlMode">PSGML Website.</ulink>
 Unpack it and follow the install instructions.</para></listitem>
 </orderedlist>
 

@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
   user_id:naturalnum,notnull
-  {return_url .}
+  {return_url:localurl .}
   {permanent:boolean f}
 }
 
@@ -24,3 +24,8 @@ if {$permanent} {
 }
 
 ad_returnredirect $return_url
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

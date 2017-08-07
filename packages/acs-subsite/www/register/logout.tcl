@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 if { $return_url eq "" } {
@@ -22,3 +22,9 @@ db_release_unused_handles
 
 ad_returnredirect $return_url
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

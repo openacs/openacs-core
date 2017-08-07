@@ -12,7 +12,7 @@ ad_page_contract {
     locale
     package_key
     {message_key ""}
-    {return_url {[export_vars -base message-list { locale package_key }]}}
+    {return_url:localurl {[export_vars -base message-list { locale package_key }]}}
 }
 
 
@@ -114,3 +114,8 @@ if { [form is_valid message_new] } {
 set focus ""
 
 ad_return_template
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

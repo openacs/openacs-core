@@ -98,7 +98,7 @@ ns_write "<li>Channels are: [array get channel_tag]</ul>\n"
 #----------------------------------------------------------------------
 
 # Wipe and re-create the working directory
-file delete -force $work_dir
+file delete -force -- $work_dir
 file mkdir ${work_dir}
 cd $work_dir
     
@@ -106,7 +106,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     ns_write "<h2>Channel $channel using tag $channel_tag($channel)</h2><ul>"
 
     # Wipe and re-create the checkout directory
-    file delete -force "${work_dir}openacs-4"
+    file delete -force -- "${work_dir}openacs-4"
     
     # Prepare channel directory
     set channel_dir "${work_dir}repository/${channel}/"
@@ -184,19 +184,19 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                     
                     append manifest {  } {<package>} \n
                 
-                    append manifest {    } {<package-key>} [ad_quotehtml $version(package.key)] {</package-key>} \n
-                    append manifest {    } {<version>} [ad_quotehtml $version(name)] {</version>} \n
-                    append manifest {    } {<pretty-name>} [ad_quotehtml $version(package-name)] {</pretty-name>} \n
-                    append manifest {    } {<package-type>} [ad_quotehtml $version(package.type)] {</package-type>} \n
-                    append manifest {    } {<summary>} [ad_quotehtml $version(summary)] {</summary>} \n
-                    append manifest {    } {<description format="} [ad_quotehtml $version(description.format)] {">} 
-                    append manifest [ad_quotehtml $version(description)] {</description>} \n
-                    append manifest {    } {<release-date>} [ad_quotehtml $version(release-date)] {</release-date>} \n
-                    append manifest {    } {<maturity>} [ad_quotehtml $version(maturity)] {</maturity>} \n
-                    append manifest {    } {<license url="} [ad_quotehtml $version(license_url)] {">}
-		    append manifest [ad_quotehtml $version(license)] {</license>} \n
-                    append manifest {    } {<vendor url="} [ad_quotehtml $version(vendor.url)] {">} 
-                    append manifest [ad_quotehtml $version(vendor)] {</vendor>} \n
+                    append manifest {    } {<package-key>} [ns_quotehtml $version(package.key)] {</package-key>} \n
+                    append manifest {    } {<version>} [ns_quotehtml $version(name)] {</version>} \n
+                    append manifest {    } {<pretty-name>} [ns_quotehtml $version(package-name)] {</pretty-name>} \n
+                    append manifest {    } {<package-type>} [ns_quotehtml $version(package.type)] {</package-type>} \n
+                    append manifest {    } {<summary>} [ns_quotehtml $version(summary)] {</summary>} \n
+                    append manifest {    } {<description format="} [ns_quotehtml $version(description.format)] {">} 
+                    append manifest [ns_quotehtml $version(description)] {</description>} \n
+                    append manifest {    } {<release-date>} [ns_quotehtml $version(release-date)] {</release-date>} \n
+                    append manifest {    } {<maturity>} [ns_quotehtml $version(maturity)] {</maturity>} \n
+                    append manifest {    } {<license url="} [ns_quotehtml $version(license_url)] {">}
+		    append manifest [ns_quotehtml $version(license)] {</license>} \n
+                    append manifest {    } {<vendor url="} [ns_quotehtml $version(vendor.url)] {">} 
+                    append manifest [ns_quotehtml $version(vendor)] {</vendor>} \n
 
                     append manifest [apm::package_version::attributes::generate_xml \
                                          -version_id $version_id \
@@ -234,7 +234,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                         close $fp
 
                         lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
-                        #ns_log Notice "Executing: [ad_quotehtml $cmd]"
+                        #ns_log Notice "Executing: [ns_quotehtml $cmd]"
                         eval $cmd
                     }
 
@@ -243,18 +243,17 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
 
                     append manifest {    } {<download-url>} $apm_url {</download-url>} \n
                     foreach elm $version(provides) {
-                        append manifest {    } "<provides url=\"[ad_quotehtml [lindex $elm 0]]\" version=\"[ad_quotehtml [lindex $elm 1]]\" />" \n
+                        append manifest {    } "<provides url=\"[ns_quotehtml [lindex $elm 0]]\" version=\"[ns_quotehtml [lindex $elm 1]]\" />" \n
                     }
                     
                     foreach elm $version(requires) {
-                        append manifest {    } "<requires url=\"[ad_quotehtml [lindex $elm 0]]\" version=\"[ad_quotehtml [lindex $elm 1]]\" />" \n
+                        append manifest {    } "<requires url=\"[ns_quotehtml [lindex $elm 0]]\" version=\"[ns_quotehtml [lindex $elm 1]]\" />" \n
                     }
                     
                     append manifest {  } {</package>} \n
                 } 
             } {
-                global errorInfo
-                ns_write "<li> Error on spec_file $spec_file: [ad_quotehtml $errmsg]<br>[ad_quotehtml $errorInfo]\n"
+                ns_write "<li> Error on spec_file $spec_file: [ns_quotehtml $errmsg]<br>[ns_quotehtml $::errorInfo]\n"
             }
         }
     }
@@ -298,11 +297,17 @@ set repository_bak "[string range $repository_dir 0 end-1].bak"
 ns_write "<li>Moving work repository $work_repository_dirname to live repository dir at <a href=\"/repository\/>$repository_dir</a>\n"
 
 if { [file exists $repository_bak] } {
-    file delete -force $repository_bak
+    file delete -force -- $repository_bak
 }
 if { [file exists $repository_dirname] } {
-    file rename $repository_dirname $repository_bak
+    file rename -- $repository_dirname $repository_bak
 }
-file rename $work_repository_dirname  $repository_dirname
+file rename -- $work_repository_dirname  $repository_dirname
 
 ns_write "</ul> <h2>DONE</h2>\n"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

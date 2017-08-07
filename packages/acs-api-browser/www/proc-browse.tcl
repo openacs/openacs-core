@@ -42,9 +42,9 @@ foreach proc [nsv_array names api_proc_doc] {
 	lappend matches [list $proc $doc_elements(script)] 
     } elseif {$type eq "Deprecated" && $doc_elements(deprecated_p)} {
 	lappend matches [list $proc $doc_elements(script)] 
-    } elseif {$type eq "Private" && $doc_elements(private_p) } {
+    } elseif {$type eq "Private" && $doc_elements(protection) eq "private" } {
 	lappend matches [list $proc $doc_elements(script)] 
-    } elseif {$type eq "Public" && $doc_elements(public_p) } {
+    } elseif {$type eq "Public" && $doc_elements(protection) eq "public" } {
 	lappend matches [list $proc $doc_elements(script)] 
     } 
 }
@@ -64,3 +64,9 @@ foreach sublist $matches {
     multirow append proc_list $file $proc $url
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

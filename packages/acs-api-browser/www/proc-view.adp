@@ -1,25 +1,31 @@
 <master>
 <property name="doc(title)">@title;literal@</property>
 <property name="context">@context;literal@</property>
+<property name="head">
+  <style type="text/css">
+  div.api-doc {background: #e4e4e4;}
+  div.api-doc dd {margin-left: 2em;}
+  </style>
+</property>
 
 <if @error_msg@ ne "">
 @error_msg;noquote@
 </if>
 <else>
-<table width="100%">
-  <tr><td style="background: #eeeeee">@documentation;noquote@</td></tr>
+  <div class="api-doc">
+  @documentation;literal@
+  </div>
 </table>
 
-<if @source_p@ eq 0>
-[ <a href="proc-view?proc=@proc@&amp;source_p=1&amp;version_id=@version_id@">show source</a> ]
+<if @source_p;literal@ false>
+[ <a href="@procViewToggleURL;noi18n@">show source</a> ]
 </if>
 <else>
-[ <a href="proc-view?proc=@proc@&amp;source_p=0&amp;version_id=@version_id@">hide source</a> ]
+[ <a href="@procViewToggleURL;noi18n@">hide source</a> ]
 </else>
 
 <if @source_p@ ne @default_source_p@> 
- | [ <a href="set-default?source_p=@source_p@&amp;return_url=@return_url@">make this
-the default</a> ]
+ | [ <a href="@setDefaultURL;noi18n@">make this the default</a> ]
 </if>
 </else>
 

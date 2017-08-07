@@ -17,7 +17,7 @@ ad_proc us_state_widget {
     }
 
     db_foreach all_states {
-	select state_name, abbrev from us_states order by state_name
+        select state_name, abbrev from states order by state_name
     } {
         if { $default == $abbrev } {
             append widget_value "<option value=\"$abbrev\" selected=\"selected\">$state_name</option>\n" 
@@ -47,7 +47,7 @@ ad_proc country_widget {
 	}
     }
     db_foreach all_countries {
-	select default_name, iso from countries order by default_name 
+        select default_name, iso from countries order by default_name
     } {
         if { $default == $iso } {
             append widget_value "<option value=\"$iso\" selected=\"selected\">$default_name</option>\n" 
@@ -168,12 +168,8 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
 } {
     # if you would like the default to be null, call with value= ""
 
-    if {[ns_info name] ne "NaviServer"} {
-        ns_share NS
-    } else {
-        set NS(months) [list January February March April May June \
-                            July August September October November December]
-    }
+    set NS(months) [list January February March April May June \
+                        July August September October November December]
 
     if { $value == 0 } {
 	# no default, so use today
@@ -276,7 +272,7 @@ ad_proc ad_db_select_widget {
 	    }
 	} if_no_rows {
 	    if {$default ne ""} { 
-		return "<input type=\"hidden\" value=\"[ad_quotehtml $default]\" name=\"$name\">\n"
+		return "<input type=\"hidden\" value=\"[ns_quotehtml $default]\" name=\"$name\">\n"
 	    } else { 
 		return {}            
 	    }
@@ -284,7 +280,7 @@ ad_proc ad_db_select_widget {
     }
 
     if { $count == 1 || ($dbcount == 1 && $hidden_if_one_db) } {
-        return "$item<input type=\"hidden\" value=\"[ad_quotehtml $value]\" name=\"$name\">\n"
+        return "$item<input type=\"hidden\" value=\"[ns_quotehtml $value]\" name=\"$name\">\n"
     } elseif {!$count && !$dbcount && $blank_if_no_db} {
 	return {}
     } else { 
@@ -387,9 +383,14 @@ ad_proc ad_color_widget {
 } {
     Returns a color selection widget, optionally using JavaScript. Default is a string of the form '0,192,255'.
 } {
-    set out "<table cellspacing=0 cellpadding=0><tr><td><select name=$name.list"
+    set out {<table cellspacing="0" cellpadding="0"><tr><td>}
+    append out [subst {<select name="$name.list"}]
     if { $use_js != 0 } {
-	append out " onChange=\"adUpdateColorText('$name')\""
+        set id [clock clicks -microseconds]
+	append out [subst { id="select-$id"}]
+        template::add_event_listener \
+            -id select-$id -event change \
+            -script [subst {adUpdateColorText('$name');}]
     }
     append out ">\n"
 
@@ -410,9 +411,12 @@ ad_proc ad_color_widget {
     }
 
     foreach component { c1 c2 c3 } {
-	append out " <input name=$name.$component size=3 value=\"[set $component]\""
+	append out [subst { <input name="$name.$component" size="3" value="[set $component]"}]
 	if { $use_js } {
-	    append out " onChange=\"adUpdateColorList('$name')\""
+            append out [subst { id="input-$component-$id"}]
+            template::add_event_listener \
+                -id input-$component-$id -event change \
+                -script [subst {adUpdateColorList('$name');}]
 	}
 	append out ">"
     }
@@ -423,7 +427,9 @@ ad_proc ad_color_widget {
 	    set c2 255
 	    set c3 255
 	}
-	append out "</td><td>&nbsp; <img name=\"color_$name\" src=\"/shared/1pixel.tcl?r=$c1&g=$c2&b=$c3\" width=\"26\" height=\"26\" style=\"border:1\">"
+	append out [subst {</td><td>&nbsp;
+            <img name="color_$name" src="/shared/1pixel.tcl?r=$c1&g=$c2&b=$c3" width="26" height="26" style="border:1">
+        }]
     }
     append out "</td></tr></table>\n"
     return $out
@@ -454,3 +460,9 @@ ad_proc ad_color_to_hex { triplet } {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -3,10 +3,11 @@
 <property name="context">"advanced search"</property>
 
 <div>
-<form method=GET action=search>
+<form method="GET" action="search">
 <p>
 <input type="text" name="q" size="41" maxlength="256" value="@q@">
 <input type="submit" value="Search" name="t">
+<if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
 </p>
 <p>
 <label for="dfs">#search.Date_Range#</label>

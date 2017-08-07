@@ -14,3 +14,9 @@ set context [list [list $return_url $locale_label] $page_title]
 
 lang::catalog::export -locales [list $locale]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

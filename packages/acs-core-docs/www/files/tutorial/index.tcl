@@ -7,3 +7,8 @@ ad_page_contract {
 
 set page_title [ad_conn instance_name]
 set context [list]
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

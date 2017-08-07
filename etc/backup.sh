@@ -34,7 +34,7 @@ WIPE_OLD_AFTER_SCP_FULL=false        # if true, then whenever a full backup file
                                      # rationale is, keep last good full + incrementals
                                      # on this box, keep everything on other box
 
-OTHERUSER=malte                     # the user on the recipient server
+OTHERUSER=malte                      # the user on the recipient server
                                      # must have silent authentication, ie,
                                      # certificates
 
@@ -49,7 +49,7 @@ ORACLE8I_DBS="service0"              # space-separated list of Oracle8i database
                                      # space-separated list of directories to be backed up
 
 KEEP_DAYS=7                          # Number of days to keep backups in $BACKUPDIR
-RSYNC="no"                          # Use RSYNC for the content-repository. Useful with large amount of content
+RSYNC="no"                           # Use RSYNC for the content-repository. Useful with large amount of content
 
 #---------------------------------------------------------------------
 # a space-delimited list of directories to back up
@@ -61,7 +61,7 @@ DIRECTORIES="/var/lib/aolserver/service0"
 #---------------------------------------------------------------------
 
 # System Program Paths
-PG_BINDIR=/usr/local/pg80/bin       # path to PostGreSQL binaries
+PG_BINDIR=/usr/bin                   # path to PostGreSQL binaries (containing pg_dump)
 TIMEDIR=$BACKUPDIR/last-full         # where to store time of full backup
 TAR=/bin/tar                         # name and location of tar
 CHOWN=/bin/chown
@@ -192,9 +192,9 @@ for directory in $DIRECTORIES
   if [[ $RSYNC == "yes" ]];
     then
       # Exclude at least on GNU Tar is picky about using the full patch and the order exclude and directoy.
-      tar -zcpsh --file $FULLNAME --exclude "$directory/content-repository-content-files" $NEW_FLAG $directory
+      tar -zcph --file $FULLNAME --exclude "$directory/content-repository-content-files" $NEW_FLAG $directory
   else
-      tar -zcpsh . --file $FULLNAME $NEW_FLAG
+      tar -zcph . --file $FULLNAME $NEW_FLAG
   fi
 
   $CHOWN $BACKUPUSER $FULLNAME

@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {version_id:naturalnum,notnull}
-    {return_url "index"}
+    {return_url:localurl "index"}
 }
 
 apm_version_info $version_id
@@ -59,7 +59,7 @@ if { [llength $files] == 0 } {
 
         if {[info exists package_errors($file)]} {
             append body "<dl class='error'><dt title='Errors while loading $file'>ERROR!</dt>" \
-                "<dd><code><pre>[ad_quotehtml $package_errors($file)]</pre></code></dd></dl>"
+                "<dd><code><pre>[ns_quotehtml $package_errors($file)]</pre></code></dd></dl>"
         }
         append body "</li>\n"
     }

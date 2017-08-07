@@ -50,9 +50,10 @@ begin
       raise_application_error(-20000,v_error);
   end if;
 
-  select object_id_one, object_id_two, rel_type
+  select object_id_one, object_id_two, r.rel_type, composable_p
   into v_object_id_one, v_object_id_two, v_rel_type
-  from acs_rels
+  from acs_rels r
+  join acs_rel_types t on (r.rel_type = t.rel_type)
   where rel_id = :new.rel_id;
 
   -- Insert a row for me in the group_member_index.
@@ -67,23 +68,25 @@ begin
     party_approved_member.add(v_object_id_one, v_object_id_two, v_rel_type);
   end if;
 
-  -- For all groups of which I am a component, insert a
-  -- row in the group_member_index.
-  for map in (select distinct group_id
-	      from group_component_map
-	      where component_id = v_object_id_one) loop
-    insert into group_element_index
-     (group_id, element_id, rel_id, container_id,
-      rel_type, ancestor_rel_type)
-    values
-     (map.group_id, v_object_id_two, :new.rel_id, v_object_id_one,
-      v_rel_type, 'membership_rel');
+  if v_composable_p = 't' then
+    -- For all groups of which I am a component, insert a
+    -- row in the group_member_index.
+    for map in (select distinct group_id
+	        from group_component_map
+	        where component_id = v_object_id_one) loop
+          insert into group_element_index
+          (group_id, element_id, rel_id, container_id,
+          rel_type, ancestor_rel_type)
+          values
+          (map.group_id, v_object_id_two, :new.rel_id, v_object_id_one,
+          v_rel_type, 'membership_rel');
 
-    if :new.member_state = 'approved' then
-      party_approved_member.add(map.group_id, v_object_id_two, v_rel_type);
-    end if;
+          if :new.member_state = 'approved' then
+             party_approved_member.add(map.group_id, v_object_id_two, v_rel_type);
+          end if;
 
-  end loop;
+    end loop;
+  end if;
 end;
 /
 show errors
@@ -157,15 +160,17 @@ begin
     party_approved_member.add(v_object_id_one, members.member_id, members.rel_type);
   end loop;
 
-  -- Make my elements be elements of my new composite group
+  -- Make my composable elements be elements of my new composite group
   insert into group_element_index
    (group_id, element_id, rel_id, container_id,
     rel_type, ancestor_rel_type)
   select distinct
    v_object_id_one, element_id, rel_id, container_id,
-   rel_type, ancestor_rel_type
+   m.rel_type, ancestor_rel_type
   from group_element_map m
+  join acs_rel_types t on (m.rel_type = t.rel_type)
   where group_id = v_object_id_two
+  and t.composable_p = 't'
   and not exists (select 1
 		  from group_element_map
 		  where group_id = v_object_id_one
@@ -173,7 +178,7 @@ begin
 		  and rel_id = m.rel_id);
 
   -- For all direct or indirect containers of my new composite group, 
-  -- add me and add my elements
+  -- add me and add my composable elements
   for map in (select distinct group_id
 	      from group_component_map
 	      where component_id = v_object_id_one) loop
@@ -186,11 +191,13 @@ begin
      (map.group_id, v_object_id_two, :new.rel_id, v_object_id_one,
       v_rel_type, 'composition_rel');
 
-    -- Add rows for my elements
+    -- Add rows for my composable elements
 
     for members in (select distinct member_id, rel_type
                     from group_approved_member_map m
+                     join acs_rel_types t on (m.rel_type = t.rel_type)
                     where group_id = v_object_id_two
+                      and t.composable_p = 't'
                       and not exists (select 1
 		                      from group_element_map
 		                      where group_id = map.group_id
@@ -207,7 +214,9 @@ begin
      map.group_id, element_id, rel_id, container_id,
      rel_type, ancestor_rel_type
     from group_element_map m
+    join acs_rel_types t on (m.rel_type = t.rel_type)
     where group_id = v_object_id_two
+    and t.composable_p = 't'
     and not exists (select 1
 		    from group_element_map
 		    where group_id = map.group_id
@@ -877,7 +886,7 @@ is
   else
     select count(*)
       into m_result
-      from acs_rels rels, all_object_party_privilege_map perm
+      from acs_rels rels, acs_object_party_privilege_map perm
     where perm.object_id = rels.rel_id
            and perm.privilege = 'read'
            and rels.rel_type = 'membership_rel'

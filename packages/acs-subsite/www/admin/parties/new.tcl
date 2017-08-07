@@ -13,7 +13,7 @@ ad_page_contract {
     { party_type_exact_p:boolean t }
     { party_id:naturalnum "" }
     { party.email ""}
-    { return_url "" }
+    { return_url:localurl "" }
     {add_to_group_id:naturalnum ""}
     {add_with_rel_type "membership_rel"}
     {group_rel_type_list ""}
@@ -41,16 +41,7 @@ db_1row group_info {
 }
 
 # We assume the group is on side 1... 
-db_1row rel_type_info {
-    select object_type as ancestor_rel_type
-      from acs_object_types
-     where supertype = 'relationship'
-       and object_type in (
-               select object_type from acs_object_types
-               start with object_type = :add_with_rel_type
-               connect by object_type = prior supertype
-           )
-}
+db_1row rel_type_info {}
 
 set create_p [group::permission_p -privilege create $add_to_group_id]
 
@@ -100,7 +91,7 @@ if {$group_rel_type_list eq ""} {
 	set object_type_pretty_name $party_type_pretty_name
 	
 	# We're going to have to pass the required_group_rel_type_list to the
-	# next page.  The easiest way I see to do this is jsut encode the list
+	# next page.  The easiest way I see to do this is just encode the list
 	# in a variable, since the list is just a string anyways.
 	
 	# We don't care about the first group/rel_type combo, because we'll pass
@@ -185,10 +176,15 @@ attribute::add_form_elements -form_id add_party -variable_prefix rel -start_with
 if { [template::form is_valid add_party] } {
 
     db_transaction {
-	party::new -email ${party.email} -form_id add_party -variable_prefix party -party_id $party_id -context_id [ad_conn package_id] $party_type 
+	set party_id [party::new \
+                          -email ${party.email} \
+                          -form_id add_party \
+                          -variable_prefix party \
+                          -party_id $party_id \
+                          -context_id [ad_conn package_id] \
+                          $party_type]
 
 	relation_add -member_state $member_state $add_with_rel_type $add_to_group_id $party_id
-
     }
 
     # there may be more segments to put this new party in before the
@@ -215,3 +211,9 @@ if { [template::form is_valid add_party] } {
 
 ad_return_template
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

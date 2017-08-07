@@ -16,7 +16,7 @@
 </fullquery>
 
  
-<fullquery name="select_dependants">      
+<fullquery name="select_dependents">      
       <querytext>
       
 	select r.viol_rel_id as rel_id,

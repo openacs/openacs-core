@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     segment_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     export_vars:onevalue
     segment_name:onevalue
@@ -35,3 +35,9 @@ set context [list \
      "Remove segment"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

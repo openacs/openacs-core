@@ -45,7 +45,7 @@ db_transaction {
 	select 1 from apm_parameters where parameter_id = :parameter_id
     } -default 0]} {
 	ad_return_error "Database Error" "The database is complaining about the parameter you entered:<p>
-<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
+<blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
 	ad_script_abort
     }
 }
@@ -60,3 +60,9 @@ foreach section $sections {
 }
 
 ad_returnredirect [export_vars -base "version-parameters" { version_id section_name }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

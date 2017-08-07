@@ -22,7 +22,7 @@
       <para>
         OpenACS (Open Architecture Community System) is an
         advanced toolkit for building scalable, community-oriented
-        web applications.  If you're thinking of building an
+        web applications.  If you&#39;re thinking of building an
         enterprise-level web application, OpenACS is a solid,
         scalable framework for building dynamic content driven
         sites.
@@ -77,7 +77,7 @@
         users are actively funding and contributing work back to the
         project.  Formal, consensus driven governance has been
         established (with semi-annual elections) which ensures the
-        project serves the needs of it's constituents.
+        project serves the needs of it&#39;s constituents.
       </para>
 
       <para>
@@ -94,7 +94,7 @@
 </part>
 
 <part id="acs-admin">
-  <title>Administrator's Guide</title>
+  <title>Administrator&#39;s Guide</title>
 
   <chapter id="install-overview">
     <title>Installation Overview</title>

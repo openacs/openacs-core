@@ -12,3 +12,9 @@ set page_title "[apm_instance_name_from_id $package_id] Permissions"
 
 set context [list [list "." "Applications"] $page_title]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

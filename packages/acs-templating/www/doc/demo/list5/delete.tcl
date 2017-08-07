@@ -15,7 +15,7 @@ ad_page_contract {
 # is there are a bunch of template_demo_note_id values coming in 
 # through the url. So, this list is sorta becoming a form too :)
 #
-# so this loop runs thru all passed-in values of template_demo_note_id
+# so this loop runs through all passed-in values of template_demo_note_id
 # and for each, deletes that note.
 
 foreach template_demo_note_id $template_demo_note_id {
@@ -34,3 +34,9 @@ foreach template_demo_note_id $template_demo_note_id {
 }
 
 ad_returnredirect "./"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

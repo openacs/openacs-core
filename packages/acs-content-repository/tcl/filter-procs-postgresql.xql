@@ -46,21 +46,7 @@
         select 
           content_item__get_live_revision(content_item__get_template(:item_id, :context)) as template_id,
           content_template__get_path(content_item__get_template(:item_id, :context),:template_root) as template_url 
-        from 
-          dual
-
-
-      </querytext>
-</fullquery>
-
-<fullquery name="content::init_all.get_template_url">      
-      <querytext>
-
-        select 
-          content_template__get_path(
-          content_item__get_template(:item_id, :context),:template_root) as template_url 
-        from 
-          dual
+        from dual
 
       </querytext>
 </fullquery>

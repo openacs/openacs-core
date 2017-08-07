@@ -29,7 +29,7 @@ with our data model. This gives us two real advantages:
 
 <para>
 <phrase>Why do we need a naming convention? </phrase>
-<ulink url="http://oradoc.photo.net/ora8doc/DOC/server803/A54647_01/ch2.htm#2956">Oracle limits names</ulink>, 
+<ulink url="https://docs.oracle.com/database/121/SQLRF/sql_elements008.htm#SQLRF00223">Oracle limits names</ulink>, 
 in general, to 30 characters, which is hardly enough for a human readable constraint name.
 </para>
 
@@ -40,9 +40,7 @@ in general, to 30 characters, which is hardly enough for a human readable constr
 
 <para>
 We propose the following naming convention for all constraints, with
-the following abbreviations taken from Oracle Docs at 
-<ulink url="http://oradoc.photo.net/ora81/DOC/server.815/a67779/ch4e.htm#8953">
-http://oradoc.photo.net/ora81/DOC/server.815/a67779/ch4e.htm#8953</ulink>. 
+the following abbreviations taken from Oracle Docs. 
 Note that we shortened all of the constraint abbrevations to 
 two characters to save room.
 </para>
@@ -76,6 +74,11 @@ two characters to save room.
   <entry>not null</entry>
   <entry>nn</entry>
 </row>
+<row>
+  <entry>index</entry>
+  <entry>idx</entry>
+</row>
+
 </tbody></tgroup></informaltable>
 
 
@@ -89,13 +92,13 @@ two characters to save room.
 </para>
 
 <para>
-In reality, this won't be possible because of the character limitation on 
+In reality, this won&#39;t be possible because of the character limitation on 
 names inside oracle. When the name is too long, we will follow these two
 steps in order:
 </para>
 
 <orderedlist>
-  <listitem><para> Abbreviate the table name with the table's initials (e.g. users -&gt; u and users_contact -&gt; uc).
+  <listitem><para> Abbreviate the table name with the table&#39;s initials (e.g. users -&gt; u and users_contact -&gt; uc).
 </para></listitem>
   <listitem><para> Truncate the column name until it fits.</para></listitem>
 </orderedlist>
@@ -147,10 +150,10 @@ create table constraint_naming_example (
 </sect2>
 
 <sect2 id="eng-standards-constraint-naming-pk">
-<title>Why it's good to name primary keys</title>
+<title>Why it&#39;s good to name primary keys</title>
 
 <para>
-Naming primary keys might not have any obvious advantages. However, here's an 
+Naming primary keys might not have any obvious advantages. However, here&#39;s an 
 example where naming the primary key really helps (and this is by no means
 a rare case!
 </para>
@@ -172,7 +175,7 @@ Execution Plan
 </programlisting>
 
 <para>
-Isn't it nice to see "EXAMPLE_TOPICS_TOPIC_ID_PK" in the trace
+Isn&#39;t it nice to see "EXAMPLE_TOPICS_TOPIC_ID_PK" in the trace
 and know exactly which table oracle is using at each step?
 </para>
 
@@ -192,7 +195,7 @@ requirement.
 <phrase>About Naming the not null constraints</phrase>
 </para>
 <para>
-Though naming "not null" constraints doesn't help immeditately in error
+Though naming "not null" constraints doesn&#39;t help immeditately in error
 debugging (e.g. the error will say something like 
 "Cannot insert null value into column"), we recommend naming not null
 constraints to be consistent in our naming of all constraints.

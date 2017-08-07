@@ -4,7 +4,7 @@
 <h3>Data sources for @code_stub@.acs</h3>
 
 <multiple name="datasources">
-<b>@datasources.name@</b>
+<strong>@datasources.name@</strong>
 <table>
 <tr><td align="left">Type:</td><td>@datasources.structure@</td></tr>
 <tr><td>Comments:</td><td>@datasources.comment@</td></tr>
@@ -25,7 +25,7 @@
      <blockquote>
      <table border="0" cellpadding="0" cellspacing="1">
      <group column="name">
-     <tr><th align="right" valign="top">@datasources.input_name@</th><td>&nbsp;&nbsp;</td><td><i>@datasources.input_type@</i>; @datasources.input_comment@</td><tr>
+     <tr><th align="right" valign="top">@datasources.input_name@</th><td>&nbsp;&nbsp;</td><td><em>@datasources.input_type@</em>; @datasources.input_comment@</td><tr>
      </group>
      </table>
      </blockquote>

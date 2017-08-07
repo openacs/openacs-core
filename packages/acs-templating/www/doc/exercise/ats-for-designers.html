@@ -5,7 +5,7 @@
 
 <body>
 <h2>The ACS Templating System for Web Designers</h2>
-<b><a href="../index.html">Templating System</a> : Templating Exercise</b>
+<strong><a href="../index.html">Templating System</a> : Templating Exercise</strong>
 <hr>
 
 <h3>Reading</h3>
@@ -33,7 +33,7 @@ how to use it in building web pages.
 <p>First, perhaps an explanation of what the templating system does will help us understand
 how it works.  An ATS template itself serves as a reusable, unchanging framework that delivers
 dynamic data.  The advantage to this is something you probably already realize: you need only build 
-and edit a few pages to maintain a consistent presentation style while accomodating numerous permutaions of changing data.
+and edit a few pages to maintain a consistent presentation style while accommodating numerous permutaions of changing data.
 
 <p>This training module will teach largely by exercise and example, but you should also
 refer regularly to the <a href="../index.html">ATS documents</a> provided and more specific pointers will be given to help you out along the way.
@@ -51,7 +51,7 @@ three basic formats, as <a href="../tags/list.html">lists</a>,
 
 <p>
 
-<b>Exercise 1: Onevalues, onelists, multilists and multirows</b><br>
+<strong>Exercise 1: Onevalues, onelists, multilists and multirows</strong><br>
 (nestedlists, too?)
 <p>
 Let's first take a look at some list and variable tags in action.  Open up another
@@ -77,12 +77,12 @@ the two, specifically:
     .adp file, are cycled repeatedly to show multiple sets of information when displayed in
     <code>list-and-var-sample.acs</code>; example:
     <blockquote><code><pre>
-    &lt;multiple name="<i>your_multirow</i>"&gt;
-    &lt;tr&gt;&lt;td&gt;@<i>your_multirow</i>.first_names@ @<i>your_multirow</i>.last_name@ &lt;/td&gt; &lt;/tr&gt;
+    &lt;multiple name="<em>your_multirow</em>"&gt;
+    &lt;tr&gt;&lt;td&gt;@<em>your_multirow</em>.first_names@ @<em>your_multirow</em>.last_name@ &lt;/td&gt; &lt;/tr&gt;
     &lt;/multiple&gt;
     </pre></code></blockquote>
     The user will see one table row filled with a different person's name for each row contained in the multirow
-    <code><i>your_multirow</i></code>.
+    <code><em>your_multirow</em></code>.
     </li>
 <li>multirow variables are identified with this format: @&lt;name of the multirow&gt;.&lt;name
     of a field in the multirow&gt;@, and can only be called within their respective
@@ -132,11 +132,11 @@ page describing friends you've never met
 and movies you've possibly never seen.
 
 <p>
-<b>Exercise Two: &lt;if&gt; and &lt;else&gt;, the conditional tags</b>
+<strong>Exercise Two: &lt;if&gt; and &lt;else&gt;, the conditional tags</strong>
 <p>
 Dynamic data implies a changing page, and also changing presentation.  
 The <a href="../tags/if.html">&lt;if&gt;</a> and &lt;else&gt; tags allow 
-you to alter the format of your page to accomodate data changes.  The 
+you to alter the format of your page to accommodate data changes.  The 
 function of &lt;if&gt;
 is straightforward enough: given a condition -- such as @x@ equals 5 -- 
 all the text/html/dynamic data between the the opening 
@@ -149,8 +149,8 @@ found <a href="../tags/if.html">here</a>.  Also, a few more things to keep in mi
   <li>in Tcl all variables, even numbers, are stored as text 
   strings with quantitative values, so 
   conditions like less than, greater than, and (not) between can also 
-  be used with text to determine alphabetical order: <i>a</i> &lt; <i>b</i> &lt; ... &lt; 
-  <i>z</i>, lower-case letters are greater than upper-case, and numbers less than letters.  
+  be used with text to determine alphabetical order: <em>a</em> &lt; <em>b</em> &lt; ... &lt; 
+  <em>z</em>, lower-case letters are greater than upper-case, and numbers less than letters.  
   Example: "you" are greater than "me", and "I" am less than "you"</li>
 
   <li>the "between" conditions checks inclusively, so &lt;if 2 between 2 6&gt; 
@@ -158,7 +158,7 @@ will test true</li>
 
   <li><code>&lt;if @a@ between @b@ @c@&gt;</code> requires that <code>@a@</code>
       is greater than or equal to <code>@b@</code>
-      <i>and</i> less than or equal to <code>@c@</code>; so <code>&lt;if
+      <em>and</em> less than or equal to <code>@c@</code>; so <code>&lt;if
       @x@ between 4 2&gt;</code> will always test false</li>
 
   <li>the "in" condition uses a regular expression check (or will it? <font color=red>come
@@ -171,11 +171,11 @@ of your own.  Specifically, add one &lt;if&gt; and &lt;else&gt; combination so t
 description reads "likes chocolate" when <code>likes_chocolate_p</code> is "t", 
 "doesn't like chocolate" when <code>likes_chocolate_p</code> is "f", or 
 "probably like chocolate" if <code>likes_chocolate_p</code> is an empty string.  
-Also, add one &lt;if&gt;, and one &lt;if&gt; only, so that <i>a</i> is appropriately
-changed to <i>an</i> for any 11-, 18- or 80- to 89-year olds.
+Also, add one &lt;if&gt;, and one &lt;if&gt; only, so that <em>a</em> is appropriately
+changed to <em>an</em> for any 11-, 18- or 80- to 89-year olds.
 
 <p>
-<b>Exercise Three: The &lt;master&gt; and &lt;slave&gt; tags -- a call to the dominatrix in you</b>
+<strong>Exercise Three: The &lt;master&gt; and &lt;slave&gt; tags -- a call to the dominatrix in you</strong>
 <p>
 The <a href="../tags/master.html">&lt;master&gt;</a> and <a href="../tags/slave.html">
 &lt;slave&gt;</a> tags allow you to maintain a consistent style and format among pages
@@ -211,7 +211,7 @@ demonstration and upon examining the .adp files, and add a few pointers:
   <li>the master page can be viewed at its own .acs page, but shows nothing in
       place of the &lt;slave&gt; tag</li>
   <li>you can have nested slave sections, that is, a slave section within another slave</li> 
-  <li>you <b>cannot</b> have two different slave sections within the same master (go ahead
+  <li>you <strong>cannot</strong> have two different slave sections within the same master (go ahead
       and try adding an extra &lt;slave&gt; tag to a master page to see what happens)</li> 
   <li><a href="../tags/property.html">&lt;property&gt;</a> tags are used within a slave section
       to pass text, HTML and references to local datasources up to the master page; these values
@@ -233,14 +233,14 @@ if you were to label the newly inserted form
 with some slave-specific title.
 
 <p>
-<b>Exercise Four: The functions of &lt;formtemplate&gt;</b><br>
+<strong>Exercise Four: The functions of &lt;formtemplate&gt;</strong><br>
 <p>
 Creating forms with ATS can be as simple as inserting two tags into a page.  Try this:
 open <code>form-sample.adp</code> and add the two following ATS tags:
 <blockquote>
-<code><tt>
+<code><kbd>
 <a href="../tags/formtemplate.html">&lt;formtemplate id="add_entry"&gt;&lt;/formtemplate&gt;</a>
-</tt></code>
+</kbd></code>
 </blockquote>
 <p>
 Save the page and reload it.  You should see now see a big baby-blue form block; this is the
@@ -276,7 +276,7 @@ a hand-built version of the same form.
 There are noticeable differences between the two form templates, most obviously
 the lack of background color and a few missing entry fields in the manually 
 constructed one.  Maybe not so noticeable
-is the grouping of entry widgets into one HTML table row (check out the <i>Name</i> field) and
+is the grouping of entry widgets into one HTML table row (check out the <em>Name</em> field) and
 the multi-input combination of text entry boxes and radio buttons for entering telephone number
 information.  Take a look at how the phone information entry section is constructed in <code>
 form-sample.adp</code>.  Note specifically: &lt;formgroup&gt; is somewhat similar to 
@@ -298,17 +298,17 @@ tag, an example of which can be found under the gender formwidget.
 
 <p>
 
-<b>Exercise Five: more fun with multirows</b>
+<strong>Exercise Five: more fun with multirows</strong>
 <p>
 Now that you've confidently added the conditional &lt;if&gt; and &lt;else&gt; tags to
 your ATS toolbelt, it's time to put those tools to good use in formatting
 multirow data.  First, read the <a href="../tags/multiple.html">docs</a> to learn about
-the automatcally generated <code>@<i>your_multirow</i>.rownum@</code> column,
-the <code>@<i>your_multirow</i>:rowcount@</code> onevalue which contains
+the automatcally generated <code>@<em>your_multirow</em>.rownum@</code> column,
+the <code>@<em>your_multirow</em>:rowcount@</code> onevalue which contains
 the total number of rows contained in your multirow, and the &lt;multiple&gt; <code>startrow</code>
 and <code>maxrows</code> attributes.  Possible point of confusion: the variable 
-<code>@<i>your_multirow</i>:rowcount@</code> is a onevalue and not a column of the 
-multirow <code><i>your_multirow</i></code>, so it need not be used within &lt;multiple&gt;
+<code>@<em>your_multirow</em>:rowcount@</code> is a onevalue and not a column of the 
+multirow <code><em>your_multirow</em></code>, so it need not be used within &lt;multiple&gt;
 tags and in many cases should not be used within &lt;multiple&gt; tags.  Why is this?  (Take 
 a look at how <code>@address:rowcount@</code> is used.)
 

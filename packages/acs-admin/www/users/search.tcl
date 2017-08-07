@@ -101,7 +101,7 @@ if { $only_authorized_p } {
 if { ![info exists passthrough] } {
     set passthrough_parameters ""
 } else {
-    set passthrough_parameters "[export_entire_form_as_url_vars $passthrough]"
+    set passthrough_parameters [export_entire_form_as_url_vars $passthrough]
 }
 
 if { $limit_to_user_id ne "" } {
@@ -110,17 +110,21 @@ if { $limit_to_user_id ne "" } {
 }
 
 if { $limit_to_users_in_group_id ne "" } {
-set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
-from cc_users cu, group_member_map gm, membership_rels mr
-where cu.user_id = gm.member_id
-  and gm.rel_id = mr.rel_id
-  and gm.group_id = :limit_to_users_in_group_id
-  and [join $where_clause "\nand "]"
+    set query [subst {
+        select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
+        from cc_users cu, group_member_map gm, membership_rels mr
+        where cu.user_id = gm.member_id
+        and gm.rel_id = mr.rel_id
+        and gm.group_id = :limit_to_users_in_group_id
+        and [join $where_clause "\nand "]
+    }]
 
 } else {
-set query "select user_id, email_verified_p, first_names, last_name, email, member_state
-from cc_users
-where [join $where_clause "\nand "]"
+    set query [subst {
+        select user_id, email_verified_p, first_names, last_name, email, member_state
+        from cc_users
+        where [join $where_clause "\nand "]
+    }]
 }
 
 
@@ -163,8 +167,11 @@ set user_search:rowcount $rowcount
 # We are limiting the search to one group - display that group's name
 if { $limit_to_users_in_group_id ne "" 
      && ![regexp {[^0-9]} $limit_to_users_in_group_id] } {
-    set group_name [db_string user_group_name_from_id \
-			"select group_name from user_groups where group_id = :limit_to_users_in_group_id"]
+    set group_name [db_string user_group_name_from_id {
+        select group_name from
+        user_groups
+        where group_id = :limit_to_users_in_group_id
+    }]
     set title "User search in $group_name"
 } else {
     set group_name ""
@@ -174,3 +181,9 @@ if { $limit_to_users_in_group_id ne ""
 set export_authorize [export_ns_set_vars {url} {only_authorized_p}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

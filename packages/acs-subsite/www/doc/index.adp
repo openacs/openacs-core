@@ -1,12 +1,12 @@
 
-<property name="context">{/doc/acs-subsite {Subsite}} {ACS Subsite Documentation}</property>
+<property name="context">{/doc/acs-subsite {ACS Subsite}} {ACS Subsite Documentation}</property>
 <property name="doc(title)">ACS Subsite Documentation</property>
 <master>
+<h1>ACS Subsite Documentation</h1>
 
-<body>
-<h2>ACS Subsite Documentation</h2>
 ACS subsite docs
-<h3>Document overview</h3><table cellpadding="0" cellspacing="0">
+<h2>Document overview</h2>
+<table cellpadding="0" cellspacing="0">
 <tr>
 <td colspan="2"><a href="/doc/subsites-requirements">Overall
 requirements</a></td><td>Overview of the requirements that motivated the design of
@@ -26,7 +26,13 @@ administration</td>
 <td colspan="2"><a href="images">Subsite images</a></td><td>Shows all (hopefully) images available from the subsite
 package</td>
 </tr>
-</table><hr><address><a href="mailto:mbryzek@arsdigita.com">Michael
-Bryzek</a></address><br><font size="-1">$Id: index.html,v 1.2 2005/01/13 13:55:49 jeffd Exp
-$</font><!-- Created: 1/11/2001 -->
-</body>
+</table>
+<h2>Release Notes</h2>
+<p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
+<hr>
+<address><a href="mailto:mbryzek\@arsdigita.com">Michael
+Bryzek</a></address>
+<br>
+<font size="-1">$&zwnj;Id: index.html,v 1.3.2.3 2016/11/19 09:10:54
+gustafn Exp $</font>
+<!-- Created: 1/11/2001 -->

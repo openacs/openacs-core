@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">@doc.title;literal@</property>
+<property name="&doc">doc</property>
 				  
 
 <h1>#acs-subsite.Add_relationship_for_group__group_type#</h1>

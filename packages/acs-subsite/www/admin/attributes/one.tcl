@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     attribute_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     attribute:onerow
@@ -56,3 +56,9 @@ if {$attribute(datatype) eq "enumeration"} {
 set dynamic_p $attribute(dynamic_p)
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

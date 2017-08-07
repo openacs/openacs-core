@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     constraint_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     constraint_name:onevalue
@@ -38,3 +38,9 @@ if { ![db_0or1row select_constraint_props {
 }
 
 set export_vars [export_vars -form {constraint_id return_url}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

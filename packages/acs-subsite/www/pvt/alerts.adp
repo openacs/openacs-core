@@ -2,7 +2,7 @@
 <property name="doc(title)">@title;literal@</property>
 <property name="context">@context;literal@</property>
 
-<if @discussion_forum_alert_p@ eq 1>
+<if @discussion_forum_alert_p;literal@ true>
 
 <h3>#acs-subsite.Your_discussion_alerts#</h3>
 
@@ -12,7 +12,7 @@
        <th>#acs-subsite.Action#</th>
        <th>#acs-subsite.Topic#</th>
        <th>#acs-subsite.Frequency#</th>
-     <if @bboard_keyword_p@ eq 1>
+     <if @bboard_keyword_p;literal@ true>
        <th>#acs-subsite.Keyword#</th>
      </if>
    </tr>
@@ -29,7 +29,7 @@
       </else>
        <td>@topic@</td>
        <td>@frequency@</td>
-     <if @bboard_keyword_p@ eq 1>
+     <if @bboard_keyword_p;literal@ true>
        <td>@keyword@</td>
      </if>
    </tr>
@@ -40,7 +40,7 @@
 
 </if>
 
-<if @classified_email_alert_p@ eq 1>
+<if @classified_email_alert_p;literal@ true>
 
 <h3>#acs-subsite.Your_system_alerts#</h3>
 
@@ -72,7 +72,7 @@
 
 </if>
 
-<if @discussion_forum_alert_p@ eq 0 and @classified_email_alert_p@ eq 0>
+<if @discussion_forum_alert_p;literal@ true and @classified_email_alert_p;literal@ true>
  #acs-subsite.You_have_no_email_alerts#
 </if>
 

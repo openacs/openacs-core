@@ -1,3 +1,8 @@
+ad_library {
+    File procs
+}
+
+
 namespace eval template {}
 namespace eval template::data {}
 namespace eval template::data::transform {}
@@ -5,7 +10,6 @@ namespace eval template::data::validate {}
 namespace eval template {}
 namespace eval template::util {}
 namespace eval template::util::file {}
-
 
 ad_proc -private template::data::transform::file { element_ref } {
     @return the list { file_name temp_file_name content_mime_type }.
@@ -66,3 +70,9 @@ ad_proc -public template::util::file::get_property {
 
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

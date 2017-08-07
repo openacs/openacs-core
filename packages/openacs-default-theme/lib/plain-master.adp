@@ -80,7 +80,7 @@
        </div>
      </if>
 
-     <if @main_content_p@>
+     <if @main_content_p;literal@ true>
        <div id="main">
          <div id="main-content">
            <div class="main-content-padding">
@@ -100,7 +100,7 @@
     TODO: remove this and add a more systematic / package independent way 
     TODO  of getting this content here
   </comment>
-  <if @curriculum_bar_p@ true><include src="/packages/curriculum/lib/bar" /></if>
+  <if @curriculum_bar_p;literal@ true><include src="/packages/curriculum/lib/bar" ></if>
 
   <comment> empty UL gives a validation error for the W3C validator 
   </comment>

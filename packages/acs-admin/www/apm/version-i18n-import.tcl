@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$  
 } {
     version_id:naturalnum,notnull    
-    {return_url {[export_vars -base "version-i18n-index" { version_id }]}}
+    {return_url:localurl {[export_vars -base "version-i18n-index" { version_id }]}}
 }
 
 db_1row package_version_info { 
@@ -24,3 +24,9 @@ set context [list \
 set catalog_dir [lang::catalog::package_catalog_dir $package_key]
 
 lang::catalog::import -package_key $package_key
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

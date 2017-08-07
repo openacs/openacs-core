@@ -35,7 +35,8 @@ begin
       object_type_two		=> 'user',
       role_two			=> 'user',
       min_n_rels_two		=> 0,
-      max_n_rels_two		=> null
+      max_n_rels_two		=> null,
+      composable_p          => 'f'
     );
 
 end;

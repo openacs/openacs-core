@@ -1,13 +1,17 @@
-# Datatype validation for the ArsDigita Templating System
+ad_library {
+    Datatype validation for the ArsDigita Templating System
+
+    @author Karl Goldstein    (karlg@arsdigita.com)
+    
+    @cvs-id $Id$    
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein    (karlg@arsdigita.com)
-#          
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 namespace eval template::data {}
@@ -132,7 +136,7 @@ ad_proc -public template::data::validate::boolean {
   upvar 2 $message_ref message $value_ref value
 
   set result ""
-  set value [string tolower $value]
+  set value [::string tolower $value]
 
   switch $value {
       0 -
@@ -395,7 +399,7 @@ ad_proc -public template::data::validate::textdate {
 	}
     }
     if { [llength $error_msg] > 0 } {
-	set message "[join $error_msg {<br>}]"
+	set message [join $error_msg {<br>}]
         return 0
     } else {
         return 1
@@ -513,3 +517,9 @@ ad_proc -public template::data::validate::time_of_day {
 
   return [template::util::date::validate $value message]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

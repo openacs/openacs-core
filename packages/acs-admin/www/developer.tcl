@@ -9,3 +9,9 @@ ad_page_contract {
 
 set page_title "Developer's Administration"
 set context [list $page_title]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

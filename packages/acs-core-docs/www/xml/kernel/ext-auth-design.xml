@@ -396,7 +396,7 @@ ad_form -name user_add -form {
        }
    }
    # TODO: form builder validation of account_status
-   # We're logged in
+   # We&#39;re logged in
    ad_returnrediredt $return_url
    ad_script_abort
 }
@@ -468,7 +468,7 @@ display auth_message
 </para>
             </listitem>
             <listitem>
-              <para>failed_to_connect: The driver didn't return anything
+              <para>failed_to_connect: The driver didn&#39;t return anything
 meaningful, display error message
 </para>
             </listitem>
@@ -487,7 +487,7 @@ to account_closed, display error message
 </para>
             </listitem>
             <listitem>
-              <para>No match: account_status doesn't match any of the above,
+              <para>No match: account_status doesn&#39;t match any of the above,
 display error message
 </para>
             </listitem>
@@ -510,7 +510,7 @@ reg_message
 </para>
             </listitem>
             <listitem>
-              <para>No match: reg_status doesn't match any of the above,
+              <para>No match: reg_status doesn&#39;t match any of the above,
 display error message
 </para>
             </listitem>
@@ -539,7 +539,7 @@ Password Management API
       <sect3>
         <title>Current Design
 </title>
-        <para>proc "ad_change_password" updates a user's password.
+        <para>proc "ad_change_password" updates a user&#39;s password.
 </para>
         <para>Other password update/retrieval/reset functionality is
 hard-coded in the pages.
@@ -575,7 +575,7 @@ is determined as follows: </para>
 </para>
               </listitem>
               <listitem>
-                <para>Otherwise, if the authority's pwd mgmt driver's
+                <para>Otherwise, if the authority&#39;s pwd mgmt driver&#39;s
 CanRetrievePassword or CanRetrievePassword returns "Yes", we offer
 a link to the OpenACS forgotten-password page, query vars
 authority_id, maybe username.
@@ -607,17 +607,17 @@ contract).
 </para>
                   </listitem>
                   <listitem>
-                    <para>"My Account" will provide a link to changing the user's
+                    <para>"My Account" will provide a link to changing the user&#39;s
 password as follows: </para>
                     <orderedlist>
                       <listitem>
-                        <para>If the authority has a 'change_pwd_url' defined, we'll
+                        <para>If the authority has a 'change_pwd_url' defined, we&#39;ll
 offer a "Change my password" link that goes there.
 </para>
                       </listitem>
                       <listitem>
-                        <para>Otherwise, if the authority driver's CanChangePassword
-returns "Yes", we'll offer a "Change my password" link that goes to
+                        <para>Otherwise, if the authority driver&#39;s CanChangePassword
+returns "Yes", we&#39;ll offer a "Change my password" link that goes to
 the normal OpenACS change password page.
 </para>
                       </listitem>
@@ -648,8 +648,8 @@ ad_proc -public auth::password::get_change_url {
     {-user_id:required}
 } {
     Returns the URL to redirect to for changing passwords. If the
-    user's authority has a "change_pwd_url" set, it'll return that,
-    otherwise it'll return a link to /user/password-update under the
+    user&#39;s authority has a "change_pwd_url" set, it&#39;ll return that,
+    otherwise it&#39;ll return a link to /user/password-update under the
     nearest subsite.
     @param user_id The ID of the user whose password you want to change.
     @return A URL that can be linked to for changing password.
@@ -658,20 +658,20 @@ ad_proc -public auth::password::can_change_p {
     {-user_id:required}
 } {
     Returns whether the given user change password. 
-    This depends on the user's authority and the configuration of that authority. 
+    This depends on the user&#39;s authority and the configuration of that authority. 
     
     @param user_id The ID of the user whose password you want to change.
     @return 1 if the user can change password, 0 otherwise.
 } {
     # Implementation note:
-    # Calls auth::password::CanChangePassword(authority_id) for the user's authority.
+    # Calls auth::password::CanChangePassword(authority_id) for the user&#39;s authority.
 }
 ad_proc -public auth::password::change {
     {-user_id:required}
     {-old_password:required}
     {-new_password:required}
 } {
-    Change the user's password.
+    Change the user&#39;s password.
     @param user_id      The ID of the user whose password you want to change.
     @param old_password The current password of that user. This is required for security purposes.
     
@@ -685,14 +685,14 @@ ad_proc -public auth::password::change {
     &lt;/ul&gt;
 } {
     # Implementation note
-    # Calls auth::password::ChangePassword(authority_id, username, old_password, new_password) for the user's authority.
+    # Calls auth::password::ChangePassword(authority_id, username, old_password, new_password) for the user&#39;s authority.
 }
 ad_proc -public auth::password::get_forgotten_url {
     {-authority_id:required}
 } { 
     Returns the URL to redirect to for forgotten passwords. If the
-    user's authority has a "forgotten_pwd_url" set, it'll return that,
-    otherwise it'll return a link to /register/email-password under the
+    user&#39;s authority has a "forgotten_pwd_url" set, it&#39;ll return that,
+    otherwise it&#39;ll return a link to /register/email-password under the
     nearest subsite.
         
     @param authority_id The ID of the authority that the user is trying to log into.
@@ -707,12 +707,12 @@ ad_proc -public auth::password::can_retrieve_p {
     @return 1 if the authority allows retrieving passwords, 0 otherwise.
 } {
     # Implementation note
-    # Calls auth::password::CanRetrievePassword(authority_id) for the user's authority.
+    # Calls auth::password::CanRetrievePassword(authority_id) for the user&#39;s authority.
 }
 ad_proc -public auth::password::retrieve {
     {-user_id:required}
 } {
-    Retrieve the user's password.
+    Retrieve the user&#39;s password.
     @param user_id      The ID of the user whose password you want to retrieve.
     @return An array list with the following entries:
     &lt;ul&gt;
@@ -725,7 +725,7 @@ ad_proc -public auth::password::retrieve {
     &lt;/ul&gt;
 } {
     # Implementation note
-    # Calls auth::password::RetrievePassword(authority_id, username) for the user's authority.
+    # Calls auth::password::RetrievePassword(authority_id, username) for the user&#39;s authority.
 }
 ad_proc -public auth::password::can_reset_p {
     {-authority_id:required}
@@ -736,12 +736,12 @@ ad_proc -public auth::password::can_reset_p {
     @return 1 if the authority allows resetting passwords, 0 otherwise.
 } {
     # Implementation note
-    # Calls auth::password::CanResetPassword(authority_id) for the user's authority.
+    # Calls auth::password::CanResetPassword(authority_id) for the user&#39;s authority.
 }
 ad_proc -public auth::password::reset {
     {-user_id:required}
 } {
-    Reset the user's password, which means setting it to a new
+    Reset the user&#39;s password, which means setting it to a new
     randomly generated password and informing the user of that new
     password.
     @param user_id      The ID of the user whose password you want to reset.
@@ -760,7 +760,7 @@ ad_proc -public auth::password::reset {
     &lt;/ul&gt;
 } { 
     # Implementation note
-    # Calls auth::password::ResetPassword(authority_id, username) for the user's authority.
+    # Calls auth::password::ResetPassword(authority_id, username) for the user&#39;s authority.
 }
 </programlisting>
 
@@ -1324,7 +1324,7 @@ PAM, the PAM authentication driver will be invoked.
 </title>
         <para>Will implement the authentication service contract.
 </para>
-        <para>Parameters: Don't know.
+        <para>Parameters: Don&#39;t know.
 </para>
       </sect3>
       <sect3>
@@ -1333,7 +1333,7 @@ PAM, the PAM authentication driver will be invoked.
         <para>Mat Kovach will implement a thread-safe ns_pam AOLserver
 module in C, which will provide a Tcl interface to PAM.
 </para>
-        <para>We'll write the service contract implementation in Tcl as a
+        <para>We&#39;ll write the service contract implementation in Tcl as a
 wrapper for the ns_pam calls.
 </para>
       </sect3>
@@ -1398,18 +1398,18 @@ LDAP, the LDAP authentication driver will be invoked.
 </title>
         <para>Will implement the authentication service contract.
 </para>
-        <para>Parameters: Don't know.
+        <para>Parameters: Don&#39;t know.
 </para>
       </sect3>
       <sect3>
         <title>Internal Design
 </title>
-        <para>We'd look at the extisting ns_ldap module, or we'd find
+        <para>We&#39;d look at the extisting ns_ldap module, or we&#39;d find
 someone to implement a new thread-safe ns_ldap AOLserver module in
 C, which will provide a Tcl interface to the parts of LDAP which we
 need.
 </para>
-        <para>We'll write the service contract implementation in Tcl as a
+        <para>We&#39;ll write the service contract implementation in Tcl as a
 wrapper for the ns_ldap calls.
 </para>
       </sect3>
@@ -1637,7 +1637,7 @@ set reset_password_p [auth::password::CanResetPassword -driver $driver]
 </programlisting>
         If $retrieve_password_p and $reset_password_p is true, this text
         will be displayed: 
-        <para>"If you've forgotten your password, you can
+        <para>"If you&#39;ve forgotten your password, you can
 <ulink url="email-password?user_id=blahblah">ask this server to
 reset your password and email a new randomly generated password to
 you
@@ -1674,7 +1674,7 @@ $body
     return
 }
 </programlisting>
-        We'll want to add a check for CanChangePassword in /pvt/home. 
+        We&#39;ll want to add a check for CanChangePassword in /pvt/home. 
       </sect3>
       <sect3>
         <title>Estimate
@@ -1709,7 +1709,7 @@ received over HTTPS.
           </listitem>
           <listitem>
             <para>If images on the login page are over HTTP and not HTTPS,
-browsers will warn that you're seeing unsecure items as part of a
+browsers will warn that you&#39;re seeing unsecure items as part of a
 secure web page, which is annoying and unprofessional.
 </para>
           </listitem>
@@ -1743,7 +1743,7 @@ document.
         <itemizedlist>
           <listitem>
             <para>acs-kernel.RegisterRestrictToSSLFilters: If set to 0, we
-don't restrict any URLs to HTTPs.
+don&#39;t restrict any URLs to HTTPs.
 </para>
           </listitem>
           <listitem>
@@ -1831,7 +1831,7 @@ test what happens.
       <sect3>
         <title>Internal Design
 </title>
-        We'll first want to check whether changing the password is allowed:
+        We&#39;ll first want to check whether changing the password is allowed:
 
         <programlisting>
 set user_id [ad_conn user_id]
@@ -1839,7 +1839,7 @@ set authority [auth::authority -user_id $user_id]
 set driver [auth::get_driver -authority $authority]
 set change_password_p [auth::password::CanChangePassword -driver $driver]
 </programlisting>
-        If $change_password_p is true, we'll display the "Change my
+        If $change_password_p is true, we&#39;ll display the "Change my
         password" link on /pvt/home. update-password would look something
         like this: 
         <programlisting>
@@ -1905,7 +1905,7 @@ certain number of days. No password history, though.
 </para>
           </listitem>
           <listitem>
-            <para>Approval expiration: If a user is approved but doesn't
+            <para>Approval expiration: If a user is approved but doesn&#39;t
 log on before a certain number of days, his approval will
 expire.
 </para>
@@ -1943,7 +1943,7 @@ around June 6).
     </sect2>
 
     <sect2>
-      <title>Who's online list
+      <title>Who&#39;s online list
 </title>
       <sect3>
         <title>Execution Story
@@ -1956,9 +1956,9 @@ around June 6).
 </title>
         <para>We keep a record of which authenticated users have requested
 pags on the site in the last x minutes (typically about 5), and
-thus are considered to be currently online. We've already made the
+thus are considered to be currently online. We&#39;ve already made the
 changes necessary to security-procs.tcl to do this on an earlier
-project, but haven't quite finished the work and put it back into
+project, but haven&#39;t quite finished the work and put it back into
 the tree.
 </para>
         Lars? 
@@ -1985,9 +1985,9 @@ AUTH #28: Create Service Contract for Batch Sync
       <sect3>
         <title>Status
 </title>
-        <para>NOTE: We'll need to keep a pretty close transaction log of
+        <para>NOTE: We&#39;ll need to keep a pretty close transaction log of
 any action taken during batch sync, and also offer a mechanism for
-storing transactions that couldn't be completed for some reason,
+storing transactions that couldn&#39;t be completed for some reason,
 e.g. email address already taken, etc., email the admin, offer a
 list of transactions that failed for manual resolution by an
 admin.
@@ -2000,7 +2000,7 @@ Do/Notes
         <para>Performance criteria: Nightly batch run should be able to
 complete within 3 hours with 10,000 users.
 </para>
-        <para>We'll want to design an API for an incremental or snapshot
+        <para>We&#39;ll want to design an API for an incremental or snapshot
 run to call, which takes care of all the updating, logging, error
 handling, emailing admins, etc.
 </para>
@@ -2008,7 +2008,7 @@ handling, emailing admins, etc.
 our clients.
 </para>
         <para>We might need a source/ID column in the users table to
-identify where they're imported from for doing updates,
+identify where they&#39;re imported from for doing updates,
 particularly if importing from multiple sources (or when some users
 are local.)
 </para>
@@ -2025,7 +2025,7 @@ are local.)
         <para>This is executed in background thread, typically
 nightly.
 </para>
-        <para>There's also a link from the authority administration page to
+        <para>There&#39;s also a link from the authority administration page to
 run the batch synchronization immediately.
 </para>
         <para>The process runs like this:
@@ -2088,7 +2088,7 @@ robustness.
 </title>
         <para>NOTE: Do we really want to do this as service contracts? We
 might be better off getting one implementation running, and only do
-the service contract when we're certain what it would look
+the service contract when we&#39;re certain what it would look
 like.
 </para>
         <para>TODO: Look at how Blackboard and other systems implements
@@ -2097,7 +2097,7 @@ system. Which enterprise servers already support the IMS Enterprise
 specification?
 </para>
         <para>TODO: Find out if Greenpeace needs an different exchange
-format from IMS Enterprise, given that they're not in the
+format from IMS Enterprise, given that they&#39;re not in the
 University business.
 </para>
         <para>Service contract for retrieving the document:
@@ -2132,7 +2132,7 @@ University business.
         Not sure what parameters would be.
 </programlisting>
 
-        <para>It looks like we'll use the IMS standard for formatting of
+        <para>It looks like we&#39;ll use the IMS standard for formatting of
 the doucment, but not so
 </para>
       </sect3>
@@ -2148,8 +2148,8 @@ before the leap; IMS Enterprise 1.1
 IMS Enterprise 1.1 (current version) does not address the
 communication model, which is critically missing for real seamless
 interoperability. IMS Enterprise 2.0 will address this, but
-Blackboard, who's influential in the IMS committee, is adopting
-OKI's programming interrfaces for this.
+Blackboard, who&#39;s influential in the IMS committee, is adopting
+OKI&#39;s programming interrfaces for this.
 </para>
           </listitem>
           <listitem>
@@ -2219,7 +2219,7 @@ Marklund
       <sect3>
         <title>External Design
 </title>
-        We'll want an API that lets us 
+        We&#39;ll want an API that lets us 
         <itemizedlist>
           <listitem>
             <para>add authorities: auth::authority::new
@@ -2434,7 +2434,7 @@ contract implementation when its methods get called.
       <sect3>
         <title>External Design
 </title>
-        <para>We're considering whether to implement a very simple solution
+        <para>We&#39;re considering whether to implement a very simple solution
 a' la current package parameters, or a general configuration
 solution as outlined in the
 <ulink url="http://www.collaboraid.biz/developer/config-spec">Configurator

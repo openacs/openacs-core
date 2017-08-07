@@ -338,7 +338,7 @@ ad_proc -private lang::catalog::export_to_file {
         array set old_filename_info [apm_parse_catalog_path $old_catalog_file]
 
         if {$old_filename_info(locale) eq $filename_info(locale)} {
-            file delete $old_catalog_file
+            file delete -- $old_catalog_file
         }
     }
 
@@ -356,9 +356,9 @@ ad_proc -private lang::catalog::export_to_file {
    # Loop over and write the messages to the file
    set message_count "0"
    foreach message_key $message_key_list {
-       puts $catalog_file_id "  <msg key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $messages_array($message_key)]</msg>"
+       puts $catalog_file_id "  <msg key=\"[ns_quotehtml $message_key]\">[ns_quotehtml $messages_array($message_key)]</msg>"
        if { ([info exists descriptions_array($message_key)] && $descriptions_array($message_key) ne "") && $filename_info(locale) eq "en_US" } {
-           puts $catalog_file_id "  <description key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $descriptions_array($message_key)]</description>\n"
+           puts $catalog_file_id "  <description key=\"[ns_quotehtml $message_key]\">[ns_quotehtml $descriptions_array($message_key)]</description>\n"
        }
        incr message_count
    }
@@ -583,11 +583,11 @@ ad_proc -private lang::catalog::import_from_file {
     }
 
     # Get the messages array, and the list of message keys to iterate over
-    array set messages_array [lindex [array get catalog_array messages] 1]
+    array set messages_array $catalog_array(messages)
     set messages_array_names [array names messages_array]
 
     # Get the descriptions array
-    array set descriptions_array [lindex [array get catalog_array descriptions] 1]
+    array set descriptions_array $catalog_array(descriptions)
 
     ns_log Notice "Loading messages in file $file_path"
 
@@ -606,8 +606,7 @@ ad_proc -private lang::catalog::import_from_file {
                     -message_key $message_key \
                     -description $descriptions_array($message_key)
             } {
-                global errorInfo
-                ns_log Error "Registering description for key ${package_key}.${message_key} in locale $locale failed with error message \"$errmsg\"\n\n$errorInfo"
+                ns_log Error "Registering description for key ${package_key}.${message_key} in locale $locale failed with error message \"$errmsg\"\n\n$::errorInfo"
             }
         }    
     }
@@ -1023,9 +1022,8 @@ ad_proc -public lang::catalog::import {
             # Use a catch so that parse failure of one file doesn't cause the import of all files to fail
             array unset loop_message_count
             if { [catch { array set loop_message_count [lang::catalog::import_from_file $file_path] } errMsg] } {
-                global errorInfo
                 
-                ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$errorInfo\n\n"
+                ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$::errorInfo\n\n"
             } else {
                 foreach action [array names loop_message_count] {
                     if { $action ne "errors" } {
@@ -1146,9 +1144,9 @@ ad_proc -private lang::catalog::translate {} {
     set default_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
     db_foreach get_untranslated_messages {} {    
         foreach lang [list es_ES fr_FR de_DE] {
-            if [catch {
+            if {[catch {
                 set translated_message [lang_babel_translate $message en_$lang]
-            } errmsg] {
+            } errmsg]} {
                 ns_log Notice "Error translating $message into $lang: $errmsg"
             } else {
                 lang::message::register $lang $package_key $message_key $translated_message
@@ -1156,3 +1154,9 @@ ad_proc -private lang::catalog::translate {} {
         }
     }                 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

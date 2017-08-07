@@ -31,11 +31,7 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
     if { [apm_package_upgrade_p $package_key $final_version_name] == 1} {
         ns_log Debug "Upgrading package [string totitle $version(package-name)] to $final_version_name."
         set upgrade_p 1
-        set initial_version_name [db_string apm_package_upgrade_from {
-            select version_name from apm_package_versions
-            where package_key = :package_key
-            and version_id = apm_package.highest_version(:package_key)
-        } -default ""]
+        set initial_version_name [db_string apm_package_upgrade_from {} -default ""]
     } else {
         set upgrade_p 0
         set initial_version_name ""

@@ -16,7 +16,7 @@
 
       <para>To run a database on a different machine than the
       webserver requires changes to the database configuration file
-      and access control file, and to the OpenACS service's
+      and access control file, and to the OpenACS service&#39;s
       configuration file.</para>
       <itemizedlist>
         <listitem>
@@ -33,7 +33,7 @@
           controlled ... (add notes from forum post) </para>
         </listitem>
         <listitem>
-          <para>Change the OpenACS service's configuration file to
+          <para>Change the OpenACS service&#39;s configuration file to
           point to the remote database.  Edit
           <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/config.tcl</computeroutput>
           and change</para>
@@ -90,8 +90,8 @@
       <para>
         Dropping a PostgreSQL tablespace is easy. You have to stop any
         AOLserver instances that are using the database that you wish to
-        drop. If you're using daemontools, this is simple, just use the
-        'down' flag (-d). If you're using inittab, you have to comment out
+        drop. If you&#39;re using daemontools, this is simple, just use the
+        'down' flag (-d). If you&#39;re using inittab, you have to comment out
         your server in <computeroutput>/etc/inittab</computeroutput>,
         reread the inittab with <computeroutput>/sbin/init
         q</computeroutput>, and then <computeroutput>restart-aolserver
@@ -114,18 +114,18 @@ DROP DATABASE</programlisting>
       data can make a tremendous difference in the execution speed of
       queries. This command can also be run from cron, but it probably makes
       more sense to run this command as part of your nightly backup
-      procedure - if "vacuum" is going to screw up the database, you'd
-      prefer it to happen immediately after (not before!) you've made a
+      procedure - if "vacuum" is going to screw up the database, you&#39;d
+      prefer it to happen immediately after (not before!) you&#39;ve made a
       backup! The "vacuum" command is very reliable, but conservatism is
-      the key to good system management. So, if you're using the export
-      procedure described above, you don't need to do this extra
+      the key to good system management. So, if you&#39;re using the export
+      procedure described above, you don&#39;t need to do this extra
       step.
     </para>
 
     <para>Edit your crontab:</para>
     <programlisting>[joeuser ~]$ <userinput>crontab -e</userinput></programlisting>
 
-    <para>We'll set vacuum up to run nightly at 1 AM. Add the following
+    <para>We&#39;ll set vacuum up to run nightly at 1 AM. Add the following
     line:</para>
     <programlisting>
 0 1 * * * /usr/local/pgsql/bin/vacuumdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></programlisting>

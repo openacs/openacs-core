@@ -3,7 +3,7 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    {return_url "" }
+    {return_url:localurl "" }
     {user_id:naturalnum ""}
 } -properties {
     context:onevalue
@@ -77,3 +77,9 @@ ad_form -name "portrait_erase" -export {user_id return_url} -form {} -on_submit 
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

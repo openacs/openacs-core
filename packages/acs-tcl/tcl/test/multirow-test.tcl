@@ -7,3 +7,9 @@ ad_page_contract {
 }
 
 ad_context_bar_multirow -multirow test_rows -from_node $from_node -node_id $node_id $context
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

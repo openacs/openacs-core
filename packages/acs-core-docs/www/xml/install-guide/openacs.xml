@@ -16,29 +16,28 @@
     <para>
       AOLserver needs to be started as the root user if you want to use
       port 80. Once it starts, though, it will drop the root privileges and
-      run as another user, which you must specify on the command line. It's
+      run as another user, which you must specify on the command line. It&#39;s
       important that this user has as few privileges as possible. Why?
-      Because if an intruder somehow breaks in through AOLserver, you don't
+      Because if an intruder somehow breaks in through AOLserver, you don&#39;t
       want her to have any ability to do damage to the rest of your
       server.</para>
 
         <para>At the same time, AOLserver needs to have write access to
       some files on your system in order for OpenACS to function
-      properly. So, we'll run AOLserver with a different user account
+      properly. So, we&#39;ll run AOLserver with a different user account
       for each different service.  A service name should be a single
       word, <emphasis>letters and numbers only</emphasis>. If the name
       of your site is one word, that would be a good choice. For
       example &quot;<replaceable>$OPENACS_SERVICE_NAME</replaceable>&quot; might be the service name for the
-      <ulink url="http://$OPENACS_SERVICE_NAME.net/"><replaceable>$OPENACS_SERVICE_NAME</replaceable>.net</ulink>
-      community.</para>
+      <replaceable>$OPENACS_SERVICE_NAME</replaceable>.net community.</para>
 
-        <para>We'll leave the password blank, which prevents login by
+        <para>We&#39;ll leave the password blank, which prevents login by
       password, for increased security.  The only way to log in will
       be with ssh certificates.  The only people who should log in are
       developers for that specific instance.  Add this user, and put
       it in the <computeroutput><replaceable>$OPENACS_SERVICE_NAME</replaceable></computeroutput> group so that it
       can use database and server commands associated with that group.
-      (If you don't know how to do this, type 
+      (If you don&#39;t know how to do this, type 
       <userinput>man usermod</userinput>. You can type
       <userinput>groups</userinput> to find out which groups a user
       is a part of)
@@ -96,7 +95,7 @@ chmod 770 /var/lib/aolserver</action></screen>
         <para>Get the install script from CVS.  It is located within
         the main cvs tree, at /etc/install.  Use anonymous CVS
         checkout to get that directory in the home directory of the
-        service's dedicated user.  We put it there so that it is not
+        service&#39;s dedicated user.  We put it there so that it is not
         overwritten when we do the main CVS checkout to the target
         location.</para>
         <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
@@ -110,7 +109,7 @@ U install/tcl/user-procs.tcl
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd install</userinput>
 [$OPENACS_SERVICE_NAME install]$ <userinput>emacs install.tcl</userinput>
 </screen>
-        <para>Edit the installation configuration file, <computeroutput>/home/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/install/install.tcl</computeroutput> and update the site-specific values, such as the new service's IP address and name, which will be written into the new service's <computeroutput>config.tcl</computeroutput> file.  If your system is different from the one described in the previous sections, check the file paths as well.  Set <computeroutput>do_checkout=yes</computeroutput> to create a new OpenACS site directly from a CVS checkout, or <computeroutput>=no</computeroutput> if you have a fully configured site and just want to rebuild it (drop and recreate the database and repeat the installation).  If you have followed a stock installation, the default configuration will work without changes and will install an OpenACS site at 127.0.0.1:8000.</para>
+        <para>Edit the installation configuration file, <computeroutput>/home/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/install/install.tcl</computeroutput> and update the site-specific values, such as the new service&#39;s IP address and name, which will be written into the new service&#39;s <computeroutput>config.tcl</computeroutput> file.  If your system is different from the one described in the previous sections, check the file paths as well.  Set <computeroutput>do_checkout=yes</computeroutput> to create a new OpenACS site directly from a CVS checkout, or <computeroutput>=no</computeroutput> if you have a fully configured site and just want to rebuild it (drop and recreate the database and repeat the installation).  If you have followed a stock installation, the default configuration will work without changes and will install an OpenACS site at 127.0.0.1:8000.</para>
     <para>Run the install script <computeroutput>install.sh</computeroutput> as root:</para>
         <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>exit</userinput> 
 [root root]# <userinput>sh /home/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/install/install.sh</userinput>
@@ -172,7 +171,7 @@ exit</action></screen>
           <listitem>
             <formalpara id="install-openacs-prepare-oracle">
               <title>Prepare Oracle for OpenACS</title>
-              <para>If you won't be using Oracle, skip to <xref
+              <para>If you won&#39;t be using Oracle, skip to <xref
                   linkend="install-openacs-prepare-postgres"/></para>
             </formalpara>
             <para>
@@ -288,7 +287,7 @@ SVRMGR&gt; <userinput>create tablespace <replaceable>$OPENACS_SERVICE_NAME</repl
 
               <listitem><para> 
 		  Create a database user for this service. Give the
-		  user access to the tablespace and rights to connect. We'll use
+		  user access to the tablespace and rights to connect. We&#39;ll use
 		  <computeroutput><replaceable>$OPENACS_SERVICE_NAMEpassword</replaceable></computeroutput> as our password.</para>
 
                 <para>
@@ -344,7 +343,7 @@ SQL&gt; <userinput>exit;</userinput></programlisting>
               <listitem id="create-service-db-user">
                 <para>PostgreSQL:</para>
                 <para>Create a user in the database matching the service
-            name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</para>
+            name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the OpenACS system accounts on a machine has full access to all postgresql databases on that machine.</para>
                 <screen>[root root]# <userinput>su - postgres</userinput>
 [postgres pgsql]$ <userinput>createuser -a -d <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 CREATE USER
@@ -374,7 +373,7 @@ CREATE DATABASE
 
                 <para>Depending on your distribution, you may receive
                 email when the crontab items are executed. If you
-                don't want to receive email for those crontab items,
+                don&#39;t want to receive email for those crontab items,
                 you can add <computeroutput>&gt; /dev/null
                 2>&amp;1</computeroutput> to the end of each crontab
                 line</para>
@@ -415,12 +414,12 @@ CREATE DATABASE
 [$OPENACS_SERVICE_NAME etc]$ <userinput>emacs config.tcl</userinput>
 </screen>
             <para>
-	  You can continue without changing any values in the file.  However, if you don't change <computeroutput>address</computeroutput> to match the computer's ip address, you won't be able to browse to your server from other machines.
+	  You can continue without changing any values in the file.  However, if you don&#39;t change <computeroutput>address</computeroutput> to match the computer&#39;s ip address, you won&#39;t be able to browse to your server from other machines.
 	</para>
             
             <itemizedlist>
               <listitem><para><emphasis>httpport</emphasis> - If you want your
-		  server on a different port, enter it here.  The Reference Platform port is 8000, which is suitable for development use.  Port 80 is the standard http port - it's the port used by your browser when you enter http://yourserver.test.  So you should use port 80 for your production site.</para></listitem>
+		  server on a different port, enter it here.  The Reference Platform port is 8000, which is suitable for development use.  Port 80 is the standard http port - it&#39;s the port used by your browser when you enter http://yourserver.test.  So you should use port 80 for your production site.</para></listitem>
               
               <listitem>
                 <para><emphasis>httpsport</emphasis> - This is the
@@ -496,7 +495,7 @@ CREATE DATABASE
 	  the command line via <computeroutput>-u
 	  <replaceable>501</replaceable> -g
 	  <replaceable>502</replaceable></computeroutput>.    In AOLserver 4, you must also send a <computeroutput>-b</computeroutput> flag.  Do this by editing the <computeroutput>run</computeroutput> file as indicated in the comments.  </para>
-          <para>If you are root then killall will affect all OpenACS services on the machine, so if there's more than one you'll have to do <computeroutput>ps -auxw | grep
+          <para>If you are root then killall will affect all OpenACS services on the machine, so if there&#39;s more than one you&#39;ll have to do <computeroutput>ps -auxw | grep
 	  nsd</computeroutput> and selectively kill by job number.</para>
         <screen>[$OPENACS_SERVICE_NAME etc]$ <userinput>killall nsd</userinput>
 nsd: no process killed
@@ -518,12 +517,12 @@ nsd: no process killed
 
 	<para>
 
-	  If you don't see the login page, view your error log
+	  If you don&#39;t see the login page, view your error log
 	  (<computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/log/<replaceable>$OPENACS_SERVICE_NAME</replaceable>-error.log</computeroutput>)
 	  to make sure the service is starting without any
 	  problems. The most common errors here are trying to start a
 	  port 80 server while not root, failing to connect because of
-	  a firewall, and aolserver failing to start due to
+	  a firewall, and AOLserver failing to start due to
 	  permissions errors or missing files.  If you need to make
 	  changes, don&#39;t forget to kill any running servers with
 	  <userinput>killall nsd</userinput>.
@@ -540,7 +539,7 @@ nsd: no process killed
           <title>Configure a Service with the OpenACS
           Installer</title>
           <para>
-	  Now that you've got AOLserver up and running, let's install OpenACS
+	  Now that you&#39;ve got AOLserver up and running, let&#39;s install OpenACS
 	  &version;.
 	</para>
         </formalpara>
@@ -562,7 +561,7 @@ nsd: no process killed
 		  The next page shows the results of loading the OpenACS Kernel
 		  data model - be prepared to wait a few minutes as it works. You
 		  should see a string of output messages from the database as the
-		  datamodel is created.  You'll see the line:
+		  datamodel is created.  You&#39;ll see the line:
 
 		</para>
 
@@ -628,7 +627,16 @@ Loading package .info files ... this will take a few minutes</programlisting>
 
   <sect2 id="install-from-cvs">
     <title>Installation Option 3: Install from CVS</title>
-    <para>If you want to track fresh code developments inbetween releases, or you are an OpenACS core developer, you may want to install from CVS.  This is identical to Option 2 except that you get the files from CVS instead of the tarball: <ulink url="http://openacs.org/4/checkout">CVS Checkout Instructions</ulink>.  So, instead of <computeroutput><userinput>tar xzf /var/tmp/&tarballpath;.tgz</userinput></computeroutput>, <computeroutput><userinput>cvs -z3 -d :pserver:anonymous@openacs.org:/cvsroot co acs-core</userinput></computeroutput>.</para>
+    <para>If you want to track fresh code developments between
+    releases, or you are an OpenACS core developer, you may want to
+    install from CVS.  This is identical to Option 2 except that you
+    get the files from CVS instead of the tarball: <ulink
+    url="/xowiki/Get_the_Code">CVS Checkout Instructions</ulink>.  In short,
+    instead of <computeroutput><userinput>tar xzf
+    /var/tmp/&tarballpath;.tgz</userinput></computeroutput>, use
+    <computeroutput><userinput>cvs -z3 -d
+    :pserver:anonymous@openacs.org:/cvsroot co
+    acs-core</userinput></computeroutput> to obtain an ACS core installation.</para>
   </sect2>
   <sect2 id="install-next-steps">
     <title>Next Steps</title>
@@ -663,7 +671,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
         <para>Set up database environment variables for the site
 	user.  Depending on how you installed Oracle or PostGreSQL, these settings may be necessary for working with the
 	database while logged in as the service user.  They do not
-	directly affect the service's run-time connection with the
+	directly affect the service&#39;s run-time connection with the
 	database, because those environmental variables are set by the
 	wrapper scripts nsd-postgres and nsd-oracle.</para>
         
@@ -679,7 +687,7 @@ export PATH=$PATH:/usr/local/pgsql/bin</programlisting>
           <listitem>
             <para>Oracle.  These environment variables are specific for a local Oracle
       installation communicating via IPC. If you are connecting to a remote
-      Oracle installation, you'll need to adjust these appropriately. Also,
+      Oracle installation, you&#39;ll need to adjust these appropriately. Also,
       make sure that the '8.1.7' matches your Oracle version.
 </para>
             <programlisting>export ORACLE_BASE=/ora8/m01/app/oracle

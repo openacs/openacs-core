@@ -11,7 +11,7 @@ Otherwise, please specify a filesystem location for the packages you want to ins
 You can also copy the extracted package files directly into the <code>@acs::rootdir@/packages/</code> directory if you prefer.
 <p>
 
-Load a package from the <tt>.apm</tt> file at this URL:
+Load a package from the <kbd>.apm</kbd> file at this URL:
 <blockquote>http:// <input name="url" size="50"></blockquote>
 <p>
 Specify a local path including a filename for the APM file or a directory containing several APM files.<p>

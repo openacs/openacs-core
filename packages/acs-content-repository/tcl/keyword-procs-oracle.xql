@@ -37,14 +37,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="cr::keyword::item_unassign.item_unassign">
-        <querytext>
-            begin
-                 content_keyword.item_unassign(:item_id, :keyword_id);
-            end;
-        </querytext>
-    </fullquery>
-
     <fullquery name="cr::keyword::item_assign.keyword_assign">
         <querytext>
             begin

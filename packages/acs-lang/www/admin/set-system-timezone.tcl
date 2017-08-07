@@ -129,7 +129,12 @@ if { [info exists utc_epoch] } {
         }
     } {
         # Didn't work, too bad
-        global errorInfo
-        error $errmsg $errorInfo
+        error $errmsg $::errorInfo
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

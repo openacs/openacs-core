@@ -7,7 +7,7 @@
 
 <formtemplate id="lookup"></formtemplate>
 
-<if @message_p@ true>
+<if @message_p;literal@ true>
   <h2>#acs-lang.Translated_Message#</h2>
   <p>@message@</p>
 </if>

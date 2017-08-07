@@ -1,10 +1,11 @@
 ad_page_contract {
     @cvs-id $Id$
 } {
-    testcase_id:naturalnum,notnull
-    package_key:nohtml
+    testcase_id:word,notnull
+    package_key:token
     {showsource:boolean 0}
     {quiet:boolean 1}
+    {return_url ""}
 } -properties {
     title:onevalue
     context_bar:onevalue
@@ -85,7 +86,7 @@ if {[llength $testcase_bodys] == 0} {
     #
     # Work out the URL for this directory (stripping off the file element).
     #
-    set url "[ad_conn url]"
+    set url [ad_conn url]
     regexp {(.*)/[^/]*} $url {\\1} url
     append url "/component?package_key=${package_key}"
 
@@ -106,7 +107,11 @@ set resource_file_url [export_vars -base init-file-resource {
     {absolute_file_path $testcase_file}
 }]
 
-set return_url [export_vars -base . { { view_by testcase } quiet { by_package_key $package_key } }]
+set rerun_url [export_vars -base rerun {testcase_id package_key quiet {return_url [ad_return_url]}}]
+
+if {$return_url eq ""} {
+  set return_url [export_vars -base . { { view_by testcase } quiet { by_package_key $package_key } }]
+}
 
 set quiet_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=1"
 set verbose_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=0"
@@ -130,3 +135,9 @@ th {
 "
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

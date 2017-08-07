@@ -40,38 +40,39 @@ See also: content_revision, content_folder
 
 
 <a name="api"><h3>API</h3></a>
+<ul>
     <li><font size="+1">Function: </font>content_item.get_content_type
 
     <p>Retrieve the content type of this item. Only objects of this type may be
 used as revisions for the item.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The content type of the item</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The content type of the item</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the content type is to be retrieved
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_content_type (
   item_id     in cr_items.item_id%TYPE
 ) return cr_items.content_type%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -84,32 +85,32 @@ function get_content_type (
     <p>Retrieve the parent of the given item
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The id of the parent for this item</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The id of the parent for this item</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the parent is to be retrieved
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_context (
   item_id	in cr_items.item_id%TYPE
 ) return acs_objects.context_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -125,22 +126,22 @@ extensions are allowed in content item names and extensions are stripped when
 looking up content items)
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The id of the item with the given path, or null if no such item exists</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The id of the item with the given path, or null if no such item exists</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_path:</th>
+              <tr><th align="right" valign="top">item_path:</th>
                   <td>&nbsp;&nbsp;</td><td>The path to be resolved
 </td></tr>
             
-              <tr><th align=right valign=top>root_folder_id:</th>
+              <tr><th align="right" valign="top">root_folder_id:</th>
                   <td>&nbsp;&nbsp;</td><td>Starts path resolution from this folder. Defaults to
 the root of the sitemap
 </td></tr>
@@ -148,18 +149,18 @@ the root of the sitemap
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_id (
   item_path   in varchar2,
   root_folder_id in cr_items.item_id%TYPE default c_root_folder_id
 ) return cr_items.item_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.get_path</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.get_path</td></tr>
       
     </table>
 
@@ -172,36 +173,36 @@ function get_id (
 revision)
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The id of the latest revision for this item, or null if no revisions
+        <tr><th align="left">Returns:</th><td align="left">The id of the latest revision for this item, or null if no revisions
 exist</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the latest revision is to be retrieved
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_latest_revision (
   item_id    in cr_items.item_id%TYPE
 ) return cr_revisions.revision_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.get_live_revision</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.get_live_revision</td></tr>
       
     </table>
 
@@ -217,34 +218,34 @@ function get_latest_revision (
     thus more efficient in many cases to join against
     <code>cr_items</code> and retrieve the value directly.</p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Returns:</th><td align=left>The id of the live revision for this item, or null if no live revision
+        <tr><th align="left">Returns:</th><td align="left">The id of the live revision for this item, or null if no live revision
 exists</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the live revision is to be retrieved
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_live_revision (
   item_id   in cr_items.item_id%TYPE
 ) return cr_revisions.revision_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.set_live_revision, content_item.get_latest_revision</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.set_live_revision, content_item.get_latest_revision</td></tr>
       
     </table>
 
@@ -256,32 +257,32 @@ function get_live_revision (
     <p>Get the parent folder.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Michael Pih</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Michael Pih</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>the folder_id of the parent folder, null otherwise</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">the folder_id of the parent folder, null otherwise</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item id
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_parent_folder (
   item_id	in cr_items.item_id%TYPE
 ) return cr_folders.folder_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -295,22 +296,22 @@ function get_parent_folder (
 "/tv/programs/star_trek/episode_203"
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The path to the item</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The path to the item</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the path is to be retrieved
 </td></tr>
             
-              <tr><th align=right valign=top>root_folder_id:</th>
+              <tr><th align="right" valign="top">root_folder_id:</th>
                   <td>&nbsp;&nbsp;</td><td>Starts path resolution from this folder. Defaults to
 the root of the sitemap
 </td></tr>
@@ -318,18 +319,18 @@ the root of the sitemap
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_path (
   item_id        in cr_items.item_id%TYPE,
   root_folder_id in cr_items.item_id%TYPE default c_root_folder_id
 ) return varchar2;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.get_id, content_item.write_to_file</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.get_id, content_item.write_to_file</td></tr>
       
     </table>
 
@@ -341,22 +342,22 @@ function get_path (
     <p>Retrieves the publish date for the item
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The publish date for the item, or null if the item has no revisions</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The publish date for the item, or null if the item has no revisions</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the publish date is to be retrieved
 </td></tr>
             
-              <tr><th align=right valign=top>is_live:</th>
+              <tr><th align="right" valign="top">is_live:</th>
                   <td>&nbsp;&nbsp;</td><td>If 't', use the live revision for the item. Otherwise, use
 the latest revision. The default is 'f'
 </td></tr>
@@ -364,18 +365,18 @@ the latest revision. The default is 'f'
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_publish_date (
   item_id    in cr_items.item_id%TYPE,
   is_live    in char default 'f'
 ) return cr_revisions.publish_date%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.get_live_revision, content_item.get_latest_revision,</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.get_live_revision, content_item.get_latest_revision,</td></tr>
       
     </table>
 
@@ -387,35 +388,35 @@ function get_publish_date (
     <p>Return the total count of revisions for this item
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The number of revisions for this item</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The number of revisions for this item</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The id the item
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_revision_count (
   item_id   in cr_items.item_id%TYPE
 ) return number;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_revision.new</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_revision.new</td></tr>
       
     </table>
 
@@ -426,20 +427,20 @@ function get_revision_count (
 
     <p></p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <i>Not yet documented</i>
+          <em>Not yet documented</em>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_root_folder return cr_folders.folder_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -454,23 +455,23 @@ is registered to specifically render the item in the given context, the
 default template for the item's type is returned.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The id of the registered template, or null if no template could be
+        <tr><th align="left">Returns:</th><td align="left">The id of the registered template, or null if no template could be
 found</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the template will be unregistered
 </td></tr>
             
-              <tr><th align=right valign=top>use_context:</th>
+              <tr><th align="right" valign="top">use_context:</th>
                   <td>&nbsp;&nbsp;</td><td>The context in the item is to be rendered, such
 as 'admin' or 'public'
 </td></tr>
@@ -478,18 +479,18 @@ as 'admin' or 'public'
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_template (
   item_id     in cr_items.item_id%TYPE,
   use_context in cr_item_template_map.use_context%TYPE
 ) return cr_templates.template_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_type.register_template, content_item.register_template,</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_type.register_template, content_item.register_template,</td></tr>
       
     </table>
 
@@ -503,22 +504,22 @@ If the specified item is in fact a folder, return the folder's label.
 In addition, this function will automatically resolve symlinks.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The title of the item</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The title of the item</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the title is to be retrieved
 </td></tr>
             
-              <tr><th align=right valign=top>is_live:</th>
+              <tr><th align="right" valign="top">is_live:</th>
                   <td>&nbsp;&nbsp;</td><td>If 't', use the live revision to get the title. Otherwise,
 use the latest revision. The default is 'f'
 </td></tr>
@@ -526,18 +527,18 @@ use the latest revision. The default is 'f'
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_title (
   item_id    in cr_items.item_id%TYPE,
   is_live    in char default 'f'
 ) return cr_revisions.title%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.get_live_revision, content_item.get_latest_revision,
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.get_live_revision, content_item.get_latest_revision,
 content_symlink.resolve</td></tr>
       
     </table>
@@ -551,22 +552,22 @@ content_symlink.resolve</td></tr>
 "/tv/programs/star_trek/episode_203"
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Michael Pih</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Michael Pih</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The virtual path to the item</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The virtual path to the item</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the path is to be retrieved
 </td></tr>
             
-              <tr><th align=right valign=top>root_folder_id:</th>
+              <tr><th align="right" valign="top">root_folder_id:</th>
                   <td>&nbsp;&nbsp;</td><td>Starts path resolution from this folder. Defaults to
 the root of the sitemap
 </td></tr>
@@ -574,18 +575,18 @@ the root of the sitemap
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function get_virtual_path (
   item_id        in cr_items.item_id%TYPE,
   root_folder_id in cr_items.item_id%TYPE default c_root_folder_id
 ) return varchar2;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.get_id, content_item.write_to_file, content_item.get_path</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.get_id, content_item.write_to_file, content_item.get_path</td></tr>
       
     </table>
 
@@ -599,41 +600,41 @@ The item is an index page for the folder if it exists in the
 folder and its item name is "index".
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>'t' if the item is an index page for the specified
+        <tr><th align="left">Returns:</th><td align="left">'t' if the item is an index page for the specified
 folder, 'f' otherwise</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item id
 </td></tr>
             
-              <tr><th align=right valign=top>folder_id:</th>
+              <tr><th align="right" valign="top">folder_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The folder id
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function is_index_page (
   item_id   in cr_items.item_id%TYPE,
   folder_id in cr_folders.folder_id%TYPE
 ) return varchar2;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_folder.get_index_page</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_folder.get_index_page</td></tr>
       
     </table>
 
@@ -649,33 +650,33 @@ meet the following criteria:
 	3) any 'publishing_wf' workflows are finished
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Michael Pih</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Michael Pih</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>'t' if the item is publishable in it's present state,
+        <tr><th align="left">Returns:</th><td align="left">'t' if the item is publishable in it's present state,
 Otherwise, returns 'f'</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id		The:</th>
+              <tr><th align="right" valign="top">item_id		The:</th>
                   <td>&nbsp;&nbsp;</td><td>item ID of the potential parent
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function is_publishable (
   item_id		in cr_items.item_id%TYPE
 ) return char;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -689,40 +690,40 @@ function is_publishable (
 itself.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>'t' if the child class is a subclass of the superclass, 'f' otherwise</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">'t' if the child class is a subclass of the superclass, 'f' otherwise</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>object_type:</th>
+              <tr><th align="right" valign="top">object_type:</th>
                   <td>&nbsp;&nbsp;</td><td>The child class
 </td></tr>
             
-              <tr><th align=right valign=top>supertype:</th>
+              <tr><th align="right" valign="top">supertype:</th>
                   <td>&nbsp;&nbsp;</td><td>The superclass
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function is_subclass (
   object_type in acs_object_types.object_type%TYPE,
   supertype	in acs_object_types.supertype%TYPE
 ) return char;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>acs_object_type.create_type</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>acs_object_type.create_type</td></tr>
       
     </table>
 
@@ -737,37 +738,37 @@ content type and if the parent already has n_max children of
 that content type.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Michael Pih</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Michael Pih</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>'t' if the item would be a valid child, 'f' otherwise</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">'t' if the item would be a valid child, 'f' otherwise</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id		The:</th>
+              <tr><th align="right" valign="top">item_id		The:</th>
                   <td>&nbsp;&nbsp;</td><td>item ID of the potential parent
 </td></tr>
             
-              <tr><th align=right valign=top>content_type	The:</th>
+              <tr><th align="right" valign="top">content_type	The:</th>
                   <td>&nbsp;&nbsp;</td><td>content type of the potential child item
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function is_valid_child (
   item_id	in cr_items.item_id%TYPE,
   content_type  in acs_object_types.object_type%TYPE
 ) return char;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -777,110 +778,110 @@ function is_valid_child (
   <p>&nbsp;</p>
     <li><font size="+1">Function: </font>content_item.new
 
-    <p>Creates a new content item. If the <tt>data</tt>, <tt>title</tt> or <tt>text</tt>
+    <p>Creates a new content item. If the <kbd>data</kbd>, <kbd>title</kbd> or <kbd>text</kbd>
 parameters are specified, also creates a revision for the item.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-        <tr><th align=left>Returns:</th><td align=left>The id of the newly created item</td></tr>
+        <tr><th align="left">Returns:</th><td align="left">The id of the newly created item</td></tr>
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>name:</th>
+              <tr><th align="right" valign="top">name:</th>
                   <td>&nbsp;&nbsp;</td><td>The name for the item, must be URL-encoded.
 If an item with this name already exists under the specified
 parent item, an error is thrown
 </td></tr>
             
-              <tr><th align=right valign=top>parent_id:</th>
+              <tr><th align="right" valign="top">parent_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The parent of this item, defaults to null
 </td></tr>
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The id of the new item. A new id will be allocated if this
 parameter is null
 </td></tr>
             
-              <tr><th align=right valign=top>locale:</th>
+              <tr><th align="right" valign="top">locale:</th>
                   <td>&nbsp;&nbsp;</td><td>The locale for this item, for use with Intermedia search
 </td></tr>
             
-              <tr><th align=right valign=top>item_subtype:</th>
+              <tr><th align="right" valign="top">item_subtype:</th>
                   <td>&nbsp;&nbsp;</td><td>The type of the new item, defaults to 'content_item'
 This parameter is used to support inheritance, so that
-subclasses of <tt>content_item</tt> can call this function
+subclasses of <kbd>content_item</kbd> can call this function
 to initialize the parent class
 </td></tr>
             
-              <tr><th align=right valign=top>content_type:</th>
+              <tr><th align="right" valign="top">content_type:</th>
                   <td>&nbsp;&nbsp;</td><td>The content type for the item, defaults to
 'content_revision'. Only objects of this type
 may be used as revisions for the item
 </td></tr>
             
-              <tr><th align=right valign=top>title:</th>
+              <tr><th align="right" valign="top">title:</th>
                   <td>&nbsp;&nbsp;</td><td>The user-readable title for the item, defaults to the item's
 name
 </td></tr>
             
-              <tr><th align=right valign=top>description:</th>
+              <tr><th align="right" valign="top">description:</th>
                   <td>&nbsp;&nbsp;</td><td>A short description for the item (4000 characters maximum)
 </td></tr>
             
-              <tr><th align=right valign=top>mime_type:</th>
+              <tr><th align="right" valign="top">mime_type:</th>
                   <td>&nbsp;&nbsp;</td><td>The file type of the item, defaults to 'text/plain'
 </td></tr>
             
-              <tr><th align=right valign=top>nls_language:</th>
+              <tr><th align="right" valign="top">nls_language:</th>
                   <td>&nbsp;&nbsp;</td><td>The language for the item, used for Intermedia search
 </td></tr>
             
-              <tr><th align=right valign=top>text:</th>
+              <tr><th align="right" valign="top">text:</th>
                   <td>&nbsp;&nbsp;</td><td>The text content of the new revision, 4000 charcters maximum.
-Cannot be specified simultaneously with the <tt>data</tt>
+Cannot be specified simultaneously with the <kbd>data</kbd>
 parameter
 </td></tr>
             
-              <tr><th align=right valign=top>data:</th>
+              <tr><th align="right" valign="top">data:</th>
                   <td>&nbsp;&nbsp;</td><td>The blob content of the new revison. Cannot be specified
-simultaneously with the <tt>text</tt> parameter
+simultaneously with the <kbd>text</kbd> parameter
 </td></tr>
             
-              <tr><th align=right valign=top>relation_tag:</th>
+              <tr><th align="right" valign="top">relation_tag:</th>
                   <td>&nbsp;&nbsp;</td><td>If a parent-child relationship is registered
 for these content types, use this tag to
 			     describe the parent-child relationship.  Defaults
 to 'parent content type'-'child content type'
 </td></tr>
             
-              <tr><th align=right valign=top>is_live:</th>
+              <tr><th align="right" valign="top">is_live:</th>
                   <td>&nbsp;&nbsp;</td><td>If 't', the new revision will become live
 </td></tr>
             
-              <tr><th align=right valign=top>creation_date:</th>
-                  <td>&nbsp;&nbsp;</td><td>As in <tt>acs_object.new</tt>
+              <tr><th align="right" valign="top">creation_date:</th>
+                  <td>&nbsp;&nbsp;</td><td>As in <kbd>acs_object.new</kbd>
 </td></tr>
             
-              <tr><th align=right valign=top>creation_ip:</th>
-                  <td>&nbsp;&nbsp;</td><td>As in <tt>acs_object.new</tt>
+              <tr><th align="right" valign="top">creation_ip:</th>
+                  <td>&nbsp;&nbsp;</td><td>As in <kbd>acs_object.new</kbd>
 </td></tr>
             
-              <tr><th align=right valign=top>creation_user:</th>
-                  <td>&nbsp;&nbsp;</td><td>As in <tt>acs_object.new</tt>
+              <tr><th align="right" valign="top">creation_user:</th>
+                  <td>&nbsp;&nbsp;</td><td>As in <kbd>acs_object.new</kbd>
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function new (
   name          in cr_items.name%TYPE,
   parent_id     in acs_objects.context_id%TYPE default null,
@@ -905,10 +906,10 @@ function new (
   is_live       in char default 'f'
 ) return cr_items.item_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>acs_object.new</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>acs_object.new</td></tr>
       
     </table>
 
@@ -919,17 +920,17 @@ function new (
 
     <p></p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <i>Not yet documented</i>
+          <em>Not yet documented</em>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 function relate (
   item_id       in cr_items.item_id%TYPE,
   object_id     in acs_objects.object_id%TYPE,
@@ -938,7 +939,7 @@ function relate (
   relation_type in acs_object_types.object_type%TYPE default 'cr_item_rel'
 ) return cr_item_rels.rel_id%TYPE;
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -954,38 +955,38 @@ not exist, or if the folder already contains an item with the same name
 as the given item, an error will be thrown.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item to be copied
 </td></tr>
             
-              <tr><th align=right valign=top>target_folder_id:</th>
+              <tr><th align="right" valign="top">target_folder_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The folder where the item is to be copied
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure copy (
   item_id		in cr_items.item_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.new, content_folder.new, content_item.move</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.new, content_folder.new, content_item.move</td></tr>
       
     </table>
 
@@ -999,33 +1000,33 @@ workflows, and template relations for the item. Use with caution - this
 operation cannot be undone.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The id of the item to delete
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure delete (
   item_id	in cr_items.item_id%TYPE
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>acs_object.delete</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>acs_object.delete</td></tr>
       
     </table>
 
@@ -1039,38 +1040,38 @@ not exist, or if the folder already contains an item with the same name
 as the given item, an error will be thrown.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item to be moved
 </td></tr>
             
-              <tr><th align=right valign=top>target_folder_id:</th>
+              <tr><th align="right" valign="top">target_folder_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The new folder for the item
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure move (
   item_id		in cr_items.item_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.new, content_folder.new, content_item.copy</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.new, content_folder.new, content_item.copy</td></tr>
       
     </table>
 
@@ -1082,24 +1083,24 @@ procedure move (
     <p>Registers a template which will be used to render this item.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the template will be registered
 </td></tr>
             
-              <tr><th align=right valign=top>template_id:</th>
+              <tr><th align="right" valign="top">template_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The template to be registered
 </td></tr>
             
-              <tr><th align=right valign=top>use_context:</th>
+              <tr><th align="right" valign="top">use_context:</th>
                   <td>&nbsp;&nbsp;</td><td>The context in which the template is appropriate, such
 as 'admin' or 'public'
 </td></tr>
@@ -1107,19 +1108,19 @@ as 'admin' or 'public'
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure register_template (
   item_id      in cr_items.item_id%TYPE,
   template_id  in cr_templates.template_id%TYPE,
   use_context  in cr_item_template_map.use_context%TYPE
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_type.register_template, content_item.unregister_template,
+        <tr><th align="left" valign="top">See Also:</th><td>content_type.register_template, content_item.unregister_template,
 content_item.get_template</td></tr>
       
     </table>
@@ -1133,38 +1134,38 @@ content_item.get_template</td></tr>
 under this item's parent, an error is thrown
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The id of the item to rename
 </td></tr>
             
-              <tr><th align=right valign=top>name:</th>
+              <tr><th align="right" valign="top">name:</th>
                   <td>&nbsp;&nbsp;</td><td>The new name for the item, must be URL-encoded
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure rename (
   item_id	 in cr_items.item_id%TYPE,
   name           in cr_items.name%TYPE
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.new</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.new</td></tr>
       
     </table>
 
@@ -1176,16 +1177,16 @@ procedure rename (
     <p>Make the specified revision the live revision for the item
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>revision_id:</th>
+              <tr><th align="right" valign="top">revision_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The id of the revision which is to become live
 for its corresponding item
 </td></tr>
@@ -1193,18 +1194,18 @@ for its corresponding item
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure set_live_revision (
   revision_id   in cr_revisions.revision_id%TYPE,
   publish_status in cr_items.publish_status%TYPE default 'ready'
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.get_live_revision</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.get_live_revision</td></tr>
       
     </table>
 
@@ -1218,40 +1219,40 @@ used by applications to update the publishing status of items
 at periodic intervals.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The id the item.
 </td></tr>
             
-              <tr><th align=right valign=top>start_when:</th>
+              <tr><th align="right" valign="top">start_when:</th>
                   <td>&nbsp;&nbsp;</td><td>The time and date when the item should be released.
 </td></tr>
             
-              <tr><th align=right valign=top>end_when:</th>
+              <tr><th align="right" valign="top">end_when:</th>
                   <td>&nbsp;&nbsp;</td><td>The time and date when the item should be expired.
 </td></tr>
             
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure set_release_period (
   item_id    in cr_items.item_id%TYPE,
   start_when date default null,
   end_when   date default null
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -1264,24 +1265,24 @@ procedure set_release_period (
     <p>Unregisters a template which will be used to render this item.
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item for which the template will be unregistered
 </td></tr>
             
-              <tr><th align=right valign=top>template_id:</th>
+              <tr><th align="right" valign="top">template_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The template to be registered
 </td></tr>
             
-              <tr><th align=right valign=top>use_context:</th>
+              <tr><th align="right" valign="top">use_context:</th>
                   <td>&nbsp;&nbsp;</td><td>The context in which the template is appropriate, such
 as 'admin' or 'public'
 </td></tr>
@@ -1289,19 +1290,19 @@ as 'admin' or 'public'
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure unregister_template (
   item_id      in cr_items.item_id%TYPE,
   template_id  in cr_templates.template_id%TYPE default null,
   use_context  in cr_item_template_map.use_context%TYPE default null
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_type.register_template, content_item.register_template,
+        <tr><th align="left" valign="top">See Also:</th><td>content_type.register_template, content_item.register_template,
 content_item.get_template</td></tr>
       
     </table>
@@ -1313,17 +1314,17 @@ content_item.get_template</td></tr>
 
     <p></p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <i>Not yet documented</i>
+          <em>Not yet documented</em>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure unset_live_revision (
   --/** Set the live revision to null for the item
   --    @author Michael Pih
@@ -1332,7 +1333,7 @@ procedure unset_live_revision (
   item_id      in cr_items.item_id%TYPE
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
     </table>
@@ -1343,23 +1344,23 @@ procedure unset_live_revision (
     <li><font size="+1">Procedure: </font>content_item.write_to_file
 
     <p>Writes the content of the  live revision of this item to a file,
-creating all the neccessary directories in the process
+creating all the necessary directories in the process
 </p>
 
-    <table cellpadding=3 cellspacing=0 border=0>
+    <table cellpadding="3" cellspacing="0" border="0">
       
-        <tr><th align=left>Author:</th><td align=left>Karl Goldstein</td></tr> 
+        <tr><th align="left">Author:</th><td align="left">Karl Goldstein</td></tr> 
       
-      <tr><th align=left colspan=2>Parameters:</th><tr>
-      <tr><td align=left colspan=2>
+      <tr><th align="left" colspan="2">Parameters:</th><tr>
+      <tr><td align="left" colspan="2">
         
-          <blockquote><table border=0 cellpadding=0 cellspacing=1>
+          <blockquote><table border="0" cellpadding="0" cellspacing="1">
             
-              <tr><th align=right valign=top>item_id:</th>
+              <tr><th align="right" valign="top">item_id:</th>
                   <td>&nbsp;&nbsp;</td><td>The item to be written to a file
 </td></tr>
             
-              <tr><th align=right valign=top>root_path:</th>
+              <tr><th align="right" valign="top">root_path:</th>
                   <td>&nbsp;&nbsp;</td><td>The path in the filesystem to which the root of the
 sitemap corresponds
 </td></tr>
@@ -1367,23 +1368,23 @@ sitemap corresponds
           </table></blockquote>
         </td>
       </tr>
-      <tr><th align=left colspan=2>Declaration:</th></tr>
-      <tr align=left><td colspan=2 align=left>
-<pre><tt>
+      <tr><th align="left" colspan="2">Declaration:</th></tr>
+      <tr align="left"><td colspan="2" align="left">
+<pre><kbd>
 procedure write_to_file (
   item_id     in cr_items.item_id%TYPE,
   root_path   in varchar2
 );
 
-</tt></pre>
+</kbd></pre>
       </td></tr>
       
-        <tr><th align=left valign=top>See Also:</th><td>content_item.get_path</td></tr>
+        <tr><th align="left" valign="top">See Also:</th><td>content_item.get_path</td></tr>
       
     </table>
 
 <p>
-
+</ul>
   <p>&nbsp;</p>
 
 

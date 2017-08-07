@@ -1,7 +1,7 @@
 --
 -- acs-kernel/sql/acs-metadata-create.sql
 --
--- A generic metadata system that allows table inheritence. This is
+-- A generic metadata system that allows table inheritance. This is
 -- based in many ways on Problem Set 4 by Philip Greenspun
 -- (philg@mit.edu), and the user-groups data model by Tracy Adams
 -- (teadams@mit.edu).
@@ -26,7 +26,7 @@
 create table acs_object_types (
 	object_type	varchar(1000) not null
 			constraint acs_object_types_pk primary key,
-	supertype	varchar(100) constraint acs_object_types_supertype_fk
+	supertype	varchar(1000) constraint acs_object_types_supertype_fk
 			references acs_object_types (object_type),
 	abstract_p	boolean default 'f' not null,
 	pretty_name	varchar(1000) not null
@@ -261,7 +261,7 @@ as select ot1.object_type, ot2.object_type as ancestor_type
       and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey);
 
 create table acs_object_type_tables (
-	object_type	varchar(100) not null 
+	object_type	varchar(1000) not null 
                         constraint acs_obj_type_tbls_obj_type_fk
 			references acs_object_types (object_type),
 	table_name	varchar(30) not null,
@@ -449,7 +449,7 @@ create table acs_attributes (
 	attribute_id	integer not null
 			constraint acs_attributes_attribute_id_pk
 			primary key,
-	object_type	varchar(100) not null
+	object_type	varchar(1000) not null
 			constraint acs_attributes_object_type_fk
 			references acs_object_types (object_type),
 	table_name	varchar(30),
@@ -547,7 +547,7 @@ create table acs_enum_values (
 create index acs_enum_values_attr_id_idx on acs_enum_values (attribute_id);
 
 create table acs_attribute_descriptions (
-	object_type	varchar(100) not null constraint acs_attr_descs_obj_type_fk
+	object_type	varchar(1000) not null constraint acs_attr_descs_obj_type_fk
 			references acs_object_types (object_type),
 	attribute_name  varchar(100) not null,
 	constraint acs_attr_descs_ob_tp_at_na_fk
@@ -960,7 +960,7 @@ BEGIN
     -- Add the appropriate column to the table
 
     -- We can only create the table column if
-    -- 1. the attribute is declared type_specific (generic storage uses an auxillary table)
+    -- 1. the attribute is declared type_specific (generic storage uses an auxiliary table)
     -- 2. the attribute is not declared static
     -- 3. it does not already exist in the table
 

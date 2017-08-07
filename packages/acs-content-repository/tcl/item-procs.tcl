@@ -436,7 +436,7 @@ ad_proc -public -deprecated item::get_content_type { item_id } {
 
   @public get_content_type
  
-  Retrieves the content type of tyhe item. If the item does not exist,
+  Retrieves the content type of the item. If the item does not exist,
   returns an empty string.
  
   @param  item_id   The item id
@@ -692,3 +692,9 @@ ad_proc -public -deprecated item::delete {
     ::content::item::delete -item_id $item_id
 }
   
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

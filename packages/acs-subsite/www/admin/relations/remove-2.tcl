@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     rel_id:naturalnum,notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 } -validate {
     permission_p -requires {rel_id:notnull} {
 	if { ![relation_permission_p -privilege delete $rel_id] } {
@@ -35,3 +35,9 @@ if {$operation eq "Yes, I really want to remove this relation"} {
 db_release_unused_handles
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

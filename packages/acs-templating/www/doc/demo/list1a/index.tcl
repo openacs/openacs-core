@@ -11,6 +11,7 @@ ad_page_contract {
 
 set package_id [ad_conn package_id]
 set user_id    [ad_conn user_id]
+set title "Note Demo"
 
 db_multirow template_demo_notes template_demo_notes {}
 
@@ -23,3 +24,9 @@ template::list::create -name notes \
     }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

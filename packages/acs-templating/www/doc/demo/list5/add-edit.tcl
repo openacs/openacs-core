@@ -26,7 +26,7 @@ ad_form -form {
 
     # The "note" object type's key
 
-    note_id:key
+    id:key
 
     # "title" is of type text and will use a "text" widget.
 
@@ -40,6 +40,25 @@ ad_form -form {
     {body:text(textarea) \
         {label Body}
         {html {rows 10 cols 40}}
+    }
+
+    {vitamins:text(checkbox) 
+        {label "Vitamins"}
+        {options {
+            {Lettuce lettuce}
+            {"&nbsp;Tomato" tomato}
+            {"&nbsp;&nbsp;Pickle" pickle}
+            {"&nbsp;&nbsp;&nbsp;Sprouts" sprouts}
+        }}
+    }
+
+    {action:text(select)
+        {label Action}
+        {options {
+            { "&nbsp;&nbsp;&nbsp;&nbsp;aaa" a }
+            { "&nbsp;&nbsp;bbb" b }
+            { "<c>" c }
+        }}
     }
 
 } -new_request {
@@ -121,3 +140,9 @@ set context [list $page_title]
 # processing an "edit" request or a submitted form that contains errors.
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

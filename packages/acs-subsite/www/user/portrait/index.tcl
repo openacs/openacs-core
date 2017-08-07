@@ -1,12 +1,12 @@
 ad_page_contract {
-    displays a user's portrait to the user him/herself
+    Displays a user's portrait to the user him/herself
     offers options to replace it
 
     @author philg@mit.edu
     @creation-date September 26, 1999
     @cvs-id $Id$
 } {
-    {return_url "" }
+    {return_url:localurl "" }
     {user_id:naturalnum ""}
 } -properties {
     first_names:onevalue
@@ -45,14 +45,14 @@ if { $current_user_id == $user_id } {
     set admin_p 0
 }
 
-set export_vars      [export_vars {user_id}]
-set export_edit_vars [export_vars {user_id return_url}]
+set portrait_image_url [export_vars -base ${subsite_url}shared/portrait-bits.tcl {user_id}]
+set export_edit_vars   [export_vars {user_id return_url}]
 
-if {![db_0or1row user_info "select 
-  first_names, 
-  last_name 
-from persons 
-where person_id=:user_id"]} {
+if {![db_0or1row user_info {
+    select first_names, last_name 
+    from persons 
+    where person_id = :user_id
+}]} {
     set return_code "no_user"
     set context [list "Account Unavailable"]
     ad_return_template
@@ -60,11 +60,16 @@ where person_id=:user_id"]} {
 }
 
 
-if {![db_0or1row get_item_id "select live_revision as revision_id, item_id
-from acs_rels a, cr_items c
-where a.object_id_two = c.item_id
-and a.object_id_one = :user_id
-and a.rel_type = 'user_portrait_rel'"] || $revision_id eq ""} {
+if {![db_0or1row get_item_id {
+    select live_revision as revision_id, item_id
+    from acs_rels a, cr_items c
+    where a.object_id_two = c.item_id
+    and a.object_id_one = :user_id
+    and a.rel_type = 'user_portrait_rel'
+    and live_revision is not null
+    order by revision_id desc
+    limit 1
+}] || $revision_id eq ""} {
     # The user doesn't have a portrait yet
     set portrait_p 0
 } else {
@@ -117,3 +122,9 @@ set system_name [ad_system_name]
 set pretty_date [lc_time_fmt $publish_date "%q"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

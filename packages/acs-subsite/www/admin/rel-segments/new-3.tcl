@@ -13,7 +13,7 @@ ad_page_contract {
     group_id:integer,notnull
     segment_name:notnull
     rel_type:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_vars:onevalue
@@ -54,12 +54,7 @@ db_transaction {
 # Now let's offer to walk the user through the process of creating
 # constraints it there are any other segments
 
-if { ![db_string segments_exists_p {
-    select case when exists 
-                   (select 1 from rel_segments s where s.segment_id <> :segment_id)
-           then 1 else 0 end
-      from dual
-}] } {
+if { ![db_string segments_exists_p {}] } {
     # No more segments... can't create constraints
     ad_returnredirect $return_url
     return
@@ -70,3 +65,9 @@ set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational s
 set export_vars [export_vars -form {segment_id return_url}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

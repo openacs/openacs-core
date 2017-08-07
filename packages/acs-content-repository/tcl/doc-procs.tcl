@@ -37,7 +37,7 @@ namespace eval doc {
 
 
     ad_proc -public get_proc_header { proc_name package_name doc_ref code_ref { db "" } } {
-	Retreive the function header for a specific function
+	Retrieve the function header for a specific function
 	and parse out the javadoc comment.
     } {
 
@@ -210,3 +210,9 @@ namespace eval doc {
     }
   }   
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

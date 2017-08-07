@@ -122,6 +122,12 @@ template::list::create \
 	}
     }
     
-db_multirow notify_users notify_users { *SQL* }
+db_multirow notify_users notify_users {}
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

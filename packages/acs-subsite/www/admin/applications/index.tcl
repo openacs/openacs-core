@@ -4,27 +4,38 @@ ad_page_contract {
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-06-02
     @cvs-id $Id$
+} {
+    page:naturalnum,optional
+    {search ""}
 }
 
-set page_title "[_ acs-subsite.Applications]"
+set page_title [_ acs-subsite.Applications]
 set context [list $page_title]
 
-# Get the subsite node ID
-set subsite_url [lindex [site_node::get_url_from_object_id -object_id [site_node::closest_ancestor_package -include_self -package_key [subsite::package_keys]]] 0]
-array set subsite_sitenode [site_node::get -url $subsite_url]
-set subsite_node_id $subsite_sitenode(node_id)
+set subsite_node_id [ad_conn subsite_node_id]
 
-db_multirow -extend { parameter_url } applications select_applications {} {
-    set instance_name "[string repeat .. $treelevel]$instance_name"
-    if { $num_parameters > 0 } {
-        set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
-    }
-}
+set locale [ad_conn locale]
+
+ad_form \
+    -name filter \
+    -edit_buttons [list [list "Go" go]] \
+    -has_submit 1 \
+    -html { style "float:right;" } \
+    -form {
+	{search:text,optional
+            {label ""}
+	    {html {length 20 placeholder "[_ acs-kernel.common_Search]"} }
+	    {value $search}
+	}
+    } -on_submit {}
 
 list::create \
     -name applications \
     -multirow applications \
     -key node_id \
+    -page_flush_p 1 \
+    -page_size 250 \
+    -page_query_name select_applications \
     -actions { 
         "#acs-subsite.Add_application#" application-add "#acs-subsite.Add_new_app#"
     } \
@@ -70,7 +81,23 @@ list::create \
             link_url_eval {[export_vars -base application-delete { node_id }]}
             link_html { title "#acs-subsite.Delete_this_application#" }
         }
+    } -filters {
+	search {
+	    hide_p 1
+            where_clause {(:search is null or upper(coalesce(coalesce(m.message, md.message), p.instance_name) || n.name || pt.pretty_name) like '%' || upper(:search) || '%')}
+        }
     }
 
 
+db_multirow -extend { parameter_url } applications select_applications_page {} {
+    set instance_name [string repeat "- " $treelevel]$instance_name
+    if { $parameters_p } {
+        set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
+    }
+}
 
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

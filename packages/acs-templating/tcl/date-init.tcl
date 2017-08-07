@@ -6,3 +6,9 @@
 # Initialize the months array 
 
 template::util::date::init
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

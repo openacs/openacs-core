@@ -114,10 +114,10 @@ if { [info exists property(rp)] } {
 	    continue
 	}
 
-	set duration [format "%.1f ms" [expr { $endclicks - $startclicks }]]
+	set duration [format "%.1f ms" [expr { ($endclicks - $startclicks)/1000.0 }]]
 
 	if { [info exists conn(startclicks)] } {
-	    append body "<li>[format "%+06.1f" [expr { ($startclicks - $conn(startclicks)) }]] ms: "
+	    append body "<li>[format "%+06.1f" [expr { ($startclicks - $conn(startclicks))/1000.0 }]] ms: "
 	} else {
 	    append body "<li>"
 	}
@@ -358,3 +358,9 @@ if { [info exists property(prof)] } {
         multirow append profiling $tag $total_ms $file_links $size
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

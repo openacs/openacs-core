@@ -26,18 +26,18 @@ ad_proc -private cr_delete_scheduled_files {} {
 } {
     db_transaction {
         # subselect makes sure there isn't a parent revision still lying around
-        db_foreach fetch_paths { *SQL* } {
+        db_foreach fetch_paths {} {
             set file [cr_fs_path $storage_area_key]/$path
             if {[regexp {^[0-9/]+$} $path]} {
                 # the filename looks valid, delete the file from filesystem
                 ns_log Debug "cr_delete_scheduled_files: deleting $file"
-                file delete $file
+                file delete -- $file
             } else {
                 ns_log Warning "cr_delete_scheduled_files: refuse to delete $file"
             }
         }
         # now that all scheduled files deleted, clear table
-        db_dml delete_files { *SQL* }
+        db_dml delete_files {}
     }
 
     #
@@ -117,7 +117,7 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
         
         lappend result $f
         if {$delete_p} {
-            file delete $f
+            file delete -- $f
         }
     }
     

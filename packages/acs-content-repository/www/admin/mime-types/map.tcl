@@ -6,7 +6,7 @@ ad_page_contract {
 
 } {
     mime_type:notnull
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 set doc(title) "Add an extension"
@@ -45,3 +45,9 @@ ad_form -name extension_new -export {return_url} -cancel_url $return_url -form {
     ad_script_abort
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

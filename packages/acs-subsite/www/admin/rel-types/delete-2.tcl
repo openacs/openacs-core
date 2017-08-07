@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     rel_type:notnull,rel_type_dynamic_p
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 if { $operation ne "Yes, I really want to delete this relationship type" } {
@@ -28,23 +28,9 @@ if { $operation ne "Yes, I really want to delete this relationship type" } {
 
     set user_id [ad_conn user_id]
 
-    set rel_id_list [db_list select_rel_ids {
-	select r.rel_id
-	  from acs_rels r, acs_object_party_privilege_map perm
-	 where perm.object_id = r.rel_id
-	  and perm.party_id = :user_id
-	  and perm.privilege = 'delete'
-	  and r.rel_type = :rel_type
-    }]
+    set rel_id_list [db_list select_rel_ids {}]
 
-    set segment_id [db_string select_segment_id {
-	select s.segment_id
-	  from rel_segments s, acs_object_party_privilege_map perm
-	 where perm.object_id = s.segment_id
- 	   and perm.party_id = :user_id
-	   and perm.privilege = 'delete'
-	   and s.rel_type = :rel_type
-    } -default ""]
+    set segment_id [db_string select_segment_id {} -default ""]
     
     # delete all relations, all segments, and drop the relationship
     # type. This will fail if a relation / segment for this type is created
@@ -60,12 +46,7 @@ if { $operation ne "Yes, I really want to delete this relationship type" } {
 	    rel_segments_delete $segment_id
 	}
 	    
-	db_exec_plsql drop_relationship_type {
-	    BEGIN
-	      acs_rel_type.drop_type( rel_type  => :rel_type,
-                                      cascade_p => 't' );
-	    END;
-	}
+	db_exec_plsql drop_relationship_type {}
     } on_error {
 	ad_return_error "Error deleting relationship type" "We got the following error trying to delete this relationship type:<pre>$errmsg</pre>"
 	ad_script_abort
@@ -82,3 +63,9 @@ if { $operation ne "Yes, I really want to delete this relationship type" } {
 package_object_view_reset $rel_type
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

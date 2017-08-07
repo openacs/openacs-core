@@ -58,3 +58,9 @@ multirow extend audit creation_user_url
 multirow foreach audit {
     set creation_user_url [acs_community_member_url -user_id $creation_user_id]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

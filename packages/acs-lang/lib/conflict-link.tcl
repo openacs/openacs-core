@@ -20,3 +20,9 @@ set conflict_count [lang::message::conflict_count \
                         -locale $locale]
 
 set message_conflicts_url [export_vars -base message-conflicts $link_export_list]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

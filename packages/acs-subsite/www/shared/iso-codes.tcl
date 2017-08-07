@@ -13,6 +13,13 @@ if {![db_table_exists countries] } {
     return
 }
 
-db_multirow ccodes country_codes "select iso, default_name from countries order by default_name" 
+db_multirow ccodes country_codes {
+    select iso, default_name from countries order by default_name
+}
 
 ad_return_template
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

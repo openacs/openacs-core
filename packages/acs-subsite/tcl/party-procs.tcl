@@ -174,36 +174,9 @@ namespace eval party {
 	    set start_with_clause [db_map start_with_clause]
 	}
 
-	db_foreach select_sub_rel_types "
-	select 
-	    types.pretty_name, 
-	    types.object_type, 
-	    types.tree_level, 
-	    types.indent,
-	    decode(valid_types.object_type, null, 0, 1) as valid_p
-	from 
-	    (select
-	        t.pretty_name, t.object_type, level as tree_level,
-	        replace(lpad(' ', (level - 1) * 4), 
-	                ' ', '&nbsp;') as indent,
-	        rownum as tree_rownum
-	     from 
-	        acs_object_types t
-	     connect by 
-	        prior t.object_type = t.supertype
-	     start with 
-	        $start_with_clause ) types,
-	    (select 
-	        object_type 
-	     from 
-	        rel_types_valid_obj_two_types
-	     where 
-	        rel_type = :rel_type ) valid_types
-	where 
-	    types.object_type = valid_types.object_type(+)
-	order by tree_rownum
-	" {
-	    template::multirow append $datasource_name $object_type [ad_urlencode $object_type] $indent $pretty_name $valid_p
+	db_foreach select_sub_rel_types {} {
+	    template::multirow append $datasource_name $object_type \
+                [ad_urlencode $object_type] $indent $pretty_name $valid_p
 	}
 
     }
@@ -285,3 +258,9 @@ namespace eval party {
     }
     
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

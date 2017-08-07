@@ -17,12 +17,13 @@ ad_page_contract_filter rel_type_dynamic_p {name value} {
     @creation-date 12/30/2000
 } {
     if {[db_string rel_type_dynamic_p {
-	select case when exists (select 1
-				 from acs_object_types t
-				 where t.dynamic_p = 't'
-				 and t.object_type = :value)
-	then 1 else 0 end
-	from dual}]} {
+        	select case when exists (select 1 
+                                   from acs_object_types t
+                                  where t.dynamic_p = 't'
+                                    and t.object_type = :value)
+	            then 1 else 0 end
+	  from dual
+    }]} {
 	return 1
     }
     ad_complain "Specific rel type either does not exist or is not dynamic and thus cannot be modified"
@@ -61,16 +62,7 @@ namespace eval rel_types {
 	@author Michael Bryzek (mbryzek@arsdigita.com)
 	@creation-date 12/30/2000
     } {
-	return [db_string "group_rel_type_exists" "
-	     select case when exists (select 1
-                                        from acs_object_types t
-                                        where t.object_type not in (select g.rel_type
-                                                                      from group_rels g
-                                                                     where g.group_id = :group_id)
-                                      connect by prior t.object_type = t.supertype
-                                        start with t.object_type in ('membership_rel','composition_rel'))
-                    then 1 else 0 end
-               from dual"]
+	return [db_string group_rel_type_exists {}]
     }
 
     ad_proc -private additional_rel_types_group_type_p {
@@ -82,16 +74,7 @@ namespace eval rel_types {
 	@author Michael Bryzek (mbryzek@arsdigita.com)
 	@creation-date 12/30/2000
     } {
-	return [db_string "group_rel_type_exists" "
-	     select case when exists (select 1
-                                        from acs_object_types t
-                                        where t.object_type not in (select g.rel_type
-                                                                      from group_type_rels g
-                                                                     where g.group_type = :group_type)
-                                      connect by prior t.object_type = t.supertype
-                                        start with t.object_type in ('membership_rel','composition_rel'))
-                    then 1 else 0 end
-               from dual"]
+	return [db_string group_rel_type_exists {}]
     }
 
     ad_proc -public new {
@@ -109,6 +92,7 @@ namespace eval rel_types {
 	object_type_two
 	min_n_rels_two
 	max_n_rels_two
+        {composable_p "t"}
     } {
 	Creates a new relationship type named rel_type
 
@@ -151,12 +135,12 @@ namespace eval rel_types {
 
 	# Create the actual acs object type
 
-	lappend plsql_drop [list db_exec_plsql drop_type {FOO}]
-	lappend plsql [list db_exec_plsql create_type {FOO}]
+	lappend plsql_drop [list db_exec_plsql drop_type {}]
+	lappend plsql [list db_exec_plsql create_type {}]
 
 	# Mark the type as dynamic
 
-	lappend plsql [list db_dml update_type {FOO}]
+	lappend plsql [list db_dml update_type FOO]
 	
 	# Force internationalisation of Roles
 	
@@ -322,3 +306,9 @@ namespace eval rel_types {
 	return $return_code
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

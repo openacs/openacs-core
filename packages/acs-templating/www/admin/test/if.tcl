@@ -17,3 +17,9 @@ set v:1(five) 5
 # don't define z
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

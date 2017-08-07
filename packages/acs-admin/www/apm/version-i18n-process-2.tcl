@@ -1,5 +1,5 @@
 ad_page_contract {
-    Internationalize a certain adp or tcl file.
+    Internationalize a certain adp or Tcl file.
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
@@ -135,3 +135,9 @@ if { [llength $files] > 0 } {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

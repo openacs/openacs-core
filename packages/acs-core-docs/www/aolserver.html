@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install AOLserver 3.3oacs1</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-ldap-radius.html" title="Install LDAP for use as external authentication"><link rel="next" href="credits.html" title="Appendix C. Credits"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-ldap-radius.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div></div><div class="authorblurb"><p>by <a class="ulink" href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install AOLserver 3.3oacs1</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-ldap-radius.html" title="Install LDAP for use as external authentication"><link rel="next" href="credits.html" title="Appendix C. Credits"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-ldap-radius.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div></div><div class="authorblurb"><p>by <a class="ulink" href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>We recommend the use of <a class="link" href="aolserver4.html" title="Install AOLserver 4">AOLserver 4.0.1</a> or later.  These instructions are retained as a resource.</p><p>
@@ -58,7 +58,7 @@ cd /usr/local/src/aolserver
           and <code class="computeroutput">ln -s /usr/lib/postgresql /usr/local/pgsql</code>)</p><pre class="screen">[root aolserver]# <strong class="userinput"><code>export POSTGRES=/usr/local/pgsql; ./conf</code></strong>
 Building in /usr/local/aolserver
 with the following modules:
-aolserver
+AOLserver
 nscache
 nsrewrite
 nssha1
@@ -83,17 +83,17 @@ Done Building Sat Mar  8 10:31:35 PST 2003
 	  communicate with the database.  There is one script each for
 	  Oracle and PostgreSQL.  They don't conflict, so if you plan
 	  to use both databases, install both.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Oracle</p><pre class="screen">[root aolserver]# <strong class="userinput"><code>cd /usr/local/aolserver/bin</code></strong>
-[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</code></strong>
+[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</code></strong>
 [root bin]# <strong class="userinput"><code>chmod 750 nsd-oracle</code></strong>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</span></span></pre></li><li class="listitem"><p>PostgreSQL</p><pre class="screen">[root aolserver]# <strong class="userinput"><code>cd /usr/local/aolserver/bin</code></strong>
-[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</code></strong>
+[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</code></strong>
 [root bin]# <strong class="userinput"><code>chmod 755 nsd-postgres</code></strong>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</span></span></pre></li></ul></div></li><li class="listitem"><a name="install-tdom"></a><p><b>Install tDOM. </b>Download the <a class="link" href="individual-programs.html#source-tdom">tDOM
         tarball</a>, unpack it, adjust the configuration file to match our patched
         distribution of aolserver, and compile it.</p><pre class="screen">[root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
@@ -241,4 +241,4 @@ set address         [ns_info address]</pre><p>
 set hostname        [ns_info hostname]
 #set address         [ns_info address]
 set address 0.0.0.0</pre></li><li class="listitem"><p><a class="link" href="analog-install.html" title="Install Analog web file analyzer">Install
-      Analog</a> web file analyzer. (OPTIONAL)</p></li></ol></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-ldap-radius.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr><tr><td width="40%" align="left">Install LDAP for use as external authentication </td><td width="20%" align="center"><a accesskey="u" href="install-more-software.html">Up</a></td><td width="40%" align="right"> Appendix C. Credits</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/aolserver.html#comments">View comments on this page at openacs.org</a></center></body></html>
+      Analog</a> web file analyzer. (OPTIONAL)</p></li></ol></div><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-ldap-radius.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="credits.html">Next</a></td></tr><tr><td width="40%" align="left">Install LDAP for use as external authentication </td><td width="20%" align="center"><a accesskey="u" href="install-more-software.html">Up</a></td><td width="40%" align="right"> Appendix C. Credits</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

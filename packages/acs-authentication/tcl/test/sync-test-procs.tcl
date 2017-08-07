@@ -501,7 +501,6 @@ aa_register_case -cats {api} sync_batch_ims_example_doc {
     Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
 } {
     aa_stub acs_sc::invoke {
-        acs_sc::invoke__arg_parser
 
         if { $contract eq "auth_sync_retrieve" && $operation eq "GetDocument" } {
             array set result {
@@ -684,7 +683,6 @@ aa_register_case -cats {api} sync_batch_ims_test {
     Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
 } {
     aa_stub acs_sc::invoke {
-        acs_sc::invoke__arg_parser
 
         if { $contract eq "auth_sync_retrieve" && $operation eq "GetDocument" } {
             array set result {
@@ -980,3 +978,9 @@ aa_register_case -cats {api web} sync_file_get_document {
     aa_true "result.doc_message is empty" [expr {$result(doc_message) eq ""}]
     aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

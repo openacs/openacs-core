@@ -1,11 +1,11 @@
-####################################
-#
-# Procs for creating the tabbed UI
-#
+ad_library {
+    Procs for creating the tabbed UI
+}
+
 # The tabs object is basically just a form
 # Each tab is a formwidget
-
 # A tab is just a formwidget
+
 
 namespace eval template {}
 namespace eval template::widget {}
@@ -276,3 +276,9 @@ template_tag tabstrip { chunk params } {
 
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

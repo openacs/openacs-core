@@ -71,3 +71,9 @@ aa_register_case acs_sc_impl_new_from_spec {
             aa_equals "pretty_name dit not get inserted correctly" $impl(impl_pretty_name) "Foo Driver"
         }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

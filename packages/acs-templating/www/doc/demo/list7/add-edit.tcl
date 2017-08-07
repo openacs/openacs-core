@@ -13,6 +13,8 @@ ad_page_contract {
 } -properties {
     context:onevalue
     page_title:onevalue
+} -validate {
+    csrf { csrf::validate }
 }
 
 # When using ad_form to generate or edit acs_objects, the object type's
@@ -121,3 +123,9 @@ set context [list $page_title]
 # processing an "edit" request or a submitted form that contains errors.
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

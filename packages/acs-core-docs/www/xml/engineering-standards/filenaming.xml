@@ -33,7 +33,7 @@ Essentially, we want our files named in a fashion that reflects their purpose.</
 
 <para>
 
-Under the page root (and the template root if using the <ulink url="style">Style package</ulink>):
+Under the page root:
 </para>
 
 <itemizedlist>
@@ -47,14 +47,14 @@ Under the page root (and the template root if using the <ulink url="style">Style
 </blockquote>
 
 <para>
-For example, the page to erase a user's portrait from the database is
+For example, the page to erase a user&#39;s portrait from the database is
 <computeroutput>/admin/users/portrait-erase.tcl</computeroutput>.
 </para>
 </listitem>
 
 <listitem><para>However, modules typically deal with only one primary type of object -
 e.g.,
-the Bookmarks module deals mainly with bookmarks - and so action-type files in modules don't need to be specified by the object they act on.  Example: the user pages
+the Bookmarks module deals mainly with bookmarks - and so action-type files in modules don&#39;t need to be specified by the object they act on.  Example: the user pages
 for the Bookmarks module live in the <computeroutput>/bookmarks/</computeroutput>
 directory, and so there is no need to name the bookmark editing page with a redundant url: <computeroutput>/bookmarks/bookmark-edit.tcl</computeroutput>. Instead, we omit the object type, and use this convention:
 </para>
@@ -73,7 +73,7 @@ Thus, the page to edit a bookmark is <computeroutput>/bookmarks/edit.tcl</comput
 
 <blockquote>
 <para>
-<computeroutput>one.</computeroutput><emphasis><computeroutput>extension</computeroutput></emphasis>
+<computeroutput>one.extension</computeroutput>
 </para>
 </blockquote>
 
@@ -179,7 +179,7 @@ use the convention:</para>
 
 <para>
 File names also appear <emphasis>within</emphasis> pages, as linked URLs and
-form targets. When they do, always use <ulink url="abstract-url">abstract
+form targets. When they do, always use <ulink url="rp-design">abstract
 URLs</ulink> (e.g., <computeroutput>user-delete</computeroutput> instead of
 <computeroutput>user-delete.tcl</computeroutput>), because they enhance maintainability.
 </para>
@@ -261,9 +261,9 @@ validation purposes:
 # www/register/user-login-2.tcl
 
 ad_page_contract {
-    Verify the user's password and issue the cookie.
+    Verify the user&#39;s password and issue the cookie.
     
-    @param user_id The user's id in users table.
+    @param user_id The user&#39;s id in users table.
     @param password_from_from The password the user entered.
     @param return_url What url to return to after successful login.
     @param persistent_cookie_p Specifies whether a cookie should be set to keep the user logged in forever.
@@ -286,7 +286,7 @@ Salient features of <computeroutput>ad_page_contract</computeroutput>:
 <itemizedlist>
 
 <listitem><para>A mandatory documentation string is the first argument. This has
-the standard form with javadoc-style @author, @cvs-id, etc, and should contain a short description of the recieved variables and any necessary explanations. </para></listitem>
+the standard form with javadoc-style @author, @cvs-id, etc, and should contain a short description of the received variables and any necessary explanations. </para></listitem>
 
 <listitem><para>The second argument specifies the page
 inputs. The syntax for switches/flags (e.g. multiple-list, array,
@@ -297,7 +297,7 @@ e.g. <computeroutput>foo:integer,multiple,trim</computeroutput>. In particular, 
 <computeroutput>ad_page_variables</computeroutput> flags.</para></listitem>
 
 <listitem><para>There are new flags: <computeroutput>trim</computeroutput>, <computeroutput>notnull</computeroutput> and
-<computeroutput>optional</computeroutput>. They do what you'd expect; values will not be
+<computeroutput>optional</computeroutput>. They do what you&#39;d expect; values will not be
 trimmed, unless you mark them for it; empty strings are valid input, unless
 you specify notnull; and a specified variable will be considered required,
 unless you declare it optional.</para></listitem>
@@ -323,7 +323,7 @@ previous variable syntax obsolete.
 For shared Tcl library files, use <link linkend="tcl-doc-ad-library"><computeroutput>ad_library</computeroutput></link> after
 the file path comment. Its only argument is a doc_string in the
 standard (javadoc-style) format, like
-<computeroutput>ad_page_contract</computeroutput>. Don't forget to put the @cvs-id in
+<computeroutput>ad_page_contract</computeroutput>. Don&#39;t forget to put the @cvs-id in
 there.  Here is an example of using ad_library:
 </para>
  
@@ -350,7 +350,7 @@ For SQL and other non-Tcl source files, the following file header structure is r
 <programlisting>
 -- <emphasis>path relative to the ACS root directory</emphasis>
 --
--- <emphasis>brief description of the file's purpose</emphasis>
+-- <emphasis>brief description of the file&#39;s purpose</emphasis>
 --
 -- <emphasis>author</emphasis>
 -- <emphasis>created</emphasis>
@@ -415,7 +415,7 @@ approach has the disadvantage of tying up a scarce and valuable
 resource (namely, a database handle) for an unpredictable amount of
 time while sending packets back to the browser, and so it should be
 avoided in most cases. (On the other hand, for a page that requires an
-expensive database query, it's better to call
+expensive database query, it&#39;s better to call
 
 <computeroutput>ad_return_top_of_page</computeroutput>
 

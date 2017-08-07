@@ -29,8 +29,6 @@ doc_body_flush
 
 set no_changes [list]
 
-global errorCode
-
 foreach file [apm_get_package_files -package_key $package_key] {
     if { ![file isfile "[acs_root_dir]/$file"] } {
 	doc_body_append "<h3>$file</h3>\n<blockquote>This file has been locally added.</blockquote>\n"
@@ -41,7 +39,10 @@ foreach file [apm_get_package_files -package_key $package_key] {
 	continue
     }
 
-    set cmd [list exec /usr/bin/diff]
+    if {[set diff [util::which diff]] eq ""} {
+        error "'diff' command not found on the system"
+    }
+    set cmd [list exec $diff]
     if { $context_p } {
 	lappend cmd "-c"
     }
@@ -50,7 +51,7 @@ foreach file [apm_get_package_files -package_key $package_key] {
     if { $errno == 0 } {
 	lappend no_changes $file
     } else {
-	set status [lindex $errorCode 2]
+	set status [lindex $::errorCode 2]
 	if { $status == 1 } {
 	    regsub {child process exited abnormally$} $diffs "" diffs
 	    doc_body_append "<h3>$file</h3>\n<blockquote><pre>[ns_quotehtml $diffs]</pre></blockquote>\n"
@@ -67,3 +68,9 @@ if { [llength $no_changes] > 0 } {
 
 doc_body_append [ad_footer]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

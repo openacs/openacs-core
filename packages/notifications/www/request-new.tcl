@@ -9,7 +9,7 @@ ad_page_contract {
     type_id:naturalnum,notnull
     object_id:naturalnum,notnull
     {pretty_name ""}
-    return_url
+    return_url:localurl
 }
 
 set user_id [auth::require_login]
@@ -57,3 +57,9 @@ if { [llength $delivery_methods] == 1 } {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -2,24 +2,22 @@
 <HTML><HEAD><TITLE>Group Admin Pages - Design</TITLE>
 <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <BODY bgColor=white>
-<H2>Group Admin Pages - Design</H2>
+<h2>Group Admin Pages - Design</h2>
 
 <a href="">ACS subsite docs</a> : Group Admin Pages - Design
-<HR>
+<hr>
 
-<H3>I. Essentials</H3>
-<P>
-<UL>
-  <LI>ACS administrator directory (/admin/groups for each subsite)</li>
-  <P></P>
-  <LI> <a href=/api-doc/>Tcl script directory</a> </li>
-  <LI> <a href=/api-doc/plsql-subprograms-all>PL/SQL packages</a>
-  <P></P>
-  <LI><a href=group-admin-pages-requirements.html>Requirements document </a>
-  <li><a href=group-admin-pages-acceptance-test.html>Acceptance test</a>
-</UL>
+<h3>I. Essentials</h3>
+<p>
+<ul>
+  <li>ACS administrator directory (/admin/groups for each subsite)</li>
+  <li> <a href="/api-doc/">Tcl script directory</a> </li>
+  <li> <a href="/api-doc/plsql-subprograms-all">PL/SQL packages</a></li>
+  <li><a href="group-admin-pages-requirements.html">Requirements document </a></li>
+  <li><a href="group-admin-pages-acceptance-test.html">Acceptance test</a></li>
+</ul>
 
-<H3>II. Introduction</H3>
+<h3>II. Introduction</h3>
 
 The group administration packages provides a "control panel" to allow
 the administrator of a subsite to control the groups in use on that
@@ -28,7 +26,7 @@ subsite. For each of these group types, the administrator can create
 new groups, specify applicable relationship types, create relations
 between these groups, and modify attributes of the types and groups.
 
-<H3>III. Historical Considerations</H3>
+<h3>III. Historical Considerations</h3>
 
 Versions 4.0.x of the ACS lacked a useful group administration package
 for subsites. For example:
@@ -51,14 +49,14 @@ subsites group administration package making group administration
 subsite aware and better integrated with the ACS Object Model.
 
 
-<H3>IV. Design Tradeoffs</H3>
+<h3>IV. Design Tradeoffs</h3>
 
 Whenever possible, the design of this package tries to minimize
 disturbance to the core ACS 4.0 data model. Instead, we focus on
 adding a more powerful user interface and PL/SQL API to the existing
 group admin pages while extending the data model only when necessary. 
 
-<H3>V. API</H3>
+<h3>V. API</h3>
 
 <h4>Permissible relationship types</h4>
 
@@ -102,7 +100,7 @@ create table group_rels (
 </pre>
 
 
-<p><h4>Dynamic subtypes of object types</h4>
+<h4>Dynamic subtypes of object types</h4>
 
 To allow administrators to create dynamic object types (e.g. subtypes
 of the object types <code>group</code>, <code>membership_rel</code>,
@@ -140,26 +138,26 @@ acs_object_types.dynamic_p       char(1) default 'f'
 </pre>
 <p>
 
-<b>Note that the <code>dynamic_p</code> is still experimental and may
-be removed in a future version of ACS</b>
+<strong>Note that the <code>dynamic_p</code> is still experimental and may
+be removed in a future version of ACS</strong>
 
 
-<H3>VII. Data Model Discussion</H3>
+<h3>VII. Data Model Discussion</h3>
 
 ...
 
 
-<H3>VIII. User Interface</H3>
+<h3>VIII. User Interface</h3>
 
 The user interface comprises entirely of administrative pages located
 in the <code>/admin/</code> directory of the subsite package. 
 
-<H3>IX. Configuration/Parameters</H3>
+<h3>IX. Configuration/Parameters</h3>
 
 The revised group administration pages require no new package parameters.
 
 
-<H3>X. Future Improvements/Areas of Likely Change</H3>
+<h3>X. Future Improvements/Areas of Likely Change</h3>
 
 There are many areas for improvement to the user interface, including
 tighter integration with the relational segments and constraints
@@ -183,19 +181,19 @@ We also may add a few additional package parameters including:
 </ul>
 
 
-<H3>XI. Authors</H3>
+<h3>XI. Authors</h3>
 
 This document is primarily the result of discussions between Oumi
 Mehrotra and Michael Bryzek. Bryan Quinn and Rafi Schloming provided
 key insights early in the development process.
 
-<UL>
-  <LI>System creator: <a href=mailto:mbryzek@arsdigita.com>mbryzek@arsdigita.com</a>
-  <LI>System owner: <a href=mailto:mbryzek@arsdigita.com>mbryzek@arsdigita.com</a>
-  <LI>Documentation author <a href=mailto:mbryzek@arsdigita.com>mbryzek@arsdigita.com</a>
-</UL>
+<ul>
+  <li>System creator: <a href="mailto:mbryzek@arsdigita.com">mbryzek@arsdigita.com</a></li>
+  <li>System owner: <a href="mailto:mbryzek@arsdigita.com">mbryzek@arsdigita.com</a></li>
+  <li>Documentation author <a href="mailto:mbryzek@arsdigita.com">mbryzek@arsdigita.com</a></li>
+</ul>
 
-<H3>XII. Revision History</H3>
+<h3>XII. Revision History</h3>
 
 <TABLE cellSpacing=2 cellPadding=2 width="90%" bgColor=#efefef>
  <TBODY>
@@ -219,8 +217,8 @@ key insights early in the development process.
   </TR>
  </TBODY>
 </TABLE>
-<P>
-<HR>
+<p>
+<hr>
 <address><A href="mailto:mbryzek@arsdigita.com">Michael Bryzek</a></address>
 <br><font size=-1>group-admin-pages-design.html,v 1.1.4.1 2001/01/12 22:43:33 mbryzek Exp</font>
 

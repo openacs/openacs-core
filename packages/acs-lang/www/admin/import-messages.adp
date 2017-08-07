@@ -3,17 +3,17 @@
 
 Import results for
 <if @package_key@ nil>
-  <b>all packages</b>
+  <strong>all packages</strong>
 </if>
 <else>
-package <b>@package_key@</b>
+package <strong>@package_key@</strong>
 </else>
 and
 <if @locale@ nil>
-  <b>all locales</b>
+  <strong>all locales</strong>
 </if>
 <else>
-locale <b>@locale@</b>
+locale <strong>@locale@</strong>
 </else>.
 
 <p>

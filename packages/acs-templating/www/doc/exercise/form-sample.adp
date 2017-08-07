@@ -4,36 +4,36 @@
 </head>
 
 <body>
-<b>Add an entry to your address book
+<strong>Add an entry to your address book
 <formtemplate id="add_entry">
 
 
 	<table>
-  	<tr><td><b><i>Name</i>:</b></td>
+  	<tr><td><strong><em>Name</em>:</strong></td>
   	<td><formwidget id="title"> <formwidget id="first_names"> <formwidget id="last_name">	 
 	  </td></tr>
-	  <tr><td><b><i>Gender</i>:</b></td><td>
+	  <tr><td><strong><em>Gender</em>:</strong></td><td>
 	  <formgroup id="gender">@formgroup.label@ @formgroup.widget@
 	  </formgroup>
 	  <formerror id="gender"><br><font color=red><small>Please include gender information about your entry subject</small></font></formerror>
 	  </td></tr>
-	  <tr><td><b><i>Birthday</i>:</b></td><td><formwidget id="birthday"></td></tr>
-	  <tr><td><b><i>Address</i>:</b></td><td><formwidget id="address"></td></tr>
-	  <tr><td><b><i>City</i>:</b></td>
-	      <td><formwidget id="city" size="29"> <b> <i>State</i>:</b><formwidget id="state"></td>
+	  <tr><td><strong><em>Birthday</em>:</strong></td><td><formwidget id="birthday"></td></tr>
+	  <tr><td><strong><em>Address</em>:</strong></td><td><formwidget id="address"></td></tr>
+	  <tr><td><strong><em>City</em>:</strong></td>
+	      <td><formwidget id="city" size="29"> <strong> <em>State</em>:</strong><formwidget id="state"></td>
 	  </tr>
-	  <tr><td><b><i>Zip</i>:</b></td>
-	      <td><formwidget id="zip"> <b><i>Country</i>:</b><formwidget id="country"></td>
+	  <tr><td><strong><em>Zip</em>:</strong></td>
+	      <td><formwidget id="zip"> <strong><em>Country</em>:</strong><formwidget id="country"></td>
 	  </tr>
-	  <tr><td><b><i>Email</i>:</b></td><td><formwidget id="email"></td></tr>
-	  <tr><td><b><i>Relation</i>:</b></td>
+	  <tr><td><strong><em>Email</em>:</strong></td><td><formwidget id="email"></td></tr>
+	  <tr><td><strong><em>Relation</em>:</strong></td>
 	      <td><formgroup id="relationship"> @formgroup.widget@ @formgroup.label@ <br></formgroup></td>
 	  </tr>
-	  <tr><td><b><i>Telephones<b>:</i></td>
+	  <tr><td><strong><em>Telephones<strong>:</em></td>
 		<td><table><formgroup id="primary_phone">
 		  <tr><td>@formgroup.widget@</td><td>@formgroup.label@</td>
 	          <td><formwidget id="@formgroup.label@"></td></tr>
-		</formgroup></table><small><i>please indicate your primary telephone</i></small>
+		</formgroup></table><small><em>please indicate your primary telephone</em></small>
 	  </td></tr>
 	  <tr><td colspan="2" align="center"><br><input type="submit" value="Enter"></td></tr>
 	</table>
@@ -68,7 +68,7 @@
 
 </multiple>
   <if @address:rowcount@ eq 0>
-    <tr><th align="center" colspan="4"><i>You currently have no entries in your addressbook</i></th></tr>
+    <tr><th align="center" colspan="4"><em>You currently have no entries in your addressbook</em></th></tr>
   </if>
 
 </table>

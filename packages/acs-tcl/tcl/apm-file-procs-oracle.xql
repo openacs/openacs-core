@@ -3,40 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="apm_generate_tarball.create_item">      
-      <querytext>
-
-begin
- :1 := content_item.new(name => :name,
-                        creation_ip => :creation_ip,
-                        storage_type => 'file'
-                        );
-end;
-
-      </querytext>
-</fullquery>
-
-<fullquery name="apm_generate_tarball.create_revision">      
-      <querytext>
-
-        begin
-          :1 := content_revision.new(title => :title,
-                                   description => 'gzipped tarfile',
-                                   text => 'not_important',
-                                   mime_type => 'text/plain',
-                                   item_id => :item_id,
-                                   creation_user => :user_id,
-                                   creation_ip => :creation_ip
-                );
-
-          update cr_items
-          set live_revision = :1
-          where item_id = :item_id;
-        end;
-
-      </querytext>
-</fullquery>
-
 <fullquery name="apm_generate_tarball.update_tarball">      
       <querytext>
 
@@ -71,35 +37,4 @@ end;
       </querytext>
 </fullquery>
  
-<fullquery name="apm_file_add.apm_file_add">      
-      <querytext>
-      
-	begin
-	:1 := apm_package_version.add_file(
-		file_id => :file_id,
-		version_id => :version_id,
-		path => :path,
-		file_type => :file_type,
-                db_type => :db_type
-		);
-	end;
-    
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="apm_file_remove.apm_file_remove">      
-      <querytext>
-      
-	begin
-	apm_package_version.remove_file(
-				path => :path,
-				version_id => :version_id
-				);
-	end;
-    
-      </querytext>
-</fullquery>
-
-
 </queryset>

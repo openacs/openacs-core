@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Release Version Numbering</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="cvs-guidelines.html" title="CVS Guidelines"><link rel="next" href="eng-standards-constraint-naming.html" title="Constraint naming standard"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="cvs-guidelines.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><div class="authorblurb"><div class="cvstag">($Id$)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Release Version Numbering</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="cvs-guidelines.html" title="CVS Guidelines"><link rel="next" href="eng-standards-constraint-naming.html" title="Constraint naming standard"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="cvs-guidelines.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><div class="authorblurb"><div class="cvstag">($Id$)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>
@@ -71,24 +71,32 @@ the next.  These rules are fine-tuned with each release; an example is <a class=
         &lt;maturity&gt;1&lt;/maturity&gt;
         &lt;callbacks&gt;
             ...
-    </pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-        <span class="strong"><strong>Level -1: Incompatible.</strong></span> This package is not supported for this platform and should not be expected to work.
-      </p></li><li class="listitem"><p>
-        <span class="strong"><strong>Level 0: New Submission.</strong></span> This is the default for packages that do not have maturity explicitly set, 
-        and for new contributions. The only criterion for level 0 is that at least one person asserts that it works on a given platform.
-      </p></li><li class="listitem"><p>
-        <span class="strong"><strong>Level 1: Immature.</strong></span> Has no open priority 1 or priority 2 bugs. Has been installed by at least
-        10? different people, including 1 core developer. Has been available in a stable release for at least 1 month. Has API documentation.
-      </p></li><li class="listitem"><p>
-        <span class="strong"><strong>Level 2: Mature.</strong></span> Same as Level 1, plus has install guide and user documentation; 
-        no serious deviations from general coding practices; no namespace conflicts with existing level 2 packages.
-      </p></li><li class="listitem"><p>
-        <span class="strong"><strong>Level 3: Mature and Standard.</strong></span> Same as level 2, plus meets published coding standards; 
-        is fully internationalized; available on both supported databases.
+    </pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p> <span class="strong"><strong>Level -1:
+      Incompatible.</strong></span> This package is not supported for this
+      platform and should not be expected to work.  </p></li><li class="listitem"><p> <span class="strong"><strong>Level 0: New
+      Submission.</strong></span> This is the default for packages that do
+      not have maturity explicitly set, and for new contributions. The
+      only criterion for level 0 is that at least one person asserts
+      that it works on a given platform.  </p></li><li class="listitem"><p> <span class="strong"><strong>Level 1:
+      Immature.</strong></span> Has no open priority 1 or priority 2
+      bugs. Has been installed by at least 10? different people,
+      including 1 core developer. Has been available in a stable
+      release for at least 1 month. Has API documentation.
+      </p></li><li class="listitem"><p> <span class="strong"><strong>Level 2:
+      Mature.</strong></span> Same as Level 1, plus has install guide and
+      user documentation; no serious deviations from general coding
+      practices; no namespace conflicts with existing level 2
+      packages.  </p></li><li class="listitem"><p> <span class="strong"><strong>Level 3: Mature and
+      Standard.</strong></span> Same as level 2, plus meets published
+      coding standards; is fully internationalized; available on both
+      supported databases.  </p></li><li class="listitem"><p> <span class="strong"><strong>Level 4:
+      Deprecated.</strong></span> The package was in some earlier version
+      is use, but was probably replaced by a another package. The
+      package description should point to a preferred version.
       </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="naming-upgrade-scripts"></a>Naming Database Upgrade Scripts</h3></div></div></div><p>Database upgrade scripts must be named very precisely in order for the Package Manager to run the correct script at the correct time.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Upgrade scripts should be named <code class="computeroutput">/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>/sql/<span class="replaceable"><span class="replaceable">postgresql</span></span>/upgrade/upgrade-<span class="replaceable"><span class="replaceable">OLDVERSION</span></span>-<span class="replaceable"><span class="replaceable">NEWVERSION</span></span>.sql</code></p></li><li class="listitem"><p>If the version you are working on is a later version than the current released version, OLDVERSION should be the current version.  The current version is package version in the APM and in <code class="computeroutput">/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>.info</code>.  So if forums is at 2.0.1, OLDVERSION should be 2.0.1d1.  Note that this means that new version development that includes an upgrade must start at d2, not d1.
         </p></li><li class="listitem"><p>If you are working on a pre-release version of a package, use the current package version as OLDVERSION.  Increment the package version as appropriate (see above) and use the new version as NEWVERSION.  For example, if you are working on 2.0.1d3, make it 2.0.1d4 and use <code class="computeroutput">upgrade-2.0.1d3-2.0.1d4.sql</code>.</p></li><li class="listitem"><p>Database upgrades should be confined to development releases, not alpha or beta releases.</p></li><li class="listitem"><p>
           Never use a final release number as a NEWVERSION.  If you do, then it is impossible to add any more database upgrades without incrementing the overall package version.</p></li><li class="listitem"><p>Use only the d, a, and b letters in OLDVERSION and NEWVERSION.  rc is not supported by OpenACS APM.</p></li><li class="listitem"><p>The distance from OLDVERSION to NEWVERSION should never span a release.   For example if we had a bug fix in
 acs-kernel on 5.1.0 you wouldn't want a file upgrade-5.0.4-5.1.0d1.sql since if you subsequently need to provide a 5.0.4-5.0.5 upgrade you will have to rename the 5.0.4-5.1.0 upgrade since you can't have upgrades which overlap like that.  Instead, use <code class="computeroutput">upgrade-5.1.0d1-5.1.0d2.sql</code>
 </p></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="cvs-guidelines.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="eng-standards-constraint-naming.html">Next</a></td></tr><tr><td width="40%" align="left">
     CVS Guidelines
-   </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> Constraint naming standard</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/eng-standards-versioning.html#comments">View comments on this page at openacs.org</a></center></body></html>
+   </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> Constraint naming standard</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

@@ -2,7 +2,7 @@ ad_page_contract {
     Flush one or more values from util_memoize's cache
 } {
     suffix
-    {return_url "."}
+    {return_url:localurl "."}
 }
 
 if {$suffix eq "util_memoize"} {   
@@ -17,3 +17,9 @@ if {$suffix eq "util_memoize"} {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

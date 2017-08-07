@@ -111,7 +111,7 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
     } error]
 
     # Teardown
-    file delete $spec_path
+    file delete -- $spec_path
     foreach {type proc} [array get callback_array] {
       db_dml remove_callback {delete from apm_package_callbacks 
                               where version_id = :version_id
@@ -123,8 +123,7 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
 
 
     if { $error_p } {
-        global errorInfo
-        error "$error - $errorInfo"
+	error "$error - $::errorInfo"
     }
 }
 
@@ -163,8 +162,7 @@ aa_register_case -cats {api db smoke} apm__test_callback_get_set {
     apm_remove_callback_proc -package_key $package_key -type $callback_type
 
     if { $error_p } {
-        global errorInfo
-        error "$error - $errorInfo"
+	error "$error - $::errorInfo"
     }
 }
 
@@ -196,12 +194,11 @@ aa_register_case -cats {db api smoke} apm__test_callback_invoke {
     } error]
 
     # Teardown
-    file delete $file_path
+    file delete -- $file_path
     apm_remove_callback_proc -package_key $package_key -type $type
 
     if { $error_p } {
-        global errorInfo
-        error "$error - $errorInfo"
+	error "$error - $::errorInfo"
     }
 }
 
@@ -304,9 +301,8 @@ aa_register_case -cats {api smoke} text_to_html {
     set errno [catch { set text_version [ad_html_to_text -- $offending_post] } errmsg]
 
     if { ![aa_equals "Does not bomb" $errno 0] } {
-        global errorInfo
-        aa_log "errmsg: $errmsg"
-        aa_log "errorInfo: $errorInfo"
+                aa_log "errmsg: $errmsg"
+        aa_log "errorInfo: $::errorInfo"
     } else {
         aa_equals "Expected identical result" $text_version $offending_post
     }
@@ -368,9 +364,8 @@ anybody have any ideas?
     set errno [catch { set text_version [ad_html_to_text -- $offending_post] } errmsg]
 
     if { ![aa_equals "Does not bomb" $errno 0] } {
-        global errorInfo
         aa_log "errmsg: $errmsg"
-        aa_log "errorInfo: $errorInfo"
+        aa_log "errorInfo: $::errorInfo"
     } else {
         aa_log "Text version: $text_version"
     }
@@ -527,15 +522,15 @@ aa_register_case -cats {api db smoke} db__transaction {
     # verify the on_error clause is called
     set error_called 0
     catch {db_transaction { set foo } on_error {set error_called 1}} errMsg
-    aa_equals "error clause invoked on tcl error" \
+    aa_equals "error clause invoked on Tcl error" \
         $error_called 1
 
-    # Check that the tcl error propigates up from the code block
+    # Check that the Tcl error propigates up from the code block
     set error_p [catch {db_transaction { error "BAD CODE"}} errMsg]
     aa_equals "Tcl error propigates to errMsg from code block" \
         $errMsg "Transaction aborted: BAD CODE"
 
-    # Check that the tcl error propigates up from the on_error block
+    # Check that the Tcl error propigates up from the on_error block
     set error_p [catch {db_transaction {set foo} on_error { error "BAD CODE"}} errMsg]
     aa_equals "Tcl error propigates to errMsg from on_error block" \
         $errMsg "BAD CODE"
@@ -1019,7 +1014,12 @@ aa_register_case -cats {api db} db__caching {
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {parameter::get parameter::get_from_package_key parameter::set_default parameter::set_default parameter::set_value parameter::set_from_package_key parameter::set_global_value parameter::get_global_value} \
+    -procs {
+	parameter::get parameter::get_from_package_key
+	parameter::set_default parameter::set_default
+	parameter::set_value parameter::set_from_package_key
+	parameter::set_global_value parameter::get_global_value
+    } \
     parameter__check_procs {
     Test the parameter::* procs
 
@@ -1036,7 +1036,7 @@ aa_register_case \
             apm_parameter_register -parameter_id $parameter_id -scope global x_test_x "" acs-tcl 0 number
             parameter::set_global_value -package_key acs-tcl -parameter x_test_x -value 3
             aa_equals "check global parameter value set/get" \
-		[parameter::get_global_value -package_key acs-tcl -parameter x_test_x]\
+		[parameter::get_global_value -package_key acs-tcl -parameter x_test_x] \
 		"3"
             apm_parameter_unregister $parameter_id
 
@@ -1046,18 +1046,17 @@ aa_register_case \
 		where
 		ap.package_key = apt.package_key
 		and apt.singleton_p ='t'
-		and ap.package_key <> 'acs-kernel'
+		and ap.package_key <> 'acs-kernel' and ap.package_key <> 'search'
 	    }] {
 
 		lassign $tuple parameter_name package_key default_value parameter_id
 		set value [random]
 		if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
 
-		    set package_id [apm_package_id_from_key $package_key]	    
+		    set package_id [apm_package_id_from_key $package_key]
 		    set actual_value [db_string real_value {
 			select apm_parameter_values.attr_value
-			from 
-			apm_parameter_values
+			from   apm_parameter_values
 			where apm_parameter_values.package_id = :package_id
 			and apm_parameter_values.parameter_id = :parameter_id
 		    }]
@@ -1133,3 +1132,59 @@ aa_register_case -cats {api smoke} acs_user__registered_user_p {
     aa_true "registered_user_p works correct" $works_p
 }
 
+
+aa_register_case -cats {api smoke} util__ns_parseurl {
+    Test ns_parseurl
+
+    @author Gustaf Neumann
+} {
+    aa_equals "full url, no port" \
+        [ns_parseurl http://openacs.org/www/t.html] \
+        {proto http host openacs.org path www tail t.html}
+    
+    aa_equals "full url, with port" \
+        [ns_parseurl http://openacs.org:80/www/t.html] \
+        {proto http host openacs.org port 80 path www tail t.html}
+    
+    aa_equals "full url, no port, no component" \
+        [ns_parseurl http://openacs.org/] \
+        {proto http host openacs.org path {} tail {}}
+
+    aa_equals "full url, no port, no component, no trailing slash" \
+        [ns_parseurl http://openacs.org] \
+        {proto http host openacs.org path {} tail {}}
+    
+    aa_equals "full url, no port, one component" \
+        [ns_parseurl http://openacs.org/t.html] \
+        {proto http host openacs.org path {} tail t.html}
+
+    #
+    # relative URLs
+    #
+    aa_equals "relative url" \
+        [ns_parseurl /www/t.html] \
+        {path www tail t.html}
+    
+    # legacy NaviServer for pre HTTP/1.0, desired?
+    
+    aa_equals "legacy NaviServer, pre HTTP/1.0, no leading /" \
+        [ns_parseurl www/t.html] \
+        {tail www/t.html}
+
+    #
+    # protocol relative (protocol agnostic) URLs (contained in RFC 3986)
+    #
+    aa_equals "protocol relative url with port" \
+        [ns_parseurl //openacs.org/www/t.html] \
+        {host openacs.org path www tail t.html}
+    
+    aa_equals "protocol relative url without port" \
+        [ns_parseurl //openacs.org:80/www/t.html] \
+        {host openacs.org port 80 path www tail t.html}    
+}
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -13,7 +13,7 @@
       <th>Details</th>
     </tr>
     <tr>
-      <td><b>This server</b></td>
+      <td><strong>This server</strong></td>
       <td colspan="4" align="center"><a href="admin/">Automated Test Admin</a></td>
     </tr>
     <multiple name="servers">
@@ -34,7 +34,7 @@
               <td style="background-color:yellow">@servers.error_total_count@</td>
             </if>
 	    <else>
-            <td style="background-color:red"><b>@servers.error_total_count@</b></td>
+            <td style="background-color:red"><strong>@servers.error_total_count@</strong></td>
             </else>
           </else>
           <td style="white-space:nowrap"><a href="@servers.local_url@">More info</a></td>

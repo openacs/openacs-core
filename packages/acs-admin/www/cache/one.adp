@@ -11,12 +11,12 @@
       <input type="submit" value="Flush">
     </form>
     <hr>
-    <b>Key:</b>
+    <strong>Key:</strong>
     <blockquote>
       <pre>@key;noquote@</pre>
     </blockquote>
     <hr>
-    <b>Value:</b>
+    <strong>Value:</strong>
     <blockquote>
       @value;noquote@
     </blockquote>

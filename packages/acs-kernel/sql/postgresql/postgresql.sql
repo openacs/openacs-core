@@ -1,11 +1,7 @@
 create view dual as select now() as sysdate;
 
 -- used to support anonymous plsql blocks in the db_plsql function call in tcl.
-create sequence t_anon_func_seq;
-create view anon_func_seq as 
-select nextval('t_anon_func_seq') as nextval;
-
-
+create sequence anon_func_seq;
 
 --
 -- procedure instr/4
@@ -253,58 +249,35 @@ $$ LANGUAGE plpgsql immutable strict;
 --
 -- procedure get_func_definition/2
 --
+
 CREATE OR REPLACE FUNCTION get_func_definition(
    fname varchar,
    args oidvector
-) RETURNS text AS $$
+) RETURNS text AS $PROC$
 DECLARE
-        nargs           integer default 0;
-        v_pos           integer;
         v_funcdef       text default '';
         v_args          varchar;
-        v_one_arg       varchar;
-        v_one_type      varchar;
         v_nargs         integer;
         v_src           text;
         v_rettype       varchar;
 BEGIN
-        select proargtypes, pronargs, number_src(prosrc), 
+        select pg_get_function_arguments(oid), pronargs, prosrc, -- was number_src(prosrc)
                (select typname from pg_type where oid = p.prorettype::integer)
           into v_args, v_nargs, v_src, v_rettype
           from pg_proc p 
          where proname = fname::name
            and proargtypes = args;
 
-         v_funcdef := v_funcdef || '
-create or replace function ' || fname || '(';
-
-         v_pos := position(' ' in v_args);
-
-         while nargs < v_nargs loop
-             nargs := nargs + 1;
-             if nargs = v_nargs then 
-                 v_one_arg := v_args;
-                 v_args    := '';
-             else
-                 v_one_arg := substr(v_args, 1, v_pos - 1);
-                 v_args    := substr(v_args, v_pos + 1);
-                 v_pos     := position(' ' in v_args);            
-             end if;
-             select case when nargs = 1 
-                           then typname 
-                           else ',' || typname 
-                         end into v_one_type 
-               from pg_type 
-              where oid = v_one_arg::integer;
-             v_funcdef := v_funcdef || v_one_type;
-         end loop;
-         v_funcdef := v_funcdef || ') returns ' || v_rettype || E' as ''\n' || v_src || ''' language ''plpgsql'';';
+         v_funcdef :=
+	 	   E'--\n-- ' || fname || '/' || v_nargs || E'\n--' 
+         	   || E'\ncreate or replace function ' || fname || E'(\n  '
+                   || replace(v_args, ', ', E',\n  ')
+	           || E'\n) returns ' || v_rettype
+		   || E' as $$\n' || v_src || '$$ language plpgsql;';
 
         return v_funcdef;
-
 END;
-$$ LANGUAGE plpgsql stable strict;
-
+$PROC$ LANGUAGE plpgsql stable strict;
 
 
 --
@@ -798,9 +771,6 @@ $$ language 'sql' immutable strict;
 -- that acs_objects will become HUGE on real systems the resulting sequential scan would cripple
 -- performance.   
 
--- WARNING: subselects in where clauses that call this function and join on an outer table appear
--- to reliably kill PG 7.1.2, at least if "exists" is involved.   PG 7.2 doesn''t die on my test
--- case, so it appears to have been fixed.
 create or replace function tree_ancestor_keys(varbit) returns setof varbit as $$
 
   select tree_ancestor_keys($1, 1)
@@ -977,7 +947,7 @@ select define_function_args('trigger_type','tgtype');
 -- PG version checking helper
 -- vguerra@wu.ac.at 
 
--- This helper function indicates wether the current version of PG 
+-- This helper function indicates whether the current version of PG 
 -- one runs on is greater than, less than or equal to a given version, 
 -- returning 1 , -1 or 0 correspondingly.
 
@@ -1001,8 +971,11 @@ BEGIN
     ret_val = 0;
 
     user_pg_version := string_to_array(trim(p__version),'.')::int[];
-    select string_to_array(setting, '.')::int[] into pg_version from pg_settings where name = 'server_version';
-
+    
+    --   select string_to_array(setting, '.')::int[] into pg_version from pg_settings where name = 'server_version';
+    -- the following version does not barf on beta-versions etc.
+    select string_to_array(setting::int/10000 || '.' || (setting::int%10000)/100 || '.' || (setting::int%100), '.')::int[] into pg_version
+    from pg_settings where name = 'server_version_num';
 
     for index in array_length(user_pg_version, 1) + 1..array_length(pg_version, 1) loop
         user_pg_version[index] := 0;
