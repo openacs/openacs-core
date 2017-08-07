@@ -1617,9 +1617,11 @@ if {$UseXotclSiteNodes} {
         db_dml mount_object {}
         db_dml update_object_package_id {}
 
-        # We might have for this node_id (or under it) some entries in the
-        # cache, so flush these first.
-        site_node::update_cache -sync_children -node_id $node_id
+        # Flush all values for this node and its ancestors
+        set ancestors [site_node::get_ancestors -node_id $node_id -element node_id]
+        foreachn $ancestors {
+            site_node::update_cache -sync_children -node_id $n
+        }
 
         # DAVEB update context_id if it is passed in
         # some code relies on context_id to be set by
