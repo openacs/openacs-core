@@ -228,10 +228,10 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_dependency_provided_p.apm_dependency_check">      
+<fullquery name="apm_dependency_provided_p.get_service_versions">
       <querytext>
       
-	select apm_package_version.version_name_greater(service_version, :dependency_version) as version_p
+	select service_version
 	from apm_package_dependencies d, apm_package_types a, apm_package_versions v
 	where d.dependency_type = 'provides'
 	and d.version_id = v.version_id
@@ -239,12 +239,6 @@
 	and v.installed_p = 't'
 	and a.package_key = v.package_key
     
-      </querytext>
-</fullquery>
-
- <fullquery name="apm_dependency_provided_p.version_greater_p">      
-      <querytext>
-        select apm_package_version.version_name_greater(:provided_version, :dependency_version) from dual
       </querytext>
 </fullquery>
 
