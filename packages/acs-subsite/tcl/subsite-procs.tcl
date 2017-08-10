@@ -843,6 +843,58 @@ ad_proc -public -callback subsite::theme_changed {
 } -
 
 
+ad_proc -public subsite::get_theme_subsites {
+    -theme
+} {    
+    Returns a list of all packages implementing subsite that currently
+    are using specified theme.
+
+    @param theme theme key to lookup for
+
+    @return list of subsite_id
+} {
+    array set main_node [site_node::get_from_url -url "/"]
+
+    set all_subsites [list $main_node(object_id)]
+    foreach package_key [subsite::package_keys] {
+        lappend all_subsites {*}[site_node::get_children \
+                                     -all \
+                                     -package_key $package_key \
+                                     -element object_id \
+                                     -node_id $main_node(node_id)]
+    }
+    
+    set theme_subsites {}
+    foreach subsite_id $all_subsites {
+        set subsite_theme [subsite::get_theme \
+                               -subsite_id $subsite_id]
+        if {$subsite_theme eq $theme} {
+            lappend theme_subsites $subsite_id
+        }
+    }
+
+    return $theme_subsites
+}
+
+ad_proc -public subsite::refresh_theme_subsites {
+    -theme
+} {    
+    Refreshes theme subsite parameter on every subsite currently using
+    specified theme, in order to reload them from current theme
+    defaults. This might be used, for example, in upgrade callbacks
+    for themes where desired behavior is to upgrade all subsites using
+    it without manual intervention.
+    
+    @param theme theme key to lookup for
+} {
+    foreach subsite_id [subsite::get_theme_subsites \
+                            -theme $theme] {
+        subsite::set_theme \
+            -subsite_id $subsite_id \
+            -theme $theme
+    }
+}
+
 ad_proc -public subsite::save_theme_parameters {
     -subsite_id
     -theme
