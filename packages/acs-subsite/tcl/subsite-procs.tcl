@@ -844,32 +844,77 @@ ad_proc -public -callback subsite::theme_changed {
 
 
 ad_proc -public subsite::get_theme_subsites {
-    -theme
+    -theme:required
+    -subsite_id
+    -unmodified:boolean
 } {    
-    Returns a list of all packages implementing subsite that currently
-    are using specified theme.
+    Returns a list of all packages implementing subsite that are
+    currently using specified theme. Optionally, returns a list of
+    just those that were not locally modified.
 
-    @param theme theme key to lookup for
+    @param theme theme key to lookup for.
+    @param subsite_id narrow search to this subsite only. Useful to
+    check whether a single subsite is using a theme with or without
+    local modifications.    
+    @param unmodified decides whether we include subsites which theme
+    was locally modified.
 
     @return list of subsite_id
 } {
-    array set main_node [site_node::get_from_url -url "/"]
+    if {![info exists subsite_id]} {
+        array set main_node [site_node::get_from_url -url "/"]
 
-    set all_subsites [list $main_node(object_id)]
-    foreach package_key [subsite::package_keys] {
-        lappend all_subsites {*}[site_node::get_children \
-                                     -all \
-                                     -package_key $package_key \
-                                     -element object_id \
-                                     -node_id $main_node(node_id)]
+        set all_subsites [list $main_node(object_id)]
+        foreach package_key [subsite::package_keys] {
+            lappend all_subsites {*}[site_node::get_children \
+                                         -all \
+                                         -package_key $package_key \
+                                         -element object_id \
+                                         -node_id $main_node(node_id)]
+        }
+    } else {
+        set all_subsites $subsite_id
+    }
+
+    db_1row get_theme {
+        select * from subsite_themes
+         where key = :theme
     }
     
+    set settings {
+        template             DefaultMaster
+        css                  ThemeCSS
+        js                   ThemeJS
+        form_template        DefaultFormStyle
+        list_template        DefaultListStyle
+        list_filter_template DefaultListFilterStyle
+        dimensional_template DefaultDimensionalStyle
+        resource_dir         ResourceDir
+        streaming_head       StreamingHead
+    }
+
     set theme_subsites {}
     foreach subsite_id $all_subsites {
         set subsite_theme [subsite::get_theme \
                                -subsite_id $subsite_id]
         if {$subsite_theme eq $theme} {
-            lappend theme_subsites $subsite_id
+            set collect_p 1
+            if {$unmodified_p} {
+                foreach {var param} $settings {
+                    set default [string trim [set $var]]
+                    set value   [string trim [parameter::get -parameter $param -package_id $subsite_id]]
+                    regsub -all {\r\n} $value "\n" value
+                    regsub -all {\r\n} $default "\n" default            
+                    set collect_p [expr {$default eq $value}]
+                    if {!$collect_p} {
+                        ns_log notice "theme '$theme' parameter $var differs on subsite '$subsite_id': default '$default' actual value '$value'"
+                        break
+                    }
+                }
+            }
+            if {$collect_p} {
+                lappend theme_subsites $subsite_id
+            }
         }
     }
 
@@ -878,17 +923,22 @@ ad_proc -public subsite::get_theme_subsites {
 
 ad_proc -public subsite::refresh_theme_subsites {
     -theme
-} {    
-    Refreshes theme subsite parameter on every subsite currently using
-    specified theme, in order to reload them from current theme
-    defaults. This might be used, for example, in upgrade callbacks
-    for themes where desired behavior is to upgrade all subsites using
-    it without manual intervention.
-    
-    @param theme theme key to lookup for
+    -include_modified:boolean
 } {
+    Reload theme subsite parameters from defaults on every subsite
+    currently using specified theme. This might be used, for example,
+    in upgrade callbacks for themes if desired behavior is to upgrade
+    all subsites using it without manual intervention.
+    
+    By default this proc will not refresh locally modified templates.
+    
+    @param theme theme key to lookup for    
+    @param include_modified force reload also for locally modified
+    templates
+} {
+    set unmodified_p [expr {$include_modified_p ? false : true}]
     foreach subsite_id [subsite::get_theme_subsites \
-                            -theme $theme] {
+                            -theme $theme -unmodified=$unmodified_p] {
         subsite::set_theme \
             -subsite_id $subsite_id \
             -theme $theme

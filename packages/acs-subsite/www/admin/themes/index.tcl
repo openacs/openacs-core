@@ -92,36 +92,15 @@ list::create \
 
 set subsite_id [ad_conn subsite_id]
 set currentThemeKey [parameter::get -parameter ThemeKey -package_id $subsite_id]
-set settings {
-    template             DefaultMaster
-    css                  ThemeCSS
-    js                   ThemeJS
-    form_template        DefaultFormStyle
-    list_template        DefaultListStyle
-    list_filter_template DefaultListFilterStyle
-    dimensional_template DefaultDimensionalStyle
-    resource_dir         ResourceDir
-    streaming_head       StreamingHead
-}
 
 set package_keys '[join [subsite::package_keys] ',']'
 
 db_multirow -extend {active_p modified_p delete_p usage_count} themes select_themes {} {
     set active_p [expr {$currentThemeKey eq $key}]
-    set modified_p 0
-    if {$active_p} {
-        foreach {var param} $settings {
-            set default [string trim [set $var]]
-            set value   [string trim [parameter::get -parameter $param -package_id $subsite_id]]
-            regsub -all {\r\n} $value "\n" value
-            regsub -all {\r\n} $default "\n" default            
-            set modified_p [expr {$default ne $value}]
-            if {$modified_p} {
-                ns_log notice "theme parameter $var differs: default '$default' actual value '$value'"
-                break
-            }
-        }
-    }
+    set modified_p [expr {$active_p && [subsite::get_theme_subsites \
+                                            -theme $key \
+                                            -subsite_id $subsite_id \
+                                            -unmodified] eq ""}]
     set usage_count [db_string count_theme_usages [subst {
         select count(*)
         from apm_parameters p, apm_parameter_values v
