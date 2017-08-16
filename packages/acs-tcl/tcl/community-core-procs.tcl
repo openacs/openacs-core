@@ -325,6 +325,10 @@ ad_proc -public acs_user::delete {
         change_state -user_id $user_id -state "deleted"
         acs_user::flush_cache -user_id $user_id
     } else {
+        # portrait is also an entry in acs_objects with creation_user
+        # set to this user. Therefore won't be deleted by cascade and
+        # must be removed manually
+        acs_user::erase_portrait -user_id $user_id
         db_exec_plsql permanent_delete {}
     }
 }
@@ -731,6 +735,25 @@ ad_proc -private acs_user::get_portrait_id_not_cached {
     @param user_id user_id of the user for whom we need the portrait
 } {
     return [db_string get_item_id "" -default 0]
+}
+
+ad_proc -private acs_user::erase_portrait {
+    {-user_id:required}
+} {
+    Erases portrait of a user
+
+    @param user_id user_id of user whose portrait we want to delete
+} {
+    set item_id [acs_user::get_portrait_id \
+                     -user_id $user_id]
+
+    if {$item_id != 0} {
+        # Delete the item
+        content::item::delete -item_id $item_id
+        
+        # Flush the portrait cache
+        util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
+    }
 }
 
 # Local variables:
