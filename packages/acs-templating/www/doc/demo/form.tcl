@@ -38,7 +38,7 @@ if { [form is_valid add_user] } {
     if {[db_0or1row user_exists {
         select 1 from ad_template_sample_users where user_id = :user_id
     }]} {
-        ad_complain 1 "duplicate user_id; looks like somebody tried to hack the form"
+        ad_complain "duplicate user_id; looks like somebody tried to hack the form"
         ad_script_abort
     }
     db_dml insert_sample {
