@@ -808,57 +808,74 @@ ad_proc -private util::http::append_to_payload {
             spooling_file_handle}
 
 } {
+    set encode_p [expr {$encoding ni [list "binary" [encoding system]]}]
+    
     set payload_size [string length $payload]
 
+    # Get content size
     if {$file eq ""} {
-        if {$encoding ne "binary"} {set content [encoding convertto $encoding $content]}
         set content_size [string length $content]
     } else {
-        # At first check length by file size, so we don't have to read
-        # anything...
         set content_size [file size $file]
-        set rfd [open $file r]
-        fconfigure $rfd -translation binary
     }
 
-    # ...file as it is could be small enough, now let's check with
-    # encoding...
+    # Content size seems ok. Now try applying encoding
     if {$spool_file eq "" &&
-        $payload_size + $content_size <= $max_size &&
-        $file ne ""} {
-        set content [read $rfd]; close $rfd
-        if {$base64_p} {set content [base64::encode $content]}
-        if {$encoding ne "binary"} {set content [encoding convertto $encoding $content]}
+        $payload_size + $content_size <= $max_size} {
+        if {$file ne ""} {
+            set rfd [open $file r]
+            fconfigure $rfd -translation binary
+            set content [read $rfd]
+            close $rfd
+        }
+        if {$base64_p} {
+            set content [base64::encode $content]
+        }
+        if {$encode_p} {
+            set content [encoding convertto $encoding $content]
+        }
         set content_size [string length $content]
     }
 
     if {$spool_file eq "" &&
         $payload_size + $content_size <= $max_size} {
+        ## Payload small enough:
+        # just append new content
         return [list ${payload}${content} {} {}]
-    } else {
-        if {$spool_file eq ""} {
-            set spool_file [ad_tmpnam]
-            set wfd [open $spool_file w]
-            # Flush previously collected payload. As it was already
-            # properly encoded, use the binary translation...
-            fconfigure $wfd -translation binary
-            puts -nonewline $wfd $payload
-            # ...then switch to the proper one.
-            fconfigure $wfd -translation $encoding
-        }
-        if {$file ne ""} {
-            if {$base64_p} {
-                # TODO: it's tricky to base64 encode without slurping
-                # the whole file (exec + pipes?)
-                error "Base64 encoding currently supported only for in-memory file POSTing"
-            }
-            fcopy $rfd $wfd
-            close $rfd
-        } else {
-            puts -nonewline $wfd $content
-        }
-        return [list {} $spool_file $wfd]
     }
+    
+    ## Payload is too big:
+    
+    if {$spool_file eq ""} {
+        # create the spool file
+        set spool_file [ad_tmpnam]
+        set wfd [open $spool_file w]
+        # flush currently collected payload
+        puts -nonewline $wfd $payload
+        # set required encoding for next content
+        if {$encode_p} {
+            fconfigure $wfd -encoding $encoding
+        }       
+    }
+
+    # output content to spool file
+    if {$file ne ""} {
+        if {$base64_p} {
+            # TODO: it's tricky to base64 encode without slurping
+            # the whole file (exec + pipes?)
+            error "Base64 encoding currently supported only for in-memory file POSTing"
+        }
+        set rfd [open $file r]
+        fconfigure $rfd -translation binary
+        fconfigure $wfd -translation binary
+        fcopy $rfd $wfd
+        fconfigure $wfd -translation auto
+        close $rfd
+    } else {
+        puts -nonewline $wfd $content
+    }
+    
+    return [list {} $spool_file $wfd]
 }
 
 ad_proc -private util::http::follow_redirects {
