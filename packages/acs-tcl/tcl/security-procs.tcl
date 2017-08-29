@@ -310,6 +310,7 @@ ad_proc -public ad_user_login {
     
     ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
+        -expire [expr {$forever_p ? false : true}] \
         -max_age $max_age \
         -domain $cookie_domain \
         -secure f \
