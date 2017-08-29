@@ -500,11 +500,13 @@ ad_proc util::http::post {
     If <code>-base64</code> flag is set, files will be base64 encoded
     (useful for some kind of form).
 
-    @param -formvars Other form variables can be passes in<code>-formvars</code>
-    easily by the use of <code>export_vars -url</code> and will be
-    translated for the proper type of form. URL variables, as with GET
-    requests, are also sent, but an error is thrown if URL variables
-    conflict with those specified in other ways.
+    @param formvars Other form variables can be passed easily
+    through<code>-formvars</code> using <code>export_vars -url</code>
+    and will be translated for the proper type of form. This is useful
+    when we intend to send files together with variables to a
+    form. URL variables, as with GET requests, are also sent, but an
+    error is thrown if URL variables conflict with those specified in
+    other ways.
 
     <p> Default behavior is to build payload as an
     'application/x-www-form-urlencoded' payload if no files are
@@ -715,6 +717,7 @@ ad_proc util::http::post {
             set formvar [split $formvar  =]
             set key [lindex $formvar 0]
             set val [join [lrange $formvar 1 end] =]
+            set val [ad_urldecode_query $val]
 
             if {[info exists filevars($key)]} {
                 return -code error "${this_proc}:  Variable '$key' already specified as file variable"
