@@ -477,7 +477,7 @@ BEGIN
 	new__description,
         now(),               -- publish_date
 	new__mime_type,
-        new_nls_language,
+        new__nls_language,
 	null,                -- data/text
 	v_item_id,
         null,                -- revision_id
