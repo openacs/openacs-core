@@ -675,7 +675,7 @@ ad_proc -public site_node::get_url_from_object_id {
 ad_proc -public site_node::get_node_id {
     {-url:required}
 } {
-    return the node_id for this url
+    @return the node_id for this url
 } {
     array set node [get -url $url]
     return $node(node_id)
@@ -684,7 +684,7 @@ ad_proc -public site_node::get_node_id {
 ad_proc -public site_node::get_node_id_from_object_id {
     {-object_id:required}
 } {
-    return the site node id associated with the given object_id
+    @return the site node id associated with the given object_id
 } {
     set urls [get_url_from_object_id -object_id $object_id]
     if {[llength $urls] == 0} {
@@ -705,7 +705,7 @@ ad_proc -public site_node::get_node_id_from_object_id {
 ad_proc -public site_node::get_parent_id {
     {-node_id:required}
 } {
-    return the parent_id of this node
+    @return the parent_id of this node
 } {
     array set node [get -node_id $node_id]
     return $node(parent_id)
@@ -714,7 +714,7 @@ ad_proc -public site_node::get_parent_id {
 ad_proc -public site_node::get_parent {
     {-node_id:required}
 } {
-    return the parent node of this node
+    @return the parent node of this node
 } {
     array set node [get -node_id $node_id]
     return [get -node_id $node(parent_id)]
@@ -724,7 +724,7 @@ ad_proc -public site_node::get_ancestors {
     {-node_id:required}
     {-element ""}
 } {
-    return the ancestors of this node
+    @return the ancestors of this node
 } {
     set result [list]
     set array_result_p [string equal $element ""]
@@ -747,10 +747,9 @@ ad_proc -public site_node::get_ancestors {
 ad_proc -public site_node::get_object_id {
     {-node_id:required}
 } {
-    return the object_id for this node
+    @return the object_id for this node
 } {
-    array set node [get -node_id $node_id]
-    return $node(object_id)
+    return [dict get [get -node_id $node_id] object_id]
 }
 
 ad_proc -public site_node::get_children {
@@ -906,7 +905,7 @@ ad_proc -public site_node::closest_ancestor_package {
             set url [site_node::get_url -node_id $node_id]
         }
     }
-
+    
     # should we return the package at the passed-in node/url?
     if { $include_self_p && $package_key ne ""} {
         array set node_array [site_node::get -url $url]
@@ -1492,7 +1491,14 @@ if {$UseXotclSiteNodes} {
                 -node_id:required
                 {-all:switch} {-package_type ""} {-package_key ""} {-filters ""} {-element ""}
             } {
-                ns_cache_eval xo_site_nodes get_children-$node_id-$all-$package_type-$package_key-$filters-$element { next }
+                if {$all} {
+                    #
+                    # don't cache when $all is specified - seldomly used, a pain for invalidating
+                    #
+                    next
+                } else {
+                    ns_cache_eval xo_site_nodes get_children-$node_id-$all-$package_type-$package_key-$filters-$element { next }
+                }
             }
 
             :public method get_node_id {-url:required} {
@@ -1523,7 +1529,7 @@ if {$UseXotclSiteNodes} {
                 ns_cache_eval xo_site_nodes package_url-$package_key { next }
             }
 
-            :protected method flush_all {patterns} {
+            :public method flush_all {patterns} {
                 foreach pattern $patterns {
                     foreach key [ns_cache names xo_site_nodes $pattern] {
                         #:msg ......key=$key
@@ -1543,13 +1549,11 @@ if {$UseXotclSiteNodes} {
                 set old_url [:get_url -node_id $node_id]
 
                 if {$node_id eq "" || $old_url eq "/"} {
-                    foreach i [ns_cache names xo_site_nodes] {
-                        ::xo::clusterwide ns_cache flush xo_site_nodes $i
-                    }
+                    ::xo::clusterwide ns_cache_flush xo_site_nodes
                 } else {
                     set limit_clause [expr {$with_subtree ? "" : "limit 1"}]
                     #
-                    # the following query is just for PG, TODO: Oracle is missing
+                    # The following query is just for PG, TODO: Oracle is missing
                     #
                     set tree [::xo::dc list_of_lists [current method]-flush-tree "
             select site_node__url(children.node_id), children.node_id, children.object_id
@@ -1621,10 +1625,15 @@ if {$UseXotclSiteNodes} {
         # the cache, so flush these first. Since the cache might
         # contain children, we have to flush on all ancestor nodes up
         # to the top node.
-        set ancestors [site_node::get_ancestors -node_id $node_id -element node_id]
-        foreach n $ancestors {
-            site_node::update_cache -sync_children -node_id $n
-        }
+        
+        #set ancestors [site_node::get_ancestors -node_id $node_id -element node_id]
+        #foreach n $ancestors {
+            #site_node::update_cache -sync_children -node_id $n
+        #}
+        site_node::update_cache -sync_children -node_id $node_id
+
+        set parent_node_id [site_node::get_parent_id -node_id [site_node::get_parent_id -node_id $node_id]]
+        ::xo::site_node flush_all get_children-$parent_node_id-*
 
         # DAVEB update context_id if it is passed in
         # some code relies on context_id to be set by
@@ -1670,6 +1679,9 @@ if {$UseXotclSiteNodes} {
     } {
         #ns_log Notice "site_node::update_cache for node_id $node_id"
         ::xo::site_node flush_cache -node_id $node_id -with_subtree $sync_children_p
+        
+        set parent_node_id [site_node::get_parent_id -node_id $node_id]
+        ::xo::site_node flush_all get_children-$parent_node_id-*
     }
 
     ad_proc -public site_node::get {
@@ -1853,6 +1865,24 @@ if {$UseXotclSiteNodes} {
     #
     # End of overwritten procs.
     #
+
+    # temporary helper for testing in ds/shell
+    #
+    #array set top [site_node::get -url /]
+    #array set ds [site_node::get -url /ds]
+    ##set n [site_node::new -name a2 -parent_id $ds(node_id)]
+    #array set a2 [site_node::get -url /ds/a2]
+    #set n $a2(node_id)
+    
+    #site_node::get_children -package_key attachments -node_id $ds(node_id)
+    #site_node::get_children -package_key attachments -node_id $top(node_id)
+    #foreach k [ns_cache_keys xo_site_nodes get_children*] {lappend _ $k=[ns_cache_get xo_site_nodes $k]}
+    
+    #site_node::mount -node_id $n -object_id 1226
+    #site_node::unmount -node_id $n
+
+    set _
+
 }
 
 #
