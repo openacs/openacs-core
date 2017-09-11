@@ -15,11 +15,11 @@ ad_page_contract {
     last_name:onevalue
     export_vars:onevalue
 }
-    
+
 set admin_user_id [ad_conn user_id]
 
 set context [list [list "./" "Users"] "New user notified"]
-set export_vars [export_vars {user_id}]
+set admin_url [acs_community_member_admin_url -user_id $user_id]
 
 set admin_email [db_string get_admin_email {}]
 set subject "You have been added as a user to [ad_system_name] at [ad_url]"

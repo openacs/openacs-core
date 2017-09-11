@@ -84,7 +84,7 @@ set subject $action
 set message $email_message
 
 if {$return_url eq ""} {
-    set return_url [export_vars -base /acs-admin/users/one {user_id}]
+    set return_url [acs_community_member_admin_url -user_id $user_id]
 }
 
 set context [list [list "./" "Users"] "$action"]

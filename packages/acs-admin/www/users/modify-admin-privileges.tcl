@@ -13,7 +13,8 @@ ad_page_contract {
 set confirmed_url [export_vars -base /acs-admin/users/modify-admin-privileges {
     user_id:sign(max_age=60) action:sign {confirmed_p 1}
 }]
-set return_url [export_vars -base /acs-admin/users/one {user_id}]
+
+set return_url [acs_community_member_admin_url -user_id $user_id]
 
 set context [list [list "./" "Users"] "Modify privileges"]
 

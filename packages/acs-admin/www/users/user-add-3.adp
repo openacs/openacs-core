@@ -8,7 +8,7 @@
 <p>
 <ul>
 <li>Return to <a href="@referer@">user administration</a></li>
-<li>View administrative page for newly created user, <a href="/acs-admin/users/one?@export_vars@">@first_names@ @last_name@</a></li>
+<li>View administrative page for newly created user, <a href="@admin_url@">@first_names@ @last_name@</a></li>
 </ul>
 </p>
 
