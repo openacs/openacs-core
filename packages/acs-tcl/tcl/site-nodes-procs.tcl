@@ -1881,7 +1881,7 @@ if {$UseXotclSiteNodes} {
     #site_node::mount -node_id $n -object_id 1226
     #site_node::unmount -node_id $n
 
-    set _
+    #set _
 
 }
 
