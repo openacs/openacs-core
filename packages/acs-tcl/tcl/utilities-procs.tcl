@@ -10,6 +10,36 @@ ad_library {
 
 namespace eval util {}
 
+ad_proc util::pdfinfo {
+    file
+} {    
+    Calls the pdfinfo command line utility on a given pdf
+    file. pdfinfo must be installed on the server for this to work. On
+    linux this is usually part of the poppler-utils
+    (https://poppler.freedesktop.org/).
+
+    @param file absolute path to the pdf file
+
+    @return a dict containing all the pdfinfo returned fields as keys
+            and their respective values    
+} {
+    set pdfinfo [util::which pdfinfo]
+
+    if {$pdfinfo eq ""} {
+        error "pdfinfo command not found on the system"        
+    }
+
+    set retval [dict create]
+    foreach line [split [exec $pdfinfo $file] \n] {
+        lassign [split $line ":"] name value
+        set name  [string trim $name]
+        set value [string trim $value]
+        dict set retval $name $value
+    }
+
+    return $retval
+}
+
 ad_proc util::zip {
     -source:required
     -destination:required
