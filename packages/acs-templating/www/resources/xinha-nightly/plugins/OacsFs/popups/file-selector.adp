@@ -117,7 +117,7 @@ select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
       </td>
 
       <td valign="top" width="50%" >
-	<if @write_p@ eq 1>
+	<if @write_p;literal@ true>
 	  <fieldset style="margin-top:10px;padding-top:10px;">
 	    <legend><b>@HTML_UploadTitle@</b></legend>
 	    <formtemplate id="upload_form">

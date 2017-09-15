@@ -1,7 +1,7 @@
 <% set selected_rownum 1 %>
 <multiple name="filters">
   <group column="filter_name">
-    <if @filters.selected_p@ and @filters.filter_name@ ne "groupby">
+    <if @filters.selected_p;literal@ true and @filters.filter_name@ ne "groupby">
       <if @selected_rownum@ eq 1><strong>Filtered by:</strong> </if>
       <elseif @selected_rownum@ gt 1>, </elseif>
       @filters.filter_label@: @filters.label@

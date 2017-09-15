@@ -3,7 +3,7 @@
 	<table border="0" width="100%" style="margin: 0 auto; text-align: left;padding: 0px;">
 	  <tbody>
       <td valign="top">
-	<if @write_p@ eq 1>
+	<if @write_p;literal@ true>
 	    <formtemplate id="upload_form">
 	<formwidget id="f_href">
 			<input type="hidden" id="f_target"/>

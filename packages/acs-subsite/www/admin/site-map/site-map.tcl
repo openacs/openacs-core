@@ -98,7 +98,7 @@ template::list::create \
 		    <input type="hidden" name="checkbox" value="@nodes.node_id@">
 		</if>
 		<else>
-		    <if @nodes.view_p@ true>
+		    <if @nodes.view_p;literal@ true>
 		        <input type="checkbox" name="checkbox" value="@nodes.node_id@" checked> 
 		    </if>
 		    <else>

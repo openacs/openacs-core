@@ -159,7 +159,7 @@ template::list::create \
       name {
 	label "[_ file-storage.Name]"
 	display_template {
-	  <if @contents.folder_p@ eq 0>
+	  <if @contents.folder_p;literal@ false>
 	  <input type="radio" name="linktarget" value="@contents.object_id@" 
 	     id="oi@contents.object_id@" 
              onclick="onPreview('@contents.file_url@','@contents.type@');" />
@@ -172,7 +172,7 @@ template::list::create \
 	  </if>
 	  <img src="@contents.icon@"  border=0 
 	  alt="#file-storage.@contents.type@#" /> 
-	  <a href="@contents.file_url@" <if @contents.folder_p@ eq 0>onclick="selectImage('@contents.object_id@','@contents.file_url@','@contents.type@');return false;"</if>>@contents.name@</a>
+	  <a href="@contents.file_url@" <if @contents.folder_p;literal@ false>onclick="selectImage('@contents.object_id@','@contents.file_url@','@contents.type@');return false;"</if>>@contents.name@</a>
 	}
 	orderby_desc {name desc}
 	orderby_asc {name asc}

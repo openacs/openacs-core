@@ -5,7 +5,7 @@
 	<table border="0" style="margin: 0 auto; text-align: left;padding: 0px;" width="100%">
 	  <tbody>
       <td valign="top">
-	<if @write_p@ eq 1>
+	<if @write_p;literal@ true>
 
 	    <formtemplate id="upload_form" style="attach-image-form">
 		  <input type="hidden" name="f_url" id="f_url" value="@f_url@"/>
@@ -17,7 +17,7 @@
 	          <else>
 		    <td class="form-widget">
                   </else> 	
-                  <if @ajaxhelper_p@>
+                  <if @ajaxhelper_p;literal@ true>
                  <fieldset>
         <legend>#acs-templating.Choose_Image#</legend>
         	<table border="0" cellpadding="0" cellspacing="0" width="100%">

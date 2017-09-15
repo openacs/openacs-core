@@ -228,9 +228,9 @@ ad_proc -public template_tag_if_interp_expr {} {
         }
 
         default { 
-            # treat <if @foo_p@> as a shortcut for <if @foo_p@ true>
+            # treat <if @foo_p;literal@ true> as a shortcut for <if @foo_p;literal@ true>
             #append condition "\[template::util::is_true $arg1\]"
-            ad_log warning "operation <$op> using undocumented <if @foo_p@> as a shortcut for <if @foo_p@ true>"
+            ad_log warning "operation <$op> using undocumented <if @foo_p;literal@ true> as a shortcut for <if @foo_p;literal@ true>"
             append condition "\[string is true -strict $arg1\]"
             set next [expr {$i - 1}]
         }

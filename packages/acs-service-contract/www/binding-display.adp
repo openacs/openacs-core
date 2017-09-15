@@ -13,7 +13,7 @@
         <ul>
           <group column="operation_name">
             <li>@contract.inout@ @contract.param@
-              @contract.param_type@ <if @contract.set_p@ eq t>[]</if></li>
+              @contract.param_type@ <if @contract.set_p;literal@ true>[]</if></li>
           </group>
         </ul>
     </multiple>

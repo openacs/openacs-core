@@ -161,7 +161,7 @@
       </td>
 
       <td valign="top" width="50%" >
-	<if @write_p@ eq 1>
+	<if @write_p;literal@ true>
 	  <fieldset style="margin-top:10px;padding-top:10px;">
 	    <legend><strong>@HTML_UploadTitle@</strong></legend>
 	    <formtemplate id="upload_form">
