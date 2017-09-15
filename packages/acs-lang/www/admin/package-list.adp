@@ -8,7 +8,7 @@
 
 <include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale;literal@" >
 
-<if @locale_enabled_p;literal@ true and @site_wide_admin_p;literal@ true>
+<if @locale_enabled_p@ and @site_wide_admin_p@>
   <ul class="action-links">
     <li><a href="@import_all_url@" title="#acs-lang.Import_all_messages__title#">#acs-lang.Import_all_messages_for_this_locale#</a></li>
     <li> <a href="@export_all_url@" title="#acs-lang.Export_all_messages__title#">#acs-lang.Export_all_messages_for_this_locale#</a></li>
