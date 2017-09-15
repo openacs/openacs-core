@@ -15,7 +15,7 @@ template::list::create \
         translated_text {
             label "Translation"
             display_template {
-               <if @messages.translated_p@ false>
+               <if @messages.translated_p;literal@ false>
                  <a href="@messages.translate_url@" title="Translate"><font color="red">Translate</font></a>
                </if>
                <else>
@@ -26,7 +26,7 @@ template::list::create \
         edit {
             label ""
             display_template {
-                <if @messages.translated_p@ true>
+                <if @messages.translated_p;literal@ true>
                   <a href="@messages.translate_url@" title="Edit the translation">
                     <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Edit" border="0">
                   </a>
