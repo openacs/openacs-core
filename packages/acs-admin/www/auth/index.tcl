@@ -31,7 +31,7 @@ list::create \
             label "\#acs-admin.Enabled\#"
             html { align center }
             display_template {
-                <if @authorities.enabled_p@ true>
+                <if @authorities.enabled_p;literal@ true>
                 <a href="@authorities.enabled_p_url@" title="\#acs-admin.Disable_this_authority\#"><img src="/shared/images/checkboxchecked.gif" alt="enabled" height="13" width="13" style="background-color: white; border: 0;"></a>
                 </if>
                 <else>

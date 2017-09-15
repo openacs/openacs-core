@@ -1,4 +1,4 @@
-<if @show_p@ true>
+<if @show_p;literal@ true>
   <table width="100%" id="developer-toolbar">
     <tr align="center">
       <td>

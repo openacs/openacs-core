@@ -107,7 +107,7 @@ list::create \
         success_p {
             label "\#acs-admin.Success\#"
             display_template {
-                <if @batch_actions.success_p@ eq "t">
+                <if @batch_actions.success_p;literal@ true>
                   <font color="green">\#acs-admin.Yes\#</font>
                 </if>
                 <else>

@@ -2,7 +2,7 @@
   <property name="doc(title)">@page_title;literal@</property>
   <property name="context">@context;literal@</property>
 
-  <if @page_fragment_cache_p@ true>
+  <if @page_fragment_cache_p;literal@ true>
     <p>
       <form name="searchfrags" action="/ds/search">
         <input type="hidden" name="request" value="@request@">
@@ -12,7 +12,7 @@
     </p></if>
 
 @body;noquote@
-<if @expired_p@ eq 0>
+<if @expired_p;literal@ false>
   <if @dbreqs:rowcount@ gt 0>
     <listfilters name="dbreqs" style="inline-filters"></listfilters>
     <listtemplate name="dbreqs"></listtemplate>
@@ -21,7 +21,7 @@
   <if @profiling:rowcount@ gt 0>
     <h3>Profiling Information</h3>
     <listtemplate name="profiling"></listtemplate>
-    <if @page_fragment_cache_p@ true>
+    <if @page_fragment_cache_p;literal@ true>
       <p>
         <form name="searchfrags" action="search">
           <input type="hidden" name="request" value="@request@">
