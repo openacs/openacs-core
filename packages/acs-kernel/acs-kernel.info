@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.10.0d1" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.0d1.apm">
+    <version name="5.10.0d2" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.0d2.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2017-08-06</release-date>
@@ -17,7 +17,7 @@
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.10.0d1"/>
+        <provides url="acs-kernel" version="5.10.0d2"/>
 
         <callbacks>
         </callbacks>
@@ -84,6 +84,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UseCustomQuestionForPasswordReset"  default="0" description="Does the user get to choose their custom password question and answer" section_name="security"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="UseEmailForLoginP"  default="1" description="Say 1 if we should login with email instead of username." section_name="security"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePasswordWidgetForUsername"  default="0" description="Should we hide what the user types in the username field, the way we do with the password field? Set this to 1 if you are using sensitive information such as social security number for username." section_name="security"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SecureSessionCookie"  default="0" description="Set the session cookie as secure. This parameter should only be set, when ALL requests to the site requiring a cookie are over https." section_name="security"/>
         </parameters>
 
     </version>
