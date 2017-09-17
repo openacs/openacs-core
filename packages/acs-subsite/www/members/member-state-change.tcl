@@ -51,8 +51,7 @@ if {$send_notification_mail} {
     #
     # Use the current user in the "from" field of the email
     #
-    set email_from [ad_conn user_id]
-    
+    set email_from [dict get [acs_user::get -user_id [ad_conn user_id]] email]
     acs_mail_lite::send -send_immediately \
         -to_addr $user_info(email) \
         -from_addr $email_from \
