@@ -11,7 +11,7 @@ box to view a description and API summary for a particular object
 type):</p>
 <img name="objectmodel" src="object-model.gif" width="500" height="400" border="0" usemap="#m_object_model" id="objectmodel">
 <map name="m_object_model" id="m_object_model">
-<area shape="rect" coords="191,45,287,90" href="api/keyword.html"><area shape="rect" coords="39,224,135,269" href="api/object.html"><area shape="rect" coords="345,306,440,364" href="api/type.html"><area shape="rect" coords="191,123,287,168" href="api/item.html"><area shape="rect" coords="191,313,287,358" href="api/revision.html"><area shape="rect" coords="343,25,439,70" href="api/folder.html"><area shape="rect" coords="345,89,441,134" href="api/template.html"><area shape="rect" coords="344,154,440,199" href="api/symlink.html"><area shape="rect" coords="345,221,441,266" href="api/extlink.html">
+<area shape="rect" coords="191,45,287,90" href="api/keyword.html"><area shape="rect" coords="39,224,135,269" href="/doc/object-system-design"><area shape="rect" coords="345,306,440,364" href="api/type.html"><area shape="rect" coords="191,123,287,168" href="api/item.html"><area shape="rect" coords="191,313,287,358" href="api/revision.html"><area shape="rect" coords="343,25,439,70" href="api/folder.html"><area shape="rect" coords="345,89,441,134" href="api/template.html"><area shape="rect" coords="344,154,440,199" href="api/symlink.html"><area shape="rect" coords="345,221,441,266" href="api/extlink.html">
 </map>
 <p>Note that content revisions and content items inherit separately
 from the root of the object model. Each item may be related to one
