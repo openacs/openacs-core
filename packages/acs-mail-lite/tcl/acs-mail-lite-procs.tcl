@@ -380,35 +380,20 @@ namespace eval acs_mail_lite {
         multiple "TO" recipients as well as CC
         and BCC recipients. Runs entirely off MIME and SMTP to achieve this. 
 
-        
         @param to_addr List of e-mail addresses to send this mail to. 
-
         @param from_addr E-Mail address of the sender.
-
         @param reply_to E-Mail address to which replies should go. Defaults to from_addr
-
         @param subject of the email
-
         @param body Text body of the email
-
         @param cc_addr List of CC Users e-mail addresses to send this mail to.
-
         @param bcc_addr List of CC Users e-mail addresses to send this mail to.
-
         @param package_id Package ID of the sending package
-
         @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file-storage.
-        
         @param filesystem_files List of regular files on the filesystem to be send as attachments.
-        
         @param delete_filesystem_files_p Decides if we want files specified by the 'file' parameter to be deleted once sent.
-
         @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
-
         @param extraheaders List of keywords and their values passed in for headers. Interesting ones are: "Precedence: list" to disable autoreplies and mark this as a list message. This is as list of lists !!
-
         @param no_callback_p Indicates if callback should be executed or not. If you don't provide it it will execute callbacks.
-
         @param use_sender_p Boolean indicating that from_addr should be used regardless of fixed-sender parameter
         @param object_id Object id that caused this email to be sent
     } {
@@ -462,7 +447,7 @@ namespace eval acs_mail_lite {
             db_foreach get_file_info {} {
                 lappend tokens [mime::initialize \
                                     -param [list name [ns_quotehtml $title]] \
-                                    -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
+                                    -header [list Content-Disposition "attachment; filename=\"$name\""] \
                                     -header [list Content-Description $title] \
                                     -canonical $mime_type \
                                     -file "[cr_fs_path]$filename"]
@@ -495,7 +480,7 @@ namespace eval acs_mail_lite {
 		set mime_type [cr_filename_to_mime_type $name]
                 lappend tokens [mime::initialize \
                                     -param [list name $name] \
-                                    -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
+                                    -header [list Content-Disposition "attachment; filename=\"$name\""] \
                                     -header [list Content-Description $name] \
                                     -canonical $mime_type \
                                     -file $f]
