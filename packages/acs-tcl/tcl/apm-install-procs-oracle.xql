@@ -296,17 +296,6 @@
   </querytext>
 </fullquery>
 
-<fullquery name="apm_package_upgrade_p.apm_package_upgrade_p">      
-      <querytext>
-      
-	select apm_package_version.version_name_greater(:version_name, version_name) upgrade_p
-	from apm_package_versions
-	where package_key = :package_key
-	and version_id = apm_package.highest_version (:package_key)
-    
-      </querytext>
-</fullquery>
-
 <fullquery name="apm_package_upgrade_from.apm_package_upgrade_from">      
       <querytext>
       

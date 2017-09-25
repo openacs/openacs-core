@@ -1638,7 +1638,12 @@ ad_proc -private apm_package_upgrade_p {package_key version_name} {
     @return 1 if a version of the indicated package_key of version lower than version_name \
         is already installed in the system, 0 otherwise.
 } {
-    return [db_string apm_package_upgrade_p {} -default 0]
+    set package_version_name [apm_highest_version_name $package_key]
+    if {$package_version_name eq ""} {
+        return 0
+    } else {
+        return [expr {[apm_version_names_compare $package_version_name $version_name] == -1}]
+    }
 }
 
 ad_proc -private apm_package_upgrade_from { package_key version_name } {
