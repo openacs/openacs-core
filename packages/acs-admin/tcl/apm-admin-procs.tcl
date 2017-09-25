@@ -207,15 +207,11 @@ ad_proc -private apm_higher_version_installed_p {
     <li>1 if the version you gave is higher than the highest version installed, or no version of this package is installed.
     </ul>
 } {
-
-    # DRB: I turned this into a simple select by rearranging the code and
-    # stuck the result into queryfiles.
-
-    # LARS: Default to 1 (the package_key/version_name you supplied was higher than what's on the system)
-    # for the case where nothing it returned, because this implies that there was no highest version installed,
-    # i.e., no version at all of the package was installed.
-
-    return [db_string apm_higher_version_installed_p {} -default 1]
+    set package_version_name [apm_highest_version_name $package_key]
+    if {$package_version_name eq ""} {
+        return 1
+    }
+    return [apm_version_names_compare $version_name $package_version_name]
 }
 
 
