@@ -41,6 +41,8 @@ set downloaded_p [ad_decode $version_uri "" 0 1]
 # We use rownum = 1 in case someone mucks up the database and leaves two package versions
 # installed and enabled.
 db_0or1row apm_enabled_version_info {}
+set installed_version_name_greater_p [expr {[apm_version_names_compare $installed_version_name $version_name] == 1}]
+
 
 db_0or1row apm_data_model_install_version {}
 
@@ -86,10 +88,10 @@ if { ![info exists installed_version_id] } {
     }
 } else {
     set status [subst {
-        [ad_decode $version_name_greater -1 "An older" "A newer"] version of this package,
+        [expr {$installed_version_name_greater_p ? "A newer" : "An older"}] version of this package,
         version $installed_version_name, is installed and [ad_decode $installed_enabled_p "t" "enabled" "disabled"].
     }]
-    if { $version_name_greater < 0 } {
+    if { !$installed_version_name_greater_p } {
         set href [export_vars -base version-upgrade {version_id}]
         append body [subst {
             You may <a href="[ns_quotehtml $href]">upgrade to this version now</a>.
