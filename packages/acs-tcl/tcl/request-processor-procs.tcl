@@ -985,18 +985,17 @@ ad_proc -private rp_handler {} {
     rp_debug "rp_handler: handling request: [ns_conn method] [ns_conn url]?[ns_conn query]"
     if { [set code [catch {
         if { [rp_performance_mode] } {
-            if { ![catch {
-                set file      $::tcl_url2file([ad_conn url])
-                set path_info $::tcl_url2path_info([ad_conn url])
-            } errmsg] } {
-                ad_conn -set file $file
-                ad_conn -set path_info $path_info
-                rp_serve_concrete_file $file
+            set current_url [ad_conn url]
+            if {[info exists ::tcl_url2file($current_url)]
+                && [info exists ::tcl_url2path_info($current_url)]
+            } {
+                ad_conn -set file $::tcl_url2file($current_url)
+                ad_conn -set path_info $::tcl_url2path_info($current_url)
+                rp_serve_concrete_file $::tcl_url2file($current_url)
                 return
             }
-            rp_debug -debug t "error in rp_handler: $errmsg"
+            rp_debug "performance mode: no ::tcl_url2file mapping for $current_url available; perform usual lookup"
         }
-
 
         set resolve_values $::acs::pageroot[string trimright [ad_conn package_url] /]
         if {[ad_conn package_key] ne ""} {
