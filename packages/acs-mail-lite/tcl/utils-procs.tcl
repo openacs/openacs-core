@@ -164,7 +164,7 @@ ad_proc acs_mail_lite::utils::build_body {
                                    -canonical "text/plain" \
                                    -param [list charset $charset] \
                                    -encoding "quoted-printable" \
-                                   -string [ad_html_to_text "$body"]]
+                                   -string [ad_html_to_text -- $body]]
         
         set message_token [mime::initialize \
                                -canonical "multipart/alternative" \
