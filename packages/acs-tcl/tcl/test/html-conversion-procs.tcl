@@ -14,7 +14,7 @@ aa_register_case -cats {api smoke} ad_html_to_text_bold {
 
     set html "Some <b>bold</b> test"
 
-    set result [ad_html_to_text $html]
+    set result [ad_html_to_text -- $html]
 
     aa_true "contains asterisks?" [regexp {\*bold\*} $result]
 
@@ -38,7 +38,7 @@ Some <a href=abc">linktext</a> bla
 <p>
 following text
     }} {
-	set result [ad_html_to_text $html]
+	set result [ad_html_to_text -- $html]
 
 	# make sure the desired text is in there and _before_ the
 	# footnotes

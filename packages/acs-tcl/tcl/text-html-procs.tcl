@@ -2281,7 +2281,7 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
     if { $html_p == "t" } {
         return $raw_string
     } else {
-        return [ad_text_to_html $raw_string]
+        return [ad_text_to_html -- $raw_string]
     }
 }
 
