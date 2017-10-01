@@ -531,7 +531,7 @@ ad_proc -private util_close_html_tags {
                                 set tagstack($tagptr) $tag
                             }
                         } else {
-                            switch $syn($tag) {
+                            switch -- $syn($tag) {
                                 nobr {
                                     if { ! $nobr } {
                                         set nobr_out_point [string length $out]
@@ -1257,7 +1257,7 @@ ad_proc ad_parse_html_attributes_upvar {
                 
                 # 3: check for any attribute that could contain a url
                 # whether this is acceptable
-                switch $att {
+                switch -- $att {
                     "href" - "src" - "content" - "action" {                        
                         set url [string trim [$node getAttribute $att ""]]
                         if {$url eq ""} continue
@@ -2003,9 +2003,9 @@ ad_proc -public ad_html_text_convert {
     }
 
     # Do the conversion
-    switch $from {
+    switch -- $from {
         text/enhanced {
-            switch $to {
+            switch -- $to {
                 text/html {
                     set text [ad_enhanced_text_to_html $text]
                 }
@@ -2015,7 +2015,7 @@ ad_proc -public ad_html_text_convert {
             }
         }
         text/plain {
-            switch $to {
+            switch -- $to {
                 text/html {
                     set text [ad_text_to_html -- $text]
                 }
@@ -2025,7 +2025,7 @@ ad_proc -public ad_html_text_convert {
             }
         }
         text/fixed-width {
-            switch $to {
+            switch -- $to {
                 text/html {
                     set text "<pre>[ad_text_to_html -no_lines -- $text]</pre>"
                 }
@@ -2035,7 +2035,7 @@ ad_proc -public ad_html_text_convert {
             }
         }
         text/html {
-            switch $to {
+            switch -- $to {
                 text/html {
                     # Handled below
                 }
@@ -2045,7 +2045,7 @@ ad_proc -public ad_html_text_convert {
             }
         }
         text/xml {
-            switch $to {
+            switch -- $to {
                 text/html {
                     set text "<pre>[ad_text_to_html -no_lines -- $text]</pre>"
                 }
@@ -2057,7 +2057,7 @@ ad_proc -public ad_html_text_convert {
     }
 
     # Handle closing of HTML tags, truncation
-    switch $to {
+    switch -- $to {
         text/html {
             set text [util_close_html_tags $text $truncate_len $truncate_len $ellipsis $more]
         }

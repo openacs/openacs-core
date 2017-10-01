@@ -134,7 +134,7 @@ if {$write_p} {
 		# create thumbnail
 		image::resize -item_id $item_id
 		
-		file delete $upload_tmpfile
+		file delete -- $upload_tmpfile
 		
 		permission::grant \
 		    -object_id $item_id \

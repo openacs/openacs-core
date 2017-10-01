@@ -175,7 +175,7 @@ ad_proc -public image::imagemagick_identify {
         return -code error $errMsg
     }
     lassign $out width height type
-    switch $type { 
+    switch -- $type { 
         JPG - JPEG {
             set mime_type image/jpeg
         } 

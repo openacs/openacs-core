@@ -43,7 +43,7 @@ if {$package_key eq ""} {
 
         array set failed $result(failed)
       
-        switch $result(status) {
+        switch -- $result(status) {
             ok {
                 set title "Confirm"
             }

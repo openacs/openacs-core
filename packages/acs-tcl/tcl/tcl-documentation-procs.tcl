@@ -1204,7 +1204,7 @@ ad_proc -public ad_page_contract {
                         #
                         return ""
                     }
-                    ad_log error "problem rendering complain page: $errorMsg ($errorCode)"
+                    ad_log error "problem rendering complain page: $errorMsg ($errorCode) $::errorInfo"
                     set html "Invalid input"
                 }
                 ns_return 422 text/html $html

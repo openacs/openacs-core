@@ -18,7 +18,7 @@ set version_name [lindex $service 1]
 apm_package_install_spec $version_id
 
 db_transaction {
-    switch $dependency_type {
+    switch -- $dependency_type {
 	require {
 	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $package_key $version_name
             apm_build_one_package_relationships $our_package_key

@@ -51,7 +51,7 @@ foreach dependency_type { provide require extend embed } {
 	    if { $counter == 1 } {
 		append body "<ul>\n"
 	    }
-            switch $dep_type {
+            switch -- $dep_type {
                 provides { set dep_d provided }
                 requires { set dep_d required }
                 extends { set dep_d extended }

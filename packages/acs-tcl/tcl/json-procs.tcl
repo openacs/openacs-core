@@ -443,7 +443,7 @@ ad_proc util::json::json_value_to_sql_value {value} {
             The Ilias RTE JavaScript returns '' rather than null for JS null variables.
 
 } {
-    switch $value {
+    switch -- $value {
         false { return 0 }
         true { return 1 }
         null -

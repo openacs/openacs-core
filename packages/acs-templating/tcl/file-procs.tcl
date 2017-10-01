@@ -56,7 +56,7 @@ ad_proc -public template::util::file::get_property {
     @return The requested property from the file datatype structure.
 } {
 
-    switch $what {
+    switch -- $what {
         filename {
             return [lindex $file_list 0]
         }

@@ -58,7 +58,7 @@ ad_proc -public cr_write_content {
 	set content_length 0
     }
 
-    switch $storage_type {
+    switch -- $storage_type {
         text {
             set text [db_string write_text_content ""]
             if { $string_p } {
@@ -242,7 +242,7 @@ ad_proc -public cr_import_content {
             db_exec_plsql mime_type_register ""
         }
 
-        switch $content_type {
+        switch -- $content_type {
             image {
 
                 if { [db_string image_subclass ""] == "f" } {
@@ -300,7 +300,7 @@ ad_proc -public cr_import_content {
 
         # insert the attatchment into the database
 
-        switch $storage_type {
+        switch -- $storage_type {
             file {
                 set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
                 db_dml set_file_content ""

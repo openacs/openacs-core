@@ -127,7 +127,7 @@ ad_proc parse_incoming_email {
 
     foreach part $expanded_parts {
         catch {mime::getproperty $part content} this_content 
-        switch $this_content {
+        switch -- $this_content {
             "text/plain" {
                 if { ![info exists plain] } {
                     set plain [mime::getbody $part]

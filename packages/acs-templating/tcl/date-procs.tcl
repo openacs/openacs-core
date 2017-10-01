@@ -215,7 +215,7 @@ ad_proc -public template::util::date::get_property { what date } {
 
   variable month_data
 
-  switch $what {
+  switch -- $what {
     year       { return [lindex $date 0] }
     month      { return [lindex $date 1] }
     day        { return [lindex $date 2] }
@@ -441,13 +441,13 @@ ad_proc -public template::util::date::set_property { what date value } {
   # Erase leading zeroes from the value, but make sure that 00
   # is not completely erased - but only for single-element properties
 
-  switch $value {
+  switch -- $value {
     year - month - day - hour - minutes - seconds - short_year - short_hours - ampm {
       set value [util::trim_leading_zeros $value]
     }
   }
 
-  switch $what {
+  switch -- $what {
     year       { return [lreplace $date 0 0 $value] }
     month      { return [lreplace $date 1 1 $value] }
     day        { return [lreplace $date 2 2 $value] }
@@ -537,7 +537,7 @@ ad_proc -public template::util::date::set_property { what date value } {
 ad_proc -public template::util::date::defaultInterval { what } {
     Get the default ranges for all the numeric fields of a Date object
 } {
-  switch $what {
+  switch -- $what {
     year        { return [list 2002 2012 1 ] }
     month       { return [list 1 12 1] }
     day         { return [list 1 31 1] }
@@ -995,7 +995,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   }
 
   # Choose a pre-selected format, if any
-  switch $element(format) {
+  switch -- $element(format) {
     long     { set element(format) "YYYY/MM/DD HH24:MI:SS" }
     short    { set element(format) "YYYY/MM/DD"}
     time     { set element(format) "HH24:MI:SS"}

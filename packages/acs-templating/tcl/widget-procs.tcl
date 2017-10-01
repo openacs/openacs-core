@@ -1016,7 +1016,7 @@ ad_proc -public template::util::select_text::get_property {
     @return 
     @error 
 } {
-    switch $what {
+    switch -- $what {
         select_value - select {
             return [lindex $select_text_list 0]
         }
@@ -1128,7 +1128,7 @@ ad_proc -public template::util::radio_text::get_property {
     @return 
     @error 
 } {
-    switch $what {
+    switch -- $what {
         radio_value - radio {
             return [lindex $radio_list 0]
         }
@@ -1253,7 +1253,7 @@ ad_proc -public template::util::checkbox_text::get_property {
     @return 
     @error 
 } {
-    switch $what {
+    switch -- $what {
         checkbox_value - checkbox {
             return [lindex $checkbox_list 0]
         }

@@ -318,7 +318,7 @@ ad_proc -deprecated ad_table {
 		# single characters r l c are special for alignment 
 		set Tformat [lindex $Tcol 3]
 		set Tcolumn [lindex $Tcol 0]
-		switch $Tformat {
+		switch -- $Tformat {
 		    "" {set Tdisplay_field " <td>[set $Tcolumn]</td>\n"}
 		    r {set Tdisplay_field " <td align=\"right\">[set $Tcolumn]</td>\n"}
 		    l {set Tdisplay_field " <td align=\"left\">[set $Tcolumn]</td>\n"}

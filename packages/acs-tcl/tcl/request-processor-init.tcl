@@ -122,6 +122,7 @@ ad_after_server_initialization filters_register {
     # that filters are registered in order of priority. AOLServer will
     # then run the filters in the order they were registered.
     set filters [lsort -integer -index 0 $filters]
+    ns_log notice "FILTERS [join $filters \n]"
     nsv_set rp_filters . $filters
 
     set filter_index 0

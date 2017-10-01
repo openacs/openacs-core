@@ -182,7 +182,7 @@ ad_proc -deprecated doc_serve_document {} { Serves the document currently in the
 	}
     }
 
-    switch $mime_type {
+    switch -- $mime_type {
 	text/html;content-pane - text/x-html-content-pane {
 	    # It's a content pane. Find the appropriate template.
 	    set template_path [doc_find_template [ad_conn file]]

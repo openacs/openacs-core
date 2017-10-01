@@ -185,7 +185,7 @@ ad_form -extend -name user_info -form $elms_list -on_request {
 
 
     # Handle authentication problems
-    switch $result(update_status) {
+    switch -- $result(update_status) {
         ok {
             # Updating locale/tz data
             if { [info exists site_wide_locale] } {

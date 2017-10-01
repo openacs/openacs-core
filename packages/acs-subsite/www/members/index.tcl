@@ -237,7 +237,7 @@ if { !$show_member_list_p } {
         set member_state_pretty [group::get_member_state_pretty -member_state $member_state]
         set user_email [email_image::get_user_email -user_id $user_id]
         if { $admin_p } {
-            switch $member_state {
+            switch -- $member_state {
                 approved {
                     if { $member_admin_p == 0 } {
                         set make_admin_url [export_vars -base make-admin { user_id }]

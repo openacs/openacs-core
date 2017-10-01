@@ -185,7 +185,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     # Always pop off the parse_level no matter how we exit
     template::util::lpop ::template::parse_level
 
-    switch $return_code {
+    switch -- $return_code {
         0 - 2 {
             # CODE executed without a non-local exit -- return what it
             # evaluated to.

@@ -22,7 +22,7 @@ ad_page_contract {
         }
     }
     node_type_ck -requires node_type:notnull {
-        switch $node_type {
+        switch -- $node_type {
             folder {
                 set directory_p t
                 set pattern_p t

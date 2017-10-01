@@ -824,7 +824,7 @@ template_tag switch { chunk params } {
 
     # append the switch statement and eval tags in between
 
-    template::adp_append_code "switch $sw -- $arg {"
+    template::adp_append_code "switch -- $sw -- $arg {"
 
     template::adp_compile_chunk $chunk
 

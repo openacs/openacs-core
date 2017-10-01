@@ -195,7 +195,7 @@ ad_proc apm_package_list_url_resolution {
         if { [info exists ::apm_visited_package_keys($package_key)] } {
             continue
         }
-        switch $dependency_type {
+        switch -- $dependency_type {
             extends -
             "" { lappend ::apm_package_url_resolution $::acs::rootdir/packages/$package_key/www }
             embeds {
@@ -809,7 +809,7 @@ ad_proc -public apm_load_any_changed_libraries { {errorVarName {}} } {
                 set file_path "$::acs::rootdir/$file"
                 set file_ext [file extension $file_path]
                 
-                switch $file_ext {
+                switch -- $file_ext {
                     .tcl { 
                         # Make sure this is not a -init.tcl file as those should only be sourced on server startup
                         if { ![regexp {\-init\.tcl$} $file_path] } {
@@ -1977,7 +1977,7 @@ ad_proc -private apm::metrics_internal {
     # We'll be using apm_get_package_files to get a list of files
     # by file type. 
 
-    switch $file_type {
+    switch -- $file_type {
         data_model_pg -
         data_model_ora {
             set file_types [list data_model_create data_model]
@@ -1993,7 +1993,7 @@ ad_proc -private apm::metrics_internal {
                       -file_types $file_types]
 
     # filelist needs to be weeded for certain file types
-    switch $file_type {
+    switch -- $file_type {
         include_page -
         content_page {
             # weed out non-.adp files

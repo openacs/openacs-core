@@ -510,7 +510,7 @@ namespace eval acs_mail_lite {
         # Rollout support
         set delivery_mode [parameter::get -package_id [get_package_id] -parameter EmailDeliveryMode -default default]
 
-        switch $delivery_mode {
+        switch -- $delivery_mode {
             log {
                 set send_mode "log"
                 set notice "logging email instead of sending"

@@ -120,7 +120,7 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
             set required_seg [template::multirow get required_segments $rownum]
             
             if { ![group::member_p -group_id $required_segments(group_id)] } {
-                switch $required_segments(join_policy) {
+                switch -- $required_segments(join_policy) {
                     "needs approval" {
                         set member_state "needs approval"
                     }
@@ -176,7 +176,7 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
         ad_script_abort
     }
     
-    switch $member_state {
+    switch -- $member_state {
         "approved" { set message "[_ acs-subsite.You_joined_group]." }
         "needs approval" { set message "[_ acs-subsite.Request_join_submitted]." }
     }

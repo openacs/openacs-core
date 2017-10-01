@@ -782,14 +782,14 @@ proc dom::node {method token args} {
 		return -code error "too many arguments"
 	    }
 	    if {[regexp [format {^-(%s)$} $nodeOptionsRO] [lindex $args 0] discard option]} {
-		switch $option {
+		switch -- $option {
 		    childNodes {
 			# How are we going to handle documentElement?
 			set result $node(node:childNodes)
 		    }
 		    firstChild {
 			upvar #0 $node(node:childNodes) children
-			switch $node(node:nodeType) {
+			switch -- $node(node:nodeType) {
 			    documentFragment {
 				set result [lindex $children 0]
 				catch {set result $node(document:documentElement)}
@@ -801,7 +801,7 @@ proc dom::node {method token args} {
 		    }
 		    lastChild {
 			upvar #0 $node(node:childNodes) children
-			switch $node(node:nodeType) {
+			switch -- $node(node:nodeType) {
 			    documentFragment {
 				set result [lindex $children end]
 				catch {set result $node(document:documentElement)}
@@ -1027,7 +1027,7 @@ proc dom::node {method token args} {
 		}
 	    }
 
-	    switch $node(node:nodeType) {
+	    switch -- $node(node:nodeType) {
 		element {
 		    set result [CreateElement {} $node(node:nodeName) [array get $node(element:attributeList)] -docarray $node(docArray)]
 		    if {$deep} {
@@ -1181,7 +1181,7 @@ proc dom::element {method token args} {
 		return -code error "too many arguments"
 	    }
 	    if {[regexp [format {^-(%s)$} $elementOptionsRO] [lindex $args 0] discard option]} {
-		switch $option {
+		switch -- $option {
 		    tagName {
 			set result [lindex $node(node:nodeName) 0]
 		    }
@@ -1347,7 +1347,7 @@ proc dom::Element:Normalize {pVar nodes} {
 	GetHandle node $n child
 	set cleanup {}
 
-	switch $child(node:nodeType) {
+	switch -- $child(node:nodeType) {
 	    textNode {
 		if {[llength $textNode]} {
 		    # Coalesce into previous node
@@ -1416,7 +1416,7 @@ proc dom::processinginstruction {method token args} {
 		return -code error "too many arguments"
 	    }
 	    if {[regexp [format {^-(%s)$} $elementOptionsRO] [lindex $args 0] discard option]} {
-		switch $option {
+		switch -- $option {
 		    target {
 			set result [lindex $node(node:nodeName) 0]
 		    }
@@ -1425,7 +1425,7 @@ proc dom::processinginstruction {method token args} {
 		    }
 		}
 	    } elseif {[regexp [format {^-(%s)$} $elementOptionsRW] [lindex $args 0] discard option]} {
-		switch $option {
+		switch -- $option {
 		    data {
 			return $node(node:nodeValue)
 		    }
@@ -1447,7 +1447,7 @@ proc dom::processinginstruction {method token args} {
 		    if {[regexp [format {^-(%s)$} $elementOptionsRO] $option discard opt]} {
 			return -code error "attribute \"$option\" is read-only"
 		    } elseif {[regexp [format {^-(%s)$} $elementOptionsRW] $option discard opt]} {
-			switch $opt {
+			switch -- $opt {
 			    data {
 				set node(node:nodeValue) $value
 			    }
@@ -1925,7 +1925,7 @@ proc dom::ParseDocType {stateVar root {publit {}} {systemlit {}} {dtd {}}} {
 proc dom::Trim nodeid {
     array set node [set $nodeid]
 
-    switch $node(node:nodeType) {
+    switch -- $node(node:nodeType) {
 
 	textNode {
 	    if {[string trim $node(node:nodeValue)] eq ""} {

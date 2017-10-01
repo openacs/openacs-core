@@ -315,7 +315,7 @@ ad_proc -private group::get_members_not_cached {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-07-26
 } {
-    switch $type {
+    switch -- $type {
 	party  { set member_list [db_list group_members_party {}] }
 	default { set member_list [db_list group_members {}] }
     }
@@ -458,7 +458,7 @@ ad_proc -public group::get_member_state_pretty {
     #
     regsub -all " " $member_state "_" member_state
     
-    switch $component {
+    switch -- $component {
         pretty_name {
             set message #acs-kernel.member_state_$member_state#
         }

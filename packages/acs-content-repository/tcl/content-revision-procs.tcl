@@ -201,7 +201,7 @@ ad_proc -public ::content::revision::update_content {
     @error 
 } {
 
-     switch $storage_type {
+     switch -- $storage_type {
 	file {
 	    if {$tmp_filename eq ""} {
                 set filename [cr_create_content_file_from_string $item_id $revision_id $content]

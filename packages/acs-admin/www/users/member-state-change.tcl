@@ -34,7 +34,7 @@ if {![db_0or1row get_states {}]} {
 # This page is used for state changes in the member_state, and as well
 # on email confirm require and approve operations.
 #
-switch $email_verified_p {
+switch -- $email_verified_p {
     "t" {
         set user_name     $name
         set url           [ad_url]
@@ -63,7 +63,7 @@ switch $email_verified_p {
 if {[catch {
     acs_user::change_state -user_id $user_id -state $member_state
 
-    switch $email_verified_p {
+    switch -- $email_verified_p {
         "t" {
             db_exec_plsql approve_email {}
         }

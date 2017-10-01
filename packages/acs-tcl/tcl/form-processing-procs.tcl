@@ -879,11 +879,11 @@ ad_proc -public ad_form {
             set command [list template::form section]
             foreach option [lrange $element_name 2 end] {
                 lassign $option switch args
-                switch $switch {
+                switch -- $switch {
                     fieldset -
                     legendtext -
                     legend {
-                        lappend command -$switch $args
+                        lappend command -$switch -- $args
                     }
                     default {return -code error "\"$switch\" is not a legal -section option"}
                 }
@@ -893,7 +893,7 @@ ad_proc -public ad_form {
         } else {
             set form_command [list template::element create $form_name $element_name]
             foreach flag $af_flag_list(${form_name}__$element_name) {
-                switch $flag {
+                switch -- $flag {
 
                     key {
                         if { [info exists af_key_name($form_name)] } {
@@ -1289,7 +1289,7 @@ ad_proc -public ad_form {
                 # Handle or propagate the error. Can't use the usual
                 # "return -code $errno..." trick due to the db_with_handle
                 # wrapped around this loop, so propagate it explicitly.
-                switch $errno {
+                switch -- $errno {
                     0 {
                         # TCL_OK
                     }

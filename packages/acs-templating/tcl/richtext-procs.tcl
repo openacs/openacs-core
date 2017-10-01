@@ -136,7 +136,7 @@ ad_proc -public template::util::richtext::set_property { what richtext_list valu
     set contents [lindex $richtext_list 0]
     set format   [lindex $richtext_list 1]
 
-    switch $what {
+    switch -- $what {
         contents - content - text {
             # Replace contents with value
             return [list $value $format]
@@ -166,7 +166,7 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
     set contents  [lindex $richtext_list 0]
     set format    [lindex $richtext_list 1]
 
-    switch $what {
+    switch -- $what {
         content - contents - text {
             return $contents
         }

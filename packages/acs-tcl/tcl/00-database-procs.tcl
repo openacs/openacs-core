@@ -384,7 +384,7 @@ ad_proc -public db_nextval {
     # PostgreSQL has a special implementation here, any other db will
     # probably work with the default:
 
-    switch $driverkey {
+    switch -- $driverkey {
 
         postgresql {
             #             # the following query will return a nextval if the sequnce
@@ -708,7 +708,7 @@ ad_proc -public db_exec_plsql {
     }
 
     set driverkey [db_driverkey $dbn]
-    switch $driverkey {
+    switch -- $driverkey {
         postgresql {
             set postgres_p 1
         }
@@ -1041,7 +1041,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
             if { [llength $bind] == 1 } {
                 # $bind is an ns_set id:
 
-                switch $driverkey {
+                switch -- $driverkey {
                     oracle {
                         return [ns_ora $type $db -bind $bind $sql {*}$args]
                     }
@@ -1064,7 +1064,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
                 }
             }
 
-            switch $driverkey {
+            switch -- $driverkey {
                 oracle {
                     # TODO: Using $args outside the list is
                     # potentially bad here, depending on what is in
@@ -1090,7 +1090,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
             # Bind variables, if any, are defined solely as individual
             # Tcl variables:
 
-            switch $driverkey {
+            switch -- $driverkey {
                 oracle {
                     return [uplevel $ulevel [list ns_ora $type $db $sql] $args]
                 }
@@ -1422,7 +1422,7 @@ ad_proc -public db_foreach {
 
             # Handle or propagate the error. Can't use the usual "return -code $errno..." trick
             # due to the db_with_handle wrapped around this loop, so propagate it explicitly.
-            switch $errno {
+            switch -- $errno {
                 0 {
                     # TCL_OK
                 }
@@ -1572,7 +1572,7 @@ proc db_multirow_helper {} {
                         # Handle or propagate the error. Can't use the usual
                         # "return -code $errno..." trick due to the db_with_handle
                         # wrapped around this loop, so propagate it explicitly.
-                        switch $errno {
+                        switch -- $errno {
                             0 {
                                 # TCL_OK
                             }
@@ -1906,7 +1906,7 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
     ad_arg_parser { clobs blobs clob_files blob_files bind } $args
     set driverkey [db_driverkey $dbn]
 
-    switch $driverkey {
+    switch -- $driverkey {
         postgresql {
             set postgres_p 1
         }
@@ -2015,7 +2015,7 @@ ad_proc -public db_resultrows {{-dbn ""}} {
     upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
     set driverkey [db_driverkey $dbn]
 
-    switch $driverkey {
+    switch -- $driverkey {
         oracle {
             return [ns_ora resultrows $db_state(last_used)]
         }
@@ -2228,7 +2228,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     incr db_state(transaction_level,$dbh) -1
 
     set err_p 0
-    switch $errno {
+    switch -- $errno {
         0 {
             # TCL_OK
         }
@@ -2290,7 +2290,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
 
             # Determine what do with the error.
             set err_p 0
-            switch $errno {
+            switch -- $errno {
                 0 {
                     # TCL_OK
                 }
@@ -2557,7 +2557,7 @@ ad_proc -public db_source_sql_file {
     set proc_name {db_source_sql_file}
     set driverkey [db_driverkey $dbn]
 
-    switch $driverkey {
+    switch -- $driverkey {
 
         oracle {
             set user_pass [db_get_sql_user -dbn $dbn]
@@ -2848,7 +2848,7 @@ ad_proc -public db_tables {
     set proc_name {db_tables}
     set driverkey [db_driverkey $dbn]
 
-    switch $driverkey {
+    switch -- $driverkey {
         oracle {
             set sql_table_names_with_pattern {
                 select lower(table_name) as table_name
@@ -2909,7 +2909,7 @@ ad_proc -public db_table_exists {{-dbn ""} table_name } {
     set proc_name {db_table_exists}
     set driverkey [db_driverkey $dbn]
 
-    switch $driverkey {
+    switch -- $driverkey {
         oracle {
             set n_rows [db_string -dbn $dbn table_count {
                 select count(*) from user_tables
@@ -3043,7 +3043,7 @@ ad_proc -public db_write_clob {{-dbn ""} statement_name sql args } {
     # difference between Oracle and Postgres code?
     # --atp@piskorski.com, 2003/04/09 10:00 EDT
 
-    switch $driverkey {
+    switch -- $driverkey {
         oracle {
             set full_statement_name [db_qd_get_fullname $statement_name]
             db_with_handle -dbn $dbn db {
@@ -3096,7 +3096,7 @@ ad_proc -public db_blob_get_file {{-dbn ""} statement_name sql args } {
 
     set full_statement_name [db_qd_get_fullname $statement_name]
 
-    switch $driverkey {
+    switch -- $driverkey {
         oracle {
             db_with_handle -dbn $dbn db {
                 db_exec_lob blob_get_file $db $full_statement_name $sql $file
@@ -3126,7 +3126,7 @@ ad_proc -public db_blob_get {{-dbn ""} statement_name sql args } {
     set proc_name {db_blob_get}
     set driverkey [db_driverkey $dbn]
 
-    switch $driverkey {
+    switch -- $driverkey {
 
         postgresql {
             set full_statement_name [db_qd_get_fullname $statement_name]
@@ -3187,7 +3187,7 @@ ad_proc -private db_exec_lob {
     # possible of those two relatively complex procs.
     # --atp@piskorski.com, 2003/04/09 11:55 EDT
 
-    switch $driverkey {
+    switch -- $driverkey {
         oracle {
             set which_proc {db_exec_lob_oracle}
         }
@@ -3287,7 +3287,7 @@ ad_proc -private db_exec_lob_oracle {
                 }
             }
 
-            switch $original_type {
+            switch -- $original_type {
 
                 blob_get_file {
                     if {[file exists $content]} {
@@ -3390,12 +3390,12 @@ ad_proc -private db_exec_lob_postgresql {
         # to a file/connection if it is stored as a lob or if it is
         # stored in the content-repository as a file. (DanW - Openacs)
 
-        switch $type {
+        switch -- $type {
 
             blob_get {
 
                 if {[info exists storage_type]} {
-                    switch $storage_type {
+                    switch -- $storage_type {
                         file {
                             if {[file exists $content]} {
                                 set ifp [open $content r]
@@ -3443,7 +3443,7 @@ ad_proc -private db_exec_lob_postgresql {
             blob_select_file {
 
                 if {[info exists storage_type]} {
-                    switch $storage_type {
+                    switch -- $storage_type {
                         file {
                             if {[file exists $content]} {
                                 file copy -- $content $file
@@ -3482,7 +3482,7 @@ ad_proc -private db_exec_lob_postgresql {
             write_blob {
 
                 if {[info exists storage_type]} {
-                    switch $storage_type {
+                    switch -- $storage_type {
                         file {
                             if {[file exists $content]} {
                                 set ofp [open $content r]

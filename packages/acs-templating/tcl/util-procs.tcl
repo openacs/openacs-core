@@ -587,7 +587,7 @@ ad_proc -public -deprecated template::util::set_cookie { expire_state name value
 
   set cookie "$name=[ns_urlencode $value]; path=/; domain=$domain"
     
-  switch $expire_state {
+  switch -- $expire_state {
 
     persistent {
       append cookie ";expires=Wed, 01-Jan-2020 01:00:00 GMT"

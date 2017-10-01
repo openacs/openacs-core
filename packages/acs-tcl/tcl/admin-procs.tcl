@@ -66,7 +66,7 @@ ad_proc -private ad_user_class_description { set_id } {
     foreach criteria [ad_user_class_parameters] {
 	if { [info exists $criteria] && [set $criteria] ne "" } {
 
-	    switch $criteria {
+	    switch -- $criteria {
 		"category_id" {
 		    set pretty_category [db_string $criteria {
 			select category from categories where category_id = :category_id
@@ -194,7 +194,7 @@ ad_proc -private ad_registration_finite_state_machine_admin_links {
     is set, then a list of lists will be returned (url label).
 } {
     set user_finite_states [list]
-    switch $member_state {
+    switch -- $member_state {
         "approved" {
             lappend user_finite_states \
                 [list [export_vars -base "/acs-admin/users/member-state-change" {

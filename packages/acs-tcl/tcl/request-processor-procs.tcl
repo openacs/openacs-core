@@ -249,7 +249,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
 
     rp_debug -debug $debug_p "Invoking $why filter $proc"
 
-    switch $arg_count {
+    switch -- $arg_count {
         0 { set errno [catch { set result [$proc] } error] }
         1 { set errno [catch { set result [$proc $why] } error] }
         2 { set errno [catch { set result [$proc $conn $why] } error] }
@@ -309,7 +309,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
 
     rp_debug -debug $debug_p "Invoking registered procedure $proc"
 
-    switch $arg_count {
+    switch -- $arg_count {
         0 { set errno [catch $proc error] }
         1 { set errno [catch "$proc $arg" error] }
         default { set errno [catch {
@@ -528,6 +528,10 @@ ad_proc -private rp_resources_filter { why } {
     @author Don Baccus (dhogaza@pacifier.com)
 
 } {
+    if {[info commands ::valgrind] ne ""} {
+        ::valgrind start
+    }
+
     ad_conn -set untrusted_user_id 0
     set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[join [lrange [ns_conn urlv] 2 end] /]"
     if { [file isfile $path] } {
@@ -1455,7 +1459,7 @@ ad_proc -public ad_conn {args} {
             # own caching, so calling it instead of [ns_conn form]
             # is OK.
 
-            switch $var {
+            switch -- $var {
                 form {
                     return [ns_getform]
                 }
@@ -1468,7 +1472,7 @@ ad_proc -public ad_conn {args} {
                     }
 
                     # Fallback
-                    switch $var {
+                    switch -- $var {
                         locale {
                             set ad_conn(locale) [parameter::get \
                                                      -parameter SiteWideLocale \

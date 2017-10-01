@@ -880,7 +880,7 @@ ad_proc -public template::list::write_output {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
 
-    switch $list_properties(output) {
+    switch -- $list_properties(output) {
         csv {
             write_csv -name $name
             ad_script_abort
@@ -1308,7 +1308,7 @@ ad_proc -private template::list::prepare_for_rendering {
                                    ([string is double [set $__element_properties(name)]] ? [set $__element_properties(name)] : 0)}]
                     }
 
-                    switch $__element_properties(aggregate) {
+                    switch -- $__element_properties(aggregate) {
                         sum {
                             set $__element_properties(aggregate_col) $__agg_sum($__element_properties(name))
                             if { $__have_groupby } {
@@ -1667,7 +1667,7 @@ ad_proc -private template::list::prepare_filters {
             if { [string trim $label] eq "" } {
                 set label $filter_properties(null_label)
             }
-            switch $filter_properties(type) {
+            switch -- $filter_properties(type) {
                 singleval {
                     set selected_p [exists_and_equal current_filter_value $value]
                 }
@@ -1719,7 +1719,7 @@ ad_proc -private template::list::prepare_filters {
             }
 
             # Generate url and add to filter(urls)
-            switch $filter_properties(type) {
+            switch -- $filter_properties(type) {
                 singleval - multival {
                     lappend filter_properties(urls) [get_url \
                                                          -name $name \
@@ -2174,7 +2174,7 @@ ad_proc -public template::list::element::set_property {
         -list_name $list_name \
         -element_name $element_name
 
-    switch $property {
+    switch -- $property {
         display_eval - link_url_eval {
             # This is a chunk of Tcl code, which should be executed later, not now
             set element_properties($property) $value
@@ -2442,7 +2442,7 @@ ad_proc -public template::list::filter::create {
         -ulevel [expr {$ulevel + 1}]
 
     # This is to be used by the export_vars function
-    switch $filter_properties(type) {
+    switch -- $filter_properties(type) {
         singleval - multivar {
             set filter_properties(var_spec) $filter_name
         }
@@ -2500,7 +2500,7 @@ ad_proc -public template::list::filter::set_property {
         -list_name $list_name \
         -filter_name $filter_name
 
-    switch $property {
+    switch -- $property {
         where_clause_eval - add_url_eval {
             # Eval's shouldn't be subst'ed here, will be later
             set filter_properties($property) $value
@@ -2689,7 +2689,7 @@ ad_proc -public template::list::format::create {
     set elementnum 0
 
     foreach { key value } $spec {
-        switch $key {
+        switch -- $key {
             row {
                 # We only care about this for the currently selected format
                 if {$format_name eq $selected_format} {
@@ -2977,7 +2977,7 @@ ad_proc -public template::list::orderby::set_property {
         -list_name $list_name \
         -orderby_name $orderby_name
 
-    switch $property {
+    switch -- $property {
         orderby {
             set value [uplevel $ulevel [list subst $value]]
             set orderby_properties($property) $value

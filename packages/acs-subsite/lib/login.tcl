@@ -226,7 +226,7 @@ ad_form -extend -name login -on_request {
                              -persistent=[expr {$allow_persistent_login_p && [template::util::is_true $persistent_p]}]]
     
     # Handle authentication problems
-    switch $auth_info(auth_status) {
+    switch -- $auth_info(auth_status) {
         ok {
             # Continue below
         }
@@ -246,7 +246,7 @@ ad_form -extend -name login -on_request {
     }
 
     # Handle account status
-    switch $auth_info(account_status) {
+    switch -- $auth_info(account_status) {
         ok {
             # Continue below
         }

@@ -101,7 +101,7 @@ db_foreach select_params {} {
         set focus_elm $parameter_name
     }
 
-    switch $datatype {
+    switch -- $datatype {
         text {
             set widget textarea
             set html [list cols 100 rows 15]

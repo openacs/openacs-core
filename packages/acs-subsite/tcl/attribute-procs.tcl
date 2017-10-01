@@ -188,7 +188,7 @@ ad_proc -private datatype_to_sql_type {
     set type ""
     set constraint ""
     
-    switch $datatype {
+    switch -- $datatype {
         "string" { set type "varchar(1000)" }
         "boolean" { set type "char(1)"
                     set constraint "[plsql_utility::generate_constraint_name $table $column "ck"] check ($column in ('t','f'))" }

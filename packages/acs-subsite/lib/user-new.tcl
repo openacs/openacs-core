@@ -133,7 +133,7 @@ ad_form -extend -name register -on_request {
     
     # Handle registration problems
     
-    switch $creation_info(creation_status) {
+    switch -- $creation_info(creation_status) {
         ok {
             # Continue below
         }
@@ -153,7 +153,7 @@ ad_form -extend -name register -on_request {
         }
     }
     
-    switch $creation_info(account_status) {
+    switch -- $creation_info(account_status) {
         ok {
             # Continue below
         }

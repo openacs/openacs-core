@@ -98,7 +98,7 @@ ad_form -extend -name update -form {
                           -old_password $password_old \
                           -new_password $password_1]
     
-    switch $result(password_status) {
+    switch -- $result(password_status) {
         ok {
             # Continue
         }
@@ -130,7 +130,7 @@ ad_form -extend -name update -form {
                 -password $password_1]
         
         # Handle authentication problems
-        switch $auth_info(auth_status) {
+        switch -- $auth_info(auth_status) {
             ok {
                 # Continue below
             }
@@ -147,7 +147,7 @@ ad_form -extend -name update -form {
         }
 
         # Handle account status
-        switch $auth_info(account_status) {
+        switch -- $auth_info(account_status) {
             ok {
                 # Continue below
             }

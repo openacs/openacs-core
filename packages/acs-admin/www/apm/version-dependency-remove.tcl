@@ -11,7 +11,7 @@ ad_page_contract {
 }
 
 db_transaction {
-    switch $dependency_type {
+    switch -- $dependency_type {
 
 	provide - require {
 	    apm_dependency_remove $dependency_id

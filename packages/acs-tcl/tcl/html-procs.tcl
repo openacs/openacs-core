@@ -124,7 +124,7 @@ ad_proc -public util::html::get_form_vars {
         # no name, no variable
         if {![info exists a(name)] || $a(name) eq ""} continue
         set name $a(name) ; set tag $fld(tag)
-        switch $tag {
+        switch -- $tag {
             "input" {
                 if {[info exists a(value)]} {
                     lappend v($name) $a(value)

@@ -458,7 +458,7 @@ ad_proc -private get_cached_result { name type } {
 
   if { $success } {
 
-    switch $type {
+    switch -- $type {
 
       multirow {
 
@@ -871,7 +871,7 @@ ad_proc -public template::multirow {
 
         set errno [catch { uplevel 1 $code_block } error]
 
-        switch $errno {
+        switch -- $errno {
           0 {
             # TCL_OK
           }

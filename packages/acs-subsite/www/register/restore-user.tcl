@@ -13,7 +13,7 @@ set user_id [auth::require_login -account_status closed]
 
 set member_state [acs_user::get_element -user_id $user_id -element member_state]
 
-switch $member_state {
+switch -- $member_state {
     deleted {
         
         # They presumably deleted themselves  

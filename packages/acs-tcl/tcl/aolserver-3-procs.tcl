@@ -24,7 +24,7 @@ proc ns_dbformvalue {formdata column type valuebyref} {
     set value [ns_set get $formdata $column]
 
     if { [string match $value ""] } {
-        switch $type {
+        switch -- $type {
 	    
 	    date      {
 		set value [ns_buildsqldate \
@@ -62,7 +62,7 @@ proc ns_dbformvalue {formdata column type valuebyref} {
 
 proc ns_dbformvalueput {htmlform column type value} {
 
-    switch $type {
+    switch -- $type {
 
 	date {
 	    set retval [ns_formvalueput $htmlform $column.NULL f]

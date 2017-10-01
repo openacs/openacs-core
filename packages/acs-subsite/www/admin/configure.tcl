@@ -52,7 +52,7 @@ ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     set group(description) $description
     group::update -group_id $group_id -array group
 
-    switch $visibility {
+    switch -- $visibility {
         any {
             permission::set_inherit -object_id [ad_conn package_id]
         }

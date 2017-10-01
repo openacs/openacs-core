@@ -263,7 +263,7 @@ proc sgml::parseEvent {sgml args} {
 	# regsub has done to reconstitute the data
 
 	set empty {}
-	switch $state(mode) {
+	switch -- $state(mode) {
 	    comment {
 		# This had "[string length $param] && " as a guard -
 		# can't remember why :-(

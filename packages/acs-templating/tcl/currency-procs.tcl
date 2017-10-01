@@ -203,7 +203,7 @@ ad_proc -public template::util::currency::set_property {
 
     set format [lindex $currency_list 5]
 
-    switch $what {
+    switch -- $what {
         sql_number {
 
             if { $value eq ""} {
@@ -253,7 +253,7 @@ ad_proc -public template::util::currency::get_property {
     set trailing_money [lindex $currency_list 4]
     set format [lindex $currency_list 5]
 
-    switch $what {
+    switch -- $what {
         leading_symbol {
             return $leading_symbol
         }

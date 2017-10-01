@@ -61,7 +61,7 @@ ad_proc -public email_image::get_user_email {
         set priv_level $user_level
     }
     set send_email_url [ns_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
-    switch $priv_level {
+    switch -- $priv_level {
         "4" {
             return [subst {<a href="mailto:$email" title="#acs-subsite.Send_email_to_this_user#">$email</a>}]
         }

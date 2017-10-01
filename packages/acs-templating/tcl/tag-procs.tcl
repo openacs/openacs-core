@@ -34,7 +34,7 @@ ad_proc -private template_tag_if_condition { chunk params condition_type } {
 
             set conjunction [lindex $args 0]      
 
-            switch $conjunction {
+            switch -- $conjunction {
                 
                 and { append condition " && " }
                 or { append condition " || " }
@@ -56,7 +56,7 @@ ad_proc -private template_tag_if_condition { chunk params condition_type } {
 
     append condition "\} \{"
 
-    switch $condition_type {
+    switch -- $condition_type {
         if     {template::adp_append_code $condition}
         elseif {template::adp_append_code $condition -nobreak}
     }
@@ -144,7 +144,7 @@ ad_proc -public template_tag_if_interp_expr {} {
 
     # build the conditional expression
 
-    switch $op {
+    switch -- $op {
 
         gt { 
             append condition "$arg1 > \"[lindex $args $i]\"" 

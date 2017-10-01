@@ -138,7 +138,7 @@ ad_proc -public template::data::validate::boolean {
   set result ""
   set value [::string tolower $value]
 
-  switch $value {
+  switch -- $value {
       0 -
       1 -
       f -

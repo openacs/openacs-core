@@ -58,7 +58,7 @@ foreach path $files {
 
     vc_parse_cvs_status [apm_fetch_cached_vc_status "packages/$package_key/$path"]
 
-    switch $vc_file_props(status) {
+    switch -- $vc_file_props(status) {
 	"Up-to-date" {
 	    set full_path [acs_package_root_dir $package_key]/$path
 	    exec $cvs tag -F $version_tag $full_path

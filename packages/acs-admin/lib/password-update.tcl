@@ -58,7 +58,7 @@ ad_form -extend -name update -form {
                           -old_password "" \
                           -new_password $password_1]
 
-    switch $result(password_status) {
+    switch -- $result(password_status) {
         ok {
             # Continue
         }

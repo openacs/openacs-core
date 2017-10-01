@@ -18,7 +18,7 @@ db_multirow users users_query $query
 
 # Choose a skin
 
-switch $skin {
+switch -- $skin {
   plain { set file skin-plain }
   fancy { set file skin-fancy }
   default { set file /packages/acs-templating/www/doc/demo/skin-plain }

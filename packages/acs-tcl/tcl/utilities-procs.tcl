@@ -56,7 +56,7 @@ ad_proc util::zip {
         error "zip command not found on the system."
     }
     set cmd [list exec]
-    switch $::tcl_platform(platform) {
+    switch -- $::tcl_platform(platform) {
         windows {lappend cmd cmd.exe /c}
         default {lappend cmd bash -c}
     }
@@ -998,7 +998,7 @@ ad_proc -private export_vars_sign {
     set secret  [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
     foreach def [split $params &] {
         lassign [split $def =] key val
-        switch $key {
+        switch -- $key {
             max_age -
             secret {set $key [ad_urldecode_query $val]}
         }
@@ -1188,7 +1188,7 @@ ad_proc -deprecated export_form_vars {
         lassign [split $var_spec ":"] var type
         upvar 1 $var value
         if { [info exists value] } {
-            switch $type {
+            switch -- $type {
                 multiple {
                     foreach item $value {
                         append hidden "<input type=\"hidden\" name=\"[ns_quotehtml $var]\" value=\"[ns_quotehtml $item]\" >\n"
@@ -1327,7 +1327,7 @@ ad_proc -deprecated export_url_vars {
             lassign [split $var_spec ":"] var type
             upvar 1 $var upvar_value
             if { [info exists upvar_value] } {
-                switch $type {
+                switch -- $type {
                     multiple {
                         foreach item $upvar_value {
                             lappend params "[ns_urlencode $var]=[ns_urlencode $item]"
@@ -2955,7 +2955,7 @@ ad_proc -public ad_ns_set_to_tcl_vars {
         set varname [ns_set key $set_id $i]
         upvar $level $varname var
         if { [info exists var] } {
-            switch $duplicates {
+            switch -- $duplicates {
                 fail {
                     return -code error "ad_ns_set_to_tcl_vars tried to set the var $varname which is already set"
                 }
@@ -3867,7 +3867,7 @@ ad_proc -public with_finally {
     # stuff like break or continue, the result is undefined.
     uplevel $finally
 
-    switch $return_code {
+    switch -- $return_code {
         0 {
             # CODE executed without a non-local exit -- return what it
             # evaluated to.
@@ -4503,19 +4503,19 @@ ad_proc -public util::age_pretty {
         set hours [expr {abs($age_seconds / 3600)}]
         set minutes [expr {round(($age_seconds% 3600)/60.0)}]
         if {$hours < 24} {
-            switch $hours {
+            switch -- $hours {
                 0 { set result "" }
                 1 { set result "One hour " }
                 default { set result "$hours hours "}
             }
-            switch $minutes {
+            switch -- $minutes {
                 0 {}
                 1 { append result "$minutes minute " }
                 default { append result "$minutes minutes " }
             }
         } else {
             set days [expr {abs($hours / 24)}]
-            switch $days {
+            switch -- $days {
                 1 { set result "One day " }
                 default { set result "$days days "}
             }
@@ -4779,7 +4779,7 @@ ad_proc -public util::which {prog} {
 
     @author Gustaf Neumann
 } {
-    switch $::tcl_platform(platform) {
+    switch -- $::tcl_platform(platform) {
         windows {
             #
             # Notice: Windows has an alternative search environment 

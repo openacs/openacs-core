@@ -116,7 +116,7 @@ ad_proc -public template::data::transform::richtext_or_file {
     # as a non-value in case of a required element.
 
     set storage_type [ns_queryget $element_id.storage_type]
-    switch $storage_type {
+    switch -- $storage_type {
         text {
             set text [ns_queryget $element_id.text]
             if { $text eq "" } {
@@ -162,7 +162,7 @@ ad_proc -public template::util::richtext_or_file::set_property { what richtext_o
     set tmp_filename [lindex $richtext_or_file_list 4]
     set content_url  [lindex $richtext_or_file_list 5]
 
-    switch $what {
+    switch -- $what {
         storage_type {
             # Replace contents with value
             return [list $value $mime_type $text $filename $tmp_filename $content_url]
@@ -210,7 +210,7 @@ ad_proc -public template::util::richtext_or_file::get_property { what richtext_o
     set tmp_filename [lindex $richtext_or_file_list 4]
     set content_url  [lindex $richtext_or_file_list 5]
 
-    switch $what {
+    switch -- $what {
         storage_type {
             return $storage_type
         }
@@ -233,7 +233,7 @@ ad_proc -public template::util::richtext_or_file::get_property { what richtext_o
             return [list $filename $tmp_filename $mime_type]
         }
         html_value {
-            switch $storage_type {
+            switch -- $storage_type {
                 text {
                     return [ad_html_text_convert -from $mime_type -to "text/html" -- $text]
                 }

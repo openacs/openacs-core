@@ -46,7 +46,7 @@ if { $item_id != 0} {
         set filename $folder/$itemInfo(revision_id).$size
         
         if {![file exists $filename]} {
-            switch $itemInfo(storage_type) {
+            switch -- $itemInfo(storage_type) {
                 "file" {
                     set input_file [content::revision::get_cr_file_path -revision_id $itemInfo(revision_id)]
                     exec convert $input_file -resize $size $filename

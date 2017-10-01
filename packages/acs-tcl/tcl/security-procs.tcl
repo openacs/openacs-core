@@ -137,7 +137,7 @@ ad_proc -private sec_handler {} {
         set user_id 0
         set account_status closed
         
-        switch $login_level {
+        switch -- $login_level {
             1 {
                 set auth_level ok
                 set user_id $untrusted_user_id

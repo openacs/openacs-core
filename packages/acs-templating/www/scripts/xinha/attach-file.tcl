@@ -170,7 +170,7 @@ if {$write_p} {
 			    -package_id [ad_conn package_id] \
 			    -mime_type $mime_type
 		    }
-		    file delete $upload_tmpfile
+		    file delete -- $upload_tmpfile
 		    permission::grant \
 			-object_id $item_id \
 			-party_id $user_id \
