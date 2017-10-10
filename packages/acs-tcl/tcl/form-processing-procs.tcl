@@ -883,7 +883,7 @@ ad_proc -public ad_form {
                     fieldset -
                     legendtext -
                     legend {
-                        lappend command -$switch -- $args
+                        lappend command -$switch $args
                     }
                     default {return -code error "\"$switch\" is not a legal -section option"}
                 }
