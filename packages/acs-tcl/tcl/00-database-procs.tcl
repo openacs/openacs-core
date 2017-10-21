@@ -1114,7 +1114,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
     # If we took more than 3 seconds yack about it.
     if { [clock clicks -milliseconds] - $start_time > 3000 } {
         set duration [format %.2f [expr {[clock clicks -milliseconds] - $start_time}]]
-        ns_log Warning "db_exec: longdb $duration seconds $db $type $statement_name"
+        ns_log Warning "db_exec: longdb $duration ms $db $type $statement_name"
     } else {
         #set duration [format %.2f [expr {[clock clicks -milliseconds] - $start_time}]]
         #ns_log Debug "db_exec: timing $duration seconds $db $type $statement_name"
