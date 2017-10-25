@@ -10,7 +10,7 @@ ad_page_contract {
 } {    
     { revision_id "" }
 }
-
+ns_log notice "======= index.vuh"
 # Get the paths
 set the_root $::acs::pageroot
 set the_url [ad_conn path_info]
