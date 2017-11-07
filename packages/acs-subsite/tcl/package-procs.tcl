@@ -18,13 +18,9 @@ ad_proc -public package_type_dynamic_p {
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 12/30/2000
 } {
-    return [db_string object_type_dynamic_p {
-        	select case when exists (select 1 
-                                   from acs_object_types t
-                                  where t.dynamic_p = 't'
-                                    and t.object_type = :object_type)
-	            then 1 else 0 end
-	  from dual
+    return [db_0or1row object_type_dynamic_p {
+        select 1 from acs_object_types
+         where dynamic_p and object_type = :object_type
     }]
 }
 
