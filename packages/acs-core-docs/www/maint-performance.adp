@@ -32,7 +32,7 @@ Information" at the bottom of the page.</p></li><li class="listitem">
 <p>This should return a list of database queries on the page,
 including the exact query (so it can be cut-paste into psql or
 oracle) and the time each query took.</p><div class="figure">
-<a name="idp140592101531128" id="idp140592101531128"></a><p class="title"><strong>Figure 6.8. Query
+<a name="idp140623175898008" id="idp140623175898008"></a><p class="title"><strong>Figure 6.8. Query
 Analysis example</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/query-duration.png" alt="Query Analysis example"></div></div>
 </div><br class="figure-break">
 </li>
@@ -40,7 +40,7 @@ Analysis example</strong></p><div class="figure-contents"><div class="mediaobjec
 </li><li class="listitem">
 <p>Identify a runaway Oracle query: first, use <strong class="userinput"><code>ps aux</code></strong> or <strong class="userinput"><code>top</code></strong> to get the UNIX process ID of
 a runaway Oracle process.</p><p>Log in to SQL*Plus as the admin:</p><pre class="screen">
-[<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> ~]$ svrmgrl
+[<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> ~]$ svrmgrl
 
 Oracle Server Manager Release 3.1.7.0.0 - Production
 
@@ -83,9 +83,10 @@ the PostGreSQL installation - and change</p><pre class="programlisting">
 </pre><p>to</p><pre class="programlisting">
 stats_command_string = true
 </pre><p>Next, connect to postgres (<code class="computeroutput">psql
-<span class="replaceable"><span class="replaceable">service0</span></span>
-</code>) and <code class="computeroutput">select * from pg_stat_activity;</code>. Typical
-output should look like:</p><pre class="programlisting">
+<em class="replaceable"><code>service0</code></em>
+</code>) and
+<code class="computeroutput">select * from
+pg_stat_activity;</code>. Typical output should look like:</p><pre class="programlisting">
   datid   |   datname   | procpid | usesysid | usename |  current_query
 ----------+-------------+---------+----------+---------+-----------------
  64344418 | openacs.org |   14122 |      101 | nsadmin | &lt;IDLE&gt;
@@ -123,7 +124,7 @@ about 1% per Oracle Support information.</p><p>To be able to get a overview of h
 query, install "autotrace". I usually follow the
 instructions here <a class="ulink" href="http://asktom.oracle.com/~tkyte/article1/autotrace.html" target="_top">http://asktom.oracle.com/~tkyte/article1/autotrace.html</a>.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592104105016" id="idp140592104105016"></a>Make sure, that the Oracle CBO works with
+<a name="idp140623175869304" id="idp140623175869304"></a>Make sure, that the Oracle CBO works with
 adequate statistics</h4></div></div></div><p>The Oracle Cost Based optimizer is a piece of software that
 tries to find the "optimal" execution plan for a given
 SQL statement. For that it estimates the costs of running a SQL

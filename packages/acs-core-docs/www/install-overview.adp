@@ -17,11 +17,8 @@ Overview</h2></div></div></div><div class="toc">
 <dt><span class="sect1"><a href="install-steps">Basic
 Steps</a></span></dt><dt><span class="sect1"><a href="individual-programs">Prerequisite Software</a></span></dt>
 </dl>
-</div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div>
+</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="acs-admin" leftLabel="Prev" leftTitle="

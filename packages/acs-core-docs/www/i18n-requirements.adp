@@ -10,12 +10,9 @@ Chapter 15. Kernel Documentation"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="i18n-requirements" id="i18n-requirements"></a>OpenACS Internationalization
-Requirements</h2></div></div></div><div class="authorblurb">
-<p>by Henry Minsky, <a class="ulink" href="mailto:yon\@openforce.net" target="_top">Yon Feldman</a>, <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars
+Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by Henry Minsky, <a class="ulink" href="mailto:yon\@openforce.net" target="_top">Yon Feldman</a>, <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars
 Pind</a>, <a class="ulink" href="mailto:peter\@collaboraid.biz" target="_top">Peter Marklund</a>, <a class="ulink" href="mailto:christian\@collaboraid.biz" target="_top">Christian
-Hvid</a>, and others.</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+Hvid</a>, and others.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="i18n-requirements-introduction" id="i18n-requirements-introduction"></a>Introduction</h3></div></div></div><p>This document describes the requirements for functionality in
 the OpenACS platform to support globalization of the core and

@@ -19,7 +19,7 @@ current files. You will still need to back up your database.</p><p>Note that, if
 <code class="filename">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc</code>
 directory is not included in cvs and you may want to add it.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs commit -m "last-minute commits before upgrade to 4.6"</code></strong>
 cvs commit: Examining .
@@ -32,19 +32,19 @@ T bin/ad-context-server.pl
 (many lines omitted)
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
 [root root]# 
-<span class="action"><span class="action">su - $OPENACS_SERVICE_NAME
-cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+<span class="action">su - $OPENACS_SERVICE_NAME
+cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 cvs commit -m "last-minute commits before upgrade to 4.6"
 cvs tag before_upgrade_to_4_6
-exit</span></span>
+exit</span>
 </pre><p>To restore files from a cvs tag such as the one used above:</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs up -r current</code></strong>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong><span class="action"><span class="action">su - $OPENACS_SERVICE_NAME
-cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-cvs up -r current</span></span>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong><span class="action">su - $OPENACS_SERVICE_NAME
+cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+cvs up -r current</span>
 </pre>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

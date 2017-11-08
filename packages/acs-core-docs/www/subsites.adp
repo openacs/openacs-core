@@ -9,10 +9,8 @@ Chapter 11. Development Reference"
 		    rightLink="parties" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="subsites" id="subsites"></a>Writing OpenACS Application Pages</h2></div></div></div><div class="authorblurb">
-<p>By Rafael H. Schloming and Pete Su</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+<a name="subsites" id="subsites"></a>Writing OpenACS Application Pages</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Rafael H. Schloming and Pete
+Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="subsites-overview" id="subsites-overview"></a>Overview</h3></div></div></div><p>In this document, we&#39;ll examine the user interface pages of
 the Notes application in more detail, covering two separate aspects
@@ -242,8 +240,8 @@ how it makes it possible to easily turn Notes into an application
 that appears to provide each user in a system with their own
 private notes database.</p><p>We also saw how to use the templating system&#39;s forms API in
 a simple way, to create forms based pages with minimal duplication
-of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.9.2.1 2016/06/23
-08:32:46 gustafn Exp $)</div>
+of code.</p><p><span class="cvstag">($&zwnj;Id: subsites.xml,v 1.10 2017/08/07
+23:47:54 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

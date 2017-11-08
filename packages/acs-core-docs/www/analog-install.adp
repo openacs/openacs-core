@@ -25,12 +25,12 @@ make[1]: Leaving directory `/usr/local/src/analog-5.32/src'
 [root analog-5.32]# <strong class="userinput"><code>cd ..</code></strong>
 [root src]#<strong class="userinput"><code> mv analog-5.32 /usr/share/</code></strong>
 [root src]#
-<span class="action"><span class="action">cd /usr/local/src
+<span class="action">cd /usr/local/src
 tar xzf /tmp/analog-5.32.tar.gz
 cd analog-5.32
 make
 cd ..
-mv analog-5.32 /usr/share/</span></span>
+mv analog-5.32 /usr/share/</span>
 </pre><p>See also <a class="xref" href="analog-setup" title="Set up Log Analysis Reports">the section called
 &ldquo;Set up Log Analysis
 Reports&rdquo;</a>

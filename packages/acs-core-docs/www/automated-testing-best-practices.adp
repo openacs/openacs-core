@@ -9,11 +9,8 @@ Chapter 12. Engineering Standards"
 		    rightLink="doc-standards" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="automated-testing-best-practices" id="automated-testing-best-practices"></a>Automated Testing</h2></div></div></div><div class="authorblurb">
-<p>By <a class="ulink" href="mailto:davis\@xarg.net" target="_top">Jeff Davis</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>Best practices in writing OpenACS automated tests</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="automated-testing-best-practices" id="automated-testing-best-practices"></a>Automated Testing</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:davis\@xarg.net" target="_top">Jeff Davis</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Best practices in writing OpenACS automated tests</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <strong>Special characters in Tcl. </strong> Try
 strings starting with a <code class="computeroutput">-Bad</code>
@@ -24,7 +21,7 @@ a <code class="computeroutput">?</code> and <code class="computeroutput">$Bad</c
 <code class="computeroutput">-Bad [BAD] \077 { $Bad</code> should
 be valid user input, should pass through the system unaltered, and
 if it isn&#39;t that&#39;s a bug.</p></li><li class="listitem"><p>
-<strong>Quoting issues. </strong>Put some html in
+<strong>Quoting issues. </strong> Put some html in
 plain text fields and make sure the result is properly quoted
 anywhere it shows up (I use "&lt;b&gt;bold&lt;/b&gt;"
 usually). Look out especially for quoting errors in the context bar
@@ -37,7 +34,7 @@ considered an error but given that data for text fields can come
 from various sources if it&#39;s text it should be properly quoted
 and we should not rely on input validation to prevent XSS security
 holes.)</p></li><li class="listitem"><p>
-<strong>Whitespace input. </strong>Check that
+<strong>Whitespace input. </strong> Check that
 whitespace is not considered valid input for a field if it does not
 make sense. For example, the subject of a forum post is used to
 construct a link and if it is " " it will have a link of
@@ -51,8 +48,8 @@ is for, but a server error is not reasonable).</p></li><li class="listitem"><p>
 <strong>Duplicate names. </strong> Make sure that if
 a duplicate name is entered that there is a reasonable error rather
 than a server error. Check for insert, move, copy, and rename.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: auto-testing.xml,v 1.3.14.1 2016/06/23
-08:32:46 gustafn Exp $)</div>
+</ul></div><p><span class="cvstag">($&zwnj;Id: auto-testing.xml,v 1.4 2017/08/07
+23:47:54 gustafn Exp $)</span></p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="variables" leftLabel="Prev" leftTitle="Variables"

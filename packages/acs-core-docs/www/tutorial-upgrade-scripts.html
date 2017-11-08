@@ -1,18 +1,27 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Writing upgrade scripts</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-parameters.html" title="Adding in parameters for your package"><link rel="next" href="tutorial-second-database.html" title="Connect to a second database"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-parameters.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-second-database.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-upgrade-scripts"></a>Writing upgrade scripts</h2></div></div></div><div class="authorblurb"><p>by <a class="ulink" href="mailto:jade@rubick.com" target="_top">Jade Rubick</a></p>
-          OpenACS docs are written by the named authors, and may be edited
-          by OpenACS documentation staff.
-        </div><p>If your package changes its data model, you have to write an
-    upgrade script. This is very easy in OpenACS. </p><p>First, you want to make sure you change the original .sql
-    file so that new installation will have the new data model.</p><p>Next, check what version your package is currently at. For
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Writing upgrade scripts</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-parameters.html" title="Adding in parameters for your package"><link rel="next" href="tutorial-second-database.html" title="Connect to a second database"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-parameters.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-second-database.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-upgrade-scripts"></a>Writing upgrade scripts</h2></div></div></div>
+    
+    <span style="color: red">&lt;authorblurb&gt;
+      <p>by <a class="ulink" href="mailto:jade@rubick.com" target="_top">Jade Rubick</a></p>
+    &lt;/authorblurb&gt;</span>
+    <p>If your package changes its data model, you have to write an
+    upgrade script. This is very easy in OpenACS. </p>
+    
+    <p>First, you want to make sure you change the original .sql
+    file so that new installation will have the new data model.</p>
+
+    <p>Next, check what version your package is currently at. For
     example, it may be at version 1.0b1. Create a file in
     sql/postgres/upgrade called packagename-1.0b1-1.0b2.sql and put
     the SQL code that will update the data model. For example, if you
     add in a column, you would have an alter table add column
     statement in this file. Test this out very well, because data
     model changes are more serious and fundamental changes than the
-    program .tcl files. </p><p>Now use the APM to create a new package version
+    program .tcl files. </p>
+
+    <p>Now use the APM to create a new package version
       1.0b2. Commit all your changes, tag the release 
       (<a class="xref" href="tutorial-upgrades.html" title="Distributing upgrades of your package">the section called “Distributing upgrades of your package”</a>), 
       and both new installations and upgrades
-      will be taken care of.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-parameters.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-second-database.html">Next</a></td></tr><tr><td width="40%" align="left">Adding in parameters for your package </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Connect to a second database</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+      will be taken care of.</p>
+  </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-parameters.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-second-database.html">Next</a></td></tr><tr><td width="40%" align="left">Adding in parameters for your package </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Connect to a second database</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

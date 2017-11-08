@@ -1,12 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Hierarchical data</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-notifications.html" title="Notifications"><link rel="next" href="tutorial-vuh.html" title="Using .vuh files for pretty urls"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-notifications.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-vuh.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-hierarchical"></a>Hierarchical data</h2></div></div></div><div class="authorblurb"><p>by <a class="ulink" href="http://rubick.com:8002" target="_top">Jade Rubick</a>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Hierarchical data</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-notifications.html" title="Notifications"><link rel="next" href="tutorial-vuh.html" title="Using .vuh files for pretty urls"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-notifications.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-vuh.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-hierarchical"></a>Hierarchical data</h2></div></div></div>
+    
+    <span style="color: red">&lt;authorblurb&gt;
+      <p>by <a class="ulink" href="http://rubick.com:8002" target="_top">Jade Rubick</a>
       with help from many people in the OpenACS community</p>
-          OpenACS docs are written by the named authors, and may be edited
-          by OpenACS documentation staff.
-        </div><p>One of the nice things about using the OpenACS object system
+    &lt;/authorblurb&gt;</span>
+
+    <p>One of the nice things about using the OpenACS object system
     is that it has a built-in facility for tracking hierarchical data
     in an efficient way. The algorithm behind this is called
-    <code class="computeroutput">tree_sortkey.</code></p><p>Any time your tables are subclasses of the acs_objects
+    <code class="computeroutput">tree_sortkey.</code></p>
+
+    <p>Any time your tables are subclasses of the acs_objects
     table, then you automatically get the ability to structure them
     hierarchically. The way you do this is currently via the
     <code class="computeroutput">context_id</code> column of
@@ -15,7 +20,9 @@
     the use of <code class="computeroutput">context_id</code> has been
     ambiguous in the past). So when you want to build your hierarchy,
     simply set the context_id values. Then, when you want to make
-    hierarchical queries, you can do them as follows:</p><pre class="programlisting">
+    hierarchical queries, you can do them as follows:</p>
+
+    <pre class="programlisting">
       db_multirow categories blog_categories "
       SELECT
       c.*,
@@ -28,10 +35,16 @@
       c.category_id = o.object_id
       ORDER BY
       o.tree_sortkey"
-    </pre><p>Note the use of the
+    </pre>
+
+    <p>Note the use of the
     <code class="computeroutput">tree_level()</code> function, which
-    gives you the level, starting from 1, 2, 3... </p><p>Here's an example, pulling all of the children for a given
-  parent:</p><pre class="programlisting">
+    gives you the level, starting from 1, 2, 3... </p>
+
+    <p>Here's an example, pulling all of the children for a given
+  parent:</p> 
+
+    <pre class="programlisting">
       SELECT 
       children.*,
       tree_level(children.tree_sortkey) -
@@ -43,14 +56,20 @@
       children.tree_sortkey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
       and parent.tree_sortkey &lt;&gt; children.tree_sortkey
       and parent.key = :the_parent_key;
-      </pre><p>The reason we subtract the parent's tree_level from the
+      </pre>
+
+    <p>The reason we subtract the parent's tree_level from the
     child's tree_level is that the tree_levels are global, so if you
     want the parent's tree_level to start with 0, you'll want the
     subtraction in there. This is a reason you'll commonly see magic
     numbers in tree_sortkey SQL queries, like
     <code class="computeroutput">tree_level(children.tree_sortkey) -
     4</code>. That is basically an incorrect way to do it,
-    and subtracting the parent's tree_level is the preferred method.</p><p>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</p><pre class="programlisting">
+    and subtracting the parent's tree_level is the preferred method.</p>
+
+    <p>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</p>
+
+    <pre class="programlisting">
       SELECT
       subtree.*,
       tree_level(subtree.tree_sortkey) -
@@ -59,10 +78,14 @@
       WHERE 
       subtree.tree_sortkey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
       and parent.key = :the_parent_key;
-    </pre><p>If you are using the Content Repository, you get a similar
+    </pre>
+
+    <p>If you are using the Content Repository, you get a similar
       facility, but the <code class="computeroutput">parent_id</code>
       column is already there. Note you can do joins with
-      <code class="computeroutput">tree_sortkey</code>:</p><pre class="programlisting">
+      <code class="computeroutput">tree_sortkey</code>:</p>
+      
+    <pre class="programlisting">
       SELECT
       p.item_id,
       repeat(:indent_pattern, (tree_level(p.tree_sortkey) - 5)* :indent_factor) as indent,
@@ -71,10 +94,14 @@
       FROM pm_projectsx p, cr_items i
       WHERE p.project_id = i.live_revision
       ORDER BY i.tree_sortkey
-    </pre><p>This rather long thread explains <a class="ulink" href="http://openacs.org/forums/message-view?message_id=16799" target="_top">How
+    </pre>
+
+    <p>This rather long thread explains <a class="ulink" href="http://openacs.org/forums/message-view?message_id=16799" target="_top">How
     tree_sortkeys work</a> and this paper <a class="ulink" href="http://www.yafla.com/papers/sqlhierarchies/sqlhierarchies2.htm" target="_top">describes
     the technique for tree_sortkeys</a>, although the <a class="ulink" href="http://openacs.org/forums/message-view?message_id=112943" target="_top">OpenACS
     implementation has a few differences in the
     implementation</a>, to make it work for many languages and the
     LIKE construct in Postgres.
-    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-notifications.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-vuh.html">Next</a></td></tr><tr><td width="40%" align="left">Notifications </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Using .vuh files for pretty urls</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+    </p>
+
+  </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-notifications.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-vuh.html">Next</a></td></tr><tr><td width="40%" align="left">Notifications </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Using .vuh files for pretty urls</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

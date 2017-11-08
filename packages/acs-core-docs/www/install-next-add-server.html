@@ -1,10 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Running multiple services on one machine</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance-web.html" title="Chapter 6. Production Environments"><link rel="previous" href="install-openacs-inittab.html" title="AOLserver keepalive with inittab"><link rel="next" href="high-avail.html" title="High Availability/High Performance Configurations"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-openacs-inittab.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Production Environments</th><td width="20%" align="right"> <a accesskey="n" href="high-avail.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-next-add-server"></a>Running multiple services on one machine</h2></div></div></div><p><b>Services on different ports. </b>To run a different service on another port but the same
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Running multiple services on one machine</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance-web.html" title="Chapter 6. Production Environments"><link rel="previous" href="install-openacs-inittab.html" title="AOLserver keepalive with inittab"><link rel="next" href="high-avail.html" title="High Availability/High Performance Configurations"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-openacs-inittab.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Production Environments</th><td width="20%" align="right"> <a accesskey="n" href="high-avail.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-next-add-server"></a>Running multiple services on one machine</h2></div></div></div>
+    
+      <p>
+        <b>Services on different ports. </b>
+        To run a different service on another port but the same
         ip, simply repeat <a class="xref" href="openacs.html" title="Install OpenACS 5.9.0">Install OpenACS 5.9.0</a> replacing
-        <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>, and change the
+        <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>, and change the
 </p><pre class="programlisting">set httpport              8000
 set httpsport             8443 </pre><p>
- to different values.</p><p><b>Services on different host names. </b>For example, suppose you want to support
+ to different values.
+      </p>
+      <p>
+        <b>Services on different host names. </b>
+        For example, suppose you want to support
 <code class="computeroutput">http://service0.com</code> and
     <code class="computeroutput">http://bar.com</code> on the same
     machine.  The easiest way is to assign each one a different ip
@@ -12,8 +20,13 @@ set httpsport             8443 </pre><p>
         different values for
 </p><pre class="programlisting">set hostname               [ns_info hostname]
 set address                127.0.0.1 </pre><p>
-</p><p>If you want to install two services with different host
+
+    </p>
+
+    <p>If you want to install two services with different host
     names sharing the same ip, you'll need nsvhr to redirect requests
     based on the contents of the tcp headers.  See <a class="ulink" href="http://borkware.com/rants/aolserver-vhosting/" target="_top">AOLserver
     Virtual Hosting with TCP</a> by <a class="ulink" href="mailto:markd@borkware.com" target="_top">markd</a>.
-</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-openacs-inittab.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="high-avail.html">Next</a></td></tr><tr><td width="40%" align="left">AOLserver keepalive with inittab </td><td width="20%" align="center"><a accesskey="u" href="maintenance-web.html">Up</a></td><td width="40%" align="right"> High Availability/High Performance Configurations</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+</p>
+
+  </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-openacs-inittab.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="high-avail.html">Next</a></td></tr><tr><td width="40%" align="left">AOLserver keepalive with inittab </td><td width="20%" align="center"><a accesskey="u" href="maintenance-web.html">Up</a></td><td width="40%" align="right"> High Availability/High Performance Configurations</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

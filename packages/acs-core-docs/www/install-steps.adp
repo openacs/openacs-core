@@ -58,9 +58,10 @@ of Oracle for development purposes. This is described in the
 use this guide</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <code class="computeroutput">This</code> is text you will see on
-screen, such as a <code class="computeroutput"><span class="guibutton"><span class="guibutton">
-<u><span class="accel">B</span></u>utton</span></span></code> or <code class="computeroutput"><span class="guilabel"><span class="guilabel"><u><span class="accel">link</span></u></span></span></code> in a radio button list
-or menu.</p></li><li class="listitem"><p><strong class="userinput"><code>This is text that you will
+screen, such as a <code class="computeroutput"><span class="guibutton">
+<span class="accel">B</span>utton</span></code> or
+<code class="computeroutput"><span class="guilabel"><span class="accel">link</span></span></code> in a radio button list or
+menu.</p></li><li class="listitem"><p><strong class="userinput"><code>This is text that you will
 type.</code></strong></p></li><li class="listitem">
 <p>This is text from a program or file which you may need to
 examine or edit:</p><pre class="programlisting">
@@ -70,73 +71,73 @@ if {$database eq "oracle"} {
 </pre>
 </li><li class="listitem">
 <p>This is text that you will <code class="computeroutput">see</code> and <strong class="userinput"><code>type</code></strong> in a command shell,
-including <span class="replaceable"><span class="replaceable">text
-you may have to change</span></span>. It is followed by a list of
-just the commands, which you can copy and paste. The command prompt
-varies by system; in the examples we use the form<code class="computeroutput">[$OPENACS_SERVICE_NAME aolserver]$</code>, where
+including <em class="replaceable"><code>text you may have to
+change</code></em>. It is followed by a list of just the commands,
+which you can copy and paste. The command prompt varies by system;
+in the examples we use the form<code class="computeroutput">[$OPENACS_SERVICE_NAME aolserver]$</code>, where
 <code class="computeroutput">$OPENACS_SERVICE_NAME</code> is the
 current user and <code class="computeroutput">aolserver</code> is
 the current directory. The root prompt is shown ending in # and all
 other prompts in $.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>svc -d /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>svc -d /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>dropdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>dropdb <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 DROP DATABASE
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>createdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>createdb <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 CREATE DATABASE
-<span class="action"><span class="action">su - $OPENACS_SERVICE_NAME
-svc -d /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-dropdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-createdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-</span></span>
+<span class="action">su - $OPENACS_SERVICE_NAME
+svc -d /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+dropdb <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+createdb <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+</span>
 </pre><p>
 <a name="cut-and-paste-name-var" id="cut-and-paste-name-var"></a><strong>Setting a global shell
-variable for cut and paste. </strong>In order to cut
+variable for cut and paste. </strong> In order to cut
 and paste the instructions into your shell, you must set the
 environment variable $OPENACS_SERVICE_NAME. In order to set it
 globally so that it works for any new users or special service
 users you may create, edit the file <code class="computeroutput">/etc/profile</code> ( <code class="computeroutput">/etc/share/skel/dot.profile</code> for FreeBSD)
 and add this line:</p><pre class="programlisting">
-export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">service0</span></span>
+export OPENACS_SERVICE_NAME=<em class="replaceable"><code>service0</code></em>
 </pre>
 </li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592102795240" id="idp140592102795240"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140592102795880" id="idp140592102795880"></a><p class="title"><strong>Table 2.1. Default
+<a name="idp140623179121976" id="idp140623179121976"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140623179122616" id="idp140623179122616"></a><p class="title"><strong>Table 2.1. Default
 directories for a standard install</strong></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
 </colgroup><tbody>
 <tr>
-<td>Fully qualified domain name of your server</td><td><span class="replaceable"><span class="replaceable">yourserver.test</span></span></td>
+<td>Fully qualified domain name of your server</td><td><em class="replaceable"><code>yourserver.test</code></em></td>
 </tr><tr>
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140592102800488" id="idp140592102800488"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
-in default install)</td>
+<a class="indexterm" name="idp140623179128168" id="idp140623179128168"></a><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> (set to
+service0 in default install)</td>
 </tr><tr>
-<td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
+<td>OpenACS service account</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td>
 </tr><tr>
-<td>OpenACS database name</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
+<td>OpenACS database name</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td>
 </tr><tr>
-<td>Root of OpenACS service file tree (SERVERROOT)</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME</span></span></td>
+<td>Root of OpenACS service file tree (SERVERROOT)</td><td><em class="replaceable"><code>/var/lib/aolserver/$OPENACS_SERVICE_NAME</code></em></td>
 </tr><tr>
 <td>Location of source code tarballs for new software</td><td>/var/tmp</td>
 </tr><tr>
 <td>The OpenACS tarball contains some files which are useful while
 setting up other software. Those files are located at:</td><td>/var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files</td>
 </tr><tr>
-<td>Database backup directory</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</span></span></td>
+<td>Database backup directory</td><td><em class="replaceable"><code>/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</code></em></td>
 </tr><tr>
-<td>Service config files</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc</span></span></td>
+<td>Service config files</td><td><em class="replaceable"><code>/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc</code></em></td>
 </tr><tr>
-<td>Service log files</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME/log</span></span></td>
+<td>Service log files</td><td><em class="replaceable"><code>/var/lib/aolserver/$OPENACS_SERVICE_NAME/log</code></em></td>
 </tr><tr>
 <td>Compile directory</td><td>/usr/local/src</td>
 </tr><tr>
@@ -148,9 +149,9 @@ setting up other software. Those files are located at:</td><td>/var/tmp/openacs-
 </table></div>
 </div><br class="table-break"><p>None of these locations are set in stone - they&#39;re simply
 the values that we&#39;ve chosen. The values that you&#39;ll
-probably want to change, such as service name, are <span class="replaceable"><span class="replaceable">marked like
-this</span></span>. The other values we recommend you leave
-unchanged unless you have a reason to change them.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+probably want to change, such as service name, are <em class="replaceable"><code>marked like this</code></em>. The other values
+we recommend you leave unchanged unless you have a reason to change
+them.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3><p>Some of the paths and user accounts have been changed from those
 recommended in previous versions of this document to improve
 security and maintainability. See <a class="ulink" href="http://openacs.org/forums/message-view?message_id=82934" target="_top">this thread</a> for discussion.</p>
@@ -183,8 +184,8 @@ commands that are failing with the accompanying error. If
 there&#39;s a SQL error in the Tcl error or in the log, post that
 too.</p></li><li class="listitem"><p>If you find errors in this document or if you have ideas about
 making it better, please post them in our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">BugTracker</a>.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: overview.xml,v 1.29.2.2 2016/06/23
-08:32:46 gustafn Exp $)</div>
+</ul></div><p><span class="cvstag">($&zwnj;Id: overview.xml,v 1.30 2017/08/07
+23:47:55 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

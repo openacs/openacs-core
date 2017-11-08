@@ -17,19 +17,19 @@ tablespace</h3></div></div></div><p>Should it become necessary to rebuild a tabl
 you can use the <code class="computeroutput">drop user</code>
 command in SVRMGRL with the <code class="computeroutput">cascade</code> option. This command will drop the
 user and every database object the user owns.</p><pre class="programlisting">
-SVRMGR&gt; <strong class="userinput"><code>drop user <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> cascade;</code></strong>
+SVRMGR&gt; <strong class="userinput"><code>drop user <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> cascade;</code></strong>
 </pre><p>If this does not work because svrmgrl "cannot drop a user
 that is currently connected", make sure to kill the AOLserver
 using this user. If it still does not work, do:</p><pre class="programlisting">
-SVRMGR&gt; <strong class="userinput"><code>select username, sid, serial# from v$session where lower(username)='<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>';</code></strong>
+SVRMGR&gt; <strong class="userinput"><code>select username, sid, serial# from v$session where lower(username)='<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>';</code></strong>
 </pre><p>and then</p><pre class="programlisting">
-SVRMGR&gt; <strong class="userinput"><code>alter system kill session '<span class="replaceable"><span class="replaceable">sid, serial#</span></span>';</code></strong>
+SVRMGR&gt; <strong class="userinput"><code>alter system kill session '<em class="replaceable"><code>sid, serial#</code></em>';</code></strong>
 </pre><p>where <span class="emphasis"><em>sid</em></span> and
 <span class="emphasis"><em>serial#</em></span> are replaced with
 the corresponding values for the open session.</p><p><span class="strong"><strong>Use with
 caution!</strong></span></p><p>If you feel the need to delete <span class="emphasis"><em>everything</em></span> related to the service, you
 can also issue the following:</p><pre class="programlisting">
-SVRMGR&gt; <strong class="userinput"><code>drop tablespace <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> including contents cascade constraints;</code></strong>
+SVRMGR&gt; <strong class="userinput"><code>drop tablespace <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> including contents cascade constraints;</code></strong>
 </pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -40,9 +40,9 @@ drop. If you&#39;re using daemontools, this is simple, just use the
 'down' flag (-d). If you&#39;re using inittab, you have to
 comment out your server in <code class="computeroutput">/etc/inittab</code>, reread the inittab with
 <code class="computeroutput">/sbin/init q</code>, and then
-<code class="computeroutput">restart-aolserver <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+<code class="computeroutput">restart-aolserver <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code>.</p><p>Then, to drop the db, just do:</p><pre class="programlisting">
-[$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>dropdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>dropdb <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 DROP DATABASE
 </pre>

@@ -1,8 +1,53 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 10. Advanced Topics</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="acs-package-dev.html" title="Part III. For OpenACS Package Developers"><link rel="previous" href="tutorial-debug.html" title="Debugging and Automated Testing"><link rel="next" href="tutorial-specs.html" title="Write the Requirements and Design Specs"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><th width="60%" align="center">Part III. For OpenACS Package Developers</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-specs.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="tutorial-advanced"></a>Chapter 10. Advanced Topics</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="tutorial-specs.html">Write the Requirements and Design Specs</a></span></dt><dt><span class="sect1"><a href="tutorial-cvs.html">Add the new package to CVS</a></span></dt><dt><span class="sect1"><a href="tutorial-etp-templates.html">OpenACS Edit This Page Templates</a></span></dt><dt><span class="sect1"><a href="tutorial-comments.html">Adding Comments</a></span></dt><dt><span class="sect1"><a href="tutorial-admin-pages.html">Admin Pages</a></span></dt><dt><span class="sect1"><a href="tutorial-categories.html">Categories</a></span></dt><dt><span class="sect1"><a href="profile-code.html">Profile your code</a></span></dt><dt><span class="sect1"><a href="tutorial-distribute.html">Prepare the package for distribution.</a></span></dt><dt><span class="sect1"><a href="tutorial-upgrades.html">Distributing upgrades of your package</a></span></dt><dt><span class="sect1"><a href="tutorial-notifications.html">Notifications</a></span></dt><dt><span class="sect1"><a href="tutorial-hierarchical.html">Hierarchical data</a></span></dt><dt><span class="sect1"><a href="tutorial-vuh.html">Using .vuh files for pretty urls</a></span></dt><dt><span class="sect1"><a href="tutorial-css-layout.html">Laying out a page with CSS instead of tables</a></span></dt><dt><span class="sect1"><a href="tutorial-html-email.html">Sending HTML email from your application</a></span></dt><dt><span class="sect1"><a href="tutorial-caching.html">Basic Caching</a></span></dt><dt><span class="sect1"><a href="tutorial-schedule-procs.html">Scheduled Procedures</a></span></dt><dt><span class="sect1"><a href="tutorial-wysiwyg-editor.html">Enabling WYSIWYG</a></span></dt><dt><span class="sect1"><a href="tutorial-parameters.html">Adding in parameters for your package</a></span></dt><dt><span class="sect1"><a href="tutorial-upgrade-scripts.html">Writing upgrade scripts</a></span></dt><dt><span class="sect1"><a href="tutorial-second-database.html">Connect to a second database</a></span></dt><dt><span class="sect1"><a href="tutorial-future-topics.html">Future Topics</a></span></dt></dl></div><div class="authorblurb"><p>by <a class="ulink" href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
-          OpenACS docs are written by the named authors, and may be edited
-          by OpenACS documentation staff.
-        </div><p>This tutorial covers topics which are not essential to
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 10. Advanced Topics</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="acs-package-dev.html" title="Part III. For OpenACS Package Developers"><link rel="previous" href="tutorial-debug.html" title="Debugging and Automated Testing"><link rel="next" href="tutorial-specs.html" title="Write the Requirements and Design Specs"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><th width="60%" align="center">Part III. For OpenACS Package Developers</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-specs.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="tutorial-advanced"></a>Chapter 10. Advanced Topics</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="tutorial-specs.html">Write the Requirements and Design Specs</a></span></dt><dt><span class="sect1"><a href="tutorial-cvs.html">Add the new package to CVS</a></span></dt><dt><span class="sect1"><a href="tutorial-etp-templates.html">OpenACS Edit This Page Templates</a></span></dt><dt><span class="sect1"><a href="tutorial-comments.html">Adding Comments</a></span></dt><dt><span class="sect1"><a href="tutorial-admin-pages.html">Admin Pages</a></span></dt><dt><span class="sect1"><a href="tutorial-categories.html">Categories</a></span></dt><dt><span class="sect1"><a href="profile-code.html">Profile your code</a></span></dt><dt><span class="sect1"><a href="tutorial-distribute.html">Prepare the package for distribution.</a></span></dt><dt><span class="sect1"><a href="tutorial-upgrades.html">Distributing upgrades of your package</a></span></dt><dt><span class="sect1"><a href="tutorial-notifications.html">Notifications</a></span></dt><dt><span class="sect1"><a href="tutorial-hierarchical.html">Hierarchical data</a></span></dt><dt><span class="sect1"><a href="tutorial-vuh.html">Using .vuh files for pretty urls</a></span></dt><dt><span class="sect1"><a href="tutorial-css-layout.html">Laying out a page with CSS instead of tables</a></span></dt><dt><span class="sect1"><a href="tutorial-html-email.html">Sending HTML email from your application</a></span></dt><dt><span class="sect1"><a href="tutorial-caching.html">Basic Caching</a></span></dt><dt><span class="sect1"><a href="tutorial-schedule-procs.html">Scheduled Procedures</a></span></dt><dt><span class="sect1"><a href="tutorial-wysiwyg-editor.html">Enabling WYSIWYG</a></span></dt><dt><span class="sect1"><a href="tutorial-parameters.html">Adding in parameters for your package</a></span></dt><dt><span class="sect1"><a href="tutorial-upgrade-scripts.html">Writing upgrade scripts</a></span></dt><dt><span class="sect1"><a href="tutorial-second-database.html">Connect to a second database</a></span></dt><dt><span class="sect1"><a href="tutorial-future-topics.html">Future Topics</a></span></dt></dl></div>
+  
+  <span style="color: red">&lt;authorblurb&gt;
+    <p>by <a class="ulink" href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
+  &lt;/authorblurb&gt;</span>
+    <p>This tutorial covers topics which are not essential to
     creating a minimal working package.  Each section can be used
     independently of all of the others; all sections assume that
-    you've completed the basic tutorial.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-specs.html">Next</a></td></tr><tr><td width="40%" align="left">Debugging and Automated Testing </td><td width="20%" align="center"><a accesskey="u" href="acs-package-dev.html">Up</a></td><td width="40%" align="right"> Write the Requirements and Design Specs</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+    you've completed the basic tutorial.</p>
+
+    
+    
+
+  
+
+  
+   
+
+  
+
+  
+
+      
+
+  
+
+
+  
+
+
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+ 
+  
+
+  
+
+  
+
+  
+</div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-debug.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-specs.html">Next</a></td></tr><tr><td width="40%" align="left">Debugging and Automated Testing </td><td width="20%" align="center"><a accesskey="u" href="acs-package-dev.html">Up</a></td><td width="40%" align="right"> Write the Requirements and Design Specs</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

@@ -9,10 +9,7 @@ Chapter 11. Development Reference"
 		    rightLink="db-api" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="request-processor" id="request-processor"></a>The Request Processor</h2></div></div></div><div class="authorblurb">
-<p>By Pete Su</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+<a name="request-processor" id="request-processor"></a>The Request Processor</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="rp-overview" id="rp-overview"></a>Overview</h3></div></div></div><p>This document is a brief introduction to the OpenACS 5.9.0
 Request Processor; more details can be found in the <a class="xref" href="rp-design" title="Request Processor Design">OpenACS 4
@@ -106,8 +103,8 @@ package_key]</code></span></dt><dd><p>If the URL refers to a package instance, t
 name of the package.</p></dd><dt><span class="term"><code class="computeroutput">[ad_conn
 path_info]</code></span></dt><dd><p>In a .vuh file, path_info is the trailing part of the URL not
 matched by the .vuh file.</p></dd>
-</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.12.6.3 2017/04/21 15:07:52
-gustafn Exp $)</div>
+</dl></div><p><span class="cvstag">($&zwnj;Id: rp.xml,v 1.13 2017/08/07 23:47:54
+gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

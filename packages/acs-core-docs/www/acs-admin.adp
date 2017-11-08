@@ -79,8 +79,7 @@ Daemontools (OPTIONAL)</a></span></dt><dt><span class="sect1"><a href="install-q
 (OPTIONAL)</a></span></dt><dt><span class="sect1"><a href="analog-install">Install
 Analog web file analyzer</a></span></dt><dt><span class="sect1"><a href="install-nspam">Install
 nspam</a></span></dt><dt><span class="sect1"><a href="install-full-text-search-tsearch2">Install Full Text Search
-using Tsearch2</a></span></dt><dt><span class="sect1"><a href="install-full-text-search-openfts">Install Full Text Search
-using OpenFTS (deprecated see tsearch2)</a></span></dt><dt><span class="sect1"><a href="install-nsopenssl">Install
+using Tsearch2</a></span></dt><dt><span class="sect1"><a href="install-nsopenssl">Install
 nsopenssl</a></span></dt><dt><span class="sect1"><a href="install-tclwebtest">Install
 tclwebtest.</a></span></dt><dt><span class="sect1"><a href="install-php">Install PHP for
 use in AOLserver</a></span></dt><dt><span class="sect1"><a href="install-squirrelmail">Install

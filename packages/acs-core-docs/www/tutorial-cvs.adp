@@ -18,13 +18,13 @@ you go. (<a class="ulink" href="http://www.piskorski.com/docs/cvs-conventions.ht
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cd ..</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>cd ..</code></strong>
 [$OPENACS_SERVICE_NAME packages]$ <strong class="userinput"><code>cvs add myfirstpackage/</code></strong>
-Directory /cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage added to the repository
+Directory /cvsroot/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage added to the repository
 [$OPENACS_SERVICE_NAME packages]$ <strong class="userinput"><code>cd myfirstpackage/</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>cvs add www</code></strong>
-Directory /cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www added to the repository
+Directory /cvsroot/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www added to the repository
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>cd www</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cvs add doc</code></strong>
-Directory /cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/doc added to the repository
+Directory /cvsroot/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/doc added to the repository
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cd doc</code></strong>
 [$OPENACS_SERVICE_NAME doc]$ <strong class="userinput"><code>cvs add *</code></strong>
 cvs add: cannot add special file `CVS'; skipping
@@ -49,7 +49,7 @@ cvs add: scheduling file `sample.png' for addition
 cvs add: scheduling file `user-guide.html' for addition
 cvs add: scheduling file `user-interface.dia' for addition
 cvs add: scheduling file `user-interface.png' for addition
-Directory /cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/doc/xml added to the repository
+Directory /cvsroot/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/doc/xml added to the repository
 cvs add: use 'cvs commit' to add these files permanently
 [$OPENACS_SERVICE_NAME doc]$ <strong class="userinput"><code>cd xml</code></strong>
 [$OPENACS_SERVICE_NAME xml]$ <strong class="userinput"><code>cvs add Makefile index.xml</code></strong>
@@ -62,16 +62,16 @@ cvs commit: Examining .
 cvs commit: Examining www
 cvs commit: Examining www/doc
 cvs commit: Examining www/doc/xml
-RCS file: /cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/doc/admin-guide.html,v
+RCS file: /cvsroot/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/doc/admin-guide.html,v
 done
 Checking in www/doc/admin-guide.html;
-/cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/doc/admin-guide.html,v  &lt;--  admin-guide.html
+/cvsroot/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/doc/admin-guide.html,v  &lt;--  admin-guide.html
 initial revision: 1.1
 done
 <span class="emphasis"><em>(many lines omitted)</em></span>
 [$OPENACS_SERVICE_NAME myfirstpackage]$
 </pre><div class="figure">
-<a name="idp140592099723480" id="idp140592099723480"></a><p class="title"><strong>Figure 10.1. Upgrading a local CVS
+<a name="idp140623162867368" id="idp140623162867368"></a><p class="title"><strong>Figure 10.1. Upgrading a local CVS
 repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/development-with-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break">
 </div>

@@ -9,7 +9,7 @@ Chapter 5. Upgrading"
 		    rightLink="upgrade-4.6.3-to-5" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="upgrade-4.5-to-4.6" id="upgrade-4.5-to-4.6"></a>Upgrading 4.5 or higher to 4.6.3</h2></div></div></div><a class="indexterm" name="idp140592104583224" id="idp140592104583224"></a><p>The required platform for OpenACS 4.6 is the same as 4.5, with
+<a name="upgrade-4.5-to-4.6" id="upgrade-4.5-to-4.6"></a>Upgrading 4.5 or higher to 4.6.3</h2></div></div></div><a class="indexterm" name="idp140623160154424" id="idp140623160154424"></a><p>The required platform for OpenACS 4.6 is the same as 4.5, with
 the exception of OpenFTS. OpenACS 4.6 and later require OpenFTS
 0.3.2 for full text search on PostGreSQL. If you have OpenFTS 0.2,
 you&#39;ll need to upgrade.</p><p>If upgrading from 4.4, you need to manually run
@@ -21,17 +21,16 @@ acs-kernel/sql/postgres/upgrade-4.4-4.5.sql. See <a class="ulink" href="http://o
 </p></li>
 </ul></div><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<strong>Make a Backup. </strong>Back up the database
-and file system (see <a class="xref" href="snapshot-backup" title="Manual backup and recovery">the section called
-&ldquo;Manual backup and
+<strong>Make a Backup. </strong> Back up the
+database and file system (see <a class="xref" href="snapshot-backup" title="Manual backup and recovery">the
+section called &ldquo;Manual backup and
 recovery&rdquo;</a>).</p></li><li class="listitem"><p>
-<strong>OPTIONAL: Upgrade
-OpenFTS. </strong><a class="xref" href="upgrade-supporting" title="Upgrading OpenFTS from 0.2 to 0.3.2">the section called
+<strong>OPTIONAL: Upgrade OpenFTS. </strong><a class="xref" href="upgrade-supporting" title="Upgrading OpenFTS from 0.2 to 0.3.2">the section called
 &ldquo;Upgrading OpenFTS from 0.2 to
 0.3.2&rdquo;</a>
 </p></li><li class="listitem">
 <p>Stop the server</p><pre class="screen">
-[root root]# <strong class="userinput"><code>svc -d /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[root root]# <strong class="userinput"><code>svc -d /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 </pre>
 </li><li class="listitem"><p>
@@ -41,32 +40,31 @@ files&rdquo;</a>
 </p></li><li class="listitem">
 <p><span class="strong"><strong>Start the
 server</strong></span></p><pre class="screen">
-[root root]# <strong class="userinput"><code>svc -u /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[root root]# <strong class="userinput"><code>svc -u /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 </pre>
 </li><li class="listitem">
 <p>
-<a name="upgrade-with-apm" id="upgrade-with-apm"></a><strong>Use
-APM to upgrade the database. </strong>
+<a name="upgrade-with-apm" id="upgrade-with-apm"></a><strong>Use APM to upgrade the database. </strong>
 </p><div class="orderedlist"><ol class="orderedlist" type="a">
-<li class="listitem"><p>Browse to the package manager, <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/acs-admin/apm</code>.</p></li><li class="listitem"><p>Click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Install
-packages.</span></span></code>
+<li class="listitem"><p>Browse to the package manager, <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/acs-admin/apm</code>.</p></li><li class="listitem"><p>Click <code class="computeroutput"><span class="guilabel">Install packages.</span></code>
 </p></li><li class="listitem"><p>Select the packages you want to install. This should be
 everything that says <code class="computeroutput">upgrade</code>,
 plus any new packages you want. It&#39;s safest to upgrade the
 kernel by itself, and then come back and upgrade the rest of the
-desired packages in a second pass.</p></li><li class="listitem"><p>On the next screen, click <code class="computeroutput"><span class="guibutton"><span class="guibutton">Install Packages</span></span></code>
+desired packages in a second pass.</p></li><li class="listitem"><p>On the next screen, click <code class="computeroutput"><span class="guibutton">Install
+Packages</span></code>
 </p></li><li class="listitem">
 <p>When prompted, restart the server:</p><pre class="screen">
-[root root]# <strong class="userinput"><code>restart-aolserver <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[root root]# <strong class="userinput"><code>restart-aolserver <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 </pre>
-</li><li class="listitem"><p>Wait a minute, then browse to the package manager, <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/acs-admin/apm</code>.</p></li><li class="listitem"><p>Check that the kernel upgrade worked by clicking <code class="computeroutput"><span class="guilabel"><span class="guilabel">All</span></span></code> and making sure that
-<code class="computeroutput">acs-kernel</code> version is
-5.9.0.</p></li>
+</li><li class="listitem"><p>Wait a minute, then browse to the package manager, <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/acs-admin/apm</code>.</p></li><li class="listitem"><p>Check that the kernel upgrade worked by clicking <code class="computeroutput"><span class="guilabel">All</span></code> and
+making sure that <code class="computeroutput">acs-kernel</code>
+version is 5.9.0.</p></li>
 </ol></div>
 </li><li class="listitem"><p>
-<strong>Rollback. </strong>If anything goes wrong,
+<strong>Rollback. </strong> If anything goes wrong,
 <a class="link" href="snapshot-backup" title="Recovery">roll back</a> to the backup snapshot.</p></li>
 </ol></div>
 </div>

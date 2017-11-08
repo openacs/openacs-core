@@ -9,30 +9,28 @@ Chapter 9. Development Tutorial"
 		    rightLink="tutorial-advanced" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-debug" id="tutorial-debug"></a>Debugging and Automated Testing</h2></div></div></div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+<a name="tutorial-debug" id="tutorial-debug"></a>Debugging and Automated Testing</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
+Aufrecht</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592107822152" id="idp140592107822152"></a>Debugging</h3></div></div></div><p>
-<strong>Developer Support. </strong>The Developer
+<a name="idp140623170297736" id="idp140623170297736"></a>Debugging</h3></div></div></div><p>
+<strong>Developer Support. </strong> The Developer
 Support package adds several goodies: debug information for every
 page; the ability to log comments to the page instead of the error
 log, and fast user switching so that you can test pages as
 anonymous and as dummy users without logging in and out.</p><p>
-<strong>PostgreSQL. </strong>You can work directly
+<strong>PostgreSQL. </strong> You can work directly
 with the database to do debugging steps like looking directly at
 tables and testing stored procedures. Start emacs. Type
 <strong class="userinput"><code>M-x sql-postgres</code></strong>.
-Press enter for server name and use <strong class="userinput"><code><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
+Press enter for server name and use <strong class="userinput"><code><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></code></strong>
 for database name. You can use C-(up arrow) and C-(down arrow) for
 command history.</p><p>Hint: "Parse error near *" usually means that an xql
 file wasn&#39;t recognized, because the Tcl file is choking on the
 *SQL* placeholder that it falls back on.</p><p><strong>Watching the server log. </strong></p><p>To set up real-time monitoring of the AOLserver error log,
 <span class="bold"><strong>type</strong></span>
 </p><pre class="screen">
-less /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/openacs-dev-error.log
+less /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/log/openacs-dev-error.log
 </pre><div class="literallayout"><p>
 F to show new log entries in real time (like tail -f)<br>
 
@@ -45,7 +43,7 @@ G goes to the end.<br>
           </p></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592107831512" id="idp140592107831512"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
+<a name="idp140623166255592" id="idp140623166255592"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
 <thead><tr class="segtitle">
 <th>Test Num</th><th>Action</th><th>Expected Result</th>
 </tr></thead><tbody>
@@ -73,19 +71,17 @@ mfp::note::delete.</td><td class="seg">Proc should return 0 for success.</td>
 to delete your own note. Edit your own note. Search for a note.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592102696792" id="idp140592102696792"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a> and Joel Aufrecht</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>
-<a class="indexterm" name="idp140592102521720" id="idp140592102521720"></a> It seems to me that a lot of people have
+<a name="idp140623164614664" id="idp140623164614664"></a>Write automated tests</h3></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a>
+and Joel Aufrecht</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>
+<a class="indexterm" name="idp140623162159976" id="idp140623162159976"></a> It seems to me that a lot of people have
 been asking for some guidelines on how to write automated tests.
 I&#39;ve done several tests by now and have found the process to be
 extremely easy and useful. It&#39;s a joy to work with automated
 testing once you get the hang of it.</p><p>Create the directory that will contain the test script and edit
 the script file. The directory location and file name are standards
 which are recognized by the automated testing package:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
-[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
+[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/tcl/test</code></strong>
+[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/tcl/test</code></strong>
 [$OPENACS_SERVICE_NAME test]$ <strong class="userinput"><code>emacs myfirstpackages-procs.tcl</code></strong>
 </pre><p>Write the tests. This is obviously the big step :) The script
 should first call ad_library like any normal -procs.tcl file:</p><pre class="screen">
@@ -148,7 +144,7 @@ any test. (<a class="ulink" href="http://www.nedbatchelder.com/blog/20030408T062
 myfirstpackage. You should see your test case. Run it and examine
 the results.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592102416504" id="idp140592102416504"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn&#39;t
+<a name="idp140623166048792" id="idp140623166048792"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn&#39;t
 test the code in our adp/tcl pairs. For this, we can use
 TCLwebtest. TCLwebtest must be <a class="link" href="install-tclwebtest" title="Install tclwebtest.">installed</a>
 for this test to work. This provides a <a class="ulink" href="http://tclwebtest.sourceforge.net/doc/api_public.html" target="_top">library of functions</a> that make it easy to call a page
@@ -158,7 +154,7 @@ acs-automated-testing; see the example provided for one approach on
 integrating them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592102047384" id="idp140592102047384"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
+<a name="idp140623160629800" id="idp140623160629800"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
 deliberately bad data. The complete test looks like:</p><pre class="programlisting">
 ad_library {
     Test cases for my first package.

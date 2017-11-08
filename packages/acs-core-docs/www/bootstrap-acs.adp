@@ -9,11 +9,8 @@ Chapter 15. Kernel Documentation"
 		    rightLink="ext-auth-requirements" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="bootstrap-acs" id="bootstrap-acs"></a>Bootstrapping OpenACS</h2></div></div></div><div class="authorblurb">
-<p>By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Tcl code: /tcl/0-acs-init.tcl and
+<a name="bootstrap-acs" id="bootstrap-acs"></a>Bootstrapping OpenACS</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Tcl code: /tcl/0-acs-init.tcl and
 /packages/acs-kernel/bootstrap.tcl</p></li></ul></div><p>This document describes the startup (bootstrapping) process for
 an AOLserver running OpenACS.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -103,8 +100,8 @@ log an error.</p></li>
 </ol></div><p>At this point, <code class="computeroutput">bootstrap.tcl</code>
 is done executing. AOLserver proceeds to source the remaining files
 in the <code class="computeroutput">/tcl</code> directory (i.e.,
-unpackaged libraries) and begins listening for connections.</p><div class="cvstag">($&zwnj;Id: bootstrap-acs.xml,v 1.7 2006/07/17
-05:38:38 torbenb Exp $)</div>
+unpackaged libraries) and begins listening for connections.</p><p><span class="cvstag">($&zwnj;Id: bootstrap-acs.xml,v 1.7 2006/07/17
+05:38:38 torbenb Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

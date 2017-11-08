@@ -1,8 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Packages</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
-          OpenACS docs are written by the named authors, and may be edited
-          by OpenACS documentation staff.
-        </div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Packages</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div></div>
+  
+
+  <span style="color: red">&lt;authorblurb&gt;
+    <p>By Pete Su and Bryan Quinn</p>
+  &lt;/authorblurb&gt;</span>
+
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div></div>
+    
+    <p>
       This document is a guide on how to write a software package for
       OpenACS. OpenACS packages are installed and maintained with the
       OpenACS Package Manager (APM) which is part of the acs-admin
@@ -10,10 +16,20 @@
       conventions for the file system and naming that must be
       followed, and step by step instructions for creating a new
       package for the "Notes" example package.
-    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div></div><p>
+    </p>
+
+  </div>
+
+
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div></div>
+    
+    <p>
       Here is how an OpenACS 5 server is laid out
       starting from the Server root (ROOT):
-    </p><div class="figure"><a name="idp140592107056328"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
+    </p>
+    <div class="figure"><a name="idp140623177082456"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><div class="figure-contents">
+      
+      <pre class="programlisting">
 ROOT/
     bin/
         Various executables and scripts for server maintanence.
@@ -31,7 +47,15 @@ ROOT/
     tcl/
         bootstrap code
     www/
-        Pages not in packages (static content, customized pages)</pre></div></div><br class="figure-break"></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-looks"></a>What a Package Looks Like</h3></div></div></div><p>
+        Pages not in packages (static content, customized pages)</pre>
+    </div></div><br class="figure-break">
+  </div>
+
+
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-looks"></a>What a Package Looks Like</h3></div></div></div>
+    
+
+    <p>
       Each package encapsulates all of its data model, library code,
       logic, administration pages and user pages in a single part of
       the file tree.  This means developers can track down
@@ -39,7 +63,9 @@ ROOT/
       package without hunting all over the file system.  Encapsulating
       everything about a package in one place also makes it much
       easier to distribute packages independently from the OpenACS Core.
-    </p><p>
+    </p>
+
+    <p>
       In order to make this work, we need a system that keeps track of the
       packages that have been installed in the server, where those packages
       have been installed, and a standard way to map URLs that a client
@@ -47,11 +73,17 @@ ROOT/
       package. While we're at it, this tool should also automate
       package installation, dependency checking, upgrades, and package
       removal. In OpenACS 5, this tool is called the <a class="link" href="packages.html#packages-apm" title="The APM">APM</a>.
-    </p><p>
+    </p>
+
+    <p>
       <a class="indexterm" name="baby"></a>
       To illustrate the general structure of a package, let's see what the
       package for the "notes" application should look like.
-    </p><div class="figure"><a name="idp140592107063624"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
+    </p>
+
+    <div class="figure"><a name="idp140623172256280"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><div class="figure-contents">
+      
+      <pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
         |
@@ -108,23 +140,31 @@ ROOT/
         |     |     +-- *.adp                             UI Templates
         |     |     +-- *-oracle.xql                      Oracle-specific Queries
         |     |     +-- *-postgresql.xql                  PostgreSQL-specific Queries
-        +-- Other package directories.</pre></div></div><br class="figure-break"><p>
+        +-- Other package directories.</pre>
+    </div></div><br class="figure-break">
+    <p>
       All file locations are relative to the package root, which in this
       case is <code class="computeroutput">ROOT/packages/notes</code>. The following table
       describes in detail what each of the files up in the diagram contain.
-    </p><p> 
+    </p>
+
+    <p> 
       A special note on the
-      <code class="computeroutput"><span class="replaceable"><span class="replaceable">PACKAGE-KEY</span></span>/www/resources</code>
+      <code class="computeroutput"><em class="replaceable"><code>PACKAGE-KEY</code></em>/www/resources</code>
       directory.
       Files in this directory are available at
-      <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/resources/<span class="replaceable"><span class="replaceable">PACKAGE-KEY</span></span>/...</code>
+      <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/resources/<em class="replaceable"><code>PACKAGE-KEY</code></em>/...</code>
       and are returned without any permissions checking or even checks
       that the package is installed or mounted.  Files are returned
       directly, so .tcl or .adp files are not sourced in these
       directories.  This makes it suitable for storing icons, css
       files, javascript, and other static content which can be treated
       this way.
-    </p><div class="table"><a name="idp140592107069416"></a><p class="title"><b>Table 11.1. Package files</b></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
+    </p>
+    
+    <div class="table"><a name="idp140623177767000"></a><p class="title"><b>Table 11.1. Package files</b></p><div class="table-contents">
+      
+      <table class="table" summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
           maintained by the OpenACS Package Manager (APM).  It specifies
           information about the package including its parameters and its
           files.</td><td><code class="computeroutput">notes.info</code></td></tr><tr><td>Data Model Creation Script</td><td>
@@ -225,13 +265,25 @@ ROOT/
           Templates receive a set of data sources from the logic scripts
           and prepare them for display to the browser.</td><td><code class="computeroutput">www/*.adp</code></td></tr><tr><td>UI Index Page</td><td>The UI must have an index page composed of a logic script
           called <code class="computeroutput">index.tcl</code> and a template called
-          <code class="computeroutput">index.adp</code>.</td><td><code class="computeroutput">www/index.tcl</code></td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-apm"></a>The APM</h3></div></div></div><p>
+          <code class="computeroutput">index.adp</code>.</td><td><code class="computeroutput">www/index.tcl</code></td></tr></tbody></table>
+    </div></div><br class="table-break">
+
+  </div>
+
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-apm"></a>The APM</h3></div></div></div>
+    
+
+    <p>
       The APM is used to create, maintain, and install packages.  It takes
       care of copying all of the files and registering the package in the
       system.  The APM is responsible for:
-    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Package registration</p></li><li class="listitem"><p>Automatic installation of packages: loading data models, code
+    </p>
+
+    <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Package registration</p></li><li class="listitem"><p>Automatic installation of packages: loading data models, code
       libraries, and so on.</p></li><li class="listitem"><p>Checking what packages depend on what other packages.</p></li><li class="listitem"><p>Storing information on the package including ownership and a file
-      list.</p></li></ol></div><p>
+      list.</p></li></ol></div>
+
+    <p>
       In addition for packages that are applications, the APM is responsible
       for keeping track of where in the site a user must go in order to use
       the application. To do this, the APM defines a set of objects that we
@@ -243,19 +295,34 @@ ROOT/
       running copies of a single program. Each instance can be independently
       administered and each instance maintains its own set of application
       parameters and options.
-    </p><p>
+    </p>
+
+    <p>
       The following sections will show you how to make a package for the
       Notes application. In addition, they will discuss some site
       management features in OpenACS 5 that take advantage of the APM's package
       instance model. The two most important of these are <span class="emphasis"><em>subsites</em></span>,
       and the <span class="emphasis"><em>site map</em></span> tool, which can be used to map applications to
       one or more arbitrary URLs in a running site.
-    </p><p>
+    </p>
+
+    <p>
       We will also discuss how to organize your files and queries so
       they work with the OpenACS Query Dispatcher.
-    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-making-a-package"></a>Making a Package</h3></div></div></div><p>
+    </p>
+
+  </div>
+
+
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-making-a-package"></a>Making a Package</h3></div></div></div>
+    
+
+
+    <p>
       Here is how you make a package.
-    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Login as a site-wide administrator on your web service.
+    </p>
+
+    <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Login as a site-wide administrator on your web service.
     </p></li><li class="listitem"><p>Go to the package manager on your server.  The URL is <a class="ulink" href="/acs-admin/apm" target="_top">/acs-admin/apm</a>.
     </p></li><li class="listitem"><p>Click on the link <a class="ulink" href="/acs-admin/apm/package-add" target="_top">/acs-admin/apm/package-add</a>.
     </p></li><li class="listitem"><p>Fill out the form for adding a new package. The form explains what
@@ -324,7 +391,9 @@ ROOT/
           <code class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-create.sql</code>
           and
           <code class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-drop.sql</code>.
-        </p><p>
+        </p>
+
+        <p>
           After you do this, go back to the main APM page. From there,
           click the link called "notes" to go to the management
           page for the new package. Now click the link called "Manage
@@ -334,7 +403,9 @@ ROOT/
           the file system for new files.  This will bring you do a page
           that lists all the files you just added and lets you add them to
           the <code class="computeroutput">notes</code> package.
-        </p><p>
+        </p>
+
+        <p>
           Note that while the <code class="computeroutput">.sql</code> files
           have been added to the packge, they <span class="emphasis"><em>have not</em></span>
           been loaded into the database. For the purposes of development,
@@ -350,7 +421,10 @@ ROOT/
       I'll assume that you have set up your development repository according
       to the standards described in 
       <a class="link" href="cvs-tips.html#cvs-service-import" title="Add the Service to CVS - OPTIONAL">this appendix</a>. If so, then you just do this:
-    </p><pre class="programlisting">% cd ROOT/packages
+    </p>
+    
+
+    <pre class="programlisting">% cd ROOT/packages
 % cvs add notes
 % cd notes
 % cvs add notes.info
@@ -359,10 +433,23 @@ ROOT/
 % cvs add *.sql
 % cd ROOT/packages/notes
 % cvs commit -m "add new package for notes"
-    </pre></li><li class="listitem"><p>
+    </pre>
+
+
+
+      </li><li class="listitem"><p>
       Now you can start developing the package. In addition to writing code,
       you should also consider the tasks outlined in the <a class="link" href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a>.
-    </p></li></ol></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div></div><p>
+    </p></li></ol></div>
+
+
+  </div>
+
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div></div>
+    
+
+
+    <p>
       At this point, you are probably excited to see your new package in
       action. But, we haven't added any user visible pages yet. By
       convention, user visible pages go in the
@@ -373,7 +460,9 @@ ROOT/
       own.  What we have to do is <span class="emphasis"><em>mount</em></span> the application into the site
       map. That is, we have to define the URL from which the application
       will serve its pages.
-    </p><p>
+    </p>
+
+    <p>
       In OpenACS 5, administrators can define an arbitrary mapping between the
       URLs the user types and the actual file in the file system that is
       served. This mapping is called the <span class="emphasis"><em>site map</em></span> and entries in the
@@ -391,7 +480,9 @@ ROOT/
       you how OpenACS figures out which instance of your application was
       requested by the user at any given time. The <a class="link" href="subsites.html" title="Writing OpenACS Application Pages">page development</a> tutorial shows you how to use this
       information in your user interface.
-    </p><p>
+    </p>
+
+    <p>
       In order to make the new <code class="computeroutput">notes</code> application visible to
       users, we have to mount it in the site map. You do this by going to
       the <a class="ulink" href="/admin/site-map" target="_top">Site Map</a> page, which is by
@@ -400,9 +491,13 @@ ROOT/
       the root of the site, then click "new application" to mount a new
       instance of the <code class="computeroutput">notes</code> application to the site. Name the
       new instance <code class="computeroutput">notes-1</code>.
-    </p><p>
-      Then type this URL into your browser: <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/notes/hello.html</code>
-    </p><p>
+    </p>
+
+    <p>
+      Then type this URL into your browser: <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/notes/hello.html</code>
+    </p> 
+
+    <p>
       Now you should see the contents of the page that you added. What has
       happened is that all URLs that start with <code class="computeroutput">/notes</code> have
       been mapped in such a way as to serve content from the directory
@@ -412,9 +507,19 @@ ROOT/
       later document, we'll see how to write your application so that the
       code can detect from what URL it was invoked. This is the key
       to supporting <a class="link" href="subsites.html" title="Writing OpenACS Application Pages">subsites</a>.
-    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-summary"></a>Summary</h3></div></div></div><p>
+    </p>
+
+  </div>
+
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-summary"></a>Summary</h3></div></div></div>
+    
+
+
+    <p>
       The APM performs the following tasks in an OpenACS site:
-    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    </p>
+
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
       Manages creation, installation, and removal of packages from the
       server. Also keeps track of what files belong to which packages.
     </p></li><li class="listitem"><p>
@@ -427,4 +532,18 @@ ROOT/
     </p></li><li class="listitem"><p>
       Writes out package distribution files for other people to download and
       install. We'll cover this later.
-    </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="apm-design.html" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements.html" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 11. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+    </p></li></ul></div>
+
+  </div>
+
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div></div>
+    
+
+
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="apm-design.html" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements.html" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div>
+
+    <p><span class="cvstag">($Id$)</span></p>
+
+  </div>
+
+</div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 11. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

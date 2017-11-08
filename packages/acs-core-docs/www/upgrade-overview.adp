@@ -26,23 +26,23 @@ install the files on your hard drive, run any appropriate database
 upgrade scripts, and prompt you to restart the server. After
 restarting the server again, the upgrade is complete.</p></li>
 </ol></div><div class="figure">
-<a name="idp140592104571672" id="idp140592104571672"></a><p class="title"><strong>Figure 5.1. Upgrading with the
+<a name="idp140623159984264" id="idp140623159984264"></a><p class="title"><strong>Figure 5.1. Upgrading with the
 APM</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-apm.png" align="middle" alt="Upgrading with the APM"></div></div>
 </div><br class="figure-break"><p>It&#39;s always a good idea to precede an upgrade attempt with a
 <a class="link" href="snapshot-backup" title="Manual backup and recovery">snapshot backup</a>.</p><div class="table">
-<a name="idp140592104575352" id="idp140592104575352"></a><p class="title"><strong>Table 5.1. Assumptions in this
+<a name="idp140623160218856" id="idp140623160218856"></a><p class="title"><strong>Table 5.1. Assumptions in this
 section</strong></p><div class="table-contents"><table class="table" summary="Assumptions in this section" cellspacing="0" border="1">
 <colgroup>
 <col><col>
 </colgroup><tbody>
 <tr>
-<td>name of OpenACS user</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
+<td>name of OpenACS user</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td>
 </tr><tr>
-<td>OpenACS server name</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
+<td>OpenACS server name</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td>
 </tr><tr>
-<td>Root of OpenACS file tree</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME</span></span></td>
+<td>Root of OpenACS file tree</td><td><em class="replaceable"><code>/var/lib/aolserver/$OPENACS_SERVICE_NAME</code></em></td>
 </tr><tr>
-<td>Database backup directory</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</span></span></td>
+<td>Database backup directory</td><td><em class="replaceable"><code>/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</code></em></td>
 </tr>
 </tbody>
 </table></div>

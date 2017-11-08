@@ -9,10 +9,7 @@ Chapter 15. Kernel Documentation"
 		    rightLink="object-system-design" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="object-system-requirements" id="object-system-requirements"></a>Object Model Requirements</h2></div></div></div><div class="authorblurb">
-<p>By Pete Su</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+<a name="object-system-requirements" id="object-system-requirements"></a>Object Model Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="object-system-requirements-" id="object-system-requirements-"></a>I. Introduction</h3></div></div></div><p>A major goal in OpenACS 4 is to unify and normalize many of the
 core services of the system into a coherent common data model and

@@ -11,17 +11,15 @@ software"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-ldap-radius" id="install-ldap-radius"></a>Install LDAP for use as external
-authentication</h2></div></div></div><div class="authorblurb">
-<p>By <a class="ulink" href="mailto:openacs\@sussdorff.de" target="_top">Malte Sussdorff</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>This step by step guide on how to use LDAP for external
+authentication</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:openacs\@sussdorff.de" target="_top">Malte
+Sussdorff</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>This step by step guide on how to use LDAP for external
 authentication using the LDAP bind command, which differs from the
 approach usually taken by auth-ldap. Both will be dealt with in
 these section</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <a name="install-openldap" id="install-openldap"></a><p>
-<strong>Install openldap. </strong>Download and
+<strong>Install openldap. </strong> Download and
 install ns_ldap</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/</code></strong>
           [root src]# <strong class="userinput"><code>wget ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.2.17.tgz</code></strong>
@@ -30,17 +28,17 @@ install ns_ldap</p><pre class="screen">
           [root src]# <strong class="userinput"><code>./configure --prefix=/usr/local/openldap</code></strong>
           [root openldap]# <strong class="userinput"><code>make install</code></strong>
           [root openldap]#
-<span class="action"><span class="action">cd /usr/local/src/
+<span class="action">cd /usr/local/src/
 wget ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.2.17.tgz
 tar xvfz openldap-2.2.17.tgz
 cd openldap-2.2.17
 ./configure --prefix=/usr/local/openldap --disable-slapd
 make install
-</span></span>
+</span>
 </pre>
 </li><li class="listitem">
 <a name="install-ns_ldap" id="install-ns_ldap"></a><p>
-<strong>Install ns_ldap. </strong>Download and
+<strong>Install ns_ldap. </strong> Download and
 install ns_ldap</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver/</code></strong>
           [root aolserver]# <strong class="userinput"><code>wget http://www.sussdorff.de/ressources/nsldap.tgz</code></strong>
@@ -48,17 +46,17 @@ install ns_ldap</p><pre class="screen">
           [root aolserver]# <strong class="userinput"><code>cd nsldap</code></strong>
           [root ns_pam-0.1]# <strong class="userinput"><code>make install LDAP=/usr/local/openldap INST=/usr/local/aolserver</code></strong>
           [root ns_pam-0.1]#
-<span class="action"><span class="action">cd /usr/local/src/aolserver/
+<span class="action">cd /usr/local/src/aolserver/
 wget http://www.sussdorff.de/resources/nsldap.tgz
 tar xfz nsldap.tgz
 cd nsldap
 make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
-</span></span>
+</span>
 </pre>
 </li><li class="listitem">
 <a name="configure-ns_ldap" id="configure-ns_ldap"></a><p>
 <strong>Configure ns_ldap for traditional
-use. </strong>Traditionally OpenACS has supported
+use. </strong> Traditionally OpenACS has supported
 ns_ldap for authentification by storing the OpenACS password in an
 encrypted field within the LDAP server called
 "userPassword". Furthermore a CN field was used for
@@ -73,7 +71,7 @@ module.</p></li></ul></div>
 </li><li class="listitem">
 <a name="configure-ns_ldap-bind" id="configure-ns_ldap-bind"></a><p>
 <strong>Configure ns_ldap for use with LDAP
-bind. </strong>LDAP authentication usually is done by
+bind. </strong> LDAP authentication usually is done by
 trying to bind (aka. login) a user with the LDAP server. The
 password of the user is not stored in any field of the LDAP server,
 but kept internally. The latest version of ns_ldap supports this

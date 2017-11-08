@@ -11,7 +11,7 @@ Chapter 6. Production Environments"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="uptime" id="uptime"></a>External uptime validation</h2></div></div></div><p>The <a class="ulink" href="http://uptime.openacs.org/uptime/" target="_top">OpenACS uptime site</a> can monitor your site and
 send you an email whenever your site fails to respond. If you test
-the url <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver.test</span></span>/SYSTEM/dbtest.tcl</code>,
+the url <code class="computeroutput">http://<em class="replaceable"><code>yourserver.test</code></em>/SYSTEM/dbtest.tcl</code>,
 you should get back the string <code class="computeroutput">success</code>.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

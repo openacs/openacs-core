@@ -9,10 +9,8 @@ Chapter 12. Engineering Standards"
 		    rightLink="variables" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="eng-standards-plsql" id="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div></div><div class="authorblurb">
-<p>By Richard Li and Yon Feldman</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>Like any other part of the OpenACS, PL/SQL (or pl/pgsql) code
+<a name="eng-standards-plsql" id="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li and Yon
+Feldman</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Like any other part of the OpenACS, PL/SQL (or pl/pgsql) code
 must be maintainable and professional. This means that it must be
 consistent and therefore must abide by certain standards. The
 standards will ensure that our product will be useful long after
@@ -142,8 +140,8 @@ viewable in the SQL files but also through our SQL and PL/SQL
 browsers. This means that we should try to make it as consistent as
 possible to all source code readers.</p></li><li class="listitem"><p>Lowercase everything, with the exception of %TYPE and
 %ROWTYPE.</p></li>
-</ol></div><div class="cvstag">($&zwnj;Id: plsql.xml,v 1.6.14.3 2017/06/16 17:19:52
-gustafn Exp $)</div>
+</ol></div><p><span class="cvstag">($&zwnj;Id: plsql.xml,v 1.7 2017/08/07 23:47:54
+gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

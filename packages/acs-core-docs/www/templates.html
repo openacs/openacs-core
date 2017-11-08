@@ -1,8 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Using Templates in OpenACS</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="db-api.html" title="The OpenACS Database Access API"><link rel="next" href="permissions.html" title="Groups, Context, Permissions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="db-api.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="permissions.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="templates"></a>Using Templates in OpenACS</h2></div></div></div><div class="authorblurb"><p>By Pete Su</p>
-          OpenACS docs are written by the named authors, and may be edited
-          by OpenACS documentation staff.
-        </div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="templates-overview"></a>Overview</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Using Templates in OpenACS</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="db-api.html" title="The OpenACS Database Access API"><link rel="next" href="permissions.html" title="Groups, Context, Permissions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="db-api.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="permissions.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="templates"></a>Using Templates in OpenACS</h2></div></div></div>
+
+
+ 
+<span style="color: red">&lt;authorblurb&gt;
+<p>By Pete Su</p>
+&lt;/authorblurb&gt;</span>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="templates-overview"></a>Overview</h3></div></div></div>
+
+
+
+<p>
 The OpenACS Template System (ATS) is designed to allow developers to
 cleanly separate <span class="emphasis"><em>application logic</em></span> from <span class="emphasis"><em>display
 logic</em></span>. The intent is to have all of the logic related to
@@ -11,7 +20,9 @@ place, and all the logic related to displaying the state of the
 application in another place.  This gives developer's quicker
 customization and easier upgrades, and also allows developers and
 graphic designers to work more independently.
-</p><p>
+</p>
+
+<p>
 In ATS, you write two files for every user-visible page in the
 system. One is a plain <code class="computeroutput">.tcl</code> file and the other is a
 special <code class="computeroutput">.adp</code> file. The <code class="computeroutput">.tcl</code> file runs a
@@ -21,7 +32,9 @@ or some combination thereof. The template system automatically makes
 them available to the <code class="computeroutput">.adp</code> file, or the display part of
 the template, which is written in a combination of HTML, special
 template related tags, and data source substitutions.
-</p><p>
+</p>
+
+<p>
 In the overall context of our example OpenACS Notes application, this
 document will show you how to set up a simple templated page that
 displays a form to the user for entering new notes into the system. In
@@ -29,7 +42,16 @@ later sections of the DG, we'll discuss how to develop the pages that
 actually add notes to the database, how to provide a separate instance
 of the Notes application to every user and how to design appropriate
 access control policies for the system.
-</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="templates-entering-notes"></a>Entering Notes</h3></div></div></div><p>
+</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="templates-entering-notes"></a>Entering Notes</h3></div></div></div>
+
+
+
+<p>
 In order for the Notes application to be useful, we have to allow
 users to enter data into the database. Typically, this takes two
 pages: one that displays a form for data entry, and another page that
@@ -38,13 +60,19 @@ operation failed. In this document, we will use the template system to
 build the first of these pages. This isn't a very interesting use of
 the system since we won't be displaying much data, but we'll cover
 more on that end later.
-</p><p>
+</p>
+
+<p>
 The <code class="computeroutput">.tcl</code> file for the form entry template is pretty
 simple. Here, the only thing we need from the database is a new ID for
 the note object to be inserted. Open up a file called
 <code class="computeroutput">note-add.tcl</code> in the <code class="computeroutput">ROOT/packages/notes/www</code>
 directory, and put the following code in it:
-</p><pre class="programlisting">
+</p>
+
+ 
+
+<pre class="programlisting">
 
 ad_page_contract {
 
@@ -76,9 +104,14 @@ set note_id [db_nextval acs_object_id_seq]
 
 ad_return_template "note-add"
 
-</pre><p>
+</pre>
+
+
+<p>
 Some things to note about this code:
-</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+</p>
+
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 The procedure <a class="link" href="tcl-doc.html#tcl-doc-ad-page-contract" title="ad_page_contract">ad_page_contract</a> is
 always the first thing a <code class="computeroutput">.tcl</code> file calls, if it's under
 the www/ directory (i.e. not a Tcl library file). It does validation
@@ -103,13 +136,19 @@ what <code class="computeroutput">.adp</code> template page to fetch to display 
 properties that have been processed. By default, the template system
 will look for a file by the same name as the <code class="computeroutput">.tcl</code> file
 that just ran, but with an <code class="computeroutput">.adp</code> extension.
-</p></li></ul></div><p>
+</p></li></ul></div>
+
+<p>
 Next we write the corresponding <code class="computeroutput">.adp</code> page. This page
 outputs HTML for the form, and also contains placeholders whose values
 are substituted in from the properties set up by the <code class="computeroutput">.tcl</code>
 file.  Create a file called <code class="computeroutput">note-add.adp</code> in your editor,
 and insert this text:
-</p><pre class="programlisting">
+</p>
+
+ 
+
+<pre class="programlisting">
 
 &lt;master src="master"&gt;
 &lt;property name="title"&gt;@page_title;literal@&lt;/property&gt;
@@ -129,7 +168,10 @@ and insert this text:
 &lt;/p&gt;
 &lt;/form&gt;
 
-</pre><p>
+</pre>
+
+
+<p>
 The main point to note here is: when you want to substitute a value
 into a page, you put the name of the data source between two "@"
 characters. Another point to note is the use of a master template:
@@ -137,11 +179,22 @@ Master templates allow you do centralize display code that is used
 throughout an application in a single file. In this case, we intend to
 have a master template that does the standard page headers and footers
 for us
-</p><p>
+</p>
+
+<p>
 After putting all these files into
 <code class="computeroutput">ROOT/packages/notes/www</code>, you should be able to go to
 <code class="computeroutput">/notes/</code> URL for your server and see the input form.
-</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="templates-summary"></a>Summary</h3></div></div></div><p>
+</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="templates-summary"></a>Summary</h3></div></div></div>
+
+
+
+<p>
 Templates separate application logic from display logic by requiring
 the developer to write pages in two stages, one file for database
 queries and application logic, and another for display. In OpenACS, the
@@ -152,6 +205,17 @@ special tags and notations for dealing with display logic and
 inserting properties into the text of the page. Later on we'll get
 into templates more deeply, and show how to use database queries as
 data sources.
-</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="templates-documentation"></a>Documentation</h3></div></div></div><p>
+</p>
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="templates-documentation"></a>Documentation</h3></div></div></div>
+
+<p>
 <a class="ulink" href="/doc/acs-templating/" target="_top">Templating system documentation</a>
-</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="db-api.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="permissions.html">Next</a></td></tr><tr><td width="40%" align="left">The OpenACS Database Access API </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Groups, Context, Permissions</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+</p>
+<p><span class="cvstag">($Id$)</span></p>
+
+</div>
+
+</div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="db-api.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="permissions.html">Next</a></td></tr><tr><td width="40%" align="left">The OpenACS Database Access API </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Groups, Context, Permissions</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

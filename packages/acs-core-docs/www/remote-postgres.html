@@ -1,12 +1,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Running a PostgreSQL database on another server</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="database-management.html" title="Chapter 7. Database Management"><link rel="previous" href="database-management.html" title="Chapter 7. Database Management"><link rel="next" href="install-openacs-delete-tablespace.html" title="Deleting a tablespace"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="database-management.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Database Management</th><td width="20%" align="right"> <a accesskey="n" href="install-openacs-delete-tablespace.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="remote-postgres"></a>Running a PostgreSQL database on another server</h2></div></div></div><p>To run a database on a different machine than the
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Running a PostgreSQL database on another server</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="database-management.html" title="Chapter 7. Database Management"><link rel="previous" href="database-management.html" title="Chapter 7. Database Management"><link rel="next" href="install-openacs-delete-tablespace.html" title="Deleting a tablespace"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="database-management.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Database Management</th><td width="20%" align="right"> <a accesskey="n" href="install-openacs-delete-tablespace.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="remote-postgres"></a>Running a PostgreSQL database on another server</h2></div></div></div>
+      
+
+      <p>To run a database on a different machine than the
       webserver requires changes to the database configuration file
       and access control file, and to the OpenACS service's
-      configuration file.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Edit the database configuration file, which in a
+      configuration file.</p>
+      <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+          <p>Edit the database configuration file, which in a
       Reference install is located at <code class="computeroutput">/usr/local/pgsql/data/postgresql.conf</code>
-      and change</p><pre class="programlisting">#tcpip_socket = false</pre><p>to</p><pre class="programlisting">tcpip_socket = true</pre></li><li class="listitem"><p>Change the access control file for the database to
+      and change</p>
+      <pre class="programlisting">#tcpip_socket = false</pre>
+<p>to</p>
+<pre class="programlisting">tcpip_socket = true</pre>
+        </li><li class="listitem">
+          <p>Change the access control file for the database to
           permit specific remote clients to access.  Access can be
-          controlled ... (add notes from forum post) </p></li><li class="listitem"><p>Change the OpenACS service's configuration file to
+          controlled ... (add notes from forum post) </p>
+        </li><li class="listitem">
+          <p>Change the OpenACS service's configuration file to
           point to the remote database.  Edit
-          <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/config.tcl</code>
-          and change</p><pre class="programlisting"></pre><p>to </p><pre class="programlisting"></pre></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="database-management.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-openacs-delete-tablespace.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 7. Database Management </td><td width="20%" align="center"><a accesskey="u" href="database-management.html">Up</a></td><td width="40%" align="right"> Deleting a tablespace</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+          <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/config.tcl</code>
+          and change</p>
+          <pre class="programlisting"></pre>
+          <p>to </p>
+          <pre class="programlisting"></pre>
+        </li></ul></div>
+    </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="database-management.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-openacs-delete-tablespace.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 7. Database Management </td><td width="20%" align="center"><a accesskey="u" href="database-management.html">Up</a></td><td width="40%" align="right"> Deleting a tablespace</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

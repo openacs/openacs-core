@@ -9,11 +9,9 @@ Chapter 11. Development Reference"
 		    rightLink="permissions-tediously-explained" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="parties" id="parties"></a>Parties in OpenACS</h2></div></div></div><div class="authorblurb">
-<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+<a name="parties" id="parties"></a>Parties in OpenACS</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
+Schloming</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="parties-intro" id="parties-intro"></a>Introduction</h3></div></div></div><p>While many applications must deal with individuals and many
 applications must deal with groups, most applications must deal
@@ -323,8 +321,8 @@ primary key in what could be thought of as a pure relation. Because
 a membership relation is an ordinary acs object with <a class="ulink" href="object-identity" target="_top">object
 identity</a>, it is as easy to extend the membership relation to
 store extra information as it is to extend the users table or the
-groups table.</p><div class="cvstag">($&zwnj;Id: parties.xml,v 1.9 2006/09/25 20:32:37
-byronl Exp $)</div>
+groups table.</p><p><span class="cvstag">($&zwnj;Id: parties.xml,v 1.9 2006/09/25 20:32:37
+byronl Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

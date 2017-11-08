@@ -1,16 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Backup Strategy</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="backup-recovery.html" title="Chapter 8. Backup and Recovery"><link rel="previous" href="backup-recovery.html" title="Chapter 8. Backup and Recovery"><link rel="next" href="snapshot-backup.html" title="Manual backup and recovery"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Backup and Recovery</th><td width="20%" align="right"> <a accesskey="n" href="snapshot-backup.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-next-backups"></a>Backup Strategy</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Backup Strategy</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="backup-recovery.html" title="Chapter 8. Backup and Recovery"><link rel="previous" href="backup-recovery.html" title="Chapter 8. Backup and Recovery"><link rel="next" href="snapshot-backup.html" title="Manual backup and recovery"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Backup and Recovery</th><td width="20%" align="right"> <a accesskey="n" href="snapshot-backup.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-next-backups"></a>Backup Strategy</h2></div></div></div>
+    
+    <p>
       The purpose of backup is to enable recovery.  Backup and
       recovery are always risky; here are some steps that minimize the
       chance recovery is necessary:
-    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    </p>
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
       Store everything on a fault-tolerant disk array (RAID 1 or 5
       or better).
       </p></li><li class="listitem"><p>
       Use battery backup.
       </p></li><li class="listitem"><p>
       Use more reliable hardware, such as SCSI instead of IDE.
-      </p></li></ul></div><p>These steps improve the chances of successful recovery:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      </p></li></ul></div>
+
+    <p>These steps improve the chances of successful recovery:</p>
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
       Store backups on a third disk on another controller
       </p></li><li class="listitem"><p>
       Store backups on a different computer on a different network
@@ -24,13 +30,16 @@
       </p></li><li class="listitem"><p>
       Make it easy to maintain and test your recovery strategy, so
       that you are more likely to do it.
-      </p></li></ul></div><p>
+      </p></li></ul></div>
+
+    <p>
       OpenACS installations comprise files and database contents.
       If you follow the reference install and put all files,
       including configuration files, in
-      <code class="filename">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/</code>,
+      <code class="filename">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/</code>,
       and back up the database nightly to a file in
-      <code class="filename">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/database-backup</code>,
+      <code class="filename">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/database-backup</code>,
       then you can apply standard file-based backup strategies to
-      <code class="filename">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code>
-    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="snapshot-backup.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 8. Backup and Recovery </td><td width="20%" align="center"><a accesskey="u" href="backup-recovery.html">Up</a></td><td width="40%" align="right"> Manual backup and recovery</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+      <code class="filename">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></code>
+    </p>
+  </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="backup-recovery.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="snapshot-backup.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 8. Backup and Recovery </td><td width="20%" align="center"><a accesskey="u" href="backup-recovery.html">Up</a></td><td width="40%" align="right"> Manual backup and recovery</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

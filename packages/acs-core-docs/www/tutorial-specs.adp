@@ -21,12 +21,12 @@ design sections, generate the html, and start coding. Store any
 supporting files, like page maps or schema diagrams, in the
 <code class="computeroutput">www/doc/xml</code> directory, and
 store png or jpg versions of supporting files in the <code class="computeroutput">www/doc</code> directory.</p><p>For this tutorial, you should instead install the pre-written
-documentation files for the tutorial app. Log in as <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>, create the
+documentation files for the tutorial app. Log in as <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>, create the
 standard directories, and copy the prepared documentation:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/</code></strong>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>mkdir -p www/doc/xml</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>cd www/doc/xml</code></strong>
-[$OPENACS_SERVICE_NAME xml]$ <strong class="userinput"><code>cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/myfirstpackage/* .</code></strong>
+[$OPENACS_SERVICE_NAME xml]$ <strong class="userinput"><code>cp /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/myfirstpackage/* .</code></strong>
 [$OPENACS_SERVICE_NAME xml]$
 </pre><p>OpenACS uses DocBook for documentation. DocBook is an XML
 standard for semantic markup of documentation. That means that the
@@ -60,7 +60,7 @@ Writing bi01.html for bibliography
 Writing index.html for book
 [$OPENACS_SERVICE_NAME xml]$
 </pre><p>Verify that the documentation was generated and reflects your
-changes by browsing to <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yoursite</span></span>:8000/myfirstpackage/doc</code>
+changes by browsing to <code class="computeroutput">http://<em class="replaceable"><code>yoursite</code></em>:8000/myfirstpackage/doc</code>
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

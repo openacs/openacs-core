@@ -1,16 +1,31 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install PostgreSQL</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver4.html" title="Install AOLserver 4"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver4.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostgreSQL</h2></div></div></div><div class="authorblurb"><p>by <a class="ulink" href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
-          OpenACS docs are written by the named authors, and may be edited
-          by OpenACS documentation staff.
-        </div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.9.0 will run with <a class="link" href="individual-programs.html#source-postgresql" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">PostgreSQL</a> 9.0 or newer.  9.5 is currently
-  the recommended version of PostgreSQL.</p><p>It is recommend to use a prepackaged version of PostgreSQL,
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install PostgreSQL</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver4.html" title="Install AOLserver 4"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver4.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostgreSQL</h2></div></div></div>
+  
+
+  <span style="color: red">&lt;authorblurb&gt;
+    <p>by <a class="ulink" href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
+  &lt;/authorblurb&gt;</span>
+  
+  <p>Skip this section if you will run only Oracle.</p>
+
+  <p>OpenACS 5.9.0 will run with <a class="link" href="individual-programs.html#source-postgresql" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">PostgreSQL</a> 9.0 or newer.  9.5 is currently
+  the recommended version of PostgreSQL.</p>
+
+  <p>It is recommend to use a prepackaged version of PostgreSQL,
   which are available in source and binary formats from 
   <a class="ulink" href="https://www.postgresql.org/download" target="_top">www.postgresql.org/download/</a>.
-  </p><p>Larger installations might want to tune the PostgreSQL
+  </p>
+
+  <p>Larger installations might want to tune the PostgreSQL
   installation with e.g. the utility <a class="ulink" href="https://github.com/gregs1104/pgtune" target="_top">pgtune</a>, which is also
   available via <strong class="userinput"><code>apt-get install pgtune</code></strong> or
   <strong class="userinput"><code>dnf install pgtune</code></strong> on Debian/Ubuntu or RedHat systems.
-  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-postgres-moreinfo"></a>More information about PostgreSQL</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  </p>
+  
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-postgres-moreinfo"></a>More information about PostgreSQL</h3></div></div></div>
+    
+    
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 
         <a class="ulink" href="https://www.postgresql.org/docs/" target="_top">Official PostgreSQL
         Docs</a>
@@ -24,4 +39,6 @@
         <a class="ulink" href="https://wiki.postgresql.org/wiki/Performance_Optimization" target="_top">PostgreSQL
         Performance Tuning</a>
 
-      </p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="aolserver4.html">Next</a></td></tr><tr><td width="40%" align="left">Install Oracle 8.1.7 </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> Install AOLserver 4</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+      </p></li></ul></div>
+  </div>
+</div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="aolserver4.html">Next</a></td></tr><tr><td width="40%" align="left">Install Oracle 8.1.7 </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> Install AOLserver 4</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

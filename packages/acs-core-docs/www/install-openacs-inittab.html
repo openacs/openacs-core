@@ -1,12 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>AOLserver keepalive with inittab</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance-web.html" title="Chapter 6. Production Environments"><link rel="previous" href="install-openacs-keepalive.html" title="Starting and Stopping an OpenACS instance."><link rel="next" href="install-next-add-server.html" title="Running multiple services on one machine"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-openacs-keepalive.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Production Environments</th><td width="20%" align="right"> <a accesskey="n" href="install-next-add-server.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-openacs-inittab"></a>AOLserver keepalive with inittab</h2></div></div></div><p>This is an alternative method for keeping the AOLserver
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>AOLserver keepalive with inittab</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance-web.html" title="Chapter 6. Production Environments"><link rel="previous" href="install-openacs-keepalive.html" title="Starting and Stopping an OpenACS instance."><link rel="next" href="install-next-add-server.html" title="Running multiple services on one machine"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-openacs-keepalive.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Production Environments</th><td width="20%" align="right"> <a accesskey="n" href="install-next-add-server.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-openacs-inittab"></a>AOLserver keepalive with inittab</h2></div></div></div>
+      
+      
+      <p>This is an alternative method for keeping the AOLserver
 		process running.  The recommended method is to <a class="link" href="install-openacs-keepalive.html" title="Starting and Stopping an OpenACS instance.">run AOLserver
-		supervised</a>.</p><p>
+		supervised</a>.</p>
+      
+      <p>
 		This step should be completed as root. This can break every service
 		on your machine, so proceed with caution.
-	  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	  </p>
+      
+      <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 			There are 2 general steps to getting this working. 
-		  </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p> 
+		  </p>
+          <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p> 
 				Install a script called
 				<code class="computeroutput">restart-aolserver</code>. This
 				script doesn't actually restart AOLserver - it just kills
@@ -15,7 +23,9 @@
 				Ask the OS to restart our service whenever it's not
 				running. We do this by adding a line to
 				<code class="computeroutput">/etc/inittab</code>.
-			  </p></li></ol></div><p>
+			  </p></li></ol></div>
+          
+          <p>
 			Calling <code class="computeroutput">restart-aolserver</code>
 			kills our service. The OS notices that our service is not
 			running, so it automatically restarts it. Thus, calling
@@ -34,27 +44,33 @@
 			general system users cannot run the script. You also need to
 			have Perl installed and also a symbolic link to it in
 			<code class="computeroutput">/usr/local/bin</code>. 
-		  </p><pre class="programlisting">
+		  </p>
+		<pre class="programlisting">
 [joeuser ~]$ su - 
 Password: ***********
 [root ~]# cp /var/tmp/restart-aolserver.txt /usr/local/bin/restart-aolserver
 [root ~]# chown root.web /usr/local/bin/restart-aolserver
 [root ~]# chmod 4750 /usr/local/bin/restart-aolserver
 [root ~]# ln -s /usr/bin/perl /usr/local/bin/perl
-[root ~]# exit</pre></li><li class="listitem"><p> 
+[root ~]# exit</pre>
+      </li><li class="listitem"><p> 
 			Test the <code class="computeroutput">restart-aolserver</code>
 			script. We'll first kill all running servers to clean the
 			slate. Then, we'll start one server and use
 			<code class="computeroutput">restart-aolserver</code> to kill
 			it. If it works, then there should be no more servers
-			running. You should see the following lines. </p><pre class="programlisting">
+			running. You should see the following lines. </p>
+
+		<pre class="programlisting">
 [joeuser ~]$ killall nsd
 nsd: no process killed
 [joeuser ~]$ /usr/local/aolserver/bin/nsd-postgres -t ~/var/lib/aolserver/<span class="emphasis"><em>birdnotes</em></span>/nsd.tcl
 [joeuser ~]$ restart-aolserver <span class="emphasis"><em>birdnotes</em></span>
 Killing 23727 
 [joeuser ~]$ killall nsd
-nsd: no process killed</pre><p>
+nsd: no process killed</pre>
+
+        <p>
             The number 23727 indicates the process id(s) (PIDs) of the
             processes being killed. It is important that <span class="strong"><strong>no processes are killed</strong></span> by the second
             call to <code class="computeroutput">killall</code>. If there are
@@ -63,30 +79,43 @@ nsd: no process killed</pre><p>
           Assuming that the <code class="computeroutput">restart-aolserver</code>
           script worked, login as root and open
           <code class="computeroutput">/etc/inittab</code> for
-          editing. </p><pre class="programlisting">
+          editing. </p>
+        <pre class="programlisting">
 [joeuser ~]$ su -
 Password: ************
-[root ~]# emacs -nw /etc/inittab</pre></li><li class="listitem"><p> 
+[root ~]# emacs -nw /etc/inittab</pre>
+      </li><li class="listitem"><p> 
             Copy this line into the bottom of the file as a template,
             making sure that the first field
             <code class="computeroutput">nss1</code> is unique.
-          </p><pre class="programlisting">
-nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /home/<span class="emphasis"><em>joeuser</em></span>/var/lib/aolserver/<span class="emphasis"><em>birdnotes</em></span>/nsd.tcl</pre></li><li class="listitem"><p>
+          </p>
+          <pre class="programlisting">
+nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /home/<span class="emphasis"><em>joeuser</em></span>/var/lib/aolserver/<span class="emphasis"><em>birdnotes</em></span>/nsd.tcl</pre>
+        </li><li class="listitem"><p>
             <span class="strong"><strong>Important:</strong></span> Make sure there is a
             newline at the end of the file. If there is not a newline at
             the end of the file, the system may suffer catastrophic
             failures.  
           </p></li><li class="listitem"><p>
             Still as root, enter the following command to re-initialize
-            <code class="computeroutput">/etc/inittab</code>. </p><pre class="programlisting">
+            <code class="computeroutput">/etc/inittab</code>. </p>
+
+          <pre class="programlisting">
 [root ~]# killall nsd    
 nsd: no process killed
-[root ~]# /sbin/init q</pre></li><li class="listitem"><p> 
+[root ~]# /sbin/init q</pre>        
+        </li><li class="listitem"><p> 
             See if it worked by running the
             <code class="computeroutput">restart-aolserver</code> script
-            again. </p><pre class="programlisting">
+            again. </p>
+
+          <pre class="programlisting">
 [root ~]# restart-aolserver <span class="emphasis"><em>birdnotes</em></span>
-Killing 23750</pre></li></ul></div><p>
+Killing 23750</pre>
+        </li></ul></div>
+
+      <p>
         If processes were killed, congratulations, your server is now
         automated for startup and shutdown. 
-      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-openacs-keepalive.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-next-add-server.html">Next</a></td></tr><tr><td width="40%" align="left">Starting and Stopping an OpenACS instance. </td><td width="20%" align="center"><a accesskey="u" href="maintenance-web.html">Up</a></td><td width="40%" align="right"> Running multiple services on one machine</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+      </p>
+    </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-openacs-keepalive.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-next-add-server.html">Next</a></td></tr><tr><td width="40%" align="left">Starting and Stopping an OpenACS instance. </td><td width="20%" align="center"><a accesskey="u" href="maintenance-web.html">Up</a></td><td width="40%" align="right"> Running multiple services on one machine</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

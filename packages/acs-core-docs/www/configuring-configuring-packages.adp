@@ -11,13 +11,10 @@ Site"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="configuring-configuring-packages" id="configuring-configuring-packages"></a>Configuring an OpenACS
-package</h2></div></div></div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:jade\@rubick.com" target="_top">Jade Rubick</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+package</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:jade\@rubick.com" target="_top">Jade Rubick</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592104638184" id="idp140592104638184"></a>Configuring an OpenACS package</h3></div></div></div><p>After you&#39;ve installed and mounted your package, you can
+<a name="idp140623160110936" id="idp140623160110936"></a>Configuring an OpenACS package</h3></div></div></div><p>After you&#39;ve installed and mounted your package, you can
 configure each instance to act as you would like.</p><p>This is done from the Applications page. Log in, go to the Admin
 or Control Panel, click on the subsite the application is in, and
 click on Applications. If you click on the 'Parameters'

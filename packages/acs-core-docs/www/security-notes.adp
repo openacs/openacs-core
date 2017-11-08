@@ -9,10 +9,7 @@ Chapter 15. Kernel Documentation"
 		    rightLink="rp-requirements" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="security-notes" id="security-notes"></a>Security Notes</h2></div></div></div><div class="authorblurb">
-<p>By Richard Li</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>The security system was designed for security. Thus, decisions
+<a name="security-notes" id="security-notes"></a>Security Notes</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>The security system was designed for security. Thus, decisions
 requiring trade-offs between ease-of-use and security tend to
 result in a system that may not be as easy to use but is more
 secure.</p><div class="sect2">
@@ -68,8 +65,8 @@ ad_proc -private ad_login_page {} {
 </pre><p>The set of string match expressions in the procedure above
 should be extended appropriately for other registration pages. This
 procedure does not use <code class="computeroutput">ad_parameter</code> or regular expressions for
-performance reasons, as it is called by the request processor.</p><div class="cvstag">($&zwnj;Id: security-notes.xml,v 1.7 2014/10/27
-16:39:32 victorg Exp $)</div>
+performance reasons, as it is called by the request processor.</p><p><span class="cvstag">($&zwnj;Id: security-notes.xml,v 1.7 2014/10/27
+16:39:32 victorg Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

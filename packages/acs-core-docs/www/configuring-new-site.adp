@@ -21,11 +21,9 @@ package</a></span></dt><dt><span class="sect1"><a href="configuring-configuring-
 an OpenACS package</a></span></dt><dt><span class="sect1"><a href="how-do-I">How Do
 I?</a></span></dt>
 </dl>
-</div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>In this chapter, <span class="strong"><strong>Configuring</strong></span> refers to making
+</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
+Aufrecht</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>In this chapter, <span class="strong"><strong>Configuring</strong></span> refers to making
 changes to a new OpenACS site through the web interface. In crude
 terms, these changes happen in the database, and are upgrade-safe.
 <span class="strong"><strong>Customizing</strong></span> refers to

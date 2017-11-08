@@ -1,12 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Using CVS for backup-recovery</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="backup-recovery.html" title="Chapter 8. Backup and Recovery"><link rel="previous" href="automated-backup.html" title="Automated Backup"><link rel="next" href="install-redhat.html" title="Appendix A. Install Red Hat 8/9"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="automated-backup.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Backup and Recovery</th><td width="20%" align="right"> <a accesskey="n" href="install-redhat.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="backups-with-cvs"></a>Using CVS for backup-recovery</h2></div></div></div><p>CVS-only backup is often appropriate for development sites.  If you are already using CVS and your data is not important, you probably don't
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Using CVS for backup-recovery</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="backup-recovery.html" title="Chapter 8. Backup and Recovery"><link rel="previous" href="automated-backup.html" title="Automated Backup"><link rel="next" href="install-redhat.html" title="Appendix A. Install Red Hat 8/9"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="automated-backup.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Backup and Recovery</th><td width="20%" align="right"> <a accesskey="n" href="install-redhat.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="backups-with-cvs"></a>Using CVS for backup-recovery</h2></div></div></div>
+    
+    <p>CVS-only backup is often appropriate for development sites.  If you are already using CVS and your data is not important, you probably don't
       need to do anything to back up your files.  Just make
       sure that your current work is checked into the system.
       You can then roll back based on date - note the
       current system time, down to the minute.  For maximum
       safety, you can apply a tag to your current
-      files.  You will still need to back up your database.</p><p>  Note that, if you did the CVS options in this document, the <code class="filename">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc</code> directory is not included in cvs and you may want to add it.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
+      files.  You will still need to back up your database.</p>
+    <p>  Note that, if you did the CVS options in this document, the <code class="filename">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc</code> directory is not included in cvs and you may want to add it.</p>
+    <pre class="screen">[root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs commit -m "last-minute commits before upgrade to 4.6"</code></strong>
 cvs commit: Examining .
 cvs commit: Examining bin
@@ -18,14 +22,18 @@ T bin/ad-context-server.pl
 (many lines omitted)
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
 [root root]# 
-<span class="action"><span class="action">su - $OPENACS_SERVICE_NAME
-cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+<span class="action">su - $OPENACS_SERVICE_NAME
+cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 cvs commit -m "last-minute commits before upgrade to 4.6"
 cvs tag before_upgrade_to_4_6
-exit</span></span></pre><p>To restore files from a cvs tag such as the one used above:</p><pre class="screen">[root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
+exit</span></pre>
+    <p>To restore files from a cvs tag such as the one used above:</p>
+    <pre class="screen">[root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs up -r current</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
-<span class="action"><span class="action">su - $OPENACS_SERVICE_NAME
-cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-cvs up -r current</span></span></pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="automated-backup.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-redhat.html">Next</a></td></tr><tr><td width="40%" align="left">Automated Backup </td><td width="20%" align="center"><a accesskey="u" href="backup-recovery.html">Up</a></td><td width="40%" align="right"> Appendix A. Install Red Hat 8/9</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+<span class="action">su - $OPENACS_SERVICE_NAME
+cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+cvs up -r current</span></pre>
+
+  </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="automated-backup.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="install-redhat.html">Next</a></td></tr><tr><td width="40%" align="left">Automated Backup </td><td width="20%" align="center"><a accesskey="u" href="backup-recovery.html">Up</a></td><td width="40%" align="right"> Appendix A. Install Red Hat 8/9</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

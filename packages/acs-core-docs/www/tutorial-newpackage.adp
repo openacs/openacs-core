@@ -9,16 +9,14 @@ Chapter 9. Development Tutorial"
 		    rightLink="tutorial-database" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-newpackage" id="tutorial-newpackage"></a>Creating an Application Package</h2></div></div></div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+<a name="tutorial-newpackage" id="tutorial-newpackage"></a>Creating an Application Package</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
+Aufrecht</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="tutorial-picture" id="tutorial-picture"></a>The intended page map</h3></div></div></div><div class="mediaobject"><img src="images/openacs-best-practice.png"></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592102395400" id="idp140592102395400"></a>Overview</h3></div></div></div><p>To start developing new code in OpenACS, we build a new package.
+<a name="idp140623176147848" id="idp140623176147848"></a>Overview</h3></div></div></div><p>To start developing new code in OpenACS, we build a new package.
 A package is a a discrete collection of web pages, Tcl code, and
 database tables and procedures. A package with user interface is
 called an <span class="strong"><strong>application</strong></span>;
@@ -36,41 +34,41 @@ right now. Code that is temporary hackage is clearly marked.</p><p>In this tutor
 displaying a list of text notes.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592102408120" id="idp140592102408120"></a>Before you begin</h3></div></div></div><p>You will need:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140623176152424" id="idp140623176152424"></a>Before you begin</h3></div></div></div><p>You will need:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>A computer with a working installation of OpenACS. If you
 don&#39;t have this, see <a class="xref" href="install-overview" title="Chapter 2. Installation Overview">Chapter 2,
 <em>Installation Overview</em>
 </a>.</p></li><li class="listitem"><p>Example files, which are included in the standard OpenACS 5.9.0
 distribution.</p></li>
 </ul></div><div class="figure">
-<a name="idp140592100698680" id="idp140592100698680"></a><p class="title"><strong>Figure 9.1. Assumptions in this
+<a name="idp140623174045016" id="idp140623174045016"></a><p class="title"><strong>Figure 9.1. Assumptions in this
 section</strong></p><div class="figure-contents"><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col>
 </colgroup><tbody>
 <tr>
-<td>Fully qualified domain name of your server</td><td><span class="replaceable"><span class="replaceable">yourserver.test</span></span></td>
+<td>Fully qualified domain name of your server</td><td><em class="replaceable"><code>yourserver.test</code></em></td>
 </tr><tr>
-<td>URL of your server</td><td><span class="replaceable"><span class="replaceable">http://yourserver.test:8000</span></span></td>
+<td>URL of your server</td><td><em class="replaceable"><code>http://yourserver.test:8000</code></em></td>
 </tr><tr>
-<td>Name of development account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
+<td>Name of development account</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td>
 </tr><tr>
-<td>New Package key</td><td><span class="replaceable"><span class="replaceable">myfirstpackage</span></span></td>
+<td>New Package key</td><td><em class="replaceable"><code>myfirstpackage</code></em></td>
 </tr>
 </tbody>
 </table></div></div>
 </div><br class="figure-break">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592100706104" id="idp140592100706104"></a>Use the APM to initialize a new
+<a name="idp140623174833816" id="idp140623174833816"></a>Use the APM to initialize a new
 package</h3></div></div></div><p>We use the <a class="ulink" href="packages" target="_top">ACS Package Manager</a> (APM) to add, remove, and upgrade
 packages. It handles package meta-data, such as lists of files that
 belong in the package. Each package is uniquely identified by a
 package key. To start developing a new package, use the APM to
-create an empty package with our new package key, <span class="replaceable"><span class="replaceable">myfirstpackage</span></span>. This will create the
-initial directories, meta-information files, and database entries
-for a new package. (<a class="ulink" href="apm-requirements" target="_top">More info on APM</a>)</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>Browse to <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver:8000</span></span><a class="ulink" href="/acs-admin/apm" target="_top">/acs-admin/apm</a>
+create an empty package with our new package key, <em class="replaceable"><code>myfirstpackage</code></em>. This will create
+the initial directories, meta-information files, and database
+entries for a new package. (<a class="ulink" href="apm-requirements" target="_top">More info on APM</a>)</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><p>Browse to <code class="computeroutput">http://<em class="replaceable"><code>yourserver:8000</code></em><a class="ulink" href="/acs-admin/apm" target="_top">/acs-admin/apm</a>
 </code>.</p></li><li class="listitem">
 <p>Click <code class="computeroutput">Create a New
 Package</code>.</p><p>Fill in the fields listed below. <span class="strong"><strong>Ignore the rest (and leave the check boxes
@@ -92,17 +90,16 @@ Package</code></strong>
 </p></li><li class="listitem"><p>
 <code class="computeroutput">Summary</code>: <strong class="userinput"><code>This is my first package.</code></strong>
 </p></li>
-</ul></div><p>At the bottom, click <code class="computeroutput"><span class="guibutton"><span class="guibutton">Create
-Package</span></span></code>.</p>
+</ul></div><p>At the bottom, click <code class="computeroutput"><span class="guibutton">Create Package</span></code>.</p>
 </li>
-</ol></div><p>This creates a package rooted at <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>
+</ol></div><p>This creates a package rooted at <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/<em class="replaceable"><code>myfirstpackage</code></em>
 </code>.
 This is the "home directory" of our new package, and all
 files in the package will be within this directory. <a class="ulink" href="packages" target="_top">More on the structure of
 packages</a>).</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592100726520" id="idp140592100726520"></a>Add an Application Instance to the
+<a name="idp140623175709240" id="idp140623175709240"></a>Add an Application Instance to the
 Server</h3></div></div></div><p>In order to see your work in progress, you must create a map
 between the URL space of incoming requests and the package
 application instance. You do this by adding the application in the
@@ -113,7 +110,7 @@ different URL and different permissions, all sharing the same code
 and tables. This requires that a package be developed <span class="emphasis"><em>package-aware</em></span>. You&#39;ll see how to do
 that in this tutorial.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Browse to <code class="computeroutput">
-<span class="replaceable"><span class="replaceable">http://yourserver.test:8000</span></span><a class="ulink" href="/admin/applications/application-add" target="_top">/admin/applications/application-add/</a>
+<em class="replaceable"><code>http://yourserver.test:8000</code></em><a class="ulink" href="/admin/applications/application-add" target="_top">/admin/applications/application-add/</a>
 </code>.</p></li><li class="listitem"><p>Choose "My First Package" from the list and click OK
 (the other fields are optional).</p></li>
 </ol></div><p>By mounting the package, we&#39;ve caused all requests to
@@ -121,11 +118,11 @@ that in this tutorial.</p><div class="orderedlist"><ol class="orderedlist" type=
 to be satisfied from the files at <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/myfirstpackage/www</code>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140592100734328" id="idp140592100734328"></a>Quick start</h3></div></div></div><p>The remainder of the tutorial walks you through each file one at
+<a name="idp140623171946968" id="idp140623171946968"></a>Quick start</h3></div></div></div><p>The remainder of the tutorial walks you through each file one at
 a time as you create the package. You can skip all this, and get a
 working package, by doing the following:</p><pre class="screen">
-cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial
-psql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> -f myfirstpackage-create.sql
+cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/tutorial
+psql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> -f myfirstpackage-create.sql
 cp note-edit.* note-delete.tcl index.* ../../../../myfirstpackage/www/
 mkdir ../../../../myfirstpackage/lib
 cp note-list.* ../../../../myfirstpackage/lib/

@@ -1,7 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Admin Pages</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-comments.html" title="Adding Comments"><link rel="next" href="tutorial-categories.html" title="Categories"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-comments.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-categories.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-admin-pages"></a>Admin Pages</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Admin Pages</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-comments.html" title="Adding Comments"><link rel="next" href="tutorial-categories.html" title="Categories"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-comments.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-categories.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-admin-pages"></a>Admin Pages</h2></div></div></div>
+     
+     <p>
      There are at least two flavors of admin user interface:
-     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Admins use same pages as all other users, except
+     </p>
+     <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Admins use same pages as all other users, except
        that they are offered admin links and buttons where appropriate.
        For example, if admins have privilege to bulk-delete items you
        could provide checkboxes next to every item seen on a list and the
@@ -10,16 +13,21 @@
        access to data that users aren't interested in or aren't allowed
        to see you will need dedicated admin pages.  The conventional
        place to put those dedicated admin pages is in the
- <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin</code>
+ <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin</code>
  directory.
-      </p><pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>mkdir admin</code></strong></pre><pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cd admin</code></strong></pre><p>
+      </p>
+<pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>mkdir admin</code></strong></pre>
+<pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cd admin</code></strong></pre>
+      <p>
       Even if your application doesn't need any admin pages of its own you will
       usually need at least one simple page with a bunch of links to existing
       administration UI such as Category Management or standard Parameters UI.
       Adding the link to Category Management is described in the section on
       categories.  The listing below adds a link to the Parameters UI of our
       package.
-      </p><pre class="screen">[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.adp</code></strong></pre><pre class="programlisting">
+      </p>
+<pre class="screen">[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.adp</code></strong></pre>
+<pre class="programlisting">
 &lt;master&gt;
 &lt;property name="title"&gt;@title;noquote@&lt;/property&gt;
 &lt;property name="context"&gt;@context;noquote@&lt;/property&gt;
@@ -27,7 +35,9 @@
 &lt;ul class="action-links"&gt;
   &lt;li&gt;&lt;a href="@parameters_url@" title="Set parameters" class="action_link"&gt;Set parameters&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</pre><pre class="screen">[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.tcl</code></strong></pre><pre class="programlisting">
+</pre>
+<pre class="screen">[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.tcl</code></strong></pre>
+<pre class="programlisting">
 ad_page_contract {} {
 } -properties {
     context_bar
@@ -47,7 +57,9 @@ set parameters_url [export_vars -base "/shared/parameters" {
   package_id { return_url [ad_return_url] }
 }]
 
-</pre><p>
+</pre>
+
+<p>
 Now that you have the first admin page it would be nice to have a link to it
 somewhere in the system so that admins don't have to type in the
 <code class="computeroutput">/admin</code> every time they need to reach it.  You
@@ -56,11 +68,13 @@ could put a static link to the toplevel
 people who are not admins.  Besides, some people consider it impolite to first
 offer a link and then display a nasty "You don't have permission to access this
 page" message.
-</p><p>
+</p>
+<p>
 In order to display the link to the admin page only to users that have admin
 privileges add the following code near the top of
-<code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.tcl</code>:
-</p><pre class="programlisting">
+<code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.tcl</code>:
+</p>
+<pre class="programlisting">
 
 set package_id [ad_conn package_id]
 
@@ -71,11 +85,17 @@ if { $admin_p } {
     set admin_url "admin"
     set admin_title Administration
 }
-</pre><p>
+</pre>
+<p>
 In 
-<code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.adp</code> put:
-</p><pre class="programlisting">
+<code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.adp</code> put:
+</p>
+<pre class="programlisting">
 &lt;if @admin_p@ ne nil&gt;
   &lt;a href="@admin_url@"&gt;@admin_title@&lt;/a&gt;
 &lt;/if&gt;
-</pre></li></ul></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-comments.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-categories.html">Next</a></td></tr><tr><td width="40%" align="left">Adding Comments </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Categories</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+</pre>
+
+      </li></ul></div>
+
+  </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-comments.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-categories.html">Next</a></td></tr><tr><td width="40%" align="left">Adding Comments </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Categories</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

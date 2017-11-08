@@ -25,11 +25,9 @@ Analysis Reports</a></span></dt><dt><span class="sect1"><a href="uptime">Externa
 validation</a></span></dt><dt><span class="sect1"><a href="maint-performance">Diagnosing
 Performance Problems</a></span></dt>
 </dl>
-</div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div>
+</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
+Aufrecht</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="upgrade-supporting" leftLabel="Prev" leftTitle="Upgrading Platform components"

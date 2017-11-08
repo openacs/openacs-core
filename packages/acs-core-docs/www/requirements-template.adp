@@ -10,11 +10,8 @@ Chapter 13. Documentation Standards"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="requirements-template" id="requirements-template"></a>System/Application Requirements
-Template</h2></div></div></div><div class="authorblurb">
-<p>By <a class="ulink" href="mailto:youremail\@example.com" target="_top">You</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+Template</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:youremail\@example.com" target="_top">You</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-requirements-introduction" id="yourpackage-requirements-introduction"></a>Introduction</h3></div></div></div><p><span class="emphasis"><em>Briefly explain to the reader what
 this document is for, whether it records the requirements for a new
@@ -127,8 +124,8 @@ programmers.</em></span></p>
 <td>0.1</td><td>Created</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.6.14.2
-2017/06/15 13:56:42 gustafn Exp $)</div>
+</table></div><p><span class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.7
+2017/08/07 23:47:54 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

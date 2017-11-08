@@ -1,32 +1,53 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Set up Log Analysis Reports</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance-web.html" title="Chapter 6. Production Environments"><link rel="previous" href="install-ssl.html" title="Installing SSL Support for an OpenACS service"><link rel="next" href="uptime.html" title="External uptime validation"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-ssl.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Production Environments</th><td width="20%" align="right"> <a accesskey="n" href="uptime.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="analog-setup"></a>Set up Log Analysis Reports</h2></div></div></div><p>Analog is a program with processes webserver access logs,
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Set up Log Analysis Reports</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="maintenance-web.html" title="Chapter 6. Production Environments"><link rel="previous" href="install-ssl.html" title="Installing SSL Support for an OpenACS service"><link rel="next" href="uptime.html" title="External uptime validation"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-ssl.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Production Environments</th><td width="20%" align="right"> <a accesskey="n" href="uptime.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="analog-setup"></a>Set up Log Analysis Reports</h2></div></div></div>
+    
+    
+    <p>Analog is a program with processes webserver access logs,
       performs DNS lookup, and outputs HTML reports.  Analog should
       <a class="link" href="analog-install.html" title="Install Analog web file analyzer">already be
       installed.</a>  A modified configuration file is included in
-      the OpenACS tarball.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="screen">[root src]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
+      the OpenACS tarball.</p>
+    <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+        <pre class="screen">[root src]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>mkdir www/log</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cp -r /usr/share/analog-5.32/images www/log/</code></strong>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <span class="action"><span class="action">
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <span class="action">
 su - $OPENACS_SERVICE_NAME
 cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
 cp /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg
 mkdir www/log
-cp -r /usr/share/analog-5.32/images www/log/</span></span></pre><p>Edit
+cp -r /usr/share/analog-5.32/images www/log/</span></pre>
+        <p>Edit
 <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</code> and change the variable in <code class="computeroutput">HOSTNAME "[my
 organisation]"</code> to reflect your website title.  If you
 don't want the traffic log to be publicly visible, change
 <code class="computeroutput">OUTFILE /var/lib/aolserver/$OPENACS_SERVICE_NAME/www/log/traffic.html</code> to use a private
-directory. You'll also need to edit all instances of service0 to your $OPENACS_SERVICE_NAME.</p></li><li class="listitem"><p>Run it.</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</code></strong>
+directory. You'll also need to edit all instances of service0 to your $OPENACS_SERVICE_NAME.</p>
+      </li><li class="listitem">
+        <p>Run it.</p>
+        <pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</code></strong>
 /usr/share/analog-5.32/analog: analog version 5.32/Unix
 /usr/share/analog-5.32/analog: Warning F: Failed to open DNS input file
   /home/$OPENACS_SERVICE_NAME/dnscache: ignoring it
   (For help on all errors and warnings, see docs/errors.html)
 /usr/share/analog-5.32/analog: Warning R: Turning off empty Search Word Report
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</pre><p>Verify that it works by browing to <code class="computeroutput">http://yourserver.test:8000/log/traffic.html</code></p></li><li class="listitem"><p>Automate this by creating a file in
-          <code class="computeroutput">/etc/cron.daily</code>.</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</pre>
+        <p>Verify that it works by browing to <code class="computeroutput">http://yourserver.test:8000/log/traffic.html</code></p>
+      </li><li class="listitem">
+        <p>Automate this by creating a file in
+          <code class="computeroutput">/etc/cron.daily</code>.</p>
+          <pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
 logout
 
-[root root]# <strong class="userinput"><code>emacs /etc/cron.daily/analog</code></strong></pre><p>Put this into the file:</p><pre class="programlisting">#!/bin/sh
+[root root]# <strong class="userinput"><code>emacs /etc/cron.daily/analog</code></strong></pre>
+        <p>Put this into the file:</p>
+        <pre class="programlisting">#!/bin/sh
 
-/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/analog.cfg</pre><pre class="screen">[root root]# <strong class="userinput"><code>chmod 755 /etc/cron.daily/analog</code></strong></pre><p>Test it by running the script.</p><pre class="screen">[root root]# <strong class="userinput"><code>sh /etc/cron.daily/analog</code></strong></pre><p>Browse to <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver.test</span></span>/log/traffic.html</code></p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-ssl.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="uptime.html">Next</a></td></tr><tr><td width="40%" align="left">Installing SSL Support for an OpenACS service </td><td width="20%" align="center"><a accesskey="u" href="maintenance-web.html">Up</a></td><td width="40%" align="right"> External uptime validation</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/analog.cfg</pre>
+        <pre class="screen">[root root]# <strong class="userinput"><code>chmod 755 /etc/cron.daily/analog</code></strong></pre>
+        <p>Test it by running the script.</p>
+        <pre class="screen">[root root]# <strong class="userinput"><code>sh /etc/cron.daily/analog</code></strong></pre>
+        <p>Browse to <code class="computeroutput">http://<em class="replaceable"><code>yourserver.test</code></em>/log/traffic.html</code></p>
+      </li></ol></div>
+  </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-ssl.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="uptime.html">Next</a></td></tr><tr><td width="40%" align="left">Installing SSL Support for an OpenACS service </td><td width="20%" align="center"><a accesskey="u" href="maintenance-web.html">Up</a></td><td width="40%" align="right"> External uptime validation</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

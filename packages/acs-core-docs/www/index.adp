@@ -9,7 +9,7 @@
 		<div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140592082495080" id="idp140592082495080"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140623166870808" id="idp140623166870808"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
@@ -87,8 +87,7 @@ Daemontools (OPTIONAL)</a></span></dt><dt><span class="sect1"><a href="install-q
 (OPTIONAL)</a></span></dt><dt><span class="sect1"><a href="analog-install">Install
 Analog web file analyzer</a></span></dt><dt><span class="sect1"><a href="install-nspam">Install
 nspam</a></span></dt><dt><span class="sect1"><a href="install-full-text-search-tsearch2">Install Full Text Search
-using Tsearch2</a></span></dt><dt><span class="sect1"><a href="install-full-text-search-openfts">Install Full Text Search
-using OpenFTS (deprecated see tsearch2)</a></span></dt><dt><span class="sect1"><a href="install-nsopenssl">Install
+using Tsearch2</a></span></dt><dt><span class="sect1"><a href="install-nsopenssl">Install
 nsopenssl</a></span></dt><dt><span class="sect1"><a href="install-tclwebtest">Install
 tclwebtest.</a></span></dt><dt><span class="sect1"><a href="install-php">Install PHP for
 use in AOLserver</a></span></dt><dt><span class="sect1"><a href="install-squirrelmail">Install

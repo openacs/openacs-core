@@ -23,9 +23,8 @@ translating to. If the locale is not present you need to visit
 <a class="ulink" href="/acs-lang/admin" target="_top">Administration of Localization</a> and create the
 locale.</p></li><li class="listitem">
 <p>
-<strong>Translating with Translator
-Mode. </strong>To translate messages in the pages they
-appear, <a class="ulink" href="http://localhost:8008/acs-lang/admin/translator-mode-toggle" target="_top">Toggle Translator Mode</a> and then browse to the
+<strong>Translating with Translator Mode. </strong>
+To translate messages in the pages they appear, <a class="ulink" href="http://localhost:8008/acs-lang/admin/translator-mode-toggle" target="_top">Toggle Translator Mode</a> and then browse to the
 page you want to translate. Untranslated messages will have a
 yellow background and a red star that you click to translate the
 message. Translated messages have a green star next to them that is
@@ -35,7 +34,7 @@ would want to revert a translation.</p><div class="mediaobject" align="center"><
 the bottom of each page.</p><div class="mediaobject" align="center"><img src="images/translations.png" align="middle"></div>
 </li><li class="listitem">
 <p>
-<strong>Batch translation. </strong>To translate
+<strong>Batch translation. </strong> To translate
 many messages at once, go to <a class="ulink" href="/acs-lang/admin" target="_top">Administration of Localization</a>,
 click on the locale to translate, then click on a package, and then
 click <code class="computeroutput">Batch edit these

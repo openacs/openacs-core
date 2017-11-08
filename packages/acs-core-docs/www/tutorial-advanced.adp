@@ -30,11 +30,9 @@ in parameters for your package</a></span></dt><dt><span class="sect1"><a href="t
 scripts</a></span></dt><dt><span class="sect1"><a href="tutorial-second-database">Connect to a second
 database</a></span></dt><dt><span class="sect1"><a href="tutorial-future-topics">Future Topics</a></span></dt>
 </dl>
-</div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>This tutorial covers topics which are not essential to creating
+</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
+Aufrecht</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>This tutorial covers topics which are not essential to creating
 a minimal working package. Each section can be used independently
 of all of the others; all sections assume that you&#39;ve completed
 the basic tutorial.</p>

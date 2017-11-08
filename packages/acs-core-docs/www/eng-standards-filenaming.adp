@@ -10,10 +10,8 @@ Chapter 12. Engineering Standards"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-filenaming" id="eng-standards-filenaming"></a>ACS
-File Naming and Formatting Standards</h2></div></div></div><div class="authorblurb">
-<p>By Michael Yoon and Aurelius Prochazka</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>To ensure consistency (and its collateral benefit,
+File Naming and Formatting Standards</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Michael Yoon and Aurelius
+Prochazka</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>To ensure consistency (and its collateral benefit,
 maintainability), we define and adhere to standards in the
 following areas:</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -103,7 +101,7 @@ take the form of a line like this:</p><pre class="programlisting">
 &lt;p&gt;
 Last Modified: file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 &lt;/p&gt;
-</pre><p>This can be at the top or bottom of the file.</p><div>Using ad_page_contract</div><p>For non-library Tcl files (those not in the private Tcl
+</pre><p>This can be at the top or bottom of the file.</p><p><span class="phrase">Using ad_page_contract</span></p><p>For non-library Tcl files (those not in the private Tcl
 directory), use <a class="link" href="tcl-doc" title="ad_page_contract"><code class="computeroutput">ad_page_contract</code></a> after the file path
 comment (this supersedes set_the_usual_form_variables and
 ad_return_complaint). Here is an example of using ad_page_contract,
@@ -150,7 +148,7 @@ string.</p></li><li class="listitem"><p>Note that <code class="computeroutput">a
 does not generate QQvariables, which were automatically created by
 ad_page_variables and set_the_usual_form_variables. The use of bind
 variables makes such previous variable syntax obsolete.</p></li>
-</ul></div><div>Using ad_library</div><p>For shared Tcl library files, use <a class="link" href="tcl-doc" title="ad_library"><code class="computeroutput">ad_library</code></a> after the file path comment.
+</ul></div><p><span class="phrase">Using ad_library</span></p><p>For shared Tcl library files, use <a class="link" href="tcl-doc" title="ad_library"><code class="computeroutput">ad_library</code></a> after the file path comment.
 Its only argument is a doc_string in the standard (javadoc-style)
 format, like <code class="computeroutput">ad_page_contract</code>.
 Don&#39;t forget to put the \@cvs-id in there. Here is an example of
@@ -163,7 +161,7 @@ ad_library {
     \@author John Doe (jdoe\@example.com)
     \@cvs-id file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 }
-</pre><div>Non-Tcl Files</div><p>For SQL and other non-Tcl source files, the following file
+</pre><p><span class="phrase">Non-Tcl Files</span></p><p>For SQL and other non-Tcl source files, the following file
 header structure is recommended:</p><pre class="programlisting">
 -- <span class="emphasis"><em>path relative to the ACS root directory</em></span>
 --
@@ -216,8 +214,8 @@ used rarely, only when they are exceedingly useful.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-tcllib" id="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>Further standards for Tcl library files are under discussion; we
-plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: filenaming.xml,v 1.7.2.3 2017/04/21
-15:07:52 gustafn Exp $)</div>
+plan to include naming conventions for procs.</p><p><span class="cvstag">($&zwnj;Id: filenaming.xml,v 1.8 2017/08/07
+23:47:54 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

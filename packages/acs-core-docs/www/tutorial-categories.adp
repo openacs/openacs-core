@@ -9,11 +9,9 @@ Chapter 10. Advanced Topics"
 		    rightLink="profile-code" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-categories" id="tutorial-categories"></a>Categories</h2></div></div></div><div class="authorblurb">
-<p>extended by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima Mazloumi</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>You can associate any ACS Object with one or more categories. In
+<a name="tutorial-categories" id="tutorial-categories"></a>Categories</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">extended by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima
+Mazloumi</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>You can associate any ACS Object with one or more categories. In
 this tutorial we&#39;ll show how to equip your application with
 user interface to take advantage of the Categories service.</p><p>We&#39;ll start by installing the Categories service. Go to
 <code class="computeroutput">/acs/admin</code> and install it. This
@@ -33,11 +31,11 @@ market segments etc. Before users of your application can take
 advantage of the Categories service there needs to be a way for
 administrators of your application to choose which category trees
 are applicable for the application.</p><p>The way to achieve this is is to provide a link to the Category
-Management pages. Add the following snippet to your <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.tcl</code>
+Management pages. Add the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.tcl</code>
 file:</p><pre class="programlisting">
                   set category_map_url [export_vars -base "[site_node::get_package_url -package_key categories]cadmin/one-object" { { object_id $package_id } }]
           
-</pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.adp</code>
+</pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.adp</code>
 file:</p><pre class="programlisting">
                   &lt;a href="\@category_map_url\@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
           

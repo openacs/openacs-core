@@ -290,13 +290,13 @@ this instead of <code class="computeroutput">db_dml
     <span class="emphasis"><em>code_block</em></span> [ if_no_rows <span class="emphasis"><em>if_no_rows_block ]</em></span>
 </pre><p>Performs the SQL query <code class="computeroutput">sql</code>,
 saving results in variables of the form <code class="computeroutput">
-<span class="replaceable"><span class="replaceable">var_name</span></span>:1</code>, <code class="computeroutput">
-<span class="replaceable"><span class="replaceable">var_name</span></span>:2</code>, etc, setting
+<em class="replaceable"><code>var_name</code></em>:1</code>, <code class="computeroutput">
+<em class="replaceable"><code>var_name</code></em>:2</code>, etc, setting
 <code class="computeroutput">
-<span class="replaceable"><span class="replaceable">var_name</span></span>:rowcount</code> to the total
-number of rows, and setting <code class="computeroutput">
-<span class="replaceable"><span class="replaceable">var_name</span></span>:columns</code> to a list of
-column names.</p><p>Each row also has a column, rownum, automatically added and set
+<em class="replaceable"><code>var_name</code></em>:rowcount</code> to the
+total number of rows, and setting <code class="computeroutput">
+<em class="replaceable"><code>var_name</code></em>:columns</code> to a list
+of column names.</p><p>Each row also has a column, rownum, automatically added and set
 to the row number, starting with 1. Note that this will override
 any column in the SQL statement named 'rownum', also if
 you&#39;re using the Oracle rownum pseudo-column.</p><p>If the <code class="computeroutput">-local</code> is passed, the
@@ -309,7 +309,7 @@ ns_urlencode or ad_quotehtml, etc. When the Tcl code is executed,
 all the columns from the SQL query will be set as local variables
 in that code. Any changes made to these local variables will be
 copied back into the multirow.</p><p>You may also add additional, computed columns to the multirow,
-using the <code class="computeroutput">-extend { <span class="replaceable"><span class="replaceable">col_1</span></span><span class="replaceable"><span class="replaceable">col_2</span></span> ... }</code> switch. This is
+using the <code class="computeroutput">-extend { <em class="replaceable"><code>col_1</code></em><em class="replaceable"><code>col_2</code></em> ... }</code> switch. This is
 useful for things like constructing a URL for the object retrieved
 by the query.</p><p>If you&#39;re constructing your multirow through multiple
 queries with the same set of columns, but with different rows, you
@@ -602,8 +602,8 @@ db_dml foo_insert {insert into foo(baz) values(:1)} {[db_nullify_empty_string $b
           
 </pre>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.13.8.4 2017/04/21 15:07:52
-gustafn Exp $)</div>
+</dl></div><p><span class="cvstag">($&zwnj;Id: db-api.xml,v 1.14 2017/08/07 23:47:54
+gustafn Exp $)</span></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="db-api-caching" id="db-api-caching"></a>Caching Database API Results</h3></div></div></div><p>The database API allows for direct caching of query results.

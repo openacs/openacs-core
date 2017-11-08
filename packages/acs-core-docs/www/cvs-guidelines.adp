@@ -9,16 +9,15 @@ Chapter 12. Engineering Standards"
 		    rightLink="eng-standards-versioning" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="cvs-guidelines" id="cvs-guidelines"></a> CVS Guidelines</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: cvs.xml,v 1.6.14.6 2017/06/17 08:29:28
-gustafn Exp $)</div><p>By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki,
+<a name="cvs-guidelines" id="cvs-guidelines"></a> CVS Guidelines</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red"><span class="cvstag">($&zwnj;Id: cvs.xml,v
+1.7 2017/08/07 23:47:54 gustafn Exp $)</span></span></p><p>By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki,
 and Jade Rubick.</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+&lt;/authorblurb&gt;
+<div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="using-cvs-with-openacs" id="using-cvs-with-openacs"></a>Using CVS with OpenACS</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118797960" id="idp140592118797960"></a>Getting Started</h4></div></div></div><p>All OpenACS code is available anonymously. To get code
+<a name="idp140623176779576" id="idp140623176779576"></a>Getting Started</h4></div></div></div><p>All OpenACS code is available anonymously. To get code
 anonymously, use the parameter <code class="computeroutput">-d:pserver:anonymous\@cvs.openacs.org:/cvsroot</code>
 immediately after <code class="computeroutput">cvs</code> in a cvs
 command to check out or export code.</p><p>If you are an OpenACS developer, you should check out code so
@@ -44,8 +43,8 @@ Host cvs.openacs.org
 cvs command. To avoid this, set up ssh certificate authentication
 for your OpenACS account. (<a class="ulink" href="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server" target="_top">More information</a>)</p><p>You may want to set some more default actions for CVS usage. To
 do so, create the file <code class="computeroutput">~/.cvsrc</code>
-with the contents:</p><pre class="screen"><span class="action"><span class="action">cvs -z6
-cvs -q</span></span></pre><p>
+with the contents:</p><pre class="screen"><span class="action">cvs -z6
+cvs -q</span></pre><p>
 <code class="computeroutput">-z6</code> speeds up cvs access
 over the network quite a bit by enabling compressed connection by
 default. <code class="computeroutput">-q</code> suppresses some
@@ -54,17 +53,17 @@ verbose output from commands. For example, it makes the output of
 <div class="titlepage"><div><div><p class="title"></p></div></div></div><p>Administrator Note: These are the steps to grant CVS commit
 rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Create the user&#39;s account. On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
-/usr/sbin/useradd -c "<span class="replaceable"><span class="replaceable">Real Name</span></span>" -G cvs -p <span class="replaceable"><span class="replaceable">passwd</span></span><span class="replaceable"><span class="replaceable">username</span></span>
-/usr/sbin/usermod -G cvs,<span class="replaceable"><span class="replaceable">username</span></span><span class="replaceable"><span class="replaceable">username</span></span>
-</span></span></pre>
+<p>Create the user&#39;s account. On cvs.openacs.org:</p><pre class="screen"><span class="action">sudo bash
+/usr/sbin/useradd -c "<em class="replaceable"><code>Real Name</code></em>" -G cvs -p <em class="replaceable"><code>passwd</code></em><em class="replaceable"><code>username</code></em>
+/usr/sbin/usermod -G cvs,<em class="replaceable"><code>username</code></em><em class="replaceable"><code>username</code></em>
+</span></pre>
 </li><li class="listitem">
 <p>Grant cvs access to the user account. On any machine, in a
-temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
+temporary directory:</p><pre class="screen"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
-emacs avail</span></span></pre><p>Add an avail line of the form:</p><pre class="programlisting">
-avail|<span class="replaceable"><span class="replaceable">username</span></span>|openacs-4
-</pre><pre class="screen"><span class="action"><span class="action">cvs commit -m "added commit on X for username" avail</span></span></pre>
+emacs avail</span></pre><p>Add an avail line of the form:</p><pre class="programlisting">
+avail|<em class="replaceable"><code>username</code></em>|openacs-4
+</pre><pre class="screen"><span class="action">cvs commit -m "added commit on X for username" avail</span></pre>
 </li>
 </ol></div>
 </div><div class="sidebar">
@@ -72,7 +71,7 @@ avail|<span class="replaceable"><span class="replaceable">username</span></span>
 put</p><pre class="programlisting">
 Host cvs-server
       HostName cvs.openacs.org
-      User <span class="replaceable"><span class="replaceable">yournamehere</span></span>
+      User <em class="replaceable"><code>yournamehere</code></em>
 </pre><p>into your <code class="computeroutput">~/.ssh/config</code>
 file, then you can use <code class="computeroutput">-d
 :ext:cvs-server:/cvsroot</code> instead of <code class="computeroutput">-d :ext:cvs.openacs.org:/cvsroot</code>. You can
@@ -81,43 +80,43 @@ editing hundreds of <code class="computeroutput">CVSROOT/Repository</code> files
 </div>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118827320" id="idp140592118827320"></a>Checkout for Package Development</h4></div></div></div><p>If you are actively developing a non-core package, you should
+<a name="idp140623176779832" id="idp140623176779832"></a>Checkout for Package Development</h4></div></div></div><p>If you are actively developing a non-core package, you should
 work from the latest core release branch. Currently this is
 oacs-5-9. This ensures that you are working on top of a stable
 OpenACS core, but still allows you to commit feature changes to
-non-core packages. To check out all packages,</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co -r oacs-5-9 openacs-4</span></span></pre><p>If you work in the directories created with this command, all of
+non-core packages. To check out all packages,</p><pre class="screen"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co -r oacs-5-9 openacs-4</span></pre><p>If you work in the directories created with this command, all of
 your cvs updates and commits will be confined to the oacs-5-9
 branch. Your work will be merged back to HEAD for you with each
 release.</p><p>Because the entire openacs-4 directory is large, you may want to
 use only acs-core plus some specific modules. To do this, check out
-core first:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot -r oacs-5-9 checkout acs-core</span></span></pre><p>Then add modules as needed:</p><pre class="screen"><span class="action"><span class="action">cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages
-cvs up -d <span class="replaceable"><span class="replaceable">packagename</span></span>
-</span></span></pre><p>... where <span class="replaceable"><span class="replaceable">packagename</span></span> is the name of the package
-you want. Visit the <a class="ulink" href="http://openacs.org/packages" target="_top">Package Inventory</a>
-and <a class="ulink" href="http://openacs.org/projects/openacs/packages/" target="_top">Package maintainers and status</a> for a list of available
+core first:</p><pre class="screen"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot -r oacs-5-9 checkout acs-core</span></pre><p>Then add modules as needed:</p><pre class="screen"><span class="action">cd /var/lib/aolserver/<em class="replaceable"><code>service0</code></em>/packages
+cvs up -d <em class="replaceable"><code>packagename</code></em>
+</span></pre><p>... where <em class="replaceable"><code>packagename</code></em>
+is the name of the package you want. Visit the <a class="ulink" href="http://openacs.org/packages" target="_top">Package
+Inventory</a> and <a class="ulink" href="http://openacs.org/projects/openacs/packages/" target="_top">Package maintainers and status</a> for a list of available
 packages and their current state.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118836152" id="idp140592118836152"></a>Checkout for Core Development</h4></div></div></div><p>If you are actively developing packages in the OpenACS Core,
+<a name="idp140623176821048" id="idp140623176821048"></a>Checkout for Core Development</h4></div></div></div><p>If you are actively developing packages in the OpenACS Core,
 work from the HEAD branch. HEAD is used for active development of
 the next version of core OpenACS. It may be very buggy; it may not
 even install correctly. Do not use this branch for development of
 non-core features unless your work depends on some of the HEAD core
 work. To check out HEAD, omit the <code class="computeroutput">-r</code> tag.</p><p>To check out HEAD for development, which requires an OpenACS
-developer account:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>To check out HEAD anonymously:</p><pre class="screen"><span class="action"><span class="action">cvs -d:pserver:anonymous\@cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre>
+developer account:</p><pre class="screen"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></pre><p>To check out HEAD anonymously:</p><pre class="screen"><span class="action">cvs -d:pserver:anonymous\@cvs.openacs.org:/cvsroot checkout acs-core</span></pre>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118841528" id="idp140592118841528"></a>Checkout .LRN</h4></div></div></div><p>.LRN consists of a given version OpenACS core, plus a set of
+<a name="idp140623176826632" id="idp140623176826632"></a>Checkout .LRN</h4></div></div></div><p>.LRN consists of a given version OpenACS core, plus a set of
 packages. These are collectively packages together to form a
 distribution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
 .LRN also uses an OpenACS install.xml file during installation;
 this file is distributed within the dotlrn package and must be
 moved. To get a development checkout of .LRN in the subdirectory
-<code class="literal">dotlrn</code>:</p><pre class="screen"><span class="action"><span class="action">cvs -d :pserver:anonymous\@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 acs-core
+<code class="literal">dotlrn</code>:</p><pre class="screen"><span class="action">cvs -d :pserver:anonymous\@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 acs-core
 mv openacs-4 dotlrn
 cd dotlrn/packages
 cvs -d :pserver:anonymous\@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 dotlrn-all
-mv dotlrn/install.xml ..</span></span></pre>
+mv dotlrn/install.xml ..</span></pre>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="working-with-cvs" id="working-with-cvs"></a>Working with CVS</h4></div></div></div><p>Once you have a checkout you can use some commands to track what
@@ -132,7 +131,7 @@ repository.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="openacs-cvs-concepts" id="openacs-cvs-concepts"></a>OpenACS CVS Concepts</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118849288" id="idp140592118849288"></a>Modules</h4></div></div></div><p>All OpenACS code resides within a single CVS module,
+<a name="idp140623176834888" id="idp140623176834888"></a>Modules</h4></div></div></div><p>All OpenACS code resides within a single CVS module,
 <code class="computeroutput">openacs-4</code>. (The openacs-4
 directory contains code for all versions of OpenACS 4 and later,
 and .LRN 1 and later.) Checking out this module retrieves all
@@ -169,54 +168,49 @@ project-manager package.</p><p>Each OpenACS package (i.e., directory in <code cl
 module of the same name.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118857720" id="idp140592118857720"></a> Tags and Branches</h4></div></div></div><p>Tags and Branches look similar in commands, but behave
+<a name="idp140623176843880" id="idp140623176843880"></a> Tags and Branches</h4></div></div></div><p>Tags and Branches look similar in commands, but behave
 differently. A tag is a fixed point on a branch. Check out a tag to
 get a specific version of OpenACS. Check out a branch to get the
 most current code for that major-minor version (e.g., 5.0.x or
 5.1.x). You can only commit to a branch, not a tag, so check out a
 branch if you will be working on the code.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<code class="computeroutput">openacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</code>
-tags mark final releases of OpenACS. This tag is applied to the
-acs-core files for an OpenACS core release, and to the latest
-released versions of all other packages at the time of release.
-Example: <code class="computeroutput">openacs-5-0-4-final</code>.</p></li><li class="listitem"><p>
-<code class="computeroutput">dotlrn-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</code>
-tags mark final releases of .LRN. These tags apply only to .LRN
-packages. Example: <code class="computeroutput">dotlrn-2-0-1-final</code>
+<code class="computeroutput">openacs-<em class="replaceable"><code>x</code></em>-<em class="replaceable"><code>y</code></em>-<em class="replaceable"><code>z</code></em>-final</code> tags mark final
+releases of OpenACS. This tag is applied to the acs-core files for
+an OpenACS core release, and to the latest released versions of all
+other packages at the time of release. Example: <code class="computeroutput">openacs-5-0-4-final</code>.</p></li><li class="listitem"><p>
+<code class="computeroutput">dotlrn-<em class="replaceable"><code>x</code></em>-<em class="replaceable"><code>y</code></em>-<em class="replaceable"><code>z</code></em>-final</code> tags mark final
+releases of .LRN. These tags apply only to .LRN packages. Example:
+<code class="computeroutput">dotlrn-2-0-1-final</code>
 </p></li><li class="listitem"><p>
 <code class="computeroutput">
-<span class="replaceable"><span class="replaceable">packagename</span></span>-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-<span class="replaceable"><span class="replaceable">z</span></span>-final</code>
-tags apply to releases of individual packages. For example,
-<code class="computeroutput">calendar-2-0-0-final</code> is a tag
-that will retrieve only the files in the calendar 2.0.0 release. It
-applies only to the calendar package. All non-core, non-dotlrn
-packages should have a tag of this style, based on the package
-name. Many packages have not been re-released since the new naming
-convention was adopted and so don&#39;t have a tag of this
-type.</p></li><li class="listitem">
+<em class="replaceable"><code>packagename</code></em>-<em class="replaceable"><code>x</code></em>-<em class="replaceable"><code>y</code></em>-<em class="replaceable"><code>z</code></em>-final</code> tags apply to
+releases of individual packages. For example, <code class="computeroutput">calendar-2-0-0-final</code> is a tag that will
+retrieve only the files in the calendar 2.0.0 release. It applies
+only to the calendar package. All non-core, non-dotlrn packages
+should have a tag of this style, based on the package name. Many
+packages have not been re-released since the new naming convention
+was adopted and so don&#39;t have a tag of this type.</p></li><li class="listitem">
 <p>
-<code class="computeroutput">openacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-compat</code>
-tags point to the most recent released version of OpenACS
-<span class="replaceable"><span class="replaceable">X</span></span>.<span class="replaceable"><span class="replaceable">Y</span></span>. It is
-similar to openacs-x-y-z-compat, except that it will always get the
-most recent dot-release of Core and the most recent compatible,
-released version of all other packages. All of the other tag styles
-should be static, but -compat tags may change over time. If you
-want version 5.0.4 exactly, use the openacs-5-0-4-final tag. If you
-want the best newest released code in the 5.0.x release series and
-you want to upgrade within 5.0.x later, use the compat tag.</p><p>For example, if you check out the entire tree with -r
+<code class="computeroutput">openacs-<em class="replaceable"><code>x</code></em>-<em class="replaceable"><code>y</code></em>-compat</code> tags point to the
+most recent released version of OpenACS <em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>. It is similar to
+openacs-x-y-z-compat, except that it will always get the most
+recent dot-release of Core and the most recent compatible, released
+version of all other packages. All of the other tag styles should
+be static, but -compat tags may change over time. If you want
+version 5.0.4 exactly, use the openacs-5-0-4-final tag. If you want
+the best newest released code in the 5.0.x release series and you
+want to upgrade within 5.0.x later, use the compat tag.</p><p>For example, if you check out the entire tree with -r
 openacs-5-0-compat, you might get version 5.0.4 of each OpenACS
 core package, version 2.0.1 of calendar, version 2.0.3 of each .LRN
 package, etc. If you update the checkout two months later, you
 might get version 5.0.5 of all OpenACS core packages and version
 2.1 of calendar.</p>
 </li><li class="listitem">
-<p>oacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span> is a
-<span class="emphasis"><em>branch,</em></span> , not a tag. All
-core packages in the 5.0 release series (5.0.0, 5.0.1, 5.0.2, etc)
-are also on the oacs-5-0 branch. Similarly, OpenACS core packages
-for 5.1.0 are on the oacs-5-1 branch.</p><p>These branches are used for two purposes. OpenACS Core packages
+<p>oacs-<em class="replaceable"><code>x</code></em>-<em class="replaceable"><code>y</code></em> is a <span class="emphasis"><em>branch,</em></span> , not a tag. All core packages
+in the 5.0 release series (5.0.0, 5.0.1, 5.0.2, etc) are also on
+the oacs-5-0 branch. Similarly, OpenACS core packages for 5.1.0 are
+on the oacs-5-1 branch.</p><p>These branches are used for two purposes. OpenACS Core packages
 on these branches are being tidied up for release. Only bug fixes,
 not new features, should be added to core packages on release
 branches. For all other packages, release branches are the
@@ -242,7 +236,7 @@ your system. This takes the place of steps 1 and 2 in <a class="xref" href="open
 &ldquo;Installation Option 2: Install from
 tarball&rdquo;</a>. Continue setting up the site as described
 there.</p></li><li class="listitem"><p>Fix bugs and add features.</p></li><li class="listitem">
-<p>Commit that file (or files):</p><pre class="screen"><span class="action"><span class="action">cvs commit -m "what I did and why" filename</span></span></pre><p>Because this occurs in your personal checkout and not an
+<p>Commit that file (or files):</p><pre class="screen"><span class="action">cvs commit -m "what I did and why" filename</span></pre><p>Because this occurs in your personal checkout and not an
 anonymous one, this commit automagically moves back upstream to the
 Mother Ship repository at cvs.openacs.org. The names of the changed
 files, and your comments, are sent to a mailing list for OpenACS
@@ -256,18 +250,18 @@ intended them to be.</p></li>
 approval and to get a module alias created.</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>Check out acs-core on the HEAD branch. (Weird things happen if
-you add files to a branch but not to HEAD):</p><pre class="screen"><span class="action"><span class="action">cd /tmp
-cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>Copy your package directory from your working directory to this
-directory. Make sure not to copy any CVS directories.</p><pre class="screen"><span class="action"><span class="action">cp -r /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span> /tmp/openacs-4/packages</span></span></pre><p>Import the package into the cvs.openacs.org cvs repository:</p><pre class="screen"><span class="action"><span class="action">cd /tmp/openacs-4/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
-cvs import -m "Initial import of <span class="replaceable"><span class="replaceable">newpackage</span></span>" openacs-4/packages/newpackage <span class="replaceable"><span class="replaceable">myname</span></span><span class="replaceable"><span class="replaceable">newpackage-0-1d</span></span>
-</span></span></pre>
+you add files to a branch but not to HEAD):</p><pre class="screen"><span class="action">cd /tmp
+cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></pre><p>Copy your package directory from your working directory to this
+directory. Make sure not to copy any CVS directories.</p><pre class="screen"><span class="action">cp -r /var/lib/aolserver/<em class="replaceable"><code>service0</code></em>/packages/<em class="replaceable"><code>newpackage</code></em> /tmp/openacs-4/packages</span></pre><p>Import the package into the cvs.openacs.org cvs repository:</p><pre class="screen"><span class="action">cd /tmp/openacs-4/packages/<em class="replaceable"><code>newpackage</code></em>
+cvs import -m "Initial import of <em class="replaceable"><code>newpackage</code></em>" openacs-4/packages/newpackage <em class="replaceable"><code>myname</code></em><em class="replaceable"><code>newpackage-0-1d</code></em>
+</span></pre>
 </li><li class="listitem">
 <p>Add the new package to the modules file. (An administrator has
-to do this step.) On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
+to do this step.) On any machine, in a temporary directory:</p><pre class="screen"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
-emacs modules</span></span></pre><p>Add a line of the form:</p><pre class="programlisting">
-<span class="replaceable"><span class="replaceable">photo-album-portlet</span></span> openacs-4/packages/<span class="replaceable"><span class="replaceable">photo-album-portlet</span></span>
-</pre><p>Commit the change:</p><pre class="screen"><span class="action"><span class="action">cvs commit -m "added alias for package <span class="replaceable"><span class="replaceable">newpackage</span></span>" modules</span></span></pre><p>This should print something like:</p><div class="literallayout"><p>cvs commit: Examining .<br>
+emacs modules</span></pre><p>Add a line of the form:</p><pre class="programlisting">
+<em class="replaceable"><code>photo-album-portlet</code></em> openacs-4/packages/<em class="replaceable"><code>photo-album-portlet</code></em>
+</pre><p>Commit the change:</p><pre class="screen"><span class="action">cvs commit -m "added alias for package <em class="replaceable"><code>newpackage</code></em>" modules</span></pre><p>This should print something like:</p><div class="literallayout"><p>cvs commit: Examining .<br>
 **** Access allowed: Personal Karma exceeds Environmental Karma.<br>
 
 Checking in modules;<br>
@@ -282,8 +276,8 @@ cvs commit: Rebuilding administrative file database</p></div>
 package development on the latest release branch that your code is
 compatible with. So, after completing the import, you may want to
 branch your package:</p><pre class="programlisting">
-cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
-cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></span>
+cd /var/lib/aolserver/<em class="replaceable"><code>service0</code></em>/packages/<em class="replaceable"><code>newpackage</code></em>
+cvs tag -b <em class="replaceable"><code>oacs-5-1</code></em>
 </pre>
 </li><li class="listitem"><p>See <a class="xref" href="releasing-package" title="How to package and release an OpenACS Package">the section called
 &ldquo;How to package and release an OpenACS
@@ -297,7 +291,7 @@ un-necessary. If you are working on a <code class="computeroutput">contrib</code
 <code class="computeroutput">/packages</code>. This must be done by
 an OpenACS administrator. On cvs.openacs.org:</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><pre class="programlisting">
-cp -r /cvsroot/openacs-4/contrib/packages/<span class="replaceable"><span class="replaceable">package0</span></span> /cvsroot/openacs-4/packages
+cp -r /cvsroot/openacs-4/contrib/packages/<em class="replaceable"><code>package0</code></em> /cvsroot/openacs-4/packages
 </pre></li><li class="listitem"><p>Update the modules file as described above.</p></li><li class="listitem"><p>Remove the directory from cvs in the old location using
 <code class="computeroutput">cvs rm</code>. One approach
 <code class="computeroutput">for file in `find | grep -v CVS`; do
@@ -415,7 +409,7 @@ TIP.</p>
 </ol></div>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118962952" id="idp140592118962952"></a> Informal Guidelines</h4></div></div></div><p>Informal guidelines which may be obsolete in places and should
+<a name="idp140623174806760" id="idp140623174806760"></a> Informal Guidelines</h4></div></div></div><p>Informal guidelines which may be obsolete in places and should
 be reviewed:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Before committing to cvs you must submit a bug report and patch
 to the <a class="ulink" href="http://openacs.org/bugtracker/openacs" target="_top">OpenACS bug

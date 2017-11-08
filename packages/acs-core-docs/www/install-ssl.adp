@@ -18,14 +18,12 @@ for AOLserver.</p></li><li class="listitem">
 #ns_param   nsopenssl       ${bindir}/nsopenssl.so
 </pre>
 </li><li class="listitem">
-<p>
-<a name="ssl-certificates" id="ssl-certificates"></a>Prepare a
-certificate directory for the service.</p><pre class="screen">
-[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/certs</code></strong>
-[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>chmod 700 /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/certs</code></strong>
+<p>Prepare a certificate directory for the service.</p><pre class="screen">
+[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>mkdir /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/certs</code></strong>
+[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>chmod 700 /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/certs</code></strong>
 [$OPENACS_SERVICE_NAME etc]$ 
-<span class="action"><span class="action">mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/certs
-chmod 700 /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/certs</span></span>
+<span class="action">mkdir /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/certs
+chmod 700 /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/certs</span>
 </pre>
 </li><li class="listitem">
 <p>It takes two files to support an SSL connection. The certificate

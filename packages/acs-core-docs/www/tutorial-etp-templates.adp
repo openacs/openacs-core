@@ -9,11 +9,9 @@ ChapterÂ 10.Â Advanced Topics"
 		    rightLink="tutorial-comments" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-etp-templates"></a>OpenACS Edit This Page Templates</h2></div></div></div><div class="authorblurb">
-<p>by <a class="ulink" href="mailto:ncarroll\@ee.usyd.edu.au" target="_top">Nick Carroll</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+<a name="tutorial-etp-templates"></a>OpenACS Edit This Page Templates</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:ncarroll\@ee.usyd.edu.au" target="_top">Nick
+Carroll</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="goals"></a>Goals</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Learn about the OpenACS templating system.</p></li><li class="listitem"><p>Learn about subsites and site-map administration.</p></li>
@@ -86,7 +84,7 @@ cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140592099042408"></a><p class="title"><strong>TableÂ 10.1.Â table
+<a name="idp140623170145000"></a><p class="title"><strong>TableÂ 10.1.Â table
 showing ETP layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">
@@ -133,8 +131,8 @@ view your ETP application using the col2 template.</p></li>
 <a name="end"></a>Who Wrote This and When</h3></div></div></div><p>This problem set was originally written by Nick Carroll in
 August 2004 for the <a class="ulink" href="http://www.usyd.edu.au" target="_top">University of Sydney</a> Course EBUS5002.</p><p>This material is copyright 2004 by Nick Carroll. It may be
 copied, reused, and modified, provided credit is given to the
-original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.52.2.7
-2017/06/17 10:15:41 gustafn Exp $)</div>
+original author.</p><p><span class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.53
+2017/08/07 23:47:54 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

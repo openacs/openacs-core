@@ -11,12 +11,13 @@ Chapter 5. Upgrading"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="upgrade-4.6.3-to-5" id="upgrade-4.6.3-to-5"></a>Upgrading OpenACS 4.6.3 to 5.0</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<strong>Oracle. </strong>This forum posting
+<strong>Oracle. </strong> This forum posting
 documents <a class="ulink" href="http://openacs.org/forums/message-view?message_id=201394" target="_top">how to upgrade an Oracle installation from OpenACS 4.6.3 to
 5</a> .</p></li><li class="listitem">
 <p>
-<strong>PostGreSQL. </strong>You must use PostGreSQL
-7.3.x or newer to upgrade OpenACS beyond 4.6.3. See <a class="link" href="upgrade-supporting" title="Upgrading from PostGreSQL 7.2 to 7.3">Upgrade PostGreSQL to
+<strong>PostGreSQL. </strong> You must use
+PostGreSQL 7.3.x or newer to upgrade OpenACS beyond 4.6.3. See
+<a class="link" href="upgrade-supporting" title="Upgrading from PostGreSQL 7.2 to 7.3">Upgrade PostGreSQL to
 7.3</a>; <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
 &ldquo;Version Compatibility
 Matrix&rdquo;</a>
@@ -32,47 +33,47 @@ files&rdquo;</a>
 the rest: <a class="ulink" href="http://cvs.openacs.org/browse/OpenACS/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?r=1.6" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</a>).
 You&#39;ll still have to do a lot of stuff manually, but automated
 trial and error is much more fun.)</p><pre class="screen">
-[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[root root]# <strong class="userinput"><code>su - <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd /var/lib/aolserver/ <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-kernel/sql/postgresql/upgrade</code></strong>
+[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd /var/lib/aolserver/ <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-kernel/sql/postgresql/upgrade</code></strong>
 </pre><p>Manually execute each of the upgrade scripts in sequence, either
 from within psql or from the command line with commands such as
 <code class="computeroutput"><strong class="userinput"><code>psql
--f upgrade-4.6.3-4.6.4.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+-f upgrade-4.6.3-4.6.4.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong></code>.
 Run the scripts in this order (order is tentative, not
 verified):</p><pre class="programlisting">
-psql -f upgrade-4.6.3-4.6.4.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-4.6.4-4.6.5.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-4.6.5-4.6.6.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-4.7d-4.7.2d.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-4.7.2d-5.0d.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0d-5.0d2.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0d2-5.0d3.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0d6-5.0d7.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0d7-5.0d9.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0d11-5.0d12.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0.0a4-5.0.0a5.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0.0b1-5.0.0b2.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0.0b2-5.0.0b3.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-psql -f upgrade-5.0.0b3-5.0.0b4.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+psql -f upgrade-4.6.3-4.6.4.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-4.6.4-4.6.5.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-4.6.5-4.6.6.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-4.7d-4.7.2d.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-4.7.2d-5.0d.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0d-5.0d2.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0d2-5.0d3.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0d6-5.0d7.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0d7-5.0d9.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0d11-5.0d12.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0.0a4-5.0.0a5.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0.0b1-5.0.0b2.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0.0b2-5.0.0b3.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+psql -f upgrade-5.0.0b3-5.0.0b4.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </pre>
 </li><li class="listitem">
 <p>Upgrade ACS Service Contracts manually:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd /var/lib/aolserver/ <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-service-contracts/sql/postgresql/upgrade</code></strong>
-psql -f upgrade-4.7d2-4.7d3.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd /var/lib/aolserver/ <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-service-contracts/sql/postgresql/upgrade</code></strong>
+psql -f upgrade-4.7d2-4.7d3.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </pre>
 </li><li class="listitem">
-<p>Load acs-authentication data model.</p><pre class="screen"><strong class="userinput"><code>psql -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/openacs-5/packages/acs-authentication/sql/postgresql/acs-authentication-create.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+<p>Load acs-authentication data model.</p><pre class="screen"><strong class="userinput"><code>psql -f /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/openacs-5/packages/acs-authentication/sql/postgresql/acs-authentication-create.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong></pre>
 </li><li class="listitem">
-<p>Load acs-lang data model.</p><pre class="screen"><strong class="userinput"><code>psql -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-lang/sql/postgresql/acs-lang-create.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+<p>Load acs-lang data model.</p><pre class="screen"><strong class="userinput"><code>psql -f /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-lang/sql/postgresql/acs-lang-create.sql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong></pre>
 </li><li class="listitem">
 <p>(This step may overlap with the two previous steps, but I think
 it&#39;s harmless?) Create a file which will be executed on startup
 which takes care of a few issues with authentication and
-internationalization: create <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/tcl/zzz-postload.tcl
+internationalization: create <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/tcl/zzz-postload.tcl
 containing:</p><pre class="programlisting">
 if {![apm_package_installed_p acs-lang]} {
 apm_package_install -enable -mount_path acs-lang $::acs::rootdir/packages/acs-lang/acs-lang.info

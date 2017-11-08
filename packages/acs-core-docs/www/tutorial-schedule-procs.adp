@@ -9,7 +9,7 @@ Chapter 10. Advanced Topics"
 		    rightLink="tutorial-wysiwyg-editor" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-schedule-procs" id="tutorial-schedule-procs"></a>Scheduled Procedures</h2></div></div></div><p>Put this proc in a file <code class="computeroutput">/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>/tcl/scheduled-init.tcl</code>.
+<a name="tutorial-schedule-procs" id="tutorial-schedule-procs"></a>Scheduled Procedures</h2></div></div></div><p>Put this proc in a file <code class="computeroutput">/packages/<em class="replaceable"><code>myfirstpackage</code></em>/tcl/scheduled-init.tcl</code>.
 Files in /tcl with the -init.tcl ending are sourced on server
 startup. This one executes my_proc every 60 seconds:</p><pre class="programlisting">
 ad_schedule_proc 60 myfirstpackage::my_proc

@@ -9,10 +9,7 @@ Chapter 10. Advanced Topics"
 		    rightLink="tutorial-schedule-procs" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-caching" id="tutorial-caching"></a>Basic Caching</h2></div></div></div><div class="authorblurb">
-<p>Based on <a class="ulink" href="http://openacs.org/forums/message-view?message_id=157448" target="_top">a post by Dave Bauer</a>.</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>Caching using the database API is described in the database API
+<a name="tutorial-caching" id="tutorial-caching"></a>Basic Caching</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">Based on <a class="ulink" href="http://openacs.org/forums/message-view?message_id=157448" target="_top">a post by Dave Bauer</a>.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Caching using the database API is described in the database API
 tutorial.</p><p>Caching using util_memoize</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Implement your proc as <code class="computeroutput">my_proc_not_cached</code>
 </p></li><li class="listitem">

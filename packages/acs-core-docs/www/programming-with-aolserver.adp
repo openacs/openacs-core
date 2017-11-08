@@ -9,10 +9,8 @@ Chapter 11. Development Reference"
 		    rightLink="form-builder" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="programming-with-aolserver" id="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div></div><div class="authorblurb">
-<p>By Michael Yoon, Jon Salz and Lars Pind.</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><div class="sect2">
+<a name="programming-with-aolserver" id="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Michael Yoon, Jon Salz and Lars
+Pind.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="programming-aolserver-global" id="programming-aolserver-global"></a>The <code class="computeroutput">global</code> command</h3></div></div></div><p>When using AOLserver, remember that there are effectively
 <span class="emphasis"><em>two</em></span> types of global
@@ -230,8 +228,8 @@ lightweight, so memory consumption should not be a problem.
 However, when using <code class="computeroutput">ns_set get</code>
 to perform lookup by name, they perform a linear lookup, whereas
 arrays use a hash table, so <code class="computeroutput">ns_set</code>s are slower than arrays when the
-number of entries is large.</p><div class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.7.2.1
-2017/06/17 10:28:29 gustafn Exp $)</div>
+number of entries is large.</p><p><span class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.8
+2017/08/07 23:47:54 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

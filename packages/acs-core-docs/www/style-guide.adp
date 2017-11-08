@@ -99,8 +99,8 @@ others.</p></li>
 </tr></thead><tbody><tr>
 <td>0.1</td><td>Creation</td><td>12/2003</td><td>Jeff Davis</td>
 </tr></tbody>
-</table></div><div class="cvstag">($&zwnj;Id: style-guide.xml,v 1.3.14.3 2017/04/22
-17:18:48 gustafn Exp $)</div>
+</table></div><p><span class="cvstag">($&zwnj;Id: style-guide.xml,v 1.4 2017/08/07
+23:47:54 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

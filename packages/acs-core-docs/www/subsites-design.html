@@ -1,23 +1,56 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Subsites Design Document</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 15. Kernel Documentation"><link rel="previous" href="subsites-requirements.html" title="Subsites Requirements"><link rel="next" href="apm-requirements.html" title="Package Manager Requirements"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="apm-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites-design"></a>Subsites Design Document</h2></div></div></div><div class="authorblurb"><p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a> </p>
-          OpenACS docs are written by the named authors, and may be edited
-          by OpenACS documentation staff.
-        </div><p><span class="emphasis"><em>*Note* This document has not gone through the any of the
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Subsites Design Document</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 15. Kernel Documentation"><link rel="previous" href="subsites-requirements.html" title="Subsites Requirements"><link rel="next" href="apm-requirements.html" title="Package Manager Requirements"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="subsites-requirements.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="apm-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subsites-design"></a>Subsites Design Document</h2></div></div></div>
+
+
+<span style="color: red">&lt;authorblurb&gt;
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a> </p>
+&lt;/authorblurb&gt;</span>
+
+<p><span class="emphasis"><em>*Note* This document has not gone through the any of the
 required QA process yet. It is being tagged as stable due to high
-demand.</em></span></p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="subsites-requirements.html" title="Subsites Requirements">OpenACS 4 Subsites Requirements</a></p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-intro"></a>Introduction</h3></div></div></div><p>An OpenACS 4 subsite is a managed suite of applications that work together for
+demand.</em></span></p>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-essentials"></a>Essentials</h3></div></div></div>
+
+
+
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p><a class="xref" href="subsites-requirements.html" title="Subsites Requirements">OpenACS 4 Subsites Requirements</a></p>
+</li></ul></div>
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-intro"></a>Introduction</h3></div></div></div>
+
+
+
+
+<p>An OpenACS 4 subsite is a managed suite of applications that work together for
 a particular user community. This definition covers a very broad range of
 requirements: from a Geocities style homepage where a user can install
 whatever available application he wants (e.g. a single user could have their
 own news and forums), to a highly structured project subsite with multiple
 interdependent applications. Thus, flexibility in application deployment is
-the overarching philosophy of subsites.</p><p>Meeting such broad requirements of flexibility demands architecture-level
+the overarching philosophy of subsites.</p>
+
+<p>Meeting such broad requirements of flexibility demands architecture-level
 support, i.e. very low level support from the core OpenACS 4 data model. For
 example, the subsites concept demands that any package can have multiple
 instances installed at different URLs - entailing support from the APM and
 the Request Processor. Since the design and implementation directly
 associated with subsites is actually minimal, a discussion of subsites design
 is, in fact, a discussion of how core OpenACS 4 components implicitly support
-subsites as a whole.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-hist-considerations"></a>Historical Considerations</h3></div></div></div><p>The subsites problem actually has several quite diverse origins. It was
+subsites as a whole.</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-hist-considerations"></a>Historical Considerations</h3></div></div></div>
+
+
+
+
+<p>The subsites problem actually has several quite diverse origins. It was
 originally recognized as a toolkit feature in the form of
 "scoping". The basic concept behind scoping was to allow one scoped
 OpenACS installation to behave as multiple unscoped OpenACS installations so that one
@@ -25,25 +58,67 @@ OpenACS install could serve multiple communities. Each piece of application data
 was tagged with a "scope" consisting of the (user_id, group_id,
 scope) triple. In practice the highly denormalized data models that this
 method uses produced large amounts of very redundant code and in general made
-it an extremely cumbersome process to "scopify" a module.</p><p>Before the advent of scoping there were several cases of client projects
+it an extremely cumbersome process to "scopify" a module.</p>
+
+<p>Before the advent of scoping there were several cases of client projects
 implementing their own version of scoping in special cases. One example being
 the wineaccess multi-retailer ecommerce. (Remember the other examples and get
-details. Archnet?, iluvcamp?)</p><p>The requirements of all these different projects vary greatly, but the one
+details. Archnet?, iluvcamp?)</p>
+
+<p>The requirements of all these different projects vary greatly, but the one
 consistent theme among all of them is the concept that various areas of the
 web site have their own private version of a module. Because this theme is so
 dominant, this is the primary problem that the OpenACS4 implementation of
-subsites addresses.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-competitors"></a>Competitive Analysis</h3></div></div></div><p>...</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-design-tradeoffs"></a>Design Tradeoffs</h3></div></div></div><p>The current implementation of package instances and subsites allows
+subsites addresses.</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-competitors"></a>Competitive Analysis</h3></div></div></div>
+
+
+
+
+<p>...</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-design-tradeoffs"></a>Design Tradeoffs</h3></div></div></div>
+
+
+
+
+<p>The current implementation of package instances and subsites allows
 extremely flexible URL configurations. This has the benefit of allowing
 multiple instances of the same package to be installed in one subsite, but
 can potentially complicate the process of integrating packages with each
 other since it is likely people will want packages that live at non standard
 URLs to operate together. This requirement would cause some packages to have
 more configuration options than normal since hard-coding the URLs would not
-be feasible anymore.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-api"></a>API</h3></div></div></div><p>This section will cover all the APIs relevant to subsites, and so will
-consist of portions of the APIs of several systems.</p><p><span class="strong"><strong>Packages</strong></span></p><p>The following package is provided for instantiation of packages. The
+be feasible anymore.</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-api"></a>API</h3></div></div></div>
+
+
+
+
+<p>This section will cover all the APIs relevant to subsites, and so will
+consist of portions of the APIs of several systems.</p>
+
+<p><span class="strong"><strong>Packages</strong></span></p>
+
+<p>The following package is provided for instantiation of packages. The
 apm_package.new function can be used to create a package of any type known to
 the system. The apm_package_types table can be queried for a list of
-installed packages. (See APM docs for more detail XXX: insert link here)</p><pre class="programlisting">
+installed packages. (See APM docs for more detail XXX: insert link here)</p>
+
+ 
+
+<pre class="programlisting">
 
 <code class="computeroutput">create or replace package apm_package
 as
@@ -100,7 +175,12 @@ end apm_package;
 show errors
 </code>
 
-</pre><p><span class="strong"><strong>Site Nodes</strong></span></p><p>This data model keeps track of what packages are being served from what
+</pre>
+
+
+<p><span class="strong"><strong>Site Nodes</strong></span></p>
+
+<p>This data model keeps track of what packages are being served from what
 URLs. You can think of this as a kind of rp_register_directory_map on drugs.
 This table represents a fully hierarchical site map. The directory_p column
 indicates whether or not the node is a leaf node. The pattern_p column
@@ -108,7 +188,11 @@ indicates whether an exact match between the request URL and the URL of the
 node is required. If pattern_p is true then a match between a request URL and
 a site node occurs if any valid prefix of the request URL matches the site
 node URL. The object_id column contains the object mounted on the URL
-represented by the node. In most cases this will be a package instance.</p><pre class="programlisting">
+represented by the node. In most cases this will be a package instance.</p>
+
+ 
+
+<pre class="programlisting">
 
 <code class="computeroutput">create table site_nodes (
     node_id     constraint site_nodes_node_id_fk
@@ -136,7 +220,14 @@ represented by the node. In most cases this will be a package instance.</p><pre 
 );
 </code>
 
-</pre><p>The following package is provided for creating nodes.</p><pre class="programlisting">
+</pre>
+
+
+<p>The following package is provided for creating nodes.</p>
+
+ 
+
+<pre class="programlisting">
 
 <code class="computeroutput">create or replace package site_node
 as
@@ -181,9 +272,18 @@ end;
 show errors
 </code>
 
-</pre><p><span class="strong"><strong>Request Processor</strong></span></p><p>Once the above APIs are used to create packages and mount them on a
+</pre>
+
+
+<p><span class="strong"><strong>Request Processor</strong></span></p>
+
+<p>Once the above APIs are used to create packages and mount them on a
 specific site node, the following request processor APIs can be used to allow
-the package to serve content appropriate to the package instance.</p><pre class="programlisting">
+the package to serve content appropriate to the package instance.</p>
+
+ 
+
+<pre class="programlisting">
 
 <code class="computeroutput">[ad_conn node_id]
 [ad_conn package_id]
@@ -192,15 +292,56 @@ the package to serve content appropriate to the package instance.</p><pre class=
 [ad_conn subsite_url]
 </code>
 
-</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-data-model"></a>Data Model Discussion</h3></div></div></div><p>The subsites implementation doesn't really have it's own data
+</pre>
+
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-data-model"></a>Data Model Discussion</h3></div></div></div>
+
+
+
+
+<p>The subsites implementation doesn't really have it's own data
 model, although it depends heavily on the site-nodes data model, and the APM
-data model.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-ui"></a>User Interface</h3></div></div></div><p>The primary elements of the subsite user interface consist of the subsite
+data model.</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-ui"></a>User Interface</h3></div></div></div>
+
+
+
+
+<p>The primary elements of the subsite user interface consist of the subsite
 admin pages. These pages are divided up into two areas: Group administration,
 and the site map. The group administration pages allow a subsite
 administrator to create and modify groups. The site map pages allow a subsite
 administrator to install, remove, configure, and control access to packages.
 The site map interface is the primary point of entry for most of the things a
-subsite administrator would want to do.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-config"></a>Configuration/Parameters</h3></div></div></div><p>...</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div></div><p>The current subsites implementation addresses the most basic functionality
+subsite administrator would want to do.</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-config"></a>Configuration/Parameters</h3></div></div></div>
+
+
+
+
+<p>...</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div></div>
+
+
+
+
+<p>The current subsites implementation addresses the most basic functionality
 required for subsites. It is likely that as developers begin to use the
 subsites system for more sophisticated projects, it will become necessary to
 develop tools to help build tightly integrated packages. The general area
@@ -211,4 +352,19 @@ currently underdeveloped is the ability to "tar up" and distribute
 a particular configuration of site nodes/packages. As we build more
 fundamental applications that can be applied in more general areas, this
 feature will become more and more in demand since more problems will be
-solvable by configuration instead of coding.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-authors"></a>Authors</h3></div></div></div><p><a class="ulink" href="mailto:rhs@mit.edu" target="_top">rhs@mit.edu</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="subsites-requirements.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="apm-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">Subsites Requirements </td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right"> Package Manager Requirements</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+solvable by configuration instead of coding.</p>
+
+
+</div>
+
+<div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="subsites-design-authors"></a>Authors</h3></div></div></div>
+
+
+
+
+<p><a class="ulink" href="mailto:rhs@mit.edu" target="_top">rhs@mit.edu</a></p>
+
+
+</div>
+
+</div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="subsites-requirements.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="apm-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">Subsites Requirements </td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right"> Package Manager Requirements</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

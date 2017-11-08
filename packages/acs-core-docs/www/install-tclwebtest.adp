@@ -15,14 +15,14 @@ unpack it, and put it an appropriate place. (tclwebtest 1.0 will be
 required for auto-tests in OpenACS 5.1. When it exists, the cvs
 command here will be replaced with
 http://prdownloads.sourceforge.net/tclwebtest/tclwebtest-0.3.tar.gz?download.)
-As root:</p><pre class="screen"><span class="action"><span class="action">cd /tmp
+As root:</p><pre class="screen"><span class="action">cd /tmp
 cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/tclwebtest co tclwebtest
 #wget http://umn.dl.sourceforge.net/sourceforge/tclwebtest/tclwebtest-1.0.tar.gz
 #tar xvzf tclwebtest-1-0.tar.gz
 mv tclwebtest-0.3 /usr/local/
 ln -s /usr/local/tclwebtest-0.3 /usr/local/tclwebtest
 ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
-</span></span></pre>
+</span></pre>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="install-nsopenssl" leftLabel="Prev" leftTitle="Install nsopenssl"

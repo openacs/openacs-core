@@ -9,10 +9,7 @@ Chapter 13. Documentation Standards"
 		    rightLink="nxml-mode" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="psgml-mode" id="psgml-mode"></a>Using PSGML mode in Emacs</h2></div></div></div><div class="authorblurb">
-<p>By David Lutterkort</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>Note: <code class="computeroutput">nxml</code> mode replaces
+<a name="psgml-mode" id="psgml-mode"></a>Using PSGML mode in Emacs</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By David Lutterkort</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Note: <code class="computeroutput">nxml</code> mode replaces
 and/or complements psgml mode. <a class="ulink" href="http://www.xmlhack.com/read.php?item=2061" target="_top">More
 information</a>.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -145,8 +142,8 @@ parents, what its contents can be and lists its attributes.</td>
 <a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called
 &ldquo;OpenACS Documentation
 Guide&rdquo;</a>
-</p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.8.14.1 2017/06/15
-13:56:42 gustafn Exp $)</div>
+</p><p><span class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.9 2017/08/07
+23:47:54 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

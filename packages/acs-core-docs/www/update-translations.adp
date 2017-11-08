@@ -24,7 +24,7 @@ insert into ad_locales
         'windows-1256', 't', 'f');
 </pre><p>Put this command into the following four files. For the upgrade
 files, the correct file name will depend on the exact version.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/postgresql/ad-locales.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/postgresql/upgrade/upgrade-<span class="replaceable"><span class="replaceable">current-version</span></span>.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/oracle/ad-locales.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/oracle/upgrade/upgrade-<span class="replaceable"><span class="replaceable">current-version</span></span>.sql</code></p></li>
+<li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/postgresql/ad-locales.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/postgresql/upgrade/upgrade-<em class="replaceable"><code>current-version</code></em>.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/oracle/ad-locales.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/oracle/upgrade/upgrade-<em class="replaceable"><code>current-version</code></em>.sql</code></p></li>
 </ul></div>
 </li><li class="listitem"><p>Make a backup of the production database. Restore it as a new
 database. For example, if upgrading from OpenACS 5.1.1, and the

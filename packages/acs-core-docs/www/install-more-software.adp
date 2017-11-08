@@ -22,8 +22,7 @@ Daemontools (OPTIONAL)</a></span></dt><dt><span class="sect1"><a href="install-q
 (OPTIONAL)</a></span></dt><dt><span class="sect1"><a href="analog-install">Install
 Analog web file analyzer</a></span></dt><dt><span class="sect1"><a href="install-nspam">Install
 nspam</a></span></dt><dt><span class="sect1"><a href="install-full-text-search-tsearch2">Install Full Text Search
-using Tsearch2</a></span></dt><dt><span class="sect1"><a href="install-full-text-search-openfts">Install Full Text Search
-using OpenFTS (deprecated see tsearch2)</a></span></dt><dt><span class="sect1"><a href="install-nsopenssl">Install
+using Tsearch2</a></span></dt><dt><span class="sect1"><a href="install-nsopenssl">Install
 nsopenssl</a></span></dt><dt><span class="sect1"><a href="install-tclwebtest">Install
 tclwebtest.</a></span></dt><dt><span class="sect1"><a href="install-php">Install PHP for
 use in AOLserver</a></span></dt><dt><span class="sect1"><a href="install-squirrelmail">Install
@@ -33,11 +32,9 @@ PAM Radius for use as external authentication</a></span></dt><dt><span class="se
 LDAP for use as external authentication</a></span></dt><dt><span class="sect1"><a href="aolserver">Install AOLserver
 3.3oacs1</a></span></dt>
 </dl>
-</div><div class="authorblurb">
-<p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
-</p>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>This section assumes that the source tarballs for supporting
+</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
+Aufrecht</a>
+</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>This section assumes that the source tarballs for supporting
 software are in <code class="computeroutput">/tmp</code>. It
 assumes that you begin each continuous block of commands as root,
 and you should end each block as root. It doesn&#39;t care which

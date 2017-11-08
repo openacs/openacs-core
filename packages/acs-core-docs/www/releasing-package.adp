@@ -13,10 +13,10 @@ Chapter 16. Releasing OpenACS"
 Package</h2></div></div></div><p>In this example, we are packaging and releasing <code class="computeroutput">myfirstpackage</code> as version 1.0.0, which is
 compatible with OpenACS 5.0.x.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Update the version number, release date, and <a class="ulink" href="http://openacs.org/forums/message-view?message_id=161393" target="_top">package maturity</a> of your package in the <a class="ulink" href="/acs-admin/apm/" target="_top">APM</a>.</p></li><li class="listitem"><p>Make sure all changes are committed.</p></li><li class="listitem">
-<p>Tag the updated work.:</p><pre class="screen"><span class="action"><span class="action">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>
-cvs tag <span class="replaceable"><span class="replaceable">myfirstpackages-1-0-0-final</span></span>
-cvs tag -F <span class="replaceable"><span class="replaceable">openacs-5-0-compat</span></span>
-</span></span></pre>
+<p>Tag the updated work.:</p><pre class="screen"><span class="action">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/<em class="replaceable"><code>myfirstpackage</code></em>
+cvs tag <em class="replaceable"><code>myfirstpackages-1-0-0-final</code></em>
+cvs tag -F <em class="replaceable"><code>openacs-5-0-compat</code></em>
+</span></pre>
 </li>
 </ol></div><p>Done. The package will be added to the <a class="ulink" href="http://openacs.org/repository" target="_top">repository</a>
 automatically. If the correct version does not show up within 24

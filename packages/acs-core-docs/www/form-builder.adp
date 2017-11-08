@@ -12,11 +12,11 @@ Chapter 11. Development Reference"
 <a name="form-builder" id="form-builder"></a>Using Form Builder: building html forms
 dynamically</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ad-form-overview" id="ad-form-overview"></a>Overview</h3></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: form-builder.xml,v 1.9.2.2 2016/06/23
-08:32:46 gustafn Exp $)</div>
-OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>OpenACS has a form manager called ad_form. Ad_form has an
+<a name="ad-form-overview" id="ad-form-overview"></a>Overview</h3></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red"><span class="cvstag">($&zwnj;Id:
+form-builder.xml,v 1.10 2017/08/07 23:47:54 gustafn Exp
+$)</span></span></p>
+&lt;/authorblurb&gt;
+<p>OpenACS has a form manager called ad_form. Ad_form has an
 adaptable UI. Error handling includes inline error reporting, and
 is customizable. However, ad_form can be tricky to use. In addition
 to this document, the ad_form <a class="ulink" href="http://openacs.org/api-doc/proc-view?proc=ad_form" target="_top">api documentation</a> is helpful.</p>
@@ -25,10 +25,10 @@ to this document, the ad_form <a class="ulink" href="http://openacs.org/api-doc/
 <a name="multi-part-elements" id="multi-part-elements"></a>Multi-part Elements</h3></div></div></div><p>Some elements have more than one choice, or can submit more than
 one value.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118527752" id="idp140592118527752"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<a name="idp140623176711352" id="idp140623176711352"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
 <p>
-<strong>Creating the form element. </strong>Populate
-a list of lists with values for the option list.</p><pre class="programlisting">
+<strong>Creating the form element. </strong>
+Populate a list of lists with values for the option list.</p><pre class="programlisting">
 set foo_options [db_list_of_lists foo_option_list "
     select foo,
            foo_id
@@ -106,7 +106,7 @@ widgets:</p><p><a class="ulink" href="http://openacs.org/forums/message-view?mes
 Errors</h3></div></div></div><p>Here are some common errors and what to do when you encounter
 them:</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140592118550568" id="idp140592118550568"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your query.</p>
+<a name="idp140623176734104" id="idp140623176734104"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your query.</p>
 </div>
 </div>
 </div>

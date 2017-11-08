@@ -1,7 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Using .vuh files for pretty urls</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-hierarchical.html" title="Hierarchical data"><link rel="next" href="tutorial-css-layout.html" title="Laying out a page with CSS instead of tables"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-hierarchical.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-css-layout.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-vuh"></a>Using .vuh files for pretty urls</h2></div></div></div><p>.Vuh files are special cases of .tcl files, used for rewriting incoming urls.  We can use a vuh file to prettify the uri for our notes.  Instead of <code class="computeroutput">note-edit?item_id=495</code>, we can use <code class="computeroutput">note/495</code>.  To do this, we will need a new .vuh file for redirection and we will need to change the referring links in note-list.  First, add the vuh:</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www</code></strong>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Using .vuh files for pretty urls</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-hierarchical.html" title="Hierarchical data"><link rel="next" href="tutorial-css-layout.html" title="Laying out a page with CSS instead of tables"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-hierarchical.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="tutorial-css-layout.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-vuh"></a>Using .vuh files for pretty urls</h2></div></div></div>
+    
+    <p>.Vuh files are special cases of .tcl files, used for rewriting incoming urls.  We can use a vuh file to prettify the uri for our notes.  Instead of <code class="computeroutput">note-edit?item_id=495</code>, we can use <code class="computeroutput">note/495</code>.  To do this, we will need a new .vuh file for redirection and we will need to change the referring links in note-list.  First, add the vuh:</p>
+      <pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs note.vuh</code></strong>
-</pre><p>Paste this into the file:</p><pre class="programlisting"># Transform requests of type: a/b
+</pre>
+    <p>Paste this into the file:</p>
+    <pre class="programlisting"># Transform requests of type: a/b
 # into this internal request: A?c=b
 # for example, note/495 &gt; note-edit?item_id=496
 # a: base name of this .vuh file
@@ -24,7 +29,12 @@ rp_internal_redirect $internal_path
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-</pre><p>We parse the incoming request and treat everything after the final / as the item id.  Note that this simple redirection will lose any additional query parameters passed in.  Many OpenACS objects maintain a pretty-name, which is a unique, human-readable string, usually derived from title, which makes an even better 'pretty url' than a numeric id; this requires that your display page be able to look up an item based on pretty id.</p><p>We use <code class="computeroutput">rp_form_put</code> to store the item id in the internal register that the next page is expecting, and then redirects the request in process internally (ie, without a browser refresh).</p><p>Next, modify note-list so that its link is of the new form.:</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs ../lib/note-edit.tcl</code></strong></pre><pre class="programlisting">
+</pre>
+    <p>We parse the incoming request and treat everything after the final / as the item id.  Note that this simple redirection will lose any additional query parameters passed in.  Many OpenACS objects maintain a pretty-name, which is a unique, human-readable string, usually derived from title, which makes an even better 'pretty url' than a numeric id; this requires that your display page be able to look up an item based on pretty id.</p>
+    <p>We use <code class="computeroutput">rp_form_put</code> to store the item id in the internal register that the next page is expecting, and then redirects the request in process internally (ie, without a browser refresh).</p>
+    <p>Next, modify note-list so that its link is of the new form.:</p>
+      <pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs ../lib/note-edit.tcl</code></strong></pre>
+    <pre class="programlisting">
 db_multirow \
     -extend {
 	edit_url
@@ -39,8 +49,12 @@ db_multirow \
 	<span class="strong"><strong>set edit_url [export_vars -base "note/$item_id"]</strong></span>
 	set delete_url [export_vars -base "note-delete" {item_id}]
     }
-</pre><p>You may also need to change some of the links in your
+</pre>
+
+    <p>You may also need to change some of the links in your
     package. Commonly, you would use ad_conn package_url to build the
     URL. Otherwise, some of your links may be relative to the virtual
     directory (note/) instead of the actual directory that the note is
-    being served from.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-hierarchical.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-css-layout.html">Next</a></td></tr><tr><td width="40%" align="left">Hierarchical data </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Laying out a page with CSS instead of tables</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+    being served from.</p>
+
+  </div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-hierarchical.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="tutorial-css-layout.html">Next</a></td></tr><tr><td width="40%" align="left">Hierarchical data </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Laying out a page with CSS instead of tables</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
