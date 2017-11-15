@@ -21,19 +21,6 @@
       </querytext>
    </fullquery>
 
-   <fullquery name="content_symlink::edit.symlink_update_object">      
-      <querytext>
-
-        update acs_objects
-        set last_modified = sysdate,
-          modifying_user = :modifying_user,
-          modifying_ip = :modifying_ip,
-          title = :label
-        where object_id = :symlink_id
-
-      </querytext>
-   </fullquery>
-
    <fullquery name="content_symlink::delete.symlink_delete">      
       <querytext>
 

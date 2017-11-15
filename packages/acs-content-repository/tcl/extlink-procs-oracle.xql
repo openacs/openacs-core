@@ -22,19 +22,6 @@
       </querytext>
    </fullquery>
 
-   <fullquery name="content_extlink::edit.extlink_update_object">      
-      <querytext>
-
-        update acs_objects
-        set last_modified = sysdate,
-          modifying_user = :modifying_user,
-          modifying_ip = :modifying_ip,
-          title = :label
-        where object_id = :extlink_id
-
-      </querytext>
-   </fullquery>
-
    <fullquery name="content_extlink::delete.extlink_delete">      
       <querytext>
 
