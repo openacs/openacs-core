@@ -103,11 +103,8 @@ set rowcount 0
 
 if {$limit_to_users_in_group_id ne "" 
     && ![regexp {[^-0-9]} $limit_to_users_in_group_id] } {
-    set group_name [db_string user_group_name_from_id {
-        select group_name
-        from groups
-        where group_id = :limit_to_users_in_group_id
-    }]
+    
+    set group_name [db_string user_group_name_from_id {}]
     incr rowcount
     set criteria:[set rowcount](data) \
         "Is a member of '$group_name'"
@@ -249,9 +246,6 @@ db_foreach user_search_admin $query {
 set user_search:rowcount $rowcount
 
 set export_authorize [export_ns_set_vars {url} {only_authorized_p}]
-
-
-ad_return_template
 
 # Local variables:
 #    mode: tcl
