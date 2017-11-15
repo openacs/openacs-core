@@ -2,6 +2,25 @@
 
 <queryset>
 
+    <fullquery name="auth::sync::job::start_get_document.update_doc_start_time">
+        <querytext>
+            update auth_batch_jobs
+            set    doc_start_time = current_timestamp
+            where  job_id = :job_id
+        </querytext>
+    </fullquery>
+
+    <fullquery name="auth::sync::job::end.update_job_end">
+        <querytext>
+
+            update auth_batch_jobs
+            set    job_end_time = current_timestamp,
+                   message = :message
+            where  job_id = :job_id
+
+        </querytext>
+    </fullquery>    
+
     <fullquery name="auth::sync::entry::get.select_entry">
         <querytext>
             select e.entry_id,
@@ -23,5 +42,12 @@
               and j.authority_id = a.authority_id
         </querytext>
     </fullquery>
+
+    <fullquery name="auth::sync::purge_jobs.purge_jobs">
+        <querytext>
+            delete from auth_batch_jobs
+            where  job_end_time < current_date - cast(:num_days as integer)
+        </querytext>
+    </fullquery>    
 
 </queryset>
