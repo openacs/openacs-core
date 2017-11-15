@@ -3,25 +3,6 @@
 <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="notification::sweep::cleanup_notifications.select_notification_ids">
-        <querytext>
-            select notifications.notification_id
-            from notifications
-            minus
-            select nnr.notification_id
-	    from (select notification_id, user_id
-                  from notifications, notification_requests, acs_objects
-                  where notifications.type_id = notification_requests.type_id
-		    and notifications.object_id = notification_requests.object_id
-		    and notification_requests.request_id = acs_objects.object_id
-		    and acs_objects.creation_date <= notifications.notif_date) nnr,
-              notification_user_map
-            where nnr.notification_id = notification_user_map.notification_id(+)
-              and nnr.user_id = notification_user_map.user_id(+)
-	      and notification_user_map.sent_date is null
-        </querytext>
-    </fullquery>
-
     <fullquery name="notification::sweep::sweep_notifications.select_notifications">
         <querytext>
             select nnr.*
