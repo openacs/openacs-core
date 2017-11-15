@@ -1243,17 +1243,18 @@ ad_proc -public aa_test::parse_test_file {
 
 ad_proc -public aa_get_first_url {
     {-package_key:required}
+} {    
+    Procedure for geting the url of a mounted package with the
+    package_key. It uses the first instance that it founds. This is
+    useful for tclwebtest tests.    
 } {
-    Procedure for geting the url of a mounted package with the package_key. It uses the first instance that it founds. This is useful for tclwebtest tests.
-} {
-
-    if {![db_0or1row first_url {}]} {
+    set url [site_node::get_package_url -package_key $package_key]
+    if {$url eq ""} {
         site_node::instantiate_and_mount -package_key $package_key
-        db_1row first_url {}
+        set url [site_node::get_package_url -package_key $package_key]
     }
 
     return $url
-
 }
 
 ad_proc -public aa_display_result {
