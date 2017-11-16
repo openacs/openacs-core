@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <queryset>
 
+  <fullquery name="lang::system::timezone_utc_offset.system_utc_offset">
+     <querytext>
+       select cast(
+                to_char(
+                  current_timestamp at time zone :system_timezone - current_timestamp at time zone 'UTC'
+                , 'HH24MI')
+              as float) / 100
+         from dual
+      </querytext>
+   </fullquery>
+
    <fullquery name="lang::system::package_level_locale_not_cached.get_package_locale">      
       <querytext>
         select default_locale
