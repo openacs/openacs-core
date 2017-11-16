@@ -13,7 +13,7 @@ set header [ad_header $title]
 # set navbar [ad_context_bar "Test"]
 set footer [ad_footer]
 
-db_1row lang_system_time_select "SELECT to_char(sysdate, 'YYYY-MM-DD HH24:MI:SS') AS system_time FROM dual"
+db_1row lang_system_time_select {}
 
 # Test 5 checks the localization routines
 set us_number [lc_numeric 123456.789 {} en_US]
