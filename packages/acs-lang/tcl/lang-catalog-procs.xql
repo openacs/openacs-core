@@ -1,6 +1,15 @@
 <?xml version="1.0"?>
 <queryset>
 
+  <fullquery name="lang::catalog::export.update_sync_time">
+    <querytext>
+      update lang_messages
+      set sync_time = current_timestamp
+      where package_key = :package_key
+      and locale = :locale
+    </querytext>
+  </fullquery>
+  
   <fullquery name="lang::catalog::uninitialized_packages.select_uninitialized">
     <querytext>
       select package_key

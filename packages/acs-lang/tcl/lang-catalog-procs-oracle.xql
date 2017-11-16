@@ -2,15 +2,6 @@
 <queryset>
   <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-  <fullquery name="lang::catalog::export.update_sync_time">
-    <querytext>
-      update lang_messages
-      set sync_time = sysdate
-      where package_key = :package_key
-      and locale = :locale
-    </querytext>
-  </fullquery>
-
   <fullquery name="lang::catalog::last_sync_messages.last_sync_messages">
     <querytext>
         select message_key,

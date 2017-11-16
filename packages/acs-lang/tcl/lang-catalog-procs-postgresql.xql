@@ -2,16 +2,6 @@
 <queryset>
   <rdbms><type>postgresql</type><version>7.2</version></rdbms>
 
-  <fullquery name="lang::catalog::export.update_sync_time">
-    <querytext>
-      update lang_messages
-      set sync_time = current_timestamp
-      where package_key = :package_key
-      and locale = :locale
-    </querytext>
-  </fullquery>
-
-
   <fullquery name="lang::catalog::last_sync_messages.last_sync_messages">
     <querytext>
         select message_key,
@@ -44,7 +34,6 @@
                              and sync_time is not null
                            )
     </querytext>
-  </fullquery>
-    
+  </fullquery>    
 
 </queryset>
