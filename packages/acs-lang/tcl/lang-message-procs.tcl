@@ -231,7 +231,7 @@ ad_proc -public lang::message::register {
             
             # Trying to avoid hitting Oracle bug#2011927    
             if { [string trim $message] eq "" } {
-                db_dml lang_message_null_update {}
+                db_dml lang_message_update {}
             } else { 
                 set cols(message) [db_map message]
                 db_dml lang_message_update {} -clobs [list $message]
