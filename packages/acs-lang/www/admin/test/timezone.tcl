@@ -29,7 +29,7 @@ set tz_sql "SELECT tz as timezone
 db_multirow tz_results lang_tz_get_data $tz_sql
 
 # Test 4 checks that we can convert from local time to UTC
-db_1row lang_system_time_select "SELECT to_char(sysdate, 'YYYY-MM-DD HH24:MI:SS') AS system_time FROM dual"
+db_1row lang_system_time_select {}
 
 set NYC_time [lc_time_utc_to_local $system_time "America/New_York"]
 set NYC_utc_time [lc_time_local_to_utc $NYC_time "America/New_York"]
