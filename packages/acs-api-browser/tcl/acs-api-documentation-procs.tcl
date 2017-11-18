@@ -1350,7 +1350,7 @@ namespace eval ::apidoc {
                                             incr comment_end
                                         }
                                         if {$comment_end < $l} {
-                                            ns_log notice "AD_PROC CAND COMM [string range $data $comment_start $comment_end]"
+                                            #ns_log notice "AD_PROC CAND COMM [string range $data $comment_start $comment_end]"
                                             set url ""
                                             append html \
                                                 "<a href='/api-doc/proc-view?proc=ad_proc' title='ad_proc'>" \
