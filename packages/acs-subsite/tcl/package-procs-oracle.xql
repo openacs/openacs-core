@@ -250,14 +250,6 @@ END ${package_name};
       </querytext>
 </partialquery>
 
- 
-<partialquery name="package_attribute_default.creation_date">      
-      <querytext>sysdate</querytext>
-</partialquery>
-
-<partialquery name="package_attribute_default.last_modified">      
-      <querytext>sysdate</querytext>
-</partialquery>
 
 <fullquery name="package_exec_plsql.exec_func_plsql">
       <querytext>

@@ -73,11 +73,9 @@ ad_proc -private package_create_attribute_list {
 } {
     if { $table eq "" || $column eq "" } {
         # pull out the table and column names based on the object type
-        db_1row select_type_info {
-            select t.table_name as table, t.id_column as column
-            from acs_object_types t
-            where t.object_type = :object_type
-        }
+        acs_object_type::get -object_type $object_type -array acs_type
+        set table  $acs_type(table_name)
+        set column $acs_type(id_column)
     }
 
     # set toupper for case-insensitive searching
@@ -273,18 +271,19 @@ ad_proc -private package_create {
 
 } {
 
-    if { ![package_type_dynamic_p $object_type] } {
-        error "The specified object, $object_type, either does not exist or is not dynamic. Therefore, a package cannot be created for it"
+    if {[catch {
+        acs_object_type::get -object_type $object_type -array acs_type
+    } errmsg]} {
+        error "The specified object, $object_type does not exist."
+    }
+    
+    if { ![string is true -strict $acs_type(dynamic_p)] } {
+        error "The specified object, $object_type is not dynamic. Therefore, a package cannot be created for it"
     }
 
     # build up a list of the pl/sql to execute as it will make it
     # easier to return a string for debugging purposes.
-
-    set package_name [db_string select_package_name {
-        select t.package_name
-        from acs_object_types t
-        where t.object_type = :object_type
-    }]
+    set package_name $acs_type(package_name)
 
     lappend plsql \
         [list "package" "create_package" [package_generate_spec $object_type]] \
@@ -337,11 +336,11 @@ ad_proc -private package_generate_spec {
     @param object_type The object for which to create a package spec
 } {
     # First pull out some basic information about this object type
-    db_1row select_type_info {
-        select t.table_name, t.id_column, lower(t.package_name) as package_name, t.supertype
-        from acs_object_types t
-        where t.object_type = :object_type
-    }
+    acs_object_type::get -object_type $object_type -array acs_type
+    set table_name   $acs_type(table_name)
+    set id_column    $acs_type(id_column)
+    set package_name [string tolower $acs_type(package_name)]
+    set supertype    $acs_type(supertype)
 
     return [db_map spec]
 }
@@ -359,19 +358,17 @@ ad_proc -private package_generate_body {
 
 } {
     # Pull out information about this object type
-    db_1row select_type_info {
-        select t.table_name, t.id_column, lower(t.package_name) as package_name, t.supertype
-        from acs_object_types t
-        where t.object_type = :object_type
-    }
+    acs_object_type::get -object_type $object_type -array acs_type
+    set table_name   $acs_type(table_name)
+    set id_column    $acs_type(id_column)
+    set package_name [string tolower $acs_type(package_name)]
+    set supertype    $acs_type(supertype)
 
     # Pull out information about the supertype
-    db_1row select_type_info {
-        select t.table_name as supertype_table_name, t.id_column as supertype_id_column,
-        lower(t.package_name) as supertype_package_name
-        from acs_object_types t
-        where t.object_type = :supertype
-    }
+    acs_object_type::get -object_type $supertype -array acs_type
+    set supertype_table_name   $acs_type(table_name)
+    set supertype_id_column    $acs_type(id_column)
+    set supertype_package_name [string tolower $acs_type(package_name)]
 
     set attribute_list [package_create_attribute_list \
                             -supertype $supertype \
@@ -463,13 +460,9 @@ ad_proc -private package_object_view_helper {
     # separately in case there are no other attributes for this object type
     # Note that we also alias this primary key to object_id so
     # that the calling code can generically use it.
-
-    db_1row select_type_info {
-        select t.table_name, t.id_column
-        from acs_object_types t
-        where t.object_type = :object_type
-    }
-
+    acs_object_type::get -object_type $object_type -array acs_type
+    set table_name $acs_type(table_name)
+    set id_column  $acs_type(id_column)
 
     set columns [list "${table_name}.${id_column}"]
     if { [string tolower $id_column] ne "object_id" } {
@@ -629,11 +622,8 @@ ad_proc -private package_table_columns_for_type {
 
     set object_name "NEW"
 
-    db_1row select_type_info {
-        select t.package_name
-        from acs_object_types t
-        where t.object_type = :object_type
-    }
+    acs_object_type::get -object_type $object_type -array acs_type
+    set package_name $acs_type(package_name)
 
     # We need to hit the data dictionary to find the table and column names
     # for all the arguments to the object_types function/procedure
@@ -722,11 +712,10 @@ ad_proc -public package_instantiate_object {
 
     # Select out the package name if it wasn't passed in
     if { $package_name eq "" } {
-        if { ![db_0or1row package_select {
-            select t.package_name
-            from acs_object_types t
-            where t.object_type = :object_type
-        }] } {
+        if {[catch {
+            acs_object_type::get -object_type $object_type -array acs_type
+            set package_name $acs_type(package_name)
+        } errmsg]} {
             error "Object type \"$object_type\" does not exist"
         }
     }
