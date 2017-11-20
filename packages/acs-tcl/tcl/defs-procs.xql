@@ -38,4 +38,14 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="ad_record_query_string.query_string_record">      
+    <querytext>
+      insert
+      into query_strings 
+      (query_date, query_string, subsection, n_results, user_id)
+      values
+      (current_timestamp, :query_string, :subsection, :n_results, :user_id)
+    </querytext>
+  </fullquery>
+
 </queryset>
