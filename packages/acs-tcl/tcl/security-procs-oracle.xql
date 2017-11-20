@@ -3,19 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="sec_update_user_session_info.update_last_visit">      
-      <querytext>
-      
-        update users
-        set second_to_last_visit = last_visit,
-            last_visit = sysdate,
-            n_sessions = n_sessions + 1
-        where user_id = :user_id
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="populate_secret_tokens_db.insert_random_token">      
       <querytext>
       
@@ -70,17 +57,6 @@
       begin
          sec_session_property.upsert(:session_id, :module, :name, :value, :secure, :last_hit);
       end;
-      </querytext>
-</fullquery>
-
-
-<fullquery name="ad_change_password.password_update">      
-      <querytext>
-        update users 
-        set    password = :new_password, 
-               salt = :salt,
-               password_changed_date = sysdate
-        where  user_id = :user_id
       </querytext>
 </fullquery>
 

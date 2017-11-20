@@ -19,22 +19,8 @@
   <querytext>
     select sec_session_property__upsert(:session_id, :module, :name, :value, :secure, :last_hit) from dual
   </querytext>
-</fullquery>
- 
+</fullquery> 
 
-<fullquery name="sec_update_user_session_info.update_last_visit">      
-      <querytext>
-
-        update users
-        set second_to_last_visit = last_visit,
-            last_visit = now(),
-            n_sessions = n_sessions + 1
-        where user_id = :user_id
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="populate_secret_tokens_db.insert_random_token">      
       <querytext>
 
@@ -55,16 +41,5 @@
 	
       </querytext>
 </fullquery>
-
-<fullquery name="ad_change_password.password_update">      
-      <querytext>
-        update users 
-        set    password = :new_password, 
-               salt = :salt,
-               password_changed_date = current_timestamp
-        where  user_id = :user_id
-      </querytext>
-</fullquery>
-
  
 </queryset>

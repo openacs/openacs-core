@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <queryset>
 
+<fullquery name="sec_update_user_session_info.update_last_visit">      
+      <querytext>
+
+        update users
+        set second_to_last_visit = last_visit,
+            last_visit = current_timestamp,
+            n_sessions = n_sessions + 1
+        where user_id = :user_id
+    
+      </querytext>
+</fullquery>
+
+  
 <fullquery name="sec_sweep_sessions.sessions_sweep">      
       <querytext>
       
@@ -59,5 +72,14 @@
       </querytext>
 </fullquery>
 
+<fullquery name="ad_change_password.password_update">      
+      <querytext>
+        update users 
+        set    password = :new_password, 
+               salt = :salt,
+               password_changed_date = current_timestamp
+        where  user_id = :user_id
+      </querytext>
+</fullquery>
 
 </queryset>
