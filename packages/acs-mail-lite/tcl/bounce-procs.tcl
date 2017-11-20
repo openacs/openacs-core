@@ -136,7 +136,7 @@ namespace eval acs_mail_lite {
             ns_log Notice "Bounce notification send to user $user_id"
 
             # schedule next notification
-            db_dml log_notication_sending {}
+            db_dml log_notification_sending {}
         }
     }
 
