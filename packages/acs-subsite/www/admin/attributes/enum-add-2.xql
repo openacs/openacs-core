@@ -41,7 +41,7 @@
 		    insert into acs_enum_values
 		    (attribute_id, sort_order, enum_value, pretty_name)
 		    select :attribute_id, :sort_order, :pretty_name, :pretty_name
-		    
+		    from dual
 		    where not exists (select 1 
                                         from acs_enum_values v2
                                        where v2.pretty_name = :pretty_name
