@@ -905,7 +905,7 @@ ad_proc -public site_node::closest_ancestor_package {
             set url [site_node::get_url -node_id $node_id]
         }
     }
-    
+
     # should we return the package at the passed-in node/url?
     if { $include_self_p && $package_key ne ""} {
         array set node_array [site_node::get -url $url]
@@ -1476,6 +1476,8 @@ if {$UseXotclSiteNodes} {
         if {$createCache} {
             ns_log notice "creating xo_site_nodes cache"
             ns_cache create xo_site_nodes -size 2000000
+            ns_cache create xo_site_nodes_id -size 100000
+            ns_cache create xo_site_nodes_get_children -size 100000
         }
 
         #
@@ -1489,7 +1491,11 @@ if {$UseXotclSiteNodes} {
 
             :public method get_children {
                 -node_id:required
-                {-all:switch} {-package_type ""} {-package_key ""} {-filters ""} {-element ""}
+                {-all:switch}
+                {-package_type ""}
+                {-package_key ""}
+                {-filters ""}
+                {-element ""}
             } {
                 if {$all} {
                     #
@@ -1497,12 +1503,15 @@ if {$UseXotclSiteNodes} {
                     #
                     next
                 } else {
-                    ns_cache_eval xo_site_nodes get_children-$node_id-$all-$package_type-$package_key-$filters-$element { next }
+                    ns_cache_eval xo_site_nodes_get_children \
+                        get_children-$node_id-$all-$package_type-$package_key-$filters-$element {
+                            next
+                        }
                 }
             }
 
             :public method get_node_id {-url:required} {
-                return [ns_cache_eval xo_site_nodes id-$url { next }]
+                return [ns_cache_eval xo_site_nodes_id id-$url { next }]
             }
 
             :protected method properties {-node_id:required} {
@@ -1531,9 +1540,14 @@ if {$UseXotclSiteNodes} {
 
             :public method flush_all {patterns} {
                 foreach pattern $patterns {
-                    foreach key [ns_cache names xo_site_nodes $pattern] {
+                    switch -glob -- $pattern {
+                        id-*           {set cache xo_site_nodes_id}
+                        get_children-* {set cache xo_site_nodes_get_children}
+                        default        {set cache xo_site_nodes}
+                    }
+                    foreach key [ns_cache names $cache $pattern] {
                         #:msg ......key=$key
-                        ::xo::clusterwide ns_cache flush xo_site_nodes $key
+                        ::xo::clusterwide ns_cache flush $cache $key
                     }
                 }
             }
@@ -1550,6 +1564,8 @@ if {$UseXotclSiteNodes} {
 
                 if {$node_id eq "" || $old_url eq "/"} {
                     ::xo::clusterwide ns_cache_flush xo_site_nodes
+                    ::xo::clusterwide ns_cache_flush xo_site_nodes_id
+                    ::xo::clusterwide ns_cache_flush xo_site_nodes_get_children
                 } else {
                     set limit_clause [expr {$with_subtree ? "" : "limit 1"}]
                     #
@@ -1625,7 +1641,7 @@ if {$UseXotclSiteNodes} {
         # the cache, so flush these first. Since the cache might
         # contain children, we have to flush on all ancestor nodes up
         # to the top node.
-        
+
         #set ancestors [site_node::get_ancestors -node_id $node_id -element node_id]
         #foreach n $ancestors {
             #site_node::update_cache -sync_children -node_id $n
@@ -1679,7 +1695,7 @@ if {$UseXotclSiteNodes} {
     } {
         #ns_log Notice "site_node::update_cache for node_id $node_id"
         ::xo::site_node flush_cache -node_id $node_id -with_subtree $sync_children_p
-        
+
         set parent_node_id [site_node::get_parent_id -node_id $node_id]
         ::xo::site_node flush_all get_children-$parent_node_id-*
     }
@@ -1873,11 +1889,11 @@ if {$UseXotclSiteNodes} {
     ##set n [site_node::new -name a2 -parent_id $ds(node_id)]
     #array set a2 [site_node::get -url /ds/a2]
     #set n $a2(node_id)
-    
+
     #site_node::get_children -package_key attachments -node_id $ds(node_id)
     #site_node::get_children -package_key attachments -node_id $top(node_id)
     #foreach k [ns_cache_keys xo_site_nodes get_children*] {lappend _ $k=[ns_cache_get xo_site_nodes $k]}
-    
+
     #site_node::mount -node_id $n -object_id 1226
     #site_node::unmount -node_id $n
 
