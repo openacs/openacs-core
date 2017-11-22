@@ -2,23 +2,8 @@
 
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
-
  
-<fullquery name="delete.select_attr_info">      
-      <querytext>
-      
-        select a.object_type, a.attribute_name, 
-               case when a.storage = 'type_specific' then t.table_name else a.table_name end as table_name,
-	       nvl(a.column_name, a.attribute_name) as column_name
-          from acs_attributes a, acs_object_types t
-         where a.attribute_id = :attribute_id
-           and t.object_type = a.object_type
-    
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="array_for_type.select_attributes">      
+<fullquery name="attribute::array_for_type.select_attributes">
       <querytext>
       
 	select nvl(a.column_name, a.attribute_name) as name, 
@@ -65,27 +50,9 @@ end;
 </fullquery>
 
 
-<fullquery name="attribute::add.drop_attr_column">
-<querytext>
-alter table $table_name drop column $attribute_name
-</querytext>
-</fullquery>
-
-<fullquery name="attribute::add.add_column">
-<querytext>
-alter table $table_name add $attribute_name $sql_type
-</querytext>
-</fullquery>
-
 <fullquery name="attribute::delete.drop_attribute">
 <querytext>
 begin acs_attribute.drop_attribute(:object_type, :attribute_name); end;
-</querytext>
-</fullquery>
-
-<fullquery name="attribute::delete.drop_attr_column">
-<querytext>
-alter table $table_name drop column $column_name
 </querytext>
 </fullquery>
 

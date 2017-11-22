@@ -106,16 +106,37 @@
 
 
 <fullquery name="attribute::value_add.insert_enum_value">
-<querytext>
-	insert into acs_enum_values
-	(attribute_id, sort_order, enum_value, pretty_name)
-	select :attribute_id, :sort_order, :enum_value, :enum_value
-	from dual
-	where not exists (select 1 
-	from acs_enum_values v2
-	where v2.pretty_name = :enum_value
-	and v2.attribute_id = :attribute_id)
-</querytext>
+  <querytext>
+    insert into acs_enum_values
+    (attribute_id, sort_order, enum_value, pretty_name)
+    select :attribute_id, :sort_order, :enum_value, :enum_value
+    from dual
+    where not exists (select 1 
+    from acs_enum_values v2
+    where v2.pretty_name = :enum_value
+    and v2.attribute_id = :attribute_id)
+  </querytext>
 </fullquery>
- 
+
+
+<fullquery name="attribute::add.drop_attr_column">
+  <querytext>
+    alter table $table_name drop column $attribute_name
+  </querytext>
+</fullquery>
+
+
+<fullquery name="attribute::add.add_column">
+  <querytext>
+    alter table $table_name add $attribute_name $sql_type
+  </querytext>
+</fullquery>
+
+
+<fullquery name="attribute::delete.drop_attr_column">
+  <querytext>
+    alter table $table_name drop column $column_name
+  </querytext>
+</fullquery>
+
 </queryset>

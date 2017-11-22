@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="attribute::array_for_type.select_attributes">      
+<fullquery name="attribute::array_for_type.select_attributes">
       <querytext>
 
 	select coalesce(a.column_name, a.attribute_name) as name, 
@@ -60,30 +60,10 @@ select acs_attribute__create_attribute (
 </querytext>
 </fullquery>
 
-<fullquery name="attribute::add.drop_attr_column">
-<querytext>
-alter table $table_name drop column $attribute_name
-</querytext>
-</fullquery>
-
-<fullquery name="attribute::add.add_column">
-<querytext>
-alter table $table_name add $attribute_name $sql_type
-</querytext>
-</fullquery>
-
 <fullquery name="attribute::delete.drop_attribute">
-<querytext>
-select acs_attribute__drop_attribute(:object_type, :attribute_name)
-</querytext>
-</fullquery>
-
-
-<!-- Cannot remove a column in PG -->
-<fullquery name="attribute::delete.drop_attr_column">
-<querytext>
-alter table $table_name rename column $column_name to __DELETED__$column_name
-</querytext>
+  <querytext>
+    select acs_attribute__drop_attribute(:object_type, :attribute_name)
+  </querytext>
 </fullquery>
 
 </queryset>
