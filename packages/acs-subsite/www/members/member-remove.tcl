@@ -11,7 +11,9 @@ ad_page_contract {
 
 set group_id [application_group::group_id_from_package_id]
 
-permission::require_permission -object_id $group_id -privilege "admin"
+if {$user_id != [ad_conn user_id]} {
+    permission::require_permission -object_id $group_id -privilege "admin"
+}
 
 foreach id $user_id {
     group::remove_member \
