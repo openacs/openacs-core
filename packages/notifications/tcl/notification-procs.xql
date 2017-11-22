@@ -84,4 +84,15 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="notification::mark_sent.insert_notification_user_map">
+        <querytext>
+            insert
+            into notification_user_map
+            (notification_id, user_id, sent_date)
+            select :notification_id, :user_id, current_timestamp
+            from dual where exists (select 1 from notifications
+                                    where notification_id = :notification_id)
+        </querytext>
+    </fullquery>
+    
 </queryset>
