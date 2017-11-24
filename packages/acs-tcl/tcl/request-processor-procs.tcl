@@ -1612,9 +1612,8 @@ ad_proc -public ad_conn {args} {
                             #
                             set ad_conn(behind_proxy_p) 0
                             if {[ns_conn isconnected]} {
-                                set headers [ns_conn headers]
                                 if { [ns_config "ns/parameters" ReverseProxyMode false]
-                                     && [ns_set ifind $headers X-Forwarded-For] > -1} {
+                                     && [ns_set ifind [ns_conn headers] X-Forwarded-For] > -1} {
                                     set ad_conn(behind_proxy_p) 1
                                 }
                             }
@@ -1629,7 +1628,8 @@ ad_proc -public ad_conn {args} {
                             #
                             set ad_conn(behind_secure_proxy_p) 0
                             if {[ad_conn behind_proxy_p]} {
-                                set ad_conn(behind_secure_proxy_p) [ns_set iget [ns_conn headers] X-SSL-Request]
+                                set ad_conn(behind_secure_proxy_p) \
+                                    [expr {[ns_set iget [ns_conn headers] X-SSL-Request] == 1}]
                             }
                             return $ad_conn(behind_secure_proxy_p)
                         }
