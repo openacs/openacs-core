@@ -6,7 +6,7 @@ ad_page_contract {
 } {
 }
 
-db_1row email_by_user_id {}
+set email [party::email -party_id [ad_conn user_id]]
 
 doc_body_append "[apm_header "Your Non-Up-To-Date Files"]"
 
@@ -17,13 +17,14 @@ set no_changes [list]
 set all_files_to_add [list]
 set all_files_to_commit [list]
 
-db_foreach all_packages_owned_by_email "
+db_foreach all_packages_owned_by_email {
     select v.package_key, v.version_id, v.package_name, v.version_name
     from   apm_package_version_info v, apm_package_owners o
     where  o.owner_url = :email
     and    v.version_id = o.version_id
     and    v.installed_p = 't'
-    order by upper(package_name)" {
+    order by upper(package_name)
+} {
     
 	set files_to_add [list]
 	set files_to_commit [list]
@@ -32,7 +33,7 @@ db_foreach all_packages_owned_by_email "
 	set counter 0
 	db_foreach apm_file_path {
 	    select path from apm_package_files where version_id = :version_id
-	}{
+	} {
 	    vc_parse_cvs_status [apm_fetch_cached_vc_status "packages/$package_key/$path"]
 	    global vc_file_props
 	    if { [regexp {[a-zA-Z]} $vc_file_props(status)] } {
