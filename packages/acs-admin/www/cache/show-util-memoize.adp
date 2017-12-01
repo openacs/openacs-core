@@ -7,7 +7,7 @@
     <if @matches:rowcount@ not nil and @matches:rowcount@ gt 0>
       @matches:rowcount@ matches found.<p></p>
 
-      <if @full@ eq "f">
+      <if @full;literal@ false>
 	Only the first 200 chars of key and value are shown.
 	<a href="show-util-memoize?full=t&pattern=@pattern@">View
 	  full results.</a>
