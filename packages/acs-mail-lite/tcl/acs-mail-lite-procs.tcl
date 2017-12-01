@@ -513,7 +513,7 @@ namespace eval acs_mail_lite {
 
         # Set the subject
         if { $subject ne "" } {
-            set encoded_subject [acs_mail_lite::utils::build_subject $subject]
+            set encoded_subject [acs_mail_lite::utils::build_subject -- $subject]
             mime::setheader $tokens Subject $encoded_subject
         }
 
