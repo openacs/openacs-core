@@ -1,9 +1,9 @@
 <if @show_p;literal@ true>
   <div class="developer-support-footer">
-    <if @errcount@ gt 0>
+    <if @errcount;literal@ gt 0>
       <p style="color: red">errors: @errcount@ <a href="@ds_url@send?output=@request@:error">view</a></p>
     </if>
-    <if @comments:rowcount@ gt 0>
+    <if @comments:rowcount;literal@ gt 0>
       <multiple name="comments">
         <strong>Comment:</strong> <pre>@comments.text;noi18n@</pre><br>
       </multiple>
