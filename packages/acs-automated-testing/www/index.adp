@@ -26,7 +26,7 @@
 	  <td><a href="@servers.admin_login_url@">Admin</a></td>
           <td>@servers.description;noquote@</td>
           <td style="white-space:nowrap">@servers.install_date@</td>
-	  <if @servers.error_total_count@ eq 0>
+	  <if @servers.error_total_count;literal@ eq 0>
             <td style="background-color:green">@servers.error_total_count@</td>
 	  </if>
 	  <else>

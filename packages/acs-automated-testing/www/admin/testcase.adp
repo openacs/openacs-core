@@ -22,7 +22,7 @@
         <dt class="fail">Testcase failure error response:</dt>
         <dd>@testcase_on_error;noquote@</dd>
       </if>
-      <if @showsource@ eq 1>
+      <if @showsource;literal@ true>
         <multiple name="bodys">
           <dt>  Body @bodys.body_number@ source  </dt>
           <dd><pre>@bodys.body@</pre></dd>
@@ -31,7 +31,7 @@
     </dl>
   </div>
 
-  <if @showsource@ eq 0>
+  <if @showsource;literal@ false>
     [<a href="testcase?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;showsource=1&amp;quiet=@quiet@">
       show testcase source
     </a>]
@@ -50,7 +50,7 @@
   
   <p>
     <strong>Results</strong> 
-    [<if @quiet@ eq "1">
+    [<if @quiet;literal@ true>
       <strong> quiet </strong> | 
       <a href="@verbose_url@">verbose</a>
     </if><else>
