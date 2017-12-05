@@ -383,19 +383,18 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 
 	    set spellcheck_p 0
 	} else {
-
-
 	    array set widget_info [string trim [parameter::get_from_package_key \
 						    -package_key acs-templating \
 						    -parameter SpellcheckFormWidgets \
 						    -default ""]]
-	    
+            
 	    set spellcheck_p [expr {[array size widget_info] 
 				    && ($element(widget) eq "richtext" || 
 					$element(widget) eq "textarea" || 
 					$element(widget) eq "text") 
-				    && $element(widget) in [array names widget_info]}]
-	    
+				    && [info exists widget_info($element(widget))]
+                                    && [set widget_info($element(widget))]
+                                }]
 	}
 	
 	if { $spellcheck_p } {
@@ -403,8 +402,7 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	    # since the spellcheck "sub widget" is to be displayed we'll also want to know
 	    # which option should be selected by default.
 
-	    set spellcheck(render_p) 1
-	    set spellcheck(perform_p) 1
+	    array set spellcheck {render_p 1 perform_p 1}
 
 	    if { $widget_info(${element(widget)}) } {
 		set spellcheck(selected_option) [nsv_get spellchecker default_lang]
@@ -414,8 +412,7 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 
 	} else {
 
-	    set spellcheck(render_p) 0
-	    set spellcheck(perform_p) 0
+	    array set spellcheck {render_p 0 perform_p 0}
 
 	    # set this to something so the script won't choke.
 	    set spellcheck(selected_option) ":nospell:"

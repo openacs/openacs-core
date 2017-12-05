@@ -190,19 +190,22 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
 ad_proc -public -deprecated template::widget::richtext_htmlarea { element_reference tag_attributes } {
     Implements the richtext widget, which offers rich text editing options.
 
-    If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), this will use the htmlArea WYSIWYG editor widget.
-    Otherwise, it will use a normal textarea, with a drop-down to select a format. The available formats are:
+    If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1),
+    this will use the htmlArea WYSIWYG editor widget.
+    Otherwise, it will use a normal textarea, with a drop-down to select a format.
+    The available formats are:
     <ul>
     <li>Enhanced text = Allows HTML, but automatically inserts line and paragraph breaks.
-    <li>Plain text = Automatically inserts line and paragraph breaks, and quotes all HTML-specific characters, such as less-than, greater-than, etc.
+    <li>Plain text = Automatically inserts line and paragraph breaks,
+    and quotes all HTML-specific characters, such as less-than, greater-than, etc.
     <li>Fixed-width text = Same as plain text, but conserves spacing; useful for tabular data.
     <li>HTML = normal HTML.
     </ul>
-    You can also parameterize the richtext widget with a 'htmlarea_p' attribute, which can be true or false, and which will override the parameter setting.
+    You can also parameterize the richtext widget with a 'htmlarea_p' attribute,
+    which can be true or false, and which will override the parameter setting.
 
     @see template::widget::richtext
 } {
-
   upvar $element_reference element
 
   if { [info exists element(html)] } {
@@ -317,8 +320,7 @@ ad_proc -public template::util::richtext::initialize_widget {
     @return          On success, this function returns a dict with success 1
                                                                                                      
 } {
-    if {$editor ni $::template::util::richtext::editors} {
-        ns_log warning "richtext: no editor with name $editor is registered"
+    if {![require_editor -editor $editor]} {
         return {success 0}
     }
 
@@ -331,6 +333,41 @@ ad_proc -public template::util::richtext::initialize_widget {
 }
 
 set ::template::util::richtext::editors {}
+
+#
+# Check if an editor package of this kind is installed
+#
+ad_proc -private template::util::richtext::require_editor {
+    -editor
+} {
+    Check, whether this editor package is installed.
+} {
+    if {$editor ni $::template::util::richtext::editors} {
+        ns_log warning "richtext: no editor with name $editor is registered"
+        return 0
+    }
+    return 1
+}
+
+
+ad_proc -public template::util::richtext::get_tag {
+    {-options {}}
+} {
+    
+    Return tag name for the markup; normally a "textarea", but some
+    editors might use e.g. a "div". If the fuction is defined for the
+    editor, call it.
+    
+} {
+    set tag textarea
+    if {[dict exists $options editor]
+        && [info commands ::richtext::[dict get $options editor]::get_tag] ne ""
+    } {
+        set tag [::richtext::[dict get $options editor]::get_tag -options $options]
+    }
+    return $tag
+}
+
 
 ad_proc -public template::util::richtext::register_editor { editor } {
 
@@ -497,6 +534,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
     upvar $element_reference element
     set output ""
+
+    #ns_log notice "widget::richtext: richtext-options? [info exists element(options)] HTML? [info exists element(html)]"
     
     if { [info exists element(html)] } {
         array set attributes $element(html)
@@ -532,7 +571,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
             }
         }
 
-        if { ([info exists element(htmlarea_p)] && $element(htmlarea_p) ne "") } {
+        if { [info exists element(htmlarea_p)] && $element(htmlarea_p) ne "" } {
             set htmlarea_p [template::util::is_true $element(htmlarea_p)]
         } else {
             set htmlarea_p [parameter::get \
@@ -540,13 +579,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                                 -parameter "UseHtmlAreaForRichtextP" \
                                 -default 0]
         }
-
+        set edit_item_tag [::template::util::richtext::get_tag -options [array get options]]
         set format_menu [menu $element(id).format [template::util::richtext::format_options] $format {}]
-        set output [textarea_internal $element(id) attributes $contents]
+        set output [textarea_internal $element(id) attributes $contents "edit" $edit_item_tag]
 
         # Spell-checker
         array set spellcheck [template::util::spellcheck::spellcheck_properties \
                                   -element_ref element]
+        #ns_log notice "widget::richtext: $htmlarea_p, spellcheck [array get spellcheck] OPTIONS [array get options]"
 
         if { $htmlarea_p } {
             # figure out, which rich text editor to use
@@ -574,7 +614,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                             -text_id $attributes(id) \
                             -editor $richtextEditor \
                             -options [array get options]]
-            ns_log debug "::template::util::richtext::initialize_widget -> $result"
+            ns_log debug "widget::richtext: ::template::util::richtext::initialize_widget -> $result"
             
             if {[dict get $result success] == 1} {
                 #

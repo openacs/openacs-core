@@ -308,6 +308,7 @@ ad_proc -private template::widget::textarea_internal {
     attribute_reference
     {value {}}
     {mode edit}
+    {tag textarea}
 } {
     Do the actual construction of a textarea widget, called by various user-callable
     widgets.
@@ -324,24 +325,29 @@ ad_proc -private template::widget::textarea_internal {
     upvar $attribute_reference attributes
 
     if { $mode ne "edit" } {
-        set output {}
+        set output ""
         if { $value ne "" } {
-            append output "[ns_quotehtml $value]<input type=\"hidden\" name=\"$name\" value=\"[ns_quotehtml $value]\">"
+            append output \
+                [ns_quotehtml $value] \
+                "<input type=\"hidden\" name=\"$name\" value=\"[ns_quotehtml $value]\">"
         }
     } else {
-        set output "<textarea name=\"$name\""
-        
-        foreach attribute_name [array names attributes] {
-            if {$attributes($attribute_name) eq {}} {
-                append output " $attribute_name"
-            } else {
-                append output " $attribute_name=\"$attributes($attribute_name)\""
-            }
+        if {$tag ne "textarea"} {
+            set output "<$tag"
+        } else {
+            set output "<textarea name=\"$name\""
         }
         
-        append output ">[ns_quotehtml $value]</textarea>"
+        foreach attribute_name [array names attributes] {
+            if {$attributes($attribute_name) eq ""} {
+                append output " $attribute_name"
+            } else {
+                append output " $attribute_name=\"[ns_quotehtml $attributes($attribute_name)]\""
+            }
+        }
+        append output ">[ns_quotehtml $value]</$tag>"
     }
-    
+
     return $output
 }
 
