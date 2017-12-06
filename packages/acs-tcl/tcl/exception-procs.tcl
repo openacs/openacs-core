@@ -5,6 +5,16 @@ ad_library {
     @cvs-id $Id$
 }
 
+if {$::tcl_version eq "8.5"} {
+    #
+    # In Tcl 8.5, "::try" was not yet a builtin of Tcl
+    #
+    package require try 
+}
+if {[info commands "::try"] eq ""} {
+    error "This version of OpenACS requires the ::try command (builtin in 8.6+, package for 8.5"
+}
+
 ad_proc -private ad_raise {exception {value ""}} {
     @author rhs@mit.edu
     @creation-date 2000-09-09
