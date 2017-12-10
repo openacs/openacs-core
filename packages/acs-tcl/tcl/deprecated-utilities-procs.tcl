@@ -178,6 +178,68 @@ ad_proc -public -deprecated proc_doc { args } {
     ad_proc {*}$args
 }
 
+#
+# GN: maybe this function was useful for ancient versions of Tcl, but
+# unless i oversee something, it does not make any sense. The comment
+# argues, that "return -code ..." ignores the error code, but then the
+# function uses "return -code ..." to fix this...
+#
+ad_proc -deprecated ad_return { args } {
+
+    Works like the "return" Tcl command, with one difference. Where
+    "return" will always return TCL_RETURN, regardless of the -code
+    switch this way, by burying it inside a proc, the proc will return
+    the code you specify.
+
+    <p>
+
+    Why? Because "return" only sets the "returnCode" attribute of the
+    interpreter object, which the function actually interpreting the
+    procedure then reads and uses as the return code of the procedure.
+    This proc adds just that level of processing to the statement.
+
+    <p>
+
+    When is that useful or necessary? Here:
+
+    <pre>
+    set errno [catch {
+        return -code error "Boo!"
+    } error]
+    </pre>
+
+    In this case, <code>errno</code> will always contain 2 (TCL_RETURN).
+    If you use ad_return instead, it'll contain what you wanted, namely
+    1 (TCL_ERROR).
+
+} {
+    return {*}$args
+}
+
+ad_proc -private -deprecated rp_handle_adp_request {} {
+
+    Handles a request for an .adp file.
+
+    @see adp_parse_ad_conn_file
+
+} {
+    doc_init
+
+    set adp [ns_adp_parse -file [ad_conn file]]
+
+    if { [doc_exists_p] } {
+        doc_set_property body $adp
+        doc_serve_document
+    } else {
+        set content_type [ns_set iget [ad_conn outputheaders] "content-type"]
+        if { $content_type eq "" } {
+            set content_type "text/html"
+        }
+        doc_return 200 $content_type $adp
+    }
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
