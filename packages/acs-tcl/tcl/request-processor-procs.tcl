@@ -1201,7 +1201,7 @@ ad_proc -public rp_serve_concrete_file {file} {
         } on error {errMsg} {
             ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -microseconds] \
                            error "$::errorCode: $::errorInfo"]
-            return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
+            return -code error -errorcode $::errorCode -errorinfo $::errorInfo $errMsg
         } on ok {r} {
             ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -microseconds]]
         } finally {
