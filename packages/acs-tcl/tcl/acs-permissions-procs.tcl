@@ -184,7 +184,7 @@ ad_proc -public permission::require_permission {
         if {!${party_id} && ![ad_conn ajax_p]} {
             auth::require_login
         } else {
-            ns_log notice "permission::require_permission: $party_id doesn't have $privilege on object $object_id"
+            ns_log notice "permission::require_permission: $party_id doesn't have privilege $privilege on object $object_id"
             ad_return_forbidden \
                 "Permission Denied" \
                 "You don't have permission to $privilege [db_string name {}]."
