@@ -237,17 +237,20 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
         ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] \
                        $startclicks [clock clicks -microseconds] "error" $::errorInfo]
         # make sure you report catching the error!
-        rp_debug "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errorInfo is $::errorInfo"
+        set error_msg "result $result filter $proc for [ns_conn request] errorInfo is $::errorInfo"
+        rp_debug $error_msg
+        ns_log error "rp_invoke_filter: $error_msg"
         rp_report_error
         set result filter_return
 
     } elseif {$result ni {"filter_ok" "filter_break" "filter_return"} } {
-        set error_msg "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query]. Filter returned invalid result \"$result\""
+        set error_msg "error in filter $proc for [ns_conn request]. Filter returned invalid result \"$result\""
         ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] \
                        $startclicks [clock clicks -microseconds] "error" $error_msg]
         # report the bad filter_return message
         rp_debug -debug t -ns_log_level error $error_msg
         rp_report_error -message $error_msg
+        ns_log error "rp_invoke_filter: $error_msg"
         set result filter_return
     } else {
         ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] \
@@ -284,6 +287,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
     } on error {errMsg} {
         ds_add rp [list registered_proc $cmd $startclicks [clock clicks -microseconds] error $::errorInfo]
         rp_debug "error in $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errorInfo is $::errorInfo"
+        ns_log Error "rp_invoke_proc: '$cmd' returned error: $errMsg\n$::errorInfo"
         rp_report_error
     } on ok {r} {
         ds_add rp [list registered_proc $cmd $startclicks [clock clicks -microseconds]]
@@ -1094,11 +1098,10 @@ ad_proc -private rp_handler {} {
     ad_try {
         rp_handle_request
     } on error {errorMsg} {
-        set q [ns_conn query]
-        if {$q ne ""} {
-            set q ?$q
-        }
-        rp_debug "error in rp_handler: serving [ns_conn method] [ns_conn url]$q  \n\tad_url \"[ad_conn url]\" maps to file \"[ad_conn file]\"\nerrmsg is $errorMsg"
+        set error_msg "errorMsg $errorMsg while serving [ns_conn request]"
+        append error_msg "\n\tad_url <[ad_conn url]> maps to file <[ad_conn file]>"
+        rp_debug "error in rp_handler: $error_msg"
+        ns_log error "rp_handler: $error_msg"
         rp_report_error
     }
 }
