@@ -1,5 +1,3 @@
-# /packages/subsite/www/admin/users/new.tcl
-
 ad_page_contract {
 
     Adds a new party
@@ -84,7 +82,10 @@ if { $user_type_exact_p == "f"
     set user_type_exact_p "t"
     set export_url_vars [export_vars -exclude user_type $export_var_list ]
 
-    party::types_valid_for_rel_type_multirow -datasource_name object_types -start_with $user_type -rel_type $add_with_rel_type
+    party::types_valid_for_rel_type_multirow \
+        -datasource_name object_types \
+        -start_with $user_type \
+        -rel_type $add_with_rel_type
 
     set object_type_pretty_name $user_type_pretty_name
     set this_url [ad_conn url]
@@ -134,7 +135,11 @@ if {[parameter::get -parameter RegistrationRequiresApprovalP -default 0]} {
 
 # attribute::add_form_elements -form_id add_user -variable_prefix user -start_with user -object_type $user_type
 
-attribute::add_form_elements -form_id add_user -variable_prefix rel -start_with relationship -object_type $add_with_rel_type
+attribute::add_form_elements \
+    -form_id add_user \
+    -variable_prefix rel \
+    -start_with relationship \
+    -object_type $add_with_rel_type
 
 
 if { [template::form is_valid add_user] } {
@@ -152,6 +157,9 @@ if { [template::form is_valid add_user] } {
     }
 
     set double_click_p [db_string user_exists {}]
+    set add_user_email       [template::element::get_value add_user email]
+    set add_user_first_names [template::element::get_value add_user first_names]
+    set add_user_last_name   [template::element::get_value add_user last_name]
 
     if {!$double_click_p} {
 
@@ -161,9 +169,9 @@ if { [template::form is_valid add_user] } {
 
             array set result [auth::create_user \
                                   -user_id $user_id \
-                                  -email [template::element::get_value add_user email] \
-                                  -first_names [template::element::get_value add_user first_names] \
-                                  -last_name [template::element::get_value add_user last_name] \
+                                  -email $add_user_email \
+                                  -first_names $add_user_first_names \
+                                  -last_name $add_user_last_name \
                                   -password $password \
                                   -password_confirm $password \
                                   -url [template::element::get_value add_user url] \
@@ -175,7 +183,8 @@ if { [template::form is_valid add_user] } {
             # Hack for adding users to the main subsite, whose application group is the registered users group.
 
             if { $add_to_group_id != [acs_lookup_magic_object "registered_users"] ||
-                 $add_with_rel_type ne "membership_rel" } {
+                 $add_with_rel_type ne "membership_rel"
+             } {
                 relation_add -member_state $rel_member_state $add_with_rel_type $add_to_group_id $user_id
             }
 
@@ -189,7 +198,12 @@ if { [template::form is_valid add_user] } {
     foreach group_rel_type $group_rel_type_list {
         lassign $group_rel_type next_group_id next_rel_type
         lappend return_url_list \
-            [export_vars -base "../relations/add" {{group_id $next_group_id} {rel_type $next_rel_type} {party_id $user_id} {allow_out_of_scope_p t}}]
+            [export_vars -base "../relations/add" {
+                {group_id $next_group_id}
+                {rel_type $next_rel_type}
+                {party_id $user_id}
+                {allow_out_of_scope_p t}
+            }]
     }
 
     # Add the original return_url as the last one in the list
@@ -204,65 +218,65 @@ if { [template::form is_valid add_user] } {
 
     if {!$double_click_p} {
 
-        set notification_address [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]
+        set notification_address [parameter::get \
+                                      -parameter NewRegistrationEmailAddress \
+                                      -default [ad_system_owner]]
 
         if {[parameter::get -parameter NotifyAdminOfNewRegistrationsP -default 0]} {
 
             set creation_user [ad_conn user_id]
             set creation_name [db_string creation_name_query {
-            select p.first_names || ' ' || p.last_name
-                      || ' (' || pa.email || ')'
-            from persons p, parties pa
-            where p.person_id = pa.party_id and p.person_id = :creation_user
+            select p.first_names || ' ' || p.last_name || ' (' || pa.email || ')'
+                from persons p, parties pa
+                where p.person_id = pa.party_id and p.person_id = :creation_user
             }]
 
             # we're supposed to notify the administrator when someone new registers
+
             acs_mail_lite::send \
                 -send_immediately \
                 -to_addr $notification_address \
-                -from_addr [template::element::get_value add_user email] \
+                -from_addr $add_user_email \
                 -subject "New registration at [ad_url]" \
-                -body "[template::element::get_value add_user first_names] [template::element::get_value add_user last_name] ([template::element::get_value add_user email]) was added as a registered as a user of
+                -body "$add_user_first_names $add_user_last_name ($add_user_email) was added as a registered as a user of
 [ad_url]
 
 The user was added by $creation_name from [ad_conn url]."
 
-    }
+        }
 
         if { $email_verified_p == "f" } {
 
-            set row_id [db_string user_new_2_rowid_for_email {select rowid from users where user_id = :user_id}]
+            set row_id [db_string user_new_2_rowid_for_email {}]
             # the user has to come back and activate their account
 
-            set href [export_vars \
-                -base [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm {row_id}]
+            set system_url [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]
+            set href [export_vars -base $system_url/register/email-confirm {row_id}]
             acs_mail_lite::send \
-                -to_addr [template::element::get_value add_user email] \
+                -to_addr $add_user_email \
                 -from_addr $notification_address \
                 -subject "Welcome to [ad_system_name]" \
                 -body "To confirm your registration, please go to $href
 
 After confirming your email, here's how you can log in at [ad_url]:
 
-Username:  [template::element::get_value add_user email]
+Username:  $add_user_email
 Password:  $password
 "
-
-
         } else {
-            with_catch errmsg {
-#		ns_log Notice "sending mail from $notification_address to [template::element::get_value add_user email]"
+            ad_try {
+                # ns_log Notice "sending mail from $notification_address to $add_user_email"
                 acs_mail_lite::send \
-                        -to_addr [template::element::get_value add_user email] \
+                        -to_addr $add_user_email \
                         -from_addr $notification_address \
                         -subject "Thank you for visiting [ad_system_name]" \
                         -body "Here's how you can log in at [ad_url]:
 
-Username:  [template::element::get_value add_user email]
+Username:  $add_user_email
 Password:  $password
 "
-            } {
-                ns_returnerror "500" "$errmsg"
+            } on error {errmsg} {
+                ns_returnerror 500 $errmsg
                 ns_log Warning "Error sending registration confirmation to $email in acs-subsite/www/admin/users/new Error: $errmsg"
             }
         }

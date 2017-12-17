@@ -55,12 +55,12 @@ ad_form -extend -name user_search -on_submit {
     }
 
     if { ![group::member_p -user_id $user_id -group_id $group_id] } {
-        with_catch errmsg {
+        ad_try {
             group::add_member \
                 -group_id $group_id \
                 -user_id $user_id \
                 -rel_type $rel_type
-        } {
+        } on error {errmsg} {
             form set_error user_search user_id "Error adding user to community: $errmsg"
             ns_log Error "Error adding user $user_id to community group $group_id: $errmsg\n$::errorInfo"
             break
