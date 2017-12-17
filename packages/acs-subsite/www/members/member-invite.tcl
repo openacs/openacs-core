@@ -1,6 +1,6 @@
 ad_page_contract {
     Invite new member.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-06-02
     @cvs-id $Id$
@@ -43,7 +43,7 @@ if { $admin_p } {
 
 ad_form -extend -name user_search -on_submit {
     set create_p [group::permission_p -privilege create $group_id]
-    
+
     if { $group_info(join_policy) eq "closed" && !$create_p} {
         ad_return_forbidden "Cannot invite members" "I'm sorry, but you're not allowed to invite members to this group"
         ad_script_abort
