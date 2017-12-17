@@ -35,8 +35,8 @@ proc acs_root_dir {} {
     return $::acs::rootdir
 }
 
-proc acs_package_root_dir { package } {
-    return [file join $::acs::rootdir packages $package]
+proc acs_package_root_dir { package_key } {
+    return [file join $::acs::rootdir packages $package_key]
 }
 
 proc ad_make_relative_path { path } {
@@ -955,7 +955,7 @@ ad_proc -public acs_root_dir {} {
     Returns the path root for the OpenACS installation. 
 } -
 
-ad_proc -public acs_package_root_dir { package } { 
+ad_proc -public acs_package_root_dir { package_key } { 
     Returns the path root for a particular package within the OpenACS installation.
     For example /web/yourserver/packages/foo, i.e., a full file system path with no ending slash.
 } -
