@@ -218,21 +218,21 @@ proc install_file_serve { path } {
         ns_log Debug "Installer serving $path"
         ad_try {
             rp_serve_abstract_file $path
-        } notfound val {
-            install_return 404 "Not found" "
-        The file you've requested, doesn't exist. Please check
+        } trap {AD EXCEPTION notfound} {val} {
+            install_return 404 "Not found" "The file you've requested, doesn't exist. Please check
         your URL and try again."
-        } redirect url {
+        } trap {AD EXCEPTION redirect} {url} {
             ad_returnredirect $url
-        } directory dir_index {
+        } trap {AD EXCEPTION directory} {dir_index} {
             set new_file [file join $path "index.html"]
             if {[file exists $new_file]} {
                 rp_serve_abstract_file $new_file
-            } 
-            set new_file [file join $path "index.adp"]
-            if {[file exists $new_file]} {
-                rp_serve_abstract_file $new_file
-            } 
+            } else {
+                set new_file [file join $path "index.adp"]
+                if {[file exists $new_file]} {
+                    rp_serve_abstract_file $new_file
+                }
+            }
         }
     }
 }

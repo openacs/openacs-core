@@ -26,7 +26,7 @@ ad_page_contract {
   ad_conn -set language       Must be used to override the document language
                               if necessary.
 
-  To add a CSS or Javascripts to the <head> section of the document you can 
+  To add a CSS or JavaScript files to the <head> section of the document you can 
   call the corresponding template::head::add_* functions within your page.
 
   @see template::head::add_css
@@ -40,7 +40,7 @@ ad_page_contract {
   @see template::head::add_link
   @see template::head::add_script
 
-  Javascript event handlers, such as onload, an be added to the <body> tag by 
+  JavaScript event handlers, such as onload, an be added to the <body> tag by 
   calling template::add_body_handler within your page.
 
   @see template::add_body_handler
@@ -73,14 +73,17 @@ template::head::add_meta \
     -lang en \
     -content "OpenACS version [ad_acs_version]"
 
-# Add standard javascript
+# Add standard JavaScript
 #
 # Include core.js inclusion to the bottom of the body.
 
 template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/core.js"
 
+# Add page plugin specific code
+callback subsite::page_plugin
+
 #
-# Add css for the current subsite, defaulting to the old list/form css which was
+# Add CSS for the current subsite, defaulting to the old list/form CSS which was
 # hard-wired in previous versions of OpenACS.
 
 set cssList [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeCSS -default ""]
