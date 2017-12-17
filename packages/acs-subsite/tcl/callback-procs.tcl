@@ -11,10 +11,9 @@ ad_proc -public -callback user::workspace {
 } {
     used to generate html fragments for display on the /pvt/home page.
     
-    The html fragment should have an h2 header for sectioning.
+    The HTML fragment should have an h2 header for sectioning.
     
     @param user_id - the user to display
-    
     @see callback::user::workspace::impl::acs-subsite
 } -
 
@@ -36,14 +35,25 @@ ad_proc -public -callback user::registration {
 
 ad_proc -callback subsite::get_extra_headers {
 } {
-    returns any further header stuff that needs to be added
+    @return any further header stuff that needs to be added
+    @see subsite::page_plugin
 } -
 
 ad_proc -callback subsite::header_onload {
 } {
-    returns any javascript function that needs to be loaded
+    @return any javascript function that needs to be loaded
     the callback implementation should simply do:
     return {your_function(params);}
+    @see subsite::page_plugin
+} -
+
+ad_proc -callback subsite::page_plugin {
+} {
+    Execute pacakge-specfic code on every page. Callbacks of this type
+    typically call template::head::* functions to add application specific
+    code (CSS and JavaScript) to every page (e.g. like e.g. the cookie-consent-plugin).
+    This callback is a generalization of the callbacks "subsite::get_extra_headers"
+    and "subsite::header_onload".
 } -
 
 
