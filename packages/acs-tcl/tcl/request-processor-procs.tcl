@@ -1200,8 +1200,15 @@ ad_proc -public rp_serve_concrete_file {file} {
             ds_init
             $handler
         } trap {AD EXCEPTION ad_script_abort} {r} {
+            #
             # swallow script_aborts silently
+            #
+            #ns_log notice "rp_serve_concrete_file: swallow ad_script_abort"
         } on error {errMsg} {
+            #
+            # raise true exception
+            #
+            #ns_log notice "rp_serve_concrete_file: on error $errMsg"
             ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -microseconds] \
                            error "$::errorCode: $::errorInfo"]
             return -code error -errorcode $::errorCode -errorinfo $::errorInfo $errMsg
