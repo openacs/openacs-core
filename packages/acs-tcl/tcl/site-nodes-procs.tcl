@@ -113,7 +113,7 @@ ad_proc -public site_node::new {
     # Grab the lock so our URL key doesn't change on us midstream
     ns_mutex lock [nsv_get site_nodes_mutex mutex]
 
-    with_finally -code {
+    ad_try {
         set url [site_node::get_url -node_id $parent_id]
         append url $name
         if { $directory_p == "t" } { append url "/" }
@@ -124,7 +124,7 @@ ad_proc -public site_node::new {
                  object_id "" object_type "" \
                  package_key "" package_id "" \
                  instance_name "" package_type ""]
-    } -finally {
+    } finally {
         ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
 
@@ -187,7 +187,7 @@ ad_proc -public site_node::mount {
 
     ns_mutex lock [nsv_get site_nodes_mutex mutex]
 
-    with_finally -code {
+    ad_try {
         #Now update the nsv caches.
         array set node [site_node::get_from_node_id -node_id $node_id]
 
@@ -230,7 +230,7 @@ ad_proc -public site_node::mount {
             }
             nsv_set site_node_url_by_package_key $package_key $url_by_package_key
         }
-    } -finally {
+    } finally {
         ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
 
@@ -391,7 +391,7 @@ ad_proc -private site_node::update_cache {
     # until cache is fully updated
     ns_mutex lock [nsv_get site_nodes_mutex mutex]
 
-    with_finally -code {
+    ad_try {
 
         # Lars: We need to record the object_id's touched, so we can sort the
         # object_id->url mappings again. We store them sorted by length of the URL
@@ -494,7 +494,7 @@ ad_proc -private site_node::update_cache {
                                                                -command util::string_length_compare \
                                                                [nsv_get site_node_url_by_object_id $object_id] ]
         }
-    } -finally {
+    } finally {
         ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
 }

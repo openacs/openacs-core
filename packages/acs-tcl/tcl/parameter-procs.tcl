@@ -251,7 +251,7 @@ ad_proc -public parameter::get_from_package_key {
     # 2. try to get a package_id for this package_key and use the standard
     # parameter::get function to get the value
     if {$value eq ""} {
-        with_catch errmsg {
+        ad_try {
             set value [parameter::get \
                              -localize=$localize_p \
                              -boolean=$boolean_p \
@@ -259,7 +259,7 @@ ad_proc -public parameter::get_from_package_key {
                              -parameter $parameter \
                              -default $default \
                             ]
-        } {
+        } on error {errmsg} {
             set value $default
         }
     }

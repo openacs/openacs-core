@@ -812,7 +812,7 @@ ad_proc -private apm_package_install {
         set spec_file_path [apm_package_info_file_path -path [file dirname $package_path] $package_key]
     }
 
-    with_catch errmsg {
+    ad_try {
         set package_uri $version(package.url)
         set package_type $version(package.type)
         set package_name $version(package-name)
@@ -936,7 +936,7 @@ ad_proc -private apm_package_install {
         apm_build_subsite_packages_list
         
         apm_callback_and_log $callback "<p>[lindex $operations 1] $version(package-name), version $version(name).</p>"
-    } {
+    } on error {errmsg} {
         ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$::errorInfo"
 
         apm_callback_and_log -severity Error $callback [subst {<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
@@ -2132,7 +2132,7 @@ ad_proc -private apm_get_package_repository {
         set spec_files [apm_scan_packages "$::acs::rootdir/packages"]
         lappend spec_files {*}[apm_scan_packages]
         foreach spec_file $spec_files {
-            with_catch errmsg {
+            ad_try {
                 array unset version
                 array set version [apm_read_package_info_file $spec_file]
                 
@@ -2155,7 +2155,7 @@ ad_proc -private apm_get_package_repository {
                         set repository($version(package.key)) [array get version]
                     }
                 }
-            } {
+            } on error {errmsg} {
                 # We don't error hard here, because we don't want the whole process to fail if there's just one
                 # package with a bad .info file
                 ns_log Error "apm_get_package_repository: Error while checking package info file $spec_file: $errmsg\n$::errorInfo"

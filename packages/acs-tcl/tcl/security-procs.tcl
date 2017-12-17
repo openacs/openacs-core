@@ -725,6 +725,7 @@ ad_proc -private security::get_register_subsite {} {
             # login.
             #
             set url /
+            set subsite_id $package_id
 
             if {$UseHostnameDomainforReg} {
                 set url [subsite::get_element -subsite_id $package_id -element url]
@@ -764,9 +765,9 @@ ad_proc -private security::get_register_subsite {} {
             # we'll get into an infinite redirect loop.
             #
             array set site_node [site_node::get_from_url -url $url]
-            set package_id $site_node(object_id)
+            set subsite_id $site_node(object_id)
             if { ![permission::permission_p -no_login \
-                       -object_id $site_node(object_id) \
+                       -object_id $subsite_id \
                        -privilege read \
                        -party_id 0] } {
                 set url /
@@ -778,6 +779,7 @@ ad_proc -private security::get_register_subsite {} {
             # subsite.
             #
             set url /
+            set subsite_id [site_node::get_object_id -node_id $host_node_id]
         }
         if {$UseHostnameDomainforReg} {
             set url [security::get_qualified_url $url]
@@ -786,6 +788,7 @@ ad_proc -private security::get_register_subsite {} {
     }
     return [list \
                 url $url \
+                subsite_id $subsite_id \
                 require_qualified_return_url $require_qualified_return_url \
                 host_node_id $host_node_id]
 }

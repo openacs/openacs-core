@@ -25,7 +25,7 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
         @param cd  change to the given directory before executing the command
     } {
         set handle [ns_proxy get ExecPool]
-        with_finally -code {
+        ad_try {
             if {[info exists cd]} {
                 #
                 # We were requested to switch to a different
@@ -36,7 +36,7 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
                 ns_proxy eval $handle [list cd $cd]
             }
             set return_string [ns_proxy eval $handle [list ::exec {*}$call]]
-        } -finally {
+        } finally {
             if {[info exists pwd]} {
                 #
                 # Switch back to the previous directory.
