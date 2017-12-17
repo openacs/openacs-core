@@ -49,7 +49,7 @@ ad_proc -callback subsite::header_onload {
 
 ad_proc -callback subsite::page_plugin {
 } {
-    Execute pacakge-specfic code on every page. Callbacks of this type
+    Execute package-specific code on every page. Callbacks of this type
     typically call template::head::* functions to add application specific
     code (CSS and JavaScript) to every page (e.g. like e.g. the cookie-consent-plugin).
     This callback is a generalization of the callbacks "subsite::get_extra_headers"
