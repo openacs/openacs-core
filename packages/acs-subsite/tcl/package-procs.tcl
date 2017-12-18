@@ -710,14 +710,16 @@ ad_proc -public package_instantiate_object {
         append variable_prefix "."
     }
 
+    if {[catch {
+        acs_object_type::get -object_type $object_type -array acs_type
+        set package_name $acs_type(package_name)
+    } errmsg]} {
+        error "Object type \"$object_type\" does not exist"
+    }    
+    
     # Select out the package name if it wasn't passed in
-    if { $package_name eq "" } {
-        if {[catch {
-            acs_object_type::get -object_type $object_type -array acs_type
-            set package_name $acs_type(package_name)
-        } errmsg]} {
-            error "Object type \"$object_type\" does not exist"
-        }
+    if { $package_name eq "" } {        
+        set package_name $acs_type(package_name)
     }
 
     if { [ad_conn isconnected] } {
@@ -788,8 +790,7 @@ ad_proc -public package_instantiate_object {
 
     if { $form_id ne ""} {
 
-        #DRB: This needs to be cached!
-        set __id_column [db_string get_id_column {}]
+        set __id_column $acs_type(id_column)
         if { [info exists real_params([string toupper $__id_column])]
              && ![info exists param_array([string toupper $__id_column])]
          } {
