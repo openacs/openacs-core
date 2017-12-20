@@ -79,8 +79,17 @@ template::head::add_meta \
 
 template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/core.js"
 
+#
 # Add page plugin specific code
-callback subsite::page_plugin
+#
+# The check is transitional code (until the release of OpenACS 5.11 or
+# 5.12) and is just upgrading the package from earlier versions, where
+# e.g. the blank master is installed before the subsite definitions
+# for the page_plugin callback.  Templates are required to be very
+# robust.
+if {[info commands ::callback::subsite::page_plugin::*] ne ""} {
+    callback subsite::page_plugin
+}
 
 #
 # Add CSS for the current subsite, defaulting to the old list/form CSS which was
