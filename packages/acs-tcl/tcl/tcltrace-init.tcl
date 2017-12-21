@@ -37,7 +37,8 @@ set traced_cmds {}
 #
 # traces with context
 #
-#set traced_cmds {::ns_return}
+#set traced_cmds {::ns_return ::ns_returnredirect}
+
 foreach cmd $traced_cmds {
     append trace "\ntrace add execution $cmd  enter {::tcltrace::before -details}"
 }
