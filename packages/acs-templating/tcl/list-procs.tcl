@@ -364,7 +364,7 @@ ad_proc -public template::list::create {
         if {[info exists ::__csrf_token]} {
             append label [subst {<input type="hidden" name="__csrf_token" value="$::__csrf_token">}]
         }
-        
+
         # We only ulevel 1 here, because we want the subst to be done in this namespace
         template::list::element::create \
             -list_name $name \
@@ -580,18 +580,18 @@ ad_proc -public template::list::prepare {
         set last_row [expr {$first_row + ($groupsize + 1) * $page_size - 1}]
         set page_offset [expr {($page_group - 1) * $groupsize}]
 
-        # Antonio Pisano 2015-11-17: From now on, the original query 
-        # will be tampered with the limit information, so this is our 
+        # Antonio Pisano 2015-11-17: From now on, the original query
+        # will be tampered with the limit information, so this is our
         # last chance to save it and use it to get the full row count in
         # the paginator.
         set list_properties(page_query_original) $list_properties(page_query_substed)
-        
+
         # Now wrap the provided query with the limit information
         set list_properties(page_query_substed) [db_map pagination_query]
 
-        # Generate a paginator name which includes the page group we're in 
+        # Generate a paginator name which includes the page group we're in
         # and all the filter values, so the paginator cahing works properly
-        # Antonio Pisano 2015-11-17: it is important that the paginator_name starts with the list's 
+        # Antonio Pisano 2015-11-17: it is important that the paginator_name starts with the list's
         # name, because we count on this in template::paginator::create to retrieve the count_query
         set paginator_name $list_properties(name)
 
@@ -1165,11 +1165,11 @@ ad_proc -private template::list::template {
     # Find the list template
     #
 
-    if {$style eq {}} {
+    if {$style eq ""} {
         set style $list_properties(style)
     }
 
-    if {$style eq {}} {
+    if {$style eq ""} {
         set style [parameter::get \
                        -package_id [ad_conn subsite_id] \
                        -parameter DefaultListStyle \
@@ -1833,7 +1833,7 @@ ad_proc -private template::list::render_filters {
                        -parameter DefaultListFilterStyle \
                        -default "filters"]
     }
-    
+
     set file_stub [template::resource_path -type lists -style $style]
 
     # ensure that the style template has been compiled and is up-to-date
@@ -3048,7 +3048,7 @@ ad_proc -public template::list::orderby::set_properties {
 
 template_tag listtemplate { chunk params } {
     set level [template::adp_level]
-    
+
     set list_name [template::get_attribute listtemplate $params name]
     set style [ns_set iget $params style]
 
