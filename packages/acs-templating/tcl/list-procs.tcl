@@ -524,11 +524,11 @@ ad_proc -public template::list::prepare {
 
         if { $orderby_direction eq "" } {
 
-            if {[catch {
+            ad_try {
                 template::list::orderby::get_reference \
                     -list_name $name \
                     -orderby_name $orderby_name
-            } errorMsg]} {
+            } on error {errorMsg] {
                 ad_page_contract_handle_datasource_error $errorMsg
                 ad_script_abort
             }
@@ -617,7 +617,7 @@ ad_proc -public template::list::prepare {
         # this was failing if the template::list call contained a
         # page_query with an empty page_query_name
         uplevel $ulevel [list template::paginator create \
-                             --dummy--query--name-- \
+                             templating-paginator-$name \
                              $list_properties(paginator_name) \
                              $list_properties(page_query_substed) \
                              -pagesize $list_properties(page_size) \
