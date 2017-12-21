@@ -42,10 +42,9 @@ ad_proc ad_exception {errorCode} {
     return ""
 }
 
-if {$::tcl_version eq "8.6"} {
-
+if {$::tcl_version >= 8.6} {
     #
-    # Tcl 8.6 variant of ad_try
+    # Tcl 8.6 (or newer) variant of ad_try
     #
     
     ad_proc ad_try {
@@ -83,7 +82,7 @@ if {$::tcl_version eq "8.6"} {
             #
             lappend extraTraps \
                 trap {AD EXCEPTION ad_script_abort} {result} [subst {
-                    puts stderr "ad_script_abort of <$body> return value <\$result>"
+                    ns_log notice {ad_script_abort of <$body> return value <\$result>}
                     ::throw {AD EXCEPTION ad_script_abort} \$result
                 }]
         }
@@ -133,7 +132,7 @@ if {$::tcl_version eq "8.6"} {
             #
             lappend extraTraps \
                 trap {AD EXCEPTION ad_script_abort} {result} [subst {
-                    puts stderr "ad_script_abort of <$body> return value <\$result>"
+                    ns_log notice {ad_script_abort of <$body> return value <\$result>}
                     ::throw {AD EXCEPTION ad_script_abort} \$result
                 }]
         }
