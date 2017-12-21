@@ -1101,7 +1101,7 @@ ad_proc -private rp_handler {} {
         set error_msg "errorMsg $errorMsg while serving [ns_conn request]"
         append error_msg "\n\tad_url <[ad_conn url]> maps to file <[ad_conn file]>"
         rp_debug "error in rp_handler: $error_msg"
-        ns_log error "rp_handler: $error_msg"
+        ns_log error "rp_handler no-script-abort: $error_msg\n$::errorCode\n$::errorInfo"
         rp_report_error
     }
 }
