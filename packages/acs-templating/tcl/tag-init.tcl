@@ -698,10 +698,10 @@ template_tag include-optional { chunk params } {
   # chunk inside the include-optional tag.
   # Finally, we pop the output off of the __adp_include_optional_output stack.
 
-  template::adp_append_code "if { \[catch { ad_try { lappend __adp_include_optional_output \[$command\] } ad_script_abort val { } } errmsg\] } {"
+  template::adp_append_code "ad_try { lappend __adp_include_optional_output \[$command\] } on error {errmsg} {"
   template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
   template::adp_append_code "    ad_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
-  template::adp_append_code "} else {"
+  template::adp_append_code "} on ok {r} {"
   template::adp_append_code "if { \[string trim \[lindex \$__adp_include_optional_output end\]\] ne {} } {"
 
   template::adp_compile_chunk $chunk
