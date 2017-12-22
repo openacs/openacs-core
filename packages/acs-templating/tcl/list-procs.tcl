@@ -513,22 +513,20 @@ ad_proc -public template::list::prepare {
 
     prepare_filters \
         -name $name
-
+    
     # Split the current ordering info into name and direction
     # name is the string before the comma, order (asc/desc) is what's after
     if { [info exists list_properties(filter,$list_properties(orderby_name))] } {
-        foreach { orderby_name orderby_direction } \
-            [lrange [split $list_properties(filter,$list_properties(orderby_name)) ","] 0 1] {}
-
+        lassign [lrange [split $list_properties(filter,$list_properties(orderby_name)) ","] 0 1] orderby_name orderby_direction
+        
         set list_properties(orderby_selected_name) $orderby_name
-
         if { $orderby_direction eq "" } {
 
             ad_try {
                 template::list::orderby::get_reference \
                     -list_name $name \
                     -orderby_name $orderby_name
-            } on error {errorMsg] {
+            } on error {errorMsg} {
                 ad_page_contract_handle_datasource_error $errorMsg
                 ad_script_abort
             }
@@ -543,7 +541,7 @@ ad_proc -public template::list::prepare {
         -name $name \
         -ulevel [expr {$ulevel + 1}]
 
-    # Make groupby information available to templates
+    # Make group_by information available to templates
     if { [exists_and_not_null list_properties(filter,groupby)] } {
         set list_properties(groupby) $list_properties(filter,groupby)
     }
@@ -555,7 +553,8 @@ ad_proc -public template::list::prepare {
     if { $list_properties(page_size_variable_p) == 1 } {
         set list_properties(page_size) $list_properties(filter,page_size)
         set list_properties(url) [ad_conn url]
-        set list_properties(page_size_export_chunk) [uplevel $list_properties(ulevel) [list export_vars -form -exclude {page_size page} $list_properties(filters_export)]]
+        set list_properties(page_size_export_chunk) \
+            [uplevel $list_properties(ulevel) [list export_vars -form -exclude {page_size page} $list_properties(filters_export)]]
     }
 
     if { $list_properties(page_size) ne "" && $list_properties(page_size) != 0 } {
@@ -573,11 +572,11 @@ ad_proc -public template::list::prepare {
 
         # Use some short variable names to make the expr readable
         set page $list_properties(filter,page)
-        set groupsize $list_properties(page_groupsize)
-        set page_size $list_properties(page_size)
-        set page_group [expr {($page - 1 - (($page - 1) % $groupsize)) / $groupsize + 1}]
-        set first_row [expr {($page_group - 1) * $groupsize * $page_size + 1}]
-        set last_row [expr {$first_row + ($groupsize + 1) * $page_size - 1}]
+        set groupsize   $list_properties(page_groupsize)
+        set page_size   $list_properties(page_size)
+        set page_group  [expr {($page - 1 - (($page - 1) % $groupsize)) / $groupsize + 1}]
+        set first_row   [expr {($page_group - 1) * $groupsize * $page_size + 1}]
+        set last_row    [expr {$first_row + ($groupsize + 1) * $page_size - 1}]
         set page_offset [expr {($page_group - 1) * $groupsize}]
 
         # Antonio Pisano 2015-11-17: From now on, the original query
