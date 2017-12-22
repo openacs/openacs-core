@@ -443,13 +443,21 @@ ad_proc -public template::util::list_of_ns_sets_to_multirow {
 
         @return A string with the contents of the file.
     } {
-
-        set fd [open $path]
-
-        template::util::set_file_encoding $fd
-
-        set text [read $fd]
-        close $fd
+        #
+        # Use ad_try to make sure, that the file descriptor is finally
+        # closed.
+        #
+        ad_try {
+            set fd [open $path]
+            template::util::set_file_encoding $fd
+            set text [read $fd]
+        } on error {errMsg opts} {
+            dict incr opts -level
+            ns_log error "template::util::read_file on fd $fd: $errMsg,\n$::errorInfo"
+            return -options [dict replace $opts -inside $opts] $errMsg
+        } finally {
+            close $fd
+        }
 
         return $text
     }
