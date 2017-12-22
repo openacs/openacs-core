@@ -188,7 +188,7 @@ transaction.</blockquote><dl><dd>
 <td align="right">
 <code>args</code><font color="red">*</font>
 </td><td align="left">A list of element identifiers. If the list is
-empty, retreive all form elements</td>
+empty, retrieve all form elements</td>
 </tr>
 </table>
 </dd></dl>
