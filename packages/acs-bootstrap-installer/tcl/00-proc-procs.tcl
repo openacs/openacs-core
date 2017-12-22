@@ -634,7 +634,7 @@ ad_proc -public ad_proc {
       <li> Procedures can be declared with regular <i>positional</i> parameters (where
            you pass parameters in the order they were declared), or with <i>named</i>
 	   parameters, where the order doesn't matter because parameter names are 
-	   specified explicitely when calling the parameter. Named parameters are 
+	   specified explicitly when calling the parameter. Named parameters are 
 	   preferred.</li>
       <li> If you use named parameters, you can specify which ones are required, optional,
            (including default values), and boolean. See the examples below.</li>
