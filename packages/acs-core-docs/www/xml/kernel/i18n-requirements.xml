@@ -413,7 +413,7 @@ grouped with respect to a module name or package path.</para>
 
 <para><emphasis>40.30</emphasis> The API for lookup of a message
 will take a locale and message key as arguments, and return the
-appropriate translation of that message for the specifed
+appropriate translation of that message for the specified
 locale.</para>
 
 <para><emphasis>40.40</emphasis> The API for lookup of a message

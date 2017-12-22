@@ -217,7 +217,7 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
             <title>Install qmail</title>
 	     <para>QMail is available as standard Debian/Ubuntu package,
       rpms for Fedora/Redhat/CenTOS are available from <ulink
-      url="https://en.wikipedia.org/wiki/Qmail/">QMail wiki
+      url="https://en.wikipedia.org/wiki/Qmail">QMail wiki
 	     page</ulink></para>
 	  </formalpara>
 	</listitem>

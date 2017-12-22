@@ -191,7 +191,7 @@ case, pass-by-value is expensive, and you&#39;d use pass-by-reference.
 <blockquote><para><emphasis>The transformation of the array into a list and back to an
 array takes, in our test environment, approximately 10 microseconds per entry
 of 100 character&#39;s length. Thus you can process about 100 entries per
-milisecond. The time depends almost completely on the number of entries, and
+millisecond. The time depends almost completely on the number of entries, and
 almost not at all on the size of the entries.</emphasis></para></blockquote>
 
 <para>
