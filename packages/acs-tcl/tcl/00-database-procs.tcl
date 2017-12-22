@@ -2161,7 +2161,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     <code>transaction_code</code> will be caught automatically and process control will transfer to <code>error_code_block</code>
     with a variable <code>errmsg</code> set.  The error_code block can then clean up after the error, such as presenting a usable
     error message to the user.  Following the execution of <code>error_code_block</code> the transaction will be aborted.
-    If you want to explicity abort the transaction, call <code>db_abort_transaction</code>
+    If you want to explicitly abort the transaction, call <code>db_abort_transaction</code>
     from within the transaction_code block or the error_code block.<p>
 
     Example 1:<br>

@@ -2231,11 +2231,11 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
 
     if {[info exists data] && [string length $data]} {
         if {![info exists name]} {
-            error "Cannot upload file without specifing form variable -name"
+            error "Cannot upload file without specifying form variable -name"
         }
 
         if {![info exists filename]} {
-            error "Cannot upload file without specifing -filename"
+            error "Cannot upload file without specifying -filename"
         }
 
         if {$mime_type eq "*/*" || $mime_type eq ""} {

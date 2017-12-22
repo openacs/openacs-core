@@ -38,7 +38,7 @@ ad_page_contract {
     package_key_unique -requires {package_key} {
 	if {[apm_package_registered_p $package_key] } {
 	    ad_complain "The package key, <tt>$package_key</tt>, you have requested 
-is already registerd to another package."
+is already registered to another package."
 	}
     }
 
