@@ -2618,7 +2618,7 @@ ad_proc -private apm::package_version::attributes::generate_xml_element {
     {-multiple:boolean false}
     -value:required
 } {
-    Format an XML element wit a value depending on the specified arguemnts
+    Format an XML element wit a value depending on the specified arguments
     @param attribute_name code the value as xml attribute
     @param multiple treat the value as a list and produce multiple xml elements
     @return the xml-formatted string

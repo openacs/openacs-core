@@ -1,7 +1,7 @@
 ad_library {
     Callback contract definitions for page rendering.
 
-    Typically the callbacks also have a corresponing
+    Typically the callbacks also have a corresponding
     .adp for rendering their output, see the specific callbacks 
     for details.
 

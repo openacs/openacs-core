@@ -2185,7 +2185,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
     timeout, depth, and http_referer are optional, and are included
     as optional positional variables in the same order they are used
     in <tt>util_httppost</tt>.  NOTE: <tt>util_http_file_upload</tt> does
-    not (currently) follow any redirects, so depth is superfulous.
+    not (currently) follow any redirects, so depth is superfluous.
 
     @author Michael A. Cleverly (michael@cleverly.com)
     @creation-date 3 September 2002

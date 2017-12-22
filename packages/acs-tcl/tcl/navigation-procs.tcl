@@ -14,7 +14,7 @@ ad_proc -public ad_context_bar_html {
     -separator
     context
 } { 
-    Generate the an html fragement for a context bar.
+    Generate the an html fragment for a context bar.
     This is the function that takes a list in the format
     <pre>
     [list [list url1 text1] [list url2 text2] ... "terminal text"] 

@@ -59,7 +59,7 @@ ad_proc country_widget {
     return $widget_value
 }
 
-# teadams - It is usually more approprate to use html_select_options or
+# teadams - It is usually more appropriate to use html_select_options or
 # html_select_value_options. 
 
 ad_proc ad_generic_optionlist {

@@ -670,7 +670,7 @@ ad_proc -public export_vars {
     # TODO: At least the parsing of the options should be transformed
     # to produce a single dict, containing the properties of all form
     # vars (probably optionally) and specified arguments. The dict
-    # should be the straightforeward source for the genertion of the
+    # should be the straightforward source for the genertion of the
     # output set. One should be able to speed the code significantly
     # up (at least for the standard cases).
     #
@@ -1145,7 +1145,7 @@ ad_proc -public exists_and_not_null { varname } {
 
 
 ad_proc -public exists_and_equal { varname value } {
-    Returns 1 if the variable name exists in the caller's envirnoment
+    Returns 1 if the variable name exists in the caller's environment
     and is equal to the given value.
 
     @see exists_and_not_null

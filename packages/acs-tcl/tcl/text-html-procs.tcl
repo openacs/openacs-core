@@ -1059,7 +1059,7 @@ ad_proc ad_parse_html_attributes_upvar {
         every reference to external addresses. Proc will try to
         distinguish between external URLs and fine fully specified
         internal ones. Acceptable URLs will be transformed in absolute
-        local references, others will be just stripped togheter with
+        local references, others will be just stripped together with
         the attribute.
         
         @param validate This flag will avoid the creation of the

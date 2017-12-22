@@ -1,6 +1,6 @@
 ad_library {
     
-    Compatibily procs in case we're not running a version of AOLServer that supports charsets.
+    Compatibility procs in case we're not running a version of AOLServer that supports charsets.
     
     @author Rob Mayoff [mayoff@arsdigita.com]
     @author Nada Amin [namin@arsdigita.com]

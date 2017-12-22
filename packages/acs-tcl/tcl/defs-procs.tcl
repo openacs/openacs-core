@@ -620,7 +620,7 @@ ad_proc -deprecated ad_parameter {
     affect the parameter retrieved.  If the code that calls ad_parameter is being called within the scope
     of a running server, the package_id will be determined automatically.  However, if you want to use a
     parameter on server startup or access an arbitrary parameter (e.g., you are writing bboard code, but
-    want to know an acs-kernel parameter), specifiy the package_id parameter to the object id of the package
+    want to know an acs-kernel parameter), specify the package_id parameter to the object id of the package
     you want.
     <p>
     Note: <strong>The parameters/ad.ini file is deprecated.</strong>

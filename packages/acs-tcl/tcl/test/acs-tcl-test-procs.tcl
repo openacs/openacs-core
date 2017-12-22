@@ -822,7 +822,7 @@ aa_register_case \
 } {
 
     # DRB: Not all of these test cases work for Oracle (select can't be used in
-    # db_exec_plsql) and bindvar substituion is done by Oracle, not the driver,
+    # db_exec_plsql) and bindvar substitution is done by Oracle, not the driver,
     # anyway so there's not much point in testing.   These tests really test
     # Oracle bindvar emulation, in other words...
 

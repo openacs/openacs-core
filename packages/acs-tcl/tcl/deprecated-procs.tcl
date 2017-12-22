@@ -184,7 +184,7 @@ ad_proc -deprecated ad_export_vars {
     The args is a list of variable names that you want exported. You can name 
 
     <ul>
-    <li>a scalar varaible, <code>foo</code>,
+    <li>a scalar variable, <code>foo</code>,
     <li>the name of an array, <code>bar</code>, 
     in which case all the values in that array will get exported, or
     <li>an individual value in an array, <code>bar(baz)</code>

@@ -774,7 +774,7 @@ ad_proc -public site_node::get_children {
 
     @param package_key   If specified, this will limit the returned nodes to those with a
     package of the specified package key mounted. Conflicts with the
-    -package_type option. Can take one or more packges keys as a Tcl list.
+    -package_type option. Can take one or more packages keys as a Tcl list.
 
     @param filters       Takes a list of { element value element value ... } for filtering
     the result list. Only nodes where element is value for each of the
@@ -1796,7 +1796,7 @@ if {$UseXotclSiteNodes} {
 
         @param package_key   If specified, this will limit the returned nodes to those with a
         package of the specified package key mounted. Conflicts with the
-        -package_type option. Can take one or more packges keys as a Tcl list.
+        -package_type option. Can take one or more packages keys as a Tcl list.
 
         @param filters       Takes a list of { element value element value ... } for filtering
         the result list. Only nodes where element is value for each of the
