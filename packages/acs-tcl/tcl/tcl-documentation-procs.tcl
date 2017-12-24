@@ -2214,7 +2214,7 @@ ad_proc ad_page_contract_verify_datasources {} {
     Check if all the datasources (properties) promised in the page contract have
     actually been set.
 
-    @author Chrisitan Brechbuehler <christian@arsdigita.com>
+    @author Christian Brechbuehler <christian@arsdigita.com>
     @creation-date 13 Aug 2000
 } {
     # for now this is a dummy proc.
@@ -2227,7 +2227,7 @@ ad_proc ad_page_contract_verify_datasources {} {
 ad_proc ad_page_contract_handle_datasource_error {error} {
     Output a diagnostic page.  Treats both special and generic error messages.
 
-    @author Chrisitan Brechbuehler <christian@arsdigita.com>
+    @author Christian Brechbuehler <christian@arsdigita.com>
     @creation-date 13 Aug 2000
 } {
     set complaint_template [parameter::get_from_package_key \

@@ -51,7 +51,7 @@ if { [string match "*aspell*" $bin] } {
     set default_lang ""
 } 
 
-#Do we include all availabale dicts or not ?
+#Do we include all available dicts or not ?
 set use_dicts_p [parameter::get_from_package_key \
 		    -package_key acs-templating \
 		    -parameter SpellcheckUseDictsP \

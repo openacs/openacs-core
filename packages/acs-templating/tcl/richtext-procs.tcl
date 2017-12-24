@@ -448,11 +448,11 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     These options are used by the OacsFs plugin
     <ul>
     <li> <em>folder_id</em>: the folder from which files should be taken
-    for the file selector. Can be used alterantive with fs_package_id, whatever
+    for the file selector. Can be used alternative with fs_package_id, whatever
     more handy in the application.
     <li> <em>fs_package_id</em>: the package id of the file_storage package 
     from which files should be taken
-    for the file selector. Can be used alterantive with folder_id, whatever
+    for the file selector. Can be used alternative with folder_id, whatever
     more handy in the application. If nothing is specified, the
     globally mounted file-store is used.
     <li> <em>file_types</em>: SQL match pattern for selecting certain types

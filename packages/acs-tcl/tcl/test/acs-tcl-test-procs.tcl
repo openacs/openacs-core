@@ -693,7 +693,7 @@ aa_register_case -cats {api smoke} util__subset_p {
 aa_register_case -cats {api smoke} util__randomize_list {
     Test util::randomize_list
 } {
-    aa_equals "Emtpy list" [util::randomize_list {}] {}
+    aa_equals "Empty list" [util::randomize_list {}] {}
 
     aa_equals "One-element list" [util::randomize_list {a}] {a}
 

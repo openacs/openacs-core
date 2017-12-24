@@ -268,7 +268,7 @@ ad_proc -public template::list::create {
         sub_class {}
     }
 
-    # These are defauls for internally maintained properties
+    # These are defaults for internally maintained properties
     array set list_properties {
         aggregates_p 0
         bulk_action_export_chunk {}
