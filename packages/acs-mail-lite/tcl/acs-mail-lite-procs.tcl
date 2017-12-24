@@ -568,7 +568,7 @@ namespace eval acs_mail_lite {
             lappend headers_list [list DCC [join $bcc_addr ","]]
         }
 
-        # Build the originator address to be used as enveloppe sender
+        # Build the originator address to be used as envelope sender
         set rcpt_id 0
         if { [llength $to_addr] eq 1 } {
             set rcpt_id [party::get_by_email -email $to_addr]
