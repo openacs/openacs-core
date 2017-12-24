@@ -258,7 +258,7 @@ rm -rf /var/tmp/openacs-4</action></screen>
           </listitem>  	
           <listitem>
             <para>
-              For each channel, it&#39;ll do an anonymous checkout of packges and contrib/packages, then build .apm files for each package in the checkout.
+              For each channel, it&#39;ll do an anonymous checkout of packages and contrib/packages, then build .apm files for each package in the checkout.
             </para>
           </listitem>
           <listitem>

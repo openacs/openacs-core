@@ -974,7 +974,7 @@ create table <emphasis role="bold">composition_rels</emphasis> (
       The situation we are
       facing in trying to determine whether or not a user is member of a group is similar to the one
       discussed above in the case of the context hierarchy.  Groups can form hierarchies with
-      respect to the composition relationship.  The compositon relationship is transitive.  If
+      respect to the composition relationship.  The composition relationship is transitive.  If
       <emphasis>G1</emphasis> is a subgroup of <emphasis>G2</emphasis>, and <emphasis>G2</emphasis> is a subgroup of <emphasis>G3</emphasis>, then
       <emphasis>G1</emphasis> is a subgroup of <emphasis>G3</emphasis>; that is, any member of <emphasis>G1</emphasis> is also a member
       of <emphasis>G3</emphasis>. 

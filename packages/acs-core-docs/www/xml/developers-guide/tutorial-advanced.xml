@@ -948,7 +948,7 @@ cvs tag -F openacs-5-1-compat
     </programlisting>
 
     <para>You also need a drop script. This is untested for
-    comptability with the above script.</para>
+    compatibility with the above script.</para>
     <programlisting>
       -- @author gwong@orchardlabs.com,ben@openforce.biz
       -- @creation-date 2002-05-16
@@ -1543,7 +1543,7 @@ ad_page_contract {
  
   <sect1 id="tutorial-parameters">
     <title>Adding in parameters for your package</title>
-    <para>Each instance of a package can have paramaters associated
+    <para>Each instance of a package can have parameters associated
     with it. These are like preferences, and they can be set by the
     administrator for each application to change the behavior of your
     application. </para>

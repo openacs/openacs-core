@@ -1950,7 +1950,7 @@ END OF TEMPLATE -->
 
       <listitem>
         <para>
-          External authenticaiton.
+          External authentication.
 
           Integrate with outside user databases through e.g. LDAP, RADIUS, Kerberos, MS Active Directory. 
           Imports user information through IMS Enterprise 1.1 format. Easily extended to support other 

@@ -24,7 +24,7 @@ with our data model. This gives us two real advantages:
 
 <itemizedlist>
   <listitem><para> We can quickly identify and fix any errors. </para></listitem>
-  <listitem><para> We can reliabily modify or drop constraints </para></listitem>
+  <listitem><para> We can reliability modify or drop constraints </para></listitem>
 </itemizedlist>
 
 <para>

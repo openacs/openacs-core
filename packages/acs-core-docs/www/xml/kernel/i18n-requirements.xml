@@ -589,7 +589,7 @@ designer may create multiple locale-specific template files may be
 created (one per locale or language)</para>
 
 <para><emphasis>70.10</emphasis> For a given page request, the
-system must be able to select an approprate locale-specific
+system must be able to select an appropriate locale-specific
 template file to use. The request locale is computed as per (see
 requirement 20.0).</para>
 

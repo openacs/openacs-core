@@ -17,7 +17,7 @@ to add jimi when building FOP (and it's only on 10.3 unstable I think).
 
 
 I did have to change the fop executable script to increase the JVM
-memory.  On the last line of /usr/bin/fop (or whereever yours ends
+memory.  On the last line of /usr/bin/fop (or wherever yours ends
 up) add -Xms64m -Xmx256m; smaller might work too...
 
 104c104

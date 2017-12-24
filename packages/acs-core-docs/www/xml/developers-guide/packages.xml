@@ -37,7 +37,7 @@
       <programlisting>
 ROOT/
     bin/
-        Various executables and scripts for server maintanence.
+        Various executables and scripts for server maintenance.
     content-repository-content-files/
         content repository content stored in the filesystem.
     etc/
@@ -584,7 +584,7 @@ ROOT/
 
         <para>
           Note that while the <computeroutput>.sql</computeroutput> files
-          have been added to the packge, they <emphasis>have not</emphasis>
+          have been added to the package, they <emphasis>have not</emphasis>
           been loaded into the database. For the purposes of development,
           you have to load the data model by hand, because while OpenACS
           has automatic mechanisms for loading and reloading

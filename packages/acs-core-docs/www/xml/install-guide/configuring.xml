@@ -266,7 +266,7 @@
           <programlisting>set can_register_p [events::security::can_register_for_event_p -event_id $event_id]</programlisting>
           <para>We need to know what that procedure does, so go to <ulink url="/api-doc">/api-doc</ulink>, paste events::security::can_register_for_event_p into the ACS Tcl API Search box, and click Feeling Lucky.  The next pages shows the proc, and we click "show source" to see more information.  The body of the proc is simply</para>
           <programlisting>return [permission::permission_p -party_id $user_id -object_id $event_id -privilege write]</programlisting>
-          <para>This means that a given user must have the write privilige on the event in order to register.  Let&#39;s assume that the priviliges inherit, so that if a user has the write privilige on the whole package, they will have the write privilege on the event.</para>
+          <para>This means that a given user must have the write privilige on the event in order to register.  Let&#39;s assume that the privileges inherit, so that if a user has the write privilige on the whole package, they will have the write privilege on the event.</para>
         </listitem>
         <listitem>
           <formalpara>
