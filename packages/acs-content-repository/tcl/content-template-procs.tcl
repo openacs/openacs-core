@@ -2,7 +2,7 @@
 
 ad_library {
     
-    Procudures for content template
+    Procedures for content template
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09

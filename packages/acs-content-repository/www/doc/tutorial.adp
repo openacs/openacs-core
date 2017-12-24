@@ -659,7 +659,7 @@ Note that this example is for projects rather than tasks. This is
 because for the application I&#39;m writing, projects are what
 tasks are stored inside of. A project has many component tasks. If
 you were writing another application, or if I wasn&#39;t doing
-anythign with projects, then this would be creating a folder for
+anything with projects, then this would be creating a folder for
 just tasks.
 <p>Typically, this definition would go in your
 <code>sql/postgresql/project-manager-create.sql</code> file. If

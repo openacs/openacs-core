@@ -4,7 +4,7 @@ as
 --/** 
 --Content items store the overview of the content published on a
 --website. The actual content is stored in content revisions. It is
---implemented this way so that there can be mulitple versions of the
+--implemented this way so that there can be multiple versions of the
 --actual content while the main idea remains constant. For example: If
 --there is a review for the movie "Terminator," there will exist a
 --content item by the name "terminator" with all the right parameters
@@ -89,7 +89,7 @@ function new (
 
 
 function is_published (
-  --/** Determins whether an item is published or not.
+  --/** Determines whether an item is published or not.
   --    @author Michael Pih
   --    @param item_id		The item ID
   --    @return 't' if the item is published, 'f' otherwise

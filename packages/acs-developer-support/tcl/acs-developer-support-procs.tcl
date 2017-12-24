@@ -268,7 +268,7 @@ ad_library {
  }
 
  ad_proc -public ds_get_page_serve_time_ms {} {
-     Returns the number of miliseconds passed since this request thread was started.
+     Returns the number of milliseconds passed since this request thread was started.
 
      Returns the empty string if this information is not available.
  } {

@@ -115,7 +115,7 @@ ad_proc -public ::content::item::new {
     # pass in the cr_item subtype here and content_type as part of
     # var_list
     db_transaction {
-        # An explict lock was necessary for PostgreSQL between 8.0 and
+        # An explicit lock was necessary for PostgreSQL between 8.0 and
         # 8.2; left the following statement here for documentary
         # purposes
         #

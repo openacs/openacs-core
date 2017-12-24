@@ -128,7 +128,7 @@ ad_proc -public cr_cleanup_orphaned_files {} {
     Helper proc to cleanup orphaned files in the content
     repository. Orphaned files can be created during aborted
     transactions involving the files being added to the content
-    respository.
+    repository.
 
 } {
     cr_delete_orphans [cr_get_file_creation_log]

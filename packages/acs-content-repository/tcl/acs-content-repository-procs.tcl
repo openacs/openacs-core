@@ -77,7 +77,7 @@ ad_proc -private cr_scan_mime_types {} {
 }
 
 ##
-## Check for orphans in the content respository directory, and delete
+## Check for orphans in the content repository directory, and delete
 ## such files if required.
 ##
 ## gustaf.neumann@wu-wien.ac.at
@@ -86,7 +86,7 @@ ad_proc -private cr_scan_mime_types {} {
 
 ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} { 
 
-    Check for orphaned files in the content respository directory, and
+    Check for orphaned files in the content repository directory, and
     delete such files if required.  Orphaned files might be created,
     when files are added to the content repository, but the transaction
     is being aborted. This function is intended to be used for one-time
@@ -109,7 +109,7 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
         set name [string range $f $root_length end]
         if {![regexp {^[0-9/]+$} $name]} continue
 
-        # For every file in the content respository directory, check if this
+        # For every file in the content repository directory, check if this
         # file is still referenced from the content-revisions.
 
         set x [cr_count_file_entries $name]

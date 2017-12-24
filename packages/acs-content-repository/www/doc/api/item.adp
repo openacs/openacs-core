@@ -14,7 +14,7 @@ content_item</p>
 <h3><a name="overview">Overview</a></h3>
 <p>Content items store the overview of the content published on a
 website. The actual content is stored in content revisions. It is
-implemented this way so that there can be mulitple versions of the
+implemented this way so that there can be multiple versions of the
 actual content while the main idea remains constant. For example:
 If there is a review for the movie "Terminator," there
 will exist a content item by the name "terminator" with
