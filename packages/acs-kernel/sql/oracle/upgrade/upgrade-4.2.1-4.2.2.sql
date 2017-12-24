@@ -1,4 +1,4 @@
--- scalability/performace enchancements
+-- scalability/performance enchancements
 
 create index site_nodes_parent_id_idx on site_nodes(parent_id,object_id,node_id);
 create unique index users_u_id_email_verified_idx on users (user_id, email_verified_p);

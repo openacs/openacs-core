@@ -290,7 +290,7 @@ $$;
 comment on column apm_package_versions.release_date is $$
 This tracks when the package was released. Releasing a package means
 freezing the code and files, creating an archive, and making the
-package available for donwload. XXX (bquinn): I'm skeptical about the
+package available for download. XXX (bquinn): I'm skeptical about the
 usefulness of storing this information here.
 $$;
 
@@ -734,9 +734,9 @@ create table apm_parameters (
 	max_n_values		integer default 1 not null
 			        constraint apm_parameters_max_n_values_ck
 			        check (max_n_values >= 0),
-	constraint apm_paramters_attr_name_un
+	constraint apm_parameters_attr_name_un
 	unique (parameter_name, package_key),
-	constraint apm_paramters_n_values_ck
+	constraint apm_parameters_n_values_ck
 	check (min_n_values <= max_n_values)
 );
 

@@ -122,7 +122,7 @@ $$ LANGUAGE plpgsql;
 -- 'content_type__refresh_view'.
 --
 -- However, we have as well rebuild a few views which included
--- (sometimes implicitely, e.g. via acs_objects.*) the
+-- (sometimes implicitly, e.g. via acs_objects.*) the
 -- tree_sortkey. We perform this operation here (since the views were
 -- dropped by this upgrade script) but as well in update scripts for
 -- the relevant packages referring explicitly to the tree_sortkey

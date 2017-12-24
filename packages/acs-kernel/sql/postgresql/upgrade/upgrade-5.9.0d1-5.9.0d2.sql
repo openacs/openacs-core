@@ -9,7 +9,7 @@ DECLARE
 BEGIN
   
   -- GN: the following deletion operation iterates over the id_columns
-  -- of the acs_object_types of the type tree for the obejct and
+  -- of the acs_object_types of the type tree for the object and
   -- performs manual deletions in these tables by trying to delete the
   -- delete__object_id from the id_column.  This deletion includes as
   -- well the deletion in acs_objects.

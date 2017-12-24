@@ -633,7 +633,7 @@ execute procedure rel_constraints_del_tr ();
 -- This view only returns segments S that have at least one rel_constraints row
 -- where rel_segment = S.  Segments that have no constraints defined on them
 -- can be said to have dependency_level=0, hence the outer join and nvl in the
--- example query above (see "Answer:").  I could have embeded that logic into
+-- example query above (see "Answer:").  I could have embedded that logic into
 -- this view, but that would unnecessarily degrade performance.
 --
 -- create view rc_segment_dependency_levels as

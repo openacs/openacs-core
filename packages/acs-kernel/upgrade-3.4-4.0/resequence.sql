@@ -148,7 +148,7 @@ create table rs_dummy (
 insert into rs_dummy (one) values (1);
 
 -- This procedure disables all constraints referencing v_table_name's
--- primary key, incremenets all the ids in v_table_name by v_offset as
+-- primary key, increments all the ids in v_table_name by v_offset as
 -- well as all the ids in columns referencing v_table_name, and then
 -- reinstates all the constraints. This will probably require that the
 -- sequence used for v_table_name's primary key be bumped. This should
