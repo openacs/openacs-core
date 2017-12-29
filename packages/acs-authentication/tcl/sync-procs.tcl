@@ -178,7 +178,7 @@ ad_proc -public auth::sync::job::end {
     if { ![template::util::is_true $job(interactive_p)] && $email_p } {
         # Only send out email if not an interactive job
 
-        with_catch errmsg {
+        ad_try {
             acs_mail_lite::send -send_immediately \
                 -to_addr [ad_system_owner] \
                 -from_addr [ad_system_owner] \
@@ -192,9 +192,9 @@ Number of problems: $job(num_problems)
 Job message       : $job(message)
 
 To view the complete log, please visit\n$job(log_url)"
-        } {
+        } on error {errorMsg} {
             # We don't fail hard here, just log an error
-            ns_log Error "Error sending registration confirmation to [ad_system_owner].\n$::errorInfo"
+            ad_log Error "Error sending registration confirmation to [ad_system_owner]: $errorMsg"
         }
     }
     
@@ -367,7 +367,7 @@ ad_proc -public auth::sync::job::action {
 
         # Only actually perform the action if we didn't already encounter a problem
         if { $success_p } {
-            with_catch errmsg {
+            ad_try {
                 switch $operation {
                     "insert" {
                         # We set email_verified_p to 't', because we trust the email we get from the remote system
@@ -452,9 +452,9 @@ ad_proc -public auth::sync::job::action {
                         }
                     }
                 }
-            } {
+            } on error {errorMsg} {
                 # Get errorInfo and log it
-                ns_log Error "Error during batch syncrhonization job:\n$::errorInfo"
+                ad_log Error "Error during batch syncrhonization job: $errorMsg"
                 set success_p 0
                 set result(message) $::errorInfo
             }
@@ -541,9 +541,11 @@ ad_proc -private auth::sync::get_sync_elements {
     }
 
     set elms [list]
-    with_catch errmsg {
+    ad_try  {
         set elms [auth::sync::GetElements -authority_id $authority_id]
-    } {}
+    } on error {errorMsg} {
+        ad_log error "auth::sync::GetElements raised: $errorMsg"
+    }
 
     return $elms
 }

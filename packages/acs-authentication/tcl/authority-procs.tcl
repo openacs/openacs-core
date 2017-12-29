@@ -323,12 +323,12 @@ ad_proc -public auth::authority::batch_sync {
             document {}
             snapshot_p f
         }
-        with_catch errmsg {
+        ad_try {
             array set doc_result [auth::sync::GetDocument -authority_id $authority_id]
-        } {
-            ns_log Error "Error getting sync document:\n$::errorInfo"
+        } on error {errorMsg} {
+            ad_log Error "Error getting sync document: errorMsg"
             set doc_result(doc_status) failed_to_connect
-            set doc_result(doc_message) $errmsg
+            set doc_result(doc_message) $errorMsg
         }
         
         set snapshot_p [template::util::is_true $doc_result(snapshot_p)]
@@ -341,7 +341,7 @@ ad_proc -public auth::authority::batch_sync {
             -snapshot=$snapshot_p
 
         if { $doc_result(doc_status) eq "ok" && $doc_result(document) ne "" } {
-            with_catch errmsg {
+            ad_try {
                 auth::sync::ProcessDocument \
                     -authority_id $authority_id \
                     -job_id $job_id \
@@ -371,9 +371,9 @@ ad_proc -public auth::authority::batch_sync {
                         $ack_file_name \
                         $ack_doc
                 }
-            } {
-                ns_log Error "Error processing sync document:\n$::errorInfo"
-                set message "Error processing sync document: $errmsg"
+            } on error {errorMsg} {
+                ad_log Error "Error processing sync document: $errorMsg"
+                set message "Error processing sync document: $errorMsg"
             }
         } else {
             if { $message eq "" } {

@@ -276,16 +276,18 @@ ad_proc -private auth::local::password::ChangePassword {
 	}
     }
 
-    if { [catch { ad_change_password $user_id $new_password } errmsg] } {
+    ad_try {
+        ad_change_password $user_id $new_password
+    } on error {errorMsg} {
         set result(password_status) "change_error"
-        ns_log Error "Error changing local password for username $username, user_id $user_id: \n$::errorInfo"
+        ad_log Error "Error changing local password for username $username, user_id $user_id: $errorMsg"
         return [array get result]
     }
 
     set result(password_status) "ok"
 
     if { [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1] } {
-	with_catch errmsg {
+	ad_try {
 	    acs_user::get -username $username -authority_id $authority_id -array user
 	    
 	    set system_name [ad_system_name]
@@ -304,13 +306,13 @@ ad_proc -private auth::local::password::ChangePassword {
 	    set body [_ acs-subsite.Password_changed_body]
 	    
 	    acs_mail_lite::send \
-            -send_immediately \
-            -to_addr $user(email) \
-            -from_addr [ad_outgoing_sender] \
-            -subject $subject \
-            -body $body
-	} {
-            ns_log Error "Error sending out password changed notification to account owner with user_id $user(user_id), email $user(email): $errmsg\n$::errorInfo"
+                -send_immediately \
+                -to_addr $user(email) \
+                -from_addr [ad_outgoing_sender] \
+                -subject $subject \
+                -body $body
+	} on error {errorMsg} {
+            ad_log Error "Error sending out password changed notification to account owner with user_id $user(user_id), email $user(email): $errorMsg"
 	}
     }
     
@@ -509,7 +511,7 @@ ad_proc -private auth::local::registration::Register {
                      -package_id [ad_conn subsite_id] -default 0]
              || $email_reg_confirm_p
          } {
-	    with_catch errmsg {
+	    ad_try {
 		auth::password::email_password \
 		    -username $username \
 		    -authority_id $authority_id \
@@ -520,9 +522,9 @@ ad_proc -private auth::local::registration::Register {
                                -default [ad_system_owner]] \
 		    -subject_msg_key "acs-subsite.email_subject_Registration_password" \
 		    -body_msg_key "acs-subsite.email_body_Registration_password" 
-	    } {
+	    } on error {errorMsg} {
 		# We don't fail hard here, just log an error
-		ns_log Error "Error sending registration confirmation to $email.\n$::errorInfo"
+		ad_log Error "Error sending registration confirmation to $email: $errorMsg"
 	    }
 	}
     }
@@ -530,7 +532,7 @@ ad_proc -private auth::local::registration::Register {
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Notify admin on new registration
     if { [parameter::get -parameter  NotifyAdminOfNewRegistrationsP -default 0] } {
-        with_catch errmsg {
+        ad_try {
             set admin_email [parameter::get \
                                  -parameter NewRegistrationEmailAddress \
                                  -package_id [ad_conn subsite_id] \
@@ -550,9 +552,9 @@ ad_proc -private auth::local::registration::Register {
                 -from_addr [ad_outgoing_sender] \
                 -subject [lang::message::lookup $admin_locale acs-subsite.lt_New_registration_at_s] \
                 -body [lang::message::lookup $admin_locale acs-subsite.lt_first_names_last_name]
-        } {
+        } on error {errorMsg} {
             # We don't fail hard here, just log an error
-            ns_log Error "Error sending admin notification to $admin_email.\n$::errorInfo"
+            ad_log Error "Error sending admin notification to $admin_email: $errorMsg"
         }
     }
 

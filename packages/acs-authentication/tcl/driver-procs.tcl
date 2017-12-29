@@ -31,13 +31,13 @@ ad_proc -public auth::driver::get_parameters {
 
     set parameters {}
 
-    with_catch errmsg {
+    ad_try {
         set parameters [acs_sc::invoke \
                             -error \
                             -impl_id $impl_id \
                             -operation GetParameters]
-    } {
-        ns_log Error "Error getting parameters for impl_id $impl_id: $errmsg\n$::errorInfo"
+    } on error {errorMsg} {
+        ad_log Error "Error getting parameters for impl_id $impl_id: $errorMsg"
     }
     return $parameters
 }

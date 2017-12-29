@@ -229,7 +229,7 @@ ad_proc -public auth::authenticate {
         }
     }
 
-    with_catch errmsg {
+    ad_ty {
         array set result [auth::authentication::Authenticate \
                               -username $username \
                               -authority_id $authority_id \
@@ -240,10 +240,10 @@ ad_proc -public auth::authenticate {
         if {$result(auth_status) eq "ok"} {
             set dummy $result(account_status)
         }
-    } {
+    } on error {errorMsg} {
         set result(auth_status) failed_to_connect
-        set result(auth_message) $errmsg
-        ns_log Error "auth::authenticate: error invoking authentication driver for authority_id = $authority_id: $::errorInfo"
+        set result(auth_message) $errorMsg
+        ad_log Error "auth::authenticate: error invoking authentication driver for authority_id = $authority_id: $::errorInfo"
     }
 
     # Returns:
@@ -624,8 +624,8 @@ ad_proc -public auth::create_user {
 
     } on_error {
         set creation_info(creation_status) failed_to_connect
-        set creation_info(creation_message) $errmsg
-        ns_log Error "auth::create_user: Error invoking account registration driver for authority_id = $authority_id: $::errorInfo"
+        set creation_info(creation_message) $errorMsg
+        ad_log Error "auth::create_user: Error invoking account registration driver for authority_id = $authority_id"
     }
 
     if { $creation_info(creation_status) ne "ok" } {
@@ -973,7 +973,7 @@ ad_proc -public auth::create_local_account {
     }
 
     set error_p 0
-    with_catch errmsg {
+    ad_try {
         # We create the user without a password
         # If it's a local account, that'll get set later
         set user_id [auth::create_local_account_helper \
@@ -997,14 +997,14 @@ ad_proc -public auth::create_local_account {
                 -person_id $user_id \
                 -bio $user_info(bio)
         }
-    } {
+    } on error {errorMsg} {
         set error_p 1
     }
 
     if { $error_p || $user_id == 0 } {
         set result(creation_status) "failed_to_connect"
         set result(creation_message) [_ acs-subsite.Error_trying_to_register]
-        ns_log Error "auth::create_local_account: Error creating local account.\n$::errorInfo"
+        ad_log Error "auth::create_local_account: Error creating local account."
         return [array get result]
     }
 
@@ -1023,10 +1023,10 @@ ad_proc -public auth::create_local_account {
         set result(account_status) "closed"
         set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat_1]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
 
-        with_catch errmsg {
+        ad_try {
             auth::send_email_verification_email -user_id $user_id
-        } {
-            ns_log Error "auth::create_local_account: Error sending out email verification email to email $email:\n$::errorInfo"
+        } on error {errorMsg} {
+            ad_log Error "auth::create_local_account: Error sending out email verification email to email $email: $errorMsg"
             set auth_info(account_message) [_ acs_subsite.Error_sending_verification_mail]
         }
     }
@@ -1076,9 +1076,11 @@ ad_proc -private auth::create_local_account_helper {
 
     # This may fail, either because there's no connection, or because
     # we're in the bootstrap-installer, at which point [ad_conn user_id] is undefined.
-    catch {
+    ad_try {
         set creation_user [ad_conn user_id]
         set peeraddr [ad_conn peeraddr]
+    } on error {errorMsg} {
+        ns_log warning "auth::create_local_account_helper $errorMsg"
     }
 
     set salt [sec_random_token]
@@ -1092,17 +1094,18 @@ ad_proc -private auth::create_local_account_helper {
         # set password_question, password_answer
         db_dml update_question_answer {}
 
-        if {[catch {
+        ad_try {
             # Call the extension
             acs_user_extension::user_new -user_id $user_id
-        } errmsg]} {
+        } on error {errorMsg} {
             # At this point, we don't want the user addition to fail
             # if some extension is screwing things up
+            ns_log warning "acs_user_extension::user_new -user_id $user_id failed: $errorMsg"
         }
 
     } on_error {
         # we got an error.  log it and signal failure.
-        ns_log Error "Problem creating a new user: $::errorInfo"
+        ad_log Error "Problem creating a new user"
         set error_p 1
     }
 
@@ -1170,8 +1173,7 @@ ad_proc -public auth::update_local_account {
     set user_id $user_info(user_id)
     set result(user_id) $user_id
 
-    set error_p 0
-    with_catch errmsg {
+    ad_try {
 
         db_transaction {
             # Update persons: first_names, last_name
@@ -1230,14 +1232,10 @@ ad_proc -public auth::update_local_account {
 
             # TODO: Portrait
         }
-    } {
-        set error_p 1
-    }
-
-    if { $error_p } {
+    } on error {errorMsg} {
         set result(update_status) "failed_to_connect"
         set result(update_message) [_ acs-subsite.Error_update_account_info]
-        ns_log Error "Error updating local account.\n$::errorInfo"
+        ad_log Error "Error updating local account: $errorMsg"
         return [array get result]
     }
 
@@ -1343,10 +1341,10 @@ ad_proc -private auth::get_local_account {
         set authority_id [auth::authority::local]
     }
     #ns_log notice "auth::get_local_account authority_id = '${authority_id}' local = [auth::authority::local]"
-    with_catch errmsg {
+    ad_try {
         acs_user::get -authority_id $authority_id -username $username -array user
         set account_found_p 1
-    } {
+    } on error {errorMsg} {
         set account_found_p 0
     }
     if { !$account_found_p } {
@@ -1472,10 +1470,10 @@ ad_proc -private auth::check_local_account_status {
                 if { !$no_dialogue_p } {
                     set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
 
-                    with_catch errmsg {
+                    ad_try {
                         auth::send_email_verification_email -user_id $user_id
-                    } {
-                        ns_log Error "auth::check_local_account_status: Error sending out email verification email to email $email:\n$::errorInfo"
+                    } on error {errorMsg} {
+                        ad_log Error "auth::check_local_account_status: Error sending out email verification email to email $email: $errorMsg"
                         set result(account_message) [_ acs-subsite.Error_sending_verification_mail]
                     }
                 }
@@ -1524,7 +1522,7 @@ ad_proc -public auth::get_local_account_status {
     Return 'ok', 'closed', or 'no_account'
 } {
     set result no_account
-    catch {
+    ad_try {
         acs_user::get -user_id $user_id -array user
         array set check_result [auth::check_local_account_status \
                                     -user_id $user_id \
@@ -1534,6 +1532,8 @@ ad_proc -public auth::get_local_account_status {
                                     -password_age_days $user(password_age_days)]
 
         set result $check_result(account_status)
+    } on error {errorMsg} {
+        ns_log notice "auth::get_local_account_status returned: $errorMsg"
     }
     return $result
 }
