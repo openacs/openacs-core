@@ -31,7 +31,7 @@ set default_lang ""
 #
 if { [string match "*aspell*" $bin] } {
     # aspell
-    with_catch errmsg {
+    ad_try {
         set dicts [exec $bin dump dicts]
         set default_lang [exec $bin config lang]
         if { !$dialects_p } {
@@ -40,8 +40,8 @@ if { [string match "*aspell*" $bin] } {
             # one of the names in the pull-down menu.
             set default_lang [string range $default_lang 0 1]
         }
-    } {
-        ns_log Warning "Gettings dicts and default_lang for aspell failed with error message: \"$errmsg\""
+    } on error {errorMsg} {
+        ns_log Warning "Gettings dicts and default_lang for aspell failed with error message: \"$errorMsg\""
 	ns_log Notice "You might want to upgrade to a more recent version of Aspell ... http://aspell.sourceforge.net/"
     }
 } elseif { [string match "*ispell*" $bin] } {
