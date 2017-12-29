@@ -198,7 +198,7 @@ hierarchical structure to it, so that sets of messages can be
 grouped with respect to a module name or package path.</p><p>
 <strong>40.30</strong> The API for lookup of a message will take
 a locale and message key as arguments, and return the appropriate
-translation of that message for the specifed locale.</p><p>
+translation of that message for the specified locale.</p><p>
 <strong>40.40</strong> The API for lookup of a message will
 accept an optional default string which can be used if the message
 key is not found in the catalog. This lets the developer get code
@@ -318,7 +318,7 @@ designer may create multiple locale-specific template files may be
 created (one per locale or language)
 <p>
 <strong>70.10</strong> For a given page request, the system must
-be able to select an approprate locale-specific template file to
+be able to select an appropriate locale-specific template file to
 use. The request locale is computed as per (see requirement
 20.0).</p><p><font color="#080EFF"><em>Design note: this would probably be
 implemented by suffixing the locale or a locale abbreviation to the
