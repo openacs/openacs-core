@@ -62,7 +62,7 @@ aa_register_case -cats {api smoke} tcl_to_sql_list {
 }
 
 aa_register_case -cats {api smoke} expand_percentage_signs {
-    Test expand percentage signs to make sure it substitures correctly
+    Test expand percentage signs to make sure it substitutes correctly
     
     @author Dave Bauer
     @creation-date 2005-11-20
@@ -99,7 +99,7 @@ aa_register_case -cats {api smoke} tcl_to_sql_list {
 }
 
 aa_register_case -cats {api smoke} expand_percentage_signs {
-    Test expand percentage signs to make sure it substitures correctly
+    Test expand percentage signs to make sure it substitutes correctly
     
     @author Dave Bauer
     @creation-date 2005-11-20

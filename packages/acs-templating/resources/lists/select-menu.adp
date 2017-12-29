@@ -78,7 +78,7 @@ function getExtraVars (filter_name, filter_url) {
    // Split all variables by "&"
    var_array = variables.split("&");
 
-   // We store only the varaibles that are not equal to 
+   // We store only the variables that are not equal to 
    // the filter name
    for ( var i = 0; i < var_array.length; i++) 
        if ( var_array[i].search(filter_name) == -1) 
