@@ -1,7 +1,7 @@
 ad_library {
 
     Provides a simple API for reliably sending email.
-    
+
     @author Eric Lorenzo (eric@openforce.net)
     @creation-date 22 March 2002
     @cvs-id $Id$
@@ -11,6 +11,7 @@ ad_library {
 package require mime 1.4
 package require smtp 1.4
 package require base64 2.3.1
+
 namespace eval acs_mail_lite {
 
     #---------------------------------------
@@ -19,7 +20,7 @@ namespace eval acs_mail_lite {
     } {
         return [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "EnvelopePrefix"]
     }
-    
+
     #---------------------------------------
     ad_proc -public bouncing_email_p {
         -email:required
@@ -57,7 +58,7 @@ namespace eval acs_mail_lite {
     } {
         return "[bounce_prefix]-$user_id-[ns_sha1 $message_id]-$package_id@[address_domain]"
     }
-    
+
     #---------------------------------------
     ad_proc -public parse_bounce_address {
         -bounce_address:required
@@ -72,7 +73,7 @@ namespace eval acs_mail_lite {
             ns_log Debug "acs-mail-lite: bounce address not found for $bounce_address"
             return ""
         }
-    	return [list $user_id $package_id $signature]
+        return [list $user_id $package_id $signature]
     }
 
     #---------------------------------------
@@ -94,7 +95,7 @@ namespace eval acs_mail_lite {
     }
 
     #---------------------------------------
-    ad_proc -private check_bounces { } {
+    ad_proc -private check_bounces {} {
         Daily proc that sends out warning mail that emails
         are bouncing and disables emails if necessary
     } {
@@ -132,7 +133,7 @@ namespace eval acs_mail_lite {
             set notification_list [util_ns_set_to_list -set $notification]
             array set user $notification_list
             set user_id $user(user_id)
-	    set href [export_vars -base [ad_url]/register/restore-bounce {user_id}]
+            set href [export_vars -base [ad_url]/register/restore-bounce {user_id}]
             set body "Dear $user(name),\n\nDue to returning mails from your email account, we currently do not send you any email from our system. To reenable your email account, please visit\n$href"
 
             send -to_addr $notification_list -from_addr $notification_sender -subject $subject -body $body -valid_email
@@ -146,7 +147,7 @@ namespace eval acs_mail_lite {
     ad_proc -public record_bounce {
         {-user_id ""}
         {-email ""}
-    } { 
+    } {
         Records that an email bounce for this user
     } {
         if {$user_id eq ""} {
@@ -156,7 +157,7 @@ namespace eval acs_mail_lite {
             ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id"
             # record the bounce in the database
             db_dml record_bounce {}
-            
+
             if {![db_resultrows]} {
                 db_dml insert_bounce {}
             }
