@@ -939,7 +939,7 @@ ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
     document
     parameters
 } {
-    Generates an record-wise acknolwedgement document in home-brewed 
+    Generates an record-wise acknowledgement document in home-brewed 
     adaptation of the IMS Enterprise v 1.1 spec.
 } {
     set tree [xml_parse -persist $document]

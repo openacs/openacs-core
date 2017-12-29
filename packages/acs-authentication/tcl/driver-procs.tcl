@@ -1,5 +1,5 @@
 ad_library {
-    Procs for driver paramaters service contract implementations.
+    Procs for driver parameters service contract implementations.
 
     @author Simon Carstensen (simon@collaobraid.biz)
     @creation-date 2003-08-27

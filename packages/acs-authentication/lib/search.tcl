@@ -3,7 +3,7 @@ ad_page_contract {
     
     To grant permission on an object
     Including page can pass in 
-    add_permisison (list of Label, URL)
+    add_permissions (list of Label, URL)
     object_id
     privilege
 
