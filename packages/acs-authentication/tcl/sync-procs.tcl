@@ -1,6 +1,6 @@
 ad_library {
     API for managing synchronization of user data.
-    
+
     @creation-date 2003-09-05
     @author Lars Pind (lars@collaboraid.biz)
     @cvs-id $Id$
@@ -29,9 +29,9 @@ ad_proc -public auth::sync::job::get {
     Get information about a batch job in an array.
 
     @param job_id        The ID of the batch job you're ending.
-    
+
     @param array         Name of an array into which you want the information.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
 } {
     upvar 1 $array row
@@ -47,7 +47,7 @@ ad_proc -public auth::sync::job::get_entries {
     Get a list of entry_ids of the job log entries, ordered by entry_time.
 
     @param job_id        The ID of the batch job you're ending.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
 } {
     return [db_list select_entries { select entry_id from auth_batch_job_entries where job_id = :job_id order by entry_time }]
@@ -59,7 +59,7 @@ ad_proc -public auth::sync::job::get_authority_id {
     Get the authority_id from a job_id. Cached.
 
     @param job_id        The ID of the batch job you're ending.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
 } {
     return [util_memoize [list auth::sync::job::get_authority_id_not_cached $job_id]]
@@ -71,7 +71,7 @@ ad_proc -private auth::sync::job::get_authority_id_flush {
     Flush cache
 
     @param job_id        The ID of the batch job you're ending.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
 } {
     if { $job_id ne "" } {
@@ -88,7 +88,7 @@ ad_proc -private auth::sync::job::get_authority_id_seed {
     Flush cache
 
     @param job_id        The ID of the batch job you're ending.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
 } {
     util_memoize_seed [list auth::sync::job::get_authority_id_not_cached $job_id] $authority_id
@@ -100,9 +100,9 @@ ad_proc -private auth::sync::job::get_authority_id_not_cached {
     Get the authority_id from a job_id. Not cached.
 
     @param job_id        The ID of the batch job you're ending.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
-    
+
     @see auth::sync::job::get_authority_id
 } {
     return [db_string select_auth_id { select authority_id from auth_batch_jobs where job_id = :job_id }]
@@ -117,11 +117,11 @@ ad_proc -public auth::sync::job::start {
     Record the beginning of a job.
 
     @param authority_id      The ID of the authority you're trying to sync
-    
+
     @param interactive       Set this if this is an interactive job, i.e. it's initiated by a user.
 
     @return job_id           An ID for the new batch job. Used when calling other procs in this API.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
 } {
     db_transaction {
@@ -132,7 +132,7 @@ ad_proc -public auth::sync::job::start {
         if { $interactive_p && $creation_user eq "" } {
             set creation_user [ad_conn user_id]
         }
-        
+
         set interactive_p [db_boolean $interactive_p]
 
         db_dml job_insert {
@@ -143,7 +143,7 @@ ad_proc -public auth::sync::job::start {
         }
 
     }
-    
+
     # See the cache, we're going to need it shortly
     auth::sync::job::get_authority_id_seed -job_id $job_id -authority_id $authority_id
 
@@ -154,7 +154,7 @@ ad_proc -public auth::sync::job::end {
     {-job_id:required}
     {-message ""}
 } {
-    Record the end of a batch job. Closes out the transaction 
+    Record the end of a batch job. Closes out the transaction
     log and sends out notifications.
 
     @param job_id        The ID of the batch job you're ending.
@@ -166,14 +166,14 @@ ad_proc -public auth::sync::job::end {
     @author Lars Pind (lars@collaboraid.biz)
 } {
     db_dml update_job_end {}
-    
+
     # interactive_p, run_time_seconds, num_actions, num_problems
     get -job_id $job_id -array job
 
     set email_p [parameter::get_from_package_key \
                      -parameter SyncEmailConfirmationP \
                      -package_key "acs-authentication" \
-                     -default 0] 
+                     -default 0]
 
     if { ![template::util::is_true $job(interactive_p)] && $email_p } {
         # Only send out email if not an interactive job
@@ -197,7 +197,7 @@ To view the complete log, please visit\n$job(log_url)"
             ad_log Error "Error sending registration confirmation to [ad_system_owner]: $errorMsg"
         }
     }
-    
+
     return [array get job]
 }
 
@@ -241,17 +241,17 @@ ad_proc -public auth::sync::job::create_entry {
     Record a batch job entry.
 
     @param job_id The ID of the batch job you're ending.
-    
+
     @param operation One of 'insert', 'update', or 'delete'.
 
     @param username The username of the user being inserted/updated/deleted.
-    
+
     @param user_id The user_id of the local user account, if known.
 
     @param success Whether or not the operation went well.
-    
+
     @param message Any error message to stick into the log.
-    
+
     @return entry_id
 } {
     set success_p_db [ad_decode $success_p 1 "t" "f"]
@@ -266,7 +266,7 @@ ad_proc -public auth::sync::job::create_entry {
 ad_proc -public auth::sync::job::get_entry {
     {-entry_id:required}
     {-array:required}
-} { 
+} {
     Get information about a log entry
 } {
     upvar 1 $array row
@@ -299,20 +299,20 @@ ad_proc -public auth::sync::job::action {
     Inserts/updates/deletes a user, depending on the operation.
 
     @param job_id        The job which this is part of for logging purposes.
-    
+
     @param operation     'insert', 'update', 'delete', or 'snapshot'.
-    
-    @param username      The username which this action refers to. 
-    
+
+    @param username      The username which this action refers to.
+
     @param array         Name of an array containing the relevant registration elements. Not required if this is a delete operation.
-    
+
     @return entry_id of newly created entry
 } {
     if { $operation ne "delete" && $array eq "" } {
         error "Switch -array is required when operation is not delete"
     }
     upvar 1 $array user_info
-    
+
     set entry_id {}
     set user_id {}
 
@@ -322,13 +322,13 @@ ad_proc -public auth::sync::job::action {
         set user_id [acs_user::get_by_username \
                          -authority_id $authority_id \
                          -username $username]
-        
+
         set success_p 1
         array set result {
             message {}
             element_messages {}
         }
-        
+
         switch $operation {
             snapshot {
                 if { $user_id ne "" } {
@@ -407,13 +407,13 @@ ad_proc -public auth::sync::job::action {
                                                              -parameter SyncDotLrnReadPrivateDataP \
                                                              -package_key "acs-authentication" \
                                                              -default 1]
-                                
+
                                 dotlrn::user_add \
                                     -id $user_info(email) \
                                     -type $type \
                                     -can_browse=$can_browse_p \
                                     -user_id $user_id
-                                
+
                                 dotlrn_privacy::set_user_is_non_guest \
                                     -user_id $user_id \
                                     -value $read_private_data_p
@@ -431,7 +431,7 @@ ad_proc -public auth::sync::job::action {
                                               -authority_id $authority_id \
                                               -username $username \
                                               -array user_info]
-                        
+
                         if { $result(update_status) ne "ok" } {
                             set result(message) $result(update_message)
                             set success_p 0
@@ -443,7 +443,7 @@ ad_proc -public auth::sync::job::action {
                         array set result [auth::delete_local_account \
                                               -authority_id $authority_id \
                                               -username $username]
-                        
+
                         if { $result(delete_status) ne "ok" } {
                             set result(message) $result(delete_message)
                             set success_p 0
@@ -515,12 +515,12 @@ ad_proc -public auth::sync::purge_jobs {
                           -package_key "acs-authentication" \
                           -default 0]
     }
-    
+
     if {![string is integer -strict $num_days]} {
-	error "num_days ($num_days) has to be an integer"
+        error "num_days ($num_days) has to be an integer"
     }
 
-    if { $num_days > 0 } { 
+    if { $num_days > 0 } {
         db_dml purge_jobs {}
     }
 }
@@ -529,8 +529,8 @@ ad_proc -private auth::sync::get_sync_elements {
     {-user_id ""}
     {-authority_id ""}
 } {
-    Get a Tcl list of the user profile elements controlled by the batch synchronization. 
-    These should not be editable by the user. Supply either user_id or authority_id. 
+    Get a Tcl list of the user profile elements controlled by the batch synchronization.
+    These should not be editable by the user. Supply either user_id or authority_id.
     Authority_id is the most efficient.
 } {
     if { $authority_id eq "" } {
@@ -720,9 +720,9 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
         document {}
         snapshot_p f
     }
-    
+
     array set param $parameters
-    
+
     if { ($param(SnapshotURL) ne "" && [clock format [clock seconds] -format "%d"] eq "01")
          || $param(IncrementalURL) eq ""
      } {
@@ -798,9 +798,9 @@ ad_proc -private auth::sync::get_doc::file::GetDocument {
         document {}
         snapshot_p f
     }
-    
+
     array set param $parameters
-    
+
     if { ($param(SnapshotPath) ne "" && [clock format [clock seconds] -format "%d"] eq "01")
          || $param(IncrementalPath) eq ""
      } {
@@ -896,7 +896,7 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
             1 {
                 set operation "insert"
             }
-            2 { 
+            2 {
                 set operation "update"
             }
             3 {
@@ -941,7 +941,7 @@ ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
     document
     parameters
 } {
-    Generates an record-wise acknowledgement document in home-brewed 
+    Generates an record-wise acknowledgement document in home-brewed
     adaptation of the IMS Enterprise v 1.1 spec.
 } {
     set tree [xml_parse -persist $document]
@@ -985,7 +985,7 @@ ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
     }
 
     append doc {</enterprise>} \n
-    
+
     return $doc
 }
 

@@ -44,7 +44,7 @@ ad_proc -private lang::test::setup_test_package {} {
     <pretty-plural>$package_name</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>f</singleton-p>
-    
+
     <version name=\"1.0\" url=\"http://www.openacs.org/acs-repository/download/apm/$package_key-1.0.apm\">
         <owner url=\"mailto:peter@collaboraid.biz\">Peter Marklund</owner>
         <summary>Temporary acs-lang test package</summary>
@@ -86,9 +86,9 @@ ad_proc -private lang::test::check_import_result {
     upvar $db_array db_messages
     upvar $file_array file_messages
 
-    # Check that we have the expected message properties in the database after upgrade        
+    # Check that we have the expected message properties in the database after upgrade
     foreach message_key [lsort [array names upgrade_expect]] {
-        array set expect_property $upgrade_expect($message_key) 
+        array set expect_property $upgrade_expect($message_key)
         switch $expect_property(message) {
             db {
                 set expect_message $db_messages($message_key)
@@ -116,7 +116,7 @@ ad_proc -private lang::test::check_import_result {
             $message_actual(upgrade_status) $expect_property(upgrade_status)
         if {$expect_property(sync_time) eq "not_null"} {
             aa_true "Import check: $message_key - lang_messages.sync_time not null" \
-                [expr {$message_actual(sync_time) ne ""}] 
+                [expr {$message_actual(sync_time) ne ""}]
         } else {
             aa_true "Import check: $message_key - lang_messages.sync_time null" \
                 [expr {$message_actual(sync_time) eq ""}]
@@ -352,7 +352,7 @@ ad_proc -private lang::test::execute_upgrade {
             if { ![info exists base_messages($message_key)]
                  || $base_messages($message_key) ne $db_messages($message_key)
              } {
-                # Added || updated 
+                # Added || updated
                 aa_log "Adding/updating message $message_key"
                 lang::message::register \
                     $locale \
@@ -450,7 +450,7 @@ ad_proc -private lang::test::execute_upgrade {
     #----------------------------------------------------------------------
     aa_log "locale=$locale ----------9. Check results of third upgrade (that resolutions are sticky)----------"
     foreach message_key [array names conflict_resolutions] {
-    
+
         array unset message_array
         lang::message::get \
             -package_key $package_key \
@@ -467,11 +467,11 @@ ad_proc -private lang::test::execute_upgrade {
 
 aa_register_case \
     -procs {
-	lang::util::replace_temporary_tags_with_lookups
-	lang::catalog::export_messages_to_file
-	lang::catalog::parse
-	lang::catalog::read_file
-	lang::util::get_temporary_tags_indices
+        lang::util::replace_temporary_tags_with_lookups
+        lang::catalog::export_messages_to_file
+        lang::catalog::parse
+        lang::catalog::read_file
+        lang::util::get_temporary_tags_indices
     } util__replace_temporary_tags_with_lookups {
 
     A test Tcl file and catalog file are created. The temporary tags in the
@@ -483,7 +483,7 @@ aa_register_case \
 } {
     # Peter NOTE: cannot get this test case to work with the rollback code in automated testing
     # and couldn't track down why. I'm threrefor resorting to manual teardown which is fragile and hairy
-    
+
     # The files involved in the test
     set package_key acs-lang
     set test_dir [lang::test::get_dir]
@@ -498,10 +498,10 @@ aa_register_case \
     # The test messages to use for the catalog file
     array set messages_array [list key_1 text_1 key_2 text_2 key_3 text_3]
     # NOTE: must be kept up-to-date for teardown to work
-    set expected_new_keys [list Auto_Key key_1_1] 
+    set expected_new_keys [list Auto_Key key_1_1]
 
     # Write the test Tcl file
-    set tcl_file_id [open "$::acs::rootdir/$tcl_file" w]    
+    set tcl_file_id [open "$::acs::rootdir/$tcl_file" w]
     set new_key_1 "_"
     set new_text_1 "Auto Key"
     set new_key_2 "key_1"
@@ -536,7 +536,7 @@ aa_register_case \
     array set updated_messages_array $catalog_array(messages)
 
     # Assert that the old messages are unchanged
-    foreach old_message_key [array names messages_array] { 
+    foreach old_message_key [array names messages_array] {
         aa_true "old key $old_message_key should be unchanged" [string equal $messages_array($old_message_key) \
                                                                              $updated_messages_array($old_message_key)]
     }
@@ -547,7 +547,7 @@ aa_register_case \
     # Check that the second new key was made unique and inserted
     aa_true "check key made unique" [string equal $updated_messages_array(${new_key_2}_1) $new_text_2]
 
-    # Check that the third key was not inserted    
+    # Check that the third key was not inserted
     aa_true "third key not inserted" [string equal [lindex [array get updated_messages_array $new_key_3] 1] \
                                                    $messages_array($new_key_3)]
 
@@ -572,12 +572,12 @@ aa_register_case \
 
 aa_register_case \
     -procs {
-	lang::util::get_hash_indices
+        lang::util::get_hash_indices
     } util__get_hash_indices {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 21 October 2002
-} { 
+} {
   set multilingual_string "#package1.key1# abc\# #package2.key2#"
   set indices_list [lang::util::get_hash_indices $multilingual_string]
   set expected_indices_list [list [list 0 14] [list 21 35]]
@@ -587,10 +587,10 @@ aa_register_case \
   set counter 0
   foreach index_item $indices_list {
       set expected_index_item [lindex $expected_indices_list $counter]
-      
+
       aa_true "checking start and end indices of item $counter" \
-	  [expr {[lindex $index_item 0] eq [lindex $expected_index_item 0]
-		 && [lindex $index_item 1] eq [lindex $expected_index_item 1]}]
+          [expr {[lindex $index_item 0] eq [lindex $expected_index_item 0]
+                 && [lindex $index_item 1] eq [lindex $expected_index_item 1]}]
 
       set counter [expr {$counter + 1}]
   }
@@ -598,8 +598,8 @@ aa_register_case \
 
 aa_register_case \
     -procs {
-	lang::util::convert_adp_variables_to_percentage_signs
-	lang::util::convert_percentage_signs_to_adp_variables
+        lang::util::convert_adp_variables_to_percentage_signs
+        lang::util::convert_percentage_signs_to_adp_variables
     } util__convert_adp_variables_to_percentage_signs {
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -628,7 +628,7 @@ aa_register_case \
 
 aa_register_case \
     -procs {
-	lang::util::replace_adp_text_with_message_tags
+        lang::util::replace_adp_text_with_message_tags
     } util__replace_adp_text_with_message_tags {
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -667,9 +667,9 @@ Test text"
 }
 
 aa_register_case \
-	-procs {
-	    lang::message::format
-	} message__format {
+        -procs {
+            lang::message::format
+        } message__format {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 21 October 2002
@@ -691,9 +691,9 @@ aa_register_case \
 }
 
 aa_register_case \
-	-procs {
-	    lang::message::get_embedded_vars
-	} message__get_embedded_vars {
+        -procs {
+            lang::message::get_embedded_vars
+        } message__get_embedded_vars {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 12 November 2002
@@ -729,22 +729,22 @@ aa_register_case \
             [lang::message::get_embedded_vars $en_us_message]]
     if { ![aa_equals "No missing vars" [llength $missing_vars_list] 0] } {
         aa_log "Missing vars: $missing_vars_list"
-    }    
+    }
 }
 
 aa_register_case \
-	-procs {
-	    lang::system::set_locale
-	    lang::system::locale
-	    lang::system::site_wide_locale
-	} locale__test_system_package_setting {
+        -procs {
+            lang::system::set_locale
+            lang::system::locale
+            lang::system::site_wide_locale
+        } locale__test_system_package_setting {
     Tests whether the system package level setting works
 
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-08-12
 } {
     set use_package_level_locales_p_org [parameter::get -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"]]
-    
+
     parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value 1
 
 
@@ -753,17 +753,17 @@ aa_register_case \
     set locale_to_set [ad_generate_random_string]
 
     set retrieved_locale {}
-    
+
     ad_try {
         # Let's pick a random unmounted package to test with
         set package_id [apm_package_id_from_key "acs-kernel"]
-        
+
         set org_setting [lang::system::site_wide_locale]
-        
+
         lang::system::set_locale -package_id $package_id $locale_to_set
-        
+
         set retrieved_locale [lang::system::locale -package_id $package_id]
-        
+
     } on error {errorMsg} {
         # rethrow error
         error $errorMsg $::errorInfo
@@ -773,14 +773,14 @@ aa_register_case \
             -package_id [apm_package_id_from_key "acs-lang"] \
             -value $use_package_level_locales_p_org
     }
-    
+
     aa_true "Retrieved system locale ('$retrieved_locale') equals the one we just set ('$locale_to_set')" [string equal $locale_to_set $retrieved_locale]
 }
 
 aa_register_case \
-	-procs {
-	    lang::conn::browser_locale
-	} locale__test_lang_conn_browser_locale {
+        -procs {
+            lang::conn::browser_locale
+        } locale__test_lang_conn_browser_locale {
 
     @author Peter Marklund
     @creation-date 2003-08-13
@@ -799,16 +799,16 @@ aa_register_case \
 
         # First locale is perfect language match
         lang::test::assert_browser_locale "da,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
-    
+
         # First locale is perfect locale match
         lang::test::assert_browser_locale "da_DK,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
-    
+
         # Tentative match being discarded
         lang::test::assert_browser_locale "da_BLA,foobar,en" "en_US"
-    
+
         # Tentative match being used
         lang::test::assert_browser_locale "da_BLA,foobar" "da_DK"
-    
+
         # Several tentative matches, all being discarded
         lang::test::assert_browser_locale "da_BLA,foobar,da_BLUB,da_DK" "da_DK"
     }
@@ -816,30 +816,30 @@ aa_register_case \
 
 
 aa_register_case \
-	-cats db \
-	strange_oracle_problem {
+        -cats db \
+        strange_oracle_problem {
     Strange Oracle problem when selecting by language
-    
+
 } {
     set language "da "
     set locale da_DK
 
-    set db_string [db_string select_default_locale { 
-        select locale 
-        from   ad_locales 
+    set db_string [db_string select_default_locale {
+        select locale
+        from   ad_locales
         where  language = :language
     } -default "WRONG"]
-    
+
     aa_false "Does not return 'WRONG'" [string equal $db_string "WRONG"]
 }
 
 
 aa_register_case \
-	-procs {
-	    lang::user::set_timezone
-	    lang::system::set_timezone
-	    lang::system::timezone
-	} set_get_timezone {
+        -procs {
+            lang::user::set_timezone
+            lang::system::set_timezone
+            lang::system::timezone
+        } set_get_timezone {
 
     Test that setting and getting user timezone works
 } {
@@ -862,30 +862,30 @@ aa_register_case \
 
         set timezones [lc_list_all_timezones]
         set n [expr {[llength $timezones]-1}]
-        
+
         set desired_user_timezone [lindex [lindex $timezones [randomRange $n]] 0]
         set desired_system_timezone [lindex [lindex $timezones [randomRange $n]] 0]
-        
+
         set error_p 0
         ad_try {
             # User timezone
             lang::user::set_timezone $desired_user_timezone
             aa_equals "User timezone retrieved is the same as the one set" [lang::user::timezone] $desired_user_timezone
-            
+
             # Storage
             set user_id [ad_conn user_id]
             aa_equals "User timezone stored in user_preferences table" \
                 [db_string user_prefs { select timezone from user_preferences where user_id = :user_id }] \
                 $desired_user_timezone
-            
-            
+
+
             # System timezone
             lang::system::set_timezone $desired_system_timezone
             aa_equals "System timezone retrieved is the same as the one set" [lang::system::timezone] $desired_system_timezone
-            
+
             # Connection timezone
             aa_equals "Using user timezone" [lang::conn::timezone] $desired_user_timezone
-            
+
             ad_conn -set isconnected 0
             aa_equals "Fallback to system timezone when no connection" [lang::conn::timezone] $desired_system_timezone
             ad_conn -set isconnected 1
@@ -907,10 +907,10 @@ aa_register_case \
 }
 
 aa_register_case \
-	-procs {
-	    lang::user::set_timezone
-	    lang::system::timezone
-	} set_timezone_not_logged_in {
+        -procs {
+            lang::user::set_timezone
+            lang::system::timezone
+        } set_timezone_not_logged_in {
     Test that setting and getting user timezone throws an error when user is not logged in
 } {
     # We cannot test timezones if they are not installed
@@ -924,7 +924,7 @@ aa_register_case \
         set error_p [catch { lang::user::set_timezone [lang::system::timezone] } errmsg]
         aa_true "Error when setting user timezone when user not logged in" $error_p
 
-        # Reset the user_id 
+        # Reset the user_id
         ad_conn -set user_id $user_id
     }
 }
@@ -937,29 +937,29 @@ aa_register_case lc_time_fmt_Z_timezone {
 
 aa_register_case \
     -procs {
-	lang::message::lookup
+        lang::message::lookup
     } locale_language_fallback {
-    Test that we fall back to 'default locale for language' when requesting a message 
+    Test that we fall back to 'default locale for language' when requesting a message
     which exists in default locale for language, but not in the current locale
 } {
     # Assuming we have en_US and en_GB
-    
+
     set package_key "acs-lang"
     set message_key [ad_generate_random_string]
 
     set us_message [ad_generate_random_string]
     set gb_message [ad_generate_random_string]
-    
+
     set error_p 0
     ad_try {
         lang::message::register "en_US" $package_key $message_key $us_message
-        
+
         aa_equals "Looking up message in GB returns US message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
             $us_message
 
         lang::message::register "en_GB" $package_key $message_key $gb_message
-        
+
         aa_equals "Looking up message in GB returns GB message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
             $gb_message
@@ -977,9 +977,9 @@ aa_register_case \
 
 aa_register_case \
     -procs {
-	lang::catalog::import
-	lang::message::edit
-	lang::message::get
+        lang::catalog::import
+        lang::message::edit
+        lang::message::get
     } upgrade {
     Test that a package can be upgraded with new
     catalog files and that the resulting keys and messages
@@ -1007,10 +1007,10 @@ aa_register_case \
 
         lang::test::execute_upgrade -locale de_DE
 
-    } -teardown_code {                 
+    } -teardown_code {
         foreach message_key [array names upgrade_expect] {
             lang::message::unregister $package_key $message_key
-        }    
+        }
         lang::test::teardown_test_package
     }
 }
@@ -1063,11 +1063,11 @@ aa_register_case lang_messages_correct {
     This test calls the checks to ensure a message is correct on every message in the system
 } {
     aa_run_with_teardown -rollback -test_code {
-	db_foreach query "
-	  select message_key, package_key, locale, message from lang_messages" {
-	    aa_false "Message $message_key in package $package_key for locale $locale correct" \
-	      [catch {lang::message::check $locale $package_key $message_key $message}]
-	}
+        db_foreach query "
+          select message_key, package_key, locale, message from lang_messages" {
+            aa_false "Message $message_key in package $package_key for locale $locale correct" \
+              [catch {lang::message::check $locale $package_key $message_key $message}]
+        }
     }
 }
 

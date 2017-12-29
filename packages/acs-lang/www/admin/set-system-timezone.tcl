@@ -38,7 +38,7 @@ set system_utc_offset [lang::system::timezone_utc_offset]
 multirow create timezones label value selected_p
 foreach entry [lc_list_all_timezones] {
     set tz [lindex $entry 0]
-    
+
     multirow append timezones $entry $tz [string equal $tz $system_timezone]>
 }
 
@@ -57,7 +57,7 @@ ad_try {
 
 if { [regexp {<strong>UTC</strong>[^:]+[:][ ]*<strong[^>]*>([^<]+)</strong>} $time_and_date_page match utc_from_page] } {
     # UTC in format (including some historical ones to help keep a robust regexp:
-    # Friday, July 27, 2012 at 19:20:27  
+    # Friday, July 27, 2012 at 19:20:27
     # Wednesday, 20 November 2002, at 2:49:07 PM
     # Wednesday, 6 August  2003, at 12:11:48
     # this regexp is a little more flexible and accepting of data types to help with parsing
@@ -102,7 +102,7 @@ if { [info exists utc_epoch] } {
         } else {
             set correct_p 0
         }
-        
+
         set try_offsets [list]
         foreach offset [list $recommended_offset [expr {$recommended_offset -24}]] {
             if { $offset < 0 } {
@@ -114,7 +114,7 @@ if { [info exists utc_epoch] } {
 
         set query "
             select tz.tz, tz.gmt_offset
-            from   timezones tz, 
+            from   timezones tz,
                    timezone_rules tzr
             where  tzr.gmt_offset in ([join $try_offsets ", "])
             and    tzr.tz_id = tz.tz_id

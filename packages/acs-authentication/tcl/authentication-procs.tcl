@@ -152,8 +152,7 @@ ad_proc -public auth::get_user_id {
 }
 
 ad_proc -public auth::UseEmailForLoginP {} {
-    Do we use email address for login? code wrapped in a catch, so the
-    proc will not break regardless of what the parameter value is.
+    Do we use email address for login?
 } {
     return [parameter::get -boolean -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -default 1]
 }
@@ -214,7 +213,7 @@ ad_proc -public auth::authenticate {
             return [array get result]
         }
         set user_id [party::get_by_email -email $email]
-        if { $user_id eq "" || ![acs_user::registered_user_p -user_id $user_id] } {            
+        if { $user_id eq "" || ![acs_user::registered_user_p -user_id $user_id] } {
             set result(auth_status) "no_account"
             set result(auth_message) [_ acs-subsite.Unknown_email]
             return [array get result]
@@ -842,7 +841,7 @@ ad_proc -public auth::get_registration_form_elements {
 
             # Help Text
             lappend form_element [list help_text $help_text($element)]
-            
+
             # The form element is finished - add it to the list
             lappend form_elements $form_element
         } else {

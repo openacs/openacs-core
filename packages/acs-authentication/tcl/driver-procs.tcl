@@ -17,7 +17,7 @@ namespace eval auth::driver {}
 #
 #####
 
-ad_proc -public auth::driver::get_parameters { 
+ad_proc -public auth::driver::get_parameters {
     {-impl_id:required}
 } {
     Returns a list of names of parameters for the driver
@@ -88,7 +88,7 @@ ad_proc -public auth::driver::set_parameter_value {
     @creation-date 2003-08-27
 } {
     set exists_p [db_string param_exists_p {}]
- 
+
     if { $exists_p } {
         db_dml update_parameter {} -clobs [list $value]
     } else {
@@ -96,7 +96,7 @@ ad_proc -public auth::driver::set_parameter_value {
     }
 }
 
-ad_proc -public auth::driver::GetParameters { 
+ad_proc -public auth::driver::GetParameters {
     {-impl_id:required}
 } {
     Returns a list of names of parameters for the driver
