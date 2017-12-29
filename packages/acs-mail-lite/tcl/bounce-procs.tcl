@@ -98,11 +98,14 @@ namespace eval acs_mail_lite {
         Daily proc that sends out warning mail that emails
         are bouncing and disables emails if necessary
     } {
-        set max_bounce_count [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter MaxBounceCount -default 10]
-        set max_days_to_bounce [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter MaxDaysToBounce -default 3]
-        set notification_interval [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter NotificationInterval -default 7]
-        set max_notification_count [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter MaxNotificationCount -default 4]
-        set notification_sender [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter NotificationSender -default "reminder@[address_domain]"]
+        set package_id [apm_package_id_from_key "acs-mail-lite"]
+        set max_bounce_count [parameter::get -package_id $package_id -parameter MaxBounceCount -default 10]
+        set max_days_to_bounce [parameter::get -package_id $package_id -parameter MaxDaysToBounce -default 3]
+        set notification_interval [parameter::get -package_id $package_id -parameter NotificationInterval -default 7]
+        set max_notification_count [parameter::get -package_id $package_id -parameter MaxNotificationCount -default 4]
+        set notification_sender [parameter::get -package_id $package_id \
+                                     -parameter NotificationSender \
+                                     -default "reminder@[address_domain]"]
 
         # delete all bounce-log-entries for users who received last email
         # X days ago without any bouncing (parameter)
