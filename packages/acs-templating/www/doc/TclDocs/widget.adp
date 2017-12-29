@@ -195,7 +195,7 @@ widget param is mandatory</td>
 </tr><tr>
 <td align="right">
 <code>param_source</code><font color="red">*</font>
-</td><td align="left">The deafult param source for the form widget param
+</td><td align="left">The default param source for the form widget param
 value (literal, query, eval)</td>
 </tr>
 </table>

@@ -6,7 +6,7 @@ element create car_opts extras \
     {{Power Windows} windows} 
     {{Anti-Lock Brakes} brakes} 
     {{AI Alarm System} alarm}
-    {{Rocket Laucnher} rocket}
+    {{Rocket Launcher} rocket}
  }
 
 element create car_opts payment \

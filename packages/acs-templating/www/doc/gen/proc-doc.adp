@@ -31,7 +31,7 @@ should look somthing like this:
      # <font color="red">\@param</font><em>&lt;name&gt;</em><em>&lt;default value&gt;</em><em>&lt;description&gt;</em>
      # <em>&lt;continued description&gt;</em>
 
-     # <font color="red">\@param</font> ... <em>&lt;info for other paramaters&gt;</em>
+     # <font color="red">\@param</font> ... <em>&lt;info for other parameters&gt;</em>
 
      # <font color="red">\@option</font><em>&lt;name&gt;</em><em>&lt;default value&gt;</em><em>&lt;description&gt;</em>
      # <em>&lt;continued description&gt;</em>

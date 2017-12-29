@@ -7,7 +7,7 @@ set code [adp_compile -string $template]; 	# compile the template
 
 set name John
 set food [list "potato salad" "penne all' arrabiata" "steak" "baked alaska"]
-adp_eval code;					# running code sets __adp_ouput
+adp_eval code;					# running code sets __adp_output
 lappend body $__adp_output
 
 set name Jill

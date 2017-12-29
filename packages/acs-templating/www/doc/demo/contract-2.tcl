@@ -5,14 +5,14 @@ ad_page_contract {
     noun:notnull,nohtml
     { plural:nohtml "" }
 } -validate {
-    supersticion -requires {count} {
+    superstition -requires {count} {
         if {$count == 13} {
             ad_complain
         }
     }
     csrf { csrf::validate }   
 } -errors {
-    supersticion {This number brings you no luck.}
+    superstition {This number brings you no luck.}
 } -properties {
     phrase:onevalue
 } -return_errors error_list

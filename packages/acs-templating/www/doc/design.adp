@@ -32,7 +32,7 @@ should only have to learn a single system that serves as a UI
 substrate for all the functionally specific modules used on a site.
 The system should not make any assumptions about how pages should
 look or function. Designers should be able to change the default
-presentation of any module using a single metholodogy with minimal
+presentation of any module using a single methodology with minimal
 exposure to code.</p></li><li><p>
 <strong>Separation of code (Tcl, Java and SQL) and layout
 (HTML).</strong> Programmers should be able to specify the data
@@ -189,7 +189,7 @@ serving a templated page involves.
 <ol>
 <li>The request processor gets a url and maps it to a
 <code>.adp</code> or <code>.tcl</code> file. As both invoke the
-same handler, it doesn&#39;t matter that adp take precendence.</li><li>If a <code>.tcl</code> file is present, its <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>
+same handler, it doesn&#39;t matter that adp take precedence.</li><li>If a <code>.tcl</code> file is present, its <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>
 in the <code>-properties</code> block indicates a set of data
 sources that will be made available to the template.</li><li>The rest of the Tcl script executes, defining these data
 sources. It may change the name of the page being served by calling
