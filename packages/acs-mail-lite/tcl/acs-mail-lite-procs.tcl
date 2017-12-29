@@ -310,7 +310,7 @@ namespace eval acs_mail_lite {
             return
         }
 
-        with_finally -code {
+        ad_try {
             db_foreach get_queued_messages {} {
                 # check if record is already there and free to use
                 set return_id [db_string get_queued_message {} -default -1]
@@ -319,7 +319,7 @@ namespace eval acs_mail_lite {
                     set locking_server [ad_url]
                     db_dml lock_queued_message {}
                     # send the mail
-                    set err [catch {
+                    ad_try {
                         acs_mail_lite::send_immediately \
                             -to_addr $to_addr \
                             -cc_addr $cc_addr \
@@ -337,19 +337,18 @@ namespace eval acs_mail_lite {
                             -no_callback_p $no_callback_p \
                             -extraheaders $extraheaders \
                             -use_sender_p $use_sender_p        
-                    } errMsg]
-                    if {$err} {
-                        ns_log Error "Could not send queued mail (message $return_id): $errMsg"
+                    } on error {errorMsg} {
+                        ad_log Error "Could not send queued mail (message $return_id): $errorMsg"
                         # release the lock (MS not now)
                         # set locking_server ""
                         # db_dml lock_queued_message {}    
-                    } else {
+                    } on ok {r} {
                         # mail was sent, delete the queue entry
                         db_dml delete_queue_entry {}
                     }
                 }
             }
-        } -finally {
+        } finally {
             nsv_incr acs_mail_lite send_mails_p -1
         }
     }

@@ -85,10 +85,10 @@ namespace eval acs_mail_lite {
             return
         }
 
-        with_finally -code {
+        ad_try  {
             ns_log Debug "acs-mail-lite: about to load qmail queue for [mail_dir]"
             load_mails -queue_dir [mail_dir]
-        } -finally {
+        } finally {
             nsv_incr acs_mail_lite check_bounce_p -1
         }
     }
