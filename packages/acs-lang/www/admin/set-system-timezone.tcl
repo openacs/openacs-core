@@ -43,12 +43,12 @@ foreach entry [lc_list_all_timezones] {
 }
 
 # Try to get the correct UTC time from www.timeanddate.com
-if { [catch {
+ad_try {
     set h [ns_set create headers Accept-Language en-us]
     set result [util::http::get -url "http://www.timeanddate.com/worldclock/" -headers $h]
     set time_and_date_page [dict get $result page]
-} errmsg] } {
-    ns_log Error "set-system-timezone.tcl: Error trying to get timeanddate.com/worldclock/"
+} on error {errorMsg} {
+    ad_log Error "set-system-timezone.tcl: Error trying to get timeanddate.com/worldclock/"
     set utc_ansi {Couldn't get time from timeanddate.com, sorry.}
 }
 
@@ -90,7 +90,7 @@ if { [regexp {<strong>UTC</strong>[^:]+[:][ ]*<strong[^>]*>([^<]+)</strong>} $ti
 set correct_p {}
 
 if { [info exists utc_epoch] } {
-    with_catch errmsg {
+    ad_try {
         set sysdate_utc_epoch [clock scan $sysdate_utc]
         set delta_hours [expr {round(($sysdate_utc_epoch - $utc_epoch)*4.0 / (60*60)) / 4.0}]
         set recommended_offset [expr {$system_utc_offset + $delta_hours}]
@@ -127,9 +127,9 @@ if { [info exists utc_epoch] } {
             set value $tz
             set label "$tz $gmt_offset"
         }
-    } {
+    } on error {errorMsg} {
         # Didn't work, too bad
-        error $errmsg $::errorInfo
+        error $errorMsg $::errorInfo
     }
 }
 

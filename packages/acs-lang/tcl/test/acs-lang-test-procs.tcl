@@ -748,13 +748,13 @@ aa_register_case \
     parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value 1
 
 
-    # There's no foreign key constraint on the locales column, so this should work
+    # There's no foreign key constraint on the locales column, so this
+    # should work
     set locale_to_set [ad_generate_random_string]
 
     set retrieved_locale {}
     
-    # We could really use a 'finally' block on 'with_catch' (a block, which gets executed at the end, regardless of whether there was an error or not)
-    with_catch errmsg {
+    ad_try {
         # Let's pick a random unmounted package to test with
         set package_id [apm_package_id_from_key "acs-kernel"]
         
@@ -764,12 +764,15 @@ aa_register_case \
         
         set retrieved_locale [lang::system::locale -package_id $package_id]
         
-    } {
-        parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value $use_package_level_locales_p_org
-        error $errmsg $::errorInfo
+    } on error {errorMsg} {
+        # rethrow error
+        error $errorMsg $::errorInfo
+    } finally {
+        parameter::set_value \
+            -parameter UsePackageLevelLocalesP \
+            -package_id [apm_package_id_from_key "acs-lang"] \
+            -value $use_package_level_locales_p_org
     }
-
-    parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value $use_package_level_locales_p_org
     
     aa_true "Retrieved system locale ('$retrieved_locale') equals the one we just set ('$locale_to_set')" [string equal $locale_to_set $retrieved_locale]
 }
@@ -864,7 +867,7 @@ aa_register_case \
         set desired_system_timezone [lindex [lindex $timezones [randomRange $n]] 0]
         
         set error_p 0
-        with_catch errmsg {
+        ad_try {
             # User timezone
             lang::user::set_timezone $desired_user_timezone
             aa_equals "User timezone retrieved is the same as the one set" [lang::user::timezone] $desired_user_timezone
@@ -890,18 +893,15 @@ aa_register_case \
             lang::user::set_timezone {}
             aa_equals "Fallback to system timezone when no user pref" [lang::conn::timezone] $desired_system_timezone
 
-        } {
+        } on error {errorMsg} {
             set error_p 1
-        }
-        
-        # Clean up
-        lang::system::set_timezone $system_timezone
-        lang::user::set_timezone $user_timezone
-        ad_conn -set user_id $org_user_id
-
-        if { $error_p } {
             # rethrow the error
-            error $errmsg $::errorInfo
+            error $errorMsg $::errorInfo
+
+        } finally {
+            lang::system::set_timezone $system_timezone
+            lang::user::set_timezone $user_timezone
+            ad_conn -set user_id $org_user_id
         }
     }
 }
@@ -951,7 +951,7 @@ aa_register_case \
     set gb_message [ad_generate_random_string]
     
     set error_p 0
-    with_catch saved_error {
+    ad_try {
         lang::message::register "en_US" $package_key $message_key $us_message
         
         aa_equals "Looking up message in GB returns US message" \
@@ -963,17 +963,15 @@ aa_register_case \
         aa_equals "Looking up message in GB returns GB message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
             $gb_message
-    } {
+    } on error {errorMsg} {
         set error_p 1
         set saved_errorInfo $::errorInfo
-    }
+        error $errorMsg $saved_errorInfo
 
-    # Clean up
-    db_dml delete_msg { delete from lang_messages where package_key = :package_key and message_key = :message_key }
-    db_dml delete_key { delete from lang_message_keys where package_key = :package_key and message_key = :message_key }
-
-    if { $error_p } {
-        error $saved_error $saved_errorInfo
+    } finally {
+        # Clean up
+        db_dml delete_msg { delete from lang_messages where package_key = :package_key and message_key = :message_key }
+        db_dml delete_key { delete from lang_message_keys where package_key = :package_key and message_key = :message_key }
     }
 }
 

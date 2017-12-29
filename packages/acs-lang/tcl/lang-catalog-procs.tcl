@@ -144,10 +144,12 @@ ad_proc -private lang::catalog::package_has_files_in_locale_p {package_key local
 
     @author Peter Marklund
 } {
-    if { [catch {glob [package_catalog_dir $package_key]/$package_key.${locale}.*}] } {
-        set has_file_in_locale_p 0
-    } else {
+    ad_try {
+        glob [package_catalog_dir $package_key]/$package_key.${locale}.*
+    } on ok {r} {
         set has_file_in_locale_p 1
+    } on error {errorMsg} {
+        set has_file_in_locale_p 0
     }
     
     return $has_file_in_locale_p
@@ -600,15 +602,15 @@ ad_proc -private lang::catalog::import_from_file {
     # Register descriptions
     foreach message_key $messages_array_names {
         if { [info exists descriptions_array($message_key)] } {
-            with_catch errmsg {
+            ad_try {
                 lang::message::update_description \
                     -package_key $catalog_array(package_key) \
                     -message_key $message_key \
                     -description $descriptions_array($message_key)
-            } {
-                ns_log Error "Registering description for key ${package_key}.${message_key} in locale $locale failed with error message \"$errmsg\"\n\n$::errorInfo"
+            } on error {errorMsg} {
+                ad_log Error "Registering description for key ${package_key}.${message_key} in locale $locale failed with: $errorMsg"
             }
-        }    
+        }
     }
 
     return [array get message_count]
@@ -906,16 +908,17 @@ ad_proc -private lang::catalog::import_messages {
         if { $upgrade_status eq "added" || $upgrade_status eq "updated" } {
 
             ns_log Debug "lang::catalog::import_messages - invoking lang::message::register with import_case=\"$import_case\" -update_sync=$update_sync_p $message_key $upgrade_status $conflict_p"
-            if { [catch {lang::message::register \
-                -update_sync \
-                -upgrade_status $upgrade_status \
-                -conflict=$conflict_p \
-                $locale \
-                $package_key \
-                $message_key \
-                $file_messages($message_key)} errmsg] } {
-                
-                lappend message_count(errors) $errmsg
+            ad_try {
+                lang::message::register \
+                    -update_sync \
+                    -upgrade_status $upgrade_status \
+                    -conflict=$conflict_p \
+                    $locale \
+                    $package_key \
+                    $message_key \
+                    $file_messages($message_key)
+            } on error {errorMsg} {
+                lappend message_count(errors) $errorMsg
                 set error_p 1
             }
         } elseif { $update_sync_p || $upgrade_status eq "deleted" } {
@@ -931,14 +934,15 @@ ad_proc -private lang::catalog::import_messages {
             }
             
             ns_log Debug "lang::catalog::import_messages - invoking lang::message::edit with import_case=\"$import_case\" -update_sync=$update_sync_p $message_key [array get edit_array]"
-            if { [catch {lang::message::edit \
-                -update_sync=$update_sync_p \
-                $package_key \
-                $message_key \
-                $locale \
-                [array get edit_array]} errmsg] } {
-
-                lappend message_count(errors) $errmsg
+            ad_try {
+                lang::message::edit \
+                    -update_sync=$update_sync_p \
+                    $package_key \
+                    $message_key \
+                    $locale \
+                    [array get edit_array]
+            } on error {errorMsg} } {
+                lappend message_count(errors) $errorMsg
                 set error_p 1
             }
         } else {
@@ -1019,12 +1023,14 @@ ad_proc -public lang::catalog::import {
         }
 
         foreach file_path $catalog_files {
-            # Use a catch so that parse failure of one file doesn't cause the import of all files to fail
+            # Use an ad_try so that parse failure of one file doesn't
+            # cause the import of all files to fail
             array unset loop_message_count
-            if { [catch { array set loop_message_count [lang::catalog::import_from_file $file_path] } errMsg] } {
-                
-                ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$::errorInfo\n\n"
-            } else {
+            ad_try {
+                array set loop_message_count [lang::catalog::import_from_file $file_path]
+            } on error {errorMsg} {
+                ad_log Error "The import of file $file_path failed, error message is: $errorMsg"
+            } on ok {r} {
                 foreach action [array names loop_message_count] {
                     if { $action ne "errors" } {
                         set message_count($action) [expr {$message_count($action) + $loop_message_count($action)}]
@@ -1144,11 +1150,11 @@ ad_proc -private lang::catalog::translate {} {
     set default_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
     db_foreach get_untranslated_messages {} {    
         foreach lang [list es_ES fr_FR de_DE] {
-            if {[catch {
+            ad_try {
                 set translated_message [lang_babel_translate $message en_$lang]
-            } errmsg]} {
-                ns_log Notice "Error translating $message into $lang: $errmsg"
-            } else {
+            } on error {errorMsg} {
+                ns_log Notice "Error translating $message into $lang: $errorMsg"
+            } ok ok {r} {
                 lang::message::register $lang $package_key $message_key $translated_message
             }
         }

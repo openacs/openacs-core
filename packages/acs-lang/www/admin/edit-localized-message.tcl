@@ -66,7 +66,7 @@ ad_form -name message_form -form {
         {label "Description"}
         {after_html {}}
     }
-} 
+}
 
 if { $default_locale ne $current_locale } {
     ad_form -extend -name message_form -form {
@@ -75,10 +75,10 @@ if { $default_locale ne $current_locale } {
         }
     }
 }
-    
+
 ad_form -extend -name message_form -form {
     {message:text(textarea)
-        {label "$locale_label Message"} 
+        {label "$locale_label Message"}
         {html { rows 6 cols 40 } }
     }
     {comment:text(textarea),optional
@@ -158,30 +158,30 @@ ad_form -extend -name message_form -form {
                                      where  lm2.package_key = :package_key
                                      and    lm2.message_key = :message_key
                                      and    lm2.locale = :current_locale
-                                     )                                     
+                                     )
             }
-        } 
+        }
 
         set first_translated_message [subst {
-	    <ul> <li>First translated by
-	    [acs_community_member_link -user_id $creation_user_id -label $creation_user_name] on $creation_date
-	    </li></ul>
-	}]
+            <ul> <li>First translated by
+            [acs_community_member_link -user_id $creation_user_id -label $creation_user_name] on $creation_date
+            </li></ul>
+        }]
     } else {
         set first_translated_message ""
     }
 } -on_submit {
 
     set first_translated_message ""
-    
-    with_catch errmsg {
-	# Call semantic and sanity checks on the key before registering.
-	lang::message::check $locale $package_key $message_key $message
-    } {
-	template::form::set_error message message $errmsg
-	break
+
+    ad_try {
+        # Call semantic and sanity checks on the key before registering.
+        lang::message::check $locale $package_key $message_key $message
+    } on error {errorMsg} {
+        template::form::set_error message message $errorMsg
+        break
     }
-    
+
     # Register message via acs-lang
     lang::message::register -comment $comment $locale $package_key $message_key $message
 

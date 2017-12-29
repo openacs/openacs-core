@@ -401,11 +401,10 @@ ad_proc -public lc_time_utc_to_local {
 
     set local_time $time_value
 
-    if {[catch {
+    ad_try {
 	set local_time [db_exec_plsql utc_to_local {}]
-    } errmsg]
-    } {
-	ns_log Warning "lc_time_utc_to_local: Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errmsg"
+    } on error {errorMsg} {
+       ad_log Warning "lc_time_utc_to_local: Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errorMsg"
     }
 
     if {$local_time eq ""} {
@@ -431,11 +430,10 @@ ad_proc -public lc_time_local_to_utc {
     }
 
     set utc_time $time_value
-    if {[catch {
+    ad_try {
 	set utc_time [db_exec_plsql local_to_utc {}]
-    } errmsg]
-    } {
-	ns_log Warning "lc_time_local_to_utc: Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errmsg"
+    } on error {errorMsg} {
+	ad_log Warning "lc_time_local_to_utc: Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errorMsg"
     }
 
     if {$utc_time eq ""} {
@@ -506,10 +504,10 @@ ad_proc -public lc_time_tz_convert {
     @param time_value        Timestamp in the 'from' timezone, in the ISO datetime format.
     @return                  Timestamp in the 'to' timezone, also in ISO datetime format.
 } {
-    with_catch errmsg {
+    ad_try {
         set time_value [db_exec_plsql convert {}]
-    } {
-        ns_log Warning "lc_time_tz_convert: Error converting timezone: $errmsg"
+    } on error {errorMsg} {
+        ad_log Warning "lc_time_tz_convert: Error converting timezone: $errorMsg"
     }
     return $time_value
 }
