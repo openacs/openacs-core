@@ -228,7 +228,7 @@ ad_proc -public auth::authenticate {
         }
     }
 
-    ad_ty {
+    ad_try {
         array set result [auth::authentication::Authenticate \
                               -username $username \
                               -authority_id $authority_id \
