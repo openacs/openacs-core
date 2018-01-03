@@ -701,6 +701,14 @@ ad_proc -private security::get_register_subsite {} {
     register/unregister should be performed. If there is no current
     connection, the main site url is returned.
 
+    TODO: util_current_location and security::get_register_subsite
+    can be probably cached, when using the following parameters in
+    the cache key:
+       - host header field
+       - [ns_conn location]
+       - ...
+    also [security::get_register_subsite] could/should be cached
+    
     @author Gustaf Neumann
 } {
     
