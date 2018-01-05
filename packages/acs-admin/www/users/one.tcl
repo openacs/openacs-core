@@ -9,9 +9,9 @@ ad_page_contract {
     user_id:naturalnum,notnull
 }
 
-with_catch errmsg {
+ad_try {
     acs_user::get -user_id $user_id -array user_info
-} {
+} on error {errorMsg} {
     ad_return_complaint 1 "<li>We couldn't find user #$user_id; perhaps this person was deleted?"
     return
 }
