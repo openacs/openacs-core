@@ -10,6 +10,7 @@ ad_page_contract {
 db_dml update_show_email {}
 
 ad_returnredirect "/pvt/home"
+ad_script_abort
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

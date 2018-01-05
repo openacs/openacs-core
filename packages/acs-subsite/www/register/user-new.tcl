@@ -28,6 +28,7 @@ ad_page_contract {
 set registration_url [parameter::get -parameter RegistrationRedirectUrl]
 if {$registration_url ne ""} {
     ad_returnredirect [export_vars -base "$registration_url" -url {return_url email}]
+    ad_script_abort
 }
 
 set subsite_id [ad_conn subsite_id]

@@ -33,6 +33,7 @@ ad_page_contract {
 
 ad_set_client_property $session_property(package) $session_property(key) $session_property(value)
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

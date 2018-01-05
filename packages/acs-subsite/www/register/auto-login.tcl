@@ -16,11 +16,11 @@ array set auth_info [auth::authenticate \
 
 if {$auth_info(auth_status) eq "ok"} {
     ad_returnredirect $return_url
-    ad_script_abort
 } else {
     # Login problem - redirect to login form
     ad_returnredirect [export_vars -base /register { email return_url }]    
 }
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

@@ -30,10 +30,13 @@ ad_form -name private-email -export return_url -form {
     }
 } -on_request {
     set level [email_image::get_priv_email -user_id $user_id]
+
 } -on_submit {
     email_image::update_private_p -user_id $user_id -level $level
+
 } -after_submit {
     ad_returnredirect $return_url
+    ad_script_abort
 }
 # Local variables:
 #    mode: tcl

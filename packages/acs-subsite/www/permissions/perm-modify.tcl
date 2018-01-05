@@ -78,6 +78,7 @@ db_transaction {
 set message [expr {$changes_p ? [_ acs-subsite.Information_Updated] : ""}]
 
 ad_returnredirect -message $message $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

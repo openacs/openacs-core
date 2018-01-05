@@ -29,6 +29,7 @@ ad_form -name private-email -form {
 
 } -after_submit {
     ad_returnredirect "/acs-admin/users/"
+    ad_script_abort
 }
 # Local variables:
 #    mode: tcl

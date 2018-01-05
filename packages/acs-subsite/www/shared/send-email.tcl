@@ -47,6 +47,7 @@ ad_form -name send-email -export {sendto return_url} -form {
     
 } -after_submit {
     ad_returnredirect $return_url
+    ad_script_abort
 }
 
 # Local variables:
