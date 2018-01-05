@@ -17,7 +17,7 @@ don&#39;t want to use an alternate MTA.</p><div class="orderedlist"><ol class="o
 <li class="listitem"><p>
 <strong>Install qmail. </strong> QMail is available
 as standard Debian/Ubuntu package, rpms for Fedora/Redhat/CenTOS
-are available from <a class="ulink" href="https://en.wikipedia.org/wiki/Qmail/" target="_top">QMail wiki
+are available from <a class="ulink" href="https://en.wikipedia.org/wiki/Qmail" target="_top">QMail wiki
 page</a>
 </p></li><li class="listitem">
 <p>Replace sendmail with qmail&#39;s wrapper.</p><a class="indexterm" name="idp140623090549880" id="idp140623090549880"></a><pre class="screen">
