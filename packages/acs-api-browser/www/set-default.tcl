@@ -8,6 +8,7 @@ ad_page_contract {
 ad_set_client_property -persistent t acs-api-browser api_doc_source_p $source_p
 
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

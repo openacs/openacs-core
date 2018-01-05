@@ -29,7 +29,7 @@ set expire_state "s"
 
 ad_user_login $user_id
 ad_returnredirect $return_url
-
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

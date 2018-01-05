@@ -7,7 +7,7 @@ ad_page_contract {
 exec sudo /usr/local/bin/rebuild-server.sh $server >& /web/master/www/rebuild-$server.log &
 
 ad_returnredirect /rebuild-$server.log
-
+ad_script_abort
 
 
 # Local variables:

@@ -101,9 +101,13 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 
     } -after_submit {
 	ad_returnredirect $return_url
+        ad_script_abort
+
     } -cancel_url $return_url
+
 } else {
     ad_returnredirect $return_url
+    ad_script_abort
 }
 
 # Local variables:

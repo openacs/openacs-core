@@ -11,6 +11,7 @@ permission::require_permission -object_id [ad_conn package_id] -privilege "read"
 ad_set_client_property developer-support user_id $user_id
 
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

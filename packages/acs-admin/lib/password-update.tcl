@@ -99,6 +99,7 @@ ad_form -extend -name update -form {
     # ad_return_template /packages/acs-subsite/www/register/display-message
 
     ad_returnredirect $return_url
+    ad_script_abort
 }
 
 # Local variables:

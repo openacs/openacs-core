@@ -29,6 +29,7 @@ set source [content::revision::get_cr_file_path -revision_id $revision_id]
 file copy -force -- $source $target
 
 ad_returnredirect $return_url_2
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

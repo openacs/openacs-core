@@ -3295,6 +3295,7 @@ ad_proc -private template::list::prepare_filter_form {
             set pattern [ns_urlencode "clear_one"]=[ns_urlencode "$clear_one"]
             regsub "${pattern}&?" [ad_return_url] {} url
             ad_returnredirect $url
+            ad_script_abort
         }
     } -on_submit {
 

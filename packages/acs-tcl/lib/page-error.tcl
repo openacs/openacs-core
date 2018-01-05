@@ -290,14 +290,15 @@ if {$auto_submit_p && $user_id > 0} {
             -array row \
             -entry_id [element get_value bug_edit entry_id]
     
-     ad_returnredirect $return_url
+    ad_returnredirect $return_url
     ad_script_abort
-   } -edit_request {
+  
+  } -edit_request {
       # ID form complains if -edit_request is missing
-}
+  }
 
 
-if { ![form is_valid bug_edit] } {
+  if { ![form is_valid bug_edit] } {
     
     # Get the bug data
     bug_tracker::bug::get -bug_id $bug_id -array bug -enabled_action_id $enabled_action_id
