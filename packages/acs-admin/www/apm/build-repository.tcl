@@ -174,7 +174,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                 unset version
             }
 
-            with_catch errmsg {
+            ad_try {
                 array set version [apm_read_package_info_file $spec_file]
                 
                 if {$version(package.key) in $packages} {
@@ -252,7 +252,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                     
                     append manifest {  } {</package>} \n
                 } 
-            } {
+            } on error {errmsg} {
                 ns_write "<li> Error on spec_file $spec_file: [ns_quotehtml $errmsg]<br>[ns_quotehtml $::errorInfo]\n"
             }
         }
