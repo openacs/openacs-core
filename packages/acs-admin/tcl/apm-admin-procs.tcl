@@ -391,7 +391,7 @@ ad_proc -private apm_build_repository {
                     unset pkg_info
                 }
                 
-                with_catch errmsg {
+                ad_try {
                     array set pkg_info [apm_read_package_info_file $spec_file]
                     
                     if { $pkg_info(package.key) in $packages } {
@@ -480,8 +480,8 @@ ad_proc -private apm_build_repository {
                         }
                         append manifest "  </package>\n"
                     }
-                } {
-                    ns_log Notice "Repository: Error on spec_file $spec_file: $errmsg\n$::errorInfo\n"
+                } on error {errorMsg} {
+                    ns_log Notice "Repository: Error on spec_file $spec_file: $errorMsg\n$::errorInfo\n"
                 }
             }
         }
