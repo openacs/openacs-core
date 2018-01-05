@@ -297,10 +297,10 @@ ad_form -extend -name login -on_request {
                 set message [expr { [info exists auth_info(account_message)] ? $auth_info(account_message) : "" }]
 		# Display the message on a separate page
                 ad_returnredirect \
-                -message $message \
-                -html \
-                [export_vars \
-                     -base "[subsite::get_element -element url]register/account-closed"]
+                    -message $message \
+                    -html \
+                    [export_vars \
+                         -base "[subsite::get_element -element url]register/account-closed"]
 		ad_script_abort
 	    }
         }

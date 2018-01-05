@@ -35,6 +35,7 @@ if { (![info exists return_url] || $return_url eq "") } {
 }
 
 ad_returnredirect -message "You have left the group \"$group_info(group_name)\"." $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

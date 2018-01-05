@@ -166,7 +166,7 @@ ad_form -extend -name "portrait_upload" -validate {
                 # Delete the item
                 content::item::delete -item_id $resized_portrait($name)
 
-                # Resize the item
+                 # Resize the item
                 image::resize -item_id $item_id -size_name $name
             }
         }
@@ -182,9 +182,11 @@ ad_form -extend -name "portrait_upload" -validate {
     util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
 
     ad_returnredirect $return_url
-}
+    ad_script_abort
 
-ad_return_template
+} else {
+    ad_return_template
+}
 
 # Local variables:
 #    mode: tcl
