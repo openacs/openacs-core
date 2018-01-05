@@ -540,11 +540,18 @@ ad_proc -private auth::sync::get_sync_elements {
         set authority_id [acs_user::get_element -user_id $user_id -element authority_id]
     }
 
+    #
+    # Try to sync. Many authorities do no support auth_sync_process,
+    # but these will issue an exception below.
+    #
+    # TODO: using a different error-code could make the code saver, by
+    # just ingnoring such cases.
+    #
     set elms [list]
     ad_try  {
         set elms [auth::sync::GetElements -authority_id $authority_id]
-    } on error {errorMsg} {
-        ad_log error "auth::sync::GetElements raised: $errorMsg"
+    } on error {errorMsg dict} {
+        ad_log error "auth::sync::GetElements raised: $errorMsg ($dict)"
     }
 
     return $elms
