@@ -65,9 +65,9 @@ if { $safe_p } {
     set sql ""
     set fn [acs_package_root_dir $package_key]/sql/$url
     if {[file readable $fn]} {
-	if {[catch {
+	ad_try {
 	    set f [open $fn]; set sql [read $f]; close $f
-	} errorMsg]} {
+	} on error {errorMsg} {
 	    ad_return_warning "Problem reading file" "There was a problem reading $url ($errorMsg)"
 	}
     }

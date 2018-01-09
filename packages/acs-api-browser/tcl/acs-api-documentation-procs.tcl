@@ -73,7 +73,7 @@ namespace eval ::apidoc {
         lreplace lreverse lsearch lset lsort namespace open package
         pid proc puts pwd read refchan regexp regsub rename return
         scan seek set socket source split string subst switch tell
-        time trace unload unset update uplevel upvar variable vwait
+        time trace try unload unset update uplevel upvar variable vwait
         while
 
     }
@@ -100,7 +100,7 @@ ad_proc -public api_read_script_documentation {
     set has_contract_p 0
 
     if { ![file exists "$::acs::rootdir/$path"] } {
-        return -code error "File $path does not exist"
+        error "File $path does not exist"
     }
 
     set file [open "$::acs::rootdir/$path" "r"]
@@ -121,24 +121,22 @@ ad_proc -public api_read_script_documentation {
 
     doc_set_page_documentation_mode 1
     #ns_log notice "Sourcing $::acs::rootdir/$path in documentation mode"
-    set errno [catch { source "$::acs::rootdir/$path" } error]
-    doc_set_page_documentation_mode 0
-    
-    #
-    # In documentation mode, we expect ad_page_contract (and counterparts)
-    # to break out of sourcing with an error to avoid side-effects of sourcing
-    #
-    if { $errno == 1} {
+    ad_try {
+        #
+        # Sourcing in documentation mode fills "doc_elements"
+        #
+        source "$::acs::rootdir/$path"
+    } on error {errorMsg} {
         if {[regexp {^ad_page_contract documentation} $::errorInfo] } {
-            array set doc_elements $error
+            array set doc_elements $errorMsg
         }
-        if { [array exists doc_elements] } {
-            return [array get doc_elements]
-        }
-        return [list]
+        return -code error [array get doc_elements]
+    } finally {
+        doc_set_page_documentation_mode 0
     }
 
-    return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
+    return [array get doc_elements]
+    
 }
 
 ad_proc -public api_script_documentation {
@@ -175,8 +173,10 @@ ad_proc -public api_script_documentation {
         return $out
     }
 
-    if { [catch { array set doc_elements [api_read_script_documentation $path] } error] } {
-        append out "<blockquote><p><i>Unable to read $path: [ns_quotehtml $error]</i></blockquote>\n"
+    ad_try {
+        array set doc_elements [api_read_script_documentation $path]
+    } on error {errorMsg} {
+        append out "<blockquote><p><i>Unable to read $path: [ns_errorMsg $error]</i></blockquote>\n"
         return $out
     }
 

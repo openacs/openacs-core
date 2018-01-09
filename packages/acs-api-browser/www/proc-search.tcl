@@ -118,9 +118,8 @@ foreach proc [nsv_array names api_proc_doc] {
     ## Source Search:
     #################
     if {$source_weight != 0} {
-        if {![catch {set source [info body $proc]}]} {
-            incr score [expr {$source_weight * [::apidoc::ad_keywords_score $query_string $source]}] 
-        }    
+        set body [api_get_body $proc]
+        incr score [expr {$source_weight * [::apidoc::ad_keywords_score $query_string $source]}]
     }
 
     #####

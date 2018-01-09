@@ -135,7 +135,7 @@ switch $kind {
                 unset doc_elements
             }
             # don't stop completely if the page is gone
-            if { [catch {
+            ad_try {
                 set full_path "packages/$package_key/$path"
                 array set doc_elements [api_read_script_documentation $full_path]
 
@@ -166,12 +166,16 @@ switch $kind {
                     } else {
                         set content_type directory
                     }
-                    multirow append content_pages $indentation $full_path $content_type $name $type $first_sentence
+                    multirow append content_pages \
+                        $indentation $full_path $content_type $name $type $first_sentence
                 }
                 set last_components $components
-            } error] } {
-                ns_log Error "API Broswer: Package View: $error"
-                # couldn't read info from the file. it probably doesn't exist.
+            } on error {errorMsg} } {
+                #
+                # Couldn't read info from the file. it probably doesn't exist.
+                #
+                ns_log Error "API Broswer: Package View: $errorMsg"
+
             }
         }
     }
