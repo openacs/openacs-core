@@ -32,7 +32,13 @@ if { [llength $files] == 0 } {
     # Source all of the marked files using the current interpreter, accumulating
     # errors into apm_package_load_errors
     array set errors [list]
-    catch { apm_load_any_changed_libraries errors }
+    ad_try {
+        apm_load_any_changed_libraries errors
+    } on error {errorMsg} {
+        set errHTML "<p>Error during apm_load_any_changed_libraries:</p><pre>[ns_quotehtml $errorMsg]</pre>"
+    } on ok {r} {
+        set errHTML ""
+    }
 
     if {[info exists errors($package_key)]} {
         array set package_errors $errors($package_key)
@@ -80,6 +86,7 @@ if { [llength $files] == 0 } {
         </p>
     "
     }
+    append body $errHTML
 }
 
 
