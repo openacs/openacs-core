@@ -170,7 +170,7 @@ switch $kind {
                         $indentation $full_path $content_type $name $type $first_sentence
                 }
                 set last_components $components
-            } on error {errorMsg} } {
+            } on error {errorMsg} {
                 #
                 # Couldn't read info from the file. it probably doesn't exist.
                 #
