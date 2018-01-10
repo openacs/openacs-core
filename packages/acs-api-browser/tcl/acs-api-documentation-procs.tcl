@@ -127,10 +127,17 @@ ad_proc -public api_read_script_documentation {
         #
         source "$::acs::rootdir/$path"
     } on error {errorMsg} {
+        #
+        # This is a strange construct: in case, the ::$errorInfo
+        # starts with ad_page_contract, we get the documentation
+        # elements from the $errorMsg
+        #
         if {[regexp {^ad_page_contract documentation} $::errorInfo] } {
             array set doc_elements $errorMsg
+        } else {
+            ad_log warning "api_read_script_documentation: got unexpected result while sourcing $::acs::rootdir/$path\n$errorMsg"
+            return -code error $errorMsg
         }
-        return -code error [array get doc_elements]
     } finally {
         doc_set_page_documentation_mode 0
     }
