@@ -176,7 +176,7 @@ ad_proc -public api_script_documentation {
     ad_try {
         array set doc_elements [api_read_script_documentation $path]
     } on error {errorMsg} {
-        append out "<blockquote><p><i>Unable to read $path: [ns_errorMsg $error]</i></blockquote>\n"
+        append out "<blockquote><p><i>Unable to read $path: [ns_quotehtml $errorMsg]</i></blockquote>\n"
         return $out
     }
 
