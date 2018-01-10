@@ -174,7 +174,7 @@ switch $kind {
                 #
                 # Couldn't read info from the file. it probably doesn't exist.
                 #
-                ns_log Error "API Broswer: Package View: $errorMsg"
+                ns_log Error "API Browser: Package View: $errorMsg"
 
             }
         }
