@@ -4274,11 +4274,13 @@ if {[ns_info name] eq "NaviServer"} {
 
     } {
         ns_mutex lock $mutex
-        set err [catch {uplevel $script} result]
-        ns_mutex unlock $mutex
-        if {$err} {
-            error $result
-        }
+        ad_try {
+            set result [uplevel $script]
+        } on error {errorMsg} {
+            error $errorMsg
+        } finally {
+            ns_mutex unlock $mutex
+        } 
         return $result
     }
 }
