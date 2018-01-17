@@ -357,7 +357,7 @@ ad_proc -private util_close_html_tags {
         #
         set frag [string map [list &# "\0&amp;#\0"] $html_fragment]
 
-        ad_try {
+        try {
             dom parse -html <body>$frag doc
         } on error {errorMsg} {
             # we got an error, so do normal processing
@@ -448,9 +448,7 @@ ad_proc -private util_close_html_tags {
     }
 
     set broken_p 0
-
     set discard 0
-
     set tagptr -1
 
     # First try to fix up < not part of a tag.
@@ -1184,12 +1182,12 @@ ad_proc ad_parse_html_attributes_upvar {
         set lmarker "<root>"
         set rmarker "</root>"
         
-        ad_try {
+        try {
             dom parse -html "${lmarker}${html}${rmarker}" doc
 
         } on error {errorMsg} {
             if {$fix_p} {
-                ad_try {
+                try {
                     set doc [ad_dom_fix_html -html $html -dom]
                 } on error {errorMsg} {
                     ad_log error "Fixing of the document failed. Reported error: $errorMsg"
