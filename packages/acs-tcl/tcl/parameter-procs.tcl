@@ -92,16 +92,7 @@ ad_proc -public parameter::get_global_value {
     # Special parsing for boolean parameters, true and false can be written
     # in many different ways
     if { $boolean_p } {
-        if { [catch { 
-            if { [template::util::is_true $value] } {
-                set value 1
-            } else {
-                set value 0
-            }
-        } errmsg] } {
-                        ns_log Error "Parameter $parameter not a boolean:\n$::errorInfo"
-            set value $default
-        }
+        set value [template::util::is_true $value]
     }
 
     return $value
@@ -190,16 +181,7 @@ ad_proc -public parameter::get {
     # Special parsing for boolean parameters, true and false can be written
     # in many different ways
     if { $boolean_p } {
-        if { [catch { 
-            if { [template::util::is_true $value] } {
-                set value 1
-            } else {
-                set value 0
-            }
-        } errmsg] } {
-                        ns_log Error "Parameter $parameter not a boolean:\n$::errorInfo"
-            set value $default
-        }
+        set value [template::util::is_true $value]
     }
 
     return $value
