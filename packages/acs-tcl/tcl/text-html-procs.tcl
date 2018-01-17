@@ -357,10 +357,12 @@ ad_proc -private util_close_html_tags {
         #
         set frag [string map [list &# "\0&amp;#\0"] $html_fragment]
 
-        if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
+        ad_try {
+            dom parse -html <body>$frag doc
+        } on error {errorMsg} {
             # we got an error, so do normal processing
             ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
-        } else {
+        } on ok {r} {
             $doc documentElement root
             set html ""
             # discard forms
@@ -1177,21 +1179,24 @@ ad_proc ad_parse_html_attributes_upvar {
         }
 
         ##
-
-        
         # root of the document must be unique, this will enforce it by
         # wrapping html in an auxiliary root element
         set lmarker "<root>"
         set rmarker "</root>"
         
-        if {[catch {
+        ad_try {
             dom parse -html "${lmarker}${html}${rmarker}" doc
-        } errmsg]} {
-            if {!$fix_p ||
-                [catch {
+
+        } on error {errorMsg} {
+            if {$fix_p} {
+                ad_try {
                     set doc [ad_dom_fix_html -html $html -dom]
-                } errmsg]} {
-                ad_log error "Parsing of the document failed. Reported error: $errmsg"
+                } on error {errorMsg} {
+                    ad_log error "Fixing of the document failed. Reported error: $errorMsg"
+                    return [expr {$validate_p ? 0 : ""}]
+                }
+            } else {
+                ad_log error "Parsing of the document failed. Reported error: $errorMsg"
                 return [expr {$validate_p ? 0 : ""}]
             }
         }
@@ -1407,9 +1412,11 @@ ad_proc ad_parse_html_attributes_upvar {
             set count 0
             while 1 {
                 if {[incr count] > 3000 } {
-                    # JCD: the programming bug is that an unmatched < in the input runs off forever looking for
-                    # it's closing > and in some long text like program listings you can have lots of quotes
-                    # before you find that >
+                    # JCD: the programming bug is that an unmatched <
+                    # in the input runs off forever looking for it's
+                    # closing > and in some long text like program
+                    # listings you can have lots of quotes before you
+                    # find that >
                     error "There appears to be a programming bug in ad_html_to_text: We've entered an infinite loop."
                 }
                 # Find the positions of the first quote, apostrophe and greater-than sign.
@@ -1439,7 +1446,8 @@ ad_proc ad_parse_html_attributes_upvar {
                 }
                 set string_delimiter [string index $html $string_delimiter_idx]
 
-                # If the greater than sign appears before any of the string delimters, we've found the tag end.
+                # If the greater than sign appears before any of the
+                # string delimters, we've found the tag end.
                 if { $gt_idx < $string_delimiter_idx || $string_delimiter_idx == -1 } {
                     # we found the tag end
                     set i $gt_idx
