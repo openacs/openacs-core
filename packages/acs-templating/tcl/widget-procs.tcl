@@ -164,7 +164,7 @@ ad_proc -private template::data::transform::party_search {
     if { [llength $persons] == 0 && [llength $groups_relsegs] == 0 } {
         # no search results so return text entry back to the user
 
-        catch { unset element(options) }
+        unset -nocomplain element(options)
 
         template::element::set_error $element(form_id) $element_id "
         No matches were found for \"$search_string\".<br>Please

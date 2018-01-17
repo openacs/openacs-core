@@ -165,7 +165,7 @@ proc dom::DOMImplementation {method args} {
 		1 {
 		    # Use array name provided.  Should check that it is safe.
 		    set name [lindex $args 0]
-		    catch {unset $name}
+		    unset -nocomplain $name
 		}
 		default {
 		    return -code error "wrong number of arguments"
@@ -211,16 +211,17 @@ proc dom::DOMImplementation {method args} {
 	    ##
 	    upvar #0 $node(docArray) docArray
 	    for {set i 0} {$i < $docArray(counter)} {incr i} {
-		catch {unset ${docArrayName}var$i}
-		catch {unset ${docArrayName}arr$i}
+		unset -nocomplain ${docArrayName}var$i
+		unset -nocomplain ${docArrayName}arr$i
 	    }
              
 	    ##
 	    ## Then release the main document array
 	    ##
-	    if {[catch {unset $node(docArray)}]} {
+	    if {![info exists $node(docArray)]} {
 		return -code error "unable to destroy document"
 	    }
+            unset -nocomplain $node(docArray)
 
 	    return {}
 
@@ -305,7 +306,7 @@ proc dom::DOMImplementation {method args} {
 		$parser configure -final true
 	    } elseif {[catch {$parser parse [lindex $args 0]} err]} {
 		catch {rename $parser {}}
-		catch {unset $state}
+		unset -nocomplain $state
 		return -code error $err
 	    }
 
@@ -1248,7 +1249,7 @@ proc dom::element {method token args} {
 	    }
 
 	    upvar #0 $node(element:attributeList) attrList
-	    catch {unset attrList([lindex $args 0])}
+	    unset -nocomplain attrList([lindex $args 0])
 
 	}
 
@@ -1307,7 +1308,7 @@ proc dom::Element:GetByTagName {token name} {
 
     if {$node(node:nodeType) ne "documentFragment" } {
 	foreach child [set $node(node:childNodes)] {
-	    catch {unset childNode}
+	    unset -nocomplain childNode
 	    array set childNode [set $child]
 	    if {$childNode(node:nodeType) eq "element" 
 		&& [GetField childNode(node:nodeName)] eq $name 
@@ -1317,7 +1318,7 @@ proc dom::Element:GetByTagName {token name} {
 	}
     } elseif {[llength $node(document:documentElement)]} {
 	# Document Element must exist and must be an element type node
-	catch {unset childNode}
+	unset -nocomplain childNode
 	array set childNode [set $node(document:documentElement)]
 	if {$childNode(node:nodeName) eq $name } {
 	    set result $node(document:documentElement)
@@ -1362,7 +1363,7 @@ proc dom::Element:Normalize {pVar nodes} {
 		    PutHandle $textNode text
 		} else {
 		    set textNode $n
-		    catch {unset text}
+		    unset -nocomplain text
 		    array set text [array get child]
 		}
 	    }
@@ -1598,7 +1599,7 @@ proc dom::Serialize:node {token args} {
 
     set result {}
     foreach childToken [set $node(node:childNodes)] {
-	catch {unset child}
+	unset -nocomplain child
 	array set child [set $childToken]
 	append result [eval [list Serialize:$child(node:nodeType) $childToken] $args]
     }

@@ -1217,7 +1217,7 @@ proc sgml::CModelMakeTransitionTable {state st} {
     }
 
     # Construct the followpos functions
-    catch {unset var}
+    unset -nocomplain var
     followpos $state $st $firstpos $lastpos
 
     # Construct transition table
