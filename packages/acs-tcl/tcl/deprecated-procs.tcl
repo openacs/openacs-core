@@ -742,6 +742,236 @@ ad_proc -public -deprecated ad_block_sql_urls {
     return filter_ok
 }
 
+ad_proc -deprecated ad_present_user {
+    user_id 
+    name
+} {
+    This function is an alias to acs_community_member_link 
+    and receives identical parameters, but the former finds out the name
+    of the user if a blank is passed. That's why it's marked as deprecated.
+
+    @return the HTML link of the community member page of a particular user
+
+    @author Unknown
+    @author Roberto Mello
+    
+    @see acs_community_member_link
+} {
+    return [acs_community_member_link -user_id $user_id -label $name]
+}
+
+ad_proc -deprecated ad_admin_present_user {
+    user_id 
+    name
+} {
+    This function is an alias to acs_community_member_admin_link 
+    and receives identical parameters, but the former finds out the name
+    of the user if a blank is passed. That's why it's marked as deprecated.
+
+    @return the HTML link of the community member page of a particular admin user.
+
+    @author Unknown
+    @author Roberto Mello
+
+    @see acs_community_member_admin_link
+} {
+    return [acs_community_member_admin_link -user_id $user_id -label $name]
+}
+
+ad_proc -deprecated ad_header {
+    {-focus ""}
+    page_title
+    {extra_stuff_for_document_head ""} 
+} {
+    writes HEAD, TITLE, and BODY tags to start off pages in a consistent fashion
+
+    @see   Documentation on the site master template for the proper way to standardize page headers
+} {
+    return [ad_header_with_extra_stuff -focus $focus $page_title $extra_stuff_for_document_head]
+}
+
+ad_proc -deprecated ad_header_with_extra_stuff {
+    {-focus ""}
+    page_title
+    {extra_stuff_for_document_head ""} 
+    {pre_content_html ""}
+} {
+    This is the version of the ad_header that accepts extra stuff for the document head and pre-page content html
+
+    @see  Documentation on the site master template for the proper way to standardize page headers
+} {
+    set html "<html>
+<head>
+$extra_stuff_for_document_head
+<title>$page_title</title>
+</head>
+"
+    array set attrs [list]
+    set attrs(bgcolor) [parameter::get -package_id [ad_acs_kernel_id] -parameter bgcolor -default "white"]
+    set attrs(text)    [parameter::get -package_id [ad_acs_kernel_id] -parameter textcolor -default "black"]
+
+    if { $focus ne "" } {
+        template::add_body_script -script [subst {
+            window.addEventListener('load', function () {document.${focus}.focus()}, false);
+        }]
+    }
+    foreach attr [array names attrs] {
+	lappend attr_list "$attr=\"$attrs($attr)\""
+    }
+    append html "<body [join $attr_list]>\n"
+
+    append html $pre_content_html
+    return $html
+}
+
+ad_proc -deprecated ad_footer {
+    {signatory ""} 
+    {suppress_curriculum_bar_p 0}
+} {
+    Writes a horizontal rule, a mailto address box 
+    (ad_system_owner if not specified as an argument), 
+    and then closes the BODY and HTML tags
+
+
+    @see  Documentation on the site master template for the proper way to standardize page footers
+} {
+    global sidegraphic_displayed_p
+    if { $signatory eq "" } {
+	set signatory [ad_system_owner]
+    } 
+    if { [info exists sidegraphic_displayed_p] && $sidegraphic_displayed_p } {
+	# we put in a BR CLEAR=RIGHT so that the signature will clear any side graphic
+	# from the ad-sidegraphic.tcl package
+	set extra_br "<br clear=right>"
+    } else {
+	set extra_br ""
+    }
+    if { [parameter::get -package_id [ad_acs_kernel_id] -parameter EnabledP -default 0] && [parameter::get -package_id [ad_acs_kernel_id] -parameter StickInFooterP -default 0] && !$suppress_curriculum_bar_p} {
+	set curriculum_bar "<center>[curriculum_bar]</center>"
+    } else {
+	set curriculum_bar ""
+    }
+    if { [info commands ds_link] ne "" } {
+	set ds_link [ds_link]
+    } else {
+	set ds_link ""
+    }
+    return "
+$extra_br
+$curriculum_bar
+<hr>
+$ds_link
+<a href=\"mailto:$signatory\"><address>$signatory</address></a>
+</body>
+</html>"
+}
+
+# need special headers and footers for admin pages
+# notably, we want pages signed by someone different
+# (the user-visible pages are probably signed by
+# webmaster@yourdomain.com; the admin pages are probably
+# used by this person or persons.  If they don't like
+# the way a page works, they should see a link to the
+# email address of the programmer who can fix the page).
+
+ad_proc -public -deprecated ad_admin_owner {} {
+    @return E-mail address of the Administrator of this site.
+} {
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter AdminOwner]
+}
+
+ad_proc -deprecated ad_admin_header {
+    {-focus ""}
+    page_title
+} {
+    
+    @see  Documentation on the site master template for the proper way to standardize page headers
+} {
+    return [ad_header_with_extra_stuff -focus $focus $page_title]
+}
+
+ad_proc -deprecated ad_admin_footer {} {
+    Signs pages with ad_admin_owner (usually a programmer who can fix 
+    bugs) rather than the signatory of the user pages
+
+
+    @see  Documentation on the site master template for the proper way to standardize page footers
+} {
+    if { [info commands ds_link] ne "" } {
+	set ds_link [ds_link]
+    } else {
+	set ds_link ""
+    }
+    return "<hr>
+$ds_link
+<a href=\"mailto:[ad_admin_owner]\"><address>[ad_admin_owner]</address></a>
+</body>
+</html>"
+}
+
+ad_proc -deprecated ad_get_user_info {} { 
+    Sets first_names, last_name, email in the environment of its caller.
+    @return ad_return_error if user_id can't be found.
+
+    @author Unknown
+    @author Roberto Mello
+
+    @see acs_user::get
+} {
+    uplevel {
+	set user_id [ad_conn user_id]
+	if { [catch {
+	    db_1row user_name_select {
+		select first_names, last_name, email
+		from persons, parties
+		where person_id = :user_id
+		and person_id = party_id
+	    }
+	} errmsg] } {
+	    ad_return_error "Couldn't find user info" "Couldn't find user info."
+	    return
+	}
+    }
+}
+
+ad_proc -deprecated ad_parameter {
+    -localize:boolean
+    -set
+    {-package_id ""}
+    name
+    {package_key ""}
+    {default ""}
+} {
+    Package instances can have parameters associated with them.  This function is used for accessing  
+    and setting these values.  Parameter values are stored in the database and cached within memory.
+    New parameters can be created with the <a href="/acs-admin/apm/">APM</a> and values can be set
+    using the <a href="/admin/site-map">Site Map UI.</a>.  Because parameters are specified on an instance
+    basis, setting the package_key parameter (preserved from the old version of this function) does not 
+    affect the parameter retrieved.  If the code that calls ad_parameter is being called within the scope
+    of a running server, the package_id will be determined automatically.  However, if you want to use a
+    parameter on server startup or access an arbitrary parameter (e.g., you are writing bboard code, but
+    want to know an acs-kernel parameter), specify the package_id parameter to the object id of the package
+    you want.
+    <p>
+    Note: <strong>The parameters/ad.ini file is deprecated.</strong>
+
+    @see parameter::set_value
+    @see parameter::get
+
+    @param -set Use this if you want to indicate a value to set the parameter to.
+    @param -package_id Specify this if you want to manually specify what object id to use the new parameter. 
+    @return The parameter of the object or if it doesn't exist, the default.
+} {
+    if {[info exists set]} {
+	set ns_param [parameter::set_value -package_id $package_id -parameter $name -value $set]
+    } else {
+        set ns_param [parameter::get -localize=$localize_p -package_id $package_id -parameter $name -default $default]
+    }
+
+    return $ns_param
+}
+
+
 
 # Local variables:
 #    mode: tcl
