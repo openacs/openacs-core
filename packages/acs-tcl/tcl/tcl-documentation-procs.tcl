@@ -1188,12 +1188,12 @@ ad_proc -public ad_page_contract {
                 foreach elm [ad_complaints_get_list] {
                     template::multirow append complaints $elm
                 }
-                if {[catch {
+                ad_try {
                     set html [ad_parse_template \
                                   -params [list complaints [list context $::ad_page_contract_context] \
                                                [list prev_url [get_referrer]] \
                                               ] "/packages/acs-tcl/lib/complain"]
-                } errorMsg]} {
+                } on error {errorMsg} {
                     set errorCode $::errorCode
                     #
                     # Check, if we were called from "ad_script_abort" (intentional abortion)
