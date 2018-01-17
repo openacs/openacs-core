@@ -76,7 +76,7 @@ ad_proc -public template::filter { command args } {
 ad_proc -public cmp_page_filter { why } {
     Show the compiled template (for debugging)
 } {
-    if { [catch {
+    ad_try {
         set url [ns_conn url]
         regsub {.cmp} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
@@ -87,8 +87,8 @@ ad_proc -public cmp_page_filter { why } {
 
         set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
         ns_log debug "cmp_page_filter: Time elapsed: $timeElapsed"
-
-    } errMsg] } {
+        
+    } on error {errorMsg} {
         set output <html><body><pre>[ns_quotehtml $::errorInfo]</pre></body></html>
     }
 
@@ -100,7 +100,7 @@ ad_proc -public cmp_page_filter { why } {
 ad_proc -public dat_page_filter { why } {
     Show the comments for the template (for designer)
 } {
-    if { [catch {
+    ad_try {
         set url [ns_conn url]
         regsub {.dat} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
@@ -114,8 +114,8 @@ ad_proc -public dat_page_filter { why } {
         set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
         ns_log debug " dat_page_filter: Time elapsed: $timeElapsed"
 
-    } errMsg] } {
-        set output <html><body><pre>$::errorInfo</pre></body></html>
+    } on error {errorMsg} {
+        set output <html><body><pre>[ns_quotehtml $::errorInfo]</pre></body></html>
     }
 
     ns_return 200 text/html $output
@@ -152,7 +152,7 @@ namespace eval template {
 ad_proc -private frm_page_filter { why } {
     Return the form data for a request for .frm
 } {
-    if { [catch {
+    ad_try {
         set beginTime [clock clicks -milliseconds]
 
         set output [template::frm_page_handler]
@@ -160,7 +160,7 @@ ad_proc -private frm_page_filter { why } {
         set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
         ns_log debug "frm_page_filter: Time elapsed: $timeElapsed"
 
-    } errMsg] } {
+    } on error {errorMsg} {
         set output $::errorInfo
     }
 
