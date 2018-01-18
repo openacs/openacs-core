@@ -105,7 +105,7 @@ ad_proc -private template:template_tag_include_helper_code {
 } {
     if {$ds_avail_p} {
         set __DS_CODE__ {
-            if {[info exists ::ds_enabled_p] \&\& [info exists ::ds_collection_enabled_p] } {
+            if {[info exists ::ds_enabled_p] && [info exists ::ds_collection_enabled_p] } {
                 set __include_errors {}
                 ns_cache get ds_page_bits [ad_conn request]:error __include_errors
                 ns_cache set ds_page_bits [ad_conn request]:error [lappend __include_errors [list "__SRC__" $::errorInfo]]
