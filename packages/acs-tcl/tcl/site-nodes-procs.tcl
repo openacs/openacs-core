@@ -73,7 +73,7 @@ if {[info commands ::nx::Object] ne ""
     && [apm_package_installed_p xotcl-core]
 } {
     set UseXotclSiteNodes 1
-    ns_log notice "use XOTcl Site Nodes"
+    ns_log notice "site-nodes: use XOTcl based site-node implementation"
 }
 
 #----------------------------------------------------------------------
@@ -1475,8 +1475,23 @@ if {$UseXotclSiteNodes} {
             set createCache [catch {ns_cache flush xo_site_nodes NOTHING}]
         }
         if {$createCache} {
-            ns_log notice "creating xo_site_nodes cache"
-            ns_cache create xo_site_nodes -size 2000000
+            #
+            # Create caches. The sizes can be tailored in the config
+            # file like the following:
+            #
+            # ns_section ns/server/${server}/acs/acs-tcl
+            #   ns_param SiteNodesCacheSize        2000000
+            
+            foreach {cache parameter default} {
+                xo_site_nodes          SiteNodesCacheSize        2000000
+            } {
+                set size [parameter::get_from_package_key \
+                              -package_key acs-tcl \
+                              -parameter $parameter \
+                              -default $default]
+                ns_log notice "site-nodes: create cache $cache -size $size"
+                ns_cache create $cache -size $size
+            }
         }
 
         #
@@ -1485,7 +1500,6 @@ if {$UseXotclSiteNodes} {
         # the object mixin deactivates caching for these methods
         # completely.
         #
-
         ::nx::Class create SiteNodeCache {
 
             :public method get_children {
