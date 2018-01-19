@@ -92,6 +92,7 @@ I was unable to update your version for the following reason:
 }
 
 ad_returnredirect "version-generate-info?version_id=$version_id&write_p=1"
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

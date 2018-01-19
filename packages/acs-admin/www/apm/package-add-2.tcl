@@ -146,6 +146,7 @@ db_transaction {
 }
 
 ad_returnredirect "version-view?version_id=$version_id"
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

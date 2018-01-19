@@ -13,7 +13,7 @@ auth::password::reset \
     -username $user_info(username)
 
 ad_returnredirect $return_url
-
+ad_script_abort
 
 
 # Local variables:

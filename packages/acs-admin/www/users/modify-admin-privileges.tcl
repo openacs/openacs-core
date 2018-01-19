@@ -30,6 +30,7 @@ if {$confirmed_p} {
     # We need to flush all permission checks pertaining to this user.
     # this is expensive so maybe we should check if we in fact are cacheing.
     util_memoize_flush_regexp "^permission::.*-party_id $user_id"
+    ad_script_abort
 }
 
 acs_user::get -user_id $user_id -array user_info

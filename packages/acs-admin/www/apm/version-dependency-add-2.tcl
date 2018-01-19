@@ -51,6 +51,7 @@ db_transaction {
 }
 
 ad_returnredirect [export_vars -base version-dependencies {version_id}]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

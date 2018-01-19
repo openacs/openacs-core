@@ -34,6 +34,7 @@ if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
 ns_cache flush util_memoize $key
 
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

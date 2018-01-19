@@ -60,6 +60,7 @@ foreach section $sections {
 }
 
 ad_returnredirect [export_vars -base "version-parameters" { version_id section_name }]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

@@ -19,6 +19,7 @@ foreach path $paths {
 }
 
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

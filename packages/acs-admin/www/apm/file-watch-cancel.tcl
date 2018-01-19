@@ -13,6 +13,7 @@ ad_page_contract {
 apm_file_watch_cancel $watch_file
 
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

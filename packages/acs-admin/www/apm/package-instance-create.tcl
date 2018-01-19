@@ -7,8 +7,10 @@ ad_page_contract {
     {package_key:notnull}
     {return_url:localurl /acs/admin/apm}
 }
+
 apm_package_instance_new -package_key $package_key
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

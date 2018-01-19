@@ -31,6 +31,7 @@ set context [list [list "./" "Merge"] "Merge"]
 
 if { !$merge_p } {
     ad_returnredirect "/acs-admin/users"
+    ad_script_abort
 } else {
     set final_results [callback merge::MergePackageUser \
                            -from_user_id $from_user_id \
