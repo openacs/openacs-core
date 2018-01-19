@@ -197,6 +197,7 @@ aa_register_case \
         set version_id [apm_version_id_from_package_key $package_key]
         apm_mark_version_for_reload $version_id files
         ad_returnredirect $return_url
+        ad_script_abort
     }
 
 

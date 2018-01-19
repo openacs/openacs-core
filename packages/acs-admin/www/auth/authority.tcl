@@ -214,6 +214,7 @@ ad_form -name authority \
         -array element_array
 } -after_submit {
     ad_returnredirect [export_vars -base [ad_conn url] { authority_id }]
+    ad_script_abort
 }
 
 # Show recent batch jobs for existing authorities

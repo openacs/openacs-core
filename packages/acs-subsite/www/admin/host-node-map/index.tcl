@@ -84,6 +84,7 @@ ad_form -name add_host_node_mapping -export {parent_node_id} -form {
     db_dml host_node_insert {}
 } -after_submit {
     ad_returnredirect index
+    ad_script_abort
 }
 
 # Local variables:
