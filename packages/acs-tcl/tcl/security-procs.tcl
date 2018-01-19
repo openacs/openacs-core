@@ -666,6 +666,7 @@ ad_proc -public ad_redirect_for_registration {} {
     @see ad_get_login_url
 } {
     ad_returnredirect [ad_get_login_url -return]
+    # caller might call "ad_script_abort"
 }
 
 
