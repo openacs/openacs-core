@@ -9,6 +9,7 @@ ad_page_contract {
 lang::catalog::import
 
 ad_returnredirect "index"
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

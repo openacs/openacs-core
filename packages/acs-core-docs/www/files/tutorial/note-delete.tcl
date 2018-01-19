@@ -15,7 +15,7 @@ mfp::note::delete -item_id $item_id
 
 ad_returnredirect "."
 # stop running this code, since we're redirecting
-abort
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

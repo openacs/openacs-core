@@ -11,7 +11,7 @@ ad_page_contract {
 lang::util::translator_mode_set [expr {![lang::util::translator_mode_p]}] 
 
 ad_returnredirect $return_url
-
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

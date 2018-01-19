@@ -14,6 +14,7 @@ ns_log Notice "Sourcing test definition file $absolute_file_path"
 apm_source $absolute_file_path
 
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

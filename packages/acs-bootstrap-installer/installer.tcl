@@ -214,6 +214,7 @@ proc install_next_button { url } {
 proc install_file_serve { path } {
     if {[file isdirectory $path] && [string index [ad_conn url] end] != "/" } {
         ad_returnredirect "[ad_conn url]/"
+        ad_script_abort
     } else {
         ns_log Debug "Installer serving $path"
         ad_try {
@@ -223,6 +224,7 @@ proc install_file_serve { path } {
         your URL and try again."
         } trap {AD EXCEPTION redirect} {url} {
             ad_returnredirect $url
+            ad_script_abort
         } trap {AD EXCEPTION directory} {dir_index} {
             set new_file [file join $path "index.html"]
             if {[file exists $new_file]} {

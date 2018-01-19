@@ -22,6 +22,7 @@ if {$testcase_id eq ""} {
 	{by_package_key $package_key}
 	{by_category $category}
 	view_by quiet stress security_risk}]
+    ad_script_abort
 } else {
     if {$quiet} {
 	aa_runseries -quiet -testcase_id $testcase_id "" ""
@@ -29,7 +30,9 @@ if {$testcase_id eq ""} {
 	aa_runseries -testcase_id $testcase_id "" ""
     }
     ad_returnredirect "testcase?testcase_id=$testcase_id&package_key=$package_key&quiet=$quiet"
+    ad_script_abort
 }
+
 
 
 # Local variables:

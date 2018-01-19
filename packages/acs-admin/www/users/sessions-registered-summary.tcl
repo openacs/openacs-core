@@ -11,11 +11,11 @@ set_the_usual_form_variables 0
 
 # go_beyond_60_days_p (optional; default is to limit to 60 days)
 
-append whole_page "[ad_admin_header "Registered Sessions"]
+append whole_page "[ad_admin_header {Registered Sessions}]
 
 <h2>Registered Sessions</h2>
 
-[ad_context_bar [list "./" "Users"] "Registered Sessions"]
+[ad_context_bar [list ./ Users] {Registered Sessions}]
 
 <hr>
 
@@ -64,6 +64,7 @@ append whole_page "$table_rows
 [ad_admin_footer]
 "
 ns_return 200 text/html $whole_page
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

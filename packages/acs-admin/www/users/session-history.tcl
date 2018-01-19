@@ -63,6 +63,7 @@ inflated to the extent that users have disabled cookies."]
 "
 db_release_unused_handles
 ns_return 200 text/html $whole_page
+ad_script_abort
 
 # Local variables:
 #    mode: tcl
