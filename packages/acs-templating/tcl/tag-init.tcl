@@ -129,7 +129,7 @@ ad_proc -private template:template_tag_include_helper_code {
             append __adp_output "Error in include template \"$templateFile\": [ns_quotehtml $errorMsg]"
             # JCD: If we have the ds_page_bits cache maybe save the error for later
             __DS_CODE__
-            ad_log Error "Error in include template \"$templateFile\": [ns_quotehtml $errorMsg]"
+            ad_log Error "Error in include template \"$templateFile\": $errorMsg"
         }
     }
 
