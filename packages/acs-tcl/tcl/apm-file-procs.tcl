@@ -403,14 +403,6 @@ ad_proc -private apm_get_watchable_files { package_key } {
     return $watchable_files
 } 
 
-ad_proc -public -deprecated pkg_home {package_key} {
-
-    @return A server-root relative path to the directory for a package.  Usually /packages/package-key
-    @see acs_package_root_dir
-
-} {
-    return "/packages/$package_key"
-}
 
 ad_proc -private apm_system_paths {} {
 

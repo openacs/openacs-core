@@ -263,24 +263,7 @@ ad_proc -public db_compatible_rdbms_p { db_type } {
     return [expr { $db_type eq "" || [db_type] eq $db_type }]
 }
 
-ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
-    @return 1 if db_type_list contains the current RDMBS type.  A package intended to run with a given RDBMS must note this in it's package info file regardless of whether or not it actually uses the database.
 
-    @see apm_package_supports_rdbms_p
-} {
-    if { [lsearch $db_type_list [db_type]] != -1 } {
-        return 1
-    }
-
-    # DRB: Legacy package check - we allow installation of old aD Oracle 4.2 packages,
-    # though we don't guarantee that they work.
-
-    if { [db_type] eq "oracle" && [lsearch $db_type_list "oracle-8.1.6"] != -1 } {
-        return 1
-    }
-
-    return 0
-}
 
 ad_proc -private db_legacy_package_p { db_type_list } {
     @return 1 if the package is a legacy package.  We can only tell for certain if it explicitly supports Oracle 8.1.6 rather than the OpenACS more general oracle.
