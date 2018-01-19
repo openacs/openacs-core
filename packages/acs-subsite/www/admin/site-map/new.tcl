@@ -66,6 +66,7 @@ if {[lsearch $expand $parent_id] == -1} {
 }
 
 ad_returnredirect [export_vars -base . {expand:multiple root_id}]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

@@ -23,6 +23,7 @@ db_dml update_rel_type_mapping {
 }
 
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

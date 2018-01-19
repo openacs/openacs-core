@@ -25,6 +25,7 @@ if {$operation eq "Yes"} {
 }
 
 ad_returnredirect [export_vars -base one {object_id application_url}]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

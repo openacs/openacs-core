@@ -35,7 +35,10 @@ db_dml update_member_state {
 if {$return_url eq ""} {
     set return_url "one?rel_id=$rel_id"
 }
+
 ad_returnredirect $return_url
+ad_script_abort
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

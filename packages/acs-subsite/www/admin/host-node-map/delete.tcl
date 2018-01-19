@@ -17,6 +17,7 @@ db_dml host_node_delete {
 }
 
 ad_returnredirect index
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

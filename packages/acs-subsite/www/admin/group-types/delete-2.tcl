@@ -95,6 +95,7 @@ db_transaction {
 package_object_view_reset $group_type
 
 ad_returnredirect $return_url 
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

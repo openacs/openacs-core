@@ -59,6 +59,7 @@ ad_form -name comment_edit -export {user_id return_url} -form {
     db_dml comment_update {}
 
     ad_returnredirect $return_url
+    ad_script_abort
 }
 
 ad_return_template

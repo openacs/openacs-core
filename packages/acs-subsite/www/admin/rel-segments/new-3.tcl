@@ -57,7 +57,7 @@ db_transaction {
 if { ![db_string segments_exists_p {}] } {
     # No more segments... can't create constraints
     ad_returnredirect $return_url
-    return
+    ad_script_abort
 }
 
 

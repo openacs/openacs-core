@@ -19,6 +19,7 @@ if {$root_id == $node_id} {
 site_node::delete -node_id $node_id
 
 ad_returnredirect [export_vars -base . {expand:multiple root_id}]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

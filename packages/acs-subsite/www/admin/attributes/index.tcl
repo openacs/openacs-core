@@ -12,6 +12,7 @@ ad_page_contract {
 }
 
 ad_returnredirect ../
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

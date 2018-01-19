@@ -53,6 +53,8 @@ if { [db_string segment_exists_p {}] } {
 } else {
     ad_returnredirect [export_vars -base constraints-create {group_id rel_type return_url}]
 }
+ad_script_abort
+
 
 
 # Local variables:

@@ -130,6 +130,7 @@ set redirects_for_type [list \
 foreach {type url} $redirects_for_type {
     if {[lsearch $object_type_path_list $type] != -1} {
 	ad_returnredirect [ad_conn package_url]admin/$url
+        ad_script_abort
     }
 }
 

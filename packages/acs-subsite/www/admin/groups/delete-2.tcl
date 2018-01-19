@@ -33,8 +33,8 @@ if {$operation eq "Yes, I really want to delete this group"} {
     }
 }
 
-
 ad_returnredirect $return_url
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

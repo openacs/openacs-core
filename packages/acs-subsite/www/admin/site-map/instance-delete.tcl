@@ -56,6 +56,7 @@ db_transaction {
 }
 	
 ad_returnredirect ${parent}admin/site-map
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

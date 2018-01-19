@@ -34,7 +34,7 @@ if { !$confirm_p } {
 
     if { $num == 0 } {
         ad_returnredirect .
-        return
+        ad_script_abort
     }
 
     append listing <ul>\n
@@ -90,6 +90,7 @@ db_transaction {
 }
      
 ad_returnredirect $return_url
+ad_script_abort
 
 
 #

@@ -15,6 +15,7 @@ ad_page_contract {
 site_node::unmount -node_id $node_id
 
 ad_returnredirect [export_vars -base . {expand:multiple root_id}]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

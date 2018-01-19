@@ -91,7 +91,7 @@ if { [template::form is_valid group_type] } {
         group_type::new -group_type $object_type -supertype $supertype $pretty_name $pretty_plural
     }
     ad_returnredirect ""
-    return 
+    ad_script_abort
 }
 
 ad_return_template
