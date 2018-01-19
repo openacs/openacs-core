@@ -33,7 +33,7 @@ ad_proc -public template::forward { url args } {
 
     if {$cache_p == "t"} {
         set persistent_p [lindex $args 1]
-	set excluded_vars [lindex $args 2]
+        set excluded_vars [lindex $args 2]
 
         ad_cache_returnredirect $url $persistent_p $excluded_vars
     } else {

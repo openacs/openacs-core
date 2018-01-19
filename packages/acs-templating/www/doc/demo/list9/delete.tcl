@@ -26,6 +26,7 @@ foreach template_demo_note_id $template_demo_note_id {
 cache flush notes*
 
 ad_returnredirect "./"
+ad_script_abort
 
 # Local variables:
 #    mode: tcl
