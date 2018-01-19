@@ -73,7 +73,7 @@ if {[info commands ::nx::Object] ne ""
     && [apm_package_installed_p xotcl-core]
 } {
     set UseXotclSiteNodes 1
-    ns_log notice "use XOTcl Site Nodes"
+    ns_log notice "site-nodes: use XOTcl based site-node implementation"
 }
 
 #----------------------------------------------------------------------
@@ -1474,10 +1474,27 @@ if {$UseXotclSiteNodes} {
             set createCache [catch {ns_cache flush xo_site_nodes NOTHING}]
         }
         if {$createCache} {
-            ns_log notice "creating xo_site_nodes cache"
-            ns_cache create xo_site_nodes -size 2000000
-            ns_cache create xo_site_nodes_id -size 100000
-            ns_cache create xo_site_nodes_get_children -size 100000
+            #
+            # Create caches. The sizes can be tailored in the config
+            # file like the following:
+            #
+            # ns_section ns/server/${server}/acs/acs-tcl
+            #   ns_param SiteNodesCacheSize        2000000
+            #   ns_param SiteNodesIdCacheSize       100000
+            #   ns_param SiteNodesChildenCacheSize  100000
+            
+            foreach {cache parameter default} {
+                xo_site_nodes          SiteNodesCacheSize        2000000
+                xo_site_nodes_id       SiteNodesIdCacheSize      100000
+                xo_site_nodes_children SiteNodesChildenCacheSize 100000
+            } {
+                set size [parameter::get_from_package_key \
+                              -package_key acs-tcl \
+                              -parameter $parameter \
+                              -default $default]
+                ns_log notice "site-nodes: create cache $cache -size $size"
+                ns_cache create $cache -size $size
+            }
         }
 
         #
@@ -1486,7 +1503,6 @@ if {$UseXotclSiteNodes} {
         # the object mixin deactivates caching for these methods
         # completely.
         #
-
         ::nx::Class create SiteNodeCache {
 
             :public method get_children {
@@ -1499,11 +1515,12 @@ if {$UseXotclSiteNodes} {
             } {
                 if {$all} {
                     #
-                    # don't cache when $all is specified - seldomly used, a pain for invalidating
+                    # Don't cache when $all is specified - seldom
+                    # used, a pain for invalidating.
                     #
                     next
                 } else {
-                    ns_cache_eval xo_site_nodes_get_children \
+                    ns_cache_eval xo_site_nodes_children \
                         get_children-$node_id-$all-$package_type-$package_key-$filters-$element {
                             next
                         }
@@ -1542,7 +1559,7 @@ if {$UseXotclSiteNodes} {
                 foreach pattern $patterns {
                     switch -glob -- $pattern {
                         id-*           {set cache xo_site_nodes_id}
-                        get_children-* {set cache xo_site_nodes_get_children}
+                        get_children-* {set cache xo_site_nodes_children}
                         default        {set cache xo_site_nodes}
                     }
                     foreach key [ns_cache names $cache $pattern] {
@@ -1565,7 +1582,7 @@ if {$UseXotclSiteNodes} {
                 if {$node_id eq "" || $old_url eq "/"} {
                     ::xo::clusterwide ns_cache_flush xo_site_nodes
                     ::xo::clusterwide ns_cache_flush xo_site_nodes_id
-                    ::xo::clusterwide ns_cache_flush xo_site_nodes_get_children
+                    ::xo::clusterwide ns_cache_flush xo_site_nodes_children
                 } else {
                     set limit_clause [expr {$with_subtree ? "" : "limit 1"}]
                     #
