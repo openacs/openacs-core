@@ -245,6 +245,7 @@ ad_proc check_for_form_variable_naughtiness {
                 ns_returnerror 500 "variable $name failed '$typed_var_type' type check"
                 ns_log Error "check_for_form_variable_naughtiness: [ad_conn url] called with \$$name = $value"
                 error "variable $name failed '$typed_var_type' type check"
+                ad_script_abort
             }
 
             # we've found the first element in the list that matches,
