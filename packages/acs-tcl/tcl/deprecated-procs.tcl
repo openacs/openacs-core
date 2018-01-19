@@ -8,8 +8,21 @@ ad_library {
     @cvs-id $Id$
 }
 
-namespace eval util {}
+#
+# In order to skip loading of deprecated code, use the following
+# snippet in your config file
+#
+#      ns_section ns/server/${server}/acs
+#          ns_param WithDeprecatedCode 0
+#
+if {![ns_config ns/server/[ns_info server]/acs WithDeprecatedCode 1]} {
+    ns_log notice "deprecated-procs: skip depreacted code"
+    return
+}
+ns_log notice "deprecated-procs include depreacted code"
 
+
+namespace eval util {}
 
 ad_proc -public -deprecated ad_set_typed_form_variable_filter {
     url_pattern
