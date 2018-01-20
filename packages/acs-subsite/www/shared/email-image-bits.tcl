@@ -7,7 +7,7 @@ ad_page_contract {
 }
 
 cr_write_content -revision_id $revision_id
-
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

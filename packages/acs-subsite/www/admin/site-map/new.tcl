@@ -59,6 +59,7 @@ db_transaction {
         <blockquote><pre>
                 [ns_quotehtml $errmsg]
         </pre></blockquote>"
+    ad_script_abort
 }
 
 if {[lsearch $expand $parent_id] == -1} {

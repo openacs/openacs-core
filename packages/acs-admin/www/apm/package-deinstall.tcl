@@ -26,6 +26,7 @@ db_transaction {
     if {![apm_version_installed_p $version_id] } {
 	ad_return_complaint 1 "Database Error: The database returned the following error
 	message <pre><blockquote>[ns_quotehtml $errmsg]</blockquote></pre>"
+        ad_script_abort
     }
 }
 

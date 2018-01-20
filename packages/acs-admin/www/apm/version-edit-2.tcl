@@ -57,6 +57,7 @@ if {$old_version_name eq $version_name} {
 if { $version_changed_p && $version_uri eq $old_version_uri } {
     ad_return_complaint 1 {You have changed the version number but not the version URL. When creating
         a package for a new version, you must select a new URL for the version.}
+    ad_script_abort
 }
 
 if { $upgrade_p && [db_string apm_version_uri_unique_ck {
@@ -64,6 +65,7 @@ if { $upgrade_p && [db_string apm_version_uri_unique_ck {
     where version_uri = :version_uri
 } -default 0] } {
     ad_return_complaint 1 "A version with the URL $version_uri already exists."
+    ad_script_abort
 }
 
 db_transaction {
