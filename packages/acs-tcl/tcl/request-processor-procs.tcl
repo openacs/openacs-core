@@ -1247,7 +1247,6 @@ ad_proc -private rp_file_can_be_public_p { path } {
         # Can't use ad_return_exception_page because it depends upon an initialized ad_conn
         ns_log Warning "An attempt was made to access an .XQL resource: {$path}."
         ns_return 404 "text/html" "Not Found"
-        ns_conn close
         return 0
     }
     foreach match [parameter::get -parameter ExcludedFiles -package_id $::acs::kernel_id -default {}] {
@@ -1255,7 +1254,6 @@ ad_proc -private rp_file_can_be_public_p { path } {
             # Can't use ad_return_exception_page because it depends upon an initialized ad_conn
             ns_log Warning "An attempt was made to access an ExcludedFiles resource: {$path}."
             ns_return 404 "text/html" "Not Found"
-            ns_conn close
             return 0
         }
     }
