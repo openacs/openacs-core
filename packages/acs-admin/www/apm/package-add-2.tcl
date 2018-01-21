@@ -124,9 +124,10 @@ db_transaction {
 	if {[catch {
 	    apm_package_install_spec $version_id
 	} errmsg]} {
-	    ad_return_error "Filesystem Error" "
-	    I was unable to create your package for the following reason:
-	    <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
+	    ad_return_error "Filesystem Error" \
+                "I was unable to create your package for the following reason:
+                <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
+            ad_script_abort
 	}
     }
 } on_error {
@@ -137,11 +138,9 @@ db_transaction {
 	ad_returnredirect "version-view?version_id=$version_id"
 	ad_script_abort
     }
-    ad_return_error "Database Error" "
-    I was unable to create your package for the following reason:
-
-    <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>
-    "
+    ad_return_error "Database Error" \
+        "I was unable to create your package for the following reason:
+        <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
     ad_script_abort
 }
 

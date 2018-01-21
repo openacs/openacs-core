@@ -14,6 +14,7 @@ auth::require_login \
 
 if { ![auth::password::can_change_p -user_id $user_id] } {
     ad_return_error "Not supported" "Changing password is not supported."
+    ad_script_abort
 }
 
 set page_title [_ acs-subsite.Update_Password]
@@ -71,7 +72,7 @@ ad_form -extend -name update -form {
                 ad_script_abort
             }
 	    ad_return_error $result(password_message) ""
-	    break
+	    ad_script_abort
         }
         default {
             form set_error update password_1 $result(password_message)

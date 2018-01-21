@@ -60,7 +60,7 @@ switch -- $email_verified_p {
     }
 }
 
-if {[catch {
+ad_try {
     acs_user::change_state -user_id $user_id -state $member_state
 
     switch -- $email_verified_p {
@@ -71,9 +71,10 @@ if {[catch {
             db_exec_plsql unapprove_email {}
         }
     }
-} errmsg]} {
+} on error {errorMsg} {
     ad_return_error "Database Update Failed" "Database update failed with the following error:
-    <pre>$errmsg</pre>"
+    <pre>[ns_quotehtml $errorMsg]</pre>"
+    ad_script_abort
 }
 
 callback acs_admin::member_state_change -member_state $member_state -user_id $user_id

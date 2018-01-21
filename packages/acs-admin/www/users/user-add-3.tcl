@@ -33,7 +33,7 @@ if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $ad
 [ns_quotehtml $errmsg]
 </code></div>
 }]
-    return
+   ad_script_abort
 }
 
 # Local variables:

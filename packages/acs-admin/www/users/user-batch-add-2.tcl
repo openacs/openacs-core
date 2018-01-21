@@ -88,9 +88,8 @@ while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
 <div><code>
 [ns_quotehtml $errmsg]
 </code></div>"
-        return
+        ad_script_abort
     }
-
 }
 
 ad_return_template

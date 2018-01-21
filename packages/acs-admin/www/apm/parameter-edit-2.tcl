@@ -36,6 +36,7 @@ db_transaction {
     ad_return_error "Database Error" "The parameter could not be updated.  
 The database returned the following error:<p>
  <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
+    ad_script_abort
 } 
 
 # LARS hack
