@@ -42,11 +42,13 @@ if {![file readable ${::acs::rootdir}$path] || [file isdirectory ${::acs::rootdi
     } else {
 	set link [subst {<p>Go back to <a href="[ns_quotehtml [ad_conn package_url]]">API Browser</a>.}]
     }
-    ad_return_warning "No such library file" [subst {
-	The file '$path' was not found. Maybe the url contains a typo.
-	$link
-    }]
-    return
+    ad_return_warning \
+        "No such library file" \
+        [subst {
+            The file '$path' was not found. Maybe the url contains a typo.
+            $link
+        }]
+    ad_script_abort
 }
 
 

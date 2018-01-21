@@ -23,8 +23,10 @@ if {![db_0or1row user_info {
     from persons
     where person_id = :user_id
 }]} {
-    ad_return_warning "Account Unavailable" "We can't find user #$user_id in the users table."
-    return
+    ad_return_warning \
+        "Account Unavailable" \
+        "We can't find user #$user_id in the users table."
+    ad_script_abort
 }
 
 if {![db_0or1row get_item_id {

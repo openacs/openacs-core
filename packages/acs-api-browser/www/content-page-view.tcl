@@ -60,11 +60,13 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
     } else {
 	set link [subst {<p>Go back to <a href="[ns_quotehtml [ad_conn package_url]]">API Browser</a>.}]
     }
-    ad_return_warning "No such content page" [subst {
-	The file '$path' was not found. Maybe the url contains a typo.
-	$link
-    }]
-    return
+    ad_return_warning \
+        "No such content page" \
+        [subst {
+            The file '$path' was not found. Maybe the url contains a typo.
+            $link
+        }]
+    ad_script_abort
 }
 
 set mime_type [ns_guesstype $path]

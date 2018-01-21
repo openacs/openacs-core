@@ -41,7 +41,7 @@ if {$version_id ne ""} {
 }
 lappend context [file tail $url]
 
-set title "[file tail $url]"
+set title [file tail $url]
 
 # This is normally a password-protected page, but to be safe let's
 # check the incoming URL for ".." to make sure that someone isn't
@@ -50,9 +50,10 @@ set title "[file tail $url]"
 # for example
 
 if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
-    ad_return_warning "Can't back up beyond the pageroot" "You can't use 
-    display-sql.tcl to look at files underneath the pageroot."
-    return
+    ad_return_warning \
+        "Can't back up beyond the pageroot" \
+        "You can't use display-sql.tcl to look at files underneath the pageroot."
+    ad_script_abort
 }
 
 if { $package_key ne "" } {
@@ -68,11 +69,17 @@ if { $safe_p } {
 	ad_try {
 	    set f [open $fn]; set sql [read $f]; close $f
 	} on error {errorMsg} {
-	    ad_return_warning "Problem reading file" "There was a problem reading $url ($errorMsg)"
+	    ad_return_warning \
+                "Problem reading file" \
+                "There was a problem reading $url ($errorMsg)"
+            ad_script_abort
 	}
     }
 } else {
-    ad_return_warning "Invalid file location" "Can only display files in package or doc directory"
+    ad_return_warning \
+        "Invalid file location" \
+        "Can only display files in package or doc directory"
+    ad_script_abort
 }
 
 # Local variables:

@@ -364,12 +364,11 @@ ad_proc -public subsite::upload_allowed {} {
 
     if { ![parameter::get -package_id $package_id -parameter SolicitPortraitP -default 1]  } {
         if { ![acs_user::site_wide_admin_p] } {
-             ns_log notice "user is tried to see user/portrait/upload  without permission"
-        ad_return_forbidden \
-               "Permission Denied" \
-               "<blockquote>
-                You don't have permission to see this page.
-               </blockquote>"
+            ns_log notice "user is tried to see user/portrait/upload without permission"
+            ad_return_forbidden \
+                "Permission Denied" \
+                "<blockquote>You don't have permission to see this page.</blockquote>"
+            ad_script_abort
         }
     }
 }
