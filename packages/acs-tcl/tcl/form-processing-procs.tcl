@@ -1163,6 +1163,7 @@ ad_proc -public ad_form {
 
             if { [info exists __key] && ![ad_verify_signature "$__key:$form_name" $__key_signature] } {
                 ad_return_error "Bad key signature" "Verification of the database key value failed"
+                ad_script_abort
             }
         }
 
