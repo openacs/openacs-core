@@ -26,7 +26,10 @@ switch -- $member_state {
         # May be a double-click
     }
     default {
-        ad_return_error "[_ acs-subsite.lt_Problem_with_authenti]" "[_ acs-subsite.lt_There_was_a_problem_w]"
+        ad_return_error \
+            [_ acs-subsite.lt_Problem_with_authenti] \
+            [_ acs-subsite.lt_There_was_a_problem_w]
+        ad_script_abort
     }
 }
 

@@ -28,17 +28,21 @@ set context [list \
 
 if { ![db_0or1row select_pretty_name {}] } {
     ad_return_error "Group type doesn't exist" "Group type \"$group_type\" doesn't exist"
-    return
+    errorMsgad_script_abort
 }
 
 if {$dynamic_p != "t" } {
-    ad_return_error "Cannot administer group type" "Group type \"$group_type\" can only be administered by programmers"
+    ad_return_error \
+        "Cannot administer group type" \
+        "Group type \"$group_type\" can only be administered by programmers"
+    ad_script_abort
 }
 
 set possible_join_policies [list open "needs approval" closed]
 set QQreturn_url [ns_quotehtml $return_url]
 set QQgroup_type [ns_quotehtml $group_type]
 ad_return_template
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

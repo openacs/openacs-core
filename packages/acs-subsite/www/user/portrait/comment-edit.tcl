@@ -24,8 +24,10 @@ if {$user_id eq ""} {
 permission::require_permission -object_id $user_id -privilege "write"
 
 if {![db_0or1row user_info {}]} {
-    ad_return_error "Account Unavailable" "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
-    return
+    ad_return_error \
+        "Account Unavailable" \
+        "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
+    ad_script_abort
 }
 
 if {![db_0or1row portrait_info {}]} {

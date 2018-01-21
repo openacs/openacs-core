@@ -30,8 +30,10 @@ set group_type_enc [ad_urlencode $group_type]
 set package_id [ad_conn package_id]
 
 if { ![db_0or1row select_pretty_name {}] } {
-    ad_return_error "Group type doesn't exist" "Group type \"$group_type\" doesn't exist"
-    return
+    ad_return_error \
+        "Group type doesn't exist" \
+        "Group type \"$group_type\" doesn't exist"
+    ad_script_abort
 }
 
 set doc(title) [_ acs-subsite.Details_for__group_type_pretty_name]

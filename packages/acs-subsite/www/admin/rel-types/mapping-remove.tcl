@@ -27,8 +27,10 @@ if { ![db_0or1row select_info {
        and t.object_type = g.rel_type
        and t2.object_type = g.group_type
 }] } {
-    ad_return_error "Relation already removed." "Please back up and reload"
-    return
+    ad_return_error \
+        "Relation already removed." \
+        "Please back up and reload"
+    ad_script_abort
 }
 
 set export_vars [export_vars -form {group_rel_type_id return_url}]

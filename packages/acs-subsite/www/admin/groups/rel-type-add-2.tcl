@@ -40,7 +40,7 @@ if { [catch {
     # Does this pair already exists?
     if { ![db_string exists_p {}] } {
 	ad_return_error "Error inserting to database" $err_msg
-	return
+	ad_script_abort
     }
 }
 

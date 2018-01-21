@@ -31,8 +31,10 @@ ad_page_contract {
 set context [list [list "./" "Relational segments"] "One segment"]
 
 if { ![db_0or1row select_segment_properties {} -column_array props] } {
-    ad_return_error "Segment does not exist" "Segment $segment_id does not exist"
-    return
+    ad_return_error \
+        "Segment does not exist" \
+        "Segment $segment_id does not exist"
+    ad_script_abort
 }
 
 set props(role_pretty_plural) [lang::util::localize $props(role_pretty_plural)]

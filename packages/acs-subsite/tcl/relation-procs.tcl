@@ -358,7 +358,10 @@ ad_proc -public relation::get_objects {
 } {
     if {$object_id_one eq ""} {
 	if {$object_id_two eq ""} {
-	    ad_return_error "[_ acs-subsite.Missing_argument]" "[_ acs-subsite.lt_You_have_to_provide_a]"
+            ad_return_error \
+                [_ acs-subsite.Missing_argument] \
+                [_ acs-subsite.lt_You_have_to_provide_a]
+            ad_script_abort
 	} else {
 	    return [relation::get_object_one -object_id_two $object_id_two -rel_type $rel_type -multiple]
 	}

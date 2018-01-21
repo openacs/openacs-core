@@ -15,7 +15,10 @@ if { [security::RestrictLoginToSSLP] } {
 }
 
 if { ![auth::password::can_change_p -user_id $user_id] } {
-    ad_return_error "Not supported" "Changing password is not supported."
+    ad_return_error \
+        "Not supported" \
+        "Changing password is not supported."
+    ad_script_abort
 }
 
 set admin_p [permission::permission_p -object_id $user_id -privilege admin]
@@ -25,13 +28,11 @@ if { !$admin_p } {
 }
 
 
-
 set page_title [_ acs-subsite.Reset_Password]
 set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
 
 set system_name [ad_system_name]
 set site_link [ad_site_home_link]
-
 
 
 acs_user::get -user_id $user_id -array user

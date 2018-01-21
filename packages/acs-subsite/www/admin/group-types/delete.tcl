@@ -38,8 +38,10 @@ if { ![db_0or1row select_pretty_name {
       from acs_object_types t
      where t.object_type = :group_type
 }] } {
-    ad_return_error "Group type doesn't exist" "Group type \"$group_type\" doesn't exist"
-    return
+    ad_return_error \
+        "Group type doesn't exist" \
+        "Group type \"$group_type\" doesn't exist"
+    ad_script_abort
 }
 
 set subtypes_exist_p [db_string number_subtypes {}]

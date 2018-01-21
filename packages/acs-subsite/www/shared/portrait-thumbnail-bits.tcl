@@ -29,8 +29,10 @@ if { $file_type eq "" } {
         where user_id = :user_id
     } -default "" ]
     if {$file_type eq ""} {
-	ad_return_error "Couldn't find thumbnail or portrait" "Couldn't find a thumbnail or a portrait for User $user_id"
-	return
+	ad_return_error \
+            "Couldn't find thumbnail or portrait" \
+            "Couldn't find a thumbnail or a portrait for User $user_id"
+	ad_script_abort
     }
     set column portrait
 }

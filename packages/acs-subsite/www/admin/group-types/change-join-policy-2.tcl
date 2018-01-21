@@ -20,12 +20,17 @@ if { ![db_0or1row select_pretty_name {
      where t.object_type = :group_type
        and t.object_type = gt.group_type(+)
 }] } {
-    ad_return_error "Group type doesn't exist" "Group type \"$group_type\" doesn't exist"
-    return
+    ad_return_error \
+        "Group type doesn't exist" \
+        "Group type \"$group_type\" doesn't exist"
+    ad_script_abort
 }
 
 if {$dynamic_p != "t" } {
-    ad_return_error "Cannot administer group type" "Group type \"$group_type\" can only be administered by programmers"
+    ad_return_error \
+        "Cannot administer group type" \
+        "Group type \"$group_type\" can only be administered by programmers"
+    ad_script_abort
 }
 
 

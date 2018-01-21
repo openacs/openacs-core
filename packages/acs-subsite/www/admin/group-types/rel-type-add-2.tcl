@@ -35,8 +35,10 @@ if { [catch {
 }   } err_msg] } {
     # Does this pair already exists?
     if { ![db_string exists_p {select count(*) from group_type_rels where group_type = :group_type and rel_type = :rel_type}] } {
-	ad_return_error "Error inserting to database" $err_msg
-	return
+	ad_return_error \
+            "Error inserting to database" \
+            $err_msg
+	ad_script_abort
     }
 
 }

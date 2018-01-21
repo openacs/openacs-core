@@ -81,8 +81,9 @@ set segment_list [db_list_of_lists select_segments {
 }]
 
 if { [llength $segment_list] == 0 } {
-    ad_return_complaint 1 "<li> There are currently no other segments. You must have at least two segments before you can create a constraint"
-    return
+    ad_return_complaint 1 \
+        "<li> There are currently no other segments. You must have at least two segments before you can create a constraint"
+    ad_script_abort
 }
 
 template::element create constraint_new required_rel_segment \
@@ -113,14 +114,16 @@ if { [template::form is_valid constraint_new] } {
     } on_error {
 	if { $ctr == 0 } {
 	    # Return the error message
-	    ad_return_error "Error creating the constraint" "We got the following error while trying to create the constraint: <pre>$errmsg</pre>"
-	    return
+	    ad_return_error \
+                "Error creating the constraint" \
+                "We got the following error while trying to create the constraint: <pre>$errmsg</pre>"
+	    ad_script_abort
 	} 
     }
     if { $ctr > 0 } {
 	# show the user the erroneous relations, then abort
 	ad_return_template violations
-	return
+	ad_script_abort
     }
     if { $return_url eq "" } {
 	set return_url "../one?segment_id=$rel_segment"

@@ -40,8 +40,10 @@ set package_id [ad_conn package_id]
 #  rel_segment
 
 if { ![db_0or1row select_constraint_properties {} -column_array props] } {
-    ad_return_error "Error" "Constraint #$constraint_id could not be found or is out of the scope of this subsite."
-    return
+    ad_return_error \
+        "Error" \
+        "Constraint #$constraint_id could not be found or is out of the scope of this subsite."
+    ad_script_abort
 }
 
 set segment_id $props(segment_id)

@@ -34,7 +34,10 @@ if { $old_password ne "" } {
 
 
 if { ![auth::password::can_change_p -user_id $user_id] } {
-    ad_return_error "Not supported" "Changing password is not supported."
+    ad_return_error \
+        "Not supported" \
+        "Changing password is not supported."
+    ad_script_abort
 }
 
 set admin_p [permission::permission_p -object_id $user_id -privilege admin]

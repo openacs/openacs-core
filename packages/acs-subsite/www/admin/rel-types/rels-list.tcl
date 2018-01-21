@@ -26,8 +26,10 @@ if { ![db_0or1row select_pretty_name {
       from acs_object_types t
      where t.object_type = :rel_type
 }] } {
-    ad_return_error "Relationship type doesn't exist" "Relationship type \"$rel_type\" doesn't exist"
-    return
+    ad_return_error \
+        "Relationship type doesn't exist" \
+        "Relationship type \"$rel_type\" doesn't exist"
+    ad_script_abort
 }
 
 db_multirow rels rels_select {}

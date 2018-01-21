@@ -189,7 +189,8 @@ if { [template::form is_valid add_user] } {
             }
 
         } on_error {
-                ad_return_error "User Creation Failed" "We were unable to create the user record in the database."
+            ad_return_error "User Creation Failed" "We were unable to create the user record in the database."
+            ad_script_abort
         }
     }
 
@@ -280,8 +281,6 @@ Password:  $password
                 ns_log Warning "Error sending registration confirmation to $email in acs-subsite/www/admin/users/new Error: $errmsg"
             }
         }
-
-
     }
 
     ad_script_abort
