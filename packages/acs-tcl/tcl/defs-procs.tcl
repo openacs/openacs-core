@@ -468,7 +468,14 @@ ad_proc -private ad_parameter_cache {
     } elseif { [nsv_exists ad_param_$key $parameter_name] } {
 	return [nsv_get ad_param_$key $parameter_name]
     } elseif { $global_p } {
-        set value [db_string select_global_parameter_value {} -default ""]
+        set value [db_string select_global_parameter_value {
+            select apm_parameter_values.attr_value
+            from   apm_parameters, apm_parameter_values
+            where  apm_parameter_values.package_id is null
+            and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
+            and    apm_parameters.parameter_name = :parameter_name
+            and    apm_parameters.package_key = :key
+        } -default ""]
     } else {
         set value [db_string select_instance_parameter_value {} -default ""]
     }
