@@ -407,542 +407,362 @@ ad_proc -public template::util::list_of_ns_sets_to_multirow {
     {-var_name:required}
     {-level "1"}
 } {
-    Transform a list of ns_sets (most likely produced by db_list_of_ns_sets
-                                 into a multirow datasource.
+    Transform a list of ns_sets (e.g. produced by db_list_of_ns_sets)
+    into a multirow datasource.
 
-                                 @param rows The data to be transformed
-                                 @param var_name The name of the multirow to create
-                                 @param level How many levels up the stack to place the new datasource,
-                                 defaults to 1 level up.
-                             } {
-                                 upvar $level $var_name:rowcount rowcount $var_name:columns columns
-                                 set rowcount [llength $rows]
+    @param rows The data to be transformed
+    @param var_name The name of the multirow to create
+    @param level How many levels up the stack to place the new datasource,
+    defaults to 1 level up.
+} {
+    upvar $level $var_name:rowcount rowcount $var_name:columns columns
+    set rowcount [llength $rows]
 
-                                 set i 1
-                                 foreach row_set $rows {
+    set i 1
+    foreach row_set $rows {
 
-                                     ns_set put $row_set rownum $i
+        ns_set put $row_set rownum $i
 
-                                     upvar $level $var_name:$i row
-                                     array set row [util_ns_set_to_list -set $row_set]
-                                     if {$i == 1} {
-                                         set columns [array names row]
-                                     }
-                                     incr i
-                                 }
-                             }
-
-    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    # * Utility procedures for interacting with the file system *
-    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-    ad_proc -public template::util::read_file { path } {
-        Reads a text file.
-
-        @param path The absolute path to the file
-
-        @return A string with the contents of the file.
-    } {
-        #
-        # Use ad_try to make sure, that the file descriptor is finally
-        # closed.
-        #
-        ad_try {
-            set fd [open $path]
-            template::util::set_file_encoding $fd
-            set text [read $fd]
-        } on error {errMsg opts} {
-            dict incr opts -level
-            ns_log error "template::util::read_file on fd $fd: $errMsg,\n$::errorInfo"
-            return -options [dict replace $opts -inside $opts] $errMsg
-        } finally {
-            close $fd
+        upvar $level $var_name:$i row
+        array set row [util_ns_set_to_list -set $row_set]
+        if {$i == 1} {
+            set columns [array names row]
         }
-
-        return $text
+        incr i
     }
+}
 
-    ad_proc -public template::util::set_file_encoding { file_channel_id } {
-        Set encoding of the given file channel based on the OutputCharset
-        parameter of AOLserver. All ADP, Tcl, and txt files are assumed
-        to be in the same charset.
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+# * Utility procedures for interacting with the file system *
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-        @param file_channel_id The id of the file to set encoding for.
+ad_proc -public template::util::read_file { path } {
+    Reads a text file.
 
-        @author Peter Marklund
-    } {
-        set output_charset [ns_config "ns/parameters" OutputCharset]
-        set tcl_charset [ns_encodingforcharset $output_charset]
+    @param path The absolute path to the file
 
-        if { $tcl_charset ne "" } {
-            fconfigure $file_channel_id -encoding $tcl_charset
-        }
-    }
-
-    ad_proc -public template::util::write_file { path text } {
-        Writes a text file
-
-        @param path The absolute path to the file
-        @param text A string containing the text to write to the file.
-    } {
-
-        file mkdir [file dirname $path]
-
-        set fd [open $path w]
-
+    @return A string with the contents of the file.
+} {
+    #
+    # Use ad_try to make sure, that the file descriptor is finally
+    # closed.
+    #
+    ad_try {
+        set fd [open $path]
         template::util::set_file_encoding $fd
-
-        puts $fd $text
+        set text [read $fd]
+    } on error {errMsg opts} {
+        dict incr opts -level
+        ns_log error "template::util::read_file on fd $fd: $errMsg,\n$::errorInfo"
+        return -options [dict replace $opts -inside $opts] $errMsg
+    } finally {
         close $fd
     }
 
-    ad_proc -public template::util::master_to_file { url {reference_url ""} } {
+    return $text
+}
 
-        Resolve a URL into an absolute file path, but respect styled
-        master configuration for named masters
-        (e.g. acs-templating/resources/masters/... containing 2cols.adp)
+ad_proc -public template::util::set_file_encoding { file_channel_id } {
+    Set encoding of the given file channel based on the OutputCharset
+    parameter of AOLserver. All ADP, Tcl, and txt files are assumed
+    to be in the same charset.
 
-    } {
-        if { [string index $url 0] ne "/" } {
-            set master_stub [template::resource_path -type masters -style $url]
+    @param file_channel_id The id of the file to set encoding for.
 
-            if {[file exists $master_stub.adp]} {
-                set path $master_stub
-            } else {
-                set path [file dirname $reference_url]/$url
-            }
+    @author Peter Marklund
+} {
+    set output_charset [ns_config "ns/parameters" OutputCharset]
+    set tcl_charset [ns_encodingforcharset $output_charset]
 
-        } else {
-            set path $::acs::rootdir/$url
-        }
-        return [ns_normalizepath $path]
+    if { $tcl_charset ne "" } {
+        fconfigure $file_channel_id -encoding $tcl_charset
     }
+}
 
-    ad_proc -public template::util::url_to_file { url {reference_url ""} } {
-        Resolve a URL into an absolute file path.
-    } {
+ad_proc -public template::util::write_file { path text } {
+    Writes a text file
 
-        if { [string index $url 0] ne "/" } {
+    @param path The absolute path to the file
+    @param text A string containing the text to write to the file.
+} {
+
+    file mkdir [file dirname $path]
+
+    set fd [open $path w]
+
+    template::util::set_file_encoding $fd
+
+    puts $fd $text
+    close $fd
+}
+
+ad_proc -public template::util::master_to_file { url {reference_url ""} } {
+
+    Resolve a URL into an absolute file path, but respect styled
+    master configuration for named masters
+    (e.g. acs-templating/resources/masters/... containing 2cols.adp)
+
+} {
+    if { [string index $url 0] ne "/" } {
+        set master_stub [template::resource_path -type masters -style $url]
+
+        if {[file exists $master_stub.adp]} {
+            set path $master_stub
+        } else {
             set path [file dirname $reference_url]/$url
-        } else {
-            set path $::acs::rootdir/$url
         }
 
-        return [ns_normalizepath $path]
+    } else {
+        set path $::acs::rootdir/$url
+    }
+    return [ns_normalizepath $path]
+}
+
+ad_proc -public template::util::url_to_file { url {reference_url ""} } {
+    Resolve a URL into an absolute file path.
+} {
+
+    if { [string index $url 0] ne "/" } {
+        set path [file dirname $reference_url]/$url
+    } else {
+        set path $::acs::rootdir/$url
     }
 
-    ad_proc -public template::util::resolve_directory_url { url } {
-        Resolve the file name for a directory URL
-    } {
-        set path $::acs::pageroot$url
+    return [ns_normalizepath $path]
+}
 
-        if { [file isdirectory $path] && [file exists ${path}index.adp] } {
-            set url ${url}index.acs
+ad_proc -public template::util::resolve_directory_url { url } {
+    Resolve the file name for a directory URL
+} {
+    set path $::acs::pageroot$url
+
+    if { [file isdirectory $path] && [file exists ${path}index.adp] } {
+        set url ${url}index.acs
+    }
+
+    return $url
+}
+
+ad_proc -public template::util::get_url_directory { url } {
+    Get the directory portion of a URL.  If the URL has a trailing
+    slash, then return the entire URL.
+} {
+    set directory $url
+
+    set lastchar [string range $url [string length $url]-1 end]
+
+    if {$lastchar ne "/" } {
+
+        set directory [file dirname $url]/
+
+        if {$directory eq "//"} {
+            # root directory is a special case
+            set directory /
         }
-
-        return $url
     }
 
-    ad_proc -public template::util::get_url_directory { url } {
-        Get the directory portion of a URL.  If the URL has a trailing
-        slash, then return the entire URL.
-    } {
-        set directory $url
+    return $directory
+}
 
-        set lastchar [string range $url [string length $url]-1 end]
 
-        if {$lastchar ne "/" } {
+ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
+    implements template::util::quote_html on the designated column of a multirow
 
-            set directory [file dirname $url]/
+    @param multirow_ref name of the multirow
+    @param column_ref name of the column to be
 
-            if {$directory eq "//"} {
-                # root directory is a special case
-                set directory /
+    @author simon
+} {
+
+    upvar $multirow_ref:rowcount rowcount
+
+    for { set i 1 } { $i <= $rowcount } { incr i} {
+        upvar $multirow_ref:$i arr
+        set arr($column_ref) [ns_quotehtml [set arr($column_ref)]]
+    }
+
+}
+
+
+ad_proc -public template::util::nvl { value value_if_null } {
+    Analogous to SQL NVL
+} {
+    if {$value eq ""} {
+        return $value_if_null
+    }
+    return $value
+}
+
+ad_proc -public template::util::number_list { last_number {start_at 0} } {
+    Return a list of numbers, {1 2 3 ... n}
+} {
+
+    set ret [list]
+    for {set i $start_at} { $i <= $last_number } {incr i} {
+        lappend ret $i
+    }
+    return $ret
+}
+
+ad_proc -public template::util::tcl_to_sql_list { lst } {
+    Convert a Tcl list to a SQL list, for use with the "in" statement.
+    Uses DoubleApos (similar to ns_dbquotevalue) functionality to escape single quotes
+} {
+
+    if { [llength $lst] > 0 } {
+        # adding DoubleApos functionality for security reasons.
+        regsub -all -- ' "$lst" '' lst2
+        set sql "'"
+        append sql [join $lst2 "', '"]
+        append sql "'"
+        return $sql
+    } else {
+        return ""
+    }
+}
+
+ad_proc -public template::themed_template {
+    path
+} {
+
+    Given a path like /packages/acs-admin/www/index pointing to an
+    .adp file, this function tries to locate this path in the
+    ResourceDir of the subsite (determined by the theme). If found the
+    themed template is returned, otherwse the passed template path.
+
+    @param path absolute path within the open acs tree (without extension)
+    @return path to themed template or input value (without extension)
+
+} {
+    if {[string index $path 0] eq "/"} {
+        set style [string range $path 1 end]
+    } else {
+        set style $path
+    }
+    set stub [template::resource_path -type templates -style $style -relative]
+    if {[file readable $::acs::rootdir/$stub.adp]} {
+        return $stub
+    }
+    return $path
+}
+
+ad_proc -public template::streaming_template {
+    -subsite_id
+} {
+    Return the path of the streaming template
+    @param subsite_id id of the subsite. Defaults to [ad_conn subsite_id]
+    @return path to themed template
+} {
+    if { ![info exists subsite_id] } {
+        set subsite_id [ad_conn subsite_id]
+    }
+    set template [parameter::get -package_id $subsite_id \
+                      -parameter StreamingHead \
+                      -default "/packages/openacs-default-theme/lib/plain-streaming-head"]
+    return [template::resource_path -type masters -style $template -relative]
+}
+
+ad_proc -public template::resource_path {
+    -type:required
+    -style:required
+    -relative:boolean
+    -subsite_id
+    -theme_dir
+} {
+
+    Process the templating "style" and return the stub (path without
+                                                        extensions). When the style is not an abolute path, check if the
+    resource can be obtained from the theme, if not fallback to the
+    resources directory of acs-templating.
+
+    @param type type of resource (e.g. "forms" or "lists")
+    @param style name of the resource within the type (e.g. "standard")
+    @param relative return optionally the path relative to the OpenACS root directory
+    @param theme_dir theming directory (alternative to determination via subsite), higher priority
+    @param subsite_id subsite_id to determine theming information
+
+    @return path of the resource (without extension)
+    @author Gustaf Neumann
+} {
+
+    if {![regexp {^/(.*)} $style path]} {
+
+        if { ![info exists theme_dir] } {
+            if { ![info exists subsite_id] } {
+                set subsite_id [ad_conn subsite_id]
             }
+            set theme_dir [parameter::get -parameter ResourceDir -package_id $subsite_id]
         }
 
-        return $directory
-    }
-
-    ad_proc -public -deprecated template::util::get_cookie { name {default_value ""} } {
-        Retrieve the value of a cookie and return it
-        Return the default if no such cookie exists
-
-        @see ad_get_cookie
-    } {
-        set headers [ns_conn headers]
-        set cookie [ns_set iget $headers Cookie]
-
-        if { [regexp "$name=(\[^;\]+)" $cookie match value] } {
-            return [ns_urldecode $value]
-        }
-
-        return $default_value
-    }
-
-    ad_proc -public -deprecated template::util::set_cookie { expire_state name value { domain "" } } {
-        Create a cookie with specified parameters.  The expiration state
-        may be persistent, session, or a number of minutes from the current
-        time.
-
-        @see ad_set_cookie
-    } {
-
-        if { [string match $domain {}] } {
-            set path "ns/server/[ns_info server]/module/nssock"
-            set domain [ns_config $path Hostname]
-        }
-
-        set cookie "$name=[ns_urlencode $value]; path=/; domain=$domain"
-
-        switch -- $expire_state {
-
-            persistent {
-                append cookie ";expires=Wed, 01-Jan-2020 01:00:00 GMT"
-            }
-
-            "" -
-            session {
-            }
-
-            default {
-
-                set time [expr {[ns_time] + ($expire_state * 60)}]
-                append cookie ";expires=[ns_httptime $time]"
-            }
-        }
-
-        ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
-    }
-
-    ad_proc -public -deprecated template::util::clear_cookie { name { domain "" } } {
-        Expires an existing cookie.
-
-        @see ad_get_cookie
-
-    } {
-        if { [string match $domain {}] } {
-            set path "ns/server/[ns_info server]/module/nssock"
-            set domain [ns_config $path Hostname]
-        }
-
-        set cookie "$name=expired; path=/; domain=$domain;"
-        append cookie "expires=Tue, 01-Jan-1980 01:00:00 GMT"
-
-        ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
-    }
-
-    ad_proc -deprecated -public template::util::quote_html {
-        html
-    } {
-        Quote possible HTML tags in the contents of the html parameter.
-    } {
-
-        return [ns_quotehtml $html]
-    }
-
-    ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
-        implements template::util::quote_html on the designated column of a multirow
-
-        @param multirow_ref name of the multirow
-        @param column_ref name of the column to be
-
-        @author simon
-    } {
-
-        upvar $multirow_ref:rowcount rowcount
-
-        for { set i 1 } { $i <= $rowcount } { incr i} {
-            upvar $multirow_ref:$i arr
-            set arr($column_ref) [ns_quotehtml [set arr($column_ref)]]
-        }
-
-    }
-
-
-    ad_proc -deprecated -public template::util::multirow_foreach { name code_text } {
-        runs a block of code foreach row in a multirow.
-
-        Using "template::multirow foreach" is recommended over this routine.
-
-        @param name the name of the multirow over which the block of
-        code is iterated
-
-        @param code_text the block of code in the for loop; this block can
-        reference any of the columns belonging to the
-        multirow specified; with the multirow named
-        "fake_multirow" containing columns named "spanky"
-        and "foobar",to set the column spanky to the value
-        of column foobar use:<br>
-        <code>set fake_multirow.spanky @fake_multirow.foobar@</code>
-        <p>
-        note: this block of code is evaluated in the same
-        scope as the .tcl page that uses this procedure
-
-        @author simon
-
-        @see template::multirow
-    } {
-
-        upvar $name:rowcount rowcount $name:columns columns i i
-        upvar running_code running_code
-
-        for { set i 1} {$i <= $rowcount} {incr i} {
-
-            set running_code $code_text
-            foreach column_name $columns {
-
-                # first change all references to a column to the proper
-                # rownum-dependent identifier, ie the array value identified
-                # by $<multirow_name>:<rownum>(<column_name>)
-                regsub -all "($name).($column_name)" $running_code "$name:${i}($column_name)" running_code
-            }
-
-            regsub -all {@([a-zA-Z0-9_:\(\)]+)@} $running_code {${\1}} running_code
-
-            uplevel {
-                eval $running_code
-            }
-
-        }
-
-    }
-
-    ad_proc -deprecated -public template::util::get_param {
-        name
-        {section ""}
-        {key ""}
-    } {
-        Retrieve a stored parameter, or "" if no such parameter
-        If section/key are present, read the parameter from the specified
-        section.key in the INI file, and cache them under the given name
-    } {
-
-        if { ![nsv_exists __template_config $name] } {
-
-            # Extract the parameter from the ini file if possible
-            if { $section ne "" } {
-
-                # Use the name if no key is specified
-                if { $key ne "" } {
-                    set key $name
-                }
-
-                set value [ns_config $section $key ""]
-                if {$value eq ""} {
-                    return ""
-                } else {
-                    # Cache the value and return it
-                    template::util::set_param $name $value
-                    return $value
-                }
-
-            } else {
-                # No such parameter found and no key/section specified
-                return ""
-            }
-        } else {
-            return [nsv_get __template_config $name]
-        }
-    }
-
-    ad_proc -public -deprecated  template::util::set_param { name value } {
-        Set a stored parameter
-    } {
-        nsv_set __template_config $name $value
-    }
-
-    ad_proc -public template::util::nvl { value value_if_null } {
-        Analogous to SQL NVL
-    } {
-        if {$value eq ""} {
-            return $value_if_null
-        }
-        return $value
-    }
-
-    ad_proc -public template::util::number_list { last_number {start_at 0} } {
-        Return a list of numbers, {1 2 3 ... n}
-    } {
-
-        set ret [list]
-        for {set i $start_at} { $i <= $last_number } {incr i} {
-            lappend ret $i
-        }
-        return $ret
-    }
-
-    ad_proc -public template::util::tcl_to_sql_list { lst } {
-        Convert a Tcl list to a SQL list, for use with the "in" statement.
-        Uses DoubleApos (similar to ns_dbquotevalue) functionality to escape single quotes
-    } {
-
-        if { [llength $lst] > 0 } {
-            # adding DoubleApos functionality for security reasons.
-            regsub -all -- ' "$lst" '' lst2
-            set sql "'"
-            append sql [join $lst2 "', '"]
-            append sql "'"
-            return $sql
-        } else {
-            return ""
-        }
-    }
-
-    ad_proc -deprecated template::get_resource_path {} {
-        Get the template directory
-        The body is doublequoted, so it is interpreted when this file is read
-        @see template::resource_path
-    } "
-  return \"[file dirname [file dirname [info script]]]/resources\"
-"
-
-    ad_proc -public template::themed_template {
-        path
-    } {
-
-        Given a path like /packages/acs-admin/www/index pointing to an
-        .adp file, this function tries to locate this path in the
-        ResourceDir of the subsite (determined by the theme). If found the
-        themed template is returned, otherwse the passed template path.
-
-        @param path absolute path within the open acs tree (without extension)
-        @return path to themed template or input value (without extension)
-
-    } {
-        if {[string index $path 0] eq "/"} {
-            set style [string range $path 1 end]
-        } else {
-            set style $path
-        }
-        set stub [template::resource_path -type templates -style $style -relative]
-        if {[file readable $::acs::rootdir/$stub.adp]} {
-            return $stub
-        }
-        return $path
-    }
-
-    ad_proc -public template::streaming_template {
-        -subsite_id
-    } {
-        Return the path of the streaming template
-        @param subsite_id id of the subsite. Defaults to [ad_conn subsite_id]
-        @return path to themed template
-    } {
-        if { ![info exists subsite_id] } {
-            set subsite_id [ad_conn subsite_id]
-        }
-        set template [parameter::get -package_id $subsite_id \
-                          -parameter StreamingHead \
-                          -default "/packages/openacs-default-theme/lib/plain-streaming-head"]
-        return [template::resource_path -type masters -style $template -relative]
-    }
-
-    ad_proc -public template::resource_path {
-        -type:required
-        -style:required
-        -relative:boolean
-        -subsite_id
-        -theme_dir
-    } {
-
-        Process the templating "style" and return the stub (path without
-                                                            extensions). When the style is not an abolute path, check if the
-        resource can be obtained from the theme, if not fallback to the
-        resources directory of acs-templating.
-
-        @param type type of resource (e.g. "forms" or "lists")
-        @param style name of the resource within the type (e.g. "standard")
-        @param relative return optionally the path relative to the OpenACS root directory
-        @param theme_dir theming directory (alternative to determination via subsite), higher priority
-        @param subsite_id subsite_id to determine theming information
-
-        @return path of the resource (without extension)
-        @author Gustaf Neumann
-    } {
-
-        if {![regexp {^/(.*)} $style path]} {
-
-            if { ![info exists theme_dir] } {
-                if { ![info exists subsite_id] } {
-                    set subsite_id [ad_conn subsite_id]
-                }
-                set theme_dir [parameter::get -parameter ResourceDir -package_id $subsite_id]
-            }
-
-            if {$theme_dir ne ""} {
-                if {![file isdir $::acs::rootdir/$theme_dir]} {
-                    ns_log warning "ResourceDir '$theme_dir' does not exist under '$::acs::rootdir';\
+        if {$theme_dir ne ""} {
+            if {![file isdir $::acs::rootdir/$theme_dir]} {
+                ns_log warning "ResourceDir '$theme_dir' does not exist under '$::acs::rootdir';\
                     ignore parameter setting of subsite $subsite_id"
-                    set theme_dir ""
-                }
-            }
-
-            if {$theme_dir ne ""} {
-                set path $theme_dir/$type/$style
-                if {![file exists $::acs::rootdir/$path.adp]} {
-                    unset path
-                }
-            }
-            if {![info exists path]} {
-                set path /packages/acs-templating/resources/$type/$style
+                set theme_dir ""
             }
         }
 
-        if {$relative_p} {
-            return $path
+        if {$theme_dir ne ""} {
+            set path $theme_dir/$type/$style
+            if {![file exists $::acs::rootdir/$path.adp]} {
+                unset path
+            }
+        }
+        if {![info exists path]} {
+            set path /packages/acs-templating/resources/$type/$style
+        }
+    }
+
+    if {$relative_p} {
+        return $path
+    } else {
+        return $::acs::rootdir/$path
+    }
+}
+
+ad_proc -public stack_frame_values {level} {
+    return the variables and arrays of one frame as HTML
+} {
+
+    set varlist ""
+    foreach i [if {$level} {
+        uplevel \#$level {info locals}
+    } else {info globals} ] {
+        append varlist "    <li><b>$i</b> = "
+        if {$i eq "page" && $level == [info level]-1 ||
+            $i eq "__adp_output" || $i eq "errorInfo"} {
+            append varlist "<em>value withheld to avoid messy page</em>\n"
+        } elseif {[string match -nocase "*secret*" $i]} {
+            append varlist "<em>value withheld as the name contains \"secret\"</em>\n"
         } else {
-            return $::acs::rootdir/$path
-        }
-    }
-
-    ad_proc -public stack_frame_values {level} {
-        return the variables and arrays of one frame as HTML
-    } {
-
-        set varlist ""
-        foreach i [if {$level} {
-            uplevel \#$level {info locals}
-        } else {info globals} ] {
-            append varlist "    <li><b>$i</b> = "
-            if {$i eq "page" && $level == [info level]-1 ||
-                $i eq "__adp_output" || $i eq "errorInfo"} {
-                append varlist "<em>value withheld to avoid messy page</em>\n"
-            } elseif {[string match -nocase "*secret*" $i]} {
-                append varlist "<em>value withheld as the name contains \"secret\"</em>\n"
+            if {[uplevel \#$level array exists $i]} {
+                append varlist "<em>ARRAY</em><ul>\n"
+                foreach {key value} [uplevel \#$level array get $i] {
+                    append varlist "        <li><b>$key</b> = '$value'\n"
+                }
+                append varlist "        </ul>\n"
             } else {
-                if {[uplevel \#$level array exists $i]} {
-                    append varlist "<em>ARRAY</em><ul>\n"
-                    foreach {key value} [uplevel \#$level array get $i] {
-                        append varlist "        <li><b>$key</b> = '$value'\n"
-                    }
-                    append varlist "        </ul>\n"
-                } else {
-                    if {[catch {append varlist "'[uplevel #$level set $i]'\n"}]} {
-                        append varlist "<em>bad string value</em>\n"
-                    }
+                if {[catch {append varlist "'[uplevel #$level set $i]'\n"}]} {
+                    append varlist "<em>bad string value</em>\n"
                 }
             }
         }
-        return $varlist
+    }
+    return $varlist
+}
+
+
+
+ad_proc -public stack_dump {} {
+    return the whole call stack as HTML
+} {
+    append page "<h1>Tcl Call Trace</h1>\n<ul>"
+
+    for {set x [info level]} {$x > 0} {incr x -1} {
+        append page "<li>$x.  [info level $x]<ul>[stack_frame_values $x]</ul>\n"
     }
 
-
-
-    ad_proc -public stack_dump {} {
-        return the whole call stack as HTML
-    } {
-        append page "<h1>Tcl Call Trace</h1>
-  <ul>"
-
-        for {set x [info level]} {$x > 0} {incr x -1} {
-            append page "<li>$x.  [info level $x]<ul>
-[stack_frame_values $x]    </ul>\n"
-  }
-
-  append page "</ul>
-<h2>Globals</h2>
-<ul> [stack_frame_values 0] </ul>\n"
+    append page "</ul>\n<h2>Globals</h2>\n<ul> [stack_frame_values 0] </ul>\n"
 }
 
 # Local variables:
