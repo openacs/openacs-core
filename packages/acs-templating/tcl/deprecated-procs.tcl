@@ -199,3 +199,251 @@ ad_proc -deprecated template::get_resource_path {} {
 } "
   return \"[file dirname [file dirname [info script]]]/resources\"
 "
+
+##################################################################################
+#
+# From richtext-procs.tcl
+#
+##################################################################################
+namespace eval template::widget {}
+
+ad_proc -public -deprecated template::widget::richtext_htmlarea { element_reference tag_attributes } {
+    Implements the richtext widget, which offers rich text editing options.
+
+    If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1),
+    this will use the htmlArea WYSIWYG editor widget.
+    Otherwise, it will use a normal textarea, with a drop-down to select a format.
+    The available formats are:
+    <ul>
+    <li>Enhanced text = Allows HTML, but automatically inserts line and paragraph breaks.
+    <li>Plain text = Automatically inserts line and paragraph breaks,
+    and quotes all HTML-specific characters, such as less-than, greater-than, etc.
+    <li>Fixed-width text = Same as plain text, but conserves spacing; useful for tabular data.
+    <li>HTML = normal HTML.
+    </ul>
+    You can also parameterize the richtext widget with a 'htmlarea_p' attribute,
+    which can be true or false, and which will override the parameter setting.
+
+    @see template::widget::richtext
+} {
+  upvar $element_reference element
+
+  if { [info exists element(html)] } {
+    array set attributes $element(html)
+  }
+
+  array set attributes $tag_attributes
+
+  if { [info exists element(value)] } {
+      set contents [template::util::richtext::get_property contents $element(value)]
+      set format   [template::util::richtext::get_property format $element(value)]
+  } else {
+      set contents {}
+      set format {}
+  }
+  
+  set output {}
+
+  if {$element(mode) eq "edit"} {
+      append output {<script type="text/javascript" nonce='$::__csp_nonce'><!--} \n {acs_RichText_WriteButtons();  //--></script>}
+      
+      set attributes(id) "richtext__$element(form_id)__$element(id)"
+      
+      if { ([info exists element(htmlarea_p)] && $element(htmlarea_p) ne "") } {
+          set htmlarea_p [template::util::is_true $element(htmlarea_p)]
+      } else {
+          set htmlarea_p [parameter::get \
+                              -package_id [apm_package_id_from_key "acs-templating"] \
+                              -parameter "UseHtmlAreaForRichtextP" \
+                              -default 0]
+      }
+
+      # Check browser's User-Agent header for compatibility with htmlArea
+      ad_return_complaint 1 "use htmlareap = $htmlarea_p"
+      if { $htmlarea_p } {
+          set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+          if { [string first "opera" $user_agent] != -1 } { 
+              # Opera - doesn't work, even though Opera claims to be IE
+              set htmlarea_p 0
+          } elseif { [regexp {msie ([0-9]*)\.([0-9]+)} $user_agent matches major minor] } {
+              # IE, works for browsers > 5.5
+              if { $major < 5 || ($major == 5  && $minor < 5) } {
+                  set htmlarea_p 0
+              }
+          } elseif { [regexp {gecko/0*([1-9][0-9]*)} $user_agent match build] } {
+              if { $build < 20030210 } {
+                  set htmlarea_p 0
+              }
+          } else {
+              set htmlarea_p 0
+          }
+      }
+
+      if { $htmlarea_p } {
+          # Tell the blank-master to include the special stuff for htmlArea in the page header
+          lappend ::acs_blank_master__htmlareas $attributes(id)
+      }
+
+      append output [textarea_internal $element(id) attributes $contents]
+      if { $htmlarea_p } {
+          append output [subst {<input name="$element(id).format" value="text/html" type="hidden">}]
+      } else {
+          append output \
+              [subst {<br>[_ acs-templating.Format]:}] \
+              [menu $element(id).format [template::util::richtext::format_options] $format attributes]
+      }
+          
+      # Spell-checker
+      array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
+      if { $spellcheck(render_p) } {
+          append output \
+              [subst { [_ acs-templating.Spellcheck]: }] \
+              [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
+                   $spellcheck(selected_option) attributes]
+      }
+  } else {
+      # Display mode
+      if { [info exists element(value)] } {
+          append output \
+              [template::util::richtext::get_property html_value $element(value)] \
+              [subst {<input type="hidden" name="$element(id)" value="[ns_quotehtml $contents]">}] \
+              [subst {<input type="hidden" name="$element(id).format" value="[ns_quotehtml $format]">}]
+      }
+  }
+      
+  return $output
+}
+
+##################################################################################
+#
+# From doc-tcl-procs.tcl
+#
+##################################################################################
+
+ad_proc -private -deprecated template::util::server_root {} {
+    uses ns_library to find the server root, may not always be accurate
+    because it essentially asks for the Tcl library path and
+    strips off the last /tcl directory.
+
+    @see use $::acs::rootdir instead
+} {
+
+  set path_length [expr [llength [file split [ns_library private]]] - 1]
+  set svr_root "/[join [lreplace [file split [ns_library private]] $path_length $path_le\ngth] / ]"
+  return $svr_root
+}
+
+
+ad_proc -private -deprecated template::util::display_value { ref } {
+    a proc used for debugging, just prints out a value to the error log
+
+    @see use simple "ns_log ...." instead
+} {
+    upvar $ref value
+    ns_log notice "$ref: $value"
+}
+
+ad_proc -private -deprecated template::util::proper_noun { string_ref } {
+    capitalizes the first letter of a string
+    @return returns formatted string (UNFINISHED. FIXME.)
+    @see use "string totitle ..."
+} {
+
+}
+
+ad_proc -private -deprecated template::util::string_range { string indices } {
+    @see use "string range instead"
+} {
+    return [string range $string [lindex $indices 0] [lindex $indices 1]]
+}
+
+##################################################################################
+#
+# From query-procs.tcl
+#
+##################################################################################
+
+ad_proc -public -deprecated template::query::iterate { statement_name sql body } {
+    @param statement_name Standard db_api statement name used to hook 
+                          into query dispatcher
+
+    @param sql Query to use when processing this command
+
+    @param body Code body to be execute for each result row of the 
+                returned query
+
+    @see db_foreach
+} {
+
+    db_with_handle db {
+        set result [db_exec select $db $statement_name $sql 2]
+
+        set rowcount 0
+
+        while { [ns_db getrow $db $result] } {
+
+            upvar __query_iterate_row row
+
+            set row(rownum) [incr rowcount]
+
+            set size [ns_set size $result]
+
+            for { set i 0 } { $i < $size } { incr i } {
+
+                set column [ns_set key $result $i]
+                set row($column) [ns_set value $result $i]
+            }
+
+            # Execute custom code for each row
+            uplevel "upvar 0 __query_iterate_row row; $body"
+        }
+    }
+}
+
+##################################################################################
+#
+# From parse-procs.tcl
+#
+##################################################################################
+
+ad_proc -private -deprecated template::get_enclosing_tag { tag } {
+    Reach back into the tag stack for the last enclosing instance of a tag.  
+    Typically used where the usage of a tag depends on its context, such
+    as the "group" tag within a "multiple" tag.
+    
+    Deprecated, use:
+    <pre>
+    set tag [template::enclosing_tag &lt;tag-type&gt;]
+    set attribute [template::tag_attribute tag &lt;attribute&gt;]
+    </pre>
+    @param tag  The name of the enclosing tag to look for.
+
+    @see template::enclosing_tag
+    @see template::tag_attribute
+} {
+    set name ""
+
+    variable tag_stack
+
+    set last [expr {[llength $tag_stack] - 1}]
+
+    for { set i $last } { $i >= 0 } { incr i -1 } {
+
+        set pair [lindex $tag_stack $i]
+
+        if {[lindex $pair 0] eq $tag} {
+            set name [ns_set get [lindex $pair 1] name]
+            break
+        }
+    }
+
+    return $name
+}
+
+
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

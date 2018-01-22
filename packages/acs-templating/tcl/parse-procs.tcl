@@ -833,40 +833,6 @@ ad_proc -private template::enclosing_tag {
     return $name
 }
 
-ad_proc -private -deprecated template::get_enclosing_tag { tag } {
-    Reach back into the tag stack for the last enclosing instance of a tag.  
-    Typically used where the usage of a tag depends on its context, such
-    as the "group" tag within a "multiple" tag.
-    
-    Deprecated, use:
-    <pre>
-    set tag [template::enclosing_tag &lt;tag-type&gt;]
-    set attribute [template::tag_attribute tag &lt;attribute&gt;]
-    </pre>
-    @param tag  The name of the enclosing tag to look for.
-
-    @see template::enclosing_tag
-    @see template::tag_attribute
-} {
-    set name ""
-
-    variable tag_stack
-
-    set last [expr {[llength $tag_stack] - 1}]
-
-    for { set i $last } { $i >= 0 } { incr i -1 } {
-
-        set pair [lindex $tag_stack $i]
-
-        if {[lindex $pair 0] eq $tag} {
-            set name [ns_set get [lindex $pair 1] name]
-            break
-        }
-    }
-
-    return $name
-}
-
 ad_proc -private template::get_attribute { tag params name { default "ERROR" } } {
     Retrieves a named attribute value from the parameter set passed to a
     tag handler.  If a default is not specified, assumes the attribute

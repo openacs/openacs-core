@@ -140,18 +140,6 @@ ad_proc -private doc::util::text_divider { text_ref marker } {
     return 1
 }
 
-ad_proc -private -deprecated template::util::server_root {} {
-    uses ns_library to find the server root, may not always be accurate
-    because it essentially asks for the Tcl library path and
-    strips off the last /tcl directory.
-
-    @see use $::acs::rootdir instead
-} {
-
-  set path_length [expr [llength [file split [ns_library private]]] - 1]
-  set svr_root "/[join [lreplace [file split [ns_library private]] $path_length $path_le\ngth] / ]"
-  return $svr_root
-}
 
 ad_proc -private template::util::write_from_template { template file_name} {
     takes a .adp template name and the name of the file to
@@ -171,31 +159,6 @@ ad_proc -private template::util::write_from_template { template file_name} {
   upvar output output
   template::util::write_to_file $file_name "$output"
 
-}
-
-ad_proc -private -deprecated template::util::display_value { ref } {
-    a proc used for debugging, just prints out a value to the error log
-
-    @see use simple "ns_log ...." instead
-} {
-    upvar $ref value
-    ns_log notice "$ref: $value"
-}
-
-
-ad_proc -private -deprecated template::util::proper_noun { string_ref } {
-    capitalizes the first letter of a string
-    @return returns formatted string (UNFINISHED. FIXME.)
-    @see use "string totitle ..."
-} {
-
-}
-
-
-ad_proc -private -deprecated template::util::string_range { string indices } {
-    @see use "string range instead"
-} {
-    return [string range $string [lindex $indices 0] [lindex $indices 1]]
 }
 
 ad_proc -private template::util::quote_space {text} {
