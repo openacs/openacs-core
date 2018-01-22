@@ -209,7 +209,7 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
   # set a local variable as to whether we are cacheing or not
   if { [info exists opts(cache)] } {
     set is_cached 1
-    set cached_result [list]
+      set cached_result {}
   } else {
     set is_cached 0
   }
@@ -287,19 +287,17 @@ ad_proc -private template::query::multilist { statement_name db result_name sql 
 
   upvar $opts(uplevel) $result_name rows
 
-  set rows [list]
+  set rows {}
 
   while { [ns_db getrow $db $row] } {
 
-    set values [list]
-    set size [ns_set size $row]
+      set values {}
+      set size [ns_set size $row]
 
-    for { set i 0 } { $i < $size } { incr i } {
-
-      lappend values [ns_set value $row $i]
-    }
-
-    lappend rows $values
+      for { set i 0 } { $i < $size } { incr i } {
+          lappend values [ns_set value $row $i]
+      }
+      lappend rows $values
   }
 
   if { [info exists opts(cache)] } {
@@ -334,25 +332,24 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
   
   set groups $opts(groupby)
 
-  set rows [list]
+  set rows {}
 
   while { [ns_db getrow $db $row] } {
 
-    set values [list]
-    set size [ns_set size $row]
+      set values {}
+      set size [ns_set size $row]
 
-    for { set i 0 } { $i < $size } { incr i } {
+      for { set i 0 } { $i < $size } { incr i } {
+          lappend values [ns_set value $row $i]
+      }
 
-      lappend values [ns_set value $row $i]
-    }
-
-    # build the values on which to group
-    set group_values [list]
-    foreach group $groups {
-      lappend group_values [ns_set get $row $group]
-    }
-
-    template::util::lnest rows $values {*}$group_values
+      # build the values on which to group
+      set group_values [list]
+      foreach group $groups {
+          lappend group_values [ns_set get $row $group]
+      }
+      
+      template::util::lnest rows $values {*}$group_values
   }
 
   if { [info exists opts(cache)] } {
@@ -381,11 +378,8 @@ ad_proc -private template::query::onelist { statement_name db result_name sql } 
 
   upvar $opts(uplevel) $result_name rows
 
-  set rows [list]
-
+  set rows }{}
   while { [ns_db getrow $db $row] } {
-
-    set values [list]
     lappend rows [ns_set value $row 0]
   }
 
@@ -409,7 +403,7 @@ ad_proc -private template::query::dml { statement_name db name sql } {
 
   upvar opts opts
 
-  db_exec dml $db $statement_name "$sql" 3
+  db_exec dml $db $statement_name $sql 3
 }
 
 
@@ -499,7 +493,9 @@ ad_proc -private set_cached_result {} {
 
   upvar opts opts
   
-  if { ! [info exists opts(result)] } { return } 
+  if { ! [info exists opts(result)] } {
+      return
+  } 
 
   set cache_key $opts(cache)
 
@@ -1024,8 +1020,7 @@ ad_proc -public template::url { command args } {
     } 
 
     default {
-      error "Invalid command for url: 
-             must be set_param, get_param or get_query"
+      error "Invalid command for url: must be set_param, get_param or get_query"
     }
 
   }
