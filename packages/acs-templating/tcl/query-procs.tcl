@@ -378,7 +378,7 @@ ad_proc -private template::query::onelist { statement_name db result_name sql } 
 
   upvar $opts(uplevel) $result_name rows
 
-  set rows }{}
+  set rows {}
   while { [ns_db getrow $db $row] } {
     lappend rows [ns_set value $row 0]
   }
