@@ -22,12 +22,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="permission::require_permission.name">      
-        <querytext>
-            select acs_object__name(:object_id) from dual
-        </querytext>
-    </fullquery>
-
     <fullquery name="permission::toggle_inherit.toggle_inherit">
         <querytext>
             update acs_objects
