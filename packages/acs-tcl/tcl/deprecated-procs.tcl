@@ -1,28 +1,24 @@
 ad_library {
 
-    Provides a variety of non-ACS-specific utilities, including
-    the procs to support the who's online feature.
+    Provides a collection of deprecated procs to provide backward
+    compatibility for sites who have not yet removed calls to the
+    dprecated functions.
 
-    @author Various (acs@arsdigita.com)
-    @creation-date 13 April 2000
+    In order to skip loading of deprecated code, use the following
+    snippet in your config file
+
+        ns_section ns/server/${server}/acs
+            ns_param WithDeprecatedCode 0
+    
     @cvs-id $Id$
 }
 
-#
-# In order to skip loading of deprecated code, use the following
-# snippet in your config file
-#
-#      ns_section ns/server/${server}/acs
-#          ns_param WithDeprecatedCode 0
-#
-if {![ns_config ns/server/[ns_info server]/acs WithDeprecatedCode 1]} {
-    ns_log notice "deprecated-procs: skip depreacted code"
+if {![ad_with_deprecated_code_p]} {
+    ns_log notice "deprecated-procs: skip deprecated code"
     return
 }
 ns_log notice "deprecated-procs include depreacted code"
 
-
-namespace eval util {}
 
 ad_proc -public -deprecated ad_set_typed_form_variable_filter {
     url_pattern
