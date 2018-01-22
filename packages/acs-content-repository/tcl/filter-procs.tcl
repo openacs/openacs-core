@@ -138,27 +138,6 @@ ad_proc -public content::get_template_url {} {
 }
 
 
-ad_proc -deprecated -public content::get_folder_labels { { varname "folders" } } {
-    Set a data source in the calling frame with folder URL and label
-    Useful for generating a context bar.
-
-    This function returns a hard-coded name for the root level. One should use for path generation for items the
-    appropriate API, such as e.g. content::item::get_virtual_path
-
-    @see content::item::get_virtual_path 
-} {
-
-    variable item_id
-
-    # this repeats the query used to look up the item in the first place
-    # but there does not seem to be a clear way around this
-
-    # build the folder URL out as we iterate over the query
-    set query [db_map get_url]
-    db_multirow -extend {url} $varname ignore_get_url $query  {
-        append url "$name/"
-    }
-}
 
 ad_proc -public content::get_content_value { revision_id } {
     @return content element corresponding to the provided revision_id

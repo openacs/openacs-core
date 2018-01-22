@@ -1,3 +1,333 @@
+ad_library {
+
+    Provides a collection of deprecated procs to provide backward
+    compatibility for sites who have not yet removed calls to the
+    dprecated functions.
+
+    In order to skip loading of deprecated code, use the following
+    snippet in your config file
+
+        ns_section ns/server/${server}/acs
+            ns_param WithDeprecatedCode 0
+    
+    @cvs-id $Id$
+}
+
+if {![ad_with_deprecated_code_p]} {
+    ns_log notice "deprecated-procs: skip deprecated code"
+    return
+}
+ns_log notice "deprecated-procs include depreacted code"
+
+
+##################################################################################
+#
+# From keyword-procs.tcl
+#
+##################################################################################
+
+namespace eval cr {}
+namespace eval cr::keyword {}
+
+ad_proc -public -deprecated cr::keyword::new {
+    {-heading:required}
+    {-description ""}
+    {-parent_id ""}
+    {-keyword_id ""}
+    {-object_type "content_keyword"}
+    {-package_id ""}
+} {
+    Create a new keyword
+    @see content::keyword::new
+} {
+    set user_id [ad_conn user_id]
+    set creation_ip [ad_conn peeraddr]
+
+    if {$package_id eq ""} {
+	set package_id [ad_conn package_id]
+    }
+
+    set keyword_id [db_exec_plsql content_keyword_new {}]
+    
+    return $keyword_id
+}
+
+ad_proc -public -deprecated cr::keyword::delete {
+    {-keyword_id:required}
+} {
+    Delete a keyword.
+
+    @author Peter Marklund
+    @see content::keyword::delete
+} {
+    db_exec_plsql delete_keyword {}
+}
+
+ad_proc -public -deprecated cr::keyword::set_heading {
+    {-keyword_id:required}
+    {-heading:required}
+} {
+    Update a keyword heading
+    @see content::keyword::set_heading
+} {
+    db_exec_plsql set_heading {}
+}
+
+ad_proc -public -deprecated cr::keyword::get_keyword_id {
+    {-parent_id:required}
+    {-heading:required}
+} {
+    Get the keyword with the given heading under the given parent.
+    Returns the empty string if none exists.
+
+    @see content::keyword::get_keyword_id
+} {
+    return [content::keyword::get_keyword_id -parent_id $parent_id -heading $heading]
+}
+
+ad_proc -public -deprecated cr::keyword::item_unassign {
+    {-keyword_id:required}
+    {-item_id:required}
+} {
+    Unassign a single keyword from a content item.
+
+    Returns the supplied item_id for convenience.
+    @see content::keyword::item_unassign
+} {
+    return [content::keyword::item_unassign -keyword_id $keyword_id -item_id $item_id]
+}
+
+ad_proc -deprecated -public cr::keyword::item_unassign_children {
+    {-item_id:required}
+    {-parent_id:required}
+} {
+    Unassign all the keywords attached to a content item
+    that are children of keyword parent_id.
+
+    @return the supplied item_id for convenience.
+    @see content::keyword::item_unassign_children
+} {
+    return [content::keyword::item_unassign_children -item_id $item_id -parent_id $parent_id]
+}
+
+ad_proc -public -deprecated cr::keyword::item_assign {
+    {-item_id:required}
+    {-keyword_id:required}
+    {-singular:boolean}
+} {
+    Assign one or more keywords to a content_item.
+    
+    @param singular   If singular is specified, then any keywords with the same parent_id as this keyword_id
+                      will first be unassigned.
+
+    @param keyword_id A list of keywords to assign.
+
+    @return the supplied item_id for convenience.
+    @see content::keyword::item_assign
+} {
+    # First, unassign for the parents of each/all
+    if {$singular_p} {
+	foreach keyword $keyword_id {
+	    set parent_id [db_string get_parent_id {
+		select parent_id
+		from cr_keywords
+		where keyword_id = :keyword
+	    }]
+	    item_unassign_children -item_id $item_id -parent_id $parent_id
+	}
+    }
+
+    # Now assign for each/all
+    foreach keyword $keyword_id {
+	db_exec_plsql keyword_assign {}
+    }
+
+    return $item_id
+}
+
+
+ad_proc -public -deprecated cr::keyword::item_get_assigned {
+    {-item_id:required}
+    {-parent_id}
+} {
+    Returns a list of all keywords assigned to the given cr_item.
+
+    If parent_id is supplied, only keywords that are children of
+    parent_id are listed.
+    
+    @see content::keyword::item_get_assigned
+} {
+
+    if {[info exists parent_id]} {
+	set keyword_list [content::keyword::item_get_assigned -parent_id $parent_id -item_id $item_id]
+    } else {
+	set keyword_list [content::keyword::item_get_assigned -parent_id $parent_id -item_id $item_id]
+    }
+
+    return $keyword_list
+}
+
+ad_proc -deprecated -public cr::keyword::get_options_flat {
+    {-parent_id ""}
+} {
+    Returns a flat options list of the keywords with the given parent_id.
+
+    @see content::keyword::get_options_flat
+} {
+    return [content::keyword::get_options_flat -parent_id $parent_id]
+}
+
+ad_proc -public -deprecated cr::keyword::get_children {
+    {-parent_id ""}
+} {
+    Returns the ids of the keywords having the given parent_id. Returns
+    an empty list if there are no children.
+
+    @author Peter Marklund
+    @see content::keyword::get_children 
+} {
+    return [content::keyword::get_children -parent_id $parent_id]
+}
+
+##################################################################################
+#
+# From symlink-procs.tcl
+#
+##################################################################################
+namespace eval content_symlink {}
+
+ad_proc -deprecated content_symlink::new {
+    {-symlink_id ""}
+    -target_id:required
+    -parent_id:required
+    {-name ""}
+    {-label ""}
+    {-package_id ""}
+} {
+
+    Create a new internal link.
+
+    @param symlink_id Optional pre-assigned object_id for the link
+    @param target_id The item_id of the target of the link
+    @param parent_id The folder that will contain this symlink
+    @param name Name to assign the object (defaults to the name of the target item)
+    @param label Label for the symlink (defaults to the URL)
+    @param description An extended description of the link (defaults to NULL)
+    @param package_id Package Id of the package that created the link
+    @see content::symlink::new
+
+} {
+
+    set creation_user [ad_conn user_id]
+    set creation_ip [ad_conn peeraddr]
+
+    if {$package_id eq ""} {
+	set package_id [ad_conn package_id]
+    }
+
+    return [db_exec_plsql symlink_new {}]
+
+}
+
+ad_proc -deprecated content_symlink::edit {
+    -symlink_id:required
+    -target_id:required
+    -label:required
+} {
+
+    Edit an existing internal link.  The parameters are required because it
+    is assumed that the caller will be pulling the existing values out of
+    the database before editing them.
+
+    @param symlink_id Optional pre-assigned object_id for the link
+    @param target_id The target item_id of the link
+    @param label Label for the symlink (defaults to the target_id item title)
+    @param description An extended description of the link (defaults to NULL)
+
+} {
+
+    set modifying_user [ad_conn user_id]
+    set modifying_ip [ad_conn peeraddr]
+
+    db_transaction {
+        db_dml symlink_update_object {}
+        db_dml symlink_update_symlink {}
+    }
+
+}
+
+ad_proc -deprecated content_symlink::delete {
+    -symlink_id:required
+} {
+
+    Delete an external link.
+
+    @param symlink_id  The object id of the link to delete
+    @see content::symlink::delete
+
+} {
+    db_exec_plsql symlink_delete {}
+}
+
+ad_proc -deprecated content_symlink::symlink_p {
+    -item_id:required
+} {
+
+    Returns true if the given item is a symlink
+
+    @param symlink_id  The object id of the item to check.
+    @see content::symlink::is_symlink
+
+} {
+    return [db_string symlink_check {}]
+}
+
+ad_proc content_symlink::symlink_name {
+    -item_id:required
+} {
+
+    Returns the name of an symlink
+
+    @param item_id  The object id of the item to check.
+
+} {
+    return [db_string symlink_name {}]
+}
+
+ad_proc -public -deprecated content_symlink::resolve {
+	-item_id:required
+} {
+	@param item)id item_id of content_symlink item to resolve
+
+	@return item_id of symlink target
+	@see content::symlink::resolve
+} {
+
+	return [db_exec_plsql resolve_symlink ""]
+
+}
+
+ad_proc -public -deprecated content_symlink::resolve_content_type {
+	-item_id:required
+} {
+
+	@param item_id item_id of symlink
+
+	@return content_type of target item
+	@see content::symlink::resolve_content_type
+
+} {
+
+	return [db_exec_plsql resolve_content_type ""]
+
+}
+
+##################################################################################
+#
+# From item-procs.tcl
+#
+##################################################################################
+
 ##########################################
 #
 # Procs for accessing content item properties
@@ -691,7 +1021,170 @@ ad_proc -public -deprecated item::delete {
 } {
     ::content::item::delete -item_id $item_id
 }
-  
+
+##################################################################################
+#
+# From extlink-procs.tcl
+#
+##################################################################################
+
+namespace eval content_extlink {}
+
+ad_proc -deprecated content_extlink::new {
+    {-extlink_id ""}
+    -url:required
+    -parent_id:required
+    {-name ""}
+    {-label ""}
+    {-description ""}
+    {-package_id ""}
+} {
+
+    Create a new external link.
+
+    @see content::extlink::new
+
+    @param extlink_id Optional pre-assigned object_id for the link
+    @param url The URL of the external resource
+    @param parent_id The folder that will contain this extlink
+    @param name Name to assign the object (defaults to "link extlink_id")
+    @param label Label for the extlink (defaults to the URL)
+    @param description An extended description of the link (defaults to NULL)
+    @param package_id Package Id of the package that created the link
+
+} {
+
+    set creation_user [ad_conn user_id]
+    set creation_ip [ad_conn peeraddr]
+
+    if {$package_id eq ""} {
+	set package_id [ad_conn package_id]
+    }
+
+    return [db_exec_plsql extlink_new {}]
+
+}
+
+ad_proc -deprecated content_extlink::edit {
+    -extlink_id:required
+    -url:required
+    -label:required
+    -description:required
+} {
+
+    Edit an existing external link.  The parameters are required because it
+    is assumed that the caller will be pulling the existing values out of
+    the database before editing them.
+
+    @param extlink_id Optional pre-assigned object_id for the link
+    @param url The URL of the external resource
+    @param label Label for the extlink (defaults to the URL)
+    @param description An extended description of the link (defaults to NULL)
+
+    @see content::extlink::edit
+} {
+
+    set modifying_user [ad_conn user_id]
+    set modifying_ip [ad_conn peeraddr]
+
+    db_transaction {
+        db_dml extlink_update_object {}
+        db_dml extlink_update_extlink {}
+    }
+}
+
+ad_proc -deprecated content_extlink::delete {
+    -extlink_id:required
+} {
+
+    Delete an external link.
+    @see content::extlink::delete
+
+    @param extlink_id  The object id of the link to delete
+
+} {
+    db_exec_plsql extlink_delete {}
+}
+
+ad_proc -deprecated content_extlink::extlink_p {
+    -item_id:required
+} {
+
+    Returns true if the given item is an external link.
+
+    @see content::extlink::is_extlink
+    @param extlink_id  The object id of the item to check.
+
+} {
+    return [db_string extlink_check {}]
+}
+
+ad_proc -deprecated content_extlink::extlink_name {
+    -item_id:required
+} {
+
+    Returns the name of an extlink
+
+    @param item_id  The object id of the item to check.
+
+    @see content::extlink::name
+} {
+    return [db_string extlink_name {}]
+}
+
+
+##################################################################################
+#
+# From filter-procs.tcl
+#
+##################################################################################
+
+namespace eval content {}
+
+ad_proc -deprecated -public content::get_folder_labels { { varname "folders" } } {
+    Set a data source in the calling frame with folder URL and label
+    Useful for generating a context bar.
+
+    This function returns a hard-coded name for the root level. One should use for path generation for items the
+    appropriate API, such as e.g. content::item::get_virtual_path
+
+    @see content::item::get_virtual_path 
+} {
+
+    variable item_id
+
+    # this repeats the query used to look up the item in the first place
+    # but there does not seem to be a clear way around this
+
+    # build the folder URL out as we iterate over the query
+    set query [db_map get_url]
+    db_multirow -extend {url} $varname ignore_get_url $query  {
+        append url "$name/"
+    }
+}
+
+
+##################################################################################
+#
+# From folder-procs.tcl
+#
+##################################################################################
+
+namespace eval folder {}
+
+ad_proc -public -deprecated folder::delete {
+    {-folder_id:required}
+} {
+    Deprecated. See content::folder::delete instead.
+    Delete a content folder. If the folder
+    to delete has children content items referencing it
+    via acs_objects.context_id then this proc will fail.
+
+    @author Peter Marklund
+    @see content::folder::delete
+} {
+    db_exec_plsql delete_folder {}
+}
 
 # Local variables:
 #    mode: tcl

@@ -2,23 +2,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="content::get_folder_labels.get_url">      
-      <querytext>
-
-      With RECURSIVE child_items AS (
-        select 0 as lvl, i.item_id, ''::text as name, i.parent_id, 'Home'::text as title
-	from cr_items i, cr_revisions r
-	where i.item_id = :item_id and i.live_revision = r.revision_id
-      UNION ALL
-        select child_items.lvl+1, i.item_id, i.name, i.parent_id, r.title
-	from cr_items i, cr_revisions r, child_items
-        where i.parent_id = child_items.item_id and i.live_revision = r.revision_id
-      )
-      select * from child_items;    
-
-      </querytext>
-</fullquery>
-
 <fullquery name="content::get_content_value.gcv_get_revision_id">
 	<querytext>
 
