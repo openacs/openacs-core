@@ -523,7 +523,7 @@ ad_proc -private package_insert_default_comment { } {
         set user_id [ad_conn user_id]
         db_1row select_comments {}
     } else {
-        db_1row select_author_unknwon {
+        db_1row select_author_unknown {
             select 'Unknown' as author,
             sysdate as creation_date
             from dual
