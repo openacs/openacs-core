@@ -3331,7 +3331,7 @@ ad_proc -public with_finally {
                 # GN: In case the errorCode starts with CHILDSTATUS it
                 # means that an error was raised from an "exec". In
                 # that case the raw error just tells that the "child
-                # process exited abnormally", whithout given any
+                # process exited abnormally", without given any
                 # details. Therefore we add the exit code to the
                 # messages.
                 #
