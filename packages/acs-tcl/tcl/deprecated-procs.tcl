@@ -2775,7 +2775,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
 ad_proc -deprecated -private cc_lookup_screen_name_user { screen_name } {
     @see acs_user::get_user_id_by_screen_name
 } {
-    return [db_string user_select {} -default {}]
+    return [db_string user_select_screen_name {} -default {}]
 }
 
 ad_proc -deprecated cc_screen_name_user { screen_name } {

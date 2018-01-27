@@ -187,7 +187,7 @@ ad_proc -public permission::require_permission {
             ns_log notice "permission::require_permission: $party_id doesn't have privilege $privilege on object $object_id"
             ad_return_forbidden \
                 "Permission Denied" \
-                "You don't have permission to $privilege [db_string name {}]."
+                "You don't have permission to $privilege on object $object_id."
         }
 
         ad_script_abort
