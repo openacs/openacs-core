@@ -50,13 +50,13 @@ namespace eval plsql_utility {
 	@author Michael Bryzek (mbryzek@arsdigita.com)
 	@creation-date 11/2000
     } {
-	return [db_string object_type_exists_p {
-	    select case when exists (select 1 from acs_object_types where object_type=:object_type)
-                        then 1
-                        else 0
-                   end
-              from dual            
-        }]
+ 	return [db_string object_type_exists_p {
+ 	    select case when exists (select 1 from acs_object_types where object_type=:object_type)
+                         then 1
+                         else 0
+                    end
+            from dual            
+        }]       
     }
 
 

@@ -9,7 +9,6 @@ ad_page_contract {
 } {
 } -properties {
     context:onevalue
-    subsite_name:onevalue
     acs_admin_url:onevalue
     instance_name:onevalue
     acs_automated_testing_url:onevalue

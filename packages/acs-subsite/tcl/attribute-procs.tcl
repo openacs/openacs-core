@@ -244,10 +244,9 @@ ad_proc -public delete { attribute_id } {
 	error "We do not have enough information to automatically remove this attribute. Namely, we are missing either the table name or the column name"
     }
 
-    set plsql [list]
-    lappend plsql [list "drop_attribute" "FOO" "db_exec_plsql"]
+    set plsql {drop_attribute FOO db_exec_plsql}
     if { [db_column_exists $table_name $column_name] } {
-        lappend plsql [list "drop_attr_column" "FOO" "db_dml"]
+        lappend plsql {drop_attr_column FOO db_dml}
     }
 
     foreach cmd $plsql {
