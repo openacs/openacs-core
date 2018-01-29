@@ -159,6 +159,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Conference 
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'VRML'                    , 'x-world/x-vrml'                , 'vrml');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Xuda'                    , 'xuda/gen-cert'                 , 'xuda');
 insert into cr_mime_types (label,mime_type,file_extension) values ('Enhanced text'            , 'text/enhanced'                 , 'etxt');
+insert into cr_mime_types (label,mime_type,file_extension) values ('Markdown text'            , 'text/markdown'                 , 'mtxt');
 insert into cr_mime_types (label,mime_type,file_extension) values ('Fixed-width text'         , 'text/fixed-width'              , 'ftxt');
 insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Spreadsheet'   , 'application/vnd.sun.xml.calc', 'sxc');
 insert into cr_mime_types (label,mime_type,file_extension) values ('OpenOffice Spreadsheet Template', 'application/vnd.sun.xml.calc.template', 'stc');
