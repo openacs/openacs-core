@@ -47,7 +47,7 @@ ad_proc -public template::util::richtext::acquire { type { value "" } } {
 ad_proc -public template::util::richtext::formats {} {
     Returns a list of valid richtext formats
 } {
-    return { text/enhanced text/plain text/html text/fixed-width }
+    return { text/enhanced text/markdown text/plain text/html text/fixed-width }
 }
 
 ad_proc -public template::util::richtext::format_options {} {
@@ -55,6 +55,7 @@ ad_proc -public template::util::richtext::format_options {} {
 } {
     return [list \
                 [list [_ acs-templating.Enhanced_Text] text/enhanced] \
+                [list [_ acs-templating.Markdown_Text] text/markdown] \
                 [list [_ acs-templating.Plain_Text] text/plain] \
                 [list [_ acs-templating.Fixed_width_Text] text/fixed-width] \
                 [list [_ acs-templating.HTML] text/html]]

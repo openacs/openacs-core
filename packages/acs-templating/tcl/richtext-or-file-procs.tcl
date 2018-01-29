@@ -44,14 +44,15 @@ ad_proc -public template::util::richtext_or_file::acquire { type { value "" } } 
 ad_proc -public template::util::richtext_or_file::formats {} {
     Returns a list of valid richtext_or_file formats
 } {
-    return { text/enhanced text/plain text/html text/fixed-width }
+    return { text/enhanced text/markdown text/plain text/html text/fixed-width }
 }
 
 ad_proc -public template::util::richtext_or_file::format_options {} {
     Returns a formatting option list
 } {
-    return { 
+    return {
         {"Enhanced Text" text/enhanced}
+        {"Markdown Text" text/markdown}
         {"Plain Text" text/plain}
         {"Fixed-width Text" text/fixed-width}
         {"HTML" text/html}
@@ -87,7 +88,7 @@ ad_proc -public template::data::validate::richtext_or_file {
     }
 
     # enhanced text and HTML needs to be security checked
-    if { [lsearch { text/enhanced text/html } $mime_type] == -1 } {
+    if { $mime_type in { text/enhanced text/html } } {
         set check_result [ad_html_security_check $text]
         if { $check_result ne "" } {
             set message $check_result

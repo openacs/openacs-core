@@ -1919,7 +1919,7 @@ ad_proc -public ad_html_text_convertable_p {
 } {
     Returns true of ad_html_text_convert can handle the given from and to mime types.
 } {
-    set valid_froms { text/enhanced text/plain text/fixed-width text/html text/xml }
+    set valid_froms { text/enhanced text/markdown text/plain text/fixed-width text/html text/xml }
     set valid_tos { text/plain text/html }
     # Validate procedure input
     set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
@@ -1969,6 +1969,7 @@ ad_proc -public ad_html_text_convert {
     <ul>
     <li>text/plain</li>
     <li>text/enhanced</li>
+    <li>text/markdown</li>
     <li>text/fixed-width</li>
     <li>text/html</li>
     </ul>
@@ -2017,6 +2018,19 @@ ad_proc -public ad_html_text_convert {
                 }
                 text/plain {
                     set text [ad_enhanced_text_to_plain_text -maxlen $maxlen -- $text]
+                }
+            }
+        }
+        text/markdown {
+            package require Markdown
+            switch -- $to {
+                text/html {
+                    set c [regsub -all \r\n $text \n text]
+                    set text [Markdown::convert $text]
+                }
+                text/plain {
+                    set htmlText [Markdown::convert $text]
+                    set text [ad_html_to_text -maxlen $maxlen -- $htmlText]
                 }
             }
         }

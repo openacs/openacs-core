@@ -20,12 +20,11 @@
   <msg key="Element_is_required">%label% is required</msg>
   <msg key="Element_is_too_long_Plural">%label% is %excess_no_bytes% characters too long.</msg>
   <msg key="Element_is_too_long_Singular">%label% is one character too long.</msg>
-  <msg key="Enhanced_Text">Enhanced Text
-</msg>
+  <msg key="Markdown_Text">Markdown Text</msg>
+  <msg key="Enhanced_Text">Enhanced Text</msg>
   <msg key="Enter_your_search_text">Enter your search text here</msg>
   <msg key="Fixed_width_Text">Fixed-width Text</msg>
-  <msg key="Format">Format
-</msg>
+  <msg key="Format">Format</msg>
   <msg key="Formats">Formats</msg>
   <msg key="hours">hours</msg>
   <msg key="Hours_must_be_between_0_and_23">Hours must be between 0 and 23</msg>
