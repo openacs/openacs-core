@@ -61,6 +61,7 @@ namespace eval ::apidoc {
             /*width: 900px; overflow: auto;*/
         }
         pre.code a      {text-decoration: none;}
+        pre.code code   { white-space:pre-wrap; }
     }
 
     set KEYWORDS {
@@ -1311,7 +1312,7 @@ namespace eval ::apidoc {
                 }
 
                 " " {
-                    append html " "
+                    append html "&nbsp;"
                 }
                 
                 default {
