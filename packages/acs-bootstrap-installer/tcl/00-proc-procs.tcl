@@ -732,7 +732,7 @@ ad_proc -public ::foobar::new {
             <code>ad_proc -callback foo::bar::zip -impl myimpl  { } { } { #code }</code>
         <li>Two ways to call:
 		<ul>
-		  <li>then you can call _all_ implentations (ie. in an event / event handler type arrangement) with
+		  <li>then you can call _all_ implementations (ie. in an event / event handler type arrangement) with
 		    <code>callback foo::bar::zip $arg1 $arg2</code>
                   <li>or you can call a specific implementation (ie. in a service contract type arrangement) with
                       <code>callback -impl myimpl foo::bar::zip $arg1 $arg2</code>

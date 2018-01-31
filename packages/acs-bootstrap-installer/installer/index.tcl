@@ -37,7 +37,7 @@ this page to access the running web server.
     ns_shutdown
   } else {
     install_return 200 "Error" "
-The installation program has encounted an error.  Please drop your OpenACS tablespace
+The installation program has encountered an error.  Please drop your OpenACS tablespace
 and the OpenACS username, recreate them, and try again.  You can log this as a bug
 using the <a href=\"http://openacs.org/bugtracker/openacs\">OpenACS Bug Tracker</a>. 
 "
