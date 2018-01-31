@@ -2,7 +2,7 @@
 ad_page_contract {
     Set on vacation to null.
 
-    @author Multipe
+    @author Multiple
     @cvs-id $Id$
 } -properties {
     site_link:onevalue
