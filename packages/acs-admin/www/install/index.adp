@@ -9,7 +9,7 @@
 
 <p>Download and install/upgrade packages from the <a href="http://openacs.org/repository/">OpenACS.org repository</a>.
 <br>When using this option, the existing code of the currently installed packages is moved
-away <br>and replaced by the chosen packages from the OpenACS respository.
+away <br>and replaced by the chosen packages from the OpenACS repository.
 
 <p><a href="/acs-admin/@remote_install_url@" class="button">Install</a> or
 <a href="/acs-admin/@remote_upgrade_url@" class="button">upgrade</a> from repository.</p>
