@@ -83,7 +83,7 @@ ad_proc -public acs_sc::contract::new_from_spec {
 
     <ul>
       <li>name: The name of the service contract. 
-      <li>description: A human-readable descirption.
+      <li>description: A human-readable descriptions.
       <li>operations: An array-list of operations in this service contract.
     </ul>
   

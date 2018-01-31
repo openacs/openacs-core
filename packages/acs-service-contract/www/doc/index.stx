@@ -34,7 +34,7 @@ ACS Service Contract Documentation
     documentation through ad_proc.
 
     The Service Contract interface specification was inspired by
-    WDSL, the interface specfication for web services.
+    WDSL, the interface specification for web services.
 
   Hitchiker's Guide to Service Contract Definitions
 
@@ -97,7 +97,7 @@ ACS Service Contract Documentation
 		 acs_sc_msg_type__new (name, spec):
 
 	   defines a type based on spec. Spec should
-	   be a string (possibly emtpy) that defines the
+	   be a string (possibly empty) that defines the
 	   names and types that compose this type.
 	   example 'ObjectDisplay.Name.InputType' as name
            'object_id:integer' as spec.

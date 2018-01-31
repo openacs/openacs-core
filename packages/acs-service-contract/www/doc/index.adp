@@ -29,7 +29,7 @@ only available through tcl.</p>
 <p>Interface Discovery is available programmatically as well as via
 documentation through ad_proc.</p>
 <p>The Service Contract interface specification was inspired by
-WDSL, the interface specfication for web services.</p>
+WDSL, the interface specification for web services.</p>
 <h2>Hitchiker&#39;s Guide to Service Contract Definitions</h2>
 <ul>
 <li>contract - analogous to interface, contracts serve as logical
@@ -68,7 +68,7 @@ already installed on the system can be bound to it.</p>
 <h3>Creating Message Types</h3>
 <ul><li>(sql):: acs_sc_msg_type__new (name, spec):
 <p>defines a type based on spec. Spec should be a string (possibly
-emtpy) that defines the names and types that compose this type.
+empty) that defines the names and types that compose this type.
 example <code>ObjectDisplay.Name.InputType</code> as name
 <code>object_id:integer</code> as spec.</p>
 </li></ul>

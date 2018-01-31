@@ -61,7 +61,7 @@ Interface Discovery is available programmatically as well as via
 <para>
 
 The Service Contract interface specification was inspired by
-    WDSL, the interface specfication for web services.</para>
+    WDSL, the interface specification for web services.</para>
 
 
 </section>
@@ -165,7 +165,7 @@ This might seem a little strange since a binding is the official
                  acs_sc_msg_type__new (name, spec):<para>
 
 defines a type based on spec. Spec should
-           be a string (possibly emtpy) that defines the
+           be a string (possibly empty) that defines the
            names and types that compose this type.
            example <literal>ObjectDisplay.Name.InputType</literal>as name
            <literal>object_id:integer</literal>as spec.</para>
