@@ -2083,7 +2083,7 @@ ad_proc -public security::validated_host_header {} {
     set hostName [string trimright $hostName .]
     
     #
-    # Check, if the provided host is the same as the configued host
+    # Check, if the provided host is the same as the configured host
     # name for the current driver or one of its IP addresses. Should
     # be true in most cases.
     #
