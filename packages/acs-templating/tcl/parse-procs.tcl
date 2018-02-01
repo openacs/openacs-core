@@ -618,7 +618,7 @@ ad_proc -public template::adp_array_variable_regexp_noi18n {} {
 
 ad_proc -public template::adp_variable_regexp {} {
     The regexp pattern used to find adp variables in
-    a piece of text, i.e. occurenceis of @variable_name@. 
+    a piece of text, i.e. occurrences of @variable_name@. 
     Captures the character preceding the first @ in \1 and
     the variable_name in \2.
 
