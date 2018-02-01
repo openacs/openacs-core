@@ -2,7 +2,7 @@ ad_library {
 
     Provides a collection of deprecated procs to provide backward
     compatibility for sites who have not yet removed calls to the
-    dprecated functions.
+    deprecated functions.
 
     In order to skip loading of deprecated code, use the following
     snippet in your config file
@@ -362,6 +362,7 @@ ad_proc -private -deprecated template::util::string_range { string indices } {
 # From query-procs.tcl
 #
 ##################################################################################
+namespace eval template::query {}
 
 ad_proc -public -deprecated template::query::iterate { statement_name sql body } {
     @param statement_name Standard db_api statement name used to hook 
