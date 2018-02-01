@@ -231,8 +231,8 @@ ad_proc -public ad_page_contract {
     args
 } {
     Specifies the contract between programmer and graphic designer for a page.
-    When called with the magic "documentation-gathering" flag set (to
-                                                                   be defined), the proc will record the information about this page, so
+    When called with the magic "documentation-gathering" flag set
+    (to be defined), the proc will record the information about this page, so
     it can be displayed as documentation. When called during normal
     page execution, it will validate the query string and set
     corresponding variables in the caller's environment.
@@ -371,16 +371,20 @@ ad_proc -public ad_page_contract {
     <dd>Pluggable filter, installed by default, that makes sure the value is a natural number, i.e.
     non-decimal numbers >= 0.
 
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_oneof"><b>oneof</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure the value X contained in
+    the set of the provided values. Usage example: <code>oneof:(red|blue|green)</code>
+x    
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_range"><b>range</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the value X is in range
-    [Y, Z]. To use it say something like: <code>foo:(1|100)</code>
+    [Y, Z]. Usage example: <code>foo:(1|100)</code>
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_nohtml"><b>nohtml</b></a>
     <dd>Pluggable filter, installed by default, that disallows any and all html.
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_html"><b>html</b></a>
-    <dd>Pluggable filter, installed by default, that only allows certain, safe allowed tags to pass (see
-                                                                                                     <a href="proc-view?proc=ad_html_security_check">ad_html_security_check</a>).
+    <dd>Pluggable filter, installed by default, that only allows certain, safe allowed tags to pass
+    (see <a href="proc-view?proc=ad_html_security_check">ad_html_security_check</a>).
     The purpose of screening naughty html is to prevent users from uploading
     HTML with tags that hijack page formatting or execute malicious code on the users's computer.
 
@@ -1692,6 +1696,21 @@ ad_page_contract_filter range { name value range } {
     }
     return 1
 }
+
+ad_page_contract_filter oneof { name value set } {
+    Checks whether the value is contained in the set of provided values.
+    Example spec:     w:oneof(red|green)
+
+    @author Gustaf Neumann
+    @creation-date Feb, 2018
+} {
+    if { $value ni $set } {
+        ad_complain [_ acs-tcl.lt_name_is_not_valid]
+        return 0
+    }
+    return 1
+}
+
 
 ad_page_contract_filter sql_identifier { name value } {
     Checks whether the value is a valid SQL identifier
