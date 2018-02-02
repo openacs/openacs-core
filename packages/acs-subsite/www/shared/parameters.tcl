@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {package_id:naturalnum "[ad_conn package_id]"}
-    package_key:optional
+    package_key:token,optional
     {scope "instance"}
     {return_url:localurl,optional "[ad_conn url]?[ad_conn query]"}
     {section ""}

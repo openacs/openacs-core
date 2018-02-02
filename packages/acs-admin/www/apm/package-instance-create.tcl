@@ -4,7 +4,7 @@ ad_page_contract {
     @creation-date 8 Sept 2014
     @cvs-id $Id$
 } {
-    {package_key:notnull}
+    {package_key:token,notnull}
     {return_url:localurl /acs/admin/apm}
 }
 

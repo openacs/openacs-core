@@ -6,7 +6,7 @@ ad_page_contract {
     @creation-date Mon Oct  9 00:13:43 2000
     @cvs-id $Id$
 } {
-    {package_key:multiple ""}
+    {package_key:token,multiple ""}
     {force_p:boolean "f"}
 }
 

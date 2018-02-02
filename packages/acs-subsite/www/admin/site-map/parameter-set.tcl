@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     package_id:naturalnum,notnull
     {orderby:token ""}
-    {return_url "."}
+    {return_url:localurl "."}
 }
 
 permission::require_permission -object_id $package_id -privilege admin

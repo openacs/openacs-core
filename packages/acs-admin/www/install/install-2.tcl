@@ -1,7 +1,7 @@
 ad_page_contract {
     Install packages - dependency check
 } {
-    package_key:multiple
+    package_key:token,multiple
     {repository_url ""}
 }
 

@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     version_id:naturalnum,notnull
     parameter_id:naturalnum,notnull
-    package_key:notnull
+    package_key:token,notnull
     parameter_name:notnull
     section_name
     description:notnull,nohtml

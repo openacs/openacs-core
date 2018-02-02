@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    package_key:notnull
+    package_key:token,notnull
     node_id:naturalnum,notnull
     {return_url:localurl ""}
 }

@@ -7,8 +7,8 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {page ""}
-    {page_size 25}
+    {page:naturalnum ""}
+    {page_size:naturalnum 25}
     {orderby:token "username,asc"}
 }
 

@@ -7,10 +7,10 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    package_key:notnull
+    package_key:token,notnull
     package_id:naturalnum,notnull
     instance_name:notnull
-    {return_url "."}
+    {return_url:localurl "."}
     params:array
 }
 

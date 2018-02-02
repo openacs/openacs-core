@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {version_id:naturalnum,optional}
-    {package_key:optional}
+    {package_key:token,optional}
 } -validate {
     version_id_or_package_key {
         if {[info exists package_key] && ![info exists version_id]} {

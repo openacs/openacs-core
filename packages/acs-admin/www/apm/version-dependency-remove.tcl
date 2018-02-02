@@ -7,7 +7,7 @@ ad_page_contract {
     {version_id:naturalnum,notnull}
     {dependency_id:naturalnum,notnull}
     dependency_type:notnull
-    package_key:notnull
+    package_key:token,notnull
 }
 
 db_transaction {

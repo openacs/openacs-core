@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 17 April 2000
     @cvs-id $Id$
 } {
-    package_key
+    package_key:token
     pretty_name
     pretty_plural
     { package_type "apm_application"}

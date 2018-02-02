@@ -15,7 +15,7 @@ ad_page_contract {
     {new_node_p:boolean f}
     {node_name:trim ""}
     {instance_name ""}
-    package_key:notnull
+    package_key:token,notnull
     {expand:integer,multiple ""}
     root_id:naturalnum,optional
 }

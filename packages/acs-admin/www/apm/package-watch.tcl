@@ -5,7 +5,7 @@ ad_page_contract {
     @author Peter Marklund
     @cvs-id $Id$
 } {
-    package_key
+    package_key:token
     {return_url:localurl "index"}
 } 
 
