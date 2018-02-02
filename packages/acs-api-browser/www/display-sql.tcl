@@ -13,7 +13,7 @@ ad_page_contract {
     2000 August 8 Updated for ACS4 packages - richardl@arsdigita.com.
 
     @param url The full relative path of the file to display the source for.
-    @param package_key The key of the package the file is part of.
+    @param package_key:token The key of the package the file is part of.
 
     @creation-date 12/19/98
     @author philg@mit.edu
@@ -21,7 +21,7 @@ ad_page_contract {
 } {
     url:notnull
     { version_id:naturalnum "" }
-    { package_key ""}
+    { package_key:token ""}
 } -properties {
     title:onevalue
     context:onevalue
