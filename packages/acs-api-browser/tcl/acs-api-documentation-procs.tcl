@@ -136,7 +136,7 @@ ad_proc -public api_read_script_documentation {
         if {[regexp {^ad_page_contract documentation} $::errorInfo] } {
             array set doc_elements $errorMsg
         } else {
-            ad_log warning "api_read_script_documentation: got unexpected result while sourcing $::acs::rootdir/$path\n$errorMsg"
+            ns_log notice "api_read_script_documentation: got unexpected result while sourcing $::acs::rootdir/$path $errorMsg"
             return -code error $errorMsg
         }
     } finally {
