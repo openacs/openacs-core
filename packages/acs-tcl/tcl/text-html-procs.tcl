@@ -360,8 +360,8 @@ ad_proc -private util_close_html_tags {
         try {
             dom parse -html <body>$frag doc
         } on error {errorMsg} {
-            # we got an error, so do normal processing
-            ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
+            # we got an error, so do Tcl based html completion processing
+            ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom\n$frag"
         } on ok {r} {
             $doc documentElement root
             set html ""
@@ -2025,10 +2025,50 @@ ad_proc -public ad_html_text_convert {
             package require Markdown
             switch -- $to {
                 text/html {
-                    set c [regsub -all \r\n $text \n text]
+                    regsub -all \r\n $text \n text
+                    #
+                    # Try syntax highlighting just when target is text/html
+                    #
+                    if {[info commands ::Markdown::register] ne ""} {
+                        #
+                        # We can register a converter
+                        #
+                        ::Markdown::register tcl ::apidoc::tclcode_to_html
+                    }
+
                     set text [Markdown::convert $text]
+
+                    if {[info commands ::Markdown::get_lang_counter] ne ""} {
+                        
+                        set d [::Markdown::get_lang_counter]
+                        if {$d ne ""} {
+                            template::head::add_style -style $::apidoc::style
+
+                            if {0} {
+                                template::head::add_css \
+                                    -href //cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css
+                                template::head::add_javascript \
+                                    -src "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
+                                security::csp::require script-src cdnjs.cloudflare.com
+                                security::csp::require style-src cdnjs.cloudflare.com
+
+                                template::add_body_script -script "hljs.initHighlightingOnLoad();"
+                                #
+                                # In case we have Tcl, load the extra lang
+                                # support which is not included in the
+                                # default package.
+                                #
+                                if {[dict get $d tcl]} {
+                                    template::head::add_javascript \
+                                        -src "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/tcl.min.js"
+                                }
+                            }
+                            ::Markdown::reset_lang_counter
+                        }
+                    }
                 }
                 text/plain {
+                    regsub -all \r\n $text \n text
                     set htmlText [Markdown::convert $text]
                     set text [ad_html_to_text -maxlen $maxlen -- $htmlText]
                 }
