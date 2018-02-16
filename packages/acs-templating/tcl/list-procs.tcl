@@ -966,6 +966,7 @@ ad_proc -public template::list::write_csv {
     set oh [ns_conn outputheaders]
     ns_set put $oh Content-Disposition "attachment; filename=${__list_name}.csv"
     ns_return 200 text/csv $__output
+    ad_script_abort
 }
 
 
