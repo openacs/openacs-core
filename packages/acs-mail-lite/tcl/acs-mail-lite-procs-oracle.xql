@@ -50,6 +50,25 @@
         </querytext>
     </fullquery>
 
+   <fullquery name="acs_mail_lite::log_mail_sending.record_mail_sent">
+     <querytext>
+
+       update acs_mail_lite_mail_log
+       set last_mail_date = sysdate
+       where party_id = :user_id
+
+     </querytext>
+   </fullquery>
+
+   <fullquery name="acs_mail_lite::log_mail_sending.insert_log_entry">
+     <querytext>
+
+       insert into acs_mail_lite_mail_log (party_id, last_mail_date)
+       values (:user_id, sysdate)
+
+     </querytext>
+   </fullquery>
+
     <fullquery name="acs_mail_lite::sweeper.get_queued_messages">
         <querytext>
             select

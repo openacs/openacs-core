@@ -15,24 +15,36 @@ namespace eval acs_mail_lite {
 
     #---------------------------------------
     ad_proc -public address_domain {} {
-	@return domain address to which bounces are directed to
+	@return domain address to which bounces are directed to.
+        If empty, uses domain from FixedSenderEmail parameter,
+        otherwise the hostname in config.tcl is used.
     } {
-        set domain [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "BounceDomain"]
+        set domain [parameter::get_from_package_key \
+                        -package_key "acs-mail-lite" \
+                        -parameter "BounceDomain"]
         if { $domain eq "" } {
-            #
-            # If there is no domain configured, use the configured
-            # hostname as domain name
-            #
-            foreach driver {nsssl nssock} {
-                set driver_section [ns_driversection -driver $driver]
-                set configured_hostname [ns_config $driver_section hostname]
-                if {$configured_hostname ne ""} {
-                    set domain $configured_hostname
-                    break
+            # Assume a FixedSenderEmail domain, if it exists.
+            set email [parameter::get_from_package_key \
+                           -package_key "acs-mail-lite" \
+                           -parameter "FixedSenderEmail"]
+            if { $email ne "" } {
+                set domain [string range $email [string last "@" $email]+1 end]
+            } else {
+                #
+                # If there is no domain configured, use the configured
+                # hostname as domain name
+                #
+                foreach driver {nsssl nssock_v4 nssock_v6 nssock} {
+                    set section [ns_driversection -driver $driver]
+                    set configured_hostname [ns_config $section hostname]
+                    if {$configured_hostname ne ""} {
+                        set domain $configured_hostname
+                        break
+                    }
                 }
             }
-	}
-	return $domain
+        }
+        return $domain
     }
     
 
@@ -119,7 +131,7 @@ namespace eval acs_mail_lite {
 	    }
 
             #let's delete the file now
-            if {[catch {file delete -- $msg} errmsg]} {
+            if {[catch {file delete $msg} errmsg]} {
                 ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
             } else {
 		ns_log Debug "load_mails: deleted $msg"
@@ -134,7 +146,7 @@ namespace eval acs_mail_lite {
     } {
 	An email is splitted into several parts: headers, bodies and files lists and all headers directly.
 	
-	The headers consists of a list with header names as keys and their corresponding values. All keys are lower case.
+	The headers consists of a list with header names as keys and their correponding values. All keys are lower case.
 	The bodies consists of a list with two elements: content-type and content.
 	The files consists of a list with three elements: content-type, filename and content.
 	
@@ -184,7 +196,7 @@ namespace eval acs_mail_lite {
 	    set content [read $stream]
 	    close $stream
 	    ns_log error $content
-	    file delete -- $file
+	    file delete $file
 	    return
 	}
 	
@@ -280,6 +292,8 @@ namespace eval acs_mail_lite {
 	@param from From address which will be checked if it is coming from a mailer daemon
 
 	@return 1 if this is actually an autoreply
+
+    @See acs_mail_lite::email_type
     } {
 	set autoreply_p 0
 	if {$subject ne ""} {

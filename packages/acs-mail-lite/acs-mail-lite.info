@@ -9,19 +9,19 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.10.0d1" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.10.0d1.apm">
-        <owner url="mailto:malte.sussdorff@cognovis.de">Malte Sussdorff</owner>
+    <version name="5.10.0d2" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.10.0d2.apm">
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
+        <owner url="mailto:malte.sussdorff@cognovis.de">Malte Sussdorff</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
-        <release-date>2017-08-06</release-date>
+        <release-date>2017-10-19</release-date>
         <vendor url="http://www.openacs.org">OpenACS</vendor>
-        <description format="text/html">This package provides a service for sending messages, queueing messages in the database to ensure reliable sending and make sending a message 'transactional'. Replacement for acs-mail.</description>
+        <description format="text/html">This package provides a service for sending and receiving messages, messages are queued in the database to ensure reliable sending and make sending a message &#39;transactional&#39;. Replacement for acs-mail.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-mail-lite" version="5.10.0d1"/>
-        <requires url="acs-kernel" version="5.9.1"/>
-        <requires url="acs-service-contract" version="5.9.1"/>
-	<requires url="acs-tcl" version="5.9.1"/>
+        <provides url="acs-mail-lite" version="5.10.0d2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-service-contract" version="5.9.0"/>
+        <requires url="acs-tcl" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="acs_mail_lite::after_upgrade"/>
@@ -31,27 +31,38 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="BounceMailDir"  description="Location of the maildir location that accepts incoming bounces" section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="BounceScanQueue"  default="120" description="How often (in seconds) to scan for new bounces" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailAllow"  description="Tcl list of email addresses that are allowed to receive messages when delivery mode is set to filter" section_name="rollout_support"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDeliveryMode"  default="default" description="Set how message will be delivered. default: Email messages are sent in the usual manner. log: Email messages are written to the server's error log. redirect: Email messages are redirected to the addresses specified by the EmailRedirectTo parameter. If this list is absent or empty, email messages are written to the server's error log. filter: Email messages are sent to in the usual manner if the recipient appears in the EmailAllow parameter, otherwise they are logged." section_name="rollout_support"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDeliveryMode"  default="default" description="Set how message will be delivered. default: Email messages are sent in the usual manner. log: Email messages are written to the server&#39;s error log. redirect: Email messages are redirected to the addresses specified by the EmailRedirectTo parameter. If this list is absent or empty, email messages are written to the server&#39;s error log. filter: Email messages are sent to in the usual manner if the recipient appears in the EmailAllow parameter, otherwise they are logged." section_name="rollout_support"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailRedirectTo"  description="Tcl list of email addresses to redirect to" section_name="rollout_support"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EnvelopePrefix"  default="bounce" description="The prefix for sending mail that will be handled by this instance" section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EnvelopePrefix"  default="bounce" description="The prefix for sending mail that will be handled by this instance. Use alphanumeric characters only." section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FilesystemAttachmentsRoot"  description="Path of a folder in the filesystem into which files are allowed to be read and sent as attachments. Trying to send attachments residing outside this folder will throw an error.
 Set this parameter to the root of your filesystem will disable this restriction.
-Default for the empty value of this parameter will be to allow only files into the temporary folder of the system, as in '[ns_tmpdir]'" section_name="email"/>
+Default for the empty value of this parameter will be to allow only files into the temporary folder of the system, as in &#39;[ns_tmpdir]&#39;" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedFont"  description="Font definition (after the font tag) that will always be wrapped around HTML e-mail. Example: face=Verdana size=2. Default is empty" section_name="email"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedSenderEmail"  description="Email address that will be always the email stored in the sender. Default is empty" section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedSenderEmail"  description="Email addres that will be always the email stored in the sender. Default is empty" section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="FolderID"  description="Folder ID of a folder in the content repository that contains files that can be included using checkboxes in each e-mail send out of the system. This effects /lib/email" section_name="email"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="MMEncodeBin"  default="/usr/bin/mmencode" description="Location of mmencode executable." section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IMAPHost"  default="localhost" description="IMAP Host to be used for sending emails" section_name="IMAP"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IMAPPassword"  description="IMAP Password to be used for sending emails" section_name="IMAP"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="IMAPPort"  default="25" description="IMAP Port to be used for sending emails" section_name="IMAP"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="IMAPTimeout"  default="60" description="IMAP Timeout. Waiting time until we give up with the mailserver." section_name="IMAP"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IMAPUser"  description="IMAP User to be used for sending emails" section_name="IMAP"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IncomingDomain"  description="Email Domain for incoming messages" section_name="inbound_email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IncomingFilterProcName"  description="Procedure name for custom filtering of incoming email. Default is empty string." section_name="inbound_email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IncomingMailDir"  description="Location of the maildir location that accepts incoming bounces" section_name="inbound_email"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="IncomingMaxAge"  default="604800" description="Maximum time to accept replies from sent email before expiring. 604800 is 1 week of (seconds). 0 = does not expire" section_name="inbound_email"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="IncomingScanRate"  default="120" description="Duration between scans for new email (seconds)" section_name="inbound_email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxBounceCount"  default="10" description="Number of bounced emails after resulting in disabling an email-address" section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxDaysToBounce"  default="2" description="Number of days after mail sending a bounce is expected at the very latest" section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxNotificationCount"  default="4" description="Number of times the user will get a notification that his email got disabled in the system" section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="MMEncodeBin"  default="/usr/bin/mmencode" description="Location of mmencode executable." section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="NotificationInterval"  default="7" description="Number of days the users with bouncing email will be notified again on how to reenable the email again" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="NotificationSender"  description="Sender of the notification email" section_name="email"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="send_immediately"  default="0" description="Boolean value to say whether new mails should be send out immediately or stored in the db before send out." section_name="email"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SendImmediatelyP"  default="0" description="Boolean value. Answers question: Should email be sent immediately? 1 = yes, 0 = now, store in queue before sending. (replaces parameter &#39;send_immediately&#39;)" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SMTPHost"  default="localhost" description="SMTP Host to be used for sending emails" section_name="SMTP"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SMTPPassword"  description="SMTP Password to be used for sending emails" section_name="SMTP"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SMTPPort"  default="25" description="SMTP Port to be used for sending emails" section_name="SMTP"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SMTPTimeout"  default="60" description="SMTP Timeout. Waiting time until we give up with the mailserver." section_name="SMTP"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SMTPUser"  description="SMTP User to be used for sending emails" section_name="SMTP"/>
-            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="send_immediately"  default="0" description="Boolean value to say whether new mails should be send out immediately or stored in the db before send out." section_name="email"/>
         </parameters>
 
     </version>

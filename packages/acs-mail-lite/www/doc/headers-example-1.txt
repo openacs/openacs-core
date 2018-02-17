@@ -1,0 +1,26 @@
+Return-Path: <terminal3@dipole.node>
+Received: from dipole.node ([unix socket])
+           by dipole.node (Cyrus 2.5.11) with LMTPA;
+            Tue, 01 Aug 2017 06:00:30 +0000
+X-Sieve: CMU Sieve 2.4
+Received: from localhost (unknown [12.27.188.27.186.44])
+          by dipole.node (Postfix) with ESMTP id CA0551638C04
+          for <admin@dipole.node>; Tue,  1 Aug 2017 06:00:30 +0000 (UTC)
+Received: from dipole.node ([12.27.188.27.186.70])
+ by localhost (positive.propul.voyager13 [12.27.188.27.186.44]) (maiad, port 10024)
+ with ESMTP id 05590-02 for <admin@dipole.node>;
+ Tue,  1 Aug 2017 06:00:30 +0000 (UTC)
+Received: by dipole.node (Postfix, from userid 0)
+          id 960341638BFC; Tue,  1 Aug 2017 06:00:30 +0000 (UTC)
+From: terminal3@dipole.node (Cron Daemon)
+To: terminal3@dipole.node
+Subject: Cron <terminal3@dipole> /usr/local/bin/vacuumdb --all --full --analyze -U pgsql
+X-Cron-Env: <SHELL=/bin/sh>
+X-Cron-Env: <HOME=/terminal3>
+X-Cron-Env: <PATH=/usr/bin:/bin>
+X-Cron-Env: <LOGNAME=terminal3>
+X-Cron-Env: <USER=terminal3>
+Message-Id: <20170801060030.960341638BFC@dipole.node>
+Date: Tue,  1 Aug 2017 05:59:00 +0000 (UTC)
+
+

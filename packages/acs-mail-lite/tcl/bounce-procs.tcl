@@ -49,24 +49,46 @@ namespace eval acs_mail_lite {
         -package_id:required
         -message_id:required
     } {
-        Composes a bounce address
+        Composes a bounce address. If parameter FixedSenderEmail empty,
+        message_id is used. If message_id is empty, the legacy approach
+        for creating bounce_address is used.
+
         @option user_id user_id of the mail recipient
         @option package_id package_id of the mail sending package
         (needed to call package-specific code to deal with bounces)
         @option message_id message-id of the mail
         @return bounce address
     } {
-        return "[bounce_prefix]-$user_id-[ns_sha1 $message_id]-$package_id@[address_domain]"
+        set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
+        set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
+                              -package_id $mail_package_id \
+                              -default "" ]
+        if { $fixed_sender ne "" } {
+            set ba $fixed_sender
+        } else {
+            if { $message_id ne "" } {
+                set ba $message_id
+            } else {
+                set ba [bounce_prefix]
+                append ba "-" $user_id "-" [ns_sha1 $message_id] \
+                    "-" $package_id "@" [address_domain]
+                ns_log Warning "acs_mail_lite::bounce_address is using \
+ deprecated way. Supply message_id. Use acs_mail_lite::unique_id_create"
+            }
+        }
+        return $ba
     }
 
     #---------------------------------------
-    ad_proc -public parse_bounce_address {
+    ad_proc -public -deprecated parse_bounce_address {
         -bounce_address:required
     } {
         This takes a reply address, checks it for consistency,
         and returns a list of user_id, package_id and bounce_signature found
         @option bounce_address bounce address to be checked
         @return tcl-list of user_id package_id bounce_signature
+
+        @See acs_mail_lite::inbound_email_context
     } {
         set regexp_str "\[[bounce_prefix]\]-(\[0-9\]+)-(\[^-\]+)-(\[0-9\]*)\@"
         if {![regexp $regexp_str $bounce_address all user_id signature package_id]} {
@@ -104,9 +126,24 @@ namespace eval acs_mail_lite {
         set max_days_to_bounce [parameter::get -package_id $package_id -parameter MaxDaysToBounce -default 3]
         set notification_interval [parameter::get -package_id $package_id -parameter NotificationInterval -default 7]
         set max_notification_count [parameter::get -package_id $package_id -parameter MaxNotificationCount -default 4]
-        set notification_sender [parameter::get -package_id $package_id \
-                                     -parameter NotificationSender \
-                                     -default "reminder@[address_domain]"]
+        set notification_sender [parameter::get -package_id $package_id -parameter NotificationSender -default "reminder@[address_domain]"]
+        if { $notification_sender eq "" } {
+            # Use the most specific default available
+            set fixed_sender [parameter::get -package_id $package_id -parameter "FixedSenderEmail"]
+            if { $fixed_sender ne "" } {
+                set notification_sender $fixed_sender
+            } elseif { [acs_mail_lite::utils::valid_email_p [ad_system_owner]] } {
+                set notification_sender [ad_system_owner]
+            } else {
+                # Set to an email address that is required to exist
+                # to avoid email loops and other issues
+                # per RFC 5321 section 4.5.1 
+                # https://tools.ietf.org/html/rfc5321#section-4.5.1
+                # The somewhat unique capitalization may be useful
+                # for identifyng source in diagnostic context.
+                set notification_sender "PostMastER@[address_domain]"
+            }
+        }
 
         # delete all bounce-log-entries for users who received last email
         # X days ago without any bouncing (parameter)
@@ -134,7 +171,10 @@ namespace eval acs_mail_lite {
             array set user $notification_list
             set user_id $user(user_id)
             set href [export_vars -base [ad_url]/register/restore-bounce {user_id}]
-            set body "Dear $user(name),\n\nDue to returning mails from your email account, we currently do not send you any email from our system. To reenable your email account, please visit\n$href"
+            set body "Dear $user(name),\n\n\
+ Due to returning mails from your email account, \n \
+ we currently do not send you any email from our system.\n\n \
+ To re-enable your email notifications, please visit\n${href}"
 
             send -to_addr $notification_list -from_addr $notification_sender -subject $subject -body $body -valid_email
             ns_log Notice "Bounce notification send to user $user_id"

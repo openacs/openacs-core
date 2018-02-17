@@ -1,0 +1,20 @@
+Return-Path: <plasma-dipole-3@peratt.node>
+Received: from peratt.node ([unix socket])
+           by peratt.node (Cyrus 2.5.11) with LMTPA;
+            Tue, 01 Aug 2017 05:43:56 +0000
+X-Sieve: CMU Sieve 2.4
+Received: from localhost (unknown [23.77.3.4.186.44])
+          by peratt.node (Postfix) with ESMTP id EEBE81638F0E
+          for <admin@peratt.node>; Tue,  1 Aug 2017 05:43:55 +0000 (UTC)
+Received: from peratt.node ([23.77.3.4.186.70])
+ by localhost (maia-lon.uk.plasma.xtcvr.station [23.77.3.4.186.44]) (maiad, port 10024)
+ with ESMTP id 98595-01 for <admin@peratt.node>;
+ Tue,  1 Aug 2017 05:43:55 +0000 (UTC)
+Received: by peratt.node (Postfix, from userid 0)
+          id CF9CD1638AAE; Tue,  1 Aug 2017 05:43:33 +0000 (UTC)
+To: plasma-dipole-3@peratt.node
+Subject: peratt.node monthly run output
+Message-Id: <20170801054337.CF9CD1638AAE@peratt.node>
+Date: Tue,  1 Aug 2017 05:43:33 +0000 (UTC)
+From: plasma-dipole-3@peratt.node (Charlie Plasma-Dipole-3)
+
