@@ -97,7 +97,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     } else {
         set to [acs_mail_lite::parse_email_address -email $email(to)]
     }
-    ns_log Debug "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recepient $to"
+    ns_log Debug "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recipient $to"
 
     if { ![info exists email(aml_user_id)] } {
         # Traditional call parses here. Queue case is pre-parsed.

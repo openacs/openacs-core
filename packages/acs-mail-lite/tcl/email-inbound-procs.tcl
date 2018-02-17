@@ -550,7 +550,7 @@ ad_proc -public acs_mail_lite::email_type {
     # https://www.iana.org/assignments/auto-submitted-keywords/auto-submitted-keywords.xhtml
     # and rfc3834 https://www.ietf.org/rfc/rfc3834.txt
 
-    # Do NOT use x-auto-response-supress
+    # Do NOT use x-auto-response-suppress
     # per: https://stackoverflow.com/questions/1027395/detecting-outlook-autoreply-out-of-office-emails
 
     # header cases: 
@@ -1355,7 +1355,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
     of h_array_name and p_array_name for use by registered callbacks. 
 
     Arrays are repopulated with values in the same manner that
-    acs_mail_lite::inbounde_queue_insert recieves them. See below for details.
+    acs_mail_lite::inbounde_queue_insert receives them. See below for details.
     
     When complete, marks the email in the queue as processed, 
     if mark_processed_p is 1.

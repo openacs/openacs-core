@@ -690,7 +690,7 @@ namespace eval acs_mail_lite {
         {bcc {}}
     } {
 
-        Replacement for ns_sendmail for backward compability.
+        Replacement for ns_sendmail for backward compatibility.
 
     } {
 
