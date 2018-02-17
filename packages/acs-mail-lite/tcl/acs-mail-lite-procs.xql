@@ -9,7 +9,7 @@
        where email = :email
          and party_id = person_id
 	order by party_id desc
-	fetch first 1 row only
+	limit 1
 
      </querytext>
    </fullquery>
