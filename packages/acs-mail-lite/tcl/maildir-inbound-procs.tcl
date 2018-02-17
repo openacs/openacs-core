@@ -70,8 +70,8 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                     ns_log Notice "acs_mail_lite::maildir_check_incoming \
  could not process message file '${msg}'. Messaged moved to MailDir/cur/."
                     # Move the message into MailDir/cur for other mail reader
-                    file copy $msg $curdir
-                    file delete $msg
+                    file copy -- $msg $curdir
+                    file delete -- $msg
 
                 } else {
                     # process email
@@ -145,8 +145,8 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                     }
 
                     # Move the message into MailDir/cur for other mail handling
-                    file copy $msg $curdir
-                    file delete $msg
+                    file copy -- $msg $curdir
+                    file delete -- $msg
                 }
             }
         }

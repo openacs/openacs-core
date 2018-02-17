@@ -652,7 +652,7 @@ namespace eval acs_mail_lite {
 	# could need to look at files for their own purposes.
         if {[string is true $delete_filesystem_files_p]} {
 	    foreach f $filesystem_files {
-		file delete $f
+		file delete -- $f
 	    }
 	}
         if {$status ne "ok"} {
