@@ -170,7 +170,8 @@ namespace eval acs_mail_lite {
     #---------------------------------------
     ad_proc -private get_address_array {
         -addresses:required
-    } {	Checks if passed variable is already an array of emails,
+    } {
+        Checks if passed variable is already an array of emails,
         user_names and user_ids. If not, get the additional data
         from the db and return the full array.
         @option addresses variable to checked for array
@@ -178,7 +179,8 @@ namespace eval acs_mail_lite {
         for the mail procedures
     } {
         if {[catch {array set address_array $addresses}]
-            || ![string equal [lsort [array names address_array]] [list email name user_id]]} {
+            || [lsort [array names address_array] ne [list email name user_id]
+            } {
 
             # either user just passed a normal address-list or
             # user passed an array, but forgot to provide user_ids
@@ -428,8 +430,10 @@ namespace eval acs_mail_lite {
         set rcpt_id 0
         if { [llength $to_addr] eq 1 } {
             set rcpt_id [party::get_by_email -email $to_addr]
+            if {rcpt_id eq ""} {
+                set rcpt_id 0
+            }
         }
-        set rcpt_id [ad_decode $rcpt_id "" 0 $rcpt_id]
 
 
         # Set the message_id
@@ -617,9 +621,11 @@ namespace eval acs_mail_lite {
 
         } else {
             
-            if {[catch {acs_mail_lite::smtp -multi_token $tokens \
-                       -headers $headers_list \
-                            -originator $originator} errorMsg]} {
+            ad_try {
+                acs_mail_lite::smtp -multi_token $tokens \
+                    -headers $headers_list \
+                    -originator $originator
+            } on error {errorMsg} {
                 set status error
             }
             
