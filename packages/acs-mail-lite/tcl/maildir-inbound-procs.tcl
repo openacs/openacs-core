@@ -110,7 +110,7 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                                         $headers_list subject]
                         if { $su_idx > -1 } {
                             set sun [lindex $headers_list $su_idx]
-                            set hdrs_arr(aml_subject) [ad_quotehtml $hdrs_arr(${sun})]
+                            set hdrs_arr(aml_subject) [ns_quotehtml $hdrs_arr(${sun})]
                         } else {
                             set hdrs_arr(aml_subject) ""
                         }
@@ -119,7 +119,7 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                                         $headers_list to]
                         if { ${to_idx} > -1 } {
                             set ton [lindex $headers_list $to_idx]
-                            set hdrs_arr(aml_to) [ad_quotehtml $hdrs_arr(${ton}) ]
+                            set hdrs_arr(aml_to) [ns_quotehtml $hdrs_arr(${ton}) ]
                         } else {
                             set hdrs_arr(aml_to) ""
                         }

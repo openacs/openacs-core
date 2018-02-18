@@ -419,7 +419,7 @@ ad_proc -public acs_mail_lite::imap_conn_close {
     set i 0
     set conn_exists_p 0
     while { $i < $s_len && $id ne $conn_id }  {
-        set id [lindex [lindex $sessions_list 0] 0]
+        set id [lindex $sessions_list 0 0]
         if { $id eq $conn_id || $conn_id eq "all" } {
             set conn_exists_p 1
             ns_log Dev "acs_mail_lite::imap_conn_close.731 session_id '${id}'"
@@ -622,7 +622,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                                             $headers_list subject]
                             if { $su_idx > -1 } {
                                 set sun [lindex $headers_list $su_idx]
-                                set hdrs_arr(aml_subject) [ad_quotehtml $hdrs_arr(${sun})]
+                                set hdrs_arr(aml_subject) [ns_quotehtml $hdrs_arr(${sun})]
                             } else {
                                 set hdrs_arr(aml_subject) ""
                             }
@@ -631,7 +631,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                                             $headers_list to]
                             if { ${to_idx} > -1 } {
                                 set ton [lindex $headers_list $to_idx]
-                                set hdrs_arr(aml_to) [ad_quotehtml $hdrs_arr(${ton}) ]
+                                set hdrs_arr(aml_to) [ns_quotehtml $hdrs_arr(${ton}) ]
                             } else {
                                 set hdrs_arr(aml_to) ""
                             }
