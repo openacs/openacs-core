@@ -22,12 +22,12 @@
   <li>
     See <a href="maildir-install">MailDir installation notes</a> to install.
     For details of operation, see
-    <a href="/api-doc/proc-view?proc=acs_mail_lite::maildir_check_incoming&source_p=1">acs_mail_lite::maildir_check_incoming</a>.
+    <a href="/api-doc/proc-view?proc=acs_mail_lite::maildir_check_incoming&amp;source_p=1">acs_mail_lite::maildir_check_incoming</a>.
 
   </li><li>
    See <a href="imap-install">IMAP installation notes</a> to install. 
     For details of operation, see 
-    <a href="/api-doc/proc-view?proc=acs_mail_lite::imap_check_incoming&source_p=1">acs_mail_lite::imap_check_incoming</a>.
+    <a href="/api-doc/proc-view?proc=acs_mail_lite::imap_check_incoming&amp;source_p=1">acs_mail_lite::imap_check_incoming</a>.
   </li>
 </ul>
 <h3>Overview of operation</h3>

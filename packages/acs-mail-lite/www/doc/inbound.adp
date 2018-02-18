@@ -7,9 +7,9 @@
     Scheduled procs collect the email. 
     Current methods include:
 
- <a href="/api-doc/proc-view?proc=acs_mail_lite::imap_check_incoming&source_p=1">acs_mail_lite::imap_check_incoming</a> 
+ <a href="/api-doc/proc-view?proc=acs_mail_lite::imap_check_incoming&amp;source_p=1">acs_mail_lite::imap_check_incoming</a> 
  for IMAP and 
- <a href="/api-doc/proc-view?proc=acs_mail_lite::maildir_check_incoming&source_p=1">acs_mail_lite::maildir_check_incoming</a> 
+ <a href="/api-doc/proc-view?proc=acs_mail_lite::maildir_check_incoming&amp;source_p=1">acs_mail_lite::maildir_check_incoming</a> 
    for MailDir.
 </p><p>
     Both schedules procs can be run simultaneously without intefering with
