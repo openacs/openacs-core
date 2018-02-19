@@ -625,4 +625,11 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Joined_group">You have joined the group %group_name%.</msg>
   <msg key="Error_joining">Error Joining</msg>
   <msg key="Error_joining_details">We experienced an error adding you to the group.</msg>
+  <msg key="400_title">Bad Request</msg>
+  <msg key="404_message">The requested file was not found</msg>
+  <msg key="403_message">You don't have permissions to retrieve this page</msg>
+  <msg key="400_title">Server Error</msg>
+  <msg key="500_message">An error occurred while processing your request</msg>    
+  <msg key="503_message">The service you requested is currently unavailable</msg>    
+
 </message_catalog>
