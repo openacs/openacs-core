@@ -204,9 +204,9 @@ foreach msgno $messages1_list {
     #    set msg_txt [ns_imap text $conn_id $msgno]
     #    set msg_start_max [expr { 72 * 15 } ]
     #    set msg_txtb [string range $msg_txt 0 $msg_start_max]
-    #    if { [string length $msg_txt] > [expr { $msg_start_max + 400 } ] } {
+    #    if { [string length $msg_txt] > $msg_start_max + 400 } {
     #        set msg_txte [string range $msg_txt end-$msg_start_max end]
-    #    } elseif { [string length $msg_txt] > [expr { $msg_start_max + 144 } ] } {
+    #    } elseif { [string length $msg_txt] > $msg_start_max + 144 } {
     #        set msg_txte [string range $msg_txt end-144 end]
     #    } else {
     #        set msg_txte ""
