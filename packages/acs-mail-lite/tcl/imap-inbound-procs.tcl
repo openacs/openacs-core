@@ -134,8 +134,9 @@ ad_proc -private acs_mail_lite::imap_conn_set {
                             set v_p 1
                         } else {
                             set v_p [regexp -- {^[[:graph:]\ ]+$} $n_arr(${n})]
-                            if { $v_p && \
-                                     [string match {*[\[;]*} $n_arr(${n}) ] } {
+                            if { $v_p
+                                 && [string match {*[\[;]*} $n_arr(${n}) ]
+                             } {
                                 set v_p 0
                             }
                         }
@@ -546,9 +547,9 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
             after $pause_ms
         }
 
-        if { [clock seconds] < $si_quit_cs \
-                 && $active_cs eq $cycle_start_cs } {
-            
+        if { [clock seconds] < $si_quit_cs
+             && $active_cs eq $cycle_start_cs
+         } {
             set cid [acs_mail_lite::imap_conn_go ]
             if { $cid eq "" } {
                 set error_p 1
@@ -568,9 +569,9 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                 }
                 array set status_arr $status_list
                 set uidvalidity $status_arr(Uidvalidity)
-                if { [info exists status_arr(Uidnext) ] \
-                         && [info exists status_arr(Messages) ] } {
-
+                if { [info exists status_arr(Uidnext)]
+                     && [info exists status_arr(Messages)]
+                 } {
                     set aml_package_id [apm_package_id_from_key "acs-mail-lite"]
                     set filter_proc [parameter::get -parameter "IncomingFilterProcName" \
                                          -package_id $aml_package_id]
@@ -672,7 +673,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
  Either Uidnext or Messages not in status_list: '${status_list}'"
                 }
 
-                if { [expr { [clock seconds] + 65 } ] < $si_quit_cs } {
+                if { [clock seconds] + 65 < $si_quit_cs } {
                     # Regardless of parameter SMPTTimeout,
                     # if there is more than 65 seconds to next cycle,
                     # close connection
@@ -793,8 +794,10 @@ msgno '${msgno}' section_ref '${section_ref}' section_id '${section_id}'"
         set p_arr(${section_id},c_type) $type
         lappend p_arr(section_id_list) ${section_id}
 
-        if { [info exists bytes] && $bytes > $__max_txt_bytes \
-                 && ![info exists filename] } {
+        if { [info exists bytes]
+             && $bytes > $__max_txt_bytes 
+             && ![info exists filename]
+         } {
             set filename "blob.txt"
         }
         
@@ -844,11 +847,10 @@ msgno '${msgno}' section_ref '${section_ref}' section_id '${section_id}'"
                 # 72 character wide lines * x lines
                 set msg_start_max [expr { 72 * 20 } ]
                 set msg_txtb [string range $msg_txt 0 $msg_start_max]
-                if { [string length $msg_txt] \
-                         > [expr { $msg_start_max + 400 } ] } {
+                set msg_len [string length $msg_txt]
+                if { $msg_len > $msg_start_max + 400 } {
                     set msg_txte [string range $msg_txt end-$msg_start_max end]
-                } elseif { [string length $msg_txt] \
-                               > [expr { $msg_start_max + 144 } ] } {
+                } elseif { $msg_len > $msg_start_max + 144 } {
                     set msg_txte [string range $msg_txt end-144 end]
                 } else {
                     set msg_txte ""

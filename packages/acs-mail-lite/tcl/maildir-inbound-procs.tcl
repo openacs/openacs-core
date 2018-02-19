@@ -215,7 +215,7 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
     upvar 1 __max_txt_bytes __max_txt_bytes
     set has_parts_p 0
     set section_n_v_list [list ]
-    # rfc 822 date time format regexp expression
+    # RFC 822 date time format regexp expression
     set re822 {[^a-z]([a-z][a-z][a-z][ ,]+[0-9]+ [a-z][a-z][a-z][ ]+[0-9][0-9][0-9][0-9][ ]+[0-9][0-9][:][0-9][0-9][:][0-9][0-9][ ]+[\+\-][0-9]+)[^0-9]}
 
     if { ![info exists __max_txt_bytes] } {
@@ -358,12 +358,14 @@ message_fpn '${message_fpn}' section_ref '${section_ref}' section_id '${section_
         set p_arr(${section_id},c_type) $type
         lappend p_arr(section_id_list) ${section_id}
         
-        if { [info exists bytes] && $bytes > $__max_txt_bytes \
-                 && ![info exists filename] } {
+        if { [info exists bytes]
+             && $bytes > $__max_txt_bytes
+             && ![info exists filename]
+         } {
             set filename "blob.txt"
         }
         
-        if { [info exists filename ] } {
+        if { [info exists filename] } {
             set filename2 [clock microseconds]
             append filename2 "-" $filename
             set filepathname [file join [acs_root_dir] \
@@ -410,11 +412,9 @@ message_fpn '${message_fpn}' section_ref '${section_ref}' section_id '${section_
                 # 72 character wide lines * x lines
                 set msg_start_max [expr { 72 * 20 } ]
                 set msg_txtb [string range $msg_txt 0 $msg_start_max]
-                if { [string length $msg_txt] \
-                         > [expr { $msg_start_max + 400 } ] } {
+                if { [string length $msg_txt] > $msg_start_max + 400 } {
                     set msg_txte [string range $msg_txt end-$msg_start_max end]
-                } elseif { [string length $msg_txt] \
-                               > [expr { $msg_start_max + 144 } ] } {
+                } elseif { [string length $msg_txt] > $msg_start_max + 144 } {
                     set msg_txte [string range $msg_txt end-144 end]
                 } else {
                     set msg_txte ""

@@ -451,7 +451,7 @@ namespace eval acs_mail_lite {
         # Decision based firstly on parameter,
         # and then on other values that most likely could be substituted
         # with initial choice, and while meeting definition
-        # of originator header according to rfc 2822 section 3.6.2
+        # of originator header according to RFC 2822 section 3.6.2
         # https://tools.ietf.org/html/rfc2822#section-3.6.2
         # A value must be provided.
         switch -exact -- $originator_email {

@@ -109,9 +109,10 @@ ad_proc acs_mail_lite::utils::build_date {
     if { [catch {package require mime 1.5.2}] } {
    
         set gmt [clock format $clock -format "%Y-%m-%d %H:%M:%S" -gmt true]
-        if {[set diff [expr {($clock-[clock scan $gmt])/60}]] < 0} {
+        set diff [expr {($clock - [clock scan $gmt]) / 60}]
+        if {$diff < 0} {
             set s -
-            set diff [expr {-($diff)}]
+            set diff [expr {-$diff}]
         } else {
             set s +
         }

@@ -194,8 +194,9 @@ ad_proc -public acs_mail_lite::sched_parameters {
                             set v_p 1
                         } else {
                             set v_p [regexp -- {^[[:graph:]\ ]+$} $new(${spn})]
-                            if { $v_p && \
-                                     [string match {*[\[;]*} $new(${spn}) ] } {
+                            if { $v_p
+                                 && [string match {*[\[;]*} $new(${spn})]
+                             } {
                                 set v_p 0
                             }
                         }
@@ -345,15 +346,17 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
 
     set size_error_p 0
     # validate email inputs
-    if { ! ([string is wideinteger -strict $size_chars] \
-                && $size_chars > 0) } {
+    if { ! ([string is wideinteger -strict $size_chars]
+            && $size_chars > 0)
+     } {
         set size_error_p 1
         ns_log Warning "acs_mail_lite::inbound_prioritize.283: \
  size_chars '${size_chars}' is not a natural number."
     }
     set time_error_p 0
-    if { ! ([string is wideinteger -strict $received_cs] \
-                && $received_cs > 0) } {
+    if { ! ([string is wideinteger -strict $received_cs]
+            && $received_cs > 0)
+     } {
         set time_error_p 1
         ns_log Warning "acs_mail_lite::inbound_prioritize.289: \
  received_cs '${received_cs}' is not a natural number."
@@ -548,7 +551,7 @@ ad_proc -public acs_mail_lite::email_type {
     # header cases:  {*auto-generated*} {*auto-replied*} {*auto-notified*}
     # from:
     # https://www.iana.org/assignments/auto-submitted-keywords/auto-submitted-keywords.xhtml
-    # and rfc3834 https://www.ietf.org/rfc/rfc3834.txt
+    # and RFC 3834 https://www.ietf.org/rfc/rfc3834.txt
 
     # Do NOT use x-auto-response-suppress
     # per: https://stackoverflow.com/questions/1027395/detecting-outlook-autoreply-out-of-office-emails
@@ -623,7 +626,7 @@ ad_proc -public acs_mail_lite::email_type {
 
         set hn_list [array names h_arr]
         ns_log Dev "acs_mail_lite::email_type.996 hn_list '${hn_list}'"
-        # Following checks according to rfc3834 section 3.1 Message header
+        # Following checks according to RFC 3834 section 3.1 Message header
         # https://tools.ietf.org/html/rfc3834
 
 
@@ -633,7 +636,7 @@ ad_proc -public acs_mail_lite::email_type {
         # This is a new message id, not message id of email replied to
         set mi_idx [lsearch -glob -nocase $hn_list {message-id}]
 
-        # Also per rfc5436 seciton 2.7.1 consider:
+        # Also per RFC 5436 section 2.7.1 consider:
         # auto-submitted = as
         
         set as_idx [lsearch -glob -nocase $hn_list {auto-submitted}]
@@ -699,9 +702,10 @@ ad_proc -public acs_mail_lite::email_type {
 
         
 
-        if { !$ar_p && [info exists h_arr(internaldate.year)] \
-                 && $from ne "" } {
-
+        if { !$ar_p
+             && [info exists h_arr(internaldate.year)]
+             && $from ne ""
+         } {
             # Use the internal timestamp for additional filters
             set dti $h_arr(internaldate.year)
             append dti "-" [format "%02u" $h_arr(internaldate.month)]
@@ -817,10 +821,10 @@ ad_proc -public acs_mail_lite::email_type {
                 
                 set dt_h [lindex $hn_list $dt_idx]
                 # Cannot use optional ns_imap parsedate here. May not exist.
-                # rfc5322 section 3.3: multiple spaces in date is acceptable
+                # RFC 5322 section 3.3: multiple spaces in date is acceptable
                 # but not for tcl clock scan -format
-                regsub -all -- {[ ][ ]*} $h_arr(${dt_h}) { } dt_spaced
-                # rfc5322 section 3.3: obs-zone breaks clock scan format too
+                regsub -all -- { +} $h_arr(${dt_h}) { } dt_spaced
+                # RFC 5322 section 3.3: obs-zone breaks clock scan format too
                 set dt_spaced_tz_idx [string first " (" $dt_spaced]
                 set dt_spaced [string trim [string range $dt_spaced 0 ${dt_spaced_tz_idx} ]]
                 set dte_cs [clock scan $dt_spaced -format "%a, %d %b %G %H:%M:%S %z"]
@@ -865,13 +869,13 @@ ad_proc -public acs_mail_lite::email_type {
 
         }
         
-        # Delivery Status Notifications, see rfc3464
+        # Delivery Status Notifications, see RFC 3464
         # https://tools.ietf.org/html/rfc3464
         # Note: original-envelope-id is not same as message-id.
         # original-recipient = or
         set or_idx [lsearch -glob -nocase $hn_list {original-recipient}]
         if { $or_idx < 0 } {
-            # RFC3461 4.2 uses original-recipient-address
+            # RFC 3461 4.2 uses original-recipient-address
             set or_idx [lsearch -glob \
                             -nocase $hn_list {original-recipient-address}]
         }
@@ -950,7 +954,7 @@ ad_proc -public acs_mail_lite::email_type {
             set ps3 [string match -nocase {*autoreply*} $subject]
             set ps4 [string match {*NDN*} $subject]
             set ps5 [string match {*\[QuickML\] Error*} $subject]
-            # rfc3834 states to NOT rely on 'Auto: ' in subject for detection. 
+            # RFC 3834 states to NOT rely on 'Auto: ' in subject for detection. 
             #set ps6 \[string match {Auto: *} $subject\]
             
             # from flags = pf
@@ -972,8 +976,9 @@ ad_proc -public acs_mail_lite::email_type {
     # an in_reply_to does NOT include 'auto_gen'. 
     if { $dsn_p || $or_idx > -1 } {
         set type "bounce"
-    } elseif { $ar_p || ( $irt_idx > -1 && \
-                              ( $ag_p || $as_p || $an_p || $ts_p ) ) } {
+    } elseif { $ar_p
+               || ( $irt_idx > -1 && ( $ag_p || $as_p || $an_p || $ts_p ) )
+           } {
         set type "auto_reply"
     } elseif { $ag_p || $as_p || $an_p || $ts_p } {
         set type "auto_gen"
@@ -1508,7 +1513,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
         from acs_mail_lite_ie_parts
         where aml_email_id=:aml_email_id } ]
     foreach row $p_lists {
-        set section_ref [acs_mail_lite::seciton_ref_of [lindex $row 0]]
+        set section_ref [acs_mail_lite::section_ref_of [lindex $row 0]]
         set p_arr(${section_ref},c_type) [lindex $row 1]
         set p_arr(${section_ref},filename) [lindex $row 2]
         set p_arr(${section_ref},content) [lindex $row 3]
@@ -1725,7 +1730,7 @@ ad_proc -private acs_mail_lite::inbound_cache_hit_p {
     If already exists, returns 1 otherwise 0.
     Adds checked case to cache if not already there.
 
-    uidvalidity is defined by imap rfc3501 2.3.1.1
+    uidvalidity is defined by imap RFC 3501 2.3.1.1
     https://tools.ietf.org/html/rfc3501#section-2.3.1.1
     Other protocols have an analog mechanism, or one
     can be made locally to be equivallent in use.
@@ -1871,10 +1876,11 @@ ad_proc -private acs_mail_lite::unique_id_create {
     }
 
     set aml_package_id [apm_package_id_from_key "acs-mail-lite"]
-    if { ( $package_id ne "" && $package_id ne $aml_package_id ) \
-             || ( $party_id ne "" && $party_id ne "0" ) \
-             || $object_id ne "" \
-             || $other ne "" } {
+    if { ( $package_id ne "" && $package_id ne $aml_package_id ) 
+         || ( $party_id ne "" && $party_id ne "0" )
+         || $object_id ne ""
+         || $other ne ""
+     } {
         # Sign this message-id, and map message-id to values
         set uid [string range $unique_id 0 $last_at_idx-1]
         set domain [string range $unique_id $last_at_idx+1 end]
@@ -2089,7 +2095,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # and acs_mail_lite::unique_id_create/find/parse
 
 
-    # Bounce info needs to be placed in an rfc
+    # Bounce info needs to be placed in an RFC
     # compliant header. Replies can take many forms.
     # This could be a mess.
     # If a service using MailDir switches to use IMAP,
@@ -2100,10 +2106,10 @@ ad_proc -private acs_mail_lite::inbound_email_context {
 
     # General constraints:
     # Header field characters limited to US-ASCII characters between 33 and 126
-    # inclusive per rfc5322 2.2 https://tools.ietf.org/html/rfc5322#section-2.2
+    # inclusive per RFC 5322 2.2 https://tools.ietf.org/html/rfc5322#section-2.2
     # and white-space characters 32 and 9.
 
-    # Per rfc6532 3.3 and 5322 2.1.1, "Each line of characters must be no more
+    # Per RFC 6532 3.3 and 5322 2.1.1, "Each line of characters must be no more
     # than 998 characters, and should be no more than 78 characters.."
     # A domain name can take up to 253 characters.
 
@@ -2111,8 +2117,8 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # should be okay even though it almost guarantees all cases of message_id
     # will be over 78 characters.
 
-    # Unique references are case sensitive per rfc3464 2.2.1
-    # original email's envelope-id value is case sensitive per rfc3464 2.2.1
+    # Unique references are case sensitive per RFC 3464 2.2.1
+    # original email's envelope-id value is case sensitive per RFC 3464 2.2.1
     # Angle brackets are used to quote a unique reference
 
 
@@ -2121,8 +2127,8 @@ ad_proc -private acs_mail_lite::inbound_email_context {
 
     # original-message-id
     # original-envelope-id  
-    # message-id            a unique message id per rfc2822 3.6.4
-    #                       assigned by originator per rfc5598 3.4.1
+    # message-id            a unique message id per RFC 2822 3.6.4
+    #                       assigned by originator per RFC 598 3.4.1
     #                        https://tools.ietf.org/html/rfc5598#section-3.4.1
     #
     # originator            A special case alternate to 'From' header.
@@ -2130,18 +2136,18 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     #                       Notices may be sent to this address when
     #                       a bounce notice to the original email's 'From'
     #                       address bounces.
-    #                       See RFC5321 2.3.1 
+    #                       See RFC 5321 2.3.1 
     #                        https://tools.ietf.org/html/rfc5321#section-2.3.1
-    #                       and RFC5598 2.2.1 
+    #                       and RFC 5598 2.2.1 
     #                        https://tools.ietf.org/html/rfc5598#section-2.1
     # msg-id
-    # In-Reply-to  space delimited list of unique message ids per rfc2822 3.6.4
-    # References   space delimited list of unique message ids per rfc2822 3.6.4
+    # In-Reply-to  space delimited list of unique message ids per RFC 2822 3.6.4
+    # References   space delimited list of unique message ids per RFC 2822 3.6.4
     #
     # original-recipient    may contain original 'to' address of party_id
     # original-recipient-address
     #                       is an alternate to original-recipient 
-    #                       used by rfc3461 4.2 
+    #                       used by RFC 3461 4.2 
     #                        https://tools.ietf.org/html/rfc3461#section-4.2
     #                      Recipient could be used as an extra layer 
     #                       of authentication after parsing.
@@ -2290,9 +2296,9 @@ ad_proc -private acs_mail_lite::inbound_email_context {
                 } 
                 set context_list [acs_mail_lite::unique_id_parse \
                                       -message_id $hv]
-                if { $h_arr(aml_datetime_cs) eq "" \
-                         && [string match "${bounce_addrs}*" $hv] } {
-
+                if { $h_arr(aml_datetime_cs) eq "" 
+                     && [string match "${bounce_addrs}*" $hv]
+                 } {
 
                     ##code developers of OpenACS core:
                     # Legacy case should be removed for strict, secure
@@ -2300,8 +2306,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
                     
                     # Check legacy case
                     # Regexp code is from acs_mail_lite::parse_bounce_address
-                    if { [regexp $regexp_str $hv \
-                              all user_id signature package_id] } {
+                    if { [regexp $regexp_str $hv all user_id signature package_id] } {
                         set context_list [list \
                                               package_id $package_id \
                                               party_id $user_id \
@@ -2309,8 +2314,9 @@ ad_proc -private acs_mail_lite::inbound_email_context {
                                               other "" ]
                         set sig_list [split $signature "."]
                         set sig_1 [lindex $sig_list 1]
-                        if { [llength $sig_list ] == 3 \
-                                 && [string is wideinteger -strict $sig_1] } {
+                        if { [llength $sig_list ] == 3 
+                             && [string is wideinteger -strict $sig_1]
+                         } {
                             lappend context_list datetime_cs $sig_1
                         } else {
                             lappend context_list datetime_cs [clock seconds]
@@ -2408,8 +2414,9 @@ ad_proc acs_mail_lite::bounce_ministry {
                 }
                 # end code from acs_mail_lite::record_bounce
 
-                if { $h_arr(aml_party_id) ne $user_id \
-                         || $h_arr(aml_datetime_cs) eq "" } {
+                if { $h_arr(aml_party_id) ne $user_id
+                     || $h_arr(aml_datetime_cs) eq ""
+                 } {
                     # Log it, because it might be a false positive.
                     # Existence of aml_datetime_cs means unique_id was signed.
                     # See acs_mail_lite::unique_id_parse
