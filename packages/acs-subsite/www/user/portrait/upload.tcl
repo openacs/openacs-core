@@ -183,12 +183,14 @@ ad_form -extend -name "portrait_upload" -validate {
     # Flush the portrait cache
     util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
 
+} -after_submit {
+
     ad_returnredirect $return_url
     ad_script_abort
 
-} else {
-    ad_return_template
 }
+
+ad_return_template
 
 # Local variables:
 #    mode: tcl
