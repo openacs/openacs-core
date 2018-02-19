@@ -72,7 +72,7 @@
     <code>IP=4 IP6=4 SSLTYPE=nopwd</code> like this:</p>
   <code>make ldb EXTRACFLAGS=-fPIC IP=4 IP6=4 SSLTYPE=nopwd</code>
   <p>Some of these are defaults, but the defaults weren't recognized on the test system,
-    so they had to be explicitely invoked in this case.
+    so they had to be explicitly invoked in this case.
   </p>
   <p>
     Then build nsimap with:

@@ -360,7 +360,7 @@ To make things granular a separate parsing procedure should deal with loading th
     upvar $array email
 
     set to [acs_mail_lite::parse_email_address -email $email(to)]
-    ns_log Debug &quot;acs_mail_lite::incoming_email -impl acs-mail-lite called. Recepient $to&quot;
+    ns_log Debug &quot;acs_mail_lite::incoming_email -impl acs-mail-lite called. Recipient $to&quot;
 
     util_unlist [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
     
