@@ -414,7 +414,7 @@ namespace eval acs_mail_lite {
         set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
                               -package_id $mail_package_id]
 
-        
+
         if { $fixed_sender ne "" && !$use_sender_p} {
             set from_addr $fixed_sender
         }
@@ -444,12 +444,56 @@ namespace eval acs_mail_lite {
                             -party_id $rcpt_id]
 
 
-        # Build the originator address to be used as envelope sender
-        # and originator etc. 
-        set orginator [bounce_address -user_id $rcpt_id \
-                            -package_id $package_id \
-                            -message_id $message_id]
+        # Set originator header
+        set originator_email [parameter::get -parameter "OriginatorEmail" \
+                              -package_id $mail_package_id]
 
+        # Decision based firstly on parameter,
+        # and then on other values that most likely could be substituted
+        # with initial choice, and while meeting definition
+        # of originator header according to rfc 2822 section 3.6.2
+        # https://tools.ietf.org/html/rfc2822#section-3.6.2
+        # A value must be provided.
+        switch -exact -- $originator_email {
+            fixed_sender {
+                if { $fixed_sender ne "" } {
+                    set originator $fixed_sender
+                } elseif { $from_addr ne "" } {
+                    set originator $from_addr
+                } else {
+                    set originator $message_id
+                }
+            }
+            from_address {
+                if { $from_addr ne "" } {
+                    set originator $from_addr
+                } elseif { $fixed_sender ne "" } {
+                    set originator $fixed_sender
+                } else {
+                    set originator $message_id
+                }
+            }
+            message_id {
+                set originator $message_id
+            }
+            reply_to {
+                if { $reply_to ne "" } {
+                    set originator $reply_to
+                } elseif { $from_addr ne "" } {
+                    set originator $from_addr
+                } else {
+                    set originator $message_id
+                }
+            }
+            bounce_address -
+            default {
+                # Build the originator address to be used as envelope sender
+                # and originator etc. 
+                set originator [bounce_address -user_id $rcpt_id \
+                                   -package_id $package_id \
+                                   -message_id $message_id]
+            }
+        }
 
         # Set the date
         set message_date [acs_mail_lite::utils::build_date]
@@ -598,7 +642,7 @@ namespace eval acs_mail_lite {
             lappend headers_list [list DCC [join $bcc_addr ","]]
         }
 
-        set originator $message_id
+
 
         set errorMsg ""
         set status ok

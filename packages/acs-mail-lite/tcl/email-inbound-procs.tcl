@@ -816,7 +816,15 @@ ad_proc -public acs_mail_lite::email_type {
                 # or a system hosted same as OpenACS sent it.
                 
                 set dt_h [lindex $hn_list $dt_idx]
-                set dte_cs [ns_imap parsedate $h_arr(${dt_h})]
+                # Cannot use optional ns_imap parsedate here. May not exist.
+                # rfc5322 section 3.3: multiple spaces in date is acceptable
+                # but not for tcl clock scan -format
+                regsub -all -- {[ ][ ]*} $h_arr(${dt_h}) { } dt_spaced
+                # rfc5322 section 3.3: obs-zone breaks clock scan format too
+                set dt_spaced_tz_idx [string first " (" $dt_spaced]
+                set dt_spaced [string trim [string range $dt_spaced 0 ${dt_spaced_tz_idx} ]]
+                set dte_cs [clock scan $dt_spaced -format "%a, %d %b %G %H:%M:%S %z"]
+
                 set diff 1000
                 if { $dte_cs ne "" && $dti_cs ne "" } {
                     set diff [expr { abs( $dte_cs - $dti_cs ) } ]

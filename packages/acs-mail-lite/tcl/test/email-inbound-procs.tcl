@@ -356,21 +356,28 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            set t1_list [list $ho $na $ssl_p]
            aa_equals "Test acs_mail_lite::imap_mailbox_split" $t1_list $t2_list
 
-
+           aa_log "Expect imap procs other than ref407 and ref424 to fail \
+ when nsimap is not installed."
            aa_log "Testing imap open/close via default connection params"
-           set conn_id [acs_mail_lite::imap_conn_close -conn_id "all"]
+           if { [catch {set conn_id [acs_mail_lite::imap_conn_close -conn_id "all"]} errmsg ] } {
+               set conn_id 1
+           }
            set es ""
 
-           aa_log "Following three tests pass when no imap sessions open."
-           aa_false "acs_mail_lite::imap_conn_close -conn_id 'all'" $conn_id
+           aa_log "Following three tests 'pass' when no imap sessions open."
+           aa_false "ref367. acs_mail_lite::imap_conn_close -conn_id 'all'" $conn_id
 
            set conn_id [randomRange 1000]
-           set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]
-           aa_false "acs_mail_lite::imap_conn_close -conn_id '${conn_id}'" $t3
+           if { [catch {set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]} errmsg] } {
+               set t3 1
+           }
+           aa_false "ref373. acs_mail_lite::imap_conn_close -conn_id '${conn_id}'" $t3
 
            set conn_id ""
-           set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]
-           aa_false "acs_mail_lite::imap_conn_close -conn_id '${conn_id}'" $t3
+           if { [catch {set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]} errmsg] } {
+               set t3 1
+           }
+           aa_false "ref379. acs_mail_lite::imap_conn_close -conn_id '${conn_id}'" $t3
 
            aa_log "Following tests various session cases with open/close"
            aa_log "Some will fail if a session cannot be established."
@@ -394,24 +401,34 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            # for example 'INBOX.Trash {}'
 
 
-           set sid [acs_mail_lite::imap_conn_go]
+           if { [catch { set sid [acs_mail_lite::imap_conn_go] } errmsg ] } {
+               set sid "z"
+           } 
            set sid_p [ad_var_type_check_integer_p $sid]
-           aa_true "acs_mail_lite::imap_conn_go" $sid_p
+           aa_true "ref407. acs_mail_lite::imap_conn_go" $sid_p
 
-           set sid2 [acs_mail_lite::imap_conn_close -conn_id $sid]
-           aa_true "acs_mail_lite::imap_conn_close -conn_id '${sid}'" $sid2
+           if { [catch { set sid2 [acs_mail_lite::imap_conn_close -conn_id $sid] } errmsg ] } {
+               set sid2 0
+           }
+           aa_true "ref412. acs_mail_lite::imap_conn_close -conn_id '${sid}'" $sid2
 
-           set sid3 [acs_mail_lite::imap_conn_go -conn_id $sid]
+           if { [catch {set sid3 [acs_mail_lite::imap_conn_go -conn_id $sid] } errmsg ] } {
+               set sid3 "z"
+           }
            set sid3_p [ad_var_type_check_integer_p $sid3]
-           aa_false "acs_mail_lite::imap_conn_go -conn_id '${sid}'" $sid3_p
+           aa_false "ref418. acs_mail_lite::imap_conn_go -conn_id '${sid}'" $sid3_p
 
-           set sid4 [acs_mail_lite::imap_conn_go -conn_id ""]
+           if { [catch {set sid4 [acs_mail_lite::imap_conn_go -conn_id ""] } errmsg] } {
+               set sid4 "z"
+           }
            set sid4_p [ad_var_type_check_integer_p $sid4]
-           aa_true "acs_mail_lite::imap_conn_go -conn_id ''" $sid4_p
+           aa_true "ref424. acs_mail_lite::imap_conn_go -conn_id ''" $sid4_p
 
            set sid5 "all"
-           set closed_p [acs_mail_lite::imap_conn_close -conn_id $sid5]
-           aa_true "acs_mail_lite::imap_conn_close -conn_id '${sid5}'" $closed_p
+           if { [catch {set closed_p [acs_mail_lite::imap_conn_close -conn_id $sid5]} errmsg] } {
+               set closed_p 0
+           }
+           aa_true "ref430. acs_mail_lite::imap_conn_close -conn_id '${sid5}'" $closed_p
 
            aa_log "Testing for auto replies"
 

@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.10.0d2" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.10.0d2.apm">
+    <version name="5.10.0d3" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.10.0d3.apm">
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <owner url="mailto:malte.sussdorff@cognovis.de">Malte Sussdorff</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
@@ -18,7 +18,7 @@
         <description format="text/html">This package provides a service for sending and receiving messages, messages are queued in the database to ensure reliable sending and make sending a message &#39;transactional&#39;. Replacement for acs-mail.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-mail-lite" version="5.10.0d2"/>
+        <provides url="acs-mail-lite" version="5.10.0d3"/>
         <requires url="acs-kernel" version="5.9.0"/>
         <requires url="acs-service-contract" version="5.9.0"/>
         <requires url="acs-tcl" version="5.9.0"/>
@@ -57,7 +57,7 @@ Default for the empty value of this parameter will be to allow only files into t
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="NotificationInterval"  default="7" description="Number of days the users with bouncing email will be notified again on how to reenable the email again" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="NotificationSender"  description="Sender of the notification email" section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="send_immediately"  default="0" description="Boolean value to say whether new mails should be send out immediately or stored in the db before send out." section_name="email"/>
-            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SendImmediatelyP"  default="0" description="Boolean value. Answers question: Should email be sent immediately? 1 = yes, 0 = now, store in queue before sending. (replaces parameter &#39;send_immediately&#39;)" section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="OriginatorEmail"  default="bounce_address" description="Answers question: What value gets assigned to Originator header? Choices are: fixed_sender, from_address, message_id, reply_to, or bounce_address (value returned from acs_mail_lite::bounce_address). Originator defined in rfc2822 section 3.6.2" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SMTPHost"  default="localhost" description="SMTP Host to be used for sending emails" section_name="SMTP"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SMTPPassword"  description="SMTP Password to be used for sending emails" section_name="SMTP"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SMTPPort"  default="25" description="SMTP Port to be used for sending emails" section_name="SMTP"/>
