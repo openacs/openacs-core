@@ -430,7 +430,7 @@ namespace eval acs_mail_lite {
         set rcpt_id 0
         if { [llength $to_addr] eq 1 } {
             set rcpt_id [party::get_by_email -email $to_addr]
-            if {rcpt_id eq ""} {
+            if {$rcpt_id eq ""} {
                 set rcpt_id 0
             }
         }
