@@ -38,7 +38,7 @@
 Set this parameter to the root of your filesystem will disable this restriction.
 Default for the empty value of this parameter will be to allow only files into the temporary folder of the system, as in &#39;[ns_tmpdir]&#39;" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedFont"  description="Font definition (after the font tag) that will always be wrapped around HTML e-mail. Example: face=Verdana size=2. Default is empty" section_name="email"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedSenderEmail"  description="Email addres that will be always the email stored in the sender. Default is empty" section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedSenderEmail"  description="Email address that will be always the email stored in the sender. Default is empty" section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="FolderID"  description="Folder ID of a folder in the content repository that contains files that can be included using checkboxes in each e-mail send out of the system. This effects /lib/email" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IMAPHost"  default="localhost" description="IMAP Host to be used for sending emails" section_name="IMAP"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IMAPPassword"  description="IMAP Password to be used for sending emails" section_name="IMAP"/>

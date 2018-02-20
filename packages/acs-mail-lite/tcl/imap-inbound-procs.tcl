@@ -30,7 +30,7 @@ ad_proc -private acs_mail_lite::imap_conn_set {
 
     If a parameter is passed with value, the value is assigned to parameter.
     
-    @param name_mb See nsimap documentaion for mailbox.name. 
+    @param name_mb See nsimap documentation for mailbox.name. 
     @param port Ignored for now. SSL automatically switches port.
 } {
     # See one row table acs_mail_lite_imap_conn

@@ -1,6 +1,6 @@
 ad_library {
 
-    Provides API for importing email under a varitey of deployment conditions.
+    Provides API for importing email under a variety of deployment conditions.
     
     @creation-date 19 Jul 2017
     @cvs-id $Id$
@@ -1733,7 +1733,7 @@ ad_proc -private acs_mail_lite::inbound_cache_hit_p {
     uidvalidity is defined by imap RFC 3501 2.3.1.1
     https://tools.ietf.org/html/rfc3501#section-2.3.1.1
     Other protocols have an analog mechanism, or one
-    can be made locally to be equivallent in use.
+    can be made locally to be equivalent in use.
 } {
     set hit_p 0
     set src_ext $mailbox_host_name
@@ -2200,7 +2200,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # mime::uniqueID: 
     #     return "</pid/./clock seconds/./incr mime(cid)/@/info hostname/>"
     #     is defined in ns/lib/tcllib1.18/mime/mime.tcl
-    #     mime(cid) is a counter that incriments by one each time called.
+    #     mime(cid) is a counter that increments by one each time called.
 
     lappend check_list content-id
     

@@ -123,13 +123,13 @@ set equation = int( $midpoint + ($time_priority + size_priority) / 2)
     set <code>scan_in_est_dur_per_cycle_s_override</code> to actual wait time the current cycle has to wait including any prior cycle wait time --if the delays exceed one cycle (<code>accumulative_delay_cycles</code>.
   </p>
   <pre>From acs-tcl/tcl/test/ad-proc-test-procs.tcl
-    # This example gets list of implimentations of a callback: (so they could be triggered one by one)
+    # This example gets list of implementations of a callback: (so they could be triggered one by one)
      ad_proc -callback a_callback { -arg1 arg2 } { this is a test callback } -
     set callback_procs [info commands ::callback::a_callback::*]
     
   </pre>
   <p>
-    Each subsquent cycle moves toward renormalization by adjusting
+    Each subsequent cycle moves toward renormalization by adjusting
     <code>scan_in_est_dur_per_cycle_s_override</code> toward value of
     <code>scan_in_est_dur_per_cycle_s</code> by one
     <code>replies_est_dur_per_cycle</code> with minimum of
