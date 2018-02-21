@@ -15,7 +15,7 @@
 create table images (
    image_id       integer
                   constraint images_image_id_fk
-                  references cr_revisions
+                  references cr_revisions on delete cascade
                   constraint images_image_id_pk
                   primary key,
    width          integer,

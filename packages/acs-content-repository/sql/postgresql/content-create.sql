@@ -716,7 +716,7 @@ create table cr_revision_attributes (
                  constraint cr_revision_attributes_pk
                  primary key
                  constraint cr_revision_attributes_fk
-                 references cr_revisions,
+                 references cr_revisions on delete cascade,
   attributes     text
 );
 
