@@ -817,7 +817,16 @@ CREATE OR REPLACE FUNCTION acs_object__delete(
 DECLARE
   obj_type record;
 BEGIN
-  
+
+   -- Also child relationships must be deleted. On delete cascade
+   -- would not help here, as only tuple in acs_rels would go, while
+   -- related acs_object would stay.
+   PERFORM acs_object__delete(object_id)
+     from acs_objects where object_id in
+     (select rel_id from acs_rels where
+          object_id_one = delete__object_id or
+          object_id_two = delete__object_id);
+
   -- GN: the following deletion operation iterates over the id_columns
   -- of the acs_object_types of the type tree for the object and
   -- performs manual deletions in these tables by trying to delete the

@@ -640,10 +640,66 @@ ad_proc -private acs_user::get_portrait_id_not_cached {
 
     @param user_id user_id of the user for whom we need the portrait
 } {
-    return [db_string get_item_id "" -default 0]
+    set item_id [content::item::get_id_by_name \
+                     -name "portrait-of-user-$user_id" \
+                     -parent_id $user_id]
+    return [expr {$item_id ne "" ? $item_id : 0}]
 }
 
-ad_proc -private acs_user::erase_portrait {
+ad_proc -public acs_user::create_portrait {
+    {-user_id:required}
+    {-description ""}
+    {-filename ""}
+    {-mime_type ""}
+    {-file:required}
+} {    
+    Sets (or resets) the portraif for current user to the one
+    specified.
+
+    @param user_id user_id of user whose portrait we want to set.
+
+    @param description A caption for the portrait.
+    
+    @param filename Original filename of the portrait. Used to guess
+    the mimetype if an explicit one is not specified.
+
+    @param mime_type mimetype of the portrait. If missing, filename
+    will be used to guess one.
+
+    @param file Actual file containing the portrait
+
+    @return item_id of the new content item
+} {
+    # Delete old portrait, if any
+    acs_user::erase_portrait -user_id $user_id
+
+    if {$mime_type eq ""} {
+        # This simple check will suffice here. CR has its own means to
+        # ensure a valid mimetype
+        set mime_type [ns_guesstype $filename]
+    }
+    
+    # Create the new portrait
+    set item_id [content::item::new \
+                     -name "portrait-of-user-$user_id" \
+                     -parent_id $user_id \
+                     -content_type image \
+                     -storage_type file \
+                     -creation_user [ad_conn user_id] \
+                     -creation_ip [ad_conn peeraddr] \
+                     -description $description \
+                     -tmp_filename $file \
+                     -is_live t \
+                     -mime_type $mime_type]
+
+    # Create portrait relationship
+    db_exec_plsql create_rel {}
+        
+    return $item_id
+    
+}
+
+ad_proc -public acs_user::erase_portrait {
     {-user_id:required}
 } {
     Erases portrait of a user
@@ -653,13 +709,13 @@ ad_proc -private acs_user::erase_portrait {
     set item_id [acs_user::get_portrait_id \
                      -user_id $user_id]
 
-    if {$item_id != 0} {
+    if { $item_id != 0 } {
         # Delete the item
         content::item::delete -item_id $item_id
-        
-        # Flush the portrait cache
-        util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
     }
+
+    # Flush the portrait cache
+    util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
 }
 
 # Local variables:

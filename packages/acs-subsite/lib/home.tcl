@@ -47,10 +47,15 @@ set system_name [ad_system_name]
 set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_url [ad_return_url] } }]
 
 if {[parameter::get -parameter SolicitPortraitP -default 0]} {
-    # we have portraits for some users 
-    if {![db_0or1row get_portrait_info {}]} {
+    # we have portraits for some users
+    set portrait_id [acs_user::get_portrait_id -user_id $user_id]
+    if {$portrait_id == 0} {
 	set portrait_state "upload"
     } else {
+        content::item::get -item_id $portrait_id -array_name portrait
+        set publish_date         $portrait(publish_date)
+        set portrait_title       $portrait(title)
+        set portrait_description $portrait(description)
         if { $portrait_title eq "" } {
             set portrait_title "[_ acs-subsite.no_portrait_title_message]"
         }

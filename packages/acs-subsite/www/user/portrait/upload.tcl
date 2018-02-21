@@ -15,11 +15,13 @@ ad_page_contract {
 
 set current_user_id [ad_conn user_id]
 
-set portrait_p [db_0or1row checkportrait {}]
+set portrait_id [acs_user::get_portrait_id -user_id $user_id]
+set portrait_p [expr {$portrait_id != 0}]
 
 if { $portrait_p } {
+    content::item::get -item_id $portrait_id -array_name portrait
     set doc(title) [_ acs-subsite.upload_a_replacement_por]
-    set description [db_string getstory {}]
+    set description $portrait(description)
 } else {
     set doc(title) [_ acs-subsite.Upload_Portrait]
     set description ""
@@ -36,12 +38,16 @@ if {$user_id eq ""} {
 
 permission::require_permission -object_id $user_id -privilege "write"
 
-if {![db_0or1row get_name {}]} {
+if {![person::person_p -party_id $user_id]} {
     ad_return_error \
         "Account Unavailable" \
         "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
     ad_script_abort
 }
+
+acs_user::get -user_id $user_id -array user
+set first_names $user(first_names)
+set last_name   $user(last_name)
 
 if { $return_url eq "" } {
     set return_url [ad_pvt_home]
@@ -109,79 +115,15 @@ ad_form -extend -name "portrait_upload" -validate {
 
 } -on_submit {
 
-    # this stuff only makes sense to do if we know the file exists
-    set tmp_filename [ns_queryget upload_file.tmpfile]
-
-    set file_extension [string tolower [file extension $upload_file]]
-
-    # remove the first . from the file extension
-    regsub "\." $file_extension "" file_extension
-
-    set guessed_file_type [ns_guesstype $upload_file]
-
-    set n_bytes [file size $tmp_filename]
-
-    # Sizes we want for the portrait
-    set sizename_list {avatar thumbnail}
-    array set resized_portrait [list]
-
-    # strip off the C:\directories... crud and just get the file name
-    if {![regexp {([^/\\]+)$} $upload_file match client_filename]} {
-        # couldn't find a match
-        set client_filename $upload_file
-    }
-
-    # Wrap the whole creation along with the relationship in a big transaction
-    # Just to make sure it really worked.
-    
     db_transaction {
-        set item_id [content::item::get_id_by_name -name "portrait-of-user-$user_id" -parent_id $user_id]
-        if { $item_id eq ""} { 
-            # The user doesn't have a portrait relation yet
-            set item_id [content::item::new -name "portrait-of-user-$user_id" -parent_id $user_id -content_type image]
-        } else {
-            foreach sizename $sizename_list {
-                set resized_portrait($sizename) [image::get_resized_item_id \
-                                                     -item_id $item_id \
-                                                     -size_name $sizename]
-            }
-        }
 
-        # Load the file into the revision
-        set revision_id [cr_import_content \
-                             -item_id $item_id \
-                             -image_only \
-                             -storage_type file \
-                             -creation_user [ad_conn user_id] \
-                             -creation_ip [ad_conn peeraddr] \
-                             -description $portrait_comment \
-                             $user_id \
-                             $tmp_filename \
-                             $n_bytes \
-                             $guessed_file_type \
-                             "portrait-of-user-$user_id"]
-
-        content::item::set_live_revision -revision_id $revision_id
+        acs_user::create_portrait \
+            -user_id $user_id \
+            -description $portrait_comment \
+            -filename $upload_file \
+            -file [ns_queryget upload_file.tmpfile]
         
-        foreach name [array names resized_portrait] {
-            if { $resized_portrait($name) ne "" } {
-                # Delete the item
-                content::item::delete -item_id $resized_portrait($name)
-
-                 # Resize the item
-                image::resize -item_id $item_id -size_name $name
-            }
-        }
-
-        # Only create the new relationship if there does not exist one already
-        set user_portrait_rel_id [relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]
-        if {$user_portrait_rel_id eq ""} {
-            db_exec_plsql create_rel {}
-        }
     }
-
-    # Flush the portrait cache
-    util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
 
 } -after_submit {
 
@@ -189,8 +131,6 @@ ad_form -extend -name "portrait_upload" -validate {
     ad_script_abort
 
 }
-
-ad_return_template
 
 # Local variables:
 #    mode: tcl

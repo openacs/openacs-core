@@ -59,21 +59,11 @@ if {![db_0or1row user_info {
     return
 }
 
-
-if {![db_0or1row get_item_id {
-    select live_revision as revision_id, item_id
-    from acs_rels a, cr_items c
-    where a.object_id_two = c.item_id
-    and a.object_id_one = :user_id
-    and a.rel_type = 'user_portrait_rel'
-    and live_revision is not null
-    order by revision_id desc
-    limit 1
-}] || $revision_id eq ""} {
-    # The user doesn't have a portrait yet
-    set portrait_p 0
-} else {
-    set portrait_p 1
+set item_id [acs_user::get_portrait_id \
+                 -user_id $user_id]
+set portrait_p [expr {$item_id != 0}]
+if {$portrait_p} {
+    set revision_id [content::item::get_live_revision -item_id $item_id]
 }
     
 if { $admin_p } {

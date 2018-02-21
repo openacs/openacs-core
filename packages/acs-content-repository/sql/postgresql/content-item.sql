@@ -1022,42 +1022,41 @@ select define_function_args('content_item__del','item_id');
 CREATE OR REPLACE FUNCTION content_item__del(
    delete__item_id integer
 ) RETURNS integer AS $$
-DECLARE
-  v_revision_val record;
-  v_child_val record;
 BEGIN
+
+  -- Also child relationships must be deleted. On delete cascade would
+  -- not help here, as related acs_object would stay.
+  PERFORM acs_object__delete(object_id)
+    from acs_objects where object_id in 
+    (select rel_id from cr_child_rels where
+         child_id  = delete__item_id or
+         parent_id = delete__item_id);
+
   --
   -- Delete all revisions of this item
   --
-  -- The following loop could be dropped / replaced by a cascade
-  -- operation, when proper foreign keys are used along the
-  -- inheritance path.
+  -- On delete cascade should work for us, but not in case of
+  -- relationships. Therefore, we call acs_object__delete explicitly
+  -- on the revisions. Is is also safer in general, as referential
+  -- integrity might not have been enforced everytime.
   --
-  for v_revision_val in select revision_id 
-                        from   cr_revisions
-                        where  item_id = delete__item_id 
-  LOOP
-    PERFORM acs_object__delete(v_revision_val.revision_id);
-  end loop;
+  PERFORM acs_object__delete(revision_id)
+    from cr_revisions where item_id = delete__item_id;
 
   --
   -- Delete all children of this item via a recursive call.
   --
-  -- The following loop is just needed to delete the revisions of
-  -- child items. It could be removed, when proper foreign keys are
-  -- used along the inheritance path of cr_content_revisions (which is
-  -- not enforced and not always the case).
+  -- On delete cascade should work for us, but not in case of
+  -- relationships. Therefore, we call acs_object__delete explicitly
+  -- on the revisions. Is is also safer in general, as referential
+  -- integrity might not have been enforced everytime.
   --
-  for v_child_val in select item_id
-                      from   cr_items
-                      where  parent_id = delete__item_id 
-  LOOP     
-     PERFORM content_item__delete(v_child_val.item_id);
-  end loop; 
+  PERFORM content_item__delete(item_id)
+    from cr_items where parent_id = delete__item_id;
 
   --
   -- Finally, delete the acs_object of the item.
-  --
+  --      
   PERFORM acs_object__delete(delete__item_id);
 
   return 0; 
