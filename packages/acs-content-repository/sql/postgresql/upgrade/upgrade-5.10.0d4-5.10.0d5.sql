@@ -9,16 +9,20 @@ begin;
 
 -- Cleanup
 
--- delete dead tuples coming from sins of the past (mostly erased portraits)
-select acs_object__delete(object_id) from acs_objects o
- where object_type = 'cr_item_child_rel' and
-   not exists (select 1 from cr_child_rels where rel_id = o.object_id);
+-- This is not done unless uncommented, because could take a long time on busy sites!
+-- -- delete dead tuples coming from sins of the past (mostly erased portraits)
+-- select acs_object__delete(object_id) from acs_objects o
+--  where object_type = 'cr_item_child_rel' and
+--    not exists (select 1 from cr_child_rels where rel_id = o.object_id);
 
 
 -- Data model upgrade
 
 alter table images
-  drop constraint images_image_id_fk,
+  -- current name of the constraint
+  drop constraint if exists images_image_id_fk,
+  -- old name of the same constraint in old databases
+  drop constraint if exists "$1",
   add constraint images_image_id_fk foreign key (image_id)
      references cr_revisions(revision_id) on delete cascade;
 

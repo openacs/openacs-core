@@ -9,12 +9,13 @@ begin;
 
 -- Cleanup
 
-   select acs_object__delete(object_id)
-     from acs_objects o
-     where object_type = 'user_portrait_rel'
-       and not exists (
-        select 1 from acs_rels
-        where rel_id = o.object_id);
+-- This is not done if not uncommented, as could take a long time on busy sites!
+   -- select acs_object__delete(object_id)
+   --   from acs_objects o
+   --   where object_type = 'user_portrait_rel'
+   --     and not exists (
+   --      select 1 from acs_rels
+   --      where rel_id = o.object_id);
 
 -- Data model upgrade
 
