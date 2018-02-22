@@ -1067,7 +1067,7 @@ ad_proc -private rp_handler {} {
         ad_returnredirect [ns_conn url]
         return
     }
-    
+
     if {[info exists ::ad_conn(extra_url)]
         && $::ad_conn(extra_url) ne ""
         && ![string match "*$::ad_conn(extra_url)" [ns_conn url]]
@@ -1083,10 +1083,21 @@ ad_proc -private rp_handler {} {
         # sufficient to handle request processor loops, but maybe other
         # variables have to be reset either.
         #
-        array set node [site_node::get -url [ad_conn url]]
-        ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
-        ad_conn -set package_key $node(package_key)
-        ad_conn -set package_url $node(url)
+        # However, also internal redirects to error pages happens the
+        # same way, but we need to deliver the current url (coming
+        # from ns_url) and not the original url before the redirect
+        # (the extra_url). This is especially important on
+        # host-node-mapped subsites, when e.g. the error pages are
+        # mapped to /shared/404 etc.
+        #
+        if {[ns_conn status] != 200} {
+            ad_conn -set extra_url [ns_conn url]
+        } else {
+            array set node [site_node::get -url [ad_conn url]]
+            ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
+            ad_conn -set package_key $node(package_key)
+            ad_conn -set package_url $node(url)
+        }
     }
 
     # JCD: keep track of rp_handler call count to prevent dev support from recording
