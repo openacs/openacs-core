@@ -1919,12 +1919,12 @@ ad_page_contract_filter -type post time24 { name time } {
     }
 
     if {
-        "" eq $time(hours) \
-            || "" eq $time(minutes) \
-            || "" eq $time(seconds) \
-            || $time(hours) < 0 || $time(hours) > 23 \
-            || $time(minutes) < 0 || $time(minutes) > 59 \
-            || $time(seconds) < 0 || $time(seconds) > 59
+        "" eq $time(hours)
+        || "" eq $time(minutes)
+        || "" eq $time(seconds)
+        || $time(hours) < 0 || $time(hours) > 23
+        || $time(minutes) < 0 || $time(minutes) > 59
+        || $time(seconds) < 0 || $time(seconds) > 59
     } {
         ad_complain [_ acs-tcl.lt_Invalid_time_timetime_2]
         return 0
