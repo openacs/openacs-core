@@ -266,8 +266,8 @@ ad_proc -private apm_build_repository {
     file mkdir $work_dir
 
     cd $work_dir
-    catch { exec $cd_helper $work_dir $cvs_command -d $cvs_root -z3 co openacs-4/readme.txt } msg
-    catch { exec $cd_helper $work_dir $cvs_command -d $cvs_root -z3 log -h openacs-4/readme.txt } output
+    set msg [ exec $cd_helper $work_dir $cvs_command -d $cvs_root -z3 co openacs-4/readme.txt ]
+    set output [ exec $cd_helper $work_dir $cvs_command -d $cvs_root -z3 log -h openacs-4/readme.txt ]
 
     set lines [split $output \n]
     for { set i 0 } { $i < [llength $lines] } { incr i } {
