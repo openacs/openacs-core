@@ -2163,12 +2163,14 @@ ad_proc -public security::validated_host_header {} {
         return ""
     }
     set result [db_list host_header_field_mapped {select 1 from host_node_map where host = :hostName}]
-    ns_log notice "checking entry <$hostName> from host_node_map -> $result"
+    #ns_log notice "security::validated_host_header: checking entry <$hostName> from host_node_map -> $result"
+
     if {$result == 1} {
         #
         # port is ignored
         #
         set $key 1
+        #ns_log notice "security::validated_host_header: checking entry <$hostName> from host_node_map return host <$host>"
         return $host
     }
 
