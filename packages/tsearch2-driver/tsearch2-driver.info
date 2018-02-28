@@ -7,14 +7,14 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.10.0d1" url="http://openacs.org/repository/download/apm/tsearch2-driver-5.10.0d1.apm">
+    <version name="5.10.0d2" url="http://openacs.org/repository/download/apm/tsearch2-driver-5.10.0d2.apm">
         <owner url="mailto:dave@thedesignexperience.org">Dave Bauer</owner>
         <summary>Full text search support for Search via Tsearch2.</summary>
         <release-date>2017-08-06</release-date>
         <description format="text/html">Provides an implementation for the search packages service contract for searching on postgresql.</description>
         <maturity>3</maturity>
 
-        <provides url="tsearch2-driver" version="5.10.0d1"/>
+        <provides url="tsearch2-driver" version="5.10.0d2"/>
         <requires url="search" version="5.9.1"/>
 
         <callbacks>
