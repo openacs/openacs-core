@@ -169,7 +169,7 @@ ad_proc -private lang::system::timezone_support_p {} {
     ref-timezones and acs-reference packages need to be installed.
     Those packages are currently not part of the OpenACS kernel.
 } {
-    return [apm_package_installed_p ref-timezones]
+    return [expr {[apm_package_id_from_key ref-timezones] != 0}]
 }
     
 ad_proc -public lang::system::set_timezone { 
