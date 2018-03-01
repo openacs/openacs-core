@@ -7,4 +7,5 @@
   <msg key="Has_account_on_system_name">Has an account on %system_name%</msg>
   <msg key="Invalid_username_or_password">Invalid username or password</msg>
   <msg key="lt_Not_getting_the_results_you_expected">Not getting the results you expected? Try searching:</msg>
+  <msg key="To_many_failed_login_attempts">Access rejected because of to many invalid login attempts. Try again later!</msg>
 </message_catalog>

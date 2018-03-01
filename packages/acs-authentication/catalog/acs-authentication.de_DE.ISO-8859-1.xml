@@ -7,4 +7,5 @@
   <msg key="Has_account_on_system_name">Hat ein Benutzerkonto auf %system_name%</msg>
   <msg key="Invalid_username_or_password">Benutzeridentifikation oder Passwort ist falsch</msg>
   <msg key="lt_Not_getting_the_results_you_expected">Nicht die Resultate, die Sie erwartet haben? Suchen Sie nach: </msg>
+  <msg key="To_many_failed_login_attempts">Zugriff aufgrund zu vieler fehlgeschlagener Anmeldeversuche temporär gesperrt. Versuchen Sie es später erneut!</msg>
 </message_catalog>

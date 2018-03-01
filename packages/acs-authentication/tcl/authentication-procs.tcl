@@ -10,7 +10,7 @@ namespace eval auth {}
 namespace eval auth::authentication {}
 namespace eval auth::registration {}
 namespace eval auth::user_info {}
-
+namespace eval auth::login_attempts {}
 
 #####
 #
@@ -202,6 +202,22 @@ ad_proc -public auth::authenticate {
     </ul>
 
 } {
+
+    # Login Brute Force Prevention
+    set login_attempt_key "[ad_conn peeraddr]-[ad_conn subsite_id]"
+
+    if { [::auth::login_attempts::threshold_reached_p -login_attempt_key $login_attempt_key] } {
+        set auth_message [_ acs-authentication.To_many_failed_login_attempts]   
+
+       	return [list auth_status "failed_to_connect" \
+                    auth_message $auth_message \
+                    account_status "closed" \
+                    account_message "[_ acs-subsite.Auth_internal_error]"]
+    }
+
+    # record login attempt
+    ::auth::login_attempts::record -login_attempt_key $login_attempt_key
+
     if { $username eq "" } {
         if { $email eq "" } {
             set result(auth_status) "auth_error"
@@ -228,17 +244,15 @@ ad_proc -public auth::authenticate {
         }
     }
 
+    # set default values for the result array
+    array set result {auth_status "n/a" account_status "n/a"}
+    
     ad_try {
         array set result [auth::authentication::Authenticate \
                               -username $username \
                               -authority_id $authority_id \
                               -password $password]
 
-        # We do this so that if there aren't even the auth_status and account_status that need be
-        # in the array, that gets caught below
-        if {$result(auth_status) eq "ok"} {
-            set dummy $result(account_status)
-        }
     } on error {errorMsg} {
         set result(auth_status) failed_to_connect
         set result(auth_message) $errorMsg
@@ -254,6 +268,9 @@ ad_proc -public auth::authenticate {
     # Verify result/auth_message return codes
     switch $result(auth_status) {
         ok {
+	    # reset/unset failed login attempts counter after a successfull authentication
+ 	    ::auth::login_attempts::reset -login_attempt_key $login_attempt_key
+
             # Continue below
         }
         no_account -
@@ -1897,6 +1914,101 @@ ad_proc -private auth::user_info::GetUserInfo {
                 -impl_id $impl_id \
                 -operation GetUserInfo \
                 -call_args [list $username $parameters]]
+}
+#####
+#
+# auth::login_attempts
+#
+#####
+
+# Prevent/slowdown brute force attacks on login by counting the number of
+# failed consecutive failed login attempts based on the ip-address and subsite.
+#
+# After the maximum number of consecutive failed login attempts
+# has been excedeed, all further login attempts will be automatically rejected
+# for a specifed lock-out/cool-down time, even if the correct credentials have been
+# provided. Every successfull login before reaching the threshold resets the 
+# counter to 0 again. Beware, the counting is done via caching and is
+# therefore not persistent.
+#
+# Configure this feature via the following acs-authentication parameters:
+#
+# MaxConsecutiveFailedLoginAttempts: max number of consecutive failed login attempts;
+# Default: 0 (= infinite attempts)
+#
+# MaxConsecutiveFailedLoginAttemptsLockoutTime : Timespan in seconds
+# for which every new login attempt is rejected after the threshold has been reached.
+# Default: 21600 seconds (six hours)
+#
+
+ad_proc -private ::auth::login_attempts::threshold_reached_p {
+    {-login_attempt_key "[ad_conn peeraddr]-[ad_conn subsite_id]"}
+}  {
+    Check if the maximum number of consecutive failed
+    login attempts has been reached
+
+    @param login_attempt_key Identifier of this login attempt. Defaults to "[ad_conn peeraddr]-[ad_conn subsite]"
+
+    @return 1 if limit has been reached otherwise 0
+} {
+
+    set max_failed_login_attempts [parameter::get_from_package_key \
+                                       -parameter "MaxConsecutiveFailedLoginAttempts" \
+                                       -package_key "acs-authentication" \
+                                       -default 0]
+
+    if {$max_failed_login_attempts > 0 && [::auth::login_attempts::get -key $login_attempt_key] > $max_failed_login_attempts} {
+        return 1
+    } else {
+        return 0
+    }
+
+}
+
+ad_proc -private ::auth::login_attempts::record {
+    {-login_attempt_key "[ad_conn peeraddr]-[ad_conn subsite_id]"}
+}  {
+    Record a failed login attempt
+
+    @param login_attempt_key Identifier of this login attempt. Defaults to "[ad_conn peeraddr]-[ad_conn subsite]"
+
+} {
+
+    if { [parameter::get_from_package_key -parameter "MaxConsecutiveFailedLoginAttempts" -package_key "acs-authentication" -default 0] } {
+
+        set max_age [parameter::get_from_package_key \
+                        -parameter "MaxConsecutiveFailedLoginAttemptsLockoutTime" \
+                        -package_key "acs-authentication" \
+                        -default 21600]
+
+        ::auth::login_attempts::login_attempt_incr -key $login_attempt_key -max_age $max_age
+    }
+
+}
+
+ad_proc -public ::auth::login_attempts::reset {
+    {-login_attempt_key "[ad_conn peeraddr]-[ad_conn subsite_id]"}
+}  {
+    Flush the recorded failed login attempt for the provided login_attempt_key
+
+    @param login_attempt_key Identifier of this login attempt. Defaults to "[ad_conn peeraddr]-[ad_conn subsite]"
+
+} {
+
+    ::auth::login_attempts::login_attempt_flush -key $login_attempt_key
+
+}
+
+ad_proc -public ::auth::login_attempts::reset_all {}  {
+    Flush all recored failed login attempts
+} {
+    ::auth::login_attempts::flush_all
+}
+
+ad_proc -public ::auth::login_attempts::get_all {}  {
+    Get all failed login attempts
+} {
+    ::auth::login_attempts::all_entries
 }
 
 # Local variables:
