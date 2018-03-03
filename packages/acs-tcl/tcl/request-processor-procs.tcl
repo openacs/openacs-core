@@ -817,7 +817,7 @@ ad_proc -private rp_filter { why } {
                     permission::require_permission -object_id [ad_conn object_id] -privilege admin
                 }
                 sitewide-admin/* {
-                    permission::require_permission -object_id [acs_lookup_magic_object security_context_root] -privilege admin
+                    permission::require_permission -object_id [acs_magic_object security_context_root] -privilege admin
                 }
                 default {
                     # ns_log notice "rp_filter calls: permission::require_permission -object_id [ad_conn object_id] -privilege read"

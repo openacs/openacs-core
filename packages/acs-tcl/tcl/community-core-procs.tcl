@@ -507,7 +507,7 @@ ad_proc -public acs_user::site_wide_admin_p {
     }
 
     return [permission::permission_p -party_id $user_id \
-		-object_id [acs_lookup_magic_object security_context_root] \
+		-object_id [acs_magic_object security_context_root] \
 		-privilege "admin"]
 }
 
