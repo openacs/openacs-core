@@ -1856,52 +1856,68 @@ return $html
 #
 ####################
 
+if {![info commands ns_reflow_text] ne ""} {
+    ad_proc ns_reflow_text {{-width 80} {-prefix ""} input} {
 
-ad_proc wrap_string {input {threshold 80}} {
-    wraps a string to be no wider than 80 columns by inserting line breaks
-} {
-    set result_rows [list]
-    set start_of_line_index 0
-    while 1 {
-        set this_line [string range $input $start_of_line_index [expr {$start_of_line_index + $threshold - 1}]]
-        if { $this_line eq "" } {
-            return [join $result_rows "\n"]
-        }
-        set first_new_line_pos [string first "\n" $this_line]
-        if { $first_new_line_pos != -1 } {
-            # there is a newline
-            lappend result_rows [string range $input $start_of_line_index [expr {$start_of_line_index + $first_new_line_pos - 1}]]
-            set start_of_line_index [expr {$start_of_line_index + $first_new_line_pos + 1}]
-            continue
-        }
-        if { $start_of_line_index + $threshold + 1 >= [string length $input] } {
-            # we're on the last line and it is < threshold so just return it
-            lappend result_rows $this_line
-            return [join $result_rows "\n"]
-        }
-        set last_space_pos [string last " " $this_line]
-        if { $last_space_pos == -1 } {
-            # no space found!  Try the first space in the whole rest of the string
-            set next_space_pos [string first " " [string range $input $start_of_line_index end]]
-            set next_newline_pos [string first "\n" [string range $input $start_of_line_index end]]
-            if {$next_space_pos == -1} {
-                set last_space_pos $next_newline_pos
-            } elseif {$next_space_pos < $next_newline_pos} {
-                set last_space_pos $next_space_pos
-            } else {
-                set last_space_pos $next_newline_pos
+        Reflow a plain text to the given width and prefix every line
+        optionally wiith the provided string
+
+    } {
+        set result_rows [list]
+        set start_of_line_index 0
+        while 1 {
+            set this_line [string range $input $start_of_line_index [expr {$start_of_line_index + $width - 1}]]
+            if { $this_line eq "" } {
+                set result [join $result_rows "\n"]
+                break
             }
+            set first_new_line_pos [string first "\n" $this_line]
+            if { $first_new_line_pos != -1 } {
+                # there is a newline
+                lappend result_rows [string range $input $start_of_line_index \
+                                         [expr {$start_of_line_index + $first_new_line_pos - 1}]]
+                set start_of_line_index [expr {$start_of_line_index + $first_new_line_pos + 1}]
+                continue
+            }
+            if { $start_of_line_index + $width + 1 >= [string length $input] } {
+                # we're on the last line and it is < width so just return it
+                lappend result_rows $this_line
+                break
+            }
+            set last_space_pos [string last " " $this_line]
             if { $last_space_pos == -1 } {
-                # didn't find any more whitespace, append the whole thing as a line
-                lappend result_rows [string range $input $start_of_line_index end]
-                return [join $result_rows "\n"]
+                # no space found!  Try the first space in the whole rest of the string
+                set next_space_pos [string first " " [string range $input $start_of_line_index end]]
+                set next_newline_pos [string first "\n" [string range $input $start_of_line_index end]]
+                if {$next_space_pos == -1} {
+                    set last_space_pos $next_newline_pos
+                } elseif {$next_space_pos < $next_newline_pos} {
+                    set last_space_pos $next_space_pos
+                } else {
+                    set last_space_pos $next_newline_pos
+                }
+                if { $last_space_pos == -1 } {
+                    # didn't find any more whitespace, append the whole thing as a line
+                    lappend result_rows [string range $input $start_of_line_index end]
+                    break
+                }
             }
+            # OK, we have a last space pos of some sort
+            set real_index_of_space [expr {$start_of_line_index + $last_space_pos}]
+            lappend result_rows [string range $input $start_of_line_index $real_index_of_space-1]
+            set start_of_line_index [expr {$start_of_line_index + $last_space_pos + 1}]
         }
-        # OK, we have a last space pos of some sort
-        set real_index_of_space [expr {$start_of_line_index + $last_space_pos}]
-        lappend result_rows [string range $input $start_of_line_index $real_index_of_space-1]
-        set start_of_line_index [expr {$start_of_line_index + $last_space_pos + 1}]
+        return $prefix[join $result_rows "\n$prefix"]
     }
+}
+
+
+ad_proc -deprecated wrap_string {input {width 80}} {
+    wraps a string to be no wider than 80 columns by inserting line breaks
+
+    @see ns_reflow_text
+} {
+    return [ns_reflow_text -width $width -prefix "" $input]
 }
 
 
@@ -2080,7 +2096,7 @@ ad_proc -public ad_html_text_convert {
                     set text [ad_text_to_html -- $text]
                 }
                 text/plain {
-                    set text [wrap_string $text $maxlen]
+                    set text [ns_reflow_text -width $maxlen -- $text]
                 }
             }
         }
@@ -2090,7 +2106,7 @@ ad_proc -public ad_html_text_convert {
                     set text "<pre>[ad_text_to_html -no_lines -- $text]</pre>"
                 }
                 text/plain {
-                    set text [wrap_string $text $maxlen]
+                    set text [ns_reflow_text -width $maxlen -- $text]
                 }
             }
         }
@@ -2110,7 +2126,7 @@ ad_proc -public ad_html_text_convert {
                     set text "<pre>[ad_text_to_html -no_lines -- $text]</pre>"
                 }
                 text/plain {
-                    set text [wrap_string $text $maxlen]
+                    set text [ns_reflow_text -width $maxlen -- $text]
                 }
             }
         }
