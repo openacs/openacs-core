@@ -24,7 +24,9 @@ ad_proc -public ad_acs_version {} {
 
     @author Peter Marklund
 } {
-    return [util_memoize ad_acs_version_no_cache]
+    set key ::acs::version
+    if {[info exists $key]} {return [set $key]}
+    set $key [util_memoize ad_acs_version_no_cache]
 }
 
 ad_proc -public ad_acs_release_date {} {
