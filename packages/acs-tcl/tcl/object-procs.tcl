@@ -39,7 +39,12 @@ ad_proc -public acs_magic_object { name } {
 
     @error if no object exists with that magic name.
 } {
-    return [util_memoize [list acs_lookup_magic_object $name]]
+    set key ::acs::magic_object($name)
+    if {[info exists $key]} {
+        return [set $key]
+    } else {
+        return [set $key [acs_lookup_magic_object $name]]
+    }
 }
 
 ad_proc -public acs_object_name { object_id } {
