@@ -437,8 +437,8 @@ x
     can be used in place of flags
     (see <a href="proc-view?proc=ad_page_contract_filter"><code>ad_page_contract_filter</code></a>).
     There's also an interface for pluggable <b>filter rules</b>, which determine
-    what filters are applied to arguments (see <a
-                                           href="proc-view?proc=ad_page_contract_filter_rule"><code>ad_page_contract_filter_rule</code></a>).
+    what filters are applied to arguments
+    (see <a href="proc-view?proc=ad_page_contract_filter_rule"><code>ad_page_contract_filter_rule</code></a>).
 
     <p>
 
@@ -451,8 +451,8 @@ x
 
     <h3>Default Values</h3>
 
-    <strong>Default values</strong> are filled in from left to right (or top to
-                                                                      bottom), so it can depend on the values or variables that comes
+    <strong>Default values</strong> are filled in from left to right
+    (or top to bottom), so it can depend on the values or variables that comes
     before it, like in the example above. Default values are <strong>only used when
     the argument is not supplied</strong>, thus you can't use default values to override the
     empty string. (This behavior has been questioned and may have to
@@ -753,7 +753,7 @@ x
     }
 
     # If there are no query arguments to process, we're done
-    if { ![info exists query] || $query eq "" } {
+    if { $query eq "" } {
         return
     }
 
@@ -940,11 +940,11 @@ x
 
                 foreach filter $apc_filters($formal_name) {
                     set ::ad_page_contract_errorkeys [concat $formal_name:$filter $::ad_page_contract_errorkeys]
+                    set filter_proc [ad_page_contract_filter_proc $filter]
                     if { ![info exists apc_filter_parameters($formal_name:$filter)] } {
-                        set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value]
+                        set filter_ok_p [$filter_proc $formal_name actual_value]
                     } else {
-                        set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value \
-                                             $apc_filter_parameters($formal_name:$filter)]
+                        set filter_ok_p [$filter_proc $formal_name actual_value $apc_filter_parameters($formal_name:$filter)]
                     }
                     set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
 
@@ -1370,8 +1370,9 @@ ad_proc -public ad_page_contract_filter {
     <p>
 
     The filter proc <b>must</b> return either 1 if it accepts the value or 0 if it rejects it.
-    Any problem with the value is reported using <b><code>ad_complain</code></b> (see documentation
-                                                                                  for this). <b>Note:</b> Any modifications you make to value from inside your code block <b>will modify
+    Any problem with the value is reported using <b><code>ad_complain</code></b>
+    (see documentation for this). <b>Note:</b>
+    Any modifications you make to value from inside your code block <b>will modify
     the actual value being set in the page.</b>
 
     <p>
@@ -1486,7 +1487,13 @@ ad_proc ad_page_contract_filter_proc { filter } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    return [lindex [nsv_get ad_page_contract_filters $filter] 1]
+    #
+    # No need to go to the nsv causing mutex locks; note, that the
+    # name of the filter-procs is more or less hardcoded in the
+    # doc-strings above.
+    #
+    return ad_page_contract_filter_proc_$filter
+    #return [lindex [nsv_get ad_page_contract_filters $filter] 1]
 }
 
 ad_proc ad_page_contract_filter_script { filter } {
@@ -1528,10 +1535,11 @@ ad_proc ad_page_contract_filter_invoke {
     @creation-date 25 July 2000
 } {
     upvar $value_varname value
+    set filter_proc [ad_page_contract_filter_proc $filter]
     if { $parameters eq "" } {
-        set filter_result [[ad_page_contract_filter_proc $filter] $name value]
+        set filter_result [$filter_proc $filter] $name value]
     } else {
-        set filter_result [[ad_page_contract_filter_proc $filter] $name value $parameters]
+        set filter_result [$filter_proc $name value $parameters]
     }
     if { $filter_result } {
         ad_page_contract_set_validation_passed $name:$filter
