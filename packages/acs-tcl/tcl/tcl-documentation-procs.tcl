@@ -1305,7 +1305,7 @@ ad_proc ad_include_contract {docstring args} {
 #
 ####################
 #
-# ad_page_contract_filters($flag) = [list $type $priority $proc_name $doc_string [info script]]
+# ad_page_contract_filters($flag) = [list $type $priority $proc_name $doc_string $script $priority]
 #
 # ad_page_contract_mutex(filters) = mutex
 #
