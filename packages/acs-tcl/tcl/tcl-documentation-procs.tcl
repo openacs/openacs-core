@@ -656,7 +656,7 @@ x
         # Apply filter rules
         #
 
-        foreach filter_rule [nsv_array names ad_page_contract_filter_rules] {
+        foreach filter_rule [array names ::acs::ad_page_contract_filter_rules] {
             [ad_page_contract_filter_rule_proc $filter_rule] $name flag_list
         }
 
@@ -1306,7 +1306,6 @@ ad_proc ad_include_contract {docstring args} {
 ####################
 #
 # ad_page_contract_filters($flag) = [list $type $proc_name $doc_string $script $priority]
-#
 # ad_page_contract_mutex(filters) = mutex
 #
 # types are: internal, filter, post
@@ -1326,6 +1325,7 @@ if { [apm_first_time_loading_p] } {
     nsv_array set ad_page_contract_filters $internal_filters
     array set ::acs::ad_page_contract_filters $internal_filters
     nsv_array set ad_page_contract_filter_rules {}
+    array set ::acs::ad_page_contract_filter_rules {}
 
     nsv_set ad_page_contract_mutex filters [ns_mutex create]
     nsv_set ad_page_contract_mutex filter_rules [ns_mutex create]
@@ -1561,8 +1561,7 @@ ad_proc ad_page_contract_filter_invoke {
 ####################
 
 #
-# ad_page_contract_filter_rules($name) = [list $proc_name $doc_string [info script]]
-#
+# ad_page_contract_filter_rules($name) = [list $proc_name $doc_string $script]
 # ad_page_contract_mutex(filter_rules) = mutex
 #
 
@@ -1602,18 +1601,24 @@ ad_proc ad_page_contract_filter_rule {
     
     set script [info script]
     set proc_name ad_page_contract_filter_rule_proc_$name
+    set rule_key ::acs::ad_page_contract_filter_rules($name)
     
     set mutex [nsv_get ad_page_contract_mutex filter_rules]
     ns_mutex lock $mutex
-    
-    if { [nsv_exists ad_page_contract_filter_rules $name] } {
+
+    if {[info exists $rule_key]} {
+        set prior_script [set $rule_key]
+    } elseif { [nsv_exists ad_page_contract_filter_rules $name] } {
         set prior_script [ad_page_contract_filter_rule_script $name]
-        if { $script ne $prior_script } {
-            ns_log Warning "Multiple definitions of the ad_page_contract_filter_rule \"$name\" in $script and $prior_script"
-        }
     }
-    
-    nsv_set ad_page_contract_filter_rules $name [list $proc_name $doc_string $script]
+
+    if { [info exists prior_script] && $script ne $prior_script } {
+        ns_log Warning "Multiple definitions of the ad_page_contract_filter_rule \"$name\" in $script and $prior_script"
+    }
+
+    set rule_info [list $proc_name $doc_string $script]
+    nsv_set ad_page_contract_filter_rules $name $rule_info
+    set $rule_key $rule_info
     ns_mutex unlock $mutex
     
     # same trick as ad_page_contract_filter does.
@@ -1625,13 +1630,15 @@ ad_proc ad_page_contract_filter_rule {
 ad_proc ad_page_contract_filter_rule_proc { filter } {
     Returns the proc that executes the given ad_page_contract default-filter.
 } {
-    return [lindex [nsv_get ad_page_contract_filter_rules $filter] 0]
+    return [lindex $::acs::ad_page_contract_filter_rules($filter) 0]
+    #return [lindex [nsv_get ad_page_contract_filter_rules $filter] 0]
 }
 
 ad_proc ad_page_contract_filter_rule_script { filter } {
     Returns the proc that executes the given ad_page_contract default-filter.
 } {
-    return [lindex [nsv_get ad_page_contract_filter_rules $filter] 2]
+    return [lindex $::acs::ad_page_contract_filter_rules($filter) 2]
+    #return [lindex [nsv_get ad_page_contract_filter_rules $filter] 2]
 }
 
 ####################
