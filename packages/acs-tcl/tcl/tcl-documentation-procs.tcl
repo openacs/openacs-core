@@ -1305,7 +1305,7 @@ ad_proc ad_include_contract {docstring args} {
 #
 ####################
 #
-# ad_page_contract_filters($flag) = [list $type $priority $proc_name $doc_string $script $priority]
+# ad_page_contract_filters($flag) = [list $type $proc_name $doc_string $script $priority]
 #
 # ad_page_contract_mutex(filters) = mutex
 #
@@ -1314,7 +1314,7 @@ ad_proc ad_include_contract {docstring args} {
 
 if { [apm_first_time_loading_p] } {
 
-    nsv_array set ad_page_contract_filters {
+    set internal_filters {
         multiple  {internal}
         array     {internal}
         optional  {internal}
@@ -1323,8 +1323,9 @@ if { [apm_first_time_loading_p] } {
         verify    {internal}
         cached    {internal}
     }
-
-    nsv_array set ad_page_contract_filter_rules [list]
+    nsv_array set ad_page_contract_filters $internal_filters
+    array set ::acs::ad_page_contract_filters $internal_filters
+    nsv_array set ad_page_contract_filter_rules {}
 
     nsv_set ad_page_contract_mutex filters [ns_mutex create]
     nsv_set ad_page_contract_mutex filter_rules [ns_mutex create]
@@ -1444,8 +1445,9 @@ ad_proc -public ad_page_contract_filter {
             ns_log Warning [_ acs-tcl.lt_Multiple_definitions_]
         }
     }
-
-    nsv_set ad_page_contract_filters $name [list $type $proc_name $doc_string $script $priority]
+    set filter_info [list $type $proc_name $doc_string $script $priority]
+    set ::acs::ad_page_contract_filters($name) $filter_info
+    nsv_set ad_page_contract_filters $name $filter_info
     ns_mutex unlock $mutex
 
     #
@@ -1474,6 +1476,9 @@ ad_proc ad_page_contract_filter_type { filter } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
+    if {[info exists ::acs::ad_page_contract_filters($filter)]} {
+        return [lindex [set ::acs::ad_page_contract_filters($filter)] 0]
+    }
     if { [nsv_exists ad_page_contract_filters $filter] } {
         return [lindex [nsv_get ad_page_contract_filters $filter] 0]
     } else {
@@ -1503,7 +1508,8 @@ ad_proc ad_page_contract_filter_script { filter } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    return [lindex [nsv_get ad_page_contract_filters $filter] 3]
+    return [lindex [set ::acs::ad_page_contract_filters($filter)] 3]
+    #return [lindex [nsv_get ad_page_contract_filters $filter] 3]
 }
 
 ad_proc ad_page_contract_filter_priority { filter } {
@@ -1513,7 +1519,8 @@ ad_proc ad_page_contract_filter_priority { filter } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    return [lindex [nsv_get ad_page_contract_filters $filter] 4]
+    return [lindex [set ::acs::ad_page_contract_filters($filter)] 4]
+    #return [lindex [nsv_get ad_page_contract_filters $filter] 4]
 }
 
 ad_proc ad_page_contract_filter_invoke {
