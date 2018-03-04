@@ -1856,7 +1856,11 @@ return $html
 #
 ####################
 
-if {![info commands ns_reflow_text] ne ""} {
+if {[info commands ns_reflow_text] eq ""} {
+    #
+    # Define compatibility function for those implementations, that do
+    # not have the built-in version of NaviServer
+    #
     ad_proc ns_reflow_text {{-width 80} {-prefix ""} input} {
 
         Reflow a plain text to the given width and prefix every line
