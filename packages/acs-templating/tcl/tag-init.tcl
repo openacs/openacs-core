@@ -125,7 +125,7 @@ ad_proc -private template:template_tag_include_helper_code {
             append __adp_output [__COMMAND__]
             
         } on error {errorMsg} {
-            set templateFile [template::util::url_to_file \"__SRC__\" $__adp_stub]
+            set templateFile [template::util::url_to_file __SRC__ $__adp_stub]
             append __adp_output "Error in include template \"$templateFile\": [ns_quotehtml $errorMsg]"
             # JCD: If we have the ds_page_bits cache maybe save the error for later
             __DS_CODE__
