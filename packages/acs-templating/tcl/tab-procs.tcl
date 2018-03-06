@@ -236,46 +236,6 @@ template_tag tabstrip { chunk params } {
 
 }
 
-# The tabstrip tag
-
-template_tag tabstrip { chunk params } {
-
-  set level [template::adp_level]
-
-  set id [template::get_attribute formtemplate $params id]
-
-  upvar #$level $id:properties form_properties
-
-  # Create a variable called "plus" that holds the + sign
-  # Since the actual + character is regexped out... how lame
-  set tabstrip_plus "+"
-
-  template::adp_append_code "set form:id \"$id\""
-
-  # Set optional attributes for the style template
-  template::adp_append_code "
-    upvar 0 \"$id:properties\" form_properties"
-
-  # Change the default style if no style is specified
-  if {[ns_set iget $params style] eq ""} {
-    ns_set update $params style tabbed-dialog
-  }
-
-  # Render the template
-  if {[string trim $chunk] eq {}} {
-    # generate the form body dynamically if none specified.
-    set style [ns_set iget $params style]
-    if { [template::util::is_nil style] } {
-      set style "tabbed-dialog"
-    }
-    template::adp_append_string "\[template::form generate $id $style\]"
-  } else {
-    # compile the static form layout specified in the template
-    template::adp_compile_chunk $chunk
-  }
-
-}
-
 
 # Local variables:
 #    mode: tcl
