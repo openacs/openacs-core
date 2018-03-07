@@ -142,6 +142,20 @@ ad_proc -public template::head::add_script {
     }
 }
 
+ad_proc -public template::head::flush_script {
+    {-src:required}
+} {
+    Flush a a script tag, which was previously set in the head section via template::add_script.
+    One can provide a wild 
+    
+    @param src     src attribute of the script tag, ie. the source url of the
+                   script. A glob pattern similar link in "string match" can be provided.
+    @see ::template::head::add_script
+} {
+    array unset ::template::head::scripts $src
+}
+
+
 ad_proc -public template::head::add_link {
     {-crossorigin ""}
     {-href:required}
@@ -162,7 +176,7 @@ ad_proc -public template::head::add_link {
                    (Cross-Origin Resource Sharing) should be used
     @param href    the href attribute of the link tag, eg. the target document
                    of the link
-    @param integrity provide hash values for W3C Subresource Integrity recommentation
+    @param integrity provide hash values for W3C Subresource Integrity recommendation
     @param lang    the lang attribute of the link tag specifying the language
                    of its attributes if they differ from the document language
     @param media   the media attribute of the link tag describing which display
@@ -174,8 +188,27 @@ ad_proc -public template::head::add_link {
                    this link
     @param type    the type attribute of the link tag, eg. 'text/css'
                    separated list of values, eg. 'screen,print,braille'
+    
+    @see ::template::head::flush_link
 } {
     set ::template::head::links($rel,$href) [list $rel $href $type $media $title $lang $order $crossorigin $integrity]
+}
+
+ad_proc -public template::head::flush_link {
+    {-href:required}
+    {-rel:required}
+} {
+    Flush a a link tag, which was previously set in the head section via template::head::add_link
+
+    @param href    the href attribute of the link tag, eg. the target document
+                   of the link. A glob pattern similar link in "string match"
+                   can be provided.
+    
+    @param rel     the rel attribute of the link tag defining the relationship
+                   of the linked document to the current one, eg. 'stylesheet'
+    @see ::template::head::add_link
+} {
+    array unset ::template::head::links $rel,$href
 }
 
 ad_proc -public template::head::add_meta {
@@ -453,6 +486,7 @@ ad_proc -public template::add_body_script {
 
     lappend ::template::body_scripts $type $src $charset $defer $async $script $crossorigin $integrity
 }
+
 
 ad_proc -public template::add_header {
     {-direction "outer"}
