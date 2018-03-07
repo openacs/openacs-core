@@ -244,8 +244,10 @@ ad_proc -public auth::authenticate {
         }
     }
 
-    # set default values for the result array
-    array set result {auth_status "n/a" account_status "n/a"}
+    #
+    # initialize result with authentication and account keys
+    #
+    array set result {auth_status "n/a" auth_message "" account_status "n/a" account_message ""}
     
     ad_try {
         array set result [auth::authentication::Authenticate \
@@ -277,7 +279,7 @@ ad_proc -public auth::authenticate {
         bad_password -
         auth_error -
         failed_to_connect {
-            if { ![info exists result(auth_message)] || $result(auth_message) eq "" } {
+            if { $result(auth_message) eq "" } {
                 array set default_auth_message {
                     no_account {Unknown username}
                     bad_password {Bad password}
@@ -301,12 +303,9 @@ ad_proc -public auth::authenticate {
     switch $result(account_status) {
         ok {
             # Continue below
-            if { ![info exists result(account_message)] } {
-                set result(account_message) {}
-            }
         }
         closed {
-            if { ![info exists result(account_message)] || $result(account_message) eq "" } {
+            if { $result(account_message) eq "" } {
                 set result(account_message) [_ acs-subsite.Account_not_avail_now]
             }
         }
@@ -318,14 +317,17 @@ ad_proc -public auth::authenticate {
         }
     }
 
+    #
     # Save the remote account information for later
+    #
     set remote_account_status $result(account_status)
     set remote_account_message $result(account_message)
 
+    #
     # Clear out remote account_status and account_message
-    array unset result account_status
-    array unset result account_message
-    set result(account_url) {}
+    # and iinitialize it with values that we can relay on later.
+    #
+    array set result {account_url "" account_status "" account_message ""  user_id ""}
 
     # Map to row in local users table
     array set result [auth::get_local_account \
@@ -345,12 +347,9 @@ ad_proc -public auth::authenticate {
     switch $result(account_status) {
         ok {
             # Continue below
-            if { ![info exists result(account_message)] } {
-                set result(account_message) {}
-            }
         }
         closed {
-            if { ![info exists result(account_message)] || $result(account_message) eq "" } {
+            if { $result(account_message) eq "" } {
                 set result(account_message) [_ acs-subsite.Account_not_avail_now]
             }
         }
@@ -368,7 +367,7 @@ ad_proc -public auth::authenticate {
     }
 
     if { $remote_account_message ne "" } {
-        if { [info exists result(account_message)] && $result(account_message) ne "" } {
+        if { $result(account_message) ne "" } {
             # Concatenate local and remote account messages
             set local_account_message [auth::authority::get_element \
                                            -authority_id $authority_id \
@@ -382,10 +381,14 @@ ad_proc -public auth::authenticate {
         }
     }
 
+    #
     # Issue login cookie if login was successful
+    # and everything is ok with the account.
+    #
     if { $result(auth_status) eq "ok"
          && !$no_cookie_p
-         && [info exists result(user_id)] && $result(user_id) ne ""
+         && $result(user_id) ne ""
+         && $result(account_status) eq "ok"
      } {
         if {$host_node_id ne ""} {
             set cookie_domain [db_string get_mapped_host {
