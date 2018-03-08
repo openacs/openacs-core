@@ -314,8 +314,10 @@ ad_proc -public lc_time_fmt {
     set matchfull "$matchdate $matchtime"
 
     set lc_time_p 1
-    if {![regexp -- $matchfull $datetime match lc_time_year lc_time_month lc_time_days lc_time_hours lc_time_minutes lc_time_seconds]} {
-        if {[regexp -- $matchdate $datetime match lc_time_year lc_time_month lc_time_days]} {
+    if {![regexp -- $matchfull $datetime match \
+              lc_time_year lc_time_month lc_time_days lc_time_hours lc_time_minutes lc_time_seconds]} {
+        if {[regexp -- $matchdate $datetime match \
+                 lc_time_year lc_time_month lc_time_days]} {
             set lc_time_hours 0
             set lc_time_minutes 0
             set lc_time_seconds 0
@@ -329,10 +331,19 @@ ad_proc -public lc_time_fmt {
     set y [expr {$lc_time_year - $a}]
     set m [expr {$lc_time_month + 12*$a - 2}]
 
-    # day_no becomes 0 for Sunday, through to 6 for Saturday. Perfect for addressing zero-based lists pulled from locale info.
+    # day_no becomes 0 for Sunday, through to 6 for Saturday.
+    # Perfect for addressing zero-based lists pulled from locale info.
     set lc_time_day_no [expr {(($lc_time_days + $y + $y/4 - $y/100 + $y/400) + (31 * $m / 12)) % 7}]
 
-    return [subst [util_memoize [list lc_time_fmt_compile $fmt $locale]]]
+    #
+    # Keep the results of lc_time_fmt_compile in the per-thread cache
+    # (namespaced variable)
+    #
+    set key ::acs::lc_time_fmt_compile($fmt,$locale)
+    if {![info exists $key]} {
+        set $key [lc_time_fmt_compile $fmt $locale]
+    }
+    return [subst [set $key]]
 }
 
 ad_proc -public lc_time_fmt_compile {
@@ -354,23 +365,23 @@ ad_proc -public lc_time_fmt_compile {
         switch -exact -- $percent_modifier {
             x {
                 append compiled_string $done_portion
-                set to_process "[lc_get -locale $locale "d_fmt"]$remaining"
+                set to_process "[lc_get -locale $locale d_fmt]$remaining"
             }
             X {
                 append compiled_string $done_portion
-                set to_process "[lc_get -locale $locale "t_fmt"]$remaining"
+                set to_process "[lc_get -locale $locale t_fmt]$remaining"
             }
             c {
                 append compiled_string $done_portion
-                set to_process "[lc_get -locale $locale "d_t_fmt"]$remaining"
+                set to_process "[lc_get -locale $locale d_t_fmt]$remaining"
             }
             q {
                 append compiled_string $done_portion
-                set to_process "[lc_get -locale $locale "dlong_fmt"]$remaining"
+                set to_process "[lc_get -locale $locale dlong_fmt]$remaining"
             }
             Q {
                 append compiled_string $done_portion
-                set to_process "[lc_get -locale $locale "dlongweekday_fmt"]$remaining"
+                set to_process "[lc_get -locale $locale dlongweekday_fmt]$remaining"
             }
             default {
                 append compiled_string "${done_portion}$::lang::util::percent_match($percent_modifier)"
