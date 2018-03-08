@@ -406,13 +406,16 @@ create table acs_mail_lite_send_msg_id_map (
        msg_id        text primary key,
        package_id    integer
                      constraint aml_package_id_fk
-                     references apm_packages,
+                     references apm_packages
+                     on delete cascade,
        party_id      integer
                      constraint aml_from_external_party_id_fk
-                     references parties (party_id),
+                     references parties (party_id)
+                     on delete cascade,
        object_id     integer 
                      constraint aml_from_external_obect_id_fk
-                     references acs_objects (object_id),
+                     references acs_objects (object_id)
+                     on delete cascade,
        -- Indicate approximate time when this email is created
        datetime_cs   integer,
        -- other data or parameters to associate with email
