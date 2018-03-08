@@ -823,6 +823,11 @@ namespace eval ::apidoc {
             set href [export_vars -base /api-doc/proc-view {{proc $see}}]
             return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
         }
+        set see [string trimleft $see :]
+        if {[nsv_exists api_proc_doc $see]} {
+            set href [export_vars -base /api-doc/proc-view {{proc $see}}]
+            return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
+        }
         if {[string match "/doc/*" $see]
             || [util_url_valid_p $see]} { 
             return [subst {<a href="[ns_quotehtml $see]">$see</a>}]
@@ -831,7 +836,7 @@ namespace eval ::apidoc {
             set href [export_vars -base content-page-view {{source_p 1} {path $see}}]
             return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
         }
-        return ${see}
+        return $see
     }
 
     ad_proc -public format_author { author_string } {
