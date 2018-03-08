@@ -51,8 +51,10 @@ ad_proc -public lang::message::check {
         set missing_vars [util_get_subset_missing $embedded_vars $embedded_vars_en_us]
 
         if { [llength $missing_vars] > 0 } {
-            error "Message key '$key' in locale '$locale' has these embedded variables not present in the en_US locale:\
-		[join $missing_vars ","]."
+            set msg "Message key '$key' in locale '$locale' has these embedded variables not present in the en_US locale:\
+ 		[join $missing_vars ","]."
+            ad_log error $msg
+            error $msg
         }
     }
     
