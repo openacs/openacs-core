@@ -34,8 +34,6 @@ ad_proc -public ::content::item::new {
     {-attributes ""}
     {-tmp_filename ""}
 } {
-    @author Dave Bauer (dave@thedesignexperience.org)
-    @creation-date 2004-05-28
 
     Create a new content item This proc creates versioned content
     items where content_type iscontent_revision or subtypes of content
@@ -44,33 +42,39 @@ ad_proc -public ::content::item::new {
     PostgreSQL the object_type new function must be registered with
     define_function_args.
 
-    @param name
-    @param item_id - item_id of this content_item. If this is not
+    @author Dave Bauer (dave@thedesignexperience.org)
+    @creation-date 2004-05-28
+
+    @param name name of the item, must be unique for the folder
+    @param item_id item_id of this content_item. If this is not
     specified an item_id will be generated automatically
-    @param parent_id - parent object of this content_item
+    @param parent_id parent object of this content_item
     @param item_subtype
-    @param content_type - content_revision or subtype of content_revision
-    @param context_id - Context of the item. usually used in conjunction with permissions.
-    @param package_id - Package ID of the object
+    @param content_type content_revision or subtype of content_revision
+    @param context_id Context of the item. usually used in conjunction with permissions.
+    @param package_id Package ID of the object
     @param creation_user -
     @param creation_ip -
-    @param creation_date - defaults to current date and time
-    @param storage_type - file, lob, or text (postgresql only)
+    @param creation_date defaults to current date and time
+    @param storage_type file, lob, or text (postgresql only)
     @param locale -
     @param title - title of content_revision to be created
     @param description of content_revision to be created
     @param text - text of content revision to be created
-    @param tmp_filename file containing content to be added to new revision. Caller is responsible to handle cleaning up the tmp file
+    @param tmp_filename file containing content to be added to new revision.
+           Caller is responsible to handle cleaning up the tmp file
     @param nls_language - ???
     @param data - ???
-    @param attributes - A list of lists ofpairs of additional attributes and
-    their values to pass to the constructor. Each pair is a list of two
-     elements: key => value such as
+    @param attributes A list of lists ofpairs of additional attributes and
+           their values to pass to the constructor. Each pair is a list of two
+           elements: key => value such as
     [list [list attribute value] [list attribute value]]
 
     @return item_id of the new content item
 
-    @see content::symlink::new content::extlink::new content::folder::new
+    @see content::symlink::new
+    @see content::extlink::new
+    @see content::folder::new
 } {
     if {$creation_user eq ""} {
         set creation_user [ad_conn user_id]
