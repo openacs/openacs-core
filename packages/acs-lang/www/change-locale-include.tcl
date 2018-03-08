@@ -38,13 +38,16 @@ set use_timezone_p [expr {[lang::system::timezone_support_p] && [ad_conn user_id
 
 set list_of_locales [list]
 
-db_foreach locale_loop {} {
+db_foreach locale_loop {
+    select label, locale from enabled_locales
+} {
     if { [lang::message::message_exists_p $locale acs-lang.this-language] } {
         set label "[lang::message::lookup $locale  acs-lang.this-language]"
     }
     lappend list_of_locales [list ${label} $locale]
 }
 
+set list_of_locales [lsort -dictionary -index 0 $list_of_locales]
 set list_of_package_locales [linsert $list_of_locales 0 [list (default) ""]]
 
 form create locale
@@ -95,10 +98,11 @@ if { $package_level_locales_p } {
 }
 
 if { $use_timezone_p } {
-    set timezone_options [db_list_of_lists all_timezones {}]
-
+    set timezone_options [db_list_of_lists all_timezones {
+        select tz || ' ' || gmt_offset as tz, tz from timezones
+    }]
     element create locale timezone -datatype text -widget select -optional \
-        -label "[_ acs-lang.Your_timezone]" \
+        -label [_ acs-lang.Your_timezone] \
         -options $timezone_options
 }
 
