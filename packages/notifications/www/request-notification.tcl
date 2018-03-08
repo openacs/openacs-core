@@ -3,7 +3,7 @@ ad_page_contract {
     Subscribe a person or a group to a notification of an object and a type.
 
     @author Natalia Pérez (nperper@it.uc3m.es)
-    @create-date 2005-03-28
+    @creation-date 2005-03-28
 
 } {
   object_id:naturalnum,notnull
