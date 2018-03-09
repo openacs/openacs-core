@@ -147,12 +147,16 @@ ad_proc -public template::head::flush_script {
 } {
     Flush a a script tag, which was previously set in the head section via template::add_script.
     One can provide a wild 
-    
+
+    @author Gustaf Neumann
+    @creation-date 2018-03-09
+
     @param src     src attribute of the script tag, ie. the source url of the
                    script. A glob pattern similar link in "string match" can be provided.
     @see ::template::head::add_script
 } {
     array unset ::template::head::scripts $src
+    flush_included $src
 }
 
 
@@ -200,6 +204,9 @@ ad_proc -public template::head::flush_link {
 } {
     Flush a a link tag, which was previously set in the head section via template::head::add_link
 
+    @author Gustaf Neumann
+    @creation-date 2018-03-09
+
     @param href    the href attribute of the link tag, eg. the target document
                    of the link. A glob pattern similar link in "string match"
                    can be provided.
@@ -209,7 +216,71 @@ ad_proc -public template::head::flush_link {
     @see ::template::head::add_link
 } {
     array unset ::template::head::links $rel,$href
+    flush_included $href
 }
+
+ad_proc -public template::head::includes {
+    {-container:required}
+    {-parts:required}
+} {
+    
+    Define, that a compound resource (container) contains multiple
+    parts.  Container and parts are typically urls, which are referred
+    to by a "href" attribute or by link or a "src" attribute of a
+    script.
+
+    @author Gustaf Neumann
+    @creation-date 2018-03-09
+
+    @param container compound resource
+    @param parts     list of resources, which are included in a compound resource (container).
+
+    @see ::template::head::add_link
+    @see ::template::head::add_script
+    @see ::template::head::included_p
+} {
+    set ::template::head::includes($container) $parts
+    foreach p $parts {
+        set ::template::head::included($p) $container
+    }
+}
+
+ad_proc -private template::head::included_p {
+    resource
+} {
+    
+    Check, if the provided resource is included by some other resource.
+
+    @author Gustaf Neumann
+    @creation-date 2018-03-09
+
+    @param uri resource
+    @see ::template::head::includes
+} {
+    return [info exists ::template::head::included($resource)]
+}
+
+ad_proc -private template::head::flush_included {
+    resource
+} {
+    Flush a part relations ships of a compound resource
+
+    @author Gustaf Neumann
+    @creation-date 2018-03-09
+
+    @param resource compound resource
+    @see ::template::head::add_link
+} {
+    ns_log notice "flush_included <$resource> includes: [array get ::template::head::includes $resource]"
+    foreach {container parts} [array get ::template::head::includes $resource] {
+        unset ::template::head::includes($container)
+        foreach p $parts {
+            unset ::template::head::included($p)
+        }
+    }
+}
+
+
 
 ad_proc -public template::head::add_meta {
     {-http_equiv ""}
@@ -602,6 +673,17 @@ ad_proc template::head::prepare_multirows {} {
 
     # Generate the <link> tag multirow
     variable ::template::head::links
+
+    #
+    # Filter out included links, such we have to do this only once.
+    #
+    foreach name [array names links] {
+        lassign [split $name ,] rel href
+        if {[::template::head::included_p $href]} {
+            template::head::flush_link -href $ref -rel $rel
+        }
+    }
+
     template::multirow create link rel type href title lang media order crossorigin integrity
     if {[array exists links]} {
         # first non alternate stylesheet
@@ -662,9 +744,15 @@ ad_proc template::head::prepare_multirows {} {
 
     # Generate the head <script /> tag multirow
     variable ::template::head::scripts
+
     template::multirow create headscript type src charset defer async content order crossorigin integrity
     if {[array exists scripts]} {
+       
         foreach name [array names scripts] {
+            if {[::template::head::included_p $name]} {
+                continue
+            }
+
             foreach {type src charset defer async content order crossorigin integrity} $scripts($name) {
                 template::multirow append headscript \
                     $type \
