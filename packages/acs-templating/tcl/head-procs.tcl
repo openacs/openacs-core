@@ -14,7 +14,7 @@ namespace eval template {}
 namespace eval template::head {}
 
 ad_proc -private template::reset_request_vars {} {
-    Resets all global datastructures used to manage the head section of the
+    Resets all global data structures used to manage the head section of the
     returned document.  This should be called at the beginning of any request
     handled by the templating system.
 } {
@@ -26,6 +26,20 @@ ad_proc -private template::reset_request_vars {} {
 
     set ::template::headers [list]
     set ::template::footers [list]
+}
+
+ad_proc -public template::register_urn {
+    -urn:required
+    -resource:required
+} {
+
+    Register an urn for a resource. These urns provide a single place
+    for e.g updating references to external resources when switching
+    between a CDN and a local resource, or when a resource should be
+    updated.
+    
+} {
+   set ::template::head::urn($urn) $resource
 }
 
 ad_proc -public template::add_script {
@@ -119,6 +133,14 @@ ad_proc -public template::head::add_script {
         set async async
     } else {
         set async ""
+    }
+
+    #
+    # Replace potential urn in src with resolved value
+    #
+    set key ::template::head::urn($src)
+    if {[info exists $key]} {
+        set src [set $key]
     }
 
     if {$src eq ""} {
@@ -545,6 +567,8 @@ ad_proc -public template::add_body_script {
 
     if {$script ne ""} {
         #
+        # We have an inline script.
+        #
         # For the time being, not all browsers support
         # nonces. According to the specs the added 'unsafe-inline',
         # is ignored on browsers supporting nonces.
@@ -649,6 +673,19 @@ ad_proc -public template::add_footer {
     }
 }
 
+ad_proc -private template::head::resolve_urn {
+    resource
+} {
+    Replace potential urn in provided resource name with resolved
+    value
+} {
+    set key ::template::head::urn($resource)
+    if {[info exists $key]} {
+        set resource [set $key]
+    }
+    return $resource
+}
+
 ad_proc template::head::prepare_multirows {} {
     Generate multirows for meta, css, scripts
     Called only from blank-master.tcl
@@ -693,7 +730,7 @@ ad_proc template::head::prepare_multirows {} {
                     template::multirow append link \
                         $rel \
                         $type \
-                        $href \
+                        [resolve_urn $href] \
                         $title \
                         $lang \
                         $media \
@@ -712,7 +749,7 @@ ad_proc template::head::prepare_multirows {} {
                     template::multirow append link \
                         $rel \
                         $type \
-                        $href \
+                        [resolve_urn $href] \
                         $title \
                         $lang \
                         $media \
@@ -754,9 +791,10 @@ ad_proc template::head::prepare_multirows {} {
             }
 
             foreach {type src charset defer async content order crossorigin integrity} $scripts($name) {
+                ns_log notice "ADD order $order src $src"
                 template::multirow append headscript \
                     $type \
-                    $src \
+                    [resolve_urn $src] \
                     $charset \
                     $defer \
                     $async \
