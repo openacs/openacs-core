@@ -179,9 +179,9 @@ ad_proc -public ad_html_qualify_links {
     including the host name. It performs the following operations:
 
     1) prepend paths starting with a "/" by the protocol and host.
-2) prepend paths not starting a "/" by the package_url, in case it was passed in.
+    2) prepend paths not starting a "/" by the package_url, in case it was passed in.
 
-links, which are already fully qualified are not modified.
+    Links, which are already fully qualified are not modified.
 
 } {
     set host "[string trimright [ad_url] /]/"
@@ -254,8 +254,8 @@ ad_proc -public util_convert_line_breaks_to_html {
 ad_proc -public ad_quotehtml { arg } {
 
     Quotes ampersands, double-quotes, and angle brackets in $arg.
-    Analogous to ns_quotehtml except that it quotes double-quotes (which
-                                                                   ns_quotehtml does not).
+    Analogous to ns_quotehtml except that it quotes double-quotes
+    (which ns_quotehtml does not).
 
     @see ad_unquotehtml
 } {
@@ -1712,37 +1712,61 @@ ad_proc ad_parse_html_attributes_upvar {
             set output(space) 1
         }
 
-        # If there's a blockquote in the beginning of the text, we wouldn't have caught it before
-        if { $output(text) eq "" } {
-            append output(text) [string repeat {    } $output(blockquote)]
-        }
 
-        # Now output the text.
-        while { [regexp {^( +|\s|\S+)(.*)$} $text match word text] } {
+        if {1} {
+            # If there's a blockquote in the beginning of the text, we wouldn't have caught it before
+            if { $output(text) eq "" } {
+                append output(text) [string repeat {    } $output(blockquote)]
+            }
+            
+            # Now output the text.
+            while { [regexp {^( +|\s|\S+)(.*)$} $text match word text] } {
 
-            # convert &nbsp;'s
-            # We do this now, so that they're displayed, but not treated, whitespace.
-            regsub -all {&nbsp;} $word { } word
+                # convert &nbsp;'s
+                # We do this now, so that they're displayed, but not treated, whitespace.
+                regsub -all {&nbsp;} $word { } word
 
-            set wordlen [string length $word]
-            switch -glob -- $word {
-                " *" {
-                    append output(text) "$word"
-                    incr output(linelen) $wordlen
-                }
-                "\n" {
-                    if { $output(text) ne "" } {
-                        ad_html_to_text_put_newline output
+                set wordlen [string length $word]
+                switch -glob -- $word {
+                    " *" {
+                        append output(text) "$word"
+                        incr output(linelen) $wordlen
                     }
-                }
-                default {
-                    if { $output(linelen) + $wordlen > $output(maxlen) && $output(maxlen) != 0 } {
-                        ad_html_to_text_put_newline output
+                    "\n" {
+                        if { $output(text) ne "" } {
+                            ad_html_to_text_put_newline output
+                        }
                     }
-                    append output(text) "$word"
-                    incr output(linelen) $wordlen
+                    default {
+                        if { $output(linelen) + $wordlen > $output(maxlen) && $output(maxlen) != 0 } {
+                            ad_html_to_text_put_newline output
+                        }
+                        append output(text) "$word"
+                        incr output(linelen) $wordlen
+                    }
                 }
             }
+        } else {
+            #
+            # This is an experimental version that requires a version
+            # of NaviServer supporting the "-offset" argument. So it
+            # is deactivated for the time being for public use.
+            #
+            set plain [ns_reflow_text \
+                           -offset $output(linelen) \
+                           -width $output(maxlen) \
+                           $text]
+            set lastNewLine [string last \n $plain]
+            #ns_log notice "ns_reflow_text -width $output(maxlen) <$text>\ntext: $text\nplain $plain"            
+            if {$lastNewLine == -1} {
+                incr output(linelen) [string length $plain]
+            } else {
+                set output(linelen) [expr {[string length $plain] - $lastNewLine}]
+            }
+            set plain [join [split $plain \n] \n[string repeat {    } $output(blockquote)]]
+            #ns_log notice "plain\n$plain"
+            #ns_log notice "blockquote $output(blockquote) linelen $output(linelen) maxlen $output(maxlen)"
+            append output(text) $plain
         }
     }
 
@@ -1861,12 +1885,19 @@ if {[info commands ns_reflow_text] eq ""} {
     # Define compatibility function for those implementations, that do
     # not have the built-in version of NaviServer
     #
-    ad_proc ns_reflow_text {{-width 80} {-prefix ""} input} {
+    ad_proc ns_reflow_text {{-width 80} {-prefix ""} {-offset 0} input} {
 
         Reflow a plain text to the given width and prefix every line
-        optionally wiith the provided string
+        optionally wiith the provided string. If offset is used, the
+        function can be used when e.g. appending the result to some
+        constant prefix or when the reflow happens incrementally.
 
     } {
+
+        if {$offset > 0} {
+            set input [string repeat X $offset]$input
+        }
+        
         set result_rows [list]
         set start_of_line_index 0
         while 1 {
@@ -1911,7 +1942,13 @@ if {[info commands ns_reflow_text] eq ""} {
             lappend result_rows [string range $input $start_of_line_index $real_index_of_space-1]
             set start_of_line_index [expr {$start_of_line_index + $last_space_pos + 1}]
         }
-        return $prefix[join $result_rows "\n$prefix"]
+
+        set result [join $result_rows "\n$prefix"]
+        if {$offset > 0} {
+            set result [string range $result $offset end]
+        }
+        
+        return $prefix$result
     }
 }
 

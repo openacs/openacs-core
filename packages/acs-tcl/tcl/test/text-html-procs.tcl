@@ -89,7 +89,7 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
                             -allowed_protocols *]
             set result [string trim $result]
             set test_result [string trim $test_result]
-            aa_true "$msg trivial?" [expr {$result eq $test_result}]
+            aa_true "$msg trivial?" {$result eq $test_result}
         }
 
     # Try test cases not allowing js
@@ -104,7 +104,7 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
                             -no_js]
             set result [string trim $result]
             set test_result [string trim $test_result]
-            aa_true "$msg no js?" [expr {$result eq $test_result}]
+            aa_true "$msg no js?" {$result eq $test_result}
         }
 
     # Try test cases not allowing outer urls
@@ -119,7 +119,7 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
                             -no_outer_urls]
             set result [string trim $result]
             set test_result [string trim $test_result]
-            aa_true "$msg no outer urls?" [expr {$result eq $test_result}]
+            aa_true "$msg no outer urls?" {$result eq $test_result}
         }
 
     # Try test cases fixing markup
@@ -134,7 +134,7 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
                             -fix]
             set result [string trim $result]
             set test_result [string trim $test_result]
-            aa_true "$msg fixing markup?" [expr {$result eq $test_result}]
+            aa_true "$msg fixing markup?" {$result eq $test_result}
         }
 
     aa_log "trying to get start page from [util::configured_location]/"

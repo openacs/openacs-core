@@ -298,6 +298,87 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
 
 }
 
+aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_convert_to_plain {
+    Test rendering of a more or less standard HTML text
+} {
+
+    set html {<html><head><title>Some Title</title></head><body>
+        <h1>An H1 Title</h1>
+        <p>This is <b>bold</b> and this is <strong>strong</strong>.
+        This is <i>italics</i> and this is <em>em</em>.
+        A text with a <a href='/foo'>link</a>.
+        </p>
+        <h2>An H2 Title</h2>
+        <p> Now the same with a blockquote:
+        <blockquote>
+        This is <b>bold</b> and this is <strong>strong</strong>.
+        This is <i>italics</i> and this is <em>em</em>.
+        A text with a <a href='/bar'>link</a>.
+        </blockquote>
+        Now a text with a ul:
+        <ul>
+        <li>First list item
+        <li>Second list item        
+        </ul>
+        Now a text with a ol:
+        <ol>
+        <li>First enumerated item
+        <li>Second enumerated item        
+        </ol>
+
+        and a program
+        <pre>
+        set x 1
+        set r [expr {$x + 1}]
+        </pre>
+    }
+    set result [ad_html_text_convert -from text/html -to text/plain $html]
+    
+    aa_log "Resulting text:\n$result"
+    aa_true "Text contains title" [string match {Some Title*} $result]
+    aa_true "<h1> and <h2> are detected and marked with stars" {
+        [string first "\n*An H1" $result] > 0
+        && [string first "\n**An H2" $result] > 0
+    }
+    aa_true "<b> and <strong> are converted" {
+        [string first {*bold*} $result] > 0
+        && [string first {*strong*} $result] > 0        
+    }
+    aa_true "<i> and <em> are converted" {
+        [string first {_italics_} $result] > 0
+        && [string first {_em_} $result] > 0        
+    }
+    aa_true "<ul> is converted" {
+        [string first "\n- First list" $result] > 0
+        && [string first "\n- Second list" $result] > 0 
+    }
+    aa_true "<ol> is converted (same as <ul>)" {
+        [string first "\n- First enumerated" $result] > 0
+        && [string first "\n- Second enumerated" $result] > 0 
+    }
+
+    aa_true "<pre> results in linebreaks and deeper indentation" {
+        [string first "\n        set x" $result] > 0
+        && [string first "\n        set r" $result] > 0
+    }
+    
+
+    aa_true "Text contains two links" {
+        [string first {[1].} $result] > 0
+        && [string first {[2].} $result] > 0
+    }
+    aa_true "Text contains two references" {
+        [string first {[1] /foo} $result] > 0
+        && [string first {[2] /bar} $result] > 0
+    }
+    aa_true "Blockquote is indented" {
+        [string first {    This is *bold} $result] > 0
+    }
+    
+
+
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
