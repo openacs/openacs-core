@@ -39,7 +39,8 @@ ad_proc -public template::register_urn {
     updated.
     
 } {
-   set ::template::head::urn($urn) $resource
+    set ::template::head::urn($urn) $resource
+    ns_log notice "add URN: $urn <$resource>"
 }
 
 ad_proc -public template::add_script {
@@ -791,7 +792,7 @@ ad_proc template::head::prepare_multirows {} {
             }
 
             foreach {type src charset defer async content order crossorigin integrity} $scripts($name) {
-                ns_log notice "ADD order $order src $src"
+                #ns_log notice "ADD order $order src $src"
                 template::multirow append headscript \
                     $type \
                     [resolve_urn $src] \
