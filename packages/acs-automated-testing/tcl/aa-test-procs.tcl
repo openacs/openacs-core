@@ -1062,6 +1062,23 @@ ad_proc -private aa_execute_rollback_tests {} {
     }
 }
 
+ad_proc -private aa_http {{-user_id 0} request} {
+    Run an http request against the actual server
+
+    @author Gustaf Neumann
+} {
+    set driverInfo [util_driver_info]
+    set peeraddr   [ns_conn peeraddr]
+    nsv_set aa_test logindata [list peeraddr $peeraddr user_id $user_id]
+    try {
+        set d [ns_http run "http://\[$peeraddr\]:[dict get $driverInfo port]/$request"]
+    } finally {
+        nsv_unset aa_test logindata
+    }
+    ns_log notice "run $request returns $d"
+    ns_log notice "... [ns_set array [dict get $d headers]]"
+    return $d
+}
 
 namespace eval aa_test {}
 
@@ -1240,6 +1257,16 @@ ad_proc -public aa_test::parse_test_file {
     }
     set test(testcase_failure) [array get testcase_failure]
 }
+
+ad_proc -public aa_test::visualize_control_chars {lines} {
+    set output $lines
+    regsub -all {\\} $output {\\\\} output
+    regsub -all {\r} $output {\\r} output
+    regsub -all {\n} $output "\\n\n" output
+    return $output
+}
+
+
 
 ad_proc -public aa_get_first_url {
     {-package_key:required}
