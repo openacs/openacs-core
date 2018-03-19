@@ -9,15 +9,15 @@
 ad_library {
     Procs to support the acs-automated-testing package.
 
-    NOTE: There's a hack in packages/acs-bootstrap-installer/bootstrap.tcl to load 
+    NOTE: There's a hack in packages/acs-bootstrap-installer/bootstrap.tcl to load
     this file on server startup before other packages' -procs files.
-    
+
     @author Peter Harper (peter.harper@open-msg.com)
     @creation-date 21 June 2001
     @cvs-id $Id$
 }
 
-# LARS: We do this here, because if we do it in the -init file, then we cannot register 
+# LARS: We do this here, because if we do it in the -init file, then we cannot register
 # test cases in -procs files of packages.
 if { ![nsv_exists aa_test cases] } {
     nsv_set aa_test cases {}
@@ -29,7 +29,7 @@ if { ![nsv_exists aa_test cases] } {
         nsv_lappend aa_test categories "selenium"
     } else {
         nsv_lappend aa_test exclusion_categories "selenium"
-    }    
+    }
 }
 
 proc aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
@@ -114,7 +114,7 @@ ad_proc -public aa_stub {
             aa_proc_copy $proc_name ${proc_name}_unstubbed
         }
         set aa_stub_sequence($proc_name) 1
-        
+
         aa_proc_copy $proc_name $proc_name "
       global aa_stub_sequence
       global aa_testcase_id
@@ -345,17 +345,17 @@ ad_proc -public aa_register_case {
     <li><b>api</b>: tests the Tcl API
     <li><b>web</b>: tests HTTP interface
     <li><b>smoke</b>: Minimal test to assure functionality and catch basic errors.
-    <li><b>stress</b>: Puts heavy load on server or creates large numbers of records.  Intended to simulate maximal production load. 
+    <li><b>stress</b>: Puts heavy load on server or creates large numbers of records.  Intended to simulate maximal production load.
     <li><b>security_risk</b>: May introduce a security risk.
     <li><b>populator</b>: Creates sample data for future use.
     <li><b>production_safe</b>: Can be used on a live production site, ie for sanity checking or keepalive purposes.  Implies: no risk of adding or deleting data; no risk of crashing; minimal cpu/db/net load.
     </ul>
-    @param error_level Force all test failures to this error level.  One of 
+    @param error_level Force all test failures to this error level.  One of
     <ul>
     <li><b>notice</b>: Informative.  Does not indicate an error.
     <li><b>warning</b>: May indicate an problem.  Example: a non-critical bug repro case that hasn't been fixed.
     <li><b>error</b>: normal error
-    <li><b>metatest</b>: Indicates a problem with the test framework, execution, or reporting.  Suggests that current test results may be invalid.  Use this for test cases that test the tests.  Also used, automatically, for errors sourcing test cases.  
+    <li><b>metatest</b>: Indicates a problem with the test framework, execution, or reporting.  Suggests that current test results may be invalid.  Use this for test cases that test the tests.  Also used, automatically, for errors sourcing test cases.
     </ul>
     @param bugs A list of integers correspending to openacs.org bug numbers which relate to this test case.
     @param procs A list of OpenACS procs which are tested by this case.
@@ -590,7 +590,7 @@ ad_proc -public aa_runseries {
 
             # try to disqualify the test case
 
-            # if category is specified, 
+            # if category is specified,
             if { $by_package_key ne "" && $by_package_key ne $package_key } {
                 continue
             }
@@ -604,12 +604,12 @@ ad_proc -public aa_runseries {
             if { ! $stress && "stress" in $categories } {
                 continue
             }
-            
+
             # if we don't want security risks, then the test must not be stress
             if { ! $security_risk && "security_risk" in $categories } {
                 continue
             }
-            
+
             # we made it through the filters, so add the test case
             lappend testcase_ids $testcase_id
             foreach init_class $init_classes {
@@ -773,7 +773,7 @@ ad_proc -public aa_true {
 } {
     Tests that affirm_expr is true.<p>
     Call this function within a testcase, stub or component.
-    
+
     @return True if the affirmation passed, false otherwise.
 
     @author Peter Harper
@@ -781,7 +781,7 @@ ad_proc -public aa_true {
 } {
     global aa_testcase_id
     global aa_package_key
-    
+
     set result [uplevel 1 [list expr $affirm_expr]]
     if { $result } {
         aa_log_result "pass" "$affirm_name Affirm PASSED, \"$affirm_expr\" true"
@@ -798,9 +798,9 @@ ad_proc -public aa_false {
 } {
     Tests that affirm_expr is false.<br>
     Call this function within a testcase, stub or component.
-    
+
     @return True if the affirmation passed, false otherwise.
-    
+
     @author Peter Harper
     @creation-date 24 July 2001
 } {
@@ -941,7 +941,7 @@ ad_proc -public aa_run_with_teardown {
     {-teardown_code ""}
     -rollback:boolean
 } {
-    Execute code in test_code and guarantee that code in 
+    Execute code in test_code and guarantee that code in
     teardown_code will be executed even if error is thrown. Will catch
     errors in teardown_code as well and provide stack traces for both code blocks.
 
@@ -959,7 +959,7 @@ ad_proc -public aa_run_with_teardown {
             set errmsg {}
             db_transaction {
                aa_start_rollback_block
- 
+
                $test_code
 
                 aa_end_rollback_block
@@ -1094,8 +1094,8 @@ ad_proc -private aa_test::test_file_path {
     {-install_file_path:required}
 } {
     set filename [file tail $install_file_path]
-    regexp {^(.+)-(.+)-(.+)\.xml$} $filename match hostname server    
-    set test_path [file dirname $install_file_path]/${hostname}-${server}-testreport.xml    
+    regexp {^(.+)-(.+)-(.+)\.xml$} $filename match hostname server
+    set test_path [file dirname $install_file_path]/${hostname}-${server}-testreport.xml
 
     return $test_path
 }
@@ -1112,9 +1112,9 @@ ad_proc -public aa_test::parse_install_file {
 
     set root_node [xml_doc_get_first_node $tree]
 
-    foreach entry { 
-        name os dbtype dbversion webserver openacs_cvs_flag adminemail adminpassword 
-        install_begin_epoch install_end_epoch install_end_timestamp num_errors 
+    foreach entry {
+        name os dbtype dbversion webserver openacs_cvs_flag adminemail adminpassword
+        install_begin_epoch install_end_epoch install_end_timestamp num_errors
         install_duration install_duration_pretty script_path description
     } {
         set service($entry) "n/a"
@@ -1133,7 +1133,7 @@ ad_proc -public aa_test::parse_install_file {
         if { $info_type eq "" } {
             append service(parse_error) "No type on info tag;"
             continue
-        } 
+        }
         set info_type [string map {- _} $info_type]
         set info_value [xml_node_get_content $child]
         set service($info_type) $info_value
@@ -1204,7 +1204,7 @@ ad_proc -private aa_test::write_test_file {} {
     on the server.
 
     @author Peter Marklund
-    
+
 } {
     set xml_doc ""
 
@@ -1216,7 +1216,7 @@ ad_proc -private aa_test::write_test_file {} {
         set file_path "$report_dir/${hostname}-${server}-testreport.xml"
 
         set xml_doc [get_test_doc]
-        
+
         if { [catch {template::util::write_file $file_path $xml_doc} errmsg] } {
             ns_log Error "Failed to write xml test report to path $file_path - $errmsg"
         }
@@ -1270,10 +1270,10 @@ ad_proc -public aa_test::visualize_control_chars {lines} {
 
 ad_proc -public aa_get_first_url {
     {-package_key:required}
-} {    
+} {
     Procedure for geting the url of a mounted package with the
     package_key. It uses the first instance that it founds. This is
-    useful for tclwebtest tests.    
+    useful for tclwebtest tests.
 } {
     set url [site_node::get_package_url -package_key $package_key]
     if {$url eq ""} {
@@ -1318,7 +1318,7 @@ ad_proc -public aa_selenium_init {} {
         # request.
         return $_acs_automated_testing_selenium_init
     }
-    
+
     set server_url [parameter::get_from_package_key \
                         -package_key acs-automated-testing \
                         -parameter "SeleniumRcServer" \
