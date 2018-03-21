@@ -58,7 +58,7 @@ namespace eval notification::type {
         if {[info exists $key]} {
             return [set $key]
         }
-        return [set $key [list notification::type::get_type_id_not_cached $short_name]]
+        return [set $key [notification::type::get_type_id_not_cached $short_name]]
     }
     
     ad_proc -public get_type_id_not_cached {
