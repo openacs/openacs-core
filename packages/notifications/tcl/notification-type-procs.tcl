@@ -61,7 +61,7 @@ namespace eval notification::type {
         return [set $key [notification::type::get_type_id_not_cached $short_name]]
     }
     
-    ad_proc -public get_type_id_not_cached {
+    ad_proc -private get_type_id_not_cached {
         short_name
     } {
 	return the notification type ID given a short name. Short names are unique but not primary keys.
