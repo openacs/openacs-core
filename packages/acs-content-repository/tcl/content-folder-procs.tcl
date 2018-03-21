@@ -327,7 +327,7 @@ ad_proc content::folder::get_folder_from_package {
     return [util_memoize [list content::folder::get_folder_from_package_not_cached -package_id $package_id]]
 }
 
-ad_proc content::folder::get_folder_from_package_not_cached {
+ad_proc -private content::folder::get_folder_from_package_not_cached {
     -package_id:required
 } {
     @author Timo Hentschel (timo@timohentschel.de)

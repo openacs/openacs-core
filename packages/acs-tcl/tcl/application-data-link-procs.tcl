@@ -179,7 +179,7 @@ ad_proc -public application_data_link::get_linked {
     return [util_memoize [list application_data_link::get_linked_not_cached -from_object_id $from_object_id -to_object_type $to_object_type -relation_tag $relation_tag]]
 }
 
-ad_proc -public application_data_link::get_linked_not_cached {
+ad_proc -private application_data_link::get_linked_not_cached {
     -from_object_id:required
     -to_object_type:required
     {-relation_tag ""}
@@ -212,7 +212,7 @@ ad_proc -public application_data_link::get_linked_content {
     return [util_memoize [list application_data_link::get_linked_content_not_cached -from_object_id $from_object_id -to_content_type $to_content_type -relation_tag $relation_tag]]
 }
 
-ad_proc -public application_data_link::get_linked_content_not_cached {
+ad_proc -private application_data_link::get_linked_content_not_cached {
     -from_object_id:required
     -to_content_type:required
     {-relation_tag ""}

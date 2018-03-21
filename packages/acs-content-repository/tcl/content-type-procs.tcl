@@ -387,7 +387,7 @@ ad_proc -public content::type::content_type_p {
     return [util_memoize [list content::type::content_type_p_not_cached -mime_type $mime_type -content_type $content_type]]
 }
 
-ad_proc -public content::type::content_type_p_not_cached {
+ad_proc -private content::type::content_type_p_not_cached {
     -content_type:required
     -mime_type:required
 } {

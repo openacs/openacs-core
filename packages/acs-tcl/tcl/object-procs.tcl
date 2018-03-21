@@ -98,7 +98,7 @@ ad_proc -public acs_object::package_id {
     return [util_memoize [list acs_object::package_id_not_cached -object_id $object_id]]
 }
 
-ad_proc -public acs_object::package_id_not_cached {
+ad_proc -private acs_object::package_id_not_cached {
     {-object_id:required}
 } {
     Gets the package_id of the object
