@@ -1062,16 +1062,37 @@ ad_proc -private aa_execute_rollback_tests {} {
     }
 }
 
-ad_proc -private aa_http {{-user_id 0} request} {
+ad_proc -private aa_http {
+    {-user_id 0}
+    {-method GET}
+    {-body}
+    {-content_type}
+    {-timeout 10}
+    request
+} {
     Run an http request against the actual server
 
     @author Gustaf Neumann
 } {
     set driverInfo [util_driver_info]
     set peeraddr   [ns_conn peeraddr]
+    set extra_args {}
+    if {[info exists body]} {
+        lappend extra_args -body $body
+    }
+    if {[info exists content_type]} {
+        set queryHeaders [ns_set create]
+        ns_set update $queryHeaders "Content-type" $content_type
+        lappend extra_args -headers $queryHeaders
+    }
     nsv_set aa_test logindata [list peeraddr $peeraddr user_id $user_id]
+    
     try {
-        set d [ns_http run "http://\[$peeraddr\]:[dict get $driverInfo port]/$request"]
+        set d [ns_http run \
+                   -timeout $timeout \
+                   -method $method \
+                   {*}$extra_args \
+                   "http://\[$peeraddr\]:[dict get $driverInfo port]/$request"]
     } finally {
         nsv_unset aa_test logindata
     }
@@ -1080,7 +1101,17 @@ ad_proc -private aa_http {{-user_id 0} request} {
     return $d
 }
 
+
+
 namespace eval aa_test {}
+
+ad_proc -public aa_test::xml_get_text {root xpath} {
+    Get a text element from tdom via xpath expression
+} {
+    set n [$root selectNodes $xpath]
+    if {$n eq ""} {return ""}
+    return [$n asText]
+}
 
 ad_proc -public aa_test::xml_report_dir {} {
     Retrieves the XMLReportDir parameter.
