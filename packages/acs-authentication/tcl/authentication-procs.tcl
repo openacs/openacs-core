@@ -643,7 +643,7 @@ ad_proc -public auth::create_user {
 
     } on_error {
         set creation_info(creation_status) failed_to_connect
-        set creation_info(creation_message) $errorMsg
+        set creation_info(creation_message) $errmsg
         ad_log Error "auth::create_user: Error invoking account registration driver for authority_id = $authority_id"
     }
 
