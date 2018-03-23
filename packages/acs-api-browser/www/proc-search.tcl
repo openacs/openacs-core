@@ -119,7 +119,7 @@ foreach proc [nsv_array names api_proc_doc] {
     #################
     if {$source_weight != 0} {
         set body [api_get_body $proc]
-        incr score [expr {$source_weight * [::apidoc::ad_keywords_score $query_string $source]}]
+        incr score [expr {$source_weight * [::apidoc::ad_keywords_score $query_string $body]}]
     }
 
     #####
