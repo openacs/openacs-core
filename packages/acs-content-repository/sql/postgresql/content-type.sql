@@ -700,7 +700,7 @@ $$ LANGUAGE plpgsql stable;
 -- of the new content revisons seems like it would be reliable, but the 
 -- possibility of a race condition exists for either the initial creation
 -- of dropping of a type.  I'm not sure if the possibility of a race condition
--- acually exists in practice.  The thing to do here might be to just create 
+-- actually exists in practice.  The thing to do here might be to just create 
 -- a function that dynamically builds the insert strings and does the 
 -- each time an insert is done on the content_type view.  Trade-off being
 -- that the inserts would be slower due to the use of dynamic code in pl/psql.

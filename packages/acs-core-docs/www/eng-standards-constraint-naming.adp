@@ -27,7 +27,7 @@ name.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-constraint-naming-abbr" id="eng-standards-constraint-naming-abbr"></a>Abbreviations</h3></div></div></div><p>We propose the following naming convention for all constraints,
 with the following abbreviations taken from Oracle Docs. Note that
-we shortened all of the constraint abbrevations to two characters
+we shortened all of the constraint abbreviations to two characters
 to save room.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col>

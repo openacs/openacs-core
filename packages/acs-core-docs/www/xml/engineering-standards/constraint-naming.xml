@@ -41,7 +41,7 @@ in general, to 30 characters, which is hardly enough for a human readable constr
 <para>
 We propose the following naming convention for all constraints, with
 the following abbreviations taken from Oracle Docs. 
-Note that we shortened all of the constraint abbrevations to 
+Note that we shortened all of the constraint abbreviations to 
 two characters to save room.
 </para>
  
