@@ -25,7 +25,7 @@ DROP FUNCTION IF EXISTS content_revision__new(varchar,varchar,timestamptz,varcha
 --
 -- procedure content_revision__new/13
 --
--- We can't use for the last two argments "default null", since
+-- We can't use for the last two arguments "default null", since
 -- otherwise calls with provided package_id but no content_length
 -- would lead to a wrong interpretation of the package_id as
 -- content_length.

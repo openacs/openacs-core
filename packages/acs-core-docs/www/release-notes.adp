@@ -775,7 +775,7 @@ visiting <code class="filename">http://yourserver/doc</code>.</p><p>New features
 <li class="listitem"><p>Internationalization support. A message catalog to store
 translated text, localization of dates, number formatting, timezone
 conversion, etc. Allows you to serve your users in their
-language.</p></li><li class="listitem"><p>External authenticaiton. Integrate with outside user databases
+language.</p></li><li class="listitem"><p>External authentication. Integrate with outside user databases
 through e.g. LDAP, RADIUS, Kerberos, MS Active Directory. Imports
 user information through IMS Enterprise 1.1 format. Easily extended
 to support other authentication, password management, account

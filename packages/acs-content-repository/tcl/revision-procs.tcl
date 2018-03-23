@@ -298,7 +298,7 @@ ad_proc -public cr_import_content {
             }
         }
 
-        # insert the attatchment into the database
+        # insert the attachment into the database
 
         switch -- $storage_type {
             file {

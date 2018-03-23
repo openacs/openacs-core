@@ -701,7 +701,7 @@ proc http::cleanup {token} {
 
 # http::Connect
 #
-#	This callback is made when an asyncronous connection completes.
+#	This callback is made when an asynchronous connection completes.
 #
 # Arguments
 #	token	The token returned from http::geturl
