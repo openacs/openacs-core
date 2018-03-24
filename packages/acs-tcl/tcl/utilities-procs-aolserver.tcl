@@ -276,6 +276,65 @@ ad_proc -public ad_mutex_eval {mutex script} {
 }
 
 
+#-------------------------------------------------------------------------
+# In case, we are not running under NaviServer, provide a proc
+# compatible with NaviServer's built in ns_md5
+#-------------------------------------------------------------------------
+ad_proc ns_md5 {value} {
+    Emulation of NaviServer's ns_md5
+    
+    @author Gustaf Neumann
+} {
+    package require md5
+    return [md5::Hex [md5::md5 -- $value]]
+}
+
+#-------------------------------------------------------------------------
+# In case, we are not running under NaviServer, provide a proc
+# compatible with NaviServer's built in ns_parseurl.
+#-------------------------------------------------------------------------
+
+ad_proc ns_parseurl {url} {
+    Emulation of NaviServer's ns_parseurl
+    
+    @author Gustaf Neumann
+} {
+    #puts stderr url=$url
+    set result ""
+    if {[regexp {^([a-zA-Z]+):(.*)$} $url . proto url]} {
+        #
+        # a protocol was specified
+        #
+        lappend result proto $proto
+    }
+    if {[regexp {^//([^/]+)(/?.*)$} $url . host url]} {
+        #
+        # two slashes -> host is specified
+        #
+        if {[regexp {^\[(.*)\]:([0-9]+)$} $host . host port]} {
+            # IP literal notation followed by port
+            lappend result host $host port $port
+        } elseif {[regexp {^\[(.*)\]$} $host . host port]} {
+            # IP literal notation followed with no port
+            lappend result host $host
+        } elseif {[regexp {^(.*):([0-9]+)$} $host . host port]} {
+            lappend result host $host port $port
+        } else {
+            lappend result host $host
+        }
+    }
+    if {[regexp {^/(.*)/([^/]+)$} $url . path tail]} {
+        lappend result path $path tail $tail
+    } elseif {[regexp {^/([^/]+)$} $url . tail]} {
+        lappend result path "" tail $tail
+    } elseif {$url in {"/" ""}} {
+        lappend result path {} tail {}
+    } else {
+        lappend result tail $url
+    }
+    return $result
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
