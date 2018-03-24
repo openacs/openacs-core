@@ -1009,7 +1009,7 @@ namespace eval ::apidoc {
         No additional score for repeats
     } {
         # turn keywords into space-separated things
-        # replace one or more commads with a space
+        # replace one or more commands with a space
         regsub -all {,+} $keywords " " keywords
         
         set score 0

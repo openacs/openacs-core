@@ -45,7 +45,7 @@ db_transaction {
             # If they're not in the modified list, remove them
             set perm_array(${grantee_id},${privilege}) remove
         } else {
-            # If they are in the modified list, make a note that they're also in the databse
+            # If they are in the modified list, make a note that they're also in the database
             set perm_array(${grantee_id},${privilege}) nothing
         }
     }

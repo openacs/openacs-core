@@ -15,7 +15,7 @@ standard</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</spa
 <a name="eng-standards-constraint-naming-big-picture" id="eng-standards-constraint-naming-big-picture"></a>The Big
 Picture</h3></div></div></div><p>Constraint naming standard is important for one reason: The
 SYS_* name oracle assigns to unnamed constraints is not very
-understandable. By correctly naming all contraints, we can quickly
+understandable. By correctly naming all constraints, we can quickly
 associate a particular constraint with our data model. This gives
 us two real advantages:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>We can quickly identify and fix any errors.</p></li><li class="listitem"><p>We can reliabily modify or drop constraints</p></li>

@@ -449,7 +449,7 @@ ad_proc -deprecated -private set_encoding {
     names (as shown by [encoding names]) and IANA/MIME charset names
     (i.e., names and aliases in the sense of <a
      href="http://www.iana.org/assignments/character-sets">IANA's
-     charater sets registry</a>) is provided by:</p>
+     character sets registry</a>) is provided by:</p>
     
     <ul>
     <li>A static, built-in correspondence map: see nsd/encoding.c</li>
@@ -486,7 +486,7 @@ ad_proc -deprecated -private set_encoding {
     <li>Invalid IANA/MIME charsets: The name in the "charset" parameter
     of the content type spec is not a valid name or alias in <a
     href="http://www.iana.org/assignments/character-sets">IANA's
-    charater sets registry</a> (a special variant would be an empty
+    character sets registry</a> (a special variant would be an empty
                                 charset value, e.g. "text/plain; charset=")</li>
     
     <li>Unknown IANA/MIME charsets: The name in the "charset" parameter
@@ -1640,7 +1640,7 @@ ad_proc -deprecated ad_table_form {
     {columns {}} 
     {allowed {}}
 } {
-    builds a form for chosing the columns to display 
+    builds a form for choosing the columns to display 
     <p>
     columns is a list of the currently selected columns.
     <p>

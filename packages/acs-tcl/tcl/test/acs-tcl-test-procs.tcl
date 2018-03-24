@@ -244,7 +244,7 @@ aa_register_case -cats {api smoke} xml_get_child_node_content_by_path {
     aa_equals "Same, but after trying a couple of non-existent paths or empty notes" \
         [xml_get_child_node_content_by_path $root_node { { does not exist } { properties } { person name nickname } { person sourcedid id } }] "Superman"
     aa_equals "properties -> datetime" \
-        [xml_get_child_node_content_by_path $root_node { { person commments foo } { person name first_names } { properties datetime } }] "2001-08-08"
+        [xml_get_child_node_content_by_path $root_node { { person comments foo } { person name first_names } { properties datetime } }] "2001-08-08"
 
 
 }

@@ -12,7 +12,7 @@ Chapter 5. Upgrading"
 <a name="upgrade-openacs-files" id="upgrade-openacs-files"></a>Upgrading
 the OpenACS files</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623160003576" id="idp140623160003576"></a>Chosing a Method to Upgrade your
+<a name="idp140623160003576" id="idp140623160003576"></a>Choosing a Method to Upgrade your
 Files</h3></div></div></div><p>OpenACS is distributed in many different ways:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>as a collection of files</p></li><li class="listitem"><p>as one big tarball</p></li><li class="listitem"><p>via CVS</p></li><li class="listitem"><p>via automatic download from within the APM (package manager)</p></li>
 </ul></div><p>Upgrades work by first changing the file system (via any of the

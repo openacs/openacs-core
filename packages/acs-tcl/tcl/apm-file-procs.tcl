@@ -21,7 +21,7 @@ ad_proc -private apm_mkdir {path} {
             file delete -force -- $path
             file mkdir $path
         } errmsg]} {
-            error "Error creationg directory $path: $errmsg"
+            error "Error creating directory $path: $errmsg"
         }
     }
     return $path

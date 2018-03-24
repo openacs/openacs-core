@@ -270,7 +270,7 @@ ad_proc -public auth::authenticate {
     # Verify result/auth_message return codes
     switch $result(auth_status) {
         ok {
-	    # reset/unset failed login attempts counter after a successfull authentication
+	    # reset/unset failed login attempts counter after a successful authentication
  	    ::auth::login_attempts::reset -login_attempt_key $login_attempt_key
 
             # Continue below
@@ -1930,7 +1930,7 @@ ad_proc -private auth::user_info::GetUserInfo {
 # After the maximum number of consecutive failed login attempts
 # has been excedeed, all further login attempts will be automatically rejected
 # for a specifed lock-out/cool-down time, even if the correct credentials have been
-# provided. Every successfull login before reaching the threshold resets the 
+# provided. Every successful login before reaching the threshold resets the 
 # counter to 0 again. Beware, the counting is done via caching and is
 # therefore not persistent.
 #

@@ -486,7 +486,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     avoids the need to reparse the ADP template with each request.
 
     @param file The file name of the source
-    @param string string to be compliled
+    @param string string to be compiled
     @return The compiled code.
 
     Valid options are either -string or -file

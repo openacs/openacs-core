@@ -61,7 +61,7 @@ catch {
 }
 
 
-# Greenpeace had a table of contries and languages and their two-digit ISO-code
+# Greenpeace had a table of countries and languages and their two-digit ISO-code
 # but not so in ACS-LANG - here you must provide the two-digit ISO-code
 
 element create locale_editing locale -label "Locale" \

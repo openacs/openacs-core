@@ -1,6 +1,6 @@
 ad_library {
 
-    Procs for http client comunication
+    Procs for http client communication
 
     @author Antonio Pisano
     @creation-date 2014-02-13

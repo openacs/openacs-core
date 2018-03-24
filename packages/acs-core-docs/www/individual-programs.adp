@@ -240,7 +240,7 @@ production site and do not have an external load balancing
 system.</p></li><li class="listitem">
 <p>
 <strong>Database. </strong> The data on your site
-(for example, user names and passwords, calender entries, and
+(for example, user names and passwords, calendar entries, and
 notes) is stored in the database. OpenACS separates the database
 with an abstraction layer, which means that several different
 databases all function identically. While you can run the core

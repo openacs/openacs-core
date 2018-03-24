@@ -932,7 +932,7 @@ ad_proc -public template::multirow {
             # Make a copy of the row
             array set copy:$i [array get row]
 
-            # Contruct the list
+            # Construct the list
             set sortby {}
             foreach col $sort_cols {
                 append sortby $row($col) " "

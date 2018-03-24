@@ -24,7 +24,7 @@ PostgreSQL package with minor naming changes (e.g. the function
 "rank" became "ts_rank"). PostgreSQL 9 included
 a backward compatibility module named "tsearch2". Newer
 OpenACS installations (at least 5.9.0 or newer) do not need the
-compatiblity package. In PostgreSQL 10 the tsearch2 compatiblity
+compatibility package. In PostgreSQL 10 the tsearch2 compatibility
 package has been removed.</p><p>On new OpenACS installations for PostgreSQL, install the
 tsearch2-driver package via "/acs-admin/install/" and
 mount the search package under "/search" via

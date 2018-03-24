@@ -180,7 +180,7 @@ create table acs_mail_lite_ui (
        -- Any incoming email body part over this size is stored in file 
        -- instead of database.
        max_blob_chars integer,
-       -- Minimum threashold for default medium (standard) priority
+       -- Minimum threshold for default medium (standard) priority
        mpri_min integer,
        -- Maximum value for default medium (standard) priority
        mpri_max integer,

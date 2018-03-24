@@ -154,7 +154,7 @@ namespace eval acs_mail_lite {
 
 	Important headers are:
 	
-	-message-id (a unique id for the email, is different for each email except it was bounced from a mailer deamon)
+	-message-id (a unique id for the email, is different for each email except it was bounced from a mailer daemon)
 	-subject
 	-from
 	-to

@@ -294,7 +294,7 @@ ad_proc -public template::wizard::get_current_step {
 }
 
 ad_proc -private template::wizard::current_step {} {
-    convinience method to get the step for the http params or from the
+    convenience method to get the step for the http params or from the
     wizard step definition
 
     @see template::wizard

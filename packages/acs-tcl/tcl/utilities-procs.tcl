@@ -2790,7 +2790,7 @@ ad_proc -public xml_get_child_node_content_by_path {
     aa_equals &quot;Same, but after trying a couple of non-existent paths or empty notes&quot; \
         [xml_get_child_node_content_by_path $root_node { { does not exist } { properties } { person name nickname } { person sourcedid id } }] &quot;Superman&quot;
     aa_equals &quot;properties -&gt; datetime&quot; \
-        [xml_get_child_node_content_by_path $root_node { { person commments foo } { person name first_names } { properties datetime } }] &quot;2001-08-08&quot;
+        [xml_get_child_node_content_by_path $root_node { { person comments foo } { person name first_names } { properties datetime } }] &quot;2001-08-08&quot;
     </pre>
 
     @param node        The node to start from

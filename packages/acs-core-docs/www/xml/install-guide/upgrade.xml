@@ -328,7 +328,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
     <title>Upgrading the OpenACS files</title>
 
     <sect2>
-      <title>Chosing a Method to Upgrade your Files</title>
+      <title>Choosing a Method to Upgrade your Files</title>
       <para>OpenACS is distributed in many different ways:
         <itemizedlist>
           <listitem><para>as a collection of files</para></listitem>

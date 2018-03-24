@@ -52,7 +52,7 @@ for multiple pages.</li>
 <a name="usercases" id="usercases"></a>
 <h3>IV. Use-cases and User-scenarios</h3>
 <p>The template system is designed to be used by two classes of
-users: programmers and designers. In bulding a web site,
+users: programmers and designers. In building a web site,
 programmers are generally responsible for defining and implementing
 the <em>application logic</em> of the site, while designers are
 more responsible for the <em>presentation</em>. Generally speaking,
