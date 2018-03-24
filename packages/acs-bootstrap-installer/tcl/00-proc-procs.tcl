@@ -1047,7 +1047,7 @@ ad_proc -public ad_assert_arg_value_in_list {
 }
 
 ad_proc -public ad_with_deprecated_code_p {} {
-    Check, if we should load depreacted code.
+    Check, if we should load deprecated code.
     
     In order to skip loading of deprecated code, use the following
     snippet in your config file

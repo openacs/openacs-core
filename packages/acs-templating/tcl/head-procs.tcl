@@ -63,7 +63,7 @@ ad_proc -public template::add_script {
                    (Cross-Origin Resource Sharing) should be used
     @param defer   whether execution of the script should be deferred until after
                    the page has been loaded
-    @param integrity provide hash values for W3C Subresource Integrity recommentation
+    @param integrity provide hash values for W3C Subresource Integrity recommendation
     @param order   specify inclusion order
     @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for src
@@ -115,7 +115,7 @@ ad_proc -public template::head::add_script {
                    (Cross-Origin Resource Sharing) should be used
     @param defer   whether execution of the script should be deferred until after
                    the page has been loaded
-    @param integrity provide hash values for W3C Subresource Integrity recommentation
+    @param integrity provide hash values for W3C Subresource Integrity recommendation
     @param order   specify inclusion order
     @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for src
@@ -410,7 +410,7 @@ ad_proc -public template::head::add_javascript {
                    (Cross-Origin Resource Sharing) should be used
     @param defer   whether execution of the script should be deferred until after
                    the page has been loaded
-    @param integrity provide hash values for W3C Subresource Integrity recommentation
+    @param integrity provide hash values for W3C Subresource Integrity recommendation
     @param order   specify inclusion order
     @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for
@@ -542,7 +542,7 @@ ad_proc -public template::add_body_script {
                    (Cross-Origin Resource Sharing) should be used
     @param defer   whether execution of the script should be deferred until after
                    the page has been loaded
-    @param integrity provide hash values for W3C Subresource Integrity recommentation
+    @param integrity provide hash values for W3C Subresource Integrity recommendation
     @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for
                    src

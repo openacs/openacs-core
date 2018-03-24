@@ -17,7 +17,7 @@ if {![ad_with_deprecated_code_p]} {
     ns_log notice "deprecated-procs: skip deprecated code"
     return
 }
-ns_log notice "deprecated-procs include depreacted code"
+ns_log notice "deprecated-procs include deprecated code"
 
 
 ##################################################################################
