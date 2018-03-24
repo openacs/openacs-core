@@ -286,7 +286,7 @@ ad_proc -public subsite::package_keys {
 
 ad_proc -public subsite::get {
     {-subsite_id {}}
-    {-array:required}
+    {-array}
 } {
     Get information about a subsite.
 
@@ -294,11 +294,11 @@ ad_proc -public subsite::get {
     If no id is provided, then the id of the closest ancestor subsite will
     be used.
     @param array The name of an array in which information will be returned.
+    @return dict with subsite attributed
 
     @author Frank Nikolajsen (frank@warpspace.com)
     @creation-date 2003-03-08
 } {
-    upvar $array subsite_info
 
     if { $subsite_id eq "" } {
         set subsite_id [ad_conn subsite_id]
@@ -309,9 +309,13 @@ ad_proc -public subsite::get {
     } else {
         set package_id [ad_conn package_id]
     }
-
-    array unset subsite_info
-    array set subsite_info [site_node::get_from_object_id -object_id $subsite_id]
+    set info [site_node::get_from_object_id -object_id $subsite_id]
+    if {[info exists array]} {
+        upvar $array subsite_info
+        array unset subsite_info
+        array set subsite_info $info
+    }
+    return $info
 }
 
 ad_proc -public subsite::get_element {
