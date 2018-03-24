@@ -1068,6 +1068,7 @@ ad_proc -private aa_http {
     {-body}
     {-content_type}
     {-timeout 10}
+    {-headers}    
     request
 } {
     Run an http request against the actual server
@@ -1081,9 +1082,13 @@ ad_proc -private aa_http {
         lappend extra_args -body $body
     }
     if {[info exists content_type]} {
-        set queryHeaders [ns_set create]
-        ns_set update $queryHeaders "Content-type" $content_type
-        lappend extra_args -headers $queryHeaders
+        if {![info exists headers]} {
+            set headers [ns_set create]
+        }
+        ns_set update $headers "Content-type" $content_type
+    }
+    if {[info exists headers]} {
+        lappend extra_args -headers $headers
     }
     nsv_set aa_test logindata [list peeraddr $peeraddr user_id $user_id]
     
@@ -1096,8 +1101,8 @@ ad_proc -private aa_http {
     } finally {
         nsv_unset aa_test logindata
     }
-    ns_log notice "run $request returns $d"
-    ns_log notice "... [ns_set array [dict get $d headers]]"
+    #ns_log notice "run $request returns $d"
+    #ns_log notice "... [ns_set array [dict get $d headers]]"
     return $d
 }
 
