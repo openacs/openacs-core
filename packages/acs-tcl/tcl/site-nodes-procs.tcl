@@ -20,7 +20,7 @@ ad_library {
 # version is much faster from a factor of two to a several thousand
 # times - but requires XOTcl, which has not made it yet to the
 # acs-core procs. So, the implementation checks, if the installation
-# fullfills the requirements of the new code, if not, it falls back to
+# fulfills the requirements of the new code, if not, it falls back to
 # the classical implementation.
 #
 # Some timings:

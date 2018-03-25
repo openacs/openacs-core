@@ -1204,7 +1204,7 @@ namespace eval ::apidoc {
         various colors and creating hyperlinks to other proc definitions.<BR>
         The inspiration for this proc was the tcl2html script created by Jeff Hobbs.
 
-        @param script script to be formated in HTML
+        @param script script to be formatted in HTML
 
     } {
 

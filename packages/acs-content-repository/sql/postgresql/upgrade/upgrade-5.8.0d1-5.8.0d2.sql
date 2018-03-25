@@ -1,5 +1,5 @@
 
---- geting rid of backslashes used with the purpose of scaping
+--- getting rid of backslashes used with the purpose of scaping
 
 -- function is_assigned
 select define_function_args ('content_keyword__is_assigned','item_id,keyword_id,recurse;none');
@@ -335,7 +335,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- geting right definition of function's arguments 
+-- getting right definition of function's arguments 
 
 select define_function_args('cr_items_get_tree_sortkey','item_id');
 select define_function_args('cr_keywords_get_tree_sortkey','keyword_id');
@@ -477,7 +477,7 @@ select define_function_args('doc__get_proc_header','proc_name,package_name');
 select define_function_args('doc__get_package_header','package_name');
 
 
--- right return type for fuctions used in triggers and right naming 
+-- right return type for functions used in triggers and right naming 
 -- vguerra - NOTE: ALTER TRIGGER could be used for renaming the triggers but it 
 -- is available starting from PG 8.2 on, so for backwards compatibility 
 -- we simply drop and recreate the triggers.

@@ -1307,7 +1307,7 @@ ad_proc -public aa_test::visualize_control_chars {lines} {
 ad_proc -public aa_get_first_url {
     {-package_key:required}
 } {
-    Procedure for geting the url of a mounted package with the
+    Procedure for getting the url of a mounted package with the
     package_key. It uses the first instance that it founds. This is
     useful for tclwebtest tests.
 } {

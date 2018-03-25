@@ -250,7 +250,7 @@ ad_proc -public template::util::richtext::get_tag {
 } {
     
     Return tag name for the markup; normally a "textarea", but some
-    editors might use e.g. a "div". If the fuction is defined for the
+    editors might use e.g. a "div". If the function is defined for the
     editor, call it.
     
 } {

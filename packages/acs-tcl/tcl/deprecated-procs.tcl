@@ -582,7 +582,7 @@ ad_proc -deprecated validate_ad_dateentrywidget {field_name column form {allow_n
     set year [ns_set get $form "$col.year"]
 
     # check that either all elements are blank
-    # date value is formated correctly for ns_dbformvalue
+    # date value is formatted correctly for ns_dbformvalue
     if { "$day$month$year" eq "" } {
         if { $allow_null == 0 } {
             error "$field_name must be supplied"

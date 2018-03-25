@@ -92,7 +92,7 @@ create or replace function ' || fname || '(';
 END;
 $$ LANGUAGE plpgsql stable strict;
 
--- geting right definition of function's arguments 
+-- getting right definition of function's arguments
 
 select define_function_args('acs__add_user','user_id;null,object_type;user,creation_date;now(),creation_user;null,creation_ip;null,authority_id,username,email,url;null,first_names,last_name,password,salt,screen_name;null,email_verified_p;t,member_state;approved');
 select define_function_args('acs__remove_user','user_id');
