@@ -1038,7 +1038,7 @@ BEGIN
   -- On delete cascade should work for us, but not in case of
   -- relationships. Therefore, we call acs_object__delete explicitly
   -- on the revisions. Is is also safer in general, as referential
-  -- integrity might not have been enforced everytime.
+  -- integrity might not have been enforced every time.
   --
   PERFORM acs_object__delete(revision_id)
     from cr_revisions where item_id = delete__item_id;
@@ -1049,7 +1049,7 @@ BEGIN
   -- On delete cascade should work for us, but not in case of
   -- relationships. Therefore, we call acs_object__delete explicitly
   -- on the revisions. Is is also safer in general, as referential
-  -- integrity might not have been enforced everytime.
+  -- integrity might not have been enforced every time.
   --
   PERFORM content_item__delete(item_id)
     from cr_items where parent_id = delete__item_id;

@@ -1634,7 +1634,7 @@ ad_proc -private util::http::curl::request {
     }
 
     # Curls accepts gzip by default, so if gzip response is not required
-    # we have to ask explicitly for a plain text enconding
+    # we have to ask explicitly for a plain text encoding
     set req_accept_encoding [ns_set iget $headers "accept-encoding"]
     if {$req_accept_encoding ne ""} {
         set gzip_response_p [string match "*gzip*" $req_accept_encoding]

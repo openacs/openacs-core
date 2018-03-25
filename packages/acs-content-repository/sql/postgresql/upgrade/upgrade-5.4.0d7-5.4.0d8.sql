@@ -49,7 +49,7 @@ begin
 
   select parent_id into v_parent_id from cr_items 
     where item_id = delete__folder_id;
-  raise notice ''deleteing folder %'',delete__folder_id;
+  raise notice ''deleting folder %'',delete__folder_id;
   PERFORM content_item__delete(delete__folder_id);
 
   -- check if any folders are left in the parent

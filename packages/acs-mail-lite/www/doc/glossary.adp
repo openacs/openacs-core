@@ -15,7 +15,7 @@
     RFC4021 https://tools.ietf.org/html/rfc4021
     <br/><br/>
     Custom headers can also be added using 
-    the exension-field prefix "x-" or "X-"
+    the extension-field prefix "x-" or "X-"
     See RFC822 4.7.4 https://tools.ietf.org/html/rfc822
   </dd>
   

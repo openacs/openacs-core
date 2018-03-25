@@ -355,7 +355,7 @@ ad_proc -public ad_form {
 
     <p><dt><b>-edit_data</b></dt><p>
     <dd>This code block will be executed when a form for an existing database row is submitted.  This block should
-        update the database or create a new content revision for the exisiting item if the data's stored in the
+        update the database or create a new content revision for the existing item if the data's stored in the
         content repository.
         Calling 'break' inside this block causes the submission process to be aborted, and  
         after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form 
