@@ -1066,9 +1066,8 @@ ad_proc -private aa_http {
     {-user_id 0}
     {-method GET}
     {-body}
-    {-content_type}
     {-timeout 10}
-    {-headers}
+    {-headers ""}
     {-verbose:boolean 1}
     request
 } {
@@ -1082,14 +1081,12 @@ ad_proc -private aa_http {
     if {[info exists body]} {
         lappend extra_args -body $body
     }
-    if {[info exists content_type]} {
-        if {![info exists headers]} {
-            set headers [ns_set create]
+    if {[llength $headers] > 0} {
+        set requestHeaders [ns_set create]
+        foreach {tag value} $headers {
+            ns_set update $requestHeaders $tag $value
         }
-        ns_set update $headers "Content-type" $content_type
-    }
-    if {[info exists headers]} {
-        lappend extra_args -headers $headers
+        lappend extra_args -headers $requestHeaders
     }
     nsv_set aa_test logindata [list peeraddr $peeraddr user_id $user_id]
     
@@ -1113,9 +1110,9 @@ ad_proc -private aa_http {
 
 
 
-namespace eval aa_test {
+namespace eval aa_xpath {
 
-    ad_proc -public ::aa_test::xpath_get_text {root xpath} {
+    ad_proc -public ::aa_xpath::get_text {root xpath} {
         Get a text element from tdom via XPath expression.
         If the XPath expression matches multiple nodes,
         return a list.
@@ -1134,12 +1131,12 @@ namespace eval aa_test {
         return $result
     }
 
-    ad_proc -public ::aa_test::xpath_non_empty {node selectors} {
+    ad_proc -public ::aa_xpath::non_empty {node selectors} {
         Test if provided selectors return non-empty results
     } {
         foreach q $selectors {
             try {
-                set value [xpath_get_text $node $q]
+                set value [get_text $node $q]
             } on error {errorMsg} {
                 aa_true "XPAth exception during evaluation of selector '$q': $errorMsg" 0
                 throw {XPATH {xpath triggered exception}} $errorMsg
@@ -1147,13 +1144,13 @@ namespace eval aa_test {
             aa_true "XPath $q <$value>:" {[string length $value] > 0}
         }
     }
-    ad_proc -public ::aa_test::xpath_equals {node pairs} {
+    ad_proc -public ::aa_xpath::equals {node pairs} {
         Test if provided selectors (first element of the pair) return
         the specificed results (second element of the pair).
     } {
         foreach {q value} $pairs {
             try {
-                set result [xpath_get_text $node $q]
+                set result [get_text $node $q]
             } on error {errorMsg} {
                 aa_true "XPAth exception during evaluation of selector '$q': $errorMsg" 0
                 throw {XPATH {xpath triggered exception}} $errorMsg
@@ -1164,7 +1161,7 @@ namespace eval aa_test {
     }
 }
 
-
+namespace eval aa_test {}
 
 ad_proc -public aa_test::xml_report_dir {} {
     Retrieves the XMLReportDir parameter.
