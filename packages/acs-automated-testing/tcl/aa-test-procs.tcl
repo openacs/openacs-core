@@ -1069,7 +1069,7 @@ ad_proc -private aa_http {
     {-content_type}
     {-timeout 10}
     {-headers}
-    {-verbose:boolean}    
+    {-verbose:boolean 1}
     request
 } {
     Run an http request against the actual server
@@ -1113,26 +1113,58 @@ ad_proc -private aa_http {
 
 
 
-namespace eval aa_test {}
+namespace eval aa_test {
 
-ad_proc -public aa_test::xpath_get_text {root xpath} {
-    Get a text element from tdom via XPath expression.
-    If the XPath expression matches multiple nodes,
-    return a list.
-} {
-    set nodes [$root selectNodes $xpath]
-    switch [llength $nodes] {
-        0 {set result ""}
-        1 {set result [$nodes asText]}
-        default {
-            set result ""
-            foreach n $nodes {
-                lappend result [$n asText]
+    ad_proc -public ::aa_test::xpath_get_text {root xpath} {
+        Get a text element from tdom via XPath expression.
+        If the XPath expression matches multiple nodes,
+        return a list.
+    } {
+        set nodes [$root selectNodes $xpath]
+        switch [llength $nodes] {
+            0 {set result ""}
+            1 {set result [$nodes asText]}
+            default {
+                set result ""
+                foreach n $nodes {
+                    lappend result [$n asText]
+                }
             }
         }
+        return $result
     }
-    return $result
+
+    ad_proc -public ::aa_test::xpath_non_empty {node selectors} {
+        Test if provided selectors return non-empty results
+    } {
+        foreach q $selectors {
+            try {
+                set value [xpath_get_text $node $q]
+            } on error {errorMsg} {
+                aa_true "XPAth exception during evaluation of selector '$q': $errorMsg" 0
+                throw {XPATH {xpath triggered exception}} $errorMsg
+            }
+            aa_true "XPath $q <$value>:" {[string length $value] > 0}
+        }
+    }
+    ad_proc -public ::aa_test::xpath_equals {node pairs} {
+        Test if provided selectors (first element of the pair) return
+        the specificed results (second element of the pair).
+    } {
+        foreach {q value} $pairs {
+            try {
+                set result [xpath_get_text $node $q]
+            } on error {errorMsg} {
+                aa_true "XPAth exception during evaluation of selector '$q': $errorMsg" 0
+                throw {XPATH {xpath triggered exception}} $errorMsg
+            }
+
+            aa_equals "XPath $q:" $result $value
+        }
+    }
 }
+
+
 
 ad_proc -public aa_test::xml_report_dir {} {
     Retrieves the XMLReportDir parameter.
