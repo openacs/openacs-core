@@ -48,16 +48,18 @@ if {![db_0or1row acs-automated-testing.get_testcase_fails_count {
 
 set testcase_bodys {}
 foreach testcase [nsv_get aa_test cases] {
-    if {$testcase_id eq [lindex $testcase 0] && $package_key eq [lindex $testcase 3]} {
-        set testcase_desc     [lindex $testcase 1]
-        set testcase_file     [lindex $testcase 2]
-        set testcase_cats     [join [lindex $testcase 4] ", "]
-        set testcase_inits    [join [lindex $testcase 5] ", "]
-        set testcase_on_error [lindex $testcase 6]
-        set testcase_bodys    [lindex $testcase 7]
+    if {$testcase_id eq [lindex $testcase 0]
+        && $package_key eq [lindex $testcase 3]
+    } {
+        set testcase_desc        [lindex $testcase 1]
+        set testcase_file        [lindex $testcase 2]
+        set testcase_cats        [join [lindex $testcase 4] ", "]
+        set testcase_inits       [join [lindex $testcase 5] ", "]
+        set testcase_on_error    [lindex $testcase 6]
+        set testcase_bodys       [lindex $testcase 7]
         set testcase_error_level [lindex $testcase 8]
-        set testcase_bugs     [lindex $testcase 9]
-        set testcase_procs    [lindex $testcase 10]
+        set testcase_bugs        [lindex $testcase 9]
+        set testcase_procs       [lindex $testcase 10]
     }
 }
 
@@ -107,10 +109,14 @@ set resource_file_url [export_vars -base init-file-resource {
     {absolute_file_path $testcase_file}
 }]
 
-set rerun_url [export_vars -base rerun {testcase_id package_key quiet {return_url [ad_return_url]}}]
+set rerun_url [export_vars -base rerun {
+    testcase_id package_key quiet {return_url [ad_return_url]}
+}]
 
 if {$return_url eq ""} {
-  set return_url [export_vars -base . { { view_by testcase } quiet { by_package_key $package_key } }]
+    set return_url [export_vars -base . {
+        { view_by testcase } quiet { by_package_key $package_key }
+    }]
 }
 
 set quiet_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=1"
