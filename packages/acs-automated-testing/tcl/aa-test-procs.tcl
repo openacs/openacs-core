@@ -1115,8 +1115,10 @@ ad_proc -private aa_http {
 
 namespace eval aa_test {}
 
-ad_proc -public aa_test::xml_get_text {root xpath} {
-    Get a text element from tdom via xpath expression
+ad_proc -public aa_test::xpath_get_text {root xpath} {
+    Get a text element from tdom via XPath expression.
+    If the XPath expression matches multiple nodes,
+    return a list.
 } {
     set nodes [$root selectNodes $xpath]
     switch [llength $nodes] {
