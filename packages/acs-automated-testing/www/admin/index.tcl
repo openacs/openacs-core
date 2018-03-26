@@ -45,6 +45,7 @@ db_foreach acs-automated-testing.results_queryx {
     select testcase_id, package_key,
     to_char(timestamp,'YYYY-MM-DD_HH24:MI:SS') as timestamp, passes, fails
     from aa_test_final_results
+    order by package_key, testcase_id
 } {
     if {[info exists results("$testcase_id,$package_key")]} {
         # Append results to individual testcase
