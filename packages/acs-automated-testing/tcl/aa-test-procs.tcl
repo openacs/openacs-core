@@ -1068,7 +1068,8 @@ ad_proc -private aa_http {
     {-body}
     {-content_type}
     {-timeout 10}
-    {-headers}    
+    {-headers}
+    {-verbose:boolean}    
     request
 } {
     Run an http request against the actual server
@@ -1103,6 +1104,10 @@ ad_proc -private aa_http {
     }
     #ns_log notice "run $request returns $d"
     #ns_log notice "... [ns_set array [dict get $d headers]]"
+    if {$verbose_p} {
+        set ms [format %.2f [expr {[ns_time format [dict get $d time]]*1000}]]
+        aa_log "$method $request returns [dict get $d status] in ${ms}ms"
+    }
     return $d
 }
 
@@ -1113,9 +1118,18 @@ namespace eval aa_test {}
 ad_proc -public aa_test::xml_get_text {root xpath} {
     Get a text element from tdom via xpath expression
 } {
-    set n [$root selectNodes $xpath]
-    if {$n eq ""} {return ""}
-    return [$n asText]
+    set nodes [$root selectNodes $xpath]
+    switch [llength $nodes] {
+        0 {set result ""}
+        1 {set result [$nodes asText]}
+        default {
+            set result ""
+            foreach n $nodes {
+                lappend result [$n asText]
+            }
+        }
+    }
+    return $result
 }
 
 ad_proc -public aa_test::xml_report_dir {} {
