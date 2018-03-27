@@ -107,7 +107,7 @@ ad_proc -public ::content::revision::new {
     if { [info exists attributes] && $attributes ne "" } {
 	set type_attributes [package_object_attribute_list $content_type]
 	set valid_attributes [list]
-	# add in extended attributes for this type, ingore
+	# add in extended attributes for this type, ignore
 	# content_revision as those are already captured as named
 	# parameters to this procedure
 	

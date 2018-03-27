@@ -1025,7 +1025,7 @@ ad_proc -private util::http::follow_redirects {
         set multipart_p [string match -nocase "*multipart/form-data*" $req_content_type]
         # I decided to don't translate into urlvars a multipart payload.
         # This makes sense if we think that in a multipart payload we have
-        # many informations, such as mime_type, which cannot be put into url.
+        # some information, such as mime_type, which cannot be put into url.
         # Receiving a GET redirect after a POST is very common, so I won't throw an error
         if {!$multipart_p} {
             if {$gzip_request_p} {

@@ -96,7 +96,7 @@ implementations. ?? why operation</li></ul>
 <h3>Discovery</h3>
 <ul><li>(tcl) acs_sc_binding_exists_p (contract, impl): returns boolean
 whether a binding exists between a given contract name and
-implmentation.</li></ul>
+implementation.</li></ul>
 <h3>Dispatching</h3>
 <ul><li>(tcl) acs_sc::invoke (contract, operation, [arguments, impl]):
 calls an operation</li></ul>

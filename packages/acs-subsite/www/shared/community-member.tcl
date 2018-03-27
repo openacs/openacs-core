@@ -49,7 +49,7 @@ ad_page_contract {
 }
 
 #
-# See if this page has been overrided by a parameter in kernel
+# See if this page has been overridden by a parameter in kernel
 #
 set community_member_url [parameter::get \
                               -package_id [ad_acs_kernel_id] \

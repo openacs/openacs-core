@@ -88,7 +88,7 @@ foreach package_key [array names repository] {
     #  - package is deprecated
     #  - package is not supported by the installed database
     #  - don't offer "-portlet" alone (currently only useful in connection with DotLRN)
-    #  - dont't offer packages of HEAD, when these are included in the current channel
+    #  - don't offer packages of HEAD, when these are included in the current channel
     #
     if {[dict get $version maturity] < $maturity
 	|| [dict get $version maturity] == 4

@@ -203,10 +203,10 @@ originated.</td>
 </tr><tr>
 <th align="right" valign="top">relation_tag:</th><td>  </td><td>A simple token used to identify a set of relations.</td>
 </tr><tr>
-<th align="right" valign="top">min_n:</th><td>  </td><td>The minimun number of parent-child relationships of this type
+<th align="right" valign="top">min_n:</th><td>  </td><td>The minimum number of parent-child relationships of this type
 which an item must have to go live.</td>
 </tr><tr>
-<th align="right" valign="top">max_n:</th><td>  </td><td>The minimun number of relationships of this type which an item
+<th align="right" valign="top">max_n:</th><td>  </td><td>The minimum number of relationships of this type which an item
 must have to go live.</td>
 </tr>
 </table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
@@ -254,10 +254,10 @@ targeted.</td>
 </tr><tr>
 <th align="right" valign="top">relation_tag:</th><td>  </td><td>A simple token used to identify a set of relations.</td>
 </tr><tr>
-<th align="right" valign="top">min_n:</th><td>  </td><td>The minimun number of relationships of this type which an item
+<th align="right" valign="top">min_n:</th><td>  </td><td>The minimum number of relationships of this type which an item
 must have to go live.</td>
 </tr><tr>
-<th align="right" valign="top">max_n:</th><td>  </td><td>The minimun number of relationships of this type which an item
+<th align="right" valign="top">max_n:</th><td>  </td><td>The minimum number of relationships of this type which an item
 must have to go live.</td>
 </tr>
 </table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>

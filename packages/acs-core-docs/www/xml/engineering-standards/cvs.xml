@@ -804,7 +804,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
         </listitem>
         <listitem>
           <para>
-            <ulink url="http://openacs.org/forums/message-view?message_id=178551">merging 2 file heirarchies with cvs</ulink>
+            <ulink url="http://openacs.org/forums/message-view?message_id=178551">merging 2 file hierarchies with cvs</ulink>
           </para>
         </listitem>
       </itemizedlist>

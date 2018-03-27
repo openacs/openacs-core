@@ -485,7 +485,7 @@ previous section, since our system precompiles adp templates, we
 can get a performance improvement if we can cache the message
 lookups at template compile time.
 <p>The &lt;TRN&gt; tag is a call to lang_message_lookup that can be
-used inside of an ADP file. Here is the documention:</p>
+used inside of an ADP file. Here is the documentation:</p>
 <blockquote>Procedure that gets called when the &lt;trn&gt; tag is
 encountered on an ADP page. The purpose of the procedure is to
 register the text string enclosed within a pair of &lt;trn&gt; tags

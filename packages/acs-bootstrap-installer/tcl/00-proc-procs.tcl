@@ -823,7 +823,7 @@ ad_proc -public callback {
     so passing arrays to a callback can be done normally via
     <pre>upvar arrayname $arrayref</pre>
     <p>
-    The return codes returned from the implmentation are treated
+    The return codes returned from the implementation are treated
     as follows:
     <dl>
      <dt>return -code ok or "<b>return</b>"</dt>
@@ -857,7 +857,7 @@ ad_proc -public callback {
 
     @param callback the callback name without leading or trailing ::
 
-    @param impl invoke a specific implemenation rather than all implementations
+    @param impl invoke a specific implementation rather than all implementations
            of the given callback
 
     @param catch if catch specified errors in the callback will be caught, tracebacks

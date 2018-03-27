@@ -1386,7 +1386,7 @@ proc dom::Element:Normalize {pVar nodes} {
 
 # dom::processinginstruction --
 #
-#	Functions for a processing intruction.
+#	Functions for a processing instruction.
 #
 # Arguments:
 #	method	method to invoke

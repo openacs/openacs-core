@@ -34,7 +34,7 @@ developmental installation or your production installation, and
 follow the instructions for committing your files to CVS. We&#39;ll
 assume in this example that you set up the production server
 (service0). To set up the developmental instance, you then follow
-the intall guide again, this time creating a new user
+the install guide again, this time creating a new user
 (service0-dev) that you&#39;ll use for the new installation. To get
 the files for service0-dev, you check them out from cvs (check out
 service0).</p><pre class="programlisting">

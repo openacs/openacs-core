@@ -55,7 +55,7 @@ ad_proc -public template::list::create {
     {-filter_form 0}
     {-bulk_action_click_function "acs_ListBulkActionClick"}
 } {
-    Defines a list to be diplayed in a template. The list works in conjunction with a multirow, which contains the data for the list.
+    Defines a list to be displayed in a template. The list works in conjunction with a multirow, which contains the data for the list.
     The list is output using the &lt;listtemplate&gt; and &lt;listfilters&gt; templating tags, with the help of &lt;listelement&gt; and &lt;listrow&gt;.
 
     <p>

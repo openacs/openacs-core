@@ -40,12 +40,12 @@ ad_proc -public email_image::get_user_email {
     {-bgcolor "" }
     {-transparent "" }
 } {
-    Returns the email in differnet different ways (text level 4, image or text and image level 3, link level 2, ...)
+    Returns the email in different ways (text level 4, image or text and image level 3, link level 2, ...)
     according to the priv_email field in the users table. To create an image the ImageMagick software is required, 
     if ImageMagick is not present then the @ symbol in the email will be shown as an image. When creating an image 
     you can choose the background color (In this format \#xxxxxx). Also you can make the background color transparent 
     (1 or 0).
-    
+
     @param return_url   The url to return when the email is shown as a link
     @param bgcolor      The Background color of the image. Default to \#ffffff
     @param transparent  If the bgcolor is transparent. Default to 1

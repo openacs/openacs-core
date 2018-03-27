@@ -583,8 +583,8 @@ ad_proc -public acs_mail_lite::email_type {
     }
 
     if { $headers ne "" && [array size h_arr] < 1 } {
-        #  To remove subject from headers to search, 
-        #  incase topic uses a reserved word,
+        #  To remove subject from headers to search,
+        #  in case topic uses a reserved word,
         #  we rebuild the semblence of array returned by ns_imap headers.
         #  Split strategy from qss_txt_table_stats
         set linebreaks "\n\r\f\v"

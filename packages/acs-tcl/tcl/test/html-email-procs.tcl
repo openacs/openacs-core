@@ -3,11 +3,11 @@ ad_library {
 }
 
 aa_register_case -cats {api smoke} build_mime_message {
-    Basic test of build mime mesage
+    Basic test of build mime message
 } {
     aa_false "Build mime message, no error" \
 	[catch {build_mime_message \
-		    "Test Mesage" \
+		    "Test Message" \
 		    "<p>Test Message</p>"} errmsg]
     aa_log err=$errmsg
     aa_false "Package require mime package found" \

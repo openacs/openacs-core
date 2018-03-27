@@ -25,7 +25,7 @@ set locale [lang::user::locale -user_id $rel_user_id]
 
 if {$send_notification_mail} {
     #
-    # Compose a mail to notifiy the user about the new state
+    # Compose a mail to notify the user about the new state
     #
     set action [group::get_member_state_pretty -component action \
                     -member_state $member_state \

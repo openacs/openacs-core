@@ -59,13 +59,13 @@ structure of the composite page looks like this as a graph.</p>
 <p>Any (sub)page can have 0 or 1 master and 0 or more included
 pages. Each page has its own <em>separate</em> scope for variables.
 Arguments can be passed to dependent pages as attributes to
-<code>&lt;inlcude&gt;</code>, or as properties to
+<code>&lt;include&gt;</code>, or as properties to
 <code>&lt;master&gt;</code>. The directed graph of pages will often
 be be acyclic, as in the example, but this is not required.</p>
 <h3>Evaluation Order</h3>
 <p>Sometimes it is of interest in which order the different parts
 are evaluated. The "code" always runs first, followed by
-the template. The <code>&lt;inlcude&gt;</code> tag causes the
+the template. The <code>&lt;include&gt;</code> tag causes the
 subpage to be evaluated at this point of the template, and the rest
 of the including template is evaluated after that&#39;s done. This
 is like a procedure call. In contrast, the

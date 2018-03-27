@@ -138,7 +138,7 @@ over the proc many times. In this case, pass-by-value is expensive,
 and you&#39;d use pass-by-reference.</p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>The transformation of the array into
 a list and back to an array takes, in our test environment,
 approximately 10 microseconds per entry of 100 character&#39;s
-length. Thus you can process about 100 entries per milisecond. The
+length. Thus you can process about 100 entries per millisecond. The
 time depends almost completely on the number of entries, and almost
 not at all on the size of the entries.</em></span></p></blockquote></div><p>You implement pass-by-reference in Tcl by taking the name of an
 array as an argument and <code class="computeroutput">upvar</code>

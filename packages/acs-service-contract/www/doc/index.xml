@@ -225,7 +225,7 @@ creates a new operation as part of a contract.</para>
 <listitem><para>
 (tcl) acs_sc_binding_exists_p (contract, impl): 
                 returns boolean whether a binding exists between
-                a given contract name and implmentation.</para></listitem>
+                a given contract name and implementation.</para></listitem>
 </itemizedlist>
 
 </section>

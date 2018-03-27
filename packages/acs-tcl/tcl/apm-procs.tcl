@@ -1350,7 +1350,7 @@ ad_proc -public apm_version_info {version_id} {
 
 ad_proc -public apm_package_version_installed_p {package_key version_name} {
 
-    @return 1 if the indiciated package version is installed, 0 otherwise.
+    @return 1 if the indicated package version is installed, 0 otherwise.
 
 } {
     return [db_string apm_package_version_installed_p {}]
@@ -1358,7 +1358,7 @@ ad_proc -public apm_package_version_installed_p {package_key version_name} {
 
 ad_proc -public apm_package_version_enabled_p {version_id} {
 
-    @return 1 if the indiciated package version is installed, 0 otherwise.
+    @return 1 if the indicated package version is installed, 0 otherwise.
 
 } {
     return [db_string apm_package_version_enabled_p {}]

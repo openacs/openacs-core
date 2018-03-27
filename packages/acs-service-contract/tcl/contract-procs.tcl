@@ -161,7 +161,7 @@ ad_proc -public acs_sc::contract::delete {
             set msg_types [list]
             
             db_foreach select_operations {} {
-                # Put them on list of mesage types and operations to delete
+                # Put them on list of message types and operations to delete
                 lappend msg_types $operation_inputtype_id
                 lappend msg_types $operation_outputtype_id
                 lappend operations $operation_id

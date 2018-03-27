@@ -157,7 +157,7 @@ create index acs_mail_lite_from_external_release_p_idx
 -- Also, test, for example, if new message count is less than
 -- prior total, there's more of a chance that they are new messages;
 -- Maybe check for one or two duplicates.
--- If new message count is over the total prior messsage count, flag a problem.
+-- If new message count is over the total prior message count, flag a problem.
 -- rfc3501 2.3.1.1.  ..A client can only assume.. at the time
 --        that it obtains the next unique identifier value.. that
 --        messages arriving after that time will have a UID greater
