@@ -945,7 +945,7 @@ ad_proc -private rp_handle_request {} {
         # Only in cases where the URL refers to a mounted package,
         # include it for path checking.
         #
-        lappend resolve_values [apm_package_url_resolution [ad_conn package_key]]
+        lappend resolve_values {*}[apm_package_url_resolution [ad_conn package_key]]
     }
     foreach resolve_value $resolve_values {
         lassign $resolve_value root match_prefix
