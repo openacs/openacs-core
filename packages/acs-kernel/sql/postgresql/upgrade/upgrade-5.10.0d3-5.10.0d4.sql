@@ -4,7 +4,7 @@ begin;
 -- apisano 2018-02-21:
 -- - added proper removal of acs_rels when deleting an acs object
 -- - remove dead acs_object coming from erased portraits. Not clear
---   wether other kinds of dead objects due to other kind of
+--   whether other kinds of dead objects due to other kind of
 --   relationships will still be around...
 
 -- Cleanup

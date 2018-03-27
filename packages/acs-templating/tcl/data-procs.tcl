@@ -430,7 +430,7 @@ ad_proc -public template::data::transform {
   type
   value_ref
 } {
-  Dispatch procedure for the transform method.  "tranformation" in template
+  Dispatch procedure for the transform method.  "transformation" in template
   systemspeak means to convert the submitted data to the custom datatype structure,
   usually a list for complex datatypes, just the value for simple datatypes.  The
   transform method is called after the datatype is validated.

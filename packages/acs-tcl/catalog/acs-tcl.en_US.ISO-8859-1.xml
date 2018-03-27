@@ -19,7 +19,7 @@
   <msg key="Error_Report">Error Report</msg>
   <msg key="errors">errors</msg>
   <msg key="File">File with error:</msg>
-  <msg key="Insert_error">Theres was an error Inserting the Information to the Data Base: </msg>
+  <msg key="Insert_error">There was an error Inserting the Information to the Data Base: </msg>
   <msg key="lt__and_resubmit_your_en">, and resubmit your entry.</msg>
   <msg key="lt_Argspec_element_is_in">Argspec '%element%' is invalid, because it contains more than two elements.</msg>
   <msg key="lt_Automatically_Submite">Error Submitted Automatically</msg>

@@ -715,7 +715,7 @@ ad_proc -public template::widget::menu {
                     if { [info exists values($value)] } {
                         append output [subst { selected="selected"}]
                     }
-                    # Whe option element contains "normal" character data,
+                    # The option element contains "normal" character data,
                     # which must not contain any "<". For details, see:
                     # https://www.w3.org/TR/html-markup/syntax.html#normal-character-data
                     append output [subst {>[string map {< "&lt;" > "&gt;"} $label]</option>\n}]

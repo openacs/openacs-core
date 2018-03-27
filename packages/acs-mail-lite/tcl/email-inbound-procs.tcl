@@ -1286,7 +1286,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
                 # For emails originating elsewhere, another authentication
                 # method, such as a pre-signed unique-id in message
                 # content could be added as well.
-                # For now, we warn whenver this is used.
+                # For now, we warn whenever this is used.
                 if { [ad_var_type_check_number_p $pot_object_id] } {
                     if { [acs_object::object_p -id h_arr(aml_object_id)] } {
                         ns_log Warning "acs_mail_lite::inbound_queue_pull \

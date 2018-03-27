@@ -9,7 +9,7 @@
 -- 1. There could be no locale at all for some language
 --    in that case the scripts adds a new locale
 -- 2. There could be no default locale
---    the script makes sure that theres is one default locale
+--    the script makes sure that there is one default locale
 --    pr. language 
 --
 -- @author Christian Hvid
