@@ -2121,7 +2121,7 @@ ad_proc -public ad_tcl_vars_list_to_ns_set {
 
 ad_proc -public util_sets_equal_p { list1 list2 } {
     Tests whether each unique string in list1 occurs as many
-    times in list1 as in list2 and vice versa (regarless of order).
+    times in list1 as in list2 and vice versa (regardless of order).
 
     @return 1 if the lists have identical sets and 0 otherwise
 
@@ -2699,7 +2699,7 @@ ad_proc -public util_list_to_ns_set { aList } {
 
 ad_proc -public util_sets_equal_p { list1 list2 } {
     Tests whether each unique string in list1 occurs as many
-    times in list1 as in list2 and vice versa (regarless of order).
+    times in list1 as in list2 and vice versa (regardless of order).
 
     @return 1 if the lists have identical sets and 0 otherwise
 

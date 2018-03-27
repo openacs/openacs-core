@@ -508,7 +508,7 @@ aa_register_case  \
             array set reset_result [auth::password::reset \
                                         -authority_id [auth::authority::local] \
                                         -username $test_user(username)] 
-            aa_equals "status should be ok for reseting password" $reset_result(password_status) "ok"
+            aa_equals "status should be ok for resetting password" $reset_result(password_status) "ok"
             aa_true "Result contains new password" [info exists reset_result(password)]
             
             if { [info exists reset_result(password)] } {

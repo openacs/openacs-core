@@ -531,7 +531,7 @@ displaying the translation in the user&#39;s preferred language):
 </pre>
 Example 4: Register the string and display it in the preferred
 language of the current user. Note that the possible values for the
-<code>type</code> paramater are determined by what has been
+<code>type</code> parameter are determined by what has been
 implemented in the <code>ad_locale</code> procedure. By default,
 only the <code>user</code> type is implemented. An example of a
 type that could be implemented is <code>subsite</code>, for

@@ -10,7 +10,7 @@
 main text markers to divvy the Tcl library file into neat
 compartments: namespace, procedure and directive. Each of these
 divisions has its own text marker(s). In the end, your Tcl file
-should look somthing like this:
+should look something like this:
 <blockquote><pre><code><kbd>
 [------------------------------------------------------]
 [------  <em>ignored text at beginning of file</em>  -----------]

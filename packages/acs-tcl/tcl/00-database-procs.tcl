@@ -94,7 +94,7 @@ ad_library {
 # defines the ns_db API, and the OpenACS db_* API depends utterly on
 # it.  However, there are a few holes in the functionality of the
 # ns_db API, and each AOLserver database driver tends to fill in those
-# holes by adding extra functionality with its own, drive specifc
+# holes by adding extra functionality with its own, drive specific
 # functions.  Therefore, in order to make the db_* API work with
 # multiple db drivers, we need to introduce some switches or if
 # statements in our code.

@@ -709,7 +709,7 @@ upcoming .LRN 2.1.0 releases. This release does <span class="strong"><strong>not
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-1-2" id="release-notes-5-1-2"></a>Release 5.1.2</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>Translations syncronized with the translation server. Basque and
+<li class="listitem"><p>Translations synchronized with the translation server. Basque and
 Catalan added.</p></li><li class="listitem"><p>For a complete change list, see the Change list since 5.1.0 in
 <a class="xref" href="">???</a>.</p></li>
 </ul></div>
@@ -719,7 +719,7 @@ Catalan added.</p></li><li class="listitem"><p>For a complete change list, see t
 <li class="listitem"><p>This is the first release using the newest adjustment to the
 versioning convention. The OpenACS 5.1.1 tag will apply to OpenACS
 core as well as to the most recent released version of every
-package, including .LRN.</p></li><li class="listitem"><p>Translations syncronized with the translation server.</p></li><li class="listitem"><p>
+package, including .LRN.</p></li><li class="listitem"><p>Translations synchronized with the translation server.</p></li><li class="listitem"><p>
 <a class="ulink" href="http://openacs.org/bugtracker/openacs/com/acs-lang/bug?bug%5fnumber=1519" target="_top">Bug 1519</a> fixed. This involved renaming all
 catalog files for ch_ZH, TH_TH, AR_EG, AR_LB, ms_my, RO_RO, FA_IR,
 and HR_HR. If you work with any of those locales, you should do a

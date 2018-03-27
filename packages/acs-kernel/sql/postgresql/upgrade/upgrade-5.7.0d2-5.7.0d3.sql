@@ -6,9 +6,9 @@
 -- @cvs-id $Id$
 --
 
--- Avoiding the usage of the coalesce function 
+-- Avoiding the usage of the coalesce function
 -- on the site_nodes columns in the where clause
--- because this leads to usage of a sequencial scan, 
+-- because this leads to usage of a sequential scan,
 -- instead we enforce the usage of an index scan
 -- by issolating the case on which we need to compare null values
 -- and using the equal operator.

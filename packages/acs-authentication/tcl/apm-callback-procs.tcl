@@ -385,7 +385,7 @@ ad_proc -private auth::registration::create_contract {} {
                     parameters:string,multiple
                 }
                 output {
-                    requiered:string,multiple
+                    required:string,multiple
                     optional:string,multiple
                 }
             }

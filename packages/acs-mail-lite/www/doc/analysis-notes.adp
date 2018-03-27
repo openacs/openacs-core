@@ -69,7 +69,7 @@
     Ideally, it needs to forecast if it is going to go overtime with processing of the next email, and quit just before it does.
   </p>
   <p>
-    Use <code>duration_ms_list</code> to determine a time adjustment for quiting before next cycle:
+    Use <code>duration_ms_list</code> to determine a time adjustment for quitting before next cycle:
     <code>scan_in_est_dur_per_cycle_s</code> + <code>scan_repies_start_time</code> =
     <code>scan_in_est_quit_cs</code>
   </p>

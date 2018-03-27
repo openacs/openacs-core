@@ -831,7 +831,7 @@ ad_proc -public callback {
        the list of returns from the callback function</dd>
 
      <dt>return -code error or "<b>error</b>"</dt>
-     <dd>errors will simply propigate (and no value returned) unless -catch
+     <dd>errors will simply propagate (and no value returned) unless -catch
        is specified in which case the callback processing will continue but
        no value will be appended to the return list for the implementation
        which returned an error.

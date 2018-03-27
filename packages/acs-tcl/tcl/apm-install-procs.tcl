@@ -288,7 +288,7 @@ ad_proc -private apm_dependency_check {
                 incr counter
             }
         } errmsg]} {
-            # Failed to parse the specificaton file.
+            # Failed to parse the specification file.
             apm_callback_and_log $callback "$spec_file could not be parsed correctly.  It is not being installed. 
         The error: $errmsg"
         }

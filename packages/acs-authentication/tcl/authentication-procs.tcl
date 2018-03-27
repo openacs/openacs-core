@@ -1929,7 +1929,7 @@ ad_proc -private auth::user_info::GetUserInfo {
 #
 # After the maximum number of consecutive failed login attempts
 # has been excedeed, all further login attempts will be automatically rejected
-# for a specifed lock-out/cool-down time, even if the correct credentials have been
+# for a specified lock-out/cool-down time, even if the correct credentials have been
 # provided. Every successful login before reaching the threshold resets the 
 # counter to 0 again. Beware, the counting is done via caching and is
 # therefore not persistent.

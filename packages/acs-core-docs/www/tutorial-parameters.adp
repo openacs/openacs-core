@@ -10,7 +10,7 @@ Chapter 10. Advanced Topics"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-parameters" id="tutorial-parameters"></a>Adding in parameters for your
-package</h2></div></div></div><p>Each instance of a package can have paramaters associated with
+package</h2></div></div></div><p>Each instance of a package can have parameters associated with
 it. These are like preferences, and they can be set by the
 administrator for each application to change the behavior of your
 application.</p><p>To add parameters for your package, go to the Automatic Package

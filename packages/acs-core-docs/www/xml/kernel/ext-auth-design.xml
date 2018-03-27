@@ -701,7 +701,7 @@ ad_proc -public auth::password::get_forgotten_url {
 ad_proc -public auth::password::can_retrieve_p {
     {-authority_id:required}
 } {
-    Returns whether the given authority can retrive forgotten passwords. 
+    Returns whether the given authority can retrieve forgotten passwords. 
     
     @param authority_id The ID of the authority that the user is trying to log into.
     @return 1 if the authority allows retrieving passwords, 0 otherwise.

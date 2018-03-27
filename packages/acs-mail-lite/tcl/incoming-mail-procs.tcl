@@ -144,7 +144,7 @@ namespace eval acs_mail_lite {
 	-file:required
 	-array:required
     } {
-	An email is splitted into several parts: headers, bodies and files lists and all headers directly.
+	An email is split into several parts: headers, bodies and files lists and all headers directly.
 	
 	The headers consists of a list with header names as keys and their corresponding values. All keys are lower case.
 	The bodies consists of a list with two elements: content-type and content.

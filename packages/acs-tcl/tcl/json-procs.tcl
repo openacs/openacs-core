@@ -439,7 +439,7 @@ ad_proc util::json::json_value_to_sql_value {value} {
     @param value A value from a parsed JSON string
     @return Something that works in Real SQL, not to be confused with MySQL. This
             includes not trying to insert '' into columns of type real, when
-            "null" is meant (we mimic Oracle bindvar/PG bindvar emulation sematics).
+            "null" is meant (we mimic Oracle bindvar/PG bindvar emulation semantics).
             The Ilias RTE JavaScript returns '' rather than null for JS null variables.
 
 } {

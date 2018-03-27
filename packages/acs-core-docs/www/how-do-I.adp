@@ -111,7 +111,7 @@ body of the proc is simply</p><pre class="programlisting">
 return [permission::permission_p -party_id $user_id -object_id $event_id -privilege write]
 </pre><p>This means that a given user must have the write privilige on
 the event in order to register. Let&#39;s assume that the
-priviliges inherit, so that if a user has the write privilige on
+privileges inherit, so that if a user has the write privilige on
 the whole package, they will have the write privilege on the
 event.</p>
 </li><li class="listitem">

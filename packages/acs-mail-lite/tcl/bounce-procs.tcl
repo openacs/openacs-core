@@ -162,7 +162,7 @@ namespace eval acs_mail_lite {
         set subject "[ad_system_name] Email Reminder"
 
         # now periodically send notifications to users with
-        # disabled email to tell them how to reenable the email
+        # disabled email to tell them how to re-enable the email
         set notifications [db_list_of_ns_sets get_recent_bouncing_users {}]
 
         # send notification to users with disabled email

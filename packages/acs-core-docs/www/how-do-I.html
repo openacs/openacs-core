@@ -88,11 +88,11 @@
           <pre class="programlisting">set can_register_p [events::security::can_register_for_event_p -event_id $event_id]</pre>
           <p>We need to know what that procedure does, so go to <a class="ulink" href="/api-doc" target="_top">/api-doc</a>, paste events::security::can_register_for_event_p into the ACS Tcl API Search box, and click Feeling Lucky.  The next pages shows the proc, and we click "show source" to see more information.  The body of the proc is simply</p>
           <pre class="programlisting">return [permission::permission_p -party_id $user_id -object_id $event_id -privilege write]</pre>
-          <p>This means that a given user must have the write privilige on the event in order to register.  Let's assume that the priviliges inherit, so that if a user has the write privilige on the whole package, they will have the write privilege on the event.</p>
+          <p>This means that a given user must have the write privilege on the event in order to register.  Let's assume that the privilege inherit, so that if a user has the write privilege on the whole package, they will have the write privilege on the event.</p>
         </li><li class="listitem">
           <p>
             <b>Setting Permissions. </b>
-            A permission has three parts: the privilige, the object of the privilige, and the subject being granted the privilige.  In this case the privilige is "write," the object is the Events package, and the subject is all Registered Users.
+            A permission has three parts: the privilege, the object of the privilege, and the subject being granted the privilege.  In this case the privilege is "write," the object is the Events package, and the subject is all Registered Users.
           </p>
           <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
               <p>To grant permissions on a package, start at the <a class="ulink" href="/admin/site-map" target="_top">site map</a>.  Find the event package and click "Set permissions".  </p>

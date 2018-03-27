@@ -136,7 +136,7 @@ create index acs_mail_lite_from_external_release_p_idx
 -- The Questions become:
 
 -- What scenarios might we run into?
--- Another  user reseting flags.
+-- Another  user resetting flags.
 -- A server migration or restore with some conflicting UIDs.
 
 -- Can we recognize a change in server?

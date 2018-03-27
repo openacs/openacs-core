@@ -142,7 +142,7 @@ ad_proc -public email_image::new_item {
 
     set bg "xc:$bgcolor"
     
-    # Creating an image of the rigth length where the email will be
+    # Creating an image of the right length where the email will be
     if {[catch {exec convert -size $size $bg $dest_path} errmsg]} {
 	return ""
     }
@@ -225,7 +225,7 @@ ad_proc -public email_image::edit_email_image {
 
     set bg "xc:$bgcolor"
     
-    # Creating an image of the rigth length where the email will be
+    # Creating an image of the right length where the email will be
     if { [catch { exec convert -size $size $bg $dest_path } ] } {
         # ImageMagick not present
         return

@@ -17,7 +17,7 @@ and adjust the Configuration Settings.</p></li><li class="listitem"><p>Request /
 oacs-x-y, and build a repository channel for each of those branches
 where x&gt;=5 (so not for 4.6 and earlier). It will also build a
 channel for HEAD, which will be named after what you set in
-'head_channel' above.</p></li><li class="listitem"><p>For each channel, it&#39;ll do an anonymous checkout of packges
+'head_channel' above.</p></li><li class="listitem"><p>For each channel, it&#39;ll do an anonymous checkout of packages
 and contrib/packages, then build .apm files for each package in the
 checkout.</p></li><li class="listitem"><p>The files will be stored on the server&#39;s hard drive in the
 directory specified by the 'repository_dir' variable in the

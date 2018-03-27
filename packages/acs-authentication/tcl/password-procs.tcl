@@ -150,7 +150,7 @@ ad_proc -public auth::password::recover_password {
     {-username ""}
     {-email ""}
 } {
-    Handles forgotten passwords.  Attempts to retrieve a password; if not possibe,
+    Handles forgotten passwords.  Attempts to retrieve a password; if not possible,
     attempts to reset a password.  If it succeeds, it emails the user.  For all
     outcomes, it returns a message to be displayed.
 
@@ -279,7 +279,7 @@ ad_proc -public auth::password::get_forgotten_url {
 ad_proc -public auth::password::can_retrieve_p {
     {-authority_id:required}
 } {
-    Returns whether the given authority can retrive forgotten passwords.
+    Returns whether the given authority can retrieve forgotten passwords.
 
     @param authority_id The ID of the authority that the user is trying to log into.
 

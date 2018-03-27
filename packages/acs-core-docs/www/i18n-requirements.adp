@@ -214,7 +214,7 @@ of messages can be grouped with respect to a module name or package
 path.</p><p>
 <span class="emphasis"><em>40.30</em></span> The API for lookup
 of a message will take a locale and message key as arguments, and
-return the appropriate translation of that message for the specifed
+return the appropriate translation of that message for the specified
 locale.</p><p>
 <span class="emphasis"><em>40.40</em></span> The API for lookup
 of a message will accept an optional default string which can be

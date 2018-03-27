@@ -81,8 +81,8 @@ his email account gets disabled from receiving any more mails
 from the system by setting the email_bouncing_p flag to t. This
 value can be changed with the parameter "MaxBounceCount".</li>
 <li>To notify users that they will not receive any more mails and to
-tell them how to reenable the email account in the system again,
+tell them how to re-enable the email account in the system again,
 a notification email gets sent every 7 days (configurable)
-up to 4 times (configurable) that contains a link to reenable
+up to 4 times (configurable) that contains a link to re-enable
 the email account.</li>
 </ul>

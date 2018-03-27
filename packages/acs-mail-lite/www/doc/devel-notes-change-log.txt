@@ -37,7 +37,7 @@ Utility pages (requires admin permission)
 
         imap-test              For testing nsimap API
         maildir-test           For testing maildir API
-        maildir-actives-reset  For reseting concurrency check if
+        maildir-actives-reset  For resetting concurrency check if
                                acs_mail_lite::maildir_check_incoming errors.
 
 IMAP

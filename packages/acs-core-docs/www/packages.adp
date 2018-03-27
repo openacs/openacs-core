@@ -311,7 +311,7 @@ file information", then the "Scan the <code class="computeroutput">packages/note
 files in this package" link on that page to scan the file
 system for new files. This will bring you do a page that lists all
 the files you just added and lets you add them to the <code class="computeroutput">notes</code> package.</p><p>Note that while the <code class="computeroutput">.sql</code>
-files have been added to the packge, they <span class="emphasis"><em>have not</em></span> been loaded into the database.
+files have been added to the package, they <span class="emphasis"><em>have not</em></span> been loaded into the database.
 For the purposes of development, you have to load the data model by
 hand, because while OpenACS has automatic mechanisms for loading
 and reloading <code class="computeroutput">.tcl</code> files for

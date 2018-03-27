@@ -37,7 +37,7 @@ aa_register_case -cats {api smoke} -procs { apm_parameter_register } test_apm_pa
             set default_value [ad_generate_random_string]
         }
        
-       aa_log "Paramater to be added: name : $parameter_name \n descr: $description \n datatype: $datatype \n default_value: $default_value"
+       aa_log "Parameter to be added: name : $parameter_name \n descr: $description \n datatype: $datatype \n default_value: $default_value"
 
        set parameter_id [apm_parameter_register $parameter_name $description $package_key $default_value $datatype]
 

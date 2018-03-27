@@ -422,7 +422,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
   @private merge_with_template
  
   Merge the item with its template and return the resulting HTML. This proc
-  is simlar to <tt>content::init</tt>
+  is similar to <tt>content::init</tt>
  
   @param item_id   The item id
  

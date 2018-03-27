@@ -359,7 +359,7 @@ select r.rel_type as viol_rel_type, r.rel_id as viol_rel_id,
 --
 --           What are all the segments in the system that a party has to 
 --           be in if the party were to be on side :rel_side of a relation
---           in segement :rel_segment?  
+--           in segment :rel_segment?  
 --
 --           We want not only the direct required_segments (which we could
 --           get from the rel_constraints table directly), but also the 

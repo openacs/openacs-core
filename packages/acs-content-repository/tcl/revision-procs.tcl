@@ -30,7 +30,7 @@ ad_proc -public cr_write_content {
 } {
 
     if { [info exists revision_id] && [info exists item_id] } {
-	error "Both revision_id and item_id were specfied"
+	error "Both revision_id and item_id were specified"
     }
 
     if { [info exists item_id] } {

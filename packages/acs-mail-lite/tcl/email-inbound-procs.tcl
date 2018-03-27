@@ -514,7 +514,7 @@ ad_proc -public acs_mail_lite::email_type {
     </li></ul>
     Adds these index to headers array:
     <ul><li>
-    received_cs: the recevied time of email in tcl clock epoch time.
+    received_cs: the received time of email in tcl clock epoch time.
     </li><li>
     aml_type:  the same value returned by this proc.
     </li></ul>
@@ -784,7 +784,7 @@ ad_proc -public acs_mail_lite::email_type {
                             set cs2_list [list ]
                             # Really? 
                             # We just added dti_cs to si_party_id_cs(party_id)
-                            # This happens when scaning email is delayed some
+                            # This happens when scanning email is delayed some
                             ns_log Warning "acs_mail_lite::email_type.655 \
  party_id '${party_id}' prev_start_cs '${prev_start_cs}' i '${i}' \
  cs_list_len '${cs_list_len}' cs_list '${cs_list}' cs2_list '${cs2_list}'"
@@ -1544,7 +1544,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
         # for all attachments and
         # base64 for encoding of all files.
         #
-        # Encoding has already been handled for files before queing.
+        # Encoding has already been handled for files before queueing.
 
         # Legacy approach replaces nested parts with flat list
         # from parse_email:

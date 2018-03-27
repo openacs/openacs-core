@@ -493,7 +493,7 @@ pairs</blockquote><dl>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::merge_with_template" id="publish::merge_with_template"><font size="+1" weight="bold">publish::merge_with_template</font></a></td></tr><tr><td>
 <blockquote>Merge the item with its template and return the
-resulting HTML. This proc is simlar to
+resulting HTML. This proc is similar to
 <kbd>content::init</kbd>
 </blockquote><dl>
 <dd>

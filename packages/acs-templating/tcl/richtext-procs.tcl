@@ -277,7 +277,7 @@ ad_proc -public template::util::richtext::register_editor { editor } {
 
 ad_proc -public template::util::richtext::render_widgets { } {
 
-    Render all rich-text editors with their their widget spefic
+    Render all rich-text editors with their their widget specific
     code. Every editor might have multiple instances on the page,
     which are accessible to "render_widgets" via the global variable
     acs_blank_master__htmlareas. This function can be used to perform
@@ -325,7 +325,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     The richtext widget can be extended with several plugins, which are OpenACS
     packages named richtex-EDITOR. Plugins are available e.g. for xinha, tinymce
     and ckeditor4. When the plugins are installed, one can use e.g. xinha
-    by sepcifying 'editor xinha' in the options of the widget spec.
+    by specifying 'editor xinha' in the options of the widget spec.
     The following options for xinha may be specified:
     <ul>
     <li> <em>editor</em>: xinha

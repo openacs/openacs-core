@@ -1709,7 +1709,7 @@ ad_proc -private template::list::prepare_filters {
                     }
                 }
             }
-            # DAVEB Make multivar actually DO someting
+            # DAVEB Make multivar actually DO something
             # set the other vars according to the settings
             if {$selected_p && $filter_properties(type) eq "multivar"} {
                 foreach elm $value {
@@ -1960,8 +1960,8 @@ ad_proc -public template::list::element::create {
     <li>
     <b>display_template_name</b>: theme-able template. If a
     display_template_name is specified, and a file with this name is
-    available from the ressource directory in the display_templates
-    section, then take its countent as display_template. The resouce
+    available from the resource directory in the display_templates
+    section, then take its countent as display_template. The resource
     directory is taken from the ResourceDir of the theme (parameter of
                                                           acs-sub-site) or from the "resources" directory in acs-templating.
     The display_template_name acts similar to the query names in

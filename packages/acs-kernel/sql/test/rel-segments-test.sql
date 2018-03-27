@@ -374,14 +374,14 @@ BEGIN
   PERFORM acs_group__delete(A);
 
   -- Remove the test members.
-  PERFROM acs_user__delete(joe);
-  PERFROM acs_user__delete(jane);
-  PERFROM acs_user__delete(bob);
-  PERFROM acs_user__delete(betty);
-  PERFROM acs_user__delete(jack);
-  PERFROM acs_user__delete(jill);
-  PERFROM acs_user__delete(sven);
-  PERFROM acs_user__delete(stacy);
+  PERFORM acs_user__delete(joe);
+  PERFORM acs_user__delete(jane);
+  PERFORM acs_user__delete(bob);
+  PERFORM acs_user__delete(betty);
+  PERFORM acs_user__delete(jack);
+  PERFORM acs_user__delete(jill);
+  PERFORM acs_user__delete(sven);
+  PERFORM acs_user__delete(stacy);
 
   return null;
 
