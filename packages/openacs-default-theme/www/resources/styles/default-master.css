@@ -57,8 +57,8 @@
     width:100%;
     background: url("/resources/openacs-default-theme/images/bg.gif") repeat-x bottom;
     clear: both;
-    padding-top: 5px;  /* remove this padding to make the subnavigation links to appear completly enclosed */
-    padding-bottom: 5px  /* remove this padding to make the subnavigation links to appear completly enclosed */
+    padding-top: 5px;  /* remove this padding to make the subnavigation links to appear completely enclosed */
+    padding-bottom: 5px  /* remove this padding to make the subnavigation links to appear completely enclosed */
 }
 	
 #sub-navigation ul {

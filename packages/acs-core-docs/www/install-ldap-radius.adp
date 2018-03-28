@@ -57,7 +57,7 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
 <a name="configure-ns_ldap" id="configure-ns_ldap"></a><p>
 <strong>Configure ns_ldap for traditional
 use. </strong> Traditionally OpenACS has supported
-ns_ldap for authentification by storing the OpenACS password in an
+ns_ldap for authentication by storing the OpenACS password in an
 encrypted field within the LDAP server called
 "userPassword". Furthermore a CN field was used for
 searching for the username, usually userID or something similar.
@@ -77,7 +77,7 @@ password of the user is not stored in any field of the LDAP server,
 but kept internally. The latest version of ns_ldap supports this
 method with the <span class="emphasis"><em>ns_ldap bind</em></span>
 command. All you have to do to enable this is to configure
-auth_ldap to make use of the BIND authentification instead.
+auth_ldap to make use of the BIND authentication instead.
 Alternatively you can write a small script on how to calculate the
 username out of the given input (e.g. if the OpenACS username is
 malte.fb03.tu, the LDAP request can be translated into

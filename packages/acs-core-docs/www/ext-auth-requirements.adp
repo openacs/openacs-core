@@ -49,7 +49,7 @@ administrators alike. There&#39;s frequently a positive feedback
 effect between usability and security, because when authentication
 schemes have poor usability, users will think up ways to circumvent
 them.</p></li><li class="listitem"><p>Open and modular: The design should be on the one hand open to
-add other authentification mechanisms when needed and on the other
+add other authentication mechanisms when needed and on the other
 hand very modular to enable a start with minimal requirements
 (driver implementations) as soon as possible.</p></li>
 </ul></div><p>The problem can be split into several logically separate parts.
