@@ -305,12 +305,12 @@ auth::registration::get_optional_attributes
 
     <sect2>
       <sect2info>
-        <title>EXT-AUTH #4: Rewrite login &amp; register pagse to use
+        <title>EXT-AUTH #4: Rewrite login &amp; register pages to use
 APIs
 </title>
       </sect2info>
 
-      <sect2 id="ext-auth_#4__rewrite_login_&amp;_register_pagse_">
+      <sect2 id="ext-auth_#4__rewrite_login_&amp;_register_pages_">
         <title>EXT-AUTH
 #4: Rewrite login &amp; register pages to use APIs
 </title>
@@ -1955,7 +1955,7 @@ around June 6).
         <title>Internal Design
 </title>
         <para>We keep a record of which authenticated users have requested
-pags on the site in the last x minutes (typically about 5), and
+pages on the site in the last x minutes (typically about 5), and
 thus are considered to be currently online. We&#39;ve already made the
 changes necessary to security-procs.tcl to do this on an earlier
 project, but haven&#39;t quite finished the work and put it back into

@@ -21,7 +21,7 @@ if { $mainsite_group_id ne $group_id } {
     set rel_group_id $group_id
 }
 
-set page_title "Inivite Member to [ad_conn instance_name]"
+set page_title "Invite Member to [ad_conn instance_name]"
 set context [list [list "." "Members"] "Invite"]
 
 
