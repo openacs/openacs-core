@@ -190,7 +190,7 @@ template::head::add_meta \
     -content "text/html; charset=$doc(charset)" \
     -http_equiv "content-type"
 #
-# The following meta tags are unknwon for HTML5, therefore discouraged
+# The following meta tags are unknown for HTML5, therefore discouraged
 #
 # template::head::add_meta \
 #     -content "text/css" \
