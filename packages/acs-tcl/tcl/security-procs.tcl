@@ -11,10 +11,8 @@ ad_library {
 }
 
 namespace eval security {
-    set log(login_url)    debug ;# notice
+    set log(login_url) debug    ;# notice
     set log(login_cookie) debug ;# notice
-    set log(session)      debug ;# notice
-    set log(signature)    debug ;# notice
 }
 
 
@@ -94,7 +92,6 @@ ad_proc -private sec_handler {} {
     ns_log debug "OACS= sec_handler: enter"
 
     if {$::security::log(login_cookie) ne "debug"} {
-        set msg {}
         foreach c [list ad_session_id ad_secure_token ad_user_login ad_user_login_secure] {
             lappend msg "$c '[ad_get_cookie $c]'"
         }
@@ -311,7 +308,7 @@ ad_proc -public ad_user_login {
         ad_unset_cookie -secure t ad_user_login_secure
     }
     
-    ns_log $::security::log(login_cookie) "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
+    ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
         -expire [expr {$forever_p ? false : true}] \
         -max_age $max_age \
@@ -435,29 +432,29 @@ ad_proc -private sec_setup_session {
     and generates the cookies necessary for the session
 
 } {
-    ns_log $::security::log(session) "OACS= sec_setup_session: enter"
+    ns_log debug "OACS= sec_setup_session: enter"
 
     set session_id [ad_conn session_id]
     
     # figure out the session id, if we don't already have it
     if { $session_id eq ""} {
 
-        ns_log $::security::log(session) "OACS= empty session_id"
+        ns_log debug "OACS= empty session_id"
 
         set session_id [sec_allocate_session]
         # if we have a user on an newly allocated session, update
         # users table
 
-        ns_log $::security::log(session) "OACS= newly allocated session $session_id"
+        ns_log debug "OACS= newly allocated session $session_id"
 
         if { $new_user_id != 0 } {
-            ns_log $::security::log(session) "OACS= about to update user session info, user_id NONZERO"
+            ns_log debug "OACS= about to update user session info, user_id NONZERO"
             sec_update_user_session_info $new_user_id
-            ns_log $::security::log(session) "OACS= done updating user session info, user_id NONZERO"
+            ns_log debug "OACS= done updating user session info, user_id NONZERO"
         }
     } else {
         # $session_id is an active verified session
-        # this call is either a user logging in
+        # this call is either a user loging in
         # on an active unidentified session, or a change in identity
         # for a browser that is already logged in
 
@@ -470,19 +467,19 @@ ad_proc -private sec_setup_session {
         # changes from user_id 0, since owasp recommends to renew the
         # session_id after any privilege level change
         #
-        ns_log $::security::log(session) "prev_user_id $prev_user_id new_user_id $new_user_id"
+        ns_log debug "prev_user_id $prev_user_id new_user_id $new_user_id"
         
         if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
             # this is a change in identity so we should create
             # a new session so session-level data is not shared
-            ns_log $::security::log(session) "sec_allocate_session"
+            ns_log debug "sec_allocate_session"
             set session_id [sec_allocate_session]
         }
 
         if { $prev_user_id != $new_user_id } {
             # a change of user_id on an active session
             # demands an update of the users table
-            ns_log $::security::log(session) "sec_update_user_session_info"
+            ns_log debug "sec_update_user_session_info"
             sec_update_user_session_info $new_user_id
         }
     }
@@ -501,11 +498,11 @@ ad_proc -private sec_setup_session {
     ad_conn -set account_status $account_status
     ad_conn -set user_id $user_id
 
-    ns_log $::security::log(session) "OACS= about to generate session id cookie"
+    ns_log debug "OACS= about to generate session id cookie"
 
     sec_generate_session_id_cookie -cookie_domain $cookie_domain
 
-    ns_log $::security::log(session) "OACS= done generating session id cookie"
+    ns_log debug "OACS= done generating session id cookie"
 
     if { $auth_level eq "secure" && [security::secure_conn_p] && $new_user_id != 0 } {
         # this is a secure session, so the browser needs
@@ -547,7 +544,7 @@ ad_proc -private sec_generate_session_id_cookie {
         }
     }
 
-    ns_log $::security::log(session) "Security: [ns_time] sec_generate_session_id_cookie setting session_id=$session_id, user_id=$user_id, login_level=$login_level"
+    ns_log Debug "Security: [ns_time] sec_generate_session_id_cookie setting session_id=$session_id, user_id=$user_id, login_level=$login_level"
 
     if {$cookie_domain eq ""} {
         set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
@@ -1025,9 +1022,10 @@ ad_proc -private __ad_verify_signature {
     Returns 1 if signature validated; 0 if it fails.
 
 } {
+
     if { $secret eq "" } {
         if { $token_id eq "" } {
-            ns_log $::security::log(signature) "__ad_verify_signature: Neither secret, nor token_id supplied"
+            ns_log Debug "__ad_verify_signature: Neither secret, nor token_id supplied"
             return 0
         } elseif {![string is integer -strict $token_id]} {
             ns_log Warning "__ad_verify_signature: token_id <$token_id> is not an integer"
@@ -1039,8 +1037,8 @@ ad_proc -private __ad_verify_signature {
         set secret_token $secret
     }
 
-    ns_log $::security::log(signature) "__ad_verify_signature: Getting token_id $token_id, value $secret_token ; "
-    ns_log $::security::log(signature) "__ad_verify_signature: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
+    ns_log Debug "__ad_verify_signature: Getting token_id $token_id, value $secret_token ; "
+    ns_log Debug "__ad_verify_signature: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
 
     # validate cookie: verify hash and expire_time
     set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
@@ -1050,7 +1048,7 @@ ad_proc -private __ad_verify_signature {
     set expiration_ok_p 0
     
     if {$computed_hash eq $hash} {
-        set msg "Hash matches - Hash check OK"
+        ns_log Debug "__ad_verify_signature: Hash matches - Hash check OK"
         set hash_ok_p 1
     } else {
         # check to see if IE is lame (and buggy!) and is expanding \n to \r\n
@@ -1060,24 +1058,22 @@ ad_proc -private __ad_verify_signature {
         set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
 
         if {$computed_hash eq $hash} {
-            set msg "Hash matches after correcting for IE bug - Hash check OK"
+            ns_log Debug "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"
             set hash_ok_p 1
         } else {
-            set msg "Hash ($hash) doesn't match what we expected ($org_computed_hash) - Hash check FAILED"
+            ns_log Debug "__ad_verify_signature: Hash ($hash) doesn't match what we expected ($org_computed_hash) - Hash check FAILED"
         }
     }
-    ns_log $::security::log(signature) "__ad_verify_signature: $msg"
     
     if { $expire_time == 0 } {
-        set msg "No expiration time - Expiration OK"
+        ns_log Debug "__ad_verify_signature: No expiration time - Expiration OK"
         set expiration_ok_p 1
     } elseif { $expire_time > [ns_time] } {
-        set msg "Expiration time ($expire_time) greater than current time ([ns_time]) - Expiration check OK"
+        ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) greater than current time ([ns_time]) - Expiration check OK"
         set expiration_ok_p 1
     } else {
-        set msg "Expiration time ($expire_time) less than or equal to current time ([ns_time]) - Expiration check FAILED"
+        ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) less than or equal to current time ([ns_time]) - Expiration check FAILED"
     }
-    ns_log $::security::log(signature) "__ad_verify_signature: $msg"
 
     # Return validation result
     return [expr {$hash_ok_p && $expiration_ok_p}]
@@ -1136,7 +1132,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
     lassign $cookie_value value signature
     set expr_time [ad_verify_signature_with_expr -secret $secret $value $signature]
 
-    ns_log $::security::log(signature) "Security: Done calling get_cookie $cookie_value for $name; received $expr_time expiration, getting $value and $signature."
+    ns_log Debug "Security: Done calling get_cookie $cookie_value for $name; received $expr_time expiration, getting $value and $signature."
 
     if { $expr_time } {
         return [list $value $expr_time]
@@ -1194,7 +1190,7 @@ ad_proc -public ad_set_signed_cookie {
             # but that is a user interface expiration, that does
             # not give us a security expiration. (from the
             # security perspective, we use SessionLifetime)
-            ns_log $::security::log(signature) "Security: SetSignedCookie: Using sec_session_lifetime [sec_session_lifetime]"
+            ns_log Debug "Security: SetSignedCookie: Using sec_session_lifetime [sec_session_lifetime]"
             set signature_max_age [sec_session_lifetime]
         }
     }

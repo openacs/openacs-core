@@ -35,16 +35,6 @@ if {[ns_info name] ne "NaviServer"} {
 #
 catch {ns_cache_flush util_memoize}
 
-proc !! args {
-    set t0 [clock clicks -milliseconds]
-    set result [uplevel $args]
-    set t1 [clock clicks -milliseconds]
-    if {$t1 - $t0 > 100} {
-        ns_log notice "!!! slow ([expr {$t1 - $t0}]ms): $args"
-    }
-    return $result
-}
-
 ad_proc -public util_memoize {script {max_age ""}} {
     If <i>script</i> has been executed before, return the value it
     returned last time, unless it was more than <i>max_age</i> seconds ago.
@@ -66,7 +56,7 @@ ad_proc -public util_memoize {script {max_age ""}} {
     if {$max_age ne ""} {
         set max_age "-expires $max_age"
     }
-    !! ns_cache_eval {*}$max_age -- util_memoize $script {*}$script
+    ns_cache_eval {*}$max_age  -- util_memoize $script {*}$script
 }
 
 # In case, the definition of the function has cached something,
@@ -90,7 +80,7 @@ ad_proc -public util_memoize_seed {script value {max_age ""}} {
 
     @param max_age Not used.
 } {
-    !! ns_cache_eval -force util_memoize $script [list set _ $value]
+    ns_cache_eval -force util_memoize $script [list set _ $value]
 }
 
 
@@ -107,7 +97,7 @@ ad_proc -public util_memoize_cached_p {script {max_age ""}} {
     if {$max_age ne ""} {
         ns_log Warning "util_memoize_cached_p: ignore max_age $max_age for $script"
     }
-    return [expr {[!! ns_cache_keys util_memoize $script] ne ""}]
+    return [expr {[ns_cache_keys util_memoize $script] ne ""}]
 }
 
 ad_proc -public util_memoize_flush_pattern {
@@ -122,7 +112,7 @@ ad_proc -public util_memoize_flush_pattern {
     @param log Whether to log keys checked and flushed (useful for debugging).
 
 } {
-    set nr_flushed [!! ns_cache_flush -glob util_memoize $pattern]
+    set nr_flushed [ns_cache_flush -glob util_memoize $pattern]
     if {$log_p} {
         ns_log Debug "util_memoize_flush_pattern: flushed $nr_flushed entries using the pattern: $pattern"
     }
