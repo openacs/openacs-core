@@ -628,7 +628,7 @@ ad_proc -public template::paginator::get_group_count { name } {
 
     @param name    The reference to the paginator object.
 
-    @return A number represeting the group count.
+    @return A number representing the group count.
 } {
   get_reference
 
