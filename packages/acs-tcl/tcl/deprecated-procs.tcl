@@ -2017,7 +2017,7 @@ ad_proc -deprecated ad_custom_page_defaults {defaults} {
         ad_script_abort
     }
     
-    # we have a form so stuff in the ones we dont find.
+    # we have a form so stuff in the ones we don't find.
     # should think about how to support lists and ns_set persist too.
     foreach kvp $defaults { 
         if {[ns_set find $form [lindex $kvp 0]] < 0} { 

@@ -82,8 +82,8 @@ if {$auto_submit_p && $user_id > 0} {
     set exist_bug [db_string search_bug {} -default ""]
     if { $exist_bug eq ""} {
 	
-	#Submit the new Bug into the Bug - Tracker && Into the
-	# Auto_bugs tabble
+	# Submit the new Bug into the bug-tracker and into the
+	# auto_bugs table
 	set bug_id [db_nextval acs_object_id_seq]
 	
 	set keyword_ids [list]
@@ -106,9 +106,10 @@ if {$auto_submit_p && $user_id > 0} {
         db_dml insert_auto_bug {}
     } else {
 	
-	#Comment on the Existing Bug even if the user dont want to add
-	# commentaries 
-	# If the bug is closed or fixed we have to reopen the bug
+	# Comment on the existing bug even if the user don't want to
+	# add commentaries.  If the bug is closed or fixed we have to
+	# reopen the bug.
+        #
         array set row [list]
 	set bug_id $exist_bug
 	
