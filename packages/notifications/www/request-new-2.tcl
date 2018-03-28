@@ -14,7 +14,7 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 
-# Check that the object can be subcribed to
+# Check that the object can be subscribed to
 notification::security::require_notify_object -object_id $object_id
 
 # Add the request
@@ -27,7 +27,7 @@ notification::request::new \
 
 ad_returnredirect $return_url
 
-        
+
 
 # Local variables:
 #    mode: tcl

@@ -14,7 +14,7 @@ ad_page_contract {
 
 set user_id [auth::require_login]
 
-# Check that the object can be subcribed to
+# Check that the object can be subscribed to
 notification::security::require_notify_object -object_id $object_id
 
 set doc(title) [_ notifications.Request_Notification]

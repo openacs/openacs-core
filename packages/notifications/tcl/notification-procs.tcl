@@ -141,7 +141,7 @@ namespace eval notification {
         <p>
 
         In any situation where you're doing dynamic notifications, you must supply the ID of an ACS object which is
-        specific to the underlying event in the 'action_id' parameter. This is required for the interal functioning of 
+        specific to the underlying event in the 'action_id' parameter. This is required for the integral functioning of 
         dynamic recipient groups. Typically this would be the ID of a forums posting, a workflow log entry, or a 
         web log entry.
 
@@ -159,7 +159,7 @@ namespace eval notification {
         don't intend to use the result, as it requires an extra query to get.
 
         @param subset A list of user_id's of a subset of users who should be notified. Only those who have a 
-        notification request for this object, and who are in the subset list will get notified. Unless you specifiy the 
+        notification request for this object, and who are in the subset list will get notified. Unless you specify the 
         -force flag, in which case everybody in the subset list will get notified, whether they requested the notification
         or not. In this case, the 'default_request_data' will be used for these new requests.
 
@@ -330,7 +330,7 @@ namespace eval notification {
                 # Create the notification
                 package_instantiate_object -extra_vars $extra_vars notification
 
-                # teadams@alum.mit.edu - pl/sql has a 32K limit for paramaters.
+                # teadams@alum.mit.edu - pl/sql has a 32K limit for parameters.
 
                 # Updating the clob columns directly
                 # to avoid this limitation.
