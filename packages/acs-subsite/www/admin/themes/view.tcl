@@ -36,7 +36,7 @@ set currentThemeKey [parameter::get -parameter ThemeKey -package_id $subsite_id]
 #
 # Get the default values for the theme from the DB
 #
-db_1row get_vars_of_seleted_theme {select * from  subsite_themes where key = :theme}
+db_1row get_vars_of_selected_theme {select * from  subsite_themes where key = :theme}
 
 #
 # Default edit buttons
