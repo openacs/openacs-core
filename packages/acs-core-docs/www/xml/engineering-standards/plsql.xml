@@ -51,7 +51,7 @@ By Richard Li and Yon Feldman
 
   <orderedlist>
    <listitem><para>
-    Encapsulation of related fuctionality is key to maintainability
+    Encapsulation of related functionality is key to maintainability
     and upgradeability of our software. Try to bundle your code into
     <ulink url="https://docs.oracle.com/database/121/LNPLS/packages.htm#LNPLS009">packages</ulink>
     whenever possible. This will make upgrading, bug fixing, and
