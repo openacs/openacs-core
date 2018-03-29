@@ -97,9 +97,8 @@ if {$view_by eq "package"} {
     template::multirow create tests id url description package_key categories \
         timestamp passes fails marker
     set old_package_key ""
-    foreach testcase [nsv_get aa_test cases] {
-        set testcase_id        [lindex $testcase 0]
-        set package_key        [lindex $testcase 3]
+    foreach testcase [lsort [nsv_get aa_test cases]] {
+        lassign $testcase testcase_id . .  package_key .
 
         lassign $results($testcase_id,$package_key) testcase_desc . categories \
             testcase_timestamp testcase_passes testcase_fails
