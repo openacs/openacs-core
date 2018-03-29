@@ -128,7 +128,7 @@ create table acs_mail_lite_email_uid_id_map (
        -- Each UID externally defined such as from imap4 server
        uid_ext varchar(3000) not null,
        -- Each external source may apply a different uid.
-       -- This is essentialy an arbitrary constant frame reference between 
+       -- This is essentially an arbitrary constant frame reference between 
        -- connecting sessions with external server in most scenarios.
        -- For IMAP4v1 rfc3501  2.3.1.1. item 4 ..combination of
        -- mailbox.name, UIDVALIDITY, and UID must refer to a single 

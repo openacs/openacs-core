@@ -68,7 +68,7 @@ see <a class="ulink" href="http://openacs.org/doc/openacs-4/filename.html" targe
 package design.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Implementation
 phase</strong></span> is about performing the work according to the
-plan, where decisions on how to handle unforseen circumstances are
+plan, where decisions on how to handle unforeseen circumstances are
 guided by the strategy and requirements.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Verification phase</strong></span>
 measures how well the plan was implemented. Success is measured by
