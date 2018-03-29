@@ -1,7 +1,7 @@
 <master>
   <property name="doc(title)">@title;noquote@ (@package_key@)</property>
   <property name="context">@context;literal@</property>
-
+  <h1>@title@</h1>
   <div class="description">
     <dl>
       <dt>Description:</dt><dd>@testcase_desc@</dd>
