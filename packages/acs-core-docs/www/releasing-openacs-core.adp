@@ -245,7 +245,7 @@ fi
 mkdir tarball
 cd tarball
 cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION acs-core
-mv opeancs-4 openacs-${OACS_VERSION//-/.}
+mv openacs-4 openacs-${OACS_VERSION//-/.}
 tar -czf ../openacs-${OACS_VERSION//-/.}.tar.gz openacs-${OACS_VERSION//-/.}
 cd ..
 

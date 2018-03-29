@@ -143,7 +143,7 @@ all namespaces will be described within their own static html page,
 and all procedure information is anchor-referenced:
 <blockquote><pre><code>
 # \@see namespace util util.html
-# \@see proc template::multirow::create multiow.html#template::multirow::create
+# \@see proc template::multirow::create multirow.html#template::multirow::create
 # \@see url <em>&lt;a picture of wally my dog&gt;</em> http://my.page.net/dogs/wally.jpg
 # \@see proc doc::util::eat_chicken
 </code></pre></blockquote>
