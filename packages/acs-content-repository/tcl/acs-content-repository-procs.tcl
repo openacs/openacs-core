@@ -90,14 +90,14 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
     delete such files if required.  Orphaned files might be created,
     when files are added to the content repository, but the transaction
     is being aborted. This function is intended to be used for one-time
-    maintainenace operations. Starting with 5.8.1, OpenACS contains
+    maintenance operations. Starting with 5.8.1, OpenACS contains
     support for handling orphaned files much more efficiently via a
     transaction log that is checked via cr_cleanup_orphaned_files in
     cr_delete_scheduled_files.
 
     @param -delete delete the orphaned files
     @param -mtime same semantics as mtime in the file command
-    
+
 } {
     set cr_root [nsv_get CR_LOCATIONS CR_FILES]
     set root_length [string length $cr_root]
