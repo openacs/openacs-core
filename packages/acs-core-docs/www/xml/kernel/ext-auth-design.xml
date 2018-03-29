@@ -397,7 +397,7 @@ ad_form -name user_add -form {
    }
    # TODO: form builder validation of account_status
    # We&#39;re logged in
-   ad_returnrediredt $return_url
+   ad_returnredirect $return_url
    ad_script_abort
 }
 </programlisting>
@@ -425,7 +425,7 @@ switch $registratoin_info(reg_status) {
     }
 }
 # User is registered and logged in
-ad_returnrediredt $return_url
+ad_returnredirect $return_url
 </programlisting>
             </sect3>
             <sect3>
