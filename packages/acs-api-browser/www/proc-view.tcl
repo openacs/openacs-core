@@ -87,7 +87,7 @@ proc $proc {[info args $proc]} {
         }
 
         #
-        # Try NaviSever API documentation
+        # Try NaviServer API documentation
         #
         set url [apidoc::get_doc_url \
              -cmd $relative_proc \
