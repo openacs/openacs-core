@@ -10,7 +10,7 @@ ad_page_contract {
 
 set user_id [auth::require_login]
 
-if { ![info exist checkbox] } {
+if { ![info exists checkbox] } {
     set checkbox ""
 }
 
