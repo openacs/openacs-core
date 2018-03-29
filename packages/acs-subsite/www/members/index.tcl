@@ -170,7 +170,7 @@ if { !$show_member_list_p } {
                 hide_p $hide_member_state_p
             }
             member_state_change {
-                label {Action}
+                label {[_ acs-subsite.Action]}
                 display_template {
                     <if @members.approve_url@ not nil>
                     <a href="@members.approve_url@" class="button">#acs-subsite.Approve#</a>
