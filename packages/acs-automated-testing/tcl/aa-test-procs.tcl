@@ -1068,6 +1068,7 @@ ad_proc -private aa_http {
     {-body}
     {-timeout 10}
     {-headers ""}
+    {-prefix ""}
     {-verbose:boolean 1}
     request
 } {
@@ -1090,6 +1091,21 @@ ad_proc -private aa_http {
     }
     nsv_set aa_test logindata [list peeraddr $peeraddr user_id $user_id]
     
+    #
+    # Construct nice log line
+    #
+    append log_line "${prefix}Run $method $request"
+    if {[llength $headers] > 0} {
+        append log_line " (headers: $headers)"
+    }
+    if {[info exists body]} {
+        append log_line "\n$body"
+    }
+    aa_log $log_line
+    
+    #
+    # Run actual request
+    #
     try {
         set d [ns_http run \
                    -timeout $timeout \
@@ -1103,7 +1119,7 @@ ad_proc -private aa_http {
     #ns_log notice "... [ns_set array [dict get $d headers]]"
     if {$verbose_p} {
         set ms [format %.2f [expr {[ns_time format [dict get $d time]]*1000}]]
-        aa_log "$method $request returns [dict get $d status] in ${ms}ms"
+        aa_log "${prefix}$method $request returns [dict get $d status] in ${ms}ms"
     }
     return $d
 }
