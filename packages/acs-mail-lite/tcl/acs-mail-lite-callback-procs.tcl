@@ -75,7 +75,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     -package_id:required
 } {
     Implementation of the interface acs_mail_lite::incoming_email for acs-mail-lite. This proc
-    takes care of emails bounced back from mailer deamons. The required syntax for the To header
+    takes care of emails bounced back from mailer daemons. The required syntax for the To header
     is as follows: EnvelopPrefix-user_id-signature-package_id@myhost.com. This email was set for
     the Return-Path header of the original email. The signature is created by calculating the SHA
     value of the original Message-Id header. Thus an email is valid if the signature is correct and

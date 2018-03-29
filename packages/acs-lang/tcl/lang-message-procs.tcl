@@ -638,14 +638,14 @@ ad_proc -private lang::message::format {
     array set value_array $value_array_list
     set value_array_keys [array names value_array]
     set remaining_message $localized_message
-    set formated_message ""
+    set formatted_message ""
     while { [regexp [embedded_vars_regexp] $remaining_message match before_percent percent_match remaining_message] } {
 
-        append formated_message $before_percent
+        append formatted_message $before_percent
 
         if {$percent_match eq "%%"} {
             # A quoted percent sign
-            append formated_message "%"
+            append formatted_message "%"
         } else {
             set variable_string [string range $percent_match 1 end-1]
 
@@ -657,10 +657,10 @@ ad_proc -private lang::message::format {
                     
                     # There is no value available to do the substitution with
                     # so don't substitute at all
-                    append formated_message $percent_match
+                    append formatted_message $percent_match
                 } else {
                     # Do the substitution
-                    append formated_message $value_array($variable_string)
+                    append formatted_message $value_array($variable_string)
                 }
             } else {
                 regexp {^([^.]+)(?:\.([^.]+))?$} $variable_string match variable_name array_key
@@ -672,23 +672,23 @@ ad_proc -private lang::message::format {
                 if { [info exists local_variable] } {
                     if { (![info exists array_key] || $array_key eq "") } {
                         # Normal Tcl variable
-                        append formated_message $local_variable
+                        append formatted_message $local_variable
                     } else {
                         # Array variable
-                        append formated_message $local_variable($array_key)
+                        append formatted_message $local_variable($array_key)
                     }
                 } else {
                     ns_log warning "Message contains a variable named '$variable_name' which doesn't exist in the caller's environment: message $localized_message"
-		    append formated_message "MISSING: variable '$variable_name' is not available"
+		    append formatted_message "MISSING: variable '$variable_name' is not available"
                 }
             }
         }
     }
 
     # Append text after the last match
-    append formated_message $remaining_message
+    append formatted_message $remaining_message
 
-    return $formated_message
+    return $formatted_message
 }
 
 ad_proc -private lang::message::embedded_vars_regexp {} {

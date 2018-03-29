@@ -165,7 +165,7 @@ namespace eval acs_mail_lite {
 	-received
         -references (this references the original message id if the email is a reply)
 	-in-reply-to (this references the original message id if the email is a reply)
-	-return-path (this is used for mailer deamons to bounce emails back like bounce-user_id-signature-package_id@service0.com)
+	-return-path (this is used for mailer daemons to bounce emails back like bounce-user_id-signature-package_id@service0.com)
 	
 	Optional application specific stuff only exist in special cases:
 	
