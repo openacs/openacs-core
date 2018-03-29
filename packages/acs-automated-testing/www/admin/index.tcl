@@ -33,36 +33,34 @@ if {$by_category ne ""} {
 }
 
 foreach testcase [nsv_get aa_test cases] {
-    set testcase_id [lindex $testcase 0]
-    set testcase_desc [lindex $testcase 1]
-    set package_key   [lindex $testcase 3]
-    set categories    [lindex $testcase 4]
-    set results("$testcase_id,$package_key") [list $testcase_desc $package_key $categories]
+    lassign $testcase testcase_id testcase_desc . package_key categories
+
+    set results($testcase_id,$package_key) [list $testcase_desc $package_key $categories]
     set packages($package_key) [list 0 0 0]
 }
 
 db_foreach acs-automated-testing.results_queryx {
-    select testcase_id, package_key,
-    to_char(timestamp,'YYYY-MM-DD_HH24:MI:SS') as timestamp, passes, fails
+    select
+       testcase_id, package_key,
+       to_char(timestamp,'YYYY-MM-DD_HH24:MI:SS') as timestamp,
+       passes, fails
     from aa_test_final_results
     order by package_key, testcase_id
 } {
-    if {[info exists results("$testcase_id,$package_key")]} {
+    if {[info exists results($testcase_id,$package_key)]} {
         # Append results to individual testcase
-        lappend results("$testcase_id,$package_key") $timestamp $passes $fails
+        lappend results($testcase_id,$package_key) $timestamp $passes $fails
 
         #
         # If viewing by package, update the by-package results, taking into
         # account whether a specific category has been specified.
         #
         if {$view_by eq "package"} {
-            set package_total [lindex $packages($package_key) 0]
-            set package_pass  [lindex $packages($package_key) 1]
-            set package_fail  [lindex $packages($package_key) 2]
+            lassign $packages($package_key) package_total package_pass package_fail
             if {$by_category ne ""} {
                 # Category specific, only add results if this testcase is of the
                 # specified category.
-                set categories  [lindex $results("$testcase_id,$package_key") 2]
+                set categories  [lindex $results($testcase_id,$package_key) 2]
                 if {[lsearch $categories $by_category] != -1} {
                     incr package_total
                     incr package_pass $passes
@@ -88,9 +86,8 @@ if {$view_by eq "package"} {
     #
     template::multirow create packageinfo key total passes fails
     foreach package_key [lsort [array names packages]] {
-        set total  [lindex $packages($package_key) 0]
-        set passes [lindex $packages($package_key) 1]
-        set fails  [lindex $packages($package_key) 2]
+        #ns_log notice "view_by $view_by package_key=$package_key"
+        lassign $packages($package_key) total passes fails
         template::multirow append packageinfo $package_key $total $passes $fails
     }
 } else {
@@ -104,13 +101,11 @@ if {$view_by eq "package"} {
         set testcase_id        [lindex $testcase 0]
         set package_key        [lindex $testcase 3]
 
-        set testcase_desc      [lindex $results("$testcase_id,$package_key") 0]
+        lassign $results($testcase_id,$package_key) testcase_desc . categories \
+            testcase_timestamp testcase_passes testcase_fails
+
         regexp {^(.+?\.)\s} $testcase_desc "" testcase_desc
-        set categories         [lindex $results("$testcase_id,$package_key") 2]
         set categories_str     [join $categories ", "]
-        set testcase_timestamp [lindex $results("$testcase_id,$package_key") 3]
-        set testcase_passes    [lindex $results("$testcase_id,$package_key") 4]
-        set testcase_fails     [lindex $results("$testcase_id,$package_key") 5]
         #
         # Only add the testcase to the template multirow if either
         # - The package key is blank or it matches the specified.
@@ -126,7 +121,9 @@ if {$view_by eq "package"} {
             } else {
                 set marker 0
             }
-            set testcase_url [export_vars -base "testcase" -url {testcase_id package_key view_by {category by_category} quiet return_url}]
+            set testcase_url [export_vars -base "testcase" -url {
+                testcase_id package_key view_by {category by_category} quiet return_url
+            }]
             template::multirow append tests \
                 $testcase_id \
                 $testcase_url \
