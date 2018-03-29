@@ -76,7 +76,7 @@
 	
 	function openImageSelector() {
 	
-		// open the image selctor popup
+		// open the image selector popup
 		// make sure it is at least this size
 		var w=640;
 		var h=480;

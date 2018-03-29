@@ -102,7 +102,7 @@ function onCancel() {
 
 function openFileSelector() {
     
-    // open the file selctor popup
+    // open the file selector popup
     // make sure it is at least this size
     var w=640;
     var h=480;
