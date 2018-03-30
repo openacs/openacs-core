@@ -579,20 +579,29 @@ ad_proc -private package_plsql_args {
     @creation-date 11/2001
 
     @param package_name The package which owns the function
-
     @param object_name The function name which we're looking up
+    @return list of parameters
 } {
     # Get just the args
-    return [db_list select_package_func_param_list {}]
+    set key ::acs::package_plsql_args($object_name-$package_name)
+    if {[info exists $key]} {
+        return [set $key]
+    }
+    return [set $key [db_list select_package_func_param_list {}]]
+
 }
 
 ad_proc -private package_function_p {
     -object_name:required
     package_name
 } {
-    Returns true if the package's object is a function.
+    @return true if the package's object is a function.
 } {
-    return [db_0or1row function_p ""]
+    set key ::acs::package_function_p($object_name-$package_name)
+    if {[info exists $key]} {
+        return [set $key]
+    }
+    return [set $key [db_0or1row function_p ""]]
 }
 
 ad_proc -private package_table_columns_for_type {
@@ -744,7 +753,7 @@ ad_proc -public package_instantiate_object {
     # This will prevent us from passing in any parameters that are
     # not defined
 
-    foreach arg [util_memoize [list package_plsql_args $package_name]] {
+    foreach arg [package_plsql_args $package_name] {
         set real_params([string toupper $arg]) 1
     }
 
@@ -865,7 +874,7 @@ ad_proc -public package_exec_plsql {
     set __package_name $package_name
     set __object_name $object_name
 
-    foreach arg [util_memoize [list package_plsql_args -object_name $__object_name $__package_name]] {
+    foreach arg [package_plsql_args -object_name $__object_name $__package_name] {
         set real_params([string toupper $arg]) 1
     }
 
@@ -891,7 +900,7 @@ ad_proc -public package_exec_plsql {
         set $__key $__value
     }
 
-    if { [util_memoize [list package_function_p -object_name $__object_name $__package_name]] } {
+    if { [package_function_p -object_name $__object_name $__package_name] } {
         return [db_exec_plsql exec_func_plsql {}]
     } else {
         db_exec_plsql exec_proc_plsql {}
