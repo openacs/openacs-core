@@ -541,7 +541,7 @@ ad_proc -private auth::authority::get_not_cached {
 ad_proc -private auth::authority::get_id_flush {
     {-short_name ""}
 } {
-    Flush the cache for gett authority_id by short_name.
+    Flush the cache for auth::authority::get_id by short_name.
 } {
     if { $short_name eq "" } {
         util_memoize_flush_regexp [list auth::authority::get_id_not_cached .*]
