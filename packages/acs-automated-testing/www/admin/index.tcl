@@ -45,7 +45,6 @@ db_foreach acs-automated-testing.results_queryx {
        to_char(timestamp,'YYYY-MM-DD_HH24:MI:SS') as timestamp,
        passes, fails
     from aa_test_final_results
-    order by package_key, testcase_id
 } {
     if {[info exists results($testcase_id,$package_key)]} {
         # Append results to individual testcase
@@ -61,20 +60,20 @@ db_foreach acs-automated-testing.results_queryx {
                 # Category specific, only add results if this testcase is of the
                 # specified category.
                 set categories  [lindex $results($testcase_id,$package_key) 2]
-                if {[lsearch $categories $by_category] != -1} {
+                if {$by_category in $categories} {
                     incr package_total
                     incr package_pass $passes
                     incr package_fail $fails
-                    set packages($package_key) [list $package_total \
-                                                    $package_pass $package_fail]
+                    set packages($package_key) \
+                        [list $package_total $package_pass $package_fail]
                 }
             } else {
                 # No category specified, add results.
                 incr package_total
                 incr package_pass $passes
                 incr package_fail $fails
-                set packages($package_key) [list $package_total \
-                                                $package_pass $package_fail]
+                set packages($package_key) \
+                    [list $package_total $package_pass $package_fail]
             }
         }
     }
@@ -110,8 +109,8 @@ if {$view_by eq "package"} {
         # - The package key is blank or it matches the specified.
         # - The category is blank or it matches the specified.
         #
-        if {($by_package_key eq "" || ($by_package_key eq $package_key))
-            && ($by_category eq "" || ($by_category in $categories))
+        if {$by_package_key in [list "" $package_key]
+            && $by_category in [list "" $categories]
         } {
             # Swap the highlight flag between packages.
             if {$old_package_key ne $package_key} {
@@ -143,7 +142,7 @@ template::multirow create main_categories name
 template::multirow create exclusion_categories name
 foreach category [nsv_get aa_test categories] {
     # joel@aufrecht.org: putting in special cases for exclusionary categories
-    if { [lsearch [nsv_get aa_test exclusion_categories] $category ] < 0 } {
+    if { $category in [nsv_get aa_test exclusion_categories] } {
         template::multirow append main_categories $category
     } else {
         template::multirow append exclusion_categories $category
