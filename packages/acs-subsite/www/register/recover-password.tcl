@@ -51,7 +51,7 @@ if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs
 
 set focus {}
 if { [auth::UseEmailForLoginP] } {
-    ad_form -extend -name recover -form [list [list email:text($username_widget) [list label "Email"]]]
+    ad_form -extend -name recover -form [list [list email:text($username_widget) [list label [_ acs-subsite.Email]]]]
     set user_id_widget_name email
     set focus "email"
 } else {
@@ -64,7 +64,7 @@ if { [auth::UseEmailForLoginP] } {
         }
     }
     
-    ad_form -extend -name recover -form [list [list username:text($username_widget) [list label "Username"]]] -validate {
+    ad_form -extend -name recover -form [list [list username:text($username_widget) [list label [_ acs-subsite.Username]]]] -validate {
         {username
             { [acs_user::get_by_username -authority_id $authority_id -username $username] ne "" }
             { Could not find username at authority }
