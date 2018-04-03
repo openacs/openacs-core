@@ -380,7 +380,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Password_changed_subject">Passwort geändert</msg>
   <msg key="Password_regular_change_now">Ihr Passwort muss rgelmässig geändert werden.  Bitte Ändern Sie jetzt ihr Passwort.</msg>
   <msg key="Passwords_dont_match">Passwörter stimmen nicht Überein</msg>
-  <msg key="perm_cannot_be_removed">Die Erlabnis kann nicht wieder zurückgenommen werden.</msg>
+  <msg key="perm_cannot_be_removed">Die Erlaubnis kann nicht wieder zurückgenommen werden.</msg>
   <msg key="Permissions">Berechtigungen</msg>
   <msg key="permissions">Berechtigungen</msg>
   <msg key="Permissions_for_name">Zugriffsberechtigungen für %name%</msg>
