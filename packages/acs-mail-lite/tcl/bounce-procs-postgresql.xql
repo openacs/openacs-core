@@ -29,7 +29,7 @@
      </querytext>
    </fullquery>
 
-   <fullquery name="acs_mail_lite::check_bounces.log_notication_sending">
+   <fullquery name="acs_mail_lite::check_bounces.log_notification_sending">
      <querytext>
 
        update acs_mail_lite_bounce_notif
