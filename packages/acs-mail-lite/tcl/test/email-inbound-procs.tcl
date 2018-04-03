@@ -124,7 +124,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            set p_type_i 0
             foreach p_type $priority_types {
 
-                # reset prameters
+                # reset parameters
                 foreach {n v} $a_list {
                     #set $n $v
                     set p "-"
