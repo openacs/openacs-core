@@ -87,7 +87,7 @@ should be used to specify what makes the dynamic part of the page.
 There&#39;s also an API for creating forms and for creating and
 manipulating multirow data sources.</li><li>The mechanism for dynamically generating pages combines data
 and layout. It also allows coposition of modular pages from
-reusable widges and skins. It is not limited to HTML.</li><li>The <code>&lt;master&gt;</code> tag specifies a master
+reusable widgets and skins. It is not limited to HTML.</li><li>The <code>&lt;master&gt;</code> tag specifies a master
 template. Its <code>src</code> attribute defaults to the site-wide
 master template.</li>
 </ul>
