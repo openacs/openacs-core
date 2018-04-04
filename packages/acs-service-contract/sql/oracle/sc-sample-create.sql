@@ -24,7 +24,7 @@ begin
 	    operation_iscachable_p => 'f',
 	    operation_nargs => 1,
 	    operation_inputttype => 'ObjectDisplay.Name.InputType',
-	    operation_ouputtype => 'ObjectDisplay.Name.OutputType'
+	    operation_outputtype => 'ObjectDisplay.Name.OutputType'
     );
 
 
