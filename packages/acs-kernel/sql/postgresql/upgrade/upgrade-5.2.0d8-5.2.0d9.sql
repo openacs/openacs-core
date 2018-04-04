@@ -1,4 +1,4 @@
--- on pg8 the get_func_drop_command is not found since it wont coerce proname to varchar
+-- on pg8 the get_func_drop_command is not found since it won't coerce proname to varchar
 create or replace function drop_package (varchar) returns varchar as '
 declare
        package_name      alias for $1;

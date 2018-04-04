@@ -114,7 +114,7 @@ drop function acs_objects_update_tr();
 drop trigger acs_objects_insert_tr on acs_objects;
 drop function acs_objects_insert_tr();
 --
--- dont want to mess up modification dates.
+-- don't want to mess up modification dates.
 --
 drop trigger acs_objects_last_mod_update_tr on acs_objects;
 drop function acs_objects_last_mod_update_tr();
