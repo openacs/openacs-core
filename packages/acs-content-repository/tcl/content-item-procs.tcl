@@ -38,7 +38,7 @@ ad_proc -public ::content::item::new {
     Create a new content item This proc creates versioned content
     items where content_type iscontent_revision or subtypes of content
     revision. There are procedures for each other base content
-    item. This procdedure uses package_instantiate object. Under
+    item. This procedure uses package_instantiate object. Under
     PostgreSQL the object_type new function must be registered with
     define_function_args.
 

@@ -463,8 +463,8 @@ ad_proc -private doc::parse_namespace { text_lines }  {
 
     foreach proc_block $procedure_list {
 
-	# each pro_block text block contains both the directive-marked comments and 
-	# the source code for the procedyre
+	# each pro_block text block contains both the directive-marked comments and
+	# the source code for the procedure
 	doc::parse_comment_text $proc_block
     }
 

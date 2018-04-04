@@ -363,7 +363,7 @@ What this means is that even though all the code for the
 <code class="computeroutput">ROOT/packages/notes</code>, the
 application itself can run from any number of locations in the
 site. This allows developers and administrators to build sites that
-look to the user like a collection of many indedendent applications
+look to the user like a collection of many independent applications
 that actually run on a single shared code base. The <a class="link" href="request-processor" title="The Request Processor">request-processor</a> document shows you
 how OpenACS figures out which instance of your application was
 requested by the user at any given time. The <a class="link" href="subsites" title="Writing OpenACS Application Pages">page

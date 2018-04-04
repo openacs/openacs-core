@@ -416,7 +416,7 @@ ad_proc -public template::data::validate::search {
   should be on the element, not on the datatype.
 
   DRB: in practice a template form datatype is defined by the presence of a
-  validate procdure for that type.
+  validate procedure for that type.
 
   @param value_ref Reference variable to the submitted value
   @param message_ref Reference variable for returning an error message

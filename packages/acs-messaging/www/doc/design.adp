@@ -16,7 +16,7 @@ layer. Built atop the content repository, it provides the storage
 and retrieval of messages. We take messages to be objects that
 consist of a sender (an ACS party), a text body, an optional
 reference to a parent message, optional file attachments, and some
-miscellaneous auditing data.With these constraining constraining
+miscellaneous auditing data.With these constraining
 set of semantics, we can build a library of component functionality
 to operate on messages. For example: code that displays a message,
 forwards a message, compiles a set of messages into a digest,

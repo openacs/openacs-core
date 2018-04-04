@@ -1184,7 +1184,7 @@ ad_proc -public ad_form {
     if { [template::form is_submission $form_name] } {
         upvar #$level __refreshing_p __refreshing_p __confirmed_p __confirmed_p
         #
-        # The values for __refreshing_p and __confirmed_p are returend
+        # The values for __refreshing_p and __confirmed_p are returned
         # from the client.  Since Submitting invalid data to hidden
         # elements is a common attack vector, we react harsh if we see
         # an invalid input here.
