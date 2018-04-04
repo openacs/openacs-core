@@ -939,7 +939,7 @@ aa_register_case -cats {api db} db__caching {
         $not_cached
     db_flush_cache
 
-    # Check db_list_of_list caching
+    # Check db_list_of_lists caching
 
     set not_cached \
         [db_list_of_lists test5 {select * from persons where person_id = 0}]

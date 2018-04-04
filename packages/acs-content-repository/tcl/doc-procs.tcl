@@ -157,7 +157,7 @@ namespace eval doc {
 	{ {label value} {label value} ... }
     } {
 
-	set result [db_list_of_list get_packages ""]
+	set result [db_list_of_lists get_packages ""]
 	
 	return $result
     }  
