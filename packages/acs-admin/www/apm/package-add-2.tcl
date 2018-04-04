@@ -93,7 +93,7 @@ is already registered to another package."
     version_uri {You must provide a unique URI for this version of your package.}
     summary {Please summarize your package so that users can determine what it is for.}
     description {Please provide a description of your package so that users can consider using it.}
-    descrption_format {Please indicate if your package is HTML or text.}    
+    description_format {Please indicate if your package is HTML or text.}
     package_key_format {The package key should contain only letters, numbers, and hyphens (dashes) and it must be lowercase.}
     package_id {You must provide an integer key for your package.}
     version_id {You must provide an integer key for your package version.}

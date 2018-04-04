@@ -2246,7 +2246,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                 # queries in the on_error block would then fail.
                 #
                 # Note that the semantics described in the proc doc
-                # are not possible to support on postresql.
+                # are not possible to support on postgresql.
 
                 # DRB: I removed the db_release_unused_handles call that
                 # this patch included because additional aborts further

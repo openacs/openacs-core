@@ -461,7 +461,7 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
 	    
 # 	}
  
-# 	# javascipt enabled
+# 	# javascript enabled
 # 	append return_string "
 	
 # 	function hiLite(imgObjName) \{

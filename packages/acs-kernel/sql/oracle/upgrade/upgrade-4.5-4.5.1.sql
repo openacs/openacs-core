@@ -1121,7 +1121,7 @@ as
         return 't';
     end if;
     --
-    -- group permmissions
+    -- group permissions
     select decode(count(*),0,'f','t') into exists_p
     from dual where exists (
           select 'x'
