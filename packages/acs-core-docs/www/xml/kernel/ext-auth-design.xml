@@ -2289,7 +2289,7 @@ ad_proc -public auth::authority::new {
    }
 }
 ad_proc -public auth::authority::delete {
-  {-authority_id:requied}
+  {-authority_id:required}
 } {
    db_exec delete_authority {
       delete from auth_authorities 
