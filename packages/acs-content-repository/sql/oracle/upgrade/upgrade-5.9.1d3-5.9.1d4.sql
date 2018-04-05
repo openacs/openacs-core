@@ -139,10 +139,10 @@ begin
   select 
     decode(count(*),0,0,1) into table_exists 
   from 
-    user_tables u, acs_object_types objet
+    user_tables u, acs_object_types object
   where 
-    objet.object_type = drop_type.content_type and
-    u.table_name = upper(objet.table_name);
+    object.object_type = drop_type.content_type and
+    u.table_name = upper(object.table_name);
 
   if table_exists = 1 and drop_table_p = 't' then
     select 
