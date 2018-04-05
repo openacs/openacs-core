@@ -329,7 +329,7 @@ ad_proc -private -deprecated template::util::server_root {} {
 } {
 
   set path_length [expr [llength [file split [ns_library private]]] - 1]
-  set svr_root "/[join [lreplace [file split [ns_library private]] $path_length $path_le\ngth] / ]"
+  set svr_root "/[join [lreplace [file split [ns_library private]] $path_length $path_length] / ]"
   return $svr_root
 }
 
