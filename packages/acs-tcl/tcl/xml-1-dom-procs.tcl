@@ -299,8 +299,9 @@ proc dom::DOMImplementation {method args} {
 		$parser configure -final false
 		while {[string length [lindex $args 0]]} {
 		    $parser parse [string range [lindex $args 0] 0 $opts(-chunksize)]
-		    set args [lreplace $args 0 0 \
-			[string range [lindex $args 0] $opts(-chunksize) end]]
+		    #set args [lreplace $args 0 0 \
+                    #              [string range [lindex $args 0] $opts(-chunksize) end]]
+                    lset args 0 [string range [lindex $args 0] $opts(-chunksize) end]
 		    uplevel #0 $opts(-progresscommand)
 		}
 		$parser configure -final true
@@ -956,8 +957,9 @@ proc dom::node {method token args} {
 		node removeChild $newChild(node:parentNode) [lindex $args 0]
 	    }
 
-	    set $node(node:childNodes) \
-		[lreplace [set $node(node:childNodes)] $idx $idx [lindex $args 0]]
+	    #set $node(node:childNodes) \
+		#[lreplace [set $node(node:childNodes)] $idx $idx [lindex $args 0]]
+            lset $node(node:childNodes) $idx [lindex $args 0]
 	    set newChild(node:parentNode) $token
 
 	    # Update old child to reflect lack of parentage

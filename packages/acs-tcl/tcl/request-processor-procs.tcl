@@ -881,7 +881,8 @@ ad_proc rp_report_error {
         && ![permission::permission_p -object_id [ad_conn package_id] -privilege admin]
     } {
         set message {}
-        set params [lreplace $params 0 0 [list stacktrace $message]]
+        #set params [lreplace $params 0 0 [list stacktrace $message]]
+        lset params 0 [list stacktrace $message]
     }
 
     ad_try {

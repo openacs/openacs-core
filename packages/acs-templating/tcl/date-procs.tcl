@@ -588,7 +588,8 @@ ad_proc -public template::util::date::now_min_interval {} {
   }
 
   # replace the minute value in the now list with new value
-  set now [lreplace $now 4 4 $minute]
+  #set now [lreplace $now 4 4 $minute]
+  lset now 4 $minute
 
   return [create {*}$now]
 }
