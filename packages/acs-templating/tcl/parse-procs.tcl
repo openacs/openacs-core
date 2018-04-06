@@ -730,7 +730,7 @@ ad_proc -private template::adp_append_code { code { nobreak "" } } {
 
         set last_line [lindex $parse_list end]
         append last_line " $code"
-        set parse_list [lreplace $parse_list end end $last_line]
+        lset parse_list end $last_line
 
     } else {
 
