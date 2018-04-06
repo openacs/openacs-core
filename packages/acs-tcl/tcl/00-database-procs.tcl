@@ -1471,7 +1471,7 @@ proc db_multirow_helper {} {
                     for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
                         lappend local_columns [ns_set key $selection $i]
                     }
-                    set local_columns [concat $local_columns $extend]
+                    lappend local_columns {*}$extend
                     if { !$append_p || ![info exists columns] } {
                         # store the list of columns in the var_name:columns variable
                         set columns $local_columns
