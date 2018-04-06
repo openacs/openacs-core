@@ -180,7 +180,7 @@ ad_proc -public ad_context_bar {
 
     if { [string match "admin/*" [ad_conn extra_url]] } {
         lappend context [list "[ad_conn package_url]admin/" \
-                             "[_ acs-tcl.Administration]"]
+                             [_ acs-tcl.Administration]]
     }
 
     if {[llength $args] == 0} { 
@@ -192,11 +192,11 @@ ad_proc -public ad_context_bar {
 	    set args [list $args]
 	}	
     }
-
+    lappend context {*}$args
     if { [info exists separator] } {
-        return [ad_context_bar_html -separator $separator [concat $context $args]]
+        return [ad_context_bar_html -separator $separator $context]
     } else {
-        return [ad_context_bar_html [concat $context $args]]
+        return [ad_context_bar_html $context]
     }
 }
 
