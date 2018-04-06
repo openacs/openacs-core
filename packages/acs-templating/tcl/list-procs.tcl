@@ -1098,7 +1098,7 @@ ad_proc -public template::list::multirow_cols {
         lappend result "-decreasing"
     }
 
-    set result [concat $result $orderby_properties(multirow_cols)]
+    lappend result {*}$orderby_properties(multirow_cols)
 
     return $result
 }
