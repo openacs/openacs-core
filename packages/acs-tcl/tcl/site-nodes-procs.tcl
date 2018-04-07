@@ -1024,13 +1024,14 @@ ad_proc -public site_node::verify_folder_name {
 #############
 
 
-ad_proc -public site_node_delete_package_instance {
+ad_proc -deprecated -public site_node_delete_package_instance {
     {-node_id:required}
 } {
     Wrapper for apm_package_instance_delete
 
     @author Arjun Sanyal (arjun@openforc.net)
     @creation-date 2002-05-02
+    @see site_node::delete
 } {
     db_transaction {
         set package_id [site_node::get_object_id -node_id $node_id]
@@ -1041,7 +1042,7 @@ ad_proc -public site_node_delete_package_instance {
     }
 }
 
-ad_proc -public site_map_unmount_application {
+ad_proc -deprecated -public site_map_unmount_application {
     { -sync_p "t" }
     { -delete_p "f" }
     node_id
@@ -1055,6 +1056,7 @@ ad_proc -public site_map_unmount_application {
     @param delete_p If "t", we attempt to delete the site node. This
     will fail if you have not cleaned up child nodes
     @param node_id The node_id to unmount
+    @see site_node::unmount
 
 } {
     db_transaction {
@@ -1066,16 +1068,19 @@ ad_proc -public site_map_unmount_application {
     }
 }
 
-ad_proc -public site_node_id {url} {
+ad_proc -deprecated -public site_node_id {url} {
     Returns the node_id of a site node. Throws an error if there is no
     matching node.
+    @see site_node::get_node_id
 } {
     return [site_node::get_node_id -url $url]
 }
 
-ad_proc -public site_nodes_sync {args} {
+ad_proc -deprecated -public site_nodes_sync {args} {
     Brings the in memory copy of the url hierarchy in sync with the
     database version.
+
+    @see site_node::init_cache
 } {
     site_node::init_cache
 }
@@ -1196,12 +1201,13 @@ ad_proc -deprecated -public site_node_closest_ancestor_package_url {
     return [lindex [site_node::get_url_from_object_id -object_id $subsite_pkg_id] 0]
 }
 
-ad_proc -public site_node::conn_url {
+ad_proc -deprecated -public site_node::conn_url {
 } {
     Use this in place of ns_conn url when referencing host_nodes.
     This proc returns the appropriate ns_conn url value, depending on
     if host_node_map is used for current connection, or hostname's
     domain.
+    @see ad_conn
 } {
     set ns_conn_url [ns_conn url]
     set subsite_get_url [subsite::get_url]
