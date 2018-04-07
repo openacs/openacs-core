@@ -131,9 +131,9 @@ ad_proc -public email_image::new_item {
     set image_name "email${user_id}.gif"
     set email_length [string length $email]
     set dest_path "/tmp/$image_name"
-    set width [expr [expr {$email_length * [expr {$font_size / 2}]}] + 2]
+    set width [expr {($email_length * ($font_size / 2)) + 2}]
     set height $font_size
-    set ypos [expr {[expr {$height / 2}] + 3 }]
+    set ypos [expr { ($height / 2) + 3 }]
     set size "${width}x$height"
 
     if {$bgcolor eq ""} {
@@ -214,9 +214,9 @@ ad_proc -public email_image::edit_email_image {
     set image_name "email${user_id}.gif"
     set email_length [string length $new_email]
     set dest_path "/tmp/$image_name"
-    set width [expr [expr {$email_length * [expr {$font_size / 2}]}] + 2]
+    set width [expr {($email_length * ($font_size / 2)) + 2}]
     set height $font_size
-    set ypos [expr {[expr {$height / 2}] + 3 }]
+    set ypos [expr { ($height / 2) + 3 }]
     set size "${width}x$height"
 
     if {$bgcolor eq ""} {
