@@ -117,7 +117,7 @@ ad_form -extend -name message_form -form {
         and    cu.user_id = lm.creation_user
     }]
 
-    if { ([info exists message] && $message ne "") } {
+    if { [info exists message] && $message ne "" } {
         set message $message
     } else {
         set message $original_message

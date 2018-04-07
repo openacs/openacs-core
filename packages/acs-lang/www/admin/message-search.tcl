@@ -54,7 +54,9 @@ ad_form -extend -name search -form {
     # locale will be set now
 } 
 
-if { ([info exists search_locale] && $search_locale ne "") && ([info exists q] && $q ne "") } {
+if { [info exists search_locale] && $search_locale ne ""
+     && [info exists q] && $q ne ""
+ } {
     set submit_p 1
 
     set search_string "%$q%"

@@ -27,8 +27,9 @@ set context [list $page_title]
 set form_export_vars [export_vars -form { locale {confirm_p 1} }]
 
 
-if { ([info exists confirm_p] && $confirm_p ne "") && [template::util::is_true $confirm_p] } {
-
+if { [info exists confirm_p] && $confirm_p ne ""
+     && [template::util::is_true $confirm_p]
+ } {
     db_transaction {
 
         db_dml delete_messages { delete from lang_messages where locale = :locale }
