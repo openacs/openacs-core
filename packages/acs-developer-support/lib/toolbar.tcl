@@ -127,7 +127,7 @@ foreach {package_name package_url} {xotcl-core xocore_url xotcl-request-monitor 
     }
 }
 
-set this_side_node [site_node_id [ad_conn url]]
+set this_side_node [site_node::get_node_id -url [ad_conn url]]
 
 # Local variables:
 #    mode: tcl
