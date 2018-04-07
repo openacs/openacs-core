@@ -62,7 +62,7 @@ db_transaction {
     ad_script_abort
 }
 
-if {[lsearch $expand $parent_id] == -1} {
+if {$parent_id ni $expand} {
     lappend expand $parent_id
 }
 
