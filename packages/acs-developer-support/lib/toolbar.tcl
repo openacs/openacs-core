@@ -1,4 +1,3 @@
-
 # TODO: Handle the case when developer-support is not mounted
 set ip_address [ns_info address]:[ns_config [ns_driversection] port]
 
@@ -20,7 +19,7 @@ if { $show_p } {
     multirow append ds_buttons USR \
         "Toggle user switching" \
         [export_vars -base "${ds_url}set" { {field user} {enabled_p {[expr {![ds_user_switching_enabled_p]}]}} {return_url [ad_return_url]} }] \
-        [ad_decode [ds_user_switching_enabled_p] 1 "on" "off"] 
+        [ad_decode [ds_user_switching_enabled_p] 1 "on" "off"]
 
     multirow append ds_buttons DB \
         "Toggle DB data collection" \
@@ -72,7 +71,7 @@ if { $show_p } {
     set auto_test_url [site_node::get_package_url -package_key acs-automated-testing]
     set request_info_url [export_vars -base "${ds_url}request-info" { { request {[ad_conn request]} } }]
     set page_ms [lc_numeric [ds_get_page_serve_time_ms]]
-    
+
     lassign [ds_get_db_command_info] db_num_cmds db_num_ms
     if {$db_num_ms ne ""} {
         set db_num_ms [lc_numeric [format %.1f $db_num_ms]]
@@ -100,12 +99,10 @@ if { $show_p } {
 variable ::template::head::links
 
 set css_list [list]
-if {[array exists links]} {
-    foreach name [array names links] {
-        foreach {rel href type media title lang} $links($name) {
-            if {$type eq "text/css"} {
-                lappend css_list $href
-            }
+foreach name [array names links] {
+    foreach {rel href type media title lang} $links($name) {
+        if {$type eq "text/css"} {
+            lappend css_list $href
         }
     }
 }
