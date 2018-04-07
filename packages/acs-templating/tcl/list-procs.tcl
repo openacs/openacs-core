@@ -1244,7 +1244,7 @@ ad_proc -private template::list::prepare_for_rendering {
             }
 
             # aggregate
-            if { ([info exists element_properties(aggregate)] && $element_properties(aggregate) ne "") } {
+            if { [info exists element_properties(aggregate)] && $element_properties(aggregate) ne "" } {
                 # Set the aggregate_col to the name of the new, dynamic column
                 set element_properties(aggregate_col) "$element_properties(name)___$element_properties(aggregate)"
                 set element_properties(aggregate_group_col) "$element_properties(name)___$element_properties(aggregate)_group"
@@ -1285,7 +1285,7 @@ ad_proc -private template::list::prepare_for_rendering {
                 }
 
                 # aggregate
-                if { ([info exists __element_properties(aggregate)] && $__element_properties(aggregate) ne "") } {
+                if { [info exists __element_properties(aggregate)] && $__element_properties(aggregate) ne "" } {
                     # Update totals
                     incr __agg_counter($__element_properties(name))
                     if {$__element_properties(aggregate) eq "sum" } {
@@ -1395,7 +1395,7 @@ ad_proc -private template::list::render {
 
         # Set the URLs which the next/prev page/group links should point to
         foreach elm { next_page previous_page next_group previous_group } {
-            if { ([info exists paginator($elm)] && $paginator($elm) ne "") } {
+            if { [info exists paginator($elm)] && $paginator($elm) ne "" } {
                 set paginator(${elm}_url) [get_url \
                                                -name $list_properties(name) \
                                                -override [list [list page $paginator($elm)]]]
@@ -1744,7 +1744,7 @@ ad_proc -private template::list::prepare_filters {
             }
 
             # Generate add_url, and add to filter(add_urls)
-            if { ([info exists filter_properties(add_url_eval)] && $filter_properties(add_url_eval) ne "") } {
+            if { [info exists filter_properties(add_url_eval)] && $filter_properties(add_url_eval) ne "" } {
                 upvar $list_properties(ulevel) __filter_value __filter_value
                 set __filter_value $value
                 lappend filter_properties(add_urls) [uplevel $list_properties(ulevel) subst $filter_properties(add_url_eval)]

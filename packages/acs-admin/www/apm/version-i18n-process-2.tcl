@@ -32,7 +32,7 @@ if { [info exists skip_button] } {
 set message_key_list [list]
 for { set counter 1 } { $counter <= $number_of_keys } { incr counter } {
     if { [info exists replace_p($counter)] } {
-        if { ([info exists message_keys($counter)] && $message_keys($counter) ne "") } {
+        if { [info exists message_keys($counter)] && $message_keys($counter) ne "" } {
             lappend message_key_list $message_keys($counter)
         } else {
             ad_return_complaint 1 "<li>Message key number $counter is empty. Cannot replace text with empty key</li>"

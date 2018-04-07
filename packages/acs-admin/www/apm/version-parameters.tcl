@@ -43,7 +43,7 @@ set elements_list {
 #DRB: sql_clauses must not contain RDBMS-specific query clauses.
 set sql_clauses ""
 
-if { ([info exists dimensional_list] && $dimensional_list ne "") } {
+if { $dimensional_list ne "" } {
     append sql_clauses [ad_dimensional_sql $dimensional_list]
     lappend elements_list section_name {
         label "Section"

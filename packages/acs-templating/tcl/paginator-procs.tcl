@@ -715,7 +715,7 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   # If the paginator is contextual, set the context
   if { [info exists properties(context_ids)] } {
     foreach elm { next_page previous_page next_group previous_group } {
-      if { ([info exists info($elm)] && $info($elm) ne "") } {
+      if { [info exists info($elm)] && $info($elm) ne "" } {
         set info(${elm}_context) [lindex $properties(context_ids) $info($elm)-1]
       }
     }

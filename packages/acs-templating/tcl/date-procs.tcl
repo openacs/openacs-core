@@ -941,7 +941,7 @@ ad_proc -public template::widget::monthFragment {
 
   if { $mode ne "edit" } {
     set output {}
-    if { ([info exists value] && $value ne "") } {
+    if { $value ne "" } {
       append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"$value\">"
       append output [template::util::date::monthName $value $size]
     }

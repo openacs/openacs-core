@@ -282,8 +282,8 @@ if { $display_batch_history_p } {
         }
         set run_time [util::interval_pretty -seconds $run_time_seconds]
     }
-    if { ([info exists get_doc_impl_id] && $get_doc_impl_id ne "")
-         && ([info exists process_doc_impl_id] && $process_doc_impl_id ne "") } {
+    if { [info exists get_doc_impl_id] && $get_doc_impl_id ne ""
+         && [info exists process_doc_impl_id] && $process_doc_impl_id ne "" } {
         set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]
         template::add_confirm_handler \
             -id batch-sync-run \
@@ -319,9 +319,9 @@ if { ($initial_request_p || $submit_p) && !$local_authority_p } {
     foreach element_name [auth::authority::get_sc_impl_columns] {
         # Only offer link if there is an implementation chosen and that implementation has
         # parameters to configure
-        if { ([info exists element_array($element_name)] && $element_array($element_name) ne "") && 
-             [auth::driver::get_parameters -impl_id $element_array($element_name)] ne ""} {
-            
+        if { [info exists element_array($element_name)] && $element_array($element_name) ne ""
+             && [auth::driver::get_parameters -impl_id $element_array($element_name)] ne ""
+         } {
             set configure_url [export_vars -base authority-parameters { authority_id }]
             break
         }

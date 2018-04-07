@@ -123,7 +123,7 @@ if { $email ne "" } {
     set criteria:[set rowcount](data) "Email contains '$email'"
 }
 
-if { ([info exists ip] && $ip ne "") } {
+if { $ip ne "" } {
     lappend where_clause "creation_ip = :ip"
     incr rowcount
     set criteria:[set rowcount](data) "Creation IP is $ip"

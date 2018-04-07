@@ -368,7 +368,7 @@ ad_proc -public template::data::validate::textdate {
     upvar 2 $message_ref message $value_ref textdate
     
     set error_msg [list]
-    if { ([info exists textdate] && $textdate ne "") } {
+    if { [info exists textdate] && $textdate ne "" } {
 	if { [regexp {^[0-9]{4}-[0-9]{2}-[0-9]{2}$} $textdate match] } {
 	    if { [catch { clock scan "${textdate}" }] } {
 		# the textdate is formatted properly the template::data::transform::textdate proc

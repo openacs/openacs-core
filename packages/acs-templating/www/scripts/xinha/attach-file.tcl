@@ -106,7 +106,7 @@ if {$write_p} {
 	    }
 	    set error_p 0
             # check file name
-		if { [info exists f_url] && $f_url eq "" && $url_ok_btn ne ""} {
+		if { $f_url eq "" && $url_ok_btn ne ""} {
 		    template::form::set_error upload_form f_url "Specify a [_ acs-templating.Link_Url]"
 		    set error_p 1
 		} 
@@ -226,7 +226,7 @@ if {$write_p} {
 		    # see the parent object
 		    set f_href "/image/${item_id}/private/${parent_id}/${file_name}"			
 		} else {
-		    if { ([info exists f_url] && $f_url ne "") && $url_ok_btn ne "" } {
+		    if { $f_url ne "" && $url_ok_btn ne "" } {
 			set f_href $f_url
 		    } else {
 			set f_href "/file/${item_id}/${file_name}"
