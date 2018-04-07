@@ -31,7 +31,7 @@ set table_sql "select p.parameter_id, p.parameter_name, p.package_key, nvl(p.des
 set dimensional_list [apm_parameter_section_slider $package_key]
 set additional_sql ""
 
-if {([info exists dimensional_list] && $dimensional_list ne "") } {
+if {$dimensional_list ne "" } {
     lappend table_def [list section_name "Section:"]
     append additional_sql [ad_dimensional_sql $dimensional_list]
     ns_log Notice [ad_dimensional_sql $dimensional_list]
