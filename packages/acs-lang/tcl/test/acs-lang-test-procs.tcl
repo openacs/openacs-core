@@ -863,8 +863,8 @@ aa_register_case \
         set timezones [lc_list_all_timezones]
         set n [expr {[llength $timezones]-1}]
 
-        set desired_user_timezone [lindex [lindex $timezones [randomRange $n]] 0]
-        set desired_system_timezone [lindex [lindex $timezones [randomRange $n]] 0]
+        set desired_user_timezone [lindex $timezones [randomRange $n] 0]
+        set desired_system_timezone [lindex $timezones [randomRange $n] 0]
 
         set error_p 0
         ad_try {
