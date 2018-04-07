@@ -132,7 +132,7 @@ ad_proc -public acs_sc::impl::new_from_spec {
 ad_proc -public acs_sc::impl::get_id {
     {-owner:required}
     {-name:required}
-    -contract
+    {-contract ""}
 } {
     Retrieves the ID for a service contract.  If the contract is specified
     then the ID is retrieved for the specified contract, otherwise all
@@ -147,7 +147,7 @@ ad_proc -public acs_sc::impl::get_id {
     a service contract,
     if the contract is not specified.
 } {
-    if {([info exists contract] && $contract ne "")} {
+    if {($contract ne ""} {
         return [db_string select_impl_id_with_contract {}]
     } else {
         return [db_string select_impl_id {}]

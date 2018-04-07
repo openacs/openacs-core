@@ -21,7 +21,7 @@ namespace eval lang::util {}
 
 ad_proc -public lang::util::lang_sort {
     field 
-    {locale {}}
+    {locale ""}
 } { 
     Each locale can have a different alphabetical sort order. You can test
     this proc with the following data:
@@ -760,14 +760,14 @@ ad_proc -private lang::util::escape_vars_if_not_null {
 } {
     foreach lm $list {
 	upvar $lm foreign_var
-	if { ([info exists foreign_var] && $foreign_var ne "") } {
+	if { [info exists foreign_var] && $foreign_var ne "" } {
 	    set foreign_var "\[$foreign_var\]"
 	}
     }
 }
 
 ad_proc -public lang::util::convert_to_i18n {
-    {-locale}
+    {-locale ""}
     {-package_key "acs-translations"}
     {-message_key ""}
     {-prefix ""}
@@ -794,7 +794,7 @@ ad_proc -public lang::util::convert_to_i18n {
 	
 	# Register the language keys
 	lang::message::register en_US $package_key $message_key $text
-	if {([info exists locale] && $locale ne "")} {
+	if {$locale ne ""} {
 	    lang::message::register $locale $package_key $message_key $text
 	}
 	
