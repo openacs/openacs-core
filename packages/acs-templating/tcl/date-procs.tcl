@@ -472,9 +472,10 @@ ad_proc -public template::util::date::set_property { what date value } {
         set hours [lindex $date 3]
 
         # robustness check: make sure we handle form of 08:00am  --jfr
-        regexp {0([0-9])} $hours match trimmed_hours
-        if {([info exists trimmed_hours] && $trimmed_hours ne "")} {
-            set hours $trimmed_hours
+        if {[regexp {0([0-9])} $hours match trimmed_hours]} {
+            if {$trimmed_hours ne ""} {
+                set hours $trimmed_hours
+            }
         }
 
         if { $value eq "pm" && $hours < 12 } {
@@ -1056,7 +1057,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     set fragment_def $template::util::date::fragment_widgets([string toupper $token])
     set fragment [lindex $fragment_def 1]
 
-    if {([info exists id_attr_name] && $id_attr_name ne "")} {
+    if {[info exists id_attr_name] && $id_attr_name ne ""} {
 	  set attributes(id) "${id_attr_name}.${fragment}"
     }
 

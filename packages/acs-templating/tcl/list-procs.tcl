@@ -3275,7 +3275,7 @@ ad_proc -private template::list::prepare_filter_form {
         set __form [ns_getform]
         set clear_one [ns_set get $__form clear_one]
 
-        if {([info exists clear_one] && $clear_one ne "")} {
+        if {$clear_one ne ""} {
             # loop through the saved filters and remove
             # the filter from the client property if its
             # specified in clear_one
@@ -3300,7 +3300,7 @@ ad_proc -private template::list::prepare_filter_form {
         }
     } -on_submit {
 
-        if {([info exists clear_all] && $clear_all ne "")} {
+        if {[info exists clear_all] && $clear_all ne ""} {
             set __client_property_filters {}
             ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
             break
