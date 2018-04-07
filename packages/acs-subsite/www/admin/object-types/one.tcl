@@ -20,7 +20,7 @@ if { ![db_0or1row object_type {}] } {
 set page_title "Details for type $pretty_name"
 set context [list [list index "Object Type Index"] "Details for type $pretty_name"]
 
-set page "[acs_object_type_hierarchy -object_type $object_type]"
+set page [acs_object_type_hierarchy -object_type $object_type]
 
 append page [subst {
 <p>
@@ -96,7 +96,7 @@ $body
 "
     }
 
-if { ([info exists table_name] && $table_name ne "") } {
+if { $table_name ne "" } {
 
     set body [db_string table_comment {} -default ""]
 

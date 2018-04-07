@@ -63,7 +63,7 @@ ad_form -name update -edit_buttons [list [list [_ acs-kernel.common_update] "ok"
         {message:text(hidden),optional}
     }
 
-if { ([info exists old_password] && $old_password ne "") } {
+if { $old_password ne "" } {
     set focus "update.password_1"
 } else {
     ad_form -extend -name update -form {
@@ -92,7 +92,7 @@ ad_form -extend -name update -form {
     }
 } -on_submit {
     
-    if { ([info exists old_password] && $old_password ne "") } {
+    if { $old_password ne "" } {
         set password_old $old_password
     }
     
@@ -106,11 +106,14 @@ ad_form -extend -name update -form {
             # Continue
         }
         old_password_bad {
-            if { (![info exists old_password] || $old_password eq "") } {
+            if { $old_password eq "" } {
                 form set_error update password_old $result(password_message)
             } else {
                 # This hack causes the form to reload as if submitted, but with the old password showing
-                ad_returnredirect [export_vars -base [ad_conn url] -entire_form -exclude { old_password } -override { { password_old $old_password } }]
+                ad_returnredirect [export_vars \
+                                       -base [ad_conn url] \
+                                       -entire_form -exclude { old_password } \
+                                       -override { { password_old $old_password } }]
                 ad_script_abort
             }
             break
@@ -122,7 +125,7 @@ ad_form -extend -name update -form {
     }
     
     # If old_password was supplied, handle authentication and log the user in
-    if { ([info exists old_password] && $old_password ne "") } {
+    if { $old_password ne "" } {
         
         # We use full-scale auth::authenticate here, in order to be sure we also get account-status checked
         # Hm. What if there's a problem with timing, so the password update doesn't take effect immediately?
@@ -144,7 +147,7 @@ ad_form -extend -name update -form {
             }
         }
         
-        if { ([info exists auth_info(account_url)] && $auth_info(account_url) ne "") } {
+        if { [info exists auth_info(account_url)] && $auth_info(account_url) ne "" } {
             ad_returnredirect $auth_info(account_url)
             ad_script_abort
         }
