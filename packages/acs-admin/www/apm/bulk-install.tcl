@@ -63,7 +63,7 @@ foreach version_id $install {
         ns_write "</pre></blockquote>\n"
     }
 
-    if { [lsearch $enable $version_id] >= 0 } {
+    if {$version_id in $enable} {
 	if { !$ul_p } {
 	    ns_write "<ul>\n"
 	    set ul_p 1
