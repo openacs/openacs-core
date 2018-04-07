@@ -134,10 +134,10 @@ ad_proc -public ::content::item::new {
         # since we can't rely on content_item__new to create a
         # revision we have to pass is_live to content::revision::new
         # and set the live revision there
-        if {([info exists title] && $title ne "")
-            || ([info exists text] && $text ne "")
-            || ([info exists data] && $data ne "")
-            || ([info exists tmp_filename] && $tmp_filename ne "")
+        if {$title ne ""
+            || $text ne ""
+            || $data ne ""
+            || $tmp_filename ne ""
             || [llength $attributes]
         } {
             content::revision::new \
