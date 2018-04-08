@@ -1636,13 +1636,13 @@ ad_proc -private auth::validate_account_info {
     }
 
     # TODO: When doing RBM's parameter, make sure that we still require both first_names and last_names, or none of them
-    if { ([info exists user(first_names)] && $user(first_names) ne "")
+    if { [info exists user(first_names)] && $user(first_names) ne ""
          && [string first "<" $user(first_names)] != -1
      } {
         set element_messages(first_names) [_ acs-subsite.lt_You_cant_have_a_lt_in]
     }
 
-    if { ([info exists user(last_name)] && $user(last_name) ne "")
+    if { [info exists user(last_name)] && $user(last_name) ne ""
          && [string first "<" $user(last_name)] != -1
      } {
         set element_messages(last_name) [_ acs-subsite.lt_You_cant_have_a_lt_in_1]
