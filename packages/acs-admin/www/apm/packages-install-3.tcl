@@ -46,7 +46,7 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
                               -package_path $package_path \
                               $package_key]
 
-    set sql_file_list [concat $sql_file_list $data_model_files]
+    lappend sql_file_list {*}$data_model_files
 
     if {$data_model_files ne ""} {
         foreach file $data_model_files {

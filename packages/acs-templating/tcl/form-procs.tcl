@@ -834,8 +834,7 @@ ad_proc -public template::form::get_combined_values { id args } {
 
   foreach element_name $properties(element_names) {
     if { [regexp $exp $element_name match] } {
-      set values [concat $values \
-        [template::element get_values $id $element_name]]
+      lappend values {*}[template::element get_values $id $element_name]
     }
   }
 
