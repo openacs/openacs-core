@@ -156,18 +156,18 @@ ad_proc -public ::content::folder::update {
     -folder_id:required
     -attributes:required
 } {
-    update standard cr_folder attributes, including the attributes for
+    Update standard cr_folder attributes, including the attributes for
     the folder cr_item
 
-    @author dave bauer (dave@thedesignexperience.org)
+    @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-04
 
     @param folder_id folder to update
 
-    @param attributes a list of pairs of additional attributes and
-    their values to set. each pair is a list of lists of two elements:
+    @param attributes A list of pairs of additional attributes and
+    their values to set. Each pair is a list of lists of two elements:
     key => value
-    valid attributes are: label, description, name, package_id
+    Valid attributes are: label, description, name, package_id
 
     @return
 
@@ -318,10 +318,10 @@ ad_proc -public content::folder::is_sub_folder {
 ad_proc content::folder::get_folder_from_package {
     -package_id:required
 } {
-    @author timo hentschel (timo@timohentschel.de)
+    @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-01-06
 
-    returns the folder_id of the package instance. cached
+    Returns the folder_id of the package instance. Cached
 } {
     return [util_memoize [list content::folder::get_folder_from_package_not_cached -package_id $package_id]]
 }
@@ -329,17 +329,17 @@ ad_proc content::folder::get_folder_from_package {
 ad_proc -private content::folder::get_folder_from_package_not_cached {
     -package_id:required
 } {
-    @author timo hentschel (timo@timohentschel.de)
+    @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-01-06
 
-    returns the folder_id of the package instance
+    Returns the folder_id of the package instance
 } {
     return [db_string get_folder_id {
         select folder_id from cr_folders where package_id = :package_id
     }]
 }
 
-# local variables:
+# Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
