@@ -980,6 +980,7 @@ ad_proc -public site_node::verify_folder_name {
         foreach path [glob -nocomplain -types f "[acs_package_root_dir $parent_node(package_key)]/www/*.tcl"] {
             set name [file rootname [lindex [file split $path] end]]
             if { [lsearch $existing_urls $name] == -1 } {
+            if { $name ni $existing_urls } {
                 lappend existing_urls $name
             }
         }

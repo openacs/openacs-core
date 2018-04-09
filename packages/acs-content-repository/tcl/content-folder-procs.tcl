@@ -156,54 +156,53 @@ ad_proc -public ::content::folder::update {
     -folder_id:required
     -attributes:required
 } {
-    Update standard cr_folder attributes, including the attributes for
+    update standard cr_folder attributes, including the attributes for
     the folder cr_item
-    
-    @author Dave Bauer (dave@thedesignexperience.org)
+
+    @author dave bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-04
-    
+
     @param folder_id folder to update
 
-    @param attributes A list of pairs of additional attributes and
-    their values to set. Each pair is a list of lists of two elements:
+    @param attributes a list of pairs of additional attributes and
+    their values to set. each pair is a list of lists of two elements:
     key => value
-    Valid attributes are: label, description, name, package_id
+    valid attributes are: label, description, name, package_id
 
-    @return 
-    
-    @error 
+    @return
+
+    @error
 } {
     set valid_attributes [list label description package_id]
 
-    set update_text "" 
+    set update_text ""
 
     foreach {attribute_list} $attributes {
-	set attribute [lindex $attribute_list 0]
-	set value [lindex $attribute_list 1]	
-	if {[lsearch $valid_attributes $attribute] > -1}  {
+        set attribute [lindex $attribute_list 0]
+        set value [lindex $attribute_list 1]
+        if {$attribute in $valid_attributes} {
 
-	    # create local variable to use for binding
+            # create local variable to use for binding
+            set $attribute $value
 
-	    set $attribute $value
-	    if {$update_text ne ""} {
-		append update_text ","
-	    }
-	    append update_text " ${attribute} = :${attribute} "
-   	}
+            if {$update_text ne ""} {
+                append update_text ","
+            }
+            append update_text " ${attribute} = :${attribute} "
+        }
     }
     if {$update_text ne ""} {
 
-	# we have valid attributes, update them
-
-	set query_text "update cr_folders set ${update_text} where folder_id=:folder_id"
-	db_dml item_update $query_text
+        # we have valid attributes, update them
+        set query_text "update cr_folders set ${update_text} where folder_id=:folder_id"
+        db_dml item_update $query_text
     }
 
     # pass the rest of the attributes to content::item::update
     # we can just send the folder attributes because they don't overlap
     content::item::update \
-	-item_id $folder_id \
-	-attributes $attributes
+    -item_id $folder_id \
+    -attributes $attributes
 }
 
 
@@ -319,10 +318,10 @@ ad_proc -public content::folder::is_sub_folder {
 ad_proc content::folder::get_folder_from_package {
     -package_id:required
 } {
-    @author Timo Hentschel (timo@timohentschel.de)
+    @author timo hentschel (timo@timohentschel.de)
     @creation-date 2005-01-06
 
-    Returns the folder_id of the package instance. Cached
+    returns the folder_id of the package instance. cached
 } {
     return [util_memoize [list content::folder::get_folder_from_package_not_cached -package_id $package_id]]
 }
@@ -330,17 +329,17 @@ ad_proc content::folder::get_folder_from_package {
 ad_proc -private content::folder::get_folder_from_package_not_cached {
     -package_id:required
 } {
-    @author Timo Hentschel (timo@timohentschel.de)
+    @author timo hentschel (timo@timohentschel.de)
     @creation-date 2005-01-06
 
-    Returns the folder_id of the package instance
+    returns the folder_id of the package instance
 } {
     return [db_string get_folder_id {
         select folder_id from cr_folders where package_id = :package_id
     }]
 }
 
-# Local variables:
+# local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil

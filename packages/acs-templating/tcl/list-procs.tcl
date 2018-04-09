@@ -393,7 +393,7 @@ ad_proc -public template::list::create {
 
     # Handle filters
     foreach { dim_name dim_spec } $filters {
-        if { [lsearch $reserved_filter_names $dim_name] != -1 } {
+        if { $dim_name in $reserved_filter_names } {
             error "The name '$dim_name' is a reserved filter name, list '$name'. Reserved names are [join $reserved_filter_names ", "]."
         }
         template::list::filter::create \
@@ -1538,11 +1538,11 @@ ad_proc -private template::list::prepare_elements {
         if {!$element_properties(hide_p)} {
             if {$element_properties(from_clause_eval) ne ""} {
                 set evaluated_from_clause [uplevel $list_properties(ulevel) $element_properties($property)]
-                if {[lsearch $list_properties(from_clauses) $evaluated_from_clause] < 0} {
+                if {$evaluated_from_clause ni $list_properties(from_clauses)} {
                     lappend list_properties(from_clauses) $evaluated_from_clause
                 }
             } elseif {$element_properties(from_clause) ne ""
-                      && [lsearch $list_properties(from_clauses) $element_properties(from_clause)] < 0} {
+                      && $element_properties(from_clause) ni $list_properties(from_clauses)} {
                 lappend list_properties(from_clauses) $element_properties(from_clause)
             }
             # get the select clause
@@ -3212,7 +3212,7 @@ ad_proc -private template::list::prepare_filter_form {
     # loop through all the filters in this list
     foreach filter_ref $list_properties(filter_refs) {
         upvar #$level $filter_ref filter_properties
-        if {$filter_properties(label) ne "" && [lsearch $filter_exclude_from_key $filter_properties(name)] < 0} {
+        if {$filter_properties(label) ne "" && $filter_properties(name) ni $filter_exclude_from_key} {
             # filters with a label will be added to the form for the user
             # to choose from
             lappend filter_names_options_tmp [list $filter_properties(label) $filter_properties(name)]
@@ -3346,7 +3346,7 @@ ad_proc -private template::list::prepare_filter_form {
         upvar \#[template::adp_level] $f_ref filter_properties
         if {$filter_properties(label) ne ""
             && $filter_properties(hide_p) eq 0
-            && [lsearch $filter_exclude_from_key $filter_properties(name)] < 0} {
+            && $filter_properties(name) ni $filter_exclude_from_key} {
             incr visible_filters_p
         }
         if {![template::element::exists $filters_form_name $filter_properties(name)]} {

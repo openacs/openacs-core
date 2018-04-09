@@ -835,14 +835,14 @@ ad_proc -public publish::render_subitem {
 ad_proc -private publish::set_to_pairs { params {exclusion_list ""} } {
 
   @private set_to_pairs
- 
+
   Convert an ns_set into a list of name-value pairs, in form
   {name value name value ...}
- 
+
   @param params   The ns_set id
   @param exclusion_list {}
      A list of keys to be ignored
- 
+
   @return A list of name-value pairs representing the data in the ns_set
 
 } {
@@ -851,7 +851,7 @@ ad_proc -private publish::set_to_pairs { params {exclusion_list ""} } {
   for { set i 0 } { $i < [ns_set size $params] } { incr i } {
     set key   [ns_set key $params $i]
     set value [ns_set value $params $i]
-    if { [lsearch $exclusion_list $key] == -1 } {
+    if { $key ni $exclusion_list } {
       lappend extra_args $key $value
     }
   }
