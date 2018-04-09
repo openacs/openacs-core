@@ -628,40 +628,40 @@ ad_proc -private publish::get_main_revision_id {} {
 ad_proc -private publish::handle_item { item_id args } {
 
   @private handle_item
- 
+
   Render an item either by looking it up in the the temporary cache,
   or by using the appropriate mime handler. Once the item is rendered, it 
   is stored in the temporary cache under a key which combines the item_id,
   any extra HTML parameters, and a flag which specifies whether the item
   was merged with its template. <br>
   This proc takes the same arguments as the individual mime handlers.
- 
+
   @param item_id  The id of the item to be rendered
- 
+
   @option revision_id {default The live revision}  
     The revision which is to be used when rendering the item
- 
+
   @option no_merge    
     Indicates that the item should NOT be merged with its
     template. This option is used to avoid infinite recursion.
- 
+
   @option refresh     
     Re-render the item even if it exists in the cache.
     Use with caution - circular dependencies may cause infinite recursion
     if this option is specified
- 
+
   @option embed    
      Signifies that the content should be statically embedded directly in
      the HTML. If this option is not specified, the item may
      be dynamically referenced, f.ex. using the <tt>&lt;include&gt;</tt>
      tag
- 
+
   @option html
      Extra HTML parameters to be passed to the item handler, in format
      {name value name value ...}
- 
+
   @return The rendered HTML for the item, or an empty string on failure
- 
+
   @see publish::handle_binary_file
   @see publish::handle::text
   @see publish::handle::image
@@ -707,10 +707,10 @@ ad_proc -private publish::handle_item { item_id args } {
 
     # Render the item and cache it
     ns_log debug "publish::handle_item: Rendering item $item_id"
-    
+
     content::item::get -item_id $item_id -array_name item_info
     set item_handler [get_mime_handler $item_info(mime_type)]
-  
+
     if { $item_handler eq "" } {
       ns_log warning "publish::handle_item: No mime handler for mime type $mime_info(mime_type)"
       return ""
@@ -718,9 +718,9 @@ ad_proc -private publish::handle_item { item_id args } {
 
     # Call the appropriate handler function
     set code [list $item_handler $item_id]
-    set code [concat $code $args]
+    lappend code {*}$args
 
-    # Pass the revision_id 
+    # Pass the revision_id
     if { ![info exists opts(revision_id)] } {
       lappend code -revision_id $revision_id
     }
@@ -728,7 +728,7 @@ ad_proc -private publish::handle_item { item_id args } {
     set html [{*}$code]
     ns_log debug "publish::handle_item: Caching html for revision $revision_id"
     set revision_html($revision_key) $html
-    
+
     return $html
   }
 }

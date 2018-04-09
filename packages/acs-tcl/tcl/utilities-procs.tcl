@@ -3580,12 +3580,12 @@ ad_proc -public util::find_all_files {
 } {
 
     Returns a list of lists with full paths and filename to all files under $path in the directory tree
-    (descending the tree to a depth of up to $max_depth).  Clients should not 
+    (descending the tree to a depth of up to $max_depth).  Clients should not
     depend on the order of files returned.
 
     DOES NOT WORK ON WINDOWS (you have to change the splitter and I don't know how to detect a windows system)
 
-    @param include_dirs Should directories be included in the list of files. 
+    @param include_dirs Should directories be included in the list of files.
     @param max_depth How many levels of directories should be searched. Defaults to 1 which is the current directory
     @param check_file_func Function which can be executed upon the file to determine if it is worth the effort
     @param extension Only return files with this extension (single value !)
@@ -3621,7 +3621,7 @@ ad_proc -public util::find_all_files {
                     # If it's a file, add to our list. If it's a
                     # directory, add its contents to our list of files to
                     # examine next time.
-                    
+
                     set filename [lindex [split $file "/"] end]
                     set file_extension [lindex [split $filename "."] end]
                     if { [file isfile $file] } {
@@ -3632,7 +3632,7 @@ ad_proc -public util::find_all_files {
                         if { $include_dirs == 1 } {
                             lappend files $file
                         }
-                        set new_files_to_examine [concat $new_files_to_examine [glob -nocomplain "$file/*"]]
+                        lappend new_files_to_examine {*}[glob -nocomplain "$file/*"]
                     }
                 }
             }

@@ -1038,7 +1038,7 @@ ad_proc -public lang::catalog::import {
                         set message_count($action) [expr {$message_count($action) + $loop_message_count($action)}]
                     }
                 }
-                set message_count(errors) [concat $message_count(errors) $loop_message_count(errors)]
+                lappend message_count(errors) {*}$loop_message_count(errors)
             }
         }
     }

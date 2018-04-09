@@ -9,9 +9,9 @@ ad_page_contract {
 set all_proc_names [list]
 foreach file_path [nsv_array names api_proc_doc_scripts] {
     if { [regexp "^packages/$package_key" $file_path] } {
-	foreach proc_name [nsv_get api_proc_doc_scripts $file_path] {
-	    lappend all_proc_names $proc_name
-	}
+        foreach proc_name [nsv_get api_proc_doc_scripts $file_path] {
+            lappend all_proc_names $proc_name
+        }
     }
 }
 
@@ -20,17 +20,17 @@ foreach testcase [nsv_get aa_test cases] {
     set testcase_package_key [lindex $testcase 3]
 
     if {$testcase_package_key eq $package_key} {
-	set tested_procs [lindex $testcase 10]
-	if { [llength $tested_procs] > 0 } {
-	    set tested_proc_names [concat $tested_proc_names $tested_procs] 
-	}
+        set tested_procs [lindex $testcase 10]
+        if { [llength $tested_procs] > 0 } {
+            lappend tested_proc_names {*}$tested_procs
+        }
     }
 }
 
 set uncovered_procs [list]
 foreach proc_name $all_proc_names {
     if {$proc_name ni $tested_proc_names} {
-	lappend uncovered_procs $proc_name
+        lappend uncovered_procs $proc_name
     }
 }
 

@@ -700,7 +700,7 @@ ad_proc -private apm_subdirs { path } {
     set dirs [list]
     lappend dirs $path
     foreach subdir [glob -nocomplain -type d [file join $path *]] {
-        set dirs [concat $dirs [apm_subdirs $subdir]]
+        lappend dirs {*}[apm_subdirs $subdir]
     }
     return $dirs
 }
@@ -715,7 +715,7 @@ ad_proc -private apm_pretty_name_for_file_type { type } {
     @author Peter Marklund
 } {
     array set file_type_names [apm_file_type_names]
-    
+
     return $file_type_names($type)
 }
 
