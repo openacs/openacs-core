@@ -718,7 +718,7 @@ ad_proc -public auth::get_registration_elements {
     # Handle required elements for local account
     foreach elm $local_required_elms {
         # Add to required
-        if { [lsearch $element_info(required) $elm] == -1 } {
+        if { $elm ni $element_info(required) } {
             lappend element_info(required) $elm
         }
 
@@ -731,7 +731,7 @@ ad_proc -public auth::get_registration_elements {
 
     foreach elm $local_optional_elms {
         # Add to required
-        if { [lsearch $element_info(required) $elm] == -1 && [lsearch $element_info(optional) $elm] == -1 } {
+        if { $elm ni $element_info(required) && $elm ni $element_info(optional) } {
             lappend element_info(optional) $elm
         }
     }
