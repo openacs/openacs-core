@@ -75,8 +75,8 @@ db_foreach all_packages_owned_by_email {
     }
     doc_body_flush
 
-    set all_files_to_add [concat $all_files_to_add $files_to_add]
-    set all_files_to_commit [concat $all_files_to_commit $files_to_commit]
+    lappend all_files_to_add {*}$files_to_add
+    lappend all_files_to_commit {*}$files_to_commit
 }
 
 if { [llength $no_changes] > 0 } {
