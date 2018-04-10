@@ -54,7 +54,7 @@ namespace eval notification::type {
     } {
 	return the notification type ID given a short name. Short names are unique but not primary keys.
     } {
-        set key ::notification::type::get_type_id
+        set key ::notification::type::get_type_id($short_name)
         if {[info exists $key]} {
             return [set $key]
         }
