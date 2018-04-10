@@ -37,6 +37,10 @@ ad_proc -public template::register_urn {
     for e.g updating references to external resources when switching
     between a CDN and a local resource, or when a resource should be
     updated.
+
+    We could consider a dns-prefetch for CDN requests. When the
+    url-check is performed at register time, the performance for
+    processing the url can be neglected.
     
 } {
     set ::template::head::urn($urn) $resource
