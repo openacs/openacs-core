@@ -22,10 +22,10 @@ ad_proc -public subsite_callback {
     <b>Example:</b>
     <pre>
     # Execute any callbacks registered for this object type or one of
-    # it's parent object types
+    # its parent object types
     subsite_callback -object_type $object_type $object_id
     </pre>
-    
+
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 12/2000
@@ -35,18 +35,18 @@ ad_proc -public subsite_callback {
 } {
 
     if { $object_type eq "" } {
-	db_1row select_object_type {
-	    select object_type
-	      from acs_objects 
-	     where object_id = :object_id
-	}
+        db_1row select_object_type {
+            select object_type
+                from acs_objects
+                where object_id = :object_id
+        }
     }
 
     # Check to see if we have any callbacks registered for this object
-    # type or one of it's parent object types. Put the callbacks into
+    # type or one of its parent object types. Put the callbacks into
     # a list as each callback may itself require a database
     # handle. Note that we need the distinct in case two callbacks are
-    # registered for an object and it's parent object type.
+    # registered for an object and its parent object type.
 
     set callback_list [db_list_of_lists select_callbacks {}]
 
@@ -54,15 +54,15 @@ ad_proc -public subsite_callback {
     set package_id [ad_conn package_id]
 
     foreach row $callback_list {
-	lassign $row callback type
+        lassign $row callback type
 
-	switch -- $type {
-	    tcl { 
-		# Execute the Tcl procedure
-		$callback -object_id $object_id -node_id $node_id -package_id $package_id
-	    }
-	    default { error "Callbacks of type $type not supported" }
-	}
+        switch -- $type {
+            tcl {
+                # Execute the Tcl procedure
+                $callback -object_id $object_id -node_id $node_id -package_id $package_id
+            }
+            default { error "Callbacks of type $type not supported" }
+        }
     }
 }
 
@@ -99,7 +99,7 @@ ad_proc -public -callback subsite::url {
     -object_id:required
     {-type ""}
 } {
-    Callback for creating a URL for an object_id. THis is usually called in /o.vuh, but
+    Callback for creating a URL for an object_id. This is usually called in /o.vuh, but
     you could think of scenarios where using this hook makes sense as well.
 
     The type lets you define what kind of URL you are looking for (e.g. admin/edit/display)
