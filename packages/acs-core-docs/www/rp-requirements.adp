@@ -63,7 +63,7 @@ be mounted at more than one location in the URL space.</p>
 Context</strong></span></p><div class="blockquote"><blockquote class="blockquote"><p>
 <span class="strong"><strong>20.10</strong></span> The request
 processor must be able to determine a primary context or state
-associated with a pageroot based on it&#39;s location within the
+associated with a pageroot based on its location within the
 URL space.</p></blockquote></div><p><span class="strong"><strong>30.0
 Authentication</strong></span></p><div class="blockquote"><blockquote class="blockquote"><p>
 <span class="strong"><strong>30.10</strong></span> The request

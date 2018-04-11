@@ -298,7 +298,7 @@ comment on column acs_objects.context_id is $$
  The context_id column points to an object that provides a context for
  this object. Often this will reflect an observed hierarchy in a site,
  for example a bboard message would probably list a bboard topic as
- it's context, and a bboard topic might list a sub-site as it's
+ its context, and a bboard topic might list a sub-site as its
  context. Whenever we ask a question of the form "can user X perform
  action Y on object Z", the acs security model will defer to an
  object's context if there is no information about user X's

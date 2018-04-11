@@ -205,7 +205,7 @@ ad_proc -public permission::inherit_p {
 ad_proc -public permission::toggle_inherit {
     {-object_id:required}
 } {
-    toggle whether or not this object inherits permissions from it's parent
+    toggle whether or not this object inherits permissions from its parent
 } {
     db_dml toggle_inherit {}
     permission::permission_thread_cache_flush

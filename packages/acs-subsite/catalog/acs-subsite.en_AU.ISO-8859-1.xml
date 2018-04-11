@@ -355,7 +355,7 @@ You can always change your password by doing the following:
   <msg key="You_are_in_the_follow">You are in the following groups:</msg>
   <msg key="You_can_also_browse_from">You can also browse from the</msg>
   <msg key="You_can_always_re_open">You can always re-open it by</msg>
-  <msg key="You_do_not_have_admin_on">You do not have admin rights on object %root% or any of it's children</msg>
+  <msg key="You_do_not_have_admin_on">You do not have admin rights on object %root% or any of its children</msg>
   <msg key="You_dont_have_a_portrait">You don't have a portrait yet. You can</msg>
   <msg key="You_have_admin_rights_on">You have admin rights on the following objects:</msg>
   <msg key="You_have_no_email_alerts">You currently have no email alerts registered.</msg>

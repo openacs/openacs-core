@@ -201,7 +201,7 @@ ad_proc -private ad_page_contract_get_validation_passed_p { key } {
 ####################
 
 ad_proc ad_page_contract_eval { args } {
-    This just uplevels it's args. We need this proc, so that the return -code statements
+    This just uplevels its args. We need this proc, so that the return -code statements
     get processed correctly inside a catch block. This processing is namely done by the
     proc invocation.
 

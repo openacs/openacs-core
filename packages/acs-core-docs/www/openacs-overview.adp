@@ -39,7 +39,7 @@ as a commercial companies able to provide support, hosting, and
 custom development. Many of the production users are actively
 funding and contributing work back to the project. Formal,
 consensus driven governance has been established (with semi-annual
-elections) which ensures the project serves the needs of it&#39;s
+elections) which ensures the project serves the needs of its
 constituents.</p><p>The OpenACS community would like to hear your comments and can
 help you in your endeavors with the system. Visit our <a class="ulink" href="http://openacs.org/" target="_top">web site</a> and
 feel free to <a class="ulink" href="http://openacs.org/forums/" target="_top">ask questions or provide feedback</a>.</p>

@@ -346,7 +346,7 @@ item has n relations, min_n &lt; n &lt; max_n 3) any
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the item is publishable in it&#39;s
+<th align="left">Returns:</th><td align="left">'t' if the item is publishable in its
 present state, Otherwise, returns 'f'</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">item_id The:</th><td>  </td><td>item ID of the potential parent</td>

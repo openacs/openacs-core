@@ -773,7 +773,7 @@ ad_proc -public lang::util::convert_to_i18n {
     {-prefix ""}
     {-text:required}
 } {
-    Internationalising of Attributes. This is done by storing the attribute with it's acs-lang key
+    Internationalising of Attributes. This is done by storing the attribute with its acs-lang key
 } {
 
     # If the package acs-translations is installed do the conversion

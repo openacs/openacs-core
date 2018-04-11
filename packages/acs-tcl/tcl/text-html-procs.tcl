@@ -30,7 +30,7 @@ ad_proc -public ad_text_to_html {
     semi-HTML input and preserve that formatting. This will also cause spaces/tabs to not be
     replaced with nbsp's, because this can too easily mess up HTML tags.
     @param includes_html Set this if the text parameter already contains some HTML which should be preserved.
-    @param encode This will encode international characters into it's html equivalent, like "ü" into &uuml;
+    @param encode This will encode international characters into its html equivalent, like "ü" into &uuml;
 
     @author Branimir Dolicki (branimir@arsdigita.com)
     @author Lars Pind (lars@pinds.com)
@@ -1336,8 +1336,7 @@ ad_proc ad_parse_html_attributes_upvar {
     } {
         Returns a best-guess plain text version of an HTML fragment.
         Parses the HTML and does some simple formatting. The parser and
-        formatting
-        is pretty stupid, but it's better than nothing.
+        formatting is pretty stupid, but it's better than nothing.
 
         @param maxlen the line length you want your output wrapped to.
         @param showtags causes any unknown (and uninterpreted) tags to get shown in the output.
@@ -1411,7 +1410,7 @@ ad_proc ad_parse_html_attributes_upvar {
             while 1 {
                 if {[incr count] > 3000 } {
                     # JCD: the programming bug is that an unmatched <
-                    # in the input runs off forever looking for it's
+                    # in the input runs off forever looking for its
                     # closing > and in some long text like program
                     # listings you can have lots of quotes before you
                     # find that >
@@ -1782,7 +1781,7 @@ ad_proc ad_parse_html_attributes_upvar {
 
         <p>
 
-        This proc is more suitable for pretty-printing that it's
+        This proc is more suitable for pretty-printing that its
         sister-proc, <a href="/api-doc/proc-view?proc=util_expand_entities_ie_style"><code>util_expand_entities_ie_style</code></a>.
         The two differences are that this one is more strict: it requires
         proper entities i.e., both opening ampersand and closing semicolon,
@@ -1816,7 +1815,7 @@ ad_proc ad_parse_html_attributes_upvar {
 
         <p>
 
-        Unlike it's sister proc, <a href="/api-doc/proc-view?proc=util_expand_entities"><code>util_expand_entities</code></a>,
+        Unlike its sister proc, <a href="/api-doc/proc-view?proc=util_expand_entities"><code>util_expand_entities</code></a>,
         it also expands numeric entities (#999 or #xff style).
 
         @author Lars Pind (lars@pinds.com)

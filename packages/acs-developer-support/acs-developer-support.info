@@ -35,7 +35,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledOnStartupP"  default="0" description="Remember information about connections, for developers' benefit?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="PackageWatchList"  description="A space separated list of keys for packages that you are developing on and that will have full watches (automatic reloading of tcl libraries and xql files) activated on every server startup.
 " section_name="developer-support"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="PageFragmentCacheP"  default="0" description="Should page fragments generated be cached for searching and validation.  This is potentially very expensive and should be used with caution given it's performance implications." section_name="developer-support"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="PageFragmentCacheP"  default="0" description="Should page fragments generated be cached for searching and validation.  This is potentially very expensive and should be used with caution given its performance implications." section_name="developer-support"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="ShowCommentsInlineP"  default="0" description="Controls whether comments are shown inline in the ds_link." section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="UserSwitchingEnabledP"  default="0" description="Will present a widget on every page that allows you to switch user" section_name="developer-support"/>
         </parameters>

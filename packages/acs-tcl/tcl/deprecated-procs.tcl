@@ -2892,7 +2892,7 @@ namespace eval oacs::user {
 # from tcl/00-database-procs.tcl
 #
 ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
-    @return 1 if db_type_list contains the current RDMBS type.  A package intended to run with a given RDBMS must note this in it's package info file regardless of whether or not it actually uses the database.
+    @return 1 if db_type_list contains the current RDMBS type.  A package intended to run with a given RDBMS must note this in its package info file regardless of whether or not it actually uses the database.
 
     @see apm_package_supports_rdbms_p
 } {

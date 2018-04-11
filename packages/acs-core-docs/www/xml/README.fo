@@ -41,7 +41,7 @@ FOP generates a number of non-intuitive errors for docbook problems...
 * Versions 1.62.4 and 1.64.0 of docbook-xsl generate .fo code that sends
   FOP into an infinite loop.  I may investigate but probably not.
 
-All in all it's pretty unforgiving of validation errors and it's output
+All in all it's pretty unforgiving of validation errors and its output
 is not great (and it's table handling is iffy).
 
 It does make a pdf with a TOC and page numbers though.

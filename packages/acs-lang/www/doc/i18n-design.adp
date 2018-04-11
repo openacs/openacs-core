@@ -270,7 +270,7 @@ author the HTML template files will still find it easier to use
 legacy tools that author in their "native" character
 sets, such as ShiftJIS in Japan, or BIG5 in China.</p>
 <p>So we make the convention that the template file is authored in
-it&#39;s <em>effective locale</em>'s character set. For
+its <em>effective locale</em>'s character set. For
 multilingual templates, we will load the template in the site
 default character set as specified by the AOLserver
 <kbd>OutputCharset</kbd> initializatoin parameter. For now, we will
@@ -413,7 +413,7 @@ A message catalog is defined by placing a file in the
 <kbd>catalog</kbd>
  subdirectory of a package. Each file defines a
 set of messages in different locales, and the file is written in a
-character set specified by it&#39;s file suffix:
+character set specified by its file suffix:
 <pre>
 /packages/bboard/catalog/
                          bboard.iso-8859-1

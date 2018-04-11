@@ -217,7 +217,7 @@ package instance.</p><pre class="programlisting"><code class="computeroutput">[a
 </code></pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="subsites-design-data-model" id="subsites-design-data-model"></a>Data Model Discussion</h3></div></div></div><p>The subsites implementation doesn&#39;t really have it&#39;s own
+<a name="subsites-design-data-model" id="subsites-design-data-model"></a>Data Model Discussion</h3></div></div></div><p>The subsites implementation doesn&#39;t really have its own
 data model, although it depends heavily on the site-nodes data
 model, and the APM data model.</p>
 </div><div class="sect2">

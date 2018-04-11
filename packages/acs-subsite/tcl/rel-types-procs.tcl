@@ -145,7 +145,7 @@ namespace eval rel_types {
 	# Force internationalisation of Roles
 	
 	# Internationalising of Attributes. This is done by storing the
-	# attribute with it's acs-lang key
+	# attribute with its acs-lang key
 	
 	set message_key "rel_type_${rel_type}"
 
@@ -253,7 +253,7 @@ namespace eval rel_types {
 	    # Force internationalisation of Roles
 
 	    # Internationalising of Attributes. This is done by storing the
-	    # attribute with it's acs-lang key
+	    # attribute with its acs-lang key
 
 	    set message_key "role_${role}"
 

@@ -57,7 +57,7 @@ and compare the html script that you see there with the final
 user-viewed page, <code><a href="list-and-var-sample.acs">list-and-var-sample.acs</a></code>.
 Almost every .acs page the user sees is supported by one .tcl file
 which supplies the data to be shown, and one .adp file specifying
-the format of it&#39;s presentation. Compare what you see in
+the format of its presentation. Compare what you see in
 <code>list-and-var-sample.acs</code> with its supporting .adp file
 and make note of the textual and structural differences between the
 two, specifically:</p>

@@ -674,7 +674,7 @@ RDBMS.</p>
                 
 </pre><p>Returns 1 if db_type_list contains the current RDMBS type. A
 package intended to run with a given RDBMS must note this in
-it&#39;s package info file regardless of whether or not it actually
+its package info file regardless of whether or not it actually
 uses the database.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_legacy_package_p" id="kernel.dbapi_db_legacy_package_p"></a>db_legacy_package_p</code></strong></span></span></dt><dd>

@@ -116,7 +116,7 @@ function is_publishable (
   --	3) any 'publishing_wf' workflows are finished
   --    @author Michael Pih
   --    @param item_id		The item ID
-  --    @return 't' if the item is publishable in it's present state, 
+  --    @return 't' if the item is publishable in its present state,
   --            Otherwise, returns 'f'
   --*/
   item_id		in cr_items.item_id%TYPE
