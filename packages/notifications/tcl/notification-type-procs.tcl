@@ -78,6 +78,16 @@ namespace eval notification::type {
 
         db_exec_plsql delete_notification_type {}
 
+        #
+        # TODO: currently, the util_memoize_flush below does nothing
+        # (we need in these rare cases a restart of the server to get
+        # rid of the old cache entry - one can get still a
+        # notification type id from the cache, although it is removed
+        # from the db). The right thing would be a broadcast operation
+        # for flushing (similar to xo*) or a blueprint epoch/refetch
+        # (as under consideration for better live updates on the
+        # OpenACS wish-list).
+        #
         util_memoize_flush [list notification::type::get_type_id_not_cached $short_name]
     }
     
