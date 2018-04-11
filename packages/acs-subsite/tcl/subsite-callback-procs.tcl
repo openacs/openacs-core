@@ -102,7 +102,7 @@ ad_proc -public -callback subsite::url {
     Callback for creating a URL for an object_id. THis is usually called in /o.vuh, but
     you could think of scenarios where using this hook makes sense as well.
 
-    The type let's you define what kind of URL you are looking for (e.g. admin/edit/display)
+    The type lets you define what kind of URL you are looking for (e.g. admin/edit/display)
 } -
 
 # Local variables:

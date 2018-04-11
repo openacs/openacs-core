@@ -1,4 +1,4 @@
-ad_page_contract { 
+ad_page_contract {
     Tag each file in a package as part of a particular package version.
 
     @param version_id The package to be processed.
@@ -19,7 +19,7 @@ if { $installed_p eq "f" } {
 set files [db_list apm_all_paths {}]
 
 if { [llength $files] == 0 } {
-    ad_return_complaint 1 "<li>No files in this packages"
+    ad_return_complaint 1 "<li>No files in this package"
    return
 }
 

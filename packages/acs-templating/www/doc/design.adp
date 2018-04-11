@@ -267,7 +267,7 @@ The former suppresses checking mtime and may improve performance on
 a production server, where the content pages don&#39;t change. The
 latter is only inteded for testing.</p>
 <h3>VII. Data Model Discussion</h3>
-<p>This packages doesn&#39;t need a data model.</p>
+<p>This package doesn&#39;t need a data model.</p>
 <p>It comes with its own database interfaces, one for using ns_ora,
 the Oracle driver from ArsDigita, and one for ns_db, the builtin
 database interface of the AOL server. If you are programming under
@@ -275,7 +275,7 @@ the ACS, you should use neither of these, but rather the
 <code>db_*</code> interface, in particular
 <code>db_multirow</code>.</p>
 <h3>VIII. User Interface</h3>
-<p>This packages doesn&#39;t have a user interface. It is the
+<p>This package doesn&#39;t have a user interface. It is the
 <em>substrate</em> of all user interfaces, be it user or admin
 pages.</p>
 <h3>IX. Configuration/Parameters</h3>
@@ -287,7 +287,7 @@ There are two parameters.
       DefaultMaster=/www/default-master
       ; anything other than "never" or "always" means normal operation
       RefreshCache=as necessary
-    
+
 </pre>
 <h3>X. Future Improvements/Areas of Likely Change</h3>
 <p>Passing datasources by reference is new. The acs-templating
