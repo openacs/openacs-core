@@ -688,7 +688,7 @@ ad_proc -public -deprecated ad_block_sql_urls {
             # the variable, # or is trying to modify the WHERE clause
             # by adding "or ...".
             #
-            # Let's see if Oracle would accept this variables as part
+            # Let's see if Oracle would accept these variables as part
             # of a typical WHERE clause, either as string or integer.
             #
             # michael@arsdigita.com: Should we grab a handle once

@@ -1,6 +1,6 @@
 
 -- Antonio Pisano 2015-07-29: removed exclusive lock
--- for this procedures as it is sufficient to handle
+-- for these procedures as it is sufficient to handle
 -- exception/ignore the case. Locking esclusively
 -- could cause deadlock in certain situations.
 
