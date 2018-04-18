@@ -232,7 +232,7 @@ ad_proc relation_types_valid_to_group_multirow {
     {-group_id ""}
 } {
     creates multirow datasource containing relationship types starting with
-    the $start_with relationship type.  The datasource has columns that are 
+    the $start_with relationship type.  The datasource has columns that are
     identical to the party::types_allowed_in_group_multirow, which is why
     the columns are broadly named "object_*" instead of "rel_*".  A common
     template can be used for generating select widgets etc. for both
@@ -256,22 +256,22 @@ ad_proc relation_types_valid_to_group_multirow {
 
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 2000-02-07
-    
+
     @param datasource_name
     @param start_with
     @param group_id - if unspecified, then 
-                      [applcation_group::group_id_from_package_id] is used.
+                      [application_group::group_id_from_package_id] is used.
 } {
 
     if {$group_id eq ""} {
-	set group_id [application_group::group_id_from_package_id]
+        set group_id [application_group::group_id_from_package_id]
     }
 
     template::multirow create $datasource_name \
-	    object_type object_type_enc indent pretty_name valid_p
+        object_type object_type_enc indent pretty_name valid_p
 
     db_foreach select_sub_rel_types {} {
-	template::multirow append $datasource_name $object_type [ad_urlencode $object_type] $indent $pretty_name $valid_p
+        template::multirow append $datasource_name $object_type [ad_urlencode $object_type] $indent $pretty_name $valid_p
     }
 
 }

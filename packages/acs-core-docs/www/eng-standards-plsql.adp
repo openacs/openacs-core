@@ -32,7 +32,7 @@ an application, not just within one file.</p></li>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-plsql-code" id="eng-standards-plsql-code"></a>Code</h3></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>Encapsulation of related fuctionality is key to maintainability
+<li class="listitem"><p>Encapsulation of related functionality is key to maintainability
 and upgradeability of our software. Try to bundle your code into
 <a class="ulink" href="https://docs.oracle.com/database/121/LNPLS/packages.htm#LNPLS009" target="_top">packages</a> whenever possible. This will make
 upgrading, bug fixing, and customizing, among other things, a

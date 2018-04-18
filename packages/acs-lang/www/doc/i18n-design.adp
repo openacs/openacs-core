@@ -504,7 +504,7 @@ English.</li><li>
 translation is made. If omitted, type is user which means that the
 translation is provided in the user&#39;s preferred language.</li><li>
 <code>static</code> specifies that this tag should be
-translated once at templat compile time, rather than dynamically
+translated once at template compile time, rather than dynamically
 every time the page is run. This will be unneccessaru and will be
 deprecated once we have implemented <em>effective locale</em> based
 cacheing for templates.</li>

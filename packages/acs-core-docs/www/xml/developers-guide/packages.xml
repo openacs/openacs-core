@@ -487,7 +487,7 @@ ROOT/
           If your package name is a nice singular noun, this should be the
           plural form of it. I assume the plural form is used when multiple
           instances of the package are used by a single service. We&#39;ll talk more
-          about package instances later. Our example apllication doesn&#39;t really
+          about package instances later. Our example application doesn&#39;t really
           have a good plural name. So just make it also be "Notes".
         </para></listitem>
         </varlistentry>

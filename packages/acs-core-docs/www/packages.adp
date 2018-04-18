@@ -283,7 +283,7 @@ application, we will use the package key <code class="computeroutput">notes</cod
 example, we will use the name "Notes".</p></dd><dt><span class="term">Package Plural</span></dt><dd><p>If your package name is a nice singular noun, this should be the
 plural form of it. I assume the plural form is used when multiple
 instances of the package are used by a single service. We&#39;ll
-talk more about package instances later. Our example apllication
+talk more about package instances later. Our example application
 doesn&#39;t really have a good plural name. So just make it also be
 "Notes".</p></dd><dt><span class="term">Package Type</span></dt><dd><p>Generally we think of packages as either being <span class="emphasis"><em>applications</em></span>, meaning that the package
 is meant primarily for use by end-users, or <span class="emphasis"><em>services</em></span> meaning that the package is
