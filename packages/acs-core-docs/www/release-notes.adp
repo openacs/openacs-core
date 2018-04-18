@@ -481,7 +481,7 @@ refer to display templates. This enables reusability and is
 theme-able.</p></li><li class="listitem"><p>Dimensional slider reform (ad_dimensional): Removed hard-coded
 table layout from dimensional slider. Add backwards compatible
 templates Move hard-coded styles into theme styling</p></li><li class="listitem"><p>Notification chunks are now theme-able as well (using
-ad_include_contrat)</p></li><li class="listitem"><p>Complete template variable suffixes (adding noi18n, addressing
+ad_include_contract)</p></li><li class="listitem"><p>Complete template variable suffixes (adding noi18n, addressing
 bug #2692, full list is now: noquote, noi18n, literal)</p></li><li class="listitem"><p>Added timeout and configurable secrets for signed url parameters
 to export_vars/page_contracts. This can be used to secure sensitive
 operations such as granting permissions since a link can be set to

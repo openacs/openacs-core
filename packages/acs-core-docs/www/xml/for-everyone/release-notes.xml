@@ -1253,7 +1253,7 @@ END OF TEMPLATE -->
  	    theme styling </para></listitem>
 
 	    <listitem><para>
-	      Notification chunks are now theme-able as well (using ad_include_contrat)
+	      Notification chunks are now theme-able as well (using ad_include_contract)
 	    </para></listitem>
 
 	    <listitem><para>

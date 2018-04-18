@@ -165,7 +165,7 @@ results. The total processing time of Tcl-only pages is around
 The difference of 65ms is a large percentage of a total serving
 time of 155ms; when other parts of the system (e.g., the request
 processor) were slower, this wasn&#39;t that noticeable.</p><p>For ACS 3.4, Tcl-only chain-frac-0 pages take 115ms, where the
-templated versisons are much slower, 320ms for chain-frac-1 and 340
+templated versions are much slower, 320ms for chain-frac-1 and 340
 for -2.</p><h3>VI. Further Work</h3><p>Tune templating in ACS 4.0.</p><hr><address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address><!-- Created: Fri Oct  6 15:45:48 EDT 2000 --><!-- hhmts start -->
 Last modified: Tue Oct 17 20:11:49 EDT 2000 <!-- hhmts end -->

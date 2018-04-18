@@ -848,17 +848,17 @@ ad_proc -private apm_package_install {
         }
 
         # Source Tcl procs and queries to be able
-        # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading 
+        # to invoke any Tcl callbacks after mounting and instantiation. Note that this reloading
         # is only done in the Tcl interpreter of this particular request.
-        # Note that acs-tcl is a special case as its procs are always sourced on startup from boostrap.tcl
+        # Note that acs-tcl is a special case as its procs are always sourced on startup from bootstrap.tcl
         if { 1 || $package_key ne "acs-tcl" } {
             apm_load_libraries -procs -force_reload -packages $package_key
             apm_load_queries -packages $package_key
         }
 
-        # Get the callbacks in an array, since we can't rely on the 
+        # Get the callbacks in an array, since we can't rely on the
         # before-upgrade being in the db (since it might have changed)
-        # and the before-install definitely won't be there since 
+        # and the before-install definitely won't be there since
         # it's not added until later here.
 
         array set callbacks $version(callbacks)
