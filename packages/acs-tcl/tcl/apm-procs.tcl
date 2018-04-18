@@ -858,9 +858,9 @@ ad_proc -public apm_package_supported_databases {
     supported by the package with given key.
 
     @author Peter Marklund
-    
+
     @see db_known_database_types
-    @see apm_package_supoorts_rdbms_p
+    @see apm_package_supports_rdbms_p
 } {
     set supported_databases_list [list]
     foreach db_type_info [db_known_database_types] {

@@ -32,7 +32,7 @@ ad_library {
 # NSV: doc_adptags($tag) is a list representation of an array containing:
 #
 #   - balanced_p: do we expect a close tag for $tag?
-#   - literal_p: was literal provided to doc_register_adp_tag?
+#   - literal_p: was literal provided to doc_register_adptag?
 #   - handler: the name of the handler proc. See document-procs.tcl for some good
 #       examples.
 

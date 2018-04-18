@@ -139,7 +139,7 @@ admin {
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserInfoTemplate"  default="/packages/acs-subsite/lib/user-info" description="Name of the template used for description of a user" section_name="Templates"/>
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="UserNavbarTabsList"  default="home {label #acs-subsite.Subsite_Home#}" description="Navigation tabs to show to users" section_name="Navigation Tabs"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserNewTemplate"  default="/packages/acs-subsite/lib/user-new" description="Name of the template used for creation of a new user" section_name="Templates"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_applicaton procedure)" section_name="EditThisPage"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_application procedure)" section_name="EditThisPage"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="subtopic_application"  default="default" description="Name of the ETP application to use when creating a subtopic" section_name="EditThisPage"/>
         </parameters>
 

@@ -427,23 +427,23 @@ aa_register_case -cats {api smoke} export_vars {
     aa_equals "{ foo bar }" \
         [export_vars { foo bar }] \
         "foo=1&bar="
-    
+
     aa_equals "-no_empty { foo bar }" \
         [export_vars -no_empty { foo bar }] \
         "foo=1"
-    
+
     aa_equals "-no_empty { foo bar { baz greble } }" \
         [export_vars -no_empty { foo bar { baz greble } }] \
         "foo=1&baz=greble"
-    
+
     aa_equals "-no_empty -override { { bar \"\" } } { foo bar }" \
         [export_vars -no_empty -override { { bar "" } } { foo bar }] \
         "foo=1&bar=" \
-        
+
     aa_equals "-no_empty -override { { baz greble } } { foo bar }" \
         [export_vars -no_empty -override { baz } { foo bar }] \
         "foo=1"
-    
+
     aa_equals "-no_empty { foo { bar \"\" } }" \
         [export_vars -no_empty { foo { bar "" } }] \
         "foo=1&bar="
@@ -455,20 +455,20 @@ aa_register_case -cats {api smoke} export_vars {
     set export_no_base [export_vars {var1 var2}]
     aa_equals "base with query vars" \
         [export_vars -base $base {var1 var2}] \
-        "$base&$export_no_base"        
+        "$base&$export_no_base"
 
     # Test base without query vars
     set base test-page
     aa_equals "base without query vars" \
         [export_vars -base $base {var1 var2}] \
-        "$base?$export_no_base"            
+        "$base?$export_no_base"
 }
 
 aa_register_case -cats {api smoke} site_node_verify_folder_name {
-    Testing site_node::veriy_folder_name
+    Testing site_node::verify_folder_name
 } {
     set main_site_node_id [site_node::get_node_id -url /]
-    
+
     # Try a few folder names which we know exist
     aa_equals "Folder name 'user' is not allowed" \
         [site_node::verify_folder_name -parent_node_id $main_site_node_id -folder "user"] ""
@@ -479,7 +479,7 @@ aa_register_case -cats {api smoke} site_node_verify_folder_name {
     set folder [ad_generate_random_string]
     aa_equals "Folder name '$folder' is allowed" \
         [site_node::verify_folder_name -parent_node_id $main_site_node_id -folder $folder] $folder
-    
+
     # Try the code that generates a folder name
     # (We only want to try this if there doesn't happen to be a site-node named user-2)
     if { ![site_node::exists_p -url "/register-2"] } {
@@ -495,7 +495,7 @@ aa_register_case -cats {api smoke} site_node_verify_folder_name {
                  -parent_node_id $main_site_node_id \
                  -folder $first_child_name \
                  -current_node_id $first_child_node_id] $first_child_name
-        
+
     aa_false "Creating new folder named '$first_child_name' not ok" \
         [string equal [site_node::verify_folder_name \
                            -parent_node_id $main_site_node_id \
