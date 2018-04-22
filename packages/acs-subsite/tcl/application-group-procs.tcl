@@ -35,7 +35,7 @@ ad_proc -public application_group::contains_party_p {
 
     # Check if the party is a member of the application group, OR
     # the party *is* the application group.  This proc considers the
-    # applcation group to contain itself.
+    # application group to contain itself.
     if {$include_self_p} {
     set found_p [db_string app_group_contains_party_p {
         select case when exists (
@@ -117,7 +117,7 @@ ad_proc -public application_group::contains_segment_p {
 
     # Check if the party is a member of the application group, OR
     # the party *is* the application group.  This proc considers the
-    # applcation group to contain itself.
+    # application group to contain itself.
     set found_p [db_string app_group_contains_segment_p {}]
 
     return $found_p
