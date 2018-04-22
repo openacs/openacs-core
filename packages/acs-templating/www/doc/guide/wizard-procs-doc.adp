@@ -42,7 +42,7 @@ ex.
 </pre>
 </li><li>Create the individual steps, these are just normal Tcl and/or
 adp files. So make a step1.tcl, step1.adp, step2.tcl, step2.adp,
-step3.tcl and step3.adp. Normally this files are self submitting
+step3.tcl and step3.adp. Normally these files are self submitting
 forms</li><li>Add "template:wizard forward" on each step (eg.
 step1.tcl, step2.tcl, step3.tcl) , usually the code where the step
 is processed and successful.</li><li>On each step add the wizard buttons on the .tcl files. Ex.
