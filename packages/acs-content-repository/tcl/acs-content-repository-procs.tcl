@@ -18,9 +18,9 @@ ad_proc -private cr_delete_scheduled_files {} {
     file isn't being used by another revision prior to deleting it.
     Should be scheduled daily.
 
-    This proc is extremely simple, and does not have any concurrancy
+    This proc is extremely simple, and does not have any concurrency
     checks to make sure another version of the proc is
-    running/deleting a file.  Will add some concurancy checks to a
+    running/deleting a file.  Will add some concurrency checks to a
     future revision.  Right now go with short and sweet, count on
     scheduling to prevent conflicts
 } {
@@ -57,13 +57,13 @@ ad_proc -private cr_delete_scheduled_files {} {
 ad_proc -private cr_scan_mime_types {} {
     # Get the config file ns_set
     set mime_types [ns_configsection "ns/mimetypes"]
-    if {$mime_types ne ""} { 
+    if {$mime_types ne ""} {
         set n_mime_types [ns_set size $mime_types]
 
         for {set i 0} {$i < $n_mime_types} {incr i} {
             set extension [ns_set key $mime_types $i]
             set mime_type [ns_set value $mime_types $i]
-            
+
             # special case
             if {$extension eq "NoExtension" || $extension eq "Default"} {
                 continue
@@ -84,7 +84,7 @@ ad_proc -private cr_scan_mime_types {} {
 ##
 
 
-ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} { 
+ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
 
     Check for orphaned files in the content repository directory, and
     delete such files if required.  Orphaned files might be created,
@@ -114,13 +114,13 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
 
         set x [cr_count_file_entries $name]
         if {$x > 0} continue
-        
+
         lappend result $f
         if {$delete_p} {
             file delete -- $f
         }
     }
-    
+
     return $result
 }
 
