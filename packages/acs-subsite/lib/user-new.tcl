@@ -2,10 +2,10 @@ ad_include_contract {
     ADP include for adding new users
 
     Expects parameters:
-    
+
     @param self_register_p Is the form for users who self register (1) or
                            for administrators who create oher users (0)?
-    
+
     @param next_url        Any url to redirect to after the form has been
                            submitted.  The variables user_id,
                            password, and account_messages will be
@@ -22,7 +22,7 @@ ad_include_contract {
                            an element to the form where the user can
                            pick a relation among the permissible
                            rel-types for the group. Can be empty.
-    
+
 } {
     {self_register_p:boolean 1}
     {next_url ""}
@@ -39,10 +39,10 @@ if { [security::RestrictLoginToSSLP] } {
     security::require_secure_conn
 }
 
-# Log user out if currently logged in, if specified in the includeable chunk's parameters, 
+# Log user out if currently logged in, if specified in the includeable chunk's parameters,
 # e.g. not when creating accounts for other users
 if { $self_register_p } {
-    ad_user_logout 
+    ad_user_logout
 }
 
 # Redirect to the registration assessment if there is one, if not, continue with the regular
@@ -68,7 +68,7 @@ ad_form -name register -export {next_url user_id return_url} -form [auth::get_re
 #
 set validate {
     {email
-        {[string equal "" [party::get_by_email -email $email]]}
+        {[party::get_by_email -email $email] eq ""}
         "[_ acs-subsite.Email_already_exists]"
     }
 }
@@ -80,7 +80,7 @@ if { $rel_group_id ne "" } {
     ad_form -extend -name register -form {
         {rel_group_id:integer(hidden),optional}
     }
-    
+
     if { [permission::permission_p -object_id $rel_group_id -privilege "admin"] } {
         ad_form -extend -name register -form {
             {rel_type:text(select)
@@ -105,9 +105,9 @@ ad_form -extend -name register -validate $validate
 
 ad_form -extend -name register -on_request {
     # Populate elements from local variables
-    
+
 } -on_submit {
-    
+
     db_transaction {
         array set creation_info [auth::create_user \
                                      -user_id $user_id \
@@ -122,7 +122,7 @@ ad_form -extend -name register -on_request {
                                      -url $url \
                                      -secret_question $secret_question \
                                      -secret_answer $secret_answer]
-	
+
         if { $creation_info(creation_status) eq "ok" && $rel_group_id ne "" } {
             group::add_member \
                 -group_id $rel_group_id \
@@ -130,9 +130,9 @@ ad_form -extend -name register -on_request {
                 -rel_type $rel_type
         }
     }
-    
+
     # Handle registration problems
-    
+
     switch -- $creation_info(creation_status) {
         ok {
             # Continue below
@@ -144,7 +144,7 @@ ad_form -extend -name register -on_request {
                 set first_elm [lindex [concat $reg_elms(required) $reg_elms(optional)] 0]
                 form set_error register $first_elm $creation_info(creation_message)
             }
-	    
+
             # Element messages
             foreach { elm_name elm_error } $creation_info(element_messages) {
                 form set_error register $elm_name $elm_error
@@ -152,63 +152,63 @@ ad_form -extend -name register -on_request {
             break
         }
     }
-    
+
     switch -- $creation_info(account_status) {
         ok {
             # Continue below
         }
         default {
 
-	    if {[parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] &&
-		$creation_info(account_status) eq "closed"} {
-		ad_return_warning "Email Validation is required" $creation_info(account_message)
-		ad_script_abort
-	    }
-	    if {[parameter::get -parameter RegistrationRequiresApprovalP -default 0] &&
-		$creation_info(account_status) eq "closed"} {
-		ad_return_warning "Account approval is required" $creation_info(account_message)
-		ad_script_abort
-	    }
+            if {[parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] &&
+                $creation_info(account_status) eq "closed"} {
+                    ad_return_warning "Email Validation is required" $creation_info(account_message)
+                    ad_script_abort
+            }
+            if {[parameter::get -parameter RegistrationRequiresApprovalP -default 0] &&
+                $creation_info(account_status) eq "closed"} {
+                    ad_return_warning "Account approval is required" $creation_info(account_message)
+                    ad_script_abort
+            }
 
             # Display the message on a separate page
             ad_returnredirect \
                 -message $creation_info(account_message) \
                 -html \
-		"[subsite::get_element -element url]register/account-closed"
+                "[subsite::get_element -element url]register/account-closed"
             ad_script_abort
         }
     }
-    
+
 } -after_submit {
-    
+
     if { $next_url ne "" } {
         # Add user_id and account_message to the URL
-        
+
         ad_returnredirect [export_vars -base $next_url {user_id password {account_message $creation_info(account_message)}}]
         ad_script_abort
-    } 
-    
-    
+    }
+
+
     # User is registered and logged in
     if { $return_url eq "" } {
         # Redirect to subsite home page.
         set return_url [subsite::get_element -element url]
     }
-    
+
     # If the user is self registering, then try to set the preferred
     # locale (assuming the user has set it as a anonymous visitor
     # before registering).
     if { $self_register_p } {
-	# We need to explicitly get the cookie and not use
-	# lang::user::locale, as we are now a registered user,
-	# but one without a valid locale setting.
-	set locale [ad_get_cookie "ad_locale"]
-	if { $locale ne "" } {
-	    lang::user::set_locale $locale
-	    ad_set_cookie -replace t -max_age 0 "ad_locale" ""
-	}
+        # We need to explicitly get the cookie and not use
+        # lang::user::locale, as we are now a registered user,
+        # but one without a valid locale setting.
+        set locale [ad_get_cookie "ad_locale"]
+        if { $locale ne "" } {
+            lang::user::set_locale $locale
+            ad_set_cookie -replace t -max_age 0 "ad_locale" ""
+        }
     }
-    
+
     # Handle account_message
     if { $creation_info(account_message) ne "" && $self_register_p } {
         # Only do this if user is self-registering

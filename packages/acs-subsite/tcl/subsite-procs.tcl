@@ -15,7 +15,7 @@ namespace eval subsite {
     namespace eval default {}
 }
 
-ad_proc -public subsite::after_mount { 
+ad_proc -public subsite::after_mount {
     {-package_id:required}
     {-node_id:required}
 } {
@@ -31,7 +31,7 @@ ad_proc -public subsite::after_mount {
 
 
 
-ad_proc -public subsite::before_uninstantiate { 
+ad_proc -public subsite::before_uninstantiate {
     {-package_id:required}
 } {
 
@@ -41,7 +41,7 @@ ad_proc -public subsite::before_uninstantiate {
     subsite::default::delete_app_group -package_id $package_id
 }
 
-ad_proc -public subsite::before_upgrade { 
+ad_proc -public subsite::before_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
 } {
@@ -64,7 +64,7 @@ ad_proc -public subsite::before_upgrade {
                                 -package_id $main_site_id \
                                 -parameter ApprovalExpirationDays \
                                 -default 0]
-                
+
                 parameter::set_value \
                     -package_id [ad_acs_kernel_id] \
                     -parameter PasswordExpirationDays \
@@ -72,8 +72,8 @@ ad_proc -public subsite::before_upgrade {
                                 -package_id $main_site_id \
                                 -parameter PasswordExpirationDays \
                                 -default 0]
-                
-                
+
+
                 apm_parameter_unregister \
                     -package_key acs-subsite \
                     -parameter ApprovalExpirationDays \
@@ -121,7 +121,7 @@ ad_proc -public subsite::default::create_app_group {
     <ul>
       <li> Create application group
       <li> Create segment "Subsite Users"
-      <li> Create relational constraint to make subsite registration 
+      <li> Create relational constraint to make subsite registration
            require supersite registration.
     </ul>
 
@@ -179,7 +179,7 @@ ad_proc -public subsite::default::create_app_group {
                     -object_id $package_id \
                     -privilege $privilege
             }
-            
+
         }
     }
 
@@ -197,8 +197,8 @@ ad_proc -public subsite::default::delete_app_group {
 
 ad_proc -private subsite::instance_name_exists_p {
     node_id
-    instance_name 
-} { 
+    instance_name
+} {
     Returns 1 if the instance_name exists at this node. 0
     otherwise. Note that the search is case-sensitive.
 
@@ -212,7 +212,7 @@ ad_proc -private subsite::instance_name_exists_p {
     }]
 }
 
-ad_proc -public subsite::auto_mount_application { 
+ad_proc -public subsite::auto_mount_application {
     { -instance_name "" }
     { -pretty_name "" }
     { -node_id "" }
@@ -238,7 +238,7 @@ ad_proc -public subsite::auto_mount_application {
 
     @see site_node::instantiate_and_mount
 
-    @return The package id of the newly mounted package 
+    @return The package id of the newly mounted package
 
 } {
     if { $node_id eq "" } {
@@ -363,7 +363,7 @@ ad_proc -public subsite::upload_allowed {} {
     @author Hector Amado (hr_amado@galileo.edu)
     @creation-date 2004-06-16
 } {
-   
+
     set package_id [ad_conn subsite_id]
 
     if { ![parameter::get -package_id $package_id -parameter SolicitPortraitP -default 1]  } {
@@ -426,7 +426,7 @@ ad_proc -public subsite::util::object_type_pretty_name {
     @param object_type
 } {
     return [db_string select_pretty_name {
-        select pretty_name from acs_object_types 
+        select pretty_name from acs_object_types
           where object_type = :object_type
     }]
 }
@@ -435,7 +435,7 @@ ad_proc -public subsite::util::return_url_stack {
     return_url_list
 } {
     Given a list of return_urls, we recursively encode them into one
-    return_url that can be redirected to or passed into a page.  As long 
+    return_url that can be redirected to or passed into a page.  As long
     as each page in the list does the typical redirect to return_url, then
     the page flow will go through each of the pages in $return_url_list
 } {
@@ -545,8 +545,8 @@ ad_proc -public subsite::add_section_row {
      } {
         set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
     }
-    
-    if { [ad_conn node_id] == 
+
+    if { [ad_conn node_id] ==
          [site_node::closest_ancestor_package -include_self \
             -package_key [subsite::package_keys] \
             -url [ad_conn url]] } {
@@ -562,13 +562,13 @@ ad_proc -public subsite::add_section_row {
      } {
         set current_url "[string range $current_url 0 [string last / $current_url]]."
     }
-    
+
     set info(url) [file join $info(folder) $info(url)]
     regsub {/\.$} $info(url) / info(url)
 
     # Default to not selected
     set selected_p 0
-    
+
     if { $current_url eq $info(url) || $info(name) eq $section } {
         set selected_p 1
     } else {
@@ -580,9 +580,9 @@ ad_proc -public subsite::add_section_row {
             }
         }
     }
-    
-    set link_p [expr {$current_url ne $info(url) }] 
-    
+
+    set link_p [expr {$current_url ne $info(url) }]
+
     template::multirow append $multirow \
         $info(name) \
         $info(label) \
@@ -662,7 +662,7 @@ ad_proc -public subsite::get_pageflow_struct {
         for { set i 0 } { $i < [llength $child_urls] } { incr i } {
             array set child_node [site_node::get_from_url -exact -url [lindex $child_urls $i]]
             if { $index_redirect_url eq $child_node(url) ||
-                 [string equal ${index_redirect_url}/ $child_node(url)]} {
+                 ${index_redirect_url}/ eq $child_node(url)} {
                 lappend pageflow $child_node(name) [list \
                                                         label "Home" \
                                                         folder $child_node(name) \
@@ -769,7 +769,7 @@ ad_proc -public subsite::main_site_id {} {
     @author Peter Marklund
 } {
     array set main_node [site_node::get_from_url -url "/"]
-    
+
     return $main_node(object_id)
 }
 
@@ -825,7 +825,7 @@ ad_proc -public subsite::set_theme {
     parameter::set_value -parameter StreamingHead -package_id $subsite_id \
         -value $streaming_head
 
-    
+
     callback subsite::theme_changed \
         -subsite_id $subsite_id \
         -old_theme $old_theme \
@@ -839,7 +839,7 @@ ad_proc -public -callback subsite::theme_changed {
 } {
 
     Callback for executing code after the subsite theme has been send changed
-    
+
     @param subsite_id subsite, of which the theme was changed
     @param old_theme the old theme
     @param new_theme the new theme
@@ -850,7 +850,7 @@ ad_proc -public subsite::get_theme_subsites {
     -theme:required
     -subsite_id
     -unmodified:boolean
-} {    
+} {
     Returns a list of all packages implementing subsite that are
     currently using specified theme. Optionally, returns a list of
     just those that were not locally modified.
@@ -858,7 +858,7 @@ ad_proc -public subsite::get_theme_subsites {
     @param theme theme key to lookup for.
     @param subsite_id narrow search to this subsite only. Useful to
     check whether a single subsite is using a theme with or without
-    local modifications.    
+    local modifications.
     @param unmodified decides whether we include subsites which theme
     was locally modified.
 
@@ -883,7 +883,7 @@ ad_proc -public subsite::get_theme_subsites {
         select * from subsite_themes
          where key = :theme
     }
-    
+
     set settings {
         template             DefaultMaster
         css                  ThemeCSS
@@ -907,7 +907,7 @@ ad_proc -public subsite::get_theme_subsites {
                     set default [string trim [set $var]]
                     set value   [string trim [parameter::get -parameter $param -package_id $subsite_id]]
                     regsub -all {\r\n} $value "\n" value
-                    regsub -all {\r\n} $default "\n" default            
+                    regsub -all {\r\n} $default "\n" default
                     set collect_p [expr {$default eq $value}]
                     if {!$collect_p} {
                         ns_log notice "theme '$theme' parameter $var differs on subsite '$subsite_id': default '$default' actual value '$value'"
@@ -932,10 +932,10 @@ ad_proc -public subsite::refresh_theme_subsites {
     currently using specified theme. This might be used, for example,
     in upgrade callbacks for themes if desired behavior is to upgrade
     all subsites using it without manual intervention.
-    
+
     By default this proc will not refresh locally modified templates.
-    
-    @param theme theme key to lookup for    
+
+    @param theme theme key to lookup for
     @param include_modified force reload also for locally modified
     templates
 } {
@@ -951,7 +951,7 @@ ad_proc -public subsite::refresh_theme_subsites {
 ad_proc -public subsite::save_theme_parameters {
     -subsite_id
     -theme
-    -local_p 
+    -local_p
 } {
     Save the actual theming parameter set of the given/current subsite
     as default for the given/current theme. These default values are
@@ -989,7 +989,7 @@ ad_proc -public subsite::save_theme_parameters {
         -resource_dir         [parameter::get -parameter ResourceDir             -package_id $subsite_id] \
         -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] \
         -local_p              $local_p
-        
+
 }
 
 ad_proc -public subsite::save_theme_parameters_as {
@@ -1029,7 +1029,7 @@ ad_proc -public subsite::save_theme_parameters_as {
         -resource_dir         [parameter::get -parameter ResourceDir             -package_id $subsite_id] \
         -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] \
         -local_p              true
-        
+
 }
 
 
@@ -1045,7 +1045,7 @@ ad_proc -public subsite::get_theme {
     if { ![info exists subsite_id] } {
         set subsite_id [ad_conn subsite_id]
     }
-    parameter::get -parameter ThemeKey -package_id $subsite_id 
+    parameter::get -parameter ThemeKey -package_id $subsite_id
 }
 
 ad_proc -public subsite::new_subsite_theme {
@@ -1066,7 +1066,7 @@ ad_proc -public subsite::new_subsite_theme {
 } {
     # the following line is for Oracle compatibility
     set local_p [expr {$local_p ? "t" : "f"}]
-    
+
     db_dml insert_subsite_theme {}
 }
 
@@ -1090,7 +1090,7 @@ ad_proc -public subsite::update_subsite_theme {
 } {
     # the following line is for Oracle compatibility
     set local_p [expr {$local_p ? "t" : "f"}]
-    
+
     db_dml update {
       update subsite_themes
         set name = :name,
@@ -1114,7 +1114,7 @@ ad_proc -public subsite::update_subsite_theme {
 ad_proc -public subsite::delete_subsite_theme {
     -key:required
 } {
-    Delete a subsite theme, making it unavailable to the theme configuration code.    
+    Delete a subsite theme, making it unavailable to the theme configuration code.
 } {
     db_dml delete_subsite_theme {}
 }
@@ -1187,7 +1187,7 @@ ad_proc -public subsite::get_url {
         }
 
         set request_vhost_p [expr {$main_host ne $driver_info(vhost) }]
-        
+
     } elseif {$node_id eq ""} {
         error "You must supply node_id when not connected."
     } else {
@@ -1208,14 +1208,14 @@ ad_proc -public subsite::get_url {
     if {$protocol eq ""} {
         set protocol $driver_info(proto)
     }
-    
+
     #
     # If the provided port is empty, get it from the driver_info.
     #
     if {$port eq ""} {
         set port $driver_info(port)
     }
-    
+
     #
     # If the provided host is not empty, get it from the host header
     # field (when connected) or from the configured host name.
@@ -1232,14 +1232,14 @@ ad_proc -public subsite::get_url {
         set host $driver_info(hostname)
     }
 
-    
+
     set result ""
     if { $request_vhost_p } {
-        set root_p [string equal $subsite_node(parent_id) ""]
+        set root_p [expr {$subsite_node(parent_id) eq ""}]
         set search_vhost $host
 
         set where_clause [db_map orderby]
-        
+
         # TODO: This should be cached
         set site_node $subsite_node(node_id)
         set mapped_vhost [db_string get_vhost {} -default ""]
