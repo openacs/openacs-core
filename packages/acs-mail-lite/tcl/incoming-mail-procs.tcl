@@ -260,7 +260,7 @@ namespace eval acs_mail_lite {
 		array set param $params
 
 		# Append the file if there exist a filename to use. Otherwise do not append
-		if {([info exists param(name)] && $param(name) ne "")} {
+		if {[info exists param(name)] && $param(name) ne ""} {
 		    set filename $param(name)
 
 		    # Determine the content_type
