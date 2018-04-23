@@ -22,151 +22,151 @@ ad_library {
 namespace eval template {}
 
 ad_proc -public template::parse_directives {
-  code
+    code
 } {
-  Parse out directives embedded in the code parameter.
+    Parse out directives embedded in the code parameter.
 } {
 
-  # remove carriage returns if present
-  regsub -all {\r|\r\n} $code {\n} code
+    # remove carriage returns if present
+    regsub -all {\r|\r\n} $code {\n} code
 
-  # remove extra blank lines
-  regsub -all {(\n)\n} $code {\1} code
+    # remove extra blank lines
+    regsub -all {(\n)\n} $code {\1} code
 
-  set lines [split $code "\n"]
+    set lines [split $code "\n"]
 
-  # regular expression for match directive comments
-  set direxp {^\#[\s]*@([a-zA-Z0-9\-_]+)[\s]+(.*)$}
+    # regular expression for match directive comments
+    set direxp {^\#[\s]*@([a-zA-Z0-9\-_]+)[\s]+(.*)$}
 
-  set directives [list]
+    set directives [list]
 
-  foreach line $lines {
+    foreach line $lines {
 
-    if { [regexp $direxp $line x next_directive next_comment] } {
+        if { [regexp $direxp $line x next_directive next_comment] } {
 
-      # start a new directive
+            # start a new directive
 
-      if { [info exists directive] } {
+            if { [info exists directive] } {
 
-	# finish last directive
-	lappend directives [list $directive $comment]
-      }	
+                # finish last directive
+                lappend directives [list $directive $comment]
+            }
 
-      set directive $next_directive 
-      set comment $next_comment
-      
-    } elseif { [info exists directive] } {
+            set directive $next_directive
+            set comment $next_comment
 
-      if { [regexp {^\#\s*(.*)$} $line x add_comment] } {
+        } elseif { [info exists directive] } {
 
-	# append this line to the current directive
-	append comment " $add_comment"
+            if { [regexp {^\#\s*(.*)$} $line x add_comment] } {
 
-      } else {
+            # append this line to the current directive
+            append comment " $add_comment"
 
-	# finish directive
-	lappend directives [list $directive $comment]
-	unset directive
-	unset comment
-      }
+            } else {
+
+                # finish directive
+                lappend directives [list $directive $comment]
+                unset directive
+                unset comment
+            }
+        }
     }
-  }
 
-  if { [info exists directive] } {
-    lappend directives [list $directive $comment]
-  }
+    if { [info exists directive] } {
+        lappend directives [list $directive $comment]
+    }
 
-  return $directives
+    return $directives
 }
 
 ad_proc -public template::get_datasources { code } {
     Assemble directives into data source(s) for presentation.
 } {
 
-  upvar datasources:rowcount rowcount
-  set rowcount 0
+    upvar datasources:rowcount rowcount
+    set rowcount 0
 
-  #for debugging purposes
-  upvar output text
-  set text [parse_directives $code]
+    #for debugging purposes
+    upvar output text
+    set text [parse_directives $code]
 
-  foreach directive [parse_directives $code] {
-    
-    switch -exact [lindex $directive 0] {
+    foreach directive [parse_directives $code] {
 
-      datasource {
+        switch -exact [lindex $directive 0] {
 
-	# directive is a new datasource
-	set info [lindex $directive 1]
-	set name [lindex $info 0]
-	set structure [lindex $info 1]
-	set comment [lrange $info 2 end]
+            datasource {
 
-	if { [string match "one*" $structure] } {
+                # directive is a new datasource
+                set info [lindex $directive 1]
+                # Assign the first elements of $info to 'name' and 'structure',
+                # and the rest to 'comment'
+                set comment [lassign $info name structure]
 
-	  # directive is a onevalue or onelist.  add a row and move on
-	  incr rowcount
-	  upvar datasources:$rowcount datasource
+                if { [string match "one*" $structure] } {
 
-	  set datasource(rownum) $rowcount
-	  set datasource(name) $name
-	  set datasource(structure) $structure
-	  set datasource(comment) $comment
-	}
-      }
+                    # directive is a onevalue or onelist.  add a row and move on
+                    incr rowcount
+                    upvar datasources:$rowcount datasource
 
-      data_input {
-	# directive is a new form
-	set info [lindex $directive 1]
-	set name [lindex $info 0]
-	set structure [lindex $info 1]
-	set comment [lrange $info 2 end]
-      }
-      
-      input {
-	set info [lindex $directive 1]
-	set input_name [lindex $info 0]
-	set input_type [lindex $info 1]
-	set input_comment [lrange $info 2 end]
-	  
-	incr rowcount
-	upvar datasources:$rowcount datasource
-	  
-	set datasource(rownum) $rowcount
-	set datasource(structure) $structure
-	set datasource(comment) $comment
-	set datasource(name) $name
+                    set datasource(rownum) $rowcount
+                    set datasource(name) $name
+                    set datasource(structure) $structure
+                    set datasource(comment) $comment
+                }
+            }
 
-	set datasource(input_name) $input_name
-	set datasource(input_type) $input_type
-	set datasource(input_comment) $input_comment
-      }
- 
-      column {
+            data_input {
+                # directive is a new form
+                set info [lindex $directive 1]
+                # Assign the first elements of $info to 'name' and 'structure',
+                # and the rest to 'comment'
+                set comment [lassign $info name structure]
+            }
 
-	set info [lindex $directive 1]
-	set column_name [lindex $info 0]
-	set column_comment [lrange $info 1 end]
+            input {
+                set info [lindex $directive 1]
+                # Assign the first elements of $info to 'input_name' and
+                # 'input_type', and the rest to 'input_comment'
+                set input_comment [lassign $info input_name input_type]
 
-	incr rowcount
-	upvar datasources:$rowcount datasource
+                incr rowcount
+                upvar datasources:$rowcount datasource
 
-	set datasource(rownum) $rowcount
-	set datasource(name) $name
-	set datasource(structure) $structure
-	set datasource(comment) $comment
+                set datasource(rownum) $rowcount
+                set datasource(structure) $structure
+                set datasource(comment) $comment
+                set datasource(name) $name
 
-	set datasource(column_name) $column_name
-	set datasource(column_comment) $column_comment
-      }	
+                set datasource(input_name) $input_name
+                set datasource(input_type) $input_type
+                set datasource(input_comment) $input_comment
+            }
+
+            column {
+                set info [lindex $directive 1]
+                # Assign the first element of $info to 'column_name', and the
+                # rest to 'column_comment'
+                set column_comment [lassign $info column_name]
+
+                incr rowcount
+                upvar datasources:$rowcount datasource
+
+                set datasource(rownum) $rowcount
+                set datasource(name) $name
+                set datasource(structure) $structure
+                set datasource(comment) $comment
+
+                set datasource(column_name) $column_name
+                set datasource(column_comment) $column_comment
+            }
+        }
     }
-  }
 }
 
 ad_proc -public template::verify_datasources {} {
-  @return True (1)
+    @return True (1)
 } {
-  return 1
+    return 1
 }
 
 
