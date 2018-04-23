@@ -41,7 +41,7 @@ ad_proc -public template::register_urn {
     We could consider a dns-prefetch for CDN requests. When the
     url-check is performed at register time, the performance for
     processing the url can be neglected.
-    
+
 } {
     set ::template::head::urn($urn) $resource
     ns_log notice "add URN: $urn <$resource>"
@@ -77,18 +77,18 @@ ad_proc -public template::add_script {
     @param type    the type attribute of the script tag, eg. 'text/javascript'
 } {
     if {$section eq "head"} {
-	#
-	# A head script
-	#
-	::template::head::add_script -type $type -defer=$defer_p -async=$async_p \
-	    -src $src -charset $charset -script $script -order $order \
+        #
+        # A head script
+        #
+        ::template::head::add_script -type $type -defer=$defer_p -async=$async_p \
+            -src $src -charset $charset -script $script -order $order \
             -crossorigin $crossorigin -integrity $integrity
     } else {
-	#
-	# A body script. The order is ignored.
-	#
-	::template::add_body_script -type $type -defer=$defer_p -async=$async_p \
-	    -src $src -charset $charset -script $script \
+        #
+        # A body script. The order is ignored.
+        #
+        ::template::add_body_script -type $type -defer=$defer_p -async=$async_p \
+            -src $src -charset $charset -script $script \
             -crossorigin $crossorigin -integrity $integrity
     }
 }
@@ -173,7 +173,7 @@ ad_proc -public template::head::flush_script {
     {-src:required}
 } {
     Flush a script tag, which was previously set in the head section via template::add_script.
-    One can provide a wild 
+    One can provide a wild
 
     @author Gustaf Neumann
     @creation-date 2018-03-09
@@ -219,7 +219,7 @@ ad_proc -public template::head::add_link {
                    this link
     @param type    the type attribute of the link tag, eg. 'text/css'
                    separated list of values, eg. 'screen,print,braille'
-    
+
     @see ::template::head::flush_link
 } {
     set ::template::head::links($rel,$href) [list $rel $href $type $media $title $lang $order $crossorigin $integrity]
@@ -237,7 +237,7 @@ ad_proc -public template::head::flush_link {
     @param href    the href attribute of the link tag, eg. the target document
                    of the link. A glob pattern similar link in "string match"
                    can be provided.
-    
+
     @param rel     the rel attribute of the link tag defining the relationship
                    of the linked document to the current one, eg. 'stylesheet'
     @see ::template::head::add_link
@@ -250,7 +250,7 @@ ad_proc -public template::head::includes {
     {-container:required}
     {-parts:required}
 } {
-    
+
     Define, that a compound resource (container) contains multiple
     parts.  Container and parts are typically urls, which are referred
     to by a "href" attribute or by link or a "src" attribute of a
@@ -275,7 +275,7 @@ ad_proc -public template::head::includes {
 ad_proc -private template::head::included_p {
     resource
 } {
-    
+
     Check, if the provided resource is included by some other resource.
 
     @author Gustaf Neumann
@@ -624,9 +624,9 @@ ad_proc -public template::add_header {
 
     if {[info exists headers]} {
       switch -- $direction {
-	outer {set headers [concat [list $values] $headers]}
-	inner {lappend headers $values}
-	default {error "unknown direction $direction"}
+        outer {set headers [concat [list $values] $headers]}
+        inner {lappend headers $values}
+        default {error "unknown direction $direction"}
       }
     } else {
       set headers [list $values]
@@ -669,9 +669,9 @@ ad_proc -public template::add_footer {
 
     if {[info exists footers]} {
       switch -- $direction {
-	outer {lappend footers $values}
-	inner {set footers [concat [list $values] $footers]}
-	default {error "unknown direction $direction"}
+        outer {lappend footers $values}
+        inner {set footers [concat [list $values] $footers]}
+        default {error "unknown direction $direction"}
       }
     } else {
       set footers [list $values]
@@ -789,7 +789,7 @@ ad_proc template::head::prepare_multirows {} {
 
     template::multirow create headscript type src charset defer async content order crossorigin integrity
     if {[array exists scripts]} {
-       
+
         foreach name [array names scripts] {
             if {[::template::head::included_p $name]} {
                 continue
@@ -841,9 +841,7 @@ ad_proc template::get_header_html {
     set header ""
     if {[info exists headers]} {
         foreach header_list $headers {
-            set type [lindex $header_list 0]
-            set src [lindex $header_list 1]
-            set params [lindex $header_list 2]
+            lassign $header_list type src params
             if {$type eq "literal"} {
                 append header $src
             } else {
@@ -865,9 +863,7 @@ ad_proc template::get_footer_html {
     set footer ""
     if {[info exists footers]} {
         foreach footer_list $footers {
-            set type [lindex $footer_list 0]
-            set src [lindex $footer_list 1]
-            set params [lindex $footer_list 2]
+            lassign $footer_list type src params
             if {$type eq "literal"} {
                 append footer $src
             } else {

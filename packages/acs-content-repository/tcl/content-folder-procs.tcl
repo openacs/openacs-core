@@ -1,13 +1,13 @@
-# 
+#
 
 ad_library {
-    
+
     Tcl API for content_folders
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
     @cvs-id $Id$
-    
+
 }
 
 namespace eval ::content::folder {}
@@ -25,11 +25,11 @@ ad_proc -public ::content::folder::new {
     {-context_id ""}
     {-package_id ""}
 } {
-    
-    
+
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
-    
+
     @param folder_id
 
     @param name
@@ -52,22 +52,22 @@ ad_proc -public ::content::folder::new {
 
     @param package_id
 
-    @return 
-    
-    @error 
+    @return
+
+    @error
 } {
     set var_list [list]
     foreach var [list folder_id name label description parent_id context_id package_id] {
-	lappend var_list [list $var [set $var]]
+        lappend var_list [list $var [set $var]]
     }
     if {[info exists creation_date] && $creation_date ne ""} {
         lappend var_list [list creation_date $creation_date]
     }
     set folder_id [package_instantiate_object \
-		     -creation_user $creation_user \
-		     -creation_ip $creation_ip \
-		     -var_list $var_list \
-		     $content_type]
+             -creation_user $creation_user \
+             -creation_ip $creation_ip \
+             -var_list $var_list \
+             $content_type]
     return $folder_id
 }
 
@@ -76,22 +76,22 @@ ad_proc -public ::content::folder::delete {
     {-cascade_p "f"}
 } {
     Delete a content folder
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
-    
+
     @param folder_id item_id of the content_folder
     @param cascade_p if true delete all children, if false, return error if folder is non-empty
-    
-    @return 
-    
-    @error 
+
+    @return
+
+    @error
 } {
     return [package_exec_plsql \
-		-var_list [list \
-			       [list folder_id $folder_id ] \
-			       [list cascade_p $cascade_p] ] \
-		content_folder del]
+        -var_list [list \
+                   [list folder_id $folder_id ] \
+                   [list cascade_p $cascade_p] ] \
+        content_folder del]
 }
 
 ad_proc -public ::content::folder::register_content_type {
@@ -100,19 +100,19 @@ ad_proc -public ::content::folder::register_content_type {
     {-include_subtypes "f"}
 } {
     Register an allowed content type for folder_id
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-29
-    
+
     @param folder_id folder to register type to
 
     @param content_type content_revision or subtype of content_revision
 
     @param include_subtypes t or f
 
-    @return 
-    
-    @error 
+    @return
+
+    @error
 } {
     return [package_exec_plsql \
                 -var_list [list \
@@ -129,19 +129,19 @@ ad_proc -public ::content::folder::unregister_content_type {
     {-include_subtypes "f"}
 } {
     Unregister an allowed content type for folder_id
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-04
-    
+
     @param folder_id folder to unregister type from
 
     @param content_type content_revision or subtype of content_revision
 
     @param include_subtypes t or f
 
-    @return 
-    
-    @error 
+    @return
+
+    @error
 } {
 
     return [package_exec_plsql \
@@ -178,8 +178,7 @@ ad_proc -public ::content::folder::update {
     set update_text ""
 
     foreach {attribute_list} $attributes {
-        set attribute [lindex $attribute_list 0]
-        set value [lindex $attribute_list 1]
+        lassign $attribute_list attribute value
         if {$attribute in $valid_attributes} {
 
             # create local variable to use for binding
@@ -214,25 +213,25 @@ ad_proc -public content::folder::get_index_page {
     @return item_id of content item named "index" in folder_id
 } {
     return [package_exec_plsql \
-		-var_list [list [list \
-			       folder_id $folder_id \
-				    ]] \
-		content_folder get_index_page]
+        -var_list [list [list \
+                   folder_id $folder_id \
+                    ]] \
+        content_folder get_index_page]
 }
 
 
 ad_proc -public content::folder::get_label {
     -folder_id:required
 } {
-    @param folder_id 
+    @param folder_id
 
     @return label of cr_folder suitable for display
 } {
     return [package_exec_plsql \
-		-var_list [list \
-			       [list folder_id $folder_id] \
-			      ] \
-		content_folder get_label]
+        -var_list [list \
+                   [list folder_id $folder_id] \
+                  ] \
+        content_folder get_label]
 }
 
 
@@ -244,10 +243,10 @@ ad_proc -public content::folder::is_empty {
     @return t or f
 } {
     return [package_exec_plsql \
-		-var_list [list \
-			       [list folder_id $folder_id ] \
-			      ] \
-		content_folder is_empty]
+        -var_list [list \
+                   [list folder_id $folder_id ] \
+                  ] \
+        content_folder is_empty]
 }
 
 
@@ -276,12 +275,12 @@ ad_proc -public content::folder::is_registered {
     @return t or f
 } {
     return [package_exec_plsql \
-		-var_list [list \
-			       [list folder_id $folder_id] \
-			       [list content_type $content_type] \
+        -var_list [list \
+                   [list folder_id $folder_id] \
+                   [list content_type $content_type] \
                                [list include_subtypes $include_subtypes] \
-			      ] \
-		content_folder is_registered]
+                  ] \
+        content_folder is_registered]
 }
 
 
@@ -305,14 +304,14 @@ ad_proc -public content::folder::is_sub_folder {
     @param folder_id
     @param target_folder_id
 
-    @return t of f 
+    @return t of f
 } {
     return [package_exec_plsql \
-		-var_list [list \
-			       [list folder_id $folder_id] \
-			       [list target_folder_id $target_folder_id] \
-			      ] \
-		content_folder is_sub_folder]
+        -var_list [list \
+                   [list folder_id $folder_id] \
+                   [list target_folder_id $target_folder_id] \
+                  ] \
+        content_folder is_sub_folder]
 }
 
 ad_proc content::folder::get_folder_from_package {

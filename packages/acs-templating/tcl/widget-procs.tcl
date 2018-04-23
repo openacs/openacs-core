@@ -3,7 +3,7 @@ ad_library {
 
     @author Karl Goldstein    (karlg@arsdigita.com)
     @author Stanislav Freidin (sfreidin@arsdigita.com)
-     
+
     @cvs-id $Id$
 }
 
@@ -20,7 +20,7 @@ namespace eval template::data {}
 namespace eval template::data::transform {}
 
 ad_proc -public template::widget {} {
-    The template::widget namespace contains the code 
+    The template::widget namespace contains the code
     for the various input widgets.
 
     @see template::widget::ampmFragment
@@ -63,7 +63,7 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
     <p>
 
     It only searches in all parties from the system currently. It should propably be extended to
-    allow to restrict the search to a specific subsite, as well as searching only 
+    allow to restrict the search to a specific subsite, as well as searching only
     for groups or persons.
 
     @author Tilmann Singer
@@ -91,7 +91,7 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
     return $output
 }
 
-ad_proc -public template::data::validate::party_search { 
+ad_proc -public template::data::validate::party_search {
     value_ref
     message_ref
 } {
@@ -158,7 +158,7 @@ ad_proc -private template::data::transform::party_search {
     # search in groups and relsegs
     set groups_relsegs [db_list_of_lists search_groups_relsegs {}]
 
-    # Localize the groups 
+    # Localize the groups
     set groups_relsegs [lang::util::localize_list_of_lists -list $groups_relsegs]
 
     if { [llength $persons] == 0 && [llength $groups_relsegs] == 0 } {
@@ -223,7 +223,7 @@ ad_proc -public template::widget::search {
         }
     }
 </pre>
-    Can be either a select widget initially if options supplied 
+    Can be either a select widget initially if options supplied
     or a text box which on submit changes to a select widget.
 
     @param element_reference Reference variable to the form element
@@ -276,7 +276,7 @@ ad_proc -public template::widget::textarea {
         array set attributes $element(html)
     }
     array set attributes $tag_attributes
-    
+
     if { [info exists element(value)] } {
         set value $element(value)
     } else {
@@ -289,22 +289,22 @@ ad_proc -public template::widget::textarea {
         set mode {}
     }
 
-	set attributes(id) $element(name)
+    set attributes(id) $element(name)
     set output [textarea_internal $element(name) attributes $value $mode]
 
     # Spell-checker
     array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
-    
+
     if { $element(mode) eq "edit" && $spellcheck(render_p) } {
-        append output "<br>[_ acs-templating.Spellcheck]: 
+        append output "<br>[_ acs-templating.Spellcheck]:
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
-  }   
+  }
 
   return $output
 }
 
-ad_proc -private template::widget::textarea_internal { 
-    name 
+ad_proc -private template::widget::textarea_internal {
+    name
     attribute_reference
     {value {}}
     {mode edit}
@@ -337,7 +337,7 @@ ad_proc -private template::widget::textarea_internal {
         } else {
             set output "<textarea name=\"$name\""
         }
-        
+
         foreach attribute_name [array names attributes] {
             if {$attributes($attribute_name) eq ""} {
                 append output " $attribute_name"
@@ -391,8 +391,8 @@ ad_proc -public template::widget::input {
     if { ( $type eq "checkbox" || $type eq "radio" ) && [info exists element(value)] } {
         # This can be used in the form template in a <label for="id">...</label> tag.
         set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
-    } elseif { $type in {"password" "text" "button" "file" }} { 
-	set attributes(id) "$element(name)" 
+    } elseif { $type in {"password" "text" "button" "file" }} {
+        set attributes(id) "$element(name)"
     }
 
     # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
@@ -411,7 +411,7 @@ ad_proc -public template::widget::input {
 
         if { [info exists element(value)] } {
             append output [subst { value="[ns_quotehtml $element(value)]"}]
-        } 
+        }
 
         foreach name [array names attributes] {
             if {$attributes($name) eq {}} {
@@ -451,7 +451,7 @@ ad_proc -public template::widget::text {
     array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
 
     if { $element(mode) eq "edit" && $spellcheck(render_p) } {
-        return "[input text element $tag_attributes] <br>[_ acs-templating.Spellcheck]: 
+        return "[input text element $tag_attributes] <br>[_ acs-templating.Spellcheck]:
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   } else {
       return [input text element $tag_attributes]
@@ -508,20 +508,20 @@ ad_proc -public template::widget::hidden {
 } {
     upvar $element_reference element
 
-    # Antonio Pisano: 
+    # Antonio Pisano:
     # before 2015-09-03 we didn't enter this 'if' when element(value) existed.
     # This means that even if we had multiple values in element(values) those
     # were ignored, preventing the export of multiple values by hidden formfields.
-    # I changed this by saying that field is multiple whenever element(values) 
+    # I changed this by saying that field is multiple whenever element(values)
     # exists and is not null.
     if { [info exists element(values)] && $element(values) ne "" } {
-      #ns_log notice "hidden form element with multiple values: <$element(values)>"
-      set output {}
-      set count 0
-      foreach itemvalue $element(values) {
-	append output [subst {
-	  <input type="hidden" id="$element(form_id):$element(name):$count" name="$element(name)" value="[ns_quotehtml $itemvalue]">
-	}]
+        #ns_log notice "hidden form element with multiple values: <$element(values)>"
+        set output {}
+        set count 0
+        foreach itemvalue $element(values) {
+            append output [subst {
+                <input type="hidden" id="$element(form_id):$element(name):$count" name="$element(name)" value="[ns_quotehtml $itemvalue]">
+            }]
         incr count
       }
       return $output
@@ -552,7 +552,7 @@ ad_proc -public template::widget::submit {
     upvar $element_reference element
 
     # always ignore value for submit widget
-    set element(value) $element(label) 
+    set element(value) $element(label)
 
     return [input submit element $tag_attributes]
 }
@@ -633,7 +633,7 @@ ad_proc -public template::widget::button {
     return [input button element $tag_attributes]
 }
 
-ad_proc -public template::widget::menu { 
+ad_proc -public template::widget::menu {
     widget_name
     options_list
     values_list
@@ -665,9 +665,7 @@ ad_proc -public template::widget::menu {
         set selected_list [list]
 
         foreach option $options_list {
-
-            set label [lindex $option 0]
-            set value [lindex $option 1]
+            lassign $option label value
 
             if { [info exists values($value)] } {
                 lappend selected_list $label
@@ -684,9 +682,7 @@ ad_proc -public template::widget::menu {
                     set widget_type radio
                 }
                 foreach option $options_list {
-
-                    set label [lindex $option 0]
-                    set value [lindex $option 1]
+                    lassign $option label value
 
                     append output [subst { <input type="$widget_type" name="$widget_name" value="[ns_quotehtml $value]"}]
                     if { [info exists values($value)] } {
@@ -776,7 +772,7 @@ ad_proc -public template::widget::multiselect {
 
     # Determine the size automatically for a multiselect
     if { ! [info exists attributes(size)] } {
-        
+
         set size [llength $element(options)]
         if { $size > 8 } {
             set size 8
@@ -805,9 +801,9 @@ ad_proc -public template::data::transform::search {
 
     # there will no value for the initial request or if the form
     # is submitted with no search criteria (text box blank)
-    if {$value eq {}} { return [list] } 
+    if {$value eq {}} { return [list] }
 
-    if {$value eq ":search:"} { 
+    if {$value eq ":search:"} {
         if { [info exists element(options)] } {
             unset element(options)
         }
@@ -820,7 +816,7 @@ ad_proc -public template::data::transform::search {
     if { ! [ns_queryexists $element_id:select] } {
 
         # perform a search based on the value
-        if { ! [info exists element(search_query)] } { 
+        if { ! [info exists element(search_query)] } {
             error "No search query specified for search widget"
         }
 
@@ -895,14 +891,14 @@ ad_proc -public template::widget::comment {
         if { [info exists element(header)] } {
             append output "<p><b>$element(header)</b></p>"
         }
-        
+
         append output [textarea $element_reference $tag_attributes]
 
         if { [info exists element(format_element)] && [info exists element(format_options)] } {
             append output "<br>Format: [menu $element(format_element) $element(format_options) {} {}]"
         }
     }
-    
+
     return $output
 }
 
@@ -918,58 +914,56 @@ ad_proc -public template::widget::block {
     @return Form HTML for widget
 } {
     upvar $element_reference element
-    
+
     if { [info exists element(html)] } {
-	array set attributes $element(html)
+        array set attributes $element(html)
     }
-    
+
     if { [info exists element(value)] } {
-	set value $element(value)
+        set value $element(value)
     } else {
-	set value {}
+        set value {}
     }
 
     array set attributes $tag_attributes
-    
+
     set output ""
     set options $element(options)
     set count 0
     foreach option $options {
-	if {$count == 0} {
-	    # answer descriptions in a list: {{desc1 no_of_answers} {desc2 no_of_answers} ...}
-	    append output "<tr align='center'><td></td><td></td>"
-	    foreach answer_desc $option {
-		set answer_description [lindex $answer_desc 0]
-		set no_of_answers [lindex $answer_desc 1]
-		append output "<th colspan=\"[expr {$no_of_answers + 1}]\" align=\"center\">$answer_description</th>"
-	    }
-	    append output "</tr>"
-	} elseif {$count == 1} {
-	    append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
-	    foreach answer_set [lindex $option 1] {
-		append output "<td>required?</td>"
-		foreach answer $answer_set {
-		    append output "<td>$answer</td>"
-		}
-	    }
-	    append output "</tr>"
-	} else {
-	    append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
-	    foreach question [lindex $option 1] {
-		set name [lindex $question 0]
-		set required_p [lindex $question 1]
-		append output "<td>[ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"]</td>"
-		foreach choice [lindex $question 2] {
-		    if {$choice ni $value} {
-			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
-		    } else {
-			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\" checked></td>"
-		    }
-		}
-	    }
-	    append output "</tr>"
-	}
-	incr count
+        if {$count == 0} {
+            # answer descriptions in a list: {{desc1 no_of_answers} {desc2 no_of_answers} ...}
+            append output "<tr align='center'><td></td><td></td>"
+            foreach answer_desc $option {
+                lassign $answer_desc answer_description no_of_answers
+                append output "<th colspan=\"[expr {$no_of_answers + 1}]\" align=\"center\">$answer_description</th>"
+            }
+            append output "</tr>"
+        } elseif {$count == 1} {
+            append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
+            foreach answer_set [lindex $option 1] {
+                append output "<td>required?</td>"
+                foreach answer $answer_set {
+                    append output "<td>$answer</td>"
+                }
+            }
+            append output "</tr>"
+        } else {
+            append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
+            foreach question [lindex $option 1] {
+                lassign $question name required_p
+                append output "<td>[ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"]</td>"
+                foreach choice [lindex $question 2] {
+                    if {$choice ni $value} {
+                        append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
+                    } else {
+                        append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\" checked></td>"
+                    }
+                }
+            }
+            append output "</tr>"
+        }
+        incr count
     }
 
     return "<table>$output</table>"
@@ -1000,8 +994,8 @@ ad_proc -public template::data::transform::select_text {
     @creation-date 2004-07-18
 
     @param element_ref
-    @return 
-    @error 
+    @return
+    @error
 } {
     upvar $element_ref element
     set element_id $element(id)
@@ -1016,11 +1010,11 @@ ad_proc -public template::util::select_text::get_property {
 } {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-07-18
-    
+
     @param what
     @param select_text_list
-    @return 
-    @error 
+    @return
+    @error
 } {
     switch -- $what {
         select_value - select {
@@ -1040,55 +1034,55 @@ ad_proc -public template::widget::select_text {
     tag_attributes
 } {
     Implements the complex widget select_text which combines
-    a select widget with a text widget 
+    a select widget with a text widget
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-07-18
 
     @param element_reference
     @param tag_attributes
-    @return 
-    @error 
+    @return
+    @error
 } {
 
     upvar $element_reference element
     if { [info exists element(html)] } {
-	array set attributes $element(html)
+        array set attributes $element(html)
     }
-    
+
     array set attributes $tag_attributes
-    
+
     if { [info exists element(value)] } {
-	set select [template::util::select_text::get_property select_value $element(value)]
-	set text   [template::util::select_text::get_property text_value $element(value)]
+        set select [template::util::select_text::get_property select_value $element(value)]
+        set text   [template::util::select_text::get_property text_value $element(value)]
     } else {
-	set select {}
-	set text {}
+        set select {}
+        set text {}
     }
 
     set output {}
     if {$element(mode) eq "edit"} {
-	# edit mode
-	set element(value) $select
-	append output [template::widget::menu $element(name) $element(options) $select attributes $element(mode)]
+        # edit mode
+        set element(value) $select
+        append output [template::widget::menu $element(name) $element(options) $select attributes $element(mode)]
 
-	if {![info exists element(other_label)]} {
-	    set element(other_label) "[_ acs-templating.Other]"
-	}
-	append output " $element(other_label): "
-	set element(value) $text
-	set element(name) $element(name)\.text
-	append output [template::widget::input text element $tag_attributes]
+        if {![info exists element(other_label)]} {
+            set element(other_label) "[_ acs-templating.Other]"
+        }
+        append output " $element(other_label): "
+        set element(value) $text
+        set element(name) $element(name)\.text
+        append output [template::widget::input text element $tag_attributes]
     } else {
-	# display mode
-	if { [info exists element(value)] } {
-	    append output [template::util::select_text::get_property select_value $element(value)]
-	    append output "&nbsp;"
-	    append output [template::util::select_text::get_property text_value $element(value)]          
-	    append output "<input type=\"hidden\" name=\"$element(id).text\" value=\"[ns_quotehtml $text]\">"
-	    append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ns_quotehtml $select]\">"
-	}
+        # display mode
+        if { [info exists element(value)] } {
+            append output [template::util::select_text::get_property select_value $element(value)]
+            append output "&nbsp;"
+            append output [template::util::select_text::get_property text_value $element(value)]
+            append output "<input type=\"hidden\" name=\"$element(id).text\" value=\"[ns_quotehtml $text]\">"
+            append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ns_quotehtml $select]\">"
+        }
     }
-    
+
     return $output
 }
 
@@ -1112,8 +1106,8 @@ ad_proc -public template::data::transform::radio_text {
     @creation-date 2004-10-17
 
     @param element_ref
-    @return 
-    @error 
+    @return
+    @error
 } {
     upvar $element_ref element
     set element_id $element(id)
@@ -1128,11 +1122,11 @@ ad_proc -public template::util::radio_text::get_property {
 } {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2004-10-17
-    
+
     @param what
     @param radio_list
-    @return 
-    @error 
+    @return
+    @error
 } {
     switch -- $what {
         radio_value - radio {
@@ -1152,29 +1146,29 @@ ad_proc -public template::widget::radio_text {
     tag_attributes
 } {
     Implements the complex widget radio_text which combines
-    a radio widget with a text widget 
+    a radio widget with a text widget
 
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2004-10-17
 
     @param element_reference
     @param tag_attributes
-    @return 
-    @error 
+    @return
+    @error
 } {
     upvar $element_reference element
     if { [info exists element(html)] } {
-	array set attributes $element(html)
+        array set attributes $element(html)
     }
-    
+
     array set attributes $tag_attributes
-    
+
     if { [info exists element(value)] } {
-	set radio [template::util::radio_text::get_property radio_value $element(value)]
-	set text  [template::util::radio_text::get_property text_value $element(value)]
+        set radio [template::util::radio_text::get_property radio_value $element(value)]
+        set text  [template::util::radio_text::get_property text_value $element(value)]
     } else {
-	set radio {}
-	set text {}
+        set radio {}
+        set text {}
     }
     set output {}
 
@@ -1190,11 +1184,10 @@ ad_proc -public template::widget::radio_text {
     }
 
     # Create an array for easier testing of selected values
-    template::util::list_to_lookup $radio values 
+    template::util::list_to_lookup $radio values
     set output ""
     foreach option $element(options) {
-        set label [lindex $option 0]
-        set value [lindex $option 1]
+        lassign $option label value
 
         append output "$radio_text value=\"$value\""
         if { [info exists values($value)] } {
@@ -1237,8 +1230,8 @@ ad_proc -public template::data::transform::checkbox_text {
     @creation-date 2004-10-17
 
     @param element_ref
-    @return 
-    @error 
+    @return
+    @error
 } {
     upvar $element_ref element
     set element_id $element(id)
@@ -1253,11 +1246,11 @@ ad_proc -public template::util::checkbox_text::get_property {
 } {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2004-10-17
-    
+
     @param what
     @param checkbox_list
-    @return 
-    @error 
+    @return
+    @error
 } {
     switch -- $what {
         checkbox_value - checkbox {
@@ -1277,65 +1270,64 @@ ad_proc -public template::widget::checkbox_text {
     tag_attributes
 } {
     Implements the complex widget checkbox_other which combines
-    a checkbox widget with a text widget 
+    a checkbox widget with a text widget
 
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2004-10-17
 
     @param element_reference
     @param tag_attributes
-    @return 
-    @error 
+    @return
+    @error
 } {
     upvar $element_reference element
     if { [info exists element(html)] } {
-	array set attributes $element(html)
+        array set attributes $element(html)
     }
-    
+
     array set attributes $tag_attributes
-    
+
     if { [info exists element(values)] } {
-	set checkbox [template::util::checkbox_text::get_property checkbox_value $element(values)]
-	set text     [template::util::checkbox_text::get_property text_value $element(values)]
+        set checkbox [template::util::checkbox_text::get_property checkbox_value $element(values)]
+        set text     [template::util::checkbox_text::get_property text_value $element(values)]
     } else {
-	set checkbox {}
-	set text {}
+        set checkbox {}
+        set text {}
     }
 
     set output {}
-    
+
     # edit mode
     set checkbox_text [subst {<input type="checkbox" name="$element(name)"}]
 
     foreach name [array names attributes] {
-	if {$attributes($name) eq {}} {
-	    append checkbox_text " $name"
-	} else {
-	    append checkbox_text [subst { $name="$attributes($name)"}]
-	}
+        if {$attributes($name) eq {}} {
+            append checkbox_text " $name"
+        } else {
+            append checkbox_text [subst { $name="$attributes($name)"}]
+        }
     }
-    
+
     # Create an array for easier testing of selected values
-    template::util::list_to_lookup $checkbox values 
-    
+    template::util::list_to_lookup $checkbox values
+
     foreach option $element(options) {
-	set label [lindex $option 0]
-	set value [lindex $option 1]
-	
-	append output "$checkbox_text value=\"$value\""
-	if { [info exists values($value)] } {
-	    append output " checked=\"checked\""
-	}
-	append output ">$label<br>"
+        lassign $option label value
+
+        append output "$checkbox_text value=\"$value\""
+        if { [info exists values($value)] } {
+            append output " checked=\"checked\""
+        }
+        append output ">$label<br>"
     }
     if {![info exists element(other_label)]} {
-	set element(other_label) "[_ acs-templating.Other]"
+        set element(other_label) "[_ acs-templating.Other]"
     }
     append output "$element(other_label): "
     set element(value) $text
     set element(name) $element(name)\.text
     append output [template::widget::input text element $tag_attributes]
-    
+
     return $output
 }
 

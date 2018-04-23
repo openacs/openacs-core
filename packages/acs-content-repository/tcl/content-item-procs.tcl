@@ -290,18 +290,17 @@ ad_proc -public ::content::item::update {
     set update_text ""
 
     foreach {attribute_list} $attributes {
-    set attribute [lindex $attribute_list 0]
-    set value [lindex $attribute_list 1]
-    if {$attribute in $valid_attributes}  {
+        lassign $attribute_list attribute value
+        if {$attribute in $valid_attributes}  {
 
-        # create local variable to use for binding
+            # create local variable to use for binding
 
-        set $attribute $value
-        if {$update_text ne ""} {
-        append update_text ","
+            set $attribute $value
+            if {$update_text ne ""} {
+                append update_text ","
+            }
+            append update_text " ${attribute} = :${attribute} "
         }
-        append update_text " ${attribute} = :${attribute} "
-    }
     }
     if {$update_text ne ""} {
 
