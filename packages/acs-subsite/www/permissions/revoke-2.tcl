@@ -16,11 +16,10 @@ permission::require_permission -object_id $object_id -privilege admin
 
 if {$operation eq "Yes"} {
     db_transaction {
-	foreach item $revoke_list {
-	    set party_id [lindex $item 0]
-	    set privilege [lindex $item 1]
+        foreach item $revoke_list {
+            lassign $item party_id privilege
             permission::revoke -party_id $party_id -object_id $object_id -privilege $privilege
-	}
+        }
     }
 }
 

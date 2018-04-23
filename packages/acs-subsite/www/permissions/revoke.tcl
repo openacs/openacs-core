@@ -31,10 +31,9 @@ set body [subst {
 }]
 
 foreach item $revoke_list {
-    set party_id [lindex $item 0]
-    set privilege [lindex $item 1]
+    lassign $item party_id privilege
     append body [subst {
-	<li>[db_string party_name {}]</li>
+        <li>[db_string party_name {}]</li>
     }]
 }
 
@@ -46,7 +45,7 @@ append body [subst {
 
 foreach item $revoke_list {
     append body [subst {
-	<input type="hidden" name="revoke_list" value="$item">
+        <input type="hidden" name="revoke_list" value="$item">
     }]
 }
 

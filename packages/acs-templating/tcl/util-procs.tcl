@@ -321,10 +321,7 @@ ad_proc -public template::util::list_of_lists_to_array { lists array_ref } {
     upvar $array_ref array
 
     foreach pair $lists {
-
-        set key [lindex $pair 0]
-        set value [lindex $pair 1]
-
+        lassign $pair key value
         set array($key) $value
     }
 }

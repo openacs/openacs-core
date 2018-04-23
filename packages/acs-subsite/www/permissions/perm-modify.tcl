@@ -12,8 +12,7 @@ permission::require_permission -object_id $object_id -privilege admin
 
 foreach elm $perm {
     set elmv [split $elm ","]
-    set party_id [lindex $elmv 0]
-    set priv [lindex $elmv 1]
+    lassign $elmv party_id priv
     if { $priv ne "remove" } {
         set perm_array($elm) add
     }
@@ -21,8 +20,7 @@ foreach elm $perm {
 
 foreach elm $perm {
     set elmv [split $elm ","]
-    set party_id [lindex $elmv 0]
-    set priv [lindex $elmv 1]
+    lassign $elmv party_id priv
     if {$priv eq "remove"} {
         foreach priv $privs {
             if { [info exists perm_array(${party_id},${priv})] } {
@@ -49,16 +47,15 @@ db_transaction {
             set perm_array(${grantee_id},${privilege}) nothing
         }
     }
-    
+
     # run through the perm_array, and depending on the value
     #  remove:  Remove the privilege
     #  nothing: Do nothing
     #  add:     Add the privilege
     foreach elm [array names perm_array] {
         set elmv [split $elm ","]
-        set party_id [lindex $elmv 0]
-        set privilege [lindex $elmv 1]
-        
+        lassign $elmv party_id privilege
+
         switch -- $perm_array($elm) {
             remove {
                 permission::revoke -party_id $party_id -object_id $object_id -privilege $privilege
