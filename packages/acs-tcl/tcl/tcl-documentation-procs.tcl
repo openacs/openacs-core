@@ -2197,7 +2197,7 @@ ad_page_contract_filter path { name value } {
 }
 
 ad_page_contract_filter localurl { name value } {
-    Checks whether the value is a an acceptable
+    Checks whether the value is an acceptable
     (non-external) url, which can be used
     in ad_returnredirect without throwing an error.
 

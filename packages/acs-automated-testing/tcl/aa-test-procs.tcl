@@ -57,12 +57,12 @@ proc aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
         }
         set arg_parser "[namespace tail $proc_name_old]__arg_parser"
         #
-        # In case a arg-parser was used in the old body, but is
+        # In case an arg-parser was used in the old body, but is
         # missing in the new version, add it automatically to the new
         # body.
         #
-        if {[string match *$arg_parser* $old_body]} {
-            if {![string match *$arg_parser* $new_body]} {
+        if {[string match "*$arg_parser*" $old_body]} {
+            if {![string match "*$arg_parser*" $new_body]} {
                 set new_body $arg_parser\n$new_body
                 #ns_log notice "... auto added arg_parser for '$proc_name_new' ====> new_body $new_body"
             }
@@ -1157,7 +1157,7 @@ namespace eval aa_xpath {
                 aa_true "XPAth exception during evaluation of selector '$q': $errorMsg" 0
                 throw {XPATH {xpath triggered exception}} $errorMsg
             }
-            aa_true "XPath $q <$value>:" {[string length $value] > 0}
+            aa_true "XPath $q <$value>:" {$value ne ""}
         }
     }
     ad_proc -public ::aa_xpath::equals {node pairs} {

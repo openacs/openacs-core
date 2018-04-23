@@ -32,7 +32,7 @@ ad_proc -public auth::authority::create {
 
       <li> short_name          Short name for authority. Used as a key by applications to identify this authority.
 
-      <li> pretty_name         Label for the authority to be shown in a list to users picking a authority.
+      <li> pretty_name         Label for the authority to be shown in a list to users picking an authority.
 
       <li> enabled_p            't' if this authority available, 'f' if it's disabled. Defaults to 't'.
 
@@ -217,7 +217,7 @@ ad_proc -public auth::authority::edit {
     {-authority_id:required}
     {-array:required}
 } {
-    Edit info about a authority. Note, that there's no checking that the columns you name exist.
+    Edit info about an authority. Note, that there's no checking that the columns you name exist.
 
     @param authority_id The authority you want to get.
 

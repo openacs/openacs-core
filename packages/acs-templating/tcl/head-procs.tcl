@@ -172,7 +172,7 @@ ad_proc -public template::head::add_script {
 ad_proc -public template::head::flush_script {
     {-src:required}
 } {
-    Flush a a script tag, which was previously set in the head section via template::add_script.
+    Flush a script tag, which was previously set in the head section via template::add_script.
     One can provide a wild 
 
     @author Gustaf Neumann
@@ -229,7 +229,7 @@ ad_proc -public template::head::flush_link {
     {-href:required}
     {-rel:required}
 } {
-    Flush a a link tag, which was previously set in the head section via template::head::add_link
+    Flush a link tag, which was previously set in the head section via template::head::add_link
 
     @author Gustaf Neumann
     @creation-date 2018-03-09
