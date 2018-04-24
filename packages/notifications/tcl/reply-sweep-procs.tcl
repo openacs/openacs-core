@@ -38,14 +38,13 @@ ad_proc -public notification::reply::sweep::process_all_replies {} {
 
     # Loop through and transactionally process each one
     foreach reply $replies {
-        set reply_id [lindex $reply 0]
-        set type_id [lindex $reply 1]
+        lassign $reply reply_id type_id
 
         ns_log Debug "process_all_replies: one reply $reply_id of type $type_id"
 
         if { [ catch {
             notification::type::process_reply -type_id $type_id -reply_id $reply_id
-	    db_dml deletehold {}
+            db_dml deletehold {}
             notification::reply::delete -reply_id $reply_id
         } err ] } {
             ns_log Error "notification::reply::sweep::process_all_replies: bombed on reply_id $reply_id:\n$err"

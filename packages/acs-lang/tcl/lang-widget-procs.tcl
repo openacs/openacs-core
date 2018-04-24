@@ -37,8 +37,7 @@ ad_proc -public template::widget::select_locales {
 
         foreach option $element(options) {
 
-            set label [lindex $option 0]
-            set value [lindex $option 1]
+            lassign $option label value
 
             if { [info exists values($value)] } {
                 lappend selected_list $label
@@ -63,8 +62,7 @@ ad_proc -public template::widget::select_locales {
 
         foreach option $element(options) {
 
-            set label [lindex $option 0]
-            set value [lindex $option 1]
+            lassign $option label value
 
             set value [ns_quotehtml $value]
             append output " <option lang=\"[string range $value 0 1]\" value=\"$value\""
