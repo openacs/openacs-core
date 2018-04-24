@@ -50,8 +50,7 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
 
     if {$data_model_files ne ""} {
         foreach file $data_model_files {
-            set path [lindex $file 0]
-            set file_type [lindex $file 1]
+            lassign $file path file_type
             append table_rows [subst {
                 <tr>
                 <td><input type="checkbox" checked name="sql_file" value="$file_count"></td>
@@ -62,13 +61,13 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
             incr file_count
         }
 
-        if { $version(auto-mount) eq "" 
-             && $version(package.type) eq "apm_application" 
+        if { $version(auto-mount) eq ""
+             && $version(package.type) eq "apm_application"
          } {
             set mount_html [subst {
                 <div>
-                <input type="checkbox" name="mount_packages" value="$version(package.key)" checked> 
-                Mount package under the main site at path 
+                <input type="checkbox" name="mount_packages" value="$version(package.key)" checked>
+                Mount package under the main site at path
                 <input type="text" name="mount_path.$version(package.key)" value="$version(package.key)">
                 </div>
             }]
