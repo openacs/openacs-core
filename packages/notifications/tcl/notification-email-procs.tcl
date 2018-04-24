@@ -37,8 +37,8 @@ namespace eval notification::email {
             if { ![regexp {^(https?://)?(www\.)?([^/]*)} [ad_url] match ignore ignore domain] } {
                 ns_log Warning "notification::email::address_domain: Couldn't find an email domain for notifications."
             } else {
-		regsub -nocase {(.*):.*} $domain "\\1" domain
-	    }
+                regsub -nocase {(.*):.*} $domain "\\1" domain
+            }
         }
         return $domain
     }
@@ -138,17 +138,17 @@ namespace eval notification::email {
        # convert relative URLs to fully qualified URLs
        set content [ad_html_qualify_links $content]
 
-       # Use this to build up extra mail headers        
+       # Use this to build up extra mail headers
        set extra_headers [list]
 
        # This should disable most auto-replies.
        lappend extra_headers [list "Precedence" "list"]
-        
+
        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
        if { $from_user_id ne "" && $from_user_id != 0 && [db_0or1row get_person {}]} {
            set from_email [party::email -party_id $from_user_id]
-	   
+
            # Set the Mail-Followup-To address to the
            # address of the notifications handler.
            lappend extra_headers [list "Mail-Followup-To" $reply_to]
@@ -170,43 +170,43 @@ namespace eval notification::email {
 
     ad_proc -public bounce_mail_message {
         {-to_addr:required}
-	{-from_addr:required}
-	{-body:required}
-	{-message_headers:required}
-	{-reason ""}
+        {-from_addr:required}
+        {-body:required}
+        {-message_headers:required}
+        {-reason ""}
     } {
         This sends a bounce message indicating a a failuring in sending
-	a message to the system.
+        a message to the system.
 
         @author mkovach@alal.com
-	@creation-date 05 Nov 2003
+        @creation-date 05 Nov 2003
 
-	@param to_addr who the bounce is going to
-	@param from_addr who the bouncing message as sent to
-	@param the message body
-	@param message_headers the headers of the message
-	@param reason (defaults to nothing).  Reason for bounce
+        @param to_addr who the bounce is going to
+        @param from_addr who the bouncing message as sent to
+        @param the message body
+        @param message_headers the headers of the message
+        @param reason (defaults to nothing).  Reason for bounce
     } {
         set domain [address_domain]
         set bounce_to [parse_email_address $to_addr]
-	set bounce_address [parse_email_address $from_addr]
-	set bounce_from "MAILER-DAEMON@$domain"
-	set bounce_subject "failure notice"
-	set l "Hi.  This is the notification program at $domain.\n"
-	append l "I'm afraid I wasn't able to deliver your message to the\n"
-	append l "following addresses.  This is a permament error; I've\n"
-	append l "given up.  Sorry it didn't work out.\n\n"
+        set bounce_address [parse_email_address $from_addr]
+        set bounce_from "MAILER-DAEMON@$domain"
+        set bounce_subject "failure notice"
+        set l "Hi.  This is the notification program at $domain.\n"
+        append l "I'm afraid I wasn't able to deliver your message to the\n"
+        append l "following addresses.  This is a permament error; I've\n"
+        append l "given up.  Sorry it didn't work out.\n\n"
         append l "<$from_addr>:\n"
-	append l "$reason\n\n"
-	append l "--- Below is this line is a copy of the message.\n\n"
-	append l "$message_headers\n\n"
-	append l "$body\n"
-	acs_mail_lite::send \
-	    -to_addr $bounce_to \
-	    -from_addr $bounce_from \
-	    -subject $bounce_subject \
-	    -body $l \
-	    -extraheaders ""
+        append l "$reason\n\n"
+        append l "--- Below is this line is a copy of the message.\n\n"
+        append l "$message_headers\n\n"
+        append l "$body\n"
+        acs_mail_lite::send \
+            -to_addr $bounce_to \
+            -from_addr $bounce_from \
+            -subject $bounce_subject \
+            -body $l \
+            -extraheaders ""
     }
 
     ad_proc -private load_qmail_mail_queue {
@@ -222,17 +222,17 @@ namespace eval notification::email {
         @param queue_dir The location of the qmail mail queue in
         the file-system.
     } {
-	ns_log debug "load_qmail_mail_queue: checking $queue_dir/new/ for incoming mail"
+        ns_log debug "load_qmail_mail_queue: checking $queue_dir/new/ for incoming mail"
 
         if {[catch {
             set messages [glob "$queue_dir/new/*"]
         } errmsg]} {
-	    if {[string match "no files matched glob pattern*"  $errmsg ]} { 
-		ns_log Debug "load_qmail_mail_queue: queue dir = $queue_dir/new/*, no messages"		
-	    } else { 
-		ns_log Error "load_qmail_mail_queue: queue dir = $queue_dir/new/ error $errmsg"
-	    }
-	    return {}
+            if {[string match "no files matched glob pattern*"  $errmsg ]} {
+                ns_log Debug "load_qmail_mail_queue: queue dir = $queue_dir/new/*, no messages"
+            } else {
+                ns_log Error "load_qmail_mail_queue: queue dir = $queue_dir/new/ error $errmsg"
+            }
+            return {}
         }
 
         set list_of_reply_ids [list]
@@ -241,9 +241,9 @@ namespace eval notification::email {
         foreach msg $messages {
             ns_log Debug "load_qmail_mail_queue: opening file: $msg"
             if {[catch {set f [open $msg r]} errmsg]} {
-		# spit out an error message for failure to open and contiue to next message
-		ns_log Warning "load_qmail_mail_queue: error opening file $errmsg"
-		continue
+                # spit out an error message for failure to open and contiue to next message
+                ns_log Warning "load_qmail_mail_queue: error opening file $errmsg"
+                continue
             }
             set orig_file [read $f]
             close $f
@@ -267,24 +267,24 @@ namespace eval notification::email {
                 if {[regexp {^([^:]+):[ ]+(.+)$} $line match name value]} {
                     # join headers that span more than one line (e.g. Received)
                     if { ![regexp {^([^:]+):[ ]+(.+)$} $next_line match] && !$end_of_headers_p} {
-			set multiline_header_p 1
-		    } else {
-			# we only want messages a person typed in themselves - nothing
-			# from any sort of auto-responder.
-			if { [string compare -nocase $name "Auto-Submitted"] == 0 } {
-			    set is_auto_reply_p 1
-			    break
-			} elseif { [string compare -nocase $name "Subject"] == 0 && [string first "Out of Office AutoReply:" $value] == 0 } {
-			    # added for BP
-			    set is_auto_reply_p 1
-			    break
-			} else {
-			    lappend headers [string tolower $name] $value
-			    append orig_headers "$line\n"
-			}
-		    }
+                        set multiline_header_p 1
+                    } else {
+                        # we only want messages a person typed in themselves - nothing
+                        # from any sort of auto-responder.
+                        if { [string compare -nocase $name "Auto-Submitted"] == 0 } {
+                            set is_auto_reply_p 1
+                            break
+                        } elseif { [string compare -nocase $name "Subject"] == 0 && [string first "Out of Office AutoReply:" $value] == 0 } {
+                            # added for BP
+                            set is_auto_reply_p 1
+                            break
+                        } else {
+                            lappend headers [string tolower $name] $value
+                            append orig_headers "$line\n"
+                        }
+                    }
 
-		    if {$end_of_headers_p} {
+                    if {$end_of_headers_p} {
                         incr i
                         break
                     }
@@ -339,12 +339,12 @@ namespace eval notification::email {
             # We don't accept empty users for now
             if {$from_user eq ""} {
                 ns_log debug "load_qmail_mail_queue: no user for from address: $from, to: $to. bouncing message."
-		# bounce message with an informative error.
-		bounce_mail_message  -to_addr $email_headers(from) \
-		    -from_addr $email_headers(to) \
-		    -body $body  \
-		    -message_headers $orig_headers \
-		    -reason "Invalid sender.  You must be a member of the site and\nyour From address must match your registered address."
+                # bounce message with an informative error.
+                bounce_mail_message  -to_addr $email_headers(from) \
+                    -from_addr $email_headers(to) \
+                    -body $body  \
+                    -message_headers $orig_headers \
+                    -reason "Invalid sender.  You must be a member of the site and\nyour From address must match your registered address."
 
                 if {[catch {file delete -- $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg: $errmsg"
@@ -357,12 +357,12 @@ namespace eval notification::email {
             if {$to_stuff eq ""} {
                 ns_log debug "load_qmail_mail_queue: bad to address $to from $from. bouncing message."
 
-		# bounce message here
-		bounce_mail_message -to_addr $email_headers(from) \
-		    -from_addr $email_headers(to) \
-		    -body $body \
-		    -message_headers $orig_headers \
-		    -reason "Invalid To Address"
+                # bounce message here
+                bounce_mail_message -to_addr $email_headers(from) \
+                    -from_addr $email_headers(to) \
+                    -body $body \
+                    -message_headers $orig_headers \
+                    -reason "Invalid To Address"
 
                 if {[catch {file delete -- $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message file $msg: $errmsg"
@@ -370,28 +370,27 @@ namespace eval notification::email {
                 continue
             }
 
-            set object_id [lindex $to_stuff 0]
-            set type_id [lindex $to_stuff 1]
-	    set to_addr $to 
+            lassign $to_stuff object_id type_id
+            set to_addr $to
 
-            db_transaction {  
-		set reply_id [notification::reply::new \
-				  -object_id $object_id \
-				  -type_id $type_id \
-				  -from_user $from_user \
-				  -subject $email_headers(subject) \
-				  -content $body]
-	        set headers $orig_headers
+            db_transaction {
+                set reply_id [notification::reply::new \
+                      -object_id $object_id \
+                      -type_id $type_id \
+                      -from_user $from_user \
+                      -subject $email_headers(subject) \
+                      -content $body]
+                set headers $orig_headers
                 db_dml holdinsert {} -clobs [list $to_addr $headers $body]
 
-                if {[catch {file delete -- $msg} errmsg]} { 
-		    ns_log Error "load_qmail_mail_queue: unable to delete queued message $msg: $errmsg"
-		}
+                if {[catch {file delete -- $msg} errmsg]} {
+                ns_log Error "load_qmail_mail_queue: unable to delete queued message $msg: $errmsg"
+            }
 
                 lappend list_of_reply_ids $reply_id
-	    } on_error {
+            } on_error {
                 ns_log Error "load_qmail_mail_queue: error inserting incoming email into the queue: $errmsg"
-	    }
+            }
         }
 
         return $list_of_reply_ids
