@@ -4,7 +4,7 @@ ad_library {
     @creation-date 29 September 2000
     @author Karl Goldstein (karlg@arsdigita.com)
     @author Stanislav Freidin (sfreidin@arsdigita.com)
-    
+
     @cvs-id $Id$
 }
 
@@ -23,9 +23,9 @@ namespace eval template::query {}
 # http://www.fsf.org/copyleft/gpl.html
 
 # (DCW - Openacs) converted template db api to use standard api and hooked it
-# into the query-dispatcher.  This ties into the standard db api's 
+# into the query-dispatcher.  This ties into the standard db api's
 # transaction control and handle allocation into the templating query interface
-# allowing the two db api's to be mixed together. 
+# allowing the two db api's to be mixed together.
 
 
 ad_proc -public template::query { statement_name result_name type sql args } {
@@ -44,7 +44,7 @@ ad_proc -public template::query { statement_name result_name type sql args } {
                        and refresh the cache.
                        <p>
                        Only applicable if the cache option is specified as
-                       well. Does not affect a previously specified timeout 
+                       well. Does not affect a previously specified timeout
                        period.
 
     @option timeout    The maximum period of time for which the cached results
@@ -56,7 +56,7 @@ ad_proc -public template::query { statement_name result_name type sql args } {
 
     @param statement_name Standard db_api query name
 
-    @param result_name Tcl variable name when doing an uplevel to 
+    @param result_name Tcl variable name when doing an uplevel to
            set the returned result
 
     @param type The query type
@@ -68,50 +68,50 @@ ad_proc -public template::query { statement_name result_name type sql args } {
     @return 1 if query was a success, 0 if it failed
 } {
 
-  set sql [string trim $sql]
-  set full_statement_name [db_qd_get_fullname $statement_name]
+    set sql [string trim $sql]
+    set full_statement_name [db_qd_get_fullname $statement_name]
 
-  #set beginTime [clock clicks -milliseconds]
+    #set beginTime [clock clicks -milliseconds]
 
-  template::util::get_opts $args
-  
-  if { ! [info exists opts(uplevel)] } {
-    set opts(uplevel) 2
-  } else {
-    set opts(uplevel) [expr {2 + $opts(uplevel)}]
-  }
+    template::util::get_opts $args
 
-  # check the cache for a valid cached query result and return if so
-  # otherwise continue to perform the query and cache the results afterwards
+    if { ! [info exists opts(uplevel)] } {
+        set opts(uplevel) 2
+    } else {
+        set opts(uplevel) [expr {2 + $opts(uplevel)}]
+    }
 
-  if { [info exists opts(cache)] && [get_cached_result $result_name $type] } { 
-    return $opts(result)
-  }
+    # check the cache for a valid cached query result and return if so
+    # otherwise continue to perform the query and cache the results afterwards
 
-  if { ! [info exists opts(maxrows)] } {
-    set opts(maxrows) 10000
-  }
+    if { [info exists opts(cache)] && [get_cached_result $result_name $type] } {
+        return $opts(result)
+    }
 
-  db_with_handle db { 
-      set ret_code [template::query::$type $full_statement_name $db $result_name $sql] 
-  }
+    if { ! [info exists opts(maxrows)] } {
+        set opts(maxrows) 10000
+    }
 
-  if { [info exists opts(cache)] } {
-    
-    # cache the query result
-    set_cached_result
-  }
+    db_with_handle db {
+        set ret_code [template::query::$type $full_statement_name $db $result_name $sql]
+    }
 
-  #set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
-  #ns_log Notice "Query performed in: $timeElapsed ms"
-  
-  return $ret_code
+    if { [info exists opts(cache)] } {
+
+        # cache the query result
+        set_cached_result
+    }
+
+    #set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
+    #ns_log Notice "Query performed in: $timeElapsed ms"
+
+    return $ret_code
 }
 
 ad_proc -private template::query::onevalue { statement_name db result_name sql } {
     Process a onevalue query.  Use a single array to store the results.
 
-    @param statement_name Standard db_api statement name used to hook 
+    @param statement_name Standard db_api statement name used to hook
                           into query dispatcher
 
     @param db Database handle
@@ -122,28 +122,28 @@ ad_proc -private template::query::onevalue { statement_name db result_name sql }
 
 } {
 
-  upvar opts opts
+    upvar opts opts
 
-  upvar $opts(uplevel) $result_name result
-  set result ""
+    upvar $opts(uplevel) $result_name result
+    set result ""
 
-  set row [db_exec 0or1row $db $statement_name $sql 3]
+    set row [db_exec 0or1row $db $statement_name $sql 3]
 
-  if { $row ne "" } {
+    if { $row ne "" } {
 
-    # Set the result in the calling frame.
-    set result [ns_set value $row 0]
+        # Set the result in the calling frame.
+        set result [ns_set value $row 0]
 
-    if { [info exists opts(cache)] } {
-      set opts(result) $result
+        if { [info exists opts(cache)] } {
+            set opts(result) $result
+        }
     }
-  }
 }
 
 ad_proc -private template::query::onerow { statement_name db result_name sql } {
     Process a onerow query.  Use a single array to store the results.
 
-    @param statement_name Standard db_api statement name used to hook 
+    @param statement_name Standard db_api statement name used to hook
                           into query dispatcher
 
     @param db Database handle
@@ -153,33 +153,30 @@ ad_proc -private template::query::onerow { statement_name db result_name sql } {
     @param sql Query to use when processing this command
 } {
 
-  upvar opts opts
+    upvar opts opts
 
-  set row [db_exec 0or1row $db $statement_name $sql 3]
+    set row [db_exec 0or1row $db $statement_name $sql 3]
 
-  if { $row ne "" } {
+    if { $row ne "" } {
 
-    # Set the results in the calling frame.
-    upvar $opts(uplevel) $result_name result
+        # Set the results in the calling frame.
+        upvar $opts(uplevel) $result_name result
 
-    set size [ns_set size $row]
+        set size [ns_set size $row]
 
-    for { set i 0 } { $i < $size } { incr i } {
+        for { set i 0 } { $i < $size } { incr i } {
 
-	set column [ns_set key $row $i]
-	set result($column) [ns_set value $row $i]
+            set column [ns_set key $row $i]
+            set result($column) [ns_set value $row $i]
+        }
+
+        if { [info exists opts(cache)] } {
+            set opts(result) [array get result]
+        }
+        return 1
+    } else {
+        return 0
     }
-
-    if { [info exists opts(cache)] } {
-      set opts(result) [array get result]
-    }
- 
-    return 1
-
-  } else {
-
-    return 0
-  }
 }
 
 ad_proc -private template::query::multirow { statement_name db result_name sql } {
@@ -187,7 +184,7 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
     result.  Arrays are named name0, name1, name2 etc.  The variable
     name.rowcount is also defined for checking and iteration.
 
-    @param statement_name Standard db_api statement name used to hook 
+    @param statement_name Standard db_api statement name used to hook
                           into query dispatcher
 
     @param db Database handle
@@ -200,78 +197,78 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
     @see template::multirow
 } {
 
-  upvar opts opts
+    upvar opts opts
 
-  set row [db_exec select $db $statement_name $sql 3]
+    set row [db_exec select $db $statement_name $sql 3]
 
-  upvar $opts(uplevel) $result_name:rowcount rowcount $result_name:columns column_list
+    upvar $opts(uplevel) $result_name:rowcount rowcount $result_name:columns column_list
 
-  # set a local variable as to whether we are cacheing or not
-  if { [info exists opts(cache)] } {
-    set is_cached 1
-      set cached_result {}
-  } else {
-    set is_cached 0
-  }
-
-  set rowcount 0
-
-  if { [info exists opts(eval)] } {
-    # figure out the level at which to reference the row
-    set ref_level [expr {$opts(uplevel) - 2}]
-  }
-
-  while { [ns_db getrow $db $row] } {
-
-    incr rowcount
-      
-    # break if maxrows has been reached
-    if { $rowcount > $opts(maxrows) } {
-      ns_db flush $db
-      upvar $opts(uplevel) ${result_name}:has_more_rows has_more_rows
-      set has_more_rows 1
-      incr rowcount -1
-      break
+    # set a local variable as to whether we are cacheing or not
+    if { [info exists opts(cache)] } {
+        set is_cached 1
+        set cached_result {}
+    } else {
+        set is_cached 0
     }
 
-    # set the results in the calling frame
-    upvar $opts(uplevel) ${result_name}:$rowcount result
+    set rowcount 0
 
-    set result(rownum) $rowcount
-
-    set size [ns_set size $row]
-
-    for { set i 0 } { $i < $size } { incr i } {
-
-      set column [ns_set key $row $i]
-      set result($column) [ns_set value $row $i]
-
-      if {$rowcount == 1 } {
-	lappend column_list $column
-      }
-    }
-
-    # Execute custom code for each row
     if { [info exists opts(eval)] } {
-      uplevel $opts(uplevel) "
-        upvar 0 ${result_name}:$rowcount row; $opts(eval)
-      "
+        # figure out the level at which to reference the row
+        set ref_level [expr {$opts(uplevel) - 2}]
+    }
+
+    while { [ns_db getrow $db $row] } {
+
+        incr rowcount
+
+        # break if maxrows has been reached
+        if { $rowcount > $opts(maxrows) } {
+            ns_db flush $db
+            upvar $opts(uplevel) ${result_name}:has_more_rows has_more_rows
+            set has_more_rows 1
+            incr rowcount -1
+            break
+        }
+
+        # set the results in the calling frame
+        upvar $opts(uplevel) ${result_name}:$rowcount result
+
+        set result(rownum) $rowcount
+
+        set size [ns_set size $row]
+
+        for { set i 0 } { $i < $size } { incr i } {
+
+            set column [ns_set key $row $i]
+            set result($column) [ns_set value $row $i]
+
+            if {$rowcount == 1 } {
+                lappend column_list $column
+            }
+        }
+
+        # Execute custom code for each row
+        if { [info exists opts(eval)] } {
+            uplevel $opts(uplevel) "
+                upvar 0 ${result_name}:$rowcount row; $opts(eval)
+            "
+        }
+
+        if { $is_cached } {
+            lappend cached_result [array get result]
+        }
     }
 
     if { $is_cached } {
-      lappend cached_result [array get result]
+        set opts(result) $cached_result
     }
-  }
-
-  if { $is_cached } {
-    set opts(result) $cached_result
-  }
 }
 
 ad_proc -private template::query::multilist { statement_name db result_name sql } {
     Process a multilist query.
 
-    @param statement_name Standard db_api statement name used to hook 
+    @param statement_name Standard db_api statement name used to hook
                           into query dispatcher
 
     @param db Database handle
@@ -281,40 +278,40 @@ ad_proc -private template::query::multilist { statement_name db result_name sql 
     @param sql Query to use when processing this command
 } {
 
-  upvar opts opts
+    upvar opts opts
 
-  set row [db_exec select $db $statement_name $sql 3]
+    set row [db_exec select $db $statement_name $sql 3]
 
-  upvar $opts(uplevel) $result_name rows
+    upvar $opts(uplevel) $result_name rows
 
-  set rows {}
+    set rows {}
 
-  while { [ns_db getrow $db $row] } {
+    while { [ns_db getrow $db $row] } {
 
-      set values {}
-      set size [ns_set size $row]
+        set values {}
+        set size [ns_set size $row]
 
-      for { set i 0 } { $i < $size } { incr i } {
-          lappend values [ns_set value $row $i]
-      }
-      lappend rows $values
-  }
+        for { set i 0 } { $i < $size } { incr i } {
+            lappend values [ns_set value $row $i]
+        }
+        lappend rows $values
+    }
 
-  if { [info exists opts(cache)] } {
-    set opts(result) $rows
-  }
+    if { [info exists opts(cache)] } {
+        set opts(result) $rows
+    }
 
-  return $rows
+    return $rows
 }
 
 
 ad_proc -private template::query::nestedlist { statement_name db result_name sql } {
-    Creates a data source where the values for each row 
+    Creates a data source where the values for each row
     are returned as a list.  Rows are grouped according
     to the column values specified in the -groupby option
     See template::util::lnest for more details.
 
-    @param statement_name Standard db_api statement name used to hook 
+    @param statement_name Standard db_api statement name used to hook
                           into query dispatcher
 
     @param db Database handle
@@ -324,45 +321,45 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
     @param sql Query to use when processing this command
 } {
 
-  upvar opts opts
+    upvar opts opts
 
-  set row [db_exec select $db $statement_name $sql 3]
+    set row [db_exec select $db $statement_name $sql 3]
 
-  upvar $opts(uplevel) $result_name rows
-  
-  set groups $opts(groupby)
+    upvar $opts(uplevel) $result_name rows
 
-  set rows {}
+    set groups $opts(groupby)
 
-  while { [ns_db getrow $db $row] } {
+    set rows {}
 
-      set values {}
-      set size [ns_set size $row]
+    while { [ns_db getrow $db $row] } {
 
-      for { set i 0 } { $i < $size } { incr i } {
-          lappend values [ns_set value $row $i]
-      }
+        set values {}
+        set size [ns_set size $row]
 
-      # build the values on which to group
-      set group_values [list]
-      foreach group $groups {
-          lappend group_values [ns_set get $row $group]
-      }
-      
-      template::util::lnest rows $values {*}$group_values
-  }
+        for { set i 0 } { $i < $size } { incr i } {
+            lappend values [ns_set value $row $i]
+        }
 
-  if { [info exists opts(cache)] } {
-    set opts(result) $rows
-  }
+        # build the values on which to group
+        set group_values [list]
+        foreach group $groups {
+            lappend group_values [ns_set get $row $group]
+        }
 
-  return $rows
+        template::util::lnest rows $values {*}$group_values
+    }
+
+    if { [info exists opts(cache)] } {
+        set opts(result) $rows
+    }
+
+    return $rows
 }
 
 ad_proc -private template::query::onelist { statement_name db result_name sql } {
     Process a onelist query.
 
-    @param statement_name Standard db_api statement name used to hook 
+    @param statement_name Standard db_api statement name used to hook
                           into query dispatcher
 
     @param db Database handle
@@ -372,26 +369,26 @@ ad_proc -private template::query::onelist { statement_name db result_name sql } 
     @param sql Query to use when processing this command
 } {
 
-  upvar opts opts
+    upvar opts opts
 
-  set row [db_exec select $db $statement_name $sql 3]
+    set row [db_exec select $db $statement_name $sql 3]
 
-  upvar $opts(uplevel) $result_name rows
+    upvar $opts(uplevel) $result_name rows
 
-  set rows {}
-  while { [ns_db getrow $db $row] } {
-    lappend rows [ns_set value $row 0]
-  }
+    set rows {}
+    while { [ns_db getrow $db $row] } {
+        lappend rows [ns_set value $row 0]
+    }
 
-  if { [info exists opts(cache)] } {
-    set opts(result) $rows
-  }
+    if { [info exists opts(cache)] } {
+        set opts(result) $rows
+    }
 }
 
 ad_proc -private template::query::dml { statement_name db name sql } {
     Process an SQL statement that is not a query; perhaps update or insert
 
-    @param statement_name Standard db_api statement name used to hook 
+    @param statement_name Standard db_api statement name used to hook
                           into query dispatcher
 
     @param db Database handle
@@ -401,9 +398,9 @@ ad_proc -private template::query::dml { statement_name db name sql } {
     @param sql Query to use when processing this command
 } {
 
-  upvar opts opts
+    upvar opts opts
 
-  db_exec dml $db $statement_name $sql 3
+    db_exec dml $db $statement_name $sql 3
 }
 
 
@@ -419,70 +416,70 @@ ad_proc -private get_cached_result { name type } {
     @return 1 if result was successfully retrieved, 0 if failed
 } {
 
-  upvar opts opts
-  set cache_key $opts(cache)
-  set success 0
+    upvar opts opts
+    set cache_key $opts(cache)
+    set success 0
 
-  if { [info exists opts(persistent)] } {
+    if { [info exists opts(persistent)] } {
 
-    if { [ns_cache names template_query_cache $cache_key] ne ""} {
+        if { [ns_cache names template_query_cache $cache_key] ne ""} {
 
-      if {[ns_info name] eq "NaviServer"} {
-	set cached_result [ns_cache_eval template_query_cache $cache_key {}]
-      } else {
+            if {[ns_info name] eq "NaviServer"} {
+                set cached_result [ns_cache_eval template_query_cache $cache_key {}]
+            } else {
 
-	# get the pair of the timeout and value
-	lassign [ns_cache get template_query_cache $cache_key] timeout cached_result
+                # get the pair of the timeout and value
+                lassign [ns_cache get template_query_cache $cache_key] timeout cached_result
 
-	# check the timeout
-	if { $timeout > [ns_time] } {
-	  set success 1
-	} else {
-	  ns_cache flush template_query_cache $cache_key
-	}
-      }
+                # check the timeout
+                if { $timeout > [ns_time] } {
+                    set success 1
+                } else {
+                    ns_cache flush template_query_cache $cache_key
+                }
+            }
+        }
+
+    } else {
+        if { [info exists ::__template_query_request_cache($cache_key)] } {
+            set cached_result $::__template_query_request_cache($cache_key)
+            set success 1
+        }
     }
 
-  } else {
-    if { [info exists ::__template_query_request_cache($cache_key)] } {
-      set cached_result $::__template_query_request_cache($cache_key)
-      set success 1
-    }      
-  }
+    if { $success } {
 
-  if { $success } {
+        switch -- $type {
 
-    switch -- $type {
+            multirow {
 
-      multirow {
+                upvar $opts(uplevel) $name:rowcount rowcount
+                set rowcount [llength $cached_result]
+                set rownum 1
 
-	upvar $opts(uplevel) $name:rowcount rowcount
-	set rowcount [llength $cached_result]
-	set rownum 1
+                foreach cached_row $cached_result {
+                    upvar $opts(uplevel) $name:$rownum row
+                    array set row $cached_row
+                    incr rownum
+                }
+                set opts(result) ""
+            }
+            onerow {
 
-	foreach cached_row $cached_result {
-	  upvar $opts(uplevel) $name:$rownum row
-	  array set row $cached_row
-	  incr rownum
-	}
-	set opts(result) ""
-      } 
-      onerow {
+                upvar $opts(uplevel) $name result
+                array set result $cached_result
+                set opts(result) ""
+            }
+            default {
 
-	upvar $opts(uplevel) $name result
-	array set result $cached_result
-	set opts(result) ""
-      }
-      default {
-
-	upvar $opts(uplevel) $name result
-	set result $cached_result
-	set opts(result) $cached_result
-      }
+                upvar $opts(uplevel) $name result
+                set result $cached_result
+                set opts(result) $cached_result
+            }
+        }
     }
-  }
 
-  return $success
+    return $success
 }
 
 ad_proc -private set_cached_result {} {
@@ -491,40 +488,40 @@ ad_proc -private set_cached_result {} {
 
 } {
 
-  upvar opts opts
-  
-  if { ! [info exists opts(result)] } {
-      return
-  } 
+    upvar opts opts
 
-  set cache_key $opts(cache)
-
-  if { [info exists opts(persistent)] } {
-    #
-    # calculate the timeout
-    #
-    if { [info exists opts(timeout)] } {
-      set timeout [expr {[ns_time] + $opts(timeout)}]
-    } else {
-      set timeout [expr {[ns_time] + 60 * 60 * 24 * 7}]
+    if { ! [info exists opts(result)] } {
+        return
     }
 
-    if {[ns_info name] eq "NaviServer"} {
-      #
-      # NaviServer allows per entry expire time
-      #
-      ns_cache_eval -expires $timeout -force template_query_cache $cache_key \
-	  set _ $opts(result)
-    } else {
-      #
-      # set the cached value as a pair of timeout and value
-      #
-      ns_cache set template_query_cache $cache_key [list $timeout $opts(result)]
-    }
+    set cache_key $opts(cache)
 
-  } else {
-    set ::__template_query_request_cache($cache_key) $opts(result)
-  }
+    if { [info exists opts(persistent)] } {
+        #
+        # calculate the timeout
+        #
+        if { [info exists opts(timeout)] } {
+            set timeout [expr {[ns_time] + $opts(timeout)}]
+        } else {
+            set timeout [expr {[ns_time] + 60 * 60 * 24 * 7}]
+        }
+
+        if {[ns_info name] eq "NaviServer"} {
+            #
+            # NaviServer allows per entry expire time
+            #
+            ns_cache_eval -expires $timeout -force template_query_cache $cache_key \
+              set _ $opts(result)
+        } else {
+            #
+            # set the cached value as a pair of timeout and value
+            #
+            ns_cache set template_query_cache $cache_key [list $timeout $opts(result)]
+        }
+
+    } else {
+        set ::__template_query_request_cache($cache_key) $opts(result)
+    }
 }
 
 ad_proc -private template::query::flush_cache { cache_match } {
@@ -534,26 +531,26 @@ ad_proc -private template::query::flush_cache { cache_match } {
 
     @param cache_match Name of query to match for cache flushing
 } {
-  # Flush persistent cache
-  set names [ns_cache names template_query_cache]
-  foreach name $names {
-    if { [string match $cache_match $name] } {
-      ns_log debug "template::query::flush_cache: FLUSHING QUERY (persistent): $name"
-      ns_cache flush template_query_cache $name
-      if {[ns_info name] ne "NaviServer"} {
-	ns_cache flush template_timeout_cache $name
-      }
+    # Flush persistent cache
+    set names [ns_cache names template_query_cache]
+    foreach name $names {
+        if { [string match $cache_match $name] } {
+            ns_log debug "template::query::flush_cache: FLUSHING QUERY (persistent): $name"
+            ns_cache flush template_query_cache $name
+            if {[ns_info name] ne "NaviServer"} {
+                ns_cache flush template_timeout_cache $name
+            }
+        }
     }
-  }
 
-  # Flush temporary cache
-  set names [array names ::__template_query_persistent_cache]
-  foreach name $names {
-    if { [string match $cache_match $name] } {
-      ns_log debug "template::query::flush_cache: FLUSHING QUERY (request): $name"
-      unset ::__template_query_persistent_cache($name)
+    # Flush temporary cache
+    set names [array names ::__template_query_persistent_cache]
+    foreach name $names {
+        if { [string match $cache_match $name] } {
+            ns_log debug "template::query::flush_cache: FLUSHING QUERY (request): $name"
+            unset ::__template_query_persistent_cache($name)
+        }
     }
-  }
 
 }
 
@@ -565,25 +562,25 @@ ad_proc -public multirow {
     op
     name
     args
-} { 
-    multirow is really template::multirow or possibly 
+} {
+    multirow is really template::multirow or possibly
     template::query::multirow depending on context.
     the "template::" or "template::query::"
-    may be omitted depending on what the namespace 
-    is.  .tcl pages are evaluated in the template:: 
+    may be omitted depending on what the namespace
+    is.  .tcl pages are evaluated in the template::
     namespace.
 
     @see template::multirow
     @see template::query::multirow
-} -        
+} -
 
-ad_proc -public template::multirow { 
-  {-ulevel 1}
-  {-local:boolean}
-  -unclobber:boolean
-  command
-  name
-  args
+ad_proc -public template::multirow {
+    {-ulevel 1}
+    {-local:boolean}
+    -unclobber:boolean
+    command
+    name
+    args
 } {
     Create/Manipulate a multirow datasource (for use with &lt;multiple&gt; tags)
 
@@ -615,13 +612,13 @@ ad_proc -public template::multirow {
     <dt> <b>template::multirow exists datasource</b></dt>
     <dd> Return 1 if the multirow datasource exists, 0 if it doesn't.
     </dl>
-   
-    @param local If set, the multirow will be looked for in the scope the number 
-           of levels up given by ulevel (normally the caller's scope), 
-           instead of the <code>[template::adp_level]</code> scope, which 
+
+    @param local If set, the multirow will be looked for in the scope the number
+           of levels up given by ulevel (normally the caller's scope),
+           instead of the <code>[template::adp_level]</code> scope, which
            is the default.
 
-    @param ulevel Used in conjunction with the "local" parameter to specify how 
+    @param ulevel Used in conjunction with the "local" parameter to specify how
            many levels up the multirow variable resides.
 
     @param command Multirow datasource operation: create, extend, append, pop, size, get, set, foreach, upvar
@@ -632,400 +629,395 @@ ad_proc -public template::multirow {
 
     @param unclobber This only applies to the 'foreach' command.
     If set, will cause the proc to not overwrite local variables. Actually, what happens
-    is that the local variables will be overwritten, so you can access them within the code block. However, 
+    is that the local variables will be overwritten, so you can access them within the code block. However,
     if you specify -unclobber, we will revert them to their original state after execution of this proc.
 
     @see db_multirow
     @see template::query::multirow
-} {  
-  if { $local_p } {
-    set multirow_level_up $ulevel
-  } else {
-    set multirow_level_up \#[adp_level]
-    if { $multirow_level_up eq "\#" } {
-      # in event adp_level not defined we are calling either at install so up 1.
-      set multirow_level_up 1
-    }
-  }
-  
-  switch -exact $command {
-
-    create {
-      upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
-      set rowcount 0
-      set columns $args
+} {
+    if { $local_p } {
+        set multirow_level_up $ulevel
+    } else {
+        set multirow_level_up \#[adp_level]
+        if { $multirow_level_up eq "\#" } {
+            # in event adp_level not defined we are calling either at install so up 1.
+            set multirow_level_up 1
+        }
     }
 
-    unset {
-      upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
-      for { set i 1 } { $i <= $rowcount } { incr i } {
-        upvar $multirow_level_up $name:$i row
-        unset row
-      }
-      unset rowcount columns
-    }
+    switch -exact $command {
 
-    extend {
-      upvar $multirow_level_up $name:columns columns
-      foreach column_name $args {
-        lappend columns $column_name
-      }
-    }
+        create {
+            upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
+            set rowcount 0
+            set columns $args
+        }
 
-    pop {
-        upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
-        set r_list [list]
-        if {$rowcount > 0} {
+        unset {
+            upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
+            for { set i 1 } { $i <= $rowcount } { incr i } {
+                upvar $multirow_level_up $name:$i row
+                unset row
+            }
+            unset rowcount columns
+        }
+
+        extend {
+            upvar $multirow_level_up $name:columns columns
+            foreach column_name $args {
+                lappend columns $column_name
+            }
+        }
+
+        pop {
+            upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
+            set r_list [list]
+            if {$rowcount > 0} {
+                upvar $multirow_level_up $name:$rowcount row
+                for { set i 0 } { $i < [llength $columns] } { incr i } {
+                    set key [lindex $columns $i]
+                    if {[info exists row($key)]} {
+                        set value $row($key)
+                        lappend r_list $key $value
+                    }
+                }
+                array unset row
+            }
+            incr rowcount -1
+            return $r_list
+        }
+
+        append {
+            upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
+            incr rowcount
             upvar $multirow_level_up $name:$rowcount row
+
             for { set i 0 } { $i < [llength $columns] } { incr i } {
+
                 set key [lindex $columns $i]
-                if {[info exists row($key)]} {
-                    set value $row($key)
-                    lappend r_list $key $value
+                set value [lindex $args $i];    #(!) missing columns are silently empty
+                set row($key) $value
+            }
+            set row(rownum) $rowcount
+        }
+
+        size {
+            upvar $multirow_level_up $name:rowcount rowcount
+            if { [template::util::is_nil rowcount] } {
+                return 0
+            }
+            return $rowcount
+        }
+
+        columns {
+            upvar $multirow_level_up $name:columns columns
+            if { [template::util::is_nil columns] } {
+                return {}
+            }
+            return $columns
+        }
+
+        get {
+
+            lassign $args index column
+            # Set an array reference if no column is specified
+            if {$column eq ""} {
+
+                # If -local was specified, the upvar is done with a relative stack frame
+                # index, and we must take into account the fact that the uplevel moves up
+                # the frame one level.  If -local was not specified, the an absolute stack
+                # frame is passed to upvar, which of course needs no adjustment.
+
+                if { $local_p } {
+                    uplevel "upvar [expr { $multirow_level_up - 1 }] $name:$index $name"
+                } else {
+                    uplevel "upvar $multirow_level_up $name:$index $name"
+                }
+
+            } else {
+                # If a column is specified, just return the value for it
+                upvar $multirow_level_up $name:$index arr
+                if {[info exists arr($column)]} {
+                    return $arr($column)
+                } else {
+                    ns_log warning "can't obtain template variable form ${name}:${index}: $column"
+                    return ""
                 }
             }
-            array unset row
-        }
-        incr rowcount -1
-        return $r_list
-    }
-
-    append {
-      upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
-      incr rowcount
-      upvar $multirow_level_up $name:$rowcount row
-      
-      for { set i 0 } { $i < [llength $columns] } { incr i } {
-        
-        set key [lindex $columns $i]
-        set value [lindex $args $i];	#(!) missing columns are silently empty
-        set row($key) $value
-      }
-      set row(rownum) $rowcount
-    }
-
-    size {
-      upvar $multirow_level_up $name:rowcount rowcount
-      if { [template::util::is_nil rowcount] } {
-          return 0
-      }
-      return $rowcount
-    }
-
-    columns {
-      upvar $multirow_level_up $name:columns columns
-      if { [template::util::is_nil columns] } {
-          return {}
-      }
-      return $columns
-    }
-    
-    get {
-      
-      set index [lindex $args 0]
-      set column [lindex $args 1]
-      # Set an array reference if no column is specified
-      if {$column eq ""} {
-
-        # If -local was specified, the upvar is done with a relative stack frame
-        # index, and we must take into account the fact that the uplevel moves up
-        # the frame one level.  If -local was not specified, the an absolute stack
-        # frame is passed to upvar, which of course needs no adjustment.
-
-        if { $local_p } {
-            uplevel "upvar [expr { $multirow_level_up - 1 }] $name:$index $name"
-        } else {
-            uplevel "upvar $multirow_level_up $name:$index $name"
         }
 
-      } else {
-          # If a column is specified, just return the value for it
-          upvar $multirow_level_up $name:$index arr
-          if {[info exists arr($column)]} {
-              return $arr($column)
-          } else {
-              ns_log warning "can't obtain template variable form ${name}:${index}: $column"
-              return ""
-          }
-      }
-    }
-    
-    set {
-      
-      set index [lindex $args 0]
-      set column [lindex $args 1]
-      set value [lindex $args 2]
-      
-      if {$column eq {}} {
-        error "No column specified to template::multirow set"
-      }
-      
-      # Mutate the value
-      upvar $multirow_level_up $name:$index arr
-      set arr($column) $value
-      return $arr($column)
-      
-    }
-    
-    upvar {
-      # upvar from wherever the multirow is to the current stack frame
-      if { [llength $args] > 0 } {
-        set new_name [lindex $args 0]
-      } else {
-        set new_name $name
-      }
-      uplevel "
-        upvar $multirow_level_up $name:rowcount $new_name:rowcount $name:columns $new_name:columns
-        for { set i 1 } { \$i <= \${$new_name:rowcount} } { incr i } {
-          upvar $multirow_level_up $name:\$i $new_name:\$i
-        }
-      "
-    }
-    
-    foreach {
-      set code_block [lindex $args 0]
-      upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
+        set {
 
-      if {![info exists rowcount] || ![info exists columns]} { 
-        return 
-      } 
-      
-      # Save values of columns which we might clobber
-      if { $unclobber_p } {
-        foreach col $columns {
-          upvar 1 $col column_value __saved_$col column_save
-          
-          if { [info exists column_value] } {
-            if { [array exists column_value] } {
-              array set column_save [array get column_value]
-            } else {
-              set column_save $column_value
+            lassign $args index column value
+
+            if {$column eq {}} {
+                error "No column specified to template::multirow set"
             }
-            
-            # Clear the variable
-            unset column_value
-          }
-        }
-      }
 
-      for { set i 1 } { $i <= $rowcount } { incr i } {
-        # Pull values into variables (and into the array - aks),
-        # evaluate the code block, and pull values back out to
-        # the array.
-        
-        upvar $multirow_level_up $name:$i row
+            # Mutate the value
+            upvar $multirow_level_up $name:$index arr
+            set arr($column) $value
+            return $arr($column)
 
-        foreach column_name $columns {
-          upvar 1 $column_name column_value
-          if { [info exists row($column_name)] } {
-            set column_value $row($column_name)
-          } else {
-            set column_value ""
-          }
-        }
-        
-        # Also set the special var __rownum
-        upvar 1 __rownum __rownum
-        set __rownum $row(rownum)
-
-        set errno [catch { uplevel 1 $code_block } error]
-
-        switch -- $errno {
-          0 {
-            # TCL_OK
-          }
-          1 {
-            # TCL_ERROR
-            error $error $::errorInfo $::errorCode
-          }
-          2 {
-            # TCL_RETURN
-            error "Cannot return from inside template::multirow foreach loop"
-          }
-          3 {
-            # TCL_BREAK
-            break
-          }
-          4 {
-            # TCL_CONTINUE - just ignore and continue looping.
-          }
-          default {
-            error "template::multirow foreach: Unknown return code: $errno"
-          }
         }
 
-        # Pull the variables into the array.
-        foreach column_name $columns {
-          upvar 1 $column_name column_value
-          if { [info exists column_value] } {
-            set row($column_name) $column_value
-          }
-        }
-      }
-      
-      if { $unclobber_p } {
-        foreach col $columns {
-          upvar 1 $col column_value __saved_$col column_save
-          
-          # Unset it first, so the road's paved to restoring
-          if { [info exists column_value] } {
-            unset column_value
-          }
-          
-          # Restore it
-          if { [info exists column_save] } {
-            if { [array exists column_save] } {
-              array set column_value [array get column_save]
+        upvar {
+            # upvar from wherever the multirow is to the current stack frame
+            if { [llength $args] > 0 } {
+                set new_name [lindex $args 0]
             } else {
-              set column_value $column_save
+                set new_name $name
             }
-            
-            # And then remove the saved col
-            unset column_save
-          }
+            uplevel "
+                upvar $multirow_level_up $name:rowcount $new_name:rowcount $name:columns $new_name:columns
+                for { set i 1 } { \$i <= \${$new_name:rowcount} } { incr i } {
+                    upvar $multirow_level_up $name:\$i $new_name:\$i
+                }
+            "
         }
-      }
-    }
 
-    sort {
-        # args is a list of names of columns to sort by
-        # construct a list which we can lsort
-        
-        upvar $multirow_level_up $name:rowcount rowcount
-        
-        if { ![info exists rowcount] } {
-            error "Multirow $name does not exist"
-        } 
+        foreach {
+            set code_block [lindex $args 0]
+            upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
 
-        # Construct list of (rownum,columns appended with a space)
+            if {![info exists rowcount] || ![info exists columns]} {
+                return
+            }
 
-        # Allow for -ascii, -dictionary, -integer, -real, -command <command>, -increasing, -decreasing, unique switches
+            # Save values of columns which we might clobber
+            if { $unclobber_p } {
+                foreach col $columns {
+                    upvar 1 $col column_value __saved_$col column_save
 
-        set sort_args {}
+                    if { [info exists column_value] } {
+                        if { [array exists column_value] } {
+                            array set column_save [array get column_value]
+                        } else {
+                            set column_save $column_value
+                        }
 
-        set len [llength $args]
-        for { set i 0 } { $i < $len } { incr i } {
-            if { [string equal [string index [lindex $args $i] 0] "-"] } {
-                switch -exact [string range [lindex $args $i] 1 end] { 
-                    command {
-                        # command takes an additional argument
-                        lappend sort_args [lindex $args $i]
-                        incr i
-                        lappend sort_args [lindex $args $i]
+                        # Clear the variable
+                        unset column_value
+                    }
+                }
+            }
+
+            for { set i 1 } { $i <= $rowcount } { incr i } {
+                # Pull values into variables (and into the array - aks),
+                # evaluate the code block, and pull values back out to
+                # the array.
+
+                upvar $multirow_level_up $name:$i row
+
+                foreach column_name $columns {
+                    upvar 1 $column_name column_value
+                    if { [info exists row($column_name)] } {
+                        set column_value $row($column_name)
+                    } else {
+                        set column_value ""
+                    }
+                }
+
+                # Also set the special var __rownum
+                upvar 1 __rownum __rownum
+                set __rownum $row(rownum)
+
+                set errno [catch { uplevel 1 $code_block } error]
+
+                switch -- $errno {
+                    0 {
+                        # TCL_OK
+                    }
+                    1 {
+                        # TCL_ERROR
+                        error $error $::errorInfo $::errorCode
+                    }
+                    2 {
+                        # TCL_RETURN
+                        error "Cannot return from inside template::multirow foreach loop"
+                    }
+                    3 {
+                        # TCL_BREAK
+                        break
+                    }
+                    4 {
+                        # TCL_CONTINUE - just ignore and continue looping.
                     }
                     default {
-                        lappend sort_args [lindex $args $i]
+                        error "template::multirow foreach: Unknown return code: $errno"
                     }
                 }
-            } else {
-                break
+
+                # Pull the variables into the array.
+                foreach column_name $columns {
+                    upvar 1 $column_name column_value
+                    if { [info exists column_value] } {
+                        set row($column_name) $column_value
+                    }
+                }
+            }
+
+            if { $unclobber_p } {
+                foreach col $columns {
+                    upvar 1 $col column_value __saved_$col column_save
+
+                    # Unset it first, so the road's paved to restoring
+                    if { [info exists column_value] } {
+                        unset column_value
+                    }
+
+                    # Restore it
+                    if { [info exists column_save] } {
+                        if { [array exists column_save] } {
+                            array set column_value [array get column_save]
+                        } else {
+                            set column_value $column_save
+                        }
+
+                        # And then remove the saved col
+                        unset column_save
+                    }
+                }
             }
         }
 
-        set sort_cols [lrange $args $i end]
-            
-        set sort_list [list]
-        
-        for { set i 1 } { $i <= $rowcount } { incr i } {
-            upvar $multirow_level_up $name:$i row
+        sort {
+            # args is a list of names of columns to sort by
+            # construct a list which we can lsort
 
-            # Make a copy of the row
-            array set copy:$i [array get row]
+            upvar $multirow_level_up $name:rowcount rowcount
 
-            # Construct the list
-            set sortby {}
-            foreach col $sort_cols {
-                append sortby $row($col) " "
+            if { ![info exists rowcount] } {
+                error "Multirow $name does not exist"
             }
-            
-            lappend sort_list [list $i $sortby]
+
+            # Construct list of (rownum,columns appended with a space)
+
+            # Allow for -ascii, -dictionary, -integer, -real, -command <command>, -increasing, -decreasing, unique switches
+
+            set sort_args {}
+
+            set len [llength $args]
+            for { set i 0 } { $i < $len } { incr i } {
+                if { [string equal [string index [lindex $args $i] 0] "-"] } {
+                    switch -exact [string range [lindex $args $i] 1 end] {
+                        command {
+                            # command takes an additional argument
+                            lappend sort_args [lindex $args $i]
+                            incr i
+                            lappend sort_args [lindex $args $i]
+                        }
+                        default {
+                            lappend sort_args [lindex $args $i]
+                        }
+                    }
+                } else {
+                    break
+                }
+            }
+
+            set sort_cols [lrange $args $i end]
+
+            set sort_list [list]
+
+            for { set i 1 } { $i <= $rowcount } { incr i } {
+                upvar $multirow_level_up $name:$i row
+
+                # Make a copy of the row
+                array set copy:$i [array get row]
+
+                # Construct the list
+                set sortby {}
+                foreach col $sort_cols {
+                    append sortby $row($col) " "
+                }
+
+                lappend sort_list [list $i $sortby]
+            }
+
+            set sort_list [lsort {*}$sort_args -index 1 $sort_list]
+
+
+            # Now we have a list with two elms, (rownum, sort-by-value), sorted by sort-by-value
+            # Rearrange multirow to match the sort order
+
+            set i 0
+            foreach elm $sort_list {
+                incr i
+                upvar $multirow_level_up $name:$i row
+
+                # which rownum in the original list should fill this space in the sorted multirow?
+                set org_rownum [lindex $elm 0]
+
+                # Replace the row in the multirow with the row from the copy with the rownum according to the sort
+                array set row [array get copy:$org_rownum]
+
+                # Replace the 'rownum' column
+                set row(rownum) $i
+            }
+
+            # Multirow length may have changed if you said -unique
+            set rowcount [llength $sort_list]
         }
 
-        set sort_list [lsort {*}$sort_args -index 1 $sort_list]
-
-        
-        # Now we have a list with two elms, (rownum, sort-by-value), sorted by sort-by-value
-        # Rearrange multirow to match the sort order
-        
-        set i 0
-        foreach elm $sort_list {
-            incr i
-            upvar $multirow_level_up $name:$i row
-
-            # which rownum in the original list should fill this space in the sorted multirow?
-            set org_rownum [lindex $elm 0]
-
-            # Replace the row in the multirow with the row from the copy with the rownum according to the sort
-            array set row [array get copy:$org_rownum]
-
-            # Replace the 'rownum' column
-            set row(rownum) $i
+        exists {
+           upvar $multirow_level_up $name:rowcount rowcount
+           return [info exists rowcount]
         }
-        
-        # Multirow length may have changed if you said -unique
-        set rowcount [llength $sort_list]
-    }
 
-    exists {
-       upvar $multirow_level_up $name:rowcount rowcount
-       return [info exists rowcount]
+        default {
+            error "Unknown command $command in template::multirow.
+            Must be create, extend, append, backup, get, set, size, upvar, sort, exists or foreach."
+        }
     }
-
-    default {
-      error "Unknown command $command in template::multirow.
-      Must be create, extend, append, backup, get, set, size, upvar, sort, exists or foreach."
-    }
-  }
 }
 
 ad_proc -public template::url { command args } {
-    
+
 } {
 
-  global __template_url_params
-  upvar 0 __template_url_params params
+    global __template_url_params
+    upvar 0 __template_url_params params
 
-  if { ! [info exists params] } {
-    set params [ns_set create]
-  }
-
-  set result ""
-
-  switch -exact $command {
-
-    set_param {
-      set name [lindex $args 0]
-      set value [lindex $args 1]
-      ns_set put $params $name $value
+    if { ! [info exists params] } {
+        set params [ns_set create]
     }
 
-    get_param {
-      set name [lindex $args 0]
-      set default [lindex $args 1]
-      if { [ns_set find $params $name] != -1 } {
-	set result [ns_set iget $params $name]
-      } else {
-	set result $default
-      }
+    set result ""
+
+    switch -exact $command {
+
+        set_param {
+            lassign $args name value
+            ns_set put $params $name $value
+        }
+
+        get_param {
+            lassign $args name default
+            if { [ns_set find $params $name] != -1 } {
+                set result [ns_set iget $params $name]
+            } else {
+                set result $default
+            }
+        }
+
+        get_query {
+            set keyvalues [list]
+            for { set i 0 } { $i < [ns_set size $params] } { incr i } {
+                set key [ns_set key $params $i]
+                set value [ns_set value $params $i]
+                lappend keyvalues [ns_urlencode $key]=[ns_urlencode $value]
+            }
+            set result [join $keyvalues &]
+        }
+
+        default {
+            error "Invalid command for url: must be set_param, get_param or get_query"
+        }
+
     }
 
-    get_query {
-      set keyvalues [list]
-      for { set i 0 } { $i < [ns_set size $params] } { incr i } {
-	set key [ns_set key $params $i]
-	set value [ns_set value $params $i]
-	lappend keyvalues [ns_urlencode $key]=[ns_urlencode $value]
-      }
-      set result [join $keyvalues &]
-    } 
-
-    default {
-      error "Invalid command for url: must be set_param, get_param or get_query"
-    }
-
-  }
-
-  return $result
+    return $result
 }
 
 # Generic caching
@@ -1037,92 +1029,92 @@ ad_proc -public cache { command cache_key args } {
     Generic Caching
 } {
 
-  set result ""
+    set result ""
 
-  switch -exact $command {
+    switch -exact $command {
 
-    get {
-      if {[ns_info name] eq "NaviServer"} {
-	if {[ns_cache_keys template_cache $cache_key] ne ""} {
-	  set result [ns_cache_eval template_cache $cache_key {}]
-	}
-      } else {
-	if { [ns_cache names template_cache $cache_key] ne "" } {
-	  # get timeout and value
-	  lassign [ns_cache get template_cache $cache_key] timeout value
-	  # validate timeout
-	  if { $timeout > [ns_time] } {
-	    set result $value
-	  } else {
-	    ns_cache flush template_cache $cache_key
-	  }
-	}
-      }
+        get {
+            if {[ns_info name] eq "NaviServer"} {
+                if {[ns_cache_keys template_cache $cache_key] ne ""} {
+                    set result [ns_cache_eval template_cache $cache_key {}]
+                }
+            } else {
+                if { [ns_cache names template_cache $cache_key] ne "" } {
+                    # get timeout and value
+                    lassign [ns_cache get template_cache $cache_key] timeout value
+                    # validate timeout
+                    if { $timeout > [ns_time] } {
+                        set result $value
+                   } else {
+                        ns_cache flush template_cache $cache_key
+                    }
+                }
+            }
+        }
+
+        set {
+
+            if { [llength $args] == 1 } {
+                set timeout [expr {[ns_time] + 60 * 60 * 24 * 7}]
+            } else {
+                set timeout [expr {[ns_time] + [lindex $args 1]}]
+            }
+
+            if {[ns_info name] eq "NaviServer"} {
+                #
+                # NaviServer allows per entry expire time
+                #
+                ns_cache_eval -expires $timeout -force template_cache $cache_key \
+                    set _ [lindex $args 0]
+            } else {
+                #
+                # Use a pair for AOLserver
+                #
+                ns_cache set template_cache $cache_key [list $timeout [lindex $args 0]]
+            }
+        }
+
+        flush {
+            # The key is actually a string match pattern
+            if {[ns_info name] eq "NaviServer"} {
+                ns_cache_flush -glob template_cache $cache_key
+            } else {
+                set names [ns_cache names template_cache]
+                foreach name $names {
+                    if { [string match $cache_key $name] } {
+                        ns_log debug "cache: FLUSHING CACHE: $name"
+                        ns_cache flush template_cache $name
+                    }
+                }
+            }
+        }
+
+        exists  {
+            if {[ns_info name] eq "NaviServer"} {
+                set result [expr {[ns_cache_keys template_cache $cache_key] ne ""}]
+            } else {
+                if { [ns_cache get template_cache $cache_key cached_value] } {
+                    # get timeout and value
+                    lassign $cached_value timeout value
+                    # validate timeout
+                    if { $timeout > [ns_time] } {
+                        set result 1
+                    } else {
+                        set result 0
+                    }
+                } else {
+                    set result 0
+                }
+            }
+        }
+
+        default {
+            error "Invalid command option to cache: must be get or set."
+        }
+
     }
- 
-    set {
 
-      if { [llength $args] == 1 } {
-	set timeout [expr {[ns_time] + 60 * 60 * 24 * 7}]
-      } else {
-	set timeout [expr {[ns_time] + [lindex $args 1]}]
-      }
-
-      if {[ns_info name] eq "NaviServer"} {
-	#
-	# NaviServer allows per entry expire time
-	#
-	ns_cache_eval -expires $timeout -force template_cache $cache_key \
-	    set _ [lindex $args 0]
-      } else {
-	#
-	# Use a pair for AOLserver
-	#
-	ns_cache set template_cache $cache_key [list $timeout [lindex $args 0]]
-      }
-    }
-
-    flush {
-      # The key is actually a string match pattern
-      if {[ns_info name] eq "NaviServer"} {
-	ns_cache_flush -glob template_cache $cache_key
-      } else {
-	set names [ns_cache names template_cache]
-	foreach name $names {
-	  if { [string match $cache_key $name] } {
-	    ns_log debug "cache: FLUSHING CACHE: $name"
-	    ns_cache flush template_cache $name
-	  }
-	}
-      }
-    }
-
-    exists  {
-      if {[ns_info name] eq "NaviServer"} {
-	set result [expr {[ns_cache_keys template_cache $cache_key] ne ""}]
-      } else {
-	if { [ns_cache get template_cache $cache_key cached_value] } {
-	  # get timeout and value
-	  lassign $cached_value timeout value
-	  # validate timeout
-	  if { $timeout > [ns_time] } {
-	    set result 1
-	  } else {
-	    set result 0
-	  }
-	} else {
-	  set result 0
-	}
-      }
-    }
-
-    default {
-      error "Invalid command option to cache: must be get or set."
-    } 
-
-  }
-
-  return $result
+    return $result
 }
 
 # Local variables:
