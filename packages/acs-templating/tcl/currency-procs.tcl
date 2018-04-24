@@ -1,6 +1,6 @@
 ad_library {
     Currency widgets for the OpenACS Templating System
-    
+
     @author Don Baccus (dhogaza@pacifier.com)
 }
 
@@ -9,7 +9,7 @@ ad_library {
 # DRB: This was totally non-functional in ACS 4.2 Classic.  It's now partly
 # functional in that we accept and process currency values.  We really need
 # to tie this in with the acs-lang money database as this code's far too
-# simplistic.    
+# simplistic.
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -23,7 +23,7 @@ namespace eval template::data::validate::currency {}
 namespace eval template::data::transform::currency {}
 namespace eval template::util::currency::set_property {}
 namespace eval template::widget::currency {}
- 
+
 ad_proc -public template::util::currency { command args } {
     Dispatch procedure for the currency object
 } {
@@ -50,7 +50,7 @@ ad_proc -public template::util::currency::create {
            character in their normal representation
     @param format The actual format to use in list form
 
-    @return The parameters joined in a six-element list 
+    @return The parameters joined in a six-element list
 } {
     return [list $leading_symbol $whole_part $separator $fractional_part $trailing_money $format]
 }
@@ -89,15 +89,8 @@ ad_proc -public template::data::validate::currency {
 
     # a currency is a 6 element list supporting, for example, the following forms: "$2.03" "Rs 50.42" "12.52L" "Y5,13c"
     # equivalent of date::unpack
-    set leading_symbol  [lindex $value 0]
-    set whole_part      [lindex $value 1]
-    set separator       [lindex $value 2]
-    set fractional_part [lindex $value 3]
-    set trailing_money  [lindex $value 4]
-    set format          [lindex $value 5]
-
-    set format_whole_part      [lindex $format 1]
-    set format_fractional_part [lindex $format 3]
+    lassign $value leading_symbol whole_part separator fractional_part trailing_money format
+    lassign $format . format_whole_part . format_fractional_part
 
     set whole_part_valid_p [template::data::validate integer whole_part message]
     if { $fractional_part ne "" } {
@@ -107,10 +100,10 @@ ad_proc -public template::data::validate::currency {
     }
 
     if { ! $whole_part_valid_p || ! $fractional_part_valid_p } {
-	set message "[_ acs-templating.Invalid_currency] [join [lrange $value 0 4] ""]"
-	return 0
+        set message "[_ acs-templating.Invalid_currency] [join [lrange $value 0 4] ""]"
+        return 0
     } else {
-	return 1
+        return 1
     }
 }
 
@@ -136,33 +129,33 @@ ad_proc -private template::data::transform::currency {
     set have_values 0
 
     for { set i 0 } { $i <= 4 } { incr i } {
-	set key "$element_id.$i"    
-	if { [ns_queryexists $key] } {
-	    set value [ns_queryget $key]
+        set key "$element_id.$i"
+        if { [ns_queryexists $key] } {
+            set value [ns_queryget $key]
 
-	    # let's put a leading zero if the whole part is empty
-	    if { $i == 1 } {
-		if {$value eq ""} {
-		    set value 0
-		} else {
+            # let's put a leading zero if the whole part is empty
+            if { $i == 1 } {
+                if {$value eq ""} {
+                    set value 0
+                } else {
                     set have_values 1
                 }
-	    }
+            }
 
-	    # and let's fill in the zeros at the end up to the precision
-	    if { $i == 3 } {
-		if { $value ne "" } {
+            # and let's fill in the zeros at the end up to the precision
+            if { $i == 3 } {
+                if { $value ne "" } {
                     set have_values 1
                 }
-		set fractional_part_format [lindex $format 3]
-		for { set j [string length $value] } { $j < $fractional_part_format } { incr j } {
-		    append $value 0
-		}
-	    }
+                set fractional_part_format [lindex $format 3]
+                for { set j [string length $value] } { $j < $fractional_part_format } { incr j } {
+                    append $value 0
+                }
+            }
 
-	    lappend the_amount $value
+            lappend the_amount $value
 
-	} else {
+        } else {
             lappend the_amount ""
         }
     }
@@ -172,9 +165,9 @@ ad_proc -private template::data::transform::currency {
     ns_log debug "template::data::transform::currency: the_amount: $the_amount length: [llength $the_amount]"
 
     if { $have_values } {
-	return [list $the_amount]
+        return [list $the_amount]
     } else {
-	return [list]
+        return [list]
     }
 }
 
@@ -194,7 +187,7 @@ ad_proc -public template::util::currency::set_property {
     @param value The value to set currency_list to
 
     @return currency_list set to value
-    
+
 } {
 
     # Erase leading zeroes from the value, but make sure that 00
@@ -231,7 +224,7 @@ ad_proc -public template::util::currency::get_property {
     currency_list
 } {
 
-    Return a property of a currency list which was created by a 
+    Return a property of a currency list which was created by a
     currency widget.
 
     The most useful properties that can be returned are sql_number (compatible with
@@ -245,13 +238,7 @@ ad_proc -public template::util::currency::get_property {
 } {
     # There's no internal error checking, just like the date version ... and
     # of course whole_part might be pounds and fractional_part pfennings ...
-
-    set leading_symbol [lindex $currency_list 0]
-    set whole_part [lindex $currency_list 1]
-    set separator [lindex $currency_list 2]
-    set fractional_part [lindex $currency_list 3]
-    set trailing_money [lindex $currency_list 4]
-    set format [lindex $currency_list 5]
+    lassign $currency_list leading_symbol whole_part separator fractional_part trailing_money format
 
     switch -- $what {
         leading_symbol {
@@ -326,11 +313,11 @@ ad_proc -public template::widget::currency {
     upvar $element_reference element
 
     if { [info exists element(html)] } {
-	array set attributes $element(html)
+        array set attributes $element(html)
     }
 
     if { ! [info exists element(format)] } {
-	set element(format) "$ 5 . 2"
+        set element(format) "$ 5 . 2"
     }
     set format [split $element(format) " "]
     for { set i [llength $format] } { $i < 5 } { incr i } {
@@ -338,15 +325,15 @@ ad_proc -public template::widget::currency {
     }
 
     if { [info exists element(value)] } {
-	set values $element(value)
+        set values $element(value)
     } else {
         set values [list "" "" "" "" "" $element(format)]
     }
 
     set i 0
     foreach format_property $format {
-        set value [lindex $values 0]
-        set values [lrange $values 1 end]
+        # Assign the first element of $values to 'value', and the rest to 'values' again
+        set values [lassign $values value]
         set trailing_zero ""
         if { $i == 3 } {
             set trailing_zero [string range [string repeat "0" $format_property] [string length $value] end]

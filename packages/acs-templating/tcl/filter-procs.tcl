@@ -2,7 +2,7 @@ ad_library {
     Filter procedures for the ArsDigita Templating System
 
     @author Karl Goldstein    (karlg@arsdigita.com)
-    
+
     @cvs-id $Id$
 }
 
@@ -37,21 +37,20 @@ ad_proc -public template::forward { url args } {
 
         ad_cache_returnredirect $url $persistent_p $excluded_vars
     } else {
-	ad_returnredirect $url
+        ad_returnredirect $url
     }
     ad_script_abort
 }
 
 ad_proc -public template::filter { command args } {
     Run any filter procedures that have been registered with the
-    templating system.  The signature of a filter procedure is 
+    templating system.  The signature of a filter procedure is
     a reference (not the value) to a variable containing the URL of
     the template to parse.  The filter procedure may modify this.
 } {
     variable filter_list
 
-    set arg1 [lindex $args 0]
-    set arg2 [lindex $args 1]
+    lassign $args arg1 arg2
 
     switch -exact $command {
 
@@ -87,7 +86,7 @@ ad_proc -public cmp_page_filter { why } {
 
         set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
         ns_log debug "cmp_page_filter: Time elapsed: $timeElapsed"
-        
+
     } on error {errorMsg} {
         set output <html><body><pre>[ns_quotehtml $::errorInfo]</pre></body></html>
     }
@@ -107,7 +106,7 @@ ad_proc -public dat_page_filter { why } {
         set code_stub "$::acs::rootdir/packages/$package_key/www$rest"
         set beginTime [clock clicks -milliseconds]
 
-	set file_stub [template::resource_path -type messages -style $datasources]
+        set file_stub [template::resource_path -type messages -style $datasources]
 
         set output [template::adp_parse $file_stub [list code_stub $code_stub]]
 
