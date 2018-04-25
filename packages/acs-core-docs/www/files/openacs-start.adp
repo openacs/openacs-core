@@ -16,5 +16,5 @@ in this release.</p>
 <p>The next step is to install the OpenACS kernel data model. Click
 the <em>Next</em> button to proceed.</p>
 <form action="#" method="get">
-<center><input type="submit" value="Next -&gt;"></center><hr><a href="mailto:gatekeepers\@openacs.org"></a><address>gatekeepers\@openacs.org</address>
+<center><input type="submit" value="Next -&gt;"></center><hr><a href="mailto:gatekeepers\@openacs.org"><address>gatekeepers\@openacs.org</address></a>
 </form>

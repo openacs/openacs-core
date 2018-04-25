@@ -1,16 +1,13 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 12. Engineering
-Standards}</property>
-<property name="doc(title)">Chapter 12. Engineering
-Standards</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 12. Engineering Standards}</property>
+<property name="doc(title)">Chapter 12. Engineering Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="form-builder" leftLabel="Prev"
-		    title="
-Part III. For OpenACS Package
-Developers"
-		    rightLink="style-guide" rightLabel="Next">
-		<div class="chapter">
+			leftLink="form-builder" leftLabel="Prev"
+			title="Part III. For OpenACS
+Package Developers"
+			rightLink="style-guide" rightLabel="Next">
+		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="eng-standards" id="eng-standards"></a>Chapter 12. Engineering
 Standards</h2></div></div></div><div class="toc">
@@ -27,9 +24,9 @@ Testing</a></span></dt>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="form-builder" leftLabel="Prev" leftTitle="Using Form Builder: building html
+			leftLink="form-builder" leftLabel="Prev" leftTitle="Using Form Builder: building html
 forms dynamically"
-		    rightLink="style-guide" rightLabel="Next" rightTitle="OpenACS Style Guide"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-package-dev" upLabel="Up"> 
-		
+			rightLink="style-guide" rightLabel="Next" rightTitle="OpenACS Style Guide"
+			homeLink="index" homeLabel="Home" 
+			upLink="acs-package-dev" upLabel="Up"> 
+		    

@@ -3,11 +3,10 @@
 <property name="doc(title)">Resources</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="os-security" leftLabel="Prev"
-		    title="
-Appendix C. Credits"
-		    rightLink="acs-package-dev" rightLabel="Next">
-		<div class="section">
+			leftLink="os-security" leftLabel="Prev"
+			title="Appendix C. Credits"
+			rightLink="acs-package-dev" rightLabel="Next">
+		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-resources" id="install-resources"></a>Resources</h2></div></div></div><p>Here are some resources that OpenACS users have found
 useful.</p><div class="section">
@@ -34,9 +33,9 @@ skills (requires registration)</p></li>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="os-security" leftLabel="Prev" leftTitle="Security Information"
-		    rightLink="acs-package-dev" rightLabel="Next" rightTitle="Part III. For
-OpenACS Package Developers"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="credits" upLabel="Up"> 
-		
+			leftLink="os-security" leftLabel="Prev" leftTitle="Security Information"
+			rightLink="acs-package-dev" rightLabel="Next" rightTitle="Part III. For OpenACS
+Package Developers"
+			homeLink="index" homeLabel="Home" 
+			upLink="credits" upLabel="Up"> 
+		    

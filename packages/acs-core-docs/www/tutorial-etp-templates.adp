@@ -3,11 +3,11 @@
 <property name="doc(title)">OpenACS Edit This Page Templates</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-cvs" leftLabel="Prev"
-		    title="
-ChapterÂ 10.Â Advanced Topics"
-		    rightLink="tutorial-comments" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-cvs" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="tutorial-comments" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-etp-templates"></a>OpenACS Edit This Page Templates</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:ncarroll\@ee.usyd.edu.au" target="_top">Nick
 Carroll</a>
@@ -46,11 +46,9 @@ when you login to your OpenACS installation.</p></li>
 <a name="exercise2"></a>Exercise 2: Checkout and
 Install edit-this-page (ETP)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
-<p>Checkout ETP from CVS:</p><pre class="screen">
-cd ~/openacs/packages
+<p>Checkout ETP from CVS:</p><pre class="screen">cd ~/openacs/packages
             cvs -d:pserver:anonymous\@openacs.org:/cvsroot login
-            cvs -d:pserver:anonymous\@openacs.org:/cvsroot co edit-this-page
-</pre>
+            cvs -d:pserver:anonymous\@openacs.org:/cvsroot co edit-this-page</pre>
 </li><li class="listitem"><p>Go to the package manager at http://yoursite/acs-admin/apm. And
 install the new package: edit-this-page.</p></li><li class="listitem"><p>Or use the "Add Application" form available on the
 Main site.</p></li>
@@ -71,21 +69,18 @@ Application</h3></div></div></div><div class="itemizedlist"><ul class="itemizedl
 ETP Template</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>Browse the files for each of the above ETP templates at:</p><pre class="screen">
-cd ~/openacs/packages/edit-this-page/templates
-</pre>
+cd ~/openacs/packages/edit-this-page/templates</pre>
 </li><li class="listitem">
 <p>Use the article template as the basis of our new col2
-template.</p><pre class="screen">
-cp article-content.adp col2-content.adp
+template.</p><pre class="screen">cp article-content.adp col2-content.adp
             cp article-content.tcl col2-content.tcl
             cp article-index.adp col2-index.adp
-            cp article-index.tcl col2-index.tcl
-</pre>
+            cp article-index.tcl col2-index.tcl</pre>
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140623170145000"></a><p class="title"><strong>TableÂ 10.1.Â table
-showing ETP layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
+<a name="idp140682185689992"></a><p class="title"><strong>Table 10.1. table showing ETP
+layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">
 </colgroup><tbody>
@@ -106,10 +101,8 @@ as a content item in ETP.</p></li>
 col2 Template with ETP</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>Need to register your template with ETP so that it appears in
-the drop-down menu that you would have seen in Exercise 3.</p><pre class="screen">
-cd ~/openacs/packages/edit-this-page/tcl
-            emacs etp-custom-init.tcl
-</pre>
+the drop-down menu that you would have seen in Exercise 3.</p><pre class="screen">cd ~/openacs/packages/edit-this-page/tcl
+            emacs etp-custom-init.tcl</pre>
 </li><li class="listitem">
 <p>Use the function etp::define_application to register your
 template with ETP</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
@@ -131,13 +124,13 @@ view your ETP application using the col2 template.</p></li>
 <a name="end"></a>Who Wrote This and When</h3></div></div></div><p>This problem set was originally written by Nick Carroll in
 August 2004 for the <a class="ulink" href="http://www.usyd.edu.au" target="_top">University of Sydney</a> Course EBUS5002.</p><p>This material is copyright 2004 by Nick Carroll. It may be
 copied, reused, and modified, provided credit is given to the
-original author.</p><p><span class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.53
-2017/08/07 23:47:54 gustafn Exp $)</span></p>
+original author.</p><p><span class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.54
+2017/12/24 13:15:07 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-cvs" leftLabel="Prev" leftTitle="Add the new package to CVS"
-		    rightLink="tutorial-comments" rightLabel="Next" rightTitle="Adding Comments"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		<a name="comments"></a>
+			leftLink="tutorial-cvs" leftLabel="Prev" leftTitle="Add the new package to CVS"
+			rightLink="tutorial-comments" rightLabel="Next" rightTitle="Adding Comments"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    <a name="comments"></a>

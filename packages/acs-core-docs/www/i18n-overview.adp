@@ -3,11 +3,11 @@
 <property name="doc(title)">Internationalization and Localization Overview</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="i18n" leftLabel="Prev"
-		    title="
+			leftLink="i18n" leftLabel="Prev"
+			title="
 Chapter 14. Internationalization"
-		    rightLink="i18n-introduction" rightLabel="Next">
-		<div class="sect1">
+			rightLink="i18n-introduction" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="i18n-overview" id="i18n-overview"></a>Internationalization and Localization
 Overview</h2></div></div></div><div class="table">
@@ -52,10 +52,10 @@ translations, if they exist, are not overwritten.</td><td>Site Administrators</t
 </div><br class="table-break">
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="i18n" leftLabel="Prev" leftTitle="
+			leftLink="i18n" leftLabel="Prev" leftTitle="
 Chapter 14. Internationalization"
-		    rightLink="i18n-introduction" rightLabel="Next" rightTitle="How Internationalization/Localization
+			rightLink="i18n-introduction" rightLabel="Next" rightTitle="How Internationalization/Localization
 works in OpenACS"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="i18n" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="i18n" upLabel="Up"> 
+		    

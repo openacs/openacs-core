@@ -3,11 +3,11 @@
 <property name="doc(title)">Request Processor Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="rp-requirements" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="tcl-doc" rightLabel="Next">
-		<div class="sect1">
+			leftLink="rp-requirements" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="tcl-doc" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="rp-design" id="rp-design"></a>Request Processor Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
 Schloming</a>
@@ -235,9 +235,9 @@ api_page_documentation_mode_p]</code></td><td valign="top"> </td>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="rp-requirements" leftLabel="Prev" leftTitle="Request Processor Requirements"
-		    rightLink="tcl-doc" rightLabel="Next" rightTitle="Documenting Tcl Files: Page Contracts
+			leftLink="rp-requirements" leftLabel="Prev" leftTitle="Request Processor Requirements"
+			rightLink="tcl-doc" rightLabel="Next" rightTitle="Documenting Tcl Files: Page Contracts
 and Libraries"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

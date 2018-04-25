@@ -73,7 +73,8 @@ block of <code>list-and-var-sample.adp</code>; here,
 appearing once in the .adp file, are cycled repeatedly to show
 multiple sets of information when displayed in
 <code>list-and-var-sample.acs</code>; example:
-<blockquote><pre><code>    &lt;multiple name="<em>your_multirow</em>"&gt;
+<blockquote><pre><code>
+    &lt;multiple name="<em>your_multirow</em>"&gt;
     &lt;tr&gt;&lt;td&gt;\@<em>your_multirow</em>.first_names\@ \@<em>your_multirow</em>.last_name\@ &lt;/td&gt; &lt;/tr&gt;
     &lt;/multiple&gt;
     </code></pre></blockquote>
@@ -280,7 +281,7 @@ white, or some other color scheme of your preference</li><li>use the <code>start
 book listing begins at a rownumber determined by the Tcl file code
 (check the .dat page)</li><li>add navigation links to the address book so that users can move
 forward or back between row listings, or jump to the beginning or
-end of their address book</li><li style="list-style: none"><ul>
+end of their address book</li><li style="list-style: none; display: inline"><ul>
 <li>each link should set the url variable that determines the first
 row of the set to be displayed</li><li>the links should only appear when necessary, that is, a link
 pointing towards the next set of rows should not appear if the user

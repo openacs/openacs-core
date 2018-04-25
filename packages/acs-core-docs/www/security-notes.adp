@@ -3,11 +3,11 @@
 <property name="doc(title)">Security Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="security-design" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="rp-requirements" rightLabel="Next">
-		<div class="sect1">
+			leftLink="security-design" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="rp-requirements" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="security-notes" id="security-notes"></a>Security Notes</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>The security system was designed for security. Thus, decisions
 requiring trade-offs between ease-of-use and security tend to
@@ -70,8 +70,8 @@ performance reasons, as it is called by the request processor.</p><p><span class
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="security-design" leftLabel="Prev" leftTitle="Security Design"
-		    rightLink="rp-requirements" rightLabel="Next" rightTitle="Request Processor Requirements"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="security-design" leftLabel="Prev" leftTitle="Security Design"
+			rightLink="rp-requirements" rightLabel="Next" rightTitle="Request Processor Requirements"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

@@ -40,8 +40,7 @@ attributes in the <kbd>input</kbd> or <kbd>select</kbd> tag of the
 rendered HTML form. Although possible, newer browser security
 features such as CSP discourage the use of inline Javascript event
 handlers.</p><pre>
-&lt;formwidget id="cc_number" style="background-color:white;"&gt;
-</pre>
+&lt;formwidget id="cc_number" style="background-color:white;"&gt;</pre>
 </li><li><p>See the <a href="formtemplate"><kbd>formtemplate</kbd></a>
 and <a href="formgroup"><kbd>formgroup</kbd></a> tags for more
 information on writing the body of a dynamic form template.</p></li>

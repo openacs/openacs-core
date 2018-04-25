@@ -25,7 +25,7 @@
     <sect2>
       <title>Overview</title>
       <para>To start developing new code in OpenACS, we build a new package. A package 
-      is a a discrete collection of web pages, Tcl code, and database tables and procedures.
+      is a discrete collection of web pages, Tcl code, and database tables and procedures.
       A package with user interface is called an <emphasis role="strong">application</emphasis>; 
       a package which provides functions to other packages and has no direct interface, a
       <emphasis role="strong">service</emphasis>.  A package can be installed, upgraded, and 

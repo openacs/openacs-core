@@ -3,11 +3,11 @@
 <property name="doc(title)">Admin Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-comments" leftLabel="Prev"
-		    title="
-Chapter 10. Advanced Topics"
-		    rightLink="tutorial-categories" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-comments" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="tutorial-categories" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-admin-pages" id="tutorial-admin-pages"></a>Admin
 Pages</h2></div></div></div><p>There are at least two flavors of admin user interface:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -20,17 +20,14 @@ Selected button on the bottom of the list.</p></li><li class="listitem">
 that users aren&#39;t interested in or aren&#39;t allowed to see
 you will need dedicated admin pages. The conventional place to put
 those dedicated admin pages is in the <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin</code>
-directory.</p><pre class="screen">
-[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>mkdir admin</code></strong>
-</pre><pre class="screen">
-[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cd admin</code></strong>
+directory.</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>mkdir admin</code></strong>
+</pre><pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cd admin</code></strong>
 </pre><p>Even if your application doesn&#39;t need any admin pages of its
 own you will usually need at least one simple page with a bunch of
 links to existing administration UI such as Category Management or
 standard Parameters UI. Adding the link to Category Management is
 described in the section on categories. The listing below adds a
-link to the Parameters UI of our package.</p><pre class="screen">
-[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.adp</code></strong>
+link to the Parameters UI of our package.</p><pre class="screen">[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.adp</code></strong>
 </pre><pre class="programlisting">
 &lt;master&gt;
 &lt;property name="title"&gt;\@title;noquote\@&lt;/property&gt;
@@ -39,8 +36,7 @@ link to the Parameters UI of our package.</p><pre class="screen">
 &lt;ul class="action-links"&gt;
   &lt;li&gt;&lt;a href="\@parameters_url\@" title="Set parameters" class="action_link"&gt;Set parameters&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</pre><pre class="screen">
-[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.tcl</code></strong>
+</pre><pre class="screen">[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.tcl</code></strong>
 </pre><pre class="programlisting">
 ad_page_contract {} {
 } -properties {
@@ -92,8 +88,8 @@ put:</p><pre class="programlisting">
 </ul></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-comments" leftLabel="Prev" leftTitle="Adding Comments"
-		    rightLink="tutorial-categories" rightLabel="Next" rightTitle="Categories"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		
+			leftLink="tutorial-comments" leftLabel="Prev" leftTitle="Adding Comments"
+			rightLink="tutorial-categories" rightLabel="Next" rightTitle="Categories"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    

@@ -3,16 +3,16 @@
 <property name="doc(title)">External Authentication Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="bootstrap-acs" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="releasing-openacs" rightLabel="Next">
-		<div class="sect1">
+			leftLink="bootstrap-acs" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="releasing-openacs" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ext-auth-requirements" id="ext-auth-requirements"></a>External
 Authentication Requirements</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623180002952" id="idp140623180002952"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
+<a name="idp140682194045416" id="idp140682194045416"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
 don&#39;t want them to have yet another. We want people to be able
 to log in to OpenACS with the same password they use to log in to
 any other system.</p><p>Besides, administrators have better things to do than create
@@ -74,7 +74,7 @@ Pictures</h3></div></div></div><p>Authentication:</p><p><span class="inlinemedia
 <div class="titlepage"><div><div><h3 class="title">
 <a name="Requirements" id="Requirements"></a>Requirements</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140623180021992" id="idp140623180021992"></a>New API</h4></div></div></div><div class="segmentedlist">
+<a name="idp140682194064456" id="idp140682194064456"></a>New API</h4></div></div></div><div class="segmentedlist">
 <div class="seglistitem">
 <div class="seg">
 <strong><span class="segtitle">New
@@ -160,9 +160,9 @@ an actual email mailbox, or it can be something else entirely.</p><p>We&#39;re a
 will either already be in the users table through a batch
 synchronization job, or that the relevant authentication
 implementation supports real-time synchronization of user data.
-Specifically, if you want remote users who haven&#39;t yet logged
-in to OpenACS to show up in user searches, you&#39;ll have to do
-the batch synchronization.</p><p>All in all, the login box will be an includeable template and
+Specifically, if you want remote users who haven&#39;t yet
+logged-in to OpenACS to show up in user searches, you&#39;ll have
+to do the batch synchronization.</p><p>All in all, the login box will be an includeable template and
 look like this:</p><pre class="programlisting">
 Username:  ________
 Password:  ________
@@ -436,16 +436,16 @@ A</div><div class="seg">
 <strong><span class="segtitle">:</span></strong>
 Untrusted Logins</div>
 </div></div><p>I like the idea of having multiple login levels:</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>Not logged in</p></li><li class="listitem"><p>Untrusted login: We&#39;ll show you un-sensitive personal
+<li class="listitem"><p>Not logged-in</p></li><li class="listitem"><p>Untrusted login: We&#39;ll show you un-sensitive personal
 content, but won&#39;t let you modify anything or see personal
 data. A normal login becomes untrusted after a certain amount of
 time, and the user will have to re-enter his/her password in order
 to gain access to personal data. Untrusted login never expires,
 unless explicitly done so through either changing password or
-clicking a special "expire all logins" link.</p></li><li class="listitem"><p>Normal login: The user is logged, and has type his password
+clicking a special "expire all logins" link.</p></li><li class="listitem"><p>Normal login: The user is logged-in, and has type his password
 sufficiently recently that we trust the login. All normal
 operations are allowed. Will degrade to untrusted login after a
-specified amount of time.</p></li><li class="listitem"><p>Secure login: The user is logged in over a secure connection
+specified amount of time.</p></li><li class="listitem"><p>Secure login: The user is logged-in over a secure connection
 (HTTPS), potentially even using a special secure password. This
 would be for sensitive actions, such as credit card
 transactions.</p></li>
@@ -463,13 +463,14 @@ example, we could let you browse publicly available forums, and
 only when you want to post do you need to log in. This makes it
 even more feasible to have a more secure login expiration
 setting.</p><p>By default, <code class="literal">auth::require_login</code>
-would bounce to the login page if the user is only logged in at the
+would bounce to the login page if the user is only logged-in at the
 untrusted level. Only if you explicitly say <code class="literal">auth::require_login -untrusted</code> will we give you
-the user_id of a user who&#39;s only logged in in untrusted
+the user_id of a user who&#39;s only logged-in in untrusted
 mode.</p><p>Similarly, <code class="literal">ad_conn user_id</code> will
-continue to return 0 (not logged in) when the user is only logged
-in untrusted, and we&#39;ll supply another variable, <code class="literal">ad_conn untrusted_user_id</code>, which wlll be set to
-the user_id for all login levels.</p><p>This should ensure that we get full access to the new feature,
+continue to return 0 (not logged-in) when the user is only
+logged-in untrusted, and we&#39;ll supply another variable,
+<code class="literal">ad_conn untrusted_user_id</code>, which wlll
+be set to the user_id for all login levels.</p><p>This should ensure that we get full access to the new feature,
 while leaving all current code just as secure as it was before.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
@@ -518,10 +519,10 @@ B</div><div class="seg">
 <strong><span class="segtitle">:</span></strong>
 rewrite cookie handling</div>
 </div></div><p>Currently, if you&#39;ve ever left a permanent login cookie on
-someone elses machine, that person will be forever logged in until
+someone elses machine, that person will be forever logged-in until
 he/she explicitly logs out. You can change your password, you can
 do anything you want, but unless a logout is requested from that
-particular browser, that browser will be logged in forever.</p><p>I want to change our session handling code so that old login
+particular browser, that browser will be logged-in forever.</p><p>I want to change our session handling code so that old login
 cookies can be expired. This would be done automatically whenever
 you change your password, and we could also offer a link which does
 this without changing passwords. It&#39;s an important security
@@ -798,9 +799,9 @@ at Collaboraid.</td><td>20 Aug 2003</td><td>Joel Aufrecht</td>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="bootstrap-acs" leftLabel="Prev" leftTitle="Bootstrapping OpenACS"
-		    rightLink="releasing-openacs" rightLabel="Next" rightTitle="
-Chapter 16. Releasing OpenACS"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="bootstrap-acs" leftLabel="Prev" leftTitle="Bootstrapping OpenACS"
+			rightLink="releasing-openacs" rightLabel="Next" rightTitle="Chapter 16. Releasing
+OpenACS"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

@@ -1,15 +1,13 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 6. Production
-Environments}</property>
-<property name="doc(title)">Chapter 6. Production
-Environments</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 6. Production Environments}</property>
+<property name="doc(title)">Chapter 6. Production Environments</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="upgrade-supporting" leftLabel="Prev"
-		    title="
+			leftLink="upgrade-supporting" leftLabel="Prev"
+			title="
 Part II. Administrator&#39;s Guide"
-		    rightLink="install-openacs-keepalive" rightLabel="Next">
-		<div class="chapter">
+			rightLink="install-openacs-keepalive" rightLabel="Next">
+		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="maintenance-web" id="maintenance-web"></a>Chapter 6. Production
 Environments</h2></div></div></div><div class="toc">
@@ -30,9 +28,9 @@ Aufrecht</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="upgrade-supporting" leftLabel="Prev" leftTitle="Upgrading Platform components"
-		    rightLink="install-openacs-keepalive" rightLabel="Next" rightTitle="Starting and Stopping an OpenACS
+			leftLink="upgrade-supporting" leftLabel="Prev" leftTitle="Upgrading Platform components"
+			rightLink="install-openacs-keepalive" rightLabel="Next" rightTitle="Starting and Stopping an OpenACS
 instance."
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-admin" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="acs-admin" upLabel="Up"> 
+		    

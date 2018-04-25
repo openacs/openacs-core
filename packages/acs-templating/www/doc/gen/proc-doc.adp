@@ -12,6 +12,7 @@ compartments: namespace, procedure and directive. Each of these
 divisions has its own text marker(s). In the end, your Tcl file
 should look something like this:
 <blockquote><pre><code><kbd>
+
 [------------------------------------------------------]
 [------  <em>ignored text at beginning of file</em>  -----------]
 [------------------------------------------------------]
@@ -109,7 +110,8 @@ When default-value information is not included, the entry value
 will be marked as <em>required</em> if it is a parameter, or
 display no information if it is an option.
 <p>For example: the fictional procedure grant_permission might be
-preceded by these comments:</p><blockquote><pre><code># \@public grant_permission
+preceded by these comments:</p><blockquote><pre><code>
+# \@public grant_permission
 # checks for whether or not a user has the privilege 
 # to manipulate an object in a specific manner
 

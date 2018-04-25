@@ -13,22 +13,17 @@ data.</p>
 <h3>Usage</h3>
 <p>Simple variables are referenced by surrounding the variable name
 with "commercial at" (<kbd>\@</kbd>) signs:</p>
-<pre>
-&lt;!-- simple variables --&gt;
-&lt;b&gt;&lt;i&gt;\@first_name\@ \@last_name\@&lt;/b&gt;&lt;/i&gt;
-</pre>
+<pre>&lt;!-- simple variables --&gt;
+&lt;b&gt;&lt;i&gt;\@first_name\@ \@last_name\@&lt;/b&gt;&lt;/i&gt;</pre>
 <p>When processing this template, the server will look for
 variables named <kbd>first_name</kbd> and <kbd>last_name</kbd> and
 substitute their values in the output:</p>
-<pre>
-&lt;b&gt;&lt;i&gt;Fred Finkel&lt;/b&gt;&lt;/i&gt;
-</pre>
+<pre>&lt;b&gt;&lt;i&gt;Fred Finkel&lt;/b&gt;&lt;/i&gt;</pre>
 <p>The columns of a row variable are referenced by separating the
 data source name and column with a period:</p>
 <pre>
 &lt;!-- onerow or multirow data sources --&gt;
-&lt;b&gt;&lt;i&gt;\@user.first_name\@ \@user.last_name\@&lt;/b&gt;&lt;/i&gt;
-</pre>
+&lt;b&gt;&lt;i&gt;\@user.first_name\@ \@user.last_name\@&lt;/b&gt;&lt;/i&gt;</pre>
 <h3>Note(s)</h3>
 <ul><li><p>An attempt to reference a variable that does not exist will
 cause an error message to appear in the browser.</p></li></ul>

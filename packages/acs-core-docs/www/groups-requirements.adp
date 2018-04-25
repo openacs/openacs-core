@@ -3,11 +3,11 @@
 <property name="doc(title)">Groups Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="permissions-design" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="groups-design" rightLabel="Next">
-		<div class="sect1">
+			leftLink="permissions-design" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="groups-design" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="groups-requirements" id="groups-requirements"></a>Groups Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>, Mark
 Thomas</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
@@ -22,9 +22,9 @@ services for different user communities.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="groups-requirements-vision" id="groups-requirements-vision"></a>Vision Statement</h3></div></div></div><p>A powerful web service that can meet the needs of large
-enterprises must be able to model the the real world&#39;s very
-rich organizational structures and many ways of decomposing the
-same organization. For example, a corporation can be broken into
+enterprises must be able to model the real world&#39;s very rich
+organizational structures and many ways of decomposing the same
+organization. For example, a corporation can be broken into
 structures (the corporation, its divisions, and their departments)
 or regions (the Boston office, the LA office); a person who is
 employed by (is a member of) a specific department is also a member
@@ -383,8 +383,8 @@ Notes</strong></span></td><td><span class="strong"><strong>When?</strong></span>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="permissions-design" leftLabel="Prev" leftTitle="Permissions Design"
-		    rightLink="groups-design" rightLabel="Next" rightTitle="Groups Design"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="permissions-design" leftLabel="Prev" leftTitle="Permissions Design"
+			rightLink="groups-design" rightLabel="Next" rightTitle="Groups Design"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

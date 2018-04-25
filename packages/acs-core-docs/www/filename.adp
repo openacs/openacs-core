@@ -3,11 +3,11 @@
 <property name="doc(title)">Detailed Design Documentation Template</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="nxml-mode" leftLabel="Prev"
-		    title="
-Chapter 13. Documentation Standards"
-		    rightLink="requirements-template" rightLabel="Next">
-		<div class="sect1">
+			leftLink="nxml-mode" leftLabel="Prev"
+			title="Chapter 13. Documentation
+Standards"
+			rightLink="requirements-template" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="filename" id="filename"></a>Detailed Design Documentation Template</h2></div></div></div><p>By <a class="ulink" href="mailto:youremail\@example.com" target="_top">You</a>
 </p><div class="sect2">
@@ -199,9 +199,9 @@ document.</em></span></p><div class="informaltable"><table class="informaltable"
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="nxml-mode" leftLabel="Prev" leftTitle="Using nXML mode in Emacs"
-		    rightLink="requirements-template" rightLabel="Next" rightTitle="System/Application Requirements
+			leftLink="nxml-mode" leftLabel="Prev" leftTitle="Using nXML mode in Emacs"
+			rightLink="requirements-template" rightLabel="Next" rightTitle="System/Application Requirements
 Template"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="doc-standards" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="doc-standards" upLabel="Up"> 
+		    

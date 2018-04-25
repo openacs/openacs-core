@@ -3,11 +3,11 @@
 <property name="doc(title)">How to package and release an OpenACS Package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="update-repository" leftLabel="Prev"
-		    title="
-Chapter 16. Releasing OpenACS"
-		    rightLink="update-translations" rightLabel="Next">
-		<div class="section">
+			leftLink="update-repository" leftLabel="Prev"
+			title="Chapter 16. Releasing
+OpenACS"
+			rightLink="update-translations" rightLabel="Next">
+		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="releasing-package" id="releasing-package"></a>How to package and release an OpenACS
 Package</h2></div></div></div><p>In this example, we are packaging and releasing <code class="computeroutput">myfirstpackage</code> as version 1.0.0, which is
@@ -23,9 +23,9 @@ automatically. If the correct version does not show up within 24
 hours, ask for help on the OpenACS.org development forum.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="update-repository" leftLabel="Prev" leftTitle="How to Update the OpenACS.org
+			leftLink="update-repository" leftLabel="Prev" leftTitle="How to Update the OpenACS.org
 repository"
-		    rightLink="update-translations" rightLabel="Next" rightTitle="How to Update the translations"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="releasing-openacs" upLabel="Up"> 
-		
+			rightLink="update-translations" rightLabel="Next" rightTitle="How to Update the translations"
+			homeLink="index" homeLabel="Home" 
+			upLink="releasing-openacs" upLabel="Up"> 
+		    

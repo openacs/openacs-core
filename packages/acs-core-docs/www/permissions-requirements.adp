@@ -3,11 +3,11 @@
 <property name="doc(title)">Permissions Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="object-system-design" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="permissions-design" rightLabel="Next">
-		<div class="sect1">
+			leftLink="object-system-design" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="permissions-design" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="permissions-requirements" id="permissions-requirements"></a>Permissions Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By John McClary Prevost</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -188,8 +188,8 @@ pending freeze.</td><td>8/26/2000</td><td>Kai Wu</td>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="object-system-design" leftLabel="Prev" leftTitle="Object Model Design"
-		    rightLink="permissions-design" rightLabel="Next" rightTitle="Permissions Design"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="object-system-design" leftLabel="Prev" leftTitle="Object Model Design"
+			rightLink="permissions-design" rightLabel="Next" rightTitle="Permissions Design"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

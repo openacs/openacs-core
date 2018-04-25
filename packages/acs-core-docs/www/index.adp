@@ -3,13 +3,13 @@
 <property name="doc(title)">OpenACS Core Documentation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="" leftLabel=""
-		    title=""
-		    rightLink="for-everyone" rightLabel="Next">
-		<div class="book">
+			leftLink="" leftLabel=""
+			title=""
+			rightLink="for-everyone" rightLabel="Next">
+		    <div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140623166870808" id="idp140623166870808"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140682191178008" id="idp140682191178008"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
@@ -280,9 +280,9 @@ datetime from the database ANSI-style</a>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="" leftLabel="" leftTitle=""
-		    rightLink="for-everyone" rightLabel="Next" rightTitle="
-Part I. OpenACS For Everyone"
-		    homeLink="" homeLabel="" 
-		    upLink="" upLabel=""> 
-		
+			leftLink="" leftLabel="" leftTitle=""
+			rightLink="for-everyone" rightLabel="Next" rightTitle="Part I. OpenACS For
+Everyone"
+			homeLink="" homeLabel="" 
+			upLink="" upLabel=""> 
+		    

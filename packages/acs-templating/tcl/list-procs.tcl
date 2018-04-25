@@ -2341,7 +2341,7 @@ ad_proc -public template::list::filter::create {
     </li>
     <li>
     <b>type</b>: The type of values this filter sets. Also see 'values' below. Valid options are: 'singleval', meaning that the
-    value is a single value of a query variable with the name of the filter; 'multival', meaning the the value is really a Tcl list of values,
+    value is a single value of a query variable with the name of the filter; 'multival', meaning the value is really a Tcl list of values,
     sent to a :multiple page variable; and 'multivar', meaning that the value is a list of (key value) lists, as in { { var1 value1 } { var2 value 2 } }.
     'multival' is useful when you're filtering on, say, a date range, in which case you'd send two values, namely the start and end date.
     'multivar' is useful when you want the selection of one filter to change the value of another filter, for example when selecting groupby, you also

@@ -358,7 +358,7 @@ done
      We do this with another general_comments function:</para>
      <programlisting>set comments_html [general_comments_get_comments
      -print_content_p 1 $note_id]</programlisting>
-     <para>First, we pass in an optional parameter that that says to actually
+     <para>First, we pass in an optional parameter that says to actually
      show the contents of the comments, instead of just the fact that
      there are comments. Then you pass the note id, which is also the
      acs_object id.</para>
@@ -506,7 +506,7 @@ In
           category trees are applicable for the application.
           </para>
           <para>
-          The way to achieve this is is to provide a link
+          The way to achieve this is to provide a link
           to the Category Management pages.  Add the following snippet to your
             <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/admin/index.tcl</computeroutput>
           file:
@@ -1434,7 +1434,7 @@ db_multirow \
 	} ...
 	</programlisting>
 	<warning>
-	<para>You must not give your your form the same name that your page has. Otherwise HTMLArea won&#39;t load.</para>
+	<para>You must not give your form the same name that your page has. Otherwise HTMLArea won&#39;t load.</para>
 	</warning>
 	<para>Convert your textarea widget to a richtext widget and enable htmlarea.</para>
 	<para>The <code>htmlarea_p</code>-flag can be used to prevent 

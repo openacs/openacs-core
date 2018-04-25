@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>External Authentication Requirements</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.2"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 15. Kernel Documentation"><link rel="previous" href="bootstrap-acs.html" title="Bootstrapping OpenACS"><link rel="next" href="releasing-openacs.html" title="Chapter 16. Releasing OpenACS"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="bootstrap-acs.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="releasing-openacs.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ext-auth-requirements"></a>External Authentication Requirements</h2></div></div></div>
 
-  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623180002952"></a>Vision</h3></div></div></div>
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682194045416"></a>Vision</h3></div></div></div>
     <p>People have plenty of usernames and passwords already, we
 don't want them to have yet another. We want people to be able to
 log in to OpenACS with the same password they use to log in to any
@@ -72,7 +72,7 @@ parts. Each has a section below.</p>
 
   <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="Requirements"></a>Requirements</h3></div></div></div>
 
-  <div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140623180021992"></a>New API</h4></div></div></div>
+  <div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140682194064456"></a>New API</h4></div></div></div>
   
     <div class="segmentedlist">
       
@@ -147,7 +147,7 @@ entirely.</p>
 either already be in the users table through a batch
 synchronization job, or that the relevant authentication
 implementation supports real-time synchronization of user data.
-Specifically, if you want remote users who haven't yet logged in to
+Specifically, if you want remote users who haven't yet logged-in to
 OpenACS to show up in user searches, you'll have to do the batch
 synchronization.</p>
       <p>All in all, the login box will be an includeable template and
@@ -451,16 +451,16 @@ Untrusted Logins and Login Levels</h4></div></div></div>
         </div>
       </div>
       <p>I like the idea of having multiple login levels:</p>
-      <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Not logged in</p></li><li class="listitem"><p>Untrusted login: We'll show you un-sensitive personal
+      <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Not logged-in</p></li><li class="listitem"><p>Untrusted login: We'll show you un-sensitive personal
           content, but won't let you modify anything or see personal data. A
           normal login becomes untrusted after a certain amount of time, and
           the user will have to re-enter his/her password in order to gain
           access to personal data. Untrusted login never expires, unless
           explicitly done so through either changing password or clicking a
-          special "expire all logins" link.</p></li><li class="listitem"><p>Normal login: The user is logged, and has type his
+          special "expire all logins" link.</p></li><li class="listitem"><p>Normal login: The user is logged-in, and has type his
           password sufficiently recently that we trust the login. All normal
           operations are allowed. Will degrade to untrusted login after a
-          specified amount of time.</p></li><li class="listitem"><p>Secure login: The user is logged in over a secure
+          specified amount of time.</p></li><li class="listitem"><p>Secure login: The user is logged-in over a secure
           connection (HTTPS), potentially even using a special secure
           password. This would be for sensitive actions, such as credit card
           transactions.</p></li></ol></div>
@@ -480,13 +480,13 @@ only when you want to post do you need to log in. This makes it
 even more feasible to have a more secure login expiration
 setting.</p>
       <p>By default, <code class="literal">auth::require_login</code> would
-bounce to the login page if the user is only logged in at the
+bounce to the login page if the user is only logged-in at the
 untrusted level. Only if you explicitly say
 <code class="literal">auth::require_login -untrusted</code> will we give you
-the user_id of a user who's only logged in in untrusted
+the user_id of a user who's only logged-in in untrusted
 mode.</p>
       <p>Similarly, <code class="literal">ad_conn user_id</code> will continue
-to return 0 (not logged in) when the user is only logged in
+to return 0 (not logged-in) when the user is only logged-in
 untrusted, and we'll supply another variable, <code class="literal">ad_conn
 untrusted_user_id</code>, which wlll be set to the user_id for
 all login levels.</p>
@@ -555,10 +555,10 @@ Expire All Logins</h4></div></div></div>
           </div>
       </div>
       <p>Currently, if you've ever left a permanent login cookie on
-someone elses machine, that person will be forever logged in until
+someone elses machine, that person will be forever logged-in until
 he/she explicitly logs out. You can change your password, you can
 do anything you want, but unless a logout is requested from that
-particular browser, that browser will be logged in forever.</p>
+particular browser, that browser will be logged-in forever.</p>
       <p>I want to change our session handling code so that old login
 cookies can be expired. This would be done automatically whenever
 you change your password, and we could also offer a link which does

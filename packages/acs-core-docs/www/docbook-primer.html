@@ -674,7 +674,7 @@
     Docbook.
 </p>
 <p>
-<a class="indexterm" name="idp140623175611576"></a> 
+<a class="indexterm" name="idp140682193502840"></a> 
       is a publishing standard based on XML with
       similar goals to the OpenACS Documentation project.  Some specific reasons why we are using DocBook:
     </p>
@@ -743,7 +743,7 @@
     list of elements</a> and use more exotic features in your
       documents. The list is made up of SGML-elements but basically
       the same elements are valid in the XML DTD <span class="strong"><strong>as long as you remember to</strong></span>:
-      <a class="indexterm" name="idp140623175588680"></a>
+      <a class="indexterm" name="idp140682193521704"></a>
     </p>
 
     <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -826,7 +826,7 @@
       The documentation for each package will make up a little "book" that is structured like this 
       - examples are <span class="emphasis"><em>emphasized</em></span>:
 
-      <a class="indexterm" name="idp140623175542264"></a>
+      <a class="indexterm" name="idp140682193542808"></a>
 
     </p>
 
@@ -862,14 +862,14 @@
     
 
     <p>
-      <a class="indexterm" name="idp140623175476952"></a>
+      <a class="indexterm" name="idp140682193554664"></a>
       Given that your job starts at the <code class="computeroutput">sect1</code>-level, all your documents should open with a
       <a class="ulink" href="http://docbook.org/tdg/en/html/sect1.html" target="_top"><code class="computeroutput">&lt;sect1&gt;</code></a>-tag and end 
       with the corresponding <code class="computeroutput">&lt;/sect1&gt;</code>.
     </p>
 
     <p>
-      <a class="indexterm" name="idp140623175464952"></a>
+      <a class="indexterm" name="idp140682193559080"></a>
       You need to feed every <code class="computeroutput">&lt;sect1&gt;</code> two attributes. The first attribute,
       <code class="computeroutput">id</code>, is standard and can be used with all elements. It comes in  very 
       handy when interlinking between documents (more about this when talking about links in <a class="xref" href="docbook-primer.html#dbprimer-links" title="Links">the section called “Links”</a>). 
@@ -879,7 +879,7 @@
     </p>
 
     <p>
-      <a class="indexterm" name="idp140623175469752"></a>
+      <a class="indexterm" name="idp140682193563912"></a>
       The other attribute is <code class="computeroutput">xreflabel</code>. The value of this is the text that will appear
       as the link when referring to this <code class="computeroutput">sect1</code>.
     </p>
@@ -900,7 +900,7 @@
 </pre>
 
     <p>
-      <a class="indexterm" name="idp140623175474856"></a>
+      <a class="indexterm" name="idp140682186069336"></a>
       Inside this container your document will be split up into 
       <a class="ulink" href="http://docbook.org/tdg/en/html/sect2.html" target="_top"><code class="computeroutput">&lt;sect2&gt;</code></a>'s,
       each with the same requirements - <code class="computeroutput">id</code> and <code class="computeroutput">xreflabel</code>
@@ -920,7 +920,7 @@
     
 
     <p>
-      <a class="indexterm" name="idp140623175449672"></a>
+      <a class="indexterm" name="idp140682186055096"></a>
       For displaying a snippet of code, a filename or anything else you just want to appear as a part of
       a sentence, we use  
       <a class="ulink" href="http://docbook.org/tdg/en/html/computeroutput.html" target="_top"><code class="computeroutput">&lt;computeroutput&gt;</code></a>
@@ -948,7 +948,7 @@
     
 
     <p>
-      <a class="indexterm" name="idp140623175460280"></a>
+      <a class="indexterm" name="idp140682186045448"></a>
       Linking falls into two different categories: inside the book you're making and outside:
     </p>
 
@@ -958,7 +958,7 @@
         with a simple tag, regardless of where that part is.
       </p>
 
-      <p><a class="indexterm" name="idp140623175394568"></a>Check out how I link to a subsection of the Developer's Guide:</p>
+      <p><a class="indexterm" name="idp140682186031576"></a>Check out how I link to a subsection of the Developer's Guide:</p>
 
 
       <p>Put this in your XML:</p>
@@ -1015,7 +1015,7 @@
 
 
     </dd><dt><span class="term"><span class="strong"><strong>2. Linking outside the documentation</strong></span></span></dt><dd><p>
-        <a class="indexterm" name="idp140623175410504"></a>
+        <a class="indexterm" name="idp140682186011816"></a>
         If you're hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
         a little different
 
@@ -1051,7 +1051,7 @@
     </p>
 
     <p>
-      <a class="indexterm" name="idp140623175419144"></a>
+      <a class="indexterm" name="idp140682185999096"></a>
       To insert a graphic we use the elements 
       <a class="ulink" href="http://docbook.org/tdg/en/html/mediaobject.html" target="_top"><code class="computeroutput">&lt;mediaobject&gt;</code></a>,
       <a class="ulink" href="http://docbook.org/tdg/en/html/imageobject.html" target="_top"><code class="computeroutput">&lt;imageobject&gt;</code></a>,
@@ -1088,7 +1088,7 @@
     
 
     <p>
-      <a class="indexterm" name="idp140623175427256"></a>
+      <a class="indexterm" name="idp140682185988600"></a>
       Here's how you make the DocBook equivalent of the three usual HTML-lists:
     </p>
 
@@ -1155,7 +1155,7 @@
     
 
     <p>
-      <a class="indexterm" name="idp140623175373160"></a>
+      <a class="indexterm" name="idp140682185965944"></a>
       DocBook supports several types of tables, but in most cases, the
       <a class="ulink" href="http://docbook.org/tdg/en/html/informaltable.html" target="_top"><code class="computeroutput">&lt;informaltable&gt;</code></a>
       is enough:
@@ -1211,7 +1211,7 @@
     
 
     <p>
-      <a class="indexterm" name="idp140623175386280"></a>
+      <a class="indexterm" name="idp140682185949880"></a>
       Our documentation uses two flavors of emphasis - italics and bold type. DocBook uses one - 
       <a class="ulink" href="http://docbook.org/tdg/en/html/emphasis.html" target="_top"><code class="computeroutput">&lt;emphasis&gt;</code></a>.
     </p>

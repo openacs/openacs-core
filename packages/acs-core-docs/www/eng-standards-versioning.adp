@@ -3,11 +3,11 @@
 <property name="doc(title)">Release Version Numbering</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="cvs-guidelines" leftLabel="Prev"
-		    title="
-Chapter 12. Engineering Standards"
-		    rightLink="eng-standards-constraint-naming" rightLabel="Next">
-		<div class="sect1">
+			leftLink="cvs-guidelines" leftLabel="Prev"
+			title="Chapter 12. Engineering
+Standards"
+			rightLink="eng-standards-constraint-naming" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-versioning" id="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red"><span class="cvstag">($&zwnj;Id:
 eng-standards-versioning.xml,v 1.11 2017/08/07 23:47:54 gustafn Exp
@@ -45,8 +45,7 @@ tags.)</p></li>
 </ul></div><p>Milestone markers are numbered: d1, d2, ..., a1, b1, rc1,
 etc.</p>
 </li>
-</ul></div><p>A complete sequence of milestones between two releases:</p><pre class="programlisting">
-5.0.0
+</ul></div><p>A complete sequence of milestones between two releases:</p><pre class="programlisting">5.0.0
 5.0.0rc2
 5.0.0rc1
 5.0.0b4
@@ -55,8 +54,7 @@ etc.</p>
 5.0.0a3
 5.0.0a1
 5.0.0d1
-4.6.3
-</pre><p>Version numbers are also recorded in the CVS repository so that
+4.6.3</pre><p>Version numbers are also recorded in the CVS repository so that
 the code tree can be restored to the exact state it was in for a
 particular release. To translate between a distribution tar file
 (acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for
@@ -112,8 +110,7 @@ to the appropriate value for that release of the package.</p><pre class="program
         &lt;maturity&gt;1&lt;/maturity&gt;
         &lt;callbacks&gt;
             ...
-    
-</pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+    </pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <span class="strong"><strong>Level -1:
 Incompatible.</strong></span> This package is not supported for
@@ -172,8 +169,8 @@ which overlap like that. Instead, use <code class="computeroutput">upgrade-5.1.0
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="cvs-guidelines" leftLabel="Prev" leftTitle="CVS Guidelines"
-		    rightLink="eng-standards-constraint-naming" rightLabel="Next" rightTitle="Constraint naming standard"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="eng-standards" upLabel="Up"> 
-		
+			leftLink="cvs-guidelines" leftLabel="Prev" leftTitle="CVS Guidelines"
+			rightLink="eng-standards-constraint-naming" rightLabel="Next" rightTitle="Constraint naming standard"
+			homeLink="index" homeLabel="Home" 
+			upLink="eng-standards" upLabel="Up"> 
+		    

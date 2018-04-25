@@ -275,7 +275,7 @@ ad_proc -public template::util::richtext::register_editor { editor } {
 
 ad_proc -public template::util::richtext::render_widgets { } {
 
-    Render all rich-text editors with their their widget specific
+    Render all rich-text editors with their widget specific
     code. Every editor might have multiple instances on the page,
     which are accessible to "render_widgets" via the global variable
     acs_blank_master__htmlareas. This function can be used to perform

@@ -3,12 +3,11 @@
 <property name="doc(title)">Install tclwebtest.</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="install-nsopenssl" leftLabel="Prev"
-		    title="
-Appendix B. Install additional supporting
-software"
-		    rightLink="install-php" rightLabel="Next">
-		<div class="sect1">
+			leftLink="install-nsopenssl" leftLabel="Prev"
+			title="Appendix B. Install
+additional supporting software"
+			rightLink="install-php" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-tclwebtest" id="install-tclwebtest"></a>Install tclwebtest.</h2></div></div></div><p>Download the <a class="link" href="individual-programs">tclwebtest source</a>,
 unpack it, and put it an appropriate place. (tclwebtest 1.0 will be
@@ -25,8 +24,8 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 </span></pre>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="install-nsopenssl" leftLabel="Prev" leftTitle="Install nsopenssl"
-		    rightLink="install-php" rightLabel="Next" rightTitle="Install PHP for use in AOLserver"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="install-more-software" upLabel="Up"> 
-		
+			leftLink="install-nsopenssl" leftLabel="Prev" leftTitle="Install nsopenssl"
+			rightLink="install-php" rightLabel="Next" rightTitle="Install PHP for use in AOLserver"
+			homeLink="index" homeLabel="Home" 
+			upLink="install-more-software" upLabel="Up"> 
+		    

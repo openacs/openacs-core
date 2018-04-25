@@ -3,11 +3,11 @@
 <property name="doc(title)">Basic Steps</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="install-overview" leftLabel="Prev"
-		    title="
-Chapter 2. Installation Overview"
-		    rightLink="individual-programs" rightLabel="Next">
-		<div class="sect1">
+			leftLink="install-overview" leftLabel="Prev"
+			title="Chapter 2. Installation
+Overview"
+			rightLink="individual-programs" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-steps" id="install-steps"></a>Basic Steps</h2></div></div></div><p>Most of the documentation in this section is kept as a
 reference. More up-to-date documentation is in the <a class="ulink" href="http://openacs.org/xowiki/openacs-system-install" target="_top">install sections in the Wiki</a>.</p><p>The basic steps for installing OpenACS are:</p><div class="orderedlist"><ol class="orderedlist" type="1">
@@ -16,19 +16,15 @@ Unix-like OS</a> or <a class="xref" href="install-redhat" title="Appendix A. I
 <em>Install Red Hat 8/9</em>
 </a> for more details). See the
 <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
-&ldquo;Version Compatibility
-Matrix&rdquo;</a>.</p></li><li class="listitem"><p>Install a database (see <a class="xref" href="oracle" title="Install Oracle 8.1.7">the section called
-&ldquo;Install Oracle 8.1.7&rdquo;</a> or
-<a class="xref" href="postgres" title="Install PostgreSQL">Install PostgreSQL</a>).</p></li><li class="listitem"><p>Install AOLserver (<a class="xref" href="aolserver4" title="Install AOLserver 4">Install AOLserver 4</a>) .</p></li><li class="listitem"><p>Create a unique database and system user. Install the OpenACS
+“Version Compatibility Matrix”</a>.</p></li><li class="listitem"><p>Install a database (see <a class="xref" href="oracle" title="Install Oracle 8.1.7">the section called “Install Oracle
+8.1.7”</a> or <a class="xref" href="postgres" title="Install PostgreSQL">Install PostgreSQL</a>).</p></li><li class="listitem"><p>Install AOLserver (<a class="xref" href="aolserver4" title="Install AOLserver 4">Install AOLserver 4</a>) .</p></li><li class="listitem"><p>Create a unique database and system user. Install the OpenACS
 tarball, start and AOLserver instance, and use the OpenACS web
 pages to complete installation (see <a class="xref" href="openacs" title="Install OpenACS 5.9.0">Install OpenACS
 5.9.0</a>).</p></li>
 </ol></div><p>Specific instructions are available for Mac OS X and Windows2000
 (see <a class="xref" href="mac-installation" title="OpenACS Installation Guide for Mac OS X">the section called
-&ldquo;OpenACS Installation Guide for Mac OS
-X&rdquo;</a> or <a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows">the section called
-&ldquo;OpenACS Installation Guide for
-Windows&rdquo;</a>).</p><div class="sect2">
+“OpenACS Installation Guide for Mac OS X”</a> or <a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows">the section called
+“OpenACS Installation Guide for Windows”</a>).</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-rpms" id="install-rpms"></a>Binaries and other shortcuts</h3></div></div></div><p>You can try out OpenACS using some binary installers. In
 general, they are not yet supported by the community, so they are
@@ -46,8 +42,7 @@ specifications:</p><div class="itemizedlist"><ul class="itemizedlist" style="lis
 <li class="listitem"><p>128MB RAM (much more if you want Oracle)</p></li><li class="listitem"><p>1GB free space on your hard drive (much more if you want
 Oracle)</p></li><li class="listitem"><p>A Unix-like operating system with Tcl, tDOM, and a mail
 transport agent like sendmail or qmail. (see <a class="xref" href="individual-programs" title="Prerequisite Software">the
-section called &ldquo;Prerequisite
-Software&rdquo;</a>)</p></li>
+section called “Prerequisite Software”</a>)</p></li>
 </ul></div><p>All of the software mentioned is open-source and available
 without direct costs, except for Oracle. You can obtain a free copy
 of Oracle for development purposes. This is described in the
@@ -64,11 +59,9 @@ screen, such as a <code class="computeroutput"><span class="guibutton">
 menu.</p></li><li class="listitem"><p><strong class="userinput"><code>This is text that you will
 type.</code></strong></p></li><li class="listitem">
 <p>This is text from a program or file which you may need to
-examine or edit:</p><pre class="programlisting">
-if {$database eq "oracle"} {
+examine or edit:</p><pre class="programlisting">if {$database eq "oracle"} {
           set db_password        "mysitepassword"
-}
-</pre>
+}</pre>
 </li><li class="listitem">
 <p>This is text that you will <code class="computeroutput">see</code> and <strong class="userinput"><code>type</code></strong> in a command shell,
 including <em class="replaceable"><code>text you may have to
@@ -95,21 +88,20 @@ createdb <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </span>
 </pre><p>
 <a name="cut-and-paste-name-var" id="cut-and-paste-name-var"></a><strong>Setting a global shell
-variable for cut and paste. </strong> In order to cut
-and paste the instructions into your shell, you must set the
+variable for cut and paste. </strong> In order to cut and
+paste the instructions into your shell, you must set the
 environment variable $OPENACS_SERVICE_NAME. In order to set it
 globally so that it works for any new users or special service
 users you may create, edit the file <code class="computeroutput">/etc/profile</code> ( <code class="computeroutput">/etc/share/skel/dot.profile</code> for FreeBSD)
-and add this line:</p><pre class="programlisting">
-export OPENACS_SERVICE_NAME=<em class="replaceable"><code>service0</code></em>
+and add this line:</p><pre class="programlisting">export OPENACS_SERVICE_NAME=<em class="replaceable"><code>service0</code></em>
 </pre>
 </li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623179121976" id="idp140623179121976"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140623179122616" id="idp140623179122616"></a><p class="title"><strong>Table 2.1. Default
-directories for a standard install</strong></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
+<a name="idp140682192547528" id="idp140682192547528"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140682192548168" id="idp140682192548168"></a><p class="title"><strong>Table 2.1. Default directories
+for a standard install</strong></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
 </colgroup><tbody>
@@ -119,7 +111,7 @@ directories for a standard install</strong></p><div class="table-contents"><tabl
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140623179128168" id="idp140623179128168"></a><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> (set to
+<a class="indexterm" name="idp140682192553720" id="idp140682192553720"></a><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> (set to
 service0 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td>
@@ -189,9 +181,9 @@ making it better, please post them in our <a class="ulink" href="http://openacs.
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="install-overview" leftLabel="Prev" leftTitle="
-Chapter 2. Installation Overview"
-		    rightLink="individual-programs" rightLabel="Next" rightTitle="Prerequisite Software"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="install-overview" upLabel="Up"> 
-		
+			leftLink="install-overview" leftLabel="Prev" leftTitle="Chapter 2. Installation
+Overview"
+			rightLink="individual-programs" rightLabel="Next" rightTitle="Prerequisite Software"
+			homeLink="index" homeLabel="Home" 
+			upLink="install-overview" upLabel="Up"> 
+		    

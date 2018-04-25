@@ -1,15 +1,13 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 3. Complete
-Installation}</property>
-<property name="doc(title)">Chapter 3. Complete
-Installation</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 3. Complete Installation}</property>
+<property name="doc(title)">Chapter 3. Complete Installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="individual-programs" leftLabel="Prev"
-		    title="
+			leftLink="individual-programs" leftLabel="Prev"
+			title="
 Part II. Administrator&#39;s Guide"
-		    rightLink="unix-installation" rightLabel="Next">
-		<div class="chapter">
+			rightLink="unix-installation" rightLabel="Next">
+		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="complete-install" id="complete-install"></a>Chapter 3. Complete
 Installation</h2></div></div></div><div class="toc">
@@ -26,9 +24,9 @@ Installation Guide for Mac OS X</a></span></dt>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="individual-programs" leftLabel="Prev" leftTitle="Prerequisite Software"
-		    rightLink="unix-installation" rightLabel="Next" rightTitle="Install a Unix-like system and
+			leftLink="individual-programs" leftLabel="Prev" leftTitle="Prerequisite Software"
+			rightLink="unix-installation" rightLabel="Next" rightTitle="Install a Unix-like system and
 supporting software"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-admin" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="acs-admin" upLabel="Up"> 
+		    

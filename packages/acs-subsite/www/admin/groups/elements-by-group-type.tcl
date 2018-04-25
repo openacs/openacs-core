@@ -3,9 +3,10 @@
 # Datasource for elements-by-rel-type.adp 
 # (meant to be included by other templates) 
 #
-# Shows the user a summary of components (NOT members!) of the given 
-# group, provided that the the user has permission to see the component.  
-# The components are summarized by their relationship to the given group.
+# Shows the user a summary of components (NOT members!) of the given
+# group, provided that the user has permission to see the component.
+# The components are summarized by their relationship to the given
+# group.
 #
 # NOTE:
 # There is no scope check done here to ensure that the component "belongs" to

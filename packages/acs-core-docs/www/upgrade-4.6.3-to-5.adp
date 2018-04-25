@@ -3,37 +3,32 @@
 <property name="doc(title)">Upgrading OpenACS 4.6.3 to 5.0</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="upgrade-4.5-to-4.6" leftLabel="Prev"
-		    title="
-Chapter 5. Upgrading"
-		    rightLink="upgrade-5-0-dot" rightLabel="Next">
-		<div class="sect1">
+			leftLink="upgrade-4.5-to-4.6" leftLabel="Prev"
+			title="Chapter 5. Upgrading"
+			rightLink="upgrade-5-0-dot" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="upgrade-4.6.3-to-5" id="upgrade-4.6.3-to-5"></a>Upgrading OpenACS 4.6.3 to 5.0</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<strong>Oracle. </strong> This forum posting
-documents <a class="ulink" href="http://openacs.org/forums/message-view?message_id=201394" target="_top">how to upgrade an Oracle installation from OpenACS 4.6.3 to
+<strong>Oracle. </strong> This forum posting documents
+<a class="ulink" href="http://openacs.org/forums/message-view?message_id=201394" target="_top">how to upgrade an Oracle installation from OpenACS 4.6.3 to
 5</a> .</p></li><li class="listitem">
 <p>
-<strong>PostGreSQL. </strong> You must use
-PostGreSQL 7.3.x or newer to upgrade OpenACS beyond 4.6.3. See
-<a class="link" href="upgrade-supporting" title="Upgrading from PostGreSQL 7.2 to 7.3">Upgrade PostGreSQL to
+<strong>PostGreSQL. </strong> You must use PostGreSQL 7.3.x
+or newer to upgrade OpenACS beyond 4.6.3. See <a class="link" href="upgrade-supporting" title="Upgrading from PostGreSQL 7.2 to 7.3">Upgrade PostGreSQL to
 7.3</a>; <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
-&ldquo;Version Compatibility
-Matrix&rdquo;</a>
+“Version Compatibility Matrix”</a>
 </p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p><a class="link" href="snapshot-backup" title="Manual backup and recovery">Back up the database and file
 system.</a></p></li><li class="listitem"><p>
 <strong>Upgrade the file system for
-packages/acs-kernel. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
-&ldquo;Upgrading the OpenACS
-files&rdquo;</a>
+packages/acs-kernel. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called “Upgrading the
+OpenACS files”</a>
 </p></li><li class="listitem">
 <p>Upgrade the kernel manually. (There is a script to do most of
 the rest: <a class="ulink" href="http://cvs.openacs.org/browse/OpenACS/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?r=1.6" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</a>).
 You&#39;ll still have to do a lot of stuff manually, but automated
-trial and error is much more fun.)</p><pre class="screen">
-[root root]# <strong class="userinput"><code>su - <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+trial and error is much more fun.)</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 [$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd /var/lib/aolserver/ <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-kernel/sql/postgresql/upgrade</code></strong>
 </pre><p>Manually execute each of the upgrade scripts in sequence, either
@@ -90,8 +85,7 @@ such as social security number for username." \
 acs-kernel 0 number \
 security 1 1
 parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidgetForUsername -value 0
-}
-</pre>
+}</pre>
 </li><li class="listitem"><p>If you can login, visit /acs-admin/apm and upgrade acs-kernel
 and acs-service-contract and uncheck the data model scripts.
 Restart. If everything is still working, make another backup of the
@@ -108,9 +102,9 @@ Upgrade Experiences for details.</p>
 </ul></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="upgrade-4.5-to-4.6" leftLabel="Prev" leftTitle="Upgrading 4.5 or higher to 4.6.3"
-		    rightLink="upgrade-5-0-dot" rightLabel="Next" rightTitle="Upgrading an OpenACS 5.0.0 or greater
+			leftLink="upgrade-4.5-to-4.6" leftLabel="Prev" leftTitle="Upgrading 4.5 or higher to 4.6.3"
+			rightLink="upgrade-5-0-dot" rightLabel="Next" rightTitle="Upgrading an OpenACS 5.0.0 or greater
 installation"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="upgrade" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="upgrade" upLabel="Up"> 
+		    

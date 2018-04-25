@@ -19,19 +19,15 @@ complexity. You should definitely look at it and at the pages that
 use it in the survey package.</p>
 <h3>Create a form</h3>
 <p>Use the <kbd>form create</kbd> command to initialize a form:</p>
-<pre>
-form create add_user
-</pre>
+<pre>form create add_user</pre>
 <p>See the <a href="../api/form">form API</a> for optional
 parameters to this command.</p>
 <h3>Add elements</h3>
 <p>Once the form is created, use the <kbd>element create</kbd>
 command to add elements to it:</p>
-<pre>
-element create add_user first_name -datatype text \ 
+<pre>element create add_user first_name -datatype text \ 
                                    -label "First Name" \
-                                   -html { size 30 }
-</pre>
+                                   -html { size 30 }</pre>
 <p>In auto-generated forms, elements appear in the order they were
 created. See the <a href="../api/element">element API</a> for
 optional parameters to this command.</p>
@@ -40,8 +36,7 @@ optional parameters to this command.</p>
 submission is currently being processed. If a request is being
 processed, then form elements may need to be initialized with their
 appropriate values.</p>
-<pre>
-if { [template::form is_request add_user] } {
+<pre>if { [template::form is_request add_user] } {
 
   set db [ns_db gethandle]
 
@@ -51,8 +46,7 @@ if { [template::form is_request add_user] } {
   ns_db releasehandle $db
 
   template::element set_properties add_user user_id -value $user_id
-}
-</pre>
+}</pre>
 <p>This may also be done using the <kbd>value</kbd> option to
 <kbd>element create</kbd>. In this case the value is set separately
 to avoid the additional database query during a submission.</p>

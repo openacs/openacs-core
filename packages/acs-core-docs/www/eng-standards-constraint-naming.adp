@@ -3,11 +3,11 @@
 <property name="doc(title)">Constraint naming standard</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="eng-standards-versioning" leftLabel="Prev"
-		    title="
-Chapter 12. Engineering Standards"
-		    rightLink="eng-standards-filenaming" rightLabel="Next">
-		<div class="sect1">
+			leftLink="eng-standards-versioning" leftLabel="Prev"
+			title="Chapter 12. Engineering
+Standards"
+			rightLink="eng-standards-filenaming" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-constraint-naming" id="eng-standards-constraint-naming"></a>Constraint naming
 standard</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Michael Bryzek</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
@@ -18,7 +18,7 @@ SYS_* name oracle assigns to unnamed constraints is not very
 understandable. By correctly naming all constraints, we can quickly
 associate a particular constraint with our data model. This gives
 us two real advantages:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>We can quickly identify and fix any errors.</p></li><li class="listitem"><p>We can reliabily modify or drop constraints</p></li>
+<li class="listitem"><p>We can quickly identify and fix any errors.</p></li><li class="listitem"><p>We can reliability modify or drop constraints</p></li>
 </ul></div><p>
 <span class="phrase">Why do we need a naming convention?</span><a class="ulink" href="https://docs.oracle.com/database/121/SQLRF/sql_elements008.htm#SQLRF00223" target="_top">Oracle limits names</a>, in general, to 30
 characters, which is hardly enough for a human readable constraint
@@ -124,14 +124,14 @@ constraints</span></p><p>Though naming "not null" constraints doesn&#39;t help
 immeditately in error debugging (e.g. the error will say something
 like "Cannot insert null value into column"), we
 recommend naming not null constraints to be consistent in our
-naming of all constraints.</p><p><span class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.7
-2017/08/07 23:47:54 gustafn Exp $)</span></p>
+naming of all constraints.</p><p><span class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.10
+2018/03/24 00:14:57 hectorr Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="eng-standards-versioning" leftLabel="Prev" leftTitle="Release Version Numbering"
-		    rightLink="eng-standards-filenaming" rightLabel="Next" rightTitle="ACS File Naming and Formatting
+			leftLink="eng-standards-versioning" leftLabel="Prev" leftTitle="Release Version Numbering"
+			rightLink="eng-standards-filenaming" rightLabel="Next" rightTitle="ACS File Naming and Formatting
 Standards"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="eng-standards" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="eng-standards" upLabel="Up"> 
+		    

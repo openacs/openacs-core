@@ -3,13 +3,12 @@
 <property name="doc(title)">Upgrading 4.5 or higher to 4.6.3</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="upgrade-overview" leftLabel="Prev"
-		    title="
-Chapter 5. Upgrading"
-		    rightLink="upgrade-4.6.3-to-5" rightLabel="Next">
-		<div class="sect1">
+			leftLink="upgrade-overview" leftLabel="Prev"
+			title="Chapter 5. Upgrading"
+			rightLink="upgrade-4.6.3-to-5" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="upgrade-4.5-to-4.6" id="upgrade-4.5-to-4.6"></a>Upgrading 4.5 or higher to 4.6.3</h2></div></div></div><a class="indexterm" name="idp140623160154424" id="idp140623160154424"></a><p>The required platform for OpenACS 4.6 is the same as 4.5, with
+<a name="upgrade-4.5-to-4.6" id="upgrade-4.5-to-4.6"></a>Upgrading 4.5 or higher to 4.6.3</h2></div></div></div><a class="indexterm" name="idp140682183766008" id="idp140682183766008"></a><p>The required platform for OpenACS 4.6 is the same as 4.5, with
 the exception of OpenFTS. OpenACS 4.6 and later require OpenFTS
 0.3.2 for full text search on PostGreSQL. If you have OpenFTS 0.2,
 you&#39;ll need to upgrade.</p><p>If upgrading from 4.4, you need to manually run
@@ -21,26 +20,21 @@ acs-kernel/sql/postgres/upgrade-4.4-4.5.sql. See <a class="ulink" href="http://o
 </p></li>
 </ul></div><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<strong>Make a Backup. </strong> Back up the
-database and file system (see <a class="xref" href="snapshot-backup" title="Manual backup and recovery">the
-section called &ldquo;Manual backup and
-recovery&rdquo;</a>).</p></li><li class="listitem"><p>
+<strong>Make a Backup. </strong> Back up the database and
+file system (see <a class="xref" href="snapshot-backup" title="Manual backup and recovery">the section called “Manual backup and
+recovery”</a>).</p></li><li class="listitem"><p>
 <strong>OPTIONAL: Upgrade OpenFTS. </strong><a class="xref" href="upgrade-supporting" title="Upgrading OpenFTS from 0.2 to 0.3.2">the section called
-&ldquo;Upgrading OpenFTS from 0.2 to
-0.3.2&rdquo;</a>
+“Upgrading OpenFTS from 0.2 to 0.3.2”</a>
 </p></li><li class="listitem">
-<p>Stop the server</p><pre class="screen">
-[root root]# <strong class="userinput"><code>svc -d /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+<p>Stop the server</p><pre class="screen">[root root]# <strong class="userinput"><code>svc -d /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 </pre>
 </li><li class="listitem"><p>
-<strong>Upgrade the file system. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
-&ldquo;Upgrading the OpenACS
-files&rdquo;</a>
+<strong>Upgrade the file system. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called “Upgrading the
+OpenACS files”</a>
 </p></li><li class="listitem">
 <p><span class="strong"><strong>Start the
-server</strong></span></p><pre class="screen">
-[root root]# <strong class="userinput"><code>svc -u /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+server</strong></span></p><pre class="screen">[root root]# <strong class="userinput"><code>svc -u /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 </pre>
 </li><li class="listitem">
@@ -55,8 +49,7 @@ kernel by itself, and then come back and upgrade the rest of the
 desired packages in a second pass.</p></li><li class="listitem"><p>On the next screen, click <code class="computeroutput"><span class="guibutton">Install
 Packages</span></code>
 </p></li><li class="listitem">
-<p>When prompted, restart the server:</p><pre class="screen">
-[root root]# <strong class="userinput"><code>restart-aolserver <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+<p>When prompted, restart the server:</p><pre class="screen">[root root]# <strong class="userinput"><code>restart-aolserver <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 </pre>
 </li><li class="listitem"><p>Wait a minute, then browse to the package manager, <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/acs-admin/apm</code>.</p></li><li class="listitem"><p>Check that the kernel upgrade worked by clicking <code class="computeroutput"><span class="guilabel">All</span></code> and
@@ -69,8 +62,8 @@ version is 5.9.0.</p></li>
 </ol></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="upgrade-overview" leftLabel="Prev" leftTitle="Overview"
-		    rightLink="upgrade-4.6.3-to-5" rightLabel="Next" rightTitle="Upgrading OpenACS 4.6.3 to 5.0"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="upgrade" upLabel="Up"> 
-		
+			leftLink="upgrade-overview" leftLabel="Prev" leftTitle="Overview"
+			rightLink="upgrade-4.6.3-to-5" rightLabel="Next" rightTitle="Upgrading OpenACS 4.6.3 to 5.0"
+			homeLink="index" homeLabel="Home" 
+			upLink="upgrade" upLabel="Up"> 
+		    

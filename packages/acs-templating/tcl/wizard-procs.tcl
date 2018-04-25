@@ -689,7 +689,7 @@ ad_proc -public template::wizard::load_last_visited_step {
 
     get_reference
     
-    # check the old visited step on the the state manager
+    # check the old visited step on the state manager
     set visited_step [ad_get_client_property -default "" $key ${wizard_name}visited]
     if {$visited_step ne "" } {
         template::wizard::set_visited_step $visited_step

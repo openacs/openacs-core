@@ -3,11 +3,11 @@
 <property name="doc(title)">Design Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="i18n-convert" leftLabel="Prev"
-		    title="
+			leftLink="i18n-convert" leftLabel="Prev"
+			title="
 Chapter 14. Internationalization"
-		    rightLink="i18n-translators" rightLabel="Next">
-		<div class="sect1">
+			rightLink="i18n-translators" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="i18n-design" id="i18n-design"></a>Design Notes</h2></div></div></div><p>User locale is a property of ad_conn, <code class="computeroutput">ad_conn locale</code>. The request processor sets
 this by calling <code class="computeroutput">lang::conn::locale</code>, which looks for the
@@ -24,8 +24,8 @@ for the language which matches your locale&#39;s language is found,
 then that locale is offered instead.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="i18n-convert" leftLabel="Prev" leftTitle="How to Internationalize a Package"
-		    rightLink="i18n-translators" rightLabel="Next" rightTitle="Translator&#39;s Guide"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="i18n" upLabel="Up"> 
-		
+			leftLink="i18n-convert" leftLabel="Prev" leftTitle="How to Internationalize a Package"
+			rightLink="i18n-translators" rightLabel="Next" rightTitle="Translator&#39;s Guide"
+			homeLink="index" homeLabel="Home" 
+			upLink="i18n" upLabel="Up"> 
+		    

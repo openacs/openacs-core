@@ -14,13 +14,11 @@ in the same fashion as any other dynamic template; the developer
 may associate data sources and other properties to them.</p>
 <h3>Usage</h3>
 <pre>
-&lt;include src="subtemplate" attribute="value" ...&gt;
-</pre>
+&lt;include src="subtemplate" attribute="value" ...&gt;</pre>
 
 or
 <pre>
-&lt;include src="/packages/packagename/www/lib/subtemplate" attribute="value" ...&gt;
-</pre>
+&lt;include src="/packages/packagename/www/lib/subtemplate" attribute="value" ...&gt;</pre>
 <h3>Notes</h3>
 <ul>
 <li>Arguments may be passed to the subtemplate by specifying
@@ -30,8 +28,7 @@ as variables which the subtemplate may reference using the
 <kbd>var</kbd> tag. To pass a dynamic variable to the subtemplate,
 specify the variable name surrounded by at signs as the value:
 <pre>
-&lt;include src="subtemplate" source_id="\@source_id\@" ...&gt;
-</pre>
+&lt;include src="subtemplate" source_id="\@source_id\@" ...&gt;</pre>
 Note that passing an html string to a subtemplate via
 <code>\@var\@</code> will result in passing an html-escaped and
 internationalized string. To prevent this, use
@@ -42,8 +39,7 @@ scope of the subtemplate. This variant is necessary for e.g.
 passing a Tcl array like a templating datasource. To pass e.g.
 <code>users</code> by reference, use this notation:
 <pre>
-&lt;include src="subtemplate" &amp;persons="users" ...&gt;
-</pre>
+&lt;include src="subtemplate" &amp;persons="users" ...&gt;</pre>
 This is particularly useful for passing onerow and multirow data
 sourced. Note that in this case, if the subtemplate modifies the
 value this will affect the includer. When the datasource in the

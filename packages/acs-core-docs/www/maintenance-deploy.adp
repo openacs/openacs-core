@@ -3,15 +3,15 @@
 <property name="doc(title)">Staged Deployment for Production Networks</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="high-avail" leftLabel="Prev"
-		    title="
-Chapter 6. Production Environments"
-		    rightLink="install-ssl" rightLabel="Next">
-		<div class="sect1">
+			leftLink="high-avail" leftLabel="Prev"
+			title="Chapter 6. Production
+Environments"
+			rightLink="install-ssl" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="maintenance-deploy" id="maintenance-deploy"></a>Staged Deployment for Production
 Networks</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red"><span class="cvstag">($&zwnj;Id:
-maintenance.xml,v 1.31 2017/08/07 23:47:55 gustafn Exp
+maintenance.xml,v 1.32 2018/03/27 11:18:00 hectorr Exp
 $)</span></span></p><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p>
 &lt;/authorblurb&gt;
@@ -24,7 +24,7 @@ tested.</p></li><li class="listitem"><p>Rollback: If anything goes wrong, you ca
 working configuration safely and quickly.</p></li>
 </ul></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623174990600" id="idp140623174990600"></a>Method 1: Deployment with CVS</h3></div></div></div><p>With this method, we control the files on a site via CVS. This
+<a name="idp140682193078776" id="idp140682193078776"></a>Method 1: Deployment with CVS</h3></div></div></div><p>With this method, we control the files on a site via CVS. This
 example uses one developmental server (service0-dev) and one
 production server (service0). Depending on your needs, you can also
 have a staging server for extensive testing before you go live. The
@@ -86,8 +86,7 @@ the stuff in -m "service0" is a comment visible only from within cvs commands
 </pre><p>To make these changes take place on service0:</p><pre class="programlisting">
 4) update the file on production:
 cd /var/lib/aolserver/service0/www
-cvs up -Pd index.adp
-</pre><p>If you make changes that require changes to the database, test
+cvs up -Pd index.adp</pre><p>If you make changes that require changes to the database, test
 them out first on service0-dev, using either -create.sql or upgrade
 scripts. Once you&#39;ve tested them, you then update and run the
 upgrade scripts from the package manager.</p><p>The production site can run "HEAD" from cvs.</p><p>The drawback to using HEAD as the live code is that you cannot
@@ -103,7 +102,7 @@ rollback, you can use return to the last working tag if the new tag
 tags to follow ...</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623175758344" id="idp140623175758344"></a>Method 2: A/B Deployment</h3></div></div></div><p>The approach taken in this section is to always create a new
+<a name="idp140682193079128" id="idp140682193079128"></a>Method 2: A/B Deployment</h3></div></div></div><p>The approach taken in this section is to always create a new
 service with the desired changes, running in parallel with the
 existing site. This guarantees control, at least at the final step
 of the process: you know what changes you are about to make because
@@ -119,38 +118,38 @@ system regularly receiving new data, you must interrupt this
 function or risk losing data in the shuffle. It also requires extra
 steps if the database will be affected.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140623174971944" id="idp140623174971944"></a>Simple A/B Deployment: Database is not
+<a name="idp140682193094056" id="idp140682193094056"></a>Simple A/B Deployment: Database is not
 changed</h4></div></div></div><div class="figure">
-<a name="idp140623175654760" id="idp140623175654760"></a><p class="title"><strong>Figure 6.2. Simple
-A/B Deployment - Step 1</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-1.png" align="middle" alt="Simple A/B Deployment - Step 1"></div></div>
+<a name="idp140682193094792" id="idp140682193094792"></a><p class="title"><strong>Figure 6.2. Simple A/B
+Deployment - Step 1</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-1.png" align="middle" alt="Simple A/B Deployment - Step 1"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140623175792120" id="idp140623175792120"></a><p class="title"><strong>Figure 6.3. Simple
-A/B Deployment - Step 2</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-2.png" align="middle" alt="Simple A/B Deployment - Step 2"></div></div>
+<a name="idp140682193097912" id="idp140682193097912"></a><p class="title"><strong>Figure 6.3. Simple A/B
+Deployment - Step 2</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-2.png" align="middle" alt="Simple A/B Deployment - Step 2"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140623175788536" id="idp140623175788536"></a><p class="title"><strong>Figure 6.4. Simple
-A/B Deployment - Step 3</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-3.png" align="middle" alt="Simple A/B Deployment - Step 3"></div></div>
+<a name="idp140682193100872" id="idp140682193100872"></a><p class="title"><strong>Figure 6.4. Simple A/B
+Deployment - Step 3</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-3.png" align="middle" alt="Simple A/B Deployment - Step 3"></div></div>
 </div><br class="figure-break">
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140623175018872" id="idp140623175018872"></a>Complex A/B Deployment: Database is
+<a name="idp140682193103864" id="idp140682193103864"></a>Complex A/B Deployment: Database is
 changed</h4></div></div></div><div class="figure">
-<a name="idp140623175695688" id="idp140623175695688"></a><p class="title"><strong>Figure 6.5. Complex A/B Deployment
-- Step 1</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-1.png" align="middle" alt="Complex A/B Deployment - Step 1"></div></div>
+<a name="idp140682193104504" id="idp140682193104504"></a><p class="title"><strong>Figure 6.5. Complex A/B
+Deployment - Step 1</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-1.png" align="middle" alt="Complex A/B Deployment - Step 1"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140623174978168" id="idp140623174978168"></a><p class="title"><strong>Figure 6.6. Complex A/B Deployment
-- Step 2</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-2.png" align="middle" alt="Complex A/B Deployment - Step 2"></div></div>
+<a name="idp140682193107560" id="idp140682193107560"></a><p class="title"><strong>Figure 6.6. Complex A/B
+Deployment - Step 2</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-2.png" align="middle" alt="Complex A/B Deployment - Step 2"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140623174977320" id="idp140623174977320"></a><p class="title"><strong>Figure 6.7. Complex A/B Deployment
-- Step 3</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-3.png" align="middle" alt="Complex A/B Deployment - Step 3"></div></div>
+<a name="idp140682193110440" id="idp140682193110440"></a><p class="title"><strong>Figure 6.7. Complex A/B
+Deployment - Step 3</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-3.png" align="middle" alt="Complex A/B Deployment - Step 3"></div></div>
 </div><br class="figure-break">
 </div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="high-avail" leftLabel="Prev" leftTitle="High Availability/High Performance
+			leftLink="high-avail" leftLabel="Prev" leftTitle="High Availability/High Performance
 Configurations"
-		    rightLink="install-ssl" rightLabel="Next" rightTitle="Installing SSL Support for an OpenACS
+			rightLink="install-ssl" rightLabel="Next" rightTitle="Installing SSL Support for an OpenACS
 service"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="maintenance-web" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="maintenance-web" upLabel="Up"> 
+		    

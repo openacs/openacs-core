@@ -43,8 +43,7 @@ attributes in the <kbd>input</kbd> tags of each radio button or
 check box in the group. Although possible, newer browser security
 features such as CSP discourage the use of inline Javascript event
 handlers.</p><pre>
-&lt;formgroup id="services" style="background-color:white;"&gt;
-</pre>
+&lt;formgroup id="services" style="background-color:white;"&gt;</pre>
 </li><li><p>See the <a href="formtemplate"><kbd>formtemplate</kbd></a>
 and <a href="formwidget"><kbd>formwidget</kbd></a> tags for
 more information on writing the body of a dynamic form

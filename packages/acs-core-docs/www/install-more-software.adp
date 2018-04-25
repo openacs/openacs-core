@@ -1,15 +1,15 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix B. Install additional
-supporting software}</property>
-<property name="doc(title)">Appendix B. Install additional
-supporting software</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix B. Install additional supporting
+software}</property>
+<property name="doc(title)">Appendix B. Install additional supporting
+software</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="install-redhat" leftLabel="Prev"
-		    title="
+			leftLink="install-redhat" leftLabel="Prev"
+			title="
 Part II. Administrator&#39;s Guide"
-		    rightLink="openacs-unpack" rightLabel="Next">
-		<div class="appendix">
+			rightLink="openacs-unpack" rightLabel="Next">
+		    <div class="appendix">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="install-more-software" id="install-more-software"></a>Appendix B. Install
 additional supporting software</h2></div></div></div><div class="toc">
@@ -42,9 +42,9 @@ directory you start in. Text instructions always precede the
 commands they refer to.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="install-redhat" leftLabel="Prev" leftTitle="
-Appendix A. Install Red Hat 8/9"
-		    rightLink="openacs-unpack" rightLabel="Next" rightTitle="Unpack the OpenACS tarball"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-admin" upLabel="Up"> 
-		
+			leftLink="install-redhat" leftLabel="Prev" leftTitle="Appendix A. Install Red Hat
+8/9"
+			rightLink="openacs-unpack" rightLabel="Next" rightTitle="Unpack the OpenACS tarball"
+			homeLink="index" homeLabel="Home" 
+			upLink="acs-admin" upLabel="Up"> 
+		    

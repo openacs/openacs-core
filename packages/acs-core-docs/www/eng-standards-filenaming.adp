@@ -3,11 +3,11 @@
 <property name="doc(title)">ACS File Naming and Formatting Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="eng-standards-constraint-naming" leftLabel="Prev"
-		    title="
-Chapter 12. Engineering Standards"
-		    rightLink="eng-standards-plsql" rightLabel="Next">
-		<div class="sect1">
+			leftLink="eng-standards-constraint-naming" leftLabel="Prev"
+			title="Chapter 12. Engineering
+Standards"
+			rightLink="eng-standards-plsql" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-filenaming" id="eng-standards-filenaming"></a>ACS
 File Naming and Formatting Standards</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Michael Yoon and Aurelius
@@ -219,8 +219,8 @@ plan to include naming conventions for procs.</p><p><span class="cvstag">($&zwnj
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="eng-standards-constraint-naming" leftLabel="Prev" leftTitle="Constraint naming standard"
-		    rightLink="eng-standards-plsql" rightLabel="Next" rightTitle="PL/SQL Standards"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="eng-standards" upLabel="Up"> 
-		
+			leftLink="eng-standards-constraint-naming" leftLabel="Prev" leftTitle="Constraint naming standard"
+			rightLink="eng-standards-plsql" rightLabel="Next" rightTitle="PL/SQL Standards"
+			homeLink="index" homeLabel="Home" 
+			upLink="eng-standards" upLabel="Up"> 
+		    

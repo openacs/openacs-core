@@ -3,11 +3,10 @@
 <property name="doc(title)">Overview</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="upgrade" leftLabel="Prev"
-		    title="
-Chapter 5. Upgrading"
-		    rightLink="upgrade-4.5-to-4.6" rightLabel="Next">
-		<div class="sect1">
+			leftLink="upgrade" leftLabel="Prev"
+			title="Chapter 5. Upgrading"
+			rightLink="upgrade-4.5-to-4.6" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="upgrade-overview" id="upgrade-overview"></a>Overview</h2></div></div></div><p>Starting with Version 4.5, all OpenACS core packages support
 automatic upgrade. That means that, if you have OpenACS 4.5 or
@@ -26,11 +25,11 @@ install the files on your hard drive, run any appropriate database
 upgrade scripts, and prompt you to restart the server. After
 restarting the server again, the upgrade is complete.</p></li>
 </ol></div><div class="figure">
-<a name="idp140623159984264" id="idp140623159984264"></a><p class="title"><strong>Figure 5.1. Upgrading with the
+<a name="idp140682188908648" id="idp140682188908648"></a><p class="title"><strong>Figure 5.1. Upgrading with the
 APM</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-apm.png" align="middle" alt="Upgrading with the APM"></div></div>
 </div><br class="figure-break"><p>It&#39;s always a good idea to precede an upgrade attempt with a
 <a class="link" href="snapshot-backup" title="Manual backup and recovery">snapshot backup</a>.</p><div class="table">
-<a name="idp140623160218856" id="idp140623160218856"></a><p class="title"><strong>Table 5.1. Assumptions in this
+<a name="idp140682183415528" id="idp140682183415528"></a><p class="title"><strong>Table 5.1. Assumptions in this
 section</strong></p><div class="table-contents"><table class="table" summary="Assumptions in this section" cellspacing="0" border="1">
 <colgroup>
 <col><col>
@@ -49,9 +48,8 @@ section</strong></p><div class="table-contents"><table class="table" summary="As
 </div><br class="table-break">
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="upgrade" leftLabel="Prev" leftTitle="
-Chapter 5. Upgrading"
-		    rightLink="upgrade-4.5-to-4.6" rightLabel="Next" rightTitle="Upgrading 4.5 or higher to 4.6.3"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="upgrade" upLabel="Up"> 
-		
+			leftLink="upgrade" leftLabel="Prev" leftTitle="Chapter 5. Upgrading"
+			rightLink="upgrade-4.5-to-4.6" rightLabel="Next" rightTitle="Upgrading 4.5 or higher to 4.6.3"
+			homeLink="index" homeLabel="Home" 
+			upLink="upgrade" upLabel="Up"> 
+		    

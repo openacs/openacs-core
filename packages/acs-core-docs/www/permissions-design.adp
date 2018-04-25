@@ -3,11 +3,11 @@
 <property name="doc(title)">Permissions Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="permissions-requirements" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="groups-requirements" rightLabel="Next">
-		<div class="sect1">
+			leftLink="permissions-requirements" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="groups-requirements" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="permissions-design" id="permissions-design"></a>Permissions Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By John Prevost and <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
 Schloming</a>
@@ -273,8 +273,8 @@ Notes</strong></span></td><td><span class="strong"><strong>When?</strong></span>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="permissions-requirements" leftLabel="Prev" leftTitle="Permissions Requirements"
-		    rightLink="groups-requirements" rightLabel="Next" rightTitle="Groups Requirements"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="permissions-requirements" leftLabel="Prev" leftTitle="Permissions Requirements"
+			rightLink="groups-requirements" rightLabel="Next" rightTitle="Groups Requirements"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

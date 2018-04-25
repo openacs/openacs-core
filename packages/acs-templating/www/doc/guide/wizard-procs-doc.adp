@@ -6,8 +6,7 @@
 <ol>
 <li>Create a wizard file (ex. wizard.tcl) that contains the
 "template::wizard create" code.
-<pre>
-ex.
+<pre>ex.
        template::wizard create -action "wizard" -name my_wizard -params {
           my_param1 my_param2
        } -steps {
@@ -15,8 +14,7 @@ ex.
           2 -label "Step 2" -url "step2"        
           3 -label "Step 3" -url "step3"
        }
-    
-</pre><ul>
+    </pre><ul>
 <li>action - the url where the wizard will always submit, normally
 its the same as your current wizard file. Has no effect for
 subwizards.</li><li>name - use to distinguish between the different wizards, since
@@ -35,11 +33,9 @@ submitting forms are preserved. Once the form is finished
 processing the wizard will take over and rewrite the url.</p>
 </li><li>Create the wizard template file (ex. wizard.adp). This file
 will include the file based current step of the wizard
-<pre>
-ex.
+<pre>ex.
        &lt;include src="\@wizard:current_url\@"&gt;
-    
-</pre>
+    </pre>
 </li><li>Create the individual steps, these are just normal Tcl and/or
 adp files. So make a step1.tcl, step1.adp, step2.tcl, step2.adp,
 step3.tcl and step3.adp. Normally these files are self submitting
@@ -49,13 +45,11 @@ is processed and successful.</li><li>On each step add the wizard buttons on the 
 step1.tcl will include
 <pre>
     template::wizard submit myform -buttons {back next}
-    
-</pre>
+    </pre>
 On the last step you may want to use the following on step3.tcl
 <pre>
     template::wizard submit myform -buttons {back next}
-    
-</pre>
+    </pre>
 The following values are acceptable for the buttons: back, next and
 finish. Back buttons are not rendered if the step is the first
 step, like wise next buttons are not displayed if its the last
@@ -77,8 +71,7 @@ On your adp file do the following:
              \@wizard.label\@ &lt;br&gt;
           &lt;/else&gt;
        &lt;/multiple&gt;
-    
-</pre>
+    </pre>
 </li><li>
 <h3>How do you set the value of a wizard param?</h3><p>Use "template::wizard set_param myparam_name" to set
 it. Normally you place this in the steps of the wizard where the
@@ -99,27 +92,23 @@ For example you wizard was created this way:
               2 -label "Step 2" -url "step2"    
               3 -label "Step 3" -url "step3"
            }
-    
-</pre>
+    </pre>
 You can access my_param1 and/or my_param2 on any step1.tcl,
 step2.tcl, or step3.tcl by using "ad_page_contract" or
 "template::wizard get_param"
-<pre>
-ex.
+<pre>ex.
     ad_page_contract {
        gets the wizard params
     } {
        my_param1
        my_param2
     }
-    
-</pre>
+    </pre>
 or
 <pre>
     set my_param1 [template::wizard get_param my_param1]
     set my_param2 [template::wizard get_param my_param2]
-    
-</pre>
+    </pre>
 Note: "template::wizard get_param" has the advantage of
 getting the param value during the response time. What does this
 mean? It will properly get the current value of the param which was
@@ -138,8 +127,7 @@ You can use the following on your wizard.adp
              \@wizard.label\@ &lt;br&gt;
              &lt;/a&gt;
        &lt;/multiple&gt;
-   
-</pre>
+   </pre>
 Note: that this is not a very wise thing to do especially if the
 latter steps will depend on the inputs from the earlier steps. You
 can however do checking on each step.</li><li>
@@ -156,8 +144,7 @@ furthest you have been.</p><p>On your wizard.adp you can do the following</p><pr
              \@wizard.label\@ &lt;br&gt;
           &lt;/else&gt;
        &lt;/multiple&gt;
-   
-</pre>
+   </pre>
 Note: that this is not a very wise thing to do especially if the
 latter steps will depend on the inputs from the earlier steps. You
 can however do checking on each step.</li><li>

@@ -33,6 +33,6 @@ package</td>
 <address><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></address>
 <br>
-<font size="-1">$&zwnj;Id: index.html,v 1.3.2.3 2016/11/19 09:10:54
-gustafn Exp $</font>
+<font size="-1">$&zwnj;Id: index.html,v 1.4 2017/08/07 23:47:59 gustafn
+Exp $</font>
 <!-- Created: 1/11/2001 -->

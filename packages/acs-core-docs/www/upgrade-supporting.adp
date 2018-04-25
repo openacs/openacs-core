@@ -3,11 +3,10 @@
 <property name="doc(title)">Upgrading Platform components</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="upgrade-openacs-files" leftLabel="Prev"
-		    title="
-Chapter 5. Upgrading"
-		    rightLink="maintenance-web" rightLabel="Next">
-		<div class="sect1">
+			leftLink="upgrade-openacs-files" leftLabel="Prev"
+			title="Chapter 5. Upgrading"
+			rightLink="maintenance-web" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="upgrade-supporting" id="upgrade-supporting"></a>Upgrading Platform components</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -25,32 +24,26 @@ Engine</span></code>
 </li><li class="listitem">
 <p>Build and install the new OpenFTS driver and supporting Tcl
 procedures. (This section of shell code is not fully documented;
-please exercise care.)</p><pre class="screen">
-cd /usr/local/src/
+please exercise care.)</p><pre class="screen">cd /usr/local/src/
           tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
           chown -R root.root Search-OpenFTS-tcl-0.3.2/
           cd Search-OpenFTS-tcl-0.3.2/
           ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
           cd aolserver/
           make
-          
-</pre><p>Back up the old fts driver as a precaution and install the newly
+          </pre><p>Back up the old fts driver as a precaution and install the newly
 compiled one</p><pre class="screen">
 mv /usr/local/aolserver/bin/nsfts.so /usr/local/aolserver/bin/nsfts-0.2.so 
           cp nsfts.so /usr/local/aolserver/bin
-          
-</pre><p>Build and install the OpenFTS code for PostgreSQL</p><pre class="screen">
-cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
+          </pre><p>Build and install the OpenFTS code for PostgreSQL</p><pre class="screen">cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
           cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.3/contrib /usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts
           make
           su - postgres
           cd tsearch/
           make
           make install
-          exit
-</pre><p>In order for the OpenACS 4.6 OpenFTS Engine to use the OpenFTS
-0.3.2 driver, we need some commands added to the database.</p><pre class="screen">
-[root root]# <strong class="userinput"><code>su - <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+          exit</pre><p>In order for the OpenACS 4.6 OpenFTS Engine to use the OpenFTS
+0.3.2 driver, we need some commands added to the database.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
           [$OPENACS_SERVICE_NAME dev]$ <strong class="userinput"><code>psql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> -f /usr/local/pgsql/share/contrib/openfts.sql</code></strong>
           CREATE
@@ -68,10 +61,9 @@ exit</span>
 </pre>
 </li><li class="listitem">
 <p>
-<strong>OPTIONAL: Install the new OpenFTS
-Engine. </strong> If you want to upgrade the OpenFTS
-Engine, do these steps. (You must have already upgraded the OpenFTS
-driver to 0.3.2.)</p><div class="orderedlist"><ol class="orderedlist" type="a">
+<strong>OPTIONAL: Install the new OpenFTS Engine. </strong>
+If you want to upgrade the OpenFTS Engine, do these steps. (You
+must have already upgraded the OpenFTS driver to 0.3.2.)</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Browse to <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/admin/site-map</code>
 </p></li><li class="listitem"><p>On the <code class="computeroutput">openfts</code> line, click
 on <code class="computeroutput"><span class="guilabel">set
@@ -79,8 +71,7 @@ parameters</span></code>.</p></li><li class="listitem"><p>Change the value of <c
 <code class="computeroutput">/usr/local/src/Search-OpenFTS-tcl-0.3.2/</code>
 </p></li><li class="listitem"><p>Click <code class="computeroutput"><span class="guibutton">Set
 Parameters</span></code>
-</p></li><li class="listitem"><pre class="screen">
-[root root]# restart-aolserver <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+</p></li><li class="listitem"><pre class="screen">[root root]# restart-aolserver <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </pre></li><li class="listitem"><p>Browse to <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/openfts</code>
 </p></li><li class="listitem"><p><span class="bold"><strong>Click <code class="computeroutput"><span class="guilabel">Administration</span></code>.</strong></span></p></li><li class="listitem"><p><span class="bold"><strong>Click <code class="computeroutput"><span class="guibutton">Initialize OpenFTS
 Engine</span></code>
@@ -105,8 +96,7 @@ upgrade script <code class="computeroutput">/var/lib/aolserver/<em class="replac
 on the dump file, and reply the dump. See <a class="ulink" href="http://openacs.org/forums/message-view?message_id=109337" target="_top">Forum OpenACS Q&amp;A: PG 7.2-&gt;7.3 upgrade gotcha?</a>.
 Example:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Back up the database as per <a class="xref" href="snapshot-backup" title="PostgreSQL">PostgreSQL</a>.</p></li><li class="listitem">
-<p>Run the upgrade script on the backup file.</p><pre class="screen">
-[root root]# <strong class="userinput"><code>su - <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+<p>Run the upgrade script on the backup file.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
           [$OPENACS_SERVICE_NAME <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>]# <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/bin</code></strong>
           [$OPENACS_SERVICE_NAME bin]$ <strong class="userinput"><code>./pg_7.2to7.3_upgrade_helper.pl \
@@ -122,8 +112,7 @@ Example:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 
           <span class="emphasis"><em>(many lines omitted)</em></span>
           [$OPENACS_SERVICE_NAME bin]$
-          
-</pre>
+          </pre>
 </li><li class="listitem"><p>Use perl to replace <code class="computeroutput">timestamp</code> with <code class="computeroutput">timestamptz</code> in the dump file. See example
 perl code in step two in <a class="ulink" href="http://cvs.openacs.org/browse/OpenACS/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?r=1.6" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh</a>
 </p></li><li class="listitem"><p>Create a new user for PostgreSQL 7.3.x, as per the Postgres
@@ -146,9 +135,9 @@ instructions</a>.</p></li>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="upgrade-openacs-files" leftLabel="Prev" leftTitle="Upgrading the OpenACS files"
-		    rightLink="maintenance-web" rightLabel="Next" rightTitle="
-Chapter 6. Production Environments"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="upgrade" upLabel="Up"> 
-		
+			leftLink="upgrade-openacs-files" leftLabel="Prev" leftTitle="Upgrading the OpenACS files"
+			rightLink="maintenance-web" rightLabel="Next" rightTitle="Chapter 6. Production
+Environments"
+			homeLink="index" homeLabel="Home" 
+			upLink="upgrade" upLabel="Up"> 
+		    

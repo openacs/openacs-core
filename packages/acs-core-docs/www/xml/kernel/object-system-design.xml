@@ -123,7 +123,7 @@ groups).
 </para></listitem>
 </itemizedlist>
 
-<para>The next section will explore these facilities in the context of the the
+<para>The next section will explore these facilities in the context of the
 particular programming idioms that we wish to generalize.</para>
 
 <para><emphasis role="strong">Related Links</emphasis></para>
@@ -277,7 +277,8 @@ to an object&#39;s context if there is no information about user X&#39;s
 permission to perform action Y on object Z.</para>
 
 <para>The context system forms the basis for the rest of the OpenACS access control
-system, which is described in in two separate documents: one for the <link linkend="permissions-design">permissions system</link> and another for the
+system, which is described in two separate documents: one for the
+<link linkend="permissions-design">permissions system</link> and another for the
 <link linkend="groups-design">party groups</link> system. The context system
 is also used to implement <link linkend="subsites-design">subsites</link>.</para>
 </sect3>

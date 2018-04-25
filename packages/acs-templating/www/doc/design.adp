@@ -287,8 +287,7 @@ There are two parameters.
       DefaultMaster=/www/default-master
       ; anything other than "never" or "always" means normal operation
       RefreshCache=as necessary
-
-</pre>
+    </pre>
 <h3>X. Future Improvements/Areas of Likely Change</h3>
 <p>Passing datasources by reference is new. The acs-templating
 syntax <code>&amp;formal="actual"</code> is different
@@ -304,11 +303,11 @@ complement sequential nested
 <li>System creator: <a href="mailto:karl\@arsdigita.com">Karl
 Goldstein</a>
 </li><li>System owners: <a href="mailto:karl\@arsdigita.com">Karl
-Goldstein</a> and <a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a>
+Goldstein</a> and <a href="mailto:christian\@arsdigita.com">Christian Brechbühler</a>
 </li><li>Documentation authors: <a href="mailto:karl\@arsdigita.com">Karl
 Goldstein</a>, <a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a>, and <a href="mailto:bquinn\@arsdigita.com">Bryan Quinn</a>
+Brechbühler</a>, and <a href="mailto:bquinn\@arsdigita.com">Bryan
+Quinn</a>
 </li>
 </ul>
 <h3>XII. Revision History</h3>
@@ -316,9 +315,8 @@ Brechbühler</a>, and <a href="mailto:bquinn\@arsdigita.com">Bryan Quinn</a>
 <tr bgcolor="#E0E0E0">
 <th width="10%">Document Revision #</th><th width="50%">Action Taken, Notes</th><th>When?</th><th>By Whom?</th>
 </tr><tr>
-<td>0.1</td><td>Brought into the form suggested by Finkler,
-McLoghlin and Wu (href="http://dev.arsdigita.com/ad-sepg/process/design-template)
-</td><td>18 Jul 2000</td><td>Christian Brechbühler</td>
+<td>0.1</td><td>Brought into the form suggested by Finkler, McLoghlin and Wu
+(http://dev.arsdigita.com/ad-sepg/process/design-template)</td><td>18 Jul 2000</td><td>Christian Brechbühler</td>
 </tr><tr>
 <td>0.2</td><td>Adapted to acs-templating as distributed with ACS/Tcl 4.01</td><td>22 Nov 2000</td><td>Christian Brechbühler</td>
 </tr>
@@ -327,5 +325,5 @@ McLoghlin and Wu (href="http://dev.arsdigita.com/ad-sepg/process/design-template
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbuehler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: design.html,v 1.4.2.3 2017/04/22 18:30:26
-gustafn Exp $
+Last modified: $&zwnj;Id: design.html,v 1.9 2018/04/11 20:52:01 hectorr
+Exp $

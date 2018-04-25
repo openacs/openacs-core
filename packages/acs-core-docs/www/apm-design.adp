@@ -3,11 +3,11 @@
 <property name="doc(title)">Package Manager Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="apm-requirements" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="db-api-detailed" rightLabel="Next">
-		<div class="sect1">
+			leftLink="apm-requirements" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="db-api-detailed" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="apm-design" id="apm-design"></a>Package Manager Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Bryan Quinn</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -46,8 +46,8 @@ Examples of applications include <a class="ulink" href="/doc/forums" target="_to
 <span class="strong"><strong>OpenACS Services:</strong></span>
 the aforementioned building blocks. Examples of services include
 the <a class="ulink" href="/doc/acs-content-repository" target="_top">OpenACS Content Repository</a>, the <a class="ulink" href="/doc/acs-templating" target="_top">OpenACS Templating System</a>,
-and the <a class="link" href="kernel-doc" title="Chapter 15. Kernel Documentation">OpenACS
-Kernel</a>, which includes APM.</p></li>
+and the <a class="link" href="kernel-doc" title="Chapter 15. Kernel Documentation">OpenACS Kernel</a>,
+which includes APM.</p></li>
 </ul></div><p>An installation of the OpenACS includes the OpenACS Kernel, some
 services that extend the kernel&#39;s functionality, and some
 applications intended for end-users. Packages function as
@@ -690,8 +690,8 @@ Notes</strong></span></td><td><span class="strong"><strong>When?</strong></span>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="apm-requirements" leftLabel="Prev" leftTitle="Package Manager Requirements"
-		    rightLink="db-api-detailed" rightLabel="Next" rightTitle="Database Access API"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="apm-requirements" leftLabel="Prev" leftTitle="Package Manager Requirements"
+			rightLink="db-api-detailed" rightLabel="Next" rightTitle="Database Access API"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

@@ -14,8 +14,7 @@ or a dynamic template that references local data sources.
 Properties are most commonly used to pass information to a master
 template, such as a title or logo.</p>
 <h3>Usage</h3>
-<pre>
-&lt;master src="master"&gt;
+<pre>&lt;master src="master"&gt;
 
 &lt;property name="title"&gt;My Home Page&lt;/property&gt;
 

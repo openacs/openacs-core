@@ -3,11 +3,11 @@
 <property name="doc(title)">How to Update the OpenACS.org repository</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="releasing-openacs-core" leftLabel="Prev"
-		    title="
-Chapter 16. Releasing OpenACS"
-		    rightLink="releasing-package" rightLabel="Next">
-		<div class="section">
+			leftLink="releasing-openacs-core" leftLabel="Prev"
+			title="Chapter 16. Releasing
+OpenACS"
+			rightLink="releasing-package" rightLabel="Next">
+		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="update-repository" id="update-repository"></a>How to Update the OpenACS.org
 repository</h2></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1">
@@ -31,8 +31,7 @@ there.</p><p>This is automated on OpenACS.org by having a dedicated site just
 for building the repository, invoked with this shell script. Since
 the page circumvents security checks for ease of use, the entire
 site is limited to local requests. The script is called daily with
-a cron job.</p><pre class="programlisting">
-#!/bin/sh
+a cron job.</p><pre class="programlisting">#!/bin/sh
 #set -x
 
 STATUS=`wget --output-document - http://127.0.0.1:8002/build-repository.tcl | grep DONE | wc -l`
@@ -42,15 +41,14 @@ then
     rm -rf /web/openacs.org/www/repository.old
     mv /web/openacs.org/www/repository /web/openacs.org/www/repository.old
     cp -r /web/repository/www/repository /web/openacs.org/www/repository
-fi
-</pre>
+fi</pre>
 </li>
 </ol></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="releasing-openacs-core" leftLabel="Prev" leftTitle="OpenACS Core and .LRN"
-		    rightLink="releasing-package" rightLabel="Next" rightTitle="How to package and release an OpenACS
+			leftLink="releasing-openacs-core" leftLabel="Prev" leftTitle="OpenACS Core and .LRN"
+			rightLink="releasing-package" rightLabel="Next" rightTitle="How to package and release an OpenACS
 Package"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="releasing-openacs" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="releasing-openacs" upLabel="Up"> 
+		    

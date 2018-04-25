@@ -3,12 +3,11 @@
 <property name="doc(title)">OpenACS Release Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="openacs-overview" leftLabel="Prev"
-		    title="
-Chapter 1. High level information: What is
-OpenACS?"
-		    rightLink="acs-admin" rightLabel="Next">
-		<div class="sect1">
+			leftLink="openacs-overview" leftLabel="Prev"
+			title="Chapter 1. High level
+information: What is OpenACS?"
+			rightLink="acs-admin" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="release-notes" id="release-notes"></a>OpenACS Release Notes</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -419,13 +418,12 @@ message are not issued every time a user enters/exits a chat-room
 </ul></div><p>Altogether, OpenACS 5.9.1 differs from OpenACS 5.9.1 by the
 following statistics</p><pre class="programlisting">
        3548 files changed, 113292 insertions(+), 90507 deletions(-)
-    
-</pre><p>contributed by 5 committers (Michael Aram, Gustaf Neumann,
+    </pre><p>contributed by 5 committers (Michael Aram, Gustaf Neumann,
 Antonio Pisano, Hector Romojaro, Thomas Renner) and 8 patch/bugfix
-providers (Frank Bergmann, GÃ&amp;frac14;nter Ernst, Brian
-Fenton, Felix MÃ¶dritscher, Marcus Moser, Franz Penz,
-Stefan Sobernig, Michael Steigman). All packages of the release
-were tested with PostgreSQL 9.6.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+providers (Frank Bergmann, Günter Ernst, Brian Fenton, Felix
+Mödritscher, Marcus Moser, Franz Penz, Stefan Sobernig, Michael
+Steigman). All packages of the release were tested with PostgreSQL
+9.6.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-9-0" id="release-notes-5-9-0"></a>Release 5.9.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -523,13 +521,12 @@ forums, news, notifications, xowiki.</p></li></ul></div>
 </ul></div><p>Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 by the
 following statistics</p><pre class="programlisting">
       3658 files changed, 120800 insertions(+), 97617 deletions(-)
-    
-</pre><p>contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf
+    </pre><p>contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf
 Neumann, Antonio Pisano) and patch/bugfix providers (Frank
-Bergmann, Andrew Helsley, Felix MÃ¶dritscher, Marcos
-Moser, Franz Penz, Thomas Renner). These are significantly more
-changes as the differences in the last releases. All packages of
-the release were tested with PostgreSQL 9.4.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+Bergmann, Andrew Helsley, Felix Mödritscher, Marcos Moser, Franz
+Penz, Thomas Renner). These are significantly more changes as the
+differences in the last releases. All packages of the release were
+tested with PostgreSQL 9.4.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-8-1" id="release-notes-5-8-1"></a>Release 5.8.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -709,8 +706,8 @@ upcoming .LRN 2.1.0 releases. This release does <span class="strong"><strong>not
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-1-2" id="release-notes-5-1-2"></a>Release 5.1.2</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>Translations synchronized with the translation server. Basque and
-Catalan added.</p></li><li class="listitem"><p>For a complete change list, see the Change list since 5.1.0 in
+<li class="listitem"><p>Translations synchronized with the translation server. Basque
+and Catalan added.</p></li><li class="listitem"><p>For a complete change list, see the Change list since 5.1.0 in
 <a class="xref" href="">???</a>.</p></li>
 </ul></div>
 </div><div class="sect2">
@@ -766,11 +763,10 @@ automated testing, which is not comprehensive. This release
 contains work done on the translation server
 http://translate.openacs.org through 7 Nov 2003.</p><p>Please report bugs using our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">Bug
 Tracker</a> at the <a class="ulink" href="http://openacs.org/" target="_top">OpenACS website</a>.</p><p>You may want to begin by reading our installation documentation
-for <a class="xref" href="unix-installation" title="a Unix-like system">the section called &ldquo;a
-Unix-like system&rdquo;</a>. Note that the Windows
-documentation is not current for OpenACS 5.9.0, but an alternative
-is to use John Sequeira&#39;s <a class="ulink" href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM
-project</a>.</p><p>After installation, the full documentation set can be found by
+for <a class="xref" href="unix-installation" title="a Unix-like system">the section called “a Unix-like
+system”</a>. Note that the Windows documentation is not current for
+OpenACS 5.9.0, but an alternative is to use John Sequeira&#39;s
+<a class="ulink" href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM project</a>.</p><p>After installation, the full documentation set can be found by
 visiting <code class="filename">http://yourserver/doc</code>.</p><p>New features in this release:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Internationalization support. A message catalog to store
 translated text, localization of dates, number formatting, timezone
@@ -819,26 +815,26 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><p><span class="cvstag">($&zwnj;Id: release-notes.xml,v 1.31 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+</ul></div><p><span class="cvstag">($&zwnj;Id: release-notes.xml,v 1.34 2018/04/18
+09:09:12 hectorr Exp $)</span></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623178188216" id="idp140623178188216"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140682192466872" id="idp140682192466872"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623178401176" id="idp140623178401176"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140682192489224" id="idp140682192489224"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623178402712" id="idp140623178402712"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140682192490856" id="idp140682192490856"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623178404344" id="idp140623178404344"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140682192492552" id="idp140682192492552"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="openacs-overview" leftLabel="Prev" leftTitle="Overview"
-		    rightLink="acs-admin" rightLabel="Next" rightTitle="
+			leftLink="openacs-overview" leftLabel="Prev" leftTitle="Overview"
+			rightLink="acs-admin" rightLabel="Next" rightTitle="
 Part II. Administrator&#39;s Guide"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="general-documents" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="general-documents" upLabel="Up"> 
+		    

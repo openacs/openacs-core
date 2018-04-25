@@ -3,11 +3,11 @@
 <property name="doc(title)">Groups Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="groups-requirements" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="subsites-requirements" rightLabel="Next">
-		<div class="sect1">
+			leftLink="groups-requirements" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="subsites-requirements" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="groups-design" id="groups-design"></a>Groups Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a> and
 Mark Thomas</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
@@ -408,8 +408,8 @@ membership/compostion</td><td>09/08/2000</td><td>Mark Thomas</td>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="groups-requirements" leftLabel="Prev" leftTitle="Groups Requirements"
-		    rightLink="subsites-requirements" rightLabel="Next" rightTitle="Subsites Requirements"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="groups-requirements" leftLabel="Prev" leftTitle="Groups Requirements"
+			rightLink="subsites-requirements" rightLabel="Next" rightTitle="Subsites Requirements"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

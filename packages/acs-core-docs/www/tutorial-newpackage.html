@@ -11,10 +11,10 @@
   <div class="mediaobject"><img src="images/openacs-best-practice.png"></div>
 </div>
 
-    <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623176147848"></a>Overview</h3></div></div></div>
+    <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682183652824"></a>Overview</h3></div></div></div>
       
       <p>To start developing new code in OpenACS, we build a new package. A package 
-      is a a discrete collection of web pages, Tcl code, and database tables and procedures.
+      is a discrete collection of web pages, Tcl code, and database tables and procedures.
       A package with user interface is called an <span class="strong"><strong>application</strong></span>; 
       a package which provides functions to other packages and has no direct interface, a
       <span class="strong"><strong>service</strong></span>.  A package can be installed, upgraded, and 
@@ -36,14 +36,14 @@
 </p>
   </div>
 
-  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623176152424"></a>Before you begin</h3></div></div></div>
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682183611048"></a>Before you begin</h3></div></div></div>
     <p>You will need:</p>
     <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A computer with a working installation of
 	  OpenACS.  If you don't have this, see <a class="xref" href="install-overview.html" title="Chapter 2. Installation Overview">Chapter 2, <i>Installation Overview</i></a>.
 	  </p></li><li class="listitem"><p>Example files, which are included in the
 standard OpenACS 5.9.0 distribution.
 	  </p></li></ul></div>
-    <div class="figure"><a name="idp140623174045016"></a><p class="title"><b>Figure 9.1. Assumptions in this section</b></p><div class="figure-contents">
+    <div class="figure"><a name="idp140682188007688"></a><p class="title"><b>Figure 9.1. Assumptions in this section</b></p><div class="figure-contents">
       
       <div class="informaltable">
         <table class="informaltable" cellspacing="0" border="1"><colgroup><col><col></colgroup><tbody><tr><td>Fully qualified domain name of your server</td><td><em class="replaceable"><code>yourserver.test</code></em></td></tr><tr><td>URL of your server</td><td><em class="replaceable"><code>http://yourserver.test:8000</code></em></td></tr><tr><td>Name of development account</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td></tr><tr><td>New Package key</td><td><em class="replaceable"><code>myfirstpackage</code></em></td></tr></tbody></table>
@@ -51,7 +51,7 @@ standard OpenACS 5.9.0 distribution.
     </div></div><br class="figure-break">
   </div>
 
-  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623174833816"></a>Use the APM to initialize a new package</h3></div></div></div>
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682183351512"></a>Use the APM to initialize a new package</h3></div></div></div>
     
     <p>We use the <a class="ulink" href="packages.html" target="_top">ACS Package Manager</a> (APM) to add, remove, and
     upgrade packages.  It handles package meta-data, such as lists of
@@ -98,7 +98,7 @@ standard OpenACS 5.9.0 distribution.
           files in the package will be within this directory. <a class="ulink" href="packages.html" target="_top">More on the structure of
           packages</a>). </p>
     </div>
-    <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623175709240"></a>Add an Application Instance to the Server</h3></div></div></div>
+    <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682188284440"></a>Add an Application Instance to the Server</h3></div></div></div>
       
       <p>In order to see your work in progress, you must create a
       map between the URL space of incoming requests and the package application instance.
@@ -119,7 +119,7 @@ standard OpenACS 5.9.0 distribution.
       <code class="computeroutput">http://yourserver.test:8000/myfirstpackage</code>
       to be satisfied from the files at <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/myfirstpackage/www</code>.</p>
     </div>
-    <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623171946968"></a>Quick start</h3></div></div></div>
+    <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682188881800"></a>Quick start</h3></div></div></div>
       
       <p>The remainder of the tutorial walks you through each file one at a time as you create the package.  You can skip all this, and get a working package, by doing the following:</p>
     <pre class="screen">cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/tutorial

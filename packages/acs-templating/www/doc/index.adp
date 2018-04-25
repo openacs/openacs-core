@@ -43,5 +43,5 @@ parts.</td>
 Original maintainer: Christian Brechbühler
 (christian\@arsdigita.com) 
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: index.html,v 1.6.2.5 2017/04/22 18:30:26
-gustafn Exp $
+Last modified: $&zwnj;Id: index.html,v 1.7 2017/08/07 23:48:02 gustafn
+Exp $

@@ -3,11 +3,11 @@
 <property name="doc(title)">Install Oracle 8.1.7</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="unix-installation" leftLabel="Prev"
-		    title="
-Chapter 3. Complete Installation"
-		    rightLink="postgres" rightLabel="Next">
-		<div class="sect1">
+			leftLink="unix-installation" leftLabel="Prev"
+			title="Chapter 3. Complete
+Installation"
+			rightLink="postgres" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="oracle" id="oracle"></a>Install Oracle 8.1.7</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>If you are installing PostGreSQL instead of Oracle, skip this
@@ -65,7 +65,7 @@ unless you know what you are doing. Subsequent documents will
 expect that you used the defaults, so a change made here will
 necessitate further changes later. For a guide to the defaults,
 please see <a class="xref" href="oracle" title="Defaults">the section
-called &ldquo;Defaults&rdquo;</a>.</p><p>In order for OpenACS to work properly you need to set the
+called “Defaults”</a>.</p><p>In order for OpenACS to work properly you need to set the
 environment appropriately.</p><pre class="programlisting">
 export ORACLE_BASE=/ora8/m01/app/oracle
 export ORACLE_HOME=$ORACLE_BASE/product/8.1.7
@@ -75,12 +75,9 @@ export ORACLE_SID=ora8
 export ORACLE_TERM=vt100
 export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
 
-umask 022
-</pre><pre class="programlisting">
-open_cursors = 500
-</pre><pre class="programlisting">
-nls_date_format = "YYYY-MM-DD"
-</pre><p>For additional resources/documentation, please see this
+umask 022</pre><pre class="programlisting">
+open_cursors = 500</pre><pre class="programlisting">
+nls_date_format = "YYYY-MM-DD"</pre><p>For additional resources/documentation, please see this
 <a class="ulink" href="http://openacs.org/forums/message-view?message_id=28829" target="_top">thread</a> and <a class="ulink" href="http://openacs.org/forums/message-view?message_id=67108" target="_top">Andrew Piskorski&#39;s mini-guide</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -92,14 +89,12 @@ access.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-
 <li class="listitem">
 <p>Login as a non-root user and start X by typing <code class="computeroutput">startx</code>
 </p><pre class="programlisting">
-[joeuser ~]$ startx
-</pre>
+[joeuser ~]$ startx</pre>
 </li><li class="listitem">
 <p>Open a terminal window type and login as root</p><pre class="programlisting">
 [joeuser ~]$ su -
 Password: ***********
-[root ~]#
-</pre>
+[root ~]#</pre>
 </li><li class="listitem">
 <p>Create and setup the <code class="computeroutput">oracle</code>
 group and <code class="computeroutput">oracle</code> account</p><p>We need to create a user <code class="computeroutput">oracle</code>, which is used to install the
@@ -108,8 +103,7 @@ product, as well as starting and stopping the database.</p><pre class="programli
 [root ~]# groupadd oinstall
 [root ~]# groupadd oracle
 [root ~]# useradd -g dba -G oinstall,oracle -m oracle
-[root ~]# passwd oracle
-</pre><p>You will be prompted for the New Password and Confirmation of
+[root ~]# passwd oracle</pre><p>You will be prompted for the New Password and Confirmation of
 that password.</p>
 </li><li class="listitem">
 <p>Setup the installation location for Oracle. While Oracle can
@@ -122,8 +116,7 @@ install needs about 1 GB free on <code class="computeroutput">/ora8</code> to in
 root:/ora8# cd /ora8
 root:/ora8# mkdir -p m01 m02 m03/oradata/ora8
 root:/ora8# chown -R oracle.dba /ora8
-root:/ora8# exit
-</pre>
+root:/ora8# exit</pre>
 </li><li class="listitem">
 <p>Set up the <code class="computeroutput">oracle</code> user&#39;s
 environment</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
@@ -131,24 +124,19 @@ environment</p><div class="itemizedlist"><ul class="itemizedlist" style="list-st
 <p>Log in as the user <code class="computeroutput">oracle</code> by
 typing the following:</p><pre class="programlisting">
 [joeuser ~]$ su - oracle
-Password: ********
-</pre>
+Password: ********</pre>
 </li><li class="listitem">
 <p>Use a text editor to edit the <code class="computeroutput">.bash_profile</code> file in the <code class="computeroutput">oracle</code> account home directory.</p><pre class="programlisting">
-[oracle ~]$ emacs .bash_profile
-</pre><p>You may get this error trying to start emacs:</p><pre class="programlisting">
+[oracle ~]$ emacs .bash_profile</pre><p>You may get this error trying to start emacs:</p><pre class="programlisting">
 Xlib: connection to ":0.0" refused by server
 Xlib: Client is not authorized to connect to Server
 emacs: Cannot connect to X server :0.
 Check the DISPLAY environment variable or use `-d'.
 Also use the `xhost' program to verify that it is set to permit
-connections from your machine.
-</pre><p>If so, open a new terminal window and do the following:</p><pre class="programlisting">
-[joeuser ~]$ xhost +localhost
-</pre><p>Now, back in the oracle terminal:</p><pre class="programlisting">
+connections from your machine.</pre><p>If so, open a new terminal window and do the following:</p><pre class="programlisting">
+[joeuser ~]$ xhost +localhost</pre><p>Now, back in the oracle terminal:</p><pre class="programlisting">
 [oracle ~]$ export DISPLAY=localhost:0.0
-[oracle ~]$ emacs .bash_profile
-</pre><p>Try this procedure anytime you get an Xlib connection refused
+[oracle ~]$ emacs .bash_profile</pre><p>Try this procedure anytime you get an Xlib connection refused
 error.</p>
 </li><li class="listitem">
 <p>Add the following lines (substituting your Oracle version number
@@ -161,22 +149,19 @@ export ORACLE_SID=ora8
 export ORACLE_TERM=vt100
 export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
 
-umask 022
-</pre><p>Save the file by typing <code class="computeroutput">CTRL-X
+umask 022</pre><p>Save the file by typing <code class="computeroutput">CTRL-X
 CTRL-S</code> and then exit by typing <code class="computeroutput">CTRL-X CTRL-C</code>. Alternatively, use the
 menus.</p>
 </li>
 </ul></div><p>Make sure that you do <span class="strong"><strong>not</strong></span> add any lines like the
 following</p><pre class="programlisting">
 # NLS_LANG=american
-# export NLS_LANG
-</pre><p>These lines will change the Oracle date settings and will break
+# export NLS_LANG</pre><p>These lines will change the Oracle date settings and will break
 OpenACS since OpenACS depends on the ANSI date format, YYYY-MM-DD
 dates.</p>
 </li><li class="listitem">
 <p>Log out as oracle</p><pre class="programlisting">
-[oracle ~]$ exit
-</pre>
+[oracle ~]$ exit</pre>
 </li><li class="listitem">
 <p>Log back in as <code class="computeroutput">oracle</code> and
 double check that your environment variables are as intended. The
@@ -184,20 +169,17 @@ double check that your environment variables are as intended. The
 variables that are set in your environment, and <code class="computeroutput">grep</code> shows you just the lines you want
 (those with ORA in it).</p><pre class="programlisting">
 [joeuser ~]$ su - oracle
-[oracle ~]$ env | grep ORA
-</pre><p>If it worked, you should see:</p><pre class="programlisting">
+[oracle ~]$ env | grep ORA</pre><p>If it worked, you should see:</p><pre class="programlisting">
 ORACLE_SID=ora8
 ORACLE_BASE=/ora8/m01/app/oracle
 ORACLE_TERM=vt100
 ORACLE_HOME=/ora8/m01/app/oracle/product/8.1.7
-ORA_NLS33=/ora8/m01/app/oracle/product/8.1.7/ocommon/nls/admin/data
-</pre><p>If not, try adding the files to <code class="computeroutput">~/.bashrc</code> instead of <code class="computeroutput">.bash_profile</code>. Then logout and log back in
+ORA_NLS33=/ora8/m01/app/oracle/product/8.1.7/ocommon/nls/admin/data</pre><p>If not, try adding the files to <code class="computeroutput">~/.bashrc</code> instead of <code class="computeroutput">.bash_profile</code>. Then logout and log back in
 again. Also, be certain you are doing <code class="computeroutput">su - oracle</code> and not just <code class="computeroutput">su oracle</code>. The <code class="computeroutput">-</code> means that <code class="computeroutput">.bashrc</code> and <code class="computeroutput">.bash_profile</code> will be evaluated.</p><p>Make sure that <code class="computeroutput">/bin</code>,
 <code class="computeroutput">/usr/bin</code>, and <code class="computeroutput">/usr/local/bin</code> are in your path by
 typing:</p><pre class="programlisting">
 [oracle ~]$ echo $PATH
-/bin:/usr/bin:/usr/local/bin:/usr/bin/X11:/usr/X11R6/bin:/home/oracle/bin:/ora8/m01/app/oracle/product/8.1.7/bin
-</pre><p>If they are not, then add them to the <code class="computeroutput">.bash_profile</code> by changing the PATH
+/bin:/usr/bin:/usr/local/bin:/usr/bin/X11:/usr/X11R6/bin:/home/oracle/bin:/ora8/m01/app/oracle/product/8.1.7/bin</pre><p>If they are not, then add them to the <code class="computeroutput">.bash_profile</code> by changing the PATH
 statement above to <code class="computeroutput">PATH=$PATH:/usr/local/bin:$ORACLE_HOME/bin</code>
 </p>
 </li>
@@ -211,8 +193,7 @@ if not already running. Start a new terminal:</p><pre class="programlisting">
 [joeuser ~]$ xhost +localhost
 [joeuser ~]$ su - oracle
 Password: **********
-[oracle ~]$ export DISPLAY=localhost:0.0
-</pre>
+[oracle ~]$ export DISPLAY=localhost:0.0</pre>
 </li><li class="listitem">
 <p>Find the <code class="computeroutput">runInstaller</code>
 script</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
@@ -223,24 +204,20 @@ cd-rom mount point</p><pre class="programlisting">
 [oracle ~]$ su - root
 [root ~]# mount -t iso9660 /dev/cdrom /mnt/cdrom
 [root ~]# exit
-[oracle ~]$ cd /mnt/cdrom
-</pre>
+[oracle ~]$ cd /mnt/cdrom</pre>
 </li><li class="listitem">
 <p>If you are installing from the tarball, the install script is
 located in the <code class="computeroutput">Oracle8iR2</code>
 directory that was created when you expanded the archive.</p><pre class="programlisting">
-[oracle ~]$ cd /where/oracle/Disk1
-</pre>
+[oracle ~]$ cd /where/oracle/Disk1</pre>
 </li>
 </ul></div><p>Check to make sure the file is there.</p><pre class="programlisting">
 oracle:/where/oracle/Disk1$ ls
-doc  index.htm  install  runInstaller  stage  starterdb
-</pre><p>If you don&#39;t see <code class="computeroutput">runInstaller</code>, you are in the wrong
+doc  index.htm  install  runInstaller  stage  starterdb</pre><p>If you don&#39;t see <code class="computeroutput">runInstaller</code>, you are in the wrong
 directory.</p>
 </li><li class="listitem">
 <p>Run the installer</p><pre class="programlisting">
-oracle:/where/oracle/Disk1$ ./runInstaller
-</pre><p>A window will open that welcomes you to the 'Oracle
+oracle:/where/oracle/Disk1$ ./runInstaller</pre><p>A window will open that welcomes you to the 'Oracle
 Universal Installer' (OUI). Click on "<code class="computeroutput">Next</code>"</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3><p>Some people have had trouble with this step on RedHat 7.3 and
 8.0. If so, try the following steps before calling <span class="command"><strong>./runInstaller</strong></span>:</p><div class="orderedlist"><ol class="orderedlist" type="1">
@@ -256,8 +233,8 @@ LD_ASSUME_KERNEL=2.2.5</strong></span>
 "(wherever you mounted the CDROM)<code class="computeroutput">/stage/products.jar</code>"</p></li><li class="listitem">
 <p>"destination" path says "<code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7</code>"</p><p>If the destination is not correct it is because your environment
 variables are not set properly. Make sure you logged on as
-<code class="computeroutput">oracle</code> using <code class="computeroutput">su - oracle</code>. If so, edit the <code class="computeroutput">~/.bash_profile</code> as you did in <a class="xref" href="oracle" title="Pre-Installation Tasks">the section called
-&ldquo;Pre-Installation Tasks&rdquo;</a>
+<code class="computeroutput">oracle</code> using <code class="computeroutput">su - oracle</code>. If so, edit the <code class="computeroutput">~/.bash_profile</code> as you did in <a class="xref" href="oracle" title="Pre-Installation Tasks">the section called “Pre-Installation
+Tasks”</a>
 </p>
 </li><li class="listitem"><p>Click "Next" (a pop up window will display Loading
 Product information).</p></li>
@@ -270,11 +247,9 @@ as root:</p></li><li class="listitem"><div class="itemizedlist"><ul class="itemi
 <p>Debian users need to link <code class="computeroutput">/bin/awk</code> to <code class="computeroutput">/usr/bin/awk</code> before running the script
 below</p><pre class="programlisting">
 [joueser ~]$ su -
-[root ~]# ln -s /usr/bin/awk /bin/awk
-</pre>
+[root ~]# ln -s /usr/bin/awk /bin/awk</pre>
 </li></ul></div></li><li class="listitem">
-<p>Open a new terminal window, then type:</p><pre class="programlisting">
-[joeuser ~]$ su -
+<p>Open a new terminal window, then type:</p><pre class="programlisting">[joeuser ~]$ su -
 [root ~]# cd /ora8/m01/app/oracle/product/8.1.7
 [root ~]# ./orainstRoot.sh  
 ; You should see:
@@ -282,8 +257,7 @@ Creating Oracle Inventory pointer file (/etc/oraInst.loc)
 Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
 [root ~]# mkdir -p /usr/local/java
 [root ~]# exit
-[joeuser ~]$ exit
-</pre>
+[joeuser ~]$ exit</pre>
 </li><li class="listitem"><p>Click "Retry"</p></li>
 </ul></div>
 </li><li class="listitem">
@@ -370,14 +344,12 @@ IMPORTANT NOTE: Please delete any log and trace files previously
                 created by the Oracle Enterprise Manager Intelligent
                 Agent. These files may be found in the directories
                 you use for storing other Net8 log and trace files.
-                If such files exist, the OEM IA may not restart.
-</pre>
+                If such files exist, the OEM IA may not restart.</pre>
 </li><li class="listitem"><p>Do not follow the instructions on deleting trace and log files,
 it is not necessary.</p></li>
 </ul></div><pre class="programlisting">
 [root ~]# exit
-[joeuser ~]$ exit
-</pre>
+[joeuser ~]$ exit</pre>
 </li><li class="listitem"><p>Go back to the pop-up window and click "OK"</p></li><li class="listitem">
 <p>The "Configuration Tools" screen in the OUI</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p>This window displays the config tools that will automatically be
 launched.</p></li></ul></div>
@@ -440,8 +412,7 @@ hour on a Pentium II with 128 MB of RAM.</p><div class="itemizedlist"><ul class=
 [joeuser ~]$ su - oracle
 Password: *********
 [oracle ~]$ export DISPLAY=localhost:0.0
-[oracle ~]$ dbassist
-</pre>
+[oracle ~]$ dbassist</pre>
 </li><li class="listitem">
 <p>The "Welcome" screen in the Oracle Database
 Configuration Agent (ODCA)</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
@@ -487,12 +458,10 @@ is usually <code class="computeroutput">init</code><span class="emphasis"><em>SI
 Assuming your <code class="computeroutput">$ORACLE_HOME</code>
 matches our default of <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7</code>, the
 following will open the file for editing.</p><pre class="programlisting">
-[oracle ~]$ emacs /ora8/m01/app/oracle/product/8.1.7/dbs/initora8.ora
-</pre>
+[oracle ~]$ emacs /ora8/m01/app/oracle/product/8.1.7/dbs/initora8.ora</pre>
 </li><li class="listitem">
 <p>Add the following line to the end:</p><pre class="programlisting">
-nls_date_format = "YYYY-MM-DD"
-</pre>
+nls_date_format = "YYYY-MM-DD"</pre>
 </li><li class="listitem">
 <p>Now find the <code class="computeroutput">open_cursors</code>
 line in the file. If you&#39;re using <code class="computeroutput">emacs</code> scroll up to the top of the buffer
@@ -500,8 +469,7 @@ and do <code class="computeroutput">CTRL-S</code> and type
 <code class="computeroutput">open_cursors</code> to find the line.
 The default is <code class="computeroutput">100</code>. Change it
 to <code class="computeroutput">500</code>.</p><pre class="programlisting">
-open_cursors = 500
-</pre>
+open_cursors = 500</pre>
 </li><li class="listitem"><p>Save the file. In emacs, do <code class="computeroutput">CTRL-X
 CTRL-S</code> to save followed by <code class="computeroutput">CTRL-X CTRL-C</code> to exit or use the menu.</p></li><li class="listitem"><p>At this point, you are ready to initiate database creation. We
 recommend shutting down X to free up some RAM unless you have 256
@@ -512,8 +480,7 @@ instead, switch to a virtual console by doing <code class="computeroutput">CRTL-
 <p>Change to the directory where the database creation script is
 and run it:</p><pre class="programlisting">
 [oracle ~]$ cd /ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib
-oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh
-</pre><p>In some instances, Oracle will save the file to <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7/assistants/dbca</code>
+oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</pre><p>In some instances, Oracle will save the file to <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7/assistants/dbca</code>
 Try running the script there if your first attempt does not
 succeed.</p>
 </li><li class="listitem">
@@ -533,34 +500,28 @@ file. It&#39;s available <a class="ulink" href="files/acceptance-sql.txt" target
 Save the file to <code class="computeroutput">/var/tmp</code>
 </p></li><li class="listitem">
 <p>In the oracle shell, copy the file.</p><pre class="programlisting">
-[oracle ~]$ cp /var/tmp/acceptance-sql.txt /var/tmp/acceptance.sql
-</pre>
+[oracle ~]$ cp /var/tmp/acceptance-sql.txt /var/tmp/acceptance.sql</pre>
 </li><li class="listitem">
 <p>Once you&#39;ve got the acceptance test file all set, stay in
 your term and type the following:</p><pre class="programlisting">
-[oracle ~]$ sqlplus system/manager
-</pre><p>SQL*Plus should startup. If you get an <code class="computeroutput">ORA-01034: Oracle not Available</code> error, it
+[oracle ~]$ sqlplus system/manager</pre><p>SQL*Plus should startup. If you get an <code class="computeroutput">ORA-01034: Oracle not Available</code> error, it
 is because your Oracle instance is not running. You can manually
 start it as the <code class="computeroutput">oracle</code>
 user.</p><pre class="programlisting">
 [oracle ~]$ svrmgrl
 SVRMGR&gt; connect internal
-SVRMGR&gt; startup
-</pre>
+SVRMGR&gt; startup</pre>
 </li><li class="listitem">
 <p>Now that you&#39;re into SQL*Plus, change the default passwords
 for system, sys, and ctxsys to "alexisahunk" (or to
 something you&#39;ll remember):</p><pre class="programlisting">
 SQL&gt; alter user system identified by alexisahunk;
 SQL&gt; alter user sys identified by alexisahunk;
-SQL&gt; alter user ctxsys identified by alexisahunk;
-</pre>
+SQL&gt; alter user ctxsys identified by alexisahunk;</pre>
 </li><li class="listitem">
 <p>Verify that your date settings are correct.</p><pre class="programlisting">
-SQL&gt; select sysdate from dual;
-</pre><p>If you don&#39;t see a date that fits the format <code class="computeroutput">YYYY-MM-DD</code>, please read <a class="xref" href="oracle" title="Troubleshooting Oracle Dates">the section called
-&ldquo;Troubleshooting Oracle
-Dates&rdquo;</a>.</p>
+SQL&gt; select sysdate from dual;</pre><p>If you don&#39;t see a date that fits the format <code class="computeroutput">YYYY-MM-DD</code>, please read <a class="xref" href="oracle" title="Troubleshooting Oracle Dates">the section called “Troubleshooting
+Oracle Dates”</a>.</p>
 </li><li class="listitem">
 <p>At this point we are going to hammer your database with an
 intense acceptance test. This usually takes around 30 minutes.</p><pre class="programlisting">
@@ -573,19 +534,17 @@ SYSDATE
 ----------
 2000-06-10
 
-SQL&gt;
-</pre><p>Many people encounter an error regarding <code class="computeroutput">maximum key length</code>:</p><pre class="programlisting">
+SQL&gt;</pre><p>Many people encounter an error regarding <code class="computeroutput">maximum key length</code>:</p><pre class="programlisting">
 ERROR at line 1:
-ORA-01450: maximum key length (758) exceeded
-</pre><p>This error occurs if your database block size is wrong and is
+ORA-01450: maximum key length (758) exceeded</pre><p>This error occurs if your database block size is wrong and is
 usually suffered by people trying to load OpenACS into a
 pre-existing database. Unfortunately, the only solution is to
 create a new database with a block size of at least <code class="computeroutput">4096</code>. For instructions on how to do this,
-see <a class="xref" href="oracle" title="Creating the First Database">the section called
-&ldquo;Creating the First Database&rdquo;</a>
-above. You can set the parameter using the <code class="computeroutput">dbassist</code> program or by setting the
-<code class="computeroutput">DB_BLOCK_SIZE</code> parameter in your
-database&#39;s creation script.</p><p>If there were no errors, then consider yourself fortunate. Your
+see <a class="xref" href="oracle" title="Creating the First Database">the section called “Creating the
+First Database”</a> above. You can set the parameter using the
+<code class="computeroutput">dbassist</code> program or by setting
+the <code class="computeroutput">DB_BLOCK_SIZE</code> parameter in
+your database&#39;s creation script.</p><p>If there were no errors, then consider yourself fortunate. Your
 Oracle installation is working.</p>
 </li>
 </ul></div>
@@ -601,24 +560,21 @@ start the database. Unfortunately, the script shipped in the Linux
 distribution does not work out of the box. The fix is simple.
 Follow these directions to apply it. First, save <a class="ulink" href="files/dbstart.txt" target="_top">dbstart</a> to <code class="computeroutput">/var/tmp</code>. Then, as <code class="computeroutput">oracle</code>, do the following:</p><pre class="programlisting">
 [oracle ~]$ cp /var/tmp/dbstart.txt /ora8/m01/app/oracle/product/8.1.7/bin/dbstart 
-[oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart
-</pre>
+[oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart</pre>
 </li><li class="listitem">
 <p>While you&#39;re logged in as <code class="computeroutput">oracle</code>, you should configure the
 <code class="computeroutput">oratab</code> file to load your
 database at start. Edit the file <code class="computeroutput">/etc/oratab</code>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>You will see this line.</p><pre class="programlisting">
-ora8:/ora8/m01/app/oracle/product/8.1.7:N
-</pre><p>By the way, if you changed the service name or have multiple
+ora8:/ora8/m01/app/oracle/product/8.1.7:N</pre><p>By the way, if you changed the service name or have multiple
 databases, the format of this file is:</p><p><span class="emphasis"><em><code class="computeroutput">service_name:$ORACLE_HOME:Y || N (for
 autoload)</code></em></span></p>
 </li><li class="listitem">
 <p>Change the last letter from "N" to "Y". This
 tells Oracle that you want the database to start when the machine
 boots. It should look like this.</p><pre class="programlisting">
-ora8:/ora8/m01/app/oracle/product/8.1.7:Y
-</pre>
+ora8:/ora8/m01/app/oracle/product/8.1.7:Y</pre>
 </li><li class="listitem"><p>Save the file &amp; quit the terminal.</p></li>
 </ul></div>
 </li><li class="listitem">
@@ -630,8 +586,7 @@ this section)</p><pre class="programlisting">
 [oracle ~]$ su -
 [root ~]# cp /var/tmp/oracle8i.txt /etc/rc.d/init.d/oracle8i
 [root ~]# chown root.root /etc/rc.d/init.d/oracle8i
-[root ~]# chmod 755 /etc/rc.d/init.d/oracle8i
-</pre>
+[root ~]# chmod 755 /etc/rc.d/init.d/oracle8i</pre>
 </li><li class="listitem">
 <p>Test the script by typing the following commands and checking
 the output. (Debian Users: as root, do <code class="computeroutput">mkdir /var/lock/subsys</code> first)</p><pre class="programlisting">
@@ -677,8 +632,7 @@ SQL&gt; Disconnected
 
 Database "ora8" warm started.
 
-Database "ora8" warm started.
-</pre>
+Database "ora8" warm started.</pre>
 </li><li class="listitem">
 <p>If it worked, then run these commands to make the startup and
 shutdown automatic.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
@@ -688,8 +642,7 @@ shutdown automatic.</p><div class="itemizedlist"><ul class="itemizedlist" style=
 [root ~]# chkconfig --add oracle8i
 [root ~]# chkconfig --list oracle8i
 ; You should see:
-oracle8i        0:off   1:off   2:off   3:on    4:on    5:on    6:off
-</pre>
+oracle8i        0:off   1:off   2:off   3:on    4:on    5:on    6:off</pre>
 </li><li class="listitem">
 <p>Debian users:</p><pre class="programlisting">
 [root ~]# update-rc.d oracle8i defaults
@@ -700,8 +653,7 @@ oracle8i        0:off   1:off   2:off   3:on    4:on    5:on    6:off
    /etc/rc2.d/S20oracle8i -&gt; ../init.d/oracle8i
    /etc/rc3.d/S20oracle8i -&gt; ../init.d/oracle8i
    /etc/rc4.d/S20oracle8i -&gt; ../init.d/oracle8i
-   /etc/rc5.d/S20oracle8i -&gt; ../init.d/oracle8i
-</pre>
+   /etc/rc5.d/S20oracle8i -&gt; ../init.d/oracle8i</pre>
 </li><li class="listitem">
 <p>SuSE users:</p><pre class="programlisting">
 [root ~]# cd /etc/rc.d/init.d
@@ -743,8 +695,7 @@ Executing /sbin/conf.d/SuSEconfig.susewm...
 Executing /sbin/conf.d/SuSEconfig.tetex...
 Executing /sbin/conf.d/SuSEconfig.ypclient...
 Processing index files of all manpages...
-Finished.
-</pre>
+Finished.</pre>
 </li>
 </ul></div>
 </li><li class="listitem">
@@ -764,8 +715,7 @@ full site search.</p><p>Download these three scripts into <code class="computero
 [oracle ~]$ exit
 [root ~]# cp /var/tmp/listener8i.txt /etc/rc.d/init.d/listener8i
 [root ~]# cd /etc/rc.d/init.d
-root:/etc/rc.d/init.d# chmod 755 listener8i
-</pre><p>Test the listener automation by running the following commands
+root:/etc/rc.d/init.d# chmod 755 listener8i</pre><p>Test the listener automation by running the following commands
 and checking the output.</p><pre class="programlisting">
 root:/etc/rc.d/init.d# ./listener8i stop
 Oracle 8i listener start/stop
@@ -808,8 +758,7 @@ Listener Log File         /ora8/m01/app/oracle/product/8.1.7/network/log/listene
 Services Summary...
   PLSExtProc        has 1 service handler(s)
   ora8      has 1 service handler(s)
-The command completed successfully
-</pre><p>This test will verify that the listener is operating normally.
+The command completed successfully</pre><p>This test will verify that the listener is operating normally.
 Login into the database using the listener naming convention.</p><p>
 <code class="computeroutput">sqlplus</code><span class="emphasis"><em><code class="computeroutput">username/password/\@SID</code></em></span>
 </p><pre class="programlisting">
@@ -824,16 +773,14 @@ SYSDATE
 
 SQL&gt; exit
 [oracle ~]$ exit
-[root ~]#
-</pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+[root ~]#</pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>RedHat users:</p><p>Now run <code class="computeroutput">chkconfig</code> on the
 <code class="computeroutput">listener8i</code> script.</p><pre class="programlisting">
 [root ~]# cd /etc/rc.d/init.d/
 root:/etc/rc.d/init.d# chkconfig --add listener8i
 root:/etc/rc.d/init.d# chkconfig --list listener8i
-listener8i      0:off   1:off   2:off   3:on    4:on    5:on    6:off
-</pre>
+listener8i      0:off   1:off   2:off   3:on    4:on    5:on    6:off</pre>
 </li><li class="listitem">
 <p>Debian users:</p><p>Now run <code class="computeroutput">update-rc.d</code> on the
 <code class="computeroutput">listener8i</code> script.</p><pre class="programlisting">
@@ -845,20 +792,17 @@ listener8i      0:off   1:off   2:off   3:on    4:on    5:on    6:off
    /etc/rc2.d/S21listener8i -&gt; ../init.d/listener8i
    /etc/rc3.d/S21listener8i -&gt; ../init.d/listener8i
    /etc/rc4.d/S21listener8i -&gt; ../init.d/listener8i
-   /etc/rc5.d/S21listener8i -&gt; ../init.d/listener8i
-</pre>
+   /etc/rc5.d/S21listener8i -&gt; ../init.d/listener8i</pre>
 </li>
 </ul></div>
 </li><li class="listitem">
 <p>Test the automation</p><p>As a final test, reboot your computer and make sure Oracle comes
 up. You can do this by typing</p><pre class="programlisting">
-[root ~]# /sbin/shutdown -r -t 0 now
-</pre><p>Log back in and ensure that Oracle started automatically.</p><pre class="programlisting">
+[root ~]# /sbin/shutdown -r -t 0 now</pre><p>Log back in and ensure that Oracle started automatically.</p><pre class="programlisting">
 [joeuser ~]$ su - oracle
 [oracle ~]$ sqlplus system/alexisahunk\@ora8
 
-SQL&gt; exit
-</pre>
+SQL&gt; exit</pre>
 </li>
 </ul></div><p>Congratulations, your installation of Oracle 8.1.7 is
 complete.</p>
@@ -874,17 +818,14 @@ want Oracle to use the ANSI-compliant date format which is of form
 <code class="computeroutput">'YYYY-MM-DD'</code>.</p><p>To fix this, you should include the following line in
 <code class="computeroutput">$ORACLE_HOME/dbs/init</code><span class="emphasis"><em>SID</em></span><code class="computeroutput">.ora</code> or for the default case, <code class="computeroutput">$ORACLE_HOME/dbs/initora8.ora</code>
 </p><pre class="programlisting">
-nls_date_format = "YYYY-MM-DD"
-</pre><p>You test whether this solved the problem by firing up
+nls_date_format = "YYYY-MM-DD"</pre><p>You test whether this solved the problem by firing up
 <code class="computeroutput">sqlplus</code> and typing:</p><pre class="programlisting">
-SQL&gt; select sysdate from dual;
-</pre><p>You should see back a date like <code class="computeroutput">2000-06-02</code>. If some of the date is chopped
+SQL&gt; select sysdate from dual;</pre><p>You should see back a date like <code class="computeroutput">2000-06-02</code>. If some of the date is chopped
 off, i.e. like <code class="computeroutput">2000-06-0</code>,
 everything is still fine. The problem here is that <code class="computeroutput">sqlplus</code> is simply truncating the output.
 You can fix this by typing:</p><pre class="programlisting">
 SQL&gt; column sysdate format a15
-SQL&gt; select sysdate from dual;
-</pre><p>If the date does not conform to this format, double-check that
+SQL&gt; select sysdate from dual;</pre><p>If the date does not conform to this format, double-check that
 you included the necessary line in the init scripts. If it still
 isn&#39;t working, make sure that you have restarted the database
 since adding the line:</p><pre class="programlisting">
@@ -896,16 +837,13 @@ Database closed.
 Database dismounted.
 ORACLE instance shut down.
 SVRMGR&gt; startup
-ORACLE instance started.
-</pre><p>If you&#39;re sure that you have restarted the database since
+ORACLE instance started.</pre><p>If you&#39;re sure that you have restarted the database since
 adding the line, check your initialization scripts. Make sure that
 the following line is not included:</p><pre class="programlisting">
-export nls_lang = american
-</pre><p>Setting this environment variable will override the date
+export nls_lang = american</pre><p>Setting this environment variable will override the date
 setting. Either delete this line and login again or add the
 following entry to your login scripts <span class="emphasis"><em>after</em></span> the <code class="computeroutput">nls_lang</code> line:</p><pre class="programlisting">
-export nls_date_format = 'YYYY-MM-DD'
-</pre><p>Log back in again. If adding the <code class="computeroutput">nls_date_format</code> line doesn&#39;t help, you
+export nls_date_format = 'YYYY-MM-DD'</pre><p>Log back in again. If adding the <code class="computeroutput">nls_date_format</code> line doesn&#39;t help, you
 can ask for advice in our <a class="ulink" href="http://www.openacs.org/forums/" target="_top">OpenACS
 forums</a>.</p>
 </div><div class="sect2">
@@ -914,28 +852,25 @@ forums</a>.</p>
 <p>Dropping a tablespace</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>Run sqlplus as the dba:</p><pre class="programlisting">
-[oracle ~]$ sqlplus system/changeme
-</pre>
+[oracle ~]$ sqlplus system/changeme</pre>
 </li><li class="listitem">
 <p>To drop a user and all of the tables and data owned by that
 user:</p><pre class="programlisting">
-SQL&gt; drop user <span class="emphasis"><em>oracle_user_name</em></span> cascade;
-</pre>
+SQL&gt; drop user <span class="emphasis"><em>oracle_user_name</em></span> cascade;</pre>
 </li><li class="listitem">
 <p>To drop the tablespace: This will delete everything in the
 tablespace overriding any referential integrity constraints. Run
 this command only if you want to clean out your database
 entirely.</p><pre class="programlisting">
-SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> including contents cascade constraints;
-</pre>
+SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> including contents cascade constraints;</pre>
 </li>
 </ul></div>
 </li></ul></div><p>For more information on Oracle, please consult the <a class="ulink" href="https://docs.oracle.com/en/database/" target="_top">documentation</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="oracle-next-steps" id="oracle-next-steps"></a>Oracle Next Steps</h3></div></div></div><p><a class="xref" href="maint-performance" title="Creating an appropriate tuning and monitoring environment">the
-section called &ldquo;Creating an appropriate tuning
-and monitoring environment&rdquo;</a></p>
+section called “Creating an appropriate tuning and monitoring
+environment”</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-defaults" id="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
@@ -965,9 +900,9 @@ gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="unix-installation" leftLabel="Prev" leftTitle="Install a Unix-like system and
+			leftLink="unix-installation" leftLabel="Prev" leftTitle="Install a Unix-like system and
 supporting software"
-		    rightLink="postgres" rightLabel="Next" rightTitle="Install PostgreSQL"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="complete-install" upLabel="Up"> 
-		
+			rightLink="postgres" rightLabel="Next" rightTitle="Install PostgreSQL"
+			homeLink="index" homeLabel="Home" 
+			upLink="complete-install" upLabel="Up"> 
+		    

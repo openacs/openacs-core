@@ -3,11 +3,11 @@
 <property name="doc(title)">Subsites Design Document</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="subsites-requirements" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="apm-requirements" rightLabel="Next">
-		<div class="sect1">
+			leftLink="subsites-requirements" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="apm-requirements" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="subsites-design" id="subsites-design"></a>Subsites Design Document</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
 Schloming</a>
@@ -217,7 +217,7 @@ package instance.</p><pre class="programlisting"><code class="computeroutput">[a
 </code></pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="subsites-design-data-model" id="subsites-design-data-model"></a>Data Model Discussion</h3></div></div></div><p>The subsites implementation doesn&#39;t really have its own
+<a name="subsites-design-data-model" id="subsites-design-data-model"></a>Data Model Discussion</h3></div></div></div><p>The subsites implementation doesn&#39;t really have it&#39;s own
 data model, although it depends heavily on the site-nodes data
 model, and the APM data model.</p>
 </div><div class="sect2">
@@ -256,8 +256,8 @@ configuration instead of coding.</p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="subsites-requirements" leftLabel="Prev" leftTitle="Subsites Requirements"
-		    rightLink="apm-requirements" rightLabel="Next" rightTitle="Package Manager Requirements"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="subsites-requirements" leftLabel="Prev" leftTitle="Subsites Requirements"
+			rightLink="apm-requirements" rightLabel="Next" rightTitle="Package Manager Requirements"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

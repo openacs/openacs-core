@@ -3,11 +3,11 @@
 <property name="doc(title)">Documenting Tcl Files: Page Contracts and Libraries</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="rp-design" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="bootstrap-acs" rightLabel="Next">
-		<div class="sect1">
+			leftLink="rp-design" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="bootstrap-acs" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tcl-doc" id="tcl-doc"></a>Documenting Tcl Files: Page Contracts and
 Libraries</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a> on 3 July
@@ -225,8 +225,8 @@ torbenb Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="rp-design" leftLabel="Prev" leftTitle="Request Processor Design"
-		    rightLink="bootstrap-acs" rightLabel="Next" rightTitle="Bootstrapping OpenACS"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="rp-design" leftLabel="Prev" leftTitle="Request Processor Design"
+			rightLink="bootstrap-acs" rightLabel="Next" rightTitle="Bootstrapping OpenACS"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

@@ -11,8 +11,7 @@
 <p>The <kbd>if</kbd> tag is used to output a template section only
 when certain conditions are met.</p>
 <h3>Usage Examples</h3>
-<pre>
-&lt;if \@x\@ eq 5&gt;True&lt;/if&gt;
+<pre>&lt;if \@x\@ eq 5&gt;True&lt;/if&gt;
 &lt;if \@x\@ eq "Greta"&gt;True&lt;/if&gt;
 
 &lt;if \@x\@ ne 5&gt;True&lt;/if&gt;
@@ -37,8 +36,7 @@ when certain conditions are met.</p>
 &lt;if \@s\@ not nil&gt;True&lt;/if&gt;
 
 &lt;if \@z\@ in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;
-&lt;if \@z\@ not in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;
-</pre>
+&lt;if \@z\@ not in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;</pre>
 <h3>Expression Syntax</h3>
 
 The condition of the &lt;if&gt; tag is built from terms of the form
@@ -118,8 +116,7 @@ literally.</p></li><li>
 grouped correctly:</p><pre>
   &lt;if \@datasource.variable\@ eq "blue sky"&gt;
     &lt;td bgcolor="#0000ff"&gt;
-  &lt;/if&gt;
-</pre>
+  &lt;/if&gt;</pre>
 </li><li>
 <p>The <kbd>elseif</kbd> tag may be used following an <kbd>if</kbd>
 block to specify an alternate conditional template section.</p><pre>
@@ -131,8 +128,7 @@ block to specify an alternate conditional template section.</p><pre>
   &lt;/elseif&gt;
   &lt;else&gt;
     &lt;td bgcolor="#ffffff"&gt;
-  &lt;/else&gt;
-</pre>
+  &lt;/else&gt;</pre>
 </li><li>
 <p>The <kbd>else</kbd> tag may be used following an <kbd>if</kbd>
 block to specify an alternate template section when a condition is
@@ -142,8 +138,7 @@ not true:</p><pre>
   &lt;/if&gt;
   &lt;else&gt;
     &lt;td bgcolor="#ffffff"&gt;
-  &lt;/else&gt;
-</pre>
+  &lt;/else&gt;</pre>
 </li><li><p>Compound expressions can be created by combining terms with the
 <kbd>and</kbd> and <kbd>or</kbd> keywords, as illustrated above.
 Any number of statements may be connected in this fashion. There is

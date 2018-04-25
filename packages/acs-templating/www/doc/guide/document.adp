@@ -35,26 +35,23 @@ structure comments on a datasource in the following way:</p>
   # \@input birthday date birthdate w/ "MONTH DD YYYY" format
   # \@input gender radio
   # either "m" for male or "f" for female
-    
-</pre>
+    </pre>
 <p>A few formatting guidelines:</p>
 <ul>
 <li>all datasources (onevalues, onelists, multilists, multirows)
 are documented with the datasource directive, their name, the type
-of datasource, and then necessary comments:</li><li style="list-style: none"><blockquote><code># \@datasource <em>name</em> &lt;<em>type of
+of datasource, and then necessary comments:</li><blockquote><code># \@datasource <em>name</em> &lt;<em>type of
 datasource</em>&gt; <em>comments</em>
-</code></blockquote></li><li>multirow datasources are followed with a series of column
-directives, column names, and associated explanations:</li><li style="list-style: none"><blockquote><code># \@column <em>name</em><em>comments</em>
-</code></blockquote></li><li>forms are documented with the data_input directive, and are
+</code></blockquote><li>multirow datasources are followed with a series of column
+directives, column names, and associated explanations:</li><blockquote><code># \@column <em>name</em><em>comments</em>
+</code></blockquote><li>forms are documented with the data_input directive, and are
 also followed with a series of input directives with the name and
-type of input widgets, and necessary comments:</li><li style="list-style: none">
-<blockquote><code># \@data_input <em>name</em> form
+type of input widgets, and necessary comments:</li><blockquote><code># \@data_input <em>name</em> form
 <em>comments</em> # \@input <em>name</em> &lt;<em>type of form
 entry</em>&gt; <em>comments</em>
 </code></blockquote>
 Possible form entry types include text (or textentry), date,
-checkbox, radio, select, multiselect and textbox</li>
-</ul>
+checkbox, radio, select, multiselect and textbox</ul>
 <p>Once the templates have been enabled, the designer can simply
 visit the URL from which the page will be served, substituting
 <kbd>acs</kbd> with the <kbd>dat</kbd> extension.</p>

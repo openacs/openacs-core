@@ -3,11 +3,11 @@
 <property name="doc(title)">Parties in OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="subsites" leftLabel="Prev"
-		    title="
-Chapter 11. Development Reference"
-		    rightLink="permissions-tediously-explained" rightLabel="Next">
-		<div class="sect1">
+			leftLink="subsites" leftLabel="Prev"
+			title="Chapter 11. Development
+Reference"
+			rightLink="permissions-tediously-explained" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="parties" id="parties"></a>Parties in OpenACS</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
 Schloming</a>
@@ -326,9 +326,9 @@ byronl Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="subsites" leftLabel="Prev" leftTitle="Writing OpenACS Application Pages"
-		    rightLink="permissions-tediously-explained" rightLabel="Next" rightTitle="OpenACS Permissions Tediously
+			leftLink="subsites" leftLabel="Prev" leftTitle="Writing OpenACS Application Pages"
+			rightLink="permissions-tediously-explained" rightLabel="Next" rightTitle="OpenACS Permissions Tediously
 Explained"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="dev-guide" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="dev-guide" upLabel="Up"> 
+		    

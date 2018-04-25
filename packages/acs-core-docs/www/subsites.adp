@@ -3,11 +3,11 @@
 <property name="doc(title)">Writing OpenACS Application Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="permissions" leftLabel="Prev"
-		    title="
-Chapter 11. Development Reference"
-		    rightLink="parties" rightLabel="Next">
-		<div class="sect1">
+			leftLink="permissions" leftLabel="Prev"
+			title="Chapter 11. Development
+Reference"
+			rightLink="parties" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="subsites" id="subsites"></a>Writing OpenACS Application Pages</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Rafael H. Schloming and Pete
 Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
@@ -245,8 +245,8 @@ of code.</p><p><span class="cvstag">($&zwnj;Id: subsites.xml,v 1.10 2017/08/07
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="permissions" leftLabel="Prev" leftTitle="Groups, Context, Permissions"
-		    rightLink="parties" rightLabel="Next" rightTitle="Parties in OpenACS"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="dev-guide" upLabel="Up"> 
-		
+			leftLink="permissions" leftLabel="Prev" leftTitle="Groups, Context, Permissions"
+			rightLink="parties" rightLabel="Next" rightTitle="Parties in OpenACS"
+			homeLink="index" homeLabel="Home" 
+			upLink="dev-guide" upLabel="Up"> 
+		    

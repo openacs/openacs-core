@@ -3,11 +3,11 @@
 <property name="doc(title)">Object Identity</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="permissions-tediously-explained" leftLabel="Prev"
-		    title="
-Chapter 11. Development Reference"
-		    rightLink="programming-with-aolserver" rightLabel="Next">
-		<div class="sect1">
+			leftLink="permissions-tediously-explained" leftLabel="Prev"
+			title="Chapter 11. Development
+Reference"
+			rightLink="programming-with-aolserver" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="object-identity" id="object-identity"></a>Object Identity</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
 Schloming</a>
@@ -52,9 +52,9 @@ services</em></span>.</p><p><span class="cvstag">($&zwnj;Id: object-identity.xml
 05:38:37 torbenb Exp $)</span></p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="permissions-tediously-explained" leftLabel="Prev" leftTitle="OpenACS Permissions Tediously
+			leftLink="permissions-tediously-explained" leftLabel="Prev" leftTitle="OpenACS Permissions Tediously
 Explained"
-		    rightLink="programming-with-aolserver" rightLabel="Next" rightTitle="Programming with AOLserver"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="dev-guide" upLabel="Up"> 
-		
+			rightLink="programming-with-aolserver" rightLabel="Next" rightTitle="Programming with AOLserver"
+			homeLink="index" homeLabel="Home" 
+			upLink="dev-guide" upLabel="Up"> 
+		    

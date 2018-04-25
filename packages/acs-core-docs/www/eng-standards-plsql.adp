@@ -3,11 +3,11 @@
 <property name="doc(title)">PL/SQL Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="eng-standards-filenaming" leftLabel="Prev"
-		    title="
-Chapter 12. Engineering Standards"
-		    rightLink="variables" rightLabel="Next">
-		<div class="sect1">
+			leftLink="eng-standards-filenaming" leftLabel="Prev"
+			title="Chapter 12. Engineering
+Standards"
+			rightLink="variables" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-plsql" id="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li and Yon
 Feldman</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Like any other part of the OpenACS, PL/SQL (or pl/pgsql) code
@@ -140,14 +140,14 @@ viewable in the SQL files but also through our SQL and PL/SQL
 browsers. This means that we should try to make it as consistent as
 possible to all source code readers.</p></li><li class="listitem"><p>Lowercase everything, with the exception of %TYPE and
 %ROWTYPE.</p></li>
-</ol></div><p><span class="cvstag">($&zwnj;Id: plsql.xml,v 1.7 2017/08/07 23:47:54
+</ol></div><p><span class="cvstag">($&zwnj;Id: plsql.xml,v 1.8 2018/03/28 07:55:07
 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="eng-standards-filenaming" leftLabel="Prev" leftTitle="ACS File Naming and Formatting
+			leftLink="eng-standards-filenaming" leftLabel="Prev" leftTitle="ACS File Naming and Formatting
 Standards"
-		    rightLink="variables" rightLabel="Next" rightTitle="Variables"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="eng-standards" upLabel="Up"> 
-		
+			rightLink="variables" rightLabel="Next" rightTitle="Variables"
+			homeLink="index" homeLabel="Home" 
+			upLink="eng-standards" upLabel="Up"> 
+		    

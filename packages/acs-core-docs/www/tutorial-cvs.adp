@@ -3,17 +3,16 @@
 <property name="doc(title)">Add the new package to CVS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-specs" leftLabel="Prev"
-		    title="
-Chapter 10. Advanced Topics"
-		    rightLink="tutorial-etp-templates" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-specs" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="tutorial-etp-templates" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-cvs" id="tutorial-cvs"></a>Add the new package to CVS</h2></div></div></div><p>Before you do any more work, make sure that your work is
 protected by putting it all into cvs. The <code class="computeroutput">cvs add</code> command is not recursive, so
 you&#39;ll have to traverse the directory tree manually and add as
-you go. (<a class="ulink" href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">More on CVS</a>)</p><pre class="screen">
-[$OPENACS_SERVICE_NAME xml]$ <strong class="userinput"><code>cd ..</code></strong>
+you go. (<a class="ulink" href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">More on CVS</a>)</p><pre class="screen">[$OPENACS_SERVICE_NAME xml]$ <strong class="userinput"><code>cd ..</code></strong>
 [$OPENACS_SERVICE_NAME doc]$ <strong class="userinput"><code>cd ..</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cd ..</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>cd ..</code></strong>
@@ -69,16 +68,15 @@ Checking in www/doc/admin-guide.html;
 initial revision: 1.1
 done
 <span class="emphasis"><em>(many lines omitted)</em></span>
-[$OPENACS_SERVICE_NAME myfirstpackage]$
-</pre><div class="figure">
-<a name="idp140623162867368" id="idp140623162867368"></a><p class="title"><strong>Figure 10.1. Upgrading a local CVS
-repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/development-with-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
+[$OPENACS_SERVICE_NAME myfirstpackage]$</pre><div class="figure">
+<a name="idp140682188703128" id="idp140682188703128"></a><p class="title"><strong>Figure 10.1. Upgrading a local
+CVS repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/development-with-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break">
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-specs" leftLabel="Prev" leftTitle="Write the Requirements and Design
+			leftLink="tutorial-specs" leftLabel="Prev" leftTitle="Write the Requirements and Design
 Specs"
-		    rightLink="tutorial-etp-templates" rightLabel="Next" rightTitle="OpenACS Edit This Page Templates"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		
+			rightLink="tutorial-etp-templates" rightLabel="Next" rightTitle="OpenACS Edit This Page Templates"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    

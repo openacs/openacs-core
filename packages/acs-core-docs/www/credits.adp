@@ -3,11 +3,11 @@
 <property name="doc(title)">Appendix C. Credits</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="aolserver" leftLabel="Prev"
-		    title="
+			leftLink="aolserver" leftLabel="Prev"
+			title="
 Part II. Administrator&#39;s Guide"
-		    rightLink="install-origins" rightLabel="Next">
-		<div class="appendix">
+			rightLink="install-origins" rightLabel="Next">
+		    <div class="appendix">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="credits" id="credits"></a>Appendix C. Credits</h2></div></div></div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
@@ -41,13 +41,13 @@ Rubick, Fred Yankowski, Dan Chak, Sebastiano Pilla, Reuven Lerner,
 Malte Sussdorff, Stan Kaufman and Pascal Scheffers.</p><p>
 <span class="strong"><strong>All questions and
 comments</strong></span> regarding this guide should be posted on
-the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><p><span class="cvstag">($&zwnj;Id: credits.xml,v 1.13 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><p><span class="cvstag">($&zwnj;Id: credits.xml,v 1.14 2018/04/04
+18:51:56 hectorr Exp $)</span></p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="aolserver" leftLabel="Prev" leftTitle="Install AOLserver 3.3oacs1"
-		    rightLink="install-origins" rightLabel="Next" rightTitle="Where did this document come
+			leftLink="aolserver" leftLabel="Prev" leftTitle="Install AOLserver 3.3oacs1"
+			rightLink="install-origins" rightLabel="Next" rightTitle="Where did this document come
 from?"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-admin" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="acs-admin" upLabel="Up"> 
+		    

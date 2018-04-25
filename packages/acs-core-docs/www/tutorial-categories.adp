@@ -3,11 +3,11 @@
 <property name="doc(title)">Categories</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-admin-pages" leftLabel="Prev"
-		    title="
-Chapter 10. Advanced Topics"
-		    rightLink="profile-code" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-admin-pages" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="profile-code" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-categories" id="tutorial-categories"></a>Categories</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">extended by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima
 Mazloumi</a>
@@ -30,16 +30,14 @@ each continent containing countries etc. Another tree might contain
 market segments etc. Before users of your application can take
 advantage of the Categories service there needs to be a way for
 administrators of your application to choose which category trees
-are applicable for the application.</p><p>The way to achieve this is is to provide a link to the Category
+are applicable for the application.</p><p>The way to achieve this is to provide a link to the Category
 Management pages. Add the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.tcl</code>
 file:</p><pre class="programlisting">
                   set category_map_url [export_vars -base "[site_node::get_package_url -package_key categories]cadmin/one-object" { { object_id $package_id } }]
-          
-</pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.adp</code>
+          </pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.adp</code>
 file:</p><pre class="programlisting">
                   &lt;a href="\@category_map_url\@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
-          
-</pre><p>The link created by the above code (<code class="computeroutput">category_map_url</code>) will take the admin to
+          </pre><p>The link created by the above code (<code class="computeroutput">category_map_url</code>) will take the admin to
 the generic admin UI where he can pick category trees that make
 sense for this application. The same UI also includes facilities to
 build and edit category trees. Notice that the only parameter in
@@ -79,8 +77,7 @@ To achieve this we&#39;ll need to use the <code class="computeroutput">-extend</
                                         ad_returnredirect "."
                                         ad_script_abort
                         }
-                        
-</pre><p>While the <code class="computeroutput">category::ad_form::add_widgets</code> proc is
+                        </pre><p>While the <code class="computeroutput">category::ad_form::add_widgets</code> proc is
 taking care to extend your form with associated categories you need
 to ensure that your items are mapped to the corresponding category
 object yourself. Also since the categories package knows nothing
@@ -89,8 +86,7 @@ changes taking place. We use the items title so that they are
 listed in the categories browser by title.</p><p>Make sure that you also delete these entries if your item is
 delete. Add this to your corresponding delete page:</p><pre class="programlisting">
                         db_dml delete_named_object "delete from acs_named_objects where object_id = :item_id"
-                        
-</pre><p>
+                        </pre><p>
 <code class="computeroutput">note-edit.tcl</code> requires a
 <code class="computeroutput">note_id</code> to determine which
 record should be deleted. It also looks for a confirmation
@@ -104,8 +100,7 @@ hidden variables carrying both <code class="computeroutput">note_id</code> and <
 delete the record, set redirection back to the index, and abort
 script execution.</p><p>The database commands:</p><pre class="screen">
 [$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.xql</code></strong>
-</pre><pre class="programlisting">
-&lt;?xml version="1.0"?&gt;
+</pre><pre class="programlisting">&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
   &lt;fullquery name="do_delete"&gt;
     &lt;querytext&gt;
@@ -117,8 +112,7 @@ script execution.</p><p>The database commands:</p><pre class="screen">
       select samplenote__name(:note_id)
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-&lt;/queryset&gt;
-</pre><p>And the adp page:</p><pre class="screen">
+&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">
 [$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.adp</code></strong>
 </pre><pre class="programlisting">
 &lt;master&gt;
@@ -126,8 +120,7 @@ script execution.</p><p>The database commands:</p><pre class="screen">
 &lt;property name="context"&gt;{\@title\@}&lt;/property&gt;
 &lt;h2&gt;\@title\@&lt;/h2&gt;
 &lt;formtemplate id="note-del-confirm"&gt;&lt;/formtemplate&gt;
-&lt;/form&gt;
-</pre><p>The ADP is very simple. The <code class="computeroutput">formtemplate</code> tag outputs the HTML form
+&lt;/form&gt;</pre><p>The ADP is very simple. The <code class="computeroutput">formtemplate</code> tag outputs the HTML form
 generated by the ad_form command with the matching name. Test it by
 adding the new files in the APM and then deleting a few
 samplenotes.</p>
@@ -139,14 +132,12 @@ enable/disable categories for his package.</p><p>Go to the APM and create a numb
 and the default value "<code class="computeroutput">0</code>".</p><p>Add the following lines to your <code class="computeroutput">index.tcl</code>:</p><pre class="programlisting">
           set return_url [ns_conn url]
           set use_categories_p [parameter::get -parameter "EnableCategoriesP"]
-          
-</pre><p>Change your to this:</p><pre class="programlisting">
+          </pre><p>Change your to this:</p><pre class="programlisting">
                         &lt;a href=configure?&lt;%=[export_vars -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
                         &lt;if \@use_categories_p\@&gt;
                         &lt;a href="\@category_map_url\@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
                         &lt;/if&gt;
-          
-</pre><p>Now create a configure page</p><pre class="programlisting">
+          </pre><p>Now create a configure page</p><pre class="programlisting">
                 ad_page_contract {
                         This page allows an admin to change the categories usage mode.
                         } {
@@ -171,22 +162,19 @@ and the default value "<code class="computeroutput">0</code>".</p><p>Add the fol
                                 ns_returnredirect $return_url
                         }
                         }
-           
-</pre><p>and add this to its corresponding ADP page</p><pre class="programlisting">
+           </pre><p>and add this to its corresponding ADP page</p><pre class="programlisting">
                 &lt;master&gt;
                         &lt;property name="title"&gt;\@title\@&lt;/property&gt;
                         &lt;property name="context"&gt;\@context\@&lt;/property&gt;
 
                         &lt;formtemplate id="categories_mode"&gt;&lt;/formtemplate&gt;
-              
-</pre><p>Reference this page from your admin page</p><pre class="programlisting">
+              </pre><p>Reference this page from your admin page</p><pre class="programlisting">
                 #TCL:
                 set return_url [ad_conn url]
 
                 #ADP:
                 &lt;a href=configure?&lt;%=[export_vars -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
-                
-</pre><p>Change the <code class="computeroutput">note-edit.tcl</code>:</p><pre class="programlisting">
+                </pre><p>Change the <code class="computeroutput">note-edit.tcl</code>:</p><pre class="programlisting">
                 # Use Categories?
                 set use_categories_p [parameter::get -parameter "EnableCategoriesP" -default 0]
                 if { $use_categories_p == 1 } {
@@ -194,8 +182,7 @@ and the default value "<code class="computeroutput">0</code>".</p><p>Add the fol
                 } else {
                 # YOUR OLD FORM DEFINITION
                 }
-        
-</pre>
+        </pre>
 </li><li class="listitem">
 <p>You can filter your notes using categories. The below example
 does not support multiple filters and displays a category in a flat
@@ -206,8 +193,7 @@ format.</p><p>The first step is to define the optional parameter <code class="co
                         YOURPARAMS
                 {category_id:integer,optional {}}
                 }
-          
-</pre><p>Now you have to check whether categories are enabled or not. If
+          </pre><p>Now you have to check whether categories are enabled or not. If
 this is the case and a category id is passed you need to extend
 your sql select query to support filtering. One way would be to
 extend the <code class="computeroutput">mfp::note::get</code> proc
@@ -234,8 +220,7 @@ to support two more swiches <code class="computeroutput">-where_clause</code> an
                 } else {
                 # OLD STUFF
                 }
-          
-</pre><p>Also you need to make sure that the user can see the
+          </pre><p>Also you need to make sure that the user can see the
 corresponding categories. Add the following snippet to the end of
 your index page:</p><pre class="programlisting">
           # Site-Wide Categories
@@ -269,8 +254,7 @@ your index page:</p><pre class="programlisting">
                         set tree_name [category_tree::get_name $tree_id]
                 }
                 }
-                
-</pre><p>and to the corresponding index ADP page:</p><pre class="programlisting">
+                </pre><p>and to the corresponding index ADP page:</p><pre class="programlisting">
                 &lt;if \@use_categories_p\@&gt;
                         &lt;multiple name="categories"&gt;
                         &lt;h2&gt;\@categories.tree_name\@
@@ -279,26 +263,23 @@ your index page:</p><pre class="programlisting">
                         &lt;/group&gt;
                 &lt;/multiple&gt;
                 &lt;a href="\@package_url\@view?\@YOURPARAMS\@"&gt;All Items&lt;/if&gt;
-          
-</pre><p>Finally you need a an <code class="computeroutput">index.vuh</code> in your www folder to rewrite the
-URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty urls">the section called
-&ldquo;Using .vuh files for pretty
-urls&rdquo;</a>:</p><pre class="programlisting">
+          </pre><p>Finally you need a an <code class="computeroutput">index.vuh</code> in your www folder to rewrite the
+URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty urls">the section called “Using .vuh
+files for pretty urls”</a>:</p><pre class="programlisting">
           set url /[ad_conn extra_url]
 
           if {[regexp {^/+cat/+([^/]+)/*} $url ignore_whole category_id]} {
               rp_form_put category_id $category_id
           }
           rp_internal_redirect "/packages/YOURPACKAGE/www/index"          
-          
-</pre><p>Now when ever the user select a category only notes that belong
+          </pre><p>Now when ever the user select a category only notes that belong
 to this category are displayed.</p>
 </li>
 </ol></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-admin-pages" leftLabel="Prev" leftTitle="Admin Pages"
-		    rightLink="profile-code" rightLabel="Next" rightTitle="Profile your code"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		
+			leftLink="tutorial-admin-pages" leftLabel="Prev" leftTitle="Admin Pages"
+			rightLink="profile-code" rightLabel="Next" rightTitle="Profile your code"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    

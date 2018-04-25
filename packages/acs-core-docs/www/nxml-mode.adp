@@ -3,11 +3,11 @@
 <property name="doc(title)">Using nXML mode in Emacs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="psgml-mode" leftLabel="Prev"
-		    title="
-Chapter 13. Documentation Standards"
-		    rightLink="filename" rightLabel="Next">
-		<div class="sect1">
+			leftLink="psgml-mode" leftLabel="Prev"
+			title="Chapter 13. Documentation
+Standards"
+			rightLink="filename" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="nxml-mode" id="nxml-mode"></a>Using nXML mode in Emacs</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Jeff Davis</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>An alternative to psgml mode is nXML by James Clark, a new major
 mode for GNU Emacs for editing XML, and which features
@@ -19,9 +19,9 @@ download page</a> at <a class="ulink" href="http://www.thaiopensource.com/" targ
 </ul></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="psgml-mode" leftLabel="Prev" leftTitle="Using PSGML mode in Emacs"
-		    rightLink="filename" rightLabel="Next" rightTitle="Detailed Design Documentation
+			leftLink="psgml-mode" leftLabel="Prev" leftTitle="Using PSGML mode in Emacs"
+			rightLink="filename" rightLabel="Next" rightTitle="Detailed Design Documentation
 Template"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="doc-standards" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="doc-standards" upLabel="Up"> 
+		    

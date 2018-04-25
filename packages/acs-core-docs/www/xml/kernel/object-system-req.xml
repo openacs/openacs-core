@@ -245,7 +245,7 @@ objects, and tag those relationships with extra data. In OpenACS 3.x, this was
 done using <emphasis>mapping tables</emphasis>. The user/groups module has the most
 highly developed data model for this purpose, using a single table called
 <computeroutput>user_group_map</computeroutput> that mapped users to groups. In addition, it uses
-the the <computeroutput>user_group_member_fields</computeroutput> and
+the <computeroutput>user_group_member_fields</computeroutput> and
 <computeroutput>user_group_member_fields_map</computeroutput> tables to allow developers to
 attach custom attributes to group members. In fact, these custom attributes
 were not really attached to the users, but to the fact that a user was a

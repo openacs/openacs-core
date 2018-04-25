@@ -6,10 +6,9 @@
 
 by <a href="mailto:karlg\@arsdigita.com">Karl Goldstein</a>
 ,
-<a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a>
-, <a href="mailto:psu\@arsdigita.com">Peter
-Su</a>
+<a href="mailto:christian\@arsdigita.com">Christian Brechbühler</a>
+,
+<a href="mailto:psu\@arsdigita.com">Peter Su</a>
 , and <a href="mailto:yon\@arsdigita.com">Yonatan Feldman</a>
 <a name="introduction" id="introduction"></a>
 <h3>I. Introduction</h3>
@@ -100,7 +99,8 @@ template.</p>
 <h3>VI.A Functional Requirements</h3>
 <ul>
 <li>
-<a name="10.0"></a><strong>10.0 A Common Solution</strong><p>Programmers and designers should only have to learn a single
+<a name="10.0" id="10.0"></a><strong>10.0 A Common
+Solution</strong><p>Programmers and designers should only have to learn a single
 system that serves as a UI substrate for all the functionally
 specific modules in the toolkit.</p><div style="margin-left: 2em">
 <strong>10.0.1</strong><p>The system should not make any assumptions about how pages
@@ -160,8 +160,8 @@ context.</p>
 </li>
 </ul>
 </li><li>
-<a name="20.0"></a><strong>20.0 Separation of Code and
-Layout</strong><p>Programmers should be able to specify the page properties
+<a name="20.0" id="20.0"></a><strong>20.0 Separation of Code
+and Layout</strong><p>Programmers should be able to specify the page properties
 independently of the markup used to present the data in the
 template. Markup authors should be to able to write templates that
 reference the page properties without further intervention from the
@@ -173,26 +173,26 @@ page publishes and what types they are. This documentation should
 be available through the standard ACS documentation facilities.</p>
 </div>
 </li><li>
-<a name="30.0"></a><strong>30.0 Separation of Page
+<a name="30.0" id="30.0"></a><strong>30.0 Separation of Page
 Components</strong><p>There should be provisions so that pages can be broken into
 discrete components to simplify maintenance of the markup code and
 allow for reuse in different contexts. Examples of common page
 components include a navigation bar, a search box, or a section of
 a report or story.</p>
 </li><li>
-<a name="40.0"></a><strong>40.0 Global Control Over
+<a name="40.0" id="40.0"></a><strong>40.0 Global Control Over
 Presentation</strong><p>There should be a way to define one or more standard master
 templates used by most pages on a site, so that changes to the
 overall look and feel of a site can be made in one place.</p>
 </li><li>
-<a name="50.0"></a><strong>50.0 Dynamic Selection of
+<a name="50.0" id="50.0"></a><strong>50.0 Dynamic Selection of
 Presentation Style</strong><p>Given that the same data may be presented in many different
 ways, there should be a general mechanism for selecting a specific
 presentation (including file format, layout, character set and
 language) for each page request, depending on characteristics such
 as user preference, location, browser type and/or device.</p>
 </li><li>
-<a name="60.0"></a><strong>60.0 Usability</strong><p>Programmers should be able to develop template specifications
+<a name="60.0" id="60.0"></a><strong>60.0 Usability</strong><p>Programmers should be able to develop template specifications
 using their standard tools for writing and maintaining code on the
 server. HTML authors should be able to access information about
 template specifications and work on templates remotely without
@@ -203,13 +203,15 @@ needing shell access to the server.</p>
 <h3>VI.B Non-functional Requirements</h3>
 <ul>
 <li>
-<a name="100.0"></a><strong>100.0 Distribution</strong><p>The Templating System must be releasable as part of the ACS and
+<a name="100.0" id="100.0"></a><strong>100.0
+Distribution</strong><p>The Templating System must be releasable as part of the ACS and
 as a separate product. When distributed as part of the ACS all
 documentation, examples, and source code must follow ACS standards.
 This includes but is not limited to: using the <code>db_api</code>,
 using <code>ad_page_contract</code> appropriately.</p>
 </li><li>
-<a name="110.0"></a><strong>110.0 Performance</strong><p>The Templating System must not cause any performance problems to
+<a name="110.0" id="110.0"></a><strong>110.0
+Performance</strong><p>The Templating System must not cause any performance problems to
 a site. It must be fast and efficient, and it must not slow down
 page load speed by more than 10% versus a Tcl page with inline
 HTML.</p>
@@ -222,7 +224,7 @@ HTML.</p>
 </tr><tr>
 <td>0.1</td><td>Creation</td><td>8/23/2000</td><td>Yonatan Feldman</td>
 </tr><tr>
-<td>0.2</td><td>Merge with previous docs</td><td>8/25/2000</td><td>Christian BrechbÃ&amp;frac14;hler</td>
+<td>0.2</td><td>Merge with previous docs</td><td>8/25/2000</td><td>Christian Brechbühler</td>
 </tr><tr>
 <td>0.3</td><td>Edited, reviewed, pending freeze</td><td>8/28/2000</td><td>Kai Wu</td>
 </tr>
@@ -230,5 +232,5 @@ HTML.</p>
 <hr>
 <address><a href="mailto:yon\@arsdigita.com">yon\@arsdigita.com</a></address>
 
-Last modified: $&zwnj;Id: requirements.html,v 1.2.2.2 2017/04/21 16:50:30
-gustafn Exp $
+Last modified: $&zwnj;Id: requirements.html,v 1.4 2018/03/24 00:14:57
+hectorr Exp $

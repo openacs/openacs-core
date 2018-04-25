@@ -49,6 +49,7 @@ template::element set_properties <em>form_name element_name
 template::element get_value <em>form_name element_name</em>
 </pre>
 <h3>Example</h3>
+<pre></pre>
 <pre>
 template::element get_values <em>form_name element_name</em>
 </pre>

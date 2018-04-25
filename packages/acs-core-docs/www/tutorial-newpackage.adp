@@ -3,11 +3,11 @@
 <property name="doc(title)">Creating an Application Package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial" leftLabel="Prev"
-		    title="
-Chapter 9. Development Tutorial"
-		    rightLink="tutorial-database" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial" leftLabel="Prev"
+			title="Chapter 9. Development
+Tutorial"
+			rightLink="tutorial-database" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-newpackage" id="tutorial-newpackage"></a>Creating an Application Package</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
 Aufrecht</a>
@@ -16,8 +16,8 @@ Aufrecht</a>
 <a name="tutorial-picture" id="tutorial-picture"></a>The intended page map</h3></div></div></div><div class="mediaobject"><img src="images/openacs-best-practice.png"></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623176147848" id="idp140623176147848"></a>Overview</h3></div></div></div><p>To start developing new code in OpenACS, we build a new package.
-A package is a a discrete collection of web pages, Tcl code, and
+<a name="idp140682183652824" id="idp140682183652824"></a>Overview</h3></div></div></div><p>To start developing new code in OpenACS, we build a new package.
+A package is a discrete collection of web pages, Tcl code, and
 database tables and procedures. A package with user interface is
 called an <span class="strong"><strong>application</strong></span>;
 a package which provides functions to other packages and has no
@@ -34,14 +34,14 @@ right now. Code that is temporary hackage is clearly marked.</p><p>In this tutor
 displaying a list of text notes.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623176152424" id="idp140623176152424"></a>Before you begin</h3></div></div></div><p>You will need:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140682183611048" id="idp140682183611048"></a>Before you begin</h3></div></div></div><p>You will need:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>A computer with a working installation of OpenACS. If you
 don&#39;t have this, see <a class="xref" href="install-overview" title="Chapter 2. Installation Overview">Chapter 2,
 <em>Installation Overview</em>
 </a>.</p></li><li class="listitem"><p>Example files, which are included in the standard OpenACS 5.9.0
 distribution.</p></li>
 </ul></div><div class="figure">
-<a name="idp140623174045016" id="idp140623174045016"></a><p class="title"><strong>Figure 9.1. Assumptions in this
+<a name="idp140682188007688" id="idp140682188007688"></a><p class="title"><strong>Figure 9.1. Assumptions in this
 section</strong></p><div class="figure-contents"><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col>
@@ -60,7 +60,7 @@ section</strong></p><div class="figure-contents"><div class="informaltable"><tab
 </div><br class="figure-break">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623174833816" id="idp140623174833816"></a>Use the APM to initialize a new
+<a name="idp140682183351512" id="idp140682183351512"></a>Use the APM to initialize a new
 package</h3></div></div></div><p>We use the <a class="ulink" href="packages" target="_top">ACS Package Manager</a> (APM) to add, remove, and upgrade
 packages. It handles package meta-data, such as lists of files that
 belong in the package. Each package is uniquely identified by a
@@ -99,7 +99,7 @@ files in the package will be within this directory. <a class="ulink" href="packa
 packages</a>).</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623175709240" id="idp140623175709240"></a>Add an Application Instance to the
+<a name="idp140682188284440" id="idp140682188284440"></a>Add an Application Instance to the
 Server</h3></div></div></div><p>In order to see your work in progress, you must create a map
 between the URL space of incoming requests and the package
 application instance. You do this by adding the application in the
@@ -118,26 +118,24 @@ that in this tutorial.</p><div class="orderedlist"><ol class="orderedlist" type=
 to be satisfied from the files at <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/myfirstpackage/www</code>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623171946968" id="idp140623171946968"></a>Quick start</h3></div></div></div><p>The remainder of the tutorial walks you through each file one at
+<a name="idp140682188881800" id="idp140682188881800"></a>Quick start</h3></div></div></div><p>The remainder of the tutorial walks you through each file one at
 a time as you create the package. You can skip all this, and get a
-working package, by doing the following:</p><pre class="screen">
-cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/tutorial
+working package, by doing the following:</p><pre class="screen">cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/tutorial
 psql <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> -f myfirstpackage-create.sql
 cp note-edit.* note-delete.tcl index.* ../../../../myfirstpackage/www/
 mkdir ../../../../myfirstpackage/lib
 cp note-list.* ../../../../myfirstpackage/lib/
 cp myfirstpackage-*sql ../../../../myfirstpackage/sql/postgresql/
 cp myfirstpackage-procs.tcl ../../../../myfirstpackage/tcl/test/
-cp note-procs.tcl ../../../../myfirstpackage/tcl/
-</pre><p>After restarting the server, the tutorial application will be
+cp note-procs.tcl ../../../../myfirstpackage/tcl/</pre><p>After restarting the server, the tutorial application will be
 installed and working at the url you selected in the previous
 step.</p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial" leftLabel="Prev" leftTitle="
-Chapter 9. Development Tutorial"
-		    rightLink="tutorial-database" rightLabel="Next" rightTitle="Setting Up Database Objects"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial" upLabel="Up"> 
-		
+			leftLink="tutorial" leftLabel="Prev" leftTitle="Chapter 9. Development
+Tutorial"
+			rightLink="tutorial-database" rightLabel="Next" rightTitle="Setting Up Database Objects"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial" upLabel="Up"> 
+		    

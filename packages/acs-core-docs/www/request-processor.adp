@@ -3,11 +3,11 @@
 <property name="doc(title)">The Request Processor</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="objects" leftLabel="Prev"
-		    title="
-Chapter 11. Development Reference"
-		    rightLink="db-api" rightLabel="Next">
-		<div class="sect1">
+			leftLink="objects" leftLabel="Prev"
+			title="Chapter 11. Development
+Reference"
+			rightLink="db-api" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="request-processor" id="request-processor"></a>The Request Processor</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -108,9 +108,9 @@ gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="objects" leftLabel="Prev" leftTitle="OpenACS Data Models and the Object
+			leftLink="objects" leftLabel="Prev" leftTitle="OpenACS Data Models and the Object
 System"
-		    rightLink="db-api" rightLabel="Next" rightTitle="The OpenACS Database Access API"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="dev-guide" upLabel="Up"> 
-		
+			rightLink="db-api" rightLabel="Next" rightTitle="The OpenACS Database Access API"
+			homeLink="index" homeLabel="Home" 
+			upLink="dev-guide" upLabel="Up"> 
+		    

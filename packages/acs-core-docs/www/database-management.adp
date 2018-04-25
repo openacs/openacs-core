@@ -1,15 +1,13 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 7. Database
-Management}</property>
-<property name="doc(title)">Chapter 7. Database
-Management</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 7. Database Management}</property>
+<property name="doc(title)">Chapter 7. Database Management</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="maint-performance" leftLabel="Prev"
-		    title="
+			leftLink="maint-performance" leftLabel="Prev"
+			title="
 Part II. Administrator&#39;s Guide"
-		    rightLink="remote-postgres" rightLabel="Next">
-		<div class="chapter">
+			rightLink="remote-postgres" rightLabel="Next">
+		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="database-management" id="database-management"></a>Chapter 7. Database
 Management</h2></div></div></div><div class="toc">
@@ -24,9 +22,9 @@ Aufrecht</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="maint-performance" leftLabel="Prev" leftTitle="Diagnosing Performance Problems"
-		    rightLink="remote-postgres" rightLabel="Next" rightTitle="Running a PostgreSQL database on
+			leftLink="maint-performance" leftLabel="Prev" leftTitle="Diagnosing Performance Problems"
+			rightLink="remote-postgres" rightLabel="Next" rightTitle="Running a PostgreSQL database on
 another server"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-admin" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="acs-admin" upLabel="Up"> 
+		    

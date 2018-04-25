@@ -5,11 +5,11 @@ OpenACS}</property>
 OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="i18n-overview" leftLabel="Prev"
-		    title="
+			leftLink="i18n-overview" leftLabel="Prev"
+			title="
 Chapter 14. Internationalization"
-		    rightLink="i18n-convert" rightLabel="Next">
-		<div class="sect1">
+			rightLink="i18n-convert" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="i18n-introduction" id="i18n-introduction"></a>How Internationalization/Localization
 works in OpenACS</h2></div></div></div><p>This document describes how to develop internationalized OpenACS
@@ -253,10 +253,10 @@ catalog, which is available at <code class="computeroutput">/acs-lang/admin/</co
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="i18n-overview" leftLabel="Prev" leftTitle="Internationalization and Localization
+			leftLink="i18n-overview" leftLabel="Prev" leftTitle="Internationalization and Localization
 Overview"
-		    rightLink="i18n-convert" rightLabel="Next" rightTitle="How to Internationalize a
+			rightLink="i18n-convert" rightLabel="Next" rightTitle="How to Internationalize a
 Package"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="i18n" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="i18n" upLabel="Up"> 
+		    

@@ -217,7 +217,7 @@ namespace eval party {
 	if {$party_id eq "" && $email eq ""} {
 	    error "You need to provide either party_id or email"
 	} elseif {"" ne $party_id && "" ne $email } {
-	    error "Only provide provide party_id OR email, not both"
+	    error "Only provide party_id OR email, not both"
 	}
 	
 	if {$party_id eq ""} {

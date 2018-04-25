@@ -328,7 +328,7 @@ CREATE DATABASE
 /usr/local/pgsql/bin/createdb -E UNICODE <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></span></pre>
               </li><li class="listitem">
                 <p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <code class="computeroutput">VACUUM ANALYZE</code> every hour and <code class="computeroutput">VACUUM FULL ANALYZE</code> every day.</p>
-                <a class="indexterm" name="idp140623178583368"></a>
+                <a class="indexterm" name="idp140682188813000"></a>
                 <pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>export EDITOR=emacs;crontab -e</code></strong></pre>
                 <p>Add these lines to the file.  The vacuum command cleans up temporary structures within a PostGreSQL database, and can improve performance.  We vacuum gently every hour and completely every day.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day, and every (*) day of month, month, and day of week.  Type <code class="computeroutput">man 5 crontab</code> for more information.</p>
                 <pre class="programlisting">0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
@@ -361,7 +361,7 @@ CREATE DATABASE
 	  uses a configuration file included in the OpenACS tarball,
 	  <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/config.tcl</code>.
 	   Open it in an editor to adjust the parameters.</p>
-            <a class="indexterm" name="idp140623178345544"></a>
+            <a class="indexterm" name="idp140682188989288"></a>
             
             <pre class="screen">[root root]# <strong class="userinput"><code>su - <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc</code></strong>

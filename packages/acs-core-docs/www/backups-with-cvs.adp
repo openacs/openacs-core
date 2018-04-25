@@ -3,11 +3,11 @@
 <property name="doc(title)">Using CVS for backup-recovery</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="automated-backup" leftLabel="Prev"
-		    title="
-Chapter 8. Backup and Recovery"
-		    rightLink="install-redhat" rightLabel="Next">
-		<div class="sect1">
+			leftLink="automated-backup" leftLabel="Prev"
+			title="Chapter 8. Backup and
+Recovery"
+			rightLink="install-redhat" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="backups-with-cvs" id="backups-with-cvs"></a>Using CVS for backup-recovery</h2></div></div></div><p>CVS-only backup is often appropriate for development sites. If
 you are already using CVS and your data is not important, you
@@ -17,8 +17,7 @@ can then roll back based on date - note the current system time,
 down to the minute. For maximum safety, you can apply a tag to your
 current files. You will still need to back up your database.</p><p>Note that, if you did the CVS options in this document, the
 <code class="filename">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc</code>
-directory is not included in cvs and you may want to add it.</p><pre class="screen">
-[root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
+directory is not included in cvs and you may want to add it.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs commit -m "last-minute commits before upgrade to 4.6"</code></strong>
@@ -37,8 +36,7 @@ cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code>
 cvs commit -m "last-minute commits before upgrade to 4.6"
 cvs tag before_upgrade_to_4_6
 exit</span>
-</pre><p>To restore files from a cvs tag such as the one used above:</p><pre class="screen">
-[root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
+</pre><p>To restore files from a cvs tag such as the one used above:</p><pre class="screen">[root root]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs up -r current</code></strong>
@@ -48,9 +46,9 @@ cvs up -r current</span>
 </pre>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="automated-backup" leftLabel="Prev" leftTitle="Automated Backup"
-		    rightLink="install-redhat" rightLabel="Next" rightTitle="
-Appendix A. Install Red Hat 8/9"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="backup-recovery" upLabel="Up"> 
-		
+			leftLink="automated-backup" leftLabel="Prev" leftTitle="Automated Backup"
+			rightLink="install-redhat" rightLabel="Next" rightTitle="Appendix A. Install Red Hat
+8/9"
+			homeLink="index" homeLabel="Home" 
+			upLink="backup-recovery" upLabel="Up"> 
+		    

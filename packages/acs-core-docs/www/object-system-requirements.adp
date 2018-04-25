@@ -3,11 +3,11 @@
 <property name="doc(title)">Object Model Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="kernel-overview" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="object-system-design" rightLabel="Next">
-		<div class="sect1">
+			leftLink="kernel-overview" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="object-system-design" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="object-system-requirements" id="object-system-requirements"></a>Object Model Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -155,7 +155,7 @@ application objects, and tag those relationships with extra data.
 In OpenACS 3.x, this was done using <span class="emphasis"><em>mapping tables</em></span>. The user/groups module
 has the most highly developed data model for this purpose, using a
 single table called <code class="computeroutput">user_group_map</code> that mapped users to groups.
-In addition, it uses the the <code class="computeroutput">user_group_member_fields</code> and <code class="computeroutput">user_group_member_fields_map</code> tables to
+In addition, it uses the <code class="computeroutput">user_group_member_fields</code> and <code class="computeroutput">user_group_member_fields_map</code> tables to
 allow developers to attach custom attributes to group members. In
 fact, these custom attributes were not really attached to the
 users, but to the fact that a user was a member of a particular
@@ -471,8 +471,8 @@ Added short vague requirements on relation types.</td><td>09/06/2000</td><td>Pet
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="kernel-overview" leftLabel="Prev" leftTitle="Overview"
-		    rightLink="object-system-design" rightLabel="Next" rightTitle="Object Model Design"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="kernel-overview" leftLabel="Prev" leftTitle="Overview"
+			rightLink="object-system-design" rightLabel="Next" rightTitle="Object Model Design"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

@@ -3,11 +3,11 @@
 <property name="doc(title)">Using .vuh files for pretty urls</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-hierarchical" leftLabel="Prev"
-		    title="
-Chapter 10. Advanced Topics"
-		    rightLink="tutorial-css-layout" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-hierarchical" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="tutorial-css-layout" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-vuh" id="tutorial-vuh"></a>Using .vuh files for pretty urls</h2></div></div></div><p>.Vuh files are special cases of .tcl files, used for rewriting
 incoming urls. We can use a vuh file to prettify the uri for our
@@ -17,8 +17,7 @@ need a new .vuh file for redirection and we will need to change the
 referring links in note-list. First, add the vuh:</p><pre class="screen">
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs note.vuh</code></strong>
-</pre><p>Paste this into the file:</p><pre class="programlisting">
-# Transform requests of type: a/b
+</pre><p>Paste this into the file:</p><pre class="programlisting"># Transform requests of type: a/b
 # into this internal request: A?c=b
 # for example, note/495 &gt; note-edit?item_id=496
 # a: base name of this .vuh file
@@ -50,8 +49,7 @@ url' than a numeric id; this requires that your display page be
 able to look up an item based on pretty id.</p><p>We use <code class="computeroutput">rp_form_put</code> to store
 the item id in the internal register that the next page is
 expecting, and then redirects the request in process internally
-(ie, without a browser refresh).</p><p>Next, modify note-list so that its link is of the new form.:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs ../lib/note-edit.tcl</code></strong>
+(ie, without a browser refresh).</p><p>Next, modify note-list so that its link is of the new form.:</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs ../lib/note-edit.tcl</code></strong>
 </pre><pre class="programlisting">
 db_multirow \
     -extend {
@@ -74,9 +72,9 @@ directory (note/) instead of the actual directory that the note is
 being served from.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-hierarchical" leftLabel="Prev" leftTitle="Hierarchical data"
-		    rightLink="tutorial-css-layout" rightLabel="Next" rightTitle="Laying out a page with CSS instead of
+			leftLink="tutorial-hierarchical" leftLabel="Prev" leftTitle="Hierarchical data"
+			rightLink="tutorial-css-layout" rightLabel="Next" rightTitle="Laying out a page with CSS instead of
 tables"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    

@@ -3,11 +3,11 @@
 <property name="doc(title)">Diagnosing Performance Problems</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="uptime" leftLabel="Prev"
-		    title="
-Chapter 6. Production Environments"
-		    rightLink="database-management" rightLabel="Next">
-		<div class="sect1">
+			leftLink="uptime" leftLabel="Prev"
+			title="Chapter 6. Production
+Environments"
+			rightLink="database-management" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="maint-performance" id="maint-performance"></a>Diagnosing Performance Problems</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Did performance problems happen overnight, or did they sneak up
@@ -16,9 +16,8 @@ on you? Any clue what caused the performance problems (e.g. loading
 constantly?</p></li><li class="listitem">
 <p>Isolating and solving database problems.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Without daily internal maintenance, most databases slowly
-degrade in performance. For PostGreSQL, see <a class="xref" href="install-next-nightly-vacuum" title="Vacuum Postgres nightly">the section called
-&ldquo;Vacuum Postgres nightly&rdquo;</a>. For
-Oracle, use <code class="computeroutput">exec
+degrade in performance. For PostGreSQL, see <a class="xref" href="install-next-nightly-vacuum" title="Vacuum Postgres nightly">the section called “Vacuum Postgres
+nightly”</a>. For Oracle, use <code class="computeroutput">exec
 dbms_stats.gather_schema_stats('SCHEMA_NAME')</code>
 (<a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski&#39;s Oracle notes</a>).</p></li><li class="listitem">
 <p>You can track the exact amount of time each database query on a
@@ -32,15 +31,14 @@ Information" at the bottom of the page.</p></li><li class="listitem">
 <p>This should return a list of database queries on the page,
 including the exact query (so it can be cut-paste into psql or
 oracle) and the time each query took.</p><div class="figure">
-<a name="idp140623175898008" id="idp140623175898008"></a><p class="title"><strong>Figure 6.8. Query
-Analysis example</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/query-duration.png" alt="Query Analysis example"></div></div>
+<a name="idp140682193185848" id="idp140682193185848"></a><p class="title"><strong>Figure 6.8. Query Analysis
+example</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/query-duration.png" alt="Query Analysis example"></div></div>
 </div><br class="figure-break">
 </li>
 </ol></div>
 </li><li class="listitem">
 <p>Identify a runaway Oracle query: first, use <strong class="userinput"><code>ps aux</code></strong> or <strong class="userinput"><code>top</code></strong> to get the UNIX process ID of
-a runaway Oracle process.</p><p>Log in to SQL*Plus as the admin:</p><pre class="screen">
-[<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> ~]$ svrmgrl
+a runaway Oracle process.</p><p>Log in to SQL*Plus as the admin:</p><pre class="screen">[<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> ~]$ svrmgrl
 
 Oracle Server Manager Release 3.1.7.0.0 - Production
 
@@ -50,39 +48,29 @@ Oracle8i Enterprise Edition Release 8.1.7.3.0 - Production
 With the Partitioning option
 JServer Release 8.1.7.3.0 - Production
 
-SVRMGR&gt; <strong class="userinput"><code>connect internal</code></strong>              
-Password:
-</pre><p>See all of the running queries, and match the UNIX PID:</p><pre class="programlisting">
-select p.spid  -- The UNIX PID
+SVRMGR&gt; <strong class="userinput"><code>connect internal</code></strong>             
+Password:</pre><p>See all of the running queries, and match the UNIX PID:</p><pre class="programlisting">select p.spid  -- The UNIX PID
        ,s.sid  ,s.serial#
        ,p.username  as os_user
        ,s.username  ,s.status
        ,p.terminal  ,p.program
   from v$session s  ,v$process p
  where p.addr = s.paddr
- order by s.username ,p.spid ,s.sid ,s.serial# ;
-</pre><p>See the SQL behind the oracle processes:</p><pre class="programlisting">
-select s.username
+ order by s.username ,p.spid ,s.sid ,s.serial# ;</pre><p>See the SQL behind the oracle processes:</p><pre class="programlisting">select s.username
        ,s.sid  ,s.serial#
        ,sql.sql_text
   from v$session s, v$sqltext sql
  where sql.address    = s.sql_address
    and sql.hash_value = s.sql_hash_value
  --and upper(s.username) like 'USERNAME%'
- order by s.username ,s.sid ,s.serial# ,sql.piece ;
-</pre><p>To kill a troubled process:</p><pre class="programlisting">
-alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#
-</pre><p>(See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew
+ order by s.username ,s.sid ,s.serial# ,sql.piece ;</pre><p>To kill a troubled process:</p><pre class="programlisting">
+alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#</pre><p>(See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew
 Piskorski&#39;s Oracle notes</a>)</p>
 </li><li class="listitem">
 <p>Identify a runaway Postgres query. First, logging must be
 enabled in the database. This imposes a performance penalty and
 should not be done in normal operation.</p><p>Edit the file <code class="computeroutput">postgresql.conf</code> - its location depends on
-the PostGreSQL installation - and change</p><pre class="programlisting">
-#stats_command_string = false
-</pre><p>to</p><pre class="programlisting">
-stats_command_string = true
-</pre><p>Next, connect to postgres (<code class="computeroutput">psql
+the PostGreSQL installation - and change</p><pre class="programlisting">#stats_command_string = false</pre><p>to</p><pre class="programlisting">stats_command_string = true</pre><p>Next, connect to postgres (<code class="computeroutput">psql
 <em class="replaceable"><code>service0</code></em>
 </code>) and
 <code class="computeroutput">select * from
@@ -101,8 +89,7 @@ pg_stat_activity;</code>. Typical output should look like:</p><pre class="progra
  64344418 | openacs.org |   14311 |      101 | nsadmin | &lt;IDLE&gt;
  64344418 | openacs.org |   14549 |      101 | nsadmin | &lt;IDLE&gt;
 (8 rows)
-openacs.org=&gt;
-</pre>
+openacs.org=&gt;</pre>
 </li>
 </ul></div>
 </li>
@@ -124,7 +111,7 @@ about 1% per Oracle Support information.</p><p>To be able to get a overview of h
 query, install "autotrace". I usually follow the
 instructions here <a class="ulink" href="http://asktom.oracle.com/~tkyte/article1/autotrace.html" target="_top">http://asktom.oracle.com/~tkyte/article1/autotrace.html</a>.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140623175869304" id="idp140623175869304"></a>Make sure, that the Oracle CBO works with
+<a name="idp140682193210376" id="idp140682193210376"></a>Make sure, that the Oracle CBO works with
 adequate statistics</h4></div></div></div><p>The Oracle Cost Based optimizer is a piece of software that
 tries to find the "optimal" execution plan for a given
 SQL statement. For that it estimates the costs of running a SQL
@@ -136,9 +123,9 @@ CBO needs to have adequate statistics. For that Oracle supplies the
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="uptime" leftLabel="Prev" leftTitle="External uptime validation"
-		    rightLink="database-management" rightLabel="Next" rightTitle="
-Chapter 7. Database Management"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="maintenance-web" upLabel="Up"> 
-		
+			leftLink="uptime" leftLabel="Prev" leftTitle="External uptime validation"
+			rightLink="database-management" rightLabel="Next" rightTitle="Chapter 7. Database
+Management"
+			homeLink="index" homeLabel="Home" 
+			upLink="maintenance-web" upLabel="Up"> 
+		    

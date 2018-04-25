@@ -46,15 +46,13 @@ set name(last_name) Cronkite</code>
 <p>The <a href="../api/database"><kbd>query</kbd></a>
 procedure may be used as a convenient way to store the result of a
 one-row database query into an array:</p>
-<pre>
-query name onerow "
+<pre>query name onerow "
   select 
     first_name, last_name 
   from 
     users 
   where  
-    user_id = 123"
-</pre>
+    user_id = 123"</pre>
 <p>You can embed references to column values of a <kbd>onerow</kbd>
 data source in a template with simple <a href="../tagref/variable">variable substitution</a>.</p>
 <h3><kbd>onelist</kbd></h3>
@@ -62,8 +60,7 @@ data source in a template with simple <a href="../tagref/variable">variable subs
 <kbd>onelist</kbd> data sources are implemented by creating a
 Tcl list:</p>
 <pre>
-set names [list "Walter" "Fred" "Susy" "Frieda"]
-</pre>
+set names [list "Walter" "Fred" "Susy" "Frieda"]</pre>
 <p>The <kbd>query</kbd> procedure may be used to set a onelist data
 source based on a one-column database query:</p>
 <code>query name onevalue "select name from users"</code>
@@ -74,22 +71,18 @@ template with the <a href="../tagref/list">list</a> tag.</p>
 <kbd>multirow</kbd> data sources are not represented by a single
 Tcl data structure. As such the templating system includes a
 special API for constructing and manipulating them.</p>
-<pre>
-multirow create cars make model year
+<pre>multirow create cars make model year
 multirow append cars "Toyota" "Camry" "1996"
-multirow append cars "Volvo" "960" "1995"
-</pre>
+multirow append cars "Volvo" "960" "1995"</pre>
 <p>The <a href="../api/database"><kbd>query</kbd></a>
 procedure may be used as a convenient way to store the result of a
 multi-row, multi-column database query into a <kbd>multirow</kbd>
 data source:</p>
-<pre>
-query name multirow "
+<pre>query name multirow "
   select 
     make, model, year
   from 
-    cars"
-</pre>
+    cars"</pre>
 <p>You can iterate over a <kbd>multirow</kbd> data source in a
 template with the <a href="../tagref/multiple">multiple</a>
 tag.</p>

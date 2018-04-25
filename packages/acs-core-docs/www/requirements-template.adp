@@ -3,11 +3,11 @@
 <property name="doc(title)">System/Application Requirements Template</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="filename" leftLabel="Prev"
-		    title="
-Chapter 13. Documentation Standards"
-		    rightLink="i18n" rightLabel="Next">
-		<div class="sect1">
+			leftLink="filename" leftLabel="Prev"
+			title="Chapter 13. Documentation
+Standards"
+			rightLink="i18n" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="requirements-template" id="requirements-template"></a>System/Application Requirements
 Template</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:youremail\@example.com" target="_top">You</a>
@@ -129,10 +129,10 @@ programmers.</em></span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="filename" leftLabel="Prev" leftTitle="Detailed Design Documentation
+			leftLink="filename" leftLabel="Prev" leftTitle="Detailed Design Documentation
 Template"
-		    rightLink="i18n" rightLabel="Next" rightTitle="
+			rightLink="i18n" rightLabel="Next" rightTitle="
 Chapter 14. Internationalization"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="doc-standards" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="doc-standards" upLabel="Up"> 
+		    

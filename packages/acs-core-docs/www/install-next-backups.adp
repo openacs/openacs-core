@@ -3,11 +3,11 @@
 <property name="doc(title)">Backup Strategy</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="backup-recovery" leftLabel="Prev"
-		    title="
-Chapter 8. Backup and Recovery"
-		    rightLink="snapshot-backup" rightLabel="Next">
-		<div class="sect1">
+			leftLink="backup-recovery" leftLabel="Prev"
+			title="Chapter 8. Backup and
+Recovery"
+			rightLink="snapshot-backup" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-next-backups" id="install-next-backups"></a>Backup
 Strategy</h2></div></div></div><p>The purpose of backup is to enable recovery. Backup and recovery
@@ -31,9 +31,9 @@ then you can apply standard file-based backup strategies to
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="backup-recovery" leftLabel="Prev" leftTitle="
-Chapter 8. Backup and Recovery"
-		    rightLink="snapshot-backup" rightLabel="Next" rightTitle="Manual backup and recovery"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="backup-recovery" upLabel="Up"> 
-		
+			leftLink="backup-recovery" leftLabel="Prev" leftTitle="Chapter 8. Backup and
+Recovery"
+			rightLink="snapshot-backup" rightLabel="Next" rightTitle="Manual backup and recovery"
+			homeLink="index" homeLabel="Home" 
+			upLink="backup-recovery" upLabel="Up"> 
+		    

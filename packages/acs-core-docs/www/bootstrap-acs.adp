@@ -3,11 +3,11 @@
 <property name="doc(title)">Bootstrapping OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tcl-doc" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="ext-auth-requirements" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tcl-doc" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="ext-auth-requirements" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="bootstrap-acs" id="bootstrap-acs"></a>Bootstrapping OpenACS</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Tcl code: /tcl/0-acs-init.tcl and
@@ -105,10 +105,10 @@ unpackaged libraries) and begins listening for connections.</p><p><span class="c
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tcl-doc" leftLabel="Prev" leftTitle="Documenting Tcl Files: Page Contracts
+			leftLink="tcl-doc" leftLabel="Prev" leftTitle="Documenting Tcl Files: Page Contracts
 and Libraries"
-		    rightLink="ext-auth-requirements" rightLabel="Next" rightTitle="External Authentication
+			rightLink="ext-auth-requirements" rightLabel="Next" rightTitle="External Authentication
 Requirements"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

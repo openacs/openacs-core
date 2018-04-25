@@ -3,11 +3,11 @@
 <property name="doc(title)">Starting and Stopping an OpenACS instance.</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="maintenance-web" leftLabel="Prev"
-		    title="
-Chapter 6. Production Environments"
-		    rightLink="install-openacs-inittab" rightLabel="Next">
-		<div class="sect1">
+			leftLink="maintenance-web" leftLabel="Prev"
+			title="Chapter 6. Production
+Environments"
+			rightLink="install-openacs-inittab" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-openacs-keepalive" id="install-openacs-keepalive"></a>Starting and Stopping an OpenACS
 instance.</h2></div></div></div><p>The simplest way to start and stop and OpenACS site is to run
@@ -48,19 +48,16 @@ link the <code class="computeroutput">daemontools</code> directory
 into the <code class="computeroutput">/service</code> directory.
 Daemontools' <code class="computeroutput">svscan</code> process
 checks this directory every five seconds, and will quickly execute
-<code class="computeroutput">run</code>.</p><pre class="screen">
-[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>killall nsd</code></strong>
+<code class="computeroutput">run</code>.</p><pre class="screen">[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>killall nsd</code></strong>
 nsd: no process killed
 [$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>emacs /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/daemontools/run</code></strong>
 [$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>exit</code></strong>
 
 [root root]# <strong class="userinput"><code>ln -s /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/daemontools/ /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
-</pre><p>Verify that AOLserver is running.</p><pre class="screen">
-[root root]#<strong class="userinput"><code> ps -auxw | grep nsd</code></strong><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>   5562 14.4  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/config.tcl -u serve
+</pre><p>Verify that AOLserver is running.</p><pre class="screen">[root root]#<strong class="userinput"><code> ps -auxw | grep nsd</code></strong><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>   5562 14.4  6.2 22436 15952 ?       S    11:55   0:04 /usr/local/aolserver/bin/nsd -it /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/config.tcl -u serve
 root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
-[root root]#
-</pre>
+[root root]#</pre>
 </li><li class="listitem">
 <p>The user <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> can now
 control the service <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> with these
@@ -90,29 +87,25 @@ so it should still bounce back up immediately.</p></li>
 AOLserver services via daemontools. You can then restart a service
 via <code class="computeroutput">restart-aolserver <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code>
-</p><pre class="screen">
-[root root]# <strong class="userinput"><code>cp /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</code></strong>
+</p><pre class="screen">[root root]# <strong class="userinput"><code>cp /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/restart-aolserver-daemontools.txt /usr/local/bin/restart-aolserver</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /usr/local/bin/restart-aolserver</code></strong>
-[root root]#
-</pre>
+[root root]#</pre>
 </li><li class="listitem">
 <p>At this point, these commands will work only for the
 <code class="computeroutput">root</code> user. Grant permission for
 the <code class="computeroutput">web</code> group to use
 <code class="computeroutput">svc</code> commands on the
 <span class="emphasis"><em><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></em></span>
-server.</p><pre class="screen">
-[root root]# <strong class="userinput"><code>/usr/local/bin/svgroup web /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
+server.</p><pre class="screen">[root root]# <strong class="userinput"><code>/usr/local/bin/svgroup web /service/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
 </code></strong>
-[root root]#
-</pre>
+[root root]#</pre>
 </li><li class="listitem">
 <p>Verify that the controls work. You may want to <code class="computeroutput">tail -f /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/log/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>-error.log</code>
 in another window, so you can see what happens when you type these
 commands.</p><p>More information can be found on the <a class="ulink" href="http://panoptic.com/wiki/aolserver/How_to_start_stop_AOLserver_using_Daemontools" target="_top">AOLserver Daemontools</a> page.</p>
 </li>
 </ol></div><div class="table">
-<a name="idp140623159800936" id="idp140623159800936"></a><p class="title"><strong>Table 6.1. How it
+<a name="idp140682193008008" id="idp140682193008008"></a><p class="title"><strong>Table 6.1. How it
 Works</strong></p><div class="table-contents"><table class="table" summary="How it Works" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col><col><col>
@@ -133,9 +126,9 @@ Works</strong></p><div class="table-contents"><table class="table" summary="How 
 </div><br class="table-break">
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="maintenance-web" leftLabel="Prev" leftTitle="
-Chapter 6. Production Environments"
-		    rightLink="install-openacs-inittab" rightLabel="Next" rightTitle="AOLserver keepalive with inittab"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="maintenance-web" upLabel="Up"> 
-		
+			leftLink="maintenance-web" leftLabel="Prev" leftTitle="Chapter 6. Production
+Environments"
+			rightLink="install-openacs-inittab" rightLabel="Next" rightTitle="AOLserver keepalive with inittab"
+			homeLink="index" homeLabel="Home" 
+			upLink="maintenance-web" upLabel="Up"> 
+		    

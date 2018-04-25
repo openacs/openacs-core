@@ -3,11 +3,11 @@
 <property name="doc(title)">Programming with AOLserver</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="object-identity" leftLabel="Prev"
-		    title="
-Chapter 11. Development Reference"
-		    rightLink="form-builder" rightLabel="Next">
-		<div class="sect1">
+			leftLink="object-identity" leftLabel="Prev"
+			title="Chapter 11. Development
+Reference"
+			rightLink="form-builder" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="programming-with-aolserver" id="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Michael Yoon, Jon Salz and Lars
 Pind.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
@@ -228,14 +228,14 @@ lightweight, so memory consumption should not be a problem.
 However, when using <code class="computeroutput">ns_set get</code>
 to perform lookup by name, they perform a linear lookup, whereas
 arrays use a hash table, so <code class="computeroutput">ns_set</code>s are slower than arrays when the
-number of entries is large.</p><p><span class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.8
-2017/08/07 23:47:54 gustafn Exp $)</span></p>
+number of entries is large.</p><p><span class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.9
+2017/12/22 13:23:35 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="object-identity" leftLabel="Prev" leftTitle="Object Identity"
-		    rightLink="form-builder" rightLabel="Next" rightTitle="Using Form Builder: building html
+			leftLink="object-identity" leftLabel="Prev" leftTitle="Object Identity"
+			rightLink="form-builder" rightLabel="Next" rightTitle="Using Form Builder: building html
 forms dynamically"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="dev-guide" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="dev-guide" upLabel="Up"> 
+		    

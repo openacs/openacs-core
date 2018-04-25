@@ -6,22 +6,22 @@
     <p>by <a class="ulink" href="mailto:joel@aufrecht.org" target="_top">Joel Aufrecht</a></p>
   &lt;/authorblurb&gt;</span>
   
-  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623165919032"></a>Install some API</h3></div></div></div>
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682188494968"></a>Install some API</h3></div></div></div>
     
     <p>As a workaround for missing content-repository functionality, copy a provided file into the directory for Tcl files:</p>
     <pre class="screen">
     <span class="action">cp /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/tutorial/note-procs.tcl /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/tcl/</span></pre>
     <p>To make this file take effect, go to the <a class="ulink" href="/acs-admin/apm" target="_top">APM</a> and choose "Reload changed" for "MyFirstPackage".</p>
   </div>
-  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623162540728"></a>Page Map</h3></div></div></div>
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682183486264"></a>Page Map</h3></div></div></div>
     
     <p>Our package will have two visible pages.  The first shows a list of all objects; the second shows a single object in view or edit mode, and can also be used to add an object.  The index page will display the list, but since we might reuse the list later, we'll put it in a separate file and include it on the index page.</p>
-      <div class="figure"><a name="idp140623165411624"></a><p class="title"><b>Figure 9.5. Page Map</b></p><div class="figure-contents">
+      <div class="figure"><a name="idp140682183487208"></a><p class="title"><b>Figure 9.5. Page Map</b></p><div class="figure-contents">
         
         <div class="mediaobject" align="center"><img src="images/tutorial-page-map.png" align="middle" alt="Page Map"></div>
       </div></div><br class="figure-break">
   </div>
-  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140623162336104"></a>Build the "Index" page</h3></div></div></div>
+  <div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140682187991576"></a>Build the "Index" page</h3></div></div></div>
     
       <p>Each user-visible page in your package has, typically,
       three parts.  The  <code class="computeroutput">tcl</code> file
@@ -186,7 +186,7 @@ mfp::note::delete -item_id $item_id
 
 ad_returnredirect "."
 # stop running this code, since we're redirecting
-abort
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

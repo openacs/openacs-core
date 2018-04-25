@@ -13,8 +13,7 @@ for each row of a multirow data source. Column variables are reset
 with each repetition to the values of the next row of the data
 source.</p>
 <h3>Usage</h3>
-<pre>
-&lt;!-- Begin multiple layout, i.e. &lt;table&gt; --&gt;
+<pre>&lt;!-- Begin multiple layout, i.e. &lt;table&gt; --&gt;
 &lt;table&gt;
 
 &lt;multiple name="users"&gt;
@@ -39,8 +38,7 @@ source.</p>
 &lt;/multiple&gt;
 
 &lt;!-- End multiple layout, i.e. &lt;/table&gt; --&gt;
-&lt;/table&gt;
-</pre>
+&lt;/table&gt;</pre>
 <pre></pre>
 <h3>Notes</h3>
 <ul>

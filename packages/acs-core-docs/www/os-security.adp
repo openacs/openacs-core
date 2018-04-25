@@ -3,11 +3,10 @@
 <property name="doc(title)">Security Information</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="os-install" leftLabel="Prev"
-		    title="
-Appendix C. Credits"
-		    rightLink="install-resources" rightLabel="Next">
-		<div class="section">
+			leftLink="os-install" leftLabel="Prev"
+			title="Appendix C. Credits"
+			rightLink="install-resources" rightLabel="Next">
+		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="os-security" id="os-security"></a>Security Information</h2></div></div></div><p>Once you get your OS installed, it&#39;s imperative that you
 secure your installation. As Jon Griffin repeatedly warns us,
@@ -24,8 +23,8 @@ Schneier&#39;s Crypto-Gram</a>, especially <a class="ulink" href="http://www.cou
 </ul></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="os-install" leftLabel="Prev" leftTitle="Linux Install Guides"
-		    rightLink="install-resources" rightLabel="Next" rightTitle="Resources"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="credits" upLabel="Up"> 
-		
+			leftLink="os-install" leftLabel="Prev" leftTitle="Linux Install Guides"
+			rightLink="install-resources" rightLabel="Next" rightTitle="Resources"
+			homeLink="index" homeLabel="Home" 
+			upLink="credits" upLabel="Up"> 
+		    

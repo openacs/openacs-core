@@ -3,11 +3,11 @@
 <property name="doc(title)">Chapter 5. Upgrading</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="how-do-I" leftLabel="Prev"
-		    title="
+			leftLink="how-do-I" leftLabel="Prev"
+			title="
 Part II. Administrator&#39;s Guide"
-		    rightLink="upgrade-overview" rightLabel="Next">
-		<div class="chapter">
+			rightLink="upgrade-overview" rightLabel="Next">
+		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="upgrade" id="upgrade"></a>Chapter 5. Upgrading</h2></div></div></div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
@@ -23,8 +23,8 @@ Aufrecht</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="how-do-I" leftLabel="Prev" leftTitle="How Do I?"
-		    rightLink="upgrade-overview" rightLabel="Next" rightTitle="Overview"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-admin" upLabel="Up"> 
-		
+			leftLink="how-do-I" leftLabel="Prev" leftTitle="How Do I?"
+			rightLink="upgrade-overview" rightLabel="Next" rightTitle="Overview"
+			homeLink="index" homeLabel="Home" 
+			upLink="acs-admin" upLabel="Up"> 
+		    

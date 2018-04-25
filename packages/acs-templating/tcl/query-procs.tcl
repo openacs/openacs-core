@@ -180,8 +180,8 @@ ad_proc -private template::query::onerow { statement_name db result_name sql } {
 }
 
 ad_proc -private template::query::multirow { statement_name db result_name sql } {
-    Process a multirow query.  Use an array for each row row in the
-    result.  Arrays are named name0, name1, name2 etc.  The variable
+    Process a multirow query.  Use an array for each row in the
+    result.  Arrays are named name0, name1, name2 etc. The variable
     name.rowcount is also defined for checking and iteration.
 
     @param statement_name Standard db_api statement name used to hook
@@ -598,7 +598,7 @@ ad_proc -public template::multirow {
     <dt> <b>template::multirow columns datasourcename</b></dt>
     <dd> returns the columns in the datasource</dd>
     <dt> <b>template::multirow get datasourcename rownum [column]</b></dt>
-    <dd> returns the row of of data (or the particular row/column if column is provided)</dd>
+    <dd> returns the row of data (or the particular row/column if column is provided)</dd>
     <dt> <b>template::multirow set datasourcename rownum column value</b></dt>
     <dd> set an element value</dd>
     <dt> <b>template::multirow foreach datasource code </b></dt>
@@ -607,8 +607,8 @@ ad_proc -public template::multirow {
     <dd> upvar the multirow, aliasing to new_name if provided</dd>
     <dt> <b>template::multirow unset datasource</b></dt>
     <dd> unset multirow</dd>
-    <dt> <b>template::multirow sort datasource -lsort-switch -lsort-switch col1 col2</b></dt>
-    <dd> Sort the multirow by the column(s) specified. The value sorted by will be the the values of the columns specified, separated by the space character. Any switches specified before the columns will be passed directly to the lsort command. </dd>
+    <dt> <b>template::multirow sort datasource -lsort-switch col1 col2</b></dt>
+    <dd> Sort the multirow by the column(s) specified. The value sorted by will be the values of the columns specified, separated by the space character. Any switches specified before the columns will be passed directly to the lsort command. </dd>
     <dt> <b>template::multirow exists datasource</b></dt>
     <dd> Return 1 if the multirow datasource exists, 0 if it doesn't.
     </dl>

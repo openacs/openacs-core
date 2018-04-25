@@ -3,11 +3,11 @@
 <property name="doc(title)">Database Access API</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="apm-design" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="i18n-requirements" rightLabel="Next">
-		<div class="sect1">
+			leftLink="apm-design" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="i18n-requirements" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="db-api-detailed" id="db-api-detailed"></a>Database Access API</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a>. Revised and
 expanded by Roberto Mello (rmello at fslc dot usu dot edu), July
@@ -620,8 +620,7 @@ db_multirow -extend { user_url } users users_query {
 } {
     set user_url [acs_community_member_url -user_id $user_id]
 }
-    
-</pre>
+    </pre>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_resultrows" id="kernel.dbapi_db_resultrows"></a>db_resultrows</code></strong></span></span></dt><dd>
 <pre class="programlisting"><span class="strong"><strong>db_resultrows</strong></span></pre><p>Returns the number of rows affected or returned by the previous
@@ -664,24 +663,21 @@ the bootstrap process.</p>
 <a name="kernel.dbapi_db_compatible_rdbms_p" id="kernel.dbapi_db_compatible_rdbms_p"></a>db_compatible_rdbms_p</code></strong></span></span></dt><dd>
 <pre class="programlisting">
 <span class="strong"><strong>db_compatible_rdbms_p</strong></span> db_type
-                
-</pre><p>Returns 1 if the given db_type is compatible with the current
+                </pre><p>Returns 1 if the given db_type is compatible with the current
 RDBMS.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_package_supports_rdbms_p" id="kernel.dbapi_db_package_supports_rdbms_p"></a>db_package_supports_rdbms_p</code></strong></span></span></dt><dd>
 <pre class="programlisting">
 <span class="strong"><strong>db_package_supports_rdbms_p</strong></span> db_type_list
-                
-</pre><p>Returns 1 if db_type_list contains the current RDMBS type. A
+                </pre><p>Returns 1 if db_type_list contains the current RDMBS type. A
 package intended to run with a given RDBMS must note this in
-its package info file regardless of whether or not it actually
+it&#39;s package info file regardless of whether or not it actually
 uses the database.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_legacy_package_p" id="kernel.dbapi_db_legacy_package_p"></a>db_legacy_package_p</code></strong></span></span></dt><dd>
 <pre class="programlisting">
 <span class="strong"><strong>db_legacy_package_p</strong></span> db_type_list
-                
-</pre><p>Returns 1 if the package is a legacy package. We can only tell
+                </pre><p>Returns 1 if the package is a legacy package. We can only tell
 for certain if it explicitly supports Oracle 8.1.6 rather than the
 OpenACS more general oracle.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
@@ -706,9 +702,9 @@ gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="apm-design" leftLabel="Prev" leftTitle="Package Manager Design"
-		    rightLink="i18n-requirements" rightLabel="Next" rightTitle="OpenACS Internationalization
+			leftLink="apm-design" leftLabel="Prev" leftTitle="Package Manager Design"
+			rightLink="i18n-requirements" rightLabel="Next" rightTitle="OpenACS Internationalization
 Requirements"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

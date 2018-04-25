@@ -65,8 +65,7 @@ have this basic structure:</p>
 
 &lt;tr&gt;&lt;td colspan="3"&gt;&lt;!-- FOOTER --&gt;&lt;/td&gt;&lt;/tr&gt;
 
-&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;
-</pre></blockquote>
+&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</pre></blockquote>
 <p>The only special feature of this master template is the
 <kbd>slave</kbd> tag, which marks the location of the content area.
 Note that the content is inserted into the master template as a
@@ -78,15 +77,13 @@ demarcate the content area from the header and footer.</p>
 <h3>Write the Page Template(s)</h3>
 <p>A page template must include a <kbd>master</kbd> tag to specify
 that its output should be enclosed in a master template:</p>
-<blockquote><pre>
-&lt;master src="/templates/master"&gt;
+<blockquote><pre>&lt;master src="/templates/master"&gt;
 
 &lt;!--Begin layout of page content--&gt;
 &lt;h3&gt;\@title\@&lt;/h3&gt;
 &lt;p&gt;by \@name\@&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;\@byline\@&lt;/b&gt;: \@text&lt;/p&gt;
-...
-</pre></blockquote>
+...</pre></blockquote>
 <p>The <kbd>master</kbd> tag may be included anywhere in the body
 of the page template, although usually the top of the file is the
 best location for it.</p>
@@ -98,17 +95,14 @@ user&#39;s name on every page to indicate that the site has been
 personalized. The Tcl script associated with the master template
 would include code like this:</p>
 <blockquote><pre>
-set user_name [your_procedure_to_get_the_current_user_name]
-</pre></blockquote>
+set user_name [your_procedure_to_get_the_current_user_name]</pre></blockquote>
 <p>The template would have a section like this:</p>
-<blockquote><pre>
-&lt;if \@user_name\@ nil&gt;
+<blockquote><pre>&lt;if \@user_name\@ nil&gt;
   &lt;a href="/register.acs"&gt;Register Now!&lt;/a&gt;
 &lt;/if&gt;
 &lt;else&gt;
   \@user_name\@ (&lt;a href="/signout.acs"&gt;Sign Out&lt;/a&gt;)
-&lt;/else&gt;
-</pre></blockquote>
+&lt;/else&gt;</pre></blockquote>
 <h3>Passing Property Values from the Page Template to Master
 Template</h3>
 <p>As mentioned above, in many cases the dynamic elements of the
@@ -116,13 +110,11 @@ master template depend on whatever is appearing in the content area
 for a particular request. The <kbd>property</kbd> tag may be used
 in the page template to specify values that should be passed to the
 master template:</p>
-<blockquote><pre>
-&lt;master src="/templates/master"&gt;
+<blockquote><pre>&lt;master src="/templates/master"&gt;
 &lt;property name="title"&gt;\@title\@&lt;/property&gt;
 
 &lt;!--Begin layout of page content--&gt;
-...
-</pre></blockquote>
+...</pre></blockquote>
 <p>In this case, the <kbd>property</kbd> tag establishes
 <kbd>title</kbd> as a data source for the master template.
 Properties are set as regular Tcl variables prior to executing the

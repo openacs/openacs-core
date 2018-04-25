@@ -3,11 +3,11 @@
 <property name="doc(title)">Groups, Context, Permissions</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="templates" leftLabel="Prev"
-		    title="
-Chapter 11. Development Reference"
-		    rightLink="subsites" rightLabel="Next">
-		<div class="sect1">
+			leftLink="templates" leftLabel="Prev"
+			title="Chapter 11. Development
+Reference"
+			rightLink="subsites" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="permissions" id="permissions"></a>Groups, Context, Permissions</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -198,9 +198,9 @@ application pages.</p><p><span class="cvstag">($&zwnj;Id: permissions.xml,v 1.18
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="templates" leftLabel="Prev" leftTitle="Using Templates in OpenACS"
-		    rightLink="subsites" rightLabel="Next" rightTitle="Writing OpenACS Application
+			leftLink="templates" leftLabel="Prev" leftTitle="Using Templates in OpenACS"
+			rightLink="subsites" rightLabel="Next" rightTitle="Writing OpenACS Application
 Pages"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="dev-guide" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="dev-guide" upLabel="Up"> 
+		    

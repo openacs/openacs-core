@@ -3,17 +3,17 @@
 <property name="doc(title)">Setting Up Database Objects</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-newpackage" leftLabel="Prev"
-		    title="
-Chapter 9. Development Tutorial"
-		    rightLink="tutorial-pages" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-newpackage" leftLabel="Prev"
+			title="Chapter 9. Development
+Tutorial"
+			rightLink="tutorial-pages" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-database" id="tutorial-database"></a>Setting Up Database Objects</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
 Aufrecht</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623172585384" id="idp140623172585384"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
+<a name="idp140682188847784" id="idp140682188847784"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
 scripts are database-specific and are thus in either the
 <code class="computeroutput">myfirstpackage/sql/oracle</code> or
 <code class="computeroutput">myfirstpackage/sql/postgresql</code>
@@ -40,18 +40,16 @@ objects, we can also use some content repository functions to
 simplify our database creation. (<a class="ulink" href="objects" target="_top">More information about ACS
 Objects</a>. <a class="ulink" href="/doc/acs-content-repository" target="_top">More information about the Content
 Repository</a>.)</p><div class="figure">
-<a name="idp140623163033192" id="idp140623163033192"></a><p class="title"><strong>Figure 9.2. Tutorial Data
+<a name="idp140682188466808" id="idp140682188466808"></a><p class="title"><strong>Figure 9.2. Tutorial Data
 Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
 </div><br class="figure-break"><p>The top of each sql file has some standard comments, including
 doc tags such as <code class="computeroutput">\@author</code> which
 will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id:$</code> will automatically be expanded when
-the file is checked in to cvs.</p><pre class="screen">
-[$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/sql/postgresql</code></strong>
+the file is checked in to cvs.</p><pre class="screen">[$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/sql/postgresql</code></strong>
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-create.sql</code></strong>
 </pre><p>Paste the text below into the file, save, and close.</p><div class="figure">
-<a name="idp140623161557048" id="idp140623161557048"></a><p class="title"><strong>Figure 9.3. The
-Database Creation Script</strong></p><div class="figure-contents"><pre class="programlisting">
--- creation script
+<a name="idp140682188007208" id="idp140682188007208"></a><p class="title"><strong>Figure 9.3. The Database
+Creation Script</strong></p><div class="figure-contents"><pre class="programlisting">-- creation script
 --
 -- \@author joel\@aufrecht.org
 -- \@cvs-id &amp;Id:$
@@ -79,9 +77,8 @@ conflict with objects from other packages.</p><p>Create a database file to drop 
 uninstalled.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-drop.sql</code></strong>
 </pre><div class="figure">
-<a name="idp140623165914152" id="idp140623165914152"></a><p class="title"><strong>Figure 9.4. Database Deletion
-Script</strong></p><div class="figure-contents"><pre class="programlisting">
--- drop script
+<a name="idp140682188736280" id="idp140682188736280"></a><p class="title"><strong>Figure 9.4. Database Deletion
+Script</strong></p><div class="figure-contents"><pre class="programlisting">-- drop script
 --
 -- \@author joel\@aufrecht.org
 -- \@cvs-id &amp;Id:$
@@ -106,8 +103,7 @@ psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE will create implicit tr
                          0
 (1 row)
 
-[$OPENACS_SERVICE_NAME postgresql]$
-</pre><p>If there are errors, use them to debug the sql file and try
+[$OPENACS_SERVICE_NAME postgresql]$</pre><p>If there are errors, use them to debug the sql file and try
 again. If there are errors in the database table creation, you may
 need to run the drop script to drop the table so that you can
 recreate it. The drop script will probably have errors since some
@@ -121,16 +117,15 @@ script:</p><pre class="screen">
                        0
 (1 row)
 
-[$OPENACS_SERVICE_NAME postgresql]$
-</pre><p>Once both scripts are working without errors, <span class="emphasis"><em>run the create script one last time</em></span> and
+[$OPENACS_SERVICE_NAME postgresql]$</pre><p>Once both scripts are working without errors, <span class="emphasis"><em>run the create script one last time</em></span> and
 proceed.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>psql service0 -f myfirstpackage-create.sql</code></strong>
 </pre>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-newpackage" leftLabel="Prev" leftTitle="Creating an Application Package"
-		    rightLink="tutorial-pages" rightLabel="Next" rightTitle="Creating Web Pages"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial" upLabel="Up"> 
-		
+			leftLink="tutorial-newpackage" leftLabel="Prev" leftTitle="Creating an Application Package"
+			rightLink="tutorial-pages" rightLabel="Next" rightTitle="Creating Web Pages"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial" upLabel="Up"> 
+		    

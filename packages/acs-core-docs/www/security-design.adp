@@ -3,11 +3,11 @@
 <property name="doc(title)">Security Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="security-requirements" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="security-notes" rightLabel="Next">
-		<div class="sect1">
+			leftLink="security-requirements" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="security-notes" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="security-design" id="security-design"></a>Security Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li and Archit
 Shah</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
@@ -562,8 +562,8 @@ system is dependent upon this function.</p></li>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="security-requirements" leftLabel="Prev" leftTitle="Security Requirements"
-		    rightLink="security-notes" rightLabel="Next" rightTitle="Security Notes"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="security-requirements" leftLabel="Prev" leftTitle="Security Requirements"
+			rightLink="security-notes" rightLabel="Next" rightTitle="Security Notes"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

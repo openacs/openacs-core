@@ -1,15 +1,13 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 16. Releasing
-OpenACS}</property>
-<property name="doc(title)">Chapter 16. Releasing
-OpenACS</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 16. Releasing OpenACS}</property>
+<property name="doc(title)">Chapter 16. Releasing OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="ext-auth-requirements" leftLabel="Prev"
-		    title="Part IV. For
-OpenACS Platform Developers"
-		    rightLink="releasing-openacs-core" rightLabel="Next">
-		<div class="chapter">
+			leftLink="ext-auth-requirements" leftLabel="Prev"
+			title="Part IV. For OpenACS
+Platform Developers"
+			rightLink="releasing-openacs-core" rightLabel="Next">
+		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="releasing-openacs" id="releasing-openacs"></a>Chapter 16. Releasing
 OpenACS</h2></div></div></div><div class="toc">
@@ -22,9 +20,9 @@ Update the translations</a></span></dt>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="ext-auth-requirements" leftLabel="Prev" leftTitle="External Authentication
+			leftLink="ext-auth-requirements" leftLabel="Prev" leftTitle="External Authentication
 Requirements"
-		    rightLink="releasing-openacs-core" rightLabel="Next" rightTitle="OpenACS Core and .LRN"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-plat-dev" upLabel="Up"> 
-		
+			rightLink="releasing-openacs-core" rightLabel="Next" rightTitle="OpenACS Core and .LRN"
+			homeLink="index" homeLabel="Home" 
+			upLink="acs-plat-dev" upLabel="Up"> 
+		    

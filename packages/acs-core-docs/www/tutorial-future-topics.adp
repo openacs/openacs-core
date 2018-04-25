@@ -3,11 +3,11 @@
 <property name="doc(title)">Future Topics</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-second-database" leftLabel="Prev"
-		    title="
-Chapter 10. Advanced Topics"
-		    rightLink="dev-guide" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-second-database" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="dev-guide" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-future-topics" id="tutorial-future-topics"></a>Future
 Topics</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -21,9 +21,9 @@ Programming FAQ</a>
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-second-database" leftLabel="Prev" leftTitle="Connect to a second database"
-		    rightLink="dev-guide" rightLabel="Next" rightTitle="
-Chapter 11. Development Reference"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		
+			leftLink="tutorial-second-database" leftLabel="Prev" leftTitle="Connect to a second database"
+			rightLink="dev-guide" rightLabel="Next" rightTitle="Chapter 11. Development
+Reference"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    

@@ -3,11 +3,11 @@
 <property name="doc(title)">Using Templates in OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="db-api" leftLabel="Prev"
-		    title="
-Chapter 11. Development Reference"
-		    rightLink="permissions" rightLabel="Next">
-		<div class="sect1">
+			leftLink="db-api" leftLabel="Prev"
+			title="Chapter 11. Development
+Reference"
+			rightLink="permissions" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="templates" id="templates"></a>Using Templates in OpenACS</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -155,8 +155,8 @@ sources.</p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="db-api" leftLabel="Prev" leftTitle="The OpenACS Database Access API"
-		    rightLink="permissions" rightLabel="Next" rightTitle="Groups, Context, Permissions"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="dev-guide" upLabel="Up"> 
-		
+			leftLink="db-api" leftLabel="Prev" leftTitle="The OpenACS Database Access API"
+			rightLink="permissions" rightLabel="Next" rightTitle="Groups, Context, Permissions"
+			homeLink="index" homeLabel="Home" 
+			upLink="dev-guide" upLabel="Up"> 
+		    

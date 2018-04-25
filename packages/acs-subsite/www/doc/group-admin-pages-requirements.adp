@@ -88,7 +88,7 @@ efficiently.</font></p></dd><dt><font><strong>35.10 Remove attributes</strong></
 a group type. Removing the attribute removes all values specified
 for that attribute.</font></p></dd><dt><font><strong>40.10 Relationship
 Constraints</strong></font></dt><dd><p><font>The API must support the following types of constraints on
-relationships:</font></p></dd><dt><font><strong>40.10.10 Permissible
+relationships:</font></p></dd><dd></dd><dt><font><strong>40.10.10 Permissible
 relationships</strong></font></dt><dd><p><font>Each group type should maintain a list of all relationship
 types that can be used to add elements to groups of this group
 type.</font></p></dd><dt><font><strong>40.10.20 Constraints on
@@ -129,9 +129,9 @@ supertypes.</font></p></dd><dt><font>
 removes all groups of this type.</font></p></dd>
 </dl></blockquote></dd>
 </dl>
-<dl><dt><font>
+<dt><font>
 <strong>150.10</strong> Group instance summary
-page</font></dt></dl>
+page</font></dt>
 <blockquote><dl>
 <dt><font>
 <strong>150.10.10</strong> Display relations</font></dt><dd><p><font>Each group should display all the parties related to it
@@ -165,5 +165,5 @@ intra-party relations.</font></p></dd>
 <address><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></address>
 <br>
-<font size="-1">$&zwnj;Id: group-admin-pages-requirements.html,v 1.2.30.1
-2016/07/18 11:40:32 gustafn Exp $</font>
+<font size="-1">$&zwnj;Id: group-admin-pages-requirements.html,v 1.3
+2017/08/07 23:47:59 gustafn Exp $</font>

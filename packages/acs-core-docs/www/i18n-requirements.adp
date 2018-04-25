@@ -3,11 +3,11 @@
 <property name="doc(title)">OpenACS Internationalization Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="db-api-detailed" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="security-requirements" rightLabel="Next">
-		<div class="sect1">
+			leftLink="db-api-detailed" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="security-requirements" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="i18n-requirements" id="i18n-requirements"></a>OpenACS Internationalization
 Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by Henry Minsky, <a class="ulink" href="mailto:yon\@openforce.net" target="_top">Yon Feldman</a>, <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars
@@ -214,8 +214,8 @@ of messages can be grouped with respect to a module name or package
 path.</p><p>
 <span class="emphasis"><em>40.30</em></span> The API for lookup
 of a message will take a locale and message key as arguments, and
-return the appropriate translation of that message for the specified
-locale.</p><p>
+return the appropriate translation of that message for the
+specified locale.</p><p>
 <span class="emphasis"><em>40.40</em></span> The API for lookup
 of a message will accept an optional default string which can be
 used if the message key is not found in the catalog. This lets the
@@ -258,7 +258,7 @@ times:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-t
 <li class="listitem"><p>Loading source files (.tcl or .adp) or content files from the
 filesystem</p></li><li class="listitem"><p>Accepting form input data from users</p></li><li class="listitem"><p>Delivering text output to a browser</p></li><li class="listitem"><p>Composing an email message</p></li><li class="listitem"><p>Writing data to the filesystem</p></li>
 </ul></div><p>Acs-templating does the following.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>When the acs-templating package opens an an ADP or Tcl file, it
+<li class="listitem"><p>When the acs-templating package opens an ADP or Tcl file, it
 assumes the file is iso-8859-1. If the output charset
 (OutputCharset) in the AOLserver config file is set, then
 acs-templating assumes it&#39;s that charset. Writing Files</p></li><li class="listitem"><p>When the acs-templating package writes an an ADP or Tcl file, it
@@ -339,7 +339,7 @@ system.</p>
 URL, the designer may create multiple locale-specific template
 files may be created (one per locale or language)</p><p>
 <span class="emphasis"><em>70.10</em></span> For a given page
-request, the system must be able to select an approprate
+request, the system must be able to select an appropriate
 locale-specific template file to use. The request locale is
 computed as per (see requirement 20.0).</p><p>
 <span class="emphasis"><em>70.20</em></span>A template file may
@@ -489,8 +489,8 @@ University in Germany</td><td>12 September 2002</td><td>Peter Marklund</td>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="db-api-detailed" leftLabel="Prev" leftTitle="Database Access API"
-		    rightLink="security-requirements" rightLabel="Next" rightTitle="Security Requirements"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			leftLink="db-api-detailed" leftLabel="Prev" leftTitle="Database Access API"
+			rightLink="security-requirements" rightLabel="Next" rightTitle="Security Requirements"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

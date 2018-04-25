@@ -3,19 +3,18 @@
 <property name="doc(title)">Set up Log Analysis Reports</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="install-ssl" leftLabel="Prev"
-		    title="
-Chapter 6. Production Environments"
-		    rightLink="uptime" rightLabel="Next">
-		<div class="sect1">
+			leftLink="install-ssl" leftLabel="Prev"
+			title="Chapter 6. Production
+Environments"
+			rightLink="uptime" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="analog-setup" id="analog-setup"></a>Set up Log Analysis Reports</h2></div></div></div><p>Analog is a program with processes webserver access logs,
 performs DNS lookup, and outputs HTML reports. Analog should
 <a class="link" href="analog-install" title="Install Analog web file analyzer">already be installed.</a> A
 modified configuration file is included in the OpenACS tarball.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="screen">
-[root src]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
+<pre class="screen">[root src]# <strong class="userinput"><code>su - $OPENACS_SERVICE_NAME</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>mkdir www/log</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cp -r /usr/share/analog-5.32/images www/log/</code></strong>
@@ -41,8 +40,7 @@ instances of service0 to your $OPENACS_SERVICE_NAME.</p>
   /home/$OPENACS_SERVICE_NAME/dnscache: ignoring it
   (For help on all errors and warnings, see docs/errors.html)
 /usr/share/analog-5.32/analog: Warning R: Turning off empty Search Word Report
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$
-</pre><p>Verify that it works by browing to <code class="computeroutput">http://yourserver.test:8000/log/traffic.html</code>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</pre><p>Verify that it works by browing to <code class="computeroutput">http://yourserver.test:8000/log/traffic.html</code>
 </p>
 </li><li class="listitem">
 <p>Automate this by creating a file in <code class="computeroutput">/etc/cron.daily</code>.</p><pre class="screen">
@@ -50,23 +48,19 @@ instances of service0 to your $OPENACS_SERVICE_NAME.</p>
 logout
 
 [root root]# <strong class="userinput"><code>emacs /etc/cron.daily/analog</code></strong>
-</pre><p>Put this into the file:</p><pre class="programlisting">
-#!/bin/sh
+</pre><p>Put this into the file:</p><pre class="programlisting">#!/bin/sh
 
-/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/analog.cfg
-</pre><pre class="screen">
-[root root]# <strong class="userinput"><code>chmod 755 /etc/cron.daily/analog</code></strong>
-</pre><p>Test it by running the script.</p><pre class="screen">
-[root root]# <strong class="userinput"><code>sh /etc/cron.daily/analog</code></strong>
+/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/analog.cfg</pre><pre class="screen">[root root]# <strong class="userinput"><code>chmod 755 /etc/cron.daily/analog</code></strong>
+</pre><p>Test it by running the script.</p><pre class="screen">[root root]# <strong class="userinput"><code>sh /etc/cron.daily/analog</code></strong>
 </pre><p>Browse to <code class="computeroutput">http://<em class="replaceable"><code>yourserver.test</code></em>/log/traffic.html</code>
 </p>
 </li>
 </ol></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="install-ssl" leftLabel="Prev" leftTitle="Installing SSL Support for an OpenACS
+			leftLink="install-ssl" leftLabel="Prev" leftTitle="Installing SSL Support for an OpenACS
 service"
-		    rightLink="uptime" rightLabel="Next" rightTitle="External uptime validation"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="maintenance-web" upLabel="Up"> 
-		
+			rightLink="uptime" rightLabel="Next" rightTitle="External uptime validation"
+			homeLink="index" homeLabel="Home" 
+			upLink="maintenance-web" upLabel="Up"> 
+		    

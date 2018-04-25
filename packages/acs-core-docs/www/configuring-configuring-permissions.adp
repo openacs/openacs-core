@@ -3,18 +3,17 @@
 <property name="doc(title)">Setting Permissions on an OpenACS package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="configuring-configuring-packages" leftLabel="Prev"
-		    title="
-Chapter 4. Configuring a new OpenACS
-Site"
-		    rightLink="how-do-I" rightLabel="Next">
-		<div class="sect1">
+			leftLink="configuring-configuring-packages" leftLabel="Prev"
+			title="Chapter 4. Configuring a
+new OpenACS Site"
+			rightLink="how-do-I" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="configuring-configuring-permissions" id="configuring-configuring-permissions"></a>Setting Permissions on an
 OpenACS package</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:jade\@rubick.com" target="_top">Jade Rubick</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140623159761448" id="idp140623159761448"></a>Setting Permission on an OpenACS
+<a name="idp140682183333912" id="idp140682183333912"></a>Setting Permission on an OpenACS
 package</h3></div></div></div><p>After you&#39;ve installed and mounted your package, you can
 configure each instance to act as you would like.</p><p>This is done from the Applications page. Log in, go to the Admin
 or Control Panel, click on the subsite the application is in, and
@@ -30,8 +29,8 @@ registered for the site.</p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="configuring-configuring-packages" leftLabel="Prev" leftTitle="Configuring an OpenACS package"
-		    rightLink="how-do-I" rightLabel="Next" rightTitle="How Do I?"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="configuring-new-site" upLabel="Up"> 
-		
+			leftLink="configuring-configuring-packages" leftLabel="Prev" leftTitle="Configuring an OpenACS package"
+			rightLink="how-do-I" rightLabel="Next" rightTitle="How Do I?"
+			homeLink="index" homeLabel="Home" 
+			upLink="configuring-new-site" upLabel="Up"> 
+		    

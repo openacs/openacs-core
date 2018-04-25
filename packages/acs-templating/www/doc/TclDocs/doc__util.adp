@@ -15,7 +15,7 @@ methods.</blockquote>
 <strong>Private Methods</strong>:<br>
 </p>
 <table width="100%">
-<tr><td width="100%" bgcolor="#CCCCFF"><a name=" set split_name $see_name doc::util::text_divider split_name :: set name_length [llength $split_name] set see_namespace [join [lrange $split_name 0 [expr $name_length - 2]] \" set="" url=""><font size="+1" weight="bold">set split_name
+<tr><td width="100%" bgcolor="#CCCCFF"><a name="set split_name $see_name doc::util::text_divider split_name :: set name_length [llength $split_name] set see_namespace [join [lrange $split_name 0 [expr $name_length - 2]] \" set="" url=""><font size="+1" weight="bold">set split_name
 $see_name doc::util::text_divider split_name :: set name_length
 [llength $split_name] set see_namespace [join [lrange $split_name 0
 [expr $name_length - 2]] \"\"] set url

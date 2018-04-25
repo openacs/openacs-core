@@ -98,5 +98,5 @@ first step. The templating system provides the <a href="../tagref/noparse"><kbd>
 <!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> --><br>
 
 
-Last modified: $&zwnj;Id: memory.html,v 1.1.1.1.30.2 2016/12/01 20:43:45
-antoniop Exp $
+Last modified: $&zwnj;Id: memory.html,v 1.2 2017/08/07 23:48:02 gustafn
+Exp $

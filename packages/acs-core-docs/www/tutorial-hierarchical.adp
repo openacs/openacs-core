@@ -3,11 +3,11 @@
 <property name="doc(title)">Hierarchical data</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-notifications" leftLabel="Prev"
-		    title="
-Chapter 10. Advanced Topics"
-		    rightLink="tutorial-vuh" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-notifications" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="tutorial-vuh" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-hierarchical" id="tutorial-hierarchical"></a>Hierarchical
 data</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="http://rubick.com:8002" target="_top">Jade Rubick</a> with help
@@ -35,8 +35,7 @@ hierarchical queries, you can do them as follows:</p><pre class="programlisting"
       c.category_id = o.object_id
       ORDER BY
       o.tree_sortkey"
-    
-</pre><p>Note the use of the <code class="computeroutput">tree_level()</code> function, which gives you the
+    </pre><p>Note the use of the <code class="computeroutput">tree_level()</code> function, which gives you the
 level, starting from 1, 2, 3...</p><p>Here&#39;s an example, pulling all of the children for a given
 parent:</p><pre class="programlisting">
       SELECT 
@@ -50,8 +49,7 @@ parent:</p><pre class="programlisting">
       children.tree_sortkey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
       and parent.tree_sortkey &lt;&gt; children.tree_sortkey
       and parent.key = :the_parent_key;
-      
-</pre><p>The reason we subtract the parent&#39;s tree_level from the
+      </pre><p>The reason we subtract the parent&#39;s tree_level from the
 child&#39;s tree_level is that the tree_levels are global, so if
 you want the parent&#39;s tree_level to start with 0, you&#39;ll
 want the subtraction in there. This is a reason you&#39;ll commonly
@@ -67,8 +65,7 @@ subtree including the parent, leave out the non-equals clause:</p><pre class="pr
       WHERE 
       subtree.tree_sortkey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
       and parent.key = :the_parent_key;
-    
-</pre><p>If you are using the Content Repository, you get a similar
+    </pre><p>If you are using the Content Repository, you get a similar
 facility, but the <code class="computeroutput">parent_id</code>
 column is already there. Note you can do joins with <code class="computeroutput">tree_sortkey</code>:</p><pre class="programlisting">
       SELECT
@@ -79,15 +76,14 @@ column is already there. Note you can do joins with <code class="computeroutput"
       FROM pm_projectsx p, cr_items i
       WHERE p.project_id = i.live_revision
       ORDER BY i.tree_sortkey
-    
-</pre><p>This rather long thread explains <a class="ulink" href="http://openacs.org/forums/message-view?message_id=16799" target="_top">How tree_sortkeys work</a> and this paper <a class="ulink" href="http://www.yafla.com/papers/sqlhierarchies/sqlhierarchies2.htm" target="_top">describes the technique for tree_sortkeys</a>,
+    </pre><p>This rather long thread explains <a class="ulink" href="http://openacs.org/forums/message-view?message_id=16799" target="_top">How tree_sortkeys work</a> and this paper <a class="ulink" href="http://www.yafla.com/papers/sqlhierarchies/sqlhierarchies2.htm" target="_top">describes the technique for tree_sortkeys</a>,
 although the <a class="ulink" href="http://openacs.org/forums/message-view?message_id=112943" target="_top">OpenACS implementation has a few differences in the
 implementation</a>, to make it work for many languages and the LIKE
 construct in Postgres.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-notifications" leftLabel="Prev" leftTitle="Notifications"
-		    rightLink="tutorial-vuh" rightLabel="Next" rightTitle="Using .vuh files for pretty urls"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		
+			leftLink="tutorial-notifications" leftLabel="Prev" leftTitle="Notifications"
+			rightLink="tutorial-vuh" rightLabel="Next" rightTitle="Using .vuh files for pretty urls"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    

@@ -3,12 +3,11 @@
 <property name="doc(title)">Install nsopenssl</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="install-full-text-search-tsearch2" leftLabel="Prev"
-		    title="
-Appendix B. Install additional supporting
-software"
-		    rightLink="install-tclwebtest" rightLabel="Next">
-		<div class="sect1">
+			leftLink="install-full-text-search-tsearch2" leftLabel="Prev"
+			title="Appendix B. Install
+additional supporting software"
+			rightLink="install-tclwebtest" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-nsopenssl" id="install-nsopenssl"></a>Install nsopenssl</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a> and
 <a class="ulink" href="mailto:openacs\@sussdorff.de" target="_top">Malte Sussdorff</a>
@@ -22,8 +21,7 @@ instructions</a> until later.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-nsopenssl-aolserver3" id="install-nsopenssl-aolserver3"></a>Install on AOLserver3</h3></div></div></div><p>You will need the <a class="link" href="aolserver">unpacked Aolserver
 tarball</a> in <code class="computeroutput">/usr/local/src/aolserver</code> and the <a class="link" href="individual-programs">nsopenssl
-tarball</a> in <code class="computeroutput">/tmp</code>.</p><p>Red Hat 9 note: see <a class="ulink" href="http://openacs.org/forums/message-view?message_id=92882" target="_top">this thread</a> for details on compiling nsopenssl.)</p><pre class="screen">
-[root bin]#<strong class="userinput"><code> cd /usr/local/src/aolserver</code></strong>
+tarball</a> in <code class="computeroutput">/tmp</code>.</p><p>Red Hat 9 note: see <a class="ulink" href="http://openacs.org/forums/message-view?message_id=92882" target="_top">this thread</a> for details on compiling nsopenssl.)</p><pre class="screen">[root bin]#<strong class="userinput"><code> cd /usr/local/src/aolserver</code></strong>
 [root aolserver]# <strong class="userinput"><code>wget --passive http://www.scottg.net/download/nsopenssl-2.1.tar.gz</code></strong>
 [root aolserver]# <strong class="userinput"><code>tar xzf nsopenssl-2.1.tar.gz </code></strong>
 [root aolserver]# <strong class="userinput"><code>cd nsopenssl-2.1</code></strong>
@@ -58,8 +56,7 @@ including both here, because while this module still requires INST,
 if one just uses AOLSERVER, the default value would be used and
 could intefere with another existing installation.</p><p>FreeBSD note: build nsopenssl with <strong class="userinput"><code>gmake install OPENSSL=/usr/local/openssl
 AOLSERVER=/usr/local/aolserver4r10</code></strong>
-</p><pre class="screen">
-[root bin]#<strong class="userinput"><code> cd /usr/local/src/aolserver</code></strong>
+</p><pre class="screen">[root bin]#<strong class="userinput"><code> cd /usr/local/src/aolserver</code></strong>
 [root aolserver]# <strong class="userinput"><code>cvs -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/aolserver login</code></strong>
 [root aolserver]# <strong class="userinput"><code>cvs -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/aolserver co nsopenssl</code></strong>
 [root aolserver]# <strong class="userinput"><code>cd nsopenssl</code></strong>
@@ -100,9 +97,9 @@ the README file in <code class="computeroutput">/usr/local/src/aolserver/nsopens
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="install-full-text-search-tsearch2" leftLabel="Prev" leftTitle="Install Full Text Search using
+			leftLink="install-full-text-search-tsearch2" leftLabel="Prev" leftTitle="Install Full Text Search using
 Tsearch2"
-		    rightLink="install-tclwebtest" rightLabel="Next" rightTitle="Install tclwebtest."
-		    homeLink="index" homeLabel="Home" 
-		    upLink="install-more-software" upLabel="Up"> 
-		
+			rightLink="install-tclwebtest" rightLabel="Next" rightTitle="Install tclwebtest."
+			homeLink="index" homeLabel="Home" 
+			upLink="install-more-software" upLabel="Up"> 
+		    

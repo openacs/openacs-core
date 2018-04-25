@@ -3,11 +3,11 @@
 <property name="doc(title)">Basic Caching</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-html-email" leftLabel="Prev"
-		    title="
-Chapter 10. Advanced Topics"
-		    rightLink="tutorial-schedule-procs" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-html-email" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="tutorial-schedule-procs" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-caching" id="tutorial-caching"></a>Basic Caching</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">Based on <a class="ulink" href="http://openacs.org/forums/message-view?message_id=157448" target="_top">a post by Dave Bauer</a>.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Caching using the database API is described in the database API
 tutorial.</p><p>Caching using util_memoize</p><div class="orderedlist"><ol class="orderedlist" type="1">
@@ -18,13 +18,11 @@ in the caching mechanism. In this example, my_proc_not_cached takes
 one argument, -foo, so the wrapper passes that on. The wrapper also
 uses the list command, to ensure that the arguments get passed
 correctly and to prevent commands passed in as arguments from being
-executed.</p><pre class="programlisting">
-ad_proc my_proc {-foo} {
+executed.</p><pre class="programlisting">ad_proc my_proc {-foo} {
         Get a cached version of my_proc.
 } {
     return [util_memoize [list my_proc_not_cached -foo $foo]]
-}
-</pre>
+}</pre>
 </li><li class="listitem"><p>In your code, always call my_proc. There will be a separate
 cache item for each unique call to my_proc_not_cached so that calls
 with different arguments are cached separately. You can flush the
@@ -46,9 +44,9 @@ it.</p></li>
 </ol></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-html-email" leftLabel="Prev" leftTitle="Sending HTML email from your
+			leftLink="tutorial-html-email" leftLabel="Prev" leftTitle="Sending HTML email from your
 application"
-		    rightLink="tutorial-schedule-procs" rightLabel="Next" rightTitle="Scheduled Procedures"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		
+			rightLink="tutorial-schedule-procs" rightLabel="Next" rightTitle="Scheduled Procedures"
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    

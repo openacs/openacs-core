@@ -314,7 +314,7 @@ chmod 755 /var/qmail/supervise/qmail-smtpd/run
 chmod 755 /var/qmail/supervise/qmail-smtpd/log/run
 ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service
 </action></screen>
-          <para>Wait ten seconds or so, and then verify that that the four qmail processes are running.  If uptimes don&#39;t rise above 1 second, this may indicate broken scripts that are continuously restarting.  In that case, start debugging by checking permissions.</para>
+          <para>Wait ten seconds or so, and then verify that the four qmail processes are running.  If uptimes don&#39;t rise above 1 second, this may indicate broken scripts that are continuously restarting.  In that case, start debugging by checking permissions.</para>
           <screen>[root root]# <userinput>qmailctl stat</userinput>
 /service/qmail-send: up (pid 32700) 430 seconds
 /service/qmail-send/log: up (pid 32701) 430 seconds

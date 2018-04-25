@@ -3,11 +3,11 @@
 <property name="doc(title)">Using PSGML mode in Emacs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="docbook-primer" leftLabel="Prev"
-		    title="
-Chapter 13. Documentation Standards"
-		    rightLink="nxml-mode" rightLabel="Next">
-		<div class="sect1">
+			leftLink="docbook-primer" leftLabel="Prev"
+			title="Chapter 13. Documentation
+Standards"
+			rightLink="nxml-mode" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="psgml-mode" id="psgml-mode"></a>Using PSGML mode in Emacs</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By David Lutterkort</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Note: <code class="computeroutput">nxml</code> mode replaces
 and/or complements psgml mode. <a class="ulink" href="http://www.xmlhack.com/read.php?item=2061" target="_top">More
@@ -139,16 +139,15 @@ parents, what its contents can be and lists its attributes.</td>
 </table></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called
-&ldquo;OpenACS Documentation
-Guide&rdquo;</a>
+<a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called “OpenACS
+Documentation Guide”</a>
 </p><p><span class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.9 2017/08/07
 23:47:54 gustafn Exp $)</span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="docbook-primer" leftLabel="Prev" leftTitle="OpenACS Documentation Guide"
-		    rightLink="nxml-mode" rightLabel="Next" rightTitle="Using nXML mode in Emacs"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="doc-standards" upLabel="Up"> 
-		
+			leftLink="docbook-primer" leftLabel="Prev" leftTitle="OpenACS Documentation Guide"
+			rightLink="nxml-mode" rightLabel="Next" rightTitle="Using nXML mode in Emacs"
+			homeLink="index" homeLabel="Home" 
+			upLink="doc-standards" upLabel="Up"> 
+		    

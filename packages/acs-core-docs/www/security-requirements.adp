@@ -3,11 +3,11 @@
 <property name="doc(title)">Security Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="i18n-requirements" leftLabel="Prev"
-		    title="
-Chapter 15. Kernel Documentation"
-		    rightLink="security-design" rightLabel="Next">
-		<div class="sect1">
+			leftLink="i18n-requirements" leftLabel="Prev"
+			title="Chapter 15. Kernel
+Documentation"
+			rightLink="security-design" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="security-requirements" id="security-requirements"></a>Security
 Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
@@ -81,9 +81,9 @@ web server (in specialized hardware, in a firewall, etc.).</p></li></ul></div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="i18n-requirements" leftLabel="Prev" leftTitle="OpenACS Internationalization
+			leftLink="i18n-requirements" leftLabel="Prev" leftTitle="OpenACS Internationalization
 Requirements"
-		    rightLink="security-design" rightLabel="Next" rightTitle="Security Design"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="kernel-doc" upLabel="Up"> 
-		
+			rightLink="security-design" rightLabel="Next" rightTitle="Security Design"
+			homeLink="index" homeLabel="Home" 
+			upLink="kernel-doc" upLabel="Up"> 
+		    

@@ -3,11 +3,11 @@
 <property name="doc(title)">Profile your code</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="tutorial-categories" leftLabel="Prev"
-		    title="
-Chapter 10. Advanced Topics"
-		    rightLink="tutorial-distribute" rightLabel="Next">
-		<div class="sect1">
+			leftLink="tutorial-categories" leftLabel="Prev"
+			title="Chapter 10. Advanced
+Topics"
+			rightLink="tutorial-distribute" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="profile-code" id="profile-code"></a>Profile your code</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:jade\@rubick.com" target="_top">Jade Rubick</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>There are several facilities for profiling your code in OpenACS.
@@ -17,9 +17,9 @@ profiling your code: <a class="ulink" href="http://openacs.org/forums/message-vi
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="tutorial-categories" leftLabel="Prev" leftTitle="Categories"
-		    rightLink="tutorial-distribute" rightLabel="Next" rightTitle="Prepare the package for
+			leftLink="tutorial-categories" leftLabel="Prev" leftTitle="Categories"
+			rightLink="tutorial-distribute" rightLabel="Next" rightTitle="Prepare the package for
 distribution."
-		    homeLink="index" homeLabel="Home" 
-		    upLink="tutorial-advanced" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="tutorial-advanced" upLabel="Up"> 
+		    

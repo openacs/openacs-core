@@ -3,11 +3,11 @@
 <property name="doc(title)">Install PostgreSQL</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="oracle" leftLabel="Prev"
-		    title="
-Chapter 3. Complete Installation"
-		    rightLink="aolserver4" rightLabel="Next">
-		<div class="sect1">
+			leftLink="oracle" leftLabel="Prev"
+			title="Chapter 3. Complete
+Installation"
+			rightLink="aolserver4" rightLabel="Next">
+		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="postgres" id="postgres"></a>Install PostgreSQL</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
 </span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.9.0 will run with <a class="link" href="individual-programs" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">PostgreSQL</a>
@@ -26,8 +26,8 @@ PostgreSQL</h3></div></div></div><div class="itemizedlist"><ul class="itemizedli
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="oracle" leftLabel="Prev" leftTitle="Install Oracle 8.1.7"
-		    rightLink="aolserver4" rightLabel="Next" rightTitle="Install AOLserver 4"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="complete-install" upLabel="Up"> 
-		
+			leftLink="oracle" leftLabel="Prev" leftTitle="Install Oracle 8.1.7"
+			rightLink="aolserver4" rightLabel="Next" rightTitle="Install AOLserver 4"
+			homeLink="index" homeLabel="Home" 
+			upLink="complete-install" upLabel="Up"> 
+		    

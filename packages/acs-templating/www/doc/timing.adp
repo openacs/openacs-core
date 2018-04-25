@@ -12,7 +12,8 @@ One of the <a href="requirements">requirements</a>
  for the
 template system asks for efficiency:
 <blockquote><ul><li>
-<a name="110.0"><strong>110.0 Performance</strong></a><p>The Templating System must not cause any performance problems to
+<a name="110.0" id="110.0"><strong>110.0
+Performance</strong></a><p>The Templating System must not cause any performance problems to
 a site. It must be fast and efficient, and it must not slow down
 page load speed by more than 10% versus a Tcl page with inline
 HTML.</p>
@@ -78,8 +79,7 @@ foreach i ( never normal always )
   end
   cut -d" " -f3 $i-1| cut -c2-| tr \? 0            &gt;  $i-2
 end
-        
-</pre>
+        </pre>
 The three resulting files, ending in -2, contain 18000 numbers, for
 2 runs * 200 tries * 3 pages * 15 stages.</li><li>
 <em>Group and sort times</em>. The time one stage of processing
@@ -141,8 +141,7 @@ runs the gnuplot script distrib.gplt:
      (cd $i; gnuplot ../distrib.gplt &gt; $i.gif)
      echo $i done.
    end
-        
-</pre>
+        </pre>
 </li>
 </ul><h3>IV. Results</h3><ul>
 <li>
