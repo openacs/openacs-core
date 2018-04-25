@@ -1861,7 +1861,7 @@ ad_proc -deprecated ad_table_sort_form {
 }
 
 ad_proc -deprecated ad_order_by_from_sort_spec {sort_by tabledef} {
-    Takes a sort_by spec, and translates it into into an "order by" clause
+    Takes a sort_by spec, and translates it into an "order by" clause
     with each sort_by key dictated by the sort info in tabledef
 } {
     set order_by_clause {}
@@ -2086,9 +2086,10 @@ ad_proc -deprecated ad_table_orderby_sql {datadef orderby order} {
 
 
 
-#
+########################################################################
 # was in set-operation-procs.tcl
-#
+########################################################################
+
 
 ad_proc -deprecated set_member? { s v } {
     <p>Tests whether or not $v is a member of set $s.</p>
@@ -2216,9 +2217,10 @@ ad_proc -deprecated set_difference! { u-name v } {
     return $result
 }
 
-#
+########################################################################
 # from tcl/navigation-procs.tcl
-#
+########################################################################
+
 ad_proc -deprecated -public ad_context_bar_ws args {
     Returns a Yahoo-style hierarchical navbar. Use ad_context_bar instead.
 
@@ -2257,9 +2259,9 @@ ad_proc -public -deprecated ad_admin_context_bar args {
 }
 
 
-#
+########################################################################
 # From tcl/http-client-procs.tcl
-#
+########################################################################
 
 #########################
 ## Deprecated HTTP api ##
@@ -2767,10 +2769,9 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
     return $page
 }
 
-#
+########################################################################
 # from tcl/community-core-procs.tcl
-#
-
+########################################################################
 
 ad_proc -deprecated -private cc_lookup_screen_name_user { screen_name } {
     @see acs_user::get_user_id_by_screen_name
@@ -2888,8 +2889,9 @@ namespace eval oacs::user {
 
 }
 
-#
+########################################################################
 # from tcl/00-database-procs.tcl
+########################################################################
 #
 ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
     @return 1 if db_type_list contains the current RDMBS type.  A package intended to run with a given RDBMS must note this in its package info file regardless of whether or not it actually uses the database.
@@ -2910,9 +2912,10 @@ ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
     return 0
 }
 
-#
+########################################################################
 #  from tcl/apm-procs.tcl
-# 
+########################################################################
+
 
 ad_proc -public -deprecated apm_doc_body_callback { string } {
     This callback uses the document api to append more text to the stream.
@@ -2920,9 +2923,10 @@ ad_proc -public -deprecated apm_doc_body_callback { string } {
     doc_body_append $string
 }
 
-#
+########################################################################
 #  from tcl/apm-file-procs.tcl
-# 
+########################################################################
+
 
 ad_proc -public -deprecated pkg_home {package_key} {
 
@@ -2933,9 +2937,9 @@ ad_proc -public -deprecated pkg_home {package_key} {
     return "/packages/$package_key"
 }
 
-#
-# deprecated-utilities-procs.tcl
-#
+########################################################################
+# deprecated utilities-procs.tcl
+########################################################################
 
 # ad_library {
 #
@@ -3168,6 +3172,10 @@ ad_proc -private -deprecated rp_handle_adp_request {} {
         doc_return 200 $content_type $adp
     }
 }
+
+########################################################################
+# deprecated site-nodes-procs.tcl
+########################################################################
 
 
 # Local variables:

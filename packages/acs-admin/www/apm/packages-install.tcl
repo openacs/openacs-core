@@ -28,7 +28,7 @@ set dimensional_list [ad_dimensional $dimensional_list]
 
 ### Get all the spec files
 #
-# If a package is in the apm_workspace dir then we assume that that is
+# If a package is in the apm_workspace dir then we assume that this is
 # the package that should be installed and we ignore any such package
 # in the packages dir.  
 #

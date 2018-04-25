@@ -48,7 +48,7 @@ namespace eval membership_rel {
             # This will trigger an update of the acs_objects.modified_date column.
             # We use this in the ApprovalExpiration feature to make sure that a user isn't 
             # bumped back to needs_approval right after an administrator has approved them,
-            # even if the user doesn't log in in the meantime.
+            # even if the user doesn't log in the meantime.
 
             if { [ad_conn isconnected] } {
                 set user_id [ad_conn user_id]

@@ -164,17 +164,16 @@ ad_proc -public ad_set_cookie {
     without the replace option being specified, the client will
     receive both copies of the cookie.
 
-    @param discard instructs the user agent to discard the
-    cookie when when the user agent terminates.
+    @param discard instructs the user agent to discard the cookie when
+    the user agent terminates.
 
-    @param scriptable If the scriptable option is false or not
-    given the cookie is unavailable to javascript on the
-    client. This can prevent cross site scripting attacks (XSS) on
-    clients which support the HttpOnly option. Set -scriptable to
-    true if you need to access the cookie via javascript. For
-    compatibility reasons with earlier versions, OpenACS 5.8 has
-    the default set to "true". OpenACS 5.9 will have the flag per
-    default set to "false".
+    @param scriptable If the scriptable option is false or not given
+    the cookie is unavailable to javascript on the client. This can
+    prevent cross site scripting attacks (XSS) on clients which
+    support the HttpOnly option. Set -scriptable to true if you need
+    to access the cookie via javascript. For compatibility reasons
+    with earlier versions, OpenACS 5.8 has the default set to
+    "true". OpenACS 5.9 will have the flag per default set to "false".
 
     @param value is autmatically URL encoded.
 

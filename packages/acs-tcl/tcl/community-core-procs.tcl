@@ -80,7 +80,7 @@ ad_proc -public person::name {
     if {$person_id eq "" && $email eq ""} {
         error "You need to provide either person_id or email"
     } elseif {"" ne $person_id && "" ne $email } {
-        error "Only provide provide person_id OR email, not both"
+        error "Only provide person_id OR email, not both"
     } else {
         return [util_memoize [list person::name_not_cached -person_id $person_id -email $email]]
     }

@@ -400,13 +400,13 @@ ad_proc -public db_nextval {
             # occurrences.
             #
             # Note, that the sequence handling in OpenACS is quite a
-            # mess.  Some sequences are named t_SEQUENCE (10 in dotlrn),
-            # others are are called just SEQUENCE (18 in dotlrn), for
-            # some sequences, additional views are defined with an
+            # mess.  Some sequences are named t_SEQUENCE (10 in
+            # dotlrn), others are called just SEQUENCE (18 in dotlrn),
+            # for some sequences, additional views are defined with an
             # attribute 'nextval', and on top of this, db_nextval is
-            # called sometimes with the view name and sometimes with the
-            # sequence name. Checking this at runtime is unnecessary
-            # complex and costly.
+            # called sometimes with the view name and sometimes with
+            # the sequence name. Checking this at runtime is
+            # unnecessary complex and costly.
             #
             # The best solution would certainly be to call "db_nextval"
             # only with real sequence names (as defined in SQL). In that

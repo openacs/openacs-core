@@ -1295,7 +1295,7 @@ ad_proc -public apm_version_id_from_package_key {
     Return the id of the (per default enabled) version of the given package_key.
     If no such version id can be found, returns the empty string.
 
-    @param all when specified, return the the enabled or disabled version_ids of the package_key.
+    @param all when specified, return the enabled or disabled version_ids of the package_key.
     @param package_key
     @author Peter Marklund
 

@@ -138,7 +138,7 @@ ad_proc -public install::xml::action::mount { node } {
         set parent_id [site_node::get_node_id -url "/$parent_url"]
 
         # technically this isn't safe - between us checking that the node exists
-        # and using it it may have been deleted. 
+        # and using it, the node may have been deleted. 
         # We could "select for update" but since it's in a memory cache anyway,
         # it won't help us very much!
         # Instead we just press on and if there's an error handle it at the top level.
@@ -216,7 +216,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
         set parent_id [site_node::get_node_id -url "/$parent_url"]
 
         # technically this isn't safe - between us checking that the node exists
-        # and using it it may have been deleted. 
+        # and using it, the node may have been deleted. 
         # We could "select for update" but since it's in a memory cache anyway,
         # it won't help us very much!
         # Instead we just press on and if there's an error handle it at the top level.

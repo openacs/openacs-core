@@ -59,16 +59,17 @@ if { !$merge_p } {
 		      -operation MergeUser \
 		      -call_args $parameters]
 
-    # TODO: Add to the SC implementations of the SC
-    # an output to improve the  msg's of the the final 
-    # status of auth_authentication merge.
-    # It could be a list as we did with callbacks implementations.
+    # TODO: Add to the SC implementations of the SC an output to
+    # improve the messages of the final status of auth_authentication
+    # merge.  It could be a list as we did with callbacks
+    # implementations.
+    #
     #     foreach item $user_res {
-    # 	append results "<li>[lindex $item 0]<ul>"
-    # 	for { set idx 1 } { $idx < [llength $item] } {incr idx} {
-    # 	    append results "<li>[lindex $item $idx]</li>"
-    # 	}
-    # 	append results "</ul></li></ul>"
+    # 	     append results "<li>[lindex $item 0]<ul>"
+    # 	     for { set idx 1 } { $idx < [llength $item] } {incr idx} {
+    # 	        append results "<li>[lindex $item $idx]</li>"
+    # 	     }
+    # 	     append results "</ul></li></ul>"
     #     }
     #     append results "</ul>"
 

@@ -2004,7 +2004,7 @@ ad_proc -private apm_get_package_repository {
     search the local file system instead.
 
     @param array          Name of an array where you want the repository stored. It will be keyed by package-key,
-    and each entry will be an array list list what's returned by apm_read_package_info_file.
+    and each entry will be an array list returned by apm_read_package_info_file.
 
     @see apm_read_package_info_file
 
