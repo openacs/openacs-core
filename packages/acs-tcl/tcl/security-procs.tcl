@@ -1326,7 +1326,7 @@ ad_proc -private populate_secret_tokens_db {} {
     # we assume sample size of 10%.
     set num_tokens [expr {$num_tokens * 10}]
     set counter 0
-    set list_of_tokens [list]
+    set list_of_tokens {}
 
     # the best thing to use here would be an array_dml, except
     # that an array_dml makes it hard to use sysdate and sequences.
@@ -1941,7 +1941,7 @@ ad_proc -public security::locations {} {
     @return insecure location and secure location followed possibly by alternate location(s) as a list.
 
 } {
-    set locations [list]
+    set locations {}
     set portless_locations {}
     #
     # Get Information from configured servers

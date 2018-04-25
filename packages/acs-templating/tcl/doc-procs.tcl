@@ -38,7 +38,7 @@ ad_proc -public template::parse_directives {
     # regular expression for match directive comments
     set direxp {^\#[\s]*@([a-zA-Z0-9\-_]+)[\s]+(.*)$}
 
-    set directives [list]
+    set directives {}
 
     foreach line $lines {
 

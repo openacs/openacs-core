@@ -30,7 +30,7 @@ ad_proc apm_scan_packages {
     ### Scan for all unregistered .info files.
 
     ns_log Notice "apm_scan_packages: Scanning for new unregistered packages..."
-    set new_spec_files [list]
+    set new_spec_files {}
     # Loop through all directories in the /packages directory, searching each for a
     # .info file.
     foreach dir [lsort [glob -nocomplain "$path/*"]] {
@@ -257,10 +257,10 @@ ad_proc -private apm_dependency_check {
     ##              by packages in the install set.
     ## extra_package_keys - package keys of extra packages to install to satisfy all requirements.
 
-    set extra_package_keys [list]
+    set extra_package_keys {}
 
     set updated_p 1
-    set install_in [list]
+    set install_in {}
     foreach spec_file $spec_files {
         if { [catch {
             array set package [apm_read_package_info_file $spec_file]
@@ -301,8 +301,8 @@ ad_proc -private apm_dependency_check {
 
         # Inner loop tries to add another package from the install_pend list
         while { $updated_p && [info exists install_pend] && $install_pend ne ""} {
-            set install_in_provides [list]
-            set new_install_pend [list]
+            set install_in_provides {}
+            set new_install_pend {}
             set updated_p 0
             # Generate the list of dependencies currently provided by the install set.
             foreach pkg_info $install_in {
@@ -455,14 +455,14 @@ ad_proc -private apm_dependency_check_new {
 
     # 'pending_packages' is an array keyed by package_key with a value of 1 for each package pending installation
     # When dependencies have been met, the entry will be unset
-    array set pending_packages [list]
+    array set pending_packages {}
     foreach package_key $package_keys {
         set pending_packages($package_key) 1
     }
 
     # 'installed_packages' is an array keyed by package_key with a value of 1 for each package
     # whose dependencies have been met and is ready to be installed
-    array set installed_packages [list]
+    array set installed_packages {}
 
     # 'provided' will keep track of what we've provided with the currently installed packages
     # combined with the packages which we're already able to install
@@ -470,11 +470,11 @@ ad_proc -private apm_dependency_check_new {
 
     # 'required' will keep track of unsatisfied dependencies
     # keyed by (service-uri) and will contain the largest version number required
-    array set required [list]
+    array set required {}
 
     # 'required_by' will keep track of unsatisfied dependencies
     # keyed by (service-uri) and will contain the largest version number required
-    array set required_by [list]
+    array set required_by {}
 
     # Just to get us started
     set updated_p 1
@@ -621,7 +621,7 @@ ad_proc -private apm_dependency_check_new {
     } else {
         set result(status) failed
 
-        array set failed [list]
+        array set failed {}
 
         # There were problems, now be helpful
 
@@ -710,7 +710,7 @@ ad_proc -public apm_simple_package_install {
         return
     }
 
-    set pkg_info_list [list]
+    set pkg_info_list {}
     foreach spec_file [glob -nocomplain "$::acs::rootdir/packages/*/*.info"] {
         # Get package info, and find out if this is a package we should install
         if { [catch {
@@ -1417,7 +1417,7 @@ ad_proc -private apm_package_install_owners_prepare {owner_names owner_uris } {
     Prepare the owners data structure for installation.
 
 } {
-    set owners [list]
+    set owners {}
     for {set i 0} {$i < [llength $owner_names] } {incr i} {
         if { [lindex $owner_names $i] ne "" } {
             lappend owners [list [lindex $owner_names $i] [lindex $owner_uris $i]]
@@ -1714,9 +1714,9 @@ ad_proc -private apm_data_model_scripts_find {
     } else {
         lappend types_to_retrieve "data_model_upgrade"
     }
-    set data_model_list [list]
-    set upgrade_file_list [list]
-    set ctl_file_list [list]
+    set data_model_list {}
+    set upgrade_file_list {}
+    set ctl_file_list {}
     set file_list [apm_get_package_files -include_data_model_files \
                        -file_types $types_to_retrieve \
                        -package_path $package_path \
@@ -1762,7 +1762,7 @@ ad_proc -private apm_query_files_find {
     @param file_list A list of files and file types of form [list [list "foo.sql" "data_model_upgrade"] ...]
 } {
 
-    set query_file_list [list]
+    set query_file_list {}
 
     foreach file $file_list {
         lassign $file path file_type file_db_type
@@ -1967,7 +1967,7 @@ ad_proc -public apm_upgrade_logic {
         error "The length of spec should be dividable by 3"
     }
 
-    array set chunks [list]
+    array set chunks {}
     foreach { elm_from elm_to elm_chunk } $spec {
 
         # Check that
@@ -2074,7 +2074,7 @@ ad_proc -private apm_get_package_repository {
             }
 
             # Build a list of packages to install additionally
-            set version(install) [list]
+            set version(install) {}
             foreach node [xml_node_get_children_by_name $package_node install] {
                 set install [apm_attribute_value $node package]
                 lappend version(install) $install
@@ -2248,7 +2248,7 @@ ad_proc -public apm::process_install_xml {
     # If it is nested we will typically need id's from the parent
     if {!$nested_p} {
         array unset ids
-        array set ids [list]
+        array set ids {}
 
         # set default ids for the main site and core packages
         set ids(ACS_KERNEL) [apm_package_id_from_key acs-kernel]

@@ -31,7 +31,7 @@ if { [llength $files] == 0 } {
 
     # Source all of the marked files using the current interpreter, accumulating
     # errors into apm_package_load_errors
-    array set errors [list]
+    array set errors {}
     ad_try {
         apm_load_any_changed_libraries errors
     } on error {errorMsg} {
@@ -43,7 +43,7 @@ if { [llength $files] == 0 } {
     if {[info exists errors($package_key)]} {
         array set package_errors $errors($package_key)
     } else {
-        array set package_errors [list]
+        array set package_errors {}
     }
 
     foreach file $files {

@@ -441,7 +441,7 @@ ad_proc search::extra_args_names {
 } {
     List of names of extra args implemented
 } {
-    set names [list]
+    set names {}
     foreach procname [info procs ::callback::search::extra_arg::impl::*] {
 	lappend names [namespace tail $procname]
     }
@@ -469,7 +469,7 @@ ad_proc search::extra_args {
 } {
     List of extra_args to pass to search::search callback
 } {
-    set extra_args [list]
+    set extra_args {}
     foreach name [extra_args_names] {
 	upvar $name local_$name
 	ns_log debug "extra_args name = '${name}' exists [info exists local_${name}]"

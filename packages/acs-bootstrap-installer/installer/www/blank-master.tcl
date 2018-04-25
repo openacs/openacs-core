@@ -117,7 +117,7 @@ if {![string is list $cssList]} {
         if { [llength $css] == 2 && [llength $first] == 1 && [string index $first 0] ne "-"} {
             template::head::add_css -href $first -media [lindex $css 1]
         } elseif {[llength $first] == 2} {
-	    set params [list]
+	    set params {}
             foreach param $css {
                 lappend params -[lindex $param 0] [lindex $param 1]
             }

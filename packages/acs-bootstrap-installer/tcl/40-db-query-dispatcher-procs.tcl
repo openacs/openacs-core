@@ -224,7 +224,7 @@ ad_proc -public db_qd_load_query_file {file_path {errorVarName ""}} {
     if {$errorVarName ne ""} {
 	upvar $errorVarName errors
     } else {
-	array set errors [list]
+	array set errors {}
     }
     if { [catch {db_qd_internal_load_cache $file_path} errMsg] } {
         set backTrace $::errorInfo

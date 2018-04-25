@@ -127,7 +127,7 @@ element create grant party_id \
     -optional
 
 if { ![info exists privileges] } {
-    set privileges [list]
+    set privileges {}
 }
 
 # limit the size of the select widget to a number that should fit on a

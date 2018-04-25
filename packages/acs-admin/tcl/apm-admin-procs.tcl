@@ -277,8 +277,8 @@ ad_proc -private apm_build_repository {
         }
     }
 
-    array set channel_tag [list]
-    array set channel_bugfix_version [list]
+    array set channel_tag {}
+    array set channel_bugfix_version {}
 
     for { } { $i < [llength $lines] } { incr i } {
         # Tag lines have the form   tag: cvs-version
@@ -338,7 +338,7 @@ ad_proc -private apm_build_repository {
 
         # Store the list of packages we've seen for this channel, so we don't include the same package twice
         # Seems odd, but we have to do this given the forked packages sitting in /contrib
-        set packages [list]
+        set packages {}
         
         # Checkout from the tag given by channel_tag($channel)
         if { $debug_p } {

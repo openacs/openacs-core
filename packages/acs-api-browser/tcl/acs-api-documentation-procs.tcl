@@ -188,7 +188,7 @@ ad_proc -public api_script_documentation {
         return $out
     }
 
-    array set params [list]
+    array set params {}
 
     if { [info exists doc_elements(param)] } {
         foreach param $doc_elements(param) {
@@ -215,7 +215,7 @@ ad_proc -public api_script_documentation {
     #         append out "<dt><b>Query Parameters:</b><dd>\n"
     #         foreach arg_name $doc_elements(as_arg_names) {
     #         append out "<b>$arg_name</b>"
-    #         set notes [list]
+    #         set notes {}
     #         if { [info exists as_default_value($arg_name)] } {
     #             lappend notes "defaults to <code>\"$as_default_value($arg_name)\"</code>"
     #         }
@@ -310,7 +310,7 @@ ad_proc -public api_type_documentation {
 <dd>
 "
 
-    array set property_doc [list]
+    array set property_doc {}
     if { [info exists doc_elements(property)] } {
         foreach property $doc_elements(property) {
             if { [regexp {^([^ \t]+)[ \t](.+)$} $property "" name value] } {
@@ -715,7 +715,7 @@ ad_proc -public api_apropos_functions { string } {
     Returns the functions in the system that contain string in their name
     and have been defined using ad_proc.
 } {
-    set matches [list]
+    set matches {}
     foreach function [nsv_array names api_proc_doc] {
         if {[string match -nocase "*$string*" $function]} {
             array set doc_elements [nsv_get api_proc_doc $function]
@@ -733,7 +733,7 @@ ad_proc -public api_describe_function {
     have been defined using ad_proc.  The description includes the
     documentation string, if any.
 } {
-    set matches [list]
+    set matches {}
     foreach function [nsv_array names api_proc_doc] {
         if {[string match -nocase $proc $function]} {
             array set doc_elements [nsv_get api_proc_doc $function]
@@ -1487,7 +1487,7 @@ namespace eval ::apidoc {
 
     } {
 
-        set linkList [list]
+        set linkList {}
         set filename $::acs::rootdir/$path
         set path_dirname [file dirname $path]
         set file_dirname [file dirname $filename]

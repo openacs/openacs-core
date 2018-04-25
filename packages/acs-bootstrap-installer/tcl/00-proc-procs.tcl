@@ -1,10 +1,10 @@
 # For documentation, see the ad_library call at the bottom of this script.
 
-nsv_array set api_proc_doc [list]
-nsv_array set api_proc_doc_scripts [list]
-nsv_array set api_library_doc [list]
-nsv_array set proc_doc [list]
-nsv_array set proc_source_file [list]
+nsv_array set api_proc_doc {}
+nsv_array set api_proc_doc_scripts {}
+nsv_array set api_library_doc {}
+nsv_array set proc_doc {}
+nsv_array set proc_source_file {}
 
 
 #
@@ -95,7 +95,7 @@ proc ad_parse_documentation_string { doc_string elements_var } {
 
     set lines [split $doc_string "\n\r"]
 
-    array set elements [list]
+    array set elements {}
     set current_element main
     set buffer ""
 
@@ -304,7 +304,7 @@ proc ad_proc args {
     if { $n_args_remaining == 3 } {
         # No doc string provided.
         #ns_log notice "missing doc string for ad_proc $proc_name ([info script])"
-        array set doc_elements [list]
+        array set doc_elements {}
 	set doc_elements(main) ""
     } else {
         # Doc string was provided.
@@ -326,12 +326,12 @@ proc ad_proc args {
     #
     #####
 
-    set switches [list]
-    set positionals [list]
+    set switches {}
+    set positionals {}
     set seen_positional_with_default_p 0
     set n_positionals_with_defaults 0
-    array set default_values [list]
-    array set flags [list]
+    array set default_values {}
+    array set flags {}
     set varargs_p 0
     set switch_code ""
 
@@ -341,7 +341,7 @@ proc ad_proc args {
         set first_arg [lindex $arg_list 0]
         if { [llength $first_arg] == 0 || [llength $first_arg] > 2 } {
 	    ns_log Warning "Convert old (deprecated) style proc: $proc_name"
-            set new_arg_list [list]
+            set new_arg_list {}
             foreach { switch default_value } $first_arg {
                 lappend new_arg_list [list $switch $default_value]
             }
@@ -370,7 +370,7 @@ proc ad_proc args {
             set default_p 0
         }
 
-        set arg_flags [list]
+        set arg_flags {}
         set arg_split [split $arg ":"]
         if { [llength $arg_split] == 2 } {
             set arg [lindex $arg_split 0]

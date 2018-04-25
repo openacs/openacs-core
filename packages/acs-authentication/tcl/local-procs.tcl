@@ -143,7 +143,7 @@ ad_proc -private auth::local::authentication::Authenticate {
     Implements the Authenticate operation of the auth_authentication
     service contract for the local account implementation.
 } {
-    array set auth_info [list]
+    array set auth_info {}
 
     if {$authority_id eq ""} {
         set authority_id [auth::authority::local]
@@ -630,7 +630,7 @@ ad_proc -private auth::local::search::Search {
     service contract for the local account implementation.
 } {
 
-    set results [list]
+    set results {}
     db_foreach user_search {} {
         lappend results $user_id
     }

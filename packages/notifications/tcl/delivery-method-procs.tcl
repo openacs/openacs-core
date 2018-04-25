@@ -69,7 +69,7 @@ ad_proc -public notification::delivery::scan_replies {
     set impl_key [get_impl_key -delivery_method_id $delivery_method_id]
 
     # Prepare the arguments
-    set args [list]
+    set args {}
 
     # ns_log Notice "NOTIF-DELIV-METHOD: about to call acs_sc on $impl_key"
 

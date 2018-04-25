@@ -863,7 +863,7 @@ ad_proc rp_report_error {
 
     ds_add conn error $message
 
-    set params [list]
+    set params {}
 
     #Serve the stacktrace
     set params [list [list stacktrace $message] \
@@ -913,7 +913,7 @@ ad_proc -private rp_path_prefixes {path} {
     }
 
     set components [split $path "/"]
-    set prefixes [list]
+    set prefixes {}
     for {set i [expr {[llength $components] -1}]} {$i > 0} {incr i -1} {
         lappend prefixes "[join [lrange $components 0 $i] /]/"
         lappend prefixes [join [lrange $components 0 $i] /]
@@ -1675,9 +1675,9 @@ ad_proc -private rp_handle_html_request {} {
 if { [apm_first_time_loading_p] } {
     # Initialize nsv_sets
 
-    nsv_array set rp_filters [list]
-    nsv_array set rp_registered_procs [list]
-    nsv_array set rp_extension_handlers [list]
+    nsv_array set rp_filters {}
+    nsv_array set rp_registered_procs {}
+    nsv_array set rp_extension_handlers {}
 
     # The following stuff is in a -procs.tcl file rather than a
     # -init.tcl file since we want it done really early in the startup

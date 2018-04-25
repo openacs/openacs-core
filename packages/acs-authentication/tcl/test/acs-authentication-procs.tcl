@@ -629,7 +629,7 @@ aa_register_case  \
 
             aa_true "List of parameters is not empty" [expr {[llength $parameters] != 0}]
 
-            array set values [list]
+            array set values {}
 
             # Set the values
             foreach parameter $parameters {

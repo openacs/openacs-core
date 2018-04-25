@@ -143,7 +143,7 @@ ad_proc -public template::util::date::today {} {
 } {
 
   set now [clock format [clock seconds] -format "%Y %m %d"]
-  set today [list]
+  set today {}
 
   foreach v $now {
     # trim leading zeros to avoid octal problem
@@ -157,7 +157,7 @@ ad_proc -public template::util::date::now {} {
     Create a new Date object for the current date and time
 } {
   set now [clock format [clock seconds] -format "%Y %m %d %H %M %S"]
-  set today [list]
+  set today {}
 
   foreach v $now {
     lappend today [util::trim_leading_zeros $v]
@@ -340,7 +340,7 @@ ad_proc -public template::util::date::get_property { what date } {
       # Return a date in format "YYYY MM DD HH24 MI SS"
       # For use with karl's non-working form builder API
       set clipped_date [lrange $date 0 5]
-      set ret [list]
+      set ret {}
       set pad "0000"
       foreach fragment $clipped_date {
         lappend ret "[string range $pad [string length $fragment] end]$fragment"
@@ -351,7 +351,7 @@ ad_proc -public template::util::date::get_property { what date } {
     linear_date_no_time {
       # Return a date in format "YYYY MM DD"
       set clipped_date [lrange $date 0 2]
-      set ret [list]
+      set ret {}
       set pad "0000"
       foreach fragment $clipped_date {
         lappend ret "[string range $pad [string length $fragment] end]$fragment"
@@ -367,7 +367,7 @@ ad_proc -public template::util::date::get_property { what date } {
       # not a terribly efficient thing to do.
 
       set clipped_date [lrange $date 0 2]
-      set date_list [list]
+      set date_list {}
       set pad "0000"
       foreach fragment $clipped_date {
         lappend date_list "[string range $pad [string length $fragment] end]$fragment"
@@ -489,7 +489,7 @@ ad_proc -public template::util::date::set_property { what date value } {
     }
     clock {
       set old_date [clock format $value -format "%Y %m %d %H %M %S"]
-      set new_date [list]
+      set new_date {}
       foreach field $old_date {
         lappend new_date [util::trim_leading_zeros $field]
       }
@@ -498,7 +498,7 @@ ad_proc -public template::util::date::set_property { what date value } {
     }
     sql_date {
       set old_format [lindex $date 6]
-      set new_date [list]
+      set new_date {}
       foreach fragment $value {
         lappend new_date [util::trim_leading_zeros $fragment]
       }
@@ -568,7 +568,7 @@ ad_proc -public template::util::date::now_min_interval {} {
     @author Walter McGinnis (wtem@olywa.net)
     @creation-date 2002-01-06
 } {
-  set now [list]
+  set now {}
   foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
       lappend now [util::trim_leading_zeros $v]
   }
@@ -603,7 +603,7 @@ ad_proc -public template::util::date::now_min_interval_plus_hour {} {
     @author Walter McGinnis (wtem@olywa.net)
     @creation-date 2002-01-06
 } {
-  set now [list]
+  set now {}
   foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
       lappend now [util::trim_leading_zeros $v]
   }
@@ -727,7 +727,7 @@ ad_proc -public template::util::date::validate { date error_ref } {
 
   unpack $date
 
-  set error_msg [list]
+  set error_msg {}
 
   foreach {field exp} { year "YYYY|YY" month "MM|MON|MONTH" day "DD" 
                       hours "HH24|HH12" minutes "MI" seconds "SS" } {
@@ -1036,7 +1036,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   # of tokens
   set format_string $element(format)
 
-  set tokens [list]
+  set tokens {}
 
   if {[info exists attributes(id)]} {
        set id_attr_name $attributes(id)

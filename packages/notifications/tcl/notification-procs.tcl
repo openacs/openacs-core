@@ -61,7 +61,7 @@ namespace eval notification {
         set intervals [db_list_of_lists select_intervals {}]
         if { $localized_p } {
             # build pretty names for intervals
-            set intervals_pretty [list]
+            set intervals_pretty {}
             foreach elm $intervals {
                 lassign $elm elm_name elm_id
                 lappend intervals_pretty [list [_ notifications.${elm_name}] $elm_id]
@@ -220,7 +220,7 @@ namespace eval notification {
                 }
                 array set default_request $default_request_data
 
-                array set request [list]
+                array set request {}
 
                 # Start with the existing requests for the original object_id
                 db_foreach select_notification_requests {} -column_array row {

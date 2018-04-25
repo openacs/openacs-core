@@ -110,7 +110,7 @@ ad_proc -public install::xml::action::mount { node } {
     set context_id [apm_attribute_value -default "" $node context-id]
     set security_inherit_p [apm_attribute_value -default "t" $node security-inherit-p]
 
-    set out [list]
+    set out {}
 
     # Remove double slashes
     regsub -all {//} $mount_point "/" mount_point
@@ -194,7 +194,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
     set package_key [apm_attribute_value -default "" $node package-key]
     set mount_point [apm_attribute_value -default "" $node mount-point]
 
-    set out [list]
+    set out {}
 
     # Remove double slashes
     regsub -all {//} $mount_point "/" mount_point

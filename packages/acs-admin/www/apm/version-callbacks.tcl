@@ -23,7 +23,7 @@ set unused_callback_types [apm_unused_callback_types -version_id $version_id]
 if { [llength $unused_callback_types] > 0  } {
     set actions [list "\#acs-admin.Add_callback\#" [export_vars -base "version-callback-add-edit" { version_id }]]
 } else {
-    set actions [list]
+    set actions {}
 }
 
 

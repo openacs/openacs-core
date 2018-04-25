@@ -207,7 +207,7 @@ ad_proc -private lang::catalog::get_catalog_files { package_key } {
 
     @author Peter Marklund
 } {
-    set catalog_paths [list]
+    set catalog_paths {}
 
     set catalog_dir [lang::catalog::package_catalog_dir $package_key]
     foreach file_path [glob -nocomplain "$catalog_dir/*"] {
@@ -232,7 +232,7 @@ ad_proc -private lang::catalog::messages_in_db {
 
     @author Peter Marklund
 } {
-    set message_list [list]
+    set message_list {}
 
     foreach message_tuple [all_messages_for_package_and_locale $package_key $locale] {
         lassign $message_tuple message_key message description
@@ -256,7 +256,7 @@ ad_proc -private lang::catalog::last_sync_messages {
 
     @author Peter Marklund
 } {
-    set message_list [list]
+    set message_list {}
     db_foreach last_sync_messages {} {
         if { ![template::util::is_true $deleted_p] } {
             lappend message_list $message_key $message
@@ -405,8 +405,8 @@ ad_proc -public lang::catalog::export {
                 }
 
                 # Get messages and descriptions for the locale
-                set messages_list [list]
-                set descriptions_list [list]
+                set messages_list {}
+                set descriptions_list {}
                 foreach message_tuple [all_messages_for_package_and_locale $package_key $locale] {
                     lassign $message_tuple message_key message description
                     lappend messages_list $message_key $message
@@ -717,7 +717,7 @@ ad_proc -private lang::catalog::import_messages {
     set message_count(added) 0
     set message_count(updated) 0
     set message_count(deleted) 0
-    set message_count(errors) [list]
+    set message_count(errors) {}
 
     # Form arrays for all three sets of messages
     array set file_messages $file_messages_list
@@ -729,7 +729,7 @@ ad_proc -private lang::catalog::import_messages {
                                -locale $locale]
 
     foreach arrname { base_messages file_messages db_messages } {
-        set dummy [list]
+        set dummy {}
         foreach elm [lsort [array names $arrname]] {
             lappend dummy "$elm=[set ${arrname}($elm)]"
         }
@@ -737,7 +737,7 @@ ad_proc -private lang::catalog::import_messages {
     }
 
     # Remember each time we've processed a key, so we don't process it twice
-    array set message_key_processed_p [list]
+    array set message_key_processed_p {}
 
     # Loop over the union of import and db keys.
     foreach message_key [lsort [concat [array names db_messages] [array names file_messages] [array names base_messages]]] {
@@ -991,7 +991,7 @@ ad_proc -public lang::catalog::import {
     set message_count(added) 0
     set message_count(updated) 0
     set message_count(deleted) 0
-    set message_count(errors) [list]
+    set message_count(errors) {}
 
     if { $package_key ne "" } {
         set package_key_list $package_key
@@ -1074,7 +1074,7 @@ ad_proc -private lang::catalog::get_catalog_paths_for_import {
     set locales_list [concat $en_us_locale_list $other_locales_list]
 
     # Get all catalog files for enabled locales
-    set catalog_files [list]
+    set catalog_files {}
     foreach locale $locales_list {
 
         # If we are only processing certain locales and this is not one of them - continue

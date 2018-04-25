@@ -157,8 +157,8 @@ ad_proc -public acs_sc::contract::delete {
 
         if { !$no_cascade_p } {
             
-            set operations [list]
-            set msg_types [list]
+            set operations {}
+            set msg_types {}
             
             db_foreach select_operations {} {
                 # Put them on list of message types and operations to delete

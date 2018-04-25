@@ -8,12 +8,12 @@
 if { ![nsv_exists ds_properties enabled_p] } {
     ad_register_filter -critical t -priority 999999 trace * /* ds_trace_filter
     ad_schedule_proc [parameter::get -package_id [ds_instance_id] -parameter DataSweepInterval -default 900] ds_sweep_data
-    nsv_array set ds_request [list]
+    nsv_array set ds_request {}
 
     nsv_set ds_properties enabled_p [parameter::get -package_id [ds_instance_id] -parameter EnabledOnStartupP -default 0]
 
     # Take the IP list (space or comma separated) and turn it into a Tcl list.
-    set IPs [list]
+    set IPs {}
     foreach ip [lsort -unique [split [parameter::get -package_id [ds_instance_id] -parameter EnabledIPs -default *] { ,}]] { 
         if {$ip eq "*"} {
             # a star means anything will match so just use the * instead

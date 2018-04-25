@@ -138,7 +138,7 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
 
         # build list of files for each db type, sort, check strict ordering.
         foreach db_type {postgresql oracle} {
-            set upgrades [list]
+            set upgrades {}
             foreach file $files {
                 # DRB: Ignore old upgrade scripts that aren't in the proper place.  We
                 # still have old ACS 3 -> ACS 4 upgrade scripts lying around, and

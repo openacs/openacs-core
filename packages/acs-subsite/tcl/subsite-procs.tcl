@@ -399,7 +399,7 @@ ad_proc -public subsite::util::object_type_path_list {
 } {
     @return the object type hierarchy for the given object type from ancestor_type to object_type
 } {
-    set path_list [list]
+    set path_list {}
 
     set type_list [db_list select_object_type_path {}]
 
@@ -624,14 +624,14 @@ ad_proc -public subsite::get_pageflow_struct {
     Defines the page flow structure.
 } {
     # This is where the page flow structure is defined
-    set subsections [list]
+    set subsections {}
     lappend subsections home {
         label "Home"
         url ""
     }
 
 
-    set pageflow [list]
+    set pageflow {}
 
     if {$url eq ""} {
         set subsite_url [subsite::get_element -element url]
@@ -1286,7 +1286,7 @@ ad_proc -private subsite::util::packages_no_mem {
     @see subsite::util::packages
 } {
     # need to strip nodes which have no mounted package...
-    set packages [list]
+    set packages {}
     foreach package [site_node::get_children -all -node_id $node_id -element package_id] {
         if {$package ne ""} {
             lappend packages $package

@@ -294,7 +294,7 @@ ad_proc -public application_data_link::scan_for_links {
     @creation-date 2006-08-31
 
 } {
-    set refs [list]
+    set refs {}
     set http_url [string trimright [ad_url] /]/
     set https_url [string map {http https} $http_url]
     set re "(?:\")(?:$http_url|$https_url|/)(?:o|image|file)/(\\d{1,8})"
@@ -334,7 +334,7 @@ ad_proc -public application_data_link::update_links_from {
     if {![llength $link_object_ids]} {
 	set link_object_ids [application_data_link::scan_for_links -text $text]
     }
-    set delete_ids [list]
+    set delete_ids {}
     foreach old_link $old_links {
 	if {$old_link ni $link_object_ids} {
 	    lappend delete_ids $old_link

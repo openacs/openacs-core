@@ -547,7 +547,7 @@ ad_proc -private auth::sync::get_sync_elements {
     # TODO: using a different error-code could make the code saver, by
     # just ingnoring such cases.
     #
-    set elms [list]
+    set elms {}
     ad_try  {
         set elms [auth::sync::GetElements -authority_id $authority_id]
     } on error {errorMsg dict} {

@@ -60,7 +60,7 @@ ad_proc ad_context_node_list {
 
     @author Peter Marklund
 } {
-    set context [list]
+    set context {}
 
     while { $node_id ne "" } {        
         array set node [site_node::get -node_id $node_id]
@@ -234,7 +234,7 @@ ad_proc -public ad_choice_bar { items links values {default ""} } {
 } {
 
     set count 0
-    set return_list [list]
+    set return_list {}
 
     foreach value $values {
 	if { $default eq $value  } {
@@ -274,7 +274,7 @@ ad_proc -public util_current_location_node_id { } {
 # directories that should not receive links to move up one level
 
 proc ad_no_uplevel_patterns {} {
-    set regexp_patterns [list]
+    set regexp_patterns {}
     lappend regexp_patterns "*/pvt/home.tcl"
     # Tcl files in the root directory
     lappend regexp_patterns "^/\[^/\]*\.tcl\$"

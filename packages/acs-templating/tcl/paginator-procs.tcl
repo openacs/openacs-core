@@ -192,7 +192,7 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
   # perform the query in the calling scope so bind variables have effect
 
   upvar 2 __paginator_ids ids
-  set ids [list]
+  set ids {}
   
   set full_statement_name [uplevel 2 "db_qd_get_fullname $statement_name"]
   
@@ -260,7 +260,7 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
 
       set i 0
       set page_size $properties(pagesize)
-      set context_ids [list]
+      set context_ids {}
       set row_ids ""
 
       foreach row $ids {
@@ -463,7 +463,7 @@ ad_proc -public template::paginator::get_pages { name group } {
 
     if { $end > $page_count } { set end $page_count }
 
-  set pages [list]
+  set pages {}
 
   for { set i $start } { $i <= $end } { incr i } {
     lappend pages $i
@@ -504,7 +504,7 @@ ad_proc -public template::paginator::get_groups { name group count } {
 
   if { $end > $page_count } { set end $page_count) }
 
-  set pages [list]
+  set pages {}
 
   for { set i $start } { $i <= $end } { incr i $group_size } {
     lappend pages $i
@@ -750,7 +750,7 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
 
   # DEDS: quote the ids so that we are not
   #       necessarily limited to integer keys
-  set quoted_ids [list]
+  set quoted_ids {}
   foreach one_id $ids {
       lappend quoted_ids "'[DoubleApos $one_id]'"
   }

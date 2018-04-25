@@ -100,7 +100,7 @@ ad_proc -private ::auth::login_attempts::all_entries {}  {
     @return list {key number_of_attempts timeout}
 } {
 
-    set result [list]
+    set result {}
     set current_time [ns_time]
     set max_age [parameter::get_from_package_key \
                     -parameter "MaxConsecutiveFailedLoginAttemptsLockoutTime" \

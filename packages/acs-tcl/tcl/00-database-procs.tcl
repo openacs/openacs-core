@@ -504,7 +504,7 @@ ad_proc -public db_with_handle {
 
     # Initialize bookkeeping variables.
     if { ![info exists db_state(handles)] } {
-        set db_state(handles) [list]
+        set db_state(handles) {}
     }
     if { ![info exists db_state(n_handles_used)] } {
         set db_state(n_handles_used) 0
@@ -805,7 +805,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
         upvar bind bind
         if { [info exists bind] && [llength $bind] != 0 } {
             if { [llength $bind] == 1 } {
-                set bind_vars [list]
+                set bind_vars {}
                 set len [ns_set size $bind]
                 for {set i 0} {$i < $len} {incr i} {
                     lappend bind_vars [ns_set key $bind $i] \
@@ -862,7 +862,7 @@ ad_proc -private db_get_quote_indices { sql } {
 
     @see db_bind_var_subsitution
 } {
-    set quote_indices [list]
+    set quote_indices {}
 
     # Returns a list on the format
     # Example - for sql={'a'a'a'} returns
@@ -1197,7 +1197,7 @@ ad_proc -public db_list {
         return [ns_cache eval $cache_pool $cache_key {
             db_with_handle -dbn $dbn db {
                 set selection [db_exec select $db $full_statement_name $sql]
-                set result [list]
+                set result {}
                 while { [db_getrow $db $selection] } {
                     lappend result [ns_set value $selection 0]
                 }
@@ -1208,7 +1208,7 @@ ad_proc -public db_list {
 
     db_with_handle -dbn $dbn db {
         set selection [db_exec select $db $full_statement_name $sql]
-        set result [list]
+        set result {}
         while { [db_getrow $db $selection] } {
             lappend result [ns_set value $selection 0]
         }
@@ -1251,9 +1251,9 @@ ad_proc -public db_list_of_lists {
         return [ns_cache eval $cache_pool $cache_key {
             db_with_handle -dbn $dbn db {
                 set selection [db_exec select $db $full_statement_name $sql]
-                set result [list]
+                set result {}
                 while { [db_getrow $db $selection] } {
-                    set this_result [list]
+                    set this_result {}
                     for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
                         lappend this_result  [ns_set value $selection $i]
                     }
@@ -1266,9 +1266,9 @@ ad_proc -public db_list_of_lists {
 
     db_with_handle -dbn $dbn db {
         set selection [db_exec select $db $full_statement_name $sql]
-        set result [list]
+        set result {}
         while { [db_getrow $db $selection] } {
-            set this_result [list]
+            set this_result {}
             for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
                 lappend this_result  [ns_set value $selection $i]
             }
@@ -1304,7 +1304,7 @@ ad_proc -public db_list_of_ns_sets {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     db_with_handle -dbn $dbn db {
-        set result [list]
+        set result {}
         set selection [db_exec select $db $full_statement_name $sql]
 
         while {[db_getrow $db $selection]} {
@@ -1781,7 +1781,7 @@ ad_proc -public db_multirow {
         set value [ns_cache eval $cache_pool $cache_key {
             db_multirow_helper
 
-            set values [list]
+            set values {}
 
             for { set count 1 } { $count <= $counter } { incr count } {
                 upvar $level_up "$var_name:[expr {$count}]" array_val
@@ -1828,7 +1828,7 @@ ad_proc -public db_multirow_group_last_row_p {
 
     <pre>
     # Initialize the lines variable to hold a list of order line summaries
-    set lines [list]
+    set lines {}
 
     # Start building the multirow. We add the dynamic column 'lines_pretty', which will
     # contain the pretty summary of the order lines.
@@ -1848,7 +1848,7 @@ ad_proc -public db_multirow_group_last_row_p {
             set lines_pretty [join $lines ", "]
 
             # Reset the lines list, so we start from a fresh with the next row
-            set lines [list]
+            set lines {}
         } else {
             # There are yet more order lines to come for this order,
             # continue until we've collected all the order lines
@@ -1911,7 +1911,7 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
     # Remember which one (if any) is provided:
 
     set lob_argc 0
-    set lob_argv [list]
+    set lob_argv {}
     set command "dml"
     if { [info exists clobs] } {
         set command "clob_dml"
@@ -1942,7 +1942,7 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
         db_with_handle -dbn $dbn db {
             if { $lob_argc == 1 } {
                 # Bind :1, :2, ..., :n as LOBs (where n = [llength $lob_argv])
-                set bind_vars [list]
+                set bind_vars {}
                 for { set i 1 } { $i <= [llength $lob_argv] } { incr i } {
                     lappend bind_vars $i
                 }
@@ -2066,7 +2066,7 @@ ad_proc -public db_0or1row {
                 set selection [db_exec 0or1row $db $full_statement_name $sql]
             }
 
-            set values [list]
+            set values {}
 
             if { $selection ne "" } {
                 for {set i 0} { $i < [ns_set size $selection] } {incr i} {
@@ -2864,7 +2864,7 @@ ad_proc -public db_tables {
         }
     }
 
-    set tables [list]
+    set tables {}
     if { [info exists pattern] } {
         db_foreach -dbn $dbn table_names_with_pattern \
             $sql_table_names_with_pattern {
@@ -2927,7 +2927,7 @@ ad_proc -public db_columns {{-dbn ""} table_name } {
 
     @change-log yon@arsdigita.com 20000711 changed to return lower case column names
 } {
-    set columns [list]
+    set columns {}
 
     # Works for both Oracle and PostgreSQL:
     db_foreach -dbn $dbn table_column_names {
@@ -2949,7 +2949,7 @@ ad_proc -public db_column_exists {{-dbn ""} table_name column_name } {
 
     @author Lars Pind (lars@pinds.com)
 } {
-    set columns [list]
+    set columns {}
 
     # Works for both Oracle and PostgreSQL:
     set n_rows [db_string -dbn $dbn column_exists {
@@ -3340,7 +3340,7 @@ ad_proc -private db_exec_lob_postgresql {
         upvar bind bind
         if { [info exists bind] && [llength $bind] != 0 } {
             if { [llength $bind] == 1 } {
-                set bind_vars [list]
+                set bind_vars {}
                 set len [ns_set size $bind]
                 for {set i 0} {$i < $len} {incr i} {
                     lappend bind_vars [ns_set key $bind $i] \

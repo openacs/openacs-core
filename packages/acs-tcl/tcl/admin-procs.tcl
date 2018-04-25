@@ -55,7 +55,7 @@ ad_proc -private ad_user_class_description { set_id } {
     Takes an ns_set of key/value pairs and produces a human-readable
     description of the class of users specified.
 } {
-    set clauses [list]
+    set clauses {}
     set pretty_description ""
 
     # turn all the parameters in the ns_set into Tcl vars
@@ -193,7 +193,7 @@ ad_proc -private ad_registration_finite_state_machine_admin_links {
     in the user_state finite state machine. If the nohtml switch
     is set, then a list of lists will be returned (url label).
 } {
-    set user_finite_states [list]
+    set user_finite_states {}
     switch -- $member_state {
         "approved" {
             lappend user_finite_states \

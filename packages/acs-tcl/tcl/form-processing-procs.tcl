@@ -582,7 +582,7 @@ ad_proc -public ad_form {
 
     global af_element_names
     if { !$extend_p } {
-        set af_element_names($form_name) [list]
+        set af_element_names($form_name) {}
     }
 
     global af_parts
@@ -630,8 +630,8 @@ ad_proc -public ad_form {
     # Track element names and their parameters locally as we'll generate those in this form
     # or extend block on the fly
 
-    set element_names [list]
-    array set af_element_parameters [list] 
+    set element_names {}
+    array set af_element_parameters {} 
 
     if { [info exists form] } {
         
@@ -654,11 +654,11 @@ ad_proc -public ad_form {
                 lappend af_element_names($form_name) $element_name
                 set af_extra_args($element_name) [lrange $element 1 end]
                 set pre_flag_list [split [string tolower $flags] ,]
-                set af_flag_list(${form_name}__$element_name) [list]
+                set af_flag_list(${form_name}__$element_name) {}
 
                 # find parameterized flags.  We only allow one parameter.
                 foreach flag $pre_flag_list {
-                    set af_element_parameters($element_name:$flag) [list]
+                    set af_element_parameters($element_name:$flag) {}
                     set left_paren [string first "(" $flag]
                     if { $left_paren != -1 } {
                         if { [string index $flag end] ne ")" } {
@@ -683,7 +683,7 @@ ad_proc -public ad_form {
 
     global af_validate_elements
     if { !$extend_p } {
-        set af_validate_elements($form_name) [list]
+        set af_validate_elements($form_name) {}
     }
 
     if { [info exists validate] } {
@@ -1214,7 +1214,7 @@ ad_proc -public ad_form {
 
                     # Pass the form variables to the confirm template, applying the to_html filter if present
 
-                    set args [list]
+                    set args {}
                     foreach element_name $af_element_names($form_name) {
                         if { [llength $element_name] == 1 } {
                             if { [info exists af_to_html(${form_name}__$element_name)] } {

@@ -178,7 +178,7 @@ ad_proc -public lang::message::register {
     lang::message::check $locale $package_key $message_key $message
     
     # Build up an array of columns to set
-    array set cols [list]
+    array set cols {}
     if { $update_sync_p } {
         set cols(sync_time) [db_map sync_time]
     } else {
@@ -212,7 +212,7 @@ ad_proc -public lang::message::register {
         set cols(deleted_p) :deleted_p
 
         # For use in update query
-        set set_clauses [list]
+        set set_clauses {}
         foreach col [array names cols] {
             lappend set_clauses "$col = $cols($col)"
         }
@@ -253,8 +253,8 @@ ad_proc -public lang::message::register {
             set cols(creation_user) :creation_user
         }
         
-        set col_clauses [list]
-        set val_clauses [list]
+        set col_clauses {}
+        set val_clauses {}
         foreach col [array names cols] {
             lappend col_clauses $col
             lappend val_clauses $cols($col)
@@ -505,7 +505,7 @@ ad_proc -private lang::message::edit {
         }
     }
 
-    set set_clauses [list]
+    set set_clauses {}
     foreach name [array names edit_array] {
         lappend set_clauses "$name = :$name"
         set $name $edit_array($name)
@@ -542,7 +542,7 @@ ad_proc -public lang::message::conflict_count {
     @author Peter Marklund
 } {
     # Build any package and locale where clauses
-    set where_clauses [list]
+    set where_clauses {}
     foreach col {package_key locale} {
         if { [set $col] ne "" } {
             lappend where_clauses "$col = :${col}"
@@ -596,7 +596,7 @@ ad_proc -private lang::message::get_embedded_vars {
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 12 November 2002
 } {
-    set variables_list [list]
+    set variables_list {}
     set remaining_message $message
     while { [regexp [embedded_vars_regexp] $remaining_message \
             match before_percent percent_match remaining_message] } {

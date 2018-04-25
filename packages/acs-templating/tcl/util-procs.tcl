@@ -73,7 +73,7 @@ ad_proc -public template::util::list_opts { {array_ref opts} } {
 
     upvar $array_ref arr
 
-    set ret [list]
+    set ret {}
     foreach {key value} [array get arr] {
         lappend ret "-$key" $value
     }
@@ -165,7 +165,7 @@ ad_proc -public template::util::lnest { listref value next args } {
 
     upvar $listref inlist
     if { ! [info exists inlist] } {
-        set inlist [list]
+        set inlist {}
     }
 
     # inlist represents the top level of the data structure into which
@@ -181,7 +181,7 @@ ad_proc -public template::util::lnest { listref value next args } {
     if { [info exists values($next)] } {
         set next_list $values($next)
     } else {
-        set next_list [list]
+        set next_list {}
     }
 
     # the number of additional arguments after next determines how many
@@ -228,7 +228,7 @@ ad_proc -public template::util::set_to_list { set args } {
     @return A list in the form { key value key value key value ... }
 } {
 
-    set result [list]
+    set result {}
 
     for { set i 0 } { $i < [ns_set size $set] } { incr i } {
 
@@ -364,7 +364,7 @@ ad_proc -public template::util::multirow_to_list {
 
     upvar $level $name:rowcount rowcount
 
-    set rows [list]
+    set rows {}
 
     for { set i 1 } { $i <= $rowcount } { incr i } {
 
@@ -594,7 +594,7 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
     Return a list of numbers, {1 2 3 ... n}
 } {
 
-    set ret [list]
+    set ret {}
     for {set i $start_at} { $i <= $last_number } {incr i} {
         lappend ret $i
     }

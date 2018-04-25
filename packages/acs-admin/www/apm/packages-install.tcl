@@ -135,9 +135,9 @@ if { $spec_files eq "" } {
 
     ad_set_client_property -clob t apm spec_files $spec_files
 
-    set errors [list]
-    set pkg_info_list [list]
-    set pkg_key_list [list]
+    set errors {}
+    set pkg_info_list {}
+    set pkg_key_list {}
     apm_log APMDebug "APM: Specification files available: $spec_files"
     foreach spec_file $spec_files {
         ### Parse the package.

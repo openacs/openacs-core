@@ -42,7 +42,7 @@ ad_proc -private util::http::set_cookies {
     if {$headers eq ""} {
         set headers [ns_set create headers]
     }
-    set cookies [list]
+    set cookies {}
     foreach {name value} $resp_headers {
         # get only set-cookie headers, ignoring case
         set name [string tolower $name]
@@ -258,8 +258,8 @@ ad_proc -private util::http::apis_not_cached {
 } {
     Obtains implemented apis for http communication
 } {
-    set http  [list]
-    set https [list]
+    set http  {}
+    set https {}
     if {[util::which curl] ne ""} {
         lappend http  "curl"
         lappend https "curl"
@@ -1009,7 +1009,7 @@ ad_proc -private util::http::follow_redirects {
     #
     set this_proc ::util::http::request
 
-    set urlvars [list]
+    set urlvars {}
 
     # ...retrieve redirect location variables...
     set locvars [lindex [split $location ?] 1]
