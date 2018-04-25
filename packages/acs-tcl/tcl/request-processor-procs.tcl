@@ -576,7 +576,7 @@ ad_proc -private rp_filter { why } {
     #
     # UseCanonicalLocation is a experimental feature, not to be
     # activated for the OpenACS 5.9.1 release. One can use this to
-    # force requests submitted to a alternate DNS entry to be
+    # force requests submitted to an alternate DNS entry to be
     # redirected to a canonical name. For more background, see:
     # https://support.google.com/webmasters/answer/139066?hl=en
     # https://webmasters.stackexchange.com/questions/44830/should-i-redirect-the-site-ip-address-to-the-domain-name
@@ -1281,7 +1281,6 @@ ad_proc -private rp_concrete_file {
     there's no file "$path.*" in the filesystem (even if the file $path
                                                  itself does exist).
 } {
-
     # Sub out funky characters in the pathname, so the user can't request
     # http://www.arsdigita.com/*/index (causing a potentially expensive glob
     # and bypassing registered procedures)!
@@ -1298,26 +1297,9 @@ ad_proc -private rp_concrete_file {
             return "$path.$extension"
         }
     }
-
-    # None of the extensions from ExtensionPrecedence were found - just pick
-    # the first in alphabetical order.
     #
-    # GN: OpenACS was trying to serve files with arbitrary extensions
-    # (i.e. not included in the kernel parameter ExtensionPrecedence) in
-    # case the requested file was not found.  This is quite dangerous
-    # and breaks e.g. the listing of openacs.org/repository (which is a
-    # directory), since the directory is moved every night into
-    # openacs.org/repository.bak. With the given logic, it tries to
-    # server the .bak directory as a file (which does of course not
-    # work). That blind logic is not inecessary, and is actually a
-    # potential attack vector.
+    # None of the extensions from ExtensionPrecedence were found
     #
-    #if { [llength $files] > 0 } {
-    #  set files [lsort $files]
-    #  return [lindex $files 0]
-    #}
-
-    # Nada!
     return ""
 }
 
@@ -1697,9 +1679,9 @@ if { [apm_first_time_loading_p] } {
     nsv_array set rp_registered_procs [list]
     nsv_array set rp_extension_handlers [list]
 
-    # The following stuff is in a -procs.tcl file rather than a -init.tcl file
-    # since we want it done really really early in the startup process. Don't
-    # try this at home!
+    # The following stuff is in a -procs.tcl file rather than a
+    # -init.tcl file since we want it done really early in the startup
+    # process. Don't try this at home!
 
     foreach method { GET POST HEAD } { nsv_set rp_registered_procs $method [list] }
 }
