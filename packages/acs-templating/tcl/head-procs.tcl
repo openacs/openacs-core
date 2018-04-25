@@ -172,8 +172,10 @@ ad_proc -public template::head::add_script {
 ad_proc -public template::head::flush_script {
     {-src:required}
 } {
-    Flush a script tag, which was previously set in the head section via template::add_script.
-    One can provide a wild
+    
+    Flush a script tag, which was previously set in the head section
+    via template::add_script.  One can delete multiple entries by
+    providing a glob pattern.
 
     @author Gustaf Neumann
     @creation-date 2018-03-09
