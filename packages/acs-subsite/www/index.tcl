@@ -40,7 +40,7 @@ if { $redirect_url ne "" } {
     ad_script_abort
 }
 
-set context [list]
+set context {}
 set package_id [ad_conn package_id]
 set admin_p [permission::permission_p -object_id $package_id -party_id [ad_conn untrusted_user_id] -privilege admin]
 

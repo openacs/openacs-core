@@ -10,7 +10,7 @@ if { ![parameter::get -boolean -parameter IsInstallReportServer] } {
 }
 
 set page_title "Test Servers Control Page"
-set context [list]
+set context {}
 multirow create servers path admin_login_url local_url remote_url name description install_date error_total_count parse_errors
 
 set xml_report_dir [aa_test::xml_report_dir]

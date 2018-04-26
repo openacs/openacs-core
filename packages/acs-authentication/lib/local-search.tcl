@@ -18,7 +18,7 @@ if {![info exists orderby]} {
     set orderby ""
 }
 set search_text [string tolower $search_text]
-set search_terms [list]
+set search_terms {}
 foreach term [split $search_text] {
     lappend search_terms $term
 }
@@ -47,7 +47,7 @@ or lower(username) like '%' || :search_text || '%'
 or lower(email) like '%' || :search_text || '%'
 " {
 
-set status [list]
+set status {}
 if {[info exists object_id]} {
     set group_member_p [permission::permission_p -object_id $object_id -party_id $user_id -privilege $privilege]
     set status ""

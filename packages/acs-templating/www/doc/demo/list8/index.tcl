@@ -24,10 +24,10 @@ ad_page_contract {
 set package_id [ad_conn package_id]
 set user_id [ad_conn user_id]
 
-set context [list]
+set context {}
 set create_p [permission::permission_p -object_id $package_id -privilege create]
 
-set actions [list]
+set actions {}
 
 if { $create_p } {
     lappend actions "Create Note" add-edit "Create Note"

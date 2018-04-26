@@ -131,7 +131,7 @@ namespace eval rel_types {
 	set pk_constraint_name [plsql_utility::generate_constraint_name $table_name rel_id "pk"]
 	set fk_constraint_name [plsql_utility::generate_constraint_name $table_name rel_id "fk"]
 
-	set plsql [list]
+	set plsql {}
 
 	# Create the actual acs object type
 

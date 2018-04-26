@@ -219,7 +219,7 @@ would write the following to the browser:
 	@creation-date 11/2000
 
     } {
-	set pieces [list]
+	set pieces {}
 	foreach triple $attr_list {
 	    set table [string toupper [string trim [lindex $triple 0]]]
 	    set attr [string toupper [string trim [lindex $triple 1]]]
@@ -246,7 +246,7 @@ would write the following to the browser:
 	@creation-date 11/2000
 
     } {
-	set the_list [list]
+	set the_list {}
 	foreach row $attr_list {
 	    lappend the_list [list [lindex $row 1] [lindex $row 3]]
 	}
@@ -264,7 +264,7 @@ would write the following to the browser:
 	@creation-date 11/2000
 
     } {
-	set pieces [list]
+	set pieces {}
 	foreach row $pairs {
 	    set attr [string trim [lindex $row 0]]
 	    set attr_value [string trim [lindex $row 1]]
@@ -292,7 +292,7 @@ would write the following to the browser:
 
     } {
 	set ignore [string toupper $ignore]
-	set this_columns [list]
+	set this_columns {}
 	set table_name [string toupper [string trim $table_name]]
 	foreach triple $attr_list {
 	    set table [string toupper [string trim [lindex $triple 0]]]

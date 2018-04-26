@@ -106,7 +106,7 @@ To make things granular a separate parsing procedure should deal with loading th
     #get all available headers
     set keys [mime::getheader $mime -names]
     
-    set headers [list]
+    set headers {}
 
     # create both the headers array and all headers directly for the email array
     foreach header $keys {
@@ -149,8 +149,8 @@ To make things granular a separate parsing procedure should deal with loading th
 </p>
 
 <pre>
-    set bodies [list]
-    set files [list]
+    set bodies {}
+    set files {}
     
     #now extract all parts (bodies/files) and fill the email array
     foreach part $all_parts {

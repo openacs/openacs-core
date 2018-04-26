@@ -34,7 +34,7 @@ set maxlevel 1
 # Initialize the $hierarchy datastructure which is a list of
 # lists. The inner lists consist of two elements: 1. level,
 # 2. privilege
-set hierarchy [list]
+set hierarchy {}
 foreach privilege $existing_privs {
     lappend hierarchy [list 0 $privilege]
 }

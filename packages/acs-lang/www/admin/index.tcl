@@ -15,7 +15,7 @@ set system_locale [lang::system::locale -site_wide]
 set system_locale_label [lang::util::get_label $system_locale]
 
 set page_title [_ acs-lang.Administration_of_Localization]
-set context [list]
+set context {}
 
 set site_wide_admin_p [acs_user::site_wide_admin_p]
 

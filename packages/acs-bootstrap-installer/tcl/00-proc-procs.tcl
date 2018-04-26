@@ -782,7 +782,7 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
 
     if { $varargs_p } {
 	upvar args args
-	set args [list]
+	set args {}
     }
 
     set counter 0

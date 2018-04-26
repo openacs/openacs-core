@@ -29,7 +29,7 @@ template::list::create \
         }
     }
 
-set users [list]
+set users {}
 
 foreach user_id [whos_online::user_ids] {
     acs_user::get -user_id $user_id -array user

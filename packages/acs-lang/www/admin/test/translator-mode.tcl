@@ -4,7 +4,7 @@ ad_page_contract {
 
 set tcl_message [_ acs-lang.French]
 
-set options [list]
+set options {}
 
 foreach elm { English French German Spanish } {
     lappend options [list [_ acs-lang.$elm] $elm]

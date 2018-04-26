@@ -67,7 +67,7 @@ set dimensional_list {
     }
 }
 
-set context [list]
+set context {}
 if { [info exists version_id] } {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name

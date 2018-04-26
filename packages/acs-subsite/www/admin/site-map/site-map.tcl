@@ -169,7 +169,7 @@ template::list::create \
     }
 
 multirow create nodes node_id expand_mode expand_url tree_indent name name_url instance instance_url type action_type action_form_part add_folder_url new_app_url unmount_url mount_url rename_url delete_url parameters_url permissions_url extra_form_part view_p
-set open_nodes [list]
+set open_nodes {}
 
 db_foreach nodes_select {} {
     set add_folder_url ""
@@ -231,7 +231,7 @@ db_foreach nodes_select {} {
     set expand_mode 0
     if {!$root_p && $n_children > 0} {
 	set expand_mode 1
-	set urlvars [list]
+	set urlvars {}
 	foreach n $expand {
 	    if {$n == $node_id} {
 		set expand_mode 2

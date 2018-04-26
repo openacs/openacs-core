@@ -49,7 +49,7 @@ permission::require_permission \
           -object_id $package_id \
           -privilege admin]
 
-set context [list]
+set context {}
 
 set title "Administration"
 

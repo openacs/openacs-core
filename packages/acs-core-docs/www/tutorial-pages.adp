@@ -49,7 +49,7 @@ first, starting with the Tcl file:</p><pre class="screen">
 }
 
 set page_title [ad_conn instance_name]
-set context [list]
+set context {}
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

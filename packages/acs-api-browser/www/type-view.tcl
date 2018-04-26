@@ -27,7 +27,7 @@ if { ![info exists version_id]
 set public_p [::apidoc::set_public $version_id]
 
 
-set context [list]
+set context {}
 
 if { [info exists version_id] } {
     db_1row package_info_from_version_id {

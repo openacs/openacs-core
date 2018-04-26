@@ -1,6 +1,6 @@
 set admin_p [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
 
-set actions [list]
+set actions {}
 if { $admin_p } {
     lappend actions \
         [_ acs-subsite.Add_new_app] \

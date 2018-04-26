@@ -11,7 +11,7 @@ list::create \
         }
     }
 
-set services [list]
+set services {}
 
 foreach url [site_node::get_children -package_type apm_service -node_id [subsite::get_element -element node_id]] {
     array unset node 
