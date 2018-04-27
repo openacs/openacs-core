@@ -32,8 +32,7 @@ ad_proc -public template::forward { url args } {
     set cache_p [lindex $args 0]
 
     if {$cache_p == "t"} {
-        set persistent_p [lindex $args 1]
-        set excluded_vars [lindex $args 2]
+        lassign $args . persistent_p excluded_vars
 
         ad_cache_returnredirect $url $persistent_p $excluded_vars
     } else {
@@ -84,7 +83,7 @@ ad_proc -public cmp_page_filter { why } {
 
         set output "<pre>[ns_quotehtml [template::adp_compile -file $file_stub.adp]]</pre>"
 
-        set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
+        set timeElapsed [expr {[clock clicks -milliseconds] - $beginTime}]
         ns_log debug "cmp_page_filter: Time elapsed: $timeElapsed"
 
     } on error {errorMsg} {
@@ -110,7 +109,7 @@ ad_proc -public dat_page_filter { why } {
 
         set output [template::adp_parse $file_stub [list code_stub $code_stub]]
 
-        set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
+        set timeElapsed [expr {[clock clicks -milliseconds] - $beginTime}]
         ns_log debug " dat_page_filter: Time elapsed: $timeElapsed"
 
     } on error {errorMsg} {
@@ -156,7 +155,7 @@ ad_proc -private frm_page_filter { why } {
 
         set output [template::frm_page_handler]
 
-        set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
+        set timeElapsed [expr {[clock clicks -milliseconds] - $beginTime}]
         ns_log debug "frm_page_filter: Time elapsed: $timeElapsed"
 
     } on error {errorMsg} {
