@@ -28,7 +28,7 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
     # sort the list and return in array set form
     set out {}
     foreach pkg [lsort -dictionary -index 1 $uninstalled] { 
-        set out [concat $out $pkg]
+        lappend out {*}$pkg
     }
     return  $out
 

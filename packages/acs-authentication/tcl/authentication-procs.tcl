@@ -1604,7 +1604,7 @@ ad_proc -private auth::validate_account_info {
 
     set required_elms { }
     if { !$update_p } {
-        set required_elms [concat $required_elms { first_names last_name email }]
+        lappend $required_elms {*}{ first_names last_name email }
     }
 
     foreach elm $required_elms {

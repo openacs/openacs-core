@@ -2278,7 +2278,7 @@ ad_proc -public apm::process_install_xml {
 
     foreach action $actions {
         set install_proc_out [apm_invoke_install_proc -install_from_repository=$install_from_repository_p -node $action]
-        set out [concat $out $install_proc_out]
+        lappend out {*}$install_proc_out
     }
 
     # pop off parse level

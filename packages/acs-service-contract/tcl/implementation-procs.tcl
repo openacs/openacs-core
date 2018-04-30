@@ -1,6 +1,6 @@
 ad_library {
     Support library for acs service contracts. Implements the acs_sc::impl namespace.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-01-14
     @cvs-id $Id$
@@ -29,7 +29,7 @@ ad_proc -public acs_sc::impl::new {
                         Alphanumeric characters and underscores only.
 
     @param pretty_name  The name of the implementation when display to users. Defaults to 'name'.
-    
+
     @return the ID of the new implementation
 } {
     if { $pretty_name eq "" } {
@@ -42,22 +42,22 @@ ad_proc -public acs_sc::impl::delete {
     {-contract_name:required}
     {-impl_name:required}
 } {
-    Delete a service contract implementation 
+    Delete a service contract implementation
 } {
 
     if { $contract_name eq "" || $impl_name eq "" } {
         error "You must supply contract_name and impl_name"
     }
 
-    db_exec_plsql delete_impl {} 
+    db_exec_plsql delete_impl {}
 }
 
 ad_proc -public acs_sc::impl::new_from_spec {
     {-spec:required}
 } {
-    Add new service contract implementation from an array-list style implementation, 
+    Add new service contract implementation from an array-list style implementation,
     and binds it to the specified contract.
-    
+
     <p>
 
     The specification takes the following form:
@@ -81,8 +81,8 @@ ad_proc -public acs_sc::impl::new_from_spec {
 
     <p>
 
-    The spec is an array-list with the following entries: 
-    
+    The spec is an array-list with the following entries:
+
     <ul>
       <li>contract_name: The name of the service contract you're implementing.
       <li>owner: Owner of the implementation, use the package-key.
@@ -91,17 +91,17 @@ ad_proc -public acs_sc::impl::new_from_spec {
       <li>aliases: Specification of the Tcl procedures for each of the service contract's operations.
     </ul>
 
-    The aliases section is itself an array-list. The keys are the operation names 
-    from the service contract. The values are the names of Tcl procedures in your package, 
+    The aliases section is itself an array-list. The keys are the operation names
+    from the service contract. The values are the names of Tcl procedures in your package,
     which implement these operations.
 
     @param spec The specification for the new service contract implementation.
-    
+
     @return the impl_id of the newly registered implementation
 } {
     # Spec contains: contract_name, name, pretty_name, owner, aliases
     array set impl $spec
-    
+
     if { ![info exists impl(pretty_name)] } {
         set impl(pretty_name) ""
     }
@@ -159,8 +159,8 @@ ad_proc -public acs_sc::impl::get {
     {-array:required}
 } {
     Get information about a service contract implementation.
-    
-    @param array Name of an array into which you want the info. 
+
+    @param array Name of an array into which you want the info.
                  Available columns are: impl_name, impl_owner_name, impl_contract_name.
 
     @author Lars Pind (lars@collaboraid.biz)
@@ -211,7 +211,7 @@ ad_proc -public acs_sc::impl::get_options {
         }
     } else {
         # No exclude names, use all options
-        set impl_list [concat $impl_list $full_list]
+        lappend impl_list {*}$full_list
     }
 
     return $impl_list
@@ -230,7 +230,7 @@ ad_proc -public acs_sc::impl::alias::new {
     {-alias:required}
     {-language "TCL"}
 } {
-    Add new service contract implementation alias 
+    Add new service contract implementation alias
     (the procedure that implements the operation in a contract).
 
     @return the ID of the implementation
@@ -282,7 +282,7 @@ ad_proc -private acs_sc::impl::alias::parse_spec {
                 -operation $operation \
                 -alias $alias(alias) \
                 -language $alias(language)
-        
+
     }
 }
 
@@ -309,7 +309,7 @@ ad_proc -private acs_sc::impl::binding::init_procs {
     {-impl_id:required}
 } {
     Initialize the procs so we can call the service contract.
-    
+
     Note that this proc doesn't really work, because it doesn't
     initialize the aliases in all interpreters, only in one.
 } {
@@ -328,16 +328,16 @@ ad_proc -private acs_sc::impl::binding::init_procs {
 
 
 
-    
+
     # LARS:
     # This is the left-over stuff, which we could one day resurrect if we
     # decide to implement an apm_eval feature, which can eval chunks of code
-    # in each interpreter. Then we could just say 
+    # in each interpreter. Then we could just say
     # apm_eval "acs_sc::impl::binding::init_procs_internal -impl_id $impl_id"
-    
+
     # Get the list of aliases
     db_foreach impl_operation {
-        select impl_contract_name, 
+        select impl_contract_name,
                impl_operation_name,
                impl_name
         from   acs_sc_impl_aliases
@@ -345,7 +345,7 @@ ad_proc -private acs_sc::impl::binding::init_procs {
     } -column_array row {
         lappend rows [array get row]
     }
-    
+
     # Register them
     # Hm. We need to do this in all interpreters
     foreach row_list $rows {
@@ -354,7 +354,7 @@ ad_proc -private acs_sc::impl::binding::init_procs {
     }
 }
 
-    
+
 
 # Local variables:
 #    mode: tcl
