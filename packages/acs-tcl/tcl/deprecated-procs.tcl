@@ -164,7 +164,7 @@ ad_proc -deprecated ad_export_vars {
     <code>export_vars</code> have a number of advantages:
     
     <ul>
-    <li>It can sign variables (the the <code>:sign</code> flag)
+    <li>It can sign variables (the <code>:sign</code> flag)
     <li>It can export variables as a :multiple.
     <li>It can export arrays with on-the-fly values (not pulled from the environment)
     </ul>

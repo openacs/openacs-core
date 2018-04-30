@@ -282,7 +282,7 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
             lappend headers_list "aml_received_cs" [file mtime ${message_fpn}]
             lappend headers_list "uid" $uid_val
             
-            # Append property_list to to headers_list
+            # Append property_list to headers_list
             set prop_list [mime::getproperty $m_id]
             #set prop_names_list /mime::getproperty $m_id -names/
             foreach {n v} $prop_list {
