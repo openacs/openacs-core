@@ -27,12 +27,12 @@ ad_proc -callback merge::MergePackageUser -impl notifications {
     set msg "Merging notifications"
     set result [list $msg]
     ns_log Notice $msg
-    
+
     db_transaction {
-	db_dml upd_notifications {}
-	db_dml upd_map {}
-	lappend result "Notifications merge is done"
-    } 
+        db_dml upd_notifications {}
+        db_dml upd_map {}
+        lappend result "Notifications merge is done"
+    }
     return $result
 }
 
@@ -61,73 +61,72 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
     upvar $array email
 
     set is_auto_reply_p 0
-    
+
     #TODO: we need to check if it Auto-Submitted header exists or "Out of Office AutoReply" in Subject
-    
+
     if { $is_auto_reply_p } {
-	ns_log Notice "acs_mail_lite::incoming_email -impl notifications: message $email(message-id) is from an auto-responder, skipping"
+        ns_log Notice "acs_mail_lite::incoming_email -impl notifications: message $email(message-id) is from an auto-responder, skipping"
     }
 
     set from [notification::email::parse_email_address $email(from)]
     set to [notification::email::parse_email_address $email(to)]
-    
+
     set to_stuff [notification::email::parse_reply_address -reply_address $to]
     # We don't accept a bad incoming email address
     if {$to_stuff eq ""} {
-	# This is not an e-mail notification can work with. Maybe bounce ?
-	return
+    # This is not an e-mail notification can work with. Maybe bounce ?
+        return
     }
 
     # Find the user_id of the sender
     ns_log Notice "acs_mail_lite::incoming_email -impl notifications: from $from"
     set user_id [party::get_by_email -email $from]
-    
+
     # We don't accept empty users for now
     if {$user_id eq ""} {
-	ns_log Notice "acs_mail_lite::incoming_email -impl notifications: Unknown sender with email $from. Bouncing message."
-	# bounce message with an informative error.
-	notification::email::bounce_mail_message \
-	    -to_addr $from \
-	    -from_addr $to \
-	    -body $email(bodies)  \
-	    -message_headers $email(headers) \
-	    -reason "Invalid sender.  You must be a member of the site and\nyour From address must match your registered address."
-	return
+        ns_log Notice "acs_mail_lite::incoming_email -impl notifications: Unknown sender with email $from. Bouncing message."
+        # bounce message with an informative error.
+        notification::email::bounce_mail_message \
+            -to_addr $from \
+            -from_addr $to \
+            -body $email(bodies)  \
+            -message_headers $email(headers) \
+            -reason "Invalid sender.  You must be a member of the site and\nyour From address must match your registered address."
+        return
     }
-    
-    set object_id [lindex $to_stuff 0]
-    set type_id [lindex $to_stuff 1]
+
+    lassign $to_stuff object_id type_id
     set to_addr $to
     set headers $email(headers)
     set bodies $email(bodies)
 
     db_transaction {
-	ns_log Notice "acs_mail_lite::incoming_email -impl notifications: Creating a reply for user: $user_id, object: object_id: $object_id, type_id: $type_id."
-	set reply_id [notification::reply::new \
-			  -object_id $object_id \
-			  -type_id $type_id \
-			  -from_user $user_id \
-			  -subject $email(subject) \
-			  -content $email(bodies)]
-	db_dml holdinsert {}
-	
-	#extending email array for notification callback implementors
-	set email(object_id) $object_id
-	set email(type_id) $type_id
-	set email(reply_id) $reply_id
-	set email(user_id) $user_id
-	
-	if {[db_0or1row select_impl {}]} {
-	ns_log Notice "acs_mail_lite::incoming_email -impl notifications: calling notifications::incoming_email implementation for package $package_key"
-	    if { [catch {callback -impl $package_key notifications::incoming_email -array email} error] } {
-		ns_log Notice "acs_mail_lite::incoming_email -impl notifications: $error"
-	    }
-	} else {
-	    ns_log Notice "acs_mail_lite::incoming_email -impl notifications: No corresponding package registered for type_id $type_id"
-	}
-	
+        ns_log Notice "acs_mail_lite::incoming_email -impl notifications: Creating a reply for user: $user_id, object: object_id: $object_id, type_id: $type_id."
+        set reply_id [notification::reply::new \
+            -object_id $object_id \
+            -type_id $type_id \
+            -from_user $user_id \
+            -subject $email(subject) \
+            -content $email(bodies)]
+        db_dml holdinsert {}
+
+        #extending email array for notification callback implementors
+        set email(object_id) $object_id
+        set email(type_id) $type_id
+        set email(reply_id) $reply_id
+        set email(user_id) $user_id
+
+        if {[db_0or1row select_impl {}]} {
+            ns_log Notice "acs_mail_lite::incoming_email -impl notifications: calling notifications::incoming_email implementation for package $package_key"
+            if { [catch {callback -impl $package_key notifications::incoming_email -array email} error] } {
+                ns_log Notice "acs_mail_lite::incoming_email -impl notifications: $error"
+            }
+        } else {
+            ns_log Notice "acs_mail_lite::incoming_email -impl notifications: No corresponding package registered for type_id $type_id"
+        }
+
     } on_error {
-	ns_log Error "acs_mail_lite::incoming_email -impl notifications: error inserting incoming email into the queue: $errmsg"
+        ns_log Error "acs_mail_lite::incoming_email -impl notifications: error inserting incoming email into the queue: $errmsg"
     }
 }
 

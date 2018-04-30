@@ -121,14 +121,12 @@ ad_proc -public template::paginator::create { statement_name name query args } {
          || ([info exists opts(flush_p)] && $opts(flush_p) == "t")
     } {
         if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
-            set title [lindex $opts(printing_prefs) 0]
-            set stylesheet [lindex $opts(printing_prefs) 1]
+            lassign $opts(printing_prefs) title stylesheet background header_file footer_file return_url
             if { $stylesheet ne "" } {
                 set css_link [subst {<link rel="stylesheet" href="[ns_quotehtml $stylesheet]" type="text/css">}]
             } else {
                 set css_link ""
             }
-            set background [lindex $opts(printing_prefs) 2]
             if { $background ne "" } {
                 set bg "background=\"$background\""
             } else {
@@ -144,23 +142,20 @@ ad_proc -public template::paginator::create { statement_name name query args } {
                 </head>
                 <body $bg>
             }]
-            set header_file [lindex $opts(printing_prefs) 3]
             if { $header_file ne "" } {
                 ns_write [ns_adp_parse -file $header_file]
             }
             ns_write [lindex $opts(printing_prefs) 6]
             init $statement_name $name $query 1
             ns_write [lindex $opts(printing_prefs) 7]
-            set footer_file [lindex $opts(printing_prefs) 4]
             if { $footer_file ne "" } {
                 ns_write [ns_adp_parse -file $footer_file]
             }
-            set return_url [lindex $opts(printing_prefs) 5]
             if { $return_url ne "" } {
-            # Not sure, what the intended semantics of this command was...
-            #if { [llength $opts(row_ids)]==0 } {
-            #   nsv_set __template_cache_timeout $cache_key $opts(timeout)
-            #}
+                # Not sure, what the intended semantics of this command was...
+                #if { [llength $opts(row_ids)]==0 } {
+                #   nsv_set __template_cache_timeout $cache_key $opts(timeout)
+                #}
                 ns_write [subst {
                     <script type="text/javascript" nonce="$::__csp_nonce">
                     document.location.href="[ns_quotehtml $return_url]";

@@ -5,9 +5,9 @@
 # http.tcl --
 #
 #	Client-side HTTP for GET, POST, and HEAD commands.
-#	These routines can be used in untrusted code that uses 
-#	the Safesock security policy.  These procedures use a 
-#	callback interface to avoid using vwait, which is not 
+#	These routines can be used in untrusted code that uses
+#	the Safesock security policy.  These procedures use a
+#	callback interface to avoid using vwait, which is not
 #	defined in the safe base.
 #
 # See the file "license.terms" for information on usage and
@@ -59,7 +59,7 @@ namespace eval http {
             -proxyport {}
             -proxyfilter http::ProxyRequired
         }
-        
+
         # Use a Mozilla compatible useragent header to avoid problems with
         # some web sites.
         set http(-useragent) \
@@ -225,7 +225,7 @@ proc ::http::CloseSocket {s {token {}}} {
     catch {fileevent $s readable {}}
     if {$token != {}} {
         variable $token
-        upvar 0 $token state        
+        upvar 0 $token state
         if {[info exists state(socketinfo)]} {
             if {[info exists socketmap($state(socketinfo))]} {
                 unset socketmap($state(socketinfo))
@@ -401,8 +401,7 @@ proc http::geturl { url args } {
 	unset $token
 	return -code error "Unsupported URL type \"$proto\""
     }
-    set defport [lindex $urlTypes($proto) 0]
-    set defcmd [lindex $urlTypes($proto) 1]
+    lassign $urlTypes($proto) defport defcmd
 
     if {$port eq ""} {
 	set port $defport
@@ -415,8 +414,7 @@ proc http::geturl { url args } {
     }
     set state(url) $url
     if {![catch {$http(-proxyfilter) $host} proxy]} {
-	set phost [lindex $proxy 0]
-	set pport [lindex $proxy 1]
+    lassign $proxy phost pport
     }
 
     # If a timeout is specified we set up the after event
@@ -464,7 +462,7 @@ proc http::geturl { url args } {
             eval $defcmd $async [split $state(socketinfo) :]
         } s]
         if {$conStat} {
-            
+
             # something went wrong while trying to establish the
             # connection Clean up after events and such, but DON'T
             # call the command callback (if available) because we're
@@ -487,7 +485,7 @@ proc http::geturl { url args } {
 	if {$state(status) eq "error"} {
 	    # something went wrong while trying to establish the connection
 	    # Clean up after events and such, but DON'T call the command
-	    # callback (if available) because we're going to throw an 
+	    # callback (if available) because we're going to throw an
 	    # exception from here instead.
 	    set err [lindex $state(error) 0]
 	    cleanup $token
@@ -586,10 +584,10 @@ proc http::geturl { url args } {
 	# get the response from the server because of the error it will
 	# get trying to write the post data.  Having both fileevents active
 	# changes the timing and the behavior, but no two platforms
-	# (among Solaris, Linux, and NT)  behave the same, and none 
+	# (among Solaris, Linux, and NT)  behave the same, and none
 	# behave all that well in any case.  Servers should always read their
 	# POST data if they expect the client to read their response.
-		
+
 	if {$isQuery || $isQueryChannel} {
 	    puts $s "Content-Type: $state(-type)"
 	    if {!$contDone} {
@@ -614,7 +612,7 @@ proc http::geturl { url args } {
 		# Something went wrong, so throw the exception, and the
 		# enclosing catch will do cleanup.
 		return -code error [lindex $state(error) 0]
-	    }		
+	    }
 	}
     } err]} {
 	# The socket probably was never connected,
@@ -623,7 +621,7 @@ proc http::geturl { url args } {
 	# Clean up after events and such, but DON'T call the command callback
 	# (if available) because we're going to throw an exception from here
 	# instead.
-	
+
 	# if state(status) is error, it means someone's already called Finish
 	# to do the above-described clean up.
 	if {$state(status) eq "error"} {
@@ -737,16 +735,16 @@ proc http::Write {token} {
     variable $token
     upvar 0 $token state
     set s $state(sock)
-    
+
     # Output a block.  Tcl will buffer this if the socket blocks
-    
+
     set done 0
     if {[catch {
-	
+
 	# Catch I/O errors on dead sockets
 
 	if {[info exists state(-query)]} {
-	    
+
 	    # Chop up large query strings so queryprogress callback
 	    # can give smooth feedback
 
@@ -760,7 +758,7 @@ proc http::Write {token} {
 		set done 1
 	    }
 	} else {
-	    
+
 	    # Copy blocks from the query channel
 
 	    set outStr [read $state(-querychannel) $state(-queryblocksize)]
@@ -888,7 +886,7 @@ proc http::Event {s token} {
                     }
                 }
                 lappend state(meta) $key [string trim $value]
-                
+
             } elseif {[string match "HTTP*" $line]} {
                 set state(http) $line
             }
@@ -1092,8 +1090,8 @@ proc http::wait {token} {
 # http::formatQuery --
 #
 #	See documentation for details.
-#	Call http::formatQuery with an even number of arguments, where 
-#	the first is a name, the second is a value, the third is another 
+#	Call http::formatQuery with an even number of arguments, where
+#	the first is a name, the second is a value, the third is another
 #	name, and so on.
 #
 # Arguments:
@@ -1142,7 +1140,7 @@ proc http::mapReply {string} {
 }
 
 # http::ProxyRequired --
-#	Default proxy filter. 
+#	Default proxy filter.
 #
 # Arguments:
 #	host	The destination host

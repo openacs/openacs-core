@@ -513,12 +513,12 @@ ad_proc -public template::list::prepare {
 
     prepare_filters \
         -name $name
-    
+
     # Split the current ordering info into name and direction
     # name is the string before the comma, order (asc/desc) is what's after
     if { [info exists list_properties(filter,$list_properties(orderby_name))] } {
         lassign [lrange [split $list_properties(filter,$list_properties(orderby_name)) ","] 0 1] orderby_name orderby_direction
-        
+
         set list_properties(orderby_selected_name) $orderby_name
         if { $orderby_direction eq "" } {
 
@@ -3247,8 +3247,7 @@ ad_proc -private template::list::prepare_filter_form {
     # take out filters we already applied...
     set i 0
     foreach option_list $filter_names_options_tmp {
-        set option_label [lindex $option_list 0]
-        set option_name [lindex $option_list 1]
+        lassign $option_list option_label option_name
         if {"${name}:filter:${option_name}:properties" ni $client_property_filters} {
             lappend filter_names_options [list $option_label $option_name]
         }

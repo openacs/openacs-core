@@ -490,8 +490,7 @@ ad_proc -public aa_register_case {
     upvar 2 _aa_exports _aa_exports
     foreach init_class \[list $init_classes\] {
       if {[llength $init_class] == 2} {
-        set init_package_key [lindex $init_class 1]
-        set init_class [lindex $init_class 0]
+        lassign $init_class init_class init_package_key
       } else {
         set init_package_key $package_key
       }
@@ -574,8 +573,7 @@ ad_proc -public aa_runseries {
         lappend testcase_ids $testcase_id
         foreach testcase [nsv_get aa_test cases] {
             if {$testcase_id == [lindex $testcase 0]} {
-                set package_key    [lindex $testcase 3]
-                set init_classes   [lindex $testcase 5]
+                lassign $testcase . . . package_key . init_classes
                 foreach init_class $init_classes {
                     set classes([list $package_key $init_class]) 1
                 }
@@ -583,10 +581,7 @@ ad_proc -public aa_runseries {
         }
     } else {
         foreach testcase [nsv_get aa_test cases] {
-            set testcase_id    [lindex $testcase 0]
-            set package_key    [lindex $testcase 3]
-            set categories     [lindex $testcase 4]
-            set init_classes   [lindex $testcase 5]
+            lassign $testcase testcase_id . . package_key categories init_classes
 
             # try to disqualify the test case
 
@@ -624,8 +619,7 @@ ad_proc -public aa_runseries {
     #
     if {[info exists classes]} {
         foreach initpair [array names classes] {
-            set package_key [lindex $initpair 0]
-            set init_class  [lindex $initpair 1]
+            lassign $initpair package_key init_class
             set _aa_export {}
             set aa_init_class_logs([list $package_key $init_class]) {}
             set aa_in_init_class [list $package_key $init_class]
@@ -647,8 +641,7 @@ ad_proc -public aa_runseries {
     #
     if {[info exists classes]} {
         foreach initpair [array names classes] {
-            set package_key [lindex $initpair 0]
-            set init_class  [lindex $initpair 1]
+            lassign $initpair package_key init_class
             set aa_in_init_class [list $package_key $init_class]
             _${package_key}__d_$init_class
         }
@@ -688,14 +681,8 @@ ad_proc -public aa_run_testcase {
     set testcase_bodys {}
     foreach testcase [nsv_get aa_test cases] {
         if {$testcase_id == [lindex $testcase 0]} {
-            set testcase_file     [lindex $testcase 2]
-            set package_key       [lindex $testcase 3]
+            lassign $testcase . . testcase_file package_key testcase_cats testcase_inits testcase_on_error testcase_bodys aa_error_level
             set aa_package_key    $package_key
-            set testcase_cats     [lindex $testcase 4]
-            set testcase_inits    [lindex $testcase 5]
-            set testcase_on_error [lindex $testcase 6]
-            set testcase_bodys    [lindex $testcase 7]
-            set aa_error_level       [lindex $testcase 8]
         }
     }
     if {[llength $testcase_bodys] == 0} {
@@ -1090,7 +1077,7 @@ ad_proc -private aa_http {
         lappend extra_args -headers $requestHeaders
     }
     nsv_set aa_test logindata [list peeraddr $peeraddr user_id $user_id]
-    
+
     #
     # Construct nice log line
     #
@@ -1102,7 +1089,7 @@ ad_proc -private aa_http {
         append log_line "\n$body"
     }
     aa_log $log_line
-    
+
     #
     # Run actual request
     #

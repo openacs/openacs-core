@@ -75,16 +75,11 @@ ad_proc -public template::data::validate::richtext_or_file {
 
     upvar 2 $message_ref message $value_ref richtext_or_file_list
 
-    set storage_type [lindex $richtext_or_file_list 0]
-    set mime_type    [lindex $richtext_or_file_list 1]
-    set text         [lindex $richtext_or_file_list 2]
-    set filename     [lindex $richtext_or_file_list 3]
-    set tmp_filename [lindex $richtext_or_file_list 4]
-    set content_url  [lindex $richtext_or_file_list 5]
+    lassign $richtext_or_file_list storage_type mime_type text filename tmp_filename content_url
 
     if { $text ne "" && [lsearch -exact [template::util::richtext_or_file::formats] $mime_type] == -1 } {
-	set message "Invalid text format, '$mime_type'."
-	return 0
+        set message "Invalid text format, '$mime_type'."
+        return 0
     }
 
     # enhanced text and HTML needs to be security checked
@@ -97,7 +92,7 @@ ad_proc -public template::data::validate::richtext_or_file {
     }
 
     return 1
-}    
+}
 
 ad_proc -public template::data::transform::richtext_or_file {
     element_ref
@@ -113,7 +108,7 @@ ad_proc -public template::data::transform::richtext_or_file {
     upvar $element_ref element
     set element_id $element(id)
 
-    # We need to return the empty list in order for form builder to think of it 
+    # We need to return the empty list in order for form builder to think of it
     # as a non-value in case of a required element.
 
     set storage_type [ns_queryget $element_id.storage_type]
@@ -126,7 +121,7 @@ ad_proc -public template::data::transform::richtext_or_file {
             set mime_type [ns_queryget $element_id.mime_type]
 
             return [list [list "text" $mime_type $text {} {} {}]]
-        }  
+        }
         file {
             set file [template::util::file_transform $element_id.file]
             if { $file eq "" } {
@@ -145,7 +140,7 @@ ad_proc -public template::data::transform::richtext_or_file {
 }
 
 ad_proc -public template::util::richtext_or_file::set_property { what richtext_or_file_list value } {
-    Set a property of the richtext_or_file datatype. Valid proerties are: 
+    Set a property of the richtext_or_file datatype. Valid proerties are:
 
     <ul>
       <li>storage_type
@@ -156,12 +151,7 @@ ad_proc -public template::util::richtext_or_file::set_property { what richtext_o
       <li>content_url
     </ul>
 } {
-    set storage_type [lindex $richtext_or_file_list 0]
-    set mime_type    [lindex $richtext_or_file_list 1]
-    set text         [lindex $richtext_or_file_list 2]
-    set filename     [lindex $richtext_or_file_list 3]
-    set tmp_filename [lindex $richtext_or_file_list 4]
-    set content_url  [lindex $richtext_or_file_list 5]
+    lassign richtext_or_file_list storage_type mime_type text filename tmp_filename content_url
 
     switch -- $what {
         storage_type {
@@ -193,7 +183,7 @@ ad_proc -public template::util::richtext_or_file::set_property { what richtext_o
 
 ad_proc -public template::util::richtext_or_file::get_property { what richtext_or_file_list } {
 
-    Get a property of the richtext_or_file datatype. Valid proerties are: 
+    Get a property of the richtext_or_file datatype. Valid proerties are:
 
     <ul>
       <li>storage_type
@@ -204,12 +194,7 @@ ad_proc -public template::util::richtext_or_file::get_property { what richtext_o
       <li>content_url
     </ul>
 } {
-    set storage_type [lindex $richtext_or_file_list 0]
-    set mime_type    [lindex $richtext_or_file_list 1]
-    set text         [lindex $richtext_or_file_list 2]
-    set filename     [lindex $richtext_or_file_list 3]
-    set tmp_filename [lindex $richtext_or_file_list 4]
-    set content_url  [lindex $richtext_or_file_list 5]
+    lassign $richtext_or_file_list storage_type mime_type text filename tmp_filename content_url
 
     switch -- $what {
         storage_type {
@@ -253,7 +238,7 @@ ad_proc -public template::util::richtext_or_file::get_property { what richtext_o
 ad_proc -public template::widget::richtext_or_file {
     element_reference
     tag_attributes
-} { 
+} {
     Render a richtext_or_file widget
 
     @param element_reference Reference variable to the form element
@@ -261,7 +246,7 @@ ad_proc -public template::widget::richtext_or_file {
 
     @return Form HTML for the widget
 
-} { 
+} {
   upvar $element_reference element
 
   if { [info exists element(html)] } {
@@ -273,10 +258,10 @@ ad_proc -public template::widget::richtext_or_file {
   if { [info exists element(value)] } {
       set storage_type [template::util::richtext_or_file::get_property storage_type $element(value)]
       set mime_type    [template::util::richtext_or_file::get_property mime_type $element(value)]
-      set text         [template::util::richtext_or_file::get_property text $element(value)] 
-      set filename     [template::util::richtext_or_file::get_property filename $element(value)] 
-      set tmp_filename [template::util::richtext_or_file::get_property tmp_filename $element(value)] 
-      set content_url  [template::util::richtext_or_file::get_property content_url $element(value)] 
+      set text         [template::util::richtext_or_file::get_property text $element(value)]
+      set filename     [template::util::richtext_or_file::get_property filename $element(value)]
+      set tmp_filename [template::util::richtext_or_file::get_property tmp_filename $element(value)]
+      set content_url  [template::util::richtext_or_file::get_property content_url $element(value)]
   } else {
       set storage_type {}
       set mime_type    {}
@@ -285,7 +270,7 @@ ad_proc -public template::widget::richtext_or_file {
       set tmp_filename {}
       set content_url  {}
   }
-  
+
   set output {}
 
   if {$element(mode) eq "edit"} {
@@ -338,7 +323,7 @@ ad_proc -public template::widget::richtext_or_file {
       if { $storage_type eq "" } {
           append output [subst {<input type="file" name="$element(id).file" disabled>}]
       }
-      
+
       if { $storage_type eq "" } {
           append output "</blockquote>"
       }
@@ -351,7 +336,7 @@ ad_proc -public template::widget::richtext_or_file {
           append output "<input type=\"hidden\" name=\"$element(id).text\" value=\"[ns_quotehtml $text]\">"
       }
   }
-      
+
   return $output
 }
 

@@ -18,19 +18,19 @@
 # Note: This code requires a new HTTP/1.1 aware version of geturl - the current
 #       http 2.4 package in Tcl doesn't know how to keep a 1.1 connection alive
 #       and will slow down because *each* Selenium request will time out.
-#       
+#
 # Example use:
 #
 #       package require selenium
-#       
+#
 #       Se init localhost 4444 *firefox http://www.google.com/webhp
 #       Se start
-#       
+#
 #       Se open http://www.google.com/webhp
 #       Se type q "hello world"
 #       Se clickAndWait btnG
 #       Se assertTitle "hello world - Google Search"
-#       
+#
 #       Se stop
 #
 # by Jean-Claude Wippler, 2007-02-24
@@ -43,26 +43,23 @@ package provide selenium 0.1
 proc Se {cmd args} {
     global selenium
     switch -- $cmd {
-        
+
         init {
-            set selenium(host) [lindex $args 0]
-            set selenium(port) [lindex $args 1]
-            set selenium(browserStartCommand) [lindex $args 2]
-            set selenium(browserURL) [lindex $args 3]
+            lassign $args selenium(host) selenium(port) selenium(browserStartCommand) selenium(browserURL)
             set selenium(sessionId) ""
         }
-        
+
         start {
             set selenium(sessionId) [Se getNewBrowserSession \
                                         $selenium(browserStartCommand) \
                                         $selenium(browserURL)]
         }
-        
+
         stop {
             Se testComplete
             set selenium(sessionId) ""
         }
-        
+
         default {
             set query [list http::formatQuery cmd $cmd]
             set i 0

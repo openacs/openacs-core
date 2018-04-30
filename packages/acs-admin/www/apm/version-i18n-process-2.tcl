@@ -3,9 +3,9 @@ ad_page_contract {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
-    @cvs-id $Id$  
+    @cvs-id $Id$
 } {
-    version_id:naturalnum,notnull    
+    version_id:naturalnum,notnull
     {files:multiple,notnull}
     {file_action:multiple}
     {number_of_keys:integer,notnull ""}
@@ -68,8 +68,7 @@ if { $replace_text_p } {
     ns_log Notice "Replacing text in file $text_file with message tags"
     append processing_html_result "<h3>Text replacements for $text_file</h3>"
     set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "$::acs::rootdir/$text_file" write $message_key_list]
-    set text_replacement_list [lindex $adp_text_result_list 0]
-    set text_untouched_list [lindex $adp_text_result_list 1]
+    lassign $adp_text_result_list text_replacement_list text_untouched_list
 
     append processing_html_result "<b>Replaced [llength $text_replacement_list] texts</b>: <br>"
     foreach text_replacement $text_replacement_list {
@@ -108,7 +107,7 @@ if { $replace_tags_p } {
 
         append processing_html_result "Did $number_of_replacements replacements, see the log file for details"
     }
-}    
+}
 
 # Remove the processed file from the file list.
 set files [lrange $files $number_of_processed_files end]
