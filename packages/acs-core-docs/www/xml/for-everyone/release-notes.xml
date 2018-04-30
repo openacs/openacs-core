@@ -509,7 +509,7 @@ END OF TEMPLATE -->
 	      </para></listitem>
 	      <listitem><para>
 		Improved exception handling (often, a
-		&quot;catch&quot; swallows to much, e.g. 
+		&quot;catch&quot; swallows too much, e.g. 
 		script_aborts), introducing
 		&quot;ad_exception&quot;.
 	      </para></listitem>
