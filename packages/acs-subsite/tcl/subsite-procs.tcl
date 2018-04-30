@@ -333,7 +333,7 @@ ad_proc -public subsite::get_element {
        object_type package_key package_id name pattern_p instance_name
        node_id parent_id url object_id
 
-    @param notrailing If true and the element requested is a url,
+    @param notrailing If true and the element requested is a URL,
        then strip any trailing slash ('/'). This means the empty string
        is returned for the root.
 

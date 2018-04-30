@@ -249,7 +249,7 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
 
     @author Peter Marklund, Dave Bauer
 } {
-    # Make sure we have a url to work with
+    # Make sure we have a URL to work with
     if { $url eq "" } {
           if { $node_id eq "" } {
               set url "/"

@@ -87,20 +87,20 @@ foreach var $export_var_list {
 	    -widget hidden
 }
 
-# Build a url used to create a new party of type object_type_two
+# Build a URL used to create a new party of type object_type_two
 set party_type $object_type_two
 set party_type_exact_p f
 set add_to_group_id $group_id
 set add_with_rel_type $rel_type
 set add_party_url [export_vars -base [ad_conn package_url]admin/parties/new {add_to_group_id add_with_rel_type party_type party_type_exact_p return_url}]
 
-# Build a url used to select an existing party from the system (as opposed
+# Build a URL used to select an existing party from the system (as opposed
 # to limiting the selection to parties on the current subsite).
 set saved_allow_out_of_scope_p $allow_out_of_scope_p
 set allow_out_of_scope_p t
 set add_out_of_scope_url [export_vars -base [ad_conn url] $export_var_list]
 
-# Build a url used to select an existing party from the current subsite
+# Build a URL used to select an existing party from the current subsite
 set allow_out_of_scope_p f
 set add_in_scope_url [export_vars -base [ad_conn url] $export_var_list]
 
