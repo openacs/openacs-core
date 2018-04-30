@@ -75,19 +75,17 @@ example <code>ObjectDisplay.Name.InputType</code> as name
 <h3>Creating Interfaces</h3>
 <ul><li>(sql):
 <pre>
-                 acs_sc_contract__new (contract_name, contract_desc):
-</pre>
+acs_sc_contract__new (contract_name, contract_desc):</pre>
 </li></ul>
 <p>creates a new contract to serve as a logical container for
 operations. contract_desc is a text description of the
 contract.</p>
 <ul><li>(sql):
 <pre>
-                 acs_sc_operation__new (contract_name, operation_name,
+acs_sc_operation__new (contract_name, operation_name,
                                        operation_desc, operation_iscachable_p,
                                        operation_inputtype, operation_outputtype
-                                      ):
-</pre>
+                                      ):</pre>
 </li></ul>
 <p>creates a new operation as part of a contract.</p>
 <h3>Creating Implementations</h3>
