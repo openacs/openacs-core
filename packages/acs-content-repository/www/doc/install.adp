@@ -29,14 +29,10 @@ v2, available from the Oracle Technology Network:</p>
 <p>To load the XML parser, download and untar the distribution.
 Load the class package <kbd>lib/xmlparserv2.jar</kbd> into Oracle
 from a shell prompt:</p>
-<pre>
-$ loadjava -user user/password xmlparserv2.jar
-</pre>
+<pre>$ loadjava -user user/password xmlparserv2.jar</pre>
 <p>Finally, load the SQLJ files in
 <kbd>packages/acs-content-repository/java</kbd>:</p>
-<pre>
-$ loadjava -user user/password -resolve *.sqlj
-</pre>
+<pre>$ loadjava -user user/password -resolve *.sqlj</pre>
 <p>Installation of the data model and API should now be
 complete.</p>
 <h3>Intermedia</h3>
@@ -53,18 +49,17 @@ can verifying this by checking for entries in the
 index</kbd> statement.</p>
 <p>If you experience errors on a UNIX system, check the
 following:</p>
-<ul>
 <li>The operating system user running the Oracle database must have
 execute permission on the files
-<kbd>$ORACLE_HOME/ctx/lib/*.flt</kbd>.</li><li>The directory <kbd>$ORACLE_HOME/ctx/lib</kbd> must be in the
+<kbd>$ORACLE_HOME/ctx/lib/*.flt</kbd>.
+<ul>
+<li>The directory <kbd>$ORACLE_HOME/ctx/lib</kbd> must be in the
 <kbd>$PATH</kbd> environment variable of the operating system user
 running the Oracle database.</li><li>The directory <kbd>$ORACLE_HOME/ctx/lib</kbd> must be in the
 <kbd>$LD_LIBRARY_PATH</kbd> of the operating system user running
 the Oracle database.</li><li>The <kbd>LD_LIBRARY_PATH</kbd> environment variable must be
 specified in the entry for <kbd>PLSExtProc</kbd> in the
-<kbd>$ORACLE_HOME/network/admin/listener.ora.</kbd> For
-example:</li>
-</ul>
+<kbd>$ORACLE_HOME/network/admin/listener.ora.</kbd> For example:
 <pre>
     (SID_DESC =
       (SID_NAME = PLSExtProc)
@@ -72,14 +67,11 @@ example:</li>
       (ENVS = LD_LIBRARY_PATH=/ora8/m01/app/oracle/product/8.1.6/lib:/usr/lib:/lib:/usr/openwin/lib:/ora8/m01/app/oracle/product/8.1.6/ctx/lib)
       (PROGRAM = extproc)
     )
-</pre>
-<p>If your searches are still failing even after following these
+</pre><p>If your searches are still failing even after following these
 instructions, try a simple <a href="intermedia">test case</a>
 to determine whether the problem has something to do with the
-content repository data model itself.</p>
-<hr>
-<a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<br>
-
-Last revised: $&zwnj;Id: install.html,v 1.1.1.1.30.2 2017/06/20 07:10:17
-gustafn Exp $
+content repository data model itself.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
+Last revised: $&zwnj;Id: install.html,v 1.2 2017/08/07 23:47:47 gustafn
+Exp $</li>
+</ul>
+</li>

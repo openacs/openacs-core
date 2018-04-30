@@ -1,12 +1,12 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {IMS Sync driver design}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {IMS Sync driver design}</property>
 <property name="doc(title)">IMS Sync driver design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="ext-auth-design" leftLabel="Prev"
-		    title="Design"
-		    rightLink="" rightLabel="">
-		<div class="sect1" lang="en">
+			leftLink="ext-auth-design" leftLabel="Prev"
+			title="Design"
+			rightLink="" rightLabel="">
+		    <div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ims-sync-driver-design" id="ims-sync-driver-design"></a>IMS Sync
 driver design</h2></div></div></div><div class="authorblurb">by <a href="mailto:lars\@collaboraid.biz" target="_top">Lars Pind</a> OpenACS docs are written by the named
@@ -190,18 +190,18 @@ this, then, with all users when doing a snapshot update?)</p></li></ol></div>
 <a name="id2452593" id="id2452593"></a>
 Resources</h3></div></div></div><div class="itemizedlist"><ul type="disc">
 <li><p>
-<a href="http://zope.cetis.ac.uk/content/20020524162233/index.html" target="_top">Consolidation before the leap; IMS Enterprise 1.1</a>: This
+<a href="http://www.cetis.ac.uk/content/20020524162233" target="_top">Consolidation before the leap; IMS Enterprise 1.1</a>: This
 article says that IMS Enterprise 1.1 (current version) does not
 address the communication model, which is critically missing for
 real seamless interoperability. IMS Enterprise 2.0 will address
 this, but Blackboard, who&#39;s influential in the IMS committee,
-is adopting OKI&#39;s programming interrfaces for this.</p></li><li><p><a href="http://www.cetis.ac.uk/content/20030717185453" target="_top">IMS and OKI, the wire and the socket</a></p></li>
+is adopting OKI&#39;s programming interrfaces for this.</p></li><li><p><a href="http://zope.cetis.ac.uk/content/20020524162233/index.html" target="_top">IMS and OKI, the wire and the socket</a></p></li>
 </ul></div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="ext-auth-design" leftLabel="Prev" leftTitle="Design"
-		    rightLink="" rightLabel="" rightTitle=""
-		    homeLink="index" homeLabel="Home" 
-		    upLink="ext-auth-design" upLabel="Up"> 
-		
+			leftLink="ext-auth-design" leftLabel="Prev" leftTitle="Design"
+			rightLink="" rightLabel="" rightTitle=""
+			homeLink="index" homeLabel="Home" 
+			upLink="ext-auth-design" upLabel="Up"> 
+		    

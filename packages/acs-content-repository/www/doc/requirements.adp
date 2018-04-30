@@ -398,5 +398,5 @@ other objects.</td>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: requirements.html,v 1.2.22.1 2016/06/22
-07:40:41 gustafn Exp $
+Last Modified: $&zwnj;Id: requirements.html,v 1.3 2017/08/07 23:47:47
+gustafn Exp $

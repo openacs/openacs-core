@@ -39,5 +39,5 @@ repository</a></li>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Revised: $&zwnj;Id: index.html,v 1.2.18.3 2016/06/22 07:40:41
-gustafn Exp $
+Last Revised: $&zwnj;Id: index.html,v 1.3 2017/08/07 23:47:47 gustafn Exp
+$

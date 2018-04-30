@@ -65,5 +65,5 @@ name
 </table>
 </li>
 </ul>
-<p>Last Modified: $&zwnj;Id: content.html,v 1.1.1.1.30.2 2016/06/22
-07:40:41 gustafn Exp $</p>
+<p>Last Modified: $&zwnj;Id: content.html,v 1.2 2017/08/07 23:47:47
+gustafn Exp $</p>

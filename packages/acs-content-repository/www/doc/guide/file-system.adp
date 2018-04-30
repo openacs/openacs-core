@@ -94,8 +94,7 @@ begin
   );
   -- Store v_my_content_root in a safe place
 end;
-/ 
-</pre>
+/ </pre>
 <p>The important point is that you have to pass in <kbd>0</kbd> for
 the <kbd>parent_id</kbd>. This <kbd>parent_id</kbd> is special in
 that it indicates folders with no parent.</p>
@@ -117,5 +116,5 @@ resolved.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: file-system.html,v 1.1.1.1.30.2 2017/04/21
-14:53:08 gustafn Exp $
+Last Modified: $&zwnj;Id: file-system.html,v 1.2 2017/08/07 23:47:47
+gustafn Exp $

@@ -3,10 +3,10 @@
 <property name="doc(title)">Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="usage" leftLabel="Prev"
-		    title=""
-		    rightLink="" rightLabel="">
-		<div class="sect1" lang="en">
+			leftLink="usage" leftLabel="Prev"
+			title=""
+			rightLink="" rightLabel="">
+		    <div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="requirements" id="requirements"></a>Requirements</h2></div></div></div><div class="authorblurb">
 <p>by <a href="mailto:joel\@aufrecht.org" target="_top">Joel
@@ -105,8 +105,7 @@ instead of database objects to track its tests, it is incompatible
 with the standard category package. It uses an internal,
 single-dimension category field. Should this eventually get
 extended, a more complete list of categories to implement could
-be:</p><pre class="programlisting">
-Testing Mode
+be:</p><pre class="programlisting">Testing Mode
   Regression
   Smoke
   Stress
@@ -158,8 +157,8 @@ started</a>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="usage" leftLabel="Prev" leftTitle="Usage"
-		    rightLink="" rightLabel="" rightTitle=""
-		    homeLink="index" homeLabel="Home" 
-		    upLink="index" upLabel="Up"> 
-		
+			leftLink="usage" leftLabel="Prev" leftTitle="Usage"
+			rightLink="" rightLabel="" rightTitle=""
+			homeLink="index" homeLabel="Home" 
+			upLink="index" upLabel="Up"> 
+		    

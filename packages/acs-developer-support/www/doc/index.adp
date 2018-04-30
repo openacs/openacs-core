@@ -50,9 +50,7 @@ Tired of using <tt>ns_log</tt>
 grokking the error log to see what&#39;s wrong with your page? Use
 the <tt>ds_comment</tt>
  routine instead:
-<blockquote><pre>
-ds_comment "Foo is $foo"
-</pre></blockquote>
+<blockquote><pre>ds_comment "Foo is $foo"</pre></blockquote>
 
 Your comment will show up at the bottom of the page, beneath the
 <em>Developer Information</em>
@@ -78,5 +76,5 @@ Developer Support.</p>
 <p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 <hr>
 <address><a href="mailto:jsalz\@mit.edu">jsalz\@mit.edu</a></address>
-<p>Last Modified: $&zwnj;Id: index.html,v 1.1.1.1.28.2 2015/08/25
-17:58:45 gustafn Exp $</p>
+<p>Last Modified: $&zwnj;Id: index.html,v 1.2 2017/08/07 23:47:56 gustafn
+Exp $</p>

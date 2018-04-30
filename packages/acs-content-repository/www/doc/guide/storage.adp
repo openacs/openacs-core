@@ -18,8 +18,7 @@ manage.</p>
 <p>Most types of content require additional attributes. For a
 photo, we probably also want to store the pixel width and height at
 the very least:</p>
-<pre>
-  create table images (
+<pre>  create table images (
     image_id       integer
                    constraint images_image_id_fk
                    references cr_revisions
@@ -27,12 +26,10 @@ the very least:</p>
                    primary key,
     width          integer,
     height         integer
-  );
-</pre>
+  );</pre>
 <p>Content types are nothing more than standard ACS Objects that
 inherit from <kbd>content_revision</kbd>:</p>
-<pre>
-begin
+<pre>begin
 
  acs_object_type.create_type (
    supertype =&gt; 'content_revision',
@@ -62,8 +59,7 @@ begin
 
 end;
 /
-show errors
-</pre>
+show errors</pre>
 <p>Note that content types always extend
 <kbd>content_revision</kbd>, rather than <kbd>content_item</kbd>.
 This is because we want to store multiple revisions of both the
@@ -79,8 +75,7 @@ single portrait.</p>
 <p>In the simple case where each user is allowed a single portrait,
 we can simply define a relationship between user and image as ACS
 Objects:</p>
-<pre>
-  acs_rel_type.create_role('user');
+<pre>  acs_rel_type.create_role('user');
   acs_rel_type.create_role('portrait');
 
   acs_rel_type.create_type( rel_type =&gt; 'user_portrait_rel',
@@ -93,8 +88,7 @@ Objects:</p>
      object_type_two =&gt; 'content_item',
      min_n_rels_two =&gt; 0,
      max_n_rels_two =&gt; 1
-  );
-</pre>
+  );</pre>
 <p>Note that the <kbd>user</kbd> object is related to a
 <kbd>content_item</kbd> object rather than an <kbd>image</kbd>
 object directly. Each <kbd>image</kbd> object represents only a
@@ -104,21 +98,17 @@ context of an item.</p>
 <p>Now we have defined both a content type and relationship type,
 we can start storing portraits. The DML for processing a new
 portrait upload form would look like this:</p>
-<pre>
-  begin transaction
+<pre>  begin transaction
     :item_id := content_item.new(:name, :item_id, sysdate, NULL,                           '[ns_conn peeraddr]'); 
     # maybe have content_revision return the LOB locator so that it can
     # be used directly with blob_dml_file
     :revision_id := content_revision.new(:title, :description, $publish_date,                               :mime_type, NULL, :text, 'content_revision', 
                                :item_id, :revision_id);
     blob_dml_file update cr_revisions set content = empty_blob() ...
-    :rel_id := acs_rel.new(...)
-</pre>
+    :rel_id := acs_rel.new(...)</pre>
 <h3>Retrieve Objects</h3>
-<pre>
-  ns_ora write_blob ...
-</pre>
+<pre>  ns_ora write_blob ...</pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: storage.html,v 1.1.1.1.30.1 2016/06/22
-07:40:41 gustafn Exp $</p>
+<p>Last Modified: $&zwnj;Id: storage.html,v 1.2 2017/08/07 23:47:47
+gustafn Exp $</p>

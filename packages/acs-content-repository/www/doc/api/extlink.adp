@@ -11,18 +11,17 @@ content_extlink</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<h3><a name="overview" id="overview">Overview</a></h3>
+<a name="overview" id="overview"><h3>Overview</h3></a>
 <p>External links are references to content pages on other web
 sites. They provide the basis for maintaining a hierarchy of
 "bookmarks" that may be managed in a manner analogous to
 other content items. In particular, external links may be tagged
 with keywords and related to the site&#39;s own content items.</p>
 <p> </p>
-<h3><a name="related" id="related">Related Objects</a></h3>
-
-See also: {content_item}
+<a name="related" id="related"><h3>Related Objects</h3></a>
+ See also: {content_item}
 <p> </p>
-<h3><a name="api" id="api">API</a></h3>
+<a name="api" id="api"><h3>API</h3></a>
 <ul>
 <li>
 <font size="+1">Function:</font> content_extlink.is_extlink
@@ -115,5 +114,5 @@ procedure delete (
 </li>
 </ul>
 
-Last Modified: $&zwnj;Id: extlink.html,v 1.1.1.1.30.2 2016/06/22 07:40:41
-gustafn Exp $
+Last Modified: $&zwnj;Id: extlink.html,v 1.2 2017/08/07 23:47:47 gustafn
+Exp $

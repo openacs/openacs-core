@@ -1,12 +1,12 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Configure Batch Synchronization}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Configure Batch Synchronization}</property>
 <property name="doc(title)">Configure Batch Synchronization</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="ext-auth-ldap-install" leftLabel="Prev"
-		    title="Installation"
-		    rightLink="ext-auth-design" rightLabel="Next">
-		<div class="sect1" lang="en">
+			leftLink="ext-auth-ldap-install" leftLabel="Prev"
+			title="Installation"
+			rightLink="ext-auth-design" rightLabel="Next">
+		    <div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="configure-batch-sync" id="configure-batch-sync"></a>Configure
 Batch Synchronization</h2></div></div></div><div class="orderedlist"><ol type="1">
@@ -59,12 +59,12 @@ it&#39;s not a delta but a list of valid records. See the larger
 example in the design document for more details.</p><p>(More information: <a href="ims-sync-driver-design" title="IMS Sync driver design">the section called “IMS Sync driver
 design”</a>, <a href="http://www.imsproject.org/enterprise/" target="_top">The IMS 1.1 spec</a>)</p>
 </li>
-</ol></div><div class="cvstag">($&zwnj;Id: configure-batch-sync.html,v 1.2
-2004/02/19 14:59:42 joela Exp $)</div>
+</ol></div><div class="cvstag">($&zwnj;Id: configure-batch-sync.html,v 1.3
+2017/08/07 23:47:46 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="ext-auth-ldap-install" leftLabel="Prev" leftTitle="Installing LDAP support"
-		    rightLink="ext-auth-design" rightLabel="Next" rightTitle="Design"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="ext-auth-install" upLabel="Up"> 
-		
+			leftLink="ext-auth-ldap-install" leftLabel="Prev" leftTitle="Installing LDAP support"
+			rightLink="ext-auth-design" rightLabel="Next" rightTitle="Design"
+			homeLink="index" homeLabel="Home" 
+			upLink="ext-auth-install" upLabel="Up"> 
+		    

@@ -1,12 +1,12 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Using LDAP/Active Directory with OpenACS}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Using LDAP/Active Directory with OpenACS}</property>
 <property name="doc(title)">Using LDAP/Active Directory with OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="ext-auth-pam-install" leftLabel="Prev"
-		    title="Installation"
-		    rightLink="configure-batch-sync" rightLabel="Next">
-		<div class="sect1" lang="en">
+			leftLink="ext-auth-pam-install" leftLabel="Prev"
+			title="Installation"
+			rightLink="configure-batch-sync" rightLabel="Next">
+		    <div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ext-auth-ldap-install" id="ext-auth-ldap-install"></a>Using
 LDAP/Active Directory with OpenACS</h2></div></div></div><div class="authorblurb">by <a href="http://openacs.org/shared/community-member?user_id=8551" target="_top">John Sequeira</a>, <a href="http://openacs.org/shared/community-member?user_id=8263" target="_top">Michael Steigman</a>, and <a href="http://openacs.org/shared/community-member?user_id=12805" target="_top">Carl Blesius</a>. OpenACS docs are written by the named
@@ -132,7 +132,7 @@ if {[ns_ldap bind $lh $fdn $password]} {
 </ol></div><p>
 <strong>Troubleshooting. </strong>If you&#39;re having
 trouble figuring out some the values for the ldapm, see this useful
-page on <a href="http://bugzilla.glob.com.au/activedirectory/" target="_top">setting up Active Directory integration with
+page on <a href="https://www.rhyous.com/2009/11/10/how-to-configure-bugzilla-to-authenticate-to-active-directory/" target="_top">setting up Active Directory integration with
 Bugzilla</a>. It explains how distinguished names are defined in
 Active Directory, and how to test that you have the correct values
 for connectivity and base DN using the OpenLDAP command-line
@@ -145,9 +145,9 @@ help and the <a href="http://www.lcs.mgh.harvard.edu/" target="_top">Laboratory 
 Hospital</a> for underwriting this work.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="ext-auth-pam-install" leftLabel="Prev" leftTitle="Using Pluggable Authentication Modules
+			leftLink="ext-auth-pam-install" leftLabel="Prev" leftTitle="Using Pluggable Authentication Modules
 (PAM) with OpenACS"
-		    rightLink="configure-batch-sync" rightLabel="Next" rightTitle="Configure Batch Synchronization"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="ext-auth-install" upLabel="Up"> 
-		
+			rightLink="configure-batch-sync" rightLabel="Next" rightTitle="Configure Batch Synchronization"
+			homeLink="index" homeLabel="Home" 
+			upLink="ext-auth-install" upLabel="Up"> 
+		    

@@ -84,5 +84,5 @@ development tasks using the content repository.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: design.html,v 1.1.1.1.30.1 2016/06/22 07:40:41
-gustafn Exp $
+Last Modified: $&zwnj;Id: design.html,v 1.2 2017/08/07 23:47:47 gustafn
+Exp $

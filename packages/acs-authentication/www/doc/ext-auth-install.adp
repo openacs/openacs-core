@@ -1,12 +1,12 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Installation}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Installation}</property>
 <property name="doc(title)">Installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="index" leftLabel="Prev"
-		    title=""
-		    rightLink="ext-auth-pam-install" rightLabel="Next">
-		<div class="article" lang="en">
+			leftLink="index" leftLabel="Prev"
+			title=""
+			rightLink="ext-auth-pam-install" rightLabel="Next">
+		    <div class="article" lang="en">
 <div class="titlepage">
 <div><div><h2 class="title">
 <a name="ext-auth-install" id="ext-auth-install"></a>Installation</h2></div></div><hr>
@@ -24,9 +24,9 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="index" leftLabel="Prev" leftTitle="External Authentication"
-		    rightLink="ext-auth-pam-install" rightLabel="Next" rightTitle="Using Pluggable Authentication
+			leftLink="index" leftLabel="Prev" leftTitle="External Authentication"
+			rightLink="ext-auth-pam-install" rightLabel="Next" rightTitle="Using Pluggable Authentication
 Modules (PAM) with OpenACS"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="index" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="index" upLabel="Up"> 
+		    

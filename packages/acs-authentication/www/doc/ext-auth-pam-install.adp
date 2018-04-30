@@ -1,14 +1,14 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Using Pluggable Authentication Modules (PAM) with
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Using Pluggable Authentication Modules (PAM) with
 OpenACS}</property>
 <property name="doc(title)">Using Pluggable Authentication Modules (PAM) with
 OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="ext-auth-install" leftLabel="Prev"
-		    title="Installation"
-		    rightLink="ext-auth-ldap-install" rightLabel="Next">
-		<div class="sect1" lang="en">
+			leftLink="ext-auth-install" leftLabel="Prev"
+			title="Installation"
+			rightLink="ext-auth-ldap-install" rightLabel="Next">
+		    <div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ext-auth-pam-install" id="ext-auth-pam-install"></a>Using
 Pluggable Authentication Modules (PAM) with OpenACS</h2></div></div></div><p>OpenACS supports PAM authetication via the ns_pam module in
@@ -18,7 +18,7 @@ AOLserver.</p><div class="orderedlist"><ol type="1">
 <strong>Add PAM support to AOLserver. </strong>OpenACS
 supports PAM support via the PAM AOLserver module. PAM is system of
 modular support, and can provide local (unix password), RADIUS,
-LDAP (<a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more information</a>), and other forms of
+LDAP (<a href="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more information</a>), and other forms of
 authentication. Note that due to security issues, the AOLserver PAM
 module cannot be used for local password authentication.</p><div class="orderedlist"><ol type="a">
 <li>
@@ -26,8 +26,7 @@ module cannot be used for local password authentication.</p><div class="orderedl
 <a name="install-nspam" id="install-nspam"></a><strong>Compile
 and install ns_pam. </strong>Download the <a href="/doc/nspam-download" target="_top">tarball</a> to <code class="computeroutput">/tmp</code>.</p><p>Debian users: first do <strong class="userinput"><code>apt-get
 install libpam-dev</code></strong>
-</p><pre class="screen">
-[root\@yourserver root]# <strong class="userinput"><code>cd /usr/local/src/aolserver</code></strong>
+</p><pre class="screen">[root\@yourserver root]# <strong class="userinput"><code>cd /usr/local/src/aolserver</code></strong>
 [root\@yourserver aolserver]# <strong class="userinput"><code>tar xzf /tmp/ns_pam-0.1.tar.gz</code></strong>
 [root\@yourserver aolserver]# <strong class="userinput"><code>cd nspam</code></strong>
 [root\@yourserver nspam]# <strong class="userinput"><code>make</code></strong>
@@ -63,8 +62,7 @@ perform new types of authentication.</p><div class="itemizedlist"><ul type="disc
 <p><strong>RADIUS in PAM. </strong></p><div class="orderedlist"><ol type="i">
 <li>
 <p>Untar the <a href="/doc/individual-programs" target="_top">pam_radius tarball</a> and compile and install. (<a href="http://www.freeradius.org/pam_radius_auth/" target="_top">more
-information</a>)</p><pre class="screen">
-[root\@yourserver root]# <strong class="userinput"><code>cd /usr/local/src/</code></strong>
+information</a>)</p><pre class="screen">[root\@yourserver root]# <strong class="userinput"><code>cd /usr/local/src/</code></strong>
 [root\@yourserver src]# <strong class="userinput"><code>tar xf /tmp/pam_radius-1.3.16.tar</code></strong>
 [root\@yourserver src]# <strong class="userinput"><code>cd pam_radius-1.3.16</code></strong>
 [root\@yourserver pam_radius-1.3.16]# <strong class="userinput"><code>make</code></strong>
@@ -93,23 +91,19 @@ auth       sufficient   /lib/security/pam_radius_auth.so
 </li><li>
 <p>Modify the AOLserver configuration file to use this PAM domain.
 Edit the line</p><pre class="programlisting">
-ns_param   PamDomain             "<span class="replaceable"><span class="replaceable">service0</span></span>"
-</pre><p>So that the value of the parameter matches the name (just the
-file name, not the fully pathed name) of the domain file in</p><pre class="programlisting">
-/etc/pam.d/
-</pre>
+ns_param   PamDomain             "<span class="replaceable"><span class="replaceable">service0</span></span>"</pre><p>So that the value of the parameter matches the name (just the
+file name, not the fully pathed name) of the domain file in</p><pre class="programlisting">/etc/pam.d/</pre>
 </li>
 </ol></div>
 </li><li><p>
-<strong>LDAP in PAM. </strong><a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html#AEN110" target="_top">more information</a>
+<strong>LDAP in PAM. </strong><a href="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html#AEN110" target="_top">more information</a>
 </p></li>
 </ul></div>
 </li><li>
 <p><strong>Modify the AOLserver configuration file to support
 ns_pam. </strong></p><p>In <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</code>, enable
 the nspam module by uncommenting this line:</p><pre class="programlisting">
-ns_param   nspam           ${bindir}/nspam.so
-</pre>
+ns_param   nspam           ${bindir}/nspam.so</pre>
 </li>
 </ol></div>
 </li><li><p>
@@ -132,9 +126,9 @@ Synchronization</a></p></li>
 </ol></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="ext-auth-install" leftLabel="Prev" leftTitle="Installation"
-		    rightLink="ext-auth-ldap-install" rightLabel="Next" rightTitle="Using LDAP/Active Directory with
+			leftLink="ext-auth-install" leftLabel="Prev" leftTitle="Installation"
+			rightLink="ext-auth-ldap-install" rightLabel="Next" rightTitle="Using LDAP/Active Directory with
 OpenACS"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="ext-auth-install" upLabel="Up"> 
-		
+			homeLink="index" homeLabel="Home" 
+			upLink="ext-auth-install" upLabel="Up"> 
+		    

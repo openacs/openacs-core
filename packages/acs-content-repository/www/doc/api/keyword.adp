@@ -11,16 +11,15 @@ content_keyword</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<h3><a name="overview">Overview</a></h3>
+<a name="overview" id="overview"><h3>Overview</h3></a>
 <p>Keyword cassify a content_item. For example: If you have some
 press releases about dogs. You might want assigning the Keyword dog
 to every single content_item.</p>
 <p> </p>
-<h3><a name="related">Related Objects</a></h3>
-
-See also: content_item
+<a name="related" id="related"><h3>Related Objects</h3></a>
+ See also: content_item
 <p> </p>
-<h3><a name="api">API</a></h3>
+<a name="api" id="api"><h3>API</h3></a>
 <ul>
 <li>
 <font size="+1">Function:</font>
@@ -314,5 +313,5 @@ content_keyword.set_description</td>
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: keyword.html,v 1.1.1.1.30.3 2017/04/21 14:53:08
-gustafn Exp $
+Last Modified: $&zwnj;Id: keyword.html,v 1.2 2017/08/07 23:47:47 gustafn
+Exp $

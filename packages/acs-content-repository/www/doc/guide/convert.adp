@@ -52,5 +52,5 @@ automatically deleted from the <kbd>cr_doc_filter</kbd> table.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: convert.html,v 1.1.1.1.30.1 2016/06/22 07:40:41
-gustafn Exp $
+Last Modified: $&zwnj;Id: convert.html,v 1.2 2017/08/07 23:47:47 gustafn
+Exp $

@@ -1,12 +1,12 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Design}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Design}</property>
 <property name="doc(title)">Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="configure-batch-sync" leftLabel="Prev"
-		    title=""
-		    rightLink="ims-sync-driver-design" rightLabel="Next">
-		<div class="article" lang="en">
+			leftLink="configure-batch-sync" leftLabel="Prev"
+			title=""
+			rightLink="ims-sync-driver-design" rightLabel="Next">
+		    <div class="article" lang="en">
 <div class="titlepage">
 <div><div><h2 class="title">
 <a name="ext-auth-design" id="ext-auth-design"></a>Design</h2></div></div><hr>
@@ -18,8 +18,8 @@ named authors, and may be edited by OpenACS documentation
 staff.</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="configure-batch-sync" leftLabel="Prev" leftTitle="Configure Batch Synchronization"
-		    rightLink="ims-sync-driver-design" rightLabel="Next" rightTitle="IMS Sync driver design"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="index" upLabel="Up"> 
-		
+			leftLink="configure-batch-sync" leftLabel="Prev" leftTitle="Configure Batch Synchronization"
+			rightLink="ims-sync-driver-design" rightLabel="Next" rightTitle="IMS Sync driver design"
+			homeLink="index" homeLabel="Home" 
+			upLink="index" upLabel="Up"> 
+		    

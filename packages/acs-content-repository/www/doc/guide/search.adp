@@ -113,5 +113,5 @@ method, which a dispatch method can call by reflection.</li>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: search.html,v 1.1.1.1.30.2 2017/04/21 14:53:08
-gustafn Exp $
+Last Modified: $&zwnj;Id: search.html,v 1.2 2017/08/07 23:47:47 gustafn
+Exp $

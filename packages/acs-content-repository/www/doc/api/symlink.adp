@@ -11,15 +11,14 @@ content_symlink</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<h3><a name="overview">Overview</a></h3>
+<a name="overview" id="overview"><h3>Overview</h3></a>
 <p>Symlinks are pointers to items within the content repository.
 They are simply used to create links between content items.</p>
 <p> </p>
-<h3><a name="related">Related Objects</a></h3>
-
-See also: content_item, content_folder
+<a name="related" id="related"><h3>Related Objects</h3></a>
+ See also: content_item, content_folder
 <p> </p>
-<h3><a name="api">API</a></h3>
+<a name="api" id="api"><h3>API</h3></a>
 <ul>
 <li>
 <font size="+1">Function:</font> content_symlink.is_symlink
@@ -171,5 +170,5 @@ procedure delete (
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: symlink.html,v 1.2.2.2 2016/06/22 07:40:41
-gustafn Exp $
+Last Modified: $&zwnj;Id: symlink.html,v 1.3 2017/08/07 23:47:47 gustafn
+Exp $

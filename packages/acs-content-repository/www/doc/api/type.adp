@@ -11,16 +11,15 @@ content_type</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<h3><a name="overview">Overview</a></h3>
+<a name="overview" id="overview"><h3>Overview</h3></a>
 <p>This package is used to manipulate content types and attributes
 Content types represent the different kind of content displayed on
 a website. All content items should subclass a content type.</p>
 <p> </p>
-<h3><a name="related">Related Objects</a></h3>
-
-See also: {Content Item }
+<a name="related" id="related"><h3>Related Objects</h3></a>
+ See also: {Content Item }
 <p> </p>
-<h3><a name="api">API</a></h3>
+<a name="api" id="api"><h3>API</h3></a>
 <ul>
 <li>
 <font size="+1">Function:</font> content_type.create_attribute
@@ -171,8 +170,8 @@ cm_form_widget.unregister_attribute_widget</td>
 type, including the inherited attributes. The view is named
 "</p>
 X" Called by create_attribute and create_type.
-<table name="" for="" content_type="">
-<tr><td></td></tr><tr>
+<table name="" for="" content_type=""></table><table cellpadding="3" cellspacing="0" border="0">
+<tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">content_type:</th><td>  </td><td>The type for which the view is to be created.</td>
@@ -440,5 +439,5 @@ content_type.get_template</td>
 </li>
 </ul>
 
-Last Modified: $&zwnj;Id: type.html,v 1.1.1.1.30.2 2016/06/22 07:40:41
-gustafn Exp $
+Last Modified: $&zwnj;Id: type.html,v 1.3 2018/03/27 11:17:59 hectorr Exp
+$

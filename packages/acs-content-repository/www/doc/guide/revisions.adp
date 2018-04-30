@@ -25,14 +25,12 @@ type is <strong>Basic Item</strong>.</li>
 <kbd>content_revision.new</kbd> function. The only parameters
 required to create the revision are a title, a content item ID, and
 some text:</p>
-<pre>
-revision_id := content_revision.new( 
+<pre>revision_id := content_revision.new( 
     title   =&gt; 'A Revision',
     item_id =&gt; :item_id,
     text    =&gt; 'Once upon a time Goldilocks crossed the street.
                 Here comes a car...uh oh!  The End'
-);
-</pre>
+);</pre>
 <p>The <kbd>item_id</kbd> parameter is ID of the content item with
 which the revision is associated.</p>
 <p>The <kbd>content_item.new</kbd> function accepts a number of
@@ -43,8 +41,7 @@ other optional parameters: <kbd>description</kbd>,
 Instead of the <kbd>text</kbd> parameter, this function can be
 called with a <kbd>data</kbd> parameter, in which <kbd>data</kbd>
 is a blob:</p>
-<pre>
-revision_id := content_revision.new(
+<pre>revision_id := content_revision.new(
     title         =&gt; 'A Revision',
     description   =&gt; 'A Description of a revision',
     mime_type     =&gt; 'text/html',
@@ -54,8 +51,7 @@ revision_id := content_revision.new(
     creation_date =&gt; sysdate,
     creation_user =&gt; :user_id,
     creation_ip   =&gt; :ip_address
-);
-</pre>
+);</pre>
 <h3>Insert additional attributes</h3>
 <p>Given that there is no way (AFAIK) to pass variable parameters
 to a PL/SQL function, there is no way to make
@@ -82,43 +78,35 @@ automatically generated and executed with each call to
 <kbd>content_type.create_attribute</kbd>. The trigger makes it
 possible to create complete revisions with a single insert
 statement:</p>
-<pre>
-insert into cr_revisionsx (
+<pre>insert into cr_revisionsx (
   item_id, revision_id, title
 ) values (
   18, 19, 'All About Revisions'
-);
-</pre>
+);</pre>
 <p>Because a special trigger is generated for each content type
 that includes insert statements for all inherited tables, revisions
 with extended attributes may be created in the same fashion:</p>
-<pre>
-insert into cr_imagesx (
+<pre>insert into cr_imagesx (
   item_id, revision_id, title, height, width
 ) values (
   18, 19, 'A Nice Drawing', 300, 400
-);
-</pre>
+);</pre>
 <h3>Inserting content via file or text upload</h3>
 <h3>Selecting a live revision</h3>
 <p>The live revision of a content item can be obtained with the
 <kbd>content_item.get_live_revision</kbd> function:</p>
-<pre>
-live_revision_id := content_item.get_live_revision(
+<pre>live_revision_id := content_item.get_live_revision(
     item_id =&gt; :item_id
-);
-</pre>
+);</pre>
 <p>The <kbd>item_id</kbd> identifies the content item with which
 the revision is associated.</p>
 <p>Likewise, the most recent revision of a content item can be
 obtained with the <kbd>content_item.get_latest_revision</kbd>
 function:</p>
-<pre>
-latest_revision_id := content_item.get_latest_revision(
+<pre>latest_revision_id := content_item.get_latest_revision(
     item_id =&gt; :item_id
-);
-</pre>
+);</pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: revisions.html,v 1.1.1.1.30.1 2016/06/22
-07:40:41 gustafn Exp $</p>
+<p>Last Modified: $&zwnj;Id: revisions.html,v 1.2 2017/08/07 23:47:47
+gustafn Exp $</p>

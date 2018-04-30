@@ -37,8 +37,7 @@ Subject Keywords (see <kbd>content_keyword.sql</kbd>) The
    =&gt; 'content_keyword', pretty_name =&gt; 'Content Keyword',
    pretty_plural =&gt; 'Content Keywords', table_name =&gt; 'cr_keywords',
    id_column =&gt; 'keyword_id', name_method =&gt; 'acs_object.default_name'
-   ); 
-</pre>
+   ); </pre>
 
 In addition, the <kbd>cr_keywords</kbd>
  table (see

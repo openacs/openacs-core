@@ -11,7 +11,7 @@ content_folder</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<h3><a name="overview">Overview</a></h3>
+<a name="overview" id="overview"><h3>Overview</h3></a>
 <p>Content folders contain related content items and allow content
 managers to group content as they see fit. Within a content folder,
 content items must have unique names since this is where they will
@@ -21,11 +21,10 @@ such as: "terminator," "terminator2" (served
 from "/movies/terminator, "/movies/terminator2"
 respectively).</p>
 <p> </p>
-<h3><a name="related">Related Objects</a></h3>
-
-See also: Content Item
+<a name="related" id="related"><h3>Related Objects</h3></a>
+ See also: Content Item
 <p> </p>
-<h3><a name="api">API</a></h3>
+<a name="api" id="api"><h3>API</h3></a>
 <ul>
 <li>
 <font size="+1">Function:</font> content_folder.get_index_page
@@ -366,5 +365,5 @@ content_folder.is_registered</td>
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: folder.html,v 1.2.18.2 2016/06/22 07:40:41
-gustafn Exp $
+Last Modified: $&zwnj;Id: folder.html,v 1.3 2017/08/07 23:47:47 gustafn
+Exp $

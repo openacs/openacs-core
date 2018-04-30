@@ -48,8 +48,7 @@ descriptions of what needs to be accomplished, and so on:</p>
           Title
           Description
           Task Number
-        
-</pre></blockquote>
+        </pre></blockquote>
 <h3>Overview</h3>
 <p>First of all, let&#39;s get some terminology out of the way.
 Columns of a table are referred to as <em>attributes</em> in
@@ -71,8 +70,7 @@ don&#39;t want that changing every time someone edits it.</p>
           Title - want versions
           Description - want versions
           Task Number - do NOT want versions
-        
-</pre></blockquote>
+        </pre></blockquote>
 <h3>Define tables</h3>
 <p>You will have two tables: one with versioned attributes, and one
 without versioned attributes.</p>
@@ -99,8 +97,7 @@ This is actually very easy:
             description
             varchar(4000)
             );
-          
-</pre></blockquote>
+          </pre></blockquote>
 <p>Unversioned portion:</p>
 <blockquote><pre>
             create table pm_tasks (
@@ -114,8 +111,7 @@ This is actually very easy:
             task_number
             integer
             )
-          
-</pre></blockquote>
+          </pre></blockquote>
 <p>One thing you have to be careful of when creating these tables
 is that there are no columns that have the same names as any of the
 columns in the <code>cr_items</code> and <code>cr_revisions</code>
@@ -153,8 +149,7 @@ them, such as when they are due, and what needs to be done.</p>
           'task_id', -- id_column
           'content_revision.revision_name'
           );
-        
-</pre></blockquote>
+        </pre></blockquote>
 <p>You then need to add in all the attributes, so that the content
 repository can do some magic things behind the scenes. The content
 repository doesn&#39;t know about what&#39;s inside of the
@@ -195,8 +190,7 @@ teach it:</p>
           null, -- default value
           'numeric' -- column_spec
           );
-        
-</pre></blockquote>
+        </pre></blockquote>
 <p>
 <strong>Side effect</strong>: once you&#39;ve created the
 content type, the content repository creates a view for you called
@@ -291,8 +285,7 @@ select content_type__create_attribute(
         null,
         null,
         'integer constraint pm_project_comp_fk references organizations'
-);
-</pre></blockquote>
+);</pre></blockquote>
 
 I have no idea of whether or not that is supposed to be legal, but
 I believe it works. Jun was the one who originally talked about

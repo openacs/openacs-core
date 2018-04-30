@@ -270,12 +270,12 @@ author the HTML template files will still find it easier to use
 legacy tools that author in their "native" character
 sets, such as ShiftJIS in Japan, or BIG5 in China.</p>
 <p>So we make the convention that the template file is authored in
-its <em>effective locale</em>'s character set. For
-multilingual templates, we will load the template in the site
-default character set as specified by the AOLserver
-<kbd>OutputCharset</kbd> initializatoin parameter. For now, we will
-say that authoring generic multilingual adp files can and should be
-done in ASCII. Eventually we can switch to using UTF8.</p>
+its <em>effective locale</em>'s character set. For multilingual
+templates, we will load the template in the site default character
+set as specified by the AOLserver <kbd>OutputCharset</kbd>
+initializatoin parameter. For now, we will say that authoring
+generic multilingual adp files can and should be done in ASCII.
+Eventually we can switch to using UTF8.</p>
 <p>A character set corresponding to a locale can be found using the
 <kbd>[<strong>ad_locale charset</strong><em>$locale</em>]</kbd>
 command. The templating system should call this right after it
@@ -513,22 +513,19 @@ Example 1: Display the text string <em>Hello</em> on an ADP page
 (i.e. do nothing special):
 <pre>
     &lt;trn&gt;Hello&lt;/trn&gt;
-    
-</pre>
+    </pre>
 Example 2: Assign the key key <em>hello</em> to the text string
 <em>Hello</em> and display the translated string in the user&#39;s
 preferred language:
 <pre>
     &lt;trn key="hello"&gt;Hello&lt;/trn&gt;
-    
-</pre>
+    </pre>
 Example 3: Specify that <em>Bonjour</em> needs to be registered as
 the French translation for the key <em>hello</em> (in addition to
 displaying the translation in the user&#39;s preferred language):
 <pre>
     &lt;trn key="hello" lang="fr"&gt;Bonjour&lt;/trn&gt;
-    
-</pre>
+    </pre>
 Example 4: Register the string and display it in the preferred
 language of the current user. Note that the possible values for the
 <code>type</code> parameter are determined by what has been
@@ -539,12 +536,10 @@ displaying strings in the language of the subsite that owns the
 current web page.
 <pre>
     &lt;trn key="hello" type="user"&gt;Hello&lt;/trn&gt;
-    
-</pre><p>Example 5: Translates the string once at template compile time,
+    </pre><p>Example 5: Translates the string once at template compile time,
 using the effective local of the page.</p><pre>
     &lt;trn key="hello" static&gt;Hello&lt;/trn&gt;
-    
-</pre>
+    </pre>
 </blockquote>
 <h3>VII. Data Model Discussion</h3>
 <h4>Internationalizing the Data Models</h4>

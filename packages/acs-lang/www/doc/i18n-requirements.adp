@@ -119,10 +119,10 @@ presentation.</li>
 documentation for this software is linked off of</em></li><li><em>Design document</em></li><li><em>Developer&#39;s guide</em></li><li><em>User&#39;s guide</em></li><li>
 <em>Other-cool-system-related-to-this-one document</em><br><a href="http://www.li18nux.net/">LI18NUX 2000 Globalization
 Specification: http://www.li18nux.net/</a><p><a href="">Mozilla i18N Guidelines:
-http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</a></p><p><a href="https://en.wikipedia.org/wiki/ISO_639">ISO
-639:1988 Code for the representation of names of languages</a></p><p><a href="https://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1:1997 Codes
-for the representation of names of countries and their subdivisions
-Part 1: Country codes</a></p><p><a href="">IANA Registry of Character Sets</a></p>
+http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</a></p><p><a href="https://en.wikipedia.org/wiki/ISO_639">ISO 639:1988
+Code for the representation of names of languages</a></p><p><a href="https://en.wikipedia.org/wiki/ISO_3166-1">ISO
+3166-1:1997 Codes for the representation of names of countries and
+their subdivisions Part 1: Country codes</a></p><p><a href="">IANA Registry of Character Sets</a></p>
 </li><li><em>Test plan</em></li><li><em>Competitive system(s)</em></li>
 </ul>
 <h3>VI Requirements</h3>
