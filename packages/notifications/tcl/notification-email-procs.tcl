@@ -44,7 +44,7 @@ namespace eval notification::email {
     }
 
     ad_proc -public manage_notifications_url {} {
-        Build a url to the "manage notifications" script.
+        Build a URL to the "manage notifications" script.
     } {
         return "[ad_url][apm_package_url_from_key [notification::package_key]]manage"
     }
@@ -175,7 +175,7 @@ namespace eval notification::email {
         {-message_headers:required}
         {-reason ""}
     } {
-        This sends a bounce message indicating a a failuring in sending
+        This sends a bounce message indicating a failuring in sending
         a message to the system.
 
         @author mkovach@alal.com
