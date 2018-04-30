@@ -465,9 +465,9 @@ BEGIN
   end if;
 
   if substring(p_tree_key, v_parent_pos, 1) = '1' then
-    return bittoint4(substring(p_tree_key, v_parent_pos + 1, 31));
+    return substring(p_tree_key, v_parent_pos + 1, 31)::bit(31)::integer;
   else
-    return bittoint4(substring(p_tree_key, v_parent_pos, 8));
+    return substring(p_tree_key, v_parent_pos, 8)::bit(8)::integer;
   end if;
 
 END;
@@ -555,9 +555,9 @@ BEGIN
   end loop;
 
   if substring(p_tree_key, v_leaf_pos, 1) = '1' then
-    return bittoint4(substring(p_tree_key, v_leaf_pos + 1, 31));
+    return substring(p_tree_key, v_leaf_pos + 1, 31)::bit(31)::integer;
   else
-    return bittoint4(substring(p_tree_key, v_leaf_pos, 8));
+    return substring(p_tree_key, v_leaf_pos, 8)::bit(8)::integer;
   end if;
 
 END;
