@@ -626,7 +626,7 @@ ad_proc -public template::add_header {
 
     if {[info exists headers]} {
       switch -- $direction {
-        outer {set headers [concat [list $values] $headers]}
+        outer {set headers [linsert $headers 0 $values]}
         inner {lappend headers $values}
         default {error "unknown direction $direction"}
       }
@@ -672,7 +672,7 @@ ad_proc -public template::add_footer {
     if {[info exists footers]} {
       switch -- $direction {
         outer {lappend footers $values}
-        inner {set footers [concat [list $values] $footers]}
+        inner {set footers [linsert $footers 0 $values]}
         default {error "unknown direction $direction"}
       }
     } else {
