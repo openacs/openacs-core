@@ -192,7 +192,7 @@ namespace eval doc {
 
     # Get each line that contains "procedure" or "function" in it
     # Pretty risky... The like query should be improved to return 
-    # less false matches
+    # fewer false matches
     db_multirow result get_functions "" {
 
       # Only insert a row into the datasource if it looks like a procedure
