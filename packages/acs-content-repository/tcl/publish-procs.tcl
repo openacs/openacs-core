@@ -132,7 +132,7 @@ ad_proc -private publish::push_id { item_id {revision_id ""}} {
     set pair [list $old_item_id $old_revision_id]
 
     if { ![template::util::is_nil item_id_stack] } {
-      set item_id_stack [concat [list $pair] $item_id_stack]
+      set item_id_stack [linsert $item_id_stack 0 $pair]
     } else {
       # This is the first id pushed - also clear the cache
       set item_id_stack [list $pair]
@@ -629,7 +629,7 @@ ad_proc -private publish::handle_item { item_id args } {
 
   @private handle_item
 
-  Render an item either by looking it up in the the temporary cache,
+  Render an item either by looking it up in the temporary cache,
   or by using the appropriate mime handler. Once the item is rendered, it 
   is stored in the temporary cache under a key which combines the item_id,
   any extra HTML parameters, and a flag which specifies whether the item
@@ -717,8 +717,7 @@ ad_proc -private publish::handle_item { item_id args } {
     }
 
     # Call the appropriate handler function
-    set code [list $item_handler $item_id]
-    lappend code {*}$args
+    set code [list $item_handler $item_id {*}$args]
 
     # Pass the revision_id
     if { ![info exists opts(revision_id)] } {
