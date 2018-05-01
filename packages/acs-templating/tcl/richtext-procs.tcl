@@ -353,7 +353,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     type of the field. E.g. a value of %text/% allows any kind of text
     files to be selected, while %pdf% could be used for pdf-files. If
     nothing is specified, all file-types are presented.
-    <li> <em>javascript</em>: provide javascript code to configure
+    <li> <em>javascript</em>: provide JavaScript code to configure
     the xinha widget and its plugins. The configure object is called <code>xinha_config</code>.
     </ul>
 
@@ -526,7 +526,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
             #
             # The following trick with document.write is for providing
-            # reasonable behavior when javascript is turned completely
+            # reasonable behavior when JavaScript is turned completely
             # off.
             #
             append output \

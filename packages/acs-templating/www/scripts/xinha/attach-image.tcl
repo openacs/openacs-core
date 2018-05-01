@@ -271,7 +271,7 @@ template::head::add_javascript \
 	  var f_url = document.getElementById('f_url');
 	  var url = f_url.value;
 	  if (!url) {
-	    alert('You have to enter an URL first');
+	    alert('You have to enter a URL first');
 	    f_url.focus();
 	    return false;
 	  }

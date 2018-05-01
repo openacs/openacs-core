@@ -233,7 +233,7 @@ ad_proc -public template::list::create {
     See <a href="/api-doc/proc-view?proc=template::list::format::create">template::list::format::create</a> for details.
 
     @param filter_form     Whether or not we create the form data structure for the listfilters-form tag to dynamically generate a form to specify filter criteria. Default 0 will not generate form. Set to 1 to generate form to use listfilters-form tag.
-    @param bulk_action_click_functon Javascript function name to call when bulk action buttons are clicked.
+    @param bulk_action_click_functon JavaScript function name to call when bulk action buttons are clicked.
 
     @see template::list::element::create
     @see template::list::filter::create

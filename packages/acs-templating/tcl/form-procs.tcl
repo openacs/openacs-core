@@ -71,7 +71,7 @@ ad_proc -public template::form::create { id args } {
                             rendered form. Common use for this option is to set multipart
                             form encoding by specifying "-html { enctype multipart/form-data }".
                             Please note that to comply with newer security features, such as CSP,
-                            one should not specify javascript event handlers here, as they will
+                            one should not specify JavaScript event handlers here, as they will
                             be rendered inline.
     
     @option mode            If set to 'display', the form is shown in display-only mode, where 
@@ -127,7 +127,7 @@ ad_proc -public template::form::create { id args } {
 } {
   set level [template::adp_level]
 
-  # bump the form_count for widgets that use javascript to navigate through
+  # bump the form_count for widgets that use JavaScript to navigate through
   # the form (liberated from my Greenpeace work ages ago)
 
   incr ::ad_conn(form_count)

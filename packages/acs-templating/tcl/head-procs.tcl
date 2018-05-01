@@ -485,8 +485,8 @@ ad_proc -public template::add_body_handler {
     {-script:required}
     {-identifier anonymous}
 } {
-    Adds javascript code to an event handler in the body tag.  Several
-    javascript code blocks may be assigned to each handler by subsequent calls
+    Adds JavaScript code to an event handler in the body tag.  Several
+    JavaScript code blocks may be assigned to each handler by subsequent calls
     to template::add_body_handler.
 
     <p>If your script may only be added once you may supply an identifier.
@@ -511,8 +511,8 @@ ad_proc -public template::add_body_handler {
 
     @param event      the event during which the supplied script should be
                       executed
-    @param script     the javascript code to execute
-    @param identifier a name, if supplied, used to ensure this javascript code
+    @param script     the JavaScript code to execute
+    @param identifier a name, if supplied, used to ensure this JavaScript code
                       is only added to the handler once
 } {
     variable ::template::body_handlers
@@ -882,7 +882,7 @@ ad_proc template::get_body_event_handlers {
     Get body event handlers specified with template::add_body_handler
 } {
     #
-    # Concatenate the javascript event handlers for the body tag
+    # Concatenate the JavaScript event handlers for the body tag
     #
     variable ::template::body_handlers
     set event_handlers ""
@@ -894,8 +894,8 @@ ad_proc template::get_body_event_handlers {
         #
         foreach name [array names body_handlers] {
             set event [lindex [split $name ","] 0]
-            foreach javascript $body_handlers($name) {
-                lappend body_handlers($event) "[string trimright $javascript {; }];"
+            foreach js $body_handlers($name) {
+                lappend body_handlers($event) "[string trimright $js {; }];"
             }
             unset body_handlers($name)
         }
