@@ -300,7 +300,7 @@ ad_proc -private template::head::flush_included {
     @param resource compound resource
     @see ::template::head::add_link
 } {
-    ns_log notice "flush_included <$resource> includes: [array get ::template::head::includes $resource]"
+    #ns_log notice "flush_included <$resource> includes: [array get ::template::head::includes $resource]"
     foreach {container parts} [array get ::template::head::includes $resource] {
         unset ::template::head::includes($container)
         foreach p $parts {
