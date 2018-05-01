@@ -142,7 +142,7 @@ namespace eval notification::sweep {
                 append batched_content_text "[_ notifications.SUBJECT] [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n=====================\n"
                 append batched_content_html "<a name=[ns_set get $notif notification_id]>[_ notifications.SUBJECT]</a> [ns_set get $notif notif_subject]\n $notif_html <hr><p>"
 
-		set batched_file_ids [concat [ns_set get $notif file_ids] $batched_file_ids]
+		set batched_file_ids [linsert $batched_file_ids 0 [ns_set get $notif file_ids]]
 		
                 lappend list_of_notification_ids [ns_set get $notif notification_id]
 

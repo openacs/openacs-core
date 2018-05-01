@@ -258,7 +258,7 @@ proc ad_proc args {
 
         # pretend to the rest of the proc that we were passed the proc name
         incr n_args_remaining
-        set args [concat [list $proc_name] $args]
+        set args [linsert $args 0 $proc_name]
     }
 
     # (SDW - OpenACS). If proc_name is being defined inside a namespace, we

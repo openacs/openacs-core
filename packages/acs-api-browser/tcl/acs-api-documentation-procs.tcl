@@ -219,7 +219,7 @@ ad_proc -public api_script_documentation {
     #         if { [info exists as_default_value($arg_name)] } {
     #             lappend notes "defaults to <code>\"$as_default_value($arg_name)\"</code>"
     #         }
-    #          set notes [concat $notes $as_flags($arg_name)]
+    #          lappend notes {*}$as_flags($arg_name)
     #         foreach filter $as_filters($arg_name) {
     #             set filter_proc [ad_page_contract_filter_proc $filter]
     #             lappend notes "<a href=\"[api_proc_url $filter_proc]\">$filter</a>"
