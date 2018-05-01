@@ -45,7 +45,7 @@ ALTER TABLE group_type_rels            ALTER COLUMN rel_type        TYPE varchar
 -- many application packages. The genererally recommended way is to
 -- drop and recreate the views, but this is for a kernel upgrade not
 -- feasible. Since the length change is not a real type change, we can
--- simply update the the length information in the pg_attribute table.
+-- simply update the length information in the pg_attribute table.
 
 WITH RECURSIVE dependent_views AS (
     SELECT c.oid::REGCLASS AS view_name
