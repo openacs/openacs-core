@@ -1602,9 +1602,9 @@ ad_proc -private auth::validate_account_info {
     upvar 1 $user_array user
     upvar 1 $message_array element_messages
 
-    set required_elms { }
+    set required_elms {}
     if { !$update_p } {
-        lappend required_elms {*}{ first_names last_name email }
+        lappend required_elms first_names last_name email
     }
 
     foreach elm $required_elms {
