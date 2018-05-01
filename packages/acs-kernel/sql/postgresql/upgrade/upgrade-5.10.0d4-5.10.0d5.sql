@@ -1,5 +1,5 @@
 --
--- Replace obsolete funktion bittoint4() by cast
+-- Replace obsolete function bittoint4() by cast
 ---
 -- ... but keep emulation function still around in case somebodes uses
 -- this still....
