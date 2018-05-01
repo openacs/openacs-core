@@ -59,8 +59,8 @@ implemented using this package:</p>
 <li>BBoard</li><li>Webmail</li><li>General Comments</li><li>Spam</li><li>Various parts of the ticket tracker.</li>
 </ul>
 <p>Each of these applications requires a message store and each
-defines its own high level organization for messages within
-that store.</p>
+defines its own high level organization for messages whithin that
+store.</p>
 <ul>
 <li>Bboard organizes messages into forums and categories and
 threads. It also allows users to send and reply to messages via
@@ -156,5 +156,5 @@ bboard thread could be sent to a user as a digest.</p>
 <hr>
 <address><a href="mailto:kapoor\@maya.com"></a></address>
 
-Last modified: $&zwnj;Id: requirements.html,v 1.1.1.1.30.1 2017/04/21
-16:14:09 gustafn Exp $
+Last modified: $&zwnj;Id: requirements.html,v 1.3 2018/04/11 21:35:07
+hectorr Exp $

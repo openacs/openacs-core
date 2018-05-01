@@ -16,9 +16,9 @@ layer. Built atop the content repository, it provides the storage
 and retrieval of messages. We take messages to be objects that
 consist of a sender (an ACS party), a text body, an optional
 reference to a parent message, optional file attachments, and some
-miscellaneous auditing data.With these constraining
-set of semantics, we can build a library of component functionality
-to operate on messages. For example: code that displays a message,
+miscellaneous auditing data.With these constraining set of
+semantics, we can build a library of component functionality to
+operate on messages. For example: code that displays a message,
 forwards a message, compiles a set of messages into a digest,
 displays a specific attachment, etc., This functionality can then
 be reused across messaging applications such as bboard, webmail,
@@ -53,7 +53,8 @@ repository.
 ACS Messaging provides the <code>acs_messages_all</code>
  view as
 the primary mechanism for message queries.
-<blockquote><pre><code>create or replace view acs_messages_all as
+<blockquote><pre><code>
+create or replace view acs_messages_all as
     select m.message_id, m.reply_to, o.context_id, r.title, r.publish_date,
            r.mime_type, r.content, o.creation_user
     ...
