@@ -166,9 +166,9 @@ ad_proc -private template::data::transform::party_search {
 
         unset -nocomplain element(options)
 
-        template::element::set_error $element(form_id) $element_id "
-        No matches were found for \"$search_string\".<br>Please
-        try again."
+        template::element::set_error $element(form_id) $element_id [subst {
+            No matches were found for "[ns_quotehtml $search_string]".<br>Please try again.
+        }]
 
     } else {
         # we need to return a select list
@@ -177,11 +177,10 @@ ad_proc -private template::data::transform::party_search {
 
         if { [llength $persons] > 0 } {
             set options $persons
-            set options [concat $options [list [list "---" ""]]]
+            lappend options [list "---" ""]
         }
         if { [llength $groups_relsegs] > 0 } {
-            set options [concat $options $groups_relsegs]
-            set options [concat $options [list [list "---" ""]]]
+            lappend options {*}$groups_relsegs [list "---" ""]
         }
         set element(options) [concat $options { { "Search again..." ":search:" } }]
         if { ![info exists value] } {
@@ -194,8 +193,8 @@ ad_proc -private template::data::transform::party_search {
         }
     }
 
-    if { [info exists element(result_datatype)] &&
-         [ns_queryexists $element_id:select] } {
+    if { [info exists element(result_datatype)]
+         && [ns_queryexists $element_id:select] } {
         set element(datatype) $element(result_datatype)
     }
 
@@ -246,9 +245,10 @@ ad_proc -public template::widget::search {
         # include an extra hidden element to indicate that the
         # value is being selected as opposed to entered
 
-        set output "\n<input type=\"hidden\" name=\"$element(id):select\" value=\"t\" >"
-        append output [select element $tag_attributes]
-
+        set output ""
+        append output \
+            [subst {\n<input type="hidden" name="$element(id):select" value="t">}] \
+            [select element $tag_attributes]
     }
 
 
@@ -329,7 +329,7 @@ ad_proc -private template::widget::textarea_internal {
         if { $value ne "" } {
             append output \
                 [ns_quotehtml $value] \
-                "<input type=\"hidden\" name=\"$name\" value=\"[ns_quotehtml $value]\">"
+                [subst {<input type="hidden" name="$name" value="[ns_quotehtml $value]">}]
         }
     } else {
         if {$tag ne "textarea"} {
@@ -388,7 +388,9 @@ ad_proc -public template::widget::input {
 
     array set attributes $tag_attributes
 
-    if { ( $type eq "checkbox" || $type eq "radio" ) && [info exists element(value)] } {
+    if { ( $type eq "checkbox" || $type eq "radio" )
+         && [info exists element(value)]
+     } {
         # This can be used in the form template in a <label for="id">...</label> tag.
         set attributes(id) "$element(form_id):elements:$element(name):$element(value)"
     } elseif { $type in {"password" "text" "button" "file" }} {
@@ -396,7 +398,9 @@ ad_proc -public template::widget::input {
     }
 
     # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
-    if { $element(mode) ne "edit" && $type ni { hidden submit button clear checkbox radio } } {
+    if { $element(mode) ne "edit"
+         && $type ni { hidden submit button clear checkbox radio }
+     } {
         set output ""
         if { [info exists element(value)] } {
             append output [ns_quotehtml $element(value)]
@@ -405,7 +409,9 @@ ad_proc -public template::widget::input {
     } else {
         set output [subst {<input type="$type" name="$element(name)"}]
 
-        if { $element(mode) ne "edit" && $type ni { hidden submit button clear } } {
+        if { $element(mode) ne "edit"
+             && $type ni { hidden submit button clear }
+         } {
             append output " disabled"
         }
 
@@ -450,7 +456,9 @@ ad_proc -public template::widget::text {
     # Spell-checker
     array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
 
-    if { $element(mode) eq "edit" && $spellcheck(render_p) } {
+    if { $element(mode) eq "edit"
+         && $spellcheck(render_p)
+     } {
         return "[input text element $tag_attributes] <br>[_ acs-templating.Spellcheck]:
 [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] $spellcheck(selected_option) {}]"
   } else {
@@ -514,7 +522,9 @@ ad_proc -public template::widget::hidden {
     # were ignored, preventing the export of multiple values by hidden formfields.
     # I changed this by saying that field is multiple whenever element(values)
     # exists and is not null.
-    if { [info exists element(values)] && $element(values) ne "" } {
+    if { [info exists element(values)]
+         && $element(values) ne ""
+     } {
         #ns_log notice "hidden form element with multiple values: <$element(values)>"
         set output {}
         set count 0
@@ -686,7 +696,7 @@ ad_proc -public template::widget::menu {
 
                     append output [subst { <input type="$widget_type" name="$widget_name" value="[ns_quotehtml $value]"}]
                     if { [info exists values($value)] } {
-                        append output [subst { checked="checked"}]
+                        append output { checked="checked"}
                     }
 
                     append output [subst {>[ns_quotehtml $label]<br>\n}]
@@ -835,7 +845,7 @@ ad_proc -public template::data::transform::search {
             }
 
             template::element::set_error $element(form_id) $element_id \
-                "No matches were found for \"$value\".<br>Please\ntry again."
+                [subst {No matches were found for "[ns_quotehtml $value]".<br>Please\ntry again.}]
 
         } elseif { $option_count == 1 } {
 
@@ -847,14 +857,15 @@ ad_proc -public template::data::transform::search {
             # need to return a select list
             set element(options) [concat $options { { "Search again..." ":search:" } }]
             template::element::set_error $element(form_id) $element_id \
-                "More than one match was found for \"$value\".<br>Please\nchoose one from the list."
+                [subst {More than one match was found for "[ns_quotehtml $value]".<br>
+                    Please choose one from the list.}]
 
             set value [lindex $options 0 1]
         }
     }
 
-    if { [info exists element(result_datatype)] &&
-         [ns_queryexists $element_id:select] } {
+    if { [info exists element(result_datatype)]
+         && [ns_queryexists $element_id:select] } {
         set element(datatype) $element(result_datatype)
     }
 
@@ -894,7 +905,9 @@ ad_proc -public template::widget::comment {
 
         append output [textarea $element_reference $tag_attributes]
 
-        if { [info exists element(format_element)] && [info exists element(format_options)] } {
+        if { [info exists element(format_element)]
+             && [info exists element(format_options)]
+         } {
             append output "<br>Format: [menu $element(format_element) $element(format_options) {} {}]"
         }
     }
@@ -940,19 +953,26 @@ ad_proc -public template::widget::block {
             }
             append output "</tr>"
         } elseif {$count == 1} {
-            append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
+            append output \
+                {<tr>} \
+                {<td><span style="font-weight: bold">} \
+                [ns_quotehtml [lindex $option 0]] \
+                {</span></td>}
             foreach answer_set [lindex $option 1] {
                 append output "<td>required?</td>"
                 foreach answer $answer_set {
-                    append output "<td>$answer</td>"
+                    append output "<td>[ns_quotehtml $answer]</td>"
                 }
             }
-            append output "</tr>"
+            append output {</tr>}
         } else {
             append output "<tr><td><span style=\"font-weight: bold\">[lindex $option 0]</span></td>"
             foreach question [lindex $option 1] {
                 lassign $question name required_p
-                append output "<td>[ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"]</td>"
+                append output \
+                    "<td>" \
+                    [ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"] \
+                    "</td>"
                 foreach choice [lindex $question 2] {
                     if {$choice ni $value} {
                         append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
@@ -1075,11 +1095,12 @@ ad_proc -public template::widget::select_text {
     } else {
         # display mode
         if { [info exists element(value)] } {
-            append output [template::util::select_text::get_property select_value $element(value)]
-            append output "&nbsp;"
-            append output [template::util::select_text::get_property text_value $element(value)]
-            append output "<input type=\"hidden\" name=\"$element(id).text\" value=\"[ns_quotehtml $text]\">"
-            append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ns_quotehtml $select]\">"
+            append output \
+                [template::util::select_text::get_property select_value $element(value)] \
+                "&nbsp;" \
+                [template::util::select_text::get_property text_value $element(value)] \
+                [subst {<input type="hidden" name="$element(id).text" value="[ns_quotehtml $text]">}] \
+                [subst {<input type="hidden" name="$element(id)" value="[ns_quotehtml $select]">}]
         }
     }
 
@@ -1191,12 +1212,12 @@ ad_proc -public template::widget::radio_text {
 
         append output "$radio_text value=\"$value\""
         if { [info exists values($value)] } {
-            append output " checked=\"checked\""
+            append output { checked="checked"}
         }
         if {$element(mode) ne "edit"} {
             append output " disabled"
         }
-        append output ">$label<br>"
+        append output ">[ns_quotehtml $label]<br>"
     }
     if {![info exists element(other_label)]} {
         set element(other_label) "[_ acs-templating.Other]"
@@ -1260,7 +1281,9 @@ ad_proc -public template::util::checkbox_text::get_property {
             return [lindex $checkbox_list 1]
         }
         default {
-            error "Parameter supplied to util::checkbox_text::get_property 'what' must be one of: checkbox_value, text_value. You specified: '$what'."
+            error "Parameter supplied to util::checkbox_text::get_property\
+                  'what' must be one of: checkbox_value, text_value.\
+                  You specified: '$what'."
         }
     }
 }
@@ -1302,7 +1325,7 @@ ad_proc -public template::widget::checkbox_text {
 
     foreach name [array names attributes] {
         if {$attributes($name) eq {}} {
-            append checkbox_text " $name"
+            append checkbox_text " [ns_quotehtml $name]"
         } else {
             append checkbox_text [subst { $name="$attributes($name)"}]
         }
@@ -1314,19 +1337,23 @@ ad_proc -public template::widget::checkbox_text {
     foreach option $element(options) {
         lassign $option label value
 
-        append output "$checkbox_text value=\"$value\""
+        append output \
+            $checkbox_text \
+            [subst { value="[ns_quotehtml $value]"}]
+        
         if { [info exists values($value)] } {
-            append output " checked=\"checked\""
+            append output { checked="checked"}
         }
-        append output ">$label<br>"
+        append output ">[ns_quotehtml $label]<br>"
     }
     if {![info exists element(other_label)]} {
-        set element(other_label) "[_ acs-templating.Other]"
+        set element(other_label) [_ acs-templating.Other]
     }
-    append output "$element(other_label): "
     set element(value) $text
     set element(name) $element(name)\.text
-    append output [template::widget::input text element $tag_attributes]
+    append output \
+        "$element(other_label): "
+        [template::widget::input text element $tag_attributes]
 
     return $output
 }

@@ -3206,7 +3206,7 @@ ad_proc -private template::list::prepare_filter_form {
     set filter_key_filters {}
     set filter_exclude_from_key [list orderby groupby format page __list_view]
     if {[llength $filter_exclude_from_key_extra]} {
-        set filter_exclude_from_key [concat $filter_exclude_from_key $filter_exclude_from_key_extra]
+        lappend filter_exclude_from_key {*}$filter_exclude_from_key_extra
     }
     set filter_hidden_filters_url_vars {}
     # loop through all the filters in this list
