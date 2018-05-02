@@ -162,6 +162,7 @@ ad_proc -public template::head::add_script {
         # browsers by checking the user agent.
         #
         security::csp::require script-src 'unsafe-inline'
+        #security::csp::require script-src 'strict-dynamic'
 
         lappend ::template::head::scripts(anonymous) $type "" $charset $defer $async $script $order $crossorigin $integrity
     } else {

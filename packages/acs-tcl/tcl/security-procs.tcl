@@ -2303,7 +2303,8 @@ namespace eval ::security::csp {
         security::csp::require style-src 'self'
         security::csp::require img-src 'self'
         security::csp::require font-src 'self'
-
+        security::csp::require base-uri 'self'        
+        
         #
         # Some browser (safari, chrome) need "font-src data:", maybe
         # for plugins or diffent font settings. Seems safe enough.
@@ -2346,6 +2347,11 @@ namespace eval ::security::csp {
         #
         security::csp::require report-uri /SYSTEM/csp-collector.tcl
 
+        #
+        # We do not need object-src
+        #
+        security::csp::require object-src 'none'        
+
         set policy ""
         foreach directive {
             child-src
@@ -2363,6 +2369,7 @@ namespace eval ::security::csp {
             sandbox
             script-src
             style-src
+            base-uri
         } {
             set var ::__csp__directive($directive)
             if {[info exists $var]} {
