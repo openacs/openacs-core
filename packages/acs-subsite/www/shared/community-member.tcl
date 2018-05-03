@@ -82,7 +82,7 @@ set bio [ad_text_to_html -- [person::get_bio -person_id $user_id]]
 # Do we show the portrait?
 set inline_portrait_state "none"
 set portrait_url [export_vars -base portrait {user_id}]
-set portrait_image_url [export_vars -base portrait-bits {user_id}]
+set portrait_image_url [export_vars -base portrait-bits {user_id {size x150}}]
 
 if {[db_0or1row portrait_info {
     select i.width, i.height, cr.title, cr.description, cr.publish_date
@@ -95,7 +95,12 @@ if {[db_0or1row portrait_info {
 }]} {
     # We have a portrait. Let's see if we can show it inline
 
-    if { $width ne "" && $width < 400 } {
+    if { 1 || $width ne "" && $width < 400 } {
+        #
+        # Deactivated branch: since we can provide scaling, why not
+        # use it.  The maintenance of the image width in i.width
+        # (above) does not seem to work reliable.
+        #
 	# let's show it inline
 	set inline_portrait_state "inline"
     } else {
