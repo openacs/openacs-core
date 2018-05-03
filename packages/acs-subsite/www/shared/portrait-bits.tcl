@@ -13,7 +13,7 @@ ad_page_contract {
 # The size info is a valid geometry as provided for image magicks
 # "convert". We provide here a sample list of valid sizes
 #
-if {$size ne "" && $size ni {x24 x50 x100}} {
+if {$size ne "" && $size ni {x24 x50 x100 x150 x200}} {
     ad_log warning "size '$size' is not supported"
     set size ""
 }
