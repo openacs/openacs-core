@@ -17,10 +17,10 @@ namespace eval notification::sweep {
         # Also sweep the dynamic notification requests that have been sent out
         db_dml delete_dynamic_requests {}
 
-	# before the killing starts, remove invalid requests
-	foreach request_id [db_list select_invalid_request_ids {}] {
-	    notification::request::delete -request_id $request_id
-	}
+        # before the killing starts, remove invalid requests
+        foreach request_id [db_list select_invalid_request_ids {}] {
+            notification::request::delete -request_id $request_id
+        }
 
         # Get the list of the ones to kill
         set notification_id_list [db_list select_notification_ids {}]
@@ -31,7 +31,7 @@ namespace eval notification::sweep {
         }
 
     }
-    
+
     ad_proc -public sweep_notifications {
         {-interval_id:required}
         {-batched_p 0}
@@ -51,7 +51,7 @@ namespace eval notification::sweep {
             set list_of_notification_ids [list]
             set batched_content_text ""
             set batched_content_html ""
-	    set batched_file_ids [list]
+            set batched_file_ids [list]
             set summary_text "[_ notifications.Contents]/n"
             set summary_html "<h4>[_ notifications.Contents]</h4><ul>"
 
@@ -86,28 +86,28 @@ namespace eval notification::sweep {
                             # System name is used in the subject
                             set system_name [ad_system_name]
                             notification::delivery::send \
-                                    -to_user_id $prev_user_id \
-                                    -notification_type_id $prev_type_id \
-                                    -subject "[_ notifications.lt_system_name_-_Batched]" \
-                                    -content_text "$summary_text $batched_content_text" \
-                                    -content_html "$summary_html </ul><hr>$batched_content_html" \
-				    -file_ids $batched_file_ids \
-                                    -delivery_method_id $prev_deliv_method_id
-                            
+                                -to_user_id $prev_user_id \
+                                -notification_type_id $prev_type_id \
+                                -subject "[_ notifications.lt_system_name_-_Batched]" \
+                                -content_text "$summary_text $batched_content_text" \
+                                -content_html "$summary_html </ul><hr>$batched_content_html" \
+                                -file_ids $batched_file_ids \
+                                -delivery_method_id $prev_deliv_method_id
+
                             ns_log Debug "NOTIF-BATCHED: marking notifications"
                             foreach not_id $list_of_notification_ids {
-                                # Mark it as sent
+                            # Mark it as sent
                                 notification::mark_sent \
-                                        -notification_id $not_id \
-                                        -user_id $prev_user_id
-                            }         
+                                    -notification_id $not_id \
+                                    -user_id $prev_user_id
+                            }
                         }
 
                         # Reset things
                         set list_of_notification_ids [list]
                         set batched_content_text ""
                         set batched_content_html ""
-			set batched_file_ids [list]
+                        set batched_file_ids [list]
                         set summary_text "[_ notifications.Contents]/n"
                         set summary_html "<h4>[_ notifications.Contents]</h4><ul>"
                     } else {
@@ -118,7 +118,7 @@ namespace eval notification::sweep {
                 if {$notif eq "STOP"} {
                     continue
                 }
-                
+
 
                 # append content to built-up content
                 ns_log Debug "NOTIF-BATCHED: appending one notif!"
@@ -142,8 +142,8 @@ namespace eval notification::sweep {
                 append batched_content_text "[_ notifications.SUBJECT] [ns_set get $notif notif_subject]\n[ns_set get $notif notif_text]\n=====================\n"
                 append batched_content_html "<a name=[ns_set get $notif notification_id]>[_ notifications.SUBJECT]</a> [ns_set get $notif notif_subject]\n $notif_html <hr><p>"
 
-		set batched_file_ids [linsert $batched_file_ids 0 [ns_set get $notif file_ids]]
-		
+                set batched_file_ids [linsert $batched_file_ids 0 {*}[ns_set get $notif file_ids]]
+
                 lappend list_of_notification_ids [ns_set get $notif notification_id]
 
                 # Set the vars
@@ -151,7 +151,7 @@ namespace eval notification::sweep {
                 set prev_type_id $type_id
                 set prev_deliv_method_id [ns_set get $notif delivery_method_id]
             }
-            
+
         } else {
             # Unbatched
             foreach notif $notifications {
@@ -164,19 +164,18 @@ namespace eval notification::sweep {
                         -subject [ns_set get $notif notif_subject] \
                         -content_text [ns_set get $notif notif_text] \
                         -content_html [ns_set get $notif notif_html] \
-			-file_ids [ns_set get $notif file_ids] \
+                        -file_ids [ns_set get $notif file_ids] \
                         -reply_object_id [ns_set get $notif response_id] \
                         -delivery_method_id [ns_set get $notif delivery_method_id]
-                    
-                    # Markt it as sent
+
+                        # Mark it as sent
                     notification::mark_sent \
-                            -notification_id [ns_set get $notif notification_id] \
-                            -user_id [ns_set get $notif user_id]
+                        -notification_id [ns_set get $notif notification_id] \
+                        -user_id [ns_set get $notif user_id]
                 }
             }
-        } 
+        }
     }
-
 }
 
 # Local variables:
