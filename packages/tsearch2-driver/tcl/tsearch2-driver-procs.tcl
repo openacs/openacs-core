@@ -376,8 +376,7 @@ ad_proc -public tsearch2::separate_query_and_operators {
 
         if {[llength $e] > 1} {
             # query element contains a valid operator
-            set last_operator [lindex $e 0]
-            set e [lindex $e 1]
+            lassign $e last_operator e
         } else {
             set last_operator ""
         }
