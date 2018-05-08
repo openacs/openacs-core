@@ -1365,8 +1365,7 @@ ad_proc -public db_foreach {
          } {
             return -code error "Expected if_no_rows as second-to-last argument"
         }
-        set code_block [lindex $args 0]
-        set if_no_rows_code_block [lindex $args 2]
+        lassign $args code_block . if_no_rows_code_block
     } else {
         return -code error "Expected 1 or 3 arguments after switches"
     }
@@ -1760,8 +1759,7 @@ ad_proc -public db_multirow {
          } {
             return -code error "Expected if_no_rows as second-to-last argument"
         }
-        set code_block [lindex $args 0]
-        set if_no_rows_code_block [lindex $args 2]
+        lassign $args code_block . if_no_rows_code_block
     } else {
         return -code error "Expected 1 or 3 arguments after switches"
     }

@@ -530,8 +530,7 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
 	    break
 	}
 
-	set one_query [lindex $result 0]
-	set parsing_state [lindex $result 1]
+    lassign $result one_query parsing_state
 
 	# db_qd_log QDDebug "loaded one query - [db_fullquery_get_name $one_query]"
 

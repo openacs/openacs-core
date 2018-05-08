@@ -13,11 +13,11 @@ ad_form -name lookup -form {
         {help_text "[_ acs-lang.Include_package_key_as]"}
         {html {size 50}}
     }
-    {locale:text 
+    {locale:text
         {label "[_ acs-lang.Locale]"}
         {help_text "[_ acs-lang.Can_be_two_character]"}
     }
-} -on_submit {    
+} -on_submit {
     if {[catch {
         # No substitution
         set message [lang::message::lookup $locale $key]
@@ -26,10 +26,9 @@ ad_form -name lookup -form {
         ad_log error $errmsg
         ad_script_abort
     }
-    
+
     set keyv [split $key "."]
-    set package_key [lindex $keyv 0]
-    set message_key [lindex $keyv 1]
+    lassign $keyv package_key message_key
 
     set edit_url [export_vars -base edit-localized-message { package_key locale message_key {return_url [ad_return_url]} }]
 

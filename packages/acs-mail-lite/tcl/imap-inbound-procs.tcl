@@ -72,9 +72,7 @@ ad_proc -private acs_mail_lite::imap_conn_set {
  Quote mailbox with curly braces like: {{mailbox.host}mailbox.name} "
             set mb_list [acs_mail_lite::imap_mailbox_split $mb]
             if { [llength $mb_list] eq 3 } {
-                set ho [lindex $mb_list 0]
-                set na [lindex $mb_list 1]
-                set ssl_p [lindex $mb_list 2]
+                lassign $mb_list ho na ssl_p
                 ns_log Notice "acs_mail_lite::imap_conn_set.479: \
  Used alternate parsing. host '${ho}' mailbox.name '${na}' ssl_p '${ssl_p}'"
             } else {
@@ -251,9 +249,7 @@ ad_proc -private acs_mail_lite::imap_conn_go {
             set id [lindex $s_list 0]
             if { $id eq $conn_id } {
                 set prior_conn_exists_p 1
-                set opentime [lindex $s_list 1]
-                set accesstime [lindex $s_list 2]
-                set mailbox [lindex $s_list 3]
+                lassign $s_list . opentime accesstime mailbox
             }
             incr i
         }

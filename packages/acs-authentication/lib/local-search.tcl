@@ -66,8 +66,7 @@ if {[info exists object_id]} {
 }
 
 set orderby_list [split $orderby ,]
-set orderby_column [lindex $orderby_list 0]
-set direction [lindex $orderby_list 1]
+lassign $orderby_list orderby_column direction
 set direction [string map {asc -increasing desc -decreasing} $direction]
 if {$orderby_column ne ""} {
     template::multirow -ulevel 2 -local sort users $direction $orderby_column

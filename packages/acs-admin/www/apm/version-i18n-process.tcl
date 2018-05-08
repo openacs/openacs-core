@@ -4,9 +4,9 @@ ad_page_contract {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
-    @cvs-id $Id$  
+    @cvs-id $Id$
 } {
-    version_id:naturalnum,notnull    
+    version_id:naturalnum,notnull
     {files:multiple}
     {file_action:multiple}
 }
@@ -39,8 +39,7 @@ set file [lindex $files 0]
 set full_file_name "$::acs::rootdir/$file"
 
 set adp_report_list [lang::util::replace_adp_text_with_message_tags "$::acs::rootdir/$file" report]
-set adp_replace_list [lindex $adp_report_list 0]
-set adp_no_replace_list [lindex $adp_report_list 1]
+lassign $adp_report_list adp_replace_list adp_no_replace_list
 
 if { [llength $adp_replace_list] == 0 } {
     # There are no replacements to choose keys for so go straight to the processing result page

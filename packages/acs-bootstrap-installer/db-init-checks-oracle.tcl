@@ -141,9 +141,7 @@ ALTER USER $thisuser DEFAULT ROLE ALL;
     }
 
     set dbversion_list [split $dbversion .]
-    set dbversion_major [lindex $dbversion_list 0]
-    set dbversion_minor [lindex $dbversion_list 1]
-    set dbversion_patch [lindex $dbversion_list 2]
+    lassign $dbversion_list dbversion_major dbversion_minor dbversion_patch
     set dbversion_total [expr {($dbversion_major * 1000000) + ($dbversion_minor * 1000) + ($dbversion_patch)}]
 
     # Check for Oracle 8.1.6 and before running on Linux. If so, we've got to tell the user

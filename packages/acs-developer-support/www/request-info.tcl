@@ -141,8 +141,7 @@ if { [info exists property(rp)] } {
 		}
 	    }
 	    registered_proc {
-		set proc [lindex $info 2]
-		set args [lindex $info 3]
+        lassign $info . . proc args
 		append body "Called registered procedure: <b>$proc</b> [ns_quotehtml $args] for ($method $path) - $duration\n"
 		if {$action eq "error"} {
 		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"

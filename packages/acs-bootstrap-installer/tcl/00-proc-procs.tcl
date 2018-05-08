@@ -361,8 +361,7 @@ proc ad_proc args {
     foreach arg $effective_arg_list {
         if { [llength $arg] == 2 } {
             set default_p 1
-            set default_value [lindex $arg 1]
-            set arg [lindex $arg 0]
+            lassign $arg arg default_value
         } else {
             if { [llength $arg] != 1 } {
                 return -code error "Invalid element \"$arg\" in argument list"
