@@ -899,7 +899,7 @@ ad_proc -public template::multirow {
 
             set len [llength $args]
             for { set i 0 } { $i < $len } { incr i } {
-                if { [string equal [string index [lindex $args $i] 0] "-"] } {
+                if { [string index [lindex $args $i] 0] eq "-" } {
                     switch -exact [string range [lindex $args $i] 1 end] {
                         command {
                             # command takes an additional argument
