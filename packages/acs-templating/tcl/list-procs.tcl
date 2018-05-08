@@ -54,6 +54,7 @@ ad_proc -public template::list::create {
     {-formats ""}
     {-filter_form 0}
     {-bulk_action_click_function "acs_ListBulkActionClick"}
+    {-aggregation_format ""}
 } {
     Defines a list to be displayed in a template. The list works in conjunction with a multirow, which contains the data for the list.
     The list is output using the &lt;listtemplate&gt; and &lt;listfilters&gt; templating tags, with the help of &lt;listelement&gt; and &lt;listrow&gt;.
@@ -235,6 +236,8 @@ ad_proc -public template::list::create {
     @param filter_form     Whether or not we create the form data structure for the listfilters-form tag to dynamically generate a form to specify filter criteria. Default 0 will not generate form. Set to 1 to generate form to use listfilters-form tag.
     @param bulk_action_click_functon JavaScript function name to call when bulk action buttons are clicked.
 
+    @param aggregation_format   An option to format the result (number) of an aggregation operation. Default is empty string (result is not formatted). See the Tcl built-in command <a href="https://www.tcl.tk/man/tcl/TclCmd/format.htm">format</a> for details on the different formatting options.
+
     @see template::list::element::create
     @see template::list::filter::create
     @see template::list::orderby::create
@@ -271,6 +274,7 @@ ad_proc -public template::list::create {
     # These are defaults for internally maintained properties
     array set list_properties {
         aggregates_p 0
+        aggregation_format {}
         bulk_action_export_chunk {}
         display_elements {}
         dynamic_cols_p 0
@@ -306,6 +310,7 @@ ad_proc -public template::list::create {
     # Set properties from the parameters passed
     foreach elm {
         actions
+        aggregation_format
         bulk_action_click_function
         bulk_action_export_vars
         bulk_action_method
@@ -1292,6 +1297,9 @@ ad_proc -private template::list::prepare_for_rendering {
                         set __agg_sum($__element_properties(name)) \
                             [expr {$__agg_sum($__element_properties(name)) +
                                    ([set $__element_properties(name)] ne "" ? [set $__element_properties(name)] : 0)} ]
+                        if {$__list_properties(aggregation_format) ne ""} {
+                            set __agg_sum($__element_properties(name)) [format $__list_properties(aggregation_format) $__agg_sum($__element_properties(name))]
+                        }
                     }
 
                     # Check if the value of the groupby column has changed
@@ -1306,6 +1314,9 @@ ad_proc -private template::list::prepare_for_rendering {
                         set __agg_group_sum($__element_properties(name)) \
                             [expr {$__agg_group_sum($__element_properties(name)) +
                                    ([string is double [set $__element_properties(name)]] ? [set $__element_properties(name)] : 0)}]
+                        if {$__list_properties(aggregation_format) ne ""} {
+                            set __agg_group_sum($__element_properties(name)) [format $__list_properties(aggregation_format) $__agg_group_sum($__element_properties(name))]
+                        }
                     }
 
                     switch -- $__element_properties(aggregate) {
