@@ -54,7 +54,7 @@ catch { exec $cvs_command -d $cvs_root -z3 log -h openacs-4/readme.txt } output
 
 set lines [split $output \n]
 for { set i 0 } { $i < [llength $lines] } { incr i } {
-    if { [string equal [string trim [lindex $lines $i]] "symbolic names:"] } {
+    if { [string trim [lindex $lines $i]] eq "symbolic names:" } {
         incr i
         break
     }
