@@ -483,8 +483,8 @@ ad_proc -private doc::parse_namespace { text_lines }  {
 	# listings for private and public procedures
 
         set namespace_index [lsearch -exact $namespace_list $namespace_name ]
-	
-	set total_result_listing [lreplace $total_result_listing $namespace_index $namespace_index [list [list info "$namespace_info"] [list public "$namespace_public"] [list private "$namespace_private"]]]
+
+        lset total_result_listing $namespace_index [list [list info "$namespace_info"] [list public "$namespace_public"] [list private "$namespace_private"]]
     }
 
 }
