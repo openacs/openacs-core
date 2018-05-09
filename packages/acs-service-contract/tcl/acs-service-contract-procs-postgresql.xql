@@ -34,8 +34,7 @@ select acs_sc_binding__exists_p(:contract,:impl)
 </querytext>
 </fullquery>
 
-
-<fullquery name="acs_sc_proc.operation_inputtype_element">
+<fullquery name="acs_sc_proc.operation_msgtype_element">
 <querytext>
 	select 
 	    element_name, 
@@ -43,20 +42,7 @@ select acs_sc_binding__exists_p(:contract,:impl)
 	    element_msg_type_isset_p,
 	    element_pos
 	from acs_sc_msg_type_elements
-	where msg_type_id = :operation_inputtype_id
-	order by element_pos asc
-</querytext>
-</fullquery>
-
-<fullquery name="acs_sc_proc.operation_outputtype_element">
-<querytext>
-	select 
-	    element_name, 
-	    acs_sc_msg_type__get_name(element_msg_type_id) as element_msg_type_name,
-	    element_msg_type_isset_p,
-	    element_pos
-	from acs_sc_msg_type_elements
-	where msg_type_id = :operation_outputtype_id
+	where msg_type_id = :msg_type_id
 	order by element_pos asc
 </querytext>
 </fullquery>

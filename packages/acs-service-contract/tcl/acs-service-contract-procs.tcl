@@ -167,7 +167,8 @@ ad_proc -private acs_sc_proc {
 
     append docblock "\n<b>acs-service-contract operation.  Call via acs_sc::invoke.</b>\n\n$operation_desc\n\n"
 
-    db_foreach operation_inputtype_element {} {
+    set msg_type_id $operation_inputtype_id
+    db_foreach operation_msgtype_element {} {
 	lappend arguments "$element_name"
 	append docblock "\n@param $element_name $element_msg_type_name"
 	if { $element_msg_type_isset_p } {
@@ -175,7 +176,8 @@ ad_proc -private acs_sc_proc {
 	}
     }
 
-    db_foreach operation_outputtype_element {} {
+    set msg_type_id $operation_outputtype_id    
+    db_foreach operation_msgtype_element {} {
 	append docblock "\n@return <b>$element_name</b> - $element_msg_type_name"
 	if { $element_msg_type_isset_p } {
 	    append docblock " \[\]"
