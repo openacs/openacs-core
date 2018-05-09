@@ -473,7 +473,9 @@ ad_proc -private package_object_view_helper {
     set primary_keys [list "${table_name}.${id_column}"]
 
     foreach row [package_object_attribute_list -start_with $start_with $object_type] {
-        lassign $row . table column . . . . . object_column
+        set table [lindex $row 1]
+        set column [lindex $row 2]
+        set object_column [lindex $row 8]
 
         if {[string tolower $column] eq "object_id"} {
             # We already have object_id... skip this column
