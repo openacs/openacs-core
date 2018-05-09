@@ -358,7 +358,7 @@ ad_proc ad_pretty_mailing_address_from_args {
     @author Unknown
     @author Roberto Mello
 } {
-    set lines {}
+    set lines [list]
     if { $line2 eq "" } {
 	lappend lines $line1
     } elseif { $line1 eq "" } {

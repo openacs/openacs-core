@@ -21,7 +21,7 @@ if { $return_url eq "" } {
 
 db_1row object_info {}
 
-set elements {}
+set elements [list]
 lappend elements grantee_name { 
     label "[_ acs-subsite.Name]"
     link_url_col name_url

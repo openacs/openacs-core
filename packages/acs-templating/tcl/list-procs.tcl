@@ -755,7 +755,7 @@ ad_proc -public template::list::from_clauses {
     if { [llength $list_properties(from_clauses)] == 0 } {
         return {}
     }
-    set trimmed_from_clauses {}
+    set trimmed_from_clauses [list]
 
     set result {}
 
@@ -916,9 +916,9 @@ ad_proc -public template::list::write_csv {
     set __groupby $list_properties(groupby)
 
     # Output header row
-    set __cols {}
-    set __csv_cols {}
-    set __csv_labels {}
+    set __cols [list]
+    set __csv_cols [list]
+    set __csv_labels [list]
 
     foreach __element_name $list_properties(elements) {
         template::list::element::get_reference -list_name $name -element_name $__element_name
@@ -948,7 +948,7 @@ ad_proc -public template::list::write_csv {
         }
 
         if {$__groupby eq ""  || $group_lastnum_p} {
-            set __cols {}
+            set __cols [list]
 
             foreach __element_name $__csv_cols {
                 if {![string match "*___*_group" $__element_name]} {
@@ -998,7 +998,7 @@ ad_proc -public template::list::page_get_ids {
         if { [llength $ids] == 0 } {
             return NULL
         }
-        set quoted_ids {}
+        set quoted_ids [list]
         foreach one_id $ids {
             lappend quoted_ids "'[DoubleApos $one_id]'"
         }
@@ -1098,7 +1098,7 @@ ad_proc -public template::list::multirow_cols {
 
     template::list::orderby::get_reference -list_name $name -orderby_name $list_properties(orderby_selected_name)
 
-    set result {}
+    set result [list]
     if {$list_properties(orderby_selected_direction) eq "desc"} {
         lappend result "-decreasing"
     }
@@ -1422,7 +1422,7 @@ ad_proc -private template::list::render {
         # However, for now, it's just commented out with an if 0 ... block.
         if 0 {
             set num_pages 11
-            set pages {}
+            set pages [list]
             for { set i [expr {$current_page - $num_pages}] } { $i < $current_page + $num_pages } { incr i } {
                 if { $i > 0 && $i <= $paginator(page_count) } {
                     lappend pages $i
@@ -1591,7 +1591,7 @@ ad_proc -private template::list::prepare_filters {
     get_reference -name $name
 
     if {[info exists filter_names]} {
-        set filter_refs {}
+        set filter_refs [list]
         foreach filter_name $filter_names {
             lappend filter_refs ${name}:filter:${filter_name}:properties
         }
@@ -2124,7 +2124,7 @@ ad_proc -public template::list::element::create {
 
     # Create the orderby filter, if specified
     if { $element_properties(orderby) ne "" || $element_properties(orderby_asc) ne "" || $element_properties(orderby_desc) ne "" } {
-        set orderby_spec {}
+        set orderby_spec [list]
         foreach elm { orderby orderby_asc orderby_desc default_direction label } {
             if { $element_properties($elm) ne "" } {
                 lappend orderby_spec $elm $element_properties($elm)
@@ -3211,15 +3211,15 @@ ad_proc -private template::list::prepare_filter_form {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
 
-    set filter_names_options_tmp {}
-    set filter_names_options {}
-    set filter_hidden_filters {}
-    set filter_key_filters {}
+    set filter_names_options_tmp [list]
+    set filter_names_options [list]
+    set filter_hidden_filters [list]
+    set filter_key_filters [list]
     set filter_exclude_from_key [list orderby groupby format page __list_view]
     if {[llength $filter_exclude_from_key_extra]} {
         lappend filter_exclude_from_key {*}$filter_exclude_from_key_extra
     }
-    set filter_hidden_filters_url_vars {}
+    set filter_hidden_filters_url_vars [list]
     # loop through all the filters in this list
     foreach filter_ref $list_properties(filter_refs) {
         upvar #$level $filter_ref filter_properties
@@ -3290,7 +3290,7 @@ ad_proc -private template::list::prepare_filter_form {
             # the filter from the client property if its
             # specified in clear_one
             set __old_client_property_filters [ad_get_client_property acs-templating $__list_filter_form_client_property_key]
-            set __client_property_filters {}
+            set __client_property_filters [list]
 
             foreach {__ref __value} $__old_client_property_filters {
                 if {[set ${__ref}(name)] ne $clear_one} {
@@ -3361,7 +3361,7 @@ ad_proc -private template::list::prepare_filter_form {
         }
         if {![template::element::exists $filters_form_name $filter_properties(name)]} {
             # extract options
-            set options {}
+            set options [list]
 
             foreach \
                 elm $filter_properties(values) \
@@ -3424,7 +3424,7 @@ ad_proc -private template::list::prepare_filter_form {
         # still has to process the values to generate a valid
         # where clause
         template::list::get_reference -name $name
-        set templist {}
+        set templist [list]
         foreach {f_ref f_value} $__client_property_filters {
             upvar \#[template::adp_level] $f_ref filter_properties
             set filter_properties(value) [set $filter_properties(name)]

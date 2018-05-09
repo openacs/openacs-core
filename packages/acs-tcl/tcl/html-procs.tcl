@@ -38,11 +38,11 @@ ad_proc -public util::html::get_forms {
     dom parse -html -keepEmpties $html doc
     set root [$doc documentElement]
 
-    set forms {}
+    set forms [list]
     # Get every form...
     foreach f [$root selectNodes {//form}] {
         set form [list "attributes" [util::get_node_attributes -node $f]]
-        set fields {}
+        set fields [list]
         # ...every input tag
         foreach input [$f selectNodes {//input}] {
             lappend fields [list tag "input" attributes [util::get_node_attributes -node $input]]
@@ -50,7 +50,7 @@ ad_proc -public util::html::get_forms {
         # ...every select tag with its options
         foreach select [$f selectNodes {//select}] {
             set field [list tag "select" attributes [util::get_node_attributes -node $select]]
-            set options {}
+            set options [list]
             foreach option [$f selectNodes {option}] {
                 lappend options [list attributes [$option attributes] value [$option nodeValue]]
             }
@@ -148,7 +148,7 @@ ad_proc -public util::html::get_form_vars {
     }
     
     # Now vars must be translated in export_vars form
-    set vars {}
+    set vars [list]
     foreach {name value} [array get v] {
       # Multiple values must be specified 
       # with the :multiple modifier

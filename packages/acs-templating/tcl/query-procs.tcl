@@ -341,7 +341,7 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
         }
 
         # build the values on which to group
-        set group_values {}
+        set group_values [list]
         foreach group $groups {
             lappend group_values [ns_set get $row $group]
         }
@@ -671,7 +671,7 @@ ad_proc -public template::multirow {
 
         pop {
             upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
-            set r_list {}
+            set r_list [list]
             if {$rowcount > 0} {
                 upvar $multirow_level_up $name:$rowcount row
                 for { set i 0 } { $i < [llength $columns] } { incr i } {
@@ -918,7 +918,7 @@ ad_proc -public template::multirow {
 
             set sort_cols [lrange $args $i end]
 
-            set sort_list {}
+            set sort_list [list]
 
             for { set i 1 } { $i <= $rowcount } { incr i } {
                 upvar $multirow_level_up $name:$i row
@@ -1002,7 +1002,7 @@ ad_proc -public template::url { command args } {
         }
 
         get_query {
-            set keyvalues {}
+            set keyvalues [list]
             for { set i 0 } { $i < [ns_set size $params] } { incr i } {
                 set key [ns_set key $params $i]
                 set value [ns_set value $params $i]

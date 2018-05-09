@@ -67,7 +67,7 @@ set doc_pages [lindex [glob -nocomplain "[acs_package_root_dir $package_key]/www
 
 switch $kind {
     procs_files {
-        array set procs {}
+        array set procs [list]
 
         multirow create procs_files path full_path first_sentence view
 
@@ -92,7 +92,7 @@ switch $kind {
         }
     }
     procs {
-        array set procs {}
+        array set procs [list]
 
         foreach path [apm_get_package_files -package_key $package_key -file_types tcl_procs] {
             if { [nsv_exists api_proc_doc_scripts "packages/$package_key/$path"] } {
@@ -128,7 +128,7 @@ switch $kind {
     }
     content {
         multirow create content_pages indentation full_path content_type name type first_sentence
-        set last_components {}
+        set last_components [list]
         foreach path [apm_get_package_files -package_key $package_key -file_types content_page] {
             set components [split $path "/"]
             if { [info exists doc_elements] } {

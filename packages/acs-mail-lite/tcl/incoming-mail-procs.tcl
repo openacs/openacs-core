@@ -206,7 +206,7 @@ namespace eval acs_mail_lite {
 	#get all available headers
 	set keys [mime::getheader $mime -names]
 		
-	set headers {}
+	set headers [list]
 
 	# create both the headers array and all headers directly for the email array
 	foreach header $keys {
@@ -225,7 +225,7 @@ namespace eval acs_mail_lite {
 	}
 	
 	# travers the tree and extract parts into a flat list
-	set all_parts {}
+	set all_parts [list]
 	foreach part $parts {
 	    if {[mime::getproperty $part content] eq "multipart/alternative"} {
 		foreach child_part [mime::getproperty $part parts] {
@@ -236,8 +236,8 @@ namespace eval acs_mail_lite {
 	    }
 	}
 	
-	set bodies {}
-	set files {}
+	set bodies [list]
+	set files [list]
 	
 	#now extract all parts (bodies/files) and fill the email array
 	foreach part $all_parts {

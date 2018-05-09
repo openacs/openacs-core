@@ -139,7 +139,7 @@ namespace eval notification::email {
        set content [ad_html_qualify_links $content]
 
        # Use this to build up extra mail headers
-       set extra_headers {}
+       set extra_headers [list]
 
        # This should disable most auto-replies.
        lappend extra_headers [list "Precedence" "list"]
@@ -235,7 +235,7 @@ namespace eval notification::email {
             return {}
         }
 
-        set list_of_reply_ids {}
+        set list_of_reply_ids [list]
         set new_messages_p 0
 
         foreach msg $messages {
@@ -253,7 +253,7 @@ namespace eval notification::email {
             set end_of_headers_p 0
             set i 0
             set line [lindex $file $i]
-            set headers {}
+            set headers [list]
             set orig_headers ""
 
             # walk through the headers and extract each one

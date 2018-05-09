@@ -448,7 +448,7 @@ ad_proc -private site_node::update_cache {
             set query_name select_site_node
         }
 
-        set cur_obj_ids {}
+        set cur_obj_ids [list]
         db_foreach $query_name {} {
             if {$parent_id eq ""} {
                 # url of root node
@@ -625,9 +625,9 @@ ad_proc -public site_node::get_all_from_object_id {
     Return a list of site node info associated with the given object_id.
     The nodes will be ordered descendingly by url (children before their parents).
 } {
-    set node_id_list {}
+    set node_id_list [list]
 
-    set url_list {}
+    set url_list [list]
     foreach url [get_url_from_object_id -object_id $object_id] {
         lappend node_id_list [get -url $url]
     }
@@ -726,7 +726,7 @@ ad_proc -public site_node::get_ancestors {
 } {
     @return the ancestors of this node
 } {
-    set result {}
+    set result [list]
     set array_result_p [string equal $element ""]
 
     while {$node_id ne "" } {
@@ -803,7 +803,7 @@ ad_proc -public site_node::get_children {
     set node_url [site_node::get_url -node_id $node_id]
 
     if { !$all_p } {
-        set child_urls {}
+        set child_urls [list]
         set s [string length "$node_url"]
         # find all child_urls who have only one path element below node_id
         # by clipping the node url and last character and seeing if there
@@ -819,7 +819,7 @@ ad_proc -public site_node::get_children {
 
 
     if { [llength $filters] > 0 } {
-        set return_val {}
+        set return_val [list]
         foreach child_url $child_urls {
             array unset site_node
             if {![catch {array set site_node [nsv_get site_nodes $child_url]}]} {
@@ -847,7 +847,7 @@ ad_proc -public site_node::get_children {
             }
         }
     } elseif { $element ne "" } {
-        set return_val {}
+        set return_val [list]
         foreach child_url $child_urls {
             array unset site_node
             if {![catch {array set site_node [nsv_get site_nodes $child_url]}]} {
@@ -1357,7 +1357,7 @@ if {$UseXotclSiteNodes} {
                 }
 
                 if { [llength $filters] > 0 } {
-                    set return_val {}
+                    set return_val [list]
                     foreach child_url $child_urls {
                         array unset site_node
                         if {![catch {array set site_node [:get -url $child_url]}]} {
@@ -1379,7 +1379,7 @@ if {$UseXotclSiteNodes} {
                         }
                     }
                 } elseif { $element ne "" } {
-                    set return_val {}
+                    set return_val [list]
                     foreach child_url $child_urls {
                         array unset site_node
                         if {![catch {array set site_node [:get -url $child_url]}]} {

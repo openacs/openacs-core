@@ -63,8 +63,8 @@ ad_proc -private ad_complaints_init {context} {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    set ::ad_page_contract_complaints {}
-    set ::ad_page_contract_errorkeys {}
+    set ::ad_page_contract_complaints [list]
+    set ::ad_page_contract_errorkeys [list]
     set ::ad_page_contract_context $context
 }
 
@@ -136,7 +136,7 @@ ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    array set ::ad_page_contract_error_string {}
+    array set ::ad_page_contract_error_string [list]
 
     foreach { errorkeys text } $errorstrings {
         foreach errorkey $errorkeys {
@@ -541,7 +541,7 @@ x
 
 
     if { [llength $args] == 0 } {
-        set query {}
+        set query [list]
     } else {
 
         set valid_args { validate errors return_errors properties }   ;# add type later
@@ -553,7 +553,7 @@ x
         } else {
             # otherwise, accept a -query argument
             lappend valid_args query
-            set query {}
+            set query [list]
         }
 
         ad_arg_parser $valid_args $args
@@ -599,16 +599,16 @@ x
     # array apc_flags($name):         contains a list of the flags that apply
     #
 
-    set apc_formals {}
-    array set apc_formal {}
-    array set apc_default_value {}
+    set apc_formals [list]
+    array set apc_formal [list]
+    array set apc_default_value [list]
 
-    array set apc_internal_filter {}
-    array set apc_filters {}
-    array set apc_post_filters {}
-    array set apc_filter_parameters {}
+    array set apc_internal_filter [list]
+    array set apc_filters [list]
+    array set apc_post_filters [list]
+    array set apc_filter_parameters [list]
 
-    array set apc_flags {}
+    array set apc_flags [list]
 
     foreach element $query {
         set element_len [llength $element]
@@ -631,7 +631,7 @@ x
         }
 
         set pre_flag_list [split [string tolower $flags] ,]
-        set flag_list {}
+        set flag_list [list]
 
         # find parameterized flags
         foreach flag $pre_flag_list {
@@ -664,7 +664,7 @@ x
         # Sort the flag list according to priority
         #
 
-        set flag_list_for_sorting {}
+        set flag_list_for_sorting [list]
         foreach flag $flag_list {
             lappend flag_list_for_sorting [list [ad_page_contract_filter_priority $flag] $flag]
         }
@@ -676,9 +676,9 @@ x
         # apc_flags($name) is for documentation only.
         #
 
-        set apc_flags($name) {}
-        set apc_filters($name) {}
-        set apc_post_filters($name) {}
+        set apc_flags($name) [list]
+        set apc_filters($name) [list]
+        set apc_post_filters($name) [list]
 
         foreach flag_entry $flag_list_sorted {
             set flag [lindex $flag_entry 1]
@@ -769,10 +769,10 @@ x
     #                                    for the validation block. Once the block has executed, this entry
     #                                    self destructs, i.e. unset apc_validation_blocks($name)
 
-    array set apc_validation_blocks {}
+    array set apc_validation_blocks [list]
 
     if { ![info exists validate] } {
-        set validate {}
+        set validate [list]
     }
 
     set validate_len [llength $validate]
@@ -812,7 +812,7 @@ x
             }
             incr i
         } else {
-            set requires {}
+            set requires [list]
         }
         set code [lindex $validate $i]
         set apc_validation_blocks($name) [list $requires $code]
@@ -846,7 +846,7 @@ x
 
     # This is the array in which we store the signature variables as we come across them
     # Whenever we see a variable named foo:sig, we record it here as apc_signatures(foo).
-    array set apc_signatures {}
+    array set apc_signatures [list]
 
     for { set form_counter_i 0 } { $form_counter_i < $form_size } { incr form_counter_i } {
 

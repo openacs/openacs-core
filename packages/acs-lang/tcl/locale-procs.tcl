@@ -631,7 +631,7 @@ ad_proc -private lang::conn::get_accept_language_header {} {
 
     # Split by comma, and get rid of any ;q=0.5 parts
     # acclang is something like 'da,en-us;q=0.8,es-ni;q=0.5,de;q=0.3'
-    set acclangv {}
+    set acclangv [list]
     foreach elm [split $acclang ","] {
         # Get rid of trailing ;q=0.5 part and trim spaces
         set elm [string trimleft [lindex [split $elm ";"] 0] " "]

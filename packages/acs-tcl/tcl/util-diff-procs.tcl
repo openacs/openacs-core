@@ -115,7 +115,7 @@ ad_proc -public util::html_diff {
     package require struct::list
 
     set frag $old
-    set old_list {}
+    set old_list [list]
     while {$frag ne ""} {
 	if {![regexp "(\[^<]*)(<(/?)(\[^ \r\n\t>]+)(\[^>]*)>)?(.*)" $frag match pretag fulltag close tag tagbody frag]} {
 	    # we should never get here, the regexp should match anything
@@ -126,7 +126,7 @@ ad_proc -public util::html_diff {
 	}
 	if {$pretag ne ""} {
 	    set pretag [string map {\n " "} $pretag]
-	    set pretag2 {}
+	    set pretag2 [list]
 	    foreach element [split $pretag " "] {
 		if {[string trim $element] ne ""} {
 		    lappend pretag2 [string trim $element]
@@ -142,7 +142,7 @@ ad_proc -public util::html_diff {
     }
 
     set frag $new
-    set new_list {}
+    set new_list [list]
     while {$frag ne ""} {
 	if {![regexp "(\[^<]*)(<(/?)(\[^ \r\n\t>]+)(\[^>]*)>)?(.*)" $frag match pretag fulltag close tag tagbody frag]} {
 	    # we should never get here, the regexp should match anything
@@ -152,7 +152,7 @@ ad_proc -public util::html_diff {
 	}
 	if {$pretag ne ""} {
 	    set pretag [string map {\n " "} $pretag]
-	    set pretag2 {}
+	    set pretag2 [list]
 	    foreach element [split $pretag " "] {
 		if {[string trim $element] ne ""} {
 		    lappend pretag2 [string trim $element]

@@ -12,14 +12,14 @@ set context [list $page_title]
 #gets the information in a different way.
 
 set threads [ns_info threads]
-set connections {}
+set connections [list]
 foreach thread $threads {
     if { [lindex $thread 5] eq "ns:connthread" && [llength [lindex $thread 6]] > 0 } {
 	lappend connections [lindex $thread 6]
     }
 }
 
-array set ip_p {}
+array set ip_p [list]
 
 multirow create connections num ip state method url seconds bytes
 

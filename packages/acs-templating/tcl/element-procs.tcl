@@ -431,7 +431,7 @@ ad_proc -private template::element::validate { form_id element_id } {
 
   # if the element is optional and the value is an empty string, then ignore
   if { $is_optional && [lindex $values 0] eq "" } {
-    set values {}
+    set values [list]
 
     # also clobber the value(s) for a submit widget
     if {$element(widget) eq "submit"} {
@@ -487,10 +487,10 @@ ad_proc -private template::element::validate { form_id element_id } {
 
   } else {
 
-    set element(validate) {}
+    set element(validate) [list]
   }
 
-  set v_errors {}
+  set v_errors [list]
 
   foreach value $values {
   
@@ -605,7 +605,7 @@ ad_proc -public template::element::querygetall { element_ref } {
     set values [ns_querygetall $element(id)]
 
     # QUIRK: ns_querygetall returns a single-element list {{}} for no values
-    if { [string equal $values {{}}] } { set values {} }
+    if { [string equal $values {{}}] } { set values [list] }
 
   } else {
     set values [template::data::transform::$datatype element]
@@ -758,7 +758,7 @@ ad_proc -private template::element::copy_value_to_values_if_defined {} {
       # breaks eg ad_form.
       #
     if { [string equal opts(value) {}] } {
-      set opts(values) {}
+      set opts(values) [list]
     } else {
       set opts(values) [list $opts(value)]
     }

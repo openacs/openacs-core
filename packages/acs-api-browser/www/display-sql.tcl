@@ -28,7 +28,7 @@ ad_page_contract {
     sql:onevalue
 }
 
-set context {}
+set context [list]
 if {$version_id ne ""} {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name

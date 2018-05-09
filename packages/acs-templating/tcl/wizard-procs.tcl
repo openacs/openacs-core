@@ -93,7 +93,7 @@ ad_proc -public template::wizard::create { args } {
 
     template::util::get_opts $args
 
-    set steps {}
+    set steps [list]
     set rowcount 0
     if { [info exists opts(name)] } {
 	set wizard_name $opts(name)
@@ -416,7 +416,7 @@ ad_proc -public template::wizard::submit { form_id args } {
 
     get_reference
     upvar 2 wizard_submit_buttons buttons
-    set buttons {}
+    set buttons [list]
 
     set param_level [template::adp_level]
     upvar #$param_level wizard:params params
@@ -611,7 +611,7 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
         append url "&wizard_visitedstep${one_wizard}=[ns_queryget wizard_visitedstep${one_wizard}]"
     }
 
-    set multiple_listed {}
+    set multiple_listed [list]
 
     # check for passthrough parameters
 

@@ -116,7 +116,7 @@ ad_after_server_initialization filters_register {
     if {[nsv_exists rp_filters .]} {
         set filters [nsv_get rp_filters .]
     } else {
-        set filters {}
+        set filters [list]
     }
     # This lsort is what makes the priority stuff work. It guarantees
     # that filters are registered in order of priority. AOLServer will
@@ -159,7 +159,7 @@ ad_after_server_initialization procs_register {
     if {[nsv_exists rp_registered_procs .]} {
         set procs [nsv_get rp_registered_procs .]
     } else {
-        set procs {}
+        set procs [list]
     }
 
     set proc_index 0

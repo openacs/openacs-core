@@ -260,7 +260,7 @@ db_foreach nodes_select {} {
     set expand_mode 0
     if {!$root_p && $n_children > 0} {
         set expand_mode 1
-        set urlvars {}
+        set urlvars [list]
         foreach n $expand {
             if {$n == $node_id} {
                 set expand_mode 2

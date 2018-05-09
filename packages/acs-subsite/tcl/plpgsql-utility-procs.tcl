@@ -22,7 +22,7 @@ namespace eval plpgsql_utility {
 	@creation-date 11/2000
 
     } {
-	set the_list {}
+	set the_list [list]
 	foreach row $attr_list {
 	    lappend the_list [list [lindex $row 1] [lindex $row 3]]
 	}
@@ -56,7 +56,7 @@ namespace eval plpgsql_utility {
 	}
 
 	# For each real arg, append default or supplied arg value
-	set pieces {}
+	set pieces [list]
 	foreach row $real_args {
 	    lassign $row arg_name arg_default
 
@@ -97,7 +97,7 @@ namespace eval plpgsql_utility {
 	@creation-date 11/2000
 
     } {
-	set pieces {}
+	set pieces [list]
 	set arg_num 0
 	foreach triple $attr_list {
 	    incr arg_num
@@ -118,7 +118,7 @@ namespace eval plpgsql_utility {
 	@creation-date 07/2001
 
     } {
-	set pieces {}
+	set pieces [list]
 	foreach triple $attr_list {
 	    set table [string toupper [string trim [lindex $triple 0]]]
 	    set attr [string toupper [string trim [lindex $triple 1]]]
@@ -146,7 +146,7 @@ namespace eval plpgsql_utility {
 	@creation-date 07/2001
 
     } {
-	set pieces {}
+	set pieces [list]
 	foreach triple $attr_list {
 	    set attr  [string trim [lindex $triple 1]]
 	    set dft   [string trim [lindex $triple 2]]

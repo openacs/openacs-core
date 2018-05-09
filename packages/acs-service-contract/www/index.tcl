@@ -1,4 +1,4 @@
-set context {}
+set context [list]
 
 db_multirow defined_contracts defined_contracts {
     select contract_id,

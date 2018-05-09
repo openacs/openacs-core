@@ -282,22 +282,22 @@ ad_proc apm_build_one_package_relationships {
 } {
 
     array unset ::apm_visited_package_keys
-    set ::apm_package_url_resolution {}
+    set ::apm_package_url_resolution [list]
     apm_package_list_url_resolution $package_key
     nsv_set apm_package_url_resolution $package_key $::apm_package_url_resolution
 
     array unset ::apm_visited_package_keys
-    set ::apm_package_inherit_order {}
+    set ::apm_package_inherit_order [list]
     apm_one_package_inherit_order $package_key
     nsv_set apm_package_inherit_order $package_key $::apm_package_inherit_order
 
     array unset ::apm_visited_package_keys
-    set ::apm_package_load_libraries_order {}
+    set ::apm_package_load_libraries_order [list]
     apm_one_package_load_libraries_dependencies $package_key
     nsv_set apm_package_load_libraries_order $package_key $::apm_package_load_libraries_order
 
     array unset ::apm_visited_package_keys
-    set ::apm_package_descendents {}
+    set ::apm_package_descendents [list]
     apm_one_package_descendents $package_key
     nsv_set apm_package_descendents $package_key $::apm_package_descendents
 
@@ -371,7 +371,7 @@ ad_proc -private apm_mark_files_for_reload {
 
     @author Peter Marklund
 } {
-    set changed_files {}
+    set changed_files [list]
     foreach relative_path $file_list {
         set full_path "$::acs::rootdir/$relative_path"
 
@@ -418,7 +418,7 @@ ad_proc -private apm_mark_version_for_reload {
     ns_log notice "apm_mark_version_for_reload try to get package_key from $version_id"
     set package_key [apm_package_key_from_version_id $version_id]
     ns_log notice "apm_mark_version_for_reload $package_key $version_id"
-    set changed_files {}
+    set changed_files [list]
 
     set file_types [list tcl_procs query_file]
     if { [apm_load_tests_p] } {
@@ -509,7 +509,7 @@ ad_proc -private apm_load_libraries {
                     to in *all* active interpreters).
 
 } {
-    set file_types {}
+    set file_types [list]
     if { $procs_p } {
         lappend file_types tcl_procs
     }
@@ -528,7 +528,7 @@ ad_proc -private apm_load_libraries {
     }
 
     # Scan the package directory for files to source.    
-    set files {}    
+    set files [list]    
     foreach package $packages {
 
         set paths [apm_get_package_files -package_key $package -file_types $file_types]
@@ -583,7 +583,7 @@ ad_proc -public apm_load_packages {
         set packages [apm_enabled_packages]
     }
 
-    set packages_to_load {}
+    set packages_to_load [list]
     foreach package_key $packages {
         foreach package_to_load [::apm_package_load_libraries_order $package_key] {
             if {$package_to_load ni $packages_to_load} {
@@ -648,7 +648,7 @@ ad_proc -private apm_load_queries {
     }
 
     # Scan the package directory for files to source.    
-    set files {}    
+    set files [list]    
     foreach package $packages {
 
         set files [ad_find_all_files $::acs::rootdir/packages/$package]
@@ -697,7 +697,7 @@ ad_proc -private apm_subdirs { path } {
     Returns a list of subdirectories of path (including path itself)
 
 } {
-    set dirs {}
+    set dirs [list]
     lappend dirs $path
     foreach subdir [glob -nocomplain -type d [file join $path *]] {
         lappend dirs {*}[apm_subdirs $subdir]
@@ -745,7 +745,7 @@ ad_proc -public apm_load_any_changed_libraries { {errorVarName {}} } {
     if {$errorVarName ne ""} {
         upvar $errorVarName errors
     } else {
-        array set errors {}
+        array set errors [list]
     }
 
     # Determine the current reload level in this interpreter by calling
@@ -758,7 +758,7 @@ ad_proc -public apm_load_any_changed_libraries { {errorVarName {}} } {
 
     # Check watched files, adding them to files_to_reload if they have
     # changed.
-    set files_to_reload {}
+    set files_to_reload [list]
     foreach file [nsv_array names apm_reload_watch] {
         set path "$::acs::rootdir/$file"
         ns_log Debug "APM: File being watched: $path"
@@ -783,7 +783,7 @@ ad_proc -public apm_load_any_changed_libraries { {errorVarName {}} } {
 
     # Keep track of which files we've reloaded in this loop so we never
     # reload the same one twice.
-    array set reloaded_files {}
+    array set reloaded_files [list]
     while { $reload_level < [nsv_get apm_properties reload_level] } {
         incr reload_level
         set changed_reload_level_p 1
@@ -862,7 +862,7 @@ ad_proc -public apm_package_supported_databases {
     @see db_known_database_types
     @see apm_package_supports_rdbms_p
 } {
-    set supported_databases_list {}
+    set supported_databases_list [list]
     foreach db_type_info [db_known_database_types] {
         set db_type [lindex $db_type_info 0]
         if { [apm_package_supports_rdbms_p -package_key $package_key] } {
@@ -1236,7 +1236,7 @@ ad_proc -private apm_package_ids_from_key_mem {
 } {
     
     if {$mounted_p} {
-        set package_ids {}
+        set package_ids [list]
         db_foreach apm_package_ids_from_key {
             select package_id from apm_packages where package_key = :package_key
         } {
@@ -1497,7 +1497,7 @@ ad_proc -public apm_unused_callback_types {
 
     set supported_types [apm_supported_callback_types]
 
-    set unused_types {}
+    set unused_types [list]
     foreach supported_type $supported_types {
         if {$supported_type ni $used_callback_types} {
             lappend unused_types $supported_type

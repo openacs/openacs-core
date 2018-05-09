@@ -145,7 +145,7 @@ ad_proc -private acs_sc_proc {
     @return 0 on failure, 1 on success.
     @author Neophytos Demetriou
 } {
-    set arguments {}
+    set arguments [list]
     set docblock {}
 
     set proc_name [acs_sc_generate_name $contract $impl $operation]
@@ -228,7 +228,7 @@ ad_proc -private acs_sc_get_statement {
 	    set full_statement [join $full_statement]
 	}
 	PLPGSQL {
-	    set args_list {}
+	    set args_list [list]
 	    for {set __i 0} {$__i < [llength $arguments]} {incr __i} {
 		lappend args_list "\$[lindex $arguments $__i]"
 	    }

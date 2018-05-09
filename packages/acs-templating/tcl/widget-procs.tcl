@@ -173,7 +173,7 @@ ad_proc -private template::data::transform::party_search {
     } else {
         # we need to return a select list
 
-        set options {}
+        set options [list]
 
         if { [llength $persons] > 0 } {
             set options $persons
@@ -672,7 +672,7 @@ ad_proc -public template::widget::menu {
 
     set output {}
     if { $mode ne "edit" } {
-        set selected_list {}
+        set selected_list [list]
 
         foreach option $options_list {
             lassign $option label value

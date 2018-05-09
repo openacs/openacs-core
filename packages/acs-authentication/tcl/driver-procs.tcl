@@ -52,7 +52,7 @@ ad_proc -public auth::driver::get_parameter_values {
     @author Simon Carstensen (simon@collaboraid.biz)
     @creation-date 2003-08-27
 } {
-    array set param {}
+    array set param [list]
 
     db_foreach select_values {
         select key, value
@@ -64,7 +64,7 @@ ad_proc -public auth::driver::get_parameter_values {
     }
 
     # We need to ensure that the driver gets all the parameters it is asking for, and nothing but the ones it is asking for
-    set params {}
+    set params [list]
     foreach { name desc } [get_parameters -impl_id $impl_id] {
         if { [info exists param($name)] } {
             lappend params $name $param($name)

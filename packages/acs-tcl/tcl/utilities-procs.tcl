@@ -70,7 +70,7 @@ ad_proc util::zip {
     # To avoid having the full path of the file included in the archive,
     # we must first cd to the source directory. zip doesn't have an option
     # to do this without building a little script...
-    set zip_cmd {}
+    set zip_cmd [list]
     lappend zip_cmd "cd $in_path"
     lappend zip_cmd "${zip} -r \"${destination}\" \"${filename}\""
     set zip_cmd [join $zip_cmd " && "]
@@ -681,7 +681,7 @@ ad_proc -public export_vars {
     # 'noprocessing_vars' is yet another container of variables, 
     # only this one doesn't have the values subst'ed
     # and we don't try to find :multiple and :array flags in the namespec
-    set noprocessing_vars {}
+    set noprocessing_vars [list]
 
     if { $entire_form_p } {
         set the_form [ns_getform]
@@ -705,13 +705,13 @@ ad_proc -public export_vars {
     # 2. if they're in vars, but not in exclude or override, use those
     
     # There'll always be an entry here if the variable is to be exported
-    array set exp_precedence_type {}
+    array set exp_precedence_type [list]
 
     # This contains entries of the form exp_flag(name:flag) e.g., exp_flag(foo:multiple)
-    array set exp_flag {}
+    array set exp_flag [list]
 
     # This contains the value if provided, otherwise we'll pull it out of the caller's environment
-    array set exp_value {}
+    array set exp_value [list]
 
     foreach precedence_type { override exclude vars noprocessing_vars } {
         foreach var_spec [set $precedence_type] {
@@ -767,7 +767,7 @@ ad_proc -public export_vars {
                             if { [array exists upvar_variable] } {
                                 if { $no_empty_p } {
                                     # If the no_empty_p flag is set, remove empty string values first
-                                    set exp_value($name) {}
+                                    set exp_value($name) [list]
                                     foreach { key value } [array get upvar_variable] {
                                         if { $value ne "" } {
                                             lappend exp_value($name) $key $value
@@ -788,7 +788,7 @@ ad_proc -public export_vars {
                                     # no_empty_p flag set, remove empty strings
                                     if { [info exists exp_flag($name:multiple)] } {
                                         # This is a list, remove empty entries
-                                        set exp_value($name) {}
+                                        set exp_value($name) [list]
                                         foreach elm $upvar_variable {
                                             if { $elm ne "" } {
                                                 lappend exp_value($name) $elm
@@ -871,7 +871,7 @@ ad_proc -public export_vars {
     set export_string {}
     
     if { $url_p } {
-        set export_list {}
+        set export_list [list]
         for { set i 0 } { $i < $export_size } { incr i } {
             lappend export_list [ad_urlencode_query [ns_set key $export_set $i]]=[ad_urlencode_query [ns_set value $export_set $i]]
         }
@@ -985,7 +985,7 @@ ad_proc export_ns_set_vars {
         set setid [ns_getform]
     }
 
-    set return_list {}
+    set return_list [list]
     if { $setid ne "" } {
         set set_size [ns_set size $setid]
         set set_counter_i 0
@@ -1022,7 +1022,7 @@ ad_proc -public export_entire_form_as_url_vars {
     
     @see export_vars
 } {
-    set params {}
+    set params [list]
     set the_form [ns_getform]
     if { $the_form ne "" } {
         for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
@@ -1422,7 +1422,7 @@ ad_proc -public ad_schedule_proc {
     nsv_set ad_procs . $procs
     ns_mutex unlock [nsv_get ad_procs mutex]
 
-    set my_args {}
+    set my_args [list]
     if { $thread == "t" } {
         lappend my_args "-thread"
     }
@@ -2219,7 +2219,7 @@ ad_proc -public util_get_subset_missing {
         return [list]
     }
 
-    set sorted_list1 {}
+    set sorted_list1 [list]
     foreach elm [lsort $list1] {
         if { [llength $sorted_list1] == 0 || [lindex $sorted_list1 end] ne $elm } {
             lappend sorted_list1 $elm
@@ -2230,7 +2230,7 @@ ad_proc -public util_get_subset_missing {
     set len1 [llength $sorted_list1]
     set len2 [llength $sorted_list2]
 
-    set missing_elms {}
+    set missing_elms [list]
 
     # Loop over list1 and list2 in sort order, comparing the elements
     
@@ -2326,7 +2326,7 @@ ad_proc -public ad_ns_set_keys {
     @author Lars Pind (lars@pinds.com)
     
 } {
-    set keys {}
+    set keys [list]
     set size [ns_set size $set_id]
     for { set i 0 } { $i < $size } { incr i } {
         set key [ns_set key $set_id $i]
@@ -2671,7 +2671,7 @@ ad_proc -public util_ns_set_to_list {
 
     @return An array of equivalent keys and values as the ns_set specified.
 } {
-    set result {}
+    set result [list]
 
     for {set i 0} {$i < [ns_set size $set]} {incr i} {
         lappend result [ns_set key $set $i]
@@ -2733,7 +2733,7 @@ ad_proc -public util_list_of_ns_sets_to_list_of_lists {
     @author Ola Hansson (ola@polyxena.net)
     @creation-date September 27, 2002
 } {
-    set result {}
+    set result [list]
     
     foreach ns_set $list_of_ns_sets {
         lappend result [util_ns_set_to_list -set $ns_set]
@@ -3344,7 +3344,7 @@ ad_proc -public util::randomize_list {
     Returns a random permutation of the list.
 } {
     set len [llength $list]
-    set result {}
+    set result [list]
     while { [llength $list] > 0 } {
         set index [randomRange [expr {[llength $list] - 1}]]
         lappend result [lindex $list $index]
@@ -3594,11 +3594,11 @@ ad_proc -public util::find_all_files {
     @return list of lists (filename and full_path) of all files found.
 } {
     # Use the examined_files array to track files that we've examined.
-    array set examined_files {}
+    array set examined_files [list]
 
     # A list of files that we will return (in the order in which we
     # examined them).
-    set files {}
+    set files [list]
 
     # A list of files that we still need to examine.
     set files_to_examine [list $path]
@@ -3608,7 +3608,7 @@ ad_proc -public util::find_all_files {
     # add contained files to $new_files_to_examine (which will become
     # $files_to_examine in the next iteration).
     while { [incr max_depth -1] > -2 && [llength $files_to_examine] != 0 } {
-        set new_files_to_examine {}
+        set new_files_to_examine [list]
         foreach file $files_to_examine {
             # Only examine the file if we haven't already. (This is just a safeguard
             # in case, e.g., Tcl decides to play funny games with symbolic links so

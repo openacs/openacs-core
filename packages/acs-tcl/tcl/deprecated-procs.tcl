@@ -228,7 +228,7 @@ ad_proc -deprecated ad_export_vars {
     #
     ####################
 
-    array set export {}
+    array set export [list]
 
     set override_p 0
     foreach argument { include override } {
@@ -283,13 +283,13 @@ ad_proc -deprecated ad_export_vars {
     ####################
     
     if { !$form_p } {
-        set export_list {}
+        set export_list [list]
         foreach varname [array names export] {
             lappend export_list "[ns_urlencode $varname]=[ns_urlencode $export($varname)]"
         }
         return [join $export_list &]
     } else {
-        set export_list {}
+        set export_list [list]
         foreach varname [array names export] {
             lappend export_list "<input type=\"hidden\" name=\"[ns_quotehtml $varname]\"\
             value=\"[ns_quotehtml $export($varname)]\" >"
@@ -815,7 +815,7 @@ $extra_stuff_for_document_head
 <title>$page_title</title>
 </head>
 "
-    array set attrs {}
+    array set attrs [list]
     set attrs(bgcolor) [parameter::get -package_id [ad_acs_kernel_id] -parameter bgcolor -default "white"]
     set attrs(text)    [parameter::get -package_id [ad_acs_kernel_id] -parameter textcolor -default "black"]
 
@@ -1773,8 +1773,8 @@ ad_proc -deprecated ad_table_sort_form {
     
     # build the map of currently selected columns 
     set full_column [split $sort_spec ","]
-    set sel_columns {}
-    set direction {}
+    set sel_columns [list]
+    set direction [list]
     foreach col $full_column {
         regexp {([^*,]+)([*])?} $col match coln dirn
         if {$dirn eq "*"} {
@@ -2153,7 +2153,7 @@ ad_proc -deprecated set_union! { u-name v } {
 ad_proc -deprecated set_intersection { u v } {
     <p>Returns the intersection of sets $u and $v.</p>
 } {
-    set result {}
+    set result [list]
     
     foreach ue $u {
 	if { [set_member? $v $ue] } {
@@ -2171,7 +2171,7 @@ ad_proc -deprecated set_intersection! { u-name v } {
     to that intersection, and also returns that intersection.</p>
 } {
     upvar $u-name u
-    set result {}
+    set result [list]
     
     foreach ue $u {
 	if { [set_member? $v $ue] } {
@@ -2187,7 +2187,7 @@ ad_proc -deprecated set_difference { u v } {
     <p>Returns the difference of sets $u and $v.  (i.e. The set of all
     members of u that aren't also members of $v.)</p>
 } {
-    set result {}
+    set result [list]
 
     foreach ue $u {
 	if { ![set_member? $v $ue] } {
@@ -2205,7 +2205,7 @@ ad_proc -deprecated set_difference! { u-name v } {
     to that difference, and also returns that difference.</p>
 } {
     upvar $u-name u
-    set result {}
+    set result [list]
 
     foreach ue $u {
 	if { ![set_member? $v $ue] } {
@@ -2663,7 +2663,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
     }
 
 
-    set variables {}
+    set variables [list]
     switch -- $mode {
         array {
             set variables $formvars

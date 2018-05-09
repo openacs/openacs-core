@@ -12,7 +12,7 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
 
     @author Jeff Davis (davis@xarg.net)
 } {
-    set uninstalled {}
+    set uninstalled [list]
     # Determine which spec files are not installed
     foreach spec_file [apm_scan_packages "$::acs::rootdir/packages"] {
         if { ! [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } { 
@@ -26,7 +26,7 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
     }
 
     # sort the list and return in array set form
-    set out {}
+    set out [list]
     foreach pkg [lsort -dictionary -index 1 $uninstalled] { 
         lappend out {*}$pkg
     }

@@ -141,7 +141,7 @@ ad_proc -public template::form::create { id args } {
 
   template::util::get_opts $args
 
-  set elements {}
+  set elements [list]
 
   # check whether this form is being submitted
   upvar #$level $id:submission submission
@@ -785,7 +785,7 @@ ad_proc -public template::form::get_elements {
     set elements $properties(element_names)
 
     if { $no_api_p } {
-        set elements_no_api {}
+        set elements_no_api [list]
         foreach element $elements {
             if { ![regexp {^__} $element] } {
                 lappend elements_no_api $element
@@ -830,7 +830,7 @@ ad_proc -public template::form::get_combined_values { id args } {
   get_reference 
 
   set exp [join $args "|"]
-  set values {}
+  set values [list]
 
   foreach element_name $properties(element_names) {
     if { [regexp $exp $element_name match] } {

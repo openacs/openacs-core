@@ -20,7 +20,7 @@ ad_page_contract {
 }
 
 set title "API Browser"
-set context {}
+set context [list]
 
 if  { [info exists about_package_key] } {
 

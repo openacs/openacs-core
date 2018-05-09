@@ -26,11 +26,11 @@ ad_proc -public ad_find_all_files {
 
 } {
     # Use the examined_files array to track files that we've examined.
-    array set examined_files {}
+    array set examined_files [list]
 
     # A list of files that we will return (in the order in which we
     # examined them).
-    set files {}
+    set files [list]
 
     # A list of files that we still need to examine.
     set files_to_examine [list $path]

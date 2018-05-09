@@ -470,7 +470,7 @@ ad_proc -public acs_user::update {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    set cols {}
+    set cols [list]
     foreach var { authority_id username screen_name password_question password_answer email_verified_p } {
         if { [info exists $var] } {
             lappend cols "$var = :$var"
@@ -559,7 +559,7 @@ ad_proc -public party::update {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    set cols {}
+    set cols [list]
     foreach var { email url } {
         if { [info exists $var] } {
             lappend cols "$var = :$var"

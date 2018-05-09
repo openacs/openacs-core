@@ -342,7 +342,7 @@ ad_library {
              set _errno [catch {
                  if { [info exists bind] && [llength $bind] != 0 } {
                      if { [llength $bind] == 1 } {
-                         set bind_vars {}
+                         set bind_vars [list]
                          set len [ns_set size $bind]
                          for {set i 0} {$i < $len} {incr i} {
                              lappend bind_vars [ns_set key $bind $i] \
@@ -638,7 +638,7 @@ ad_proc -public ds_comments_p {} {
 ad_proc -public ds_get_comments {} {
     Get comments for the current request
 } {
-    set comments {}
+    set comments [list]
     if { [nsv_exists ds_request $::ad_conn(request).comment] } {
         set comments [nsv_get ds_request $::ad_conn(request).comment]
     }

@@ -55,7 +55,7 @@ set context [list [list "." "Install Software"] $page_title]
 
 apm_get_installed_versions -array installed_versions
 set upgrades_p 0
-array set package {}
+array set package [list]
 
 if {$channel eq ""} {
     set channel $current_channel

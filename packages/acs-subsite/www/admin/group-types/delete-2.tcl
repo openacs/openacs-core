@@ -31,7 +31,7 @@ if { $operation ne "Yes, I really want to delete this group type" } {
     ad_script_abort
 }
 
-set plsql {}
+set plsql [list]
 
 if { ![db_0or1row select_type_info {
     select t.table_name, t.package_name

@@ -117,7 +117,7 @@ ad_proc -public add {
     # friendly and is thus used as the column name
     set attribute_name [plsql_utility::generate_oracle_name $pretty_name]
     
-#      set attr_list {}
+#      set attr_list [list]
 #      lappend attr_list [list "object_type" '$object_type']
 #      lappend attr_list [list "attribute_name" '$attribute_name']
 #      lappend attr_list [list "min_n_values" '$min_n_values']
@@ -130,7 +130,7 @@ ad_proc -public add {
     # A note (by ben, OpenACS)
     # the queries are empty because they are pulled out later in db_exec_plsql
     
-    set plsql {}
+    set plsql [list]
     lappend plsql_drop [list db_exec_plsql "drop_attribute" "FOO"]
     lappend plsql [list db_exec_plsql "create_attribute" "FOO"]
 
@@ -419,7 +419,7 @@ ad_proc -public array_for_type {
 } { 
     upvar $array_name attr_props
     upvar $enum_array_name enum_values
-    set attr_list {}
+    set attr_list [list]
 
     set storage_clause ""
 

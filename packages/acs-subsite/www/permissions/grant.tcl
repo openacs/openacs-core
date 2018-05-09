@@ -34,7 +34,7 @@ set maxlevel 1
 # Initialize the $hierarchy datastructure which is a list of
 # lists. The inner lists consist of two elements: 1. level,
 # 2. privilege
-set hierarchy {}
+set hierarchy [list]
 foreach privilege $existing_privs {
     lappend hierarchy [list 0 $privilege]
 }
@@ -127,7 +127,7 @@ element create grant party_id \
     -optional
 
 if { ![info exists privileges] } {
-    set privileges {}
+    set privileges [list]
 }
 
 # limit the size of the select widget to a number that should fit on a

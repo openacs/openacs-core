@@ -110,7 +110,7 @@ if {$auto_submit_p && $user_id > 0} {
 	# add commentaries.  If the bug is closed or fixed we have to
 	# reopen the bug.
         #
-        array set row {}
+        array set row [list]
 	set bug_id $exist_bug
 	
 	if {$bug_number eq ""} {
@@ -256,7 +256,7 @@ if {$auto_submit_p && $user_id > 0} {
 	{entry_id:integer(hidden),optional}
     } -on_submit {
 
-	array set row {}
+	array set row [list]
 	
 	set description [element get_value bug_edit description]
 	set error_desc_html "

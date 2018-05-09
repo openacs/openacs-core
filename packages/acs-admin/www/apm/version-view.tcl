@@ -58,7 +58,7 @@ foreach field { summary description release_date vendor } {
 # Later we'll output any items in "prompts" as entries in a bullet list at the
 # top of the page (these are things that the administrator probably needs to
 # address ASAP).
-set prompts {}
+set prompts [list]
 
 if { ![info exists installed_version_id] } {
     if { !$downloaded_p } {
@@ -115,7 +115,7 @@ if { [file isdirectory "[acs_package_root_dir $package_key]/CVS"] } {
 
 
 # Obtain a list of owners, properly hyperlinked.
-set owners {}
+set owners [list]
 db_foreach apm_all_owners {
     select owner_uri, owner_name from apm_package_owners where version_id = :version_id
 } {

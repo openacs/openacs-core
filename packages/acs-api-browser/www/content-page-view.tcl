@@ -19,7 +19,7 @@ ad_page_contract {
     script_documentation:onevalue
 }
 
-set context {}
+set context [list]
 set url_vars [export_vars {path version_id}]
 set return_url [export_vars -base [ad_conn url] {path version_id}]
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]

@@ -86,7 +86,7 @@ ad_proc -private package_create_attribute_list {
     # pl/sql code. Note that the helper procs also return nicely
     # formatted pl/sql code
 
-    set attr_list {}
+    set attr_list [list]
 
     # Start with the primary key for this object type. Continuing with
     # convention that id_column can be null (will default to new
@@ -498,7 +498,7 @@ ad_proc -private package_object_view_helper {
         }
     }
 
-    set pk_formatted {}
+    set pk_formatted [list]
     for { set i 0 } { $i < [llength $primary_keys] - 1 } { incr i } {
         lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys $i+1]"
     }
@@ -763,7 +763,7 @@ ad_proc -public package_instantiate_object {
     # parameters we've already added in the array param_array (all keys are
     # in upper case)
 
-    set pieces {}
+    set pieces [list]
 
     foreach pair $var_list {
         lassign $pair __key __value
@@ -884,7 +884,7 @@ ad_proc -public package_exec_plsql {
     # parameters we've already added in the array param_array (all keys are
     # in upper case)
 
-    set pieces {}
+    set pieces [list]
 
     foreach pair $var_list {
         lassign $pair __key __value

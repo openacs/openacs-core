@@ -90,7 +90,7 @@ ad_proc -private doc::util::find_marker_indices { text marker } {
     @see doc::util::text_divider
 } {
 
-  set indices_list {}
+  set indices_list [list]
   set last_index -1
    
   while { [regexp -indices $marker $text marker_idx] } {
@@ -119,7 +119,7 @@ ad_proc -private doc::util::text_divider { text_ref marker } {
     upvar $text_ref text
     
     set indices_list [doc::util::find_marker_indices $text $marker]
-    set result_list {}
+    set result_list [list]
 
     # first check for no markers present
     if { $indices_list eq "end" } {
@@ -289,9 +289,9 @@ ad_proc -private doc::parse_comment_text { proc_block } {
     # if we wanted to include the source text for the procedure as well:
     # set proc_info [list [list proc_name $proc_name] [list source $source_text]]
 
-    set proc_param {}
-    set proc_option {}
-    set proc_see {}
+    set proc_param [list]
+    set proc_option [list]
+    set proc_see [list]
 
     set directives [lsort -index 0 [template::parse_directives $comment_text]]
 
@@ -566,9 +566,9 @@ ad_proc -private doc::parse_tcl_library { dir_list } {
   # with respect to namespaces in the same order as the list result
 
   upvar namespace_list namespace_list 
-  set namespace_list {}
+  set namespace_list [list]
 
-  set result {}
+  set result [list]
 
   foreach dir $dir_list {
 

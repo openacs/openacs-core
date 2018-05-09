@@ -196,7 +196,7 @@ ad_proc -public apm_get_package_files {
     # We don't assume db_type proc is defined yet
     set system_db_type [nsv_get ad_database_type .]
 
-    set matching_files {}
+    set matching_files [list]
     foreach file $files {
         set rel_path [string range $file [string length $package_path]+1 end]
         set file_type [apm_guess_file_type $package_key $rel_path]
@@ -368,7 +368,7 @@ ad_proc -private apm_source { __file {errorVarName ""}} {
     if {$errorVarName ne ""} {
         upvar $errorVarName errors
     } else {
-        array set errors {}
+        array set errors [list]
     }
 
     if { ![file exists $__file] } {
@@ -423,7 +423,7 @@ ad_proc -private apm_bootstrap_load_libraries {
     @param init Load initialization files
     @param procs Load the proc library files
 } {
-    set file_types {}
+    set file_types [list]
     if { $procs_p } {
         lappend file_types tcl_procs
     }

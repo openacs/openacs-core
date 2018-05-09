@@ -106,8 +106,8 @@ namespace eval group_type {
 	# Store the plsql in a list so that we can choose, at the end,
 	# to either execute it or return it as a debug message
 
-	set plsql {}
-	set plsql_drop {}
+	set plsql [list]
+	set plsql_drop [list]
 
 	if { [db_table_exists $table_name] } {
 	    # What to do? Options:

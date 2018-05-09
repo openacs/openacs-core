@@ -110,7 +110,7 @@ ad_proc -private lang::util::get_regexp_indices { multilingual_string regexp_pat
 
     set multilingual_string_offset "0"
     set offset_string $multilingual_string
-    set indices_list {}
+    set indices_list [list]
 
     while { [regexp -indices $regexp_pattern $offset_string full_match_idx key_match_idx] } {
 
@@ -527,8 +527,8 @@ ad_proc -public lang::util::replace_adp_text_with_message_tags {
     set state text
     set out {}
 
-    set report {}
-    set garbage {}
+    set report [list]
+    set garbage [list]
 
     set n 0
 
@@ -807,7 +807,7 @@ ad_proc -public lang::util::localize_list_of_lists {
 } {
     localize the elements of a list_of_lists
 } {
-    set list_output {}
+    set list_output [list]
     foreach item $list {
 	set item_output [list]
 	foreach part $item {

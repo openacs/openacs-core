@@ -142,7 +142,7 @@ ad_proc -public template::util::spellcheck::get_sorted_list_with_unique_elements
     
 } {
     set sorted_list [lsort -dictionary $the_list]
-    set new_list {}
+    set new_list [list]
     
     set old_element "XXinitial_conditionXX"
     foreach list_element $sorted_list {
@@ -277,7 +277,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     upvar $error_num_ref error_num
 
     set error_num 0
-    set errors {}
+    set errors [list]
     
     set processed_text ""
 

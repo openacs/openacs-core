@@ -34,7 +34,7 @@ set title "$type Procedures"
 set context [list "Browse Procedures"]
 set dimensional_slider [ad_dimensional $dimensional]
 
-set matches {}
+set matches [list]
 foreach proc [nsv_array names api_proc_doc] {
     array set doc_elements [nsv_get api_proc_doc $proc]
 

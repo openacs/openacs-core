@@ -61,9 +61,9 @@ if {$name_weight eq "exact"} {
 }
 
 set counter 0
-set matches {}
-set deprecated_matches {}
-set private_matches {}
+set matches [list]
+set deprecated_matches [list]
+set private_matches [list]
 
 # place a [list proc_name score positionals] into matches for every proc
 foreach proc [nsv_array names api_proc_doc] { 

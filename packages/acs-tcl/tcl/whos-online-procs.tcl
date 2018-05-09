@@ -32,7 +32,7 @@ ad_proc -private whos_online::flush {} {
     @author Bjoern Kiesbye
 } { 
     array set last_hit [nsv_array get last_hit]
-    set onliners_out {}
+    set onliners_out [list]
     set interval 1
     set oldtime [expr {[ns_time] - [interval]}]
 
@@ -135,7 +135,7 @@ ad_proc -public whos_online::user_ids {
     @author Bjoern Kiesbye
 } {
     array set last_hit [nsv_array get last_hit]
-    set onliners {}
+    set onliners [list]
     set oldtime [expr {[ns_time] - [interval]}]
 
     for { set search [array startsearch last_hit] } { [array anymore last_hit $search] } {} {

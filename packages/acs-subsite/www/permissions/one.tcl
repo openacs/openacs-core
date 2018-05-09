@@ -34,7 +34,7 @@ db_multirow inherited inherited_permissions {} {}
 
 db_multirow acl acl {} {}
 
-set controls {}
+set controls [list]
 set controlsUrl [export_vars -base grant {application_url object_id}]
 lappend controls "<a href=\"[ns_quotehtml $controlsUrl]\">[ns_quotehtml [_ acs-subsite.Grant_Permission]]</a>"
 

@@ -15,11 +15,11 @@ set context [list [list "." "Authentication"] [list $authority_url $authority(pr
 
 
 # Get the implementation id and implementation pretty name
-array set parameters {}
-array set parameter_values {}
+array set parameters [list]
+array set parameter_values [list]
 
 # Each element is a list of impl_ids which have this parameter
-array set param_impls {}
+array set param_impls [list]
 
 foreach element_name [auth::authority::get_sc_impl_columns] {
     set name_column $element_name
@@ -47,7 +47,7 @@ if { $has_parameters_p } {
     # Set focus on first param name
     set first_param_name [lindex [array names parameters] 0]
 
-    set form_widgets {}
+    set form_widgets [list]
     foreach parameter_name [array names parameters] {
         lappend form_widgets [list ${parameter_name}:text,optional [list label $parameter_name] [list help_text $parameters($parameter_name)] {html {size 80}}]
     }
