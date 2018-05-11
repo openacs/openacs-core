@@ -31,7 +31,7 @@ set subject "[_ acs-tcl.lt_Error_Report_in_ad_sy] ( [_ acs-tcl.File ] $error_fil
 set found_in_version ""
 set send_to [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator -default "[ad_system_owner]"]
 
-set error_desc_email "
+set error_desc_email [subst {
  --------------------------------------------------------<br>
                    [_ acs-tcl.Error_Report]<br>
  --------------------------------------------------------<br>
@@ -51,7 +51,7 @@ set error_desc_email "
 ------------------------------<br>
 <br>
 <br>
-[_ acs-tcl.lt_NB_This_error_was_sub]"
+[_ acs-tcl.lt_NB_This_error_was_sub]}]
 
 if { $bug_number eq "" && $send_email_p} {
     acs_mail_lite::send -send_immediately \
@@ -220,13 +220,14 @@ if {$auto_submit_p && $user_id > 0} {
 						      ] \
 						 ]
     }
-   ad_form -extend -name bug_edit -form {
-       {found_in_version:text(select),optional
-	   {label "[_ bug-tracker.Found_in_Version]"}
-	   {options {[bug_tracker::version_get_options -include_unknown]}}
-	   {mode display}
-       }
-   }
+    
+    ad_form -extend -name bug_edit -form {
+        {found_in_version:text(select),optional
+            {label "[_ bug-tracker.Found_in_Version]"}
+            {options {[bug_tracker::version_get_options -include_unknown]}}
+            {mode display}
+        }
+    }
     
     workflow::case::role::add_assignee_widgets -case_id $case_id -form_name bug_edit
     
@@ -244,7 +245,7 @@ if {$auto_submit_p && $user_id > 0} {
 	    {label "[_ bug-tracker.Fixed_in_Version]"}
 	    {options {[bug_tracker::version_get_options -include_undecided]}}
 	    {mode display}
-    }
+        }
 	{description:richtext(richtext),optional
 	    {label "[_ bug-tracker.Description]"}
 	    {html {cols 60 rows 13}}
@@ -259,7 +260,7 @@ if {$auto_submit_p && $user_id > 0} {
 	array set row [list]
 	
 	set description [element get_value bug_edit description]
-	set error_desc_html "
+	set error_desc_html [subst {
  -------------------------------------------------------- <br>
                    [_ acs-tcl.Error_Report] <br>
  -------------------------------------------------------- <br>
@@ -272,9 +273,9 @@ if {$auto_submit_p && $user_id > 0} {
 <br><br><strong>[_ acs-tcl.User_comments]</strong>  
 <br>
 [ns_quotehtml [template::util::richtext::get_property contents $description]]<br>
-<br>"
+<br>}]
  
-  foreach available_enabled_action_id [workflow::case::get_available_enabled_action_ids -case_id $case_id] {
+        foreach available_enabled_action_id [workflow::case::get_available_enabled_action_ids -case_id $case_id] {
             workflow::case::enabled_action_get -enabled_action_id $available_enabled_action_id -array enabled_action
             workflow::action::get -action_id $enabled_action(action_id) -array available_action
             if {[string match "*Comment*" $available_action(pretty_name)]} {
@@ -282,127 +283,127 @@ if {$auto_submit_p && $user_id > 0} {
             }
         }
 
-   
-     bug_tracker::bug::edit \
+
+        bug_tracker::bug::edit \
             -bug_id $bug_id \
             -enabled_action_id $comment_action \
             -description [template::util::richtext::get_property contents $description] \
             -desc_format [template::util::richtext::get_property format $description] \
             -array row \
             -entry_id [element get_value bug_edit entry_id]
-    
-    ad_returnredirect $return_url
-    ad_script_abort
-  
-  } -edit_request {
-      # ID form complains if -edit_request is missing
-  }
+
+        ad_returnredirect $return_url
+        ad_script_abort
+
+    } -edit_request {
+        # ID form complains if -edit_request is missing
+    }
 
 
-  if { ![form is_valid bug_edit] } {
-    
-    # Get the bug data
-    bug_tracker::bug::get -bug_id $bug_id -array bug -enabled_action_id $enabled_action_id
-    
-    
-    # Make list of form fields
-    set element_names {
-        bug_number component_id summary pretty_state resolution
-        found_in_version user_agent fix_for_version fixed_in_version
-        bug_number_display entry_id
-    }
-    
-    # update the element_name list and bug array with category stuff
-    foreach {category_id category_name} [bug_tracker::category_types] {
-        lappend element_names $category_id
-        set bug($category_id) [cr::keyword::item_get_assigned -item_id $bug(bug_id) -parent_id $category_id]
-        if {$bug($category_id) eq "" } {
-            set bug($category_id) [bug_tracker::get_default_keyword -parent_id $category_id]
+    if { ![form is_valid bug_edit] } {
+        
+        # Get the bug data
+        bug_tracker::bug::get -bug_id $bug_id -array bug -enabled_action_id $enabled_action_id
+        
+        
+        # Make list of form fields
+        set element_names {
+            bug_number component_id summary pretty_state resolution
+            found_in_version user_agent fix_for_version fixed_in_version
+            bug_number_display entry_id
         }
-    }
-    # Display value for patches
-    set href [export_vars -base patch-add { { bug_number $bug(bug_number) } { component_id $bug(component_id) } }]
-    set bug(patches_display) [subst {
-	[bug_tracker::get_patch_links -bug_id $bug(bug_id) -show_patch_status $show_patch_status]
-	&nbsp; \[ <a href="[ns_quotehtml $href]">[_ bug-tracker.Upload_Patch]</a> \]
-    }]
-    
-    # Hide elements that should be hidden depending on the bug status
-    foreach element $bug(hide_fields) {
-        element set_properties bug_edit $element -widget hidden
-    }
-    
-    if { !$versions_p } {
-        foreach element { found_in_version fix_for_version fixed_in_version } {
-            if { [info exists bug_edit:$element] } {
-                element set_properties bug_edit $element -widget hidden
+        
+        # update the element_name list and bug array with category stuff
+        foreach {category_id category_name} [bug_tracker::category_types] {
+            lappend element_names $category_id
+            set bug($category_id) [cr::keyword::item_get_assigned -item_id $bug(bug_id) -parent_id $category_id]
+            if {$bug($category_id) eq "" } {
+                set bug($category_id) [bug_tracker::get_default_keyword -parent_id $category_id]
             }
         }
-    }
-    
-    if { !$patches_p } {
-        foreach element { patches } {
-            if { [info exists bug_edit:$element] } {
-                element set_properties bug_edit $element -widget hidden
-            }
+        # Display value for patches
+        set href [export_vars -base patch-add { { bug_number $bug(bug_number) } { component_id $bug(component_id) } }]
+        set bug(patches_display) [subst {
+            [bug_tracker::get_patch_links -bug_id $bug(bug_id) -show_patch_status $show_patch_status]
+            &nbsp; \[ <a href="[ns_quotehtml $href]">[_ bug-tracker.Upload_Patch]</a> \]
+        }]
+        
+        # Hide elements that should be hidden depending on the bug status
+        foreach element $bug(hide_fields) {
+            element set_properties bug_edit $element -widget hidden
         }
-    }
-    
-    # Optionally hide user agent
-    if { !$user_agent_p } {
-        element set_properties bug_edit user_agent -widget hidden
-    }
-    
-    
-    # Set regular element values
-    foreach element $element_names {
-	
-        # check that the element exists
-        if { [info exists bug_edit:$element] && [info exists bug($element)] } {
-            if {[form is_request bug_edit]
-                || [string equal [element get_property bug_edit $element mode] "display"] } {
-                if { [string first "\#" $bug($element)] == 0 } {
-                    element set_value bug_edit $element [lang::util::localize $bug($element)]
-                } else {
-                    element set_value bug_edit $element $bug($element)
+        
+        if { !$versions_p } {
+            foreach element { found_in_version fix_for_version fixed_in_version } {
+                if { [info exists bug_edit:$element] } {
+                    element set_properties bug_edit $element -widget hidden
                 }
             }
         }
-    }
-    # Add empty option to resolution code
-    if { $enabled_action_id ne "" } {
-        if {"resolution" ni [workflow::action::get_element -action_id $action_id -element edit_fields]} {
-            element set_properties bug_edit resolution -options [concat {{{} {}}} [element get_property bug_edit resolution options]]
+        
+        if { !$patches_p } {
+            foreach element { patches } {
+                if { [info exists bug_edit:$element] } {
+                    element set_properties bug_edit $element -widget hidden
+                }
+            }
         }
-    } else {
-        element set_properties bug_edit resolution -widget hidden
-    }
-
-    # Get values for the role assignment widgets
-    workflow::case::role::set_assignee_values -case_id $case_id -form_name bug_edit
-
-    # Set values for elements with separate display value
-    foreach element {
-        patches
-    } {
-        # check that the element exists
-        if { [info exists bug_edit:$element] } {
-            element set_properties bug_edit $element -display_value $bug(${element}_display)
+        
+        # Optionally hide user agent
+        if { !$user_agent_p } {
+            element set_properties bug_edit user_agent -widget hidden
         }
-    }
+        
+        
+        # Set regular element values
+        foreach element $element_names {
+            
+            # check that the element exists
+            if { [info exists bug_edit:$element] && [info exists bug($element)] } {
+                if {[form is_request bug_edit]
+                    || [string equal [element get_property bug_edit $element mode] "display"] } {
+                    if { [string first "\#" $bug($element)] == 0 } {
+                        element set_value bug_edit $element [lang::util::localize $bug($element)]
+                    } else {
+                        element set_value bug_edit $element $bug($element)
+                    }
+                }
+            }
+        }
+        # Add empty option to resolution code
+        if { $enabled_action_id ne "" } {
+            if {"resolution" ni [workflow::action::get_element -action_id $action_id -element edit_fields]} {
+                element set_properties bug_edit resolution -options [concat {{{} {}}} [element get_property bug_edit resolution options]]
+            }
+        } else {
+            element set_properties bug_edit resolution -widget hidden
+        }
 
-    # Set values for description field
-    
-    ad_form -name bug_history -has_submit 1 -form {
-	{history:text(inform)
-	    {label "[_ acs-tcl.User_comments]"}
-	    {value ""}
-	}
+        # Get values for the role assignment widgets
+        workflow::case::role::set_assignee_values -case_id $case_id -form_name bug_edit
+
+        # Set values for elements with separate display value
+        foreach element {
+            patches
+        } {
+            # check that the element exists
+            if { [info exists bug_edit:$element] } {
+                element set_properties bug_edit $element -display_value $bug(${element}_display)
+            }
+        }
+
+        # Set values for description field
+        
+        ad_form -name bug_history -has_submit 1 -form {
+            {history:text(inform)
+                {label "[_ acs-tcl.User_comments]"}
+                {value ""}
+            }
+        }
+        
+        element set_properties bug_history history \
+            -after_html [workflow::case::get_activity_html -case_id $case_id -action_id $action_id]
     }
-    
-    element set_properties bug_history history \
-	-after_html [workflow::case::get_activity_html -case_id $case_id -action_id $action_id]
-}
 
 }    
     
