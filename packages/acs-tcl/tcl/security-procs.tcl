@@ -2324,7 +2324,7 @@ namespace eval ::security::csp {
         #
         # Another problem is mixed content. When we set the nonce-src
         # and 'unsafe-inline', and a browser honoring nonces ignores
-        # the 'unsafe-inline', but some javascript framework requires
+        # the 'unsafe-inline', but some JavaScript framework requires
         # it (e.g ckeditor4), we have a problem. Therefore, an
         # application can force "'unsafe-inline'" which means that we
         # do not set the nonce-src in such cases.

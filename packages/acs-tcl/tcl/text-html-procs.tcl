@@ -1028,7 +1028,7 @@ ad_proc ad_parse_html_attributes_upvar {
     } {
 
         Sanitizes HTML by specified criteria, basically removing
-        unallowed tags and attributes, javascript or outer references
+        unallowed tags and attributes, JavaScript or outer references
         into page URLs. When desired, this proc can act also as just a
         validator in order to enforce some markup policies.
 

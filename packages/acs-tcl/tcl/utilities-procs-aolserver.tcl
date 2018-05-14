@@ -168,7 +168,7 @@ ad_proc -public ad_set_cookie {
     the user agent terminates.
 
     @param scriptable If the scriptable option is false or not given
-    the cookie is unavailable to javascript on the client. This can
+    the cookie is unavailable to JavaScript on the client. This can
     prevent cross site scripting attacks (XSS) on clients which
     support the HttpOnly option. Set -scriptable to true if you need
     to access the cookie via javascript. For compatibility reasons

@@ -332,7 +332,7 @@ ad_proc -public ad_form {
     </dd>
 
     <p><dt><b>-on_refresh</b></dt><p>
-    <dd>Executed when the form comes back from being refreshed using javascript with the __refreshing_p flag set.
+    <dd>Executed when the form comes back from being refreshed using JavaScript with the __refreshing_p flag set.
     </dd>
 
     <p><dt><b>-on_submit</b></dt><p>
@@ -402,7 +402,7 @@ ad_proc -public ad_form {
 
     <p><dt><b>__refreshing_p</b></dt><p>
     <dd>
-       This should be set true by Javascript widgets which change a form element then
+       This should be set true by JavaScript widgets which change a form element then
        submit the form to refresh values.
     </dd>
     </dl>
@@ -774,7 +774,7 @@ ad_proc -public ad_form {
 
         template::element create $form_name __confirmed_p -datatype integer -widget hidden -value 0
 
-        # javascript widgets can change a form value and submit the result in order to allow the
+        # JavaScript widgets can change a form value and submit the result in order to allow the
         # generating script to fill in a value such as an image.   The widget must set __refreshing_p
         # true.
 
