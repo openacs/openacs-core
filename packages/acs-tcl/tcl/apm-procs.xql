@@ -92,14 +92,6 @@
     </querytext>
   </fullquery>
   
-  <fullquery name="apm_pretty_name_for_db_type.pretty_db_name_select">      
-    <querytext>
-      select pretty_db_name
-      from apm_package_db_types
-      where db_type_key = :db_type
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_package_parameters.get_names">      
     <querytext>
       select parameter_name from apm_parameters
