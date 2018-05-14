@@ -21,13 +21,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_db_type_keys.db_type_keys">      
-      <querytext>
-      select db_type_key from apm_package_db_types
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="apm_generate_tarball.package_key_select">      
       <querytext>
       select package_key from apm_package_version_info where version_id = :version_id

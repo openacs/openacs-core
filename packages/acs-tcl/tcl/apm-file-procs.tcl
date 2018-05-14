@@ -96,16 +96,6 @@ ad_proc -public apm_file_type_keys {} {
     return [array names file_type_names]
 }
 
-
-ad_proc -public apm_db_type_keys {} {
-
-    Returns a list of valid database type keys.
-
-} {
-    return [util_memoize [list db_list db_type_keys {select db_type_key from apm_package_db_types}]]
-}
-
-
 ad_proc -public apm_package_info_file_path { 
     {-path ""}
     package_key 
@@ -654,6 +644,24 @@ ad_proc -private apm_load_apm_file {
         return "${install_path}/${package_key}/${package_key}.info"
     }
 }
+
+
+#
+### Deprecated procs
+#
+
+# apisano 2018-05-14: current code won't use this proc and is also not
+# clear why we should get from the database something we have in a
+# proc already. Commented code was the original one
+ad_proc -deprecated -public apm_db_type_keys {} {
+
+    Returns a list of valid database type keys.
+
+} {
+    return [lmap dbtype [ad_known_database_types] {lindex $dbtype 0}]
+    # return [util_memoize [list db_list db_type_keys {select db_type_key from apm_package_db_types}]]
+}
+
 
 #
 # Local variables:
