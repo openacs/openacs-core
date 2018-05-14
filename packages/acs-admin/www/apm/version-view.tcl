@@ -21,19 +21,7 @@ ad_page_contract {
     }
 }
 
-db_1row apm_all_version_info {
-    select version_id, package_key, package_uri, pretty_name, version_name, version_uri,
-    summary, description_format, description, singleton_p, initial_install_p,
-    implements_subsite_p, inherit_templates_p,
-    to_char(release_date, 'Month DD, YYYY') as release_date , vendor, vendor_uri, auto_mount,
-    enabled_p, installed_p, tagged_p, imported_p, data_model_loaded_p, 
-    to_char(activation_date, 'Month DD, YYYY') as activation_date,
-    tarball_length, distribution_uri,
-    to_char(deactivation_date, 'Month DD, YYYY') as deactivation_date,
-    to_char(distribution_date, 'Month DD, YYYY') as distribution_date
-    from apm_package_version_info 
-    where version_id = :version_id
-}
+db_1row apm_all_version_info {}
 
 set downloaded_p [ad_decode $version_uri "" 0 1]
 
@@ -116,9 +104,7 @@ if { [file isdirectory "[acs_package_root_dir $package_key]/CVS"] } {
 
 # Obtain a list of owners, properly hyperlinked.
 set owners [list]
-db_foreach apm_all_owners {
-    select owner_uri, owner_name from apm_package_owners where version_id = :version_id
-} {
+db_foreach apm_all_owners {} {
     if { $owner_uri eq "" } {
         lappend owners $owner_name
     } else {

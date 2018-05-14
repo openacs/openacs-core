@@ -19,28 +19,12 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="supported_databases">      
-      <querytext>
-      
-    select pretty_db_name
-    from apm_package_db_types
-    where exists (select 1
-                  from apm_package_files
-                  where version_id = :version_id
-                  and   db_type = db_type_key)
-
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="apm_all_owners">      
+ <fullquery name="apm_all_owners">      
       <querytext>
       
     select owner_uri, owner_name from apm_package_owners where version_id = :version_id
 
       </querytext>
 </fullquery>
-
  
 </queryset>
