@@ -719,19 +719,6 @@ ad_proc -private apm_pretty_name_for_file_type { type } {
     return $file_type_names($type)
 }
 
-ad_proc -private apm_pretty_name_for_db_type { db_type } {
-
-    Returns the pretty name corresponding to a particular file type key
-    (memoizing to save a database hit here and there).
-
-} {
-    return [util_memoize [list db_string pretty_db_name_select "
-        select pretty_db_name
-        from apm_package_db_types
-        where db_type_key = :db_type
-    " -default "all" -bind [list db_type $db_type]]]
-}
-
 ad_proc -public apm_load_any_changed_libraries { {errorVarName {}} } {
     
     In the running interpreter, reloads files marked for reload by
@@ -2117,6 +2104,30 @@ ad_proc -public apm::convert_type {
     }
 
 }
+
+
+#
+### Deprecated procs
+#
+
+# apisano 2018-05-14: there is a thread cache for this now, no need
+# IMO to maintain a datamodel to know which databases we
+# support. Original code is the commented one.
+ad_proc -deprecated -private apm_pretty_name_for_db_type { db_type } {
+
+    Returns the pretty name corresponding to a particular file type key
+    (memoizing to save a database hit here and there).
+
+} {
+    set pos [lsearch -index 0 -exact $::acs::known_database_types $db_type]
+    return [lindex [lindex $::acs::known_database_types $pos] 2]
+    # return [util_memoize [list db_string pretty_db_name_select "
+    #     select pretty_db_name
+    #     from apm_package_db_types
+    #     where db_type_key = :db_type
+    # " -default "all" -bind [list db_type $db_type]]]
+}
+
 
 #
 # Local variables:
