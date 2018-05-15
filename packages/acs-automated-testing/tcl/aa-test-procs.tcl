@@ -1100,6 +1100,9 @@ ad_proc -private aa_http {
                    {*}$extra_args \
                    "http://\[$peeraddr\]:[dict get $driverInfo port]/$request"]
     } finally {
+        #
+        # always reset after the reqest the login data nsv
+        #
         nsv_unset aa_test logindata
     }
     #ns_log notice "run $request returns $d"
@@ -1133,10 +1136,25 @@ namespace eval aa_xpath {
         }
         return $result
     }
-
+    
+    ad_proc -public ::aa_dom_html {var html body} {
+    } {
+        upvar $var root
+        dom parse -html $html doc
+        $doc documentElement root
+        uplevel $body
+    }
+    
     ad_proc -public ::aa_xpath::non_empty {node selectors} {
         Test if provided selectors return non-empty results
     } {
+        #
+        # if we have no node, use as default the root in the parent
+        # enviromnent
+        #
+        if {$node eq ""} {
+            set node [uplevel {set root}]
+        }
         foreach q $selectors {
             try {
                 set value [get_text $node $q]
