@@ -23,18 +23,18 @@ namespace eval security {
 #   ad_user_login_secure  user_id,random                 never expires   yes
 #   ad_secure_token       session_id,random,peeraddr     SessionLifetime yes
 #
-#   the random data is used to hinder attack the secure hash. 
+#   the random data is used to hinder attack the secure hash.
 #   currently the random data is ns_time
 #   peeraddr is used to avoid session hijacking
 #
 #   ad_user_login issue_time: [ns_time] at the time the user last authenticated
 #
 #   ad_session_id login_level: 0 = none/expired, 1 = ok, 2 = auth ok, but account closed
-#   
+#
 
 
-ad_proc -private sec_random_token {} { 
-    Generates a random token. 
+ad_proc -private sec_random_token {} {
+    Generates a random token.
 } {
     # ::tcl_sec_seed is used to maintain a small subset of the previously
     # generated random token to use as the seed for the next
@@ -48,14 +48,14 @@ ad_proc -private sec_random_token {} {
         set request "yoursponsoredadvertisementhere"
         set start_clicks "cvs.openacs.org"
     }
-    
+
     if { ![info exists ::tcl_sec_seed] } {
         set ::tcl_sec_seed "listentowmbr89.1"
     }
 
     set random_base [ns_sha1 "[ns_time][ns_rand]$start_clicks$request$::tcl_sec_seed"]
     set ::tcl_sec_seed [string range $random_base 0 10]
-    
+
     return [ns_sha1 [string range $random_base 11 39]]
 }
 
@@ -69,7 +69,7 @@ ad_proc -private sec_session_lifetime {} {
 ad_proc -private sec_sweep_sessions {} {
     set expires [expr {[ns_time] - [sec_session_lifetime]}]
 
-    db_dml sessions_sweep {} 
+    db_dml sessions_sweep {}
     db_release_unused_handles
 }
 
@@ -78,7 +78,7 @@ ad_proc -private sec_handler_reset {} {
     Provide dummy values for global variables provided by the
     sec_handler, in case, the sec_handler is not called or runs into
     an exception.
-    
+
 } {
     set ::__csp_nonce [::security::csp::nonce]
     set ::__csrf_token ""
@@ -98,7 +98,7 @@ ad_proc -private sec_handler {} {
         ns_log notice "OACS [ns_conn url] cookies: $msg"
     }
 
-    if { [catch { 
+    if { [catch {
         set cookie_list [ad_get_signed_cookie "ad_session_id"]
     } errmsg ] } {
         # Cookie is invalid because either:
@@ -156,7 +156,7 @@ ad_proc -private sec_handler {} {
         if {$session_expr < [ns_time]} {
             sec_login_handler
         }
-        
+
         lassign $cookie_data session_id untrusted_user_id login_level
         set user_id 0
         set account_status closed
@@ -183,9 +183,9 @@ ad_proc -private sec_handler {} {
 
         # We're okay, insofar as the insecure session, check if it's also secure
         if { $auth_level eq "ok" && [security::secure_conn_p] } {
-            catch { 
-                set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}] 
-                if {[lindex $sec_token 0] eq $session_id 
+            catch {
+                set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}]
+                if {[lindex $sec_token 0] eq $session_id
                     && [lindex $sec_token 2] eq [ad_conn peeraddr]
                 } {
                     set auth_level secure
@@ -208,14 +208,14 @@ ad_proc -private sec_handler {} {
         # [sec_session_renew] = SessionTimeout - SessionRenew (see security-init.tcl)
         # $session_expr = PreviousSessionIssue + SessionTimeout
         if { $session_expr - [sec_session_renew] < [ns_time] } {
-            
+
             # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
-            # if only the keep requesting pages frequently enough, but the alternative was that 
+            # if only the keep requesting pages frequently enough, but the alternative was that
             # the situation where LoginTimeout = 0 (infinte) and the user unchecks the "Remember me" checkbox
             # would cause users' sessions to expire as soon as the session needed to be renewed
             sec_generate_session_id_cookie
         }
-        
+
         #
         # generate a csrf token and a csp nonce value
         #
@@ -227,8 +227,8 @@ ad_proc -private sec_login_read_cookie {} {
 
     Fetches values either from ad_user_login_secure or ad_user_login,
     depending whether we are in a secured connection or not.
-    
-    @author Victor Guerra 
+
+    @author Victor Guerra
 
     @return List of values read from cookie ad_user_login_secure or ad_user_login
 } {
@@ -254,14 +254,14 @@ ad_proc -private sec_login_handler {} {
     set new_user_id 0
     set untrusted_user_id 0
     set account_status closed
-    
+
     # check for permanent login cookie
     catch {
         lassign [sec_login_read_cookie] untrusted_user_id login_expr auth_token
         set auth_level expired
-        
+
         # Check authentication cookie
-        # First, check expiration 
+        # First, check expiration
         if { [sec_login_timeout] == 0 || [ns_time] - $login_expr < [sec_login_timeout] } {
             # Then check auth_token
             if {$auth_token eq [sec_get_user_auth_token $untrusted_user_id]} {
@@ -274,7 +274,7 @@ ad_proc -private sec_login_handler {} {
                 }
             }
         }
-        
+
         # Check account status
         set account_status [auth::get_local_account_status -user_id $untrusted_user_id]
 
@@ -284,7 +284,7 @@ ad_proc -private sec_login_handler {} {
             set account_status "closed"
         }
     }
-    
+
     sec_setup_session $untrusted_user_id $auth_level $account_status
 }
 
@@ -294,13 +294,13 @@ ad_proc -public ad_user_login {
     {-cookie_domain ""}
     -forever:boolean
     user_id
-} { 
+} {
     Logs the user in, forever (via the user_login cookie) if -forever
     is true. This procedure assumes that the user identity has been
     validated.
 } {
     set prev_user_id [ad_conn user_id]
-    
+
     # deal with the permanent login cookies (ad_user_login and ad_user_login_secure)
     if { $forever_p } {
         set max_age inf
@@ -327,11 +327,11 @@ ad_proc -public ad_user_login {
         # We're secure
         set auth_level "secure"
     } elseif { $prev_user_id != $user_id } {
-        # Hose the secure login token if this user is different 
+        # Hose the secure login token if this user is different
         # from the previous one.
         ad_unset_cookie -secure t ad_user_login_secure
     }
-    
+
     ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
         -expire [expr {$forever_p ? false : true}] \
@@ -350,7 +350,7 @@ ad_proc -public sec_get_user_auth_token {
 } {
     Get the user's auth token for verifying login cookies.
 } {
-    set auth_token [db_string select_auth_token { 
+    set auth_token [db_string select_auth_token {
         select auth_token from users where user_id = :user_id
     } -default {}]
     db_release_unused_handles
@@ -382,8 +382,8 @@ ad_proc -public sec_change_user_auth_token {
 
 ad_proc -public ad_user_logout {
     {-cookie_domain ""}
-} { 
-    Logs the user out. 
+} {
+    Logs the user out.
 } {
     if {$cookie_domain eq ""} {
         set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
@@ -404,11 +404,11 @@ ad_proc -public ad_user_logout {
     ad_unset_cookie -domain $cookie_domain -secure t ad_user_login_secure
 }
 
-ad_proc -public ad_check_password { 
+ad_proc -public ad_check_password {
     user_id
     password_from_form
-} { 
-    Returns 1 if the password is correct for the given user ID. 
+} {
+    Returns 1 if the password is correct for the given user ID.
 } {
 
     set found_p [db_0or1row password_select {select password, salt from users where user_id = :user_id}]
@@ -426,19 +426,19 @@ ad_proc -public ad_check_password {
     return 1
 }
 
-ad_proc -public ad_change_password { 
-    user_id 
-    new_password 
-} { 
-    Change the user's password 
+ad_proc -public ad_change_password {
+    user_id
+    new_password
+} {
+    Change the user's password
 } {
     # In case someone wants to change the salt from now on, you can do
     # this and still support old users by changing the salt below.
 
     if { $user_id eq "" } {
         error "No user_id supplied"
-    } 
-    
+    }
+
     set salt [sec_random_token]
     set new_password [ns_sha1 "$new_password$salt"]
     db_dml password_update {}
@@ -447,7 +447,7 @@ ad_proc -public ad_change_password {
 
 ad_proc -private sec_setup_session {
     {-cookie_domain ""}
-    new_user_id 
+    new_user_id
     auth_level
     account_status
 } {
@@ -459,7 +459,7 @@ ad_proc -private sec_setup_session {
     ns_log debug "OACS= sec_setup_session: enter"
 
     set session_id [ad_conn session_id]
-    
+
     # figure out the session id, if we don't already have it
     if { $session_id eq ""} {
 
@@ -492,7 +492,7 @@ ad_proc -private sec_setup_session {
         # session_id after any privilege level change
         #
         ns_log debug "prev_user_id $prev_user_id new_user_id $new_user_id"
-        
+
         if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
             # this is a change in identity so we should create
             # a new session so session-level data is not shared
@@ -535,8 +535,8 @@ ad_proc -private sec_setup_session {
     }
 }
 
-ad_proc -private sec_update_user_session_info { 
-    user_id 
+ad_proc -private sec_update_user_session_info {
+    user_id
 } {
     Update the session info in the users table. Should be called when
     the user login either via permanent cookies at session creation
@@ -548,8 +548,8 @@ ad_proc -private sec_update_user_session_info {
 
 ad_proc -private sec_generate_session_id_cookie {
     {-cookie_domain ""}
-} { 
-    Sets the ad_session_id cookie based on global variables. 
+} {
+    Sets the ad_session_id cookie based on global variables.
 } {
     set user_id [ad_conn untrusted_user_id]
     #
@@ -558,11 +558,11 @@ ad_proc -private sec_generate_session_id_cookie {
     set session_id [ad_conn session_id]
     set auth_level [ad_conn auth_level]
     set account_status [ad_conn account_status]
-    
+
     set login_level 0
     if { $auth_level eq "ok" || $auth_level eq "secure" } {
         if {$account_status eq "ok"} {
-            set login_level 1 
+            set login_level 1
         } else {
             set login_level 2
         }
@@ -577,10 +577,10 @@ ad_proc -private sec_generate_session_id_cookie {
     # Fetch the last value element of ad_user_login cookie (or
     # ad_user_login_secure) that indicates if user wanted to be
     # remembered when loggin in.
-    
+
     set discard t
     set max_age [sec_session_timeout]
-    catch { 
+    catch {
         set login_list [sec_login_read_cookie]
         if {[lindex $login_list end] == 1} {
             set discard f
@@ -599,7 +599,7 @@ ad_proc -private sec_generate_session_id_cookie {
         ad_session_id "$session_id,$user_id,$login_level,[ns_time]"
 }
 
-ad_proc -private sec_generate_secure_token_cookie { } { 
+ad_proc -private sec_generate_secure_token_cookie { } {
     Sets the ad_secure_token cookie.
 } {
     ad_set_signed_cookie -secure t "ad_secure_token" "[ad_conn session_id],[ns_time],[ad_conn peeraddr]"
@@ -611,13 +611,13 @@ ad_proc -private sec_allocate_session {} {
 
 } {
 
-    if { ![info exists ::acs::sec_id_max_value] || ![info exists ::acs::sec_id_current_sequence_id] 
+    if { ![info exists ::acs::sec_id_max_value] || ![info exists ::acs::sec_id_current_sequence_id]
          || $::acs::sec_id_current_sequence_id > $::acs::sec_id_max_value } {
         # Thread just spawned or we exceeded preallocated count.
         set ::acs::sec_id_current_sequence_id [db_nextval sec_id_seq]
         db_release_unused_handles
         set ::acs::sec_id_max_value [expr {$::acs::sec_id_current_sequence_id + 100}]
-    } 
+    }
 
     set session_id $::acs::sec_id_current_sequence_id
     incr ::acs::sec_id_current_sequence_id
@@ -626,8 +626,8 @@ ad_proc -private sec_allocate_session {} {
 }
 
 ad_proc -private ad_login_page {} {
-    
-    Returns 1 if the page is used for logging in, 0 otherwise. 
+
+    Returns 1 if the page is used for logging in, 0 otherwise.
 
 } {
     set url [ad_conn url]
@@ -677,7 +677,7 @@ ad_proc -private ad_get_node_id_from_host_node_map {hostname} {
 }
 
 ad_proc -public ad_redirect_for_registration {} {
-    
+
     Redirects user to [subsite]/register/index to require the user to
     register. When registration is complete, the user will be returned
     to the current location.  All variables in ns_getform (both posts and
@@ -698,7 +698,7 @@ ad_proc -private security::replace_host_in_url {-hostname url} {
 
     Given a fully qualified url, replace the hostname in this URL with
     the given hostname.
-    
+
     @return url with remapped hostname
 } {
     set ui [ns_parseurl $url]
@@ -721,7 +721,7 @@ ad_proc -private security::replace_host_in_url {-hostname url} {
 }
 
 ad_proc -private security::get_register_subsite {} {
-    
+
     Returns a URL pointing to the subsite, on which the
     register/unregister should be performed. If there is no current
     connection, the main site url is returned.
@@ -733,19 +733,19 @@ ad_proc -private security::get_register_subsite {} {
        - [ns_conn location]
        - ...
     also [security::get_register_subsite] could/should be cached
-    
+
     @author Gustaf Neumann
 } {
-    
+
     util::split_location [util_current_location] current_proto current_host current_port
-    set config_hostname [dict get [util_driver_info] hostname] 
+    set config_hostname [dict get [util_driver_info] hostname]
     set UseHostnameDomainforReg [parameter::get \
                                      -package_id [apm_package_id_from_key acs-tcl] \
                                      -parameter UseHostnameDomainforReg \
                                      -default 0]
     set require_qualified_return_url $UseHostnameDomainforReg
     set host_node_id [ad_get_node_id_from_host_node_map $current_host]
-    
+
     if { $host_node_id > 0 } {
         #
         # We are on a host-node mapped subsite
@@ -832,11 +832,11 @@ ad_proc -public ad_get_login_url {
     {-username ""}
     -return:boolean
 } {
-    
+
     Returns a URL to the login page of the closest subsite, or the main site, if there's no current connection.
-    
-    @option return      If set, will export the current form, so when the registration is complete, 
-    the user will be returned to the current location.  All variables in 
+
+    @option return      If set, will export the current form, so when the registration is complete,
+    the user will be returned to the current location.  All variables in
     ns_getform (both posts and gets) will be maintained.
 
     @author Lars Pind (lars@collaboraid.biz)
@@ -848,7 +848,7 @@ ad_proc -public ad_get_login_url {
     foreach var {url require_qualified_return_url host_node_id} {
         set $var [dict get $subsite_info $var]
     }
-    
+
     append url "register/"
 
     #
@@ -881,11 +881,11 @@ ad_proc -public ad_get_logout_url {
     -return:boolean
     {-return_url ""}
 } {
-    
+
     Returns a URL to the logout page of the closest subsite, or the main site, if there's no current connection.
-    
+
     @option return      If set, will export the current form, so when the logout is complete
-    the user will be returned to the current location.  All variables in 
+    the user will be returned to the current location.  All variables in
     ns_getform (both posts and gets) will be maintained.
 
     @author Lars Pind (lars@collaboraid.biz)
@@ -893,24 +893,24 @@ ad_proc -public ad_get_logout_url {
 
     set subsite_info [security::get_register_subsite]
     set url [dict get $subsite_info url]
-    
+
     append url "register/logout"
 
     if { $return_p && $return_url eq "" } {
         set return_url [ad_return_url]
-    } 
+    }
     if { $return_url ne "" } {
         set url [export_vars -base $url { return_url }]
-    } 
+    }
 
     return $url
 }
 
-# JCD 20020915 I think this probably should not be deprecated since it is 
-# far more reliable than permissioning esp for a development server 
+# JCD 20020915 I think this probably should not be deprecated since it is
+# far more reliable than permissioning esp for a development server
 
 ad_proc -public ad_restrict_entire_server_to_registered_users {
-    conn 
+    conn
     args
     why
 } {
@@ -918,12 +918,12 @@ ad_proc -public ad_restrict_entire_server_to_registered_users {
     unregistered, except the site index page and stuff underneath
     [subsite]/register. Use permissions on the site node map to control access.
 } {
-    if {"/favicon.ico" ne [ad_conn url] 
-        && "/index.tcl" ne [ad_conn url] 
-        && "/" ne [ad_conn url] 
-        && ![string match "/global/*" [ad_conn url]] 
-        && ![string match "*/register/*" [ad_conn url]] 
-        && ![string match "*/SYSTEM/*" [ad_conn url]] 
+    if {"/favicon.ico" ne [ad_conn url]
+        && "/index.tcl" ne [ad_conn url]
+        && "/" ne [ad_conn url]
+        && ![string match "/global/*" [ad_conn url]]
+        && ![string match "*/register/*" [ad_conn url]]
+        && ![string match "*/SYSTEM/*" [ad_conn url]]
         && ![string match "*/user_please_login.tcl" [ad_conn url]]} {
         # not one of the magic acceptable URLs
         set user_id [ad_conn user_id]
@@ -973,7 +973,7 @@ ad_proc -public ad_sign {
 
     @param value the value to be signed.
 } {
-    if {$token_id eq ""} { 
+    if {$token_id eq ""} {
         # pick a random token_id
         set token_id [sec_get_random_cached_token_id]
     }
@@ -983,7 +983,7 @@ ad_proc -public ad_sign {
     } else {
         set secret_token $secret
     }
-    
+
 
     ns_log Debug "Security: Getting token_id $token_id, value $secret_token"
 
@@ -1001,7 +1001,7 @@ ad_proc -public ad_sign {
 
 ad_proc -public ad_verify_signature {
     {-secret ""}
-    value 
+    value
     signature
 } {
     Verifies a digital signature. Returns 1 for success, and 0 for
@@ -1017,7 +1017,7 @@ ad_proc -public ad_verify_signature {
 
 ad_proc -public ad_verify_signature_with_expr {
     {-secret ""}
-    value 
+    value
     signature
 } {
     Verifies a digital signature. Returns either the expiration time
@@ -1042,7 +1042,7 @@ ad_proc -private __ad_verify_signature {
     expire_time
     hash
 } {
-    
+
     Returns 1 if signature validated; 0 if it fails.
 
 } {
@@ -1070,7 +1070,7 @@ ad_proc -private __ad_verify_signature {
     # Need to verify both hash and expiration
     set hash_ok_p 0
     set expiration_ok_p 0
-    
+
     if {$computed_hash eq $hash} {
         ns_log Debug "__ad_verify_signature: Hash matches - Hash check OK"
         set hash_ok_p 1
@@ -1088,7 +1088,7 @@ ad_proc -private __ad_verify_signature {
             ns_log Debug "__ad_verify_signature: Hash ($hash) doesn't match what we expected ($org_computed_hash) - Hash check FAILED"
         }
     }
-    
+
     if { $expire_time == 0 } {
         ns_log Debug "__ad_verify_signature: No expiration time - Expiration OK"
         set expiration_ok_p 1
@@ -1108,7 +1108,7 @@ ad_proc -public ad_get_signed_cookie {
     {-include_set_cookies t}
     {-secret ""}
     name
-} { 
+} {
 
     Retrieves a signed cookie. Validates a cookie against its
     cryptographic signature and insures that the cookie has not
@@ -1137,7 +1137,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
     {-include_set_cookies t}
     {-secret ""}
     name
-} { 
+} {
 
     Retrieves a signed cookie. Validates a cookie against its
     cryptographic signature and insures that the cookie has not
@@ -1168,7 +1168,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 ad_proc -public ad_set_signed_cookie {
     {-replace f}
     {-secure f}
-    {-expire f}    
+    {-expire f}
     {-discard f}
     {-scriptable f}
     {-max_age ""}
@@ -1231,7 +1231,7 @@ ad_proc -public ad_set_signed_cookie {
         -max_age $max_age \
         -domain $domain \
         -path $path \
-        $name $data    
+        $name $data
 }
 
 
@@ -1244,7 +1244,7 @@ ad_proc -public ad_set_signed_cookie {
 #
 #####
 
-ad_proc -private sec_get_token { 
+ad_proc -private sec_get_token {
     token_id
 } {
 
@@ -1259,15 +1259,15 @@ ad_proc -private sec_get_token {
     thread-persistent Tcl cache.
 
 } {
-    
+
     set key ::security::tcl_secret_tokens($token_id)
-    if { [info exists $key] } { return [set $key] } 
+    if { [info exists $key] } { return [set $key] }
 
     if {[array size ::security::tcl_secret_tokens] == 0} {
         populate_secret_tokens_thread_cache
-        if { [info exists $key] } { return [set $key] } 
+        if { [info exists $key] } { return [set $key] }
     }
-    
+
     #
     # We might get token_ids from previous runs, so we have fetch these
     # in case of a validation
@@ -1276,13 +1276,13 @@ ad_proc -private sec_get_token {
         set token [db_string get_token {select token from secret_tokens
             where token_id = :token_id} -default 0]
         db_release_unused_handles
-        
+
         # Very important to throw the error here if $token == 0
-        
+
         if { $token == 0 } {
             error "Invalid token ID"
         }
-        
+
         return $token
     }]
 
@@ -1291,7 +1291,7 @@ ad_proc -private sec_get_token {
 }
 
 ad_proc -private sec_get_random_cached_token_id {} {
-    
+
     Randomly returns a token_id from the token cache
 
 } {
@@ -1307,7 +1307,7 @@ ad_proc -private sec_get_random_cached_token_id {} {
 }
 
 ad_proc -private populate_secret_tokens_thread_cache {} {
-    
+
     Copy secret_tokens cache to per-thread variables
 
 } {
@@ -1322,7 +1322,7 @@ ad_proc -private populate_secret_tokens_thread_cache {} {
 }
 
 ad_proc -private populate_secret_tokens_cache {} {
-    
+
     Randomly populates the secret_tokens cache.
 
 } {
@@ -1373,11 +1373,11 @@ ad_proc -private populate_secret_tokens_db {} {
 #
 #####
 
-ad_proc -private sec_lookup_property { 
+ad_proc -private sec_lookup_property {
     id
     module
     name
-} { 
+} {
 
     Used as a helper procedure for util_memoize to look up a
     particular property from the database.
@@ -1428,13 +1428,13 @@ ad_proc -public ad_get_client_property {
            belongs (serves as a namespace)
     @param name name of the property
     @return value of the property or default
-    
+
     @see ad_set_client_property
 } {
     if { $session_id eq "" } {
         set id [ad_conn session_id]
-        
-        # if session_id is still undefined in the connection then we 
+
+        # if session_id is still undefined in the connection then we
         # should just return the default
         if { $id eq "" } {
             return $default
@@ -1458,7 +1458,7 @@ ad_proc -public ad_get_client_property {
         return $default
     }
     lassign $property value secure_p
-    
+
     if { $secure_p != "f" && ![security::secure_conn_p] } {
         return $default
     }
@@ -1474,7 +1474,7 @@ ad_proc -public ad_set_client_property {
     module
     name
     value
-} { 
+} {
     Sets a client (session-level) property. If -persistent is true,
     the new value will be written through to the database (it will
     survive a server restart, bit it will be slower). If -secure is true,
@@ -1502,7 +1502,7 @@ ad_proc -public ad_set_client_property {
     if { $persistent == "t" } {
         # Write to database - either defer, or write immediately. First delete the old
         # value if any; then insert the new one.
-        
+
         set last_hit [ns_time]
 
         if { $clob == "t" } {
@@ -1520,12 +1520,12 @@ ad_proc -public ad_set_client_property {
                 # Oracle doesn't allow a RETURNING clause on an insert with a
                 # subselect, so this code first inserts a dummy value if none exists
                 # (ensuring it does exist afterwards) then updates it with the real
-                # value.  Ugh.  
+                # value.  Ugh.
 
                 set clob_update_dml [db_map prop_update_dml_clob]
 
                 db_dml prop_insert_dml ""
-                
+
                 if { $clob_update_dml ne "" } {
                     db_dml prop_update_dml_clob "" -clobs [list $value]
                 } else {
@@ -1560,8 +1560,8 @@ ad_proc -public security::https_available_p {} {
     return [expr {[get_https_port] ni {"" 0}}]
 }
 
-ad_proc -public security::secure_conn_p {} { 
-    Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
+ad_proc -public security::secure_conn_p {} {
+    Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise.
 } {
     # interestingly, "string match" is faster than "string range" + "eq"
 
@@ -1572,7 +1572,7 @@ ad_proc -public security::RestrictLoginToSSLP {} {
     Return 1 if login pages and other pages taking user password
     should be restricted to a secure (HTTPS) connection and 0 otherwise.
     Based on acs-kernel parameter with same name.
-    
+
     @author Peter Marklund
 } {
     if { ![security::https_available_p] } {
@@ -1600,9 +1600,9 @@ ad_proc -public security::require_secure_conn {} {
 
 ad_proc -public security::redirect_to_secure {
     {-script_abort:boolean true}
-    url 
+    url
 } {
-    Redirect to the given URL and enter secure (HTTPS) mode.    
+    Redirect to the given URL and enter secure (HTTPS) mode.
     Does nothing if the server is not configured for HTTPS support.
 
     @author Peter Marklund
@@ -1617,14 +1617,14 @@ ad_proc -public security::redirect_to_secure {
 }
 
 ad_proc -public security::redirect_to_insecure {
-    url 
+    url
 } {
-    Redirect to the given URL and enter insecure (HTTP) mode.    
+    Redirect to the given URL and enter insecure (HTTP) mode.
 
     @author Peter Marklund
 } {
     set insecure_url [get_insecure_qualified_url $url]
-    
+
     ad_returnredirect $insecure_url
     ad_script_abort
 }
@@ -1637,7 +1637,7 @@ ad_proc -public security::redirect_to_insecure {
 
 ad_proc -private security::get_https_port {} {
     Return the HTTPS port specified in the AOLserver config file.
-    
+
     @return The HTTPS port or the empty string if none is configured.
 
     @author Gustaf Neumann
@@ -1671,7 +1671,7 @@ ad_proc -private security::get_secure_qualified_url { url } {
 } {
     set qualified_uri [get_qualified_uri_part $url]
     set secure_url [get_secure_location]${qualified_uri}
-    
+
     return $secure_url
 }
 
@@ -1686,7 +1686,7 @@ ad_proc -private security::get_insecure_qualified_url { url } {
 
     set insecure_url [get_insecure_location]${qualified_uri}
 
-    return $insecure_url    
+    return $insecure_url
 }
 
 ad_proc -private security::get_uri_part { url } {
@@ -1702,7 +1702,7 @@ ad_proc -private security::get_uri_part { url } {
 }
 
 ad_proc -private security::get_qualified_uri_part { url } {
-    
+
 } {
     set uri [get_uri_part $url]
 
@@ -1716,11 +1716,11 @@ ad_proc -private security::get_qualified_uri_part { url } {
 
 ad_proc -private security::get_secure_location {} {
     Return the current location in secure (https) mode.
-    
+
     @author Peter Marklund
 } {
     set current_location [util_current_location]
-    
+
     if { [regexp {^https://} $current_location] } {
         #
         # Current location is already secure - do nothing
@@ -1774,10 +1774,10 @@ if {[ns_info name] ne "NaviServer"} {
         {-driver "nssock"}
         {-server ""}
     } {
-        Return the section name in the config file containing configuration information about the 
+        Return the section name in the config file containing configuration information about the
         network connection.
         @param driver (e.g. nssock)
-        @param server symobolic server name 
+        @param server symobolic server name
         @return name of section of the drive in the config file
     } {
         if {$server eq ""} {set server [ns_info server]}
@@ -1823,14 +1823,14 @@ ad_proc -public security::driver {} {
 }
 
 if {[info commands ns_driver] ne ""} {
-    
+
     ad_proc -private security::configured_driver_info {} {
-        
+
         Return a list of dicts containing type, driver, location and port
         of all configured drivers
 
         @see util_driver_info
-        
+
     } {
         set defaultport {http 80 https 433}
         set result {}
@@ -1839,7 +1839,7 @@ if {[info commands ns_driver] ne ""} {
             set location [dict get $i location]
             set proto    [dict get $i protocol]
             set li       [ns_parseurl $location]
-            
+
             if {[dict exists $li port]} {
                 set port [dict get $li port]
                 set suffix ":$port"
@@ -1855,15 +1855,15 @@ if {[info commands ns_driver] ne ""} {
         }
         return $result
     }
-    
+
 } else {
-    
+
     ad_proc -private security::configured_driver_info {} {
         set result ""
         #
         # Find the first insecure driver based on driver names from
         # recommended config files
-        # 
+        #
         foreach driver {nssock nssock_v4 nssock_v6} {
             set driver_section [ns_driversection -driver $driver]
             if {$driver_section ne ""} {
@@ -1882,7 +1882,7 @@ if {[info commands ns_driver] ne ""} {
                     }
                 }
                 set location "http://$host"
-                
+
                 set port [ns_config -int $driver_section port 80]
                 if { $port ne "" && $port != 80 } {
                     set suffix ":$port"
@@ -1892,7 +1892,7 @@ if {[info commands ns_driver] ne ""} {
                     set suffix ""
                 }
                 lappend result [list proto http driver $driver host $host \
-                                    location $location port $port suffix $suffix]                
+                                    location $location port $port suffix $suffix]
             }
         }
 
@@ -1903,11 +1903,11 @@ if {[info commands ns_driver] ne ""} {
 
         # nsopenssl 3 has variable locations for the secure
         # port, OpenACS standardized at:
-        
+
         if { $sdriver eq "nsopenssl" } {
             set port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
             set host [ns_config "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" hostname]
-            
+
         } elseif { $sdriver ne "" } {
             # get secure port for all other cases of nsssl, nsssle etc
             set driver_section [ns_driversection -driver $sdriver]
@@ -1919,8 +1919,8 @@ if {[info commands ns_driver] ne ""} {
                 }
             }
             set port [ns_config -int $driver_section port]
-            
-            # checking nsopenssl 2.0 which has different names for 
+
+            # checking nsopenssl 2.0 which has different names for
             # the secure port etc, and deprecated with this version of OpenACS
             if {$port eq ""} {
                 set port [ns_config -int $driver_section ServerPort 443]
@@ -1931,7 +1931,7 @@ if {[info commands ns_driver] ne ""} {
         } else {
             set port ""
         }
-        
+
         if {$sdriver ne ""} {
             set location "https://$host"
             if {$port eq "" || $port eq "443" } {
@@ -1940,9 +1940,9 @@ if {[info commands ns_driver] ne ""} {
                 set suffix ":$port"
                 append location $suffix
             }
- 
+
             lappend result [list proto https driver $sdriver host $host \
-                                location $location port $port suffix $suffix]                
+                                location $location port $port suffix $suffix]
         }
         return $result
     }
@@ -1958,7 +1958,7 @@ ad_proc -public security::locations {} {
     is true, then an alternate location without a port is included.
     This proc also assumes hostnames from host_node_map table are
     accurate and legit.
-    
+
     The term location refers to protocol://domain:port for
     website.
 
@@ -1978,7 +1978,7 @@ ad_proc -public security::locations {} {
         if {[dict get $d port] != 0} {
             set location [dict get $d location]
             if {$location ni $locations} {lappend locations $location}
-            
+
             set location [dict get $d proto]://[dict get $d host]
             if {$location ni $portless_locations &&
                 $location ni $locations} {
@@ -1994,12 +1994,12 @@ ad_proc -public security::locations {} {
         # Is the current connection secure?
         #
         set secure_conn_p [security::secure_conn_p]
-        
+
         set current_location [util_current_location]
         if {$current_location ni $locations} {
             lappend locations $current_location
         }
-        
+
         #
         # When we are on a secure connection, the command above added
         # already a secure connection. When we are on a nonsecure
@@ -2016,7 +2016,7 @@ ad_proc -public security::locations {} {
     } else {
         set secure_conn_p 0
     }
-    
+
     #
     # Consider if we are behind a proxy and don't want to publish the
     # proxy's backend port. In this cases, SuppressHttpPort can be used
@@ -2028,13 +2028,13 @@ ad_proc -public security::locations {} {
         lappend locations {*}$portless_locations
     }
 
-   
+
     #
     # Add locations from host_node_map
     #
     set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
                                       get_node_host_names {select host from host_node_map}]
- 
+
     if { [llength $host_node_map_hosts_list] > 0 } {
         if { $suppress_http_port } {
             foreach hostname $host_node_map_hosts_list {
@@ -2081,7 +2081,7 @@ ad_proc -public security::validated_host_header {} {
     if {$host eq ""} {
         return ""
     }
-    
+
     #
     # Check, if we have validated it before, or it belongs to the
     # predefined accepted host header fields.
@@ -2105,7 +2105,7 @@ ad_proc -public security::validated_host_header {} {
     # names (see e.g. §3.2.2 of RFC 3976).
     #
     set hostName [string trimright $hostName .]
-    
+
     #
     # Check, if the provided host is the same as the configured host
     # name for the current driver or one of its IP addresses. Should
@@ -2132,7 +2132,7 @@ ad_proc -public security::validated_host_header {} {
             # port is currently ignored
             #
             set $key 1
-            return $host            
+            return $host
         }
     }
 
@@ -2155,7 +2155,7 @@ ad_proc -public security::validated_host_header {} {
         set s [ns_info server]
         set driverInfo [security::configured_driver_info]
         set drivers [lmap d $driverInfo {dict get $d driver}]
-        
+
         foreach driver $drivers {
             #
             # Check global "servers" configuration for virtual servers for the driver
@@ -2210,7 +2210,7 @@ ad_proc -public security::validated_host_header {} {
         set $key 1
         return $host
     }
-    
+
     #
     # We could/should check as well against a white-list of additional
     # host names (maybe via ::acs::validated, or via config file, or
@@ -2235,15 +2235,15 @@ namespace eval ::security::csp {
     # https://www.w3.org/TR/CSP/
     #
     ad_proc -public ::security::csp::nonce { {-tokenname __csp_nonce} } {
-    
+
         Generate a Nonce token and return it. The nonce token can be used
         in content security policies (CSP2) for "script" and "style"
         elements. Desired Properties: generate a single unique value per
         request which is hard for a hacker to predict, it should only
         contain base64 characters (so hex is fine).
-        
+
         For details, see https://www.w3.org/TR/CSP/
-        
+
         @return nonce token
         @author Gustaf Neumann
     } {
@@ -2268,7 +2268,7 @@ namespace eval ::security::csp {
                 set session_id [ad_conn peeraddr]
             }
             set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
-            
+
             if {[info commands ::crypto::hmac] ne ""} {
                 set token  [::crypto::hmac string $secret $session_id-[clock clicks -microseconds]]
             } else {
@@ -2281,14 +2281,14 @@ namespace eval ::security::csp {
 
     # security::csp::require style-src 'unsafe-inline'
     ad_proc -public ::security::csp::require {{-force:boolean} directive value} {
-        
+
         Add a single value directive to the CSP rule-set. The
         directices are picked up, when the pages is rendered, by the
         CSP generator.
-        
+
         @directive name of the directive (such as e.g. style-src)
         @value allowed source for this page (such as e.g. unsafe-inline)
-        
+
         @author Gustaf Neumann
         @see    security::csp::render
     } {
@@ -2306,7 +2306,7 @@ namespace eval ::security::csp {
     }
 
     ad_proc -public ::security::csp::render {} {
-        
+
         This is the CSP generator. Collect the specified directives
         and build from these directives the full CSP specification for
         the current page.
@@ -2327,14 +2327,14 @@ namespace eval ::security::csp {
         security::csp::require style-src 'self'
         security::csp::require img-src 'self'
         security::csp::require font-src 'self'
-        security::csp::require base-uri 'self'        
-        
+        security::csp::require base-uri 'self'
+
         #
         # Some browser (safari, chrome) need "font-src data:", maybe
         # for plugins or diffent font settings. Seems safe enough.
         #
         security::csp::require font-src data:
-        
+
         #
         # Always add the nonce-token to script-src. Note, that nonce
         # definition comes via CSP 2, which - at the current time - is
@@ -2358,7 +2358,7 @@ namespace eval ::security::csp {
         } {
             security::csp::require script-src 'nonce-$nonce'
         }
-        
+
         # We need for the time being 'unsafe-inline' for style-src,
         # otherwise not even the style attribute (e.g. <p
         # style="...">) would be allowed.
@@ -2374,7 +2374,7 @@ namespace eval ::security::csp {
         #
         # We do not need object-src
         #
-        security::csp::require object-src 'none'        
+        security::csp::require object-src 'none'
 
         set policy ""
         foreach directive {
@@ -2418,28 +2418,28 @@ namespace eval ::security::csrf {
     #
     #    security::csrf::new
     #    security::csrf::validate
-    
+
     ad_proc -public ::security::csrf::new {{-tokenname __csrf_token} -user_id} {
 
         Create a security token to protect against CSRF (Cross-Site
         Request Forgery).  The token is set (and cached) in a global
         per-thread variable an can be included in forms e.g. via the
         following command.
-    
+
         <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
 
         The token is automatically cleared together with other global
         variables at the end of the processing of every request.
-    
+
         @return csrf token
-        
+
         @author Gustaf Neumann
     } {
         set globalTokenName ::$tokenname
         if {[info exists $globalTokenName] && [set $globalTokenName] ne ""} {
             return [set $globalTokenName]
         }
-        
+
         set token [token -tokenname $tokenname]
         return [set $globalTokenName $token]
     }
@@ -2448,7 +2448,7 @@ namespace eval ::security::csrf {
     # validate
     #
     ad_proc -public ::security::csrf::validate {{-tokenname __csrf_token} {-allowempty false}} {
-        
+
         Validate a CSRF token and call security::csrf::fail the request if
         invalid.
 
@@ -2463,7 +2463,7 @@ namespace eval ::security::csrf {
             #
             return
         }
-        
+
         set oldToken [ns_queryget $tokenname]
         if {$oldToken eq ""} {
             #
@@ -2475,7 +2475,7 @@ namespace eval ::security::csrf {
             }
             fail
         }
-        
+
         set token [token -tokenname $tokenname]
         if {$oldToken ne $token} {
             fail
@@ -2511,7 +2511,7 @@ namespace eval ::security::csrf {
     }
 
     #
-    # Generate CSRF token 
+    # Generate CSRF token
     #
     ad_proc -public ::security::csrf::token { {-tokenname __csrf_token} } {
 
@@ -2545,10 +2545,10 @@ namespace eval ::security::csrf {
     # Failure handling
     #
     ad_proc -private ::security::csrf::fail {} {
-    
+
         This function is called, when a csrf validation fails. Unless the
         current user is swa, it aborts the current request.
-        
+
     } {
         ad_log Warning "CSRF failure"
         if {[acs_user::site_wide_admin_p]} {
@@ -2566,4 +2566,3 @@ namespace eval ::security::csrf {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-
