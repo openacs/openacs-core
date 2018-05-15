@@ -1136,7 +1136,7 @@ namespace eval aa_xpath {
         }
         return $result
     }
-    
+
     ad_proc -public ::aa_dom_html {var html body} {
     } {
         upvar $var root
@@ -1144,7 +1144,7 @@ namespace eval aa_xpath {
         $doc documentElement root
         uplevel $body
     }
-    
+
     ad_proc -public ::aa_xpath::non_empty {node selectors} {
         Test if provided selectors return non-empty results
     } {
