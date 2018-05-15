@@ -864,13 +864,15 @@ ad_proc template::get_footer_html {
     # Generate the body footers
     variable ::template::footers
     set footer ""
+
     if {[info exists footers]} {
         foreach footer_list $footers {
             lassign $footer_list type src params
             if {$type eq "literal"} {
                 append footer $src
             } else {
-                append footer [template::adp_include $src $params]
+                set themed_template [template::themed_template $src]
+                append footer [template::adp_include $themed_template $params]
             }
         }
         unset footers
