@@ -108,14 +108,38 @@ ad_proc -private sec_handler {} {
 
         # Now check for login cookie
         ns_log $::security::log(login_cookie) "OACS: Not a valid session cookie, looking for login cookie '$errmsg'"
-        if {![string match "*does not exist*" $errmsg]} {
+        if {[string match "*does not exist*" $errmsg]} {
             #
-            # Current firefox does not seem to include cookies in CSP
-            # messages sent via "report-uri"
+            # We have no cookie. Maybe we are running under aa_test.
+            #
+            if {[nsv_array exists aa_test]
+                && [nsv_get aa_test logindata logindata]
+                && [ns_conn peeraddr] eq [dict get $logindata peeraddr]
+            } {
+                #ns_log notice logindata=$logindata
+                if {[dict exists $logindata user_id]} {
+                    set user_id [dict get $logindata user_id]
+                    ad_conn -set user_id $user_id
+                    ad_conn -set untrusted_user_id $user_id
+                    ad_conn -set account_status ok
+                    ad_conn -set auth_level ok
+                    set auth_level ok
+                    set untrusted_user_id $user_id
+                }
+            }
+        } else {
+            #
+            # We have a cookie, but it is not ok, so logout.
             #
             ad_user_logout
         }
-        sec_login_handler
+
+        #
+        # Unless we have managed to get credentials above, get it now.
+        #
+        if {![info exists auth_level]} {
+            sec_login_handler
+        }
     } else {
         # The session cookie already exists and is valid.
         set cookie_data [split [lindex $cookie_list 0] {,}]
@@ -136,7 +160,7 @@ ad_proc -private sec_handler {} {
         lassign $cookie_data session_id untrusted_user_id login_level
         set user_id 0
         set account_status closed
-        
+
         switch -- $login_level {
             1 {
                 set auth_level ok
