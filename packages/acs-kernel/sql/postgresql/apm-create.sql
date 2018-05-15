@@ -693,20 +693,6 @@ create view apm_enabled_package_versions as
     select * from apm_package_version_info
     where  enabled_p = 't';
 
-create table apm_package_db_types (
-    db_type_key      varchar(50)
-                       constraint apm_package_db_types_pk primary key,
-    pretty_db_name   varchar(200)
-                       constraint apm_package_db_types_name_nn not null
-);
-
-comment on table apm_package_db_types is '
-  A list of all the different kinds of database engines that an APM package can
-  support.  This table is initialized in acs-tcl/tcl/apm-init.tcl rather than in
-  PL/SQL in order to guarantee that the list of supported database engines is
-  consistent between the bootstrap code and the package manager.
-';
-
 create table apm_parameters (
 	parameter_id		integer constraint apm_parameters_parameter_id_fk 
 				references acs_objects(object_id)
