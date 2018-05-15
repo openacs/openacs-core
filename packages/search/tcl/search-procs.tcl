@@ -330,7 +330,7 @@ ad_proc -callback search::search {
     This callback is invoked when a search is to be performed. Query
     will be a list of lists. The first list is required and will be a
     list of search terms to send to the full text search
-    engine. Additional optional lists will be a two element list. THe
+    engine. Additional optional lists will be a two element list. The
     first element will be the name of an advanced search operator. The
     second element will be a list of data to restrict search results
     based on that operator.
