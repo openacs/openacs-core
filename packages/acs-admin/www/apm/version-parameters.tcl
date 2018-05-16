@@ -84,19 +84,6 @@ if { $dimensional_list ne "" } {
     set filter_html [ad_dimensional $dimensional_list]
 }
 
-# LARS hack
-set sections [lindex $dimensional_list 0 3]
-foreach section $sections {
-    if {$section_name eq [lindex $section 0]} {
-        set section_name [lindex $section 1]
-        break
-    }
-}
-
-
-
-
-
 
 # Local variables:
 #    mode: tcl

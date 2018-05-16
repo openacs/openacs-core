@@ -17,6 +17,15 @@ db_1row apm_get_name {
     where version_id = :version_id
 }
 
+# This to filter out sections such as "all" and $package_key, which
+# have special meaning and are not supposed to be created.
+if {![db_string get_section {
+    select exists (select 1 from apm_parameters
+                   where section_name = :section_name
+                   and package_key = :package_key) from dual}]} {
+    set section_name ""
+}
+
 set title "Add Parameter"
 set context [list \
 		 [list "." "Package Manager"] \

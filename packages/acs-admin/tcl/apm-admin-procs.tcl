@@ -18,15 +18,13 @@ ad_proc apm_parameter_section_slider {package_key} {
     }]
 
     if { [llength $sections] > 1 } {
-        set i 0
         lappend section_list [list $package_key $package_key [list "where" "section_name is null"]]
         foreach section $sections {
-            incr i
             if { $section ne "" } {
-                lappend section_list [list "section_$i" $section [list "where" "section_name = '[db_quote $section]'"]]
+                lappend section_list [list $section $section [list "where" "section_name = '[db_quote $section]'"]]
             }
         }
-        lappend section_list [list all "All" [list] ]
+        lappend section_list [list all "All" [list]]
         return [list [list section_name "Section:" $package_key $section_list]]
     } else {
         return ""
