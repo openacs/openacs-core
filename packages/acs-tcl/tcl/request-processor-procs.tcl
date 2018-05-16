@@ -1087,12 +1087,17 @@ ad_proc -private rp_handler {} {
         # However, also internal redirects to error pages happens the
         # same way, but we need to deliver the current url (coming
         # from ns_url) and not the original url before the redirect
-        # (the extra_url). This is especially important on
+        # (the extra_url). Similarly we have to reset the package_key
+        # and package_url to point to the subsite package to deliver
+        # the error pages. This is especially important on
         # host-node-mapped subsites, when e.g. the error pages are
         # mapped to /shared/404 etc.
         #
-        if {[ns_conn status] != 200} {
+        set status [ns_conn status]
+        if {$status <= 200 || $status >= 300} {
             ad_conn -set extra_url [ns_conn url]
+            ad_conn -set package_key "acs-subsite"
+            ad_conn -set package_url /
         } else {
             array set node [site_node::get -url [ad_conn url]]
             ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
