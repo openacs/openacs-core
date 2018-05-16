@@ -17,7 +17,9 @@ set context [list $title]
 set component_bodys {}
 foreach component [nsv_get aa_test components] {
     if {$component_id eq [lindex $component 0] && $package_key eq [lindex $component 1]} {
-        lassign $component . . component_desc component_file component_body
+        set component_desc [lindex $component 2]
+        set component_file [lindex $component 3]
+        set component_body [lindex $component 4]
     }
 }
 

@@ -141,7 +141,8 @@ if { [info exists property(rp)] } {
 		}
 	    }
 	    registered_proc {
-        lassign $info . . proc args
+        set proc [lindex $info 2]
+        set args [lindex $info 3]
 		append body "Called registered procedure: <b>$proc</b> [ns_quotehtml $args] for ($method $path) - $duration\n"
 		if {$action eq "error"} {
 		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
@@ -224,7 +225,7 @@ if { ![info exists property(db)] } {
 	} else {
 	    set statement_pool ""
 	}
-        
+
 	if { $command eq "gethandle" } {
 	    # Remember which handle was acquired from which pool.
 	    set statement_pool $sql
@@ -238,7 +239,7 @@ if { ![info exists property(db)] } {
 	    } else {
 		set value "$statement_name: "
 	    }
-            
+
             # Remove extra whitespace before query
             set min_whitespace -1
             foreach line [split $sql \n] {
@@ -251,7 +252,7 @@ if { ![info exists property(db)] } {
                     }
                 }
             }
-            
+
             if { $min_whitespace > 0 } {
                 set new_sql {}
                 foreach line [split $sql \n] {
@@ -302,7 +303,7 @@ if { ![info exists property(db)] } {
                 hide_p t
             }
         }
-            
+
 }
 
 # Profiling information
@@ -349,7 +350,7 @@ if { [info exists property(prof)] } {
                 append file_links " x"
                 set size -
             }
-        } else { 
+        } else {
             set size {}
         }
 

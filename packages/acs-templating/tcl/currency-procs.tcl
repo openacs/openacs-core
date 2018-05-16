@@ -90,7 +90,9 @@ ad_proc -public template::data::validate::currency {
     # a currency is a 6 element list supporting, for example, the following forms: "$2.03" "Rs 50.42" "12.52L" "Y5,13c"
     # equivalent of date::unpack
     lassign $value leading_symbol whole_part separator fractional_part trailing_money format
-    lassign $format . format_whole_part . format_fractional_part
+
+    set format_whole_part      [lindex $format 1]
+    set format_fractional_part [lindex $format 3]
 
     set whole_part_valid_p [template::data::validate integer whole_part message]
     if { $fractional_part ne "" } {

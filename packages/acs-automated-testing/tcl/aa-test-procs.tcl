@@ -573,7 +573,8 @@ ad_proc -public aa_runseries {
         lappend testcase_ids $testcase_id
         foreach testcase [nsv_get aa_test cases] {
             if {$testcase_id == [lindex $testcase 0]} {
-                lassign $testcase . . . package_key . init_classes
+                set package_key     [lindex $testcase 3]
+                set init_classes    [lindex $testcase 5]
                 foreach init_class $init_classes {
                     set classes([list $package_key $init_class]) 1
                 }
@@ -581,7 +582,10 @@ ad_proc -public aa_runseries {
         }
     } else {
         foreach testcase [nsv_get aa_test cases] {
-            lassign $testcase testcase_id . . package_key categories init_classes
+            set testcase_id     [lindex $testcase 0]
+            set package_key     [lindex $testcase 3]
+            set categories      [lindex $testcase 4]
+            set init_classes    [lindex $testcase 5]
 
             # try to disqualify the test case
 
@@ -681,7 +685,14 @@ ad_proc -public aa_run_testcase {
     set testcase_bodys {}
     foreach testcase [nsv_get aa_test cases] {
         if {$testcase_id == [lindex $testcase 0]} {
-            lassign $testcase . . testcase_file package_key testcase_cats testcase_inits testcase_on_error testcase_bodys aa_error_level
+            set testcase_file       [lindex $testcase 2]
+            set package_key         [lindex $testcase 3]
+            set testcase_cats       [lindex $testcase 4]
+            set testcase_inits      [lindex $testcase 5]
+            set testcase_on_error   [lindex $testcase 6]
+            set testcase_bodys      [lindex $testcase 7]
+            set aa_error_level      [lindex $testcase 8]
+
             set aa_package_key    $package_key
         }
     }
