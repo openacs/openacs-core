@@ -440,6 +440,10 @@ ad_proc -public template::util::read_file { path } {
 
     @return A string with the contents of the file.
 } {
+    if {![file exists $path]} {
+        error "File $path does not exist"
+    }
+    
     #
     # Use ad_try to make sure, that the file descriptor is finally
     # closed.
