@@ -85,12 +85,6 @@ ad_proc -public ad_return_exception_template {
     ad_script_abort
 }
 
-ad_proc -public get_server_root {} {
-    Get the server root directory (supposing we run under ACS)
-} {
-    return $::acs::rootdir
-}
-
 
 ad_proc adp_parse_ad_conn_file {} {
     
@@ -183,6 +177,19 @@ ad_proc adp_parse_ad_conn_file {} {
         db_release_unused_handles
     }
 }
+
+
+#
+### Deprecated procs
+#
+
+ad_proc -deprecated -public get_server_root {} {
+    Get the server root directory (supposing we run under ACS)<br>
+    THIS PROC IS SUPERSEDED BY acs_root_dir
+} {
+    return $::acs::rootdir
+}
+
 
 #
 # Local variables:
