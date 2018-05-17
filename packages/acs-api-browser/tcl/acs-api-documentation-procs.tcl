@@ -15,7 +15,7 @@ namespace eval ::apidoc {
         #
         # NaviServer at sourceforge
         #
-        set ns_api_host  "http://naviserver.sourceforge.net/"
+        set ns_api_host  "https://naviserver.sourceforge.io/"
         set ns_api_index [list "n/naviserver/files/" "n/"]
         set ns_api_root  [list \
                               ${ns_api_host}[lindex $ns_api_index 0] \
