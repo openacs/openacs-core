@@ -876,12 +876,6 @@ provide further information about the particular version:</para>
 
 </para></listitem>
 
-<listitem><para><computeroutput>apm_package_files</computeroutput>
- Stores information about the files that are part of a version.
-
-
-</para></listitem>
-
 <listitem><para><computeroutput>apm_package_dependencies</computeroutput>
  Stores information about what interfaces the package provides and
 requires.</para></listitem>
