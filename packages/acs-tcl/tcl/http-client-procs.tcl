@@ -405,7 +405,7 @@ ad_proc util::http::get {
 
     @param headers specifies an ns_set of extra headers to send
     to the server when doing the request.  Some options exist that
-    allow to avoid the need to specify headers manually, but headers
+    allow one to avoid the need to specify headers manually, but headers
     will always take precedence over options.
 
     @param gzip_response informs the server that we are
@@ -515,7 +515,7 @@ ad_proc util::http::post {
     multipart.
 
     @param headers specifies an ns_set of extra headers to send to the
-    server when doing the request.  Some options exist that allow to
+    server when doing the request.  Some options exist that allow one to
     avoid the need to specify headers manually, but headers will
     always take precedence over options.
 
@@ -931,7 +931,7 @@ ad_proc -private util::http::follow_redirects {
     once the request is over.
 
     @param headers specifies an ns_set of extra headers to send to the
-    server when doing the request.  Some options exist that allow to
+    server when doing the request.  Some options exist that allow one to
     avoid the need to specify headers manually, but headers will
     always take precedence over options.
 
@@ -1095,7 +1095,7 @@ ad_proc -private util::http::request {
     Issue an HTTP request either GET or POST to the url specified.
 
     @param headers specifies an ns_set of extra headers to send to the
-    server when doing the request.  Some options exist that allow to
+    server when doing the request.  Some options exist that allow one to
     avoid the need to specify headers manually, but headers will
     always take precedence over options.
 
@@ -1232,7 +1232,7 @@ ad_proc -private util::http::native::request {
     This is the native implementation based on NaviServer HTTP api.
 
     @param headers specifies an ns_set of extra headers to send to the
-    server when doing the request.  Some options exist that allow to
+    server when doing the request.  Some options exist that allow one to
     avoid the need to specify headers manually, but headers will
     always take precedence over options.
 
@@ -1538,7 +1538,7 @@ ad_proc -private util::http::curl::request {
     when ssl native capabilities are not available.
 
     @param headers specifies an ns_set of extra headers to send to the
-    server when doing the request.  Some options exist that allow to
+    server when doing the request.  Some options exist that allow one to
     avoid the need to specify headers manually, but headers will
     always take precedence over options.
 

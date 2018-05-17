@@ -1673,7 +1673,7 @@ ad_proc -private template::list::prepare_filters {
             }
         }
 
-        # If none were found, we may need to provide an 'other' entry below
+        # If none was found, we may need to provide an 'other' entry below
         set found_selected_p 0
 
         # Now generate selected_p, urls, add_urls

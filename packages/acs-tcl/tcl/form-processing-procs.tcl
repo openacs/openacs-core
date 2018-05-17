@@ -257,7 +257,7 @@ ad_proc -public ad_form {
     </dd>
 
     <p><dt><b>-export</b></dt><p>
-    <dd>This options allows to export data in current page environment to the page receiving the form.
+    <dd>This options allows one to export data in current page environment to the page receiving the form.
         Variables are treated as "hidden" form elements which will be automatically generated. Each value is 
         either a name, in which case the Tcl variable at the caller's level is passed to the form if it exists, 
         or a name-value pair.

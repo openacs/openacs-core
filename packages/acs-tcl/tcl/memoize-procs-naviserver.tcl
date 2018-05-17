@@ -17,7 +17,7 @@ if {[ns_info name] ne "NaviServer"} {
 
 #
 # Implementation of util_memoize for NaviServer.  The built-in
-# ns_cache_* implementation of NaviServer allows to specify for
+# ns_cache_* implementation of NaviServer allows one to specify for
 # every entry an expire time (among others). This allows us to
 # drop the "manual" expire handling as implemented in the OpenACS
 # when NaviServer is available.

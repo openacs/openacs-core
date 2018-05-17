@@ -41,7 +41,7 @@ ad_proc -callback subsite::get_extra_headers {
 
 ad_proc -callback subsite::header_onload {
 } {
-    @return any javascript function that needs to be loaded
+    @return any JavaScript function that needs to be loaded
     the callback implementation should simply do:
     return {your_function(params);}
     @see subsite::page_plugin

@@ -44,7 +44,7 @@ db_1row get_vars_of_selected_theme {select * from  subsite_themes where key = :t
 set editButtons {{" Save Parameters " save}}
 if {$local_p} {
     #
-    # When the local_p flag is set, allow to overwrite the theme
+    # When the local_p flag is set, allow one to overwrite the theme
     # defaults.
     #
     lappend editButtons {" Overwrite Theme Defaults and Save Parameters " overwrite}

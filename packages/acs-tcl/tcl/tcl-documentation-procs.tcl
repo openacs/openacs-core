@@ -1243,7 +1243,7 @@ ad_proc ad_include_contract {docstring args} {
 
     Define interface between a page and an <include> similar to the
     page_contract. This is a light-weight implementation based on the
-    ad_page_contract. It allows to check the passed arguments (types,
+    ad_page_contract. It allows one to check the passed arguments (types,
                                                                optionality) and can be used for setting defaults the usual way.
     Using ad_include_contracts helps to improve documentation of
     included content.

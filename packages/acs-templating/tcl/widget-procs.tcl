@@ -63,7 +63,7 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
     <p>
 
     It only searches in all parties from the system currently. It should propably be extended to
-    allow to restrict the search to a specific subsite, as well as searching only
+    allow one to restrict the search to a specific subsite, as well as searching only
     for groups or persons.
 
     @author Tilmann Singer
