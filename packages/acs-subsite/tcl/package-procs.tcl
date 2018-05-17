@@ -844,7 +844,7 @@ ad_proc -public package_exec_plsql {
 } {
 
     Calls a pl/[pg]sql proc/func defined within the object type's package.  Use of
-    this Tcl APi proc avoids the need for the developer to write separate SQL for each
+    this Tcl API proc avoids the need for the developer to write separate SQL for each
     RDBMS we support.
 
     @author Don Baccus (dhogaza@pacifier.com)

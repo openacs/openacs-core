@@ -60,7 +60,7 @@ db_multirow -extend {check} binding binding {
 	    # - we have XOTcl installed, 
 	    # - the first word is an object, 
 	    # - the second word is a method for the object, 
-	    # ... so provide a link to the XOTcl api browser
+	    # ... so provide a link to the XOTcl API browser
 	    set href "/xotcl/show-object?object=[lindex $impl_alias 0]&show_methods=2"
 	    append impl_alias "<a href='[ns_quotehtml $href]'>" \
 		"<img border='0' src='/resources/acs-subsite/ZoomIn16.gif'></a>"
