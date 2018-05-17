@@ -301,7 +301,7 @@ END OF TEMPLATE -->
 		Reduced number of insert cr_child_rels operations, just when
 		needed:
 	      </para>
-	      <para>cr_child_rels provide only little benefit (allow to use
+	      <para>cr_child_rels provide only little benefit (allow one to use
 	      roles in a child-rel), but the common operation is a well available
 	      in cr_items via the parent_id. cr_child_rels do not help for
 	      recursive queries either. One option would be to add an additional
@@ -582,7 +582,7 @@ END OF TEMPLATE -->
 		<listitem><para>Get rid of various pesky &quot;MISSING FORMWIDGET:
 		...formbutton:ok&quot; messages
 		</para></listitem>
-		<listitem><para>Improved support for javascript event handlers in
+		<listitem><para>Improved support for JavaScript event handlers in
 		template::head
 		</para></listitem>
 		<listitem><para>New functions
@@ -669,7 +669,7 @@ END OF TEMPLATE -->
 		<listitem><para> &quot;ns_md5&quot; and
 		&quot;ns_parseurl&quot;: improve compatibility between
 		AOLserver and NaviServer </para></listitem>
-		<listitem><para> &quot;ad_dom_sanitize_html&quot;: allow to
+		<listitem><para> &quot;ad_dom_sanitize_html&quot;: allow one to
 		specify different sets of tags, attributes and protocols and
 		&quot;ad_dom_fix_html&quot;, which is a light weight tidy
 		variant.  </para></listitem>
@@ -906,7 +906,7 @@ END OF TEMPLATE -->
 	      </para></listitem>
 	      <listitem><para>
 		Added option &quot;-path_encode&quot; to methods
-		&quot;pretty_link&quot; and &quot;folder_path&quot; to allow to
+		&quot;pretty_link&quot; and &quot;folder_path&quot; to allow one to
 		control, whether the result should be encoded or not (default
 		true)
 	      </para></listitem>
@@ -932,7 +932,7 @@ END OF TEMPLATE -->
 		    attribute based on form-field names
 		  </para></listitem>
 		  <listitem><para>
-		    richtext: allow to specify
+		    richtext: allow one to specify
 		    &quot;extraAllowedContent&quot; via
 		    options
 		  </para></listitem>
