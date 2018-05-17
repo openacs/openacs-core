@@ -587,27 +587,6 @@ procedure disable (
 </programlisting>
 
 
-<para>Files associated with a version can be added and removed. The path is
-relative to the <emphasis role="strong">package-root</emphasis> which is
-<computeroutput>acs-server-root/packages/package-key</computeroutput>.</para>
-
-
-<programlisting>
--- Add a file to the indicated version. 
-function add_file(
-    file_id             in apm_package_files.file_id%TYPE 
-                        default null, 
-    version_id in       apm_package_versions.version_id%TYPE, 
-    path                in apm_package_files.path%TYPE,
-    file_type           in apm_package_file_types.file_type_key%TYPE 
-) return apm_package_files.file_id%TYPE; 
-
--- Remove a file from the indicated version.
-procedure remove_file( 
-    version_id          in apm_package_versions.version_id%TYPE,
-    path                in apm_package_files.path%TYPE 
-);
-</programlisting>
 
 <para>Package versions need to indicate that they provide interfaces for other
 software. An interface is an API that other packages can access and utilize.
