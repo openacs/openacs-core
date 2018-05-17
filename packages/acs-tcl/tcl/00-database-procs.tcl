@@ -890,7 +890,7 @@ ad_proc -private db_bind_var_quoted_p { sql bind_start_idx bind_end_idx} {
 
 ad_proc -private db_bind_var_substitution { sql { bind "" } } {
 
-    This proc emulates the bind variable substitution in the postgresql driver.
+    This proc emulates the bind variable substitution in the PostgreSQL driver.
     Since this is a temporary hack, we do it in Tcl instead of hacking up the
     driver to support plsql calls.  This is only used for the db_exec_plpgsql
     function.
@@ -1961,7 +1961,7 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
             # db_dml update_photo  "update foo set bar = empty_blob()
             #                       where bar = :bar
             #                       returning foo into :1" -blob_files [list $file]
-            # for postgresql we can do the equivalent by placing the following
+            # for PostgreSQL we can do the equivalent by placing the following
             # in a query file:
             # update foo set bar = [set __lob_id [db_string get_id "select empty_lob()"]]
             # where bar = :bar
@@ -2244,7 +2244,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                 # queries in the on_error block would then fail.
                 #
                 # Note that the semantics described in the proc doc
-                # are not possible to support on postgresql.
+                # are not possible to support on PostgreSQL.
 
                 # DRB: I removed the db_release_unused_handles call that
                 # this patch included because additional aborts further

@@ -15,7 +15,7 @@ ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 22 0] cr_delet
 
 ad_proc -public acs_cr_scheduled_release_exec {} {
 
-    This was handled by oracle, but since other dbs, such as postgresql don't 
+    This was handled by oracle, but since other dbs, such as PostgreSQL don't 
     support job submission, the job scheduling has been moved to aolserver.
     (OpenACS - DanW)
 

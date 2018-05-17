@@ -482,7 +482,7 @@ ad_proc -public content::revision::get_cr_file_path {
     @creation-date 2006-08-27
 } {
     # the file path is stored in filename column on oracle
-    # and content in postgresql, but we alias to filename so it makes
+    # and content in PostgreSQL, but we alias to filename so it makes
     # sense
     db_1row get_storage_key_and_path ""
     return [cr_fs_path $storage_area_key]${filename}
