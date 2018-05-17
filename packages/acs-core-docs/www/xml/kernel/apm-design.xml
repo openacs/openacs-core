@@ -911,12 +911,7 @@ information available from the <computeroutput>apm_package_types</computeroutput
 
 <listitem><para><computeroutput>apm_enabled_package_versions</computeroutput>
  A view (subset) of the above table with only enabled versions.
-
-
 </para></listitem>
-
-<listitem><para><computeroutput>apm_file_info</computeroutput>
- Provides a public interface for querying file information.</para></listitem>
 </itemizedlist>
 
 
