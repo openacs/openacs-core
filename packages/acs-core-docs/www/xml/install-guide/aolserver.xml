@@ -88,7 +88,7 @@ cd /usr/local/src/aolserver
           installs them.</para>
       <para>Debian users, see
           warning above, but if you do use apt-get for AOLserver
-          3.3+ad13 and postgresql from apt-get may need to 
+          3.3+ad13 and PostgreSQL from apt-get may need to 
           make these symlinks: <computeroutput>ln -s
           /usr/include/postgresql/ /usr/include/pgsql</computeroutput>
           and <computeroutput>ln -s /usr/lib/postgresql /usr/local/pgsql</computeroutput>)</para>

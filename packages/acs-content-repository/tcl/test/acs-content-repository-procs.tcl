@@ -17,7 +17,7 @@ aa_register_case -cats {smoke api} acs_content_repository_trivial_smoke_test {
             set name [ad_generate_random_string]
             set name_2 [ad_generate_random_string]
 
-            # there is no function in the api to directly retrieve a key
+            # there is no function in the API to directly retrieve a key
             # so instead we have to create a child of another and then
             # retrieve the parent's child
 

@@ -2264,7 +2264,7 @@ ad_proc -public -deprecated ad_admin_context_bar args {
 ########################################################################
 
 #########################
-## Deprecated HTTP api ##
+## Deprecated HTTP API ##
 #########################
 
 ad_proc -deprecated -public util_link_responding_p {
@@ -2918,7 +2918,7 @@ ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
 
 
 ad_proc -public -deprecated apm_doc_body_callback { string } {
-    This callback uses the document api to append more text to the stream.
+    This callback uses the document API to append more text to the stream.
 } {
     doc_body_append $string
 }

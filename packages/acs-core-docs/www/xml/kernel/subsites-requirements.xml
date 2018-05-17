@@ -52,7 +52,7 @@ communities. At an implementation level this is primarily accomplished by
 having an application &quot;scope&quot; its content to a particular package
 instance. The <link linkend="rp-design">request
 processor</link> then figures out which package_id a particular URL references
-and then provides this information through the <computeroutput>ad_conn</computeroutput> api (<computeroutput>[ad_conn
+and then provides this information through the <computeroutput>ad_conn</computeroutput> API (<computeroutput>[ad_conn
 package_id]</computeroutput>, <computeroutput>[ad_conn package_url]</computeroutput>).</para>
 
 

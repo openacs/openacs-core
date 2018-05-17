@@ -1,6 +1,6 @@
 ad_library {
 
-    Procs for http client communication
+    Procs for HTTP client communication
 
     @author Antonio Pisano
     @creation-date 2014-02-13
@@ -244,7 +244,7 @@ ad_proc -private util::http::native_https_api_not_cached {
 
 ad_proc -private util::http::native_https_api {
 } {
-    Obtains implemented apis for http communication
+    Obtains implemented apis for HTTP communication
 } {
     set key ::util::http::native_https_api
     if {[info exists $key]} {
@@ -256,7 +256,7 @@ ad_proc -private util::http::native_https_api {
 
 ad_proc -private util::http::apis_not_cached {
 } {
-    Obtains implemented apis for http communication
+    Obtains implemented apis for HTTP communication
 } {
     set http  [list]
     set https [list]
@@ -278,7 +278,7 @@ ad_proc -private util::http::apis_not_cached {
 
 ad_proc -private util::http::apis {
 } {
-    Obtains implemented apis for http communication
+    Obtains implemented apis for HTTP communication
 } {
     set key ::util::http::apis
     if {[info exists $key]} {
@@ -401,7 +401,7 @@ ad_proc util::http::get {
     -spool:boolean
     {-preference {native curl}}
 } {
-    Issue an http GET request to <code>url</code>.
+    Issue an HTTP GET request to <code>url</code>.
 
     @param headers specifies an ns_set of extra headers to send
     to the server when doing the request.  Some options exist that
@@ -475,8 +475,8 @@ ad_proc util::http::post {
     how big can the whole body payload get before we start spooling
     its content to a file. This is important in case of big file
     uploads, when keeping the entire request in memory is just not
-    feasible. The handling of the spooling is taken care of in the
-    api. This value takes into account also the encoding required by
+    feasible. The handling of the spooling is taken care of in the API.
+    This value takes into account also the encoding required by
     the content type, so its value could not reflect the exact length
     of body's string representation.
 
@@ -1003,7 +1003,7 @@ ad_proc -private util::http::follow_redirects {
     }
 
     #
-    # A redirect from http might point to https, which in turn
+    # A redirect from HTTP might point to https, which in turn
     # might not be configured. So we have to go through
     # util::http::request again.
     #
@@ -1229,7 +1229,7 @@ ad_proc -private util::http::native::request {
 } {
 
     Issue an HTTP request either GET or POST to the url specified.
-    This is the native implementation based on NaviServer HTTP api.
+    This is the native implementation based on NaviServer HTTP API.
 
     @param headers specifies an ns_set of extra headers to send to the
     server when doing the request.  Some options exist that allow one to
@@ -1572,7 +1572,7 @@ ad_proc -private util::http::curl::request {
     capable of receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
 
-    @param force_ssl is ignored when using curl http client
+    @param force_ssl is ignored when using curl HTTP client
     implementation and is only kept for cross compatibility.
 
     @param spool enables file spooling of the request on the file
@@ -1590,7 +1590,7 @@ ad_proc -private util::http::curl::request {
     Be aware that curl allows the POSTing of 303 requests only since
     version 7.26. Versions prior than this will follow 303 redirects
     by GET method. If following by POST is a requirement, please
-    consider switching to the native http client implementation, or
+    consider switching to the native HTTP client implementation, or
     update curl.
 
     @param max_depth is the maximum number of redirects the proc is
@@ -1625,7 +1625,7 @@ ad_proc -private util::http::curl::request {
 
     # Determine whether we want to gzip the request.
     # Default is no, can't know whether the server accepts it.
-    # We could at the http api level (TODO?)
+    # We could at the HTTP API level (TODO?)
     set req_content_encoding [ns_set iget $headers "content-encoding"]
     if {$req_content_encoding ne ""} {
         set gzip_request_p [string match "*gzip*" $req_content_encoding]

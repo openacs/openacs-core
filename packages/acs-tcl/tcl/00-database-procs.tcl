@@ -45,7 +45,7 @@ ad_library {
 #   - The basic functionality worked fine back in Sept. 2001, but I
 #     have NOT tested it since then at all, so maybe there are bugs.
 #
-# - Any others: Basic stuff using only the standard ns_db api will
+# - Any others: Basic stuff using only the standard ns_db API will
 #   likely work, but any special features of the driver (e.g., LOBs)
 #   definitely won't.  Feel free to add support!
 #
@@ -3454,7 +3454,7 @@ ad_proc -private db_exec_lob_postgresql {
 
                     # TODO: Page /file-storage/download-archive/index
                     # fails here on cvs head both before and after my
-                    # mult-db db_* api work, I don't know why.  See bug:
+                    # mult-db db_* API work, I don't know why.  See bug:
                     #   http://openacs.org/bugtracker/openacs/com/file-storage/bug?bug%5fnumber=427
                     # --atp@piskorski.com, 2003/04/09 18:04 EDT
                 }

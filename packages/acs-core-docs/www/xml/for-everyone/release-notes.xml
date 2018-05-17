@@ -1296,7 +1296,7 @@ END OF TEMPLATE -->
 	    </para></listitem>
 	    
 	    <listitem><para>
-	      New api function "ad_log" having the same interface as
+	      New API function "ad_log" having the same interface as
 	      ns_log, but which logs the calling information (like URL
 	      and call-stack) to ease tracking of errors.
 	    </para></listitem>	  
