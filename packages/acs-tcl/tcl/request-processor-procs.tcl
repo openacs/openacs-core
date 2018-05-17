@@ -1094,7 +1094,7 @@ ad_proc -private rp_handler {} {
         # mapped to /shared/404 etc.
         #
         set status [ns_conn status]
-        if {$status <= 200 || $status >= 300} {
+        if {$status < 200 || $status >= 300} {
             ad_conn -set extra_url [ns_conn url]
             ad_conn -set package_key "acs-subsite"
             ad_conn -set package_url /
