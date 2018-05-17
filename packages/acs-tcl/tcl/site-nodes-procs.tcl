@@ -12,7 +12,7 @@ ad_library {
 
 #####################################################################
 #
-# For the sitenodes implmementation there are two versions available.
+# For the sitenodes implementation there are two versions available.
 # One has the option to use either the classical site-nodes code based
 # on nsvs or the newer XOTcl based code. The classical code has the
 # disadvantage that it takes a while on start-up, uses a lot of
