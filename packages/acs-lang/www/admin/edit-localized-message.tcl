@@ -127,7 +127,7 @@ ad_form -extend -name message_form -form {
     if { $description eq "" } {
         set description [subst {(<a href="[ns_quotehtml $description_edit_url]">add description</a>)}]
     } else {
-        set description "[ad_text_to_html -- $description] [subst { (<a href="[ns_quotehtml $description_edit_url]">edit</a>)}]"
+        set description "[ad_text_to_html -- $description] (<a href='[ns_quotehtml $description_edit_url]'>edit</a>)"
     }
 
     # Augment the audit trail with info on who created the first message
