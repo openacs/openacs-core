@@ -1,7 +1,7 @@
 ad_library {
 
-    The template::head::* api manipulates the head section of the document that
-    will be returned to the users client.  Packages should use this api to add
+    The template::head::* API manipulates the head section of the document that
+    will be returned to the users client.  Packages should use this API to add
     package specific javascripts, CSS, link tags and meta tags to the HTML
     document.
 

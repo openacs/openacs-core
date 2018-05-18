@@ -17,7 +17,7 @@ To facilitate greater code reuse, application integration,
 
 <para>
 
-To do this acs-service-contract defines an api for the creation
+To do this acs-service-contract defines an API for the creation
     of interfaces and discovery of interface implementations.</para>
 
 
@@ -247,7 +247,7 @@ creates a new operation as part of a contract.</para>
 <para>
 
 Included in the service contract package are examples for oracle
-    and postgresql of a trivial contract.</para>
+    and PostgreSQL of a trivial contract.</para>
 
 <para>
 

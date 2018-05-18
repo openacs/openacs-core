@@ -6,7 +6,7 @@
 <h2>Why</h2>
 <p>To facilitate greater code reuse, application integration, and
 package extensibility within the OpenACS.</p>
-<p>To do this acs-service-contract defines an api for the creation
+<p>To do this acs-service-contract defines an API for the creation
 of interfaces and discovery of interface implementations.</p>
 <h2>Background</h2>
 <p>Most component systems are based on the use of interfaces.
@@ -100,7 +100,7 @@ implementation.</li></ul>
 calls an operation</li></ul>
 <h2>Examples</h2>
 <p>Included in the service contract package are examples for oracle
-and postgresql of a trivial contract.</p>
+and PostgreSQL of a trivial contract.</p>
 <p>Also the search contract functions as a non-trivial core
 contract used by openacs4.</p>
 <h2>Further Reading</h2>

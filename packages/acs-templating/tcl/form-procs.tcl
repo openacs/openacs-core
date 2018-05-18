@@ -31,7 +31,7 @@ ad_proc -public template::form { command args } {
 
     template::form command invokes form functions.  Please see the
     individual functions for their arguments.  The template::element
-    api is used to manipulate form elements.
+    API is used to manipulate form elements.
     
     @see template::form::create
     @see template::form::get_button

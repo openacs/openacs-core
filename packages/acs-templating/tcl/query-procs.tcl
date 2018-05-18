@@ -22,10 +22,10 @@ namespace eval template::query {}
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-# (DCW - Openacs) converted template db api to use standard api and hooked it
-# into the query-dispatcher.  This ties into the standard db api's
+# (DCW - Openacs) converted template db API to use standard API and hooked it
+# into the query-dispatcher.  This ties into the standard db API's
 # transaction control and handle allocation into the templating query interface
-# allowing the two db api's to be mixed together.
+# allowing the two db APIs to be mixed together.
 
 
 ad_proc -public template::query { statement_name result_name type sql args } {

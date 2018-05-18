@@ -20,7 +20,7 @@ namespace eval template::element {}
 ad_proc -public element { command form_id element_id args } {
     element is really template::element although when in the
     "template" namespace you may omit the template:: qualifier.
-    See the template::form api for creating the form element container.
+    See the template::form API for creating the form element container.
 
     @see template::element
     @see template::form

@@ -5,7 +5,7 @@ ACS Service Contract Documentation
     To facilitate greater code reuse, application integration, 
     and package extensibility within the OpenACS.
 
-    To do this acs-service-contract defines an api for the creation
+    To do this acs-service-contract defines an API for the creation
     of interfaces and discovery of interface implementations.
 
   Background
@@ -140,7 +140,7 @@ ACS Service Contract Documentation
   Examples
 
     Included in the service contract package are examples for oracle
-    and postgresql of a trivial contract.
+    and PostgreSQL of a trivial contract.
   
     Also the search contract functions as a non-trivial core contract
     used by openacs4.
