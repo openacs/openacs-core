@@ -231,9 +231,9 @@ ad_proc -public util::http::available {
 
 ad_proc -private util::http::native_https_api_not_cached {
 } {
-    Obtains the right https native API
+    Obtains the right HTTPS native API
 } {
-    # Since NaviServer 4.99.12 ns_http handles also https
+    # Since NaviServer 4.99.12 ns_http handles also HTTPS
     if {[apm_version_names_compare \
              [ns_info patchlevel] "4.99.12"] >= 0} {
         return [info commands ns_http]
@@ -1003,7 +1003,7 @@ ad_proc -private util::http::follow_redirects {
     }
 
     #
-    # A redirect from HTTP might point to https, which in turn
+    # A redirect from HTTP might point to HTTPS, which in turn
     # might not be configured. So we have to go through
     # util::http::request again.
     #
