@@ -812,7 +812,7 @@ ad_proc -private template::enclosing_tag {
     @creation-date 2002-01-30
 
     @return the tag identifier for the enclosing tag
-    @param tag the type (eg. multiple) of the enclosing tag to look for.
+    @param tag the type (e.g. multiple) of the enclosing tag to look for.
 } {
     set name ""
 

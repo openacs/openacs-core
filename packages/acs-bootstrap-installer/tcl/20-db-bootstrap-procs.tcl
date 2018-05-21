@@ -6,7 +6,7 @@ ad_proc -private db_available_pools {dbn} {
     We define this here in 20-db-bootstrap-procs.tcl rather than
     acs-tcl/tcl/00-database-procs.tcl, as we also need to call it from
     db_bootstrap_set_db_type, below, and from db_bootstrap_checks,
-    before all the rest of the db_* api code in 00-database-procs.tcl
+    before all the rest of the db_* API code in 00-database-procs.tcl
     is sourced.
 
     @param dbn The database name to use.  If empty_string, uses the default database.

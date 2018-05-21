@@ -639,7 +639,7 @@ ad_proc -public ad_proc {
            (including default values), and boolean. See the examples below.</li>
     <li> There is now a callback facility. See below.</li>
       <li> The declaration can (and <b>should!</b>) include documentation. This documentation 
-           may contain tags which are parsed for display by the api browser.  Some tags are 
+           may contain tags which are parsed for display by the API browser.  Some tags are 
 	   <tt>@param</tt>, <tt>@return</tt>, <tt>@error</tt>, <tt>@see</tt>, <tt>@author</tt>
            (probably this should be better documented).</li>
     </ul>
@@ -680,7 +680,7 @@ if {$flush_p} {
     <p>
     Here's an example with named parameters, and namespaces (notice the preferred way of
     declaring namespaces and namespaced procedures). Ignore the \ in "\@param",
-    I had to use it so the api-browser wouldn't think the parameter docs were for ad_proc
+    I had to use it so the API browser wouldn't think the parameter docs were for ad_proc
     itself:
     </p>
 

@@ -172,7 +172,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     @param html_p Does the text have html in it? If so, we strip out html tags in the string we feed to ispell (or aspell).
     @param no_abort_p Set this tue for testing purposes (e.g. aa_test).
     
-    @param var_to_spellcheck The name of the text input type or textarea that holds this text (eg., "email_body")
+    @param var_to_spellcheck The name of the text input type or textarea that holds this text (e.g., "email_body")
     
 } {
 

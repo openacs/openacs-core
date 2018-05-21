@@ -74,7 +74,7 @@ ad_proc -public template::add_script {
     @param section section, where script is added ("head" or "body")
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
-    @param type    the type attribute of the script tag, eg. 'text/javascript'
+    @param type    the type attribute of the script tag, e.g. 'text/javascript'
 } {
     if {$section eq "head"} {
         #
@@ -125,7 +125,7 @@ ad_proc -public template::head::add_script {
                    parameter will be ignored if a value has been supplied for src
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
-    @param type    the type attribute of the script tag, eg. 'text/javascript'
+    @param type    the type attribute of the script tag, e.g. 'text/javascript'
 
 } {
     if {$defer_p} {
@@ -208,7 +208,7 @@ ad_proc -public template::head::add_link {
 
     @param crossorigin  Enumerated attribute to indicate whether CORS
                    (Cross-Origin Resource Sharing) should be used
-    @param href    the href attribute of the link tag, eg. the target document
+    @param href    the href attribute of the link tag, e.g. the target document
                    of the link
     @param integrity provide hash values for W3C Subresource Integrity recommendation
     @param lang    the lang attribute of the link tag specifying the language
@@ -217,11 +217,11 @@ ad_proc -public template::head::add_link {
                    media this link is relevant to.  This may be a comma
     @param order   specify inclusion order
     @param rel     the rel attribute of the link tag defining the relationship
-                   of the linked document to the current one, eg. 'stylesheet'
+                   of the linked document to the current one, e.g. 'stylesheet'
     @param title   the title attribute of the link tag describing the target of
                    this link
-    @param type    the type attribute of the link tag, eg. 'text/css'
-                   separated list of values, eg. 'screen,print,braille'
+    @param type    the type attribute of the link tag, e.g. 'text/css'
+                   separated list of values, e.g. 'screen,print,braille'
 
     @see ::template::head::flush_link
 } {
@@ -237,12 +237,12 @@ ad_proc -public template::head::flush_link {
     @author Gustaf Neumann
     @creation-date 2018-03-09
 
-    @param href    the href attribute of the link tag, eg. the target document
+    @param href    the href attribute of the link tag, e.g. the target document
                    of the link. A glob pattern similar link in "string match"
                    can be provided.
 
     @param rel     the rel attribute of the link tag defining the relationship
-                   of the linked document to the current one, eg. 'stylesheet'
+                   of the linked document to the current one, e.g. 'stylesheet'
     @see ::template::head::add_link
 } {
     array unset ::template::head::links $rel,$href
@@ -326,12 +326,12 @@ ad_proc -public template::head::add_meta {
 
     @param http_equiv the http-equiv attribute of the meta tag, ie. the
                       HTTP header which this metadata is equivalent to
-                      eg. 'content-type'
+                      e.g. 'content-type'
     @param name       the name attribute of the meta tag, ie. the metadata
                       identifier
     @param scheme     the scheme attribute of the meta tag defining which
                       metadata scheme should be used to interpret the metadata,
-                      eg. 'DC' for Dublin Core (http://dublincore.org/)
+                      e.g. 'DC' for Dublin Core (http://dublincore.org/)
     @param content    the content attribute of the meta tag, ie the metadata
                       value
     @param lang       the lang attribute of the meta tag specifying the language
@@ -366,10 +366,10 @@ ad_proc -public template::head::add_style {
     @creation-date 2007-11-30
 
     @param style CSS content to be included in the style tag
-    @param type    the type attribute of the link tag, eg. 'text/css'
+    @param type    the type attribute of the link tag, e.g. 'text/css'
     @param media   the media attribute of the link tag describing which display
                    media this link is relevant to.  This may be a comma
-                   separated list of values, eg. 'screen,print,braille'
+                   separated list of values, e.g. 'screen,print,braille'
     @param title   the title attribute of the link tag describing the target of
                    this link
     @param lang    the lang attribute of the link tag specifying the language
@@ -451,14 +451,14 @@ ad_proc -public template::head::add_css {
     subsequent calls to add_css will replace the existing entry.  This function
     is a wrapper around template::head::add_link.
 
-    @param href      the href attribute of the link tag, eg. the target
+    @param href      the href attribute of the link tag, e.g. the target
                      stylesheet
     @param alternate sets the rel attribute of the link tag defining to
                      'alternate stylesheet' if set, sets it to 'stylesheet'
                      otherwise
     @param media     the media attribute of the link tag describing which
                      display media this link is relevant to.  This may be a
-                     comma separated list of values, eg. 'screen,print,braille'
+                     comma separated list of values, e.g. 'screen,print,braille'
     @param title     the title attribute of the link tag describing the target
                      of this link
     @param lang      the lang attribute of the link tag specifying the language
@@ -555,7 +555,7 @@ ad_proc -public template::add_body_script {
                    src
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
-    @param type    the type attribute of the script tag, eg. 'text/javascript'
+    @param type    the type attribute of the script tag, e.g. 'text/javascript'
 } {
 
     if {$defer_p} {

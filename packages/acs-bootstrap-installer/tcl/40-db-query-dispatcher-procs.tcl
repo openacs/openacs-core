@@ -256,7 +256,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
 
     # Get the proc name being executed.
     # We catch this in case we're being called from the top level
-    # (eg. from bootstrap.tcl), in which case we return what we
+    # (e.g. from bootstrap.tcl), in which case we return what we
     # were given
     if { [catch {string trimleft [info level [expr {-1 - $added_stack_num}]] ::} proc_name] } {
 	return [::nsf::strip_proc_name $local_name]
