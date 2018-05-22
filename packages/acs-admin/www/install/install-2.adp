@@ -9,7 +9,7 @@
 
 </if>
 <else>
-  <if @extras_p@ true >
+  <if @extras_p;literal@ true >
     <p> The packages you want to install require some other
     packages. These have been added to the list, and are marked
     below. </p>

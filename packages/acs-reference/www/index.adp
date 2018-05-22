@@ -9,7 +9,7 @@
 <hr>
 <h3>Reports</h3>
 Coming soon!
-<if @admin_p@ ne 0 >
+<if @admin_p;literal@ ne 0 >
 <hr>
 <h3>Admin</h3>
   None Yet

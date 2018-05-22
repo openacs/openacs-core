@@ -10,7 +10,7 @@
 <td> @table_info.package_name@ </td></tr>
 
 <tr><th valign="top" align="right">Internal Data?</th>
-<td> @table_info.internal_data_p@ </td></tr>
+<td> @table_info.internal_data_p;literal@ </td></tr>
 
 <tr><th valign="top" align="right">Source</th>
 <td> @table_info.source@ </td></tr>
