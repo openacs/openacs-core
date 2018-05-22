@@ -655,21 +655,6 @@ ad_proc -private rp_filter { why } {
     # if root non empty then we had a hostname based subsite and
     # should not redirect since we got a hostname we know about.
 
-
-    ### BLOCK NASTY YAHOO START
-    set headers [ns_conn headers]
-    set user_agent [ns_set iget $headers User-Agent]
-    ns_log Debug "rp_filter: user agent is $user_agent"
-
-    if {[string match "*YahooSeeker*" $user_agent]
-        || [string match ".*Yahoo! Slurp.*" $user_agent]
-    } {
-        ns_log Notice "rp_filter: nasty spider $user_agent"
-        ns_returnredirect "http://www.yahoo.com"
-        return filter_return
-    }
-    ## BLOCK NASTY YAHOO FINISH
-
     if { $root eq ""
          && [parameter::get -package_id $::acs::kernel_id -parameter ForceHostP -default 0]
      } {
