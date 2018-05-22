@@ -28,7 +28,7 @@ proc ::template::util::write_to_file { file_name output} {
 # uses ns_library to find the server root, may not always be accurate
 proc ::template::util::server_root {} {
 
-  set path_length [expr [llength [file split [ns_library private]]] - 1]
+  set path_length [expr {[llength [file split [ns_library private]]] - 1}]
   set svr_root "/[join [lreplace [file split [ns_library private]] $path_length $path_length] / ]"
   return $svr_root 
 }
