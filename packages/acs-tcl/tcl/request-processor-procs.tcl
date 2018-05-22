@@ -694,7 +694,7 @@ ad_proc -private rp_filter { why } {
 
     if { [lindex [ad_conn urlv] end] eq "" } {
         ad_conn -set urlc [expr {[ad_conn urlc] - 1}]
-        ad_conn -set urlv [lrange [ad_conn urlv] 0 [expr {[llength [ad_conn urlv]] - 2}] ]
+        ad_conn -set urlv [lrange [ad_conn urlv] 0 end-1]
     }
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 
