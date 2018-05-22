@@ -144,8 +144,8 @@ db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch
            success_p,
            message,
            element_messages,
-           (select count(*) from users u2 where u2.user_id = user_id) as user_exists_p
-    from   auth_batch_job_entries
+           exists (select 1 from users where user_id = e.user_id) as user_exists_p
+    from   auth_batch_job_entries e
     where  [template::list::page_where_clause -name batch_actions]
     [template::list::filter_where_clauses -and -name batch_actions]
     order  by entry_id
