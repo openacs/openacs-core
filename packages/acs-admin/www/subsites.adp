@@ -4,7 +4,7 @@
 
 <h1>@page_title@</h1>
 
-<if @too_many_subsites_p;literal@ gt 0>
+<if @too_many_subsites_p;literal@ true>
   <p>Too many subsites to display: @subsite_number@</p>
 </if>
 <else>
