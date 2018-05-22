@@ -4,7 +4,7 @@
 
     <h2>Merging ...</h2>
 
-    <if @merge_p;literal@ ne 0>
+    <if @merge_p;literal@ true>
       <p/>
         @results;noquote@
       <p/>
