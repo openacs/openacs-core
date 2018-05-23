@@ -13,7 +13,7 @@ ad_page_contract {
     @creation-date Jul 14, 2000
     @cvs-id $Id$
 } {
-    {name_weight:notnull 0}
+    {name_weight:integer,notnull 0}
     {doc_weight:integer,notnull 0}
     {param_weight:integer,notnull 0}
     {source_weight:integer,notnull 0}

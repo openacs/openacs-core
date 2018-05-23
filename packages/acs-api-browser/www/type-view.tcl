@@ -6,7 +6,7 @@ ad_page_contract {
 
 } {
     version_id:naturalnum,optional
-    type
+    type:token
 } -properties {
     title:onevalue
     context:onevalue

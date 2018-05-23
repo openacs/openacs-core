@@ -4,7 +4,7 @@
 
 @dimensional_slider;noquote@
 
-<if @sort_by@ eq "file">
+<if @orderby;literal@ eq "file">
   <% set last_file ""; set count 0 %>
   <multiple name="proc_list">
   <% if { $proc_list(file) != $last_file } { %>

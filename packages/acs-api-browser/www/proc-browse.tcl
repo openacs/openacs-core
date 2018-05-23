@@ -8,8 +8,8 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    { type "Public" }
-    { sort_by "file"}
+    { type:word "Public" }
+    { orderby:word "file"}
 } -properties {
     title:onevalue
     context:onevalue
@@ -24,7 +24,7 @@ set dimensional {
         {Private "Private" ""}
         {Deprecated "Deprecated" ""}}
     }
-    {sort_by "Sorted By" "file" {
+    {orderby "Sorted By" "file" {
         {file "File" ""}
         {name "Name" ""}}
     }
@@ -49,7 +49,7 @@ foreach proc [nsv_array names api_proc_doc] {
     }
 }
 
-if {$sort_by eq "file"} {
+if {$orderby eq "file"} {
     set matches [lsort -command ::apidoc::ad_sort_by_second_string_proc $matches]
 } else {
     set matches [lsort -command ::apidoc::ad_sort_by_first_string_proc $matches]
