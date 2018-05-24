@@ -17,7 +17,7 @@ ad_page_contract {
     export_vars:onevalue
 }
 
-set context [list [list "../" "Relationship types"] [list "" "Roles"] [[export_vars -base one role] "One role"] "Delete role"]
+set context [list [list "../" "Relationship types"] [list "" "Roles"] [list [export_vars -base one role] "One role"] "Delete role"]
 
 set export_vars [export_vars -form {role return_url}]
 
