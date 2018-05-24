@@ -89,6 +89,7 @@ set roles_list [db_list_of_lists select_roles {
       from acs_rel_roles r
      order by lower(r.role)
 }]
+lappend roles_list_i18n {"--" ""}
 foreach role $roles_list {
     lappend roles_list_i18n [lang::util::localize $role]
 }
@@ -104,6 +105,7 @@ template::element create rel_type object_type_one \
 set role_return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
 
 template::element create rel_type role_one \
+	-optional \
 	-label "Role one<br><small>(<a href=\"roles/new?return_url=$role_return_url_enc\">create new role</a>)</small>" \
 	-datatype text \
 	-widget select \
@@ -129,6 +131,7 @@ template::element create rel_type object_type_two \
 
 
 template::element create rel_type role_two \
+	-optional \
 	-label "Role two<br><small>(<a href=\"roles/new?return_url=$role_return_url_enc\">create new role</a>)</small>" \
 	-datatype text \
 	-widget select \
