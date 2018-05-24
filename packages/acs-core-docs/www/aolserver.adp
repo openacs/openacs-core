@@ -67,7 +67,7 @@ name of the GNU Make command on your system. It defaults to
 /usr/bin/make /usr/bin/gmake</code></strong></code>.</p><p>Set an environment variable that the nspostgres driver Makefile
 needs to compile correctly and run <code class="computeroutput">conf</code>, which compiles AOLserver, the default
 modules, and the database driver, and installs them.</p><p>Debian users, see warning above, but if you do use apt-get for
-AOLserver 3.3+ad13 and postgresql from apt-get may need to make
+AOLserver 3.3+ad13 and PostgreSQL from apt-get may need to make
 these symlinks: <code class="computeroutput">ln -s
 /usr/include/postgresql/ /usr/include/pgsql</code> and <code class="computeroutput">ln -s /usr/lib/postgresql
 /usr/local/pgsql</code>)</p><pre class="screen">[root aolserver]# <strong class="userinput"><code>export POSTGRES=/usr/local/pgsql; ./conf</code></strong>

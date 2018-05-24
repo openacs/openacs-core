@@ -122,7 +122,7 @@ to the future, since it will not add any content with future
 publish dates to the search-queue.</p>
 </li><li class="listitem">
 <p>Reduced number of insert cr_child_rels operations, just when
-needed:</p><p>cr_child_rels provide only little benefit (allow to use roles in
+needed:</p><p>cr_child_rels provide only little benefit (allow one to use roles in
 a child-rel), but the common operation is a well available in
 cr_items via the parent_id. cr_child_rels do not help for recursive
 queries either. One option would be to add an additional argument
@@ -136,8 +136,7 @@ behavior) and adapt the other cases.</p>
 <p>Added support against <a class="ulink" href="/xowiki/CSRF" target="_top">CSRF</a> (cross site request forgery)</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>OpenACS maintains a per-request CSRF token that ensures that
 form replies are coming just from sites that received the form</p></li><li class="listitem"><p>CSRF support is optional for packages where CSRF is less
-dangerous, and such requests are wanted (e.g. search and
-api-browser)</p></li>
+dangerous, and such requests are wanted (e.g. search and API-browser)</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>Added Support for W3C "Upgrade-Insecure-Headers" (see
@@ -209,8 +208,7 @@ group::get_member_state_pretty</p></li>
 <p>Misc code improvements:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem"><p>18 issues from the OpenACS-bug-tracker fixed</p></li><li class="listitem"><p>Made code more robust against invalid/incorrect input
 (page_contracts, validators, values obtained from header fields
-such as Accept-Language)</p></li><li class="listitem"><p>Fixed quoting of message keys on many places</p></li><li class="listitem"><p>Improved exception handling (often, a "catch" swallows
-to much, e.g. script_aborts), introducing
+such as Accept-Language)</p></li><li class="listitem"><p>Fixed quoting of message keys on many places</p></li><li class="listitem"><p>Improved exception handling (often, a "catch" swallows one to much, e.g. script_aborts), introducing
 "ad_exception".</p></li><li class="listitem">
 <p>Generalized handling of leading zeros:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Fixed cases where leading zeros could lead to unwanted octal
@@ -279,7 +277,7 @@ PostgreSQL.</p><p>Reasons:</p><div class="itemizedlist"><ul class="itemizedlist"
 <p>Misc new functions:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>"lang::util::message_key_regexp": factor out scattered
 regexp for detecting message keys</p></li><li class="listitem"><p>"ns_md5" and "ns_parseurl": improve
-compatibility between AOLserver and NaviServer</p></li><li class="listitem"><p>"ad_dom_sanitize_html": allow to specify different
+compatibility between AOLserver and NaviServer</p></li><li class="listitem"><p>"ad_dom_sanitize_html": allow one to specify different
 sets of tags, attributes and protocols and
 "ad_dom_fix_html", which is a light weight tidy
 variant.</p></li>
@@ -352,7 +350,7 @@ interface in ::xo::dc (nsdb driver)</p></li>
 is called, what has to be checked especially carefully)</p></li><li class="listitem"><p>Moved templates from www into xowiki/resources to avoid naming
 conflicts</p></li><li class="listitem"><p>Improved ckeditor support</p></li><li class="listitem"><p>Added usage of prepared statements for common queries</p></li><li class="listitem"><p>Improved error handling</p></li><li class="listitem"><p>Better value checking for query parameter, error reporting via
 ad_return_complaint</p></li><li class="listitem"><p>Added option "-path_encode" to methods
-"pretty_link" and "folder_path" to allow to
+"pretty_link" and "folder_path" to allow one to
 control, whether the result should be encoded or not (default
 true)</p></li><li class="listitem">
 <p>Form fields:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
@@ -360,7 +358,7 @@ true)</p></li><li class="listitem">
 don&#39;t require preallocation (can be costly in composite
 cases)</p></li><li class="listitem"><p>Added signing of form-fields</p></li><li class="listitem"><p>Added HTML5 attributes such as "multiple" (for
 "file") or "autocomplete"</p></li><li class="listitem"><p>Fixed generation of "orderby" attribute based on
-form-field names</p></li><li class="listitem"><p>richtext: allow to specify "extraAllowedContent" via
+form-field names</p></li><li class="listitem"><p>richtext: allow one to specify "extraAllowedContent" via
 options</p></li><li class="listitem"><p>Improved layout of horizontal check boxes</p></li>
 </ul></div>
 </li><li class="listitem">
@@ -499,7 +497,7 @@ parameters)</p></li><li class="listitem"><p>Added ability to save data sent by n
 file system. This can be used to validate HTML content also for
 password protected pages (controlled via package parameter
 "TclTraceSaveNsReturn" in the acs-tcl package
-parameters)</p></li><li class="listitem"><p>New api function "ad_log" having the same interface as
+parameters)</p></li><li class="listitem"><p>New API function "ad_log" having the same interface as
 ns_log, but which logs the calling information (like URL and
 call-stack) to ease tracking of errors.</p></li><li class="listitem"><p>Use per-thread caching to reduce number of mutex lock operations
 and lock contention on various caches (util-memoize, xo_site_nodes,
@@ -556,7 +554,7 @@ functions are marked as deprecated and will be moved into an
 "outdated" package in the 5.9 or 6.0 release)</p></li><li class="listitem"><p>General overhaul of package management</p></li><li class="listitem"><p>Install-from-local and install-from-repository can be used to
 install the provided packages based on a acs-core installation.
 This means that also DotLRN can be installed from repository or
-from local into an existing OpenACS instance.</p></li><li class="listitem"><p>Install-from-repository offers filtering functions, allows to
+from local into an existing OpenACS instance.</p></li><li class="listitem"><p>Install-from-repository offers filtering functions, allows one to
 install optionally from head-channel (for packages not in the base
 channel of the installed instance). Install-from-repository works
 more like an app-store, showing as well vendor information</p></li><li class="listitem"><p>Packages can be equipped with xml-based configuration files

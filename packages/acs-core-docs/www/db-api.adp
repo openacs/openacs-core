@@ -14,7 +14,7 @@ Reference"
 <a name="db-api-overview" id="db-api-overview"></a>Overview</h3></div></div></div><p>One of OpenACS&#39;s great strengths is that code written for it
 is very close to the database. It is very easy to interact with the
 database from anywhere within OpenACS, and we have a coherent API
-for database access which makes this even easier.</p><p>More detailed information about the DB api is available at
+for database access which makes this even easier.</p><p>More detailed information about the DB API is available at
 <a class="xref" href="db-api-detailed" title="Database Access API">Database Access API</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
