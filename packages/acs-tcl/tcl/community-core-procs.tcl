@@ -25,11 +25,7 @@ ad_proc -private person::person_p_not_cached {
 } {
     is this party a person? Cached
 } {
-    if {[db_0or1row contact_person_exists_p {select '1' from persons where person_id = :party_id}]} {
-        return 1
-    } else {
-        return 0
-    }
+    return [db_0or1row contact_person_exists_p {select '1' from persons where person_id = :party_id}]
 }
     
 ad_proc -public person::new {
@@ -338,30 +334,24 @@ ad_proc -public acs_user::get {
     </ul>
     @result dict of attributes
     @author Lars Pind (lars@collaboraid.biz)
-} {
+} {    
     if { $user_id eq "" } {
-        if { $username eq "" } {
-            set user_id [ad_conn user_id]
-        } else {
-            if { $authority_id eq "" } {
-                set authority_id [auth::authority::local]
-            }
-        }
+        set user_id [expr {$username ne "" ? \
+                               [acs_user::get_by_username \
+                                    -authority_id $authority_id -username $username] : \
+                               [ad_conn user_id]}]
     }
 
-    if { $user_id ne "" } {
-        set data [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
-    } else {
-        set data [util_memoize [list acs_user::get_from_username_not_cached $username $authority_id] [cache_timeout]]
-    }
-
+    set data [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
     if { $include_bio_p } {
-        lappend data bio [person::get_bio -person_id [dict get $data user_id]]
+        lappend data bio [person::get_bio -person_id $user_id]
     }
+    
     if {[info exists array]} {
         upvar $array row
         array set row $data
     }
+    
     return $data
 }
 
@@ -373,17 +363,6 @@ ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
 } {
     db_1row select_user_info {} -column_array row
     
-    return [array get row]
-}
-
-ad_proc -private acs_user::get_from_username_not_cached { username authority_id } {
-    Returns an array list with user info from the database. Should
-    never be called from application code. Use acs_user::get instead.
-
-    @author Peter Marklund
-} {
-    db_1row select_user_info {} -column_array row
-
     return [array get row]
 }
 
