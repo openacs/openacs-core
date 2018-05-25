@@ -173,6 +173,11 @@ ad_proc -public person::update_bio {
 }
 
 
+# create a cache for the acs_user:: api
+if {"acs_user" ni [ns_cache_names]} {
+    # 2MB size
+    ns_cache_create acs_user 2000000
+}
 
 ad_proc -public acs_user::change_state {
     {-user_id:required}
@@ -260,12 +265,13 @@ ad_proc -public acs_user::get_by_username {
         set authority_id [auth::authority::local]
     }
 
-    set key [list ::acs_user::get_by_username [list -authority_id $authority_id -username $username]]
-    set user_id [nsv_set {*}$key [expr {[nsv_exists {*}$key] ?
-                                        [nsv_get {*}$key] :
-                                        [acs_user::get_by_username_not_cached \
-                                             -authority_id $authority_id \
-                                             -username     $username]}]]
+    set key [list get_by_username -authority_id $authority_id -username $username]
+    set user_id [ns_cache_eval -- acs_user $key {
+        acs_user::get_by_username_not_cached \
+            -authority_id $authority_id \
+            -username     $username
+    }]
+    
     return $user_id
 }
 
@@ -345,10 +351,11 @@ ad_proc -public acs_user::get {
                            [ad_conn user_id]}]
     }
 
-    set key [list ::acs_user::get_from_user_id $user_id]
-    set data [nsv_set {*}$key [expr {[nsv_exists {*}$key] ?
-                                     [nsv_get {*}$key] :
-                                     [acs_user::get_from_user_id_not_cached $user_id]}]]
+    set key [list get_from_user_id $user_id]
+    set data [ns_cache_eval -- acs_user $key {
+        acs_user::get_from_user_id_not_cached $user_id
+    }]
+    
     if { $include_bio_p } {
         lappend data bio [person::get_bio -person_id $user_id]
     }
@@ -390,7 +397,8 @@ ad_proc -public acs_user::flush_cache {
 
     @author Peter Marklund
 } {
-    nsv_unset -nocomplain -- ::acs_user::get_from_user_id $user_id
+    set key [list get_from_user_id $user_id]
+    ns_cache_flush -- acs_user $key
     #
     # Get username and authority_id so we can flush the
     # get_by_username_not_cached proc.
@@ -404,8 +412,8 @@ ad_proc -public acs_user::flush_cache {
     }]} {
         set username     [dict get $u username]
         set authority_id [dict get $u authority_id]
-        nsv_unset -nocomplain -- ::acs_user::get_by_username \
-            [list -authority_id $authority_id -username $username]
+        set key [list get_by_username -authority_id $authority_id -username $username]
+        ns_cache_flush -- acs_user $key
     }
 }
 
