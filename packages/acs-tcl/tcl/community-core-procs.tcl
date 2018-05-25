@@ -336,10 +336,11 @@ ad_proc -public acs_user::get {
     @author Lars Pind (lars@collaboraid.biz)
 } {    
     if { $user_id eq "" } {
-        set user_id [expr {$username ne "" ? \
-                               [acs_user::get_by_username \
-                                    -authority_id $authority_id -username $username] : \
-                               [ad_conn user_id]}]
+        set user_id [expr {$username ne "" ? 
+                           [acs_user::get_by_username \
+                                -authority_id $authority_id \
+                                -username     $username] :
+                           [ad_conn user_id]}]
     }
 
     set data [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
@@ -385,18 +386,19 @@ ad_proc -public acs_user::flush_cache {
     util_memoize_flush [list acs_user::get_from_user_id_not_cached $user_id]
     #
     # Get username and authority_id so we can flush the
-    # get_from_username_not_cached proc.
+    # get_by_username_not_cached proc.
     #
     # Note, that it might be the case, that this function is called
     # for user_ids, which are "persons", but do not qualify as
     # "users". Therefore, the catch is used (like in earlier versions)
     #
-    catch {
+    if {![catch {
         set u [acs_user::get -user_id $user_id]
+    }]} {
         set username     [dict get $u username]
         set authority_id [dict get $u authority_id]
-        util_memoize_flush [list acs_user::get_from_username_not_cached $username $authority_id]
-        util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
+        util_memoize_flush [list acs_user::get_by_username_not_cached \
+                                -authority_id $authority_id -username $username]
     }
 }
 
