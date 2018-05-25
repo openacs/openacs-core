@@ -259,11 +259,13 @@ ad_proc -public acs_user::get_by_username {
     if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
     }
-    
-    set user_id [util_memoize [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]]
-    if {$user_id eq ""} {
-	util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
-    }
+
+    set key [list ::acs_user::get_by_username [list -authority_id $authority_id -username $username]]
+    set user_id [nsv_set {*}$key [expr {[nsv_exists {*}$key] ?
+                                        [nsv_get {*}$key] :
+                                        [acs_user::get_by_username_not_cached \
+                                             -authority_id $authority_id \
+                                             -username     $username]}]]
     return $user_id
 }
 
@@ -343,7 +345,10 @@ ad_proc -public acs_user::get {
                            [ad_conn user_id]}]
     }
 
-    set data [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
+    set key [list ::acs_user::get_from_user_id $user_id]
+    set data [nsv_set {*}$key [expr {[nsv_exists {*}$key] ?
+                                     [nsv_get {*}$key] :
+                                     [acs_user::get_from_user_id_not_cached $user_id]}]]
     if { $include_bio_p } {
         lappend data bio [person::get_bio -person_id $user_id]
     }
@@ -367,8 +372,10 @@ ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
     return [array get row]
 }
 
-ad_proc -private acs_user::cache_timeout {} {
-    Returns the number of seconds the user info cache is kept.
+ad_proc -deprecated -private acs_user::cache_timeout {} {
+    Returns the number of seconds the user info cache is kept.    
+    DEPRECATED: user cache is now implemented thorugh nsv. In case,
+                this will be anyhow defined as a parameter.
 
     @author Peter Marklund
 } {
@@ -383,7 +390,7 @@ ad_proc -public acs_user::flush_cache {
 
     @author Peter Marklund
 } {
-    util_memoize_flush [list acs_user::get_from_user_id_not_cached $user_id]
+    nsv_unset -nocomplain -- ::acs_user::get_from_user_id $user_id
     #
     # Get username and authority_id so we can flush the
     # get_by_username_not_cached proc.
@@ -397,8 +404,8 @@ ad_proc -public acs_user::flush_cache {
     }]} {
         set username     [dict get $u username]
         set authority_id [dict get $u authority_id]
-        util_memoize_flush [list acs_user::get_by_username_not_cached \
-                                -authority_id $authority_id -username $username]
+        nsv_unset -nocomplain -- ::acs_user::get_by_username \
+            [list -authority_id $authority_id -username $username]
     }
 }
 
