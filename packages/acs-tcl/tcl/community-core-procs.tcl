@@ -25,7 +25,7 @@ ad_proc -private person::person_p_not_cached {
 } {
     is this party a person? Cached
 } {
-    return [db_0or1row contact_person_exists_p {select '1' from persons where person_id = :party_id}]
+    return [db_0or1row contact_person_exists_p {select 1 from persons where person_id = :party_id}]
 }
     
 ad_proc -public person::new {
@@ -173,11 +173,7 @@ ad_proc -public person::update_bio {
 }
 
 
-# create a cache for the acs_user:: api
-if {"acs_user" ni [ns_cache_names]} {
-    # 2MB size
-    ns_cache_create acs_user 2000000
-}
+
 
 ad_proc -public acs_user::change_state {
     {-user_id:required}
@@ -266,7 +262,7 @@ ad_proc -public acs_user::get_by_username {
     }
 
     set key [list get_by_username -authority_id $authority_id -username $username]
-    set user_id [ns_cache_eval -- acs_user $key {
+    set user_id [ns_cache eval user_info_cache $key {
         acs_user::get_by_username_not_cached \
             -authority_id $authority_id \
             -username     $username
@@ -352,7 +348,7 @@ ad_proc -public acs_user::get {
     }
 
     set key [list get_from_user_id $user_id]
-    set data [ns_cache_eval -- acs_user $key {
+    set data [ns_cache eval user_info_cache $key {
         acs_user::get_from_user_id_not_cached $user_id
     }]
     
@@ -379,17 +375,6 @@ ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
     return [array get row]
 }
 
-ad_proc -deprecated -private acs_user::cache_timeout {} {
-    Returns the number of seconds the user info cache is kept.    
-    DEPRECATED: user cache is now implemented thorugh nsv. In case,
-                this will be anyhow defined as a parameter.
-
-    @author Peter Marklund
-} {
-    # TODO: This should maybe be an APM parameter
-    return 3600
-}
-
 ad_proc -public acs_user::flush_cache { 
     {-user_id:required}
 } {
@@ -398,7 +383,7 @@ ad_proc -public acs_user::flush_cache {
     @author Peter Marklund
 } {
     set key [list get_from_user_id $user_id]
-    ns_cache_flush -- acs_user $key
+    ns_cache flush user_info_cache $key
     #
     # Get username and authority_id so we can flush the
     # get_by_username_not_cached proc.
@@ -413,7 +398,7 @@ ad_proc -public acs_user::flush_cache {
         set username     [dict get $u username]
         set authority_id [dict get $u authority_id]
         set key [list get_by_username -authority_id $authority_id -username $username]
-        ns_cache_flush -- acs_user $key
+        ns_cache flush user_info_cache $key
     }
 }
 
