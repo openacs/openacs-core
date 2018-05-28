@@ -106,7 +106,7 @@ ad_proc -private person::name_not_cached {
             return ""
         }
     }
-    set person [dict create {*}[person::get -person_id $person_id]]
+    set person [person::get -person_id $person_id]
     set person_name [dict get $person person_name]
     return $person_name
 }
@@ -154,7 +154,7 @@ ad_proc -public person::get_bio {
         upvar $exists_var exists_p
     }
 
-    set person [dict create {*}[person::get -person_id $person_id]]
+    set person [person::get -person_id $person_id]
     set bio [dict get $person bio]
     
     set exists_p [expr {$bio ne ""}]
