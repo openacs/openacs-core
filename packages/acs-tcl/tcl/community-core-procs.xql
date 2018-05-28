@@ -1,16 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="person::get.get_person">      
-      <querytext>
-      
-	select first_names, last_name
-          from persons 
-         where person_id = :person_id
-    
-      </querytext>
-</fullquery>
-
 <fullquery name="person::update.update_person">      
       <querytext>
       
@@ -32,36 +22,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="person::name_not_cached.get_person_name">      
-      <querytext>
-      
-          select distinct first_names||' '||last_name as person_name
-            from persons
-           where person_id = :person_id
-          
-      </querytext>
-</fullquery>
-
-<fullquery name="person::name_not_cached.get_party_name">      
-      <querytext>
-      
-          select distinct first_names||' '||last_name as person_name
-            from persons, parties
-           where person_id = party_id 
-             and email = :email
-             
-          
-      </querytext>
-</fullquery>
-
-<fullquery name="person::get_bio.select_bio">      
-      <querytext>
-          select bio
-          from persons
-          where person_id = :person_id
-      </querytext>
-</fullquery>
-
 <fullquery name="person::update_bio.update_bio">      
       <querytext>
         update persons
@@ -69,7 +29,6 @@
 	where person_id = :person_id
       </querytext>
 </fullquery>
-
  
 <fullquery name="acs_user::update.user_update">      
       <querytext>

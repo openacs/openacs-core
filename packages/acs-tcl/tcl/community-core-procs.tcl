@@ -58,12 +58,11 @@ ad_proc -public person::get {
 } {
     get info for a person as a Tcl array in list form
 } {
-    db_1row get_person {}
-    
-    set person(person_id) $person_id
-    set person(first_names) $first_names
-    set person(last_name) $last_name
-
+    db_1row get_person {
+        select * from persons
+         where person_id = :person_id
+    } -column_array person
+    set person(person_name) "$person(first_names) $person(last_name)"    
     return [array get person]
 }
 
@@ -98,13 +97,11 @@ ad_proc -private person::name_not_cached {
 } {
     get the name of a person
 } {
-    if {$email eq ""} {
-        db_1row get_person_name {}
-    } else {
-        # As the old functionality returned an error, but I want an empty string for e-mail
-        # Therefore for emails we use db_string
-        set person_name [db_string get_party_name {} -default ""]
+    if {$person_id eq ""} {
+        set person_id [party::get_by_email -email $email]
     }
+    set person [dict create {*}[person::get -person_id $person_id]]
+    set person_name [dict get $person person_name]
     return $person_name
 }
 
@@ -151,7 +148,8 @@ ad_proc -public person::get_bio {
         upvar $exists_var exists_p
     }
 
-    db_1row select_bio {}
+    set person [dict create {*}[person::get -person_id $person_id]]
+    set bio [dict get $person bio]
     
     set exists_p [expr {$bio ne ""}]
     
