@@ -176,11 +176,9 @@ ad_proc -public acs_community_member_admin_link {
     @return the HTML link of the community member page of a particular admin user.
 } {
     if {$label eq ""} {
-        set label [db_string select_community_member_link_label {
-            select persons.first_names || ' ' || persons.last_name
-            from persons
-            where person_id = :user_id
-        } -default $user_id]
+        set label [expr {[person::person_p -party_id $user_id] ?
+                         [acs_user::get_element \
+                              -user_id $user_id -element name] : $user_id}]
     }
     set href [acs_community_member_admin_url -user_id $user_id]
     return [subst {<a href="[ns_quotehtml $href]">$label</a>}]
