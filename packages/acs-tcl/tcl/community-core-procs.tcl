@@ -98,7 +98,13 @@ ad_proc -private person::name_not_cached {
     get the name of a person
 } {
     if {$person_id eq ""} {
+        # As the old functionality returned an error, but I want an
+        # empty string for e-mail, check if a person_id was found and
+        # return immediately otherwise
         set person_id [party::get_by_email -email $email]
+        if {$person_id eq ""} {
+            return ""
+        }
     }
     set person [dict create {*}[person::get -person_id $person_id]]
     set person_name [dict get $person person_name]
