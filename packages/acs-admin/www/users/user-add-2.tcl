@@ -30,11 +30,8 @@ if { $password eq "" } {
     set password [ad_generate_random_string]
 }
 
-set administration_name [db_string admin_name {
-      select first_names || ' ' || last_name
-      from persons
-      where person_id = :admin_user_id
-}]
+set administration_name [acs_user::get_element \
+                             -user_id $admin_user_id -element name]
 
 set context [list [list "./" "Users"] "Notify added user"]
 set system_name [ad_system_name]
