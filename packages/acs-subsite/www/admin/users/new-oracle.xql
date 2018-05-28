@@ -17,19 +17,6 @@
 
       </querytext>
 </fullquery>
-
- 
-<fullquery name="user_exists">      
-      <querytext>
-      
-	select case when exists
-	                 (select 1 from users where user_id = :user_id)
-	       then 1 else 0 end
-	from dual
-    
-      </querytext>
-</fullquery>
-
  
 <fullquery name="user_new_2_rowid_for_email">      
       <querytext>

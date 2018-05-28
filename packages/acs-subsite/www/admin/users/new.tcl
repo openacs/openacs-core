@@ -51,15 +51,12 @@ if {$ancestor_rel_type eq "membership_rel"} {
     set rel_member_state ""
 }
 
-# Select out the user name and the user's object type. Note we can
-# use 1row because the validate filter above will catch missing parties
+# Select out the user name and the user's object type. The validate
+# filter above will catch missing parties
 
-db_1row select_type_info {
-    select t.pretty_name as user_type_pretty_name,
-           t.table_name
-      from acs_object_types t
-     where t.object_type = :user_type
-}
+acs_object_type::get -object_type $user_type -array object_type
+set user_type_pretty_name $object_type(pretty_name)
+set table_name            $object_type(table_name)
 
 ## ISSUE / TO DO: (see also admin/groups/new.tcl)
 ##
@@ -226,11 +223,8 @@ if { [template::form is_valid add_user] } {
         if {[parameter::get -parameter NotifyAdminOfNewRegistrationsP -default 0]} {
 
             set creation_user [ad_conn user_id]
-            set creation_name [db_string creation_name_query {
-            select p.first_names || ' ' || p.last_name || ' (' || pa.email || ')'
-                from persons p, parties pa
-                where p.person_id = pa.party_id and p.person_id = :creation_user
-            }]
+            set user [acs_user::get -user_id $creation_user]            
+            set creation_name "[dict get $user name] ([dict get $user email])"
 
             # we're supposed to notify the administrator when someone new registers
 
