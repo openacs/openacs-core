@@ -146,7 +146,7 @@ namespace eval notification::email {
 
        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
-       if { $from_user_id ne "" && $from_user_id != 0 && [db_0or1row get_person {}]} {
+       if { $from_user_id ni {"" 0} && [person::person_p -party_id $from_user_id]} {
            set from_email [party::email -party_id $from_user_id]
 
            # Set the Mail-Followup-To address to the
