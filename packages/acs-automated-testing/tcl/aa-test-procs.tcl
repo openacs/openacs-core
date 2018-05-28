@@ -1075,7 +1075,7 @@ ad_proc -private aa_http {
     @author Gustaf Neumann
 } {
     set driverInfo [util_driver_info]
-    set peeraddr   [ns_conn peeraddr]
+    set address [dict get $driverInfo address]
     set extra_args {}
     if {[info exists body]} {
         lappend extra_args -body $body
@@ -1087,7 +1087,7 @@ ad_proc -private aa_http {
         }
         lappend extra_args -headers $requestHeaders
     }
-    nsv_set aa_test logindata [list peeraddr $peeraddr user_id $user_id]
+    nsv_set aa_test logindata [list peeraddr $address user_id $user_id]
 
     #
     # Construct nice log line
@@ -1109,7 +1109,7 @@ ad_proc -private aa_http {
                    -timeout $timeout \
                    -method $method \
                    {*}$extra_args \
-                   "http://\[$peeraddr\]:[dict get $driverInfo port]/$request"]
+                   "http://\[$address\]:[dict get $driverInfo port]/$request"]
     } finally {
         #
         # always reset after the reqest the login data nsv
