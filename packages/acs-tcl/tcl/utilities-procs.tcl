@@ -1675,7 +1675,7 @@ ad_proc -public util_driver_info {
     Returns the protocol and port for the specified (or current) driver.
 
     @param driver the driver to query (defaults to [ad_conn driver])
-    @param array the array to populate with proto and port
+    @param array the array to populate with proto, address and port
 
     @see security::configured_driver_info
 } {
@@ -1689,16 +1689,16 @@ ad_proc -public util_driver_info {
     switch -glob -- $driver {
         nsudp* -
         nssock* {
-            set d [list proto http port [ns_config -int $section Port]] 
+            set d [list proto http port [ns_config -int $section Port] address [ns_config $section address]]
         }
         nsunix {
-            set d [list proto http port ""]
+            set d [list proto http port "" address ""]
         }
         nsssl* - nsssle {
-            set d [list proto https port [ns_config -int $section Port]]
+            set d [list proto https port [ns_config -int $section Port] address [ns_config $section address]]
         }
         nsopenssl {
-            set d [list proto https port [ns_config -int $section ServerPort]]
+            set d [list proto https port [ns_config -int $section ServerPort] address [ns_config $section address]]
         }
         default {
             ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
