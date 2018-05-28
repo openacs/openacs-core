@@ -12,7 +12,7 @@ ad_library {
 
 namespace eval security {
     set log(login_url) debug    ;# notice
-    set log(login_cookie) debug ;# notice
+    set log(login_cookie) notice; #debug ;# notice
 }
 
 
@@ -123,6 +123,7 @@ ad_proc -private sec_handler {} {
                     ad_conn -set untrusted_user_id $user_id
                     ad_conn -set account_status ok
                     ad_conn -set auth_level ok
+                    #ad_conn -set session_id [sec_allocate_session]
                     set auth_level ok
                     set untrusted_user_id $user_id
                 }
@@ -141,7 +142,9 @@ ad_proc -private sec_handler {} {
             sec_login_handler
         }
     } else {
+        #
         # The session cookie already exists and is valid.
+        #
         set cookie_data [split [lindex $cookie_list 0] {,}]
         set session_last_renew_time [lindex $cookie_data 3]
         if {![string is integer -strict $session_last_renew_time]} {
@@ -1433,9 +1436,10 @@ ad_proc -public ad_get_client_property {
 } {
     if { $session_id eq "" } {
         set id [ad_conn session_id]
-
-        # if session_id is still undefined in the connection then we
-        # should just return the default
+        #
+        # If session_id is still undefined in the connection then just
+        # return the default.
+        #
         if { $id eq "" } {
             return $default
         }
@@ -1786,7 +1790,7 @@ if {[ns_info name] ne "NaviServer"} {
 }
 
 ad_proc -public ad_server_modules {} {
-    Return the list of the available sever modules
+    Return the list of the available server modules
     @author Gustaf Neumann
 } {
     if {[info exists ::acs::server_modules]} {

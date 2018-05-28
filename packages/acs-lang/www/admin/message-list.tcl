@@ -12,7 +12,7 @@ ad_page_contract {
     {show "all"}
 } -validate {
     show_valid -requires { show } {
-        if { [lsearch { all deleted translated untranslated } $show] == -1 } {
+        if {$show ni { all deleted translated untranslated }} {
             ad_complain "Show must be one of 'all', 'deleted', 'translated', or 'untranslated'."
         }
     }
