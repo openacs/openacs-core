@@ -153,7 +153,7 @@ if { [template::form is_valid add_user] } {
         set email_verified_p "t"
     }
 
-    set double_click_p [db_string user_exists {}]
+    set double_click_p [db_string user_exists {select count(*) from users where user_id = :user_id}]
     set add_user_email       [template::element::get_value add_user email]
     set add_user_first_names [template::element::get_value add_user first_names]
     set add_user_last_name   [template::element::get_value add_user last_name]
