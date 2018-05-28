@@ -522,13 +522,12 @@ ad_proc -public acs_user::ScreenName {} {
     Get the value of the ScreenName parameter. Checked to ensure that it only returns none, solicit, or require.
 } {
     set value [parameter::get -parameter ScreenName -package_id [ad_acs_kernel_id] -default "solicit"]
-    if { [lsearch { none solicit require } $value] == -1 } {
+    if { $value ni {"none" "solicit" "require"} } {
         ns_log Error "acs-kernel.ScreenName parameter invalid. Set to '$value', should be one of none, solicit, or require."
         return "solicit"
     } else {
         return $value
     }
-
 }
 
 ad_proc -public party::update {
