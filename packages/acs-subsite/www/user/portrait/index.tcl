@@ -48,16 +48,16 @@ if { $current_user_id == $user_id } {
 set portrait_image_url [export_vars -base ${subsite_url}shared/portrait-bits.tcl {user_id}]
 set export_edit_vars   [export_vars {user_id return_url}]
 
-if {![db_0or1row user_info {
-    select first_names, last_name 
-    from persons 
-    where person_id = :user_id
-}]} {
+if {![person::person_p -party_id $user_id]} {
     set return_code "no_user"
     set context [list "Account Unavailable"]
     ad_return_template
     return
 }
+
+set person [person::get -person_id $user_id]
+set first_names [dict get $person first_names]
+set last_name   [dict get $person last_name]
 
 set item_id [acs_user::get_portrait_id \
                  -user_id $user_id]
