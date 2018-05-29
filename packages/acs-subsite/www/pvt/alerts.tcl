@@ -43,12 +43,13 @@ if { [db_table_exists "bboard_email_alerts"] } {
 	set bboard_keyword_p 0
     }
 	
-    db_foreach alerts_list "
-    select bea.valid_p, bea.frequency, bea.keywords, bt.topic, bea.rowid
-    from bboard_email_alerts bea, bboard_topics bt
-    where bea.user_id = :user_id
-    and bea.topic_id = bt.topic_id
-    order by bea.frequency" {
+    db_foreach alerts_list {
+        select bea.valid_p, bea.frequency, bea.keywords, bt.topic, bea.rowid
+          from bboard_email_alerts bea, bboard_topics bt
+         where bea.user_id = :user_id
+           and bea.topic_id = bt.topic_id
+         order by bea.frequency
+    } {
 	incr rownum
 
 	if { $valid_p == "f" } {
@@ -77,7 +78,7 @@ if { [db_table_exists "classified_email_alerts"] } {
     set gc_system_name [gc_system_name]
     set rownum 0
 
-    db_foreach alerts_list_2 "
+    db_foreach alerts_list_2 {
     select cea.valid_p,
            ad.domain,
            cea.alert_id,
@@ -90,7 +91,8 @@ if { [db_table_exists "classified_email_alerts"] } {
     where  user_id = :user_id
     and    ad.domain_id = cea.domain_id
     and    sysdate <= expires
-    order by expires desc" {
+    order by expires desc
+    } {
 	incr rownum
 	
 	if { $valid_p == "f" } {
