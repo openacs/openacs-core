@@ -23,17 +23,28 @@ if {$user_id eq ""} {
 
 permission::require_permission -object_id $user_id -privilege "write"
 
-if {![db_0or1row user_info {}]} {
+if {![person::person_p -party_id $user_id]} {
     ad_return_error \
         "Account Unavailable" \
         "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
     ad_script_abort
 }
 
-if {![db_0or1row portrait_info {}]} {
+set user [acs_user::get -user_id $user_id]
+set first_names [dict get $user first_names]
+set last_name   [dict get $user last_name]
+
+set portrait_id [acs_user::get_portrait_id -user_id $user_id]
+
+if {$portrait_id == 0} {
     ad_return_complaint 1 "<li>You shouldn't have gotten here; we don't have a portrait on file for you."
     return
 }
+
+set description [db_string portrait_info {
+    select description from cr_revisions
+    where revision_id = (select live_revision from cr_items
+                          where item_id = :portrait_id)}]
 
 set doc(title) [_ acs-subsite.Edit_caption]
 set context [list \
@@ -58,7 +69,13 @@ ad_form -name comment_edit -export {user_id return_url} -form {
         return
     }
 
-    db_dml comment_update {}
+    db_dml comment_update {
+        update cr_revisions set
+          description = :description
+        where revision_id = (select live_revision
+                             from cr_items
+                             where item_id = :portrait_id)
+    }
 
     ad_returnredirect $return_url
     ad_script_abort
