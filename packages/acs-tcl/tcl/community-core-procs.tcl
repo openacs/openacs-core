@@ -271,6 +271,9 @@ ad_proc -public acs_user::get_by_username {
             -authority_id $authority_id \
             -username     $username
     }]
+    if {$user_id eq ""} {
+        ns_cache flush user_info_cache $key
+    }
     
     return $user_id
 }
