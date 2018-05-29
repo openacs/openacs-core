@@ -21,7 +21,9 @@ if {$user_id eq 0} {
     set user_name [_ acs-tcl.Public_User]
     set public_userm_email [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator -default ""]
 } else {
-    db_1row get_user_info {}
+    set user [acs_user::get -user_id $user_id]
+    set user_name  [dict get $user name]
+    set user_email [dict get $user email]
     set public_userm_email $user_email
 }
 

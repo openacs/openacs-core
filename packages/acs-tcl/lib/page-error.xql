@@ -7,16 +7,7 @@
 <!-- @cvs-id $Id$ -->
 
 <queryset>
-  <fullquery name="get_user_info">
-    <querytext>
-      
-      select p.first_names||' '||p.last_name as user_name, pa.email as user_email 
-      from persons p, parties pa
-      where pa.party_id = p.person_id
-      and p.person_id = :user_id
-      
-    </querytext>
-  </fullquery>
+
   <fullquery name="search_bug">
     <querytext>
       select bug_id
