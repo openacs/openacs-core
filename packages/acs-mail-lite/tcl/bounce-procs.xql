@@ -37,29 +37,6 @@
       </querytext>
     </fullquery>
 
-    <fullquery name="acs_mail_lite::bouncing_email_p.bouncing_p">
-      <querytext>
-
-    	select case when email_bouncing_p = 't' then 1 else 0 end 
-	as send_p 
-      	from users, parties 
-     	where lower(email) = lower(:email)
-          and party_id = user_id
-
-      </querytext>
-    </fullquery>
-
-    <fullquery name="acs_mail_lite::bouncing_user_p.bouncing_p">
-      <querytext>
-
-    	select case when email_bouncing_p = 't' then 1 else 0 end 
-	as send_p 
-      	from users 
-     	where user_id = :user_id
-
-      </querytext>
-    </fullquery>
-
    <fullquery name="acs_mail_lite::check_bounces.delete_log_if_no_recent_bounce">
      <querytext>
 

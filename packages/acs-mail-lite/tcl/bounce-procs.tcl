@@ -29,7 +29,8 @@ namespace eval acs_mail_lite {
         @option email email address to be checked for bouncing
         @return boolean 1 if bouncing 0 if ok.
     } {
-        return [db_string bouncing_p {} -default 0]
+        return [bouncing_user_p \
+                    -user_id [party::get_by_email -email $email]]
     }
 
     #---------------------------------------
@@ -40,7 +41,9 @@ namespace eval acs_mail_lite {
         @option user_id user to be checked for bouncing
         @return boolean 1 if bouncing 0 if ok.
     } {
-        return [db_string bouncing_p {} -default 0]
+        return [acs_user::get_element \
+                    -user_id $user_id \
+                    -element email_bouncing_p]
     }
 
     #---------------------------------------
