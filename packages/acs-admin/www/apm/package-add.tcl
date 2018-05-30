@@ -7,10 +7,9 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-
-db_1row apm_get_name { 
-    select first_names || ' ' || last_name user_name, email from cc_users where user_id = :user_id
-}
+set user [acs_user::get -user_id $user_id]
+set user_name [dict get $user name]
+set email     [dict get $user email]
 
 set package_id [db_nextval acs_object_id_seq]
 set version_id [db_nextval acs_object_id_seq]
