@@ -126,7 +126,9 @@ template::list::create \
 	}
     }
     
-db_multirow notify_users notify_users {}
+db_multirow -extend {name} notify_users notify_users {} {
+    set name [acs_user::get_element -user_id $request_user_id -element name]
+}
 
 
 
