@@ -617,7 +617,10 @@ ad_proc -public acs_user::get_portrait_id {
 
     @param user_id user_id of the user for whom we need the portrait
 } {
-    return [util_memoize [list acs_user::get_portrait_id_not_cached -user_id $user_id] 600]
+    set key [list get_portrait_id -user_id $user_id]
+    return [ns_cache eval user_info_cache $key {
+        acs_user::get_portrait_id_not_cached -user_id $user_id
+    }]
 }
 
 ad_proc -private acs_user::get_portrait_id_not_cached {
@@ -702,7 +705,8 @@ ad_proc -public acs_user::erase_portrait {
     }
 
     # Flush the portrait cache
-    util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
+    set key [list get_portrait_id -user_id $user_id]
+    ns_cache flush user_info_cache $key
 }
 
 # Local variables:
