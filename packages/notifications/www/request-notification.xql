@@ -49,9 +49,9 @@
         </querytext>
     </fullquery>
     
-    <fullquery name="get_user_name">
+    <fullquery name="user_p">
         <querytext>
-           select username 
+           select 1
 	   from users 
 	   where user_id = :party_id
         </querytext>
