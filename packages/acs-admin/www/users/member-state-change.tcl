@@ -24,11 +24,20 @@ ad_page_contract {
     return_url:onevalue
 }
 
-if {![db_0or1row get_states {}]} {
+if {![db_0or1row get_states {
+    select member_state as member_state_old,
+           email_verified_p as email_verified_p_old
+    from users where user_id = :user_id
+}]} {
     # The user is not in there
     ad_return_complaint 1 "Invalid User: the user is not in the system"
     return
 }
+
+set user [acs_user::get -user_id $user_id]
+set name   [dict get $user name]
+set email  [dict get $user email]
+set rel_id [dict get $user rel_id]
 
 #
 # This page is used for state changes in the member_state, and as well
@@ -80,7 +89,7 @@ ad_try {
 callback acs_admin::member_state_change -member_state $member_state -user_id $user_id
 
 set admin_user_id [ad_conn user_id]
-set email_from [db_string admin_email {select email from parties where party_id = :admin_user_id}]
+set email_from [acs_user::get_element -user_id $admin_user_id -element email]
 set subject $action
 set message $email_message
 
