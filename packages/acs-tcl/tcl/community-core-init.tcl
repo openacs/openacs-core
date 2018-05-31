@@ -16,8 +16,8 @@ ns_cache create user_info_cache \
 	       -parameter UserInfoCacheSize \
 	       -default 2000000] \
     -timeout [parameter::get \
-	       -package_id [apm_package_id_from_key acs-tcl] \
-	       -parameter UserInfoCacheTimeout \
+		  -package_id [apm_package_id_from_key acs-tcl] \
+		  -parameter UserInfoCacheTimeout \
 		  -default 3600]
 
 
