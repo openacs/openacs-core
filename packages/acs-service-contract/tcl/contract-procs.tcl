@@ -1,6 +1,6 @@
 ad_library {
     Support library for acs service contracts.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-01-14
     @cvs-id $Id$
@@ -22,10 +22,10 @@ ad_proc -public acs_sc::contract::new {
     {-description:required}
 } {
 
-    Procedure to call to define and new service contract and 
+    Procedure to call to define a new service contract and
     the message types, implementations and bindings.
 
-    Refer to the Service contract Tcl API discussion at 
+    Refer to the Service contract Tcl API discussion at
     http://openacs.org/forums/message-view?message_id=71799
 
     @param name Name of the service contract
@@ -42,7 +42,7 @@ ad_proc -public acs_sc::contract::new_from_spec {
     Takes a complete service contract specification and creates the new service contract.
 
     <p>
-    
+
     The spec looks like this:
 
     <blockquote><pre>
@@ -55,7 +55,7 @@ ad_proc -public acs_sc::contract::new_from_spec {
                 output { object_types:string,multiple }
                 iscachable_p "t"
             }
-            GetPrettyName { 
+            GetPrettyName {
                 description "Get the pretty name of this implementation."
                 output { pretty_name:string }
                 iscachable_p "t"
@@ -69,9 +69,9 @@ ad_proc -public acs_sc::contract::new_from_spec {
                     entry_id:integer
                 }
             }
-        } 
-    }  
-    
+        }
+    }
+
     acs_sc::contract::new_from_spec -spec $spec
     </pre></blockquote>
 
@@ -79,15 +79,15 @@ ad_proc -public acs_sc::contract::new_from_spec {
 
     <p>
 
-    The spec should be an array-list with 3 entries: 
+    The spec should be an array-list with 3 entries:
 
     <ul>
-      <li>name: The name of the service contract. 
-      <li>description: A human-readable descriptions.
+      <li>name: The name of the service contract.
+      <li>description: A human-readable description.
       <li>operations: An array-list of operations in this service contract.
     </ul>
-  
-    The operations array-list has the operation name as key, and 
+
+    The operations array-list has the operation name as key, and
     another array-list containing the specification for the operation as the value.
     That array-list has the following entries:
 
@@ -101,8 +101,8 @@ ad_proc -public acs_sc::contract::new_from_spec {
 
     <p>
 
-    The format of the 'input' and 'output' specs is a Tcl list of parameter specs, 
-    each of which consist of name, colon (:), 
+    The format of the 'input' and 'output' specs is a Tcl list of parameter specs,
+    each of which consist of name, colon (:),
     datatype plus an optional comma (,) and the flag 'multiple'.
 
 
@@ -117,18 +117,18 @@ ad_proc -public acs_sc::contract::new_from_spec {
 
     # Default values
     array set contract { description "" }
-    
+
     # Get the spec
     array set contract $spec
 
     db_transaction {
-	set contract_id [new \
-		-name $contract(name) \
-		-description $contract(description)]
-	
-	acs_sc::contract::operation::parse_operations_spec \
+        set contract_id [new \
                 -name $contract(name) \
-                -spec $contract(operations) 
+                -description $contract(description)]
+
+        acs_sc::contract::operation::parse_operations_spec \
+                -name $contract(name) \
+                -spec $contract(operations)
     }
     return $contract_id
 }
@@ -156,10 +156,10 @@ ad_proc -public acs_sc::contract::delete {
         }
 
         if { !$no_cascade_p } {
-            
+
             set operations [list]
             set msg_types [list]
-            
+
             db_foreach select_operations {} {
                 # Put them on list of message types and operations to delete
                 lappend msg_types $operation_inputtype_id
@@ -211,30 +211,30 @@ ad_proc -public acs_sc::contract::operation::new {
     {-description:required}
     {-is_cachable_p ""}
 } {
- 
-    Call the service contract function to create the 
-    operation in the database. 
+
+    Call the service contract function to create the
+    operation in the database.
 
 } {
     db_transaction {
         # Create the input type
-        
+
         set input_type_name "${contract_name}.${operation}.InputType"
-    
+
         set nargs [acs_sc::msg_type::parse_spec \
                 -name $input_type_name \
                 -spec $input]
-        
+
         # Create the output type
-    
+
         set output_type_name "${contract_name}.${operation}.OutputType"
-    
+
         acs_sc::msg_type::parse_spec \
                 -name $output_type_name \
                 -spec $output
-    
+
         # Create the operation
-        
+
         db_exec_plsql insert_operation {}
     }
 }
@@ -244,13 +244,13 @@ ad_proc -public acs_sc::contract::operation::delete {
     {-contract_name ""}
     {-operation_name ""}
 } {
-    Delete a message type. Supply either ID or name.
+    Delete the operation.
 
-    @param msg_type_id The ID of the msg_type to delete.
-    @param name Name of the service contract to delete
+    @param operation_id     ID of the operation.
+    @param contract_name    Name of the contract.
+    @param operation_name   Name of the operation.
 } {
-    if { $operation_id eq "" && ( $contract_name eq "" || $operation_name eq "") 
-     } {
+    if { $operation_id eq "" && ( $contract_name eq "" || $operation_name eq "" ) } {
         error "You must supply either contract_name and operation_name, or operation_id"
     }
 
@@ -272,10 +272,10 @@ ad_proc -public acs_sc::contract::operation::parse_operations_spec {
 } {
     Parse the operations defined in the operations specification
     @param name Name of the contract
-    @param spec  spec Specification of all the operations
+    @param spec Specification of all the operations
 } {
     foreach { operation subspec } $spec {
-	acs_sc::contract::operation::parse_spec \
+        acs_sc::contract::operation::parse_spec \
                 -contract_name $name \
                 -operation $operation \
                 -spec $subspec
@@ -285,30 +285,30 @@ ad_proc -public acs_sc::contract::operation::parse_operations_spec {
 ad_proc -public acs_sc::contract::operation::parse_spec {
     {-contract_name:required}
     {-operation:required}
-    {-spec:required} 
+    {-spec:required}
 } {
     Parse one operation
 } {
 
     # Default values
     array set attributes {
-	description {}
-	input {}
-	output {} 
-	is_cachable_p "f"
+        description {}
+        input {}
+        output {}
+        is_cachable_p "f"
     }
-    
+
     # Get the sepc
     array set attributes $spec
-    
+
     # New operation
     acs_sc::contract::operation::new \
-	    -contract_name $contract_name \
-	    -operation $operation \
-	    -description $attributes(description) \
-	    -input $attributes(input)   \
-	    -output $attributes(output) \
-	    -is_cachable_p $attributes(is_cachable_p) 
+            -contract_name $contract_name \
+            -operation $operation \
+            -description $attributes(description) \
+            -input $attributes(input)   \
+            -output $attributes(output) \
+            -is_cachable_p $attributes(is_cachable_p)
 }
 
 
