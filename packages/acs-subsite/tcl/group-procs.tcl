@@ -340,7 +340,7 @@ ad_proc -private group::flush_members_cache {
   util_memoize_flush_regexp [list group::member_p_not_cached -group_id $group_id (.*)]
 }
 
-ad_proc -public group::permission_p { 
+ad_proc -deprecated -public group::permission_p { 
     { -user_id "" }
     { -privilege "read" }
     group_id
