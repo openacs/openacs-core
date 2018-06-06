@@ -14,22 +14,22 @@ ad_page_contract {
     { return_url:localurl "" }
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
-	if { ![group::permission_p $group_id] } {
-	    ad_complain "The group either does not exist or you do not have permission to view it"
-	}
+        if { ![party::permission_p $group_id] } {
+            ad_complain "The group either does not exist or you do not have permission to view it"
+        }
     }
 }
 
 if {$operation eq "Yes, I really want to delete this group"} {
     db_transaction {
-	set group_type [group::delete $group_id]
+        set group_type [group::delete $group_id]
     }
     if { $return_url eq "" && $group_type ne "" } {
-	set return_url [export_vars -base ../group-types/one group_type]
+        set return_url [export_vars -base ../group-types/one group_type]
     }
 } else {
     if { $return_url eq "" } {
-	set return_url [export_vars -base one group_id]
+        set return_url [export_vars -base one group_id]
     }
 }
 

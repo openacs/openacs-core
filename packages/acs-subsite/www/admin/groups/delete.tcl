@@ -17,9 +17,9 @@ ad_page_contract {
     group_id:onevalue
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
-	if { ![group::permission_p -privilege delete $group_id] } {
-	    ad_complain "The group either does not exist or you do not have permission to delete it"
-	}
+        if { ![party::permission_p -privilege delete $group_id] } {
+            ad_complain "The group either does not exist or you do not have permission to delete it"
+        }
     }
 }
 

@@ -21,14 +21,14 @@ ad_page_contract {
     join_policy:onevalue
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
-	if { ![group::permission_p $group_id] } {
-	    ad_complain "The group either does not exist or you do not have permission to view it"
-	}
+        if { ![party::permission_p $group_id] } {
+            ad_complain "The group either does not exist or you do not have permission to view it"
+        }
     }
     group_in_scope_p -requires {group_id:notnull} {
-	if { ![application_group::contains_party_p -include_self -party_id $group_id]} {
-	    ad_complain "The group either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_party_p -include_self -party_id $group_id]} {
+            ad_complain "The group either does not exist or does not belong to this subsite."
+        }
     }
 }
 

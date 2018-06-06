@@ -43,7 +43,7 @@ db_1row group_info {
 # We assume the group is on side 1... 
 db_1row rel_type_info {}
 
-set create_p [group::permission_p -privilege create $add_to_group_id]
+set create_p [party::permission_p -privilege create $add_to_group_id]
 
 # Membership relations have a member_state attribute that gets set
 # based on the group's join policy.

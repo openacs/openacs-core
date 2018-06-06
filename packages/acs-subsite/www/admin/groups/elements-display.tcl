@@ -26,9 +26,9 @@ ad_page_contract {
     ancestor_rel_type:onevalue
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
-	if { ![group::permission_p $group_id] } {
-	    ad_complain "The group either does not exist or you do not have permission to view it"
-	}
+        if { ![party::permission_p $group_id] } {
+            ad_complain "The group either does not exist or you do not have permission to view it"
+        }
     }
 }
 
@@ -45,7 +45,7 @@ db_1row group_and_rel_info {}
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
 set role_pretty_name [lang::util::localize $role_pretty_name]
-set role_pretty_plural [lang::util::localize $role_pretty_plural]    
+set role_pretty_plural [lang::util::localize $role_pretty_plural]
 
 set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list [export_vars -base one group_id] "One Group"] "All $role_pretty_plural"]
 
