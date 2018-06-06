@@ -373,11 +373,11 @@ ad_proc -public ad_page_contract {
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_oneof"><b>oneof</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the value X contained in
-    the set of the provided values. Usage example: <code>oneof:(red|blue|green)</code>
-x    
+    the set of the provided values. Usage example: <code>color:oneof(red|blue|green)</code>
+    
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_range"><b>range</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the value X is in range
-    [Y, Z]. Usage example: <code>foo:(1|100)</code>
+    [Y, Z]. Usage example: <code>foo:range(1|100)</code>
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_nohtml"><b>nohtml</b></a>
     <dd>Pluggable filter, installed by default, that disallows any and all html.
