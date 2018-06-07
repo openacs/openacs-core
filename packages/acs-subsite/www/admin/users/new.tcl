@@ -36,7 +36,7 @@ db_1row group_info {
 # We assume the group is on side 1...
 db_1row rel_type_info {}
 
-set create_p [party::permission_p -privilege create $add_to_group_id]
+set create_p [permission::permission_p -object_id $add_to_group_id -privilege "create"]
 
 # Membership relations have a member_state attribute that gets set
 # based on the group's join policy.
@@ -223,7 +223,7 @@ if { [template::form is_valid add_user] } {
         if {[parameter::get -parameter NotifyAdminOfNewRegistrationsP -default 0]} {
 
             set creation_user [ad_conn user_id]
-            set user [acs_user::get -user_id $creation_user]            
+            set user [acs_user::get -user_id $creation_user]
             set creation_name "[dict get $user name] ([dict get $user email])"
 
             # we're supposed to notify the administrator when someone new registers

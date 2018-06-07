@@ -13,7 +13,7 @@ ad_page_contract {
     {return_url:localurl ""}
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
-        if { ![party::permission_p -privilege admin $group_id] } {
+        if { ![permission::permission_p -object_id $group_id -privilege "admin"] } {
             ad_complain "The group either does not exist or you do not have permission to administer it"
         }
     }

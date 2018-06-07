@@ -34,16 +34,16 @@ set export_var_list [list \
 	return_url party_type_exact_p group_rel_type_list]
 
 db_1row group_info {
-    select group_name as add_to_group_name, 
+    select group_name as add_to_group_name,
            join_policy as add_to_group_join_policy
     from groups
     where group_id = :add_to_group_id
 }
 
-# We assume the group is on side 1... 
+# We assume the group is on side 1...
 db_1row rel_type_info {}
 
-set create_p [party::permission_p -privilege create $add_to_group_id]
+set create_p [permission::permission_p -object_id $add_to_group_id -privilege "create"]
 
 # Membership relations have a member_state attribute that gets set
 # based on the group's join policy.
@@ -80,35 +80,35 @@ if {$group_rel_type_list eq ""} {
 
     if {[llength $required_group_rel_type_list] > 0} {
 	# There are required segments that the soon-to-exist party must be in
-	# before it can be added to $add_to_group_id with rel type 
+	# before it can be added to $add_to_group_id with rel type
 	# $add_with_rel_type.  We'll return a notice to the user, and give
 	# them a link to begin the process of adding the party in the right
 	# segments.
-	
+
 	# set up variables for template
 	set rel_type_pretty_name [subsite::util::object_type_pretty_name $add_with_rel_type]
 	set group_name [acs_object_name $add_to_group_id]
 	set object_type_pretty_name $party_type_pretty_name
-	
+
 	# We're going to have to pass the required_group_rel_type_list to the
 	# next page.  The easiest way I see to do this is just encode the list
 	# in a variable, since the list is just a string anyways.
-	
+
 	# We don't care about the first group/rel_type combo, because we'll pass
 	# that information explicitly in other variables.
 	set group_rel_type_list [lrange $required_group_rel_type_list 1 end]
-	
+
 	# We also want to make sure that the user is finally returned to a page
-	# where they can put the new party in the original group they were 
+	# where they can put the new party in the original group they were
 	# attempting, and with the original relationship type they wanted.
 	# We can't use return_url because we don't yet know the party_id.  So
 	# we'll just add to group_rel_type_list
 	lappend group_rel_type_list [list $add_to_group_id $add_with_rel_type]
-	
+
 	lappend export_var_list group_rel_type_list
-	
+
 	set export_url_vars [export_vars -exclude {add_to_group_id add_with_rel_type} $export_var_list]
-	
+
 	ad_return_template new-list-required-segments
 	return
     }
@@ -135,7 +135,7 @@ foreach {type url} $redirects_for_type {
 }
 
 
-if { $party_type_exact_p == "f" 
+if { $party_type_exact_p == "f"
      && [subsite::util::sub_type_exists_p $party_type] } {
 
     # Sub party-types exist... select one
@@ -155,7 +155,7 @@ if { $party_type_exact_p == "f"
 template::form create add_party
 
 if { [template::form is_request add_party] } {
-    
+
     foreach var $export_var_list {
 	template::element create add_party $var \
 		-value [set $var] \

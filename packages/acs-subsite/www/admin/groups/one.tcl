@@ -21,7 +21,7 @@ ad_page_contract {
     join_policy:onevalue
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
-        if { ![party::permission_p $group_id] } {
+        if { ![permission::permission_p -object_id $group_id -privilege "read"] } {
             ad_complain "The group either does not exist or you do not have permission to view it"
         }
     }

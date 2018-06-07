@@ -38,23 +38,23 @@ if {$add_to_group_id eq ""} {
 }
 
 db_1row group_info {
-    select group_name as add_to_group_name, 
+    select group_name as add_to_group_name,
            join_policy as add_to_group_join_policy
     from groups
     where group_id = :add_to_group_id
 }
 
-# We assume the group is on side 1... 
+# We assume the group is on side 1...
 db_1row rel_type_info {}
 
-set create_p [party::permission_p -privilege create $add_to_group_id]
+set create_p [permission::permission_p -object_id $add_to_group_id -privilege "create"]
 
 # Membership relations have a member_state attribute that gets set
 # based on the group's join policy.
 if {$ancestor_rel_type eq "membership_rel"} {
     if {$add_to_group_join_policy eq "closed" && !$create_p} {
-	ad_complain "You do not have permission to add elements to $add_to_group_name"
-	return
+        ad_complain "You do not have permission to add elements to $add_to_group_name"
+        return
     }
 
     set member_state [group::default_member_state -join_policy $add_to_group_join_policy -create_p $create_p]
@@ -70,23 +70,23 @@ db_1row select_type_info {
 }
 
 set export_var_list [list group_id group_type \
-	    add_to_group_id add_with_rel_type return_url]
+        add_to_group_id add_with_rel_type return_url]
 
 ## ISSUE / TO DO: (see also admin/users/new.tcl)
 ##
 ## Should there be a check here for required segments, as there is
-## in parties/new.tcl? (see parties/new.tcl, search for 
+## in parties/new.tcl? (see parties/new.tcl, search for
 ## "relation_required_segments_multirow).
 ##
 ## Tentative Answer: we don't need to repeat that semi-heinous check on this
 ## page, because (a) the user should have gotten to this page through
-## parties/new.tcl, so the required segments check should have already 
+## parties/new.tcl, so the required segments check should have already
 ## happened before the user reaches this page.  And (b) even if the user
-## somehow bypassed parties/new.tcl, they can't cause any relational 
+## somehow bypassed parties/new.tcl, they can't cause any relational
 ## constraint violations in the database because the constraints are enforced
 ## by triggers in the DB.
 
-if { $group_type_exact_p == "f" 
+if { $group_type_exact_p == "f"
      && [subsite::util::sub_type_exists_p $group_type] } {
 
     # Sub rel-types exist... select one
@@ -109,7 +109,7 @@ attribute::add_form_elements -form_id add_group -variable_prefix group -start_wi
 attribute::add_form_elements -form_id add_group -variable_prefix rel -start_with relationship -object_type $add_with_rel_type
 
 if { [template::form is_request add_group] } {
-    
+
     foreach var $export_var_list {
 	template::element create add_group $var \
 		-value [set $var] \

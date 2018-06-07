@@ -734,7 +734,7 @@ ad_proc -public group::add_member {
     group::get -group_id $group_id -array group
 
     if { !$no_perm_check_p } {
-        set create_p [party::permission_p -privilege create $group_id]
+        set create_p [permission::permission_p -object_id $group_id -privilege "create"]
         if { $group(join_policy) eq "closed" && !$create_p } {
             error "You do not have permission to add members to the group '$group(group_name)'"
         }
