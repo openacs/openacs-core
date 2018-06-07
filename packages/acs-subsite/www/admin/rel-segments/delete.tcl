@@ -16,9 +16,9 @@ ad_page_contract {
     segment_name:onevalue
 } -validate {
     segment_exists_p -requires {segment_id:notnull} {
-	if { ![rel_segments_permission_p -privilege delete $segment_id] } {
-	    ad_complain "The segment either does not exist or you do not have permission to delete it"
-	}
+        if { ![permission::permission_p -object_id $segment_id -privilege "delete"] } {
+            ad_complain "The segment either does not exist or you do not have permission to delete it"
+        }
     }
 }
 

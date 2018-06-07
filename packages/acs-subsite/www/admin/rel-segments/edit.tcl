@@ -10,14 +10,14 @@ ad_page_contract {
     segment_id:naturalnum,notnull
 } -validate {
     segment_exists_p -requires {segment_id:notnull} {
-	if { ![rel_segments_permission_p $segment_id] } {
-	    ad_complain "The segment either does not exist or you do not have permission to view it"
-	}
+        if { ![permission::permission_p -object_id $segment_id -privilege "read"] } {
+            ad_complain "The segment either does not exist or you do not have permission to view it"
+        }
     }
     segment_in_scope_p -requires {segment_id:notnull segment_exists_p} {
-	if { ![application_group::contains_segment_p -segment_id $segment_id]} {
-	    ad_complain "The segment either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_segment_p -segment_id $segment_id]} {
+            ad_complain "The segment either does not exist or does not belong to this subsite."
+        }
     }
 }
 
@@ -32,7 +32,7 @@ ad_form -name segment -cancel_url $view_url -form {
         {html {size 50}}
     }
 } -select_query {
-    select s.segment_id, 
+    select s.segment_id,
            s.segment_name
     from   rel_segments s
     where  s.segment_id = :segment_id
@@ -43,9 +43,9 @@ ad_form -name segment -cancel_url $view_url -form {
         where  segment_id = :segment_id
     }
     db_dml update_object_title {
-	update acs_objects
-	set title = :segment_name
-	where object_id = :segment_id
+        update acs_objects
+        set title = :segment_name
+        where object_id = :segment_id
     }
 } -after_submit {
     ad_returnredirect $view_url

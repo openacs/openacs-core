@@ -17,14 +17,14 @@ ad_page_contract {
     admin_p:onevalue
 } -validate {
     segment_exists_p -requires {segment_id:notnull} {
-	if { ![rel_segments_permission_p $segment_id] } {
-	    ad_complain "The segment either does not exist or you do not have permission to view it"
-	}
+        if { ![permission::permission_p -object_id $segment_id -privilege "read"] } {
+            ad_complain "The segment either does not exist or you do not have permission to view it"
+        }
     }
     segment_in_scope_p -requires {segment_id:notnull segment_exists_p} {
-	if { ![application_group::contains_segment_p -segment_id $segment_id]} {
-	    ad_complain "The segment either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_segment_p -segment_id $segment_id]} {
+            ad_complain "The segment either does not exist or does not belong to this subsite."
+        }
     }
 }
 
