@@ -354,6 +354,8 @@ ad_proc -deprecated -public group::permission_p {
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 10/2000
 
+    @see party::permission_p
+
 } {
     return [party::permission_p -user_id $user_id -privilege $privilege $group_id]
 }
