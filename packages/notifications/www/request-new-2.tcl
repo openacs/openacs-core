@@ -15,7 +15,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 
 # Check that the object can be subscribed to
-notification::security::require_notify_object -object_id $object_id
+permission::require_permission -party_id $user_id -object_id $object_id -privilege "read"
 
 # Add the request
 notification::request::new \

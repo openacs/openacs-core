@@ -15,14 +15,14 @@ ad_page_contract {
 set user_id [auth::require_login]
 
 # Check that the object can be subscribed to
-notification::security::require_notify_object -object_id $object_id
+permission::require_permission -object_id $object_id -privilege "read"
 
 set doc(title) [_ notifications.Request_Notification]
 set context [list $doc(title)]
 
-if {$pretty_name eq ""} { 
+if {$pretty_name eq ""} {
     set page_title [_ notifications.Request_Notification]
-} else { 
+} else {
     set page_title [_ notifications.lt_Request_Notification_]
 }
 
@@ -30,10 +30,10 @@ set intervals_pretty [notification::get_intervals -localized -type_id $type_id]
 set delivery_methods [notification::get_delivery_methods -type_id $type_id]
 
 ad_form -name subscribe -export {type_id object_id return_url} -form {
-    {interval_id:integer(select)           
+    {interval_id:integer(select)
         {label "[_ notifications.lt_Notification_Interval]"}
         {options $intervals_pretty}}
-    {delivery_method_id:integer(select)    
+    {delivery_method_id:integer(select)
         {label "[_ notifications.Delivery_Method]"}
         {options $delivery_methods}
         {value {[lindex $delivery_methods 0 1]}}

@@ -12,7 +12,7 @@ ad_page_contract {
 }
 
 # Security Check
-notification::security::require_admin_request -request_id $request_id
+permission::require_permission -object_id $request_id -privilege "admin"
 
 # Actually Delete
 notification::request::delete -request_id $request_id
