@@ -12,15 +12,19 @@ ad_library {
 
 namespace eval relation {}
 
-ad_proc -public relation_permission_p {
+ad_proc -deprecated -public relation_permission_p {
     { -user_id "" }
     { -privilege "read" }
     rel_id
 } {
     Wrapper for ad_permission_p that lets us default to read permission
 
+    Deprecated: just another wrapper for permission::permission_p
+
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 12/2000
+
+    @see permission::permission_p
 
 } {
     return [permission::permission_p -party_id $user_id -object_id $rel_id -privilege $privilege]

@@ -7,7 +7,7 @@ ad_library {
     @author mbryzek@arsdigita.com
     @creation-date Tue Dec 12 16:37:45 2000
     @cvs-id $Id$
-    
+
 }
 
 ad_proc -public rel_segments_new {
@@ -16,7 +16,7 @@ ad_proc -public rel_segments_new {
     { -creation_ip "" }
     group_id
     rel_type
-    segment_name 
+    segment_name
 } {
     Creates a new relational segment
 
@@ -39,10 +39,10 @@ ad_proc -public rel_segments_new {
 }
 
 ad_proc -public rel_segments_delete {
-    segment_id 
+    segment_id
 } {
     Deletes the specified relational segment including all relational
-    constraints that depend on it. 
+    constraints that depend on it.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 1/12/2001
@@ -58,10 +58,10 @@ ad_proc -public rel_segments_delete {
     }
 
     db_exec_plsql rel_segment_delete {}
-    
+
 }
 
-ad_proc -public rel_segments_permission_p { 
+ad_proc -deprecated -public rel_segments_permission_p {
     { -user_id "" }
     { -privilege "read" }
     segment_id
@@ -70,8 +70,12 @@ ad_proc -public rel_segments_permission_p {
     Wrapper for ad_permission to allow us to bypass having to
     specify the read privilege
 
+    Deprecated: just another wrapper for permission::permission_p
+
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 12/2000
+
+    @see permission::permission_p
 
 } {
     return [permission::permission_p -party_id $user_id -object_id $segment_id -privilege $privilege]

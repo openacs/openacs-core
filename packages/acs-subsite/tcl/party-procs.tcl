@@ -13,37 +13,41 @@ ad_library {
 
 namespace eval party {
 
-    ad_proc -public permission_p { 
-	{ -user_id "" }
-	{ -privilege "read" }
-	party_id
+    ad_proc -deprecated -public permission_p {
+        { -user_id "" }
+        { -privilege "read" }
+        party_id
     } {
-	Wrapper for ad_permission to allow us to bypass having to
-	specify the read privilege
+        Wrapper for ad_permission to allow us to bypass having to
+        specify the read privilege
 
-	@author Michael Bryzek (mbryzek@arsdigita.com)
-	@creation-date 10/2000
+        Deprecated: just another wrapper for permission::permission_p
+
+        @author Michael Bryzek (mbryzek@arsdigita.com)
+        @creation-date 10/2000
+
+        @see permission::permission_p
 
     } {
-	return [permission::permission_p -party_id $user_id -object_id $party_id -privilege $privilege]
+        return [permission::permission_p -party_id $user_id -object_id $party_id -privilege $privilege]
     }
 
 
-    ad_proc new { 
+    ad_proc new {
 	{ -form_id "" }
 	{ -variable_prefix "" }
 	{ -creation_user "" }
 	{ -creation_ip "" }
-	{ -party_id "" } 
-	{ -context_id "" } 
+	{ -party_id "" }
+	{ -context_id "" }
 	{ -email "" }
-	party_type 
+	party_type
     } {
 	Creates a party of this type by calling the .new function for
 	the package associated with the given party_type. This
 	function will fail if there is no package.
-	
-	<p> 
+
+	<p>
 	There are now several ways to create a party of a given
 	type. You can use this Tcl API with or without a form from the form
 	system, or you can directly use the PL/SQL API for the party type.
@@ -53,33 +57,33 @@ namespace eval party {
 
 	# OPTION 1: Create the party using the Tcl Procedure. Useful if the
 	# only attribute you need to specify is the party name
-	
+
 	db_transaction {
 	    set party_id [party::new -email "joe@foo.com" $party_type]
 	}
-	
-	
+
+
 	# OPTION 2: Create the party using the Tcl API with a templating
 	# form. Useful when there are multiple attributes to specify for the
 	# party
-	
+
 	template::form create add_party
 	template::element create add_party email -value "joe@foo.com"
-	
+
 	db_transaction {
 	    set party_id [party::new -form_id add_party $party_type ]
 	}
-	
+
 	# OPTION 3: Create the party using the PL/SQL package automatically
 	# created for it
-	
+
 	# creating the new party
 	set party_id [db_exec_plsql add_party "
 	  begin
 	    :1 := ${party_type}.new (email => 'joe@foo.com');
 	  end;
 	"]
-	
+
 	</pre>
 
 	@author Oumi Mehrotra (oumi@arsdigita.com)
@@ -102,7 +106,7 @@ namespace eval party {
 	# We select out the name of the primary key. Note that the
 	# primary key is equivalent to party_id as this is a subtype of
 	# acs_party
-		
+
 	if { ![db_0or1row package_select {
 	    select t.package_name, lower(t.id_column) as id_column
 	      from acs_object_types t
@@ -134,14 +138,14 @@ namespace eval party {
 	{-rel_type "membership_rel"}
     } {
 	creates multirow datasource containing party types starting with
-	the $start_with party type.  The datasource has columns that are 
+	the $start_with party type.  The datasource has columns that are
 	identical to the relation_types_allowed_to_group_multirow, which is why
-	the columns are broadly named "object_*" instead of "party_*".  A 
-	common template can be used for generating select widgets etc. for 
+	the columns are broadly named "object_*" instead of "party_*".  A
+	common template can be used for generating select widgets etc. for
 	both this datasource and the relation_types_allowed_to_groups_multirow
 	datasource.
 
-	All subtypes of $start_with are returned, but the "valid_p" column in 
+	All subtypes of $start_with are returned, but the "valid_p" column in
 	the datasource indicates whether the type is a valid one for $group_id.
 
 	Includes fields that are useful for
@@ -156,10 +160,10 @@ namespace eval party {
 
 	@author Oumi Mehrotra (oumi@arsdigita.com)
 	@creation-date 2000-02-07
-    
+
 	@param datasource_name
 	@param start_with
-	@param rel_type - if unspecified, then membership_rel is used 
+	@param rel_type - if unspecified, then membership_rel is used
     } {
 
 	template::multirow create $datasource_name \
@@ -180,7 +184,7 @@ namespace eval party {
 	}
 
     }
-    
+
     ad_proc -public email {
 	{-party_id:required}
     } {
@@ -188,7 +192,7 @@ namespace eval party {
     } {
 	return [util_memoize [list ::party::email_not_cached -party_id $party_id]]
     }
-    
+
     ad_proc -private email_not_cached {
 	{-party_id:required}
     } {
@@ -203,7 +207,7 @@ namespace eval party {
 	{-email ""}
     } {
 	Gets the party name of the provided party_id
-	
+
 	@author Miguel Marin (miguelmarin@viaro.net)
 	@author Viaro Networks www.viaro.net
 
@@ -219,7 +223,7 @@ namespace eval party {
 	} elseif {"" ne $party_id && "" ne $email } {
 	    error "Only provide party_id OR email, not both"
 	}
-	
+
 	if {$party_id eq ""} {
 	    set party_id [party::get_by_email -email $email]
 	}
@@ -229,8 +233,8 @@ namespace eval party {
 	} else {
 	    if { [apm_package_installed_p "organizations"] } {
 		set name [db_string get_org_name {} -default ""]
-	    } 
-	    
+	    }
+
 	    if { $name eq "" } {
 		set name [db_string get_group_name {} -default ""]
 	    }
@@ -238,7 +242,7 @@ namespace eval party {
 	    if { $name eq "" } {
 		set name [db_string get_party_name {} -default ""]
 	    }
-	    
+
 	}
 	return $name
     }
@@ -246,17 +250,17 @@ namespace eval party {
     ad_proc -public party_p {
 	-object_id:required
     } {
-	
+
 	@author Malte Sussdorff
 	@creation-date 2007-01-26
-	
+
 	@param object_id object_id which is checked if it is a party
 	@return true if object_id is a party
-	
+
     } {
 	return [db_string party_p {} -default 0]
     }
-    
+
 }
 
 # Local variables:

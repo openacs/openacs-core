@@ -13,13 +13,13 @@ ad_library {
 
 namespace eval group {}
 
-ad_proc -public group::new { 
+ad_proc -public group::new {
     { -form_id "" }
     { -variable_prefix "" }
     { -creation_user "" }
     { -creation_ip "" }
-    { -group_id "" } 
-    { -context_id "" } 
+    { -group_id "" }
+    { -context_id "" }
     { -group_name "" }
     { -pretty_name ""}
     {group_type "group"}
@@ -27,8 +27,8 @@ ad_proc -public group::new {
     Creates a group of this type by calling the .new function for
     the package associated with the given group_type. This
     function will fail if there is no package.
-    
-    <p> 
+
+    <p>
     There are now several ways to create a group of a given
     type. You can use this Tcl API with or without a form from the form
     system, or you can directly use the PL/SQL API for the group type.
@@ -38,33 +38,33 @@ ad_proc -public group::new {
 
     # OPTION 1: Create the group using the Tcl Procedure. Useful if the
     # only attribute you need to specify is the group name
-    
+
     db_transaction {
         set group_id [group::new -group_name "Author" $group_type]
     }
-    
-    
+
+
     # OPTION 2: Create the group using the Tcl API with a templating
     # form. Useful when there are multiple attributes to specify for the
     # group
-    
+
     template::form create add_group
     template::element create add_group group_name -value "Publisher"
-    
+
     db_transaction {
         set group_id [group::new -form_id add_group $group_type ]
     }
-    
+
     # OPTION 3: Create the group using the PL/SQL package automatically
     # created for it
-    
+
     # creating the new group
     set group_id [db_exec_plsql add_group "
       begin
         :1 := ${group_type}.new (group_name => 'Editor');
       end;
     "]
-    
+
     </pre>
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
@@ -92,7 +92,7 @@ ad_proc -public group::new {
     # We select out the name of the primary key. Note that the
     # primary key is equivalent to group_id as this is a subtype of
     # acs_group
-    	
+
     if { ![db_0or1row package_select {
         select t.package_name, lower(t.id_column) as id_column
           from acs_object_types t
@@ -131,8 +131,8 @@ ad_proc -public group::new {
 
     if {![regexp [lang::util::message_key_regexp] $pretty_name]} {
 	set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
-    } 
-	
+    }
+
     # Update the title to the pretty name
     if {$pretty_name ne ""} {
 	db_dml title_update "update acs_objects set title = :pretty_name where object_id = :group_id"
@@ -158,8 +158,8 @@ ad_proc group::delete { group_id } {
     if { ![db_0or1row package_select {
         select t.package_name, t.object_type
         from acs_object_types t
-        where t.object_type = (select o.object_type 
-                                 from acs_objects o 
+        where t.object_type = (select o.object_type
+                                 from acs_objects o
                                 where o.object_id = :group_id)
     }] } {
         # No package means the object doesn't exist. We're done :)
@@ -168,9 +168,9 @@ ad_proc group::delete { group_id } {
 
     # Maybe the relational constraint deletion should be moved to
     # the acs_group package...
-    
+
     db_exec_plsql delete_group "
-      BEGIN 
+      BEGIN
         -- the acs_group package takes care of segments referred
         -- to by rel_constraints.rel_segment. We delete the ones
         -- references by rel_constraints.required_rel_segment here.
@@ -185,7 +185,7 @@ ad_proc group::delete { group_id } {
         end loop;
 
         -- delete the actual group
-        ${package_name}.del(:group_id); 
+        ${package_name}.del(:group_id);
       END;
     "
 
@@ -198,7 +198,7 @@ ad_proc -public group::get {
     {-array:required}
 } {
     Get basic info about a group: group_name, join_policy.
-    
+
     @param array The name of an array in the caller's namespace where the info gets delivered.
 
     @see group::get_element
@@ -271,8 +271,8 @@ ad_proc -private group::get_id_not_cached {
             ad_log warning "group::get_id '$group_name': overwriting specified application_group_id by application group of subsite"
         }
 	set application_group_id [application_group::group_id_from_package_id -package_id $subsite_id]
-    } 
-    
+    }
+
     if {$application_group_id ne ""} {
 	set group_ids [db_list get_group_id_with_application {}]
     } else {
@@ -340,13 +340,13 @@ ad_proc -private group::flush_members_cache {
   util_memoize_flush_regexp [list group::member_p_not_cached -group_id $group_id (.*)]
 }
 
-ad_proc -deprecated -public group::permission_p { 
+ad_proc -deprecated -public group::permission_p {
     { -user_id "" }
     { -privilege "read" }
     group_id
 } {
-    THIS PROC SHOULD GO AWAY! All calls to group::permission_p can be 
-    replaced with party::permission_p
+    THIS PROC SHOULD GO AWAY! All calls to group::permission_p can be
+    replaced with permission::permission_p
 
     Wrapper for ad_permission to allow us to bypass having to
     specify the read privilege
@@ -354,10 +354,10 @@ ad_proc -deprecated -public group::permission_p {
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 10/2000
 
-    @see party::permission_p
+    @see permission::permission_p
 
 } {
-    return [party::permission_p -user_id $user_id -privilege $privilege $group_id]
+    return [permission::permission_p -party_id $user_id -privilege $privilege -object_id $group_id]
 }
 
 ad_proc -public group::join_policy {
@@ -392,16 +392,16 @@ ad_proc -public group::update {
     {-array:required}
 } {
     Updates a group.
-    
+
     @param group_id The ID of the group to update.
 
     @param array    Name of array containing the columns to update.
-                    Valid columns are group_name, join_policy. 
+                    Valid columns are group_name, join_policy.
                     Valid join_policy values are 'open', 'closed', 'needs approval'.
 
 } {
     upvar $array row
-    
+
     # Construct clauses for the update statement
     set columns { group_name join_policy description }
     set set_clauses [list]
@@ -459,7 +459,7 @@ ad_proc -public group::get_member_state_pretty {
     # We can't use spaces in message keys, so replace it with a "_".
     #
     regsub -all " " $member_state "_" member_state
-    
+
     switch -- $component {
         pretty_name {
             set message #acs-kernel.member_state_$member_state#
@@ -475,7 +475,7 @@ ad_proc -public group::get_member_state_pretty {
                 set site_name [lang::util::localize $site_name $locale]
             }
             if {$url eq ""} { error "url must be specified and must be non-empty" }
-            set message #acs-kernel.member_state_account_mail_$member_state#                            
+            set message #acs-kernel.member_state_account_mail_$member_state#
         }
         community_mail {
             if {$community_name eq ""} { error "community_name must be specified and must be non-empty" }
@@ -490,7 +490,7 @@ ad_proc -public group::get_member_state_pretty {
             error "invalid component '$component'"
         }
     }
-    
+
     return [lang::util::localize $message $locale]
 }
 
@@ -509,9 +509,9 @@ ad_proc -public group::default_member_state {
     { -create_p false }
     -no_complain:boolean
 } {
-    If user has 'create' privilege on group_id OR 
-       the group's join policy is 'open', 
-    then default_member_state will return "approved".  
+    If user has 'create' privilege on group_id OR
+       the group's join policy is 'open',
+    then default_member_state will return "approved".
 
     If the group's join policy is 'needs approval'
     then default_member_state will return 'needs approval'.
@@ -522,11 +522,11 @@ ad_proc -public group::default_member_state {
 
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 10/2000
-    
-    @param join_policy - the group's join policy 
+
+    @param join_policy - the group's join policy
                          (one of 'open', 'closed', or 'needs approval')
 
-    @param create_p - 1 if the user has 'create' privilege on the group, 
+    @param create_p - 1 if the user has 'create' privilege on the group,
                       0 otherwise.
 } {
     if {$create_p || $join_policy eq "open"} {
@@ -584,7 +584,7 @@ ad_proc -public group::member_p {
 	    return 0
 	}
     }
-    
+
     return [util_memoize [list group::member_p_not_cached -group_id $group_id -user_id $user_id -cascade_p $cascade_p]]
 }
 
@@ -612,7 +612,7 @@ ad_proc -private group::member_p_not_cached {
 
     set cascade [db_boolean $cascade_p]
     set result [db_string user_is_member {} -default "f"]
-    
+
     return [template::util::is_true $result]
 }
 
@@ -622,7 +622,7 @@ ad_proc -public group::party_member_p {
     { -group_name "" }
     { -subsite_id "" }
 } {
-    
+
     Return 1 if the party is an approved member of the group
     specified.
 
@@ -636,7 +636,7 @@ ad_proc -public group::party_member_p {
 
     <p>The party must have specifically been granted
     membership on the group in question.</p>
-    
+
 } {
     if { $group_name ne "" } {
         if {$group_id ne ""} {
@@ -705,7 +705,7 @@ ad_proc -public group::admin_p {
                           -rel_type "admin_rel"]
 
     # The party is an admin if the call above returned something non-empty
-    return [expr {$admin_rel_id ne ""}] 
+    return [expr {$admin_rel_id ne ""}]
 }
 
 
@@ -762,10 +762,10 @@ ad_proc -public group::remove_member {
     {-user_id:required}
 } {
     Removes a user from a group. No permission checking.
-} {       
+} {
 
     # Find all acs_rels between this group and this user, which are membership_rels or descendants thereof (admin_rels, for example)
-    set rel_id_list [db_list select_rel_ids { 
+    set rel_id_list [db_list select_rel_ids {
         select r.rel_id
         from   acs_rels r,
                membership_rels mr
@@ -773,7 +773,7 @@ ad_proc -public group::remove_member {
         and    r.object_id_one = :group_id
         and    r.object_id_two = :user_id
     }]
-    
+
     db_transaction {
         foreach rel_id $rel_id_list {
             relation_remove $rel_id
@@ -795,7 +795,7 @@ ad_proc -public group::title {
 } {
     if {$group_name ne ""} {
 	set group_id [group::get_id -group_name $group_name]
-    } 
+    }
 
     if {$group_id ne ""} {
 	return [util_memoize [list group::title_not_cached -group_id $group_id]]
