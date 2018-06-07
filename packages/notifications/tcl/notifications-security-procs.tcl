@@ -90,7 +90,7 @@ namespace eval notification::security {
 
         @see permission::require_permission
     } {
-        permission::require_permission -party_id $user_id -object_id $object_id -privilege "admin"
+        permission::require_permission -party_id $user_id -object_id $request_id -privilege "admin"
     }
 }
 
