@@ -26,14 +26,14 @@ ad_page_contract {
     possible_member_states:onelist
 } -validate {
     permission_p -requires {rel_id:notnull} {
-	if { ![relation_permission_p $rel_id] } {
-	    ad_complain "The relation either does not exist or you do not have permission to view it"
-	}
+        if { ![permission::permission_p -object_id $rel_id -privilege "read"] } {
+            ad_complain "The relation either does not exist or you do not have permission to view it"
+        }
     }
     relation_in_scope_p -requires {rel_id:notnull permission_p} {
-	if { ![application_group::contains_relation_p -rel_id $rel_id]} {
-	    ad_complain "The relation either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_relation_p -rel_id $rel_id]} {
+            ad_complain "The relation either does not exist or does not belong to this subsite."
+        }
     }
 }
 
@@ -45,7 +45,7 @@ set context [list "One relation"]
 
 set subsite_group_id [application_group::group_id_from_package_id]
 
-if { ![db_0or1row select_rel_info {} -column_array rel] 
+if { ![db_0or1row select_rel_info {} -column_array rel]
 } {
     ad_return_error "Error" "Relation #rel_id does not exist"
     ad_script_abort
@@ -62,10 +62,10 @@ set rel_type $rel(rel_type)
 set attr_list [attribute::array_for_type -start_with "relationship" attr_props enum_values $rel_type]
 
 attribute::multirow \
-	-start_with relationship \
-	-datasource_name attributes \
-	-object_type $rel_type \
-	$rel_id
+    -start_with relationship \
+    -datasource_name attributes \
+    -object_type $rel_type \
+    $rel_id
 
 # Membership relations have a member_state.  Composition relations don't.
 # This query will return null if the relation is not a membership relation.
@@ -85,10 +85,10 @@ if {$object_two_read_p} {
     set object_two_write_p [permission::permission_p -object_id $rel(object_id_two) -privilege "write"]
 
     attribute::multirow \
-	    -start_with party \
-	    -datasource_name object_two_attributes \
-	    -object_type $rel(object_type_two) \
-	    $rel(object_id_two)
+        -start_with party \
+        -datasource_name object_two_attributes \
+        -object_type $rel(object_type_two) \
+        $rel(object_id_two)
 }
 
 ad_return_template

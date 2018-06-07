@@ -14,14 +14,14 @@ ad_page_contract {
     {return_url:localurl ""}
 } -validate {
     permission_p -requires {rel_id:notnull} {
-	if { ![relation_permission_p -privilege admin $rel_id] } {
-	    ad_complain "The relation either does not exist or you do not have permission to administer it"
-	}
+        if { ![permission::permission_p -object_id $rel_id -privilege "admin"] } {
+            ad_complain "The relation either does not exist or you do not have permission to administer it"
+        }
     }
     relation_in_scope_p -requires {rel_id:notnull permission_p} {
-	if { ![application_group::contains_relation_p -rel_id $rel_id]} {
-	    ad_complain "The relation either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_relation_p -rel_id $rel_id]} {
+            ad_complain "The relation either does not exist or does not belong to this subsite."
+        }
     }
 }
 
