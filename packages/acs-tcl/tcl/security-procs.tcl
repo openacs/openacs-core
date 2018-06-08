@@ -213,11 +213,17 @@ ad_proc -private sec_handler {} {
         # $session_expr = PreviousSessionIssue + SessionTimeout
         if { $session_expr - [sec_session_renew] < [ns_time] } {
 
-            # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
-            # if only the keep requesting pages frequently enough, but the alternative was that
-            # the situation where LoginTimeout = 0 (infinte) and the user unchecks the "Remember me" checkbox
-            # would cause users' sessions to expire as soon as the session needed to be renewed
-            sec_generate_session_id_cookie
+            # # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
+            # # if only the keep requesting pages frequently enough, but the alternative was that
+            # # the situation where LoginTimeout = 0 (infinte) and the user unchecks the "Remember me" checkbox
+            # # would cause users' sessions to expire as soon as the session needed to be renewed
+            # sec_generate_session_id_cookie
+            
+            # apisano 2018-06-08: as discussed in
+            # https://openacs.org/forums/message-view?message_id=1691183#msg_1691183,
+            # this would break sec_change_user_auth_token as a mean to
+            # invalidate user login...
+            sec_login_handler
         }
 
         #
