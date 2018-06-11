@@ -937,9 +937,9 @@ ad_proc -private publish::write_multiple_blobs {
 
   Write the content of some revision to multiple publishing roots.
 
-  @param db           A valid database handle
   @param url          Relative URL of the file to write
   @param revision_id  Write the blob for this revision
+  @param root_path    Use this root path (default empty)
 
   @see publish::get_publish_roots
   @see publish::write_multiple_files
@@ -971,8 +971,9 @@ ad_proc -private publish::write_multiple_files { url text {root_path ""}} {
 
   Write a relative URL to the multiple publishing roots.
 
-  @param url   Relative URL of the file to write
-  @param text  A string of text to be written to the URL
+  @param url        Relative URL of the file to write
+  @param text       A string of text to be written to the URL
+  @param root_path  Use this root path (default empty)
 
   @see template::util::write_file
   @see publish::get_publish_roots
