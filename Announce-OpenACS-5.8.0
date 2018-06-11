@@ -164,10 +164,9 @@ Bug Fixes:
             tsearch errors
 
 	* misc:
-          - removed duplicate files that caused troubles under Mac OS
-            X. For some reason, several files existed with uppercase
+          - removed duplicate files that caused troubles under macOS. For some reason, several files existed with uppercase
             and lowercase names, where the latter was a previous
-            convention in Xinha. cvs on Mac OS X reported "cvs
+            convention in Xinha. cvs on macOS reported "cvs
             update: move away...; it is in the way" even on new
             checkouts.
           - convert ppt now via catppt to text, part of catdoc 
