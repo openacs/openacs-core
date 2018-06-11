@@ -35,7 +35,8 @@ You have to implement these operations for your object type by
 writing concrete functions that follow the specification. For
 example, the implementation of <code>datasource</code> for the
 object type <code>note</code>, looks like this:
-<pre><code>ad_proc notes__datasource {
+<pre><code>
+ad_proc notes__datasource {
     object_id
 } {
     \@author Neophytos Demetriou
@@ -60,7 +61,8 @@ system know of your implementation. This is accomplished by an SQL
 file which associates the implementation with a contract name. The
 implementation of <code>FtsContentProvider</code> for the object
 type <code>note</code> looks like:
-<pre><code>select acs_sc_impl__new(
+<pre><code>
+select acs_sc_impl__new(
            'FtsContentProvider',                -- impl_contract_name
            'note',                              -- impl_name
            'notes'                              -- impl_owner_name
@@ -73,7 +75,8 @@ to create associations between the operations of
 <code>FtsContentProvider</code> and your concrete functions.
 Here&#39;s how an association between an operation and a concrete
 function looks like:
-<pre><code>select acs_sc_impl_alias__new(
+<pre><code>
+select acs_sc_impl_alias__new(
            'FtsContentProvider',                -- impl_contract_name
            'note',                              -- impl_name
            'datasource',                        -- impl_operation_name
@@ -93,7 +96,8 @@ search_observer_queue of new content items, updates or deletions.
 We do this by adding triggers on the table that stores the content
 items of your object type. Here&#39;s how that part looks like for
 <code>note</code>.
-<pre><code>create function notes__itrg ()
+<pre><code>
+create function notes__itrg ()
 returns opaque as $$
 begin
     perform search_observer__enqueue(new.note_id,'INSERT');
