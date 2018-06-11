@@ -1020,12 +1020,12 @@ ad_proc -public template::url { command args } {
     return $result
 }
 
-# Generic caching
+# Generic template caching
 
 nsv_set __template_cache_value . .
 nsv_set __template_cache_timeout . .
 
-ad_proc -public cache { command cache_key args } {
+ad_proc -public template::cache { command cache_key args } {
     Generic Caching
 } {
 
@@ -1082,7 +1082,7 @@ ad_proc -public cache { command cache_key args } {
                 set names [ns_cache names template_cache]
                 foreach name $names {
                     if { [string match $cache_key $name] } {
-                        ns_log debug "cache: FLUSHING CACHE: $name"
+                        ns_log debug "template::cache: FLUSHING CACHE: $name"
                         ns_cache flush template_cache $name
                     }
                 }
@@ -1109,7 +1109,7 @@ ad_proc -public cache { command cache_key args } {
         }
 
         default {
-            error "Invalid command option to cache: must be get or set."
+            error "Invalid command option to template::cache: must be get or set."
         }
 
     }

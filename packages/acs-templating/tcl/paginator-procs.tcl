@@ -100,10 +100,10 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     template::util::get_opts $args
 
     set cache_key	$name:$query
-    set row_ids [cache get $cache_key:row_ids]
+    set row_ids [template::cache get $cache_key:row_ids]
 
     # full number of rows returned by original paginator query
-    set full_row_count [cache get $cache_key:full_row_count]
+    set full_row_count [template::cache get $cache_key:full_row_count]
 
     #
     # GN: In the following line, we had instead of [::cache exists
@@ -117,7 +117,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     # recommended. Unfortunately, several places in OpenACS have this
     # problem.
     #
-    if { ($row_ids eq {} && ![::cache exists $cache_key])
+    if { ($row_ids eq {} && ![template::cache exists $cache_key])
          || ([info exists opts(flush_p)] && $opts(flush_p) == "t")
     } {
         if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
@@ -170,7 +170,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     } else {
         set opts(row_ids) $row_ids
         set opts(full_row_count) $full_row_count
-        set opts(context_ids) [cache get $cache_key:context_ids]
+        set opts(context_ids) [template::cache get $cache_key:context_ids]
     }
 
     set opts(row_count) [llength $opts(row_ids)]
@@ -269,11 +269,11 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
         }
 
         set properties(context_ids) $context_ids
-        cache set $name:$query:context_ids $context_ids $properties(timeout)
+        template::cache set $name:$query:context_ids $context_ids $properties(timeout)
 
         set properties(row_ids) $row_ids
 
-        cache set $name:$query:row_ids $row_ids $properties(timeout)
+        template::cache set $name:$query:row_ids $row_ids $properties(timeout)
 
     } else {
 
@@ -308,13 +308,13 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
         "
 
         set properties(row_ids) $ids
-        cache set $name:$query:row_ids $ids $properties(timeout)
+        template::cache set $name:$query:row_ids $ids $properties(timeout)
     }
 
     # Get full number of rows retrieved by original paginator query
     set full_row_count [uplevel 3 [list db_string query [db_map count_query]]]
     set properties(full_row_count) $full_row_count
-    cache set $name:$query:full_row_count $full_row_count $properties(timeout)
+    template::cache set $name:$query:full_row_count $full_row_count $properties(timeout)
 }
 
 ad_proc -public template::paginator::get_page { name rownum } {
@@ -841,8 +841,8 @@ ad_proc -public template::paginator::get_query { name id_column page } {
 ad_proc -public template::paginator::reset { name query } {
     Resets the cache for a query.
 } {
-    cache flush $name:$query:context_ids
-    cache flush $name:$query:row_ids
+    template::cache flush $name:$query:context_ids
+    template::cache flush $name:$query:row_ids
 }
 
 ad_proc -private template::paginator::get_reference {} {
