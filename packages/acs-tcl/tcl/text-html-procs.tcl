@@ -1258,7 +1258,7 @@ ad_proc ad_parse_html_attributes_upvar {
                     continue
                 }
                 
-                # 3: check for any attribute that could contain a url
+                # 3: check for any attribute that could contain a URL
                 # whether this is acceptable
                 switch -- $att {
                     "href" - "src" - "content" - "action" {                        
@@ -1293,7 +1293,7 @@ ad_proc ad_parse_html_attributes_upvar {
                             }
                         }
 
-                        # regexp is for stuff like 'javascript:' pseudoprotocol, that is not really a url
+                        # regexp is for stuff like 'javascript:' pseudoprotocol, that is not really a URL
                         if {$prot ne "" || [regexp {^(\w+):.*$} $url match prot]} {
                             # check if protocol is allowed
                             if {[info exists unallowed_protocol($prot)] ||

@@ -56,7 +56,7 @@ ad_proc -public util_memoize {script {max_age ""}} {
     if {$max_age ne ""} {
         set max_age "-expires $max_age"
     }
-    ns_cache_eval {*}$max_age  -- util_memoize $script {*}$script
+    ns_cache_eval {*}$max_age -- util_memoize $script {*}$script
 }
 
 # In case, the definition of the function has cached something,

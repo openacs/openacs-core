@@ -717,7 +717,7 @@ ad_proc -public install::xml::action::ats-page { node } {
 }
 
 ad_proc -public install::xml::action::location { node } {
-    Creates a url location object.
+    Creates a URL location object.
 } {
     set id [apm_attribute_value -default "" $node id]
     set parent [apm_attribute_value -default "" $node parent]

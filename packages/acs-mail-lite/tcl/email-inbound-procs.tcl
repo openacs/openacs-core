@@ -2040,9 +2040,9 @@ ad_proc -private acs_mail_lite::inbound_email_context {
 
     package_id, party_id, object_id, other, datetime_cs 
 
-    datetime_cs is the time in seconds since tcl epoch.
+    datetime_cs is the time in seconds since Tcl epoch.
 
-    other can be most any data represented in sql text.
+    other can be most any data represented in SQL text.
 
     By accessing all email headers, various scenarios of OpenACS sender
     and replies can be checked to increase likelihood of retrieving

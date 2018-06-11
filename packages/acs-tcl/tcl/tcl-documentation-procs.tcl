@@ -1662,7 +1662,7 @@ ad_page_contract_filter integer { name value } {
     if { [regexp {^(-)(.*)$} $value match sign rest] } {
         # Trim the value for any leading zeros
         set value $sign[util::trim_leading_zeros $rest]
-        # the string might be still to large, so check again...
+        # the string might be still too large, so check again...
         if {[string is integer -strict $value]} {
             return 1
         }

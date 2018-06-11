@@ -7,12 +7,12 @@ ad_library {
 
 if {$::tcl_version eq "8.5"} {
     #
-    # In Tcl 8.5, "::try" was not yet a builtin of Tcl
+    # In Tcl 8.5, "::try" was not yet a built-in of Tcl
     #
     package require try 
 }
 if {[info commands "::try"] eq ""} {
-    error "This version of OpenACS requires the ::try command (builtin in 8.6+, package for 8.5"
+    error "This version of OpenACS requires the ::try command (built-in in 8.6+, package for 8.5"
 }
 
 ad_proc -private ad_raise {exception {value ""}} {
@@ -55,7 +55,7 @@ if {$::tcl_version >= 8.6} {
         
         Generic code for OpenACS to handle exceptions and traps based on
         Tcl's primitives. This implementation is a slight generalization
-        of the Tcl 8.6 builtin ::try, which handles ad_script_aborts
+        of the Tcl 8.6 built-in ::try, which handles ad_script_aborts
         automatically.
 
         The command "ad_try" should replace the various exception handling
@@ -87,7 +87,7 @@ if {$::tcl_version >= 8.6} {
                 }]
         }
         #
-        # Call the Tcl 8.6 builtin/compliant ::try in the scope of the caller
+        # Call the Tcl 8.6 built-in/compliant ::try in the scope of the caller
         #
         #puts stderr EXEC=[list ::try $body {*}$extraTraps {*}$args]
         
@@ -105,7 +105,7 @@ if {$::tcl_version >= 8.6} {
         
         Generic code for OpenACS to handle exceptions and traps based on
         Tcl's primitives. This implementation is a slight generalization
-        of the Tcl 8.6 builtin ::try, which handles ad_script_aborts
+        of the Tcl 8.6 built-in ::try, which handles ad_script_aborts
         automatically.
 
         The command "ad_try" should replace the various exception handling
@@ -137,7 +137,7 @@ if {$::tcl_version >= 8.6} {
                 }]
         }
         #
-        # Call the Tcl 8.6 builtin/compliant ::try in the scope of the caller
+        # Call the Tcl 8.6 built-in/compliant ::try in the scope of the caller
         #
         #puts stderr EXEC=[list ::try $body {*}$extraTraps {*}$args]
         

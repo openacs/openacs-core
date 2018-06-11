@@ -900,7 +900,7 @@ ad_proc -public site_node::closest_ancestor_package {
 
     @author Peter Marklund
 } {
-    # Make sure we have a url to work with
+    # Make sure we have a URL to work with
     if { $url eq "" } {
         if { $node_id eq "" } {
             set url "/"

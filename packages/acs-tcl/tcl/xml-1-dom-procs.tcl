@@ -1973,8 +1973,8 @@ proc GetField var {
 #	Return the minimum of two numeric values
 #
 # Arguments:
-#	a	a value
-#	b	another value
+#	a some value
+#	b another value
 #
 # Results:
 #	Returns the value which is lower than the other.
@@ -1988,8 +1988,8 @@ proc dom::Min {a b} {
 #	Return the maximum of two numeric values
 #
 # Arguments:
-#	a	a value
-#	b	another value
+#	a some value
+#	b another value
 #
 # Results:
 #	Returns the value which is greater than the other.

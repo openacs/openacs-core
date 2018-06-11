@@ -969,7 +969,7 @@ ad_proc export_ns_set_vars {
 } {
     Returns all the params in an ns_set with the exception of those in
     exclusion_list. If no setid is provide, ns_getform is used. If
-    format = url, a url parameter string will be returned. If format = form, a
+    format = url, a URL parameter string will be returned. If format = form, a
     block of hidden form fragments will be returned.  
 
     export_vars is now the preferred interface.
@@ -1528,7 +1528,7 @@ ad_proc -public ad_returnredirect {
     the prepended location part is constructed by looking at the HTTP 1.1 Host header.
     </li>
     <li>
-    If an URL relative to the current directory is supplied (e.g. foo.tcl)
+    If a URL relative to the current directory is supplied (e.g. foo.tcl)
     it prepends location and directory.
     </li>
     </ul>

@@ -16,8 +16,8 @@ site_node::init_cache
 #
 if {[info commands ns_urlspace] ne "" && [info commands ::xo::db::sql::site_node] ne ""} {
     #
-    # Prefetch paths, which should not be mapped to the base node /,
-    # since these have to to through the classical mapping, where we
+    # Prefetch paths, which should not be mapped to the base node "/",
+    # since these have to go through the classical mapping, where we
     # need for every possible path a single cache entry. By mapping eg
     # "/resources/*" to the sitenode of "/", we can remove this redundancy.
     #
