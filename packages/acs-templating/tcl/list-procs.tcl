@@ -3401,7 +3401,7 @@ ad_proc -private template::list::prepare_filter_form {
                 set ad_form_element [list "[lindex $ad_form_element 0],multiple"]
             }
             foreach {var value} [array get form_element] {
-                if {[lsearch {name widget datatype} $var] < 0} {
+                if {$var ni {name widget datatype}} {
                     lappend ad_form_element [list $var $value]
                 }
             }
