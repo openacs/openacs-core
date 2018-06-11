@@ -147,7 +147,7 @@ ad_proc -public acs_sc::impl::get_id {
     a service contract,
     if the contract is not specified.
 } {
-    if {($contract ne ""} {
+    if {$contract ne ""} {
         return [db_string select_impl_id_with_contract {}]
     } else {
         return [db_string select_impl_id {}]
