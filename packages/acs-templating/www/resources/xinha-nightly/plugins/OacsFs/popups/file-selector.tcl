@@ -246,9 +246,9 @@ db_multirow -extend {
   }
   if {$title eq ""} {set title $name}
 
-  set file_upload_name [fs::remove_special_file_system_characters \
-			    -string $file_upload_name]
-  
+  set file_upload_name [ad_sanitize_filename \
+                            -tolower \
+                            $file_upload_name]
   if { $content_size ne "" } {
     incr content_size_total $content_size
   }
