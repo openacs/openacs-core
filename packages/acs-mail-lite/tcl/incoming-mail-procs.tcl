@@ -293,7 +293,7 @@ namespace eval acs_mail_lite {
 
 	@return 1 if this is actually an autoreply
 
-    @See acs_mail_lite::email_type
+        @see acs_mail_lite::email_type
     } {
 	set autoreply_p 0
 	if {$subject ne ""} {

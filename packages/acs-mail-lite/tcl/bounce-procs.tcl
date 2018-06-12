@@ -88,10 +88,10 @@ namespace eval acs_mail_lite {
     } {
         This takes a reply address, checks it for consistency,
         and returns a list of user_id, package_id and bounce_signature found
+        
         @option bounce_address bounce address to be checked
         @return tcl-list of user_id package_id bounce_signature
-
-        @See acs_mail_lite::inbound_email_context
+        @see acs_mail_lite::inbound_email_context
     } {
         set regexp_str "\[[bounce_prefix]\]-(\[0-9\]+)-(\[^-\]+)-(\[0-9\]*)\@"
         if {![regexp $regexp_str $bounce_address all user_id signature package_id]} {
