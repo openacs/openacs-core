@@ -512,8 +512,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
         set per_cycle_s_override [nsv_get acs_mail_lite \
                                       si_dur_per_cycle_s_override]
         set si_quit_cs \
-            [expr { $cycle_start_cs + int( $si_dur_per_cycle_s \
-                                               * .8 ) } ]
+            [expr { $cycle_start_cs + int( $si_dur_per_cycle_s * .8 )}]
         if { $per_cycle_s_override ne "" } {
             set si_quit_cs [expr { $si_quit_cs - $per_cycle_s_override } ]
             # deplayed
@@ -527,10 +526,10 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
         # pause is in seconds
         set pause_s 10
         set pause_ms [expr { $pause_s * 1000 } ]
-        while { $active_cs eq $cycle_start_cs \
-                    && [clock seconds] < $si_quit_cs \
-                    && $concurrent_ct > 1 } {
-
+        while { $active_cs eq $cycle_start_cs 
+                && [clock seconds] < $si_quit_cs 
+                && $concurrent_ct > 1
+            } {
             incr per_cycle_s_override $pause_s
             nsv_set acs_mail_lite si_dur_per_cycle_s_override \
                 $per_cycle_s_override

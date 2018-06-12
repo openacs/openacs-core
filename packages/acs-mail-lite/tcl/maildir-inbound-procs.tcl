@@ -42,8 +42,9 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
         # pause is in seconds
         set pause_s 10
         set pause_ms [expr { $pause_s * 1000 } ]
-        while { $active_cs eq $cycle_start_cs \
-                    && $concurrent_ct > 1 } {
+        while { $active_cs eq $cycle_start_cs 
+                && $concurrent_ct > 1
+            } {
             set sj_actives_list [nsv_get acs_mail_lite sj_actives_list]
             set active_cs [lindex $sj_actives_list end]
             set concurrent_ct [llength $sj_actives_list]
@@ -136,8 +137,7 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                         }
                         
                         set id [acs_mail_lite::inbound_queue_insert \
-                                    -parts_arr_name parts_arr 
-                                \
+                                    -parts_arr_name parts_arr \
                                     -headers_arr_name hdrs_arr \
                                     -error_p $error_p ]
                         ns_log Notice "acs_mail_lite::maildir_check_incoming \
