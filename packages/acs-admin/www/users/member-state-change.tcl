@@ -27,7 +27,7 @@ ad_page_contract {
 if {![db_0or1row get_states {
     select member_state as member_state_old,
            email_verified_p as email_verified_p_old
-    from users where user_id = :user_id
+    from cc_users where user_id = :user_id
 }]} {
     # The user is not in there
     ad_return_complaint 1 "Invalid User: the user is not in the system"
