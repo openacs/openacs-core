@@ -1,5 +1,7 @@
 ad_page_contract {
-    @Author Nis Jorgensen
+    Interactive shell for executing commands in OpenACS
+
+    @author Nis Jorgensen
 } {
     {script:optional,allhtml {}}
 } -properties {
