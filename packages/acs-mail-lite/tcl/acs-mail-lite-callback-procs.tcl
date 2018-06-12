@@ -100,6 +100,17 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     ns_log Debug "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recipient $to"
 
     if { ![info exists email(aml_user_id)] } {
+        #
+        #  GN: acs_mail_lite::parse_bounce_address is deprecated.
+        #
+        #    Should
+        #    we use here acs_mail_lite::inbound_email_context, or should
+        #    acs_mail_lite::incoming_email (and load_mails) be also deprecated
+        #    and only
+        #      - acs_mail_lite::maildir_check_incoming and
+        #      - acs_mail_lite::imap_check_incoming
+        #    should be called?
+        #
         # Traditional call parses here. Queue case is pre-parsed.
         lassign [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
     } else {
