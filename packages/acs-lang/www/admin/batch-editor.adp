@@ -50,7 +50,7 @@
         <multiple name="pagination">
           <tr>
             <group column="group">    
-              <if @pagination.selected;literal@ true">
+              <if @pagination.selected;literal@ true>
                 <td class="high"><strong>@pagination.text@</strong>
               </if>
               <else>
