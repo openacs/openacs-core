@@ -1684,7 +1684,7 @@ function showCalendar(id,dateformat) {
 }
 
 // same function as above except you can set a defaultdate which
-// the calendar will go to immediately when when you click on it
+// the calendar will go to immediately when you click on it
 function showCalendarWithDefault(id,defaultdate,dateformat) {
   var el = document.getElementById(id);
   if (calendar != null) {
