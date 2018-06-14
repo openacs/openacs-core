@@ -126,7 +126,13 @@ ad_proc -private acs_sc_get_alias {
 
     if {![set exists_p]} {return ""}
     
-    db_0or1row get_alias {}
+    db_0or1row get_alias {
+        select impl_alias, impl_pl
+          from acs_sc_impl_aliases
+         where impl_contract_name  = :contract
+           and impl_operation_name = :operation
+           and impl_name           = :impl
+    }
 
     return [list $impl_alias $impl_pl]
 
@@ -160,7 +166,17 @@ ad_proc -private acs_sc_proc {
 	error "ACS-SC: Cannot find alias for $proc_name"
     }
 
-    if {![db_0or1row get_operation_definition {}]} { 
+    if {![db_0or1row get_operation_definition {
+	select 
+	    operation_desc,
+            coalesce(operation_iscachable_p,'f') as operation_iscachable_p,
+	    operation_nargs,
+	    operation_inputtype_id,
+	    operation_outputtype_id
+	from acs_sc_operations
+	where contract_name = :contract
+	and operation_name = :operation        
+    }]} { 
         ns_log warning "ACS-SC: operation definition not found for contract $contract operation $operation"
         return 0
     }
