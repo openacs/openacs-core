@@ -27,7 +27,19 @@ ad_form -name user_search -cancel_url . -form {
         {result_datatype integer}
         {label {Search for user}}
         {help_text {Type part of the name or email of the user you would like to add}}
-        {search_query {[db_map user_search]}}
+        {search_query {
+            select first_names || ' ' || last_name || ' (' || email || ')' as name, user_id
+              from cc_users u
+             where upper(coalesce(first_names || ' ', '') ||
+                   coalesce(last_name || ' ', '') ||
+                   email || ' ' ||
+                   coalesce(screen_name, '')) like upper('%'||:value||'%')
+               and not exists (select 1 from acs_rels
+                                where object_id_one = $group_id
+                                  and object_id_two = u.user_id
+                                  and rel_type = 'membership_rel')
+            order  by name            
+        }}
     }
 }
 
