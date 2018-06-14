@@ -1,7 +1,20 @@
 <?xml version="1.0"?>
 <queryset>
  
- 
+<fullquery name="apm_dependency_provided_p.get_service_versions">
+      <querytext>
+      
+	select service_version
+	from apm_package_dependencies d, apm_package_types a, apm_package_versions v
+	where d.dependency_type = 'provides'
+	and d.version_id = v.version_id
+	and d.service_uri = :dependency_uri
+	and v.installed_p = 't'
+	and a.package_key = v.package_key
+    
+      </querytext>
+</fullquery>
+  
 <fullquery name="apm_package_deinstall.apm_uninstall_record">      
       <querytext>
       
