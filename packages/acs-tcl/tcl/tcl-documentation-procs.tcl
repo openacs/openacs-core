@@ -1196,7 +1196,7 @@ ad_proc -public ad_page_contract {
                     set html [ad_parse_template \
                                   -params [list complaints [list context $::ad_page_contract_context] \
                                                [list prev_url [get_referrer]] \
-                                              ] "/packages/acs-tcl/lib/complain"]
+                                              ] [template::themed_template "/packages/acs-tcl/lib/complain"]]
                 } on error {errorMsg} {
                     set errorCode $::errorCode
                     #
