@@ -387,9 +387,10 @@ ad_proc -public subsite::util::sub_type_exists_p {
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 2000-02-07
 } {
-
-    return [db_string sub_type_exists_p {}]
-
+    return [db_string sub_type_exists_p {
+        select exists (select 1 from acs_object_types 
+                              where supertype = :object_type) from dual
+    }]
 }
 
 
@@ -1122,8 +1123,15 @@ ad_proc -public subsite::delete_subsite_theme {
 ad_proc -public subsite::get_application_options {} {
     Gets options list for applications to install
 } {
-    set subsite_package_keys [join '[subsite::package_keys]' ","]
-    return [db_list_of_lists package_types {}]
+    return [db_list_of_lists package_types {
+        select pretty_name, package_key
+        from   apm_package_types t
+        where  not (singleton_p and exists (select 1 from apm_packages
+                                            where package_key = t.package_key))
+        and    implements_subsite_p = 'f'
+        and    package_type = 'apm_application'
+        order  by upper(pretty_name)
+    }]
 }
 
 ad_proc -private subsite::assert_user_may_add_member {} {

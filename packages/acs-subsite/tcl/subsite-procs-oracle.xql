@@ -33,21 +33,6 @@
 </fullquery>
 
  
-<fullquery name="subsite::util::sub_type_exists_p.sub_type_exists_p">      
-      <querytext>
-      
-	select case 
-                 when exists (select 1 from acs_object_types 
-                              where supertype = :object_type)
-                 then 1 
-                 else 0 
-               end
-        from dual
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="subsite::util::object_type_path_list.select_object_type_path">      
       <querytext>
       
@@ -59,20 +44,6 @@
       </querytext>
 </fullquery>
 
-    <fullquery name="subsite::get_application_options.package_types">
-        <querytext>
-
-    select pretty_name, package_key
-    from   apm_package_types
-    where  not (apm_package.singleton_p(package_key) = 1 and
-                apm_package.num_instances(package_key) >= 1)
-    and    implements_subsite_p = 'f'
-    and    package_type = 'apm_application'
-    order  by upper(pretty_name)
-
-        </querytext>
-    </fullquery>
- 
     <partialquery name="subsite::get_url.orderby">
         <querytext>
         and rownum < 2
