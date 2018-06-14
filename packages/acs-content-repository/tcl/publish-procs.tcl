@@ -1008,7 +1008,7 @@ ad_proc -public publish::write_content { revision_id args } {
     The id of the revision to write
 
   @option item_id   {default The item_id of the revision}
-    Specifies the item  to which this revision belongs (mereley
+    Specifies the item  to which this revision belongs (merely
     for optimization purposes)
 
   @option text

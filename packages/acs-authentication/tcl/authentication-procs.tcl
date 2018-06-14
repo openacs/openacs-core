@@ -325,7 +325,7 @@ ad_proc -public auth::authenticate {
 
     #
     # Clear out remote account_status and account_message
-    # and iinitialize it with values that we can relay on later.
+    # and initialize it with values that we can relay on later.
     #
     array set result {account_url "" account_status "" account_message ""  user_id ""}
 
@@ -1773,7 +1773,7 @@ ad_proc -private auth::authentication::Authenticate {
 
     @param authority_id The ID of the authority to ask to verify the user.
     @param username Username of the user.
-    @param passowrd The password as the user entered it.
+    @param password The password as the user entered it.
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "auth_impl_id"]
 
@@ -2003,7 +2003,7 @@ ad_proc -public ::auth::login_attempts::reset {
 }
 
 ad_proc -public ::auth::login_attempts::reset_all {}  {
-    Flush all recored failed login attempts
+    Flush all recorded failed login attempts
 } {
     ::auth::login_attempts::flush_all
 }
