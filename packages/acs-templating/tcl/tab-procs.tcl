@@ -202,7 +202,7 @@ template_tag tabstrip { chunk params } {
 
   set level [template::adp_level]
 
-  set id [template::get_attribute formtemplate $params id]
+  set id [template::get_attribute tabstrip $params id]
 
   upvar #$level $id:properties form_properties
 

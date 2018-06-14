@@ -3120,7 +3120,7 @@ template_tag listfilters { chunk params } {
 
 template_tag listfilters-form { chunk params } {
     set level [template::adp_level]
-    set list_name [template::get_attribute listfilters $params name]
+    set list_name [template::get_attribute listfilters-form $params name]
 
     set style [ns_set iget $params style]
 

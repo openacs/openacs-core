@@ -54,7 +54,7 @@ template_tag property { chunk params } {
 template_tag master { params } {
 
   set src [ns_set iget $params src]
-  set slave_properties_p [template::get_attribute multiple $params slave-properties-p 0]
+  set slave_properties_p [template::get_attribute master $params slave-properties-p 0]
 
   if {[template::util::is_true $slave_properties_p]} {
       template::adp_append_code {
@@ -512,7 +512,7 @@ template_tag formwidget { params } {
 
 template_tag formhelp { params } {
 
-  set id [template::get_attribute formwidget $params id]
+  set id [template::get_attribute formhelp $params id]
 
   # get any additional HTML attributes specified by the designer
   set tag_attributes [template::util::set_to_list $params id]
@@ -525,7 +525,7 @@ template_tag formhelp { params } {
 
 template_tag formerror { chunk params } {
 
-  set id [template::get_attribute formwidget $params id]
+  set id [template::get_attribute formerror $params id]
   set type [ns_set get $params type]
 
   if {$type eq {}} {
@@ -555,7 +555,7 @@ template_tag formerror { chunk params } {
 
 template_tag formgroup { chunk params } {
 
-  set id [template::get_attribute formwidget $params id]
+  set id [template::get_attribute formgroup $params id]
 
   # get any additional HTML attributes specified by the designer
   set tag_attributes [template::util::set_to_list $params id]
