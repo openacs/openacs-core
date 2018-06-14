@@ -41,13 +41,17 @@ set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational s
 
 set export_vars [export_vars -form {group_id rel_type return_url}]
 
-db_1row select_basic_info {}
+set role_pretty_plural [db_string get_pretty_plural {
+    select coalesce(pretty_plural, 'Elements') from acs_rel_roles
+    where role = (select role_two from acs_rel_types where rel_type = :rel_type)}]
+
+set group_name [group::get_element \
+                    -group_id $group_id \
+                    -element group_name]
 
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
-set role_pretty_plural [lang::util::localize $role_pretty_plural]    
-
-ad_return_template
+set role_pretty_plural [lang::util::localize $role_pretty_plural]
 
 # Local variables:
 #    mode: tcl
