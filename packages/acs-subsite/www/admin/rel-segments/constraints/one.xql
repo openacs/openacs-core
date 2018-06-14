@@ -17,7 +17,7 @@
            s2.segment_name as req_segment_name, 
            s2.rel_type as req_rel_type,
            (select group_name from groups
-             where group_id = s2.group_id) as group_name,           
+             where group_id = s2.group_id) as req_group_name
       from application_group_segments s,
            application_group_segments s2,
            rel_constraints c
