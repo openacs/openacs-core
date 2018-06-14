@@ -1,7 +1,7 @@
 ad_library {
 
     Provides API for importing email via nsimap
-    
+
     @creation-date 19 Jul 2017
     @cvs-id $Id$
 
@@ -29,8 +29,8 @@ ad_proc -private acs_mail_lite::imap_conn_set {
     used by ACS Mail Lite imap connections
 
     If a parameter is passed with value, the value is assigned to parameter.
-    
-    @param name_mb See nsimap documentation for mailbox.name. 
+
+    @param name_mb See nsimap documentation for mailbox.name.
     @param port Ignored for now. SSL automatically switches port.
 } {
     # See one row table acs_mail_lite_imap_conn
@@ -57,13 +57,13 @@ ad_proc -private acs_mail_lite::imap_conn_set {
         select ho,pa,po,ti,us,na,fl
         from acs_mail_lite_imap_conn limit 1
     } ]
-    
+
     if { !$exists_p } {
         # set initial defaults
         set mb [ns_config nsimap mailbox ""]
         set mb_good_form_p [regexp -nocase -- \
                                 {^[{]([a-z0-9\.\/]+)[}]([a-z0-9\/\ \_]+)$} \
-                                $mb x ho na] 
+                                $mb x ho na]
         # ho and na defined by regexp?
         set ssl_p 0
         if { !$mb_good_form_p } {
@@ -91,7 +91,7 @@ ad_proc -private acs_mail_lite::imap_conn_set {
 
             }
         }
-        
+
         set pa [ns_config nsimap password ""]
         set po [ns_config nsimap port ""]
         set ti [ns_config -int nsimap timeout 1800]
@@ -151,7 +151,7 @@ ad_proc -private acs_mail_lite::imap_conn_set {
                 }
             }
         }
-        
+
         if { $validated_p } {
             foreach ic_n $n_pv_list {
                 set ${ic_n} $n_arr($ic_n)
@@ -164,12 +164,12 @@ ad_proc -private acs_mail_lite::imap_conn_set {
                     }
                 }
                 db_dml acs_mail_lite_imap_conn_i {
-                    insert into acs_mail_lite_imap_conn 
+                    insert into acs_mail_lite_imap_conn
                     (ho,pa,po,ti,us,na,fl)
                     values (:ho,:pa,:po,:ti,:us,:na,:fl)
                 }
             }
-        } 
+        }
     }
     set i_list [list ]
     foreach i $ic_list {
@@ -198,7 +198,7 @@ ad_proc -private acs_mail_lite::imap_conn_go {
     or as close as possible to it.
 
     If -host parameter is supplied, will try connection with supplied params.
-    Defaults to use connection info provided by parameters 
+    Defaults to use connection info provided by parameters
     via acs_mail_lite::imap_conn_set.
 
     @param port Ignored for now. SSL automatically switches port.
@@ -241,7 +241,7 @@ ad_proc -private acs_mail_lite::imap_conn_go {
         ns_log Dev "acs_mail_lite::imap_conn_go.612: \
  sessions_list '${sessions_list}'"
         # Example session_list as val0 val1 val2 val3 val4 val5 val6..:
-        #'40 1501048046 1501048046 {{or97.net:143/imap/tls/user="testimap1"}<no_mailbox>} 
+        #'40 1501048046 1501048046 {{or97.net:143/imap/tls/user="testimap1"}<no_mailbox>}
         # 39 1501047978 1501047978 {{or97.net:143/imap/tls/user="testimap1"}<no_mailbox>}'
         set i 0
         while { $i < $s_len && $id ne $conn_id }  {
@@ -272,7 +272,7 @@ ad_proc -private acs_mail_lite::imap_conn_go {
             ns_log Dev "acs_mail_lite::imap_conn_go.640: fl_list '${fl_list}'"
         }
     }
-    
+
     if { !$prior_conn_exists_p && $host ne "" } {
         if { "ssl" in $fl_list } {
             set ssl_p 1
@@ -291,7 +291,7 @@ ad_proc -private acs_mail_lite::imap_conn_go {
                                            -password $password] \
                           } err_txt ] \
                  } { ns_log Warning "acs_mail_lite::imap_conn_go.653 \
- Error attempting ns_imap open. Error is: '${err_txt}'" 
+ Error attempting ns_imap open. Error is: '${err_txt}'"
             } else {
                 set connected_p 1
                 ns_log Dev "acs_mail_lite::imap_conn_go.662: \
@@ -304,7 +304,7 @@ ad_proc -private acs_mail_lite::imap_conn_go {
                                            -password $password] \
                           } err_txt ] \
                  } { ns_log Warning "acs_mail_lite::imap_conn_go.653 \
- Error attempting ns_imap open. Error is: '${err_txt}'" 
+ Error attempting ns_imap open. Error is: '${err_txt}'"
             } else {
                 set connected_p 1
                 ns_log Dev "acs_mail_lite::imap_conn_go.675: \
@@ -330,7 +330,7 @@ ad_proc -private acs_mail_lite::imap_conn_go {
             ns_log Notice "acs_mail_lite::imap_conn_go.725 \
  available top level mailbox names '${t_list}'"
             if { [llength $t_list < 2] && !$default_to_inbox_p } {
-                # Provide more hints. 
+                # Provide more hints.
                 set t_list [ns_imap list $conn_id $host {*}]
                 ns_log Notice "acs_mail_lite::imap_conn_go.727 \
  available mailbox names '${t_list}'"
@@ -338,7 +338,7 @@ ad_proc -private acs_mail_lite::imap_conn_go {
         } else {
             set mb_exists_p 1
         }
-        
+
         if { !$mb_exists_p && $default_to_inbox_p } {
             set mb_default ""
             set idx [lsearch -exact -nocase $t_list "${default_box_name}"]
@@ -387,11 +387,11 @@ ad_proc -private acs_mail_lite::imap_conn_go {
                     set conn_id [ns_imap open \
                                      -mailbox "${mb}" \
                                      -user $user \
-                                     -password $password] 
+                                     -password $password]
                 }
             }
         }
-        
+
     }
     return $conn_id
 }
@@ -410,7 +410,7 @@ ad_proc -public acs_mail_lite::imap_conn_close {
     ns_log Dev "acs_mail_lite::imap_conn_close.716: \
  sessions_list '${sessions_list}'"
     # Example session_list as val0 val1 val2 val3 val4 val5 val6..:
-    #'40 1501048046 1501048046 {{or97.net:143/imap/tls/user="testimap1"}<no_mailbox>} 
+    #'40 1501048046 1501048046 {{or97.net:143/imap/tls/user="testimap1"}<no_mailbox>}
     # 39 1501047978 1501047978 {{or97.net:143/imap/tls/user="testimap1"}<no_mailbox>}'
     set id ""
     set i 0
@@ -430,7 +430,7 @@ ad_proc -public acs_mail_lite::imap_conn_close {
     if { $conn_exists_p eq 0 } {
         ns_log Warning "acs_mail_lite::imap_conn_close.732: \
  Session(s) broken? conn_id '${conn_id}' not found."
-    } 
+    }
     return $conn_exists_p
 }
 
@@ -506,7 +506,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
         set cycle_start_cs [clock seconds]
         nsv_lappend acs_mail_lite si_actives_list $cycle_start_cs
         set si_actives_list [nsv_get acs_mail_lite si_actives_list]
-        
+
         set si_dur_per_cycle_s \
             [nsv_get acs_mail_lite si_dur_per_cycle_s]
         set per_cycle_s_override [nsv_get acs_mail_lite \
@@ -519,15 +519,15 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
         } else {
             set per_cycle_s_override $si_dur_per_cycle_s
         }
-        
-        
+
+
         set active_cs [lindex $si_actives_list end]
         set concurrent_ct [llength $si_actives_list]
         # pause is in seconds
         set pause_s 10
         set pause_ms [expr { $pause_s * 1000 } ]
-        while { $active_cs eq $cycle_start_cs 
-                && [clock seconds] < $si_quit_cs 
+        while { $active_cs eq $cycle_start_cs
+                && [clock seconds] < $si_quit_cs
                 && $concurrent_ct > 1
             } {
             incr per_cycle_s_override $pause_s
@@ -592,13 +592,13 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                         if { !$processed_p } {
                             set headers_list [ns_imap headers $cid $msgno]
                             array set hdrs_arr $headers_list
-                            
+
                             set type [acs_mail_lite::email_type \
                                           -header_arr_name hdrs_arr ]
-                            
+
 
                             # Create some standardized header indexes aml_*
-                            # with corresponding values 
+                            # with corresponding values
                             set size_idx [lsearch -nocase -exact \
                                               $headers_list size]
                             set sizen [lindex $headers_list $size_idx]
@@ -607,13 +607,13 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                             } else {
                                 set hdrs_arr(aml_size_chars) ""
                             }
-                            
+
                             if { [info exists hdrs_arr(received_cs)] } {
                                 set hdrs_arr(aml_received_cs) $hdrs_arr(received_cs)
                             } else {
                                 set hdrs_arr(aml_received_cs) ""
                             }
-                            
+
                             set su_idx [lsearch -nocase -exact \
                                             $headers_list subject]
                             if { $su_idx > -1 } {
@@ -622,7 +622,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                             } else {
                                 set hdrs_arr(aml_subject) ""
                             }
-                            
+
                             set to_idx [lsearch -nocase -exact \
                                             $headers_list to]
                             if { ${to_idx} > -1 } {
@@ -631,14 +631,14 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                             } else {
                                 set hdrs_arr(aml_to) ""
                             }
-                            
+
                             acs_mail_lite::inbound_email_context \
                                 -header_array_name hdrs_arr \
                                 -header_name_list $headers_list
-                            
+
                             acs_mail_lite::inbound_prioritize \
                                 -header_array_name hdrs_arr
-                            
+
                             set error_p [acs_mail_lite::imap_email_parse \
                                              -headers_arr_name hdrs_arr \
                                              -parts_arr_name parts_arr \
@@ -650,9 +650,9 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                                 set hdrs_arr(aml_package_ids_list) [safe_eval ${filter_proc}]
                             }
                             if { !$error_p } {
-                                
+
                                 set id [acs_mail_lite::inbound_queue_insert \
-                                            -parts_arr_name parts_arr 
+                                            -parts_arr_name parts_arr
                                         \
                                             -headers_arr_name hdrs_arr \
                                             -error_p $error_p ]
@@ -674,7 +674,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                     # close connection
                     acs_mail_lite::imap_conn_close -conn_id $cid
                 }
-                
+
             }
             # end if !$error
 
@@ -689,7 +689,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
         } else {
             nsv_set acs_mail_lite si_configured_p 0
         }
-        # acs_mail_lite::imap_check_incoming should quit gracefully 
+        # acs_mail_lite::imap_check_incoming should quit gracefully
         # when not configured or there is error on connect.
 
     }
@@ -717,7 +717,7 @@ ad_proc -private acs_mail_lite::imap_email_parse {
 
     # for format this proc is to generate.
 
-    # Due to the hierarchical nature of email and ns_imap struct 
+    # Due to the hierarchical nature of email and ns_imap struct
     # this proc is recursive.
     upvar 1 $headers_arr_name h_arr
     upvar 1 $parts_arr_name p_arr
@@ -732,7 +732,7 @@ ad_proc -private acs_mail_lite::imap_email_parse {
 
         if { [string range $section_ref 0 0] eq "." } {
             set section_ref [string range $section_ref 1 end]
-        } 
+        }
         ns_log Dev "acs_mail_lite::imap_email_parse.706 \
 msgno '${msgno}' section_ref '${section_ref}'"
 
@@ -762,7 +762,7 @@ msgno '${msgno}' section_ref '${section_ref}'"
                     type {
                         set type $v
                     }
-                    
+
                     default {
                         # do nothing
                     }
@@ -790,12 +790,12 @@ msgno '${msgno}' section_ref '${section_ref}' section_id '${section_id}'"
         lappend p_arr(section_id_list) ${section_id}
 
         if { [info exists bytes]
-             && $bytes > $__max_txt_bytes 
+             && $bytes > $__max_txt_bytes
              && ![info exists filename]
          } {
             set filename "blob.txt"
         }
-        
+
         if { [info exists filename ] } {
             set filename2 [clock microseconds]
             append filename2 "-" $filename
@@ -818,23 +818,23 @@ msgno '${msgno}' section_ref '${section_ref}' section_id '${section_id}'"
                 ns_imap body $conn_id $msgno ${section_ref} \
                     -file $filepathname \
                     -decode
-            } 
+            }
         } elseif { $section_ref ne "" } {
             # text content
             set p_arr(${section_id},content) [ns_imap body $conn_id $msgno $section_ref]
             ns_log Dev "acs_mail_lite::imap_email_parse.792 \
  text content '${conn_id}' '${msgno}' '${section_ref}' \
  $p_arr(${section_id},content)'"
-            
+
         } else {
             set p_arr(${section_id},content) ""
             # The content for this case
             # has been verified to be redundant.
             # It is mostly the last section/part of message.
             #
-            # If diagnostics urge examining these cases, 
-            # Set debug_p 1 to allow the following code to 
-            # to compress a message to recognizable parts without 
+            # If diagnostics urge examining these cases,
+            # Set debug_p 1 to allow the following code to
+            # to compress a message to recognizable parts without
             # flooding the log.
             set debug_p 0
             if { $debug_p } {
@@ -864,7 +864,7 @@ msgno '${msgno}' section_ref '${section_ref}' section_id '${section_id}'"
 }
 
 
-#            
+#
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

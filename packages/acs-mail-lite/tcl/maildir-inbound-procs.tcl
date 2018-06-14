@@ -1,7 +1,7 @@
 ad_library {
 
     Provides API for importing email via postfix maildir
-    
+
     @creation-date 12 Oct 2017
     @cvs-id $Id$
 
@@ -23,26 +23,26 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
     set error_p 0
     set mail_dir_fullpath [acs_mail_lite::mail_dir]
     if { $mail_dir_fullpath ne "" } {
-        
+
 
         set newdir [file join $mail_dir_fullpath new "*"]
         set curdir [file join $mail_dir_fullpath cur "."]
 
         set messages_list [glob -nocomplain $newdir]
-        
+
         # only one of acs_mail_lite::maildir_check_incoming process at a time.
         set cycle_start_cs [clock seconds]
         nsv_lappend acs_mail_lite sj_actives_list $cycle_start_cs
         set sj_actives_list [nsv_get acs_mail_lite sj_actives_list]
         ns_log Notice "acs_mail_lite::maildir_check_incoming.37. start \
  sj_actives_list '${sj_actives_list}'"
-        
+
         set active_cs [lindex $sj_actives_list end]
         set concurrent_ct [llength $sj_actives_list]
         # pause is in seconds
         set pause_s 10
         set pause_ms [expr { $pause_s * 1000 } ]
-        while { $active_cs eq $cycle_start_cs 
+        while { $active_cs eq $cycle_start_cs
                 && $concurrent_ct > 1
             } {
             set sj_actives_list [nsv_get acs_mail_lite sj_actives_list]
@@ -55,7 +55,7 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
         }
 
         if { $active_cs eq $cycle_start_cs } {
-            
+
             set aml_package_id [apm_package_id_from_key "acs-mail-lite"]
             set filter_proc [parameter::get -parameter "IncomingFilterProcName" \
                                  -package_id $aml_package_id]
@@ -85,13 +85,13 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                                          $mail_dir_fullpath ]
 
                     if { !$processed_p } {
-                        
+
                         set type [acs_mail_lite::email_type \
                                       -header_arr_name hdrs_arr ]
-                        
+
                         set headers_list [array names hdrs_arr]
                         # Create some standardized header indexes aml_*
-                        # with corresponding values 
+                        # with corresponding values
                         set size_idx [lsearch -nocase -exact \
                                           $headers_list size]
                         set sizen [lindex $headers_list $size_idx]
@@ -100,13 +100,13 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                         } else {
                             set hdrs_arr(aml_size_chars) ""
                         }
-                        
+
                         if { [info exists hdrs_arr(received_cs)] } {
                             set hdrs_arr(aml_received_cs) $hdrs_arr(received_cs)
                         } else {
                             set hdrs_arr(aml_received_cs) ""
                         }
-                        
+
                         set su_idx [lsearch -nocase -exact \
                                         $headers_list subject]
                         if { $su_idx > -1 } {
@@ -115,7 +115,7 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                         } else {
                             set hdrs_arr(aml_subject) ""
                         }
-                        
+
                         set to_idx [lsearch -nocase -exact \
                                         $headers_list to]
                         if { ${to_idx} > -1 } {
@@ -124,18 +124,18 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                         } else {
                             set hdrs_arr(aml_to) ""
                         }
-                        
+
                         acs_mail_lite::inbound_email_context \
                             -header_array_name hdrs_arr \
                             -header_name_list $headers_list
-                        
+
                         acs_mail_lite::inbound_prioritize \
                             -header_array_name hdrs_arr
-                        
+
                         if { [string match {[a-z]*_[a-z]*} $filter_proc] } {
                             set hdrs_arr(aml_package_ids_list) [safe_eval ${filter_proc}]
                         }
-                        
+
                         set id [acs_mail_lite::inbound_queue_insert \
                                     -parts_arr_name parts_arr \
                                     -headers_arr_name hdrs_arr \
@@ -162,7 +162,7 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
  acs_mail_lite sj_actives_list '[nsv_get acs_mail_lite sj_actives_list]'"
     }
     # end if !$error
-    
+
     return 1
 }
 
@@ -228,17 +228,17 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
  message file '${message_fpn}' error: '${errmsg}'"
             set error_p 1
         } else {
-            # For acs_mail_lite::inbond_cache_hit_p, 
-            # make a uid if there is not one. 
+            # For acs_mail_lite::inbond_cache_hit_p,
+            # make a uid if there is not one.
             set uid_ref ""
-            # Do not use email file's tail, 
+            # Do not use email file's tail,
             # because tail is unique to system not email.
             # See http://cr.yp.to/proto/maildir.html
-            
+
             # A header returns multiple values in a list
             # if header name is repeated in email.
             set h_list [mime::getheader $m_id]
-            # headers_list 
+            # headers_list
             set headers_list [list ]
             foreach {h v} $h_list {
                 switch -nocase -- $h {
@@ -254,7 +254,7 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
                         if { $uid_ref ne "uid"} {
                             if { $uid_ref ne "message-id" } {
                                 # message-id is not required
-                                # msg-id is an alternate 
+                                # msg-id is an alternate
                                 # Fallback to most standard uid
                                 set uid_ref [string tolower $h]
                                 set uid_val $v
@@ -273,7 +273,7 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
                             lappend headers_list "aml_datetime_cs" $dt_cs
                         }
                     }
-                    default { 
+                    default {
                         # do nothing
                     }
                 }
@@ -281,7 +281,7 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
             }
             lappend headers_list "aml_received_cs" [file mtime ${message_fpn}]
             lappend headers_list "uid" $uid_val
-            
+
             # Append property_list to headers_list
             set prop_list [mime::getproperty $m_id]
             #set prop_names_list /mime::getproperty $m_id -names/
@@ -294,7 +294,7 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
                                 regsub -all -nocase -- {[^0-9a-zA-Z-.,\_]} $w {_} w
                                 if { $w eq "" } {
                                     set w "untitled"
-                                } 
+                                }
                                 set filename $w
                                 lappend headers_list "filename" $w
                             } else {
@@ -313,7 +313,7 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
         }
         set subref_ct 0
         set type ""
-        
+
         # Assume headers and names are unordered
         foreach {n v} $headers_list {
             if { [string match -nocase {parts} $n] } {
@@ -348,23 +348,23 @@ ad_proc -private acs_mail_lite::maildir_email_parse {
                 }
             }
         }
-        
+
         set section_id [acs_mail_lite::section_id_of $section_ref]
         ns_log Dev "acs_mail_lite::maildir_email_parse.746 \
 message_fpn '${message_fpn}' section_ref '${section_ref}' section_id '${section_id}'"
-        
+
         # Add content of an email part
         set p_arr(${section_id},nv_list) $section_n_v_list
         set p_arr(${section_id},c_type) $type
         lappend p_arr(section_id_list) ${section_id}
-        
+
         if { [info exists bytes]
              && $bytes > $__max_txt_bytes
              && ![info exists filename]
          } {
             set filename "blob.txt"
         }
-        
+
         if { [info exists filename] } {
             set filename2 [clock microseconds]
             append filename2 "-" $filename
@@ -388,23 +388,23 @@ message_fpn '${message_fpn}' section_ref '${section_ref}' section_id '${section_
                 chan configure $binfileId -translation binary
                 puts -nonewline $binfileId [mime::getbody $m_id -decode ]
                 close $binfileId
-            } 
+            }
         } elseif { $section_ref ne "" } {
             # text content
             set p_arr(${section_id},content) [mime::buildmessage $m_id]
             ns_log Dev "acs_mail_lite::maildir_email_parse.792 \
  text m_id '${m_id}' '${section_ref}': \
  $p_arr(${section_id},content)'"
-            
+
         } else {
             set p_arr(${section_id},content) ""
             # The content for this case
             # has been verified to be redundant.
             # It is mostly the last section/part of message.
             #
-            # If diagnostics urge examining these cases, 
-            # Set debug_p 1 to allow the following code to 
-            # to compress a message to recognizable parts without 
+            # If diagnostics urge examining these cases,
+            # Set debug_p 1 to allow the following code to
+            # to compress a message to recognizable parts without
             # flooding the log.
             set debug_p 0
             if { $debug_p } {
@@ -432,7 +432,7 @@ message_fpn '${message_fpn}' section_ref '${section_ref}' section_id '${section_
 }
 
 
-#            
+#
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

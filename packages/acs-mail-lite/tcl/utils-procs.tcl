@@ -1,9 +1,9 @@
 # packages/acs-mail-lite/tcl/utils-procs.tcl
 
 ad_library {
-    
+
     Helper procs to build email messages
-    
+
     @author Emmanuelle Raffenne (eraffenne@gmail.com)
     @creation-date 2007-12-16
     @arch-tag: 820de9a9-533f-4fc3-b11d-2c9fb616a620
@@ -19,7 +19,7 @@ ad_proc acs_mail_lite::utils::build_subject {
     {-charset "UTF-8"}
     subject
 } {
-    Encode the subject, using quoted-printable, of an email message 
+    Encode the subject, using quoted-printable, of an email message
     and trim long lines.
 
     Depending on the available mime package version, it uses either
@@ -38,7 +38,7 @@ ad_proc acs_mail_lite::utils::build_subject {
     # maxlen for each line
     # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
     set maxlen [expr {69 - [string length $charset]}]
-        
+
     #
     # Make sure, the subject line does not have surrounding white
     # space/new lines
@@ -49,7 +49,7 @@ ad_proc acs_mail_lite::utils::build_subject {
         ad_log warning "subject line contains line breaks (replaced by space): '$subject' -> '$s'"
         set subject $s
     }
-    
+
     #
     # set up variables for loop
     #
@@ -60,7 +60,7 @@ ad_proc acs_mail_lite::utils::build_subject {
     set subject_length [string length $subject]
     while { $i < $subject_length } {
         set chunk [string index $subject $i]
-            
+
         # encode that chunk
         set chunk [encoding convertto $charset_code "$chunk"]
         if { $chunk eq "\x3F" } {
@@ -107,7 +107,7 @@ ad_proc acs_mail_lite::utils::build_date {
     }
 
     if { [catch {package require mime 1.5.2}] } {
-   
+
         set gmt [clock format $clock -format "%Y-%m-%d %H:%M:%S" -gmt true]
         set diff [expr {($clock - [clock scan $gmt]) / 60}]
         if {$diff < 0} {
@@ -144,7 +144,7 @@ ad_proc acs_mail_lite::utils::build_body {
     Return a list of message tokens
 } {
 
-    # Encode the body 
+    # Encode the body
     set encoding [ns_encodingforcharset $charset]
     set body [encoding convertto $encoding $body]
 
@@ -166,7 +166,7 @@ ad_proc acs_mail_lite::utils::build_body {
                                    -param [list charset $charset] \
                                    -encoding "quoted-printable" \
                                    -string [ad_html_to_text -- $body]]
-        
+
         set message_token [mime::initialize \
                                -canonical "multipart/alternative" \
                                -parts [list $message_text_part $message_html_part]]

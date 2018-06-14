@@ -1,7 +1,7 @@
 ad_library {
 
     Provides API for importing email under a variety of deployment conditions.
-    
+
     @creation-date 19 Jul 2017
     @cvs-id $Id$
 
@@ -37,7 +37,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
     -reject_on_hit
     -reject_on_miss
 } {
-    Returns a name value list of parameters 
+    Returns a name value list of parameters
     used by ACS Mail Lite scheduled procs.
     If a parameter is passed with value, the value is assigned to parameter.
 
@@ -62,7 +62,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
     @param hpri_party_ids List of party_ids to process at fast/high priority.
 
     @param lpri_party_ids List of party_ids to process at low priority.
-    
+
     @param hpri_subject_glob When email subject matches, flag as fast priority.
 
     @param lpri_subject_glob When email subject matches, flag as low priority.
@@ -95,7 +95,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
                      lpri_object_ids \
                      reject_on_hit \
                      reject_on_miss ]
-    
+
     foreach sp $sp_list {
         if { [info exists $sp] } {
             set new(${sp}) [set $sp]
@@ -221,7 +221,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
                 }
             }
         }
-            
+
         if { $validated_p } {
             foreach sp_n $new_pv_list {
                 set ${sp_n} $new($sp_n)
@@ -234,7 +234,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
                     }
                 }
                 db_dml acs_mail_lite_ui_i {
-                    insert into acs_mail_lite_ui 
+                    insert into acs_mail_lite_ui
                     (sredpcs_override,
                      reprocess_old_p,
                      max_concurrent,
@@ -251,7 +251,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
                      lpri_object_ids,
                      reject_on_hit,
                      reject_on_miss)
-                    values 
+                    values
                     (:sredpcs_override,
                      :reprocess_old_p,
                      :max_concurrent,
@@ -275,7 +275,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
                 nsv_set acs_mail_lite si_configured_p 1
             }
         }
-                
+
     }
     set s_list [list ]
     foreach s $sp_list {
@@ -339,7 +339,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
                 # set array's index same as variable
                 set h_arr(${hn}) [set ${vname} ]
             }
-        }                
+        }
     }
 
     set priority_fine ""
@@ -362,7 +362,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
  received_cs '${received_cs}' is not a natural number."
     }
 
-    # *_cs means clock time from epoch in seconds, 
+    # *_cs means clock time from epoch in seconds,
     #      same as returned from tcl clock seconds
     array set params_arr [acs_mail_lite::sched_parameters]
 
@@ -394,7 +394,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
         set priority 3
     }
 
-    
+
     if { $object_id ne "" } {
         if { $object_id in $params_arr(hpri_object_ids) } {
             set priority 1
@@ -403,7 +403,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
             set priority 3
         }
     }
-    
+
     # quick math for arbitrary super max of maxes
     set su_max $params_arr(mpri_max)
     append su_max "00"
@@ -412,7 +412,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
     foreach section $ns_section_list {
         lappend size_list [ns_config -int -min 0 $section maxinput]
     }
-    set size_max [f::lmax $size_list] 
+    set size_max [f::lmax $size_list]
     # add granularity
     switch -exact $priority {
         1 {
@@ -442,7 +442,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
     set mp [expr { $pri_min + $d_max } ]
     ns_log Dev "inbound_prioritize: range '${range}' d_max '${d_max}' mp '${mp}'"
 
-    # number of variables in fine granularity calcs: 
+    # number of variables in fine granularity calcs:
     # char_size, date time stamp
     set varnum 2
     # Get most recent scan start time for reference to batch present time
@@ -466,7 +466,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
         set pri_s [expr { ( $size_chars / ( $size_max + 0. ) ) } ]
     }
 
-    set priority_fine [expr { int( ( $pri_t + $pri_s ) * $d_max ) + $mp } ] 
+    set priority_fine [expr { int( ( $pri_t + $pri_s ) * $d_max ) + $mp } ]
     ns_log Dev "inbound_prioritize: pri_t '${pri_t}' pri_s '${pri_s}'"
     ns_log Dev "inbound_prioritize: pre(max/min) priority_fine '${priority_fine}'"
     set priority_fine [f::min $priority_fine $pri_max]
@@ -495,7 +495,7 @@ ad_proc -public acs_mail_lite::email_type {
     to reduce redundant processing downstream. See code comments for details.
     </p><p>
     Actional types: \
-        'auto_gen' 'auto_reply', 'bounce', 'in_reply_to' or 
+        'auto_gen' 'auto_reply', 'bounce', 'in_reply_to' or
     empty string indicating 'other' type.
     </p>
     <ul><li>
@@ -536,7 +536,7 @@ ad_proc -public acs_mail_lite::email_type {
     @param from of email
     @param headers of email, a block of text containing all headers and values
     @param header_arr_name, the name of an array containing headers.
-    @param check_subject_p Set to 1 to check email subject. 
+    @param check_subject_p Set to 1 to check email subject.
 } {
     set ag_p 0
     set an_p 0
@@ -556,10 +556,10 @@ ad_proc -public acs_mail_lite::email_type {
     # Do NOT use x-auto-response-suppress
     # per: https://stackoverflow.com/questions/1027395/detecting-outlook-autoreply-out-of-office-emails
 
-    # header cases: 
+    # header cases:
     # {*x-autoresponder*} {*autoresponder*} {*autoreply*}
-    # {*x-autorespond*} {*auto_reply*} 
-    # from: 
+    # {*x-autorespond*} {*auto_reply*}
+    # from:
     # https://github.com/jpmckinney/multi_mail/wiki/Detecting-autoresponders
     # redundant cases are removed from list.
     # auto reply = ar
@@ -571,11 +571,11 @@ ad_proc -public acs_mail_lite::email_type {
                      {x-autorespond} \
                     ]
     # Theses were in auto_reply, but are not specific to replies:
-    #                     {auto-generated} 
-    #             {auto-notified} 
+    #                     {auto-generated}
+    #             {auto-notified}
     # See section on auto_gen types. (auto-submitted and the like)
 
-    
+
     if { $header_arr_name ne "" } {
         upvar 1 $header_arr_name h_arr
     } else {
@@ -638,7 +638,7 @@ ad_proc -public acs_mail_lite::email_type {
 
         # Also per RFC 5436 section 2.7.1 consider:
         # auto-submitted = as
-        
+
         set as_idx [lsearch -glob -nocase $hn_list {auto-submitted}]
         if { $as_idx > 1 } {
             set as_p 1
@@ -647,7 +647,7 @@ ad_proc -public acs_mail_lite::email_type {
             # also check for auto-generated
             set ag_p [string match -nocase $h_arr(${as_h}) {auto-generated}]
         }
-        
+
 
 
         ns_log Dev "acs_mail_lite::email_type.1017 as_p ${as_p} an_p ${an_p} ag_p ${ag_p}"
@@ -700,7 +700,7 @@ ad_proc -public acs_mail_lite::email_type {
         }
 
 
-        
+
 
         if { !$ar_p
              && [info exists h_arr(internaldate.year)]
@@ -741,7 +741,7 @@ ad_proc -public acs_mail_lite::email_type {
             # If the difference between date and local time is less than 10s
             # and either from is "" or subject matches "return*to*sender"
 
-            # More likely also from machine 
+            # More likely also from machine
             # if size is more than a few thousand characters in a short time.
 
             # This is meant to detect more general cases
@@ -782,7 +782,7 @@ ad_proc -public acs_mail_lite::email_type {
                         }
                         if { $is_stale_p } {
                             set cs2_list [list ]
-                            # Really? 
+                            # Really?
                             # We just added dti_cs to si_party_id_cs(party_id)
                             # This happens when scanning email is delayed some
                             ns_log Warning "acs_mail_lite::email_type.655 \
@@ -793,23 +793,23 @@ ad_proc -public acs_mail_lite::email_type {
                             set cs2_list_len [llength $cs2_list]
                             if { $cs2_list_len > $max_ct } {
                                 # si_max_ct_per_cycle reached for party_id
-                                
+
                                 # Flag as low priority if over count for cycle
-                                # That is, add party_id to 
-                                # acs_mail_lite::sched_parameters -lpri_party_ids 
+                                # That is, add party_id to
+                                # acs_mail_lite::sched_parameters -lpri_party_ids
                                 # if it is not already
                                 # Already checked at beginning of this check
                                 lappend lpri_pids_list $party_id
                                 acs_mail_lite::sched_parameters \
                                     -lpri_party_ids $lpri_pids_list
-                                
+
                             }
                         }
                         nsv_set acs_mail_lite si_party_id_cs(${party_id}) $cs2_list
                     }
                 }
             }
-                
+
             # RFC 822 header required: DATE
             set dt_idx [lsearch -glob -nocase $hn_list {date}]
             # If there is no date. Flag it.
@@ -818,7 +818,7 @@ ad_proc -public acs_mail_lite::email_type {
             } else {
                 # Need to check received timestamp vs. when OpenACS
                 # or a system hosted same as OpenACS sent it.
-                
+
                 set dt_h [lindex $hn_list $dt_idx]
                 # Cannot use optional ns_imap parsedate here. May not exist.
                 # RFC 5322 section 3.3: multiple spaces in date is acceptable
@@ -832,43 +832,43 @@ ad_proc -public acs_mail_lite::email_type {
                 set diff 1000
                 if { $dte_cs ne "" && $dti_cs ne "" } {
                     set diff [expr { abs( $dte_cs - $dti_cs ) } ]
-                } 
+                }
                 # If too fast, set ts_p 1
                 if { $diff < 11 } {
                     set ts_p 1
                 }
-                
+
                 # check from host against acs_mail_lite's host
                 # From: header must show same OpenACS domain for bounce
                 # and subsequently verified not a user or system recognized
-                # user/admin address. 
-                
+                # user/admin address.
+
                 # Examples of unrecognized addresses include mailer-daemon@..
                 set host [dict get [acs_mail_lite::imap_conn_set] host]
                 if { $ts_p && [string -nocase "*${host}*" $from_host] } {
                     if { $from_email eq [ad_outgoing_sender] || !$pe_p } {
-                        # This is a stray one. 
+                        # This is a stray one.
                         set ag_p 1
                     }
-                    
+
                 }
-                
+
                 # Another possibility is return-path "<>"
                 # and Message ID unique-char-ref@bounce-domain
-                
-                # Examples might be a bounced email from 
+
+                # Examples might be a bounced email from
                 # a nonstandard web form on site
-                # or 
+                # or
                 # a loop where 'from' is
                 # a verified user or system recognized address
                 # and reply is within 10 seconds
                 # and a non-standard acs-mail-lite reply-to address
-                
-                
+
+
             }
 
         }
-        
+
         # Delivery Status Notifications, see RFC 3464
         # https://tools.ietf.org/html/rfc3464
         # Note: original-envelope-id is not same as message-id.
@@ -932,7 +932,7 @@ ad_proc -public acs_mail_lite::email_type {
         if { !$ar_p && $check_subject_p } {
             # catch nonstandard cases
             # subject flags
-            
+
             # If 'from' not set. Set here.
             if { $from eq "" } {
                 set fr_idx [lsearch -glob -nocase $hn_list {from}]
@@ -948,18 +948,18 @@ ad_proc -public acs_mail_lite::email_type {
                     set h_arr(aml_subject) [ns_quotehtml $subject]
                 }
             }
-            
+
             set ps1 [string match -nocase {*out of*office*} $subject]
             set ps2 [string match -nocase {*automated response*} $subject]
             set ps3 [string match -nocase {*autoreply*} $subject]
             set ps4 [string match {*NDN*} $subject]
             set ps5 [string match {*\[QuickML\] Error*} $subject]
-            # RFC 3834 states to NOT rely on 'Auto: ' in subject for detection. 
+            # RFC 3834 states to NOT rely on 'Auto: ' in subject for detection.
             #set ps6 \[string match {Auto: *} $subject\]
-            
+
             # from flags = pf
             set pf1 [string match -nocase {*mailer*daemon*} $from]
-                
+
             set ar_p [expr { $ps1 || $ps2 || $ps3 || $ps4 || $ps5 || $pf1 } ]
         }
 
@@ -973,7 +973,7 @@ ad_proc -public acs_mail_lite::email_type {
     #  a bounce also flags maybe auto_reply, in_reply_to, auto_gen
     # an auto_reply also flags maybe auto_reply, auto_gen, in_reply_to
     # an auto_gen does NOT include an 'in_reply_to'
-    # an in_reply_to does NOT include 'auto_gen'. 
+    # an in_reply_to does NOT include 'auto_gen'.
     if { $dsn_p || $or_idx > -1 } {
         set type "bounce"
     } elseif { $ar_p
@@ -1026,7 +1026,7 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
     #   h_arr(aml_email_id)
     #   h_arr(aml_to_addrs)     to_email_addrs
     #   h_arr(aml_from_addrs)   from_email_addrs
-    #   h_arr(aml_priority)     priority    
+    #   h_arr(aml_priority)     priority
     #   h_arr(aml_subject)      email subject (normalized index reference).
     #   h_arr(aml_msg_id)       email message-id or msg-id's cross-reference
     #                           see acs_mail_lite_msg_id_map.msg_id
@@ -1037,22 +1037,22 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
     #   p_arr($section_id,nv_list)  acs_mail_lite_part_nv_pairs
     #   p_arr(section_id_list) list of section_ids
     #
-    # 
+    #
     # where index is section_id based on section_ref, and
     # where top most section_ref is a natural number as
     # there may be more than one tree.
-    # 
+    #
     # Specifically,
     # for p_arr, content is p_arr($section_id,content)
     #            c_type is p_arr($section_id,c_type)
     #            filename is p_arr($section_id,filename)
     #            c_filepathname is p_arr($section_id,c_filepathname)
-    # 
+    #
 
 
-    
+
     if { !$error_p } {
-        
+
         # email goes into queue tables:
 
         # This data is expected to be available at same moment
@@ -1070,7 +1070,7 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
             set received_cs ""
             # sub set of header names
             foreach h_name $h_names_list {
-                set h_value $h_arr(${h_name}) 
+                set h_value $h_arr(${h_name})
                 switch -nocase -- $h_name {
                     x-openacs-from -
                     aml_from_addrs -
@@ -1115,27 +1115,27 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
                             set size_chars $h_arr(ams_size_chars)
                         }
                     }
-                    aml_received_cs { 
+                    aml_received_cs {
                         set received_cs $h_value
                     }
                     aml_priority {
                         set priority $h_value
                     }
                 }
-                
+
                 if { $priority eq "" } {
                     set priority [dict get \
                                       [acs_mail_lite::sched_parameters] mpri_max]
                 }
 
                 db_dml acs_mail_lite_ie_headers_w1 {
-                    insert into acs_mail_lite_ie_headers 
+                    insert into acs_mail_lite_ie_headers
                     (aml_email_id,h_name,h_value)
                     values (:id,:h_name,:h_value)
                 }
             }
-            
-            # acs_mail_lite_from_external 
+
+            # acs_mail_lite_from_external
             set false 0
             #set processed_p 0
             #set release_p 0
@@ -1173,7 +1173,7 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
                     set $p ""
                     if { [info exists p_arr(${section_id},${p}) ] } {
                         set $p $p_arr(${section_id},${p})
-                    } 
+                    }
                 }
                 db_dml acs_mail_lite_ie_parts_w1 {
                     insert into acs_mail_lite_ie_parts
@@ -1183,7 +1183,7 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
                      filename,
                      content,
                      c_filepathname)
-                    values 
+                    values
                     (:id,
                      :section_id,
                      :c_type,
@@ -1208,7 +1208,7 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
                     }
                 }
             }
-            
+
 
         } on_error {
             ns_log Error "acs_mail_lite::inbound_queue_insert \
@@ -1225,7 +1225,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
     Identifies and processes highest priority inbound email.
 } {
 
-    
+
     # Get scheduling parameters
     set start_cs [clock seconds]
     # The value of si_dur_per_cycle_s is used
@@ -1250,7 +1250,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
         # ols = ordered lists
         set chunk_ols [db_list acs_mail_lite_from_external_rN {
             select aml_email_id from acs_mail_lite_from_external
-            where processed_p <>'1' 
+            where processed_p <>'1'
             and release_p <>'1'
             order by priority
             limit :email_max_ct } ]
@@ -1269,7 +1269,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
                 -h_array_name h_arr \
                 -p_array_name p_arr \
                 -aml_email_id $aml_email_id
-            
+
             set processed_p 0
             set bounced_p [acs_mail_lite::bounce_ministry]
             if { !$bounced_p } {
@@ -1277,11 +1277,11 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
                 # following from acs_mail_lite::load_mail
                 set pot_object_id [lindex [split $h_arr(aml_to_addrs) "@"] 0]
                 ##code  OpenACS Developers:
-                # object_id@domain is unconventional 
+                # object_id@domain is unconventional
                 # and may break if someone
                 # uses an email beginning with a number.
                 # Also, 'from' header could be spoofed..
-                # This practice should be deprecated in favor of signed 
+                # This practice should be deprecated in favor of signed
                 # acs_mail_lite::unqiue_id_create.
                 # For emails originating elsewhere, another authentication
                 # method, such as a pre-signed unique-id in message
@@ -1300,13 +1300,13 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
                 }
                 if { !$processed_p } {
                     # Execute all callbacks for this email
-                    
+
                     # Forums uses callbacks via notifications
-                    # See callback 
-                    # acs_mail_lite::incoming_email -imp notifications 
+                    # See callback
+                    # acs_mail_lite::incoming_email -imp notifications
                     # in notifications/tcl/notification-callback-procs.tcl
                     # and
-                    # notification::reply::get 
+                    # notification::reply::get
                     #  in forums/tcl/forum-reply-procs.tcl
                     #  which is defined in file:
                     # notifications/tcl/notification-reply-procs.tcl
@@ -1328,7 +1328,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
                                     -party_id $h_arr(aml_party_id) \
                                     -other $h_arr(aml_other) \
                                     -datetime_cs $h_arr(aml_datetime_cs)]
-                    
+
                     if {"0" in $status} {
                         set error_p 1
                     }
@@ -1349,7 +1349,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
 
             incr i
         }
-        
+
     }
 
    return 1
@@ -1365,18 +1365,18 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
     {-legacy_array_name ""}
 } {
     Puts email referenced by aml_email_id from the inbound queue into array
-    of h_array_name and p_array_name for use by registered callbacks. 
+    of h_array_name and p_array_name for use by registered callbacks.
 
     Arrays are repopulated with values in the same manner that
     acs_mail_lite::inbounde_queue_insert receives them. See below for details.
-    
-    When complete, marks the email in the queue as processed, 
+
+    When complete, marks the email in the queue as processed,
     if mark_processed_p is 1.
-    
+
     Array content corresponds to these tables:
     <pre>
     h_arr($name) $value         acs_mail_lite_ie_headers
-    
+
     Some indexes match fields of table acs_mail_lite_from_external:
 
     h_arr(aml_email_id)     assigned by acs_mail_lite::inbound_queue_insert
@@ -1384,12 +1384,12 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
     h_arr(aml_to_addrs)     to_email_addrs
     h_arr(aml_from)         from email including any label
     h_arr(aml_from_addrs)   from_email_addrs
-    h_arr(aml_priority)     priority    
+    h_arr(aml_priority)     priority
     h_arr(aml_subject)      email subject (normalized index reference).
     h_arr(aml_msg_id)       email message-id or msg-id's cross-reference
                             see acs_mail_lite_msg_id_map.msg_id
     h_arr(aml_size_chars)   size_chars
-    
+
     Some headers are transferred from the email generation process.
     See acs_mail_lite::unique_id_create for details:
 
@@ -1397,13 +1397,13 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
     h_arr(aml_party_id)
     h_arr(aml_object_id)
     h_arr(aml_other)
-    
+
 
     Some headers are internally generated during input:
-    
+
     h_arr(aml_type)         Type of email from acs_mail_lite::email_type
-    h_arr(aml_received_cs)  Time received in seconds since Tcl epoch 
-    h_arr(aml_datetime_cs)  Time unique_id generatd in seconds since Tcl epoch 
+    h_arr(aml_received_cs)  Time received in seconds since Tcl epoch
+    h_arr(aml_datetime_cs)  Time unique_id generatd in seconds since Tcl epoch
     h_arr(aml_processed_p)  processed_p
     h_arr(aml_priority)     a priority number assigned to email.
 
@@ -1412,12 +1412,12 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
     p_arr($section_ref,<field>)  acs_mail_lite_ie_parts (content of a part)
     p_arr($section_ref,nv_list)  acs_mail_lite_part_nv_pairs
     p_arr(section_ref_list) list of section_refs
-    
-    
+
+
     where index is section_ref based on section_ref, and
     where top most section_ref is a natural number as
     there may be more than one tree.
-      
+
     Specifically, for p_arr array:
 
     content        is  p_arr($section_ref,content)
@@ -1431,12 +1431,12 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
     c_filepathname is the filepathname within the system.
 
     Each section may have headers:
-    
+
     To avoid any header-name collision with content, c_type etc,
     headers are supplied in a name_value_list only:
 
-    list of headers by section is  p_arr($section_ref,name_value_list) 
-    list of section_refs       is  p_arr(section_ref_list) 
+    list of headers by section is  p_arr($section_ref,name_value_list)
+    list of section_refs       is  p_arr(section_ref_list)
 
     For direct compatibility with legacy email systems that used:
     </pre><p>
@@ -1473,7 +1473,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
         h_arr(aml_size_chars) \
         h_arr(aml_received_cs) \
         h_arr(aml_processed_p) \
-        h_arr(aml_release_p) 
+        h_arr(aml_release_p)
 
     # collect from acs_mail_lite_ie_headers
     set h_lists [db_list_of_lists acs_mail_lite_ie_headers_r1 {
@@ -1499,7 +1499,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
             if { $tol > -1 } {
                 set tol_ref [lindex $h_names_ul $tol_idx]
                 lappend l_headers_ul $tol $h_arr(${tol_ref})
-            } 
+            }
         }
         if { $h_arr(received_cs) ne "" } {
             lappend l_headers_ul received [clock format $h_arr(received_cs) ]
@@ -1548,7 +1548,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
 
         # Legacy approach replaces nested parts with flat list
         # from parse_email:
-        #   The bodies consists of a list with two elements: 
+        #   The bodies consists of a list with two elements:
         #     content-type and content.
         #   The files consists of a list with three elements:
         #     content-type, filename and content.
@@ -1563,18 +1563,18 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
                                      $p_arr(${section_ref},content) ]
             # check for local filename
             if { $p_arr(${section_ref},c_filepathname) ne "" } {
-                # Since this is saved as a file and already decoded, 
+                # Since this is saved as a file and already decoded,
                 # guess content_type from file
                 # instead of assuming content type is same
                 # as type used in email transport.
                 set content_type [ns_guesstype $p_arr(${section_ref},c_filepathname)]
-                
+
                 lappend files_list [list \
                                         $content_type \
                                         $default_encoding \
                                         $p_arr(${section_ref},filename) \
                                         $p_arr(${section_ref},c_filepathname) ]
-                                    
+
             }
         }
         set l_arr(bodies) $bodies_list
@@ -1589,10 +1589,10 @@ ad_proc -private acs_mail_lite::inbound_queue_release {
     Delete email from queue that have been flagged 'release'.
 
     This does not affect email via imap or other connections.
-    
+
 } {
     # To flag 'release', set acs_mail_lite_from_external.release_p 1
- 
+
     set aml_ids_list [db_list acs_mail_lite_from_external_rn {
         select aml_email_id from acs_mail_lite_from_external
         where release_p='1' }]
@@ -1631,12 +1631,12 @@ ad_proc -private acs_mail_lite::inbound_filters {
 
     Headers and values are not alphanumeric case sensitive.
 
-    Inbound filters are dynamically updated via 
+    Inbound filters are dynamically updated via
     acs_mail_lite::sched_parameters.
 
     Instead of rejecting, an email can be filtered to low priority
     by using acs_mail_lite::inbound_prioritize parameters
-    
+
     @see acs_mail_lite::sched_parameters
     @see acs_mail_lite::inbound_prioritize
 } {
@@ -1645,7 +1645,7 @@ ad_proc -private acs_mail_lite::inbound_filters {
     set headers_list [array names h_arr]
 
     set p_lists [acs_mail_lite::sched_parameters]
-    
+
     # For details on these filters, see tables:
     #      acs_mail_lite_ui.reject_on_hit
     #                      .reject_on_miss
@@ -1668,7 +1668,7 @@ ad_proc -private acs_mail_lite::inbound_filters {
         if { [string match -nocase $vh_arr(${h}) $h_arr(${h})] } {
             set reject_p 1
         }
-        
+
         incr i
     }
 
@@ -1691,10 +1691,10 @@ ad_proc -private acs_mail_lite::inbound_filters {
         if { ![string match -nocase $vm_arr(${h}) $h_arr(${h})] } {
             set reject_p 1
         }
-        
+
         incr i
-    } 
-    
+    }
+
     return $reject_p
 }
 
@@ -1709,12 +1709,12 @@ ad_proc -private acs_mail_lite::inbound_cache_clear {
     If you are not sure if this will do what you want, try setting
     reprocess_old_p to '1'.
     @see acs_mail_lite::sched_parameters
-    
+
 } {
     db_dml acs_mail_lite_email_uid_map_d {
         update acs_mail_lite_email_uid_id_map {
             delete from acs_mail_lite_email_uid_id_map
-            
+
         }
     }
     return 1
@@ -1774,11 +1774,11 @@ ad_proc -private acs_mail_lite::section_ref_of {
     section_id
 } {
     Returns section_ref represented by section_id.
-    Section_id is an integer. 
+    Section_id is an integer.
     Section_ref has format of counting numbers separated by dot.
     First used here by ns_imap body and adopted for general email part refs.
 
-    Defaults to empty string (top level reference and a log warning) 
+    Defaults to empty string (top level reference and a log warning)
     if not found.
 } {
     set section_ref ""
@@ -1787,9 +1787,9 @@ ad_proc -private acs_mail_lite::section_ref_of {
         if { $section_id eq "-1" } {
             set exists_p 1
         } else {
-            
+
             set exists_p [db_0or1row acs_mail_lite_ie_section_ref_map_r_id1 {
-                select section_ref 
+                select section_ref
                 from acs_mail_lite_ie_section_ref_map
                 where section_id=:section_id
             } ]
@@ -1806,12 +1806,12 @@ ad_proc -private acs_mail_lite::section_id_of {
 } {
     Returns section_id representing a section_ref.
     Section_ref has format of counting numbers separated by dot.
-    Section_id is an integer. 
+    Section_id is an integer.
     First used here by ns_imap body and adopted for general email part refs.
 } {
     set section_id ""
     if { [regexp -- {^[0-9\.]*$} $section_ref ] } {
-        
+
         if { $section_ref eq "" } {
             set section_id -1
         } else {
@@ -1819,7 +1819,7 @@ ad_proc -private acs_mail_lite::section_id_of {
             append ckey $section_ref
             set exists_p [db_0or1row -cache_key $ckey \
                               acs_mail_lite_ie_section_ref_map_r1 {
-                                  select section_id 
+                                  select section_id
                                   from acs_mail_lite_ie_section_ref_map
                                   where section_ref=:section_ref
                               } ]
@@ -1845,8 +1845,8 @@ ad_proc -private acs_mail_lite::unique_id_create {
     {-other ""}
 } {
     Returns a unique_id for an outbound email header message-id.
-    Signs unique_id when package_id, party_id, object_id, and/or other info are supplied. party_id is not supplied if its value is empty string or 0. 
-    package_id not supplied when it is the default acs-mail-lite package_id. 
+    Signs unique_id when package_id, party_id, object_id, and/or other info are supplied. party_id is not supplied if its value is empty string or 0.
+    package_id not supplied when it is the default acs-mail-lite package_id.
     If unique_id is empty string, creates a unique_id then processes it.
 
 } {
@@ -1868,7 +1868,7 @@ ad_proc -private acs_mail_lite::unique_id_create {
     }
 
     set bounce_domain [acs_mail_lite::address_domain]
-    if { [string range $unique_id $last_at_idx+1 end-1] ne $bounce_domain } { 
+    if { [string range $unique_id $last_at_idx+1 end-1] ne $bounce_domain } {
         # Use bounce's address_domain instead
         # because message-id may also be used as originator
         set unique_id [string range $unique_id 0 $last_at_idx]
@@ -1876,7 +1876,7 @@ ad_proc -private acs_mail_lite::unique_id_create {
     }
 
     set aml_package_id [apm_package_id_from_key "acs-mail-lite"]
-    if { ( $package_id ne "" && $package_id ne $aml_package_id ) 
+    if { ( $package_id ne "" && $package_id ne $aml_package_id )
          || ( $party_id ne "" && $party_id ne "0" )
          || $object_id ne ""
          || $other ne ""
@@ -1888,7 +1888,7 @@ ad_proc -private acs_mail_lite::unique_id_create {
         set uid_list [split $uid "."]
         if { [llength $uid_list] == 3 } {
             # Assume this is a unique id from mime::uniqueID
-            
+
             # Replace clock seconds of uniqueID with a random integer
             # since cs is used to build signature, which defeats purpose.
             set uid_partial [lindex $uid_list 0]
@@ -1897,7 +1897,7 @@ ad_proc -private acs_mail_lite::unique_id_create {
             # It will be 10 for a while..
             # so use eleven 9's
             # Some cycles are saved by using a constant
-            append uid_partial "." [randomRange 99999999999] 
+            append uid_partial "." [randomRange 99999999999]
             append uid_partial "." [lindex $uid_list 2]
 
             set uid $uid_partial
@@ -1918,10 +1918,10 @@ ad_proc -private acs_mail_lite::unique_id_create {
         }
         set signed_unique_id [join $signed_unique_id_list $delim]
 
-        # Since signature is part of uniqueness of unique_id, 
+        # Since signature is part of uniqueness of unique_id,
         # use uid + signature for msg_id
         set msg_id $uid
-        append msg_id "-" $signed_unique_id 
+        append msg_id "-" $signed_unique_id
 
         set datetime_cs [clock seconds]
         db_dml acs_mail_lite_send_msg_id_map_w1 {
@@ -1931,14 +1931,14 @@ ad_proc -private acs_mail_lite::unique_id_create {
         }
         set unique_id "<"
         append unique_id $msg_id "@" $domain ">"
-    } 
+    }
     return $unique_id
 }
 
 ad_proc -private acs_mail_lite::unique_id_parse {
     -message_id:required
 } {
-    Parses a message-id compatible reference 
+    Parses a message-id compatible reference
     created by acs_mail_lite::unique_id_create.
     Returns package_id, party_id, object_id, other, datetime_cs in a name value list.
 
@@ -1954,18 +1954,18 @@ ad_proc -private acs_mail_lite::unique_id_parse {
     lassign $return_list package_id party_id object_id other datetime_cs
 
     set last_at_idx [string last "@" $message_id]
-    
+
     set domain [string range $message_id $last_at_idx+1 end]
     set unique_part [string range $message_id 0 $last_at_idx-1]
     set first_dash_idx [string first "-" $unique_part]
-    
+
     if { $first_dash_idx > -1 } {
         # message-id is signed.
         ns_log Dev "acs_mail_lite::unique_id_parse message_id '${message_id}'"
         set unique_id [string range $unique_part 0 $first_dash_idx-1]
         set signature [string range $unique_part $first_dash_idx+1 end]
         set sign_list [split $signature "-+"]
-        
+
         if { [llength $sign_list] == 3 } {
             # signature is in good form
             # Use the signature's delimiter instead of param IncomingMaxAge
@@ -1974,7 +1974,7 @@ ad_proc -private acs_mail_lite::unique_id_parse {
             #set max_age /parameter::get -parameter "IncomingMaxAge" \
             #                 -package_id $aml_package_id /
             #ns_log Dev "acs_mail_lite::unique_id_parse max_age '${max_age}'"
-            # if max_age is "" or "0" delim is "-". 
+            # if max_age is "" or "0" delim is "-".
             #    See acs_mail_lite::unique_id_create
             if { [string first "-" $signature] } {
                 # A max_age of 0 or '' expires instantly.
@@ -2018,8 +2018,8 @@ ad_proc -private acs_mail_lite::unique_id_parse {
         } else {
             set date_time_cs ""
         }
-        
-    } 
+
+    }
     set r_list [list \
                     package_id $package_id \
                     party_id $party_id \
@@ -2038,7 +2038,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     Returns openacs data associated with original outbound email in
     the header_array_name and as an ordered list of values:
 
-    package_id, party_id, object_id, other, datetime_cs 
+    package_id, party_id, object_id, other, datetime_cs
 
     datetime_cs is the time in seconds since Tcl epoch.
 
@@ -2049,7 +2049,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     data in context of email.
 
     Array indexes have suffix aml_ added to index name:
-    aml_package_id, aml_party_id, aml_object_id, aml_other, aml_datetime_cs 
+    aml_package_id, aml_party_id, aml_object_id, aml_other, aml_datetime_cs
 
     If a value is not found, an empty string is returned for the value.
 
@@ -2060,7 +2060,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     upvar 1 $header_array_name h_arr
     if { $header_name_list eq "" } {
         set header_name_list [array names h_arr]
-    } 
+    }
 
     # Here are some procs that help create a message-id or orginator
     # or generated unique ids from inbound email headers
@@ -2088,7 +2088,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
 
     # Note for imap paradigm: message-id should be in form:
     # <unique_id@local_domain.example>
-    # and unqiue_id should map to 
+    # and unqiue_id should map to
     # any package, party and/or object_id so
     # as to not leak info unnecessarily.
     # See table acs_mail_lite_send_msg_id_map
@@ -2126,7 +2126,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # these are the headers to check in a reply indicating original context:
 
     # original-message-id
-    # original-envelope-id  
+    # original-envelope-id
     # message-id            a unique message id per RFC 2822 3.6.4
     #                       assigned by originator per RFC 598 3.4.1
     #                        https://tools.ietf.org/html/rfc5598#section-3.4.1
@@ -2136,9 +2136,9 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     #                       Notices may be sent to this address when
     #                       a bounce notice to the original email's 'From'
     #                       address bounces.
-    #                       See RFC 5321 2.3.1 
+    #                       See RFC 5321 2.3.1
     #                        https://tools.ietf.org/html/rfc5321#section-2.3.1
-    #                       and RFC 5598 2.2.1 
+    #                       and RFC 5598 2.2.1
     #                        https://tools.ietf.org/html/rfc5598#section-2.1
     # msg-id
     # In-Reply-to  space delimited list of unique message ids per RFC 2822 3.6.4
@@ -2146,10 +2146,10 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     #
     # original-recipient    may contain original 'to' address of party_id
     # original-recipient-address
-    #                       is an alternate to original-recipient 
-    #                       used by RFC 3461 4.2 
+    #                       is an alternate to original-recipient
+    #                       used by RFC 3461 4.2
     #                        https://tools.ietf.org/html/rfc3461#section-4.2
-    #                      Recipient could be used as an extra layer 
+    #                      Recipient could be used as an extra layer
     #                       of authentication after parsing.
     #                      for example
     #                       'from' header is built as:
@@ -2174,7 +2174,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     #
 
 
-    # acs-mail-lite::send_immediately 
+    # acs-mail-lite::send_immediately
     # 'from' header defaults to acs_mail_lite parameter FixedSenderEmail
     # 'Reply-to' defaults to 'from' header value.
     # adds a different unique id to 'Return-Path'.
@@ -2192,24 +2192,24 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # which relies on tcllib mime package
     # in file acs-tcl/tcl/html-email-procs.tcl
     # message-id is built by acs_mail_lite::generate_message_id
-    #                     or mime::uniqueID 
-    #              and used in acs_mail_lite::send_immediately 
+    #                     or mime::uniqueID
+    #              and used in acs_mail_lite::send_immediately
 
     # acs_mail_lite::generate_message_id:
     #     return "/clock clicks/./ns_time/.oacs@/address_domain/>"
-    # mime::uniqueID: 
+    # mime::uniqueID:
     #     return "</pid/./clock seconds/./incr mime(cid)/@/info hostname/>"
     #     is defined in ns/lib/tcllib1.18/mime/mime.tcl
     #     mime(cid) is a counter that increments by one each time called.
 
     lappend check_list content-id
-    
+
 
     # To make acs_mail_lite_send_msg_id_map more robust,
     # should it be designed to import other references via a table map
     # so external references can be used?   No.
 
-    # Replaced generic use of mime::uniqueID 
+    # Replaced generic use of mime::uniqueID
     # with acs_mail_lite::unique_id_create
     # Don't assume acs_mail_lite::valid_signature works. It appears to check
     # an unknown form and is orphaned (not used).
@@ -2221,7 +2221,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # reply-to
     # Mail-Followup-To
     # parameter NotificationSender defaults to
-    #     remainder@ acs_mail_lite::address_domain 
+    #     remainder@ acs_mail_lite::address_domain
     # which defaults to:
     #   remainder@ parameter BounceDomain
     #   if set, otherwise to a driver hostname
@@ -2276,7 +2276,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
         set header [lindex $check_list $header_id]
         set h_idx [lsearch -exact -nocase $header_name_list $header]
         if { $h_idx > -1 } {
-            set h_name [lindex $check_list $h_idx] 
+            set h_name [lindex $check_list $h_idx]
 
             # hv = header value
             if { $header eq "references" } {
@@ -2293,17 +2293,17 @@ ad_proc -private acs_mail_lite::inbound_email_context {
                 # remove quoting angle brackets if any
                 if { [string match "<*>" $hv ] } {
                     set hv [string range $hv 1 end-1]
-                } 
+                }
                 set context_list [acs_mail_lite::unique_id_parse \
                                       -message_id $hv]
-                if { $h_arr(aml_datetime_cs) eq "" 
+                if { $h_arr(aml_datetime_cs) eq ""
                      && [string match "${bounce_addrs}*" $hv]
                  } {
 
                     ##code developers of OpenACS core:
                     # Legacy case should be removed for strict, secure
                     # handling of context info
-                    
+
                     # Check legacy case
                     # Regexp code is from acs_mail_lite::parse_bounce_address
                     if { [regexp $regexp_str $hv all user_id signature package_id] } {
@@ -2314,7 +2314,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
                                               other "" ]
                         set sig_list [split $signature "."]
                         set sig_1 [lindex $sig_list 1]
-                        if { [llength $sig_list ] == 3 
+                        if { [llength $sig_list ] == 3
                              && [string is wideinteger -strict $sig_1]
                          } {
                             lappend context_list datetime_cs $sig_1
@@ -2330,7 +2330,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
                     append cname $n
                     set h_arr(${cname}) $v
                 }
-                
+
                 incr hv_i
             }
         }
@@ -2347,7 +2347,7 @@ ad_proc acs_mail_lite::bounce_ministry {
     Check if this email is notifying original email bounced.
     If is a bounced notification, process it.
 
-    Returns 1 if bounced or an auto generated reply that 
+    Returns 1 if bounced or an auto generated reply that
     should be ignored, otherwise returns 0
 
     Expects header_array to have been previously processed by these procs:
@@ -2359,13 +2359,13 @@ ad_proc acs_mail_lite::bounce_ministry {
     # This is called ministry, because it is expected to grow in complexity
     # as bounce policy becomes more mature.
 
-    # The traditional OpenACS MailDir way: 
-    # code in acs_mail_lite::load_mails 
-    # in which, if there is a bounce, calls: 
+    # The traditional OpenACS MailDir way:
+    # code in acs_mail_lite::load_mails
+    # in which, if there is a bounce, calls:
     # acs_mail_lite::record_bounce
     # and later batches some admin via
     # acs_mail_lite::check_bounces
-    # This approach likely does not work for 
+    # This approach likely does not work for
     # standard email accounts where a FixedSenderEmail is expected and
     # a dynamic (unstatic) email
     # would bounce back again and therefore never be reported in system.
@@ -2399,9 +2399,9 @@ ad_proc acs_mail_lite::bounce_ministry {
         # Record bounced email?
         set party_id_from_addrs [party::get_by_email \
                                      -email $h_arr(aml_from_addrs)]
-        
+
         if { $party_id_from_addrs ne "" } {
-            set user_id $party_id_from_addrs 
+            set user_id $party_id_from_addrs
             if { ![acs_mail_lite::bouncing_user_p -user_id $user_id ] } {
 
                 # Following literally from acs_mail_lite::record_bounce
@@ -2426,7 +2426,7 @@ ad_proc acs_mail_lite::bounce_ministry {
 
                 }
             }
-            
+
         } else {
             # This is probably a bounce, but not from a recognized party
             # Log it, because it might help with email related issues.
@@ -2435,12 +2435,12 @@ ad_proc acs_mail_lite::bounce_ministry {
 
         }
     }
-   
+
 
     return $ignore_p
 }
 
-#            
+#
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

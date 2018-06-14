@@ -13,7 +13,7 @@
 
       </querytext>
     </fullquery>
-  
+
     <fullquery name="acs_mail_lite::check_bounces.send_notification_to_bouncing_email">
       <querytext>
 
@@ -47,7 +47,7 @@
 
      </querytext>
    </fullquery>
-   
+
    <fullquery name="acs_mail_lite::check_bounces.disable_bouncing_email">
      <querytext>
 

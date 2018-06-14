@@ -30,7 +30,7 @@ nsv_set acs_mail_lite check_bounce_p 0
 
 
 #
-# inbound 
+# inbound
 #
 # acs_mail_lite::load_mails -queue_dir $queue_dir
 
@@ -72,7 +72,7 @@ ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 1 41] acs_mail
 
 
 
-# acs_mail_lite::check_bounces 
+# acs_mail_lite::check_bounces
 ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 0 25] acs_mail_lite::check_bounces
 
 

@@ -88,7 +88,7 @@ namespace eval acs_mail_lite {
     } {
         This takes a reply address, checks it for consistency,
         and returns a list of user_id, package_id and bounce_signature found
-        
+
         @option bounce_address bounce address to be checked
         @return tcl-list of user_id package_id bounce_signature
         @see acs_mail_lite::inbound_email_context
@@ -140,7 +140,7 @@ namespace eval acs_mail_lite {
             } else {
                 # Set to an email address that is required to exist
                 # to avoid email loops and other issues
-                # per RFC 5321 section 4.5.1 
+                # per RFC 5321 section 4.5.1
                 # https://tools.ietf.org/html/rfc5321#section-4.5.1
                 # The somewhat unique capitalization may be useful
                 # for identifyng source in diagnostic context.
