@@ -822,6 +822,7 @@ ad_proc -private security::get_register_subsite {} {
             # subsite.
             #
             set url /
+            set host_node_id [dict get [site_node::get_from_url -url $url] node_id]
             set subsite_id [site_node::get_object_id -node_id $host_node_id]
         }
         if {$UseHostnameDomainforReg} {
