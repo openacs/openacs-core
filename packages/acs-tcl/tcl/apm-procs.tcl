@@ -889,14 +889,11 @@ ad_proc -public apm_package_installed_p {
 ad_proc -private apm_package_installed_p_not_cached {
     package_key
 } {
-    if {[catch {set installed_p [db_string apm_package_installed_p {
-        select 1 from apm_package_versions
-        where package_key = :package_key
-        and installed_p = 't'
-    } -default 0]}]} {
-        set installed_p 0
-    }
-    return $installed_p
+    return [db_string apm_package_installed_p {
+        select exists (select 1 from apm_package_versions
+                        where package_key = :package_key
+                          and installed_p) from dual
+    }]
 }
 
 ad_proc -public apm_package_enabled_p {
@@ -943,8 +940,10 @@ ad_proc -public apm_num_instances {package_key} {
 
     @return The number of instances of the indicated package.
 } {
-    return [db_exec_plsql apm_num_instances {}]
-
+    return [db_string query {
+        select count(*) from apm_packages
+        where package_key = :package_key
+    }]
 }
 
 ad_proc -public apm_parameter_update {
@@ -1248,11 +1247,7 @@ ad_proc -public apm_package_url_from_id {package_id} {
 
     @return The package url of the instance of the package.
 } {
-    return [util_memoize [list apm_package_url_from_id_mem $package_id]]
-}
-
-ad_proc -private apm_package_url_from_id_mem {package_id} {
-    return [db_string apm_package_url_from_id {} -default {}]
+    return [lindex [site_node::get_url_from_object_id -object_id $package_id] 0]
 }
 
 #
@@ -1263,12 +1258,7 @@ ad_proc -public apm_package_url_from_key {package_key} {
     @return The package url of the instance of the package.
     only valid for singleton packages.
 } {
-    return [util_memoize [list apm_package_url_from_key_mem $package_key]]
-}
-
-ad_proc -private apm_package_url_from_key_mem {package_key} {
-    set package_id [apm_package_id_from_key $package_key]
-    return [apm_package_url_from_id $package_id]
+    return [apm_package_url_from_id [apm_package_id_from_key $package_key]]
 }
 
 #
@@ -1340,7 +1330,11 @@ ad_proc -public apm_package_version_installed_p {package_key version_name} {
     @return 1 if the indicated package version is installed, 0 otherwise.
 
 } {
-    return [db_string apm_package_version_installed_p {}]
+    return [db_0or1row apm_package_version_installed_p {
+	select 1 from apm_package_versions
+	 where package_key  = :package_key
+	   and version_name = :version_name
+    }]
 }
 
 ad_proc -public apm_package_version_enabled_p {version_id} {
@@ -1875,20 +1869,23 @@ ad_proc -private apm_application_new_checkbox {} {
 
     @author Peter Marklund
 } {
-    set html_string "<select name=package_key>"
-
-    db_foreach package_types {} {
-        append html_string "<option value=$package_key>$pretty_name</option>\n"
+    set options [list]
+    db_foreach package_types {
+         select package_key, pretty_name
+         from apm_package_types t
+         where not (singleton_p and exists (select 1 from apm_packages
+                                             where package_key = t.package_key))
+         order by pretty_name
+    } {
+        lappend options [subst {<option value="$package_key">$pretty_name</option>}]
     }
 
     # If this is a site-wide admin, offer a link to the package manager
-    if { [permission::permission_p -object_id 0 -privilege admin] } {
-        append html_string "<option value=\"/new\">--Install new package--</option>\n"
+    if { [acs_user::site_wide_admin_p] } {
+        lappend options {<option value="/new">--Install new package--</option>}
     }
 
-    append html_string "</select>"
-
-    return $html_string
+    return [subst {<select name="package_key">[join $options]<select>}]
 }
 
 ad_proc -private apm::read_files {path file_list} {
