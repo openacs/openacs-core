@@ -669,7 +669,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                 }
 
                 if { [clock seconds] + 65 < $si_quit_cs } {
-                    # Regardless of parameter SMPTTimeout,
+                    # Regardless of parameter SMTPTimeout,
                     # if there is more than 65 seconds to next cycle,
                     # close connection
                     acs_mail_lite::imap_conn_close -conn_id $cid

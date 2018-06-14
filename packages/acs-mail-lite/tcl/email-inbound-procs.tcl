@@ -2370,7 +2370,7 @@ ad_proc acs_mail_lite::bounce_ministry {
     # a dynamic (unstatic) email
     # would bounce back again and therefore never be reported in system.
 
-    # Specfics of the old way:
+    # Specifics of the old way:
     # acs_mail_lite::record_bounce which calls:
     # acs_mail_lite::bouncing_user_p -user_id $h_arr(aml_user_id)
 

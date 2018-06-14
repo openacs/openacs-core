@@ -403,7 +403,7 @@ message_fpn '${message_fpn}' section_ref '${section_ref}' section_id '${section_
             # It is mostly the last section/part of message.
             #
             # If diagnostics urge examining these cases,
-            # Set debug_p 1 to allow the following code to
+            # Set debug_p 1 to allow the following code
             # to compress a message to recognizable parts without
             # flooding the log.
             set debug_p 0
