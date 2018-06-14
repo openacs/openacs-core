@@ -1885,7 +1885,7 @@ ad_proc -private apm_application_new_checkbox {} {
         lappend options {<option value="/new">--Install new package--</option>}
     }
 
-    return [subst {<select name="package_key">[join $options]<select>}]
+    return [subst {<select name="package_key">[join $options]</select>}]
 }
 
 ad_proc -private apm::read_files {path file_list} {
