@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/tcl/rel-types-procs.tcl
-
 ad_library {
 
     Procs about relationships
@@ -165,17 +163,18 @@ namespace eval rel_types {
 	}
 
 	# The following create table statement commits the transaction. If it
-	# fails, we roll back what we've done
+	# fails, we roll back what we've done.
 
 	if {$create_table_p == "t"} {
-	    if {[catch {db_exec_plsql create_table "
-		create table $table_name (
-        	   rel_id constraint $fk_constraint_name
-                   references $references_table ($references_column)
-                   constraint $pk_constraint_name primary key
-		)"} errmsg]} {
+	    if {[catch {db_exec_plsql create_table [subst {
+                create table $table_name (
+                     rel_id integer
+                            constraint $fk_constraint_name
+                            references $references_table ($references_column)
+                            constraint $pk_constraint_name primary key
+                   )}]} errmsg]} {
 
-		# Roll back our work so for
+		# Roll back our work so far
 
 		for {set i [expr {[llength $plsql_drop] - 1}]} {$i >= 0} {incr i -1} {
 		    set drop_cmd [lindex $plsql_drop $i]

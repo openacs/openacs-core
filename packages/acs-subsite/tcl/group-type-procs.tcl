@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/tcl/group-type-procs.tcl
-
 ad_library {
 
     Procs for creating group types
@@ -148,15 +146,18 @@ namespace eval group_type {
 	}
 
 	# The following create table statement commits the
-	# transaction. If it fails, we roll back what we've done
-	if { [catch {db_exec_plsql create_table "
-create table $table_name ( 
-    $id_column   integer 
-                 constraint $constraint(pk) primary key
-                 constraint $constraint(fk) 
-                   references $references_table ($references_column)
-)"} errmsg] } {
-            # Roll back our work so for
+	# transaction. If it fails, we roll back what we've done.
+
+	if { [catch {db_exec_plsql create_table [subst {
+            create table $table_name ( 
+                 $id_column integer 
+                            constraint $constraint(pk) primary key
+                            constraint $constraint(fk) 
+                            references $references_table ($references_column)
+                 )}]} errmsg] } {
+
+            # Roll back our work so far
+
             for { set i [expr {[llength $plsql_drop] - 1}] } { $i >= 0 } { incr i -1 } {
 		set pair [lindex $plsql_drop $i]
 		if { [catch {db_exec_plsql [lindex $drop_pair 0] [lindex $drop_pair 1]} err_msg_2] } {

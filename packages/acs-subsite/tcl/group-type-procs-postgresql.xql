@@ -72,23 +72,5 @@
 
       </querytext>
 </partialquery>
-
- 
-<fullquery name="group_type::new.create_table">      
-      <querytext>
-
-begin      
-  create table $table_name ( 
-    $id_column   integer 
-                 constraint $constraint(pk) primary key
-                 constraint $constraint(fk) 
-                   references $references_table ($references_column)
-  );
-  return null;
-end;
-
-      </querytext>
-</fullquery>
-
  
 </queryset>

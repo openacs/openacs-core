@@ -59,17 +59,6 @@ select acs_rel_type__create_type (
 </querytext>
 </fullquery>
 
- 
-<fullquery name="rel_types::new.create_table">
-<querytext>
-	create table $table_name (
-            rel_id integer constraint $fk_constraint_name
-                   references $references_table ($references_column)
-                   constraint $pk_constraint_name primary key
-	);
-</querytext>
-</fullquery>
-
 <fullquery name="rel_types::create_role.create_role">
 <querytext>
       select acs_rel_type__create_role(:role, :pretty_name, :pretty_plural)
