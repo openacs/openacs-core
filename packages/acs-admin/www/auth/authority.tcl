@@ -258,6 +258,9 @@ list::create \
 
 set display_batch_history_p [expr {$authority_exists_p && $ad_form_mode eq "display"}]
 if { $display_batch_history_p } {
+
+    set yes [_ acs-kernel.common_Yes]
+    set no  [_ acs-kernel.common_No]
     
     db_multirow -extend { 
         job_url 
@@ -267,13 +270,32 @@ if { $display_batch_history_p } {
         short_message 
         actions_per_minute
         run_time
-    } batch_jobs select_batch_jobs {} {
+        run_time_seconds
+    } batch_jobs select_batch_jobs {
+        select job_id,
+               to_char(job_start_time, 'YYYY-MM-DD HH24:MI:SS') as start_time_ansi,
+               to_char(job_end_time, 'YYYY-MM-DD HH24:MI:SS') as end_time_ansi,
+               snapshot_p,
+               (select count(*) from auth_batch_job_entries
+                where job_id = auth_batch_jobs.job_id) as num_actions,
+               (select count(*) from auth_batch_job_entries
+                 where job_id = auth_batch_jobs.job_id
+                   and not success_p) as num_problems,
+               interactive_p,
+               message
+        from   auth_batch_jobs
+        where  authority_id = :authority_id
+		order by start_time_ansi        
+    } {
+        set run_time_seconds [expr {[clock scan $end_time_ansi -format "%Y-%m-%d %H:%M:%S"] -
+                                    [clock scan $start_time_ansi -format "%Y-%m-%d %H:%M:%S"]}]
+                                    
         set job_url [export_vars -base batch-job { job_id }]
 
         set start_time_pretty [lc_time_fmt $start_time_ansi "%x %X"]
         set end_time_pretty [lc_time_fmt $end_time_ansi "%x %X"]
 
-        set interactive_pretty [ad_decode $interactive_p "t" "Yes" "No"]
+        set interactive_pretty [expr {$interactive_p eq "t" ? $yes : $no}]
         set short_message [string_truncate -len 30 -- $message]
 
         set actions_per_minute {}
