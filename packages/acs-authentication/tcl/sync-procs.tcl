@@ -204,7 +204,7 @@ To view the complete log, please visit\n$job(log_url)"
 ad_proc -public auth::sync::job::start_get_document {
     {-job_id:required}
 } {
-    Record the that we're starting to get the document.
+    Record the time that we're starting to get the document.
 
     @param job_id The ID of the batch job you're ending.
 } {
@@ -218,7 +218,7 @@ ad_proc -public auth::sync::job::end_get_document {
     {-document ""}
     {-snapshot:boolean}
 } {
-    Record the that we've finished getting the document, and record the status.
+    Record the time that we've finished getting the document, and record the status.
 
     @param job_id The ID of the batch job you're ending.
 
