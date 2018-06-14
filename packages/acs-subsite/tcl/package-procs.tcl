@@ -519,16 +519,10 @@ ad_proc -private package_insert_default_comment { } {
     @creation-date 12/29/2000
 
 } {
-    if { [ad_conn isconnected] } {
-        set user_id [ad_conn user_id]
-        db_1row select_comments {}
-    } else {
-        db_1row select_author_unknown {
-            select 'Unknown' as author,
-            sysdate as creation_date
-            from dual
-        }
-    }
+    set author [expr {[ad_conn isconnected] ?
+                      [acs_user::get_element -element name] : "Unknown"}]
+    set creation_date [db_string current_timestamp {
+        select current_timestamp from dual}]
     return "
   --/** THIS IS AN AUTO GENERATED PACKAGE. $author was the
   --    user who created it

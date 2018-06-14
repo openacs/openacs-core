@@ -75,17 +75,6 @@
 </fullquery>
 
  
-<fullquery name="package_insert_default_comment.select_comments">      
-      <querytext>
-      
-	    select acs_object.name(:user_id) as author,
-	           sysdate as creation_date
-	      from dual
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="package_object_attribute_list.attributes_select">      
       <querytext>
       
