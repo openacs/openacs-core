@@ -95,22 +95,6 @@ ad_proc -public acs_object_type::get {
     } -column_array row
 }
 
-ad_proc -private acs_object_type::acs_object_instance_of {
-    {-object_id:required}
-    {-type:required}
-} {
-    Returns true if the specified object_id is a subtype of the specified type.
-    This is an inclusive check.
-
-    @author Lee Denison (lee@thaum.net)
-} {
-    acs_object::get -object_id $object_id -array obj
-
-    return [acs_object_type::supertype \
-        -supertype $type \
-        -subtype $obj(object_type)]
-}
-
 ad_proc -private acs_object_type::supertype {
     {-supertype:required}
     {-subtype:required}
