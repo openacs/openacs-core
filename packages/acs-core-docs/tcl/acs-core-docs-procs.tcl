@@ -15,9 +15,9 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
     set uninstalled [list]
     # Determine which spec files are not installed
     foreach spec_file [apm_scan_packages "$::acs::rootdir/packages"] {
-        if { ! [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } { 
+        if { ! [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } {
             if { ! [apm_package_registered_p $version(package.key)] } {
-                if {$version(package-name) eq ""} { 
+                if {$version(package-name) eq ""} {
                     set version(package-name) $version(package.key)
                 }
                 lappend uninstalled [list $version(package.key) $version(package-name)]
@@ -27,29 +27,29 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
 
     # sort the list and return in array set form
     set out [list]
-    foreach pkg [lsort -dictionary -index 1 $uninstalled] { 
+    foreach pkg [lsort -dictionary -index 1 $uninstalled] {
         lappend out {*}$pkg
     }
     return  $out
 
 }
 
-ad_proc -public core_docs_uninstalled_packages {} { 
+ad_proc -public core_docs_uninstalled_packages {} {
     Returns a list (in array set format) of package.key package-name
     (used for display on the index.adp page).
-    
+
     Cached version of core_docs_uninstalled_packages_internal
-    
+
     @author Jeff Davis davis@xarg.net
-} { 
+} {
     return [util_memoize core_docs_uninstalled_packages_internal]
 }
 
-ad_proc -public core_docs_html_redirector {args} { 
+ad_proc -public core_docs_html_redirector {args} {
 
     Performs internal redirect requests for .html-pages to .adp
     pages if these exist.
-    
+
     @author Gustaf Neumann
 } {
     #
@@ -62,7 +62,7 @@ ad_proc -public core_docs_html_redirector {args} {
     # For now, ignore all version info
     #
     regsub {^/doc/(current|openacs-[0-9-]+|HEAD)/} $url /doc/ url
-        
+
     set path    [string range $url [string length [ad_conn package_url]] end]
     set html_fn [acs_package_root_dir [ad_conn package_key]]/www/$path
     if {[file exists $html_fn]} {
@@ -90,7 +90,7 @@ ad_proc -public core_docs_html_redirector {args} {
         # entry logged in access.log
         #
         return filter_return
-        
+
     } else {
         #
         # Continue with business as usual
