@@ -28,21 +28,30 @@ template::list::create \
 	    display_template "<if @host_node_pairs.delete_url@ not nil><a href=\"@host_node_pairs.delete_url@\" title=\"Delete this mapping\">delete</a></if>"
 	}
     }
-	    
+
+set root_node_id [site_node::get_node_id -url "/"]
+
 template::multirow create host_node_pairs host node_id url delete_url
 template::multirow append host_node_pairs \
     [ns_config ns/server/[ns_info server]/module/nssock Hostname] \
-    [db_string root_id {}] \
+    $root_node_id \
     "/" \
     ""
 
-db_multirow -extend {delete_url} -append host_node_pairs select_host_node_pairs {} {
+db_multirow -extend {
+    url
+    delete_url
+} -append host_node_pairs select_host_node_pairs {
+    select host, node_id
+    from host_node_map
+} {
+    set url [site_node::get_url -node_id $node_id]
     set delete_url [export_vars -base delete {host node_id}]
 }
 
 
 if {$parent_node_id eq ""} {
-    set parent_node_id [site_node::get_node_id -url "/"]
+    set parent_node_id $root_node_id
 }
 
 set node_list [list]
