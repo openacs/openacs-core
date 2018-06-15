@@ -30,18 +30,18 @@ ad_proc content_search__url {
     Provides a url for linking to content items which show up in a search
     result set.
 } {
-
     set package_id [apm_package_id_from_key acs-content-repository]
-    db_1row get_url_stub "
-        select site_node__url(node_id) as root_url,
-               (select content_item__get_path(item_id,content_item__get_root_folder(null)) 
-                  from cr_revisions
-                 where revision_id = :object_id) as url
-          from site_nodes n
-         where n.object_id = :package_id        
-    "
+    set root_url [lindex [site_node::get_url_from_object_id -object_id $package_id] 0]
     
-    return "[ad_url]$root_url$url?revision_id=$object_id"
+    set item_id [db_string get_item_id {
+        select item_id from cr_revisions
+        where revision_id = :object_id}]
+    set root_folder_id [content::item::get_root_folder]
+    set url [content::item::get_path \
+                 -item_id        $item_id \
+                 -root_folder_id $root_folder_id]
+    
+    return "[ad_url][string trimright $root_url /]$url?revision_id=$object_id"
 }
 
 ad_proc image_search__datasource {
@@ -72,18 +72,7 @@ ad_proc image_search__url {
     Provides a url for linking to content items which show up in a search
     result set.
 } {
-
-    set package_id [apm_package_id_from_key acs-content-repository]
-    db_1row get_url_stub "
-        select site_node__url(node_id) as root_url,
-               (select content_item__get_path(item_id,null) 
-                  from cr_revisions
-                 where revision_id = :object_id) as url
-          from site_nodes n
-         where n.object_id = :package_id        
-    "
-    
-    return "[ad_url][string trimright $root_url /]$url?revision_id=$object_id"
+    return [content_search__url $object_id]
 }
 
 
@@ -120,18 +109,7 @@ ad_proc template_search__url {
     Provides a url for linking to content items which show up in a search
     result set.
 } {
-
-    set package_id [apm_package_id_from_key acs-content-repository]
-    db_1row get_url_stub "
-        select site_node__url(node_id) as root_url,
-               (select content_item__get_path(item_id,null) 
-                  from cr_revisions
-                 where revision_id = :object_id) as url
-          from site_nodes n
-         where n.object_id = :package_id        
-    "
-    
-    return "[ad_url][string trimright $root_url /]$url?revision_id=$object_id"
+    return [content_search__url $object_id]
 }
 
 
@@ -142,10 +120,10 @@ ad_proc content_search__search_ids {
 } {
     Returns the object ids for a specified search.    
 } {
-
     set package_id [apm_package_id_from_key search]
     set driver [parameter::get -package_id $package_id -parameter FtsEngineDriver]
-    array set result [acs_sc::invoke -contract FtsEngineDriver -operation search -call_args [list $q $offset $limit] -impl $driver]
+    array set result [acs_sc::invoke -contract FtsEngineDriver \
+                          -operation search -call_args [list $q $offset $limit] -impl $driver]
 
     return $result(ids)
 }
