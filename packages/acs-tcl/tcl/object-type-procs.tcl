@@ -12,7 +12,7 @@ namespace eval acs_object_type {}
 
 ad_proc -public acs_object_type_hierarchy {
 
-    -object_type
+    { -object_type "" }
     { -indent_string "&nbsp;" }
     { -indent_width "4" }
     { -join_string "<br>" }
@@ -34,9 +34,9 @@ ad_proc -public acs_object_type_hierarchy {
 
     set result ""
 
-    if { [info exists object_type] && $object_type ne "" } {
+    if { $object_type ne "" } {
         set sql [db_map object_type_not_null]
-	set join_string "&nbsp;&gt;&nbsp;"
+        set join_string "&nbsp;&gt;&nbsp;"
     } else {
         set sql [db_map object_type_is_null]
     }
@@ -44,13 +44,13 @@ ad_proc -public acs_object_type_hierarchy {
     set i 0
     db_foreach object_types "$sql" {
 
-	if { $i > 0 } {
-	    append result $join_string
-	}
-	incr i
-	set href [export_vars -base ./one {object_type}]
-	append result [subst {\n    $indent<a href="[ns_quotehtml $href]">[lang::util::localize $pretty_name]</a>}]
-	append result $additional_html
+        if { $i > 0 } {
+            append result $join_string
+        }
+        incr i
+        set href [export_vars -base ./one {object_type}]
+        append result [subst {\n    $indent<a href="[ns_quotehtml $href]">[lang::util::localize $pretty_name]</a>}]
+        append result $additional_html
     }
 
     return $result
@@ -61,7 +61,7 @@ ad_proc -public acs_object_type::get {
     -object_type:required
     -array:required
 } {
-    Get info about an object type. Returns columns 
+    Get info about an object type. Returns columns
 
     <ul>
       <li>object_type,
@@ -133,7 +133,7 @@ ad_proc acs_object_type::get_table_name {
 
     Allow caching of the table_name as it is unlikely to change without a restart of the server
     (which is mandatory after an upgrade)
-    
+
 } {
     return [util_memoize [list acs_object_type::get_table_name_not_cached -object_type $object_type]]
 }
