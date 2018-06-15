@@ -199,7 +199,7 @@ ad_proc -public ::content::item::rename {
 ad_proc -public ::content::item::move {
     -item_id:required
     -target_folder_id:required
-    {-name}
+    {-name ""}
 } {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
@@ -211,8 +211,8 @@ ad_proc -public ::content::item::move {
     set var_list [list \
                       [list item_id $item_id] \
                       [list target_folder_id $target_folder_id] ]
-    if {[info exists name] && $name ne ""} {
-    lappend var_list [list name $name]
+    if {$name ne ""} {
+        lappend var_list [list name $name]
     }
     return [package_exec_plsql \
                 -var_list $var_list \
