@@ -47,7 +47,7 @@ ad_proc -public core_docs_uninstalled_packages {} {
 
 ad_proc -public core_docs_html_redirector {args} { 
 
-    Performs an internal redirect requests for .html-pages to .adp
+    Performs internal redirect requests for .html-pages to .adp
     pages if these exist.
     
     @author Gustaf Neumann
