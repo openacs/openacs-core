@@ -4,7 +4,7 @@
 
   @script_documentation;noquote@
 
-  <if @xql_links:rowcount@ gt 0>
+  <if @xql_links:rowcount;literal@ gt 0>
     <h4>Related Files</h4>
     <ul>
       <multiple name="xql_links">
@@ -29,9 +29,10 @@
     </if>
 
     <if @source_p;literal@ true>
-      <h4>Content File Source</h4>
+      <h4>@contents_title@</h4>
 
       <!-- directly display file contents var to avoid translating i18n strings etc -->
       <blockquote><pre class='code'>@file_contents;literal@</pre></blockquote>
+
     </if>
 </if>

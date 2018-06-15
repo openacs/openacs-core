@@ -1480,7 +1480,7 @@ namespace eval ::apidoc {
         return [string range $html 1 end]
     }
 
-    ad_proc -private xql_links_list { path } {
+    ad_proc -private xql_links_list { {-include_compiled 0} path } {
 
         Returns list of xql files related to Tcl script file
         @param path path and filename from $::acs::rootdir
@@ -1500,11 +1500,13 @@ namespace eval ::apidoc {
                       "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]]
 
         foreach file $files {
-            lappend linkList [list \
-                                  filename $file \
-                                  link "content-page-view?source_p=1&path=[ns_urlencode $path_dirname/[file tail $file]]" \
-                                 ]
-
+            set path [ns_urlencode $path_dirname/[file tail $file]]
+            set link [export_vars -base content-page-view {{source_p 1} path}]
+            lappend linkList [list filename $file link $link]
+            if {$include_compiled && [file extension $file] eq ".adp"} {
+                set link [export_vars -base content-page-view {{source_p 1} {compiled_p 1} path}]
+                lappend linkList [list filename "$file (compiled)" link $link]
+            }
         }
 
         return $linkList
