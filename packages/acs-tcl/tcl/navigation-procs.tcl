@@ -92,7 +92,7 @@ ad_proc ad_context_node_list {
 
 ad_proc -public ad_context_bar_multirow { 
     {-from_node ""}
-    -node_id
+    {-node_id ""}
     {-multirow "context"}
     context
 } {
@@ -111,7 +111,7 @@ ad_proc -public ad_context_bar_multirow {
 	return ""
     }
     
-    if { ![info exists node_id] || $node_id eq "" } {
+    if { $node_id eq "" } {
         set node_id [ad_conn node_id]
     }
 
@@ -153,7 +153,7 @@ ad_proc -public ad_context_bar_multirow {
 
 ad_proc -public ad_context_bar { 
     {-from_node ""}
-    -node_id
+    {-node_id ""}
     -separator
     args
 } {
@@ -172,7 +172,7 @@ ad_proc -public ad_context_bar {
 	return ""
     }
 
-    if { ![info exists node_id] || $node_id eq "" } {
+    if { $node_id eq "" } {
         set node_id [ad_conn node_id]
     }
 

@@ -34,7 +34,7 @@ ad_page_contract {
     {last_name_starts_with ""}
     {first_names ""}
     keyword:optional
-    target
+    {target ""}
     {passthrough ""}
     {limit_to_users_in_group_id:integer ""}
     {only_authorized_p:boolean 1}
@@ -66,7 +66,7 @@ set exception_text ""
 
 set context [list [list "index" "Users"] "Complex search"]
 
-if { ![info exists target] || $target eq "" } {
+if { $target eq "" } {
     incr exception_count
     append exception_text "<li>Target was not specified. This shouldn't have
 happened, please contact the

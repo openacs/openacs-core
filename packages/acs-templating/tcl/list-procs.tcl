@@ -845,7 +845,7 @@ ad_proc -public template::list::element_where_clauses {
 ad_proc -public template::list::page_where_clause {
     -name:required
     -and:boolean
-    {-key}
+    {-key ""}
 } {
     @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is non-empty.
 
@@ -865,7 +865,7 @@ ad_proc -public template::list::page_where_clause {
         append result "and "
     }
 
-    if { (![info exists key] || $key eq "") } {
+    if { $key eq "" } {
         set key $list_properties(key)
     }
 
