@@ -690,7 +690,8 @@ namespace eval ::foobar {}
 
 ad_proc -public ::foobar::new {
 	{-oacs_user:boolean}
-	{-shazam}
+        {-shazam:required}
+    	{-foo}
 	{-user_id ""}
 } {
 	The documentation for this procedure should have a brief description of the 
@@ -701,14 +702,19 @@ ad_proc -public ::foobar::new {
 
 	\@author Roberto Mello <rmello at fslc.usu.edu>
 	\@creation-date 2002-01-21
-	
-	\@param oacs_user If this user is already an OpenACS user. oacs_user_p will be defined.
-	\@param shazam Magical incantation that calls Captain Marvel. Required parameter.
-	\@param user_id The id for the user to process. Optional with default "" 
-	                (api-browser will show the default automatically)
+ 	
+        \@param oacs_user If this user is already an OpenACS user. oacs_user_p is defined
+                          per default as "false", when specified as "true". The parameter is optional.
+        \@param shazam    Magical incantation that calls Captain Marvel. Required parameter.
+        \@param foo       parameter, which can be omitted. Check with [info exists ...] if was given.
+	\@param user_id   The id for the user to process. Optional with default "" 
+	                  (api-browser shows the default).
 } {
 	if { $user_id eq "" } {
 		# Do something if this is not an empty string
+	}
+        if { [info exists foo] } {
+		# Do something if we got a value for "foo"
 	}
 
 	if { $oacs_user_p } {
