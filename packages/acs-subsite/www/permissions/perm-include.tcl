@@ -69,7 +69,7 @@ lappend elements remove_all {
 
 set perm_url "[ad_conn subsite_url]permissions/"
 
-if { ![info exists user_add_url] || $user_add_url eq "" } {
+if { $user_add_url eq "" } {
     set user_add_url "${perm_url}perm-user-add"
 }
 set user_add_url [export_vars -base $user_add_url {
