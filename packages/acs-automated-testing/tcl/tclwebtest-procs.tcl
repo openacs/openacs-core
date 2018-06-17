@@ -95,14 +95,14 @@ ad_proc twt::server_url {} {
 #
 #########################
 
-ad_proc twt::user::create { 
+ad_proc twt::user::create {
     {-user_id {}}
     {-admin:boolean}
  } {
     Create a test user with random email and password for testing
 
-     @param admin Provide this switch to make the user site-wide admin
-    
+    @param admin Provide this switch to make the user site-wide admin
+
     @return The user_info array list returned by auth::create_user. Contains
             the additional keys email and password.
 
@@ -157,7 +157,7 @@ ad_proc twt::user::login { email password {username ""}}  {
     @param password Password of user to log in.
 } {
     if {$username eq ""} {
-	set username $email
+        set username $email
     }
     aa_log "twt::login email $email password $password username $username"
     tclwebtest::cookies clear
@@ -167,20 +167,20 @@ ad_proc twt::user::login { email password {username ""}}  {
 
     # Login the user
     tclwebtest::form find ~n login
-    
+
     set local_authority_id [auth::authority::local]
     set local_authority_pretty_name [auth::authority::get_element -authority_id $local_authority_id -element pretty_name]
     if {![catch {tclwebtest::field find ~n authority_id} errmsg]} {
-	tclwebtest::field select $local_authority_pretty_name
-	aa_log "twt::login selecting authority_id $local_authority_id"
+        tclwebtest::field select $local_authority_pretty_name
+        aa_log "twt::login selecting authority_id $local_authority_id"
     }
     if {[catch {tclwebtest::field find ~n email} errmsg]} {
-	tclwebtest::field find ~n username
-	tclwebtest::field fill $username
-	aa_log "twt::login using username instead of email"
+        tclwebtest::field find ~n username
+        tclwebtest::field fill $username
+        aa_log "twt::login using username instead of email"
     } else {
-	aa_log "twt::login using email instead of username"
-	tclwebtest::field fill "$email"
+        aa_log "twt::login using email instead of username"
+        tclwebtest::field fill "$email"
     }
     tclwebtest::field find ~n password
     tclwebtest::field fill $password
