@@ -149,9 +149,9 @@ ad_proc -public acs_sc::contract::delete {
 
     db_transaction {
         # Need both name and ID below
-        if { (![info exists name] || $name eq "") } {
+        if { $name eq "" } {
             set name [db_string get_name_by_id {}]
-        } elseif { (![info exists contract_id] || $contract_id eq "") } {
+        } elseif { $contract_id eq "" } {
             set contract_id [db_string get_id_by_name {}]
         }
 
