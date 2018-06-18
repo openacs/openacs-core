@@ -14,7 +14,13 @@ set user_id [ad_conn user_id]
 
 # get the notification information
 
-db_1row select_notification_request {}
+db_1row select_notification_request {
+    select type_id, interval_id, object_id
+    from notification_requests
+    where request_id = :request_id    
+}
+
+set object_name [acs_object_name $object_id]
 
 set doc(title) [_ notifications.Change_frequency]
 set context [list $doc(title)]
@@ -28,7 +34,11 @@ ad_form -name change_frequency -export {request_id return_url} -form {
         {value $interval_id}}
 } -on_submit {
 
-    db_dml update_notification_frequency {}
+    db_dml update_notification_frequency {
+        update notification_requests
+        set interval_id = :interval_id
+        where request_id = :request_id        
+    }
 
     ad_returnredirect $return_url
     ad_script_abort
