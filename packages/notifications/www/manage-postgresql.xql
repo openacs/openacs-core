@@ -13,14 +13,13 @@
             nr.object_id
        from notification_requests nr,
             notification_intervals ni,
-            notification_types nt,
-            persons p
+            notification_types nt
       where nr.user_id = :user_id
         and nr.interval_id = ni.interval_id
         and nr.type_id = nt.type_id
-        and nr.user_id = p.person_id 
+        and nr.user_id is not null
         and nr.dynamic_p = 'f'
-      order by lower(nt.pretty_name), lower(acs_object__name(nr.object_id))
+      order by lower(nt.pretty_name), object_name
       </querytext>
 </fullquery>
 
