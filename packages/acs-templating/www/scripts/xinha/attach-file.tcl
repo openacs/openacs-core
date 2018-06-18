@@ -101,7 +101,9 @@ if {$write_p} {
 		element set_value upload_form f_href $f_href
 	    }
 	    # ensure that Link Title is specified
-	    if { (![info exists f_title] || $f_title eq "") && ([info exists url_ok_btn] && $url_ok_btn ne "") } {
+	    if { (![info exists f_title] || $f_title eq "")
+                 && ([info exists url_ok_btn] && $url_ok_btn ne "")
+             } {
 		template::form::set_error upload_form f_title "Specify a [_ acs-templating.Link_Title]"
 	    }
 	    set error_p 0

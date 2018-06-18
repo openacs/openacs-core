@@ -36,7 +36,7 @@ if {[string is false $email_forgotten_password_p]} {
 # Display form to collect username and authority
 set authority_options [auth::authority::get_authority_options]
 
-if { (![info exists authority_id] || $authority_id eq "") } {
+if { $authority_id eq "" } {
     set authority_id [lindex $authority_options 0 1]
 }
 

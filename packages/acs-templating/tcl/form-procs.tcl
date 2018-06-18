@@ -638,7 +638,9 @@ ad_proc -private template::form::render { id tag_attributes } {
   
   # If we're in edit mode, output the action
   upvar #$level $id:formaction formaction
-  if { $properties(mode) eq "edit" && ([info exists formaction] && $formaction ne "") } {
+    if { $properties(mode) eq "edit"
+         && ([info exists formaction] && $formaction ne "")
+     } {
     upvar #$level $id:formaction action
     append output [export_vars -form { { form\:formaction $formaction } }]
   }
