@@ -35,7 +35,7 @@
     <fullquery name="packages_mounted_select">
         <querytext>
             select p.package_id, 
-                   acs_object__name(p.package_id) as name,
+                   p.instance_name as name,
                    pt.pretty_name as package_pretty_name
             from   apm_packages p,
                    apm_package_types pt
@@ -54,7 +54,7 @@
     <fullquery name="packages_singleton_select">
         <querytext>
             select p.package_id, 
-                   acs_object__name(p.package_id) as name,
+                   p.instance_name as name,
                    pt.pretty_name as package_pretty_name
             from   apm_packages p,
                    apm_package_types pt,
