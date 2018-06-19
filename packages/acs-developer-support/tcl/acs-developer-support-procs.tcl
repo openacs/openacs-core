@@ -11,7 +11,7 @@ ad_library {
      @return The instance of a running acs developer support.
 
  } {
-     return [util_memoize [list db_string acs_kernel_id_get {} -default 0]]
+     return [apm_package_id_from_key "acs-developer-support"]
  }
 
  ad_proc -public ds_permission_p {} {
@@ -43,7 +43,7 @@ ad_library {
      } else {
        ns_log Warning "$user_id doesn't have $privilege on object $object_id"
        ad_return_forbidden "Permission Denied" "<blockquote>
-       <p>You don't have permission to $privilege [db_string name {}].</p>
+       <p>You don't have permission to $privilege [acs_object_name $object_id].</p>
        </blockquote>"
      }
      ad_script_abort
@@ -467,7 +467,8 @@ ad_library {
 
      db_foreach users { 
          select u.user_id as user_id_from_db, 
-                acs_object.name(user_id) as name, 
+                (select first_names || ' ' last_name
+                   from persons where person_id = u.user_id) as name, 
                 p.email 
          from   users u, 
                 parties p 
