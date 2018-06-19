@@ -27,7 +27,7 @@ ad_proc -private person::person_p_not_cached {
 } {
     return [db_0or1row contact_person_exists_p {select 1 from persons where person_id = :party_id}]
 }
-    
+
 ad_proc -public person::new {
     {-first_names:required}
     {-last_name:required}
@@ -35,7 +35,7 @@ ad_proc -public person::new {
 } {
     create a new person
 } {
-   
+
     set extra_vars [ns_set create]
     ns_set put $extra_vars first_names $first_names
     ns_set put $extra_vars last_name $last_name
@@ -54,7 +54,7 @@ ad_proc -public person::delete {
 }
 
 ad_proc -public person::get {
-    {-person_id:required} 
+    {-person_id:required}
 } {
     get info for a person as a Tcl array in list form
 } {
@@ -62,7 +62,7 @@ ad_proc -public person::get {
         select * from persons
          where person_id = :person_id
     } -column_array person
-    set person(person_name) "$person(first_names) $person(last_name)"    
+    set person(person_name) "$person(first_names) $person(last_name)"
     return [array get person]
 }
 
@@ -137,11 +137,11 @@ ad_proc -public person::get_bio {
 
     @option person_id    The person_id of the person to get the bio for. Leave blank for
        currently logged in user.
-    
-    @option exists_var The name of a variable in the caller's namespace, which will be set to 1 
+
+    @option exists_var The name of a variable in the caller's namespace, which will be set to 1
                        if the bio column is not null.  Leave blank if you're not
                        interested in this information.
-    
+
     @return The bio of the user as a text string.
 
     @author Lars Pind (lars@collaboraid.biz)
@@ -156,9 +156,9 @@ ad_proc -public person::get_bio {
 
     set person [person::get -person_id $person_id]
     set bio [dict get $person bio]
-    
+
     set exists_p [expr {$bio ne ""}]
-    
+
     return $bio
 }
 
@@ -223,7 +223,7 @@ ad_proc -public acs_user::delete {
     {-permanent:boolean}
 } {
     Delete a user
-    
+
     @param permanent If provided the user will be deleted permanently
                        from the database. Otherwise the user
                        state will merely be set to "deleted".
@@ -253,7 +253,7 @@ ad_proc -public acs_user::get_by_username {
     {-username:required}
 } {
     Returns user_id from authority and username. Returns the empty string if no user found.
-    
+
     @param authority_id The authority. Defaults to local authority.
 
     @param username The username of the user you're trying to find.
@@ -274,7 +274,7 @@ ad_proc -public acs_user::get_by_username {
     if {$user_id eq ""} {
         ns_cache flush user_info_cache $key
     }
-    
+
     return $user_id
 }
 
@@ -283,7 +283,7 @@ ad_proc -private acs_user::get_by_username_not_cached {
     {-username:required}
 } {
     Returns user_id from authority and username. Returns the empty string if no user found.
-    
+
     @param authority_id The authority. Defaults to local authority.
 
     @param username The username of the user you're trying to find.
@@ -291,7 +291,7 @@ ad_proc -private acs_user::get_by_username_not_cached {
     @return user_id of the user, or the empty string if no user found.
 }  {
     return [db_string user_id_from_username {} -default {}]
-}    
+}
 
 ad_proc -public acs_user::get {
     {-user_id {}}
@@ -301,20 +301,20 @@ ad_proc -public acs_user::get {
     {-include_bio:boolean}
 } {
     Get basic information about a user. Uses util_memoize to cache info from the database.
-    You may supply either user_id, or  username. 
+    You may supply either user_id, or  username.
     If you supply username, you may also supply authority_id, or you may leave it out, in which case it defaults to the local authority.
     If you supply neither user_id nor username, and we have a connection, the currently logged in user will be assumed.
 
     @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
-    
+
     @option include_bio Whether to include the bio in the user information
 
-    @param  array       The name of an array into which you want the information put. 
-    
-    The attributes returned are: 
+    @param  array       The name of an array into which you want the information put.
+
+    The attributes returned are:
 
     <ul>
-      <li> user_id 
+      <li> user_id
       <li> username
       <li> authority_id
       <li> first_names
@@ -323,7 +323,7 @@ ad_proc -public acs_user::get {
       <li> email
       <li> url
       <li> screen_name
-      <li> priv_name 
+      <li> priv_name
       <li> priv_email
       <li> email_verified_p
       <li> email_bouncing_p
@@ -345,9 +345,9 @@ ad_proc -public acs_user::get {
     </ul>
     @result dict of attributes
     @author Lars Pind (lars@collaboraid.biz)
-} {    
+} {
     if { $user_id eq "" } {
-        set user_id [expr {$username ne "" ? 
+        set user_id [expr {$username ne "" ?
                            [acs_user::get_by_username \
                                 -authority_id $authority_id \
                                 -username     $username] :
@@ -358,16 +358,16 @@ ad_proc -public acs_user::get {
     set data [ns_cache eval user_info_cache $key {
         acs_user::get_from_user_id_not_cached $user_id
     }]
-    
+
     if { $include_bio_p } {
         lappend data bio [person::get_bio -person_id $user_id]
     }
-    
+
     if {[info exists array]} {
         upvar $array row
         array set row $data
     }
-    
+
     return $data
 }
 
@@ -378,11 +378,11 @@ ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
     @author Peter Marklund
 } {
     db_1row select_user_info {} -column_array row
-    
+
     return [array get row]
 }
 
-ad_proc -public acs_user::flush_cache { 
+ad_proc -public acs_user::flush_cache {
     {-user_id:required}
 } {
     Flush the acs_user::get cache for the given user_id.
@@ -421,7 +421,7 @@ ad_proc -public acs_user::get_element {
     @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
 
     @option element     Which element you want to retrieve.
-    
+
     @return The element asked for.
 
     @see acs_user::get
@@ -432,7 +432,7 @@ ad_proc -public acs_user::get_element {
         -username $username \
         -array row \
         -include_bio=[string equal $element "bio"]
-    
+
     return $row($element)
 }
 
@@ -445,7 +445,7 @@ ad_proc -public acs_user::update {
     {-password_answer}
     {-email_verified_p}
 } {
-    Update information about a user. 
+    Update information about a user.
     Feel free to expand this with more switches later as needed, as long as they're optional.
 
     @param  user_id            The ID of the user to edit
@@ -563,7 +563,7 @@ ad_proc -public party::update {
 ad_proc -public party::get_by_email {
     {-email:required}
 } {
-    Return the party_id of the party with the given email. 
+    Return the party_id of the party with the given email.
     Uses a lowercase comparison as we don't allow for parties
     to have emails that only differ in case.
     Returns empty string if no party found.
@@ -584,7 +584,7 @@ ad_proc -public party::approved_members {
     {-object_type ""}
 } {
     Get a list of approved members of the given party.
-   
+
     @param party_id The id of the party to get members for
     @param object_type Restrict to only members of this object type. For example,
                        if you are only interested in users, set to "user".
@@ -642,14 +642,14 @@ ad_proc -public acs_user::create_portrait {
     {-filename ""}
     {-mime_type ""}
     {-file:required}
-} {    
+} {
     Sets (or resets) the portraif for current user to the one
     specified.
 
     @param user_id user_id of user whose portrait we want to set.
 
     @param description A caption for the portrait.
-    
+
     @param filename Original filename of the portrait. Used to guess
     the mimetype if an explicit one is not specified.
 
@@ -668,7 +668,7 @@ ad_proc -public acs_user::create_portrait {
         # ensure a valid mimetype
         set mime_type [ns_guesstype $filename]
     }
-    
+
     # Create the new portrait
     set item_id [content::item::new \
                      -name "portrait-of-user-$user_id" \
@@ -684,9 +684,9 @@ ad_proc -public acs_user::create_portrait {
 
     # Create portrait relationship
     db_exec_plsql create_rel {}
-        
+
     return $item_id
-    
+
 }
 
 ad_proc -public acs_user::erase_portrait {
