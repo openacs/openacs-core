@@ -449,7 +449,7 @@ ad_proc -public acs_user::update {
     Feel free to expand this with more switches later as needed, as long as they're optional.
 
     @param  user_id            The ID of the user to edit
-    @option authority_id       Authortiy
+    @option authority_id       Authority
     @option username           Username
     @option screen_name        The new screen_name for the user
     @option password_question  The new password_question for the user
