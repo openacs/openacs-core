@@ -1531,7 +1531,7 @@ ad_proc -public apm_invoke_callback_proc {
                 return 0
             }
 
-            $proc_name $arg_array(package_id)
+            {*}$proc_name $arg_array(package_id)
 
             return 1
 
@@ -1543,7 +1543,7 @@ ad_proc -public apm_invoke_callback_proc {
 
     # We have a non-empty name of a callback proc to invoke
     # Form the full command including arguments
-    set command [list $proc_name {*}[apm_callback_format_args -type $type -arg_list $arg_list]]
+    set command [list {*}$proc_name {*}[apm_callback_format_args -type $type -arg_list $arg_list]]
 
     # We are ready for invocation
     ns_log notice "apm_invoke_callback_proc: invoking callback $type with command <$command>"
