@@ -40,7 +40,7 @@ if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
         interval {
             label {[_ notifications.Frequency]}
             display_template {
-                @notifications.interval@ 
+                @notifications.interval@
                 (<a href="@notifications.interval_url@" title="\#notifications.change_interval_object_name\#">\#notifications.Change\#</a>)
             }
         }
