@@ -32,9 +32,12 @@ ad_page_contract {
 
 
 # Select out the party name and the party's object type. Note we can
-# use 1row because the validate filter above will catch missing parties
+# assume party exists because the validate filter above will catch
+# missing parties.
 
-db_1row party_info {}
+acs_object::get -object_id $party_id -array party
+set party_type $party(object_type)
+set party_name $party(object_name)
 
 ### This page redirects to different pages for groups or rel_segments.
 ### We have to check whether the party_type is a type of group or rel_segment.
