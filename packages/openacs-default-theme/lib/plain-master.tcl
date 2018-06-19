@@ -65,7 +65,7 @@ if { $untrusted_user_id == 0 } {
     set login_url [ad_get_login_url -return]
 } else {
     # The browser claims to represent a user that we know about
-    set user_name [person::name -person_id $untrusted_user_id]
+    set user_name [acs_user::get_element -user_id $untrusted_user_id -element name]
     set pvt_home_url [ad_pvt_home]
     set pvt_home_name [_ acs-subsite.Your_Account]
     set logout_url [ad_get_logout_url]
