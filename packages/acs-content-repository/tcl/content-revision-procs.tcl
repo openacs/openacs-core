@@ -68,7 +68,6 @@ ad_proc -public ::content::revision::new {
     @param is_live True is revision should be set live
 
     @param tmp_filename file containing content to be added to revision. Caller is responsible to handle cleaning up the tmp file
-    @param package_id
 
     @param package_id
 
