@@ -3,13 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="name">      
-      <querytext>
-      select acs_object__name(:object_id) 
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="inherited_permissions">      
       <querytext>
 
@@ -27,29 +20,6 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="acl">      
-      <querytext>
-      
-  select grantee_id, acs_object__name(grantee_id) as grantee_name,
-         privilege
-  from acs_permissions
-  where object_id = :object_id
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="context">      
-      <querytext>
-
-SELECT acs_object__name(context_id) as context_name, context_id, security_inherit_p
-  FROM acs_objects
- WHERE object_id = :object_id
-
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="children">      
   <querytext>
     
@@ -65,7 +35,6 @@ SELECT acs_object__name(context_id) as context_name, context_id, security_inheri
 			  
   </querytext>
 </fullquery>
-
 
 <fullquery name="children_count">      
   <querytext>

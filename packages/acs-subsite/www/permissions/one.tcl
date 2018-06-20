@@ -26,20 +26,28 @@ if {$object_id eq [subsite::main_site_id]} {
 }
 
 
-set name [db_string name {}]
+acs_object::get -object_id $object_id -array obj
+set name               $obj(object_name)
+set context_id         $obj(context_id)
+set security_inherit_p $obj(security_inherit_p)
 
 set context [list [list "./" [_ acs-subsite.Permissions]] [_ acs-subsite.Permissions_for_name]]
 
 db_multirow inherited inherited_permissions {} {}
 
-db_multirow acl acl {} {}
+db_multirow -extend {grantee_name} acl acl {
+    select grantee_id, privilege
+    from acs_permissions
+    where object_id = :object_id
+} {
+    set grantee_name [party::name -party_id $grantee_id]
+}
 
 set controls [list]
 set controlsUrl [export_vars -base grant {application_url object_id}]
 lappend controls "<a href=\"[ns_quotehtml $controlsUrl]\">[ns_quotehtml [_ acs-subsite.Grant_Permission]]</a>"
 
-db_1row context {}
-set context_name [lang::util::localize $context_name]
+set context_name [lang::util::localize [acs_object_name $context_id]]
 
 set toggleUrl [export_vars -base toggle-inherit {application_url object_id}]
 if { $security_inherit_p == "t" && $context_id ne "" } {
