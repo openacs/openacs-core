@@ -11,7 +11,19 @@ if { ![acs_user::site_wide_admin_p] } {
 
 set user_id [ad_conn user_id]
 set swadmin_p 0
-db_multirow -extend { url admin_url param_url sitewide_admin_url} packages services_select {} {
+db_multirow -extend { url admin_url param_url sitewide_admin_url} packages services_select {
+    select package_id,
+           ap.package_key,
+           pretty_name as instance_name,
+           (select count(*) from apm_parameters
+             where package_key = ap.package_key) as parameter_count
+    from apm_packages ap,
+         apm_package_types
+    where ap.package_key = apm_package_types.package_key
+    and package_type = 'apm_service'
+    and ap.package_key <> 'acs-subsite'
+    order by instance_name
+} {
     set root_dir [acs_package_root_dir $package_key]
     set sitewide_admin_url ""
     if { [file exists $root_dir/www/] } {
