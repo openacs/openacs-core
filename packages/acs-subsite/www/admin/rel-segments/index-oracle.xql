@@ -6,7 +6,8 @@
 <fullquery name="select_rel_segments">      
       <querytext>
       
-    select s.segment_id, s.segment_name, s.group_id, acs_object.name(s.group_id) as group_name, 
+    select s.segment_id, s.segment_name, s.group_id,
+           (select group_name from groups where group_id = s.group_id) as group_name,
            s.rel_type, t.pretty_name as rel_type_pretty_name
       from acs_object_types t, 
            rel_segments s, 
