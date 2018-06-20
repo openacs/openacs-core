@@ -3,18 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="object_info">      
-      <querytext>
-    select acs_object.name(object_id) as object_name,
-           acs_object.name(context_id) as parent_object_name,
-           context_id
-    from   acs_objects
-    where  object_id = :object_id
-
-      </querytext>
-</fullquery>
-
-
 <fullquery name="permissions">      
       <querytext>
     select ptab.grantee_id,

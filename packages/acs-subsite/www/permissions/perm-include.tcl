@@ -19,7 +19,10 @@ if { $return_url eq "" } {
     set return_url [ad_return_url]
 }
 
-db_1row object_info {}
+acs_object::get -object_id $object_id -array obj
+set object_name $obj(object_name)
+set context_id  $obj(context_id)
+set parent_object_name [acs_object_name $obj(context_id)]
 
 set elements [list]
 lappend elements grantee_name { 

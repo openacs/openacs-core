@@ -3,18 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="object_info">      
-      <querytext>
-    select acs_object__name(object_id) as object_name,
-           acs_object__name(context_id) as parent_object_name,
-           context_id
-    from   acs_objects
-    where  object_id = :object_id
-
-      </querytext>
-</fullquery>
-
-
 <fullquery name="permissions">      
       <querytext>
     select ptab.grantee_id,
