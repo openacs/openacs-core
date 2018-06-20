@@ -26,14 +26,14 @@ set body [subst {
 
     <hr>
     Are you sure you want to remove the following entries from the access
-    control list of [db_string name {}]?
+    control list of [acs_object_name $object_id]?
     <ul>
 }]
 
 foreach item $revoke_list {
     lassign $item party_id privilege
     append body [subst {
-        <li>[db_string party_name {}]</li>
+        <li>[party::name -party_id $party_id]</li>
     }]
 }
 
