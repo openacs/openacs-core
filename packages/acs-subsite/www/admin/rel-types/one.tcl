@@ -41,7 +41,26 @@ if { ![db_0or1row select_pretty_name {
     ad_script_abort
 }
 
-db_1row select_rel_type_properties {} -column_array properties
+db_1row select_rel_type_properties {
+    select t1.pretty_name as object_type_one_pretty_name,
+           r.object_type_one,
+           (select pretty_name from acs_rel_roles
+            where role = r.role_one) as role_one_pretty_name,
+           r.role_one,
+           r.min_n_rels_one,
+           r.max_n_rels_one,
+           t2.pretty_name as object_type_two_pretty_name,
+           r.object_type_two,
+           (select pretty_name from acs_rel_roles
+             where role = r.role_two) as role_two_pretty_name,
+           r.role_two,
+           r.min_n_rels_two,
+           r.max_n_rels_two
+      from acs_rel_types r, acs_object_types t1, acs_object_types t2
+     where r.rel_type = :rel_type
+       and r.object_type_one = t1.object_type
+       and r.object_type_two = t2.object_type
+} -column_array properties
 
 
 set user_id [ad_conn user_id]
@@ -57,8 +76,6 @@ db_multirow attributes attributes_select {
       from acs_attributes a
      where a.object_type = :rel_type
 }
-
-ad_return_template
 
 # Local variables:
 #    mode: tcl
