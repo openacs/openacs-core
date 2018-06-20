@@ -145,8 +145,8 @@ ad_proc -public parameter::get {
     set value ""
 
     # 1. check whether there is a parameter by this name specified for
-    # the packagin in the parameter file.  The name
-    # ad_parameter_from_file is a misnomer, since the it checks
+    # the package in the parameter file.  The name
+    # ad_parameter_from_file is a misnomer, since it checks
     # ns_config values
     #
     if {$package_id ne ""} {
