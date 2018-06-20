@@ -3,19 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="select_rel_info">      
-      <querytext>
-      
-    select acs_object_type.pretty_name(r.rel_type) as rel_type_pretty_name,
-           acs_object.name(r.object_id_one) as object_id_one_name,
-           acs_object.name(r.object_id_two) as object_id_two_name,
-           r.object_id_two
-      from acs_rels r
-     where r.rel_id = :rel_id
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="select_dependents">      
       <querytext>
       
@@ -28,6 +15,5 @@
     
       </querytext>
 </fullquery>
-
  
 </queryset>
