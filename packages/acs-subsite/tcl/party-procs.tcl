@@ -231,6 +231,8 @@ namespace eval party {
 	if {[person::person_p -party_id $party_id]} {
 	    set name [person::name -person_id $party_id]
 	} else {
+            set name ""
+            
 	    if { [apm_package_installed_p "organizations"] } {
 		set name [db_string get_org_name {} -default ""]
 	    }
