@@ -45,12 +45,27 @@ set context [list "One relation"]
 
 set subsite_group_id [application_group::group_id_from_package_id]
 
-if { ![db_0or1row select_rel_info {} -column_array rel]
-} {
+if { ![db_0or1row select_rel_info {
+    select r.rel_type,
+           (select pretty_name from acs_object_types
+             where object_type = t.rel_type) as rel_type_pretty_name,
+           (select pretty_name from acs_rel_roles
+             where role = t.role_one) as role_one_pretty_name,
+           (select pretty_name from acs_rel_roles
+             where role = t.role_two) as role_two_pretty_name,
+           t.object_type_two as object_type_two,
+           r.object_id_one,
+           r.object_id_two
+      from acs_rels r, acs_rel_types t
+     where r.rel_id = :rel_id
+       and r.rel_type = t.rel_type
+} -column_array rel] } {
     ad_return_error "Error" "Relation #rel_id does not exist"
     ad_script_abort
 }
 
+set rel(object_id_one_name) [acs_object_name $rel(object_id_one)]
+set rel(object_id_two_name) [acs_object_name $rel(object_id_two)]
 set rel(rel_type_enc) [ad_urlencode $rel(rel_type)]
 set rel(role_one_pretty_name) [lang::util::localize $rel(role_one_pretty_name)]
 set rel(role_two_pretty_name) [lang::util::localize $rel(role_two_pretty_name)]
@@ -69,11 +84,10 @@ attribute::multirow \
 
 # Membership relations have a member_state.  Composition relations don't.
 # This query will return null if the relation is not a membership relation.
-set member_state ""
-db_0or1row select_member_state {
+set member_state [db_string select_member_state {
     select member_state from membership_rels
     where rel_id = :rel_id
-}
+} -default ""]
 
 # Data used to build the "toggle member state" widget.
 set return_url [ad_conn url]?[ad_conn query]
@@ -90,8 +104,6 @@ if {$object_two_read_p} {
         -object_type $rel(object_type_two) \
         $rel(object_id_two)
 }
-
-ad_return_template
 
 # Local variables:
 #    mode: tcl
