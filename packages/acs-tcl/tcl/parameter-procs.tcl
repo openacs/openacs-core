@@ -55,7 +55,7 @@ ad_proc -public parameter::get_global_value {
 } {
     Get the value of a global package parameter.
 
-    @param localize should we attempt to localize the parameter 
+    @param localize should we attempt to localize the parameter
     @param boolean insure boolean parameters are normalized to 0 or 1
     @param package_key identifies the package to which the global param belongs
     @param parameter which parameter's value to get
@@ -128,7 +128,7 @@ ad_proc -public parameter::get {
 } {
     Get the value of a package instance parameter.
 
-    @param localize should we attempt to localize the parameter 
+    @param localize should we attempt to localize the parameter
     @param boolean insure boolean parameters are normalized to 0 or 1
     @param package_id what package to get the parameter from. defaults to
     [ad_conn package_id]
@@ -150,17 +150,17 @@ ad_proc -public parameter::get {
     # ns_config values
     #
     if {$package_id ne ""} {
-	set package_key ""
+        set package_key ""
         # This can fail at server startup--OpenACS calls parameter::get to
         # get the size of the util_memoize cache so it can setup the cache.
-        # apm_package_key_from_id needs that cache, but on server start 
+        # apm_package_key_from_id needs that cache, but on server start
         # when the toolkit tries to get the parameter for the cache size
         # the cache doesn't exist yet, so apm_package_key_from_id fails
         if {![catch {
             set package_key [apm_package_key_from_id $package_id]
         }]} {
-	    set value [ad_parameter_from_file $parameter $package_key]
-	}
+            set value [ad_parameter_from_file $parameter $package_key]
+        }
     }
 
     # 2. check the parameter cache
@@ -193,7 +193,7 @@ ad_proc -public parameter::set_from_package_key {
     {-value:required}
 } {
     sets an instance parameter for the package corresponding to package_key.
-    
+
     Note that this makes the assumption that the package is a singleton
     and does not set the value for all packages corresponding to package_key.
 
@@ -214,7 +214,7 @@ ad_proc -public parameter::get_from_package_key {
     {-default ""}
 } {
     Gets an instance parameter for the package corresponding to package_key.
-    
+
     Note that this makes the assumption that the package is a singleton.
 
     New packages should use global parameters instead.
