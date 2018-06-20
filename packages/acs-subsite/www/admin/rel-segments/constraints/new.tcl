@@ -39,7 +39,19 @@ set context [list [list "../" "Relational segments"] [list [export_vars -base ..
 
 set package_id [ad_conn package_id]
 
-db_1row select_rel_properties {}
+db_1row select_rel_properties {
+    select s.segment_name,
+           (select pretty_name from acs_rel_roles
+             where role = t.role_one) as role_one_name,
+           (select pretty_name from acs_rel_roles
+             where role = t.role_two) as role_two_name
+      from rel_segments s, acs_rel_types t
+     where s.rel_type = t.rel_type
+       and s.segment_id = :rel_segment    
+}
+
+set role_one_name [lang::util::localize $role_one_name]
+set role_two_name [lang::util::localize $role_two_name]
 
 template::form create constraint_new
 
@@ -71,14 +83,17 @@ template::element create constraint_new rel_side \
 	-options $option_list \
 	-label "Add constraint for which side?"
 
-set segment_list [db_list_of_lists select_segments {
+set segment_list [list]
+db_foreach select_segments {
     select s.segment_name, s.segment_id
       from application_group_segments s
      where s.segment_id <> :rel_segment
        and s.package_id = :package_id
 
      order by lower(s.segment_name)
-}]
+} {
+    lappend segment_list [list [lang::util::localize $segment_name] $segment_id]
+}
 
 if { [llength $segment_list] == 0 } {
     ad_return_complaint 1 \

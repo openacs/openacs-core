@@ -3,20 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="select_rel_properties">      
-      <querytext>
-      
-    select s.segment_name, 
-           acs_rel_type__role_pretty_name(t.role_one) as role_one_name,
-           acs_rel_type__role_pretty_name(t.role_two) as role_two_name
-      from rel_segments s, acs_rel_types t
-     where s.rel_type = t.rel_type
-       and s.segment_id = :rel_segment
-
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="add_constraint">      
       <querytext>
 
