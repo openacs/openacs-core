@@ -4,7 +4,7 @@ ad_library {
 }
 
 aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
-    Test acs-mail-lite procs in email-inbound-procs.tcl 
+    Test acs-mail-lite procs in email-inbound-procs.tcl
 } {
     aa_run_with_teardown \
         -rollback \
@@ -14,7 +14,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
 
            set a_list [acs_mail_lite::sched_parameters]
            array set params_def $a_list
-           
+
            set bools_list [list reprocess_old_p]
            set integer_list [list sredpcs_override max_concurrent \
                                  max_blob_chars mpri_min mpri_max]
@@ -48,10 +48,10 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                 } elseif { $p in $lists_list } {
                     set val_idx [randomRange 2]
                     set val [lindex $nv_list_list $val_idx]
-                } 
+                }
                 aa_log "r41. Testing change of parameter '${p}' from \
  '$params_def(${p})' to '${val}'"
-                
+
                 set b_list [acs_mail_lite::sched_parameters $param $val]
                 aa_log "param $param val $val b_list $b_list"
                 array unset params_new
@@ -77,7 +77,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                             } else {
                                 aa_equals "r56 Changed sched_parameter \
  '${pp}' value '$params_def(${pp})' to '${val}' set" $params_new(${pp}) $val
-                                
+
                             }
                         }
                     } else {
@@ -119,7 +119,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
             set subject [ad_generate_random_string]
             set su_glob "*"
             append su_glob [string range $subject [randomRange 8] end]
- 
+
            # priority_types are in order of least significant first.
            set p_type_i 0
             foreach p_type $priority_types {
@@ -153,7 +153,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                 set i 0
                 set p_i [lindex $priority_types $i]
                 while { $p_i ne $p_type && $i < $p_type_i } {
-                    # set a random value to be ignored 
+                    # set a random value to be ignored
                     # because p_i is lower significance than
                     # higher significance of p_type value
 
@@ -258,7 +258,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                     set z1 s2
                     set z2 s1
                 }
-                
+
                 set p_arr(t1) [acs_mail_lite::inbound_prioritize \
                                        -size_chars $s \
                                        -received_cs $t1 \
@@ -293,10 +293,10 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                                    -package_id $instance_id \
                                    -party_id $user_id \
                                    -object_id $instance_id]
-                
+
                 aa_log "p_arr(s2) = '$p_arr(s2)'"
 
-                # verify earlier is higher priority 
+                # verify earlier is higher priority
                 if { $p_arr(${f1}) < $p_arr(${f2}) } {
                     set cron_p 1
                 } else {
@@ -383,7 +383,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            aa_log "Some will fail if a session cannot be established."
 
 
-           # see Example of an IMAP LIST in rfc6154: 
+           # see Example of an IMAP LIST in rfc6154:
            # https://tools.ietf.org/html/rfc6154#page-7
            # ns_imap list $conn_id $mailbox pattern(* or %) substr
 
@@ -396,14 +396,14 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            # set list [ns_imap list $conn_id $mailbox_host {%}]
            # returns 'INBOX {}' when really logged in
            # and mailbox_name part of mailbox is ""
-           # If mailbox_name exists and is included in mailbox_host, returns '' 
+           # If mailbox_name exists and is included in mailbox_host, returns ''
            # If mailbox_name separate from mailbox_host, and exists and in place of %, returns 'mailbox {}'
            # for example 'INBOX.Trash {}'
 
 
            if { [catch { set sid [acs_mail_lite::imap_conn_go] } errmsg ] } {
                set sid "z"
-           } 
+           }
            set sid_p [ad_var_type_check_integer_p $sid]
            aa_true "ref407. acs_mail_lite::imap_conn_go" $sid_p
 
@@ -444,12 +444,12 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
 
            set i ""
            foreach f $files_list {
-               
+
                if { [regexp {([0-9]+)} [file tail $f] i ] } {
                    set fid [open $f r ]
                    # headers-example = he
                    set he_arr(${i}) [read $fid ]
-                   
+
                    switch -exact -- $i {
                        3 {
                            set type_arr(${i}) "in_reply_to"
@@ -464,14 +464,14 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
 
 
                    ns_log Notice "test/email-inbound-procs.tcl.394 i $i f $f"
-                   
+
                    close $fid
                } else {
                    ns_log Warning "test/email-inbound-procs.tcl.401 f ${f} not processed"
                }
            }
 
-           
+
 
            aa_log "Test using full headers in text of default cases."
            set csp 0
@@ -489,7 +489,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
  type '$type_arr(${ii})'. type from acs_mail_lite::email_type" \
                    $type $type_arr(${ii})
            }
-           
+
            aa_log "Test using full headers in modified cases, including
  false flags for subject and from fields that should be ignored."
            set csp 0
@@ -509,7 +509,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                # send garbage to try to confuse proc
                set t [randomRange 4]
                set h ""
-               # Some examples already have header types that limit 
+               # Some examples already have header types that limit
                # test type.
                if { $type_arr(${ii}) eq "auto_gen" && $t > 2 } {
                    set t [randomRange 2]
@@ -519,7 +519,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                    set t [randomRange 1]
                }
                set type_test [lindex $t_olist $t]
-               
+
                if { $t == 3 || $t < 2  } {
                    # add in_reply_to headers
                    append h "in-reply-to : " [ad_generate_random_string 30]
@@ -535,7 +535,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                if { $t < 2 } {
                    # add auto_reply headers
                    switch [randomRange 2] {
-                       0 { 
+                       0 {
                            append h [lindex $ar_list [randomRange 5]]
                            append h " : " [ad_generate_random_string]
                        }
@@ -545,9 +545,9 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                        2 {
                            set h2 [lindex $s_list [randomRange 3]]
                            append h "action : " $h2 "\n"
-                           append h "status : thisis a test" 
+                           append h "status : thisis a test"
                        }
-                   }                       
+                   }
                    append h "\n"
                }
                if { $t < 1 } {
@@ -560,7 +560,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
                        # test delivery status notification
                        append h action
                        append h " : " [lindex $s_list [randomRange 3]]
-                       append h "\n" status " : " 
+                       append h "\n" status " : "
                        append h [expr { 99 + [randomRange 900] } ] " "
                        append h [ad_generate_random_string [randomRange 9]]
                        append h "\n"
@@ -640,7 +640,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            set sect_ref2 [acs_mail_lite::section_ref_of ""]
            aa_equals "r616 test case section '${sect_ref1}'" \
                $sect_id2 $sect_id1
-           
+
            foreach sect_id [array names sect_arr] {
 
                set sect_ref1 $sect_arr(${sect_id})
@@ -658,7 +658,7 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            set integer_max 2147483647
            incr integer_max -2
            set fields_list [list package_id party_id object_id other]
-           set package_id_list [db_list apm_package_ids_rall { select 
+           set package_id_list [db_list apm_package_ids_rall { select
                distinct package_id from apm_packages } ]
            set aml_package_id [apm_package_id_from_key "acs-mail-lite"]
            set party_id_list [db_list parties_rall { select
@@ -743,9 +743,6 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            }
        }
 }
-
-
-
 
 # Local variables:
 #    mode: tcl
