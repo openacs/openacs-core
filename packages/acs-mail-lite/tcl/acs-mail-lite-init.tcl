@@ -15,10 +15,6 @@ ad_library {
 # Default interval is about one minute (reduce lock contention with other jobs scheduled at full minutes)
 ad_schedule_proc -thread t 61 acs_mail_lite::sweeper
 
-#if {$queue_dir ne ""} {
-    # if BounceMailDir is set then handle incoming mail
-#    ad_schedule_proc -thread t 120 acs_mail_lite::load_mails -queue_dir $queue_dir
-#}
 nsv_set acs_mail_lite send_mails_p 0
 nsv_set acs_mail_lite check_bounce_p 0
 
@@ -32,10 +28,16 @@ nsv_set acs_mail_lite check_bounce_p 0
 #
 # inbound
 #
-# acs_mail_lite::load_mails -queue_dir $queue_dir
+# Incoming mode. Can be:
+# - legacy: use logic pre OpenACS 5.10 (deprecated)
+# - maildir: use a MailDir location for incoming email
+# - imap: use IMAP for incoming email
+set incoming_mode [parameter::get_from_package_key -parameter "IncomingMode" -package_key "acs-mail-lite" -default "maildir"]
 
 set inbound_queue_dir [file join [acs_root_dir] acs-mail-lite ]
 file mkdir $inbound_queue_dir
+
+
 # imap scan incoming = si_
 # maildir scan incoming = sj_
 # Scan incoming start time in clock seconds.
@@ -55,27 +57,48 @@ nsv_set acs_mail_lite si_max_ct_per_cycle \
 if { [db_table_exists acs_mail_lite_ui] } {
     acs_mail_lite::sched_parameters
 }
-ad_schedule_proc -thread t \
-    $si_dur_per_cycle_s acs_mail_lite::imap_check_incoming
-
-# offset next cycle start
-after 314
-ad_schedule_proc -thread t \
-    $si_dur_per_cycle_s acs_mail_lite::maildir_check_incoming
-
-# offset next cycle start
-after 314
-ad_schedule_proc -thread t \
-    $si_dur_per_cycle_s acs_mail_lite::inbound_queue_pull
-
-ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 1 41] acs_mail_lite::inbound_queue_release
 
 
+# Switch between modes (imap, maildir, and legacy)
+# HR: are "imap" and "maildir" mutually exclusive?
+switch $incoming_mode {
+    imap {
+        # imap_check_incoming
+        ad_schedule_proc -thread t \
+            $si_dur_per_cycle_s acs_mail_lite::imap_check_incoming
+    }
+    maildir {
+        # maildir_check_incoming
+        ad_schedule_proc -thread t \
+            $si_dur_per_cycle_s acs_mail_lite::maildir_check_incoming
+    }
+    legacy {
+        # load_mails
+        set queue_dir [parameter::get_from_package_key -parameter "BounceMailDir" -package_key "acs-mail-lite"]
+        if {$queue_dir ne ""} {
+            ad_schedule_proc -thread t \
+                120 acs_mail_lite::load_mails -queue_dir $queue_dir
+        }
+    }
+}
 
-# acs_mail_lite::check_bounces
-ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 0 25] acs_mail_lite::check_bounces
+if {$incoming_mode ne "legacy"} {
 
+    # offset next cycle start
+    after 314
 
+    # inbound_queue_pull
+    ad_schedule_proc -thread t \
+        $si_dur_per_cycle_s acs_mail_lite::inbound_queue_pull
+
+    # inbound_queue_release
+    ad_schedule_proc -thread t \
+        -schedule_proc ns_schedule_daily [list 1 41] acs_mail_lite::inbound_queue_release
+
+    # check_bounces
+    ad_schedule_proc -thread t \
+        -schedule_proc ns_schedule_daily [list 0 25] acs_mail_lite::check_bounces
+}
 
 # Local variables:
 #    mode: tcl
