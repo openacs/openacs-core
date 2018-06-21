@@ -20,14 +20,18 @@ namespace eval acs_mail_lite {
         return [apm_package_id_from_key acs-mail-lite]
     }
     
-    ad_proc -public get_parameter {
+    ad_proc -deprecated -public get_parameter {
         -name:required
         {-default ""}
     } {
         Returns an apm-parameter value of this package
+
+        Deprecated: just a wrapper for parameter::get
+
         @option name parameter name
         @option default default parameter value
         @return apm-parameter value of this package
+        @see parameter::get
     } {
         return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
     }
@@ -35,7 +39,7 @@ namespace eval acs_mail_lite {
     ad_proc -private mail_dir {} {
         @return incoming mail directory to be scanned for bounces
     } {
-        return [get_parameter -name "BounceMailDir"]
+        return [parameter::get -package_id [get_package_id] -parameter "BounceMailDir" -default ""]
     }
     
     #---------------------------------------
