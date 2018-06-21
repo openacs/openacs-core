@@ -1,9 +1,9 @@
 # packages/acs-mail-lite/tcl/acs-mail-lite-callback-procs.tcl
 
 ad_library {
-    
+
     Callback procs for acs-mail-lite
-    
+
     @author Malte Sussdorff (sussdorff@sussdorff.de)
     @creation-date 2005-06-15
     @arch-tag: d9aec4df-102d-4b0d-8d0e-3dc470dbe783
@@ -29,20 +29,20 @@ ad_proc -public -callback acs_mail_lite::send {
 } {
 
     Callback for executing code after an email has been send using the send mechanism.
-    
-	@param package_id Package ID of the sending package
-	@param message_id the generated message_id for this mail
-	@param from_addr email of the sender
-	@param to_addr list of emails to whom did we send this email
-	@param body Text body of the email
-        @param mime_type Mime type of the email body
-	@param subject of the email
-	@param cc_addr list of emails to whom did we send this email in CC
-	@param bcc_addr list of emails to whom did we send this email in BCC
-	@param file_ids List of file ids sent as attachments.
-        @param object_id The ID of the object that is responsible for sending the mail in the first place
-        @param status Status of the send operation ("ok" or "error")
-        @param errorMsg Error Details
+
+    @param package_id Package ID of the sending package
+    @param message_id the generated message_id for this mail
+    @param from_addr email of the sender
+    @param to_addr list of emails to whom did we send this email
+    @param body Text body of the email
+    @param mime_type Mime type of the email body
+    @param subject of the email
+    @param cc_addr list of emails to whom did we send this email in CC
+    @param bcc_addr list of emails to whom did we send this email in BCC
+    @param file_ids List of file ids sent as attachments.
+    @param object_id The ID of the object that is responsible for sending the mail in the first place
+    @param status Status of the send operation ("ok" or "error")
+    @param errorMsg Error Details
 } -
 
 ad_proc -public -callback acs_mail_lite::incoming_email {
@@ -57,7 +57,7 @@ ad_proc -public -callback acs_mail_lite::incoming_object_email {
     -object_id:required
 } {
     Callback that is executed for incoming e-mails if the email is like $object_id@servername
-} - 
+} -
 
 ad_proc -public -callback acs_mail_lite::email_form_elements {
     -varname:required
@@ -143,7 +143,7 @@ ad_proc -public -callback acs_mail_lite::email_inbound {
     {-datetime_cs ""}
 } {
     Callback that is executed for inbound e-mails that are queued.
-    package_id, object_id, party_id, other, and datetime_cs are populated 
+    package_id, object_id, party_id, other, and datetime_cs are populated
     only when information provided via a signed unique_id via
     acs_mail_lite::unique_id_create
 } -
@@ -164,7 +164,7 @@ ad_proc -public -callback acs_mail_lite::email_inbound -impl acs-mail-lite {
     @creation-date 2017-10-17
 
     @param headers_array_name  An array with all email headers.
-    @param parts_array_name   An array with info on files and bodies. 
+    @param parts_array_name    An array with info on files and bodies.
     @see acs_mail_lite::inbound_queue_pull_one
 
     @param package_id   The package_id of package that sent the original email.
@@ -180,8 +180,8 @@ ad_proc -public -callback acs_mail_lite::email_inbound -impl acs-mail-lite {
     set no_errors_p 1
     # ------------------- Do Not change code above this line in your copy ---
     # Use this callback implementation as a template for other packages.
-    # Be sure to change 'impl acs-mail-lite' to a reference relevant to 
-    # package implementation is used in. 
+    # Be sure to change 'impl acs-mail-lite' to a reference relevant to
+    # package implementation is used in.
     # For example: -impl super-package-now-with-email
     #
     # This proc is called whenever an inbound email is pulled from the queue.
@@ -190,28 +190,28 @@ ad_proc -public -callback acs_mail_lite::email_inbound -impl acs-mail-lite {
     # filtered out.
     #
     # A package developer should just need to confirm input for their specific
-    # package. 
+    # package.
     #
     # When supplied, package_id, object_id and party_id, other and datetime_cs
-    # are passed in headers via a signed unique_id. 
-    # Values default to empty string. 
+    # are passed in headers via a signed unique_id.
+    # Values default to empty string.
 
     # headers_arr is an array of header values indexed by header name.
     # header names are in original upper and lower case, which may
     # have some significance in filtering cases. Although case should
     # should not be relied on for obtaining a value.
-    # Some header indexes are created by ACS Mail Lite procs during 
+    # Some header indexes are created by ACS Mail Lite procs during
     # processing. For example these indexes may be populated via
     # a unique id header created using acs_mail_lite::unique_id_create :
     #
     # aml_package_id contains package_id
-    # 
+    #
     # aml_object_id contains object_id
-    # 
-    # aml_party_id contains party_id (usually same as user_id) 
-    # 
+    #
+    # aml_party_id contains party_id (usually same as user_id)
+    #
     # aml_other contains other data useful as input
-    # 
+    #
     # aml_datetime_cs contains approx time in seconds since epoch when sent.
     #
     #
@@ -229,7 +229,7 @@ ad_proc -public -callback acs_mail_lite::email_inbound -impl acs-mail-lite {
     #
 
     # parts_arr  is an array that contains all the information about attached
-    # or inline files and body contents. 
+    # or inline files and body contents.
     # For details, see acs_mail_lite::inbound_queue_pull_one
     #
 
@@ -239,7 +239,7 @@ ad_proc -public -callback acs_mail_lite::email_inbound -impl acs-mail-lite {
     # set no_errors_p to 0, so that the email remains
     # in the queue for later examination, even though it is also
     # marked as 'processed' so it will not be re-processed later.
-    # 
+    #
 
     # ------------------- Do Not change code below this line in your copy ---
     return $no_errors_p
