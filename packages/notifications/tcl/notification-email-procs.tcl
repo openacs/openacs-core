@@ -17,11 +17,15 @@ namespace eval notification::email {
         return [apm_package_id_from_key notifications]
     }
 
-    ad_proc -public get_parameter {
+    ad_proc -deprecated -public get_parameter {
         {-name:required}
         {-default ""}
     } {
         Shorthand proc to return a given notifications package parameter.
+
+        Deprecated: just a wrapper for parameter::get
+
+        @see parameter::get
     } {
         return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
     }
@@ -30,7 +34,7 @@ namespace eval notification::email {
         Get the domain name to use for e-mail.  The package parameter "EmailDomain" is
         preferred, but if it doesn't exist, we build one using the system URL.
     } {
-        set domain [get_parameter -name "EmailDomain"]
+        set domain [parameter::get -package_id [get_package_id] -parameter "EmailDomain" -default ""]
         if { $domain eq "" } {
             # No domain set up, let's use the default from the system info
             # This may not find anything, but at least it's worth a try
@@ -52,13 +56,13 @@ namespace eval notification::email {
     ad_proc -public reply_address_prefix {} {
         Shorthand proc to return the email reply address prefix parameter value.
     } {
-        return [get_parameter -name "EmailReplyAddressPrefix"]
+        return [parameter::get -package_id [get_package_id] -parameter "EmailReplyAddressPrefix" -default ""]
     }
 
     ad_proc -private qmail_mail_queue_dir {} {
         Shorthand proc to return the email qmail-style mail queue (i.e. a Maildir directory)
     } {
-        return [get_parameter -name "EmailQmailQueue"]
+        return [parameter::get -package_id [get_package_id] -parameter "EmailQmailQueue" -default ""]
     }
 
     ad_proc -private parse_email_address {email} {
