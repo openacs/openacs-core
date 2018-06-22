@@ -2062,7 +2062,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
         set header_name_list [array names h_arr]
     }
 
-    # Here are some procs that help create a message-id or orginator
+    # Here are some procs that help create a message-id or originator
     # or generated unique ids from inbound email headers
     # that are of historical importance in helping
     # shape this proc.
