@@ -1353,7 +1353,7 @@ ad_proc -private util::http::native::request {
         }
 
         set enc [util::http::get_channel_settings $content_type]
-        if {$enc ne "binary"} {
+        if {$enc ni [list "binary" [encoding system]]} {
             set body [encoding convertto $enc $body]
         }
 
@@ -1455,7 +1455,7 @@ ad_proc -private util::http::native::request {
 
     # Translate into proper encoding
     set enc [util::http::get_channel_settings $content_type]
-    if {$enc ne "binary"} {
+    if {$enc ni [list "binary" [encoding system]]} {
         set page [encoding convertfrom $enc $page]
     }
 
@@ -1660,7 +1660,7 @@ ad_proc -private util::http::curl::request {
         }
 
         set enc [util::http::get_channel_settings $content_type]
-        if {$enc ne "binary"} {
+        if {$enc ni [list "binary" [encoding system]]} {
             set body [encoding convertto $enc $body]
         }
 
@@ -1808,7 +1808,7 @@ ad_proc -private util::http::curl::request {
 
     # Translate into proper encoding
     set enc [util::http::get_channel_settings $content_type]
-    if {$enc ne "binary"} {
+    if {$enc ni [list "binary" [encoding system]]} {
         set page [encoding convertfrom $enc $page]
     }
 
