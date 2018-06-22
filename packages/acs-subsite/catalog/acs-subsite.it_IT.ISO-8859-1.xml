@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-subsite" locale="it_IT" charset="ISO-8859-1">
 
+  <msg key="400_title">Errore Server</msg>
+  <msg key="403_message">Non hai il permesso di accedere a questa pagina</msg>
+  <msg key="404_message">Il file richiesto non è stato trovato</msg>
+  <msg key="500_message">Si è verificato un errore nel processare la tua richiesta</msg>
+  <msg key="503_message">Il servizio richiesto è attualmente non disponibile</msg>
   <msg key="_or">, oppure</msg>
   <msg key="_Update_Basic_Information">Aggiorna Informazione di Base</msg>
   <msg key="A_member_of_the_system">Iscritto alla comunita&#39; %system_name% sin dal</msg>
@@ -168,6 +173,8 @@
   <msg key="Erase_Portrait">Elimina il ritratto</msg>
   <msg key="erase_portrait">elimina il ritratto</msg>
   <msg key="Error">Errore</msg>
+  <msg key="Error_joining">Errore durante l&#39;iscrizione</msg>
+  <msg key="Error_joining_details">Si è verificato un errore aggiungendoti al gruppo.</msg>
   <msg key="Error_sending_mail">Errore nell&#39;invio dell&#39;email</msg>
   <msg key="Error_sending_verification_mail">C&#39;é stato un errore spedendo la mail per la verifica account</msg>
   <msg key="Error_trying_to_register">Si é verificato un errore cercando di registrare il tuo account</msg>
@@ -218,6 +225,7 @@
   <msg key="Join_subsite">Partecipa al subsite</msg>
   <msg key="Join_this_community">Partecipa a questa comunità</msg>
   <msg key="Join_this_subsite">Partecipa a questo subsite</msg>
+  <msg key="Joined_group">Sei stato iscritto al gruppo %group_name%.</msg>
   <msg key="Key">Chiave</msg>
   <msg key="Keyword">Parola chiave (keyword)</msg>
   <msg key="Last_name">Cognome</msg>
@@ -404,6 +412,7 @@
   <msg key="Req_membership_comm">Richieste di partecipazione di questa comunità</msg>
   <msg key="Req_membership_subs">Richieste di partecipazione di questo subsite</msg>
   <msg key="Request_Change_Password_token_email">Richiesta di Cambio Password: un token per modificare la tua password ti é stato inviato via email. Segui le istruzioni nella mail per cambiare la tua password</msg>
+  <msg key="Request_group_submitted">La tua richiesta di iscrizione al gruppo &#39;%group_name%&#39; è stata inoltrata.</msg>
   <msg key="Request_join_submitted">La tua richiesta di iscrizione al gruppo &#39;%group_name%&#39; è stata inviata</msg>
   <msg key="Request_membership">Richiedi di partecipare</msg>
   <msg key="Reset_Password">Reimposta Password</msg>
