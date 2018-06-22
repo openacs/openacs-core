@@ -305,42 +305,6 @@ namespace eval acs_mail_lite {
                     -user_id [party::get_by_email -email $email]]
     }
 
-    ad_proc -deprecated -public bounce_address {
-        -user_id:required
-        -package_id:required
-        -message_id:required
-    } {
-        Composes a bounce address. If parameter FixedSenderEmail empty,
-        message_id is used. If message_id is empty, the legacy approach
-        for creating bounce_address is used.
-
-        @option user_id user_id of the mail recipient
-        @option package_id package_id of the mail sending package
-        (needed to call package-specific code to deal with bounces)
-        @option message_id message-id of the mail
-        @return bounce address
-        @see acs_mail_lite::inbound_email_context
-    } {
-        set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
-        set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
-                              -package_id $mail_package_id \
-                              -default "" ]
-        if { $fixed_sender ne "" } {
-            set ba $fixed_sender
-        } else {
-            if { $message_id ne "" } {
-                set ba $message_id
-            } else {
-                set ba [bounce_prefix]
-                append ba "-" $user_id "-" [ns_sha1 $message_id] \
-                    "-" $package_id "@" [address_domain]
-                ns_log Warning "acs_mail_lite::bounce_address is using \
- deprecated way. Supply message_id. Use acs_mail_lite::unique_id_create"
-            }
-        }
-        return $ba
-    }
-
     ad_proc -deprecated -public scan_replies {} {
         Scheduled procedure that will scan for bounced mails
         @see acs_mail_lite::check_bounces
