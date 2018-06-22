@@ -37,7 +37,8 @@ switch -- $field {
         ds_set_user_switching_enabled $enabled_p
     }
     default { 
-        ns_return 200 text/plain "bad field $field"
+        ad_return_complaint 1 "bad field $field"
+        ad_script_abort
     }
 }
 ad_returnredirect $return_url
