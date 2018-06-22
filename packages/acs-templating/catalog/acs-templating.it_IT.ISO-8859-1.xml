@@ -80,6 +80,7 @@
   <msg key="lt_No_value_supplied_for_-field_pretty-">Nessun valore specificato per %field_pretty%</msg>
   <msg key="lt_The_-field_pretty-_must_be_non_negative">%field_pretty% deve essere un intero positivo</msg>
   <msg key="lt_When_specifying_a_non">Quando si specifica una pagina diversa da zero, è necessario fornire anche page_query o page_query_name</msg>
+  <msg key="Markdown_Text">Testo Markdown</msg>
   <msg key="Meridian">Meridiano</msg>
   <msg key="Minutes">Minuti</msg>
   <msg key="minutes">minuti</msg>
