@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-subsite" locale="es_ES" charset="ISO-8859-1">
 
+  <msg key="400_title">Error del servidor</msg>
+  <msg key="400_message">Solicitud incorrecta</msg>
+  <msg key="403_message">No tiene los privilegios necesarios para ver esta página</msg>
+  <msg key="404_message">Recurso no encontrado</msg>
+  <msg key="500_message">Ocurrió un error mientras se tramitaba su solicitud</msg>
+  <msg key="503_message">Servicio no disponible en este momento</msg>
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
   <msg key="A_member_of_the_system">Miembro de %system_name% desde</msg>
