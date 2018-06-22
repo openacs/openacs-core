@@ -7,4 +7,5 @@
   <msg key="Has_account_on_system_name">Ha un account su %system_name%</msg>
   <msg key="Invalid_username_or_password">Nome utente o password non sono corretti</msg>
   <msg key="lt_Not_getting_the_results_you_expected">Non stai ottenendo i risultati che ti aspettavi? Prova a cercare:</msg>
+  <msg key="To_many_failed_login_attempts">Accesso negato a causa di troppi tentativi di login falliti. Riprova più tardi!</msg>
 </message_catalog>
