@@ -3,6 +3,7 @@
 
   <msg key="Actions">Acciones</msg>
   <msg key="Administration_of_Localization">Administración de Localización</msg>
+  <msg key="all_locales">todos los idiomas</msg>
   <msg key="all_packages">todos los paquetes</msg>
   <msg key="Are_you_sure_you_want_to_export_all_I18N_messages_to_catalog_files">¿Está seguro que desea exportar todos los mensajes a catálogos?</msg>
   <msg key="Are_you_sure_you_want_to_import_all_I18N_messages_from_catalog_files">¿Está seguro que desea importar todos los mensajes desde los catálogos?</msg>

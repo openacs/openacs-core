@@ -7,4 +7,5 @@
   <msg key="Has_account_on_system_name">Tiene cuenta en %system_name%</msg>
   <msg key="Invalid_username_or_password">Usuario o contraseña erroneo</msg>
   <msg key="lt_Not_getting_the_results_you_expected">Si no ha obtenido los resultados esperados, intente buscar:</msg>
+  <msg key="To_many_failed_login_attempts">Acceso denegado: demasiados intentos erróneos. Inténtelo de nuevo mas tarde.</msg>
 </message_catalog>

@@ -83,6 +83,7 @@
   <msg key="lt_No_value_supplied_for_-field_pretty-">Falta especificar el valor de %field_pretty%</msg>
   <msg key="lt_The_-field_pretty-_must_be_non_negative">%field_pretty% debe ser un entero no negativo</msg>
   <msg key="lt_When_specifying_a_non">Al especificar un page_size distinto de 0, debe especificar también el page_query o page_query_name</msg>
+  <msg key="Markdown_Text">Texto en formato Markdown</msg>
   <msg key="Meridian">Meridiano</msg>
   <msg key="Minutes">Minutos</msg>
   <msg key="minutes">minutos</msg>
