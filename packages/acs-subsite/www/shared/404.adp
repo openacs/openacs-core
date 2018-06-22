@@ -1,4 +1,4 @@
 <master>
-<property name="doc(title)">#acs-subsite.400_title#</property>
-<h1>#acs-subsite.400_title#</h1>
+<property name="doc(title)">#acs-subsite.404_title#</property>
+<h1>#acs-subsite.404_title#</h1>
 #acs-subsite.404_message#
