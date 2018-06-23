@@ -9,12 +9,11 @@ ad_library {
 }
 
 namespace eval permission {}
-
-# define cache_p to be 0 here.  Note that it is redefined
-# to return the value of the PermissionCacheP kernel parameter
-# on the first call.  also the namespace eval is needed to 
+#
+# Define cache_p to return 0 or 1 depending on the PermissionCacheP
+# kernel parameter on the first call.  The namespace eval is needed to
 # make the redefinition work for ttrace.
-
+#
 ad_proc -private permission::cache_p {} {
     returns 0 or 1 depending if permission_p caching is enabled or disabled.
     by default caching is disabled.
@@ -32,7 +31,7 @@ ad_proc -public permission::grant {
     grant privilege Y to party X on object Z
 } {
     db_exec_plsql grant_permission {}
-    util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
+    permission::cache_flush -party_id $party_id -object_id $object_id -privilege $privilege
     permission::permission_thread_cache_flush
 }
 
@@ -44,7 +43,7 @@ ad_proc -public permission::revoke {
     revoke privilege Y from party X on object Z
 } {
     db_exec_plsql revoke_permission {}
-    util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
+    permission::cache_flush -party_id $party_id -object_id $object_id -privilege $privilege
     permission::permission_thread_cache_flush
 }
 
@@ -56,7 +55,7 @@ ad_proc -public permission::permission_p {
     {-object_id:required}
     {-privilege:required}
 } {
-    does party X have privilege Y on object Z
+    Does the provided party have the reequested privilege on the given object?
     
     @param no_cache force loading from db even if cached (flushes cache as well)
     
@@ -77,36 +76,41 @@ ad_proc -public permission::permission_p {
     set caching_activated [permission::cache_p]
 
     if { $no_cache_p || !$caching_activated } {
-
+        #
+        # No caching wanted (either per-call or configured)
+        #
 	if { $no_cache_p } {
+            #
+            # Avoid all caches.
+            #
 	    permission::permission_thread_cache_flush
 	}
 
 	if {$caching_activated} {
-	    # If there is no caching activated, there is no need to
-	    # flush the memoize cache. Frequent momoize cache flushing
-	    # causes a flood of intra-server talk in a cluster
-	    # configuration (see bug #2398);
-	    # 
-	    util_memoize_flush [list permission::permission_p_not_cached \
-				    -party_id $party_id \
-				    -object_id $object_id \
-				    -privilege $privilege]
+            #
+	    # Only flush the cache, when caching is activated.
+	    # Frequent cache flushing can cause a flood of
+	    # intra-server talk in a cluster configuration (see bug
+	    # #2398);
+	    #
+            permission::cache_flush \
+                -party_id $party_id \
+                -object_id $object_id \
+                -privilege $privilege
 	}
 
         set permission_p [permission::permission_p_not_cached \
 			      -party_id $party_id \
 			      -object_id $object_id \
 			      -privilege $privilege]
-    } else { 
-        set permission_p [util_memoize \
-                              [list permission::permission_p_not_cached \
-				   -party_id $party_id \
-				   -object_id $object_id \
-				   -privilege $privilege] \
-                              [parameter::get -package_id [ad_acs_kernel_id] \
-				   -parameter PermissionCacheTimeout \
-				   -default 300]]
+    } else {
+        #
+        # Permission caching is activated
+        #
+        set permission_p [permission::cache_eval \
+                              -party_id $party_id \
+                              -object_id $object_id \
+                              -privilege $privilege]
     }
 
     if { 
@@ -116,6 +120,12 @@ ad_proc -public permission::permission_p {
         && [ad_conn untrusted_user_id] != 0 
         && ![template::util::is_true $permission_p] 
     } {
+        #
+        # In case, permission was granted above, the party and ad_conn
+        # user_id are 0, and the permission is NOT granted based on
+        # the untrusted_user_id, require login unless this is
+        # deactivated for this call.
+        #
         set untrusted_permission_p [permission_p_not_cached \
                                         -party_id [ad_conn untrusted_user_id] \
                                         -object_id $object_id \
@@ -294,6 +304,64 @@ ad_proc -public permission::get_parties_with_permission {
     @see permission::permission_p
 } {
     return [db_list_of_lists get_parties {}]
+}
+
+ad_proc -private permission::cache_eval {
+    {-party_id}
+    {-object_id}
+    {-privilege}
+} {
+    Run permission call and cache the result.
+
+    @param party_id
+    @param user_id     
+    @param privilege
+
+    @see permission::permission_p
+} {
+    return [util_memoize \
+                [list permission::permission_p_not_cached \
+                     -party_id $party_id \
+                     -object_id $object_id \
+                     -privilege $privilege] \
+                [parameter::get -package_id [ad_acs_kernel_id] \
+                     -parameter PermissionCacheTimeout \
+                     -default 300]]
+}
+
+
+ad_proc -public permission::cache_flush {
+    {-party_id}
+    {-object_id}
+    {-privilege}
+} {
+    
+    Flush permissions from the cache. Either specify all three
+    paramters or only party_id
+
+    @param party_id
+    @param user_id     
+    @param privilege
+
+    @see permission::permission_p
+} {
+    if {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
+        #
+        # All three attributes are provided
+        #
+        util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
+        
+    } else {[info exists party_id] } {
+        #
+        # At least the party_id is provided
+        #
+        util_memoize_flush_pattern "permission::*-party_id $party_id"
+    } else {
+        #
+        # tell user, what's implemented
+        #
+        error "either specify party_id, object_id and privilege, or only party_id"
+    }
 }
 
 

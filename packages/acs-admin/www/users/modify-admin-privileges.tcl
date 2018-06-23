@@ -27,9 +27,11 @@ if {$confirmed_p} {
 
     ad_returnredirect $return_url
 
-    # We need to flush all permission checks pertaining to this user.
-    # this is expensive so maybe we should check if we in fact are cacheing.
-    util_memoize_flush_regexp "^permission::.*-party_id $user_id"
+    #
+    # Flush all permission checks pertaining to this user.
+    #
+    permission::cache_flush -party_id $user_id
+    
     ad_script_abort
 }
 

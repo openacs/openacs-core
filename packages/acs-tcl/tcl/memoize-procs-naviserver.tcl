@@ -114,7 +114,7 @@ ad_proc -public util_memoize_flush_pattern {
 } {
     set nr_flushed [ns_cache_flush -glob util_memoize $pattern]
     if {$log_p} {
-        ns_log Debug "util_memoize_flush_pattern: flushed $nr_flushed entries using the pattern: $pattern"
+        ad_log notice "util_memoize_flush_pattern: flushed $nr_flushed entries using the pattern: $pattern"
     }
 }
 
