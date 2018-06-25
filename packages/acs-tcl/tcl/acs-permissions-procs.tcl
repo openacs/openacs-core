@@ -373,7 +373,7 @@ if {[info commands ns_cache_eval] ne ""} {
             #
             ns_cache_flush permission_cache $party_id/$object_id/$privilege
 
-        } else {[info exists party_id] } {
+        } elseif {[info exists party_id] } {
             #
             # At least the party_id is provided
             #
