@@ -220,6 +220,7 @@ Please visit the following link to change your password now:
   <msg key="First_names_not_provided_by_authority">First name is not provided by the login authority. Please enter your first name.</msg>
   <msg key="First_select_the_supertype">First, select the supertype for the new relationship type</msg>
   <msg key="Forgot_your_password">Forgot your password?</msg>
+  <msg key="forum_moderate">Forum moderate</msg>
   <msg key="Frequency">Frequency</msg>
   <msg key="Gender">Gender</msg>
   <msg key="Go_back">Go back</msg>
