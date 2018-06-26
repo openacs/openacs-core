@@ -180,33 +180,44 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
 aa_register_case -cats { api } spellcheck__spellcheck_properties {
     Test the proc that knows if spell-checking is activated, if it should be performed,
     and which value the pull-down menu should default to.
-} {    
+} {
     array set element {
 	id test_element
-	widget text	
 	mode edit
     }
 
     set command {template::util::spellcheck::spellcheck_properties -element_ref element}
 
     # text
+    set element(widget) text
+    # text widget doesn't support spellcheck
+    set spellcheck_p false
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
-    array set spellcheck [eval $command]
+    array set spellcheck [{*}$command]
     aa_false "Spell-checking disabled" $spellcheck(render_p)
 
     if { $spellcheck(render_p) } {
 	aa_log "$spellcheck(selected_option) is the default"
     }
-    
+
+    # formwidget where spellcheck is enabled
+    array set widget_info [string trim [parameter::get_from_package_key \
+                                            -package_key acs-templating \
+                                            -parameter SpellcheckFormWidgets \
+                                            -default ""]]
 
     # textarea
     set element(widget) textarea
+    # spellcheck conf from parameter
+    set spellcheck_p [expr {[info exists widget_info($element(widget))] &&
+                            [set widget_info($element(widget))]}]
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
-    array set spellcheck [eval $command]
-    aa_true "Spell-checking enabled" $spellcheck(render_p)
-    
+    array set spellcheck [{*}$command]
+    aa_true "Spell-checking as configured in acs-templating.SpellcheckFormWidgets parameter" \
+        [expr {!($spellcheck(render_p) ^ $spellcheck_p)}]
+
     if { $spellcheck(render_p) } {
 	aa_log "$spellcheck(selected_option) is the default"
     }
@@ -214,15 +225,19 @@ aa_register_case -cats { api } spellcheck__spellcheck_properties {
 
     # richtext
     set element(widget) richtext
+    # spellcheck conf from parameter
+    set spellcheck_p [expr {[info exists widget_info($element(widget))] &&
+                            [set widget_info($element(widget))]}]
     aa_log "--- Spell-checking enabled on widget \"$element(widget)\"? --- $command"
 
-    array set spellcheck [eval $command]
-    aa_true "Spell-checking enabled" $spellcheck(render_p)
+    array set spellcheck [{*}$command]
+    aa_true "Spell-checking as configured in acs-templating.SpellcheckFormWidgets parameter" \
+        [expr {!($spellcheck(render_p) ^ $spellcheck_p)}]
 
     if { $spellcheck(render_p) } {
 	aa_log "$spellcheck(selected_option) is the default"
     }
-    
+
 }
 
 # Local variables:
