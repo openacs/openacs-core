@@ -17,15 +17,7 @@ ad_proc -public person::person_p {
 } {
     is this party a person? Cached
 } {
-    return [util_memoize [list ::person::person_p_not_cached -party_id $party_id]]
-}
-
-ad_proc -private person::person_p_not_cached {
-    {-party_id:required}
-} {
-    is this party a person? Cached
-} {
-    return [db_0or1row contact_person_exists_p {select 1 from persons where person_id = :party_id}]
+    return [string is true -strict [party::get -party_id $party_id -element person_p]]
 }
 
 ad_proc -public person::new {
@@ -35,7 +27,6 @@ ad_proc -public person::new {
 } {
     create a new person
 } {
-
     set extra_vars [ns_set create]
     ns_set put $extra_vars first_names $first_names
     ns_set put $extra_vars last_name $last_name
@@ -51,64 +42,42 @@ ad_proc -public person::delete {
     delete a person
 } {
     db_exec_plsql delete_person {}
+    party::flush_cache -party_id $person_id
 }
 
-ad_proc -public person::get {
+ad_proc -deprecated -public person::get {
     {-person_id:required}
 } {
-    get info for a person as a Tcl array in list form
+    get info for a person as a Tcl array in list form<br>
+    DEPRECATED: plese use the new generic party api
+
+    @see party::get
 } {
-    db_1row get_person {
-        select * from persons
-         where person_id = :person_id
-    } -column_array person
-    set person(person_name) "$person(first_names) $person(last_name)"
-    return [array get person]
+    return [party::get -party_id $person_id]
 }
 
-ad_proc -public person::name {
-    {-person_id ""}
-    {-email ""}
-} {
-    get the name of a person. Cached.
-} {
-    if {$person_id eq "" && $email eq ""} {
-        error "You need to provide either person_id or email"
-    } elseif {"" ne $person_id && "" ne $email } {
-        error "Only provide person_id OR email, not both"
-    } else {
-        return [util_memoize [list person::name_not_cached -person_id $person_id -email $email]]
-    }
-}
-
-ad_proc -public person::name_flush {
+ad_proc -deprecated -public person::name_flush {
     {-person_id:required}
     {-email ""}
 } {
-    Flush the person::name cache.
+    Flush the person::name cache.<br>
+    DEPRECATED: plese use the new generic party api
+
+    @see party::flush_cache
 } {
-    util_memoize_flush [list person::name_not_cached -person_id $person_id -email $email]
-    acs_user::flush_cache -user_id $person_id
+    party::flush_cache -party_id $person_id
 }
 
-ad_proc -private person::name_not_cached {
+ad_proc -deprecated -public person::name {
     {-person_id ""}
     {-email ""}
 } {
-    get the name of a person
+    get the name of a person<br>
+    DEPRECATED: plese use the new generic party api
+
+    @see party::get
 } {
-    if {$person_id eq ""} {
-        # As the old functionality returned an error, but I want an
-        # empty string for e-mail, check if a person_id was found and
-        # return immediately otherwise
-        set person_id [party::get_by_email -email $email]
-        if {$person_id eq ""} {
-            return ""
-        }
-    }
-    set person [person::get -person_id $person_id]
-    set person_name [dict get $person person_name]
-    return $person_name
+    return [party::get -party_id $person_id -email $email -element name]
 }
 
 ad_proc -public person::update {
@@ -120,7 +89,7 @@ ad_proc -public person::update {
 } {
     db_dml update_person {}
     db_dml update_object_title {}
-    name_flush -person_id $person_id
+    party::flush_cache -party_id $person_id
 }
 
 # DRB: Though I've moved the bio field to type specific rather than generic storage, I've
@@ -154,8 +123,7 @@ ad_proc -public person::get_bio {
         upvar $exists_var exists_p
     }
 
-    set person [person::get -person_id $person_id]
-    set bio [dict get $person bio]
+    set bio [party::get -party_id $person_id -element bio]
 
     set exists_p [expr {$bio ne ""}]
 
@@ -174,9 +142,8 @@ ad_proc -public person::update_bio {
     @author Lars Pind (lars@collaboraid.biz)
 } {
     db_dml update_bio {}
+    party::flush_cache -party_id $person_id
 }
-
-
 
 
 ad_proc -public acs_user::change_state {
@@ -192,6 +159,7 @@ ad_proc -public acs_user::change_state {
     }
 
     membership_rel::change_state -rel_id $rel_id -state $state
+    party::flush_cache -party_id $user_id
 }
 
 ad_proc -public acs_user::approve {
@@ -218,6 +186,14 @@ ad_proc -public acs_user::reject {
     change_state -user_id $user_id -state "rejected"
 }
 
+ad_proc -public acs_user::unapprove {
+    {-user_id:required}
+} {
+    Unapprove a user
+} {
+    change_state -user_id $user_id -state "needs approval"
+}
+
 ad_proc -public acs_user::delete {
     {-user_id:required}
     {-permanent:boolean}
@@ -230,22 +206,14 @@ ad_proc -public acs_user::delete {
 } {
     if { ! $permanent_p } {
         change_state -user_id $user_id -state "deleted"
-        acs_user::flush_cache -user_id $user_id
     } else {
         # portrait is also an entry in acs_objects with creation_user
         # set to this user. Therefore won't be deleted by cascade and
         # must be removed manually
         acs_user::erase_portrait -user_id $user_id
         db_exec_plsql permanent_delete {}
+        party::flush_cache -party_id $user_id
     }
-}
-
-ad_proc -public acs_user::unapprove {
-    {-user_id:required}
-} {
-    Unapprove a user
-} {
-    change_state -user_id $user_id -state "needs approval"
 }
 
 ad_proc -public acs_user::get_by_username {
@@ -266,13 +234,13 @@ ad_proc -public acs_user::get_by_username {
     }
 
     set key [list get_by_username -authority_id $authority_id -username $username]
-    set user_id [ns_cache eval user_info_cache $key {
+    set user_id [ns_cache eval party_info_cache $key {
         acs_user::get_by_username_not_cached \
             -authority_id $authority_id \
             -username     $username
     }]
     if {$user_id eq ""} {
-        ns_cache flush user_info_cache $key
+        ns_cache flush party_info_cache $key
     }
 
     return $user_id
@@ -297,17 +265,24 @@ ad_proc -public acs_user::get {
     {-user_id {}}
     {-authority_id {}}
     {-username {}}
+    {-element ""}
     {-array}
     {-include_bio:boolean}
 } {
-    Get basic information about a user. Uses util_memoize to cache info from the database.
-    You may supply either user_id, or  username.
-    If you supply username, you may also supply authority_id, or you may leave it out, in which case it defaults to the local authority.
-    If you supply neither user_id nor username, and we have a connection, the currently logged in user will be assumed.
+    Get basic information about a user. You may supply either user_id,
+    or username. If you supply username, you may also supply
+    authority_id, or you may leave it out, in which case it defaults
+    to the local authority. If you supply neither user_id nor
+    username, and we have a connection, the currently logged in user
+    will be assumed.
 
-    @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
-
-    @option include_bio Whether to include the bio in the user information
+    @param user_id     The user_id of the user to get the bio for. Leave blank for current user.
+    @param element If specified, only this element in the dict will be
+                   returned. If an array was specified, this will
+                   contain only this element.
+    @option include_bio Whether to include the bio in the user
+                        information. This flag is deprecated and bio
+                        will be now always returned.
 
     @param  array       The name of an array into which you want the information put.
 
@@ -341,7 +316,7 @@ ad_proc -public acs_user::get {
       <li> password_age_days
       <li> creation_date
       <li> creation_ip
-      <li> bio (if -include_bio switch is present)
+      <li> bio
     </ul>
     @result dict of attributes
     @author Lars Pind (lars@collaboraid.biz)
@@ -354,69 +329,48 @@ ad_proc -public acs_user::get {
                            [ad_conn user_id]}]
     }
 
-    set key [list get_from_user_id $user_id]
-    set data [ns_cache eval user_info_cache $key {
-        acs_user::get_from_user_id_not_cached $user_id
-    }]
+    set data [party::get -party_id $user_id -element $element]
 
-    if { $include_bio_p } {
-        lappend data bio [person::get_bio -person_id $user_id]
+    if {$include_bio_p} {
+        ns_log warning "acs_user::get: -include_bio flag is deprecated. Bio will be returned in any case."
     }
 
     if {[info exists array]} {
         upvar $array row
-        array set row $data
+        if {$element eq ""} {
+            array set row $data
+        } else {
+            set row($element) $data
+        }
     }
 
     return $data
 }
 
-ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
-    Returns an array list with user info from the database. Should
-    never be called from application code. Use acs_user::get instead.
-
-    @author Peter Marklund
-} {
-    db_1row select_user_info {} -column_array row
-
-    return [array get row]
-}
-
-ad_proc -public acs_user::flush_cache {
+ad_proc -deprecated -public acs_user::flush_cache {
     {-user_id:required}
 } {
-    Flush the acs_user::get cache for the given user_id.
+    Flush the acs_user::get cache for the given user_id.<br>
+    DEPRECATED: plese use the new generic party api
+
+    @see party::flush_cache
 
     @author Peter Marklund
 } {
-    set key [list get_from_user_id $user_id]
-    ns_cache flush user_info_cache $key
-    #
-    # Get username and authority_id so we can flush the
-    # get_by_username_not_cached proc.
-    #
-    # Note, that it might be the case, that this function is called
-    # for user_ids, which are "persons", but do not qualify as
-    # "users". Therefore, the catch is used (like in earlier versions)
-    #
-    if {![catch {
-        set u [acs_user::get -user_id $user_id]
-    }]} {
-        set username     [dict get $u username]
-        set authority_id [dict get $u authority_id]
-        set key [list get_by_username -authority_id $authority_id -username $username]
-        ns_cache flush user_info_cache $key
-    }
+    party::flush_cache -party_id $user_id
 }
 
-ad_proc -public acs_user::get_element {
+ad_proc -deprecated -public acs_user::get_element {
     {-user_id {}}
     {-authority_id {}}
     {-username {}}
     {-element:required}
 } {
     Get a particular element from the basic information about a user returned by acs_user::get.
-    Throws an error if the element does not exist.
+    Throws an error if the element does not exist.<br>
+    DEPRECATED: plese use the new 'element' parameter in acs_user::get
+
+    @see acs_user::get
 
     @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
 
@@ -426,14 +380,11 @@ ad_proc -public acs_user::get_element {
 
     @see acs_user::get
 } {
-    acs_user::get \
-        -user_id $user_id \
-        -authority_id $authority_id \
-        -username $username \
-        -array row \
-        -include_bio=[string equal $element "bio"]
-
-    return $row($element)
+    return [acs_user::get \
+                -user_id $user_id \
+                -authority_id $authority_id \
+                -username $username \
+                -element $element]
 }
 
 ad_proc -public acs_user::update {
@@ -466,7 +417,7 @@ ad_proc -public acs_user::update {
     }
     db_dml user_update {}
 
-    flush_cache -user_id $user_id
+    party::flush_cache -party_id $user_id
 }
 
 ad_proc -public acs_user::get_user_id_by_screen_name {
@@ -477,8 +428,6 @@ ad_proc -public acs_user::get_user_id_by_screen_name {
 } {
     return [db_string select_user_id_by_screen_name {} -default {}]
 }
-
-
 
 ad_proc -public acs_user::site_wide_admin_p {
     {-user_id ""}
@@ -516,8 +465,7 @@ ad_proc -public acs_user::registered_user_p {
     if { $user_id eq ""} {
         set user_id [ad_conn user_id]
     }
-
-    return [db_string registered_user_p {} -default 0]
+    return [party::get -party_id $user_id -element registered_user_p]
 }
 
 
@@ -530,6 +478,170 @@ ad_proc -public acs_user::ScreenName {} {
         return "solicit"
     } else {
         return $value
+    }
+}
+
+ad_proc -deprecated -public party::email {
+    -party_id:required
+} {
+    this returns the parties email. Cached<br>
+    DEPRECATED: plese use the new generic party api
+
+    @see party::get
+} {
+    return [party::get -party_id $party_id -element email]
+}
+
+ad_proc -public party::get {
+    {-party_id ""}
+    {-email ""}
+    {-element ""}
+} {
+    Returns party information. Will also retrieve whether this party
+    is also a person, a group, a user or a registered user and in this
+    case also extra information belonging in referenced table will be
+    extracted.<br>
+    <br>
+    Cached version
+
+    @param party_id id of the party
+    @param email if specified and no party_id is given, party lookup
+                 will happen by email.
+    @param element if specified, only this attribute will be returned
+                   from the whole dict.
+
+    @return dict containing party information, or an empty dict if no
+            party was found. A string if 'element' was specified.
+} {
+    if {$party_id eq ""} {
+        set party_id [party::get_by_email -email $email]
+    }
+
+    set key [list get $party_id]
+    set data [ns_cache eval party_info_cache $key {
+        party::get_not_cached -party_id $party_id
+    }]
+
+    # don't cache invalid parties
+    if {[llength [dict keys $data]] == 0} {
+        ns_cache flush party_info_cache $key
+    }
+
+    if {$element ne ""} {
+        return [expr {[dict exists $data $element] ?
+                      [dict get $data $element] : ""}]
+    } else {
+        return $data
+    }
+}
+
+ad_proc -private party::get_not_cached {
+    {-party_id:required}
+} {
+    Returns party information. Will also retrieve whether this party
+    is also a person, a group, a user or a registered user and in this
+    case also extra information belonging in referenced table will be
+    extracted.
+
+    @param party_id id of the party
+
+    @return dict containing party information. If no party was found,
+            an empty dict will be returned.
+} {
+    set registered_users_group_id [acs_magic_object "registered_users"]
+
+    set party_p [db_0or1row party_info {
+        select o.object_id,
+               o.object_type,
+               o.title,
+               o.package_id,
+               o.context_id,
+               o.security_inherit_p,
+               o.creation_user,
+               o.creation_date,
+               o.creation_ip,
+               o.last_modified,
+               o.modifying_user,
+               o.modifying_ip,
+               pa.party_id,
+               pa.email,
+               pa.url,
+               pe.person_id,
+               pe.person_id is not null as person_p,
+               pe.first_names,
+               pe.last_name,
+               pe.first_names || ' ' || pe.last_name as name,
+               pe.bio,
+               u.user_id,
+               u.user_id is not null as user_p,
+               u.authority_id,
+               u.username,
+               u.screen_name,
+               u.priv_name,
+               u.priv_email,
+               u.email_verified_p,
+               u.email_bouncing_p,
+               u.no_alerts_until,
+               u.last_visit,
+               to_char(last_visit, 'YYYY-MM-DD HH24:MI:SS') as last_visit_ansi,
+               u.second_to_last_visit,
+               to_char(second_to_last_visit, 'YYYY-MM-DD HH24:MI:SS') as second_to_last_visit_ansi,
+               u.n_sessions,
+               u.password,
+               u.salt,
+               u.password_question,
+               u.password_answer,
+               u.password_changed_date,
+               extract(day from current_timestamp - password_changed_date) as password_age_days,
+               u.auth_token,
+               mm.rel_id,
+               mr.member_state = 'approved' as registered_user_p,
+               mr.member_state,
+               g.group_id,
+               g.group_id is not null as group_p,
+               g.group_name,
+               g.description as group_description,
+               g.join_policy
+        from parties pa
+             left join persons pe on pa.party_id = pe.person_id
+             left join users u on pe.person_id = u.user_id
+             left join group_member_map mm on mm.member_id = u.user_id
+                                          and mm.group_id  = mm.container_id
+                                          and mm.group_id  = :registered_users_group_id
+                                          and mm.rel_type  = 'membership_rel'
+             left join membership_rels mr on mr.rel_id = mm.rel_id
+             left join groups g on g.group_id = pa.party_id,
+             acs_objects o
+        where o.object_id = pa.party_id
+          and pa.party_id = :party_id
+    } -column_array row]
+
+    if {!$party_p} {
+        return [dict create]
+    } else {
+        return [array get row]
+    }
+}
+
+ad_proc -public party::flush_cache {
+    {-party_id:required}
+} {
+    Flush the party cache
+} {
+    set party [party::get -party_id $party_id]
+
+    set keys [list]
+    lappend keys [list get $party_id]
+    lappend keys [list get_by_email [dict get $party email]]
+    if {[dict get $party user_p]} {
+        lappend keys [list get_portrait_id -user_id $party_id]
+        lappend keys [list get_by_username \
+                          -authority_id [dict get $party authority_id] \
+                          -username [dict get $party username]]
+    }
+
+    foreach key $keys {
+        ns_cache flush party_info_cache $key
     }
 }
 
@@ -554,13 +666,35 @@ ad_proc -public party::update {
     }
     db_dml party_update {}
     if {[info exists email]} {
-	db_dml object_title_update {}
-	util_memoize_flush [list ::party::email_not_cached -party_id $party_id]
+        db_dml object_title_update {}
     }
-    acs_user::flush_cache -user_id $party_id
+    party::flush_cache -party_id $party_id
 }
 
 ad_proc -public party::get_by_email {
+    {-email:required}
+} {
+    Return the party_id of the party with the given email.
+    Uses a lowercase comparison as we don't allow for parties
+    to have emails that only differ in case.
+    Returns empty string if no party found.
+
+    @return party_id
+} {
+    set key [list get_by_email $email]
+    set party_id [ns_cache eval party_info_cache $key {
+        party::get_by_email_not_cached -email $email
+    }]
+
+    # don't cache invalid parties
+    if {$party_id eq ""} {
+        ns_cache flush party_info_cache $key
+    }
+
+    return $party_id
+}
+
+ad_proc -public party::get_by_email_not_cached {
     {-email:required}
 } {
     Return the party_id of the party with the given email.
@@ -618,7 +752,7 @@ ad_proc -public acs_user::get_portrait_id {
     @param user_id user_id of the user for whom we need the portrait
 } {
     set key [list get_portrait_id -user_id $user_id]
-    return [ns_cache eval user_info_cache $key {
+    return [ns_cache eval party_info_cache $key {
         acs_user::get_portrait_id_not_cached -user_id $user_id
     }]
 }

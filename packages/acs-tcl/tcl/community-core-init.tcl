@@ -5,19 +5,19 @@
 # following:
 #
 #    ns_section ns/server/${server}/acs/acs-tcl
-#         ns_param UserInfoCacheSize          2000000
-#         ns_param UserInfoCacheTimeout          3600
+#         ns_param PartyInfoCacheSize          2000000
+#         ns_param PartyInfoCacheTimeout          3600
 #
 # The timeout is responsible, how precise/recent e.g. last_visit should be.
 #
-ns_cache create user_info_cache \
+ns_cache create party_info_cache \
     -size [parameter::get \
 	       -package_id [apm_package_id_from_key acs-tcl] \
-	       -parameter UserInfoCacheSize \
+	       -parameter PartyInfoCacheSize \
 	       -default 2000000] \
     -timeout [parameter::get \
 		  -package_id [apm_package_id_from_key acs-tcl] \
-		  -parameter UserInfoCacheTimeout \
+		  -parameter PartyInfoCacheTimeout \
 		  -default 3600]
 
 
