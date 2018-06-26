@@ -107,8 +107,9 @@ ad_proc -public site_node::new {
 
     set node_id [package_instantiate_object -var_list $var_list site_node]
 
-    #Now update the nsv caches.  We don't need to update the object_id and package_key caches
-    #because nothing is mounted here yet.
+    # Now update the nsv caches.  We don't need to update the
+    # object_id and package_key caches because nothing is mounted here
+    # yet.
 
     # Grab the lock so our URL key doesn't change on us midstream
     ns_mutex lock [nsv_get site_nodes_mutex mutex]
@@ -1120,7 +1121,7 @@ if {$UseXotclSiteNodes} {
                     #
                     # the following query is just for PG, TODO: Oracle is missing
                     #
-                    set child_urls [::xo::dc list [current method]-all {
+                    set child_urls [::xo::dc list -prepare integer [current method]-all {
                         select site_node__url(children.node_id)
                         from site_nodes as parent, site_nodes as children
                         where parent.node_id = :node_id
@@ -1208,7 +1209,7 @@ if {$UseXotclSiteNodes} {
                 #
                 # the following query is just for PG, TODO: Oracle is missing
                 #
-                set child_urls [::xo::dc list [current method]-all {
+                set child_urls [::xo::dc list -prepare integer [current method]-all {
                     select site_node__url(node_id)
                     from site_nodes
                     where object_id = :object_id
@@ -1219,7 +1220,7 @@ if {$UseXotclSiteNodes} {
             :public method get_urls_from_package_key {
                 -package_key:required
             } {
-                return [::xo::dc list [current method]-urls-from-package-key {
+                return [::xo::dc list -prepare varchar [current method]-urls-from-package-key {
                     select site_node__url(node_id)
                     from site_nodes n, apm_packages p
                     where p.package_key = :package_key
@@ -1272,9 +1273,9 @@ if {$UseXotclSiteNodes} {
         #####################################################
 
         if {[info commands ::ns_cache_names] ne ""} {
-            set createCache [expr {"xo_site_nodes" ni [::ns_cache_names]}]
+            set createCache [expr {"site_nodes_cache" ni [::ns_cache_names]}]
         } else {
-            set createCache [catch {ns_cache flush xo_site_nodes NOTHING}]
+            set createCache [catch {ns_cache flush site_nodes_cache NOTHING}]
         }
         if {$createCache} {
             #
@@ -1285,28 +1286,31 @@ if {$UseXotclSiteNodes} {
             #   ns_param SiteNodesCacheSize        2000000
             #   ns_param SiteNodesIdCacheSize       100000
             #   ns_param SiteNodesChildenCacheSize  100000
+            #
 
-            foreach {cache parameter default} {
-                xo_site_nodes          SiteNodesCacheSize        2000000
-                xo_site_nodes_id       SiteNodesIdCacheSize      100000
-                xo_site_nodes_children SiteNodesChildenCacheSize 100000
-            } {
-                set size [parameter::get_from_package_key \
-                              -package_key acs-tcl \
-                              -parameter $parameter \
-                              -default $default]
-                ns_log notice "site-nodes: create cache $cache -size $size"
-                ns_cache create $cache -size $size
-            }
+            ::acs::TreePartitionedCache create ::acs::site_nodes_cache \
+                -package_key acs-tcl \
+                -parameter SiteNodesCache \
+                -default_size 2000000
+
+            ::acs::Cache create ::acs::site_nodes_id_cache \
+                -package_key acs-tcl \
+                -parameter SiteNodesIdCache \
+                -default_size 100000
+
+            ::acs::TreePartitionedCache create ::acs::site_nodes_children_cache \
+                -package_key acs-tcl \
+                -parameter SiteNodesChildenCache \
+                -default_size 100000
         }
 
         #
-        # SiteNodeCache is a mixin class for caching the SiteNode objects.
+        # SiteNodesCache is a mixin class for caching the SiteNode objects.
         # Add/remove caching methods as wanted. Removing the registry of
         # the object mixin deactivates caching for these methods
         # completely.
         #
-        ::nx::Class create SiteNodeCache {
+        ::nx::Class create SiteNodesCache {
 
             :public method get_children {
                 -node_id:required
@@ -1323,7 +1327,7 @@ if {$UseXotclSiteNodes} {
                     #
                     next
                 } else {
-                    ns_cache_eval xo_site_nodes_children \
+                    ::acs::site_nodes_children_cache eval -partition_key $node_id \
                         get_children-$node_id-$all-$package_type-$package_key-$filters-$element {
                             next
                         }
@@ -1331,45 +1335,40 @@ if {$UseXotclSiteNodes} {
             }
 
             :public method get_node_id {-url:required} {
-                ns_cache_eval xo_site_nodes_id id-$url { next }
+                acs::site_nodes_id_cache eval id-$url { next }
             }
 
             :protected method properties {-node_id:required} {
-                set key ::xo_site_nodes_property($node_id)
+                set key ::__site_nodes_property($node_id)
                 if {[info exists $key]} {
                     return [set $key]
                 }
-                set $key [ns_cache_eval xo_site_nodes p-$node_id { next }]
+                set $key [::acs::site_nodes_cache eval -partition_key $node_id $node_id { next }]
                 return [set $key]
             }
 
             :public method get_url {-node_id:required} {
-                ns_cache_eval xo_site_nodes url-$node_id { next }
+                ::acs::site_nodes_cache eval -partition_key $node_id url-$node_id { next }
             }
 
             :public method get_urls_from_object_id {-object_id:required} {
-                ns_cache_eval xo_site_nodes urls-$object_id { next }
+                ::acs::site_nodes_cache eval -partition_key $object_id urls-$object_id { next }
             }
 
             # The cache value from the following method is currently not
             # flushed, but just used for package keys, not instances, so it
             # should be safe.
             :public method get_package_url {-package_key:required} {
-                ns_cache_eval xo_site_nodes package_url-$package_key { next }
+                ::acs::site_nodes_cache eval -partition_key 0 package_url-$package_key { next }
             }
 
-            :public method flush_all {patterns} {
-                foreach pattern $patterns {
-                    switch -glob -- $pattern {
-                        id-*           {set cache xo_site_nodes_id}
-                        get_children-* {set cache xo_site_nodes_children}
-                        default        {set cache xo_site_nodes}
-                    }
-                    foreach key [ns_cache names $cache $pattern] {
-                        #:msg ......key=$key
-                        ::xo::clusterwide ns_cache flush $cache $key
-                    }
+            :public method flush_pattern {{-partition_key ""} pattern} {
+                switch -glob -- $pattern {
+                    id-*           {set cache site_nodes_id_cache}
+                    get_children-* {set cache site_nodes_children_cache}
+                    default        {set cache site_nodes_cache}
                 }
+                ::acs::$cache flush_pattern -partition_key $partition_key $pattern
             }
 
             :public method flush_cache {{-node_id ""} {-with_subtree:boolean true} {-url ""}} {
@@ -1384,15 +1383,15 @@ if {$UseXotclSiteNodes} {
                 set old_url [:get_url -node_id $node_id]
 
                 if {$node_id eq "" || $old_url eq "/"} {
-                    ::xo::clusterwide ns_cache_flush xo_site_nodes
-                    ::xo::clusterwide ns_cache_flush xo_site_nodes_id
-                    ::xo::clusterwide ns_cache_flush xo_site_nodes_children
+                    ::acs::site_nodes_cache flush_cache
+                    ::acs::site_nodes_id_cache flush_cache
+                    ::acs::site_nodes_children_cache flush_cache
                 } else {
                     set limit_clause [expr {$with_subtree ? "" : "limit 1"}]
                     #
                     # The following query is just for PG, TODO: Oracle is missing
                     #
-                    set tree [::xo::dc list_of_lists [current method]-flush-tree [subst {
+                    set tree [::xo::dc list_of_lists -prepare integer [current method]-flush-tree [subst {
                         select site_node__url(children.node_id), children.node_id, children.object_id
                         from site_nodes as parent, site_nodes as children
                         where parent.node_id = :node_id
@@ -1402,16 +1401,16 @@ if {$UseXotclSiteNodes} {
                     foreach entry $tree {
                         lassign $entry url node_id object_id
                         foreach key [list p-$node_id url-$node_id urls-$object_id] {
-                            ::xo::clusterwide ns_cache flush xo_site_nodes $key
+                            ::acs::site_nodes_cache flush -partition_key $node_id $key
                         }
-                        :flush_all get_children-$node_id-*
+                        :flush_pattern -partition_key $node_id get_children-$node_id-*
                     }
                     regsub {/$} $old_url "" old_url
-                    :flush_all id-$old_url*
+                    :flush_pattern id-$old_url*
                 }
             }
         }
-        
+
         ::nx::Class create SiteNodeUrlspaceCache {
             #
             # Cache site-node information via ns_urlspace. We can use
@@ -1452,10 +1451,10 @@ if {$UseXotclSiteNodes} {
                 } else {
                     #
                     # Get value the classical way, caching potentially
-                    # the full url path in the xo_site_nodes_id cache.
+                    # the full url path in the site_nodes_id_cache.
                     #
                     set ID [next]
-                    #ns_log notice "--- get_node_id from xo_site_nodes_id <$url> -> <$ID>"
+                    #ns_log notice "--- get_node_id from site_nodes_id_cache <$url> -> <$ID>"
                     if {$ID ne ""} {
                         #
                         # We got a valid ID. If we would add blindly a
@@ -1480,29 +1479,29 @@ if {$UseXotclSiteNodes} {
                             {*}$cmd
                             #ns_log notice "---\n[join [ns_urlspace list] \n]"
                         }
-                        return [set $key $ID]                        
+                        return [set $key $ID]
                     }
                 }
             }
-            
+
             :public method flush_cache {{-node_id ""} {-with_subtree:boolean true} {-url ""}} {
                 #
                 # Cleanup in the urspace tree: Clear always the
                 # full subtree via "-recurse" (maybe not always
                 # necessary).
                 #
-               
+
                 #ns_log notice ==========flush_cache=================[list ns_urlspace unset -recurse -key sitenode $url]
                 ns_urlspace unset -recurse -key sitenode $url
-                
+
                 next
             }
 
 
         }
-        site_node object mixins add SiteNodeCache
+        site_node object mixins add SiteNodesCache
         if {[info commands ns_urlspace] ne ""} {
-            ns_log notice "... using NaviServer's ns_urlspace for reduced redundancy in site node caches" 
+            ns_log notice "... using NaviServer's ns_urlspace for reduced redundancy in site node caches"
             site_node object mixins add SiteNodeUrlspaceCache
         }
 
@@ -1560,9 +1559,9 @@ if {$UseXotclSiteNodes} {
         #
         set parent_node_id [site_node::get_parent_id -node_id [site_node::get_parent_id -node_id $node_id]]
         set url [site_node::get_url -node_id $parent_node_id]
-        
+
         site_node::update_cache -sync_children -node_id $node_id -url $url
-        ::xo::site_node flush_all get_children-$parent_node_id-*
+        ::acs::site_nodes_cache flush_pattern -partition_key $parent_node_id get_children-$parent_node_id-*
 
         # DAVEB update context_id if it is passed in some code relies
         # on context_id to be set by instantiate_and_mount so we can't
@@ -1610,7 +1609,7 @@ if {$UseXotclSiteNodes} {
         ::xo::site_node flush_cache -node_id $node_id -with_subtree $sync_children_p -url $url
 
         set parent_node_id [site_node::get_parent_id -node_id $node_id]
-        ::xo::site_node flush_all get_children-$parent_node_id-*
+        ::xo::site_node flush_pattern -partition_key $parent_node_id get_children-$parent_node_id-*
     }
 
     ad_proc -public site_node::get {
