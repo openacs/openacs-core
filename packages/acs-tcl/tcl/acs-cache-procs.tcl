@@ -10,7 +10,7 @@
 #  
 #    Permission to use, copy, modify, distribute, and sell this
 #    software and its documentation for any purpose is hereby granted
-#    without fee, provided that the above copyright notice appear in
+#    without fee, provided that the above copyright notice appears in
 #    all copies and that both that copyright notice and this permission
 #    notice appear in supporting documentation. We make no
 #    representations about the suitability of this software for any
@@ -29,7 +29,7 @@ namespace eval ::acs {
     nx::Class create ::acs::Cache {
 	#
 	# Provide a base class to generalize cache management to
-	# extend cache primitiva like e.g. for cache partitioning.
+	# extend cache primitives like e.g. for cache partitioning.
 	#
 	:property parameter:required
 	:property package_key:required
@@ -90,7 +90,7 @@ namespace eval ::acs {
 		#
 		# Set some value in the cache. This code uses
 		# ns_cache_eval to achieve this behavior, which is
-		# typically a AOLserver idom and should be avaoided.
+		# typically a AOLserver idiom and should be avoided.
 		#
 		if {![info exists partition_key]} {set partition_key $key}
 		:uplevel [list ns_cache_eval -force -- [:cache_name $partition_key] $key [list set _ $value]]
@@ -217,7 +217,6 @@ namespace eval ::acs {
         }
     }
 
-
     ##########################################################################
     #
     # Tree Partitioned Cache class
@@ -257,9 +256,9 @@ namespace eval ::acs {
     # If a site is running a cluster of OpenACS systems, certain
     # commands have to be executed on cluster nodes (e.g. flushing
     # caches, etc). A cluster setup is currently not commonly used and
-    # requires probably some work, but the code here provides a basic
-    # infrastructure. It is a good practice to flag commands to be
-    # executed on all clusternodes in the code with
+    # requires probably some more work, but the code here provides a
+    # basic infrastructure. It is a good practice to flag commands to
+    # be executed on all cluster nodes in the code with
     # ::acs::clusterwide.
     ##########################################################################
 
