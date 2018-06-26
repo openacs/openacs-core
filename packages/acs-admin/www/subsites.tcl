@@ -18,20 +18,34 @@ if {$subsite_number > 500} {
 } else {
     set too_many_subsites_p 0
 
-    db_multirow -extend { theme theme_url admin_url path_pretty parameter_url} subsites subsite_admin_urls {} {
+    db_multirow -extend {
+        theme
+        theme_url
+        admin_url
+        path_pretty
+        node_url
+        parameter_url
+    } subsites subsite_admin_urls [subst {
+        select s.node_id,
+               p.package_id
+        from   site_nodes s, apm_packages p
+        where  s.object_id = p.package_id
+        and    p.package_key in ($package_keys)        
+    }] {
+        set node [site_node::get -node_id $node_id]
+        set path_pretty [dict get $node instance_name]
+        set parent_id   [dict get $node parent_id]
+        set node_url    [dict get $node url]
+        
         set admin_url "${node_url}admin/"
         set parameter_url [export_vars -base /shared/parameters {package_id {return_url "[ad_conn url]"}}]
-        set path_pretty $instance_name
-        array set node [site_node::get -node_id $node_id]
-        set parent_id $node(parent_id)
         set theme [parameter::get -parameter ThemeKey -package_id $package_id]
         set theme_url ${admin_url}themes/
         
         while { $parent_id ne "" } {
-            array unset node
-            array set node [site_node::get -node_id $parent_id]
-            set path_pretty "$node(instance_name) > $path_pretty"
-            set parent_id $node(parent_id)
+            set node [site_node::get -node_id $parent_id]
+            set path_pretty "[dict get $node instance_name] > $path_pretty"
+            set parent_id [dict get $node parent_id]
         }
     }
     multirow sort subsites path_pretty
