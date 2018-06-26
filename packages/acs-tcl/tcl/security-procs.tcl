@@ -12,7 +12,7 @@ ad_library {
 
 namespace eval security {
     set log(login_url) debug    ;# notice
-    set log(login_cookie) notice; #debug ;# notice
+    set log(login_cookie) debug ;# notice
 }
 
 
