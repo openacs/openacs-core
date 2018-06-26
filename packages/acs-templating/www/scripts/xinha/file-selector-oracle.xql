@@ -15,7 +15,7 @@ select object_id, name, live_revision, type, title,
 	     else :folder_path || '/' || name
 	   end as file_url,
 	   case
-	     when last_modified >= (now() - cast('99999' as interval))
+	     when last_modified >= (current_timestamp - cast('99999' as interval))
 	     then 1
 	     else 0
 	   end as new_p
