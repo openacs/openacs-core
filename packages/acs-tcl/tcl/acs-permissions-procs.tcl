@@ -356,6 +356,11 @@ if {[info commands ns_cache_eval] ne ""} {
 
         @see permission::permission_p
     } {
+        # cache is not enabled, exit immediately
+        if {[catch {ns_cache_flush permission_cache NOTHING}]} {
+            return
+        }
+        
         if {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
             #
             # All three attributes are provided
