@@ -1543,11 +1543,7 @@ ad_proc ad_page_contract_filter_invoke {
 } {
     upvar $value_varname value
     set filter_proc [ad_page_contract_filter_proc $filter]
-    if { $parameters eq "" } {
-        set filter_result [$filter_proc $filter] $name value]
-    } else {
-        set filter_result [$filter_proc $name value $parameters]
-    }
+    set filter_result [$filter_proc $name value {*}$parameters]
     if { $filter_result } {
         ad_page_contract_set_validation_passed $name:$filter
     }
