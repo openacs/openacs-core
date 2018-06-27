@@ -31,8 +31,9 @@ namespace eval ::acs {
 	# Provide a base class to generalize cache management to
 	# extend cache primitives like e.g. for cache partitioning.
 	#
+	:property name
 	:property parameter:required
-	:property package_key:required
+        :property package_key:required
 	:property maxentry:integer
 	:property {default_size:integer 10000}
 
@@ -56,7 +57,9 @@ namespace eval ::acs {
 	}
 
 	:public method flush {{-partition_key} key} {
-	    if {![info exists partition_key]} {set partition_key $key}
+	    if {![info exists partition_key]} {
+                set partition_key $key
+            }
 	    ::acs::clusterwide ns_cache flush [:cache_name $partition_key] $key
 	}
 
@@ -64,13 +67,22 @@ namespace eval ::acs {
 	    #
 	    # NaviServer variant
 	    #
-	    :public method eval {{-partition_key} key command} {
+	    :public method eval {{-partition_key} {-expires:integer} key command} {
 		#
 		# Evaluate the command unless it is cached.
 		#
-		if {![info exists partition_key]} {set partition_key $key}
+		if {![info exists partition_key]} {
+                    set partition_key $key
+                }
+		if {[info exists expires]} {
+                    set expires_flag [list -expires $expires]
+                } else {
+                    set expires_flag {}
+                }
+                
 		try {
-		    :uplevel [list ns_cache_eval -- [:cache_name $partition_key] $key $command]
+		    :uplevel [list ns_cache_eval {*}$expires_flag -- \
+                                  [:cache_name $partition_key] $key $command]
 		    
 		} on break {r} {
 		    #
@@ -86,13 +98,15 @@ namespace eval ::acs {
 		}
 	    }
 	    
-	    :public method set {key value} {
+	    :public method set {-partition_key key value} {
 		#
 		# Set some value in the cache. This code uses
 		# ns_cache_eval to achieve this behavior, which is
 		# typically a AOLserver idiom and should be avoided.
 		#
-		if {![info exists partition_key]} {set partition_key $key}
+		if {![info exists partition_key]} {
+                    set partition_key $key
+                }
 		:uplevel [list ns_cache_eval -force -- [:cache_name $partition_key] $key [list set _ $value]]
 	    }
 	    
@@ -121,8 +135,13 @@ namespace eval ::acs {
 	    #
 	    # AOLserver variant
 	    #
-	    :public method eval {{-partition_key} key body} {
-		if {![info exists partition_key]} {set partition_key $key}
+	    :public method eval {{-partition_key} {-expires:integer} key body} {
+                #
+                # ignore "-expires", since not supported by AOLserver
+                #
+		if {![info exists partition_key]} {
+                    set partition_key $key
+                }
 		try {
 		    :uplevel [list ns_cache eval [:cache_name $partition_key] $key $body]
 		} on break {r} {
@@ -131,7 +150,7 @@ namespace eval ::acs {
 		    return $r
 		}
 	    }
-	    :public method set {{-partition_key} key value} {
+	    :public method set {-partition_key key value} {
 		if {![info exists partition_key]} {set partition_key $key}
 		:uplevel [list ns_cache set [:cache_name $partition_key] $key $value]
 	    }
@@ -148,6 +167,20 @@ namespace eval ::acs {
 	    }
 	}
 
+        :public method get {-partition_key key} {
+            #
+            # The "get" method retrieves data from the cache. It
+            # should not be used for new applications due to likely
+            # race conditions, but legacy applications use this.  As
+            # implementation, we use in the case of NaviServer the
+            # AOLserver API emulation.
+            #
+            if {![info exists partition_key]} {
+                set partition_key $key
+            }
+            return [ns_cache get [:cache_name $partition_key] $key]
+        }
+        
         :public method flush_cache {{-partition_key ""}} {
             #
             # Flush all entries in a cache. Both, NaviServer and
@@ -166,7 +199,13 @@ namespace eval ::acs {
 	}
 
 	:public method init {} {
-	    set :name [namespace tail [current]]
+            #
+            # If the name was not provided, use the object name as
+            # default.
+            #
+            if {![info exists :name]} {
+                set :name [namespace tail [current]]
+            }
 	    :cache_create ${:name} [:get_size]
 	}
     }
@@ -188,7 +227,13 @@ namespace eval ::acs {
 	}
 
 	:public method init {} {
-	    set :name [namespace tail [current]]
+            #
+            # If the name was not provided, use the object name as
+            # default.
+            #
+            if {![info exists :name]} {
+                set :name [namespace tail [current]]
+            }            
 	    set partitions [::parameter::get_from_package_key \
 				-package_key ${:package_key} \
 				-parameter "${:parameter}Partitions" \
