@@ -9,12 +9,13 @@ ad_page_contract {
     user_id:naturalnum,notnull
 }
 
-ad_try {
-    acs_user::get -user_id $user_id -array user_info
-} on error {errorMsg} {
+
+acs_user::get -user_id $user_id -array user_info
+if {[array size user_info] == 0} {
     ad_return_complaint 1 "<li>We couldn't find user #$user_id; perhaps this person was deleted?"
-    return
+    ad_script_abort
 }
+
 set user_info(last_visit_pretty) [lc_time_fmt $user_info(last_visit_ansi) "%q %X"]
 set user_info(creation_date_pretty) [lc_time_fmt $user_info(creation_date) "%q"]
 set user_info(url) [acs_community_member_url -user_id $user_id]
