@@ -15,7 +15,7 @@ namespace eval acs_user {}
 ad_proc -public person::person_p {
     {-party_id:required}
 } {
-    is this party a person? Cached
+    Is this party a person?
 } {
     return [string is true -strict [party::get -party_id $party_id -element person_p]]
 }
@@ -45,35 +45,41 @@ ad_proc -public person::delete {
     party::flush_cache -party_id $person_id
 }
 
-ad_proc -deprecated -public person::get {
+ad_proc -public person::get {
     {-person_id:required}
 } {
-    get info for a person as a Tcl array in list form<br>
-    DEPRECATED: plese use the new generic party api
+    Get info for a person as a Tcl array in list form.
+    
+    This function will be probably deprecated in the future: please use
+    the new generic party API.
 
     @see party::get
 } {
     return [party::get -party_id $person_id]
 }
 
-ad_proc -deprecated -public person::name_flush {
+ad_proc -public person::name_flush {
     {-person_id:required}
     {-email ""}
 } {
-    Flush the person::name cache.<br>
-    DEPRECATED: plese use the new generic party api
+    Flush the person::name cache.
+    
+    This function will be probably deprecated in the future: please use
+    the new generic party API.
 
     @see party::flush_cache
 } {
     party::flush_cache -party_id $person_id
 }
 
-ad_proc -deprecated -public person::name {
+ad_proc -public person::name {
     {-person_id ""}
     {-email ""}
 } {
-    get the name of a person<br>
-    DEPRECATED: plese use the new generic party api
+    Return the name of a person.
+    
+    This function will be probably deprecated in the future: please use
+    the new generic party API.
 
     @see party::get
 } {
@@ -278,7 +284,7 @@ ad_proc -public acs_user::get {
 
     @param user_id     The user_id of the user to get the bio for. Leave blank for current user.
     @param element If specified, only this element in the dict will be
-                   returned. If an array was specified, this will
+                   returned. If an array was specified, This function will
                    contain only this element.
     @option include_bio Whether to include the bio in the user
                         information. This flag is deprecated and bio
@@ -347,11 +353,13 @@ ad_proc -public acs_user::get {
     return $data
 }
 
-ad_proc -deprecated -public acs_user::flush_cache {
+ad_proc -public acs_user::flush_cache {
     {-user_id:required}
 } {
-    Flush the acs_user::get cache for the given user_id.<br>
-    DEPRECATED: plese use the new generic party api
+    Flush the acs_user::get cache for the given user_id.
+    
+    This function will be probably deprecated in the future: please use
+    the new generic party API.
 
     @see party::flush_cache
 
@@ -360,23 +368,21 @@ ad_proc -deprecated -public acs_user::flush_cache {
     party::flush_cache -party_id $user_id
 }
 
-ad_proc -deprecated -public acs_user::get_element {
+ad_proc -public acs_user::get_element {
     {-user_id {}}
     {-authority_id {}}
     {-username {}}
     {-element:required}
 } {
     Get a particular element from the basic information about a user returned by acs_user::get.
-    Throws an error if the element does not exist.<br>
-    DEPRECATED: plese use the new 'element' parameter in acs_user::get
-
-    @see acs_user::get
+    Throws an error if the element does not exist.
+    
+    This function will be probably deprecated in the future: please use
+    the new 'element' parameter in acs_user::get
 
     @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
-
     @option element     Which element you want to retrieve.
-
-    @return The element asked for.
+    @return             The element asked for.
 
     @see acs_user::get
 } {
@@ -481,12 +487,15 @@ ad_proc -public acs_user::ScreenName {} {
     }
 }
 
-ad_proc -deprecated -public party::email {
+ad_proc -public party::email {
     -party_id:required
 } {
-    this returns the parties email. Cached<br>
-    DEPRECATED: plese use the new generic party api
+    Return the parties email.
 
+    This function will be probably deprecated in the future: please
+    use the new generic party API.
+    
+    @return the parties email.
     @see party::get
 } {
     return [party::get -party_id $party_id -element email]
@@ -500,9 +509,7 @@ ad_proc -public party::get {
     Returns party information. Will also retrieve whether this party
     is also a person, a group, a user or a registered user and in this
     case also extra information belonging in referenced table will be
-    extracted.<br>
-    <br>
-    Cached version
+    extracted.
 
     @param party_id id of the party
     @param email if specified and no party_id is given, party lookup
@@ -617,7 +624,7 @@ ad_proc -private party::get_not_cached {
     } -column_array row]
 
     if {!$party_p} {
-        return [dict create]
+        return {}
     } else {
         return [array get row]
     }
@@ -631,13 +638,16 @@ ad_proc -public party::flush_cache {
     set party [party::get -party_id $party_id]
 
     set keys [list]
-    lappend keys [list get $party_id]
-    lappend keys [list get_by_email [dict get $party email]]
+    lappend keys \
+        [list get $party_id] \
+        [lappend keys [list get_by_email [dict get $party email]]
+
     if {[dict get $party user_p]} {
-        lappend keys [list get_portrait_id -user_id $party_id]
-        lappend keys [list get_by_username \
-                          -authority_id [dict get $party authority_id] \
-                          -username [dict get $party username]]
+        lappend keys \
+            [list get_portrait_id -user_id $party_id] \
+            [list get_by_username \
+                 -authority_id [dict get $party authority_id] \
+                 -username [dict get $party username]]
     }
 
     foreach key $keys {
