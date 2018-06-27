@@ -5,12 +5,12 @@ ad_page_contract {
     {return_url:localurl .}
 }
 
-acs_user::get -user_id $user_id -array user_info
+set user_info [acs_user::get_user_info -user_id $user_id]
 
 auth::password::reset \
     -admin \
-    -authority_id $user_info(authority_id) \
-    -username $user_info(username)
+    -authority_id [dict get $user_info authority_id] \
+    -username [dict get $user_info username]
 
 ad_returnredirect $return_url
 ad_script_abort
