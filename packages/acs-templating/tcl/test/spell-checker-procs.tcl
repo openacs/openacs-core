@@ -201,7 +201,7 @@ aa_register_case -cats { api } spellcheck__spellcheck_properties {
 	aa_log "$spellcheck(selected_option) is the default"
     }
 
-    # formwidget where spellcheck is enabled
+    # formwidgets where spellcheck is enabled
     array set widget_info [string trim [parameter::get_from_package_key \
                                             -package_key acs-templating \
                                             -parameter SpellcheckFormWidgets \
@@ -216,7 +216,7 @@ aa_register_case -cats { api } spellcheck__spellcheck_properties {
 
     array set spellcheck [{*}$command]
     aa_true "Spell-checking as configured in acs-templating.SpellcheckFormWidgets parameter" \
-        [expr {!($spellcheck(render_p) ^ $spellcheck_p)}]
+        {!($spellcheck(render_p) ^ $spellcheck_p)}
 
     if { $spellcheck(render_p) } {
 	aa_log "$spellcheck(selected_option) is the default"
@@ -232,7 +232,7 @@ aa_register_case -cats { api } spellcheck__spellcheck_properties {
 
     array set spellcheck [{*}$command]
     aa_true "Spell-checking as configured in acs-templating.SpellcheckFormWidgets parameter" \
-        [expr {!($spellcheck(render_p) ^ $spellcheck_p)}]
+        {!($spellcheck(render_p) ^ $spellcheck_p)}
 
     if { $spellcheck(render_p) } {
 	aa_log "$spellcheck(selected_option) is the default"
