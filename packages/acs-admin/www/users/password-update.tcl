@@ -8,12 +8,11 @@ ad_page_contract {
     {password_old ""}
 }
 
-acs_user::get -user_id $user_id -array userinfo
-set context [list [list "./" "Users"] [list "user.tcl?user_id=$user_id" $userinfo(email)] "Update Password"]
+set email [party::get -party_id $user_id -element email]
+set context [list [list "./" "Users"] [list "user.tcl?user_id=$user_id" $email] "Update Password"]
 
 set site_link [ad_site_home_link]
 
-ad_return_template
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
