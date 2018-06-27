@@ -175,9 +175,8 @@ namespace eval ::acs {
     #
     # Simple Partitioned Cache class
     #
-    # Partitioning is based on a modulo function using the provided
-    # key, which has to be numeric. So far, no partitioning-spanning
-    # methods are provided.
+    # Partitioning is based on a modulo function using the cache
+    # key, which has to be numeric.
     #
     ##########################################################################
 
@@ -219,15 +218,14 @@ namespace eval ::acs {
 
     ##########################################################################
     #
-    # Tree Partitioned Cache class
+    # Class for key-partitioned caches
     #
-    # Tree Partitioning is based on a modulo function using a special
-    # partition_key, which has to be numeric. So far, no
-    # partitioning-spanning methods are provided.
+    # Key-partitioning is based on a modulo function using a special
+    # partition_key, which has to be numeric - at least for the time being. 
     #
     ##########################################################################
 
-    nx::Class create ::acs::TreePartitionedCache -superclasses ::acs::PartitionedCache {
+    nx::Class create ::acs::KeyPartitionedCache -superclasses ::acs::PartitionedCache {
 	:property {partitions:integer 1}
 
 	:public method flush_pattern {{-partition_key:integer,required} pattern} {

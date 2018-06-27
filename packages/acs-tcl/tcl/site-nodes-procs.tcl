@@ -1288,7 +1288,7 @@ if {$UseXotclSiteNodes} {
             #   ns_param SiteNodesChildenCacheSize  100000
             #
 
-            ::acs::TreePartitionedCache create ::acs::site_nodes_cache \
+            ::acs::KeyPartitionedCache create ::acs::site_nodes_cache \
                 -package_key acs-tcl \
                 -parameter SiteNodesCache \
                 -default_size 2000000
@@ -1298,7 +1298,7 @@ if {$UseXotclSiteNodes} {
                 -parameter SiteNodesIdCache \
                 -default_size 100000
 
-            ::acs::TreePartitionedCache create ::acs::site_nodes_children_cache \
+            ::acs::KeyPartitionedCache create ::acs::site_nodes_children_cache \
                 -package_key acs-tcl \
                 -parameter SiteNodesChildenCache \
                 -default_size 100000
