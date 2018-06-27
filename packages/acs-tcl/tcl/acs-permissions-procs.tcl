@@ -356,12 +356,10 @@ if {[info commands ns_cache_eval] ne ""} {
 
         @see permission::permission_p
     } {
-        # cache is not enabled, exit immediately
-        if {[catch {ns_cache_flush permission_cache NOTHING}]} {
+        if {![info exists ::permission::cache_created]} {
             return
-        }
-        
-        if {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
+ 
+        } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
             #
             # All three attributes are provided
             #
@@ -428,13 +426,16 @@ if {[info commands ns_cache_eval] ne ""} {
 
         @see permission::permission_p
     } {
-        if {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
+        if {![info exists ::permission::cache_created]} {
+            return
+ 
+        } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
             #
             # All three attributes are provided
             #
             util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
 
-        } else {[info exists party_id] } {
+        } elseif {[info exists party_id] } {
             #
             # At least the party_id is provided
             #
