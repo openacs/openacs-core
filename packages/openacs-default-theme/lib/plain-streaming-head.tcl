@@ -11,7 +11,7 @@
 set separator :
 set system_name [ad_system_name]
 set untrusted_user_id [ad_conn untrusted_user_id]
-set user_name [acs_user::get_element -user_id $untrusted_user_id -element name]
+set user_name [person::name -person_id $untrusted_user_id]
 set whos_online_url [subsite::get_element -element url]shared/whos-online
 set num_users_online [lc_numeric [whos_online::num_users]]
 

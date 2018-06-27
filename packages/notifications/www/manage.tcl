@@ -25,7 +25,7 @@ if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
             label {[_ notifications.Frequency]}
         }
     }
-    set notice "[acs_community_member_link -user_id $user_id -label [acs_user::get_element -user_id $user_id -element name]] - [_ notifications.Notifications]"
+    set notice "[acs_community_member_link -user_id $user_id -label [person::name -person_id $user_id]] - [_ notifications.Notifications]"
 } else {
     set user_id [ad_conn user_id]
     set elements {
