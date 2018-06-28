@@ -58,7 +58,7 @@ ad_proc -public auth::password::can_change_p {
 
     @return 1 if the user can change password, 0 otherwise.
 } {
-    set authority_id [acs_user::get_element -user_id $user_id -element authority_id]
+    set authority_id [acs_user::get_user_info -user_id $user_id -element authority_id]
 
     set result_p 0
     ad_try {
@@ -91,12 +91,14 @@ ad_proc -public auth::password::change {
 
    </ul>
 } {
-    acs_user::get -user_id $user_id -array user
+    set user [acs_user::get_user_info -user_id $user_id]
+    set username     [dict get $user username]
+    set authority_id [dict get $user authority_id]
 
     ad_try {
         array set result [auth::password::ChangePassword \
-                              -authority_id $user(authority_id) \
-                              -username $user(username) \
+                              -authority_id $authority_id \
+                              -username $username \
                               -new_password $new_password \
                               -old_password $old_password ]
 
@@ -105,7 +107,7 @@ ad_proc -public auth::password::change {
     } on error {errorMsg} {
         set result(password_status) failed_to_connect
         set result(password_message) $errorMsg
-        ad_log Error "Error invoking password management driver for authority_id = $user(authority_id): $errorMsg"
+        ad_log Error "Error invoking password management driver for authority_id = $authority_id: $errorMsg"
     }
 
     # Check the result code and provide canned responses
@@ -138,7 +140,7 @@ ad_proc -public auth::password::change {
         default {
             set result(password_status) "failed_to_connect"
             set result(password_message) "Illegal code returned from password management driver"
-            ad_log Error "Error invoking password management driver for authority_id = $user(authority_id): Illegal return code from driver: $result(password_status)"
+            ad_log Error "Error invoking password management driver for authority_id = $authority_id: Illegal return code from driver: $result(password_status)"
         }
     }
 
@@ -181,9 +183,9 @@ ad_proc -public auth::password::recover_password {
             set result(password_message) "Unknown email"
             return [array get result]
         }
-        acs_user::get -user_id $user_id -array user
-        set authority_id $user(authority_id)
-        set username $user(username)
+        set user [acs_user::get_user_info -user_id $user_id]
+        set authority_id [dict get $user authority_id]
+        set username     [dict get $user username]
     } else {
         # Default to local authority
         if { $authority_id eq "" } {
@@ -247,9 +249,9 @@ ad_proc -public auth::password::get_forgotten_url {
     } else {
         set user_id [party::get_by_email -email $email]
         if { $user_id ne "" } {
-            acs_user::get -user_id $user_id -array user
-            set authority_id $user(authority_id)
-            set username $user(username)
+            set user [acs_user::get_user_info -user_id $user_id]
+            set authority_id [dict get $user authority_id]
+            set username     [dict get $user username]
         }
     }
 
@@ -547,23 +549,20 @@ ad_proc -private auth::password::email_password {
         set account_id_label [_ acs-subsite.Username]
         set account_id $user(username)
     }
-    # Hm, all this crummy code, just to justify the colons in the email body
     set password_label [_ acs-subsite.Password]
-    if { [string length $password_label] > [string length $account_id_label] } {
-        set length [string length $password_label]
-    } else {
-        set length [string length $account_id_label]
-    }
-    set account_id_label [string range "$account_id_label[string repeat " " $length]" 0 [expr {$length-1}]]
-    set password_label [string range "$password_label[string repeat " " $length]" 0 [expr {$length-1}]]
+    
+    set length [expr {max([string length $account_id_label], [string length $password_label])}]
+    set account_id_label [ad_pad -right $account_id_label $length " "]
+    set password_label   [ad_pad -right $password_label $length " "]
 
     set first_names $user(first_names)
     set last_name $user(last_name)
 
     if { [ad_conn untrusted_user_id] != 0 } {
-        acs_user::get -user_id [ad_conn untrusted_user_id] -array admin_user
-        set admin_first_names $admin_user(first_names)
-        set admin_last_name $admin_user(last_name)
+        set admin [person::get_person_info \
+                       -person_id [ad_conn untrusted_user_id]]
+        set admin_first_names [dict get $admin first_names]
+        set admin_last_name   [dict get $admin last_name]
     } else {
         set admin_first_names {}
         set admin_last_name {}
@@ -573,8 +572,8 @@ ad_proc -private auth::password::email_password {
     set body [_ $body_msg_key]
 
     if { $from eq "" } {
-          set from [ad_system_owner]
-      }
+        set from [ad_system_owner]
+    }
 
     # Send email
     acs_mail_lite::send -send_immediately \
