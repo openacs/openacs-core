@@ -264,14 +264,13 @@ ad_proc -public person::get_bio {
     return $bio
 }
 
-ad_proc -public person::update_bio {
+ad_proc -deprecated -public person::update_bio {
     {-person_id:required}
     {-bio:required}
 } {
     Update the bio for a person.
 
-    This proc will be deprecated in the future. Please use
-    person::update as now supports optional parameters.
+    Deprecated: please use person::update as now supports optional parameters.
 
     @see person::update
 
