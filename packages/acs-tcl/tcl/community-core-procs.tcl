@@ -816,7 +816,7 @@ ad_proc -public party::party_p {
     @return true if object_id is a party
 
 } {
-    return [llength [party::get -party_id $object_id] != 0]
+    return [expr {[llength [party::get -party_id $object_id]] != 0}]
 }
 
 ad_proc -public party::flush_cache {
