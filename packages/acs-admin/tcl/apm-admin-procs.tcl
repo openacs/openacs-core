@@ -73,7 +73,7 @@ ad_proc -deprecated apm_header { { -form "" } args } {
 }
 
 ad_proc apm_shell_wrap { cmd } { 
-    Returns a command string, wrapped it shell-style (with backslashes) 
+    @return a command string, wrapped it shell-style (with backslashes) 
     in case lines get too long. 
 } {
     set out ""

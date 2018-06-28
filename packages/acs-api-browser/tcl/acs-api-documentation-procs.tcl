@@ -685,7 +685,7 @@ ad_proc api_proc_pretty_name {
     -label
     proc
 } {
-    Return a pretty version of a proc name
+    @return a pretty version of a proc name
     @param label the label printed for the proc in the header line
     @param link provide a link to the documentation pages
 } {
@@ -712,8 +712,8 @@ ad_proc api_proc_pretty_name {
 }
 
 ad_proc -public api_apropos_functions { string } {
-    Returns the functions in the system that contain string in their name
-    and have been defined using ad_proc.
+    @return the functions in the system that contain string in their name
+            and have been defined using ad_proc.
 } {
     set matches [list]
     foreach function [nsv_array names api_proc_doc] {
@@ -932,7 +932,7 @@ namespace eval ::apidoc {
 
     ad_proc -private first_sentence { string } {
 
-        Returns the first sentence of a string.
+        @return the first sentence of a string.
 
     } {
         if { [regexp {^(.+?\.)\s} $string "" sentence] } {
@@ -1482,7 +1482,7 @@ namespace eval ::apidoc {
 
     ad_proc -private xql_links_list { {-include_compiled 0} path } {
 
-        Returns list of xql files related to Tcl script file
+        @return list of xql files related to Tcl script file
         @param path path and filename from $::acs::rootdir
 
     } {
@@ -1547,7 +1547,7 @@ namespace eval ::apidoc {
 #
 
 ad_proc api_proc_url { proc } {
-    Returns the URL of the page that documents the given proc.
+    @return the URL of the page that documents the given proc.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
@@ -1556,7 +1556,7 @@ ad_proc api_proc_url { proc } {
 }
 
 ad_proc api_proc_link { proc } {
-    Returns a full HTML link to the documentation for the proc.
+    @return full HTML link to the documentation for the proc.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
