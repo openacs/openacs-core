@@ -199,11 +199,18 @@ ad_proc -public lang::system::timezone_utc_offset { } {
 }
 
 ad_proc -public lang::system::get_locales {} {
-    Return all enabled locales in the system. Cached
+    
+    Return all enabled locales in the system. This value is cached per
+    thread and needs currently a server restart, when the system
+    locales are changed.
 
     @author Peter Marklund
 } {
-    return [util_memoize lang::system::get_locales_not_cached]
+    set key ::__per_request(lang::system::get_locales_not_cached)
+    if {![info exists $key]} {
+        set $key [util_memoize lang::system::get_locales_not_cached]
+    }
+    return [set $key]
 }
 
 ad_proc -public lang::system::get_locale_options {} {
