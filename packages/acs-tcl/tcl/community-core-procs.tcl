@@ -615,7 +615,7 @@ ad_proc -public acs_user::flush_cache {
     person::flush_cache -person_id $user_id
 }
 
-ad_proc -public acs_user::get_element {
+ad_proc -deprecated -public acs_user::get_element {
     {-user_id {}}
     {-authority_id {}}
     {-username {}}
@@ -624,8 +624,7 @@ ad_proc -public acs_user::get_element {
     Get a particular element from the basic information about a user returned by acs_user::get.
     Throws an error if the element does not exist.
 
-    This function will be probably deprecated in the future: please use
-    the new 'element' parameter in acs_user::get
+    Deprecated: please use the new 'element' parameter in acs_user::get
 
     @option user_id     The user_id of the user to get the bio for. Leave blank for current user.
     @option element     Which element you want to retrieve.
