@@ -345,7 +345,7 @@ ad_proc -public acs_user::delete {
     @param permanent If provided the user will be deleted permanently
                        from the database. Otherwise the user
                        state will merely be set to "deleted".
-} {
+} {    
     if { ! $permanent_p } {
         change_state -user_id $user_id -state "deleted"
     } else {
@@ -353,8 +353,10 @@ ad_proc -public acs_user::delete {
         # set to this user. Therefore won't be deleted by cascade and
         # must be removed manually
         acs_user::erase_portrait -user_id $user_id
+        # flush before actual deletion, so all the information is
+        # there to be retrieved
+        acs_user::flush_cache -user_id $user_id        
         db_exec_plsql permanent_delete {}
-        acs_user::flush_cache -user_id $user_id
     }
 }
 
@@ -377,7 +379,7 @@ ad_proc -public acs_user::get_by_username {
 
     set key [list get_by_username \
                  -authority_id $authority_id -username $username]
-    set user_id [ns_cache eval party_info_cache $key {
+    set user_id [ns_cache eval user_info_cache $key {
         acs_user::get_by_username_not_cached \
             -authority_id $authority_id \
             -username     $username
@@ -385,7 +387,7 @@ ad_proc -public acs_user::get_by_username {
 
     # don't cache invalid usernames
     if {$user_id eq ""} {
-        ns_cache flush party_info_cache $key
+        ns_cache flush user_info_cache $key
     }
 
     return $user_id
@@ -587,7 +589,7 @@ ad_proc -public acs_user::flush_user_info {
 
     @see acs_user::get_user_info
 } {
-    set user [acs_user::get -user_id $user_id]
+    set user [acs_user::get_user_info -user_id $user_id]
     ns_cache flush user_info_cache [list get_by_username \
                                         -authority_id [dict get $user authority_id] \
                                         -username [dict get $user username]]
