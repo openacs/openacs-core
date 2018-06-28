@@ -197,14 +197,34 @@ ad_proc -public person::name {
 
 ad_proc -public person::update {
     {-person_id:required}
-    {-first_names:required}
-    {-last_name:required}
+    -first_names
+    -last_name
+    -bio
 } {
-    update the name of a person
+    Update person information.
 } {
+    set cols [list]
+    foreach var {first_names last_name bio} {
+        if { [info exists $var] } {
+            lappend cols "$var = :$var"
+        }
+    }
+    if {[llength $cols] == 0} {
+        return
+    }
+
     db_dml update_person {}
-    db_dml update_object_title {}
-    person::flush_cache -person_id $person_id
+
+    # update object title if changed
+    if {[info exists first_names] ||
+        [info exists last_name]} {
+        db_dml update_object_title {}
+        # need to flush also objects attributes for the party
+        person::flush_cache -person_id $person_id
+    } else {
+        # only need to flush person information (e.g. bio)
+        person::flush_person_info -person_id $person_id
+    }
 }
 
 # DRB: Though I've moved the bio field to type specific rather than generic storage, I've
@@ -251,13 +271,17 @@ ad_proc -public person::update_bio {
 } {
     Update the bio for a person.
 
+    This proc will be deprecated in the future. Please use
+    person::update as now supports optional parameters.
+
+    @see person::update
+
     @param person_id The ID of the person to edit bio for
     @param bio       The new bio for the person
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    db_dml update_bio {}
-    person::flush_person_info -person_id $person_id
+    person::update -person_id $person_id -bio $bio
 }
 
 
@@ -267,8 +291,10 @@ ad_proc -public acs_user::change_state {
 } {
     Change the membership state of a user.
 } {
-    set rel_id [db_string select_rel_id {} -default {}]
+    set rel_id [acs_user::get_user_info \
+                    -user_id $user_id -element rel_id]
 
+    # most likely this is is not a registered user
     if {$rel_id eq ""} {
         return
     }

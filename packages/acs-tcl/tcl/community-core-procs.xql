@@ -5,8 +5,7 @@
       <querytext>
       
 	update persons
-           set first_names = :first_names, 
-               last_name = :last_name
+         set    [join $cols ", "]
          where person_id = :person_id
     
       </querytext>
@@ -22,14 +21,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="person::update_bio.update_bio">      
-      <querytext>
-        update persons
-	set bio = :bio
-	where person_id = :person_id
-      </querytext>
-</fullquery>
- 
 <fullquery name="acs_user::update.user_update">      
       <querytext>
       
@@ -47,16 +38,6 @@
             from   users
             where  lower(username) = lower(:username)
             and    authority_id =:authority_id
-
-      </querytext>
-</fullquery>
-
-<fullquery name="acs_user::registered_user_p.registered_user_p">
-      <querytext>
-
-            select 1
-            from   registered_users
-            where  user_id = :user_id
 
       </querytext>
 </fullquery>
@@ -129,16 +110,6 @@
       <querytext>
 
 	select user_id from users where lower(screen_name) = lower(:screen_name)
-
-      </querytext>
-</fullquery>
-
-<fullquery name="acs_user::change_state.select_rel_id">
-      <querytext>
-
-	select rel_id
-        from cc_users
-        where user_id = :user_id
 
       </querytext>
 </fullquery>
