@@ -201,11 +201,48 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
                      -allowed_protocols * \
                      -no_outer_urls \
                      -validate]
-    aa_true "$msg with validate?" $valid_p    
+    aa_true "$msg with validate?" $valid_p
     aa_false $msg? [regexp {<([a-z]\w*)\s+[^>]*(href|src|content|action)="(http|https|//):.*"[^>]*>} $result]
 
 }
 
+aa_register_case -cats {api smoke} ad_pad {
+
+    Test if it ad_pad is working as expected
+
+} {
+    
+    aa_log " ------------ Testing left pad ------------ "
+
+    set string [ad_generate_random_string]
+    set length [expr {int(rand()*1000)}]
+    set padstring [ad_generate_random_string]
+
+    aa_log " - string: $string"
+    aa_log " - length: $length"
+    aa_log " - padstring: $padstring"
+    
+    set result [ad_pad -left $string $length $padstring]
+
+    aa_true " - Result is exactly $length long " {[string length $result] == $length}
+    aa_true " - String is at right end " [regexp "^.*${string}\$" $result]
+
+    aa_log " ------------ Testing right pad ------------ "
+
+    set string [ad_generate_random_string]
+    set length [expr {int(rand()*1000)}]
+    set padstring [ad_generate_random_string]
+
+    aa_log " - string: $string"
+    aa_log " - length: $length"
+    aa_log " - padstring: $padstring"
+    
+    set result [ad_pad -right $string $length $padstring]
+
+    aa_true " - Result is exactly $length long " {[string length $result] == $length}
+    aa_true " - String is at left end " [regexp "^${string}.*\$" $result]
+    
+}
 
 
 # Local variables:

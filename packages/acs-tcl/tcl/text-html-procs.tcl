@@ -2342,6 +2342,48 @@ ad_proc -public string_truncate {
     return $string
 }
 
+ad_proc -public ad_pad {
+    -left:boolean
+    -right:boolean
+    string
+    length
+    padstring
+} {
+    Tcl implementation of the pad string function found in many DBMSs.<br>    
+    One of the directional flags -left or -right must be specified and
+    will dictate whether this will be a lpad or a rpad.
+
+    @param left text will be appended left of the original string.
+    @param right text will be appended right of the original string.
+
+    @arg string String to be padded.
+    
+    @arg length length this string will be after padding. If string
+                this long or longer, will be truncated.
+    
+    @arg padstring string that will be repeated until length of
+    supplied string is equal or greather than length.
+
+    @return padded string
+} {
+    if {!($left_p ^ $right_p)} {
+        error "Please specifiy a single flag -left or -right"
+    }
+    
+    set slength [string length $string]
+    set padlength [string length $padstring]
+    set repetitions [expr {int(($length - $slength) / $padlength) + 1}]
+    set appended [string repeat $padstring $repetitions]
+    
+    if {$left_p} {
+        set string [string range $appended$string end-[expr {$length - 1}] end]
+    } else {
+        set string [string range $string$appended 0 [expr {$length - 1}]]
+    }
+
+    return $string
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
