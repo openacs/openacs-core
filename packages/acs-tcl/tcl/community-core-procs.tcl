@@ -294,7 +294,7 @@ ad_proc -public acs_user::change_state {
     set rel_id [acs_user::get_user_info \
                     -user_id $user_id -element rel_id]
 
-    # most likely this is is not a registered user
+    # most likely this is not a registered user
     if {$rel_id eq ""} {
         return
     }
