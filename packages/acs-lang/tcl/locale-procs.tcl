@@ -206,7 +206,8 @@ ad_proc -public lang::system::get_locales {} {
 
     @author Peter Marklund
 } {
-    set key ::__per_request(lang::system::get_locales_not_cached)
+    #set key ::__per_request(lang::system::get_locales_not_cached)
+    set key ::lang::system_get_locales_not_cached
     if {![info exists $key]} {
         set $key [util_memoize lang::system::get_locales_not_cached]
     }
