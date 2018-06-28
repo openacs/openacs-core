@@ -234,9 +234,9 @@ ad_proc -public auth::authenticate {
             set result(auth_message) [_ acs-subsite.Unknown_email]
             return [array get result]
         }
-        acs_user::get -user_id $user_id -array user
-        set authority_id $user(authority_id)
-        set username $user(username)
+        set user [acs_user::get_user_info -user_id $user_id]
+        set authority_id [dict get $user authority_id]
+        set username     [dict get $user username]
     } else {
         # Default to local authority
         if { $authority_id eq "" } {
@@ -1030,7 +1030,8 @@ ad_proc -public auth::create_local_account {
     set result(user_id) $user_id
 
     if { $username eq "" } {
-        set username [acs_user::get_element -user_id $user_id -element username]
+        set username [acs_user::get_user_info \
+                          -user_id $user_id -element username]
     }
     set result(username) $username
 
@@ -1397,9 +1398,7 @@ ad_proc -private auth::get_local_account {
                                          -username $username \
                                          -array user]
 
-            if {$creation_info(creation_status) eq "ok"} {
-                acs_user::get -authority_id $authority_id -username $username -array user
-            } else {
+            if {$creation_info(creation_status) ne "ok"} {
                 set auth_info(account_status) "closed"
                 # Used to get help contact info
                 auth::authority::get -authority_id $authority_id -array authority
@@ -1438,17 +1437,21 @@ ad_proc -private auth::get_local_account {
         }
     }
 
-    # Check local account status
+    set user_id [acs_user::get_by_username \
+                     -authority_id $authority_id -username $username]
+    set user_info [acs_user::get_user_info -user_id $user_id]
+    
+    # Check local account status    
     array set auth_info [auth::check_local_account_status \
-                             -user_id $user(user_id) \
+                             -user_id $user_id \
                              -return_url $return_url \
-                             -member_state $user(member_state) \
-                             -email_verified_p $user(email_verified_p) \
-                             -screen_name $user(screen_name) \
-                             -password_age_days $user(password_age_days)]
+                             -member_state [dict get $user_info member_state] \
+                             -email_verified_p [dict get $user_info email_verified_p] \
+                             -screen_name [dict get $user_info screen_name] \
+                             -password_age_days [dict get $user_info password_age_days]]
 
     # Return user_id
-    set auth_info(user_id) $user(user_id)
+    set auth_info(user_id) $user_id
 
     return [array get auth_info]
 }
@@ -1542,14 +1545,14 @@ ad_proc -public auth::get_local_account_status {
 } {
     set result no_account
     ad_try {
-        acs_user::get -user_id $user_id -array user
+        set user [acs_user::get_user_info -user_id $user_id]
         array set check_result [auth::check_local_account_status \
                                     -user_id $user_id \
-                                    -member_state $user(member_state) \
-                                    -email_verified_p $user(email_verified_p) \
-                                    -screen_name $user(screen_name) \
-                                    -password_age_days $user(password_age_days)]
-
+                                    -member_state [dict get $user member_state] \
+                                    -email_verified_p [dict get $user email_verified_p] \
+                                    -screen_name [dict get $user screen_name] \
+                                    -password_age_days [dict get $user password_age_days]]
+        
         set result $check_result(account_status)
     } on error {errorMsg} {
         ns_log notice "auth::get_local_account_status returned: $errorMsg"
@@ -1573,12 +1576,12 @@ ad_proc -private auth::send_email_verification_email {
 } {
     # These are used in the messages below
     set token [auth::get_user_secret_token -user_id $user_id]
-    acs_user::get -user_id $user_id -array user
+    set to_addr [party::get -party_id $user_id -element email]
     set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { token user_id }]
     set system_name [ad_system_name]
 
     acs_mail_lite::send -send_immediately \
-        -to_addr $user(email) \
+        -to_addr $to_addr \
         -from_addr "\"$system_name\" <[parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]>" \
         -subject [_ acs-subsite.lt_Welcome_to_system_nam] \
         -body [_ acs-subsite.lt_To_confirm_your_regis]
@@ -1687,10 +1690,10 @@ ad_proc -private auth::validate_account_info {
             if { [acs_object_type $email_party_id] ne "user" } {
                 set element_messages(email) [_ acs-subsite.Have_group_mail]
             } else {
-                acs_user::get \
-                    -user_id $email_party_id \
-                    -array email_user
-                switch $email_user(member_state) {
+                set email_member_state [acs_user::get_user_info \
+                                            -user_id $email_party_id \
+                                            -element member_state]
+                switch $email_member_state {
                     banned {
                         set element_messages(email) [_ acs-subsite.lt_This_user_is_deleted]
                     }
@@ -1713,7 +1716,9 @@ ad_proc -private auth::validate_account_info {
             # we're not updating, or it's not the same user_id as the
             # one we're updating
 
-            set username_member_state [acs_user::get_element -user_id $username_user_id -element member_state]
+            set username_member_state [acs_user::get_user_info \
+                                           -user_id $username_user_id \
+                                           -element member_state]
             switch $username_member_state {
                 banned {
                     set element_messages(username) [_ acs-subsite.lt_This_user_is_deleted]
