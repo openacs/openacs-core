@@ -129,16 +129,15 @@ aa_register_case -cats {api} sync_actions {
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
             if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
-                array unset user
-                acs_user::get -user_id $entry(user_id) -array user
+                set user [acs_user::get -user_id $entry(user_id)]
                 
-                aa_equals "user.first_names" $user(first_names) $user_info(first_names)
-                aa_equals "user.last_name" $user(last_name) $user_info(last_name)
-                aa_equals "user.email" $user(email) [string tolower $email1]
-                aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
-                aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $user_info(url)
-                aa_equals "user.screen_name" $user(screen_name) $user_info(screen_name)
+                aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
+                aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
+                aa_equals "user.email" [dict get $user email] [string tolower $email1]
+                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.username" [dict get $user username] $username1
+                aa_equals "user.url" [dict get $user url] $user_info(url)
+                aa_equals "user.screen_name" [dict get $user screen_name] $user_info(screen_name)
             }
             
             #####
@@ -203,16 +202,15 @@ aa_register_case -cats {api} sync_actions {
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
-                array unset user
-                acs_user::get -user_id $entry(user_id) -array user
+            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {                
+                set user [acs_user::get -user_id $entry(user_id)]
                 
-                aa_equals "user.first_names" $user(first_names) $user_info(first_names)
-                aa_equals "user.last_name" $user(last_name) $user_info(last_name)
-                aa_equals "user.email" $user(email) [string tolower $email2]
-                aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
-                aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $user_info(url)
+                aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
+                aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
+                aa_equals "user.email" [dict get $user email] [string tolower $email2]
+                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.username" [dict get $user username] $username1
+                aa_equals "user.url" [dict get $user url] $user_info(url)
             }
 
             #####
@@ -244,15 +242,14 @@ aa_register_case -cats {api} sync_actions {
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
             if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
-                array unset user
-                acs_user::get -user_id $entry(user_id) -array user
+                set user [acs_user::get -user_id $entry(user_id)]
                 
-                aa_equals "user.first_names" $user(first_names) $user_info2(first_names)
-                aa_equals "user.last_name" $user(last_name) $user_info2(last_name)
-                aa_equals "user.email" $user(email) $user_info2(email)
-                aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
-                aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $user_info2(url)
+                aa_equals "user.first_names" [dict get $user first_names] $user_info2(first_names)
+                aa_equals "user.last_name" [dict get $user last_name] $user_info2(last_name)
+                aa_equals "user.email" [dict get $user email] $user_info2(email)
+                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.username" [dict get $user username] $username1
+                aa_equals "user.url" [dict get $user url] $user_info2(url)
             }
 
             #####
@@ -310,9 +307,9 @@ aa_register_case -cats {api} sync_actions {
             aa_log "entry.message = '$entry(message)'"
 
             if { [aa_true "Entry has user_id set" [expr {[info exists entry(user_id)] && $entry(user_id) ne ""}]] } {
-                array unset user
-                acs_user::get -user_id $entry(user_id) -array user
-                aa_equals "User member state is banned" $user(member_state) "banned"
+                set member_state [acs_user::get_user_info \
+                                      -user_id $entry(user_id) -element "member_state"]
+                aa_equals "User member state is banned" $member_state "banned"
             }
             
 
@@ -385,15 +382,14 @@ aa_register_case -cats {api db} sync_snapshot {
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
             if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
-                array unset user
-                acs_user::get -user_id $entry(user_id) -array user
+                set user [acs_user::get -user_id $entry(user_id)]
                 
-                aa_equals "user.first_names" $user(first_names) $user_info(first_names)
-                aa_equals "user.last_name" $user(last_name) $user_info(last_name)
-                aa_equals "user.email" $user(email) [string tolower $email1]
-                aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
-                aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $user_info(url)
+                aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
+                aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
+                aa_equals "user.email" [dict get $user email] [string tolower $email1]
+                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.username" [dict get $user username] $username1
+                aa_equals "user.url" [dict get $user url] $user_info(url)
             }
             
             #####
@@ -428,15 +424,14 @@ aa_register_case -cats {api db} sync_snapshot {
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
             if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
-                array unset user
-                acs_user::get -user_id $entry(user_id) -array user
+                set user [acs_user::get -user_id $entry(user_id)]
                 
-                aa_equals "user.first_names" $user(first_names) $user_info(first_names)
-                aa_equals "user.last_name" $user(last_name) $user_info(last_name)
-                aa_equals "user.email" $user(email) [string tolower $user_info(email)]
-                aa_equals "user.authority_id" $user(authority_id) [auth::authority::local]
-                aa_equals "user.username" $user(username) $username1
-                aa_equals "user.url" $user(url) $user_info(url)
+                aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
+                aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
+                aa_equals "user.email" [dict get $user email] [string tolower $user_info(email)]
+                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.username" [dict get $user username] $username1
+                aa_equals "user.url" [dict get $user url] $user_info(url)
             }
 
             
@@ -759,8 +754,10 @@ aa_register_case -cats {api} sync_batch_ims_test {
 
             aa_log "--- Insert test ---"
 
-            # Setup dummy variables
+            # 1 = insert operation
             set ims_doc(recstatus) 1
+
+            # dummy user variables
             set ims_doc(username) [ad_generate_random_string]
             set ims_doc(first_names) [ad_generate_random_string]
             set ims_doc(last_name) [ad_generate_random_string]
@@ -784,14 +781,13 @@ aa_register_case -cats {api} sync_batch_ims_test {
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            array unset user
-            acs_user::get -user_id $entry(user_id) -array user
+            set user [acs_user::get -user_id $entry(user_id)]
 
             foreach varname { username first_names last_name email url } { 
-                aa_equals "$varname" $user($varname) $ims_doc($varname)
+                aa_equals "$varname" [dict get $user $varname] $ims_doc($varname)
             }
-            aa_equals "authority_id" $user(authority_id) $authority_id
-            aa_false "member_state not banned" [string equal $user(member_state) "banned"]
+            aa_equals "authority_id" [dict get $user authority_id] $authority_id
+            aa_false "member_state not banned" {[dict get $user member_state] eq "banned"}
             # saving this for later
             set first_user_id $entry(user_id)
 
@@ -804,8 +800,10 @@ aa_register_case -cats {api} sync_batch_ims_test {
 
             aa_log "--- Update test ---"
 
-            # Setup dummy variables
+            # 2 = update operation
             set ims_doc(recstatus) 2
+
+            # dummy user variables
             # username is unchanged
             set ims_doc(first_names) [ad_generate_random_string]
             set ims_doc(last_name) [ad_generate_random_string]
@@ -829,13 +827,12 @@ aa_register_case -cats {api} sync_batch_ims_test {
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            array unset user
-            acs_user::get -user_id $entry(user_id) -array user
+            set user [acs_user::get -user_id $entry(user_id)]
 
             foreach varname { username first_names last_name email url } { 
-                aa_equals "$varname" $user($varname) $ims_doc($varname)
+                aa_equals "$varname" [dict get $user $varname] $ims_doc($varname)
             }
-            aa_false "member_state not banned" [string equal $user(member_state) "banned"]
+            aa_false "member_state not banned" {[dict get $user member_state] eq "banned"}
 
             #####
             #
@@ -845,14 +842,11 @@ aa_register_case -cats {api} sync_batch_ims_test {
 
             aa_log "--- Delete test ---"
 
-            # Setup dummy variables
+            # 3 = delete operation
             set ims_doc(recstatus) 3
-            # username is unchanged
-            set ims_doc(first_names) [ad_generate_random_string]
-            set ims_doc(last_name) [ad_generate_random_string]
-            # email is unchanged
-            set ims_doc(url) "http://www.[ad_generate_random_string].com"
 
+            # user variables stay the same, we are deleting
+            
             set job_id [auth::authority::batch_sync -authority_id $authority_id]
             
             auth::sync::job::get -job_id $job_id -array job
@@ -869,37 +863,41 @@ aa_register_case -cats {api} sync_batch_ims_test {
             
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
+            aa_log "entry.user_id = '$entry(user_id)'"            
 
-            array unset user
-            acs_user::get -user_id $entry(user_id) -array user
-
-            foreach varname { username } { 
-                aa_equals "$varname" $user($varname) $ims_doc($varname)
-            }
-            aa_equals "member_state" $user(member_state) "banned"
+            set user_info [acs_user::get_user_info -user_id $entry(user_id)]
+            aa_equals "username"     [dict get $user_info username]     $ims_doc(username)
+            aa_equals "member_state" [dict get $user_info member_state] "banned"
 
             #####
             #
-            # Reuse username and email
+            # Reuse username and email. This should fail, as we don't
+            # allow 'stealing' usernames from banned users.
             #
             #####
 
             aa_log "--- Reuse username/email of a deleted user test ---"
 
-            # Setup dummy variables
+            # 1 = insert operation
             set ims_doc(recstatus) 1
+
+            # attributes of the previously deletes user
+            set old_doc [array get ims_doc]
+            
+            # dummy user variables
             # same username
             set ims_doc(first_names) [ad_generate_random_string]
-            set ims_doc(last_name) [ad_generate_random_string]
+            set ims_doc(last_name)   [ad_generate_random_string]
             # same email
             set ims_doc(url) "http://www.[ad_generate_random_string].com"
 
             set job_id [auth::authority::batch_sync -authority_id $authority_id]
             
             auth::sync::job::get -job_id $job_id -array job
-            
+
+            # operation has failed because user exists already
             aa_equals "Number of actions" $job(num_actions) 1
-            aa_equals "Number of problems" $job(num_problems) 0
+            aa_equals "Number of problems" $job(num_problems) 1
             aa_log "job.message = '$job(message)'"
 
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
@@ -910,14 +908,16 @@ aa_register_case -cats {api} sync_batch_ims_test {
             
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
+            aa_log "entry.user_id = '$entry(user_id)'"
 
-            array unset user
-            acs_user::get -user_id $entry(user_id) -array user
-            foreach varname { username first_names last_name email url } { 
-                aa_equals "$varname" $user($varname) $ims_doc($varname)
+            # all attributes remained the same
+            set user [acs_user::get -user_id $entry(user_id)]
+            foreach varname { username email first_names last_name url } {
+                aa_true "$varname" {[dict get $user $varname] eq [dict get $old_doc $varname]}
             }
-            aa_equals "authority_id" $user(authority_id) $authority_id
-            aa_false "member_state not banned" [string equal $user(member_state) "banned"]
+            aa_equals "authority_id" [dict get $user authority_id] $authority_id
+            # previously deleted user keeps being banned
+            aa_true "member_state is still banned" {[dict get $user member_state] eq "banned"}
 
             # Check that first_user_id has had username/email changed
 
