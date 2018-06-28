@@ -288,7 +288,10 @@ ad_proc -private auth::local::password::ChangePassword {
 
     if { [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1] } {
         ad_try {
-            acs_user::get -username $username -authority_id $authority_id -array user
+            set user_id [acs_user::get_by_username \
+                             -username $username \
+                             -authority_id $authority_id]
+            set user_email [party::get -party_id $user_id -element email]
 
             set system_name [ad_system_name]
             set pvt_home_name [ad_pvt_home_name]
@@ -296,10 +299,12 @@ ad_proc -private auth::local::password::ChangePassword {
 
             if { [auth::UseEmailForLoginP] } {
                 set account_id_label [_ acs-subsite.Email]
-                set account_id $user(email)
+                set account_id $user_email
             } else {
                 set account_id_label [_ acs-subsite.Username]
-                set account_id $user(username)
+                set account_id [acs_user::get_user_info \
+                                    -user_id $user_id \
+                                    -element username]
             }
 
             set subject [_ acs-subsite.Password_changed_subject]
@@ -307,12 +312,12 @@ ad_proc -private auth::local::password::ChangePassword {
 
             acs_mail_lite::send \
                 -send_immediately \
-                -to_addr $user(email) \
+                -to_addr $user_email \
                 -from_addr [ad_outgoing_sender] \
                 -subject $subject \
                 -body $body
         } on error {errorMsg} {
-            ad_log Error "Error sending out password changed notification to account owner with user_id $user(user_id), email $user(email): $errorMsg"
+            ad_log Error "Error sending out password changed notification to account owner with user_id $user_id, email $user_email: $errorMsg"
         }
     }
 
