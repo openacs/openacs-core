@@ -82,7 +82,6 @@
       </querytext>
 </fullquery>
 
-
 <fullquery name="party::get_by_email_not_cached.select_party_id">
       <querytext>
       
@@ -91,6 +90,39 @@
         where  lower(email) = lower(:email)
 
       </querytext>
+</fullquery>
+
+<fullquery name="party::name.get_org_name">
+    <querytext>
+	select
+		name
+	from 
+		organizations
+	where
+		organization_id = :party_id
+    </querytext>
+</fullquery>
+
+<fullquery name="party::name.get_group_name">
+    <querytext>
+	select
+		group_name
+	from 
+		groups
+	where
+		group_id = :party_id
+    </querytext>
+</fullquery>
+
+<fullquery name="party::name.get_party_name">
+    <querytext>
+	select
+		party_name
+	from 
+		party_names
+	where
+		party_id = :party_id
+    </querytext>
 </fullquery>
 
 <fullquery name="acs_user::get_user_id_by_screen_name.select_user_id_by_screen_name">

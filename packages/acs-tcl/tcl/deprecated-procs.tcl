@@ -3177,6 +3177,32 @@ ad_proc -private -deprecated rp_handle_adp_request {} {
 # deprecated site-nodes-procs.tcl
 ########################################################################
 
+########################################################################
+# deprecated party-procs.tcl
+########################################################################
+
+namespace eval party {
+
+    ad_proc -deprecated -public permission_p {
+        { -user_id "" }
+        { -privilege "read" }
+        party_id
+    } {
+        Wrapper for ad_permission to allow us to bypass having to
+        specify the read privilege
+
+        Deprecated: just another wrapper for permission::permission_p
+
+        @author Michael Bryzek (mbryzek@arsdigita.com)
+        @creation-date 10/2000
+
+        @see permission::permission_p
+
+    } {
+        return [permission::permission_p -party_id $user_id -object_id $party_id -privilege $privilege]
+    }
+    
+}
 
 # Local variables:
 #    mode: tcl
