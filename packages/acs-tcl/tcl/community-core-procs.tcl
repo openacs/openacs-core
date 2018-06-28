@@ -152,14 +152,13 @@ ad_proc -public person::flush_person_info {
     ns_cache flush person_info_cache $key
 }
 
-ad_proc -public person::name_flush {
+ad_proc -deprecated -public person::name_flush {
     {-person_id:required}
     {-email ""}
 } {
     Flush the person::name cache.
 
-    This function as been renamed and will be deprecated in the
-    future. Please use suggested alternative.
+    Deprecated: please use suggested alternative.
 
     @see person::flush_person_info
 } {
