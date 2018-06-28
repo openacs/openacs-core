@@ -59,7 +59,7 @@ implemented using this package:</p>
 <li>BBoard</li><li>Webmail</li><li>General Comments</li><li>Spam</li><li>Various parts of the ticket tracker.</li>
 </ul>
 <p>Each of these applications requires a message store and each
-defines its own high level organization for messages whithin that
+defines its own high level organization for messages within that
 store.</p>
 <ul>
 <li>Bboard organizes messages into forums and categories and
