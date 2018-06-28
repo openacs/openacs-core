@@ -915,24 +915,20 @@ ad_proc -public party::name {
         set party_id [party::get_by_email -email $email]
     }
 
-    if {[person::person_p -party_id $party_id]} {
-        set name [person::name -person_id $party_id]
-    } else {
-        set name ""
+    set name [person::name -person_id $party_id]
 
-        if { [apm_package_installed_p "organizations"] } {
-            set name [db_string get_org_name {} -default ""]
-        }
-
-        if { $name eq "" } {
-            set name [db_string get_group_name {} -default ""]
-        }
-
-        if { $name eq "" } {
-            set name [db_string get_party_name {} -default ""]
-        }
-
+    if { $name eq "" && [apm_package_installed_p "organizations"] } {
+        set name [db_string get_org_name {} -default ""]
     }
+
+    if { $name eq "" } {
+        set name [db_string get_group_name {} -default ""]
+    }
+
+    if { $name eq "" } {
+        set name [db_string get_party_name {} -default ""]
+    }
+
     return $name
 }
 
