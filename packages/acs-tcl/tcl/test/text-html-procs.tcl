@@ -208,7 +208,7 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
 
 aa_register_case -cats {api smoke} ad_pad {
 
-    Test if it ad_pad is working as expected
+    Test if ad_pad is working as expected
 
 } {
     
