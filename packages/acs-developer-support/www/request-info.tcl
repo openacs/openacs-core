@@ -1,10 +1,11 @@
-# $Id$
-# File:        request-info.tcl
-# Author:      Jon Salz <jsalz@mit.edu>
-# Description: Displays information about a page request.
-# Inputs:      request
+# /packages/acs-developer-support/www/request-info.tcl
 
 ad_page_contract {
+    Displays information about a page request.
+
+    @author Jon Salz (jsalz@mit.edu)
+
+    @cvs-id $Id$
 } {
     request
     {rp_show_debug_p:boolean 0}
