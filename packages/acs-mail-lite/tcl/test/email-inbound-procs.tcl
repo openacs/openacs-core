@@ -356,79 +356,92 @@ aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
            set t1_list [list $ho $na $ssl_p]
            aa_equals "Test acs_mail_lite::imap_mailbox_split" $t1_list $t2_list
 
-           aa_log "Expect imap procs other than ref407 and ref424 to fail \
- when nsimap is not installed."
-           aa_log "Testing imap open/close via default connection params"
-           if { [catch {set conn_id [acs_mail_lite::imap_conn_close -conn_id "all"]} errmsg ] } {
-               set conn_id 1
-           }
-           set es ""
-
-           aa_log "Following three tests 'pass' when no imap sessions open."
-           aa_false "ref367. acs_mail_lite::imap_conn_close -conn_id 'all'" $conn_id
-
-           set conn_id [randomRange 1000]
-           if { [catch {set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]} errmsg] } {
-               set t3 1
-           }
-           aa_false "ref373. acs_mail_lite::imap_conn_close -conn_id '${conn_id}'" $t3
-
-           set conn_id ""
-           if { [catch {set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]} errmsg] } {
-               set t3 1
-           }
-           aa_false "ref379. acs_mail_lite::imap_conn_close -conn_id '${conn_id}'" $t3
-
-           aa_log "Following tests various session cases with open/close"
-           aa_log "Some will fail if a session cannot be established."
-
-
-           # see Example of an IMAP LIST in rfc6154:
-           # https://tools.ietf.org/html/rfc6154#page-7
-           # ns_imap list $conn_id $mailbox pattern(* or %) substr
-
-
-           #set list [ns_imap list $conn_id $mailbox_host {}]
-           # returns: '{} noselect'  When logged in is not successful..
-           # set list [ns_imap list $conn_id $mailbox_host {*}]
-           # returns 'INBOX {} INBOX.Trash {} INBOX.sent-mail {}' when really logged in
-           # and mailbox_name part of mailbox is "", and mailbox is in form {{mailbox_host}}
-           # set list [ns_imap list $conn_id $mailbox_host {%}]
-           # returns 'INBOX {}' when really logged in
-           # and mailbox_name part of mailbox is ""
-           # If mailbox_name exists and is included in mailbox_host, returns ''
-           # If mailbox_name separate from mailbox_host, and exists and in place of %, returns 'mailbox {}'
-           # for example 'INBOX.Trash {}'
-
-
            if { [catch { set sid [acs_mail_lite::imap_conn_go] } errmsg ] } {
                set sid "z"
            }
            set sid_p [ad_var_type_check_integer_p $sid]
            aa_true "ref407. acs_mail_lite::imap_conn_go" $sid_p
 
-           if { [catch { set sid2 [acs_mail_lite::imap_conn_close -conn_id $sid] } errmsg ] } {
-               set sid2 0
-           }
-           aa_true "ref412. acs_mail_lite::imap_conn_close -conn_id '${sid}'" $sid2
-
-           if { [catch {set sid3 [acs_mail_lite::imap_conn_go -conn_id $sid] } errmsg ] } {
-               set sid3 "z"
-           }
-           set sid3_p [ad_var_type_check_integer_p $sid3]
-           aa_false "ref418. acs_mail_lite::imap_conn_go -conn_id '${sid}'" $sid3_p
-
            if { [catch {set sid4 [acs_mail_lite::imap_conn_go -conn_id ""] } errmsg] } {
                set sid4 "z"
            }
            set sid4_p [ad_var_type_check_integer_p $sid4]
            aa_true "ref424. acs_mail_lite::imap_conn_go -conn_id ''" $sid4_p
+           
+           aa_log "Checking whether ns_imap is installed..."
+           set ns_imap_p [expr {[info commands ns_imap] ne ""}]
+           set enabled [expr {$ns_imap_p ?
+                              "enabled. Activating additional tests" :
+                              "disabled. Some tests will be skipped"}]
+           aa_log "...ns_imap $enabled."
+           
+           # Following tests are expected to work only when ns_imap is
+           # installed and are therefore disabled otherwise.
+           if {$ns_imap_p} {
+               aa_log "Start of ns_imap dependent tests."
+               
+               aa_log "Testing imap open/close via default connection params"
+               if { [catch {set conn_id [acs_mail_lite::imap_conn_close -conn_id "all"]} errmsg ] } {
+                   set conn_id 1
+               }
+               set es ""
 
-           set sid5 "all"
-           if { [catch {set closed_p [acs_mail_lite::imap_conn_close -conn_id $sid5]} errmsg] } {
-               set closed_p 0
+               aa_log "Following three tests 'pass' when no imap sessions open."
+               aa_false "ref367. acs_mail_lite::imap_conn_close -conn_id 'all'" $conn_id
+
+               set conn_id [randomRange 1000]
+               if { [catch {set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]} errmsg] } {
+                   set t3 1
+               }
+               aa_false "ref373. acs_mail_lite::imap_conn_close -conn_id '${conn_id}'" $t3
+
+               set conn_id ""
+               if { [catch {set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]} errmsg] } {
+                   set t3 1
+               }
+               aa_false "ref379. acs_mail_lite::imap_conn_close -conn_id '${conn_id}'" $t3
+
+               aa_log "Following tests various session cases with open/close"
+               aa_log "Some will fail if a session cannot be established."
+
+
+               # see Example of an IMAP LIST in rfc6154:
+               # https://tools.ietf.org/html/rfc6154#page-7
+               # ns_imap list $conn_id $mailbox pattern(* or %) substr
+
+
+               #set list [ns_imap list $conn_id $mailbox_host {}]
+               # returns: '{} noselect'  When logged in is not successful..
+               # set list [ns_imap list $conn_id $mailbox_host {*}]
+               # returns 'INBOX {} INBOX.Trash {} INBOX.sent-mail {}' when really logged in
+               # and mailbox_name part of mailbox is "", and mailbox is in form {{mailbox_host}}
+               # set list [ns_imap list $conn_id $mailbox_host {%}]
+               # returns 'INBOX {}' when really logged in
+               # and mailbox_name part of mailbox is ""
+               # If mailbox_name exists and is included in mailbox_host, returns ''
+               # If mailbox_name separate from mailbox_host, and exists and in place of %, returns 'mailbox {}'
+               # for example 'INBOX.Trash {}'
+
+
+               if { [catch { set sid2 [acs_mail_lite::imap_conn_close -conn_id $sid] } errmsg ] } {
+                   set sid2 0
+               }
+               aa_true "ref412. acs_mail_lite::imap_conn_close -conn_id '${sid}'" $sid2
+
+               if { [catch {set sid3 [acs_mail_lite::imap_conn_go -conn_id $sid] } errmsg ] } {
+                   set sid3 "z"
+               }
+               set sid3_p [ad_var_type_check_integer_p $sid3]
+               aa_false "ref418. acs_mail_lite::imap_conn_go -conn_id '${sid}'" $sid3_p
+
+               set sid5 "all"
+               if { [catch {set closed_p [acs_mail_lite::imap_conn_close -conn_id $sid5]} errmsg] } {
+                   set closed_p 0
+               }
+               aa_true "ref430. acs_mail_lite::imap_conn_close -conn_id '${sid5}'" $closed_p
+
+               aa_log "End of ns_imap dependent tests."
            }
-           aa_true "ref430. acs_mail_lite::imap_conn_close -conn_id '${sid5}'" $closed_p
 
            aa_log "Testing for auto replies"
 
