@@ -431,7 +431,7 @@ ad_proc -public template::expand_percentage_signs { message } {
     Here is an %example% variable. -> Here is an Erik variable.
     Here is an %array.variable% for you -> Here is an Oluf for you
 
-    author Christian Hvid
+    @author Christian Hvid
 
 } {
     set remaining_message $message

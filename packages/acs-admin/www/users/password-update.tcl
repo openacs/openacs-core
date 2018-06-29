@@ -1,7 +1,7 @@
 ad_page_contract {
-    Let's the admin change a user's password.
+    Lets the admin change a user's password.
 
-    @version $Id$
+    @cvs-id $Id$
 } {
     {user_id:naturalnum,notnull}
     {return_url:localurl ""}

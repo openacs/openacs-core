@@ -811,7 +811,7 @@ ad_proc -public -deprecated template::util::leadingTrim { value } {
     Trim the leading zeroes from the value, but preserve the value
     as "0" if it is "00"
 
-    @see: util::trim_leading_zeros
+    @see util::trim_leading_zeros
 } {
     return [util::trim_leading_zeros $value]
 }

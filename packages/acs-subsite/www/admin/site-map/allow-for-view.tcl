@@ -1,7 +1,7 @@
 ad_page_contract {
     Ask for confirmation for view on public site_map
     @author Viaro Networks (vivian@viaro.net)
-    @cvs-id $id:
+    @cvs-id $Id$
 
 } {
     checkbox:integer,multiple,optional

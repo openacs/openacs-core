@@ -1,14 +1,14 @@
 ad_page_contract {
 
-    @author Natalia Pérez (nperper@it.uc3m.es) 
-    @creation_date 2005-03-28
-    
+    @author Natalia Pérez (nperper@it.uc3m.es)
+    @creation-date 2005-03-28
+
 } {
     object_id:naturalnum,notnull
     request_id:naturalnum,multiple
     type_id:naturalnum,notnull
-    return_url:localurl         
-} 
+    return_url:localurl
+}
 
 set request_count [llength $request_id]
 for { set i 0} { $i < $request_count } { incr i } {

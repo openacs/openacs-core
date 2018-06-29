@@ -5,7 +5,7 @@ ad_library {
 
     @author Guenter Ernst (guenter.ernst@wu.ac.at)
     @creation-date 28 Feb 2018
-    @cvs-id $Id:
+    @cvs-id $Id$
 }
 
 

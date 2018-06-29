@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Günter Ernst (guenter.ernst@wu.ac.at)
     @creation-date 2018-02-19
-    @cvs-id $Id:
+    @cvs-id $Id$
 }
 
 set page_title "Login Attempts"
