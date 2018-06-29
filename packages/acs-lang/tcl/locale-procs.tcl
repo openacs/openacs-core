@@ -235,6 +235,7 @@ ad_proc -public lang::system::locale_set_enabled {
     db_dml set_enabled_p { update ad_locales set enabled_p = :enabled_p where locale = :locale }
 
     # Flush caches
+    unset -nocomplain ::lang::system_get_locales_not_cached
     util_memoize_flush_regexp {^lang::util::default_locale_from_lang_not_cached}
     util_memoize_flush_regexp {^lang::system::get_locales}
     util_memoize_flush_regexp {^lang::system::get_locale_options}

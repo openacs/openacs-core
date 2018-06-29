@@ -790,12 +790,7 @@ aa_register_case \
         -test_code {
 
         # The tests assume that the danish locale is enabled
-        db_dml enable_all_locales {
-            update ad_locales
-            set enabled_p = 't'
-            where locale = 'da_DK'
-        }
-        util_memoize_flush_regexp {^lang::system::get_locales}
+        lang::system::locale_set_enabled -locale "da_DK" -enabled t
 
         # First locale is perfect language match
         lang::test::assert_browser_locale "da,en-us;q=0.8,de;q=0.5,es;q=0.3" "da_DK"
