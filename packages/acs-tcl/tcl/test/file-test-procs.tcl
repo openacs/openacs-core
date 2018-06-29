@@ -192,22 +192,27 @@ aa_register_case -cats {smoke} files__check_xql_files {
     Check for some common errors in the xql files like 
     missing rdbms, missing corresponding Tcl files, etc.
 
-    Not production safe since malformed xql can crass AOLserver in the parse.
+    Not production safe since malformed xql can crash AOLserver in the parse.
 
     @author Jeff Davis davis@xarg.net
 } {
-    # couple of local helper procs 
-    proc ::xql_p {file} { 
-        return [expr {[string match {*.xql} $file] || [file isdirectory $file]}]
-    }
-    
     # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
     set startdir $::acs::rootdir/packages
     
     aa_log "Checks starting from $startdir"
 
-    #inspect every Tcl file in the directory tree starting with $startdir
-    foreach file [ad_find_all_files -check_file_func ::xql_p $startdir] { 
+    # get xql files from installed packages
+    set files [list]
+    apm_get_installed_versions -array installed_versions
+    foreach {package_key version} [array get installed_versions] {
+        lappend files {*}[lmap f [apm_get_package_files \
+                                      -package_key $package_key \
+                                      -file_types {query_file}] {
+            set f $startdir/$package_key/$f
+        }]
+    }
+
+    foreach file $files {
 
         set fp [open $file "r"]
         set data [read $fp]
@@ -215,15 +220,8 @@ aa_register_case -cats {smoke} files__check_xql_files {
         ns_log debug "acs_tcl__check_xql_files: read $file"
         set data [db_qd_internal_prepare_queryfile_content $data]
 
-        if { [catch {set parse [xml_parse $data]} errMsg] } {
-            ns_log warning "acs_tcl__check_xql_files: failed parse $file $errMsg"
-            aa_log_result fail "XML Parse Error: $file [ns_quotehtml $errMsg]"
-        } else {
-            # lets walk the nodes and check they are what we want to see.
-
-            # We are done so just let it go man.
-
-        }
+        set parse_failed_p [catch {set parse [xml_parse $data]} errMsg]
+        aa_false "xql $file correctly parsed" $parse_failed_p
 
         # Errors:
         #   .xql files without .tcl
