@@ -793,10 +793,14 @@ ad_proc -public template::util::date::validate { date error_ref } {
 
 
 
-ad_proc -public template::util::leadingPad { string size } {
+ad_proc -public -deprecated template::util::leadingPad { string size } {
     Pad a string with leading zeroes
+
+    Deprecated: please use the new and more general 'ad_pad'.
+
+    @see ad_pad
 } {
-  
+
   if {$string eq ""} {
     return ""
   }
@@ -805,7 +809,7 @@ ad_proc -public template::util::leadingPad { string size } {
   append ret $string
   return $ret
 
-}  
+}
 
 ad_proc -public -deprecated template::util::leadingTrim { value } {
     Trim the leading zeroes from the value, but preserve the value
