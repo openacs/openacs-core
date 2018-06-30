@@ -1261,7 +1261,7 @@ if {$UseXotclSiteNodes} {
             # @method flush_cache
             #    a stub to be overloaded by the cache manager
             #
-            :public method flush_cache {{-node_id ""} {-with_subtree:boolean} {-url ""}} {;}
+            :public method flush_cache {-node_id:required,integer,1..1 {-with_subtree:boolean} {-url ""}} {;}
 
             # Create an object "site_node" to provide a user-interface close
             # to the classical one.
@@ -1313,7 +1313,7 @@ if {$UseXotclSiteNodes} {
         ::nx::Class create SiteNodesCache {
 
             :public method get_children {
-                -node_id:required
+                -node_id:required,integer,1..1
                 {-all:switch}
                 {-package_type ""}
                 {-package_key ""}
@@ -1338,7 +1338,7 @@ if {$UseXotclSiteNodes} {
                 acs::site_nodes_id_cache eval id-$url { next }
             }
 
-            :protected method properties {-node_id:required} {
+            :protected method properties {-node_id:required,integer,1..1} {
                 set key ::__site_nodes_property($node_id)
                 if {[info exists $key]} {
                     return [set $key]
@@ -1347,11 +1347,11 @@ if {$UseXotclSiteNodes} {
                 return [set $key]
             }
 
-            :public method get_url {-node_id:required} {
+            :public method get_url {-node_id:required,integer,1..1} {
                 ::acs::site_nodes_cache eval -partition_key $node_id url-$node_id { next }
             }
 
-            :public method get_urls_from_object_id {-object_id:required} {
+            :public method get_urls_from_object_id {-object_id:required,integer,1..1} {
                 ::acs::site_nodes_cache eval -partition_key $object_id urls-$object_id { next }
             }
 
@@ -1371,7 +1371,7 @@ if {$UseXotclSiteNodes} {
                 ::acs::$cache flush_pattern -partition_key $partition_key $pattern
             }
 
-            :public method flush_cache {{-node_id ""} {-with_subtree:boolean true} {-url ""}} {
+            :public method flush_cache {-node_id:required,integer,1..1 {-with_subtree:boolean true} {-url ""}} {
 
                 #
                 # Flush entries from site-node tree, including the current node,
@@ -1484,7 +1484,7 @@ if {$UseXotclSiteNodes} {
                 }
             }
 
-            :public method flush_cache {{-node_id ""} {-with_subtree:boolean true} {-url ""}} {
+            :public method flush_cache {-node_id:required,integer,1..1 {-with_subtree:boolean true} {-url ""}} {
                 #
                 # Cleanup in the urspace tree: Clear always the
                 # full subtree via "-recurse" (maybe not always
