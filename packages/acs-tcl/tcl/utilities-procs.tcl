@@ -314,14 +314,9 @@ ad_proc -public util_AnsiDatetoPrettyDate {
     } else {
         set allthemonths {January February March April May June July August September October November December}
 
-        # we have to trim the leading zero because Tcl has such a 
-        # brain damaged model of numbers and decided that "09-1"
-        # was "8.0"
-
         set trimmed_month [string trimleft $month 0]
-        set pretty_month [lindex $allthemonths $trimmed_month-1]
-
-        set trimmed_day [string trimleft $day 0]
+        set pretty_month  [lindex $allthemonths $trimmed_month-1]
+        set trimmed_day   [string trimleft $day 0]
 
         return "$pretty_month $trimmed_day, $year"
     }
@@ -336,17 +331,15 @@ ad_proc -public remove_nulls_from_ns_set {
 } {
     set new_set_id [ns_set new "no_nulls$old_set_id"]
 
-    for {set i 0} {$i<[ns_set size $old_set_id]} {incr i} {
+    for {set i 0} {$i < [ns_set size $old_set_id]} {incr i} {
         if { [ns_set value $old_set_id $i] ne "" } {
 
             ns_set put $new_set_id [ns_set key $old_set_id $i] [ns_set value $old_set_id $i]
 
         }
-
     }
 
     return $new_set_id
-
 }
 
 ad_proc -public merge_form_with_query {
@@ -370,7 +363,7 @@ ad_proc -public merge_form_with_query {
     
     if { $set_id ne "" } {
         
-        for {set i 0} {$i<[ns_set size $set_id]} {incr i} {
+        for {set i 0} {$i < [ns_set size $set_id]} {incr i} {
             set form [ns_formvalueput $form [ns_set key $set_id $i] [ns_set value $set_id $i]]
         }
         
@@ -1333,41 +1326,59 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
         set proc_info [lindex $proc_info 0]
     }
 
+    #
     # Grab information about the scheduled procedure.
+    #
     lassign $proc_info thread once interval proc args time . debug
     set count 0
 
-    ns_mutex lock [nsv_get ad_procs mutex]
-    set procs [nsv_get ad_procs .]
+    ad_mutex_eval [nsv_get ad_procs mutex] {
+        set procs [nsv_get ad_procs .]
 
-    # Find the entry in the shared variable. Splice it out.
-    for { set i 0 } { $i < [llength $procs] } { incr i } {
-        set other_proc_info [lindex $procs $i]
-        for { set j 0 } { $j < 5 } { incr j } {
-            if { [lindex $proc_info $j] != [lindex $other_proc_info $j] } {
+        #
+        # Find the entry in the shared variable by comparing at the first
+        # five fields. Then delete this entry from the jobs. It might be
+        # added again after this loop with a fresh count and timestamp,
+        # when "once" is false.
+        #
+        # It would be much better to use e.g. a dict with some proper keys
+        # instead.
+        #
+        for { set i 0 } { $i < [llength $procs] } { incr i } {
+            set other_proc_info [lindex $procs $i]
+            for { set j 0 } { $j < 5 } { incr j } {
+                if { [lindex $proc_info $j] ne [lindex $other_proc_info $j] } {
+                    break
+                }
+            }
+            
+            #
+            # When the entry was found ($j == 5) get the "count" and
+            # delete the entry.
+            # 
+            if { $j == 5 } {
+                set count [lindex $other_proc_info 6]
+                set procs [lreplace $procs $i $i]
                 break
             }
         }
-        if { $j == 5 } {
-            set count [lindex $other_proc_info 6]
-            set procs [lreplace $procs $i $i]
-            break
+
+        if { $once == "f" } {
+            #
+            # The proc will run again - add it again to the shared
+            # variable (updating ns_time and incrementing the count).
+            #
+            lappend procs [list $thread $once $interval $proc $args [ns_time] [expr { $count + 1 }] $debug]
         }
+        nsv_set ad_procs . $procs
     }
 
-    if { $once == "f" } {
-        # The proc will run again - readd it to the shared variable (updating ns_time and
-        # incrementing the count).
-        lappend procs [list $thread $once $interval $proc $args [ns_time] [expr { $count + 1 }] $debug]
-    }
-    nsv_set ad_procs . $procs
-
-    ns_mutex unlock [nsv_get ad_procs mutex]
-
-    ns_log debug "Running scheduled proc $proc..."
+    ns_log notice "Running scheduled proc $proc..."
 
     # Actually run the procedure.
-    if {$proc ne ""} {$proc {*}$args}
+    if {$proc ne ""} {
+        $proc {*}$args
+    }
 
     ns_log debug "Done running scheduled proc $proc."
 }
@@ -1405,22 +1416,21 @@ ad_proc -public ad_schedule_proc {
     @param args And the args to pass it
 
 } {
-    # we don't schedule a proc to run if we have enabled server clustering,
-    # we're not the canonical server, and the procedure was not requested to run on all servers.
+    #
+    # Don't schedule a proc to run if
+    # - we have enabled server clustering,
+    # - and we're not the canonical server,
+    # - and the procedure was not requested to run on all servers.
+    #
     if { [server_cluster_enabled_p] && ![ad_canonical_server_p] && $all_servers == "f" } {
         return
     } 
 
-    # Protect the list of scheduled procs with a mutex.
-    ns_mutex lock [nsv_get ad_procs mutex]
     set proc_info [list $thread $once $interval $proc $args [ns_time] 0 $debug]
     ns_log debug "Scheduling proc $proc"
-    
+
     # Add to the list of scheduled procedures, for monitoring.
-    set procs [nsv_get ad_procs .]
-    lappend procs $proc_info
-    nsv_set ad_procs . $procs
-    ns_mutex unlock [nsv_get ad_procs mutex]
+    nsv_lappend ad_procs . $proc_info
 
     set my_args [list]
     if { $thread == "t" } {
