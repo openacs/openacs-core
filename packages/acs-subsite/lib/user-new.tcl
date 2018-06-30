@@ -11,13 +11,13 @@ ad_include_contract {
                            password, and account_messages will be
                            added to the URL. Optional.
 
-    @email                 Prepopulate the register form with given email.
+    @param email           Prepopulate the register form with given email.
                            Optional.
 
-    @return_url            URL to redirect to after creation, will not get any
+    @param return_url      URL to redirect to after creation, will not get any
                            query vars added
 
-    @rel_group_id          The name of a group which you want to relate this
+    @param rel_group_id    The name of a group which you want to relate this
                            user to after creating the user.  Will add
                            an element to the form where the user can
                            pick a relation among the permissible

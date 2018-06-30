@@ -1664,8 +1664,8 @@ if {$UseXotclSiteNodes} {
     } {
         return the url of this node_id
 
-        @notrailing If true then strip any
-        trailing slash ('/'). This means the empty string is returned for the root.
+        @param notrailing If true then strip any trailing slash ('/').
+               This means the empty string is returned for the root.
     } {
         set url [::xo::site_node get_url -node_id $node_id]
         if { $notrailing_p } {

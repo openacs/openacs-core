@@ -123,7 +123,7 @@ ad_proc -public util::http::cookie_auth {
                         authentication data. If not specified, this will refer to every cookie
                         received into <code>set-cookie</code> response headers.
 
-    @auth_form          Form to put our data into. If not specified, there must be only one form
+    @param auth_form    Form to put our data into. If not specified, there must be only one form
                         on the login page, otherwise proc will throw an error.
 
     @return ns_set of headers containing authentication data

@@ -41,9 +41,9 @@ ad_proc -public subsite_navigation::define_pageflow {
     @param navigation_multirow The name of the multirow used to build the nav bars
     @param group Group name for the primary section
     @param subgroup Group name for the subsection (opened under a selected tab)
-    @include_all Per default, only the subgroup of the currently selected top menu is return.
-        When -include_all is specified, the resulting multirow contains all subgroups
-        (useful for pull-down menus)
+    @param include_all Per default, only the subgroup of the currently selected top menu is return.
+           When -include_all is specified, the resulting multirow contains all subgroups
+           (useful for pull-down menus)
 
 } {
     if { $subsite_id eq "" } {
