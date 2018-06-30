@@ -2367,7 +2367,7 @@ ad_proc -public ad_pad {
     @return padded string
 } {
     if {!($left_p ^ $right_p)} {
-        error "Please specifiy a single flag -left or -right"
+        error "Please specify single flag -left or -right"
     }
     
     set slength [string length $string]
