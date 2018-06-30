@@ -1835,7 +1835,7 @@ ad_proc -private auth::registration::Register {
 } {
     Invoke the Register service contract operation for the given authority.
 
-    @authority_id Id of the authority.
+    @param authority_id Id of the authority.
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "register_impl_id"]
 
@@ -1904,7 +1904,7 @@ ad_proc -private auth::user_info::GetUserInfo {
 } {
     Invoke the Register service contract operation for the given authority.
 
-    @authority_id Id of the authority.
+    @param authority_id Id of the authority.
 } {
     set impl_id [auth::authority::get_element -authority_id $authority_id -element "user_info_impl_id"]
 

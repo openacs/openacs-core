@@ -2305,8 +2305,8 @@ namespace eval ::security::csp {
         directices are picked up, when the pages is rendered, by the
         CSP generator.
 
-        @directive name of the directive (such as e.g. style-src)
-        @value allowed source for this page (such as e.g. unsafe-inline)
+        @param directive name of the directive (such as e.g. style-src)
+        @param value allowed source for this page (such as e.g. unsafe-inline)
 
         @author Gustaf Neumann
         @see    security::csp::render
