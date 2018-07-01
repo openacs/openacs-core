@@ -10,6 +10,18 @@ ad_library {
 
 namespace eval apm {}
 
+#
+# Use either "class" or "blueprint" reloading.
+#
+# Blueprint reloading (starting with OpenACS 5.10) updates the
+# blueprint of nsd, which has the consequence the also threads for
+# running scheduled procedures can be updated. So far blueprint
+# reloading is just tested with NaviServer, but should work with
+# AOLserver as well (modulo bugs).
+#
+#set ::apm::reloading classic
+set ::apm::reloading blueprint
+
 #####
 # Globals used by the package manager:
 #
@@ -115,9 +127,9 @@ ad_proc -public apm_dummy_callback { string } {
 }
 
 ad_proc -public apm_ns_write_callback { string } {
-    
+
     A simple callback which prints out the log message to the server stream.
-    
+
 } {
     ns_write $string
 }
@@ -137,7 +149,7 @@ ad_proc apm_callback_and_log { { -severity Notice } callback message } {
 } {
     $callback $message
     ns_log $severity [ad_html_to_text -maxlen 140 -- $message]
-}   
+}
 
 ad_proc apm_one_package_descendents {
     package_key
@@ -354,9 +366,9 @@ ad_proc -public apm_version_loaded_p { version_id } {
     return [nsv_exists apm_version_init_loaded_p $version_id]
 }
 
-ad_proc -private apm_mark_files_for_reload { 
+ad_proc -private apm_mark_files_for_reload {
     {-force_reload:boolean}
-    file_list 
+    file_list
 } {
     Mark the given list of Tcl and query files for reload in all
     interpreters. Only marks files for reload if they haven't been
@@ -379,32 +391,36 @@ ad_proc -private apm_mark_files_for_reload {
         # which differs the mtime it had when last loaded, mark to be loaded.
         if { [file isfile $full_path] } {
             set mtime [file mtime $full_path]
-            if { $force_reload_p 
-                 || (![nsv_exists apm_library_mtime $relative_path] 
-                     || [nsv_get apm_library_mtime $relative_path] != $mtime 
+            if { $force_reload_p
+                 || (![nsv_exists apm_library_mtime $relative_path]
+                     || [nsv_get apm_library_mtime $relative_path] != $mtime
                      || [clock seconds]-$mtime < 5) } {
                 lappend changed_files $relative_path
             }
         }
     }
 
-    if { [llength $changed_files] > 0 } {
-        set reload [nsv_incr apm_properties reload_level]
-        nsv_set apm_reload $reload $changed_files
+    if {$::apm::reloading eq "classic"} {
+        if { [llength $changed_files] > 0 } {
+            set reload [nsv_incr apm_properties reload_level]
+            nsv_set apm_reload $reload $changed_files
+        }
     }
 
     return $changed_files
 }
 
-ad_proc -private apm_mark_version_for_reload { 
-    version_id 
-    { changed_files_var "" } 
+proc ::foo0 {} {return 0}
+
+ad_proc -private apm_mark_version_for_reload {
+    version_id
+    { changed_files_var "" }
 } {
     Examines all tcl_procs files in package version $version_id; if any have
     changed since they were loaded, marks (in the apm_reload array) that
     they must be reloaded by each Tcl interpreter (using the
     apm_load_any_changed_libraries procedure).
-    
+
     <p>Saves a list of files that have changed (and thus marked to be reloaded) in
     the variable named <code>$file_info_var</code>, if provided. Each element
     of this list is of the form:
@@ -415,9 +431,8 @@ ad_proc -private apm_mark_version_for_reload {
     if { $changed_files_var ne "" } {
         upvar $changed_files_var changed_files
     }
-    ns_log notice "apm_mark_version_for_reload try to get package_key from $version_id"
     set package_key [apm_package_key_from_version_id $version_id]
-    ns_log notice "apm_mark_version_for_reload $package_key $version_id"
+    #ns_log notice "apm_mark_version_for_reload $package_key version_id $version_id"
     set changed_files [list]
 
     set file_types [list tcl_procs query_file]
@@ -435,6 +450,7 @@ ad_proc -private apm_mark_version_for_reload {
             lappend changed_files $relative_path
         }
     }
+    return $changed_files
 }
 
 ad_proc -private apm_version_load_status { version_id } {
@@ -443,7 +459,7 @@ ad_proc -private apm_version_load_status { version_id } {
                                        or been added since the version was loaded), returns "needs_reload".
     If the version has never been loaded, returns "never_loaded". If the
     version is up-to-date, returns "up_to_date".
-    
+
 } {
     # See if the version was ever loaded.
     if { ![apm_package_version_enabled_p $version_id] } {
@@ -465,8 +481,8 @@ ad_proc -private apm_version_load_status { version_id } {
         set full_path "[acs_package_root_dir $package_key]/$file"
         # If $file had a different mtime when it was last loaded, return
         # needs_reload. (If the file should exist but doesn't, just skip it.)
-        if { [file exists $full_path] 
-             &&  [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"] 
+        if { [file exists $full_path]
+             &&  [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
          } {
             return "needs_reload"
         }
@@ -482,8 +498,8 @@ ad_proc -private apm_version_load_status { version_id } {
         set full_path "[acs_package_root_dir $package_key]/$file"
         # If $file had a different mtime when it was last loaded, return
         # needs_reload. (If the file should exist but doesn't, just skip it.)
-        if { [file exists $full_path] 
-             && [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"] 
+        if { [file exists $full_path]
+             && [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
          } {
             return "needs_reload"
         }
@@ -492,17 +508,17 @@ ad_proc -private apm_version_load_status { version_id } {
     return "up_to_date"
 }
 
-ad_proc -private apm_load_libraries { 
+ad_proc -private apm_load_libraries {
     {-force_reload:boolean 0}
     {-packages {}}
     {-callback apm_dummy_callback}
-    {-procs:boolean} 
+    {-procs:boolean}
     {-init:boolean}
-    {-test_procs:boolean} 
+    {-test_procs:boolean}
     {-test_init:boolean}
 } {
 
-    Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl  files into the 
+    Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl  files into the
     current interpreter for installed, enabled packages. Only loads
     files which have not yet been loaded. This is intended to be called only during server
     initialization (since it loads libraries only into the running interpreter, as opposed
@@ -522,13 +538,13 @@ ad_proc -private apm_load_libraries {
     if { $test_init_p } {
         lappend file_types test_init
     }
-    
+
     if { $packages eq "" } {
         set packages [apm_enabled_packages]
     }
 
-    # Scan the package directory for files to source.    
-    set files [list]    
+    # Scan the package directory for files to source.
+    set files [list]
     foreach package $packages {
 
         set paths [apm_get_package_files -package_key $package -file_types $file_types]
@@ -537,7 +553,7 @@ ad_proc -private apm_load_libraries {
             lappend files [list $package $path]
         }
     }
-    
+
     # Release all outstanding database handles (since the file we're sourcing
     # might be using the ns_db database API as opposed to the new db_* API).
     db_release_unused_handles
@@ -569,7 +585,7 @@ ad_proc -public apm_load_packages {
     @param load_libraries Switch to indicate if Tcl libraries in (-procs.tcl and -init.tcl)
     files should be loaded. Defaults to true.
     @param load_queries   Switch to indicate if xql query files should be loaded. Default true.
-    @param packages     A list of package_keys for packages to be loaded. Defaults to 
+    @param packages     A list of package_keys for packages to be loaded. Defaults to
     all enabled packages.  These packages, along with the packages
     they depend on, will be loaded in dependency-order using the
     information provided in the packages' "provides" and "requires"
@@ -599,7 +615,7 @@ ad_proc -public apm_load_packages {
     if { $load_libraries_p } {
         apm_load_libraries -force_reload=$force_reload_p -packages $packages_to_load -procs
     }
-    
+
     # Load up the Queries (OpenACS, ben@mit.edu)
     if { $load_queries_p } {
         apm_load_queries -packages $packages_to_load
@@ -636,7 +652,7 @@ ad_proc -private apm_load_queries {
     {-test_queries:boolean}
 } {
     Load up the queries for all enabled packages
-    (or all specified packages). Follows the pattern 
+    (or all specified packages). Follows the pattern
     of the load_libraries proc, but only loads query information
 
     @param packages Optional list of keys for packages to load queries for.
@@ -647,8 +663,8 @@ ad_proc -private apm_load_queries {
         set packages [apm_enabled_packages]
     }
 
-    # Scan the package directory for files to source.    
-    set files [list]    
+    # Scan the package directory for files to source.
+    set files [list]
     foreach package $packages {
 
         set files [ad_find_all_files $::acs::rootdir/packages/$package]
@@ -681,12 +697,12 @@ ad_proc -private apm_load_queries {
             #             !( 1 ^ 0 )             = Nope
             #             !( 1 ^ 1 )             = Yep
             #
-            if {!($test_queries_p ^ $is_test_file_p) 
-                && $file_type eq "query_file" 
+            if {!($test_queries_p ^ $is_test_file_p)
+                && $file_type eq "query_file"
                 && ($file_db_type eq "" || $file_db_type eq [db_type])
             } {
                 db_qd_load_query_file $file
-            } 
+            }
         }
     }
     ns_log debug "apm_load_queries: DONE looping through files from which to load queries"
@@ -719,15 +735,49 @@ ad_proc -private apm_pretty_name_for_file_type { type } {
     return $file_type_names($type)
 }
 
-ad_proc -public apm_load_any_changed_libraries { {errorVarName {}} } {
-    
+ad_proc -private apm_get_changed_watched_files {} {
+
+    Check, which of the watched files have to be reloaded
+
+    @return list of filenames
+} {
+    set files_to_reload [list]
+    foreach file [nsv_array names apm_reload_watch] {
+        set path "$::acs::rootdir/$file"
+        ns_log Debug "APM: File being watched: $path"
+
+        if { [file exists $path]
+             && (![nsv_exists apm_library_mtime $file]
+                 || [file mtime $path] ne [nsv_get apm_library_mtime $file])
+         } {
+            lappend files_to_reload $file
+        }
+    }
+    if {[llength $files_to_reload] > 0} {
+        if {[llength $files_to_reload] > 1} {
+            lassign {s have} suffix verb
+        } else {
+            lassign {{} has} suffix verb
+        }
+        ns_log Notice "apm_reloads: Watched file$suffix [join $files_to_reload ", "] $verb changed"
+    }
+
+    return $files_to_reload
+}
+
+ad_proc -public apm_load_any_changed_libraries {
+    {-version_files ""}
+    {errorVarName {}}
+} {
+
     In the running interpreter, reloads files marked for reload by
     apm_mark_version_for_reload. If any watches are set, examines watched
     files to see whether they need to be reloaded as well. This is intended
     to be called only by the request processor (since it should be invoked
-                                                before any filters or registered procedures are applied).
+    before any filters or registered procedures are applied).
 
 } {
+    set files $version_files
 
     if {$errorVarName ne ""} {
         upvar $errorVarName errors
@@ -735,99 +785,149 @@ ad_proc -public apm_load_any_changed_libraries { {errorVarName {}} } {
         array set errors [list]
     }
 
-    # Determine the current reload level in this interpreter by calling
-    # apm_reload_level_in_this_interpreter. If this fails, we define the reload level to be
-    # zero.
-    if { [catch { set reload_level [apm_reload_level_in_this_interpreter] } error] } {
-        proc apm_reload_level_in_this_interpreter {} { return 0 }
-        set reload_level 0
-    }
+    if {$::apm::reloading eq "blueprint"} {
+        ns_log notice "### blueprint_reloading: apm_load_any_changed_libraries"
 
-    # Check watched files, adding them to files_to_reload if they have
-    # changed.
-    set files_to_reload [list]
-    foreach file [nsv_array names apm_reload_watch] {
-        set path "$::acs::rootdir/$file"
-        ns_log Debug "APM: File being watched: $path"
-
-        if { [file exists $path] 
-             && (![nsv_exists apm_library_mtime $file] || 
-                 [file mtime $path] ne [nsv_get apm_library_mtime $file]) 
-         } {
-            lappend files_to_reload $file
-        }
-    }
-
-    # If there are any changed watched files, stick another entry on the
-    # reload queue.
-    if { [llength $files_to_reload] > 0 } {
-        ns_log Notice "apm_load_any_changed_libraries: Watched file[ad_decode [llength $files_to_reload] 1 "" "s"] [join $files_to_reload ", "] [ad_decode [llength $files_to_reload] 1 "has" "have"] changed: reloading."
-        set new_level [nsv_incr apm_properties reload_level]
-        nsv_set apm_reload $new_level $files_to_reload
-    }
-
-    set changed_reload_level_p 0
-
-    # Keep track of which files we've reloaded in this loop so we never
-    # reload the same one twice.
-    array set reloaded_files [list]
-    while { $reload_level < [nsv_get apm_properties reload_level] } {
-        incr reload_level
-        set changed_reload_level_p 1
-        # If there's no entry in apm_reload for that reload level, back out.
-        if { ![nsv_exists apm_reload $reload_level] } {
-            incr reload_level -1
-            break
-        }
-        foreach file [nsv_get apm_reload $reload_level] {
-            # If we haven't yet reloaded the file in this loop, source it.
-            if { ![info exists reloaded_files($file)] } {
-                if { [array size reloaded_files] == 0 } {
-                    # Perform this ns_log only during the first iteration of this loop.
-                    ns_log Notice "apm_load_any_changed_libraries: Reloading *-procs.tcl files in this interpreter..."
-                }
-                # File is usually of form packages/package_key
-                set file_path "$::acs::rootdir/$file"
-                set file_ext [file extension $file_path]
-                
-                switch -- $file_ext {
-                    .tcl { 
-                        # Make sure this is not a -init.tcl file as those should only be sourced on server startup
-                        if { ![regexp {\-init\.tcl$} $file_path] } {
-                            ns_log Notice "apm_load_any_changed_libraries: Reloading $file..."
-                            apm_source $file_path errors
-                        }
-                    }
-                    .xql { 
-                        ns_log Notice "apm_load_any_changed_libraries: Reloading $file..."
-                        db_qd_load_query_file $file_path errors
-                    }
-                    default {
-                        ns_log Notice "apm_load_any_changed_libraries: File $file_path has unknown extension. Not reloading."
-                    }
-                }
-
-                set reloaded_files($file) 1
+        #
+        # Add the watched files, but don't load these if these are
+        # already included.
+        #
+        foreach file [apm_get_changed_watched_files] {
+            if {$file ni $files} {
+                lappend files $file
             }
         }
+        if {[llength $files] > 0} {
+            ns_log notice "### blueprint_reloading: [llength $files] files $files"
+
+            #
+            # Transform files into reload-cmds
+            #
+            set cmds [apm_package_reload_cmds $files]
+            #
+            # Execute these cmds in a fresh interp to produce a new
+            # blueprint.
+            #
+            ns_log notice "### blueprint_reloading: cmds:\n[join $cmds \;\n]"
+
+            ns_eval [join $cmds \;]
+        }
     }
 
-    # We changed the reload level in this interpreter, so redefine the
-    # apm_reload_level_in_this_interpreter proc.
-    if { $changed_reload_level_p } {
-        proc apm_reload_level_in_this_interpreter {} "return $reload_level"
-    }
+    if {$::apm::reloading eq "classic" && [array size errors] == 0} {
 
+        ns_log notice "### classic_reloading: apm_load_any_changed_libraries"
+
+        #
+        # Determine the current reload level in this interpreter by
+        # calling apm_reload_level_in_this_interpreter. If this fails, we
+        # define the reload level to be zero.
+        #
+        if { [catch { set reload_level [apm_reload_level_in_this_interpreter] } error] } {
+            proc apm_reload_level_in_this_interpreter {} { return 0 }
+            set reload_level 0
+        }
+
+        #
+        # Check watched files, adding them to files_to_reload if they have
+        # changed.
+        #
+        set files_to_reload [apm_get_changed_watched_files]
+
+        #
+        # If there are any changed watched files, stick another entry on
+        # the reload queue.
+        #
+        if { [llength $files_to_reload] > 0 } {
+            ns_log Notice "apm_load_any_changed_libraries: Reloading [join $files_to_reload {, }]"
+            set new_level [nsv_incr apm_properties reload_level]
+            nsv_set apm_reload $new_level $files_to_reload
+        }
+
+        set changed_reload_level_p 0
+
+        # Keep track of which files we've reloaded in this loop so we never
+        # reload the same one twice.
+        while { $reload_level < [nsv_get apm_properties reload_level] } {
+            incr reload_level
+            set changed_reload_level_p 1
+            # If there's no entry in apm_reload for that reload level, back out.
+            if { ![nsv_exists apm_reload $reload_level] } {
+                incr reload_level -1
+                break
+            }
+            set reload_cmds [apm_package_reload_cmds [nsv_get apm_reload $reload_level]]
+            foreach cmd $reload_cmds {
+                if {$cmd ne ""} {
+                    ns_log notice "### apm classic reload level $reload_level: cmd $cmd"
+                    {*}$cmd
+                }
+            }
+        }
+
+        # We changed the reload level in this interpreter, so redefine the
+        # apm_reload_level_in_this_interpreter proc.
+        #
+        if { $changed_reload_level_p } {
+            proc apm_reload_level_in_this_interpreter {} "return $reload_level"
+        }
+    }
 }
+
+ad_proc -private apm_package_reload_cmds {files} {
+
+    Map file names into reloading cmds. For every file, a loading
+    command is appended to the result. The command might be empty.
+
+    @return list of Tcl cmds to be executed to load these files.
+
+} {
+    set cmds {}
+    if { [llength $files] > 0 } {
+        ns_log Notice "apm_reload: Reloading *-procs.tcl amd .xql files in this interpreter..."
+    }
+
+    foreach file $files {
+        set cmd {}
+        #
+        # If we haven't yet reloaded the file in this loop, source it.
+        #
+        if { ![info exists reloaded_files($file)] } {
+            # File is usually of form packages/package_key
+            set file_path "$::acs::rootdir/$file"
+            set file_ext [file extension $file_path]
+            switch -- $file_ext {
+                .tcl {
+                    # Make sure this is not a -init.tcl file as those should only be sourced on server startup
+                    if { ![string match "*-init.tcl" $file_path] } {
+                        ns_log Notice "apm: Reloading $file..."
+                        set cmd [list apm_source $file_path errors]
+                    }
+                }
+                .xql {
+                    ns_log Notice "apm: Reloading $file..."
+                    set cmd [list db_qd_load_query_file $file_path errors]
+                }
+                default {
+                    ns_log Notice "apm: File $file_path has unknown extension. Not reloading."
+                }
+            }
+            set reloaded_files($file) 1
+        }
+        lappend cmds $cmd
+    }
+    return $cmds
+}
+
 
 ad_proc -private apm_package_version_release_tag { package_key version_name } {
 
     Returns a CVS release tag for a particular package key and version name.
 
-    2} {
-        regsub -all {\.} [string toupper "$package_key-$version_name"] "-" release_tag
-        return $release_tag
-    }
+} {
+    regsub -all {\.} [string toupper "$package_key-$version_name"] "-" release_tag
+    return $release_tag
+}
 
 ad_proc -public apm_package_parameters {package_key} {
     @return A list of all the package parameter names.
@@ -839,9 +939,9 @@ ad_proc -public apm_package_parameters {package_key} {
 }
 
 ad_proc -public apm_package_supported_databases {
-    package_key 
+    package_key
 } {
-    Return a list of db types (i.e. oracle, postgresql) 
+    Return a list of db types (i.e. oracle, postgresql)
     supported by the package with given key.
 
     @author Peter Marklund
@@ -863,12 +963,12 @@ ad_proc -public apm_package_supported_databases {
 ad_proc -public apm_package_registered_p {
     package_key
 } {
-    Returns 1 if there is a registered package with the indicated package_key.  
+    Returns 1 if there is a registered package with the indicated package_key.
     Returns 0 otherwise.
 } {
     ### Query the database for the indicated package_key
     return [db_string apm_package_registered_p {
-        select 1 from apm_package_types 
+        select 1 from apm_package_types
         where package_key = :package_key
     } -default 0]
 }
@@ -948,15 +1048,15 @@ ad_proc -public apm_num_instances {package_key} {
 
 ad_proc -public apm_parameter_update {
     {-callback apm_dummy_callback}
-    parameter_id 
-    package_key 
-    parameter_name 
-    description 
-    default_value 
-    datatype 
-    {section_name ""} 
-    {min_n_values 1} 
-    {max_n_values 1} 
+    parameter_id
+    package_key
+    parameter_name
+    description
+    default_value
+    datatype
+    {section_name ""}
+    {min_n_values 1}
+    {max_n_values 1}
 } {
     @return The parameter id that has been updated.
 } {
@@ -965,10 +1065,10 @@ ad_proc -public apm_parameter_update {
     }
 
     db_dml parameter_update {
-        update apm_parameters 
+        update apm_parameters
         set parameter_name = :parameter_name,
         default_value  = :default_value,
-        datatype       = :datatype, 
+        datatype       = :datatype,
         description       = :description,
         section_name   = :section_name,
         min_n_values   = :min_n_values,
@@ -981,21 +1081,21 @@ ad_proc -public apm_parameter_update {
         set title = :parameter_name
         where object_id = :parameter_id
     }
-    
+
     return $parameter_id
 }
 
-ad_proc -public apm_parameter_register { 
+ad_proc -public apm_parameter_register {
     {-callback apm_dummy_callback}
     {-parameter_id ""}
     {-scope instance}
-    parameter_name 
-    description 
-    package_key 
-    default_value 
-    datatype 
-    {section_name ""} 
-    {min_n_values 1} 
+    parameter_name
+    description
+    package_key
+    default_value
+    datatype
+    {section_name ""}
+    {min_n_values 1}
     {max_n_values 1}
 } {
     Register a parameter in the system.
@@ -1031,7 +1131,7 @@ ad_proc -public apm_parameter_register {
     return $parameter_id
 }
 
-ad_proc -public apm_parameter_unregister { 
+ad_proc -public apm_parameter_unregister {
     {-callback apm_dummy_callback}
     {-package_key ""}
     {-parameter ""}
@@ -1059,10 +1159,10 @@ ad_proc -public apm_parameter_unregister {
 
 ad_proc -public apm_dependency_add {
     {-callback apm_dummy_callback}
-    {-dependency_id ""} 
-    dependency_type 
-    version_id 
-    dependency_uri 
+    {-dependency_id ""}
+    dependency_type
+    version_id
+    dependency_uri
     dependency_version
 } {
     Add a dependency to a version.
@@ -1072,12 +1172,12 @@ ad_proc -public apm_dependency_add {
     if {$dependency_id eq ""} {
         set dependency_id [db_null]
     }
-    
-    return [db_exec_plsql dependency_add {}] 
+
+    return [db_exec_plsql dependency_add {}]
 }
 
 ad_proc -public apm_dependency_remove {dependency_id} {
-    
+
     Removes a dependency from the system.
 
 } {
@@ -1087,11 +1187,11 @@ ad_proc -public apm_dependency_remove {dependency_id} {
 ad_proc -public apm_interface_add {
     {-callback apm_dummy_callback}
     {-interface_id ""}
-    version_id 
-    interface_uri 
+    version_id
+    interface_uri
     interface_version
 } {
-    
+
     Add a interface to a version.
     @return The id of the new interface.
 } {
@@ -1099,19 +1199,19 @@ ad_proc -public apm_interface_add {
     if {$interface_id eq ""} {
         set interface_id [db_null]
     }
-    
+
     return [db_exec_plsql interface_add {}]
 }
 
 ad_proc -public apm_interface_remove {interface_id} {
-    
+
     Removes a interface from the system.
 
 } {
     db_exec_plsql interface_remove {}
 }
 
-ad_proc -public apm_version_get { 
+ad_proc -public apm_version_get {
     {-version_id ""}
     {-package_key ""}
     {-array:required}
@@ -1209,7 +1309,7 @@ ad_proc -public apm_package_ids_from_key {
     @param mounted Does the package have to be mounted?
 
     @return List of package ids of all instances of the package.
-    Empty string 
+    Empty string
 } {
     return [util_memoize [list apm_package_ids_from_key_mem -package_key $package_key -mounted_p $mounted_p]]
 }
@@ -1220,7 +1320,7 @@ ad_proc -private apm_package_ids_from_key_mem {
 } {
     unmemoized version of apm_package_ids_from_key
 } {
-    
+
     if {$mounted_p} {
         set package_ids [list]
         db_foreach apm_package_ids_from_key {
@@ -1228,7 +1328,7 @@ ad_proc -private apm_package_ids_from_key_mem {
         } {
             if {"" ne [site_node::get_node_id_from_object_id -object_id $package_id] } {
                 lappend package_ids $package_id
-            } 
+            }
         }
         return $package_ids
     } else {
@@ -1262,7 +1362,7 @@ ad_proc -public apm_package_url_from_key {package_key} {
 }
 
 #
-# package_key -> version_id 
+# package_key -> version_id
 #
 
 ad_proc -public apm_version_id_from_package_key {
@@ -1292,12 +1392,12 @@ ad_proc -public apm_version_id_from_package_key {
 
 ad_proc -public apm_package_key_from_version_id {version_id} {
     Returns the package_key for the given APM package version id. Goes to the database
-    the first time called and then uses a cached value. Calls the proc apm_package_key_from_version_id_mem.    
+    the first time called and then uses a cached value. Calls the proc apm_package_key_from_version_id_mem.
 
     @author Peter Marklund (peter@collaboraid.biz)
 } {
     return [util_memoize [list apm_package_key_from_version_id_mem $version_id]]
-    
+
 }
 
 ad_proc -private apm_package_key_from_version_id_mem {version_id} {
@@ -1322,7 +1422,7 @@ ad_proc -public apm_version_info {version_id} {
             select pretty_name, version_name, package_key, installed_p, distribution_uri, tagged_p
             from apm_package_version_info where version_id = :version_id
         }
-    } 
+    }
 }
 
 ad_proc -public apm_package_version_installed_p {package_key version_name} {
@@ -1331,9 +1431,9 @@ ad_proc -public apm_package_version_installed_p {package_key version_name} {
 
 } {
     return [db_0or1row apm_package_version_installed_p {
-	select 1 from apm_package_versions
-	 where package_key  = :package_key
-	   and version_name = :version_name
+        select 1 from apm_package_versions
+         where package_key  = :package_key
+           and version_name = :version_name
     }]
 }
 
@@ -1348,7 +1448,7 @@ ad_proc -public apm_package_version_enabled_p {version_id} {
 
 ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
     Generates the name of the Tcl procedure we execute for
-    post-instantiation. 
+    post-instantiation.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2001-03-05
@@ -1360,7 +1460,7 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
     # Change all "-" to "_" to mimic our Tcl standards
     regsub -all {\-} $procedure_name "_" procedure_name
     if { [info commands ::$procedure_name] eq "" } {
-        # No such procedure exists... 
+        # No such procedure exists...
         return ""
     }
     # Procedure exists
@@ -1373,13 +1473,13 @@ ad_proc -public apm_package_rename {
     {-instance_name:required}
 } {
     Renames a package instance
-} {    
+} {
     if { $package_id eq "" } {
         set package_id [ad_conn package_id]
     }
     db_transaction {
         db_dml app_rename {
-            update apm_packages 
+            update apm_packages
             set instance_name = :instance_name
             where package_id = :package_id
         }
@@ -1415,7 +1515,7 @@ ad_proc -public apm_set_callback_proc {
         if { $package_key eq "" } {
             error "apm_set_package_callback_proc: Invoked with both version_id and package_key empty. You must supply either of these"
         }
-        
+
         set version_id [apm_version_id_from_package_key $package_key]
     }
 
@@ -1427,7 +1527,7 @@ ad_proc -public apm_set_callback_proc {
     } else {
         # We are editing
         db_dml update_proc {}
-    }    
+    }
 }
 
 ad_proc -public apm_get_callback_proc {
@@ -1453,7 +1553,7 @@ ad_proc -public apm_get_callback_proc {
 
 ad_proc -public apm_remove_callback_proc {
     {-type:required}
-    {-package_key:required}    
+    {-package_key:required}
 } {
     Remove the callback of a certain type for the given package.
 
@@ -1495,13 +1595,13 @@ ad_proc -public apm_invoke_callback_proc {
     {-arg_list {}}
     {-type:required}
 } {
-    Invoke the Tcl callback proc of a given type 
+    Invoke the Tcl callback proc of a given type
     for a given package version. Any errors during
     invocation are logged.
 
-    @param callback_proc if this is provided it is called 
+    @param callback_proc if this is provided it is called
     instead of attempting to look up the proc via the package_key or version_id
-    (needed for before-install callbacks since the db is not populated when those 
+    (needed for before-install callbacks since the db is not populated when those
      are called).
 
     @return 1 if invocation
@@ -1605,14 +1705,14 @@ ad_proc -public apm_arg_names_for_callback_type {
     @author Peter Marklund
 } {
     array set arguments {
-        after-instantiate { 
-            package_id 
+        after-instantiate {
+            package_id
         }
         before-uninstantiate {
             package_id
         }
         before-unmount {
-            package_id 
+            package_id
             node_id
         }
         after-mount {
@@ -1624,7 +1724,7 @@ ad_proc -public apm_arg_names_for_callback_type {
             to_version_name
         }
         after-upgrade {
-            from_version_name 
+            from_version_name
             to_version_name
         }
     }
@@ -1646,7 +1746,7 @@ ad_proc -public apm_supported_callback_types {} {
 } {
     return {
         before-install
-        after-install 
+        after-install
         before-upgrade
         after-upgrade
         before-uninstall
@@ -1677,14 +1777,14 @@ ad_proc -private apm_callback_has_valid_args {
     set test_arg_list_spec ""
     foreach arg_name [apm_arg_names_for_callback_type -type $type] {
         lappend test_arg_list -$arg_name value
-        lappend test_arg_list_spec -${arg_name}:required        
+        lappend test_arg_list_spec -${arg_name}:required
     }
 
     if { $test_arg_list eq "" } {
         # The callback proc should take no args
         return [expr {[info args ::$proc_name] eq ""}]
     }
-    
+
     if {[info commands ::nsf::cmd::info] ne ""} {
         #
         # We can compare the signature of via nsf procs
@@ -1696,9 +1796,9 @@ ad_proc -private apm_callback_has_valid_args {
     # The callback proc should have required arg switches. Check
     # that the ad_proc arg parser doesn't throw an error with
     # test arg list
-    if { [catch { 
+    if { [catch {
         set args $test_arg_list
-        ::${proc_name}__arg_parser 
+        ::${proc_name}__arg_parser
     } errmsg] } {
         return 0
     } else {
@@ -1713,7 +1813,7 @@ ad_proc -public apm_package_instance_new {
     {-context_id ""}
 } {
 
-    Creates a new instance of a package and calls the post instantiation proc, if any. If the 
+    Creates a new instance of a package and calls the post instantiation proc, if any. If the
     package is a singleton and already exists then this procedure will silently do nothing.
 
     @param package_key   The package_key of the package to instantiate.
@@ -1721,15 +1821,15 @@ ad_proc -public apm_package_instance_new {
     package type.
     @param package_id    The id of the new package. Optional.
     @param context_id    The context_id of the new package. Optional.
-    
+
     @return The id of the instantiated package
 } {
     if { $instance_name eq "" } {
         set p_name [apm::package_version::attributes::get_instance_name $package_key]
 
         if {$p_name eq ""} {
-            set instance_name [db_string pretty_name_from_key {select pretty_name 
-                from apm_enabled_package_versions 
+            set instance_name [db_string pretty_name_from_key {select pretty_name
+                from apm_enabled_package_versions
                 where package_key = :package_key}]
         } else {
             set instance_name  "$p_name"
@@ -1738,10 +1838,10 @@ ad_proc -public apm_package_instance_new {
 
     if { $package_id eq "" } {
         set package_id [db_null]
-    } 
+    }
 
     set package_id [db_exec_plsql invoke_new {}]
-    
+
     apm_parameter_sync $package_key $package_id
 
     foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
@@ -1755,10 +1855,10 @@ ad_proc -public apm_package_instance_new {
 }
 
 ad_proc apm_parameter_sync {package_key package_id} {
-    
+
     Syncs the parameters in the database with the memory cache.  This must be called
     after creating a new package instance.
-    
+
 } {
 
     # Get all the parameter names and values for this package_id.
@@ -1769,9 +1869,9 @@ ad_proc apm_parameter_sync {package_key package_id} {
         and a.package_id = v.package_id
         and a.package_id = :package_id
     }]
-    
+
     # Put it in the cache.
-    foreach name_value_pair $names_and_values {    
+    foreach name_value_pair $names_and_values {
         ad_parameter_cache -set [lindex $name_value_pair 1] $package_id [lindex $name_value_pair 0]
     }
 }
@@ -1780,7 +1880,7 @@ ad_proc -public apm_package_instance_delete {
     package_id
 } {
     Deletes an instance of a package
-} {    
+} {
     set package_key [apm_package_key_from_id $package_id]
     # ns_log notice "apm_package_instance_delete inherit order [nsv_get apm_package_inherit_order $package_key]"
     if {[nsv_exists apm_package_inherit_order $package_key]} {
@@ -1800,12 +1900,12 @@ ad_proc -public apm_get_installed_versions {
 } {
     Sets the current installed version of packages installed on this system
     in an array keyed by package_key.
-    
+
     @param array Name of array in caller's namespace where you want this set
 } {
     upvar 1 $array installed_version
 
-    db_foreach installed_packages { 
+    db_foreach installed_packages {
         select package_key, version_name
         from   apm_package_versions
         where  enabled_p = 't'
@@ -1819,19 +1919,19 @@ ad_proc -public apm_get_installed_provides {
 } {
     Sets the dependencies provided by the packages installed on this system
     in an array keyed by dependency service-uri.
-    
+
     @param array Name of array in caller's namespace where you want this set
 } {
     upvar 1 $array installed_provides
 
     # All packages provides themselves
     apm_get_installed_versions -array installed_provides
-    
+
     # Now check what the provides clauses say
-    db_foreach installed_provides { 
-        select service_uri, 
+    db_foreach installed_provides {
+        select service_uri,
         service_version
-        from   apm_package_dependencies d, 
+        from   apm_package_dependencies d,
         apm_package_versions v
         where  d.dependency_type = 'provides'
         and    d.version_id = v.version_id
@@ -1855,7 +1955,7 @@ ad_proc -public apm_log {
     msg
 } {
     Centralized APM logging. If you want to debug the APM, change
-    APMDebug to Debug and restart the server.  
+    APMDebug to Debug and restart the server.
 } {
     if {"APMDebug" ne $level } {
         ns_log $level $msg
@@ -1894,7 +1994,7 @@ ad_proc -private apm::read_files {path file_list} {
 } {
     set data ""
     foreach file $file_list {
-        if {![catch {set fp [open ${path}/${file} r]} err]} { 
+        if {![catch {set fp [open ${path}/${file} r]} err]} {
             append data [read $fp]
             close $fp
         }
@@ -1908,7 +2008,7 @@ ad_proc -public apm::metrics {
     -array
 } {
     Return some code metrics about the files in package $package_key. This
-    will return an array of 3 items: 
+    will return an array of 3 items:
     <ul>
     <li>count - the number of files</li>
     <li>lines - the number of lines in the files</li>
@@ -1917,7 +2017,7 @@ ad_proc -public apm::metrics {
     This will be placed in the array variable that is provided
     to this proc.
     <p>
-    Valid file_type's: 
+    Valid file_type's:
     <ul>
     <li>data_model_pg - PG datamodel files</li>
     <li>data_model_ora - Oracle datamodel files</li>
@@ -1927,7 +2027,7 @@ ad_proc -public apm::metrics {
     <li>test_procs - automated tests in package_key/tcl/test</li>
     <li>documentation - docs in package_key/www/doc</li>
     </ul>
-    
+
     This proc is cached.
 
     @author Vinod Kurup
@@ -1953,7 +2053,7 @@ ad_proc -private apm::metrics_internal {
     set package_path [acs_package_root_dir $package_key]
 
     # We'll be using apm_get_package_files to get a list of files
-    # by file type. 
+    # by file type.
 
     switch -- $file_type {
         data_model_pg -
@@ -1987,12 +2087,12 @@ ad_proc -private apm::metrics_internal {
             # ignore drop and upgrade scripts
             set pg_files {}
             foreach file $filelist {
-                if { [string match {*/postgresql/*} $file] 
-                     && ![string match "*-drop.sql" $file] 
-                     && ![string match {*/upgrade/*} $file] 
+                if { [string match {*/postgresql/*} $file]
+                     && ![string match "*-drop.sql" $file]
+                     && ![string match {*/upgrade/*} $file]
                  } {
                     lappend pg_files $file
-                } 
+                }
             }
             set filelist $pg_files
         }
@@ -2000,9 +2100,9 @@ ad_proc -private apm::metrics_internal {
             # ignore drop and upgrade scripts
             set ora_files {}
             foreach file $filelist {
-                if { [string match {*/oracle/*} $file] 
-                     && ![string match "*-drop.sql" $file] 
-                     && ![string match {*/upgrade/*} $file] 
+                if { [string match {*/oracle/*} $file]
+                     && ![string match "*-drop.sql" $file]
+                     && ![string match {*/upgrade/*} $file]
                  } {
                     lappend ora_files $file
                 }
@@ -2030,14 +2130,15 @@ ad_proc -private apm::metrics_internal {
             set metrics(procs) [regexp -all -line -nocase {^\s*create\s+or\s+replace\s+function\s+} $filedata]
         }
         data_model_ora {
-            set metrics(procs) [expr {[regexp -all -line -nocase {^\s+function\s+} $filedata] + [regexp -all -line -nocase {^\s+procedure\s+} $filedata]}]
+            set metrics(procs) [expr {[regexp -all -line -nocase {^\s+function\s+} $filedata] +
+                                      [regexp -all -line -nocase {^\s+procedure\s+} $filedata]}]
         }
         default {
             # other file-types don't have procs
             set metrics(procs) 0
         }
     }
-    
+
     return [array get metrics]
 }
 
@@ -2084,7 +2185,7 @@ ad_proc -public apm::convert_type {
     }
     db_list copy_new_params {}
     apm_parameter_sync $new_package_key $package_id
-    
+
     foreach inherited_package_key [::apm_package_inherit_order $new_package_key] {
         if {$inherited_package_key ni [::apm_package_inherit_order $old_package_key]} {
             apm_invoke_callback_proc \
