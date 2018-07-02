@@ -927,12 +927,6 @@ ad_proc -private export_vars_sign {
 }
 
 
-
-
-
-
-
-
 ad_proc -public export_entire_form {} {
 
     Exports everything in ns_getform to the ns_set.  This should
