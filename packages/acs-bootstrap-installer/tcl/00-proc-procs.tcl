@@ -637,6 +637,9 @@ ad_proc -public ad_proc {
 	   preferred.</li>
       <li> If you use named parameters, you can specify which ones are required, optional,
            (including default values), and boolean. See the examples below.</li>
+    <li>Positional parameters are always required, unless they provide with a default value,
+         making them optional. If the parameter follows another positional parameter with a default
+         value, a default value for it is also required.</li>
     <li> There is now a callback facility. See below.</li>
       <li> The declaration can (and <b>should!</b>) include documentation. This documentation 
            may contain tags which are parsed for display by the API browser.  Some tags are 
@@ -660,9 +663,9 @@ ad_proc -public ad_proc {
     </p>
     <pre>
 if {$flush_p} {
-	some_proc -flush $key
+    some_proc -flush $key
 } else {
-	some_proc $key
+    some_proc $key
 }
     </pre>
 
@@ -678,8 +681,8 @@ if {$flush_p} {
       your named parameter contains a value of something starting with a "-".
     </p>
     <p>
-    Here's an example with named parameters, and namespaces (notice the preferred way of
-    declaring namespaces and namespaced procedures). Ignore the \ in "\@param",
+    Here's an example with named and positional parameters, and also namespaces (notice the
+    preferred way of declaring namespaces and namespaced procedures). Ignore the \ in "\@param",
     I had to use it so the API browser wouldn't think the parameter docs were for ad_proc
     itself:
     </p>
@@ -689,39 +692,50 @@ if {$flush_p} {
 namespace eval ::foobar {}
 
 ad_proc -public ::foobar::new {
-	{-oacs_user:boolean}
-        {-shazam:required}
-    	{-foo}
-	{-user_id ""}
+    {-oacs_user:boolean}
+    {-shazam:required}
+    {-foo}
+    {-user_id ""}
+    {pos}
+    {pos_opt ""}
 } {
-	The documentation for this procedure should have a brief description of the 
-	purpose of the procedure (the WHAT), but most importantly, WHY it does what it 
-	does. One can read the code and see what it does (but it's quicker to see a
-	description), but one cannot read the mind of the original programmer to find out 
-	what s/he had in mind.
+    The documentation for this procedure should have a brief description of the
+    purpose of the procedure (the WHAT), but most importantly, WHY it does what it
+    does. One can read the code and see what it does (but it's quicker to see a
+    description), but one cannot read the mind of the original programmer to find out
+    what s/he had in mind.
 
-	\@author Roberto Mello <rmello at fslc.usu.edu>
-	\@creation-date 2002-01-21
- 	
-        \@param oacs_user If this user is already an OpenACS user. oacs_user_p is defined
-                          per default as "false", when specified as "true". The parameter is optional.
-        \@param shazam    Magical incantation that calls Captain Marvel. Required parameter.
-        \@param foo       parameter, which can be omitted. Check with [info exists ...] if was given.
-	\@param user_id   The id for the user to process. Optional with default "" 
-	                  (api-browser shows the default).
+    \@author Roberto Mello <rmello at fslc.usu.edu>
+    \@creation-date 2002-01-21
+
+    \@param oacs_user   If this user is already an OpenACS user. oacs_user_p is defined
+                        per default as "false", when specified as "true". The parameter is optional.
+    \@param shazam      Magical incantation that calls Captain Marvel. Required parameter.
+    \@param foo         Parameter, which can be omitted. Check with [info exists ...] if was given.
+    \@param user_id     The id for the user to process. Optional with default "".
+                        (api-browser shows the default).
+    \@param pos         Positional parameter. Required, as it does not provide a default value.
+    \@param pos_opt     Positional parameter. Optional with default "".
+                        (api-browser shows the default).
+    \@return empty list
+
+    \@see ::foobar::related_proc
 } {
-	if { $user_id eq "" } {
-		# Do something if this is not an empty string
-	}
-        if { [info exists foo] } {
-		# Do something if we got a value for "foo"
-	}
+    if { $user_id eq "" } {
+        # Do something if this is not an empty string
+    }
+    if { [info exists foo] } {
+        # Do something if we got a value for "foo"
+    }
 
-	if { $oacs_user_p } {
-		# Do something if this is an OpenACS user
-	}
+    if { $oacs_user_p } {
+        # Do something if this is an OpenACS user
+    }
+
+    # return empty list anyway...
+    return [list]
 }
-    </pre>
+</pre>
     </p>
     <p>
       (note, most of the info on callbacks here due to leeldn)<p>
