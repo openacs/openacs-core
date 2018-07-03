@@ -123,7 +123,7 @@ presentation. The <a href="../tags/if">&lt;if&gt;</a> and
 &lt;else&gt; tags allow you to alter the format of your page to
 accommodate data changes. The function of &lt;if&gt; is
 straightforward enough: given a condition -- such as \@x\@ equals 5
--- all the text/html/dynamic data between the the opening and
+-- all the text/html/dynamic data between the opening and
 closing &lt;if&gt; tags will be displayed if and only if \@x\@ does
 in fact equal 5. A complete listing of currently supported
 conditions and some brief explanatory notes can be found <a href="../tags/if">here</a>. Also, a few more things to keep in

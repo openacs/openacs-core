@@ -15,7 +15,7 @@ all the attribute columns for each content type.</p>
 contain data in any text or binary format. To accommodate searches
 across multiple file types, the content repository uses an
 Intermedia index with the INSO filtering option. The INSO filter
-automatically detects the the file type of a binary object, and
+automatically detects the file type of a binary object, and
 extracts text from it for indexing. Most common file types are
 supported, including PDF and Microsoft Word, and Excel and
 PowerPoint.</p>
