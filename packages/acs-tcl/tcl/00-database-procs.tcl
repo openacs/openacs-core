@@ -173,20 +173,38 @@ ad_proc -private db_driverkey {
     a db handle, not the dbn that handle came from.  Therefore, they
     instead use <code>-handle_p 1</code> and pass the db handle.
 
+    Hmm, as of 2018, it seems that in most cases, db_driverkey is
+    called with a handle.
+
     @return The driverkey for use in db_* API switch statements.
 
     @author Andrew Piskorski (atp@piskorski.com)
     @creation-date 2003/04/08
 } {
-    set proc_name {db_driverkey}
-
     if { $handle_p } {
-        set handle $dbn ; set dbn {}
+        #
+        # In the case, the passed "dbn" is actually a
+        # handle. Determine from the handle the "pool" and from the
+        # "pool" the "dbn".
+        #
+        set handle $dbn
         set pool [ns_db poolname $handle]
-
-        if { [nsv_exists db_pool_to_dbn $pool] } {
+        set key ::acs::db_pool_to_dbn($pool)
+        if {[info exists $key]} {
+            #
+            # First, try to get the variable from the per-thread
+            # variable (which is part of the blueprint).
+            #
+            set dbn [set $key]
+        } elseif { [nsv_exists db_pool_to_dbn $pool] } {
+            #
+            # Fallback to nsv (old style), when for whatever
+            # reasonesm, the namespaced variable is not available.
+            #
+            ns_log notice "db_driverkey $handle_p dbn <$dbn> VIA NSV"        
             set dbn [nsv_get db_pool_to_dbn $pool]
         } else {
+            #
             # db_pool_to_dbn_init runs on startup, so other than some
             # broken code deleting the nsv key (very unlikely), the
             # only way this could happen is for someone to call this
@@ -196,7 +214,7 @@ ad_proc -private db_driverkey {
             error "No database name (dbn) found for pool '$pool'. Check the 'ns/server/[ns_info server]/acs/database' section of your config file."
         }
     }
-
+    
     set key ::acs::db_driverkey($dbn)
     if {[info exists $key]} {
         return [set $key]
@@ -225,7 +243,7 @@ ad_proc -private db_driverkey {
             set driverkey "nsodbc"
         } else {
             set driverkey {}
-            ns_log Error "$proc_name: Unknown driver '$driver'."
+            ns_log Error "db_driverkey: Unknown driver '$driver'."
         }
 
         nsv_set db_driverkey $dbn $driverkey

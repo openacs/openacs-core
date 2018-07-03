@@ -32,6 +32,7 @@ ad_proc -private db_pool_to_dbn_init {} {
     foreach dbn [nsv_array names db_available_pools] {
         foreach pool [db_available_pools $dbn] {
             nsv_set db_pool_to_dbn $pool $dbn
+            set ::acs::db_pool_to_dbn($pool) $dbn
         }
     }
 }
