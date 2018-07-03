@@ -786,7 +786,7 @@ ad_proc -public apm_load_any_changed_libraries {
     }
 
     if {$::apm::reloading eq "blueprint"} {
-        ns_log notice "### blueprint_reloading: apm_load_any_changed_libraries"
+        #ns_log notice "### blueprint_reloading: apm_load_any_changed_libraries [time {apm_get_changed_watched_files}]"
 
         #
         # Add the watched files, but don't load these if these are
@@ -814,9 +814,9 @@ ad_proc -public apm_load_any_changed_libraries {
         }
     }
 
-    if {$::apm::reloading eq "classic" && [array size errors] == 0} {
+    if {$::apm::reloading eq "classic"} {
 
-        ns_log notice "### classic_reloading: apm_load_any_changed_libraries"
+        #ns_log notice "### classic_reloading: apm_load_any_changed_libraries"
 
         #
         # Determine the current reload level in this interpreter by
