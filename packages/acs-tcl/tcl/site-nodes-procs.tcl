@@ -1557,7 +1557,7 @@ if {$UseXotclSiteNodes} {
         # We have to flush from the parent_url (which might be a leaf
         # turning into an inner node)
         #
-        set parent_node_id [site_node::get_parent_id -node_id [site_node::get_parent_id -node_id $node_id]]
+        set parent_node_id [site_node::get_parent_id -node_id $node_id]
         set url [site_node::get_url -node_id $parent_node_id]
 
         site_node::update_cache -sync_children -node_id $node_id -url $url
