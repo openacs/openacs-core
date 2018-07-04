@@ -50,8 +50,8 @@ info patchlevel
         the next step.  In that step, replace
       <computeroutput>--with-tcl=/usr/local/lib/</computeroutput> with
         <computeroutput>--with-tcl=/usr/lib/tcl8.4</computeroutput>.</para>
-      <para>Remember that you have to be root if you want to follow these instructions. On Mac OS X type <userinput>sudo su -</userinput> to become root.</para>
-      <para>Alternatively use <userinput>curl -L -O</userinput> instead of <userinput>wget</userinput> (especially on Mac OS X).</para>
+      <para>Remember that you have to be root if you want to follow these instructions. On macOS type <userinput>sudo su -</userinput> to become root.</para>
+      <para>Alternatively use <userinput>curl -L -O</userinput> instead of <userinput>wget</userinput> (especially on macOS).</para>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>wget http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.9-src.tar.gz</userinput>
 [root src]# <userinput>tar xfz tcl8.4.9-src.tar.gz</userinput>

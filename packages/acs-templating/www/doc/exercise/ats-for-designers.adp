@@ -198,8 +198,7 @@ same name as a variable declared within the slave section&#39;s
 <p>Now that the secrets of &lt;master&gt; and &lt;slave&gt; have
 been revealed, it&#39;s time to put a little of your newfound
 knowledge to use. Open up <a href="form-sample.acs"><code>form-sample.adp</code></a>, a standalone,
-independently formatted html page, and enslave it to the mastery of
-of your personal web page. It would also be nice if you were to
+independently formatted html page, and enslave it to the mastery of your personal web page. It would also be nice if you were to
 label the newly inserted form with some slave-specific title.</p>
 <p>
 <strong>Exercise Four: The functions of

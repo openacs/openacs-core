@@ -341,7 +341,7 @@ done
      display individual notes, we want to put a link to add comments at
      the bottom of the screen.  If there are any comments, we want to
      show them.</para>
-     <para>First, we need to generate a url for adding comments.  In note-edit.tcl:</para>
+     <para>First, we need to generate a URL for adding comments.  In note-edit.tcl:</para>
      <programlisting>
  set comment_add_url [export_vars -base [general_comments_package_url]comment-add {
   { object_id $note_id } 
@@ -1573,7 +1573,7 @@ ad_page_contract {
     file so that new installation will have the new data model.</para>
 
     <para>Next, check what version your package is currently at. For
-    example, it may be at version 1.0b1. Create a file in
+    example, it may be at version 1.0b1. Create a file in 
     sql/postgres/upgrade called packagename-1.0b1-1.0b2.sql and put
     the SQL code that will update the data model. For example, if you
     add in a column, you would have an alter table add column

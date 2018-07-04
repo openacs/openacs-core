@@ -26,7 +26,7 @@ custom code or your packages are kept in a local code repository.
 
 <li><h3>Install from URL or Local Path</h3>
 <p>Load a single package an archive stored an a non-standard place on
-your local file system or from an URL.</p>
+your local file system or from a URL.</p>
 <p><a href="/acs-admin/apm/package-load" class="button">Load</a> from URL or Local Path</p>
 </ul>
 <hr>

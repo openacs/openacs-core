@@ -496,7 +496,7 @@ most.</para>
 data models more flexible, so that new modules can easily gain access to
 generic features. However, while the API itself doesn&#39;t enforce the idea
 that applications only use the object model for metadata, it is also the case
-that the data model is not designed to scale to large type hierarchies. In
+that the data model is not designed to scale too large type hierarchies. In
 the more limited domain of the metadata model, this is acceptable since the
 type hierarchy is fairly small. But the object system data model is not
 designed to support, for example, a huge type tree like the Java runtime

@@ -325,7 +325,7 @@ representation and API for creating and referencing a locale</para>
 
 <para><emphasis>10.20</emphasis> There will be a Tcl library of
 locale-aware formatting and parsing functions for numbers, dates
-and times. <emphasis>Note that Java has builtin support for these
+and times. <emphasis>Note that Java has built-in support for these
 already</emphasis>.</para>
 
 <para><emphasis>10.30</emphasis> For each locale there will be
@@ -496,7 +496,7 @@ filesystem</para>
 	  Writing Files</para>
         </listitem>
         <listitem>
-          <para>When the acs-templating package writes an an ADP or
+          <para>When the acs-templating package writes an ADP or
           Tcl file, it assumes the file is iso-8859-1.  If the output
           charset (OutputCharset) in the AOLserver config file is set,
           then acs-templating assumes it&#39;s that charset.  </para>

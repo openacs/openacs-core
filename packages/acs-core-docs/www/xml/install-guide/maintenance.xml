@@ -578,7 +578,7 @@ chmod 700 /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/et
         </para>
 
         <para>
-          Mac OS X users: use perl /System/Library/OpenSSL/misc/CA.pl -newcert instead of /usr/share/ssl/CA
+          macOS users: use perl /System/Library/OpenSSL/misc/CA.pl -newcert instead of /usr/share/ssl/CA
         </para>
 
             <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/certs</userinput>

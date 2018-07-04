@@ -725,7 +725,7 @@ As of OpenACS 4, this is done through the sub-site system.
 <para><emphasis role="strong">90.1</emphasis> The administrator must be able to install new
 packages either from locally maintained .APM files or from URLs.</para>
 
-<para><emphasis role="strong">90.5</emphasis> In the case of an URL, the APM transparently
+<para><emphasis role="strong">90.5</emphasis> In the case of a URL, the APM transparently
 downloads the APM file off the web, proceeds with a file based installation,
 and then optionally removes the .APM file just downloaded.</para>
 

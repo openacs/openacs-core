@@ -200,7 +200,7 @@
       <formalpara>
         <title>Operating System</title>
         <para>OpenACS is designed for a Unix-like system.  It is
-          developed primarily in Linux.  It can be run on Mac OS X,
+          developed primarily in Linux.  It can be run on macOS,
           and in Windows within VMWare.</para>
       </formalpara>
       
@@ -224,7 +224,7 @@
         </listitem>
         <listitem>
           <formalpara>
-            <title>Mac OS X</title>
+            <title>macOS</title>
             <para><xref linkend="mac-installation"/></para>
           </formalpara>
         </listitem>

@@ -187,7 +187,7 @@ specifying the latter two.</p>
 In a simple case, the following is the sequence of steps that
 serving a templated page involves.
 <ol>
-<li>The request processor gets a url and maps it to a
+<li>The request processor gets a URL and maps it to a
 <code>.adp</code> or <code>.tcl</code> file. As both invoke the
 same handler, it doesn&#39;t matter that adp take precedence.</li><li>If a <code>.tcl</code> file is present, its <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>
 in the <code>-properties</code> block indicates a set of data
@@ -269,7 +269,7 @@ latter is only inteded for testing.</p>
 <h3>VII. Data Model Discussion</h3>
 <p>This package doesn&#39;t need a data model.</p>
 <p>It comes with its own database interfaces, one for using ns_ora,
-the Oracle driver from ArsDigita, and one for ns_db, the builtin
+the Oracle driver from ArsDigita, and one for ns_db, the built-in
 database interface of the AOL server. If you are programming under
 the ACS, you should use neither of these, but rather the
 <code>db_*</code> interface, in particular

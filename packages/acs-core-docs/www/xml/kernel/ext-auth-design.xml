@@ -65,7 +65,7 @@ Marklund
     
     @param authority_id The ID of the authority to ask to verify the user. Defaults to local authority.
     @param username Authority specific username of the user.
-    @param passowrd The password as the user entered it.
+    @param password The password as the user entered it.
     
 }
 </literal>
