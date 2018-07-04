@@ -160,7 +160,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
 } {
     array set allow_types {
         string {TEXT VARCHAR CHAR VARCHAR2}
-        boolean {BOOL INT2 INT4 CHAR}
+        boolean {BOOL INT2 INT4 CHAR BPCHAR}
         number {NUMERIC INT2 INT4 INT8 FLOAT4 FLOAT8 NUMBER}
         integer {INT2 INT4 INT8 NUMBER}
         money {NUMERIC FLOAT4 FLOAT8}
