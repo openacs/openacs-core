@@ -134,7 +134,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 # all_pools to ensure that the pool is valid.
 
                 set dbn_pools [ns_config $config_path "pools_${dbn}"]
-                set ::acs::db_pools($default_dbn) $dbn_pools
+                set ::acs::db_pools($dbn) $dbn_pools
                 ns_log Notice "$proc_name: For database '$dbn', the following pools are available: $dbn_pools"
             }
 
