@@ -2148,6 +2148,15 @@ ad_proc -public db_1row { args } {
     }
 }
 
+if {[info commands ns_cache_transaction_begin] eq ""} {
+    #
+    # When the server has no support for ns_cache_transaction_*,
+    # provide dummy procs to avoid runtime "if" statements.
+    #
+    proc ns_cache_transaction_begin args {;}
+    proc ns_cache_transaction_commit args {;}
+    proc ns_cache_transaction_rollback args {;}
+}
 
 ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     Usage: <b><i>db_transaction</i></b> <i>transaction_code</i> [ on_error { <i>error_code_block</i> } ]
@@ -2218,6 +2227,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
         set level [incr db_state(transaction_level,$dbh)]
         if { $level == 1 } {
             ns_db dml $dbh "begin transaction"
+            ns_cache_transaction_begin
         }
     }
     # Execute the transaction code.
@@ -2237,6 +2247,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
         3 {
             # TCL_BREAK - Abort the transaction and do the break.
             ns_db dml $dbh "abort transaction"
+            ns_cache_transaction_rollback
             db_release_unused_handles -dbn $dbn
             break
         }
@@ -2277,7 +2288,9 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                 # useful than simply punting ...
 
                 ns_db dml $dbh "abort transaction"
+                ns_cache_transaction_rollback
                 ns_db dml $dbh "begin transaction"
+                ns_cache_transaction_begin
 
             }
 
@@ -2300,6 +2313,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                 3 {
                     # TCL_BREAK
                     ns_db dml $dbh "abort transaction"
+                    ns_cache_transaction_rollback
                     db_release_unused_handles
                     break
                 }
@@ -2318,6 +2332,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                     # We're at the top level, so we abort the transaction.
                     set db_state(db_abort_p,$dbh) 0
                     ns_db dml $dbh "abort transaction"
+                    ns_cache_transaction_rollback
                 }
                 # We throw this error because it was thrown from the error handling code that the programmer must fix.
                 error $on_errmsg $::errorInfo $::errorCode
@@ -2328,6 +2343,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                     if { $level == 1 } {
                         set db_state(db_abort_p,$dbh) 0
                         ns_db dml $dbh "abort transaction"
+                        ns_cache_transaction_rollback
                         # We still have the transaction generated error.  We don't want to throw it, so we log it.
                         ns_log Error "Aborting transaction due to error:\n$errmsg"
                     } else {
@@ -2339,6 +2355,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                     # Otherwise, we continue on through the lower transaction levels.
                     if { $level == 1} {
                         ns_db dml $dbh "end transaction"
+                        ns_cache_transaction_commit
                     }
                 }
             }
@@ -2347,6 +2364,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
             if { $level == 1 } {
                 set db_state(db_abort_p,$dbh) 0
                 ns_db dml $dbh "abort transaction"
+                ns_cache_transaction_rollback
                 error "Transaction aborted: $errmsg" $::errorInfo $::errorCode
             } else {
                 db_abort_transaction -dbn $dbn
@@ -2360,10 +2378,12 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
             if { $level == 1 } {
                 set db_state(db_abort_p,$dbh) 0
                 ns_db dml $dbh "abort transaction"
+                ns_cache_transaction_rollback
             }
         } elseif { $level == 1 } {
             # Success!  No errors and no requested abort.  Commit.
             ns_db dml $dbh "end transaction"
+            ns_cache_transaction_commit
         }
     }
 }

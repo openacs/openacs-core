@@ -514,7 +514,7 @@ aa_register_case -cats {api db smoke} db__transaction {
 
 
     aa_equals "Test we can insert a row in a db_transaction clause" \
-        [db_transaction {db_dml test1 {insert into tmp_db_transaction_test(a,b) values (1,2)}}] ""
+        [catch {db_transaction {db_dml test1 {insert into tmp_db_transaction_test(a,b) values (1,2)}}}] 0
     
     aa_equals "Verify clean insert worked" \
         [db_string check1 {select a from tmp_db_transaction_test} -default missing] 1
