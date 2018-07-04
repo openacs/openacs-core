@@ -137,8 +137,26 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
             aa_true "$msg fixing markup?" {$result eq $test_result}
         }
 
-    aa_log "trying to get start page from [util::configured_location]/"
-    array set r [util::http::get -url [util::configured_location]/]
+    #
+    # Maybe a temporary fix: when the server is configured with a
+    # wildcard IPv4 address 0.0.0.0 and the hostname "localhost", and
+    # localhost is mapped on the host to the IPv6 address "::1", then
+    # ns_http to http://localhost:.../ is rejected, while the
+    # connection to the current IPv4 address http://127.0.0.1:.../
+    # succeeds. However, the determination of the current IP address
+    # requires NaviServer 4.99.17d3 or newer, so we can't assume, this
+    # works always.
+    #
+    set mylocation [util::configured_location]/
+    if {![catch {set myip [ns_conn currentaddr]}]} {
+        set driver_info [util_driver_info]
+        set mylocation [util::join_location \
+                            -proto    [dict get $driver_info proto] \
+                            -hostname $myip \
+                            -port     [dict get $driver_info port]]
+    }
+    aa_log "trying to get start page from $mylocation"
+    array set r [util::http::get -url $mylocation]
     set test_case $r(page)
 
     set msg "Test case 6: in our index page is removing tags ok"
