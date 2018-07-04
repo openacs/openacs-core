@@ -353,7 +353,7 @@ begin;
  insert into acs_datatypes
   (datatype, max_n_values, database_type, column_size)
  values
-  ('boolean', 1, 'bool', null);
+  ('boolean', 1, 'boolean', null);
 
  insert into acs_datatypes
   (datatype, max_n_values, database_type, column_size)
