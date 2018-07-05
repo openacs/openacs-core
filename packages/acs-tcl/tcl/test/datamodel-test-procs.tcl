@@ -164,8 +164,8 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
         number {NUMERIC INT2 INT4 INT8 FLOAT4 FLOAT8 NUMBER}
         integer {INT2 INT4 INT8 NUMBER}
         money {NUMERIC FLOAT4 FLOAT8}
-        timestamp {TIMESTAMPTZ}
-        time_of_day {TIMESTAMPTZ}
+        timestamp {TIMESTAMP TIMESTAMPTZ}
+        time_of_day {TIMESTAMP TIMESTAMPTZ}
         enumeration {INT2 INT4 INT8}
         url {VARCHAR TEXT VARCHAR2}
         email {VARCHAR TEXT VARCHAR2}
