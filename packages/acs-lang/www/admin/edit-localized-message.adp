@@ -8,7 +8,7 @@
 
 <h2>Audit Trail</h2>
 
-@first_translated_message;noquote@
+<if @first_translated_message@ not nil>@first_translated_message;noquote@</if>
 
 <include src="audit-include" current_locale="@current_locale;literal@" message_key="@message_key;literal@" package_key="@package_key;literal@">
 
