@@ -52,7 +52,7 @@ end;
 
 <fullquery name="attribute::delete.drop_attribute">
 <querytext>
-begin acs_attribute.drop_attribute(:object_type, :attribute_name); end;
+begin acs_attribute.drop_attribute(:object_type, :attribute_name, :drop_table_column_p); end;
 </querytext>
 </fullquery>
 

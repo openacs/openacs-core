@@ -133,10 +133,4 @@
 </fullquery>
 
 
-<fullquery name="attribute::delete.drop_attr_column">
-  <querytext>
-    alter table $table_name drop column $column_name
-  </querytext>
-</fullquery>
-
 </queryset>

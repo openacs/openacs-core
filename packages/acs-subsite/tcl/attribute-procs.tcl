@@ -18,19 +18,17 @@ ad_page_contract_filter attribute_dynamic_p { name value } {
     @creation-date 12/30/2000
 
 } {
-    if { [db_string attribute_for_dynamic_object_p {
-	select case when exists (select 1 
-                                   from acs_attributes a, acs_object_types t
-                                  where t.dynamic_p = 't'
-                                    and a.object_type = t.object_type
-                                    and a.attribute_id = :value)
-	            then 1 else 0 end
-	  from dual        
-    }] } {
-	return 1
+    set dynamic_p [db_string attribute_for_dynamic_object_p {
+	select exists (select 1 from acs_attributes a, acs_object_types t
+                        where t.dynamic_p = 't'
+                          and a.object_type = t.object_type
+                          and a.attribute_id = :value)
+        from dual
+    }]
+    if {!$dynamic_p} {
+        ad_complain "Attribute does not belong to a dynamic object and cannot be modified"
     }
-    ad_complain "Attribute does not belong to a dynamic object and cannot be modified"
-    return 0
+    return $dynamic_p
 }
 
 
@@ -231,27 +229,29 @@ ad_proc -public delete { attribute_id } {
 
 } { 
     
-    # 1. Drop the column
-    # 2. Drop the attribute
-    # 3. Return
+    # 1. Drop the attribute with its column
+    # 2. Return
     
-    if { ![db_0or1row select_attr_info {}] } {
+    if { ![db_0or1row select_attr_info {
+        select a.object_type, a.attribute_name,
+        case when a.storage = 'type_specific' then t.table_name else a.table_name end as table_name,
+        coalesce(a.column_name, a.attribute_name) as column_name
+        from acs_attributes a, acs_object_types t
+        where a.attribute_id = :attribute_id
+        and t.object_type = a.object_type
+    }] } {
         # Attribute doesn't exist
         return 0
     }
+    
     if { $table_name eq "" || $column_name eq "" } {
 	# We have to have both a non-empty table name and column name
 	error "We do not have enough information to automatically remove this attribute. Namely, we are missing either the table name or the column name"
     }
 
-    set plsql {drop_attribute FOO db_exec_plsql}
-    if { [db_column_exists $table_name $column_name] } {
-        lappend plsql {drop_attr_column FOO db_dml}
-    }
+    set drop_table_column_p [expr {[db_column_exists $table_name $column_name] ? "t" : "f"}]
 
-    foreach cmd $plsql {
-        {*}$cmd
-    }
+    db_exec_plsql drop_attribute {}
     
     return 1
 }

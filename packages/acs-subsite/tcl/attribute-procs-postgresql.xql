@@ -62,7 +62,7 @@ select acs_attribute__create_attribute (
 
 <fullquery name="attribute::delete.drop_attribute">
   <querytext>
-    select acs_attribute__drop_attribute(:object_type, :attribute_name)
+    select acs_attribute__drop_attribute(:object_type, :attribute_name, :drop_table_column_p)
   </querytext>
 </fullquery>
 
