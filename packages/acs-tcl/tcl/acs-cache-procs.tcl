@@ -180,6 +180,10 @@ namespace eval ::acs {
             }
             return [ns_cache get [:cache_name $partition_key] $key]
         }
+
+        :public method show_all {} {
+            ns_log notice "content of ${:name}: [ns_cache_keys ${:name}]"
+        }
         
         :public method flush_cache {{-partition_key ""}} {
             #
@@ -187,6 +191,8 @@ namespace eval ::acs {
             # AOLserver support "ns_cache_flush".
             #
             ns_cache_flush [:cache_name $partition_key]
+            #ns_log notice "flush_all -> ns_cache_flush [:cache_name $partition_key]"
+            #ns_log notice "... content of ${:name}: [ns_cache_keys ${:name}]"
         }
         
 	:public method flush_all {} {
@@ -257,8 +263,18 @@ namespace eval ::acs {
             #
             for {set i 0} {$i < ${:partitions}} {incr i} {
 		ns_cache_flush ${:name}-$i
+                #ns_log notice "flush_all: ns_cache_flush ${:name}-$i"
+                #ns_log notice "... content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
 	    }
         }
+
+        :public method show_all {} {
+            for {set i 0} {$i < ${:partitions}} {incr i} {
+                ns_log notice "content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
+	    }
+            
+        }
+
     }
 
     ##########################################################################
