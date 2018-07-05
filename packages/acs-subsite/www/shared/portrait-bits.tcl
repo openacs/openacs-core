@@ -74,7 +74,16 @@ if { $item_id != 0} {
         #
         if {[file exists $filename]} {
             ns_setexpires 86400 ;# 1 day
-            ad_returnfile_background 200 $itemInfo(mime_type) $filename
+            #
+            # We had "ad_returnfile_background" before, which is a
+            # dependency on xotcl-core. We can use ns_returnfile here
+            # instead. Since a few years NaviServer delivers files via
+            # "ns_returnfile" in the background, when writer_threads
+            # are enabled (which is the case for default
+            # configurations).
+            #
+            ns_returnfile 200 $itemInfo(mime_type) $filename
+
         } else {
             ad_log warning "cannot show portrait with item_id $item_id for user $user_id "
             ns_returnnotfound
