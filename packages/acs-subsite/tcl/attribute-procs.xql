@@ -24,20 +24,6 @@
 </fullquery>
 
  
-<fullquery name="attribute::delete.select_attr_info">      
-      <querytext>
-      
-        select a.object_type, a.attribute_name, 
-               case when a.storage = 'type_specific' then t.table_name else a.table_name end as table_name,
-	       coalesce(a.column_name, a.attribute_name) as column_name
-          from acs_attributes a, acs_object_types t
-         where a.attribute_id = :attribute_id
-           and t.object_type = a.object_type
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="attribute::value_delete.select_last_sort_order">      
       <querytext>
       
