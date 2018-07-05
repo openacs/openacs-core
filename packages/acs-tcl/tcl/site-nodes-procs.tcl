@@ -1061,7 +1061,7 @@ if {$UseXotclSiteNodes} {
                 }
 
                 #
-                # make sure, we have a node_id
+                # Make sure, we have a node_id.
                 #
                 if {$node_id eq ""} {
                     set node_id [:get_node_id -url $url]
@@ -1079,7 +1079,7 @@ if {$UseXotclSiteNodes} {
                 -node_id:integer,required
             } {
                 #
-                # Get url, since it is not returned by the later query.
+                # Get URL, since it is not returned by the later query.
 
                 # TODO: I did not want to modify the query for the time
                 # being. When doing the Oracle support, the retrieval of the URL
@@ -1261,7 +1261,7 @@ if {$UseXotclSiteNodes} {
             # @method flush_cache
             #    a stub to be overloaded by the cache manager
             #
-            :public method flush_cache {-node_id:required,integer,1..1 {-with_subtree:boolean} {-url ""}} {;}
+            :public method flush_cache {-node_id:required,1..1 {-with_subtree:boolean} {-url ""}} {;}
 
             # Create an object "site_node" to provide a user-interface close
             # to the classical one.
@@ -1287,7 +1287,6 @@ if {$UseXotclSiteNodes} {
             #   ns_param SiteNodesIdCacheSize       100000
             #   ns_param SiteNodesChildenCacheSize  100000
             #
-
             ::acs::KeyPartitionedCache create ::acs::site_nodes_cache \
                 -package_key acs-tcl \
                 -parameter SiteNodesCache \
@@ -1347,8 +1346,19 @@ if {$UseXotclSiteNodes} {
                 return [set $key]
             }
 
-            :public method get_url {-node_id:required,integer,1..1} {
-                ::acs::site_nodes_cache eval -partition_key $node_id url-$node_id { next }
+            :public method get_url {-node_id:required,1..1} {
+                #
+                # I'ts a pain, but OpenACS and the its regression test
+                # call "get_url" a few times with an empty node_id.
+                # Shortcut these calls here to avoid problems with the
+                # non-numeric partition_key.
+                #
+                if {$node_id eq ""} {
+                    set result ""
+                } else {
+                    set result [::acs::site_nodes_cache eval -partition_key $node_id url-$node_id { next }]
+                }
+                return $result
             }
 
             :public method get_urls_from_object_id {-object_id:required,integer,1..1} {
@@ -1371,7 +1381,7 @@ if {$UseXotclSiteNodes} {
                 ::acs::$cache flush_pattern -partition_key $partition_key $pattern
             }
 
-            :public method flush_cache {-node_id:required,integer,1..1 {-with_subtree:boolean true} {-url ""}} {
+            :public method flush_cache {-node_id:required,1..1 {-with_subtree:boolean true} {-url ""}} {
 
                 #
                 # Flush entries from site-node tree, including the current node,
@@ -1383,9 +1393,16 @@ if {$UseXotclSiteNodes} {
                 set old_url [:get_url -node_id $node_id]
 
                 if {$node_id eq "" || $old_url eq "/"} {
-                    ::acs::site_nodes_cache flush_cache
-                    ::acs::site_nodes_id_cache flush_cache
-                    ::acs::site_nodes_children_cache flush_cache
+                    #
+                    # When no node_id is given or the URL is specified
+                    # as top-url, flush all caches. This happens
+                    # e.g. in the regression test.
+                    #
+                    #ns_log notice "FLUSHALL"
+                    ::acs::site_nodes_cache flush_all
+                    ::acs::site_nodes_id_cache flush_all
+                    ::acs::site_nodes_children_cache flush_all
+
                 } else {
                     set limit_clause [expr {$with_subtree ? "" : "limit 1"}]
                     #
@@ -1434,21 +1451,12 @@ if {$UseXotclSiteNodes} {
             # is sufficient.
 
             :public method get_node_id {-url:required} {
-                #
-                # Try per-request caching
-                #
-                set key ::__node_id($url)
-                if {[info exists $key]} {
-                    return [set $key]
-                }
+                #ns_log notice "--- get_node_id from urlspace <$url>"
                 #
                 # Try to get value from urlspace
                 #
                 set ID [ns_urlspace get -key sitenode $url]
-                #ns_log notice "--- get_node_id from urlspace <$url> -> <$ID>"
-                if {$ID ne ""} {
-                    return [set $key $ID]
-                } else {
+                if {$ID eq ""} {
                     #
                     # Get value the classical way, caching potentially
                     # the full url path in the site_nodes_id_cache.
@@ -1460,12 +1468,12 @@ if {$UseXotclSiteNodes} {
                         # We got a valid ID. If we would add blindly a
                         # node_id for the returned URL (e.g. for "/*")
                         # and some other subnode is not jet resolved,
-                        # we would obtain later the node-ide of the
-                        # parent-node although there is a subnode.
+                        # we would obtain later the node_id of the
+                        # parent_node although there is a subnode.
                         #
-                        # We could address this by e.g. preaching all
-                        # "inner nodes" or similar, but this requires
-                        # a deeper analysis of larger sites.
+                        # We could address this by e.g. pre-caching
+                        # all "inner nodes" or similar, but this
+                        # requires a deeper analysis of larger sites.
                         #
                         if {[llength [site_node::get_children -node_id $ID]] == 0} {
                             #
@@ -1479,26 +1487,25 @@ if {$UseXotclSiteNodes} {
                             {*}$cmd
                             #ns_log notice "---\n[join [ns_urlspace list] \n]"
                         }
-                        return [set $key $ID]
+                        #return [set $key $ID]
                     }
                 }
+                return $ID
             }
 
-            :public method flush_cache {-node_id:required,integer,1..1 {-with_subtree:boolean true} {-url ""}} {
+            :public method flush_cache {-node_id:required,1..1 {-with_subtree:boolean true} {-url ""}} {
                 #
-                # Cleanup in the urspace tree: Clear always the
+                # Cleanup in the urlspace tree: Clear always the
                 # full subtree via "-recurse" (maybe not always
                 # necessary).
                 #
 
-                #ns_log notice ==========flush_cache=================[list ns_urlspace unset -recurse -key sitenode $url]
                 ns_urlspace unset -recurse -key sitenode $url
-
                 next
             }
 
 
-        }
+         }
         site_node object mixins add SiteNodesCache
         if {[info commands ns_urlspace] ne ""} {
             ns_log notice "... using NaviServer's ns_urlspace for reduced redundancy in site node caches"
@@ -1583,18 +1590,22 @@ if {$UseXotclSiteNodes} {
 
     ad_proc -private site_node::init_cache {} {
         Initialize the site node cache; actually, this means flushing the
-        cache in case we have root site node.
+        cache in case we have a root site node.
     } {
-        ns_log notice "site_node::init_cache"
+        #ns_log notice "site_node::init_cache"
         set root_node_id [::db_string get_root_node_id {} -default {}]
         if { $root_node_id ne "" } {
+            #
             # If we are called during the *-init procs, the database
             # interface might not be initialized yet. However, in this
             # situation, there is nothing to flush yet.
+            #
             if {[info commands ::xo::db::sql::site_node] ne ""} {
-                ::xo::site_node flush_cache -node_id $root_node_id
+                #ns_log notice "call [list ::xo::site_node flush_cache -node_id $root_node_id]"
+                ::xo::site_node flush_cache -node_id  $root_node_id
             }
         }
+        #ns_log notice "site_node::init_cache $root_node_id DONE"
     }
 
     ad_proc -private site_node::update_cache {
@@ -1605,7 +1616,6 @@ if {$UseXotclSiteNodes} {
         Brings the in memory copy of the site nodes hierarchy in sync with the
         database version. Only updates the given node and its children.
     } {
-        #ns_log Notice "================================== site_node::update_cache for node_id $node_id <$url>"
         ::xo::site_node flush_cache -node_id $node_id -with_subtree $sync_children_p -url $url
 
         set parent_node_id [site_node::get_parent_id -node_id $node_id]
