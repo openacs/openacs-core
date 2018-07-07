@@ -135,12 +135,12 @@ template::head::add_style \
         .warn {
             color: darkmagenta;
         }
-        
+
         td.log {
             font-size: normal;
             color: darkslateblue;
         }
-        
+
         dt {
             font-weight: bold
         }
