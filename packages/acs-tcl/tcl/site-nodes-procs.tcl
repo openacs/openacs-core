@@ -1452,6 +1452,15 @@ if {$UseXotclSiteNodes} {
 
             :public method get_node_id {-url:required} {
                 #ns_log notice "--- get_node_id from urlspace <$url>"
+
+                # Try per-request caching
+                #
+                set key ::__node_id($url)
+                if {[info exists $key]} {
+                    #ns_log notice "==== returning cached value [set $key]"
+                    return [set $key]
+                }
+                
                 #
                 # Try to get value from urlspace
                 #
@@ -1487,7 +1496,7 @@ if {$UseXotclSiteNodes} {
                             {*}$cmd
                             #ns_log notice "---\n[join [ns_urlspace list] \n]"
                         }
-                        #return [set $key $ID]
+                        return [set $key $ID]
                     }
                 }
                 return $ID
