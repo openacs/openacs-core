@@ -1047,15 +1047,14 @@ if {$UseXotclSiteNodes} {
 
         ::nx::Class create SiteNode {
 
-            #
-            # @method get
-            #    returns a site node from url or site-node with all its context info
-            #
-
             :public method get {
                 {-url ""}
                 {-node_id ""}
             } {
+                #
+                # @return a site node from url or site-node with all its context info
+                #
+
                 if {$url eq "" && $node_id eq ""} {
                     error "site_node::get \"must pass in either url or node_id\""
                 }
@@ -1220,6 +1219,12 @@ if {$UseXotclSiteNodes} {
             :public method get_urls_from_package_key {
                 -package_key:required
             } {
+                #
+                # Return potentially multiple URLs based on a package key.
+                #
+                # @param package_key
+                #
+
                 return [::xo::dc list -prepare varchar [current method]-urls-from-package-key {
                     select site_node__url(node_id)
                     from site_nodes n, apm_packages p
@@ -1228,14 +1233,16 @@ if {$UseXotclSiteNodes} {
                 }]
             }
 
-            #
-            # @method get_node_id get_package_url
-            #   just a small stub for a special case for method
-            #   get_urls_from_package_key
-            #
             :public method get_package_url {
                 -package_key:required
             } {
+                #
+                # Legacy interface: previous implementations of the
+                # site-nodes assumed, that there is just one site-node
+                # entry available for a package-key. This method
+                # returns just the first answer form
+                # get_urls_from_package_key
+                #
                 return [lindex [:get_urls_from_package_key -package_key $package_key] 0]
             }
 
@@ -1257,11 +1264,12 @@ if {$UseXotclSiteNodes} {
             #
             :public forward get_url ::xo::db::sql::site_node url
 
-            #
-            # @method flush_cache
-            #    a stub to be overloaded by the cache manager
-            #
-            :public method flush_cache {-node_id:required,1..1 {-with_subtree:boolean} {-url ""}} {;}
+            :public method flush_cache {-node_id:required,1..1 {-with_subtree:boolean} {-url ""}} {
+                #
+                #  This is a stub method to be overloaded by some
+                #  cache managers.
+                #
+            }
 
             # Create an object "site_node" to provide a user-interface close
             # to the classical one.
@@ -1319,6 +1327,18 @@ if {$UseXotclSiteNodes} {
                 {-filters ""}
                 {-element ""}
             } {
+                #
+                # Cache get_children operations, except, when "-all"
+                # was specified.  The underlying operation can be quite
+                # expensive, when huge site-node trees are
+                # explored. Since the argument list influences the
+                # results, we cache for every parameter combination.
+                #
+                # Since this cache contains subtrees, we have to flush
+                # trees, which is implemented via pattern flushes. so
+                # we use a separate cache to avoid long locks on
+                # site-nodes in general.
+                #
                 if {$all} {
                     #
                     # Don't cache when $all is specified - seldom
@@ -1334,6 +1354,10 @@ if {$UseXotclSiteNodes} {
             }
 
             :public method get_node_id {-url:required} {
+                #
+                # Cache the result of the upstream implementation of
+                # get_node_id in the acs::site_nodes_id_cache cache.
+                #
                 acs::site_nodes_id_cache eval id-$url { next }
             }
 
@@ -1362,17 +1386,34 @@ if {$UseXotclSiteNodes} {
             }
 
             :public method get_urls_from_object_id {-object_id:required,integer,1..1} {
+                #
+                # Cache the result of the upstream implementation of
+                # get_urls_from_object_id in the acs::site_nodes_cache.
+                #
                 ::acs::site_nodes_cache eval -partition_key $object_id urls-$object_id { next }
             }
 
-            # The cache value from the following method is currently not
-            # flushed, but just used for package keys, not instances, so it
-            # should be safe.
             :public method get_package_url {-package_key:required} {
+                #
+                # Cache the result of the upstream implementation of
+                # get_package_url in the acs::site_nodes_cache.
+                #
+                # Note: The cache value from the following method is
+                # currently not flushed, but just used for package
+                # keys, not instances, so it should be safe.
+                #
                 ::acs::site_nodes_cache eval -partition_key 0 package_url-$package_key { next }
             }
 
             :public method flush_pattern {{-partition_key ""} pattern} {
+                #
+                # Flush from the site-nodes caches certain
+                # information. The method hides the actual caching
+                # structure and is as well provided in conformance
+                # with the alternative implementations
+                # above. Depending on the specified pattern, it
+                # reroutes the flushing request to different caches.
+                #
                 switch -glob -- $pattern {
                     id-*           {set cache site_nodes_id_cache}
                     get_children-* {set cache site_nodes_children_cache}
@@ -1382,7 +1423,6 @@ if {$UseXotclSiteNodes} {
             }
 
             :public method flush_cache {-node_id:required,1..1 {-with_subtree:boolean true} {-url ""}} {
-
                 #
                 # Flush entries from site-node tree, including the current node,
                 # the root of flushed (sub)tree. If the node_id is not provided,
@@ -1451,7 +1491,11 @@ if {$UseXotclSiteNodes} {
             # is sufficient.
 
             :public method get_node_id {-url:required} {
-                #ns_log notice "--- get_node_id from urlspace <$url>"
+                #
+                # This is the main interface of the
+                # SiteNodeUrlspaceCache to provide a first-level
+                # cache.
+                #
 
                 # Try per-request caching
                 #
@@ -1460,7 +1504,7 @@ if {$UseXotclSiteNodes} {
                     #ns_log notice "==== returning cached value [set $key]"
                     return [set $key]
                 }
-                
+
                 #
                 # Try to get value from urlspace
                 #
