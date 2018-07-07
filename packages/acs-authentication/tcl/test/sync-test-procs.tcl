@@ -947,12 +947,25 @@ aa_register_case -cats {api} sync_batch_ims_test {
 aa_register_case -cats {api smoke} sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
+    set url [ad_url]
+    # When the server is configured with wildcard IPv4 address 0.0.0.0
+    # and the hostname "localhost", and localhost is mapped on the
+    # host to the IPv6 address "::1", then ns_http to
+    # http://localhost:.../ is rejected, while the connection to the
+    # current IPv4 address http://127.0.0.1:.../ succeeds. However,
+    # the determination of the current IP address requires NaviServer
+    # 4.99.17d3 or newer, so we can't assume, this works always.
+    set parsed_url [ns_parseurl $url]
+    if {[dict get $parsed_url host] eq "localhost"} {
+        set url [dict get $parsed_url proto]://127.0.0.1:[dict get $parsed_url port]
+        set url [string trimright $url ":"]
+    } 
     array set result [acs_sc::invoke \
                           -error \
                           -contract "auth_sync_retrieve" \
                           -impl "HTTPGet" \
                           -operation "GetDocument" \
-                          -call_args [list [list SnapshotURL {} IncrementalURL "[ad_url]/SYSTEM/dbtest.tcl"]]]
+                          -call_args [list [list SnapshotURL {} IncrementalURL "$url/SYSTEM/dbtest.tcl"]]]
     
 
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
