@@ -17,6 +17,11 @@ ad_proc -private db_available_pools {dbn} {
     if { $dbn eq "" } {
         set dbn $::acs::default_database
     }
+    # When updating from versions before 5.10.0d4, namespace variable
+    # might not be initialized. Get values from conf in this case.
+    if {![info exists ::acs::db_pools($dbn)]} {
+        db_bootstrap_set_db_type errors
+    }
     return $::acs::db_pools($dbn)
 }
 
@@ -112,6 +117,9 @@ ad_proc db_bootstrap_set_db_type { errors } {
     set server_name [ns_info server]
     set config_path "ns/server/$server_name/acs/database"
     set all_pools [ns_db pools]
+
+    # unset namespaced array of database pools
+    array unset -nocomplain ::acs::db_pools
 
     set database_names [ns_config $config_path {database_names}]
 
