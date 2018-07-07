@@ -122,23 +122,36 @@ if {$return_url eq ""} {
 set quiet_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=1"
 set verbose_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=0"
 template::head::add_style \
-    -style "
-.description h2 { 1.5em; }
-.fail {
-      font-weight: bold;
-      color: red;
-}
-.ok {
-      font-weight: bold;
-      color: green;
-}
-dt {
-      font-weight: bold
-}
-th {
-      background: #c0c0c0;
-}
-"
+    -style {
+        .description h2 { 1.5em; }
+        .fail {
+            font-weight: bold;
+            color: red;
+        }
+        .ok {
+            font-weight: bold;
+            color: green;
+        }
+        .warn {
+            color: darkmagenta;
+        }
+        
+        td.log {
+            font-size: normal;
+            color: darkslateblue;
+        }
+        
+        dt {
+            font-weight: bold
+        }
+        th {
+            background: #c0c0c0;
+        }
+        td pre {
+            margin: 2px;
+            font-size: smaller;
+        }
+    }
 
 ad_return_template
 

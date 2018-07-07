@@ -73,7 +73,7 @@
           <td class="ok">@tests_quiet.result@</td>
         </elseif>
         <else>
-          <td>@tests_quiet.result@</td>
+          <td class="log">@tests_quiet.result@</td>
         </else>
         <td align="right" class="@tests_quiet.result@">@tests_quiet.count@</td>
       </tr>
@@ -97,18 +97,23 @@
         <else>
           <tr class="even">
         </else>
-        
-        <td> @tests.timestamp@ </td>
+	<td> @tests.timestamp@ </td>
         <if @tests.result@ eq "fail">
           <td class="fail">FAILED</td>
+	  <td><pre>@tests.notes@</pre></td>	  
         </if>
         <elseif @tests.result@ eq "pass">
           <td class="ok">@tests.result@</td>
+  	  <td><pre>@tests.notes@</pre></td>
+        </elseif>
+        <elseif @tests.result@ eq "warn">
+          <td class="warn">@tests.result@</td>
+  	  <td><pre class="warn">@tests.notes@</pre></td>
         </elseif>
         <else>
-          <td>@tests.result@</td>
+          <td class="log">@tests.result@</td>
+	  <td class="log">@tests.notes@</td>
         </else>
-        <td><pre>@tests.notes@</pre></td>
       </tr>
       </multiple>
     </else>
