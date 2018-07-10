@@ -1,4 +1,4 @@
-#      Initializes datastrctures for the installer.
+#      Initializes data structures for the installer.
 
 #      @creation-date 02 October 2000
 #      @author Bryan Quinn

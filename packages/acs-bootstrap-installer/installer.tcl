@@ -478,7 +478,7 @@ ad_proc -private install_do_packages_install {} {
         }
         ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
         
-        ns_log Error "At least one core package has an unsatisifed dependency.\
+        ns_log Error "At least one core package has an unsatisfied dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:\n$deps"
 
