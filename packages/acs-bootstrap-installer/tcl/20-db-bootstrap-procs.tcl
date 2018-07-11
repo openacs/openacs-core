@@ -246,11 +246,11 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 nsv_set ad_database_type . $this_suffix
                 #
                 # For the time being, keep the info in the nsv for
-                # backwards compatibility and and a version in a
+                # backwards compatibility and a version in a
                 # per-thead (namespaced) variable
                 #
                 set ::acs::database_type $this_suffix
-                
+
             } elseif { ![string match $this_suffix [nsv_get ad_database_type .]] } {
                 ns_log Notice "$proc_name: Database pool \"$pool\" type \"$this_suffix\" differs from \"[nsv_get ad_database_type .]\"."
                 lappend bad_pools "<li>Database pool \"$pool\" is of type \"$this_suffix\".  The

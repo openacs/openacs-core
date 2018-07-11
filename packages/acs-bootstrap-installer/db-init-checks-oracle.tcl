@@ -194,7 +194,7 @@ ln -s /bin/sh /bin/ksh
 	    </strong></p>"
         } else {
 	    append my_errors "<li><p>You have the Korn shell installed in <code>/usr/bin/ksh</code>, but Oracle's
-	    <code>loadjava</code> program expects in in <code>/bin/ksh</code>.  As root, please create 
+	    <code>loadjava</code> program expects it in <code>/bin/ksh</code>.  As root, please create 
 	    a symbolic link.
 	    <blockquote><pre>
 ln -s /usr/bin/ksh /bin/ksh
