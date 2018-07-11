@@ -1267,8 +1267,10 @@ ad_proc ad_parse_html_attributes_upvar {
                         
                         set prot ""
                         
-                        # attribute is a full URL
-                        if {[regexp {^(\w+:)?//(.*)} $url match prot loc]} {
+                        set parsed_url [ns_parseurl $url]
+                        # attribute is a URL including the protocol
+                        set proto [expr {[dict exists $parsed_url proto] ? [dict get $parsed_url proto] : ""}]
+                        if {$proto ne ""} {
                             if {$no_outer_urls_p} {
                                 # no external urls allowed: we still
                                 # want to allow fully specified urls
@@ -1287,21 +1289,22 @@ ad_proc ad_parse_html_attributes_upvar {
                                     continue
                                 }
                             }
-                            # this was likely a protocol-relative url
-                            if {$prot eq ""} {
-                                set prot $driver_prot
-                            }
                         }
 
-                        # regexp is for stuff like 'javascript:' pseudoprotocol, that is not really a URL
-                        if {$prot ne "" || [regexp {^(\w+):.*$} $url match prot]} {
-                            # check if protocol is allowed
-                            if {[info exists unallowed_protocol($prot)] ||
-                                ($allowed_protocols ne "*" && ![info exists allowed_protocol($prot)])} {
-                                # invalid attribute!
-                                if {$validate_p} {return 0} else {$node removeAttribute $att}
-                                continue
-                            }
+                        # to check for allowed protocols we need to
+                        # treat URLs without one (e.g. relative or
+                        # protocol-relative URLs) as using our same
+                        # protocol
+                        if {$proto eq ""} {
+                            set proto $driver_prot
+                        }
+
+                        # check if protocol is allowed
+                        if {[info exists unallowed_protocol($proto)] ||
+                            ($allowed_protocols ne "*" && ![info exists allowed_protocol($proto)])} {
+                            # invalid attribute!
+                            if {$validate_p} {return 0} else {$node removeAttribute $att}
+                            continue
                         }
                     }
                 }
