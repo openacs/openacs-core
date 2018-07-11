@@ -133,7 +133,7 @@ ad_proc -private lang::test::execute_upgrade {
 } {
     set package_key [lang::test::test_package_key]
 
-    # The key numbers correspond to the 14 cases described in the api-doc for lang::catalog::upgrade
+    # The key numbers correspond to the 14 cases described in the API-doc for lang::catalog::upgrade
     array set base_messages {
         key01 "Key 1"
         key04 "Key 4"

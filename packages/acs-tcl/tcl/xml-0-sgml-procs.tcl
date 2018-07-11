@@ -788,10 +788,10 @@ proc sgml::Entity {opts entityrefcmd pcdatacmd entities ref} {
 		# Must parse the replacement text for start & end tags, etc
 		# This text must be self-contained: balanced closing tags, and so on
 
-		set tokenised [tokenise $map($ref) $::xml::tokExpr $::xml::substExpr]
+		set tokenized [tokenise $map($ref) $::xml::tokExpr $::xml::substExpr]
 		set final $options(-final)
 		unset options(-final)
-		eval parseEvent [list $tokenised] [array get options] -final 0
+		eval parseEvent [list $tokenized] [array get options] -final 0
 		set options(-final) $final
 
 		return {}
@@ -885,7 +885,7 @@ proc sgml::parseDTD {dtd args} {
 #			Content model is mixed (PCDATA and elements).
 #			The second element of the list contains the 
 #			elements that may occur.  #PCDATA is assumed 
-#			(ie. the list is normalised).
+#			(ie. the list is normalized).
 #
 # Arguments:
 #	id	identifier for the element.

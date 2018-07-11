@@ -142,8 +142,7 @@ ad_proc -public acs_sc::impl::get_id {
     @param owner Owner of the service contract.
     @param name Implementation name.
     @param contract Implementation contract name.
-    @return Returns the ID for a specified service contract, or all IDs for
-    for service contracts that match the owner and implementation name of
+    @return Returns the ID for a specified service contract, or all IDs for service contracts that match the owner and implementation name of
     a service contract,
     if the contract is not specified.
 } {

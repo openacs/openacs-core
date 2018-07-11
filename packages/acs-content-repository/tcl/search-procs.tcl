@@ -27,7 +27,7 @@ ad_proc content_search__datasource {
 ad_proc content_search__url {
     object_id
 } {
-    Provides a url for linking to content items which show up in a search
+    Provides a URL for linking to content items which show up in a search
     result set.
 } {
     set package_id [apm_package_id_from_key acs-content-repository]
@@ -69,7 +69,7 @@ ad_proc image_search__datasource {
 ad_proc image_search__url {
     object_id
 } {
-    Provides a url for linking to content items which show up in a search
+    Provides a URL for linking to content items which show up in a search
     result set.
 } {
     return [content_search__url $object_id]
@@ -106,7 +106,7 @@ ad_proc template_search__datasource {
 ad_proc template_search__url {
     object_id
 } {
-    Provides a url for linking to content items which show up in a search
+    Provides a URL for linking to content items which show up in a search
     result set.
 } {
     return [content_search__url $object_id]

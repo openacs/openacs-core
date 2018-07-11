@@ -380,7 +380,7 @@ ad_proc -private auth::local::password::ResetPassword {
 
     ad_change_password $user_id $password
 
-    # We return the new passowrd here and let the OpenACS framework send the email with the new password
+    # We return the new password here and let the OpenACS framework send the email with the new password
     set result(password) $password
     return [array get result]
 }

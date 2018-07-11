@@ -16,7 +16,7 @@ namespace eval twt::user {}
 #########################
 
 ad_proc twt::do_request { page_url } {
-    Takes a url and invokes tclwebtest::do_request. Will retry
+    Takes a URL and invokes tclwebtest::do_request. Will retry
     the request a number of times if it fails because of a socket
     connect problem.
 } {
