@@ -591,7 +591,7 @@ ad_proc -public ad_progress_bar_begin {
     {-message_2 ""}
     {-template "/packages/acs-tcl/lib/progress-bar"}
 } {
-    Return a proress bar.
+    Return a progress bar.
 
     <p>Example:
 

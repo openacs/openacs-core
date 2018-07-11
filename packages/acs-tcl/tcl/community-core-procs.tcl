@@ -427,7 +427,7 @@ ad_proc -public acs_user::get {
     @param authority_id if user_id was not specified, but a username
                         was given, this proc will try to retrieve a
                         user_id from username and authority. If
-                        authority_id is lect blank, will default to
+                        authority_id is left blank, will default to
                         the local authority.
     @param username if specified and no user_id was give, will be used
                     to retrieve user_id from the authority. If no

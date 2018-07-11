@@ -17,7 +17,7 @@ set context [list \
 		 [list "version-view?version_id=$version_id" "$pretty_name $version_name"] \
 		 $title]
 
-# Disable all previous versions of this packae.
+# Disable all previous versions of this package.
 apm_version_upgrade $version_id
 
 # Instruct user to run SQL upgrade scripts.

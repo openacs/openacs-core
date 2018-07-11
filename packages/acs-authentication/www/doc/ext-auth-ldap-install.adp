@@ -21,7 +21,7 @@ help you set your system up so your users can seamlessly log in to
 your OpenACS instance using the password they are accustomed to
 using for other things at your institution.</p><p>
 <strong>Background. </strong>The original OpenACS LDAP
-implementation (which has been depreciated by this package) treated
+implementation (which has been deprecated by this package) treated
 the LDAP server as another data store similar to Oracle or
 Postgresql. It opened a connection using a privileged account and
 read or stored an encrypted password for the user in question. This
