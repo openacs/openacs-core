@@ -1012,8 +1012,7 @@ ad_proc -public ad_call_method {
 } {
     Calls method_name for the type of object_id with object_id as the
     first arg, and the remaining args are the remainder of the args to
-    method_name. Example ad_call_method method1 foo bar baz calls the
-    the method1 associated with the type of foo, with foo bar and baz
+    method_name. Example ad_call_method method1 foo bar baz calls the method1 associated with the type of foo, with foo bar and baz
     as the 3 arguments.
 
     @param method_name method name
@@ -1030,8 +1029,7 @@ ad_proc -public ad_dispatch {
 } {
     Calls method_name for the type of object_id with object_id as the
     first arg, and the remaining args are the remainder of the args to
-    method_name. Example ad_call_method method1 foo bar baz calls the
-    the method1 associated with the type of foo, with foo bar and baz
+    method_name. Example ad_call_method method1 foo bar baz calls the method1 associated with the type of foo, with foo bar and baz
     as the 3 arguments.
 
     @param method_name method name

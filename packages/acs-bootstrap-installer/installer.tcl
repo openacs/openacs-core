@@ -465,7 +465,7 @@ ad_proc -private install_do_packages_install {} {
     set pkg_list [lindex $dependency_results 1]
 
     if { !$dependencies_satisfied_p } {
-        ns_write "<p><b><i>At least one core package has an unsatisifed dependency.\
+        ns_write "<p><b><i>At least one core package has an unsatisfied dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:</i></b>"
         

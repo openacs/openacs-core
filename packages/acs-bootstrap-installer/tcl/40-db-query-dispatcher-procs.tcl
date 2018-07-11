@@ -272,10 +272,10 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
     set list_of_source_procs {ns_sourceproc apm_source template::adp_parse template::frm_page_handler rp_handle_tcl_request}
 
     # We check if we're running the special ns_ proc that tells us
-    # whether this is an URL or a Tcl proc.
+    # whether this is a URL or a Tcl proc.
     if { [lindex $proc_name 0] in $list_of_source_procs } {
 
-	# Means we are running inside an URL
+	# Means we are running inside a URL
 
 	# TEST
 	# for {set i 0} {$i < 6} {incr i} {
