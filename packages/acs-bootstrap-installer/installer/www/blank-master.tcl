@@ -1,5 +1,5 @@
 ad_page_contract {
-  This is the top level master template.  It allows the basic parts of an HTML 
+  This is the top-level master template.  It allows the basic parts of an HTML 
   document to be set through convenient data structures without introducing 
   anything site specific.
 
@@ -16,7 +16,7 @@ ad_page_contract {
   @property doc(title_lang)   The language of the document title, if different
                               from the document language.
 
-  The document output can be customised by supplying the following variables:
+  The document output can be customized by supplying the following variables:
 
   @property doc(type)         The declared xml DOCTYPE.
   @property doc(charset)      The document character set.
@@ -238,7 +238,9 @@ if {[info exists focus] && $focus ne ""} {
                 document.forms[form_name].elements[element_name].focus();
             };
         }
-        append focus_script "acs_Focus('${form_name}', '${element_name}');\n"
+        append focus_script "window.addEventListener('load', function() {
+                 acs_Focus('${form_name}', '${element_name}');
+            }, false);"
         template::add_body_script -script $focus_script
     } else {
         ns_log warning "blank-master: variable focus has invalid value '$focus'"
