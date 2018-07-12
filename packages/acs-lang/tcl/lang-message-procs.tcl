@@ -431,11 +431,9 @@ ad_proc -private lang::message::edit {
     the message text itself. To update or add message catalog text, use
     the lang::message::register proc.
 
-    <p>
-      Implementation note: some of the dynamic sql edit
-      code of this proc was copied from the auth::authority::edit proc
-      and should probably be broken out into a general API.
-    </p>
+    Implementation note: some of the dynamic sql edit
+    code of this proc was copied from the auth::authority::edit proc
+    and should probably be broken out into a general API.
 
     @param package_key      The package_key of the message to update
 
@@ -444,7 +442,7 @@ ad_proc -private lang::message::edit {
     @param locale           The locale of the message to update
 
     @param edit_array_list  An array list holding names of columns and
-                            and the values to set them to. Valid keys
+                            the values to set them to. Valid keys
                             in this array list are any column names in the
                             lang_messages table. 
 
