@@ -20,18 +20,34 @@ db_1row select_notification_request {
     where request_id = :request_id
 }
 
-set object_name [acs_object_name $object_id]
+acs_object::get -object_id $object_id -array obj
+set object_name   $obj(object_name)
+set creation_date $obj(creation_date_ansi)
 
-set doc(title) [_ notifications.Change_frequency]
-set context [list $doc(title)]
+set doc(title) [_ notifications.Change_frequency_of_object_name]
+set context [list [_ notifications.Change_frequency]]
 
 set intervals [notification::get_intervals -localized -type_id $type_id]
 
+set object_name [lang::util::localize $object_name]
+set creation_date [lc_time_fmt $creation_date "%d.%m.%Y %T"]
+
 ad_form -name change_frequency -export {request_id return_url} -form {
+    {object_name:text(text)
+        {label "#notifications.Item#"}
+        {mode "display"}
+        {value $object_name}
+    }
+    {creation_date:text(text)
+        {label "#acs-admin.Creation_date#"}
+        {mode "display"}
+        {value $creation_date}
+    }
     {interval_id:integer(select)
-        {label "[_ notifications.Frequency]"}
+        {label "#notifications.Frequency#"}
         {options $intervals}
-        {value $interval_id}}
+        {value $interval_id}
+    }
 } -on_submit {
 
     db_dml update_notification_frequency {
@@ -44,8 +60,6 @@ ad_form -name change_frequency -export {request_id return_url} -form {
     ad_script_abort
 
 }
-
-ad_return_template
 
 # Local variables:
 #    mode: tcl
