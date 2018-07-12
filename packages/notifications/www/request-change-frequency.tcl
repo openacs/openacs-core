@@ -17,7 +17,7 @@ set user_id [ad_conn user_id]
 db_1row select_notification_request {
     select type_id, interval_id, object_id
     from notification_requests
-    where request_id = :request_id    
+    where request_id = :request_id
 }
 
 set object_name [acs_object_name $object_id]
@@ -28,7 +28,7 @@ set context [list $doc(title)]
 set intervals [notification::get_intervals -localized -type_id $type_id]
 
 ad_form -name change_frequency -export {request_id return_url} -form {
-    {interval_id:integer(select)   
+    {interval_id:integer(select)
         {label "[_ notifications.Frequency]"}
         {options $intervals}
         {value $interval_id}}
@@ -37,7 +37,7 @@ ad_form -name change_frequency -export {request_id return_url} -form {
     db_dml update_notification_frequency {
         update notification_requests
         set interval_id = :interval_id
-        where request_id = :request_id        
+        where request_id = :request_id
     }
 
     ad_returnredirect $return_url
