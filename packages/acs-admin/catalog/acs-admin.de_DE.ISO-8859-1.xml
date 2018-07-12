@@ -16,6 +16,7 @@
   <msg key="Batch_Synchronization">Batch Synchronisation</msg>
   <msg key="Change_password_URL">URL zum Ändern des Passwortes</msg>
   <msg key="Change_password_URL_help_text">Anstatt des Password Management Treibers können Sie eine URL angeben zu welcher Benutzer weitergeleitet werden wenn sie ihr Passwort ändern möchten. Benutzernamen in dieser URL müssen dem Syntax foo={username} entsprechen, {username} wird durch den Benutzernamen ersetzt.</msg>
+  <msg key="Creation_date">Erstellungsdatum</msg>
   <msg key="Creation_user">Anlegender Benutzer</msg>
   <msg key="Delete">Löschen</msg>
   <msg key="Delete_callback">Callback löschen</msg>

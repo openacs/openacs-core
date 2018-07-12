@@ -16,6 +16,7 @@
   <msg key="Batch_Synchronization">Batch Synchronization</msg>
   <msg key="Change_password_URL">Change password URL</msg>
   <msg key="Change_password_URL_help_text">Instead of a password management driver, you may provide a URL to which users are sent when they want to change their password. Any username in this url must be on the syntax foo={username} and {username} will be replaced with the real username.</msg>
+  <msg key="Creation_date">Creation date</msg>
   <msg key="Creation_user">Creation user</msg>
   <msg key="Delete">Delete</msg>
   <msg key="Delete_callback">Delete callback</msg>

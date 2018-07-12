@@ -16,6 +16,7 @@
   <msg key="Batch_Synchronization">Sincronizzazione batch</msg>
   <msg key="Change_password_URL">URL di modifica password</msg>
   <msg key="Change_password_URL_help_text">Al posto di un driver per la gestione delle password, puoi fornire un URL verso il quale gli utenti saranno reindirizzati quando volessero cambiare la loro password. Qualsiasi username in questo URL deve essere nella forma foo={username} and {username} sarà sostituito con il vero username.</msg>
+  <msg key="Creation_date">Data creazione</msg>
   <msg key="Creation_user">Utente creazione</msg>
   <msg key="Delete">Elimina</msg>
   <msg key="Delete_callback">Callback di eliminazione</msg>
