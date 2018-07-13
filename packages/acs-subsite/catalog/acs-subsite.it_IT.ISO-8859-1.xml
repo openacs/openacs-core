@@ -4,6 +4,7 @@
   <msg key="400_title">Errore Server</msg>
   <msg key="403_message">Non hai il permesso di accedere a questa pagina</msg>
   <msg key="404_message">Il file richiesto non è stato trovato</msg>
+  <msg key="404_title">Richiesta errata</msg>
   <msg key="500_message">Si è verificato un errore nel processare la tua richiesta</msg>
   <msg key="503_message">Il servizio richiesto è attualmente non disponibile</msg>
   <msg key="_or">, oppure</msg>
@@ -186,6 +187,7 @@
   <msg key="First_names_not_provided_by_authority">Il tuo nome non viene fornito dalla autority di autenticazione. Fornisci per favore il tuo nome.</msg>
   <msg key="First_select_the_supertype">Come prima cosa seleziona il supertipo per la nuova tipologia di relazione</msg>
   <msg key="Forgot_your_password">Hai dimenticato la tua password?</msg>
+  <msg key="forum_moderate">Moderazione forum</msg>
   <msg key="Frequency">Frequenza</msg>
   <msg key="Gender">Genere</msg>
   <msg key="Go_back">Indietro</msg>
