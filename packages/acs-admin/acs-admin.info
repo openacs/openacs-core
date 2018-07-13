@@ -8,7 +8,7 @@
     <singleton-p>t</singleton-p>
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
-    
+
     <version name="5.10.0d5" url="http://openacs.org/repository/download/apm/acs-admin-5.10.0d5.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
@@ -26,7 +26,7 @@
 	<requires url="acs-templating" version="5.9.1"/>
         <requires url="acs-mail-lite" version="5.9.1"/>
 	<requires url="acs-authentication" version="5.10.0d2"/>
-	
+
         <callbacks>
         </callbacks>
         <parameters>
