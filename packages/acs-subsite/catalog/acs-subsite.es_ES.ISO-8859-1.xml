@@ -195,6 +195,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="First_names_not_provided_by_authority">La autoridad de autenticación no nos ha proporcionado su nombre. Por favor, introduzca su nombre.</msg>
   <msg key="First_select_the_supertype">Primero, seleccione el supertipo para el nuevo tipo de relación</msg>
   <msg key="Forgot_your_password">¿Ha olvidado su contraseña?</msg>
+  <msg key="forum_moderate">Moderación del foro</msg>
   <msg key="Frequency">Frecuencia</msg>
   <msg key="Gender">Género</msg>
   <msg key="Go_back">Regresar</msg>
