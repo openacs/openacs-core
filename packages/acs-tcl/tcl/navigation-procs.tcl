@@ -333,7 +333,7 @@ proc netscape3_browser {} {
 
     set netscape3_p 0
 
-    if { ($netscape_p && ($version == 3))} {
+    if { $netscape_p && $version == 3 } {
 	set netscape3_p 1
     }
 

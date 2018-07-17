@@ -43,7 +43,7 @@ if {![info exists header_color]} {
     set header_color "black"
 }
 
-if { ($total == 0) || [string is true $finish] } {
+if { $total == 0 || [string is true $finish] } {
     set percentage_done 100
 } elseif {[info exists finished_page] && $finished_page == $current} {
     # subtract 1 from current, since we haven't completed this page yet

@@ -319,7 +319,7 @@ ad_proc -public template::wizard::get_visited_step {} {
     # otherwise we keep the current value
     set last_visitedstep [get_param wizard_visitedstep${wizard_name}]
     set current_step [current_step]
-    if { ($last_visitedstep < $current_step) || $last_visitedstep eq "" } {
+    if { $last_visitedstep < $current_step || $last_visitedstep eq "" } {
         return $current_step
     } else {
         return $last_visitedstep

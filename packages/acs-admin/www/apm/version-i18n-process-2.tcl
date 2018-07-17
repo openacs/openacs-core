@@ -54,7 +54,7 @@ set replace_text_p [ad_decode [lsearch -exact $file_action replace_text] "-1" "0
 set replace_tags_p [ad_decode [lsearch -exact $file_action replace_tags] "-1" "0" "1"]
 
 # We need either or both of the actions to be selected
-if { (! $replace_text_p) && (! $replace_tags_p) } {
+if { ! $replace_text_p && ! $replace_tags_p } {
     ad_return_complaint 1 "Invalid HTML Parameters: you must choose an action to take on selected adp files, either replace_text or replace_tags or both."
     ad_script_abort
 }

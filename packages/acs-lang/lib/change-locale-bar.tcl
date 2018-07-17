@@ -6,16 +6,16 @@
 set current_locale [lang::conn::locale]
 set base_lang_url [site_node::get_package_url -package_key acs-lang]
 
-if { (![info exists return_url] || $return_url eq "")} {
+if { ![info exists return_url] || $return_url eq "" } {
     # Use referer header
     set return_url [ad_return_url]
 }
 
-if { (![info exists max_locales] || $max_locales eq "")} {
+if { ![info exists max_locales] || $max_locales eq "" } {
     set max_locales 8
 }
 
-if { (![info exists avail_key] || $avail_key eq "") } {
+if { ![info exists avail_key] || $avail_key eq "" } {
     set avail_key "this-language"
 }
 

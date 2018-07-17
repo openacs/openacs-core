@@ -1693,7 +1693,7 @@ ad_proc -private template::list::prepare_filters {
                     set selected_p [exists_and_equal current_filter_value $value]
                 }
                 multival {
-                    if { (![info exists current_filter_value] || $current_filter_value eq "") } {
+                    if { ![info exists current_filter_value] || $current_filter_value eq "" } {
                         set selected_p 0
                     } else {
                         # Since here we have multiple values

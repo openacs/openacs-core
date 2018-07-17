@@ -668,7 +668,7 @@ ad_proc -private lang::message::format {
                 upvar $upvar_level $variable_name local_variable
 
                 if { [info exists local_variable] } {
-                    if { (![info exists array_key] || $array_key eq "") } {
+                    if { ![info exists array_key] || $array_key eq "" } {
                         # Normal Tcl variable
                         append formatted_message $local_variable
                     } else {

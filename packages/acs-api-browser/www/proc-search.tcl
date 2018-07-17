@@ -48,7 +48,10 @@ if {$quick_view && [nsv_exists api_proc_doc $query_string]} {
 
 ###########################
 # No weighting use default:
-if { ($name_weight == 0) && ($doc_weight == 0) && ($param_weight == 0) && ($source_weight == 0) } {
+if { $name_weight == 0
+  && $doc_weight == 0
+  && $param_weight == 0
+  && $source_weight == 0 } {
     set name_weight 1
 }
 
