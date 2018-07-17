@@ -47,7 +47,7 @@ ad_form -extend -name update -form {
         {html {size 20}}
     }
 } -on_request {
-    
+
 } -validate {
     {password_1
         { [string equal $password_1 $password_2] }
@@ -71,21 +71,21 @@ ad_form -extend -name update -form {
                 ad_returnredirect [export_vars -base [ad_conn url] -entire_form -exclude { old_password } -override { { password_old $old_password } }]
                 ad_script_abort
             }
-	    ad_return_error $result(password_message) ""
-	    ad_script_abort
+            ad_return_error $result(password_message) ""
+            ad_script_abort
         }
         default {
             form set_error update password_1 $result(password_message)
-	    break
+            break
         }
 
     }
-   
+
     # If the account was closed, it might be open now
     if {[ad_conn account_status] eq "closed"} {
         auth::verify_account_status
     }
-    
+
 } -after_submit {
     if { $return_url eq "" } {
         set return_url [ad_pvt_home]

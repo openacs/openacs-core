@@ -47,12 +47,11 @@ if { $total == 0 || [string is true $finish] } {
     set percentage_done 100
 } elseif {[info exists finished_page] && $finished_page == $current} {
     # subtract 1 from current, since we haven't completed this page yet
-    set percentage_done [expr {round($current * 100.0 / $total)}]    
+    set percentage_done [expr {round($current * 100.0 / $total)}]
 } else {
     # subtract 1 from current, since we haven't completed this page yet
     set percentage_done [expr {round(($current - 1) * 100.0 / $total)}]
 }
-
 
 # Local variables:
 #    mode: tcl

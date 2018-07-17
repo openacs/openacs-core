@@ -3067,18 +3067,11 @@ ad_proc -public template::list::orderby::set_properties {
     }
 }
 
-
-
-
-
-
 #####
 #
 # Templating system ADP tags
 #
 #####
-
-
 
 template_tag listtemplate { chunk params } {
     set level [template::adp_level]

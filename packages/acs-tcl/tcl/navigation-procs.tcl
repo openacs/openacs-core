@@ -108,7 +108,7 @@ ad_proc -public ad_context_bar_multirow {
     @see ad_context_bar_html
 } {
     if {![parameter::get -package_id [ad_conn subsite_id] -parameter ShowContextBarP -default 1]} {
-	return ""
+        return ""
     }
 
     if { $node_id eq "" } {
@@ -129,7 +129,7 @@ ad_proc -public ad_context_bar_multirow {
     template::multirow create $multirow url label
 
     foreach elm [ad_context_node_list -from_node $from_node $node_id] {
-	lassign $elm elm_0 elm_1
+        lassign $elm elm_0 elm_1
         if { $node_id_url_end > 0 && [string match -nocase $node_id_url [string range $elm_0 0 ${node_id_url_end}-1] ] } {
             set elm_0 [string range $elm_0 $node_id_url_end end]
         }
@@ -169,7 +169,7 @@ ad_proc -public ad_context_bar {
     @see ad_context_bar_html
 } {
     if {![parameter::get -package_id [ad_conn subsite_id] -parameter ShowContextBarP -default 1]} {
-	return ""
+        return ""
     }
 
     if { $node_id eq "" } {
@@ -187,10 +187,10 @@ ad_proc -public ad_context_bar {
         # fix last element to just be literal string
         lset context end [lindex $context end 1]
     } else {
-	if {![string match "\{*" $args]} {
-	    # args is not a list, transform it into one.
-	    set args [list $args]
-	}
+        if {![string match "\{*" $args]} {
+            # args is not a list, transform it into one.
+            set args [list $args]
+        }
     }
     lappend context {*}$args
     if { [info exists separator] } {
@@ -218,12 +218,12 @@ ad_proc -public ad_navbar args {
     set counter 0
     foreach arg $args {
         lappend link_list [subst {<a href="[ns_quotehtml [lindex $element 0]]">[ns_quotehtml [lindex $element 1]]</a>}]
-	incr counter
+        incr counter
     }
     if { $counter } {
-	return "\[[join $link_list " | "]\]"
+        return "\[[join $link_list " | "]\]"
     } else {
-	return ""
+        return ""
     }
 }
 
@@ -237,19 +237,19 @@ ad_proc -public ad_choice_bar { items links values {default ""} } {
     set return_list [list]
 
     foreach value $values {
-	if { $default eq $value  } {
-	    lappend return_list "<strong>[lindex $items $count]</strong>"
-	} else {
-	    lappend return_list [subst {<a href="[ns_quotehtml [lindex $links $count]]">[ns_quotehtml [lindex $items $count]]</a>}]
-	}
+        if { $default eq $value  } {
+            lappend return_list "<strong>[lindex $items $count]</strong>"
+        } else {
+            lappend return_list [subst {<a href="[ns_quotehtml [lindex $links $count]]">[ns_quotehtml [lindex $items $count]]</a>}]
+        }
 
-	incr count
+        incr count
     }
 
     if { [llength $return_list] > 0 } {
         return "\[[join $return_list " | "]\]"
     } else {
-	return ""
+        return ""
     }
 
 }
@@ -299,13 +299,13 @@ proc java_script_capabilities {} {
 
     # Netscape browser just have Mozilla in their user-agent header
     if {$internet_explorer_p == 0} {
-	set netscape_p [regexp -nocase "mozilla" $user_agent match]
+        set netscape_p [regexp -nocase "mozilla" $user_agent match]
     }
 
     set java_script_p 0
 
     if { ($netscape_p && ($version >= 3)) || ($internet_explorer_p && ($version >= 4)) } {
-	set java_script_p 1
+        set java_script_p 1
     }
 
     return $java_script_p
@@ -328,13 +328,13 @@ proc netscape3_browser {} {
 
     # Netscape browser just have Mozilla in their user-agent header
     if {$internet_explorer_p == 0} {
-	set netscape_p [regexp -nocase "mozilla" $user_agent match]
+        set netscape_p [regexp -nocase "mozilla" $user_agent match]
     }
 
     set netscape3_p 0
 
     if { $netscape_p && $version == 3 } {
-	set netscape3_p 1
+        set netscape3_p 1
     }
 
     return $netscape3_p
@@ -358,25 +358,25 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
         -script {go_to_url(this.options[this.selectedIndex].value);}
 
     foreach item $items {
-	set url_stub [ad_conn url]
+        set url_stub [ad_conn url]
 
-	# if the url matches the url you would redirect to, as determined
-	# either by highlight_url, or if highlight_url is not set,
-	# the current url then select it
-	if {$highlight_url ne "" && $highlight_url == [lindex $urls $counter]} {
- 	    append return_string [subst {<option value="[lindex $urls $counter]" selected>$item}]
-	} elseif {$highlight_url eq "" && [string match "*$url_stub*" [lindex $urls $counter]]} {
-	    append return_string [subst {<option value="[lindex $urls $counter]" selected>$item}]
-	} else {
-	    append return_string [subst {<option value="[lindex $urls $counter]">$item}]
-	}
-	incr counter
+        # if the url matches the url you would redirect to, as determined
+        # either by highlight_url, or if highlight_url is not set,
+        # the current url then select it
+        if {$highlight_url ne "" && $highlight_url == [lindex $urls $counter]} {
+            append return_string [subst {<option value="[lindex $urls $counter]" selected>$item}]
+        } elseif {$highlight_url eq "" && [string match "*$url_stub*" [lindex $urls $counter]]} {
+            append return_string [subst {<option value="[lindex $urls $counter]" selected>$item}]
+        } else {
+            append return_string [subst {<option value="[lindex $urls $counter]">$item}]
+        }
+        incr counter
     }
 
     append return_string "</select><br>
-    <noscript><input type='submit' value='GO'>
-    </noscript>
-    </form>\n"
+        <noscript><input type='submit' value='GO'>
+        </noscript>
+        </form>\n"
 }
 
 

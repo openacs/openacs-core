@@ -53,14 +53,14 @@ ad_proc -public template::wizard { command args } {
 
 # create a wizard from a set of steps
 
-ad_proc -public template::wizard::create { args } { 
+ad_proc -public template::wizard::create { args } {
     <pre>example:
     template::wizard create -action "wizard" -name my_wizard -params {
-	my_param1 my_param2
+        my_param1 my_param2
     } -steps {
-	1 -label "Step 1" -url "step1"
-	2 -label "Step 2" -url "step2"	
-	3 -label "Step 3" -url "step3"
+        1 -label "Step 1" -url "step1"
+        2 -label "Step 2" -url "step2"
+        3 -label "Step 3" -url "step3"
     }
     </pre>
     <ul>
@@ -85,7 +85,7 @@ ad_proc -public template::wizard::create { args } {
     set parse_level $level
 
     # keep wizard properties and a list of the steps
-    upvar #$level wizard:steps steps wizard:properties opts 
+    upvar #$level wizard:steps steps wizard:properties opts
     upvar #$level wizard:rowcount rowcount
     upvar #$level wizard:columns columns
     upvar #$level wizard:name wizard_name
@@ -96,9 +96,9 @@ ad_proc -public template::wizard::create { args } {
     set steps [list]
     set rowcount 0
     if { [info exists opts(name)] } {
-	set wizard_name $opts(name)
+        set wizard_name $opts(name)
     } else {
-	set wizard_name "wizard${level}"
+        set wizard_name "wizard${level}"
     }
     set wizards [get_wizards]
 
@@ -110,16 +110,16 @@ ad_proc -public template::wizard::create { args } {
     # add steps specified at the time the wizard is created
     if { [info exists opts(steps)] } {
 
-	# strip carriage returns
-	regsub -all {\r} $opts(steps) {} step_data
+        # strip carriage returns
+        regsub -all {\r} $opts(steps) {} step_data
 
-	foreach step [split $step_data "\n"] {
+        foreach step [split $step_data "\n"] {
 
-	    set step [string trim $step]
-	    if {$step eq {}} { continue }
+            set step [string trim $step]
+            if {$step eq {}} { continue }
 
-	    add {*}$step
-	}
+            add {*}$step
+        }
     }
 }
 
@@ -152,14 +152,14 @@ ad_proc -public template::wizard::get_param { name } {
 }
 
 
-ad_proc -public template::wizard::set_param { name value } { 
+ad_proc -public template::wizard::set_param { name value } {
     <p>Set a wizard's param for passthrough</p>
 
-    <p>Normally you place this in the steps of the wizard where the 
+    <p>Normally you place this in the steps of the wizard where the
     form has been processed.  A param
     is normally used when you want to reuse a value across the steps.</p>
 
-    <p>Note: if you are to use "template::wizard set_param" on a wizard file ex. 
+    <p>Note: if you are to use "template::wizard set_param" on a wizard file ex.
     (wizard.tcl).  Make sure to do it before "template::wizard get_current_step".
     So when "template::wizard get_current_step" redirects it will properly set
     the correct values of the param to the new value.</p>
@@ -175,7 +175,7 @@ ad_proc -public template::wizard::set_param { name value } {
 }
 
 
-ad_proc -public template::wizard::set_finish_url { finish_url } { 
+ad_proc -public template::wizard::set_finish_url { finish_url } {
     <p>if the finish url is set, when a the finish button is pressed
     it will redirect to this url</p>
 
@@ -219,7 +219,7 @@ ad_proc -public template::wizard::get_current_step {
     determined by the wizard_step parameter.  If not set, the first step
     is used.</p>
 
-    <p>Make sure that you call any "template::wizard set_param" if needed before 
+    <p>Make sure that you call any "template::wizard set_param" if needed before
     calling get_current_step.  get_current_step will redirect to the wizard -action
     properly setting all -params value and its other needed http state vars</p>
 
@@ -227,8 +227,8 @@ ad_proc -public template::wizard::get_current_step {
     are preserved.  Once the form is finished processing the wizard will take
     over and rewrite the url.</p>
 
-    @param start Optionally specify 
-    
+    @param start Optionally specify
+
     @see template::wizard
 } {
     get_reference
@@ -249,47 +249,47 @@ ad_proc -public template::wizard::get_current_step {
     # if there is no step state, we are likely in the first step.
     # lets redirect with the proper state vars
     if {[ns_queryget wizard_step${wizard_name}] eq ""} {
-	template::forward [get_forward_url $current_id]
+        template::forward [get_forward_url $current_id]
     }
 
     # get a reference to the step
-    upvar #$level wizard:$current_id step 
+    upvar #$level wizard:$current_id step
 
     upvar #$level wizard:current_url current_url
 
     # lets see if this step exists, if not we are finished with wizard and pass the steps
     if {[info exists step(url)]} {
-	set current_url $step(url)
+        set current_url $step(url)
     } else {
-	# if we have set_finish_url then we redirect to that url when we are finished
-	# otherwise increment the parent wizard step
-	if {[info exists wizard_finish_url]} {
-	    template::forward $wizard_finish_url
-	} else {
+        # if we have set_finish_url then we redirect to that url when we are finished
+        # otherwise increment the parent wizard step
+        if {[info exists wizard_finish_url]} {
+            template::forward $wizard_finish_url
+        } else {
 
-	    # lets set the current wizard name to the parent wizard
-	    set parent_wizard [lindex $wizards 0]
-	    set wizard_name $parent_wizard
+            # lets set the current wizard name to the parent wizard
+            set parent_wizard [lindex $wizards 0]
+            set wizard_name $parent_wizard
 
-	    # lets now increment step of the parent wizard
-	    set parent_step [expr {[ns_queryget wizard_step${parent_wizard}] + 1}]
-	    template::forward [get_forward_url $parent_step]
-	}
-	
+            # lets now increment step of the parent wizard
+            set parent_step [expr {[ns_queryget wizard_step${parent_wizard}] + 1}]
+            template::forward [get_forward_url $parent_step]
+        }
+
     }
 
     # check for a "back" submission and forward immediately if so
     # also check if we are backing up the current wizard or another wizard
-    
+
     if { [ns_queryexists wizard_submit_back] && $wizard_name eq [ns_queryget wizard_name]} {
 
-	set last_index [expr {[lsearch -exact $steps $current_id] - 1}]
-	set last_id [lindex $steps $last_index]
+        set last_index [expr {[lsearch -exact $steps $current_id] - 1}]
+        set last_id [lindex $steps $last_index]
 
         # LARS: I removed this, because it causes forms to not save their changes when you hit the back button
-        # If you construct your form, so it calls 'wizard forward' in the -after_submit block, things will 
+        # If you construct your form, so it calls 'wizard forward' in the -after_submit block, things will
         # work the way you expect them to
-	#template::forward [get_forward_url $last_id]
+        #template::forward [get_forward_url $last_id]
     }
 }
 
@@ -324,15 +324,14 @@ ad_proc -public template::wizard::get_visited_step {} {
     } else {
         return $last_visitedstep
     }
-
 }
 
-ad_proc -public template::wizard::set_visited_step {step_id} { 
+ad_proc -public template::wizard::set_visited_step {step_id} {
     set the last visited step
 
     @see template::wizard
 } {
-    
+
     get_reference
     set_param wizard_visitedstep${wizard_name} $step_id
 }
@@ -422,22 +421,22 @@ ad_proc -public template::wizard::submit { form_id args } {
     upvar #$param_level wizard:params params
 
     template::util::get_opts $args
-    
+
     # Handle the -buttons parameter
     if { ![info exists opts(buttons)] } {
-	# jkyamog - is this really correct?  when no buttons is present we put all of the buttons?
-	upvar 0 default_button_labels button_labels 
+        # jkyamog - is this really correct?  when no buttons is present we put all of the buttons?
+        upvar 0 default_button_labels button_labels
     } else {
-	foreach pair $opts(buttons) { 
-	    # If provided with just a name, use default label
-	    if { [llength $pair] == 1 } {
-		set button_labels($pair) $default_button_labels($pair)
-	    } else {
-		set button_labels([lindex $pair 0]) [lindex $pair 1]
-	    }
-	}
+        foreach pair $opts(buttons) {
+            # If provided with just a name, use default label
+            if { [llength $pair] == 1 } {
+                set button_labels($pair) $default_button_labels($pair)
+            } else {
+                set button_labels([lindex $pair 0]) [lindex $pair 1]
+            }
+        }
     }
-    
+
     # Add a hidden element for the current wizard name
     template::element create $form_id wizard_name -widget hidden -value $wizard_name -datatype keyword
 
@@ -451,32 +450,32 @@ ad_proc -public template::wizard::submit { form_id args } {
 
     # If not the first one and it is allowed than add a "Back" button
     if { $step_index > 1 && [info exists button_labels(back)] } {
-	template::element create $form_id wizard_submit_back -widget submit \
-	    -label $button_labels(back) -optional -datatype text
+        template::element create $form_id wizard_submit_back -widget submit \
+            -label $button_labels(back) -optional -datatype text
 
-	lappend buttons wizard_submit_back
+        lappend buttons wizard_submit_back
     }
 
     # If iteration is allowed than add a "Repeat" button
     upvar #$level wizard:$current_id step
     if { [info exists step(repeat)] && [info exists button_labels(repeat)]} {
-	template::element create $form_id wizard_submit_repeat -widget submit \
-	    -label $button_labels(repeat) -optional -datatype text
-	lappend buttons wizard_submit_repeat
-    } 
+        template::element create $form_id wizard_submit_repeat -widget submit \
+            -label $button_labels(repeat) -optional -datatype text
+        lappend buttons wizard_submit_repeat
+    }
 
     # If not the last one than add a "Next" button
     if { $step_index < [llength $steps] && [info exists button_labels(next)] } {
-	template::element create $form_id wizard_submit_next -widget submit \
-	    -label $button_labels(next) -optional -datatype text
-	lappend buttons wizard_submit_next
-    } 
+        template::element create $form_id wizard_submit_next -widget submit \
+            -label $button_labels(next) -optional -datatype text
+        lappend buttons wizard_submit_next
+    }
 
     # Always finish
     if { [info exists button_labels(finish) ] } {
-	template::element create $form_id wizard_submit_finish -widget submit \
-	    -label $button_labels(finish) -optional -datatype text
-	lappend buttons wizard_submit_finish
+        template::element create $form_id wizard_submit_finish -widget submit \
+            -label $button_labels(finish) -optional -datatype text
+        lappend buttons wizard_submit_finish
     }
 
 
@@ -485,31 +484,30 @@ ad_proc -public template::wizard::submit { form_id args } {
     lappend levels $level
 
     foreach onelevel $levels {
-	upvar #$onelevel wizard:properties properties
-	foreach param $properties(params) {
-	    if { ![template::element::exists $form_id $param] } {
-		if { [info exists params($param)] } {
-		    template::element create $form_id $param -widget hidden -datatype text -optional -param -value $params($param)
-		} else {
-		    template::element create $form_id $param -widget hidden -datatype text -optional -param
-		}
-	    }
-	}
+        upvar #$onelevel wizard:properties properties
+        foreach param $properties(params) {
+            if { ![template::element::exists $form_id $param] } {
+                if { [info exists params($param)] } {
+                    template::element create $form_id $param -widget hidden -datatype text -optional -param -value $params($param)
+                } else {
+                    template::element create $form_id $param -widget hidden -datatype text -optional -param
+                }
+            }
+        }
 
     }
 
     # Create hidden variables for the other wizard steps and visited steps
     foreach one_wizard $wizards {
-	if { ![template::element::exists $form_id wizard_step${one_wizard}] } {
-	    template::element create $form_id wizard_step${one_wizard} -widget hidden \
-		-datatype keyword -value [ns_queryget wizard_step${one_wizard}]
-	}
-	if { ![template::element::exists $form_id wizard_visitedstep${one_wizard}] } {
-	    template::element create $form_id wizard_visitedstep${one_wizard} -widget hidden \
-		-datatype keyword -value [ns_queryget wizard_visitedstep${one_wizard}]
-	}
+        if { ![template::element::exists $form_id wizard_step${one_wizard}] } {
+            template::element create $form_id wizard_step${one_wizard} -widget hidden \
+                -datatype keyword -value [ns_queryget wizard_step${one_wizard}]
+        }
+        if { ![template::element::exists $form_id wizard_visitedstep${one_wizard}] } {
+            template::element create $form_id wizard_visitedstep${one_wizard} -widget hidden \
+                -datatype keyword -value [ns_queryget wizard_visitedstep${one_wizard}]
+        }
     }
-
 }
 
 
@@ -518,16 +516,16 @@ ad_proc -private template::wizard::get_reference {} {
 
     @see template::wizard
 } {
-    
+
     uplevel {
 
-	variable parse_level
-	set level $parse_level
+        variable parse_level
+        set level $parse_level
 
-	upvar #$level wizard:steps steps wizard:properties properties wizard:name wizard_name wizard:wizards wizards wizard:finish_url wizard_finish_url
-	if { ! [info exists steps] } {
-	    error "Wizard does not exist"
-	}
+        upvar #$level wizard:steps steps wizard:properties properties wizard:name wizard_name wizard:wizards wizards wizard:finish_url wizard_finish_url
+        if { ! [info exists steps] } {
+            error "Wizard does not exist"
+        }
     }
 }
 
@@ -537,13 +535,13 @@ ad_proc -public template::wizard::exists {} {
 
     @see template::wizard
 } {
-    variable parse_level 
+    variable parse_level
 
     if { ![info exists parse_level] } {
-	return 0
+        return 0
     }
 
-    upvar #$parse_level wizard:steps steps 
+    upvar #$parse_level wizard:steps steps
 
     return [info exists steps]
 }
@@ -566,27 +564,27 @@ ad_proc -public template::wizard::forward { } {
 
     if { [ns_queryexists wizard_submit_next] } {
 
-	# figure out the next step and go there
+        # figure out the next step and go there
 
-	set next_id [lindex $steps $current_index]
-	template::forward [get_forward_url $next_id] $cache_p $persistent_p $excluded_vars
+        set next_id [lindex $steps $current_index]
+        template::forward [get_forward_url $next_id] $cache_p $persistent_p $excluded_vars
 
     } elseif { [ns_queryexists wizard_submit_back] } {
 
-	set last_id [lindex $steps $current_index-2]
-	template::forward [get_forward_url $last_id] $cache_p $persistent_p $excluded_vars
+        set last_id [lindex $steps $current_index-2]
+        template::forward [get_forward_url $last_id] $cache_p $persistent_p $excluded_vars
 
     } elseif { [ns_queryexists wizard_submit_repeat] } {
-	
-	template::forward "[get_forward_url $current_id]&wizard_submit_repeat=t" $cache_p $persistent_p $excluded_vars
+
+        template::forward "[get_forward_url $current_id]&wizard_submit_repeat=t" $cache_p $persistent_p $excluded_vars
 
     } elseif { [ns_queryexists wizard_submit_finish] } {
 
-	#    template::forward $properties(action)
-	# NOTE : we are changing the behaviour of wizard, when its finish it will not reset and go back
-	# to step 1, it will blindly go forward and we will catch this on get_current_step
-	set next_id [expr {$current_index + 1}]
-	template::forward [get_forward_url $next_id] $cache_p $persistent_p $excluded_vars
+        #    template::forward $properties(action)
+        # NOTE : we are changing the behaviour of wizard, when its finish it will not reset and go back
+        # to step 1, it will blindly go forward and we will catch this on get_current_step
+        set next_id [expr {$current_index + 1}]
+        template::forward [get_forward_url $next_id] $cache_p $persistent_p $excluded_vars
     }
 }
 
@@ -604,7 +602,7 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
     upvar #$level wizard:params params
 
     set url [ns_conn url]?wizard_step${wizard_name}=$step_id&wizard_name=$wizard_name
-  
+
     # create the wizards and keep track of their steps too
     foreach one_wizard $wizards {
         append url "&wizard_step${one_wizard}=[ns_queryget wizard_step${one_wizard}]"
@@ -616,44 +614,44 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
     # check for passthrough parameters
 
     if { [info exists properties(params)] } {
-	foreach param $properties(params) {
-	    upvar #$level $param value
-	    set flags [split [lindex [split $param ":"] 1] ","]
-	    if { [lsearch -exact [split [lindex [split $param ":"] 1] ","] "array"] != -1 || [array exists value] } {
-		# Array
-		foreach {index array_value} [array get value] {
-		    if { [info exists array_value] && $array_value ne "" } {
-			append url "&$param.$index=[ns_urlencode $array_value]"
-		    } else {
-			append url "&$param.$index="
-		    }
-		}
-	    } else {
-		# Normal Variable
-		if { [lsearch -exact [split [lindex [split $param ":"] 1] ","] "multiple"] != -1 } {
-		    # Multiple
-		    set param [lindex [split $param ":"] 0]
-		    if {$param ni $multiple_listed} {
-			foreach check_param $properties(params) {
-			    if { [lindex [split $check_param ":"] 0] eq $param } {
-				set value_list [ns_querygetall $param]
-				for { set i 0 } { $i < [llength $value_list] } { incr i } {
-				    append url "&$param=[ns_urlencode [lindex $value_list $i]]"
-				}
-			    }
-			}
-			lappend multiple_listed $param
-		    }
-		} else {
-		    # Normal Var
-		    if { [info exists params($param)] } {
-			append url "&$param=[ns_urlencode $params($param)]"
-		    } else {
-			append url "&$param=[ns_urlencode [ns_queryget $param]]"
-		    }
-		}
-	    }
-	}
+        foreach param $properties(params) {
+            upvar #$level $param value
+            set flags [split [lindex [split $param ":"] 1] ","]
+            if { [lsearch -exact [split [lindex [split $param ":"] 1] ","] "array"] != -1 || [array exists value] } {
+                # Array
+                foreach {index array_value} [array get value] {
+                    if { [info exists array_value] && $array_value ne "" } {
+                        append url "&$param.$index=[ns_urlencode $array_value]"
+                    } else {
+                        append url "&$param.$index="
+                    }
+                }
+            } else {
+                # Normal Variable
+                if { [lsearch -exact [split [lindex [split $param ":"] 1] ","] "multiple"] != -1 } {
+                    # Multiple
+                    set param [lindex [split $param ":"] 0]
+                    if {$param ni $multiple_listed} {
+                        foreach check_param $properties(params) {
+                            if { [lindex [split $check_param ":"] 0] eq $param } {
+                                set value_list [ns_querygetall $param]
+                                for { set i 0 } { $i < [llength $value_list] } { incr i } {
+                                    append url "&$param=[ns_urlencode [lindex $value_list $i]]"
+                                }
+                            }
+                        }
+                        lappend multiple_listed $param
+                    }
+                } else {
+                    # Normal Var
+                    if { [info exists params($param)] } {
+                        append url "&$param=[ns_urlencode $params($param)]"
+                    } else {
+                        append url "&$param=[ns_urlencode [ns_queryget $param]]"
+                    }
+                }
+            }
+        }
     }
 
     return $url
@@ -688,13 +686,12 @@ ad_proc -public template::wizard::load_last_visited_step {
 } {
 
     get_reference
-    
+
     # check the old visited step on the state manager
     set visited_step [ad_get_client_property -default "" $key ${wizard_name}visited]
     if {$visited_step ne "" } {
         template::wizard::set_visited_step $visited_step
     }
-
 }
 
 
@@ -720,7 +717,6 @@ ad_proc -public template::wizard::save_last_visited_step {
     if { $key ne "" } {
         ad_set_client_property $key ${wizard_name}visited [template::wizard::get_visited_step]
     }
-
 }
 
 

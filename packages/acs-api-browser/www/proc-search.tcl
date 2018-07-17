@@ -69,7 +69,7 @@ set deprecated_matches [list]
 set private_matches [list]
 
 # place a [list proc_name score positionals] into matches for every proc
-foreach proc [nsv_array names api_proc_doc] { 
+foreach proc [nsv_array names api_proc_doc] {
 
     set score 0
     array set doc_elements [nsv_get api_proc_doc $proc]
@@ -87,23 +87,23 @@ foreach proc [nsv_array names api_proc_doc] {
         if {[string tolower $query_string] eq [string tolower $proc]} {
             incr score [expr {$name_weight * 2}]
         } elseif { ! $exact_match_p } {
-            incr score [expr {$name_weight * [::apidoc::ad_keywords_score $query_string $proc]}] 
+            incr score [expr {$name_weight * [::apidoc::ad_keywords_score $query_string $proc]}]
         }
     }
-   
+
     ################
     ## Param Search:
     ################
     if {$param_weight} {
         incr score [expr {$param_weight * [::apidoc::ad_keywords_score $query_string "$doc_elements(positionals) $doc_elements(switches)"]}]
     }
-    
+
 
     ##############
     ## Doc Search:
     ##############
     if {$doc_weight > 0} {
-        
+
         set doc_string [lindex $doc_elements(main) 0]
         if {[info exists doc_elements(param)]} {
             foreach parameter $doc_elements(param) {
@@ -114,9 +114,9 @@ foreach proc [nsv_array names api_proc_doc] {
             append doc_string " $doc_elements(return)"
         }
         incr score [expr {$doc_weight * [::apidoc::ad_keywords_score $query_string $doc_string]}]
-        
+
     }
-    
+
     #################
     ## Source Search:
     #################
@@ -128,15 +128,15 @@ foreach proc [nsv_array names api_proc_doc] {
     #####
     ## Place Needed info in matches
     if {$score} {
-        if {$doc_elements(varargs_p)} { 
+        if {$doc_elements(varargs_p)} {
             set args "$doc_elements(positionals) \[&nbsp;args...&nbsp;\]"
-        } else { 
+        } else {
             set args $doc_elements(positionals)
-        }   
+        }
         if { $doc_elements(deprecated_p) } {
             lappend deprecated_matches [list $proc $score $args]
         } else {
-            if { $doc_elements(protection) eq "public" } { 
+            if { $doc_elements(protection) eq "public" } {
                 lappend matches [list $proc $score $args]
             } else {
                 lappend private_matches [list $proc $score $args]

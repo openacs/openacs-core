@@ -29,11 +29,11 @@ set enabled_locale_count [db_string enabled_locale_count "
 db_multirow -extend {l10n_label switch_url} locale_list get_locale_list "
     select el.label,
            el.locale,
-           (select count(*) 
+           (select count(*)
               from user_preferences
              where locale = el.locale) as user_count
       from enabled_locales el
-     where (select count(*) 
+     where (select count(*)
               from lang_messages
              where message_key = :avail_key
                and locale = el.locale) > 0
@@ -49,9 +49,9 @@ set change_locale_url ""
 
 #######################################################################
 # The text to change locales, in decreasing order of desirability
-#   1) "Change Locale" in the browser's requested locale.  
+#   1) "Change Locale" in the browser's requested locale.
 #   2) If there is a list of locales, "..."
-#      (NOT to the system default for "Change Locale".  The reason is that, after a list of 
+#      (NOT to the system default for "Change Locale".  The reason is that, after a list of
 #       language names, "..." should be more recognizable than a foreign word)
 #   3) Fall back on the standard defaults for Change Locale
 
@@ -63,7 +63,7 @@ if { $localized_change_exists_p } {
     set change_locale_text "[_ acs-lang.change-locale]"
 }
 
-if {$enabled_locale_count > 1 && $enabled_locale_count > $switchable_count} { 
+if {$enabled_locale_count > 1 && $enabled_locale_count > $switchable_count} {
     set change_locale_url [export_vars -base ${base_lang_url} {return_url}]
 }
 
@@ -84,7 +84,7 @@ if { $enabled_locale_count > 1 } {
     set lang_admin_text "Administer Locales"
 } else {
     set lang_admin_text "Add Locales"
-}    
+}
 
 # Local variables:
 #    mode: tcl
