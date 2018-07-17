@@ -2293,16 +2293,15 @@ ad_proc -public string_truncate {
     {-more ""}
     string
 } {
-    Truncates a string to len characters (defaults to the
-                                          parameter TruncateDescriptionLength), adding the string provided in the ellipsis parameter if the
-    string was truncated. If format is html (default), any open
-    HTML tags are closed. Otherwise, it's converted to text using
-    ad_html_to_text.
+    Truncates a string to len characters adding the string provided in
+    the ellipsis parameter if the string was truncated.
 
-    The length of the resulting string, including the ellipsis, is guaranteed to be within the len specified.
+    The length of the resulting string, including the ellipsis, is
+    guaranteed to be within the len specified.
 
     Should always be called as string_truncate [-flags ...] -- string
-    since otherwise strings which start with a - will treated as switches, and will cause an error.
+    since otherwise strings which start with a - will treated as
+    switches, and will cause an error.
 
     @param len       The length to truncate to. If zero, no truncation will occur.
 
@@ -2314,8 +2313,7 @@ ad_proc -public string_truncate {
 
     @param string    The string to truncate.
 
-    @return The truncated string, with HTML tags cloosed or
-    converted to text, depending on format.
+    @return The truncated string
 
     @author Lars Pind (lars@pinds.com)
     @creation-date September 8, 2002
@@ -2324,22 +2322,13 @@ ad_proc -public string_truncate {
         set end_index [expr {$len-[string length $ellipsis]-1}]
 
         # Back up to the nearest whitespace
-        if { ![string is space [string index $string $end_index+1]] } {
-            while { $end_index >= 0 && ![string is space [string index $string $end_index]] } {
-                incr end_index -1
-            }
-        }
-
+        set last_space [string last " " $string $end_index]
         # If that leaves us with an empty string, then ignore
         # whitespace and just truncate mid-word
-        if { $end_index == -1 } {
-            set end_index [expr {$len - [string length $ellipsis] - 1}]
-        }
+        set end_index [expr {$last_space > 0 ? $last_space : $end_index}]
 
         # Chop off extra whitespace at the end
-        set string [string trimright [string range $string 0 $end_index]]
-
-        append string $ellipsis $more
+        set string [string trimright [string range $string 0 $end_index]]${ellipsis}${more}
     }
 
     return $string
