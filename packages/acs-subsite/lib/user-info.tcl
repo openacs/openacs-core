@@ -8,17 +8,17 @@
 
 auth::require_login -account_status closed
 
-if { (![info exists user_id] || $user_id eq "") } {
+if { ![info exists user_id] || $user_id eq "" } {
     set user_id [ad_conn untrusted_user_id]
 } elseif { $user_id != [auth::get_user_id -account_status closed] } {
     permission::require_permission -object_id $user_id -privilege admin
 }
 
-if { (![info exists return_url] || $return_url eq "") } {
+if { ![info exists return_url] || $return_url eq "" } {
     set return_url [ad_conn url]
 }
 
-if { (![info exists show_groups_p] || $show_groups_p eq "") } {
+if { ![info exists show_groups_p] || $show_groups_p eq "" } {
     set show_groups_p 0
 }
 
