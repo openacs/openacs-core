@@ -8,7 +8,7 @@ Group Type: @group_type_pretty_name@
 <h3>Attributes</h3>
 
 <ul>
- <if @attributes:rowcount@ eq "0">
+ <if @attributes:rowcount;literal@ eq 0">
   <li> <em>There are no attributes for groups of this type</em> </li>
  </if>
  <else>

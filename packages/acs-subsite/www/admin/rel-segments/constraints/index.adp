@@ -6,7 +6,7 @@ Currently, the system is able to handle the following relational constraints:
 
 <ul>
 
-  <if @constraints:rowcount@ eq 0>
+  <if @constraints:rowcount;literal@ eq 0>
     <li>(none)</li>
   </if>
   <else>

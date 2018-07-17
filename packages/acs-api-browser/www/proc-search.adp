@@ -15,12 +15,12 @@
    </multiple>
 </ul>
 
-<if @results:rowcount@ eq 0>
+<if @results:rowcount;literal@ eq 0>
 No results found
 </if>
 
 
-<if @private_results:rowcount@ gt 0>
+<if @private_results:rowcount;literal@ gt 0>
   <if @show_private_p;literal@ true>
     <p>
       <strong>Show</strong> | <a href="@hide_private_url@">Hide</a> <strong>@private_results:rowcount@ private</strong> procedure matches
@@ -40,7 +40,7 @@ No results found
 </if>
 
 
-<if @deprecated_results:rowcount@ gt 0>
+<if @deprecated_results:rowcount;literal@ gt 0>
   <if @show_deprecated_p;literal@ true>
     <p>
       <strong>Show</strong> | <a href="@hide_deprecated_url@">Hide</a> <strong>@deprecated_results:rowcount@ deprecated</strong> procedure matches

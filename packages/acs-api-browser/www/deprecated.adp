@@ -10,6 +10,6 @@
  </multiple>
  </ul>
 
-<if @deprecated:rowcount@ eq 0>
+<if @deprecated:rowcount;literal@ eq 0>
  No deprecated procedures found
  </if>

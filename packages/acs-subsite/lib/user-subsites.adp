@@ -1,4 +1,4 @@
-  <if @groups:rowcount@ gt 0>
+  <if @groups:rowcount;literal@ gt 0>
   <h2>#acs-subsite.You_are_in_the_follow#</h2>
   <ul>
     <multiple name="groups">

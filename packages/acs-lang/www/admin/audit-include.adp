@@ -1,4 +1,4 @@
-<if @audit:rowcount@ gt 0>
+<if @audit:rowcount;literal@ gt 0>
   <ul>
     <multiple name="audit">
       <li>

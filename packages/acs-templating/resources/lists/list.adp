@@ -7,7 +7,7 @@
   </if>
   <else>
 </noparse>
-  <if @bulk_actions:rowcount@ gt 0>
+  <if @bulk_actions:rowcount;literal@ gt 0>
   <if @list_properties.bulk_action_method@ not nil>
   <form name="@list_properties.name@" method="@list_properties.bulk_action_method@">
   </if>
@@ -19,7 +19,7 @@
     </noparse>
   </if>
 
-  <if @actions:rowcount@ gt 0>
+  <if @actions:rowcount;literal@ gt 0>
     <div class="list-button-bar">
       <multiple name="actions">
         <span class="list-button-header"><a href="@actions.url@" class="list-button" title="@actions.title@">@actions.label@</a></span>
@@ -43,7 +43,7 @@
       </multiple>
     </noparse>
 
-  <if @bulk_actions:rowcount@ gt 0>
+  <if @bulk_actions:rowcount;literal@ gt 0>
     <div class="list-button-bar">
       <multiple name="bulk_actions">
 	<% template::add_event_listener -id "$list_properties(name)-bulk_action-$bulk_actions(rownum)" -script [subst {

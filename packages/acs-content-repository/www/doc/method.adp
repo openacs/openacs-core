@@ -19,7 +19,7 @@
       </if>
       <tr><th align="left" colspan="2">Parameters:</th><tr>
       <tr><td align="left" colspan="2">
-        <if @params:rowcount@ gt 0>
+        <if @params:rowcount;literal@ gt 0>
           <blockquote><table border="0" cellpadding="0" cellspacing="1">
             <multiple name=params>
               <tr><th align="right" valign="top">@params.name@:</th>

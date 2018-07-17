@@ -2,7 +2,7 @@
 <property name="context">@context;literal@</property>
 <property name="doc(title)">All relations of type "@rel_type_pretty_name;noquote@"</property>
 				   
-<if @rels:rowcount@ eq 0>
+<if @rels:rowcount;literal@ eq 0>
  <ul>
    <li>(none)</li>
  </ul>

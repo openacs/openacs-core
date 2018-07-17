@@ -3,7 +3,7 @@
 
 <p>
   #acs-tcl.We_had#
-  <if @complaints:rowcount@ gt 1>#acs-tcl.some_problems#</if><else>#acs-tcl.a_problem#</else>
+  <if @complaints:rowcount;literal@ gt 1>#acs-tcl.some_problems#</if><else>#acs-tcl.a_problem#</else>
   #acs-tcl.with_your_input#
   <if @context;literal@ ne "">(@context@)</if>
 </p>
@@ -15,7 +15,7 @@
 </ul>
 
 <p>
-  #acs-tcl.lt_Please_back_up_using_# <if @complaints:rowcount@ gt 1>#acs-tcl.errors#</if><else>#acs-tcl.error#</else>#acs-tcl.lt__and_resubmit_your_en#
+  #acs-tcl.lt_Please_back_up_using_# <if @complaints:rowcount;literal@ gt 1>#acs-tcl.errors#</if><else>#acs-tcl.error#</else>#acs-tcl.lt__and_resubmit_your_en#
 </p>
 
 <p>

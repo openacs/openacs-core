@@ -7,7 +7,7 @@ Note: Every value must have a unique name. Duplicate names will be ignored.
 <h3>Current values</h3>
 <ul>
 
-<if @current_values:rowcount@ eq 0>
+<if @current_values:rowcount;literal@ eq 0>
   <li> <em>none</em> </li>
 </if><else>
   <multiple name="current_values">

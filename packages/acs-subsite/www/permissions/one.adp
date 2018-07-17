@@ -3,7 +3,7 @@
   <property name="context">@context;literal@</property>
 
   <h3>#acs-subsite.lt_Inherited_Permissions#</h3>
-  <if @inherited:rowcount@ gt 0>
+  <if @inherited:rowcount;literal@ gt 0>
     <ul>
       <multiple name="inherited">
         <li>@inherited.grantee_name@, @inherited.privilege@</li>
@@ -14,7 +14,7 @@
     <p><em>#acs-subsite.none#</em></p>
   </else>
   <h3>#acs-subsite.Direct_Permissions#</h3>
-  <if @acl:rowcount@ gt 0>
+  <if @acl:rowcount;literal@ gt 0>
     <form method="get" action="revoke">
       @export_form_vars;noquote@
       <multiple name="acl">
@@ -31,7 +31,7 @@
   <else>
     <p><em>#acs-subsite.none#</em></p>
   </else>
-  <if @acl:rowcount@ gt 0>
+  <if @acl:rowcount;literal@ gt 0>
     <div><input type="submit" value="#acs-subsite.Revoke_Checked#"></div>
     </form>
   </if>
@@ -39,7 +39,7 @@
 
   <h3>#acs-subsite.Children#</h3>
   <if @children_p;literal@ true>
-    <if @children:rowcount@ gt 0>
+    <if @children:rowcount;literal@ gt 0>
       <ul>
         <multiple name="children">
           <li><a href="one?object_id=@children.c_object_id@">@children.c_name@</a> @children.c_type@</li>

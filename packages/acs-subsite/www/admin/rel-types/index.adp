@@ -8,7 +8,7 @@
 
 <ul>
 
-  <if @rel_types:rowcount@ eq 0>
+  <if @rel_types:rowcount;literal@ eq 0>
     <li><em>#acs-subsite.none#</em></li>
   </if>
   <else>

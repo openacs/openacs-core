@@ -1536,7 +1536,7 @@ if {$UseXotclSiteNodes} {
                             #
                             set short_url [site_node::get_url -node_id $ID]
                             set cmd [list ns_urlspace set -key sitenode $short_url* $ID]
-                            ns_log notice "--- get_node_id save in urlspace <$cmd> -> <$ID>"
+                            #ns_log notice "--- get_node_id save in urlspace <$cmd> -> <$ID>"
                             {*}$cmd
                             #ns_log notice "---\n[join [ns_urlspace list] \n]"
                         }

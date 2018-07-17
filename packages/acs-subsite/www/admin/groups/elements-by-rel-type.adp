@@ -1,6 +1,6 @@
 <ol>
 
-<if @rels:rowcount@ eq 0>
+<if @rels:rowcount;literal@ eq 0>
   <li>There are no allowable relationship types for this group</li>
 </if>
 

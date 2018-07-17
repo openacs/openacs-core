@@ -83,7 +83,7 @@ html>body #navbar { bottom: 0px }
 </div>
 <div id="navbar-body">
 
-<if @authorities:rowcount@ gt 1>
+<if @authorities:rowcount;literal@ gt 1>
 <h2>#acs-authentication.lt_Not_getting_the_results_you_expected#
 <multiple name="authorities">
 <if @authorities.authority_id@ ne @authority_id@>

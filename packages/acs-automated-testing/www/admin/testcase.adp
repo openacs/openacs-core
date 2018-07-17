@@ -86,7 +86,7 @@
       <th>Result</th>
       <th>Notes</th>
     </tr>
-    <if @tests:rowcount@ eq 0>
+    <if @tests:rowcount;literal@ eq 0>
       <tr><td> No results </td></tr>
     </if>
     <else>

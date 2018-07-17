@@ -1,4 +1,4 @@
-  <if @actions:rowcount@ gt 0>
+  <if @actions:rowcount;literal@ gt 0>
   <dl>
     <multiple name="actions">
       <if @actions.type@ eq "SECTION">

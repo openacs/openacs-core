@@ -2,10 +2,10 @@
 <property name="doc(title)">Complex User Search</property>
 <property name="context">@context;literal@</property>
 
-<if @criteria:rowcount@ eq 0>
+<if @criteria:rowcount;literal@ eq 0>
   all matching users
 </if><else>
-  <if @criteria:rowcount@ eq 1>
+  <if @criteria:rowcount;literal@ eq 1>
     for users matching the criterion:
     <ul>
     <multiple name="criteria">
@@ -25,7 +25,7 @@
 <hr>
 
 
-<if @user_search:rowcount@ eq 0>
+<if @user_search:rowcount;literal@ eq 0>
   <ul>
     <li>No users found.</li>
   </ul>
@@ -41,7 +41,7 @@
   </multiple>
 </ul>
 
-  <if @user_search:rowcount@ gt 30>
+  <if @user_search:rowcount;literal@ gt 30>
 
     <if @only_authorized_p;literal@ false>
       <p>

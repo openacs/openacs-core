@@ -3,7 +3,7 @@
 <property name="doc(title)">Create relational segment</property>
 <property name="focus">segment_new.segment_name</property>
 
-<if @rel_types:rowcount@ eq 0>
+<if @rel_types:rowcount;literal@ eq 0>
 
   <strong>There are no relationship types for which to create segments</strong>
 

@@ -1,4 +1,4 @@
-<if @group_types:rowcount@ eq 0>
+<if @group_types:rowcount;literal@ eq 0>
   <ul>
   <li>#acs-subsite.none#</li>
   </ul>

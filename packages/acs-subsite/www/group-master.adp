@@ -55,7 +55,7 @@
     <div class="block-marker">Begin main content</div>
     <div id="inner-wrapper">
         
-     <if @user_messages:rowcount@ gt 0>
+     <if @user_messages:rowcount;literal@ gt 0>
        <div id="alert-message">
          <multiple name="user_messages">
            <div class="alert">
@@ -95,7 +95,7 @@
      </div>
      <div id="navbar-body">
      <!-- Second level navigation -->
-       <if @subsections:rowcount@ gt 0>
+       <if @subsections:rowcount;literal@ gt 0>
          <div id="subnavbar-div">
            <div id="subnavbar-container">
              <div id="subnavbar">
@@ -135,7 +135,7 @@
          </div>
        </div>
 
-       <if @subsections:rowcount@ gt 0>
+       <if @subsections:rowcount;literal@ gt 0>
          </div>
        </if>
 

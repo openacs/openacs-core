@@ -17,7 +17,7 @@
 </multiple>
 </ul>
 
-<if @disabled_packages:rowcount@ gt 0>
+<if @disabled_packages:rowcount;literal@ gt 0>
   <h3>Disabled Packages</h3>
   <ul>
    <multiple name="disabled_packages">
@@ -27,7 +27,7 @@
 </if>
 
 
-<if @uninstalled_packages:rowcount@ gt 0>
+<if @uninstalled_packages:rowcount;literal@ gt 0>
   <h3>Uninstalled Packages</h3>
   <ul>
    <multiple name="uninstalled_packages">

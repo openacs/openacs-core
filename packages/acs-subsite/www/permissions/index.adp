@@ -2,7 +2,7 @@
     <property name="doc(title)">#acs-subsite.Permissions#</property>
     <property name="context">@context;literal@</property>
 
-    <if @objects:rowcount@ gt 0> 
+    <if @objects:rowcount;literal@ gt 0> 
       #acs-subsite.You_have_admin_rights_on#
       <ul>
         <multiple name="objects">

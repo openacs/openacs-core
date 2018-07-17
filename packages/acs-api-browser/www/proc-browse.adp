@@ -24,7 +24,7 @@
   </ul>
 </else>
 
-<if @proc_list:rowcount@ eq 0>
+<if @proc_list:rowcount;literal@ eq 0>
 Sorry, no procedures found
 </if>
 <else>

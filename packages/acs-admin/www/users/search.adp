@@ -32,7 +32,7 @@
   </if></li>
 </multiple>
 
-<if @user_search:rowcount@ eq 0>
+<if @user_search:rowcount;literal@ eq 0>
   <li>No users found.
 </if>
 

@@ -29,7 +29,7 @@
     <li><a href="@new_message_url@">Create new message</a></li>
   </if>
 
-  <if @messages:rowcount@ eq 0>
+  <if @messages:rowcount;literal@ eq 0>
     <em>No messages</em>
   </if>
   <else>
@@ -41,7 +41,7 @@
   </else>
 </ul>
 
-<if @messages:rowcount@ gt 0>
+<if @messages:rowcount;literal@ gt 0>
   <table cellpadding="0" cellspacing="0" border="0">
     <tr>
       <td style="background: #CCCCCC">

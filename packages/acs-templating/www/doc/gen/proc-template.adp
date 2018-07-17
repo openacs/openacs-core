@@ -8,7 +8,7 @@
 @info.description@
 </blockquote>
 <dl>
-<if @params:rowcount@ gt 0>
+<if @params:rowcount;literal@ gt 0>
   <strong>Parameters:</strong>
   <table>
   <multiple name=params>
@@ -31,7 +31,7 @@
   <dd>
   @info.return@
 </if>
-<if @options:rowcount@ gt 0>
+<if @options:rowcount;literal@ gt 0>
   <dt><strong>Options:</strong>
   <table>
   <multiple name=options>
@@ -44,7 +44,7 @@
   </multiple>
   </table>
 </if>
-<if @see:rowcount@ gt 0>
+<if @see:rowcount;literal@ gt 0>
   <dt><strong>See Also:</strong>
   <multiple name=see>
     <dd>@see.type@ - <group column=type><a href="@see.url@">@see.name@</a></br></group>

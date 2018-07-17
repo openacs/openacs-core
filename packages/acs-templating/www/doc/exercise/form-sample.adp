@@ -67,7 +67,7 @@
   </tr>
 
 </multiple>
-  <if @address:rowcount@ eq 0>
+  <if @address:rowcount;literal@ eq 0>
     <tr><th align="center" colspan="4"><em>You currently have no entries in your addressbook</em></th></tr>
   </if>
 

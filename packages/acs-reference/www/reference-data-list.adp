@@ -2,7 +2,7 @@
 <property name="context">@context_bar;literal@</property>
 <property name="doc(title)">@title;literal@</property>
 
-<if @data:rowcount@ eq 0>
+<if @data:rowcount;literal@ eq 0>
 <em>You have no reference data in the database right now.</em><p>
 </if>
 

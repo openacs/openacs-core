@@ -12,7 +12,7 @@
 <if @attribute.datatype@ eq "enumeration">
   <p><strong>Possible values:</strong>
   <ul>
-  <if @enum_values:rowcount@ eq 0>
+  <if @enum_values:rowcount;literal@ eq 0>
     <li> <em>(none)</em>
   </if>
   <else>

@@ -5,7 +5,7 @@
 <h3>Attributes</h3>
 
 <ul>
- <if @attributes:rowcount@ eq "0">
+ <if @attributes:rowcount;literal@ eq 0">
   <li> <em>There are no attributes for relations of this type</em> </li>
  </if>
  <else>
@@ -72,7 +72,7 @@
     <h3>About @rel.object_id_two_name@</h3>
 
     <ul>
-     <if @object_two_attributes:rowcount@ eq "0">
+     <if @object_two_attributes:rowcount;literal@ eq 0">
       <li> <em>There are no attributes for parties of this type</em> </li>
      </if>
      <else>

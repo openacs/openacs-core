@@ -14,7 +14,7 @@
 <h4>Constraints on this segment</h4>
 
 <ul>
-  <if @constraints:rowcount@ eq 0>
+  <if @constraints:rowcount;literal@ eq 0>
     <li>(none)</li>
   </if><else>
    <multiple name="constraints">

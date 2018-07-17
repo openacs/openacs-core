@@ -13,12 +13,12 @@
 
 @body;noquote@
 <if @expired_p;literal@ false>
-  <if @dbreqs:rowcount@ gt 0>
+  <if @dbreqs:rowcount;literal@ gt 0>
     <listfilters name="dbreqs" style="inline-filters"></listfilters>
     <listtemplate name="dbreqs"></listtemplate>
   </if>
 
-  <if @profiling:rowcount@ gt 0>
+  <if @profiling:rowcount;literal@ gt 0>
     <h3>Profiling Information</h3>
     <listtemplate name="profiling"></listtemplate>
     <if @page_fragment_cache_p;literal@ true>

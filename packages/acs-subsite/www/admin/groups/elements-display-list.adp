@@ -16,7 +16,7 @@
 </if>
 </if>
 
-<if @rels:rowcount@ eq 0>
+<if @rels:rowcount;literal@ eq 0>
 <ul>
   <li>(none)</li>
 </ul>

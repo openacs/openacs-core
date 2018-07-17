@@ -1,4 +1,4 @@
-<if @groups:rowcount@ eq 0>
+<if @groups:rowcount;literal@ eq 0>
   <li>(none)</li>
 </if>
 <else>

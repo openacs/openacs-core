@@ -3,7 +3,7 @@
 <property name="doc(title)">Roles</property>
 
 <ul>
-  <if @roles:rowcount@ eq 0>
+  <if @roles:rowcount;literal@ eq 0>
     <li> <em>(none)</em>
   </if><else>
   <multiple name="roles">

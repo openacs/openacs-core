@@ -11,7 +11,7 @@
     </p>
 
   <if @gone_p;literal@ false> 
-    <if @matches:rowcount@ gt 0>
+    <if @matches:rowcount;literal@ gt 0>
       <multiple name="matches">
         <div style="border-bottom: 1px solid black;"><p>@matches.file_links;noquote@ <strong>@matches.page@</strong> @matches.size@ bytes</p><pre>@matches.excerpt;noquote@</pre></div>
       </multiple>

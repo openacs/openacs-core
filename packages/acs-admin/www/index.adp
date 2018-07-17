@@ -6,7 +6,7 @@
 <include src="/packages/acs-admin/lib/site-wide-services"
     nr_subsites="@subsite_number;literal@" >
 
-<if @packages:rowcount@ gt 0>
+<if @packages:rowcount;literal@ gt 0>
   <h3>Site-Wide Package Administration</h3>
 
   <p>Manage application packages with site-wide administration facilities.

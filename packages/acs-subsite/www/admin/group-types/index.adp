@@ -8,7 +8,7 @@
 
 <ul>
 
-  <if @group_types:rowcount@ eq 0>
+  <if @group_types:rowcount;literal@ eq 0>
     <li>#acs-subsite.none#</li>
   </if>
   <else>

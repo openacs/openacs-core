@@ -5,7 +5,7 @@
 <h4>Relations of this type</h4>
 
 <ul>
- <if @rels:rowcount@ eq 0>
+ <if @rels:rowcount;literal@ eq 0>
     <li>(none)</li>
  </if><else>
   <multiple name="rels">
@@ -25,7 +25,7 @@
 <h4>Attributes of this type of relationship</h4>
 
 <ul>
-  <if @attributes:rowcount@ eq 0>
+  <if @attributes:rowcount;literal@ eq 0>
     <li>(none)</li>
   </if><else>
    <multiple name="attributes">

@@ -13,7 +13,7 @@
 <p><strong>Relationship types that use this role:</strong>
 
 <ul>
-  <if @rels:rowcount@ eq 0>
+  <if @rels:rowcount;literal@ eq 0>
     <li> <em>(none)</em>
   </if><else>
   <multiple name="rels">
@@ -25,7 +25,7 @@
 <p><strong>Administration</strong>
 
 <ul>
-  <if @rels:rowcount@ eq 0>
+  <if @rels:rowcount;literal@ eq 0>
     <li> <a href="delete?role=@role_enc@">Delete this role</a>
   </if><else>
     <li> You can only delete roles that are not in use.

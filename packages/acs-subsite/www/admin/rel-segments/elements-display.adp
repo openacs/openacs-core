@@ -1,7 +1,7 @@
 <h4><a href="@package_url@admin/rel-segments/one?segment_id=@segment_id@">@segment_name@</a></h4>
 
 <ul>
-  <if @elements:rowcount@ eq 0>
+  <if @elements:rowcount;literal@ eq 0>
     <li><em>(none)</em></li>
   </if>
   <else>

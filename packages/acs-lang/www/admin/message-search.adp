@@ -16,7 +16,7 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
     </ul>
   </if>
    
-  <if @messages:rowcount@ gt 0>        
+  <if @messages:rowcount;literal@ gt 0>        
     <table cellpadding="0" cellspacing="0" border="0">
       <tr>
         <td style="background: #CCCCCC">

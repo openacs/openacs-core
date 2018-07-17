@@ -8,7 +8,7 @@
   <p>Too many subsites to display: @subsite_number@</p>
 </if>
 <else>
-<if @subsites:rowcount@ gt 0>
+<if @subsites:rowcount;literal@ gt 0>
     <listtemplate name="subsites" style="table-2third"></listtemplate>
 </if>
 </else>

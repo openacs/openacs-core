@@ -5,7 +5,7 @@
 
 <h1>#acs-subsite.Add_relationship_for_group__group_type#</h1>
 
-<if @primary_rels:rowcount@ eq "0">
+<if @primary_rels:rowcount;literal@ eq 0">
   <p>There are no other relationship types that you can add. You can <a href="../rel-types/new?return_url=@return_url_enc@">create a new relationship type</a> if you like.</p>
 </if>
 <else>

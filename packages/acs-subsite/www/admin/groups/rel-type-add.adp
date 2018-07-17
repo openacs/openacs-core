@@ -2,7 +2,7 @@
 <property name="context">@context;literal@</property>
 <property name="doc(title)">Add relation type</property>
 				   
-<if @primary_rels:rowcount@ eq "0">
+<if @primary_rels:rowcount;literal@ eq 0">
   There are no other relationship types that you can add. You can
   <a href="../rel-types/new?return_url=@return_url_enc@">create a new relationship type</a> if you like.
 </if>

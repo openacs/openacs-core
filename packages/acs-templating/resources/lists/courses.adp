@@ -78,7 +78,7 @@
   @list_properties.bulk_action_export_chunk;noquote@
 </if>
 
-<if @actions:rowcount@ gt 0>
+<if @actions:rowcount;literal@ gt 0>
   <tr class="list-button-bar">
     <td colspan="@elements:rowcount@" class="list-button-bar">
       <multiple name="actions">
@@ -263,7 +263,7 @@
 </if>
 
 <noparse><if \@@list_properties.multirow@:rowcount@ gt 0></noparse>
-  <if @bulk_actions:rowcount@ gt 0>
+  <if @bulk_actions:rowcount;literal@ gt 0>
     <tr class="list-button-bar">
       <td colspan="@elements:rowcount@" class="list-button-bar">
         <multiple name="bulk_actions">

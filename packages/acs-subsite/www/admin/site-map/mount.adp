@@ -6,7 +6,7 @@
   Please select one of the following packages to mount on <code><strong>@site_node_url@</strong></code>.
 </p>
 
-<if @unmounted:rowcount@ gt 0>
+<if @unmounted:rowcount;literal@ gt 0>
   <p>
     These package instances are not mounted anywhere else:
   </p>
@@ -18,7 +18,7 @@
   </ul>
 </if>
 
-<if @mounted:rowcount@ gt 0>
+<if @mounted:rowcount;literal@ gt 0>
   <p>
     These instances are already mounted elsewhere. Selecting one of them
     will create an additional location for the same application:
@@ -31,7 +31,7 @@
   </ul>
 </if>
 
-<if @singleton:rowcount@ gt 0>
+<if @singleton:rowcount;literal@ gt 0>
   <p>
     These packages are centralized services and are probably not meant to
     be mounted anywhere:

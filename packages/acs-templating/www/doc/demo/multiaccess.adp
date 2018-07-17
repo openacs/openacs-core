@@ -5,7 +5,7 @@
 <body>
 <h1>Sample Users</h1>
 
-  <if @users:rowcount@ eq 0>
+  <if @users:rowcount;literal@ eq 0>
     <p>Sorry, there are no users in the system at this time.</p>
   </if>
     

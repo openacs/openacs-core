@@ -12,7 +12,7 @@
 <blockquote>
 @info.overview@
 </blockquote>
-<if @see:rowcount@ gt 0>
+<if @see:rowcount;literal@ gt 0>
 <p>Also see:
 <dl>
   <multiple name=see>
@@ -32,7 +32,7 @@ Listing of public methods:<br>
 <multiple name=public>
   <a href="#@public.name@">@public.name@</a><br>
 </multiple>
-<if @public:rowcount@ eq 0>
+<if @public:rowcount;literal@ eq 0>
 The namespace @info.name@ currently contains no public methods.
 </if>
 </blockquote>
@@ -42,7 +42,7 @@ The namespace @info.name@ currently contains no public methods.
 <font color=red>*</font> indicates required
 </p>
 
-<if @public:rowcount@ gt 0>
+<if @public:rowcount;literal@ gt 0>
 <strong>Public Methods:</strong><br>
 </if>
 
@@ -53,7 +53,7 @@ The namespace @info.name@ currently contains no public methods.
 
 <p>
 
-<if @private:rowcount@ gt 0>
+<if @private:rowcount;literal@ gt 0>
 <strong>Private Methods</strong>:<br>
 </if>
 <multiple name=private>

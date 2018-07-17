@@ -12,7 +12,7 @@
 <h2>#acs-subsite.Groups_of_this_type#</h2>
 
 <blockquote>
-  <if @groups:rowcount@ eq 0>
+  <if @groups:rowcount;literal@ eq 0>
     <p>(#acs-subsite.none#)</p>
   </if>
   <else>
@@ -42,7 +42,7 @@
     </else>
   </multiple>
 
-  <if @attributes:rowcount@ eq 0>
+  <if @attributes:rowcount;literal@ eq 0>
     <li>#acs-subsite.none#</li>
   </if>
 </ul>
@@ -62,7 +62,7 @@
 
 <ul>
 
-  <if @allowed_relations:rowcount@ eq 0>
+  <if @allowed_relations:rowcount;literal@ eq 0>
     <li>#acs-subsite.none#</li>
   </if>
   <else>
