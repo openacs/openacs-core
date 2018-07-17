@@ -439,7 +439,6 @@ proc ad_proc args {
         }
     }
 
-    set protection 
     foreach element { protection deprecated_p warn_p varargs_p arg_list switches positionals } {
         set doc_elements($element) [set $element]
     }
