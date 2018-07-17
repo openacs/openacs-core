@@ -1,5 +1,5 @@
 #
-# Expects: 
+# Expects:
 #  user_id:naturalnum,optional
 #  return_url:optional
 #  edit_p:optional
@@ -152,7 +152,7 @@ foreach elm $form_elms {
 }
 set focus "user_info.$first_element"
 
-# 
+#
 ad_form -extend -name user_info -form $elms_list -on_request {
     foreach var { authority_id first_names last_name email username screen_name url bio } {
         set $var $user($var)
@@ -198,7 +198,7 @@ ad_form -extend -name user_info -form $elms_list -on_request {
             if { [llength $result(element_messages)] == 0 } {
                 form set_error user_info $first_element $result(update_message)
             }
-                
+
             # Element messages
             foreach { elm_name elm_error } $result(element_messages) {
                 form set_error user_info $elm_name $elm_error
@@ -206,12 +206,12 @@ ad_form -extend -name user_info -form $elms_list -on_request {
             break
         }
     }
- 
+
 } -after_submit {
     if {[ad_conn account_status] eq "closed"} {
         auth::verify_account_status
     }
-    
+
     ad_returnredirect $return_url
     ad_script_abort
 }
@@ -220,7 +220,7 @@ ad_form -extend -name user_info -form $elms_list -on_request {
 if { ![form is_valid user_info] } {
     element set_properties user_info email \
         -display_value "<a href=\"mailto:[element get_value user_info email]\">[element get_value user_info email]</a>"
-    
+
     set url [element get_value user_info url]
     if {   ![string match -nocase "http://*" $url]
         && ![string match -nocase "https://*" $url]
@@ -228,8 +228,8 @@ if { ![form is_valid user_info] } {
         element set_properties user_info url \
             -display_value "<a href=\"http://$url\">$url</a>"
     } else {
-	element set_properties user_info url -display_value \
-		"<a href=\"$url\">$url</a>"
+        element set_properties user_info url -display_value \
+            "<a href=\"$url\">$url</a>"
     }
 }
 
