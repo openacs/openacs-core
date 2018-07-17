@@ -2322,7 +2322,11 @@ ad_proc -public string_truncate {
         set end_index [expr {$len-[string length $ellipsis]-1}]
 
         # Back up to the nearest whitespace
-        set last_space [string last " " $string $end_index]
+        if {[regexp -indices {\s\S*$} [string range $string 0 $end_index] match]} {
+            set last_space [lindex $match 0]
+        } else {
+            set last_space -1
+        }
         # If that leaves us with an empty string, then ignore
         # whitespace and just truncate mid-word
         set end_index [expr {$last_space > 0 ? $last_space : $end_index}]
