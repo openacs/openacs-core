@@ -443,7 +443,9 @@ ad_proc -public aa_register_case {
     set test_case_list [list $testcase_id $testcase_desc \
                             [info script] $package_key \
                             $cats $init_classes $on_error $args $error_level $bugs $procs]
-
+    foreach p $procs {
+        api_add_to_proc_doc -proc_name $p -property testcase -value $testcase_id
+    }
     #
     # First, search the current list of test cases. If an old version already
     # exists, replace it with the new version.

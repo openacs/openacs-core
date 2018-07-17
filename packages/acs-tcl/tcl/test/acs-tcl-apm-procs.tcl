@@ -6,7 +6,9 @@ ad_library {
     @creation-date  11 August 2006
 }
 
-aa_register_case -cats {api smoke} -procs { apm_parameter_register } test_apm_parameter__register {
+aa_register_case -cats {api smoke} -procs {
+    apm_parameter_register
+} test_apm_parameter__register {
     Test the apm_parameter_register procedure
      
     @author Veronica De La Cruz (veronica@viaro.net)
@@ -22,11 +24,8 @@ aa_register_case -cats {api smoke} -procs { apm_parameter_register } test_apm_pa
 	set parameter_name [ad_generate_random_string]
         set description [ad_generate_random_string]
         
-
         set values { {number} {string} }
-        
         set index [randomRange 1]      
-         
         
        # Choose randomly the parameter whether will be string or number.
        # Also choose randomly its default value.

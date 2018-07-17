@@ -1,6 +1,6 @@
 ad_page_contract {
     Display information about one procedure.
-    
+
     @cvs-id $Id$
 } {
     proc:nohtml,trim
@@ -58,13 +58,13 @@ if {$documented_call} {
 }
 
 if { !$documented_call } {
-    if {[info procs $absolute_proc] eq $absolute_proc} { 
+    if {[info procs $absolute_proc] eq $absolute_proc} {
 
         template::head::add_style -style {pre.code {
-            background: #fefefa; 
-            border-color: #aaaaaa; 
+            background: #fefefa;
+            border-color: #aaaaaa;
             border-style: solid;
-            border-width: 1px; 
+            border-width: 1px;
         }}
         set error_msg [subst {
             <p>This procedure is defined in the server but not
@@ -127,7 +127,7 @@ proc $proc {[info args $proc]} {
             </p>
         }]
 
-    } else { 
+    } else {
         set error_msg "<p>The procedure <b>$proc</b> is not defined in the server.</p>"
     }
 } else {

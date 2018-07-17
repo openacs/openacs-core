@@ -589,7 +589,25 @@ ad_proc -public api_proc_documentation {
         }
 
         append blocks_out [::apidoc::format_common_elements doc_elements]
-        append blocks_out "</dl>\n"
+
+        append blocks_out "<p><dt><b>Testcases:</b></dt><dd>\n"
+
+        if {[info exists doc_elements(testcase)]} {
+            set cases {}
+            set package_key ""
+            regexp {packages/([^/]+)/} $doc_elements(script) . package_key
+            foreach testcase_id $doc_elements(testcase) {
+                set url [export_vars -base /test/admin/testcase {
+                    testcase_id package_key {showsource 1}
+                }]
+                lappend cases [subst {<a href="[ns_quotehtml $url]">[ns_quotehtml $testcase_id]</a>}]
+            }
+            append blocks_out "[join $cases {, }]"
+        } else {
+            append blocks_out "No testcase defined."
+        }
+        append blocks_out "</dd>\n</dl>\n"
+
     } else {
         set blocks_out ""
     }
@@ -724,6 +742,31 @@ ad_proc -public api_apropos_functions { string } {
     }
     return $matches
 }
+
+ad_proc -public api_add_to_proc_doc {
+    -proc_name:required
+    -property:required
+    -value:required
+} {
+    Add a certain value to a property in the proc doc of the specfied proc.
+
+    @param proc_name name is fully qualified name without leading colons proc procs,
+        XOTcl methods are a triple with the fully qualified class name,
+        then proc|instproc and then the method name.
+    @param property name of property such as "testcase"
+    @param value    value of the property
+
+} {
+    if {[nsv_exists api_proc_doc $proc_name]} {
+        set d [nsv_get api_proc_doc $proc_name]
+        dict lappend d $property $value
+        nsv_set api_proc_doc $proc_name $d
+        ns_log warning "adding property $property with value $value to proc_doc of $proc_name"
+    } else {
+        ns_log warning "no proc_doc available for $proc_name"
+    }
+}
+
 
 ad_proc -public api_describe_function {
     { -format text/plain }
