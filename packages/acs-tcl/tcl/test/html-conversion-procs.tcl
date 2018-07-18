@@ -87,6 +87,20 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/plain" -truncate_len 15 -- $string] "What?\n_Never..."
 
     #----------------------------------------------------------------------
+    # from text/markdown
+    #----------------------------------------------------------------------
+
+    if {[expr ![catch {package present Markdown}]]} {
+        set string "What?\n*Never mind, buddy*"
+
+        aa_equals "" [ad_html_text_convert -from "text/markdown" -to "text/html" -truncate_len 14 -- $string] \
+            "What?\n<i>Never</i>..."
+
+        aa_equals "" [ad_html_text_convert -from "text/markdown" -to "text/plain" -truncate_len 15 -- $string] \
+            "What?\n_Never..."
+    }
+
+    #----------------------------------------------------------------------
     # from text/plain
     #----------------------------------------------------------------------
 
