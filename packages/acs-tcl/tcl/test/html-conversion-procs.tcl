@@ -1,5 +1,5 @@
 ad_library {
-    
+
     Tests that deal with the html parsing procs of openacs.
 
     @creation-date 15 November 2003
@@ -77,9 +77,9 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     #----------------------------------------------------------------------
     # from text/enhanced
     #----------------------------------------------------------------------
-    
+
     set string "What?\n<i>Never mind, buddy</i>"
-    
+
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/html" -truncate_len 14 -- $string] \
         [ad_enhanced_text_to_html "What?\n<i>Never</i>..."]
 
@@ -105,35 +105,35 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     #----------------------------------------------------------------------
 
     set string "What?\nNever mind, buddy"
-    
+
     aa_equals "" [ad_html_text_convert -from "text/plain" -to "text/html" -truncate_len 14 -- $string] \
         "What?<br>\nNever..."
-    
+
     aa_equals "" [ad_html_text_convert -from "text/plain" -to "text/plain" -truncate_len 14 -- $string] \
         "What?\nNever..."
-    
+
     #----------------------------------------------------------------------
     # from text/fixed-width
     #----------------------------------------------------------------------
 
     set string "What?\nNever mind, buddy"
-    
+
     aa_equals "" [ad_html_text_convert -from "text/fixed-width" -to "text/html" -truncate_len 14 -- $string] \
         "<pre>What?\nNever</pre>..."
-    
+
     aa_equals "" [ad_html_text_convert -from "text/fixed-width" -to "text/plain" -truncate_len 14 -- $string] \
         "What?\nNever..."
-    
+
 
     #----------------------------------------------------------------------
     # from text/html
     #----------------------------------------------------------------------
 
     set string "What?<br><i>Never mind, buddy</i>"
-    
+
     aa_equals "" [ad_html_text_convert -from "text/html" -to "text/html" -truncate_len 14 -- $string] \
         "What?<br><i>Never</i>..."
-    
+
     aa_equals "" [ad_html_text_convert -from "text/html" -to "text/plain" -truncate_len 15 -- $string] \
         "What?\n_Never..."
 
@@ -276,7 +276,7 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
 
     set html {<!-- standard comments -->}
     set result [ad_html_text_convert -from text/html -to text/plain $html]
-    
+
     aa_equals "Standard HTML Comments cleaned $result" $result ""
     set html {<!--[if !mso]> v\:* {behavior:url(MESSAGE KEY MISSING: 'default'VML);} o\:*
 	{behavior:url(MESSAGE KEY MISSING: 'default'VML);} w\:* {behavior:url(MESSAGE KEY MISSING: 'default'VML);}
@@ -302,7 +302,7 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
 	ol {margin-bottom:0in;} ul {margin-bottom:0in;} --> }
 
     set result [ad_html_text_convert -from text/html -to text/plain $html]
-    
+
     aa_equals "MS Word Comments cleaned $result" $result ""
 
     set html {Regular Text<!-- Unclosed comment with very long content}
@@ -336,12 +336,12 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
         Now a text with a ul:
         <ul>
         <li>First list item
-        <li>Second list item        
+        <li>Second list item
         </ul>
         Now a text with a ol:
         <ol>
         <li>First enumerated item
-        <li>Second enumerated item        
+        <li>Second enumerated item
         </ol>
 
         and a program
@@ -351,7 +351,7 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
         </pre>
     }
     set result [ad_html_text_convert -from text/html -to text/plain $html]
-    
+
     aa_log "Resulting text:\n$result"
     aa_true "Text contains title" [string match {Some Title*} $result]
     aa_true "<h1> and <h2> are detected and marked with stars" {
@@ -360,26 +360,26 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
     }
     aa_true "<b> and <strong> are converted" {
         [string first {*bold*} $result] > 0
-        && [string first {*strong*} $result] > 0        
+        && [string first {*strong*} $result] > 0
     }
     aa_true "<i> and <em> are converted" {
         [string first {_italics_} $result] > 0
-        && [string first {_em_} $result] > 0        
+        && [string first {_em_} $result] > 0
     }
     aa_true "<ul> is converted" {
         [string first "\n- First list" $result] > 0
-        && [string first "\n- Second list" $result] > 0 
+        && [string first "\n- Second list" $result] > 0
     }
     aa_true "<ol> is converted (same as <ul>)" {
         [string first "\n- First enumerated" $result] > 0
-        && [string first "\n- Second enumerated" $result] > 0 
+        && [string first "\n- Second enumerated" $result] > 0
     }
 
     aa_true "<pre> results in linebreaks and deeper indentation" {
         [string first "\n        set x" $result] > 0
         && [string first "\n        set r" $result] > 0
     }
-    
+
 
     aa_true "Text contains two links" {
         [string first {[1].} $result] > 0
@@ -392,7 +392,7 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
     aa_true "Blockquote is indented" {
         [string first {    This is *bold} $result] > 0
     }
-    
+
 
 
 }
