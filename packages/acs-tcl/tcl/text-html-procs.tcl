@@ -2181,7 +2181,7 @@ ad_proc -public ad_html_text_convert {
             set text [util_close_html_tags $text $truncate_len $truncate_len $ellipsis $more]
         }
         text/plain {
-            set text [string_truncate -ellipsis $ellipsis -more $more -len $truncate_len -- $text]
+            set text [string_truncate -ellipsis $ellipsis -more $more -len $truncate_len -equal -- $text]
         }
     }
 
@@ -2291,6 +2291,7 @@ ad_proc -public string_truncate {
     {-len 200}
     {-ellipsis "..."}
     {-more ""}
+    {-equal:boolean}
     string
 } {
     Truncates a string to len characters adding the string provided in
@@ -2306,10 +2307,13 @@ ad_proc -public string_truncate {
     @param len       The length to truncate to. If zero, no truncation will occur.
 
     @param ellipsis  This will get put at the end of the truncated string, if the string was truncated.
-    However, this counts towards the total string length, so that the returned string
-    including ellipsis is guaranteed to be shorter than the 'len' provided.
+                     However, this counts towards the total string length, so that the returned string
+                     including ellipsis is guaranteed to be shorter than the 'len' provided.
 
     @param more      This will get put at the end of the truncated string, if the string was truncated.
+
+    @param equal     If this is passed, then the length of the truncated string will be shorter or
+                     *equal* to the value of the 'len' specified.
 
     @param string    The string to truncate.
 
@@ -2320,6 +2324,11 @@ ad_proc -public string_truncate {
 } {
     if { $len > 0 & [string length $string] > $len } {
         set end_index [expr {$len-[string length $ellipsis]-1}]
+
+        # If equal is passed, then the string can be equal to the length specified
+        if { $equal_p } {
+            incr end_index
+        }
 
         # Back up to the nearest whitespace
         if {[regexp -indices {\s\S*$} [string range $string 0 $end_index] match]} {
