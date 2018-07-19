@@ -20,7 +20,7 @@ aa_register_case -cats api data_links_scan_links {
     set correct_links [list 0]
     aa_log "Links = '${links}'"
     aa_true "Number of links found is correct" \
-        [expr {[llength $correct_links] eq [llength $links]}]
+        {[llength $correct_links] eq [llength $links]}
 
 }
 
@@ -62,7 +62,7 @@ aa_register_case -cats api data_links_update_links {
 			      [application_data_link::get_links_from \
 				   -object_id $o($n)]]
 		aa_true "Object \#${n} references correct" \
-		    [expr {$correct_links eq $links}]
+		    {$correct_links eq $links}
 	    }
 	    # now change the text and update one of the objects
 	    for {set i 0} {$i < 5} {incr i} {
@@ -82,7 +82,7 @@ aa_register_case -cats api data_links_update_links {
 			      [application_data_link::get_links_from \
 				   -object_id $o($i)]]
 		aa_true "Object \#${i} updated references correct" \
-		    [expr {$new_correct_links eq $links}]
+		    {$new_correct_links eq $links}
 	    }
 	}
 }
@@ -105,7 +105,7 @@ aa_register_case -cats api data_links_scan_links_with_tag {
     set correct_links [list 0]
     aa_log "Links = '${links}'"
     aa_true "Number of links found is correct" \
-        [expr {[llength $correct_links] eq [llength $links]}]
+        {[llength $correct_links] eq [llength $links]}
 
 }
 
@@ -149,7 +149,7 @@ aa_register_case -cats api data_links_update_links_with_tag {
                   [application_data_link::get_links_from \
                    -object_id $o($n) -relation_tag tag]]
         aa_true "Object \#${n} references correct" \
-            [expr {$correct_links eq $links}]
+            {$correct_links eq $links}
         }
         # now change the text and update one of the objects
         for {set i 0} {$i < 5} {incr i} {
@@ -171,7 +171,7 @@ aa_register_case -cats api data_links_update_links_with_tag {
                    -object_id $o($i) \
                    -relation_tag tag]]
         aa_true "Object \#${i} updated references correct" \
-            [expr {$new_correct_links eq $links}]
+            {$new_correct_links eq $links}
         }
     }
 }
@@ -219,22 +219,22 @@ aa_register_case -cats api data_links_with_tag {
         application_data_link::new -this_object_id $o(3) -target_object_id $o(5) -relation_tag tag2
         
         aa_true "Verify link for tag1" \
-	    [expr {[llength [application_data_link::get_linked -from_object_id $o(0) \
-				 -to_object_type [acs_object_type $o(0)] -relation_tag tag1]] == 2}]
+	    {[llength [application_data_link::get_linked -from_object_id $o(0) \
+				 -to_object_type [acs_object_type $o(0)] -relation_tag tag1]] == 2}
 
         aa_true "Verify link for tag2" \
-	    [expr {[llength [application_data_link::get_linked -from_object_id $o(3) \
-				 -to_object_type [acs_object_type $o(3)] -relation_tag tag2]] == 3}]
+	    {[llength [application_data_link::get_linked -from_object_id $o(3) \
+				 -to_object_type [acs_object_type $o(3)] -relation_tag tag2]] == 3}
 
         aa_true "Verify content link" \
-	    [expr {[llength [application_data_link::get_linked_content -from_object_id $o(0) \
-				 -to_content_type content_revision -relation_tag tag1]] == 2}]
+	    {[llength [application_data_link::get_linked_content -from_object_id $o(0) \
+				 -to_content_type content_revision -relation_tag tag1]] == 2}
         
         aa_true "Verify links to one object with multiple link tags" \
-	    [expr {[llength [application_data_link::get -object_id $o(0) -relation_tag tag1]] == 2}]
+	    {[llength [application_data_link::get -object_id $o(0) -relation_tag tag1]] == 2}
         
         aa_true "Verify links to one object with multiple link tags" \
-	    [expr {[llength [application_data_link::get -object_id $o(0) -relation_tag tag2]] == 1}]
+	    {[llength [application_data_link::get -object_id $o(0) -relation_tag tag2]] == 1}
 
     }
 }

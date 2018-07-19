@@ -15,7 +15,8 @@ aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
     set good 0
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         array set pa [nsv_get api_proc_doc $p]
-        if { "public" in $pa(protection)
+        if { [info exists pa(protection)]
+             && "public" in $pa(protection)
              && !($pa(deprecated_p) || $pa(warn_p))
          } {
             incr count
@@ -41,7 +42,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     set good 0
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         array set pa [nsv_get api_proc_doc $p]
-        if { $pa(deprecated_p)||$pa(warn_p) } {
+        if { ([info exists pa(deprecated_p)] && $pa(deprecated_p))
+             || ([info exists pa(warn_p)] && $pa(warn_p))
+         } {
             incr count
             if { ![info exists pa(see)] || [string is space $pa(see)] } {
                 aa_log_result fail "No @see for deprecated proc $p"

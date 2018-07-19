@@ -25,12 +25,12 @@ aa_register_case -cats {api smoke} ad_proc_create_callback {
     ad_proc -callback a_callback { -arg1 arg2 } { this is a test callback } -
     set callback_procs [info commands ::callback::a_callback::*]
     aa_true "creation of a valid callback contract with '-' body" \
-        [expr {"::callback::a_callback::contract" in $callback_procs}]
+        {"::callback::a_callback::contract" in $callback_procs}
 
     ad_proc -callback a_callback_2 { arg1 arg2 } { this is a test callback } {}
     set callback_procs [info commands ::callback::a_callback_2::*]
     aa_true "creation of a valid callback contract with no body" \
-        [expr {"::callback::a_callback_2::contract" in $callback_procs}]
+        {"::callback::a_callback_2::contract" in $callback_procs}
 
     aa_true "throw error for missing -callback on implementation definition" \
         [catch {
@@ -48,7 +48,7 @@ aa_register_case -cats {api smoke} ad_proc_create_callback {
     }
     set impl_procs [info commands ::callback::a_callback::impl::*]
     aa_true "creation of a valid callback implementation" \
-        [expr {"::callback::a_callback::impl::an_impl" in $impl_procs}]
+        {"::callback::a_callback::impl::an_impl" in $impl_procs}
 }
 
 ad_proc -callback a_callback {
@@ -106,18 +106,18 @@ aa_register_case -cats {api smoke} ad_proc_fire_callback {
         [catch {callback c_callback bar} error]
 
     aa_true "callback returns empty list with no implementations" \
-        [expr {[llength [callback b_callback -arg1 foo bar]] == 0}]
+        {[llength [callback b_callback -arg1 foo bar]] == 0}
 
     set foo(test) 2
 
     aa_true "callback returns value for each defined callback and catches the error callback" \
-        [expr {[llength [callback -catch a_callback -arg1 foo bar]] == 2}]
+        {[llength [callback -catch a_callback -arg1 foo bar]] == 2}
 
     aa_true "callback returns correct value for specified implementation" \
-        [expr {[callback -impl an_impl1 a_callback -arg1 foo bar] == 1}]
+        {[callback -impl an_impl1 a_callback -arg1 foo bar] == 1}
 
     aa_true "callback returns correct value for an array ref" \
-        [expr {[callback -impl an_impl2 a_callback -arg1 foo bar] == 2}]
+        {[callback -impl an_impl2 a_callback -arg1 foo bar] == 2}
 
     aa_true "callback works with {} args" \
         [expr {[callback -impl an_impl2 a_callback -arg1 {} {}] == {}}]

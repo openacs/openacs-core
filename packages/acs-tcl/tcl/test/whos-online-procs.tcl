@@ -33,7 +33,7 @@ aa_register_case -cats {
         twt::user::login $user_info(email) $user_info(password)
 	
 	set logged_users [whos_online::num_users]
-	aa_true "New user logged - Users logged: $logged_users" [expr { $logged_users  > 0 } ]
+	aa_true "New user logged - Users logged: $logged_users" { $logged_users  > 0 }
 	
         #---------------------------------------------------------------------------------------------------
 	#Test set_invisible
@@ -43,14 +43,14 @@ aa_register_case -cats {
 	
 	whos_online::set_invisible $user_id
 	
-	aa_true "User $user_info(email) is Invisible" [expr {[nsv_exists invisible_users $user_id] == 1 }]
+	aa_true "User $user_info(email) is Invisible" {[nsv_exists invisible_users $user_id] == 1 }
 	
         #---------------------------------------------------------------------------------------------------
         #Test all-invisible_user_ids
         #---------------------------------------------------------------------------------------------------
 
         aa_true "User $user_info(email) with user_id=$user_id is in the invisible list" \
-	    [expr {$user_id in [whos_online::all_invisible_user_ids]}]
+	    {$user_id in [whos_online::all_invisible_user_ids]}
 	
         #---------------------------------------------------------------------------------------------------
 	#Test unset_invisible
@@ -61,14 +61,14 @@ aa_register_case -cats {
 	whos_online::unset_invisible $user_id
 	
 	aa_false "User $user_info(email) is Visible" \
-	    [expr {[whos_online::user_invisible_p $user_id ] == 1 }]
+	    {[whos_online::user_invisible_p $user_id ] == 1 }
 	
         #---------------------------------------------------------------------------------------------------
         #Test user_ids
         #---------------------------------------------------------------------------------------------------
 	
 	aa_true "User $user_info(email) with user_id=$user_id is in the visible list" \
-	    [expr {$user_id in [whos_online::user_ids]}]
+	    {$user_id in [whos_online::user_ids]}
 
 	twt::user::logout
 	twt::user::delete -user_id $user_id
