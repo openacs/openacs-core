@@ -1376,8 +1376,8 @@ ad_proc -public aa_test::parse_test_file {
     set test(testcase_failure) [array get testcase_failure]
 }
 
-ad_proc -public aa_test::visualize_control_chars {lines} {    
-    Quotes and therefore makes visible control chars in input lines    
+ad_proc -public aa_test::visualize_control_chars {lines} {
+    Quotes and therefore makes visible control chars in input lines
 } {
     set output $lines
     regsub -all {\\} $output {\\\\} output
