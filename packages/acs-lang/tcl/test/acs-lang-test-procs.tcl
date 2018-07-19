@@ -468,7 +468,7 @@ ad_proc -private lang::test::execute_upgrade {
 aa_register_case \
     -procs {
         lang::util::replace_temporary_tags_with_lookups
-        lang::catalog::export_messages_to_file
+        lang::catalog::export_to_file
         lang::catalog::parse
         lang::catalog::read_file
         lang::util::get_temporary_tags_indices
