@@ -12,7 +12,7 @@ aa_register_case -cats {
     Test site_node::update_cache
 } {
     aa_run_with_teardown -rollback -test_code {
-        
+
 	aa_log "# 1) mount /doc1 /doc2 /doc1/doc3"
 	set doc1_name [ad_generate_random_string]
 	set doc2_name [ad_generate_random_string]
@@ -34,7 +34,7 @@ aa_register_case -cats {
 	aa_equals "Verify url /doc1 for node1" [site_node::get_url -node_id $node1_node_id] "/$doc1_name/"
 	aa_equals "Verify url /doc1/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc1_name/$doc3_name/"
 	aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
-        
+
 	aa_log "# 2) rename /doc1 => doc4: Test /doc4 /doc4/doc3 /doc2"
 	set doc4_name [ad_generate_random_string]
 	site_node::rename -node_id $node1_node_id -name $doc4_name
@@ -46,7 +46,7 @@ aa_register_case -cats {
 	aa_equals "Verify url /doc4 for node1" [site_node::get_url -node_id $node1_node_id] "/$doc4_name/"
 	aa_equals "Verify url /doc4/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc4_name/$doc3_name/"
 	aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
-        
+
 	aa_log "# 3) init_cache: Test /doc5 /doc5/doc3 /doc2"
 	set doc5_name [ad_generate_random_string]
 	db_dml rename_node1 {
@@ -68,7 +68,7 @@ aa_register_case -cats {
 	aa_equals "Verify url /doc5 for node1" [site_node::get_url -node_id $node1_node_id] "/$doc5_name/"
 	aa_equals "Verify url /doc5/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc5_name/$doc3_name/"
 	aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
-        
+
 	aa_log "# 4) delete doc3: Test /doc5 /doc2, nonexisting /doc5/doc3"
 	site_node::unmount -node_id $node3_node_id
 	site_node::delete -node_id $node3_node_id
@@ -81,13 +81,13 @@ aa_register_case -cats {
 }
 
 aa_register_case -cats {
-   api 
+   api
 } site_node_closest_ancestor_package {
     Test site_node::closest_ancestor_package
 } {
     aa_run_with_teardown -rollback -test_code {
         # 1) set up the site-map
-        #        /{acs-core-docs}/{empty-folder} 
+        #        /{acs-core-docs}/{empty-folder}
         #        node-names generated randomly
         set doc_name [ad_generate_random_string]
         set folder_name [ad_generate_random_string]
@@ -114,7 +114,7 @@ aa_register_case -cats {
         #        test doc's parent
         set package_id [site_node::closest_ancestor_package -url /$doc_name]
         aa_equals "Doc's parent is correct" $package_id $root_pkg_id
-        #        test folder's parent 
+        #        test folder's parent
         set package_id [site_node::closest_ancestor_package \
                             -url /$doc_name/$folder_name]
         aa_equals "Folder's parent is correct" $package_id $doc_pkg_id
@@ -124,7 +124,7 @@ aa_register_case -cats {
         set package_id [site_node::closest_ancestor_package \
                             -node_id $doc_node_id]
         aa_equals "Doc's parent based on node_id <$doc_node_id> is correct" $package_id $root_pkg_id
-        #        test folder's parent 
+        #        test folder's parent
         set package_id [site_node::closest_ancestor_package \
                             -node_id $folder_node_id]
         aa_equals "Folder's parent is correct" $package_id $doc_pkg_id
@@ -158,7 +158,7 @@ aa_register_case -cats {
                             -package_key acs-core-docs \
                             -include_self]
         aa_equals "Doc found itself" $package_id $doc_pkg_id
-        
+
     }
 }
 
