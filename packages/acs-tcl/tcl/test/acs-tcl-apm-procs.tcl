@@ -56,11 +56,10 @@ aa_register_case -cats {api smoke} -procs {apm_package_instance_new} test_apm_pa
 
         set package_list [db_list get_packages "select package_key from apm_package_types"]
         aa_log "List of packages: \{$package_list\}"
+
         set list_index [randomRange [expr {[llength $package_list] - 1}]]
         set package_key [lrange $package_list $list_index $list_index]
-
-        set instance_name $package_key
-        append instance_name "-[ad_generate_random_string]"
+        set instance_name "$package_key-[ad_generate_random_string]"
 
         aa_log "Package to be instantiated: $package_key"
         aa_log "Instance name to be added: $instance_name"
