@@ -7,10 +7,17 @@ ad_library {
 }
 
 aa_register_case \
-    -cats {api}\
+    -cats {api} \
+    -procs {
+        acs_user::change_state
+        acs_user::delete
+        acs_user::get_by_username
+        auth::authenticate
+        auth::create_user
+    } \
     auth_authenticate {
     Test the auth::authenticate proc.
-} {    
+} {
 
     # Initialize variables
     set username "auth_create_user1"
@@ -132,9 +139,14 @@ aa_register_case \
         }
 }
 
-aa_register_case \
-    -cats {api} \
-    auth_create_user {
+aa_register_case -cats {api} -procs {
+    
+    acs_user::delete
+    acs_user::get_by_username
+    ad_generate_random_string
+    auth::create_user
+    
+}  auth_create_user {
     Test the auth::create_user proc.
 } {
 
@@ -268,9 +280,13 @@ aa_register_case \
         } 
 }
 
-aa_register_case \
-    -cats {db api smoke} \
-    auth_confirm_email {
+aa_register_case -cats {db api smoke} -procs {
+    
+    acs_user::flush_cache
+    acs_user::get_element
+    auth::set_email_verified
+    
+} auth_confirm_email {
     Test the auth::set_email_verified proc.
 } {
     set user_id [ad_conn user_id]
@@ -290,9 +306,12 @@ aa_register_case \
         }
 }
 
-aa_register_case  \
+aa_register_case \
     -cats {api smoke} \
     -error_level {warning} \
+    -procs {
+        auth::get_registration_elements
+    } \
     auth_get_registration_elements {
     Test the auth::get_registration_elements proc
 } {
@@ -307,6 +326,9 @@ aa_register_case  \
 aa_register_case  \
     -cats {api smoke} \
     -error_level {warning} \
+    -procs {
+         auth::get_registration_form_elements
+    } \
     auth_get_registration_form_elements {
     Test the auth::get_registration_form_elements proc
 } {
@@ -323,6 +345,10 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api smoke} \
+    -procs {
+        auth::password::get_change_url
+        auth::test::get_password_vars
+    } \
     auth_password_get_change_url {
     Test the auth::password::get_change_url proc.
 } {
@@ -340,6 +366,10 @@ aa_register_case  \
 aa_register_case  \
     -cats {api smoke} \
     -error_level {warning} \
+    -procs {
+        auth::password::can_change_p
+        auth::test::get_password_vars
+    } \
     auth_password_can_change_p {
     Test the auth::password::can_change_p proc.
 } {
@@ -352,6 +382,16 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api} \
+    -procs {
+        acs_user::delete
+        ad_acs_kernel_id
+        ad_check_password
+        ad_parameter_cache
+        auth::create_user
+        auth::password::change
+        parameter::get
+        parameter::set_value
+    } \
     auth_password_change {
     Test the auth::password::change proc.
 } {
@@ -408,6 +448,10 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api smoke} \
+    -procs {
+        auth::password::recover_password
+        auth::test::get_password_vars
+    } \
     auth_password_recover {
     Test the auth::password::recover_password proc.
 } {
@@ -437,6 +481,10 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api smoke} \
+    -procs {
+        auth::password::get_forgotten_url
+        auth::test::get_password_vars
+    } \
     auth_password_get_forgotten_url {
     Test the auth::password::get_forgotten_url proc.
 } {
@@ -459,6 +507,10 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api smoke} \
+    -procs {
+        auth::password::retrieve
+        auth::test::get_password_vars
+    } \
     auth_password_retrieve {
     Test the auth::password::retrieve proc.
 } {
@@ -473,6 +525,14 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api} \
+    -procs {
+        acs_user::delete
+        acs_user::get_by_username
+        auth::authentication::Authenticate
+        auth::authority::local
+        auth::create_user
+        auth::password::reset
+    } \
     auth_password_reset {
     Test the auth::password::reset proc.
 } {
@@ -540,6 +600,10 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api db} \
+    -procs {
+        auth::password::retrieve
+        auth::test::get_password_vars
+    } \
     auth_authority_api {
     Test the auth::authority::create, auth::authority::edit, and auth::authority::delete procs.
 } {
@@ -613,6 +677,15 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api} \
+    -procs {
+        acs_sc::impl::get_id
+        ad_generate_random_string
+        auth::authority::get
+        auth::authority::local
+        auth::driver::get_parameter_values
+        auth::driver::get_parameters
+        auth::driver::set_parameter_value
+    } \
     auth_driver_get_parameter_values {
     Test the auth::driver::set_parameter_values proc.
 } {
@@ -661,6 +734,16 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api} \
+    -procs {
+        ad_acs_kernel_id
+        ad_generate_random_string
+        auth::UseEmailForLoginP
+        auth::authenticate
+        auth::authority::local
+        auth::create_user
+        auth::get_registration_elements
+        parameter::set_value
+    } \
     auth_use_email_for_login_p {
     Test auth::UseEmailForLoginP
 } {
@@ -724,6 +807,14 @@ aa_register_case  \
 
 aa_register_case  \
     -cats {api} \
+    -procs {
+        ad_acs_kernel_id
+        ad_generate_random_string
+        ad_parameter_cache
+        auth::create_user
+        auth::password::change
+        parameter::set_value
+    } \
     auth_email_on_password_change {
     Test acs-kernel.EmailAccountOwnerOnPasswordChangeP parameter
 } {

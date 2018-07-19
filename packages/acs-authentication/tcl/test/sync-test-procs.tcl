@@ -6,7 +6,18 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {api db} sync_start_end {
+aa_register_case \
+    -cats {api db} \
+    -procs {
+        auth::authority::local 
+        auth::sync::job::create_entry
+        auth::sync::job::end
+        auth::sync::job::end_get_document
+        auth::sync::job::start
+        auth::sync::job::start_get_document
+        auth::sync::purge_jobs
+    } \
+    sync_start_end {
     Test batch job basics: Starting, getting document, adding entries, ending.
 } {    
     aa_run_with_teardown \
@@ -80,7 +91,20 @@ aa_register_case -cats {api db} sync_start_end {
         }
 }
 
-aa_register_case -cats {api} sync_actions {
+aa_register_case \
+    -cats {api} \
+    -procs {
+        acs_user::get
+        acs_user::get_user_info
+        ad_generate_random_string
+        auth::authority::local
+        auth::sync::job::action
+        auth::sync::job::end
+        auth::sync::job::get_entry
+        auth::sync::job::start
+        util_sets_equal_p
+    } \
+    sync_actions {
     Test job actions: insert, update, 
 } {    
     aa_run_with_teardown \
@@ -89,8 +113,7 @@ aa_register_case -cats {api} sync_actions {
 
             # Start non-interactive job
             
-            set job_id [auth::sync::job::start \
-                            -authority_id [auth::authority::local]]
+            set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
                             
             aa_true "Returns a job_id" [expr {[info exists job_id]}]
 
@@ -334,7 +357,19 @@ aa_register_case -cats {api} sync_actions {
         }
 }
 
-aa_register_case -cats {api db} sync_snapshot {
+aa_register_case \
+    -cats {api db} \
+    -procs {
+        acs_user::get
+        ad_generate_random_string
+        auth::authority::local
+        auth::sync::job::action
+        auth::sync::job::end
+        auth::sync::job::get_entry
+        auth::sync::job::snapshot_delete_remaining
+        auth::sync::job::start
+    } \
+    sync_snapshot {
     Test a snapshot job
 } {
     aa_run_with_teardown \
@@ -343,8 +378,7 @@ aa_register_case -cats {api db} sync_snapshot {
 
             # Start non-interactive job
             
-            set job_id [auth::sync::job::start \
-                            -authority_id [auth::authority::local]]
+            set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
                             
             aa_true "Returns a job_id" [expr {$job_id ne ""}]
 
@@ -461,7 +495,7 @@ aa_register_case -cats {api db} sync_snapshot {
 
             array set job [auth::sync::job::end -job_id $job_id]
             
-            aa_true "Elapsed time less than 30 seconds" [expr {$job(run_time_seconds) < 30}]
+            aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
 
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
 
@@ -469,13 +503,20 @@ aa_register_case -cats {api db} sync_snapshot {
 
             aa_equals "Number of problems" $job(num_problems) 0
            
-            aa_false "Log URL non-empty" [expr {$job(log_url) eq ""}]
+            aa_false "Log URL non-empty" {$job(log_url) eq ""}
             
         }    
 }
 
 
-aa_register_case -cats {api smoke} sync_batch_for_local {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        auth::authority::batch_sync
+        auth::authority::local
+        auth::sync::job::get
+    } \
+    sync_batch_for_local {
     Test a batch job for the local authority
 } {
     aa_run_with_teardown \
@@ -492,7 +533,18 @@ aa_register_case -cats {api smoke} sync_batch_for_local {
 }
 
 
-aa_register_case -cats {api} sync_batch_ims_example_doc { 
+aa_register_case \
+    -cats {api} \
+    -procs {
+        acs_sc::impl::get_id
+        auth::authority::batch_sync
+        auth::authority::create
+        auth::sync::job::get
+        auth::sync::job::get_entries
+        auth::sync::job::get_entry
+        util_sets_equal_p
+    } \
+    sync_batch_ims_example_doc { 
     Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
 } {
     aa_stub acs_sc::invoke {
@@ -674,7 +726,22 @@ aa_register_case -cats {api} sync_batch_ims_example_doc {
 }
 
 
-aa_register_case -cats {api} sync_batch_ims_test {
+aa_register_case \
+    -cats {api} \
+    -procs {
+        acs_sc::impl::get_id
+        acs_user::get
+        acs_user::get_user_info
+        ad_generate_random_string
+        auth::authority::batch_sync
+        auth::authority::create
+        auth::driver::set_parameter_value
+        auth::sync::GetElements
+        auth::sync::job::get
+        auth::sync::job::get_entries
+        auth::sync::job::get_entry        
+    } \
+    sync_batch_ims_test {
     Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
 } {
     aa_stub acs_sc::invoke {
@@ -944,7 +1011,13 @@ aa_register_case -cats {api} sync_batch_ims_test {
         }
 }
 
-aa_register_case -cats {api smoke} sync_http_get_document {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        acs_sc::invoke
+        ns_parseurl
+    } \
+    sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
     set url [ad_url]
@@ -973,7 +1046,13 @@ aa_register_case -cats {api smoke} sync_http_get_document {
     aa_equals "result.document is 'success'" $result(document) "success"
 }
 
-aa_register_case -cats {api web} sync_file_get_document {
+aa_register_case \
+    -cats {api web} \
+    -procs {
+        acs_sc::invoke
+        template::util::read_file
+    } \
+    sync_file_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
     set path "$::acs::rootdir/www/SYSTEM/dbtest.tcl"
