@@ -318,13 +318,13 @@ ad_proc -public site_node::instantiate_and_mount {
             set node_id [site_node::new -name $node_name -parent_id $parent_node_id]
         } else {
             # Check that there isn't already a package mounted at the node
-            array set node [get -url $url]
-
-            if { [info exists node(object_id)] && $node(object_id) ne "" } {
-                error "Cannot mount package at url $url as package $node(object_id) is already mounted there"
+            set node [get -url $url]
+            set object_id [expr {[dict exists $node object_id] ? [dict get $node object_id] : ""}]
+            if { $object_id ne "" } {
+                error "Cannot mount package at url $url as package $object_id is already mounted there"
             }
 
-            set node_id $node(node_id)
+            set node_id [dict get $node node_id]
         }
     }
 
@@ -542,8 +542,7 @@ ad_proc -public site_node::get_element {
 
     @see site_node::get
 } {
-    array set node [site_node::get -node_id $node_id -url $url]
-    return $node($element)
+    return [dict get [site_node::get -node_id $node_id -url $url] $element]
 }
 
 ad_proc -public site_node::get_from_node_id {
@@ -681,8 +680,7 @@ ad_proc -public site_node::get_node_id {
 } {
     @return the node_id for this url
 } {
-    array set node [get -url $url]
-    return $node(node_id)
+    return [dict get [get -url $url] node_id]
 }
 
 ad_proc -public site_node::get_node_id_from_object_id {
@@ -711,8 +709,7 @@ ad_proc -public site_node::get_parent_id {
 } {
     @return the parent_id of this node
 } {
-    array set node [get -node_id $node_id]
-    return $node(parent_id)
+    return [dict get [get -node_id $node_id] parent_id]
 }
 
 ad_proc -public site_node::get_parent {
@@ -720,8 +717,7 @@ ad_proc -public site_node::get_parent {
 } {
     @return the parent node of this node
 } {
-    array set node [get -node_id $node_id]
-    return [get -node_id $node(parent_id)]
+    return [get -node_id [get_parent_id -node_id $node_id]]
 }
 
 ad_proc -public site_node::get_ancestors {
@@ -734,15 +730,15 @@ ad_proc -public site_node::get_ancestors {
     set array_result_p [string equal $element ""]
 
     while {$node_id ne "" } {
-        array set node [get -node_id $node_id]
+        set node [get -node_id $node_id]
 
         if {$array_result_p} {
-            lappend result [array get node]
+            lappend result $node
         } else {
-            lappend result $node($element)
+            lappend result [dict get $node $element]
         }
 
-        set node_id $node(parent_id)
+        set node_id [dict get $node parent_id]
     }
 
     return $result
@@ -912,10 +908,10 @@ ad_proc -public site_node::closest_ancestor_package {
 
     # should we return the package at the passed-in node/url?
     if { $include_self_p && $package_key ne ""} {
-        array set node_array [site_node::get -url $url]
+        set node [site_node::get -url $url]
 
-        if {$node_array(package_key) in $package_key} {
-            return $node_array($element)
+        if {[dict get $node package_key] in $package_key} {
+            return [dict get $node $element]
         }
     }
 
@@ -925,13 +921,13 @@ ad_proc -public site_node::closest_ancestor_package {
         set url [string trimright $url /]
         set url [string range $url 0 [string last / $url]]
 
-        array set node_array [site_node::get -url $url]
+        set node [site_node::get -url $url]
 
         # are we looking for a specific package_key?
         if { $package_key eq ""
-             || $node_array(package_key) in $package_key
+             || [dict get $node package_key] in $package_key
          } {
-            set elm_value $node_array($element)
+            set elm_value [dict get $node $element]
         }
     }
 
