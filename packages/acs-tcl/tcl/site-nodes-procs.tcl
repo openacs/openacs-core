@@ -1620,7 +1620,7 @@ if {$UseXotclSiteNodes} {
         set parent_node_id [site_node::get_parent_id -node_id $node_id]
         set url [site_node::get_url -node_id $parent_node_id]
 
-        site_node::update_cache -sync_children -node_id $node_id -url $url
+        site_node::update_cache -sync_children -node_id $parent_node_id -url $url
         ::acs::site_nodes_cache flush_pattern -partition_key $parent_node_id get_children-$parent_node_id-*
 
         # DAVEB update context_id if it is passed in some code relies
