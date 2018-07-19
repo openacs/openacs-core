@@ -1367,7 +1367,7 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
         nsv_set ad_procs . $procs
     }
 
-    ns_log notice "Running scheduled proc $proc..."
+    ns_log notice "Running scheduled proc $proc {*}$args..."
 
     # Actually run the procedure.
     if {$proc ne ""} {
