@@ -878,7 +878,7 @@ ad_proc -private db_get_quote_indices { sql } {
     {a'b'c'd'}      {1 3 5 7}
     </pre>
 
-    @see db_bind_var_subsitution
+    @see db_bind_var_substitution
 } {
     set quote_indices [list]
 
