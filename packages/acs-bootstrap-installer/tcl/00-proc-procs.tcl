@@ -310,6 +310,20 @@ proc ad_proc args {
         # Doc string was provided.
         ad_parse_documentation_string [lindex $args end-1] doc_elements
     }
+
+    #
+    # Preserve pre-existing values, e.g. from testcases, which might
+    # be loaded in a different order.
+    #
+    if {[nsv_exists api_proc_doc $proc_name]} {
+        set old_doc_elements [nsv_get api_proc_doc $proc_name]
+        #array set doc_elements $old_doc_elements
+        if {[dict exist $old_doc_elements testcase]} {
+            #ns_log notice "PRESERVE TESTCASES: $proc_name"
+            set doc_elements(testcase) [dict get $old_doc_elements testcase]
+        }
+    }
+
     set code_block [lindex $args end]
 
     if {$callback ne "" && $impl ne "" } {
@@ -325,7 +339,7 @@ proc ad_proc args {
     #  Parse the argument list.
     #
     #####
-
+    
     set switches [list]
     set positionals [list]
     set seen_positional_with_default_p 0
