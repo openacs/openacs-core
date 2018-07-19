@@ -1430,6 +1430,11 @@ if {$UseXotclSiteNodes} {
                 # the whole tree.
                 #
 
+                #
+                # In any case, flush as well the per-request cache
+                #
+                array unset ::__node_id
+                
                 set old_url [:get_url -node_id $node_id]
 
                 if {$node_id eq "" || $old_url eq "/"} {
