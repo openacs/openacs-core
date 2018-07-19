@@ -445,6 +445,7 @@ ad_proc -public aa_register_case {
                             $cats $init_classes $on_error $args $error_level $bugs $procs]
     foreach p $procs {
         api_add_to_proc_doc -proc_name $p -property testcase -value $testcase_id
+        ns_log notice "TESTCASE: api_add_to_proc_doc -proc_name $p -property testcase -value $testcase_id -> [dict get [nsv_get api_proc_doc $p] testcase]"
     }
     #
     # First, search the current list of test cases. If an old version already
@@ -759,10 +760,10 @@ ad_proc -public aa_equals {
     global aa_package_key
 
     if {$affirm_actual eq $affirm_value} {
-        aa_log_result "pass" "$affirm_name Affirm PASSED, actual = \"$affirm_actual\""
+        aa_log_result "pass" [subst {$affirm_name, actual = "$affirm_actual"}]
         return 1
     } else {
-        aa_log_result "fail" "$affirm_name Affirm FAILED, actual = \"$affirm_actual\", expected = \"$affirm_value\""
+        aa_log_result "fail" [subst {$affirm_name, actual = "$affirm_actual", expected = "$affirm_value"}]
         return 0
     }
 }
@@ -779,15 +780,12 @@ ad_proc -public aa_true {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    global aa_testcase_id
-    global aa_package_key
-
     set result [uplevel 1 [list expr $affirm_expr]]
     if { $result } {
-        aa_log_result "pass" "$affirm_name Affirm PASSED, \"$affirm_expr\" true"
+        aa_log_result "pass" [subst {$affirm_name: "$affirm_expr" true}]
         return 1
     } else {
-        aa_log_result "fail" "$affirm_name Affirm FAILED, \"$affirm_expr\" false"
+        aa_log_result "fail" [subst {$affirm_name: "$affirm_expr" false}]
         return 0
     }
 }
@@ -809,10 +807,10 @@ ad_proc -public aa_false {
 
     set result [uplevel 1 [list expr $affirm_expr]]
     if {!$result} {
-        aa_log_result "pass" "$affirm_name Affirm PASSED, \"$affirm_expr\" false"
+        aa_log_result "pass" [subst {$affirm_name: "$affirm_expr" false}]
         return 1
     } else {
-        aa_log_result "fail" "$affirm_name Affirm FAILED, \"$affirm_expr\" true"
+        aa_log_result "fail" [subst {$affirm_name: "$affirm_expr" true}]
         return 0
     }
 }
