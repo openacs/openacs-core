@@ -47,6 +47,11 @@ if {![db_0or1row acs-automated-testing.get_testcase_fails_count {
 }
 
 set testcase_bodys {}
+set testcase_bugs ""
+set testcase_procs ""        
+set testcase_cats ""        
+set testcase_inits ""
+
 foreach testcase [nsv_get aa_test cases] {
     if {$testcase_id eq [lindex $testcase 0]
         && $package_key eq [lindex $testcase 3]
