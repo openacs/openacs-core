@@ -105,6 +105,7 @@
         <th>Testcases run</th>
         <th>Passes</th>
         <th>Fails</th>
+        <th>Warnings</th>
         <th>Result</th>
     </tr>
     <multiple name="packageinfo">
@@ -124,10 +125,15 @@
           <td align="right"> @packageinfo.total@ </td>
           <td align="right"> @packageinfo.passes@ </td>
           <td align="right"> @packageinfo.fails@ </td>
+          <td align="right"> @packageinfo.warnings@ </td>
           <td align="right">
             <if @packageinfo.fails@ gt 0>
                <span style="background-color: red; color: white; font-weight: bold;">FAILED</span>
-            </if><else>
+            </if>
+            <elseif @packageinfo.warnings@ gt 0>
+              <span style="background-color: yellow; font-weight: bold;">WARNING</span>
+            </elseif>
+            <else>
               OK
             </else>
           </td>
@@ -146,10 +152,11 @@
         <th>Timestamp</th>
         <th>Passes</th>
         <th>Fails</th>
+        <th>Warnings</th>
     </tr>
     <multiple name="tests">
       <if @tests.marker;literal@ true>
-        <tr><td colspan="8" align="center" bgcolor="#c0f0c0"><strong>@tests.package_key@</strong></td></tr>
+        <tr><td colspan="9" align="center" bgcolor="#c0f0c0"><strong>@tests.package_key@</strong></td></tr>
       </if>
         <if @tests.rownum@ odd>
           <tr class="odd">
@@ -170,13 +177,18 @@
           <td>
             <if @tests.fails@ gt 0>
                <span style="background-color: red; color: white; font-weight: bold; padding: 4px;">FAILED</span>
-            </if><else>
+            </if>
+            <elseif @tests.warnings@ gt 0>
+               <span style="background-color: yellow; font-weight: bold; padding: 4px;">WARNING</span>
+            </elseif>
+            <else>
               OK
             </else>
           </td>
           <td> @tests.timestamp@ </td>
           <td align="right"> @tests.passes@ </td>
           <td align="right"> @tests.fails@ </td>
+          <td align="right"> @tests.warnings@ </td>
         </else>
       </tr>
     </multiple>

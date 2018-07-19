@@ -36,44 +36,52 @@ foreach testcase [nsv_get aa_test cases] {
     lassign $testcase testcase_id testcase_desc . package_key categories
 
     set results($testcase_id,$package_key) [list $testcase_desc $package_key $categories]
-    set packages($package_key) [list 0 0 0]
+    set packages($package_key) [list 0 0 0 0]
 }
 
 db_foreach acs-automated-testing.results_queryx {
     select
-       testcase_id, package_key,
-       to_char(timestamp,'YYYY-MM-DD_HH24:MI:SS') as timestamp,
-       passes, fails
-    from aa_test_final_results
+       fr.testcase_id,
+       fr.package_key,
+       to_char(fr.timestamp,'YYYY-MM-DD_HH24:MI:SS') as timestamp,
+       fr.passes,
+       fr.fails,
+       sum(case when r.result = 'warn' then 1 else 0 end) as warnings
+    from aa_test_final_results fr,
+         aa_test_results r
+     where fr.testcase_id = r.testcase_id
+     group by 1, 2, 3, 4, 5
 } {
     if {[info exists results($testcase_id,$package_key)]} {
         # Append results to individual testcase
-        lappend results($testcase_id,$package_key) $timestamp $passes $fails
+        lappend results($testcase_id,$package_key) $timestamp $passes $fails $warnings
 
         #
         # If viewing by package, update the by-package results, taking into
         # account whether a specific category has been specified.
         #
         if {$view_by eq "package"} {
-            lassign $packages($package_key) package_total package_pass package_fail
+            lassign $packages($package_key) package_total package_pass package_fail package_warnings
             if {$by_category ne ""} {
                 # Category specific, only add results if this testcase is of the
                 # specified category.
                 set categories  [lindex $results($testcase_id,$package_key) 2]
                 if {$by_category in $categories} {
                     incr package_total
-                    incr package_pass $passes
-                    incr package_fail $fails
+                    incr package_pass     $passes
+                    incr package_fail     $fails
+                    incr package_warnings $warnings
                     set packages($package_key) \
-                        [list $package_total $package_pass $package_fail]
+                        [list $package_total $package_pass $package_fail $package_warnings]
                 }
             } else {
                 # No category specified, add results.
                 incr package_total
-                incr package_pass $passes
-                incr package_fail $fails
+                incr package_pass     $passes
+                incr package_fail     $fails
+                incr package_warnings $warnings
                 set packages($package_key) \
-                    [list $package_total $package_pass $package_fail]
+                    [list $package_total $package_pass $package_fail $package_warnings]
             }
         }
     }
@@ -83,25 +91,25 @@ if {$view_by eq "package"} {
     #
     # Prepare the template data for a view_by "package"
     #
-    template::multirow create packageinfo key total passes fails
+    template::multirow create packageinfo key total passes fails warnings
     foreach package_key [lsort [array names packages]] {
         #ns_log notice "view_by $view_by package_key=$package_key"
-        lassign $packages($package_key) total passes fails
-        template::multirow append packageinfo $package_key $total $passes $fails
+        lassign $packages($package_key) total passes fails warnings
+        template::multirow append packageinfo $package_key $total $passes $fails $warnings
     }
 } else {
     #
     # Prepare the template data for a view_by "testcase"
     #
     template::multirow create tests id url description package_key categories \
-        timestamp passes fails marker
+        timestamp passes fails warnings marker
     set old_package_key ""
     foreach testcase [lsort [nsv_get aa_test cases]] {
         set testcase_id [lindex $testcase 0]
         set package_key [lindex $testcase 3]
 
         lassign $results($testcase_id,$package_key) testcase_desc . categories \
-            testcase_timestamp testcase_passes testcase_fails
+            testcase_timestamp testcase_passes testcase_fails testcase_warnings
 
         regexp {^(.+?\.)\s} $testcase_desc "" testcase_desc
         set categories_str     [join $categories ", "]
@@ -130,7 +138,7 @@ if {$view_by eq "package"} {
                 $package_key \
                 $categories_str \
                 $testcase_timestamp \
-                $testcase_passes $testcase_fails \
+                $testcase_passes $testcase_fails $testcase_warnings \
                 $marker
         }
     }
