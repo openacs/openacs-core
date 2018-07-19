@@ -28,7 +28,7 @@ aa_register_case -cats {api smoke} -procs {
         set index [randomRange 1]
 
         #
-        # Choose randomly string or numbner parameter.  Also choose
+        # Choose randomly string or number parameter.  Also choose
         # randomly its default value in the string case.
         #
         set datatype [lrange $values $index $index]
