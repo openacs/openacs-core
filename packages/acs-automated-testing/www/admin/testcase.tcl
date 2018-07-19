@@ -51,15 +51,12 @@ foreach testcase [nsv_get aa_test cases] {
     if {$testcase_id eq [lindex $testcase 0]
         && $package_key eq [lindex $testcase 3]
     } {
-        set testcase_desc        [lindex $testcase 1]
-        set testcase_file        [lindex $testcase 2]
-        set testcase_cats        [join [lindex $testcase 4] ", "]
-        set testcase_inits       [join [lindex $testcase 5] ", "]
-        set testcase_on_error    [lindex $testcase 6]
-        set testcase_bodys       [lindex $testcase 7]
-        set testcase_error_level [lindex $testcase 8]
-        set testcase_bugs        [lindex $testcase 9]
-        set testcase_procs       [lindex $testcase 10]
+        lassign $testcase . testcase_desc testcase_file . \
+            testcase_cats testcase_inits \
+            testcase_on_error testcase_bodys testcase_error_level testcase_bugs testcase_procs
+        set testcase_cats  [join $testcase_cats ", "]
+        set testcase_inits [join $testcase_inits ", "]
+        break
     }
 }
 
@@ -83,7 +80,7 @@ if {[llength $testcase_bodys] == 0} {
     set testcase_desc ""
     set testcase_file ""
 } else {
-    set body_count 0
+    set body_count 1
 
     #
     # Work out the URL for this directory (stripping off the file element).
@@ -99,7 +96,9 @@ if {[llength $testcase_bodys] == 0} {
         #
         regsub -all {aa_call_component\s+(["]?)([^\s]*)(["]?)} $body \
             "aa_call_component <a href='$url\\&component_id=\\2'>\\1\\2\\3</a>" body
-        template::multirow append bodys $body_count $body
+        template::multirow append bodys \
+            $body_count \
+            [::apidoc::tclcode_to_html -scope "" -proc_namespace "" $body]
         incr body_count
     }
 }

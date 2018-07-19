@@ -24,8 +24,9 @@
       </if>
       <if @showsource;literal@ true>
         <multiple name="bodys">
-          <dt>  Body @bodys.body_number@ source  </dt>
-          <dd><pre>@bodys.body@</pre></dd>
+	  <if @bodys:rowcount;literal@ lt 2><dt>Body:</dt></if>
+	  <else><dt>Body (part @bodys.body_number@)</dt></else>
+          <dd><pre class="code">@bodys.body;literal@</pre></dd>
         </multiple>
       </if>
     </dl>
