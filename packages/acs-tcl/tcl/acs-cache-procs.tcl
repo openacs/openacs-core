@@ -1,13 +1,13 @@
-#  
+#
 #    Copyright (C) 2018 Gustaf Neumann, neumann@wu-wien.ac.at
-#  
+#
 #       Vienna University of Economics and Business
 #       Institute of Information Systems and New Media
 #       A-1020, Welthandelsplatz 1
 #       Vienna, Austria
-#  
+#
 #    This is a BSD-Style license applicable for this file.
-#  
+#
 #    Permission to use, copy, modify, distribute, and sell this
 #    software and its documentation for any purpose is hereby granted
 #    without fee, provided that the above copyright notice appears in
@@ -16,16 +16,16 @@
 #    representations about the suitability of this software for any
 #    purpose.  It is provided "as is" without express or implied
 #    warranty.
-#  
+#
 
 namespace eval ::acs {
-    
+
     ##########################################################################
     #
     # Generic Cache class
     #
     ##########################################################################
-    
+
     nx::Class create ::acs::Cache {
 	#
 	# Provide a base class to generalize cache management to
@@ -79,11 +79,11 @@ namespace eval ::acs {
                 } else {
                     set expires_flag {}
                 }
-                
+
 		try {
 		    :uplevel [list ns_cache_eval {*}$expires_flag -- \
                                   [:cache_name $partition_key] $key $command]
-		    
+
 		} on break {r} {
 		    #
 		    # When the command ends with "break", it means:
@@ -92,12 +92,12 @@ namespace eval ::acs {
 		    #
 		    #ns_log notice "====================== [self] $key -> break -> <$r>"
 		    return 0
-		    
+
 		} on ok {r} {
 		    return $r
 		}
 	    }
-	    
+
 	    :public method set {-partition_key key value} {
 		#
 		# Set some value in the cache. This code uses
@@ -109,7 +109,7 @@ namespace eval ::acs {
                 }
 		:uplevel [list ns_cache_eval -force -- [:cache_name $partition_key] $key [list set _ $value]]
 	    }
-	    
+
 	    :public method flush_pattern {{-partition_key ""} pattern} {
 		#
 		# Flush in the cache a value based on a pattern
@@ -184,7 +184,7 @@ namespace eval ::acs {
         :public method show_all {} {
             ns_log notice "content of ${:name}: [ns_cache_keys ${:name}]"
         }
-        
+
         :public method flush_cache {{-partition_key ""}} {
             #
             # Flush all entries in a cache. Both, NaviServer and
@@ -194,7 +194,7 @@ namespace eval ::acs {
             #ns_log notice "flush_all -> ns_cache_flush [:cache_name $partition_key]"
             #ns_log notice "... content of ${:name}: [ns_cache_keys ${:name}]"
         }
-        
+
 	:public method flush_all {} {
             #
             # Flush all contents of all (partitioned) caches. In the
@@ -239,7 +239,7 @@ namespace eval ::acs {
             #
             if {![info exists :name]} {
                 set :name [namespace tail [current]]
-            }            
+            }
 	    set partitions [::parameter::get_from_package_key \
 				-package_key ${:package_key} \
 				-parameter "${:parameter}Partitions" \
@@ -272,7 +272,7 @@ namespace eval ::acs {
             for {set i 0} {$i < ${:partitions}} {incr i} {
                 ns_log notice "content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
 	    }
-            
+
         }
 
     }
@@ -282,7 +282,7 @@ namespace eval ::acs {
     # Class for key-partitioned caches
     #
     # Key-partitioning is based on a modulo function using a special
-    # partition_key, which has to be numeric - at least for the time being. 
+    # partition_key, which has to be numeric - at least for the time being.
     #
     ##########################################################################
 
@@ -341,20 +341,20 @@ namespace eval ::acs {
     nx::Class create Cluster {
 	:property host
 	:property {port 80}
-	
+
 	set :allowed_host_patterns [list]
-	set :url /acs-cluster-do 
+	set :url /acs-cluster-do
 	array set :allowed_host { "127.0.0.1" 1 }
 
-	# 
-	# The allowed commands are of the form 
-	#   - command names followed by 
+	#
+	# The allowed commands are of the form
+	#   - command names followed by
 	#   - optional "except patterns"
 	#
 	set :allowed_command {
-	    set "" 
-	    unset "" 
-	    nsv_set "" 
+	    set ""
+	    unset ""
+	    nsv_set ""
 	    nsv_unset ""
 	    nsv_incr ""
 	    bgdelivery ""
@@ -362,7 +362,7 @@ namespace eval ::acs {
 	    ns_cache_flush ""
 	    acs::cache_flush_all ""
 	}
-	
+
 	#
 	# handling the ns_filter methods
 	#
@@ -370,18 +370,18 @@ namespace eval ::acs {
 	    :log ""
 	    return filter_return
 	}
-	
+
 	:public object method preauth args {
 	    :log ""
 	    :incoming_request
 	    return filter_return
 	}
-	
+
 	:public object method postauth args {
 	    :log ""
 	    return filter_return
 	}
-	
+
 	#
 	# handle incoming request issues
 	#
@@ -430,7 +430,7 @@ namespace eval ::acs {
 	    }
 	    error "command '$cmd' from host $host not allowed"
 	}
-	
+
 	#
 	# Handling outgoing requests
 	#
@@ -439,10 +439,10 @@ namespace eval ::acs {
 		$server message {*}$args
 	    }
 	}
-	
+
 	:public object method message args {
-	    :log "--cluster outgoing request to [:host]:[:port] // $args" 
-	    
+	    :log "--cluster outgoing request to [:host]:[:port] // $args"
+
 	    utl::http::get -url http://[:host]:[:port]/[:url]?cmd=[ns_urlencode $args]
 	}
     }
@@ -455,4 +455,3 @@ namespace eval ::acs {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-
