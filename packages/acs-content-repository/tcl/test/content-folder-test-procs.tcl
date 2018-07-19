@@ -40,7 +40,7 @@ aa_register_case content_folder {
             content::item::get \
                 -item_id $first_folder_id \
                 -array_name first_folder
-            aa_true "Folder updated" [expr {($first_folder(label) eq "new_label") && ($first_folder(description) eq "new_description")}]
+            aa_true "Folder updated" {($first_folder(label) eq "new_label") && ($first_folder(description) eq "new_description")}
                                           
             #########################################################
             # create a child folder

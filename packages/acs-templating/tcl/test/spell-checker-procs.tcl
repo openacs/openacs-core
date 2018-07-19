@@ -51,11 +51,11 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
 	return
     }
 
-    aa_true "True statement: Text contains no misspelled words" [expr {$error_num == 0}]
+    aa_true "True statement: Text contains no misspelled words" {$error_num == 0}
     
     aa_log "Number of miss-spelled words found in text: $error_num"
     
-    aa_false "False statement: Text contains misspelled word(s)" [expr {$error_num > 0}]
+    aa_false "False statement: Text contains misspelled word(s)" {$error_num > 0}
     
     aa_equals "Number of misspelled words found in text" $error_num 0
     
@@ -67,7 +67,7 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
     aa_true "The returned string contains no hidden var(s) named 'var_to_spellcheck.error_N', where N is the error number." \
 	![regexp "var_to_spellcheck.error_\[0-9\]*" $formtext_to_display]
 
-    aa_true "just_the_errwords is empty" [expr {$just_the_errwords eq ""}]
+    aa_true "just_the_errwords is empty" {$just_the_errwords eq ""}
     
     #####
     #
@@ -86,11 +86,11 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
 	return
     }
  
-    aa_true "True statement: Text contains misspelled words" [expr {$error_num > 0}]
+    aa_true "True statement: Text contains misspelled words" {$error_num > 0}
     
     aa_log "Number of misspelled words found in text: $error_num"
     
-    aa_false "False statement: Text contains no misspelled word(s)" [expr {$error_num == 0}]
+    aa_false "False statement: Text contains no misspelled word(s)" {$error_num == 0}
     
     aa_log "Returned string: $formtext_to_display"
     
@@ -122,11 +122,11 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
 	return
     }
     
-    aa_true "True statement: HTML fragment contains no misspelled words" [expr {$error_num == 0}]
+    aa_true "True statement: HTML fragment contains no misspelled words" {$error_num == 0}
     
     aa_log "Number of miss-spelled words found in HTML fragment: $error_num"
     
-    aa_false "False statement: HTML fragment contains misspelled word(s)" [expr {$error_num > 0}]
+    aa_false "False statement: HTML fragment contains misspelled word(s)" {$error_num > 0}
     
     aa_equals "Number of misspelled words found in HTML fragment" $error_num 0
     
@@ -138,7 +138,7 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
     aa_true "The returned string contains no hidden var(s) named 'var_to_spellcheck.error_N', where N is the error number." \
 	![regexp "var_to_spellcheck.error_\[0-9\]*" $formtext_to_display]
 
-    aa_true "just_the_errwords is empty" [expr {$just_the_errwords eq ""}]
+    aa_true "just_the_errwords is empty" {$just_the_errwords eq ""}
 
     #####
     #
@@ -158,11 +158,11 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
 	return
     }
 
-    aa_true "True statement: HTML fragment contains misspelled words" [expr {$error_num > 0}]
+    aa_true "True statement: HTML fragment contains misspelled words" {$error_num > 0}
     
     aa_log "Number of miss-spelled words found in HTML fragment: $error_num"
     
-    aa_false "False statement: HTML fragment contains no misspelled word(s)" [expr {$error_num == 0}]
+    aa_false "False statement: HTML fragment contains no misspelled word(s)" {$error_num == 0}
     
     aa_log "Returned string: $formtext_to_display"
     

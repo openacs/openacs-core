@@ -6,9 +6,13 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {api smoke} apm_higher_version_installed_p {
+aa_register_case -cats {
+    api smoke
+} -procs {
+    apm_higher_version_installed_p
+} apm_higher_version_installed_p {
     Test apm_higher_version_installed_p proc.
-} {    
+} {
 
     aa_run_with_teardown \
         -rollback \

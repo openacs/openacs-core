@@ -61,7 +61,7 @@ ad_proc -private lang::test::setup_test_package {} {
         -enable \
         [apm_package_info_file_path $package_key]
     aa_true "Package install: package enabled" \
-        [expr {$package_key in [apm_enabled_packages]}]
+        {$package_key in [apm_enabled_packages]}
 }
 
 ad_proc -private lang::test::teardown_test_package {} {
@@ -116,10 +116,10 @@ ad_proc -private lang::test::check_import_result {
             $message_actual(upgrade_status) $expect_property(upgrade_status)
         if {$expect_property(sync_time) eq "not_null"} {
             aa_true "Import check: $message_key - lang_messages.sync_time not null" \
-                [expr {$message_actual(sync_time) ne ""}]
+                {$message_actual(sync_time) ne ""}
         } else {
             aa_true "Import check: $message_key - lang_messages.sync_time null" \
-                [expr {$message_actual(sync_time) eq ""}]
+                {$message_actual(sync_time) eq ""}
         }
     }
 }
@@ -555,7 +555,7 @@ aa_register_case \
     set tcl_file_id [open "$::acs::rootdir/$tcl_file" r]
     set updated_tcl_contents [read $tcl_file_id]
     close $tcl_file_id
-    aa_true "tags in Tcl file replaced" [expr {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}]
+    aa_true "tags in Tcl file replaced" {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}
 
     # Delete the test message keys
     foreach message_key [concat [array names messages_array] $expected_new_keys] {
@@ -582,15 +582,15 @@ aa_register_case \
   set indices_list [lang::util::get_hash_indices $multilingual_string]
   set expected_indices_list [list [list 0 14] [list 21 35]]
 
-  aa_true "there should be two hash entries" [expr {[llength $indices_list] == 2}]
+  aa_true "there should be two hash entries" {[llength $indices_list] == 2}
 
   set counter 0
   foreach index_item $indices_list {
       set expected_index_item [lindex $expected_indices_list $counter]
 
       aa_true "checking start and end indices of item $counter" \
-          [expr {[lindex $index_item 0] eq [lindex $expected_index_item 0]
-                 && [lindex $index_item 1] eq [lindex $expected_index_item 1]}]
+          {[lindex $index_item 0] eq [lindex $expected_index_item 0]
+                 && [lindex $index_item 1] eq [lindex $expected_index_item 1]}
 
       set counter [expr {$counter + 1}]
   }

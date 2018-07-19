@@ -87,7 +87,7 @@ aa_register_case -cats smoke acs_subsite_trivial_smoke_test {
 
             set main_subsite_id [subsite::main_site_id]
 
-            aa_true "Main subsite exists" [expr {$main_subsite_id ne ""}]
+            aa_true "Main subsite exists" {$main_subsite_id ne ""}
 
         }
 }

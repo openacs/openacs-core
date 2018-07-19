@@ -76,12 +76,12 @@ aa_register_case -cats db cr_item_search_triggers {
 			     -parent_id $folder_id \
 			     -is_live f]
 	    # make sure the item exists first
-	    aa_true "Item exists" [expr {[content::item::get_id \
+	    aa_true "Item exists" {[content::item::get_id \
 					      -item_path $item_name \
 					      -root_folder_id $folder_id] \
-					     ne ""}]
-	    aa_true "Item is NOT live" [expr {[content::item::get_live_revision \
-						   -item_id $item_id] eq ""}]
+					     ne ""}
+	    aa_true "Item is NOT live" {[content::item::get_live_revision \
+						   -item_id $item_id] eq ""}
 	    aa_true "But a revision exists" \
 		[expr \
 		     {[set latest_revision \

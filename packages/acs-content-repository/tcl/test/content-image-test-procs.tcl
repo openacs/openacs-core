@@ -19,7 +19,7 @@ aa_register_case content_image {
                                           -folder_id $first_folder_id \
                                           -name "test_folder_${first_folder_id}"]
         aa_true "Folder created" \
-            [expr {$first_folder_id == $returned_first_folder_id}]
+            {$first_folder_id == $returned_first_folder_id}
 
         content::folder::register_content_type \
             -folder_id $first_folder_id \
@@ -35,7 +35,7 @@ aa_register_case content_image {
                                         -storage_type "file"]
 
         aa_true "First item created $first_item_id" \
-            [expr {$first_item_id == $returned_first_item_id}]
+            {$first_item_id == $returned_first_item_id}
 
         # create an image
         set image_id [db_nextval "acs_object_id_seq"]
@@ -46,12 +46,12 @@ aa_register_case content_image {
                                    -title "Test Title" \
                                    -description "Test Description"]
         aa_true "Basic Image created revision_id $image_id returned_revision_id $returned_image_id " \
-            [expr {$image_id == $returned_image_id}]
+            {$image_id == $returned_image_id}
 
         ::content::item::get_content -revision_id $returned_image_id -array revision_content
         aa_true "Revision contains correct content" \
-            [expr {$revision_content(title) eq "Test Title"
-                   && $image_id == $revision_content(revision_id)}]
+            {$revision_content(title) eq "Test Title"
+                   && $image_id == $revision_content(revision_id)}
 
         content::item::delete -item_id $first_item_id
 
@@ -73,7 +73,7 @@ aa_register_case -cats {api smoke db} image_new {
                                           -folder_id $first_folder_id \
                                           -name "test_folder_${first_folder_id}"]
         aa_true "Folder created" \
-            [expr {$first_folder_id == $returned_first_folder_id}]
+            {$first_folder_id == $returned_first_folder_id}
 
         content::folder::register_content_type \
             -folder_id $first_folder_id \
@@ -88,11 +88,11 @@ aa_register_case -cats {api smoke db} image_new {
                                -name $image_name \
                                -tmp_filename $tmp_filename]
 
-        aa_true "Image Created" [expr {$image_item_id_orig eq $image_item_id}]
+        aa_true "Image Created" {$image_item_id_orig eq $image_item_id}
         aa_true "Image CR Item Exists" \
-            [expr {$image_item_id eq [content::item::get_id \
+            {$image_item_id eq [content::item::get_id \
                                           -item_path $image_name \
-                                          -root_folder_id $first_folder_id]}]
+                                          -root_folder_id $first_folder_id]}
 
     }
 }

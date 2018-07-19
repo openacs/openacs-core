@@ -29,7 +29,7 @@ aa_register_case \
             set job_id [auth::sync::job::start \
                             -authority_id [auth::authority::local]]
                             
-            aa_true "Returns a job_id" [expr {$job_id ne ""}]
+            aa_true "Returns a job_id" {$job_id ne ""}
 
 
             # Get doc
@@ -62,7 +62,7 @@ aa_register_case \
             # End job
             array set job [auth::sync::job::end -job_id $job_id]
             
-            aa_true "Elapsed time less than 30 seconds" [expr {$job(run_time_seconds) < 30}]
+            aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
             
             aa_log "Elapsed time: $job(run_time_seconds) seconds"
             
@@ -72,7 +72,7 @@ aa_register_case \
             
             aa_equals "Number of problems" $job(num_problems) 1
             
-            aa_false "Log URL non-empty" [expr {$job(log_url) eq ""}]
+            aa_false "Log URL non-empty" {$job(log_url) eq ""}
             
             # Purge not deleting the job
             auth::sync::purge_jobs \
@@ -115,7 +115,7 @@ aa_register_case \
             
             set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
                             
-            aa_true "Returns a job_id" [expr {[info exists job_id]}]
+            aa_true "Returns a job_id" {[info exists job_id]}
 
             #####
             #
@@ -151,7 +151,7 @@ aa_register_case \
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
+            if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
                 
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
@@ -188,7 +188,7 @@ aa_register_case \
 
             aa_equals "entry.success_p" $entry(success_p) "f"
 
-            aa_true "entry.message not empty" [expr {$entry(message) ne ""}]
+            aa_true "entry.message not empty" {$entry(message) ne ""}
 
             aa_log "entry.user_id = '$entry(user_id)'"
             aa_log "entry.message = '$entry(message)'"
@@ -225,7 +225,7 @@ aa_register_case \
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {                
+            if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {                
                 set user [acs_user::get -user_id $entry(user_id)]
                 
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
@@ -264,7 +264,7 @@ aa_register_case \
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
+            if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
                 
                 aa_equals "user.first_names" [dict get $user first_names] $user_info2(first_names)
@@ -301,7 +301,7 @@ aa_register_case \
             aa_equals "entry.success_p" $entry(success_p) "f"
             aa_log "entry.message = '$entry(message)'"
             if { [aa_true "entry.element_messages not empty" \
-		      [expr {[info exists entry(element_messages)] && $entry(element_messages) ne ""}]] } {
+		      {[info exists entry(element_messages)] && $entry(element_messages) ne ""}] } {
                 aa_log "entry.element_messages = '$entry(element_messages)'"
                 array unset elm_msgs
                 array set elm_msgs $entry(element_messages)
@@ -329,7 +329,7 @@ aa_register_case \
             aa_equals "entry.success_p" $entry(success_p) "t"
             aa_log "entry.message = '$entry(message)'"
 
-            if { [aa_true "Entry has user_id set" [expr {[info exists entry(user_id)] && $entry(user_id) ne ""}]] } {
+            if { [aa_true "Entry has user_id set" {[info exists entry(user_id)] && $entry(user_id) ne ""}] } {
                 set member_state [acs_user::get_user_info \
                                       -user_id $entry(user_id) -element "member_state"]
                 aa_equals "User member state is banned" $member_state "banned"
@@ -344,7 +344,7 @@ aa_register_case \
 
             array set job [auth::sync::job::end -job_id $job_id]
             
-            aa_true "Elapsed time less than 30 seconds" [expr {$job(run_time_seconds) < 30}]
+            aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
 
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
 
@@ -352,7 +352,7 @@ aa_register_case \
 
             aa_equals "Number of problems" $job(num_problems) 2
            
-            aa_false "Log URL non-empty" [expr {$job(log_url) eq ""}]
+            aa_false "Log URL non-empty" {$job(log_url) eq ""}
             
         }
 }
@@ -380,7 +380,7 @@ aa_register_case \
             
             set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
                             
-            aa_true "Returns a job_id" [expr {$job_id ne ""}]
+            aa_true "Returns a job_id" {$job_id ne ""}
 
             #####
             #
@@ -415,7 +415,7 @@ aa_register_case \
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
+            if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
                 
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
@@ -457,7 +457,7 @@ aa_register_case \
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
+            if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
                 
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
@@ -528,7 +528,7 @@ aa_register_case \
             auth::sync::job::get -job_id $job_id -array job
 
             aa_log "job.message = '$job(message)'"
-            aa_true "job.message not empty when called for local authority" [expr {$job(message) ne ""}]
+            aa_true "job.message not empty when called for local authority" {$job(message) ne ""}
         }
 }
 
@@ -712,10 +712,10 @@ aa_register_case \
                         aa_true "email has a problem (email missing)" [util_sets_equal_p { email } [array names elm_msgs]]
                     }
                     update {
-                        aa_true "User does not exist" [expr {$entry(message) ne ""}] 
+                        aa_true "User does not exist" {$entry(message) ne ""} 
                     }
                     delete {
-                        aa_false "Message is not empty" [expr {$entry(message) eq ""}]
+                        aa_false "Message is not empty" {$entry(message) eq ""}
                     }
                 }
             }
@@ -1042,7 +1042,7 @@ aa_register_case \
     
 
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
-    aa_true "result.doc_message is empty" [expr {$result(doc_message) eq ""}]
+    aa_true "result.doc_message is empty" {$result(doc_message) eq ""}
     aa_equals "result.document is 'success'" $result(document) "success"
 }
 
@@ -1067,7 +1067,7 @@ aa_register_case \
                           -call_args [list [list SnapshotPath {} IncrementalPath $path]]]
     
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
-    aa_true "result.doc_message is empty" [expr {$result(doc_message) eq ""}]
+    aa_true "result.doc_message is empty" {$result(doc_message) eq ""}
     aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
 }
 
