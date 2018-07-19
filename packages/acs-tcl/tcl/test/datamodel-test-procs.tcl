@@ -7,7 +7,7 @@ ad_library {
 }
 
 
-aa_register_case -cats {db smoke production_safe} datamodel__named_constraints {
+aa_register_case -cats {db smoke production_safe} -error_level warning datamodel__named_constraints {
     Check that all the constraints meet the constraint naming standards.
 
     @author Jeff Davis davis@xarg.net
