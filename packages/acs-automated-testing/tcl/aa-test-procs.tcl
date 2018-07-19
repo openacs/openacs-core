@@ -333,11 +333,16 @@ ad_proc -public aa_register_case {
     testcase_desc
     args
 } {
-    Registers a testcase with the acs-automated-testing system.  Whenever possible, cases that fail to register are replaced with 'metatest' log cases, so that the register-time errors are visible at test time.
+    Registers a testcase with the acs-automated-testing system.
+    Whenever possible, cases that fail to register are replaced with
+    'metatest' log cases, so that the register-time errors are visible
+    at test time.
 
     See <a href="/doc/tutorial-debug">the tutorial</a> for examples.
 
-    @param libraries A list of keywords of additional code modules to load.  The entire test case will fail if any package is missing.  Currently includes <b>tclwebtest</b>.
+    @param libraries A list of keywords of additional code modules to
+    load.  The entire test case will fail if any package is missing.
+    Currently includes <b>tclwebtest</b>.
 
     @param cats Properties of the test case.  Must be zero or more of the following:
     <ul>
@@ -444,7 +449,7 @@ ad_proc -public aa_register_case {
                             [info script] $package_key \
                             $cats $init_classes $on_error $args $error_level $bugs $procs]
     foreach p $procs {
-        api_add_to_proc_doc -proc_name $p -property testcase -value $testcase_id
+        api_add_to_proc_doc -proc_name $p -property testcase -value [list $testcase_id $package_key]
         ns_log notice "TESTCASE: api_add_to_proc_doc -proc_name $p -property testcase -value $testcase_id -> [dict get [nsv_get api_proc_doc $p] testcase]"
     }
     #
