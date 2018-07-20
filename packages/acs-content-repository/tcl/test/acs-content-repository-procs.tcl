@@ -13,7 +13,7 @@ aa_register_case \
         content::keyword::delete
         content::keyword::get_children
         content::keyword::new
-    }
+    } \
     acs_content_repository_trivial_smoke_test {
     Minimal smoke test.
 } {    

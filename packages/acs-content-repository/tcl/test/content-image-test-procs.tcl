@@ -82,7 +82,7 @@ aa_register_case \
         content::folder::register_content_type
         content::item::get_id
         image::new
-    }
+    } \
     image_new {
 
 } {
