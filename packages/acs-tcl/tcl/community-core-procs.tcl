@@ -1164,7 +1164,7 @@ ad_proc -public acs_user::get_portrait_id {
     @param user_id user_id of the user for whom we need the portrait
 } {
     set key [list get_portrait_id -user_id $user_id]
-    return [ns_cache eval party_info_cache $key {
+    return [ns_cache eval user_info_cache $key {
         acs_user::get_portrait_id_not_cached -user_id $user_id
     }]
 }
