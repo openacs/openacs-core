@@ -860,6 +860,7 @@ ad_proc -private util::http::append_to_payload {
         # create the spool file
         set spool_file [ad_tmpnam]
         set wfd [open $spool_file w]
+        fconfigure $wfd -translation binary
         # flush currently collected payload
         puts -nonewline $wfd $payload
         # set required encoding for next content
