@@ -6,6 +6,35 @@ ad_library {
     @cvs-id $Id$
 }
 
+#####
+#
+# Helper procs
+#
+####
+
+namespace eval auth::test {}
+
+ad_proc -private auth::test::get_admin_user_id {} {
+    Return the user id of a site-wide-admin on the system
+} {
+    set context_root_id [acs_lookup_magic_object security_context_root]
+
+    return [db_string select_user_id {}]
+}
+
+ad_proc -private auth::test::get_password_vars {
+    {-array_name:required}
+} {
+    Get test vars for test case.
+} {
+    upvar $array_name test_vars
+
+    db_1row select_vars {} -column_array test_vars
+}
+
+####
+
+
 aa_register_case \
     -cats {api} \
     -procs {
@@ -14,6 +43,9 @@ aa_register_case \
         acs_user::get_by_username
         auth::authenticate
         auth::create_user
+        acs_user::get_portrait_id
+        acs_user::erase_portrait
+        acs_user::create_portrait
     } \
     auth_authenticate {
     Test the auth::authenticate proc.
@@ -41,6 +73,26 @@ aa_register_case \
             }
 
             set user_id [acs_user::get_by_username -username $username]
+
+            ## Portrait api test
+            set old_portrait_id [acs_user::get_portrait_id -user_id $user_id]
+            # use a bogus image from a core package as test portrait
+            set portrait_file [acs_package_root_dir acs-templating]/www/resources/sort-neither.png
+            set new_portrait_id [acs_user::create_portrait \
+                                     -user_id $user_id \
+                                     -description [ad_generate_random_string] \
+                                     -filename [ad_generate_random_string] \
+                                     -file $portrait_file]
+            aa_true "A portrait was correctly created" [string is integer -strict $new_portrait_id]
+            aa_true "Old and new portrait differ" {$new_portrait_id ne $old_portrait_id}
+
+            set old_portrait_id [acs_user::get_portrait_id -user_id $user_id]
+            aa_equals "Portrait retrieval returns the new portrait" $new_portrait_id $old_portrait_id
+
+            acs_user::erase_portrait -user_id $user_id
+            set new_portrait_id [acs_user::get_portrait_id -user_id $user_id]
+            aa_equals "Portrait was erased correctly" $new_portrait_id 0
+            ###
 
             # Successful authentication
             array unset result
@@ -883,33 +935,6 @@ aa_register_case  \
 
             ad_parameter_cache -delete [ad_acs_kernel_id] EmailAccountOwnerOnPasswordChangeP
         }
-}
-
-
-#####
-#
-# Helper procs
-#
-####
-
-namespace eval auth::test {}
-
-ad_proc -private auth::test::get_admin_user_id {} {
-    Return the user id of a site-wide-admin on the system
-} {
-    set context_root_id [acs_lookup_magic_object security_context_root]
-
-    return [db_string select_user_id {}]
-}
-
-ad_proc -private auth::test::get_password_vars {
-    {-array_name:required}
-} {
-    Get test vars for test case.
-} {
-    upvar $array_name test_vars
-
-    db_1row select_vars {} -column_array test_vars
 }
 
 # Local variables:
