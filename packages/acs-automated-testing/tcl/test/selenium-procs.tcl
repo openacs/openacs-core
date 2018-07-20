@@ -5,7 +5,7 @@ ad_library {
 aa_register_case \
     -cats {web selenium smoke} \
     -init_classes {{selenium acs-automated-testing}} \
-    -procs {Se} \
+    -procs {} \
     selenium_server_configured {
     Is the selenium server configured and working?
 } {
