@@ -1015,7 +1015,6 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         acs_sc::invoke
-        ns_parseurl
     } \
     sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
