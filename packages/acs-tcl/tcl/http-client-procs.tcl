@@ -594,7 +594,7 @@ ad_proc util::http::post {
     }
 
     set req_content_type [ns_set iget $headers "content-type"]
-    
+
     set payload {}
     set payload_file {}
     set payload_file_fd {}
@@ -611,7 +611,7 @@ ad_proc util::http::post {
         }
         # ...replace it with our own...
         set boundary [ns_sha1 [list [clock clicks -milliseconds] [clock seconds]]]
-        set req_content_type "multipart/form-data; boundary=$boundary"        
+        set req_content_type "multipart/form-data; boundary=$boundary"
         ns_set put $headers "Content-type" $req_content_type
         # ...and get the proper encoding for the content.
         set enc [util::http::get_channel_settings $req_content_type]
@@ -750,7 +750,7 @@ ad_proc util::http::post {
                      $payload_file \
                      $payload_file_fd]
         lassign $app payload payload_file payload_file_fd
-        
+
     } else {
         # If people specified a content type we won't overwrite it,
         # otherwise this will be a 'application/x-www-form-urlencoded'
@@ -774,7 +774,7 @@ ad_proc util::http::post {
     lassign $app payload payload_file payload_file_fd
 
     if {$payload_file_fd ne ""} {close $payload_file_fd}
-    
+
     return [util::http::request \
                 -method          POST \
                 -body            $payload \
@@ -812,7 +812,7 @@ ad_proc -private util::http::append_to_payload {
 
 } {
     set encode_p [expr {$encoding ni [list "binary" [encoding system]]}]
-    
+
     set payload_size [string length $payload]
 
     # Get content size
@@ -846,9 +846,9 @@ ad_proc -private util::http::append_to_payload {
         # just append new content
         return [list ${payload}${content} {} {}]
     }
-    
+
     ## Payload is too big:
-    
+
     if {$spool_file eq ""} {
         # create the spool file
         set spool_file [ad_tmpnam]
@@ -858,7 +858,7 @@ ad_proc -private util::http::append_to_payload {
         # set required encoding for next content
         if {$encode_p} {
             fconfigure $wfd -encoding $encoding
-        }       
+        }
     }
 
     # output content to spool file
@@ -877,7 +877,7 @@ ad_proc -private util::http::append_to_payload {
     } else {
         puts -nonewline $wfd $content
     }
-    
+
     return [list {} $spool_file $wfd]
 }
 
@@ -1391,7 +1391,7 @@ ad_proc -private util::http::native::request {
             lappend wait_cmd -decompress
         }
     }
-    
+
     # Queue call to the url and wait for response
     {*}$wait_cmd [{*}$queue_cmd]
 
@@ -1751,7 +1751,7 @@ ad_proc -private util::http::curl::request {
     set resp_headers_tmpfile [ad_tmpnam]
     lappend cmd -D $resp_headers_tmpfile
     lappend cmd $url
-    
+
     set response [{*}$cmd]
 
     # Parse headers from dump file
