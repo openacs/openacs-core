@@ -132,33 +132,31 @@ ad_proc -public util::http::cookie_auth {
         set headers [ns_set create headers]
     }
 
-    # Normalize url. Slashes at the end can make
-    # the same url don't look the same for the
-    # server, if we retrieve the same url from
+    # Normalize url. Slashes at the end can make the same url don't
+    # look the same for the server, if we retrieve the same url from
     # the 'action' attribute of the form.
     set auth_url [string trimright $auth_url "/"]
     set base_url [split $auth_url "/"]
     set base_url [lindex $base_url 0]//[lindex $base_url 2]
 
     # Call login url to obtain login form
-    array set r [util::http::get -url $auth_url -preference $preference]
+    set r [util::http::get -url $auth_url -preference $preference]
 
     # Get cookies from response
     util::http::set_cookies \
-      -resp_headers $r(headers) \
-      -headers      $headers \
-      -cookie_names $auth_cookies
+        -resp_headers [dict get $r headers] \
+        -headers      $headers \
+        -cookie_names $auth_cookies
 
     # Obtain and export form vars not provided explicitly
-    set form [util::html::get_forms -html $r(page)]
+    set form [util::html::get_forms -html [dict get $r page]]
     set form [util::html::get_form -forms $form -id $auth_form]
 
-    array set f $form
-    array set a $f(attributes)
-    # Action could be different from original login url
-    # I take that from form attributes.
-    if {[info exists a(action)]} {
-        set auth_url ${base_url}${a(action)}
+    set a [dict get $form attributes]
+    # Action could be different from original login url I take that
+    # from form attributes.
+    if {[dict exists $a action]} {
+        set auth_url ${base_url}[dict get $a action]
         set auth_url [string trimright $auth_url "/"]
     }
 
@@ -169,17 +167,21 @@ ad_proc -public util::http::cookie_auth {
     # Join form vars with our vars
     set formvars [join [list $formvars $auth_vars] "&"]
 
-    # Call login url with authentication parameters. Just retrieve the first response, as it
-    # is common for login pages to redirect somewhere, but we just need to steal the cookies.
-    array set r [util::http::post \
-        -url $auth_url -body $formvars \
-        -headers $headers -max_depth 0 -preference $preference]
+    # Call login url with authentication parameters. Just retrieve the
+    # first response, as it is common for login pages to redirect
+    # somewhere, but we just need to steal the cookies.
+    set r [util::http::post \
+               -url $auth_url \
+               -body $formvars \
+               -headers $headers \
+               -max_depth 0 \
+               -preference $preference]
 
     # Get cookies from response
     util::http::set_cookies \
-      -resp_headers $r(headers) \
-      -headers      $headers \
-      -cookie_names $auth_cookies
+        -resp_headers [dict get $r headers] \
+        -headers      $headers \
+        -cookie_names $auth_cookies
 
     return $headers
 }
@@ -206,6 +208,12 @@ ad_proc -public util::http::available {
     https:// urls only.
 
 } {
+    set ssl_p [expr {$force_ssl_p || [string match "https://*" $url]}]
+    set key ::util::http::available($ssl_p,$preference,$spool_p)
+    if {[info exists $key]} {
+        return [set $key]
+    }
+
     if {$force_ssl_p || [string match "https://*" $url]} {
         set apis [lindex [apis] 1]
     } else {
@@ -220,13 +228,15 @@ ad_proc -public util::http::available {
         }
     }
 
+    set $key ""
     foreach p $preference {
-       if {$p in $apis} {
-           return $p
-       }
+        if {$p in $apis} {
+            set $key $p
+            break
+        }
     }
 
-    return ""
+    return [set $key]
 }
 
 ad_proc -private util::http::native_https_api_not_cached {
@@ -602,7 +612,7 @@ ad_proc util::http::post {
     # Request will be multipart if required by the flag, if we have
     # files or if set up manually by the headers
     if {$multipart_p ||
-        $files ne {} ||
+        [llength $files] != 0 ||
         [string match -nocase "*multipart/form-data*" $req_content_type]} {
 
         # delete every manually set content-type header...
@@ -617,58 +627,58 @@ ad_proc util::http::post {
         set enc [util::http::get_channel_settings $req_content_type]
 
         # Transform files into binaries
-        foreach file $files {
-            unset -nocomplain f
-            array set f $file
-
-            if {![info exists f(data)]} {
-                if {![info exists f(file)]} {
+        foreach f $files {
+            if {![dict exists $f data]} {
+                if {![dict exists $f file]} {
                     return -code error "${this_proc}:  No file specified"
                 }
-                if {![file exists $f(file)]} {
-                    return -code error "${this_proc}:  Error reading file: $f(file) not found"
+                set file [dict get $f file]
+                if {![file exists $file]} {
+                    return -code error "${this_proc}:  Error reading file: $file not found"
                 }
-                if {![file readable $f(file)]} {
-                    return -code error "${this_proc}:  Error reading file: $f(file) permission denied"
+                if {![file readable $file]} {
+                    return -code error "${this_proc}:  Error reading file: $file permission denied"
                 }
 
-                if {![info exists f(filename)]} {
-                    set f(filename) [file tail $f(file)]
-                }
+                dict set $f filename [expr {[dict exists $f filename] ?
+                                            [dict get $f filename] :
+                                            [file tail $file]}]
             }
 
+            # Filename and fieldname must be in the file dict at this
+            # point
             foreach key {filename fieldname} {
-                if {![info exists f($key)]} {
+                if {![dict exists $f $key]} {
                     return -code error "${this_proc}:  '$key' missing for file POST"
                 }
+                set $key [dict get $f $key]
             }
 
-            # Check that we don't already have this var specified in the url
-            if {[info exists urlvars($f(fieldname))]} {
-                return -code error "${this_proc}:  file field '$f(fieldname)' already specified as url variable"
+            # Check that we don't already have this var specified in
+            # the url
+            if {[info exists urlvars($fieldname)]} {
+                return -code error "${this_proc}:  file field '$fieldname' already specified as url variable"
             }
             # Track form variables sent as files
-            set filevars($f(fieldname)) 1
+            set filevars($fieldname) 1
 
-            if {![info exists f(mime_type)]} {
-                set f(mime_type) [ns_guesstype $f(filename)]
-                if {$f(mime_type) in {"*/*" ""}} {
-                    set f(mime_type) "application/octet-stream"
+            if {![dict exists $f mime_type]} {
+                set mime_type [ns_guesstype $filename]
+                if {$mime_type in {"*/*" ""}} {
+                    set mime_type "application/octet-stream"
                 }
+            } else {
+                set mime_type [dict get $f mime_type]
             }
 
-            if {$base64_p} {
-                set transfer_encoding base64
-            } else {
-                set transfer_encoding binary
-            }
+            set transfer_encoding [expr {$base64_p ? "base64" : "binary"}]
 
             set content [list --$boundary \
                              \r\n \
                              "Content-Disposition: form-data; " \
-                             "name=\"$f(fieldname)\"; filename=\"$f(filename)\"" \
+                             "name=\"$fieldname\"; filename=\"$filename\"" \
                              \r\n \
-                             "Content-Type: $f(mime_type)" \
+                             "Content-Type: $mime_type" \
                              \r\n \
                              "Content-transfer-encoding: $transfer_encoding" \
                              \r\n \
@@ -682,9 +692,9 @@ ad_proc util::http::post {
                          $payload_file_fd]
             lassign $app payload payload_file payload_file_fd
 
-            if {[info exists f(data)]} {
+            if {[dict exists $f data]} {
                 set app [append_to_payload \
-                             -content $f(data) \
+                             -content [dict get $f data] \
                              $enc \
                              $max_body_size \
                              $payload \
@@ -692,7 +702,7 @@ ad_proc util::http::post {
                              $payload_file_fd]
             } else {
                 set app [append_to_payload \
-                             -file $f(file) \
+                             -file $file \
                              $enc \
                              $max_body_size \
                              $payload \
@@ -709,7 +719,6 @@ ad_proc util::http::post {
                          $payload_file \
                          $payload_file_fd]
             lassign $app payload payload_file payload_file_fd
-
         }
 
         # Translate urlencoded vars into multipart variables
@@ -738,7 +747,6 @@ ad_proc util::http::post {
                          $payload_file \
                          $payload_file_fd]
             lassign $app payload payload_file payload_file_fd
-
         }
 
         set content "--$boundary--\r\n"
@@ -790,7 +798,6 @@ ad_proc util::http::post {
                 -gzip_response=$gzip_response_p \
                 -post_redirect=$post_redirect_p \
                 -spool=$spool_p]
-
 }
 
 ad_proc -private util::http::append_to_payload {
