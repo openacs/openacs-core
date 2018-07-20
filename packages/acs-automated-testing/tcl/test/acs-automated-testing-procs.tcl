@@ -6,7 +6,17 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {web smoke} -libraries tclwebtest tclwebtest_example {
+aa_register_case \
+    -cats {web} \
+    -procs {
+        twt::user::create
+        twt::user::login
+        twt::do_request
+        twt::user::logout
+        twt::user::delete
+    } \    
+    -libraries tclwebtest \
+    tclwebtest_example {
     A simple test case demonstrating the use of tclwebtest (HTTP level testing).
 
     @author Peter Marklund

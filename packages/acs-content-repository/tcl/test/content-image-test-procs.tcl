@@ -7,7 +7,19 @@ ad_library {
 }
 
 
-aa_register_case content_image {
+aa_register_case \
+    -cats {api db} \
+    -procs {
+        content::folder::delete
+        content::folder::new
+        content::folder::register_content_type
+        content::folder::unregister_content_type
+        content::item::delete
+        content::item::get_content
+        content::item::new
+        content::revision::new
+    } \
+    content_image {
     content image test
 } {
 
@@ -26,7 +38,7 @@ aa_register_case content_image {
             -content_type "image" \
 
         # create a cr_item
-        set first_item_id [db_nextval  "acs_object_id_seq"]
+        set first_item_id [db_nextval "acs_object_id_seq"]
         set returned_first_item_id [content::item::new \
                                         -name "test_item_one" \
                                         -item_id $first_item_id \
@@ -63,7 +75,15 @@ aa_register_case content_image {
     }
 }
 
-aa_register_case -cats {api smoke db} image_new {
+aa_register_case \
+    -cats {api db} \
+    -procs {
+        content::folder::new
+        content::folder::register_content_type
+        content::item::get_id
+        image::new
+    }
+    image_new {
 
 } {
     aa_run_with_teardown -rollback -test_code {

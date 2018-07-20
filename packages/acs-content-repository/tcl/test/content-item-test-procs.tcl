@@ -7,10 +7,28 @@ ad_library {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
     @cvs-id $Id$
-    
 }
 
-aa_register_case content_item {
+aa_register_case \
+    -cats {api db} \
+    -procs {
+        ad_generate_random_string
+        content::folder::delete
+        content::folder::is_empty
+        content::folder::new
+        content::folder::register_content_type
+        content::item::delete
+        content::item::get
+        content::item::get_id
+        content::item::get_latest_revision
+        content::item::new
+        content::item::rename
+        content::item::update
+        content::type::attribute::new
+        content::type::delete
+        content::type::new
+    } \
+    content_item {
     content item test
 } {
 
@@ -65,12 +83,10 @@ aa_register_case content_item {
             aa_true "first item exists" {[content::item::get -item_id $first_item_id] == 1}
 
             aa_true "First item's revision exists" \
-                [expr \
-                     {![string equal "" \
-                            [db_string get_revision {
-                                select latest_revision from cr_items, cr_revisions
-                                where latest_revision=revision_id and cr_items.item_id = :first_item_id
-                            } -default ""]]}]
+                {[db_string get_revision {
+                    select latest_revision from cr_items, cr_revisions
+                    where latest_revision=revision_id and cr_items.item_id = :first_item_id
+                } -default ""] ne ""}
 
             # check the folder is not empty now.
             set is_empty [content::folder::is_empty -folder_id $first_folder_id]
@@ -93,14 +109,12 @@ aa_register_case content_item {
 
             aa_true "Evil_name item created" {$evil_item_id == $returned_evil_item_id}
 
-            aa_true "Evil_name item exists" [expr \
-                                                 [content::item::get \
-                                                      -item_id $evil_item_id \
-                                                      -revision latest \
-                                                      -array_name evil_name] == 1]
+            aa_true "Evil_name item exists" {[content::item::get \
+                                                  -item_id $evil_item_id \
+                                                  -revision latest \
+                                                  -array_name evil_name] == 1}
             aa_true "Evil_name item's revision exists" \
-                [expr \
-                     {$evil_name(latest_revision) ne ""}]
+                {$evil_name(latest_revision) ne ""}
 
             #########################################################
             # delete the evil_name item
@@ -112,13 +126,12 @@ aa_register_case content_item {
             
             content::item::delete -item_id $evil_item_id
             array unset evil_name
-            aa_true "evil_name item no longer exists" [expr \
+            aa_true "evil_name item no longer exists" {
                 [content::item::get \
                      -item_id $evil_item_id \
                      -revision "latest" \
-                     -array_name evil_name] == 0]
-            aa_true "evil_name item revision does not exist" [expr \
-                                                              ![info exists evil(latest_revision)]]
+                     -array_name evil_name] == 0}
+            aa_true "evil_name item revision does not exist" {![info exists evil(latest_revision)]}
 
 
             #########################################################
@@ -179,8 +192,7 @@ aa_register_case content_item {
             #########################################################
             # check that extended attribute exists
             #########################################################
-            aa_true "Extended attribute set" [expr [string equal "attribute_value" \
-                               $new_type_item(attribute_name)]]
+            aa_equals "Extended attribute set" "attribute_value" $new_type_item(attribute_name)
 
             #########################################################
             # test update of item and attributes
@@ -193,7 +205,8 @@ aa_register_case content_item {
                 -item_id $new_type_item_id \
                 -revision "latest" \
                 -array_name new_type_item
-            aa_true "Item updated $new_type_item(name) $new_type_item(publish_status)" {($new_type_item(name)) eq "new_name" && ($new_type_item(publish_status) eq "live")}
+            aa_true "Item updated $new_type_item(name) $new_type_item(publish_status)" \
+                {$new_type_item(name) eq "new_name" && $new_type_item(publish_status) eq "live"}
             
             #########################################################
             # copy it

@@ -12,12 +12,12 @@ ad_proc -private cr_item_search::assert_not_in_queue {
     Check if revision_id is in the search observer queue
 } {
     aa_false "Revision ${revision_id} is not queued for search events $events" \
-	[expr [db_string check_queue [subst {
+	[db_string check_queue [subst {
             select count(*) from search_observer_queue 
             where object_id = :revision_id
             and event in
             ([template::util::tcl_to_sql_list $events])
-        }] -default 0]]
+        }] -default 0]
 }
 
 ad_proc -private cr_item_search::assert_in_queue {
@@ -30,12 +30,12 @@ ad_proc -private cr_item_search::assert_in_queue {
     @param events List of events to check for (INSERT,UPDATE,DELETE)
 } {
     aa_true "Revision ${revision_id} is queued for search events $events" \
-	[expr [db_string check_queue [subst {
+	[db_string check_queue [subst {
             select count(*) from search_observer_queue 
             where object_id = :revision_id
             and event in 
             ([template::util::tcl_to_sql_list $events])
-        }] -default 0]]
+        }] -default 0]
 }
 
 ad_proc -private cr_item_search::remove_from_queue {
@@ -58,8 +58,23 @@ ad_proc -private cr_item_search::test_setup {
 }
 
 
-aa_register_case -cats db cr_item_search_triggers {
-    Test search update trigger
+aa_register_case \
+    -cats {api db} \
+    -procs {
+        content::item::get_id
+        content::item::get_latest_revision
+        content::item::get_live_revision
+        content::item::new
+        content::item::set_live_revision
+        content::item::unset_live_revision
+        content::item::update
+        cr_item_search::assert_in_queue
+        cr_item_search::assert_not_in_queue
+        cr_item_search::remove_from_queue
+        cr_item_search::test_setup
+    } \
+    cr_item_search_triggers {
+      Test search update trigger
 } {
     if {![string match -nocase  "oracle*" [db_name]]} {
     aa_run_with_teardown \
@@ -81,17 +96,16 @@ aa_register_case -cats db cr_item_search_triggers {
 					      -root_folder_id $folder_id] \
 					     ne ""}
 	    aa_true "Item is NOT live" {[content::item::get_live_revision \
-						   -item_id $item_id] eq ""}
-	    aa_true "But a revision exists" \
-		[expr \
-		     {[set latest_revision \
-			   [content::item::get_latest_revision \
-				-item_id $item_id]] ne ""}]
+                                             -item_id $item_id] eq ""}
+            set latest_revision [content::item::get_latest_revision \
+                                     -item_id $item_id]
+	    aa_true "But a revision exists" {$latest_revision ne ""}
 	    aa_false "Item is NOT queued for search indexing" \
-		[expr [db_string check_queue {
+		[db_string check_queue {
                     select 1 from search_observer_queue 
                     where object_id = :latest_revision
-                } -default 0]]
+                } -default 0]
+            
 	    aa_log "Update Item, still no live revision"
 	    content::item::update \
 		-item_id $item_id \
@@ -99,12 +113,14 @@ aa_register_case -cats db cr_item_search_triggers {
 	    cr_item_search::assert_not_in_queue \
 		-revision_id $latest_revision \
 		-events [list INSERT UPDATE]
+            
 	    aa_log "Set live revision no publish date"
 	    content::item::set_live_revision \
 		-revision_id $latest_revision
 	    cr_item_search::assert_in_queue \
 		-revision_id $latest_revision \
 		-events [list INSERT UPDATE]
+            
 	    content::item::unset_live_revision -item_id $item_id
 	    cr_item_search::assert_in_queue \
 		-revision_id $latest_revision \
@@ -113,6 +129,7 @@ aa_register_case -cats db cr_item_search_triggers {
 		-revision_id $latest_revision
             set next_date [clock format [clock scan "tomorrow"] -format "%Y-%m-%d"]
 	    db_dml set_publish_date "update cr_revisions set publish_date=:next_date where revision_id=:latest_revision"
+
 	    aa_log "Publish Date in future, live revision not set"
 	    cr_item_search::assert_not_in_queue \
 		-revision_id $latest_revision \
@@ -124,11 +141,11 @@ aa_register_case -cats db cr_item_search_triggers {
 	    db_dml set_live_revision \
 		"update cr_items set live_revision=latest_revision
                  where item_id=:item_id"
+
 	    aa_log "Publish date in future, live revision set"
 	    cr_item_search::assert_not_in_queue \
 		-revision_id $latest_revision \
 		-events [list INSERT UPDATE]
-	    
 	}
     }
 }

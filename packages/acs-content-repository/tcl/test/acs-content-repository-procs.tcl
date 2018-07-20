@@ -6,7 +6,15 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {smoke api} acs_content_repository_trivial_smoke_test {
+aa_register_case \
+    -cats {smoke api db} \
+    -procs {
+        ad_generate_random_string
+        content::keyword::delete
+        content::keyword::get_children
+        content::keyword::new
+    }
+    acs_content_repository_trivial_smoke_test {
     Minimal smoke test.
 } {    
 

@@ -4,10 +4,12 @@ ad_library {
 
 aa_register_case \
     -cats {web selenium smoke} \
-    -init_classes {{selenium acs-automated-testing}} selenium_server_configured {
+    -init_classes {{selenium acs-automated-testing}} \
+    -procs {Se} \
+    selenium_server_configured {
     Is the selenium server configured and working?
 } {
-     aa_false "Start Selenium RC Session" [catch {Se start} errmsg]
+    aa_false "Start Selenium RC Session" [catch {Se start} errmsg]
     aa_log $errmsg
     aa_false "Open [ad_url]" [catch {Se open [ad_url]} errmsg]
     aa_log $errmsg

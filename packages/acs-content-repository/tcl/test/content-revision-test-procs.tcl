@@ -8,9 +8,22 @@ ad_library {
 }
 
 
-aa_register_case content_revision {
-    content revision test
-} {
+aa_register_case \
+    -cats {api db} \
+    -procs {
+        content::folder::delete
+        content::folder::new
+        content::folder::register_content_type
+        content::folder::unregister_content_type
+        content::item::delete
+        content::item::get_content
+        content::item::new
+        content::revision::new
+        cr_write_content 
+    } \
+    content_revision {
+        content revision test
+    } {
 
     aa_run_with_teardown -rollback -test_code {
 
@@ -51,10 +64,11 @@ aa_register_case content_revision {
 
         content::item::get_content -revision_id $returned_revision_id -array revision_content
         set revision_content(content) [cr_write_content -revision_id $returned_revision_id -string]
-        aa_true "Revision contains correct content" \
-            { $revision_content(title) eq "Test Title"
-                    && $revision_content(content) eq "Test Content"
-                    && $revision_id == $revision_content(revision_id)}
+        aa_true "Revision contains correct content" {
+            $revision_content(title) eq "Test Title"
+            && $revision_content(content) eq "Test Content"
+            && $revision_id == $revision_content(revision_id)
+        }
 
         content::item::delete -item_id $first_item_id
 
