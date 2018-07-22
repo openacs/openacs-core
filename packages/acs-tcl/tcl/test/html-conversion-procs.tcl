@@ -212,7 +212,7 @@ aa_register_case -cats {api smoke} -procs {ad_quotehtml ad_unquotehtml} quote_un
     set html {"<&text>"}
     aa_log "Unquote html=$html"
     set result [ns_quotehtml $html]
-    aa_true "Quoute html=$result" [string equal "&#34;&lt;&amp;text&gt;&#34;" $result]
+    aa_equals "Quoute html=$result"  "&#34;&lt;&amp;text&gt;&#34;" $result
 
     #unquote html
     set html $result

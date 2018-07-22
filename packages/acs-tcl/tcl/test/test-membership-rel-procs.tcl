@@ -26,8 +26,8 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
         acs_user::get -user_id $user_id -array user
 	
  	#Verifying if the state was changed
- 	aa_true "Changed State to aprroved" \
- 	    [string equal $user(member_state) "approved"]
+ 	aa_equals "Changed State to aprroved"  \
+ 	    $user(member_state) "approved"
 
 
 	#Try to change his state to banned
@@ -36,8 +36,8 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
 	acs_user::get -user_id $user_id -array user
 	
         #Verifying if the state was changed 
-	aa_true "Changed State to banned" \
-	    [string equal $user(member_state) "banned"]
+	aa_equals "Changed State to banned"  \
+	    $user(member_state) "banned"
 
 
 	#Try to change his state to rejected
@@ -46,8 +46,8 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
 	acs_user::get -user_id $user_id -array user
 	
 	#Verifying if the state was changed
-	aa_true "Changed State to rejected" \
-	    [string equal $user(member_state) "rejected"]
+	aa_equals "Changed State to rejected"  \
+	    $user(member_state) "rejected"
 
 
 	#Try to change his state to unapproved
@@ -56,8 +56,8 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
 	acs_user::get -user_id $user_id -array user
 
 	#Verifying if the state was changed
-	aa_true "Changed State to unapproved" \
-	    [string equal $user(member_state) "needs approval"]
+	aa_equals "Changed State to unapproved"  \
+	    $user(member_state) "needs approval"
 
 	#Try to change his state to deleted
 	aa_log "We change the state to deleted"
@@ -65,8 +65,8 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
         acs_user::get -user_id $user_id -array user
 
 	#Verifying if the state was changed
-	aa_true "Changed State to deleted" \
-            [string equal $user(member_state) "deleted"]
+	aa_equals "Changed State to deleted"  \
+            $user(member_state) "deleted"
 
 
     }

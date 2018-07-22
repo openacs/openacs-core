@@ -34,7 +34,7 @@ aa_register_case \
 	    #Get the cookie and we try if exist
 	    #-------------------------------------------------------------------------
 	    set cookie_info_p [ad_get_cookie -include_set_cookies t test_cookie_test_case "" ]
-	    aa_true "Check if the cookie exist" [string equal $cookie_info_p $data]
+	    aa_equals "Check if the cookie exist"  $cookie_info_p $data
 
 	    #-------------------------------------------------------------------------
 	    #clearing the cookie

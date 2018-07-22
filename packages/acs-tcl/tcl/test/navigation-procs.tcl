@@ -140,7 +140,7 @@ ad_context_bar
 
 	# Test
         aa_log "ad_context_bar 1: '$context_bar'\nad_context_bar 2: '$context_barp'"
-	aa_true "Context_bar = $context_barp" [string equal $context_bar $context_barp]
+	aa_equals "Context_bar = $context_barp"  $context_bar $context_barp
 
 	#-----------------------------------------------------------------------
         # Case 2: node_id = testnode_2 (testnode2 is a testnode_1 children)
@@ -159,7 +159,7 @@ ad_context_bar
         append context_barp "$leave_node"
         set context_bar [ad_context_bar -node_id $idr_2 -separator $separator $leave_node]
 
-        aa_true "Context_bar = $context_barp" [string equal $context_bar $context_barp]
+        aa_equals "Context_bar = $context_barp"  $context_bar $context_barp
 
 	#----------------------------------------------------------------------------
         # Case 3: from_node = testnode_1 and node_id = testnode_2
@@ -177,7 +177,7 @@ ad_context_bar
         }
         append context_barp "$leave_node"
 	set context_bar [ad_context_bar -from_node $idr_1 -node_id $idr_2 -separator $separator $leave_node]	
-	aa_true "Context_bar = $context_barp" [string equal $context_bar $context_barp]
+	aa_equals "Context_bar = $context_barp"  $context_bar $context_barp
     }
 }
 
