@@ -6,7 +6,9 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case acs_messaging_format_as_html {
+aa_register_case \
+    -procs {acs_messaging_format_as_html} \
+    acs_messaging_format_as_html {
     Test acs_messaging_format_as_html proc.
 } {    
 
@@ -21,7 +23,9 @@ aa_register_case acs_messaging_format_as_html {
         }
 }
 
-aa_register_case acs_messaging_message_p {
+aa_register_case \
+    -procs {acs_message_p} \
+    acs_messaging_message_p {
     Test message_p proc.
 } {    
 
