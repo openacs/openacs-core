@@ -6,7 +6,16 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case acs_subsite_expose_bug_775 {
+aa_register_case \
+    -bugs {775} \
+    -procs {
+        group::delete
+        group::new
+        permission::grant
+        rel_segments_new
+        relation_add
+    } \
+    acs_subsite_expose_bug_775 {
     Exposes Bug 775.
 
     @author Don Baccus
@@ -30,7 +39,15 @@ aa_register_case acs_subsite_expose_bug_775 {
 
 }
 
-aa_register_case acs_subsite_expose_bug_1144 {
+aa_register_case \
+    -bugs {1144} \
+    -procs {
+        acs_user::delete
+        application_group::group_id_from_package_id
+        auth::create_user
+        group::add_member
+    } \
+    acs_subsite_expose_bug_1144 {
     Exposes Bug 1144.
 
     @author Peter Marklund
@@ -75,7 +92,10 @@ aa_register_case acs_subsite_expose_bug_1144 {
         }
 }
 
-aa_register_case -cats smoke acs_subsite_trivial_smoke_test {
+aa_register_case \
+    -cats smoke \
+    -procs {subsite::main_site_id} \
+    acs_subsite_trivial_smoke_test {
     Minimal smoke test.
 } {    
 
@@ -84,29 +104,38 @@ aa_register_case -cats smoke acs_subsite_trivial_smoke_test {
         -test_code {
             # initialize random values
             set name [ad_generate_random_string]
-
             set main_subsite_id [subsite::main_site_id]
-
             aa_true "Main subsite exists" {$main_subsite_id ne ""}
-
         }
 }
 
-aa_register_case -cats smoke acs_subsite_unregistered_visitor {
+aa_register_case \
+    -cats smoke \
+    acs_subsite_unregistered_visitor {
     Test that unregistered visitor is not in any groups
 } {
 
     aa_equals "Unregistered vistior is not in any groups except The Public" \
-        [db_string count_rels "
+        [db_string count_rels {
 	    select count(*)
 	    from group_member_map g, acs_magic_objects a
 	    where g.member_id = 0
 	      and g.group_id <> a.object_id
-	      and a.name = 'the_pubic'" -default 0] 0
+              and a.name = 'the_public'} -default 0] 0
 }
 
 
-aa_register_case -cats smoke acs_subsite_check_composite_group {
+aa_register_case \
+    -cats smoke \
+    -procs {
+        acs_user::get_by_username_not_cached
+        auth::authority::local
+        auth::create_user
+        group::add_member
+        group::new
+        relation_add
+        util_memoize_flush
+    } acs_subsite_check_composite_group {
     Build a 3-level hierarchy of composite groups and check memberships. This test case covers the membership and composition rel insertion triggers and composability of basic membership and admin rels.
 
     @author Michael Steigman
