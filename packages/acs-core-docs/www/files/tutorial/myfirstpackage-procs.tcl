@@ -17,7 +17,7 @@ aa_register_case \
                 aa_true "Note add succeeded" {$new_id ne ""}
                 
                 mfp::note::get -item_id $new_id -array note_array
-                aa_true "Note contains correct title" [string equal $note_array(title) $name]
+                aa_equals "Note contains correct title" $note_array(title) $name
                 
                 mfp::note::delete -item_id $new_id
                 
@@ -42,7 +42,7 @@ aa_register_case \
                 aa_true "Note add succeeded" {$new_id ne ""}
                 
                 mfp::note::get -item_id $new_id -array note_array
-                aa_true "Note contains correct title" [string equal $note_array(title) $name]
+                aa_equals "Note contains correct title" $note_array(title) $name
                 aa_log "Title is $name"
                 mfp::note::delete -item_id $new_id
                 
@@ -121,12 +121,12 @@ aa_register_case \
             # 3) screen-scrape for the ID
             # all options are problematic.  We'll do #1 in this example:
 
-            set note_id [db_string get_note_id_from_name " 
+            set note_id [db_string get_note_id_from_name {
                 select item_id 
                   from cr_items 
                  where name = :note_title  
                    and content_type = 'mfp_note'
-            " -default 0]
+            } -default 0]
 
             aa_log "Deleting note with id $note_id"
 
