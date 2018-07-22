@@ -1,11 +1,10 @@
 ad_library {
 
-    Provides a variety of non-ACS-specific utilities, including
-    the procs to support the who's online feature.
+    Provides a variety of compatibility functions for AOLserver,
+    including url(en|de)code, cookie management, ad_mutex_eval,
+    ns_md5, ns_parseurl, and ns_getcontent.
 
-    @author Various (acs@arsdigita.com)
-    @creation-date 13 April 2000
-    @cvs-id $Id$
+    @author Gustaf Neumann
 }
 
 if {[ns_info name] eq "NaviServer"} {
@@ -333,6 +332,56 @@ ad_proc ns_parseurl {url} {
     }
     return $result
 }
+
+#-------------------------------------------------------------------------
+# In case, we are not running under NaviServer, provide a proc
+# compatible with NaviServer's built-in ns_getcontent.  This function
+# returns the content of a request as file or as string, no matter,
+# whether it was spooled during upload into a file or not. Currently,
+# this compatibility function does not support fully the binary flag
+# (binary state of "ns_conn content" and "ns_conn contentchannel"
+# unclear). File reading in spool case could be done more efficiently
+# when necessary by reading content chunkwise. When the maintenance
+# state of AOLserver does not change, this won't be necessary.
+# -------------------------------------------------------------------------
+
+nsf::proc ns_getcontent {{-as_file true} {-binary true}} {
+    set NS_CONN_FILECONTENT 0x80
+    if {$as_file} {
+        #
+        # If the file was not spooled, obtainit via [ns_conn content]
+        # as write it to a file.
+        #
+        set result [ad_tmpnam]
+        set F [open $result w]
+        if {$binary} {
+            fconfigure $F -translation binary -encoding binary
+        }
+        if {[ns_conn flags] & $NS_CONN_FILECONTENT} {
+            #
+            # This can be done more efficiently when necessary by
+            # reading content chunkwise. When the maintenance state of
+            # AOLserver does not change, this won't be necessary.
+            #
+            set content [read [ns_conn contentchannel]]
+        } else {
+            set content [ns_conn content]
+        } 
+        puts -nonewline $F $content
+        close $F
+    } else {
+        #
+        # Return the result as a string
+        #
+        if {[ns_conn flags] & $NS_CONN_FILECONTENT} {
+            set result [read [ns_conn contentchannel]]
+        } else {
+            set result [ns_conn content]
+        }
+    }
+    return $result
+}
+
 
 # Local variables:
 #    mode: tcl
