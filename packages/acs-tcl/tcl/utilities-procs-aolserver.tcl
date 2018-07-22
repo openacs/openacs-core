@@ -18,12 +18,12 @@ if {[ns_info name] eq "NaviServer"} {
 ad_proc -public ad_urlencode_folder_path {path} {
     Perform an urlencode operation on the segments of the provided
     folder (for a full folder path rather than path segments as in
-	    ad_urlencode_path).
+            ad_urlencode_path).
     @see ad_urlencode_path
 } {
     set segments {}
     foreach segment [split $path /] {
-	lappend segments [ns_urlencode $segment]
+        lappend segments [ns_urlencode $segment]
     }
     return [join $segments /]
 }
@@ -73,8 +73,8 @@ ad_proc -public ad_unset_cookie {
     @see ad_set_cookie
 } {
     ad_set_cookie -replace t -expire t -max_age 0 \
-	-secure $secure -domain $domain -path $path \
-	$name ""
+        -secure $secure -domain $domain -path $path \
+        $name ""
 }
 
 #
@@ -92,15 +92,15 @@ ad_proc -public ad_get_cookie {
 } {
 
     if { $include_set_cookies == "t" } {
-	set headers [ns_conn outputheaders]
-	set nr_headers [ns_set size $headers]
-	for { set i 0 } { $i < $nr_headers } { incr i } {
-	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie"
-		 && [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value]
-	     } {
-		return [ns_urldecode $value]
-	    }
-	}
+        set headers [ns_conn outputheaders]
+        set nr_headers [ns_set size $headers]
+        for { set i 0 } { $i < $nr_headers } { incr i } {
+            if { [string tolower [ns_set key $headers $i]] eq "set-cookie"
+                 && [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value]
+             } {
+                return [ns_urldecode $value]
+            }
+        }
     }
 
     set headers [ns_conn headers]
@@ -108,13 +108,13 @@ ad_proc -public ad_get_cookie {
 
     if { [regexp " $name=(\[^;\]*)" " $cookie" match value] } {
 
-	# If the cookie was set to a blank value we actually stored two quotes.  We need
-	# to undo the kludge on the way out.
+        # If the cookie was set to a blank value we actually stored two quotes.  We need
+        # to undo the kludge on the way out.
 
-	if { $value eq "\"\"" } {
-	    set value ""
-	}
-	return [ns_urldecode $value]
+        if { $value eq "\"\"" } {
+            set value ""
+        }
+        return [ns_urldecode $value]
     }
 
     return $default
@@ -181,65 +181,65 @@ ad_proc -public ad_set_cookie {
 } {
     set headers [ad_conn outputheaders]
     if { $replace } {
-	# Try to find an already-set cookie named $name.
-	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
-	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie"
-		 && [string match "$name=*" [ns_set value $headers $i]]
-	     } {
-		ns_set delete $headers $i
-	    }
-	}
+        # Try to find an already-set cookie named $name.
+        for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
+            if { [string tolower [ns_set key $headers $i]] eq "set-cookie"
+                 && [string match "$name=*" [ns_set value $headers $i]]
+             } {
+                ns_set delete $headers $i
+            }
+        }
     }
 
     # need to set some value, so we put "" as the cookie value
     if { $value eq "" } {
-	set cookie "$name=\"\""
+        set cookie "$name=\"\""
     } else {
-	set cookie "$name=[ns_urlencode $value]"
+        set cookie "$name=[ns_urlencode $value]"
     }
 
     if { $path ne "" } {
-	append cookie "; Path=$path"
+        append cookie "; Path=$path"
     }
 
     if { $discard != "f" } {
-	append cookie "; Discard"
+        append cookie "; Discard"
     } elseif { $max_age eq "inf" } {
-	if { $expire == "f"} {
-	    #
-	    # netscape seemed unhappy with huge max-age, so we use
-	    # expires which seems to work on both netscape and IE
-	    #
-	    append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
-	}
+        if { $expire == "f"} {
+            #
+            # netscape seemed unhappy with huge max-age, so we use
+            # expires which seems to work on both netscape and IE
+            #
+            append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
+        }
     } elseif { $max_age ne "" } {
-	#
-	# We know $max_age is also not "inf"
-	#
-	append cookie "; Max-Age=$max_age"
-	if {$expire == "f"} {
-	    # Reinforce Max-Age via "Expires", unless user required
-	    # immediate expiration
-	    set expire_time [util::cookietime [expr {[ns_time] + $max_age}]]
-	    append cookie "; Expires=$expire_time"
-	}
+        #
+        # We know $max_age is also not "inf"
+        #
+        append cookie "; Max-Age=$max_age"
+        if {$expire == "f"} {
+            # Reinforce Max-Age via "Expires", unless user required
+            # immediate expiration
+            set expire_time [util::cookietime [expr {[ns_time] + $max_age}]]
+            append cookie "; Expires=$expire_time"
+        }
     }
 
     if {$expire != "f"} {
-	append cookie "; Expires=Tue, 01-Jan-1980 01:00:00 GMT"
+        append cookie "; Expires=Tue, 01-Jan-1980 01:00:00 GMT"
     }
 
     if { $domain ne "" } {
-	append cookie "; Domain=$domain"
+        append cookie "; Domain=$domain"
     }
 
     if { $secure == "t" } {
-	append cookie "; Secure"
+        append cookie "; Secure"
     }
 
     if { $scriptable == "f" } {
-	# Prevent access to this cookie via JavaScript
-	append cookie "; HttpOnly"
+        # Prevent access to this cookie via JavaScript
+        append cookie "; HttpOnly"
     }
 
     ns_log Debug "OACS Set-Cookie: $cookie"
@@ -264,11 +264,11 @@ ad_proc -public ad_mutex_eval {mutex script} {
 } {
     ns_mutex lock $mutex
     ad_try {
-	set result [uplevel $script]
+        set result [uplevel $script]
     } on error {errorMsg} {
-	error $errorMsg
+        error $errorMsg
     } finally {
-	ns_mutex unlock $mutex
+        ns_mutex unlock $mutex
     }
     return $result
 }
@@ -280,7 +280,7 @@ ad_proc -public ad_mutex_eval {mutex script} {
 #-------------------------------------------------------------------------
 ad_proc ns_md5 {value} {
     Emulation of NaviServer's ns_md5
-    
+
     @author Gustaf Neumann
 } {
     package require md5
@@ -294,7 +294,7 @@ ad_proc ns_md5 {value} {
 
 ad_proc ns_parseurl {url} {
     Emulation of NaviServer's ns_parseurl
-    
+
     @author Gustaf Neumann
 } {
     #puts stderr url=$url
@@ -366,7 +366,7 @@ nsf::proc ns_getcontent {{-as_file true} {-binary true}} {
             set content [read [ns_conn contentchannel]]
         } else {
             set content [ns_conn content]
-        } 
+        }
         puts -nonewline $F $content
         close $F
     } else {
