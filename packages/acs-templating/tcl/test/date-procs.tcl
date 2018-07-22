@@ -6,12 +6,16 @@ ad_library {
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2005-10-13
-    @arch-tag: b5d458b6-bd22-4b87-8c4e-6a8c23fcca9e
     @cvs-id $Id$
 }
 
 
-aa_register_case sql_date {
+aa_register_case \
+    -procs {
+        template::util::date::get_property
+        template::util::date::now
+    } \
+    sql_date {
     test sql date transform
 } {
     aa_run_with_teardown \

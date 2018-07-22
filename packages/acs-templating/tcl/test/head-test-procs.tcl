@@ -6,7 +6,15 @@ ad_library {
     @creation-date 2018-03-09
 }
 
-aa_register_case -cats {api smoke} head_includes {
+aa_register_case \
+    -cats {api} \
+    -procs {
+        template::head::flush_link
+        template::head::flush_script
+        template::head::included_p
+        template::head::includes
+    } \
+    head_includes {
     simple test head includes test cases
 } {
 
