@@ -3,7 +3,27 @@ ad_library {
     @creation-date 2017-07-19
 }
 
-aa_register_case -cats {api smoke} acs_mail_lite_inbound_procs_check {
+aa_register_case \
+    -cats {api smoke} \
+    -procs{
+        acs_mail_lite::email_type
+        acs_mail_lite::imap_conn_close
+        acs_mail_lite::imap_conn_go
+        acs_mail_lite::imap_mailbox_join
+        acs_mail_lite::imap_mailbox_split
+        acs_mail_lite::inbound_prioritize
+        acs_mail_lite::sched_parameters
+        acs_mail_lite::section_id_of
+        acs_mail_lite::section_ref_of
+        acs_mail_lite::unique_id_create
+        acs_mail_lite::unique_id_parse
+        ad_system_owner
+        ad_var_type_check_integer_p
+        apm_package_id_from_key
+        f::lmax
+        party::get_by_email
+    } \
+    acs_mail_lite_inbound_procs_check {
     Test acs-mail-lite procs in email-inbound-procs.tcl
 } {
     aa_run_with_teardown \
