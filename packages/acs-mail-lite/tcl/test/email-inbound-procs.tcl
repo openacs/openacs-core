@@ -5,7 +5,7 @@ ad_library {
 
 aa_register_case \
     -cats {api smoke} \
-    -procs{
+    -procs {
         acs_mail_lite::email_type
         acs_mail_lite::imap_conn_close
         acs_mail_lite::imap_conn_go
@@ -22,10 +22,9 @@ aa_register_case \
         apm_package_id_from_key
         f::lmax
         party::get_by_email
-    } \
-    acs_mail_lite_inbound_procs_check {
-    Test acs-mail-lite procs in email-inbound-procs.tcl
-} {
+    } acs_mail_lite_inbound_procs_check {
+        Test acs-mail-lite procs in email-inbound-procs.tcl
+    } {
     aa_run_with_teardown \
         -rollback \
         -test_code {
