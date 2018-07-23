@@ -1,5 +1,5 @@
 ad_library {
-    Sweep the all the files in the system looking for systematic errors.
+    Sweep all the files in the system looking for systematic errors.
 
     @author Jeff Davis
     @creation-date 2005-02-28
@@ -14,7 +14,7 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
     # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
     set startdir $::acs::rootdir/packages
 
-    aa_log "Checks starting from $startdir"    
+    aa_log "Checks starting from $startdir"
 
     # get tcl files from installed packages
     set files [list]
@@ -25,7 +25,7 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
             if {[file extension $f] ne ".tcl"} continue
             set f $startdir/$package_key/$f
         }]
-    }    
+    }
 
     #inspect every Tcl file in the directory tree starting with $startdir
     foreach file $files {
@@ -54,7 +54,7 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
     aa_log "Checks starting from $startdir"
     set count 0
     #inspect every Tcl file in the directory tree starting with $startdir
-    foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
+    foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] {
 
         if {[string match "*/acs-tcl/tcl/test/file-test-procs.tcl" $file]} continue
 
@@ -62,12 +62,10 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
         set data [read $fp]
         close $fp
 
-        if {[string first @returns $data] > -1} { 
+        if {[string first @returns $data] > -1} {
             aa_log_result fail "$file should not contain '@returns'.  @returns is probably a typo of @return"
         }
-
     }
-
     aa_log "Checked $count Tcl files"
 }
 
@@ -117,11 +115,11 @@ aa_register_case -cats {smoke production_safe} files__check_info_files {
         }
         if {!$errp} {
             aa_log_result pass "$spec_file no errors"
-        } 
+        }
     }
 }
 
-aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering { 
+aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
     Check that all the upgrade files are well ordered (non-overlapping and v1 > v2)
 
     @author Jeff Davis davis@xarg.net
@@ -140,10 +138,10 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
                 # DRB: Ignore old upgrade scripts that aren't in the proper place.  We
                 # still have old ACS 3 -> ACS 4 upgrade scripts lying around, and
                 # I don't want to report them as failures nor delete them ...
-		if { [string first sql $file] == -1 &&
+                if { [string first sql $file] == -1 &&
                      [string first upgrade $file] == -1 } {
                     set db [apm_guess_db_type $package $file]
-                    if {[string is space $db] 
+                    if {[string is space $db]
                         || $db eq $db_type} {
                         set tail [file tail $file]
                         if {[regexp {\-(.*)-(.*).sql} $tail match v1 v2]} {
@@ -182,11 +180,8 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
     }
 }
 
-
-
-
 aa_register_case -cats {smoke} files__check_xql_files {
-    Check for some common errors in the xql files like 
+    Check for some common errors in the xql files like
     missing rdbms, missing corresponding Tcl files, etc.
 
     Not production safe since malformed xql can crash AOLserver in the parse.
@@ -195,7 +190,7 @@ aa_register_case -cats {smoke} files__check_xql_files {
 } {
     # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
     set startdir $::acs::rootdir/packages
-    
+
     aa_log "Checks starting from $startdir"
 
     # get xql files from installed packages
@@ -233,7 +228,7 @@ aa_register_case -cats {smoke} files__check_xql_files {
             # the file did not exist so we must have a -db extension...
             regexp {(.*?)(-)?([A-Za-z_]*)[.]xql$} $file match base dummy db
 
-            if { $db ne "" 
+            if { $db ne ""
                  && $dummy ne ""
                  && ![string match $db oracle]
                  && ![string match $db postgresql] } {
@@ -284,14 +279,13 @@ aa_register_case -cats {smoke} files__check_xql_files {
             if {[info exists onexql(${xql}-oracle)]
                 && !([info exists onexql(${xql}-postgresql)]
                      || [info exists onexql(${xql})]) } {
-                aa_log_result fail "No postgresql or generic $allxql($xql)" 
+                aa_log_result fail "No postgresql or generic $allxql($xql)"
             }
             if {[info exists onexql(${xql}-postgresql)]
                 && !([info exists onexql(${xql}-oracle)]
                      || [info exists onexql(${xql})]) } {
-                aa_log_result fail "No oracle or generic $allxql($xql)" 
+                aa_log_result fail "No oracle or generic $allxql($xql)"
             }
-
         }
     }
 }
