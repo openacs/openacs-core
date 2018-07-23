@@ -118,11 +118,12 @@ ad_proc -private apm_package_selection_widget {
         set package_key [pkg_info_key $pkg_info]
         set package_path [pkg_info_path $pkg_info]
         set spec_file [pkg_info_spec $pkg_info]
-        array set package [apm_read_package_info_file $spec_file]
-        set version_name $package(name)
+        set package [apm_read_package_info_file $spec_file]
+        set package_name [dict get $package package-name]
+        set version_name [dict get $package name]
         ns_log Debug "Selection widget: $package_key, Dependency: [pkg_info_dependency_p $pkg_info]"
 
-        append widget "  <tr class='[lindex {even odd} [expr {$counter % 2}]]'>"
+        append widget [subst {<tr class='[expr {$counter % 2 ? "odd" : "even"}]'>}]
         if { [pkg_info_dependency_p $pkg_info] == "t" } {
             # Dependency passed.
 
@@ -135,7 +136,7 @@ ad_proc -private apm_package_selection_widget {
             }
 
             append widget [subst {></td>
-                <td>$package(package-name) $package(name)</td>
+                <td>$package_name $version_name</td>
                 <td>$package_key</td>
                 <td><span style='color:green'>Dependencies satisfied.</span></td>
                 </tr> }]
@@ -143,17 +144,17 @@ ad_proc -private apm_package_selection_widget {
             #Dependency failed.
             append widget [subst {
                 <td align=center><input type='checkbox' name='package_key' value='$package_key' ></td>
-                <td>$package(package-name) $package(name)</td>
+                <td>$package_name $version_name</td>
                 <td>$package_key</td>
                 <td><span style='color:red'>
             }]
             foreach comment [pkg_info_comment $pkg_info] {
                 append widget "$comment<br>"
             }
-            append widget "
-            </span></td>
-            </tr>
-            "
+            append widget {
+                </span></td>
+                </tr>
+            }
         } else {
             # No dependency information.
             # See if the install is already installed with a higher version number.
@@ -174,16 +175,16 @@ ad_proc -private apm_package_selection_widget {
                 set comment "Installing older version of package."
             }
 
-            set install_checked [lindex {"" checked} [expr {$package_key in $to_install}]]
-            append widget "
+            set install_checked [expr {$package_key in $to_install ? "checked" : ""}]
+            append widget [subst {
             <td align='center'><input type='checkbox' $install_checked name='package_key' value='$package_key'></td>
-            <td>$package(package-name) $package(name)</td>
+            <td>$package_name $version_name</td>
             <td>$package_key</td>
             <td>$comment</td>
-           </tr>"
+            </tr>}]
         }
     }
-    append widget "\n</table></blockquote>"
+    append widget {</table></blockquote>}
     return $widget
 }
 
