@@ -2,6 +2,7 @@ abailable available
 abandonded abandoned
 abandonned abandoned
 abandonning abandoning
+abbreaf abbrev
 abbrevation abbreviation
 abbrevations abbreviations
 abbriviation abbreviation
@@ -22,6 +23,7 @@ absorbtion absorption
 absoulte absolute
 abstact abstract
 abstactly abstractly
+abstrace abstract
 accapt accept
 accapted accepted
 acccept accept
@@ -160,6 +162,7 @@ addtionally additionally
 aditional additional
 aditionally additionally
 aditionaly additionally
+adminsitration administration
 adminstration administration
 adminstrative administrative
 adminstrator administrator
@@ -279,6 +282,7 @@ anwsered answered
 anwsering answering
 anwsers answers
 anyting anything
+apeace apiece
 apendix appendix
 aplication application
 apllied applied
@@ -397,9 +401,11 @@ assosiated associated
 assosiates associates
 assosiating associating
 assotiated associated
+asssessment assessment
 assumme assume
 assummes assumes
 asthetic aesthetic
+asubsite subsite
 asuming assuming
 asycronous asynchronous
 asynchonous asynchronous
@@ -412,6 +418,7 @@ atomicly atomically
 atribute attribute
 atributes attributes
 attachement attachment
+attachmens attachments
 attatch attach
 attatched attached
 attatches attaches
@@ -455,6 +462,7 @@ automatize automate
 automatized automated
 automatizes automates
 autonymous autonomous
+autor author
 autorisation authorisation
 autorization authorization
 auxilary auxiliary
@@ -551,6 +559,7 @@ briges bridges
 brighness brightness
 brokeness brokenness
 broser browser
+broswer browser
 brower browser
 browers browsers
 bufffer buffer
@@ -585,7 +594,10 @@ calcualte calculate
 calcualted calculated
 calcualtes calculates
 calcualting calculating
+calendary calendar
 calender calendar
+calse false
+calss class
 calulate calculate
 calulated calculated
 calulates calculates
@@ -613,6 +625,7 @@ casues causes
 catagories categories
 catagory category
 catched caught
+categoried categorized
 ceate create
 ceated created
 ceates creates
@@ -621,6 +634,7 @@ cehck check
 cehcked checked
 cehcking checking
 cehcks checks
+celpadding cellpadding
 certainity certainty
 certficate certificate
 certficates certificates
@@ -657,6 +671,7 @@ chcek check
 chceked checked
 chceking checking
 chceks checks
+checbox checkbox
 checg check
 checged checked
 checkstum checksum
@@ -775,6 +790,7 @@ compatablities compatibilities
 compatablity compatibility
 compatbility compatibility
 compatiability compatibility
+compatibile compatible
 compatibiliy compatibility
 compatibilty compatibility
 compatiblities compatibilities
@@ -870,6 +886,7 @@ configration configuration
 configrations configurations
 configuation configuration
 configuations configurations
+configued configured
 configuraion configuration
 configuratoin configuration
 configuraton configuration
@@ -925,6 +942,7 @@ continous continuous
 continously continuously
 continueing continuing
 continuting continuing
+contol control
 contoller controller
 contollers controllers
 contraints constraints
@@ -946,6 +964,7 @@ contructor constructor
 contructors constructors
 contructs constructs
 contry country
+conveniance convenience
 convenince convenience
 converion conversion
 converions conversions
@@ -1032,6 +1051,7 @@ damge damage
 dammage damage
 databas database
 databse database
+datta data
 deaemon daemon
 deafault default
 deafult default
@@ -1046,6 +1066,7 @@ debiab Debian
 Debiab Debian
 debia Debian
 debians Debian's
+debig debug
 debugginf debugging
 debuging debugging
 decalared declared
@@ -1167,6 +1188,7 @@ descides decides
 desciding deciding
 desciptor descriptor
 desciptors descriptors
+descripion description
 descriptior descriptor
 descriptiors descriptors
 descripton description
@@ -1174,6 +1196,7 @@ descriptons descriptions
 descrition description
 descritpion description
 descritpions descriptions
+descrption description
 descryption description
 descryptions descriptions
 desctiptor descriptor
@@ -1298,6 +1321,7 @@ disbaled disabled
 disbale disable
 disbales disables
 disbaling disabling
+disble disable
 discernable discernible
 disconnet disconnect
 disconneted disconnected
@@ -1305,6 +1329,7 @@ disconneting disconnecting
 disconnets disconnects
 discontigous discontiguous
 discontinous discontinuous
+discovey discovery
 discribes describes
 discription description
 discriptions descriptions
@@ -1379,6 +1404,7 @@ donwload download
 donwloaded downloaded
 donwloading downloading
 donwloads downloads
+dorlrn dotlrn
 dosen't doesn't
 dowgrade downgrade
 downgrated downgraded
@@ -1407,6 +1433,7 @@ dynmaic dynamic
 eample example
 eamples examples
 easilly easily
+ebgin begin
 ecspecially especially
 edditable editable
 editting editing
@@ -1492,6 +1519,7 @@ enumarated enumerated
 enumarate enumerate
 enumarates enumerates
 enumarating enumerating
+enveloppe envelope
 envionment environment
 envireonment environment
 envirnmental environmental
@@ -1526,6 +1554,7 @@ erronous erroneous
 erronously erroneously
 errorneous erroneous
 errorneously erroneously
+errpr error
 errror error
 errrors errors
 esential essential
@@ -1588,6 +1617,7 @@ excutes executes
 excuting executing
 exeception exception
 execeptions exceptions
+execption exception
 exection execution
 exections executions
 exectuable executable
@@ -1727,6 +1757,7 @@ forseeable foreseeable
 forse force
 fortan fortran
 fortunatly fortunately
+forumss forums
 forunate fortunate
 forunately fortunately
 forwaded forwarded
@@ -1847,6 +1878,7 @@ guarrantees guarantees
 guassian Gaussian
 guidline guideline
 guidlines guidelines
+guido guide
 guranteed guaranteed
 gurantee guarantee
 guranteeing guaranteeing
@@ -1883,6 +1915,7 @@ heirarchy hierarchy
 helpfull helpful
 helpfuly helpfully
 hexidecimal hexadecimal
+hhref href
 hiddden hidden
 hidding hiding
 hiearchies hierarchies
@@ -2082,6 +2115,7 @@ independant independent
 independantly independently
 independed independent
 independend independent
+independet independent
 indepenent independent
 indepenently independently
 indiated indicated
@@ -2108,6 +2142,7 @@ ineffiently inefficiently
 infered inferred
 infering inferring
 inferrence inference
+inf info
 inflexable inflexible
 infomation information
 informaion information
@@ -2120,6 +2155,7 @@ ingored ignored
 ingore ignore
 ingores ignores
 ingoring ignoring
+inheriance inheritance
 inheritence inheritance
 inital initial
 initalisation initialisation
@@ -2173,6 +2209,7 @@ initilizing initializing
 initliazed initialized
 initliaze initialize
 initliazer initializer
+inivite invite
 inlcuded included
 inlcude include
 inlcudes includes
@@ -2278,7 +2315,6 @@ intiailises initialises
 intiailized initialized
 intiailize initialize
 intiailizes initializes
-intiailizing initialising
 intiailizing initializing
 intial initial
 intialisation initialisation
@@ -2344,6 +2380,7 @@ itsel itself
 itslef itself
 janurary january
 japanses Japanese
+javasctpit javascript
 jave java
 kenrel kernel
 keyboad keyboard
@@ -2372,6 +2409,7 @@ laoded loaded
 laoding loading
 laod load
 laods loads
+lastt last
 lauched launched
 laucher launcher
 lauches launches
@@ -2408,6 +2446,7 @@ linceses licenses
 lintain lintian
 litle little
 litterally literally
+llenght llength
 localation location
 loggging logging
 loggin login
@@ -2483,11 +2522,13 @@ messge message
 messges messages
 messsage message
 messsages messages
+microeconds microseconds
 microprocesspr microprocessor
 milisecond millisecond
 miliseconds milliseconds
 millenium millennium
 milliseonds milliseconds
+mime_time mime_type
 mimicing mimicking
 mimick mimic
 mimicks mimics
@@ -2543,6 +2584,7 @@ mulitplied multiplied
 multible multiple
 multidimensionnal multidimensional
 multilpe multiple
+multiow multirow
 multipe multiple
 multipes multiples
 multipled multiplied
@@ -2611,7 +2653,9 @@ nonexistant nonexistent
 non-inreractive non-interactive
 nontheless nonetheless
 noone no one
+noprens noparens
 normaly normally
+notce notice
 notfication notification
 notfications notifications
 nothern northern
@@ -2674,6 +2718,7 @@ offical official
 officialy officially
 ofo of
 ofthe of the
+ojbect object
 omiting omitting
 omitt omit
 ommited omitted
@@ -2686,6 +2731,7 @@ onself oneself
 onthe on the
 ontrolled controlled
 opague opaque
+opeancs openacs
 opeation operation
 opeations operations
 openened opened
@@ -2707,6 +2753,7 @@ optio option
 optmization optimization
 optmizations optimizations
 orderd ordered
+organizaion organization
 orginally originally
 orginal original
 orginated originated
@@ -2730,6 +2777,7 @@ otherise otherwise
 otherwhise otherwise
 othwerwise otherwise
 ot to
+oublish publish
 ouptut output
 ouput output
 ouputs outputs
@@ -2779,6 +2827,7 @@ packege package
 packe packed
 packge package
 packges packages
+pags pages
 pakage package
 pakages packages
 pakge package
@@ -2801,6 +2850,8 @@ parallizing parallelizing
 paramameters parameters
 paramater parameter
 paramaters parameters
+paramemter parameter
+paramer parameter
 parametes parameters
 parametised parametrised
 paramter parameter
@@ -2832,6 +2883,7 @@ pecularities peculiarities
 pecularity peculiarity
 pedning pending
 peformance performance
+peform perform
 peice piece
 peices pieces
 penalities penalties
@@ -2887,6 +2939,8 @@ pleaes please
 ploting plotting
 pluign plugin
 pluigns plugins
+poatgresql postgresql
+podcase podcast
 poinnter pointer
 poiter pointer
 poiters pointers
@@ -2897,6 +2951,8 @@ poluting polluting
 polution pollution
 popullated populated
 popullate populate
+porlet portlet
+porperties properties
 portguese Portuguese
 portugese Portuguese
 posessing possessing
@@ -2953,6 +3009,7 @@ preferrably preferably
 prefferable preferable
 prefferably preferably
 preformance performance
+premission permission
 prepaired prepared
 prepartion preparation
 prepartions preparations
@@ -2965,6 +3022,7 @@ prerequsite prerequisite
 prerequsites prerequisites
 presense presence
 pres press
+prety pretty
 previlege privilege
 prevously previously
 prevous previous
@@ -3059,6 +3117,7 @@ protocals protocols
 protocoll protocol
 protoype prototype
 protoypes prototypes
+prviate private
 psaswd passwd
 psuedo pseudo
 psychadelic psychedelic
@@ -3071,8 +3130,12 @@ qoutes quotes
 qouting quoting
 queing queueing
 quering querying
+querytxt querytext
 quiting quitting
 quitt quit
+quotehtmrm quotehtml
+quotentml quotehtml
+raplace replace
 reachs reaches
 readabilty readability
 readapted re-adapted
@@ -3164,6 +3227,7 @@ refects reflects
 refence reference
 refences references
 refered referred
+refereneces references
 referene reference
 referenes references
 refering referring
@@ -3211,6 +3275,7 @@ reimplmented reimplemented
 reimplmenting reimplementing
 reimplment reimplement
 reimplments reimplements
+reivision revision
 relased released
 relase release
 relases releases
@@ -3333,6 +3398,7 @@ resultions resolutions
 resulution resolution
 resursively recursively
 resursive recursive
+resutlts results
 retored restored
 retore restore
 retores restores
@@ -3372,10 +3438,12 @@ rouines routines
 rountine routine
 rountines routines
 routins routines
+rowy row
 rquested requested
 rquesting requesting
 rquest request
 rquests requests
+rubuild rebuild
 runing running
 runned ran
 runnig running
@@ -3420,6 +3488,7 @@ secitons sections
 sectionning sectioning
 secund second
 securty security
+sedning sending
 segement segment
 segements segments
 selction selection
@@ -3474,6 +3543,7 @@ sequeces sequences
 sequencially sequentially
 sequencial sequential
 serach search
+serch search
 serie series
 seriuos serious
 serivce service
@@ -3481,6 +3551,7 @@ serivces services
 sertificate certificate
 sertificates certificates
 serveral several
+serverities severities
 sesssion session
 sesssions sessions
 setted set
@@ -3497,6 +3568,7 @@ should'nt shouldn't
 shouldnt shouldn't
 should't shouldn't
 shoule should
+showh shown
 siginificantly significantly
 siginificant significant
 signficantly significantly
@@ -3537,6 +3609,7 @@ sluggify slugify
 smae same
 smaple sample
 smaples samples
+socpe scope
 softwares software
 sofware software
 somehwat somewhat
@@ -3618,6 +3691,7 @@ stoping stopping
 stoppped stopped
 straighforward straightforward
 straightfoward straightforward
+straightworward straightforward
 straigth straight
 straigt straight
 streched stretched
@@ -3652,6 +3726,7 @@ subexpresssion subexpression
 suble subtle
 subseqent subsequent
 subsequest subsequent
+subsr substr
 substituded substituted
 substitudes substitutes
 substitude substitute
@@ -3710,6 +3785,7 @@ supercede supersede
 superceding superseding
 superflous superfluous
 superseeded superseded
+supervice supervise
 suplementary supplementary
 suplied supplied
 suported supported
@@ -3750,6 +3826,7 @@ surpresses suppresses
 surpressing suppressing
 surpress suppress
 surrouding surrounding
+susbite subsite
 suscribed subscribed
 suscribe subscribe
 suspicously suspiciously
@@ -3802,6 +3879,7 @@ syste system
 sytems systems
 sytem system
 sythesis synthesis
+tacker tracker
 tage stage
 taht that
 targetted targeted
@@ -3941,7 +4019,10 @@ trucates truncates
 trucate truncate
 trucating truncating
 truely truly
+trute true
 tryed tried
+tseach2 tsearch2
+ttitle title
 tupples tuples
 tupple tuple
 typicaly typically
@@ -4007,6 +4088,7 @@ unintentially unintentionally
 unintialised uninitialised
 unintialized uninitialized
 uniqe unique
+unist units
 unitialized uninitialized
 unitialize uninitialize
 univerities universities
@@ -4114,6 +4196,7 @@ vaild valid
 validing validating
 valied valid
 valueable valuable
+valure value
 varables variables
 varable variable
 varaibles variables
@@ -4188,6 +4271,7 @@ whish wish
 whitch which
 whithout without
 whith with
+wiating waiting
 wich which
 widht width
 wierd weird
@@ -4201,6 +4285,7 @@ willl will
 wipoing wiping
 wirtes writes
 wirte write
+witheld withheld
 withe with
 withing within
 withthe with the
@@ -4221,6 +4306,7 @@ writeing writing
 writen written
 writting writing
 xour your
+xowki xowiki
 xwindows X
 yeilded yielded
 yeilding yielding
