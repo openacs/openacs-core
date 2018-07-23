@@ -2,6 +2,7 @@ ad_library {
     Check all the proc documentation
 
     @author Jeff Davis
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 2005-02-28
     @cvs-id $Id$
 }
@@ -64,9 +65,18 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
 
     https://github.com/Debian/lintian/tree/master/data/spelling
 
-    This test may take a while...
+    Limitations:
+
+    1- Only single words are tested.
+    2- Words are converted to lowercase before testing, so tests are case
+       insensitive.
+    3- Every word is compared against more than 4000 typos (currently), so it
+       may be slow depending on the particular setup.
 
     @author Héctor Romojaro <hector.romojaro@gmail.com>
+
+    @creation-date 2018-07-23
+
 } {
     set typo_list "[acs_package_root_dir "acs-tcl"]/tcl/test/doc-check-procs-common-typos.txt"
     set typos [dict create]
@@ -85,9 +95,15 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
         incr count
         set typo_number 0
         set proc_doc [dict create {*}[nsv_get api_proc_doc $p]]
+        #
+        # Remove extra characters from the doc and transform to lowercase.
+        #
+        # string map is quick, but feel free to replace it with a quicker and/or
+        # cleaner method.
+        #
         set proc_doc_clean [string tolower \
-                                [concat {*}[string map {& " " \" " " < " " > " " \[ " " \] " " , "" \{ "" \} ""} \
-                                [dict get $proc_doc main]]]]
+            [concat {*}[string map {& " " \" " " < " " > " " \[ " " \] " " , "" \{ "" \} ""} \
+                [dict get $proc_doc main]]]]
         if { $proc_doc_clean ne "" } {
             foreach typo [dict keys $typos] {
                 #ns_log Notice "Typo check in $p: Typo: $typo Doc: $proc_doc_clean"
@@ -97,6 +113,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
                 }
             }
         }
+        # Just count the number of procs without doc typos for summarizing
         if { $typo_number == 0 } {
             incr good
         }
