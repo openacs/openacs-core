@@ -29,9 +29,7 @@ ad_proc -public auth::sync::job::get {
     Get information about a batch job in an array.
 
     @param job_id        The ID of the batch job you're ending.
-
     @param array         Name of an array into which you want the information.
-
     @author Lars Pind (lars@collaboraid.biz)
 } {
     upvar 1 $array row
@@ -59,7 +57,6 @@ ad_proc -public auth::sync::job::get_authority_id {
     Get the authority_id from a job_id. Cached.
 
     @param job_id        The ID of the batch job you're ending.
-
     @author Lars Pind (lars@collaboraid.biz)
 } {
     return [util_memoize [list auth::sync::job::get_authority_id_not_cached $job_id]]
@@ -71,7 +68,6 @@ ad_proc -private auth::sync::job::get_authority_id_flush {
     Flush cache
 
     @param job_id        The ID of the batch job you're ending.
-
     @author Lars Pind (lars@collaboraid.biz)
 } {
     if { $job_id ne "" } {
@@ -88,7 +84,6 @@ ad_proc -private auth::sync::job::get_authority_id_seed {
     Flush cache
 
     @param job_id        The ID of the batch job you're ending.
-
     @author Lars Pind (lars@collaboraid.biz)
 } {
     util_memoize_seed [list auth::sync::job::get_authority_id_not_cached $job_id] $authority_id
@@ -100,9 +95,7 @@ ad_proc -private auth::sync::job::get_authority_id_not_cached {
     Get the authority_id from a job_id. Not cached.
 
     @param job_id        The ID of the batch job you're ending.
-
     @author Lars Pind (lars@collaboraid.biz)
-
     @see auth::sync::job::get_authority_id
 } {
     return [db_string select_auth_id { select authority_id from auth_batch_jobs where job_id = :job_id }]
@@ -117,11 +110,8 @@ ad_proc -public auth::sync::job::start {
     Record the beginning of a job.
 
     @param authority_id      The ID of the authority you're trying to sync
-
     @param interactive       Set this if this is an interactive job, i.e. it's initiated by a user.
-
     @return job_id           An ID for the new batch job. Used when calling other procs in this API.
-
     @author Lars Pind (lars@collaboraid.biz)
 } {
     db_transaction {
@@ -158,11 +148,8 @@ ad_proc -public auth::sync::job::end {
     log and sends out notifications.
 
     @param job_id        The ID of the batch job you're ending.
-
     @return array list with result of auth::sync::job::get.
-
     @see auth::sync::job::get
-
     @author Lars Pind (lars@collaboraid.biz)
 } {
     db_dml update_job_end {}
@@ -221,7 +208,6 @@ ad_proc -public auth::sync::job::end_get_document {
     Record the time that we've finished getting the document, and record the status.
 
     @param job_id The ID of the batch job you're ending.
-
     @param snapshot          Set this if this is a snapshot job, as opposed to an incremental ('event driven') job.
 } {
     set snapshot_p [db_boolean $snapshot_p]
@@ -241,17 +227,11 @@ ad_proc -public auth::sync::job::create_entry {
     Record a batch job entry.
 
     @param job_id The ID of the batch job you're ending.
-
     @param operation One of 'insert', 'update', or 'delete'.
-
     @param username The username of the user being inserted/updated/deleted.
-
     @param user_id The user_id of the local user account, if known.
-
     @param success Whether or not the operation went well.
-
     @param message Any error message to stick into the log.
-
     @return entry_id
 } {
     set success_p_db [ad_decode $success_p 1 "t" "f"]
@@ -299,13 +279,10 @@ ad_proc -public auth::sync::job::action {
     Inserts/updates/deletes a user, depending on the operation.
 
     @param job_id        The job which this is part of for logging purposes.
-
     @param operation     'insert', 'update', 'delete', or 'snapshot'.
-
     @param username      The username which this action refers to.
-
-    @param array         Name of an array containing the relevant registration elements. Not required if this is a delete operation.
-
+    @param array         Name of an array containing the relevant registration elements.
+                         Not required if this is a delete operation.
     @return entry_id of newly created entry
 } {
     if { $operation ne "delete" && $array eq "" } {
@@ -550,6 +527,9 @@ ad_proc -private auth::sync::get_sync_elements {
     set elms [list]
     ad_try  {
         set elms [auth::sync::GetElements -authority_id $authority_id]
+    } trap {AD EXCEPTION NO_AUTH_SYNC} {} {
+        # authentication does not support auth_sync_process"
+        ns_log notice "authentication of authority_id $authority_id does not support auth_sync_process"
     } on error {errorMsg dict} {
         ad_log error "auth::sync::GetElements raised: $errorMsg ($dict)"
     }
@@ -633,7 +613,7 @@ ad_proc -private auth::sync::GetAcknowledgementDocument {
     if { $impl_id eq "" } {
         # No implementation of auth_sync_process
         set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
-        error "The authority '$authority_pretty_name' doesn't support auth_sync_process"
+        ad_raise NO_AUTH_SYNC "The authority '$authority_pretty_name' doesn't support auth_sync_process"
     }
 
     set parameters [auth::driver::get_parameter_values \
@@ -658,7 +638,7 @@ ad_proc -private auth::sync::GetElements {
     if { $impl_id eq "" } {
         # No implementation of auth_sync_process
         set authority_pretty_name [auth::authority::get_element -authority_id $authority_id -element "pretty_name"]
-        error "The authority '$authority_pretty_name' doesn't support auth_sync_process"
+        ad_raise NO_AUTH_SYNC "The authority '$authority_pretty_name' doesn't support auth_sync_process"
     }
 
     set parameters [auth::driver::get_parameter_values \
