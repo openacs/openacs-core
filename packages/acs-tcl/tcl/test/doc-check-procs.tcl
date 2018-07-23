@@ -1,5 +1,5 @@
 ad_library {
-    Check all the proc documentation 
+    Check all the proc documentation
 
     @author Jeff Davis
     @creation-date 2005-02-28
@@ -57,6 +57,52 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     aa_log "Found $good of $count procs checked"
 }
 
+aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_typos {
+
+    Search for spelling errors in the proc documentation, using a list of common
+    typos based on the one included in the lintian Debian package:
+
+    https://github.com/Debian/lintian/tree/master/data/spelling
+
+    This test may take a while...
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    set typo_list "[acs_package_root_dir "acs-tcl"]/tcl/test/doc-check-procs-common-typos.txt"
+    set typos [dict create]
+
+    # Create the typos dictionary with values from the common typos file
+    set f [open $typo_list]
+    while {[gets $f line] >= 0} {
+        dict append typos {*}$line
+    }
+    close $f
+
+    # Check for the typos
+    set count 0
+    set good 0
+    foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
+        incr count
+        set typo_number 0
+        set proc_doc [dict create {*}[nsv_get api_proc_doc $p]]
+        set proc_doc_clean [string tolower \
+                                [concat {*}[string map {& " " \" " " < " " > " " \[ " " \] " " , "" \{ "" \} ""} \
+                                [dict get $proc_doc main]]]]
+        if { $proc_doc_clean ne "" } {
+            foreach typo [dict keys $typos] {
+                ns_log Notice "Typo check in $p: Typo: $typo Doc: $proc_doc_clean"
+                if { [string tolower $typo] in $proc_doc_clean } {
+                    incr typo_number
+                    aa_log_result fail "$p spelling error: $typo -> [dict get $typos $typo]"
+                }
+            }
+        }
+        if { $typo_number == 0 } {
+            incr good
+        }
+    }
+    aa_log "Documentation seems typo free in $good of $count checked procs"
+}
 
 # Local variables:
 #    mode: tcl
