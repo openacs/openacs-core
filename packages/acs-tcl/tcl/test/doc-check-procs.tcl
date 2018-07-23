@@ -90,7 +90,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
                                 [dict get $proc_doc main]]]]
         if { $proc_doc_clean ne "" } {
             foreach typo [dict keys $typos] {
-                ns_log Notice "Typo check in $p: Typo: $typo Doc: $proc_doc_clean"
+                #ns_log Notice "Typo check in $p: Typo: $typo Doc: $proc_doc_clean"
                 if { [string tolower $typo] in $proc_doc_clean } {
                     incr typo_number
                     aa_log_result fail "$p spelling error: $typo -> [dict get $typos $typo]"
