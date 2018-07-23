@@ -748,7 +748,7 @@ ad_proc -public api_add_to_proc_doc {
     -property:required
     -value:required
 } {
-    Add a certain value to a property in the proc doc of the specfied proc.
+    Add a certain value to a property in the proc doc of the specified proc.
 
     @param proc_name name is fully qualified name without leading colons proc procs,
         XOTcl methods are a triple with the fully qualified class name,
