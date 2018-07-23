@@ -107,37 +107,8 @@ ad_proc twt::user::create {
             the additional keys email and password.
 
     @author Peter Marklund
-} {
-    set username "__test_user_[ad_generate_random_string]"
-    set email "${username}@test.test"
-    set password [ad_generate_random_string]
-
-    array set user_info [auth::create_user \
-                                     -user_id $user_id \
-                                     -username $username \
-                                     -email $email \
-                                     -first_names [ad_generate_random_string] \
-                                     -last_name [ad_generate_random_string] \
-                                     -password $password \
-                                     -secret_question [ad_generate_random_string] \
-                                     -secret_answer [ad_generate_random_string]]
-
-    if { $user_info(creation_status) ne "ok" } {
-        # Could not create user
-        error "Could not create test user with username=$username user_info=[array get user_info]"
-    }
-
-    set user_info(password) $password
-    set user_info(email) $email
-
-    aa_log "Created user with email=\"$email\" and password=\"$password\""
-
-    if { $admin_p } {
-        aa_log "Making user site-wide admin"
-        permission::grant -object_id [acs_magic_object "security_context_root"] -party_id $user_info(user_id) -privilege "admin"
-    }
-
-    return [array get user_info]
+ } {
+     return [acs::test::user::create -user_id $user_id -admin=$admin_p]
 }
 
 ad_proc twt::user::delete {
@@ -145,9 +116,7 @@ ad_proc twt::user::delete {
 } {
     Remove a test user.
 } {
-    acs_user::delete \
-        -user_id $user_id \
-        -permanent
+    ::acs::test::user_delete -user_id $user_id
 }
 
 ad_proc twt::user::login { email password {username ""}}  {

@@ -327,6 +327,7 @@ ad_proc -public aa_register_case {
     {-error_level "error"}
     {-bugs {}}
     {-procs {}}
+    {-urls {}}    
     {-init_classes {}}
     {-on_error {}}
     testcase_id
@@ -355,6 +356,7 @@ ad_proc -public aa_register_case {
     <li><b>populator</b>: Creates sample data for future use.
     <li><b>production_safe</b>: Can be used on a live production site, ie for sanity checking or keepalive purposes.  Implies: no risk of adding or deleting data; no risk of crashing; minimal cpu/db/net load.
     </ul>
+    
     @param error_level Force all test failures to this error level.  One of
     <ul>
     <li><b>notice</b>: Informative.  Does not indicate an error.
@@ -362,8 +364,10 @@ ad_proc -public aa_register_case {
     <li><b>error</b>: normal error
     <li><b>metatest</b>: Indicates a problem with the test framework, execution, or reporting.  Suggests that current test results may be invalid.  Use this for test cases that test the tests.  Also used, automatically, for errors sourcing test cases.
     </ul>
+
     @param bugs A list of integers correspending to openacs.org bug numbers which relate to this test case.
     @param procs A list of OpenACS procs which are tested by this case.
+    @param urls A list of urls (relative to package) tested in web test case
 
     @param on_error Deprecated.
     @param init_classes Deprecated.
@@ -1065,91 +1069,151 @@ ad_proc -private aa_execute_rollback_tests {} {
     }
 }
 
-ad_proc -private aa_http {
-    {-user_id 0}
-    {-method GET}
-    {-body}
-    {-timeout 10}
-    {-headers ""}
-    {-prefix ""}
-    {-verbose:boolean 1}
-    request
-} {
-    Run an http request against the actual server
 
-    @author Gustaf Neumann
-} {
-    set driverInfo [util_driver_info]
-    try {
-        #
-        # First try to get actual information from the
-        # connection. This is however only available in newer versions
-        # of NaviServer. The actual information is e.g. necessary,
-        # when the driver address is set to "0.0.0.0" or "::0" etc,
-        # and therefore every address might be provided as peer
-        # address in the check in the security-procs.
-        #
-        set address [ns_conn currentaddr]
-    } on error {errorMsg} {
-        #
-        # If this fails, fall back to configured value.
-        #
-        set address [dict get $driverInfo address]
-    }
-    set extra_args {}
-    if {[info exists body]} {
-        lappend extra_args -body $body
-    }
-    if {[llength $headers] > 0} {
-        set requestHeaders [ns_set create]
-        foreach {tag value} $headers {
-            ns_set update $requestHeaders $tag $value
+
+
+namespace eval acs::test {
+    
+    ad_proc -public ::acs::test::form_reply {
+        -user_id:required
+        -url:required
+        {-update {}}
+        form_content
+    } {
+        
+        Send a (POST) request to the specified URL based on the
+        provided form_content which has the form of a dict.  For
+        convenice the update fields are provided to overload the
+        form_content.
+        
+    } {
+        foreach {att value} $update {
+            dict set form_content $att $value
         }
-        lappend extra_args -headers $requestHeaders
-    }
-    nsv_set aa_test logindata [list peeraddr $address user_id $user_id]
-
-    #
-    # Construct a nice log line
-    #
-    append log_line "${prefix}Run $method $request"
-    if {[llength $headers] > 0} {
-        append log_line " (headers: $headers)"
-    }
-    if {[info exists body]} {
-        append log_line "\n$body"
-    }
-    aa_log $log_line
-
-    #
-    # Run actual request
-    #
-    try {
-        set d [ns_http run \
-                   -timeout $timeout \
-                   -method $method \
-                   {*}$extra_args \
-                   "http://\[$address\]:[dict get $driverInfo port]/$request"]
-    } finally {
+        #ns_log notice "final form_content $form_content"
         #
-        # always reset after the reqest the login data nsv
+        # Transform the dict into export format. Since export_vars
+        # will skip all names containing a ":", such as
+        # "formbutton:ok", we do this "manually".
         #
-        nsv_unset aa_test logindata
+        set export {}
+        foreach {att value} $form_content {
+            lappend export [ad_urlencode_query $att]=[ad_urlencode_query $value]
+        }
+        set body [join $export &]
+        ns_log notice "body=$body"
+        #
+        # Send the POST request
+        #
+        return [http \
+                    -user_id $user_id \
+                    -method POST -body $body \
+                    -headers {Content-Type application/x-www-form-urlencoded} \
+                    $url]
     }
-    #ns_log notice "run $request returns $d"
-    #ns_log notice "... [ns_set array [dict get $d headers]]"
-    if {$verbose_p} {
-        set ms [format %.2f [expr {[ns_time format [dict get $d time]]*1000}]]
-        aa_log "${prefix}$method $request returns [dict get $d status] in ${ms}ms"
+
+    ad_proc -public ::acs::test::http {
+        {-user_id 0}
+        {-method GET}
+        {-body}
+        {-timeout 10}
+        {-headers ""}
+        {-prefix ""}
+        {-verbose:boolean 1}
+        request
+    } {
+        
+        Run an HTTP request against the actual server inside test
+        cases.
+
+        @author Gustaf Neumann
+    } {
+        set driverInfo [util_driver_info]
+        try {
+            #
+            # First try to get actual information from the
+            # connection. This is however only available in newer versions
+            # of NaviServer. The actual information is e.g. necessary,
+            # when the driver address is set to "0.0.0.0" or "::0" etc,
+            # and therefore every address might be provided as peer
+            # address in the check in the security-procs.
+            #
+            set address [ns_conn currentaddr]
+        } on error {errorMsg} {
+            #
+            # If this fails, fall back to configured value.
+            #
+            set address [dict get $driverInfo address]
+        }
+        set extra_args {}
+        if {[info exists body]} {
+            lappend extra_args -body $body
+        }
+        if {[llength $headers] > 0} {
+            set requestHeaders [ns_set create]
+            foreach {tag value} $headers {
+                ns_set update $requestHeaders $tag $value
+            }
+            lappend extra_args -headers $requestHeaders
+        }
+        nsv_set aa_test logindata [list peeraddr $address user_id $user_id]
+
+        #
+        # Construct a nice log line
+        #
+        append log_line "${prefix}Run $method $request"
+        if {[llength $headers] > 0} {
+            append log_line " (headers: $headers)"
+        }
+        if {[info exists body]} {
+            append log_line "\n$body"
+        }
+        aa_log $log_line
+
+        #
+        # Run actual request
+        #
+        try {
+            set d [ns_http run \
+                       -timeout $timeout \
+                       -method $method \
+                       {*}$extra_args \
+                       "http://\[$address\]:[dict get $driverInfo port]/$request"]
+        } finally {
+            #
+            # always reset after the reqest the login data nsv
+            #
+            nsv_unset aa_test logindata
+        }
+        #ns_log notice "run $request returns $d"
+        #ns_log notice "... [ns_set array [dict get $d headers]]"
+        if {$verbose_p} {
+            set ms [format %.2f [expr {[ns_time format [dict get $d time]]*1000}]]
+            aa_log "${prefix}$method $request returns [dict get $d status] in ${ms}ms"
+        }
+        return $d
     }
-    return $d
+
+    ad_proc -public ::acs::test::dom_html {var html body} {
+    } {
+        upvar $var root
+        dom parse -html $html doc
+        $doc documentElement root
+        uplevel $body
+    }
+
+
+    
 }
 
+namespace eval ::acs::test::xpath {
 
-
-namespace eval aa_xpath {
-
-    ad_proc -public ::aa_xpath::get_text {root xpath} {
+    #
+    # All procs in this namespace have the the signature
+    #   root xpath
+    # where root is a dom-node and xpath a an XPath expression.
+    #
+    ad_proc -public get_text {root xpath} {
         Get a text element from tdom via XPath expression.
         If the XPath expression matches multiple nodes,
         return a list.
@@ -1168,15 +1232,8 @@ namespace eval aa_xpath {
         return $result
     }
 
-    ad_proc -public ::aa_dom_html {var html body} {
-    } {
-        upvar $var root
-        dom parse -html $html doc
-        $doc documentElement root
-        uplevel $body
-    }
 
-    ad_proc -public ::aa_xpath::non_empty {node selectors} {
+    ad_proc -public non_empty {node selectors} {
         Test if provided selectors return non-empty results
     } {
         #
@@ -1196,7 +1253,7 @@ namespace eval aa_xpath {
             aa_true "XPath $q <$value>:" {$value ne ""}
         }
     }
-    ad_proc -public ::aa_xpath::equals {node pairs} {
+    ad_proc -public equals {node pairs} {
         Test if provided selectors (first element of the pair) return
         the specificed results (second element of the pair).
     } {
@@ -1212,7 +1269,7 @@ namespace eval aa_xpath {
         }
     }
     
-    ad_proc -public ::aa_xpath::get_form_values {node xpath} {
+    ad_proc -public get_form_values {node xpath} {
         
         return form values (input fields and textareas) in form of a
         dict (attribute value pairs). The provided xpath must point to
@@ -1248,45 +1305,68 @@ namespace eval aa_xpath {
   
 }
 
-namespace eval aa_test {}
+namespace eval acs::test::user {
+    
+    ad_proc ::acs::test::user::create {
+        {-user_id ""}
+        {-admin:boolean}
+    } {
+        Create a test user with random email and password for testing
 
-ad_proc -public ::aa_test::form_reply {
-    -user_id:required
-    -url:required
-    {-update {}}
-    form_content
-} {
-    
-    Send a (POST) request to the specified URL based on the
-    provided form_content which has the form of a dict.  For
-    convenice the update fields are provided to overload the
-    form_content.
-    
-} {
-    foreach {att value} $update {
-        dict set form_content $att $value
+        @param admin Provide this switch to make the user site-wide admin
+        @return The user_info dict returned by auth::create_user. Contains
+                the additional keys email and password.
+    } {
+        set username "__test_user_[ad_generate_random_string]"
+        set email "${username}@test.test"
+        set password [ad_generate_random_string]
+
+        set user_info [auth::create_user \
+                           -user_id $user_id \
+                           -username $username \
+                           -email $email \
+                           -first_names [ad_generate_random_string] \
+                           -last_name [ad_generate_random_string] \
+                           -password $password \
+                           -secret_question [ad_generate_random_string] \
+                           -secret_answer [ad_generate_random_string]]
+
+        if { [dict get $user_info creation_status] ne "ok" } {
+            # Could not create user
+            error "Could not create test user with username=$username user_info=[array get user_info]"
+        }
+
+        dict set user_info password $password
+        dict set $user_info email $email
+
+        aa_log "Created user with email='$email' and password='$password'"
+
+        if { $admin_p } {
+            aa_log "Making user site-wide admin"
+            permission::grant -object_id \
+                [acs_magic_object "security_context_root"] \
+                -party_id [dict get $user_info user_id] \
+                -privilege "admin"
+        }
+
+        return $user_info
     }
-    #ns_log notice "final form_content $form_content"
-    #
-    # Transform the dict into export format. Since export_vars
-    # will skip all names containing a ":", such as
-    # "formbutton:ok", we do this "manually".
-    #
-    set export {}
-    foreach {att value} $form_content {
-        lappend export [ad_urlencode_query $att]=[ad_urlencode_query $value]
+    
+    ad_proc ::acs::test::user::delete {
+        {-user_id:required}
+    } {
+        Remove a test user.
+    } {
+        acs_user::delete \
+            -user_id $user_id \
+            -permanent
     }
-    set body [join $export &]
-    ns_log notice "body=$body"
-    #
-    # Send the POST request
-    #
-    return [aa_http \
-                -user_id $user_id \
-                -method POST -body $body \
-                -headers {Content-Type application/x-www-form-urlencoded} \
-                $url]
 }
+
+
+
+
+namespace eval aa_test {}
 
 ad_proc -public aa_test::xml_report_dir {} {
     Retrieves the XMLReportDir parameter.
