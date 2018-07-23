@@ -14,7 +14,8 @@ aa_register_case \
         twt::do_request
         twt::user::logout
         twt::user::delete
-    } -libraries tclwebtest \
+    } \
+    -libraries tclwebtest \
     tclwebtest_example {
     A simple test case demonstrating the use of tclwebtest (HTTP level testing).
 

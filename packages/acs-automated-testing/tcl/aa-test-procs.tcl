@@ -450,7 +450,7 @@ ad_proc -public aa_register_case {
                             $cats $init_classes $on_error $args $error_level $bugs $procs]
     foreach p $procs {
         api_add_to_proc_doc -proc_name $p -property testcase -value [list $testcase_id $package_key]
-        ns_log notice "TESTCASE: api_add_to_proc_doc -proc_name $p -property testcase -value $testcase_id -> [dict get [nsv_get api_proc_doc $p] testcase]"
+        #ns_log notice "TESTCASE: api_add_to_proc_doc -proc_name $p -property testcase -value $testcase_id -> [dict get [nsv_get api_proc_doc $p] testcase]"
     }
     #
     # First, search the current list of test cases. If an old version already
@@ -1080,7 +1080,22 @@ ad_proc -private aa_http {
     @author Gustaf Neumann
 } {
     set driverInfo [util_driver_info]
-    set address [dict get $driverInfo address]
+    try {
+        #
+        # First try to get actual information from the
+        # connection. This is however only available in newer versions
+        # of NaviServer. The actual information is e.g. necessary,
+        # when the driver address is set to "0.0.0.0" or "::0" etc,
+        # and therefore every address might be provided as peer
+        # address in the check in the security-procs.
+        #
+        set address [ns_conn currentaddr]
+    } on error {errorMsg} {
+        #
+        # If this fails, fall back to configured value.
+        #
+        set address [dict get $driverInfo address]
+    }
     set extra_args {}
     if {[info exists body]} {
         lappend extra_args -body $body
@@ -1095,7 +1110,7 @@ ad_proc -private aa_http {
     nsv_set aa_test logindata [list peeraddr $address user_id $user_id]
 
     #
-    # Construct nice log line
+    # Construct a nice log line
     #
     append log_line "${prefix}Run $method $request"
     if {[llength $headers] > 0} {
