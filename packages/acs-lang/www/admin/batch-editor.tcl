@@ -21,14 +21,7 @@ set context [list [list [export_vars -base package-list {locale}] $locale_label]
                  [list [export_vars -base message-list {locale package_key show}] $package_key] \
                  $page_title]
 
-
-
-
-
 # TODO: PG
-
-
-
 
 #####
 #
@@ -36,7 +29,7 @@ set context [list [list [export_vars -base package-list {locale}] $locale_label]
 #
 #####
 
-# LARS: The reason I implemented this overly complex way of doing it is that I was just about to 
+# LARS: The reason I implemented this overly complex way of doing it is that I was just about to
 # merge this page with messages-search ...
 
 set where_clauses [list]
@@ -45,17 +38,17 @@ set keys_where_clauses [list]
 switch -exact $show {
     translated {
         lappend where_clauses {lm2.message is not null}
-        lappend keys_where_clauses {exists (select 1 
-                                            from   lang_messages lm 
-                                            where  lm.package_key = lmk.package_key 
+        lappend keys_where_clauses {exists (select 1
+                                            from   lang_messages lm
+                                            where  lm.package_key = lmk.package_key
                                             and    lm.message_key = lmk.message_key
                                             and    lm.locale = :current_locale)}
     }
     untranslated {
         lappend where_clauses {lm2.message is null}
-        lappend keys_where_clauses {not exists (select 1 
-                                            from   lang_messages lm 
-                                            where  lm.package_key = lmk.package_key 
+        lappend keys_where_clauses {not exists (select 1
+                                            from   lang_messages lm
+                                            where  lm.package_key = lmk.package_key
                                             and    lm.message_key = lmk.message_key
                                             and    lm.locale = :current_locale)}
     }
@@ -69,8 +62,6 @@ if { [llength $where_clauses] > 0 } {
 if { [llength $keys_where_clauses] > 0 } {
     set keys_where_clause "and [join $keys_where_clauses "\n and "]"
 }
-
-
 
 #####
 #
@@ -89,19 +80,14 @@ set num_messages_pretty [lc_numeric $num_messages]
 set num_translated_pretty [lc_numeric $num_translated]
 set num_untranslated_pretty [lc_numeric $num_untranslated]
 
-
-
-
-
 #####
 #
 # Initialize pagination
 #
 #####
 
-
 set keys [db_list get_keys "
-    select lmk.message_key 
+    select lmk.message_key
     from   lang_message_keys lmk
     where  lmk.package_key = :package_key
     $keys_where_clause
@@ -111,10 +97,6 @@ set keys [db_list get_keys "
 set total [llength $keys]
 set page_end [expr {$page_start + 10}]
 
-
-
-
-
 #####
 #
 # Build the form
@@ -123,7 +105,7 @@ set page_end [expr {$page_start + 10}]
 
 set edit_buttons [list]
 
-if { $show ne "untranslated" && $page_start > 0 } { 
+if { $show ne "untranslated" && $page_start > 0 } {
     lappend edit_buttons { "< Update and back" "prev" }
 }
 
@@ -157,22 +139,22 @@ array set sections {}
 db_foreach get_messages {} {
     ad_form -extend -name batch_editor -form \
         [list [list "message_key_$count:text(hidden)" {value $message_key}]]
-    
+
     set message_url [export_vars -base edit-localized-message { locale package_key message_key show }]
 
     # Adding section
     set section_name "$package_key.$message_key"
     if { ![info exists sections($section_name)] } {
-	set sec [list "-section" $section_name {legendtext "$section_name"}]
-	ad_form -extend -name batch_editor -form [list $sec]
-	set sections($section_name) "$section_name"
+        set sec [list "-section" $section_name {legendtext "$section_name"}]
+        ad_form -extend -name batch_editor -form [list $sec]
+        set sections($section_name) "$section_name"
     }
 
     ad_form -extend -name batch_editor -form \
         [list [list "message_key_pretty_$count:text(inform)" \
                    {label "Message Key"} \
                    {value "<a href=\"[ns_quotehtml $message_url]\">$package_key.$message_key</a>"}]]
-    
+
     if { $description ne "" } {
         set description_edit_url [export_vars -base edit-description { locale package_key message_key show }]
         set description "[ad_text_to_html -- $description] [subst { (<a href="[ns_quotehtml $description_edit_url]">edit</a>)}]"
@@ -189,7 +171,7 @@ db_foreach get_messages {} {
                        {label $default_locale_label} \
                        {value {[ns_quotehtml $default_message]}}]]
     }
-    
+
     if { [string length $translated_message] > 80 } {
         set html { cols 80 rows 15 }
     } else {
@@ -204,7 +186,7 @@ db_foreach get_messages {} {
 
     # We set this as a local variable, so that ad_form's normal system works
     set message_$count $translated_message
-    
+
     incr count
 }
 
@@ -214,7 +196,7 @@ ad_form -extend -name batch_editor -on_request {
 } -on_submit {
 
     for { set i $page_start } { $i < $page_end && $i < $total } { incr i } {
-        
+
         if { [set org_message_$i] ne [set message_$i] } {
             lang::message::register $current_locale $package_key \
                 [set message_key_$i] \
@@ -228,7 +210,7 @@ ad_form -extend -name batch_editor -on_request {
         switch $button {
             prev {
                 set page_start [expr {$page_start - 10}]
-                if { $page_start < 0 } { 
+                if { $page_start < 0 } {
                     set page_start 0
                 }
             }
@@ -239,13 +221,11 @@ ad_form -extend -name batch_editor -on_request {
                 }
             }
         }
-    }        
+    }
 
     ad_returnredirect [export_vars -base [ad_conn url] { locale package_key show page_start }]
-    ad_script_abort 
+    ad_script_abort
 }
-
-
 
 #####
 #
@@ -260,8 +240,8 @@ for {set count 0} {$count < $total} {incr count 10 } {
     if { $end_page > $total-1 } {
         set end_page [expr {$total-1}]
     }
-    
-    
+
+
     set text {}
     if { [string match "lt_*" [lindex $keys $count]] } {
         append text [string range [lindex $keys $count] 3 5]
@@ -283,10 +263,6 @@ for {set count 0} {$count < $total} {incr count 10 } {
         [expr {$count / 100}]
 }
 
-
-
-
-
 #####
 #
 # Slider for 'show' options
@@ -299,17 +275,16 @@ multirow append show_opts "all" "All" $num_messages_pretty
 multirow append show_opts "translated" "Translated" $num_translated_pretty
 multirow append show_opts "untranslated" "Untranslated" $num_untranslated_pretty
 
-multirow extend show_opts url selected_p 
+multirow extend show_opts url selected_p
 
 multirow foreach show_opts {
     set selected_p [string equal $show $value]
     if {$value eq "all"} {
         set url [export_vars -base [ad_conn url] { locale package_key }]
-    } else { 
+    } else {
         set url [export_vars -base [ad_conn url] { locale package_key {show $value} }]
     }
 }
-
 
 # Local variables:
 #    mode: tcl
