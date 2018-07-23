@@ -233,7 +233,7 @@ ad_form -extend -name batch_editor -on_request {
                 }
             }
             next {
-                set page_start [expr {$page_start + 10}]
+                incr page_start 10
                 if { $page_start > $total } {
                     set page_start [expr {$total - ($total % 10)}]
                 }
