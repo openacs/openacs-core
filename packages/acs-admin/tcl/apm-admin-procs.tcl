@@ -12,7 +12,7 @@ ad_proc apm_parameter_section_slider {package_key} {
     Build a dynamic section dimensional slider.
 } {
     set sections [db_list apm_parameter_sections {
-        select distinct(section_name) 
+        select distinct(section_name)
         from apm_parameters
         where package_key = :package_key
     }]
@@ -64,7 +64,7 @@ ad_proc -deprecated apm_header { { -form "" } args } {
     if {$form ne ""} {
         append body "<form $form>"
     }
-    
+
     return "$body\n
     <h3>$title</h3>
     $context_bar
@@ -72,9 +72,9 @@ ad_proc -deprecated apm_header { { -form "" } args } {
     "
 }
 
-ad_proc apm_shell_wrap { cmd } { 
-    @return a command string, wrapped it shell-style (with backslashes) 
-    in case lines get too long. 
+ad_proc apm_shell_wrap { cmd } {
+    @return a command string, wrapped it shell-style (with backslashes)
+    in case lines get too long.
 } {
     set out ""
     set line_length 0
@@ -113,7 +113,7 @@ ad_proc -private apm_package_selection_widget {
         <tr class='list-header'><th>$label</th><th>Package</th><th>Package Key</th><th>Comment</th></tr>}]
 
     foreach pkg_info $pkg_info_list {
-        
+
         incr counter
         set package_key [pkg_info_key $pkg_info]
         set package_path [pkg_info_path $pkg_info]
@@ -133,7 +133,7 @@ ad_proc -private apm_package_selection_widget {
                 append widget "
                 <td align='center'><input type='checkbox' name='package_key' value='$package_key' "
             }
-            
+
             append widget [subst {></td>
                 <td>$package(package-name) $package(name)</td>
                 <td>$package_key</td>
@@ -173,7 +173,7 @@ ad_proc -private apm_package_selection_widget {
             } else {
                 set comment "Installing older version of package."
             }
-            
+
             set install_checked [lindex {"" checked} [expr {$package_key in $to_install}]]
             append widget "
             <td align='center'><input type='checkbox' $install_checked name='package_key' value='$package_key'></td>
@@ -191,17 +191,17 @@ ad_proc -private apm_package_selection_widget {
 ad_proc -private apm_higher_version_installed_p {
     package_key
     version_name
-} {    
+} {
     @param package_key  The package in question.
 
     @param version_name The name of the currently installed version.
 
-    @return The return value of this procedure doesn't really fit with its name. 
-    What it returns is: 
-    
+    @return The return value of this procedure doesn't really fit with its name.
+    What it returns is:
+
     <ul>
-    <li>-1 if there's already a higher version of the given package installed than the version_name you gave it. 
-    <li>0 if the same version is installed as the one you supplied. 
+    <li>-1 if there's already a higher version of the given package installed than the version_name you gave it.
+    <li>0 if the same version is installed as the one you supplied.
     <li>1 if the version you gave is higher than the highest version installed, or no version of this package is installed.
     </ul>
 } {
@@ -215,13 +215,13 @@ ad_proc -private apm_higher_version_installed_p {
 
 
 ad_proc -private apm_build_repository {
-    {-debug:boolean 0} 
-    {-channels *} 
-    {-head_channel 5-10} 
-} {    
+    {-debug:boolean 0}
+    {-channels *}
+    {-head_channel 5-10}
+} {
 
-    Rebuild the repository on the local machine.  
-    Only useful for the openacs.org site.   
+    Rebuild the repository on the local machine.
+    Only useful for the openacs.org site.
     Adapted from Lars' build-repository.tcl page.
     @param debug Set to 1 to test with only a small subset of packages instead of the whole cvs tree.
     @param head_channel The artificial branch label to apply to HEAD.  Should be one minor version past the current release.
@@ -285,7 +285,7 @@ ad_proc -private apm_build_repository {
         if { ![regexp {^\s+([^:]+):\s+([0-9.]+)} [lindex $lines $i] match tag_name version_name] } {
             break
         }
-        
+
         # Look for tags named 'openacs-x-y-compat'
         if { [regexp {^openacs-([1-9][0-9]*-[0-9]+)-compat$} $tag_name match oacs_version] } {
             lassign [split $oacs_version "-"] major_version minor_version
@@ -317,19 +317,19 @@ ad_proc -private apm_build_repository {
     file delete -force -- $work_dir
     file mkdir ${work_dir}
     set update_pretty_date [lc_time_fmt [clock format [clock seconds] -format "%Y-%m-%d %T"] %c]
-    
+
     #cd $work_dir
-    
+
     foreach channel [lsort -decreasing [array names channel_tag]] {
 
         if {![string match $channels $channel]} continue
         ns_log Notice "Repository: Channel $channel using tag $channel_tag($channel)"
-        
+
         # Wipe and re-create the checkout directory
         file delete -force -- "${work_dir}openacs-4"
         file delete -force -- "${work_dir}dotlrn"
         file mkdir "${work_dir}dotlrn/packages"
-        
+
         # Prepare channel directory
         set channel_dir "${work_dir}repository/$channel/"
         file mkdir $channel_dir
@@ -337,7 +337,7 @@ ad_proc -private apm_build_repository {
         # Store the list of packages we've seen for this channel, so we don't include the same package twice
         # Seems odd, but we have to do this given the forked packages sitting in /contrib
         set packages [list]
-        
+
         # Checkout from the tag given by channel_tag($channel)
         if { $debug_p } {
             # Smaller list for debugging purposes
@@ -348,7 +348,7 @@ ad_proc -private apm_build_repository {
                                    $work_dir $cvs_root openacs-4/packages \
                                    $work_dir $cvs_root openacs-4/contrib/packages]
         }
-        
+
         foreach { cur_work_dir cur_cvs_root cur_module } $checkout_list {
             #cd $cur_work_dir
             set cmd [list exec $cd_helper $cur_work_dir cvs -d $cur_cvs_root -z3 co]
@@ -368,35 +368,35 @@ ad_proc -private apm_build_repository {
             release_date vendor_url vendor \
             maturity maturity_text \
             license license_url
-        
+
         set work_dirs [list ${work_dir}openacs-4/packages ${work_dir}openacs-4/contrib/packages ]
         foreach packages_dir $work_dirs {
 
             foreach spec_file [lsort [apm_scan_packages $packages_dir]] {
-                
+
                 set package_path [file join {*}[lrange [file split $spec_file] 0 end-1]]
                 set package_key [lindex [file split $spec_file] end-1]
-                
+
                 if { $package_key in $exclude_package_list } {
                     ns_log Debug "Repository: Package $package_key is on list of packages to exclude - skipping"
                     continue
                 }
-                
+
                 if { [array exists pkg_info] } {
                     array unset pkg_info
                 }
                 if { [info exists pkg_info] } {
                     unset pkg_info
                 }
-                
+
                 ad_try {
                     array set pkg_info [apm_read_package_info_file $spec_file]
-                    
+
                     if { $pkg_info(package.key) in $packages } {
                         ns_log Debug "Repository: Skipping package $package_key, because we already have another version of it"
                     } else {
                         lappend packages $pkg_info(package.key)
-                        
+
                         append manifest \
                             "  <package>" \n \
                             "    <package-key>[ns_quotehtml $pkg_info(package.key)]</package-key>\n" \
@@ -416,42 +416,42 @@ ad_proc -private apm_build_repository {
                         foreach e $pkg_info(install) {
                             append manifest "    <install package=\"$e\"/>\n"
                         }
-                        
+
                         template::multirow append packages \
                             $package_path $package_key $pkg_info(name) $pkg_info(package-name) \
                             $pkg_info(package.type) $pkg_info(summary) $pkg_info(description) \
                             $pkg_info(release-date) $pkg_info(vendor.url) $pkg_info(vendor) \
                             $pkg_info(maturity) $pkg_info(maturity_text) \
                             $pkg_info(license)  $pkg_info(license.url)
-                        
+
                         set apm_file "${channel_dir}${pkg_info(package.key)}-${pkg_info(name)}.apm"
                         ns_log Notice "Repository: Building package $package_key for channel $channel"
-                        
+
                         set files [apm_get_package_files \
                                        -all \
                                        -include_data_model_files \
                                        -all_db_types \
                                        -package_key $pkg_info(package.key) \
                                        -package_path $package_path]
-                        
+
                         if { [llength $files] == 0 } {
                             ns_log Notice "Repository: No files in package"
                         } else {
                             ns_log Notice "Repository: [llength $files] files in package $pkg_info(package.key) ($channel)"
                             set cmd [list exec [apm_tar_cmd] cf -  2>/dev/null]
-                            
+
                             # The path to the 'packages' directory in the checkout
                             set packages_root_path [file join {*}[lrange [file split $spec_file] 0 end-2]]
-                            
+
                             set tmp_filename [ad_tmpnam]
                             lappend cmd  --files-from $tmp_filename -C $packages_root_path
-                            
+
                             set fp [open $tmp_filename w]
                             foreach file $files {
                                 puts $fp $package_key/$file
                             }
                             close $fp
-                            
+
                             lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
                             ns_log Notice "Executing: $cmd"
                             if {[catch "exec $cd_helper $packages_root_path $cmd" errmsg]} {
@@ -461,16 +461,16 @@ ad_proc -private apm_build_repository {
                             }
                             file delete -- $tmp_filename
                         }
-                        
+
                         set apm_url "${repository_url}$channel/$pkg_info(package.key)-$pkg_info(name).apm"
-                        
+
                         append manifest "    <download-url>$apm_url</download-url>\n"
                         foreach elm $pkg_info(provides) {
                             append manifest "    <provides " \
                                 "url=\"[ns_quotehtml [lindex $elm 0]]\" " \
                                 "version=\"[ns_quotehtml [lindex $elm 1]]\" />\n"
                         }
-                        
+
                         foreach elm $pkg_info(requires) {
                             append manifest "    <requires " \
                                 "url=\"[ns_quotehtml [lindex $elm 0]]\" " \
@@ -484,7 +484,7 @@ ad_proc -private apm_build_repository {
             }
         }
         append manifest "</manifest>\n"
-        
+
         ns_log Notice "Repository: Writing $channel manifest to ${channel_dir}manifest.xml"
         set fw [open "${channel_dir}manifest.xml" w]
         puts $fw $manifest
@@ -523,15 +523,15 @@ ad_proc -private apm_build_repository {
             openacs-default-theme
             notifications
             search
-            tsearch2-driver 
+            tsearch2-driver
         }
         set category_title(common-app) "Common Applications"
         set package_keys(common-app) {
-            xowiki 
-            xotcl-request-monitor 
-            file-storage 
-            acs-developer-support 
-            forums 
+            xowiki
+            xotcl-request-monitor
+            file-storage
+            acs-developer-support
+            forums
             calendar
             news
             faq
@@ -552,7 +552,7 @@ ad_proc -private apm_build_repository {
                 release_date vendor_url vendor \
                 maturity maturity_text \
                 license license_url
-            
+
             template::multirow foreach packages {
                 if {$package_key in $package_keys($category)} {
                     template::multirow append pkgs \
@@ -565,15 +565,15 @@ ad_proc -private apm_build_repository {
             }
 
             puts $fw "\n<h2>$category_title($category)</h2>\n"
-            
+
             puts $fw [template::adp_include $channel_index_template \
                           [list channel $channel &pkgs pkgs update_pretty_date $update_pretty_date]]
-            
+
         }
         close $fw
 
         ns_log Notice "Repository:  Channel $channel complete."
-        
+
     }
 
     ns_log Notice "Repository: Finishing Repository"
@@ -596,7 +596,7 @@ ad_proc -private apm_build_repository {
         }
     }
 
-    
+
     # Write the index page
     ns_log Notice "Repository: Writing repository index page to ${work_dir}repository/index.adp"
     template::multirow create channels name tag label
