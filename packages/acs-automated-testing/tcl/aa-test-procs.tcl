@@ -1211,9 +1211,82 @@ namespace eval aa_xpath {
             aa_equals "XPath $q:" $result $value
         }
     }
+    
+    ad_proc -public ::aa_xpath::get_form_values {node xpath} {
+        
+        return form values (input fields and textareas) in form of a
+        dict (attribute value pairs). The provided xpath must point to
+        the form of which the values have to be extracted.
+
+    } {
+        set values {}
+        foreach n [$node selectNodes $xpath//input] {
+            set name  [$n getAttribute name]
+            #ns_log notice "aa_xpath::get_form_values from $className input node $n name $name:"
+            if {[$n hasAttribute value]} {
+                set value [$n getAttribute value]
+            } else {
+                set value ""
+            }
+            lappend values $name $value
+        }
+        foreach n [$node selectNodes $xpath//textarea] {
+            set name  [$n getAttribute name]
+            #ns_log notice "aa_xpath::get_form_values from $className textarea node $n name $name:"
+            set value [$n text]
+            lappend values $name $value
+        }
+        foreach n [$node selectNodes $xpath//select] {
+            set name  [$n getAttribute name]
+            set value [$node selectNodes $xpath//select\[name='$name'\]/option\[@selected='selected'\]/@value]
+            #ns_log notice "aa_xpath::get_form_values from SELECT $name OPTION <$value> [$n asHTML]"
+            lappend values $name $value
+        }
+        
+        return $values
+    }
+  
 }
 
 namespace eval aa_test {}
+
+ad_proc -public ::aa_test::form_reply {
+    -user_id:required
+    -url:required
+    {-update {}}
+    form_content
+} {
+    
+    Send a (POST) request to the specified URL based on the
+    provided form_content which has the form of a dict.  For
+    convenice the update fields are provided to overload the
+    form_content.
+    
+} {
+    foreach {att value} $update {
+        dict set form_content $att $value
+    }
+    #ns_log notice "final form_content $form_content"
+    #
+    # Transform the dict into export format. Since export_vars
+    # will skip all names containing a ":", such as
+    # "formbutton:ok", we do this "manually".
+    #
+    set export {}
+    foreach {att value} $form_content {
+        lappend export [ad_urlencode_query $att]=[ad_urlencode_query $value]
+    }
+    set body [join $export &]
+    ns_log notice "body=$body"
+    #
+    # Send the POST request
+    #
+    return [aa_http \
+                -user_id $user_id \
+                -method POST -body $body \
+                -headers {Content-Type application/x-www-form-urlencoded} \
+                $url]
+}
 
 ad_proc -public aa_test::xml_report_dir {} {
     Retrieves the XMLReportDir parameter.
