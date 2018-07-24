@@ -29,11 +29,11 @@ ad_proc -public acs_sc::invoke {
 
     Additional documentation and commentary at http://openacs.org/forums/message-view?message_id=108614.
     
-    @param contract_name The name of the contract you wish to use.
-    @param operation_name The name of the operation in the contract you wish to call.
+    @param contract The name of the contract you wish to use.
+    @param operation The name of the operation in the contract you wish to call.
     @param impl The name of the implementation you wish to use.
     @param impl_id The ID of the implementation you wish to use.
-    @param args The arguments you want to pass to the proc.
+    @param call_args The arguments you want to pass to the proc.
     @param error If specified, will throw an error if the operation isn't implemented.
 
     
