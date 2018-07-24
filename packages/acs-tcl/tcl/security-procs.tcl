@@ -112,6 +112,11 @@ ad_proc -private sec_handler {} {
             #
             # We have no cookie. Maybe we are running under aa_test.
             #
+            #if {[nsv_array exists aa_test]} {
+            #    ns_log notice "nsv_array logindata [nsv_get aa_test logindata logindata]"
+            #    ns_log notice "ns_conn peeraddr [ns_conn peeraddr]"
+            #    ns_log notice "dict get $logindata peeraddr [dict get $logindata peeraddr]"                
+            #}
             if {[nsv_array exists aa_test]
                 && [nsv_get aa_test logindata logindata]
                 && [ns_conn peeraddr] eq [dict get $logindata peeraddr]
@@ -593,7 +598,7 @@ ad_proc -private sec_generate_session_id_cookie {
 
     # Fetch the last value element of ad_user_login cookie (or
     # ad_user_login_secure) that indicates if user wanted to be
-    # remembered when loggin in.
+    # remembered when logging in.
 
     set discard t
     set max_age [sec_session_timeout]

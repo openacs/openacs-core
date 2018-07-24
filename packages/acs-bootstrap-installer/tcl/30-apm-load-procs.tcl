@@ -587,7 +587,7 @@ ad_proc -private apm_include_data_model_file_p { filename } {
 ad_proc -private apm_include_file_p { filename } {    
     Check if the APM should consider a file found by ad_find_all_files.
     Files for which apm_ignore_file_p returns true will be ignored.
-    Backup files and sql scripts (including the ones in upgrade directory) are ignored.
+    Backup files and SQL scripts (including the ones in upgrade directory) are ignored.
 } {
     #ns_log notice "apm_include_file_p <$filename> => [apm_ignore_file_p $filename]"
     return [expr {![apm_ignore_file_p $filename]}] 

@@ -552,7 +552,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     # (returning for the empty string input a one byte output). If this
     # happens, we fall back to the "manual" ad_quotehtml. However, we
     # prefer to use the faster (C-implemented) ns_quotehtml, since the
-    # actual subsitutions occur at page-view time, and they are called
+    # actual substitutions occur at page-view time, and they are called
     # therefore very often.
     #
     if {[ns_quotehtml ""] eq ""} {
