@@ -85,7 +85,6 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     set f [open $typo_list "r"]
     while {[gets $f line] >= 0} {
         dict append typos {*}[string tolower $line]
-        lappend Typos [string tolower $line]
     }
     close $f
     aa_log "Created typo dictionary using data from $typo_list ([dict size $typos] typos loaded)"
@@ -95,11 +94,11 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     set good 0
     set checks 0
     set ignorechars {
-        , " " 
+        , " "
         ( " " ) " " < " " > " "
         \[ " " \] " "
         \{ " " \} " "
-        < " " > " "        
+        < " " > " "
         . " " : " "   ; " " ? " " ! " "
         = " "
         \r " "
