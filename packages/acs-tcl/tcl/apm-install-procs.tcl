@@ -945,7 +945,7 @@ ad_proc -private apm_package_install {
             </blockquote></pre>
 
             <p>
-            <b><font color="red">NOTE:</font></b> If the error comes from a sql script you may try to source it manually. When you are done with that you should revisit the APM and try again but remember to leave the manually souced sql scipts unchecked on the previous page.
+            <b><font color="red">NOTE:</font></b> If the error comes from a SQL script you may try to source it manually. When you are done with that you should revisit the APM and try again but remember to leave the manually sourced SQL scripts unchecked on the previous page.
             </p>
         }]
         return 0
@@ -1653,7 +1653,7 @@ ad_proc -private apm_version_upgrade {version_id} {
 
 ad_proc -private apm_upgrade_for_version_p {path initial_version_name final_version_name} {
 
-    @return 1 if the file indicated by path is valid .sql script to upgrade initial_version_name
+    @return 1 if the file indicated by path is a valid SQL script to upgrade initial_version_name
     to final_version_name
 
 } {
