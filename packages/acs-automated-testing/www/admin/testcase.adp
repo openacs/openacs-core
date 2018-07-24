@@ -105,19 +105,19 @@
 	<td> @tests.timestamp@ </td>
         <if @tests.result@ eq "fail">
           <td class="fail">FAILED</td>
-	  <td><pre>@tests.notes@</pre></td>	  
+	  <td><pre>@tests.notes;literal@</pre></td>	  
         </if>
         <elseif @tests.result@ eq "pass">
           <td class="ok">@tests.result@</td>
-  	  <td><pre>@tests.notes@</pre></td>
+  	  <td><pre>@tests.notes;literal@</pre></td>
         </elseif>
         <elseif @tests.result@ eq "warn">
           <td class="warn">@tests.result@</td>
-  	  <td><pre class="warn">@tests.notes@</pre></td>
+  	  <td><pre class="warn">@tests.notes;literal@</pre></td>
         </elseif>
         <else>
           <td class="log">@tests.result@</td>
-	  <td class="log">@tests.notes@</td>
+	  <td class="log">@tests.notes;literal@</td>
         </else>
       </tr>
       </multiple>

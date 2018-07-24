@@ -1280,6 +1280,48 @@ namespace eval acs::test {
         return [http -user_id $user_id $href]
     }
 
+    
+    ad_proc -private detail_link {dict} {
+        
+        Create a detail link, which is useful for web-requests, to
+        inspect the result in case a test fails.
+
+        Missing: cleanup, e.g. after a couple of days, or when the
+        testcase is executed again (for that we would need testcase_id
+        and package_key, that we do not want to pass around)
+        
+    } {
+        set nonce REPLY-[clock clicks -microseconds].html
+        set F [open $::acs::rootdir/packages/acs-automated-testing/www/$nonce w]
+        puts $F [dict get $dict body]
+        close $F
+        return /test/$nonce
+    }
+    
+    ad_proc -public reply_contains {{-prefix ""} dict string} {
+        Convenience function for test cases
+    } {
+        set result [string match *$string* [dict get $dict body]]
+        if {$result} {
+            aa_true "${prefix} Reply contains $string (<a href='[detail_link $dict]'>Details</a>)" $result            
+        } else {
+            aa_true "${prefix} Reply contains $string" $result
+        }
+        return $result
+    }
+
+    ad_proc -public reply_contains_no {{-prefix ""} dict string} {
+        Convenience function for test cases
+    } {
+        set result [string match *$string* [dict get $dict body]]
+        if {$result} {
+            aa_false "${prefix} Reply contains no $string (<a href='[detail_link $dict]'>Details</a>)" $result            
+        } else {
+            aa_false "${prefix} Reply contains no $string" $result
+        }
+        return [expr {!$result}]
+    }
+
 }
 
 namespace eval ::acs::test::xpath {

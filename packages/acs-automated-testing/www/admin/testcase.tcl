@@ -36,7 +36,17 @@ db_multirow tests_quiet summary {
 }
 
 
-db_multirow tests acs-automated-testing.testcase_query {}
+db_multirow tests acs-automated-testing.testcase_query {
+    if {![string match "*<a href=*>" $notes]} {
+        #
+        # Allow only "<a href=" links unescaped in log entries, such
+        # that entries like ... a < b ... continue to work, but detail
+        # links can be used (we should probably add an additional field +
+        # interface to the data model)
+        #
+        set notes [ns_quotenhtml $notes]
+    }
+}
 
 if {![db_0or1row acs-automated-testing.get_testcase_fails_count {
     select fails
@@ -48,8 +58,8 @@ if {![db_0or1row acs-automated-testing.get_testcase_fails_count {
 
 set testcase_bodys {}
 set testcase_bugs ""
-set testcase_procs ""        
-set testcase_cats ""        
+set testcase_procs ""
+set testcase_cats ""
 set testcase_inits ""
 
 foreach testcase [nsv_get aa_test cases] {
@@ -60,7 +70,7 @@ foreach testcase [nsv_get aa_test cases] {
             testcase_cats testcase_inits \
             testcase_on_error testcase_bodys testcase_error_level \
             testcase_bugs testcase_procs testcase_urls
-        ns_log notice "testcase_urls $testcase_urls"
+
         set testcase_cats  [join [lsort $testcase_cats] ", "]
         set testcase_inits [join [lsort $testcase_inits] ", "]
         break
@@ -83,7 +93,6 @@ set proc_blurb [join $proc_list ", "]
 
 set url_list [list]
 foreach url $testcase_urls {
-    #http://localhost:8100/api-doc/content-page-view?version_id=13092&path=packages/forums/www/admin/forum-edit.adp
     set path packages/$package_key/www/$url.tcl
     set href [export_vars -base "/api-doc/content-page-view" { path {source_p 1} }]
     lappend url_list [subst {<a href="[ns_quotehtml $href]">$url</a>}]
