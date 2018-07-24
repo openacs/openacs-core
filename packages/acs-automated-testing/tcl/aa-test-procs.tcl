@@ -457,7 +457,8 @@ ad_proc -public aa_register_case {
 
     set test_case_list [list $testcase_id $testcase_desc \
                             [info script] $package_key \
-                            $cats $init_classes $on_error $args $error_level $bugs $procs]
+                            $cats $init_classes $on_error $args $error_level \
+                            $bugs $procs $urls]
     foreach p $procs {
         api_add_to_proc_doc -proc_name $p -property testcase -value [list $testcase_id $package_key]
         #ns_log notice "TESTCASE: api_add_to_proc_doc -proc_name $p -property testcase -value $testcase_id -> [dict get [nsv_get api_proc_doc $p] testcase]"

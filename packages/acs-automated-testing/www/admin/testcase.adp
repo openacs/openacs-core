@@ -15,6 +15,10 @@
         <dt>Procs:</dt><dd>This test case covers OpenACS proc(s):
           @proc_blurb;noquote@</dd>
       </if>
+      <if @url_blurb@ not nil>  
+        <dt>URLs:</dt><dd>This test case covers the following URLs:
+          @url_blurb;noquote@</dd>
+      </if>
       <if @testcase_inits@ ne "">
         <dt>Initialisation Classes:</dt><dd>@testcase_inits@</dd>
       </if>

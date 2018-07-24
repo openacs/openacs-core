@@ -58,9 +58,11 @@ foreach testcase [nsv_get aa_test cases] {
     } {
         lassign $testcase . testcase_desc testcase_file . \
             testcase_cats testcase_inits \
-            testcase_on_error testcase_bodys testcase_error_level testcase_bugs testcase_procs
-        set testcase_cats  [join $testcase_cats ", "]
-        set testcase_inits [join $testcase_inits ", "]
+            testcase_on_error testcase_bodys testcase_error_level \
+            testcase_bugs testcase_procs testcase_urls
+        ns_log notice "testcase_urls $testcase_urls"
+        set testcase_cats  [join [lsort $testcase_cats] ", "]
+        set testcase_inits [join [lsort $testcase_inits] ", "]
         break
     }
 }
@@ -78,6 +80,15 @@ foreach p $testcase_procs {
     lappend proc_list [subst {<a href="[ns_quotehtml $href]">$p</a>}]
 }
 set proc_blurb [join $proc_list ", "]
+
+set url_list [list]
+foreach url $testcase_urls {
+    #http://localhost:8100/api-doc/content-page-view?version_id=13092&path=packages/forums/www/admin/forum-edit.adp
+    set path packages/$package_key/www/$url.tcl
+    set href [export_vars -base "/api-doc/content-page-view" { path {source_p 1} }]
+    lappend url_list [subst {<a href="[ns_quotehtml $href]">$url</a>}]
+}
+set url_blurb [join $url_list ", "]
 
 
 template::multirow create bodys body_number body
