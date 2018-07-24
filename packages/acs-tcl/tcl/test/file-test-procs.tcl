@@ -347,6 +347,83 @@ aa_register_case -cats {production_safe} -error_level notice files__trailing_whi
     aa_log "$good of $count tcl files checked have no trailing whitespace"
 }
 
+aa_register_case -cats {smoke production_safe} -error_level warning files__page_contracts {
+
+    Checks for files without 'ad_page_contract' or 'ad_include_contract' in
+    both 'www' and 'lib' package directories.
+
+    There are cases, where includelets are not stored in 'lib' but 'www', or
+    have 'ad_page_contract' instead of 'ad_include_contract'.
+
+    Checking if the location of includelets is correct is not so clear, so we
+    avoid doing this in this particular test.
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+
+    @creation-date 2018-07-24
+
+} {
+    # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
+    set startdir $::acs::rootdir/packages
+
+    aa_log "Checks starting from $startdir"
+
+    # get tcl files from installed packages
+    set files [list]
+    apm_get_installed_versions -array installed_versions
+    foreach {package_key version} [array get installed_versions] {
+        lappend files {*}[lmap f [apm_get_package_files \
+                                      -package_key $package_key] {
+            set file_dirs [string map {"/" " "} [file dirname $f]]
+            # Search only in www and lib
+            if { "www" ni "$file_dirs" && "lib" ni "$file_dirs" || [file extension $f] ne ".tcl" } continue
+            # Ignore docs
+            if { "doc" in "$file_dirs" || "$package_key" eq "acs-core-docs" } continue
+            set f $startdir/$package_key/$f
+        }]
+    }
+
+    set ignorechars {
+        , " "
+        ( " " ) " " < " " > " "
+        \[ " " \] " "
+        \{ " " \} " "
+        < " " > " "
+        . " " : " "   ; " " ? " " ! " "
+        = " "
+        \r " "
+        \" " "
+        „ " " “ " " ” " "
+        ﻿ " "
+        ­ ""
+    }
+
+    #inspect every Tcl file in the directory tree starting with $startdir
+    set count 0
+    set good 0
+    foreach file $files {
+        set f [open $file "r"]
+        incr count
+        set contract_found_p false
+        ns_log Notice "Looking for contracts in file $file"
+        while {[gets $f line] >= 0 && !$contract_found_p} {
+            set line_clean [string map $ignorechars $line]
+            if { "ad_page_contract" in "$line_clean" || "ad_include_contract" in "$line_clean" } {
+                # Found contract!
+                incr good
+                set contract_found_p true
+            }
+        }
+        close $f
+
+        # Check results on $file
+        if { !$contract_found_p } {
+            aa_log_result fail "$file: no 'ad_page_contract' or 'ad_include_contract' found"
+        }
+    }
+    aa_log "$good of $count tcl files checked have 'ad_page_contract' or 'ad_include_contract'"
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
