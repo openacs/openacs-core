@@ -87,10 +87,12 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
         dict append typos {*}[string tolower $line]
     }
     close $f
+    aa_log "Created typo dictionary using data from $typo_list ([dict size $typos] typos loaded)"
 
     # Check for the typos
     set count 0
     set good 0
+    set checks 0
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         incr count
         set typo_number 0
@@ -107,6 +109,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
                 $main_doc]]
         if { $proc_doc_clean ne "" } {
             foreach typo [dict keys $typos] {
+                incr checks
                 #ns_log Notice "Typo check in $p: Typo: $typo Doc: $proc_doc_clean"
                 if { "$typo" in $proc_doc_clean } {
                     # Typo found!
@@ -120,7 +123,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
             incr good
         }
     }
-    aa_log "Documentation seems typo free in $good of $count checked procs"
+    aa_log "Documentation seems typo free in $good of $count checked procs (total typo checks: $checks)"
 }
 
 # Local variables:
