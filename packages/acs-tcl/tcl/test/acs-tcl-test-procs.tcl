@@ -1026,7 +1026,6 @@ aa_register_case \
     @author Rocael Hernandez (roc@viaro.net)
 } {
 
-
     aa_run_with_teardown \
 	-rollback \
 	-test_code {
@@ -1090,7 +1089,7 @@ aa_register_case \
 
 		    ad_parameter_cache -delete $package_id $parameter_name
 
-		    break;
+		    break
 		}
 	    }
 	}
