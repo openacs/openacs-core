@@ -351,18 +351,25 @@ ad_proc -public aa_register_case {
     <li><b>api</b>: tests the Tcl API
     <li><b>web</b>: tests HTTP interface
     <li><b>smoke</b>: Minimal test to assure functionality and catch basic errors.
-    <li><b>stress</b>: Puts heavy load on server or creates large numbers of records.  Intended to simulate maximal production load.
+    <li><b>stress</b>: Puts heavy load on server or creates large numbers of records. \
+        Intended to simulate maximal production load.
     <li><b>security_risk</b>: May introduce a security risk.
     <li><b>populator</b>: Creates sample data for future use.
-    <li><b>production_safe</b>: Can be used on a live production site, ie for sanity checking or keepalive purposes.  Implies: no risk of adding or deleting data; no risk of crashing; minimal cpu/db/net load.
+    <li><b>production_safe</b>: Can be used on a live production site, \
+        i.e. for sanity checking or keepalive purposes. \
+        Implies: no risk of adding or deleting data; no risk of crashing; minimal cpu/db/net load.
     </ul>
 
-    @param error_level Force all test failures to this error level.  One of
+    @param error_level Force all test failures to this error level. One of
     <ul>
     <li><b>notice</b>: Informative.  Does not indicate an error.
-    <li><b>warning</b>: May indicate an problem.  Example: a non-critical bug repro case that hasn't been fixed.
+    <li><b>warning</b>: May indicate an problem. \
+        Example: a non-critical bug repro case that hasn't been fixed.
     <li><b>error</b>: normal error
-    <li><b>metatest</b>: Indicates a problem with the test framework, execution, or reporting.  Suggests that current test results may be invalid.  Use this for test cases that test the tests.  Also used, automatically, for errors sourcing test cases.
+    <li><b>metatest</b>: Indicates a problem with the test framework, execution, or reporting. \
+        Suggests that current test results may be invalid. \
+        Use this for test cases that test the tests. \
+        Also used, automatically, for errors sourcing test cases.
     </ul>
 
     @param bugs A list of integers correspending to openacs.org bug numbers which relate to this test case.
@@ -398,8 +405,7 @@ ad_proc -public aa_register_case {
     # Work out the package_key.
     #
     set package_root [file join $::acs::rootdir packages]
-    set package_rel [string replace [info script] \
-                         0 [string length $package_root]]
+    set package_rel [string replace [info script] 0 [string length $package_root]]
     set package_key [lindex [file split $package_rel] 0]
 
     # run library specific code
@@ -410,7 +416,7 @@ ad_proc -public aa_register_case {
             # place following the Tcl way, we use this absolute path
             # hack.
             set tclwebtest_absolute_path "/usr/local/tclwebtest/lib"
-            if { ![info exists ::auto_path] || [lsearch $::auto_path $tclwebtest_absolute_path] == -1 } {
+            if { ![info exists ::auto_path] || $tclwebtest_absolute_path ni $::auto_path } {
                 lappend ::auto_path $tclwebtest_absolute_path
             }
             if { [catch {
@@ -463,8 +469,9 @@ ad_proc -public aa_register_case {
     set lpos 0
     set found_pos -1
     foreach case [nsv_get aa_test cases] {
-        if {[lindex $case 0] == $testcase_id &&
-            [lindex $case 3] == $package_key} {
+        if {[lindex $case 0] == $testcase_id
+            && [lindex $case 3] == $package_key
+        } {
             nsv_set aa_test cases [lreplace [nsv_get aa_test cases] $lpos $lpos \
                                        $test_case_list]
             set found_pos $lpos
@@ -519,7 +526,7 @@ ad_proc -public aa_register_case {
     set body "
     $init_class_code
     set _aa_export {}
-    set body_count 0
+    set body_count 1
     foreach testcase_body \[list $args\] {
       aa_log \"Running testcase body \$body_count\"
       set catch_val \[catch \"eval \[list \$testcase_body\]\" msg\]
@@ -540,7 +547,9 @@ ad_proc -public aa_export_vars {
 } {
     Called from a initialisation class constructor or a component to
     explicitly export the specified variables to the current testcase. You need
-    to call aa_export_vars <b>before</b> you create the variables. Example:
+    to call aa_export_vars <b>before</b> you create the variables.
+
+    Example:
     <pre>
     aa_export_vars {package_id item_id}
     set package_id 23
@@ -1083,7 +1092,7 @@ namespace eval acs::test {
 
         Send a (POST) request to the specified URL based on the
         provided form_content which has the form of a dict.  For
-        convenice the update fields are provided to overload the
+        convenience the update fields are provided to overload the
         form_content.
 
     } {
@@ -1188,10 +1197,20 @@ namespace eval acs::test {
         #ns_log notice "run $request returns $d"
         #ns_log notice "... [ns_set array [dict get $d headers]]"
         if {$verbose_p} {
-            set ms [format %.2f [expr {[ns_time format [dict get $d time]]*1000}]]
+            set ms [format %.2f [expr {[ns_time format [dict get $d time]] * 1000.0}]]
             aa_log "${prefix}$method $request returns [dict get $d status] in ${ms}ms"
         }
         return $d
+    }
+
+    ad_proc -public ::acs::test::visualize_control_chars {lines} {
+        Quotes and therefore makes visible control chars in input lines
+    } {
+        set output $lines
+        regsub -all {\\} $output {\\\\} output
+        regsub -all {\r} $output {\\r} output
+        regsub -all {\n} $output "\\n\n" output
+        return $output
     }
 
     ad_proc -public ::acs::test::dom_html {var html body} {
@@ -1202,14 +1221,70 @@ namespace eval acs::test {
         uplevel $body
     }
 
+    ad_proc -public get_form {body xpath} {
 
+        Locate the HTML forms matching the XPath expression and
+        retrieve its HTML attributes and the formfields in form of a
+        Tcl dict. This is a convenience function, combining
+        acs::test::dom_html and ::acs::test::xpath::get_form.
+
+        @return Tcl dict with form attributes (starting with "@" and fields)
+        @see acs::test::dom_html ::acs::test::xpath::get_form
+
+        @author Gustaf Neumann
+    } {
+        acs::test::dom_html root $body {
+            set form_data [::acs::test::xpath::get_form $root $xpath]
+        }
+        return $form_data
+    }
+
+    ad_proc -public follow_link {
+        {-user_id 0}
+        {-base /}
+        {-label ""}
+        {-html:required}
+    } {
+
+        Follow the first provided label and return the page info.
+        Probably, we want as well other mechanisms to locate the
+        anchor element later.
+
+        @author Gustaf Neumann
+    } {
+        set href ""
+        acs::test::dom_html root $html {
+            foreach a [$root selectNodes //a] {
+                set link_label [string trim [$a text]]
+                if {$label eq $link_label} {
+                    set href [$a getAttribute href]
+                    break
+                }
+                #
+                # There is something weird in tDOM: without the
+                # "string trim" we see something like
+                #
+                #       a TEXT 'DD25C9878' = 'DD25C9878' eq 0 77 9
+                #
+                # from the statements below.
+                # set eq [expr {$label eq $link_label}]
+                # aa_log "a TEXT '$link_label' = '$label' eq $eq [string length $link_label] [string length $label]"
+                # aa_log "a TEXT '[$a asHTML]'"
+            }
+        }
+        aa_true "Link label for '$label' is not empty: '$href'" {$href ne ""}
+        if {![string match "/*" $href]} {
+            set href $base/$href
+        }
+        return [http -user_id $user_id $href]
+    }
 
 }
 
 namespace eval ::acs::test::xpath {
 
     #
-    # All procs in this namespace have the the signature
+    # All procs in this namespace have the signature
     #   root xpath
     # where root is a dom-node and xpath a an XPath expression.
     #
@@ -1234,7 +1309,9 @@ namespace eval ::acs::test::xpath {
 
 
     ad_proc -public non_empty {node selectors} {
+
         Test if provided selectors return non-empty results
+
     } {
         #
         # if we have no node, use as default the root in the parent
@@ -1253,9 +1330,12 @@ namespace eval ::acs::test::xpath {
             aa_true "XPath $q <$value>:" {$value ne ""}
         }
     }
+
     ad_proc -public equals {node pairs} {
-        Test if provided selectors (first element of the pair) return
-        the specificed results (second element of the pair).
+
+        Test whether provided selectors (first element of the pair)
+        return the specificed results (second element of the pair).
+
     } {
         foreach {q value} $pairs {
             try {
@@ -1269,11 +1349,38 @@ namespace eval ::acs::test::xpath {
         }
     }
 
+    ad_proc -public get_form {node xpath} {
+
+        Locate the HTML forms matching the XPath expression and
+        retrieve its HTML attributes and the formfields in form of a
+        Tcl dict.
+
+        @return Tcl dict with form attributes (starting with "@" and fields)
+
+        @author Gustaf Neumann
+    } {
+        set d {}
+        set form [$node selectNodes $xpath]
+        if {[llength $form] > 1} {
+            error "XPath expression must point to at most one HTML form"
+        } else {
+            foreach form [$node selectNodes $xpath] {
+                foreach att [$node selectNodes $xpath/@*] {
+                    dict set d @[lindex $att 0] [lindex $att 1]
+                }
+                dict set d fields [::acs::test::xpath::get_form_values $node $xpath]
+            }
+        }
+        return $d
+    }
+
+
     ad_proc -public get_form_values {node xpath} {
 
-        return form values (input fields and textareas) in form of a
-        dict (attribute value pairs). The provided xpath must point to
-        the form of which the values have to be extracted.
+        Obtain form values (input fields and textareas) in form of a
+        dict (attribute value pairs). The provided XPath expression
+        must point to the HTML form containing the values to be
+        extracted.
 
     } {
         set values {}
@@ -1293,10 +1400,9 @@ namespace eval ::acs::test::xpath {
             set value [$n text]
             lappend values $name $value
         }
-        foreach n [$node selectNodes $xpath//select] {
-            set name  [$n getAttribute name]
-            set value [$node selectNodes $xpath//select\[name='$name'\]/option\[@selected='selected'\]/@value]
-            #ns_log notice "aa_xpath::get_form_values from SELECT $name OPTION <$value> [$n asHTML]"
+        foreach n [$node selectNodes $xpath//select/option\[@selected='selected'\]] {
+            set name  [[$n parentNode] getAttribute name]
+            set value [$n getAttribute value]
             lappend values $name $value
         }
 
@@ -1543,17 +1649,6 @@ ad_proc -public aa_test::parse_test_file {
     }
     set test(testcase_failure) [array get testcase_failure]
 }
-
-ad_proc -public aa_test::visualize_control_chars {lines} {
-    Quotes and therefore makes visible control chars in input lines
-} {
-    set output $lines
-    regsub -all {\\} $output {\\\\} output
-    regsub -all {\r} $output {\\r} output
-    regsub -all {\n} $output "\\n\n" output
-    return $output
-}
-
 
 
 ad_proc -public aa_get_first_url {
