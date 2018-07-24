@@ -1075,14 +1075,14 @@ aa_register_case \
 			where package_key = :package_key and parameter_name = :parameter_name
 		    }]
 		    aa_equals "check parameter::set_default" $value $value_db
-		    incr value 10
+                    set value [expr {int($value + 10)}]
 
 		    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
 		    aa_equals "check parameter::set_from_package_key" \
 			[parameter::get -package_id $package_id -parameter $parameter_name] \
 			$value
 
-		    incr value 10
+                    set value [expr {int($value + 10)}]
 		    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
 		    aa_equals "check parameter::set_value" \
 			[parameter::get -package_id $package_id -parameter $parameter_name] \
