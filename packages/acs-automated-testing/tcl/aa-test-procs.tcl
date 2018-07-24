@@ -327,7 +327,7 @@ ad_proc -public aa_register_case {
     {-error_level "error"}
     {-bugs {}}
     {-procs {}}
-    {-urls {}}    
+    {-urls {}}
     {-init_classes {}}
     {-on_error {}}
     testcase_id
@@ -356,7 +356,7 @@ ad_proc -public aa_register_case {
     <li><b>populator</b>: Creates sample data for future use.
     <li><b>production_safe</b>: Can be used on a live production site, ie for sanity checking or keepalive purposes.  Implies: no risk of adding or deleting data; no risk of crashing; minimal cpu/db/net load.
     </ul>
-    
+
     @param error_level Force all test failures to this error level.  One of
     <ul>
     <li><b>notice</b>: Informative.  Does not indicate an error.
@@ -1073,19 +1073,19 @@ ad_proc -private aa_execute_rollback_tests {} {
 
 
 namespace eval acs::test {
-    
+
     ad_proc -public ::acs::test::form_reply {
         -user_id:required
         -url:required
         {-update {}}
         form_content
     } {
-        
+
         Send a (POST) request to the specified URL based on the
         provided form_content which has the form of a dict.  For
         convenice the update fields are provided to overload the
         form_content.
-        
+
     } {
         foreach {att value} $update {
             dict set form_content $att $value
@@ -1122,7 +1122,7 @@ namespace eval acs::test {
         {-verbose:boolean 1}
         request
     } {
-        
+
         Run an HTTP request against the actual server inside test
         cases.
 
@@ -1203,7 +1203,7 @@ namespace eval acs::test {
     }
 
 
-    
+
 }
 
 namespace eval ::acs::test::xpath {
@@ -1268,9 +1268,9 @@ namespace eval ::acs::test::xpath {
             aa_equals "XPath $q:" $result $value
         }
     }
-    
+
     ad_proc -public get_form_values {node xpath} {
-        
+
         return form values (input fields and textareas) in form of a
         dict (attribute value pairs). The provided xpath must point to
         the form of which the values have to be extracted.
@@ -1299,14 +1299,14 @@ namespace eval ::acs::test::xpath {
             #ns_log notice "aa_xpath::get_form_values from SELECT $name OPTION <$value> [$n asHTML]"
             lappend values $name $value
         }
-        
+
         return $values
     }
-  
+
 }
 
 namespace eval acs::test::user {
-    
+
     ad_proc ::acs::test::user::create {
         {-user_id ""}
         {-admin:boolean}
@@ -1351,7 +1351,7 @@ namespace eval acs::test::user {
 
         return $user_info
     }
-    
+
     ad_proc ::acs::test::user::delete {
         {-user_id:required}
     } {
