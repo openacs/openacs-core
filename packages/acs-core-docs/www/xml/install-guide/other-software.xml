@@ -695,7 +695,7 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
         <listitem id="configure-ns_ldap-bind">
           <formalpara>
             <title>Configure ns_ldap for use with LDAP bind</title>
-          <para>LDAP authentication usually is done by trying to bind (aka. login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasis>ns_ldap bind</emphasis> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentication instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
+          <para>LDAP authentication usually is done by trying to bind (a.k.a. login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasis>ns_ldap bind</emphasis> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentication instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
           </formalpara>
         </listitem>
       </orderedlist>

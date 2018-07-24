@@ -76,7 +76,7 @@ db_transaction {
 	    transaction.  If you use something like db_foreach though, you need to 
             make sure that there are no calls in the code block which would take
             a second db handle since the transaction is only valid for 
-            one handle (thats why we build up a list of returned values and call 
+            one handle (that's why we build up a list of returned values and call 
             a second proc outside the db_foreach loop).
 	  </para>
 	</listitem>
