@@ -290,6 +290,62 @@ aa_register_case -cats {smoke} files__check_xql_files {
     }
 }
 
+aa_register_case -cats {production_safe} -error_level notice files__trailing_whitespace {
+
+    Looks for trailing whitespace: spaces or tabs at the end of lines.
+
+    Currently, only checks on .tcl files.
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+
+    @creation-date 2018-07-24
+
+} {
+    # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
+    set startdir $::acs::rootdir/packages
+
+    aa_log "Checks starting from $startdir"
+
+    # get tcl files from installed packages
+    set files [list]
+    apm_get_installed_versions -array installed_versions
+    foreach {package_key version} [array get installed_versions] {
+        lappend files {*}[lmap f [apm_get_package_files \
+                                      -package_key $package_key] {
+            if {[file extension $f] ne ".tcl"} continue
+            set f $startdir/$package_key/$f
+        }]
+    }
+
+    #inspect every Tcl file in the directory tree starting with $startdir
+    set count 0
+    set good 0
+    foreach file $files {
+        set f [open $file "r"]
+        set line_numbers ""
+        incr count
+        set whitespace_count 0
+        set line_number 0
+        #ns_log Notice "Looking for trailing whitespace in file $file"
+        while {[gets $f line] >= 0} {
+            incr line_number
+            if {[regexp {[ \t]+$} $line]} {
+                # Found trailing whitespace!
+                incr whitespace_count
+                lappend line_numbers $line_number
+            }
+        }
+        close $f
+
+        # Check results on $file
+        if { $whitespace_count == 0 } {
+            incr good
+        } else {
+            aa_log_result fail "$file: trailing whitespace in lines: $line_numbers"
+        }
+    }
+    aa_log "$good of $count tcl files checked have no trailing whitespace"
+}
 
 # Local variables:
 #    mode: tcl
