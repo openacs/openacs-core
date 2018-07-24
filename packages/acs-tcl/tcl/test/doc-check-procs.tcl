@@ -85,6 +85,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     set f [open $typo_list "r"]
     while {[gets $f line] >= 0} {
         dict append typos {*}[string tolower $line]
+        lappend Typos [string tolower $line]
     }
     close $f
     aa_log "Created typo dictionary using data from $typo_list ([dict size $typos] typos loaded)"
@@ -93,34 +94,48 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     set count 0
     set good 0
     set checks 0
+    set ignorechars {
+        , " " 
+        ( " " ) " " < " " > " "
+        \[ " " \] " "
+        \{ " " \} " "
+        < " " > " "        
+        . " " : " "   ; " " ? " " ! " "
+        = " "
+        \r " "
+        \" " "
+        „ " " “ " " ” " "
+        ﻿ " "
+        ­ ""
+    }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         incr count
         set typo_number 0
-        set proc_doc [dict create {*}[string tolower [nsv_get api_proc_doc $p]]]
-        set main_doc [dict get $proc_doc main]
-        #
-        # Remove extra characters from the doc.
-        #
-        # string map is quick, but feel free to replace it with a quicker and/or
-        # cleaner method.
-        #
-        set proc_doc_clean [concat \
-            {*}[string map {& " " \" " " < " " > " " \[ " " \] " " , "" \{ "" \} ""} \
-                $main_doc]]
-        if { $proc_doc_clean ne "" } {
-            foreach typo [dict keys $typos] {
-                incr checks
-                #ns_log Notice "Typo check in $p: Typo: $typo Doc: $proc_doc_clean"
-                if { "$typo" in $proc_doc_clean } {
-                    # Typo found!
-                    incr typo_number
-                    aa_log_result fail "$p spelling error: $typo -> [dict get $typos $typo]"
+        set proc_doc [nsv_get api_proc_doc $p]
+        if {[dict exists $proc_doc main]} {
+            set main_doc [string tolower [dict get $proc_doc main]]
+            #
+            # Remove extra characters from the doc.
+            #
+            set proc_doc_clean [string map $ignorechars $main_doc]
+            if { [string length $proc_doc_clean] > 0} {
+                #
+                # Check the words of the documentation string
+                # against the dictionary.
+                #
+                foreach word [lsort -unique $proc_doc_clean] {
+                    incr checks
+                    if {[dict exists $typos $word]} {
+                        # Typo found!
+                        incr typo_number
+                        aa_log_result fail "spelling error in proc $p: $word -> [dict get $typos $word]"
+                    }
                 }
             }
-        }
-        # Just count the number of procs without doc typos for summarizing
-        if { $typo_number == 0 } {
-            incr good
+            # Just count the number of procs without doc typos for summarizing
+            if { $typo_number == 0 } {
+                incr good
+            }
         }
     }
     aa_log "Documentation seems typo free in $good of $count checked procs (total typo checks: $checks)"
