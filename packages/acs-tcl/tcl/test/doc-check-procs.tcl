@@ -140,6 +140,67 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     aa_log "Documentation seems typo free in $good of $count checked procs (total typo checks: $checks)"
 }
 
+aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_parameters {
+
+    Check if the parameters defined in the proc doc as '@param' are actual
+    parameters.
+
+    Sometimes proc parameter changes are not reflected in the proc doc, this
+    should take care of some of these cases.
+
+    Test is case sensitive.
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+
+    @creation-date 2018-07-24
+
+} {
+    set count 0
+    set good 0
+    set ignorechars {
+        , " "
+        ( " " ) " " < " " > " "
+        \[ " " \] " "
+        \{ " " \} " "
+        < " " > " "
+        . " " : " "   ; " " ? " " ! " "
+        = " "
+        \r " "
+        \" " "
+        „ " " “ " " ” " "
+        ﻿ " "
+        ­ ""
+    }
+
+    foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
+        set param_unknown 0
+        set proc_doc [nsv_get api_proc_doc $p]
+        if {[dict exists $proc_doc param]} {
+            incr count
+            set params [dict get $proc_doc param]
+            set real_params [list \
+                {*}[dict get $proc_doc switches] \
+                {*}[dict get $proc_doc positionals]]
+            #
+            # Check if the @param exists in the list of parameters
+            #
+            foreach param_doc $params {
+                set param [lindex [string map $ignorechars $param_doc] 0]
+                if {"$param" ni $real_params} {
+                    # Nonexistant @param found!
+                    incr param_unknown
+                    aa_log_result fail "Unknown parameter '$param' in documentation of proc '$p'"
+                }
+            }
+            # Just count the number of procs without nonexistant @params
+            if { $param_unknown == 0 } {
+                incr good
+            }
+        }
+    }
+    aa_log "@param names seem coherent with the actual proc parameters in $good of $count checked procs"
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
