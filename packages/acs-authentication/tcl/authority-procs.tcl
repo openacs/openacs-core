@@ -297,8 +297,6 @@ ad_proc -public auth::authority::batch_sync {
     Execute batch synchronization for this authority now.
 
     @param authority_id
-    @param snapshot     If set, we will delete all authority's users
-                        not touched by the process document proc.
 
     @return job_id
 } {
