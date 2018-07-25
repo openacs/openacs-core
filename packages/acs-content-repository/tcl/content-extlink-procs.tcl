@@ -1,9 +1,9 @@
-# packages/acs-content-repository/tcl/content-extlink-procs.tcl 
+# packages/acs-content-repository/tcl/content-extlink-procs.tcl
 
 ad_library {
-    
+
     Procedures for content_extlink
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
     @arch-tag: f8f62c6c-bf3b-46d9-8e1e-fa5e60ba1c05
@@ -20,7 +20,7 @@ ad_proc -public content::extlink::copy {
 } {
     @param extlink_id extlink to copy
     @param target_folder_id folder to copy extlink into
-    @param creation_user 
+    @param creation_user
     @param creation_ip
     @return 0
 } {
