@@ -10,7 +10,7 @@ aa_register_case \
     -cats {smoke production_safe} \
     -procs {apm_get_installed_versions apm_get_package_files} \
     files__tcl_file_syntax_errors {
-        
+
         Test all known Tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
 
         @author Jeff Davis davis@xarg.net
@@ -82,7 +82,7 @@ aa_register_case \
     -cats {smoke production_safe} \
     -procs {apm_read_package_info_file} \
     files__check_info_files {
-        
+
         Check that all the info files parse correctly and are
         internally consistent.
 
@@ -140,7 +140,7 @@ aa_register_case \
         apm_version_sortable
     } \
     files__check_upgrade_ordering {
-        
+
         Check that all the upgrade files are well ordered
         (non-overlapping and v1 > v2).
 
@@ -211,7 +211,7 @@ aa_register_case \
         xml_parse
     } \
     files__check_xql_files {
-        
+
         Check for some common errors in the xql files like
         missing rdbms, missing corresponding Tcl files, etc.
 
@@ -411,12 +411,12 @@ aa_register_case \
     apm_get_installed_versions -array installed_versions
     foreach {package_key version} [array get installed_versions] {
         lappend files {*}[lmap f [apm_get_package_files \
-                                      -package_key $package_key] {
-            set file_dirs [string map {"/" " "} [file dirname $f]]
-            # Search only in www and lib
-            if { "www" ni "$file_dirs" && "lib" ni "$file_dirs" || [file extension $f] ne ".tcl" } continue
+                                      -package_key $package_key \
+                                      -file_types {content_page include_page}] {
+            # Ignore non .tcl files
+            if {[file extension $f] ne ".tcl"} continue
             # Ignore docs
-            if { "doc" in "$file_dirs" || "$package_key" eq "acs-core-docs" } continue
+            if { "$package_key" eq "acs-core-docs" } continue
             set f $startdir/$package_key/$f
         }]
     }
