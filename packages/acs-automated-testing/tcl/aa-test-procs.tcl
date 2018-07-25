@@ -800,11 +800,16 @@ ad_proc -public aa_true {
     @creation-date 24 July 2001
 } {
     set result [uplevel 1 [list expr $affirm_expr]]
+    if {$affirm_expr in {0 1 t f true false}} {
+        set expr ""
+    } else {
+        set expr [subst {"$affirm_expr" }]
+    }
     if { $result } {
-        aa_log_result "pass" [subst {$affirm_name: "$affirm_expr" true}]
+        aa_log_result "pass" "$affirm_name: $expr true"
         return 1
     } else {
-        aa_log_result "fail" [subst {$affirm_name: "$affirm_expr" false}]
+        aa_log_result "fail" "$affirm_name: $expr false"
         return 0
     }
 }
@@ -1280,16 +1285,16 @@ namespace eval acs::test {
         return [http -user_id $user_id $href]
     }
 
-    
+
     ad_proc -private detail_link {dict} {
-        
+
         Create a detail link, which is useful for web-requests, to
         inspect the result in case a test fails.
 
         Missing: cleanup, e.g. after a couple of days, or when the
         testcase is executed again (for that we would need testcase_id
         and package_key, that we do not want to pass around)
-        
+
     } {
         set nonce REPLY-[clock clicks -microseconds].html
         set F [open $::acs::rootdir/packages/acs-automated-testing/www/$nonce w]
@@ -1297,7 +1302,7 @@ namespace eval acs::test {
         close $F
         return /test/$nonce
     }
-    
+
     ad_proc -public reply_contains {{-prefix ""} dict string} {
         Convenience function for test cases
     } {
@@ -1305,7 +1310,7 @@ namespace eval acs::test {
         if {$result} {
             aa_true "${prefix} Reply contains $string" $result
         } else {
-            aa_true "${prefix} Reply contains $string (<a href='[detail_link $dict]'>Details</a>)" $result            
+            aa_true "${prefix} Reply contains $string (<a href='[detail_link $dict]'>Details</a>)" $result
         }
         return $result
     }
@@ -1315,11 +1320,23 @@ namespace eval acs::test {
     } {
         set result [string match *$string* [dict get $dict body]]
         if {$result} {
-            aa_false "${prefix} Reply contains no $string (<a href='[detail_link $dict]'>Details</a>)" $result            
+            aa_false "${prefix} Reply contains no $string (<a href='[detail_link $dict]'>Details</a>)" $result
         } else {
             aa_false "${prefix} Reply contains no $string" $result
         }
         return [expr {!$result}]
+    }
+
+    ad_proc -public reply_has_status_code {{-prefix ""} dict status_code} {
+        Convenience function for test cases
+    } {
+        set result [expr {[dict get $dict status] == $status_code}]
+        if {$result} {
+            aa_true "${prefix} Reply has status code $status_code" $result
+        } else {
+            aa_true "${prefix} Reply expected status code $status_code but got [dict get $dict status] (<a href='[detail_link $dict]'>Details</a>)" $result
+        }
+        return $result
     }
 
 }
@@ -1398,7 +1415,7 @@ namespace eval ::acs::test::xpath {
         retrieve its HTML attributes and the formfields in form of a
         Tcl dict.
 
-        @return Tcl dict with form attributes (starting with "@" and fields)
+        @return Tcl dict with form attributes (keys starting with "@", and entry "fields")
 
         @author Gustaf Neumann
     } {
