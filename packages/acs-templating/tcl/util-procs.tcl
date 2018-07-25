@@ -607,11 +607,11 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
 
 ad_proc -public template::util::tcl_to_sql_list { lst } {
     Convert a Tcl list to a SQL list, for use with the "in" statement.
-    Uses DoubleApos (similar to ns_dbquotevalue) functionality to escape single quotes
+    Uses double single quotes (similar to ns_dbquotevalue) to escape single quotes
 } {
 
     if { [llength $lst] > 0 } {
-        # adding DoubleApos functionality for security reasons.
+        # replace single quotes by two single quotes
         regsub -all -- ' "$lst" '' lst2
         set sql "'"
         append sql [join $lst2 "', '"]

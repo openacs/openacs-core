@@ -747,7 +747,7 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
     #       necessarily limited to integer keys
     set quoted_ids [list]
     foreach one_id $ids {
-        lappend quoted_ids "'[DoubleApos $one_id]'"
+        lappend quoted_ids [::ns_dbquotevalue $one_id]
     }
     set in_list [join $quoted_ids ","]
     if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
@@ -819,7 +819,7 @@ ad_proc -public template::paginator::get_query { name id_column page } {
         #       necessarily limited to integer keys
         set quoted_ids [list]
         foreach one_id $ids {
-            lappend quoted_ids "'[DoubleApos $one_id]'"
+            lappend quoted_ids [::ns_dbquotevalue $one_id]
         }
         set in_list [join $quoted_ids ","]
         if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {

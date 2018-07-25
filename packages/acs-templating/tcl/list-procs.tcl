@@ -1000,7 +1000,7 @@ ad_proc -public template::list::page_get_ids {
         }
         set quoted_ids [list]
         foreach one_id $ids {
-            lappend quoted_ids "'[DoubleApos $one_id]'"
+            lappend quoted_ids [::ns_dbquotevalue $one_id]
         }
         return [join $quoted_ids ","]
     }

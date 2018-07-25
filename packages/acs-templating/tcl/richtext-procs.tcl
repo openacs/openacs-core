@@ -579,8 +579,8 @@ ad_proc template::data::to_sql::richtext { value } {
     Handle richtext transformations using a standardized naming convention.
 
 } {
-    return "'[DoubleApos [list [template::util::richtext::get_property content $value] \
-                               [template::util::richtext::get_property format $value]]]'"
+    return [::ns_dbquotevalue [list [template::util::richtext::get_property content $value] \
+                                   [template::util::richtext::get_property format $value]]]
 }
 
 
