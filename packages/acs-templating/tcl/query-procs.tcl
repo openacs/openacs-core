@@ -393,7 +393,7 @@ ad_proc -private template::query::dml { statement_name db name sql } {
 
     @param db Database handle
 
-    @param result_name Tcl variable name to use when setting the result
+    @param name Tcl variable name to use when setting the result
 
     @param sql Query to use when processing this command
 } {

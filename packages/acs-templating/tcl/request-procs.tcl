@@ -136,9 +136,10 @@ ad_proc -public template::request::error { args } {
     to a single query parameter.  The arguments to the procedure may be
     any number of name-message combinations.
 
-    @param name A unique identifier for the error condition, which may
-                be used for layout purposes.
-    @param msg  The message text associated with the condition.
+    @param args Combinations of 'name' and 'msg'.
+                name: unique identifier for the error condition, which
+                      may be used for layout purposes.
+                msg:  message text associated with the condition.
 } {
   set level [template::adp_level]
   upvar #$level request:error requesterror
