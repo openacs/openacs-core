@@ -182,7 +182,7 @@ ad_proc -private package_attribute_default {
     # We handle defaults grossly here, but I don't currently have
     # a better idea how to do this
     if { $attr_default ne "" } {
-        return "'[DoubleApos $attr_default]'"
+        return "'[::ns_dbquotevalue $attr_default]'"
     }
 
     # Special cases for acs_object and acs_rels
@@ -191,7 +191,7 @@ ad_proc -private package_attribute_default {
 
     if {$table eq "ACS_OBJECTS"} {
         switch -- $column {
-            "OBJECT_TYPE"   { return "'[DoubleApos $object_type]'" }
+            "OBJECT_TYPE"   { return "'[::ns_dbquotevalue $object_type]'" }
             "CREATION_DATE" { return [db_map creation_date] }
             "CREATION_IP"   { return "NULL" }
             "CREATION_USER" { return "NULL" }
@@ -200,7 +200,7 @@ ad_proc -private package_attribute_default {
         }
     } elseif {$table eq "ACS_RELS"} {
         switch -- $column {
-            "REL_TYPE"      { return "'[DoubleApos $object_type]'" }
+            "REL_TYPE"      { return "'[::ns_dbquotevalue $object_type]'" }
         }
     }
 
