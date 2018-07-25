@@ -36,13 +36,17 @@ if {$compiled_p && ![acs_user::site_wide_admin_p]} {
     set complied_p 0
 }
 
-if { ![info exists version_id] && 
-        [regexp {^packages/([^ /]+)/} $path . package_key] } {
+#
+# If there is no version_id, try to get if from the provided path
+#
+if { ![info exists version_id]
+     && [regexp {^/?packages/([^ /]+)/} $path . package_key] } {
     db_0or1row version_id_from_package_key {
         select version_id 
           from apm_enabled_package_versions 
          where package_key = :package_key
     }
+    ns_log notice "got version_id $version_id from DB via package_key '$package_key'"
 }
 
 if { [info exists version_id] } {
@@ -51,6 +55,7 @@ if { [info exists version_id] } {
           from apm_package_version_info
          where version_id = :version_id
     }
+    ns_log notice "have pretty_name? [info exists pretty_name]"
     if {[info exists pretty_name]} {
         lappend context [list "package-view?version_id=$version_id&kind=content" "$pretty_name $version_name"]
     }
