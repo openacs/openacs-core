@@ -837,9 +837,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
             set proc_sql [uplevel 2 [list db_bind_var_substitution $sql]]
         }
 
-        ns_db dml $db "create function $function_name () returns varchar as '
-                      [DoubleApos $proc_sql]
-                      ' language 'plpgsql'"
+        ns_db dml $db "create function $function_name () returns varchar as [::ns_dbquotevalue $proc_sql] language 'plpgsql'"
 
         set ret_val [ns_db 0or1row $db "select $function_name ()"]
 
@@ -929,7 +927,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
                     if {$__db_tcl_var eq ""} {
                         set __db_tcl_var null
                     } else {
-                        set __db_tcl_var "'[DoubleApos $__db_tcl_var]'"
+                        set __db_tcl_var "[::ns_dbquotevalue $__db_tcl_var]"
                     }
                     set __db_sql [string replace $__db_sql $__db_ws $__db_we $__db_tcl_var]
                 }
@@ -951,7 +949,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
                 if {$val eq ""} {
                     set val null
                 } else {
-                    set val "'[DoubleApos $val]'"
+                    set val "[::ns_dbquotevalue $val]"
                 }
                 set lsql [string replace $lsql $ws $we $val]
             }

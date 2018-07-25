@@ -257,17 +257,23 @@ ad_proc check_for_form_variable_naughtiness {
 
 
 
-ad_proc -private DoubleApos {string} {
-    if the user types "O'Malley" and you try to insert that into an SQL
-    database, you will lose big time because the single quote is magic
-    in SQL and the insert has to look like 'O''Malley'.
+ad_proc -deprecated DoubleApos {string} {
+    
+    When the value "O'Malley" is inserted int an SQL database, the
+    single quote can cause troubles in SQL, one has to insert
+    'O''Malley' instead.
+    
     <p>
-    You should be using bind variables rather than
-    calling DoubleApos
+    In general, one should be using bind variables rather than
+    calling DoubleApos.
 
     @return string with single quotes converted to a pair of single quotes
 } {
-    regsub -all ' "$string" '' result
+    set result [ns_dbquotevalue $string]
+    # remove the leading quote if necessary
+    if {[string range $result 0 0] eq '} {
+        set result [string range $result 1 end-1]
+    }
     return $result
 }
 

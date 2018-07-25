@@ -448,7 +448,7 @@ ad_proc util::json::json_value_to_sql_value {value} {
         true { return 1 }
         null -
         "" { return null }
-        default { return "'[DoubleApos $value]'" }
+        default { return "[::ns_dbquotevalue $value]" }
     }
 }
 
