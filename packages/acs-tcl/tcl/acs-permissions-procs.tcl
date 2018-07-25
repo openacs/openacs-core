@@ -358,7 +358,7 @@ if {[info commands ns_cache_eval] ne ""} {
     } {
         if {![info exists ::permission::cache_created]} {
             return
- 
+
         } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
             #
             # All three attributes are provided
@@ -428,7 +428,7 @@ if {[info commands ns_cache_eval] ne ""} {
     } {
         if {![info exists ::permission::cache_created]} {
             return
- 
+
         } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
             #
             # All three attributes are provided
