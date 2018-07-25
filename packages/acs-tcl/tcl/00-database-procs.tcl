@@ -201,7 +201,7 @@ ad_proc -public db_driverkey {
             # Fallback to nsv (old style), when for whatever
             # reasonesm, the namespaced variable is not available.
             #
-            ns_log notice "db_driverkey $handle_p dbn <$dbn> VIA NSV"        
+            ns_log notice "db_driverkey $handle_p dbn <$dbn> VIA NSV"
             set dbn [nsv_get db_pool_to_dbn $pool]
         } else {
             #
@@ -214,7 +214,7 @@ ad_proc -public db_driverkey {
             error "No database name (dbn) found for pool '$pool'. Check the 'ns/server/[ns_info server]/acs/database' section of your config file."
         }
     }
-    
+
     set key ::acs::db_driverkey($dbn)
     if {[info exists $key]} {
         return [set $key]
@@ -2575,7 +2575,7 @@ ad_proc -public db_source_sql_file {
             set fp [open "|[file join $::env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r+"]
             fconfigure $fp -buffering line
             puts $fp "exit"
-            
+
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
                 if { ![string is space $line] } {
