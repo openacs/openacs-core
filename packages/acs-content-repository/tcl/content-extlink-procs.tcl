@@ -41,7 +41,8 @@ ad_proc -public content::extlink::new {
     {-description ""}
     {-package_id ""}
 } {
-    @param Create a new external link.
+    Create a new external link.
+
     @return 0
 } {
     return [package_exec_plsql -var_list [list \

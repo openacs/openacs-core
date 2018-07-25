@@ -111,7 +111,7 @@ ad_proc -private doc::util::text_divider { text_ref marker } {
     divides a string variable into a list of strings, all but the first element beginning
     with the indicated text marker; the first element of the created list contains all of
     the string preceding the first occurrence of the text marker
-    @param text name of string variable (not the string value itself)
+    @param text_ref name of string variable (not the string value itself)
     @param marker the string indicating text division
 
     @see doc::util::find_marker_indices

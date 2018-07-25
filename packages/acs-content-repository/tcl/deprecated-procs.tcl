@@ -273,7 +273,7 @@ ad_proc -deprecated content_symlink::symlink_p {
 
     Returns true if the given item is a symlink
 
-    @param symlink_id  The object id of the item to check.
+    @param item_id  The object id of the item to check.
     @see content::symlink::is_symlink
 
 } {
@@ -295,7 +295,7 @@ ad_proc content_symlink::symlink_name {
 ad_proc -public -deprecated content_symlink::resolve {
 	-item_id:required
 } {
-	@param item)id item_id of content_symlink item to resolve
+	@param item_id item_id of content_symlink item to resolve
 
 	@return item_id of symlink target
 	@see content::symlink::resolve
