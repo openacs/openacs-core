@@ -1303,9 +1303,9 @@ namespace eval acs::test {
     } {
         set result [string match *$string* [dict get $dict body]]
         if {$result} {
-            aa_true "${prefix} Reply contains $string (<a href='[detail_link $dict]'>Details</a>)" $result            
-        } else {
             aa_true "${prefix} Reply contains $string" $result
+        } else {
+            aa_true "${prefix} Reply contains $string (<a href='[detail_link $dict]'>Details</a>)" $result            
         }
         return $result
     }
@@ -1486,7 +1486,7 @@ namespace eval acs::test::user {
         }
 
         dict set user_info password $password
-        dict set $user_info email $email
+        dict set user_info email $email
 
         aa_log "Created user with email='$email' and password='$password'"
 
