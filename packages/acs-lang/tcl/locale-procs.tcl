@@ -697,7 +697,7 @@ ad_proc -public lang::conn::charset {
     Returns the MIME charset name corresponding to the current connection's locale.
 
     @author        Lars Pind (lars@pinds.com)
-    @param locale  Name of a locale, as language_COUNTRY using ISO 639 and ISO 3166
+
     @return        IANA MIME character set name
 } {
     return [lang::util::charset_for_locale [lang::conn::locale]]
