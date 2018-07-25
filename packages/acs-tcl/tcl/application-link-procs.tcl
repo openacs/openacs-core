@@ -1,7 +1,7 @@
 ad_library {
-    
+
     Procs of application linking
-    
+
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-05-23
 }
@@ -19,11 +19,11 @@ ad_proc -public application_link::new {
     @param target_package_id The ID of the target package.
 } {
     if {[catch {ad_conn user_id} user_id]} {
-	set user_id 0
+        set user_id 0
     }
-    
+
     if {[catch {ad_conn peeraddr} id_addr]} {
-	set id_addr 127.0.0.1
+        set id_addr 127.0.0.1
     }
 
     set result [db_exec_plsql create_forward_link {}]
@@ -44,7 +44,7 @@ ad_proc -public application_link::delete_links {
     set rel_ids [db_list linked_packages {}]
 
     foreach rel_id $rel_ids {
-	relation_remove $rel_id
+        relation_remove $rel_id
     }
 }
 
@@ -113,7 +113,7 @@ ad_proc -private ::install::xml::action::application-link { node } {
 
     set link_id [application_link::new -this_package_id $this_package_id \
         -target_package_id $target_package_id]
- 
+
     if {![string is space $id]} {
         set ::install::xml::ids($id) $link_id
     }

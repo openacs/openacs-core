@@ -1,7 +1,7 @@
 ad_library {
-    
+
     Procs of application data linking
-    
+
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-05-23
 }
@@ -23,23 +23,23 @@ ad_proc -public application_data_link::new {
     @param relation_tag Relationship identifier
 } {
     if { [catch {
-	application_data_link::new_from \
-	    -object_id $this_object_id \
-	    -to_object_id $target_object_id \
-        -relation_tag $relation_tag
-	
-	application_data_link::new_to \
-	    -object_id $this_object_id \
-	    -from_object_id $target_object_id \
-        -relation_tag $relation_tag
-	
+        application_data_link::new_from \
+            -object_id $this_object_id \
+            -to_object_id $target_object_id \
+            -relation_tag $relation_tag
+
+        application_data_link::new_to \
+            -object_id $this_object_id \
+            -from_object_id $target_object_id \
+            -relation_tag $relation_tag
+
     }]}  {
-	# check if error occurred because of existing link
-    if { [application_data_link::exist_link -object_id $this_object_id -target_object_id $target_object_id -relation_tag $relation_tag] eq "1" } {
-	    ns_log Debug "application_data_link::new: link already exists" 
-	} else {  
-	    ns_log Error "application_data_link::new: link creation failure"
-	}
+        # check if error occurred because of existing link
+        if { [application_data_link::exist_link -object_id $this_object_id -target_object_id $target_object_id -relation_tag $relation_tag] eq "1" } {
+            ns_log Debug "application_data_link::new: link already exists"
+        } else {
+            ns_log Error "application_data_link::new: link creation failure"
+        }
     }
 }
 
@@ -125,7 +125,7 @@ ad_proc -public application_data_link::delete_links {
     set rel_ids [db_list linked_objects {}]
 
     foreach rel_id $rel_ids {
-	db_dml delete_link {}
+        db_dml delete_link {}
     }
 }
 
@@ -144,7 +144,7 @@ ad_proc -public application_data_link::delete_from_list {
     @creation-date 2006-08-31
 } {
     if {[llength $link_object_id_list]} {
-	db_dml delete_links ""
+        db_dml delete_links ""
     }
 }
 
@@ -235,7 +235,7 @@ ad_proc -public application_data_link::get_links_from {
 } {
     Get a list of objects that are linked from an object,
     possible using the relation_tag.
-    If to_type is a subtype of content_revision, we lookup 
+    If to_type is a subtype of content_revision, we lookup
     content_items that have that content_type
 
     @param object_id object_id one, get objects linked from this object
@@ -245,11 +245,11 @@ ad_proc -public application_data_link::get_links_from {
     set content_type_from_clause ""
 
     if {[info exists to_type] && $to_type ne ""} {
-	set to_type_clause [db_map to_type_where_clause]
-        if {[content::type::is_content_type -object_type $to_type]} {
-	    set to_type_clause [db_map content_type_where_clause]
-	    set content_type_from_clause [db_map content_type_from_clause]
-	}
+        set to_type_clause [db_map to_type_where_clause]
+            if {[content::type::is_content_type -object_type $to_type]} {
+            set to_type_clause [db_map content_type_where_clause]
+            set content_type_from_clause [db_map content_type_from_clause]
+        }
     }
     return [db_list links_from {}]
 }
@@ -261,7 +261,7 @@ ad_proc -public application_data_link::get_links_to {
 } {
     Get a list of objects that are linked to an object,
     possible using the relation_tag.
-    If from_type is a subtype of content_revision, we lookup 
+    If from_type is a subtype of content_revision, we lookup
     content_items that have that content_type
 
     @param object_id object_id two, get objects linked to this object
@@ -271,11 +271,11 @@ ad_proc -public application_data_link::get_links_to {
     set content_type_from_clause ""
 
     if {[info exists from_type] && $from_type ne ""} {
-	set from_type_clause [db_map from_type_where_clause]
-        if {[content::type::is_content_type -content_type $from_type]} {
-	    set from_type_clause [db_map content_type_where_clause]
-	    set content_type_from_clause [db_map content_type_from_clause]
-	}
+        set from_type_clause [db_map from_type_where_clause]
+            if {[content::type::is_content_type -content_type $from_type]} {
+            set from_type_clause [db_map content_type_where_clause]
+            set content_type_from_clause [db_map content_type_from_clause]
+        }
     }
     return [db_list links_to {}]
 }
@@ -286,7 +286,7 @@ ad_proc -public application_data_link::scan_for_links {
     Search for object references within text
     Supports /o/ /file/ /image/ object URL formats
 
-    @param text Text to scan for object links 
+    @param text Text to scan for object links
 
     @return List of linked object_ids
 
@@ -301,9 +301,9 @@ ad_proc -public application_data_link::scan_for_links {
     set ref_data [regexp -inline -all $re $text]
     foreach {discard ref} $ref_data {
             lappend refs $ref
-    } 
+    }
     if {[llength $refs]} {
-	set refs [db_list confirm_object_ids {}]
+        set refs [db_list confirm_object_ids {}]
     }
     return $refs
 }
@@ -328,34 +328,34 @@ ad_proc -public application_data_link::update_links_from {
     @creation-date 2006-08-31
 } {
     set old_links [application_data_link::get_links_from \
-		       -object_id $object_id \
-		       -relation_tag $relation_tag]
+                       -object_id $object_id \
+                       -relation_tag $relation_tag]
 
     if {![llength $link_object_ids]} {
-	set link_object_ids [application_data_link::scan_for_links -text $text]
+        set link_object_ids [application_data_link::scan_for_links -text $text]
     }
     set delete_ids [list]
     foreach old_link $old_links {
-	if {$old_link ni $link_object_ids} {
-	    lappend delete_ids $old_link
-	}
+        if {$old_link ni $link_object_ids} {
+            lappend delete_ids $old_link
+        }
     }
     application_data_link::delete_from_list \
-	-object_id $object_id \
-	-link_object_id_list $delete_ids \
-	-relation_tag $relation_tag
+                -object_id $object_id \
+                -link_object_id_list $delete_ids \
+                -relation_tag $relation_tag
 
     foreach new_link $link_object_ids {
-	if {![application_data_link::link_exists \
-		  -from_object_id $object_id \
-		  -to_object_id $new_link \
-		  -relation_tag $relation_tag]
-	} {
-	    application_data_link::new_from \
-		-object_id $object_id \
-		-to_object_id $new_link \
-		-relation_tag $relation_tag
-	}
+        if {![application_data_link::link_exists \
+                -from_object_id $object_id \
+                -to_object_id $new_link \
+                -relation_tag $relation_tag]
+        } {
+            application_data_link::new_from \
+                -object_id $object_id \
+                -to_object_id $new_link \
+                -relation_tag $relation_tag
+        }
     }
 }
 
@@ -370,7 +370,7 @@ ad_proc -public application_data_link::link_exists {
     @param from_object_id
     @param to_object_id
     @param relation_tag
-    
+
     @return 0 or 1
 
     @author Dave Bauer (dave@solutiongrove.com)
@@ -384,7 +384,7 @@ ad_proc -public application_data_link::relation_tag_where_clause {
 } {
     Utility proc to return relation tag where clause fragment.
     We show all object links regardless of tag if relation_tag is empty string.
-    
+
     @param relation_tag Relationship identifier
 } {
     if {$relation_tag eq ""} {
