@@ -376,9 +376,17 @@ ad_proc -public api_proc_documentation {
     @return the formatted documentation string.
     @error if the procedure is not defined.
 } {
+    #
+    # Sanitize input
+    #
+    if {[string match *::::* $proc_name]} {
+        ad_log warning "api_proc_documentation: received invalid proc_name <$proc_name>, try to sanitize"
+        regsub -all {::::} $proc_name :: proc_name
+    }
     if { $format ne "text/html" && $format ne "text/plain" } {
         return -code error "Only text/html and text/plain documentation are currently supported"
     }
+    array set doc_elements {flags "" default_values "" switches "" positionals "" varargs_p 0 script "" deprecated_p 0 main ""}
     array set doc_elements [nsv_get api_proc_doc $proc_name]
     array set flags $doc_elements(flags)
     array set default_values $doc_elements(default_values)
@@ -492,125 +500,108 @@ ad_proc -public api_proc_documentation {
         append intro_out "<p>[lindex $doc_elements(main) 0]\n<p>\n"
     }
 
-    #
-    # Make first a quick check, and if it fails, double check details
-    #
-    set haveBlocks [expr {[llength $doc_elements(switches)] > 0
-                          || [llength $doc_elements(positionals)] > 0}]
-    if {$haveBlocks == 0} {
-        foreach e {param option return error author creation-date change-log cvs-id see} {
-            if {[info exists doc_elements($e)] && $doc_elements($e) ne ""} {
-                set haveBlocks 1
-                break
+    set blocks_out "<dl>\n"
+
+    if { [info exists doc_elements(param)] } {
+        foreach param $doc_elements(param) {
+            if { [regexp {^([^ \t\n]+)[ \t\n]+(.*)$} $param "" name value] } {
+                set params($name) $value
             }
         }
     }
 
-    if {$haveBlocks} {
-        set blocks_out "<dl>\n"
+    if { [llength $doc_elements(switches)] > 0 } {
+        append blocks_out "<dt><b>Switches:</b></dt><dd><dl>\n"
+        foreach switch $doc_elements(switches) {
+            append blocks_out "<dt><b>-$switch</b>"
+            if {"boolean" in $flags($switch)} {
+                append blocks_out " (boolean)"
+            }
 
-        if { [info exists doc_elements(param)] } {
-            foreach param $doc_elements(param) {
-                if { [regexp {^([^ \t\n]+)[ \t\n]+(.*)$} $param "" name value] } {
-                    set params($name) $value
-                }
+            if { [info exists default_values($switch)]
+                 && $default_values($switch) ne ""
+             } {
+                append blocks_out " (defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>)"
+            }
+
+            if {"required" in $flags($switch)} {
+                append blocks_out " (required)"
+            } else {
+                append blocks_out " (optional)"
+            }
+            append blocks_out "</dt>"
+            if { [info exists params($switch)] } {
+                append blocks_out "<dd>$params($switch)</dd>"
             }
         }
+        append blocks_out "</dl></dd>\n"
+    }
 
-        if { [llength $doc_elements(switches)] > 0 } {
-            append blocks_out "<dt><b>Switches:</b></dt><dd><dl>\n"
-            foreach switch $doc_elements(switches) {
-                append blocks_out "<dt><b>-$switch</b>"
-                if {"boolean" in $flags($switch)} {
-                    append blocks_out " (boolean)"
-                }
-
-                if { [info exists default_values($switch)]
-                     && $default_values($switch) ne ""
-                 } {
-                    append blocks_out " (defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>)"
-                }
-
-                if {"required" in $flags($switch)} {
-                    append blocks_out " (required)"
-                } else {
+    if { [llength $doc_elements(positionals)] > 0 } {
+        append blocks_out "<dt><b>Parameters:</b></dt><dd>\n"
+        foreach positional $doc_elements(positionals) {
+            append blocks_out "<b>$positional</b>"
+            if { [info exists default_values($positional)] } {
+                if { $default_values($positional) eq "" } {
                     append blocks_out " (optional)"
-                }
-                append blocks_out "</dt>"
-                if { [info exists params($switch)] } {
-                    append blocks_out "<dd>$params($switch)</dd>"
+                } else {
+                    append blocks_out " (defaults to <code>\"$default_values($positional)\"</code>)"
                 }
             }
-            append blocks_out "</dl></dd>\n"
-        }
-
-        if { [llength $doc_elements(positionals)] > 0 } {
-            append blocks_out "<dt><b>Parameters:</b></dt><dd>\n"
-            foreach positional $doc_elements(positionals) {
-                append blocks_out "<b>$positional</b>"
-                if { [info exists default_values($positional)] } {
-                    if { $default_values($positional) eq "" } {
-                        append blocks_out " (optional)"
-                    } else {
-                        append blocks_out " (defaults to <code>\"$default_values($positional)\"</code>)"
-                    }
-                }
-                if { [info exists params($positional)] } {
-                    append blocks_out " - $params($positional)"
-                }
-                append blocks_out "<br>\n"
+            if { [info exists params($positional)] } {
+                append blocks_out " - $params($positional)"
             }
-            append blocks_out "</dd>\n"
+            append blocks_out "<br>\n"
         }
-
-
-        # @option is used in  template:: and cms:: (and maybe should be used in some other
-        # things like ad_form which have internal arg parsers.  although an option
-        # and a switch are the same thing, just one is parsed in the proc itself rather than
-        # by ad_proc.
-
-        if { [info exists doc_elements(option)] } {
-            append blocks_out "<b>Options:</b><dl>"
-            foreach param $doc_elements(option) {
-                if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
-                    append blocks_out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
-                }
-            }
-            append blocks_out "</dl>"
-        }
-
-
-        if { [info exists doc_elements(return)] } {
-            append blocks_out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
-        }
-
-        if { [info exists doc_elements(error)] } {
-            append blocks_out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
-        }
-
-        append blocks_out [::apidoc::format_common_elements doc_elements]
-
-        append blocks_out "<p><dt><b>Testcases:</b></dt><dd>\n"
-
-        if {[info exists doc_elements(testcase)]} {
-            set cases {}
-            set package_key ""
-            regexp {packages/([^/]+)/} $doc_elements(script) . package_key
-            foreach testcase_id $doc_elements(testcase) {
-                set url [export_vars -base /test/admin/testcase {
-                    testcase_id package_key {showsource 1}
-                }]
-                lappend cases [subst {<a href="[ns_quotehtml $url]">[ns_quotehtml $testcase_id]</a>}]
-            }
-            append blocks_out "[join $cases {, }]"
-        } else {
-            append blocks_out "No testcase defined."
-        }
-        append blocks_out "</dd>\n</dl>\n"
-
-    } else {
-        set blocks_out ""
+        append blocks_out "</dd>\n"
     }
+
+
+    # @option is used in  template:: and cms:: (and maybe should be used in some other
+    # things like ad_form which have internal arg parsers.  although an option
+    # and a switch are the same thing, just one is parsed in the proc itself rather than
+    # by ad_proc.
+
+    if { [info exists doc_elements(option)] } {
+        append blocks_out "<b>Options:</b><dl>"
+        foreach param $doc_elements(option) {
+            if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
+                append blocks_out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
+            }
+        }
+        append blocks_out "</dl>"
+    }
+
+
+    if { [info exists doc_elements(return)] } {
+        append blocks_out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
+    }
+
+    if { [info exists doc_elements(error)] } {
+        append blocks_out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
+    }
+
+    append blocks_out [::apidoc::format_common_elements doc_elements]
+
+    set callgraph [api_inline_svg_from_dot [api_call_graph_snippet -proc_name $proc_name -maxnodes 5]]
+    if {$callgraph ne ""} {
+        append blocks_out "<p><dt><b>Partial Call Graph (max 5 caller/called nodes):</b></dt><dd>$callgraph</dd>\n"
+    }
+    
+    append blocks_out "<p><dt><b>Testcases:</b></dt><dd>\n"
+
+    if {[info exists doc_elements(testcase)]} {
+        set cases {}
+        foreach testcase_pair $doc_elements(testcase) {            
+            set url [api_test_case_url $testcase_pair]
+            lappend cases [subst {<a href="[ns_quotehtml $url]">[ns_quotehtml [lindex $testcase_pair 0]]</a>}]
+        }
+        append blocks_out [join $cases {, }]
+    } else {
+        append blocks_out "No testcase defined."
+    }
+    append blocks_out "</dd>\n</dl>\n"
+
 
     if { $source_p } {
         if {[parameter::get_from_package_key \
@@ -699,6 +690,7 @@ ad_proc -public api_proc_documentation {
 ad_proc api_proc_pretty_name {
     -link:boolean
     -include_debug_controls:boolean
+    -hints_only:boolean
     {-proc_type ""}
     -label
     proc
@@ -707,27 +699,48 @@ ad_proc api_proc_pretty_name {
     @param label the label printed for the proc in the header line
     @param link provide a link to the documentation pages
 } {
-    if {![info exists label]} {
-        set label $proc
-    }
-    if { $link_p } {
-        append out [subst {<a href="[ns_quotehtml [api_proc_url $proc]]">$label</a>}]
+    if {$hints_only_p} {
+        set out ""
+        set debug_html ""
     } else {
-        append out $label
+        if {![info exists label]} {
+            set label $proc
+        }
+        if { $link_p } {
+            append out [subst {<a href="[ns_quotehtml [api_proc_url $proc]]">$label</a>}]
+        } else {
+            append out $label
+        }
+        set debug_html [expr {$include_debug_controls_p && [info commands ::xo::api] ne ""
+                              ? [::xo::api debug_widget $proc] : ""}]
     }
-    set doc_elements [nsv_get api_proc_doc $proc]
-    set debug_html [expr {$include_debug_controls_p && [info commands ::xo::api] ne ""
-                          ? [::xo::api debug_widget $proc] : ""}]
+    if {[nsv_exists api_proc_doc $proc]} {
+        set doc_elements [nsv_get api_proc_doc $proc]
+    } else {
+        set doc_elements ""
+    }
     set hints {}
-    if {$proc_type ne ""} {lappend hints $proc_type}
-    if {[dict exists $doc_elements protection]} {lappend hints [dict get $doc_elements protection]}
-    if {[dict get $doc_elements deprecated_p]} {lappend hints deprecated}
+    if {$proc_type ne ""} {
+        lappend hints $proc_type
+    }
+    if {[dict exists $doc_elements protection]} {
+        lappend hints [dict get $doc_elements protection]
+    }
+    if {[dict exists $doc_elements deprecated_p]
+        && [dict get $doc_elements deprecated_p]
+    } {
+        lappend hints deprecated
+    }
     if {[llength $hints] > 0} {
-        append out " ([join $hints {, }])"
+        if {$out ne ""} {
+            append out " "
+        }
+        append out "([join $hints {, }])"
     }
     append out $debug_html
     return $out
 }
+
 
 ad_proc -public api_apropos_functions { string } {
     @return the functions in the system that contain string in their name
@@ -750,6 +763,7 @@ ad_proc -public api_add_to_proc_doc {
 } {
     Add a certain value to a property in the proc doc of the specified proc.
 
+    @author Gustaf Neumann
     @param proc_name name is fully qualified name without leading colons proc procs,
         XOTcl methods are a triple with the fully qualified class name,
         then proc|instproc and then the method name.
@@ -759,14 +773,265 @@ ad_proc -public api_add_to_proc_doc {
 } {
     if {[nsv_exists api_proc_doc $proc_name]} {
         set d [nsv_get api_proc_doc $proc_name]
-        dict lappend d $property $value
-        nsv_set api_proc_doc $proc_name $d
-        ns_log warning "adding property $property with value $value to proc_doc of $proc_name"
+        #
+        # Make sure, not adding value multiple times (e.g. on
+        # reloads).  Probably clearing on redefinition would be an
+        # option, but then we have to make sure that the test cases
+        # are reloaded as well.
+        #
+        if {[dict exists $d $property]} {
+            set must_update [expr {$value ni [dict get $d $property]}]
+        } else {
+            set must_update 1            
+        }
+        if {$must_update} {
+            dict lappend d $property $value
+            nsv_set api_proc_doc $proc_name $d
+            #ns_log notice "adding property $property with value $value to proc_doc of $proc_name"            
+        }
     } else {
+        nsv_set api_proc_doc $proc_name [list $property $value]
         ns_log warning "no proc_doc available for $proc_name"
     }
 }
 
+ad_proc -private api_test_case_url {testcase_pair} {
+    Return the testcase url from testcase_pair, consisting of
+    testcase_id and package_key.
+} {
+    lassign $testcase_pair testcase_id package_key
+    return [export_vars -base /test/admin/testcase {
+        testcase_id package_key {showsource 1}
+    }]
+}
+
+ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
+    Return the procdic url from procname and optionally from source_p and version_id
+} {
+    return [export_vars -base /api-doc/proc-view {
+        {proc $proc_name} source_p version_id
+    }]
+}
+
+
+ad_proc -private api_called_proc_names {proc_name} {
+    
+    Return list of procs called by the specified procname handle.
+    
+    @author Gustaf Neumann
+    @param proc_name name is fully qualified name without leading colons proc procs,
+    XOTcl methods are a triple with the fully qualified class name,
+    then proc|instproc and then the method name.
+
+} {
+    #
+    # Get calling info from prettified proc body
+    #
+    try {
+        ::apidoc::tcl_to_html $proc_name
+    } on ok {result} {
+        set body $result
+    } on error {errorMsg} {
+        ns_log warning "cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
+        return ""
+    }
+    
+    dom parse -html <p>$body</p> doc
+    $doc documentElement root
+    set called {}
+    
+    foreach a [$root selectNodes //a] {
+	set href [$a getAttribute href]
+        #
+        # When the href points to a proc, record this as calling info
+        #
+	if {[regexp {/api-doc/proc-view[?]proc=(.*)&} $href . called_proc]} {
+            set called_proc [string trimleft [ns_urldecode $called_proc] :]
+            lappend called $called_proc
+        }
+    }
+    #ns_log notice "api_called_proc_names: <$proc_name> calls $called"
+    return [lsort -unique $called]
+}
+
+ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
+    
+    Add the calling information (what a the functions called by this
+    proc_name) to the collected proc_doc information.
+
+    @author Gustaf Neumann
+} {
+    if {$proc_name eq "*"} {
+        set proc_names [nsv_array names api_proc_doc]
+    } else {
+        set proc_names [list $proc_name]
+    }
+    
+    foreach proc_name $proc_names {
+        if {[regexp {^_([^_]+)__(.*)$} $proc_name . package_key testcase_id]} {
+            #
+            # Turn this test-case cross-check just on, when needed for debugging.
+            #
+            if {0} {
+                set calls {}
+                foreach call [api_called_proc_names $proc_name] {
+                    #
+                    # Ignore aa_* calls (the testing infrastructure is
+                    # explicitly tested).
+                    #
+                    if {[string match "aa_*" $call]} continue
+                    
+                    #
+                    # Check, if these cases are already covered.
+                    #
+                    set covered 0
+                    if {[nsv_exists api_proc_doc $call]} {
+                        set called_proc_doc [nsv_get api_proc_doc $call]
+                        #ns_log notice "procdoc for $call has testcase [dict exists $called_proc_doc testcase]"
+                        if {[dict exists $called_proc_doc testcase]} {
+                            set testcase_pair [list $testcase_id $package_key]
+                            ns_log notice "$call is covered by cases [dict get $called_proc_doc testcase]\
+				- new case included [expr {$testcase_pair in [dict get $called_proc_doc testcase]}]"
+                            set covered [expr {$testcase_pair in [dict get $called_proc_doc testcase]}]
+                        }
+                    }
+                    #
+                    # Only list remaining calls to suggestions.
+                    #
+                    if {!$covered} {
+                        lappend calls $call
+                    }
+                }
+                if {[llength $calls] > 0} {
+                    ns_log notice "potential test_cases $package_key $testcase_id $package_key: $calls"
+                }
+            }
+        } else {
+            foreach called [api_called_proc_names $proc_name] {
+                api_add_to_proc_doc \
+                    -proc_name $called \
+                    -property calledby \
+                    -value $proc_name
+            }
+        }
+    }
+}
+
+
+ad_proc -private api_call_graph_snippet {
+    -proc_name:required
+    {-dpi 72}
+    {-format svg}
+    {-maxnodes 5}
+    {-textpointsize 12.0}
+} {
+    Return a source code for dot showing a local call graph snippet,
+    showing direct callers and directly called functions
+
+    @author Gustaf Neumann
+} {
+
+    set dot_code ""
+    set doc [nsv_get api_proc_doc $proc_name]
+    if {[dict exists $doc testcase]} {
+        set nodes ""
+        set edges ""
+        foreach testcase_pair [lrange [lsort [dict get $doc testcase]] 0 $maxnodes-1] {
+            lassign $testcase_pair testcase_id package_key
+            set url [api_test_case_url $testcase_pair]
+            set props ""
+            append props \
+                [subst {URL="$url", margin=".2,0", shape=none, tooltip="Testcase $testcase_id of package $package_key", }] \
+                [subst {label=<<FONT POINT-SIZE="$textpointsize">$testcase_id<BR/><I>(test $package_key)</I></FONT>>}]
+            append nodes [subst -nocommands {"$testcase_id" [$props];\n}]
+            append edges [subst {"$testcase_id" -> "$proc_name";}] \n
+        }
+        append dot_code \
+            "subgraph \{\nrank=\"source\";" \
+            $nodes \
+            "\}\n" \
+            $edges
+    }
+    if {[dict exists $doc calledby]} {
+        set edges ""
+        set nodes ""
+	foreach caller [lrange [lsort [dict get $doc calledby]] 0 $maxnodes-1] {
+            set url [api_proc_doc_url -proc_name $caller]
+            set hints [api_proc_pretty_name -hints_only $caller]
+            if {$hints ne ""} {
+                set hints "<BR/><I>$hints</I>"
+            }
+            set props ""
+            append props \
+                [subst {URL="$url", margin=".2,0" tooltip="Function calling $proc_name", }] \
+                [subst {label=<<FONT POINT-SIZE="$textpointsize">${caller}</FONT>>}]
+            append nodes [subst -nocommands {"$caller" [$props];\n}]
+	    append edges [subst {"$caller" -> "$proc_name";}] \n
+	}
+        append dot_code \
+            "subgraph \{\nrank=\"same\";" \
+            $nodes \
+            "\}\n" \
+            $edges
+    }
+    set edges ""
+    set nodes ""
+    foreach called [lrange [api_called_proc_names $proc_name] 0 $maxnodes-1] {
+        set url [api_proc_doc_url -proc_name $called]
+        set hints [api_proc_pretty_name -hints_only $called]
+        if {$hints ne ""} {
+            set hints "<BR/><I>$hints</I>"
+        }
+        ns_log notice "hints <$hints>"        
+        set props ""
+        append props \
+            [subst {URL="$url", margin=".2,0", tooltip="Function called by $proc_name", }] \
+            [subst {label=<<FONT POINT-SIZE="$textpointsize">${called}$hints</FONT>>}]
+        append nodes [subst -nocommands {"$called" [$props];\n}]
+        append edges [subst {"$proc_name" -> "$called";}] \n
+    }
+    if {$nodes ne ""} {
+        append dot_code \
+            "subgraph \{\nrank=\"same\";" \
+            $nodes \
+            "\}\n" \
+            $edges
+    }
+    ns_log notice \n$dot_code
+    append result "digraph \{api = $dpi;" $dot_code "\}"
+}
+
+ad_proc -private api_inline_svg_from_dot {dot_code} {
+
+    Transform a dot source code into an inline svg image based on code
+    from xotcl-core; should be probably move later to a different
+    place.
+
+    @author Gustaf Neumann
+} {
+    catch {set dot [::util::which dot]}
+    if {$dot ne ""} {
+        set tmpnam [ad_tmpnam]
+        set tmpfile $tmpnam.svg
+        set f [open $tmpnam.dot w]; puts $f $dot_code; close $f
+        
+        #ns_log notice "svg $tmpnam dot $tmpnam.dot"
+        set f [open "|$dot  -Tsvg -o $tmpfile" w]; puts $f $dot_code; close $f
+        set f [open  $tmpfile]; set svg [read $f]; close $f
+        
+        # delete the first three lines generated from dot
+        regsub {^[^\n]+\n[^\n]+\n[^\n]+\n} $svg "" svg
+        set css {
+            /*svg g a:link {text-decoration: none;}*/
+            div.inner svg {width: 100%; margin: 0 auto;}
+            svg g polygon {fill: transparent;}
+            svg g ellipse {fill: #eeeef4;}
+        }
+        file delete -- $tmpfile
+        file delete -- $tmpnam.dot
+        return "<style>$css</style><div><div class='inner'>$svg</div></div>"
+    }
+}
 
 ad_proc -public api_describe_function {
     { -format text/plain }
