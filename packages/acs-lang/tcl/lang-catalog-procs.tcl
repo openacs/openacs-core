@@ -299,7 +299,7 @@ ad_proc -private lang::catalog::export_to_file {
                      needs to be parseable by apm_parse_catalog_path.
                      The file and the catalog directory will be created if they don't exist.
 
-    @param message_list A list with message keys on even indices followed by
+    @param messages_list A list with message keys on even indices followed by
                         corresponding messages on odd indices.
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -436,7 +436,7 @@ ad_proc -private lang::catalog::read_file { catalog_filename } {
     Returns the contents of the given catalog file as a string
     reading the file with the charset given in the filename.
 
-    @param catalog_file_name The full path of the catalog file to read.
+    @param catalog_filename  The full path of the catalog file to read.
                              The basename of the file should be on the form
                              package_key.locale.charset.ending where ending
                              is either cat or xml (i.e. dotlrn.en_US.iso-8859-1.xml
