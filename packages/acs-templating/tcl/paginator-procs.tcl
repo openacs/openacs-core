@@ -798,14 +798,13 @@ ad_proc -public template::paginator::get_query { name id_column page } {
     Returns a query with the data for the rows on the current page.
 
     @param name       The reference to the paginator object.
-    @param query      The query to execute, containing IN (CURRENT_PAGE_SET).
     @param id_column  The name of the ID column in the display query (required
                       to order rows properly).
 } {
     set ids [get_row_ids $name $page]
 
     if { $ids ne "" } {
-    # calculate the base row number for the page
+        # calculate the base row number for the page
         upvar 2 __page_firstrow firstrow
         set firstrow [get_row $name $page]
 
