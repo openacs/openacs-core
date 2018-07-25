@@ -959,7 +959,7 @@ ad_proc -private lang::catalog::import_messages {
         incr message_count(processed)
 
     } ;# End of message key loop
-    
+
     return [array get message_count]
 }
 
