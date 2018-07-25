@@ -2,12 +2,12 @@ ad_library {
     Request handling procs for the ArsDigita Templating System
 
     @author Karl Goldstein    (karlg@arsdigita.com)
-             
+
     @cvs-id $Id$
 }
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-    
+
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
@@ -27,12 +27,12 @@ namespace eval template {}
 namespace eval template::request {}
 
 ad_proc -public template::request {
-  command
-  args
+    command
+    args
 } {
-  Dispatch procedure for requests.
+    Dispatch procedure for requests.
 } {
-  request::$command {*}$args
+    request::$command {*}$args
 }
 
 ad_proc -public template::request::create { args } {
@@ -43,26 +43,26 @@ ad_proc -public template::request::create { args } {
                    Equivalent to calling set_param for each parameter, but
                    requiring slightly less typing.
 } {
-  template::form::create request {*}$args
+    template::form::create request {*}$args
 
-  set level [template::adp_level]
+    set level [template::adp_level]
 
-  # check for params so they can be created
-  upvar #$level request:properties opts
+    # check for params so they can be created
+    upvar #$level request:properties opts
 
-  if { [info exists opts(params)] } {
+    if { [info exists opts(params)] } {
 
     # strip carriage returns
-    regsub -all {\r} $opts(params) {} param_data
+        regsub -all {\r} $opts(params) {} param_data
 
-    foreach param [split $param_data "\n"] {
+        foreach param [split $param_data "\n"] {
 
-      set param [string trim $param]
-      if {$param eq {}} { continue }
+            set param [string trim $param]
+            if {$param eq {}} { continue }
 
-      set_param {*}$param
+            set_param {*}$param
+        }
     }
-  }
 }
 
 ad_proc -public template::request::set_param { name args } {
@@ -87,22 +87,22 @@ ad_proc -public template::request::set_param { name args } {
                         name { expression } { message } ...}
                       where name is a unique identifier for the validation
                       step, expression is a block to Tcl code that evaluates
-                      to 1 or 0, and message is to be displayed to the user 
+                      to 1 or 0, and message is to be displayed to the user
                       when the validation step fails.
 
     @see template::element::create
 } {
-  set level [template::adp_level]
-  template::element::create request $name {*}$args
+    set level [template::adp_level]
+    template::element::create request $name {*}$args
 
-  # Set a local variable with the parameter value but no
-  # clobber the variable if it already exists.
+    # Set a local variable with the parameter value but no
+    # clobber the variable if it already exists.
 
-  uplevel #$level "
-    if { ! \[info exists $name\] } {
-      set $name \[template::request::get_param $name\]
-    }
-  "
+    uplevel #$level "
+        if { ! \[info exists $name\] } {
+            set $name \[template::request::get_param $name\]
+        }
+    "
 }
 # "
 
@@ -114,20 +114,20 @@ ad_proc -public template::request::get_param { name } {
 
     @return The value of the specified parameter.
 } {
-  set level [template::adp_level]
-  upvar #$level request:$name param
+    set level [template::adp_level]
+    upvar #$level request:$name param
 
-  if { [info exists param(multiple)] } {
+    if { [info exists param(multiple)] } {
 
     # multiple values expected
 
-    set value [template::element::get_values request $name]
+        set value [template::element::get_values request $name]
 
-  } else {
-    set value [template::element::get_value request $name]
-  }
+    } else {
+        set value [template::element::get_value request $name]
+    }
 
-  return $value
+    return $value
 }
 
 ad_proc -public template::request::error { args } {
@@ -141,13 +141,13 @@ ad_proc -public template::request::error { args } {
                       may be used for layout purposes.
                 msg:  message text associated with the condition.
 } {
-  set level [template::adp_level]
-  upvar #$level request:error requesterror
-  foreach { name msg } $args {
-    set requesterror($name) $msg
-  }
+    set level [template::adp_level]
+    upvar #$level request:error requesterror
+    foreach { name msg } $args {
+        set requesterror($name) $msg
+    }
 
-  is_valid
+    is_valid
 }
 
 ad_proc -public template::request::is_valid { { url "" } } {
@@ -156,8 +156,8 @@ ad_proc -public template::request::is_valid { { url "" } } {
     default).
 
     @param url The URL of the template to use to display error messages.
-    	     The special value "self" may be used to indicate that the template
-    	     for the requested page itself will handle reporting error
+               The special value "self" may be used to indicate that the template
+               for the requested page itself will handle reporting error
                conditions.
 
     @return 1 if no error conditions exist, 0 otherwise.
@@ -167,24 +167,24 @@ ad_proc -public template::request::is_valid { { url "" } } {
 
     if { [info exists requesterror] } {
 
-	# set requesterror as a data source
-	uplevel #$level "upvar 0 request:error requesterror"
+        # set requesterror as a data source
+        uplevel #$level "upvar 0 request:error requesterror"
 
-	if { $url ne "self" } {
+        if { $url ne "self" } {
 
-	    if {$url eq {}} { 
-		set file_stub [template::resource_path -type messages -style request-error]
-	    } else {
-		set file_stub [ns_url2file $url]
-	    }
-	    template::set_file $file_stub
-	}
+            if {$url eq {}} {
+                set file_stub [template::resource_path -type messages -style request-error]
+            } else {
+                set file_stub [ns_url2file $url]
+            }
+            template::set_file $file_stub
+        }
 
-	return 0
+        return 0
 
     } else {
 
-	return 1
+        return 1
     }
 }
 
