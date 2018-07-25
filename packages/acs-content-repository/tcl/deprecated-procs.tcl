@@ -212,7 +212,6 @@ ad_proc -deprecated content_symlink::new {
     @param parent_id The folder that will contain this symlink
     @param name Name to assign the object (defaults to the name of the target item)
     @param label Label for the symlink (defaults to the URL)
-    @param description An extended description of the link (defaults to NULL)
     @param package_id Package Id of the package that created the link
     @see content::symlink::new
 
@@ -242,7 +241,6 @@ ad_proc -deprecated content_symlink::edit {
     @param symlink_id Optional pre-assigned object_id for the link
     @param target_id The target item_id of the link
     @param label Label for the symlink (defaults to the target_id item title)
-    @param description An extended description of the link (defaults to NULL)
 
 } {
 
