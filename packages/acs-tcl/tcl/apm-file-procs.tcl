@@ -305,7 +305,7 @@ ad_proc -public apm_file_watchable_p { path } {
     be db compatible with the system and be of right
     type (for example contain Tcl procs or xql queries).
 
-    @param The path of the file relative to server root
+    @param path The path of the file relative to server root
 
     @return 1 If file is watchable and 0 otherwise. The proc will throw an error if the
     file doesn't exist or if the given path cannot be parsed as a path relative

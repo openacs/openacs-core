@@ -2107,7 +2107,7 @@ ad_proc -public ad_tcl_vars_list_to_ns_set {
     @param put If this boolean switch is specified, it'll use <code>ns_set put</code> instead
     of <code>ns_set update</code> (update is default)
 
-    @param args A Tcl list of variable names that will be transported into the ns_set.
+    @param vars_list A Tcl list of variable names that will be transported into the ns_set.
 
     @author Lars Pind (lars@pinds.com)
 
