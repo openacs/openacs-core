@@ -178,9 +178,21 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
         if {[dict exists $proc_doc param]} {
             incr count
             set params [dict get $proc_doc param]
+            #
+            # Build the real parameters list
+            #
             set real_params [list \
                 {*}[dict get $proc_doc switches] \
                 {*}[dict get $proc_doc positionals]]
+            #
+            # Check if the last parameter is 'args', as it is not included into
+            # 'switches' or 'positionals', and add it to the real parameter list
+            #
+            if {[dict exists $proc_doc arg_list]
+                && [lindex [dict get $proc_doc arg_list] end] eq "args"
+            } {
+                lappend real_params args
+            }
             #
             # Check if the @param exists in the list of parameters
             #
