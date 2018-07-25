@@ -187,7 +187,7 @@ namespace eval notification::email {
 
         @param to_addr who the bounce is going to
         @param from_addr who the bouncing message as sent to
-        @param the message body
+        @param body the message body
         @param message_headers the headers of the message
         @param reason (defaults to nothing).  Reason for bounce
     } {
@@ -406,7 +406,6 @@ namespace eval notification::email {
         ns_log debug "notification::email::scan_replies: about to load qmail queue"
         return [load_qmail_mail_queue -queue_dir [qmail_mail_queue_dir]]
     }
-
 }
 
 # Local variables:
