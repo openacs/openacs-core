@@ -298,7 +298,7 @@ ad_proc -public permission::get_parties_with_permission {
     Return a list of lists of party_id and acs_object.title,
     having a given privilege on the given object
 
-    @param obect_id
+    @param object_id
     @param privilege
 
     @see permission::permission_p
@@ -324,7 +324,7 @@ if {[info commands ns_cache_eval] ne ""} {
         Run permission call and cache the result.
 
         @param party_id
-        @param user_id
+        @param object_id
         @param privilege
 
         @see permission::permission_p
@@ -351,7 +351,7 @@ if {[info commands ns_cache_eval] ne ""} {
         parameters or only party_id
 
         @param party_id
-        @param user_id
+        @param object_id
         @param privilege
 
         @see permission::permission_p
@@ -395,7 +395,7 @@ if {[info commands ns_cache_eval] ne ""} {
         Run permission call and cache the result.
 
         @param party_id
-        @param user_id
+        @param object_id
         @param privilege
 
         @see permission::permission_p
@@ -421,7 +421,7 @@ if {[info commands ns_cache_eval] ne ""} {
         parameters or only party_id
 
         @param party_id
-        @param user_id
+        @param object_id
         @param privilege
 
         @see permission::permission_p
