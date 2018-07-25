@@ -188,9 +188,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
             # Check if the last parameter is 'args', as it is not included into
             # 'switches' or 'positionals', and add it to the real parameter list
             #
-            if {[dict exists $proc_doc arg_list]
-                && [lindex [dict get $proc_doc arg_list] end] eq "args"
-            } {
+            if {[dict get $proc_doc varargs_p]} {
                 lappend real_params args
             }
             #
