@@ -204,7 +204,7 @@ would write the following to the browser:
 	    if { ![info exists $var] } {
 		error "Cannot find value for bind variable \"$var\"\n\n"
 	    }
-	    regsub -- "\:$var" $sql_query '[::ns_dbquotevalue [set $var]]' sql_query
+	    regsub -- "\:$var" $sql_query [::ns_dbquotevalue [set $var]] sql_query
 	}
 	return $sql_query
     }
