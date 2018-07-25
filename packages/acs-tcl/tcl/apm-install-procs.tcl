@@ -1907,7 +1907,8 @@ ad_proc -private apm_upgrade_logic_compare {
 } {
     Compare the from-versions in two of apm_upgrade_logic's array entries on the form 'from_version_name,to_version_name'.
 
-    @param from_to_key the key from the array in apm_upgrade_logic
+    @param from_to_key_1 the first key from the array in apm_upgrade_logic
+    @param from_to_key_2 the second key from the array in apm_upgrade_logic
     @return 1 if 1 comes after 2, 0 if they are the same, -1 if 1 comes before 2.
 
     @author Lars Pind
@@ -2583,7 +2584,7 @@ ad_proc -private apm::package_version::attributes::get {
 
     @param version_id The id of the package version to return attribute values for
 
-    @param The name of an array in the callers environment in which the attribute values
+    @param array The name of an array in the callers environment in which the attribute values
     will be set (with attribute names as keys and attribute values as values).
 
     @author Peter Marklund

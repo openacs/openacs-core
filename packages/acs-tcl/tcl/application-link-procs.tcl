@@ -64,10 +64,10 @@ ad_proc -public application_link::get_linked {
     -to_package_key:required
 } {
     Gets the ID for the application linked to from_package_id and matches the
-    to_package_type.
+    to_package_key.
 
     @param from_package_id Object ID of linked-from application.
-    @param to_package_type Object type of linked-to application.
+    @param to_package_key Package key of linked-to application.
 
     @return package_id of linked package.
 } {

@@ -319,7 +319,7 @@ ad_proc -public application_data_link::update_links_from {
 
     @param object_id Object_id to update
     @param text Text to scan for references
-    @param linked_object_ids List of object ids to update the links to. Links not in this list will be deleted, and any in this list that are not in the database will be added.
+    @param link_object_ids List of object ids to update the links to. Links not in this list will be deleted, and any in this list that are not in the database will be added.
     @param relation_tag Relationship identifier
 
     @return List of updated linked object_ids
