@@ -186,7 +186,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
             #
             foreach param_doc $params {
                 set param [lindex [string map $ignorechars $param_doc] 0]
-                if {"$param" ni $real_params} {
+                # Allow boolean parameter name with appended '_p'
+                regsub -- _p$ $param "" param_trim_p
+                if {"$param" ni $real_params && "$param_trim_p" ni $real_params} {
                     # Nonexistent @param found!
                     incr param_unknown
                     aa_log_result fail "Unknown parameter '$param' in documentation of proc '$p'"
@@ -202,9 +204,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
 }
 
 if {[parameter::get \
-	 -package_id [apm_package_id_from_key acs-api-browser] \
-	 -parameter IncludeCallingInfo \
-	 -default false]} {
+    -package_id [apm_package_id_from_key acs-api-browser] \
+    -parameter IncludeCallingInfo \
+    -default false]} {
 
     aa_register_case \
         -cats {smoke production_safe} \
@@ -214,13 +216,13 @@ if {[parameter::get \
             Search for cross-package calls of private functions.
 
             @author Gustaf Neumann
-            
+
             @creation-date 2018-07-25
         } {
             set count 0
             set fails 0
             set private 0
-            
+
             foreach called [lsort -dictionary [nsv_array names api_proc_doc]] {
                 incr count
                 set called_by_count 0
@@ -236,7 +238,7 @@ if {[parameter::get \
                         incr called_by_count
                         if {[nsv_get api_proc_doc $caller caller_info]
                             && [dict exists $caller_info script]
-                            && ![string match "AcsSc.*" $caller]                    
+                            && ![string match "AcsSc.*" $caller]
                         } {
                             regexp {^packages/([^/]+)/} [dict get $caller_info script] . caller_package_key
                             if {$caller_package_key ne $called_package_key} {
@@ -251,7 +253,7 @@ if {[parameter::get \
                             }
                         }
                     }
-                    ns_log notice "private function $called called by $called_by_count functions"            
+                    ns_log notice "private function $called called by $called_by_count functions"
                 }
             }
             aa_log "Found $fails cross-package private calls out of a total of $private private calls (total: $count call sites)"
