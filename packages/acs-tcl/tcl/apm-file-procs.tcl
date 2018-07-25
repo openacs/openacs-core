@@ -232,7 +232,7 @@ ad_proc -private apm_files_load {
 } {
 
     Load the set of files into the currently running Tcl interpreter.
-    @param -force_reload Indicates if the file should be loaded even if it \
+    @param force_reload Indicates if the file should be loaded even if it \
         is already loaded in the interpreter.
 } {
     # This will be the first time loading for each of these files (since if a

@@ -447,9 +447,9 @@ ad_proc -private ad_parameter_cache {
 } {
     
     Manages the cache for ad_parameter.
-    @param -set Use this flag to indicate a value to set in the cache.
-    @param -delete Delete the value from the cache
-    @param -global If true, global param, false, instance param
+    @param set Use this flag to indicate a value to set in the cache.
+    @param delete Delete the value from the cache
+    @param global If true, global param, false, instance param
     @param key Specifies the key for the cache'd parameter, either the package instance
      id (instance parameter) or package key (global parameter).
     @param parameter_name Specifies the parameter name that is being cached.

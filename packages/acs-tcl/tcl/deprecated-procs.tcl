@@ -967,8 +967,8 @@ ad_proc -deprecated ad_parameter {
     @see parameter::set_value
     @see parameter::get
 
-    @param -set Use this if you want to indicate a value to set the parameter to.
-    @param -package_id Specify this if you want to manually specify what object id to use the new parameter. 
+    @param set Use this if you want to indicate a value to set the parameter to.
+    @param package_id Specify this if you want to manually specify what object id to use the new parameter. 
     @return The parameter of the object or if it doesn't exist, the default.
 } {
     if {[info exists set]} {

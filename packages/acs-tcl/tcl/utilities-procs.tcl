@@ -2726,7 +2726,7 @@ ad_proc -public util_list_of_ns_sets_to_list_of_lists {
     into a list of lists that match the array set format in the sublists
     (key value key value ...)
 
-    @param -list_of_ns_sets A list of ns_set ids
+    @param list_of_ns_sets A list of ns_set ids
 
     @author Ola Hansson (ola@polyxena.net)
     @creation-date September 27, 2002

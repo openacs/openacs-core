@@ -95,8 +95,8 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
     transaction log that is checked via cr_cleanup_orphaned_files in
     cr_delete_scheduled_files.
 
-    @param -delete delete the orphaned files
-    @param -mtime same semantics as mtime in the file command
+    @param delete delete the orphaned files
+    @param mtime same semantics as mtime in the file command
 
 } {
     set cr_root [nsv_get CR_LOCATIONS CR_FILES]
