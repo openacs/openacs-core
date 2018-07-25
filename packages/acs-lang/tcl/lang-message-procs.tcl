@@ -870,37 +870,6 @@ ad_proc -public lang::message::lookup {
     return $message
 }
 
-ad_proc -private lang::message::translate {
-    msg
-    locale
-} {
-    Translates an English string into a different language
-    using Babelfish.
-
-    Warning - october 2002: This is broken.
-
-    @author            Henry Minsky (hqm@mit.edu)
-
-    @param msg         String to translate
-    @param lang        Abbreviation for lang in which to translate string
-    @return            Translated string
-} {
-    set lang [string range $locale 0 2]
-    set marker "XXYYZZXX. "
-    set qmsg "$marker $msg"
-    set url "http://babel.altavista.com/translate.dyn?doit=done&BabelFishFrontPage=yes&bblType=urltext&url="
-    set babel_result [util::http::get -url "$url&lp=$lang&urltext=[ns_urlencode $qmsg]"]
-    set babel_page [dict get $babel_result page]
-    set result_pattern "$marker (\[^<\]*)"
-    if {[regexp -nocase $result_pattern $babel_page ignore msg_tr]} {
-        regsub "$marker." $msg_tr "" msg_tr
-        return [string trim $msg_tr]
-    } else {
-        error "Babelfish translation error"
-    }
-}
-
-
 ad_proc -private lang::message::cache {
     {-package_key {}}
 } {
