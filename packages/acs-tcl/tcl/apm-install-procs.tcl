@@ -1701,8 +1701,10 @@ ad_proc -private apm_data_model_scripts_find {
     {-package_path ""}
     package_key
 } {
-    @param version_id What version the files belong to.
-    @param upgrade Set this switch if you want the scripts for upgrading.
+    @param upgrade_from_version_name From which version do we want the files
+    @param upgrade_to_version_name To what version do we want the files
+    @param package_path The package path
+    @param package_key The package key
     @return A list of files and file types of form [list [list "foo.sql" "data_model_upgrade"] ...]
 } {
     set types_to_retrieve [list "sqlj_code"]
