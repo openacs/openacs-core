@@ -1834,7 +1834,7 @@ if {$UseXotclSiteNodes} {
         </pre>
 
         @param default The value to return if no package can be found
-        @param current_node_id The node from which to start the search
+        @param url The url of the node from which to start the search
         @param package_keys The type(s) of the package(s) for which we are looking
 
         @return <code>package_id</code> of the nearest package of the
@@ -1975,7 +1975,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     @creation-date 1/17/2001
 
     @param default The value to return if no package can be found
-    @param current_node_id The node from which to start the search
+    @param url The url of the node from which to start the search
     @param package_keys The type(s) of the package(s) for which we are looking
 
     @return <code>package_id</code> of the nearest package of the
