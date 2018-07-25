@@ -14,13 +14,12 @@ aa_register_case \
     {
 	test community core procs returned values
     } {
-	
-	set user_id [db_nextval acs_object_id_seq]
-        set username [ad_generate_random_string]
-        set password [ad_generate_random_string]
-	
-	aa_run_with_teardown -test_code {
-	    array set user_info [twt::user::create -user_id $user_id]
+	aa_run_with_teardown -rollback -test_code {
+            set user_id [db_nextval acs_object_id_seq]
+            set username [ad_generate_random_string]
+            set password [ad_generate_random_string]
+            
+	    array set user_info [acs::test::user::create -user_id $user_id]
 	    set user_id_p [party::get_by_email -email $user_info(email)]
 	    aa_true "User ID CORRECTO" \
 	    	[string match $user_id_p $user_info(user_id)]
@@ -28,8 +27,8 @@ aa_register_case \
 	    aa_log "returns:  $email_p ,  creation:  $user_info(email)"
 	    aa_true "Email correcto" \
 		[string match $email_p [string tolower $user_info(email)]]
-	   
-    }
+        }
+
 }
 aa_register_case \
     -cats {api smoke} \
