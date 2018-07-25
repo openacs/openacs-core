@@ -374,7 +374,7 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_oneof"><b>oneof</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the value X contained in
     the set of the provided values. Usage example: <code>color:oneof(red|blue|green)</code>
-    
+
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_range"><b>range</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the value X is in range
     [Y, Z]. Usage example: <code>foo:range(1|100)</code>
@@ -1244,7 +1244,7 @@ ad_proc ad_include_contract {docstring args} {
     Define interface between a page and an <include> similar to the
     page_contract. This is a light-weight implementation based on the
     ad_page_contract. It allows one to check the passed arguments (types,
-                                                               optionality) and can be used for setting defaults the usual way.
+    optionality) and can be used for setting defaults the usual way.
     Using ad_include_contracts helps to improve documentation of
     included content.
 
@@ -1594,11 +1594,11 @@ ad_proc ad_page_contract_filter_rule {
     if { [llength $proc_args] != 2 } {
         return -code error [_ acs-tcl.lt_The_proc_must_accept_]
     }
-    
+
     set script [info script]
     set proc_name ad_page_contract_filter_rule_proc_$name
     set rule_key ::acs::ad_page_contract_filter_rules($name)
-    
+
     set mutex [nsv_get ad_page_contract_mutex filter_rules]
     ns_mutex lock $mutex
 
@@ -1616,13 +1616,13 @@ ad_proc ad_page_contract_filter_rule {
     nsv_set ad_page_contract_filter_rules $name $rule_info
     set $rule_key $rule_info
     ns_mutex unlock $mutex
-    
+
     # same trick as ad_page_contract_filter does.
-    
+
     lassign $proc_args arg0 arg1
     ad_proc $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
 }
-    
+
 ad_proc ad_page_contract_filter_rule_proc { filter } {
     Returns the proc that executes the given ad_page_contract default-filter.
 } {
