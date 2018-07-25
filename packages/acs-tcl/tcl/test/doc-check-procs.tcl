@@ -160,7 +160,6 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     set ignorechars {
         , " "
         ( " " ) " " < " " > " "
-        \[ " " \] " "
         \{ " " \} " "
         < " " > " "
         . " " : " "   ; " " ? " " ! " "
