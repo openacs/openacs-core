@@ -604,7 +604,6 @@ ad_proc -private group::member_p_not_cached {
      is a member of group B then he is automatically a member of A
      also.)
     If cascade is false, then the user must have specifically been granted membership on the group in question.</p>
-    @param subsite_id Only useful when using group_name. Marks the subsite in which to search for the group_id that belongs to the group_name
 
     @see group::flush_members_cache
 
