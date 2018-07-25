@@ -407,9 +407,9 @@ ad_proc -private apm_system_paths {} {
     }
 }
 
-ad_proc -private apm_gzip_cmd {} {
+ad_proc -public apm_gzip_cmd {} {
 
-    @return A valid pointer to gzip, 0 otherwise.
+    @return A valid command name for gzip.
     
 } {
     return gzip
@@ -418,7 +418,7 @@ ad_proc -private apm_gzip_cmd {} {
 
 ad_proc -private apm_tar_cmd {} {
 
-    @return A valid pointer to tar, 0 otherwise.
+    @return A valid command name for tar.
     
 } {
     return tar

@@ -22,7 +22,7 @@ ad_proc -private apm_required_attribute_value { element attribute } {
     return $value
 }
 
-ad_proc -private apm_attribute_value {
+ad_proc -public apm_attribute_value {
     {-default ""}
     element attribute
 } {

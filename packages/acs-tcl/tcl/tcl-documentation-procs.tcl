@@ -120,7 +120,7 @@ ad_proc -private ad_complaints_count {} {
     return [llength $::ad_page_contract_complaints]
 }
 
-ad_proc -private ad_complaints_get_list {} {
+ad_proc -public ad_complaints_get_list {} {
     Returns the list of complaints encountered so far.
 
     @author Lars Pind (lars@pinds.com)
@@ -745,7 +745,7 @@ ad_proc -public ad_page_contract {
     # Parse -properties argument
     #
     ####################
-    # This must happen even if the query (aka parameters, formals) is empty
+    # This must happen even if the query (a.k.a. parameters, formals) is empty
 
     if { [info exists properties] } {
         upvar 1 __page_contract_property property

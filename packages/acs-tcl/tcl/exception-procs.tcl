@@ -15,7 +15,7 @@ if {[info commands "::try"] eq ""} {
     error "This version of OpenACS requires the ::try command (built-in in 8.6+, package for 8.5"
 }
 
-ad_proc -private ad_raise {exception {value ""}} {
+ad_proc -public ad_raise {exception {value ""}} {
     @author rhs@mit.edu
     @creation-date 2000-09-09
 
@@ -26,7 +26,7 @@ ad_proc -private ad_raise {exception {value ""}} {
     return -code error -errorcode [list "AD" "EXCEPTION" $exception] $value
 }
 
-ad_proc ad_exception {errorCode} {
+ad_proc -public ad_exception {errorCode} {
     @author gustaf.neumann@wu-wien.ac.at
     @creation-date 2015-12-31
 

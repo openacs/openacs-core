@@ -164,7 +164,7 @@ ad_proc -private db_state_array_name_is {
 }
 
 
-ad_proc -private db_driverkey {
+ad_proc -public db_driverkey {
     {-handle_p 0}
     dbn
 } {
@@ -1011,7 +1011,7 @@ ad_proc -private db_getrow { db selection } {
 }
 
 
-ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
+ad_proc -public db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
