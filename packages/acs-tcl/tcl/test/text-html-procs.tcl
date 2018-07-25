@@ -6,7 +6,10 @@ ad_library {
 }
 
 
-aa_register_case -cats {api smoke} ad_dom_sanitize_html {
+aa_register_case \
+    -cats {web api smoke} \
+    -procs {ad_dom_sanitize_html} \
+    ad_dom_sanitize_html {
 
     Test if it HTML sanitization works as expected
 
@@ -107,7 +110,7 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
             aa_true "$msg no js?" {$result eq $test_result}
         }
 
-    # Try test cases not allowing outer urls
+    # Try test cases not allowing outer URLs
     foreach \
         msg          $test_msgs \
         test_case    $test_cases \
@@ -136,28 +139,11 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
             set test_result [string trim $test_result]
             aa_true "$msg fixing markup?" {$result eq $test_result}
         }
+    
+    set d [acs::test::http /]
+    aa_equals "Start page of current server: Status code valid" [dict get $d status] 200
 
-    #
-    # Maybe a temporary fix: when the server is configured with a
-    # wildcard IPv4 address 0.0.0.0 and the hostname "localhost", and
-    # localhost is mapped on the host to the IPv6 address "::1", then
-    # ns_http to http://localhost:.../ is rejected, while the
-    # connection to the current IPv4 address http://127.0.0.1:.../
-    # succeeds. However, the determination of the current IP address
-    # requires NaviServer 4.99.17d3 or newer, so we can't assume, this
-    # works always.
-    #
-    set mylocation [util::configured_location]/
-    if {![catch {set myip [ns_conn currentaddr]}]} {
-        set driver_info [util_driver_info]
-        set mylocation [util::join_location \
-                            -proto    [dict get $driver_info proto] \
-                            -hostname $myip \
-                            -port     [dict get $driver_info port]]
-    }
-    aa_log "trying to get start page from $mylocation"
-    array set r [util::http::get -url $mylocation]
-    set test_case $r(page)
+    set test_case [dict get $d body]
 
     set msg "Test case 6: in our index page is removing tags ok"
     set unallowed_tags {div style script}
@@ -224,7 +210,10 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
 
 }
 
-aa_register_case -cats {api smoke} ad_pad {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_pad} \
+    ad_pad {
 
     Test if ad_pad is working as expected
 

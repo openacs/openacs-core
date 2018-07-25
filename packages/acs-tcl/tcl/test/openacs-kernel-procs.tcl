@@ -3,7 +3,10 @@ ad_library {
     @creation-date 03 August 2006
 }
 
-aa_register_case -cats {api smoke} -procs {oacs_util::csv_foreach} csv_foreach {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {oacs_util::csv_foreach} \
+    csv_foreach {
     Test block execution for rows in a csv file.
 } {
     aa_run_with_teardown -test_code {
@@ -24,21 +27,26 @@ aa_register_case -cats {api smoke} -procs {oacs_util::csv_foreach} csv_foreach {
 	aa_log "CSV file created with artists data:\n $csv_data"
 
 	set artist_list {}
-	oacs_util::csv_foreach -file $file_loc -array_name row\
-	    {
-		lappend artist_list "$row(first_name) $row(last_name) - $row(instrument)"
-	    }
+	oacs_util::csv_foreach -file $file_loc -array_name row {
+            lappend artist_list "$row(first_name) $row(last_name) - $row(instrument)"
+        }
 	aa_equals "Getting artists from csv file" $artist_list {{Charles Mingus - Bass}\
-				       {Miles Davis - Trumpet}\
-				       {Jhon Coltrane - Saxo}\
-				       {Charlie Parker - Saxo}\
-				       {Thelonius Monk - Piano}}
+                                                                    {Miles Davis - Trumpet}\
+                                                                    {Jhon Coltrane - Saxo}\
+                                                                    {Charlie Parker - Saxo}\
+                                                                    {Thelonius Monk - Piano}}
     } -teardown_code { 
 	file delete -force -- $file_loc
     }
 }
 
-aa_register_case -cats {api smoke} -procs {oacs_util::process_objects_csv} process_objects_csv {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        oacs_util::process_objects_csv
+        person::get
+    } \
+    process_objects_csv {
     Test object creation for every row in a csv file.
 } {
     aa_run_with_teardown -rollback -test_code {
@@ -66,8 +74,8 @@ aa_register_case -cats {api smoke} -procs {oacs_util::process_objects_csv} proce
 	    lappend person_list "$person_array(first_names) $person_array(last_name)"
 	}
 	aa_equals "Getting persons from database table \"persons\"" $person_list {{Charles Mingus}\
-                                       {Miles Davis}\
-                                       {Charlie Parker}}
+                                                                                      {Miles Davis}\
+                                                                                      {Charlie Parker}}
     } -teardown_code {
         file delete -force -- $file_loc
     }

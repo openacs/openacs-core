@@ -1,25 +1,32 @@
-# 
-
 ad_library {
     
     Test for Permission Procedures
     
     @author Cesar Hernandez (cesarhj@galileo.edu)
     @creation-date 2006-07-14
-    @arch-tag: 0823E65B-D0B0-417A-AB6F-CA86E0461A8E
     @cvs-id $Id$
 }
 
-aa_register_case -cats {api smoke} ad_proc_permission_grant_and_revoke {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        permission::grant
+        permission::permission_p
+        permission::revoke
+        site_node::instantiate_and_mount
+    } \
+    ad_proc_permission_grant_and_revoke {
 
-    Test for Permission Procedures of grant and revoke.
+    Test for permission procedures of grant and revoke.
 
 } {
-    # We get an user_id as party_id.
-    set user_id [db_nextval acs_object_id_seq]
     aa_run_with_teardown -rollback -test_code {
+        # We get an user_id as party_id.
+        set user_id [db_nextval acs_object_id_seq]
+
 	# Create the user
-	array set user_info [twt::user::create -user_id $user_id]
+	set user_info [acs::test::user::create -user_id $user_id]
+        
 	# Create and mount new subsite to test the permissions on this
 	# instance.
 	set site_name [ad_generate_random_string]
@@ -82,16 +89,26 @@ aa_register_case -cats {api smoke} ad_proc_permission_grant_and_revoke {
     } 
 }
 
-aa_register_case -cats {api smoke} ad_proc_permission_permission_p {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        permission::grant
+        permission::permission_p
+        permission::revoke
+        site_node::instantiate_and_mount
+    } \
+    ad_proc_permission_permission_p {
 
     Test for Permission Procedures of permission_p
 
 } {
-    # We get an user_id as party_id.
-    set user_id [db_nextval acs_object_id_seq]
     aa_run_with_teardown -rollback -test_code {
+        # We get an user_id as party_id.
+        set user_id [db_nextval acs_object_id_seq]
+
 	# Create the user
-	array set user_info [twt::user::create -user_id $user_id]
+	set user_info [twt::user::create -user_id $user_id]
+        
 	# Create and mount new subsite to test the permissions on this
 	# instance
 	set site_name [ad_generate_random_string]

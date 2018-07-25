@@ -1,19 +1,17 @@
-# 
-
 ad_library {
-    
-
     
     @author byron Haroldo Linares Roman (bhlr@galileo.edu)
     @creation-date 2006-08-11
-    @arch-tag: E1207E78-A4E3-4DC7-BEB7-49EA35B99D69
     @cvs-id $Id$
 }
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {acs_object::get acs_object::get_element acs_object::set_context_id} \
-    acs_object_procs_test \
+    -procs {
+        acs_object::get
+        acs_object::get_element
+        acs_object::set_context_id
+    } acs_object_procs_test \
     {
 	test the acs_object::* procs
     } {

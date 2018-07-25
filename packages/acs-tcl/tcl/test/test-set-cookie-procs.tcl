@@ -1,17 +1,19 @@
-#/packages/acs-tcl/tcl/test 
-
 ad_library {
     
     Test Case for set_cookie procs
     
     @author Cesar Hernandez (cesarhj@galileo.edu)
     @creation-date 2006-08-10
-    @arch-tag: 0AA7362F-83FF-4067-B391-A2F8D6918F3E
     @cvs-id $Id$
 }
 
 aa_register_case \
     -cats {web smoke} \
+    -procs {
+        ad_get_cookie
+        ad_set_cookie
+        ad_set_signed_cookie
+    } \
     test_set_cookie_procs \
     {
 	Test Case for testing if a cookie is fixed
@@ -72,9 +74,12 @@ aa_register_case \
 	}
     }
 
-
 aa_register_case \
     -cats {web smoke} \
+    -procs {
+        ad_get_client_property
+        ad_set_client_property
+    } \
     client_properties \
     {
 	Test Case client properties

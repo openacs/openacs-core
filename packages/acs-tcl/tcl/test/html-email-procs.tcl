@@ -2,7 +2,10 @@ ad_library {
     Test html email procs
 }
 
-aa_register_case -cats {api smoke} build_mime_message {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {build_mime_message} \
+    build_mime_message {
     Basic test of build mime message
 } {
     aa_false "Build mime message, no error" \

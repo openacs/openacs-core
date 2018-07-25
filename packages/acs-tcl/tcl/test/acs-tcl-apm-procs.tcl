@@ -6,12 +6,16 @@ ad_library {
     @creation-date  11 August 2006
 }
 
-aa_register_case -cats {api smoke} -procs {
-    apm_parameter_register
-} test_apm_parameter__register {
-    Test the apm_parameter_register procedure
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        apm_parameter_register
+    } \
+    test_apm_parameter__register {
+        
+        Test the apm_parameter_register procedure
 
-    @author Veronica De La Cruz (veronica@viaro.net)
+        @author Veronica De La Cruz (veronica@viaro.net)
 
 } {
     aa_run_with_teardown -rollback -test_code {
@@ -46,10 +50,13 @@ aa_register_case -cats {api smoke} -procs {
     }
 }
 
-aa_register_case -cats {api smoke} -procs {apm_package_instance_new} test_apm_package_instance__new {
-     Test the apm_package_instance_new procedure
-     @author Veronica De La Cruz (veronica@viaro.net)
-
+aa_register_case \
+    -cats {api smoke} \
+    -procs {apm_package_instance_new} \
+    test_apm_package_instance__new {
+        
+        Test the apm_package_instance_new procedure
+        @author Veronica De La Cruz (veronica@viaro.net)
 } {
 
     aa_run_with_teardown -rollback -test_code {

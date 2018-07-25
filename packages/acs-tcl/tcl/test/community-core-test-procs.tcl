@@ -3,13 +3,15 @@ ad_library {
     
     @author byron Haroldo Linares Roman (bhlr@galileo.edu)
     @creation-date 2006-07-28
-    @arch-tag: 0D0EAC28-2481-4BEE-9645-A143B939DBCA
     @cvs-id $Id$
 }
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {cc_lookup_email_user cc_email_from_party} \
+    -procs {
+        party::email
+        party::get_by_email
+    } \
     community_cc_procs \
     {
 	test community core procs returned values
@@ -32,10 +34,20 @@ aa_register_case \
 }
 aa_register_case \
     -cats {api smoke} \
-    -procs {person::person_p person::get person::new person::update person::get_bio person::update_bio} \
+    -procs {
+        party::email
+        person::delete
+        person::get
+        person::get_bio
+        person::name
+        person::new
+        person::person_p
+        person::update
+        person::update_bio
+    } \
     person_procs_test \
     {
-	test if the values returned by the person procs are correct
+	Test whether the values returned by the person procs are correct.
     } {
 	
 	set user_id [db_nextval acs_object_id_seq]
@@ -96,7 +108,10 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {party::get_by_email party::update} \
+    -procs {
+        party::get_by_email
+        party::update
+    } \
     party_procs_test \
     {
 	test if the values returned by the party procs are correct
@@ -110,8 +125,13 @@ aa_register_case \
         set last_name [ad_generate_random_string]
 	set url "url[ad_generate_random_string]"
 	
-	array set user_info [auth::create_user  -user_id $user_id  -username $username  -email $email  -first_names $first_names \
-				 -last_name $last_name  -password $password \
+	array set user_info [auth::create_user  \
+                                 -user_id $user_id  \
+                                 -username $username  \
+                                 -email $email  \
+                                 -first_names $first_names \
+				 -last_name $last_name  \
+                                 -password $password \
 				 -secret_question [ad_generate_random_string] \
 				 -secret_answer [ad_generate_random_string]]
 	

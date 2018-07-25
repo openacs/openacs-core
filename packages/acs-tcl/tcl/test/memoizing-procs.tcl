@@ -28,7 +28,10 @@ ad_proc -private memoizing_procs_test::return_upper_case_text {
     return $response
 }
 
-aa_register_case -cats {api smoke} ad_proc_cache {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {util_memoize util_memoize_cached_p} \
+    util_memoize_cache {
     Test cache of a proc executed before
 } {
     aa_log "caching a proc"
@@ -39,7 +42,10 @@ aa_register_case -cats {api smoke} ad_proc_cache {
     aa_equals "proc was cached successful" $success_p 1
 }
 
-aa_register_case -cats {api smoke} ad_proc_flush {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {util_memoize util_memoize_cached_p util_memoize_flush_regexp} \
+    util_memoize_cache_flush {
     Test flush of a proc cached
 } {
     aa_log "caching"

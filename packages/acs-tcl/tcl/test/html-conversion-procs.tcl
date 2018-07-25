@@ -6,22 +6,25 @@ ad_library {
 }
 
 
-aa_register_case -cats {api smoke} ad_html_to_text_bold {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_to_text} \
+    ad_html_to_text_bold {
 
     Test if it converts b tags correctly.
 
 } {
-
     set html "Some <b>bold</b> test"
-
     set result [ad_html_to_text -- $html]
-
     aa_true "contains asterisks?" [regexp {\*bold\*} $result]
-
 }
 
 
-aa_register_case -cats {api smoke} -bugs 386 -error_level warning  \
+aa_register_case \
+    -cats {api smoke} \
+    -bugs 386 \
+    -error_level warning \
+    -procs {ad_html_to_text} \
     ad_html_to_text_clipped_link {
 
     Test if it converts clipped links.
@@ -49,29 +52,34 @@ following text
 }
 
 
-aa_register_case -cats {api smoke} ad_html_security_check_href_allowed {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_security_check} \
+    ad_html_security_check_href_allowed {
     tests is href attribute is allowed of A tags
 } {
     set html "<a href=\"http://www.example/com\">An Link</a>"
-    aa_true "href is allowed for A tags" [string equal [ad_html_security_check $html] ""]
+    aa_equals "href is allowed for A tags" [ad_html_security_check $html] ""
 }
 
-aa_register_case -cats {api smoke} util_close_html_tags {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {util_close_html_tags} \
+    util_close_html_tags {
     Tests closing HTML tags.
 } {
     aa_equals "" [util_close_html_tags "<b>Foobar"] "<b>Foobar</b>"
-
     aa_equals "" [util_close_html_tags "<b>Foobar</b>"] "<b>Foobar</b>"
-
     aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>"] "<b>Foobar</b> is <i>a very long word</i>"
-
     aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 15] "<b>Foobar</b> is <i>a</i>"
-
     aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 0 20 "..."] "<b>Foobar</b> is <i>a very</i>..."
 }
 
 
-aa_register_case -cats {api smoke} ad_html_text_convert {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_text_convert ad_enhanced_text_to_html} \
+    ad_html_text_convert {
     Testing ad_html_text_convert.
 } {
     #----------------------------------------------------------------------
@@ -90,7 +98,7 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     # from text/markdown
     #----------------------------------------------------------------------
 
-    if {[expr ![catch {package present Markdown}]]} {
+    if {![catch {package present Markdown}]} {
         set string "What?\n*Never mind, buddy*"
 
         aa_equals "" [ad_html_text_convert -from "text/markdown" -to "text/html" -truncate_len 14 -- $string] \
@@ -138,11 +146,21 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
         "What?\n_Never..."
 
     set long_string [string repeat "Very long text. " 10]
-    aa_equals "No truncation" [ad_html_text_convert -from "text/html" -to "text/html" -truncate_len [string length $long_string] -- $long_string] $long_string
+    aa_equals "No truncation" \
+        [ad_html_text_convert \
+             -from "text/html" \
+             -to "text/html" \
+             -truncate_len [string length $long_string] \
+             -- \
+             $long_string] \
+        $long_string
 
 }
 
-aa_register_case -cats {api smoke} string_truncate {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {string_truncate} \
+    string_truncate {
     Testing string truncation
 } {
     aa_equals "" [string_truncate -len  5 -ellipsis "" -- "foo"] "foo"
@@ -173,10 +191,13 @@ aa_register_case -cats {api smoke} string_truncate {
 
     set long_string [string repeat "Very long text. " 100]
     aa_equals "No truncation" [string_truncate -len [string length $long_string] -- $long_string] $long_string
-
 }
 
-aa_register_case -cats {api smoke} -procs {util_convert_line_breaks_to_html} util_convert_line_breaks_to_html {
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {util_convert_line_breaks_to_html} \
+    util_convert_line_breaks_to_html {
     Test if it converts spaces and line breaks correctly.
 } {
     #Convert leading and trailing spaces or tabs
@@ -205,7 +226,10 @@ aa_register_case -cats {api smoke} -procs {util_convert_line_breaks_to_html} uti
 }
 
 
-aa_register_case -cats {api smoke} -procs {ad_quotehtml ad_unquotehtml} quote_unquote_html {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_unquotehtml} \
+    quote_unquote_html {
     Test if it quote and unquote html
 } {
     #quote html
@@ -218,10 +242,13 @@ aa_register_case -cats {api smoke} -procs {ad_quotehtml ad_unquotehtml} quote_un
     set html $result
     aa_log "Quote html=$html"
     set result [ad_unquotehtml $html]
-    aa_true "Unquote html=$result" [string equal "\"<&text>\"" $result]
+    aa_equals "Unquote html=$result" "\"<&text>\"" $result
 }
 
-aa_register_case -cats {api smoke} -procs {ad_looks_like_html_p} ad_looks_like_html_p {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_looks_like_html_p} \
+    ad_looks_like_html_p {
     Test if it guess the text supplied is html
 } {
     set html "<a href=/home/page>Home Page</a>"
@@ -237,16 +264,22 @@ aa_register_case -cats {api smoke} -procs {ad_looks_like_html_p} ad_looks_like_h
     aa_true "Is html text" [ad_looks_like_html_p $html]
 }
 
-aa_register_case -cats {api smoke} -procs {util_remove_html_tags} util_remove_html_tags {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {util_remove_html_tags} \
+    util_remove_html_tags {
     Test if it remove all between tags
 } {
     set html "<p><b>some</b> text <i>to</i> probe if it <table><tr>remove all between \"<\" and \">\"<tr><table><tags>"
     set result [util_remove_html_tags $html]
-    aa_true "Without all between \"<\" and \">\" html=\"$result\""\
-	[string equal "some text to probe if it remove all between \"\"" $result]
+    aa_equals "Without all between \"<\" and \">\" html=\"$result\""\
+	"some text to probe if it remove all between \"\"" $result
 }
 
-aa_register_case -cats {api smoke} -procs {ad_parse_html_attributes} ad_parse_html_attributes {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_parse_html_attributes} \
+    ad_parse_html_attributes {
     Test if returns a list of attributes inside an HTML tag
 } {
     set pos 5
@@ -270,8 +303,11 @@ aa_register_case -cats {api smoke} -procs {ad_parse_html_attributes} ad_parse_ht
     aa_equals "Attributes - $result" $result {{foo bar} {greeting {welcome home}} {ja blah}}
 }
 
-aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_convert_outlook_word_comments {
-    Test is MS Word HTML Comments are stripped or not
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_text_convert} \
+    ad_text_html_convert_outlook_word_comments {
+    Test whether HTML comments inserted by MS Word are stripped
 } {
 
     set html {<!-- standard comments -->}
@@ -316,7 +352,10 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
 
 }
 
-aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_convert_to_plain {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_text_convert} \
+    ad_text_html_convert_to_plain {
     Test rendering of a more or less standard HTML text
 } {
 
@@ -393,9 +432,115 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
         [string first {    This is *bold} $result] > 0
     }
 
-
-
 }
+
+aa_register_case \
+    -cats {api} \
+    -bugs 1450 \
+    -procs {ad_enhanced_text_to_html} \
+    acs_tcl__process_enhanced_correctly {
+       
+	Process sample text correctly
+	@author Nima Mazloumi
+    } {
+	
+	set string_with_img {<img src="http://test.test/foo.png">}
+	aa_log "Original string is $string_with_img"
+	set html_version [ad_enhanced_text_to_html $string_with_img]
+	aa_equals "new: $html_version should be the same" $html_version $string_with_img
+}
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_to_text} \
+    text_to_html {
+        
+        Test code the supposedly causes ad_html_to_text to break
+} {
+
+    # Test bad <<<'s
+
+    set offending_post {><<<}
+    set errno [catch { set text_version [ad_html_to_text -- $offending_post] } errmsg]
+
+    if { ![aa_equals "Does not bomb" $errno 0] } {
+                aa_log "errmsg: $errmsg"
+        aa_log "errorInfo: $::errorInfo"
+    } else {
+        aa_equals "Expected identical result" $text_version $offending_post
+    }
+
+    # Test offending post sent by Dave Bauer
+
+    set offending_post {
+I have a dynamically assigned ip address, so I use dyndns.org to
+change
+addresses for my acs server.
+Mail is sent to any yahoo address fine. Mail sent to aol fails. I am
+not running a dns server on my acs box. What do I need to do to
+correct this problem?<br>
+Here's my error message:<blockquote>
+            Mail Delivery Subsystem<br>
+<MAILER-DAEMON@testdsl.homeip.net>  | Block
+            Address | Add to Address Book<br>
+       To:
+            gmt3rd@yahoo.com<br>
+ Subject:
+            Returned mail: Service unavailable
+<p>
+
+
+The original message was received at Sat, 17 Mar 2001 11:48:57 -0500
+from IDENT:nsadmin@localhost [127.0.0.1]
+<br>
+   ----- The following addresses had permanent fatal errors -----
+gmt3rd@aol.com
+<br>
+   ----- Transcript of session follows -----<p>
+... while talking to mailin-04.mx.aol.com.:
+<<< 550-AOL no longer accepts connections from dynamically assigned
+<<< 550-IP addresses to our relay servers.  Please contact your ISP
+<<< 550 to have your mail redirected through your ISP's SMTP servers.
+... while talking to mailin-02.mx.aol.com.:
+>>> QUIT
+<p>
+
+                              Attachment: Message/delivery-status
+
+Reporting-MTA: dns; testdsl.homeip.net
+Received-From-MTA: DNS; localhost
+Arrival-Date: Sat, 17 Mar 2001 11:48:57 -0500
+
+Final-Recipient: RFC822; gmt3rd@aol.com
+Action: failed
+Status: 5.5.0
+Remote-MTA: DNS; mailin-01.mx.aol.com
+Diagnostic-Code: SMTP; 550-AOL no longer accepts connections from
+dynamically assigned
+Last-Attempt-Date: Sat, 17 Mar 2001 11:48:57 -0500
+
+</blockquote>
+<p>
+anybody have any ideas?
+    }
+
+    set errno [catch { set text_version [ad_html_to_text -- $offending_post] } errmsg]
+
+    if { ![aa_equals "Does not bomb" $errno 0] } {
+        aa_log "errmsg: $errmsg"
+        aa_log "errorInfo: $::errorInfo"
+    } else {
+        aa_log "Text version: $text_version"
+    }
+
+    # Test placement of [1] reference
+    set html {Here is <a href="http://openacs.org">http://openacs.org</a> my friend}
+
+    set text_version [ad_html_to_text -- $html]
+
+    aa_log "Text version: $text_version"
+}
+
 
 # Local variables:
 #    mode: tcl

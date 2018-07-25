@@ -6,7 +6,10 @@ ad_library {
     @creation-date 2005-03-11
 }
 
-aa_register_case -cats {api smoke} ad_proc_create_callback {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_proc callback} \
+    ad_proc_create_callback {
 
     Tests the creation of a callback and an implementation with 
     some forced error cases.
@@ -91,13 +94,16 @@ ad_proc -callback a_callback -impl fail_impl {} {
         error "should fail"
 }
 
-ad_proc EvilCallback {} {
+ad_proc -private EvilCallback {} {
     This is a test callback implementation that should not be invoked.
 } {
         error "Should not be invoked"
 }
 
-aa_register_case -cats {api smoke} ad_proc_fire_callback {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {callback} \
+    ad_proc_fire_callback {
 
     Tests a callback with two implementations .
 
@@ -120,10 +126,10 @@ aa_register_case -cats {api smoke} ad_proc_fire_callback {
         {[callback -impl an_impl2 a_callback -arg1 foo bar] == 2}
 
     aa_true "callback works with {} args" \
-        [expr {[callback -impl an_impl2 a_callback -arg1 {} {}] == {}}]
+        {[callback -impl an_impl2 a_callback -arg1 {} {}] == {}}
 
     aa_true "callback errors with missing arg" \
-        [expr {[catch {callback -impl an_impl2 a_callback -arg1 foo} err] == 1}]
+        {[catch {callback -impl an_impl2 a_callback -arg1 foo} err] == 1}
 
     aa_true "throws error for invalid arguments with implementations" \
         [catch {callback a_callback bar} error]

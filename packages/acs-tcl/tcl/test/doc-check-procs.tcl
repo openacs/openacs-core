@@ -187,18 +187,75 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
             foreach param_doc $params {
                 set param [lindex [string map $ignorechars $param_doc] 0]
                 if {"$param" ni $real_params} {
-                    # Nonexistant @param found!
+                    # Nonexistent @param found!
                     incr param_unknown
                     aa_log_result fail "Unknown parameter '$param' in documentation of proc '$p'"
                 }
             }
-            # Just count the number of procs without nonexistant @params
+            # Just count the number of procs without nonexistent @params
             if { $param_unknown == 0 } {
                 incr good
             }
         }
     }
     aa_log "@param names seem coherent with the actual proc parameters in $good of $count checked procs"
+}
+
+if {[parameter::get \
+	 -package_id [apm_package_id_from_key acs-api-browser] \
+	 -parameter IncludeCallingInfo \
+	 -default false]} {
+
+    aa_register_case \
+        -cats {smoke production_safe} \
+        -error_level warning \
+        cross_package_called_private_functions {
+
+            Search for cross-package calls of private functions.
+
+            @author Gustaf Neumann
+            
+            @creation-date 2018-07-25
+        } {
+            set count 0
+            set fails 0
+            set private 0
+            
+            foreach called [lsort -dictionary [nsv_array names api_proc_doc]] {
+                incr count
+                set called_by_count 0
+                set called_info [nsv_get api_proc_doc $called]
+                if {[dict exists $called_info calledby]
+                    && [dict exists $called_info script]
+                    && [dict exists $called_info protection]
+                    && [dict get $called_info protection] eq "private"
+                } {
+                    incr private
+                    regexp {^packages/([^/]+)/} [dict get $called_info script] . called_package_key
+                    foreach caller [lsort [dict get $called_info calledby]] {
+                        incr called_by_count
+                        if {[nsv_get api_proc_doc $caller caller_info]
+                            && [dict exists $caller_info script]
+                            && ![string match "AcsSc.*" $caller]                    
+                        } {
+                            regexp {^packages/([^/]+)/} [dict get $caller_info script] . caller_package_key
+                            if {$caller_package_key ne $called_package_key} {
+                                incr fails
+                                set msg ""
+                                append msg \
+                                    "private function &lt;$called_package_key $called> " \
+                                    "called by &lt;$caller_package_key $caller><br>" \
+                                    [dict get $called_info script] "<br>" \
+                                    [dict get $caller_info script]
+                                aa_log_result fail $msg
+                            }
+                        }
+                    }
+                    ns_log notice "private function $called called by $called_by_count functions"            
+                }
+            }
+            aa_log "Found $fails cross-package private calls out of a total of $private private calls (total: $count call sites)"
+        }
 }
 
 # Local variables:

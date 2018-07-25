@@ -43,16 +43,13 @@ ad_proc navigation::test::context_bar_multirow_filter {} {
 }
     
 
-aa_register_case -cats {
-    api 
-    smoke
-} -procs {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_context_bar_html
+    } ad_context_bar_html {
 
-    ad_context_bar_html
-
-} ad_context_bar_html {
-
-    Test if returns a html fragment from a list.
+    Test if returns a HTML fragment from a list.
 
 } {
 
@@ -62,8 +59,8 @@ aa_register_case -cats {
     set separator "-"
     aa_log "List with three references:\n\n$c\nseparator= \" - \" "
 
-    aa_equals "" [ad_context_bar_html -separator $separator $ref_list] "<a href=\"[lindex $ref_list 0 0]\">[lindex $ref_list 0 1]</a> - <a href=\"[lindex $ref_list 1 0]\">[lindex $ref_list 1 1]</a> - [lindex $ref_list 2 0] [lindex $ref_list 2 1]"
-
+    aa_equals "" [ad_context_bar_html -separator $separator $ref_list] \
+        "<a href=\"[lindex $ref_list 0 0]\">[lindex $ref_list 0 1]</a> - <a href=\"[lindex $ref_list 1 0]\">[lindex $ref_list 1 1]</a> - [lindex $ref_list 2 0] [lindex $ref_list 2 1]"
 }
 
 aa_register_case -cats {
@@ -76,7 +73,7 @@ aa_register_case -cats {
     site_node::new
 } ad_context_bar {
 
-    Test if returns a well formed context_bar in html format from a site node.
+    Test if returns a well formed context_bar in HTML format from a site node.
 
 } {
     
@@ -100,7 +97,7 @@ aa_register_case -cats {
 	
 	# Create hierarchy from the random created nodes
         db_1row query {
-           select MIN(node_id) as first_node from site_nodes
+           select min(node_id) as first_node from site_nodes
         }
         set idp $first_node
         set idr_1 [site_node::new -name $random1 -parent_id $idp]
@@ -129,12 +126,8 @@ aa_register_case -cats {
         #aa_log "bar_components $bar_components"
         set context_barp ""
 	foreach value $bar_components {
-		append context_barp "<a href=\""
-		append context_barp [lindex $value 0]
-		append context_barp "\">"
-		append context_barp [lindex $value 1]
-		append context_barp "</a>"
-		append context_barp " $separator "
+            append context_barp \
+                [subst {<a href="[lindex $value 0]">[lindex $value 1]</a> $separator }]
 	}
 	append context_barp "$leave_node"
 	set context_bar [ad_context_bar -node_id $idr_1 -separator $separator $leave_node]
@@ -150,12 +143,8 @@ aa_register_case -cats {
         set bar_components [list $root_node $testnode_1 $testnode_2 $admin_node]
         set context_barp ""
         foreach value $bar_components {
-            append context_barp "<a href=\""
-	    append context_barp [lindex $value 0]
-            append context_barp "\">"
-	    append context_barp [lindex $value 1]
-            append context_barp "</a>"
-            append context_barp " $separator "
+            append context_barp \
+                [subst {<a href="[lindex $value 0]">[lindex $value 1]</a> $separator }]
         }
         append context_barp "$leave_node"
         set context_bar [ad_context_bar -node_id $idr_2 -separator $separator $leave_node]
@@ -169,12 +158,8 @@ aa_register_case -cats {
         set bar_components [list $testnode_1 $testnode_2 $admin_node]
         set context_barp ""
         foreach value $bar_components {
-                append context_barp "<a href=\""
-	    append context_barp [lindex $value 0]
-                append context_barp "\">"
-	    append context_barp [lindex $value 1]
-                append context_barp "</a>"
-                append context_barp " $separator "
+            append context_barp \
+                [subst {<a href="[lindex $value 0]">[lindex $value 1]</a> $separator }]
         }
         append context_barp "$leave_node"
 	set context_bar [ad_context_bar -from_node $idr_1 -node_id $idr_2 -separator $separator $leave_node]	
@@ -182,17 +167,15 @@ aa_register_case -cats {
     }
 }
 
-aa_register_case -cats {
-    api 
-    smoke 
-    web
-} -libraries tclwebtest -procs {
+aa_register_case \
+    -cats {api smoke web} \
+    -libraries tclwebtest \
+    -procs {
+        ad_context_bar_multirow
+    } \
+    ad_context_bar_multirow {
 
-    ad_context_bar_multirow
-    
-} ad_context_bar_multirow {
-
-    Test if returns a well formed context_bar in html format from a site node in a multirow.
+    Test if returns a well formed context_bar in HTML format from a site node in a multirow.
 
 } {
     # Setup nodes from the context bar, create two nodes to include

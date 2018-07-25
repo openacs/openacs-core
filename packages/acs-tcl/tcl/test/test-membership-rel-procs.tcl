@@ -4,20 +4,31 @@ ad_library {
     
     @author Cesar Hernandez (cesarhj@galileo.edu)
     @creation-date 2006-07-31
-    @arch-tag: 92464550-0231-4D33-8885-595623B00DB6
     @cvs-id $Id$
 }
 
-aa_register_case -cats {api smoke} ad_proc_change_state_member  {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        acs_user::get
+        membership_rel::approve
+        membership_rel::ban
+        membership_rel::delete
+        membership_rel::reject
+        membership_rel::unapprove
+    } \
+    ad_proc_change_state_member  {
 
     Test the proc change_state
 
 } {
-    #we get a user_id as party_id
-    set user_id [db_nextval acs_object_id_seq]
     aa_run_with_teardown -rollback -test_code {
+        
+        #we get a user_id as party_id
+        set user_id [db_nextval acs_object_id_seq]
+
 	#Create the user
-        array set user_info [twt::user::create -user_id $user_id]
+        set user_info [acs::test::user::create -user_id $user_id]
 	set rel_id [db_string get_rel_id "select max(rel_id) from acs_rels where object_id_two = :user_id" -default 0]
 
  	#Try to change his state to approved
@@ -26,7 +37,7 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
         acs_user::get -user_id $user_id -array user
 	
  	#Verifying if the state was changed
- 	aa_equals "Changed State to aprroved"  \
+ 	aa_equals "Changed State to aprroved" \
  	    $user(member_state) "approved"
 
 
@@ -36,7 +47,7 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
 	acs_user::get -user_id $user_id -array user
 	
         #Verifying if the state was changed 
-	aa_equals "Changed State to banned"  \
+	aa_equals "Changed State to banned" \
 	    $user(member_state) "banned"
 
 
@@ -46,7 +57,7 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
 	acs_user::get -user_id $user_id -array user
 	
 	#Verifying if the state was changed
-	aa_equals "Changed State to rejected"  \
+	aa_equals "Changed State to rejected" \
 	    $user(member_state) "rejected"
 
 
@@ -65,10 +76,8 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
         acs_user::get -user_id $user_id -array user
 
 	#Verifying if the state was changed
-	aa_equals "Changed State to deleted"  \
+	aa_equals "Changed State to deleted" \
             $user(member_state) "deleted"
-
-
     }
 }
 # Local variables:

@@ -7,10 +7,16 @@ ad_library {
 }
 
 
-aa_register_case -cats {db smoke production_safe} -error_level warning datamodel__named_constraints {
-    Check that all the constraints meet the constraint naming standards.
+aa_register_case \
+    -cats {db smoke production_safe} \
+    -error_level warning \
+    -procs {} \
+    datamodel__named_constraints {
+        
+        Check that all the constraints meet the constraint naming
+        standards.
 
-    @author Jeff Davis davis@xarg.net
+        @author Jeff Davis davis@xarg.net
 } {
 
     set db_is_pg_p [string equal [db_name] "PostgreSQL"]
@@ -94,11 +100,15 @@ aa_register_case -cats {db smoke production_safe} -error_level warning datamodel
 
 
 
-aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_check {
-    Check that the object type tables exist and that the id column is present and the 
-    name method works.
+aa_register_case \
+    -cats {db smoke production_safe} \
+    -procs {db_table_exists} \
+    datamodel__acs_object_type_check {
+        
+        Check that the object type tables exist and that the id column is
+        present and the name method works.
 
-    @author Jeff Davis davis@xarg.net
+        @author Jeff Davis davis@xarg.net
 } {
     db_foreach object_type {select * from acs_object_types} {
         if {[string tolower $table_name] ne $table_name } {
@@ -152,11 +162,15 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_object_type_che
 
 
 
-aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check {
-    Check that the acs_attribute column is present and the datatype is vaguely 
-    consistent with the db datatype.
+aa_register_case \
+    -cats {db smoke production_safe} \
+    -procs {db_column_type db_columns} \
+    datamodel__acs_attribute_check {
+        
+        Check that the acs_attribute column is present and the
+        datatype is vaguely consistent with the db datatype.
 
-    @author Jeff Davis davis@xarg.net
+        @author Jeff Davis davis@xarg.net
 } {
     array set allow_types {
         string {TEXT VARCHAR CHAR VARCHAR2}
@@ -173,7 +187,11 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
         keyword {CHAR VARCHAR TEXT VARCHAR2}
     }
 
-    db_foreach attribute {select a.*, lower(ot.table_name) as obj_type_table from acs_attributes a, acs_object_types ot where ot.object_type = a.object_type order by a.object_type} {
+    db_foreach attribute {
+        select a.*, lower(ot.table_name) as obj_type_table
+        from acs_attributes a, acs_object_types ot
+        where ot.object_type = a.object_type order by a.object_type
+    } {
 
         if {[string tolower $table_name] ne $table_name } {
             aa_log_result fail "Type $object_type attribute $table_name.$attribute_name mixed case"
@@ -193,7 +211,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
                 }
                 set column_name [string tolower $column_name]
 
-                if {[lsearch $columns($obj_type_table) $column_name] < 0} {
+                if {$column_name ni $columns($obj_type_table)} {
                     aa_log_result fail "Type $object_type attribute column $column_name not found in $obj_type_table"
                 } else {
                     # check the type of the column is vaguely like the acs_datatype type.
@@ -202,7 +220,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
                         if {$actual_type eq "-1"} {
                             aa_log_result fail "Type $object_type attribute $attribute_name database type get for ($table_name.$column_name) failed"
                         } else {
-                            if {[lsearch $allow_types($datatype) $actual_type] < 0} {
+                            if {$actual_type ni $allow_types($datatype)} {
                                 aa_log_result fail "Type $object_type attribute $attribute_name database type was $actual_type for $datatype"
                             }
                         }

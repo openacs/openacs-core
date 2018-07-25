@@ -6,10 +6,14 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
-    Test all known Tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
+aa_register_case \
+    -cats {smoke production_safe} \
+    -procs {apm_get_installed_versions apm_get_package_files} \
+    files__tcl_file_syntax_errors {
+        
+        Test all known Tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
 
-    @author Jeff Davis davis@xarg.net
+        @author Jeff Davis davis@xarg.net
 } {
     # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
     set startdir $::acs::rootdir/packages
@@ -38,7 +42,11 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
     }
 }
 
-aa_register_case -cats {smoke production_safe} -error_level error files__tcl_file_common_errors {
+aa_register_case \
+    -cats {smoke production_safe} \
+    -error_level error \
+    -procs {} \
+    files__tcl_file_common_errors {
     Check for some common error patterns.
 
     @author Jeff Davis davis@xarg.net
@@ -56,8 +64,9 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
     #inspect every Tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] {
 
-        if {[string match "*/acs-tcl/tcl/test/file-test-procs.tcl" $file]} continue
-
+        if {[string match "*/acs-tcl/tcl/test/file-test-procs.tcl" $file]} {
+            continue
+        }
         set fp [open $file "r"]
         set data [read $fp]
         close $fp
@@ -69,11 +78,15 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
     aa_log "Checked $count Tcl files"
 }
 
-aa_register_case -cats {smoke production_safe} files__check_info_files {
-    Check that all the info files parse correctly and are
-    internally consistent.
+aa_register_case \
+    -cats {smoke production_safe} \
+    -procs {apm_read_package_info_file} \
+    files__check_info_files {
+        
+        Check that all the info files parse correctly and are
+        internally consistent.
 
-    @author Jeff Davis davis@xarg.net
+        @author Jeff Davis davis@xarg.net
 } {
     foreach spec_file [glob -nocomplain "$::acs::rootdir/packages/*/*.info"] {
         set errp 0
@@ -119,10 +132,19 @@ aa_register_case -cats {smoke production_safe} files__check_info_files {
     }
 }
 
-aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
-    Check that all the upgrade files are well ordered (non-overlapping and v1 > v2)
+aa_register_case \
+    -cats {smoke production_safe} \
+    -procs {
+        apm_get_package_files
+        apm_guess_db_type
+        apm_version_sortable
+    } \
+    files__check_upgrade_ordering {
+        
+        Check that all the upgrade files are well ordered
+        (non-overlapping and v1 > v2).
 
-    @author Jeff Davis davis@xarg.net
+        @author Jeff Davis davis@xarg.net
 } {
     foreach dir [lsort [glob -nocomplain -types f "$::acs::rootdir/packages/*/*.info"]] {
 
@@ -180,13 +202,22 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
     }
 }
 
-aa_register_case -cats {smoke} files__check_xql_files {
-    Check for some common errors in the xql files like
-    missing rdbms, missing corresponding Tcl files, etc.
+aa_register_case \
+    -cats {smoke} \
+    -procs {
+        apm_get_installed_versions
+        apm_get_package_files
+        db_qd_internal_prepare_queryfile_content
+        xml_parse
+    } \
+    files__check_xql_files {
+        
+        Check for some common errors in the xql files like
+        missing rdbms, missing corresponding Tcl files, etc.
 
-    Not production safe since malformed xql can crash AOLserver in the parse.
+        Not production safe since malformed xql can crash AOLserver in the parse.
 
-    @author Jeff Davis davis@xarg.net
+        @author Jeff Davis davis@xarg.net
 } {
     # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
     set startdir $::acs::rootdir/packages
@@ -290,15 +321,18 @@ aa_register_case -cats {smoke} files__check_xql_files {
     }
 }
 
-aa_register_case -cats {production_safe} -error_level notice files__trailing_whitespace {
+aa_register_case \
+    -cats {production_safe} \
+    -error_level notice \
+    -procs {} \
+    files__trailing_whitespace {
 
-    Looks for trailing whitespace: spaces or tabs at the end of lines.
+        Looks for trailing whitespace: spaces or tabs at the end of lines.
+        Currently, only checks on .tcl files.
 
-    Currently, only checks on .tcl files.
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
 
-    @author Héctor Romojaro <hector.romojaro@gmail.com>
-
-    @creation-date 2018-07-24
+        @creation-date 2018-07-24
 
 } {
     # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
@@ -347,7 +381,11 @@ aa_register_case -cats {production_safe} -error_level notice files__trailing_whi
     aa_log "$good of $count tcl files checked have no trailing whitespace"
 }
 
-aa_register_case -cats {smoke production_safe} -error_level warning files__page_contracts {
+aa_register_case \
+    -cats {smoke production_safe} \
+    -error_level warning \
+    -procs {} \
+    files__page_contracts {
 
     Checks for files without 'ad_page_contract' or 'ad_include_contract' in
     both 'www' and 'lib' package directories.
