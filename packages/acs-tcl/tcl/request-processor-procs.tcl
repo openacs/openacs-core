@@ -340,9 +340,6 @@ ad_proc -public ad_register_filter {
     @param debug If debug is set to "t", all invocations of the filter
     will be ns_logged.
 
-    @param sitewide specifies that the filter should be applied on a
-    sitewide (not subsite-by-subsite basis).
-
 } {
     if {$method eq "*"} {
         # Shortcut to allow registering filter for all methods.
