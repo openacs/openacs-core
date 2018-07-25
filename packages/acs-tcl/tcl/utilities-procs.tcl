@@ -258,11 +258,11 @@ ad_proc check_for_form_variable_naughtiness {
 
 
 ad_proc -deprecated DoubleApos {string} {
-    
+
     When the value "O'Malley" is inserted int an SQL database, the
     single quote can cause troubles in SQL, one has to insert
     'O''Malley' instead.
-    
+
     <p>
     In general, one should be using bind variables rather than
     calling DoubleApos.

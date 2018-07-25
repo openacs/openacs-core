@@ -9,7 +9,7 @@ ad_library {
 
         ns_section ns/server/${server}/acs
             ns_param WithDeprecatedCode 0
-    
+
     @cvs-id $Id$
 }
 
@@ -32,9 +32,9 @@ ad_proc -public -deprecated ad_set_typed_form_variable_filter {
     #
     #    ad_set_typed_form_variable_filter /my_module/* {a_id number} {b_id word} {*_id integer}
     #
-    # For all pages under /my_module, set_form_variables would set 
-    # $a_id only if it was number, and $b_id only if it was a 'word' 
-    # (a string that contains only letters, numbers, dashes, and 
+    # For all pages under /my_module, set_form_variables would set
+    # $a_id only if it was number, and $b_id only if it was a 'word'
+    # (a string that contains only letters, numbers, dashes, and
     # underscores), and all other variables that match the pattern
     # *_id would be set only if they were integers.
     #
@@ -46,7 +46,7 @@ ad_proc -public -deprecated ad_set_typed_form_variable_filter {
     # return 1 if the value is a valid $type_name, or 0 otherwise.
     #
     # There's also a special datatype named 'nocheck', which will
-    # return success regardless of the value. (See the docs for 
+    # return success regardless of the value. (See the docs for
     # ad_var_type_check_${type_name}_p to see how this might be
     # useful.)
     #
@@ -74,15 +74,15 @@ proc ad_set_typed_form_variables {conn args why} {
     return filter_ok
 }
 
-ad_proc -deprecated ad_dbclick_check_dml { 
+ad_proc -deprecated ad_dbclick_check_dml {
     {-bind  ""}
-    statement_name table_name id_column_name generated_id return_url insert_dml 
+    statement_name table_name id_column_name generated_id return_url insert_dml
 } {
     This proc is used for pages using double click protection. table_name
     is table_name for which we are checking whether the double click
     occurred. id_column_name is the name of the id table
     column. generated_id is the generated id, which is supposed to have
-    been generated on the previous page. return_url is url to which this 
+    been generated on the previous page. return_url is url to which this
     procedure will return redirect in the case of successful insertion in
     the database. insert_sql is the sql insert statement. if data is ok
     this procedure will insert data into the database in a double click
@@ -94,29 +94,29 @@ ad_proc -deprecated ad_dbclick_check_dml {
         if { $bind ne "" } {
             db_dml $statement_name $insert_dml -bind $bind
         } else {
-            db_dml $statement_name $insert_dml 
+            db_dml $statement_name $insert_dml
         }
     } errmsg] } {
         # Oracle choked on the insert
-        
+
         # detect double click
         if {
             [db_0or1row double_click_check "
-        
+
         select 1 as one
         from $table_name
         where $id_column_name = :generated_id
-        
+
         " -bind [ad_tcl_vars_to_ns_set generated_id]]
         } {
             ad_returnredirect $return_url
             return
         }
-        
+
         ns_log Error "[info script] choked. Oracle returned error:  $errmsg"
 
         ad_return_error "Error in insert" "
-    We were unable to do your insert in the database. 
+    We were unable to do your insert in the database.
     Here is the error that was returned:
     <p>
     <blockquote>
@@ -142,7 +142,7 @@ ad_proc -deprecated util_PrettyBoolean {t_or_f { default  "default" } } {
     } elseif { $t_or_f == "f" || $t_or_f eq "F" } {
         return "No"
     } else {
-        # Note that we can't compare default to the empty string as in 
+        # Note that we can't compare default to the empty string as in
         # many cases, we are going want the default to be the empty
         # string
         if { $default eq "default"  } {
@@ -153,16 +153,16 @@ ad_proc -deprecated util_PrettyBoolean {t_or_f { default  "default" } } {
     }
 }
 
-ad_proc -deprecated ad_export_vars { 
+ad_proc -deprecated ad_export_vars {
     -form:boolean
     {-exclude {}}
     {-override {}}
     {include {}}
 } {
-    <b><em>Note</em></b> This proc is deprecated in favor of 
-    <a href="/api-doc/proc-view?proc=export_vars"><code>export_vars</code></a>. They're very similar, but 
+    <b><em>Note</em></b> This proc is deprecated in favor of
+    <a href="/api-doc/proc-view?proc=export_vars"><code>export_vars</code></a>. They're very similar, but
     <code>export_vars</code> have a number of advantages:
-    
+
     <ul>
     <li>It can sign variables (the <code>:sign</code> flag)
     <li>It can export variables as a :multiple.
@@ -174,12 +174,12 @@ ad_proc -deprecated ad_export_vars {
 
     <p>
 
-    Helps export variables from one page to the next, 
+    Helps export variables from one page to the next,
     either as URL variables or hidden form variables.
     It'll reach into arrays and grab either all values or individual values
-    out and export them in a way that will be consistent with the 
+    out and export them in a way that will be consistent with the
     ad_page_contract :array flag.
-    
+
     <p>
 
     Example:
@@ -189,12 +189,12 @@ ad_proc -deprecated ad_export_vars {
     and it will export a variable named <code>order_by</code> with the value <code>date</code>.
 
     <p>
-    
-    The args is a list of variable names that you want exported. You can name 
+
+    The args is a list of variable names that you want exported. You can name
 
     <ul>
     <li>a scalar variable, <code>foo</code>,
-    <li>the name of an array, <code>bar</code>, 
+    <li>the name of an array, <code>bar</code>,
     in which case all the values in that array will get exported, or
     <li>an individual value in an array, <code>bar(baz)</code>
     <li>a list in [array get] format { name value name value ..}.
@@ -210,7 +210,7 @@ ad_proc -deprecated ad_export_vars {
     @param form set this parameter if you want the variables exported as hidden form variables,
     as opposed to URL variables, which is the default.
 
-    @param exclude takes a list of names of variables you don't want exported, even though 
+    @param exclude takes a list of names of variables you don't want exported, even though
     they might be listed in the args. The names take the same form as in the args list.
 
     @param override takes a list of the same format as args, which will get exported no matter
@@ -233,7 +233,7 @@ ad_proc -deprecated ad_export_vars {
     set override_p 0
     foreach argument { include override } {
         foreach arg [set $argument] {
-            if { [llength $arg] == 1 } { 
+            if { [llength $arg] == 1 } {
                 if { $override_p || $arg ni $exclude } {
                     upvar $arg var
                     if { [array exists var] } {
@@ -275,13 +275,13 @@ ad_proc -deprecated ad_export_vars {
         }
         incr override_p
     }
-    
+
     ####################
     #
     # Translate this into the desired output form
     #
     ####################
-    
+
     if { !$form_p } {
         set export_list [list]
         foreach varname [array names export] {
@@ -298,9 +298,9 @@ ad_proc -deprecated ad_export_vars {
     }
 }
 
-ad_proc -deprecated export_form_vars { 
+ad_proc -deprecated export_form_vars {
     -sign:boolean
-    args 
+    args
 } {
     Exports a number of variables as hidden input fields in a form.
     Specify a list of variable names. The proc will reach up in the caller's name space
@@ -323,7 +323,7 @@ ad_proc -deprecated export_form_vars {
     ensures that the value hasn't been tampered with at the user's end.
 
     @see export_vars
-} { 
+} {
     set hidden ""
     foreach var_spec $args {
         lassign [split $var_spec ":"] var type
@@ -349,7 +349,7 @@ ad_proc -deprecated export_form_vars {
 
 ad_proc -deprecated export_url_vars {
     -sign:boolean
-    args 
+    args
 } {
     export_vars is now the preferred interface.
 
@@ -360,19 +360,19 @@ ad_proc -deprecated export_url_vars {
 
     <p>
 
-    Instead of naming a variable you can also say name=value. Note that the value here is not 
+    Instead of naming a variable you can also say name=value. Note that the value here is not
     the name of a variable but the literal value you want to export e.g.,
     <code>export_url_vars [ns_urlencode foo]=[ns_urlencode $the_value]</code>.
 
     <p>
 
-    For normal variables, you can say <code>export_url_vars foo:multiple</code>. In this case, 
-    the value of foo will be treated as a Tcl list, and each value will be output separately e.g., 
+    For normal variables, you can say <code>export_url_vars foo:multiple</code>. In this case,
+    the value of foo will be treated as a Tcl list, and each value will be output separately e.g.,
     foo=item0&foo=item1&foo=item2...
 
     <p>
 
-    You cannot combine the foo=bar syntax with the foo:multiple syntax. Why? Because there's no way we can distinguish 
+    You cannot combine the foo=bar syntax with the foo:multiple syntax. Why? Because there's no way we can distinguish
     between the :multiple being part of the value of foo or being a flag intended for export_url_vars.
 
     @param sign If this flag is set, all the variables output will be
@@ -385,9 +385,9 @@ ad_proc -deprecated export_url_vars {
     ensures that the value hasn't been tampered with at the user's end.
 
     @see export_vars
-} { 
-    set params {} 
-    foreach var_spec $args { 
+} {
+    set params {}
+    foreach var_spec $args {
         if { [string first "=" $var_spec] != -1 } {
             # There shouldn't be more than one equal sign, since the value should already be url-encoded.
             lassign [split $var_spec "="] var value
@@ -406,7 +406,7 @@ ad_proc -deprecated export_url_vars {
                         }
                     }
                     default {
-                        lappend params "[ns_urlencode $var]=[ns_urlencode $upvar_value]" 
+                        lappend params "[ns_urlencode $var]=[ns_urlencode $upvar_value]"
                     }
                 }
                 if { $sign_p } {
@@ -415,7 +415,7 @@ ad_proc -deprecated export_url_vars {
             }
         }
     }
-    
+
     return [join $params "&"]
 }
 
@@ -450,22 +450,22 @@ ad_proc -deprecated -private set_encoding {
     (i.e., names and aliases in the sense of <a
      href="http://www.iana.org/assignments/character-sets">IANA's
      character sets registry</a>) is provided by:</p>
-    
+
     <ul>
     <li>A static, built-in correspondence map: see nsd/encoding.c</li>
     <li>An extensible correspondence map (i.e., the ns/charsets
                                           section in config.tcl).</li>
     </ul>
-    
+
     <p>[ns_encodingfortype] introduces several levels of precedence
     when resolving the actual IANA/MIME charset and the corresponding
     Tcl encoding to use:</p>
-    
+
     <ol>
     <li> The "content_type" string contains a charset specification,
     e.g.: "text/xml; charset=UTF-8". This spec fragment takes the
     highest precedence.</li>
-    
+
     <li> The "content_type" string points to a "text/*" media subtype,
     but does not specify a charset (e.g., "text/xml"). In this case, the
     charset defined by ns/parameters/OutputCharset (see config.tcl)
@@ -473,27 +473,27 @@ ad_proc -deprecated -private set_encoding {
     "iso-8859-1" (see tcl/charsets.tcl; this follows from <a
                   href="http://tools.ietf.org/html/rfc2616">RFC 2616 (HTTP 1.1)</a>;
                   Section 3.7.1).</li>
-    
+
     <li>If neither case 1 or case 2 become effective, the encoding is
     resolved to "binary".</li>
-    
+
     <li>If [ns_encodingfortype] fails to resolve any Tcl encoding name
     (i.e., returns an empty string), the general fallback is "iso8859-1"
     for text/* media subtypes and "binary" for any other. This is the
     case in two situations:
-    
+
     <ul>
     <li>Invalid IANA/MIME charsets: The name in the "charset" parameter
     of the content type spec is not a valid name or alias in <a
     href="http://www.iana.org/assignments/character-sets">IANA's
     character sets registry</a> (a special variant would be an empty
                                 charset value, e.g. "text/plain; charset=")</li>
-    
+
     <li>Unknown IANA/MIME charsets: The name in the "charset" parameter
     of the content type spec does not match any known (= registered)
     IANA/MIME charset in the MIME/Tcl mappings.</li>
     </ul>
-    
+
     </li>
     </ol>
 
@@ -503,7 +503,7 @@ ad_proc -deprecated -private set_encoding {
     <li><a href="http://sourceforge.net/tracker/?func=detail&atid=103152&aid=932459&group_id=3152">http://sourceforge.net/tracker/?func=detail&atid=103152&aid=932459&group_id=3152</a></li>
     <li><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=962233&group_id=3152&atid=353152">http://sourceforge.net/tracker/index.php?func=detail&aid=962233&group_id=3152&atid=353152</a></li>
     </ul>
-    
+
     @author stefan.sobernig@wu.ac.at
 } {
     set trl [expr {[string match "text/*" $content_type] ? $text_translation : "binary"}]
@@ -518,7 +518,7 @@ ad_proc -deprecated -private set_encoding {
 ad_proc -deprecated validate_integer {field_name string} {
     Throws an error if the string isn't a decimal integer; otherwise
     strips any leading zeros (so this won't work for octals) and returns
-    the result.  
+    the result.
     <p>
     validate via ad_page_contract
 
@@ -598,14 +598,14 @@ ad_proc -deprecated validate_ad_dateentrywidget {field_name column form {allow_n
     return $date
 }
 
-ad_proc -deprecated util_ReturnMetaRefresh { 
-    url 
-    { seconds_delay 0 } 
+ad_proc -deprecated util_ReturnMetaRefresh {
+    url
+    { seconds_delay 0 }
 } {
     Ugly workaround to deal with IE5.0 bug handling
-    multipart/form-data using                                                                                  
-    Meta Refresh page instead of a redirect.                                                                                                                   
-    
+    multipart/form-data using
+    Meta Refresh page instead of a redirect.
+
 } {
     ad_return_top_of_page [subst {
         <head>
@@ -646,7 +646,7 @@ ad_proc -public -deprecated ad_block_sql_urls {
 } {
 
     A filter that detect attempts to smuggle in SQL code through form data
-    variables. The use of bind variables and ad_page_contract input 
+    variables. The use of bind variables and ad_page_contract input
     validation to prevent SQL smuggling is preferred.
 
     @see ad_page_contract
@@ -681,7 +681,7 @@ ad_proc -public -deprecated ad_block_sql_urls {
         # characters in length.
         #
         if {
-            [regexp -nocase {[^a-z_]or[^a-z0-9_]} $value] 
+            [regexp -nocase {[^a-z_]or[^a-z0-9_]} $value]
             || [regexp -nocase {union([^a-z0-9_].*all)?[^a-z0-9_].*select} $value]
         } {
             # Looks like the user has added "union [all] select" to
@@ -722,11 +722,11 @@ ad_proc -public -deprecated ad_block_sql_urls {
             }
 
             if {
-                $parse_result_integer == 0 
+                $parse_result_integer == 0
                 || $parse_result_integer == -904
-                || $parse_result_integer == -1789 
-                || $parse_result_string == 0 
-                || $parse_result_string == -904 
+                || $parse_result_integer == -1789
+                || $parse_result_string == 0
+                || $parse_result_string == -904
                 || $parse_result_string == -1789
             } {
                 # Code -904 means "invalid column", -1789 means
@@ -752,10 +752,10 @@ ad_proc -public -deprecated ad_block_sql_urls {
 }
 
 ad_proc -deprecated ad_present_user {
-    user_id 
+    user_id
     name
 } {
-    This function is an alias to acs_community_member_link 
+    This function is an alias to acs_community_member_link
     and receives identical parameters, but the former finds out the name
     of the user if a blank is passed. That's why it's marked as deprecated.
 
@@ -763,17 +763,17 @@ ad_proc -deprecated ad_present_user {
 
     @author Unknown
     @author Roberto Mello
-    
+
     @see acs_community_member_link
 } {
     return [acs_community_member_link -user_id $user_id -label $name]
 }
 
 ad_proc -deprecated ad_admin_present_user {
-    user_id 
+    user_id
     name
 } {
-    This function is an alias to acs_community_member_admin_link 
+    This function is an alias to acs_community_member_admin_link
     and receives identical parameters, but the former finds out the name
     of the user if a blank is passed. That's why it's marked as deprecated.
 
@@ -790,7 +790,7 @@ ad_proc -deprecated ad_admin_present_user {
 ad_proc -deprecated ad_header {
     {-focus ""}
     page_title
-    {extra_stuff_for_document_head ""} 
+    {extra_stuff_for_document_head ""}
 } {
     writes HEAD, TITLE, and BODY tags to start off pages in a consistent fashion
 
@@ -802,7 +802,7 @@ ad_proc -deprecated ad_header {
 ad_proc -deprecated ad_header_with_extra_stuff {
     {-focus ""}
     page_title
-    {extra_stuff_for_document_head ""} 
+    {extra_stuff_for_document_head ""}
     {pre_content_html ""}
 } {
     This is the version of the ad_header that accepts extra stuff for the document head and pre-page content html
@@ -834,11 +834,11 @@ $extra_stuff_for_document_head
 }
 
 ad_proc -deprecated ad_footer {
-    {signatory ""} 
+    {signatory ""}
     {suppress_curriculum_bar_p 0}
 } {
-    Writes a horizontal rule, a mailto address box 
-    (ad_system_owner if not specified as an argument), 
+    Writes a horizontal rule, a mailto address box
+    (ad_system_owner if not specified as an argument),
     and then closes the BODY and HTML tags
 
 
@@ -847,7 +847,7 @@ ad_proc -deprecated ad_footer {
     global sidegraphic_displayed_p
     if { $signatory eq "" } {
 	set signatory [ad_system_owner]
-    } 
+    }
     if { [info exists sidegraphic_displayed_p] && $sidegraphic_displayed_p } {
 	# we put in a BR CLEAR=RIGHT so that the signature will clear any side graphic
 	# from the ad-sidegraphic.tcl package
@@ -893,14 +893,14 @@ ad_proc -deprecated ad_admin_header {
     {-focus ""}
     page_title
 } {
-    
+
     @see  Documentation on the site master template for the proper way to standardize page headers
 } {
     return [ad_header_with_extra_stuff -focus $focus $page_title]
 }
 
 ad_proc -deprecated ad_admin_footer {} {
-    Signs pages with ad_admin_owner (usually a programmer who can fix 
+    Signs pages with ad_admin_owner (usually a programmer who can fix
     bugs) rather than the signatory of the user pages
 
 
@@ -918,7 +918,7 @@ $ds_link
 </html>"
 }
 
-ad_proc -deprecated ad_get_user_info {} { 
+ad_proc -deprecated ad_get_user_info {} {
     Sets first_names, last_name, email in the environment of its caller.
     @return ad_return_error if user_id can't be found.
 
@@ -951,11 +951,11 @@ ad_proc -deprecated ad_parameter {
     {package_key ""}
     {default ""}
 } {
-    Package instances can have parameters associated with them.  This function is used for accessing  
+    Package instances can have parameters associated with them.  This function is used for accessing
     and setting these values.  Parameter values are stored in the database and cached within memory.
     New parameters can be created with the <a href="/acs-admin/apm/">APM</a> and values can be set
     using the <a href="/admin/site-map">Site Map UI.</a>.  Because parameters are specified on an instance
-    basis, setting the package_key parameter (preserved from the old version of this function) does not 
+    basis, setting the package_key parameter (preserved from the old version of this function) does not
     affect the parameter retrieved.  If the code that calls ad_parameter is being called within the scope
     of a running server, the package_id will be determined automatically.  However, if you want to use a
     parameter on server startup or access an arbitrary parameter (e.g., you are writing bboard code, but
@@ -968,7 +968,7 @@ ad_proc -deprecated ad_parameter {
     @see parameter::get
 
     @param set Use this if you want to indicate a value to set the parameter to.
-    @param package_id Specify this if you want to manually specify what object id to use the new parameter. 
+    @param package_id Specify this if you want to manually specify what object id to use the new parameter.
     @return The parameter of the object or if it doesn't exist, the default.
 } {
     if {[info exists set]} {
@@ -1203,11 +1203,11 @@ ad_proc -deprecated philg_quote_double_quotes {arg} {
 
 
 ad_proc -deprecated ad_dimensional_set_variables {option_list {options_set ""}} {
-    set the variables defined in option_list from the form provided 
-    (form defaults to ad_conn form) or to default value from option_list if 
+    set the variables defined in option_list from the form provided
+    (form defaults to ad_conn form) or to default value from option_list if
     not in the form data.
     <p>
-    You only really need to call this if you need the variables 
+    You only really need to call this if you need the variables
     (for example to pick which select statement and table to actually use)
 } {
     set out {}
@@ -1220,7 +1220,7 @@ ad_proc -deprecated ad_dimensional_set_variables {option_list {options_set ""}} 
         set options_set [ns_getform]
     }
 
-    foreach option $option_list { 
+    foreach option $option_list {
         # find out what the current option value is.
         # check if a default is set otherwise the first value is used
         set option_key [lindex $option 0]
@@ -1234,7 +1234,7 @@ ad_proc -deprecated ad_dimensional_set_variables {option_list {options_set ""}} 
     }
 }
 
-ad_proc -deprecated ad_table { 
+ad_proc -deprecated ad_table {
     {-Torder_target_url {}}
     {-Torderby {}}
     {-Tasc_order_img {^}}
@@ -1263,57 +1263,57 @@ ad_proc -deprecated ad_table {
 
     DRB: New code should use the listbuilder.
 
-    Note: all the variables in this function are named Tblah since we could potentially 
+    Note: all the variables in this function are named Tblah since we could potentially
     have namespace collisions
     <p>
     build and return an html fragment given an active query and a data definition.
-    <ul> 
-    <li> sql_qry -- The query that should be executed to generate the table. <br> 
+    <ul>
+    <li> sql_qry -- The query that should be executed to generate the table. <br>
     You can specify an optional -bind argument to specify a ns_set of bind variables.
     <li> Tdatadef -- the table declaration.
     </ul>
 
     Datadef structure :
-    <pre> 
-    { 
+    <pre>
+    {
         {column_id "Column_Heading" order_clause display_info}
         ...
     }
     </pre>
     <ul>
-    <li> column_id -- what to set as orderby for sorting and also is 
+    <li> column_id -- what to set as orderby for sorting and also is
          the default variable for the table cell.
 
-    <li> the text for the heading to be wrapped in &lt;th&gt; and &lt;/th&gt; tags. 
-         I am not entirely happy that things are wrapped automatically since you might not 
+    <li> the text for the heading to be wrapped in &lt;th&gt; and &lt;/th&gt; tags.
+         I am not entirely happy that things are wrapped automatically since you might not
          want plain old th tags but I also don;t want to add another field in the structure.
 
-    <li> order_clause -- the order clause for the field.  If null it defaults to 
+    <li> order_clause -- the order clause for the field.  If null it defaults to
          "column_id $order".  It is also interpolated, with orderby and order
          defined as variables so that:
          <pre>
              {upper(last_name) $order, upper(first_names) $order}
          </pre>
          would do the right thing.
-         <p> 
+         <p>
          the value "no_sort" should be used for columns which should not allow sorting.
 	 <p>
 	 the value "sort_by_pos" should be used if the columns passed in
 	 are column positions rather than column names.
 
-    <li> display_info.  If this is a null string you just default to generating 
+    <li> display_info.  If this is a null string you just default to generating
          &lt;td&gt;column_id&lt;/td&gt;.  If it is a string in the lookup list
          then special formatting is applied; this is l r c tf 01 for
-         align=left right center, Yes/No (from tf), 
+         align=left right center, Yes/No (from tf),
          Yes/No from 0/1.
-          
+
          <p>
-         if the display stuff is not any of the above then it is interpolated and the results 
+         if the display stuff is not any of the above then it is interpolated and the results
          returned (w/o any &lt;td&gt; tags put in).
     An example:
     <pre>
-    set table_def { 
-        {ffn "Full Name" 
+    set table_def {
+        {ffn "Full Name"
             {upper(last_name) $order, upper(first_names) $order}
             {&lt;td&gt;&lt;a href="/admin/users/one?user_id=$user_id"&gt;$first_names&nbsp;$last_name&lt;/a&gt;&lt;/td&gt;}}
         {email "e-Mail" {} {&lt;td&gt;&lt;a href="mailto:$email"&gt;$email&lt;/a&gt;}}
@@ -1321,7 +1321,7 @@ ad_proc -deprecated ad_table {
         {user_state "State" {} {}}
         {last_visit "Last Visit" {} r}
         {actions "Actions" no_sort {&lt;td&gt;
-                &lt;a href="/admin/users/basic-info-update?user_id=$user_id"&gt;Edit Info&lt;/a&gt; | 
+                &lt;a href="/admin/users/basic-info-update?user_id=$user_id"&gt;Edit Info&lt;/a&gt; |
                 &lt;a href="/admin/users/password-update?user_id=$user_id"&gt;New Password&lt;/a&gt; |
             [ad_registration_finite_state_machine_admin_links $user_state $user_id]}}
     }
@@ -1345,24 +1345,24 @@ ad_proc -deprecated ad_table {
 	set Tn_bands [llength $Tband_colors]
 	set Tn_band_classes [llength $Tband_classes]
 	set Tform [ad_conn form]
-	
+
 	# export variables from calling environment
 	if {$Textra_vars ne ""} {
 	    foreach Tvar $Textra_vars {
 		upvar $Tvar $Tvar
 	    }
 	}
-	
+
 	# get the current ordering information
 	set Torderbykey {::not_sorted::}
 	set Treverse {}
 	regexp {^([^*,]+)([*])?} $Torderby match Torderbykey Treverse
 	if {$Treverse eq "*"} {
 	    set Torder desc
-	} else { 
+	} else {
 	    set Torder asc
 	}
-	
+
 	# set up the target url for new sorts
 	if {$Torder_target_url eq ""} {
 	    set Torder_target_url [ad_conn url]
@@ -1372,14 +1372,14 @@ ad_proc -deprecated ad_table {
 	    set Texport {}
 	}
 	set Tsort_url "$Torder_target_url?${Texport}orderby$Tsuffix="
-	
+
 	set Thtml {}
 	set Theader {}
-	
+
 	# build the list of columns to display...
 	set Tcolumn_list [ad_table_column_list $Tdatadef $Tcolumns]
-	
-	# generate the header code 
+
+	# generate the header code
 	#
 	append Theader "<table $Ttable_extra_html>\n"
 	if {$Theader_row_extra eq ""} {
@@ -1392,9 +1392,9 @@ ad_proc -deprecated ad_table {
 	    if { ( [ns_set find $selection [lindex $Tcol 0]] < 0
 		   && ([lindex $Tcol 2] eq "" || [lindex $Tcol 2] ne "sort_by_pos")
 		   )
-		 || [lindex $Tcol 2] eq "no_sort" 
+		 || [lindex $Tcol 2] eq "no_sort"
 	     } {
-		
+
 		# not either a column in the select or has sort code
 		# then just a plain text header so do not do sorty things
 		append Theader " <th>[lindex $Tcol 1]</th>\n"
@@ -1415,54 +1415,54 @@ ad_proc -deprecated ad_table {
 	    }
 	}
 	append Theader "</tr>\n"
-	
+
 	#
-	# This has gotten kind of ugly.  Here we are looping over the 
-	# rows returned and then potentially a list of ns_sets which can 
+	# This has gotten kind of ugly.  Here we are looping over the
+	# rows returned and then potentially a list of ns_sets which can
 	# be passed in (grrr.  Richard Li needs for general protections stuff
 	# for "fake" public record which does not exist in DB).
-	# 
-	
+	#
+
 	set Tpost_data 0
-	
-	while { 1 } { 
-	    if {!$Tpost_data && [ns_db getrow $Tdb $selection]} {     
+
+	while { 1 } {
+	    if {!$Tpost_data && [ns_db getrow $Tdb $selection]} {
 		# in all its evil majesty
 		set_variables_after_query
-	    } else { 
+	    } else {
 		# move on to fake rows...
 		incr Tpost_data
-	    } 
-	    
-	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } { 
+	    }
+
+	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } {
 		# bind the Tpost_data_ns_sets row of the passed in data
 		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1]
-	    } elseif { $Tpost_data } { 
+	    } elseif { $Tpost_data } {
 		# past the end of the fake data drop out.
 		break
 	    }
-	    
+
 	    if { $Tmax_rows && $Tcount >= $Tmax_rows } {
-		if { ! $Tpost_data } { 
+		if { ! $Tpost_data } {
 		    # we hit max count and had rows left to read...
 		    ns_db flush $Tdb
 		}
 		break
 	    }
-	    
-	    # deal with putting in the header if need 
+
+	    # deal with putting in the header if need
 	    if { $Tcount == 0 } {
 		append Thtml "$Theader"
-	    } elseif { $Tpage_count == 0 }  { 
+	    } elseif { $Tpage_count == 0 }  {
 		append Thtml "</table>\n$Ttable_break_html\n$Theader"
 	    }
 
 	    # first check if we are in audit mode and if the audit columns have changed
 	    set Tdisplay_changes_only 0
-	    if {$Taudit ne "" && $Tcount > 0} { 
-		# check if the audit key columns changed 
-		foreach Taudit_key $Taudit { 
-		    if {[set $Taudit_key] eq [set P$Taudit_key] } { 
+	    if {$Taudit ne "" && $Tcount > 0} {
+		# check if the audit key columns changed
+		foreach Taudit_key $Taudit {
+		    if {[set $Taudit_key] eq [set P$Taudit_key] } {
 			set Tdisplay_changes_only 1
 		    }
 		}
@@ -1478,7 +1478,7 @@ ad_proc -deprecated ad_table {
 	    }
 	    incr Tpage_count
 
-	    if { $Trows_per_page && $Tpage_count >= $Trows_per_page } { 
+	    if { $Trows_per_page && $Tpage_count >= $Trows_per_page } {
 		set Tband_color 0
 		set Tband_class 0
 		set Tband_count 0
@@ -1487,7 +1487,7 @@ ad_proc -deprecated ad_table {
 	    }
 
             set Trow_default {}
-	    # generate the row band color 
+	    # generate the row band color
             if { $Tband_count >= $Trows_per_band } {
                 set Tband_count 0
                 set Tband_color [expr {($Tband_color + 1) % $Tn_bands} ]
@@ -1502,15 +1502,15 @@ ad_proc -deprecated ad_table {
                 append Trow_default " class=\"[lindex $Tband_classes $Tband_class]\""
             }
 
-	    
+
             set Trow_default "<tr$Trow_default>"
 
 	    append Thtml [subst $Trow_code]
-	    
+
 	    foreach Ti $Tcolumn_list {
 		set Tcol [lindex $Tdatadef $Ti]
 		# If we got some special formatting code we handle it
-		# single characters r l c are special for alignment 
+		# single characters r l c are special for alignment
 		set Tformat [lindex $Tcol 3]
 		set Tcolumn [lindex $Tcol 0]
 		switch -- $Tformat {
@@ -1524,12 +1524,12 @@ ad_proc -deprecated ad_table {
 		    default {set Tdisplay_field " [subst $Tformat]\n"}
 		}
 
-		if { $Tdisplay_changes_only 
-		     && $Tdisplay_field eq $Tlast_display($Ti) } { 
+		if { $Tdisplay_changes_only
+		     && $Tdisplay_field eq $Tlast_display($Ti) } {
 		    set Tdisplay_field {<td>&nbsp;</td>}
-		} else { 
+		} else {
 		    set Tlast_display($Ti) $Tdisplay_field
-		} 
+		}
 		append Thtml $Tdisplay_field
 	    }
 
@@ -1537,10 +1537,10 @@ ad_proc -deprecated ad_table {
 
 	    # keep the last row around so we can do fancy things.
 	    # so on next row we can say things like if $Pvar != $var not blank
-	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } { 
+	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } {
 		# bind the Tpost_data_ns_sets row of the passed in data
 		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1] P
-	    } else { 
+	    } else {
 		set_variables_after_query_not_selection $selection P
 	    }
 	}
@@ -1548,10 +1548,10 @@ ad_proc -deprecated ad_table {
 	if { $Tcount > 0} {
 	    append Thtml "$Textra_rows
 </table>\n"
-	} else { 
+	} else {
 	    append Thtml $Tmissing_text
 	}
-    }    
+    }
     return $Thtml
 }
 
@@ -1563,22 +1563,22 @@ ad_proc -deprecated ad_table_column_list {
     <p>
     returns a list of indexes into the columns one per column it found
     <p>
-    -sortable from t/f/all 
+    -sortable from t/f/all
 } {
     set column_list {}
     if {$columns eq ""} {
         for {set i 0} {$i < [llength $datadef]} {incr i} {
-            if {$sortable eq "all" 
+            if {$sortable eq "all"
                 || ($sortable == "t" && [lindex $datadef $i 2] ne "no_sort")
                 || ($sortable == "f" && [lindex $datadef $i 2] eq "no_sort")
             } {
                 lappend column_list $i
-            } 
+            }
         }
-    } else { 
+    } else {
         set colnames {}
-        foreach col $datadef { 
-            if {$sortable eq "all" 
+        foreach col $datadef {
+            if {$sortable eq "all"
                 || ($sortable == "t" && [lindex $col 2] ne "no_sort")
                 || ($sortable == "f" && [lindex $col 2] eq "no_sort")
             } {
@@ -1595,13 +1595,13 @@ ad_proc -deprecated ad_table_column_list {
             }
         }
     }
-    
+
     return $column_list
 }
 
 ad_proc -deprecated ad_sort_primary_key {orderby} {
     return the primary (first) key of an order spec
-    used by 
+    used by
 } {
     if {[regexp {^([^*,]+)} $orderby match]} {
         return $match
@@ -1623,42 +1623,42 @@ ad_proc -deprecated ad_table_same varname {
         return 0
     }
 }
-        
+
 ad_proc -deprecated ad_table_span {str {td_html "align=\"left\""}} {
-    given string the function generates a row which spans the 
+    given string the function generates a row which spans the
     whole table.
 } {
     return "<tr><td colspan=\"[uplevel llength \$Tcolumn_list]\" $td_html>$str</td></tr>"
 }
 
 ad_proc -deprecated ad_table_form {
-    datadef 
-    {type select} 
-    {return_url {}} 
-    {item_group {}} 
-    {item {}} 
-    {columns {}} 
+    datadef
+    {type select}
+    {return_url {}}
+    {item_group {}}
+    {item {}}
+    {columns {}}
     {allowed {}}
 } {
-    builds a form for choosing the columns to display 
+    builds a form for choosing the columns to display
     <p>
     columns is a list of the currently selected columns.
     <p>
-    allowed is the list of all the displayable columns, if empty 
+    allowed is the list of all the displayable columns, if empty
     all columns are allowed.
 } {
-    # first build a map of all available columns 
+    # first build a map of all available columns
     set sel_list [ad_table_column_list $datadef $allowed]
-    
-    # build the map of currently selected columns 
+
+    # build the map of currently selected columns
     set sel_columns [ad_table_column_list $datadef $columns]
-    
+
     set max_columns [llength $sel_list]
     set n_sel_columns [llength $sel_columns]
 
     set html {}
     if {$item eq "CreateNewCustom" } {
-        set item {} 
+        set item {}
     }
     # now spit out the form fragment.
     if {$item ne ""} {
@@ -1673,7 +1673,7 @@ ad_proc -deprecated ad_table_form {
         append html "</form>"
     }
 
-    append html "<form method=get action=\"/tools/table-custom\">" 
+    append html "<form method=get action=\"/tools/table-custom\">"
     if {$return_url ne ""} {
         append html "[export_vars -form {return_url}]"
     }
@@ -1701,35 +1701,35 @@ ad_proc -deprecated ad_table_form {
     if {$type eq "select" } {
         # select table
         set options "<option value=\"\">---</option>"
-        foreach opt $sel_list { 
+        foreach opt $sel_list {
             append options " <option value=\"[lindex $datadef $opt 0]\">[lindex $datadef $opt 1]</option>"
         }
-    
+
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
                 set match [lindex $datadef [lindex $sel_columns $i] 0]
                 regsub "(<option )(value=\"$match\">)" $options "\\1 selected=\"selected\" \\2" out
-            } else { 
+            } else {
                 set out $options
             }
             append html "<tr><th>[expr {$i + 1}]</th><td><select name=\"col\">$out</select></td></tr>\n"
         }
-    } else { 
+    } else {
         # radio button table
         append html "<tr><th>Col \#</th>"
-        foreach opt $sel_list { 
+        foreach opt $sel_list {
             append html "<th>[lindex $datadef $opt 1]</th>"
         }
         append html "</tr>"
 
-        foreach opt $sel_list { 
+        foreach opt $sel_list {
             append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex $datadef $opt 0]\"></td>"
         }
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
                 set match [lindex $datadef [lindex $sel_columns $i] 0]
                 regsub "( type=\"radio\" )(value=\"$match\">)" $options "\\1 checked=\"checked\" \\2" out
-            } else { 
+            } else {
                 set out $options
             }
             regsub -all {@@} $out $i out
@@ -1742,12 +1742,12 @@ ad_proc -deprecated ad_table_form {
 }
 
 ad_proc -deprecated ad_table_sort_form {
-    datadef 
-    {type select} 
-    {return_url {}} 
-    {item_group {}} 
-    {item {}} 
-    {sort_spec {}} 
+    datadef
+    {type select}
+    {return_url {}}
+    {item_group {}}
+    {item {}}
+    {sort_spec {}}
     {allowed {}}
 } {
     builds a form for setting up custom sorts.
@@ -1755,7 +1755,7 @@ ad_proc -deprecated ad_table_sort_form {
     <ul>
       <li> datadef is the table definition as in ad_table.
       <li> type is select or radio (only select is implemented now)
-      <li> return_url is the return url passed through to the page that validates and saves the 
+      <li> return_url is the return url passed through to the page that validates and saves the
          sort customization.
       <li> item_group is a string identifying the customization "ticket_tracker_main_sort" for example.
       <li> item is the user entered identifier
@@ -1763,15 +1763,15 @@ ad_proc -deprecated ad_table_sort_form {
       <li>  allowed is the list of all the columns allowed, if empty all are allowed.
     </ul>
     <p>
-    An example from the ticket system: 
+    An example from the ticket system:
     <pre>
       ad_table_sort_form $tabledef select $return_url ticket_tracker_main_sort $ticket_sort $orderby
     </pre>
 } {
-    # first build a map of all available columns 
+    # first build a map of all available columns
     set sel_list [ad_table_column_list -sortable t $datadef $allowed]
-    
-    # build the map of currently selected columns 
+
+    # build the map of currently selected columns
     set full_column [split $sort_spec ","]
     set sel_columns [list]
     set direction [list]
@@ -1785,13 +1785,13 @@ ad_proc -deprecated ad_table_sort_form {
         lappend sel_columns $coln
         lappend direction $dirn
     }
-    
+
     set max_columns 4
     set n_sel_columns [llength $sel_columns]
 
     set html {}
     if {$item eq "CreateNewCustom" } {
-        set item {} 
+        set item {}
     }
     # now spit out the form fragment.
     if {$item ne ""} {
@@ -1806,7 +1806,7 @@ ad_proc -deprecated ad_table_sort_form {
         append html "</form>"
     }
 
-    append html "<form method=get action=\"/tools/sort-custom\">" 
+    append html "<form method=get action=\"/tools/sort-custom\">"
     if {$return_url ne ""} {
         append html "[export_vars -form {return_url}]"
     }
@@ -1832,15 +1832,15 @@ ad_proc -deprecated ad_table_sort_form {
     }
 
     set options "<option value=\"\">---</option>"
-    foreach opt $sel_list { 
+    foreach opt $sel_list {
         append options " <option value=\"[lindex $datadef $opt 0]\">[lindex $datadef $opt 1]</option>"
     }
-    
+
     for {set i 0} { $i < $max_columns} {incr i} {
         if {$i < $n_sel_columns} {
             set match [lindex $sel_columns $i]
             regsub "(<option )(value=\"$match\">)" $options "\\1 selected=\"selected\" \\2" out
-        } else { 
+        } else {
             set out $options
         }
         append html "<tr><th>[expr {$i + 1}]</th><td><select name=\"col\">$out</select>"
@@ -1850,7 +1850,7 @@ ad_proc -deprecated ad_table_sort_form {
             }
             default {
                 append html "<select name=\"dir\"><option value=\"asc\">increasing</option><option value=\"desc\" selected=\"selected\">decreasing</option></select>"
-         
+
             }
         }
         append html "\n</td></tr>\n"
@@ -1883,10 +1883,10 @@ ad_proc -deprecated ad_order_by_from_sort_spec {sort_by tabledef} {
                         append order_by_clause ", "
                     }
 
-                    # tack on the order by clause 
+                    # tack on the order by clause
                     if {[lindex $order_spec 2] ne "" && [lindex $order_spec 2] ne "sort_by_pos"} {
                         append order_by_clause "[subst [lindex $order_spec 2]]"
-                    } else { 
+                    } else {
                         append order_by_clause "$sort_key $order"
                     }
                     break
@@ -1939,11 +1939,11 @@ ad_proc -deprecated ad_same_page_link {variable value text {form ""}} {
     return [subst {<a href="[ns_quotehtml $href]">[ns_quotehtml $text]</a>}]
 }
 
-ad_proc -deprecated ad_reverse order { 
+ad_proc -deprecated ad_reverse order {
     returns the opposite sort order from the
-    one it is given.  Mostly for columns whose natural 
+    one it is given.  Mostly for columns whose natural
     sort order is not the default.
-} { 
+} {
     switch [string tolower $order] {
         desc {return asc}
         asc {return desc}
@@ -1952,84 +1952,84 @@ ad_proc -deprecated ad_reverse order {
 }
 
 ad_proc -deprecated ad_custom_load {user_id item_group item item_type} {
-    load a persisted user customization as saved by 
+    load a persisted user customization as saved by
     for example table-custom.tcl.
-} { 
-    
+} {
+
     if {
 	![db_0or1row load_user_customization {
-	    select value_type, value 
-	    from user_custom 
+	    select value_type, value
+	    from user_custom
 	    where user_id = :user_id
 	    and item_type = :item_type
-	    and item_group = :item_group 
+	    and item_group = :item_group
 	    and  item = :item
 	}]
     } {
 	set value {}
-    } 
+    }
     return $value
 }
-    
+
 ad_proc -deprecated ad_custom_list {user_id item_group item_set item_type target_url custom_url {new_string "new view"}} {
     Generates the html fragment for choosing, editing and creating
     user customized data
 } {
 
     set items [db_list custom_list {
-	select item from user_custom 
+	select item from user_custom
 	where user_id = :user_id
 	and item_type = :item_type
 	and item_group = :item_group
     }]
-    
+
     set break {}
     foreach item $items {
         if {$item_set eq $item } {
             append html "$break<strong>$item</strong>&nbsp;(<a href=\"[ns_quotehtml $custom_url$item]\">edit</a>)"
-        } else { 
+        } else {
             append html "$break<a href=\"[ns_quotehtml $target_url$item]\">$item</a>"
         }
         set break " | "
     }
     append html "$break (<a href=\"[ns_quotehtml ${custom_url}CreateNewCustom]\">$new_string</a>)\n"
-    
+
     return $html
 }
-    
 
-ad_proc -deprecated ad_custom_page_defaults {defaults} { 
-    set the page defaults. If the form is 
+
+ad_proc -deprecated ad_custom_page_defaults {defaults} {
+    set the page defaults. If the form is
     empty do a returnredirect with the defaults set
 } {
     set form [ns_getform]
-    if {$form eq "" 
-        && $defaults ne ""} { 
-        # we did not get a form so set all the variables 
+    if {$form eq ""
+        && $defaults ne ""} {
+        # we did not get a form so set all the variables
         # and redirect to set them
         set redirect "[ad_conn url]?"
         set pre {}
-        foreach kvp $defaults { 
+        foreach kvp $defaults {
             append redirect "$pre[lindex $kvp 0]=[ns_urlencode [lindex $kvp 1]]"
             set pre {&}
         }
         ad_returnredirect $redirect
         ad_script_abort
     }
-    
+
     # we have a form so stuff in the ones we don't find.
     # should think about how to support lists and ns_set persist too.
-    foreach kvp $defaults { 
-        if {[ns_set find $form [lindex $kvp 0]] < 0} { 
+    foreach kvp $defaults {
+        if {[ns_set find $form [lindex $kvp 0]] < 0} {
             ns_set put $form [lindex $kvp 0] [lindex $kvp 1]
         }
     }
 }
 
-ad_proc -deprecated ad_custom_form {return_url item_group item} { 
+ad_proc -deprecated ad_custom_form {return_url item_group item} {
     sets up the head of a form to feed to /tools/form-custom.tcl
 } {
-    append html "<form method=\"get\" action=\"/tools/form-custom\">\n" 
+    append html "<form method=\"get\" action=\"/tools/form-custom\">\n"
     if {$return_url ne ""} {
         append html "[export_vars -form {return_url}]\n"
     }
@@ -2042,25 +2042,25 @@ ad_proc -deprecated ad_custom_form {return_url item_group item} {
 }
 
 ad_proc -deprecated ad_dimensional_settings {define current} {
-    given a dimensional slider definition this routine returns a form to set the 
+    given a dimensional slider definition this routine returns a form to set the
     defaults for the given slider.
 
     NB...this does not close either the table or the form...
 } {
-    foreach opt $define { 
+    foreach opt $define {
         append html "<tr><th align=\"left\">[lindex $opt 1]</th><td>"
         append html "<select name=\"[lindex $opt 0]\">"
         #append html "<option value=\"\">-- Unset --</option>"
-        if {$current ne "" 
-            && [ns_set find $current [lindex $opt 0]] > -1} { 
+        if {$current ne ""
+            && [ns_set find $current [lindex $opt 0]] > -1} {
             set picked [ns_set get $current [lindex $opt 0]]
         } else {
 	    set picked [lindex $opt 2]
 	}
-        foreach val [lindex $opt 3] { 
-            if {$picked eq [lindex $val 0] } { 
+        foreach val [lindex $opt 3] {
+            if {$picked eq [lindex $val 0] } {
                 append html "<option selected=\"selected\" value=\"[ns_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
-            } else { 
+            } else {
                 append html "<option value=\"[ns_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
             }
         }
@@ -2082,7 +2082,7 @@ ad_proc -deprecated ad_table_orderby_sql {datadef orderby order} {
         }
     }
     return $orderclause
-}        
+}
 
 
 
@@ -2108,7 +2108,7 @@ ad_proc -deprecated set_append! { s-name v } {
     environment, if it isn't already there.</p>
 } {
     upvar $s-name s
-    
+
     if { ![set_member? $s $v] } {
 	lappend s $v
     }
@@ -2154,7 +2154,7 @@ ad_proc -deprecated set_intersection { u v } {
     <p>Returns the intersection of sets $u and $v.</p>
 } {
     set result [list]
-    
+
     foreach ue $u {
 	if { [set_member? $v $ue] } {
 	    lappend result $ue
@@ -2172,7 +2172,7 @@ ad_proc -deprecated set_intersection! { u-name v } {
 } {
     upvar $u-name u
     set result [list]
-    
+
     foreach ue $u {
 	if { [set_member? $v $ue] } {
 	    lappend result $ue
@@ -2195,7 +2195,7 @@ ad_proc -deprecated set_difference { u v } {
 	}
     }
 
-    return $result    
+    return $result
 }
 
 ad_proc -deprecated set_difference! { u-name v } {
@@ -2247,7 +2247,7 @@ ad_proc -deprecated -public ad_context_bar_ws_or_index args {
     return [ad_context_bar $args]
 }
 
-ad_proc -public -deprecated ad_admin_context_bar args { 
+ad_proc -public -deprecated ad_admin_context_bar args {
     Returns a Yahoo-style hierarchical navbar. Use ad_context_bar instead.
 
     @param args list of url desc ([list [list url desc] [list url desc] ... "terminal"])
@@ -2824,7 +2824,7 @@ ad_proc -deprecated cc_name_to_group { name } {
 
     Returns the group ID for a particular name, or an empty string
     if none exists.
-    
+
     @see group::get_id
 } {
     return [util_memoize [list cc_lookup_name_group $name]]
@@ -2834,20 +2834,20 @@ ad_proc -deprecated ad_user_new {
     email
     first_names
     last_name
-    password 
+    password
     password_question
     password_answer
-    {url ""} 
-    {email_verified_p "t"} 
-    {member_state "approved"} 
-    {user_id ""} 
-    {username ""} 
+    {url ""}
+    {email_verified_p "t"}
+    {member_state "approved"}
+    {user_id ""}
+    {username ""}
     {authority_id ""}
     {screen_name ""}
 } {
     Creates a new user in the system.  The user_id can be specified as an argument to enable double click protection.
     If this procedure succeeds, returns the new user_id.  Otherwise, returns 0.
-    
+
     @see auth::create_user
     @see auth::create_local_account
 } {
@@ -2953,7 +2953,7 @@ ad_proc -public -deprecated pkg_home {package_key} {
 #     @cvs-id $Id$
 # }
 
-# if you do a 
+# if you do a
 #   set selection [ns_db 1row $db "select foo,bar from my_table where key=37"]
 #   set_variables_after_query
 # then you will find that the Tcl vars $foo and $bar are set to whatever
@@ -2972,7 +2972,7 @@ ad_proc -public -deprecated pkg_home {package_key} {
 
 #
 # CAVEAT NERDOR:  you MUST use the variable name "selection"
-# 
+#
 
 #
 # we pick long names for the counter and limit vars
@@ -2985,7 +2985,7 @@ ad_proc -deprecated -warn set_variables_after_query {} {
 
 
     @see packages/acs-tcl/tcl/00-database-procs.tcl
-} { 
+} {
     uplevel {
 	    set set_variables_after_query_i 0
 	    set set_variables_after_query_limit [ns_set size $selection]
@@ -3003,7 +3003,7 @@ ad_proc -deprecated -warn set_variables_after_subquery {} {
 
 
     @see packages/acs-tcl/tcl/00-database-procs.tcl
-} { 
+} {
     uplevel {
 	    set set_variables_after_query_i 0
 	    set set_variables_after_query_limit [ns_set size $sub_selection]
@@ -3023,7 +3023,7 @@ ad_proc -deprecated -warn set_variables_after_query_not_selection {selection_var
 
 
     @see packages/acs-tcl/tcl/00-database-procs.tcl
-} { 
+} {
     set set_variables_after_query_i 0
     set set_variables_after_query_limit [ns_set size $selection_variable]
     while {$set_variables_after_query_i<$set_variables_after_query_limit} {
@@ -3036,9 +3036,9 @@ ad_proc -deprecated -warn set_variables_after_query_not_selection {selection_var
 }
 
 
-ad_proc -public -deprecated -warn ad_secure_conn_p {} { 
+ad_proc -public -deprecated -warn ad_secure_conn_p {} {
     Use security::secure_conn_p instead.
-    
+
     @see security::secure_conn_p
 } {
     return [security::secure_conn_p]
@@ -3054,7 +3054,7 @@ ad_proc -public -deprecated ad_get_user_id {} {
     return [ad_conn user_id]
 }
 
-ad_proc -public -deprecated -warn ad_verify_and_get_user_id { 
+ad_proc -public -deprecated -warn ad_verify_and_get_user_id {
     {-secure f}
 } {
     Returns the current user's ID. 0 indicates user is not logged in
@@ -3072,14 +3072,14 @@ ad_proc -public -deprecated ad_privacy_threshold {} {
     Pages that are consider whether to display a user's name or email
     address should test to make sure that a user's priv_ from the
     database is less than or equal to what ad_privacy_threshold returns.
-    
+
     Now deprecated.
 
     @see  ad_conn
 } {
     set session_user_id [ad_conn user_id]
     if {$session_user_id == 0} {
-	# viewer of this page isn't logged in, only show stuff 
+	# viewer of this page isn't logged in, only show stuff
 	# that is extremely unprivate
 	set privacy_threshold 0
     } else {
@@ -3201,7 +3201,7 @@ namespace eval party {
     } {
         return [permission::permission_p -party_id $user_id -object_id $party_id -privilege $privilege]
     }
-    
+
 }
 
 # Local variables:

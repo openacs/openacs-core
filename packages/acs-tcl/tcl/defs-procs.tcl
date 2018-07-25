@@ -100,15 +100,15 @@ ad_proc -public ad_site_home_link {} {
     @return a link to the user's workspace if the user is logged in. Otherwise, a link to the page root.
 } {
     if { [ad_conn user_id] != 0 } {
-	return "<a href=\"[ad_pvt_home]\">[subsite::get_element -element name]</a>"
+        return "<a href=\"[ad_pvt_home]\">[subsite::get_element -element name]</a>"
     } else {
-	# we don't know who this person is
-	return "<a href=\"[subsite::get_element -element url]\">[subsite::get_element -element name]</a>"
+        # we don't know who this person is
+        return "<a href=\"[subsite::get_element -element url]\">[subsite::get_element -element name]</a>"
     }
 }
 
 ad_proc -public ad_system_owner {} {
-    Person who owns the service 
+    Person who owns the service
     this person would be interested in user feedback, etc.
 } {
     return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemOwner]
@@ -135,7 +135,7 @@ ad_proc -public acs_community_member_page {} {
     @return the url for the community member page
 } {
     return "[subsite::get_element -element url -notrailing][parameter::get \
-	    -package_id [ad_acs_kernel_id] -parameter CommunityMemberURL]"
+                -package_id [ad_acs_kernel_id] -parameter CommunityMemberURL]"
 }
 
 ad_proc -public acs_community_member_url {
@@ -191,7 +191,7 @@ ad_proc -public ad_return_string_as_file {
     -mime_type:required
 } {
     Return a string as the content of a file
-    
+
     @param string Content of the file to be sent back
     @param filename Name of the file to be returned
     @param mime_type Mime Type of the file being returned
@@ -201,11 +201,11 @@ ad_proc -public ad_return_string_as_file {
 }
 
 ad_proc -public ad_return_complaint {
-    exception_count 
+    exception_count
     exception_text
 } {
-    Return a page complaining about the user's input 
-    (as opposed to an error in our software, for which ad_return_error 
+    Return a page complaining about the user's input
+    (as opposed to an error in our software, for which ad_return_error
     is more appropriate)
 
     @param exception_count Number of exceptions. Used to say either 'a problem' or 'some problems'.
@@ -213,22 +213,22 @@ ad_proc -public ad_return_complaint {
     @param exception_text HTML chunk to go inside an UL tag with the error messages.
 } {
     set complaint_template [parameter::get_from_package_key \
-				-package_key "acs-tcl" \
-				-parameter "ReturnComplaint" \
-				-default "/packages/acs-tcl/lib/ad-return-complaint"]
+                                -package_key "acs-tcl" \
+                                -parameter "ReturnComplaint" \
+                                -default "/packages/acs-tcl/lib/ad-return-complaint"]
     ns_return 422 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
-                                              [list exception_text $exception_text]] \
-				 $complaint_template]
-				 
+                                               [list exception_text $exception_text]] \
+                                         $complaint_template]
+
     # raise abortion flag, e.g., for templating
     set ::request_aborted [list 422 "Problem with Your Input"]
 }
 
 
 ad_proc ad_return_exception_page {
-    status 
-    title 
+    status
+    title
     explanation
 } {
     Returns an exception page.
@@ -240,16 +240,16 @@ ad_proc ad_return_exception_page {
     @param explanation Explanation for the exception.
 } {
     set error_template [parameter::get_from_package_key \
-			    -package_key "acs-tcl" \
-			    -parameter "ReturnError" \
-			    -default "/packages/acs-tcl/lib/ad-return-error"]
+                            -package_key "acs-tcl" \
+                            -parameter "ReturnError" \
+                            -default "/packages/acs-tcl/lib/ad-return-error"]
     set page [ad_parse_template -params [list [list title $title] [list explanation $explanation]] $error_template]
-    if {$status > 399 
+    if {$status > 399
         && [string match {*; MSIE *} [ns_set iget [ad_conn headers] User-Agent]]
-        && [string length $page] < 512 } { 
+        && [string length $page] < 512 } {
         append page [string repeat " " [expr {513 - [string length $page]}]]
     }
-    
+
     ns_return $status text/html $page
 
     # raise abortion flag, e.g., for templating
@@ -258,24 +258,24 @@ ad_proc ad_return_exception_page {
 
 
 ad_proc ad_return_error {
-    title 
+    title
     explanation
 } {
-    Returns a page with the HTTP 500 (Error) code, 
-    along with the given title and explanation.  Should be used 
+    Returns a page with the HTTP 500 (Error) code,
+    along with the given title and explanation.  Should be used
     when an unexpected error is detected while processing a page.
 } {
     ad_return_exception_page 500 $title $explanation
 }
 
 ad_proc ad_return_warning {
-    title 
+    title
     explanation
 } {
-    Returns a page with the HTTP 200 (Success) code, along with 
-    the given title and explanation.  Should be used when an 
-    exceptional condition arises while processing a page which 
-    the user should be warned about, but which does not qualify 
+    Returns a page with the HTTP 200 (Success) code, along with
+    the given title and explanation.  Should be used when an
+    exceptional condition arises while processing a page which
+    the user should be warned about, but which does not qualify
     as an error.
 } {
     ad_return_exception_page 200 $title $explanation
@@ -285,34 +285,34 @@ ad_proc ad_return_forbidden {
     {title ""}
     {explanation ""}
 } {
-    Returns a page with the HTTP 403 (Forbidden) code, along with 
-    the given title and explanation.  Should be used by 
-    access-control filters that determine whether a user has 
+    Returns a page with the HTTP 403 (Forbidden) code, along with
+    the given title and explanation.  Should be used by
+    access-control filters that determine whether a user has
     permission to request a particular page.
 
     Title and explanation is optional. If neither is specified,
     then a default "Permission Denied" message will be displayed.
 } {
     if { $title eq "" && $explanation eq "" } {
-	set title "Permission Denied"
-	set explanation "Sorry, you haven't been given access to this area."
+        set title "Permission Denied"
+        set explanation "Sorry, you haven't been given access to this area."
     }
     ad_return_exception_page 403 $title $explanation
 }
 
 ad_proc ad_return_if_another_copy_is_running {
-    {max_simultaneous_copies 1} 
+    {max_simultaneous_copies 1}
     {call_adp_break_p 0}
 } {
-    Returns a page to the user about how this server is busy if 
-    another copy of the same script is running.  Then terminates 
-    execution of the thread.  Useful for expensive pages that do 
-    sequential searches through database tables, etc.  You don't 
-    want to tie up all of your database handles and deny service 
-    to everyone else.  
-    
-    The call_adp_break_p argument is essential 
-    if you are calling this from an ADP page and want to avoid the 
+    Returns a page to the user about how this server is busy if
+    another copy of the same script is running.  Then terminates
+    execution of the thread.  Useful for expensive pages that do
+    sequential searches through database tables, etc.  You don't
+    want to tie up all of your database handles and deny service
+    to everyone else.
+
+    The call_adp_break_p argument is essential
+    if you are calling this from an ADP page and want to avoid the
     performance hit of continuing to parse and run.
 
     This proc is dangerous, and needs to be rewritten. See:
@@ -322,32 +322,32 @@ ad_proc ad_return_if_another_copy_is_running {
     set this_connection_url [ad_conn url]
     set n_matches 0
     foreach connection [ns_server active] {
-	set query_connection_url [lindex $connection 4]
-	if { $query_connection_url == $this_connection_url } {
-	    # we got a match (we'll always get at least one
-	    # since we should match ourselves)
-	    incr n_matches
-	}
+        set query_connection_url [lindex $connection 4]
+        if { $query_connection_url == $this_connection_url } {
+            # we got a match (we'll always get at least one
+            # since we should match ourselves)
+            incr n_matches
+        }
     }
     if { $n_matches > $max_simultaneous_copies } {
-	ad_return_warning "Too many copies" "This is an expensive page for our server, which is already running the same program on behalf of some other users.  Please try again at a less busy hour."
-	# blow out of the caller as well
-	if {$call_adp_break_p} {
-	    # we were called from an ADP page; we have to abort processing
-	    ns_adp_break
-	}
-	return -code return
+        ad_return_warning "Too many copies" "This is an expensive page for our server, which is already running the same program on behalf of some other users.  Please try again at a less busy hour."
+        # blow out of the caller as well
+        if {$call_adp_break_p} {
+            # we were called from an ADP page; we have to abort processing
+            ns_adp_break
+        }
+        return -code return
     }
     # we're okay
     return 1
 }
 
 ad_proc ad_pretty_mailing_address_from_args {
-    line1 
+    line1
     line2
-    city 
-    state 
-    postal_code 
+    city
+    state
+    postal_code
     country_code
 } {
     Returns a prettily formatted address with country name, given
@@ -358,16 +358,16 @@ ad_proc ad_pretty_mailing_address_from_args {
 } {
     set lines [list]
     if { $line2 eq "" } {
-	lappend lines $line1
+        lappend lines $line1
     } elseif { $line1 eq "" } {
-	lappend lines $line2
+        lappend lines $line2
     } else {
-	lappend lines $line1
-	lappend lines $line2
+        lappend lines $line1
+        lappend lines $line2
     }
     lappend lines "$city, $state $postal_code"
     if { $country_code ne "" && $country_code ne "us" } {
-	lappend lines [ad_country_name_from_country_code $country_code]
+        lappend lines [ad_country_name_from_country_code $country_code]
     }
     return [join $lines "\n"]
 }
@@ -376,38 +376,38 @@ ad_proc ad_pretty_mailing_address_from_args {
 # for pages that have optional decoration
 
 ad_proc ad_decorate_top {
-    simple_headline 
+    simple_headline
     potential_decoration
 } {
-    Use this for pages that might or might not have an image 
-    defined in ad.ini; if the second argument isn't the empty 
-    string, ad_decorate_top will make a one-row table for the 
+    Use this for pages that might or might not have an image
+    defined in ad.ini; if the second argument isn't the empty
+    string, ad_decorate_top will make a one-row table for the
     top of the page
 } {
     if { $potential_decoration eq "" } {
-	return $simple_headline
+        return $simple_headline
     } else {
-	return "<table cellspacing=10><tr><td>$potential_decoration<td>$simple_headline</tr></table>"
+        return "<table cellspacing=10><tr><td>$potential_decoration<td>$simple_headline</tr></table>"
     }
 }
 
 ad_proc -private ad_requested_object_id {} {
 
-    @return The requested object id, or if it is not available, the kernel id.  
+    @return The requested object id, or if it is not available, the kernel id.
 
 } {
     set package_id ""
     #  Use the object id stored in ad_conn.
     if { [ad_conn -connected_p] } {
-	set package_id [ad_conn package_id]
+        set package_id [ad_conn package_id]
     }
 
     if { $package_id eq "" } {
-	if { [catch {
-	    set package_id [ad_acs_kernel_id]
-	}] } {
-	    set package_id 0
-	}
+        if { [catch {
+            set package_id [ad_acs_kernel_id]
+        }] } {
+            set package_id 0
+        }
     }
     return $package_id
 }
@@ -431,7 +431,7 @@ ad_proc -public ad_parameter_from_file {
     # actually call 'ad_parameter param_name acs-kernel'.
 
     if { $package_key eq "" || $package_key eq "acs-kernel"} {
-	return [ns_config "ns/server/[ns_info server]/acs" $name]
+        return [ns_config "ns/server/[ns_info server]/acs" $name]
     }
 
     return [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
@@ -445,7 +445,7 @@ ad_proc -private ad_parameter_cache {
     key
     parameter_name
 } {
-    
+
     Manages the cache for ad_parameter.
     @param set Use this flag to indicate a value to set in the cache.
     @param delete Delete the value from the cache
@@ -454,19 +454,19 @@ ad_proc -private ad_parameter_cache {
      id (instance parameter) or package key (global parameter).
     @param parameter_name Specifies the parameter name that is being cached.
     @return The cached value.
-    
+
 } {
     if {$delete_p} {
-	if {[nsv_exists ad_param_$key $parameter_name]} {
-	    nsv_unset ad_param_$key $parameter_name
-	}
-	return
+        if {[nsv_exists ad_param_$key $parameter_name]} {
+            nsv_unset ad_param_$key $parameter_name
+        }
+        return
     }
     if {[info exists set]} {
-	nsv_set "ad_param_${key}" $parameter_name $set
-	return $set
+        nsv_set "ad_param_${key}" $parameter_name $set
+        return $set
     } elseif { [nsv_exists ad_param_$key $parameter_name] } {
-	return [nsv_get ad_param_$key $parameter_name]
+        return [nsv_get ad_param_$key $parameter_name]
     } elseif { $global_p } {
         set value [db_string select_global_parameter_value {
             select apm_parameter_values.attr_value
@@ -485,15 +485,15 @@ ad_proc -private ad_parameter_cache {
 
 ad_proc -private ad_parameter_cache_all {} {
     Loads all package instance parameters into the proper nsv arrays
-} { 
+} {
     # Cache all parameters for enabled packages. .
     db_foreach parameters_get_all {
-	select v.package_id, p.parameter_name, v.attr_value
-	from apm_parameters p, apm_parameter_values v
-	where p.parameter_id = v.parameter_id
+        select v.package_id, p.parameter_name, v.attr_value
+        from apm_parameters p, apm_parameter_values v
+        where p.parameter_id = v.parameter_id
     } {
-	ad_parameter_cache -set $attr_value $package_id $parameter_name
-    }	
+        ad_parameter_cache -set $attr_value $package_id $parameter_name
+    }
 }
 
 # returns particular parameter values as a Tcl list (i.e., it selects
@@ -506,16 +506,16 @@ ad_proc -public ad_parameter_all_values_as_list {
 
     Returns multiple values for a parameter as a list.
 
-} {  
+} {
     return [join [parameter::get -package_id $package_id -parameter $name ] " "]
 }
 
 ad_proc doc_return {args} {
-   
+
     A wrapper to be used instead of ns_return.  It calls
     <code>db_release_unused_handles</code> prior to calling ns_return.
     This should be used instead of <code>ns_return</code> at the bottom
-    of every non-templated user-viewable page. 
+    of every non-templated user-viewable page.
 
 } {
     # AOLserver/NaviServer releases handles automatically since ages
@@ -549,7 +549,7 @@ ad_proc -public ad_return_url {
     </pre>
 
     Example setting a variable with extra_vars:
-    
+
     <pre>
     set return_url [ad_return_url [list some_id $some_id] [some_other_id $some_other_id]]
     </pre>
@@ -596,9 +596,9 @@ ad_proc -public ad_progress_bar_begin {
     <p>Example:
 
     <pre>ad_progress_bar_begin -title "Installing..." -message_1 "Please wait..." -message_2 "Will continue automatically"</pre>
-    
+
     <pre>...</pre>
-    
+
     <pre>ad_progress_bar_end -url $next_page</pre>
 
     @param title     The title of the page
@@ -610,7 +610,7 @@ ad_proc -public ad_progress_bar_begin {
 } {
     db_release_unused_handles
     ad_http_cache_control
-    
+
     ReturnHeaders
     ns_write [ad_parse_template \
                   -params [list \
@@ -628,7 +628,7 @@ ad_proc -public ad_progress_bar_end {
     Ends the progress bar by causing the browser to redirect to a new URL.
 
     @see ad_progress_bar_begin
-} { 
+} {
     util_user_message -message $message_after_redirect
     ns_write "<script type='text/javascript' nonce='$::__csp_nonce'>window.location='$url';</script>"
     ns_conn close
