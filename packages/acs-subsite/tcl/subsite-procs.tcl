@@ -1003,7 +1003,7 @@ ad_proc -public subsite::save_theme_parameters_as {
 
     @param subsite_id Id of the subsite
     @param theme Name of the theme (theme key)
-    @param pretty_theme Pretty Name (of the theme)
+    @param pretty_name Pretty Name (of the theme)
 
     @author Gustaf Neumann
 } {

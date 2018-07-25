@@ -703,7 +703,7 @@ ad_proc -public template::list::filter_from_clauses {
     -name:required
     -comma:boolean
 } {
-    @param  and     Set this flag if you want the result to start with an ',' if the list of from clauses returned is non-empty.
+    @param  comma     Set this flag if you want the result to start with an ',' if the list of from clauses returned is non-empty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -725,7 +725,7 @@ ad_proc -public template::list::filter_select_clauses {
     -name:required
     -comma:boolean
 } {
-    @param  and     Set this flag if you want the result to start with a ',' if the list of select clauses returned is non-empty.
+    @param  comma     Set this flag if you want the result to start with a ',' if the list of select clauses returned is non-empty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -747,7 +747,7 @@ ad_proc -public template::list::from_clauses {
     -name:required
     -comma:boolean
 } {
-    @param  and     Set this flag if you want the result to start with an ',' if the list of from clauses returned is non-empty.
+    @param  comma     Set this flag if you want the result to start with an ',' if the list of from clauses returned is non-empty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -781,7 +781,7 @@ ad_proc -public template::list::element_select_clauses {
     -name:required
     -comma:boolean
 } {
-    @param  and     Set this flag if you want the result to start with a ',' if the list of select clauses returned is non-empty.
+    @param  comma     Set this flag if you want the result to start with a ',' if the list of select clauses returned is non-empty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name

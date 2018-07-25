@@ -284,7 +284,7 @@ ad_proc -private template::head::included_p {
     @author Gustaf Neumann
     @creation-date 2018-03-09
 
-    @param uri resource
+    @param resource uri resource
     @see ::template::head::includes
 } {
     return [info exists ::template::head::included($resource)]
