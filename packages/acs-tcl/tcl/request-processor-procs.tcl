@@ -271,7 +271,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
     lassign $argv proc_index debug_p arg_count proc arg
 
     rp_debug -debug $debug_p "Invoking registered procedure $proc"
-    
+
     switch -- $arg_count {
         0 { set cmd $proc }
         1 { set cmd [list $proc $arg] }
@@ -554,7 +554,7 @@ ad_proc -private rp_filter { why } {
     }
     set ad_conn_url [ad_conn url]
     ad_conn -set vhost_url $ad_conn_url
-    
+
     if {[string first [encoding convertto utf-8 \x00] $ad_conn_url] > -1} {
         ad_log warning "rp_filter: BAD CHAR in URL $ad_conn_url // rp_filter $why"
         # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
@@ -603,7 +603,7 @@ ad_proc -private rp_filter { why } {
     # ns_set get accepts a default value in 3rd argument only on
     # NaviServer; so perform the check in two steps for AOLserver
     # compatibility.
-    set upgrade_insecure_requests_p [ns_set get [ns_conn headers] Upgrade-Insecure-Requests]                                     
+    set upgrade_insecure_requests_p [ns_set get [ns_conn headers] Upgrade-Insecure-Requests]
     if {$upgrade_insecure_requests_p ne "" &&
         $upgrade_insecure_requests_p
         && [security::https_available_p]
@@ -779,7 +779,7 @@ ad_proc -private rp_filter { why } {
     if {[ns_config "ns/server/[ns_info server]/acs" LogIncludeUserId 0]} {
         ns_set put [ns_conn headers] X-User-Id [ad_conn untrusted_user_id]
     }
-    
+
     #####
     #
     # Make sure the user is authorized to make this request.
@@ -806,7 +806,7 @@ ad_proc -private rp_filter { why } {
                     permission::require_permission -object_id [ad_conn object_id] -privilege read
                 }
             }
-        } trap {AD EXCEPTION ad_script_abort} {r} {            
+        } trap {AD EXCEPTION ad_script_abort} {r} {
             rp_finish_serving_page
             rp_debug "rp_filter: page aborted return filter_return"
             ns_log notice "rp_filter: aborted url [ad_conn extra_url]"
@@ -815,7 +815,7 @@ ad_proc -private rp_filter { why } {
             rp_debug "rp_filter: return filter_ok"
         }
     }
-    
+
     return $result
 }
 
@@ -1014,11 +1014,11 @@ ad_proc -private rp_handle_request {} {
                 ds_add rp [list transformation [list notfound $root$prefix $val] \
                                $startclicks [clock clicks -microseconds]]
                 continue
-            } trap {AD EXCEPTION redirect} {url} {                   
+            } trap {AD EXCEPTION redirect} {url} {
                 ds_add rp [list transformation [list redirect $root$prefix $url] \
                                $startclicks [clock clicks -microseconds]]
                 ad_returnredirect $url
-            } trap {AD EXCEPTION directory} {dir_index} {                   
+            } trap {AD EXCEPTION directory} {dir_index} {
                 ds_add rp [list transformation [list directory $root$prefix $dir_index] \
                                $startclicks [clock clicks -microseconds]]
                 continue
@@ -1093,7 +1093,7 @@ ad_proc -private rp_handler {} {
     set recursion_count [ad_conn recursion_count]
     ad_conn -set recursion_count [incr recursion_count]
     rp_debug "rp_handler: handling request: [ns_conn method] [ns_conn url]?[ns_conn query]"
-    
+
     ad_try {
         rp_handle_request
     } on error {errorMsg} {
@@ -1216,7 +1216,7 @@ ad_proc -public rp_serve_concrete_file {file} {
         } finally {
             rp_finish_serving_page
         }
-        
+
     } elseif { [rp_file_can_be_public_p $file] } {
         set type [ns_guesstype $file]
         ds_add rp [list serve_file [list $file $type] $startclicks [clock clicks -microseconds]]
@@ -1363,7 +1363,7 @@ ad_proc -public ad_conn {args} {
     subsite_url,
     system_p,
     token,
-    untrusted_user_id, 
+    untrusted_user_id,
    user_id,
     vhost_package_url,
     vhost_subsite_url,
@@ -1586,7 +1586,7 @@ ad_proc -public ad_conn {args} {
 
                         behind_proxy_p {
                             #
-                            # Check, if we are running behind a proxy: 
+                            # Check, if we are running behind a proxy:
                             # a) the parameter "ReverseProxyMode" has to be set
                             # b) the header-field X-Forwarded-For must be present
                             #
@@ -1602,7 +1602,7 @@ ad_proc -public ad_conn {args} {
 
                         behind_secure_proxy_p {
                             #
-                            # Check, if we are running behind a secure proxy: 
+                            # Check, if we are running behind a secure proxy:
                             # a) [ad_conn behind_proxy_p] must be true
                             # b) the header-field X-SSL-Request must be 1
                             #
@@ -1613,7 +1613,7 @@ ad_proc -public ad_conn {args} {
                             }
                             return $ad_conn(behind_secure_proxy_p)
                         }
-                        
+
                         default {
                             return [ns_conn $var]
                         }
