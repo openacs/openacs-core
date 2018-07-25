@@ -540,20 +540,17 @@ ad_proc -public ad_page_contract {
     ####################
 
 
-    if { [llength $args] == 0 } {
-        set query [list]
-    } else {
+    set query [list]
 
+    if { [llength $args] > 0 } {
         set valid_args { validate errors return_errors properties }   ;# add type later
 
         # If the first arg isn't a switch, it should be the query
         if { [string index [lindex $args 0] 0] ne "-" } {
-            set query [lindex $args 0]
-            set args [lrange $args 1 end]
+            set args [lassign $args query]
         } else {
             # otherwise, accept a -query argument
             lappend valid_args query
-            set query [list]
         }
 
         ad_arg_parser $valid_args $args
