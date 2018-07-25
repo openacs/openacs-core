@@ -515,16 +515,17 @@ ad_proc -public ad_page_contract {
 
     <p>
 
-    @param docstring the documentation for your page;
-    will be parsed like ad_proc and ad_library.
+    @param docstring The documentation for your page;
+                     will be parsed like ad_proc and ad_library.
 
-    @param query the query arguments that this page accepts. The query
-    argument takes form of a list of argument specs. See above.
+    @param args If the first argument is not a switch, it should be the query arguments that this page accepts,
+                in the form of a list of argument specs. See above.
+                Otherwise, the query arguments can be passed with the -query switch.
 
-    @param properties what properties the resulting document will contain.
+    @param properties What properties the resulting document will contain.
 
     @param form Optionally supply the parameters directly here instead of fetching them from the page's form (ns_getform).
-    This should be a reference to an ns_set.
+                This should be a reference to an ns_set.
 
     @author Lars Pind (lars@pinds.com)
     @author Yonatan Feldman (yon@arsdigita.com)
