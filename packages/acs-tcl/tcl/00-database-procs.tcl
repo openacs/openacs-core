@@ -2123,22 +2123,15 @@ ad_proc -public db_0or1row {
 
 
 ad_proc -public db_1row { args } {
-    Usage:
-    <blockquote>
-    db_1row <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
-        [ -column_array <i>array_name</i> | -column_set <i>set_name</i> ]
 
-    </blockquote>
+    A wrapper for db_0or1row, which produces an error if no rows are returned.
 
-    <p>Performs the SQL query sql. If a row is returned, sets variables
-    to column values (or a set or array populated if -column_array
-                      or column_set is specified). If no rows are returned,
-    throws an error.
+    @param args Arguments to be passed to db_0or1row. Check db_0or1row proc doc
+                for details.
+
+    @see db_0or1row
 
     @return 1 if variables are set.
-    @param dbn The database name to use.  If empty_string, uses the default database.
-    @param cache_key Cache the result using given value as the key.  Default is to not cache.
-    @param cache_pool Override the default db_cache_pool
 
 } {
     if { ![uplevel ::db_0or1row $args] } {
