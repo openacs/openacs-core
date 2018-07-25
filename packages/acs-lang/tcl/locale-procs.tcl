@@ -725,33 +725,6 @@ ad_proc -public lang::conn::timezone {} {
     return $timezone
 }
 
-
-#####
-#
-# Backwards compatibility procs
-#
-#####
-ad_proc -deprecated -warn -public ad_locale_get_label { locale } {
-
-    Returns the label (name) of locale
-
-    To be removed in 5.3
-
-    @author         Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
-
-    @param locale   Code for the locale, eg "en_US"
-
-    @return         String containing the label for the locale
-
-    @see lang::util::get_label
-} {
-    return [db_string select_locale_label {
-        select label
-          from ad_locales
-         where lower(locale) = lower(:locale)
-    }]
-}
-
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
