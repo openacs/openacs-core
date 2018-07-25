@@ -250,7 +250,6 @@ ad_proc -private template::util::proc_element_compare { element1 element2 } {
 
 ad_proc -private doc::set_proc_name_source_text_comment_text { proc_block } {
     called by parse_comment_text
-    @param comment_text this should include the source text
 } {
     upvar source_txt source_txt
     upvar proc_name proc_name
@@ -269,8 +268,6 @@ ad_proc -private doc::set_proc_name_source_text_comment_text { proc_block } {
 ad_proc -private doc::parse_comment_text { proc_block } {
     called by parse_namespace
 
-    @param comment_text body of comment text to be parsed through
-    @param source_text source text of the procedure
 } {
 
     doc::set_proc_name_source_text_comment_text $proc_block
