@@ -6,9 +6,18 @@ ad_library {
      @cvs-id $Id$
 }
 
-aa_register_case -cats {
-    api
-} site_node_update_cache {
+aa_register_case \
+    -cats { api } \
+    -procs {
+        site_node::delete
+        site_node::get_node_id
+        site_node::get_url
+        site_node::init_cache
+        site_node::instantiate_and_mount s
+        ite_node::rename
+        site_node::unmount
+    } \
+    site_node_update_cache {
     Test site_node::update_cache
 } {
     aa_run_with_teardown -rollback -test_code {
@@ -80,9 +89,16 @@ aa_register_case -cats {
     }
 }
 
-aa_register_case -cats {
-   api
-} site_node_closest_ancestor_package {
+aa_register_case \
+    -cats { api } \
+    -procs {
+        site_node::closest_ancestor_package
+        site_node::get_node_id
+        site_node::instantiate_and_mount
+        site_node::new
+        subsite::main_site_id
+    } \
+    site_node_closest_ancestor_package {
     Test site_node::closest_ancestor_package
 } {
     aa_run_with_teardown -rollback -test_code {

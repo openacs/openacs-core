@@ -70,9 +70,10 @@ aa_register_case -cats {
     api 
     smoke
 } -procs {
-
-ad_context_bar
-
+    ad_context_bar
+    site_node::get
+    site_node::mount
+    site_node::new
 } ad_context_bar {
 
     Test if returns a well formed context_bar in html format from a site node.

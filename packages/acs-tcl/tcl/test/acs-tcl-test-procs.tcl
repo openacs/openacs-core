@@ -249,9 +249,15 @@ aa_register_case -cats {api smoke} xml_get_child_node_content_by_path {
 
 }
 
-aa_register_case -cats {api} -on_error {
-    site_node::get_children returns root node!
-} site_node_get_children {
+aa_register_case \
+    -cats {api} \
+    -procs {
+        site_node::get_children
+        site_node::get_node_id
+    } \
+    -on_error {
+        site_node::get_children returns root node!
+    } site_node_get_children {
     Test site_node::get_children
 } {
     # Start with a known site-map entry
@@ -464,7 +470,16 @@ aa_register_case -cats {api smoke} export_vars {
         "$base?$export_no_base"
 }
 
-aa_register_case -cats {api smoke} site_node_verify_folder_name {
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        site_node::exists_p
+        site_node::get_children
+        site_node::get_element
+        site_node::get_node_id
+        site_node::verify_folder_name
+    } \
+    site_node_verify_folder_name {
     Testing site_node::verify_folder_name
 } {
     set main_site_node_id [site_node::get_node_id -url /]
