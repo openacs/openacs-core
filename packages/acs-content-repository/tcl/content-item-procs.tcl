@@ -181,6 +181,8 @@ ad_proc -public ::content::item::rename {
     -item_id:required
     -name:required
 } {
+    Rename an item.
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
 
@@ -201,12 +203,14 @@ ad_proc -public ::content::item::move {
     -target_folder_id:required
     {-name ""}
 } {
+    Move an item to a folder.
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
 
-    @param item_id item to move
-    @param new_parent_id new parent item
-    @param name new name, allows move with rename
+    @param item_id              item to move
+    @param target_folder_id     folder to move the item to
+    @param name                 new name, allows move with rename
 } {
     set var_list [list \
                       [list item_id $item_id] \
@@ -224,6 +228,8 @@ ad_proc -public ::content::item::get {
     {-revision "live"}
     {-array_name "content_item"}
 } {
+    Get an item.
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
 
@@ -523,8 +529,8 @@ ad_proc -public content::item::get_template {
   Otherwise, returns the id of the default template registered to the item's
   content_type. Returns an empty string on failure.
 
-  @param  item_id   The item_id
-  @param  context   The context in which the template will be used (e.g. public)
+  @param  item_id       The item_id
+  @param  use_context   The context in which the template will be used (e.g. public)
 
   @return The template_id of the template which can be used to render the
     item, or an empty string on failure

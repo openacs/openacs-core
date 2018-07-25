@@ -1113,7 +1113,7 @@ ad_proc -deprecated content_extlink::extlink_p {
     Returns true if the given item is an external link.
 
     @see content::extlink::is_extlink
-    @param extlink_id  The object id of the item to check.
+    @param item_id  The object id of the item to check.
 
 } {
     return [db_string extlink_check {}]
