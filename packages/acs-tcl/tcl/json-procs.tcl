@@ -403,7 +403,7 @@ ad_proc -private util::json::array2json {arrayVal} {
 
     Generate a JSON string for a two-element Tcl JSON array list.
 
-    @param objectVal [list array values]
+    @param arrayVal [list array values]
     @return Valid JSON array string.
 } {
     set values {}
