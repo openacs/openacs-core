@@ -82,15 +82,9 @@ if {$section ne ""} {
 array set sections {}
 
 db_foreach select_params {} {
-    if { $section_name eq "" } {
-        set section_name "main"
-        set section_pretty "Main"
-    } else {
-        set section_name [string map {- {_} " " {_}} $section_name]
-        set section_pretty [string map {_ { }} $section_name]
-        set section_pretty "[string toupper [string index $section_pretty 0]][string range $section_pretty 1 end]"
-    }
-    
+    set section_name [string map {- {_} " " {_}} $section_name]
+    set section_pretty [string totitle [string map {_ { }} $section_name]]
+
     if { ![info exists sections($section_name)] } {
         set sec [list "-section" $section_name {legendtext "$section_pretty"}]
         ad_form -extend -name parameters -form [list $sec]
