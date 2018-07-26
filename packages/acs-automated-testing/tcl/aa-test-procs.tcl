@@ -1154,11 +1154,15 @@ namespace eval acs::test {
             # address in the check in the security-procs.
             #
             set address [ns_conn currentaddr]
+            set port [ns_conn currentport]
+            set proto [ns_conn proto]
         } on error {errorMsg} {
             #
             # If this fails, fall back to configured value.
             #
             set address [dict get $driverInfo address]
+            set port [dict get $driverInfo port]
+            set proto [dict get $driverInfo proto]
         }
         set extra_args {}
         if {[info exists body]} {
@@ -1189,11 +1193,13 @@ namespace eval acs::test {
         # Run actual request
         #
         try {
+            set url "$proto:\[$address\]:$port/$request"
+            ns_log notice "acs::test:http client request (timeout $timeout): $method $url"
             set d [ns_http run \
                        -timeout $timeout \
                        -method $method \
                        {*}$extra_args \
-                       "http://\[$address\]:[dict get $driverInfo port]/$request"]
+                       $url]
         } finally {
             #
             # always reset after the reqest the login data nsv
