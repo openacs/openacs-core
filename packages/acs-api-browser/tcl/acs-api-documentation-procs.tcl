@@ -587,12 +587,12 @@ ad_proc -public api_proc_documentation {
     if {$callgraph ne ""} {
         append blocks_out "<p><dt><b>Partial Call Graph (max 5 caller/called nodes):</b></dt><dd>$callgraph</dd>\n"
     }
-    
+
     append blocks_out "<p><dt><b>Testcases:</b></dt><dd>\n"
 
     if {[info exists doc_elements(testcase)]} {
         set cases {}
-        foreach testcase_pair $doc_elements(testcase) {            
+        foreach testcase_pair $doc_elements(testcase) {
             set url [api_test_case_url $testcase_pair]
             lappend cases [subst {<a href="[ns_quotehtml $url]">[ns_quotehtml [lindex $testcase_pair 0]]</a>}]
         }
@@ -782,12 +782,12 @@ ad_proc -public api_add_to_proc_doc {
         if {[dict exists $d $property]} {
             set must_update [expr {$value ni [dict get $d $property]}]
         } else {
-            set must_update 1            
+            set must_update 1
         }
         if {$must_update} {
             dict lappend d $property $value
             nsv_set api_proc_doc $proc_name $d
-            #ns_log notice "adding property $property with value $value to proc_doc of $proc_name"            
+            #ns_log notice "adding property $property with value $value to proc_doc of $proc_name"
         }
     } else {
         nsv_set api_proc_doc $proc_name [list $property $value]
@@ -795,57 +795,51 @@ ad_proc -public api_add_to_proc_doc {
     }
 }
 
-ad_proc -private api_test_case_url {testcase_pair} {
-    Return the testcase url from testcase_pair, consisting of
-    testcase_id and package_key.
+ad_proc -private api_called_proc_names {
+    {-body}
+    -proc_name:required
 } {
-    lassign $testcase_pair testcase_id package_key
-    return [export_vars -base /test/admin/testcase {
-        testcase_id package_key {showsource 1}
-    }]
-}
 
-ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
-    Return the procdic url from procname and optionally from source_p and version_id
-} {
-    return [export_vars -base /api-doc/proc-view {
-        {proc $proc_name} source_p version_id
-    }]
-}
-
-
-ad_proc -private api_called_proc_names {proc_name} {
-    
     Return list of procs called by the specified procname handle.
-    
+
     @author Gustaf Neumann
     @param proc_name name is fully qualified name without leading colons proc procs,
     XOTcl methods are a triple with the fully qualified class name,
     then proc|instproc and then the method name.
 
 } {
-    #
-    # Get calling info from prettified proc body
-    #
-    try {
-        ::apidoc::tcl_to_html $proc_name
-    } on ok {result} {
-        set body $result
-    } on error {errorMsg} {
-        ns_log warning "cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
-        return ""
+    if {[info exists body]} {
+        #
+        # Get the calling information directly from the body, when
+        # e.g. the information is not in in the procdoc nsv. This is
+        # e.g. necessary, when getting calling info from *-init.tcl
+        # files.
+        #
+        set body [apidoc::tclcode_to_html $body]
+    } else {
+        #
+        # Get calling info from prettified proc body
+        #
+        try {
+            ::apidoc::tcl_to_html $proc_name
+        } on ok {result} {
+            set body $result
+        } on error {errorMsg} {
+            ns_log warning "cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
+            return ""
+        }
     }
-    
+
     dom parse -html <p>$body</p> doc
     $doc documentElement root
     set called {}
-    
+
     foreach a [$root selectNodes //a] {
-	set href [$a getAttribute href]
+        set href [$a getAttribute href]
         #
         # When the href points to a proc, record this as calling info
         #
-	if {[regexp {/api-doc/proc-view[?]proc=(.*)&} $href . called_proc]} {
+        if {[regexp {/api-doc/proc-view[?]proc=(.*)&} $href . called_proc]} {
             set called_proc [string trimleft [ns_urldecode $called_proc] :]
             lappend called $called_proc
         }
@@ -855,7 +849,7 @@ ad_proc -private api_called_proc_names {proc_name} {
 }
 
 ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
-    
+
     Add the calling information (what a the functions called by this
     proc_name) to the collected proc_doc information.
 
@@ -866,7 +860,31 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
     } else {
         set proc_names [list $proc_name]
     }
-    
+
+    #
+    # Get calling information from init files
+    #
+    foreach package_key [apm_enabled_packages] {
+        foreach file [apm_get_package_files -package_key $package_key -file_types tcl_init] {
+            ns_log notice "could add $file"
+            set file_contents [template::util::read_file $::acs::rootdir/packages/$package_key/$file]
+            set file_contents [apidoc::tclcode_to_html $file_contents]
+            set proc_name packages/$package_key/$file
+            foreach called [api_called_proc_names -proc_name $proc_name -body $file_contents] {
+                api_add_to_proc_doc \
+                    -proc_name $called \
+                    -property calledby \
+                    -value $proc_name
+            }
+
+            #template::adp_init tcl [file root $file]
+
+        }
+    }
+
+    #
+    # Get calling information from procs
+    #
     foreach proc_name $proc_names {
         if {[regexp {^_([^_]+)__(.*)$} $proc_name . package_key testcase_id]} {
             #
@@ -874,13 +892,13 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
             #
             if {0} {
                 set calls {}
-                foreach call [api_called_proc_names $proc_name] {
+                foreach call [api_called_proc_names -proc_name $proc_name] {
                     #
                     # Ignore aa_* calls (the testing infrastructure is
                     # explicitly tested).
                     #
                     if {[string match "aa_*" $call]} continue
-                    
+
                     #
                     # Check, if these cases are already covered.
                     #
@@ -891,10 +909,11 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
                         if {[dict exists $called_proc_doc testcase]} {
                             set testcase_pair [list $testcase_id $package_key]
                             ns_log notice "$call is covered by cases [dict get $called_proc_doc testcase]\
-				- new case included [expr {$testcase_pair in [dict get $called_proc_doc testcase]}]"
+                                - new case included [expr {$testcase_pair in [dict get $called_proc_doc testcase]}]"
                             set covered [expr {$testcase_pair in [dict get $called_proc_doc testcase]}]
                         }
                     }
+
                     #
                     # Only list remaining calls to suggestions.
                     #
@@ -907,7 +926,7 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
                 }
             }
         } else {
-            foreach called [api_called_proc_names $proc_name] {
+            foreach called [api_called_proc_names -proc_name $proc_name] {
                 api_add_to_proc_doc \
                     -proc_name $called \
                     -property calledby \
@@ -932,6 +951,10 @@ ad_proc -private api_call_graph_snippet {
 } {
 
     set dot_code ""
+
+    #
+    # Include calls from test cases
+    #
     set doc [nsv_get api_proc_doc $proc_name]
     if {[dict exists $doc testcase]} {
         set nodes ""
@@ -952,37 +975,57 @@ ad_proc -private api_call_graph_snippet {
             "\}\n" \
             $edges
     }
+
+    #
+    # Include calls from calledby information. Might come from a file
+    # (e.g. a *-init.tcl file) or from a proc.
+    #
     if {[dict exists $doc calledby]} {
         set edges ""
         set nodes ""
-	foreach caller [lrange [lsort [dict get $doc calledby]] 0 $maxnodes-1] {
-            set url [api_proc_doc_url -proc_name $caller]
-            set hints [api_proc_pretty_name -hints_only $caller]
-            if {$hints ne ""} {
-                set hints "<BR/><I>$hints</I>"
+        foreach caller [lrange [lsort [dict get $doc calledby]] 0 $maxnodes-1] {
+            #
+            # when the "caller" starts with "packages/", we assume,
+            # this is a file.
+            #
+            if {[regexp {^(packages/[^/]+/)(.*)} $caller . line1 line2]} {
+                set url [export_vars -base /api-doc/content-page-view {{path $caller} {source_p 1}}]
+                set props ""
+                append props \
+                    [subst {URL="$url", margin=".2,0" shape=rectangle, tooltip="File calling $proc_name", }] \
+                    [subst {label=<<FONT POINT-SIZE="$textpointsize">${line1}<BR/>${line2}</FONT>>}]
+            } else {
+                set url [api_proc_doc_url -proc_name $caller]
+                set hints [api_proc_pretty_name -hints_only $caller]
+                if {$hints ne ""} {
+                    set hints "<BR/><I>$hints</I>"
+                }
+                set props ""
+                append props \
+                    [subst {URL="$url", margin=".2,0" tooltip="Function calling $proc_name", }] \
+                    [subst {label=<<FONT POINT-SIZE="$textpointsize">${caller}</FONT>>}]
             }
-            set props ""
-            append props \
-                [subst {URL="$url", margin=".2,0" tooltip="Function calling $proc_name", }] \
-                [subst {label=<<FONT POINT-SIZE="$textpointsize">${caller}</FONT>>}]
             append nodes [subst -nocommands {"$caller" [$props];\n}]
-	    append edges [subst {"$caller" -> "$proc_name";}] \n
-	}
+            append edges [subst {"$caller" -> "$proc_name";}] \n
+        }
         append dot_code \
             "subgraph \{\nrank=\"same\";" \
             $nodes \
             "\}\n" \
             $edges
     }
+
+    #
+    # Inlcude information, what other procs this proc calls.
+    #
     set edges ""
     set nodes ""
-    foreach called [lrange [api_called_proc_names $proc_name] 0 $maxnodes-1] {
+    foreach called [lrange [api_called_proc_names -proc_name $proc_name] 0 $maxnodes-1] {
         set url [api_proc_doc_url -proc_name $called]
         set hints [api_proc_pretty_name -hints_only $called]
         if {$hints ne ""} {
             set hints "<BR/><I>$hints</I>"
         }
-        ns_log notice "hints <$hints>"        
         set props ""
         append props \
             [subst {URL="$url", margin=".2,0", tooltip="Function called by $proc_name", }] \
@@ -1014,18 +1057,18 @@ ad_proc -private api_inline_svg_from_dot {dot_code} {
         set tmpnam [ad_tmpnam]
         set tmpfile $tmpnam.svg
         set f [open $tmpnam.dot w]; puts $f $dot_code; close $f
-        
-        #ns_log notice "svg $tmpnam dot $tmpnam.dot"
+
         set f [open "|$dot  -Tsvg -o $tmpfile" w]; puts $f $dot_code; close $f
         set f [open  $tmpfile]; set svg [read $f]; close $f
-        
+
         # delete the first three lines generated from dot
         regsub {^[^\n]+\n[^\n]+\n[^\n]+\n} $svg "" svg
         set css {
             /*svg g a:link {text-decoration: none;}*/
             div.inner svg {width: 100%; margin: 0 auto;}
             svg g polygon {fill: transparent;}
-            svg g ellipse {fill: #eeeef4;}
+            svg g g ellipse {fill: #eeeef4;}
+            svg g g polygon {fill: #f4f4e4;}
         }
         file delete -- $tmpfile
         file delete -- $tmpnam.dot
@@ -1863,14 +1906,33 @@ ad_proc api_proc_url { proc } {
     return "/api-doc/proc-view?proc=[ns_urlencode $proc]&source_p=1"
 }
 
+ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
+    Return the procdic url from procname and optionally from source_p and version_id
+} {
+    return [export_vars -base /api-doc/proc-view {
+        {proc $proc_name} source_p version_id
+    }]
+}
+
 ad_proc api_proc_link { proc } {
     @return full HTML link to the documentation for the proc.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "<a href=\"[ns_quotehtml [api_proc_url $proc]]\">$proc</a>"
+    return "<a href=\"[ns_quotehtml [api_proc_url -proc_name $proc -source_p 1]]\">$proc</a>"
 }
+
+ad_proc -private api_test_case_url {testcase_pair} {
+    Return the testcase url from testcase_pair, consisting of
+    testcase_id and package_key.
+} {
+    lassign $testcase_pair testcase_id package_key
+    return [export_vars -base /test/admin/testcase {
+        testcase_id package_key {showsource 1}
+    }]
+}
+
 
 
 #
