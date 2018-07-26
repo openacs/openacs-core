@@ -864,16 +864,20 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
     #
     # Get calling information from init files
     #
+    set init_files packages/acs-bootstrap-installer/bootstrap.tcl
     foreach package_key [apm_enabled_packages] {
         foreach file [apm_get_package_files -package_key $package_key -file_types tcl_init] {
-            set file_contents [template::util::read_file $::acs::rootdir/packages/$package_key/$file]
-            set proc_name packages/$package_key/$file
-            foreach called [api_called_proc_names -proc_name $proc_name -body $file_contents] {
-                api_add_to_proc_doc \
-                    -proc_name $called \
-                    -property calledby \
-                    -value $proc_name
-            }
+            lappend init_files packages/$package_key/$file
+        }
+    }
+    
+    foreach init_file $init_files {
+        set file_contents [template::util::read_file $::acs::rootdir/$init_file]
+        foreach called [api_called_proc_names -proc_name $init_file -body $file_contents] {
+            api_add_to_proc_doc \
+                -proc_name $called \
+                -property calledby \
+                -value $init_file
         }
     }
 
