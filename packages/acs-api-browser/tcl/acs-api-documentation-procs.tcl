@@ -365,16 +365,16 @@ ad_proc -public api_proc_documentation {
 
     Generates formatted documentation for a procedure.
 
-    @param format the type of documentation to generate. Currently, only
-    <code>text/html</code> and <code>text/plain</code> are supported.
-    @param script include information about what script this proc lives in?
-    @param xql include the source code for the related xql files?
-    @param source include the source code for the script?
+    @param format    the type of documentation to generate. Currently, only
+                     <code>text/html</code> and <code>text/plain</code> are supported.
+    @param script    include information about what script this proc lives in?
+    @param xql       include the source code for the related xql files?
+    @param source    include the source code for the script?
     @param proc_name the name of the procedure for which to generate documentation.
-    @param label the label printed for the proc in the header line
+    @param label     the label printed for the proc in the header line
     @param first_line_tag tag for the markup of the first line
-    @return the formatted documentation string.
-    @error if the procedure is not defined.
+    @return          the formatted documentation string.
+    @error           if the procedure is not defined.
 } {
     #
     # Sanitize input
