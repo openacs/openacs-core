@@ -1002,7 +1002,7 @@ ad_proc -private api_call_graph_snippet {
                 set props ""
                 append props \
                     [subst {URL="$url", margin=".2,0" tooltip="Function calling $proc_name", }] \
-                    [subst {label=<<FONT POINT-SIZE="$textpointsize">${caller}</FONT>>}]
+                    [subst {label=<<FONT POINT-SIZE="$textpointsize">${caller}$hints</FONT>>}]
             }
             append nodes [subst -nocommands {"$caller" [$props];\n}]
             append edges [subst {"$caller" -> "$proc_name";}] \n
