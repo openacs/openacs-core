@@ -278,7 +278,7 @@ ad_proc -public apm_is_catalog_file { file_path } {
     return $return_value
 }
 
-ad_proc -private apm_guess_db_type { package_key path } {
+ad_proc -public apm_guess_db_type { package_key path } {
 
     Guesses and returns the database type key corresponding to a particular path
     (or an empty string if none is known). <code>$path</code> should be
@@ -360,7 +360,7 @@ ad_proc apm_package_supports_rdbms_p {
     return [expr {![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]}]
 }
 
-ad_proc -private apm_source { __file {errorVarName ""}} {
+ad_proc -public apm_source { __file {errorVarName ""}} {
     Sources $__file in a clean environment, returning 1 if successful or 0 if not.
     Records that the file has been sourced and stores its mtime in the nsv array
     apm_library_mtime
