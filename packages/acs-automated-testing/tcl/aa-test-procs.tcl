@@ -1143,27 +1143,51 @@ namespace eval acs::test {
 
         @author Gustaf Neumann
     } {
-        set driverInfo [util_driver_info]
-        try {
+        #
+        # Check, if a testURL was specified in the config file
+        #
+        # ns_section ns/server/${server}/acs/acs-automated-testing
+        #         ns_param TestURL http://127.0.0.1:8080/
+        #
+        set url [parameter::get \
+                     -package_id [apm_package_id_from_key acs-automated-testing] \
+                     -parameter TestURL \
+                     -default ""]
+        if {$url ne ""} {
+            set urlInfo [ns_parseurl $url]
+            set proto   [dict get $urlInfo proto]
+            set address [dict get $urlInfo host]
+        } else {
             #
-            # First try to get actual information from the
-            # connection. This is however only available in newer versions
-            # of NaviServer. The actual information is e.g. necessary,
-            # when the driver address is set to "0.0.0.0" or "::0" etc,
-            # and therefore every address might be provided as peer
-            # address in the check in the security-procs.
+            # There is no configuration in the config file. So try to
+            # determine it form either the current connection, or from
+            # the configured driver.
             #
-            set address [ns_conn currentaddr]
-            set port [ns_conn currentport]
-            set proto [ns_conn proto]
-        } on error {errorMsg} {
-            #
-            # If this fails, fall back to configured value.
-            #
-            set address [dict get $driverInfo address]
-            set port [dict get $driverInfo port]
-            set proto [dict get $driverInfo proto]
+            try {
+                #
+                # First try to get actual information from the
+                # connection. This is however only available in newer
+                # versions of NaviServer. The actual information is
+                # e.g. necessary, when the driver address is set to
+                # "0.0.0.0" or "::0" etc, and therefore every address
+                # might be provided as peer address in the check in
+                # the security-procs.
+                #
+                set address [ns_conn currentaddr]
+                set port [ns_conn currentport]
+                set proto [ns_conn proto]
+            } on error {errorMsg} {
+                #
+                # If this fails, fall back to configured value.
+                #
+                set driverInfo [util_driver_info]
+                set address [dict get $driverInfo address]
+                set port [dict get $driverInfo port]
+                set proto [dict get $driverInfo proto]
+            }
+            set url "$proto:\[$address\]:$port/$request"
         }
+
         set extra_args {}
         if {[info exists body]} {
             lappend extra_args -body $body
@@ -1193,7 +1217,6 @@ namespace eval acs::test {
         # Run actual request
         #
         try {
-            set url "$proto://\[$address\]:$port/$request"
             ns_log notice "acs::test:http client request (timeout $timeout): $method $url"
             set d [ns_http run \
                        -timeout $timeout \
