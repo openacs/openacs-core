@@ -1130,6 +1130,7 @@ namespace eval acs::test {
     ad_proc -public ::acs::test::http {
         {-user_id 0}
         {-method GET}
+        {-session ""}
         {-body}
         {-timeout 10}
         {-headers ""}
@@ -1174,24 +1175,29 @@ namespace eval acs::test {
                 # the security-procs.
                 #
                 set address [ns_conn currentaddr]
-                set port [ns_conn currentport]
-                set proto [ns_conn proto]
+                set port    [ns_conn currentport]
+                set proto   [ns_conn proto]
             } on error {errorMsg} {
                 #
                 # If this fails, fall back to configured value.
                 #
                 set driverInfo [util_driver_info]
                 set address [dict get $driverInfo address]
-                set port [dict get $driverInfo port]
-                set proto [dict get $driverInfo proto]
+                set port    [dict get $driverInfo port]
+                set proto   [dict get $driverInfo proto]
             }
-            set url "$proto:\[$address\]:$port/$request"
+            set url "$proto://\[$address\]:$port/$request"
+        }
+
+        if {[info exists session] && [dict exists $session cookies]} {
+            lappend headers Cookie [dict get $session cookies]
         }
 
         set extra_args {}
         if {[info exists body]} {
             lappend extra_args -body $body
         }
+
         if {[llength $headers] > 0} {
             set requestHeaders [ns_set create]
             foreach {tag value} $headers {
@@ -1235,6 +1241,63 @@ namespace eval acs::test {
             set ms [format %.2f [expr {[ns_time format [dict get $d time]] * 1000.0}]]
             aa_log "${prefix}$method $request returns [dict get $d status] in ${ms}ms"
         }
+        if {[dict exists $d headers]} {
+            set cookies {}
+            foreach {tag value} [ns_set array [dict get $d headers]] {
+                if {$tag eq "set-cookie"} {
+                    if {[regexp {^([^;]+);} $value . cookie]} {
+                        aa_log "Cookie '$cookie'"
+                        lappend cookies $cookie
+                    } else {
+                        aa_log "Cookie has invalid syntax: $value"
+                    }
+                }
+            }
+            dict set d cookies [join $cookies "; "]
+        }
+        return $d
+    }
+
+    ad_proc -public ::acs::test::login {
+        user_info
+    } {
+        Login (register operation) in a web session
+
+        @param user_info dict containing at least email, last_name, username and password
+    } {
+        aa_log $user_info
+        set d [acs::test::http /register/]
+        acs::test::reply_has_status_code $d 200
+
+        set form [acs::test::get_form [dict get $d body ] {//form[@id='login']}]
+        set fields [dict get $form fields]
+        if {[dict exists $fields email]} {
+            aa_log "login via email"
+            dict set fields email [dict get $user_info email]
+        } else {
+            aa_log "login via username"
+            dict set fields username [dict get $user_info username]
+        }
+        dict set fields password [dict get $user_info password]
+
+        set d [::acs::test::form_reply \
+                   -user_id 0 \
+                   -url [dict get $form @action] \
+                   $fields]
+        acs::test::reply_has_status_code $d 302
+
+        return $d
+    }
+
+    ad_proc -public ::acs::test::logout {
+        -session:required
+    } {
+        Logout from the current web session
+
+        @param session reply dict containing cookies
+    } {
+        set d [acs::test::http -session $session /register/logout]
+        acs::test::reply_has_status_code $d 302
         return $d
     }
 
@@ -1333,7 +1396,13 @@ namespace eval acs::test {
     }
 
     ad_proc -public reply_contains {{-prefix ""} dict string} {
-        Convenience function for test cases
+
+        Convenience function for test cases to check, whether the
+        resulting page contains the given string.
+
+        @param prefix  prefix for logging
+        @param dict    request reply dict, containing at least the request body
+        @param string  string to be checked on the page
     } {
         set result [string match *$string* [dict get $dict body]]
         if {$result} {
@@ -1345,7 +1414,13 @@ namespace eval acs::test {
     }
 
     ad_proc -public reply_contains_no {{-prefix ""} dict string} {
-        Convenience function for test cases
+
+        Convenience function for test cases to check, whether the
+        resulting page does not contains the given string.
+
+        @param prefix  prefix for logging
+        @param dict    request reply dict, containing at least the request body
+        @param string  string to be checked on the page
     } {
         set result [string match *$string* [dict get $dict body]]
         if {$result} {
@@ -1357,7 +1432,14 @@ namespace eval acs::test {
     }
 
     ad_proc -public reply_has_status_code {{-prefix ""} dict status_code} {
-        Convenience function for test cases
+
+        Convenience function for test cases to check, whether the
+        reply has the given status code.
+
+        @param prefix       prefix for logging
+        @param dict         request reply dict, containing at least the request status
+        @param status_code  expected HTTP status codes
+
     } {
         set result [expr {[dict get $dict status] == $status_code}]
         if {$result} {
@@ -1515,13 +1597,15 @@ namespace eval acs::test::user {
         set username "__test_user_[ad_generate_random_string]"
         set email "${username}@test.test"
         set password [ad_generate_random_string]
+        set first_names [ad_generate_random_string]
+        set last_name [ad_generate_random_string]
 
         set user_info [auth::create_user \
                            -user_id $user_id \
                            -username $username \
                            -email $email \
-                           -first_names [ad_generate_random_string] \
-                           -last_name [ad_generate_random_string] \
+                           -first_names $first_names \
+                           -last_name $last_name \
                            -password $password \
                            -secret_question [ad_generate_random_string] \
                            -secret_answer [ad_generate_random_string]]
@@ -1533,6 +1617,8 @@ namespace eval acs::test::user {
 
         dict set user_info password $password
         dict set user_info email $email
+        dict set user_info first_names $first_names
+        dict set user_info last_name $last_name
 
         aa_log "Created user with email='$email' and password='$password'"
 

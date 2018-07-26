@@ -2,45 +2,49 @@ ad_library {
     Automated tests.
 
     @author Peter Marklund
-    @creation-date 20 April 2004
-    @cvs-id $Id$
+    @creation-date 26 July 2018
 }
 
 aa_register_case \
-    -cats {web} \
+    -cats {api web} \
     -procs {
-        twt::user::create
-        twt::user::login
-        twt::do_request
-        twt::user::logout
-        twt::user::delete
+        acs::test::user::create
+        acs::test::user::login
+        acs::test::user::logout
     } \
-    -libraries tclwebtest \
-    tclwebtest_example {
-    A simple test case demonstrating the use of tclwebtest (HTTP level testing).
+    webtest_example {
 
-    @author Peter Marklund
+    A simple test case demonstrating the use of web tests (via
+    HTTP/HTTPS).
+
+    @author Gustaf Neumann
 } {
-    set user_id [db_nextval acs_object_id_seq]
 
-    aa_run_with_teardown \
-        -test_code {
-            # Create test user
-            array set user_info [twt::user::create -user_id $user_id]
+    aa_run_with_teardown -test_code {
+        set user_id [db_nextval acs_object_id_seq]
 
-            # Login user
-            twt::user::login $user_info(email) $user_info(password)
+        # Create test user
+        set user_info [acs::test::user::create -user_id $user_id]
 
-            # Visit homepage
-            twt::do_request "/"
+        # Login user
+        set d [acs::test::login $user_info]
 
-	    # Logout user
-            twt::user::logout
+        # Visit homepage, last name of user should be contained
+        set d [acs::test::http -session $d /]
 
-        } -teardown_code {
-            # TODO: delete test user
-            twt::user::delete -user_id $user_id
-        }
+        acs::test::reply_has_status_code $d 200
+        acs::test::reply_contains $d [dict get $user_info last_name]
+
+        # Logout user
+        set d [acs::test::logout -session $d]
+
+        # Visit homepage, last name of user should not show up
+        set d [acs::test::http -session $d /]
+        acs::test::reply_contains_no $d [dict get $user_info last_name]
+
+    } -teardown_code {
+        acs::test::user::delete -user_id $user_id
+    }
 }
 
 # Local variables:
