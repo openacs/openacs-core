@@ -866,8 +866,10 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
     #
     set init_files packages/acs-bootstrap-installer/bootstrap.tcl
     foreach package_key [apm_enabled_packages] {
-        foreach file [apm_get_package_files -package_key $package_key -file_types tcl_init] {
-            lappend init_files packages/$package_key/$file
+        foreach file [apm_get_package_files -package_key $package_key -file_types {tcl_init content_page include_page}] {
+            if {[file extension $file] eq ".tcl"} {
+                lappend init_files packages/$package_key/$file
+            }
         }
     }
     
@@ -991,7 +993,7 @@ ad_proc -private api_call_graph_snippet {
                 set url [export_vars -base /api-doc/content-page-view {{path $caller} {source_p 1}}]
                 set props ""
                 append props \
-                    [subst {URL="$url", margin=".2,0" shape=rectangle, tooltip="File calling $proc_name", }] \
+                    [subst {URL="$url", margin=".2,0" shape=rectangle, tooltip="Script calling $proc_name", }] \
                     [subst {label=<<FONT POINT-SIZE="$textpointsize">${line1}<BR/>${line2}</FONT>>}]
             } else {
                 set url [api_proc_doc_url -proc_name $caller]
