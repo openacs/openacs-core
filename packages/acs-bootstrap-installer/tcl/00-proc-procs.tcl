@@ -650,10 +650,13 @@ ad_proc -public ad_proc {
            preferred.</li>
       <li> If you use named parameters, you can specify which ones are required, optional,
            (including default values), and boolean. See the examples below.</li>
-    <li>Positional parameters are always required, unless they provide with a default value,
-         making them optional. If the parameter follows another positional parameter with a default
-         value, a default value for it is also required.</li>
-    <li> There is now a callback facility. See below.</li>
+      <li> Positional parameters are always required, unless they provide with a default value,
+           making them optional. If the parameter follows another positional parameter with a default
+           value, a default value for it is also required.</li>
+      <li> As well as in the original Tcl "<code>proc</code>", if the last parameter is called
+           "<tt>args</tt>", the proc will accept a variable number of arguments, which will be
+           assigned to the variable "<tt>args</tt>" as elements of a list.</li>
+      <li> There is now a callback facility. See below.</li>
       <li> The declaration can (and <b>should!</b>) include documentation. This documentation
            may contain tags which are parsed for display by the API browser.  Some tags are
            <tt>@param</tt>, <tt>@return</tt>, <tt>@error</tt>, <tt>@see</tt>, <tt>@author</tt>
