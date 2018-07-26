@@ -866,9 +866,7 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
     #
     foreach package_key [apm_enabled_packages] {
         foreach file [apm_get_package_files -package_key $package_key -file_types tcl_init] {
-            ns_log notice "could add $file"
             set file_contents [template::util::read_file $::acs::rootdir/packages/$package_key/$file]
-            set file_contents [apidoc::tclcode_to_html $file_contents]
             set proc_name packages/$package_key/$file
             foreach called [api_called_proc_names -proc_name $proc_name -body $file_contents] {
                 api_add_to_proc_doc \
@@ -876,9 +874,6 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
                     -property calledby \
                     -value $proc_name
             }
-
-            #template::adp_init tcl [file root $file]
-
         }
     }
 
@@ -1017,10 +1012,18 @@ ad_proc -private api_call_graph_snippet {
 
     #
     # Inlcude information, what other procs this proc calls.
+    # filter from this list false positives from the call graph analysis
     #
+    set called_procs {}
+    foreach c [api_called_proc_names -proc_name $proc_name] {
+        if {[info commands $c] eq $c} {
+            lappend called_procs $c
+        }
+    }
+
     set edges ""
     set nodes ""
-    foreach called [lrange [api_called_proc_names -proc_name $proc_name] 0 $maxnodes-1] {
+    foreach called [lrange $called_procs 0 $maxnodes-1] {
         set url [api_proc_doc_url -proc_name $called]
         set hints [api_proc_pretty_name -hints_only $called]
         if {$hints ne ""} {
