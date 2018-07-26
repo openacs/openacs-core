@@ -9,7 +9,7 @@
   height: 35px;
   position: relative;
 }
-#navbar { 
+#navbar {
   position: absolute;
   height: 21px;
   margin: 0px;
@@ -23,10 +23,10 @@
 }
 html>body #navbar { bottom: 0px }
 
-#navbar .tab { 
+#navbar .tab {
   height: 16px;
-  float: left; 
-  background-color: #eeeeee; 
+  float: left;
+  background-color: #eeeeee;
   border: 1px solid #666;
   padding: 2px 5px 2px 5px;
   margin: 0px 2px 0px 2px;
@@ -38,7 +38,7 @@ html>body #navbar { bottom: 0px }
 #navbar a:hover {
   text-decoration: underline;
 }
-#navbar #navbar-here { 
+#navbar #navbar-here {
   border-bottom-color: white;
   background-color: white;
 }
@@ -46,7 +46,7 @@ html>body #navbar { bottom: 0px }
   color: black;
 }
 
-#navbar-body { 
+#navbar-body {
   border-bottom: 1px solid #016799;
   background-color: white;
   clear: both;
@@ -74,9 +74,9 @@ html>body #navbar { bottom: 0px }
 
 <div id="navbar-div">
   <div id="navbar-container">
-    <div id="navbar"> 
+    <div id="navbar">
       <multiple name="authorities">
-        <if @selected_authority_id@ eq @authorities.authority_id@>	
+        <if @selected_authority_id@ eq @authorities.authority_id@>
           <div class="tab" id="navbar-here">
 @authorities.pretty_name@
           </div>
