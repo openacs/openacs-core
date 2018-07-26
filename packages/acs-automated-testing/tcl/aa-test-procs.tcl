@@ -1193,7 +1193,7 @@ namespace eval acs::test {
         # Run actual request
         #
         try {
-            set url "$proto:\[$address\]:$port/$request"
+            set url "$proto://\[$address\]:$port/$request"
             ns_log notice "acs::test:http client request (timeout $timeout): $method $url"
             set d [ns_http run \
                        -timeout $timeout \
