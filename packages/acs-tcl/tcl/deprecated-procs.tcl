@@ -885,8 +885,9 @@ $ds_link
 
 ad_proc -public -deprecated ad_admin_owner {} {
     @return E-mail address of the Administrator of this site.
+    @see ad_host_administrator
 } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter AdminOwner]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator]
 }
 
 ad_proc -deprecated ad_admin_header {

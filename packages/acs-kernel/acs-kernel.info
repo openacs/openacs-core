@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.10.0d8" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.0d8.apm">
+    <version name="5.10.0d9" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.0d9.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2017-08-06</release-date>
@@ -17,12 +17,12 @@
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.10.0d8"/>
+        <provides url="acs-kernel" version="5.10.0d9"/>
 
         <callbacks>
         </callbacks>
         <parameters>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AdminOwner"  default="a-programmer@yourdomain.com" description="who signs the admin pages, e.g., a programmer who can fix/enhance them" section_name="system-information"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AdminOwner"  default="a-programmer@yourdomain.com" description="Who signs the admin pages, e.g., a programmer who can fix/enhance them. DEPRECATED: please use HostAdministrator instead" section_name="deprecated"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="security"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedAttribute"  default="align alt border cellpadding cellspacing color face height href hspace id name size src style target title valign vspace width colspan rowspan class" description="A space separated list of allowed attribute names, e.g. title, src, etc.. You probably want to avoid onMouseOver and the like. Add a * to always allow all attributes." section_name="antispam"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedProtocol"  default="http https ftp mailto" description="A space separated list of protocols that are valid attributes of HTML tags in submitted content. Add a * to always all all protocols." section_name="antispam"/>
