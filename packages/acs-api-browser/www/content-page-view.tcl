@@ -27,7 +27,9 @@ set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_
 
 if { ![info exists source_p] } {
     set source_p $default_source_p
-    if {$source_p eq ""} {set source_p 0}
+    if {$source_p eq ""} {
+        set source_p 0
+    }
 }
 #
 # Allow compiled_p only for swas
@@ -46,7 +48,6 @@ if { ![info exists version_id]
           from apm_enabled_package_versions 
          where package_key = :package_key
     }
-    ns_log notice "got version_id $version_id from DB via package_key '$package_key'"
 }
 
 if { [info exists version_id] } {
@@ -55,7 +56,6 @@ if { [info exists version_id] } {
           from apm_package_version_info
          where version_id = :version_id
     }
-    ns_log notice "have pretty_name? [info exists pretty_name]"
     if {[info exists pretty_name]} {
         lappend context [list "package-view?version_id=$version_id&kind=content" "$pretty_name $version_name"]
     }
@@ -79,45 +79,45 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
             $link
         }]
     ad_script_abort
-}
 
-set mime_type [ns_guesstype $path]
-if {![string match "text/*" $mime_type] && [file extension $path] ne ".xql"} {
-    set source_p 0
-    set source_link 0
 } else {
-    set source_link 1
-}
-if { $source_p } {
-    set contents_title "File Contents"
-    set file_contents [template::util::read_file $::acs::rootdir/$path]
-    set compiled_file_contents ""
-    switch [file extension $path] {
-        ".tcl" {
-            set file_contents [apidoc::tclcode_to_html $file_contents]
-        }
-        ".adp" {
-            if {$compiled_p} {
-                set contents_title "Compiled ADP File"
-                set file_contents [apidoc::tclcode_to_html [template::adp_compile -file $::acs::rootdir/$path]]
-            } else {
+
+    set mime_type [ns_guesstype $path]
+    if {![string match "text/*" $mime_type] && [file extension $path] ne ".xql"} {
+        set source_p 0
+        set source_link 0
+    } else {
+        set source_link 1
+    }
+    if { $source_p } {
+        set contents_title "File Contents"
+        set file_contents [template::util::read_file $::acs::rootdir/$path]
+        set compiled_file_contents ""
+        switch [file extension $path] {
+            ".tcl" {
+                set file_contents [apidoc::tclcode_to_html $file_contents]
+            }
+            ".adp" {
+                if {$compiled_p} {
+                    set contents_title "Compiled ADP File"
+                    set file_contents [apidoc::tclcode_to_html [template::adp_compile -file $::acs::rootdir/$path]]
+                } else {
+                    set file_contents [ns_quotehtml $file_contents]
+                }
+            }
+            default {
                 set file_contents [ns_quotehtml $file_contents]
             }
         }
-        default {
-            set file_contents [ns_quotehtml $file_contents]
-        }
     }
+
+    template::util::list_to_multirow xql_links [::apidoc::xql_links_list \
+                                                    -include_compiled [acs_user::site_wide_admin_p] \
+                                                    $path]
+    set title [file tail $path]
+    set script_documentation [api_script_documentation $path]
+
 }
-
-template::util::list_to_multirow xql_links [::apidoc::xql_links_list \
-                                                -include_compiled [acs_user::site_wide_admin_p] \
-                                                $path]
-
-
-set title [file tail $path]
-set script_documentation [api_script_documentation $path]
-
 
 # Local variables:
 #    mode: tcl
