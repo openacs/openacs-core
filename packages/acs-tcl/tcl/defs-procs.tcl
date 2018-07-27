@@ -290,12 +290,15 @@ ad_proc ad_return_forbidden {
     access-control filters that determine whether a user has
     permission to request a particular page.
 
-    Title and explanation is optional. If neither is specified,
-    then a default "Permission Denied" message will be displayed.
+    Title and explanation are optional. If 'title' is not specified,
+    then a default localized system message will be displayed. If
+    'explanation' is not specified, it will default to the title.
 } {
-    if { $title eq "" && $explanation eq "" } {
-        set title "Permission Denied"
-        set explanation "Sorry, you haven't been given access to this area."
+    if { $title eq "" } {
+        set title [_ acs-subsite.403_message]
+    }
+    if { $explanation eq "" } {
+        set explanation $title
     }
     ad_return_exception_page 403 $title $explanation
 }
