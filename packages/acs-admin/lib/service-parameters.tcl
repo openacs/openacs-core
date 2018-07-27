@@ -1,12 +1,15 @@
-#
-# Service parameters list
-#
+ad_include_contract {
 
-if { ![acs_user::site_wide_admin_p] } {
-    ad_return_forbidden \
-        "Permission Denied" \
-        "<blockquote>You don't have permission to view this page.</blockquote>"
-    ad_script_abort
+    Service parameters list
+
+} {
+} -validate {
+    swa_p {
+        if { ![acs_user::site_wide_admin_p] } {
+            ad_return_forbidden
+            ad_script_abort
+        }
+    }
 }
 
 set user_id [ad_conn user_id]
@@ -78,7 +81,7 @@ template::list::create \
             link_url_col sitewide_admin_url
             link_html { title "\#acs-admin.Service_administration\#" }
             display_template {<if @packages.sitewide_admin_url@ not nil>\#acs-admin.Administration\#</if>}
-            hide_p {[ad_decode $swadmin_p 1 0 1]}
+            hide_p {[string is false $swadmin_p]}
             html {align left}
         }
         parameters {
