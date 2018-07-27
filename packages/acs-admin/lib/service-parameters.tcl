@@ -7,7 +7,6 @@ ad_include_contract {
     swa_p {
         if { ![acs_user::site_wide_admin_p] } {
             ad_return_forbidden
-            ad_script_abort
         }
     }
 }
