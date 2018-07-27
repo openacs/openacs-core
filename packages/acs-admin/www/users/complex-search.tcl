@@ -5,7 +5,9 @@ ad_page_contract {
     many days ago they registered, and how many times they have
     visited.
 
-    This page should be reusable but that has not been tested. See TIP#125
+    This page is based on "search.tcl", so in theory it should
+    reusable but that has not been tested.  See "search.tcl" for
+    details.
 
     @cvs-id $Id$
 
