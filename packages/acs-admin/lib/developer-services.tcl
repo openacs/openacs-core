@@ -1,3 +1,10 @@
+ad_include_contract {
+
+    Retrieve and display some site-wide URLs
+
+} {
+}
+
 set acs_admin_url [site_node::get_package_url -package_key acs-admin]
 
 set acs_automated_testing_url [site_node::get_package_url -package_key acs-automated-testing]
