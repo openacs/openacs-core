@@ -360,9 +360,11 @@ aa_register_case \
         incr count
         set whitespace_count 0
         set line_number 0
-        #ns_log Notice "Looking for trailing whitespace in file $file"
+
+        # Check for trailing whitespace in every line
         while {[gets $f line] >= 0} {
             incr line_number
+            set last_line $line
             if {[regexp {[ \t]+$} $line]} {
                 # Found trailing whitespace!
                 incr whitespace_count
@@ -370,6 +372,12 @@ aa_register_case \
             }
         }
         close $f
+
+        # Check for empty lines at the end of the file
+        if {[regexp {^\s*$} $last_line]} {
+            incr whitespace_count
+            lappend line_numbers "end of file"
+        }
 
         # Check results on $file
         if { $whitespace_count == 0 } {
