@@ -1,12 +1,21 @@
+ad_include_contract {
+
+    Password update form
+
+} {
+    user_id:naturalnum,notnull
+    {return_url:localurl ""}
+}
+
 # Redirect to HTTPS if so configured
 if { [security::RestrictLoginToSSLP] } {
     security::require_secure_conn
 }
 
-set level [ad_decode [security::RestrictLoginToSSLP] 1 "secure" "ok"]
+set level [expr {[security::RestrictLoginToSSLP] == 1 ? "secure" : "ok"}]
 
 # If the user is changing passwords for another user, they need to be account ok
-set account_status [ad_decode $user_id [ad_conn untrusted_user_id] "closed" "ok"]
+set account_status [expr {$user_id == [ad_conn untrusted_user_id] ? "closed" : "ok"}]
 
 auth::require_login \
     -level $level \
