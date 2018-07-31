@@ -159,6 +159,10 @@ template::head::add_style \
         .warn {
             color: darkmagenta;
         }
+        .sect {
+            font-size: large;
+            font-weight: bold;
+        }
 
         td.log {
             font-size: normal;

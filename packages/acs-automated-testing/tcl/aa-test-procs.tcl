@@ -818,7 +818,7 @@ ad_proc -public aa_false {
     affirm_name
     affirm_expr
 } {
-    Tests that affirm_expr is false.<br>
+    Tests that affirm_expr is false.
     Call this function within a testcase, stub or component.
 
     @return True if the affirmation passed, false otherwise.
@@ -839,22 +839,29 @@ ad_proc -public aa_false {
     }
 }
 
+ad_proc -public aa_section {
+        log_notes
+} {
+    Writes a log message indicating a new section to the log file.
+} {
+    aa_log_result "sect" $log_notes
+}
+
 ad_proc -public aa_log {
     log_notes
 } {
-    Writes a log message to the testcase log.<p>
+    Writes a log message to the testcase log.
     Call this function within a testcase, stub or component.
+
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    global aa_testcase_id
-    global aa_package_key
-    global aa_run_quietly_p
+    #global aa_testcase_id
+    #global aa_package_key
 
-    if {$aa_run_quietly_p} {
+    if {$::aa_run_quietly_p} {
         return
     }
-
     aa_log_result "log" $log_notes
 }
 
@@ -925,8 +932,7 @@ ad_proc -public aa_log_result {
                 ns_log Bug "aa_log_result: FAILED: Automated test did not function as expected: $aa_testcase_id, $test_notes"
             }
         }
-
-    } else {
+    } elseif {$test_result ne "sect"} {
         ns_log Debug "aa_log_result: LOG: $aa_testcase_id, $test_notes"
         set test_result "log"
     }
@@ -1129,6 +1135,7 @@ namespace eval acs::test {
 
     ad_proc -public ::acs::test::http {
         {-user_id 0}
+        {-user_info ""}
         {-method GET}
         {-session ""}
         {-body}
@@ -1144,6 +1151,7 @@ namespace eval acs::test {
 
         @author Gustaf Neumann
     } {
+        ns_log notice "::acs::test::http -user_id $user_id -user_info $user_info request $request"
         #
         # Check, if a testURL was specified in the config file
         #
@@ -1189,9 +1197,24 @@ namespace eval acs::test {
             set url "$proto://\[$address\]:$port/$request"
         }
 
-        if {[info exists session] && [dict exists $session cookies]} {
+        #
+        # either authenticate via user_info (when specified) or via user_id
+        #
+        if {$user_info ne ""} {
+        } else {
+            dict set user_info address $address
+            dict set user_info user_id $user_id
+        }
+
+        set session [::acs::test::set_user -session $session $user_info]
+
+        set login [dict get $session login]
+        #aa_log "login $login"
+
+        if {[dict exists $session cookies]} {
             lappend headers Cookie [dict get $session cookies]
         }
+
 
         set extra_args {}
         if {[info exists body]} {
@@ -1205,7 +1228,7 @@ namespace eval acs::test {
             }
             lappend extra_args -headers $requestHeaders
         }
-        nsv_set aa_test logindata [list peeraddr $address user_id $user_id]
+
 
         #
         # Construct a nice log line
@@ -1233,7 +1256,7 @@ namespace eval acs::test {
             #
             # always reset after the reqest the login data nsv
             #
-            nsv_unset aa_test logindata
+            nsv_unset -nocomplain aa_test logindata
         }
         #ns_log notice "run $request returns $d"
         #ns_log notice "... [ns_set array [dict get $d headers]]"
@@ -1243,39 +1266,111 @@ namespace eval acs::test {
         }
         if {[dict exists $d headers]} {
             set cookies {}
+            set cookie_dict {}
+            if {[dict exists $session cookies]} {
+                foreach cookie [split [dict get $session cookies] ";"] {
+                    lassign [split [string trim $cookie] =] name value
+                    dict set cookie_dict $name $value
+                }
+            }
             foreach {tag value} [ns_set array [dict get $d headers]] {
                 if {$tag eq "set-cookie"} {
                     if {[regexp {^([^;]+);} $value . cookie]} {
-                        aa_log "Cookie '$cookie'"
-                        lappend cookies $cookie
+                        lassign [split [string trim $cookie] =] name value
+                        dict set cookie_dict $name $value
                     } else {
                         aa_log "Cookie has invalid syntax: $value"
                     }
                 }
             }
-            dict set d cookies [join $cookies "; "]
+            foreach cookie_name [dict keys $cookie_dict] {
+                lappend cookies $cookie_name=[dict get $cookie_dict $cookie_name]
+            }
+            dict set d cookies [join $cookies ";"]
         }
+        dict set d login $login
         return $d
     }
+
+    ad_proc -public ::acs::test::set_user {
+        {-session ""}
+        user_info
+    } {
+
+        Depending on the provided user_info, either login in or
+        perform the direct test-specific authentication. When the
+        user_id is provided, use it directly.
+
+        @param user_info dict containing user_id and/or
+               email, last_name, username and password
+    } {
+        set already_logged_in 0
+        #
+        # First check, if the user is already logged in via cookies
+        #
+        if {[dict exists $session cookies]} {
+            #aa_log "session has cookies '[dict get $session cookies]'"
+            foreach cookie [split [dict get $session cookies] ";"] {
+                lassign [split [string trim $cookie] =] name value
+                #aa_log "session has cookie $cookie // NAME '$name' VALUE '$value'"
+                if {$name in {ad_user_login ad_user_login_secure} && $value ne "\"\""} {
+                    aa_log "user is already logged in via cookie $name"
+                    set already_logged_in 1
+                    dict set session login via_cookie
+                    break
+                }
+            }
+        }
+        if {!$already_logged_in} {
+            #
+            # The user is not logged in via cookies, check first
+            # available user_id. If this dies not exist, perform login
+            #
+            if {[dict exists $user_info user_id]
+                && [dict exists $user_info address]
+            } {
+                set user_id [dict get $user_info user_id]
+                if {$user_id ne 0} {
+                    aa_log "::acs::test::set_user set logindata"
+                    nsv_set aa_test logindata \
+                        [list \
+                             peeraddr [dict get $user_info address] \
+                             user_id [dict get $user_info user_id]]
+                    dict set session login via_logindata
+                } else {
+                    dict set session login none
+                }
+            } else {
+                aa_log "::acs::test::set_user perform login with $user_info"
+                foreach {att value} [::acs::test::login $user_info] {
+                    dict set session $att $value
+                }
+                dict set session login via_login
+            }
+        }
+        return $session
+    }
+
 
     ad_proc -public ::acs::test::login {
         user_info
     } {
         Login (register operation) in a web session
 
-        @param user_info dict containing at least email, last_name, username and password
+        @param user_info dict containing at least
+               email, last_name, username and password
     } {
         aa_log $user_info
-        set d [acs::test::http /register/]
+        set d [acs::test::http -user_id 0 /register/]
         acs::test::reply_has_status_code $d 200
 
         set form [acs::test::get_form [dict get $d body ] {//form[@id='login']}]
         set fields [dict get $form fields]
         if {[dict exists $fields email]} {
-            aa_log "login via email"
+            aa_log "login via email [dict get $user_info email]"
             dict set fields email [dict get $user_info email]
         } else {
-            aa_log "login via username"
+            aa_log "login via username [dict get $user_info username]"
             dict set fields username [dict get $user_info username]
         }
         dict set fields password [dict get $user_info password]

@@ -26,19 +26,41 @@ aa_register_case \
         # Create test user
         set user_info [acs::test::user::create -user_id $user_id]
 
-        # Login user
-        set d [acs::test::login $user_info]
+        ########################################################################################
+        aa_section "Visit homepage as anonymous user, last name of user should not show up"
+        ########################################################################################
+        set d [acs::test::http /]
+        acs::test::reply_contains_no $d [dict get $user_info last_name]
 
-        # Visit homepage, last name of user should be contained
-        set d [acs::test::http -session $d /]
+        # Login user
+        #set d [acs::test::login $user_info]
+
+        ########################################################################################
+        aa_section "Visit homepage with user_info, should login, last name of user should be contained"
+        ########################################################################################
+        set d [acs::test::http -user_info $user_info -session $d /]
 
         acs::test::reply_has_status_code $d 200
         acs::test::reply_contains $d [dict get $user_info last_name]
+        aa_equals "login [dict get $d login]" [dict get $d login] via_login
+        aa_true "cookies are not empty '[dict get $d cookies]'" {[dict get $d cookies] ne ""}
 
-        # Logout user
+        ########################################################################################
+        aa_section "Make a second request, now the cookie should be used"
+        ########################################################################################
+        set d [acs::test::http -user_info $user_info -session $d /]
+        acs::test::reply_has_status_code $d 200
+        acs::test::reply_contains $d [dict get $user_info last_name]
+        aa_equals "login [dict get $d login]" [dict get $d login] via_cookie
+
+        ########################################################################################
+        aa_section "Logout user"
+        ########################################################################################
         set d [acs::test::logout -session $d]
 
-        # Visit homepage, last name of user should not show up
+        ########################################################################################
+        aa_section "Visit homepage, last name of user should not show up"
+        ########################################################################################
         set d [acs::test::http -session $d /]
         acs::test::reply_contains_no $d [dict get $user_info last_name]
 

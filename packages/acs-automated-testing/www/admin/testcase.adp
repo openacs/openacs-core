@@ -115,6 +115,10 @@
           <td class="warn">@tests.result@</td>
   	  <td><pre class="warn">@tests.notes;literal@</pre></td>
         </elseif>
+        <elseif @tests.result@ eq "sect">
+          <td class="sect"></td>
+  	  <td><div class="sect">@tests.notes;literal@</div></td>
+        </elseif>
         <else>
           <td class="log">@tests.result@</td>
 	  <td class="log">@tests.notes;literal@</td>
