@@ -4019,6 +4019,169 @@ ad_proc -public ad_log {
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 
+#
+# Management of resource files, to be used in sitewide-admin procs to
+# decide between CDN installations an local installations.
+#
+namespace eval util::resources {
+
+    ad_proc -public ::util::resources::is_installed_locally {
+        -resource_info:required
+        {-version_dir ""}
+    } {
+
+        Check, if the required resource files are installed locally.
+        When the version_dir is specified, it is possible to have
+        different versions locally installed.
+
+        @param resource_dir the www/resources directory of the package
+        @param version_dir an optional directory, under the resource directory
+        @param files files to be checked if installed locally.
+
+        @author Gustaf Neumann
+    } {
+        set installed 1
+        set resource_dir [dict get $resource_info resource_dir]
+        set files [concat \
+                       [dict get $resource_info cssFiles] \
+                       [dict get $resource_info jsFiles] \
+                       [dict get $resource_info extraFiles] \
+                      ]
+        foreach file $files {
+            if {$version_dir eq ""} {
+                set path $resource_dir/$file
+            } else {
+                set path $resource_dir/$version_dir/$file
+            }
+            if {![file readable $path/]} {
+                set installed 0
+                break
+            }
+        }
+        return $installed
+    }
+
+    ad_proc -public ::util::resources::can_install_locally {
+        {-resource_info:required}
+        {-version_dir ""}
+    } {
+
+        Check, whether the operating system's permissions allow us to
+        install in the configured directories.
+
+        @param resource_info a dict containing at least resource_dir
+        @param version_dir an optional directory, under the resource directory
+
+        @author Gustaf Neumann
+    } {
+        set can_install 1
+        set resource_dir [dict get $resource_info resource_dir]
+
+        if {![file isdirectory $resource_dir]} {
+            try {
+                file mkdir $resource_dir
+            } on error {errorMsg} {
+                set can_install 0
+            }
+        }
+        if {$can_install && $version_dir ne ""} {
+            set path $resource_dir/$version_dir
+            if {![file isdirectory $path]} {
+                try {
+                    file mkdir $path
+                } on error {errorMsg} {
+                    set can_install 0
+                }
+            } else {
+                set can_install [file writable $path]
+            }
+        }
+        return $can_install
+    }
+
+    ad_proc -public ::util::resources::download {
+        {-resource_info:required}
+        {-version_dir ""}
+    } {
+
+        Download resources typically from a CDN and install it for local usage.
+        The installed files are as well gzipped for faster delivery, when gzip is available.-
+
+        @param resource_dir the www/resources directory of the package
+        @param version_dir an optional directory, under the resource directory
+        @param resource_info a dict containing resource_dir, cdn, cssFiles, jsFiles, and extraFiles
+
+        @author Gustaf Neumann
+    } {
+        set resource_dir [dict get $resource_info resource_dir]
+        set can_install [::util::resources::can_install_locally \
+                             -resource_info $resource_info \
+                             -version_dir $version_dir]
+        if {!$can_install} {
+            error "Cannot download resources to $resource_dir due to permissions"
+        }
+
+        #
+        # Get the CDN prefix (this does not include the source version
+        # information as used on the CDN).
+        #
+        set download_prefix https:[dict get $resource_info cdn]
+        set local_path $resource_dir
+
+        if {$version_dir ne ""} {
+            append local_path /$version_dir
+            append download_prefix /$version_dir
+        }
+        if {![file writable $local_path]} {
+            file mkdir $local_path
+        }
+
+        #
+        # Do we have gzip installed?
+        #
+        set gzip [::util::which gzip]
+
+        #
+        # So far, everything went fine. Now download the files and
+        # raise an exception, when the download fails.
+        #
+        foreach file [concat \
+                          [dict get $resource_info cssFiles] \
+                          [dict get $resource_info jsFiles] \
+                          [dict get $resource_info extraFiles] \
+                         ] {
+
+            set result [util::http::get -url $download_prefix/$file -spool]
+            if {[dict get $result status] == 200} {
+                set fn [dict get $result file]
+            } else {
+                error "download from $download_prefix/$file failed: $result"
+            }
+            set local_root [file dirname $local_path/$file]
+            if {![file isdirectory $local_root]} {
+                file mkdir $local_root
+            }
+            file rename -force -- $fn $local_path/$file
+
+            #
+            # Remove potentially stale gzip file.
+            #
+            if {[file exists $local_path/$file.gz]} {
+                file delete $local_path/$file.gz
+            }
+
+            #
+            # When gzip is available, produce a static compressed file
+            # as well.
+            #
+            if {$gzip ne ""} {
+                exec $gzip -9 -k $local_path/$file
+            }
+        }
+    }
+
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
