@@ -4026,7 +4026,7 @@ ad_proc -public ad_log {
 # The configuration information is provided via dict named resource_info,
 # containing typically the following fields:
 #
-#   - resource_dir:  the top-lvel directory on the local disk,
+#   - resource_dir:  the top-level directory on the local disk,
 #                    where the resource are to be stored
 #   - cdn:           the CDN which olds the content
 #   - cssFiles:      list of CSS files for that package (can be provided via URN)
