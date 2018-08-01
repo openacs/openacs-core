@@ -440,8 +440,10 @@ ad_proc util::http::get {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
 
-    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
-    <code>file</code>, <code>status</code>, and <code>modified</code>.
+    @return Returns the data as dict with elements
+    <code>headers</code>, <code>page</code>, <code>file</code>,
+    <code>status</code>, <code>time</code> (elapsed request time in
+    ns_time format), and <code>modified</code>.
 
 } {
     return [util::http::request \
@@ -575,8 +577,10 @@ ad_proc util::http::post {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
 
-    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
-    <code>file</code>, <code>status</code>, and <code>modified</code>.
+    @return Returns the data as dict with elements
+    <code>headers</code>, <code>page</code>, <code>file</code>,
+    <code>status</code>, <code>time</code> (elapsed request time in
+    ns_time format), and <code>modified</code>.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -989,9 +993,11 @@ ad_proc -private util::http::follow_redirects {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
 
-    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
-    <code>file</code>, <code>status</code>, and <code>modified</code> from the last
-    followed redirect, or an empty string if request was not a redirection.
+    @return Returns the data as dict with elements
+    <code>headers</code>, <code>page</code>, <code>file</code>,
+    <code>status</code>, <code>time</code> (elapsed request time in
+    ns_time format), and <code>modified</code> from the last followed
+    redirect, or an empty string if request was not a redirection.
 
 } {
     ## Redirection management ##
@@ -1169,8 +1175,10 @@ ad_proc -private util::http::request {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
 
-    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
-    <code>file</code>, <code>status</code>, and <code>modified</code>.
+    @return Returns the data as dict with elements
+    <code>headers</code>, <code>page</code>, <code>file</code>,
+    <code>status</code>, <code>time</code> (elapsed request time in
+    ns_time format), and <code>modified</code>.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -1300,8 +1308,10 @@ ad_proc -private util::http::native::request {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
 
-    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
-    <code>file</code>, <code>status</code>, and <code>modified</code>.
+    @return Returns the data as dict with elements
+    <code>headers</code>, <code>page</code>, <code>file</code>,
+    <code>status</code>, <code>time</code> (elapsed request time in
+    ns_time format), and <code>modified</code>.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -1400,8 +1410,20 @@ ad_proc -private util::http::native::request {
         }
     }
 
+
     # Queue call to the url and wait for response
-    {*}$wait_cmd [{*}$queue_cmd]
+    set start_time [ns_time get]
+    set r [{*}$wait_cmd [{*}$queue_cmd]]
+    set end_time [ns_time get]
+
+    # Naviserver > 4.99.16 will return, among others, elapsed time in
+    # the response dict. If we run an older version, this must be
+    # calculated.
+    if {[dict exists $r time]} {
+        set time [dict get $r time]
+    } else {
+        set time [ns_time diff $end_time $start_time]
+    }
 
     if {[info exists spool_file]} {
         set page "${this_proc}: response spooled to '$spool_file'"
@@ -1473,6 +1495,7 @@ ad_proc -private util::http::native::request {
                 page     $page \
                 file     $spool_file \
                 status   $status \
+                time     $time \
                 modified $last_modified]
 }
 
@@ -1617,8 +1640,10 @@ ad_proc -private util::http::curl::request {
     before 7.32.0 just accept integer, the granularity is set to
     seconds.
 
-    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
-    <code>file</code>, <code>status</code>, and <code>modified</code>.
+    @return Returns the data as dict with elements
+    <code>headers</code>, <code>page</code>, <code>file</code>,
+    <code>status</code>, <code>time</code> (elapsed request time in
+    ns_time format), and <code>modified</code>.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -1760,7 +1785,12 @@ ad_proc -private util::http::curl::request {
     lappend cmd -D $resp_headers_tmpfile
     lappend cmd $url
 
+    set start_time [ns_time get]
     set response [{*}$cmd]
+    set end_time [ns_time get]
+
+    # elapsed time
+    set time [ns_time diff $end_time $start_time]
 
     # Parse headers from dump file
     set resp_headers [ns_set create resp_headers]
@@ -1831,6 +1861,7 @@ ad_proc -private util::http::curl::request {
                 page     $page \
                 file     $spool_file \
                 status   $status \
+                time     $time \
                 modified $last_modified]
 }
 
