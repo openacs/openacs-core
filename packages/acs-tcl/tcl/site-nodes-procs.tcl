@@ -1430,7 +1430,7 @@ if {$UseXotclSiteNodes} {
                 # In any case, flush as well the per-request cache
                 #
                 array unset ::__node_id
-                
+
                 set old_url [:get_url -node_id $node_id]
 
                 if {$node_id eq "" || $old_url eq "/"} {
@@ -1562,7 +1562,7 @@ if {$UseXotclSiteNodes} {
          }
         site_node object mixins add SiteNodesCache
         if {[info commands ns_urlspace] ne ""} {
-            ns_log notice "... using NaviServer's ns_urlspace for reduced redundancy in site node caches"
+            ns_log notice "... using ns_urlspace for reduced redundancy in site node caches"
             site_node object mixins add SiteNodeUrlspaceCache
         }
 
