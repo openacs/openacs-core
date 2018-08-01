@@ -4023,6 +4023,18 @@ ad_proc -public ad_log {
 # Management of resource files, to be used in sitewide-admin procs to
 # decide between CDN installations an local installations.
 #
+# The configuration information is provided via dict named resource_info,
+# containing typically the following fields:
+#
+#   - resource_dir:  the top-lvel directory on the local disk,
+#                    where the resource are to be stored
+#   - cdn:           the CDN which olds the content
+#   - cssFiles:      list of CSS files for that package (can be provided via URN)
+#   - jsFiles:       list oj JavaScript files for that package (can be provided via URN)
+#   - extraFiles:    list of more files, probably included by cssFiles (e.g. fonts)
+#   - prefix:        used for resolving the files on the server; might either point
+#                    to the CDN or to locally installed files (typically /resources/...)
+#
 namespace eval util::resources {
 
     ad_proc -public ::util::resources::is_installed_locally {
@@ -4034,9 +4046,8 @@ namespace eval util::resources {
         When the version_dir is specified, it is possible to have
         different versions locally installed.
 
+        @param resource_info a dict containing resource_dir, cssFiles, jsFiles, and extraFiles
         @param resource_dir the www/resources directory of the package
-        @param version_dir an optional directory, under the resource directory
-        @param files files to be checked if installed locally.
 
         @author Gustaf Neumann
     } {
