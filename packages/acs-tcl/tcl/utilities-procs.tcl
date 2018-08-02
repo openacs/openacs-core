@@ -4036,6 +4036,9 @@ ad_proc -public ad_log {
 #   - prefix:        used for resolving the files on the server; might either point
 #                    to the CDN or to locally installed files (typically /resources/...)
 #
+# Optionally, the dict can contain more fields, like e.g. an urnMap for mapping
+# urls to resources (see e.g. openacs-bootstrap4-theme)
+#
 namespace eval util::resources {
 
     ad_proc -public ::util::resources::is_installed_locally {
