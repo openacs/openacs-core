@@ -43,9 +43,24 @@ ad_proc -public template::register_urn {
     processing the url can be neglected.
 
 } {
-    set ::template::head::urn($urn) $resource
-    ns_log notice "add URN: $urn <$resource>"
+    set key ::template::head::urn($urn)
+    if {[info exists $key]} {
+        set old_resource [set $key]
+        #
+        # Prefer local URNs over non-local ones
+        #
+        if {[string match //* $old_resource] || [string match http* $old_resource]} {
+            ns_log notice "overwrite URN: $urn <$old_resource> with <$resource>"
+            set $key $resource
+        } else {
+            ns_log notice "keep old URN: $urn <$old_resource> instead of <$resource>"
+        }
+    } else {
+        set $key $resource
+        ns_log notice "add URN: $urn <$resource>"
+    }
 }
+
 
 ad_proc -public template::add_script {
     {-async:boolean}
@@ -76,6 +91,7 @@ ad_proc -public template::add_script {
                    script
     @param type    the type attribute of the script tag, e.g. 'text/javascript'
 } {
+
     if {$section eq "head"} {
         #
         # A head script
@@ -146,6 +162,8 @@ ad_proc -public template::head::add_script {
     set key ::template::head::urn($src)
     if {[info exists $key]} {
         set src [set $key]
+    } elseif {[string match urn:* $src]} {
+        ns_log error "URN <$src> could not be resolved"
     }
 
     if {$src eq ""} {
@@ -173,7 +191,7 @@ ad_proc -public template::head::add_script {
 ad_proc -public template::head::flush_script {
     {-src:required}
 } {
-    
+
     Flush a script tag, which was previously set in the head section
     via template::add_script.  One can delete multiple entries by
     providing a glob pattern.
