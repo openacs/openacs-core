@@ -3,9 +3,9 @@
   <property name="doc(title)">@subsite_name;literal@</property>
 
 
-<table>
+<table width="100%">
   <tr>
-    <td valign="top">
+    <td valign="top" width="30%">
       <div class="portlet-wrapper">
         <div class="portlet-header">
           <div class="portlet-title">
@@ -63,14 +63,16 @@
   </tr>
 </table>
 
-<if @admin_p;literal@ true> 
-    <p>Dear Website Manager: <br>OpenACS offers a wide range of packages, containing 
-<ul>
-<li>collaboration tools (forums, wiki, file-storage...), 
-<li>announcement tools (news, notifications, faq), 
-<li>and the community based e-learning platform DotLRN. 
-</ul>
-<p><a href="/acs-admin/install/" title="Install Packages" class="button">Install more packages</a></p>
+<if @admin_p;literal@ true>
+    <div class="portlet">
+    <p>Dear Website Manager: <br>OpenACS offers a wide range of packages, containing
+    <ul>
+    <li>collaboration tools (forums, wiki, file-storage...), 
+    <li>announcement tools (news, notifications, faq), 
+    <li>and the community based e-learning platform DotLRN. 
+    </ul	    >
+    <p><a href="/acs-admin/install/" title="Install Packages" class="button">Install more packages</a></p>
+    </div>
 </if>
   
 
