@@ -42,6 +42,7 @@ admin {
     selected_patterns {
         admin/*
         shared/parameters
+	acs-admin/*
     }
     subsections {
         configuration {
@@ -55,10 +56,6 @@ admin {
                 *
             }
         }
-        subsite_add {
-            label #acs-subsite.New_Subsite#
-            url admin/subsite-add
-        }
         permissions {
             label #acs-subsite.Permissions#
             url admin/permissions
@@ -66,6 +63,10 @@ admin {
         parameters {
             label #acs-subsite.Parameters#
             url shared/parameters
+        }
+        sitemap {
+            label #acs-subsite.Site_Map#
+            url admin/site-map/
         }
         advanced {
             label #acs-subsite.Advanced#
@@ -80,6 +81,11 @@ admin {
                 object-types/*
             }
         }
+        swa {
+            label #acs-subsite.Site_Wide_Admin#
+            url /acs-admin/
+        }
+
     }
 }
 " description="Navigation tabs to show administrators" section_name="Navigation Tabs"/>
@@ -122,7 +128,7 @@ admin {
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictEntireServerToRegisteredUsersP"  default="0" description="Do we want to allow only registered users to visit this subsite? (restart required)"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictToSSL"  default="admin/*" description="URLs we want restricted to SSL. Note that this only takes effect if you have an SSL listener configured on your AOLserver and kernel parameter RegisterRestrictToSSLFilters is set to 1 (its default)."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ScreenNameP"  default="0" description="Set this to 1 if you want to show screen names instead of real names." section_name="user-info"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowApplications"  default="1" description="Show individual tabs for mounted applications within this subsite" section_name="Navigation Tabs"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowApplications"  default="0" description="Show individual tabs for mounted applications within this subsite" section_name="Navigation Tabs"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowContextBarP"  default="1" description="Should context bars appear on pages?"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowMembersListTo"  default="1" description="Who can see the subsite members list. 0 = Everyone; 1 = Members; 2 = Only administrators; 3 = members, unless subsite."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SolicitPortraitP"  default="1" description="Set this to 1 if you want users to be asked to submit a portrait." section_name="user-info"/>
