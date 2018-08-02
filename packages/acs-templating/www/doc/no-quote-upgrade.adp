@@ -104,7 +104,7 @@ everything works as expected:
 &lt;/form&gt;
       </pre></blockquote>
 <p>
-<strong>Snippets of HTML produced by Tcl code, aka
+<strong>Snippets of HTML produced by Tcl code, a.k.a.
 <em>widgets</em>
 </strong>.<br>
 Normally we try to fit all HTML code into the ADP template and have

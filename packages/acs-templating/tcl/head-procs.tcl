@@ -33,7 +33,7 @@ ad_proc -public template::register_urn {
     -resource:required
 } {
 
-    Register an urn for a resource. These urns provide a single place
+    Register a URN for a resource. These urns provide a single place
     for e.g updating references to external resources when switching
     between a CDN and a local resource, or when a resource should be
     updated.
@@ -157,7 +157,7 @@ ad_proc -public template::head::add_script {
     }
 
     #
-    # Replace potential urn in src with resolved value
+    # Replace potential URN in src with resolved value
     #
     set key ::template::head::urn($src)
     if {[info exists $key]} {
@@ -702,7 +702,7 @@ ad_proc -public template::add_footer {
 ad_proc -private template::head::resolve_urn {
     resource
 } {
-    Replace potential urn in provided resource name with resolved
+    Replace potential URN in provided resource name with resolved
     value
 } {
     set key ::template::head::urn($resource)
