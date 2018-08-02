@@ -189,12 +189,11 @@ ad_proc -private apm_package_selection_widget {
 }
 
 
-ad_proc -private apm_higher_version_installed_p {
+ad_proc -public apm_higher_version_installed_p {
     package_key
     version_name
 } {
     @param package_key  The package in question.
-
     @param version_name The name of the currently installed version.
 
     @return The return value of this procedure doesn't really fit with its name.
