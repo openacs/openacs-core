@@ -4026,9 +4026,10 @@ ad_proc -public ad_log {
 # The configuration information is provided via dict named resource_info,
 # containing typically the following fields:
 #
-#   - resource_dir:  the top-level directory on the local disk,
+#   - resourceDir:   the top-level directory on the local disk,
 #                    where the resource are to be stored
-#   - cdn:           the CDN which olds the content
+#   - cdn:           the CDN URL prefix for obtaining the content (e.g. //maxcdn.bootstrapcdn.com/bootstrap)
+#   - cdnHost:       CDN host, sometimes needed for content security policies
 #   - cssFiles:      list of CSS files for that package (can be provided via URN)
 #   - jsFiles:       list oj JavaScript files for that package (can be provided via URN)
 #   - extraFiles:    list of more files, probably included by cssFiles (e.g. fonts)
@@ -4046,13 +4047,13 @@ namespace eval util::resources {
         When the version_dir is specified, it is possible to have
         different versions locally installed.
 
-        @param resource_info a dict containing resource_dir, cssFiles, jsFiles, and extraFiles
-        @param resource_dir the www/resources directory of the package
+        @param resource_info a dict containing resourceDir, cssFiles, jsFiles, and extraFiles
+        @param version_dir an optional directory, under the resource directory
 
         @author Gustaf Neumann
     } {
         set installed 1
-        set resource_dir [dict get $resource_info resource_dir]
+        set resource_dir [dict get $resource_info resourceDir]
         set files [concat \
                        [dict get $resource_info cssFiles] \
                        [dict get $resource_info jsFiles] \
@@ -4080,13 +4081,13 @@ namespace eval util::resources {
         Check, whether the operating system's permissions allow us to
         install in the configured directories.
 
-        @param resource_info a dict containing at least resource_dir
+        @param resource_info a dict containing at least resourceDir
         @param version_dir an optional directory, under the resource directory
 
         @author Gustaf Neumann
     } {
         set can_install 1
-        set resource_dir [dict get $resource_info resource_dir]
+        set resource_dir [dict get $resource_info resourceDir]
 
         if {![file isdirectory $resource_dir]} {
             try {
@@ -4118,13 +4119,12 @@ namespace eval util::resources {
         Download resources typically from a CDN and install it for local usage.
         The installed files are as well gzipped for faster delivery, when gzip is available.-
 
-        @param resource_dir the www/resources directory of the package
         @param version_dir an optional directory, under the resource directory
-        @param resource_info a dict containing resource_dir, cdn, cssFiles, jsFiles, and extraFiles
+        @param resource_info a dict containing resourceDir, cdn, cssFiles, jsFiles, and extraFiles
 
         @author Gustaf Neumann
     } {
-        set resource_dir [dict get $resource_info resource_dir]
+        set resource_dir [dict get $resource_info resourceDir]
         set can_install [::util::resources::can_install_locally \
                              -resource_info $resource_info \
                              -version_dir $version_dir]
