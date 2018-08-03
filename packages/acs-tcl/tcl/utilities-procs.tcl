@@ -26,7 +26,7 @@ ad_proc util::pdfinfo {
     set pdfinfo [util::which pdfinfo]
 
     if {$pdfinfo eq ""} {
-        error "pdfinfo command not found on the system"
+        error "the command 'pdfinfo' is not found on the system"
     }
 
     set retval [dict create]
@@ -1546,7 +1546,7 @@ ad_proc -public ad_returnredirect {
     @param message A message to display to the user. See util_user_message.
     @param html Set this flag if your message contains HTML. If specified, you're responsible for proper quoting
     of everything in your message. Otherwise, we quote it for you.
-    @param allow_complete_url By default we disallow redirecting to urls outside the current host. This is based on the currently set host header or the host name in the config file if there is no host header. Set allow_complete_url if you are redirecting to a known safe external web site. This prevents redirecting to a site by URL query hacking.
+    @param allow_complete_url By default we disallow redirecting to URLs outside the current host. This is based on the currently set host header or the host name in the config file if there is no host header. Set allow_complete_url if you are redirecting to a known safe external web site. This prevents redirecting to a site by URL query hacking.
 
     @see util_user_message
     @see ad_script_abort
@@ -2506,7 +2506,7 @@ ad_proc -public util_text_to_url {
     {_text ""}
 } {
     Modify a string so that it is suited as a well formatted URL path element.
-    Also, if given a list of existing urls it can catch duplicate or optionally
+    Also, if given a list of existing URLs it can catch duplicate or optionally
     create an unambiguous url by appending a dash and a digit.
 
     <p>
@@ -4024,8 +4024,10 @@ ad_proc -public ad_log {
 # decide between CDN installations an local installations.
 #
 # The configuration information is provided via dict named resource_info,
-# containing typically the following fields:
+# containing typically the following fields (all in Camel case style):
 #
+#   - resourceName:  Name for the resources
+#                    where the resource are to be stored
 #   - resourceDir:   the top-level directory on the local disk,
 #                    where the resource are to be stored
 #   - cdn:           the CDN URL prefix for obtaining the content (e.g. //maxcdn.bootstrapcdn.com/bootstrap)
@@ -4036,8 +4038,9 @@ ad_proc -public ad_log {
 #   - prefix:        used for resolving the files on the server; might either point
 #                    to the CDN or to locally installed files (typically /resources/...)
 #
-# Optionally, the dict can contain more fields, like e.g. an urnMap for mapping
-# urls to resources (see e.g. openacs-bootstrap4-theme)
+# Optionally, the dict can contain more fields, like e.g. a "urnMap"
+# for mapping URLs to resources (see e.g. openacs-bootstrap4-theme) or
+# "downloadURLs" for downloading full packages.
 #
 namespace eval util::resources {
 
@@ -4057,11 +4060,21 @@ namespace eval util::resources {
     } {
         set installed 1
         set resource_dir [dict get $resource_info resourceDir]
+        set downloadFiles {}
+        ns_log notice "check downloadURLs <[dict exists $resource_info downloadURLs]> // [lsort [dict keys $resource_info]]"
+        if {[dict exists $resource_info downloadURLs]} {
+            ns_log notice "we have downloadURLs <[dict get $resource_info downloadURLs]>"
+            foreach url [dict get $resource_info downloadURLs] {
+                lappend downloadFiles [file tail $url]
+            }
+        }
         set files [concat \
                        [dict get $resource_info cssFiles] \
                        [dict get $resource_info jsFiles] \
                        [dict get $resource_info extraFiles] \
+                       $downloadFiles \
                       ]
+        ns_log notice "check files <$files>"
         foreach file $files {
             if {$version_dir eq ""} {
                 set path $resource_dir/$file
@@ -4191,6 +4204,25 @@ namespace eval util::resources {
             if {$gzip ne ""} {
                 exec $gzip -9 -k $local_path/$file
             }
+        }
+
+        if {[dict exists $resource_info downloadURLs]} {
+            #
+            # For downloadURLs, just handle here the download. How to
+            # decompress these archives and what to do with these to
+            # install it properly is handled by package-speficic
+            # downloaders, which might call this function.
+            #
+            foreach url [dict get $resource_info downloadURLs] {
+                set result [util::http::get -url $url -spool]
+                if {[dict get $result status] == 200} {
+                    set fn [dict get $result file]
+                } else {
+                    error "download from $url failed: $result"
+                }
+            }
+            set file [file tail $url]
+            file rename -force -- $fn $local_path/$file
         }
     }
 
