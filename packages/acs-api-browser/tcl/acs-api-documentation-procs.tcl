@@ -981,12 +981,25 @@ ad_proc -private api_call_graph_snippet {
     # Include calls from calledby information. Might come from a file
     # (e.g. a *-init.tcl file) or from a proc.
     #
+    set callers {}    
     if {[dict exists $doc calledby]} {
         set edges ""
         set nodes ""
-        foreach caller [lrange [lsort [dict get $doc calledby]] 0 $maxnodes-1] {
+
+        #
+        # Filter from the list the recursive calls, since these mess
+        # up the graph layout.
+        #
+        set caller_procs {}
+        foreach c [dict get $doc calledby] {
+            if { $c ne $proc_name } {
+                lappend caller_procs $c
+            }
+        }
+        
+        foreach caller [lrange [lsort $caller_procs] 0 $maxnodes-1] {
             #
-            # when the "caller" starts with "packages/", we assume,
+            # When the "caller" starts with "packages/", we assume,
             # this is a file.
             #
             if {[regexp {^(packages/[^/]+/)(.*)} $caller . line1 line2]} {
@@ -996,6 +1009,7 @@ ad_proc -private api_call_graph_snippet {
                     [subst {URL="$url", margin=".2,0" shape=rectangle, tooltip="Script calling $proc_name", }] \
                     [subst {label=<<FONT POINT-SIZE="$textpointsize">${line1}<BR/>${line2}</FONT>>}]
             } else {
+                lappend callers $caller
                 set url [api_proc_doc_url -proc_name $caller]
                 set hints [api_proc_pretty_name -hints_only $caller]
                 if {$hints ne ""} {
@@ -1017,12 +1031,17 @@ ad_proc -private api_call_graph_snippet {
     }
 
     #
-    # Inlcude information, what other procs this proc calls.
-    # filter from this list false positives from the call graph analysis
+    # Include information, what other procs this proc calls.  Filter
+    # from this list false positives of the call graph
+    # analysis. Exclude es well recursive calls, since these mess up
+    # the graph layout.
     #
     set called_procs {}
     foreach c [api_called_proc_names -proc_name $proc_name] {
-        if {[info commands $c] eq $c} {
+        if {[info commands $c] eq $c
+            && $c ni $callers
+            && $c ne $proc_name
+        } {
             lappend called_procs $c
         }
     }
