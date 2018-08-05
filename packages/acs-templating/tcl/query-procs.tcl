@@ -425,7 +425,8 @@ ad_proc -private get_cached_result { name type } {
         if { [ns_cache names template_query_cache $cache_key] ne ""} {
 
             if {[ns_info name] eq "NaviServer"} {
-                set cached_result [ns_cache_eval template_query_cache $cache_key {}]
+                set cached_result ""
+                ns_cache_get template_query_cache $cache_key cached_result
             } else {
 
                 # get the pair of the timeout and value
