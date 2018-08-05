@@ -69,7 +69,7 @@ ad_proc -public ad_text_to_html {
         # email links have the form xxx@xxx.xxx
         #
         # JCD: don't treat things =xxx@xxx.xxx as email since most
-        # common occurrence seems to be in urls (although VPATH bounce
+        # common occurrence seems to be in URLs (although VPATH bounce
         # emails like bounce-user=domain.com@sourcehost.com will then
         # not work correctly).  Another tricky case is
         #     http://www.postgresql.org/message-id/20060329203545.M43728@narrowpathinc.com
@@ -1272,8 +1272,8 @@ ad_proc ad_parse_html_attributes_upvar {
                         set proto [expr {[dict exists $parsed_url proto] ? [dict get $parsed_url proto] : ""}]
                         if {$proto ne ""} {
                             if {$no_outer_urls_p} {
-                                # no external urls allowed: we still
-                                # want to allow fully specified urls
+                                # no external URLs allowed: we still
+                                # want to allow fully specified URLs
                                 # that refer to this server, but we'll
                                 # transform them in a local absolute
                                 # reference. For all others, attribute

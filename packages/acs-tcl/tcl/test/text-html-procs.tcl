@@ -122,7 +122,7 @@ aa_register_case \
                             -no_outer_urls]
             set result [string trim $result]
             set test_result [string trim $test_result]
-            aa_true "$msg no outer urls?" {$result eq $test_result}
+            aa_true "$msg no outer URLs?" {$result eq $test_result}
         }
 
     # Try test cases fixing markup

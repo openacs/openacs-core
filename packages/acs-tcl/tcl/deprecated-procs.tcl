@@ -2376,7 +2376,7 @@ ad_proc -deprecated -public util_httpget {
     url {headers ""} {timeout 30} {depth 0}
 } {
     util_httpget simply calls util::http::get which also returns
-    status and last_modfied
+    status and last_modified
 
     @see util::http::get
 } {

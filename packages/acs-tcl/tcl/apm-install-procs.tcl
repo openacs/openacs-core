@@ -2164,7 +2164,7 @@ ad_proc -public apm_get_repository_channel {} {
 }
 
 ad_proc -public apm_get_repository_channels { {repository_url http://openacs.org/repository/} } {
-    Returns the channels and urls from a repository
+    Returns the channels and URLs from a repository
 } {
     set result [util::http::get -url $repository_url]
     set status [dict get $result status]

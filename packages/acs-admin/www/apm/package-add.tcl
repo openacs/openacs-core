@@ -255,7 +255,7 @@ this package, please load them manually into your database.
 }]
 
 
-# Add event listener for updating urls and checking mailto urls
+# Add event listener for updating URLs and checking mailto URLs
 
 template::add_event_listener -CSSclass "update-url" -event change -script {updateURLs();}
 template::add_event_listener -CSSclass "check-mailto" -event change -script {checkMailto(this);}

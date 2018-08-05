@@ -205,7 +205,7 @@ ad_proc -public util::http::available {
 
     @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
-    https:// urls only.
+    https:// URLs only.
 
 } {
     set ssl_p [expr {$force_ssl_p || [string match "https://*" $url]}]
@@ -424,7 +424,7 @@ ad_proc util::http::get {
 
     @param force_ssl specifies whether we want to use SSL
     despite the url being in http:// form.  Default behavior is to use
-    SSL on https:// urls only.
+    SSL on https:// URLs only.
 
     @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the
@@ -542,7 +542,7 @@ ad_proc util::http::post {
 
     @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form.  Default behavior is to use SSL on
-    https:// urls only.
+    https:// URLs only.
 
     @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the
@@ -958,7 +958,7 @@ ad_proc -private util::http::follow_redirects {
 
     @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form.  Default behavior is to use SSL on
-    https:// urls only.
+    https:// URLs only.
 
     @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the
@@ -1138,7 +1138,7 @@ ad_proc -private util::http::request {
 
     @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
-    https:// urls only.
+    https:// URLs only.
 
     @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the
@@ -1277,7 +1277,7 @@ ad_proc -private util::http::native::request {
 
     @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
-    https:// urls only.
+    https:// URLs only.
 
     @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the

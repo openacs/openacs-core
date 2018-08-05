@@ -74,7 +74,7 @@ if { $untrusted_user_id == 0 } {
 util_get_user_messages -multirow user_messages
 
 #
-# Set acs-lang urls
+# Set acs-lang URLs
 #
 set acs_lang_url [apm_package_url_from_key "acs-lang"]
 set num_of_locales [llength [lang::system::get_locales]]

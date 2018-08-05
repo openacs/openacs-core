@@ -662,7 +662,7 @@ ad_proc -public site_node::get_url {
 ad_proc -public site_node::get_url_from_object_id {
     {-object_id:required}
 } {
-    returns a list of urls for site_nodes that have the given object
+    Return a list of URLs for site_nodes that have the given object
     mounted or the empty list if there are none. The
     url:s will be returned in descending order meaning any children will
     come before their parents. This ordering is useful when deleting site nodes
@@ -693,7 +693,7 @@ ad_proc -public site_node::get_node_id_from_object_id {
         set url ""
     } else {
         if {[llength $urls] > 1} {
-            ad_log warning "get_node_id_from_object_id for object $object_id returns [llength $urls] urls, first one is returned"
+            ad_log warning "get_node_id_from_object_id for object $object_id returns [llength $urls] URLs, first one is returned"
         }
         set url [lindex $urls 0]
     }
@@ -857,7 +857,7 @@ ad_proc -public site_node::get_children {
     }
 
     # if we had filters or were getting a particular element then we
-    # have our results in return_val otherwise it's just urls
+    # have our results in return_val otherwise it's just URLs
     if { $element ne ""
          || [llength $filters] > 0} {
         return $return_val
@@ -1190,8 +1190,8 @@ if {$UseXotclSiteNodes} {
             #
             # @method get_urls_from_object_id
             #
-            #    returns a list of urls for site_nodes that have the given
-            #    object mounted or the empty list if there are none. The urls
+            #    returns a list of URLs for site_nodes that have the given
+            #    object mounted or the empty list if there are none. The URLs
             #    will be returned in descending order meaning any children
             #    will come before their parents. This ordering is useful when
             #    deleting site nodes as we must delete child site nodes before
@@ -1741,7 +1741,7 @@ if {$UseXotclSiteNodes} {
     ad_proc -public site_node::get_url_from_object_id {
         {-object_id:required}
     } {
-        returns a list of urls for site_nodes that have the given object
+        Returns a list of URLs for site_nodes that have the given object
         mounted or the empty list if there are none. The
         url:s will be returned in descending order meaning any children will
         come before their parents. This ordering is useful when deleting site nodes
