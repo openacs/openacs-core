@@ -1,5 +1,6 @@
 ad_include_contract {
 
+    
     Includable search form.
     Results should be appended to multirow called users at ADP level
     Default local authority search.
@@ -47,7 +48,7 @@ if {[llength $search_text]} {
 }
 
 set system_name [ad_system_name]
-# Why dont't we use authority_id if we get one from the parent page?
+# Why don't we use authority_id if we get one from the parent page?
 db_foreach get_users {
     select
      first_names, last_name, email, username, user_id, authority_id
