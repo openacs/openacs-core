@@ -14,8 +14,7 @@
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Service contracts defines an API for the creation of interfaces and discovery of interface implementations.
-        Examples are the contracts used for search which provide a means to get content on a given object and to translate an object_id to a 
-        url or the contracts used by dotlrn and new-portals to allow packages to provide portalized panes.</description>
+        Examples are the contracts used for search which provide a means to get content on a given object and to translate an object_id to a URL or the contracts used by dotlrn and new-portals to allow packages to provide portalized panes.</description>
         <license>GPL version 2</license>
 
         <provides url="acs-service-contract" version="5.10.0d1"/>
