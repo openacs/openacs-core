@@ -20,7 +20,7 @@
 <para>The following is a requirements document for the OpenACS 4.0 request
 processor. The major enhancements in the 4.0 version include a more
 sophisticated directory mapping system that allows package pageroots to be
-mounted at arbitrary urls, and tighter integration with the database to allow
+mounted at arbitrary URLs, and tighter integration with the database to allow
 for flexible user controlled url structures, and subsites.</para>
 
 </sect2>

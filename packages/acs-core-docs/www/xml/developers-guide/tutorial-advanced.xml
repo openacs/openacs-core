@@ -1207,8 +1207,8 @@ drop function inline_0();
   </sect1>
 
   <sect1 id="tutorial-vuh">
-    <title>Using .vuh files for pretty urls</title>
-    <para>.Vuh files are special cases of .tcl files, used for rewriting incoming urls.  We can use a vuh file to prettify the uri for our notes.  Instead of <computeroutput>note-edit?item_id=495</computeroutput>, we can use <computeroutput>note/495</computeroutput>.  To do this, we will need a new .vuh file for redirection and we will need to change the referring links in note-list.  First, add the vuh:</para>
+    <title>Using .vuh files for pretty URLs</title>
+    <para>.Vuh files are special cases of .tcl files, used for rewriting incoming URLs.  We can use a vuh file to prettify the uri for our notes.  Instead of <computeroutput>note-edit?item_id=495</computeroutput>, we can use <computeroutput>note/495</computeroutput>.  To do this, we will need a new .vuh file for redirection and we will need to change the referring links in note-list.  First, add the vuh:</para>
       <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www</userinput>
 [$OPENACS_SERVICE_NAME www]$ <userinput>emacs note.vuh</userinput>
 </screen>
@@ -1574,7 +1574,7 @@ ad_page_contract {
 
     <para>Next, check what version your package is currently at. For
     example, it may be at version 1.0b1. Create a file in
-    sql/postgres/upgrade called packagename-1.0b1-1.0b2.sql and put
+    yourpackage/sql/postgres/upgrade called packagename-1.0b1-1.0b2.sql and put
     the SQL code that will update the data model. For example, if you
     add in a column, you would have an alter table add column
     statement in this file. Test this out very well, because data

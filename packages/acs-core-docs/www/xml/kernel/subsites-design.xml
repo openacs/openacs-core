@@ -217,7 +217,7 @@ represented by the node. In most cases this will be a package instance.</para>
     directory_p char(1) not null
             constraint site_nodes_directory_p_ck
             check (directory_p in (&#39;t&#39;, &#39;f&#39;)),
-        -- Should urls that are logical children of this node be
+        -- Should URLs that are logical children of this node be
     -- mapped to this node?
         pattern_p   char(1) default &#39;f&#39; not null
             constraint site_nodes_pattern_p_ck

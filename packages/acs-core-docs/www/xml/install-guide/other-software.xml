@@ -668,7 +668,7 @@ make install
             <para>Download and install ns_ldap</para>
           </formalpara>
           <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver/</userinput>
-          [root aolserver]# <userinput>wget http://www.sussdorff.de/ressources/nsldap.tgz</userinput>
+          [root aolserver]# <userinput>wget http://www.sussdorff.de/resources/nsldap.tgz</userinput>
           [root aolserver]# <userinput>tar xfz nsldap.tgz</userinput>
           [root aolserver]# <userinput>cd nsldap</userinput>
           [root ns_pam-0.1]# <userinput>make install LDAP=/usr/local/openldap INST=/usr/local/aolserver</userinput>

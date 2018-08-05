@@ -344,7 +344,7 @@ END OF TEMPLATE -->
 		(<ulink url="/xowiki/CSP">CSP</ulink>; see https://www.w3.org/TR/CSP/)
 		<itemizedlist>
 		  <listitem><para>
-		    Removed &quot;javascript:*&quot; links (all such urls are removed
+		    Removed &quot;javascript:*&quot; links (all such URLs are removed
 		    from the 90 packages in oacs-5-9, excluding js libraries
 		    (ajaxhelper) and richtext code)
 		  </para></listitem>
@@ -1022,7 +1022,7 @@ END OF TEMPLATE -->
 		Added support for optional user tracking in database
 	      </para></listitem>
 	      <listitem><para>
-		Added support for monitoring response-time for certain urls via
+		Added support for monitoring response-time for certain URLs via
 		munin
 	      </para></listitem>
 	      <listitem><para>
@@ -1583,7 +1583,7 @@ END OF TEMPLATE -->
           using URLs which include the embedded package&#39;s package key.  An example
           embeddable package might be a rewritten "attachments" package.  The current
           implementation requires a global instance be mounted, and client packages
-          generate urls to that global instance.  Among other things, this leads to
+          generate URLs to that global instance.  Among other things, this leads to
           the user navigating to the top-level subsite, losing any subsite theming
           that might be associated with a community.  Using "embeds", a rewritten
           package would run in the client package&#39;s context, maintaining theming and
