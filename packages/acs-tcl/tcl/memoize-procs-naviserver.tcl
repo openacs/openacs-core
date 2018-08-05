@@ -95,9 +95,9 @@ ad_proc -public util_memoize_cached_p {script {max_age ""}} {
     @return Boolean value.
 } {
     if {$max_age ne ""} {
-        ns_log Warning "util_memoize_cached_p: ignore max_age $max_age for $script"
+        ns_log warning "util_memoize_cached_p: ignore max_age $max_age for $script"
     }
-    return [expr {[ns_cache_keys util_memoize $script] ne ""}]
+    return [ns_cache_get util_memoize $script .]
 }
 
 ad_proc -public util_memoize_flush_pattern {
