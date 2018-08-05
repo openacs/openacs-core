@@ -33,7 +33,7 @@ ad_proc -public template::register_urn {
     -resource:required
 } {
 
-    Register a URN for a resource. These urns provide a single place
+    Register a URN for a resource. These URNs provide a single place
     for e.g updating references to external resources when switching
     between a CDN and a local resource, or when a resource should be
     updated.
@@ -273,7 +273,7 @@ ad_proc -public template::head::includes {
 } {
 
     Define, that a compound resource (container) contains multiple
-    parts.  Container and parts are typically urls, which are referred
+    parts.  Container and parts are typically URLs, which are referred
     to by a "href" attribute or by link or a "src" attribute of a
     script.
 
