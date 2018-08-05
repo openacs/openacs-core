@@ -1,6 +1,6 @@
 ad_library {
 
-    Provides the caching implementation of the brute force 
+    Provides the caching implementation of the brute force
     login prevention feature.
 
     @author Guenter Ernst (guenter.ernst@wu.ac.at)
@@ -14,11 +14,17 @@ if {[ns_info name] ne "NaviServer"} {
 }
 
 #-------------------------------------------------------------------------
-# NaviServer implementation of the brute force 
-#    login prevention feature caching procs
-#-------------------------------------------------------------------------
+# NaviServer implementation of the brute force login prevention
+# feature caching procs.
+# -------------------------------------------------------------------------
 namespace eval auth::login_attempts {}
 
+#
+# Caution: The current implementation is based on the ns:memoize
+# cache. In case an application has a huge ns:memoize cache, we should
+# use another cache, since the API uses wild card operations on keys
+# keys.
+#
 ad_proc -private ::auth::login_attempts::login_attempt_incr {
     {-key:required}
     {-max_age 21600}
@@ -42,19 +48,16 @@ ad_proc -private ::auth::login_attempts::flush_all {}  {
     Flush all login attempt counters.
 } {
     ns_cache_flush -glob -- ns:memoize login-attempt-*
-}    
+}
 
 ad_proc -private ::auth::login_attempts::get {
     {-key:required}
 }  {
     Get the current number of login attempts of a user.
 } {
-    if {[ns_cache get ns:memoize login-attempt-$key value]} {
-        return $value
-    } else {
-        return 0
-    }
-
+    set value 0
+    ns_cache_get ns:memoize login-attempt-$key value
+    return $value
 }
 
 ad_proc -private ::auth::login_attempts::all_entries {}  {
@@ -64,18 +67,31 @@ ad_proc -private ::auth::login_attempts::all_entries {}  {
 } {
 
     set result [list]
-    set keys [ns_cache_keys ns:memoize]
-    set contents [lindex [ns_cache_stats -contents -- ns:memoize] 0]
+    #
+    # The function "ns_cache_stats" is actually not intended for
+    # application programs, since - historically speaking - the
+    # detailed status change over time. However, we have currently no
+    # function to obtain the expire time for a cache entry, so we use
+    # it here with caution.
+    #
+    set contents [ns_cache_stats -contents -- ns:memoize]
 
-    foreach key $keys {size timeout} $contents {
+    foreach entry $contents {
+        lassign $entry key size hits expire
         if {![string match "login-attempt-*" $key]} {
             continue
         }
 
+        #
+        # In general we face here a race condition. The entry for the
+        # keys might have timed out before the collection of the
+        # content and now. So, the cache lookup might fail. So, we
+        # preset the "value" with a default in case the "ns_cache_get" fails.
+        #
         set value ""
         ns_cache_get ns:memoize $key value
 
-        lappend result [string range $key 14 end] [ns_time seconds $timeout] $value
+        lappend result [string range $key 14 end] [ns_time seconds $expire] $value
     }
 
     return $result
@@ -89,4 +105,3 @@ ad_proc -private ::auth::login_attempts::all_entries {}  {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-
