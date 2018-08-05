@@ -1035,9 +1035,12 @@ ad_proc -public template::cache { command cache_key args } {
 
         get {
             if {[ns_info name] eq "NaviServer"} {
-                if {[ns_cache_keys template_cache $cache_key] ne ""} {
-                    set result [ns_cache_eval template_cache $cache_key {}]
-                }
+                #
+                # Get the cache content into variable "result". In case
+                # there is no such entry in the cache, the variable
+                # "result" is not modified.
+                #
+                ns_cache_get template_cache $cache_key result
             } else {
                 if { [ns_cache names template_cache $cache_key] ne "" } {
                     # get timeout and value
@@ -1091,7 +1094,7 @@ ad_proc -public template::cache { command cache_key args } {
 
         exists  {
             if {[ns_info name] eq "NaviServer"} {
-                set result [expr {[ns_cache_keys template_cache $cache_key] ne ""}]
+                set result [ns_cache_get template_cache $cache_key .]
             } else {
                 if { [ns_cache get template_cache $cache_key cached_value] } {
                     # get timeout and value
