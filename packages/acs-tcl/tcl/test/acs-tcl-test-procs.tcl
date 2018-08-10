@@ -727,7 +727,12 @@ aa_register_case -cats {api smoke} util__randomize_list {
     aa_true "Long random list" [util_sets_equal_p $org_list $randomized_list]
 }
 
-aa_register_case -cats {api} acs_tcl__util_url_valid_p {
+aa_register_case \
+    -cats {api} \
+    -procs {
+        util_url_valid_p
+    } \
+    acs_tcl__util_url_valid_p {
     A very rudimentary test of util_url_valid_p
 
     @creation-date 2004-01-10
@@ -757,14 +762,13 @@ aa_register_case -cats {api} acs_tcl__util_url_valid_p {
 }
 
 
-aa_register_case -cats {web smoke} -libraries tclwebtest front_page_1 {
+aa_register_case \
+    -cats {web smoke} \
+    front_page_1 {
     
 } {
-    #set ::auto_path "/usr/local/tclwebtest/lib"
-    #aa_log "auto_path: $auto_path"
-    ::twt::do_request "[ad_url]/"
-    ::tclwebtest::assert text "Main Site"
-
+    set d [acs::test::http /]
+    acs::test::reply_contains $d "Main Site"
 }
 
 aa_register_case -cats {smoke api} util__age_pretty {
