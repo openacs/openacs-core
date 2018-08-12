@@ -1,30 +1,34 @@
-#
-# Expects:
-#  user_id:naturalnum,optional
-#  return_url:optional
-#  edit_p:optional
-#  message:optional
-#  show_groups_p:optional
+ad_include_contract {
+    Show information of a user as a form
+
+    @param user_id        show user of this user_id. Use current user, if no user_id is provided
+    @param return_url     return to this URL when DONE.
+    @param edit_p         show form in edit mode, when set to true
+    @param show_groups_p  does currently nothing
+    @param message        passed as a hidden form field. No idea why.
+} {
+    {user_id:naturalnum ""}
+    {return_url:localurl ""}
+    {edit_p:boolean false}    
+    {show_groups_p:boolean false}
+    {message:optional}
+}
 
 auth::require_login -account_status closed
 
-if { ![info exists user_id] || $user_id eq "" } {
+if { $user_id eq "" } {
     set user_id [ad_conn untrusted_user_id]
 } elseif { $user_id != [auth::get_user_id -account_status closed] } {
     permission::require_permission -object_id $user_id -privilege admin
 }
 
-if { ![info exists return_url] || $return_url eq "" } {
+if { $return_url eq "" } {
     set return_url [ad_conn url]
-}
-
-if { ![info exists show_groups_p] || $show_groups_p eq "" } {
-    set show_groups_p 0
 }
 
 set action_url "[subsite::get_element -element url]user/basic-info-update"
 
-acs_user::get -user_id $user_id -array user -include_bio
+acs_user::get -user_id $user_id -array user
 
 set authority_name [auth::authority::get_element -authority_id $user(authority_id) -element pretty_name]
 
@@ -44,7 +48,7 @@ foreach elm $read_only_elements {
 set edit_mode_p [expr {[form::get_action user_info] ne ""}]
 
 set form_mode display
-if { [info exists edit_p] && $edit_p eq "1" } {
+if { $edit_p } {
     set form_mode edit
 }
 
