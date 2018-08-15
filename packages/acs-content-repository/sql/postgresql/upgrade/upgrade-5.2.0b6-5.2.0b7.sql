@@ -3,7 +3,6 @@
 -- 
 -- @author sussdorff aolserver (sussdorff@ipxserver.de)
 -- @creation-date 2005-11-29
--- @arch-tag: 6c315b82-708f-4c42-8c66-297d27dcb2a0
 -- @cvs-id $Id$
 --
 

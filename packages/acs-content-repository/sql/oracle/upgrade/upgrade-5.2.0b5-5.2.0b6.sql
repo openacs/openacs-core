@@ -3,7 +3,6 @@
 -- 
 -- @author Don Baccus (dhogaza@pacifier.com)
 -- @creation-date 2005-10-28
--- @arch-tag: dab7cf3d-a947-43d4-ba54-66f34c66d9d0
 -- @cvs-id $Id$
 --
 

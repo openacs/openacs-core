@@ -3,7 +3,6 @@
 -- 
 -- @author Dave Bauer (dave@thedesignexperience.org)
 -- @creation-date 2004-12-29
--- @arch-tag: 4199ac3e-74bb-47ac-8b3c-71166bc12271
 -- @cvs-id $Id$
 --
 -- return new folder_id on creation
