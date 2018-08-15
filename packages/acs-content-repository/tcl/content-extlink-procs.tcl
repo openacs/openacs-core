@@ -1,12 +1,9 @@
-# packages/acs-content-repository/tcl/content-extlink-procs.tcl
-
 ad_library {
 
     Procedures for content_extlink
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
-    @arch-tag: f8f62c6c-bf3b-46d9-8e1e-fa5e60ba1c05
     @cvs-id $Id$
 }
 

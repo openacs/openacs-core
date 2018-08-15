@@ -1,12 +1,9 @@
-#
-
 ad_library {
 
     Procedures to manipulate content revisions
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-04
-    @arch-tag: ddc736fb-cb5f-41fe-a854-703df26e8e03
     @cvs-id $Id$
 }
 

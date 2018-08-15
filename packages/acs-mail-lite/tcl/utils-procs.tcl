@@ -1,12 +1,9 @@
-# packages/acs-mail-lite/tcl/utils-procs.tcl
-
 ad_library {
 
     Helper procs to build email messages
 
     @author Emmanuelle Raffenne (eraffenne@gmail.com)
     @creation-date 2007-12-16
-    @arch-tag: 820de9a9-533f-4fc3-b11d-2c9fb616a620
     @cvs-id $Id$
 }
 

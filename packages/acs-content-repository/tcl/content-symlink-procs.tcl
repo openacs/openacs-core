@@ -1,12 +1,9 @@
-# 
-
 ad_library {
     
     Procedures for content symlink
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
-    @arch-tag: 31c66882-e912-4db4-84fe-8a2b0890ffb0
     @cvs-id $Id$
 }
 

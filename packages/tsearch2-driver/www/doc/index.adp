@@ -100,8 +100,7 @@ reindex:</p>
     insert into search_observer_queue (
             select <em>my_id</em>, now(),'INSERT' from <em>my_table</em>
             );
-  
-</pre>
+  </pre>
 <p>For forums and ETP this looks like:</p>
 <pre>
     insert into search_observer_queue (

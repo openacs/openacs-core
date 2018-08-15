@@ -1,12 +1,9 @@
-# 
-
 ad_library {
     
     Tests for content keyword APIs
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2005-03-20
-    @arch-tag: b66524da-fe12-4bd9-ae32-f635b0b3949b
     @cvs-id $Id$
 }
 

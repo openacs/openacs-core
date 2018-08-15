@@ -1,5 +1,3 @@
-# 
-
 ad_library {
     
     These should probably just use the regular old
@@ -7,7 +5,6 @@ ad_library {
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
-    @arch-tag: da21d1e8-0729-4f3b-8bef-3b847a979fec
     @cvs-id $Id$
 }
 

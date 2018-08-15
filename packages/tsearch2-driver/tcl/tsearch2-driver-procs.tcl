@@ -3,7 +3,6 @@ ad_library {
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
-    @arch-tag: 49a5102d-7c06-4245-8b8d-15a3b12a8cc5
     @cvs-id $Id$
 }
 

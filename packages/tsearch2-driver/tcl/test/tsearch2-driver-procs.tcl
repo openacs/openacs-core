@@ -1,12 +1,9 @@
-# 
-
 ad_library {
     
     Tests for tsearch2-driver
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2005-03-07
-    @arch-tag: 17a26a17-9fd6-4ae9-90ae-ce445c020ab7
     @cvs-id $Id$
 }
 

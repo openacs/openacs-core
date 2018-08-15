@@ -1,12 +1,9 @@
-# 
-
 ad_library {
     
     Procedures for content template
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
-    @arch-tag: a2fad1c8-17eb-412c-a62e-9704d346b27b
     @cvs-id $Id$
 }
 
