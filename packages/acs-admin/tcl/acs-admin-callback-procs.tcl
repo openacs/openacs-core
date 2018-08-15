@@ -1,11 +1,8 @@
-# packages/acs-admin/tcl/acs-admin-callback-procs.tcl
-
 ad_library {
     
     Callback procs for acs-admin
     @author Malte Sussdorff (sussdorff@sussdorff.de)
     @creation-date 2007-06-15
-    @arch-tag: 4267c818-0019-4222-8a50-64edbe7563d1
 }
 
 namespace eval acs_admin {}

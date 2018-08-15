@@ -3,7 +3,6 @@ ad_library {
     Automated functions for acs-admin
 
     @cvs-id $Id$
-
 }
 
 # Only run this if this is openacs.org
@@ -59,10 +58,6 @@ if {0} {
     }
 
 }
-
-
-
-
 
 # Local variables:
 #    mode: tcl
