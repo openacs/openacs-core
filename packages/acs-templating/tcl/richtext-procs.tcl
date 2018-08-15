@@ -3,7 +3,6 @@ ad_library {
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 2003-01-27
-    @cvs-id $Id$
 }
 
 namespace eval template {}
