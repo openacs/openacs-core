@@ -3,7 +3,6 @@
 -- 
 -- @author Emmanuelle Raffenne (eraffenne@dia.uned.es)
 -- @creation-date 2006-12-15
--- @arch-tag: a67a9b16-d809-4da4-a47a-62f96f7e8d1e
 -- @cvs-id $Id$
 --
 

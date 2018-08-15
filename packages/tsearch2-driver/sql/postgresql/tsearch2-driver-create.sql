@@ -3,7 +3,6 @@
 -- 
 -- @author Dave Bauer (dave@thedesignexperience.org)
 -- @creation-date 2004-06-05
--- @arch-tag: 25662a8a-e960-4888-bd9f-3e7a8fff5637
 -- @cvs-id $Id$
 --
 

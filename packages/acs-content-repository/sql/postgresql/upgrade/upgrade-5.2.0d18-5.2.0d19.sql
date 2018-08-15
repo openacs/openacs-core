@@ -54,8 +54,6 @@ end;' language 'plpgsql';
 -- 
 -- @author Dave Bauer (dave@thedesignexperience.org)
 -- @creation-date 2005-06-05
--- @arch-tag: 16725764-0b5d-4e98-a75d-dc77bf3141de
--- @cvs-id $Id$
 --
 
 -- patch#548 bug#1937

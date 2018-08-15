@@ -3,7 +3,6 @@
 -- 
 -- @author Victor Guerra (guerra@galileo.edu)
 -- @creation-date 2006-07-13
--- @arch-tag: 75450145-8d86-463e-8408-1c07d796f484
 -- @cvs-id $Id$
 --
 
