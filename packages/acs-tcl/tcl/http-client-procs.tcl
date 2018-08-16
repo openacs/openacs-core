@@ -1442,7 +1442,7 @@ ad_proc -private util::http::native::request {
 
 
     # Redirection handling
-    if {$depth <= $max_depth} {
+    if {$depth < $max_depth} {
         incr depth
         set redirection [util::http::follow_redirects \
                              -url             $url \
@@ -1815,7 +1815,7 @@ ad_proc -private util::http::curl::request {
     set page   [string range $response 0 end-4]
 
     # Redirection handling
-    if {$depth <= $max_depth} {
+    if {$depth < $max_depth} {
         incr depth
         set redirection [util::http::follow_redirects \
                              -url             $url \
