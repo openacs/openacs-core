@@ -64,7 +64,7 @@ namespace eval notification {
             set intervals_pretty [list]
             foreach elm $intervals {
                 lassign $elm elm_name elm_id
-                lappend intervals_pretty [list [_ notifications.${elm_name}] $elm_id]
+                lappend intervals_pretty [list [lang::util::localize ${elm_name}] $elm_id]
             }
             return $intervals_pretty
         } else {
