@@ -1529,7 +1529,7 @@ if {$UseXotclSiteNodes} {
                         # all "inner nodes" or similar, but this
                         # requires a deeper analysis of larger sites.
                         #
-                        if {[llength [site_node::get_children -node_id $ID]] == 0} {
+                        if {[site_node::get_children -node_id $ID] eq ""} {
                             #
                             # We are on a leaf-node of the site node
                             # tree. Get the shortened url and save it
