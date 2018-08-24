@@ -2053,7 +2053,7 @@ ad_proc -public ad_html_text_convert {
     @creation-date 19 July 2000
 } {
     # DRB: Modified this to accept mime types (text/plain or
-    # text/html).  Simplies things when providing confirmation pages
+    # text/html).  Simplifies things when providing confirmation pages
     # for input destined for the content repository ...
 
     if { $text eq "" } {
