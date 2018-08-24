@@ -884,7 +884,7 @@ ad_proc ad_parse_html_attributes_upvar {
         {-marker "root"}
         -dom:boolean
     } {
-        
+
         Similar in spirit to the famous Tidy command line utility,
         this proc takes a piece of possibly invalid markup and returns
         a 'fixed' version where unopened tags have been closed and
@@ -892,7 +892,7 @@ ad_proc ad_parse_html_attributes_upvar {
         in the form <code>attribute-name="attribute value"</code>. All
         attributes with an invalid (non-alphanumeric) name will be
         stripped.<br>
-        <br>        
+        <br>
         Be aware that every comment and also the possibly present
         DOCTYPE declaration will be stripped from the markup. Also,
         most of tag's internal whitespace will be trimmed. This
@@ -903,7 +903,7 @@ ad_proc ad_parse_html_attributes_upvar {
 
         @param marker Root element use to enforce a single root of the
                DOM tree.
-        
+
         @param dom When this flag is set, instead of returning markup,
         the proc will return the tDOM object built during the
         operation. Useful when the result should be used by tDOM
@@ -913,7 +913,7 @@ ad_proc ad_parse_html_attributes_upvar {
         specified
 
         @author Antonio Pisano
-        
+
     } {
         if {[catch {package require struct}]} {
             error "Package struct non found on the system"
@@ -921,10 +921,10 @@ ad_proc ad_parse_html_attributes_upvar {
         if {[catch {package require htmlparse}]} {
             error "Package htmlparse non found on the system"
         }
-        
+
         set tree [::struct::tree]
 
-        
+
         catch {::htmlparse::tags destroy}
 
         ::struct::stack ::htmlparse::tags
@@ -940,17 +940,17 @@ ad_proc ad_parse_html_attributes_upvar {
         }
 
         ::htmlparse::tags destroy
-        
+
 
         set lmarker "<$marker>"
         set rmarker "</$marker>"
         set doc [dom createDocument $marker]
         set root [$doc documentElement]
-        
+
         set queue {}
         lappend queue [list $root [$tree children [$tree children root]]]
         while {$queue ne {}} {
-            lassign [lindex $queue 0] domparent treechildren            
+            lassign [lindex $queue 0] domparent treechildren
             set queue [lrange $queue 1 end]
 
             foreach child $treechildren {
@@ -981,7 +981,7 @@ ad_proc ad_parse_html_attributes_upvar {
                         if {[string is alnum -strict $attname]} {
                             $el setAttribute $attname $attvalue
                         }
-                        
+
                         set data [string range $data [string length $m] end]
                     }
                 }
@@ -1001,10 +1001,10 @@ ad_proc ad_parse_html_attributes_upvar {
             return $doc
         } else {
             set html [$doc asHTML]
-            $doc delete            
+            $doc delete
             set html [string range $html [string length $lmarker] end-[string length $rmarker]]
         }
-        
+
         return [string trim $html]
     }
 
@@ -1033,35 +1033,35 @@ ad_proc ad_parse_html_attributes_upvar {
         validator in order to enforce some markup policies.
 
         @param html the markup to be checked.
-        
+
         @param allowed_tags list of tags we allow in the markup.
-        
+
         @param allowed_attributes list of attributes we allow in the
         markup.
-        
+
         @param allowed_protocols list of attributes we allow into
         links
-        
+
         @param unallowed_tags list of tags we don't allow in the
         markup.
-        
+
         @param unallowed_attributes list of attributes we don't allow
         in the markup.
-        
+
         @param unallowed_protocols list of protocols we don't allow in
         the markup.
-        
+
         @param no_js this flag decides whether every script tag,
         inline event handlers and the javascript: pseudo-protocol
         should be stripped from the markup.
-        
+
         @param no_outer_urls this flag tells the proc to remove
         every reference to external addresses. Proc will try to
         distinguish between external URLs and fine fully specified
         internal ones. Acceptable URLs will be transformed in absolute
         local references, others will be just stripped together with
         the attribute.
-        
+
         @param validate This flag will avoid the creation of the
         stripped markup and just report whether the original one
         respects all the specified requirements.
@@ -1077,11 +1077,11 @@ ad_proc ad_parse_html_attributes_upvar {
         -validate flag is specified
 
         @author Antonio Pisano
-        
+
     } {
         ## Allowed/Unallowed tags come from the user or default to
         ## those specified in the parameters
-        
+
         array set allowed_tag {}
         if {![info exists allowed_tags]} {
             # Use the antispam tags for this package instance and whatever is on the kernel.
@@ -1110,21 +1110,21 @@ ad_proc ad_parse_html_attributes_upvar {
         foreach tag $allowed_tags {
             set allowed_tag([string tolower $tag]) 1
         }
-        
+
         if {"*" in $allowed_attributes} {
             set allowed_attributes "*"
         }
         foreach attribute $allowed_attributes {
             set allowed_attribute([string tolower $attribute]) 1
         }
-        
+
         if {"*" in $allowed_protocols} {
             set allowed_protocols "*"
         }
         foreach protocol $allowed_protocols {
             set allowed_protocol([string tolower $protocol]) 1
         }
-        
+
         array set unallowed_tag {}
         if {![info exists unallowed_tags]} {
             set unallowed_tags {}
@@ -1141,10 +1141,10 @@ ad_proc ad_parse_html_attributes_upvar {
         }
 
         # TODO: consider default unallowed stuff to come from a parameter
-        
+
         if {$no_js_p} {
             lappend unallowed_tags "script"
-            lappend unallowed_attributes {*}{                
+            lappend unallowed_attributes {*}{
                 onafterprint onbeforeprint onbeforeunload onerror
                 onhashchange onload onmessage onoffline ononline
                 onpagehide onpageshow onpopstate onresize onstorage
@@ -1168,7 +1168,7 @@ ad_proc ad_parse_html_attributes_upvar {
         foreach tag $unallowed_tags {
             set unallowed_tag([string tolower $tag]) 1
         }
-        
+
         foreach attribute $unallowed_attributes {
             set unallowed_attribute([string tolower $attribute]) 1
         }
@@ -1181,7 +1181,7 @@ ad_proc ad_parse_html_attributes_upvar {
         # wrapping html in an auxiliary root element
         set lmarker "<root>"
         set rmarker "</root>"
-        
+
         try {
             dom parse -html "${lmarker}${html}${rmarker}" doc
 
@@ -1198,9 +1198,9 @@ ad_proc ad_parse_html_attributes_upvar {
                 return [expr {$validate_p ? 0 : ""}]
             }
         }
-        
+
         $doc documentElement root
-        
+
         set driver_info [util_driver_info]
         set driver_prot [dict get $driver_info proto]
         set driver_host [dict get $driver_info hostname]
@@ -1221,18 +1221,18 @@ ad_proc ad_parse_html_attributes_upvar {
 
         # location from connection
         set location [ad_conn location]
-        set our_location($location) 1                
+        set our_location($location) 1
         regsub {^\w+://} $location {//} location
         set our_location($location) 1
-        
+
         set our_locations [join [array names our_location] |]
         ##
 
-        set queue [$root childNodes]        
+        set queue [$root childNodes]
         while {$queue ne {}} {
             set node [lindex $queue 0]
             set queue [lrange $queue 1 end]
-            
+
             # skip all non-element nodes
             if {$node eq "" || [$node nodeType] ne "ELEMENT_NODE"} continue
 
@@ -1244,11 +1244,11 @@ ad_proc ad_parse_html_attributes_upvar {
                 if {$validate_p} {return 0} else {$node delete}
                 continue
             }
-            
+
             # tag itself is allowed, we can inspect its children
             lappend queue {*}[$node childNodes]
 
-            # 2: check tag contains only allowed attributes            
+            # 2: check tag contains only allowed attributes
             foreach att [$node attributes] {
                 set att [string tolower $att]
                 if {[info exists unallowed_attribute($att)] ||
@@ -1257,16 +1257,16 @@ ad_proc ad_parse_html_attributes_upvar {
                     if {$validate_p} {return 0} else {$node removeAttribute $att}
                     continue
                 }
-                
+
                 # 3: check for any attribute that could contain a URL
                 # whether this is acceptable
                 switch -- $att {
-                    "href" - "src" - "content" - "action" {                        
+                    "href" - "src" - "content" - "action" {
                         set url [string trim [$node getAttribute $att ""]]
                         if {$url eq ""} continue
-                        
+
                         set prot ""
-                        
+
                         set parsed_url [ns_parseurl $url]
                         # attribute is a URL including the protocol
                         set proto [expr {[dict exists $parsed_url proto] ? [dict get $parsed_url proto] : ""}]
@@ -1277,7 +1277,7 @@ ad_proc ad_parse_html_attributes_upvar {
                                 # that refer to this server, but we'll
                                 # transform them in a local absolute
                                 # reference. For all others, attribute
-                                # will be just removed.                                
+                                # will be just removed.
                                 # - This is ok, points to our system...
                                 if {[regsub ^($our_locations) $url {} url]} {
                                     set url /[string trimleft $url "/"]
@@ -1314,9 +1314,9 @@ ad_proc ad_parse_html_attributes_upvar {
         if {$validate_p} {
             $doc delete
             return 1
-        } else {            
+        } else {
             set html [$root asHTML]
-            $doc delete            
+            $doc delete
             # remove auxiliary root element from output
             set html [string range $html [string length $lmarker] end-[string length $rmarker]]
             set html [string trim $html]
@@ -1720,7 +1720,7 @@ ad_proc ad_parse_html_attributes_upvar {
             if { $output(text) eq "" } {
                 append output(text) [string repeat {    } $output(blockquote)]
             }
-            
+
             # Now output the text.
             while { [regexp {^( +|\s|\S+)(.*)$} $text match word text] } {
 
@@ -1759,7 +1759,7 @@ ad_proc ad_parse_html_attributes_upvar {
                            -width $output(maxlen) \
                            $text]
             set lastNewLine [string last \n $plain]
-            #ns_log notice "ns_reflow_text -width $output(maxlen) <$text>\ntext: $text\nplain $plain"            
+            #ns_log notice "ns_reflow_text -width $output(maxlen) <$text>\ntext: $text\nplain $plain"
             if {$lastNewLine == -1} {
                 incr output(linelen) [string length $plain]
             } else {
@@ -1899,7 +1899,7 @@ if {[info commands ns_reflow_text] eq ""} {
         if {$offset > 0} {
             set input [string repeat X $offset]$input
         }
-        
+
         set result_rows [list]
         set start_of_line_index 0
         while 1 {
@@ -1949,7 +1949,7 @@ if {[info commands ns_reflow_text] eq ""} {
         if {$offset > 0} {
             set result [string range $result $offset end]
         }
-        
+
         return $prefix$result
     }
 }
@@ -2098,7 +2098,7 @@ ad_proc -public ad_html_text_convert {
                     set text [Markdown::convert $text]
 
                     if {[info commands ::Markdown::get_lang_counter] ne ""} {
-                        
+
                         set d [::Markdown::get_lang_counter]
                         if {$d ne ""} {
                             template::head::add_style -style $::apidoc::style
@@ -2346,7 +2346,7 @@ ad_proc -public ad_pad {
     length
     padstring
 } {
-    Tcl implementation of the pad string function found in many DBMSs.<br>    
+    Tcl implementation of the pad string function found in many DBMSs.<br>
     One of the directional flags -left or -right must be specified and
     will dictate whether this will be a lpad or a rpad.
 
@@ -2354,10 +2354,10 @@ ad_proc -public ad_pad {
     @param right text will be appended right of the original string.
 
     @arg string String to be padded.
-    
+
     @arg length length this string will be after padding. If string
                 this long or longer, will be truncated.
-    
+
     @arg padstring string that will be repeated until length of
     supplied string is equal or greather than length.
 
@@ -2366,12 +2366,12 @@ ad_proc -public ad_pad {
     if {!($left_p ^ $right_p)} {
         error "Please specify single flag -left or -right"
     }
-    
+
     set slength [string length $string]
     set padlength [string length $padstring]
     set repetitions [expr {int(($length - $slength) / $padlength) + 1}]
     set appended [string repeat $padstring $repetitions]
-    
+
     if {$left_p} {
         set string [string range $appended$string end-[expr {$length - 1}] end]
     } else {
