@@ -186,6 +186,8 @@ ad_proc adp_parse_ad_conn_file {} {
 ad_proc -deprecated -public get_server_root {} {
     Get the server root directory (supposing we run under ACS)<br>
     THIS PROC IS SUPERSEDED BY acs_root_dir
+
+    @see acs_root_dir
 } {
     return $::acs::rootdir
 }
