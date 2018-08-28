@@ -644,7 +644,7 @@ ad_proc util::http::post {
                     return -code error "${this_proc}:  Error reading file: $file permission denied"
                 }
 
-                dict set $f filename [expr {[dict exists $f filename] ?
+                dict set f filename [expr {[dict exists $f filename] ?
                                             [dict get $f filename] :
                                             [file tail $file]}]
             }
