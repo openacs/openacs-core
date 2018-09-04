@@ -171,6 +171,7 @@ ad_proc -public ad_text_to_html {
 }
 
 ad_proc -public ad_html_qualify_links {
+    -location
     -path
     html
 } {
@@ -178,13 +179,23 @@ ad_proc -public ad_html_qualify_links {
     Convert in the HTML text relative URLs into fully qualified URLs
     including the host name. It performs the following operations:
 
-    1) prepend paths starting with a "/" by the protocol and host.
-    2) prepend paths not starting a "/" by the package_url, in case it was passed in.
+    1. prepend paths starting with a "/" by the location (protocol and host).
+    2. prepend paths not starting a "/" by the path, in case it was passed in.
 
     Links, which are already fully qualified are not modified.
 
+    @param location protcol and host (defaults to [ad_url])
+    @param path optional path to be prepended to paths not starting with a "/"
+    @param html HTML text, in which substitutions should be performed.
+
 } {
-    set host "[string trimright [ad_url] /]/"
+    if {![info exists location]} {
+        set location [ad_url]
+    }
+    #
+    # make sure, location ends with a "/"
+    #
+    set location "[string trimright $location /]/"
 
     #
     # Protect all full qualified URLs with special characters (one
@@ -200,10 +211,10 @@ ad_proc -public ad_html_qualify_links {
     if {[info exists path]} {
         set path "[string trim $path /]/"
         regsub -all {(href|src)\s*=\s*['\"]([^/][^\u0001:'\"]+?)['\"]} $html \
-            "\\1='${host}${path}\\2'" html
+            "\\1='${location}${path}\\2'" html
     }
     regsub -all {(href|src)\s*=\s*['\"]/([^\u0001:'\"]+?)['\"]} $html \
-        "\\1='${host}\\2'" html
+        "\\1='${location}\\2'" html
 
     #
     # Remove all protection characters again.
