@@ -192,25 +192,25 @@ ad_proc -public ad_html_qualify_links {
     #
     regsub -nocase -all \
         {(href|src)\s*=\s*'((http|https|ftp|mailto):[^'\"]+)'} $html \
-    "\\1='\u0001\\2\u0002'" html
-regsub -nocase -all \
-    {(href|src)\s*=\s*[\"]((http|https|ftp|mailto):[^'\"]+)[\"]} $html \
-    "\\1=\"\u0001\\2\u0002\"" html
+        "\\1='\u0001\\2\u0002'" html
+    regsub -nocase -all \
+        {(href|src)\s*=\s*[\"]((http|https|ftp|mailto):[^'\"]+)[\"]} $html \
+        "\\1=\"\u0001\\2\u0002\"" html
 
-if {[info exists path]} {
-    set path "[string trim $path /]/"
-    regsub -all {(href|src)\s*=\s*['\"]([^/][^\u0001:'\"]+?)['\"]} $html \
-        "\\1='${host}${path}\\2111'" html
-}
-regsub -all {(href|src)\s*=\s*['\"]/([^\u0001:'\"]+?)['\"]} $html \
-    "\\1=\"${host}\\2222\"" html
+    if {[info exists path]} {
+        set path "[string trim $path /]/"
+        regsub -all {(href|src)\s*=\s*['\"]([^/][^\u0001:'\"]+?)['\"]} $html \
+            "\\1='${host}${path}\\2'" html
+    }
+    regsub -all {(href|src)\s*=\s*['\"]/([^\u0001:'\"]+?)['\"]} $html \
+        "\\1='${host}\\2'" html
 
-#
-# Remove all protection characters again.
-#
-regsub -nocase -all {((href|src)\s*=\s*['\"]?)\u0001([^\u0002]*)\u0002} $html {\1\3} html
+    #
+    # Remove all protection characters again.
+    #
+    regsub -nocase -all {((href|src)\s*=\s*['\"]?)\u0001([^\u0002]*)\u0002} $html {\1\3} html
 
-return $html
+    return $html
 }
 
 
