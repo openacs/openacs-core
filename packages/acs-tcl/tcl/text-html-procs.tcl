@@ -221,7 +221,7 @@ ad_proc -public ad_html_qualify_links {
     #
     # Prefix every URL starting with a slash by the location.
     #
-    regsub -all {(href|src)\s*=\s*['\"]/([^\u0001:'\"]+?)['\"]} $html \
+    regsub -nocase -all {(href|src)\s*=\s*['\"]/([^\u0001:'\"]+?)['\"]} $html \
         "\\1='${location}\\2'" html
 
     #
