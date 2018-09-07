@@ -223,7 +223,6 @@ ad_proc -public ad_html_qualify_links {
     #
     regsub -all {(href|src)\s*=\s*['\"]/([^\u0001:'\"]+?)['\"]} $html \
         "\\1='${location}\\2'" html
-    ns_log notice "END\n$html"    
 
     #
     # Remove all protection characters again.
