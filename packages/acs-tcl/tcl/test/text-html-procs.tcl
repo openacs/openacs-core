@@ -219,7 +219,7 @@ aa_register_case \
 
 } {
     
-    aa_log " ------------ Testing left pad ------------ "
+    aa_section "Testing left pad"
 
     set string [ad_generate_random_string]
     set length [expr {int(rand()*1000)}]
@@ -234,7 +234,7 @@ aa_register_case \
     aa_true " - Result is exactly $length long " {[string length $result] == $length}
     aa_true " - String is at right end " [regexp "^.*${string}\$" $result]
 
-    aa_log " ------------ Testing right pad ------------ "
+    aa_section "Testing right pad"
 
     set string [ad_generate_random_string]
     set length [expr {int(rand()*1000)}]
@@ -251,6 +251,43 @@ aa_register_case \
     
 }
 
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_qualify_links} \
+    ad_html_qualify_links {
+
+        Test if ad_html_qualify_links is working as expected.
+        
+        @author Gustaf Neumann
+} {
+    
+    aa_section "Testing without path"
+
+    set rURL "relative/r.txt"
+    set aURL "/dotlrn/clubs/club1/mytext.docx"
+    set fqURL "https://openacs.org/doc/"
+    
+    set html [subst {<div><div class="table">
+        A relative URL <a href="$rURL">relative/r.txt</a>
+        An absolute URL <a href="$aURL">mytext.docx</a>
+        A fully qualified URL <a href="$fqURL">Documentation</a>        
+    }]
+    set result [ad_html_qualify_links -location {http://myhost/} $html]
+
+    aa_true "result contains relative URL NOT expanded" {[string match *href=\"$rURL* $result]}
+    aa_true "result contains absolute URL location-prefixed" {[string match *http://myhost$aURL* $result]}
+    aa_true "result contains fully qualified URL" {[string match *$fqURL* $result]}
+
+    aa_section "Testing with path"
+
+    set pretty_link "/dotlrn/clubs/club2/uploads/mytext.docx"
+    set result [ad_html_qualify_links -location {http://myhost/} -path /somepath $html]
+
+    aa_true "result contains relative URL expanded" {[string match */somepath/$rURL* $result]}
+    aa_true "result contains absolute URL location-prefixed" {[string match *http://myhost$aURL* $result]}
+    aa_true "result contains fully qualified URL" {[string match *$fqURL* $result]}
+
+}
 
 # Local variables:
 #    mode: tcl

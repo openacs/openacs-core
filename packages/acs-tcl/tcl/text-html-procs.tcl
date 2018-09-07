@@ -208,13 +208,22 @@ ad_proc -public ad_html_qualify_links {
         {(href|src)\s*=\s*[\"]((http|https|ftp|mailto):[^'\"]+)[\"]} $html \
         "\\1=\"\u0001\\2\u0002\"" html
 
+    #
+    # If a path is specified, prefix all relative URLs (i.e. not
+    # starting with a slash) with the specified path.
+    #
     if {[info exists path]} {
         set path "[string trim $path /]/"
         regsub -all {(href|src)\s*=\s*['\"]([^/][^\u0001:'\"]+?)['\"]} $html \
             "\\1='${location}${path}\\2'" html
     }
+
+    #
+    # Prefix every URL starting with a slash by the location.
+    #
     regsub -all {(href|src)\s*=\s*['\"]/([^\u0001:'\"]+?)['\"]} $html \
         "\\1='${location}\\2'" html
+    ns_log notice "END\n$html"    
 
     #
     # Remove all protection characters again.
