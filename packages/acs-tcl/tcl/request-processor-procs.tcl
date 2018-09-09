@@ -1364,7 +1364,7 @@ ad_proc -public ad_conn {args} {
     system_p,
     token,
     untrusted_user_id,
-   user_id,
+    user_id,
     vhost_package_url,
     vhost_subsite_url,
     vhost_url.
@@ -1372,6 +1372,7 @@ ad_proc -public ad_conn {args} {
 
     Added recursion_count to properly deal with internalredirects.
 
+    @see util_current_location
 } {
     global ad_conn
 
