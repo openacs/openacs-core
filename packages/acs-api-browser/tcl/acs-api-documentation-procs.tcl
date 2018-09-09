@@ -824,6 +824,8 @@ ad_proc -private api_called_proc_names {
             ::apidoc::tcl_to_html $proc_name
         } on ok {result} {
             set body $result
+            #ns_log notice "api_called_proc_names <$proc_name> got body <$body>"
+            
         } on error {errorMsg} {
             ns_log warning "cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
             return ""
@@ -928,6 +930,7 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
             }
         } else {
             foreach called [api_called_proc_names -proc_name $proc_name] {
+
                 api_add_to_proc_doc \
                     -proc_name $called \
                     -property calledby \
@@ -1086,7 +1089,12 @@ ad_proc -private api_inline_svg_from_dot {dot_code} {
         set tmpfile $tmpnam.svg
         set f [open $tmpnam.dot w]; puts $f $dot_code; close $f
 
-        set f [open "|$dot  -Tsvg -o $tmpfile" w]; puts $f $dot_code; close $f
+        set f [open "|$dot -Tsvg -o $tmpfile" w]; puts $f $dot_code;
+        try {
+            close $f
+        } on error {errorMsg} {
+            ns_log warning "dot returned $errorMsg"
+        }
         set f [open  $tmpfile]; set svg [read $f]; close $f
 
         # delete the first three lines generated from dot
@@ -1937,9 +1945,17 @@ ad_proc api_proc_url { proc } {
 ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
     Return the procdic url from procname and optionally from source_p and version_id
 } {
-    return [export_vars -base /api-doc/proc-view {
-        {proc $proc_name} source_p version_id
-    }]
+    if {[string range $proc_name 0 0] eq " " && [lindex $proc_name 0] in {Object Class}} {
+        set object [lindex $proc_name end]
+        set url [export_vars -base /xotcl/show-object {
+            object {show_source 1} {show_methods 1}
+        }]
+    } else {
+        set url [export_vars -base /api-doc/proc-view {
+            {proc $proc_name} source_p version_id
+        }]
+    }
+    return $url
 }
 
 ad_proc api_proc_link { proc } {
