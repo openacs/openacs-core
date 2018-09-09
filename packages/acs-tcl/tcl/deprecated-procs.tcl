@@ -2,7 +2,7 @@ ad_library {
 
     Provides a collection of deprecated procs to provide backward
     compatibility for sites who have not yet removed calls to the
-    dprecated functions.
+    deprecated functions.
 
     In order to skip loading of deprecated code, use the following
     snippet in your config file
@@ -17,7 +17,7 @@ if {![ad_with_deprecated_code_p]} {
     ns_log notice "deprecated-procs: skip deprecated code"
     return
 }
-ns_log notice "deprecated-procs include deprecated code"
+ns_log notice "deprecated-procs: load deprecated code"
 
 
 ad_proc -public -deprecated ad_set_typed_form_variable_filter {
