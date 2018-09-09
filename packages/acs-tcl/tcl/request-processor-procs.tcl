@@ -1326,13 +1326,14 @@ ad_proc -public ad_conn {args} {
     href="/doc/request-processor">request
     processor documentation</a> for an (incomplete) list of allowable values.
 
-    <p>
+    If option "-set" is passed as first argument, then ad_conn sets
+    the specified property, otherwise it returns its value.
 
-    If -set is passed then it sets a property.
-
-    <p>
-
-    If the property has not been set directly by OpenACS it will be passed on to AOLservers/NaviServers <code>ns_conn</code>: <a href="http://www.aolserver.com/docs/devel/tcl/api/conn.html#ns_conn">http://www.aolserver.com/docs/devel/tcl/api/conn.html#ns_conn</a>. If it is not a valid option for <code>ns_conn</code> either then it will throw an error.
+    If the property has not been set directly by OpenACS it will be
+    passed on to AOLserver's/NaviServer's <code>ns_conn</code> If the
+    property is not a valid option for <code>ns_conn</code> either
+    then it will throw an error.
+    
 <p>
     Valid options for ad_conn are:
     ajax_p,
@@ -1369,8 +1370,6 @@ ad_proc -public ad_conn {args} {
     vhost_subsite_url,
     vhost_url.
     <p>
-
-    Added recursion_count to properly deal with internalredirects.
 
     @see util_current_location
 } {
