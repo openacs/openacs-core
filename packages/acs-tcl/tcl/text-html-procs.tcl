@@ -190,10 +190,10 @@ ad_proc -public ad_html_qualify_links {
 
 } {
     if {![info exists location]} {
-        set location [ad_url]
+        set location [util_current_location]
     }
     #
-    # make sure, location ends with a "/"
+    # Make sure, location ends with a "/".
     #
     set location "[string trimright $location /]/"
 
