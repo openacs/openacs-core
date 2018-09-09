@@ -1818,13 +1818,12 @@ ad_proc -public util_current_location {} {
 
     Like [ad_conn location] - Returns the location string of the
     current request in the form protocol://hostname?:port? but it
-    looks at the "Host:" header field, that is, takes into account the
-    host name the client used although it may be different from the
-    host name from the server configuration file.  If the Host header
-    is missing or empty util_current_location falls back to ad_conn
-    location.
+    honors the "Host:" header field (when the client addressed the
+    server with a host name different to the default one from the
+    server configuration file).  If the "Host" header field is missing
+    or empty this function falls back to [ad_conn location].
 
-    @return the configured location in the form "protocol://hostname?:port?"
+    @return the current location in the form "protocol://hostname?:port?"
 
     @see util::configured_location
     @see ad_url
