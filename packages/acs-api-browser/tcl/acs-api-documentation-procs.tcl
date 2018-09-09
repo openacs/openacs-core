@@ -825,7 +825,7 @@ ad_proc -private api_called_proc_names {
         } on ok {result} {
             set body $result
             #ns_log notice "api_called_proc_names <$proc_name> got body <$body>"
-            
+
         } on error {errorMsg} {
             ns_log warning "cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
             return ""
@@ -874,7 +874,7 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
             }
         }
     }
-    
+
     foreach init_file $init_files {
         set file_contents [template::util::read_file $::acs::rootdir/$init_file]
         foreach called [api_called_proc_names -proc_name $init_file -body $file_contents] {
@@ -984,7 +984,7 @@ ad_proc -private api_call_graph_snippet {
     # Include calls from calledby information. Might come from a file
     # (e.g. a *-init.tcl file) or from a proc.
     #
-    set callers {}    
+    set callers {}
     if {[dict exists $doc calledby]} {
         set edges ""
         set nodes ""
@@ -999,7 +999,7 @@ ad_proc -private api_call_graph_snippet {
                 lappend caller_procs $c
             }
         }
-        
+
         foreach caller [lrange [lsort $caller_procs] 0 $maxnodes-1] {
             #
             # When the "caller" starts with "packages/", we assume,
