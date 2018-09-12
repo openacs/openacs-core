@@ -1690,10 +1690,17 @@ ad_proc -private security::get_secure_location {} {
         #
         set secure_location $current_location
     } elseif {[util::split_location $current_location proto hostname port]} {
+        #
+        # Do not return a location with a port, when SuppressHttpPort
+        # is set.
+        #
+        set suppress_http_port [parameter::get -parameter SuppressHttpPort \
+                                    -package_id [apm_package_id_from_key acs-tcl] \
+                                    -default 0]
         set secure_location [util::join_location \
                                  -proto https \
                                  -hostname $hostname \
-                                 -port [security::get_https_port]]
+                                 -port [expr {$suppress_http_port ? "" : [security::get_https_port]}]]
     } else {
         error "invalid location $current_location"
     }
