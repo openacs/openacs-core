@@ -1660,9 +1660,9 @@ ad_proc -public security::redirect_to_insecure {
 #####
 
 ad_proc -private security::get_https_port {} {
-    Return the HTTPS port specified in the AOLserver config file.
+    Return the HTTPS port specified in the server's config file.
 
-    @return The HTTPS port or the empty string if none is configured.
+    @return The HTTPS port number or the empty string if none is configured.
 
     @author Gustaf Neumann
 } {
@@ -1674,6 +1674,18 @@ ad_proc -private security::get_https_port {} {
         return [dict get $d port]
     }
 }
+
+ad_proc -private security::get_http_port {} {
+    Return the HTTP port specified in the server's config file.
+
+    @return The HTTP port number or the empty string if none is configured.
+
+    @author Gustaf Neumann
+} {
+    set d [util_driver_info -driver nssock]
+    return [dict get $d port]
+}
+
 
 ad_proc -private security::get_qualified_url { url } {
     @return secure or insecure qualified url
@@ -1751,10 +1763,17 @@ ad_proc -private security::get_secure_location {} {
         #
         set secure_location $current_location
     } elseif {[util::split_location $current_location proto hostname port]} {
+        #
+        # Do not return a location with a port number, when
+        # SuppressHttpPort is set.
+        #
+        set suppress_http_port [parameter::get -parameter SuppressHttpPort \
+                                    -package_id [apm_package_id_from_key acs-tcl] \
+                                    -default 0]
         set secure_location [util::join_location \
                                  -proto https \
                                  -hostname $hostname \
-                                 -port [security::get_https_port]]
+                                 -port [expr {$suppress_http_port ? "" : [security::get_https_port]}]]
     } else {
         error "invalid location $current_location"
     }
@@ -1771,16 +1790,24 @@ ad_proc -private security::get_insecure_location {} {
     set http_prefix {http://}
 
     if { [string match "$http_prefix*" $current_location] } {
+        #
         # Current location is already insecure - do nothing
+        #
         set insecure_location $current_location
+    } elseif {[util::split_location $current_location proto hostname port]} {
+        #
+        # Do not return a location with a port number, when
+        # SuppressHttpPort is set.
+        #
+        set suppress_http_port [parameter::get -parameter SuppressHttpPort \
+                                    -package_id [apm_package_id_from_key acs-tcl] \
+                                    -default 0]
+        set insecure_location [util::join_location \
+                                   -proto http \
+                                   -hostname $hostname \
+                                   -port [expr {$suppress_http_port ? "" : [security::get_http_port]}]]
     } else {
-        # Current location is secure - use location from config file
-        set insecure_location [ad_conn location]
-        regsub -all {https://} $insecure_location "" insecure_location
-        if { ![string match "$http_prefix*" $insecure_location] } {
-            # Prepend http://
-            set insecure_location ${http_prefix}${insecure_location}
-        }
+        error "invalid location $current_location"
     }
 
     return $insecure_location
