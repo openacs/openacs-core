@@ -89,7 +89,7 @@ ad_proc -public template::form::create { id args } {
     @option actions         A list of actions available on the form, which in practice means 
                             a list of buttons to show when the form is in display mode. 
                             The value should be a list of lists, with the first element being the form label
-                            and the second element being the name of the name of the form element. Defaults to
+                            and the second element being the name of the form element. Defaults to
                             { { "Edit" edit } }. The name of the button clicked can be retrieved using 
                             template::form::get_button. The name of the button clicked while in display mode
                             is called the 'action', and can be retrieved using template::form::get_action. 
