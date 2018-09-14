@@ -1777,7 +1777,7 @@ ad_proc util::join_location {{-proto ""} {-hostname} {-port ""}} {
     return $result
 }
 
-ad_proc -public util::configured_location {} {
+ad_proc -public util::configured_location {{-suppress_port:boolean}} {
 
     Return the configured location as configured for the current
     network driver. While [util_current_location] honors the virtual
@@ -1796,7 +1796,7 @@ ad_proc -public util::configured_location {} {
     return [util::join_location \
                 -proto    [dict get $driver_info proto] \
                 -hostname [dict get $driver_info hostname] \
-                -port     [dict get $driver_info port]]
+                -port     [expr {$suppress_port_p ? "" : [dict get $driver_info port]}]]
 }
 
 ad_proc -public util_current_location {} {
