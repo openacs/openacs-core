@@ -125,7 +125,7 @@ ad_proc -callback search::search -impl tsearch2-driver {
     @creation-date 2004-06-05
 
     @param query
-    @param user_id    
+    @param user_id
     @param offset
     @param limit
     @param df
@@ -137,12 +137,6 @@ ad_proc -callback search::search -impl tsearch2-driver {
     @error
 } {
     set packages {}
-    # JCD: I have done something horrible.  I took out dt and
-    # made it packages.  when you search there is no way to specify a date range just
-    # last six months, last year etc.  I hijack what was the old dt param and make it
-    # the package_id list and just empty string for dt.
-    set dt {}
-
     set orig_query $query
 
     # clean up query for tsearch2
