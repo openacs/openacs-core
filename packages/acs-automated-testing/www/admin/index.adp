@@ -121,6 +121,7 @@
           <td align="right">-</td>
           <td align="right">-</td>
           <td align="right">-</td>
+          <td align="right">-</td>
         </if><else>
           <td align="right"> @packageinfo.total@ </td>
           <td align="right"> @packageinfo.passes@ </td>
