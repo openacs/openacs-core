@@ -100,17 +100,9 @@ ad_proc -public tsearch2::update_index {
     }
 }
 
-#ad_proc -callback search::search -impl tsearch2-driver {
-#    {-extra_args {}}
-#    query
-#    offset
-#    limit
-#    user_id
-#    df
-#}
 ad_proc -callback search::search -impl tsearch2-driver {
     -query
-    -user_id
+    {-user_id 0}
     {-offset 0}
     {-limit 10}
     {-df ""}
@@ -139,14 +131,14 @@ ad_proc -callback search::search -impl tsearch2-driver {
     set packages $package_ids
     set orig_query $query
 
-    # clean up query for tsearch2
+    #
+    # Clean up query for tsearch2
+    #
     set query [tsearch2::build_query -query $query]
 
     set where_clauses ""
     set from_clauses ""
-    if {![info exists user_id]} {set user_id 0}
 
-    # don't use bind vars since pg7.3 yacks for '1' (which is what comes out of bind vars)
     set limit_clause ""
     set offset_clause ""
     if {[string is integer -strict $limit]} {
@@ -202,8 +194,10 @@ ad_proc -callback search::search -impl tsearch2-driver {
     set count [db_string count {}]
     set stop_words {}
 
-    # lovely the search package requires count to be returned but the
+    #
+    # Lovely the search package requires count to be returned but the
     # service contract definition doesn't specify it!
+    #
     return [list ids $results_ids stopwords $stop_words count $count]
 }
 
