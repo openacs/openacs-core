@@ -4005,6 +4005,26 @@ ad_proc -public ad_log {
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 
+ad_proc -public -deprecated util_search_list_of_lists {list_of_lists query_string {sublist_element_pos 0}} {
+    Returns position of sublist that contains QUERY_STRING at SUBLIST_ELEMENT_POS.
+
+    The function can be replaced by "lsearch -index $pos $list_of_lists $query_string"
+    @see lsearch
+} {
+    #set sublist_index 0
+    #foreach sublist $list_of_lists {
+    #    set comparison_element [lindex $sublist $sublist_element_pos]
+    #    if { $query_string eq $comparison_element  } {
+    #        return $sublist_index
+    #    }
+    #    incr sublist_index
+    #}
+    # didn't find it
+    #return -1
+    
+    return [lsearch -index $sublist_element_pos $list_of_lists $query_string]
+}
+
 #
 # Management of resource files, to be used in sitewide-admin procs to
 # decide between CDN installations an local installations.
