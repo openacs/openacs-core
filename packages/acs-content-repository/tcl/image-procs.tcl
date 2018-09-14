@@ -1,7 +1,7 @@
 # packages/acs-content-repository/tcl/image-procs.tcl
 
 ad_library {
-    
+
     Procedures to handle image subtype
 
     Image magick handling procedures inspired and borrowed from
@@ -38,10 +38,10 @@ ad_proc -public image::new {
     {-height ""}
 } {
      Create a new image object from a temporary file
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2006-07-31
-    
+
     @param item_id Item id of the content item for this image. The
                    item_id will be generated from the acs_object_id
                    sequence if not specified.
@@ -55,8 +55,8 @@ ad_proc -public image::new {
                         AOLserver user to create image from
 
     @return          Item_id
-    
-    @error 
+
+    @error
 } {
     if {$width eq "" || $height eq ""} {
 	foreach {width height} [image::get_file_dimensions \
@@ -96,7 +96,7 @@ ad_proc -public image::get_file_info {
     -filename
 } {
     Get info about an image file, dimensions, mime_type
-    The name of this proc tries to make clear that we aren't getting info 
+    The name of this proc tries to make clear that we aren't getting info
     for an image type object, but examinging an image file in the filesystem
 
     @param filename Full path to file in the filesystem
@@ -126,7 +126,7 @@ ad_proc -public image::get_file_info_array {
 
     @author Dave Bauer
     @creation-date 2006-08-27
-    
+
     @see image::get_info
 } {
     upvar $array_name local_array
@@ -139,13 +139,13 @@ ad_proc -public image::get_file_dimensions {
     {-mime_type ""}
 } {
     Get the width and height of an image from
-    a file in the filesystem. 
+    a file in the filesystem.
 
-    This tries first to use built-in ns_*-support, and if not available, if talls back to 
+    This tries first to use built-in ns_*-support, and if not available, if talls back to
     imagemagick. We use imagemagick first since it supports many more image formats.
 
     @param filename full path to file in the filesystem
-    
+
     @return Returns a list of width and height
 
     @creation-date 2006-08-28
@@ -162,7 +162,7 @@ ad_proc -public image::get_info {
     {-filename:required}
     {-array:required}
 } {
-    Get the width and height of an image file. 
+    Get the width and height of an image file.
     The width and height are returned as 'height' and 'width' entries in the array named in the parameter.
     Uses ImageMagick instead of AOLserver function because it can handle more than
     just gifs and jpegs. The plan is to add the ability to get more details later.
@@ -204,32 +204,32 @@ ad_proc -public image::imagemagick_identify {
     @creation-date 2006-08-27
 } {
     if { [ catch {set out [exec [image::identify_binary] \
-			       -format "%w %h %m %k %q %#" $filename]} errMsg]} { 
+			       -format "%w %h %m %k %q %#" $filename]} errMsg]} {
         return -code error $errMsg
     }
     lassign $out width height type
-    switch -- $type { 
+    switch -- $type {
         JPG - JPEG {
             set mime_type image/jpeg
-        } 
-        GIF - GIF87 { 
+        }
+        GIF - GIF87 {
             set mime_type image/gif
-        } 
-        PNG { 
+        }
+        PNG {
             set mime_type image/png
-        } 
-        TIF - TIFF { 
+        }
+        TIF - TIFF {
             set mime_type image/tiff
         }
-        default { 
-            set mime_type {} 
+        default {
+            set mime_type {}
         }
     }
     return [list $width $height $mime_type]
 }
 
 ad_proc -public image::imagemagick_file_dimensions {
-    -filename 
+    -filename
 } {
     Get the dimensions of an image from imagemagick
 
@@ -248,7 +248,7 @@ ad_proc -public image::imagemagick_file_dimensions {
 ad_proc -public image::identify_binary {
 } {
     Find imagemagick identify binary
-    
+
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
@@ -262,7 +262,7 @@ ad_proc -public image::identify_binary {
 ad_proc -public image::convert_binary {
 } {
     Find imagemagick convert binary
-    
+
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
@@ -279,7 +279,7 @@ if {[ns_info name] eq "NaviServer"} {
 	{-mime_type ""}
     } {
 	Use ns_gifsize/ns_jpegsize to try to get the size of an image
-	
+
 	@param filename Full path to file in the filesystem
 	@return List containing width and height
     } {
@@ -296,7 +296,7 @@ if {[ns_info name] eq "NaviServer"} {
 	{-mime_type ""}
     } {
 	Use ns_gifsize/ns_jpegsize to try to get the size of an image
-	
+
 	@param filename Full path to file in the filesystem
 	@return List containing width and height
 	@author Dave Bauer (dave@solutiongrove.com)
@@ -370,7 +370,7 @@ ad_proc -private image::get_convert_to_sizes {
 }
 
 ad_proc -public image::resize {
-    -item_id 
+    -item_id
     {-revision_id ""}
     {-size_name "thumbnail"}
 } {
@@ -388,7 +388,7 @@ ad_proc -public image::resize {
     set original_filename [content::revision::get_cr_file_path -revision_id $revision_id]
     set tmp_filename [ns_mktemp "/tmp/XXXXXX"]
     array set sizes [image::get_convert_to_sizes]
-    
+
     if {[catch {exec [image::convert_binary] -resize $sizes($size_name) $original_filename $tmp_filename} errmsg]} {
 	# maybe imagemagick isn't installed?
         file delete -- $tmp_filename
@@ -398,7 +398,7 @@ ad_proc -public image::resize {
 	     [image::get_size_item_id \
 		  -item_id $item_id \
 		  -size_name $size_name]] eq ""} {
-	
+
 	set resize_item_id \
 	    [image::new \
 		 -item_id $resize_item_id \
@@ -411,16 +411,16 @@ ad_proc -public image::resize {
 	    -item_id $resize_item_id \
 	    -tmp_filename $tmp_filename
     }
-    file delete -- $tmp_filename    
+    file delete -- $tmp_filename
     return $resize_item_id
 }
 
 ad_proc -public image::get_size_item_id {
-    -item_id 
+    -item_id
     -size_name
 } {
     Get the item_id of a resized version of an image
-    
+
     @param item_id Original image item_id
     @param size_name Name of the size to get
 
