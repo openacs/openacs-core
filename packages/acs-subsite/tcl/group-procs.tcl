@@ -710,6 +710,7 @@ ad_proc -public group::admin_p {
 
 ad_proc -public group::add_member {
     {-no_perm_check:boolean}
+    {-no_automatic_membership_rel:boolean}
     {-group_id:required}
     {-user_id:required}
     {-rel_type ""}
@@ -717,6 +718,14 @@ ad_proc -public group::add_member {
 } {
     Adds a user to a group, checking that the rel_type is permissible given the user's privileges,
     Can default both the rel_type and the member_state to their relevant values.
+
+    @param no_perm_check avoid permission check
+    @param no_automatic_membership_rel Use this flag, when we do not wan to add automatically a membership_rel (e.g. in DotLRN)
+    @param group_id group, to which a member should be added
+    @param user_id user, which should be added to a group
+    @param rel_type relationship type to be used (defaults to membership_rel)
+    @param member_state state, in which member should be added  (gets default via group::default_member_state)
+
 } {
     set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
 
@@ -747,7 +756,7 @@ ad_proc -public group::add_member {
                               -create_p $create_p]
     }
 
-    if { $rel_type ne "membership_rel" } {
+    if { !$no_automatic_membership_rel_p && $rel_type ne "membership_rel" } {
 	# add them with a membership_rel first
 	relation_add -member_state $member_state "membership_rel" $group_id $user_id
     }
