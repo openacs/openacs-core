@@ -3174,6 +3174,27 @@ ad_proc -private -deprecated rp_handle_adp_request {} {
     }
 }
 
+# Since Tcl 8.5, lsearch has -index flag and can therefore achieve
+# this natively.
+ad_proc -deprecated -public util_search_list_of_lists {
+    list_of_lists query_string
+    {sublist_element_pos 0}
+} {
+    Returns position of sublist that contains QUERY_STRING at SUBLIST_ELEMENT_POS.
+} {
+    set sublist_index 0
+    foreach sublist $list_of_lists {
+        set comparison_element [lindex $sublist $sublist_element_pos]
+        if { $query_string eq $comparison_element  } {
+            return $sublist_index
+        }
+        incr sublist_index
+    }
+    # didn't find it
+    return -1
+}
+
+
 ########################################################################
 # deprecated site-nodes-procs.tcl
 ########################################################################
