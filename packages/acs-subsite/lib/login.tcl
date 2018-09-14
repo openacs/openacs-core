@@ -1,5 +1,5 @@
 ad_include_contract {
-    ADP include for presentin a login box
+    ADP include for presenting a login box
 
     @param subsite_id - optional, defaults to nearest subsite
     @param return_url - optional, defaults to Your Account
