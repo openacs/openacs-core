@@ -298,7 +298,11 @@ ad_proc -public group::get_members {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-07-26
 } {
-    return [util_memoize [list group::get_members_not_cached -group_id $group_id -type $type]]
+    acs::group_cache eval -partition_key $group_id \
+        members-$group_id-$type {
+            group::get_members_not_cached -group_id $group_id -type $type
+        }
+    #return [util_memoize [list group::get_members_not_cached -group_id $group_id -type $type]]
 }
 
 ad_proc -private group::get_members_not_cached {
@@ -323,6 +327,7 @@ ad_proc -private group::get_members_not_cached {
     return $member_list
 }
 
+
 ad_proc -private group::flush_members_cache {
     {-group_id:required}
 } {
@@ -334,10 +339,11 @@ ad_proc -private group::flush_members_cache {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-07-26
 } {
-  util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type party]
-  util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type user]
-  util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type person]
-  util_memoize_flush_regexp [list group::member_p_not_cached -group_id $group_id (.*)]
+    ::acs::group_cache flush_pattern -partition_key $group_id *-$group_id-*
+    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type party]
+    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type user]
+    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type person]
+    #util_memoize_flush_regexp [list group::member_p_not_cached -group_id $group_id (.*)]
 }
 
 ad_proc -deprecated -public group::permission_p {
@@ -554,16 +560,17 @@ ad_proc -public group::member_p {
 } {
     Return 1 if the user is a member of the group specified.
     You can specify a group name or group id.
-    </p><p>
+    
     If there is more than one group with this name, it will use the first one.
-     <p>
+   
     If cascade is true, check to see if the user is
     a member of the group by virtue of any other component group.
     (e.g. if group B is a component of group A then if a user
      is a member of group B then he is automatically a member of A
      also.)
     If cascade is false, then the user must have specifically
-    been granted membership on the group in question.</p>
+    been granted membership on the group in question.
+    
     @param subsite_id Only useful when using group_name. Marks the subsite in which to search for the group_id that belongs to the group_name
 
     @see group::flush_members_cache
@@ -585,7 +592,11 @@ ad_proc -public group::member_p {
 	}
     }
 
-    return [util_memoize [list group::member_p_not_cached -group_id $group_id -user_id $user_id -cascade_p $cascade_p]]
+    return [acs::group_cache eval -partition_key $group_id \
+                member-$group_id-$user_id-$cascade_p {
+                    group::member_p_not_cached -group_id $group_id -user_id $user_id -cascade_p $cascade_p
+                }]
+    #return [util_memoize [list group::member_p_not_cached -group_id $group_id -user_id $user_id -cascade_p $cascade_p]]
 }
 
 ad_proc -private group::member_p_not_cached {
