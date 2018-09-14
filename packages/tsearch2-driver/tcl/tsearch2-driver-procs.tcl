@@ -109,12 +109,15 @@ ad_proc -public tsearch2::update_index {
 #    df
 #}
 ad_proc -callback search::search -impl tsearch2-driver {
-    {-extra_args {}}
     -query
-    -offset
-    -limit
     -user_id
-    -df
+    {-offset 0}
+    {-limit 10}
+    {-df ""}
+    {-dt ""}
+    {-package_ids ""}
+    {-object_type ""}
+    {-extra_args {}}
 } {
     ftsenginedriver search operation implementation for tsearch2
 
@@ -122,12 +125,14 @@ ad_proc -callback search::search -impl tsearch2-driver {
     @creation-date 2004-06-05
 
     @param query
+    @param user_id    
     @param offset
     @param limit
-    @param user_id
     @param df
-    @param packages list of packages to search for content in.
-
+    @param dt
+    @param package_ids
+    @param object_type
+    @param extra_args
     @return
     @error
 } {
@@ -254,7 +259,7 @@ ad_proc tsearch2::build_query { -query } {
     or => |
     space => | (or)
 
-    @param string string to convert
+    @param query string to convert
     @return returns formatted query string for tsearch2 tsquery
 } {
     # get rid of everything that isn't valid in a query
