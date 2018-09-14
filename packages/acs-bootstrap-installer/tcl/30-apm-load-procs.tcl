@@ -307,7 +307,7 @@ ad_proc -public apm_guess_db_type { package_key path } {
     ends in a dash and database type, the file is assumed to be specific to 
     that database type.
 
-    Example: "tcl/10-database-postgresql-proc.tcl" is asusmed to be the file that
+    Example: "tcl/10-database-postgresql-proc.tcl" is assumed to be the file that
     defines the PostgreSQL-specific portions of the database API.
 
 } {
@@ -345,7 +345,7 @@ ad_proc apm_package_supports_rdbms_p {
     {-package_key:required}
 } {
     Returns 1 if the given package supports the rdbms of the system and 0 otherwise.
-    The package is considedered to support the given rdbms if there is at least one
+    The package is considered to support the given rdbms if there is at least one
     file in the package of matching db_type, or if there are no files in the package
     of a certain db type.
 
