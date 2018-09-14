@@ -251,7 +251,6 @@ ad_proc -public image::identify_binary {
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
-    # FIXME create parameter
     return [parameter::get \
 		-parameter ImageMagickIdentifyBinary \
 		-package_id [apm_package_id_from_key acs-content-repository] \
@@ -265,7 +264,6 @@ ad_proc -public image::convert_binary {
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
-    #FIXME create parameter
     return [parameter::get \
 		-parameter ImageMagickConvertBinary \
 		-package_id [apm_package_id_from_key acs-content-repository] \
