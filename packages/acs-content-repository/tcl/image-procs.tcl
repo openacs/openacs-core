@@ -59,15 +59,14 @@ ad_proc -public image::new {
     @error
 } {
     if {$width eq "" || $height eq ""} {
-	foreach {width height} [image::get_file_dimensions \
-				    -filename $tmp_filename \
-				    -mime_type $mime_type] {}
-
+	lassign [image::get_file_dimensions \
+                     -filename $tmp_filename \
+                     -mime_type $mime_type] width height
     }
-    if {[util_search_list_of_lists $attributes width]<0} {
+    if {[lsearch -index 0 $attributes "width"] < 0} {
 	lappend attributes [list width $width]
     }
-    if {[util_search_list_of_lists $attributes height]<0} {
+    if {[lsearch -index 0 $attributes "height"] < 0} {
 	lappend attributes [list height $height]
     }
     return [content::item::new \
