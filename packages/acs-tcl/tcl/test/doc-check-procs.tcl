@@ -32,7 +32,10 @@ aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
     aa_log "Found $good good of $count checked"
 }
 
-aa_register_case -cats {smoke production_safe} documentation__check_proc_testcase {
+aa_register_case \
+    -cats {smoke production_safe} \
+    -error_level warning \
+    documentation__check_proc_testcase {
 
     Checks if testcases exist for public procs.
 
