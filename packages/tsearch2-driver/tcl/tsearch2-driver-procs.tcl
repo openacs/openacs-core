@@ -136,7 +136,7 @@ ad_proc -callback search::search -impl tsearch2-driver {
     @return
     @error
 } {
-    set packages {}
+    set packages $package_ids
     set orig_query $query
 
     # clean up query for tsearch2
