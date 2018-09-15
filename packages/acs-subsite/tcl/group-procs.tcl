@@ -174,6 +174,22 @@ ad_proc group::delete { group_id } {
     return $object_type
 }
 
+ad_proc -private group::get_not_cached {
+    {-group_id:required}
+} {
+    Get basic info about a group: group_name, join_policy.
+
+    @return dict containing group_name, title, join_policy, and description
+} {
+    db_1row group_info {
+        select group_name, title, join_policy, description
+        from   groups g, acs_objects o
+        where  group_id = :group_id
+	and object_id = :group_id
+    } -column_array row
+    return [array get row]
+}
+
 ad_proc -public group::get {
     {-group_id:required}
     {-array}
@@ -184,17 +200,18 @@ ad_proc -public group::get {
     @return dict containing group_name, title, join_policy, and description
     @see group::get_element
 } {
+    set group_info [acs::group_cache eval -partition_key $group_id \
+                        info-$group_id- {
+                            group::get_not_cached -group_id $group_id
+                        }]
+   
     if {[info exists array]} {
         upvar 1 $array row
+        array set row $info
     }
-    db_1row group_info {
-        select group_name, title, join_policy, description
-        from   groups g, acs_objects o
-        where  group_id = :group_id
-	and object_id = :group_id
-    } -column_array row
-    return [array get row]
+    return $info
 }
+
 
 ad_proc -public group::get_element {
     {-group_id:required}
@@ -421,6 +438,7 @@ ad_proc -public group::update {
 	    where object_id = :group_id
 	}
     }
+    acs::group_cache flush info-$group_id-
 }
 
 ad_proc -public group::possible_member_states {} {
@@ -788,31 +806,24 @@ ad_proc -public group::title {
     {-group_name ""}
     {-group_id ""}
 } {
-    Get the title of a group, cached
-    Use either the group_id or the group_name
+    
+    Get the title of a group based either on group_name or on the group_id.
 
     @param group_id The group_id of the group
     @param group_name The name of the group. Note this is not the I18N title we want to retrieve with this procedure
 } {
     if {$group_name ne ""} {
+        if {$group_id ne ""} {
+            error "specify either -group_name or -group_id, but not both"
+        }
 	set group_id [group::get_id -group_name $group_name]
     }
 
     if {$group_id ne ""} {
-	return [util_memoize [list group::title_not_cached -group_id $group_id]]
+	return [group::get_element -group_id $group_id -element "title"]
     } else {
 	return ""
     }
-}
-
-ad_proc -private group::title_not_cached {
-    {-group_id ""}
-} {
-    Get the title of a group, not cached
-
-    @param group_id The group_id of the group
-} {
-    return [group::get_element -group_id $group_id -element "title"]
 }
 
 ad_proc -private group::group_p {
