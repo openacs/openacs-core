@@ -628,16 +628,18 @@ ad_proc -private group::member_p_not_cached {
 } {
     Return 1 if the user is a member of the group specified.
     You can specify a group id.
-    </p><p>
-    If there is more than one group with this name, it will use the first one.
-     <p>
-    If cascade is true, check to see if the user is
-    a member of the group by virtue of any other component group.
-    (e.g. if group B is a component of group A then if a user
-     is a member of group B then he is automatically a member of A
-     also.)
-    If cascade is false, then the user must have specifically been granted membership on the group in question.</p>
 
+    If there is more than one group with this name, it will use the first one.
+
+    If cascade is true, check to see if the user is a member of the
+    group by virtue of any other component group. e.g. if group B is
+    a component of group A then if a user is a member of group B then
+    he is automatically a member of A also.
+
+    If cascade is false, then the user must have specifically been
+    granted membership on the group in question.</p>
+
+    @return boolean value
     @see group::flush_members_cache
 
 } {
@@ -854,7 +856,7 @@ ad_proc -public group::title {
 ad_proc -private group::group_p {
     {-group_id:required}
 } {
-    Get the title of a group, not cached
+    Test, of group exists
 
     @param group_id The group_id of the group
 } {
