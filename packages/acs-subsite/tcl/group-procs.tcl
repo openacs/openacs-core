@@ -169,47 +169,31 @@ ad_proc group::delete { group_id } {
     # Maybe the relational constraint deletion should be moved to
     # the acs_group package...
 
-    db_exec_plsql delete_group "
-      BEGIN
-        -- the acs_group package takes care of segments referred
-        -- to by rel_constraints.rel_segment. We delete the ones
-        -- references by rel_constraints.required_rel_segment here.
+    db_exec_plsql delete_group {}
 
-        for row in (select cons.constraint_id
-                      from rel_constraints cons, rel_segments segs
-                     where segs.segment_id = cons.required_rel_segment
-                       and segs.group_id = :group_id) loop
-
-            rel_segment.del(row.constraint_id);
-
-        end loop;
-
-        -- delete the actual group
-        ${package_name}.del(:group_id);
-      END;
-    "
-
-  util_memoize_flush [list group::get_title_not_cached -group_id $group_id]
     return $object_type
 }
 
 ad_proc -public group::get {
     {-group_id:required}
-    {-array:required}
+    {-array}
 } {
     Get basic info about a group: group_name, join_policy.
 
     @param array The name of an array in the caller's namespace where the info gets delivered.
-
+    @return dict containing group_name, title, join_policy, and description
     @see group::get_element
 } {
-    upvar 1 $array row
+    if {[info exists array]} {
+        upvar 1 $array row
+    }
     db_1row group_info {
         select group_name, title, join_policy, description
         from   groups g, acs_objects o
         where  group_id = :group_id
 	and object_id = :group_id
     } -column_array row
+    return [array get row]
 }
 
 ad_proc -public group::get_element {
@@ -220,8 +204,7 @@ ad_proc -public group::get_element {
 
     @see group::get
 } {
-    group::get -group_id $group_id -array row
-    return $row($element)
+    return [dict get [group::get -group_id $group_id] $element]
 }
 
 ad_proc -public group::get_id {
@@ -437,7 +420,6 @@ ad_proc -public group::update {
 	    set title = :pretty_name
 	    where object_id = :group_id
 	}
-      util_memoize_flush [list group::get_title_not_cached -group_id $group_id]
     }
 }
 
