@@ -200,10 +200,10 @@ ad_proc -public group::get {
     @return dict containing group_name, title, join_policy, and description
     @see group::get_element
 } {
-    set group_info [acs::group_cache eval -partition_key $group_id \
-                        info-$group_id- {
-                            group::get_not_cached -group_id $group_id
-                        }]
+    set info [acs::group_cache eval -partition_key $group_id \
+                  info-$group_id- {
+                      group::get_not_cached -group_id $group_id
+                  }]
    
     if {[info exists array]} {
         upvar 1 $array row
@@ -827,24 +827,16 @@ ad_proc -public group::title {
 }
 
 ad_proc -private group::group_p {
-    {-group_id ""}
+    {-group_id:required}
 } {
     Get the title of a group, not cached
 
     @param group_id The group_id of the group
 } {
-    return [util_memoize [list group::group_p_not_cached -group_id $group_id]]
-}
-
-
-ad_proc -private group::group_p_not_cached {
-    {-group_id ""}
-} {
-    Get the title of a group, not cached
-
-    @param group_id The group_id of the group
-} {
-    return [db_string group {select 1 from groups where group_id = :group_id} -default 0]
+    return [acs::group_cache eval -partition_key $group_id \
+                exists-$group_id- {
+                    db_string group {select 1 from groups where group_id = :group_id} -default 0
+                }]
 }
 
 
