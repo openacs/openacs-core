@@ -375,9 +375,7 @@ ad_proc -public group::join_policy {
     @creation-date 10/2000
 
 } {
-    return [db_string select_join_policy {
-        select join_policy from groups where group_id = :group_id
-    }]
+    return [dict get [group::get -group_id $group_id] join_policy]
 }
 
 ad_proc -public group::description {
@@ -388,9 +386,7 @@ ad_proc -public group::description {
     @creation-date 09/2008
 
 } {
-    return [db_string select_description {
-        select description from groups where group_id = :group_id
-    }]
+    return [dict get [group::get -group_id $group_id] description]
 }
 
 ad_proc -public group::update {
