@@ -105,20 +105,20 @@ ad_proc -public group::new {
     lappend var_list [list $id_column $group_id]
     if { $group_name ne "" } {
         lappend var_list [list group_name $group_name]
-	if {$pretty_name eq ""} {
-	    set pretty_name $group_name
-	}
+        if {$pretty_name eq ""} {
+            set pretty_name $group_name
+        }
     }
 
     set group_id [package_instantiate_object \
-    	-creation_user $creation_user \
-    	-creation_ip $creation_ip \
-    	-package_name $package_name \
-    	-start_with "group" \
-    	-var_list $var_list \
-    	-form_id $form_id \
-    	-variable_prefix $variable_prefix \
-    	$group_type]
+        -creation_user $creation_user \
+        -creation_ip $creation_ip \
+        -package_name $package_name \
+        -start_with "group" \
+        -var_list $var_list \
+        -form_id $form_id \
+        -variable_prefix $variable_prefix \
+        $group_type]
 
     # We can't change the group_name to an I18N version as this would
     # break compatibility with group::member_p -group_name and the
@@ -130,12 +130,12 @@ ad_proc -public group::new {
     # key, there is no need to convert this a second time.
 
     if {![regexp [lang::util::message_key_regexp] $pretty_name]} {
-	set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
+        set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
     }
 
     # Update the title to the pretty name
     if {$pretty_name ne ""} {
-	db_dml title_update "update acs_objects set title = :pretty_name where object_id = :group_id"
+        db_dml title_update "update acs_objects set title = :pretty_name where object_id = :group_id"
     }
     return $group_id
 }
@@ -185,7 +185,7 @@ ad_proc -private group::get_not_cached {
         select group_name, title, join_policy, description
         from   groups g, acs_objects o
         where  group_id = :group_id
-	and object_id = :group_id
+        and object_id = :group_id
     } -column_array row
     return [array get row]
 }
@@ -204,7 +204,7 @@ ad_proc -public group::get {
                   info-$group_id- {
                       group::get_not_cached -group_id $group_id
                   }]
-   
+
     if {[info exists array]} {
         upvar 1 $array row
         array set row $info
@@ -270,13 +270,25 @@ ad_proc -private group::get_id_not_cached {
         if {$application_group_id ne ""} {
             ad_log warning "group::get_id '$group_name': overwriting specified application_group_id by application group of subsite"
         }
-	set application_group_id [application_group::group_id_from_package_id -package_id $subsite_id]
+        set application_group_id [application_group::group_id_from_package_id \
+                                      -package_id $subsite_id]
     }
 
     if {$application_group_id ne ""} {
-	set group_ids [db_list get_group_id_with_application {}]
+        set group_ids [db_list get_group_id_with_application {
+            SELECT g.group_id
+            FROM   acs_rels rels
+            INNER JOIN composition_rels comp ON rels.rel_id = comp.rel_id
+            INNER JOIN groups g              ON rels.object_id_two = g.group_id
+            WHERE rels.object_id_one = :application_group_id
+            AND   g.group_name = :group_name
+        }]
     } else {
-	set group_ids [db_list get_group_id {}]
+        set group_ids [db_list get_group_id {
+            select group_id
+            from groups
+            where group_name = :group_name
+        }]
     }
     if {[llength $group_ids] > 1} {
         ad_log warning "group::get_id for '$group_name' returns more than one value; returning the first one"
@@ -320,8 +332,22 @@ ad_proc -private group::get_members_not_cached {
     @creation-date 2005-07-26
 } {
     switch -- $type {
-	party  { set member_list [db_list group_members_party {}] }
-	default { set member_list [db_list group_members {}] }
+        party  {
+            set member_list [db_list group_members_party {
+                select distinct member_id
+                from group_member_map
+                where group_id = :group_id
+            }]
+        }
+        default {
+            set member_list [db_list group_members {
+                select distinct m.member_id
+                from group_member_map m, acs_objects o
+                where m.group_id = :group_id
+                and m.member_id = o.object_id
+                and o.object_type = :type
+            }]
+        }
     }
 
     return $member_list
@@ -427,12 +453,12 @@ ad_proc -public group::update {
     "
 
     if {[info exists group_name]} {
-	set pretty_name [lang::util::convert_to_i18n -message_key "group_title.${group_id}" -text "$group_name"]
-	db_dml update_object_title {
-	    update acs_objects
-	    set title = :pretty_name
-	    where object_id = :group_id
-	}
+        set pretty_name [lang::util::convert_to_i18n -message_key "group_title.${group_id}" -text "$group_name"]
+        db_dml update_object_title {
+            update acs_objects
+            set title = :pretty_name
+            where object_id = :group_id
+        }
     }
     acs::group_cache flush info-$group_id-
 }
@@ -556,9 +582,9 @@ ad_proc -public group::member_p {
 } {
     Return 1 if the user is a member of the group specified.
     You can specify a group name or group id.
-    
+
     If there is more than one group with this name, it will use the first one.
-   
+
     If cascade is true, check to see if the user is
     a member of the group by virtue of any other component group.
     (e.g. if group B is a component of group A then if a user
@@ -566,7 +592,7 @@ ad_proc -public group::member_p {
      also.)
     If cascade is false, then the user must have specifically
     been granted membership on the group in question.
-    
+
     @param subsite_id Only useful when using group_name. Marks the subsite in which to search for the group_id that belongs to the group_name
 
     @see group::flush_members_cache
@@ -574,18 +600,18 @@ ad_proc -public group::member_p {
 } {
 
     if { $user_id eq "" } {
-	set user_id [ad_conn user_id]
+        set user_id [ad_conn user_id]
     }
 
     if { $group_name eq "" && $group_id eq "" } {
-	return 0
+        return 0
     }
 
     if { $group_name ne "" } {
-	set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
-	if { $group_id eq "" } {
-	    return 0
-	}
+        set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
+        if { $group_id eq "" } {
+            return 0
+        }
     }
 
     return [acs::group_cache eval -partition_key $group_id \
@@ -648,7 +674,7 @@ ad_proc -public group::party_member_p {
         if {$group_id ne ""} {
             ad_log warning "group::party_member_p: ignore specified group_id $group_id, usin name '$group_name' instead"
         }
-	set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
+        set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
     }
 
     if { $group_id eq "" } {
@@ -674,7 +700,10 @@ ad_proc -public group::get_rel_segment {
 } {
     Get a segment for a particular relation type for a given group.
 } {
-    return [db_string select_segment_id {}]
+    return [db_string select_segment_id {
+        select segment_id from rel_segments
+        where group_id = :group_id and rel_type = :type
+    }]
 }
 
 ad_proc -public group::get_rel_types_options {
@@ -764,8 +793,8 @@ ad_proc -public group::add_member {
     }
 
     if { !$no_automatic_membership_rel_p && $rel_type ne "membership_rel" } {
-	# add them with a membership_rel first
-	relation_add -member_state $member_state "membership_rel" $group_id $user_id
+        # add them with a membership_rel first
+        relation_add -member_state $member_state "membership_rel" $group_id $user_id
     }
     relation_add -member_state $member_state $rel_type $group_id $user_id
     flush_members_cache -group_id $group_id
@@ -802,7 +831,7 @@ ad_proc -public group::title {
     {-group_name ""}
     {-group_id ""}
 } {
-    
+
     Get the title of a group based either on group_name or on the group_id.
 
     @param group_id The group_id of the group
@@ -812,13 +841,13 @@ ad_proc -public group::title {
         if {$group_id ne ""} {
             error "specify either -group_name or -group_id, but not both"
         }
-	set group_id [group::get_id -group_name $group_name]
+        set group_id [group::get_id -group_name $group_name]
     }
 
     if {$group_id ne ""} {
-	return [group::get_element -group_id $group_id -element "title"]
+        return [group::get_element -group_id $group_id -element "title"]
     } else {
-	return ""
+        return ""
     }
 }
 
