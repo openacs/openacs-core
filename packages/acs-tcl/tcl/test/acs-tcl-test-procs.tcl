@@ -812,6 +812,31 @@ aa_register_case \
 }
 
 aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs util_complete_url_p \
+    util__complete_url_p {
+
+        Test util_complete_url_p
+
+        @creation-date 2018-09-17
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    foreach url {
+        ""
+        "/test"
+        ":/test"
+    } {
+        aa_false $url [util_complete_url_p $url]
+    }
+    foreach url {
+        "http://test"
+        "ftp://test"
+    } {
+        aa_true $url [util_complete_url_p $url]
+    }
+}
+
+aa_register_case \
     -cats {api} \
     -procs util_url_valid_p \
     acs_tcl__util_url_valid_p {
