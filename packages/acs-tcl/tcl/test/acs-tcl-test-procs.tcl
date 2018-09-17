@@ -803,12 +803,20 @@ aa_register_case \
         @creation-date 2018-09-17
         @author Héctor Romojaro <hector.romojaro@gmail.com>
 } {
-    aa_false "Empty value" [util_absolute_path_p {}]
-    aa_false "blablabla" [util_absolute_path_p blablabla]
-    aa_false "bla/bla/bla/" [util_absolute_path_p bla/bla/bla]
-    aa_true "Only /" [util_absolute_path_p /]
-    aa_true "/blablabla" [util_absolute_path_p /blablabla]
-    aa_true "/bla/bla/bla/" [util_absolute_path_p /bla/bla/bla]
+    foreach path {
+        ""
+        "blablabla"
+        "bla/bla/bla/"
+    } {
+        aa_false $path [util_absolute_path_p $path]
+    }
+    foreach path {
+        "/"
+        "/blablabla"
+        "/bla/bla/bla/"
+    } {
+        aa_true $path [util_absolute_path_p $path]
+    }
 }
 
 aa_register_case \
