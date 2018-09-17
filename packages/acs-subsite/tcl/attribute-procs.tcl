@@ -172,7 +172,7 @@ ad_proc -private datatype_to_sql_type {
     column 
     datatype 
 } {
-    Returns the appropriate sql type for a table definitation
+    Returns the appropriate sql type for a table definition
     based on the table, column, datatype, and default value. Note that for
     default values, this proc automatically generates appropriate
     constraint names as well.
