@@ -9,7 +9,7 @@ ad_library {
 aa_register_case \
     -cats {api db} \
     -procs {
-        auth::authority::local 
+        auth::authority::local
         auth::sync::job::create_entry
         auth::sync::job::end
         auth::sync::job::end_get_document
@@ -19,16 +19,16 @@ aa_register_case \
     } \
     sync_start_end {
     Test batch job basics: Starting, getting document, adding entries, ending.
-} {    
+} {
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            
+
             # Start non-interactive job
-            
+
             set job_id [auth::sync::job::start \
                             -authority_id [auth::authority::local]]
-                            
+
             aa_true "Returns a job_id" {$job_id ne ""}
 
 
@@ -57,35 +57,35 @@ aa_register_case \
                 -user_id [ad_conn user_id] \
                 -message "A problem" \
                 -element_messages ""
-            
-            
+
+
             # End job
             array set job [auth::sync::job::end -job_id $job_id]
-            
+
             aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
-            
+
             aa_log "Elapsed time: $job(run_time_seconds) seconds"
-            
+
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
-            
+
             aa_equals "Number of actions" $job(num_actions) 2
-            
+
             aa_equals "Number of problems" $job(num_problems) 1
-            
+
             aa_false "Log URL non-empty" {$job(log_url) eq ""}
-            
+
             # Purge not deleting the job
             auth::sync::purge_jobs \
                 -num_days 1
-            
+
             aa_equals "Job still exists" [db_string job_exists_p { select count(*) from auth_batch_job_entries where job_id = :job_id }] 2
-            
+
             # Tricking it into deleting the job
             aa_log "Updating the job end time"
             db_dml update_job { update auth_batch_jobs set job_end_time = to_date('1974-03-27', 'YYYY-MM-DD') where job_id = :job_id }
             auth::sync::purge_jobs \
                 -num_days 1
-            
+
             aa_equals "Job has been purged" [db_string job_exists_p { select count(*) from auth_batch_job_entries where job_id = :job_id }] 0
 
         }
@@ -106,15 +106,15 @@ aa_register_case \
     } \
     sync_actions {
     Test job actions: insert, update, delete.
-} {    
+} {
     aa_run_with_teardown \
         -rollback \
         -test_code {
 
             # Start non-interactive job
-            
+
             set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
-                            
+
             aa_true "Returns a job_id" {[info exists job_id]}
 
             #####
@@ -145,7 +145,7 @@ aa_register_case \
                 -array entry
 
             aa_equals "entry.success_p" $entry(success_p) "t"
-            aa_equals "entry.message" $entry(message) {} 
+            aa_equals "entry.message" $entry(message) {}
             aa_equals "entry.element_messages" $entry(element_messages) {}
             aa_log "entry.user_id = '$entry(user_id)'"
             aa_log "entry.message = '$entry(message)'"
@@ -153,7 +153,7 @@ aa_register_case \
 
             if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
-                
+
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
                 aa_equals "user.email" [dict get $user email] [string tolower $email1]
@@ -162,7 +162,7 @@ aa_register_case \
                 aa_equals "user.url" [dict get $user url] $user_info(url)
                 aa_equals "user.screen_name" [dict get $user screen_name] $user_info(screen_name)
             }
-            
+
             #####
             #
             # Invalid insert action: Reusing username, email
@@ -193,7 +193,7 @@ aa_register_case \
             aa_log "entry.user_id = '$entry(user_id)'"
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
-            
+
             #####
             #
             # Valid update action
@@ -225,9 +225,9 @@ aa_register_case \
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {                
+            if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
-                
+
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
                 aa_equals "user.email" [dict get $user email] [string tolower $email2]
@@ -266,7 +266,7 @@ aa_register_case \
 
             if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
-                
+
                 aa_equals "user.first_names" [dict get $user first_names] $user_info2(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info2(last_name)
                 aa_equals "user.email" [dict get $user email] $user_info2(email)
@@ -301,7 +301,7 @@ aa_register_case \
             aa_equals "entry.success_p" $entry(success_p) "f"
             aa_log "entry.message = '$entry(message)'"
             if { [aa_true "entry.element_messages not empty" \
-		      {[info exists entry(element_messages)] && $entry(element_messages) ne ""}] } {
+              {[info exists entry(element_messages)] && $entry(element_messages) ne ""}] } {
                 aa_log "entry.element_messages = '$entry(element_messages)'"
                 array unset elm_msgs
                 array set elm_msgs $entry(element_messages)
@@ -320,7 +320,7 @@ aa_register_case \
                               -job_id $job_id \
                               -operation "delete" \
                               -username $username1]
-            
+
             array unset entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
@@ -334,7 +334,7 @@ aa_register_case \
                                       -user_id $entry(user_id) -element "member_state"]
                 aa_equals "User member state is banned" $member_state "banned"
             }
-            
+
 
             #####
             #
@@ -343,7 +343,7 @@ aa_register_case \
             #####
 
             array set job [auth::sync::job::end -job_id $job_id]
-            
+
             aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
 
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
@@ -351,9 +351,9 @@ aa_register_case \
             aa_equals "Number of actions" $job(num_actions) 6
 
             aa_equals "Number of problems" $job(num_problems) 2
-           
+
             aa_false "Log URL non-empty" {$job(log_url) eq ""}
-            
+
         }
 }
 
@@ -377,9 +377,9 @@ aa_register_case \
         -test_code {
 
             # Start non-interactive job
-            
+
             set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
-                            
+
             aa_true "Returns a job_id" {$job_id ne ""}
 
             #####
@@ -408,7 +408,7 @@ aa_register_case \
                 -array entry
 
             aa_equals "entry.success_p" $entry(success_p) "t"
-            aa_equals "entry.message" $entry(message) {} 
+            aa_equals "entry.message" $entry(message) {}
             aa_equals "entry.element_messages" $entry(element_messages) {}
             aa_equals "entry.operation" $entry(operation) "insert"
             aa_log "entry.user_id = '$entry(user_id)'"
@@ -417,7 +417,7 @@ aa_register_case \
 
             if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
-                
+
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
                 aa_equals "user.email" [dict get $user email] [string tolower $email1]
@@ -425,7 +425,7 @@ aa_register_case \
                 aa_equals "user.username" [dict get $user username] $username1
                 aa_equals "user.url" [dict get $user url] $user_info(url)
             }
-            
+
             #####
             #
             # Valid update action
@@ -459,7 +459,7 @@ aa_register_case \
 
             if { [aa_true "Entry has user_id set" {$entry(user_id) ne ""}] } {
                 set user [acs_user::get -user_id $entry(user_id)]
-                
+
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
                 aa_equals "user.email" [dict get $user email] [string tolower $user_info(email)]
@@ -468,7 +468,7 @@ aa_register_case \
                 aa_equals "user.url" [dict get $user url] $user_info(url)
             }
 
-            
+
             #####
             #
             # Wrap up batch sync job
@@ -477,13 +477,13 @@ aa_register_case \
 
             # We need this number to check the counts below
             set authority_id [auth::authority::local]
-            set num_users_not_banned [db_string select_num { 
-                select count(*) 
-                from   cc_users 
-                where  authority_id = :authority_id 
-                and    member_state != 'banned' 
+            set num_users_not_banned [db_string select_num {
+                select count(*)
+                from   cc_users
+                where  authority_id = :authority_id
+                and    member_state != 'banned'
             }]
-            
+
             auth::sync::job::snapshot_delete_remaining \
                 -job_id $job_id
 
@@ -494,7 +494,7 @@ aa_register_case \
             #####
 
             array set job [auth::sync::job::end -job_id $job_id]
-            
+
             aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
 
             aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
@@ -502,10 +502,10 @@ aa_register_case \
             aa_equals "Number of actions" $job(num_actions) [expr {$num_users_not_banned + 1}]
 
             aa_equals "Number of problems" $job(num_problems) 0
-           
+
             aa_false "Log URL non-empty" {$job(log_url) eq ""}
-            
-        }    
+
+        }
 }
 
 
@@ -522,9 +522,9 @@ aa_register_case \
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            
+
             set job_id [auth::authority::batch_sync -authority_id [auth::authority::local]]
-            
+
             auth::sync::job::get -job_id $job_id -array job
 
             aa_log "job.message = '$job(message)'"
@@ -544,7 +544,7 @@ aa_register_case \
         auth::sync::job::get_entry
         util_sets_equal_p
     } \
-    sync_batch_ims_example_doc { 
+    sync_batch_ims_example_doc {
     Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
 } {
     aa_stub acs_sc::invoke {
@@ -556,8 +556,8 @@ aa_register_case \
                 document {}
                 snapshot_p f
             }
-            
-            # Example document grabbed pulled from 
+
+            # Example document grabbed pulled from
             # http://www.imsglobal.org/enterprise/entv1p1/imsent_bestv1p1.html#1404584
             set result(document) {
 <enterprise>
@@ -643,7 +643,7 @@ aa_register_case \
   </person>
 </enterprise>
 }
-            
+
             return [array get result]
         } else {
             acs_sc::invoke_unstubbed \
@@ -659,7 +659,7 @@ aa_register_case \
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            
+
             # Create a new dummy authority with the dummy IMS get-document driver and the IMS Enterprise 1.1 process driver.
             array set new_auth {
                 short_name dummy-test
@@ -677,28 +677,28 @@ aa_register_case \
             }
             set new_auth(get_doc_impl_id) 1
             set new_auth(process_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS_Enterprise_v_1p1"]
-            
+
             set new_auth(get_doc_impl_id) [acs_sc::impl::get_id -owner "acs-authentication" -name "HTTPGet"]
 
             set authority_id [auth::authority::create \
                                   -array new_auth]
-            
+
             set job_id [auth::authority::batch_sync -authority_id $authority_id]
-            
+
             auth::sync::job::get -job_id $job_id -array job
-            
+
             aa_equals "Number of actions" $job(num_actions) 3
 
             aa_equals "Number of problems" $job(num_problems) 3
-           
+
             foreach entry_id [auth::sync::job::get_entries -job_id $job_id] {
                 array unset entry
                 auth::sync::job::get_entry \
                     -entry_id $entry_id \
                     -array entry
-                
+
                 aa_false "Success_p is false" [template::util::is_true $entry(success_p)]
-                
+
                 array unset elm_msgs
                 array set elm_msgs $entry(element_messages)
 
@@ -712,7 +712,7 @@ aa_register_case \
                         aa_true "email has a problem (email missing)" [util_sets_equal_p { email } [array names elm_msgs]]
                     }
                     update {
-                        aa_true "User does not exist" {$entry(message) ne ""} 
+                        aa_true "User does not exist" {$entry(message) ne ""}
                     }
                     delete {
                         aa_false "Message is not empty" {$entry(message) eq ""}
@@ -739,7 +739,7 @@ aa_register_case \
         auth::sync::GetElements
         auth::sync::job::get
         auth::sync::job::get_entries
-        auth::sync::job::get_entry        
+        auth::sync::job::get_entry
     } \
     sync_batch_ims_test {
     Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
@@ -752,7 +752,7 @@ aa_register_case \
                 doc_message {}
                 document {}
             }
-            
+
             global ims_doc
 
             set result(document) "<enterprise>
@@ -771,7 +771,7 @@ aa_register_case \
     <url>$ims_doc(url)</url>
   </person>
 </enterprise>"
-            
+
             return [array get result]
         } else {
             acs_sc::invoke_unstubbed \
@@ -809,7 +809,7 @@ aa_register_case \
 
             set authority_id [auth::authority::create \
                                   -array new_auth]
-            
+
 
             global ims_doc
 
@@ -832,9 +832,9 @@ aa_register_case \
             set ims_doc(url) "http://www.[ad_generate_random_string].com"
 
             set job_id [auth::authority::batch_sync -authority_id $authority_id]
-            
+
             auth::sync::job::get -job_id $job_id -array job
-            
+
             aa_equals "Number of actions" $job(num_actions) 1
             aa_equals "Number of problems" $job(num_problems) 0
             aa_log "job.message = '$job(message)'"
@@ -844,13 +844,13 @@ aa_register_case \
 
             array unset entry
             auth::sync::job::get_entry -entry_id $entry_id -array entry
-            
+
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
             set user [acs_user::get -user_id $entry(user_id)]
 
-            foreach varname { username first_names last_name email url } { 
+            foreach varname { username first_names last_name email url } {
                 aa_equals "$varname" [dict get $user $varname] $ims_doc($varname)
             }
             aa_equals "authority_id" [dict get $user authority_id] $authority_id
@@ -878,9 +878,9 @@ aa_register_case \
             set ims_doc(url) "http://www.[ad_generate_random_string].com"
 
             set job_id [auth::authority::batch_sync -authority_id $authority_id]
-            
+
             auth::sync::job::get -job_id $job_id -array job
-            
+
             aa_equals "Number of actions" $job(num_actions) 1
             aa_equals "Number of problems" $job(num_problems) 0
             aa_log "job.message = '$job(message)'"
@@ -890,13 +890,13 @@ aa_register_case \
 
             array unset entry
             auth::sync::job::get_entry -entry_id $entry_id -array entry
-            
+
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
             set user [acs_user::get -user_id $entry(user_id)]
 
-            foreach varname { username first_names last_name email url } { 
+            foreach varname { username first_names last_name email url } {
                 aa_equals "$varname" [dict get $user $varname] $ims_doc($varname)
             }
             aa_false "member_state not banned" {[dict get $user member_state] eq "banned"}
@@ -913,11 +913,11 @@ aa_register_case \
             set ims_doc(recstatus) 3
 
             # user variables stay the same, we are deleting
-            
+
             set job_id [auth::authority::batch_sync -authority_id $authority_id]
-            
+
             auth::sync::job::get -job_id $job_id -array job
-            
+
             aa_equals "Number of actions" $job(num_actions) 1
             aa_equals "Number of problems" $job(num_problems) 0
             aa_log "job.message = '$job(message)'"
@@ -927,10 +927,10 @@ aa_register_case \
 
             array unset entry
             auth::sync::job::get_entry -entry_id $entry_id -array entry
-            
+
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
-            aa_log "entry.user_id = '$entry(user_id)'"            
+            aa_log "entry.user_id = '$entry(user_id)'"
 
             set user_info [acs_user::get_user_info -user_id $entry(user_id)]
             aa_equals "username"     [dict get $user_info username]     $ims_doc(username)
@@ -950,7 +950,7 @@ aa_register_case \
 
             # attributes of the previously deletes user
             set old_doc [array get ims_doc]
-            
+
             # dummy user variables
             # same username
             set ims_doc(first_names) [ad_generate_random_string]
@@ -959,7 +959,7 @@ aa_register_case \
             set ims_doc(url) "http://www.[ad_generate_random_string].com"
 
             set job_id [auth::authority::batch_sync -authority_id $authority_id]
-            
+
             auth::sync::job::get -job_id $job_id -array job
 
             # operation has failed because user exists already
@@ -972,7 +972,7 @@ aa_register_case \
 
             array unset entry
             auth::sync::job::get_entry -entry_id $entry_id -array entry
-            
+
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
             aa_log "entry.user_id = '$entry(user_id)'"
@@ -989,11 +989,11 @@ aa_register_case \
             # Check that first_user_id has had username/email changed
 
             #####
-            # 
+            #
             # Test GetElements
             #
             #####
-            
+
             aa_log "--- GetElements test ---"
 
             set desired_elements [ad_generate_random_string]
@@ -1003,7 +1003,7 @@ aa_register_case \
                 -impl_id [acs_sc::impl::get_id -owner "acs-authentication" -name "IMS_Enterprise_v_1p1"] \
                 -parameter Elements \
                 -value $desired_elements
-            
+
             set elements [auth::sync::GetElements -authority_id $authority_id]
 
             aa_equals "Elements are '$desired_elements'" $elements $desired_elements
@@ -1029,14 +1029,14 @@ aa_register_case \
     if {[dict get $parsed_url host] eq "localhost"} {
         set url [dict get $parsed_url proto]://127.0.0.1:[dict get $parsed_url port]
         set url [string trimright $url ":"]
-    } 
+    }
     array set result [acs_sc::invoke \
                           -error \
                           -contract "auth_sync_retrieve" \
                           -impl "HTTPGet" \
                           -operation "GetDocument" \
                           -call_args [list [list SnapshotURL {} IncrementalURL "$url/SYSTEM/dbtest.tcl"]]]
-    
+
 
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
     aa_true "result.doc_message is empty" {$result(doc_message) eq ""}
@@ -1062,7 +1062,7 @@ aa_register_case \
                           -impl "LocalFilesystem" \
                           -operation "GetDocument" \
                           -call_args [list [list SnapshotPath {} IncrementalPath $path]]]
-    
+
     aa_equals "result.doc_status is ok" $result(doc_status) "ok"
     aa_true "result.doc_message is empty" {$result(doc_message) eq ""}
     aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
