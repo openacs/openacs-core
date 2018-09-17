@@ -770,6 +770,30 @@ aa_register_case \
 }
 
 aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs util::trim_leading_zeros \
+    util__trim_leading_zeros {
+
+        Test util::trim_leading_zeros
+
+        @creation-date 2018-09-17
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    aa_equals "Empty value" {} [util::trim_leading_zeros {}]
+    aa_equals "Real value (0.31)" [util::trim_leading_zeros 0.31] {.31}
+    aa_equals "Real value with multiple leading zeroes (000.31)" [util::trim_leading_zeros 0000.31] {.31}
+    aa_equals "Real value already trimmed (.31)" [util::trim_leading_zeros .31] {.31}
+    aa_equals "Natural value (031)" [util::trim_leading_zeros 031] {31}
+    aa_equals "Natural value with multiple leading zeroes (000031)" [util::trim_leading_zeros 000031] {31}
+    aa_equals "Natural value already trimmed (31)" [util::trim_leading_zeros 31] {31}
+    aa_equals "String (0asfda)" [util::trim_leading_zeros 0asfda] {asfda}
+    aa_equals "String with multiple leading zeroes (000asfda)" [util::trim_leading_zeros 000asfda] {asfda}
+    aa_equals "String already trimmed (asfda)" [util::trim_leading_zeros asfda] {asfda}
+    aa_equals "Only zeroes (000)" [util::trim_leading_zeros 000] {0}
+    aa_equals "Only one zero (0)" [util::trim_leading_zeros 0] {0}
+}
+
+aa_register_case \
     -cats {api} \
     -procs util_url_valid_p \
     acs_tcl__util_url_valid_p {
