@@ -18,7 +18,7 @@ ad_proc -public application_group::contains_party_p {
     -include_self:boolean
 } {
     Determines whether the party in question (identified by party_id) is 
-    a contained by the application group identified by package_id.
+    contained by the application group identified by package_id.
     If package_id is not specified, and we have a connection, then the 
     proc will grab the package_id of the current package (i.e., 
     [ad_conn package_id]).
@@ -73,7 +73,7 @@ ad_proc -public application_group::contains_relation_p {
     { -rel_id "" }
 } {
     Determines whether the relation in question (identified by rel_id) is 
-    a contained by the application group identified by package_id.
+    contained by the application group identified by package_id.
     If package_id is not specified, and we have a connection, then the 
     proc will grab the package_id of the current package (i.e., 
     [ad_conn package_id]).
@@ -219,7 +219,7 @@ ad_proc -public application_group::delete {
     # Delete permissions on:
     # - the application group
     # - any relational segment of this group
-    # - any relation with this gorup
+    # - any relation with this group
     # We really ought to have cascading deletes on acs_permissions.grantee_id (and object_id)
     db_dml delete_perms {}
 
@@ -234,7 +234,7 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
     {-node_id ""}
     {-include_self:boolean}
 } {
-    Starting with the node at with given id, or at given url,
+    Starting with the node of the given id, or at given url,
     climb up the site map and return the node of the first 
     non null application group
 
