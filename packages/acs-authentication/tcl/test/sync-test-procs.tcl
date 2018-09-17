@@ -105,7 +105,7 @@ aa_register_case \
         util_sets_equal_p
     } \
     sync_actions {
-    Test job actions: insert, update, 
+    Test job actions: insert, update, delete.
 } {    
     aa_run_with_teardown \
         -rollback \
@@ -1013,9 +1013,7 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {
-        acs_sc::invoke
-    } \
+    -procs acs_sc::invoke \
     sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
