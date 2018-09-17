@@ -44,7 +44,7 @@ aa_register_case \
     aa_false "lists are not identical sets 2" [util_sets_equal_p [list a b c] [list a b c d]]
 }
 
-# By stubbing this proc we can define callbacks valid only during testing 
+# By stubbing this proc we can define callbacks valid only during testing
 # that are guaranteed not to interfere with any real callbacks in the system
 aa_stub apm_supported_callback_types {
     return [list __test-callback-type]
@@ -61,8 +61,8 @@ aa_register_case \
         apm_read_package_info_file
     } \
     apm__test_info_file {
-        Test that the procs for interfacing with package info files - 
-        apm_generate_package_spec and 
+        Test that the procs for interfacing with package info files -
+        apm_generate_package_spec and
         apm_read_package_info_file - handle the newly added
         callback and auto-mount tags properly.
 
@@ -73,8 +73,8 @@ aa_register_case \
     set spec_path "${test_dir}/tmp-test-info-file.xml"
     set allowed_type [lindex [apm_supported_callback_types] 0]
     array set callback_array [list unknown-type proc_name1 $allowed_type proc_name2]
-    set version_id [db_string aa_version_id {select version_id 
-                                            from apm_enabled_package_versions 
+    set version_id [db_string aa_version_id {select version_id
+                                            from apm_enabled_package_versions
                                             where package_key = 'acs-automated-testing'}]
     set auto_mount_orig [db_string aa_auto_mount {select auto_mount
                                              from apm_package_versions
@@ -85,44 +85,44 @@ aa_register_case \
         db_dml set_test_mount {update apm_package_versions
                                set auto_mount = :auto_mount
                                where version_id = :version_id}
-        } 
+        }
 
-    set error_p [catch {         
+    set error_p [catch {
         # Add a few test callbacks
         foreach {type proc} [array get callback_array] {
           db_dml insert_callback {insert into apm_package_callbacks
                                        (version_id, type, proc)
                                 values (:version_id, :type, :proc)}
         }
-    
+
         # Get the xml string
         set spec [apm_generate_package_spec $version_id]
-    
+
         # Write xml to file
         set spec_file_id [open $spec_path w]
         puts $spec_file_id $spec
         close $spec_file_id
-    
+
         # Read the xml file
         array set spec_array [apm_read_package_info_file $spec_path]
-    
+
         # Assert that info parsed from xml file is correct
         array set parsed_callback_array $spec_array(callbacks)
-    
+
         aa_true "Only one permissible callback should be returned, got array [array get parsed_callback_array]" \
-	    {[array size parsed_callback_array] == 1}
-    
+            {[array size parsed_callback_array] == 1}
+
         aa_equals "Checking name of callback of allowed type $allowed_type" \
                 $parsed_callback_array($allowed_type) $callback_array($allowed_type)
 
         aa_equals "Checking that auto-callback is correct" $spec_array(auto-mount) $auto_mount
-            
+
     } error]
 
     # Teardown
     file delete -- $spec_path
     foreach {type proc} [array get callback_array] {
-      db_dml remove_callback {delete from apm_package_callbacks 
+      db_dml remove_callback {delete from apm_package_callbacks
                               where version_id = :version_id
                               and type = :type }
     }
@@ -132,7 +132,7 @@ aa_register_case \
 
 
     if { $error_p } {
-	error "$error - $::errorInfo"
+        error "$error - $::errorInfo"
     }
 }
 
@@ -158,7 +158,7 @@ aa_register_case \
     set invalid_type "not-allowed-type"
     set error_p [catch {apm_get_callback_proc -type $invalid_type -package_key acs-kernel} error]
     aa_true "invalid types should result in error, got error: $error" $error_p
-    
+
     # Try setting a package callback proc
     set callback_type [lindex [apm_supported_callback_types] 0]
     set proc_name "test_proc"
@@ -167,7 +167,7 @@ aa_register_case \
 
     set error_p [catch {
         apm_package_install_callbacks [list $callback_type $proc_name] $version_id
-    
+
         # Retrieve the callback proc
         set retrieved_proc_name \
                 [apm_get_callback_proc -package_key $package_key \
@@ -180,7 +180,7 @@ aa_register_case \
     apm_remove_callback_proc -package_key $package_key -type $callback_type
 
     if { $error_p } {
-	error "$error - $::errorInfo"
+        error "$error - $::errorInfo"
     }
 }
 
@@ -201,15 +201,15 @@ aa_register_case \
 
         # Set the callback to be to our little test proc
         apm_set_callback_proc -version_id $version_id -type $type "apm_test_callback_proc"
-    
+
         apm_invoke_callback_proc -version_id $version_id -arg_list [list arg1 value1 arg2 value2] -type $type
-    
+
         set file_id [open $file_path r]
         set file_contents [read $file_id]
         aa_equals "The callback proc should have been executed and written argument values to file" \
                 [string trim $file_contents] "value1 value2"
         close $file_id
-    
+
         # Provide invalid argument list and the invoke proc should bomb
         # TODO...
     } error]
@@ -288,9 +288,9 @@ aa_register_case \
     set node_id [site_node::get_node_id -url "/"]
 
     set child_node_ids [site_node::get_children \
-			    -all \
-			    -element node_id \
-			    -node_id $node_id]
+                            -all \
+                            -element node_id \
+                            -node_id $node_id]
 
     # lsearch returns '-1' if not found
     aa_equals "site_node::get_children does not return root node" [lsearch -exact $child_node_ids $node_id] -1
@@ -302,7 +302,7 @@ aa_register_case \
     aa_equals "package_key arg. identical to -filters" \
         [site_node::get_children -all -element node_id -node_id $node_id -package_key "acs-admin"] \
         $nodes
-    
+
     aa_equals "Found exactly one acs-admin node" [llength $nodes] 1
 
 
@@ -311,14 +311,14 @@ aa_register_case \
     aa_equals "package_type arg. identical to filter_element package_type" \
         [site_node::get_children -all -element node_id -node_id $node_id -package_type "apm_service"] \
         $nodes
-    
+
     aa_true "Found at least one apm_service node" {[llength $nodes] > 0}
 
     # nonexistent package_type
     aa_true "No nodes with package type 'foo'" \
         {[llength [site_node::get_children -all -element node_id -node_id $node_id -package_type "foo"]] == 0}
 
-    
+
 }
 
 aa_register_case \
@@ -327,7 +327,7 @@ aa_register_case \
     text_to_html {
         Test code the supposedly causes ad_html_to_text to break
 } {
-    
+
     # Test bad <<<'s
 
     set offending_post {><<<}
@@ -368,7 +368,7 @@ gmt3rd@aol.com
 <br>
    ----- Transcript of session follows -----<p>
 ... while talking to mailin-04.mx.aol.com.:
-<<< 550-AOL no longer accepts connections from dynamically assigned 
+<<< 550-AOL no longer accepts connections from dynamically assigned
 <<< 550-IP addresses to our relay servers.  Please contact your ISP
 <<< 550 to have your mail redirected through your ISP's SMTP servers.
 ... while talking to mailin-02.mx.aol.com.:
@@ -385,8 +385,8 @@ Final-Recipient: RFC822; gmt3rd@aol.com
 Action: failed
 Status: 5.5.0
 Remote-MTA: DNS; mailin-01.mx.aol.com
-Diagnostic-Code: SMTP; 550-AOL no longer accepts connections from 
-dynamically assigned 
+Diagnostic-Code: SMTP; 550-AOL no longer accepts connections from
+dynamically assigned
 Last-Attempt-Date: Sat, 17 Mar 2001 11:48:57 -0500
 
 </blockquote>
@@ -415,7 +415,7 @@ aa_register_case \
     -cats {api smoke} \
     -procs ad_page_contract_filters \
     ad_page_contract_filters {
-        Test ad_page_contract_filters 
+        Test ad_page_contract_filters
 } {
     set filter integer
     foreach { value result } { "1" 1 "a" 0 "1.2" 0 "'" 0 } {
@@ -555,21 +555,21 @@ aa_register_case \
 aa_register_case \
     -cats {api db smoke} \
     -procs db_transaction \
-    db__transaction { 
+    db__transaction {
         Test db_transaction
 } {
 
-    # create a temp table for testing 
+    # create a temp table for testing
     catch {db_dml remove_table {drop table tmp_db_transaction_test}}
     db_dml new_table {create table tmp_db_transaction_test (a integer constraint tmp_db_transaction_test_pk primary key, b integer)}
 
 
     aa_equals "Test we can insert a row in a db_transaction clause" \
         [catch {db_transaction {db_dml test1 {insert into tmp_db_transaction_test(a,b) values (1,2)}}}] 0
-    
+
     aa_equals "Verify clean insert worked" \
         [db_string check1 {select a from tmp_db_transaction_test} -default missing] 1
-    
+
     # verify the on_error clause is called
     set error_called 0
     catch {db_transaction { set foo } on_error {set error_called 1}} errMsg
@@ -591,27 +591,27 @@ aa_register_case \
     set error_p [catch {db_transaction {db_dml test2 {insert into tmp_db_transaction_test(a,b) values (1,2)}}} errMsg]
     aa_true "error thrown inserting duplicate row" $error_p
     aa_true "error message contains constraint violated" [string match -nocase {*tmp_db_transaction_test_pk*} $errMsg]
-    
+
     # check a sql error calls on_error clause
     set error_called 0
     set error_p [catch {db_transaction {db_dml test3 {insert into tmp_db_transaction_test(a,b) values (1,2)}} on_error {set error_called 1}} errMsg]
     aa_false "no error thrown with on_error clause" $error_p
     aa_equals "error message empty with on_error clause" \
         $errMsg {}
-                 
+
     # Check on explicit aborts
     set error_p [catch {
         db_transaction {
             db_dml test4 {
                 insert into tmp_db_transaction_test(a,b) values (2,3)
             }
-            db_abort_transaction 
+            db_abort_transaction
         }
     } errMsg]
     aa_true "error thrown with explicit abort" $error_p
     aa_equals "row not inserted with explicit abort" \
         [db_string check4 {select a from tmp_db_transaction_test where a = 2} -default missing] "missing"
-    
+
     # Check a failed sql command can do sql in the on_error block
     set sqlok {}
     set error_p [catch {
@@ -619,7 +619,7 @@ aa_register_case \
             db_dml test5 {
                 insert into tmp_db_transaction_test(a,b) values (1,2)
             }
-        } on_error { 
+        } on_error {
             set sqlok [db_string check5 {select a from tmp_db_transaction_test where a = 1}]
         }
     } errMsg]
@@ -632,7 +632,7 @@ aa_register_case \
     set error_p [catch {
         db_transaction {
             error "BAD CODE"
-        } on_error { 
+        } on_error {
             db_dml test6 {
                 insert into tmp_db_transaction_test(a,b) values (3,4)
             }
@@ -649,7 +649,7 @@ aa_register_case \
             db_dml test7 {
                 insert into tmp_db_transaction_test(a,b) values (1,2)
             }
-        } on_error { 
+        } on_error {
             db_dml test8 {
                 insert into tmp_db_transaction_test(a,b) values (3,4)
             }
@@ -659,22 +659,22 @@ aa_register_case \
     aa_equals "Insert in on_error block rolled back, sql error" \
         [db_string check8 {select a from tmp_db_transaction_test where a = 3} -default {missing}] missing
 
-    
+
 
     # check nested db_transactions work properly with clean code
-    set error_p [catch { 
-        db_transaction { 
+    set error_p [catch {
+        db_transaction {
             db_dml test9 {
                 insert into tmp_db_transaction_test(a,b) values (5,6)
             }
-            db_transaction { 
+            db_transaction {
                 db_dml test10 {
                     insert into tmp_db_transaction_test(a,b) values (6,7)
                 }
             }
         }
     } errMsg]
-    aa_false "No error thrown doing nested db_transactions" $error_p    
+    aa_false "No error thrown doing nested db_transactions" $error_p
     aa_equals "Data inserted in  outer db_transaction" \
         [db_string check9 {select a from tmp_db_transaction_test where a = 5} -default {missing}] 5
     aa_equals "Data inserted in nested db_transaction" \
@@ -683,12 +683,12 @@ aa_register_case \
 
 
     # check error in outer transaction rolls back nested transaction
-    set error_p [catch { 
-        db_transaction { 
+    set error_p [catch {
+        db_transaction {
             db_dml test11 {
                 insert into tmp_db_transaction_test(a,b) values (7,8)
             }
-            db_transaction { 
+            db_transaction {
                 db_dml test12 {
                     insert into tmp_db_transaction_test(a,b) values (8,9)
                 }
@@ -696,19 +696,19 @@ aa_register_case \
             error "BAD CODE"
         }
     } errMsg]
-    aa_true "Error thrown doing nested db_transactions" $error_p    
+    aa_true "Error thrown doing nested db_transactions" $error_p
     aa_equals "Data rolled back in outer db_transactions with error in outer" \
         [db_string check11 {select a from tmp_db_transaction_test where a = 7} -default {missing}] missing
     aa_equals "Data rolled back in nested db_transactions with error in outer" \
         [db_string check12 {select a from tmp_db_transaction_test where a = 8} -default {missing}] missing
 
     # check error in outer transaction rolls back nested transaction
-    set error_p [catch { 
-        db_transaction { 
+    set error_p [catch {
+        db_transaction {
             db_dml test13 {
                 insert into tmp_db_transaction_test(a,b) values (9,10)
             }
-            db_transaction { 
+            db_transaction {
                 db_dml test14 {
                     insert into tmp_db_transaction_test(a,b) values (10,11)
                 }
@@ -716,7 +716,7 @@ aa_register_case \
             }
         }
     } errMsg]
-    aa_true "Error thrown doing nested db_transactions: $errMsg" $error_p    
+    aa_true "Error thrown doing nested db_transactions: $errMsg" $error_p
     aa_equals "Data rolled back in outer db_transactions with error in nested" \
         [db_string check13 {select a from tmp_db_transaction_test where a = 9} -default {missing}] missing
     aa_equals "Data rolled back in nested db_transactions with error in nested" \
@@ -805,7 +805,7 @@ aa_register_case \
 aa_register_case \
     -cats {web smoke} \
     front_page_1 {
-    
+
 } {
     set d [acs::test::http /]
     acs::test::reply_contains $d "Main Site"
@@ -818,30 +818,30 @@ aa_register_case \
         Test the util::age_pretty proc.
 } {
     aa_log "Forcing locale to en_US for all strings so that tests work in any locale"
-    aa_equals "0 secs"       [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:00" -locale en_US] "1 minute ago" 
-    aa_equals "1 sec"        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:01" -locale en_US] "1 minute ago" 
-    aa_equals "29 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:29" -locale en_US] "1 minute ago" 
-    aa_equals "30 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:30" -locale en_US] "1 minute ago" 
-    aa_equals "31 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:31" -locale en_US] "1 minute ago" 
-    aa_equals "59 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:59" -locale en_US] "1 minute ago" 
-    aa_equals "1 min"        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:00" -locale en_US] "1 minute ago" 
-    aa_equals "1 min 1 sec"  [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:01" -locale en_US] "1 minute ago" 
+    aa_equals "0 secs"       [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:00" -locale en_US] "1 minute ago"
+    aa_equals "1 sec"        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:01" -locale en_US] "1 minute ago"
+    aa_equals "29 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:29" -locale en_US] "1 minute ago"
+    aa_equals "30 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:30" -locale en_US] "1 minute ago"
+    aa_equals "31 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:31" -locale en_US] "1 minute ago"
+    aa_equals "59 secs"      [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:59" -locale en_US] "1 minute ago"
+    aa_equals "1 min"        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:00" -locale en_US] "1 minute ago"
+    aa_equals "1 min 1 sec"  [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:01" -locale en_US] "1 minute ago"
 
-    aa_equals "1 min 29 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:29" -locale en_US] "1 minute ago" 
-    aa_equals "1 min 30 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:30" -locale en_US] "2 minutes ago" 
-    aa_equals "1 min 31 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:31" -locale en_US] "2 minutes ago" 
+    aa_equals "1 min 29 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:29" -locale en_US] "1 minute ago"
+    aa_equals "1 min 30 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:30" -locale en_US] "2 minutes ago"
+    aa_equals "1 min 31 sec" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:01:31" -locale en_US] "2 minutes ago"
 
     aa_equals "11 hours 59 minutes" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 23:59:00" -locale en_US] "11 hours 59 minutes ago"
     aa_equals "15 hours 0 minutes with override" \
-        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 03:00:00" -hours_limit 16 -locale en_US] "15 hours ago" 
+        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 03:00:00" -hours_limit 16 -locale en_US] "15 hours ago"
 
 
-    aa_equals "12 hours 0 minutes" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 00:00:00" -locale en_US] "12:00 PM, Thursday" 
+    aa_equals "12 hours 0 minutes" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 00:00:00" -locale en_US] "12:00 PM, Thursday"
 
-    aa_equals "15 hours 0 minutes" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 03:00:00" -locale en_US] "12:00 PM, Thursday" 
+    aa_equals "15 hours 0 minutes" [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-02 03:00:00" -locale en_US] "12:00 PM, Thursday"
 
     aa_equals "4 days 0 hours 0 minutes with override" \
-        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-05 12:00:00" -days_limit 5 -locale en_US] "12:00 PM, Thursday" 
+        [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-05 12:00:00" -days_limit 5 -locale en_US] "12:00 PM, Thursday"
 
     aa_equals "3 days 0 hours 0 minutes" \
         [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-04 12:00:00" -locale en_US] "12:00 PM, 01 Jan 2004"
@@ -860,18 +860,18 @@ aa_register_case \
     -cats {api} \
     db_get_quote_indices {
         Test the proc db_get_quote_indices.
-        
+
         @author Peter Marklund
 } {
     aa_equals "" [db_get_quote_indices {'a'}] {0 2}
     aa_equals "" [db_get_quote_indices {'a''}] {}
-    aa_equals "" [db_get_quote_indices {'a'a'a'}] {0 2 4 6} 
-    aa_equals "" [db_get_quote_indices {a'b'c'd''s'}] {1 3 5 10} 
-    aa_equals "" [db_get_quote_indices {'}] {} 
-    aa_equals "" [db_get_quote_indices {''}] {} 
-    aa_equals "" [db_get_quote_indices {a''a}] {} 
-    aa_equals "" [db_get_quote_indices {a'b'a}] {1 3} 
-    aa_equals "" [db_get_quote_indices {'a''b'}] {0 5} 
+    aa_equals "" [db_get_quote_indices {'a'a'a'}] {0 2 4 6}
+    aa_equals "" [db_get_quote_indices {a'b'c'd''s'}] {1 3 5 10}
+    aa_equals "" [db_get_quote_indices {'}] {}
+    aa_equals "" [db_get_quote_indices {''}] {}
+    aa_equals "" [db_get_quote_indices {a''a}] {}
+    aa_equals "" [db_get_quote_indices {a'b'a}] {1 3}
+    aa_equals "" [db_get_quote_indices {'a''b'}] {0 5}
 }
 
 aa_register_case \
@@ -879,7 +879,7 @@ aa_register_case \
     -cats {api} \
     db_bind_var_substitution {
         Test the proc db_bind_var_substitution.
-        
+
         @author Peter Marklund
 } {
 
@@ -891,10 +891,10 @@ aa_register_case \
     if { [db_type] ne "oracle" } {
         set sql {to_char(fm.posting_date, 'YYYY-MM-DD HH24:MI:SS')}
         aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] $sql
-    
+
         set sql {to_char(fm.posting_date, :SS)}
         aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, '3')}
-    
+
         set sql {to_char(fm.posting_date, don''t subst ':SS', do subst :SS )}
         aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, don''t subst ':SS', do subst '3' )}
 
@@ -904,7 +904,7 @@ aa_register_case \
             select ':SS'
         }]
         aa_equals "db_exec_plsql should not bind quoted var" $db_value ":SS"
-    
+
         set db_value [db_exec_plsql test_bind {
             select :SS
         }]
@@ -916,18 +916,18 @@ aa_register_case -cats {api} \
     -bugs 1450 \
     -procs ad_enhanced_text_to_html \
     acs_tcl__process_enhanced_correctly {
-       
-	Process sample text correctly
-	@author Nima Mazloumi
-    } {
-	
-	set string_with_img {<img src="http://test.test/foo.png">}
-	aa_log "Original string is $string_with_img"
-	set html_version [ad_enhanced_text_to_html $string_with_img]
-	aa_equals "new: $html_version should be the same" $html_version $string_with_img
+
+        Process sample text correctly
+        @author Nima Mazloumi
+} {
+
+    set string_with_img {<img src="http://test.test/foo.png">}
+    aa_log "Original string is $string_with_img"
+    set html_version [ad_enhanced_text_to_html $string_with_img]
+    aa_equals "new: $html_version should be the same" $html_version $string_with_img
 }
 
-aa_register_case -cats {api db} db__caching { 
+aa_register_case -cats {api db} db__caching {
     test db_* API caching
 } {
 
@@ -1078,84 +1078,84 @@ aa_register_case -cats {api db} db__caching {
 aa_register_case \
     -cats {api smoke} \
     -procs {
-	parameter::get parameter::get_from_package_key
-	parameter::set_default parameter::set_default
-	parameter::set_value parameter::set_from_package_key
-	parameter::set_global_value parameter::get_global_value
+        parameter::get parameter::get_from_package_key
+        parameter::set_default parameter::set_default
+        parameter::set_value parameter::set_from_package_key
+        parameter::set_global_value parameter::get_global_value
     } \
     parameter__check_procs {
-    Test the parameter::* procs
+        Test the parameter::* procs
 
-    @author Rocael Hernandez (roc@viaro.net)
+        @author Rocael Hernandez (roc@viaro.net)
 } {
 
     aa_run_with_teardown \
-	-rollback \
-	-test_code {
+        -rollback \
+        -test_code {
 
             aa_log "Test global parameter functionality"
             set parameter_id [db_nextval "acs_object_id_seq"]
             apm_parameter_register -parameter_id $parameter_id -scope global x_test_x "" acs-tcl 0 number
             parameter::set_global_value -package_key acs-tcl -parameter x_test_x -value 3
             aa_equals "check global parameter value set/get" \
-		[parameter::get_global_value -package_key acs-tcl -parameter x_test_x] \
-		"3"
+                [parameter::get_global_value -package_key acs-tcl -parameter x_test_x] \
+                "3"
             apm_parameter_unregister $parameter_id
 
-	    foreach tuple [db_list_of_lists get_param {
-		select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
-		from apm_parameters ap, apm_package_types apt
-		where
-		ap.package_key = apt.package_key
-		and apt.singleton_p ='t'
-		and ap.package_key <> 'acs-kernel' and ap.package_key <> 'search'
-	    }] {
+            foreach tuple [db_list_of_lists get_param {
+                select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
+                from apm_parameters ap, apm_package_types apt
+                where
+                ap.package_key = apt.package_key
+                and apt.singleton_p ='t'
+                and ap.package_key <> 'acs-kernel' and ap.package_key <> 'search'
+            }] {
 
-		lassign $tuple parameter_name package_key default_value parameter_id
-		set value [random]
-		if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
+                lassign $tuple parameter_name package_key default_value parameter_id
+                set value [random]
+                if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
 
-		    set package_id [apm_package_id_from_key $package_key]
-		    set actual_value [db_string real_value {
-			select apm_parameter_values.attr_value
-			from   apm_parameter_values
-			where apm_parameter_values.package_id = :package_id
-			and apm_parameter_values.parameter_id = :parameter_id
-		    }]
+                    set package_id [apm_package_id_from_key $package_key]
+                    set actual_value [db_string real_value {
+                        select apm_parameter_values.attr_value
+                        from   apm_parameter_values
+                        where apm_parameter_values.package_id = :package_id
+                        and apm_parameter_values.parameter_id = :parameter_id
+                    }]
 
-		    aa_log "$package_key $parameter_name $actual_value"
-		    aa_equals "check parameter::get" \
-			[parameter::get -package_id $package_id -parameter $parameter_name] \
-			$actual_value
-		    aa_equals "check parameter::get_from_package_key" \
-			[parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] \
-			$actual_value
+                    aa_log "$package_key $parameter_name $actual_value"
+                    aa_equals "check parameter::get" \
+                        [parameter::get -package_id $package_id -parameter $parameter_name] \
+                        $actual_value
+                    aa_equals "check parameter::get_from_package_key" \
+                        [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] \
+                        $actual_value
 
-		    parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
-		    set value_db [db_string get_values {
-			select default_value from apm_parameters
-			where package_key = :package_key and parameter_name = :parameter_name
-		    }]
-		    aa_equals "check parameter::set_default" $value $value_db
+                    parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
+                    set value_db [db_string get_values {
+                        select default_value from apm_parameters
+                        where package_key = :package_key and parameter_name = :parameter_name
+                    }]
+                    aa_equals "check parameter::set_default" $value $value_db
                     set value [expr {$value + 10}]
 
-		    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
-		    aa_equals "check parameter::set_from_package_key" \
-			[parameter::get -package_id $package_id -parameter $parameter_name] \
-			$value
+                    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
+                    aa_equals "check parameter::set_from_package_key" \
+                        [parameter::get -package_id $package_id -parameter $parameter_name] \
+                        $value
 
                     set value [expr {$value + 10}]
-		    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
-		    aa_equals "check parameter::set_value" \
-			[parameter::get -package_id $package_id -parameter $parameter_name] \
-			$value
+                    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
+                    aa_equals "check parameter::set_value" \
+                        [parameter::get -package_id $package_id -parameter $parameter_name] \
+                        $value
 
-		    ad_parameter_cache -delete $package_id $parameter_name
+                    ad_parameter_cache -delete $package_id $parameter_name
 
-		    break
-		}
-	    }
-	}
+                    break
+                }
+            }
+    }
 }
 
 aa_register_case \
@@ -1185,7 +1185,7 @@ aa_register_case \
 
     # Check if the registered_user_p procedure finds him
     set is_registered_p [acs_user::registered_user_p -user_id $user_id]
-    
+
     # Ban the user and check if he is not a registered_user anymore
     acs_user::ban -user_id $user_id
     set is_not_registered_p [acs_user::registered_user_p -user_id $user_id]
@@ -1208,11 +1208,11 @@ aa_register_case \
     aa_equals "full url, no port" \
         [ns_parseurl http://openacs.org/www/t.html] \
         {proto http host openacs.org path www tail t.html}
-    
+
     aa_equals "full url, with port" \
         [ns_parseurl http://openacs.org:80/www/t.html] \
         {proto http host openacs.org port 80 path www tail t.html}
-    
+
     aa_equals "full url, no port, no component" \
         [ns_parseurl http://openacs.org/] \
         {proto http host openacs.org path {} tail {}}
@@ -1220,7 +1220,7 @@ aa_register_case \
     aa_equals "full url, no port, no component, no trailing slash" \
         [ns_parseurl http://openacs.org] \
         {proto http host openacs.org path {} tail {}}
-    
+
     aa_equals "full url, no port, one component" \
         [ns_parseurl http://openacs.org/t.html] \
         {proto http host openacs.org path {} tail t.html}
@@ -1231,9 +1231,9 @@ aa_register_case \
     aa_equals "relative url" \
         [ns_parseurl /www/t.html] \
         {path www tail t.html}
-    
+
     # legacy NaviServer for pre HTTP/1.0, desired?
-    
+
     aa_equals "legacy NaviServer, pre HTTP/1.0, no leading /" \
         [ns_parseurl www/t.html] \
         {tail www/t.html}
@@ -1244,10 +1244,10 @@ aa_register_case \
     aa_equals "protocol relative url with port" \
         [ns_parseurl //openacs.org/www/t.html] \
         {host openacs.org path www tail t.html}
-    
+
     aa_equals "protocol relative url without port" \
         [ns_parseurl //openacs.org:80/www/t.html] \
-        {host openacs.org port 80 path www tail t.html}    
+        {host openacs.org port 80 path www tail t.html}
 }
 
 # Local variables:
