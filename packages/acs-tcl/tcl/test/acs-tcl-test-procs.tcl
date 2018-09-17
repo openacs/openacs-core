@@ -30,10 +30,13 @@ ad_proc apm_test_callback_proc {
 }
 
 
-aa_register_case -cats {api smoke} util__sets_equal_p {
-    Test the util_sets_equal_p proc.
+aa_register_case \
+    -cats {api smoke} \
+    -procs util_sets_equal_p \
+    util__sets_equal_p {
+        Test the util_sets_equal_p proc.
 
-    @author Peter Marklund
+        @author Peter Marklund
 } {
     aa_true "lists are identical sets" [util_sets_equal_p [list a a a b b c] [list c a a b b a]]
     aa_true "lists are identical sets 2" [util_sets_equal_p [list a b c] [list a b c]]
@@ -51,14 +54,20 @@ aa_stub apm_arg_names_for_callback_type {
     return [list arg1 arg2]
 }
 
-aa_register_case -cats {api db smoke} apm__test_info_file {
-    Test that the procs for interfacing with package info files - 
-    apm_generate_package_spec and 
-    apm_read_package_info_file - handle the newly added
-    callback and auto-mount tags properly.
+aa_register_case \
+    -cats {api db smoke} \
+    -procs {
+        apm_generate_package_spec
+        apm_read_package_info_file
+    } \
+    apm__test_info_file {
+        Test that the procs for interfacing with package info files - 
+        apm_generate_package_spec and 
+        apm_read_package_info_file - handle the newly added
+        callback and auto-mount tags properly.
 
-    @creation-date 22 January 2003
-    @author Peter Marklund
+        @creation-date 22 January 2003
+        @author Peter Marklund
 } {
     set test_dir "[acs_package_root_dir acs-tcl]/tcl/test"
     set spec_path "${test_dir}/tmp-test-info-file.xml"
@@ -127,14 +136,23 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
     }
 }
 
-aa_register_case -cats {api db smoke} apm__test_callback_get_set {
-    Test the procs apm_get_callback_proc,
-                   apm_set_callback_proc,
-                   apm_package_install_callbacks
-                   apm_remove_callback_proc,
-                   apm_post_instantiation_tcl_proc_from_key.
+aa_register_case \
+    -cats {api db smoke} \
+    -procs {
+        apm_get_callback_proc
+        apm_set_callback_proc
+        apm_package_install_callbacks
+        apm_remove_callback_proc
+        apm_post_instantiation_tcl_proc_from_key
+    } \
+    apm__test_callback_get_set {
+        Test the procs apm_get_callback_proc,
+                       apm_set_callback_proc,
+                       apm_package_install_callbacks
+                       apm_remove_callback_proc,
+                       apm_post_instantiation_tcl_proc_from_key.
 
-    @author Peter Marklund
+        @author Peter Marklund
 } {
     # The proc should not accept an invalid callback type
     set invalid_type "not-allowed-type"
@@ -166,10 +184,13 @@ aa_register_case -cats {api db smoke} apm__test_callback_get_set {
     }
 }
 
-aa_register_case -cats {db api smoke} apm__test_callback_invoke {
-    Test the proc apm_invoke_callback_proc
+aa_register_case \
+    -cats {db api smoke} \
+    -procs apm_invoke_callback_proc \
+    apm__test_callback_invoke {
+        Test the proc apm_invoke_callback_proc
 
-    @author Peter Marklund
+        @author Peter Marklund
 } {
     set package_key acs-automated-testing
     set version_id [apm_version_id_from_package_key $package_key]
@@ -202,8 +223,11 @@ aa_register_case -cats {db api smoke} apm__test_callback_invoke {
     }
 }
 
-aa_register_case -cats {api smoke} xml_get_child_node_content_by_path {
-    Test xml_get_child_node_content_by_path
+aa_register_case \
+    -cats {api smoke} \
+    -procs xml_get_child_node_content_by_path \
+    xml_get_child_node_content_by_path {
+        Test xml_get_child_node_content_by_path
 } {
     set tree [xml_parse -persist {
 <enterprise>
@@ -297,8 +321,11 @@ aa_register_case \
     
 }
 
-aa_register_case -cats {api smoke} text_to_html {
-    Test code the supposedly causes ad_html_to_text to break
+aa_register_case \
+    -cats {api smoke} \
+    -procs ad_html_to_text \
+    text_to_html {
+        Test code the supposedly causes ad_html_to_text to break
 } {
     
     # Test bad <<<'s
@@ -384,8 +411,11 @@ anybody have any ideas?
     aa_log "Text version: $text_version"
 }
 
-aa_register_case -cats {api smoke} ad_page_contract_filters {
-    Test ad_page_contract_filters 
+aa_register_case \
+    -cats {api smoke} \
+    -procs ad_page_contract_filters \
+    ad_page_contract_filters {
+        Test ad_page_contract_filters 
 } {
     set filter integer
     foreach { value result } { "1" 1 "a" 0 "1.2" 0 "'" 0 } {
@@ -424,8 +454,11 @@ aa_register_case -cats {api smoke} ad_page_contract_filters {
     }
 }
 
-aa_register_case -cats {api smoke} export_vars {
-    Testing export_vars
+aa_register_case \
+    -cats {api smoke} \
+    -procs export_vars \
+     export_vars {
+        Testing export_vars
 } {
     set foo 1
     set bar {}
@@ -519,8 +552,11 @@ aa_register_case \
 }
 
 
-aa_register_case -cats {api db smoke} db__transaction { 
-    test db_transaction
+aa_register_case \
+    -cats {api db smoke} \
+    -procs db_transaction \
+    db__transaction { 
+        Test db_transaction
 } {
 
     # create a temp table for testing 
@@ -690,10 +726,13 @@ aa_register_case -cats {api db smoke} db__transaction {
 }
 
 
-aa_register_case -cats {api smoke} util__subset_p {
-    Test the util_subset_p proc.
+aa_register_case \
+    -cats {api smoke} \
+    -procs util_subset_p \
+    util__subset_p {
+        Test the util_subset_p proc.
 
-    @author Peter Marklund
+        @author Peter Marklund
 } {
     aa_true "List is a subset" [util_subset_p [list c b] [list c a a b b a]]
     aa_true "List is a subset" [util_subset_p [list a b c] [list c a b]]
@@ -705,8 +744,11 @@ aa_register_case -cats {api smoke} util__subset_p {
     aa_equals "List is not a subset" [util_get_subset_missing [list a b c d] [list a b c]] [list d]
 }
 
-aa_register_case -cats {api smoke} util__randomize_list {
-    Test util::randomize_list
+aa_register_case \
+    -cats {api smoke} \
+    -procs util::randomize_list \
+    util__randomize_list {
+        Test util::randomize_list
 } {
     aa_equals "Empty list" [util::randomize_list {}] {}
 
@@ -729,9 +771,7 @@ aa_register_case -cats {api smoke} util__randomize_list {
 
 aa_register_case \
     -cats {api} \
-    -procs {
-        util_url_valid_p
-    } \
+    -procs util_url_valid_p \
     acs_tcl__util_url_valid_p {
     A very rudimentary test of util_url_valid_p
 
@@ -771,8 +811,11 @@ aa_register_case \
     acs::test::reply_contains $d "Main Site"
 }
 
-aa_register_case -cats {smoke api} util__age_pretty {
-    Test the util::age_pretty proc.
+aa_register_case \
+    -cats {smoke api} \
+    -procs util::age_pretty \
+    util__age_pretty {
+        Test the util::age_pretty proc.
 } {
     aa_log "Forcing locale to en_US for all strings so that tests work in any locale"
     aa_equals "0 secs"       [util::age_pretty -timestamp_ansi "2004-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:00" -locale en_US] "1 minute ago" 
@@ -871,6 +914,7 @@ aa_register_case \
 
 aa_register_case -cats {api} \
     -bugs 1450 \
+    -procs ad_enhanced_text_to_html \
     acs_tcl__process_enhanced_correctly {
        
 	Process sample text correctly
@@ -1114,10 +1158,13 @@ aa_register_case \
 	}
 }
 
-aa_register_case -cats {api smoke} acs_object__package_id {
-    Tests the acs_object__package_id procedure
+aa_register_case \
+    -cats {api smoke} \
+    -procs acs_object::package_id \
+    acs_object__package_id {
+        Tests the acs_object__package_id procedure
 
-    @author Malte Sussdorff
+        @author Malte Sussdorff
 } {
     # Retrieve an objects_package_id
     set object_id [db_string get_object_id "select max(object_id) from acs_objects where package_id >0"]
@@ -1125,10 +1172,13 @@ aa_register_case -cats {api smoke} acs_object__package_id {
     aa_equals "package_id returned is correct" $package_id [acs_object::package_id -object_id $object_id]
 }
 
-aa_register_case -cats {api smoke} acs_user__registered_user_p {
-    Tests the acs_user::registered_user_p procedure
+aa_register_case \
+    -cats {api smoke} \
+    -procs acs_user::registered_user_p \
+    acs_user__registered_user_p {
+        Tests the acs_user::registered_user_p procedure
 
-    @author Malte Sussdorff
+        @author Malte Sussdorff
 } {
     # Retrieve a registered user
     set user_id [db_string get_registered_id {select max(user_id) from registered_users}]
@@ -1147,10 +1197,13 @@ aa_register_case -cats {api smoke} acs_user__registered_user_p {
 }
 
 
-aa_register_case -cats {api smoke} util__ns_parseurl {
-    Test ns_parseurl
+aa_register_case \
+    -cats {api smoke} \
+    -procs ns_parseurl \
+    util__ns_parseurl {
+        Test ns_parseurl
 
-    @author Gustaf Neumann
+        @author Gustaf Neumann
 } {
     aa_equals "full url, no port" \
         [ns_parseurl http://openacs.org/www/t.html] \
