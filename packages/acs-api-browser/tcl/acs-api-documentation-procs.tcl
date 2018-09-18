@@ -811,7 +811,7 @@ ad_proc -private api_called_proc_names {
     if {[info exists body]} {
         #
         # Get the calling information directly from the body, when
-        # e.g. the information is not in in the procdoc nsv. This is
+        # e.g. the information is not in the procdoc nsv. This is
         # e.g. necessary, when getting calling info from *-init.tcl
         # files.
         #

@@ -19,7 +19,7 @@ set main_node [site_node::get_node_id_from_object_id -object_id [subsite::main_s
 set check_list [list]
 
 
-# Here we make shure that when a child node is checked all his parents 
+# Here we make sure that when a child node is checked all his parents 
 # in the tree are also checked as well
 
 foreach check_node $checkbox {
@@ -34,8 +34,8 @@ foreach check_node $checkbox {
 	lappend check_list $check_node
 
     } else {
-	# The node has an inmediate parent, we put it on the list and all his parents until the
-	# node_id equals the main_site node_id and is already in the list
+	# The node has an immediate parent, we put it on the list and all his parents until the
+	# node_id equals the main site node_id and is already in the list
 	lappend check_list $check_node
 	while {
                [site_node::get_parent_id -node_id $check_node] != $main_node
