@@ -874,6 +874,23 @@ aa_register_case \
 }
 
 aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs util_escape_quotes_for_csv \
+    util__escape_quotes_for_csv {
+
+        Test util_escape_quotes_for_csv
+
+        @creation-date 2018-09-18
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    aa_equals "Empty value" [util_escape_quotes_for_csv {}] {}
+    aa_equals "\"\"" [util_escape_quotes_for_csv {""}] {\"\"}
+    aa_equals "Test \" \" test" [util_escape_quotes_for_csv {Test " " test}] {Test \" \" test}
+    aa_equals "\"Test\"" [util_escape_quotes_for_csv {"Test"}] {\"Test\"}
+    aa_equals "\"Test test test\"" [util_escape_quotes_for_csv {"Test test test"}] {\"Test test test\"}
+}
+
+aa_register_case \
     -cats {api} \
     -procs util_url_valid_p \
     acs_tcl__util_url_valid_p {
