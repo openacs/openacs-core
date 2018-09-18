@@ -26,7 +26,7 @@ ad_proc -private whos_online::init {} {
 }
 
 ad_proc -private whos_online::flush {} {
-    Removing all user_ids from the last_hit (nsv_set) which have a time Stamp older than 
+    Removing all user_ids from the last_hit (nsv_set) which have a timestamp older than 
     the number of seconds indicated by the proc whos_online::interval.
 
     @author Bjoern Kiesbye
@@ -118,7 +118,7 @@ ad_proc -public whos_online::num_users {} {
 }
 
 ad_proc -public whos_online::num_anonymous {} {
-    Get the number of anony users currently online, and not invisible 
+    Get the number of anonymous users currently online, and not invisible 
 } {
     # Not implemented yet: number of anonymous users counted by IP + number of invisible users
     return 0
@@ -128,7 +128,7 @@ ad_proc -public whos_online::user_ids {
     {-all:boolean}
 } {
     This function returns a list of user_ids from users which have requested a page 
-    from this Server in the last 10 min.And aren't set to invisible. 
+    from this Server in the last 10 min and aren't set to invisible. 
 
     @param all Set this flag if you want to include invisible users.
 
