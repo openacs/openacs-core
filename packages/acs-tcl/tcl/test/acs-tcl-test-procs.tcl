@@ -779,7 +779,7 @@ aa_register_case \
         @creation-date 2018-09-17
         @author Héctor Romojaro <hector.romojaro@gmail.com>
 } {
-    aa_equals "Empty value" {} [util::trim_leading_zeros {}]
+    aa_equals "Empty value" [util::trim_leading_zeros {}] {}
     aa_equals "Real value (0.31)" [util::trim_leading_zeros 0.31] {.31}
     aa_equals "Real value with multiple leading zeroes (000.31)" [util::trim_leading_zeros 0000.31] {.31}
     aa_equals "Real value already trimmed (.31)" [util::trim_leading_zeros .31] {.31}
@@ -842,6 +842,35 @@ aa_register_case \
     } {
         aa_true $url [util_complete_url_p $url]
     }
+}
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs util_commify_number \
+    util__commify_number {
+
+        Test util_commify_number
+
+        @creation-date 2018-09-18
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    aa_equals "Empty value" [util_commify_number {}] {}
+    aa_equals "0" [util_commify_number 0] {0}
+    aa_equals "0.0" [util_commify_number 0.0] {0.0}
+    aa_equals ".0" [util_commify_number .0] {.0}
+    aa_equals "100" [util_commify_number 100] {100}
+    aa_equals "1000" [util_commify_number 1000] {1,000}
+    aa_equals "1000000" [util_commify_number 1000000] {1,000,000}
+    aa_equals "1000000000" [util_commify_number 1000000000] {1,000,000,000}
+    aa_equals "1000000000.0002340" [util_commify_number 1000000000.0002340] {1,000,000,000.0002340}
+    aa_equals "-0" [util_commify_number -0] {-0}
+    aa_equals "-.0" [util_commify_number -.0] {-.0}
+    aa_equals "-.0000" [util_commify_number -.0000] {-.0000}
+    aa_equals "-100" [util_commify_number -100] {-100}
+    aa_equals "-1000" [util_commify_number -1000] {-1,000}
+    aa_equals "-1000000" [util_commify_number -1000000] {-1,000,000}
+    aa_equals "-1000000000" [util_commify_number -1000000000] {-1,000,000,000}
+    aa_equals "-1000000000.0002340" [util_commify_number -1000000000.0002340] {-1,000,000,000.0002340}
 }
 
 aa_register_case \
