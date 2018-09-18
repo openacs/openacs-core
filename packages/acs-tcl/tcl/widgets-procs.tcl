@@ -136,8 +136,8 @@ ad_proc ad_integer_optionlist {
     { pad_to_two_p 0} 
 } {
     Produces an optionlist for a range of integers from start_value to end_value. 
-    If default matches one of the options, it is selection. If pad_to_two_p is 1, 
-    the option values will be padded to 2 digites with a leading 0.
+    If default matches one of the options, it is selected. If pad_to_two_p is 1, 
+    the option values will be padded to 2 digits with a leading 0.
 } {
     # items is a list of the items you would like the user to select from
     # values is a list of corresponding option values
@@ -229,9 +229,9 @@ ad_proc ad_db_select_widget {
     if there is only one item the select is not generated and the value
     is passed in hidden form variable.
     <p> 
-    if -multiple is given the a multi select is returned.
+    if -multiple is given then a multi select is returned.
     <p>
-    if -blank_if_no_db set then do not return a select widget unless 
+    if -blank_if_no_db is true, then do not return a select widget unless 
     there are rows from the database
 } { 
     set retval {}
