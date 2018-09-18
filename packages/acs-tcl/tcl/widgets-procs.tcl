@@ -127,7 +127,7 @@ ad_proc future_years_list {
 # produces the optionlist for a range of integers
 
 # if pad_to_two_p is 1, the option values will be
-# padded to 2 digites with a leading 0
+# padded to 2 digits with a leading 0
 
 ad_proc ad_integer_optionlist {
     start_value

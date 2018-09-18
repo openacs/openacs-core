@@ -873,7 +873,7 @@ ad_proc -public site_node::closest_ancestor_package {
     {-include_self:boolean}
     {-element "object_id"}
 } {
-    Starting with the node at with given id, or at given url,
+    Starting with the node of the given id, or at given url,
     climb up the site map and return the id of the first not-null
     mounted object. If no ancestor object is found the empty string is
     returned.

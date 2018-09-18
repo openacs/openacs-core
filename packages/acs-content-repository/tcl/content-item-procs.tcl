@@ -878,7 +878,7 @@ ad_proc -public content::item::get_id_by_name {
     {-name:required}
     {-parent_id:required}
 } {
-    Returns The item_id of the a content item with the passed in name
+    Returns The item_id of the content item with the passed in name
 
     @param name Name of the content item
     @param parent_id Parent_id of the content item
