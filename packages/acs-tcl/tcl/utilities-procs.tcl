@@ -462,7 +462,7 @@ ad_proc -public db_html_select_value_options {
 
     Generate html option tags with values for an html selection widget. If
     select_option is passed and there exists a value for it in the values
-    list, this option will be marked as selected. The "select_option" can be 
+    list, this option will be marked as selected. The "select_option" can be
     a list, in which case all options matching a value in the list will be
     marked as selected.
 
@@ -1823,6 +1823,17 @@ ad_proc -public util_current_location {} {
     #
     if {[info exists ::__util_current_location]} {
         return $::__util_current_location
+    }
+
+    #
+    # In case we have no connection return the location based on the
+    # configured kernel parameters. This will be the same value for
+    # all (maybe host-node mapped) subsites, so probably one should
+    # parametrize this function with a subsite value and compute the
+    # result in the non-connected based on the subsite_id.
+    #
+    if {![ns_conn isconnected]} {
+        return [ad_url]
     }
 
     set default_port(http) 80
@@ -4021,7 +4032,7 @@ ad_proc -public -deprecated util_search_list_of_lists {list_of_lists query_strin
     #}
     # didn't find it
     #return -1
-    
+
     return [lsearch -index $sublist_element_pos $list_of_lists $query_string]
 }
 
