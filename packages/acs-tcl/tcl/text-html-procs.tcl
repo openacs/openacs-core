@@ -1068,18 +1068,22 @@ ad_proc ad_parse_html_attributes_upvar {
         in the markup.
 
         @param unallowed_protocols list of protocols we don't allow in
-        the markup.
+        the markup. Protocol-relative URLs are allowed, but only if
+        proc is called from a connection thread, as we need to
+        determine our current connection protocol.
 
         @param no_js this flag decides whether every script tag,
         inline event handlers and the javascript: pseudo-protocol
         should be stripped from the markup.
 
-        @param no_outer_urls this flag tells the proc to remove
-        every reference to external addresses. Proc will try to
-        distinguish between external URLs and fine fully specified
-        internal ones. Acceptable URLs will be transformed in absolute
-        local references, others will be just stripped together with
-        the attribute.
+        @param no_outer_urls this flag tells the proc to remove every
+        reference to external addresses. Proc will try to distinguish
+        between external URLs and fine fully specified internal
+        ones. Acceptable URLs will be transformed in absolute local
+        references, others will be just stripped together with the
+        attribute. Absolute URLs referring to our host are allowed,
+        but require the proc being called from a connection thread in
+        order to determine the proper current url.
 
         @param validate This flag will avoid the creation of the
         stripped markup and just report whether the original one
@@ -1220,32 +1224,40 @@ ad_proc ad_parse_html_attributes_upvar {
 
         $doc documentElement root
 
-        set driver_info [util_driver_info]
-        set driver_prot [dict get $driver_info proto]
-        set driver_host [dict get $driver_info hostname]
-        set driver_port [dict get $driver_info port]
+        # Some sanitizing requires information that is available only
+        # from a connection thread such as our local address and
+        # current protocol.
+        if {[ns_conn isconnected]} {
+            set driver_info [util_driver_info]
+            set driver_prot [dict get $driver_info proto]
+            set driver_host [dict get $driver_info hostname]
+            set driver_port [dict get $driver_info port]
 
-        ## create a regex clause of possible addresses referring to
-        ## this system
-        set our_locations {}
+            ## create a regex clause of possible addresses referring to
+            ## this system
+            set our_locations [list]
 
-        # location from conf files
-        set location [util::join_location \
-                          -proto    $driver_prot \
-                          -hostname $driver_host \
-                          -port     $driver_port]
-        set our_location($location) 1
-        regsub {^\w+://} $location {//} location
-        set our_location($location) 1
+            # location from conf files
+            set configured_location [util::join_location \
+                                         -proto    $driver_prot \
+                                         -hostname $driver_host \
+                                         -port     $driver_port]
+            lappend our_locations $configured_location
+            regsub {^\w+://} $configured_location {//} no_proto_location
+            lappend our_locations $no_proto_location
 
-        # location from connection
-        set location [ad_conn location]
-        set our_location($location) 1
-        regsub {^\w+://} $location {//} location
-        set our_location($location) 1
+            # location from connection
+            set conn_location [ad_conn location]
+            lappend our_locations $conn_location
+            regsub {^\w+://} $conn_location {//} no_proto_location
+            lappend our_locations $no_proto_location
 
-        set our_locations [join [array names our_location] |]
-        ##
+            set our_locations [join $our_locations |]
+            ##
+        } else {
+            set our_locations ""
+            set driver_prot ""
+        }
 
         set queue [$root childNodes]
         while {$queue ne {}} {
