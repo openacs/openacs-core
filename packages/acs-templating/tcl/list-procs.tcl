@@ -3227,8 +3227,8 @@ ad_proc -private template::list::prepare_filter_form {
         # and group by/order by are preserved when the filter
         # form is used
 
-        # grab the current value of the filter out of the list if
-        # it exists
+        # Grab the current value of the filter out of the list if
+        # it exists.
         upvar $list_properties(ulevel) $filter_properties(name) current_filter_value
         if {[info exists current_filter_value] && $current_filter_value ne ""} {
 
@@ -3240,11 +3240,9 @@ ad_proc -private template::list::prepare_filter_form {
         }
     }
     upvar #[template::adp_level] __list_filter_form_client_property_key list_filter_form_client_property_key
-    # we only get 50 characters
-    # to save our clienty property name, we can encode it into an
-    # ns_sha1 hash to make it fit. we don't extract the data from the
-    # property name so this should work fine
-    #    set list_filter_form_client_property_key [ns_sha1 [list [ad_conn url] $name $filter_key_filters]]
+    # To save the client property name, it is hashed with ns_sha1 hash
+    # to fit it into toe attribute. We don't extract the data from the
+    # property name so this should work fine.
     set list_filter_form_client_property_key [ns_sha1 [list [ad_conn url] $name]]
     upvar \#[template::adp_level] __client_property_filters client_property_filters
     set client_property_filters [ad_get_client_property acs-templating $list_filter_form_client_property_key]
@@ -3279,9 +3277,10 @@ ad_proc -private template::list::prepare_filter_form {
         set clear_one [ns_set get $__form clear_one]
 
         if {$clear_one ne ""} {
-            # loop through the saved filters and remove
-            # the filter from the client property if its
-            # specified in clear_one
+            #
+            # Loop through the saved filters and remove the filter
+            # from the client property if its specified in clear_one.
+            #
             set __old_client_property_filters [ad_get_client_property acs-templating $__list_filter_form_client_property_key]
             set __client_property_filters [list]
 
@@ -3290,12 +3289,16 @@ ad_proc -private template::list::prepare_filter_form {
                     lappend __client_property_filters $__ref $__value
                 }
             }
-            # if we changed the list of filters, save it in the
+            #
+            # If we changed the list of filters, save it in the
             # client property, we read it later on to build the
             # form of selected filters
+            #
             set client_property_filters $__client_property_filters
             ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
-            # now reload the form. excluding var clear_one
+            #
+            # Now reload the form, excluding variable clear_one.
+            #
             set pattern [ns_urlencode "clear_one"]=[ns_urlencode "$clear_one"]
             regsub "${pattern}&?" [ad_return_url] {} url
             ad_returnredirect $url

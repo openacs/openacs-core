@@ -189,7 +189,7 @@ ad_proc -public template::util::date::get_property { what date } {
 
     Returns a property of a date list, usually created by ad_form.
 
-    @param what the name of the property. one of:<ul>
+    @param what the name of the property. One of:<ul>
     <li>year</li>
     <li>month</li>
     <li>day</li>

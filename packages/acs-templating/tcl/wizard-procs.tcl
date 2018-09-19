@@ -67,8 +67,7 @@ ad_proc -public template::wizard::create { args } {
     <li>action - the url where the wizard will always submit, normally is the
     same as your current wizard file.  Has no effect for subwizards.</li>
     <li>name - use to distinguish between the different wizards, since you can
-    have 1 or more subwizard. name must be no spaces, alphanumeric similar
-    to normal Tcl variable naming convention</li>
+    have 1 or more subwizard. "name" must be a bare Tcl word (no spaces etc.)</li>
     <li>params - are used to keep values that you would like to pass on to
     the other steps</li>
     <li>steps - are used to define what includes to use for each step of the

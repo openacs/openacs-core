@@ -245,7 +245,7 @@ if {$write_p} {
     set write_p 0
 }
 
-# default to xinha but tinymce will work too. no plugins for rte
+# Default to xinha but tinymce will work too. No plugins for rte.
 set richtextEditor [parameter::get \
                         -package_id $package_id \
                         -parameter "RichTextEditor" \

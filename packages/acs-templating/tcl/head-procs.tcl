@@ -76,7 +76,7 @@ ad_proc -public template::add_script {
 } {
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param charset the charset attribute of the script tag, ie. the character
+    @param charset the charset attribute of the script tag, i.e. the character
                    set of the script if it differs from the main document
     @param crossorigin  Enumerated attribute to indicate whether CORS
                    (Cross-Origin Resource Sharing) should be used
@@ -87,7 +87,7 @@ ad_proc -public template::add_script {
     @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for src
     @param section section, where script is added ("head" or "body")
-    @param src     the src attribute of the script tag, ie. the source url of the
+    @param src     the src attribute of the script tag, i.e. the source url of the
                    script
     @param type    the type attribute of the script tag, e.g. 'text/javascript'
 } {
@@ -129,7 +129,7 @@ ad_proc -public template::head::add_script {
 
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param charset the charset attribute of the script tag, ie. the character
+    @param charset the charset attribute of the script tag, i.e. the character
                    set of the script if it differs from the main document
     @param crossorigin  Enumerated attribute to indicate whether CORS
                    (Cross-Origin Resource Sharing) should be used
@@ -139,7 +139,7 @@ ad_proc -public template::head::add_script {
     @param order   specify inclusion order
     @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for src
-    @param src     the src attribute of the script tag, ie. the source url of the
+    @param src     the src attribute of the script tag, i.e. the source url of the
                    script
     @param type    the type attribute of the script tag, e.g. 'text/javascript'
 
@@ -199,7 +199,7 @@ ad_proc -public template::head::flush_script {
     @author Gustaf Neumann
     @creation-date 2018-03-09
 
-    @param src     src attribute of the script tag, ie. the source url of the
+    @param src     src attribute of the script tag, i.e. the source url of the
                    script. A glob pattern similar link in "string match" can be provided.
     @see ::template::head::add_script
 } {
@@ -342,10 +342,10 @@ ad_proc -public template::head::add_meta {
     once; subsequent calls to add_meta will replace the existing entry.  You
     <strong>must</strong> supply either name or http_equiv.
 
-    @param http_equiv the http-equiv attribute of the meta tag, ie. the
+    @param http_equiv the http-equiv attribute of the meta tag, i.e. the
                       HTTP header which this metadata is equivalent to
                       e.g. 'content-type'
-    @param name       the name attribute of the meta tag, ie. the metadata
+    @param name       the name attribute of the meta tag, i.e. the metadata
                       identifier
     @param scheme     the scheme attribute of the meta tag defining which
                       metadata scheme should be used to interpret the metadata,
@@ -429,7 +429,7 @@ ad_proc -public template::head::add_javascript {
 
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param charset the charset attribute of the script tag, ie. the character
+    @param charset the charset attribute of the script tag, i.e. the character
                    set of the script if it differs from the main document
     @param crossorigin  Enumerated attribute to indicate whether CORS
                    (Cross-Origin Resource Sharing) should be used
@@ -440,7 +440,7 @@ ad_proc -public template::head::add_javascript {
     @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for
                    src
-    @param src     the src attribute of the script tag, ie. the source url of the
+    @param src     the src attribute of the script tag, i.e. the source url of the
                    script
 
     @see template::head::add_script
@@ -561,7 +561,7 @@ ad_proc -public template::add_body_script {
 
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param charset the charset attribute of the script tag, ie. the character
+    @param charset the charset attribute of the script tag, i.e. the character
                    set of the script if it differs from the main document
     @param crossorigin  Enumerated attribute to indicate whether CORS
                    (Cross-Origin Resource Sharing) should be used
@@ -571,7 +571,7 @@ ad_proc -public template::add_body_script {
     @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for
                    src
-    @param src     the src attribute of the script tag, ie. the source url of the
+    @param src     the src attribute of the script tag, i.e. the source url of the
                    script
     @param type    the type attribute of the script tag, e.g. 'text/javascript'
 } {

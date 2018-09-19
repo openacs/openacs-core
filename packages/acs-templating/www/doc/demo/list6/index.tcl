@@ -25,12 +25,12 @@ if { $create_p } {
     lappend actions "Create Note" add-edit "Create Note"
 }
 
-# notice how -bulk_actions is different inside...
+# Notice how -bulk_actions is different inside...
 # -bulk_actions { "text for button" "name of page" "tooltip text" }
 # weird, huh?
 #
-# anyway, here we are adding an action (not bulk, so doesn't respond
-# to the checkboxes) for adding a note. see the if test above? if
+# Anyway, here we are adding an action (not bulk, so doesn't respond
+# to the checkboxes) for adding a note. See the if test above? If
 # the user does not have permission to create, then the actions list
 # will be empty and the create-a-note button will not appear.
 
