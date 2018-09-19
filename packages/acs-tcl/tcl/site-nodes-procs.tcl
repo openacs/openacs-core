@@ -1331,7 +1331,7 @@ if {$UseXotclSiteNodes} {
                 # results, we cache for every parameter combination.
                 #
                 # Since this cache contains subtrees, we have to flush
-                # trees, which is implemented via pattern flushes. so
+                # trees, which is implemented via pattern flushes. So
                 # we use a separate cache to avoid long locks on
                 # site-nodes in general.
                 #

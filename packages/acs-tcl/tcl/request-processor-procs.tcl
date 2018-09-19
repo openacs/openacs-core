@@ -62,12 +62,12 @@ ad_proc -public rp_internal_redirect {
         }
     }
 
-    # save the current file setting
+    # Save the current file setting.
     set saved_file [ad_conn file]
 
     rp_serve_abstract_file $path
 
-    # restore the file setting. we need to do this because
+    # Restore the file setting. We need to do this because
     # rp_serve_abstract_file sets it to the path we internally
     # redirected to, and rp_handler will cache the file setting
     # internally in the ::tcl_url2file variable when PerformanceModeP is

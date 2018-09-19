@@ -13,9 +13,9 @@ namespace eval util {}
 ad_proc util::pdfinfo {
     file
 } {
-    Calls the pdfinfo command line utility on a given pdf
-    file. pdfinfo must be installed on the server for this to work. On
-    linux this is usually part of the poppler-utils
+    Calls the pdfinfo command line utility on a given pdf file. The
+    command pdfinfo must be installed on the server for this to
+    work. On linux this is usually part of the poppler-utils
     (https://poppler.freedesktop.org/).
 
     @param file absolute path to the pdf file
@@ -460,9 +460,9 @@ ad_proc -public db_html_select_value_options {
     sql
 } {
 
-    Generate html option tags with values for an html selection widget. if
+    Generate html option tags with values for an html selection widget. If
     select_option is passed and there exists a value for it in the values
-    list, this option will be marked as selected. select_option can be passed
+    list, this option will be marked as selected. The "select_option" can be 
     a list, in which case all options matching a value in the list will be
     marked as selected.
 
@@ -647,7 +647,7 @@ ad_proc -public export_vars {
     This avoids cluttering up the URLs with lots of unnecessary variables.
 
     @option base The base URL to make a link to. This will be prepended to the query string
-    along with a question mark (?), if the query is non-empty. so the returned
+    along with a question mark (?), if the query is non-empty. So the returned
     string can be used directly in a link. This is only relevant to URL export.
 
     @option no_base_encode Decides whether argument passed as <code>base</code> option will be
@@ -1237,12 +1237,12 @@ ad_proc -public safe_eval args {
 }
 
 ad_proc -public ad_decode { args } {
-    this procedure is analogus to sql decode procedure. first parameter is
-    the value we want to decode. this parameter is followed by a list of
+    This procedure is analogus to sql decode procedure. The first parameter is
+    the value we want to decode. This parameter is followed by a list of
     pairs where first element in the pair is convert from value and second
-    element is convert to value. last value is default value, which will
+    element is convert to value. The last value is default value, which will
     be returned in the case convert from values matches the given value to
-    be decoded
+    be decoded.
 } {
     set num_args [llength $args]
     set input_value [lindex $args 0]

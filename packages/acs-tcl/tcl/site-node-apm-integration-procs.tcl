@@ -38,8 +38,9 @@ namespace eval site_node_apm_integration {
         {-package_id ""}
         {-package_key:required}
     } {
-        get the package_id of package_key that is mounted directly under
-        package_id. returns empty string if not found.
+        Get the package_id of package_key that is mounted directly under
+        package_id.
+        @return empty string if not found.
     } {
         if {$package_id eq ""} {
             if {[ad_conn isconnected]} { 

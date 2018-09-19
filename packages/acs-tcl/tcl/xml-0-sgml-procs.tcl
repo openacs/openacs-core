@@ -885,7 +885,7 @@ proc sgml::parseDTD {dtd args} {
 #			Content model is mixed (PCDATA and elements).
 #			The second element of the list contains the 
 #			elements that may occur.  #PCDATA is assumed 
-#			(ie. the list is normalized).
+#			(i.e. the list is normalized).
 #
 # Arguments:
 #	id	identifier for the element.
@@ -1434,7 +1434,7 @@ proc sgml::lastpos {cs lastpos nullable} {
 
 # sgml::makeSet --
 #
-#	Turn a list into a set, ie. remove duplicates.
+#	Turn a list into a set, i.e. remove duplicates.
 #
 # Arguments:
 #	s	a list

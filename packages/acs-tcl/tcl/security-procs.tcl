@@ -38,7 +38,7 @@ ad_proc -private sec_random_token {} {
 } {
     # ::tcl_sec_seed is used to maintain a small subset of the previously
     # generated random token to use as the seed for the next
-    # token. this makes finding a pattern in sec_random_token harder
+    # token. This makes finding a pattern in sec_random_token harder
     # to guess when it is called multiple times in the same thread.
 
     if { [ad_conn -connected_p] } {
@@ -210,8 +210,8 @@ ad_proc -private sec_handler {} {
         ad_conn -set auth_level $auth_level
         ad_conn -set account_status $account_status
 
-        # reissue session cookie so session doesn't expire if the
-        # renewal period has passed. this is a little tricky because
+        # Reissue session cookie so session doesn't expire if the
+        # renewal period has passed. This is a little tricky because
         # the cookie doesn't know about sec_session_renew; it only
         # knows about sec_session_timeout.
         # [sec_session_renew] = SessionTimeout - SessionRenew (see security-init.tcl)
@@ -388,7 +388,7 @@ ad_proc -public sec_get_user_auth_token {
 ad_proc -public sec_change_user_auth_token {
     user_id
 } {
-    Change the user's auth_token, which invalidates all existing login cookies, ie. forces user logout at the server.
+    Change the user's auth_token, which invalidates all existing login cookies, i.e. forces user logout at the server.
 } {
     set auth_token [ad_generate_random_string]
 
@@ -2200,7 +2200,7 @@ ad_proc -public security::validated_host_header {} {
     }
 
     #
-    # Check against the virtual server configuration of NaviServer. xxxx
+    # Check against the virtual server configuration of NaviServer.
     #
     if {[ns_info name] eq "NaviServer"} {
         set s [ns_info server]

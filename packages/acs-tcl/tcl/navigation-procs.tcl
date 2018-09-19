@@ -204,7 +204,7 @@ ad_proc -public ad_context_bar {
 
 
 ad_proc -public ad_navbar args {
-    produces navigation bar. notice that navigation bar is different
+    Produces a navigation bar. Notice that navigation bar is different
     than context bar, which displays packages in the site map. Navbar will
     only generate HTML for those links passed to it.
 
@@ -344,7 +344,7 @@ proc netscape3_browser {} {
 # creates the generic javascript/nonjavascript
 # select box for the submenu
 
-proc menu_submenu_select_list {items urls {highlight_url "" }} {
+proc menu_submenu_select_list {items URLs {highlight_url "" }} {
     set return_string ""
     set counter 0
 
@@ -362,12 +362,12 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
         # if the url matches the url you would redirect to, as determined
         # either by highlight_url, or if highlight_url is not set,
         # the current url then select it
-        if {$highlight_url ne "" && $highlight_url == [lindex $urls $counter]} {
-            append return_string [subst {<option value="[lindex $urls $counter]" selected>$item}]
-        } elseif {$highlight_url eq "" && [string match "*$url_stub*" [lindex $urls $counter]]} {
-            append return_string [subst {<option value="[lindex $urls $counter]" selected>$item}]
+        if {$highlight_url ne "" && $highlight_url == [lindex $URLs $counter]} {
+            append return_string [subst {<option value="[lindex $URLs $counter]" selected>$item}]
+        } elseif {$highlight_url eq "" && [string match "*$url_stub*" [lindex $URLs $counter]]} {
+            append return_string [subst {<option value="[lindex $URLs $counter]" selected>$item}]
         } else {
-            append return_string [subst {<option value="[lindex $urls $counter]">$item}]
+            append return_string [subst {<option value="[lindex $URLs $counter]">$item}]
         }
         incr counter
     }

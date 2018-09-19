@@ -172,7 +172,7 @@ switch $kind {
                 set last_components $components
             } on error {errorMsg} {
                 #
-                # Couldn't read info from the file. it probably doesn't exist.
+                # Couldn't read info from the file. It probably doesn't exist.
                 #
                 ad_log Error "API Browser: Package View: $errorMsg\n$::errorInfo"
 

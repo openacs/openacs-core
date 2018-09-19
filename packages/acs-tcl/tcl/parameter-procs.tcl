@@ -105,7 +105,7 @@ ad_proc -public parameter::set_value {
 } {
     Set the value of a package instance parameter
 
-    @param package_id what package to set the parameter in. defaults to
+    @param package_id what package to set the parameter in. Defaults to
     [ad_conn package_id]
     @param parameter which parameter's value to set
     @param value what value to set said parameter to
@@ -130,7 +130,7 @@ ad_proc -public parameter::get {
 
     @param localize should we attempt to localize the parameter
     @param boolean insure boolean parameters are normalized to 0 or 1
-    @param package_id what package to get the parameter from. defaults to
+    @param package_id what package to get the parameter from. Defaults to
     [ad_conn package_id]
     @param parameter which parameter's value to get
     @param default what to return if we don't find a value. Defaults to returning the empty string.
@@ -219,10 +219,10 @@ ad_proc -public parameter::get_from_package_key {
 
     New packages should use global parameters instead.
 
-    @param package_key what package to get the parameter from. we will try
-    to get the package_id from the package_key. this
-    may cause an error if there are more than one
-    instance of this package
+    @param package_key what package to get the parameter from. We will try
+           to get the package_id from the package_key. This
+           may cause an error if there are more than one
+           instance of this package
     @param parameter which parameter's value to get
     @param default what to return if we don't find a value
 } {
