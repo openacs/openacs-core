@@ -2334,7 +2334,7 @@ namespace eval ::security::csp {
     ad_proc -public ::security::csp::require {{-force:boolean} directive value} {
 
         Add a single value directive to the CSP rule-set. The
-        directives are picked up, when the pages is rendered, by the
+        directives are picked up, when the page is rendered, by the
         CSP generator.
 
         @param directive name of the directive (such as e.g. style-src)
