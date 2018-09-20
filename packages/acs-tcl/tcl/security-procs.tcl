@@ -1134,7 +1134,7 @@ ad_proc -public ad_get_signed_cookie {
 } {
 
     Retrieves a signed cookie. Validates a cookie against its
-    cryptographic signature and insures that the cookie has not
+    cryptographic signature and ensures that the cookie has not
     expired. Throws an exception if validation fails.
 
 } {
@@ -1163,7 +1163,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 } {
 
     Retrieves a signed cookie. Validates a cookie against its
-    cryptographic signature and insures that the cookie has not
+    cryptographic signature and ensures that the cookie has not
     expired. Returns a two-element list, the first element of which is
     the cookie data, and the second element of which is the expiration
     time. Throws an exception if validation fails.
@@ -1364,7 +1364,7 @@ ad_proc -private populate_secret_tokens_cache {} {
 
 ad_proc -private populate_secret_tokens_db {} {
 
-    Populates the secret_tokens table. Note that this will take awhile
+    Populates the secret_tokens table. Note that this will take a while
     to run.
 
 } {
@@ -2334,7 +2334,7 @@ namespace eval ::security::csp {
     ad_proc -public ::security::csp::require {{-force:boolean} directive value} {
 
         Add a single value directive to the CSP rule-set. The
-        directices are picked up, when the pages is rendered, by the
+        directives are picked up, when the pages is rendered, by the
         CSP generator.
 
         @param directive name of the directive (such as e.g. style-src)
