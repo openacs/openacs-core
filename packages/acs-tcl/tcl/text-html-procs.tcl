@@ -184,7 +184,7 @@ ad_proc -public ad_html_qualify_links {
 
     Links, which are already fully qualified are not modified.
 
-    @param location protcol and host (defaults to [ad_url])
+    @param location protocol and host (defaults to [ad_url])
     @param path optional path to be prepended to paths not starting with a "/"
     @param html HTML text, in which substitutions should be performed.
 
