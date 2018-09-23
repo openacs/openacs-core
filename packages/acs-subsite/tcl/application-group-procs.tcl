@@ -234,15 +234,15 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
     {-node_id ""}
     {-include_self:boolean}
 } {
-    Starting with the node of the given id, or at given url,
+    Starting with the node with the given node_id (or URL),
     climb up the site map and return the node of the first
     non null application group
 
-    @param url          The url of the node to start from. You must provide
-                        either url or node_id. An empty url is taken to mean
+    @param url          The URL of the node to start from. You must provide
+                        either URL or node_id. An empty URL is taken to mean
                         the main site.
     @param node_id      The id of the node to start from. Takes precedence
-                        over any provided url.
+                        over any provided URL.
     @param include_self If true, include the current package in the search
 
     @return The node of the first non-null application group in array get format.
@@ -291,8 +291,8 @@ ad_proc -public application_group::closest_ancestor_element {
     Return one element of the site node for the closest ancestor package that has an
     application group.
 
-    @param url url of the node to start searching from.
-    @param node_id node_id of the node to start searching from (only one of node_id and url
+    @param url URL of the node to start searching from.
+    @param node_id node_id of the node to start searching from (only one of node_id and URL
            can be specified).
     @param include_self If true, include the current package in the search
 
@@ -314,8 +314,8 @@ ad_proc -public application_group::closest_ancestor_application_group_id {
     Application group id of the closest ancestor package that has an application
     group
 
-    @param url url of the node to start searching from.
-    @param node_id node_id of the node to start searching from (only one of node_id and url
+    @param url URL of the node to start searching from.
+    @param node_id node_id of the node to start searching from (only one of node_id and URL
            can be specified).
     @param include_self If true, include the current package in the search
 
