@@ -1,6 +1,6 @@
 ad_page_contract {
     List and manage subsite members.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-06-02
     @cvs-id $Id$
@@ -9,6 +9,7 @@ ad_page_contract {
     {member_state "approved"}
     {orderby:token "name,asc"}
     page:naturalnum,optional
+    {page_size:naturalnum 50}
 } -validate {
     member_state_valid -requires { member_state } {
         if { $member_state ni [group::possible_member_states] } {
@@ -142,7 +143,7 @@ if { !$show_member_list_p } {
         -name "members" \
         -multirow "members" \
         -row_pretty_plural "members" \
-        -page_size 50 \
+        -page_size $page_size \
         -page_flush_p t \
         -page_query_name members_pagination \
         -actions $actions \
@@ -212,7 +213,7 @@ if { !$show_member_list_p } {
 
     set show_partial_email_p [expr {$user_id == 0}]
 
-    db_multirow -extend { 
+    db_multirow -extend {
         email_url
         member_state_pretty
         remove_url
