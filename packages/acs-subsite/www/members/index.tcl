@@ -58,6 +58,14 @@ if { $show_member_list_to != 0
 set user_id [ad_conn user_id]
 set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
 
+if {!$admin_p && $page_size > 50} {
+    #
+    # Do not allow end-user to get full list of all members (which
+    # might be thousands). Fall back to default.
+    #
+    set page_size 50
+}
+
 set approved_member_p [group::party_member_p -group_id $group_id -party_id $user_id]
 set show_member_list_p [expr {
                               $show_member_list_to == 0
