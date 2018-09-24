@@ -131,7 +131,7 @@ if { !$show_member_list_p } {
     set orderby_option {
         name {
             label "[_ acs-subsite.Name]"
-            orderby "lower(p.first_names || ' ' || p.last_name)"
+            orderby "lower(p.last_name || ' ' || p.first_names)"
         }
     }
     if {!$hide_email_p} {
