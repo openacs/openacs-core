@@ -460,7 +460,7 @@ ad_proc -public group::update {
             where object_id = :group_id
         }
     }
-    acs::group_cache flush info-$group_id-
+    acs::group_cache flush -partition_key $group_id info-$group_id-
 }
 
 ad_proc -public group::possible_member_states {} {
