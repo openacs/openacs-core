@@ -73,7 +73,10 @@ set email_image "<p><b>\#acs-subsite.E_mail\#:</b>&nbsp;[email_image::get_user_e
 # "url" is obtained from the sql query above, together with
 # "first_names" etc.
 #
-if { $url ne "" && ![string match -nocase "http://*" $url] } {
+if { $url ne ""
+     && ![string match -nocase "http://*" $url]
+     && ![string match -nocase "https://*" $url]     
+ } {
     set url "http://$url"
 }
 
