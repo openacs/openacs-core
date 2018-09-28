@@ -640,7 +640,7 @@ ad_proc -public apm_load_packages {
         apm_load_libraries -force_reload=$force_reload_p -init -packages $unique_packages
     }
 
-    # Load up the Automated Tests initialisation scripts if necessary
+    # Load up the Automated Tests initialization scripts if necessary
     if {$load_tests_p} {
         apm_load_libraries -force_reload=$force_reload_p -packages $packages_to_load -test_init
     }

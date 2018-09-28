@@ -366,7 +366,7 @@ ad_proc -private util::http::get_channel_settings {
     #
     # (C) If neither A or B apply (e.g., because an invalid charset
     # name was given to the charset parameter), we default to
-    # "binary". This corresponds to the behaviour of
+    # "binary". This corresponds to the behavior of
     # [ns_encodingfortype].  Also note, that the RFCs 3023 and 2616 do
     # not state any procedure when "invalid" charsets etc. are
     # identified. I assume, RFC-compliant clients have to ignore them

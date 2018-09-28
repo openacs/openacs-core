@@ -2,7 +2,7 @@ ad_library {
 
     Provides a collection of deprecated procs to provide backward
     compatibility for sites who have not yet removed calls to the
-    dprecated functions.
+    deprecated functions.
 
     In order to skip loading of deprecated code, use the following
     snippet in your config file
