@@ -212,7 +212,7 @@ C, then A is a member of C.
 </para><para>
 For example, consider the membership relations of Greenpeace, and
 composite relations of a multinational corporation. Greenpeace, an
-organization (ie. group), can have both individuals and organizations
+organization (i.e. group), can have both individuals and organizations
 (other groups) as members. Hence the membership relation between
 groups and <emphasis>parties</emphasis>. However, someone is not
 a member of Greenpeace just because they are a member of a

@@ -169,7 +169,7 @@ and some_table.condition_p = '$foo'</programlisting>
 
     <para>
       What the DB API (in conjuntion with the database drivers
-      implemented for aolserver) do is send the SQL statement to the
+      implemented for AOLserver) do is send the SQL statement to the
       server for parsing, then <emphasis>bind</emphasis> values to the
       variables and sends those values along separately as a second
       step. This separate binding step is where the term

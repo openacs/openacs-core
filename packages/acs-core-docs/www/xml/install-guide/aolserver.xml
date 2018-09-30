@@ -157,7 +157,7 @@ chmod 755 nsd-postgres</action></screen>
         <title>Install tDOM</title>
         <para>Download the <link linkend="source-tdom">tDOM
         tarball</link>, unpack it, adjust the configuration file to match our patched
-        distribution of aolserver, and compile it.</para>
+        distribution of AOLserver, and compile it.</para>
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz</userinput>

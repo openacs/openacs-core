@@ -641,7 +641,7 @@ mkdir www/log
 cp -r /usr/share/analog-5.32/images www/log/</action></screen>
         <para>Edit
 <computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</computeroutput> and change the variable in <computeroutput>HOSTNAME "[my
-organisation]"</computeroutput> to reflect your website title.  If you
+organization]"</computeroutput> to reflect your website title.  If you
 don&#39;t want the traffic log to be publicly visible, change
 <computeroutput>OUTFILE /var/lib/aolserver/$OPENACS_SERVICE_NAME/www/log/traffic.html</computeroutput> to use a private
 directory. You&#39;ll also need to edit all instances of service0 to your $OPENACS_SERVICE_NAME.</para>

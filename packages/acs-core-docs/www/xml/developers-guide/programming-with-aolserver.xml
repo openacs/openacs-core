@@ -47,7 +47,7 @@ procedure. This distinction is important to understand in order to use
 interpreter) between HTTP requests. If it didn&#39;t, that would affect (and
 complicate) our use of script-global variables dramatically, which would then
 be better described as <emphasis>thread</emphasis>-global variables. Given
-AOLserver&#39;s behaviour, however, &quot;script-global&quot; is a more
+AOLserver&#39;s behavior, however, &quot;script-global&quot; is a more
 appropriate term.</para>
 
 </sect2>

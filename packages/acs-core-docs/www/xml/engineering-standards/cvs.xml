@@ -691,7 +691,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
       <listitem>
         <para>
           Consider any upgradability ramifications of your change.
-          Avoid changing the contract and behaviour of Tcl procedures. If you
+          Avoid changing the contract and behavior of Tcl procedures. If you
           want to build a new and clean API consider deprecating the old proc
           and making it invoke the new one.
         </para>
