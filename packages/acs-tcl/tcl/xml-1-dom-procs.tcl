@@ -1478,7 +1478,7 @@ proc dom::processinginstruction {method token args} {
 
 #################################################
 #
-# Serialisation
+# Serialization
 #
 #################################################
 

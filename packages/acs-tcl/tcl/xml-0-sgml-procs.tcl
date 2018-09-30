@@ -96,7 +96,7 @@ namespace eval sgml {
 #
 # Arguments:
 #	sgml		text to tokenize
-#	elemExpr	RE to recognise tags
+#	elemExpr	RE to recognize tags
 #	elemSub		transform for matched tags
 #	args		options
 #
@@ -745,7 +745,7 @@ proc sgml::Entity {opts entityrefcmd pcdatacmd entities ref} {
 
     switch -glob -- $ref {
 	%* {
-	    # Parameter entity - not recognised outside of a DTD
+	    # Parameter entity - not recognized outside of a DTD
 	}
 	#x* {
 	    # Character entity - hex

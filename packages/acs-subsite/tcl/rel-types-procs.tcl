@@ -140,7 +140,7 @@ namespace eval rel_types {
 
         lappend plsql [list db_dml update_type FOO]
 
-        # Force internationalisation of Roles
+        # Force internationalization of Roles
 
         # Internationalising of Attributes. This is done by storing the
         # attribute with its acs-lang key
@@ -249,7 +249,7 @@ namespace eval rel_types {
 
         db_transaction {
 
-            # Force internationalisation of Roles
+            # Force internationalization of Roles
 
             # Internationalising of Attributes. This is done by storing the
             # attribute with its acs-lang key
