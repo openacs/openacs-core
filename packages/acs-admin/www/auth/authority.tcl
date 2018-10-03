@@ -31,14 +31,14 @@ set form_widgets_full {
     {pretty_name:text
         {html {size 50}}
         {label "\#acs-admin.Name\#"}
-    }        
+    }
 
     {short_name:text,optional
         {html {size 50}}
         {label "\#acs-admin.Short_Name\#"}
         {mode {[ad_decode $local_authority_p 1 "display" ""]}}
         {help_text "[_ acs-admin.Authority_short_name_help_text]"}
-    }        
+    }
 
     {enabled_p:text(radio)
         {label "\#acs-admin.Enabled\#"}
@@ -46,10 +46,10 @@ set form_widgets_full {
     }
 
     {help_contact_text:richtext,optional
-        {html {cols 60 rows 13}} 
+        {html {cols 60 rows 13}}
         {label "\#acs-admin.Help_contact_text\#"}
         {help_text "[_ acs-admin.Help_contact_help_text]"}
-    }        
+    }
 
     {-section "auth" {legendtext \#acs-admin.Authentication\#}}
 
@@ -69,12 +69,12 @@ set form_widgets_full {
         {html {size 50}}
         {label "\#acs-admin.Recover_password_URL\#"}
         {help_text "[_ acs-admin.Recover_password_URL_help_text]"}
-    }        
+    }
     {change_pwd_url:text,optional
         {html {size 50}}
         {label "\#acs-admin.Change_password_URL\#"}
         {help_text "[_ acs-admin.Change_password_URL_help_text]"}
-    }        
+    }
 
     {-section "accreg" {legendtext \#acs-admin.Account_Registration\#}}
 
@@ -87,7 +87,7 @@ set form_widgets_full {
         {html {size 50}}
         {label "\#acs-admin.Account_registration_URL\#"}
         {help_text "[_ acs-admin.Account_reg_URL_help_text]"}
-    }        
+    }
 
     {-section "ondemsyn" {legendtext \#acs-admin.On-Demand_Sync\#}}
 
@@ -155,7 +155,7 @@ ad_form -name authority \
         set batch_sync_enabled_p f
     } \
     -edit_request {
-            
+
     auth::authority::get -authority_id $authority_id -array element_array
 
     set page_title $element_array(pretty_name)
@@ -167,11 +167,13 @@ ad_form -name authority \
     if { !$local_authority_p } {
         # Set the value of the help_contact_text element - both contents and format attributes
         set help_contact_text [template::util::richtext::create]
-        set help_contact_text [template::util::richtext::set_property contents $help_contact_text $element_array(help_contact_text)]
+        set help_contact_text [template::util::richtext::set_property contents $help_contact_text \
+                                   $element_array(help_contact_text)]
         if { $element_array(help_contact_text_format) eq "" } {
             set element_array(help_contact_text_format) "text/enhanced"
         }
-        set help_contact_text_format [template::util::richtext::set_property format $help_contact_text  $element_array(help_contact_text_format)]     
+        set help_contact_text_format [template::util::richtext::set_property format $help_contact_text \
+                                          $element_array(help_contact_text_format)]
     }
 
 } -new_data {
@@ -230,7 +232,7 @@ list::create \
         }
         end_time_pretty {
             label "\#acs-admin.End_time\#"
-        }            
+        }
         run_time {
             label "\#acs-admin.Run_time\#"
             html { align right }
@@ -261,13 +263,13 @@ if { $display_batch_history_p } {
 
     set yes [_ acs-kernel.common_Yes]
     set no  [_ acs-kernel.common_No]
-    
-    db_multirow -extend { 
-        job_url 
+
+    db_multirow -extend {
+        job_url
         start_time_pretty
         end_time_pretty
-        interactive_pretty 
-        short_message 
+        interactive_pretty
+        short_message
         actions_per_minute
         run_time
         run_time_seconds
@@ -285,11 +287,11 @@ if { $display_batch_history_p } {
                message
         from   auth_batch_jobs
         where  authority_id = :authority_id
-		order by start_time_ansi        
+                order by start_time_ansi
     } {
         set run_time_seconds [expr {[clock scan $end_time_ansi -format "%Y-%m-%d %H:%M:%S"] -
                                     [clock scan $start_time_ansi -format "%Y-%m-%d %H:%M:%S"]}]
-                                    
+
         set job_url [export_vars -base batch-job { job_id }]
 
         set start_time_pretty [lc_time_fmt $start_time_ansi "%x %X"]
@@ -347,7 +349,7 @@ if { ($initial_request_p || $submit_p) && !$local_authority_p } {
             set configure_url [export_vars -base authority-parameters { authority_id }]
             break
         }
-    }    
+    }
 }
 
 # Local variables:
