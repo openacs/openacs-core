@@ -120,22 +120,24 @@ create table notification_requests (
     interval_id                     integer
                                     constraint notifications_request_interv_id_nn
                                     not null,
-    constraint notifications_request_interv_fk
-    foreign key (type_id, interval_id)
-    references notification_types_intervals (type_id, interval_id),
     -- the delivery method must be allowed for this type
     delivery_method_id              integer
                                     constraint notifications_request_delivery_meth_nn
                                     not null,
-    constraint notifications_request_deliv_fk
-    foreign key (type_id, delivery_method_id)
-    references notification_types_del_methods (type_id, delivery_method_id),
     -- the format of the notification should be...
     format                          varchar(100)
                                     default 'text'
                                     constraint notifications_request_format_ck
                                     check (format in ('text', 'html')),
-    dynamic_p                       bool default 'f'
+    dynamic_p                       bool default 'f',
+    constraint                      notifications_request_interv_fk
+                                    foreign key (type_id, interval_id)
+                                    references notification_types_intervals (type_id, interval_id),
+    constraint                      notifications_request_deliv_fk
+                                    foreign key (type_id, delivery_method_id)
+                                    references notification_types_del_methods (type_id, delivery_method_id),
+    constraint                      notification_requests_un
+                                    unique (type_id, user_id, object_id)
 );
 
 create index notification_requests_t_o_idx on notification_requests(type_id, object_id);
