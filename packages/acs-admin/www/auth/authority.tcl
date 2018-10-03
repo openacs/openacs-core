@@ -171,7 +171,7 @@ ad_form -name authority \
         if { $element_array(help_contact_text_format) eq "" } {
             set element_array(help_contact_text_format) "text/enhanced"
         }
-        set help_contact_text [template::util::richtext::set_property format $help_contact_text  $element_array(help_contact_text_format)]     
+        set help_contact_text_format [template::util::richtext::set_property format $help_contact_text  $element_array(help_contact_text_format)]     
     }
 
 } -new_data {
