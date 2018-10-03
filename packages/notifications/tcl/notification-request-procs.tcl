@@ -31,7 +31,9 @@ namespace eval notification::request {
         if {$request_id eq ""} {
             # Set up the vars
             set extra_vars [ns_set create]
-            oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {request_id type_id user_id object_id interval_id delivery_method_id format dynamic_p}
+            oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {
+                request_id type_id user_id object_id interval_id delivery_method_id format dynamic_p
+            }
 
             # Create the request
             set request_id [package_instantiate_object -extra_vars $extra_vars notification_request]
@@ -46,9 +48,9 @@ namespace eval notification::request {
         {-user_id:required}
     } {
         Checks if a particular notification request exists, and if so return the request ID.
-	Note that the primary key on notification requests is notification_type, object, user.
-	Interval and delivery method are specific parameters, but do not impact the uniqueness:
-	a user can choose only one interval and delivery method for a given notification type and object.
+        Note that the primary key on notification requests is notification_type, object, user.
+        Interval and delivery method are specific parameters, but do not impact the uniqueness:
+        a user can choose only one interval and delivery method for a given notification type and object.
     } {
         return [db_string select_request_id {} -default {}]
     }
