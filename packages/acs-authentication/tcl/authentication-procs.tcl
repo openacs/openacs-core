@@ -469,13 +469,16 @@ ad_proc -public auth::create_user {
     {-secret_answer ""}
     {-email_verified_p ""}
     {-nologin:boolean}
+    {-authority_id ""}
 } {
     Create a user, and return creation status and account status.
 
     @param email_verified_p Whether the local account considers the email to be verified or not.
 
-    @param verify_password_confirm
-    Set this flag if you want the proc to verify that password and password_confirm match for you.
+    @param verify_password_confirm Set this flag if you want the proc to
+           verify that password and password_confirm match for you.
+    @param authority_id create user in the specified authority.
+           Defaults to the register authority of the subsite.
 
     @return Array list containing the following entries:
 
@@ -499,7 +502,9 @@ ad_proc -public auth::create_user {
 
     @see auth::get_all_registration_elements
 } {
-    set authority_id [auth::get_register_authority]
+    if {$authority_id eq ""} {
+        set authority_id [auth::get_register_authority]
+    }
 
     # This holds element error messages
     array set element_messages [list]
