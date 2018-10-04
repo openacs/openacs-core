@@ -7,8 +7,6 @@ ad_library {
     @creation-date 2018-10-04
 }
 
-ns_log notice "================== acs-service-contract INIT"
-
 acs_sc_update_alias_wrappers
 
 # Local variables:
