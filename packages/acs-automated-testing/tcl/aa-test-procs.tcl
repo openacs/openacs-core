@@ -155,7 +155,7 @@ ad_proc -public aa_register_init_class {
     aa_register_case proc.
 
     An initialization constructor is called <strong>once</strong> before
-    running a set of testcases, and the descructor called <strong>once</strong>
+    running a set of testcases, and the destructor called <strong>once</strong>
     upon completion of running a set of testcases.<p>
     The idea behind this is that it could be used to perform data intensive
     operations that shared amongst a set if testcases.  For example, mounting
@@ -165,7 +165,7 @@ ad_proc -public aa_register_init_class {
 
     Better to let the acs-automated-testing infrastructure call
     the init_class code to set the package up, run all the tests, then call
-    the descructor to unmount the package.
+    the destructor to unmount the package.
 
     @author Peter Harper
     @creation-date 04 November 2001
@@ -375,7 +375,7 @@ ad_proc -public aa_register_case {
 
     @param bugs A list of integers correspending to openacs.org bug numbers which relate to this test case.
     @param procs A list of OpenACS procs which are tested by this case.
-    @param urls A list of urls (relative to package) tested in web test case
+    @param urls A list of URLs (relative to package) tested in web test case
 
     @param on_error Deprecated.
     @param init_classes Deprecated.
@@ -1686,7 +1686,6 @@ namespace eval ::acs::test::xpath {
 
         return $values
     }
-
 }
 
 namespace eval acs::test::user {
