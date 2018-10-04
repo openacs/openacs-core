@@ -553,8 +553,13 @@ ad_proc -private auth::authority::get_id_not_cached {
 } {
     Get authority_id by short_name. Not cached.
 } {
-    return [db_string select_authority_id {} -default {}]
+    return [db_string select_authority_id {
+        select authority_id 
+        from   auth_authorities 
+        where  short_name = :short_name
+    } -default {}]
 }
+
 ad_proc -public auth::authority::local {} {
     Returns the authority_id of the local authority.
 } {

@@ -20,12 +20,5 @@
       </querytext>
   </fullquery>
 
-  <fullquery name="auth::authority::get_id_not_cached.select_authority_id">
-      <querytext>
-          select authority_id 
-          from   auth_authorities 
-          where  short_name = :short_name 
-      </querytext>
-  </fullquery>
 
 </queryset>
