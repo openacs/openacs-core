@@ -150,11 +150,11 @@ ad_proc -public aa_register_init_class {
     constructor
     destructor
 } {
-    Registers a initialisation class to be used by one or more testcases.  An
-    initialisation class can be assigned to a testcase via the
-    aa_register_case proc.<p>
-    <p>
-    An initialisation constructor is called <strong>once</strong> before
+    Registers a initialization class to be used by one or more testcases.  An
+    initialization class can be assigned to a testcase via the
+    aa_register_case proc.
+
+    An initialization constructor is called <strong>once</strong> before
     running a set of testcases, and the descructor called <strong>once</strong>
     upon completion of running a set of testcases.<p>
     The idea behind this is that it could be used to perform data intensive
@@ -162,10 +162,11 @@ ad_proc -public aa_register_init_class {
     an instance of a package.  This could be performed by each testcase
     individually, but this would be highly inefficient if there are any
     significant number of them.
-    <p>
+
     Better to let the acs-automated-testing infrastructure call
     the init_class code to set the package up, run all the tests, then call
     the descructor to unmount the package.
+
     @author Peter Harper
     @creation-date 04 November 2001
 
@@ -220,7 +221,7 @@ ad_proc -public aa_register_init_class {
     # the constructor has exported.
     #
     ad_proc -private _${package_key}__i_$init_class_id {} "
-    aa_log \"Running \\\"$init_class_id\\\" initialisation class constructor\"
+    aa_log \"Running \\\"$init_class_id\\\" initialization class constructor\"
     $constructor
   "
     ad_proc -private _${package_key}__d_$init_class_id {} "
@@ -546,7 +547,7 @@ ad_proc -public aa_register_case {
 ad_proc -public aa_export_vars {
     args
 } {
-    Called from a initialisation class constructor or a component to
+    Called from a initialization class constructor or a component to
     explicitly export the specified variables to the current testcase. You need
     to call aa_export_vars <b>before</b> you create the variables.
 
@@ -588,7 +589,7 @@ ad_proc -public aa_runseries {
 
     set aa_run_quietly_p $quiet_p
     #
-    # Work out the list of initialisation classes.
+    # Work out the list of initialization classes.
     #
     set testcase_ids {}
     if {$testcase_id ne ""} {
@@ -639,8 +640,8 @@ ad_proc -public aa_runseries {
         }
     }
     #
-    # Run each initialisation script.  Keep a list of the exported variables
-    # by each initialisation script so each testcase (and destructor) can
+    # Run each initialization script.  Keep a list of the exported variables
+    # by each initialization script so each testcase (and destructor) can
     # correctly upvar to gain visibility of them.
     #
     if {[info exists classes]} {
@@ -663,7 +664,7 @@ ad_proc -public aa_runseries {
     }
 
     #
-    # Run each initialisation destructor script.
+    # Run each initialization destructor script.
     #
     if {[info exists classes]} {
         foreach initpair [array names classes] {
@@ -859,10 +860,21 @@ ad_proc -public aa_log {
     #global aa_testcase_id
     #global aa_package_key
 
-    if {$::aa_run_quietly_p} {
-        return
+    #
+    # When aa_run_quietly_p exists, we run inside the testing
+    # environment.
+    #
+    if {[info exists ::aa_run_quietly_p]} {
+        if {$::aa_run_quietly_p} {
+            return
+        }
+        aa_log_result "log" $log_notes
+    } else {
+        #
+        # Use plain ns_log reporting
+        #
+        ns_log notice "aa_log: $log_notes"
     }
-    aa_log_result "log" $log_notes
 }
 
 ad_proc -public aa_error {
@@ -898,7 +910,7 @@ ad_proc -public aa_log_result {
     global aa_error_level
 
     #
-    # If logging is happened whilst in a initialisation class, store the log
+    # If logging is happened whilst in a initialization class, store the log
     # entry, but don't write it to the database.  Individual testcase will make
     # their own copies of these log entries.
     #
@@ -1689,11 +1701,11 @@ namespace eval acs::test::user {
         @return The user_info dict returned by auth::create_user. Contains
                 the additional keys email and password.
     } {
-        set username "__test_user_[ad_generate_random_string]"
-        set email "${username}@test.test"
-        set password [ad_generate_random_string]
+        set username    "__test_user_[ad_generate_random_string]"
+        set email       "${username}@test.test"
+        set password    [ad_generate_random_string]
         set first_names [ad_generate_random_string]
-        set last_name [ad_generate_random_string]
+        set last_name   [ad_generate_random_string]
 
         set user_info [auth::create_user \
                            -user_id $user_id \
@@ -1703,7 +1715,8 @@ namespace eval acs::test::user {
                            -last_name $last_name \
                            -password $password \
                            -secret_question [ad_generate_random_string] \
-                           -secret_answer [ad_generate_random_string]]
+                           -secret_answer [ad_generate_random_string] \
+                           -authority_id [auth::authority::get_id -short_name "acs_testing"]]
 
         if { [dict get $user_info creation_status] ne "ok" } {
             # Could not create user
