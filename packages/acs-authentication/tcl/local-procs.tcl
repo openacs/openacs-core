@@ -489,7 +489,12 @@ ad_proc -private auth::local::registration::Register {
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Generate random password?
     set generated_pwd_p 0
-    if { $password eq "" || [parameter::get -package_id [ad_conn subsite_id] -parameter RegistrationProvidesRandomPasswordP -default 0] } {
+    if { $password eq ""
+         || [parameter::get \
+                 -package_id [ad_conn subsite_id] \
+                 -parameter RegistrationProvidesRandomPasswordP \
+                 -default 0]
+     } {
         set password [ad_generate_random_string]
         set generated_pwd_p 1
     }
@@ -497,7 +502,7 @@ ad_proc -private auth::local::registration::Register {
     set result(password) $password
 
     # Set user's password
-    set user_id [acs_user::get_by_username -username $username]
+    set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
     ad_change_password $user_id $password
 
     # Used in messages below
