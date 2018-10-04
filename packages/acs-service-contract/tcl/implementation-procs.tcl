@@ -137,19 +137,20 @@ ad_proc -public acs_sc::impl::get_id {
     Retrieves the ID for a service contract.  If the contract is specified
     then the ID is retrieved for the specified contract, otherwise all
     service contract IDs will be retrieved that match the specified owner
-    and implementation name.
+    and implementation name. If nothing is found, the functons returns empty.
 
     @param owner Owner of the service contract.
     @param name Implementation name.
     @param contract Implementation contract name.
-    @return Returns the ID for a specified service contract, or all IDs for service contracts that match the owner and implementation name of
-    a service contract,
-    if the contract is not specified.
+    @return Returns the ID for a specified service contract, or all IDs for service contracts
+       that match the owner and implementation name of a service contract,
+       if the contract is not specified. If there is no such service contract, the function
+       returns empty.
 } {
     if {$contract ne ""} {
-        return [db_string select_impl_id_with_contract {}]
+        return [db_string select_impl_id_with_contract {} -default {}]
     } else {
-        return [db_string select_impl_id {}]
+        return [db_string select_impl_id {} -default {}]
     }
 }
 
