@@ -99,21 +99,19 @@ ad_proc -public auth::authority::create {
 
         # Set default values for columns not provided
         foreach column $all_columns {
-            if { [lsearch $names $column] == -1 } {
+            if { $column ni $names } {
                 set $column $column_defaults($column)
             }
         }
 
-        if { ![info exists context_id] || $context_id eq "" } {
-            set context_id [ad_conn package_id]
-        }
-
-        if { ![info exists creation_user] || $creation_user eq "" } {
+        if {[ns_conn is_connected]} {
+            set context_id    [ad_conn package_id]
             set creation_user [ad_conn user_id]
-        }
-
-        if { ![info exists creation_ip] || $creation_ip eq "" } {
-            set creation_ip [ad_conn peeraddr]
+            set creation_ip   [ad_conn peeraddr]
+        } else {
+            set context_id    ""
+            set creation_user ""
+            set creation_ip   ""
         }
 
         # Auto generate short name if not provided and make
