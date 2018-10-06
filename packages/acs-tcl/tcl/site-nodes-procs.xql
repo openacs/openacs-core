@@ -17,14 +17,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="site_node::mount.update_package_context_id">
-        <querytext>
-            update acs_objects
-            set context_id = :context_id
-            where object_id = :object_id
-        </querytext>
-    </fullquery>
-
 
     <fullquery name="site_node::rename.rename_node">
         <querytext>

@@ -1622,15 +1622,25 @@ if {$UseXotclSiteNodes} {
         set url [site_node::get_url -node_id $parent_node_id]
 
         site_node::update_cache -sync_children -node_id $node_id -url $url
+        #
+        # The parent_node_id should in a mount operation never be
+        # empty.
+        #
         ::acs::site_nodes_cache flush_pattern -partition_key $parent_node_id get_children-$parent_node_id-*
 
-        # DAVEB update context_id if it is passed in some code relies
+        #
+        # DAVEB: update context_id if it is passed in some code relies
         # on context_id to be set by instantiate_and_mount so we can't
         # assume anything at this point. Callers that need to set
         # context_id for example, when an unmounted package is
-        # mounted, should pass in the correct context_id
+        # mounted, should pass in the correct context_id.
+        #
         if {[info exists context_id]} {
-            db_dml update_package_context_id ""
+            db_dml update_package_context_id {
+                update acs_objects
+                set context_id = :context_id
+                where object_id = :object_id
+            }
         }
 
         set package_key [apm_package_key_from_id $object_id]
@@ -1673,7 +1683,9 @@ if {$UseXotclSiteNodes} {
         ::xo::site_node flush_cache -node_id $node_id -with_subtree $sync_children_p -url $url
 
         set parent_node_id [site_node::get_parent_id -node_id $node_id]
-        ::xo::site_node flush_pattern -partition_key $parent_node_id get_children-$parent_node_id-*
+        if {$parent_node_id ne ""} {
+            ::xo::site_node flush_pattern -partition_key $parent_node_id get_children-$parent_node_id-*
+        }
     }
 
     ad_proc -public site_node::get {
