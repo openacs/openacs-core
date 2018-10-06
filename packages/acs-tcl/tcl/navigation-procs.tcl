@@ -76,7 +76,7 @@ ad_proc ad_context_node_list {
         # Don't collect link for nodes without an object underneath
         # (e.g. empty site folders), as they would just be dead links
         if {$node(object_id) ne ""} {
-            set context [list [list $node(url) [ns_quotehtml $node(instance_name)]] {*}$context]
+            set context [list [list $node(url) $node(instance_name)] {*}$context]
         }
 
         # We have the break here, so that 'from_node' itself is included
