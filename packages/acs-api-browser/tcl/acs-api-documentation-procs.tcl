@@ -1392,8 +1392,8 @@ namespace eval ::apidoc {
     }
 
     ad_proc -private ad_keywords_score {keywords string_to_search} {
-        returns number of keywords found in string to search.
-        No additional score for repeats
+        @return Number of keywords found in string to search.
+        No additional score for repeats.
     } {
         # turn keywords into space-separated things
         # replace one or more commands with a space
@@ -1453,9 +1453,9 @@ namespace eval ::apidoc {
         return [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]]
     }
 
-
-    # Returns length of a variable name
-    proc length_var {data} {
+    ad_proc -private length_var {data} {
+        @return Length of a variable name.
+    } {
         if {[regexp -indices {^\$\{[^\}]+\}} $data found]} {
             return [lindex $found 1]
         } elseif {[regexp -indices {^\$[A-Za-z0-9_:]+(\([\$A-Za-z0-9_\-/]+\))?} $data found]} {
@@ -1465,23 +1465,26 @@ namespace eval ::apidoc {
     }
 
 
-    # Returns length of a command name
-    proc length_proc {data} {
+    ad_proc -private length_proc {data} {
+        @return Length of a command name.
+    } {
         if {[regexp -indices {^(::)?[A-Za-z][:A-Za-z0-9_@]+} $data found]} {
             return [lindex $found 1]
         }
         return 0
     }
 
-    # Returns length of subexpression, from open to close quote inclusive
-    proc length_string {data} {
+    ad_proc -private length_string {data} {
+        @eturn length of subexpression, from open to close quote inclusive.
+    } {
         regexp -indices {[^\\]\"} $data match
         return [expr {[lindex $match 1]+1}]
     }
 
-    # Returns length of subexpression, from open to close brace inclusive
-    # Doesn't deal with unescaped braces in substrings
-    proc length_braces {data} {
+    ad_proc -private length_braces {data} {
+        @return length of subexpression, from open to close brace inclusive.
+         Doesn't deal with unescaped braces in substrings.
+    } {
         set i 1
         for {set count 1} {1} {incr i} {
             if {[string index $data $i] eq "\\"} {
@@ -1496,14 +1499,16 @@ namespace eval ::apidoc {
         return [expr {$i+1}]
     }
 
-    # Returns number of spaces until next subexpression
-    proc length_spaces {data} {
+    ad_proc -private length_spaces {data} {
+        @return Number of spaces until next subexpression.  
+    } {
         regexp -indices {\s+} $data match
         return [expr {[lindex $match 1]+1}]
     }
 
-    # Returns length of a generic subexpression
-    proc length_exp {data} {
+    ad_proc -private length_exp {data} {
+        @return length of a generic subexpression.
+    } {
         if {[string index $data 0] eq "\""} {
             return [length_string $data]
         } elseif {[string index $data 0] eq "\{"} {
@@ -1517,8 +1522,10 @@ namespace eval ::apidoc {
         return 0
     }
 
-    # Calculate how much text we should ignore
-    proc length_regexp {data} {
+    ad_proc -private length_regexp {data} {
+        Calculate how much text we should ignore.
+        @return length in characters.
+    } {
         set i 0
         set found_regexp 0
         set curchar [string index $data $i]
