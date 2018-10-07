@@ -104,7 +104,7 @@ ad_proc -public auth::authority::create {
             }
         }
 
-        if {[ns_conn is_connected]} {
+        if {[ns_conn isconnected]} {
             set context_id    [ad_conn package_id]
             set creation_user [ad_conn user_id]
             set creation_ip   [ad_conn peeraddr]
