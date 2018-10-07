@@ -81,6 +81,10 @@ admin {
                 object-types/*
             }
         }
+        developer {
+            label {Developer Tools}
+            url /acs-admin/developer
+        }    
         swa {
             label #acs-subsite.Site_Wide_Admin#
             url /acs-admin/
