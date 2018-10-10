@@ -1366,6 +1366,14 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
     }
 
     ns_log debug "Done running scheduled proc $proc."
+    
+    #
+    # In case there are temporary xotcl objects, clean these up to
+    # avoid surprises in schedued threads about pre-existing objects.
+    #
+    if {[info commands ::xo::at_cleanup] ne ""} {
+        ::xo::at_cleanup
+    }
 }
 
 # Initialize NSVs for ad_schedule_proc.
