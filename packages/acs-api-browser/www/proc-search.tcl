@@ -174,11 +174,11 @@ foreach output $deprecated_matches {
 }
 global __csrf_token
 
-set show_deprecated_url [export_vars -base [ad_conn url] -override {{ show_deprecated_p 1 }} {
+set show_deprecated_url [export_vars -base [ad_conn url] -no_empty -override {{ show_deprecated_p 1 }} {
     name_weight doc_weight param_weight source_weight search_type query_string show_private_p __csrf_token
 }]
 
-set hide_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 0 } } {
+set hide_deprecated_url [export_vars -base [ad_conn url] -no_empty -override { { show_deprecated_p 0 } } {
     name_weight doc_weight param_weight source_weight search_type query_string show_private_p __csrf_token
 }]
 
@@ -192,10 +192,10 @@ foreach output $private_matches {
     multirow append private_results $score $proc $args $url
 }
 
-set show_private_url [export_vars -base [ad_conn url] -override { { show_private_p 1 } } {
+set show_private_url [export_vars -base [ad_conn url] -no_empty -override { { show_private_p 1 } } {
     name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p __csrf_token
 }]
-set hide_private_url [export_vars -base [ad_conn url] -override { { show_private_p 0 } } {
+set hide_private_url [export_vars -base [ad_conn url] -no_empty -override { { show_private_p 0 } } {
     name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p __csrf_token
 }]
 

@@ -1958,7 +1958,7 @@ ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
             object {show_source 1} {show_methods 1}
         }]
     } else {
-        set url [export_vars -base /api-doc/proc-view {
+        set url [export_vars -base /api-doc/proc-view -no_empty {
             {proc $proc_name} source_p version_id
         }]
     }
