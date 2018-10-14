@@ -1147,10 +1147,16 @@ ad_proc -public api_describe_function {
 
 
 ad_proc -public api_get_body {proc_name} {
-    This function returns the body of a Tcl proc or an xotcl method.
+    This function returns the body of a Tcl proc or an XOTcl method.
     @param proc_name the name spec of the proc
     @return body of the specified proc
 } {
+    #
+    # In case the proc_name contains magic chars, these have to be
+    # escaped for Tcl commands expecting a pattern (e.g. "info procs")
+    #
+    regsub -all {([?*])} $proc_name {\\\1} proc_name_pattern
+    
     if {[info commands ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
         if {[regexp {^(.*) (.*)$} $obj match thread obj]} {
@@ -1164,9 +1170,9 @@ ad_proc -public api_get_body {proc_name} {
     } elseif {[info commands ::xo::api] ne ""
               && [regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
         return [::xo::api get_object_source "" $obj]
-    } elseif {[info procs $proc_name] ne ""} {
+    } elseif {[info procs $proc_name_pattern] ne ""} {
         return [info body $proc_name]
-    } elseif {[info procs ::nsf::procs::$proc_name] ne ""} {
+    } elseif {[info procs ::nsf::procs::$proc_name_pattern] ne ""} {
         return [::nx::Object info method body ::nsf::procs::$proc_name]
     } else {
         return "No such Tcl-proc '$proc_name'"
