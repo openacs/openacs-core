@@ -39,6 +39,7 @@ ad_proc -public ad_text_to_html {
     if { $text eq "" } {
         return ""
     }
+    set orig_text $text
 
     set space_added 0
     set nr_links 0
@@ -76,7 +77,7 @@ ad_proc -public ad_text_to_html {
         # where we do not want turn the @ into a mailto.
 
         incr nr_links [regsub -nocase -all \
-                           {([^a-zA-Z0-9=/.]+)(mailto:)?([^=\(\)\s:;,@<>/]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
+                           {([^a-zA-Z0-9=/.-]+)(mailto:)?([^=\(\)\s:;,@<>/]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
                            "\\1\u0002mailto:\\3\u0003" text]
 
         #
@@ -158,7 +159,7 @@ ad_proc -public ad_text_to_html {
             # to debug.
             #
             if {$changed_back > 0} {
-                ad_log warning "Replaced spurious magic marker in ad_text_to_html"
+                ad_log warning "Replaced spurious magic marker in ad_text_to_html, orig:\n$orig_text"
             }
         }
     }
