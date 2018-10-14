@@ -324,7 +324,7 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke} \
     -procs ad_html_to_text \
-    text_to_html {
+    html_to_text {
         Test code the supposedly causes ad_html_to_text to break
 } {
 
@@ -1061,16 +1061,22 @@ aa_register_case \
 aa_register_case -cats {api} \
     -bugs 1450 \
     -procs ad_enhanced_text_to_html \
-    acs_tcl__process_enhanced_correctly {
+    ad_enhanced_text_to_html {
 
         Process sample text correctly
         @author Nima Mazloumi
 } {
 
     set string_with_img {<img src="http://test.test/foo.png">}
-    aa_log "Original string is $string_with_img"
+    aa_log "Original string is [ns_quotehtml $string_with_img]"
     set html_version [ad_enhanced_text_to_html $string_with_img]
-    aa_equals "new: $html_version should be the same" $html_version $string_with_img
+    aa_true "new: [ns_quotehtml $html_version] should be the same" {$html_version eq $string_with_img}
+
+    set text {http://www.mail-archive.com/aolserver-talk@lists.sourceforge.net/msg00277.html}
+    aa_log "Original string is with @-sign: [ns_quotehtml $text]"
+    set html {<a href="http://www.mail-archive.com/aolserver-talk@lists.sourceforge.net/msg00277.html">http://www.mail-archive.com/aolserver-talk@lists.sourceforge.net/msg00277.html</a>}
+    aa_true "link with @-sign should not contain mailto:link" {[ad_enhanced_text_to_html $text] eq $html}
+
 }
 
 aa_register_case -cats {api db} db__caching {
