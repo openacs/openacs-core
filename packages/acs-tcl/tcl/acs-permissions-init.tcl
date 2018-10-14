@@ -1,17 +1,14 @@
-if {[info commands ns_cache_eval] ne ""} {
-    #
-    # Permission cache management for NaviServer.
-    #
-    # Some of this code will go away, when abstract cache management
-    # will be introduced.
-    #
-    if {![info exists ::permission::cache_created]} {
-	ns_log notice "acs-tcl: creating permission cache"
-	ns_cache_create \
-	    -expires [parameter::get -package_id [ad_acs_kernel_id] \
-			  -parameter PermissionCacheTimeout \
-			  -default 300] \
-	    permission_cache 100000
-	set permission::cache_created 1
-    }
-}
+#
+# Create permission caches. The sizes can be tailored in the config
+            # file like the following:
+#
+# ns_section ns/server/${server}/acs/acs-tcl
+#   ns_param PermissionCacheSize        100000
+#   ns_param PermissionCachePartitions  2
+#
+::acs::KeyPartitionedCache create ::acs::permission_cache \
+    -package_key acs-tcl \
+    -parameter PermissionCache \
+    -default_size 100000 \
+    -partitions 2
+

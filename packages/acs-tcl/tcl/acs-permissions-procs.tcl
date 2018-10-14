@@ -329,12 +329,14 @@ if {[info commands ns_cache_eval] ne ""} {
 
         @see permission::permission_p
     } {
-        return [ns_cache eval permission_cache $party_id/$object_id/$privilege {
-            permission::permission_p_not_cached \
-                -party_id $party_id \
-                -object_id $object_id \
-                -privilege $privilege
-        }]
+        return [acs::permission_cache eval \
+                    -partition_key $party_id \
+                    $party_id/$object_id/$privilege {
+                        permission::permission_p_not_cached \
+                            -party_id $party_id \
+                            -object_id $object_id \
+                            -privilege $privilege
+                    }]
     }
 
     #
@@ -356,20 +358,20 @@ if {[info commands ns_cache_eval] ne ""} {
 
         @see permission::permission_p
     } {
-        if {![info exists ::permission::cache_created]} {
+        if {[info commands ::acs::permission_cache] eq ""} {
             return
 
         } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
             #
             # All three attributes are provided
             #
-            ns_cache_flush permission_cache $party_id/$object_id/$privilege
+            ::acs::permission_cache flush -partition_key $party_id $party_id/$object_id/$privilege
 
         } elseif {[info exists party_id] } {
             #
             # At least the party_id is provided
             #
-            ns_cache_flush -glob permission_cache $party_id/*
+            ::acs::permission_cache flush_all -partition_key $party_id
         } else {
             #
             # tell user, what's implemented
@@ -426,7 +428,7 @@ if {[info commands ns_cache_eval] ne ""} {
 
         @see permission::permission_p
     } {
-        if {![info exists ::permission::cache_created]} {
+        if {[info command ::acs::permission_cache] eq ""} {
             return
 
         } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
