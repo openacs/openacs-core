@@ -1779,7 +1779,7 @@ namespace eval ::apidoc {
                                 }
                             }
                         }
-                        if {$proc_name eq "*" || $proc_name eq "@"} {
+                        if {$proc_name in {* @ ?}} {
                             append html $proc_name
                         } elseif {$proc_name in $::apidoc::KEYWORDS ||
                             ([regexp {^::(.*)} $proc_name match had_colons]
