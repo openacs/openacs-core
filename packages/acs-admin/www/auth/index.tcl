@@ -62,11 +62,11 @@ list::create \
                     <img src="/resources/acs-subsite/radiochecked.gif" height="13" width="13" style="border: 0" alt="checked">
                   </case>
                   <case value="can_select">
-                    <a href="@authorities.registration_url@" 
+                    <a href="@authorities.registration_url@"
                        title="\#acs-admin.Make_this_the_authority_for_registering_new_users\#"
                        id="@authorities.select_id;literal@">
                 <img src="/resources/acs-subsite/radio.gif" height="13" width="13" style="background-color: white; border: 0;" alt="unchecked">
-                    </a> 
+                    </a>
                   </case>
                   <case value="cannot_select">
                     <span style="color: gray;">N/A</span>
@@ -95,17 +95,17 @@ list::create \
                 </if>
             }
             sub_class narrow
-        }        
+        }
     }
 
 
 # The authority currently selected for registering users
 set register_authority_id [auth::get_register_authority]
 
-db_multirow -extend { 
-    enabled_p_url 
-    sort_order_url_up 
-    sort_order_url_down 
+db_multirow -extend {
+    enabled_p_url
+    sort_order_url_up
+    sort_order_url_down
     delete_url
     registration_url
     registration_status

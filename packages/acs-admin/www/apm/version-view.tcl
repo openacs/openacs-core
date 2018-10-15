@@ -59,12 +59,12 @@ if { ![info exists installed_version_id] } {
     } else {
         set href [export_vars -base version-install {version_id}]
         set status [subst {
-            No version of this package is installed. You may 
+            No version of this package is installed. You may
             <a href="[ns_quotehtml $href]">install this package now</a>.
         }]
     }
     lappend prompts $status
-    
+
 } elseif { $installed_version_id == $version_id } {
     set status "This version of the package is installed"
     if { $enabled_p == "t" } {
@@ -186,7 +186,7 @@ append body [subst {
 if { $tarball_length ne "" && $tarball_length > 0 } {
     set href [export_vars -base packages/[file tail $version_uri] {version_id}]
     append body [subst {
-        <a href="[ns_quotehtml $href]">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a> 
+        <a href="[ns_quotehtml $href]">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a>
     }]
     if { $distribution_uri eq "" } {
         append body "(generated on this system"
@@ -198,11 +198,11 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
                       {{m create-new} {p.description $summary} {title "[file tail $version_uri]"}}]
         append body [subst {
             <p>
-            In order to contribute this package back to the OpenACS community, 
+            In order to contribute this package back to the OpenACS community,
             <ol>
             <li>download the .apm-file to your file system and</li>
-            <li>submit the .apm-file 
-            <a href="[ns_quotehtml $href]" target="_blank">to 
+            <li>submit the .apm-file
+            <a href="[ns_quotehtml $href]" target="_blank">to
             the package repository of OpenACS</a>.</li>
             </ol>
         }]
@@ -236,7 +236,7 @@ if {$nr_instances > 0} {
 if {$nr_instances == 0 || ($nr_instances > 0 && !$singleton_p)} {
     set href [export_vars -base package-instance-create { package_key {return_url [ad_return_url]}}]
     set instance_create [subst {
-        <li><a href="[ns_quotehtml $href]">Create 
+        <li><a href="[ns_quotehtml $href]">Create
         (unmounted) instance of this package</a></li>
     }]
 } else {
@@ -275,13 +275,13 @@ append body [subst {
     XML package specification file for this version</a></li>
 }]
 
-if { ![info exists installed_version_id] || $installed_version_id == $version_id && 
+if { ![info exists installed_version_id] || $installed_version_id == $version_id &&
      $distribution_uri eq "" } {
     # As long as there isn't a different installed version, and this package is being
     # generated locally, allow the user to write a specification file for this version
     # of the package.
     append body [subst {
-        <li><a href="[ns_quotehtml [export_vars -base version-generate-info {version_id {write_p 1}}]]">Write 
+        <li><a href="[ns_quotehtml [export_vars -base version-generate-info {version_id {write_p 1}}]]">Write
         an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a></li>
     }]
 }
@@ -291,7 +291,7 @@ if { $installed_p == "t" } {
         # The distribution tarball was either (a) never generated, or (b) generated on this
         # system. Allow the user to make a tarball based on files in the filesystem.
         append body [subst {
-            <li><a href="[ns_quotehtml [export_vars -base version-generate-tarball {version_id}]]">Generate 
+            <li><a href="[ns_quotehtml [export_vars -base version-generate-tarball {version_id}]]">Generate
             a distribution file for this package from the filesystem</a></li>
         }]
     }
@@ -300,20 +300,20 @@ if { $installed_p == "t" } {
 
     if { [info exists can_disable_p] } {
         append body [subst {
-            <li><a href="[ns_quotehtml [export_vars -base version-disable {version_id}]]">Disable 
+            <li><a href="[ns_quotehtml [export_vars -base version-disable {version_id}]]">Disable
             this version of the package</a></li>
         }]
     }
     if { [info exists can_enable_p] } {
         append body [subst {
-            <li><a href="[ns_quotehtml [export_vars -base version-enable {version_id}]]">Enable 
+            <li><a href="[ns_quotehtml [export_vars -base version-enable {version_id}]]">Enable
             this version of the package</a></li>
         }]
     }
-    
-    if { $installed_p == "t" } {    
+
+    if { $installed_p == "t" } {
         append body [subst {
-            <li><a href="[ns_quotehtml [export_vars -base package-delete {version_id}]]">Uninstall 
+            <li><a href="[ns_quotehtml [export_vars -base package-delete {version_id}]]">Uninstall
             this package from your system</a> (be very careful!)</li>
         }]
     }

@@ -1,4 +1,4 @@
-ad_page_contract { 
+ad_page_contract {
     List all the files in a particular version of a package.
 
     @param version_id The package to be processed.
@@ -14,7 +14,7 @@ ad_page_contract {
 
 db_1row apm_package_by_version_id {
     select pretty_name, version_name, package_key
-    from apm_package_version_info 
+    from apm_package_version_info
     where version_id = :version_id
 }
 
@@ -37,7 +37,7 @@ set elements_list {
     description {
         label "Description"
         orderby description
-    }    
+    }
 }
 
 #DRB: sql_clauses must not contain RDBMS-specific query clauses.
@@ -69,7 +69,7 @@ append sql_clauses " [template::list::orderby_clause -orderby -name parameters_l
 
 db_multirow -extend {actions} parameters parameter_table {} {
     set actions [subst {\[<font size="-1">
-        <a href="[ns_quotehtml [export_vars -base parameter-delete {parameter_id version_id section_name}]]">delete</a> | 
+        <a href="[ns_quotehtml [export_vars -base parameter-delete {parameter_id version_id section_name}]]">delete</a> |
         <a href="[ns_quotehtml [export_vars -base parameter-edit {version_id parameter_id}]]">edit</a></font>\]
     }]
 }

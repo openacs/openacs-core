@@ -22,13 +22,13 @@ ad_form \
     -display_buttons {} \
     -form {
         {authority_pretty_name:text(inform)
-            {label "\#acs-admin.Authority_name\#"}                
-        }            
+            {label "\#acs-admin.Authority_name\#"}
+        }
         {job_start_time:text(inform)
-            {label "\#acs-admin.Start_time\#"}                
+            {label "\#acs-admin.Start_time\#"}
         }
         {job_end_time:text(inform)
-            {label "\#acs-admin.End_time\#"}                
+            {label "\#acs-admin.End_time\#"}
         }
         {run_time_seconds:text(inform)
             {label "\#acs-admin.Running_time\#"}
@@ -38,26 +38,26 @@ ad_form \
             {label "\#acs-admin.Interactive\#"}
         }
         {snapshot_p:text(inform)
-            {label "\#acs-admin.Snapshot\#"}                
-        }            
+            {label "\#acs-admin.Snapshot\#"}
+        }
         {message:text(inform)
-            {label "\#acs-admin.Message"}                
-        }            
+            {label "\#acs-admin.Message"}
+        }
         {creation_user:text(inform)
-            {label "\#acs-admin.Creation_user\#"}                
-        }            
+            {label "\#acs-admin.Creation_user\#"}
+        }
         {doc_start_time:text(inform)
             {label "\#acs-admin.Document_start_time\#"}
-        }            
+        }
         {doc_end_time:text(inform)
-            {label "\#acs-admin.Document_end_time\#"}                
-        }            
+            {label "\#acs-admin.Document_end_time\#"}
+        }
         {doc_status:text(inform)
-            {label "\#acs-admin.Document_status\#"}                
-        }            
+            {label "\#acs-admin.Document_status\#"}
+        }
         {doc_message:text(inform)
-            {label "\#acs-admin.Document_message\#"}                
-        }            
+            {label "\#acs-admin.Document_message\#"}
+        }
         {document_download:text(inform)
             {label "\#acs-admin.Document\#"}
         }
@@ -76,7 +76,7 @@ ad_form \
                 set $element_name [acs_community_member_link -user_id $batch_job($element_name)]
             } else {
                 set $element_name [ns_quotehtml $batch_job($element_name)]
-            }               
+            }
         }
 
         set job_start_time [lc_time_fmt $batch_job(job_start_time) "%x %X"]
@@ -151,7 +151,7 @@ db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch
     order  by entry_id
 " {
     set entry_url [export_vars -base batch-action { entry_id }]
-    
+
     # Use message and element_messages to display one short message in the table
     if { $message ne "" } {
         set short_message $message
@@ -172,7 +172,6 @@ db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch
         set user_url {}
     }
 
-    
     set entry_time_pretty [lc_time_fmt $entry_time_ansi "%x %X"]
 }
 
