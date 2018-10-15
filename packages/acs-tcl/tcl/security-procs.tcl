@@ -115,7 +115,7 @@ ad_proc -private sec_handler {} {
             #if {[nsv_array exists aa_test]} {
             #    ns_log notice "nsv_array logindata [nsv_get aa_test logindata logindata]"
             #    ns_log notice "ns_conn peeraddr [ns_conn peeraddr]"
-            #    ns_log notice "dict get $logindata peeraddr [dict get $logindata peeraddr]"                
+            #    ns_log notice "dict get $logindata peeraddr [dict get $logindata peeraddr]"
             #}
             if {[nsv_array exists aa_test]
                 && [nsv_get aa_test logindata logindata]
@@ -2115,6 +2115,28 @@ ad_proc -public security::locations {} {
     return $locations
 }
 
+ad_proc -private security::provided_host_valid {host} {
+    Check, if the provided host contains just valid characters.
+    Spit warning message out only once per request.
+    @param host host from host header field.
+} {
+    #
+    # The global variable takes care of outputting error message only
+    # once per request.
+    #
+    set key ::__security_provided_host_validated($host)
+    if {![info exists $key]} {
+        set $key 1
+        if {$host ne ""} {
+            if {![regexp {^[\w.:@+/=$%!*~\[\]-]+$} $host]} {
+                binary scan [encoding convertto utf-8 $host] H* hex
+                ad_log warning "provided host <$host> (hex $hex) contains invalid characters"
+                set $key 0
+            }
+        }
+    }
+    return [set $key]
+}
 
 ad_proc -public security::validated_host_header {} {
     @return validated host header field or empty
@@ -2233,8 +2255,7 @@ ad_proc -public security::validated_host_header {} {
     # Check against host node map. Here we need as well protection
     # against invalid utf-8 characters.
     #
-    if {![regexp {^[\w.:@+/=$%!*~\[\]-]+$} $host]} {
-        ns_log Warning "host header field contains invalid characters: $host"
+    if {![security::provided_host_valid $hostName]} {
         return ""
     }
     set result [db_list host_header_field_mapped {select 1 from host_node_map where host = :hostName}]

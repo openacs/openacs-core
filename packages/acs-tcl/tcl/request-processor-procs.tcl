@@ -1305,7 +1305,9 @@ ad_proc -private ad_acs_kernel_id_mem {} {
     Returns the package_id of the kernel. (not cached)
 
 } {
-    return [db_string acs_kernel_id_get {} -default 0]
+    return [db_string acs_kernel_id_get {
+        select package_id from apm_packages where package_key = 'acs-kernel'
+    } -default 0]
 }
 
 ad_proc -public ad_acs_kernel_id {} {
@@ -1333,7 +1335,7 @@ ad_proc -public ad_conn {args} {
     passed on to AOLserver's/NaviServer's <code>ns_conn</code> If the
     property is not a valid option for <code>ns_conn</code> either
     then it will throw an error.
-    
+
 <p>
     Valid options for ad_conn are:
     ajax_p,
@@ -1791,6 +1793,8 @@ ad_proc root_of_host {host} {
     set $key [root_of_host_noncached $host]
 }
 
+
+
 ad_proc -private root_of_host_noncached {host} {
 
     Helper function for root_of_host, which performs the actual work.
@@ -1807,35 +1811,36 @@ ad_proc -private root_of_host_noncached {host} {
         }
     }
 
-    #
-    # Other hostnames map to subsites.
-    #
-    set node_id [util_memoize [list rp_lookup_node_from_host $host]]
-
-    if {$node_id eq ""} {
-        set host [regsub "www\." $host ""]
+    if {[security::provided_host_valid $host]} {
+        #
+        # Other hostnames map to subsites.
+        #
         set node_id [util_memoize [list rp_lookup_node_from_host $host]]
-    }
 
-    if { $node_id ne "" } {
-        set url [site_node::get_url -node_id $node_id]
+        if {$node_id eq ""} {
+            set host_stripped [regsub "www\." $host ""]
+            if {$host_stripped ne $host} {
+                set node_id [util_memoize [list rp_lookup_node_from_host $host_stripped]]
+            }
+        }
 
-        return [string range $url 0 end-1]
-    } else {
-        # Hack to provide a useful default
-        return ""
+        if { $node_id ne "" } {
+            set url [site_node::get_url -node_id $node_id]
+            return [string range $url 0 end-1]
+        }
     }
+    # Hack to provide a useful default
+    return ""
 }
 
 ad_proc -private rp_lookup_node_from_host { host } {
+    Lookup host from host_node_map.
+    @return node_id on success or empty string
+} {
     if {$host ne ""} {
-        if {![regexp {^[\w.@+/=$%!*~\[\]-]+$} $host]} {
-            binary scan [encoding convertto utf-8 $host] H* hex
-            ad_log error "rp_lookup_node_from_host: host <$host> (hex $hex) contains invalid characters"
-            ad_return_complaint 1 "invalid request"
-            ad_script_abort
-        }
-        return [db_string node_id {} -default ""]
+        return [db_string node_id {
+            select node_id from host_node_map where host = :host
+        } -default ""]
     }
 }
 
@@ -1879,4 +1884,3 @@ if {[ns_info name] eq "NaviServer"} {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-
