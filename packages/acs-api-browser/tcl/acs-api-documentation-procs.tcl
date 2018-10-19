@@ -1160,7 +1160,7 @@ ad_proc -public api_get_body {proc_name} {
     # escaped for Tcl commands expecting a pattern (e.g. "info procs")
     #
     regsub -all {([?*])} $proc_name {\\\1} proc_name_pattern
-    
+
     if {[info commands ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
         if {[regexp {^(.*) (.*)$} $obj match thread obj]} {
@@ -1510,7 +1510,7 @@ namespace eval ::apidoc {
     }
 
     ad_proc -private length_spaces {data} {
-        @return Number of spaces until next subexpression.  
+        @return Number of spaces until next subexpression.
     } {
         regexp -indices {\s+} $data match
         return [expr {[lindex $match 1]+1}]
