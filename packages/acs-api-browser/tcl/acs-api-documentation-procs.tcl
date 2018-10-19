@@ -965,13 +965,14 @@ ad_proc -private api_call_graph_snippet {
         set edges ""
         foreach testcase_pair [lrange [lsort [dict get $doc testcase]] 0 $maxnodes-1] {
             lassign $testcase_pair testcase_id package_key
+            set testcase_node test_$testcase_id
             set url [api_test_case_url $testcase_pair]
             set props ""
             append props \
                 [subst {URL="$url", margin=".2,0", shape=none, tooltip="Testcase $testcase_id of package $package_key", }] \
                 [subst {label=<<FONT POINT-SIZE="$textpointsize">$testcase_id<BR/><I>(test $package_key)</I></FONT>>}]
-            append nodes [subst -nocommands {"$testcase_id" [$props];\n}]
-            append edges [subst {"$testcase_id" -> "$proc_name";}] \n
+            append nodes [subst -nocommands {"$testcase_node" [$props];\n}]
+            append edges [subst {"$testcase_node" -> "$proc_name";}] \n
         }
         append dot_code \
             "subgraph \{\nrank=\"source\";" \
@@ -1094,22 +1095,25 @@ ad_proc -private api_inline_svg_from_dot {dot_code} {
             close $f
         } on error {errorMsg} {
             ns_log warning "dot returned $errorMsg"
-        }
-        set f [open  $tmpfile]; set svg [read $f]; close $f
+        } on ok {result} {
+            set f [open $tmpfile]; set svg [read $f]; close $f
 
-        # delete the first three lines generated from dot
-        regsub {^[^\n]+\n[^\n]+\n[^\n]+\n} $svg "" svg
-        set css {
-            /*svg g a:link {text-decoration: none;}*/
-            div.inner svg {width: 100%; margin: 0 auto;}
-            svg g polygon {fill: transparent;}
-            svg g g ellipse {fill: #eeeef4;}
-            svg g g polygon {fill: #f4f4e4;}
+            # delete the first three lines generated from dot
+            regsub {^[^\n]+\n[^\n]+\n[^\n]+\n} $svg "" svg
+            set css {
+                /*svg g a:link {text-decoration: none;}*/
+                div.inner svg {width: 100%; margin: 0 auto;}
+                svg g polygon {fill: transparent;}
+                svg g g ellipse {fill: #eeeef4;}
+                svg g g polygon {fill: #f4f4e4;}
+            }
+            file delete -- $tmpfile
+            return "<style>$css</style><div><div class='inner'>$svg</div></div>"
+        } finally {
+            file delete -- $tmpnam.dot
         }
-        file delete -- $tmpfile
-        file delete -- $tmpnam.dot
-        return "<style>$css</style><div><div class='inner'>$svg</div></div>"
     }
+    return ""
 }
 
 ad_proc -public api_describe_function {
