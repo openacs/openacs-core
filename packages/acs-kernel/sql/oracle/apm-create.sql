@@ -515,7 +515,7 @@ comment on column apm_package_callbacks.type is '
   values are given by the Tcl proc apm_supported_callback_types.
 ';
 
--- Ths view facilitates accessing information about package versions by joining
+-- This view facilitates accessing information about package versions by joining
 -- the apm_package_types information and acs_object_types information (which is
 -- invariant across versions) with the specific version information.
 
