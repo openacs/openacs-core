@@ -61,7 +61,10 @@ ad_library {
      if {[info exists ::ds_enabled_p]} {
          return $::ds_enabled_p
      }
-     if { ![nsv_exists ds_properties enabled_p] || ![nsv_get ds_properties enabled_p] } {
+     if { [ns_conn isconnected] == 0
+          || ![nsv_exists ds_properties enabled_p]
+          || ![nsv_get ds_properties enabled_p]
+      } {
          set ::ds_enabled_p 0
      } else {
          set ::ds_enabled_p 1
