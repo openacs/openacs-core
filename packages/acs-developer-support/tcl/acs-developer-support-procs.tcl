@@ -51,10 +51,10 @@ ad_library {
  }
 
  ad_proc -public ds_enabled_p {} {
-     Returns true if developer-support facilities are enabled.
+     @returns true if developer-support facilities are enabled.
  } {
      #
-     # On busy sites, frequent calls to [ds_enabled_p] leads to huge
+     # On busy sites, frequent calls to [ds_enabled_p] lead to huge
      # number of mutex locks for the nsv ds_properties. Therefore,
      # cache its results in a per-thead variable.
      #
@@ -280,7 +280,7 @@ ad_library {
          if { [nsv_exists ds_request $::ad_conn(request).conn] } {
              array set conn [nsv_get ds_request $::ad_conn(request).conn]
              if { [info exists conn(startclicks)] } {
-                 set result [format "%.f" [expr { ([clock clicks -microseconds] - $conn(startclicks))/1000.0 }]]
+                 set result [format "%.f" [expr { ([clock clicks -microseconds] - $conn(startclicks)) / 1000.0 }]]
              }
          }
      }
@@ -288,7 +288,9 @@ ad_library {
  }
 
  ad_proc -public ds_get_db_command_info {} {
-     Get a Tcl list with { num_commands total_ms } for the database commands for the request.
+
+     Get a Tcl list with { num_commands total_ms } for the database
+     commands for the request.
 
      @return list containing num_commands and total_ms, or empty string if the information is not available.
  } {
@@ -310,12 +312,17 @@ ad_library {
  }
 
  ad_proc -private ds_collect_connection_info {} {
-     Collects information about the current connection.
-     Should be called only at the very beginning of the request processor handler.
+
+     Collect information about the current connection.  Should be
+     called only at the very beginning of the request processor
+     handler.
+
  } {
      # JCD: check recursion_count to ensure adding headers only one time.
      if { [ds_enabled_p] && [ds_collection_enabled_p] && ![ad_conn recursion_count]} {
-         ##This is expensive, but easy.  Otherwise we need to do it in every interpreter
+         #
+         # This is expensive, but easy.  Otherwise we need to do it in every interpreter
+         #
          ds_replace_get_user_procs [ds_user_switching_enabled_p]
 
          ds_add start [ns_time]
@@ -365,7 +372,8 @@ ad_library {
              }
          }
 
-         ds_add db $db $command $statement_name $bound_sql $start_time [expr {[clock clicks -microseconds]/1000.0}] $errno $error
+         ds_add db $db $command $statement_name $bound_sql $start_time \
+             [expr {[clock clicks -microseconds]/1000.0}] $errno $error
      }
  }
 
@@ -385,7 +393,10 @@ ad_library {
      }
  }
 
- ad_proc -public ds_comment { value } { Adds a comment to the developer-support information for the current request. } {
+ ad_proc -public ds_comment { value } {
+    Adds a comment to the developer-support information for the
+    current request.
+ } {
 
       if { [ds_enabled_p] } {
           ds_add comment $value
@@ -424,12 +435,16 @@ ad_library {
      ns_log "Debug" "Swept developer support information for [array size kill_requests] requests ($kill_count nsv elements)"
  }
 
- ad_proc -private ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
+ ad_proc -private ds_trace_filter { conn args why } {
+     Adds developer-support information about the end of sessions.
+ } {
      if { [ds_enabled_p] && [ds_collection_enabled_p] } {
          ds_add conn end [ns_time] endclicks [clock clicks -microseconds]
 
          for { set i 0 } { $i < [ns_set size [ad_conn outputheaders]] } { incr i } {
-             ds_add oheaders [ns_set key [ad_conn outputheaders] $i] [ns_set value [ad_conn outputheaders] $i]
+             ds_add oheaders \
+                 [ns_set key [ad_conn outputheaders] $i] \
+                 [ns_set value [ad_conn outputheaders] $i]
          }
 
          foreach param { browser_id validated session_id user_id } {
@@ -444,9 +459,16 @@ ad_library {
  }
 
  ad_proc -public ds_user_select_widget {} {
-     Build a select widget for all users in the system, for quick user switching.  Very
-     expensive (returns a big file) for OpenACS instances with a large number of users,
-     so perhaps best used on test instances.
+
+     Build a select widget for  users in the system, for quick user
+     switching.
+
+     WARNING: On instances with high numbers of users, the query
+     might return high number of instances, leading to very slow pages.
+     So, the number of users returned is limited to 100. For testing
+     purposes, a different selection of users is probably preferred.
+
+     The current query does not work for Oracle.
  } {
      set user_id [ad_conn user_id]
      set real_user_id [ds_get_real_user_id]
@@ -466,9 +488,9 @@ ad_library {
      } else {
          set selected {}
      }
-     set options "<option value=\"0\"$selected>--Logged out--</option>"
+     set options "<option value='0'$selected>--Logged out--</option>"
 
-     db_foreach users {
+     set tuples [db_list_of_lists users {
          select u.user_id as user_id_from_db,
                 (select first_names || ' ' last_name
                    from persons where person_id = u.user_id) as name,
@@ -477,7 +499,10 @@ ad_library {
                 parties p
          where  u.user_id = p.party_id
          order by name
-     } {
+         limit 100
+     }]
+     foreach tuple tuples {
+         lassign $tuple user_id_from_db name email
          if { $user_id == $user_id_from_db } {
              set selected " selected"
              set you_are "<small>You are testing as <strong>$name ($email)</strong></small><br>"
@@ -528,7 +553,10 @@ ad_proc -public ds_get_user_id {{original 0}} {
     Developer support version of ad_get_user_id, used for debugging sites.
 } {
     set orig_user_id [ds_get_real_user_id]
-    if {($original == 0) && ([ds_user_switching_enabled_p]) && [ds_permission_p]} {
+    if {$original == 0
+        && [ds_user_switching_enabled_p]
+        && [ds_permission_p]
+    } {
         set ds_user_id [ad_get_client_property -default $orig_user_id developer-support user_id]
         return $ds_user_id
     } else {
@@ -540,11 +568,13 @@ ad_proc -public ds_conn { args } {
     Developer support version of ad_conn. Overloads "ad_conn user_id",
     delegates to ad_conn in all other cases.
 } {
-    foreach elm { user_id untrusted_user_id } {
-        if { [lindex $args 0] eq $elm ||
-             ([lindex $args 0] eq "-get" && [lindex $args 1] eq $elm) } {
-            return [ds_get_user_id]
-        }
+    if {[lindex $args 0] eq "-get"} {
+        set subcmd [lindex $args 1]
+    } else {
+        set subcmd [lindex $args 0]
+    }
+    if {$subcmd in {user_id untrusted_user_id} } {
+        return [ds_get_user_id]
     }
     return [orig_ad_conn {*}$args]
 }
@@ -640,7 +670,7 @@ ad_proc -public ds_comments_p {} {
 }
 
 ad_proc -public ds_get_comments {} {
-    Get comments for the current request
+    Get comments for the current request.
 } {
     set comments [list]
     if { [nsv_exists ds_request $::ad_conn(request).comment] } {
