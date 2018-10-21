@@ -76,31 +76,10 @@ if {0 && $subsite_number > 100} {
     set where_limit ""
 }
 
-db_foreach path_select {} {
-    if {$node_id != $root_id && $admin_p == "t"} {
-        append head [subst {<a href="[ns_quotehtml [export_vars -base . {expand:multiple {root_id $node_id}}]]">}]
-    }
-    if {$name eq ""} {
-        append head "$obj_name:"
-    } else {
-        append head $name
-    }
-
-    if {$node_id != $root_id && $admin_p == "t"} {
-        append head "</a>"
-    }
-
-    if {$directory_p == "t"} {
-        append head "/"
-    }
-} if_no_rows {
-    append head "&nbsp;"
-}
-
 if {[llength $expand] == 0} {
     lappend expand $root_id
     if { $parent_id ne "" } {
-        lappend expand $parent_id
+        #lappend expand $parent_id
     }
 }
 
@@ -208,6 +187,7 @@ multirow create nodes \
     rename_url delete_url parameters_url permissions_url extra_form_part delete_id
 
 set open_nodes [list]
+set open_nodes [list $root_id]
 
 db_foreach nodes_select {} {
     set add_folder_url ""
@@ -219,8 +199,13 @@ db_foreach nodes_select {} {
     set parameters_url ""
     set permissions_url ""
 
-    if { $parent_id ni $open_nodes && $parent_id ne "" && $mylevel > 2 } { continue }
-
+    if { $parent_id ni $open_nodes && $parent_id ne "" && $mylevel > 2 } {
+        continue
+    }
+    if {$name eq ""} {
+        set name "/"
+    }
+    
     if {$directory_p == "t"} {
         set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
         if {$object_id eq ""} {
@@ -257,6 +242,12 @@ db_foreach nodes_select {} {
         append indent "&nbsp;"
     }
 
+    #
+    # Values for expand_mode:
+    #  0: no children
+    #  1: has children, node is not open
+    #  2: has chilren, node is open
+    #
     set expand_mode 0
     if {!$root_p && $n_children > 0} {
         set expand_mode 1
@@ -281,7 +272,8 @@ db_foreach nodes_select {} {
         set expand_url ""
     }
 
-    set name_url [export_vars -base . {expand:multiple {root_id $node_id}}]
+    #set name_url [export_vars -base . {expand:multiple {root_id $node_id}}]
+    set name_url [export_vars -base . {{root_id $node_id}}]
 
     set action_type 0
     set action_form_part ""
@@ -310,7 +302,8 @@ db_foreach nodes_select {} {
         set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
     }
     set delete_id delete-$node_id
-    
+
+    ns_log notice "append name <$name> name_url <$name_url> expand_mode $expand_mode"
     multirow append nodes \
         $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name \
         $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url \

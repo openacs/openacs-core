@@ -50,6 +50,11 @@ set context [list [list "." "Site Map"] $page_title]
 
 set user_id [ad_conn user_id]
 
+#
+# Build a clickable path named "head" displayed above the site node
+# table.
+#
+set head ""
 db_foreach path_select {} {
     if {$node_id != $root_id && $admin_p == "t"} {
 	set href [export_vars -base . {expand:multiple {root_id $node_id}}]
@@ -71,6 +76,7 @@ db_foreach path_select {} {
 } if_no_rows {
     append head "&nbsp;"
 }
+
 
 if {[llength $expand] == 0} {
     lappend expand $root_id 
@@ -168,7 +174,10 @@ template::list::create \
         }
     }
 
-multirow create nodes node_id expand_mode expand_url tree_indent name name_url instance instance_url type action_type action_form_part add_folder_url new_app_url unmount_url mount_url rename_url delete_url parameters_url permissions_url extra_form_part view_p
+multirow create nodes \
+    node_id expand_mode expand_url tree_indent name name_url instance instance_url \
+    type action_type action_form_part add_folder_url new_app_url unmount_url mount_url \
+    rename_url delete_url parameters_url permissions_url extra_form_part view_p
 set open_nodes [list]
 
 db_foreach nodes_select {} {
@@ -281,7 +290,11 @@ db_foreach nodes_select {} {
 	set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
     }
 
-    multirow append nodes $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url $rename_url $delete_url $parameters_url $permissions_url "" $view_p
+    multirow append nodes \
+        $node_id $expand_mode $expand_url $indent $name $name_url $object_name \
+        $url $package_pretty_name $action_type $action_form_part $add_folder_url \
+        $new_app_url $unmount_url $mount_url $rename_url $delete_url $parameters_url \
+        $permissions_url "" $view_p
 
 }
 
