@@ -41,27 +41,6 @@ set context [list $page_title]
 
 set user_id [ad_conn user_id]
 
-db_foreach path_select {} {
-    if {$node_id != $root_id && $admin_p == "t"} {
-        append head "<a href=\"[export_vars -base . {expand:multiple {root_id $node_id}}]\">"
-    }
-    if {$name eq ""} {
-	append head "$obj_name:"
-    } else {
-	append head $name
-    }
-    
-    if {$node_id != $root_id && $admin_p == "t"} {
-	append head "</a>"
-    }
-    
-    if {$directory_p == "t"} {
-	append head "/"
-    }
-} if_no_rows {
-    append head "&nbsp;"
-}
-
 if {[llength $expand] == 0} {
     lappend expand $root_id 
     if { $parent_id ne "" } {
@@ -127,9 +106,13 @@ template::list::create \
         }
     }
 
-multirow create nodes node_id expand_mode expand_url tree_indent name name_url instance instance_url type action_type action_form_part add_folder_url new_app_url unmount_url mount_url rename_url delete_url parameters_url permissions_url extra_form_part view_p
+multirow create nodes \
+    node_id expand_mode expand_url tree_indent name name_url instance instance_url \
+    type action_type action_form_part add_folder_url new_app_url unmount_url mount_url \
+    rename_url delete_url parameters_url permissions_url extra_form_part view_p
 set open_nodes [list]
 
+# dbqd.acs-subsite.www.admin.site-map.site-map.nodes_select
 db_foreach nodes_select {} {
     set add_folder_url ""
     set new_app_url ""
@@ -140,7 +123,12 @@ db_foreach nodes_select {} {
     set parameters_url ""
     set permissions_url ""
 
-    if { $parent_id ni $open_nodes && $parent_id ne "" && $mylevel > 2 } { continue } 
+    if {$parent_id ni $open_nodes
+        && $parent_id ne ""
+        && $mylevel > 2
+    } {
+        continue
+    }
         
     if {$directory_p == "t"} {
 	set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]

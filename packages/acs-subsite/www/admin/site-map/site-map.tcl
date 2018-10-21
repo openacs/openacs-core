@@ -180,7 +180,7 @@ multirow create nodes \
     rename_url delete_url parameters_url permissions_url extra_form_part view_p
 set open_nodes [list]
 
-db_foreach nodes_select {} {
+db_foreach dbqd.acs-subsite.www.admin.site-map.site-map.nodes_select {} {
     set add_folder_url ""
     set new_app_url ""
     set unmount_url ""
