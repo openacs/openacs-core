@@ -11,22 +11,20 @@
 
     <fullquery name="site_node::update_cache.select_child_site_nodes">
         <querytext>
-	    select n.node_id,
-		   n.parent_id,
-		   n.name,
-		   n.directory_p,
-		   n.pattern_p,
-		   n.object_id,
-		   p.package_key,
-		   p.package_id,
-		   p.instance_name,
-		   t.package_type
-            from site_nodes n left join
-                 apm_packages p on n.object_id = p.package_id left join
-                 apm_package_types t using (package_key)
-	    where n.tree_sortkey between site_node_get_tree_sortkey(:node_id)
-	                         and tree_right(site_node_get_tree_sortkey(:node_id))
-	    order by n.tree_sortkey
+	  with recursive site_node_tree AS (
+	     select node_id, parent_id, name, directory_p, pattern_p, object_id
+	     from site_nodes where node_id = :node_id
+	  union all
+	     select c.node_id, c.parent_id, c.name, c.directory_p, c.pattern_p, c.object_id
+	     from site_node_tree tree, site_nodes c
+	     where  c.parent_id = tree.node_id
+	  )
+	  select
+	     t.node_id, t.parent_id, t.name, t.directory_p, t.pattern_p, t.object_id,
+	     p.package_key, pt.package_type
+	  from   site_node_tree t, apm_packages p, apm_package_types pt
+	  where  pt.package_key = p.package_key
+	  and    t.object_id = p.package_id
         </querytext>
     </fullquery>
 
