@@ -51,7 +51,7 @@ ad_library {
  }
 
  ad_proc -public ds_enabled_p {} {
-     @returns true if developer-support facilities are enabled.
+     @return true if developer-support facilities are enabled.
  } {
      #
      # On busy sites, frequent calls to [ds_enabled_p] lead to huge
