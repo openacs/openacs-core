@@ -137,7 +137,7 @@ ad_proc -public acs_sc::impl::get_id {
     Retrieves the ID for a service contract.  If the contract is specified
     then the ID is retrieved for the specified contract, otherwise all
     service contract IDs will be retrieved that match the specified owner
-    and implementation name. If nothing is found, the functons returns empty.
+    and implementation name. If nothing is found, the functions returns empty.
 
     @param owner Owner of the service contract.
     @param name Implementation name.
