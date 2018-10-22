@@ -3,21 +3,6 @@
 <queryset>
     <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-    <fullquery name="path_select">
-        <querytext>
-            select s2.node_id,
-                   s2.name,
-                   s2.directory_p,
-                   tree_level(s2.tree_sortkey) as level,
-                   acs_object__name(s2.object_id) as obj_name,
-                   acs_permission__permission_p(s2.object_id, :user_id, 'admin') as admin_p
-            from (select tree_ancestor_keys(site_node_get_tree_sortkey(:root_id)) as tree_sortkey) parents,
-                 site_nodes s2
-            where s2.tree_sortkey = parents.tree_sortkey
-            order by level
-        </querytext>
-    </fullquery>
-
     <fullquery name="nodes_select">
         <rdbms><type>postgresql</type><version>8.4</version></rdbms>
         <querytext>
@@ -31,28 +16,28 @@
             acs_permission__permission_p(object_id, :user_id, 'admin') as object_admin_p,
             (select view_p from site_nodes_selection where node_id=site_map.node_id) as view_p
                 from apm_packages p join apm_package_types using (package_key) right outer join
-                (select n.node_id,
-                        site_node__url(n.node_id) as url,
-                        site_node__url(n.parent_id) as parent_url,
-                        n.name,
-                        case when exists (select 1 from site_nodes where parent_id = n.node_id) then 1 else 0 end as n_children,
-                        case when n.node_id = (select site_node__node_id('/', null)) then 1 else 0 end as root_p,
-                        (tree_level(n.tree_sortkey) - (select tree_level(n2.tree_sortkey) from site_nodes n2 where n2.node_id = (select coalesce(:root_id, site_node__node_id('/', null))))) as mylevel,
+
+                (select sm0.*, (char_length(url)-char_length(replace(url, '/', ''))-1) as mylevel
+	         from (select distinct n.node_id,
+                         site_node__url(n.node_id) as url,
+                         site_node__url(n.parent_id) as parent_url,
+                         n.name,
+                         case when exists (select 1 from site_nodes where parent_id = n.node_id) then 1 else 0 end as n_children,
+                         case when n.parent_id is NULL then 1 else 0 end as root_p,
                          n.object_id,
                          n.directory_p,
                          n.parent_id
-                  from site_nodes n, site_nodes n2,site_nodes_selection sn
-                  where (n.object_id is null
-                         or acs_permission__permission_p(n.object_id, :user_id, 'read'))
-                  and sn.node_id = n.node_id
-                  and n2.node_id = (select coalesce(:root_id, site_node__node_id('/', null)))
-                  and n.tree_sortkey between n2.tree_sortkey and tree_right(n2.tree_sortkey)
-                  and (n.parent_id is null or n.parent_id in ([join $expand ", "]))) site_map
+                  from site_nodes n, site_nodes_selection s
+                  where (n.object_id is null or acs_permission__permission_p(n.object_id, :user_id,'read'))
+		  and s.node_id = n.node_id
+                  and (n.parent_id is null or n.parent_id in ([join $expand ", "]))) sm0) as site_map
+
+
             on site_map.object_id = p.package_id
             order by url
         </querytext>
     </fullquery>
-
+    
     <fullquery name="services_select">
         <rdbms><type>postgresql</type><version>8.4</version></rdbms>
         <querytext>

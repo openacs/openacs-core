@@ -21,7 +21,6 @@ if {$root_id eq ""} {
 # Check if the user has site-wide-admin privileges
 set site_wide_admin_p [acs_user::site_wide_admin_p]
 
-
 array set node [site_node::get -node_id $root_id]
 set parent_id $node(parent_id)
 set object_id $node(object_id)
@@ -42,6 +41,7 @@ set context [list $page_title]
 set user_id [ad_conn user_id]
 
 if {[llength $expand] == 0} {
+    #lappend expand 0
     lappend expand $root_id 
     if { $parent_id ne "" } {
         lappend expand $parent_id
@@ -88,19 +88,19 @@ template::list::create \
 		<if @nodes.action_type@ eq "new_app">
 		<form name="new_application" action="package-new">
 		<div><input name="instance_name" type="text" size="8" value="">
-		(@nodes.action_form_part;noquote@)
+		@nodes.action_form_part;noquote@
 		<input type="submit" value="New"></div>
 		</form>
 		</if>
 		<if @nodes.action_type@ eq "rename_app">
 		<form name="rename_application" action="rename">
 		<div><input name="instance_name" type="text" value="@nodes.instance@">
-		(@nodes.action_form_part;noquote@)
+		@nodes.action_form_part;noquote@
 		<input type="submit" value="Rename"></div>
 		</form>
 		</if>
 		<else>
-		(@nodes.instance_url;noquote@)
+		@nodes.instance_url;noquote@
 		</else>
 	    }
         }
@@ -112,7 +112,7 @@ multirow create nodes \
     rename_url delete_url parameters_url permissions_url extra_form_part view_p
 set open_nodes [list]
 
-# dbqd.acs-subsite.www.admin.site-map.site-map.nodes_select
+
 db_foreach nodes_select {} {
     set add_folder_url ""
     set new_app_url ""
@@ -160,7 +160,11 @@ db_foreach nodes_select {} {
 	set delete_url [export_vars -base delete {expand:multiple root_id node_id}]
     }
     
-    # use the indent variable to hold current indent level we'll use it later to indent stuff at the end by the amount of the last node
+    #
+    # Use the indent variable to hold current indent level we'll use
+    # it later to indent stuff at the end by the amount of the last
+    # node.
+    #
     set indent ""
     if { $mylevel != 1 } {
 	if { $mylevel == 2 } {
@@ -172,10 +176,6 @@ db_foreach nodes_select {} {
 	}
     }
 
-    #for {set i 0} {$i < 3*$mylevel} {incr i} {
-    #append indent "&nbsp;"
-    #}
-    
     set expand_mode 0
     if {!$root_p && $n_children > 0} {
 	set expand_mode 1
@@ -229,8 +229,10 @@ db_foreach nodes_select {} {
 	set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
     }
 
-    multirow append nodes $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url $rename_url $delete_url $parameters_url $permissions_url "" $view_p
-
+    multirow append nodes $node_id $expand_mode $expand_url $indent $name $name_url $object_name \
+        $url $package_pretty_name $action_type $action_form_part $add_folder_url \
+        $new_app_url $unmount_url $mount_url $rename_url $delete_url $parameters_url \
+        $permissions_url "" $view_p
 }
 
 #set new_app_form_part_1 "<p align=\"top\"><form name="new_application" action="package-new"><input type="hidden" name="node_id" value="$node(node_id)>"<input type="hidden" name="root_id" value="$node(node_id)"><input type="hidden" name="new_node_p" value="t">[export_vars -form {expand:multiple}]<input name="node_name" type="text" size="8"></p>"
