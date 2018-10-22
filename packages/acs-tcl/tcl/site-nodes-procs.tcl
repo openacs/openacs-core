@@ -1489,9 +1489,31 @@ if {$UseXotclSiteNodes} {
             #
             #    ns_urlspace set -key sitenode /storage/* 3839
             #
-            # is sufficient.
+            # is sufficient for replacing all entries above.
+            #
+
+            :method has_children {
+                -node_id:required,integer,1..1
+            } {
+                #
+                # Check, if the provided site-node has children.
+                #
+                # @return boolean value.
+                #
+                ::xo::dc get_value -prepare integer has_children {
+                    select exists(select 1 from site_nodes where parent_id = :node_id)
+                }
+            }
 
             :public method get_node_id {-url:required} {
+                #
+                # Get node_id for the provied URL. We have to
+                # determine the partial URL for determining the site
+                # node.
+                #
+                # @return node_id (integer)
+                #
+
                 #
                 # This is the main interface of the
                 # SiteNodeUrlspaceCache to provide a first-level
@@ -1529,7 +1551,12 @@ if {$UseXotclSiteNodes} {
                         # all "inner nodes" or similar, but this
                         # requires a deeper analysis of larger sites.
                         #
-                        if {[site_node::get_children -node_id $ID] eq ""} {
+                        # In earlier versions, we had here
+                        #   ... {[site_node::get_children -node_id $ID] eq ""} ...
+                        # but on site_node trees with huge number of entries,
+                        # this is a waste.
+                        #
+                        if {![:has_children -node_id $ID]} {
                             #
                             # We are on a leaf-node of the site node
                             # tree. Get the shortened url and save it
