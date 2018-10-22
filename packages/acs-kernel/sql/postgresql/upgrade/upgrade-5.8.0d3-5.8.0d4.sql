@@ -45,6 +45,9 @@ begin
     IF cmp_pg_version('8.4') >= 0 THEN
         -- recursive permissions functions - START
 
+	DROP FUNCTION IF EXISTS acs_permission__permission_p(integer,integer,character varying);
+	DROP FUNCTION IF EXISTS acs_permission__permission_p_recursive_array(integer[],integer,character varying);	
+	
         --
         -- procedure acs_permission__permission_p/3
         --
