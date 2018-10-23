@@ -1109,24 +1109,29 @@ if {$UseXotclSiteNodes} {
                 {-element ""}
             } {
                 #
-                # Fitering happens here exactly like in the nsv-based version. If should be possible to
-                # realize (at least some of the) filtering via the SQL query
+                # Filtering happens here exactly like in the nsv-based
+                # version. If should be possible to realize (at least
+                # some of the) filtering via the SQL query.
                 #
                 if {$all} {
                     #
-                    # the following query is just for PG, TODO: Oracle is missing
+                    # The following query is just for PG.  Note that
+                    # the query should not return the root of the
+                    # tree.
                     #
+                    # TODO: Oracle query is missing.
                     set child_urls [::xo::dc list -prepare integer [current method]-all {
-                        select site_node__url(children.node_id)
-                        from site_nodes as parent, site_nodes as children
-                        where parent.node_id = :node_id
-                        and children.tree_sortkey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
-                        and children.tree_sortkey <> parent.tree_sortkey
+                        WITH RECURSIVE site_node_tree AS (
+                            select node_id, parent_id from site_nodes where node_id = :node_id
+                        UNION ALL
+                            select child.node_id, child.parent_id from site_node_tree, site_nodes as child
+                            where  child.parent_id = site_node_tree.node_id
+                        ) select site_node__url(node_id) from site_node_tree where node_id != :node_id
                     }]
                 } else {
                     if {$package_key ne ""} {
                         #
-                        # Simple optimization for package_keys; seems to be frequenty used.
+                        # Simple optimization for package_keys; seems to be frequently used.
                         # We leave the logic below unmodified, which could be optimized as well.
                         #
                         set package_key_clause "and package_id = object_id and package_key = :package_key"
@@ -1205,10 +1210,10 @@ if {$UseXotclSiteNodes} {
                 # the following query is just for PG, TODO: Oracle is missing
                 #
                 set child_urls [::xo::dc list -prepare integer [current method]-all {
-                    select site_node__url(node_id)
+                    select site_node__url(node_id) as url
                     from site_nodes
                     where object_id = :object_id
-                    order by tree_sortkey desc
+                    order by url desc
                 }]
             }
 
@@ -1450,10 +1455,12 @@ if {$UseXotclSiteNodes} {
                     # The following query is just for PG, TODO: Oracle is missing
                     #
                     set tree [::xo::dc list_of_lists -prepare integer [current method]-flush-tree [subst {
-                        select site_node__url(children.node_id), children.node_id, children.object_id
-                        from site_nodes as parent, site_nodes as children
-                        where parent.node_id = :node_id
-                        and children.tree_sortkey between parent.tree_sortkey and tree_right(parent.tree_sortkey)
+                        WITH RECURSIVE site_node_tree AS (
+                            select node_id, parent_id, object_id from site_nodes where node_id = :node_id
+                        UNION ALL
+                            select child.node_id, child.parent_id, child.object_id from site_node_tree, site_nodes as child
+                            where  child.parent_id = site_node_tree.node_id
+                        ) select site_node__url(node_id), node_id, object_id from site_node_tree
                         $limit_clause
                     }]]
                     foreach entry $tree {
