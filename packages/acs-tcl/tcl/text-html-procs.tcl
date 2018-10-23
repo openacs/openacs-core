@@ -1539,7 +1539,9 @@ ad_proc ad_parse_html_attributes_upvar {
                     a {
                         if { !$no_format_p } {
                             if { $slash eq ""} {
-                                if { [info exists attribute_array(href)] } {
+                                if { [info exists attribute_array(href)]
+                                     && [string index $attribute_array(href) 0] ni {"#" ""}
+                                 } {
                                     if { [info exists attribute_array(title)] } {
                                         set title ": '$attribute_array(title)'"
                                     } else {
@@ -1596,12 +1598,16 @@ ad_proc ad_parse_html_attributes_upvar {
                                 lappend img_info "'$attribute_array(alt)'"
                             }
                             if { [info exists attribute_array(src)] } {
-                                lappend img_info $attribute_array(src)
+                                if {[string match "data:*" $attribute_array(src)]} {
+                                    lappend img_info "data:..."
+                                } else {
+                                    lappend img_info $attribute_array(src)
+                                }
                             }
                             if { [llength $img_info] == 0 } {
                                 ad_html_to_text_put_text output {[IMAGE]}
                             } else {
-                                ad_html_to_text_put_text output "\[IMAGE: [join $img_info " "] \]"
+                                ad_html_to_text_put_text output "\[IMAGE: [join $img_info " "]\]"
                             }
                         }
                     }

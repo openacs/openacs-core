@@ -11,12 +11,54 @@ aa_register_case \
     -procs {ad_html_to_text} \
     ad_html_to_text_bold {
 
-    Test if it converts b tags correctly.
+    Test if it converts "b" tags correctly.
 
 } {
     set html "Some <b>bold</b> test"
     set result [ad_html_to_text -- $html]
     aa_true "contains asterisks?" [regexp {\*bold\*} $result]
+}
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_to_text} \
+    ad_html_to_text_anchor {
+
+    Test if it converts "a" tags correctly.
+
+} {
+    set html {
+        This is a text with an <a name='foo'>anchor</a>
+        and a <a href='#foo'>reference</a>
+        and an empty <a href="">href</a>
+        and a regular <a href='https://openacs.org' title='OpenACS main site'>link</a>.
+    }
+    set result [ad_html_to_text -- $html]
+    aa_log "<pre>$result</pre>"
+    aa_true "contains link \[1\]" [string match {*\[1\]*} $result]
+    aa_false "contains link \[2\]" [string match {*\[2\]*} $result]
+    aa_true "contains link title" [string match {*OpenACS main site*} $result]
+}
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_to_text} \
+    ad_html_to_text_image {
+
+    Test if it converts "img" tags correctly.
+
+} {
+    set html {
+        This is a text with an regular image <img src="/images/foo.png">,
+        image with alt text <img src="/images/bar.png" alt="flower">,
+        and an embedded image <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEU..."
+        alt='embedded'>.
+    }
+    set result [ad_html_to_text -- $html]
+    aa_log "<pre>$result</pre>"
+    aa_true "contains image" [string match {*\[IMAGE: /images*} $result]
+    aa_true "contains alt text" [string match {*\[IMAGE: 'flower'*} $result]
+    aa_true "contains embedded image abbreviated" [string match {*\[IMAGE:*data:...*} $result]
 }
 
 
