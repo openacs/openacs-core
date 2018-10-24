@@ -991,6 +991,27 @@ ad_proc template::add_confirm_handler {
     {*}$cmd
 }
 
+ad_proc template::add_refresh_on_history_handler {} {
+    Register an event handler which will trigger a complete page
+    refresh when we land on this page by accessing the browser's
+    history (back and forward buttons).
+
+    This is useful e.g. for those pages where some push interaction is
+    happening and retrieving the page from the browser history would
+    display it in an inconsistent state.
+} {
+    # courtesy of: vasleo@gmail.com from Stack Overflow
+    template::add_body_script -script {
+        window.addEventListener( "pageshow", function ( event ) {
+            var historyTraversal = event.persisted ||
+            ( typeof window.performance != "undefined" &&
+              window.performance.navigation.type === 2 );
+            if ( historyTraversal ) {
+                window.location.reload();
+            }
+        });
+    }
+}
 
 ad_proc template::add_event_listener {
     {-event click}
