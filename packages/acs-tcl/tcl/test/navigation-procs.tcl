@@ -16,18 +16,35 @@ ad_proc navigation::test::context_bar_multirow_filter {} {
         set testnode_2 [list "[lindex $testnode_1 0]navigation_test_node2/" "navigation_test_node2"]
 
         # Create hierarchy from the random created nodes
-        db_1row query {
-            select MIN(node_id) as first_node from site_nodes
-        }
-        set idp $first_node
-        set idr_1 [site_node::new -name [lindex $testnode_1 1] -parent_id $idp]
-        set idr_2 [site_node::new -name [lindex $testnode_2 1] -parent_id $idr_1]
+        set root_node [site_node::get_from_url -url "/"]
+        set root_node_id [dict get $root_node node_id]
 
-        set from_node $first_node
+        # Create and mount new node. We also need a subsite underneath
+        # or the context bar won't display them.
+        set node_name [lindex $testnode_1 1]
+        set package_id [site_node::instantiate_and_mount \
+                            -parent_node_id $root_node_id \
+                            -node_name $node_name \
+                            -package_name $node_name \
+                            -package_key "acs-subsite"]
+        set idr_1 [dict get [site_node::get_from_object_id -object_id $package_id] node_id]
+        set node_name [lindex $testnode_2 1]
+        set package_id [site_node::instantiate_and_mount \
+                            -parent_node_id $idr_1 \
+                            -node_name $node_name \
+                            -package_name $node_name \
+                            -package_key "acs-subsite"]
+        set idr_2 [dict get [site_node::get_from_object_id -object_id $package_id] node_id]
+
         set node_id $idr_2
         set context "last"
 
-        set page [ad_parse_template -params [list [list from_node $from_node] [list node_id $node_id] [list context $context]] "/packages/acs-tcl/tcl/test/multirow-test"]
+        set page [ad_parse_template -params \
+                      [list \
+                           [list from_node $root_node_id] \
+                           [list node_id $node_id] \
+                           [list context $context]] \
+                      "/packages/acs-tcl/tcl/test/multirow-test"]
 
         site_node::delete -node_id $idr_2
         site_node::delete -node_id $idr_1
@@ -181,7 +198,7 @@ aa_register_case \
     set separator ""
     set testnode_1 [list "/navigation_test_node1/" "navigation_test_node1"]
     set testnode_2 [list "[lindex $testnode_1 0]navigation_test_node2/" "navigation_test_node2"]
-    set root_node [list "/" "Main Site"]
+    set root_node [list "/" [_ acs-kernel.Main_Site]]
     set last_node [list "" "last"]
 
     set bar_components [list $root_node $testnode_1 $testnode_2 $last_node]
