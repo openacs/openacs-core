@@ -253,7 +253,7 @@ ad_proc -private apm_dependency_check {
     ## Every time we satisfy another package, remove it from install_pend, and loop again.
     ## If we don't satisfy at least one more package, halt.
     ## install_in - Package info structures for packages that can be installed in a satisfactory order.
-    ## install_pend - Stores package info structures fro packages that might have their dependencies satisfied
+    ## install_pend - Stores package info structures for packages that might have their dependencies satisfied
     ##              by packages in the install set.
     ## extra_package_keys - package keys of extra packages to install to satisfy all requirements.
 
