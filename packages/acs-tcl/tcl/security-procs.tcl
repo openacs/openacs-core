@@ -220,7 +220,7 @@ ad_proc -private sec_handler {} {
 
             # # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
             # # if only they keep requesting pages frequently enough, but the alternative was that
-            # # the situation where LoginTimeout = 0 (infinte) and the user unchecks the "Remember me" checkbox
+            # # the situation where LoginTimeout = 0 (infinite) and the user unchecks the "Remember me" checkbox
             # # would cause users' sessions to expire as soon as the session needed to be renewed
             sec_generate_session_id_cookie
 
