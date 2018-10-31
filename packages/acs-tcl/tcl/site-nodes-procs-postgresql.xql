@@ -21,7 +21,7 @@
 	  )
 	  select
 	     t.node_id, t.parent_id, t.name, t.directory_p, t.pattern_p, t.object_id,
-	     p.package_key, pt.package_type
+	     p.package_key, p.package_id, p.instance_name, pt.package_type
 	  from   site_node_tree t, apm_packages p, apm_package_types pt
 	  where  pt.package_key = p.package_key
 	  and    t.object_id = p.package_id
