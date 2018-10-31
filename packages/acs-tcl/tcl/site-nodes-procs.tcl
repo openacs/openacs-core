@@ -61,8 +61,9 @@ set UseXotclSiteNodes 0
 #
 # Turn on UseXotclSiteNodes in cases, where all requirements are met.
 # The XOTcl classes below depend on XOTcl 2, xotcl-core (in particular
-# 05-db-procs.tcl). The current implementation does not support
-# oracle, the implementation does not distinguish btw. AOLserver and
+# 05-db-procs.tcl). The current implementation should with Oracle
+# 11gR2 (Aug 2013) or newer, probably one "limit" clause has to be
+# replaced. The implementation does not distinguish btw. AOLserver and
 # NaviServer (uses simply ns_cache_eval for speed and simplicity).
 #
 
@@ -1119,15 +1120,15 @@ if {$UseXotclSiteNodes} {
                     # the query should not return the root of the
                     # tree.
                     #
-                    # TODO: Oracle query is missing.
-                    set child_urls [::xo::dc list -prepare integer [current method]-all {
+                    set child_urls [::xo::dc list -prepare integer [current method]-all [subst {
                         WITH RECURSIVE site_node_tree AS (
                             select node_id, parent_id from site_nodes where node_id = :node_id
                         UNION ALL
                             select child.node_id, child.parent_id from site_node_tree, site_nodes as child
                             where  child.parent_id = site_node_tree.node_id
-                        ) select site_node__url(node_id) from site_node_tree where node_id != :node_id
-                    }]
+                        ) select [xo::dc map_function_name site_node__url(node_id)]
+                          from site_node_tree where node_id != :node_id
+                    }]]
                 } else {
                     if {$package_key ne ""} {
                         #
@@ -1206,15 +1207,12 @@ if {$UseXotclSiteNodes} {
             :public method get_urls_from_object_id {
                 -object_id:required
             } {
-                #
-                # the following query is just for PG, TODO: Oracle is missing
-                #
-                set child_urls [::xo::dc list -prepare integer [current method]-all {
-                    select site_node__url(node_id) as url
+                set child_urls [::xo::dc list -prepare integer [current method]-all [subst {
+                    select [xo::dc map_function_name site_node__url(node_id)] as url
                     from site_nodes
                     where object_id = :object_id
                     order by url desc
-                }]
+                }]]
             }
 
             :public method get_urls_from_package_key {
@@ -1452,7 +1450,7 @@ if {$UseXotclSiteNodes} {
                 } else {
                     set limit_clause [expr {$with_subtree ? "" : "limit 1"}]
                     #
-                    # The following query is just for PG, TODO: Oracle is missing
+                    # Get subtree from db; probably Oracle does not support "limit 1" yet
                     #
                     set tree [::xo::dc list_of_lists -prepare integer [current method]-flush-tree [subst {
                         WITH RECURSIVE site_node_tree AS (
@@ -1460,7 +1458,7 @@ if {$UseXotclSiteNodes} {
                         UNION ALL
                             select child.node_id, child.parent_id, child.object_id from site_node_tree, site_nodes as child
                             where  child.parent_id = site_node_tree.node_id
-                        ) select site_node__url(node_id), node_id, object_id from site_node_tree
+                        ) select [xo::dc map_function_name site_node__url(node_id)], node_id, object_id from site_node_tree
                         $limit_clause
                     }]]
                     foreach entry $tree {
