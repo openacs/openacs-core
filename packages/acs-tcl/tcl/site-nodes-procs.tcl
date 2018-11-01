@@ -1637,15 +1637,6 @@ if {$UseXotclSiteNodes} {
         db_dml mount_object {}
         db_dml update_object_package_id {}
 
-        # We might have for this node_id (or under it) some entries in
-        # the cache, so flush these first. Since the cache might
-        # contain children, we have to flush on all ancestor nodes up
-        # to the top node.
-        #set ancestors [site_node::get_ancestors -node_id $node_id -element node_id]
-        #foreach n $ancestors {
-        #site_node::update_cache -sync_children -node_id $n
-        #}
-
         #
         # We have to flush from the parent_url (which might be a leaf
         # turning into an inner node)
