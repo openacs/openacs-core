@@ -237,7 +237,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
         ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] \
                        $startclicks [clock clicks -microseconds] "error" $::errorInfo]
         # make sure you report catching the error!
-        set error_msg "result $result filter $proc for [ns_conn request] errorInfo is $::errorInfo"
+        set error_msg "result $errMsg filter $proc for [ns_conn request] errorInfo is $::errorInfo"
         rp_debug $error_msg
         ns_log error "rp_invoke_filter: $error_msg"
         rp_report_error
