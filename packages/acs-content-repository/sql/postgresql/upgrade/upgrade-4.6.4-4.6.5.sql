@@ -34,7 +34,7 @@ begin
         copy2__creation_user,
         copy2__creation_ip
     );
-  -- call content_extlink.copy if the item is an url
+  -- call content_extlink.copy if the item is a URL
   else if content_extlink__is_extlink(copy2__item_id) = ''t'' then
     PERFORM content_extlink__copy(
         copy2__item_id,

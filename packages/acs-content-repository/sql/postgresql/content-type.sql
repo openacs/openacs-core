@@ -694,7 +694,7 @@ END;
 $$ LANGUAGE plpgsql stable;
 
 -- FIXME: need to look at this in more detail.  This probably can't be made 
--- to work reliably in postgresql.  Currently we are using a rule to insert 
+-- to work reliably in PostgreSQL.  Currently we are using a rule to insert 
 -- into the input view when a new content revision is added.  Pg locks the 
 -- underlying table when the rule is dropped, so the dropping and recreating
 -- of the new content revisons seems like it would be reliable, but the 

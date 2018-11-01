@@ -1372,7 +1372,7 @@ DECLARE
 BEGIN
   
   -- FIXME:
-  raise NOTICE 'not implemented for postgresql';
+  raise NOTICE 'not implemented for PostgreSQL';
 /*
   v_revision := content_item__get_live_revision(item_id);
 
@@ -1937,7 +1937,7 @@ BEGIN
 	copy__name
     );
 
-  -- call content_extlink.copy if the item is an url
+  -- call content_extlink.copy if the item is a URL
   else if content_extlink__is_extlink(copy__item_id) = 't' then
     PERFORM content_extlink__copy(
         copy__item_id,

@@ -137,7 +137,7 @@ content repository know that we have a new type of structured data
 that we are storing in the content repository. Tasks are a
 "content type", because they have data associated with
 them, such as when they are due, and what needs to be done.</p>
-<p>I thus need to to</p>
+<p>I thus need to</p>
 <blockquote><pre>
           --create the content type
           select content_type__create_type (

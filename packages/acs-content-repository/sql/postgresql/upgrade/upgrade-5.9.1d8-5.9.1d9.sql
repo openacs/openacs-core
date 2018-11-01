@@ -106,7 +106,7 @@ $$ LANGUAGE plpgsql;
 
 
 --
--- The content_search__dtrg tries to add entries on deletion the the
+-- The content_search__dtrg tries to add entries on deletion the
 -- search queue via
 --
 --      SELECT search_observer__enqueue(old.revision_id,'DELETE')

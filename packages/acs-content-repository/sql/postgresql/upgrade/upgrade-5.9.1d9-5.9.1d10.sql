@@ -785,7 +785,7 @@ BEGIN
 	copy__name
     );
 
-  -- call content_extlink.copy if the item is an url
+  -- call content_extlink.copy if the item is a URL
   else if content_extlink__is_extlink(copy__item_id) = 't' then
     PERFORM content_extlink__copy(
         copy__item_id,

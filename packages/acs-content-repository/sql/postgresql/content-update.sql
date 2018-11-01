@@ -12,8 +12,6 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
---set serveroutput on
--- FIXME: drop constraint doesn't work on postgresql
 CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
 BEGIN
   -- altering the constraint on cr_type_template_map
