@@ -116,7 +116,9 @@ namespace eval notification::email {
     } {
         Send the actual email.
 
-        @param from_user_id The user_id of the user that the email should be sent as. Leave empty for the standard mailer from address.
+        @param from_user_id The user_id of the user that the email
+               should be sent as. Provide empty for the standard
+               mailer from address.
     } {
 
        # Get user data
