@@ -1,4 +1,4 @@
--- for postgresql 7.4 the || op needs an explicit cast.
+-- for PostgreSQL 7.4 the || op needs an explicit cast.
 
 create or replace function tree_left(varbit) returns varbit as '
 

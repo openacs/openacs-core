@@ -96,16 +96,17 @@ create index acs_priv_desc_map_privilege_idx on acs_privilege_descendant_map (pr
 --           connect by prior privilege = child_privilege
 --           start with child_privilege = 'cm_perm'
 
--- This query is used to find all of the ancestor permissions of 'cm_perm'. 
--- The equivalent query for the postgresql tree-query model would be:
+-- This query is used to find all of the ancestor privileges of 'cm_perm'. 
+-- The equivalent recursive query for PostgreSQL would be:
 
--- select  h2.privilege 
---   from acs_privilege_hierarchy_index h1, 
---        acs_privilege_hierarchy_index h2
---  where h1.child_privilege = 'cm_perm'
---    and h1.tree_sortkey between h2.tree_sortkey and tree_right(h2.tree_sortkey)
---    and h2.tree_sortkey <> h1.tree_sortkey;
-
+--     with recursive privilege_path AS (
+--       select privilege, child_privilege from acs_privilege_hierarchy
+--       where child_privilege = 'cm_perm'
+--     UNION
+--       select  ph.privilege, ph.child_privilege from acs_privilege_hierarchy ph, privilege_path pp
+--       where ph.child_privilege = pp.privilege
+--     ) select * from privilege_path;
+--
 -- Also since acs_privilege_descendant_map is simply a path enumeration of
 -- acs_privilege_hierarchy, we should be able to replace the above connect-by
 -- with: 
@@ -115,7 +116,7 @@ create index acs_priv_desc_map_privilege_idx on acs_privilege_descendant_map (pr
 -- where descendant = 'cm_perm'
 
 -- This would be better, since the same query could be used for both oracle
--- and postgresql.
+-- and PostgreSQL.
 
 
 

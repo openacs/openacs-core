@@ -1,4 +1,4 @@
--- Support for postgresql 9.x
+-- Support for PostgreSQL 9.x
 -- @author Victor Guerra (vguerra@gmail.com)
 
 create or replace function acs_objects_context_id_up_tr () returns trigger as '

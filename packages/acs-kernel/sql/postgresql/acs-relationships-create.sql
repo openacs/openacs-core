@@ -75,7 +75,7 @@ comment on table acs_rel_types is $$
    'person', 'employee', 0, null,
    'company', 'employer', 0, null)
  </pre></blockquote>
- defines an "employment" relationship type that can be expressed in
+ defines an "employment" relationship type that can be expressed
  in natural language as:
  <blockquote>
  A person may be the employee of zero or more companies, and a company
