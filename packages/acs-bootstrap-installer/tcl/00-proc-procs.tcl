@@ -999,6 +999,12 @@ ad_proc -public ad_make_relative_path { path } {
     Returns the relative path corresponding to absolute path $path.
 } -
 
+ad_proc ad_proc_valid_switch_p {str} {
+    Check of the provided argument looks like a switch (i.e. it starts
+    with a dash and is not a number).
+} -
+
+
 # procedures for doing type based dispatch
 ad_proc -public ad_method {
     method_name
@@ -1026,10 +1032,15 @@ ad_proc -public ad_call_method {
     object_id
     args
 } {
+
     Calls method_name for the type of object_id with object_id as the
     first arg, and the remaining args are the remainder of the args to
-    method_name. Example ad_call_method method1 foo bar baz calls the method1 associated with the type of foo, with foo bar and baz
-    as the 3 arguments.
+    method_name. Example:
+
+    ad_call_method method1 foo bar baz
+
+    calls the method1 associated with the type of foo, with foo bar
+    and baz as the 3 arguments.
 
     @param method_name method name
     @param object_id the target, it is the first arg to the method
