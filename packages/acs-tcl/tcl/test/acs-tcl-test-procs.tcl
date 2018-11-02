@@ -413,7 +413,7 @@ anybody have any ideas?
 
 aa_register_case \
     -cats {api smoke} \
-    -procs ad_page_contract_filters \
+    -procs ad_page_contract_filter_invoke \
     ad_page_contract_filters {
         Test ad_page_contract_filters
 } {
