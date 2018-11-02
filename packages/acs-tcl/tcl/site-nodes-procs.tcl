@@ -1290,9 +1290,11 @@ if {$UseXotclSiteNodes} {
             # file like the following:
             #
             # ns_section ns/server/${server}/acs/acs-tcl
-            #   ns_param SiteNodesCacheSize        2000000
-            #   ns_param SiteNodesIdCacheSize       100000
-            #   ns_param SiteNodesChildenCacheSize  100000
+            #   ns_param SiteNodesCacheSize              10000000
+            #   ns_param SiteNodesCachePartitions               2
+            #   ns_param SiteNodesChildenCacheSize       10000000
+            #   ns_param SiteNodesChildenCachePartitions        2
+            #   ns_param SiteNodesIdCacheSize              200000
             #
             ::acs::KeyPartitionedCache create ::acs::site_nodes_cache \
                 -package_key acs-tcl \
