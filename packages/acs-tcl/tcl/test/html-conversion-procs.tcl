@@ -83,13 +83,13 @@ Some <a href=abc">linktext</a> bla
 <p>
 following text
     }} {
-	set result [ad_html_to_text -- $html]
+        set result [ad_html_to_text -- $html]
 
-	# make sure the desired text is in there and _before_ the
-	# footnotes
+        # make sure the desired text is in there and _before_ the
+        # footnotes
 
-	aa_true "contains link" [regexp {linktext.*\[1\]} $result]
-	aa_true "contains following text" [regexp {following text.*\[1\]} $result]
+        aa_true "contains link" [regexp {linktext.*\[1\]} $result]
+        aa_true "contains following text" [regexp {following text.*\[1\]} $result]
     }
 }
 
@@ -315,7 +315,7 @@ aa_register_case \
     set html "<p><b>some</b> text <i>to</i> probe if it <table><tr>remove all between \"<\" and \">\"<tr><table><tags>"
     set result [util_remove_html_tags $html]
     aa_equals "Without all between \"<\" and \">\" html=\"$result\""\
-	"some text to probe if it remove all between \"\"" $result
+        "some text to probe if it remove all between \"\"" $result
 }
 
 aa_register_case \
@@ -357,27 +357,27 @@ aa_register_case \
 
     aa_equals "Standard HTML Comments cleaned $result" $result ""
     set html {<!--[if !mso]> v\:* {behavior:url(MESSAGE KEY MISSING: 'default'VML);} o\:*
-	{behavior:url(MESSAGE KEY MISSING: 'default'VML);} w\:* {behavior:url(MESSAGE KEY MISSING: 'default'VML);}
-	.shape {behavior:url(MESSAGE KEY MISSING: 'default'VML);} <![endif]--> <!-- /* Font
-	Definitions */ @font-face {font-family:Wingdings; panose-1:5 0 0 0 0 0
-	    0 0 0 0;} @font-face {font-family:Tahoma; panose-1:2 11 6 4 3 5 4 4 2
-		4;} /* Style Definitions */ p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in; margin-bottom:.0001pt; font-size:12.0pt;
-	    font-family:"Times New Roman";} a:link, span.MsoHyperlink {color:blue;
-		text-decoration:underline;} a:visited, span.MsoHyperlinkFollowed
-	{color:blue; text-decoration:underline;} p {mso-margin-top-alt:auto;
-	    margin-right:0in; mso-margin-bottom-alt:auto; margin-left:0in;
-	    font-size:12.0pt; font-family:"Times New Roman";} span.EmailStyle18
-	{mso-style-type:personal-reply; font-family:Arial; color:navy;} @page
-	Section1 {size:8.5in 11.0in; margin:1.0in 1.25in 1.0in 1.25in;}
-	div.Section1 {page:Section1;} /* List Definitions */ @list l0
-	{mso-list-id:669450480; mso-list-template-ids:145939189
-	    6;} @list
-	l0:level1 {mso-level-number-format:bullet; mso-level-text:\F0B7;
-	    mso-level-tab-stop:.5in; mso-level-number-position:left;
-	    text-indent:-.25in; mso-ansi-font-size:10.0pt; font-family:Symbol;}
-	@list l1 {mso-list-id:1015379521; mso-list-template-ids:-1243462522;}
-	ol {margin-bottom:0in;} ul {margin-bottom:0in;} --> }
+        {behavior:url(MESSAGE KEY MISSING: 'default'VML);} w\:* {behavior:url(MESSAGE KEY MISSING: 'default'VML);}
+        .shape {behavior:url(MESSAGE KEY MISSING: 'default'VML);} <![endif]--> <!-- /* Font
+        Definitions */ @font-face {font-family:Wingdings; panose-1:5 0 0 0 0 0
+            0 0 0 0;} @font-face {font-family:Tahoma; panose-1:2 11 6 4 3 5 4 4 2
+                4;} /* Style Definitions */ p.MsoNormal, li.MsoNormal, div.MsoNormal
+        {margin:0in; margin-bottom:.0001pt; font-size:12.0pt;
+            font-family:"Times New Roman";} a:link, span.MsoHyperlink {color:blue;
+                text-decoration:underline;} a:visited, span.MsoHyperlinkFollowed
+        {color:blue; text-decoration:underline;} p {mso-margin-top-alt:auto;
+            margin-right:0in; mso-margin-bottom-alt:auto; margin-left:0in;
+            font-size:12.0pt; font-family:"Times New Roman";} span.EmailStyle18
+        {mso-style-type:personal-reply; font-family:Arial; color:navy;} @page
+        Section1 {size:8.5in 11.0in; margin:1.0in 1.25in 1.0in 1.25in;}
+        div.Section1 {page:Section1;} /* List Definitions */ @list l0
+        {mso-list-id:669450480; mso-list-template-ids:145939189
+            6;} @list
+        l0:level1 {mso-level-number-format:bullet; mso-level-text:\F0B7;
+            mso-level-tab-stop:.5in; mso-level-number-position:left;
+            text-indent:-.25in; mso-ansi-font-size:10.0pt; font-family:Symbol;}
+        @list l1 {mso-list-id:1015379521; mso-list-template-ids:-1243462522;}
+        ol {margin-bottom:0in;} ul {margin-bottom:0in;} --> }
 
     set result [ad_html_text_convert -from text/html -to text/plain $html]
 
@@ -481,22 +481,22 @@ aa_register_case \
     -bugs 1450 \
     -procs {ad_enhanced_text_to_html} \
     acs_tcl__process_enhanced_correctly {
-       
-	Process sample text correctly
-	@author Nima Mazloumi
+
+        Process sample text correctly
+        @author Nima Mazloumi
     } {
-	
-	set string_with_img {<img src="http://test.test/foo.png">}
-	aa_log "Original string is $string_with_img"
-	set html_version [ad_enhanced_text_to_html $string_with_img]
-	aa_equals "new: $html_version should be the same" $html_version $string_with_img
+
+        set string_with_img {<img src="http://test.test/foo.png">}
+        aa_log "Original string is $string_with_img"
+        set html_version [ad_enhanced_text_to_html $string_with_img]
+        aa_equals "new: $html_version should be the same" $html_version $string_with_img
 }
 
 aa_register_case \
     -cats {api smoke} \
     -procs {ad_html_to_text} \
     text_to_html {
-        
+
         Test code the supposedly causes ad_html_to_text to break
 } {
 

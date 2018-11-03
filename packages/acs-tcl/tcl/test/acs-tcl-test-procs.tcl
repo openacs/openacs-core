@@ -219,7 +219,7 @@ aa_register_case \
     apm_remove_callback_proc -package_key $package_key -type $type
 
     if { $error_p } {
-	error "$error - $::errorInfo"
+        error "$error - $::errorInfo"
     }
 }
 

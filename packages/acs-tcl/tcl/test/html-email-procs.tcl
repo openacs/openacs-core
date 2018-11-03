@@ -9,12 +9,12 @@ aa_register_case \
     Basic test of build mime message
 } {
     aa_false "Build mime message, no error" \
-	[catch {build_mime_message \
-		    "Test Message" \
-		    "<p>Test Message</p>"} errmsg]
+        [catch {build_mime_message \
+                    "Test Message" \
+                    "<p>Test Message</p>"} errmsg]
     aa_log err=$errmsg
     aa_false "Package require mime package found" \
-	[catch {package require mime} errmsg]
+        [catch {package require mime} errmsg]
 
 
 }
