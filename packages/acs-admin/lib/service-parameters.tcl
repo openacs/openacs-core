@@ -29,7 +29,7 @@ db_multirow -extend { url admin_url param_url sitewide_admin_url} packages servi
     set root_dir [acs_package_root_dir $package_key]
     set sitewide_admin_url ""
     if { [file exists $root_dir/www/] } {
-        set url [apm_package_url_from_key $package_key]
+        set url [apm_package_url_from_id $package_id]
         if { $url ne "" && [file exists $root_dir/www/admin/] } {
             set admin_url "${url}admin/"
         }
