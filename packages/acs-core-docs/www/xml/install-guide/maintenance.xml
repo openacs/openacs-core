@@ -829,7 +829,7 @@ openacs.org=&gt;</programlisting>
       url="http://asktom.oracle.com/~tkyte/article1/autotrace.html">http://asktom.oracle.com/~tkyte/article1/autotrace.html</ulink>.
     </para>
     <sect3>
-      <title>Make sure, that the Oracle CBO works with adequate statistics</title>
+      <title>Make sure that the Oracle CBO works with adequate statistics</title>
   
       <para>
     The Oracle Cost Based optimizer is a piece of software that tries to find
