@@ -9,8 +9,9 @@ aa_register_case \
     -cats {api web} \
     -procs {
         acs::test::user::create
-        acs::test::user::login
-        acs::test::user::logout
+        acs::test::http
+        acs::test::login
+        acs::test::logout
     } \
     webtest_example {
 
