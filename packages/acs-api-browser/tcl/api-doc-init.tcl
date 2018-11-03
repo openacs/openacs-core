@@ -6,7 +6,7 @@
 # fast, so just do it when needed.
 #
 # To activate the computation of calling-info, add a section like the
-# following to your NaviServer config file. Note, that the
+# following to your NaviServer config file. Note that the
 # calling-info is not necessarily complete (it is not always possible
 # to derive call calls from the static analysis), also direct calls
 # from web pages are not included.

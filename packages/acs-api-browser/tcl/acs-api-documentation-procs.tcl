@@ -1746,7 +1746,7 @@ namespace eval ::apidoc {
                                     # ad_proc (ad_proc ?-options ...?
                                     # name args) before that?
                                     #
-                                    # Note, that this handles just
+                                    # Note that this handles just
                                     # single line ad-proc signatures,
                                     # not multi-line argument lists.
 
