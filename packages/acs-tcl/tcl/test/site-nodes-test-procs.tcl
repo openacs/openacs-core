@@ -13,8 +13,8 @@ aa_register_case \
         site_node::get_node_id
         site_node::get_url
         site_node::init_cache
-        site_node::instantiate_and_mount s
-        ite_node::rename
+        site_node::instantiate_and_mount
+        site_node::rename
         site_node::unmount
     } \
     site_node_update_cache {
