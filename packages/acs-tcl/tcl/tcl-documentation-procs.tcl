@@ -1491,7 +1491,7 @@ ad_proc ad_page_contract_filter_proc { filter } {
     @creation-date 25 July 2000
 } {
     #
-    # No need to go to the nsv causing mutex locks; note, that the
+    # No need to go to the nsv causing mutex locks; note that the
     # name of the filter-procs is more or less hardcoded in the
     # doc-strings above.
     #

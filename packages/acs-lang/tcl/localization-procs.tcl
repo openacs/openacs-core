@@ -306,7 +306,7 @@ ad_proc -public lc_time_fmt {
         set locale [ad_conn locale]
     }
 
-    # Some initialisation...
+    # Some initialization...
     # Now, expect d_fmt, t_fmt and d_t_fmt to exist of the form in ISO spec
     # Rip $date into $lc_time_* as numbers, no leading zeroes
     set matchdate {([0-9]{4})\-0?(1?[0-9])\-0?([1-3]?[0-9])}

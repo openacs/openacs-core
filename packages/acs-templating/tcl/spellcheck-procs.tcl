@@ -336,7 +336,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     regsub -all "\r\n" $formtext "<br>" formtext_to_display
 
     # We replace <a></a> with  <u></u> because misspelled text in link titles
-    # would lead to strange browser behaviour where the select boxes with the 
+    # would lead to strange browser behavior where the select boxes with the 
     # proposed changes would itself be a link!!!
     # It seemed like an okay idea to make the text underlined so it would a) work,
     # b) still resemble a link ...

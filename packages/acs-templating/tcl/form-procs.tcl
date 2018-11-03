@@ -581,7 +581,7 @@ ad_proc -private template::form::render { id tag_attributes } {
         append output " class=\"margin-form\""
     }
 
-    # make sure, that event handlers have IDs
+    # make sure that event handlers have IDs
     foreach name [array names attributes] {
         if {[regexp -nocase {^on(.*)%} $name . event]} {
             if {![info exists attributes(id)]} {

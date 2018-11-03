@@ -445,7 +445,7 @@ ad_proc -public template::util::read_file { path } {
     }
     
     #
-    # Use ad_try to make sure, that the file descriptor is finally
+    # Use ad_try to make sure that the file descriptor is finally
     # closed.
     #
     ad_try {

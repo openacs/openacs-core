@@ -27,7 +27,7 @@ set dialects_p [parameter::get_from_package_key \
 set dicts ""
 set default_lang ""
 #
-# GN: note, that under windows, the binary will be called aspell.exe
+# GN: note that under windows, the binary will be called aspell.exe
 #
 if { [string match "*aspell*" $bin] } {
     # aspell

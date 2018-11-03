@@ -705,7 +705,7 @@ ad_proc ad_parse_html_attributes_upvar {
     @param pos_varname the name of the variable holding the position
     within the <code>html_varname</code> string from which we should
     start. This should point to a character inside the tag, just after
-    the tag name, and before the first attribute. Note, that we <i>will</i> modify this variable.
+    the tag name, and before the first attribute. Note that we <i>will</i> modify this variable.
     When this proc is done, this variable will point to the tag-closing <code>&gt;</code>.
     Example:
     if the tag is &lt;img src="foo"&gt;, <code>pos_varname</code> should point to either the space between
@@ -2010,7 +2010,7 @@ ad_proc -deprecated wrap_string {input {width 80}} {
 #
 ####################
 
-ad_proc -public ad_html_text_convertable_p {
+ad_proc -public ad_html_text_convertible_p {
     -from
     -to
 } {
@@ -2102,7 +2102,7 @@ ad_proc -public ad_html_text_convert {
     set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
     set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
 
-    if { ![ad_html_text_convertable_p -from $from -to $to] } {
+    if { ![ad_html_text_convertible_p -from $from -to $to] } {
         error "Illegal mime types for conversion - from: $from to: $to"
     }
 

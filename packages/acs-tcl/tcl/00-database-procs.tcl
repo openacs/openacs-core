@@ -412,12 +412,12 @@ ad_proc -public db_nextval {
             # view. This change makes this function more than a factor
             # of 2 faster than before.
             #
-            # Note, that solely the per-thread information won't work for
+            # Note that solely the per-thread information won't work for
             # freshly created sequences. Therefore, we keep the old
             # code for checking at runtime in the database for such
             # occurrences.
             #
-            # Note, that the sequence handling in OpenACS is quite a
+            # Note that the sequence handling in OpenACS is quite a
             # mess.  Some sequences are named t_SEQUENCE (10 in
             # dotlrn), others are called just SEQUENCE (18 in dotlrn),
             # for some sequences, additional views are defined with an

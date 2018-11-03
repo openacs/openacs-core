@@ -2413,7 +2413,7 @@ namespace eval ::security::csp {
         security::csp::require font-src data:
 
         #
-        # Always add the nonce-token to script-src. Note, that nonce
+        # Always add the nonce-token to script-src. Note that nonce
         # definition comes via CSP 2, which - at the current time - is
         # not supported by all browsers interpreting CSPs. We could
         # add a "unsafe-inline" here, since the spec defines that when

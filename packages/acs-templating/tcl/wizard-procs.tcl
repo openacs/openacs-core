@@ -580,7 +580,7 @@ ad_proc -public template::wizard::forward { } {
     } elseif { [ns_queryexists wizard_submit_finish] } {
 
         #    template::forward $properties(action)
-        # NOTE : we are changing the behaviour of wizard, when its finish it will not reset and go back
+        # NOTE : we are changing the behavior of wizard, when its finish it will not reset and go back
         # to step 1, it will blindly go forward and we will catch this on get_current_step
         set next_id [expr {$current_index + 1}]
         template::forward [get_forward_url $next_id] $cache_p $persistent_p $excluded_vars

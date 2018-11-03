@@ -506,7 +506,7 @@ ad_proc -public template::util::date::set_property { what date value } {
       return $new_date
     }
     ansi {
-        # Some initialisation...
+        # Some initialization...
         # Rip $date into $ansi_* as numbers, no leading zeroes
         set matchdate {([0-9]{4})\-0?(1?[0-9])\-0?([1-3]?[0-9])}
         set matchtime {0?([1-2]?[0-9]):0?([1-5]?[0-9]):0?([1-6]?[0-9])}
