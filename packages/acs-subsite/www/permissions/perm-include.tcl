@@ -29,7 +29,7 @@ lappend elements grantee_name {
     label "[_ acs-subsite.Name]"
     link_url_col name_url
     display_template {
-        <if @permissions.any_perm_p_@ true>
+        <if @permissions.any_perm_p_@ gt 0>
           @permissions.grantee_name@
         </if>
         <else>
