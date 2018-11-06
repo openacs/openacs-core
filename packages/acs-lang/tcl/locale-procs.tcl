@@ -658,7 +658,11 @@ ad_proc -private lang::conn::get_accept_language_header {} {
         if {[lang::conn::valid_locale_p $elm]} {
             lappend acclangv $elm
         } else {
-            error "invalid locale in provided Accept-Language header field"
+            # It is usually bots or other kinds of not-canonical web
+            # browsers which set this wrong. We tolerate it by
+            # assuming our default language.
+            ns_log warning "Invalid locale '$elm' in provided Accept-Language header field. Defaulting to system locale."
+            return [lang::system::locale]
         }
     }
 
