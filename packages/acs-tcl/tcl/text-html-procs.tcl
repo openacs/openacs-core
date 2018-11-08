@@ -2394,7 +2394,8 @@ ad_proc -public ad_pad {
     @arg string String to be padded.
 
     @arg length length this string will be after padding. If string
-                this long or longer, will be truncated.
+                this long or longer, will be truncated. The provided
+                value must be an integer > 0.
 
     @arg padstring string that will be repeated until length of
     supplied string is equal or greather than length.
@@ -2404,16 +2405,20 @@ ad_proc -public ad_pad {
     if {!($left_p ^ $right_p)} {
         error "Please specify single flag -left or -right"
     }
+    if {$length < 1 || ![string is integer -strict $length]} {
+        error "length ($length) must be an integer > 0"
+    }
 
     set slength [string length $string]
     set padlength [string length $padstring]
     set repetitions [expr {int(($length - $slength) / $padlength) + 1}]
     set appended [string repeat $padstring $repetitions]
-
+    incr length -1
+    
     if {$left_p} {
-        set string [string range $appended$string end-[expr {$length - 1}] end]
+        set string [string range $appended$string end-$length end]
     } else {
-        set string [string range $string$appended 0 [expr {$length - 1}]]
+        set string [string range $string$appended 0 $length]
     }
 
     return $string
