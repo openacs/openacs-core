@@ -848,7 +848,7 @@ ad_proc -public template::widget::numericRange { name interval_def size {value "
   for { set i [lindex $interval_def 0] } \
       { $i <= [lindex $interval_def 1] } \
       { incr i $interval_size } {
-    lappend options [list [template::util::leadingPad $i $size] $i]
+    lappend options [list [ad_pad -left $i $size "0"] $i]
   }
 
   if {$interval_size > 1} {
@@ -876,10 +876,7 @@ ad_proc -public template::widget::dateFragment {
   set value [util::trim_leading_zeros $value]
 
   if { $mode ne "edit" } {
-    set output {}
-    append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"[template::util::leadingPad $value $size]\">"
-    append output $value
-    return $output
+    return [subst {<input type="hidden" name="$element(name).$fragment" value="[ad_pad -left $value $size 0]">$value}]
   } else {
     if { [info exists element(${fragment}_interval)] } {
       set interval $element(${fragment}_interval)
@@ -889,7 +886,7 @@ ad_proc -public template::widget::dateFragment {
 	    || [regexp "year|short_year" $fragment] 
 	} {
          set output "<input type=\"text\" name=\"$element(name).$fragment\" id=\"$element(name).$fragment\" size=\"$size\""
-         append output " maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\""
+         append output " maxlength=\"$size\" value=\"[ad_pad -left $value $size 0]\""
          array set attributes $tag_attributes
          foreach attribute_name [array names attributes] {
            if {$attributes($attribute_name) eq ""} {
