@@ -240,7 +240,7 @@ namespace eval ::acs {
             if {![info exists :name]} {
                 set :name [namespace tail [current]]
             }
-	    set partitions [::parameter::get_from_package_key \
+	    set :partitions [::parameter::get_from_package_key \
 				-package_key ${:package_key} \
 				-parameter "${:parameter}Partitions" \
 				-default ${:partitions}]
