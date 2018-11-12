@@ -229,7 +229,13 @@ namespace eval ::acs {
 	:property {partitions:integer 1}
 
 	:protected method cache_name {key:integer} {
-	    return ${:name}-[expr {$key % ${:partitions}}]
+            #
+            # Return the cache_name always as the same Tcl_Obj (list
+            # element) rather than concatenating always a fresh
+            # Tcl_Obj dynamically the fly (type string). Caching the
+            # cache structure in the dynamic Tcl_Obj can't not work.
+            #
+            return [lindex ${:partitions_names} [expr {$key % ${:partitions}}]]
 	}
 
 	:public method init {} {
@@ -252,6 +258,7 @@ namespace eval ::acs {
 	    #
 	    set size [expr {[:get_size] / ${:partitions}}]
 	    for {set i 0} {$i < ${:partitions}} {incr i} {
+                lappend :partitions_names ${:name}-$i                
 		:cache_create ${:name}-$i $size
 	    }
 	}
