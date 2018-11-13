@@ -1212,20 +1212,21 @@ ad_proc -private util::http::request {
 
 namespace eval util::http::native {}
 
-ad_proc -private util::http::native::timeout {input} {
+# This conversion is not needed (anymore?) for native implementation
+# ad_proc -private util::http::native::timeout {input} {
 
-    Convert the provided value to a ns_time format
-    used by NaviServer
+#     Convert the provided value to a ns_time format
+#     used by NaviServer
 
-} {
-    if {[string is integer -strict $input]} {
-        return $input:0
-    } elseif {[string is double -strict $input]} {
-        set secs [expr {int($input)}]
-        return $secs:[expr {($input - $secs)*1000000}]
-    }
-    return $input
-}
+# } {
+#     if {[string is integer -strict $input]} {
+#         return $input:0
+#     } elseif {[string is double -strict $input]} {
+#         set secs [expr {int($input)}]
+#         return $secs:[expr {($input - $secs)*1000000}]
+#     }
+#     return $input
+# }
 
 ad_proc -private util::http::native::request {
     -url
@@ -1382,9 +1383,8 @@ ad_proc -private util::http::native::request {
 
 
     ## Issuing of the request
-
     set queue_cmd [list $http_api queue \
-                       -timeout [timeout $timeout] \
+                       -timeout $timeout \
                        -method $method \
                        -headers $headers]
     if {$body_file ne ""} {
@@ -1395,7 +1395,7 @@ ad_proc -private util::http::native::request {
     lappend queue_cmd $url
 
     set resp_headers [ns_set create resp_headers]
-    set wait_cmd [list $http_api wait -headers $resp_headers -status status]
+    set wait_cmd [list $http_api wait -headers $resp_headers -status status -timeout $timeout]
     if {$spool_p} {
         lappend wait_cmd -spoolsize 0 -file spool_file
         set page ""
