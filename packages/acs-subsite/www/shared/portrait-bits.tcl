@@ -9,6 +9,9 @@ ad_page_contract {
     {size ""}
 }
 
+# Show the portrait only to authenticated users
+auth::require_login
+
 #
 # The size info is a valid geometry as provided for image magicks
 # "convert". We provide here a sample list of valid sizes
@@ -37,14 +40,14 @@ if { $item_id != 0} {
         # we provide cached thumbnails, which use in their cache
         # key the revision id.
         #
-            
+
         set folder [acs_root_dir]/portrait-thumbnails
         if {![file exists $folder]} {
             file mkdir $folder
         }
 
         set filename $folder/$itemInfo(revision_id).$size
-        
+
         if {![file exists $filename]} {
             switch -- $itemInfo(storage_type) {
                 "file" {
@@ -89,6 +92,9 @@ if { $item_id != 0} {
             ns_returnnotfound
         }
     }
+} else {
+    # Return default avatar image
+    ns_returnfile 200 image/png [acs_root_dir]/packages/acs-subsite/www/shared/avatar-x50.png
 }
 
 # Local variables:
