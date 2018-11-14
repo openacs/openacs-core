@@ -239,12 +239,12 @@ ad_proc -private ad_registration_finite_state_machine_admin_links {
     if { $email_verified_p == "t" } {
         lappend user_finite_states \
             [list [export_vars -base "/acs-admin/users/member-state-change" {
-                user_id return_url {email_verified_p f}
+                user_id return_url member_state {email_verified_p f}
             }] [_ acs-tcl.lt_require_email_verific]]
     } else {
         lappend user_finite_states \
             [list [export_vars -base "/acs-admin/users/member-state-change" {
-                user_id return_url {email_verified_p t}
+                user_id return_url member_state {email_verified_p t}
             }] [_ acs-tcl.approve_email]]
     }
 
