@@ -1465,9 +1465,10 @@ if {$UseXotclSiteNodes} {
                     }]]
                     foreach entry $tree {
                         lassign $entry url node_id object_id
-                        foreach key [list $node_id url-$node_id urls-$object_id] {
+                        foreach key [list $node_id url-$node_id] {
                             ::acs::site_nodes_cache flush -partition_key $node_id $key
                         }
+                        ::acs::site_nodes_cache flush -partition_key $object_id urls-$object_id
                         :flush_pattern -partition_key $node_id get_children-$node_id-*
                     }
                     regsub {/$} $old_url "" old_url
