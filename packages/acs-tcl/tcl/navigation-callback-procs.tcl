@@ -2,7 +2,7 @@ ad_library {
     Callback contract definitions for page rendering.
 
     Typically the callbacks also have a corresponding
-    .adp for rendering their output, see the specific callbacks 
+    .adp for rendering their output, see the specific callbacks
     for details.
 
     @author Jeff Davis (davis@xarg.net)
@@ -15,14 +15,14 @@ ad_proc -public -callback navigation::package_admin {
     -user_id
     {-return_url {}}
 } {
-    <p>Returns the list of available admin actions for the passed in 
+    <p>Returns the list of available admin actions for the passed in
     user on the passed in package_id.</p>
     <pre>
     {
        {LINK url_stub text title_text long_text}
        {SECTION title long_text}
     }</pre>
-    
+
     Where LINK and SECTION are the literal strings.
 
     For LINK the url and text are required, text and title should be plain text
@@ -46,7 +46,7 @@ ad_proc -public -callback navigation::package_admin {
 
     @param package_id - the package for which to generate the admin links
     @param user_id - the user_id for whom the list should be generated
-    @param return_url - a return_url provided by the rendering agent 
+    @param return_url - a return_url provided by the rendering agent
                         for those actions which could come back
 
     @return a list with one element, the list of actions
