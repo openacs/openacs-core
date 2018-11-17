@@ -235,7 +235,7 @@ namespace eval ::acs {
             # Tcl_Obj dynamically the fly (type string). Caching the
             # cache structure in the dynamic Tcl_Obj can't not work.
             #
-            return [lindex ${:partitions_names} [expr {$key % ${:partitions}}]]
+            return [lindex ${:partition_names} [expr {$key % ${:partitions}}]]
 	}
 
 	:public method init {} {
@@ -257,8 +257,9 @@ namespace eval ::acs {
 	    # number from some partition_key.
 	    #
 	    set size [expr {[:get_size] / ${:partitions}}]
+            set :partition_names {}
 	    for {set i 0} {$i < ${:partitions}} {incr i} {
-                lappend :partitions_names ${:name}-$i                
+                lappend :partition_names ${:name}-$i                
 		:cache_create ${:name}-$i $size
 	    }
 	}
