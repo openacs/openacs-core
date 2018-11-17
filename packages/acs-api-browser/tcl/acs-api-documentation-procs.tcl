@@ -386,7 +386,16 @@ ad_proc -public api_proc_documentation {
     if { $format ne "text/html" && $format ne "text/plain" } {
         return -code error "Only text/html and text/plain documentation are currently supported"
     }
-    array set doc_elements {flags "" default_values "" switches "" positionals "" varargs_p 0 script "" deprecated_p 0 main ""}
+    array set doc_elements {
+        flags ""
+        default_values ""
+        switches ""
+        positionals ""
+        varargs_p 0
+        script ""
+        deprecated_p 0
+        main ""
+    }
     array set doc_elements [nsv_get api_proc_doc $proc_name]
     array set flags $doc_elements(flags)
     array set default_values $doc_elements(default_values)
@@ -1163,11 +1172,16 @@ ad_proc -public api_get_body {proc_name} {
 
     if {[info commands ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
-        if {[regexp {^(.*) (.*)$} $obj match thread obj]} {
-            return [::xo::api get_method_source $thread $obj $prefix $method]
+        if {[regexp {^(.*) (.*)$} $obj match scope obj]} {
+            if {[:xo::api scope_eval $scope ::nsf::is object $obj]} {
+                [::xo::api get_method_source $scope $obj $prefix $method]
+            }
         } else {
-            return [::xo::api get_method_source "" $obj $prefix $method]
+            if {[::nsf::is object $obj]} {
+                return [::xo::api get_method_source "" $obj $prefix $method]
+            }
         }
+        return ""        
     } elseif {[info commands ::xo::api] ne ""
               && [regexp {^([^ ]+) (Class|Object) (.*)$} $proc_name . thread kind obj]} {
         return [::xo::api get_object_source $thread $obj]
