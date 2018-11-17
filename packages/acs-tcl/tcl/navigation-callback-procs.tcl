@@ -21,29 +21,28 @@ ad_proc -public -callback navigation::package_admin {
     {
        {LINK url_stub text title_text long_text}
        {SECTION title long_text}
-    }
-    </pre>
-    <p>Where LINK and SECTION are the literal strings.</p>
+    }</pre>
+    
+    Where LINK and SECTION are the literal strings.
 
-    <p>For LINK the url and text are required, text and title should be plain text
-    but long_text should be html (and renderers should present it noquote).</p>
+    For LINK the url and text are required, text and title should be plain text
+    but long_text should be html (and renderers should present it noquote).
 
-    <p>For SECTION both title and long_text can be blank which for the
+    For SECTION both title and long_text can be blank which for the
     rendering agent would imply a section break with something like
     blank space or an &lt;hr&gt; tag.  Also keep in mind the rendering
     agent may be creating dropdown menus which would only display the
     link text and title or might be rendering in a page in which case
     all things might be rendered so try to make sure the short "title"
-    and "text" fields are not abiguous.  heading should be plain text
-    but long_text is treated as html.
-    </p>
+    and "text" fields are not ambiguous.  "title" should be plain text
+    but "long_text" is treated as HTML.
 
-    <p><b>url_stub</b> should be relative to the package mountpoint
+    <b>url_stub</b> should be relative to the package mountpoint
     and without a leading / since the link may be prefixed by the
-    full path or by the vhost url depending on context.</p>
+    full path or by the vhost URL depending on context.
 
-    <p>The <code>/packages/acs-tcl/lib/actions.adp<code> file is an include which
-    will render admin actions returned by this callback.</p>
+    The <code>/packages/acs-tcl/lib/actions.adp</code> file is an include which
+    will render admin actions returned by this callback.
 
     @param package_id - the package for which to generate the admin links
     @param user_id - the user_id for whom the list should be generated
