@@ -2384,7 +2384,8 @@ ad_proc -public ad_pad {
     length
     padstring
 } {
-    Tcl implementation of the pad string function found in many DBMSs.<br>
+    Tcl implementation of the pad string function found in many DBMSs.
+    
     One of the directional flags -left or -right must be specified and
     will dictate whether this will be a lpad or a rpad.
 
@@ -2398,7 +2399,7 @@ ad_proc -public ad_pad {
                 value must be an integer > 0.
 
     @arg padstring string that will be repeated until length of
-    supplied string is equal or greather than length.
+                   supplied string is equal or greather than length.
 
     @return padded string
 } {
