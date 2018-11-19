@@ -705,7 +705,8 @@ ad_proc -public template::resource_path {
 
         if {$theme_dir ne ""} {
             set path $theme_dir/$type/$style
-            if {![file exists $::acs::rootdir/$path.adp]} {
+            set lookup_path [expr {[file extension $path] eq "" ? "${path}.adp" : $path}]
+            if {![file exists $::acs::rootdir/$lookup_path]} {
                 unset path
             }
         }

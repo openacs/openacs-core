@@ -468,14 +468,17 @@ ad_proc -private rp_serve_resource_file { path } {
 
 ad_proc -private rp_resources_filter { why } {
 
-    This filter runs on all URLs of the form /resources/*.  The acs-resources package
-    mounts itself at /resources but we short circuit references here in order to
-    maximize throughput for resource files.  We just ns_returnfile the file, no
-    permissions are checked, the ad_conn structure is not initialized, etc.
+    This filter runs on all URLs of the form /resources/*.  We just
+    ns_returnfile the file, no permissions are checked, the ad_conn
+    structure is not initialized, etc in order to maximize throughput
+    for resource files.
 
     There are three mapping possibilities:
 
-    /resources/package-key/* maps to root/packages/package-key/www/resources/*
+    /resources/package-key/* maps to
+    root/packages/package-key/www/resources/*. This mapping is theme
+    aware and will be therefore overridden by
+    root/packages/<theme_package>/resources/templates/packages/package-key/www/resources.
 
     If that fails, we map to root/packages/acs-subsite/www/resources/*
     If that fails, we map to root/www/resources/*
@@ -492,7 +495,18 @@ ad_proc -private rp_resources_filter { why } {
     }
 
     ad_conn -set untrusted_user_id 0
-    set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[join [lrange [ns_conn urlv] 2 end] /]"
+
+    set urlv [ns_conn urlv]
+    set package_key [lindex $urlv 1]
+    set resource [join [lrange $urlv 2 end] /]
+
+    set path "packages/$package_key/www/resources/$resource"
+    set themed_path [template::resource_path -type templates -style $path]
+    if { [file isfile $themed_path] } {
+        return [rp_serve_resource_file $themed_path]
+    }
+
+    set path "[acs_package_root_dir $package_key]/www/resources/$resource"
     if { [file isfile $path] } {
         return [rp_serve_resource_file $path]
     }
