@@ -1173,7 +1173,7 @@ ad_proc -public api_get_body {proc_name} {
     if {[info commands ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
         if {[regexp {^(.*) (.*)$} $obj match scope obj]} {
-            if {[:xo::api scope_eval $scope ::nsf::is object $obj]} {
+            if {[::xo::api scope_eval $scope ::nsf::is object $obj]} {
                 [::xo::api get_method_source $scope $obj $prefix $method]
             }
         } else {
