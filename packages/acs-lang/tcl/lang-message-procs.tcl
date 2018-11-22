@@ -246,9 +246,8 @@ ad_proc -public lang::message::register {
         set cols(message_key) :message_key
         set cols(locale) :locale
 
-        # We wrap this in a catch, so that it still works in the bootstrap-installer where ad_conn user_id will fail.
-        # LARS NOTE: Why not make ad_conn user_id return 0 in the bootstrap-installer?
-        catch {
+        # user_id is available only with a connection
+        if {[ns_conn isconnected]} {
             set creation_user [ad_conn user_id]
             set cols(creation_user) :creation_user
         }
