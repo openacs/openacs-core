@@ -878,10 +878,7 @@ ad_proc -private lang::message::cache {
     # We segregate messages by language. It might reduce contention
     # if we segregage instead by package. Check for problems with ns_info locks.
 
-    # LARS TODO: Use a mutex
-    if { ![nsv_exists lang_message_cache executed_p] } {
-        nsv_set lang_message_cache executed_p 1
-
+    if {[nsv_incr lang_message_cache executed_p] == 1} {
         if { $package_key eq "" } {
             set package_where_clause ""
         } else {
