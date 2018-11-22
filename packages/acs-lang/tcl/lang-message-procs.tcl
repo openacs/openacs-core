@@ -530,7 +530,7 @@ ad_proc -public lang::message::conflict_count {
     {-package_key ""}
     {-locale ""}
 } {
-    Return the number of messages with  conflicts (conflict_p=t) resulting
+    Return the number of messages with conflicts (conflict_p=t) resulting
     from catalog imports.
 
     @param package_key Restrict count to package with this key
@@ -875,7 +875,7 @@ ad_proc -private lang::message::cache {
     Loads the entire message catalog from the database into the cache.
 } {
     # We segregate messages by language. It might reduce contention
-    # if we segregage instead by package. Check for problems with ns_info locks.
+    # if we segregate instead by package. Check for problems with ns_info locks.
 
     if {[nsv_incr lang_message_cache executed_p] == 1} {
         if { $package_key eq "" } {
