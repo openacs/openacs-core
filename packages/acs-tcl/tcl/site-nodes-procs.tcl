@@ -166,15 +166,14 @@ ad_proc -public site_node::delete {
     # delete nodes in reverse order, starting from leaves
     foreach node_id [lreverse $nodes_to_delete] {
         # first delete package_id under this node...
-        set package_id [site_node::get_object_id \
-                            -node_id $node_id]
+        set package_id [site_node::get_object_id -node_id $node_id]
         set url [site_node::get_url -node_id $node_id]
         if {$delete_package_p} {
             apm_package_instance_delete $package_id
         }
         # ...then the node itself
         db_exec_plsql delete_site_node {}
-        update_cache -node_id $node_id -url $url
+        update_cache -node_id $node_id -url $url -object_id $package_id
     }
 }
 
@@ -266,11 +265,12 @@ ad_proc -public site_node::rename {
     # We need to update the cache for all the child nodes as well
     set node_url [get_url -node_id $node_id]
     set child_node_ids [get_children -all -node_id $node_id -element node_id]
+    set node_object_id [dict get [site_node::get -node_id $node_id] object_id]
 
     db_dml rename_node {}
     db_dml update_object_title {}
 
-    update_cache -sync_children -node_id $node_id -url $node_url
+    update_cache -sync_children -node_id $node_id -url $node_url -object_id $node_object_id
 }
 
 ad_proc -public site_node::instantiate_and_mount {
@@ -366,7 +366,7 @@ ad_proc -public site_node::unmount {
     set url [site_node::get_url -node_id $node_id]
     db_dml unmount_object {}
     db_dml update_object_package_id {}
-    update_cache -node_id $node_id -url $url
+    update_cache -node_id $node_id -url $url -object_id $package_id
 }
 
 ad_proc -private site_node::init_cache {} {
@@ -380,7 +380,8 @@ ad_proc -private site_node::init_cache {} {
     set root_node_id [db_string get_root_node_id {} -default {}]
     if { $root_node_id ne "" } {
         set url [site_node::get_url -node_id $root_node_id]
-        site_node::update_cache -sync_children -node_id $root_node_id -url $url
+        set node_object_id [dict get [site_node::get -node_id $node_node_id] object_id]
+        update_cache -sync_children -node_id $root_node_id -url $url -object_id $node_object_id
     }
 }
 
@@ -388,6 +389,7 @@ ad_proc -private site_node::update_cache {
     {-sync_children:boolean}
     {-node_id:required}
     {-url}
+    {-object_id}
 } {
     Brings the in memory copy of the site nodes hierarchy in sync with the
     database version. Only updates the given node and its children.
@@ -1468,7 +1470,9 @@ if {$UseXotclSiteNodes} {
                         foreach key [list $node_id url-$node_id] {
                             ::acs::site_nodes_cache flush -partition_key $node_id $key
                         }
-                        ::acs::site_nodes_cache flush -partition_key $object_id urls-$object_id
+                        if {$object_id ne ""} {
+                            ::acs::site_nodes_cache flush -partition_key $object_id urls-$object_id
+                        }
                         :flush_pattern -partition_key $node_id get_children-$node_id-*
                     }
                     regsub {/$} $old_url "" old_url
@@ -1647,7 +1651,7 @@ if {$UseXotclSiteNodes} {
         set parent_node_id [site_node::get_parent_id -node_id $node_id]
         set url [site_node::get_url -node_id $parent_node_id]
 
-        site_node::update_cache -sync_children -node_id $node_id -url $url
+        site_node::update_cache -sync_children -node_id $node_id -url $url -object_id $object_id
         #
         # The parent_node_id should in a mount operation never be
         # empty.
@@ -1692,7 +1696,7 @@ if {$UseXotclSiteNodes} {
             #
             if {[info commands ::xo::db::sql::site_node] ne ""} {
                 #ns_log notice "call [list ::xo::site_node flush_cache -node_id $root_node_id]"
-                ::xo::site_node flush_cache -node_id  $root_node_id
+                ::xo::site_node flush_cache -node_id $root_node_id
             }
         }
         #ns_log notice "site_node::init_cache $root_node_id DONE"
@@ -1702,6 +1706,7 @@ if {$UseXotclSiteNodes} {
         {-sync_children:boolean}
         {-node_id:required}
         {-url ""}
+        {-object_id ""}
     } {
         Brings the in memory copy of the site nodes hierarchy in sync with the
         database version. Only updates the given node and its children.
@@ -1711,6 +1716,16 @@ if {$UseXotclSiteNodes} {
         set parent_node_id [site_node::get_parent_id -node_id $node_id]
         if {$parent_node_id ne ""} {
             ::xo::site_node flush_pattern -partition_key $parent_node_id get_children-$parent_node_id-*
+        }
+
+        #
+        # In case update_cache is called after the deltion of the node
+        # in the database, it is still necessary to flush for the
+        # original object_id, but this can't be handled in the
+        # recursive query of method "flush_cache".
+        #
+        if {$object_id ne ""} {
+            ::acs::site_nodes_cache flush -partition_key $object_id urls-$object_id
         }
     }
 

@@ -22,31 +22,68 @@ aa_register_case \
 } {
     aa_run_with_teardown -rollback -test_code {
 
-        aa_log "# 1) mount /doc1 /doc2 /doc1/doc3"
+        set root_node_id [site_node::get_node_id -url /]
+        set root_object_id [dict get [site_node::get -node_id $root_node_id] object_id]
+        set subsite_urls [site_node::get_url_from_object_id -object_id $root_object_id]
+
+        aa_section "1) mount /doc1 /doc2 /doc1/doc3"
         set doc1_name [ad_generate_random_string]
         set doc2_name [ad_generate_random_string]
         set doc3_name [ad_generate_random_string]
+
         set node1_pkg_id [site_node::instantiate_and_mount \
                               -node_name $doc1_name \
-                              -package_key acs-core-docs]
+                              -package_key acs-templating]
         set node1_node_id [site_node::get_node_id -url "/$doc1_name"]
+        set node1_object_id [dict get [site_node::get -node_id $node1_node_id] object_id]
+
         set node2_pkg_id [site_node::instantiate_and_mount \
                               -node_name $doc2_name \
                               -package_key acs-core-docs]
         set node2_node_id [site_node::get_node_id -url "/$doc2_name"]
+        set node2_object_id [dict get [site_node::get -node_id $node2_node_id] object_id]
+
         set node3_pkg_id [site_node::instantiate_and_mount \
                               -parent_node_id $node1_node_id \
                               -node_name $doc3_name \
                               -package_key acs-core-docs]
         set node3_node_id [site_node::get_node_id -url "/$doc1_name/$doc3_name"]
-        set root_node_id [site_node::get_node_id -url /]
-        aa_equals "Verify url /doc1 for node1" [site_node::get_url -node_id $node1_node_id] "/$doc1_name/"
-        aa_equals "Verify url /doc1/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc1_name/$doc3_name/"
-        aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
+        set node3_object_id [dict get [site_node::get -node_id $node3_node_id] object_id]
 
-        aa_log "# 2) rename /doc1 => doc4: Test /doc4 /doc4/doc3 /doc2"
+        aa_equals "Verify url /doc1 for node1" \
+            [site_node::get_url -node_id $node1_node_id] "/$doc1_name/"
+        aa_equals "Verify url /doc1/doc3 for node3" \
+            [site_node::get_url -node_id $node3_node_id] "/$doc1_name/$doc3_name/"
+        aa_equals "Verify url /doc2 for node2" \
+            [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
+
+        aa_log "node1_object_id urls [site_node::get_url_from_object_id -object_id $node1_object_id]"
+        aa_log "root object_id urls [site_node::get_url_from_object_id -object_id $root_object_id]"
+
+
+        aa_equals "Get urls from root_object_id $root_object_id unchanged" \
+            [llength [site_node::get_url_from_object_id -object_id $root_object_id]] \
+            [llength $subsite_urls]
+        aa_true "Get url from node1 object_id $node1_object_id contains /$doc1_name/" {
+            "/$doc1_name/" in [site_node::get_url_from_object_id -object_id $node1_object_id]
+        }
+        aa_true "Get url from node2 object_id $node2_object_id contains /$doc2_name/" {
+            "/$doc2_name/" in [site_node::get_url_from_object_id -object_id $node2_object_id]
+        }
+        aa_true "Get url from node3 object_id $node3_object_id contains /$doc1_name/$doc3_name/" {
+            "/$doc1_name/$doc3_name/" in [site_node::get_url_from_object_id -object_id $node3_object_id]
+        }
+
+        #aa_log "node1 [site_node::get -node_id $node1_node_id]"
+
+        #
+        # Rename the url from /doc1 to /doc4
+        #
+        aa_section "2) rename /doc1 => doc4: Test /doc4 /doc4/doc3 /doc2"
+
         set doc4_name [ad_generate_random_string]
         site_node::rename -node_id $node1_node_id -name $doc4_name
+
         aa_equals "Check new url /doc4" [site_node::get_node_id -url "/$doc4_name"] $node1_node_id
         aa_equals "Check new url /doc4/doc3" [site_node::get_node_id -url "/$doc4_name/$doc3_name"] $node3_node_id
         aa_equals "Check old url /doc2" [site_node::get_node_id -url "/$doc2_name"] $node2_node_id
@@ -56,13 +93,49 @@ aa_register_case \
         aa_equals "Verify url /doc4/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc4_name/$doc3_name/"
         aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
 
-        aa_log "# 3) init_cache: Test /doc5 /doc5/doc3 /doc2"
+        #::acs::site_nodes_cache flush_all
+        #::acs::site_nodes_id_cache flush_all
+        #::acs::site_nodes_children_cache flush_all
+
+        aa_equals "Get urls from root_object_id $root_object_id unchanged" \
+            [llength [site_node::get_url_from_object_id -object_id $root_object_id]] \
+            [llength $subsite_urls]
+        aa_true "Get url from node1 object_id $node1_object_id contains /$doc4_name/" {
+            "/$doc4_name/" in [site_node::get_url_from_object_id -object_id $node1_object_id]
+        }
+        aa_false "Get url from node1 object_id $node1_object_id contains /$doc1_name/" {
+            "/$doc1_name/" in [site_node::get_url_from_object_id -object_id $node1_object_id]
+        }
+
+        aa_true "Get url from node2 object_id $node2_object_id contains /$doc2_name/" {
+            "/$doc2_name/" in [site_node::get_url_from_object_id -object_id $node2_object_id]
+        }
+
+        aa_true "Get url from node3 object_id $node3_object_id contains /$doc4_name/$doc3_name/" {
+            "/$doc4_name/$doc3_name/" in [site_node::get_url_from_object_id -object_id $node3_object_id]
+        }
+        aa_false "Get url from node3 object_id $node3_object_id contains /$doc1_name/$doc3_name/" {
+            "/$doc1_name/$doc3_name/" in [site_node::get_url_from_object_id -object_id $node3_object_id]
+        }
+
+
+        aa_section "3) init_cache: Test /doc5 /doc5/doc3 /doc2"
+
+        #
+        # Rename node1 to doc5_name in the database.
+        #
         set doc5_name [ad_generate_random_string]
         db_dml rename_node1 {
             update site_nodes
             set name = :doc5_name
             where node_id = :node1_node_id
         }
+
+        #
+        # Renaming in the database bypassed the API and does not flush
+        # the cache automatically. So flush the caches filled up with
+        # the tests from the previous tests section.
+        #
         ns_cache_transaction_rollback
         site_node::init_cache
         ns_cache_transaction_begin
@@ -78,14 +151,36 @@ aa_register_case \
         aa_equals "Verify url /doc5/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc5_name/$doc3_name/"
         aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
 
-        aa_log "# 4) delete doc3: Test /doc5 /doc2, nonexisting /doc5/doc3"
+        aa_true "Get url from node1 object_id $node1_object_id contains /$doc5_name/" {
+            "/$doc5_name/" in [site_node::get_url_from_object_id -object_id $node1_object_id]
+        }
+        aa_true "Get url from node3 object_id $node3_object_id contains /$doc5_name/" {
+            "/$doc5_name/$doc3_name/" in [site_node::get_url_from_object_id -object_id $node3_object_id]
+        }
+
+
+        aa_section "4) delete doc3: Test /doc5 /doc2, nonexisting /doc5/doc3"
+        #
+        # unmount and delete site node3.
+        #
         site_node::unmount -node_id $node3_node_id
         site_node::delete -node_id $node3_node_id
+
         aa_equals "Check url /doc5" [site_node::get_node_id -url "/$doc5_name"] $node1_node_id
         aa_equals "Check url /doc2" [site_node::get_node_id -url "/$doc2_name"] $node2_node_id
-        aa_equals "Make sure old url /doc5/doc3 now matches /doc5" [site_node::get_node_id -url "/$doc5_name/$doc3_name/"] $node1_node_id
+        aa_equals "Make sure old url /doc5/doc3 now matches /doc5" \
+            [site_node::get_node_id -url "/$doc5_name/$doc3_name/"] $node1_node_id
+
         aa_equals "Verify url /doc5 for node1" [site_node::get_url -node_id $node1_node_id] "/$doc5_name/"
         aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
+
+        #
+        # In secton 3, we checked this case positively
+        #
+        aa_false "Get url from node3 object_id $node3_object_id contains /$doc5_name/" {
+            "/$doc5_name/$doc3_name/" in [site_node::get_url_from_object_id -object_id $node3_object_id]
+        }
+
     }
 }
 
