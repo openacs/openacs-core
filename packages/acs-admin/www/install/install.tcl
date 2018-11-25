@@ -3,7 +3,7 @@ ad_page_contract {
 } {
     {package_type ""}
     {upgrade_p:boolean 0}
-    {repository_url "http://openacs.org/repository/"}
+    {repository_url "https://openacs.org/repository/"}
     {channel ""}
     {maturity:naturalnum ""}
     {current_channel ""}
@@ -175,7 +175,7 @@ template::list::create \
 		        <else><a href=" @packages.vendor_url@">@packages.vendor@</a></else>
 		        <if @packages.release_date@ not nil> (released on @packages.release_date@<if @packages.license@ not nil>, license: @packages.license@</if>)</if>
 		<br>
-		Details: <a href="http://openacs.org/xowiki/@packages.package_key@">@packages.package_key@</a>
+		Details: <a href="https://openacs.org/xowiki/@packages.package_key@">@packages.package_key@</a>
 	    }
         }   
         maturity {

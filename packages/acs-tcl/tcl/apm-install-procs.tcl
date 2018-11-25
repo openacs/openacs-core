@@ -2163,7 +2163,7 @@ ad_proc -public apm_get_repository_channel {} {
     return [join [lrange $kernel_versionv 0 1] "-"]
 }
 
-ad_proc -public apm_get_repository_channels { {repository_url http://openacs.org/repository/} } {
+ad_proc -public apm_get_repository_channels { {repository_url https://openacs.org/repository/} } {
     Returns the channels and URLs from a repository
 } {
     set result [util::http::get -url $repository_url]

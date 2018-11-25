@@ -194,7 +194,7 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
             append body " on $distribution_date"
         }
         append body ")"
-        set href [export_vars -base "http://openacs.org/xowf/package-submissions/PackageSubmit.wf" \
+        set href [export_vars -base "https://openacs.org/xowf/package-submissions/PackageSubmit.wf" \
                       {{m create-new} {p.description $summary} {title "[file tail $version_uri]"}}]
         append body [subst {
             <p>

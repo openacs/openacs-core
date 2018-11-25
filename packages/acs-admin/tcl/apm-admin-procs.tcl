@@ -243,7 +243,7 @@ ad_proc -private apm_build_repository {
     set work_dir               $::acs::rootdir/repository-builder/
 
     set repository_dir         $::acs::rootdir/www/repository/
-    set repository_url         http://openacs.org/repository/
+    set repository_url         https://openacs.org/repository/
 
     set exclude_package_list {}
 
