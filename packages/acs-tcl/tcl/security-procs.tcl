@@ -280,7 +280,7 @@ ad_proc -private sec_login_handler {} {
     set account_status closed
 
     # check for permanent login cookie
-    catch {
+    try {
         lassign [sec_login_read_cookie] untrusted_user_id login_expr auth_token
         set auth_level expired
 
@@ -307,6 +307,12 @@ ad_proc -private sec_login_handler {} {
             set auth_level none
             set account_status "closed"
         }
+    } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
+        #
+        # There is no such such cookie, no error to report.
+        #
+    } on error {errorMsg} {
+        ns_log error "sec_login_handler: $errorMsg, $::errorCode"
     }
 
     sec_setup_session $untrusted_user_id $auth_level $account_status
@@ -1143,7 +1149,7 @@ ad_proc -public ad_get_signed_cookie {
 
     set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
     if { $cookie_value eq "" } {
-        error "Cookie does not exist."
+        throw {AD_EXCEPTION NO_COOKIE} {Cookie does not exist}
     }
 
     lassign $cookie_value value signature
@@ -1173,9 +1179,8 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 } {
 
     set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
-
     if { $cookie_value eq "" } {
-        error "Cookie does not exist."
+        throw {AD_EXCEPTION NO_COOKIE} {Cookie does not exist}
     }
 
     lassign $cookie_value value signature
