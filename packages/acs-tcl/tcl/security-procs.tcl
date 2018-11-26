@@ -278,7 +278,7 @@ ad_proc -private sec_login_read_cookie {} {
     #
     # If over HTTPS, we look for the *_secure cookie
     #
-    if { [security::secure_conn_p] } {
+    if { [security::secure_conn_p] || [ad_conn behind_secure_proxy_p]} {
         set cookie_name "ad_user_login_secure"
     } else {
         set cookie_name "ad_user_login"
@@ -359,7 +359,7 @@ ad_proc -public ad_user_login {
     }
 
     set auth_level "ok"
-    set secure_p [security::secure_conn_p]
+    set secure_p [expr {[security::secure_conn_p] || [ad_conn behind_secure_proxy_p]}]
     if {$cookie_domain eq ""} {
         set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
     }
