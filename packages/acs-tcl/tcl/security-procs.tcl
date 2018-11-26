@@ -170,6 +170,18 @@ ad_proc -private sec_handler {} {
         set user_id 0
         set account_status closed
 
+        if {$login_level > 0 && [sec_session_id_invalidated_p $session_id]} {
+            #
+            # Check, if the session_id was invalidated (e.g. via
+            # logout).  In case, someone might be operating with
+            # stolen cookies. This check required to make sure that
+            # after the logout this sesson_id is not accepted anymore,
+            # even when below sec_session_renew time (default 5min).
+            #
+            ns_log warning "downgrade login_level since session_id was invalidated"
+            set login_level 0
+        }
+
         if {$login_level > 0} {
             #
             # Check if we have a valid login cookie, since the
@@ -265,6 +277,31 @@ ad_proc -private sec_handler {} {
         security::csrf::new
     }
 }
+
+if {[ns_info name] eq "NaviServer"} {
+    ad_proc -private sec_invalidate_session_id {session_id} {
+        Invalidate the session_id for [sec_session_timeout] secs
+    } {
+        ns_cache_eval -expires [sec_session_timeout] -- ns:memoize $session_id {set _ 1}
+    }
+    ad_proc -private sec_session_id_invalidated_p {session_id} {
+        Check, if the session_id was invalidated.
+    } {
+        return [ns_cache_get ns:memoize $session_id .]
+    }
+} else {
+    ad_proc -private sec_invalidate_session_id {session_id} {
+        Invalidate the session_id for [sec_session_timeout] secs
+    } {
+        # stub for now
+    }
+    ad_proc -private sec_session_id_invalidated_p {session_id} {
+        Check, if the session_id was invalidated.
+    } {
+        # stub for now
+    }
+}
+
 
 ad_proc -private sec_login_read_cookie {} {
 
@@ -437,6 +474,9 @@ ad_proc -public ad_user_logout {
     if {$cookie_domain eq ""} {
         set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
     }
+
+    sec_invalidate_session_id [ad_conn session_id]
+
     #
     # Use the same "secure" setting for unsetting the cookie as it was
     # used for setting the cookie. The implementation is not 100%
