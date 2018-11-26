@@ -208,7 +208,9 @@ ad_proc -private sec_handler {} {
         ns_log $::security::log(login_cookie) "Security: Insecure session OK: session_id $session_id, untrusted_user_id $untrusted_user_id, auth_level $auth_level, user_id $user_id"
 
         # We're okay, insofar as the insecure session, check if it's also secure
-        if { $auth_level eq "ok" && [security::secure_conn_p] } {
+        if { $auth_level eq "ok"
+             && ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])
+         } {
             catch {
                 set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}]
                 if {[lindex $sec_token 0] eq $session_id
@@ -575,7 +577,10 @@ ad_proc -private sec_setup_session {
 
     ns_log debug "OACS= done generating session id cookie"
 
-    if { $auth_level eq "secure" && [security::secure_conn_p] && $new_user_id != 0 } {
+    if { $auth_level eq "secure"
+         && ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])
+         && $new_user_id != 0
+     } {
         # this is a secure session, so the browser needs
         # a cookie marking it as such
         sec_generate_secure_token_cookie
