@@ -170,6 +170,23 @@ ad_proc -private sec_handler {} {
         set user_id 0
         set account_status closed
 
+        if {$login_level > 0} {
+            #
+            # Check if we have a valid login cookie, since the
+            # login_level is just based on the session_cookie. On
+            # proper logouts via the web interface, this extra check
+            # should not be necessary. However, if someone hacks
+            # around with the cookies, we want to make sure that no
+            # user_id can set without a login cookie.
+            #
+            try {
+                sec_login_read_cookie
+            } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
+                set login_level 0
+                ns_log warning "downgrade login_level since there is no login cookie provided"
+            }
+        }
+
         switch -- $login_level {
             1 {
                 set auth_level ok
