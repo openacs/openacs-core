@@ -34,8 +34,6 @@ ad_include_contract {
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
 
-template::multirow create group_types group_type group_type_enc type_pretty_name number_groups
-
 # ISSUE: this doesn't check permissions when generating the number_groups.
 # So a user might be told that there are 156 groups of type X, then when they
 # click to zoom in, they see only 10 groups listed (because they only have
@@ -43,8 +41,10 @@ template::multirow create group_types group_type group_type_enc type_pretty_name
 # should tell you total number of groups, and tell you "these are the ones
 # you have read privilege on", so you don't get confused.
 
-db_foreach select_group_types {
-     select t.object_type, t.pretty_name, count(g.group_id) as number_groups
+db_multirow -extend {group_type_enc} group_types select_group_types {
+     select t.object_type as group_type,
+            t.pretty_name as type_pretty_name,
+            count(g.group_id) as number_groups
      from   groups g, acs_objects o, acs_object_types t,
             application_group_element_map app_group
      where o.object_id = g.group_id
@@ -54,7 +54,7 @@ db_foreach select_group_types {
      group by t.object_type, t.pretty_name
      order by lower(t.pretty_name)
 } {
-    template::multirow append group_types $object_type [ad_urlencode $object_type] $pretty_name $number_groups
+    set group_type_enc [ad_urlencode $group_type]
 }
 
 # Local variables:
