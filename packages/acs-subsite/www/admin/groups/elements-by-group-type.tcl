@@ -31,9 +31,6 @@ ad_include_contract {
     group_id:integer
 }
 
-set user_id [ad_conn user_id]
-set package_id [ad_conn package_id]
-
 # ISSUE: this doesn't check permissions when generating the number_groups.
 # So a user might be told that there are 156 groups of type X, then when they
 # click to zoom in, they see only 10 groups listed (because they only have
@@ -49,7 +46,7 @@ db_multirow -extend {group_type_enc} group_types select_group_types {
             application_group_element_map app_group
      where o.object_id = g.group_id
        and o.object_type = t.object_type
-       and app_group.package_id = :package_id
+       and app_group.package_id = (select package_id from application_groups where group_id = :group_id)
        and app_group.element_id = g.group_id
      group by t.object_type, t.pretty_name
      order by lower(t.pretty_name)
