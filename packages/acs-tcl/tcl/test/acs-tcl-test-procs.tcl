@@ -954,7 +954,8 @@ aa_register_case \
 
 } {
     set d [acs::test::http /]
-    acs::test::reply_contains $d "Main Site"
+    set main_node [site_node::get_from_url -url "/"]
+    acs::test::reply_contains $d [::lang::util::localize [dict get $main_node instance_name]]
 }
 
 aa_register_case \
