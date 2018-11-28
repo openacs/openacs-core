@@ -1,17 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-    <fullquery name="subsite::get_url.get_vhost">
-        <querytext>
-
-    select host
-      from host_node_map
-     where node_id = :node_id
-     $where_clause
-
-        </querytext>
-    </fullquery>
- 
     <partialquery name="subsite::get_url.strict_search">
         <querytext>
         and host = :search_vhost

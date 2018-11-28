@@ -1252,11 +1252,12 @@ ad_proc -public subsite::get_url {
         set root_p [expr {$subsite_node(parent_id) eq ""}]
         set search_vhost $host
 
-        set where_clause [db_map orderby]
-
         # TODO: This should be cached
-        set site_node $subsite_node(node_id)
-        set mapped_vhost [db_string get_vhost {} -default ""]
+        set mapped_vhost [lindex [db_list get_vhost {
+            select host from host_node_map
+            where node_id = :node_id
+            order by host = :search_vhost desc
+        }] 0]
 
         if {$root_p && $mapped_vhost eq ""} {
             if {$strict_p} {
