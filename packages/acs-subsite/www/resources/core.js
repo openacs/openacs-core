@@ -786,7 +786,7 @@ Calendar.prototype.create = function (_par) {
 		parent = _par;
 		this.isPopup = false;
 	}
-	this.date = this.dateStr ? new Date(this.dateStr) : new Date();
+	this.date = this.dateStr ? this.parseDate(this.dateStr) : new Date();
 
 	var table = Calendar.createElement("table");
 	this.table = table;
@@ -1338,8 +1338,7 @@ Calendar.prototype.parseDate = function (str, fmt) {
 		}
 	}
 	if (y != 0 && m != -1 && d != 0) {
-		this.setDate(new Date(y, m, d));
-		return;
+		return (new Date(y, m, d));
 	}
 	y = 0; m = -1; d = 0;
 	for (i = 0; i < a.length; ++i) {
@@ -1368,9 +1367,13 @@ Calendar.prototype.parseDate = function (str, fmt) {
 		y = today.getFullYear();
 	}
 	if (m != -1 && d != 0) {
-		this.setDate(new Date(y, m, d));
+		return (new Date(y, m, d));
 	}
 };
+
+Calendar.prototype.parseAndSetDate = function (str, fmt) {
+    this.setDate(this.parseDate(str,fmt));
+}
 
 Calendar.prototype.hideShowCovered = function () {
 	function getStyleProp(obj, style){
@@ -1665,7 +1668,7 @@ function showCalendar(id,dateformat) {
   if (calendar != null) {
     // we already have one created, so just update it.
     calendar.hide();            // hide the existing calendar
-    calendar.parseDate(el.value, dateformat); // set it to a new date
+    calendar.parseAndSetDate(el.value, dateformat); // set it to a new date
   } else {
     // first-time call, create the calendar
     if ( dateformat == null ) {
@@ -1690,7 +1693,7 @@ function showCalendarWithDefault(id,defaultdate,dateformat) {
   if (calendar != null) {
     // we already have one created, so just update it.
     calendar.hide();            // hide the existing calendar
-    calendar.parseDate(el.value, dateformat); // set it to a new date
+    calendar.parseAndSetDate(el.value, dateformat); // set it to a new date
   } else {
     // first-time call, create the calendar
     if ( dateformat == null ) {
@@ -1717,14 +1720,14 @@ function showCalendarWithDateWidget(id,fmt) {
   if (calendar != null) {
     // we already have one created, so just update it.
     calendar.hide();            // hide the existing calendar
-    calendar.parseDate(calval,fmt); // set it to a new date
+    calendar.parseAndSetDate(calval,fmt); // set it to a new date
   } else {
     // first-time call, create the calendar
     var cal = new Calendar(true, null, selectwidget, closeHandler);
     calendar = cal;             // remember the calendar in the global
     cal.setRange(1900, 2050);   // min/max year allowed
     calendar.create();          // create a popup calendar
-    calendar.parseDate(calval,fmt); // set it to a new date
+    calendar.parseAndSetDate(calval,fmt); // set it to a new date
   }
   calendar.selM = idM;            // inform it about the input field in use
   calendar.selD = idD;            // inform it about the input field in use
