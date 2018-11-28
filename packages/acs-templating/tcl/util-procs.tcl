@@ -672,7 +672,7 @@ ad_proc -public template::resource_path {
 } {
 
     Process the templating "style" and return the stub (path without
-                                                        extensions). When the style is not an absolute path, check if the
+    extensions). When the style is not an absolute path, check if the
     resource can be obtained from the theme, if not fallback to the
     resources directory of acs-templating.
 
