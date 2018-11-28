@@ -21,19 +21,6 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="subsite::auto_mount_application.select_package_object_names">      
-      <querytext>
-      
-	    select t.pretty_name as package_name, acs_object__name(s.object_id) as object_name
-	      from site_nodes s, apm_package_types t
-	     where s.node_id = :node_id
-	       and t.package_key = :package_key
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="subsite::util::object_type_path_list.select_object_type_path">      
       <querytext>
 

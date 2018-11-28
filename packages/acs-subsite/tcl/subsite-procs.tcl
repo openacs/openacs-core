@@ -261,7 +261,12 @@ ad_proc -public subsite::auto_mount_application {
 
     if { $pretty_name eq "" } {
         # Get the name of the object mounted at this node
-        db_1row select_package_object_names {}
+        set package_name [db_string get_package_name {
+            select pretty_name from apm_package_types
+            where package_key = :package_key
+        }]
+        set node [site_node::get_from_node_id -node_id $node_id]
+        set object_name [acs_object_name [dict get $node object_id]]
         set pretty_name "$object_name $package_name"
         if { $ctr > 2 } {
             # This was a duplicate pkg name... append the ctr used in the instance name
