@@ -18,13 +18,6 @@
         </querytext>
     </partialquery>
 
-  <fullquery name="subsite::get_theme_options.get_subsite_themes">
-    <querytext>
-      select name, key
-      from subsite_themes
-    </querytext>
-  </fullquery>
-  
   <fullquery name="subsite::new_subsite_theme.insert_subsite_theme">
     <querytext>
       insert into subsite_themes

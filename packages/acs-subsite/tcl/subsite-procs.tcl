@@ -783,7 +783,10 @@ ad_proc -public subsite::main_site_id {} {
 ad_proc -public subsite::get_theme_options {} {
     Gets options for subsite themes for use with a form builder select widget.
 } {
-    db_foreach get_subsite_themes {} {
+    db_foreach get_subsite_themes {
+        select name, key
+        from subsite_themes
+    } {
         lappend master_theme_options [list [lang::util::localize $name] $key]
     }
 
