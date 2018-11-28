@@ -37,9 +37,7 @@ db_1row subsite_info {
       and ag.package_id = :package_id
 }
 
-set intro_text [lang::util::localize [_ acs-subsite.Currently_the_instance_name_has_the_following_groups]]
-
-ad_return_template
+set intro_text [_ acs-subsite.Currently_the_instance_name_has_the_following_groups]
 
 # Local variables:
 #    mode: tcl
