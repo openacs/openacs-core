@@ -131,23 +131,23 @@ ad_proc -public subsite::default::create_app_group {
         set node_id $node(node_id)
 
         if { $name eq "" } {
-            set subsite_name [db_string subsite_name_query {}]
+            set subsite_name $node(instance_name)
         } else {
             set subsite_name $name
         }
-
-        set truncated_subsite_name [string range $subsite_name 0 89]
+        set subsite_name_30 [string range $subsite_name 0 30]
+        set subsite_name_89 [string range $subsite_name 0 89]
 
         db_transaction {
 
             # Create subsite application group
-            set group_name "$truncated_subsite_name"
+            set group_name "$subsite_name_89"
             set subsite_group_id [application_group::new \
                                       -package_id $package_id \
                                       -group_name $group_name]
 
             # Create segment of registered users
-            set segment_name "$truncated_subsite_name Members"
+            set segment_name "$subsite_name_89 Members"
             set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
 
             # Create a constraint that says "to be a member of this subsite you must be a member
@@ -155,15 +155,18 @@ ad_proc -public subsite::default::create_app_group {
             set subsite_id [site_node::closest_ancestor_package \
                                 -node_id $node_id \
                                 -package_key [subsite::package_keys]]
+            set subsite [subsite::get -subsite_id $subsite_id]
+            set supersite_group_id [application_group::group_id_from_package_id \
+                                        -package_id $subsite_id]
+            set supersite_name_30 [string range [dict get $subsite instance_name] 0 30]
 
-            db_1row parent_subsite_query {}
-            set constraint_name "Members of [string range $subsite_name 0 30] must be members of [string range $supersite_name 0 30]"
+            set constraint_name "Members of $subsite_name_30 must be members of $supersite_name_30"
             set user_id [ad_conn user_id]
             set creation_ip [ad_conn peeraddr]
             db_exec_plsql add_constraint {}
 
             # Create segment of registered users for administrators
-            set segment_name "$truncated_subsite_name Administrators"
+            set segment_name "$subsite_name_89 Administrators"
             set admin_segment_id [rel_segments_new $subsite_group_id admin_rel $segment_name]
 
             # Grant admin privileges to the admin segment
