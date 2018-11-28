@@ -32,7 +32,7 @@
         <li>#acs-subsite.Administration#
           <ul>
             <if @create_p@ true and @rels.rel_type_valid_p@ true>
-              <li><a href="@relations_add_url@">Add @rels.role_pretty_name@</a> </li>
+              <li><a href="@rels.relations_add_url@">Add @rels.role_pretty_name@</a> </li>
             </if>
             <li>Relational segment: 
               <if @rels.segment_id@ nil>
