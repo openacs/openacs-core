@@ -31,7 +31,42 @@ set create_p [permission::permission_p -object_id $group_id -privilege "create"]
 set return_url "[ad_conn url]?[ad_conn query]"
 set return_url_enc [ad_urlencode $return_url]
 
-db_multirow -extend {elements_display_url relations_add_url} rels relations_query {} {
+db_multirow -extend {elements_display_url relations_add_url} rels relations_query {
+    select
+        g.group_id,
+        g.rel_type,
+        g.group_id = null as rel_type_valid_p,
+        gr.group_rel_id,
+        (select pretty_name from acs_object_types
+          where object_type = g.rel_type) as rel_type_pretty_name,
+        s.segment_id,
+        s.segment_name,
+        rr.pretty_plural as role_pretty_plural,
+        rr.pretty_name as role_pretty_name,
+        rels.num_rels
+    from rc_valid_rel_types g
+	 left outer join rel_segments s using (group_id, rel_type)
+     	 left outer join group_rels gr using (group_id, rel_type)
+	 left outer join
+	   (select rel_type, count(*) as num_rels
+	      from group_component_map
+	     where group_id = :group_id
+	       and group_id = container_id
+	     group by rel_type
+	      UNION ALL
+	    select rel_type, count(*) as num_rels
+	      from group_approved_member_map
+	     where group_id = :group_id
+	       and group_id = container_id
+            group by rel_type
+         ) rels using (rel_type),
+    	 acs_rel_types rel_types,
+         acs_rel_roles rr,
+     where g.rel_type = rel_types.rel_type
+       and rr.role_two = rel_types.role_two
+       and g.group_id = :group_id
+  order by lower(g.rel_type)
+} {
     # The role pretty names can be message catalog keys that need
     # to be localized before they are displayed
     set role_pretty_name [lang::util::localize $role_pretty_name]
