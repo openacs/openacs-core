@@ -777,9 +777,7 @@ ad_proc -public subsite::main_site_id {} {
 
     @author Peter Marklund
 } {
-    array set main_node [site_node::get_from_url -url "/"]
-
-    return $main_node(object_id)
+    return [dict get [site_node::get_from_url -url "/"] object_id]
 }
 
 ad_proc -public subsite::get_theme_options {} {
