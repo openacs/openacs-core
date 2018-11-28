@@ -1150,25 +1150,7 @@ ad_proc -public db_string {
 
     ad_arg_parser { default bind } $args
 
-    if { [info exists cache_key] } {
-        set value [ns_cache eval $cache_pool $cache_key {
-            db_with_handle -dbn $dbn db {
-                set selection [db_exec 0or1row $db $full_name $sql]
-            }
-            if { $selection ne ""} {
-                set selection [list [ns_set value $selection 0]]
-            }
-            set selection
-        }]
-        if { $value eq "" } {
-            if { [info exists default] } {
-                return $default
-            }
-            return -code error "Selection did not return a value, and no default was provided"
-        } else {
-            return [lindex $value 0]
-        }
-    } else {
+    set code {
         db_with_handle -dbn $dbn db {
             set selection [db_exec 0or1row $db $full_name $sql]
         }
@@ -1176,11 +1158,16 @@ ad_proc -public db_string {
             if { [info exists default] } {
                 return $default
             }
-            return -code error "Selection did not return a value, and no default was provided"
+            error "Selection did not return a value, and no default was provided"
         }
         return [ns_set value $selection 0]
     }
 
+    if { [info exists cache_key] } {
+        return [ns_cache eval $cache_pool $cache_key $code]
+    } else {
+        return [eval $code]
+    }
 }
 
 
