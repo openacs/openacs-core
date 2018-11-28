@@ -33,10 +33,4 @@
       </querytext>
 </fullquery>
 
-    <partialquery name="subsite::get_url.simple_search">
-        <querytext>
-        limit 1
-        </querytext>
-    </partialquery>
-
 </queryset>

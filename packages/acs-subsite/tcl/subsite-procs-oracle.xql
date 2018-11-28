@@ -31,10 +31,4 @@
       </querytext>
 </fullquery>
 
-    <partialquery name="subsite::get_url.simple_search">
-        <querytext>
-        and rownum < 2
-        </querytext>
-    </partialquery>
- 
 </queryset>
