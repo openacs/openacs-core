@@ -90,7 +90,7 @@ set search_locales [list \
                         [list "Current locale - [lang::util::get_label $current_locale]" $current_locale] \
                         [list "Master locale - [lang::util::get_label $default_locale]" $default_locale]]
 
-ad_form -name search -action message-search -form {
+ad_form -has_submit 1 -name search -action message-search -form {
     {locale:text(hidden) {value $locale}}
 }
 
