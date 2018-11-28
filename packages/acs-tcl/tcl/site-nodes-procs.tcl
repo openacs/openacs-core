@@ -1688,8 +1688,11 @@ if {$UseXotclSiteNodes} {
         cache in case we have a root site node.
     } {
         #ns_log notice "site_node::init_cache"
-        set root_node_id [::db_string get_root_node_id {} -default {}]
-        if { $root_node_id ne "" } {
+        if {[db_0or1row get_root_node {
+            select node_id as root_node_id
+            from site_nodes
+            where parent_id is null
+        }]} {
             #
             # If we are called during the *-init procs, the database
             # interface might not be initialized yet. However, in this
