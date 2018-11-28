@@ -377,11 +377,12 @@ ad_proc -private site_node::init_cache {} {
     nsv_array reset site_node_url_by_object_id [list]
     nsv_array reset site_node_url_by_package_key [list]
 
-    set root_node_id [db_string get_root_node_id {} -default {}]
-    if { $root_node_id ne "" } {
-        set url [site_node::get_url -node_id $root_node_id]
-        set node_object_id [dict get [site_node::get -node_id $node_node_id] object_id]
-        update_cache -sync_children -node_id $root_node_id -url $url -object_id $node_object_id
+    if {[db_0or1row get_root_node {
+        select node_id, object_id
+        from site_nodes
+        where parent_id is null
+    }]} {
+        update_cache -sync_children -node_id $node_id -url "/" -object_id $object_id
     }
 }
 
