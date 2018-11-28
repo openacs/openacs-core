@@ -65,9 +65,9 @@ db_multirow -extend {
             group by rel_type
          ) rels using (rel_type),
     	 acs_rel_types rel_types,
-         acs_rel_roles rr,
+         acs_rel_roles rr
      where g.rel_type = rel_types.rel_type
-       and rr.role_two = rel_types.role_two
+       and rr.role = rel_types.role_two
        and g.group_id = :group_id
   order by lower(g.rel_type)
 } {
