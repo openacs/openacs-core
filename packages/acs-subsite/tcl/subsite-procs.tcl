@@ -812,7 +812,11 @@ ad_proc -public subsite::set_theme {
 
     set old_theme [subsite::get_theme -subsite_id $subsite_id]
 
-    db_1row get_theme_paths {}
+    db_1row get_theme_paths {
+      select *
+      from subsite_themes
+      where key = :theme
+    }
 
     parameter::set_value -parameter ThemeKey -package_id $subsite_id \
         -value $theme
@@ -1077,7 +1081,16 @@ ad_proc -public subsite::new_subsite_theme {
     # the following line is for Oracle compatibility
     set local_p [expr {$local_p ? "t" : "f"}]
 
-    db_dml insert_subsite_theme {}
+    db_dml insert_subsite_theme {
+      insert into subsite_themes
+        (key, name, template, css, js, form_template, list_template,
+	list_filter_template, dimensional_template, resource_dir,
+	streaming_head, local_p)
+      values
+        (:key, :name, :template, :css, :js, :form_template, :list_template,
+	:list_filter_template, :dimensional_template, :resource_dir,
+	:streaming_head, :local_p)
+    }
 }
 
 ad_proc -public subsite::update_subsite_theme {
@@ -1126,7 +1139,10 @@ ad_proc -public subsite::delete_subsite_theme {
 } {
     Delete a subsite theme, making it unavailable to the theme configuration code.
 } {
-    db_dml delete_subsite_theme {}
+    db_dml delete_subsite_theme {
+      delete from subsite_themes
+      where key = :key
+    }
 }
 
 ad_proc -public subsite::get_application_options {} {
@@ -1339,7 +1355,12 @@ ad_proc -public subsite::util::get_package_options {
     @return a list of pretty name, package key pairs suitable for use in a template
             select widget.
 } {
-    return [db_list_of_lists get {}]
+    return [db_list_of_lists get {
+        select pretty_name, package_key
+        from apm_package_types
+        where implements_subsite_p = 't'
+        order by pretty_name
+    }]
 }
 
 # Local variables:
