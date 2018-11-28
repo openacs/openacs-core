@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-    <partialquery name="subsite::get_url.strict_search">
-        <querytext>
-        and host = :search_vhost
-        </querytext>
-    </partialquery>
-
   <fullquery name="subsite::new_subsite_theme.insert_subsite_theme">
     <querytext>
       insert into subsite_themes
