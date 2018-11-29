@@ -1082,7 +1082,7 @@ ad_proc -public content::item::get_revision_content { -revision_id:required -ite
       from cr_revisionsx
       where revision_id = :revision_id
   }
-  
+
   if { $mime_type ne "" && [string match "text/*" $mime_type]} {
       set text_sql [db_map grc_get_all_content_1]
   } else {
