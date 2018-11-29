@@ -65,7 +65,7 @@ ad_proc -public ::content::item::new {
            Caller is responsible to handle cleaning up the tmp file
     @param nls_language - ???
     @param data - ???
-    @param attributes A list of lists ofpairs of additional attributes and
+    @param attributes A list of lists of pairs of additional attributes and
            their values to pass to the constructor. Each pair is a list of two
            elements: key => value such as
     [list [list attribute value] [list attribute value]]
@@ -313,7 +313,7 @@ ad_proc -public ::content::item::update {
     }
 }
 
-ad_proc -public ::content::item::content_type {
+ad_proc -deprecated -public ::content::item::content_type {
     -item_id:required
 } {
     @public get_content_type
@@ -321,19 +321,17 @@ ad_proc -public ::content::item::content_type {
     Retrieves the content type of the item. If the item does not exist,
     returns an empty string.
 
+    Deprecated: exactly the same proc as content::item::get_content_type
+
+    @see content::item::get_content_type
+
     @param  item_id   The item_id of the content item
 
     @return The content type of the item, or an empty string if no such
     item exists
 } {
-    return [package_exec_plsql \
-        -var_list [list [list item_id $item_id]] \
-        content_item get_content_type]
+    return [content::item::get_content_type -item_id $item_id]
 }
-
-
-
-
 
 ad_proc -public content::item::get_content_type {
     -item_id:required
@@ -344,13 +342,12 @@ ad_proc -public content::item::get_content_type {
     @param  item_id   The item_id of the content item
 
     @return The content type of the item, or an empty string if no such
-    item exists
+            item exists
 } {
-    return [package_exec_plsql -var_list [list \
-        [list item_id $item_id ] \
-    ] content_item get_content_type]
+    return [package_exec_plsql \
+        -var_list [list [list item_id $item_id ]] \
+        content_item get_content_type]
 }
-
 
 ad_proc -public content::item::get_context {
     -item_id:required
