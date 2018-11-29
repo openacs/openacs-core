@@ -89,7 +89,7 @@ ad_proc -public ::content::revision::new {
     }
 
     if {![info exists content_type] || $content_type eq ""} {
-        set content_type [::content::item::content_type -item_id $item_id]
+        set content_type [::content::item::get_content_type -item_id $item_id]
     }
     if {$storage_type eq ""} {
         set storage_type [db_string get_storage_type ""]
