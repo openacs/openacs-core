@@ -1227,6 +1227,108 @@ namespace eval util::http::native {}
 #     }
 #     return $input
 # }
+ad_proc -private util::http::native::run {
+    -url
+    {-method GET}
+    {-headers ""}
+    {-body ""}
+    {-body_file ""}
+    {-timeout 30}
+    -force_ssl:boolean
+    -gzip_response:boolean
+    -spool:boolean
+} {
+    Over time, Naviserver ns_http capabilities, return values and
+    arguments changed. This proc, probably meant to be transitional,
+    supports the different api variants with a common interface.
+
+    Parameters have the same meaning documented in util::http::native::request
+
+    @see util::http::native::request
+
+    @return a dict in the format returned by 'ns_http run' command on
+            a modern Naviserver.
+} {
+    if {[apm_version_names_compare [ns_info patchlevel] "4.99.15"] == 1} {
+        set cmd [list ns_http run \
+                     -timeout $timeout \
+                     -method $method \
+                     -headers $headers]
+        if {$body_file ne ""} {
+            lappend cmd -body_file $body_file
+        } elseif {$body ne ""} {
+            lappend cmd -body $body
+        }
+        if {$spool_p} {
+            lappend cmd -spoolsize 0
+        }
+        lappend cmd $url
+
+        set r [{*}$cmd]
+    } else {
+        # Older Naviservers used different commands depending if http
+        # or https was required
+        if {$force_ssl_p || [string match "https://*" $url]} {
+            set http_api [util::http::native_https_api]
+            if {$http_api eq ""} {
+                error "${this_proc}:  SSL not enabled"
+            }
+        } else {
+            set http_api "ns_http"
+        }
+
+        set queue_cmd [list $http_api queue \
+                           -timeout $timeout \
+                           -method $method \
+                           -headers $headers]
+        if {$body_file ne ""} {
+            lappend queue_cmd -body_file $body_file
+        } elseif {$body ne ""} {
+            lappend queue_cmd -body $body
+        }
+        lappend queue_cmd $url
+
+        # Older Naviservers would specify additional arguments:
+        # - ns_set for response headers in the command line.
+        # - variables where request's body, status and spool file would be returned
+        set resp_headers [ns_set create resp_headers]
+        set wait_cmd [list $http_api wait -headers $resp_headers -status status -timeout $timeout]
+        if {$spool_p} {
+            lappend wait_cmd -spoolsize 0 -file spool_file
+            set page ""
+        } else {
+            lappend wait_cmd -result page
+        }
+
+        if {$gzip_response_p} {
+            # NaviServer since 4.99.6 can decompress response transparently
+            if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
+                lappend wait_cmd -decompress
+            }
+        }
+
+        # Queue call to the url and wait for response: older
+        # Naviservers would queue and wait for the request complete in
+        # separate steps
+        set start_time [ns_time get]
+        set r [{*}$wait_cmd [{*}$queue_cmd]]
+        set end_time [ns_time get]
+        # Older Naviservers would not return request time. As a
+        # fallback, we calculate this manually.
+        set time [ns_time diff $end_time $start_time]
+
+        set r [dict create \
+                   body $page \
+                   time $time \
+                   headers $resp_headers \
+                   status $status]
+        if {[info exists spool_file]} {
+            dict set r file $spool_file
+        }
+    }
+
+    return $r
+}
 
 ad_proc -private util::http::native::request {
     -url
@@ -1321,16 +1423,6 @@ ad_proc -private util::http::native::request {
         return -code error "${this_proc}:  Invalid url:  $url"
     }
 
-    # Check whether we will use ssl or not
-    if {$force_ssl_p || [string match "https://*" $url]} {
-        set http_api [util::http::native_https_api]
-        if {$http_api eq ""} {
-            return -code error "${this_proc}:  SSL not enabled"
-        }
-    } else {
-        set http_api "ns_http"
-    }
-
     if {$headers eq ""} {
         set headers [ns_set create headers]
     }
@@ -1381,54 +1473,26 @@ ad_proc -private util::http::native::request {
         }
     }
 
-
     ## Issuing of the request
-    set queue_cmd [list $http_api queue \
-                       -timeout $timeout \
-                       -method $method \
-                       -headers $headers]
-    if {$body_file ne ""} {
-        lappend queue_cmd -body_file $body_file
-    } elseif {$body ne ""} {
-        lappend queue_cmd -body $body
-    }
-    lappend queue_cmd $url
-
-    set resp_headers [ns_set create resp_headers]
-    set wait_cmd [list $http_api wait -headers $resp_headers -status status -timeout $timeout]
-    if {$spool_p} {
-        lappend wait_cmd -spoolsize 0 -file spool_file
-        set page ""
-    } else {
-        lappend wait_cmd -result page
-    }
-
-    if {$gzip_response_p} {
-        # NaviServer since 4.99.6 can decompress response transparently
-        if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
-            lappend wait_cmd -decompress
-        }
-    }
-
-
-    # Queue call to the url and wait for response
-    set start_time [ns_time get]
-    set r [{*}$wait_cmd [{*}$queue_cmd]]
-    set end_time [ns_time get]
-
-    # Naviserver > 4.99.16 will return, among others, elapsed time in
-    # the response dict. If we run an older version, this must be
-    # calculated.
-    if {[dict exists $r time]} {
-        set time [dict get $r time]
-    } else {
-        set time [ns_time diff $end_time $start_time]
-    }
-
-    if {[info exists spool_file]} {
+    set r [util::http::native::run \
+               -url $url \
+               -method $method \
+               -headers $headers \
+               -body $body \
+               -body_file $body_file \
+               -timeout $timeout \
+               -force_ssl=$force_ssl_p \
+               -gzip_response=$gzip_response_p \
+               -spool=$spool_p]
+    set resp_headers [dict get $r headers]
+    set status       [dict get $r status]
+    set time         [dict get $r time]
+    if {[dict exists $r file]} {
+        set spool_file [dict get $r file]
         set page "${this_proc}: response spooled to '$spool_file'"
     } else {
         set spool_file ""
+        set page [dict get $r body]
     }
 
     # Get values from response headers, then remove them
