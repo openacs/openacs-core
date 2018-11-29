@@ -15,23 +15,26 @@ namespace eval security {
     set log(login_cookie) debug ;# notice
 }
 
-
-# cookies (all are signed cookies):
-#   cookie                value                          max-age         secure
-#   ad_session_id         session_id,user_id,login_level SessionTimeout  yes|no  (when SecureSessionCookie set: yes)
-#   ad_user_login         user_id,issue_time,auth_token  never expires   no
-#   ad_user_login_secure  user_id,random                 never expires   yes
-#   ad_secure_token       session_id,random,peeraddr     SessionLifetime yes
 #
-#   the random data is used to hinder attack the secure hash.
-#   currently the random data is ns_time
-#   peeraddr is used to avoid session hijacking
+# Cookies (all are signed cookies):
+#   cookie                value                                         max-age           secure
+#   --------------------------------------------------------------------------------------------
+#   ad_session_id         session_id,user_id,login_level                SessionTimeout    yes|no
+#   ad_user_login         user_id,issue_time,auth_token,forever         LoginTimeout|inf  no
+#   ad_user_login_secure  user_id,issue_time,auth_token,random,forever  LoginTimeout|inf  yes
+#   ad_secure_token       session_id,random,peeraddr                    SessionLifetime   yes
 #
-#   ad_user_login issue_time: [ns_time] at the time the user last authenticated
+#   "random" is used to hinder attack the secure hash.  Currently the
+#   random data is ns_time. "peeraddr" is used to avoid session
+#   hijacking.
 #
-#   ad_session_id login_level: 0 = none/expired, 1 = ok, 2 = auth ok, but account closed
+#   ad_user_login/ad_user_login_secure issue_time:
+#      [ns_time] at the time the user last authenticated
 #
-
+#   ad_session_id login_level:
+#      0 = none/expired,
+#      1 = ok,
+#      2 = auth ok, but account closed
 
 ad_proc -private sec_random_token {} {
     Generates a random token.
@@ -192,7 +195,7 @@ ad_proc -private sec_handler {} {
             # user_id can set without a login cookie.
             #
             try {
-                sec_login_read_cookie
+                lassign [sec_login_read_cookie] login_user_id login_cookie_login_expr login_auth_token
             } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
                 set login_level 0
                 ns_log warning "downgrade login_level since there is no login cookie provided"
@@ -323,9 +326,16 @@ ad_proc -private sec_login_read_cookie {} {
     return [split [ad_get_signed_cookie $cookie_name] ","]
 }
 
+
 ad_proc -private sec_login_handler {} {
 
-    Reads the login cookie, setting fields in ad_conn accordingly.
+    If a login cookie exists, it is checked for expiration
+    (depending on LoginTimeout) and the account status is validated.
+    In every case, the session info including [ad_conn] and the
+    session cookie is updated accordingly.
+
+    Modified ad_conn variables: untrusted_user_id, session_id,
+    auth_level, account_status, and user_id.
 
 } {
     ns_log debug "OACS= sec_login_handler: enter"
@@ -337,12 +347,21 @@ ad_proc -private sec_login_handler {} {
 
     # check for permanent login cookie
     try {
-        lassign [sec_login_read_cookie] untrusted_user_id login_expr auth_token
+        set login_cookie_info [sec_login_read_cookie]
+        lassign $login_cookie_info untrusted_user_id login_expr auth_token
         set auth_level expired
 
-        # Check authentication cookie
-        # First, check expiration
-        if { [sec_login_timeout] == 0 || [ns_time] - $login_expr < [sec_login_timeout] } {
+        # Check login cookie
+        #
+        # First, check expiration.
+        #
+        # When LoginTimeout is 0, check the auth token always.
+        # Otherwise, when check the auth_token, when it LoginTimeout
+        # has expired.
+        #
+        set sec_login_timeout [sec_login_timeout]
+
+        if { $sec_login_timeout == 0 || [ns_time] - $login_expr < $sec_login_timeout } {
             # Then check auth_token
             if {$auth_token eq [sec_get_user_auth_token $untrusted_user_id]} {
                 # Are we secure?
@@ -352,10 +371,14 @@ ad_proc -private sec_login_handler {} {
                 } else {
                     set auth_level ok
                 }
+            } else {
+                ns_log notice "OACS= auth_token has changed"
             }
         }
 
-        # Check account status
+        #
+        # Check in addition to the auth_token the account status
+        #
         set account_status [auth::get_local_account_status -user_id $untrusted_user_id]
 
         if {$account_status eq "no_account"} {
@@ -418,6 +441,10 @@ ad_proc -public ad_user_login {
         ad_unset_cookie -secure t ad_user_login_secure
     }
 
+    #
+    # Set "ad_user_login" Cookie always with secure=f for mixed
+    # content.
+    #
     ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
         -expire [expr {$forever_p ? false : true}] \
@@ -542,6 +569,7 @@ ad_proc -private sec_setup_session {
 } {
 
     Set up the session, generating a new one if necessary,
+    updates all user_relevant information in [ad_conn],
     and generates the cookies necessary for the session
 
 } {
@@ -1223,7 +1251,7 @@ ad_proc -public ad_get_signed_cookie {
     }
 
     ns_log $::security::log(login_cookie) "ad_get_signed_cookie: Verification of cookie $name FAILED"
-    error "Cookie could not be authenticated."
+    throw {AD_EXCEPTION INVALID_COOKIE} "Cookie could not be authenticated."
 }
 
 ad_proc -public ad_get_signed_cookie_with_expr {
@@ -1254,7 +1282,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
         return [list $value $expr_time]
     }
 
-    error "Cookie could not be authenticated."
+    throw {AD_EXCEPTION INVALID_COOKIE} "Cookie could not be authenticated."
 }
 
 ad_proc -public ad_set_signed_cookie {
