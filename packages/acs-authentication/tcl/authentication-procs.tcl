@@ -71,9 +71,7 @@ ad_proc -public auth::require_login {
     }
 
     # The -return switch causes the URL to return to the current page
-    ns_log notice "auth::require_login calls ad_returnredirect to $return_url"
     ad_returnredirect -message $message -- $return_url
-    ns_log notice "auth::require_login calls ad_returnredirect to $return_url DONE"    
     ad_script_abort
 }
 
@@ -209,9 +207,9 @@ ad_proc -public auth::authenticate {
     set login_attempt_key "[ad_conn peeraddr]-[ad_conn subsite_id]"
 
     if { [::auth::login_attempts::threshold_reached_p -login_attempt_key $login_attempt_key] } {
-        set auth_message [_ acs-authentication.To_many_failed_login_attempts]   
+        set auth_message [_ acs-authentication.To_many_failed_login_attempts]
 
-       	return [list auth_status "failed_to_connect" \
+        return [list auth_status "failed_to_connect" \
                     auth_message $auth_message \
                     account_status "closed" \
                     account_message "[_ acs-subsite.Auth_internal_error]"]
@@ -250,7 +248,7 @@ ad_proc -public auth::authenticate {
     # initialize result with authentication and account keys
     #
     array set result {auth_status "n/a" auth_message "" account_status "n/a" account_message ""}
-    
+
     ad_try {
         array set result [auth::authentication::Authenticate \
                               -username $username \
@@ -272,8 +270,8 @@ ad_proc -public auth::authenticate {
     # Verify result/auth_message return codes
     switch $result(auth_status) {
         ok {
-	    # reset/unset failed login attempts counter after a successful authentication
- 	    ::auth::login_attempts::reset -login_attempt_key $login_attempt_key
+            # reset/unset failed login attempts counter after a successful authentication
+            ::auth::login_attempts::reset -login_attempt_key $login_attempt_key
 
             # Continue below
         }
@@ -1449,7 +1447,7 @@ ad_proc -private auth::get_local_account {
     set user_info [acs_user::get_user_info -user_id $user_id]
     set party_info [party::get -party_id $user_id]
 
-    # Check local account status    
+    # Check local account status
     array set auth_info [auth::check_local_account_status \
                              -user_id $user_id \
                              -authority_id      [dict get $user_info authority_id] \
@@ -1470,7 +1468,7 @@ ad_proc -private auth::check_local_account_status {
     {-return_url ""}
     {-no_dialogue:boolean}
     {-user_id:required}
-    {-authority_id:required}    
+    {-authority_id:required}
     {-member_state:required}
     {-email:required}
     {-email_verified_p:required}
@@ -1567,7 +1565,7 @@ ad_proc -public auth::get_local_account_status {
                               -email             [dict get $party_info email] \
                               -screen_name       [dict get $user screen_name] \
                               -password_age_days [dict get $user password_age_days]]
-        
+
         set result [dict get $check_result account_status]
     } on error {errorMsg} {
         ns_log notice "auth::get_local_account_status returned: $errorMsg"
@@ -1950,7 +1948,7 @@ ad_proc -private auth::user_info::GetUserInfo {
 # After the maximum number of consecutive failed login attempts
 # has been excedeed, all further login attempts will be automatically rejected
 # for a specified lock-out/cool-down time, even if the correct credentials have been
-# provided. Every successful login before reaching the threshold resets the 
+# provided. Every successful login before reaching the threshold resets the
 # counter to 0 again. Beware, the counting is done via caching and is
 # therefore not persistent.
 #
