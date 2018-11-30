@@ -16,6 +16,10 @@ namespace eval security {
     #set log(timeout) notice
 
     ad_proc -private log {kind msg} {
+        Helper proc for debugging security aspects.
+        Uncomment some of the log(*) flags above to activate
+        debugging and reload this file.
+    } {
         set var ::security::log($kind)
         if {[info exists $var]} {
             ns_log [set $var] "$kind $msg"
