@@ -814,19 +814,18 @@ ad_proc -public content::item::upload_file {
     {-upload_file:required}
     {-parent_id:required}
     {-package_id ""}
+    {-title ""}
 } {
     Store the file uploaded under the parent_id if a file was uploaded
 
     @author Malte Sussdorff (sussdorff@sussdorff.de)
     @creation-date 2005-06-21
 
-    @param upload_file
+    @param upload_file  File to upload
+    @param parent_id    Parent ID
+    @param title        Title of the uploaded file
 
-    @param parent_id
-
-    @return the revision_id of the generated item
-
-    @error
+    @return revision_id of the generated item
 } {
 
     set filename [template::util::file::get_property filename $upload_file]
@@ -835,8 +834,7 @@ ad_proc -public content::item::upload_file {
         set mime_type [template::util::file::get_property mime_type $upload_file]
         set tmp_size [file size $tmp_filename]
         set extension [file extension $filename]
-        # GN: where is the title supposed to come from? missing nonpos arg?
-        if {![info exists title] || $title eq ""} {
+        if {$title eq ""} {
 
             # maltes: The following regsub garbles the title and consequently the filename as well.
             # "info_c+w.zip" will become "info_c+"
