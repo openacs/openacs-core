@@ -71,7 +71,9 @@ ad_proc -public auth::require_login {
     }
 
     # The -return switch causes the URL to return to the current page
+    ns_log notice "auth::require_login calls ad_returnredirect to $return_url"
     ad_returnredirect -message $message -- $return_url
+    ns_log notice "auth::require_login calls ad_returnredirect to $return_url DONE"    
     ad_script_abort
 }
 
@@ -1445,15 +1447,18 @@ ad_proc -private auth::get_local_account {
     set user_id [acs_user::get_by_username \
                      -authority_id $authority_id -username $username]
     set user_info [acs_user::get_user_info -user_id $user_id]
-    
+    set party_info [party::get -party_id $user_id]
+
     # Check local account status    
     array set auth_info [auth::check_local_account_status \
                              -user_id $user_id \
-                             -return_url $return_url \
-                             -member_state [dict get $user_info member_state] \
-                             -email_verified_p [dict get $user_info email_verified_p] \
-                             -screen_name [dict get $user_info screen_name] \
-                             -password_age_days [dict get $user_info password_age_days]]
+                             -authority_id      [dict get $user_info authority_id] \
+                             -member_state      [dict get $user_info member_state] \
+                             -email             [dict get $party_info email] \
+                             -email_verified_p  [dict get $user_info email_verified_p] \
+                             -screen_name       [dict get $user_info screen_name] \
+                             -password_age_days [dict get $user_info password_age_days] \
+                             -return_url $return_url]
 
     # Return user_id
     set auth_info(user_id) $user_id
@@ -1465,7 +1470,9 @@ ad_proc -private auth::check_local_account_status {
     {-return_url ""}
     {-no_dialogue:boolean}
     {-user_id:required}
+    {-authority_id:required}    
     {-member_state:required}
+    {-email:required}
     {-email_verified_p:required}
     {-screen_name:required}
     {-password_age_days:required}
@@ -1482,9 +1489,6 @@ ad_proc -private auth::check_local_account_status {
 
     # system_name and email is used in some of the I18N messages
     set system_name [ad_system_name]
-    acs_user::get -user_id $user_id -array user
-    set authority_id $user(authority_id)
-    set email $user(email)
 
     switch $member_state {
         approved {
@@ -1495,7 +1499,10 @@ ad_proc -private auth::check_local_account_status {
 
             if { $email_verified_p == "f" } {
                 if { !$no_dialogue_p } {
-                    set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
+                    set result(account_message) [subst {
+                        <p>[_ acs-subsite.lt_Registration_informat]</p>
+                        <p>[_ acs-subsite.lt_Please_read_and_follo]</p>
+                    }]
 
                     ad_try {
                         auth::send_email_verification_email -user_id $user_id
@@ -1551,14 +1558,17 @@ ad_proc -public auth::get_local_account_status {
     set result no_account
     ad_try {
         set user [acs_user::get_user_info -user_id $user_id]
-        array set check_result [auth::check_local_account_status \
-                                    -user_id $user_id \
-                                    -member_state [dict get $user member_state] \
-                                    -email_verified_p [dict get $user email_verified_p] \
-                                    -screen_name [dict get $user screen_name] \
-                                    -password_age_days [dict get $user password_age_days]]
+        set party_info [party::get -party_id $user_id]
+        set check_result [auth::check_local_account_status \
+                              -user_id $user_id \
+                              -authority_id      [dict get $user authority_id] \
+                              -member_state      [dict get $user member_state] \
+                              -email_verified_p  [dict get $user email_verified_p] \
+                              -email             [dict get $party_info email] \
+                              -screen_name       [dict get $user screen_name] \
+                              -password_age_days [dict get $user password_age_days]]
         
-        set result $check_result(account_status)
+        set result [dict get $check_result account_status]
     } on error {errorMsg} {
         ns_log notice "auth::get_local_account_status returned: $errorMsg"
     }
