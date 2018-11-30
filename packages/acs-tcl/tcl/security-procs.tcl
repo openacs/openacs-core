@@ -11,8 +11,16 @@ ad_library {
 }
 
 namespace eval security {
-    set log(login_url) debug    ;# notice
-    set log(login_cookie) debug ;# notice
+    #set log(login_url) notice
+    #set log(login_cookie) notice
+    #set log(timeout) notice
+
+    ad_proc -private log {kind msg} {
+        set var ::security::log($kind)
+        if {[info exists $var]} {
+            ns_log [set $var] "$kind $msg"
+        }
+    }
 }
 
 #
@@ -94,82 +102,125 @@ ad_proc -private sec_handler {} {
 } {
     ns_log debug "OACS= sec_handler: enter"
 
-    if {$::security::log(login_cookie) ne "debug"} {
+    if {[info exists ::security::log(login_cookie)]} {
         foreach c [list ad_session_id ad_secure_token ad_user_login ad_user_login_secure] {
             lappend msg "$c '[ad_get_cookie $c]'"
         }
         ns_log notice "OACS [ns_conn url] cookies: $msg"
     }
 
-    if { [catch {
-        set cookie_list [ad_get_signed_cookie "ad_session_id"]
-    } errmsg ] } {
-        # Cookie is invalid because either:
-        # -> it was never set
-        # -> it failed the cryptographic check
-        # -> it expired.
+    try {
 
-        # Now check for login cookie
-        ns_log $::security::log(login_cookie) "OACS: Not a valid session cookie, looking for login cookie '$errmsg'"
-        if {[string match "*does not exist*" $errmsg]} {
-            #
-            # We have no cookie. Maybe we are running under aa_test.
-            #
-            #if {[nsv_array exists aa_test]} {
-            #    ns_log notice "nsv_array logindata [nsv_get aa_test logindata logindata]"
-            #    ns_log notice "ns_conn peeraddr [ns_conn peeraddr]"
-            #    ns_log notice "dict get $logindata peeraddr [dict get $logindata peeraddr]"
-            #}
-            if {[nsv_array exists aa_test]
-                && [nsv_get aa_test logindata logindata]
-                && [ns_conn peeraddr] eq [dict get $logindata peeraddr]
-            } {
-                #ns_log notice logindata=$logindata
-                if {[dict exists $logindata user_id]} {
-                    set user_id [dict get $logindata user_id]
-                    ad_conn -set user_id $user_id
-                    ad_conn -set untrusted_user_id $user_id
-                    ad_conn -set account_status ok
-                    ad_conn -set auth_level ok
-                    #ad_conn -set session_id [sec_allocate_session]
-                    set auth_level ok
-                    set untrusted_user_id $user_id
-                    set ::__aa_testing_mode 1
-                }
+        ad_get_signed_cookie "ad_session_id"
+
+    } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
+        #
+        # We have no session cookie. Maybe we are running under
+        # aa_test.
+        #
+        #if {[nsv_array exists aa_test]} {
+        #    ns_log notice "nsv_array logindata [nsv_get aa_test logindata logindata]"
+        #    ns_log notice "ns_conn peeraddr [ns_conn peeraddr]"
+        #    ns_log notice "dict get $logindata peeraddr [dict get $logindata peeraddr]"
+        #}
+        if {[nsv_array exists aa_test]
+            && [nsv_get aa_test logindata logindata]
+            && [ns_conn peeraddr] eq [dict get $logindata peeraddr]
+        } {
+            #ns_log notice logindata=$logindata
+            if {[dict exists $logindata user_id]} {
+                set user_id [dict get $logindata user_id]
+                ad_conn -set user_id $user_id
+                ad_conn -set untrusted_user_id $user_id
+                ad_conn -set account_status ok
+                ad_conn -set auth_level ok
+                #ad_conn -set session_id [sec_allocate_session]
+                set auth_level ok
+                set untrusted_user_id $user_id
+                set ::__aa_testing_mode 1
             }
-        } else {
-            #
-            # We have a cookie, but it is not ok, so logout.
-            #
-            ad_user_logout
         }
-
-        #
-        # Unless we have managed to get credentials above, get it now.
-        #
-        if {![info exists auth_level]} {
+        if {![info exists ::__aa_testing_mode]} {
             sec_login_handler
         }
-    } else {
+
+    } trap {AD_EXCEPTION INVALID_COOKIE} {errorMsg} {
         #
-        # The session cookie already exists and is valid.
+        # We have a session cookie, but it fails the cryptographic
+        # checks.  Make sure to log the current user out and update
+        # session cookie and ad_conn information.
         #
-        set cookie_data [split [lindex $cookie_list 0] {,}]
-        set session_last_renew_time [lindex $cookie_data 3]
+        ad_user_logout
+        sec_login_handler
+
+    } on ok {session_list} {
+        #
+        # The session cookie exists and is valid.
+        #
+        set session_data [split [lindex $session_list 0] {,}]
+        set session_id              [lindex $session_data 0]
+        set session_user_id         [lindex $session_data 1]
+        set login_level             [lindex $session_data 2]
+        set session_last_renew_time [lindex $session_data 3]
+
         if {![string is integer -strict $session_last_renew_time]} {
-            # This only happens if the session cookie is old style
-            # previous to OpenACS 5.7 and does not have session review time
-            # embedded.
-            # Assume cookie expired and force login handler
+            #
+            # This happens only when the session cookie is old style
+            # previous to OpenACS 5.7 and does not have session review
+            # time embedded. Assume cookie expired and force login
+            # handler.
+            #
             set session_last_renew_time 0
         }
 
-        set session_expr [expr {$session_last_renew_time + [sec_session_timeout]}]
-        if {$session_expr < [ns_time]} {
-            sec_login_handler
+        #
+        # When the session_cookie comes from an authenticated session,
+        # get login cookie as well.
+        #
+        set login_cookie_exists_p 0
+        set persistent_login_p 0
+
+        if {$session_user_id > 0} {
+            try {
+                sec_login_read_cookie
+
+            } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
+                #
+                # No login cookie.
+                #
+                ns_log notice "=== no login_cookie"
+
+            } trap {AD_EXCEPTION INVALID_COOKIE} {errorMsg} {
+                #
+                # Invalid login cookie (might be past validity)
+                #
+                ns_log notice "=== invalid login_cookie"
+
+            } on ok {login_list} {
+                set login_cookie_exists_p 1
+                set persistent_login_p [lindex $login_list end]
+            }
         }
 
-        lassign $cookie_data session_id untrusted_user_id login_level
+        ::security::log timeout "login_cookie persistent_login $persistent_login_p [ns_conn url]"
+
+        set session_expr [expr {$session_last_renew_time + [sec_session_timeout]}]
+
+        #
+        # Check for persistent logins: If the user requested a
+        # persistent login, don't perform session renewing based on
+        # SessionTimeout.
+        #
+        if {!$persistent_login_p} {
+            ::security::log timeout "SessionTimeout in [expr {$session_expr - [ns_time]}] secs"
+            if {$session_expr < [ns_time]} {
+                ::security::log timeout "SessionTimeout reached, call sec_login_handler"
+                sec_login_handler
+            }
+        } else {
+            ::security::log timeout "SessionTimeout not checked due to persistent login"
+        }
+
         set user_id 0
         set account_status closed
 
@@ -185,34 +236,36 @@ ad_proc -private sec_handler {} {
             set login_level 0
         }
 
-        if {$login_level > 0} {
+        if {$login_level > 0 && !$login_cookie_exists_p} {
             #
-            # Check if we have a valid login cookie, since the
-            # login_level is just based on the session_cookie. On
-            # proper logouts via the web interface, this extra check
-            # should not be necessary. However, if someone hacks
-            # around with the cookies, we want to make sure that no
-            # user_id can set without a login cookie.
+            # $login_level > 0 requires a login cookie. If we have no
+            # login cookie, somebody tries to hack around.
             #
-            try {
-                lassign [sec_login_read_cookie] login_user_id login_cookie_login_expr login_auth_token
-            } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
-                set login_level 0
-                ns_log warning "downgrade login_level since there is no login cookie provided"
-            }
+            set login_level 0
+            ns_log warning "downgrade login_level since there is no login cookie provided"
         }
 
         switch -- $login_level {
             1 {
+                #
+                # authentication ok
+                #
                 set auth_level ok
-                set user_id $untrusted_user_id
+                set user_id $session_user_id
                 set account_status ok
             }
             2 {
+                #
+                # authentication ok, but account closed
+                #
                 set auth_level ok
             }
             default {
-                if { $untrusted_user_id == 0 } {
+                #
+                # login_level 0: none/expired
+                #
+
+                if { $session_user_id == 0 } {
                     set auth_level none
                 } else  {
                     set auth_level expired
@@ -220,9 +273,12 @@ ad_proc -private sec_handler {} {
             }
         }
 
-        ns_log $::security::log(login_cookie) "Security: Insecure session OK: session_id $session_id, untrusted_user_id $untrusted_user_id, auth_level $auth_level, user_id $user_id"
+        ::security::log login_cookie "Insecure session OK: session_id $session_id, session_user_id $session_user_id, auth_level $auth_level, user_id $user_id"
 
-        # We're okay, insofar as the insecure session, check if it's also secure
+        #
+        # We're okay for the insecure session. Check if it's also
+        # secure.
+        #
         if { $auth_level eq "ok"
              && ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])
          } {
@@ -234,12 +290,12 @@ ad_proc -private sec_handler {} {
                     set auth_level secure
                 }
             }
-            ns_log $::security::log(login_cookie) "Security: Secure session checked: session_id = $session_id, untrusted_user_id = $untrusted_user_id, auth_level = $auth_level, user_id = $user_id"
+            ::security::log login_cookie "Secure session checked: session_id = $session_id, session_user_id = $session_user_id, auth_level = $auth_level, user_id = $user_id"
         }
 
         # Setup ad_conn
         ad_conn -set session_id $session_id
-        ad_conn -set untrusted_user_id $untrusted_user_id
+        ad_conn -set untrusted_user_id $session_user_id
         ad_conn -set user_id $user_id
         ad_conn -set auth_level $auth_level
         ad_conn -set account_status $account_status
@@ -250,35 +306,28 @@ ad_proc -private sec_handler {} {
         # knows about sec_session_timeout.
         # [sec_session_renew] = SessionTimeout - SessionRenew (see security-init.tcl)
         # $session_expr = PreviousSessionIssue + SessionTimeout
-        if { $session_expr - [sec_session_renew] < [ns_time] } {
+
+        ::security::log timeout "SessionRefresh in [expr {($session_expr - [sec_session_renew]) - [ns_time]}] secs"
+
+        if {  $session_expr - [sec_session_renew] < [ns_time] } {
 
             # # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
             # # if only they keep requesting pages frequently enough, but the alternative was that
             # # the situation where LoginTimeout = 0 (infinite) and the user unchecks the "Remember me" checkbox
             # # would cause users' sessions to expire as soon as the session needed to be renewed
-            #sec_generate_session_id_cookie
+            sec_generate_session_id_cookie
 
             # apisano 2018-06-08: as discussed in
             # https://openacs.org/forums/message-view?message_id=1691183#msg_1691183,
             # this would break sec_change_user_auth_token as a mean to
             # invalidate user login...
-            #
-            # GN: when we use "sec_login_handler" instead of the
-            # previous code using "sec_generate_session_id_cookie",
-            # persistent logins stop to work (people are logged out
-            # from time to time). However, when just
-            # [sec_generate_session_id_cookie] is used then the login
-            # cookie is nevery checked, as long there is a
-            # cryptographically valid session cookie.
-            #
-            sec_login_handler
+            #sec_login_handler
         }
-
-        #
-        # generate a csrf token and a csp nonce value
-        #
-        security::csrf::new
     }
+    #
+    # Generate a csrf token and a csp nonce value
+    #
+    security::csrf::new
 }
 
 if {[ns_info name] eq "NaviServer"} {
@@ -345,28 +394,40 @@ ad_proc -private sec_login_handler {} {
     set untrusted_user_id 0
     set account_status closed
 
-    # check for permanent login cookie
+    #
+    # Check login cookie.
+    #
     try {
-        set login_cookie_info [sec_login_read_cookie]
-        lassign $login_cookie_info untrusted_user_id login_expr auth_token
+        set login_list [sec_login_read_cookie]
+        set login_info [list \
+                            user_id    [lindex $login_list 0] \
+                            issue_time [lindex $login_list 1] \
+                            auth_token [lindex $login_list 2] \
+                            forever    [lindex $login_list end] ]
+
+        set untrusted_user_id [dict get $login_info user_id]
         set auth_level expired
 
-        # Check login cookie
         #
-        # First, check expiration.
-        #
-        # When LoginTimeout is 0, check the auth token always.
-        # Otherwise, when check the auth_token, when it LoginTimeout
-        # has expired.
+        # Check conformancy of the auth_token between cookie and
+        # database depending on LoginTimeout: When LoginTimeout is 0,
+        # check the auth token always.  Otherwise, when check the
+        # auth_token, when it LoginTimeout has expired.
         #
         set sec_login_timeout [sec_login_timeout]
 
-        if { $sec_login_timeout == 0 || [ns_time] - $login_expr < $sec_login_timeout } {
-            # Then check auth_token
-            if {$auth_token eq [sec_get_user_auth_token $untrusted_user_id]} {
-                # Are we secure?
-                if { [security::secure_conn_p] } {
-                    # We retrieved the secure login cookie over HTTPS, we're secure
+        if { $sec_login_timeout == 0
+             || [ns_time] - [dict get $login_info issue_time] < $sec_login_timeout
+         } {
+            #
+            # Check auth_token.
+            #
+            if {[dict get $login_info auth_token] eq [sec_get_user_auth_token $untrusted_user_id]} {
+                #
+                # Check whether we retrieved the login cookie over
+                # HTTPS. If so, we're secure.
+                #
+                if { [security::secure_conn_p] || [ad_conn behind_secure_proxy_p]} {
                     set auth_level secure
                 } else {
                     set auth_level ok
@@ -377,7 +438,7 @@ ad_proc -private sec_login_handler {} {
         }
 
         #
-        # Check in addition to the auth_token the account status
+        # Check in addition to the auth_token also the account status.
         #
         set account_status [auth::get_local_account_status -user_id $untrusted_user_id]
 
@@ -389,6 +450,10 @@ ad_proc -private sec_login_handler {} {
     } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
         #
         # There is no such such cookie, no error to report.
+        #
+    } trap {AD_EXCEPTION INVALID_COOKIE} {errorMsg} {
+        #
+        # The cookie is not valid (might be past validity)
         #
     } on error {errorMsg} {
         ns_log error "sec_login_handler: $errorMsg, $::errorCode"
@@ -466,7 +531,6 @@ ad_proc -public sec_get_user_auth_token {
     set auth_token [db_string select_auth_token {
         select auth_token from users where user_id = :user_id
     } -default {}]
-    db_release_unused_handles
 
     if { $auth_token eq "" } {
         ns_log Debug "Security: User $user_id does not have any auth_token, creating a new one."
@@ -487,7 +551,6 @@ ad_proc -public sec_change_user_auth_token {
     db_dml update_auth_token {
         update users set auth_token = :auth_token where user_id = :user_id
     }
-    db_release_unused_handles
 
     return $auth_token
 }
@@ -502,6 +565,9 @@ ad_proc -public ad_user_logout {
         set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
     }
 
+    #
+    # Make sure, this session_id is not accepted anymore.
+    #
     sec_invalidate_session_id [ad_conn session_id]
 
     #
@@ -570,7 +636,7 @@ ad_proc -private sec_setup_session {
 
     Set up the session, generating a new one if necessary,
     updates all user_relevant information in [ad_conn],
-    and generates the cookies necessary for the session
+    and generates the cookies necessary for the session.
 
 } {
     ns_log debug "OACS= sec_setup_session: enter"
@@ -982,7 +1048,9 @@ ad_proc -public ad_get_login_url {
         # In a few cases, we do not need to add a fully qualified
         # return url. The secure cases have to be still tested.
         #
-        if { !$require_qualified_return_url && ([security::secure_conn_p] || ![security::RestrictLoginToSSLP]) } {
+        if { !$require_qualified_return_url
+             && ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p] || ![security::RestrictLoginToSSLP])
+         } {
             set return_url [ad_return_url]
         } else {
             set return_url [ad_return_url -qualified]
@@ -993,7 +1061,7 @@ ad_proc -public ad_get_login_url {
     }
     set url [export_vars -base $url -no_empty {authority_id username return_url host_node_id}]
 
-    ns_log $::security::log(login_url) "ad_get_login_url: final login_url <$url>"
+    ::security::log login_url "ad_get_login_url: final login_url <$url>"
 
     return $url
 }
@@ -1233,8 +1301,10 @@ ad_proc -public ad_get_signed_cookie {
 
     Retrieves a signed cookie. Validates a cookie against its
     cryptographic signature and ensures that the cookie has not
-    expired. Throws an exception if validation fails.
+    expired. Throws an exception if cookie does not exists or
+    validation fails (maybe due to expiration).
 
+    @return cookie value
 } {
 
     set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
@@ -1243,14 +1313,14 @@ ad_proc -public ad_get_signed_cookie {
     }
 
     lassign $cookie_value value signature
-    ns_log $::security::log(login_cookie) "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
+    ::security::log login_cookie "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
 
     if { [ad_verify_signature -secret $secret $value $signature] } {
-        ns_log $::security::log(login_cookie) "ad_get_signed_cookie: Verification of cookie $name OK"
+        ::security::log login_cookie "ad_get_signed_cookie: Verification of cookie $name OK"
         return $value
     }
 
-    ns_log $::security::log(login_cookie) "ad_get_signed_cookie: Verification of cookie $name FAILED"
+    ::security::log login_cookie "ad_get_signed_cookie: Verification of cookie $name FAILED"
     throw {AD_EXCEPTION INVALID_COOKIE} "Cookie could not be authenticated."
 }
 
@@ -1325,7 +1395,7 @@ ad_proc -public ad_set_signed_cookie {
 
 } {
     if { $signature_max_age eq "" } {
-        if { $max_age eq "inf" } {
+        if { $max_age in {"inf" 0} } {
             set signature_max_age ""
         } elseif { $max_age ne "" } {
             set signature_max_age $max_age
@@ -1342,6 +1412,7 @@ ad_proc -public ad_set_signed_cookie {
     set cookie_value [ad_sign -secret $secret -token_id $token_id -max_age $signature_max_age $value]
     set data [list $value $cookie_value]
 
+    ::security::log timeout "ad_set_signed_cookie $name [list signature_max_age $signature_max_age max_age $max_age]"
     ad_set_cookie \
         -replace $replace \
         -secure $secure \
@@ -1555,7 +1626,7 @@ ad_proc -public ad_get_client_property {
         set id [ad_conn session_id]
         #
         # If session_id is still undefined in the connection then just
-        # return the default.
+        # return the default of the property.
         #
         if { $id eq "" } {
             return $default
@@ -1580,7 +1651,7 @@ ad_proc -public ad_get_client_property {
     }
     lassign $property value secure_p
 
-    if { $secure_p != "f" && ![security::secure_conn_p] } {
+    if { $secure_p != "f" && !([security::secure_conn_p] || [ad_conn behind_secure_proxy_p]) } {
         return $default
     }
 
@@ -1612,7 +1683,7 @@ ad_proc -public ad_set_client_property {
     @see ad_get_client_property
 } {
 
-    if { $secure != "f" && ![security::secure_conn_p] } {
+    if { $secure != "f" && !([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])} {
         error "Unable to set secure property in insecure or invalid session"
     }
 
@@ -1718,7 +1789,7 @@ ad_proc -public security::require_secure_conn {} {
     @author Peter Marklund
 } {
     if { [https_available_p] } {
-        if { ![security::secure_conn_p] } {
+        if { !([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])} {
             security::redirect_to_secure [ad_return_url -qualified]
         }
     }
@@ -2146,7 +2217,7 @@ ad_proc -public security::locations {} {
         #
         # Is the current connection secure?
         #
-        set secure_conn_p [security::secure_conn_p]
+        set secure_conn_p [expr {[security::secure_conn_p] || [ad_conn behind_secure_proxy_p]}]
 
         set current_location [util_current_location]
         if {$current_location ni $locations} {
