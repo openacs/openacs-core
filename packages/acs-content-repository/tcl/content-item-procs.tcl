@@ -246,7 +246,7 @@ ad_proc -public ::content::item::get {
     if {$revision ni {live latest}} {
         error "content::item::get revision was '${revision}'. It must be 'live' or 'latest'"
     }
-    set content_type [content_type -item_id $item_id]
+    set content_type [content::item::get_content_type -item_id $item_id]
     if {$content_type eq ""} {
         # content_type query was unsuccessful, item does not exist
         return 0
