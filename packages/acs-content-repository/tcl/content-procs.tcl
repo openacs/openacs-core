@@ -1,12 +1,12 @@
 ad_library {
 
-    Functions that the content-repository uses to interact with the 
+    Functions that the content-repository uses to interact with the
     file system.
 
     @author Dan Wickstrom (dcwickstrom@earthlink.net)
     @creation-date Sat May  5 13:45 2001
     @cvs-id $Id$
-} 
+}
 
 # The location for files
 ad_proc -public cr_fs_path { { location CR_FILES } } {
@@ -19,7 +19,7 @@ ad_proc -public cr_fs_path { { location CR_FILES } } {
 
 ad_proc -private cr_create_content_file_path {item_id revision_id} {
 
-    Creates a unique file in the content repository file system based off of 
+    Creates a unique file in the content repository file system based off of
     the item_id and revision_id of the content item.
 
 } {
@@ -27,7 +27,7 @@ ad_proc -private cr_create_content_file_path {item_id revision_id} {
     # Split out the version_id by groups of 2.
     set item_id_length [string length $item_id]
     set path "/"
-    
+
     for {set i 0} {$i < $item_id_length} {incr i} {
         append path [string range $item_id $i $i]
         if {($i % 2) == 1} {
@@ -36,7 +36,7 @@ ad_proc -private cr_create_content_file_path {item_id revision_id} {
                 if {![file exists [cr_fs_path]$path]} {
                     file mkdir [cr_fs_path]$path
                 }
-                
+
                 append path "/"
             }
         }
@@ -58,8 +58,8 @@ ad_proc -private cr_create_content_file_path {item_id revision_id} {
 
 ad_proc -public cr_create_content_file {
     -move:boolean
-    item_id 
-    revision_id 
+    item_id
+    revision_id
     client_filename
 } {
     Copies the file passed by client_filename to the content repository file
@@ -71,9 +71,9 @@ ad_proc -public cr_create_content_file {
     set content_file [cr_create_content_file_path $item_id $revision_id]
     set dir [cr_fs_path]
 
-    if { $move_p } { 
+    if { $move_p } {
         file rename -- $client_filename $dir$content_file
-    } else { 
+    } else {
         file copy -force -- $client_filename $dir$content_file
     }
 
@@ -83,15 +83,15 @@ ad_proc -public cr_create_content_file {
         set f [open $dir/file-creation.log a]
         puts $f $content_file
         close $f
-    } 
+    }
 
     return $content_file
 }
 
 ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
 
-    Copies the string to the content repository file storage area, and it 
-    returns the relative file path from the root of the content repository 
+    Copies the string to the content repository file storage area, and it
+    returns the relative file path from the root of the content repository
     file storage area.
 } {
     ad_mutex_eval [nsv_get mutex cr_file_creation] {
@@ -109,7 +109,7 @@ ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
 
 ad_proc -public cr_file_size {relative_file_path} {
 
-    Returns the size of a file stored in the content repository.  Takes the 
+    Returns the size of a file stored in the content repository.  Takes the
     relative file path of the content repository file as an argument.
 
 } {
@@ -169,7 +169,7 @@ ad_proc -public cr_count_file_entries {name} {
 ad_proc -private cr_delete_orphans {files} {
 
     delete orphaned files in the content repository
-    
+
 } {
     set dir [cr_fs_path]
     foreach name $files {
@@ -189,7 +189,7 @@ ad_proc -private cr_delete_orphans {files} {
             # file is an orphan and should be removed
             ns_log notice "delete orphaned file $dir$name"
             file delete -- $dir$name
-          }
+        }
     }
 }
 
