@@ -47,6 +47,9 @@ ad_proc -public auth::require_login {
         set message [_ acs-subsite.lt_Your_login_has_expire]
     }
 
+    #
+    # The -return switch causes the URL to return to the current page.
+    #
     set return_url [ad_get_login_url -return]
 
     # Long URLs (slightly above 4000 bytes) can kill aolserver-4.0.10, causing
@@ -70,7 +73,6 @@ ad_proc -public auth::require_login {
         set return_url [ad_get_login_url]
     }
 
-    # The -return switch causes the URL to return to the current page
     ad_returnredirect -message $message -- $return_url
     ad_script_abort
 }
