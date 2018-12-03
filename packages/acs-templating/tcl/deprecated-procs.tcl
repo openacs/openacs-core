@@ -92,6 +92,8 @@ ad_proc -public -deprecated template::util::clear_cookie { name { domain "" } } 
 
 ad_proc -deprecated -public template::util::quote_html {
     html
+
+    @see ns_quotehtml
 } {
     Quote possible HTML tags in the contents of the html parameter.
 } {
