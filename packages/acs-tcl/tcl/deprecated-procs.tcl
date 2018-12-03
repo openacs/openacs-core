@@ -136,6 +136,9 @@ ad_proc -deprecated ad_dbclick_check_dml {
 
 
 ad_proc -deprecated util_PrettyBoolean {t_or_f { default  "default" } } {
+
+    @see tcl string is true/false
+    @see lang::message::lookup
 } {
     if { $t_or_f == "t" || $t_or_f eq "T" } {
         return "Yes"
@@ -606,6 +609,7 @@ ad_proc -deprecated util_ReturnMetaRefresh {
     multipart/form-data using
     Meta Refresh page instead of a redirect.
 
+    @see ad_returnredirect
 } {
     ad_return_top_of_page [subst {
         <head>
@@ -626,6 +630,8 @@ ad_proc -public -deprecated util_unlist { list args } {
     the <i>n</i>th element of <code>args</code>.
 
     One should use the built-in Tcl command "lassign" instread of this proc.
+
+    @see lassign
 
 } {
     for { set i 0 } { $i < [llength $args] } { incr i } {
@@ -2469,6 +2475,9 @@ ad_proc -deprecated -public util_httpopen {
     {http_referer ""}
 } {
     Like ns_httpopen but works for POST as well; called by util_httppost
+
+    @see util::http::request
+    @see ns_http
 } {
 
     if { ![string match "http://*" $url] } {
