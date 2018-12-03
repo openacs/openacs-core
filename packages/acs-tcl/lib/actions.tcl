@@ -1,9 +1,11 @@
-# Generate an html version of the given package_id's admin actions.
-# expects to be in a conn.
-#
-# @param package_id
-# @param package_key
-# @param return_url
+ad_include_contract {
+    Generate an html version of the given package_id's admin actions.
+    expects to be in a conn.
+} {
+    package_id:integer
+    package_key:token
+    return_url:localurl
+}
 
 set user_id [ad_conn user_id]
 
