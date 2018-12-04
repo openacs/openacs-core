@@ -13,7 +13,7 @@ ad_proc -private doc_parse_property_string { properties } {
     Parses a properties declaration of the form that programmers specify.
     
     @param properties The property string as the programmer specified it.
-    @error if there's any problems with the string.
+    @error if there's any problem with the string.
     @return an internal array-as-a-list representation of the properties
     declaration.
 
