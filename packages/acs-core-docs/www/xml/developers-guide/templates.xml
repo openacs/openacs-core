@@ -99,7 +99,7 @@ set user_id [ad_conn user_id]
 db_1row user_name {
     select first_names || ' ' || last_name as user_name 
     from users
-    where forum_id = :user_id
+    where user_id = :user_id
 }
 
 set page_title "Add a note for $user_name"
