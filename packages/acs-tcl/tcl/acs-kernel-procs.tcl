@@ -33,7 +33,7 @@ ad_proc -public ad_acs_administrator_exists_p {} {
 ad_proc -private ad_acs_require_basic_schemata {} {
 
     This is a transitional code to ensure that the SQL schemata
-    required for botostrapping (i.e. before the upgrade script) are
+    required for bootstrapping (i.e. before the upgrade script) are
     already installed.
 
 } {
