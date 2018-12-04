@@ -5,6 +5,7 @@ ad_include_contract {
 
     @param resource_info dict containing at least resourceDir and cdn
     @param version version of the package
+    @param download_url url for downloading the resource
 
     @author Gustaf Neumann
 } {
