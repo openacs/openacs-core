@@ -118,7 +118,6 @@ ad_proc -public util::html_diff {
     set old_list [list]
     while {$frag ne ""} {
 	if {![regexp "(\[^<]*)(<(/?)(\[^ \r\n\t>]+)(\[^>]*)>)?(.*)" $frag match pretag fulltag close tag tagbody frag]} {
-	    # we should never get here, the regexp should match anything
             # should never get here since above will match anything.
             ns_log Error "util_close_html_tag - NO MATCH: should never happen! frag=$frag"
             lappend old_list $frag 
@@ -145,7 +144,6 @@ ad_proc -public util::html_diff {
     set new_list [list]
     while {$frag ne ""} {
 	if {![regexp "(\[^<]*)(<(/?)(\[^ \r\n\t>]+)(\[^>]*)>)?(.*)" $frag match pretag fulltag close tag tagbody frag]} {
-	    # we should never get here, the regexp should match anything
             # should never get here since above will match anything.
             lappend new_list $frag 
             set frag {}	    
