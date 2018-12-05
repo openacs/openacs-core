@@ -400,6 +400,8 @@ create index acs_mail_lite_ie_section_ref_map_section_id_idx
 	on acs_mail_lite_ie_section_ref_map (section_id);
 
 --
+-- TODO: this table does not exists for Oracle.... Not needed there?
+--
 create table acs_mail_lite_send_msg_id_map (
        -- a randomized number unique to this table
        -- unique not null
@@ -425,3 +427,9 @@ create table acs_mail_lite_send_msg_id_map (
 create index acs_mail_lite_send_msg_id_map_msg_id_idx
        on acs_mail_lite_send_msg_id_map (msg_id);
 
+--
+-- Speed up referential integrity
+--
+CREATE INDEX acs_mail_lite_send_msg_id_map_package_id_idx ON acs_mail_lite_send_msg_id_map(package_id);
+CREATE INDEX acs_mail_lite_send_msg_id_map_party_id_idx   ON acs_mail_lite_send_msg_id_map(party_id);
+CREATE INDEX acs_mail_lite_send_msg_id_map_object_id_idx  ON acs_mail_lite_send_msg_id_map(object_id);
