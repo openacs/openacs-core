@@ -2833,8 +2833,6 @@ ad_proc -public xml_get_child_node_attribute_by_path {
 
     Return the attribute of a child node down a give path from the current node.
 
-    <p>
-
     Example:<pre>
     set tree [xml_parse -persist "
 &lt;enterprise&gt;
@@ -2863,6 +2861,7 @@ ad_proc -public xml_get_child_node_attribute_by_path {
     set root_node [xml_doc_get_first_node $tree]
     set group_node [xml_node_get_children_by_name $root_node "group"]
     set typevalue [xml_get_child_node_attribute_by_path $group_node {grouptype typevalue} "level"]
+    </pre>
 
     @param node        The node to start from
     @param path_list   List of the node to try, e.g.
@@ -3089,11 +3088,7 @@ ad_proc util_background_reset {
 # for ad_set_typed_form_variable_filter for more details.
 
 ad_proc ad_var_type_check_integer_p {value} {
-    <pre>
-    #
-    # return 1 if $value is an integer, 0 otherwise.
-    #
-    <pre>
+    @return 1 if $value is an integer, 0 otherwise.
 } {
 
     if { [regexp {[^0-9]} $value] } {
@@ -3104,11 +3099,7 @@ ad_proc ad_var_type_check_integer_p {value} {
 }
 
 ad_proc ad_var_type_check_safefilename_p {value} {
-    <pre>
-    #
-    # return 0 if the file contains ".."
-    #
-    <pre>
+    @return 0 if the file contains ".."
 } {
 
     if { [string match "*..*" $value] } {
@@ -3119,11 +3110,7 @@ ad_proc ad_var_type_check_safefilename_p {value} {
 }
 
 ad_proc ad_var_type_check_dirname_p {value} {
-    <pre>
-    #
-    # return 0 if $value contains a / or \, 1 otherwise.
-    #
-    <pre>
+    @return 0 if $value contains a / or \, 1 otherwise.
 } {
 
     if { [regexp {[/\\]} $value] } {
@@ -3134,11 +3121,7 @@ ad_proc ad_var_type_check_dirname_p {value} {
 }
 
 ad_proc ad_var_type_check_number_p {value} {
-    <pre>
-    #
-    # return 1 if $value is a valid number
-    #
-    <pre>
+    @return 1 if $value is a valid number
 } {
     if { [catch {expr {1.0 * $value}}] } {
         return 0
@@ -3148,12 +3131,8 @@ ad_proc ad_var_type_check_number_p {value} {
 }
 
 ad_proc ad_var_type_check_word_p {value} {
-    <pre>
-    #
-    # return 1 if $value contains only letters, numbers, dashes,
-    # and underscores, otherwise returns 0.
-    #
-    </pre>
+    @return 1 if $value contains only letters, numbers, dashes,
+            and underscores, otherwise returns 0.
 } {
 
     if { [regexp {[^-A-Za-z0-9_]} $value] } {
@@ -3164,27 +3143,19 @@ ad_proc ad_var_type_check_word_p {value} {
 }
 
 ad_proc ad_var_type_check_nocheck_p {{value ""}} {
-    <pre>
-    #
-    # return 1 regardless of the value. This useful if you want to
-    # set a filter over the entire site, then create a few exceptions.
-    #
-    # For example:
-    #
-    #   ad_set_typed_form_variable_filter /my-dangerous-page.tcl {user_id nocheck}
-    #   ad_set_typed_form_variable_filter /*.tcl user_id
-    #
-    </pre>
+    @return 1 regardless of the value. This is useful if you want to
+            set a filter over the entire site, then create a few exceptions.
+
+    For example:
+
+      ad_set_typed_form_variable_filter /my-dangerous-page.tcl {user_id nocheck}
+      ad_set_typed_form_variable_filter /*.tcl user_id
 } {
     return 1
 }
 
 ad_proc ad_var_type_check_noquote_p {value} {
-    <pre>
-    #
-    # return 1 if $value contains any single-quotes
-    #
-    <pre>
+    @return 1 if $value contains any single-quotes
 } {
 
     if { [string match "*'*" $value] } {
@@ -3195,15 +3166,10 @@ ad_proc ad_var_type_check_noquote_p {value} {
 }
 
 ad_proc ad_var_type_check_integerlist_p {value} {
-    <pre>
-    #
-    # return 1 if list contains only numbers, spaces, and commas.
-    # Example '5, 3, 1'. Note: it doesn't allow negative numbers,
-    # because that could let people sneak in numbers that get
-    # treated like math expressions like '1, 5-2'
-    #
-    #
-    <pre>
+    @return 1 if list contains only numbers, spaces, and commas.
+            Example '5, 3, 1'. Note: it doesn't allow negative numbers,
+            because that could let people sneak in numbers that get
+            treated like math expressions like '1, 5-2'
 } {
 
     if { [regexp {[^ 0-9,]} $value] } {
@@ -3214,22 +3180,14 @@ ad_proc ad_var_type_check_integerlist_p {value} {
 }
 
 ad_proc ad_var_type_check_fail_p {value} {
-    <pre>
-    #
-    # A check that always returns 0. Useful if you want to disable all access
-    # to a page.
-    #
-    <pre>
+    A check that always returns 0. Useful if you want to disable all access
+    to a page.
 } {
     return 0
 }
 
 ad_proc ad_var_type_check_third_urlv_integer_p {{args ""}} {
-    <pre>
-    #
-    # Returns 1 if the third path element in the URL is integer.
-    #
-    <pre>
+    @return 1 if the third path element in the URL is integer.
 } {
 
     set third_url_element [lindex [ad_conn urlv] 3]
