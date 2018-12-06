@@ -140,7 +140,7 @@ ad_proc -public template::data::transform::richtext_or_file {
 }
 
 ad_proc -public template::util::richtext_or_file::set_property { what richtext_or_file_list value } {
-    Set a property of the richtext_or_file datatype. Valid proerties are:
+    Set a property of the richtext_or_file datatype. Valid properties are:
 
     <ul>
       <li>storage_type
