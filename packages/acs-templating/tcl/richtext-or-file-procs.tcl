@@ -183,7 +183,7 @@ ad_proc -public template::util::richtext_or_file::set_property { what richtext_o
 
 ad_proc -public template::util::richtext_or_file::get_property { what richtext_or_file_list } {
 
-    Get a property of the richtext_or_file datatype. Valid proerties are:
+    Get a property of the richtext_or_file datatype. Valid properties are:
 
     <ul>
       <li>storage_type

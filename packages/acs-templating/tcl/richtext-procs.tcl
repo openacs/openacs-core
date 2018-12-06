@@ -152,7 +152,7 @@ ad_proc -public template::util::richtext::set_property { what richtext_list valu
 
 ad_proc -public template::util::richtext::get_property { what richtext_list } {
 
-    Get a property of the richtext datatype. Valid proerties are:
+    Get a property of the richtext datatype. Valid properties are:
 
     @param what the name of the property. Must be one of:
     <ul>
