@@ -55,14 +55,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="lang::message::cache.select_locale_keys">
-    <querytext>
-      select locale, package_key, message_key, message 
-      from   lang_messages
-      $package_where_clause
-    </querytext>
-  </fullquery>
-
   <fullquery name="lang::message::update_description.update_description_insert_null">
     <querytext>
       update lang_message_keys

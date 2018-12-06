@@ -869,23 +869,20 @@ ad_proc -public lang::message::lookup {
     return $message
 }
 
-ad_proc -private lang::message::cache {
-    {-package_key {}}
-} {
+ad_proc -private lang::message::cache {} {
     Loads the entire message catalog from the database into the cache.
 } {
     # We segregate messages by language. It might reduce contention
     # if we segregate instead by package. Check for problems with ns_info locks.
 
     if {[nsv_incr lang_message_cache executed_p] == 1} {
-        if { $package_key eq "" } {
-            set package_where_clause ""
-        } else {
-            set package_where_clause "where package_key = :package_key"
-        }
 
         set i 0
-        db_foreach select_locale_keys {} {
+        db_foreach select_locale_keys {
+            select locale, package_key, message_key, message 
+            from   lang_messages
+            where deleted_p = 'f'
+        } {
             nsv_set lang_message_$locale "${package_key}.${message_key}" $message
             incr i
         }
