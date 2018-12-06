@@ -221,7 +221,9 @@ ad_proc -private acs_sc_proc {
 ad_proc acs_sc_update_alias_wrappers {} {
 
     Loop over actual bindings, finding every impl alias for each contract operation
-    and adfine a "acs_sc_proc" for all of these.
+    and call "acs_sc_proc" for all of these.
+
+    @see acs_sc_proc
     
 } {
     db_foreach impl_operation {
