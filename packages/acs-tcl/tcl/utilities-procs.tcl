@@ -1550,11 +1550,7 @@ ad_proc -public ad_returnredirect {
         # current page.
         #
         set ::__skip_util_get_user_messages 1
-        if { [string is false $html_p] } {
-            util_user_message -message $message
-        } else {
-            util_user_message -message $message -html
-        }
+        util_user_message -message $message -html=$html_p
     }
 
     if { [util_complete_url_p $target_url] } {
@@ -1597,21 +1593,18 @@ ad_proc -public util_user_message {
 
     @see util_get_user_messages
 } {
+    if {$replace_p} {
+        set messages [list]
+    } else {
+        set messages [ad_get_client_property -default {} -cache_only t "acs-kernel" "general_messages"]
+    }
     if { $message ne "" } {
-        if { [string is false $html_p] } {
+        if { $html_p } {
             set message [ns_quotehtml $message]
         }
-
-        if { !$replace_p } {
-            set new_messages [ad_get_client_property -default {} -cache_only t "acs-kernel" "general_messages"]
-            lappend new_messages $message
-        } else {
-            set new_messages [list $message]
-        }
-        ad_set_client_property "acs-kernel" "general_messages" $new_messages
-    } elseif { $replace_p } {
-        ad_set_client_property "acs-kernel" "general_messages" {}
+        lappend messages $message
     }
+    ad_set_client_property "acs-kernel" "general_messages" $messages
 }
 
 ad_proc -public util_get_user_messages {
