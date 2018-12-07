@@ -800,7 +800,7 @@ ad_proc -public api_add_to_proc_doc {
         }
     } else {
         nsv_set api_proc_doc $proc_name [list $property $value]
-        ns_log warning "no proc_doc available for $proc_name"
+        ns_log warning "api_add_to_proc_doc: no proc_doc available for $proc_name"
     }
 }
 
@@ -836,7 +836,7 @@ ad_proc -private api_called_proc_names {
             #ns_log notice "api_called_proc_names <$proc_name> got body <$body>"
 
         } on error {errorMsg} {
-            ns_log warning "cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
+            ns_log warning "api_called_proc_names: cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
             return ""
         }
     }
@@ -1103,7 +1103,7 @@ ad_proc -private api_inline_svg_from_dot {dot_code} {
         try {
             close $f
         } on error {errorMsg} {
-            ns_log warning "dot returned $errorMsg"
+            ns_log warning "api_inline_svg_from_dot: dot returned $errorMsg"
         } on ok {result} {
             set f [open $tmpfile]; set svg [read $f]; close $f
 
@@ -1174,7 +1174,7 @@ ad_proc -public api_get_body {proc_name} {
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
         if {[regexp {^(.*) (.*)$} $obj match scope obj]} {
             if {[::xo::api scope_eval $scope ::nsf::is object $obj]} {
-                [::xo::api get_method_source $scope $obj $prefix $method]
+                return [::xo::api get_method_source $scope $obj $prefix $method]
             }
         } else {
             if {[::nsf::is object $obj]} {
