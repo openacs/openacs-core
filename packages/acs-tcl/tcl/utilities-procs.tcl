@@ -1599,7 +1599,7 @@ ad_proc -public util_user_message {
         set messages [ad_get_client_property -default {} -cache_only t "acs-kernel" "general_messages"]
     }
     if { $message ne "" } {
-        if { $html_p } {
+        if { !$html_p } {
             set message [ns_quotehtml $message]
         }
         lappend messages $message
