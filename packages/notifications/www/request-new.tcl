@@ -8,7 +8,7 @@ ad_page_contract {
 } {
     type_id:naturalnum,notnull
     object_id:naturalnum,notnull
-    {pretty_name ""}
+    {pretty_name:allhtml ""}
     return_url:localurl
 }
 

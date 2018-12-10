@@ -3,7 +3,7 @@ ad_include_contract {
 } {
     {type:token}
     {object_id:naturalnum}
-    {pretty_name}
+    {pretty_name:allhtml}
     {url ""}
     {user_id:naturalnum ""}
 }
