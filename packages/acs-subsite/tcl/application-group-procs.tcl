@@ -90,7 +90,15 @@ ad_proc -public application_group::contains_relation_p {
     # Check if the rel belongs to the application group, OR
     # the party *is* the application group.  This proc considers the
     # application group to contain itself.
-    set found_p [db_string app_group_contains_rel_p {}]
+    set found_p [db_string app_group_contains_rel_p {
+        select case when exists (
+            select 1
+            from application_group_element_map
+            where package_id = :package_id
+              and rel_id = :rel_id
+        ) then 1 else 0 end
+        from dual
+    }]
 
     return $found_p
 }
@@ -118,7 +126,15 @@ ad_proc -public application_group::contains_segment_p {
     # Check if the party is a member of the application group, OR
     # the party *is* the application group.  This proc considers the
     # application group to contain itself.
-    set found_p [db_string app_group_contains_segment_p {}]
+    set found_p [db_string app_group_contains_segment_p {
+        select case when exists (
+            select 1
+            from application_group_segments
+            where package_id = :package_id
+              and segment_id = :segment_id
+        ) then 1 else 0 end
+        from dual
+    }]
 
     return $found_p
 }
@@ -142,7 +158,15 @@ ad_proc -public application_group::group_id_from_package_id {
         error "application_group::group_id_from_package_id - no package_id specified."
     }
 
-    set group_id [db_string application_group_from_package_id_query {}]
+    set group_id [db_string application_group_from_package_id_query {
+        select group_id
+        from application_groups
+        where package_id = :package_id
+    } -default ""]
+
+    if {!$no_complain_p && $group_id eq ""} {
+        error "No group_id found for package $package_id ([acs_object_name $package_id])"
+    }
 
     return $group_id
 }
@@ -154,7 +178,11 @@ ad_proc -public application_group::package_id_from_group_id {
     Returns the package_id of a given application group.
 
 } {
-    return [db_string -cache_key application_group_pid_from_gid_${group_id} get {}]
+    return [db_string -cache_key application_group_pid_from_gid_${group_id} get {
+        select package_id
+        from application_groups
+        where group_id = :group_id
+    }]
 }
 
 ad_proc -public application_group::new {
@@ -221,7 +249,12 @@ ad_proc -public application_group::delete {
     # - any relational segment of this group
     # - any relation with this group
     # We really ought to have cascading deletes on acs_permissions.grantee_id (and object_id)
-    db_dml delete_perms {}
+    db_dml delete_perms {
+        delete from acs_permissions
+        where  grantee_id = :group_id
+        or     grantee_id in (select segment_id from rel_segments where group_id = :group_id)
+        or     grantee_id in (select rel_id from acs_rels where object_id_one = :group_id or object_id_two = :group_id)
+    }
 
     db_exec_plsql delete {}
 
