@@ -8,7 +8,7 @@ set admin_p [permission::permission_p \
                  -privilege admin \
                  -party_id [ad_conn untrusted_user_id]]
 
-set actions {}
+set actions [list]
 if { $admin_p } {
     lappend actions [_ acs-subsite.Create_new_subsite] "[subsite::get_element -element url]admin/subsite-add" {}
 }
