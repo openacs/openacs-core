@@ -50,8 +50,9 @@ set subsite_url [subsite::get_element -element url]
 
 set untrusted_user_id [ad_conn untrusted_user_id]
 
-db_multirow -extend { url join_url request_url } subsites select_subsites {*SQL*} {
-    set join_url [export_vars -base "${subsite_url}register/user-join" { group_id { return_url [ad_return_url] } }]
+set return_url [ad_return_url]
+db_multirow -extend { url join_url request_url } subsites select_subsites {} {
+    set join_url [export_vars -base "${subsite_url}register/user-join" {group_id return_url}]
     set url $subsite_url$name
 }
 
