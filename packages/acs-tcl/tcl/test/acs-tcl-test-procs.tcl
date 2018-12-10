@@ -727,9 +727,9 @@ aa_register_case \
 
 
 aa_register_case \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -procs util_subset_p \
-    util__subset_p {
+    util_subset_p {
         Test the util_subset_p proc.
 
         @author Peter Marklund
@@ -738,10 +738,18 @@ aa_register_case \
     aa_true "List is a subset" [util_subset_p [list a b c] [list c a b]]
     aa_false "List is not a subset" [util_subset_p [list a a a b b c] [list c c a b b a]]
     aa_false "List is not a subset" [util_subset_p [list a b c d] [list a b c]]
+}
 
-    aa_equals "List is a subset" [util_get_subset_missing [list a a a b b c] [list c c a b b a]] [list]
-    aa_equals "List is a subset" [util_get_subset_missing [list a a a b b c] [list c c a b b a]] [list]
-    aa_equals "List is not a subset" [util_get_subset_missing [list a b c d] [list a b c]] [list d]
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs util_get_subset_missing \
+    util_get_subset_missing {
+        Test the util_get_subset_missing proc.
+} {
+
+    aa_equals "List A {a b d d e f g} contains elements that are not in list B {a b c e g} (duplicates being ignored)" [util_get_subset_missing [list a b d d e f g] [list a b c e g]] [list d f]
+    aa_equals "List A {a a a b b c} contains no elements that are not in list B {c c a b b e d a e} (duplicates being ignored) " [util_get_subset_missing [list a a a b b c] [list c c a b b e d a e]] [list]
+    
 }
 
 aa_register_case \

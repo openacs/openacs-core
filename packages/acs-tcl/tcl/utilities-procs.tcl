@@ -2262,7 +2262,7 @@ ad_proc -public util_get_subset_missing {
 
     if { $index1 == $len1 } {
         # We've reached the end of list1, finding all elements along the way, we're done
-        return [list]
+        return $missing_elms
     } else {
         # One or more elements in list1 not found in list2
         return [concat $missing_elms [lrange $sorted_list1 $index1 end]]
