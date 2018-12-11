@@ -55,6 +55,16 @@ namespace eval plpgsql_utility {
 	    set user_supplied([string toupper $attr]) $attr
 	}
 
+        # This list of reserved default values is needed so we don't
+        # try to quote them. A better alternative might be to use some
+        # notion of datatype (e.g. using
+        # information_schema.parameters) and take an informed decision
+        # based on this.
+        set reserved_default_values {
+            current_date
+            current_timestamp
+        }
+
 	# For each real arg, append default or supplied arg value
 	set pieces [list]
 	foreach row $real_args {
@@ -62,13 +72,13 @@ namespace eval plpgsql_utility {
 
 	    if { [info exists user_supplied($arg_name)] } {
 		lappend pieces "${prepend}$user_supplied($arg_name)"
+	    } elseif { $arg_default eq "" || $arg_default eq "null"} {
+                lappend pieces "NULL"
+            } elseif { [string tolower $arg_default] ni $reserved_default_values } {
+                lappend pieces "'[db_quote $arg_default]'"
 	    } else {
-		if { $arg_default eq "" || $arg_default eq "null"} {
-		    lappend pieces "NULL"
-		} else {
-		    lappend pieces "'[db_quote $arg_default]'"
-		}
-	    }
+                lappend pieces $arg_default
+            }
 	}
 
 	return [join $pieces ","]
