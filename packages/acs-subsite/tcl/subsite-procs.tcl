@@ -307,16 +307,10 @@ ad_proc -public subsite::get {
     @author Frank Nikolajsen (frank@warpspace.com)
     @creation-date 2003-03-08
 } {
-
     if { $subsite_id eq "" } {
         set subsite_id [ad_conn subsite_id]
     }
 
-    if { ![ad_conn isconnected] } {
-        set package_id ""
-    } else {
-        set package_id [ad_conn package_id]
-    }
     set info [site_node::get_from_object_id -object_id $subsite_id]
     if {[info exists array]} {
         upvar $array subsite_info
