@@ -241,6 +241,7 @@ aa_register_case \
         group::new
         group::get
         group_type::delete
+        _
     } acs_subsite_group_type {
         Create a new group type, create a new instance of it, check
         that everything was created according to expectations and
@@ -264,6 +265,7 @@ aa_register_case \
             aa_true "Function returns the expected value (the group type)" \
                 {$group_type eq $returned_group_type}
 
+            # Test group type info
             acs_object_type::get -object_type $group_type -array type
             aa_true "Group type is an ACS Object created with expected values" \
                 {$pretty_name eq $type(pretty_name) && $pretty_plural eq $type(pretty_plural)}
@@ -275,9 +277,14 @@ aa_register_case \
                               -group_name  $group_name \
                               -pretty_name $pretty_name \
                               $group_type]
+
+            # Test group info
             set group [group::get -group_id $group_id]
-            aa_true "Group was created with supplied values" \
-                {$group_name eq [dict get $group group_name] && $pretty_name eq [dict get $group title]}
+            set expected_group_name  [dict get $group group_name]
+            # Pretty name is stored in an automatically generated message key
+            set expected_pretty_name [_ [string trim [dict get $group title] "#"]]
+            aa_true "Group was created with supplied values: $group_name eq $expected_group_name && $pretty_name eq $expected_pretty_name" \
+                {$group_name eq $expected_group_name && $pretty_name eq $expected_pretty_name}
 
         } finally {
             # Cleanup
