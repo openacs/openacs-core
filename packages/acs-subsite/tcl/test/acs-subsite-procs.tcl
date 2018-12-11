@@ -233,6 +233,58 @@ aa_register_case \
         }
 }
 
+aa_register_case \
+    -cats smoke \
+    -procs {
+        group_type::new
+        acs_object_type::get
+        group::new
+        group::get
+        group_type::delete
+    } acs_subsite_group_type {
+        Create a new group type, create a new instance of it, check
+        that everything was created according to expectations and
+        cleanup at the end.
+
+        @author Antonio Pisano
+    } {
+        set group_type "aa_test_group_type"
+
+        try {
+            # Make sure the group type does not exist
+            group_type::delete -group_type $group_type
+
+            # Create the group type
+            set pretty_name "Test Group"
+            set pretty_plural "Test Groups"
+            set returned_group_type [group_type::new \
+                                         -group_type $group_type \
+                                         -supertype "group" \
+                                         $pretty_name $pretty_plural]
+            aa_true "Function returns the expected value (the group type)" \
+                {$group_type eq $returned_group_type}
+
+            acs_object_type::get -object_type $group_type -array type
+            aa_true "Group type is an ACS Object created with expected values" \
+                {$pretty_name eq $type(pretty_name) && $pretty_plural eq $type(pretty_plural)}
+
+            # Create a group type instance
+            set group_name "${group_type}_instance_1"
+            set pretty_name "${pretty_name} Instance 1"
+            set group_id [group::new \
+                              -group_name  $group_name \
+                              -pretty_name $pretty_name \
+                              $group_type]
+            set group [group::get -group_id $group_id]
+            aa_true "Group was created with supplied values" \
+                {$group_name eq [dict get $group group_name] && $pretty_name eq [dict get $group title]}
+
+        } finally {
+            # Cleanup
+            group_type::delete -group_type $group_type
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
