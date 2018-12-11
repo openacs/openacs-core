@@ -179,6 +179,76 @@ namespace eval group_type {
 
     }
 
+    ad_proc -public delete {
+        -group_type:required
+    } {
+        Deletes a group type
+
+        @param group_type type to be deleted
+    } {
+        # How do we handle the situation where we delete the groups we can,
+        # but there are groups that we do not have permission to delete? For
+        # now, we check in advance if there is a group that must be deleted
+        # that this user can't delete, and if there is, we return an error
+        # message (in the validate block of page contract). If another group
+        # is added while we're deleting, then it's possible that we'll fail
+        # when actually dropping the type, but that seems reasonable to me. 
+        # - mbryzek (famous last words...)
+
+        set user_id [ad_conn user_id]
+
+        if { ![db_0or1row select_type_info {
+            select t.table_name, t.package_name
+            from acs_object_types t
+            where t.object_type=:group_type
+        }] } {
+            set table_name ""
+            set package_name $group_type
+        }
+
+        if { ![db_string package_exists {}] } {
+            set package_name ""
+        }
+
+        db_transaction {
+            # First delete the groups
+            if { $package_name ne "" } {
+                foreach group_id [db_list select_group_ids {}] {
+                    group::delete $group_id
+                }
+
+                db_exec_plsql package_drop {}
+            }
+
+            # Remove the specified rel_types
+            db_dml delete_rel_types {
+                delete from group_type_rels where group_type = :group_type
+            }
+
+            # Remove the group_type
+            db_dml delete_group_type {
+                delete from group_types where group_type = :group_type
+            }
+
+            if { [db_string type_exists {
+                select exists (select 1 from acs_object_types t where t.object_type = :group_type)
+                from dual
+            }] } {
+                db_exec_plsql drop_type {}
+            }
+
+            # Make sure we drop the table last
+            if { $table_name ne "" && [db_table_exists $table_name] } {
+                db_dml drop_table [subst {
+                    drop table $table_name
+                }]
+            }
+        }
+
+        # Reset the attribute view for objects of this type
+        package_object_view_reset $group_type
+    }
+
 }
 
 # Local variables:
