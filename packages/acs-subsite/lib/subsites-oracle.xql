@@ -9,7 +9,6 @@
            p.instance_name,
            n.node_id, 
            n.name,
-           :subsite_url || n.name as url,
            (select count(*)
             from   group_approved_member_map m
             where  m.rel_type = 'membership_rel'

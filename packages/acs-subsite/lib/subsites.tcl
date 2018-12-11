@@ -3,14 +3,21 @@
 set pretty_name [_ acs-subsite.subsite]
 set pretty_plural [_ acs-subsite.subsites]
 
+set untrusted_user_id [ad_conn untrusted_user_id]
+set subsite_id [ad_conn subsite_id]
+
 set admin_p [permission::permission_p \
-                 -object_id [ad_conn subsite_id] \
+                 -object_id $subsite_id \
                  -privilege admin \
-                 -party_id [ad_conn untrusted_user_id]]
+                 -party_id $untrusted_user_id]
+
+set subsite [site_node::get_from_object_id -object_id $subsite_id]
+set subsite_node_id [dict get $subsite node_id]
+set subsite_url     [dict get $subsite url]
 
 set actions [list]
 if { $admin_p } {
-    lappend actions [_ acs-subsite.Create_new_subsite] "[subsite::get_element -element url]admin/subsite-add" {}
+    lappend actions [_ acs-subsite.Create_new_subsite] "${subsite_url}admin/subsite-add" {}
 }
 
 list::create \
@@ -43,12 +50,6 @@ list::create \
             }
         }
     }
-
-
-set subsite_node_id [subsite::get_element -element node_id]
-set subsite_url [subsite::get_element -element url]
-
-set untrusted_user_id [ad_conn untrusted_user_id]
 
 set return_url [ad_return_url]
 db_multirow -extend { url join_url request_url } subsites select_subsites {} {
