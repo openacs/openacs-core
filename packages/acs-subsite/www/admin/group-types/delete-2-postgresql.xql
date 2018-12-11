@@ -30,7 +30,7 @@
  
 <partialquery name="package_drop">
   <querytext>
-    select drop_package('[DoubleApos $group_type]')
+    select drop_package(:group_type)
   </querytext>
 </partialquery>
 
