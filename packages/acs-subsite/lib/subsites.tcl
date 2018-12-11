@@ -1,4 +1,7 @@
-# @param admin_p - generate admin action links.
+ad_include_contract {
+    UI includelet to show and create subsites.
+} {
+}
 
 set pretty_name [_ acs-subsite.subsite]
 set pretty_plural [_ acs-subsite.subsites]
@@ -6,6 +9,7 @@ set pretty_plural [_ acs-subsite.subsites]
 set untrusted_user_id [ad_conn untrusted_user_id]
 set subsite_id [ad_conn subsite_id]
 
+# generate admin action links?
 set admin_p [permission::permission_p \
                  -object_id $subsite_id \
                  -privilege admin \
