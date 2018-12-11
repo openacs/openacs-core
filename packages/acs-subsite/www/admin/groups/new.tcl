@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     group_type:notnull
     { group_type_exact_p:boolean t }
-    { group_name "" }
+    { group.group_name "" }
     { group_id:naturalnum "" }
     {add_to_group_id:integer ""}
     {add_with_rel_type "composition_rel"}
@@ -130,6 +130,7 @@ if { [template::form is_valid add_group] } {
                           -variable_prefix group \
                           -group_id $group_id \
                           -context_id [ad_conn package_id] \
+                          -pretty_name ${group.group_name} \
                           $group_type]
         relation_add -member_state $member_state $add_with_rel_type $add_to_group_id $group_id
     }
