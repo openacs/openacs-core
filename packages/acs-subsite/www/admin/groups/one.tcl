@@ -77,7 +77,12 @@ if {[apm_package_installed_p categories]} {
     set category_trees [join $category_trees ,]
 }
 
-ad_return_template
+set add_subgroup_url [export_vars -base "new" {
+    {add_to_group_id $group_id}
+    {group_type $group_type}
+    {add_with_rel_type composition_rel}
+    return_url
+}]
 
 # Local variables:
 #    mode: tcl

@@ -41,9 +41,10 @@ Group Type: @group_type_pretty_name@
 <include src="elements-by-rel-type" group_id="@group_id;literal@">
 
 <if @admin_p;literal@ true>
-  <h3>Extreme Actions</h3>
+  <h3>#acs-subsite.Administration#</h3>
   <ul>
-    <li> <a href="delete?group_id=@group_id@" class="button">Nuke this group</a>
+    <li> <a href="@add_subgroup_url@" class="button">New Component Group</a>
+    <li> <a href="delete?group_id=@group_id@" class="button">Nuke This Group</a>
   </ul>
 </if>
 
