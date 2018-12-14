@@ -1356,6 +1356,27 @@ ad_proc ad_parse_html_attributes_upvar {
         }
     }
 
+    ad_proc -public ad_js_escape {
+        string
+    } {
+        Return supplied string with invalid javascript characters
+        propery escaped. This makes possible to use the string safely
+        inside javascript code.
+
+        @author Antonio Pisano
+    } {
+        # Escape quotes and backslashes (non greedy)
+        regsub -all {.??([^\\])?('|\"|\\)} $string {\1\\\2} string
+        # Escape characters are replaced with their escape sequence
+        regsub -all {\b} $string {\\b} string
+        regsub -all {\f} $string {\\f} string
+        regsub -all {\n} $string {\\n} string
+        regsub -all {\r} $string {\\r} string
+        regsub -all {\t} $string {\\t} string
+        regsub -all {\v} $string {\\v} string
+
+        return $string
+    }
 
     ####################
     #

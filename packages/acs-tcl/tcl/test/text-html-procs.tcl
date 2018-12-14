@@ -212,6 +212,25 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
+    -procs {ad_js_escape} \
+    ad_js_escape {
+
+    Test if ad_js_escape is working as expected
+
+} {
+    set string "\"\"\"\"\"\'"
+    aa_true " - String of only quotes " {[ad_js_escape $string] eq {\"\"\"\"\"\'}}
+
+    set string "\n\r\t  \n\n\n \t\t \b \v\v\v  \f"
+    aa_true " - String of only escape sequences " {[ad_js_escape $string] eq {\n\r\t  \n\n\n \t\t \b \v\v\v  \f}}
+
+    set string "\n\r\t  \na word  \'\n\n \t\t\"\" aaaaaa\' \'\'\'\b \v\v\v  \f"
+    aa_true " - String of escape sequences, quotes and text (with some quotes already escaped)" \
+        {[ad_js_escape $string] eq {\n\r\t  \na word \'\n\n \t\"\" aaaaa\' \'\'\'\b \v\v\v  \f}}
+}
+
+aa_register_case \
+    -cats {api smoke} \
     -procs {ad_pad} \
     ad_pad {
 
