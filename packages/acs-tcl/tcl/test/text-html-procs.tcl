@@ -221,12 +221,19 @@ aa_register_case \
     set string "\"\"\"\"\"\'"
     aa_true " - String of only quotes " {[ad_js_escape $string] eq {\"\"\"\"\"\'}}
 
-    set string "\n\r\t  \n\n\n \t\t \b \v\v\v  \f"
-    aa_true " - String of only escape sequences " {[ad_js_escape $string] eq {\n\r\t  \n\n\n \t\t \b \v\v\v  \f}}
+    set string   "\n\r\t  \n\n\n \t\t \b \v\v\v  \f"
+    set expected {\n\r\t  \n\n\n \t\t \b \v\v\v  \f}
+    
+    aa_true " - String of only escape sequences " {[ad_js_escape $string] eq $expected}
 
-    set string "\n\r\t  \na word  \'\n\n \t\t\"\" aaaaaa\' \'\'\'\b \v\v\v  \f"
+    set string   "\n\r\t  \na word  \'\n\n \t\"\" aaaaa\' \'\'\'\b \v\v\v  \f"
+    set expected {\n\r\t  \na word  \'\n\n \t\"\" aaaaa\' \'\'\'\b \v\v\v  \f}
+
+    ns_log notice EXP:<$expected>
+    ns_log notice GOT:<[ad_js_escape $string]>
+
     aa_true " - String of escape sequences, quotes and text (with some quotes already escaped)" \
-        {[ad_js_escape $string] eq {\n\r\t  \na word \'\n\n \t\"\" aaaaa\' \'\'\'\b \v\v\v  \f}}
+        {[ad_js_escape $string] eq $expected}
 }
 
 aa_register_case \

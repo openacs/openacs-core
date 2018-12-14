@@ -1365,17 +1365,19 @@ ad_proc ad_parse_html_attributes_upvar {
 
         @author Antonio Pisano
     } {
-        # Escape quotes and backslashes (non greedy)
-        regsub -all {.??([^\\])?('|\"|\\)} $string {\1\\\2} string
-        # Escape characters are replaced with their escape sequence
-        regsub -all {\b} $string {\\b} string
-        regsub -all {\f} $string {\\f} string
-        regsub -all {\n} $string {\\n} string
-        regsub -all {\r} $string {\\r} string
-        regsub -all {\t} $string {\\t} string
-        regsub -all {\v} $string {\\v} string
+        string map [list \n \\n \b \\b \f \\f \r \\r \t \\t \v \\v \" {\"} ' {\'}] $string
 
-        return $string
+        # Escape quotes and backslashes (non greedy)
+        #regsub -all {.??([^\\])?('|\"|\\)} $string {\1\\\2} string
+        # Escape characters are replaced with their escape sequence
+        #regsub -all {\b} $string {\\b} string
+        #regsub -all {\f} $string {\\f} string
+        #regsub -all {\n} $string {\\n} string
+        #regsub -all {\r} $string {\\r} string
+        #regsub -all {\t} $string {\\t} string
+        #regsub -all {\v} $string {\\v} string
+
+        #return $string
     }
 
     ####################
