@@ -1360,7 +1360,7 @@ ad_proc ad_parse_html_attributes_upvar {
         string
     } {
         Return supplied string with invalid javascript characters
-        propery escaped. This makes possible to use the string safely
+        property escaped. This makes possible to use the string safely
         inside javascript code.
 
         @author Antonio Pisano
