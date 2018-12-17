@@ -537,7 +537,7 @@ if {$useNsdbCurrentHandles} {
     #
     # This branch uses "ns_db currenthandles" to implement
     # "db_with_handle" instead of the old approach based on the global
-    # db_state variables. The new approach has the advantantge that it
+    # db_state variables. The new approach has the advantage that it
     # is:
     #
     # - more robust (deletion and creation of the per-request variables,
