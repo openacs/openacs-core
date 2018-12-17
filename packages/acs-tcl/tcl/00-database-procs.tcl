@@ -573,7 +573,7 @@ if {0 && $useNsdbCurrentHandles} {
         #
         set pools [db_available_pools $dbn]
         set currentHandles [ns_db currenthandles]
-        ns_log notice "### pools <$pools> currentHandles <$currentHandles>"
+        #ns_log notice "### pools <$pools> currentHandles <$currentHandles>"
 
         set db ""
         set n 0
@@ -612,12 +612,16 @@ if {0 && $useNsdbCurrentHandles} {
             # We were not successful above
             #
             set pool [lindex $pools $n]
+            if {$pool eq ""} {
+                ad_log error "handles from all pools <$pools> are exhausted"
+                error "could not obtain handle, all pools are exhausted"
+            }
             set start_time [expr {[clock clicks -microseconds]/1000.0}]
             #ns_log notice "### BEFORE gethandle $pool ($n)"
             set errno [catch {
                 set db [ns_db gethandle $pool]
             } error]
-            #ns_log notice "### AFTER gethandle $pool errno $errno handle <$db>"
+            ad_log notice "### AFTER gethandle $pool errno $errno handle <$db> currentHandles [ns_db currenthandles]"
             ds_collect_db_call $db gethandle "" $pool $start_time $errno $error
             if { $errno } {
                 ns_log notice "### RETURNING error $error"
