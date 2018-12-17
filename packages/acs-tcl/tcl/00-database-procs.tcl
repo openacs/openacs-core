@@ -113,12 +113,14 @@ ad_library {
 # We now use the following global variables:
 #
 # Server-Wide NSV arrays, keys:
-#     db_available_pools   $dbn
 #     db_driverkey         $dbn
 #     db_pool_to_dbn       $pool
 #
 # Global Variables
 #    ::acs::default_database
+#    ::acs::db_pools($dbn)        (used in db_available_pools)
+#    ::acs::db_pool_to_dbn($pool) (used for caching access to nsv db_pool_to_dbn)
+#    ::acs::db_driverkey($dbn)    (used for caching access to nsv db_driverkey)
 #
 # Per-thread Tcl global variables:
 #   One Tcl Array per Database Name:
@@ -160,9 +162,20 @@ ad_proc -private db_state_array_name_is {
     if { $dbn eq "" } {
         set dbn $::acs::default_database
     }
-    return "db_state_${dbn}"
+    if {[llength [trace info variable ::db_state_${dbn}]] == 0} {
+        trace add variable ::db_state_${dbn} {array read write unset} [list ::db_tracer ::db_state_${dbn}]
+    }
+    return "::db_state_${dbn}"
 }
 
+proc db_tracer {varname name1 name2 op} {
+    if {$name2 eq "handles"} {
+        #ns_log notice "### variable $varname: $name1 ($name2) $op"
+        if {$op eq "write"} {
+            ns_log notice "###### handles updated to <[set ::${varname}($name2)]>"
+        }
+    }
+}
 
 ad_proc -public db_driverkey {
     {-handle_p 0}
@@ -199,7 +212,7 @@ ad_proc -public db_driverkey {
         } elseif { [nsv_exists db_pool_to_dbn $pool] } {
             #
             # Fallback to nsv (old style), when for whatever
-            # reasonesm, the namespaced variable is not available.
+            # reasons, the namespaced variable is not available.
             #
             ns_log notice "db_driverkey $handle_p dbn <$dbn> VIA NSV"
             set dbn [nsv_get db_pool_to_dbn $pool]
@@ -508,68 +521,330 @@ ad_proc -public db_nth_pool_name {
 }
 
 
-ad_proc -public db_with_handle {
-    { -dbn "" }
-    db code_block
-} {
+set useNsdbCurrentHandles 0
+try {
+    ns_db x
+} on error {errorMsg} {
+    if {"currenthandles," in [split $errorMsg " "]} {
+        ns_log notice "can use 'ns_db currenthandles'"
+        set useNsdbCurrentHandles 1
+    } else {
+        ns_log notice "cannot use 'ns_db currenthandles'"
+    }
+}
 
-    Places a usable database handle in <i>db</i> and executes <i>code_block</i>.
+if {$useNsdbCurrentHandles} {
+    #
+    # This branch uses "ns_db currenthandles" to implement
+    # "db_with_handle" instead of the old approach based on the global
+    # db_state variables. The new approach has the advantantge that it
+    # is:
+    #
+    # - more robust (deletion and creation of the per-request variables,
+    #   no coherency problem),
+    # - simpler, and
+    # - faster (less overhead per db_with_handle call, simple queries up to 20% faster)
+    #
+    #     time {db_string . {select object_id from acs_objects limit 1}} 1000
+    #     old: 200-230 microseconds per iteration
+    #     new: 160-180 microseconds per iteration
+    #
+    # Still, more improvement can be done (GN).
+    #
+    ad_proc -public db_with_handle {
+        { -dbn "" }
+        db code_block
+    } {
+        Place a usable database handle in <i>db</i> and executes
+        <i>code_block</i>.
+
+        @param dbn         Database name to use. If empty_string, use the default database
+        @param db          Name of the handle variable used in the code block
+        @param code_block  code block to be executed with handle
+    } {
+        #
+        # Let the caller decide, how the handle variable is called in
+        # the code block.
+        #
+        upvar 1 $db dbh
+
+        #
+        # Get the pools and the current allocated handles for this thread.
+        #
+        set pools [db_available_pools $dbn]
+        set currentHandles [ns_db currenthandles]
+        ns_log notice "### pools <$pools> currentHandles <$currentHandles>"
+
+        set db ""
+        set n 0
+        foreach pool $pools {
+            #
+            # Do we have already handles allocated from this pool?
+            #
+            if {[dict exists $currentHandles $pool]} {
+                #
+                # Are there handles, which are not active (i.e. not in
+                # an currently open "ns_db select" and "ns_db getrow"
+                # context.
+                #
+                foreach {handle active} [dict get $currentHandles $pool] {
+                    #ns_log notice "### FOUND pool $pool handle $handle active $active"
+                    if {$active eq "0"} {
+                        #
+                        # We can use this handle
+                        #
+                        set db $handle
+                        break
+                    }
+                }
+            } else {
+                break
+            }
+            incr n
+        }
+        #
+        # In case, we got no handle above, we have to allocate a
+        # handle from the next pool, from which we have not got a
+        # handle before.
+        #
+        if {$db eq ""} {
+            #
+            # We were not successful above
+            #
+            set pool [lindex $pools $n]
+            set start_time [expr {[clock clicks -microseconds]/1000.0}]
+            #ns_log notice "### BEFORE gethandle $pool ($n)"
+            set errno [catch {
+                set db [ns_db gethandle $pool]
+            } error]
+            #ns_log notice "### AFTER gethandle $pool errno $errno handle <$db>"
+            ds_collect_db_call $db gethandle "" $pool $start_time $errno $error
+            if { $errno } {
+                ns_log notice "### RETURNING error $error"
+                return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
+            }
+        }
+        #ns_log notice "### db_with_handle has handle <$db>"
+
+        set dbh $db
+        set errno [catch { uplevel 1 $code_block } error]
+
+        # Unset dbh, so any subsequence use of this variable will bomb.
+        unset -nocomplain dbh
+
+        # If errno is 1, it's an error, so return errorCode and errorInfo;
+        # if errno = 2, it's a return, so don't try to return errorCode/errorInfo
+        # errno = 3 or 4 give undefined results
+
+        if { $errno == 1 } {
+            # A real error occurred
+            ns_log notice "### db_with_handle returned error <$error> for statement $code_block"
+            return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
+        }
+
+        if { $errno == 2 } {
+
+            # The code block called a "return", so pass the message through but don't try
+            # to return errorCode or errorInfo since they may not exist
+
+            return -code $errno $error
+        }
+    }
+
+    #
+    # db_last_used_handle
+    #
+    ad_proc -private db_last_used_handle {{-dbn ""}} {
+        Get the last used inactive handle.
+
+        @param dbn database name
+        @return last active handle or empty string
+    } {
+        set pools [db_available_pools $dbn]
+        set currentHandles [ns_db currenthandles]
+
+        set last_used_handle ""
+        foreach pool $pools {
+            if {[dict exists $currentHandles $pool]} {
+                foreach {handle active} [dict get $currentHandles $pool] {
+                    #ns_log notice "### FOUND pool $pool handle $handle active $active"
+                    if {$active eq 0} {
+                        set last_used_handle $handle
+                    }
+                }
+            }
+        }
+        #ns_log notice "###### db_last_used_handle: <$currentHandles> last used $last_used_handle"
+        return $last_used_handle
+    }
+
+    #
+    # db_release_unused_handles
+    #
+    ad_proc -public db_release_unused_handles {{-dbn ""}} {
+        Releases any database handles that are presently unused.
+
+        @param dbn The database name to use.  If empty_string, uses the default database.
+    } {
+        set pools [db_available_pools $dbn]
+        set currentHandles [ns_db currenthandles]
+
+        foreach pool $pools {
+            if {[dict exists $currentHandles $pool]} {
+                foreach {handle active} [dict get $currentHandles $pool] {
+                    #ns_log notice "### FOUND pool $pool handle $handle active $active"
+                    if {$active eq 0} {
+                        set start_time [expr {[clock clicks -microseconds]/1000.0}]
+                        ns_db releasehandle $handle
+                        #ns_log notice "### AFTER releasehandle [ns_db currenthandles $pool]"
+                        ds_collect_db_call $handle releasehandle "" "" $start_time 0 ""
+                    }
+                }
+            }
+        }
+    }
+
+
+} else {
+
+    #
+    # This is the legacy branch without [ns_db currenthandles], using
+    # the global state variables.
+    #
+
+    ad_proc -public db_with_handle {
+        { -dbn "" }
+        db code_block
+    } {
+
+        Places a usable database handle in <i>db</i> and executes <i>code_block</i>.
+
+        @param dbn The database name to use.  If empty_string, uses the default database.
+    } {
+        upvar 1 $db dbh
+        upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
+
+        # Initialize bookkeeping variables.
+        if { ![info exists db_state(handles)] } {
+            set db_state(handles) [list]
+        }
+        if { ![info exists db_state(n_handles_used)] } {
+            set db_state(n_handles_used) 0
+        }
+        if { $db_state(n_handles_used) >= [llength $db_state(handles)] } {
+            set pool [db_nth_pool_name -dbn $dbn $db_state(n_handles_used)]
+            set start_time [expr {[clock clicks -microseconds]/1000.0}]
+            set errno [catch {
+                set db [ns_db gethandle $pool]
+            } error]
+            ds_collect_db_call $db gethandle "" $pool $start_time $errno $error
+            lappend db_state(handles) $db
+            if { $errno } {
+                return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
+            }
+        }
+        set my_dbh [lindex $db_state(handles) $db_state(n_handles_used)]
+        set dbh $my_dbh
+        set db_state(last_used) $my_dbh
+
+        incr db_state(n_handles_used)
+        set errno [catch { uplevel 1 $code_block } error]
+        incr db_state(n_handles_used) -1
+
+        # This may have changed while the code_block was being evaluated.
+        set db_state(last_used) $my_dbh
+
+        # Unset dbh, so any subsequence use of this variable will bomb.
+        unset -nocomplain dbh
+
+        # If errno is 1, it's an error, so return errorCode and errorInfo;
+        # if errno = 2, it's a return, so don't try to return errorCode/errorInfo
+        # errno = 3 or 4 give undefined results
+
+        if { $errno == 1 } {
+            # A real error occurred
+            return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
+        }
+
+        if { $errno == 2 } {
+
+            # The code block called a "return", so pass the message through but don't try
+            # to return errorCode or errorInfo since they may not exist
+
+            return -code $errno $error
+        }
+    }
+
+    ad_proc -private db_last_used_handle {{-dbn ""}} {
+        Get the last used handle
+
+        @param dbn database name
+        @return last active handle or empty string
+    } {
+        upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
+
+        return $db_state(last_used)
+    }
+
+    ad_proc -public db_release_unused_handles {{-dbn ""}} {
+
+        Releases any database handles that are presently unused.
+
+        @param dbn The database name to use.  If empty_string, uses the default database.
+    } {
+        upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
+
+        if { [info exists db_state(n_handles_used)] } {
+            # Examine the elements at the end of db_state(handles), killing off
+            # handles that are unused and not engaged in a transaction.
+
+            set index_to_examine [expr { [llength $db_state(handles)] - 1 }]
+            while { $index_to_examine >= $db_state(n_handles_used) } {
+                set db [lindex $db_state(handles) $index_to_examine]
+
+                # Stop now if the handle is part of a transaction.
+                if { [info exists db_state(transaction_level,$db)]
+                     && $db_state(transaction_level,$db) > 0
+                 } {
+                    break
+                }
+
+                set pool [db_nth_pool_name -dbn $dbn $db_state(n_handles_used)]
+                set start_time [expr {[clock clicks -microseconds]/1000.0}]
+                ns_db releasehandle $db
+                ds_collect_db_call $db releasehandle "" "" $start_time 0 ""
+                incr index_to_examine -1
+            }
+            set db_state(handles) [lrange $db_state(handles) 0 $index_to_examine]
+        }
+    }
+
+
+}
+
+ad_proc -public db_resultrows {{-dbn ""}} {
+    @return the number of rows affected by the last DML command.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    upvar 1 $db dbh
-    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
+    set driverkey [db_driverkey $dbn]
 
-    # Initialize bookkeeping variables.
-    if { ![info exists db_state(handles)] } {
-        set db_state(handles) [list]
-    }
-    if { ![info exists db_state(n_handles_used)] } {
-        set db_state(n_handles_used) 0
-    }
-    if { $db_state(n_handles_used) >= [llength $db_state(handles)] } {
-        set pool [db_nth_pool_name -dbn $dbn $db_state(n_handles_used)]
-        set start_time [expr {[clock clicks -microseconds]/1000.0}]
-        set errno [catch {
-            set db [ns_db gethandle $pool]
-        } error]
-        ds_collect_db_call $db gethandle "" $pool $start_time $errno $error
-        lappend db_state(handles) $db
-        if { $errno } {
-            return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
+    switch -- $driverkey {
+        oracle {
+            return [ns_ora resultrows [db_last_used_handle -dbn $dbn]]
+        }
+        postgresql {
+            return [ns_pg ntuples [db_last_used_handle -dbn $dbn]]
+        }
+        nsodbc {
+            error "db_resultrows is not supported for this database."
+        }
+        default {
+            error "Unknown database driver.  db_resultrows is not supported for this database."
         }
     }
-    set my_dbh [lindex $db_state(handles) $db_state(n_handles_used)]
-    set dbh $my_dbh
-    set db_state(last_used) $my_dbh
-
-    incr db_state(n_handles_used)
-    set errno [catch { uplevel 1 $code_block } error]
-    incr db_state(n_handles_used) -1
-
-    # This may have changed while the code_block was being evaluated.
-    set db_state(last_used) $my_dbh
-
-    # Unset dbh, so any subsequence use of this variable will bomb.
-    unset -nocomplain dbh
-
-    # If errno is 1, it's an error, so return errorCode and errorInfo;
-    # if errno = 2, it's a return, so don't try to return errorCode/errorInfo
-    # errno = 3 or 4 give undefined results
-
-    if { $errno == 1 } {
-        # A real error occurred
-        return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
-    }
-
-    if { $errno == 2 } {
-
-        # The code block called a "return", so pass the message through but don't try
-        # to return errorCode or errorInfo since they may not exist
-
-        return -code $errno $error
-    }
 }
+
 
 
 ad_proc -public db_exec_plsql {
@@ -957,39 +1232,6 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
     }
 
     return $lsql
-}
-
-
-ad_proc -public db_release_unused_handles {{-dbn ""}} {
-
-    Releases any database handles that are presently unused.
-
-    @param dbn The database name to use.  If empty_string, uses the default database.
-} {
-    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
-
-    if { [info exists db_state(n_handles_used)] } {
-        # Examine the elements at the end of db_state(handles), killing off
-        # handles that are unused and not engaged in a transaction.
-
-        set index_to_examine [expr { [llength $db_state(handles)] - 1 }]
-        while { $index_to_examine >= $db_state(n_handles_used) } {
-            set db [lindex $db_state(handles) $index_to_examine]
-
-            # Stop now if the handle is part of a transaction.
-            if { [info exists db_state(transaction_level,$db)]
-                 && $db_state(transaction_level,$db) > 0
-             } {
-                break
-            }
-
-            set start_time [expr {[clock clicks -microseconds]/1000.0}]
-            ns_db releasehandle $db
-            ds_collect_db_call $db releasehandle "" "" $start_time 0 ""
-            incr index_to_examine -1
-        }
-        set db_state(handles) [lrange $db_state(handles) 0 $index_to_examine]
-    }
 }
 
 
@@ -1387,7 +1629,6 @@ ad_proc -public db_foreach {
 
     db_with_handle -dbn $dbn db {
         set selection [db_exec select $db $full_statement_name $sql]
-
         set counter 0
         while { [db_getrow $db $selection] } {
             incr counter
@@ -1405,8 +1646,11 @@ ad_proc -public db_foreach {
             }
             set errno [catch { uplevel 1 $code_block } error]
 
-            # Handle or propagate the error. Can't use the usual "return -code $errno..." trick
-            # due to the db_with_handle wrapped around this loop, so propagate it explicitly.
+            #
+            # Handle or propagate the error. Can't use the usual
+            # "return -code $errno..." trick due to the db_with_handle
+            # wrapped around this loop, so propagate it explicitly.
+            #
             switch -- $errno {
                 0 {
                     # TCL_OK
@@ -1991,29 +2235,6 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
 }
 
 
-ad_proc -public db_resultrows {{-dbn ""}} {
-    @return the number of rows affected by the last DML command.
-
-    @param dbn The database name to use.  If empty_string, uses the default database.
-} {
-    upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
-    set driverkey [db_driverkey $dbn]
-
-    switch -- $driverkey {
-        oracle {
-            return [ns_ora resultrows $db_state(last_used)]
-        }
-        postgresql {
-            return [ns_pg ntuples $db_state(last_used)]
-        }
-        nsodbc {
-            error "db_resultrows is not supported for this database."
-        }
-        default {
-            error "Unknown database driver.  db_resultrows is not supported for this database."
-        }
-    }
-}
 
 
 ad_proc -public db_0or1row {
