@@ -24,27 +24,27 @@ ad_proc -private template_tag_if_condition { chunk params condition_type } {
 
     ad_try {
 
-        while { 1 } { 
+        while { 1 } {
 
             # process the conditional expression
             template_tag_if_interp_expr
 
-            # Stop when we run out of args 
+            # Stop when we run out of args
             if { [llength $args] == 0 } { break }
 
-            set conjunction [lindex $args 0]      
+            set conjunction [lindex $args 0]
             switch -- $conjunction {
-                
+
                 and { append condition " && " }
                 or { append condition " || " }
 
-                default { 
-                    error "Invalid conjunction <tt>$conjunction</tt> in 
-                 $condition_type tag" 
+                default {
+                    error "Invalid conjunction <tt>$conjunction</tt> in
+                 $condition_type tag"
                 }
             }
-            
-            set args [lrange $args 1 end] 
+
+            set args [lrange $args 1 end]
         }
 
     } on error {errorMsg} {
@@ -96,10 +96,10 @@ ad_proc -public template_tag_if_concat_params { params } {
 
 ad_proc -private template_tag_subst_reference {arg} {
     substitute variable references
-    @return variable name 
+    @return variable name
 } {
     if { [regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.-]+)@"$} $arg {\1(\2)} arg1] } {
-    } elseif { [regsub {^"@([a-zA-Z0-9_:]+)@"$} $arg {\1} arg1] } { 
+    } elseif { [regsub {^"@([a-zA-Z0-9_:]+)@"$} $arg {\1} arg1] } {
     } else {
         set arg1 ""
     }
@@ -144,40 +144,40 @@ ad_proc -public template_tag_if_interp_expr {} {
 
     switch -- $op {
 
-        gt { 
-            append condition "$arg1 > \"[lindex $args $i]\"" 
+        gt {
+            append condition "$arg1 > \"[lindex $args $i]\""
             set next [expr {$i + 1}]
         }
-        ge { 
-            append condition "$arg1 >= \"[lindex $args $i]\"" 
+        ge {
+            append condition "$arg1 >= \"[lindex $args $i]\""
             set next [expr {$i + 1}]
         }
-        lt { 
-            append condition "$arg1 <  \"[lindex $args $i]\"" 
+        lt {
+            append condition "$arg1 <  \"[lindex $args $i]\""
             set next [expr {$i + 1}]
         }
-        le { 
-            append condition "$arg1 <= \"[lindex $args $i]\"" 
+        le {
+            append condition "$arg1 <= \"[lindex $args $i]\""
             set next [expr {$i + 1}]
         }
-        eq { 
-            append condition "$arg1 eq \"[lindex $args $i]\"" 
+        eq {
+            append condition "$arg1 eq \"[lindex $args $i]\""
             set next [expr {$i + 1}]
         }
-        ne { 
-            append condition "$arg1 ne \"[lindex $args $i]\"" 
+        ne {
+            append condition "$arg1 ne \"[lindex $args $i]\""
             set next [expr {$i + 1}]
         }
 
-        in { 
+        in {
             append condition "$arg1 in { [lrange $args 2 end] } "
             set next [llength $args]
         }
 
-        between { 
+        between {
             set expr1 "$arg1 >= \"[lindex $args $i]\""
             set expr2 "$arg1 <= \"[lindex $args $i+1]\""
-            append condition "($expr1 && $expr2)" 
+            append condition "($expr1 && $expr2)"
             set next [expr {$i + 2}]
         }
 
@@ -204,28 +204,28 @@ ad_proc -public template_tag_if_interp_expr {} {
             set next $i
         }
 
-        odd { 
-            append condition "\[expr {$arg1 % 2}\]" 
+        odd {
+            append condition "\[expr {$arg1 % 2}\]"
             set next $i
         }
 
-        even { 
-            append condition "! \[expr {$arg1 % 2}\]" 
+        even {
+            append condition "! \[expr {$arg1 % 2}\]"
             set next $i
         }
-        
+
         true {
             #append condition "\[template::util::is_true $arg1\]"
             append condition "\[string is true -strict $arg1\]"
             set next $i
         }
-        
+
         false {
             append condition "!\[template::util::is_true $arg1\]"
             set next $i
         }
 
-        default { 
+        default {
             # treat <if @foo_p;literal@ true> as a shortcut for <if @foo_p;literal@ true>
             #append condition "\[template::util::is_true $arg1\]"
             ad_log warning "operation <$op> in '$args' is using undocumented <if @foo_p;literal@ true> as a shortcut for <if @foo_p;literal@ true>"
@@ -246,4 +246,3 @@ ad_proc -public template_tag_if_interp_expr {} {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-

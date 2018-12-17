@@ -1,8 +1,8 @@
 # Tag Handlers for the ArsDigita Templating System
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein    	  (karlg@arsdigita.com)
-#          Stanislav Freidin 	  (sfreidin@arsdigita.com)
+# Authors: Karl Goldstein         (karlg@arsdigita.com)
+#          Stanislav Freidin      (sfreidin@arsdigita.com)
 #          Christian Brechbuehler (chrisitan@arsdigita.com)
 
 # $Id$
@@ -70,7 +70,7 @@ template_tag master { params } {
   if {$src eq ""} {
       set src {[parameter::get -package_id [ad_conn subsite_id] -parameter DefaultMaster -default "/www/default-master"]}
   }
-  
+
   template::adp_append_code [subst -nocommands {
       set __adp_master [template::util::master_to_file "$src" "\$__adp_stub"]
   }]
@@ -123,7 +123,7 @@ ad_proc -private template:template_tag_include_helper_code {
     set snippet {
         ad_try {
             append __adp_output [__COMMAND__]
-            
+
         } on error {errorMsg} {
             set templateFile [template::util::url_to_file __SRC__ $__adp_stub]
             append __adp_output "Error in include template \"$templateFile\": [ns_quotehtml $errorMsg]"
@@ -145,7 +145,7 @@ ad_proc -private template:template_tag_include_helper_code {
     # will not be substituted.
     #
     set containsMagicString [regsub -all __COMMAND__ $src \u0001 __SRC__]
-    
+
     set __COMMAND__ $command
     foreach v {__DS_CODE__ __SRC__ __COMMAND__} {
         set startPos 0
@@ -181,10 +181,10 @@ ad_proc -private template:template_tag_include_command {src params} {
 
     for { set i 0 } { $i < [ns_set size $params] } { incr i } {
 
-	set key [ns_set key $params $i]
-	if {$key in {src ds}} { continue }
-	set value [ns_set value $params $i]
-	append command [subst { $key "$value"}]
+        set key [ns_set key $params $i]
+        if {$key in {src ds}} { continue }
+        set value [ns_set value $params $i]
+        append command [subst { $key "$value"}]
     }
     append command "\]"
     return $command
@@ -199,10 +199,10 @@ ad_proc -private template:template_tag_include_helper {params} {
     set ds [ns_set iget $params ds]
     if {$ds eq ""} {set ds 1}
     set ds_avail_p [expr {[info commands ::ds_adp_start_box] ne "" }]
-    
+
     #Start developer support frame around subordinate template.
     if { $ds && [info commands ::ds_enabled_p] ne "" && $ds_avail_p } {
-	::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+        ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
     }
 
     template::adp_append_code [template:template_tag_include_helper_code \
@@ -212,7 +212,7 @@ ad_proc -private template:template_tag_include_helper {params} {
 
     # End developer support frame around subordinate template.
     if { $ds && [info commands ::ds_enabled_p] ne "" && $ds_avail_p } {
-	::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+        ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
     }
 }
 
@@ -236,9 +236,9 @@ template_tag widget { params } {
     set src [ns_set iget $params src]
     set adp_stub [template::resource_path -type widgets -style $src -relative]
     if {[file exists $::acs::rootdir/$adp_stub.adp]} {
-	ns_set update $params src $adp_stub
+        ns_set update $params src $adp_stub
     }
-    template:template_tag_include_helper $params 
+    template:template_tag_include_helper $params
 }
 
 
@@ -254,7 +254,7 @@ template_tag multiple { chunk params } {
   set tag_id [template::current_tag]
 
   set i "__${tag_id}_i"
-  
+
   template::adp_append_code "
 
   if {\[info exists $name\]} {
@@ -265,9 +265,9 @@ template_tag multiple { chunk params } {
 
   if {$maxrows >= 0} {
     template::adp_append_code " && \$$i <= $maxrows + $startrow" \
-	-nobreak
+        -nobreak
   }
-  
+
   template::adp_append_code " } { incr $i } {
     upvar 0 $name:\$$i $name
   " -nobreak
@@ -277,8 +277,8 @@ template_tag multiple { chunk params } {
       template::adp_append_code " if { \$$i < \${$name:rowcount}"
 
       if {$maxrows >= 0} {
-	  template::adp_append_code " && \$$i < $maxrows + $startrow" \
-	      -nobreak
+          template::adp_append_code " && \$$i < $maxrows + $startrow" \
+              -nobreak
       }
 
       template::adp_append_code " } {\n"
@@ -291,7 +291,7 @@ template_tag multiple { chunk params } {
   if {\[info exists __${tag_id}_swap\]} {
       upvar 0 __${tag_id}_swap $name
   }"
-}  
+}
 
 # Repeat a template chunk for each item in a list
 
@@ -320,7 +320,7 @@ template_tag list { chunk params } {
     set name [template::get_attribute list $params name]
     template::adp_append_code "\nset {$name:rowcount} \[llength \${$name}\]\n"
   }
-  
+
   template::adp_append_code "
 
   for { set __ats_${name}_i 0 } { \$__ats_${name}_i < \${$name:rowcount} } { incr __ats_${name}_i } {
@@ -330,9 +330,9 @@ template_tag list { chunk params } {
   template::adp_compile_chunk $chunk
 
   template::adp_append_code "}"
-}  
+}
 
-# Create a recursed group, generating a recursive multirow block until the 
+# Create a recursed group, generating a recursive multirow block until the
 # column name stays the same
 
 template_tag group { chunk params } {
@@ -360,7 +360,7 @@ template_tag group { chunk params } {
   # Save groupnum pseudocolumns from surrounding group tag
   # We don't care about saving groupnum_last_p, since this doesn't work
   # for group tags that have other group tags inside them, since we can't know
-  # if we're the last row until the inner group tag has eaten up all the 
+  # if we're the last row until the inner group tag has eaten up all the
   # rows between the start of this tag and the end.
   if { $group_tag_id ne "" } {
     template::adp_append_code "
@@ -371,7 +371,7 @@ template_tag group { chunk params } {
   }
 
   set i "__${multiple_tag_id}_i"
-  
+
   # while the value of name(column) stays the same
   template::adp_append_code "
     set __${tag_id}_group_rowcount 1
@@ -380,12 +380,12 @@ template_tag group { chunk params } {
       if { \$$i >= \${$name:rowcount} } {
         set ${name}(groupnum_last_p) 1
       } else {
-        upvar 0 ${name}:\[expr {\$$i + 1}\] $name:next 
+        upvar 0 ${name}:\[expr {\$$i + 1}\] $name:next
         set ${name}(groupnum_last_p) \[expr {\${${name}:next(${column})} ne \$${name}($column)}\]
       }
   "
 
-  template::adp_compile_chunk $chunk     
+  template::adp_compile_chunk $chunk
 
   # look ahead to the next value and break if it is different
   # otherwise advance the cursor to the next row
@@ -393,8 +393,8 @@ template_tag group { chunk params } {
       if { \$$i >= \${$name:rowcount} } {
           break
       }
-      upvar 0 ${name}:[expr {\$$i + 1}] $name:next 
-      if { \${${name}:next($column)} ne \$${name}(${column}) } { 
+      upvar 0 ${name}:[expr {\$$i + 1}] $name:next
+      if { \${${name}:next($column)} ne \$${name}(${column}) } {
         break
       }
   }]
@@ -445,7 +445,7 @@ template_tag grid { chunk params } {
   } else {
     template::adp_append_code "
       set rownum \[expr {1 + int((\$__c - 1) + ((\$__r - 1) * $cols))}\]
-" 
+"
   }
 
   template::adp_append_code "
@@ -481,7 +481,7 @@ template_tag else { chunk params } {
 
   template::adp_compile_chunk $chunk
 
-  template::adp_append_code "}"  
+  template::adp_append_code "}"
 }
 
 # Output a template chunk without parsing, for preprocessed templates
@@ -569,9 +569,9 @@ template_tag formgroup { chunk params } {
   ns_set update $params name formgroup
   ns_set update $params id formgroup
 
-  # Use the multiple or grid tag to render the form group depending on 
+  # Use the multiple or grid tag to render the form group depending on
   # whether the cols attribute was specified
-  
+
   if { [ns_set find $params cols] == -1 } {
     template_tag_multiple $chunk $params
   } else {
@@ -591,7 +591,7 @@ template_tag formgroup-widget { chunk params } {
 
     template::adp_append_code \
         "template::element options \${form:id} [list $id] { $tag_attributes }"
-    
+
     # make sure name is a parameter to pass to the rendering tag handler
     ns_set update $params name formgroup
     ns_set update $params id formgroup
@@ -620,7 +620,7 @@ template_tag formtemplate { chunk params } {
 
     set form_properties($varname) [ns_set iget $params $varname]
     template::adp_append_code \
-	[list set form_properties($varname) $form_properties($varname)]
+        [list set form_properties($varname) $form_properties($varname)]
   }
 
   # get any additional HTML attributes specified by the designer
@@ -640,10 +640,10 @@ template_tag formtemplate { chunk params } {
 
     # compile the static form layout specified in the template
     template::adp_compile_chunk $chunk
-   
+
     # Render any hidden variables that have not been rendered yet
     template::adp_append_string \
-	[subst -nocommands {[template::form check_elements $id]}]
+        [subst -nocommands {[template::form check_elements $id]}]
   }
 
   if { [info exists form_properties(fieldset)] } {
@@ -657,7 +657,7 @@ template_tag formtemplate { chunk params } {
 #
 # Implements the <tt>child</tt> tag which renders a child item.
 # See the Developer Guide for more information. <br>
-# The child tag format is 
+# The child tag format is
 # <blockquote><tt>
 # &lt;child tag=<i>tag</i> index=<i>n embed args</i>&gt;
 # </blockquote>
@@ -672,7 +672,7 @@ template_tag child { params } {
 #
 # Implements the <tt>relation</tt> tag which renders a related item.
 # See the Developer Guide for more information. <br>
-# The relation tag format is 
+# The relation tag format is
 # <blockquote><tt>
 # &lt;relation tag=<i>tag</i> index=<i>n embed args</i>&gt;
 # </tt></blockquote>
@@ -712,10 +712,10 @@ template_tag content { params } {
   append command " -html \{$extra_args\} -no_merge -embed"
   append command " -revision_id \[publish::get_main_revision_id\]\]"
 
-  template::adp_append_code "append __adp_output \[$command\]" 
+  template::adp_append_code "append __adp_output \[$command\]"
 }
 
-# Include another template in the current template, but make 
+# Include another template in the current template, but make
 # some other chunk dependent on whether or not the included
 # template returned something.
 #
@@ -744,7 +744,7 @@ template_tag include-optional { chunk params } {
 
   # __adp_include_optional_output is a list that operates like a stack
   # So first we execute the include template, and push the result onto this stack
-  # Then, if the output contained anything but whitespace, we also output the 
+  # Then, if the output contained anything but whitespace, we also output the
   # chunk inside the include-optional tag.
   # Finally, we pop the output off of the __adp_include_optional_output stack.
 
@@ -787,11 +787,11 @@ template_tag trn { chunk params } {
 
   # LARS: Note that this version of the <TRN> tag requires a body, like this:
   # <trn key="...">default</trn>.
-  # This is the way to give a default value, and is okay, because we now have the #...# 
+  # This is the way to give a default value, and is okay, because we now have the #...#
   # notation for when there's no default value.
   # Will register the key in the message catalog if it doesn't exist.
 
-  set size [ns_set size $params] 
+  set size [ns_set size $params]
   for { set i 0 } { $i < $size } { incr i } {
      set [ns_set key $params $i] [ns_set value $params $i]
      # substitute array variables
@@ -818,7 +818,7 @@ template_tag trn { chunk params } {
       if { ![lang::message::message_exists_p $locale $key] } {
           lang::message::register $locale $key $chunk
       }
-  } 
+  }
 
   # quote dollar signs, square bracket and quotes
   regsub -all {[\]\[""\\$]} $chunk {\\&} quoted_chunk
@@ -867,7 +867,7 @@ template_tag switch { chunk params } {
         if {$key eq $value} {
             set arg $key
         } elseif {$key eq "flag"} {
-            append sw " -$value "            
+            append sw " -$value "
         }
     }
 
@@ -880,7 +880,7 @@ template_tag switch { chunk params } {
 
 
 # case statements as part of switch statement as shown above
-# 
+#
 
 template_tag case { chunk params } {
 
@@ -889,7 +889,7 @@ template_tag case { chunk params } {
     set tag_id [template::enclosing_tag switch]
     if {$tag_id eq {}} {
         error "No enclosing SWITCH tag for CASE tag on value $value"
-    }    
+    }
 
     # get the case value
 
@@ -901,7 +901,7 @@ template_tag case { chunk params } {
 
         # processing <case value= ...> form
 
-        template::adp_append_code "[list $value] {" -nobreak        
+        template::adp_append_code "[list $value] {" -nobreak
 
         template::adp_compile_chunk $chunk
 
@@ -935,7 +935,7 @@ template_tag case { chunk params } {
                     if { $i == $size_1 } {
 
                         template::adp_append_code "$switches $value {" -nobreak
-        
+
                         template::adp_compile_chunk $chunk
 
                         template::adp_append_code "}"
@@ -945,7 +945,7 @@ template_tag case { chunk params } {
                         # previous items default to pass-through
                         append switches " $key - "
                     }
-                    
+
                 } else {
                     error "Format error: should be <case in \"foo\" \"bar\" ...>"
                 }
@@ -963,7 +963,7 @@ template_tag default { chunk params } {
     set tag_id [template::enclosing_tag switch]
     if {$tag_id eq {}} {
         error "No enclosing SWITCH tag for DEFAULT tag"
-    }    
+    }
 
     # insert the default value and evaluate the chunk
 
