@@ -50,7 +50,7 @@
             <form name="\@list_properties.name@_resize" method="GET" action="">
               \@list_properties.page_size_export_chunk;noquote@
 	      <tcl>template::add_event_listener -event change -id "$list_properties(name)_resize-control" -script [subst {
-                  acs_ListBulkActionClick('$list_properties(name)_resize', '$list_properties(url)');
+                  acs_ListBulkActionClick("$list_properties(name)_resize", "$list_properties(url)");
 	      }]</tcl>
               <select id='\@list_properties.name@_resize-control' name="page_size">
                 <multiple name="page_sizes">
