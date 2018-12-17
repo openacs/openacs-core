@@ -162,20 +162,20 @@ ad_proc -private db_state_array_name_is {
     if { $dbn eq "" } {
         set dbn $::acs::default_database
     }
-    if {[llength [trace info variable ::db_state_${dbn}]] == 0} {
-        trace add variable ::db_state_${dbn} {array read write unset} [list ::db_tracer ::db_state_${dbn}]
-    }
+    #if {[llength [trace info variable ::db_state_${dbn}]] == 0} {
+    #    trace add variable ::db_state_${dbn} {array read write unset} [list ::db_tracer ::db_state_${dbn}]
+    #}
     return "::db_state_${dbn}"
 }
 
-proc db_tracer {varname name1 name2 op} {
-    if {$name2 eq "handles"} {
-        #ns_log notice "### variable $varname: $name1 ($name2) $op"
-        if {$op eq "write"} {
-            ns_log notice "###### handles updated to <[set ::${varname}($name2)]>"
-        }
-    }
-}
+# proc db_tracer {varname name1 name2 op} {
+#     if {$name2 eq "handles"} {
+#         #ns_log notice "### variable $varname: $name1 ($name2) $op"
+#         if {$op eq "write"} {
+#             ns_log notice "###### handles updated to <[set ::${varname}($name2)]>"
+#         }
+#     }
+# }
 
 ad_proc -public db_driverkey {
     {-handle_p 0}
@@ -533,7 +533,7 @@ try {
     }
 }
 
-if {$useNsdbCurrentHandles} {
+if {0 && $useNsdbCurrentHandles} {
     #
     # This branch uses "ns_db currenthandles" to implement
     # "db_with_handle" instead of the old approach based on the global
