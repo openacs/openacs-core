@@ -533,7 +533,7 @@ try {
     }
 }
 
-if {0 && $useNsdbCurrentHandles} {
+if {$useNsdbCurrentHandles} {
     #
     # This branch uses "ns_db currenthandles" to implement
     # "db_with_handle" instead of the old approach based on the global
@@ -543,11 +543,20 @@ if {0 && $useNsdbCurrentHandles} {
     # - more robust (deletion and creation of the per-request variables,
     #   no coherency problem),
     # - simpler, and
-    # - faster (less overhead per db_with_handle call, simple queries up to 20% faster)
+    # - faster (less overhead per db_with_handle call)
     #
     #     time {db_string . {select object_id from acs_objects limit 1}} 1000
-    #     old: 200-230 microseconds per iteration
-    #     new: 160-180 microseconds per iteration
+    #     old: 160-190 microseconds per iteration
+    #     new: 150-180 microseconds per iteration
+    #
+    #     time {xo::dc get_value . {select object_id from acs_objects limit 1}} 1000
+    #     old: 110-120
+    #     new: 105-110
+    #
+    #     set id -1
+    #     time {xo::dc get_value -prepare {int} . {select object_id from acs_objects where object_id=:id}} 1000
+    #     old: 80-100
+    #     new: 76-90
     #
     # Still, more improvement can be done (GN).
     #
@@ -621,7 +630,7 @@ if {0 && $useNsdbCurrentHandles} {
             set errno [catch {
                 set db [ns_db gethandle $pool]
             } error]
-            ad_log notice "### AFTER gethandle $pool errno $errno handle <$db> currentHandles [ns_db currenthandles]"
+            #ad_log notice "### AFTER gethandle $pool errno $errno handle <$db> currentHandles [ns_db currenthandles]"
             ds_collect_db_call $db gethandle "" $pool $start_time $errno $error
             if { $errno } {
                 ns_log notice "### RETURNING error $error"
