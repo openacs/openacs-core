@@ -918,7 +918,7 @@ BEGIN
  return description;
 
 END;
-$$ LANGUAGE plpgsql with (iscachable);
+$$ LANGUAGE plpgsql IMMUTABLE;
 
 
 -- added
