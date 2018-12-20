@@ -23,7 +23,11 @@ ad_proc -public ad_urlencode_folder_path {path} {
             ad_urlencode_path).
     @see ad_urlencode_path
 } {
-    return [ns_urlencode -part path -- {*}[split $path /]]
+    if {$path ne ""} {
+        return [ns_urlencode -part path -- {*}[split $path /]]
+    } else {
+        return ""
+    }
 }
 
 ad_proc -public ad_urlencode_path { string } {

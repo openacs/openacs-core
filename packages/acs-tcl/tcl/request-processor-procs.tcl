@@ -824,7 +824,10 @@ ad_proc -private rp_filter { why } {
         } trap {AD EXCEPTION ad_script_abort} {r} {
             rp_finish_serving_page
             rp_debug "rp_filter: page aborted return filter_return"
-            ns_log notice "rp_filter: aborted url [ad_conn extra_url]"
+            ns_log notice "rp_filter: aborted url<[ad_conn extra_url]> ($r) connected [ns_conn isconnected]\n$::errorInfo"
+            if {[ns_conn isconnected]} {
+                ad_return_complaint 1 "invalid request?"
+            }
             set result filter_return
         } on ok {r} {
             rp_debug "rp_filter: return filter_ok"
