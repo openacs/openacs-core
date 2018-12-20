@@ -66,7 +66,10 @@ ad_proc ad_dimensional {
         set style [parameter::get \
                        -package_id [ad_conn subsite_id] \
                        -parameter DefaultDimensionalStyle \
-                       -default "dimensional"]
+                       -default [parameter::get \
+                                     -package_id [apm_package_id_from_key "acs-templating"] \
+                                     -parameter DefaultDimensionalStyle \
+                                     -default "dimensional"]]
     }
 
     #

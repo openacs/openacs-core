@@ -1854,9 +1854,12 @@ ad_proc -private template::list::render_filters {
 
     if {$style eq {}} {
         set style [parameter::get \
-                       -package_id [apm_package_id_from_key "acs-templating"] \
+                       -package_id [ad_conn subsite_id] \
                        -parameter DefaultListFilterStyle \
-                       -default "filters"]
+                       -default [parameter::get \
+                                     -package_id [apm_package_id_from_key "acs-templating"] \
+                                     -parameter DefaultListFilterStyle \
+                                     -default "filters"]]
     }
 
     set file_stub [template::resource_path -type lists -style $style]
@@ -3174,9 +3177,12 @@ ad_proc -private template::list::render_form_filters {
     ############################################################
     if {$style eq ""} {
         set style [parameter::get \
-                       -package_id [apm_package_id_from_key "acs-templating"] \
+                       -package_id [ad_conn subsite_id] \
                        -parameter DefaultListFilterStyle \
-                       -default "filters"]
+                       -default [parameter::get \
+                                     -package_id [apm_package_id_from_key "acs-templating"] \
+                                     -parameter DefaultListFilterStyle \
+                                     -default "filters"]]        
     }
     set file_stub [template::resource_path -type lists -style $style]
 
