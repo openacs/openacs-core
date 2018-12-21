@@ -524,15 +524,18 @@ ad_proc -private auth::password::email_password {
 
     @author Peter Marklund
 } {
-    set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
-    acs_user::get -user_id $user_id -array user
+    set user_id    [acs_user::get_by_username -authority_id $authority_id -username $username]
+    set user_info  [acs_user::get -user_id $user_id]
+    set user_email [party::get -party_id $user_id -element email]
 
     # Set up variables for use in message key
-    set reset_password_url [export_vars -base "[ad_url]/user/password-update" {user_id {old_password $password}}]
+    set reset_password_url [export_vars -base "[ad_url]/user/password-update" {
+        user_id {old_password $password}
+    }]
     set forgotten_password_url [auth::password::get_forgotten_url \
                                     -authority_id $authority_id \
-                                    -username $user(username) \
-                                    -email $user(email)]
+                                    -username $username \
+                                    -email $user_email]
     set subsite_info [security::get_register_subsite]
     if {[dict get $subsite_info url] ne "/"} {
         set forgotten_password_url [dict get $subsite_info url]$forgotten_password_url
@@ -544,19 +547,19 @@ ad_proc -private auth::password::email_password {
     set system_url [ad_url]
     if { [auth::UseEmailForLoginP] } {
         set account_id_label [_ acs-subsite.Email]
-        set account_id $user(email)
+        set account_id $user_email
     } else {
         set account_id_label [_ acs-subsite.Username]
-        set account_id $user(username)
+        set account_id $username
     }
     set password_label [_ acs-subsite.Password]
-    
+
     set length [expr {max([string length $account_id_label], [string length $password_label])}]
     set account_id_label [ad_pad -right $account_id_label $length " "]
     set password_label   [ad_pad -right $password_label $length " "]
 
-    set first_names $user(first_names)
-    set last_name $user(last_name)
+    set first_names [dict get $user_info first_names]
+    set last_name   [dict get $user_info lastt_name]
 
     if { [ad_conn untrusted_user_id] != 0 } {
         set admin [person::get_person_info \
@@ -577,7 +580,7 @@ ad_proc -private auth::password::email_password {
 
     # Send email
     acs_mail_lite::send -send_immediately \
-        -to_addr $user(email) \
+        -to_addr $user_email \
         -from_addr $system_owner \
         -subject $subject \
         -body $body
