@@ -260,7 +260,7 @@ ad_proc -public auth::authenticate {
     } on error {errorMsg} {
         set result(auth_status) failed_to_connect
         set result(auth_message) $errorMsg
-        ad_log Error "auth::authenticate: error invoking authentication driver for authority_id = $authority_id: $::errorInfo"
+        ad_log Error "auth::authenticate: error '$errorMsg' invoking authentication driver for authority_id = $authority_id: $::errorInfo"
     }
 
     # Returns:
@@ -1283,8 +1283,8 @@ ad_proc -public auth::delete_local_account {
 
     <ul>
     <li> delete_status:  ok, delete_error, failed_to_connect. Says whether user deletion succeeded.
-    <li> delete_message: Information about the problem, to be relayed to the user. If delete_status is not ok, then
-    delete_message is guaranteed to be non-empty. May contain HTML.
+    <li> delete_message: Information about the problem, to be relayed to the user.
+    If delete_status is not ok, then delete_message is guaranteed to be non-empty. May contain HTML.
     </ul>
 
     All entries are guaranteed to always be set, but may be empty.
