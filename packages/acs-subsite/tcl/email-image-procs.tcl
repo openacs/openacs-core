@@ -21,15 +21,41 @@ ad_proc -public email_image::update_private_p {
     }
 }
 
+ad_proc -private email_image::get_priv_email_from_parameter {
+    {-subsite_id ""}
+} {
+    Returns the priv_email field of the user from the users table.
+} {
+    if {$subsite_id eq ""} {
+        if {[ns_conn isconnected]} {
+            set subsite_id [ad_conn subsite_id]
+        } else {
+            set subsite_id [lindex [apm_package_ids_from_key -package_key acs-subsite -mounted] 0]
+        }
+    }
+    return [parameter::get \
+                -package_id $subsite_id \
+                -parameter "PrivateEmailLevelP" \
+                -default 4]
+}
+
+
 ad_proc -public email_image::get_priv_email {
     -user_id:required
+    {-subsite_id ""}
 } {
     Returns the priv_email field of the user from the users table.
 } {
     set priv_level [db_string get_private_email {}]
     if {$priv_level eq "5"} {
-      set priv_level [parameter::get_from_package_key -package_key "acs-subsite" \
-      -parameter "PrivateEmailLevelP" -default 4]
+        if {$subsite_id eq ""} {
+            if {[ns_conn isconnected]} {
+                set subsite_id [ad_conn subsite_id]
+            } else {
+                set subsite_id [lindex [apm_package_ids_from_key -package_key acs-subsite -mounted] 0]
+            }
+        }
+        set priv_level [email_image::get_priv_email_from_parameter -subsite_id $subsite_id]
     }
     return $priv_level
 }
@@ -39,6 +65,7 @@ ad_proc -public email_image::get_user_email {
     {-return_url ""}
     {-bgcolor "" }
     {-transparent "" }
+    {-subsite_id ""}
 } {
     Returns the email in different ways (text level 4, image or text and image level 3, link level 2, ...)
     according to the priv_email field in the users table. To create an image the ImageMagick software is required, 
@@ -54,8 +81,7 @@ ad_proc -public email_image::get_user_email {
     set user_level [email_image::get_priv_email -user_id $user_id]
     if { $user_level == 5 } {
         # We get the privacy level from PrivateEmailLevelP parameter
-        set priv_level [parameter::get_from_package_key -package_key "acs-subsite" \
-	 -parameter "PrivateEmailLevelP" -default 4]
+        set priv_level [email_image::get_priv_email_from_parameter -subsite_id $subsite_id]
     } else {
         # We use the privacy level that the user select
         set priv_level $user_level
