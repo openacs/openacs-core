@@ -525,7 +525,7 @@ ad_proc -private auth::password::email_password {
     @author Peter Marklund
 } {
     set user_id    [acs_user::get_by_username -authority_id $authority_id -username $username]
-    set user_info  [acs_user::get -user_id $user_id]
+    set user_info  [person::get_person_info -person_id $user_id]
     set user_email [party::get -party_id $user_id -element email]
 
     # Set up variables for use in message key
@@ -559,7 +559,7 @@ ad_proc -private auth::password::email_password {
     set password_label   [ad_pad -right $password_label $length " "]
 
     set first_names [dict get $user_info first_names]
-    set last_name   [dict get $user_info lastt_name]
+    set last_name   [dict get $user_info last_name]
 
     if { [ad_conn untrusted_user_id] != 0 } {
         set admin [person::get_person_info \
