@@ -554,8 +554,9 @@ ad_proc -public auth::create_user {
         #   creation_info(account_message)
         #   creation_info(user_id)
 
-        # We don't do any fancy error checking here, because create_local_account is not a service contract
-        # so we control it 100%
+        # We don't do any fancy error checking here, because
+        # create_local_account is not a service contract so we control
+        # it 100%
 
         # Local account creation ok?
         if {$creation_info(creation_status) eq "ok"} {
@@ -1054,7 +1055,7 @@ ad_proc -public auth::create_local_account {
             auth::send_email_verification_email -user_id $user_id
         } on error {errorMsg} {
             ad_log Error "auth::create_local_account: Error sending out email verification email to email $email: $errorMsg"
-            set auth_info(account_message) [_ acs_subsite.Error_sending_verification_mail]
+            set auth_info(account_message) [_ acs-subsite.Error_sending_verification_mail]
         }
     }
 
