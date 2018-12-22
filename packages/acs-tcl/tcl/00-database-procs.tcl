@@ -699,6 +699,9 @@ if {$useNsdbCurrentHandles} {
 
         @param dbn The database name to use.  If empty_string, uses the default database.
     } {
+        # we need the state array still for transaction handling
+        upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
+
         set pools [db_available_pools $dbn]
         set currentHandles [ns_db currenthandles]
 
@@ -707,6 +710,12 @@ if {$useNsdbCurrentHandles} {
                 foreach {handle active} [dict get $currentHandles $pool] {
                     #ns_log notice "### FOUND pool $pool handle $handle active $active"
                     if {$active eq 0} {
+                        # Don't release handles which are part of a transaction.
+                        if { [info exists db_state(transaction_level,$handle)]
+                             && $db_state(transaction_level,$handle) > 0
+                         } {
+                            continue
+                        }
                         set start_time [expr {[clock clicks -microseconds]/1000.0}]
                         ns_db releasehandle $handle
                         #ns_log notice "### AFTER releasehandle [ns_db currenthandles $pool]"
