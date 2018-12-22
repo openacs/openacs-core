@@ -1470,7 +1470,6 @@ ad_proc -private sec_get_token {
     set token [ns_cache eval secret_tokens $token_id {
         set token [db_string get_token {select token from secret_tokens
             where token_id = :token_id} -default 0]
-        db_release_unused_handles
 
         # Very important to throw the error here if $token == 0
 
