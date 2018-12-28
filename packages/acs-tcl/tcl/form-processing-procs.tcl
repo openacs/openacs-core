@@ -785,87 +785,12 @@ ad_proc -public ad_form {
         template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
     }
 
-    # Antonio Pisano: now ad_form supports :multiple, 
-    # :array and :sign flags in exported variables.
+    # Antonio Pisano: export property will eventually end up into
+    # template::form::render, where export_vars will take care of
+    # creating the required hidden form fields according to
+    # specification.
     if { [info exists export] } {
-        foreach value $export {
-            set has_value_p [expr {[llength $value] >= 2}]
-            lassign $value name value
-
-            # recognize supported flags
-            lassign [split $name ":"] name mode
-            set modes [split $mode ,]
-
-            # verify variable existence and nature
-            set var_exists_p [uplevel [list info  exists $name]]
-            set is_array_p   [uplevel [list array exists $name]]
-
-            # arrays are automatically recognized, even if not specified
-            set array_p    [expr {$is_array_p || "array" in $modes}]
-            set sign_p     [expr {"sign"     in $modes}]
-            set multiple_p [expr {"multiple" in $modes}]
-            
-            if {$array_p} {
-              # no explicit value:
-              if {!$has_value_p} {
-                # if array in caller stack exists, get its value from there
-                if {$is_array_p} {
-                  set value [uplevel [list array get $name]]
-                # else, if a variable exists but it's not an array, throw error (as in export_vars)
-                } elseif {$var_exists_p} {
-                    error "variable \"$name\" should be an array"
-                # else, just ignore this export
-                } else {continue}
-              }
-              # arrays generate one hidden formfield for each key
-              foreach {key val} $value {
-                set val [uplevel [list subst $val]]
-                # field is multiple: use '-values' instead of '-value'
-                if {$multiple_p} {
-                  template::element create $form_name ${name}.${key} \
-                      -datatype text -widget hidden \
-                      -values $val
-                } else {
-                  template::element create $form_name ${name}.${key} \
-                      -datatype text -widget hidden \
-                      -value $val
-                }
-              }
-            } else {
-              # no explicit value:
-              if {!$has_value_p} {
-                # if variable in caller stack exists, get its value from there
-                if {$var_exists_p} {
-                  set value [uplevel [list set $name]]
-                # else, just ignore this export
-                } else {continue}
-              } else {
-                #
-                # substitute only the explicitly specified value
-                #
-                set value [uplevel [list subst $value]]
-              }
-              # field is multiple: use '-values' instead of '-value'
-              if {$multiple_p} {
-                template::element create $form_name $name \
-                    -datatype text -widget hidden \
-                    -values $value
-              } else {
-                template::element create $form_name $name \
-                    -datatype text -widget hidden \
-                    -value $value
-              }
-            }
-            if {$sign_p} {
-                # value is signed and its signature sent as another hidden field.
-                # lsort is required for arrays, as 'array get' doesn't specify
-                # the order of extraction of elements and we could have different
-                # signature for the same array
-                template::element create $form_name $name:sig \
-                  -datatype text -widget hidden \
-                  -value [ad_sign [lsort $value]]
-            }
-        }
+        template::form::set_properties $form_name export $export
     }
 
     # We need to track these for submission time and for error checking
