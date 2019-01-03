@@ -299,10 +299,13 @@ ad_proc -private group::get_id_not_cached {
 ad_proc -public group::get_members {
     {-group_id:required}
     {-type "party"}
+    {-member_state ""}
 } {
     Get party_ids of all members from cache.
 
     @param type Type of members - party, person, user
+    @param member_state when specified, return only members in this
+                        membership state
 
     @see group::get_members_not_cached
     @see group::flush_members_cache
@@ -311,19 +314,22 @@ ad_proc -public group::get_members {
     @creation-date 2005-07-26
 } {
     acs::group_cache eval -partition_key $group_id \
-        members-$group_id-$type {
-            group::get_members_not_cached -group_id $group_id -type $type
+        members-$group_id-$type-$member_state {
+            group::get_members_not_cached -group_id $group_id \
+                -type $type -member_state $member_state
         }
-    #return [util_memoize [list group::get_members_not_cached -group_id $group_id -type $type]]
 }
 
 ad_proc -private group::get_members_not_cached {
     {-group_id:required}
     {-type:required}
+    {-member_state:required}
 } {
     Get party_ids of all members.
 
     @param type Type of members - party, person, user
+    @param member_state when specified, return only members in this
+                        membership state
 
     @see group::get_members
     @see group::flush_members_cache
@@ -331,26 +337,18 @@ ad_proc -private group::get_members_not_cached {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-07-26
 } {
-    switch -- $type {
-        party  {
-            set member_list [db_list group_members_party {
-                select distinct member_id
-                from group_member_map
-                where group_id = :group_id
-            }]
-        }
-        default {
-            set member_list [db_list group_members {
-                select distinct m.member_id
-                from group_member_map m, acs_objects o
-                where m.group_id = :group_id
-                and m.member_id = o.object_id
-                and o.object_type = :type
-            }]
-        }
-    }
-
-    return $member_list
+    return [db_list group_members {
+        select distinct member_id
+        from group_member_map m
+        where group_id = :group_id
+          and (:member_state is null or
+               (select member_state from membership_rels
+                 where rel_id = m.rel_id) = :member_state)
+          and (:type is null or
+               :type = 'party' or
+               (select object_type from acs_objects
+                 where object_id = m.member_id) = :type)
+    }]
 }
 
 
