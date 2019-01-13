@@ -53,7 +53,7 @@ list::create \
         }
         instance_name {
             label "[_ acs-subsite.Name]"
-            link_url_eval {../../$name/}
+            link_url_eval {[site_node::get_url -node_id $node_id]}
         }
         name {
             label "[_ acs-subsite.URL]"
