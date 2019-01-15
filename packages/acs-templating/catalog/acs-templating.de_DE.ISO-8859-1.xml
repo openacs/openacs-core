@@ -22,6 +22,7 @@
   <msg key="Element_is_too_long_Singular">%label% ist um 1 Zeichen zu lang.</msg>
   <msg key="Enhanced_Text">Erweiterter Text</msg>
   <msg key="Enter_your_search_text">Geben Sie ihren Suchtext hier ein</msg>
+  <msg key="filter_clear">Entfernen</msg>
   <msg key="Fixed_width_Text">Text mit fester Breite</msg>
   <msg key="Format">Format</msg>
   <msg key="Formats">Formate</msg>

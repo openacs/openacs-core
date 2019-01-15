@@ -4,7 +4,7 @@
         <td colspan="3" class="list-filter-header">
          @filters.filter_label@
          <if @filters.filter_clear_url@ not nil>
-           (<a href="@filters.filter_clear_url@" title="Clear the currently selected @filters.filter_label@">clear</a>)
+           (<a href="@filters.filter_clear_url@" title="#acs-templating.filter_clear#">#acs-templating.filter_clear#</a>)
          </if>
         </td>
       </tr>

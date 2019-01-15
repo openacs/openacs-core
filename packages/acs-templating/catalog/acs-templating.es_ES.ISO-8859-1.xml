@@ -22,6 +22,7 @@
   <msg key="Element_is_too_long_Singular">%label% es un caracater muy largo.</msg>
   <msg key="Enhanced_Text">Texto Enriquecido</msg>
   <msg key="Enter_your_search_text">Introduzca el texto a buscar</msg>
+  <msg key="filter_clear">Limpiar</msg>
   <msg key="Fixed_width_Text">Preformateado
 </msg>
   <msg key="Format">Formato
