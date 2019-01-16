@@ -36,9 +36,9 @@ set package_admin_p [permission::permission_p -object_id [ad_conn package_id] -p
 db_multirow -extend {subscriber_url subscriber_name } notifications select_notifications {} {
     set subscriber_name [person::name -person_id $user_id]
     if { [string is true $package_admin_p] } {
-	set subscriber_url [export_vars -base "manage" -url {user_id}]
+        set subscriber_url [export_vars -base "manage" -url {user_id}]
     } else {
-	set subscriber_url [acs_community_member_url -user_id $user_id]
+        set subscriber_url [acs_community_member_url -user_id $user_id]
     }
 }
 
@@ -46,18 +46,17 @@ template::list::create \
     -name notifications \
     -no_data [_ notifications.lt_You_have_no_notificat] \
     -elements {
-	subscriber_name {
-	    label {[_ notifications.Subscriber] }
-	    link_url_eval $subscriber_url
-	}
-	type {
-	    label {[_ notifications.Notification_type]}
-	}
+        subscriber_name {
+            label {[_ notifications.Subscriber] }
+            link_url_eval $subscriber_url
+        }
+        type {
+            label {[_ notifications.Notification_type]}
+        }
         interval {
             label {[_ notifications.Frequency]}
         }
     }
-        
 
 # Local variables:
 #    mode: tcl
