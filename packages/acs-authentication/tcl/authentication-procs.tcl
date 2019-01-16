@@ -68,8 +68,8 @@ ad_proc -public auth::require_login {
     # ns_log notice "URL have url, len=[string length $return_url] $user_agent"
 
     if {[string length $return_url] > 2083} {
-        set message "Your login expired and the computed URL for automated continuation is too long. "
-        append message "If you were editing a from, please use the back button after logging in and resubmit the form."
+        set message "[_ acs-authentication.Login_expired_url_too_long]"
+        append message "[_ acs-authentication.Editing_form_text]"
         set return_url [ad_get_login_url]
     }
 
