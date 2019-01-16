@@ -711,13 +711,12 @@ $$ LANGUAGE plpgsql stable;
 -- Create or replace a trigger on insert for simplifying addition of
 -- revisions for any content type
 
-select define_function_args('content_type__refresh_trigger','content_type');
-
-
 
 --
 -- procedure content_type__refresh_trigger/1
 --
+select define_function_args('content_type__refresh_trigger','content_type');
+
 CREATE OR REPLACE FUNCTION content_type__refresh_trigger(
    refresh_trigger__content_type varchar
 ) RETURNS integer AS $$
@@ -792,7 +791,7 @@ BEGIN
   execute function_text;
 
   rule_text := 'create rule ' || v_table_name || '_r as on insert to ' ||
-               v_table_name || 'i do instead SELECT ' || v_table_name || '_f(new); ' ;
+               v_table_name || 'i do instead SELECT ' || v_table_name || '_f(new) FOR UPDATE; ' ;
   --================== done building rule code =======================
 
   -- drop the old rule
@@ -808,13 +807,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args('content_type__refresh_view','content_type');
 
 
 
 --
 -- procedure content_type__refresh_view/1
 --
+select define_function_args('content_type__refresh_view','content_type');
+
 CREATE OR REPLACE FUNCTION content_type__refresh_view(
    refresh_view__content_type varchar
 ) RETURNS integer AS $$
