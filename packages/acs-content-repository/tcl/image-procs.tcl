@@ -59,15 +59,15 @@ ad_proc -public image::new {
     @error
 } {
     if {$width eq "" || $height eq ""} {
-	lassign [image::get_file_dimensions \
+        lassign [image::get_file_dimensions \
                      -filename $tmp_filename \
                      -mime_type $mime_type] width height
     }
     if {[lsearch -index 0 $attributes "width"] < 0} {
-	lappend attributes [list width $width]
+        lappend attributes [list width $width]
     }
     if {[lsearch -index 0 $attributes "height"] < 0} {
-	lappend attributes [list height $height]
+        lappend attributes [list height $height]
     }
     return [content::item::new \
                 -name $name \
@@ -106,8 +106,8 @@ ad_proc -public image::get_file_info {
     # image magic.
     set size [image::ns_size -filename $filename]
     if {[lindex $size 0] ne ""} {
-	set mime_type [image::mime_type -filename $filename]
-	return [concat $size $mime_type]
+        set mime_type [image::mime_type -filename $filename]
+        return [concat $size $mime_type]
     }
     return [image::imagemagick_identify -filename $filename]
 }
@@ -130,7 +130,7 @@ ad_proc -public image::get_file_info_array {
 } {
     upvar $array_name local_array
     lassign [image::get_file_info -filename $filename] \
-	local_array(width) local_array(height) local_array(mime_type)
+        local_array(width) local_array(height) local_array(mime_type)
 }
 
 ad_proc -public image::get_file_dimensions {
@@ -152,7 +152,7 @@ ad_proc -public image::get_file_dimensions {
 } {
     set size [image::ns_size -filename $filename -mime_type $mime_type]
     if {[lindex $size 0] eq ""} {
-	catch {set size [image::imagemagick_file_dimensions -filename $filename]}
+        catch {set size [image::imagemagick_file_dimensions -filename $filename]}
     }
     return $size
 }
@@ -203,7 +203,7 @@ ad_proc -public image::imagemagick_identify {
     @creation-date 2006-08-27
 } {
     if { [ catch {set out [exec [image::identify_binary] \
-			       -format "%w %h %m %k %q %#" $filename]} errMsg]} {
+                               -format "%w %h %m %k %q %#" $filename]} errMsg]} {
         return -code error $errMsg
     }
     lassign $out width height type
@@ -252,9 +252,9 @@ ad_proc -public image::identify_binary {
     @creation-date 2006-08-27
 } {
     return [parameter::get \
-		-parameter ImageMagickIdentifyBinary \
-		-package_id [apm_package_id_from_key acs-content-repository] \
-		-default "/usr/bin/identify"]
+                -parameter ImageMagickIdentifyBinary \
+                -package_id [apm_package_id_from_key acs-content-repository] \
+                -default "/usr/bin/identify"]
 }
 
 ad_proc -public image::convert_binary {
@@ -265,56 +265,56 @@ ad_proc -public image::convert_binary {
     @creation-date 2006-08-27
 } {
     return [parameter::get \
-		-parameter ImageMagickConvertBinary \
-		-package_id [apm_package_id_from_key acs-content-repository] \
-		-default "/usr/bin/convert"]
+                -parameter ImageMagickConvertBinary \
+                -package_id [apm_package_id_from_key acs-content-repository] \
+                -default "/usr/bin/convert"]
 }
 
 if {[ns_info name] eq "NaviServer"} {
-        ad_proc -public image::ns_size {
-	-filename
-	{-mime_type ""}
+    ad_proc -public image::ns_size {
+        -filename
+        {-mime_type ""}
     } {
-	Use ns_gifsize/ns_jpegsize to try to get the size of an image
+        Use ns_gifsize/ns_jpegsize to try to get the size of an image
 
-	@param filename Full path to file in the filesystem
-	@return List containing width and height
+        @param filename Full path to file in the filesystem
+        @return List containing width and height
     } {
-	set w ""
-	set h ""
-	if {[file exists $filename] && [ns_imgtype $filename] ne "unknown"} {
-	    lassign [ns_imgsize $filename] w h
-	}
-	return [list $w $h]
+        set w ""
+        set h ""
+        if {[file exists $filename] && [ns_imgtype $filename] ne "unknown"} {
+            lassign [ns_imgsize $filename] w h
+        }
+        return [list $w $h]
     }
 } else {
     ad_proc -public image::ns_size {
-	-filename
-	{-mime_type ""}
+        -filename
+        {-mime_type ""}
     } {
-	Use ns_gifsize/ns_jpegsize to try to get the size of an image
+        Use ns_gifsize/ns_jpegsize to try to get the size of an image
 
-	@param filename Full path to file in the filesystem
-	@return List containing width and height
-	@author Dave Bauer (dave@solutiongrove.com)
-	@creation-date 2006-08-27
+        @param filename Full path to file in the filesystem
+        @return List containing width and height
+        @author Dave Bauer (dave@solutiongrove.com)
+        @creation-date 2006-08-27
     } {
-	switch -glob -- \
-	    [image::filename_mime_type \
-		 -filename $filename \
-		 -mime_type $mime_type] {
-		     *gif {
-			 set size [ns_gifsize $filename]
-		     }
-		     *jpg -
-		     *jpeg {
-			 set size [ns_jpegsize $filename]
-		     }
-		     default {
-			 set size [list "" ""]
-		     }
-		 }
-	return $size
+        switch -glob -- \
+            [image::filename_mime_type \
+                 -filename $filename \
+                 -mime_type $mime_type] {
+                     *gif {
+                         set size [ns_gifsize $filename]
+                     }
+                     *jpg -
+                     *jpeg {
+                         set size [ns_jpegsize $filename]
+                     }
+                     default {
+                         set size [list "" ""]
+                     }
+                 }
+        return $size
     }
 }
 
@@ -326,10 +326,10 @@ ad_proc -public image::mime_type {
     @param filename Filename of image file
 } {
     if {[info commands ns_imgmime] ne ""} {
-	set mime_type [ns_imgmime $filename]
-	if {$mime_type ne "image/unknown"} {
-	    return $mime_type
-	}
+        set mime_type [ns_imgmime $filename]
+        if {$mime_type ne "image/unknown"} {
+            return $mime_type
+        }
     }
     lassign [image::imagemagick_identify] . . mime_type
     return $mime_type
@@ -348,7 +348,7 @@ ad_proc -public image::filename_mime_type {
     @creation-date 2006-08-27
 } {
     if {$mime_type eq ""} {
-	set mime_type [ns_guesstype $filename]
+        set mime_type [ns_guesstype $filename]
     }
     return $mime_type
 }
@@ -362,7 +362,7 @@ ad_proc -private image::get_convert_to_sizes {
 
 } {
     #TODO make a parameter in content repository
-	# avatar size to match gravatar.com
+        # avatar size to match gravatar.com
     return [list thumbnail 150x150 view 500x500 avatar 80x80]
 }
 
@@ -380,33 +380,33 @@ ad_proc -public image::resize {
     @creation-date 2006-08-27
 } {
     if {$revision_id eq ""} {
-	set revision_id [content::item::get_best_revision -item_id $item_id]
+        set revision_id [content::item::get_best_revision -item_id $item_id]
     }
     set original_filename [content::revision::get_cr_file_path -revision_id $revision_id]
     set tmp_filename [ns_mktemp "/tmp/XXXXXX"]
     array set sizes [image::get_convert_to_sizes]
 
     if {[catch {exec [image::convert_binary] -resize $sizes($size_name) $original_filename $tmp_filename} errmsg]} {
-	# maybe imagemagick isn't installed?
+        # maybe imagemagick isn't installed?
         file delete -- $tmp_filename
-	return ""
+        return ""
     }
     if {[set resize_item_id \
-	     [image::get_size_item_id \
-		  -item_id $item_id \
-		  -size_name $size_name]] eq ""} {
+             [image::get_size_item_id \
+                  -item_id $item_id \
+                  -size_name $size_name]] eq ""} {
 
-	set resize_item_id \
-	    [image::new \
-		 -item_id $resize_item_id \
-		 -name "${item_id}_${size_name}" \
-		 -parent_id $item_id \
-		 -relation_tag "image-${size_name}" \
-		 -tmp_filename $tmp_filename]
+        set resize_item_id \
+            [image::new \
+                 -item_id $resize_item_id \
+                 -name "${item_id}_${size_name}" \
+                 -parent_id $item_id \
+                 -relation_tag "image-${size_name}" \
+                 -tmp_filename $tmp_filename]
     } else {
-	content::revision::new \
-	    -item_id $resize_item_id \
-	    -tmp_filename $tmp_filename
+        content::revision::new \
+            -item_id $resize_item_id \
+            -tmp_filename $tmp_filename
     }
     file delete -- $tmp_filename
     return $resize_item_id
@@ -427,8 +427,8 @@ ad_proc -public image::get_size_item_id {
     @see image::get_convert_to_sizes
 } {
     return [content::item::get_id \
-		-item_path ${item_id}_${size_name} \
-		-root_folder_id $item_id]
+                -item_path ${item_id}_${size_name} \
+                -root_folder_id $item_id]
 }
 
 ad_proc -public image::get_resized_item_id {
