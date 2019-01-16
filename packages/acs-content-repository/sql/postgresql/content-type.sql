@@ -791,7 +791,7 @@ BEGIN
   execute function_text;
 
   rule_text := 'create rule ' || v_table_name || '_r as on insert to ' ||
-               v_table_name || 'i do instead SELECT ' || v_table_name || '_f(new) FOR UPDATE; ' ;
+               v_table_name || 'i do instead SELECT ' || v_table_name || '_f(new); ' ;
   --================== done building rule code =======================
 
   -- drop the old rule
