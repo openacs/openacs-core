@@ -17,7 +17,7 @@ permission::require_permission -object_id $object_id -privilege "admin"
 # first we verify that this object receives notifications
 if { ![db_0or1row select_name {}] } {
     # there are no notifications for this object
-    ad_return_error "No Notifications" "This object does have anybody subscribed via notifications"
+    ad_return_error "[_ notifications.No_Notifications]" "[_ notifications.No_Notifications_text]"
     ad_script_abort
 }
 

@@ -31,6 +31,8 @@
   <msg key="lt_You_have_requested_no">Deaktiviere Benachrichtigungsfunktion. </msg>
   <msg key="lt_You_may_a_hrefsub_url">Aktiviere Benachrichtungungsfunktion</msg>
   <msg key="Manage_Notifications">Benachrichtigungsoptionen verwalten</msg>
+  <msg key="No_Notifications">Keine Benachrichtigungen</msg>
+  <msg key="No_Notifications_text">Für dieses Objekt wurden keine Benachrichtigungen abboniert</msg>
   <msg key="Notification">Benachrichtigung</msg>
   <msg key="Notification_Replies">Antworten auf Benachrichtigungen</msg>
   <msg key="Notification_Reply">Antwort auf eine Benachrichtigung</msg>

@@ -30,6 +30,8 @@
   <msg key="lt_You_have_requested_no">Unsubscribe</msg>
   <msg key="lt_You_may_a_hrefsub_url">Request notifications</msg>
   <msg key="Manage_Notifications">Manage Your Email Notifications</msg>
+  <msg key="No_Notifications">No Notifications</msg>
+  <msg key="No_Notifications_text">This object does not have anybody subscribed via notifications</msg>
   <msg key="Notification">Notification</msg>
   <msg key="Notification_Replies">Notification Replies</msg>
   <msg key="Notification_Reply">Notification Reply</msg>

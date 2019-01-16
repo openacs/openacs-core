@@ -30,6 +30,8 @@
   <msg key="lt_You_have_requested_no">Darse de baja</msg>
   <msg key="lt_You_may_a_hrefsub_url">Solicitar notificaciones</msg>
   <msg key="Manage_Notifications">Administrar Notificaciones</msg>
+  <msg key="No_Notifications">Sin notificaciones</msg>
+  <msg key="No_Notifications_text">No hay usuarios suscritos a las notificaciones de este objeto</msg>
   <msg key="Notification">Notificaciones</msg>
   <msg key="Notification_Replies">Respuestas de notificaciones</msg>
   <msg key="Notification_Reply">Respuesta de notificación</msg>
