@@ -72,7 +72,7 @@ if {$auto_submit_p && $user_id > 0} {
     # Is this project using multiple versions?
     set versions_p [bug_tracker::versions_p]
     
-    # Paches enabled for this project?
+    # Patches enabled for this project?
     set patches_p [bug_tracker::patches_p]
     
     set enabled_action_id [form get_action bug_edit]
@@ -104,7 +104,7 @@ if {$auto_submit_p && $user_id > 0} {
         db_dml insert_auto_bug {}
     } else {
 	
-	# Comment on the existing bug even if the user don't want to
+	# Comment on the existing bug even if the user doesn't want to
 	# add commentaries.  If the bug is closed or fixed we have to
 	# reopen the bug.
         #

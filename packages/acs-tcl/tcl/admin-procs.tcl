@@ -189,7 +189,7 @@ ad_proc -private ad_registration_finite_state_machine_admin_links {
     user_id
     {return_url ""}
 } {
-    Returns the admininistation links to change the user's state
+    Returns the administration links to change the user's state
     in the user_state finite state machine. If the nohtml switch
     is set, then a list of lists will be returned (url label).
 } {
