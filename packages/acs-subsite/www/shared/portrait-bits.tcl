@@ -56,7 +56,12 @@ if { $item_id != 0} {
             switch -- $itemInfo(storage_type) {
                 "file" {
                     set input_file [content::revision::get_cr_file_path -revision_id $itemInfo(revision_id)]
-                    exec convert $input_file -resize $size $filename
+                    ad_try {
+                        exec convert $input_file -resize $size $filename
+                    } on error {errorMsg} {
+                        ad_log warning "portrait-bits: convert returned error: $errorMsg"
+                        ns_returnfile 200 $default_avatar_mime $default_avatar
+                    }
                 }
                 "lob" {
                     set input_file [ad_tmpnam]
@@ -67,8 +72,14 @@ if { $item_id != 0} {
                         from cr_revisions
                         where revision_id = :revision_id
                     } -file $input_file
-                    exec convert $input_file -resize $size $filename
-                    file delete -- $input_file
+                    ad_try {
+                        exec convert $input_file -resize $size $filename
+                    } on error {errorMsg} {
+                        ad_log warning "portrait-bits: convert returned error: $errorMsg"
+                        ns_returnfile 200 $default_avatar_mime $default_avatar
+                    } finally {
+                        file delete -- $input_file
+                    }
                 }
                 default {
                     ad_log warning "unsupported storage type for portraits: $itemInfo(storage_type)"
