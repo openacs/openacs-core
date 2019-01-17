@@ -12,6 +12,9 @@ ad_page_contract {
 # Show the portrait only to authenticated users
 auth::require_login
 
+# Default avatar image
+set default_avatar [acs_root_dir]/packages/acs-subsite/www/shared/avatar-x50.png
+
 #
 # The size info is a valid geometry as provided for image magicks
 # "convert". We provide here a sample list of valid sizes
@@ -30,7 +33,7 @@ if { $item_id != 0} {
         if {[content::item::get -item_id $item_id -array_name itemInfo] == 0} {
             if {[content::item::get -item_id $item_id -array_name itemInfo -revision latest] == 0} {
                 ad_log warning "cannot obtain revision info for item_id $item_id user_id $user_id"
-                ns_returnnotfound
+                ns_returnfile 200 image/png $default_avatar
                 ad_script_abort
             }
         }
@@ -89,12 +92,12 @@ if { $item_id != 0} {
 
         } else {
             ad_log warning "cannot show portrait with item_id $item_id for user $user_id "
-            ns_returnnotfound
+            ns_returnfile 200 image/png $default_avatar
         }
     }
 } else {
     # Return default avatar image
-    ns_returnfile 200 image/png [acs_root_dir]/packages/acs-subsite/www/shared/avatar-x50.png
+    ns_returnfile 200 image/png $default_avatar
 }
 
 # Local variables:
