@@ -29,7 +29,9 @@ if {$pretty_name eq ""} {
 set intervals_pretty [notification::get_intervals -localized -type_id $type_id]
 set delivery_methods [notification::get_delivery_methods -type_id $type_id]
 
-ad_form -name subscribe -export {type_id object_id return_url} -form {
+ad_form -name subscribe -export {
+    type_id object_id return_url
+} -form {
     {interval_id:integer(select)
         {label "[_ notifications.lt_Notification_Interval]"}
         {options $intervals_pretty}}
@@ -42,11 +44,11 @@ ad_form -name subscribe -export {type_id object_id return_url} -form {
 
     # Add the subscribe
     notification::request::new \
-            -type_id $type_id \
-            -user_id $user_id \
-            -object_id $object_id \
-            -interval_id $interval_id \
-            -delivery_method_id $delivery_method_id
+        -type_id $type_id \
+        -user_id $user_id \
+        -object_id $object_id \
+        -interval_id $interval_id \
+        -delivery_method_id $delivery_method_id
 
     ad_returnredirect $return_url
     ad_script_abort
