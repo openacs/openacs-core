@@ -13,5 +13,6 @@
   <li><a href="@acs_admin_url@auth">Authentication</a>
   <li><a href="/admin/host-node-map/">#acs-subsite.Host_Node_Map#</a></li>
   <li><a href="@acs_admin_url@monitor">Active connections</a><if @request_monitor_url@ defined>, <a href="@request_monitor_url@">XOTcl Request Monitor</a></if>
+  <li><a href="@acs_admin_url@server-restart">Server Restart</a>  
   <li><a href="@acs_core_docs_url@">Documentation</a>
 </ul>
