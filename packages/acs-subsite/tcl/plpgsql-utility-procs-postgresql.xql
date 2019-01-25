@@ -12,13 +12,4 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="plpgsql_utility::table_column_type.fetch_type">      
-    <querytext>
-      select data_type
-      from user_tab_columns
-      where table_name = upper(:table)
-      and column_name = upper(:column)
-    </querytext>
-  </fullquery>
-
 </queryset>

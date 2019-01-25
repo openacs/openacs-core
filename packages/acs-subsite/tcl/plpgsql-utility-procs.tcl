@@ -84,17 +84,19 @@ namespace eval plpgsql_utility {
 	return [join $pieces ","]
     }
 
-    ad_proc -public table_column_type {
+    ad_proc -deprecated table_column_type {
 	table
 	column
     } {
 	Returns the datatype for column in table
 
+        @see db_column_type
+
 	@author Steve Woodcock (swoodcock@scholastic.co.uk)
 	@creation-date 07/2001
 
     } {
-	return [db_string fetch_type {}]
+        return [db_column_type -complain $table $column]
     }
 
     ad_proc -public generate_attribute_parameters { 
@@ -132,7 +134,7 @@ namespace eval plpgsql_utility {
 	foreach triple $attr_list {
 	    set table [string toupper [string trim [lindex $triple 0]]]
 	    set attr [string toupper [string trim [lindex $triple 1]]]
-	    set datatype [table_column_type $table $attr]
+	    set datatype [db_column_type -complain $table $attr]
 	    lappend pieces $datatype
 	}
 	return [join $pieces ","]

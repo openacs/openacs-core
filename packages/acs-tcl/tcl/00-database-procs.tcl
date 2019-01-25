@@ -3220,12 +3220,14 @@ ad_proc -public db_column_exists {{-dbn ""} table_name column_name } {
 }
 
 
-ad_proc -public db_column_type {{-dbn ""} table_name column_name } {
+ad_proc -public db_column_type {{-dbn ""} {-complain:boolean} table_name column_name } {
 
     @return the Oracle Data Type for the specified column.
     @return -1 if the table or column doesn't exist.
+    @return an error if table or column doesn't exist and -complain flag was specified
 
     @param dbn The database name to use.  If empty_string, uses the default database.
+    @param complain throw an error when datatype is not found
 
     @author Yon Feldman (yon@arsdigita.com)
 
@@ -3241,12 +3243,17 @@ ad_proc -public db_column_type {{-dbn ""} table_name column_name } {
 
 } {
     # Works for both Oracle and PostgreSQL:
-    return [db_string -dbn $dbn column_type_select "
+    set datatype [db_string -dbn $dbn column_type_select "
     select data_type as data_type
       from user_tab_columns
      where upper(table_name) = upper(:table_name)
        and upper(column_name) = upper(:column_name)
     " -default "-1"]
+    if {$complain_p && $datatype == -1} {
+        error "Datatype for $table_name.$column_name not found."
+    } else {
+        return $datatype
+    }
 }
 
 
