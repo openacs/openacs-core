@@ -78,6 +78,7 @@ if { $item_id != 0} {
                     } on error {errorMsg} {
                         ad_log warning "portrait-bits: convert returned error: $errorMsg"
                         ns_returnfile 200 $default_avatar_mime $default_avatar
+                        ad_script_abort
                     } finally {
                         file delete -- $input_file
                     }
