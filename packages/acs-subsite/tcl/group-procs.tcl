@@ -323,7 +323,7 @@ ad_proc -public group::get_members {
 ad_proc -private group::get_members_not_cached {
     {-group_id:required}
     {-type:required}
-    {-member_state:required}
+    {-member_state ""}
 } {
     Get party_ids of all members.
 
