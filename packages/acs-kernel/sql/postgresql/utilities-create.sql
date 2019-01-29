@@ -80,22 +80,23 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- added
-select define_function_args('util__table_column_exists','t_name,c_name');
+
 
 --
 -- procedure util__table_column_exists/1
 --
+select define_function_args('util__table_column_exists','p_table,p_column');
+
 CREATE OR REPLACE FUNCTION util__table_column_exists(
-   t_name  text,
-   c_name text
+   p_table  text,
+   p_column text
 ) RETURNS boolean AS $$
 DECLARE
 BEGIN
       return exists (
        select 1 from information_schema.columns c
-         where c.table_name  = lower(t_name)
-           and c.column_name = lower(c_name));
+         where c.table_name  = lower(p_table)
+           and c.column_name = lower(p_column));
 END;
 $$ LANGUAGE plpgsql;
 
