@@ -7,8 +7,8 @@
 -- procedure util__table_column_exists/1
 --
 CREATE OR REPLACE FUNCTION util__table_column_exists(
-   c_name text
-   t_name  text,
+   c_name text,
+   t_name text
 ) RETURNS boolean AS $$
 DECLARE
 BEGIN
