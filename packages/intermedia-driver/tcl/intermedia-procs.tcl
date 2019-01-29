@@ -127,7 +127,7 @@ ad_proc -public -callback search::search -impl intermedia-driver {} {
 
     set people_search_clause { o.object_type = 'phb_person' or }
     if {[apm_package_installed_p "dotlrn"]} {
-        set is_guest_p [search::is_guest_p]
+        set is_guest_p [db_string get_is_guest_p {select dotlrn_privacy.guest_p(:user_id) from dual}]
         if {$is_guest_p} {
             set people_search_clause { and }; # doesn't look like legal SQL
         }
