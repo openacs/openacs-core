@@ -94,8 +94,8 @@ ad_proc -public -callback search::action {
 
 
 ad_proc -private search::indexer {} {
-    Search indexer loops over the existing entries in the search_observer_queue 
-    table and calls the appropriate driver functions to index, update, or 
+    Search indexer loops over the existing entries in the search_observer_queue
+    table and calls the appropriate driver functions to index, update, or
     delete the entry.
 
     @author Neophytos Demetriou
@@ -135,7 +135,7 @@ ad_proc -private search::indexer {} {
                     set object_type [acs_object_type $object_id]
                     ns_log debug "\n-----DB-----\n SEARCH INDEX object type = '${object_type}' \n------------\n "
                     if {[callback::impl_exists -callback search::datasource -impl $object_type]
-			|| [acs_sc_binding_exists_p FtsContentProvider $object_type]} {
+                        || [acs_sc_binding_exists_p FtsContentProvider $object_type]} {
 
                         array set datasource {mime {} storage_type {} keywords {}}
                         if {[catch {
@@ -145,11 +145,11 @@ ad_proc -private search::indexer {} {
                                 #ns_log notice "\n-----DB-----\n SEARCH INDEX callback datasource exists for object_type '${object_type}'\n------------\n "
                                 array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
                             } else {
-				#ns_log notice "invoke contract [list acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]"
+                                #ns_log notice "invoke contract [list acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]"
                                 array set datasource  [acs_sc::invoke -contract FtsContentProvider \
-							   -operation datasource \
-							   -call_args [list $object_id] \
-							   -impl $object_type]
+                                    -operation datasource \
+                                    -call_args [list $object_id] \
+                                    -impl $object_type]
                             }
 
                             search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
@@ -159,27 +159,27 @@ ad_proc -private search::indexer {} {
                                     set datasource(package_id) ""
                                 }
                                 # set datasource(community_id) [search::dotlrn::get_community_id -package_id $datasource(package_id)]
-                                
+
                                 if {![info exists datasource(relevant_date)]} {
                                     set datasource(relevant_date) ""
                                 }
-				#ns_log notice "callback invoke search::index"
+                                #ns_log notice "callback invoke search::index"
                                 callback -impl $driver search::index \
-				    -object_id $object_id \
-				    -content $txt \
-				    -title $datasource(title) \
-				    -keywords $datasource(keywords) \
-				    -package_id $datasource(package_id) \
-				    -community_id $datasource(community_id) \
-				    -relevant_date $datasource(relevant_date) \
-				    -datasource datasource 
+                                    -object_id $object_id \
+                                    -content $txt \
+                                    -title $datasource(title) \
+                                    -keywords $datasource(keywords) \
+                                    -package_id $datasource(package_id) \
+                                    -community_id $datasource(community_id) \
+                                    -relevant_date $datasource(relevant_date) \
+                                    -datasource datasource
                             } else {
-				#ns_log notice "acs_sc::invoke FtsEngineDriver"
+                                #ns_log notice "acs_sc::invoke FtsEngineDriver"
                                 set r [acs_sc::invoke \
-					   -contract FtsEngineDriver \
-					   -operation [ad_decode $event UPDATE update_index index] \
-					   -call_args [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] \
-					   -impl $driver]
+                                    -contract FtsEngineDriver \
+                                    -operation [ad_decode $event UPDATE update_index index] \
+                                    -call_args [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] \
+                                    -impl $driver]
                             }
                         } errMsg]} {
                             ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
@@ -259,13 +259,13 @@ ad_proc -private search::content_get {
         }
         file {
             set data [cr_fs_path][db_string get_filename "select content from cr_revisions where revision_id=:object_id"]
-	    set passing_style file
+            set passing_style file
         }
         lob {
             set data [db_blob_get get_lob_data {}]
         }
     }
-    
+
     search::content_filter -passing_style $passing_style txt data $mime
 }
 
@@ -281,32 +281,32 @@ ad_proc -private search::content_filter {
     upvar $_data data
 
     #ns_log notice "---search::content_filter $mime data=[string length $data] <$passing_style>"
-    
+
     if {$passing_style eq "string"} {
-	if {[string match text/* $mime]} {
-	    if {$mime eq "text/html"} {
-		set txt [ns_striphtml $data]
-	    } else {
-		set txt $data
-	    }
-	    return
-	}
-	#
-	# Write content to a file and let the filter below extract the 
-	# words for the index from the file.
-	#
-	set tmp_filename [ad_tmpnam]
-	set f [open $tmp_filename w]
-	puts $f $data
-	close $f
-	set data $tmp_filename
-    } 
+        if {[string match text/* $mime]} {
+            if {$mime eq "text/html"} {
+                set txt [ns_striphtml $data]
+            } else {
+                set txt $data
+            }
+            return
+        }
+        #
+        # Write content to a file and let the filter below extract the
+        # words for the index from the file.
+        #
+        set tmp_filename [ad_tmpnam]
+        set f [open $tmp_filename w]
+        puts $f $data
+        close $f
+        set data $tmp_filename
+    }
 
     set txt [search::convert::binary_to_text -filename $data -mime_type $mime]
     #ns_log notice "search::content_filter txt len [string length $txt]"
 
     if {[info exists tmp_filename]} {
-	file delete -- $tmp_filename
+        file delete -- $tmp_filename
     }
 }
 
@@ -356,7 +356,7 @@ ad_proc -callback search::url {
 } -
 
 ad_proc -callback search::index {
-    -object_id 
+    -object_id
     -content
     -title
     -keywords
@@ -364,14 +364,14 @@ ad_proc -callback search::index {
     -relevant_date
     {-description ""}
     {-datasource ""}
-    {-package_id ""}    
+    {-package_id ""}
 } {
     This callback is invoked from the search::indexer scheduled procedure
     to add an item to the index
 } -
 
-ad_proc -callback search::update_index {    
-    -object_id 
+ad_proc -callback search::update_index {
+    -object_id
     -content
     -title
     -keywords
@@ -379,7 +379,7 @@ ad_proc -callback search::update_index {
     -relevant_date
     {-description ""}
     {-datasource ""}
-    {-package_id ""}    
+    {-package_id ""}
 } {
     This callback is invoked from the search::indexer scheduled procedure
     to update an item already in the index
@@ -390,7 +390,7 @@ ad_proc -callback search::summary {
     -text
 } {
     This callback is invoked to return an HTML fragment highlighting the terms in query
-} - 
+} -
 
 ad_proc -callback search::driver_info {
 } {
@@ -412,17 +412,17 @@ ad_proc -public search::dotlrn::get_community_id {
     -package_id
 } {
     if dotlrn is installed find the package's community_id
-    
+
     @param package_id Package to find community
 
     @return dotLRN community_id. empty string if package_id is not under a dotlrn package instance
 } {
     if {[apm_package_installed_p dotlrn]} {
-	set site_node [site_node::get_node_id_from_object_id -object_id $package_id]
-	set dotlrn_package_id [site_node::closest_ancestor_package -node_id $site_node -package_key dotlrn -include_self]
-	set community_id [db_string get_community_id {select community_id from dotlrn_communities_all where package_id=:dotlrn_package_id} -default [db_null]]
-	return $community_id
-    } 
+        set site_node [site_node::get_node_id_from_object_id -object_id $package_id]
+        set dotlrn_package_id [site_node::closest_ancestor_package -node_id $site_node -package_key dotlrn -include_self]
+        set community_id [db_string get_community_id {select community_id from dotlrn_communities_all where package_id=:dotlrn_package_id} -default [db_null]]
+        return $community_id
+    }
     return ""
 }
 
@@ -437,7 +437,7 @@ ad_proc -callback search::extra_arg {
 
     @param value value of the argument
     @param object_table_alias SQL alias of table that contains the object_id to join against
-    
+
     @return list in array format of {from_clause {} where_clause {}}
 } -
 
@@ -447,7 +447,7 @@ ad_proc search::extra_args_names {
 } {
     set names [list]
     foreach procname [info procs ::callback::search::extra_arg::impl::*] {
-	lappend names [namespace tail $procname]
+        lappend names [namespace tail $procname]
     }
     return $names
 }
@@ -483,8 +483,6 @@ ad_proc search::extra_args {
     }
     return $extra_args
 }
-
-
 
 # Local variables:
 #    mode: tcl
