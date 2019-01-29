@@ -81,7 +81,7 @@ ad_proc -public -callback search::action {
      -datasource
      -object_type
 } {
-     Do something with a search datasource Called by the indexer
+     Do something with a search datasource called by the indexer
      after having created the datasource.
 
      @param action UPDATE INSERT DELETE
@@ -224,7 +224,7 @@ ad_proc -private search::indexer {} {
             }
         }
 
-        # Don't put that dequeue in a default block of the swith above
+        # Don't put that dequeue in a default block of the switch above
         # otherwise objects with insert/update and delete operations in the same
         # run would crash and never get dequeued
 
@@ -343,7 +343,7 @@ ad_proc -callback search::search {
 ad_proc -callback search::unindex {
     -object_id:required
 } {
-    This callback is invoked to remove and item from the search index.
+    This callback is invoked to remove an item from the search index.
 } -
 
 ad_proc -callback search::url {
@@ -411,11 +411,11 @@ namespace eval search::dotlrn {}
 ad_proc -public search::dotlrn::get_community_id {
     -package_id
 } {
-    if dotlrn is installed find the package's community_id
+    If dotlrn is installed find the package's community_id
 
     @param package_id Package to find community
 
-    @return dotLRN community_id. empty string if package_id is not under a dotlrn package instance
+    @return dotLRN community_id. Empty string if package_id is not under a dotlrn package instance
 } {
     if {[apm_package_installed_p dotlrn]} {
         set site_node [site_node::get_node_id_from_object_id -object_id $package_id]
@@ -459,12 +459,12 @@ ad_proc search::extra_args_page_contract {
     Get all the callback impls for extra_args and add
      a page contract declaration
 
-    @return string containing the ad_page_contract query delcarations
+    @return string containing the ad_page_contract query declarations
             for the extra_args that are implemented
 } {
     set contract ""
     foreach name [extra_args_names] {
-	append contract "\{$name \{\}\}\n"
+        append contract "\{$name \{\}\}\n"
     }
     return $contract
 }
@@ -475,11 +475,11 @@ ad_proc search::extra_args {
 } {
     set extra_args [list]
     foreach name [extra_args_names] {
-	upvar $name local_$name
-	ns_log debug "extra_args name = '${name}' exists [info exists local_${name}]"
-	if {[info exists local_$name]} {
-	    lappend extra_args $name [set local_$name]
-	}
+        upvar $name local_$name
+        ns_log debug "extra_args name = '${name}' exists [info exists local_${name}]"
+        if {[info exists local_$name]} {
+            lappend extra_args $name [set local_$name]
+        }
     }
     return $extra_args
 }
