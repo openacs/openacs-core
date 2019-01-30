@@ -530,6 +530,7 @@ ad_proc doc_return {args} {
 ad_proc -public ad_return_url {
     -urlencode:boolean
     -qualified:boolean
+    {-default_url /}
     {extra_args {}}
 } {
 
@@ -559,27 +560,30 @@ ad_proc -public ad_return_url {
 
     @author Don Baccus (dhogaza@pacifier.com)
 
-    @param urlencode If true url-encode the result
+    @param urlencode If true URL-encode the result
+    @param default_url When there is no connection, fall back to this URL
     @param qualified If provided the return URL will be fully qualified including http or https.
     @param extra_args A list of {name value} lists to append to the query string
 
 } {
 
-    set query_list [export_entire_form_as_url_vars]
-
+    if {[ns_conn isconnected]} {
+        set query_list [export_entire_form_as_url_vars]
+        if { [llength $query_list] == 0 } {
+            set url [ns_conn url]
+        } else {
+            set url "[ns_conn url]?[join $query_list &]"
+        }
+        if { $qualified_p } {
+            # Make the return_url fully qualified
+            set url [security::get_qualified_url $url]
+        }
+    } else {
+        set query_list ""
+        set url $default_url
+    }
     foreach {extra_arg} $extra_args {
         lappend query_list [join $extra_arg "="]
-    }
-
-    if { [llength $query_list] == 0 } {
-        set url [ns_conn url]
-    } else {
-        set url "[ns_conn url]?[join $query_list &]"
-    }
-
-    if { $qualified_p } {
-        # Make the return_url fully qualified
-        set url [security::get_qualified_url $url]
     }
 
     if { $urlencode_p } {
