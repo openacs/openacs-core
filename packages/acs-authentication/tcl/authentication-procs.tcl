@@ -947,7 +947,8 @@ ad_proc -public auth::create_local_account {
 
     # Admin approval
     set system_name [ad_system_name]
-    if { [parameter::get -parameter RegistrationRequiresApprovalP -default 0] } {
+    set subsite_id [expr {[ns_conn isconnected] ? [ad_conn subsite_id] : [subsite::main_site_id]}]
+    if { [parameter::get -package_id $subsite_id -parameter RegistrationRequiresApprovalP -default 0] } {
         set member_state "needs approval"
         set result(account_status) "closed"
         set result(account_message) [_ acs-subsite.Registration_Approval_Notice]
@@ -955,8 +956,14 @@ ad_proc -public auth::create_local_account {
         set member_state "approved"
     }
 
+    set registration_requires_email_verification_p \
+        [parameter::get \
+             -package_id $subsite_id \
+             -parameter RegistrationRequiresEmailVerificationP \
+             -default 0]
+
     if { ![info exists user_info(email_verified_p)] || $user_info(email_verified_p) eq "" } {
-        if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
+        if {$registration_requires_email_verification_p} {
             set user_info(email_verified_p) "f"
         } else {
             set user_info(email_verified_p) "t"
@@ -964,11 +971,11 @@ ad_proc -public auth::create_local_account {
     }
 
     # Default a local account username
-    if { $user_info(authority_id) == [auth::authority::local] \
-             && [auth::UseEmailForLoginP] \
-             && $username eq "" } {
+    if { $user_info(authority_id) == [auth::authority::local]
+         && [auth::UseEmailForLoginP]
+         && $username eq "" } {
 
-        # Generate a username that's guaranteed to be unique
+        # Generate a username that is guaranteed to be unique.
         # Rather much work, but that's the best I could think of
 
         # Default to email
@@ -991,7 +998,9 @@ ad_proc -public auth::create_local_account {
             foreach existing_username $existing_usernames {
                 if { [regexp "^${username}-(\\d+)\$" $existing_username match existing_number] } {
                     # matches the foo-123 pattern
-                    if { $existing_number >= $number } { set number [expr {$existing_number + 1}] }
+                    if { $existing_number >= $number } {
+                        set number [expr {$existing_number + 1}]
+                    }
                 }
             }
             set username "$username-$number"
@@ -1046,7 +1055,7 @@ ad_proc -public auth::create_local_account {
     # Creation succeeded
     set result(creation_status) "ok"
 
-    if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
+    if {$registration_requires_email_verification_p} {
         set email $user_info(email)
         set result(account_status) "closed"
         set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat_1]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
