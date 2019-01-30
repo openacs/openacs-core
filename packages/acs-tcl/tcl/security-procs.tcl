@@ -329,7 +329,7 @@ ad_proc -private sec_handler {} {
         }
     }
     #
-    # Generate a csrf token and a csp nonce value
+    # Generate a CSRF token.
     #
     security::csrf::new
 }
@@ -2483,7 +2483,7 @@ namespace eval ::security::csp {
     #
     ad_proc -public ::security::csp::nonce { {-tokenname __csp_nonce} } {
 
-        Generate a Nonce token and return it. The nonce token can be used
+        Generate a nonce token and return it. The nonce token can be used
         in content security policies (CSP2) for "script" and "style"
         elements. Desired Properties: generate a single unique value per
         request which is hard for a hacker to predict, it should only
@@ -2564,7 +2564,7 @@ namespace eval ::security::csp {
         #
         # Fetch the nonce token
         #
-        set nonce [::security::nonce_token]
+        set nonce [::security::csp::nonce]
 
         #
         # Add 'self' rules
@@ -2583,7 +2583,7 @@ namespace eval ::security::csp {
         security::csp::require font-src data:
 
         #
-        # Always add the nonce-token to script-src. Note that nonce
+        # Always add the nonce token to script-src. Note that nonce
         # definition comes via CSP 2, which - at the current time - is
         # not supported by all browsers interpreting CSPs. We could
         # add a "unsafe-inline" here, since the spec defines that when
@@ -2678,7 +2678,7 @@ namespace eval ::security::csrf {
         The token is automatically cleared together with other global
         variables at the end of the processing of every request.
 
-        @return csrf token
+        @return CSRF token
 
         @author Gustaf Neumann
     } {
@@ -2703,9 +2703,9 @@ namespace eval ::security::csrf {
     } {
         if {![info exists ::$tokenname] || ![ns_conn isconnected]} {
             #
-            # If there is no global csrf token, or we are not in a
+            # If there is no global CSRF token, or we are not in a
             # connection thread, we accept everything.  If there is
-            # not csrf token, we assume, that its generation is
+            # no CSRF token, we assume, that its generation is
             # deactivated,
             #
             return
@@ -2793,7 +2793,7 @@ namespace eval ::security::csrf {
     #
     ad_proc -private ::security::csrf::fail {} {
 
-        This function is called, when a csrf validation fails. Unless the
+        This function is called, when a CSRF validation fails. Unless the
         current user is swa, it aborts the current request.
 
     } {
