@@ -530,8 +530,8 @@ ad_proc doc_return {args} {
 ad_proc -public ad_return_url {
     -urlencode:boolean
     -qualified:boolean
-    {-default_url /}
-    {extra_args {}}
+    {-default_url .}
+    {extra_args ""}
 } {
 
     Build a return url suitable for passing to a page you expect to return back
