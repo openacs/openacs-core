@@ -51,15 +51,9 @@ ad_proc util::zip {
 
     @param destination is the name of the created file
 } {
-    set zip [util::which zip]
-    if {$zip eq ""} {
-        error "zip command not found on the system."
-    }
-    set cmd [list exec]
-    switch -- $::tcl_platform(platform) {
-        windows {lappend cmd cmd.exe /c}
-        default {lappend cmd bash -c}
-    }
+    #
+    # Split the source
+    #
     if {[file isfile $source]} {
         set filename [file tail $source]
         set in_path  [file dirname $source]
@@ -67,18 +61,77 @@ ad_proc util::zip {
         set filename "."
         set in_path  $source
     }
-    # To avoid having the full path of the file included in the archive,
-    # we must first cd to the source directory. zip doesn't have an option
-    # to do this without building a little script...
-    set zip_cmd [list]
-    lappend zip_cmd "cd $in_path"
-    lappend zip_cmd "${zip} -r \"${destination}\" \"${filename}\""
-    set zip_cmd [join $zip_cmd " && "]
 
-    lappend cmd $zip_cmd
+    #
+    # Check if zipfile::mkzip, introduced in tcllib 1.18, is available.
+    # Otherwise, use the legacy method calling an external zip command via exec.
+    #
+    if {![catch {package require zipfile::mkzip} version]} {
+        ::zipfile::mkzip::mkzip $destination -directory $in_path $filename
+    } else {
+        set zip [util::which zip]
+        if {$zip eq ""} {
+            error "zip command not found on the system."
+        }
+        #
+        # To avoid having the full path of the file included in the archive,
+        # we must first cd to the source directory. zip doesn't have an option
+        # to do this without building a little script...
+        #
+        set cmd [list exec]
+        switch -- $::tcl_platform(platform) {
+            windows {
+                lappend cmd cmd.exe /c
+                set zip_cmd [list]
+                lappend zip_cmd "cd $in_path"
+                lappend zip_cmd "${zip} -r \"${destination}\" \"${filename}\""
+                set zip_cmd [join $zip_cmd " && "]
+                lappend cmd $zip_cmd
+            }
+            default {
+                #
+                # Previous versions of this, for unix-like systems, used bash in
+                # order to change directories before executing zip (see above).
+                #
+                # This method was problematic when using certain characters for
+                # the filenames, such as backticks, for example.
+                #
+                # In order to avoid this and properly quote everything, we use
+                # tclsh instead, in a convoluted and funny way.
+                #
+                # (Thanks to Nathan Coulter for the hack.)
+                #
+                # TODO: test this also on windows. It may work as well, and
+                # potentially unify the two legacy implementations.
+                #
+                set tcl_shell [util::which tclsh]
+                if {$tcl_shell eq ""} {
+                    error "tclsh command not found on the system."
+                }
+                lappend cmd $tcl_shell -
 
-    # create the archive
-    {*}$cmd
+                set script [
+                    string map [
+                        list @in_path@ [list $in_path] @zip@ [list $zip] @destination@ [list $destination] @filename@ [list $filename]
+                    ] {
+                        if {
+                            [catch {
+                                cd @in_path@
+                                exec @zip@ -r @destination@ @filename@
+                            } errorMsg eopts]
+                        } {
+                            puts "Error: [dict get $eopts -errorinfo]"
+                            exit 1
+                        }
+                    }
+                ]
+                lappend cmd << $script
+            }
+        }
+
+        # Create the archive
+        {*}$cmd
+    }
 }
 
 ad_proc util::unzip {
