@@ -8,6 +8,7 @@
 --
 select define_function_args('util__table_column_exists','p_table,p_column');
 
+DROP FUNCTION if exists util__table_column_exists(text,text);
 CREATE OR REPLACE FUNCTION util__table_column_exists(
    p_table  text,
    p_column text
