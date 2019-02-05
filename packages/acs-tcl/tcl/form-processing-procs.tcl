@@ -1077,7 +1077,7 @@ ad_proc -public ad_form {
 
         # Update the clicked button if it does not already exist
         uplevel #$level {
-            if {[info exists __submit_button_name && $__submit_button_name ne ""]} {
+            if {[info exists __submit_button_name] && $__submit_button_name ne ""} {
                 set $__submit_button_name $__submit_button_value
             }
         }
