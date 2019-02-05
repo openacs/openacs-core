@@ -19,10 +19,10 @@ ad_proc -public ad_form {
     <p><a href="/doc/form-builder">Developer's Guide fo ad_form</a>
     <p>
 
-    We use the standard OpenACS Templating System (ATS) form builder's form and element create 
-    procedures to generate forms, and its state-tracking code to determine when to execute 
-    various code blocks.  Because of this, you can use any form builder datatype or widget 
-    with this procedure, and extending its functionality is a simple matter of implementing 
+    We use the standard OpenACS Templating System (ATS) form builder's form and element create
+    procedures to generate forms, and its state-tracking code to determine when to execute
+    various code blocks.  Because of this, you can use any form builder datatype or widget
+    with this procedure, and extending its functionality is a simple matter of implementing
     new ones. Because ad_form is just a wrapper for the ATS, you <b>must</b> familiarize
     yourself with it to be able to use ad_form effectively.
 
@@ -41,21 +41,21 @@ ad_proc -public ad_form {
     <li>Executing the form
     </ol>
     Through the -extend switch, you can declare the form in multiple steps, adding elements.
-    But as soon as you add an action block (on_submit, after_submit, new_data, edit_data, etc.), 
+    But as soon as you add an action block (on_submit, after_submit, new_data, edit_data, etc.),
     ad_form will consider the form complete, and <b>execute</b> the form, meaning validating element values,
-    and executing the action blocks. The execution will happen automatically the first time you 
+    and executing the action blocks. The execution will happen automatically the first time you
     call ad_form with an action block, and after that point, you cannot -extend the form later.
     Also, if you don't supply any action blocks at all, the form will never be considered finished,
     and thus validation will not get executed. Instead, you will get an error when the form is rendered.
-    
+
     <p>
 
-    <b>Bottom line:</b> 
+    <b>Bottom line:</b>
     <ol>
     <li>You must always have at least one action block, even if it's just -on_submit { }.
     <li>You cannot extend the form after you've supplied any action block.
     </ol>
-    
+
     </blockquote>
 
     <p>
@@ -99,20 +99,20 @@ ad_proc -public ad_form {
 
     ad_form -name form_name \
      -export {
-        foo 
-        {bar none} 
+        foo
+        {bar none}
         many_values:multiple
         signed_var:sign
         big_array:array
       } -form {
 
         my_table_key:key(my_table_sequence)
-        
-        {value:text(textarea)             
+
+        {value:text(textarea)
             {label "Enter text"}
             {html {rows 4 cols 50}}
         }
-        
+
     } -select_query {
         select value from my_table where my_table_key = :my_table_key
     } -validate {
@@ -121,17 +121,17 @@ ad_proc -public ad_form {
          "\$value\" must be a string containing three or more characters"
         }
     } -on_submit {
-        
+
         foreach val $many_values {
           # do stuff
         }
-        
+
         if {[info exists big_array(some_key)]} {
             set some_value $big_array(some_key)
         }
-        
+
         set safe_verified_value $signed_var
-        
+
     } -new_data {
         db_dml do_insert "
             insert into my_table
@@ -161,7 +161,7 @@ ad_proc -public ad_form {
 
     The call to ad_return_template then renders the page - it is your responsibility to render the form
     in your template by use of the ATS formtemplate tag.
- 
+
     <p>
 
     On submission, the validation block checks that the user has entered at least three characters into the
@@ -205,36 +205,36 @@ ad_proc -public ad_form {
 
     <p><dt><b>-action</b></dt><p>
     <dd>The name of the script to be called when the form is submitted.  Defaults to the name of the script
-        being served.  
+        being served.
     </dd>
 
     <p><dt><b>-actions</b></dt><p>
-    <dd>A list of lists of actions (e.g. {{"  Delete  " delete} {"  Resolve " resolve}} ), which gets 
-        translated to buttons at the bottom of the form. You can find out what button was pressed 
+    <dd>A list of lists of actions (e.g. {{"  Delete  " delete} {"  Resolve " resolve}} ), which gets
+        translated to buttons at the bottom of the form. You can find out what button was pressed
         with [template::form get_action form_id], usually in the -edit_request block to perform whatever
         actions you deem appropriate. When the form is loaded the action will be empty.
     </dd>
-    
+
     <p><dt><b>-mode { display | edit }</b></dt><p>
-    <dd>If set to 'display', the form is shown in display-only mode, where the user cannot edit the fields. 
-        Each widget knows how to display its contents appropriately, e.g. a select widget will show 
-        the label, not the value. If set to 'edit', the form is displayed as normal, for editing. 
-        Defaults to 'edit'. Switching to edit mode when a button is clicked in display mode is handled 
+    <dd>If set to 'display', the form is shown in display-only mode, where the user cannot edit the fields.
+        Each widget knows how to display its contents appropriately, e.g. a select widget will show
+        the label, not the value. If set to 'edit', the form is displayed as normal, for editing.
+        Defaults to 'edit'. Switching to edit mode when a button is clicked in display mode is handled
         automatically
     </dd>
-    
+
     <p><dt><b>-has_edit { 0 | 1 }</b></dt><p>
-    <dd>Set to 1 to suppress the Edit button automatically added by the form builder. Use this if you 
+    <dd>Set to 1 to suppress the Edit button automatically added by the form builder. Use this if you
         include your own.
     </dd>
 
     <p><dt><b>-has_submit { 0 | 1 }</b></dt><p>
-    <dd>Set to 1 to suppress the OK button automatically added by the form builder. Use this if you 
+    <dd>Set to 1 to suppress the OK button automatically added by the form builder. Use this if you
         include your own.
     </dd>
 
     <p><dt><b>-method</b></dt><p>
-    <dd>The standard METHOD attribute to specify in the HTML FORM tag at the beginning of the rendered 
+    <dd>The standard METHOD attribute to specify in the HTML FORM tag at the beginning of the rendered
         form. Defaults to POST.
     </dd>
 
@@ -258,16 +258,16 @@ ad_proc -public ad_form {
 
     <p><dt><b>-export</b></dt><p>
     <dd>This options allows one to export data in current page environment to the page receiving the form.
-        Variables are treated as "hidden" form elements which will be automatically generated. Each value is 
-        either a name, in which case the Tcl variable at the caller's level is passed to the form if it exists, 
+        Variables are treated as "hidden" form elements which will be automatically generated. Each value is
+        either a name, in which case the Tcl variable at the caller's level is passed to the form if it exists,
         or a name-value pair.
-        The behavior of this option replicates that for <code>vars</code> argument in proc 
-        <a href='/api-doc/proc-view?proc=export_vars&amp;source_p=1'>export_vars</a>, which in turn follows specification 
+        The behavior of this option replicates that for <code>vars</code> argument in proc
+        <a href='/api-doc/proc-view?proc=export_vars&amp;source_p=1'>export_vars</a>, which in turn follows specification
     for input page variables in <a href='/api-doc/proc-view?proc=ad_page_contract&amp;source_p=1'>ad_page_contract</a>.
-        In particular, flags <code>:multiple</code>, <code>:sign</code> and <code>:array</code> are allowed and 
+        In particular, flags <code>:multiple</code>, <code>:sign</code> and <code>:array</code> are allowed and
         their meaning is the same as in <code>export_vars</code>.
     </dd>
-        
+
     <p><dt><b>-select_query</b></dt><p>
     <dd>
     Defines a query that returns a single row containing values for each
@@ -287,21 +287,21 @@ ad_proc -public ad_form {
     </dd>
 
     <p><dt><b>-show_required_p { 0 | 1 }</b></dt><p>
-    <dd>Should the form template show which elements are required. Use 1 or t for true, 0 or f for false. 
+    <dd>Should the form template show which elements are required. Use 1 or t for true, 0 or f for false.
        Defaults to true.
     </dd>
 
     <p><dt><b>-on_request</b></dt><p>
     <dd>A code block which sets the values for each element of the form meant to be modifiable by
         the user when the built-in key management feature is being used or to define options for
-        select lists etc. Set the values as local variables in the code block, and they'll get 
+        select lists etc. Set the values as local variables in the code block, and they'll get
         fetched and used as element values for you. This block is executed <i>every time</i> the
         form is loaded <i>except</i> when the form is being submitted (in which case the -on_submit
         block is executed.)
     </dd>
 
     <p><dt><b>-edit_request</b></dt><p>
-    <dd>    
+    <dd>
     A code block which sets the values for each element of the form meant
     to be modifiable by the user.  Use this when a single query to grab
     database values is insufficient.  Any variables set in an -edit_request
@@ -339,8 +339,8 @@ ad_proc -public ad_form {
     <dd>When the form is submitted, this code block will be executed before any new_data or edit_data code block.
         Use this if your form doesn't interact with the database or if the database type involved includes a Tcl
         API that works for both new and existing data. The values of the form's elements will be available as local variables.
-        Calling 'break' inside this block causes the submission process to be aborted, and neither new_data, edit_data, nor 
-        after_submit will get executed. Useful in combination with template::form set_error to display an error on a form 
+        Calling 'break' inside this block causes the submission process to be aborted, and neither new_data, edit_data, nor
+        after_submit will get executed. Useful in combination with template::form set_error to display an error on a form
         element.
     </dd>
 
@@ -348,8 +348,8 @@ ad_proc -public ad_form {
     <dd>This code block will be executed when a form for a new database row is submitted.  This block should
         insert the data into the database or create a new database object or content repository item containing
         the data.
-        Calling 'break' inside this block causes the submission process to be aborted, and  
-        after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form 
+        Calling 'break' inside this block causes the submission process to be aborted, and
+        after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form
         element.
     </dd>
 
@@ -357,8 +357,8 @@ ad_proc -public ad_form {
     <dd>This code block will be executed when a form for an existing database row is submitted.  This block should
         update the database or create a new content revision for the existing item if the data's stored in the
         content repository.
-        Calling 'break' inside this block causes the submission process to be aborted, and  
-        after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form 
+        Calling 'break' inside this block causes the submission process to be aborted, and
+        after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form
         element.
     </dd>
 
@@ -422,15 +422,15 @@ ad_proc -public ad_form {
     element create procedure are allowed.
 
     <p>
-  
+
     <ul>
       <li>
-        <a href="/api-doc/proc-search?query%5fstring=template%3a%3adata%3a%3avalidate">Available datatypes</a>. 
+        <a href="/api-doc/proc-search?query%5fstring=template%3a%3adata%3a%3avalidate">Available datatypes</a>.
         For example, the procedure <code>template::data::validate::float</code> on this list implements the 'float' datatype.
       </li>
       <li>
         <a href="/api-doc/proc-search?query_string=template%3A%3Awidget">Available widgets</a>.
-        For example, the procedure <code>template::widget::radio</code> implements the 'radio' widget. 
+        For example, the procedure <code>template::widget::radio</code> implements the 'radio' widget.
         Not all widgets are compatible with all datatypes.
       </li>
       <li>
@@ -491,7 +491,7 @@ ad_proc -public ad_form {
     {my_key:text(multiselect),multiple       {label "select some values"}
                                               {options {first second third fourth fifth}}
                                               {html {size 4}}}
-                                  
+
     </pre><p>
 
     Define a multiple select element with five choices, in a four-line select box.
@@ -514,7 +514,7 @@ ad_proc -public ad_form {
 
     Define the optional element "start_date" of type "date", get the sql_date property before executing
     any new_data, edit_data or on_submit block, set the sql_date property after performing any
-    select_query. 
+    select_query.
 
     <p>
     </blockquote>
@@ -552,12 +552,12 @@ ad_proc -public ad_form {
 
     if { [llength $args] == 0 } {
         return -code error "No arguments to ad_form"
-    } 
+    }
 
     set valid_args { form method action mode html name select_query select_query_name new_data
                      on_refresh edit_data validate on_submit after_submit confirm_template
                      on_request new_request edit_request export cancel_url cancel_label
-                     has_submit has_edit actions edit_buttons display_buttons show_required_p 
+                     has_submit has_edit actions edit_buttons display_buttons show_required_p
                      on_validation_error fieldset };
 
     ad_arg_parser $valid_args $args
@@ -589,7 +589,7 @@ ad_proc -public ad_form {
 
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
-            if { [info exists af_parts(${form_name}__$valid_arg)] 
+            if { [info exists af_parts(${form_name}__$valid_arg)]
                  && $valid_arg ni { form name validate export }
              } {
                 return -code error "Form \"$form_name\" already has a \"$valid_arg\" section"
@@ -631,13 +631,13 @@ ad_proc -public ad_form {
     # or extend block on the fly
 
     set element_names [list]
-    array set af_element_parameters [list] 
+    array set af_element_parameters [list]
 
     if { [info exists form] } {
-        
+
         # Remove comment lines in form section (DanW)
         regsub -all -line -- {^\s*\#.*$} $form "" form
-        
+
         foreach element $form {
             set element_name_part [lindex $element 0]
 
@@ -697,7 +697,7 @@ ad_proc -public ad_form {
             }
 
             set element_name [lindex $validate_element 0]
-            if {$element_name ni $af_element_names($form_name) 
+            if {$element_name ni $af_element_names($form_name)
                 && ![template::element::exists $form_name $element_name]
             } {
                 return -code error "Element \"$element_name\" is not a form element"
@@ -886,7 +886,7 @@ ad_proc -public ad_form {
                     }
                 }
             }
-              
+
             foreach extra_arg $af_extra_args($element_name) {
                 lappend form_command "-[lindex $extra_arg 0]" [uplevel [list subst [lindex $extra_arg 1]]]
             }
@@ -896,7 +896,7 @@ ad_proc -public ad_form {
     }
 
     # Check that any acquire and get_property attributes are supported by their element's datatype
-    # These are needed at submission and fill-the-form-with-db-values time 
+    # These are needed at submission and fill-the-form-with-db-values time
     foreach element_name $af_element_names($form_name) {
         if { [llength $element_name] == 1 } {
             if { [info exists af_from_sql(${form_name}__$element_name)] } {
@@ -975,14 +975,14 @@ ad_proc -public ad_form {
                                 set values($element_name) [uplevel \#$level [list set $element_name]]
                             }
                         }
-                    }            
+                    }
 
                 } else {
 
                     # The key exists, grab the existing values if we have an select_query clause
 
                     if { ![info exists select_query] && ![info exists select_query_name] } {
-                        return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query, select_query_name, or edit_request clause exists.  (This can be caused by having ad_form request blocks in the wrong order.)" 
+                        return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query, select_query_name, or edit_request clause exists.  (This can be caused by having ad_form request blocks in the wrong order.)"
                     }
 
                     if { [info exists select_query_name] } {
@@ -1026,7 +1026,7 @@ ad_proc -public ad_form {
                     return -code error "Couldn't get the next value from sequence: $errmsg\""
                 }
                 set values(__new_p) 1
-                
+
                 if { [info exists new_request] } {
                     ad_page_contract_eval uplevel #$level $new_request
                     # LARS: Set form values based on local vars in the new_request block
@@ -1036,7 +1036,7 @@ ad_proc -public ad_form {
                                 set values($element_name) [uplevel \#$level [list set $element_name]]
                             }
                         }
-                    }            
+                    }
                 }
             }
             set values(__key_signature) [ad_sign -- "$values($key_name):$form_name"]
@@ -1044,7 +1044,7 @@ ad_proc -public ad_form {
 
         foreach element_name $properties(element_names) {
             if { [info exists values($element_name)] } {
-                if { [info exists af_flag_list(${form_name}__$element_name)] 
+                if { [info exists af_flag_list(${form_name}__$element_name)]
                      && "multiple" in $af_flag_list(${form_name}__$element_name)
                  } {
                     template::element set_values $form_name $element_name $values($element_name)
@@ -1054,7 +1054,7 @@ ad_proc -public ad_form {
             }
         }
 
-    } elseif { [template::form is_submission $form_name] } { 
+    } elseif { [template::form is_submission $form_name] } {
 
         # Handle form submission.  We create the form values in the caller's context and execute validation
         # expressions if they exist
@@ -1063,12 +1063,12 @@ ad_proc -public ad_form {
         # in a reasonable way.
 
         foreach element_name $properties(element_names) {
-            if { [info exists af_flag_list(${form_name}__$element_name)] 
+            if { [info exists af_flag_list(${form_name}__$element_name)]
                  && "multiple" in $af_flag_list(${form_name}__$element_name)
              } {
                 set values [uplevel #$level [list template::element get_values $form_name $element_name]]
                 uplevel #$level [list set $element_name $values]
-#                 "get_values $values"
+                # "get_values $values"
             } else {
                 set value [uplevel #$level [list template::element get_value $form_name $element_name]]
                 uplevel #$level [list set $element_name $value]
@@ -1077,10 +1077,10 @@ ad_proc -public ad_form {
 
         # Update the clicked button if it does not already exist
         uplevel #$level {
-                if {![exists_and_not_null ${__submit_button_name}]} {
-                    set ${__submit_button_name} ${__submit_button_value}
-                }
+            if {[info exists __submit_button_name && $__submit_button_name ne ""]} {
+                set $__submit_button_name $__submit_button_value
             }
+        }
 
         if { [info exists key_name] } {
             upvar #$level $key_name __key
@@ -1097,8 +1097,8 @@ ad_proc -public ad_form {
 
         foreach validate_element $af_validate_elements($form_name) {
             foreach {element_name validate_expr error_message} $validate_element {
-                if { ![template::element error_p $form_name $element_name] 
-                     && ![uplevel #$level [list expr $validate_expr]] 
+                if { ![template::element error_p $form_name $element_name]
+                     && ![uplevel #$level [list expr $validate_expr]]
                  } {
                     template::element set_error $form_name $element_name [uplevel [list subst $error_message]]
                 }
@@ -1114,7 +1114,7 @@ ad_proc -public ad_form {
         # elements is a common attack vector, we react harsh if we see
         # an invalid input here.
         #
-        if {![string is boolean -strict $__refreshing_p] 
+        if {![string is boolean -strict $__refreshing_p]
             || ![string is boolean -strict $__confirmed_p] } {
             ad_return_complaint 1 "Your request is invalid."
             ns_log Warning "Validation error in hidden form element.\
@@ -1129,7 +1129,7 @@ ad_proc -public ad_form {
                 ad_page_contract_eval uplevel #$level $on_refresh
             }
         } else {
-            # Not __refreshing_p 
+            # Not __refreshing_p
 
             if { [template::form is_valid $form_name] } {
 
@@ -1239,7 +1239,7 @@ ad_proc -public ad_form {
                         error "Unknown return code: $errno"
                     }
                 }
-           
+
             } elseif { [info exists on_validation_error] } {
                 uplevel #$level $on_validation_error
             }
@@ -1255,7 +1255,7 @@ ad_proc -public ad_set_element_value {
     -element:required
     value
 } {
-    Set the value of a particular element in the current form being built by 
+    Set the value of a particular element in the current form being built by
     ad_form.
 
     @param element The name of the element
@@ -1337,4 +1337,3 @@ ad_proc -public ad_form_new_p {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-
