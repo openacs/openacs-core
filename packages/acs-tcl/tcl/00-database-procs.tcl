@@ -1510,30 +1510,22 @@ ad_proc -public db_list_of_lists {
 } {
     ad_arg_parser { bind } $args
 
-    # Query Dispatcher (OpenACS - SDW)
-    set full_statement_name [db_qd_get_fullname $statement_name]
-
-    # Can't use db_foreach here, since we need to use the ns_set directly.
-
     set code {
-        db_with_handle -dbn $dbn db {
-            set selection [db_exec select $db $full_statement_name $sql]
-            set selection_size [ns_set size $selection]
-            set result [list]
-            if {$with_headers_p} {
+        set result [list]
+        foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn $statement_name $sql]] {
+            set selection_array [ns_set array $selection]
+            if {[llength $result] == 0 && $with_headers_p} {
                 set headers [list]
-                for { set i 0 } { $i < $selection_size } { incr i } {
-                    lappend headers [ns_set key $selection $i]
+                foreach {key value} $selection_array {
+                    lappend headers $key
                 }
                 lappend result $headers
             }
-            while { [db_getrow $db $selection] } {
-                set this_result [list]
-                for { set i 0 } { $i < $selection_size } { incr i } {
-                    lappend this_result [ns_set value $selection $i]
-                }
-                lappend result $this_result
+            set row [list]
+            foreach {key value} $selection_array {
+                lappend row $value
             }
+            lappend result $row
         }
         set result
     }
@@ -1642,32 +1634,19 @@ ad_proc -public db_foreach {
 
     if { [info exists column_set] } {
         upvar 1 $column_set selection
-        set selection [ns_set create]
     }
 
-    set cmd [list ::db_list_of_lists -dbn $dbn -with_headers \
-                 $statement_name $sql]
     set counter 0
-    foreach row [uplevel 1 $cmd] {
+    foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn $statement_name $sql]] {
         incr counter
-        if {$counter == 1} {
-            # headers are the first list in returned tuples
-            set headers $row
-            continue
-        } elseif { [info exists column_array] || [info exists column_set] } {
-            # User wants query results to be put inside ns_set or
-            # array data structure.
-            foreach header $headers value $row {
-                if {[info exists column_set]} {
-                    ns_set put $selection $header $value
-                } else {
-                    set array_val($header) $value
-                }
+        if { ![info exists column_set] } {
+            set set_array [ns_set array $selection]
+            if { [info exists column_array] } {
+                unser -nocomplain array_val
+                array set array_val $set_array
+            } else {
+                foreach {a v} $set_array { uplevel [list set $a $v] }
             }
-        } else {
-            # 'Simple' case: values are set as variables corresponding
-            # to column names in the caller namespace.
-            uplevel 1 [list lassign $row {*}$headers]
         }
         set errno [catch { uplevel 1 $code_block } error]
 
@@ -1702,7 +1681,7 @@ ad_proc -public db_foreach {
         }
     }
     # If the if_no_rows_code is defined, go ahead and run it.
-    if { $counter > 1 && [info exists if_no_rows_code_block] } {
+    if { $counter > 0 && [info exists if_no_rows_code_block] } {
         uplevel 1 $if_no_rows_code_block
     }
 }
