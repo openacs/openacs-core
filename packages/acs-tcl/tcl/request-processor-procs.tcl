@@ -1509,7 +1509,7 @@ ad_proc -public ad_conn {args} {
                         user_id {
                             # Fallbacks, see above.
                             set ad_conn($var) 0
-                            ns_log notice "ad_conn: request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"
+                            ns_log debug "ad_conn: request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"
                             return $ad_conn($var)
                         }
                         extra_url -
