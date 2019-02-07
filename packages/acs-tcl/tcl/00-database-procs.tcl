@@ -1514,36 +1514,25 @@ ad_proc -public db_list_of_lists {
 
     # Can't use db_foreach here, since we need to use the ns_set directly.
 
-    if { [info exists cache_key] } {
-        return [ns_cache eval $cache_pool $cache_key {
-            db_with_handle -dbn $dbn db {
-                set selection [db_exec select $db $full_statement_name $sql]
-                set result [list]
-                while { [db_getrow $db $selection] } {
-                    set this_result [list]
-                    for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                        lappend this_result  [ns_set value $selection $i]
-                    }
-                    lappend result $this_result
+    set code {
+        db_with_handle -dbn $dbn db {
+            set selection [db_exec select $db $full_statement_name $sql]
+            set result [list]
+            while { [db_getrow $db $selection] } {
+                set this_result [list]
+                for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
+                    lappend this_result  [ns_set value $selection $i]
                 }
+                lappend result $this_result
             }
-            set result
-        }]
-    }
-
-    db_with_handle -dbn $dbn db {
-        set selection [db_exec select $db $full_statement_name $sql]
-        set result [list]
-        while { [db_getrow $db $selection] } {
-            set this_result [list]
-            for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                lappend this_result  [ns_set value $selection $i]
-            }
-            lappend result $this_result
         }
+        set result
     }
-    return $result
-
+    if { [info exists cache_key] } {
+        return [ns_cache eval $cache_pool $cache_key $code]
+    } else {
+        return [eval $code]
+    }
 }
 
 
