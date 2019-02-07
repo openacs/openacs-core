@@ -1613,9 +1613,6 @@ ad_proc -public db_foreach {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    # Query Dispatcher (OpenACS - ben)
-    set full_statement_name [db_qd_get_fullname $statement_name]
-
     ad_arg_parser { bind column_array column_set args } $args
 
     # Do some syntax checking.
@@ -1645,61 +1642,65 @@ ad_proc -public db_foreach {
 
     if { [info exists column_set] } {
         upvar 1 $column_set selection
+        set selection [ns_set create]
     }
 
-    db_with_handle -dbn $dbn db {
-        set selection [db_exec select $db $full_statement_name $sql]
-        set counter 0
-        while { [db_getrow $db $selection] } {
-            incr counter
-            unset -nocomplain array_val
-
-            if { ![info exists column_set] } {
-                for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                    if { [info exists column_array] } {
-                        set array_val([ns_set key $selection $i]) [ns_set value $selection $i]
-                    } else {
-                        upvar 1 [ns_set key $selection $i] column_value
-                        set column_value [ns_set value $selection $i]
-                    }
+    set cmd [list ::db_list_of_lists -dbn $dbn -with_headers \
+                 $statement_name $sql]
+    set rows [uplevel 1 $cmd]
+    set headers [lindex $rows 0]
+    set rows    [lrange $rows 1 end]
+    foreach row $rows {
+        if { [info exists column_array] || [info exists column_set] } {
+            # User wants query results to be put inside ns_set or
+            # array data structure.
+            foreach header $headers value $row {
+                if {[info exists column_set]} {
+                    ns_set put $selection $header $value
+                } else {
+                    set array_val($header) $value
                 }
             }
-            set errno [catch { uplevel 1 $code_block } error]
+        } else {
+            # 'Simple' case: values are set as variables corresponding
+            # to column names in the caller namespace.
+            uplevel 1 [list lassign $row {*}$headers]
+        }
+        set errno [catch { uplevel 1 $code_block } error]
 
-            #
-            # Handle or propagate the error. Can't use the usual
-            # "return -code $errno..." trick due to the db_with_handle
-            # wrapped around this loop, so propagate it explicitly.
-            #
-            switch -- $errno {
-                0 {
-                    # TCL_OK
-                }
-                1 {
-                    # TCL_ERROR
-                    error $error $::errorInfo $::errorCode
-                }
-                2 {
-                    # TCL_RETURN
-                    error "Cannot return from inside a db_foreach loop"
-                }
-                3 {
-                    # TCL_BREAK
-                    ns_db flush $db
-                    break
-                }
-                4 {
-                    # TCL_CONTINUE - just ignore and continue looping.
-                }
-                default {
-                    error "Unknown return code: $errno"
-                }
+        #
+        # Handle or propagate the error. Can't use the usual
+        # "return -code $errno..." trick due to the db_with_handle
+        # wrapped around this loop, so propagate it explicitly.
+        #
+        switch -- $errno {
+            0 {
+                # TCL_OK
+            }
+            1 {
+                # TCL_ERROR
+                error $error $::errorInfo $::errorCode
+            }
+            2 {
+                # TCL_RETURN
+                error "Cannot return from inside a db_foreach loop"
+            }
+            3 {
+                # TCL_BREAK
+                ns_db flush $db
+                break
+            }
+            4 {
+                # TCL_CONTINUE - just ignore and continue looping.
+            }
+            default {
+                error "Unknown return code: $errno"
             }
         }
-        # If the if_no_rows_code is defined, go ahead and run it.
-        if { $counter == 0 && [info exists if_no_rows_code_block] } {
-            uplevel 1 $if_no_rows_code_block
-        }
+    }
+    # If the if_no_rows_code is defined, go ahead and run it.
+    if { [llength $rows] == 0 && [info exists if_no_rows_code_block] } {
+        uplevel 1 $if_no_rows_code_block
     }
 }
 
