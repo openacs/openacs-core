@@ -1489,6 +1489,7 @@ ad_proc -public db_list_of_lists {
     {-dbn ""}
     -cache_key
     {-cache_pool db_cache_pool}
+    -with_headers:boolean
     statement_name
     sql
     args
@@ -1496,9 +1497,16 @@ ad_proc -public db_list_of_lists {
 
     Usage: <b>db_list_of_lists</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
+    @param with_headers when specified, first line of returned list of
+    lists will always be the list of column names as reported by the
+    database. Useful when you want to dynamically assign variables to
+    values returned in the list of lists.
+
     @return a Tcl list, each element of which is a list of all column
     values in a row of the result of the SQL query<tt>sql</tt>. If
-    <tt>sql</tt> doesn't return any rows, returns an empty list.
+    <tt>sql</tt> doesn't return any rows, returns an empty list,
+    unless with_headers flag was specified and in this case the only
+    element in the list will be the list of headers.
 
     It checks if the element is I18N and replaces it, thereby
     reducing the need to do this with every single package
@@ -1517,11 +1525,19 @@ ad_proc -public db_list_of_lists {
     set code {
         db_with_handle -dbn $dbn db {
             set selection [db_exec select $db $full_statement_name $sql]
+            set selection_size [ns_set size $selection]
             set result [list]
+            if {$with_headers_p} {
+                set headers [list]
+                for { set i 0 } { $i < $selection_size } { incr i } {
+                    lappend headers [ns_set key $selection $i]
+                }
+                lappend result $headers
+            }
             while { [db_getrow $db $selection] } {
                 set this_result [list]
-                for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                    lappend this_result  [ns_set value $selection $i]
+                for { set i 0 } { $i < $selection_size } { incr i } {
+                    lappend this_result [ns_set value $selection $i]
                 }
                 lappend result $this_result
             }
