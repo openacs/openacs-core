@@ -1651,9 +1651,7 @@ ad_proc -public db_foreach {
         set errno [catch { uplevel 1 $code_block } error]
 
         #
-        # Handle or propagate the error. Can't use the usual
-        # "return -code $errno..." trick due to the db_with_handle
-        # wrapped around this loop, so propagate it explicitly.
+        # Handle or propagate the error.
         #
         switch -- $errno {
             0 {
@@ -1669,7 +1667,6 @@ ad_proc -public db_foreach {
             }
             3 {
                 # TCL_BREAK
-                ns_db flush $db
                 break
             }
             4 {
