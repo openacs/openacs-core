@@ -1460,28 +1460,21 @@ ad_proc -public db_list {
 
     # Can't use db_foreach in this proc, since we need to use the ns_set directly.
 
-    if { [info exists cache_key] } {
-        return [ns_cache eval $cache_pool $cache_key {
-            db_with_handle -dbn $dbn db {
-                set selection [db_exec select $db $full_statement_name $sql]
-                set result [list]
-                while { [db_getrow $db $selection] } {
-                    lappend result [ns_set value $selection 0]
-                }
+    set code {
+        db_with_handle -dbn $dbn db {
+            set selection [db_exec select $db $full_statement_name $sql]
+            set result [list]
+            while { [db_getrow $db $selection] } {
+                lappend result [ns_set value $selection 0]
             }
-            set result
-        }]
-    }
-
-    db_with_handle -dbn $dbn db {
-        set selection [db_exec select $db $full_statement_name $sql]
-        set result [list]
-        while { [db_getrow $db $selection] } {
-            lappend result [ns_set value $selection 0]
         }
+        return $result
     }
-    return $result
-
+    if { [info exists cache_key] } {
+        return [ns_cache eval $cache_pool $cache_key $code]
+    } else {
+        return [eval $code]
+    }
 }
 
 
