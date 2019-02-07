@@ -1647,11 +1647,14 @@ ad_proc -public db_foreach {
 
     set cmd [list ::db_list_of_lists -dbn $dbn -with_headers \
                  $statement_name $sql]
-    set rows [uplevel 1 $cmd]
-    set headers [lindex $rows 0]
-    set rows    [lrange $rows 1 end]
-    foreach row $rows {
-        if { [info exists column_array] || [info exists column_set] } {
+    set counter 0
+    foreach row [uplevel 1 $cmd] {
+        incr counter
+        if {$counter == 1} {
+            # headers are the first list in returned tuples
+            set headers $row
+            continue
+        } elseif { [info exists column_array] || [info exists column_set] } {
             # User wants query results to be put inside ns_set or
             # array data structure.
             foreach header $headers value $row {
@@ -1699,7 +1702,7 @@ ad_proc -public db_foreach {
         }
     }
     # If the if_no_rows_code is defined, go ahead and run it.
-    if { [llength $rows] == 0 && [info exists if_no_rows_code_block] } {
+    if { $counter > 1 && [info exists if_no_rows_code_block] } {
         uplevel 1 $if_no_rows_code_block
     }
 }
