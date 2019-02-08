@@ -765,22 +765,26 @@ ad_proc -public ad_form {
 
         {*}$create_command
 
-        # Now make it impossible to add params specific to form creation to an extend
-        # block
-
-        # if a confirm template has been specified, it will be returned unless __confirmed_p is set
-        # true.  This is most easily done by including resources/forms/confirm-button in the confirm
-        # template.
+        # Now make it impossible to add params specific to form
+        # creation to an extend block.
+        #
+        # If a confirm template has been specified, it will be
+        # returned unless __confirmed_p is set true.  This is most
+        # easily done by including resources/forms/confirm-button in
+        # the confirm template.
 
         template::element create $form_name __confirmed_p -datatype integer -widget hidden -value 0
 
-        # JavaScript widgets can change a form value and submit the result in order to allow the
-        # generating script to fill in a value such as an image.   The widget must set __refreshing_p
+        # JavaScript widgets can change a form value and submit the
+        # result in order to allow the generating script to fill in a
+        # value such as an image.  The widget must set __refreshing_p
         # true.
 
         template::element create $form_name __refreshing_p -datatype integer -widget hidden -value 0
 
-        # add the hidden button element
+        #
+        # Add the hidden button element.
+        #
         template::element create $form_name "__submit_button_name" -datatype text -widget hidden -value ""
         template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
     }
@@ -895,8 +899,11 @@ ad_proc -public ad_form {
         }
     }
 
-    # Check that any acquire and get_property attributes are supported by their element's datatype
-    # These are needed at submission and fill-the-form-with-db-values time
+    #
+    # Check that any acquire and get_property attributes are supported
+    # by their element's datatype These are needed at submission and
+    # fill-the-form-with-db-values time.
+    #
     foreach element_name $af_element_names($form_name) {
         if { [llength $element_name] == 1 } {
             if { [info exists af_from_sql(${form_name}__$element_name)] } {
@@ -1041,7 +1048,7 @@ ad_proc -public ad_form {
             }
             set values(__key_signature) [ad_sign -- "$values($key_name):${form_name}:[ad_conn user_id]"]
         }
-        
+
         foreach element_name $properties(element_names) {
             if { [info exists values($element_name)] } {
                 if { [info exists af_flag_list(${form_name}__$element_name)]
