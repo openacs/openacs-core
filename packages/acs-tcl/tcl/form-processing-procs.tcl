@@ -590,8 +590,8 @@ ad_proc -public ad_form {
         return -code error "Can't extend form \"$form_name\" - a parameter block requiring the full form has already been declared"
     }
 
-    # Allow an empty form to work until we see an action block, useful for building up
-    # forms piecemeal.
+    # Allow an empty form to work until we see an action block, useful
+    # for building up forms piecemeal.
 
     global af_element_names
     if { !$extend_p } {
@@ -610,9 +610,10 @@ ad_proc -public ad_form {
 
             set af_parts(${form_name}__$valid_arg) ""
 
-            # Force completion of the form if we have any action block.  We only allow the form
-            # and validation block to be extended, for now at least until I get more experience
-            # with this ...
+            # Force completion of the form if we have any action
+            # block.  We only allow the form and validation block to
+            # be extended, for now at least until I get more
+            # experience with this ...
 
             if {$valid_arg ni {
                 name form method action html validate export mode cancel_url
@@ -630,19 +631,23 @@ ad_proc -public ad_form {
     #
     ####################
 
-    # We need the full list of element names and their flags during submission, so track
-    # them globally.  (Future implementation note: the form builder tracks these already
-    # and we should extend its data and use it directly, but there's not time to do this
-    # right for Greenpeace so I'm hacking the hell out of it)
+    # We need the full list of element names and their flags during
+    # submission, so track them globally.
+    #
+    # (Future implementation note: the form builder tracks these
+    # already and we should extend its data and use it directly, but
+    # there's not time to do this right for Greenpeace so I'm hacking
+    # the hell out of it)
 
     global af_flag_list
     global af_to_sql
     global af_from_sql
     global af_to_html
 
-    # Track element names and their parameters locally as we'll generate those in this form
-    # or extend block on the fly
-
+    #
+    # Track element names and their parameters locally as we'll
+    # generate those in this form or extend block on the fly.
+    #
     set element_names [list]
     array set af_element_parameters [list]
 
@@ -654,7 +659,8 @@ ad_proc -public ad_form {
         foreach element $form {
             set element_name_part [lindex $element 0]
 
-            # This can easily be generalized if we add more embeddable form commands ...
+            # This can easily be generalized if we add more embeddable
+            # form commands ...
 
             if {$element_name_part eq "-section"} {
                 lappend af_element_names($form_name) [concat -section [uplevel [list subst [lrange $element 1 end]]]]
@@ -690,10 +696,13 @@ ad_proc -public ad_form {
         }
     }
 
-    # Check the validation block for boneheaded errors if it exists.  We explicitly allow a form element
-    # to appear twice in the validation block so the caller can pair different error messages to different
-    # checks.  We implement this by building a global list of validation elements
-
+    #
+    # Check the validation block for boneheaded errors if it exists.
+    # We explicitly allow a form element to appear twice in the
+    # validation block so the caller can pair different error messages
+    # to different checks.  We implement this by building a global
+    # list of validation elements.
+    #
     global af_validate_elements
     if { !$extend_p } {
         set af_validate_elements($form_name) [list]
@@ -946,7 +955,8 @@ ad_proc -public ad_form {
         }
     }
 
-    # Check for consistency if database operations are to be triggered by this form
+    # Check for consistency if database operations are to be triggered
+    # by this form.
 
     if { [info exists af_sequence_name($form_name)] && ![info exists af_key_name($form_name)] } {
         return -code error "You've supplied a sequence name no \"key_name\" parameter"
@@ -956,8 +966,9 @@ ad_proc -public ad_form {
 
     upvar #$level $form_name:properties properties
 
-    # If we haven't seen an "action block" that requires the entire form, return.  If the calling
-    # script never finishes its form, tough.  It won't work.
+    # If we haven't seen an "action block" that requires the entire
+    # form, return.  If the calling script never finishes its form,
+    # tough.  It won't work.
 
     if { ![info exists af_parts(${form_name}__extend)] } {
         return
@@ -1027,8 +1038,9 @@ ad_proc -public ad_form {
                     foreach element_name $af_element_names($form_name) {
                         if { [llength $element_name] == 1 } {
                             if { [info exists af_from_sql(${form_name}__$element_name)] } {
-                                set values($element_name) [template::util::$af_type(${form_name}__$element_name)::acquire \
-                                                           $af_from_sql(${form_name}__$element_name) $values($element_name)]
+                                set values($element_name) \
+                                    [template::util::$af_type(${form_name}__$element_name)::acquire \
+                                         $af_from_sql(${form_name}__$element_name) $values($element_name)]
                             } elseif { [info commands ::template::data::from_sql::$af_type(${form_name}__$element_name)] ne "" } {
                                 set values($element_name) [template::data::from_sql::$af_type(${form_name}__$element_name) $values($element_name)]
                             }
@@ -1041,9 +1053,11 @@ ad_proc -public ad_form {
 
             } else {
 
-                # Make life easy for the OACS 4.5 hacker by automagically generating a value for
-                # our new database row.  Set a local so the query can use bindvar notation (the driver
-                # doesn't support array bind vars)
+                # Make life easy for the OACS 4.5 hacker by
+                # automagically generating a value for our new
+                # database row.  Set a local so the query can use
+                # bindvar notation (the driver doesn't support array
+                # bind vars)
 
                 if { [info exists af_sequence_name($form_name)] } {
                     set sequence_name $af_sequence_name($form_name)
@@ -1085,12 +1099,13 @@ ad_proc -public ad_form {
 
     } elseif { [template::form is_submission $form_name] } {
 
-        # Handle form submission.  We create the form values in the caller's context and execute validation
-        # expressions if they exist
-
-        # Get all the form elements.  We can't call form get_values because it doesn't handle multiples
-        # in a reasonable way.
-
+        # Handle form submission.  We create the form values in the
+        # caller's context and execute validation expressions if they
+        # exist.
+        #
+        # Get all the form elements.  We can't call form get_values
+        # because it doesn't handle multiples in a reasonable way.
+        #
         foreach element_name $properties(element_names) {
             if { [info exists af_flag_list(${form_name}__$element_name)]
                  && "multiple" in $af_flag_list(${form_name}__$element_name)
@@ -1103,8 +1118,9 @@ ad_proc -public ad_form {
                 uplevel #$level [list set $element_name $value]
             }
         }
-
-        # Update the clicked button if it does not already exist
+        #
+        # Update the clicked button if it does not already exist.
+        #
         uplevel #$level {
             if {[info exists __submit_button_name] && $__submit_button_name ne ""} {
                 set $__submit_button_name $__submit_button_value
@@ -1131,8 +1147,8 @@ ad_proc -public ad_form {
             security::csrf::validate
         }
 
-        # Execute validation expressions.  We've already done some sanity checks so know the basic structure
-        # is OK
+        # Execute validation expressions.  We've already done some
+        # sanity checks so know the basic structure is OK.
 
         foreach validate_element $af_validate_elements($form_name) {
             foreach {element_name validate_expr error_message} $validate_element {
@@ -1172,11 +1188,13 @@ ad_proc -public ad_form {
 
             if { [template::form is_valid $form_name] } {
 
-                # Run confirm and preview templates before we do final processing of the form
+                # Run confirm and preview templates before we do final
+                # processing of the form.
 
                 if { [info exists confirm_template] && ! $__confirmed_p } {
 
-                    # Pass the form variables to the confirm template, applying the to_html filter if present
+                    # Pass the form variables to the confirm template,
+                    # applying the to_html filter if present.
 
                     set args [list]
                     foreach element_name $af_element_names($form_name) {
@@ -1190,24 +1208,30 @@ ad_proc -public ad_form {
                             lappend args [list $element_name [uplevel #$level [list set $element_name]]]
                         }
                     }
-                    # This is serious abuse of ad_return_exception_template, but hell, I wrote it so I'm entitled ...
+                    # This is serious abuse of
+                    # ad_return_exception_template, but hell, I wrote
+                    # it so I'm entitled ...
                     ad_return_exception_template -status 200 -params $args $confirm_template
 
                 }
 
                 # We have three possible ways to handle the form
 
-                # 1. an on_submit block (useful for forms that don't touch the database or can share smart Tcl API
-                #    for both add and edit forms)
+                # 1. an on_submit block (useful for forms that don't touch the
+                #    database or can share smart Tcl API for both add and edit forms)
                 # 2. an new_data block (when __new_p is true)
                 # 3. an edit_data block (when __new_p is false)
-                # 4. an after_submit block (for ad_returnredirect and the like that is the same for new and edit)
+                # 4. an after_submit block (for ad_returnredirect and the like that
+                #    is the same for new and edit)
 
-                # We don't need to interrogate the af_parts structure because we know we're in the last call to
-                # to ad_form at this point and that this call contained the "action blocks".
+                # We don't need to interrogate the af_parts structure
+                # because we know we're in the last call to to ad_form
+                # at this point and that this call contained the
+                # "action blocks".
 
-                # Execute our to_sql filters, if any, before passing control to the caller's
-                # on_submit, new_data, edit_data or after_submit blocks
+                # Execute our to_sql filters, if any, before passing
+                # control to the caller's on_submit, new_data,
+                # edit_data or after_submit blocks
 
                 foreach element_name $af_element_names($form_name) {
                     if { [llength $element_name] == 1 } {
@@ -1219,12 +1243,11 @@ ad_proc -public ad_form {
                         }
                     }
                 }
-
-                # Lars: We're wrapping this in a catch to allow people to throw a "break" inside
-                # the code block, causing submission to be canceled
-                # In order to make this work, I had to eliminate the ad_page_contract_eval's below
-                # and replace them with simple uplevel's. Otherwise, we'd get an error saying
-                # 'break used outside of a loop'.
+                #
+                # Lars: We're wrapping this in a catch to allow people
+                # to throw a "break" inside the code block, causing
+                # submission to be canceled.
+                #
                 set errno [catch {
                     if { [info exists on_submit] } {
                         uplevel #$level $on_submit
