@@ -803,7 +803,7 @@ ad_proc -public group::add_member {
     #
     permission::cache_flush -party_id $user_id
     #
-    # Flush all permission checks pertaining to the group
+    # Flush members cache for the group
     #
     flush_members_cache -group_id $group_id
 }
