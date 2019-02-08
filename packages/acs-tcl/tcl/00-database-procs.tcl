@@ -1642,7 +1642,7 @@ ad_proc -public db_foreach {
         if { ![info exists column_set] } {
             set set_array [ns_set array $selection]
             if { [info exists column_array] } {
-                unser -nocomplain array_val
+                unset -nocomplain array_val
                 array set array_val $set_array
             } else {
                 foreach {a v} $set_array { uplevel [list set $a $v] }
