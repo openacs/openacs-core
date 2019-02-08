@@ -1039,14 +1039,9 @@ ad_proc -public ad_form {
                     }
                 }
             }
-            if {[ns_conn isconnected]} {
-                set current_user_id [ad_conn user_id]
-            } else {
-                set current_user_id 0
-            }
-            set values(__key_signature) [ad_sign -- "$values($key_name):${form_name}:${current_user_id}"]
+            set values(__key_signature) [ad_sign -- "$values($key_name):${form_name}:[ad_conn user_id]"]
         }
-
+        
         foreach element_name $properties(element_names) {
             if { [info exists values($element_name)] } {
                 if { [info exists af_flag_list(${form_name}__$element_name)]
@@ -1092,12 +1087,7 @@ ad_proc -public ad_form {
             upvar #$level __key_signature __key_signature
 
             if { [info exists __key] } {
-                if {[ns_conn isconnected]} {
-                    set current_user_id [ad_conn user_id]
-                } else {
-                    set current_user_id 0
-                }
-                if {![ad_verify_signature "$__key:${form_name}:${current_user_id}" $__key_signature] } {
+                if {![ad_verify_signature "$__key:${form_name}:[ad_conn user_id]" $__key_signature] } {
                     ad_return_error "Bad key signature" "Verification of the database key value failed"
                     ad_script_abort
                 }
