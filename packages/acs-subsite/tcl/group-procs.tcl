@@ -797,6 +797,14 @@ ad_proc -public group::add_member {
         relation_add -member_state $member_state "membership_rel" $group_id $user_id
     }
     relation_add -member_state $member_state $rel_type $group_id $user_id
+
+    #
+    # Flush all permission checks pertaining to this user.
+    #
+    permission::cache_flush -party_id $user_id
+    #
+    # Flush all permission checks pertaining to the group
+    #
     flush_members_cache -group_id $group_id
 }
 
