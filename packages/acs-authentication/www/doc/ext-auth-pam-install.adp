@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {ACS Authentication}} {Using Pluggable Authentication Modules (PAM) with
+<property name="context">{/doc/acs-authentication/ {ACS Authentication}} {Using Pluggable Authentication Modules (PAM) with
 OpenACS}</property>
 <property name="doc(title)">Using Pluggable Authentication Modules (PAM) with
 OpenACS</property>

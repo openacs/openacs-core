@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {ACS Authentication}} {IMS Sync driver design}</property>
+<property name="context">{/doc/acs-authentication/ {ACS Authentication}} {IMS Sync driver design}</property>
 <property name="doc(title)">IMS Sync driver design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

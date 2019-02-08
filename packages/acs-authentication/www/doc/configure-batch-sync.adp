@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {ACS Authentication}} {Configure Batch Synchronization}</property>
+<property name="context">{/doc/acs-authentication/ {ACS Authentication}} {Configure Batch Synchronization}</property>
 <property name="doc(title)">Configure Batch Synchronization</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

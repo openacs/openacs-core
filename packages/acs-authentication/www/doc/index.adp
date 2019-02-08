@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {ACS Authentication}} {External Authentication}</property>
+<property name="context">{/doc/acs-authentication/ {ACS Authentication}} {External Authentication}</property>
 <property name="doc(title)">External Authentication</property>
 <master>
 <div class="book" lang="en">

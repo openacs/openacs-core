@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {ACS Authentication}} {Using LDAP/Active Directory with OpenACS}</property>
+<property name="context">{/doc/acs-authentication/ {ACS Authentication}} {Using LDAP/Active Directory with OpenACS}</property>
 <property name="doc(title)">Using LDAP/Active Directory with OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
