@@ -385,6 +385,12 @@ ad_proc -public ad_form {
         a custom page title or some similar action.
     </dd>
 
+    <p><dt><b>-csrf_protection_p { 0 | 1 }</b></dt><p>
+    <dd>Should the form add automatically a hidden form field for csrf protection?
+       Use 1 or t for true, 0 or f for false.
+       Defaults to false.
+    </dd>
+
     </dl>
 
     Two hidden values of interest are available to the caller of ad_form when processing a submit:
@@ -548,17 +554,24 @@ ad_proc -public ad_form {
         set extend_p 0
     }
 
+    #
+    # Default for csrf_protection.
+    #
+    set csrf_protection_p 0
+
     # Parse the rest of the arguments
 
     if { [llength $args] == 0 } {
         return -code error "No arguments to ad_form"
     }
 
-    set valid_args { form method action mode html name select_query select_query_name new_data
-                     on_refresh edit_data validate on_submit after_submit confirm_template
-                     on_request new_request edit_request export cancel_url cancel_label
-                     has_submit has_edit actions edit_buttons display_buttons show_required_p
-                     on_validation_error fieldset };
+    set valid_args {
+        form method action mode html name select_query select_query_name new_data
+        on_refresh edit_data validate on_submit after_submit confirm_template
+        on_request new_request edit_request export cancel_url cancel_label
+        has_submit has_edit actions edit_buttons display_buttons show_required_p
+        on_validation_error fieldset csrf_protection_p
+    }
 
     ad_arg_parser $valid_args $args
 
@@ -787,6 +800,15 @@ ad_proc -public ad_form {
         #
         template::element create $form_name "__submit_button_name" -datatype text -widget hidden -value ""
         template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
+
+        if {$csrf_protection_p} {
+            #
+            # Add CSRF value to every ad_form. Validation might be
+            # application-specific (validation is not always wanted,
+            # especially, when high backward compitibility is required).
+            #
+            template::element create $form_name __csrf_token -datatype text -widget hidden -value $::__csrf_token
+        }
     }
 
     # Antonio Pisano: export property will eventually end up into
@@ -1099,6 +1121,14 @@ ad_proc -public ad_form {
                     ad_script_abort
                 }
             }
+        }
+
+        if {$csrf_protection_p} {
+            #
+            # CSRF protection is activated, therfore validate the
+            # hidden form field content.
+            #
+            security::csrf::validate
         }
 
         # Execute validation expressions.  We've already done some sanity checks so know the basic structure
