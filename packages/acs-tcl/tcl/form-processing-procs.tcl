@@ -6,7 +6,37 @@ ad_library {
 }
 
 ad_proc -public ad_form {
-    args
+    -name
+    -extend:boolean
+    -action
+    -actions
+    -mode
+    -has_edit
+    -has_submit
+    -method
+    -form
+    -cancel_url
+    -cancel_label
+    -html
+    -export
+    -select_query
+    -select_query_name
+    -show_required_p
+    -on_request
+    -edit_request
+    -new_request
+    -confirm_template
+    -on_refresh
+    -on_submit
+    -new_data
+    -edit_data
+    -after_submit
+    -validate
+    -on_validation_error
+    -edit_buttons
+    -display_buttons
+    -fieldset
+    -csrf_protection_p
 } {
 
     This procedure implements a high-level, declarative syntax for the generation and
@@ -184,218 +214,8 @@ ad_proc -public ad_form {
     <p>Parameters which take a name (for instance "-name" or "-select_query_name") expect a simple name
     not surrounded by curly braces (in other words not a single-element list).  All other parameters expect
     a single list to be passed in.
-    <p>
 
-    Here's a complete list of switches that are supported by ad_form:
-
-    <p>
-
-    <dl>
-    <p><dt><b>-extend</b></dt><p>
-    <dd>Extend an existing form.  This allows one to build forms incrementally.  Forms are built at the
-        template level.  As a consequence one can write utility procs that use -extend to build form
-        snippets common to several data entry forms. Note that the full form block must be built up
-        (extended) and completed before any action blocks such as select_query, new_request, edit_request etc.
-        are defined.
-        <p>This must be the first switch passed into ad_form
-    </dd>
-
-    <p><dt><b>-name</b></dt><p>
-    <dd>Declares the name of the form.  Defaults to the name of the script being served.</dd>
-
-    <p><dt><b>-action</b></dt><p>
-    <dd>The name of the script to be called when the form is submitted.  Defaults to the name of the script
-        being served.
-    </dd>
-
-    <p><dt><b>-actions</b></dt><p>
-    <dd>A list of lists of actions (e.g. {{"  Delete  " delete} {"  Resolve " resolve}} ), which gets
-        translated to buttons at the bottom of the form. You can find out what button was pressed
-        with [template::form get_action form_id], usually in the -edit_request block to perform whatever
-        actions you deem appropriate. When the form is loaded the action will be empty.
-    </dd>
-
-    <p><dt><b>-mode { display | edit }</b></dt><p>
-    <dd>If set to 'display', the form is shown in display-only mode, where the user cannot edit the fields.
-        Each widget knows how to display its contents appropriately, e.g. a select widget will show
-        the label, not the value. If set to 'edit', the form is displayed as normal, for editing.
-        Defaults to 'edit'. Switching to edit mode when a button is clicked in display mode is handled
-        automatically
-    </dd>
-
-    <p><dt><b>-has_edit { 0 | 1 }</b></dt><p>
-    <dd>Set to 1 to suppress the Edit button automatically added by the form builder. Use this if you
-        include your own.
-    </dd>
-
-    <p><dt><b>-has_submit { 0 | 1 }</b></dt><p>
-    <dd>Set to 1 to suppress the OK button automatically added by the form builder. Use this if you
-        include your own.
-    </dd>
-
-    <p><dt><b>-method</b></dt><p>
-    <dd>The standard METHOD attribute to specify in the HTML FORM tag at the beginning of the rendered
-        form. Defaults to POST.
-    </dd>
-
-    <p><dt><b>-form</b></dt><p>
-    <dd>Declare form elements (described in detail below)
-    </dd>
-
-    <p><dt><b>-cancel_url</b></dt><p>
-    <dd>The URL the cancel button should take you to. If this is specified, a cancel button will show up
-        during the edit phase.
-    </dd>
-
-    <p><dt><b>-cancel_label</b></dt><p>
-    <dd>The label for the cancel button.
-    </dd>
-
-    <p><dt><b>-html</b></dt><p>
-    <dd>The given html will be added to the "form" tag when page is rendered.  This is commonly used to
-        define multipart file handling forms.
-    </dd>
-
-    <p><dt><b>-export</b></dt><p>
-    <dd>This options allows one to export data in current page environment to the page receiving the form.
-        Variables are treated as "hidden" form elements which will be automatically generated. Each value is
-        either a name, in which case the Tcl variable at the caller's level is passed to the form if it exists,
-        or a name-value pair.
-        The behavior of this option replicates that for <code>vars</code> argument in proc
-        <a href='/api-doc/proc-view?proc=export_vars&amp;source_p=1'>export_vars</a>, which in turn follows specification
-    for input page variables in <a href='/api-doc/proc-view?proc=ad_page_contract&amp;source_p=1'>ad_page_contract</a>.
-        In particular, flags <code>:multiple</code>, <code>:sign</code> and <code>:array</code> are allowed and
-        their meaning is the same as in <code>export_vars</code>.
-    </dd>
-
-    <p><dt><b>-select_query</b></dt><p>
-    <dd>
-    Defines a query that returns a single row containing values for each
-    element of the form meant to be modifiable by the user.  Can only be
-    used if an element of type key has been declared. Values returned from
-    the query are available in the form, but not the ADP template (for
-    that, use -edit_request instead).
-    </dd>
-
-    <p><dt><b>-select_query_name</b></dt><p>
-    <dd>
-    Identical to -select_query, except instead of specifying the query
-    inline, specifies a query name. The query with that name from the
-    appropriate XQL file will be used. Use -select_query_name rather than
-    -select_query whenever possible, as query files are the mechanism used
-    to make the support of multiple RDMBS systems possible.
-    </dd>
-
-    <p><dt><b>-show_required_p { 0 | 1 }</b></dt><p>
-    <dd>Should the form template show which elements are required. Use 1 or t for true, 0 or f for false.
-       Defaults to true.
-    </dd>
-
-    <p><dt><b>-on_request</b></dt><p>
-    <dd>A code block which sets the values for each element of the form meant to be modifiable by
-        the user when the built-in key management feature is being used or to define options for
-        select lists etc. Set the values as local variables in the code block, and they'll get
-        fetched and used as element values for you. This block is executed <i>every time</i> the
-        form is loaded <i>except</i> when the form is being submitted (in which case the -on_submit
-        block is executed.)
-    </dd>
-
-    <p><dt><b>-edit_request</b></dt><p>
-    <dd>
-    A code block which sets the values for each element of the form meant
-    to be modifiable by the user.  Use this when a single query to grab
-    database values is insufficient.  Any variables set in an -edit_request
-    block are available to the ADP template as well as the form, while
-    -select_query sets variables in the form only. Can only be used if an
-    element of type key is defined.  This block is only executed if the
-    page is called with a valid key, i.e. a self-submit form to add or edit
-    an item called to edit the data. Set the values as local variables in
-    the code block, and they'll get fetched and used as element values for
-    you.
-    </dd>
-
-    <p><dt><b>-new_request</b></dt><p>
-    <dd>A code block which sets the values for each element of the form meant to be modifiable by the user.  Use
-        this when a single query to grab database values is insufficient.  Can only be used if an element of
-        type key is defined.  This block complements the -edit_request block. You just need to set the values as local
-        variables in the code block, and they'll get fetched and used as element values for you.
-    </dd>
-
-    <p><dt><b>-confirm_template</b></dt><p>
-    <dd>The name of a confirmation template to be called before any on_submit, new_data or edit_data block.  When
-        the user confirms input control will be passed to the appropriate submission block.  The confirmation
-        template can be used to provide a bboard-like preview/confirm page.  Your confirmation template should
-        render the form contents in a user-friendly way then include "/packages/acs-templating/resources/forms/confirm-button".
-        The "confirm-button" template not only provides a confirm button but includes the magic incantation that
-        tells ad_form that the form has been confirmed by the user and that it is safe to call the proper submission
-        block.
-    </dd>
-
-    <p><dt><b>-on_refresh</b></dt><p>
-    <dd>Executed when the form comes back from being refreshed using JavaScript with the __refreshing_p flag set.
-    </dd>
-
-    <p><dt><b>-on_submit</b></dt><p>
-    <dd>When the form is submitted, this code block will be executed before any new_data or edit_data code block.
-        Use this if your form doesn't interact with the database or if the database type involved includes a Tcl
-        API that works for both new and existing data. The values of the form's elements will be available as local variables.
-        Calling 'break' inside this block causes the submission process to be aborted, and neither new_data, edit_data, nor
-        after_submit will get executed. Useful in combination with template::form set_error to display an error on a form
-        element.
-    </dd>
-
-    <p><dt><b>-new_data</b></dt><p>
-    <dd>This code block will be executed when a form for a new database row is submitted.  This block should
-        insert the data into the database or create a new database object or content repository item containing
-        the data.
-        Calling 'break' inside this block causes the submission process to be aborted, and
-        after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form
-        element.
-    </dd>
-
-    <p><dt><b>-edit_data</b></dt><p>
-    <dd>This code block will be executed when a form for an existing database row is submitted.  This block should
-        update the database or create a new content revision for the existing item if the data's stored in the
-        content repository.
-        Calling 'break' inside this block causes the submission process to be aborted, and
-        after_submit will not get executed. Useful in combination with template::form set_error to display an error on a form
-        element.
-    </dd>
-
-    <p><dt><b>-after_submit</b></dt><p>
-    <dd>This code block will be executed after the three blocks on_submit, new_data or edit_data have been
-    executed. It is useful for putting in stuff like ad_returnredirect that is the same for new and edit.
-    </dd>
-
-    <p><dt><b>-validate</b></dt><p>
-    <dd>A code block that validates the elements in the form. The elements are set as local values.
-        The block has the following form:
-       <pre>
-{element_name
-    {tcl code that returns 1 or 0}
-    "Message to be shown by that element in case of error"
-}
-{...}
-       </pre>
-    </dd>
-
-
-    <p><dt><b>-on_validation_error</b></dt><p>
-    <dd>A code block that is executed if validation fails.  This can be done to set
-        a custom page title or some similar action.
-    </dd>
-
-    <p><dt><b>-csrf_protection_p { 0 | 1 }</b></dt><p>
-    <dd>Should the form add automatically a hidden form field for csrf protection?
-       Use 1 or t for true, 0 or f for false.
-       Defaults to false.
-    </dd>
-
-    </dl>
-
-    Two hidden values of interest are available to the caller of ad_form when processing a submit:
-
-    <p>
+    <p>Two hidden values of interest are available to the caller of ad_form when processing a submit:
     <dl>
     <p><dt><b>__new_p</b></dt><p>
     <dd>
@@ -538,42 +358,198 @@ ad_proc -public ad_form {
     <p>
     </blockquote>
 
+    @param extend Extend an existing form.  This allows one to build
+        forms incrementally.  Forms are built at the template level.
+        As a consequence one can write utility procs that use -extend
+        to build form snippets common to several data entry
+        forms. Note that the full form block must be built up
+        (extended) and completed before any action blocks such as
+        select_query, new_request, edit_request etc.  are defined
+
+    @param name Declares the name of the form.  Defaults to the name
+    of the script being served.
+
+    @param action The name of the script to be called when the form is
+        submitted.  Defaults to the name of the script being served.
+
+    @param actions A list of lists of actions (e.g. {{" Delete "
+    delete} {" Resolve " resolve}} ), which gets translated to buttons
+    at the bottom of the form. You can find out what button was
+    pressed with [template::form get_action form_id], usually in the
+    -edit_request block to perform whatever actions you deem
+    appropriate. When the form is loaded the action will be empty.
+
+    @param mode { display | edit } If set to 'display', the form is
+        shown in display-only mode, where the user cannot edit the
+        fields.  Each widget knows how to display its contents
+        appropriately, e.g. a select widget will show the label, not
+        the value. If set to 'edit', the form is displayed as normal,
+        for editing.  Switching to edit mode when a button is clicked
+        in display mode is handled automatically
+
+    @param has_edit { 0 | 1 } Set to 1 to suppress the Edit button
+        automatically added by the form builder. Use this if you
+        include your own.
+
+    @param has_submit { 0 | 1 } Set to 1 to suppress the OK button
+        automatically added by the form builder. Use this if you
+        include your own.
+
+    @param method The standard METHOD attribute to specify in the HTML
+        FORM tag at the beginning of the rendered form.
+
+    @param form Declare form elements (described in detail above)
+
+    @param cancel_url The URL the cancel button should take you to. If
+        this is specified, a cancel button will show up during the
+        edit phase.
+
+    @param cancel_label The label for the cancel button.
+
+    @param html The given html will be added to the "form" tag when
+        page is rendered.  This is commonly used to define multipart
+        file handling forms.
+
+    @param export This options allows one to export data in current
+        page environment to the page receiving the form.  Variables
+        are treated as "hidden" form elements which will be
+        automatically generated. Each value is either a name, in which
+        case the Tcl variable at the caller's level is passed to the
+        form if it exists, or a name-value pair.  The behavior of this
+        option replicates that for <code>vars</code> argument in proc
+        <a
+        href='/api-doc/proc-view?proc=export_vars&amp;source_p=1'>export_vars</a>,
+        which in turn follows specification for input page variables
+        in <a
+        href='/api-doc/proc-view?proc=ad_page_contract&amp;source_p=1'>ad_page_contract</a>.
+        In particular, flags <code>:multiple</code>,
+        <code>:sign</code> and <code>:array</code> are allowed and
+        their meaning is the same as in <code>export_vars</code>.
+
+    @param select_query Defines a query that returns a single row
+    containing values for each element of the form meant to be
+    modifiable by the user.  Can only be used if an element of type
+    key has been declared. Values returned from the query are
+    available in the form, but not the ADP template (for that, use
+    -edit_request instead).
+
+    @param select_query_name Identical to -select_query, except
+    instead of specifying the query inline, specifies a query
+    name. The query with that name from the appropriate XQL file will
+    be used. Use -select_query_name rather than -select_query whenever
+    possible, as query files are the mechanism used to make the
+    support of multiple RDMBS systems possible.
+
+    @param show_required_p { 0 | 1 } Should the form template show
+    which elements are required. Use 1 or t for true, 0 or f for
+    false.
+
+    @param on_request A code block which sets the values for each
+        element of the form meant to be modifiable by the user when
+        the built-in key management feature is being used or to define
+        options for select lists etc. Set the values as local
+        variables in the code block, and they'll get fetched and used
+        as element values for you. This block is executed <i>every
+        time</i> the form is loaded <i>except</i> when the form is
+        being submitted (in which case the -on_submit block is
+        executed.)
+
+    @param edit_request A code block which sets the values for each
+    element of the form meant to be modifiable by the user.  Use this
+    when a single query to grab database values is insufficient.  Any
+    variables set in an -edit_request block are available to the ADP
+    template as well as the form, while -select_query sets variables
+    in the form only. Can only be used if an element of type key is
+    defined.  This block is only executed if the page is called with a
+    valid key, i.e. a self-submit form to add or edit an item called
+    to edit the data. Set the values as local variables in the code
+    block, and they'll get fetched and used as element values for you.
+
+    @param new_request A code block which sets the values for each
+        element of the form meant to be modifiable by the user.  Use
+        this when a single query to grab database values is
+        insufficient.  Can only be used if an element of type key is
+        defined.  This block complements the -edit_request block. You
+        just need to set the values as local variables in the code
+        block, and they'll get fetched and used as element values for
+        you.
+
+    @param confirm_template The name of a confirmation template to be
+        called before any on_submit, new_data or edit_data block.
+        When the user confirms input control will be passed to the
+        appropriate submission block.  The confirmation template can
+        be used to provide a bboard-like preview/confirm page.  Your
+        confirmation template should render the form contents in a
+        user-friendly way then include
+        "/packages/acs-templating/resources/forms/confirm-button".
+        The "confirm-button" template not only provides a confirm
+        button but includes the magic incantation that tells ad_form
+        that the form has been confirmed by the user and that it is
+        safe to call the proper submission block.
+
+    @param on_refresh Executed when the form comes back from being
+    refreshed using JavaScript with the __refreshing_p flag set.
+
+    @param on_submit When the form is submitted, this code block will
+        be executed before any new_data or edit_data code block.  Use
+        this if your form doesn't interact with the database or if the
+        database type involved includes a Tcl API that works for both
+        new and existing data. The values of the form's elements will
+        be available as local variables.  Calling 'break' inside this
+        block causes the submission process to be aborted, and neither
+        new_data, edit_data, nor after_submit will get
+        executed. Useful in combination with template::form set_error
+        to display an error on a form element.
+
+    @param new_data This code block will be executed when a form for a
+        new database row is submitted.  This block should insert the
+        data into the database or create a new database object or
+        content repository item containing the data.  Calling 'break'
+        inside this block causes the submission process to be aborted,
+        and after_submit will not get executed. Useful in combination
+        with template::form set_error to display an error on a form
+        element.
+
+    @param edit_data This code block will be executed when a form for
+        an existing database row is submitted.  This block should
+        update the database or create a new content revision for the
+        existing item if the data's stored in the content repository.
+        Calling 'break' inside this block causes the submission
+        process to be aborted, and after_submit will not get
+        executed. Useful in combination with template::form set_error
+        to display an error on a form element.
+
+    @param after_submit This code block will be executed after the
+    three blocks on_submit, new_data or edit_data have been
+    executed. It is useful for putting in stuff like ad_returnredirect
+    that is the same for new and edit.
+
+    @param validate A code block that validates the elements in the
+    form. The elements are set as local values.  The block has the
+    following form:
+       <pre>
+{element_name
+    {tcl code that returns 1 or 0}
+    "Message to be shown by that element in case of error"
+}
+{...}
+       </pre>
+
+    @param on_validation_error A code block that is executed if
+        validation fails.  This can be done to set a custom page title
+        or some similar action.
+
+    @param csrf_protection_p { 0 | 1 } Should the form add
+       automatically a hidden form field for csrf protection?  Use 1
+       or t for true, 0 or f for false.  Defaults to false.
+
     @see ad_form_new_p
     @see ad_set_element_value
     @see ad_set_form_values
+    @see template::form::create
 
 } {
     set level [template::adp_level]
-
-    # Are we extending the form?
-
-    if {[lindex $args 0] eq "-extend"} {
-        set extend_p 1
-        set args [lrange $args 1 end]
-    } else {
-        set extend_p 0
-    }
-
-    #
-    # Default for csrf_protection.
-    #
-    set csrf_protection_p 0
-
-    # Parse the rest of the arguments
-
-    if { [llength $args] == 0 } {
-        return -code error "No arguments to ad_form"
-    }
-
-    set valid_args {
-        form method action mode html name select_query select_query_name new_data
-        on_refresh edit_data validate on_submit after_submit confirm_template
-        on_request new_request edit_request export cancel_url cancel_label
-        has_submit has_edit actions edit_buttons display_buttons show_required_p
-        on_validation_error fieldset csrf_protection_p
-    }
-
-    ad_arg_parser $valid_args $args
 
     # Set the form name, defaulting to the name of the template that called us
 
@@ -598,8 +574,18 @@ ad_proc -public ad_form {
         set af_element_names($form_name) [list]
     }
 
+    # One of the features of ad_form is the possibility to configure a
+    # form in subsequent calls of the proc ('piecewise'
+    # configuration). To maintain some level of consistency, in this
+    # loop we enforce that only some 'extendable' parameters can be
+    # specified multiple times, while others will throw an error in
+    # that case. One drawback of this approach is one must take extra
+    # care when specifying default values for a flag, or it will be
+    # considered already specified. Also, some trick is needed to
+    # persist flags which where specified in previous calls
+    # (e.g. these global variables).
     global af_parts
-
+    set valid_args [dict get [nsv_get api_proc_doc [lindex [info level 0] 0]] switches]
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
             if { [info exists af_parts(${form_name}__$valid_arg)]
@@ -810,7 +796,7 @@ ad_proc -public ad_form {
         template::element create $form_name "__submit_button_name" -datatype text -widget hidden -value ""
         template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
 
-        if {$csrf_protection_p} {
+        if {[info exists csrf_protection_p] && $csrf_protection_p} {
             #
             # Add CSRF value to every ad_form. Validation might be
             # application-specific (validation is not always wanted,
@@ -1139,7 +1125,7 @@ ad_proc -public ad_form {
             }
         }
 
-        if {$csrf_protection_p} {
+        if {[template::element::exists $form_name __csrf_token]} {
             #
             # CSRF protection is activated, therfore validate the
             # hidden form field content.
