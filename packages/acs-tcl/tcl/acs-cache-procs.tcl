@@ -241,7 +241,7 @@ namespace eval ::acs {
 	:public method init {} {
             #
             # If the name was not provided, use the object name as
-            # default.
+            # default for the cache name.
             #
             if {![info exists :name]} {
                 set :name [namespace tail [current]]
