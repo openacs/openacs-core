@@ -1301,7 +1301,7 @@ ad_proc -public subsite::get_url {
     return $result
 }
 
-ad_proc -private subsite::util::packages_no_mem {
+ad_proc -private subsite::util::packages_no_cache {
     -node_id
 } {
     return a list of package_id's for children of the passed node_id
@@ -1338,7 +1338,7 @@ ad_proc -public subsite::util::packages {
                              -include_self \
                              -element node_id]
 
-    return [util_memoize [list subsite::util::packages_no_mem -node_id $subsite_node_id] 1200]
+    return [util_memoize [list subsite::util::packages_no_cache -node_id $subsite_node_id] 1200]
 }
 
 ad_proc -public subsite::util::get_package_options {

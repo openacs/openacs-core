@@ -1245,10 +1245,10 @@ ad_proc -public apm_package_key_from_id {package_id} {
 } {
     set key ::acs::apm_package_key_from_id($package_id)
     if {[info exists $key]} {return [set $key]}
-    set $key [apm_package_key_from_id_mem $package_id]
+    set $key [apm_package_key_from_id_not_cached $package_id]
 }
 
-ad_proc -private apm_package_key_from_id_mem {package_id} {
+ad_proc -private apm_package_key_from_id_not_cached {package_id} {
     unmemoized version of apm_package_key_from_id
 } {
     return [db_string apm_package_key_from_id {
@@ -1263,10 +1263,10 @@ ad_proc -private apm_package_key_from_id_mem {package_id} {
 ad_proc -public apm_instance_name_from_id {package_id} {
     @return The name of the instance.
 } {
-    return [util_memoize [list apm_instance_name_from_id_mem $package_id]]
+    return [util_memoize [list apm_instance_name_from_id_not_cached $package_id]]
 }
 
-ad_proc -private apm_instance_name_from_id_mem {package_id} {
+ad_proc -private apm_instance_name_from_id_not_cached {package_id} {
     unmemoized version of apm_instance_name_from_id
 } {
     return [db_string apm_package_instance_name_from_id {
@@ -1285,15 +1285,15 @@ ad_proc -public apm_package_id_from_key {package_key} {
 } {
     set var ::apm::package_id_from_key($package_key)
     if {[info exists $var]} {return [set $var]}
-    set result [util_memoize [list apm_package_id_from_key_mem $package_key]]
-    #set result [ns_cache_eval ns:memoize apm_package_id_from_key_$package_key [list apm_package_id_from_key_mem $package_key]]
+    set result [util_memoize [list apm_package_id_from_key_not_cached $package_key]]
+    #set result [ns_cache_eval ns:memoize apm_package_id_from_key_$package_key [list apm_package_id_from_key_not_cached $package_key]]
     if {$result != 0} {
         set $var $result
     }
     return $result
 }
 
-ad_proc -private apm_package_id_from_key_mem {package_key} {
+ad_proc -private apm_package_id_from_key_not_cached {package_key} {
     unmemoized version of apm_package_id_from_key
 } {
     return [db_string apm_package_id_from_key {
@@ -1311,10 +1311,10 @@ ad_proc -public apm_package_ids_from_key {
     @return List of package ids of all instances of the package.
     Empty string
 } {
-    return [util_memoize [list apm_package_ids_from_key_mem -package_key $package_key -mounted_p $mounted_p]]
+    return [util_memoize [list apm_package_ids_from_key_not_cached -package_key $package_key -mounted_p $mounted_p]]
 }
 
-ad_proc -private apm_package_ids_from_key_mem {
+ad_proc -private apm_package_ids_from_key_not_cached {
     -package_key:required
     {-mounted_p "0"}
 } {
@@ -1396,11 +1396,11 @@ ad_proc -public apm_package_key_from_version_id {version_id} {
 
     @author Peter Marklund (peter@collaboraid.biz)
 } {
-    return [util_memoize [list apm_package_key_from_version_id_mem $version_id]]
+    return [util_memoize [list apm_package_key_from_version_id_not_cached $version_id]]
 
 }
 
-ad_proc -private apm_package_key_from_version_id_mem {version_id} {
+ad_proc -private apm_package_key_from_version_id_not_cached {version_id} {
     Returns the package_key for the given APM package version id. Goes to the database
     every time called.
 
@@ -2171,7 +2171,7 @@ ad_proc -public apm::convert_type {
 
 } {
     db_dml update_package_key {}
-    util_memoize_flush "apm_package_key_from_id_mem $package_id"
+    util_memoize_flush "apm_package_key_from_id_not_cached $package_id"
 
     set node_id [site_node::get_node_id_from_object_id -object_id $package_id]
     if { $node_id ne "" } {

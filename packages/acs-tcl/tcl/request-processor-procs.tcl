@@ -1315,7 +1315,7 @@ ad_proc -public ad_script_abort {} {
 }
 
 
-ad_proc -private ad_acs_kernel_id_mem {} {
+ad_proc -private ad_acs_kernel_id_not_cached {} {
 
     Returns the package_id of the kernel. (not cached)
 
@@ -1328,7 +1328,7 @@ ad_proc -private ad_acs_kernel_id_mem {} {
 ad_proc -public ad_acs_kernel_id {} {
     Returns the package_id of the kernel.
 } {
-    set acs_kernel_id [ad_acs_kernel_id_mem]
+    set acs_kernel_id [ad_acs_kernel_id_not_cached]
     #
     # use proc rather than ad_proc on redefine since we don't want to see a
     # multiple define proc warning...
