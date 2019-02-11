@@ -226,22 +226,45 @@ ad_proc -public parameter::get_from_package_key {
     @param parameter which parameter's value to get
     @param default what to return if we don't find a value
 } {
-    # 1. check to see if this parameter is being set in the server's
-    # configuration file; this value has highest precedence
+    #
+    # 1. Check to see if this parameter is being set in the server's
+    #    configuration file; this value has highest precedence.
+    #
     set value [ad_parameter_from_file $parameter $package_key]
 
-    # 2. try to get a package_id for this package_key and use the standard
-    # parameter::get function to get the value
+    #
+    # 2. Try to get the value from a global package parameter.
+    #
     if {$value eq ""} {
-        ad_try {
+        set value [parameter::get_global_value \
+                       -localize=$localize_p \
+                       -boolean=$boolean_p \
+                       -package_key $package_key \
+                       -parameter $parameter \
+                       -default ""]
+    }
+
+    #
+    # 3. Try to get the value from the package_id of this package_key
+    #    and use the standard parameter::get function to get the
+    #    value. Note that this lookup only makes sense for singleton
+    #    packages.
+    #
+    if {$value eq ""} {
+        if {[db_string check_singleton {
+            select 1 from apm_package_types
+            where package_key = :package_key
+            and singleton_p = 't'
+        } -default 0]} {
             set value [parameter::get \
-                             -localize=$localize_p \
-                             -boolean=$boolean_p \
-                             -package_id [apm_package_id_from_key $package_key] \
-                             -parameter $parameter \
-                             -default $default \
-                            ]
-        } on error {errmsg} {
+                           -localize=$localize_p \
+                           -boolean=$boolean_p \
+                           -package_id [apm_package_id_from_key $package_key] \
+                           -parameter $parameter \
+                           -default $default \
+                          ]
+        } else {
+            ns_log notice "tried to lookup parameter $parameter from non-singleton package $package_key"
             set value $default
         }
     }
