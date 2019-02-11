@@ -480,7 +480,13 @@ ad_proc -private ad_parameter_cache {
             and    apm_parameters.package_key = :key
         } -default ""]
     } else {
-        set value [db_string select_instance_parameter_value {} -default ""]
+        set value [db_string select_instance_parameter_value {
+            select apm_parameter_values.attr_value
+            from   apm_parameters, apm_parameter_values
+            where  apm_parameter_values.package_id = :key
+            and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
+            and    apm_parameters.parameter_name = :parameter_name
+        } -default ""]
     }
     nsv_set "ad_param_${key}" $parameter_name $value
     return $value
