@@ -1544,7 +1544,7 @@ if {$UseXotclSiteNodes} {
                 #
                 # Try to get value from urlspace
                 #
-                set ID [ns_urlspace get -key sitenode $url]
+                set ID [ns_urlspace get -id $::acs::siteNodesID -key sitenode $url]
                 if {$ID eq ""} {
                     #
                     # Get value the classical way, caching potentially
@@ -1576,10 +1576,10 @@ if {$UseXotclSiteNodes} {
                             # in the urlspace.
                             #
                             set short_url [site_node::get_url -node_id $ID]
-                            set cmd [list ns_urlspace set -key sitenode $short_url* $ID]
+                            set cmd [list ns_urlspace set -id $::acs::siteNodesID -key sitenode $short_url* $ID]
                             #ns_log notice "--- get_node_id save in urlspace <$cmd> -> <$ID>"
                             {*}$cmd
-                            #ns_log notice "---\n[join [ns_urlspace list] \n]"
+                            #ns_log notice "---\n[join [ns_urlspace list -id $::acs::siteNodesID] \n]"
                         }
                         return [set $key $ID]
                     }
@@ -1594,7 +1594,7 @@ if {$UseXotclSiteNodes} {
                 # necessary).
                 #
 
-                ns_urlspace unset -recurse -key sitenode $url
+                ns_urlspace unset -id $::acs::siteNodesID -recurse -key sitenode $url
                 next
             }
 
@@ -1602,7 +1602,9 @@ if {$UseXotclSiteNodes} {
          }
         site_node object mixins add SiteNodesCache
         if {[info commands ns_urlspace] ne ""} {
-            ns_log notice "... using ns_urlspace for reduced redundancy in site node caches"
+            set ::acs::siteNodesID [ns_urlspace new]
+            ns_log notice \
+                "... using ns_urlspace $::acs::siteNodesID for reduced redundancy in site node caches"
             site_node object mixins add SiteNodeUrlspaceCache
         }
 
