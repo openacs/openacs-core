@@ -141,7 +141,7 @@ set errno [catch {
     # should not be necessary to use the [ad_acs_kernel_id] redefine
     # trick, but to use a plain variable in the ::acs namespace.
     #
-    set ::acs::kernel_id [ad_acs_kernel_id_mem]
+    set ::acs::kernel_id [ad_acs_kernel_id]
     ns_log notice "bootstrap: setting ::acs::kernel_id to $::acs::kernel_id"
 
     #
