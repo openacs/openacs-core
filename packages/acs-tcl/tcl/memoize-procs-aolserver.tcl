@@ -24,30 +24,39 @@ ad_proc -public util_memoize {script {max_age ""}} {
 
     @return The possibly-cached value returned by <i>script</i>.
 } {
+    #
+    # The ::util_memoize_flush proc is defined in the *-init script,
+    # after the util_memoize cache was created. Therefore is save to
+    # use the util_memoize when this proc is available.
+    #
+    if {[info commands ::util_memoize_flush] ne ""} {
 
-    if {$max_age ne "" && $max_age < 0} {
-	error "max_age must not be negative"
+        if {$max_age ne "" && $max_age < 0} {
+            error "max_age must not be negative"
+        }
+
+        set current_time [ns_time]
+
+        set cached_p [ns_cache get util_memoize $script pair]
+
+        if {$cached_p && $max_age ne "" } {
+            set cache_time [lindex $pair 0]
+            if {$current_time - $cache_time > $max_age} {
+                ns_cache flush util_memoize $script
+                set cached_p 0
+            }
+        }
+
+        if {!$cached_p} {
+            set pair [ns_cache eval util_memoize $script {
+                list $current_time [eval $script]
+            }]
+        }
+
+        return [lindex $pair 1]
+    } else {
+        uplevel $script
     }
-
-    set current_time [ns_time]
-
-    set cached_p [ns_cache get util_memoize $script pair]
-
-    if {$cached_p && $max_age ne "" } {
-	set cache_time [lindex $pair 0]
-	if {$current_time - $cache_time > $max_age} {
-	    ns_cache flush util_memoize $script
-	    set cached_p 0
-	}
-    }
-
-    if {!$cached_p} {
-	set pair [ns_cache eval util_memoize $script {
-	    list $current_time [eval $script]
-	}]
-    }
-
-    return [lindex $pair 1]
 }
 
 ad_proc -public util_memoize_seed {script value {max_age ""}} {

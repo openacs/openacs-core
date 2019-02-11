@@ -53,10 +53,19 @@ ad_proc -public util_memoize {script {max_age ""}} {
 
     @return The possibly-cached value returned by <i>script</i>.
 } {
-    if {$max_age ne ""} {
-        set max_age "-expires $max_age"
+    #
+    # The ::util_memoize_flush proc is defined in the *-init script,
+    # after the util_memoize cache was created. Therefore is save to
+    # use the util_memoize when this proc is available.
+    #
+    if {[info commands ::util_memoize_flush] ne ""} {
+        if {$max_age ne ""} {
+            set max_age "-expires $max_age"
+        }
+        ns_cache_eval {*}$max_age -- util_memoize $script {*}$script
+    } else {
+        uplevel $script
     }
-    ns_cache_eval {*}$max_age -- util_memoize $script {*}$script
 }
 
 # In case, the definition of the function has cached something,
