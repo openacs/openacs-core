@@ -1127,7 +1127,7 @@ ad_proc -public ad_form {
 
         if {[template::element::exists $form_name __csrf_token]} {
             #
-            # CSRF protection is activated, therfore validate the
+            # CSRF protection is activated, therefore validate the
             # hidden form field content.
             #
             security::csrf::validate
@@ -1211,7 +1211,7 @@ ad_proc -public ad_form {
                 #    is the same for new and edit)
 
                 # We don't need to interrogate the af_parts structure
-                # because we know we're in the last call to to ad_form
+                # because we know we're in the last call to ad_form
                 # at this point and that this call contained the
                 # "action blocks".
 
