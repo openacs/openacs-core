@@ -2678,6 +2678,13 @@ namespace eval ::security::csrf {
         The token is automatically cleared together with other global
         variables at the end of the processing of every request.
 
+        The optional argument user_id is currently ignored, but it is
+        there, since there are algorithms published to calculate the
+        CSRF token based on an user_id. So far, i found no evidence
+        that these should be used, but the argument is there as a
+        reminder, such the interface does not have to be used, when we
+        switch to such an algorithm.
+
         @return CSRF token
 
         @author Gustaf Neumann
@@ -2760,7 +2767,7 @@ namespace eval ::security::csrf {
     #
     # Generate CSRF token
     #
-    ad_proc -public ::security::csrf::token { {-tokenname __csrf_token} } {
+    ad_proc -private ::security::csrf::token { {-tokenname __csrf_token} } {
 
         Generate a CSRF token and return it
 
