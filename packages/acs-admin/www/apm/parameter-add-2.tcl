@@ -18,19 +18,19 @@ ad_page_contract {
     {max_n_values:integer 1}
 } -validate {
     datatype_type_ck {
-	if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
-	    ad_complain
-	}
+        if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
+            ad_complain
+        }
     }
     param_name_unique_ck {
-	if {[db_string param_name_unique_ck {
-	    select decode(count(*), 0, 0, 1) 
-	    from apm_parameters
-	    where parameter_name = :parameter_name
+        if {[db_string param_name_unique_ck {
+            select decode(count(*), 0, 0, 1)
+            from apm_parameters
+            where parameter_name = :parameter_name
             and package_key= :package_key
-	}]} {
-	    ad_complain "The parameter name $parameter_name already exists for this package"	    
-	}
+        }]} {
+            ad_complain "The parameter name $parameter_name already exists for this package"
+        }
     }
 } -errors {
     datatype_type_ck {The datatype must be either a number or a string or text.}
@@ -38,15 +38,15 @@ ad_page_contract {
 
 db_transaction {
     apm_parameter_register -parameter_id $parameter_id -scope $scope $parameter_name $description $package_key \
-	$default_value $datatype $section_name $min_n_values $max_n_values
+        $default_value $datatype $section_name $min_n_values $max_n_values
     apm_package_install_spec $version_id
 } on_error {
     if {![db_string apm_parameter_register_doubleclick_p {
-	select 1 from apm_parameters where parameter_id = :parameter_id
+        select 1 from apm_parameters where parameter_id = :parameter_id
     } -default 0]} {
-	ad_return_error "Database Error" "The database is complaining about the parameter you entered:<p>
-<blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
-	ad_script_abort
+        ad_return_error "Database Error" "The database is complaining about the parameter you entered:<p>
+        <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
+        ad_script_abort
     }
 }
 

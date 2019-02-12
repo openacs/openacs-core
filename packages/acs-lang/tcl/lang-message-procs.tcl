@@ -879,7 +879,7 @@ ad_proc -private lang::message::cache {} {
 
         set i 0
         db_foreach select_locale_keys {
-            select locale, package_key, message_key, message 
+            select locale, package_key, message_key, message
             from   lang_messages
             where deleted_p = 'f'
         } {

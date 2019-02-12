@@ -1,6 +1,6 @@
 ad_page_contract {
     Adds a package to the package manager.
-    
+
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date 17 April 2000
     @cvs-id $Id$
@@ -24,64 +24,64 @@ ad_page_contract {
     version_id:naturalnum
     { owner_name:multiple }
     { owner_uri:multiple}
-    { vendor ""} 
+    { vendor ""}
     { vendor_uri ""}
     { install_p:boolean 0 }
     {implements_subsite_p:boolean "f"}
     {inherit_templates_p:boolean "f"}
 } -validate {
     package_key_format -requires {package_key} {
-	if { [regexp {[^a-z0-9-]} $package_key] } {
-	    ad_complain
-	}
+        if { [regexp {[^a-z0-9-]} $package_key] } {
+            ad_complain
+        }
     }
     package_key_unique -requires {package_key} {
-	if {[apm_package_registered_p $package_key] } {
-	    ad_complain "The package key, <tt>$package_key</tt>, you have requested 
-is already registered to another package."
-	}
+        if {[apm_package_registered_p $package_key] } {
+            ad_complain "The package key, <tt>$package_key</tt>, you have requested
+            is already registered to another package."
+        }
     }
 
     pretty_plural_unique -requires {pretty_plural} {
-	if {[db_string apm_pretty_plural_unique_ck {
-	    select decode(count(*), 0, 0, 1) from apm_package_types 
-	    where pretty_plural = :pretty_plural
-	} -default 0]} {
-	    ad_complain "A package with the pretty plural of $pretty_plural already exists."
-	}
+        if {[db_string apm_pretty_plural_unique_ck {
+            select decode(count(*), 0, 0, 1) from apm_package_types
+            where pretty_plural = :pretty_plural
+        } -default 0]} {
+            ad_complain "A package with the pretty plural of $pretty_plural already exists."
+        }
     }
 
     package_name_unique -requires {pretty_name} {
-	if { [db_string apm_name_unique_ck {
-	    select decode(count(*), 0, 0, 1) from apm_package_types 
-	    where pretty_name = :pretty_name
-	} -default 0] } {
-	    ad_complain "A package with the name <strong>$pretty_name</strong> already exists."
-	}
+        if { [db_string apm_name_unique_ck {
+            select decode(count(*), 0, 0, 1) from apm_package_types
+            where pretty_name = :pretty_name
+        } -default 0] } {
+            ad_complain "A package with the name <strong>$pretty_name</strong> already exists."
+        }
     }
 
     package_uri_unique -requires {package_uri} {
-	if { [db_string apm_uri_unique_ck {
-	    select decode(count(*), 0, 0, 1) from apm_package_types 
-	    where package_uri = :package_uri
-	} -default 0] } {
-	    ad_complain "A package with the URL $package_uri already exists."
-	}
+        if { [db_string apm_uri_unique_ck {
+            select decode(count(*), 0, 0, 1) from apm_package_types
+            where package_uri = :package_uri
+        } -default 0] } {
+            ad_complain "A package with the URL $package_uri already exists."
+        }
     }
 
     version_uri_unique -requires {version_uri} {
-	if { [db_string apm_version_uri_unique_ck {
-	    select decode(count(*), 0, 0, 1) from apm_package_versions 
-	    where version_uri = :version_uri
-	} -default 0] } {
-	    ad_complain "A version with the URL $version_uri already exists."
-	}
+        if { [db_string apm_version_uri_unique_ck {
+            select decode(count(*), 0, 0, 1) from apm_package_versions
+            where version_uri = :version_uri
+        } -default 0] } {
+            ad_complain "A version with the URL $version_uri already exists."
+        }
     }
 
-    version_name_ck -requires {version_uri} {	
-	if {![regexp {^[0-9]+((\.[0-9]+)+((d|a|b|)[0-9]?)?)$} $version_name match]} {
-	    ad_complain
-	} 
+    version_name_ck -requires {version_uri} {
+        if {![regexp {^[0-9]+((\.[0-9]+)+((d|a|b|)[0-9]?)?)$} $version_name match]} {
+            ad_complain
+        }
     }
 
 } -errors {
@@ -105,42 +105,42 @@ set attributes(maturity) 0
 db_transaction {
     # Register the package.
     apm_package_register $package_key $pretty_name $pretty_plural $package_uri \
-	    $package_type $initial_install_p $singleton_p $implements_subsite_p \
-            $inherit_templates_p
-    # Insert the version
+        $package_type $initial_install_p $singleton_p $implements_subsite_p \
+        $inherit_templates_p
+        # Insert the version
     set version_id [apm_package_install_version \
-                        -callback apm_dummy_callback \
-                        -version_id $version_id \
-                        -array attributes \
-                        $package_key $version_name $version_uri $summary $description \
-                        $description_format $vendor $vendor_uri $auto_mount]
+        -callback apm_dummy_callback \
+        -version_id $version_id \
+        -array attributes \
+        $package_key $version_name $version_uri $summary $description \
+        $description_format $vendor $vendor_uri $auto_mount]
     apm_version_enable -callback apm_dummy_callback $version_id
     apm_build_one_package_relationships $package_key
     apm_build_subsite_packages_list
     apm_package_install_owners -callback apm_dummy_callback \
-	    [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id
+        [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id
 
     if { $install_p } {
-	if {[catch {
-	    apm_package_install_spec $version_id
-	} errmsg]} {
-	    ad_return_error "Filesystem Error" \
+        if {[catch {
+            apm_package_install_spec $version_id
+        } errmsg]} {
+            ad_return_error "Filesystem Error" \
                 "I was unable to create your package for the following reason:
-                <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
+            <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
             ad_script_abort
-	}
+        }
     }
 } on_error {
     if {[db_string apm_package_add_doubleclick {
-	select decode(count(*), 0, 0, 1) from apm_package_versions
-	where version_id = :version_id
+        select decode(count(*), 0, 0, 1) from apm_package_versions
+        where version_id = :version_id
     } -default 0]} {
-	ad_returnredirect "version-view?version_id=$version_id"
-	ad_script_abort
+        ad_returnredirect "version-view?version_id=$version_id"
+        ad_script_abort
     }
     ad_return_error "Database Error" \
         "I was unable to create your package for the following reason:
-        <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
+    <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
     ad_script_abort
 }
 
