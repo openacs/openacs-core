@@ -356,14 +356,14 @@ ad_proc -public db_quote { string } {
     return $result
 }
 
-ad_proc -public db_nullify_empty_string { string } {
+ad_proc -public -deprecated db_nullify_empty_string { string } {
     A convenience function that returns [db_null] if $string is the empty string.
+
+    Deprecated: essentially just returns the passed string.
+
+    @see: db_null
 } {
-    if { $string eq "" } {
-        return [db_null]
-    } else {
-        return $string
-    }
+    return $string
 }
 
 ad_proc -public db_boolean { bool } {
