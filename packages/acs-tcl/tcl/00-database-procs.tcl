@@ -336,11 +336,15 @@ ad_proc -public db_known_database_types {} {
 # can't hurt anything to have them defined in when OpenACS is using
 # Postgres too.  --atp@piskorski.com, 2003/04/08 05:34 EDT
 
-ad_proc db_null {} {
-    @return an empty string, which Oracle thinks is null.  This routine was
-    invented to provide an RDBMS-specific null value but doesn't actually
-    work.  I (DRB) left it in to speed porting - we should really clean up
-    the code an pull out the calls instead, though.
+ad_proc -deprecated db_null {} {
+
+    @return an empty string, which Oracle thinks is null.
+
+    Deprecated: This routine was invented to provide an RDBMS-specific null
+    value but doesn't actually work.  I (DRB) left it in to speed porting - we
+    should really clean up the code an pull out the calls instead, though.
+
+    @see ""
 } {
     return ""
 }
