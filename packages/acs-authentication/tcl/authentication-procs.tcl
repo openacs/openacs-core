@@ -1096,18 +1096,6 @@ ad_proc -private auth::create_local_account_helper {
         set user_id [db_nextval acs_object_id_seq]
     }
 
-    if { $password_question eq "" } {
-        set password_question [db_null]
-    }
-
-    if { $password_answer eq "" } {
-        set password_answer [db_null]
-    }
-
-    if { $url eq "" } {
-        set url [db_null]
-    }
-
     set creation_user ""
     set peeraddr ""
 

@@ -12,7 +12,7 @@ ad_page_contract {
     section_name
     description:notnull,nohtml
     datatype:notnull
-    {default_value [db_null]}
+    {default_value ""}
     {min_n_values:integer 1}
     {max_n_values:integer 1}
 } -validate {

@@ -24,8 +24,8 @@ ad_page_contract {
     version_id:naturalnum
     { owner_name:multiple }
     { owner_uri:multiple}
-    { vendor [db_null] } 
-    { vendor_uri [db_null] }
+    { vendor ""} 
+    { vendor_uri ""}
     { install_p:boolean 0 }
     {implements_subsite_p:boolean "f"}
     {inherit_templates_p:boolean "f"}

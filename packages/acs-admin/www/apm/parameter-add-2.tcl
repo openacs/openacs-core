@@ -13,7 +13,7 @@ ad_page_contract {
     description:notnull,nohtml
     datatype:notnull
     scope:notnull
-    {default_value [db_null]}
+    {default_value ""}
     {min_n_values:integer 1}
     {max_n_values:integer 1}
 } -validate {

@@ -1086,13 +1086,6 @@ ad_proc -private apm_package_install_version {
 } {
     upvar $array local_array
 
-    if { $version_id eq "" } {
-        set version_id [db_null]
-    }
-    if { $release_date eq "" } {
-        set release_date [db_null]
-    }
-
     set version_id [db_exec_plsql version_insert {}]
 
     apm::package_version::attributes::store \
@@ -1553,14 +1546,6 @@ ad_proc -public apm_package_register {
     Register the package in the system.
 } {
 
-    if { $spec_file_path eq "" } {
-        set spec_file_path [db_null]
-    }
-
-    if { $spec_file_mtime eq "" } {
-        set spec_file_mtime [db_null]
-    }
-
     if { $package_type eq "apm_application" } {
         db_exec_plsql application_register {}
     } elseif { $package_type eq "apm_service" } {
@@ -1579,10 +1564,6 @@ ad_proc -public apm_version_update {
     Update a version in the system to new information.
 } {
     upvar $array local_array
-
-    if { $release_date eq "" } {
-        set release_date [db_null]
-    }
 
     set version_id [db_exec_plsql apm_version_update {}]
 

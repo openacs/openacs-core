@@ -291,9 +291,7 @@ ad_proc -public install::xml::action::create-package { node } {
     set context_id [apm_attribute_value -default "" $node context-id]
     set security_inherit_p [apm_attribute_value -default "t" $node security-inherit-p]
 
-    if {$context_id eq ""} {
-        set context_id [db_null]
-    } else {
+    if {$context_id ne ""} {
         set context_id [install::xml::util::get_id $context_id]
     }
 

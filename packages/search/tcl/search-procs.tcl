@@ -420,7 +420,7 @@ ad_proc -public search::dotlrn::get_community_id {
     if {[apm_package_installed_p dotlrn]} {
         set site_node [site_node::get_node_id_from_object_id -object_id $package_id]
         set dotlrn_package_id [site_node::closest_ancestor_package -node_id $site_node -package_key dotlrn -include_self]
-        set community_id [db_string get_community_id {select community_id from dotlrn_communities_all where package_id=:dotlrn_package_id} -default [db_null]]
+        set community_id [db_string get_community_id {select community_id from dotlrn_communities_all where package_id=:dotlrn_package_id} -default ""]
         return $community_id
     }
     return ""

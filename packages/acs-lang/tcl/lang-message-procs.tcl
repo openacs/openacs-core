@@ -287,7 +287,7 @@ ad_proc -public lang::message::delete {
         [list deleted_p t \
               upgrade_status no_upgrade \
               conflict_p f \
-              sync_time [db_null] \
+              sync_time "" \
         ]
 }
 

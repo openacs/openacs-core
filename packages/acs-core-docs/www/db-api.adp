@@ -216,19 +216,7 @@ db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
 # null, because Oracle has coerced the empty string (even for the
 # numeric column "bar") into null in both cases
 
-      </pre><p>Since databases other than Oracle do not coerce empty strings
-into <code class="computeroutput">null</code>, this code has
-different semantics depending on the underlying database (i.e., the
-row that gets inserted may not have null as its column values),
-which defeats the purpose of SQL abstraction.</p><p>Therefore, the Database Access API provides a
-database-independent way to represent <code class="computeroutput">null</code> (instead of the Oracle-specific idiom
-of the empty string): <code class="computeroutput">db_null</code>.</p><p>Use it instead of the empty string whenever you want to set a
-column value explicitly to <code class="computeroutput">null</code>, e.g.:</p><pre class="programlisting">set bar [db_null]
-set baz [db_null]
-
-db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
-#
-# sets the values for both the "bar" and "baz" columns to null</pre>
+      </pre>
 </div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -331,12 +319,6 @@ multirow foreach assets {
 }
           </pre><p>Technically it&#39;s equivalent to using a code block on the end
 of your db_multirow.</p>
-</dd><dt><span class="term"><code class="computeroutput">
-<a name="devguide.dbapi_db_null" id="devguide.dbapi_db_null"></a>db_null</code></span></dt><dd>
-<pre class="programlisting"><code class="computeroutput">db_null</code></pre><p>Returns a value which can be used in a bind variable to
-represent the SQL value <code class="computeroutput">null</code>.
-See <a class="link" href="db-api" title="Nulls and Bind Variables">Nulls and Bind Variables</a>
-above.</p>
 </dd><dt><span class="term"><code class="computeroutput">
 <a name="devguide.dbapi_db_foreach" id="devguide.dbapi_db_foreach"></a>db_foreach</code></span></dt><dd>
 <pre class="programlisting">

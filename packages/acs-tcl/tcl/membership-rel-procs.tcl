@@ -53,7 +53,7 @@ namespace eval membership_rel {
             if { [ad_conn isconnected] } {
                 set user_id [ad_conn user_id]
             } else {
-                set user_id [db_null]
+                set user_id ""
             }
             db_dml update_modifying_user {}
         }

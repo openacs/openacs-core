@@ -1060,10 +1060,6 @@ ad_proc -public apm_parameter_update {
 } {
     @return The parameter id that has been updated.
 } {
-    if {$section_name eq ""} {
-        set section_name [db_null]
-    }
-
     db_dml parameter_update {
         update apm_parameters
         set parameter_name = :parameter_name,
@@ -1106,14 +1102,6 @@ ad_proc -public apm_parameter_register {
     @return The parameter id of the new parameter.
 
 } {
-    if {$parameter_id eq ""} {
-        set parameter_id [db_null]
-    }
-
-    if {$section_name eq ""} {
-        set section_name [db_null]
-    }
-
     ns_log debug "apm_parameter_register: Registering $parameter_name, $section_name, $default_value"
 
     set parameter_id [db_exec_plsql parameter_register {}]
@@ -1168,11 +1156,6 @@ ad_proc -public apm_dependency_add {
     Add a dependency to a version.
     @return The id of the new dependency.
 } {
-
-    if {$dependency_id eq ""} {
-        set dependency_id [db_null]
-    }
-
     return [db_exec_plsql dependency_add {}]
 }
 
@@ -1195,11 +1178,6 @@ ad_proc -public apm_interface_add {
     Add a interface to a version.
     @return The id of the new interface.
 } {
-
-    if {$interface_id eq ""} {
-        set interface_id [db_null]
-    }
-
     return [db_exec_plsql interface_add {}]
 }
 
@@ -1834,10 +1812,6 @@ ad_proc -public apm_package_instance_new {
         } else {
             set instance_name  "$p_name"
         }
-    }
-
-    if { $package_id eq "" } {
-        set package_id [db_null]
     }
 
     set package_id [db_exec_plsql invoke_new {}]
