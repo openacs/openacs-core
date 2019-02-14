@@ -201,7 +201,7 @@ ad_proc -public lc_numeric {
 ad_proc -public clock_to_ansi {
     seconds
 } {
-    Convert a time in the Tcl internal clock seconds format to ANSI format, usable by lc_time_fmt.
+    Convert a time in the Tcl internal clock seeconds format to ANSI format, usable by lc_time_fmt.
 
     @author Lars Pind (lars@pinds.com)
     @return ANSI (YYYY-MM-DD HH24:MI:SS) formatted date.
@@ -530,7 +530,7 @@ ad_proc -public lc_time_tz_convert {
 
 
 ad_proc -public lc_list_all_timezones { } {
-    @return list of pairs containing all timezone names and offsets.
+    @return list of pairs containing all  timezone names and offsets.
     Data drawn from acs-reference package timezones table
 } {
     return [db_list_of_lists all_timezones {}]

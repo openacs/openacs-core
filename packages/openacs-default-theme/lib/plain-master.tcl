@@ -4,7 +4,7 @@ ad_page_contract {
   Properties allowed
   doc(title) HTML title
   head code to be entered into head of document
-  body
+  body 
   focus HTML id of form element to focus
   skip_link href of link to skip to. Should be of format #skip_link
   main_content_p if true wrap in the main content divs (if false, provide your own
@@ -53,7 +53,7 @@ if { [template::multirow exists navigation] } {
     }
 }
 
-#
+# 
 # User information and top level navigation links
 #
 set user_id [ad_conn user_id]
@@ -96,7 +96,7 @@ if { $untrusted_user_id == 0 } {
 #
 util_get_user_messages -multirow user_messages
 
-#
+# 
 # Set acs-lang urls
 #
 set acs_lang_url [apm_package_url_from_key "acs-lang"]
@@ -153,7 +153,7 @@ set separator [parameter::get -package_id $subsite_id -parameter ContextBarSepar
 
 #
 # Curriculum specific bar
-#   TODO: remove this and add a more systematic / package independent way
+#   TODO: remove this and add a more systematic / package independent way 
 #   TODO  of getting this content here
 #
 set curriculum_bar_p [expr {

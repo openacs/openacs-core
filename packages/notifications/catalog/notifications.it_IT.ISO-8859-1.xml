@@ -30,8 +30,6 @@
   <msg key="lt_You_have_requested_no">Annulla Iscrizione</msg>
   <msg key="lt_You_may_a_hrefsub_url">Richiedi notifiche</msg>
   <msg key="Manage_Notifications">Regola le notifiche</msg>
-  <msg key="No_Notifications">Nessuna notifica</msg>
-  <msg key="No_Notifications_text">Nessuno ha sottoscritto le notifiche per questo oggetto</msg>
   <msg key="Notification">Notifica</msg>
   <msg key="Notification_Replies">Risposte a Notifica</msg>
   <msg key="Notification_Reply">Risposta a Notifica</msg>

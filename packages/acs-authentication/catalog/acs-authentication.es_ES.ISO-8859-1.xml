@@ -4,10 +4,8 @@
   <msg key="Add_to_Community">Añadir a comunidad</msg>
   <msg key="Add_to_system_name">Añadir a %system_name%</msg>
   <msg key="Does_not_have_an_account_on_system_name">No tiene cuenta en %system_name%</msg>
-  <msg key="Editing_form_text">Si estaba editando un formulario, pulse el botón de volver tras registrarse y vuelva a enviarlo, por favor.</msg>
   <msg key="Has_account_on_system_name">Tiene cuenta en %system_name%</msg>
   <msg key="Invalid_username_or_password">Usuario o contraseña erroneo</msg>
-  <msg key="Login_expired_url_too_long">Su registro ha expirado y la URL computada para continuar automáticamente es demasiado larga. </msg>
   <msg key="lt_Not_getting_the_results_you_expected">Si no ha obtenido los resultados esperados, intente buscar:</msg>
   <msg key="To_many_failed_login_attempts">Acceso denegado: demasiados intentos erróneos. Inténtelo de nuevo mas tarde.</msg>
 </message_catalog>

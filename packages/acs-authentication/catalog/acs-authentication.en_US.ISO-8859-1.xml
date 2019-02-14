@@ -4,10 +4,8 @@
   <msg key="Add_to_Community">Add to Community</msg>
   <msg key="Add_to_system_name">Add to %system_name%</msg>
   <msg key="Does_not_have_an_account_on_system_name">Does not have an account on %system_name%</msg>
-  <msg key="Editing_form_text">If you were editing a form, please use the back button after logging in and resubmit the form.</msg>
   <msg key="Has_account_on_system_name">Has an account on %system_name%</msg>
   <msg key="Invalid_username_or_password">Invalid username or password</msg>
-  <msg key="Login_expired_url_too_long">Your login expired and the computed URL for automated continuation is too long. </msg>
   <msg key="lt_Not_getting_the_results_you_expected">Not getting the results you expected? Try searching:</msg>
   <msg key="To_many_failed_login_attempts">Access rejected because of too many invalid login attempts. Try again later!</msg>
 </message_catalog>
