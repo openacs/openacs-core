@@ -12,7 +12,7 @@ ad_page_contract {
 
   When using this template directly you MUST supply the following variables:
 
-  @property doc(title)        The document title, ie. <title /> tag.
+  @property doc(title)        The document title, i.e. <title /> tag.
   @property doc(title_lang)   The language of the document title, if different
                               from the document language.
 
