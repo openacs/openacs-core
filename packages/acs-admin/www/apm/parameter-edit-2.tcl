@@ -12,33 +12,32 @@ ad_page_contract {
     section_name
     description:notnull,nohtml
     datatype:notnull
-    {default_value [db_null]}
+    {default_value ""}
     {min_n_values:integer 1}
     {max_n_values:integer 1}
 } -validate {
     datatype_type_ck {
-	if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
-	    ad_complain
-	}
+        if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
+            ad_complain
+        }
     }
 } -errors {
     datatype_type_ck {The datatype must be either a number or a string or text.}
 }
 
-db_transaction {  
+db_transaction {
     ns_log Debug "APM: Updating Parameter: $parameter_id, $parameter_name $description, $package_key, $default_value, $datatype, $section_name, $min_n_values, $max_n_values"
 
 
     apm_parameter_update $parameter_id $package_key $parameter_name $description \
-	    $default_value $datatype $section_name $min_n_values $max_n_values
+        $default_value $datatype $section_name $min_n_values $max_n_values
     apm_package_install_spec $version_id
 } on_error {
-    ad_return_error "Database Error" "The parameter could not be updated.  
+    ad_return_error "Database Error" "The parameter could not be updated.
 The database returned the following error:<p>
  <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
     ad_script_abort
-} 
-
+}
 
 ad_returnredirect [export_vars -base "version-parameters" { version_id section_name }]
 ad_script_abort

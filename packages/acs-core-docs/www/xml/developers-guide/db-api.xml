@@ -366,27 +366,6 @@ db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
 # numeric column &quot;bar&quot;) into null in both cases
 
       </programlisting>
-
-      <para>
-	Since databases other than Oracle do not coerce empty strings into
-	<computeroutput>null</computeroutput>, this code has different semantics depending on the
-	underlying database (i.e., the row that gets inserted may not have null as
-	its column values), which defeats the purpose of SQL abstraction. 
-      </para>
-
-      <para>Therefore, the Database Access API provides a database-independent way to
-	represent <computeroutput>null</computeroutput> (instead of the Oracle-specific idiom of the
-	empty string): <computeroutput>db_null</computeroutput>.</para>
-
-      <para>Use it instead of the empty string whenever you want to set a column value
-	explicitly to <computeroutput>null</computeroutput>, e.g.:</para>
-
-      <programlisting>set bar [db_null]
-set baz [db_null]
-
-db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
-#
-# sets the values for both the &quot;bar&quot; and &quot;baz&quot; columns to null</programlisting>
     </sect3>
     
   </sect2>
@@ -585,31 +564,6 @@ multirow foreach assets {
 
   	</listitem>
       </varlistentry>	
-
-      <varlistentry>
-	<term>
-	  
-	    <computeroutput>
-	      <anchor id="devguide.dbapi_db_null"/>db_null
-	    </computeroutput>
-	  
-
-	</term>
- 
-	<listitem>
-	  <programlisting>
-<computeroutput>db_null</computeroutput>
-	  </programlisting>
-
-	  <para>
-	    Returns a value which can be used in a bind variable
-	    to represent the SQL value
-	    <computeroutput>null</computeroutput>.
-	    See <link linkend="dbapi_nulls_and_bind_vars">Nulls and
-	    Bind Variables</link> above.
-	  </para>
-	</listitem>
-      </varlistentry>
 
       <varlistentry>
 	<term>
@@ -1012,57 +966,6 @@ db_with_handle db {
 }
 
 	  </programlisting>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term>
-	  
-	    <computeroutput>
-	      <anchor
-		id="devguide.dbapi_db_nullify_empty_string"/>db_nullify_empty_string
-	    </computeroutput>
-	  
-	</term>
-	<listitem>
-	  <programlisting>
-db_nullify_empty_string <emphasis>string</emphasis>
-	  </programlisting>
-
-	  <para>For true SQL purists, we provide the convenience function
-	    <computeroutput>db_nullify_empty_string</computeroutput>, which returns
-	    [db_null] if its <emphasis><computeroutput>string</computeroutput></emphasis> argument is the empty string
-	    and can be used to encapsulate another Oracle quirk: </para>
-
-	  <programlisting>
-
-set baz &quot;&quot;
-
-# Clean out the foo table
-#
-db_dml unused {delete from foo}
-db_dml unused {insert into foo(baz) values(:baz)}
-
-set n_rows [db_string unused &quot;select count(*) from foo where baz is null&quot;]
-#
-# $n_rows is 1; in effect, the &quot;baz is null&quot; criterion is matching
-# the empty string we just inserted (because of Oracle&#39;s coercion
-# quirk)
-
-	  </programlisting>
-
-	  <para>
-	    To balance out this asymmetry, you can explicitly set <computeroutput>baz</computeroutput> to
-	    <computeroutput>null</computeroutput> by writing: 
-	  </para>
-	  
-
-	  <programlisting>
-
-db_dml foo_insert {insert into foo(baz) values(:1)} {[db_nullify_empty_string $baz]}
-
-	  </programlisting>
-
 	</listitem>
       </varlistentry>
     </variablelist>

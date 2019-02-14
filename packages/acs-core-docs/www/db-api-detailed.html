@@ -482,33 +482,6 @@ db_dml foo_create {insert into foo(bar, baz) values(:bar, :baz)}
 
 </pre>
 
-<p>
-Since databases other than Oracle do not coerce empty strings into
-<code class="computeroutput">null</code>, this code has different semantics depending on the
-underlying database (i.e., the row that gets inserted may not have null as
-its column values), which defeats the purpose of SQL abstraction. 
-</p>
-
-<p>Therefore, the Database Access API provides a database-independent way to
-represent <code class="computeroutput">null</code> (instead of the Oracle-specific idiom of the
-empty string): <span class="strong"><strong><code class="computeroutput">db_null</code></strong></span>.</p>
-
-<p>Use it instead of the empty string whenever you want to set a column value
-explicitly to <code class="computeroutput">null</code>, e.g.:</p>
-
- 
-
-<pre class="programlisting">
-
-set bar [db_null]
-set baz [db_null]
-
-db_dml foo_create {insert into foo(bar, baz) values(:bar, :baz)}
-#
-# sets the values for both the "bar" and "baz" columns to null
-
-</pre>
-
 
 
 

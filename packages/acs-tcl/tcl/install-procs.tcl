@@ -16,19 +16,19 @@ namespace eval install::xml::object_id {}
 
 ad_proc -public install::xml::action::text { node } {
     A documentation element which ignores its contents and does no processing.
-} { 
+} {
     return {}
 }
 
 ad_proc -private ::install::xml::action::source { node } {
-    Source an install.xml file, sql file or Tcl script during execution of 
+    Source an install.xml file, sql file or Tcl script during execution of
     the current install.xml.
 
-    If no type attribute is specified then this tag will attempt to guess 
-    type of the sourced script from the file extension, otherwise it defaults 
+    If no type attribute is specified then this tag will attempt to guess
+    type of the sourced script from the file extension, otherwise it defaults
     to install.xml.
 
-    The type of the sourced script may be explicitly declared as 'tcl', 
+    The type of the sourced script may be explicitly declared as 'tcl',
     'sql' or 'install.xml' using the type attribute.
 
     @author Lee Denison lee@xarg.co.uk
@@ -82,7 +82,7 @@ ad_proc -private ::install::xml::action::source { node } {
         }
     }
 
-    return $out 
+    return $out
 }
 
 ad_proc -public install::xml::action::install { node } {
@@ -101,7 +101,7 @@ ad_proc -public install::xml::action::mount { node } {
     Mounts a package on a specified node.
 
     <p>&lt;mount package=&quot;<em>package-key</em> instance-name=&quot;<em>name</em>&quot; mount-point=&quot;<em>url</em>&quot; /&gt;</p>
-} { 
+} {
 
     set package_key [apm_required_attribute_value $node package]
     set instance_name [apm_required_attribute_value $node instance-name]
@@ -138,11 +138,11 @@ ad_proc -public install::xml::action::mount { node } {
         set parent_id [site_node::get_node_id -url "/$parent_url"]
 
         # technically this isn't safe - between us checking that the node exists
-        # and using it, the node may have been deleted. 
+        # and using it, the node may have been deleted.
         # We could "select for update" but since it's in a memory cache anyway,
         # it won't help us very much!
         # Instead we just press on and if there's an error handle it at the top level.
-       
+
         # create the node and reget iff it doesn't exist
         if { [catch { array set site_node [site_node::get_from_url -exact -url "/$mount_point"] } error] } {
             set node_id [site_node::new -name $leaf_url -parent_id $parent_id]
@@ -189,7 +189,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
     Mounts an existing package on a specified node.
 
     <p>&lt;mount-existing package-id=&quot;<em>package-id</em> mount-point=&quot;<em>url</em>&quot; /&gt;</p>
-} { 
+} {
     set package_id [apm_attribute_value -default "" $node package-id]
     set package_key [apm_attribute_value -default "" $node package-key]
     set mount_point [apm_attribute_value -default "" $node mount-point]
@@ -216,17 +216,17 @@ ad_proc -public install::xml::action::mount-existing { node } {
         set parent_id [site_node::get_node_id -url "/$parent_url"]
 
         # technically this isn't safe - between us checking that the node exists
-        # and using it, the node may have been deleted. 
+        # and using it, the node may have been deleted.
         # We could "select for update" but since it's in a memory cache anyway,
         # it won't help us very much!
         # Instead we just press on and if there's an error handle it at the top level.
-        
+
         # create the node and reget iff it doesn't exist
         if { [catch { array set site_node [site_node::get_from_url -exact -url "/$mount_point"] } error] } {
             set node_id [site_node::new -name $leaf_url -parent_id $parent_id]
             array set site_node [site_node::get_from_url -exact -url "/$mount_point"]
         }
-    
+
         # There now definitely a node with that path
         if {$site_node(object_id) eq ""} {
             # no package mounted - good!
@@ -245,7 +245,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
             set package_id [install::xml::util::get_id $package_id]
         } elseif {$package_key ne ""} {
             set package_id [apm_package_id_from_key $package_key]
-        } 
+        }
 
         set package_id [site_node::mount \
             -node_id $node_id \
@@ -261,7 +261,7 @@ ad_proc -public install::xml::action::rename-instance { node } {
 
     <p>&lt;rename-instance package-id=&quot;<em>package-id</em>&quot; url=&quot;<em>url</em>&quot; instance-name=&quot;<em>new instance name</em>&quot; /&gt;</p>
 
-} { 
+} {
     set package_id [apm_attribute_value -default "" $node package-id]
     set url [apm_attribute_value -default "" $node url]
     set instance_name [apm_required_attribute_value $node instance-name]
@@ -291,9 +291,7 @@ ad_proc -public install::xml::action::create-package { node } {
     set context_id [apm_attribute_value -default "" $node context-id]
     set security_inherit_p [apm_attribute_value -default "t" $node security-inherit-p]
 
-    if {$context_id eq ""} {
-        set context_id [db_null]
-    } else {
+    if {$context_id ne ""} {
         set context_id [install::xml::util::get_id $context_id]
     }
 
@@ -317,7 +315,7 @@ ad_proc -public install::xml::action::register-parameter { node } {
     Registers a package parameter.
 
     <p>&lt;register-parameter name=&quot;<em>parameter</em>&quot; description=&quot;<em>description</em>&quot; package-key=&quot;<em>package-key</em>&quot; scope=&quot;<em>instance or global</em>&quot; default-value=&quot;<em>default-value</em>&quot; datatype=&quot;<em>datatype</em>&quot; [ [ [ section=&quot;<em>section</em>&quot; ] min-n-values=&quot;<em>min-n-values</em>&quot; ] max-n-values=&quot;<em>max-n-values</em>&quot; ] [ callback=&quot;<em>callback</em>&quot; ] [ parameter-id=&quot;<em>parameter-id</em>&quot; ]</p>
-} { 
+} {
     set name [apm_required_attribute_value $node name]
     set desc [apm_required_attribute_value $node description]
     set package_key [apm_required_attribute_value $node package-key]
@@ -362,7 +360,7 @@ ad_proc -public install::xml::action::set-parameter { node } {
     Sets a package parameter.
 
     <p>&lt;set-parameter name=&quot;<em>parameter</em>&quot; [ package=&quot;<em>package-key</em> | url=&quot;<em>package-url</em>&quot; ] type=&quot;<em>[id|literal]</em>&quot; value=&quot;<em>value</em>&quot; /&gt;</p>
-} { 
+} {
     variable ::install::xml::ids
 
     set name [apm_required_attribute_value $node name]
@@ -372,19 +370,19 @@ ad_proc -public install::xml::action::set-parameter { node } {
     set package_ids [install::xml::object_id::package $node]
 
     foreach package_id $package_ids {
-	switch -- $type {
-	    literal {
-		parameter::set_value -package_id $package_id \
-		    -parameter $name \
-		    -value $value
-	    }
+        switch -- $type {
+            literal {
+                parameter::set_value -package_id $package_id \
+                    -parameter $name \
+                    -value $value
+            }
 
-	    id {
-		parameter::set_value -package_id $package_id \
-		    -parameter $name \
-		    -value $ids($value)
-	    }
-	}
+            id {
+                parameter::set_value -package_id $package_id \
+                    -parameter $name \
+                    -value $ids($value)
+            }
+        }
     }
     return
 }
@@ -409,7 +407,7 @@ ad_proc -public install::xml::action::set-permission { node } {
     Sets permissions on an object.
 
     <p>&lt;set-permissions grantee=&quot;<em>party</em>&quot; privilege=&quot;<em>package-key</em> /&gt;</p>
-} { 
+} {
     set privileges [apm_required_attribute_value $node privilege]
 
     set privilege_list [split $privileges ","]
@@ -419,7 +417,7 @@ ad_proc -public install::xml::action::set-permission { node } {
 
     foreach grantee $grantees {
         set party_id [apm_invoke_install_proc -type object_id -node $grantee]
-         
+
         set objects_node [xml_node_get_children_by_name [lindex $node 0] object]
         set objects [xml_node_get_children [lindex $objects_node 0]]
 
@@ -438,11 +436,11 @@ ad_proc -public install::xml::action::set-permission { node } {
 }
 
 ad_proc -public install::xml::action::unset-permission { node } {
-    Revokes a permissions on an object - has no effect if the permission is not granted directly 
+    Revokes a permissions on an object - has no effect if the permission is not granted directly
     (ie does not act as negative permissions).
 
     <p>&lt;unset-permissions grantee=&quot;<em>party</em>&quot; privilege=&quot;<em>package-key</em> /&gt;</p>
-} { 
+} {
     set privileges [apm_required_attribute_value $node privilege]
 
     set privilege_list [split $privileges ","]
@@ -452,7 +450,7 @@ ad_proc -public install::xml::action::unset-permission { node } {
 
     foreach grantee $grantees {
         set party_id [apm_invoke_install_proc -type object_id -node $grantee]
-         
+
         set objects_node [xml_node_get_children_by_name [lindex $node 0] object]
         set objects [xml_node_get_children [lindex $objects_node 0]]
 
@@ -491,7 +489,7 @@ ad_proc -public install::xml::action::create-user { node } {
     Create a new user.
 
     local-p should be set to true when this action is used in
-    the bootstrap install.xml - this ensures we call the 
+    the bootstrap install.xml - this ensures we call the
     auth::local api directly while the service contract has not
     been setup.
 } {
@@ -578,7 +576,7 @@ ad_proc -public install::xml::action::create-user { node } {
                  WHERE user_id = :user_id
             }
         }
-              
+
         if {$id ne ""} {
             set ::install::xml::ids($id) $result(user_id)
         }
@@ -708,7 +706,7 @@ ad_proc -public install::xml::action::ats-page { node } {
             -extension $extension \
             -package_id $package \
             -context_id $context]
-    } 
+    }
 
     if {$id ne ""} {
         set ::install::xml::ids($id) $result
@@ -774,7 +772,7 @@ ad_proc -public install::xml::action::location { node } {
                 set value [apm_attribute_value -default "" $child value]
                 set type [apm_attribute_value -default literal $child type]
                 set subtree_p [apm_attribute_value -default f $child subtree-p]
-                
+
                 set subtree_p [template::util::is_true $subtree_p]
 
                 if {$type eq "id"} {
@@ -791,7 +789,7 @@ ad_proc -public install::xml::action::location { node } {
                 set url [apm_required_attribute_value $child url]
                 set exports [apm_attribute_value -default "" $child exports]
                 set subtree_p [apm_attribute_value -default f $child subtree-p]
-                
+
                 set subtree_p [template::util::is_true $subtree_p]
 
                 location::parameter::create -location_id $location_id \
@@ -813,12 +811,12 @@ ad_proc -public install::xml::action::location { node } {
                     xml_node_set_attribute $child path-arg $child_arg
                 }
 
-                if {$package ne "" 
+                if {$package ne ""
                     && ![xml_node_has_attribute $child package-id]} {
                     xml_node_set_attribute $child package-id $package
                 }
 
-                if {$context ne "" 
+                if {$context ne ""
                     && ![xml_node_has_attribute $child context-id]} {
                     xml_node_set_attribute $child context-id $parent_id
                 }
@@ -848,7 +846,7 @@ ad_proc -public install::xml::action::wizard { node } {
     set title [apm_attribute_value -default "" $node title]
     set child_arg [apm_attribute_value -default "" $node child-arg]
     set process [apm_attribute_value -default "" $node process]
-    
+
     if {$context ne ""} {
         set context [install::xml::util::get_id $context]
     }
@@ -866,14 +864,14 @@ ad_proc -public install::xml::action::wizard { node } {
         -path_arg "" \
         -package_id $package \
         -context_id $context]
-    
+
     if {$process ne ""} {
         location::parameter::create -location_id $parent_id \
             -name "wizard::process" \
             -subtree_p t \
             -value $process
     }
-    
+
     set steps [xml_node_get_children [lindex $node 0]]
 
     foreach step $steps {
@@ -890,12 +888,12 @@ ad_proc -public install::xml::action::wizard { node } {
             xml_node_set_attribute $step path-arg $child_arg
         }
 
-        if {$package ne "" 
+        if {$package ne ""
             && ![xml_node_has_attribute $step package-id]} {
             xml_node_set_attribute $step package-id $package
         }
 
-        if {$context ne "" 
+        if {$context ne ""
             && ![xml_node_has_attribute $step context-id]} {
             xml_node_set_attribute $step context-id $parent_id
         }
@@ -993,7 +991,7 @@ ad_proc -private ::install::xml::action::instantiate-object { node } {
     Instantiate an object using package_instantiate_object.  This will work
     for both PostgreSQL and Oracle if the proper object package and new()
     function have been defined.
-    
+
     @author Don Baccus donb@pacifier.com
     @creation-date 2008-12-04
 
@@ -1030,7 +1028,7 @@ ad_proc -private ::install::xml::action::instantiate-object { node } {
 ad_proc -public install::xml::object_id::package { node } {
     Returns an object_id for a package specified in node.
 
-    The node name is ignored so any node which provides the correct 
+    The node name is ignored so any node which provides the correct
     attributes may be used.
 
     <p>&lt;package [ id=&quot;<em>id</em>&quot; | key=&quot;<em>package-key</em>&quot; | url=&quot;<em>package-url</em>&quot; ] /&gt;</p>
@@ -1067,14 +1065,14 @@ ad_proc -public install::xml::object_id::package { node } {
 ad_proc -public install::xml::object_id::group { node } {
     Returns an object_id for a group or relational segment.
 
-    The node name is ignored so any node which provides the correct 
+    The node name is ignored so any node which provides the correct
     attributes may be used.
 
     <p>&lt;group id=&quot;<em>group_id</em>&quot; [ type=&quot;<em>group type</em>&quot; relation=&quot;<em>relation-type</em>&quot; ] /&gt;</p>
 } {
     set group_type [apm_attribute_value -default "group" $node type]
     set relation_type [apm_attribute_value -default "membership_rel" $node relation]
-    
+
     if {$group_type eq "group"} {
         set id [apm_required_attribute_value $node group-id]
     } elseif {$group_type eq "rel_segment"} {
@@ -1127,7 +1125,7 @@ ad_proc -public install::xml::object_id::admin-group { node } {
 
 ad_proc -public install::xml::object_id::object { node } {
     Returns a literal object_id for an object.
-    
+
     use &lt;object id="-100"&gt; to return the literal id -100.
 } {
     set id [apm_required_attribute_value $node id]
@@ -1148,7 +1146,7 @@ ad_proc -public ::install::xml::action::set-id { node } {
     variable ::install::xml::ids
     set ids($name) $value
 }
-    
+
 ad_proc -public install::xml::util::get_id { id } {
     Returns an id from the global ids variable if it exists and attempts to
     find an acs_magic_object if not.
@@ -1166,7 +1164,7 @@ ad_proc -public install::xml::util::get_id { id } {
     } err]} {
         error "$id is not an integer, is not defined in this install.xml, and is not an acs_magic_object"
     }
-    
+
     return $result
 }
 
