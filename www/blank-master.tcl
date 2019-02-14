@@ -1,5 +1,5 @@
 ad_page_contract {
-  This is the top level master template.  It allows the basic parts of an HTML 
+  This is the top-level master template.  It allows the basic parts of an HTML 
   document to be set through convenient data structures without introducing 
   anything site specific.
 
@@ -16,7 +16,7 @@ ad_page_contract {
   @property doc(title_lang)   The language of the document title, if different
                               from the document language.
 
-  The document output can be customised by supplying the following variables:
+  The document output can be customized by supplying the following variables:
 
   @property doc(type)         The declared xml DOCTYPE.
   @property doc(charset)      The document character set.
@@ -26,7 +26,7 @@ ad_page_contract {
   ad_conn -set language       Must be used to override the document language
                               if necessary.
 
-  To add a CSS or Javascripts to the <head> section of the document you can 
+  To add CSS or JavaScript files to the <head> section of the document you can 
   call the corresponding template::head::add_* functions within your page.
 
   @see template::head::add_css
@@ -40,7 +40,7 @@ ad_page_contract {
   @see template::head::add_link
   @see template::head::add_script
 
-  Javascript event handlers, such as onload, an be added to the <body> tag by 
+  JavaScript event handlers, such as onload, an be added to the <body> tag by 
   calling template::add_body_handler within your page.
 
   @see template::add_body_handler
@@ -73,14 +73,26 @@ template::head::add_meta \
     -lang en \
     -content "OpenACS version [ad_acs_version]"
 
-# Add standard javascript
+# Add standard JavaScript
 #
 # Include core.js inclusion to the bottom of the body.
 
 template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/core.js"
 
 #
-# Add css for the current subsite, defaulting to the old list/form css which was
+# Add page plugin specific code
+#
+# The check is transitional code (until the release of OpenACS 5.11 or
+# 5.12) and is just upgrading the package from earlier versions, where
+# e.g. the blank master is installed before the subsite definitions
+# for the page_plugin callback.  Templates are required to be very
+# robust.
+if {[info commands ::callback::subsite::page_plugin::*] ne ""} {
+    callback subsite::page_plugin
+}
+
+#
+# Add CSS for the current subsite, defaulting to the old list/form CSS which was
 # hard-wired in previous versions of OpenACS.
 
 set cssList [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeCSS -default ""]
@@ -153,14 +165,7 @@ if {![string is list $jsSpecs]} {
 # page (that might require a list of the HTML IDs of all affected
 # textareas).
 #
-# We check whether render_widgets command exists, as during a release
-# upgrade this could be missing and would prevent any further action
-# on the system after installing new code
-if {[info proc ::template::util::richtext::render_widgets] ne ""} {
-    ::template::util::richtext::render_widgets
-} else {
-    ns_log warning "::template::util::richtext::render_widgets not defined. Richtext widgets won't work. Try restarting the server."
-}
+::template::util::richtext::render_widgets
 
 #
 # Get the basic content info like title and charset for the head of
@@ -190,7 +195,7 @@ template::head::add_meta \
     -content "text/html; charset=$doc(charset)" \
     -http_equiv "content-type"
 #
-# The following meta tags are unknwon for HTML5, therefore discouraged
+# The following meta tags are unknown for HTML5, therefore discouraged
 #
 # template::head::add_meta \
 #     -content "text/css" \
@@ -233,7 +238,9 @@ if {[info exists focus] && $focus ne ""} {
                 document.forms[form_name].elements[element_name].focus();
             };
         }
-        append focus_script "acs_Focus('${form_name}', '${element_name}');\n"
+        append focus_script "window.addEventListener('load', function() {
+                 acs_Focus('${form_name}', '${element_name}');
+            }, false);"
         template::add_body_script -script $focus_script
     } else {
         ns_log warning "blank-master: variable focus has invalid value '$focus'"
