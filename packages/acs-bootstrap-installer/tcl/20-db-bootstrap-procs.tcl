@@ -173,10 +173,12 @@ ad_proc db_bootstrap_set_db_type { errors } {
         }
         set ::acs::db_pools($default_dbn) $dbn_pools
     }
-
+    set ::acs::db_pools("") $::acs::db_pools($::acs::default_database)
+    
     set pools [db_available_pools {}]
     if { [llength $pools] <= 0 } {
         set ::acs::db_pools($default_dbn) $all_pools
+        set ::acs::db_pools("") $all_pools        
         set pools $all_pools
         ns_log Notice "$proc_name: Using ALL database pools for OpenACS."
     }
