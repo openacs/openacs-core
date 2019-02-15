@@ -1148,7 +1148,7 @@ ad_proc -public ad_sign {
     {-secret ""}
     {-token_id ""}
     {-max_age ""}
-    {-user_binding 0}
+    {-binding 0}
     value
 } {
     Returns a digital signature of the value. Negative token_ids are
@@ -1162,11 +1162,16 @@ ad_proc -public ad_sign {
     @param secret allows the caller to specify a known secret external
     to the random secret management mechanism.
 
-    @param token_id allows the caller to specify a token_id which is then ignored so don't use it.
+    @param token_id allows the caller to specify a token_id which
+           is then ignored so don't use it.
 
-    @param user_binding allows to bind a signature to a user.
+    @param binding allows the caller to bind a signature to a user/session.
+           A value of 0 (default) means no additional binding.
            When the value is "-1" only the user who created the signature can
-           obtain the value again. A value of 0 (default) means no user binding.
+           obtain the value again.
+           When the value is "-2" only the user with the same csrf token can
+           obtain the value again. 
+
            The permissible values might be extended in the future.
     
     @param value the value to be signed.
@@ -1191,18 +1196,22 @@ ad_proc -public ad_sign {
         set expire_time [expr {$max_age + [ns_time]}]
     }
 
-    switch $user_binding {
+    switch $binding {
         -1 {
-            set user_id [ad_conn user_id]
-            append token_id :$user_binding
+            set binding_value [ad_conn user_id]
+            append token_id :$binding
+        }
+        -2 {
+            set binding_value [::security::csrf::new]
+            append token_id :$binding
         }
         0 {
-            set user_id ""
+            set binding_value ""
         }
-        default {error "invalid user_binding"}
+        default {error "invalid binding"}
     }
 
-    set hash [ns_sha1 "$value$token_id$expire_time$secret_token$user_id"]
+    set hash [ns_sha1 "$value$token_id$expire_time$secret_token$binding_value"]
     set signature [list $token_id $expire_time $hash]
 
     return $signature
@@ -1256,7 +1265,7 @@ ad_proc -private __ad_verify_signature {
 
 } {
 
-    lassign [split $token_id :] raw_token_id user_binding
+    lassign [split $token_id :] raw_token_id binding
 
     if { $secret eq "" } {
         if { $raw_token_id eq "" } {
@@ -1275,16 +1284,18 @@ ad_proc -private __ad_verify_signature {
     ns_log Debug "__ad_verify_signature: Getting token_id $token_id, value $secret_token ; "
     ns_log Debug "__ad_verify_signature: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
 
-    if {$user_binding == -1} {
-        set user_id [ad_conn user_id]
+    if {$binding == -1} {
+        set binding_value [ad_conn user_id]
+    } elseif {$binding == -2} {
+        set binding_value [::security::csrf::new]
     } else {
-        set user_id ""
+        set binding_value ""
     }
 
     #
-    # Compute hash based on tokes, expire_time and user_id.
+    # Compute hash based on tokes, expire_time and user_id/csrf token
     #
-    set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$user_id"]
+    set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$binding_value"]
 
     # Need to verify both hash and expiration
     set hash_ok_p 0
@@ -1300,7 +1311,7 @@ ad_proc -private __ad_verify_signature {
         #
         set value [string map [list \r ""] $value]
         set org_computed_hash $computed_hash
-        set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$user_id"]
+        set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$binding_value"]
 
         if {$computed_hash eq $hash} {
             ns_log Debug "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"

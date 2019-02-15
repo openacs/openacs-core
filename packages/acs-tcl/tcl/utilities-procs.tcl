@@ -981,12 +981,26 @@ ad_proc -private export_vars_sign {
             max_age -
             secret {set $key [ad_urldecode_query $val]}
             user {
-                set user_binding -1
+                if {$user_binding == 0} {
+                    set user_binding -1
+                } else {
+                    ns_log warning "can't overrode sign(user) with sign(nonce)"
+                }
+            }
+            csrf {
+                if {$user_binding == 0} {
+                    set user_binding -2
+                } else {
+                    ns_log warning "can't overrode sign(user) with sign(nonce)"
+                }
+            }
+            default {
+                error "invalid value '$key' in sign() specification"
             }
         }
     }
 
-    return [ad_sign -max_age $max_age -secret $secret -user_binding $user_binding $value]
+    return [ad_sign -max_age $max_age -secret $secret -binding $user_binding $value]
 }
 
 
