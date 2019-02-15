@@ -1148,6 +1148,7 @@ ad_proc -public ad_sign {
     {-secret ""}
     {-token_id ""}
     {-max_age ""}
+    {-user_binding 0}
     value
 } {
     Returns a digital signature of the value. Negative token_ids are
@@ -1163,6 +1164,11 @@ ad_proc -public ad_sign {
 
     @param token_id allows the caller to specify a token_id which is then ignored so don't use it.
 
+    @param user_binding allows to bind a signature to a user.
+           When the value is "-1" only the user who created the signature can
+           obtain the value again. A value of 0 (default) means no user binding.
+           The permissible values might be extended in the future.
+    
     @param value the value to be signed.
 } {
     if {$token_id eq ""} {
@@ -1185,7 +1191,18 @@ ad_proc -public ad_sign {
         set expire_time [expr {$max_age + [ns_time]}]
     }
 
-    set hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
+    switch $user_binding {
+        -1 {
+            set user_id [ad_conn user_id]
+            append token_id :$user_binding
+        }
+        0 {
+            set user_id ""
+        }
+        default {error "invalid user_binding"}
+    }
+
+    set hash [ns_sha1 "$value$token_id$expire_time$secret_token$user_id"]
     set signature [list $token_id $expire_time $hash]
 
     return $signature
@@ -1239,15 +1256,17 @@ ad_proc -private __ad_verify_signature {
 
 } {
 
+    lassign [split $token_id :] raw_token_id user_binding
+
     if { $secret eq "" } {
-        if { $token_id eq "" } {
+        if { $raw_token_id eq "" } {
             ns_log Debug "__ad_verify_signature: Neither secret, nor token_id supplied"
             return 0
-        } elseif {![string is integer -strict $token_id]} {
-            ns_log Warning "__ad_verify_signature: token_id <$token_id> is not an integer"
+        } elseif {![string is integer -strict $raw_token_id]} {
+            ns_log Warning "__ad_verify_signature: token_id <$raw_token_id> is not an integer"
             return 0
         }
-        set secret_token [sec_get_token $token_id]
+        set secret_token [sec_get_token $raw_token_id]
 
     } else {
         set secret_token $secret
@@ -1256,8 +1275,16 @@ ad_proc -private __ad_verify_signature {
     ns_log Debug "__ad_verify_signature: Getting token_id $token_id, value $secret_token ; "
     ns_log Debug "__ad_verify_signature: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
 
-    # validate cookie: verify hash and expire_time
-    set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
+    if {$user_binding == -1} {
+        set user_id [ad_conn user_id]
+    } else {
+        set user_id ""
+    }
+
+    #
+    # Compute hash based on tokes, expire_time and user_id.
+    #
+    set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$user_id"]
 
     # Need to verify both hash and expiration
     set hash_ok_p 0
@@ -1267,11 +1294,13 @@ ad_proc -private __ad_verify_signature {
         ns_log Debug "__ad_verify_signature: Hash matches - Hash check OK"
         set hash_ok_p 1
     } else {
-        # check to see if IE is lame (and buggy!) and is expanding \n to \r\n
+        #
+        # Check to see if IE is lame (and buggy!) and is expanding \n to \r\n
         # See: http://rhea.redhat.com/bboard-archive/webdb/000bfF.html
+        #
         set value [string map [list \r ""] $value]
         set org_computed_hash $computed_hash
-        set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
+        set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$user_id"]
 
         if {$computed_hash eq $hash} {
             ns_log Debug "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"

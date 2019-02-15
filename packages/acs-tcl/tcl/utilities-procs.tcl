@@ -948,7 +948,7 @@ ad_proc -public export_vars {
             # path up to this point is already correctly encoded.
             set export_string $base[expr {$export_string ne "" ? "&$export_string" : ""}]
         } else {
-            # The base has no query vars: encode url part if not
+            # The base has no query vars: encode URL part if not
             # explicitly said otherwise. Include also as exception
             # trivial case of the base being the dummy url '#'.
             if {!$no_base_encode_p && $base ne "#"} {
@@ -973,16 +973,20 @@ ad_proc -private export_vars_sign {
     Call ad_sign parameterized via max_age and secret specified in urlencoding
 } {
     set max_age ""
+    set user_binding 0
     set secret  [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
     foreach def [split $params &] {
         lassign [split $def =] key val
         switch -- $key {
             max_age -
             secret {set $key [ad_urldecode_query $val]}
+            user {
+                set user_binding -1
+            }
         }
     }
 
-    return [ad_sign -max_age $max_age -secret $secret $value]
+    return [ad_sign -max_age $max_age -secret $secret -user_binding $user_binding $value]
 }
 
 
