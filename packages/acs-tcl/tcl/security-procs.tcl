@@ -1314,7 +1314,11 @@ ad_proc -private __ad_verify_signature {
         set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$binding_value"]
 
         if {$computed_hash eq $hash} {
-            ns_log Debug "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"
+            #
+            # Not sure, the comments for IE are still true, so issue
+            # warnings in the error.log when this happens.
+            #
+            ns_log warning "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"
             set hash_ok_p 1
         } else {
             ns_log Debug "__ad_verify_signature: Hash ($hash) doesn't match what we expected ($org_computed_hash) - Hash check FAILED"
