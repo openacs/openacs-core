@@ -707,7 +707,7 @@ create table apm_parameters (
 	section_name		varchar(200),
 	datatype	        varchar(100) not null
 			        constraint apm_parameters_datatype_ck 
-				check(datatype in ('number', 'string','text')),
+				check(datatype in ('number','boolean','string','text')),
         scope                   varchar(10) default 'instance'
                                 constraint apm_parameters_scope_ck
                                 check (scope in ('global','instance'))
