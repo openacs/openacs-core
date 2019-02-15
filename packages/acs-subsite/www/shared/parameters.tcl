@@ -1,6 +1,6 @@
 ad_page_contract {
     Parameters page.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-06-13
     @cvs-id $Id$
@@ -48,17 +48,17 @@ if { $package_url eq [subsite::get_element -element url] } {
 if { $scope ne "global" } {
 
     if {![info exists package_key] || $package_key eq ""} {
-	set package_key [apm_package_key_from_id $package_id]
+        set package_key [apm_package_key_from_id $package_id]
     }
     set global_parameters [db_list get_global_parameters {
-	select parameter_name from apm_parameters where package_key = :package_key and scope = 'global'
-    }] 
+        select parameter_name from apm_parameters where package_key = :package_key and scope = 'global'
+    }]
     if {[llength $global_parameters] > 0} {
-	#
-	# Just provide a link to the global parameters in case these exist
-	#
-	set global_parameter_label [join [lsort $global_parameters] ", "]
-	set global_param_url [export_vars -base /shared/parameters {package_key return_url package_id {scope global}}]
+        #
+        # Just provide a link to the global parameters in case these exist
+        #
+        set global_parameter_label [join [lsort $global_parameters] ", "]
+        set global_param_url [export_vars -base /shared/parameters {package_key return_url package_id {scope global}}]
     }
 }
 
@@ -111,15 +111,15 @@ db_foreach select_params {} {
                  [list html $html]]
 
     set file_val [ad_parameter_from_file $parameter_name $package_key]
-    if { $file_val ne "" } { 
-        set display_warning_p 1 
+    if { $file_val ne "" } {
+        set display_warning_p 1
         lappend elm [list after_html "<br><span style=\"color: red; font-weight: bold;\">$file_val (*)</span>"]
     }
-    
+
     ad_form -extend -name parameters -form [list $elm]
 
     set param($parameter_name) $attr_value
-    
+
     incr counter
 }
 
@@ -137,9 +137,9 @@ if { $counter > 0 } {
             if { [info exists $c__parameter_name] } {
                 if { $scope eq "instance" } {
                     parameter::set_value \
-	                -package_id $package_id \
-	                -parameter $c__parameter_name \
-	                -value [set $c__parameter_name]
+                        -package_id $package_id \
+                        -parameter $c__parameter_name \
+                        -value [set $c__parameter_name]
                     callback subsite::parameter_changed -package_id $package_id -parameter $c__parameter_name -value [set $c__parameter_name]
                 } else {
                     parameter::set_global_value \
