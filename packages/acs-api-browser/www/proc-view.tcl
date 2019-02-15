@@ -41,6 +41,10 @@ if { ![info exists source_p] || $source_p eq ""} {
     if {$source_p eq ""} {set source_p 0}
 }
 
+if {[llength $proc] > 1 && [lindex $proc 0] eq "Class"} {
+    set proc [lrange $proc 1 end]
+}
+
 if {[string match ::* $proc]} {
     set absolute_proc $proc
     set relative_proc [string range $proc 2 end]
