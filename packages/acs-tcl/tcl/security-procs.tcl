@@ -1414,6 +1414,7 @@ ad_proc -public ad_set_signed_cookie {
     {-path "/"}
     {-secret ""}
     {-token_id ""}
+    {-samesite strict}
     name
     value
 } {
@@ -1469,6 +1470,7 @@ ad_proc -public ad_set_signed_cookie {
         -max_age $max_age \
         -domain $domain \
         -path $path \
+        -samesite $samesite \
         $name $data
 }
 

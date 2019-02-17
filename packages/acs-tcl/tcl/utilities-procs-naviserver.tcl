@@ -13,6 +13,14 @@ if {[ns_info name] ne "NaviServer"} {
     return
 }
 
+#
+# If the server supports samesite cookie, set the samesite as provided.
+#
+try { ns_setcookie } on error {r} {
+    set ::acs::serverSupports(samesiteCookie) [string match "*-samesite*" $r]
+}
+
+
 #-------------------------------------------------------------------------
 # NaviServer implementation of ad_url(en|de)code* procs
 #-------------------------------------------------------------------------
@@ -102,7 +110,8 @@ ad_proc -public ad_set_cookie {
     {-domain ""}
     {-path "/"}
     {-discard f}
-    {-scriptable t}    
+    {-scriptable t}
+    {-samesite none}
     name 
     {value ""}
 } { 
@@ -162,8 +171,13 @@ ad_proc -public ad_set_cookie {
         }
     }
 
+    if {$samesite ne "none" && $::acs::serverSupports(samesiteCookie)} {
+        set samesiteFlag "-samesite $samesite"
+    } else {
+        set samesiteFlag ""
+    }
     ns_setcookie -discard $discard -domain $domain -expires $expire -path $path \
-        -replace $replace -scriptable $scriptable -secure $secure -- \
+        -replace $replace -scriptable $scriptable -secure $secure {*}$samesiteFlag -- \
         $name $value
 }
 

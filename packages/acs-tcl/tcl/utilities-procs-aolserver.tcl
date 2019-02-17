@@ -132,6 +132,7 @@ ad_proc -public ad_set_cookie {
     {-path "/"}
     {-discard f}
     {-scriptable t}
+    {-samesite none}    
     name
     {value ""}
 } {
