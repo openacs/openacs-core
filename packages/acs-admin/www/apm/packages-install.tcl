@@ -93,10 +93,9 @@ if { $spec_files eq "" } {
     }]
 } else {   
     
-    append body {
+    append body [subst {
         <h2>Select Packages to $operation</h2><p>
         <p>Please select the set of packages you'd like to [string tolower $operation].</p>
-    } [subst {
         <div style="margin: 0 auto;">
         $dimensional_list
         </div>
