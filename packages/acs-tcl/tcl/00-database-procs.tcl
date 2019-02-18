@@ -1596,7 +1596,7 @@ ad_proc -public db_foreach {
     <em><i><tt>code_block</tt></i></em> once for each row with variables set to
     column values (or a set or array populated if <tt>-column_array</tt> or
                    <tt>column_set</tt> is specified). If the query returns no rows, executes
-    <em><i><tt>if_no_rows_block</tt></i></em> (if provided). </p>
+    <em><i><tt>if_no_rows_block</tt></i></em> (if provided). In place of 'if_no_rows' also the 'else' keyword can be used.</p>
 
     <p>Example:
 
@@ -1618,10 +1618,8 @@ ad_proc -public db_foreach {
         set code_block [lindex $args 0]
     } elseif { $arglength == 3 } {
         # Should have code block + if_no_rows + code block.
-        if { [lindex $args 1] ne "if_no_rows"
-             && [lindex $args 1] ne "else"
-         } {
-            return -code error "Expected if_no_rows as second-to-last argument"
+        if { [lindex $args 1] ni {"if_no_rows" "else"}} {
+            return -code error "Expected if_no_rows or else as second-to-last argument"
         }
         lassign $args code_block . if_no_rows_code_block
     } else {
@@ -1682,7 +1680,7 @@ ad_proc -public db_foreach {
         }
     }
     # If the if_no_rows_code is defined, go ahead and run it.
-    if { $counter > 0 && [info exists if_no_rows_code_block] } {
+    if { $counter == 0 && [info exists if_no_rows_code_block] } {
         uplevel 1 $if_no_rows_code_block
     }
 }

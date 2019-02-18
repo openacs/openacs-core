@@ -1088,6 +1088,41 @@ aa_register_case -cats {api} \
 
 }
 
+aa_register_case \
+    -cats {db smoke production_safe} \
+    -procs {db_foreach} \
+    db__db_foreach {
+        Checks that db_foreach works as expected
+    } {
+        set results [list]
+        db_foreach query {SELECT a FROM (VALUES (1), (2), (3), (4), (5), (6), (7)) AS X(a)} {
+            lappend results $a
+        }
+        aa_equals "db_foreach collects correct values from query" \
+            [list 1 2 3 4 5 6 7] \
+            $results
+
+        set results ""
+        db_foreach query {select 1 from dual where 1 = 2} {
+            set results "found"
+        } else {
+            set results "not found"
+        }
+        aa_equals "db_foreach executes the 'no row' code block using the 'else' syntax" \
+            "not found" \
+            $results
+
+        set results ""
+        db_foreach query {select 1 from dual where 1 = 2} {
+            set results "found"
+        } if_no_rows {
+            set results "not found"
+        }
+        aa_equals "db_foreach executes the 'no row' code block using the 'if_no_rows' syntax" \
+            "not found" \
+            $results
+    }
+
 aa_register_case -cats {api db} db__caching {
     test db_* API caching
 } {
