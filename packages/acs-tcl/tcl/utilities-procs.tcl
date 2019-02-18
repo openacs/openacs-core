@@ -995,7 +995,14 @@ ad_proc -private export_vars_sign {
                 }
             }
             default {
-                error "invalid value '$key' in sign() specification"
+                #
+                # It seems, there are several cases, where
+                # "export_vars_sign" is called with invalid params
+                # (which can be seemingly ignored:
+                #
+                ns_log warning  "export_vars_sign: invalid value '$key' in sign() specification (params <$params>, key=<$key>)"
+                #error "invalid value '$key' in sign() specification"
+
             }
         }
     }
