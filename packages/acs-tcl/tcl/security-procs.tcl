@@ -97,6 +97,7 @@ ad_proc -private sec_handler_reset {} {
 } {
     set ::__csp_nonce [::security::csp::nonce]
     set ::__csrf_token ""
+    nsv_set sec_previous_session_id . .
 }
 
 ad_proc -private sec_handler {} {
@@ -664,32 +665,37 @@ ad_proc -private sec_setup_session {
             ns_log debug "OACS= done updating user session info, user_id NONZERO"
         }
     } else {
-        # $session_id is an active verified session
-        # this call is either a user logging in
-        # on an active unidentified session, or a change in identity
-        # for a browser that is already logged in
-
-        # this is an active session [ad_conn user_id] will not return
-        # the empty string
+        #
+        # $session_id is an active verified session this call is
+        # either a user logging in on an active unidentified session,
+        # or a change in identity for a browser that is already logged
+        # in.
+        #
         set prev_user_id [ad_conn user_id]
 
         #
         # Change the session id for all user_id changes, also on
         # changes from user_id 0, since owasp recommends to renew the
-        # session_id after any privilege level change
+        # session_id after any privilege level change.
         #
         ns_log debug "prev_user_id $prev_user_id new_user_id $new_user_id"
 
         if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
-            # this is a change in identity so we should create
-            # a new session so session-level data is not shared
-            ns_log debug "sec_allocate_session"
+            #
+            # This is a change in identity so we should create
+            # a new session so session-level data is not shared.
+            #
+            set old_session_id [ad_conn session_id]
             set session_id [sec_allocate_session]
+            ns_log notice "sec_allocate_session <$old_session_id> -> <$session_id>"
+            nsv_set sec_previous_session_id $session_id $old_session_id
         }
 
         if { $prev_user_id != $new_user_id } {
-            # a change of user_id on an active session
-            # demands an update of the users table
+            #
+            # A change of user_id on an active session demands an
+            # update of the users table.
+            #
             ns_log debug "sec_update_user_session_info"
             sec_update_user_session_info $new_user_id
         }
