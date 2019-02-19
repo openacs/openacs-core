@@ -652,8 +652,10 @@ ad_proc -public export_vars {
     switch to <code>export_vars</code>, is a short-hand for specifying the <code>:sign</code> switch
     on every variable.
     <p>
-    For example, one can use now "user_id:sign(max_age=60)" in
+    For example, one can use "user_id:sign(max_age=60)" in
     export_vars to let the exported variable after 60 seconds.
+    Other potential arguments for sign are "user" or "csrf" to bind the signature to a user or
+    to the CSRF token.
     </dd>
 
     </dl>
@@ -802,7 +804,7 @@ ad_proc -public export_vars {
                     }
 
                     if { $sign_p } {
-                        set exp_flag($name:sign) 0
+                        set exp_flag($name:sign) ""
                     }
 
                     if { [llength $var_spec] > 1 } {
