@@ -116,7 +116,7 @@ ad_proc -public parameter::set_value {
 
     db_exec_plsql set_parameter_value {}
 
-    return [ad_parameter_cache -set $value $package_id $parameter]
+    return [ad_parameter_cache -delete -set $value $package_id $parameter]
 }
 
 ad_proc -public parameter::get {
