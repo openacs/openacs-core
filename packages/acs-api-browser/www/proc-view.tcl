@@ -41,8 +41,17 @@ if { ![info exists source_p] || $source_p eq ""} {
     if {$source_p eq ""} {set source_p 0}
 }
 
-if {[llength $proc] > 1 && [lindex $proc 0] eq "Class"} {
-    set proc [lrange $proc 1 end]
+#
+# The check for "Class " is based on a regexp, since this is more
+# robust than e.g. llength and friends in case of hacking attacks,
+# which can lead to errors with invalid list structures.
+#
+# The following check is probably here not at the right place, since
+# the proc value should be directly usable here. So "Class " should
+# probably not be part of the link.
+#
+if {[regexp {^Class (.*)$} $proc . reminder]} {
+    set proc $reminder
 }
 
 if {[string match ::* $proc]} {
