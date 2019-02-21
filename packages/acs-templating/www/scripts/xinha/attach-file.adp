@@ -35,7 +35,7 @@
 		    				<formerror id="choose_file">
 		      					<div class="form-error">@formerror.choose_file@</div>
 		    				</formerror>
-						<br /><formwidget id="select_btn">&nbsp;<input type="button" value="#acs-templating.HTMLArea_action_cancel#" name="cancel" onclick="javascript:onCancel();"></input>
+						<br /><formwidget id="select_btn">&nbsp;<input type="button" value="#acs-templating.HTMLArea_action_cancel#" name="cancel" onclick="javascript:onCancel();">
 					</fieldset>
 					</if>
 					</td>
