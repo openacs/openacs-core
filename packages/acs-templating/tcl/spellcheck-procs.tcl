@@ -426,12 +426,14 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	# case the error page is shown (because of an error in a neighboring element).
 
 	set spellcheck(selected_option) $spellcheck_value
-	set spellcheck(render_p) 1
 
 	if {":nospell:" eq $spellcheck(selected_option)} {
 	    set spellcheck(perform_p) 0
+            set spellcheck(render_p) 0
+
 	} else {
 	    set spellcheck(perform_p) 1
+            set spellcheck(render_p) 1
 	}
     }
 
