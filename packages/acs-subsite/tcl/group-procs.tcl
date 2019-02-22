@@ -299,6 +299,7 @@ ad_proc -private group::get_id_not_cached {
 ad_proc -public group::get_members {
     {-group_id:required}
     {-type "party"}
+    {-rel_type ""}
     {-member_state ""}
 } {
     Get party_ids of all members from cache.
@@ -314,15 +315,16 @@ ad_proc -public group::get_members {
     @creation-date 2005-07-26
 } {
     acs::group_cache eval -partition_key $group_id \
-        members-$group_id-$type-$member_state {
+        members-$group_id-$type-$rel_type-$member_state {
             group::get_members_not_cached -group_id $group_id \
-                -type $type -member_state $member_state
+                -type $type -rel_type $rel_type -member_state $member_state
         }
 }
 
 ad_proc -private group::get_members_not_cached {
     {-group_id:required}
     {-type:required}
+    {-rel_type ""}
     {-member_state ""}
 } {
     Get party_ids of all members.
@@ -348,6 +350,8 @@ ad_proc -private group::get_members_not_cached {
                :type = 'party' or
                (select object_type from acs_objects
                  where object_id = m.member_id) = :type)
+          and (:rel_type is null or
+               rel_type = :rel_type)
     }]
 }
 
