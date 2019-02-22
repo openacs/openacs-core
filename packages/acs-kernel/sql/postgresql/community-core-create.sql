@@ -667,6 +667,7 @@ create table user_preferences (
 	-- an ISO 639 language code (in lowercase)
 	language_preference	char(2) default 'en',
 	dont_spam_me_p		boolean default 'f',
+	public_avatar_p		boolean default 'f',
 	email_type		varchar(64),
         timezone                varchar(100)
 );
