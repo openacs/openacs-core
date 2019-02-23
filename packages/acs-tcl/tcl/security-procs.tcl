@@ -2627,6 +2627,7 @@ namespace eval ::security::csp {
         security::csp::require img-src 'self'
         security::csp::require font-src 'self'
         security::csp::require base-uri 'self'
+        security::csp::require connect-src 'self';
 
         #
         # Some browser (safari, chrome) need "font-src data:", maybe
