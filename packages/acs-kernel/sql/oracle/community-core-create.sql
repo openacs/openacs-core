@@ -601,7 +601,6 @@ create table user_preferences (
 				check (prefer_text_only_p in ('t','f')),
 	-- an ISO 639 language code (in lowercase)
 	language_preference	char(2) default 'en',
-	public_avatar_p		char(1) default 'f',
 	dont_spam_me_p		char(1) default 'f'
 				constraint user_prefs_dont_spam_me_p_ck
 				check (dont_spam_me_p in ('t','f')),
