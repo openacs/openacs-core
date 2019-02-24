@@ -157,12 +157,16 @@ ad_form -extend -name login -form {
     }
 }
 
-set options_list [list [list [_ acs-subsite.Remember_my_login] "t"]]
 if { $allow_persistent_login_p } {
+    set default_persistent_login [parameter::get \
+                                      -package_id $subsite_id \
+                                      -parameter PersistentLoginDefault \
+                                      -default 1]
+    set checkbox_default [expr {$default_persistent_login == 1 ? "t" : "f"}]
     ad_form -extend -name login -form {
         {persistent_p:text(checkbox),optional
             {label ""}
-            {options $options_list}
+            {options {{"[_ acs-subsite.Remember_my_login]" $checkbox_default}}}
         }
     }
 }
