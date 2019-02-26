@@ -1081,7 +1081,7 @@ ad_proc -private api_call_graph_snippet {
             "\}\n" \
             $edges
     }
-    ns_log notice \n$dot_code
+    #ns_log notice \n$dot_code
     append result "digraph \{api = $dpi;" $dot_code "\}"
 }
 
@@ -1095,17 +1095,32 @@ ad_proc -private api_inline_svg_from_dot {dot_code} {
 } {
     catch {set dot [::util::which dot]}
     if {$dot ne ""} {
-        set tmpnam [ad_tmpnam]
-        set tmpfile $tmpnam.svg
-        set f [open $tmpnam.dot w]; puts $f $dot_code; close $f
+        set dir /tmp/oacs-dotcode
+        if {![file isdirectory $dir]} {
+            file mkdir $dir
+        }
+        set dot_signature [ns_md5 $dot_code-svg]
+        set stem $dir/$dot_signature
+        if {![file exists $stem.svg]} {
+            ns_log notice "api_inline_svg_from_dot: generate $stem.svg"
 
-        set f [open "|$dot -Tsvg -o $tmpfile" w]; puts $f $dot_code;
-        try {
-            close $f
-        } on error {errorMsg} {
-            ns_log warning "api_inline_svg_from_dot: dot returned $errorMsg"
-        } on ok {result} {
-            set f [open $tmpfile]; set svg [read $f]; close $f
+            set f [open $stem.dot w]; puts $f $dot_code; close $f
+
+            set f [open "|$dot -Tsvg -o $stem.svg" w]; puts $f $dot_code
+            try {
+                close $f
+            } on error {errorMsg} {
+                ns_log warning "api_inline_svg_from_dot: dot returned $errorMsg"
+            } on ok {result} {
+                set f [open $stem.svg]; set svg [read $f]; close $f
+            } finally {
+                file delete -- $stem.dot
+            }
+        } else {
+            ns_log notice "api_inline_svg_from_dot: try to reuse $stem.svg"
+        }
+        if {[file exists $stem.svg]} {
+            set f [open $stem.svg]; set svg [read $f]; close $f
 
             # delete the first three lines generated from dot
             regsub {^[^\n]+\n[^\n]+\n[^\n]+\n} $svg "" svg
@@ -1116,10 +1131,9 @@ ad_proc -private api_inline_svg_from_dot {dot_code} {
                 svg g g ellipse {fill: #eeeef4;}
                 svg g g polygon {fill: #f4f4e4;}
             }
-            file delete -- $tmpfile
             return "<style>$css</style><div><div class='inner'>$svg</div></div>"
-        } finally {
-            file delete -- $tmpnam.dot
+        } else {
+            ns_log warning "cannot create svg file"
         }
     }
     return ""
