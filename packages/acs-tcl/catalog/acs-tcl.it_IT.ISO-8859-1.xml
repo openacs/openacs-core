@@ -7,7 +7,6 @@
   <msg key="approve_email">approva l&#39;email</msg>
   <msg key="ban">bandisci</msg>
   <msg key="Browser_of_the_user">Browser dell&#39;Utente</msg>
-  <msg key="Cant_find_executable">Eseguibile %executable% non trovato nel sistema</msg>
   <msg key="Comments">&lt;b&gt;Commenti&lt;/b&gt;&lt;br&gt; &lt;span style=&#34;color:red;&#34;&gt; (Spiega per favore cosa stavi cercando di fare) &lt;/span&gt;</msg>
   <msg key="delete">cancella</msg>
   <msg key="Detais">Dettagli:</msg>
@@ -51,8 +50,8 @@
   <msg key="lt_name_is_not_valid">%name% non é valido</msg>
   <msg key="lt_name_is_too_long__Ple">%name% é troppo lungo. Inserisci per favore un valore di al massimo %max_length% caratteri. Quello fornito ora é lungo %actual_length% caratteri.</msg>
   <msg key="lt_name_is_too_long__Ple_1">%name% é troppo lungo. Inserisci per favore un valore di al massimo %max_length% caratteri. Quello fornito ora é lungo %actual_length% caratteri.</msg>
-  <msg key="lt_name_is_too_short__Pl">%name% é troppo corto. Inserisci per favore un valore di almeno %max_length% caratteri. Quello fornito ora é lungo %actual_length% caratteri.</msg>
-  <msg key="lt_name_is_too_short__Pl_1">%name% é troppo corto. Inserisci per favore un valore di almeno %max_length% caratteri. Quello fornito ora é lungo %actual_length% caratteri.</msg>
+  <msg key="lt_name_is_too_short__Pl">%name% è troppo corto. Si prega di inserire un valore lungo almeno %min_length% caratteri. Il valore inserito ora è lungo %actual_length% caratteri.</msg>
+  <msg key="lt_name_is_too_short__Pl_1">%name% è troppo corto. Si prega di inserire un valore lungo almeno %min_length% caratteri. Il valore inserito ora è lungo %actual_length% caratteri.</msg>
   <msg key="lt_NB_This_error_was_sub">Questo errore é stato riportato</msg>
   <msg key="lt_Please_back_up_using_">Torna per favore indietro con il browser, correggi in caso di</msg>
   <msg key="lt_Problem_with_a_Page_o">Problema con una Pagina (o forse con quanto digitato)</msg>
