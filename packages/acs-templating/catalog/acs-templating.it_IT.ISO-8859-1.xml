@@ -22,6 +22,7 @@
   <msg key="Element_is_too_long_Singular">%label% ha un carattere di troppo.</msg>
   <msg key="Enhanced_Text">Testo Aumentato</msg>
   <msg key="Enter_your_search_text">Inserisci la tuta stringa di ricerca qui</msg>
+  <msg key="filter_clear">Cancella</msg>
   <msg key="Fixed_width_Text">Testo a grandezza fissa</msg>
   <msg key="Format">Formato</msg>
   <msg key="Formats">Formati</msg>
