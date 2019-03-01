@@ -1749,17 +1749,18 @@ ad_proc -private auth::can_admin_system_without_authority_p {
 } {
     Before disabling or deleting an authority we need to check
     that there is at least one site-wide admin in a different
-    authority that can administer the system. This proc returns
-    1 if there is such an admin and 0 otherwise.
+    authority that can administer the system.
+
+    @return boolean
 
     @author Peter Marklund
 } {
     #
-    # Count all users from other authorities having swa admins (having
-    # admin rights on the magic object 'security_context_root').
+    # Is there a user from other authorities having swa admins (having
+    # admin rights on the magic object 'security_context_root')?
     #
-    set number_of_admins_left [db_string count_admins_left {
-        select count(*)
+    return [db_string admins_left_p {
+        select exists (select 1
         from acs_permissions p,
              party_approved_member_map m,
              acs_magic_objects amo,
@@ -1770,10 +1771,8 @@ ad_proc -private auth::can_admin_system_without_authority_p {
         and u.user_id = m.member_id
         and u.member_state = 'approved'
         and u.authority_id <> :authority_id
-        and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')
+        and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')) from dual
     }]
-
-    return [ad_decode $number_of_admins_left "0" "0" "1"]
 }
 
 #####
