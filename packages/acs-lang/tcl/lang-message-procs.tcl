@@ -545,7 +545,9 @@ ad_proc -public lang::message::conflict_count {
             lappend where_clauses "$col = :${col}"
         }
     }
-    set where_clause [ad_decode $where_clauses "" "" "and [join $where_clauses " and "]"]
+    if {[llength $where_clause] > 0} {
+        set where_clause "and [join $where_clauses \" and \"]"
+    }
 
     return [db_string conflict_count "
         select count(*)
