@@ -2136,8 +2136,22 @@ ad_proc -public ad_html_text_convert {
     }
 
     # For backwards compatibility
-    set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
-    set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
+    switch $from {
+        "html" {
+            set from text/html
+        }
+        "text" - "plain" - "pre" {
+            set from text/plain
+        }
+    }
+    switch $to {
+        "html" {
+            set to text/html
+        }
+        "text" - "plain" - "pre" {
+            set to text/plain
+        }
+    }
 
     if { ![ad_html_text_convertible_p -from $from -to $to] } {
         error "Illegal mime types for conversion - from: $from to: $to"
