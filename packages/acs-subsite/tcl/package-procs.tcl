@@ -206,7 +206,7 @@ ad_proc -private package_attribute_default {
 
     # return to null unless this attribute is required
     # (min_n_values > 0)
-    return [ad_decode $min_n_values 0 "NULL" ""]
+    return [expr {$min_n_values > 0 ? "" : "NULL"}]
 }
 
 
@@ -502,9 +502,13 @@ ad_proc -private package_object_view_helper {
     for { set i 0 } { $i < [llength $primary_keys] - 1 } { incr i } {
         lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys $i+1]"
     }
+    if {[llength $pk_formatted] > 0} {
+        set where_clause [join [string tolower $pk_formatted] "\n   AND "]
+        set where_clause " WHERE $where_clause"
+    }
     return "SELECT [string tolower [join $columns ",\n       "]]
   FROM [string tolower [join $tables ", "]]
-[ad_decode [llength $pk_formatted] "0" "" " WHERE [join [string tolower $pk_formatted] "\n   AND "]"]"
+$where_clause"
 
 }
 

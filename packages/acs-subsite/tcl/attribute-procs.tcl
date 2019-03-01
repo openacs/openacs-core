@@ -550,14 +550,14 @@ namespace eval attribute {
                     lappend option_list [list " (no value) " ""]
                 }
                 template::element create $form_id "$variable_prefix$attribute_name" \
-                    -datatype "text" [ad_decode $required_p "f" "-optional" ""] \
+                    -datatype "text" [expr {$required_p eq "f" ? "-optional" : ""}] \
                     -widget select \
                     -options $option_list \
                     -label "$pretty_name" \
                     -value $default
             } else {
                 template::element create $form_id "$variable_prefix$attribute_name" \
-                    -datatype $datatype [ad_decode $required_p "f" "-optional" ""] \
+                    -datatype $datatype [expr {$required_p eq "f" ? "-optional" : ""}] \
                     -widget text \
                     -label $pretty_name \
                     -value $default
