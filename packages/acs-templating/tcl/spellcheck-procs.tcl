@@ -80,8 +80,9 @@ ad_proc -public template::data::transform::spellcheck {
     if { $contents eq "" } {
         return $values
     }
-    # if language is empty string don't spellcheck
-    set spellcheck_p [ad_decode [set language [ns_queryget $element(id).spellcheck]] ":nospell:" 0 "" 0 1]
+    # if language is empty or :nospell: string don't spellcheck
+    set language [ns_queryget $element(id).spellcheck]
+    set spellcheck_p [expr {$language ni {":nospell:" ""}}]
 
     # perform spellchecking or not?
     if { $spellcheck_p } {
@@ -104,7 +105,7 @@ ad_proc -public template::data::transform::spellcheck {
             template::element::set_properties $element(form_id) $element(id) -validate [list]
 
             template::element::set_error $element(form_id) $element(id) "
-          [ad_decode $error_num 1 "Found one error." "Found $error_num errors."] Please correct, if necessary."
+          [expr {$error_num == 1 ? "Found one error." : "Found $error_num errors."}] Please correct, if necessary."
 
             # switch to display mode so we can show our inline mini-form with suggestions.
             template::element::set_properties $element(form_id) $element(id) mode display
@@ -194,7 +195,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     set lines [split $text "\n"]
 
     # Support for local, localized, dictionaries (UI to add to them is not implemented yet!)
-    set suffix [ad_decode $language "" "" "-$language"]
+    set suffix [expr {$language ne "" ? "-$language" : ""}]
     set dictionaryfile [file join [acs_package_root_dir acs-templating] resources forms webspell-local-dict$suffix]
 
     # The webspell wrapper is necessary because ispell requires
