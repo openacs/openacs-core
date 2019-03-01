@@ -275,7 +275,7 @@ ad_proc -public api_library_documentation {
             append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]\n"
         }
         if { [info exists doc_elements(author)] } {
-            append out "<dt><b>Author[ad_decode [llength $doc_elements(author)] 1 "" "s"]:</b>\n"
+            append out "<dt><b>Author[expr {[llength $doc_elements(author)] > 1 ? "s" : ""}]:</b>\n"
             foreach author $doc_elements(author) {
                 append out "<dd>[::apidoc::format_author $author]\n"
             }
@@ -1312,7 +1312,7 @@ namespace eval ::apidoc {
         if { [llength $authors] == 0 } {
             return ""
         }
-        append out "<dt><b>Author[ad_decode [llength $authors] 1 "" "s"]:</b>\n"
+        append out "<dt><b>Author[expr {[llength $authors] > 1 ? "s" : ""}]:</b>\n"
         foreach author $authors {
             append out "<dd>[format_author $author]</dd>\n"
         }
