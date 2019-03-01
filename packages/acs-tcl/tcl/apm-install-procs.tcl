@@ -963,7 +963,7 @@ ad_proc -private apm_package_install {
         # After install Tcl proc callback
         apm_invoke_callback_proc -version_id $version_id -type after-install
 
-        set priority_mount_path [ad_decode $version(auto-mount) "" $mount_path $version(auto-mount)]
+        set priority_mount_path [expr {$version(auto-mount) eq "" ? $mount_path : $version(auto-mount)}]
         if { $priority_mount_path ne "" } {
             # This is a package that should be auto mounted
 
