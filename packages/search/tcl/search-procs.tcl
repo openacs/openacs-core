@@ -177,7 +177,7 @@ ad_proc -private search::indexer {} {
                                 #ns_log notice "acs_sc::invoke FtsEngineDriver"
                                 set r [acs_sc::invoke \
                                     -contract FtsEngineDriver \
-                                    -operation [ad_decode $event UPDATE update_index index] \
+                                    -operation [expr {$event eq "UPDATE" ? "update_index" : "index"}] \
                                     -call_args [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] \
                                     -impl $driver]
                             }
