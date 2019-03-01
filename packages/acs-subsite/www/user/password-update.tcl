@@ -22,10 +22,10 @@ if { $old_password ne "" } {
     # If old_password is set, this is a user who has had his password recovered,
     # so they won't be authenticated yet.
 } else {
-    set level [ad_decode [security::RestrictLoginToSSLP] 1 "secure" "ok"]
+    set level [expr {[security::RestrictLoginToSSLP] ? "secure" : "ok"}]
 
     # If the user is changing passwords for another user, they need to be account ok
-    set account_status [ad_decode $user_id [ad_conn untrusted_user_id] "closed" "ok"]
+    set account_status [expr {$user_id == [ad_conn untrusted_user_id] ? "closed" : "ok"}]
 
     auth::require_login \
         -level $level \
