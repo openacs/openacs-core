@@ -971,7 +971,7 @@ ad_proc -public template::widget::block {
                 lassign $question name required_p
                 append output \
                     "<td>" \
-                    [ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"] \
+                    [expr {$required_p eq "t" ? {<span style="color: #f00;">*</span>} : {&nbsp;}}] \
                     "</td>"
                 foreach choice [lindex $question 2] {
                     if {$choice ni $value} {

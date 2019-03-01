@@ -303,7 +303,7 @@ ad_proc -public template::list::create {
 
     # Set default for no_data
     set row_pretty_plural [lang::util::localize $row_pretty_plural]
-    set no_data [ad_decode $no_data "" [_ acs-templating.No_row_pretty_plural] $no_data]
+    set no_data [expr {$no_data eq "" ? "[_ acs-templating.No_row_pretty_plural]" : $no_data}]
     # Set ulevel to the level of the page, so we can access it later
     set list_properties(ulevel) "\#[expr {[info level] - $ulevel}]"
 
@@ -1527,7 +1527,7 @@ ad_proc -private template::list::prepare_elements {
 
             if {$list_properties(orderby_selected_name) eq $element_name} {
                 # We're currently ordering on this column
-                set direction [ad_decode $list_properties(orderby_selected_direction) "asc" "desc" "asc"]
+                set direction [expr {$list_properties(orderby_selected_direction) eq "asc" ? "desc" : "asc"}]
                 set element_properties(orderby_url) [get_url \
                                                          -name $name \
                                                          -override [list [list $list_properties(orderby_name) "${element_name},$direction"]]]
