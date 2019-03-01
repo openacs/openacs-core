@@ -2042,8 +2042,22 @@ ad_proc -public ad_html_text_convertible_p {
     set valid_froms { text/enhanced text/markdown text/plain text/fixed-width text/html text/xml }
     set valid_tos { text/plain text/html }
     # Validate procedure input
-    set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
-    set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
+    switch $from {
+        "html" {
+            set from text/html
+        }
+        "text" - "plain" - "pre" {
+            set from text/plain
+        }
+    }
+    switch $to {
+        "html" {
+            set to text/html
+        }
+        "text" - "plain" - "pre" {
+            set to text/plain
+        }
+    }
     return [expr {$from in $valid_froms && $to in $valid_tos}]
 }
 
