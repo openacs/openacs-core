@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Package Manager Requirements}</property>
 <property name="doc(title)">Package Manager Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,8 +9,10 @@ Documentation"
 			rightLink="apm-design" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="apm-requirements" id="apm-requirements"></a>Package Manager Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Bryan Quinn and Todd
-Nightingale</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="apm-requirements" id="apm-requirements"></a>Package Manager Requirements</h2></div></div></div><div class="authorblurb">
+<p>By Bryan Quinn and Todd Nightingale</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="apm-requirements-intro" id="apm-requirements-intro"></a>Introduction</h3></div></div></div><p>The following is a requirements document for the OpenACS Package
 Manager (APM), version 4.0 (APM4). APM4 offers a superset of APM
@@ -461,7 +463,7 @@ Install</strong></span></p><p>
 administrator must be able to install new packages either from
 locally maintained .APM files or from URLs.</p><p>
 <span class="strong"><strong>90.5</strong></span> In the case of
-an URL, the APM transparently downloads the APM file off the web,
+a URL, the APM transparently downloads the APM file off the web,
 proceeds with a file based installation, and then optionally
 removes the .APM file just downloaded.</p><p>
 <span class="strong"><strong>90.10.1</strong></span> If .APM

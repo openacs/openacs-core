@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Documentation Guide}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Documentation Guide}</property>
 <property name="doc(title)">OpenACS Documentation Guide</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,7 +10,7 @@ Standards"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="docbook-primer" id="docbook-primer"></a>OpenACS Documentation Guide</h2></div></div></div><p>By Claus Rasmussen, with additions by Roberto Mello, Vinod
-Kurup, and the OpenACS Community</p><div class="sect2">
+Kurup, and the OpenACS community</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-overview" id="dbprimer-overview"></a>Overview of OpenACS Documentation</h3></div></div></div><p>
 <span class="productname">OpenACS</span>™ is a powerful system
@@ -87,7 +87,7 @@ community.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="docs-requirements" id="docs-requirements"></a>OpenACS General Documentation
-Requirements</h3></div></div></div><p>By the OpenACS Community. This section is a collection of
+Requirements</h3></div></div></div><p>By the OpenACS community. This section is a collection of
 documentation requirements that have been expressed in the OpenACS
 forums to 4th July 2003.</p><p>OpenACS documentation should meet the following requirements. No
 significance has been given to the order presented, topic breadth
@@ -132,7 +132,7 @@ accommodate different reading style preferences. The should still
 be in 1 area, using a common layout of perhaps summary,
 introduction and discussion requiring increasing expertise,
 complexity or specificity.</p>
-</li><li class="listitem"><p>Consistency in link descriptions -When link urls refer to whole
+</li><li class="listitem"><p>Consistency in link descriptions -When link URLs refer to whole
 documents, make the link (anchor wrapped title) that points to a
 document with the same title and/or heading of the document.</p></li><li class="listitem"><p>Consider OpenACS documentation as a set of books (an
 encyclopedic set organized like an atlas) that contains volumes
@@ -167,7 +167,7 @@ the documents.</p><pre class="programlisting">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="docs-end-user-reqs" id="docs-end-user-reqs"></a>OpenACS Documentation Requirements for
-End-users</h3></div></div></div><p>By the OpenACS Community. This section is a collection of
+End-users</h3></div></div></div><p>By the OpenACS community. This section is a collection of
 documentation requirements that have been expressed in the OpenACS
 forums to 4th July 2003.</p><p>OpenACS end-user documentation should meet the following
 requirements. No significance has been given to the order
@@ -264,7 +264,7 @@ itself through two basic development document templates: a
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="docs-admin-reqs" id="docs-admin-reqs"></a>OpenACS Documentation Requirements for Site
-and Administrators</h3></div></div></div><p>By the OpenACS Community. This section is a collection of
+and Administrators</h3></div></div></div><p>By the OpenACS community. This section is a collection of
 documentation requirements that have been expressed in the OpenACS
 forums to 4th July 2003.</p><p>OpenACS administrators' documentation should meet the
 following requirements. No significance has been given to the order
@@ -307,7 +307,7 @@ variables, file locations</p></li>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="docs-install-reqs" id="docs-install-reqs"></a>OpenACS Installation Documentation
-Requirements</h3></div></div></div><p>By the OpenACS Community. This section is a collection of
+Requirements</h3></div></div></div><p>By the OpenACS community. This section is a collection of
 documentation requirements that have been expressed in the OpenACS
 forums to 4th July 2003.</p><p>OpenACS installation documentation should meet the following
 requirements. No significance has been given to the order
@@ -331,7 +331,7 @@ OpenACS install and configure, post-install work</p></li>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="docs-developer-tutorial-reqs" id="docs-developer-tutorial-reqs"></a>OpenACS Developer Tutorial
-Documentation Requirements</h3></div></div></div><p>By the OpenACS Community. This section is a collection of
+Documentation Requirements</h3></div></div></div><p>By the OpenACS community. This section is a collection of
 documentation requirements that have been expressed in the OpenACS
 forums to 4th July 2003.</p><p>OpenACS developer tutorial documentation should meet the
 following requirements. No significance has been given to the order
@@ -358,7 +358,7 @@ versions instead of describing them in current docs</p></li>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="docs-developer-reqs" id="docs-developer-reqs"></a>OpenACS Developer Documentation
-Requirements</h3></div></div></div><p>By the OpenACS Community. This section is a collection of
+Requirements</h3></div></div></div><p>By the OpenACS community. This section is a collection of
 documentation requirements that have been expressed in the OpenACS
 forums to 4th July 2003.</p><p>OpenACS developer documentation should meet the following
 requirements. No significance has been given to the order
@@ -409,7 +409,7 @@ that tend to remain static and require more expressive publishing
 tools will be marked up to conform to the <a class="ulink" href="http://docbook.org/xml/index.html" target="_top">DocBook XML
 DTD</a>. The remaining discussion is about publishing using
 Docbook.</p><p>
-<a class="indexterm" name="idp140682193502840" id="idp140682193502840"></a> is a publishing standard based on XML
+<a class="indexterm" name="idp140560390770600" id="idp140560390770600"></a> is a publishing standard based on XML
 with similar goals to the OpenACS Documentation project. Some
 specific reasons why we are using DocBook:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>It is open-source.</p></li><li class="listitem"><p>The DocBook community <a class="ulink" href="http://docbook.org/help" target="_top">mailing lists</a>
@@ -449,7 +449,7 @@ produce. You are welcome to explore DocBook&#39;s <a class="ulink" href="http://
 of elements</a> and use more exotic features in your documents. The
 list is made up of SGML-elements but basically the same elements
 are valid in the XML DTD <span class="strong"><strong>as long as
-you remember to</strong></span>: <a class="indexterm" name="idp140682193521704" id="idp140682193521704"></a>
+you remember to</strong></span>: <a class="indexterm" name="idp140560390789512" id="idp140560390789512"></a>
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Always close your tags with corresponding end-tags and to
 <span class="strong"><strong>not use other tag
@@ -490,7 +490,7 @@ Template</em></span>.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-structure" id="dbprimer-structure"></a>Document Structure</h3></div></div></div><p>The documentation for each package will make up a little
 "book" that is structured like this - examples are
-<span class="emphasis"><em>emphasized</em></span>: <a class="indexterm" name="idp140682193542808" id="idp140682193542808"></a>
+<span class="emphasis"><em>emphasized</em></span>: <a class="indexterm" name="idp140560390810840" id="idp140560390810840"></a>
 </p><pre class="programlisting">
     book                        : <span class="strong"><strong>Docs for one package</strong></span> - <span class="emphasis"><em>templating</em></span>
      |
@@ -515,11 +515,11 @@ of how they are tied together.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-sections" id="dbprimer-sections"></a>Headlines, Sections</h3></div></div></div><p>
-<a class="indexterm" name="idp140682193554664" id="idp140682193554664"></a> Given that your job starts at the
+<a class="indexterm" name="idp140560390823000" id="idp140560390823000"></a> Given that your job starts at the
 <code class="computeroutput">sect1</code>-level, all your documents
 should open with a <a class="ulink" href="http://docbook.org/tdg/en/html/sect1.html" target="_top"><code class="computeroutput">&lt;sect1&gt;</code></a>-tag
 and end with the corresponding <code class="computeroutput">&lt;/sect1&gt;</code>.</p><p>
-<a class="indexterm" name="idp140682193559080" id="idp140682193559080"></a> You need to feed every <code class="computeroutput">&lt;sect1&gt;</code> two attributes. The first
+<a class="indexterm" name="idp140560390826952" id="idp140560390826952"></a> You need to feed every <code class="computeroutput">&lt;sect1&gt;</code> two attributes. The first
 attribute, <code class="computeroutput">id</code>, is standard and
 can be used with all elements. It comes in very handy when
 interlinking between documents (more about this when talking about
@@ -527,7 +527,7 @@ links in <a class="xref" href="docbook-primer" title="Links">the section called 
 <code class="computeroutput">id</code> has to be unique throughout
 the book you&#39;re making since the <code class="computeroutput">id</code>'s in your <code class="computeroutput">sect1</code>'s will turn into filenames when
 the book is parsed into HTML.</p><p>
-<a class="indexterm" name="idp140682193563912" id="idp140682193563912"></a> The other attribute is <code class="computeroutput">xreflabel</code>. The value of this is the text
+<a class="indexterm" name="idp140560390832312" id="idp140560390832312"></a> The other attribute is <code class="computeroutput">xreflabel</code>. The value of this is the text
 that will appear as the link when referring to this <code class="computeroutput">sect1</code>.</p><p>Right after the opening tag you put the title of the document -
 this is usually the same as <code class="computeroutput">xreflabel</code>-attribute. E.g. the top level of
 the document you&#39;re reading right now looks like this:</p><pre class="programlisting">
@@ -538,7 +538,7 @@ the document you&#39;re reading right now looks like this:</p><pre class="progra
 
 &lt;/sect1&gt;
 </pre><p>
-<a class="indexterm" name="idp140682186069336" id="idp140682186069336"></a> Inside this container your document will
+<a class="indexterm" name="idp140560390836936" id="idp140560390836936"></a> Inside this container your document will
 be split up into <a class="ulink" href="http://docbook.org/tdg/en/html/sect2.html" target="_top"><code class="computeroutput">&lt;sect2&gt;</code></a>'s,
 each with the same requirements - <code class="computeroutput">id</code> and <code class="computeroutput">xreflabel</code> attributes, and a <code class="computeroutput">&lt;title&gt;</code>-tag inside. Actually, the
 <code class="computeroutput">xreflabel</code> is never required in
@@ -548,7 +548,7 @@ the <code class="computeroutput">sect1</code> such as <code class="computeroutpu
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-code" id="dbprimer-code"></a>Code</h3></div></div></div><p>
-<a class="indexterm" name="idp140682186055096" id="idp140682186055096"></a> For displaying a snippet of code, a
+<a class="indexterm" name="idp140560390846296" id="idp140560390846296"></a> For displaying a snippet of code, a
 filename or anything else you just want to appear as a part of a
 sentence, we use <a class="ulink" href="http://docbook.org/tdg/en/html/computeroutput.html" target="_top"><code class="computeroutput">&lt;computeroutput&gt;</code></a> and <a class="ulink" href="http://docbook.org/tdg/en/html/code.html" target="_top"><code class="code">&lt;code&gt;</code></a> tags. These
 replace the HTML-tag <code class="code">&lt;code&gt;</code> tag,
@@ -562,7 +562,7 @@ around text that has been wrapped by combinations of <a class="ulink" href="http
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-links" id="dbprimer-links"></a>Links</h3></div></div></div><p>
-<a class="indexterm" name="idp140682186045448" id="idp140682186045448"></a> Linking falls into two different
+<a class="indexterm" name="idp140560390378280" id="idp140560390378280"></a> Linking falls into two different
 categories: inside the book you&#39;re making and outside:</p><div class="variablelist"><dl class="variablelist">
 <dt><span class="term"><span class="strong"><strong>1. Inside
 linking, cross-referencing other parts of your
@@ -570,7 +570,7 @@ book</strong></span></span></dt><dd>
 <p>By having unique <code class="computeroutput">id</code>'s
 you can cross-reference any part of your book with a simple tag,
 regardless of where that part is.</p><p>
-<a class="indexterm" name="idp140682186031576" id="idp140682186031576"></a>Check out how I link to a subsection of
+<a class="indexterm" name="idp140560390382136" id="idp140560390382136"></a>Check out how I link to a subsection of
 the Developer&#39;s Guide:</p><p>Put this in your XML:</p><pre class="programlisting">
 - Find information about creating a package in
 &lt;xref linkend="packages-making-a-package"&gt;&lt;/xref&gt;.
@@ -594,7 +594,7 @@ best to explain where the link takes you.</p>
 </dd><dt><span class="term"><span class="strong"><strong>2. Linking
 outside the documentation</strong></span></span></dt><dd>
 <p>
-<a class="indexterm" name="idp140682186011816" id="idp140682186011816"></a> If you&#39;re hyper-linking out of the
+<a class="indexterm" name="idp140560390238520" id="idp140560390238520"></a> If you&#39;re hyper-linking out of the
 documentation, it works almost the same way as HTML - the tag is
 just a little different (<a class="ulink" href="http://docbook.org/tdg/en/html/ulink.html" target="_top"><code class="computeroutput">&lt;ulink&gt;</code></a>):</p><pre class="programlisting">
 &lt;ulink url="http://www.oracle.com/"&gt;Oracle Corporation&lt;/ulink&gt;</pre><p>....will create a hyper-link to Oracle in the HTML-version of
@@ -612,7 +612,7 @@ ampersands in your hyperlinks. These are reserved for referencing
 <span class="strong"><strong>Note:</strong></span> The graphics guidelines are
 not written in stone. Use another valid approach if it works better
 for you.</em></span></p><p>
-<a class="indexterm" name="idp140682185999096" id="idp140682185999096"></a> To insert a graphic we use the elements
+<a class="indexterm" name="idp140560390247448" id="idp140560390247448"></a> To insert a graphic we use the elements
 <a class="ulink" href="http://docbook.org/tdg/en/html/mediaobject.html" target="_top"><code class="computeroutput">&lt;mediaobject&gt;</code></a>,
 <a class="ulink" href="http://docbook.org/tdg/en/html/imageobject.html" target="_top"><code class="computeroutput">&lt;imageobject&gt;</code></a>,
 <a class="ulink" href="http://docbook.org/tdg/en/html/imagedata.html" target="_top"><code class="computeroutput">&lt;imagedata&gt;</code></a>,
@@ -637,7 +637,7 @@ and link to them only with relative paths.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-lists" id="dbprimer-lists"></a>Lists</h3></div></div></div><p>
-<a class="indexterm" name="idp140682185988600" id="idp140682185988600"></a> Here&#39;s how you make the DocBook
+<a class="indexterm" name="idp140560390368520" id="idp140560390368520"></a> Here&#39;s how you make the DocBook
 equivalent of the three usual HTML-lists:</p><div class="variablelist"><dl class="variablelist">
 <dt><span class="term"><span class="strong"><strong>1. How to make
 an &lt;ul&gt;</strong></span></span></dt><dd>
@@ -690,7 +690,7 @@ you&#39;ll need to make it happen: <a class="ulink" href="http://docbook.org/tdg
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-tables" id="dbprimer-tables"></a>Tables</h3></div></div></div><p>
-<a class="indexterm" name="idp140682185965944" id="idp140682185965944"></a> DocBook supports several types of tables,
+<a class="indexterm" name="idp140560390642376" id="idp140560390642376"></a> DocBook supports several types of tables,
 but in most cases, the <a class="ulink" href="http://docbook.org/tdg/en/html/informaltable.html" target="_top"><code class="computeroutput">&lt;informaltable&gt;</code></a> is enough:</p><pre class="programlisting">
 &lt;informaltable frame="all"&gt;
   &lt;tgroup cols="3"&gt;
@@ -736,7 +736,7 @@ example.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-emphasis" id="dbprimer-emphasis"></a>Emphasis</h3></div></div></div><p>
-<a class="indexterm" name="idp140682185949880" id="idp140682185949880"></a> Our documentation uses two flavors of
+<a class="indexterm" name="idp140560390683144" id="idp140560390683144"></a> Our documentation uses two flavors of
 emphasis - italics and bold type. DocBook uses one - <a class="ulink" href="http://docbook.org/tdg/en/html/emphasis.html" target="_top"><code class="computeroutput">&lt;emphasis&gt;</code></a>.</p><p>The <code class="computeroutput">&lt;emphasis&gt;</code> tag
 defaults to italics when parsed. If you&#39;re looking for
 emphasizing with bold type, use <code class="computeroutput">&lt;emphasis

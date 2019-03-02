@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Adding Comments}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Adding Comments}</property>
 <property name="doc(title)">Adding Comments</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -13,7 +13,7 @@ Topics"
 comments for notes. On the note-edit.tcl/adp pair, which is used to
 display individual notes, we want to put a link to add comments at
 the bottom of the screen. If there are any comments, we want to
-show them.</p><p>First, we need to generate a url for adding comments. In
+show them.</p><p>First, we need to generate a URL for adding comments. In
 note-edit.tcl:</p><pre class="programlisting">
  set comment_add_url [export_vars -base [general_comments_package_url]comment-add {
   { object_id $note_id } 

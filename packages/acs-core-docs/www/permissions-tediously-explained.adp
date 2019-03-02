@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Permissions Tediously Explained}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Permissions Tediously Explained}</property>
 <property name="doc(title)">OpenACS Permissions Tediously Explained</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -127,7 +127,7 @@ are discussed in the following sections.</p>
 <a name="permissions-tedious-context-hierarchy" id="permissions-tedious-context-hierarchy"></a>Context
 Hierarchy</h3></div></div></div><p>Suppose objects <span class="emphasis"><em>A</em></span>,
 <span class="emphasis"><em>B</em></span>, ..., and <span class="emphasis"><em>F</em></span> form the following hierarchy.</p><div class="table">
-<a name="idp140682187418040" id="idp140682187418040"></a><p class="title"><strong>Table 11.2. Context Hierarchy
+<a name="idp140560465661608" id="idp140560465661608"></a><p class="title"><strong>Table 11.2. Context Hierarchy
 Example</strong></p><div class="table-contents"><table class="table" summary="Context Hierarchy Example" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
@@ -153,7 +153,7 @@ Example</strong></p><div class="table-contents"><table class="table" summary="Co
 </table></div>
 </div><br class="table-break"><p>This can be represented in the <a class="xref" href="permissions-tediously-explained">acs_objects</a>
 table by the following entries:</p><div class="table">
-<a name="idp140682182505032" id="idp140682182505032"></a><p class="title"><strong>Table 11.3. acs_objects example
+<a name="idp140560465785032" id="idp140560465785032"></a><p class="title"><strong>Table 11.3. acs_objects example
 data</strong></p><div class="table-contents"><table class="table" summary="acs_objects example data" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2">

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading an OpenACS 5.0.0 or greater installation}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Upgrading an OpenACS 5.0.0 or greater installation}</property>
 <property name="doc(title)">Upgrading an OpenACS 5.0.0 or greater installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -12,7 +12,7 @@
 installation</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
-<strong>Upgrading a stock site. </strong> If you have no
+<strong>Upgrading a stock site. </strong>If you have no
 custom code, and your site is not in a CVS repository, upgrade with
 these steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Go to <a class="ulink" href="/acs-admin/install" target="_top">/acs-admin/install/</a> and click "Upgrade Your
@@ -23,7 +23,7 @@ over imported translations.</p></li>
 </ol></div>
 </li><li class="listitem">
 <p>
-<strong>Upgrading a Custom or CVS site. </strong> If you
+<strong>Upgrading a Custom or CVS site. </strong>If you
 have custom code, and your site is in a CVS repository, upgrade
 with these steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>

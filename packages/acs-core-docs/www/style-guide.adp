@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Style Guide}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Style Guide}</property>
 <property name="doc(title)">OpenACS Style Guide</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -98,8 +98,8 @@ over your code and provide feedback and do the same for others.</p></li>
 </tr></thead><tbody><tr>
 <td>0.1</td><td>Creation</td><td>12/2003</td><td>Jeff Davis</td>
 </tr></tbody>
-</table></div><p><span class="cvstag">($&zwnj;Id: style-guide.xml,v 1.4 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+</table></div><div class="cvstag">($&zwnj;Id: style-guide.xml,v 1.4 2017/08/07 23:47:54
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 5. Upgrading}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 5. Upgrading}</property>
 <property name="doc(title)">Chapter 5. Upgrading</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -18,9 +18,11 @@ OpenACS 5.0.0 or greater installation</a></span></dt><dt><span class="sect1"><a 
 files</a></span></dt><dt><span class="sect1"><a href="upgrade-supporting">Upgrading
 Platform components</a></span></dt>
 </dl>
-</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
-Aufrecht</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span>
+</div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="how-do-I" leftLabel="Prev" leftTitle="How Do I?"

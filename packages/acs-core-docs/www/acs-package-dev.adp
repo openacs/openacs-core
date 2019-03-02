@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Part III. For OpenACS Package Developers}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Part III. For OpenACS Package Developers}</property>
 <property name="doc(title)">Part III. For OpenACS Package Developers</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -31,7 +31,7 @@ Pages</a></span></dt><dt><span class="sect1"><a href="tutorial-categories">Categ
 code</a></span></dt><dt><span class="sect1"><a href="tutorial-distribute">Prepare
 the package for distribution.</a></span></dt><dt><span class="sect1"><a href="tutorial-upgrades">Distributing upgrades of your
 package</a></span></dt><dt><span class="sect1"><a href="tutorial-notifications">Notifications</a></span></dt><dt><span class="sect1"><a href="tutorial-hierarchical">Hierarchical data</a></span></dt><dt><span class="sect1"><a href="tutorial-vuh">Using .vuh
-files for pretty urls</a></span></dt><dt><span class="sect1"><a href="tutorial-css-layout">Laying
+files for pretty URLs</a></span></dt><dt><span class="sect1"><a href="tutorial-css-layout">Laying
 out a page with CSS instead of tables</a></span></dt><dt><span class="sect1"><a href="tutorial-html-email">Sending
 HTML email from your application</a></span></dt><dt><span class="sect1"><a href="tutorial-caching">Basic
 Caching</a></span></dt><dt><span class="sect1"><a href="tutorial-schedule-procs">Scheduled Procedures</a></span></dt><dt><span class="sect1"><a href="tutorial-wysiwyg-editor">Enabling WYSIWYG</a></span></dt><dt><span class="sect1"><a href="tutorial-parameters">Adding

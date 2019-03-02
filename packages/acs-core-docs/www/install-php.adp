@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install PHP for use in AOLserver}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install PHP for use in AOLserver}</property>
 <property name="doc(title)">Install PHP for use in AOLserver</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,9 +9,11 @@ additional supporting software"
 			rightLink="install-squirrelmail" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="install-php" id="install-php"></a>Install PHP for use in AOLserver</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:openacs\@sussdorff.de" target="_top">Malte
-Sussdorff</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>To be able to use PHP software with AOLserver (and OpenACS), you
+<a name="install-php" id="install-php"></a>Install PHP for use in AOLserver</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:openacs\@sussdorff.de" target="_top">Malte Sussdorff</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>To be able to use PHP software with AOLserver (and OpenACS), you
 have to install PHP with AOLserver support. Get the latest version
 from <a class="ulink" href="http://www.php.net" target="_top">www.php.net</a>. For convenience we get version 4.3.4 from a
 mirror</p><pre class="screen">[root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>

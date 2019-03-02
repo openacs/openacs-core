@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Enabling WYSIWYG}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Enabling WYSIWYG}</property>
 <property name="doc(title)">Enabling WYSIWYG</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,9 +10,11 @@ Topics"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-wysiwyg-editor" id="tutorial-wysiwyg-editor"></a>Enabling
-WYSIWYG</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima
-Mazloumi</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Most of the forms in OpenACS are created using the form builder,
+WYSIWYG</h2></div></div></div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima Mazloumi</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>Most of the forms in OpenACS are created using the form builder,
 see <a class="xref" href="form-builder" title="Using Form Builder: building html forms dynamically">the section
 called “Using Form Builder: building html forms dynamically”</a>.
 For detailed information on the API take a look <a class="ulink" href="/api-doc/proc-view?proc=ad_form" target="_top">here</a>.</p><p>The following section shows how you can modify your form to

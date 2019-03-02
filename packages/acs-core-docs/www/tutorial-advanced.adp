@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 10. Advanced Topics}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 10. Advanced Topics}</property>
 <property name="doc(title)">Chapter 10. Advanced Topics</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -20,7 +20,7 @@ Pages</a></span></dt><dt><span class="sect1"><a href="tutorial-categories">Categ
 code</a></span></dt><dt><span class="sect1"><a href="tutorial-distribute">Prepare
 the package for distribution.</a></span></dt><dt><span class="sect1"><a href="tutorial-upgrades">Distributing upgrades of your
 package</a></span></dt><dt><span class="sect1"><a href="tutorial-notifications">Notifications</a></span></dt><dt><span class="sect1"><a href="tutorial-hierarchical">Hierarchical data</a></span></dt><dt><span class="sect1"><a href="tutorial-vuh">Using .vuh
-files for pretty urls</a></span></dt><dt><span class="sect1"><a href="tutorial-css-layout">Laying
+files for pretty URLs</a></span></dt><dt><span class="sect1"><a href="tutorial-css-layout">Laying
 out a page with CSS instead of tables</a></span></dt><dt><span class="sect1"><a href="tutorial-html-email">Sending
 HTML email from your application</a></span></dt><dt><span class="sect1"><a href="tutorial-caching">Basic
 Caching</a></span></dt><dt><span class="sect1"><a href="tutorial-schedule-procs">Scheduled Procedures</a></span></dt><dt><span class="sect1"><a href="tutorial-wysiwyg-editor">Enabling WYSIWYG</a></span></dt><dt><span class="sect1"><a href="tutorial-parameters">Adding
@@ -28,9 +28,11 @@ in parameters for your package</a></span></dt><dt><span class="sect1"><a href="t
 scripts</a></span></dt><dt><span class="sect1"><a href="tutorial-second-database">Connect to a second
 database</a></span></dt><dt><span class="sect1"><a href="tutorial-future-topics">Future Topics</a></span></dt>
 </dl>
-</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
-Aufrecht</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>This tutorial covers topics which are not essential to creating
+</div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>This tutorial covers topics which are not essential to creating
 a minimal working package. Each section can be used independently
 of all of the others; all sections assume that you&#39;ve completed
 the basic tutorial.</p>

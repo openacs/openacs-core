@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Full Text Search using Tsearch2}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Full Text Search using Tsearch2}</property>
 <property name="doc(title)">Install Full Text Search using Tsearch2</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,14 +10,14 @@ additional supporting software"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-full-text-search-tsearch2" id="install-full-text-search-tsearch2"></a>Install Full Text Search
-using Tsearch2</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:dave\@thedesignexperience.org" target="_top">Dave Bauer</a>,
-<a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
-Aufrecht</a> and <a class="ulink" href="mailto:openacs\@sussdorff.de" target="_top">Malte Sussdorff</a>
-with help from <a class="ulink" href="http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/docs/tsearch-V2-intro.html" target="_top">Tsearch V2 Introduction by Andrew J.
-Kopciuch</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+using Tsearch2</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:dave\@thedesignexperience.org" target="_top">Dave Bauer</a>, <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a> and
+<a class="ulink" href="mailto:openacs\@sussdorff.de" target="_top">Malte Sussdorff</a> with help from <a class="ulink" href="http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/docs/tsearch-V2-intro.html" target="_top">Tsearch V2 Introduction by Andrew J. Kopciuch</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="idp140682186280760" id="idp140682186280760"></a><p>In earlier versions of PostgreSQL (7.4), tsearch2 was a contrib
+<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="idp140560467196504" id="idp140560467196504"></a><p>In earlier versions of PostgreSQL (7.4), tsearch2 was a contrib
 module. With PostgreSQL 9.*, it was included in the standard
 PostgreSQL package with minor naming changes (e.g. the function
 "rank" became "ts_rank"). PostgreSQL 9 included

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 14. Internationalization}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 14. Internationalization}</property>
 <property name="doc(title)">Chapter 14. Internationalization</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -17,9 +17,11 @@ Internationalization/Localization works in OpenACS</a></span></dt><dt><span clas
 Internationalize a Package</a></span></dt><dt><span class="sect1"><a href="i18n-design">Design
 Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator&#39;s Guide</a></span></dt>
 </dl>
-</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:peter\@collaboraid.biz" target="_top">Peter Marklund</a> and
-<a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars Pind</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span>
+</div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:peter\@collaboraid.biz" target="_top">Peter Marklund</a> and <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars Pind</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="requirements-template" leftLabel="Prev" leftTitle="System/Application Requirements

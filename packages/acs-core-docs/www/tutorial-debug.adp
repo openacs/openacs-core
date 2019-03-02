@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Debugging and Automated Testing}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Debugging and Automated Testing}</property>
 <property name="doc(title)">Debugging and Automated Testing</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,26 +9,28 @@ Tutorial"
 			rightLink="tutorial-advanced" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-debug" id="tutorial-debug"></a>Debugging and Automated Testing</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
-Aufrecht</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="tutorial-debug" id="tutorial-debug"></a>Debugging and Automated Testing</h2></div></div></div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682183507144" id="idp140682183507144"></a>Debugging</h3></div></div></div><p>
-<strong>Developer Support. </strong> The Developer Support
+<a name="idp140560466636760" id="idp140560466636760"></a>Debugging</h3></div></div></div><p>
+<strong>Developer Support. </strong>The Developer Support
 package adds several goodies: debug information for every page; the
 ability to log comments to the page instead of the error log, and
 fast user switching so that you can test pages as anonymous and as
 dummy users without logging in and out.</p><p>
-<strong>PostgreSQL. </strong> You can work directly with
-the database to do debugging steps like looking directly at tables
-and testing stored procedures. Start emacs. Type <strong class="userinput"><code>M-x sql-postgres</code></strong>. Press enter for
-server name and use <strong class="userinput"><code><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></code></strong>
+<strong>PostgreSQL. </strong>You can work directly with the
+database to do debugging steps like looking directly at tables and
+testing stored procedures. Start emacs. Type <strong class="userinput"><code>M-x sql-postgres</code></strong>. Press enter for
+server name and use <strong class="userinput"><code><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 for database name. You can use C-(up arrow) and C-(down arrow) for
 command history.</p><p>Hint: "Parse error near *" usually means that an xql
 file wasn&#39;t recognized, because the Tcl file is choking on the
 *SQL* placeholder that it falls back on.</p><p><strong>Watching the server log. </strong></p><p>To set up real-time monitoring of the AOLserver error log,
 <span class="bold"><strong>type</strong></span>
-</p><pre class="screen">less /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/log/openacs-dev-error.log</pre><div class="literallayout"><p>
+</p><pre class="screen">less /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/openacs-dev-error.log</pre><div class="literallayout"><p>
 F to show new log entries in real time (like tail -f)<br>
 
 C-c to stop and F to start it up again. <br>
@@ -39,7 +41,7 @@ G goes to the end.<br>
           </p></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682183480040" id="idp140682183480040"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
+<a name="idp140560467381016" id="idp140560467381016"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
 <thead><tr class="segtitle">
 <th>Test Num</th><th>Action</th><th>Expected Result</th>
 </tr></thead><tbody>
@@ -67,16 +69,18 @@ mfp::note::delete.</td><td class="seg">Proc should return 0 for success.</td>
 to delete your own note. Edit your own note. Search for a note.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682182897832" id="idp140682182897832"></a>Write automated tests</h3></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a>
-and Joel Aufrecht</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>
-<a class="indexterm" name="idp140682188491320" id="idp140682188491320"></a> It seems to me that a lot of people have
+<a name="idp140560466768600" id="idp140560466768600"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a> and Joel Aufrecht</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>
+<a class="indexterm" name="idp140560467256968" id="idp140560467256968"></a> It seems to me that a lot of people have
 been asking for some guidelines on how to write automated tests.
 I&#39;ve done several tests by now and have found the process to be
 extremely easy and useful. It&#39;s a joy to work with automated
 testing once you get the hang of it.</p><p>Create the directory that will contain the test script and edit
 the script file. The directory location and file name are standards
-which are recognized by the automated testing package:</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/tcl/test</code></strong>
-[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/tcl/test</code></strong>
+which are recognized by the automated testing package:</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
+[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
 [$OPENACS_SERVICE_NAME test]$ <strong class="userinput"><code>emacs myfirstpackages-procs.tcl</code></strong>
 </pre><p>Write the tests. This is obviously the big step :) The script
 should first call ad_library like any normal -procs.tcl file:</p><pre class="screen">ad_library {
@@ -115,7 +119,7 @@ from API-001, invoke mfp::note::get. Proc should return the
 specific word in the title."</p><pre class="programlisting">
       set name [ad_generate_random_string]
       set new_id [mfp::note::add -title $name]
-      aa_true "Note add succeeded" ([info exists new_id] &amp;&amp; $new_id ne "")</pre><p>To test our simple case, we must load the test file into the
+      aa_true "Note add succeeded" {$new_id ne ""}</pre><p>To test our simple case, we must load the test file into the
 system (just as with the /tcl file in the basic tutorial, since the
 file didn&#39;t exist when the system started, the system
 doesn&#39;t know about it.) To make this file take effect, go to
@@ -135,7 +139,7 @@ any test. (<a class="ulink" href="http://www.nedbatchelder.com/blog/20030408T062
 myfirstpackage. You should see your test case. Run it and examine
 the results.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682188378408" id="idp140682188378408"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn&#39;t
+<a name="idp140560467276536" id="idp140560467276536"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn&#39;t
 test the code in our adp/tcl pairs. For this, we can use
 TCLwebtest. TCLwebtest must be <a class="link" href="install-tclwebtest" title="Install tclwebtest.">installed</a>
 for this test to work. This provides a <a class="ulink" href="http://tclwebtest.sourceforge.net/doc/api_public.html" target="_top">library of functions</a> that make it easy to call a page
@@ -145,7 +149,7 @@ acs-automated-testing; see the example provided for one approach on
 integrating them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682188392072" id="idp140682188392072"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
+<a name="idp140560466678056" id="idp140560466678056"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
 deliberately bad data. The complete test looks like:</p><pre class="programlisting">ad_library {
     Test cases for my first package.
 }
@@ -162,15 +166,15 @@ aa_register_case \
             -test_code  {
                 set name [ad_generate_random_string]
                 set new_id [mfp::note::add -title $name]
-                aa_true "Note add succeeded" ([info exists new_id] &amp;&amp; $new_id ne "")
+                aa_true "Note add succeeded" {$new_id ne ""}
                 
                 mfp::note::get -item_id $new_id -array note_array
-                aa_true "Note contains correct title" [string equal $note_array(title) $name]
+                aa_equals "Note contains correct title" $note_array(title) $name
                 
                 mfp::note::delete -item_id $new_id
                 
                 set get_again [catch {mfp::note::get -item_id $new_id -array note_array}]
-                aa_false "After deleting a note, retrieving it fails" [expr {$get_again == 0}]
+                aa_false "After deleting a note, retrieving it fails" {$get_again == 0}
             }
     }
 
@@ -187,15 +191,15 @@ aa_register_case \
                 set name {-Bad [BAD] \077 { $Bad}} 
                 append name [ad_generate_random_string]
                 set new_id [mfp::note::add -title $name]
-                aa_true "Note add succeeded" ([info exists new_id] &amp;&amp; $new_id ne "")
+                aa_true "Note add succeeded" {$new_id ne ""}
                 
                 mfp::note::get -item_id $new_id -array note_array
-                aa_true "Note contains correct title" [string equal $note_array(title) $name]
+                aa_equals "Note contains correct title" $note_array(title) $name
                 aa_log "Title is $name"
                 mfp::note::delete -item_id $new_id
                 
                 set get_again [catch {mfp::note::get -item_id $new_id -array note_array}]
-                aa_false "After deleting a note, retrieving it fails" [expr {$get_again == 0}]
+                aa_false "After deleting a note, retrieving it fails" {$get_again == 0}
             }
     }
 
@@ -269,12 +273,12 @@ aa_register_case \
             # 3) screen-scrape for the ID
             # all options are problematic.  We&#39;ll do #1 in this example:
 
-            set note_id [db_string get_note_id_from_name " 
+            set note_id [db_string get_note_id_from_name {
                 select item_id 
                   from cr_items 
                  where name = :note_title  
                    and content_type = 'mfp_note'
-            " -default 0]
+            } -default 0]
 
             aa_log "Deleting note with id $note_id"
 

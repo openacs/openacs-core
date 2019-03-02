@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install a Unix-like system and supporting software}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install a Unix-like system and supporting software}</property>
 <property name="doc(title)">Install a Unix-like system and supporting software</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,9 +10,11 @@ Installation"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="unix-installation" id="unix-installation"></a>Install a Unix-like system and
-supporting software</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
-Aufrecht</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+supporting software</h2></div></div></div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="unix-install" id="unix-install"></a>a
 Unix-like system</h3></div></div></div><p>Most of the documentation in this section is kept as a
@@ -36,8 +38,8 @@ emacs keybindings for DocBook SGML)</p></li><li class="listitem"><p>daemontools 
 must first do <a class="xref" href="install-steps" title="Setting a global shell variable for cut and paste">Setting a
 global shell variable for cut and paste</a>.</p><p>To install a machine to the specifications of the Reference
 Platform, do the <a class="link" href="install-redhat" title="Appendix A. Install Red Hat 8/9">walkthrough of the Red
-Hat 8.0 Install for OpenACS</a>.</p><p><span class="cvstag">($&zwnj;Id: os.xml,v 1.16 2017/08/07 23:47:55
-gustafn Exp $)</span></p>
+Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($&zwnj;Id: os.xml,v 1.16 2017/08/07 23:47:55 gustafn
+Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

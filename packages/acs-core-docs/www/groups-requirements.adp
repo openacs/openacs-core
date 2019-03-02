@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Groups Requirements}</property>
 <property name="doc(title)">Groups Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,8 +9,10 @@ Documentation"
 			rightLink="groups-design" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="groups-requirements" id="groups-requirements"></a>Groups Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>, Mark
-Thomas</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="groups-requirements" id="groups-requirements"></a>Groups Requirements</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>, Mark Thomas</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="groups-requirements-intro" id="groups-requirements-intro"></a>Introduction</h3></div></div></div><p>Almost all database-backed websites have users, and need to
 model the grouping of users. The OpenACS 4 Parties and Groups

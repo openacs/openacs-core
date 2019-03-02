@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Distributing upgrades of your package}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Distributing upgrades of your package}</property>
 <property name="doc(title)">Distributing upgrades of your package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,7 +10,10 @@ Topics"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-upgrades" id="tutorial-upgrades"></a>Distributing upgrades of your
-package</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by Jade Rubick</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>The OpenACS Package Repository builds a list of packages that
+package</h2></div></div></div><div class="authorblurb">
+<p>by Jade Rubick</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>The OpenACS Package Repository builds a list of packages that
 can be installed on OpenACS installations, and can be used by
 administrators to update their packages. If you are a package
 developer, there are a couple of steps you need to take in order to

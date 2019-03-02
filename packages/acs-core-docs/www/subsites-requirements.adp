@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Subsites Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Subsites Requirements}</property>
 <property name="doc(title)">Subsites Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,8 +10,10 @@ Documentation"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="subsites-requirements" id="subsites-requirements"></a>Subsites
-Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a> and
-Dennis Gregorovic</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+Requirements</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a> and Dennis Gregorovic</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="subsites-requirements-intro" id="subsites-requirements-intro"></a>Introduction</h3></div></div></div><p>The following is a requirements document for OpenACS 4 Subsites,
 part of the OpenACS 4 Kernel. The Subsites system allows one
@@ -37,7 +39,7 @@ primarily accomplished by having an application "scope"
 its content to a particular package instance. The <a class="link" href="rp-design" title="Request Processor Design">request
 processor</a> then figures out which package_id a particular URL
 references and then provides this information through the
-<code class="computeroutput">ad_conn</code> api (<code class="computeroutput">[ad_conn package_id]</code>, <code class="computeroutput">[ad_conn package_url]</code>).</p><p>The other piece of the subsite system is a subsite package that
+<code class="computeroutput">ad_conn</code> API (<code class="computeroutput">[ad_conn package_id]</code>, <code class="computeroutput">[ad_conn package_url]</code>).</p><p>The other piece of the subsite system is a subsite package that
 provides subsite admins a "control panel" for
 administering their subsite. This is the same package used to
 provide all the community core functionality available at the

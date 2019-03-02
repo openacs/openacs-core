@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Sending HTML email from your application}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Sending HTML email from your application}</property>
 <property name="doc(title)">Sending HTML email from your application</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,8 +10,11 @@ Topics"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-html-email" id="tutorial-html-email"></a>Sending HTML email from your
-application</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:jade\@rubick.com" target="_top">Jade Rubick</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>Sending email is fairly simple using the acs-mail-lite package.
+application</h2></div></div></div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:jade\@rubick.com" target="_top">Jade Rubick</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>Sending email is fairly simple using the acs-mail-lite package.
 Sending HTML email is only slightly more complicated.</p><pre class="programlisting">
     set subject "my subject"
 

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Parties in OpenACS}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Parties in OpenACS}</property>
 <property name="doc(title)">Parties in OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,9 +9,11 @@ Reference"
 			rightLink="permissions-tediously-explained" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="parties" id="parties"></a>Parties in OpenACS</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
-Schloming</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="parties" id="parties"></a>Parties in OpenACS</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="parties-intro" id="parties-intro"></a>Introduction</h3></div></div></div><p>While many applications must deal with individuals and many
 applications must deal with groups, most applications must deal
@@ -132,7 +134,7 @@ relation is transitive. That is, it works like memberships in set
 theory. If A is a member of B, and B is a member of C, then A is a
 member of C.</p><p>For example, consider the membership relations of Greenpeace,
 and composite relations of a multinational corporation. Greenpeace,
-an organization (ie. group), can have both individuals and
+an organization (i.e. group), can have both individuals and
 organizations (other groups) as members. Hence the membership
 relation between groups and <span class="emphasis"><em>parties</em></span>. However, someone is not a
 member of Greenpeace just because they are a member of a group that
@@ -321,8 +323,8 @@ primary key in what could be thought of as a pure relation. Because
 a membership relation is an ordinary acs object with <a class="ulink" href="object-identity" target="_top">object
 identity</a>, it is as easy to extend the membership relation to
 store extra information as it is to extend the users table or the
-groups table.</p><p><span class="cvstag">($&zwnj;Id: parties.xml,v 1.9 2006/09/25 20:32:37
-byronl Exp $)</span></p>
+groups table.</p><div class="cvstag">($&zwnj;Id: parties.xml,v 1.10 2018/09/30 15:53:28
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

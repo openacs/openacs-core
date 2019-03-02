@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Core Documentation}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Core Documentation}</property>
 <property name="doc(title)">OpenACS Core Documentation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,7 +9,7 @@
 		    <div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140682191178008" id="idp140682191178008"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140560390223752" id="idp140560390223752"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
@@ -34,7 +34,7 @@ PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install A
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
 5.9.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
 Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
-Installation Guide for Mac OS X</a></span></dt>
+Installation Guide for macOS</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="configuring-new-site">4.
 Configuring a new OpenACS Site</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="configuring-install-packages">Installing OpenACS
@@ -123,7 +123,7 @@ Pages</a></span></dt><dt><span class="sect1"><a href="tutorial-categories">Categ
 code</a></span></dt><dt><span class="sect1"><a href="tutorial-distribute">Prepare
 the package for distribution.</a></span></dt><dt><span class="sect1"><a href="tutorial-upgrades">Distributing upgrades of your
 package</a></span></dt><dt><span class="sect1"><a href="tutorial-notifications">Notifications</a></span></dt><dt><span class="sect1"><a href="tutorial-hierarchical">Hierarchical data</a></span></dt><dt><span class="sect1"><a href="tutorial-vuh">Using .vuh
-files for pretty urls</a></span></dt><dt><span class="sect1"><a href="tutorial-css-layout">Laying
+files for pretty URLs</a></span></dt><dt><span class="sect1"><a href="tutorial-css-layout">Laying
 out a page with CSS instead of tables</a></span></dt><dt><span class="sect1"><a href="tutorial-html-email">Sending
 HTML email from your application</a></span></dt><dt><span class="sect1"><a href="tutorial-caching">Basic
 Caching</a></span></dt><dt><span class="sect1"><a href="tutorial-schedule-procs">Scheduled Procedures</a></span></dt><dt><span class="sect1"><a href="tutorial-wysiwyg-editor">Enabling WYSIWYG</a></span></dt><dt><span class="sect1"><a href="tutorial-parameters">Adding

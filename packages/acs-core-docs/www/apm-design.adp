@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Package Manager Design}</property>
 <property name="doc(title)">Package Manager Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,7 +9,10 @@ Documentation"
 			rightLink="db-api-detailed" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="apm-design" id="apm-design"></a>Package Manager Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Bryan Quinn</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="apm-design" id="apm-design"></a>Package Manager Design</h2></div></div></div><div class="authorblurb">
+<p>By Bryan Quinn</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="apm-design-essentials" id="apm-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="ulink" href="/acs-admin/apm" target="_top">OpenACS
@@ -342,22 +345,6 @@ procedure disable (
     version_id          in apm_package_versions.version_id%TYPE  
 );
 
-</pre><p>Files associated with a version can be added and removed. The
-path is relative to the <span class="strong"><strong>package-root</strong></span> which is <code class="computeroutput">acs-server-root/packages/package-key</code>.</p><pre class="programlisting">
--- Add a file to the indicated version. 
-function add_file(
-    file_id             in apm_package_files.file_id%TYPE 
-                        default null, 
-    version_id in       apm_package_versions.version_id%TYPE, 
-    path                in apm_package_files.path%TYPE,
-    file_type           in apm_package_file_types.file_type_key%TYPE 
-) return apm_package_files.file_id%TYPE; 
-
--- Remove a file from the indicated version.
-procedure remove_file( 
-    version_id          in apm_package_versions.version_id%TYPE,
-    path                in apm_package_files.path%TYPE 
-);
 </pre><p>Package versions need to indicate that they provide interfaces
 for other software. An interface is an API that other packages can
 access and utilize. Interfaces are identified as a URI and a
@@ -586,8 +573,6 @@ information about the particular version:</p><div class="itemizedlist"><ul class
 <code class="computeroutput">apm_package_owners</code> Stores
 information about the owners of a particular version of a
 package.</p></li><li class="listitem"><p>
-<code class="computeroutput">apm_package_files</code> Stores
-information about the files that are part of a version.</p></li><li class="listitem"><p>
 <code class="computeroutput">apm_package_dependencies</code>
 Stores information about what interfaces the package provides and
 requires.</p></li>
@@ -606,9 +591,7 @@ packages registered in the APM.</p><div class="itemizedlist"><ul class="itemized
 Provides information about all of the versions in the system with
 information available from the <code class="computeroutput">apm_package_types</code> table.</p></li><li class="listitem"><p>
 <code class="computeroutput">apm_enabled_package_versions</code>
-A view (subset) of the above table with only enabled versions.</p></li><li class="listitem"><p>
-<code class="computeroutput">apm_file_info</code> Provides a
-public interface for querying file information.</p></li>
+A view (subset) of the above table with only enabled versions.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

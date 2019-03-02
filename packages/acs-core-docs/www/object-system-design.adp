@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Model Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Object Model Design}</property>
 <property name="doc(title)">Object Model Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,8 +10,10 @@ Documentation"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="object-system-design" id="object-system-design"></a>Object Model
-Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su, Michael Yoon, Richard Li,
-Rafael Schloming</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+Design</h2></div></div></div><div class="authorblurb">
+<p>By Pete Su, Michael Yoon, Richard Li, Rafael Schloming</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="object-system-design-essentials" id="object-system-design-essentials"></a>Essentials</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
@@ -361,7 +363,7 @@ to make our data models more flexible, so that new modules can
 easily gain access to generic features. However, while the API
 itself doesn&#39;t enforce the idea that applications only use the
 object model for metadata, it is also the case that the data model
-is not designed to scale to large type hierarchies. In the more
+is not designed to scale too large type hierarchies. In the more
 limited domain of the metadata model, this is acceptable since the
 type hierarchy is fairly small. But the object system data model is
 not designed to support, for example, a huge type tree like the

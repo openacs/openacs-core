@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Overview}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Overview}</property>
 <property name="doc(title)">Overview</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -25,23 +25,23 @@ install the files on your hard drive, run any appropriate database
 upgrade scripts, and prompt you to restart the server. After
 restarting the server again, the upgrade is complete.</p></li>
 </ol></div><div class="figure">
-<a name="idp140682188908648" id="idp140682188908648"></a><p class="title"><strong>Figure 5.1. Upgrading with the
+<a name="idp140560457538536" id="idp140560457538536"></a><p class="title"><strong>Figure 5.1. Upgrading with the
 APM</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-apm.png" align="middle" alt="Upgrading with the APM"></div></div>
 </div><br class="figure-break"><p>It&#39;s always a good idea to precede an upgrade attempt with a
 <a class="link" href="snapshot-backup" title="Manual backup and recovery">snapshot backup</a>.</p><div class="table">
-<a name="idp140682183415528" id="idp140682183415528"></a><p class="title"><strong>Table 5.1. Assumptions in this
+<a name="idp140560457541736" id="idp140560457541736"></a><p class="title"><strong>Table 5.1. Assumptions in this
 section</strong></p><div class="table-contents"><table class="table" summary="Assumptions in this section" cellspacing="0" border="1">
 <colgroup>
 <col><col>
 </colgroup><tbody>
 <tr>
-<td>name of OpenACS user</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td>
+<td>name of OpenACS user</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
 </tr><tr>
-<td>OpenACS server name</td><td><em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em></td>
+<td>OpenACS server name</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
 </tr><tr>
-<td>Root of OpenACS file tree</td><td><em class="replaceable"><code>/var/lib/aolserver/$OPENACS_SERVICE_NAME</code></em></td>
+<td>Root of OpenACS file tree</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME</span></span></td>
 </tr><tr>
-<td>Database backup directory</td><td><em class="replaceable"><code>/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</code></em></td>
+<td>Database backup directory</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</span></span></td>
 </tr>
 </tbody>
 </table></div>

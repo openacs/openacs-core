@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Staged Deployment for Production Networks}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Staged Deployment for Production Networks}</property>
 <property name="doc(title)">Staged Deployment for Production Networks</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,12 +10,12 @@ Environments"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="maintenance-deploy" id="maintenance-deploy"></a>Staged Deployment for Production
-Networks</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red"><span class="cvstag">($&zwnj;Id:
-maintenance.xml,v 1.32 2018/03/27 11:18:00 hectorr Exp
-$)</span></span></p><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+Networks</h2></div></div></div><div class="authorblurb">
+<div class="cvstag">($&zwnj;Id: maintenance.xml,v 1.35 2018/11/03
+19:57:22 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p>
-&lt;/authorblurb&gt;
-<p>This section describes two minimal-risk methods for deploying
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>This section describes two minimal-risk methods for deploying
 changes on a production network. The important characteristics of a
 safe change deployment include: (THIS SECTION IN DEVELOPMENT)</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Control: You know for sure that the change you are making is the
@@ -24,7 +24,7 @@ tested.</p></li><li class="listitem"><p>Rollback: If anything goes wrong, you ca
 working configuration safely and quickly.</p></li>
 </ul></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682193078776" id="idp140682193078776"></a>Method 1: Deployment with CVS</h3></div></div></div><p>With this method, we control the files on a site via CVS. This
+<a name="idp140560461984808" id="idp140560461984808"></a>Method 1: Deployment with CVS</h3></div></div></div><p>With this method, we control the files on a site via CVS. This
 example uses one developmental server (service0-dev) and one
 production server (service0). Depending on your needs, you can also
 have a staging server for extensive testing before you go live. The
@@ -102,7 +102,7 @@ rollback, you can use return to the last working tag if the new tag
 tags to follow ...</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682193079128" id="idp140682193079128"></a>Method 2: A/B Deployment</h3></div></div></div><p>The approach taken in this section is to always create a new
+<a name="idp140560461996760" id="idp140560461996760"></a>Method 2: A/B Deployment</h3></div></div></div><p>The approach taken in this section is to always create a new
 service with the desired changes, running in parallel with the
 existing site. This guarantees control, at least at the final step
 of the process: you know what changes you are about to make because
@@ -118,28 +118,28 @@ system regularly receiving new data, you must interrupt this
 function or risk losing data in the shuffle. It also requires extra
 steps if the database will be affected.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682193094056" id="idp140682193094056"></a>Simple A/B Deployment: Database is not
+<a name="idp140560361327240" id="idp140560361327240"></a>Simple A/B Deployment: Database is not
 changed</h4></div></div></div><div class="figure">
-<a name="idp140682193094792" id="idp140682193094792"></a><p class="title"><strong>Figure 6.2. Simple A/B
+<a name="idp140560361327880" id="idp140560361327880"></a><p class="title"><strong>Figure 6.2. Simple A/B
 Deployment - Step 1</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-1.png" align="middle" alt="Simple A/B Deployment - Step 1"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140682193097912" id="idp140682193097912"></a><p class="title"><strong>Figure 6.3. Simple A/B
+<a name="idp140560361330568" id="idp140560361330568"></a><p class="title"><strong>Figure 6.3. Simple A/B
 Deployment - Step 2</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-2.png" align="middle" alt="Simple A/B Deployment - Step 2"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140682193100872" id="idp140682193100872"></a><p class="title"><strong>Figure 6.4. Simple A/B
+<a name="idp140560361333256" id="idp140560361333256"></a><p class="title"><strong>Figure 6.4. Simple A/B
 Deployment - Step 3</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-3.png" align="middle" alt="Simple A/B Deployment - Step 3"></div></div>
 </div><br class="figure-break">
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682193103864" id="idp140682193103864"></a>Complex A/B Deployment: Database is
+<a name="idp140560361336072" id="idp140560361336072"></a>Complex A/B Deployment: Database is
 changed</h4></div></div></div><div class="figure">
-<a name="idp140682193104504" id="idp140682193104504"></a><p class="title"><strong>Figure 6.5. Complex A/B
+<a name="idp140560361336712" id="idp140560361336712"></a><p class="title"><strong>Figure 6.5. Complex A/B
 Deployment - Step 1</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-1.png" align="middle" alt="Complex A/B Deployment - Step 1"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140682193107560" id="idp140682193107560"></a><p class="title"><strong>Figure 6.6. Complex A/B
+<a name="idp140560361339400" id="idp140560361339400"></a><p class="title"><strong>Figure 6.6. Complex A/B
 Deployment - Step 2</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-2.png" align="middle" alt="Complex A/B Deployment - Step 2"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140682193110440" id="idp140682193110440"></a><p class="title"><strong>Figure 6.7. Complex A/B
+<a name="idp140560361342088" id="idp140560361342088"></a><p class="title"><strong>Figure 6.7. Complex A/B
 Deployment - Step 3</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-3.png" align="middle" alt="Complex A/B Deployment - Step 3"></div></div>
 </div><br class="figure-break">
 </div>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
 <property name="doc(title)">Install Oracle 8.1.7</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,8 +9,11 @@ Installation"
 			rightLink="postgres" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="oracle" id="oracle"></a>Install Oracle 8.1.7</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>If you are installing PostGreSQL instead of Oracle, skip this
+<a name="oracle" id="oracle"></a>Install Oracle 8.1.7</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>If you are installing PostGreSQL instead of Oracle, skip this
 section.</p><p>OpenACS 5.9.0 will install with Oracle 9i but has not been
 extensively tested so may still have bugs or tuning issues. See
 <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski&#39;s Oracle 9i notes</a> for
@@ -895,8 +898,8 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><p><span class="cvstag">($&zwnj;Id: oracle.xml,v 1.22 2017/08/07 23:47:55
-gustafn Exp $)</span></p>
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.22 2017/08/07 23:47:55
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

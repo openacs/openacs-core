@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Daemontools (OPTIONAL)}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Daemontools (OPTIONAL)}</property>
 <property name="doc(title)">Install Daemontools (OPTIONAL)</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -15,7 +15,7 @@ installed in /package. These commands install daemontools and
 svgroup. svgroup is a script for granting permissions, to allow
 users other than root to use daemontools for specific services.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Install Daemontools</p><a class="indexterm" name="idp140682186500936" id="idp140682186500936"></a><p>
+<p>Install Daemontools</p><a class="indexterm" name="idp140560467306168" id="idp140560467306168"></a><p>
 <a class="link" href="individual-programs">download
 daemontools</a> and install it.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
@@ -31,12 +31,12 @@ Creating /service...
 Adding svscanboot to inittab...
 init should start svscan now.
 [root root]#
-<span class="action">mkdir -p /package 
+<span class="action"><span class="action">mkdir -p /package 
 chmod 1755 /package 
 cd /package 
 tar xzf /tmp/daemontools-0.76.tar.gz 
 cd admin/daemontools-0.76 
-package/install</span>
+package/install</span></span>
 </pre>
 </li><li class="listitem">
 <p>Red Hat 9, Fedora Core 1-4</p><p>Make sure you have the source tarball in <code class="computeroutput">/tmp</code>, or <a class="link" href="individual-programs">download
@@ -65,7 +65,7 @@ Creating /service...
 Adding svscanboot to inittab...
 init should start svscan now.
 [root root]#
-<span class="action">mkdir -p /package 
+<span class="action"><span class="action">mkdir -p /package 
 chmod 1755 /package 
 cd /package 
 tar xzf /tmp/daemontools-0.76.tar.gz 
@@ -73,7 +73,7 @@ cd admin
 wget http://moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch
 cd daemontools-0.76
 patch -p1 &lt; ../daemontools-0.76.errno.patch
-package/install</span>
+package/install</span></span>
 </pre>
 </li><li class="listitem">
 <p>FreeBSD (follow standard install)</p><p>Make sure you have the source tarball in <code class="computeroutput">/tmp</code>, or <a class="link" href="individual-programs">download
@@ -88,12 +88,12 @@ Creating /service...
 Adding svscanboot to inittab...
 init should start svscan now.
 [root root]#
-<span class="action">mkdir -p /package 
+<span class="action"><span class="action">mkdir -p /package 
 chmod 1755 /package 
 cd /package 
 tar xzf /tmp/daemontools-0.76.tar.gz 
 cd admin/daemontools-0.76
-package/install</span>
+package/install</span></span>
 </pre>
 </li><li class="listitem">
 <p>Debian</p><pre class="screen">[root ~]# <strong class="userinput"><code>apt-get install daemontools-installer</code></strong>
@@ -110,8 +110,8 @@ root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle ser
 </li><li class="listitem">
 <p>Install a script to grant non-root users permission to control
 daemontools services.</p><pre class="screen">[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</code></strong>
-[root root]# <strong class="userinput"><code>chmod 755 /usr/local/bin/svgroup</code></strong><span class="action">cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
-chmod 755 /usr/local/bin/svgroup</span>
+[root root]# <strong class="userinput"><code>chmod 755 /usr/local/bin/svgroup</code></strong><span class="action"><span class="action">cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
+chmod 755 /usr/local/bin/svgroup</span></span>
 </pre>
 </li>
 </ol></div>

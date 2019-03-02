@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Categories}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,9 +9,11 @@ Topics"
 			rightLink="profile-code" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-categories" id="tutorial-categories"></a>Categories</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">extended by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima
-Mazloumi</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>You can associate any ACS Object with one or more categories. In
+<a name="tutorial-categories" id="tutorial-categories"></a>Categories</h2></div></div></div><div class="authorblurb">
+<p>extended by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima Mazloumi</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>You can associate any ACS Object with one or more categories. In
 this tutorial we&#39;ll show how to equip your application with
 user interface to take advantage of the Categories service.</p><p>We&#39;ll start by installing the Categories service. Go to
 <code class="computeroutput">/acs/admin</code> and install it. This
@@ -31,10 +33,10 @@ market segments etc. Before users of your application can take
 advantage of the Categories service there needs to be a way for
 administrators of your application to choose which category trees
 are applicable for the application.</p><p>The way to achieve this is to provide a link to the Category
-Management pages. Add the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.tcl</code>
+Management pages. Add the following snippet to your <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.tcl</code>
 file:</p><pre class="programlisting">
                   set category_map_url [export_vars -base "[site_node::get_package_url -package_key categories]cadmin/one-object" { { object_id $package_id } }]
-          </pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.adp</code>
+          </pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.adp</code>
 file:</p><pre class="programlisting">
                   &lt;a href="\@category_map_url\@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
           </pre><p>The link created by the above code (<code class="computeroutput">category_map_url</code>) will take the admin to
@@ -202,10 +204,10 @@ to support two more swiches <code class="computeroutput">-where_clause</code> an
 
                 if { $use_categories_p == 1 &amp;&amp; $category_id ne "" } {
 
-                        set from_clause "category_object_map com, acs_named_objects nam"
+                        set from_clause "category_object_map com, acs_named_objects ano"
                         set_where_clause "com.object_id = qa.entry_id and
-                                                                nam.package_id = :package_id and
-                                                                com.object_id = nam.object_id and
+                                                                ano.package_id = :package_id and
+                                                                com.object_id = ano.object_id and
                                                                 com.category_id = :category_id"
                         
                         ...
@@ -264,8 +266,8 @@ your index page:</p><pre class="programlisting">
                 &lt;/multiple&gt;
                 &lt;a href="\@package_url\@view?\@YOURPARAMS\@"&gt;All Items&lt;/if&gt;
           </pre><p>Finally you need a an <code class="computeroutput">index.vuh</code> in your www folder to rewrite the
-URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty urls">the section called “Using .vuh
-files for pretty urls”</a>:</p><pre class="programlisting">
+URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty URLs">the section called “Using .vuh
+files for pretty URLs”</a>:</p><pre class="programlisting">
           set url /[ad_conn extra_url]
 
           if {[regexp {^/+cat/+([^/]+)/*} $url ignore_whole category_id]} {

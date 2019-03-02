@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Vacuum Postgres nightly}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Vacuum Postgres nightly}</property>
 <property name="doc(title)">Vacuum Postgres nightly</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -25,9 +25,9 @@ management. So, if you&#39;re using the export procedure described
 above, you don&#39;t need to do this extra step.</p><p>Edit your crontab:</p><pre class="programlisting">[joeuser ~]$ <strong class="userinput"><code>crontab -e</code></strong>
 </pre><p>We&#39;ll set vacuum up to run nightly at 1 AM. Add the
 following line:</p><pre class="programlisting">
-0 1 * * * /usr/local/pgsql/bin/vacuumdb <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>
-</pre><p><span class="cvstag">($&zwnj;Id: database-maintenance.xml,v 1.9
-2017/08/07 23:47:54 gustafn Exp $)</span></p>
+0 1 * * * /usr/local/pgsql/bin/vacuumdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+</pre><div class="cvstag">($&zwnj;Id: database-maintenance.xml,v 1.9 2017/08/07
+23:47:54 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="install-openacs-delete-tablespace" leftLabel="Prev" leftTitle="Deleting a tablespace"

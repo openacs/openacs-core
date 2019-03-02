@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {My Space - SloanSpace}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {My Space - SloanSpace}</property>
 <property name="doc(title)">My Space - SloanSpace</property>
 <master>
 <ul id="breadcrumbs">

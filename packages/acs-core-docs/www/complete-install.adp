@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 3. Complete Installation}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 3. Complete Installation}</property>
 <property name="doc(title)">Chapter 3. Complete Installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -19,7 +19,7 @@ PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install A
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
 5.9.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
 Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
-Installation Guide for Mac OS X</a></span></dt>
+Installation Guide for macOS</a></span></dt>
 </dl>
 </div>
 </div>

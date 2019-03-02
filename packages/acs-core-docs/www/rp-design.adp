@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Request Processor Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Request Processor Design}</property>
 <property name="doc(title)">Request Processor Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,9 +9,11 @@ Documentation"
 			rightLink="tcl-doc" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="rp-design" id="rp-design"></a>Request Processor Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
-Schloming</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="rp-design" id="rp-design"></a>Request Processor Design</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="rp-design-essentials" id="rp-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="xref" href="rp-requirements" title="Request Processor Requirements">OpenACS 4 Request Processor

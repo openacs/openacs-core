@@ -1,6 +1,6 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using .vuh files for pretty urls}</property>
-<property name="doc(title)">Using .vuh files for pretty urls</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using .vuh files for pretty URLs}</property>
+<property name="doc(title)">Using .vuh files for pretty URLs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-hierarchical" leftLabel="Prev"
@@ -9,13 +9,13 @@ Topics"
 			rightLink="tutorial-css-layout" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-vuh" id="tutorial-vuh"></a>Using .vuh files for pretty urls</h2></div></div></div><p>.Vuh files are special cases of .tcl files, used for rewriting
-incoming urls. We can use a vuh file to prettify the uri for our
+<a name="tutorial-vuh" id="tutorial-vuh"></a>Using .vuh files for pretty URLs</h2></div></div></div><p>.Vuh files are special cases of .tcl files, used for rewriting
+incoming URLs. We can use a vuh file to prettify the uri for our
 notes. Instead of <code class="computeroutput">note-edit?item_id=495</code>, we can use
 <code class="computeroutput">note/495</code>. To do this, we will
 need a new .vuh file for redirection and we will need to change the
 referring links in note-list. First, add the vuh:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www</code></strong>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs note.vuh</code></strong>
 </pre><p>Paste this into the file:</p><pre class="programlisting"># Transform requests of type: a/b
 # into this internal request: A?c=b

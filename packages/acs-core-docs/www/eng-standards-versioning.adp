@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Release Version Numbering}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Release Version Numbering}</property>
 <property name="doc(title)">Release Version Numbering</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,11 +9,11 @@ Standards"
 			rightLink="eng-standards-constraint-naming" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="eng-standards-versioning" id="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red"><span class="cvstag">($&zwnj;Id:
-eng-standards-versioning.xml,v 1.11 2017/08/07 23:47:54 gustafn Exp
-$)</span></span></p><p>By Ron Henderson, Revised by Joel Aufrecht</p>
-&lt;/authorblurb&gt;
-<p>OpenACS version numbers help identify at a high-level what is in
+<a name="eng-standards-versioning" id="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><div class="authorblurb">
+<div class="cvstag">($&zwnj;Id: eng-standards-versioning.xml,v 1.11
+2017/08/07 23:47:54 gustafn Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>OpenACS version numbers help identify at a high-level what is in
 a particular release and what has changed since the last
 release.</p><p>A "version number" is really just a string of the
 form:</p><div class="blockquote"><blockquote class="blockquote"><p>
@@ -143,11 +143,11 @@ description should point to a preferred version.</p></li>
 <a name="naming-upgrade-scripts" id="naming-upgrade-scripts"></a>Naming Database Upgrade Scripts</h3></div></div></div><p>Database upgrade scripts must be named very precisely in order
 for the Package Manager to run the correct script at the correct
 time.</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>Upgrade scripts should be named <code class="computeroutput">/packages/<em class="replaceable"><code>myfirstpackage</code></em>/sql/<em class="replaceable"><code>postgresql</code></em>/upgrade/upgrade-<em class="replaceable"><code>OLDVERSION</code></em>-<em class="replaceable"><code>NEWVERSION</code></em>.sql</code>
+<li class="listitem"><p>Upgrade scripts should be named <code class="computeroutput">/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>/sql/<span class="replaceable"><span class="replaceable">postgresql</span></span>/upgrade/upgrade-<span class="replaceable"><span class="replaceable">OLDVERSION</span></span>-<span class="replaceable"><span class="replaceable">NEWVERSION</span></span>.sql</code>
 </p></li><li class="listitem"><p>If the version you are working on is a later version than the
 current released version, OLDVERSION should be the current version.
 The current version is package version in the APM and in
-<code class="computeroutput">/packages/<em class="replaceable"><code>myfirstpackage</code></em>/<em class="replaceable"><code>myfirstpackage</code></em>.info</code>. So if
+<code class="computeroutput">/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>.info</code>. So if
 forums is at 2.0.1, OLDVERSION should be 2.0.1d1. Note that this
 means that new version development that includes an upgrade must
 start at d2, not d1.</p></li><li class="listitem"><p>If you are working on a pre-release version of a package, use

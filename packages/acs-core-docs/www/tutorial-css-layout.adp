@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Laying out a page with CSS instead of tables}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Laying out a page with CSS instead of tables}</property>
 <property name="doc(title)">Laying out a page with CSS instead of tables</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -12,7 +12,7 @@ Topics"
 <a name="tutorial-css-layout" id="tutorial-css-layout"></a>Laying out a page with CSS instead of
 tables</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682185485368" id="idp140682185485368"></a>.LRN home page with table-based
+<a name="idp140560470509800" id="idp140560470509800"></a>.LRN home page with table-based
 layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-1.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-1" target="_top">full source</a>)</p><pre class="programlisting">
 &lt;table border="0" width="100%"&gt;
   &lt;tr&gt;
@@ -39,7 +39,7 @@ layout</h3></div></div></div><div class="mediaobject" align="center"><img src="i
                         MBA 101</pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682185476280" id="idp140682185476280"></a>.LRN Home with CSS-based layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-3.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-2" target="_top">full source</a>)</p><pre class="programlisting">&lt;div class="left"&gt;
+<a name="idp140560470514808" id="idp140560470514808"></a>.LRN Home with CSS-based layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-3.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-2" target="_top">full source</a>)</p><pre class="programlisting">&lt;div class="left"&gt;
   &lt;div class="portlet-wrap-shadow"&gt;
     &lt;div class="portlet-wrap-bl"&gt;
       &lt;div class="portlet-wrap-tr"&gt;
@@ -52,7 +52,7 @@ different:</p><div class="mediaobject" align="center"><img src="images/dotlrn-st
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="tutorial-vuh" leftLabel="Prev" leftTitle="Using .vuh files for pretty urls"
+			leftLink="tutorial-vuh" leftLabel="Prev" leftTitle="Using .vuh files for pretty URLs"
 			rightLink="tutorial-html-email" rightLabel="Next" rightTitle="Sending HTML email from your
 application"
 			homeLink="index" homeLabel="Home" 

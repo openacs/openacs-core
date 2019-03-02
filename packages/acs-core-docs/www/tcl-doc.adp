@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Documenting Tcl Files: Page Contracts and Libraries}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Documenting Tcl Files: Page Contracts and Libraries}</property>
 <property name="doc(title)">Documenting Tcl Files: Page Contracts and Libraries</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,8 +10,10 @@ Documentation"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tcl-doc" id="tcl-doc"></a>Documenting Tcl Files: Page Contracts and
-Libraries</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a> on 3 July
-2000</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Tcl procedures:
+Libraries</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a> on 3 July 2000</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Tcl procedures:
 /packages/acs-kernel/tcl-documentation-procs.tcl</p></li></ul></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="tcl-doc-bigpicture" id="tcl-doc-bigpicture"></a>The Big Picture</h3></div></div></div><p>In versions of the OpenACS prior to 3.4, <a class="ulink" href="/doc/standards" target="_top">the standard place</a> to document
@@ -220,8 +222,8 @@ indicating when the script was first created.</p></li><li class="listitem"><p>A 
 page&#39;s CVS identification string. Just use <code class="computeroutput">$&zwnj;Id: tcl-documentation.html,v 1.2 2000/09/19
 07:22:35 ron Exp $</code> when creating the file, and CVS will
 substitute an appropriate string when you check the file in.</p></li>
-</ul></div><p><span class="cvstag">($&zwnj;Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38
-torbenb Exp $)</span></p>
+</ul></div><div class="cvstag">($&zwnj;Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38
+torbenb Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

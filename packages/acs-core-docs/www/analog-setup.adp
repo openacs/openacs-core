@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Set up Log Analysis Reports}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Set up Log Analysis Reports}</property>
 <property name="doc(title)">Set up Log Analysis Reports</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -18,15 +18,15 @@ modified configuration file is included in the OpenACS tarball.</p><div class="o
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>mkdir www/log</code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cp -r /usr/share/analog-5.32/images www/log/</code></strong>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <span class="action">
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <span class="action"><span class="action">
 su - $OPENACS_SERVICE_NAME
 cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
 cp /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/files/analog.cfg.txt etc/analog.cfg
 mkdir www/log
-cp -r /usr/share/analog-5.32/images www/log/</span>
+cp -r /usr/share/analog-5.32/images www/log/</span></span>
 </pre><p>Edit <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</code>
 and change the variable in <code class="computeroutput">HOSTNAME
-"[my organisation]"</code> to reflect your website title.
+"[my organization]"</code> to reflect your website title.
 If you don&#39;t want the traffic log to be publicly visible,
 change <code class="computeroutput">OUTFILE
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/www/log/traffic.html</code>
@@ -50,9 +50,9 @@ logout
 [root root]# <strong class="userinput"><code>emacs /etc/cron.daily/analog</code></strong>
 </pre><p>Put this into the file:</p><pre class="programlisting">#!/bin/sh
 
-/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/analog.cfg</pre><pre class="screen">[root root]# <strong class="userinput"><code>chmod 755 /etc/cron.daily/analog</code></strong>
+/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/analog.cfg</pre><pre class="screen">[root root]# <strong class="userinput"><code>chmod 755 /etc/cron.daily/analog</code></strong>
 </pre><p>Test it by running the script.</p><pre class="screen">[root root]# <strong class="userinput"><code>sh /etc/cron.daily/analog</code></strong>
-</pre><p>Browse to <code class="computeroutput">http://<em class="replaceable"><code>yourserver.test</code></em>/log/traffic.html</code>
+</pre><p>Browse to <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver.test</span></span>/log/traffic.html</code>
 </p>
 </li>
 </ol></div>

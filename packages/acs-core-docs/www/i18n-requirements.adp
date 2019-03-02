@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Internationalization Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Internationalization Requirements}</property>
 <property name="doc(title)">OpenACS Internationalization Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,9 +10,12 @@ Documentation"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="i18n-requirements" id="i18n-requirements"></a>OpenACS Internationalization
-Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by Henry Minsky, <a class="ulink" href="mailto:yon\@openforce.net" target="_top">Yon Feldman</a>, <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars
+Requirements</h2></div></div></div><div class="authorblurb">
+<p>by Henry Minsky, <a class="ulink" href="mailto:yon\@openforce.net" target="_top">Yon Feldman</a>, <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars
 Pind</a>, <a class="ulink" href="mailto:peter\@collaboraid.biz" target="_top">Peter Marklund</a>, <a class="ulink" href="mailto:christian\@collaboraid.biz" target="_top">Christian
-Hvid</a>, and others.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+Hvid</a>, and others.</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="i18n-requirements-introduction" id="i18n-requirements-introduction"></a>Introduction</h3></div></div></div><p>This document describes the requirements for functionality in
 the OpenACS platform to support globalization of the core and
@@ -151,7 +154,7 @@ locale</p><p>
 <span class="emphasis"><em>10.20</em></span> There will be a Tcl
 library of locale-aware formatting and parsing functions for
 numbers, dates and times. <span class="emphasis"><em>Note that Java
-has builtin support for these already</em></span>.</p><p>
+has built-in support for these already</em></span>.</p><p>
 <span class="emphasis"><em>10.30</em></span> For each locale
 there will be default date, number and currency formats.
 <em><span class="remark">Currency i18n is NOT IMPLEMENTED for
@@ -261,7 +264,7 @@ filesystem</p></li><li class="listitem"><p>Accepting form input data from users<
 <li class="listitem"><p>When the acs-templating package opens an ADP or Tcl file, it
 assumes the file is iso-8859-1. If the output charset
 (OutputCharset) in the AOLserver config file is set, then
-acs-templating assumes it&#39;s that charset. Writing Files</p></li><li class="listitem"><p>When the acs-templating package writes an an ADP or Tcl file, it
+acs-templating assumes it&#39;s that charset. Writing Files</p></li><li class="listitem"><p>When the acs-templating package writes an ADP or Tcl file, it
 assumes the file is iso-8859-1. If the output charset
 (OutputCharset) in the AOLserver config file is set, then
 acs-templating assumes it&#39;s that charset.</p></li>

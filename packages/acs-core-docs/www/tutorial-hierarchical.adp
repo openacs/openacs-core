@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Hierarchical data}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Hierarchical data}</property>
 <property name="doc(title)">Hierarchical data</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,8 +10,11 @@ Topics"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-hierarchical" id="tutorial-hierarchical"></a>Hierarchical
-data</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="http://rubick.com:8002" target="_top">Jade Rubick</a> with help
-from many people in the OpenACS community</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>One of the nice things about using the OpenACS object system is
+data</h2></div></div></div><div class="authorblurb">
+<p>by <a class="ulink" href="http://rubick.com:8002" target="_top">Jade Rubick</a> with help from many people in the OpenACS
+community</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>One of the nice things about using the OpenACS object system is
 that it has a built-in facility for tracking hierarchical data in
 an efficient way. The algorithm behind this is called <code class="computeroutput">tree_sortkey.</code>
 </p><p>Any time your tables are subclasses of the acs_objects table,
@@ -83,7 +86,7 @@ construct in Postgres.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="tutorial-notifications" leftLabel="Prev" leftTitle="Notifications"
-			rightLink="tutorial-vuh" rightLabel="Next" rightTitle="Using .vuh files for pretty urls"
+			rightLink="tutorial-vuh" rightLabel="Next" rightTitle="Using .vuh files for pretty URLs"
 			homeLink="index" homeLabel="Home" 
 			upLink="tutorial-advanced" upLabel="Up"> 
 		    

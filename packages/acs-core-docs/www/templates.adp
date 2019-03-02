@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using Templates in OpenACS}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using Templates in OpenACS}</property>
 <property name="doc(title)">Using Templates in OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,7 +9,10 @@ Reference"
 			rightLink="permissions" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="templates" id="templates"></a>Using Templates in OpenACS</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="templates" id="templates"></a>Using Templates in OpenACS</h2></div></div></div><div class="authorblurb">
+<p>By Pete Su</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="templates-overview" id="templates-overview"></a>Overview</h3></div></div></div><p>The OpenACS Template System (ATS) is designed to allow
 developers to cleanly separate <span class="emphasis"><em>application logic</em></span> from <span class="emphasis"><em>display logic</em></span>. The intent is to have all
@@ -150,8 +153,8 @@ templates more deeply, and show how to use database queries as data
 sources.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="templates-documentation" id="templates-documentation"></a>Documentation</h3></div></div></div><p><a class="ulink" href="/doc/acs-templating/" target="_top">Templating system documentation</a></p><p><span class="cvstag">($&zwnj;Id: templates.xml,v 1.13 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+<a name="templates-documentation" id="templates-documentation"></a>Documentation</h3></div></div></div><p><a class="ulink" href="/doc/acs-templating/" target="_top">Templating system documentation</a></p><div class="cvstag">($&zwnj;Id: templates.xml,v 1.14 2018/12/04 13:30:31
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

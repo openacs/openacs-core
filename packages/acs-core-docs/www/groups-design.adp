@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Groups Design}</property>
 <property name="doc(title)">Groups Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,8 +9,10 @@ Documentation"
 			rightLink="subsites-requirements" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="groups-design" id="groups-design"></a>Groups Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a> and
-Mark Thomas</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="groups-design" id="groups-design"></a>Groups Design</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a> and Mark Thomas</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="groups-design-essentials" id="groups-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>User directory</p></li><li class="listitem"><p>Sitewide administrator directory</p></li><li class="listitem"><p>Subsite administrator directory</p></li><li class="listitem"><p>Tcl script directory</p></li><li class="listitem"><p><a class="xref" href="groups-requirements" title="Groups Requirements">OpenACS 4 Groups Requirements</a></p></li><li class="listitem"><p>Data model</p></li><li class="listitem">

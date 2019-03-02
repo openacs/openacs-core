@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Release Notes}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Release Notes}</property>
 <property name="doc(title)">OpenACS Release Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -122,12 +122,12 @@ to the future, since it will not add any content with future
 publish dates to the search-queue.</p>
 </li><li class="listitem">
 <p>Reduced number of insert cr_child_rels operations, just when
-needed:</p><p>cr_child_rels provide only little benefit (allow one to use roles in
-a child-rel), but the common operation is a well available in
-cr_items via the parent_id. cr_child_rels do not help for recursive
-queries either. One option would be to add an additional argument
-for content_item__new to omit child-rel creation (default is old
-behavior) and adapt the other cases.</p>
+needed:</p><p>cr_child_rels provide only little benefit (allow one to use
+roles in a child-rel), but the common operation is a well available
+in cr_items via the parent_id. cr_child_rels do not help for
+recursive queries either. One option would be to add an additional
+argument for content_item__new to omit child-rel creation (default
+is old behavior) and adapt the other cases.</p>
 </li>
 </ul></div>
 </li><li class="listitem">
@@ -136,7 +136,8 @@ behavior) and adapt the other cases.</p>
 <p>Added support against <a class="ulink" href="/xowiki/CSRF" target="_top">CSRF</a> (cross site request forgery)</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>OpenACS maintains a per-request CSRF token that ensures that
 form replies are coming just from sites that received the form</p></li><li class="listitem"><p>CSRF support is optional for packages where CSRF is less
-dangerous, and such requests are wanted (e.g. search and API-browser)</p></li>
+dangerous, and such requests are wanted (e.g. search and
+API-browser)</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>Added Support for W3C "Upgrade-Insecure-Headers" (see
@@ -147,7 +148,7 @@ see https://www.w3.org/TR/SRI/)</p></li><li class="listitem">
 <p>Added support for W3C "Content Security Policy"
 (<a class="ulink" href="/xowiki/CSP" target="_top">CSP</a>; see
 https://www.w3.org/TR/CSP/)</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>Removed "javascript:*" links (all such urls are
+<li class="listitem"><p>Removed "javascript:*" links (all such URLs are
 removed from the 90 packages in oacs-5-9, excluding js libraries
 (ajaxhelper) and richtext code)</p></li><li class="listitem"><p>Removed "onclick", "onfocus",
 "onblur", "onchange" handlers from all .adp and
@@ -208,7 +209,8 @@ group::get_member_state_pretty</p></li>
 <p>Misc code improvements:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem"><p>18 issues from the OpenACS-bug-tracker fixed</p></li><li class="listitem"><p>Made code more robust against invalid/incorrect input
 (page_contracts, validators, values obtained from header fields
-such as Accept-Language)</p></li><li class="listitem"><p>Fixed quoting of message keys on many places</p></li><li class="listitem"><p>Improved exception handling (often, a "catch" swallows one to much, e.g. script_aborts), introducing
+such as Accept-Language)</p></li><li class="listitem"><p>Fixed quoting of message keys on many places</p></li><li class="listitem"><p>Improved exception handling (often, a "catch" swallows
+one too much, e.g. script_aborts), introducing
 "ad_exception".</p></li><li class="listitem">
 <p>Generalized handling of leading zeros:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Fixed cases where leading zeros could lead to unwanted octal
@@ -240,7 +242,7 @@ differences between "new"-and "old" (upgraded)
 installations</p></li><li class="listitem">
 <p>Templating</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Get rid of various pesky "MISSING FORMWIDGET:
-...formbutton:ok" messages</p></li><li class="listitem"><p>Improved support for javascript event handlers in
+...formbutton:ok" messages</p></li><li class="listitem"><p>Improved support for JavaScript event handlers in
 template::head</p></li><li class="listitem"><p>New functions "template::add_event_listener" and
 "template::add_confirm_handler"</p></li><li class="listitem"><p>Fix handling, when "page_size_variable_p" is set (was
 broken since ages)</p></li>
@@ -358,8 +360,8 @@ true)</p></li><li class="listitem">
 don&#39;t require preallocation (can be costly in composite
 cases)</p></li><li class="listitem"><p>Added signing of form-fields</p></li><li class="listitem"><p>Added HTML5 attributes such as "multiple" (for
 "file") or "autocomplete"</p></li><li class="listitem"><p>Fixed generation of "orderby" attribute based on
-form-field names</p></li><li class="listitem"><p>richtext: allow one to specify "extraAllowedContent" via
-options</p></li><li class="listitem"><p>Improved layout of horizontal check boxes</p></li>
+form-field names</p></li><li class="listitem"><p>richtext: allow one to specify "extraAllowedContent"
+via options</p></li><li class="listitem"><p>Improved layout of horizontal check boxes</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>Menu bar:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
@@ -390,7 +392,7 @@ workflow "allocate" actions</p></li><li class="listitem"><p>Internationalized mo
 </li><li class="listitem">
 <p>xotcl-request-monitor</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Added class "BanUser" (use. e.g. ip address to
-disallow requests from a user via request monitor)</p></li><li class="listitem"><p>Added support for optional user tracking in database</p></li><li class="listitem"><p>Added support for monitoring response-time for certain urls via
+disallow requests from a user via request monitor)</p></li><li class="listitem"><p>Added support for optional user tracking in database</p></li><li class="listitem"><p>Added support for monitoring response-time for certain URLs via
 munin</p></li><li class="listitem"><p>Increased usage of XOTcl 2.0 variable resolver (potentially
 speed improvement 4x)</p></li><li class="listitem"><p>Performed some refactoring of response-time handling to allow
 site-admin to make e.g. use of NaviServer&#39;s dynamic connection
@@ -554,7 +556,7 @@ functions are marked as deprecated and will be moved into an
 "outdated" package in the 5.9 or 6.0 release)</p></li><li class="listitem"><p>General overhaul of package management</p></li><li class="listitem"><p>Install-from-local and install-from-repository can be used to
 install the provided packages based on a acs-core installation.
 This means that also DotLRN can be installed from repository or
-from local into an existing OpenACS instance.</p></li><li class="listitem"><p>Install-from-repository offers filtering functions, allows one to
+from local into an existing OpenACS instance.</p></li><li class="listitem"><p>Install-from-repository offers filtering functions, allows to
 install optionally from head-channel (for packages not in the base
 channel of the installed instance). Install-from-repository works
 more like an app-store, showing as well vendor information</p></li><li class="listitem"><p>Packages can be equipped with xml-based configuration files
@@ -605,7 +607,7 @@ scripts made visible in client packages using URLs which include
 the embedded package&#39;s package key. An example embeddable
 package might be a rewritten "attachments" package. The
 current implementation requires a global instance be mounted, and
-client packages generate urls to that global instance. Among other
+client packages generate URLs to that global instance. Among other
 things, this leads to the user navigating to the top-level subsite,
 losing any subsite theming that might be associated with a
 community. Using "embeds", a rewritten package would run
@@ -813,20 +815,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><p><span class="cvstag">($&zwnj;Id: release-notes.xml,v 1.34 2018/04/18
-09:09:12 hectorr Exp $)</span></p>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39 2018/08/05
+21:26:03 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682192466872" id="idp140682192466872"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140560459712328" id="idp140560459712328"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682192489224" id="idp140682192489224"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140560459713736" id="idp140560459713736"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682192490856" id="idp140682192490856"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140560459715144" id="idp140560459715144"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682192492552" id="idp140682192492552"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140560459716552" id="idp140560459716552"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

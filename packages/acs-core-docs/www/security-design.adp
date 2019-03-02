@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Security Design}</property>
 <property name="doc(title)">Security Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,8 +9,10 @@ Documentation"
 			rightLink="security-notes" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="security-design" id="security-design"></a>Security Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li and Archit
-Shah</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="security-design" id="security-design"></a>Security Design</h2></div></div></div><div class="authorblurb">
+<p>By Richard Li and Archit Shah</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="security-design-essentials" id="security-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p><a class="xref" href="security-requirements" title="Security Requirements">OpenACS 4 Security Requirements</a></p></li></ul></div>
 </div><div class="sect2">

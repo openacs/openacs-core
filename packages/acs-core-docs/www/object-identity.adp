@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Identity}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Object Identity}</property>
 <property name="doc(title)">Object Identity</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,9 +9,11 @@ Reference"
 			rightLink="programming-with-aolserver" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="object-identity" id="object-identity"></a>Object Identity</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
-Schloming</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>One of the major design features of OpenACS 5.9.0 is the
+<a name="object-identity" id="object-identity"></a>Object Identity</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>One of the major design features of OpenACS 5.9.0 is the
 explicit representation of <span class="emphasis"><em>object
 identity</em></span>. The reason I say "explicit
 representation" is because the concept of object identity has
@@ -48,8 +50,8 @@ membership state.</p><p>The design choice of explicitly representing object iden
 with an integer primary key that is derived from a globally unique
 sequence is the key to eliminating redundant code and replacing it
 with generic <span class="emphasis"><em>object level
-services</em></span>.</p><p><span class="cvstag">($&zwnj;Id: object-identity.xml,v 1.7 2006/07/17
-05:38:37 torbenb Exp $)</span></p>
+services</em></span>.</p><div class="cvstag">($&zwnj;Id: object-identity.xml,v 1.7 2006/07/17
+05:38:37 torbenb Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="permissions-tediously-explained" leftLabel="Prev" leftTitle="OpenACS Permissions Tediously

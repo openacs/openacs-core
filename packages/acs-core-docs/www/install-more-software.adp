@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix B. Install additional supporting
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix B. Install additional supporting
 software}</property>
 <property name="doc(title)">Appendix B. Install additional supporting
 software</property>
@@ -32,9 +32,11 @@ PAM Radius for use as external authentication</a></span></dt><dt><span class="se
 LDAP for use as external authentication</a></span></dt><dt><span class="sect1"><a href="aolserver">Install AOLserver
 3.3oacs1</a></span></dt>
 </dl>
-</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel
-Aufrecht</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>This section assumes that the source tarballs for supporting
+</div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>This section assumes that the source tarballs for supporting
 software are in <code class="computeroutput">/tmp</code>. It
 assumes that you begin each continuous block of commands as root,
 and you should end each block as root. It doesn&#39;t care which

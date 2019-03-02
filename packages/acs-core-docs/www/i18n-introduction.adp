@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How Internationalization/Localization works in
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How Internationalization/Localization works in
 OpenACS}</property>
 <property name="doc(title)">How Internationalization/Localization works in
 OpenACS</property>
@@ -76,15 +76,16 @@ useful while developing, because it allows default text so that the
 page is usable before you have done localization.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>The <span class="strong"><strong>short</strong></span>:
-<code class="computeroutput">#<em class="replaceable"><code>package_key.message_key</code></em>#</code>
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>#</code>
 </p><p>The advantage of the short syntax is that it&#39;s short.
 It&#39;s as simple as inserting the value of a variable. Example:
-<code class="computeroutput">#<em class="replaceable"><code>forum.title</code></em>#</code>
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">forum.title</span></span>#</code>
 </p>
 </li><li class="listitem">
 <p>The <span class="strong"><strong>verbose</strong></span>:
-<code class="computeroutput">&lt;trn key="<em class="replaceable"><code>package_key.message_key</code></em>"
-locale="<em class="replaceable"><code>locale</code></em>"&gt;<em class="replaceable"><code>default text</code></em>&lt;/trn&gt;</code>
+<code class="computeroutput">&lt;trn key="<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>"
+locale="<span class="replaceable"><span class="replaceable">locale</span></span>"&gt;<span class="replaceable"><span class="replaceable">default
+text</span></span>&lt;/trn&gt;</code>
 </p><p>The verbose syntax allows you to specify a default text in a
 certain language. This syntax is not recommended anymore, but it
 can be convenient for development, because it still works even if
@@ -96,7 +97,8 @@ locale="en_US"&gt;Title&lt;/trn&gt;</em></span>
 </p>
 </li><li class="listitem">
 <p>The <span class="strong"><strong>temporary</strong></span>:
-<code class="computeroutput">&lt;#<em class="replaceable"><code>message_key</code></em><em class="replaceable"><code>original text</code></em>#&gt;</code>
+<code class="computeroutput">&lt;#<span class="replaceable"><span class="replaceable">message_key</span></span><span class="replaceable"><span class="replaceable">original
+text</span></span>#&gt;</code>
 </p><p>This syntax has been designed to make it easy to
 internationalize existing pages. This is not a syntax that stays in
 the page. As you&#39;ll see later, it&#39;ll be replaced with the
@@ -217,12 +219,12 @@ parameters, taken directly from the dotlrn package.</p><div class="informaltable
 </tr></thead><tbody>
 <tr>
 <td>class_instance_pages_csv</td><td>
-<code class="computeroutput">#<em class="replaceable"><code>dotlrn.class_page_home_title</code></em>#</code>,Simple
-2-Column;<code class="computeroutput">#<em class="replaceable"><code>dotlrn.class_page_calendar_title</code></em>#</code>,Simple
-1-Column;<code class="computeroutput">#<em class="replaceable"><code>dotlrn.class_page_file_storage_title</code></em>#</code>,Simple
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_home_title</span></span>#</code>,Simple
+2-Column;<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_calendar_title</span></span>#</code>,Simple
+1-Column;<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_file_storage_title</span></span>#</code>,Simple
 1-Column</td>
 </tr><tr>
-<td>departments_pretty_name</td><td><code class="computeroutput">#<em class="replaceable"><code>departments_pretty_name</code></em>#</code></td>
+<td>departments_pretty_name</td><td><code class="computeroutput">#<span class="replaceable"><span class="replaceable">departments_pretty_name</span></span>#</code></td>
 </tr>
 </tbody>
 </table></div><p>Then, depending on how we retrieve the value, here&#39;s what we
@@ -240,7 +242,7 @@ class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simpl
 <td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter
 departments_pretty_name</td><td>Abteilung</td>
 </tr><tr>
-<td>parameter::get -parameter departments_pretty_name</td><td><code class="computeroutput">#<em class="replaceable"><code>departments_pretty_name</code></em>#</code></td>
+<td>parameter::get -parameter departments_pretty_name</td><td><code class="computeroutput">#<span class="replaceable"><span class="replaceable">departments_pretty_name</span></span>#</code></td>
 </tr>
 </tbody>
 </table></div><p>The value in the rightmost column in the table above is the

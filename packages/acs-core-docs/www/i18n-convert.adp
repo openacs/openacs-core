@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How to Internationalize a Package}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How to Internationalize a Package}</property>
 <property name="doc(title)">How to Internationalize a Package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -23,7 +23,7 @@ acs-core-docs/www/files/nds-oracle.txt template file).</p>
 <li class="listitem">
 <p>
 <strong>Replace all text with temporary message
-tags. </strong> From<code class="computeroutput">/acs-admin/apm/</code>, select a package and then
+tags. </strong>From<code class="computeroutput">/acs-admin/apm/</code>, select a package and then
 click on <code class="computeroutput">Internationalization</code>,
 then <code class="computeroutput">Convert ADP, Tcl, and SQL files
 to using the message catalog.</code>. This pass only changes the
@@ -33,7 +33,7 @@ The UI shows you the intended changes and lets you edit or cancel
 them key by key.</p><div class="mediaobject" align="center"><img src="images/i18n-2.png" align="middle"></div>
 </li><li class="listitem"><p>
 <strong>Replace the temporary message tags in ADP
-files. </strong> From the same <code class="computeroutput">Convert ADP ...</code> page in <code class="computeroutput">/acs-admin/apm</code> as in the last step, repeat
+files. </strong>From the same <code class="computeroutput">Convert ADP ...</code> page in <code class="computeroutput">/acs-admin/apm</code> as in the last step, repeat
 the process but deselect <code class="computeroutput">Find human
 language text ...</code> and select <code class="computeroutput">Replace &lt;# ... #&gt; tags ...</code> and click
 OK. This step replaces all of the temporary tags with
@@ -42,7 +42,7 @@ the database message catalog, and then writes that catalog out to
 an xml file.</p></li><li class="listitem">
 <p>
 <strong>Replace human-readable text in Tcl files with temporary
-tags. </strong> Examine all of the Tcl files in the packages
+tags. </strong>Examine all of the Tcl files in the packages
 for human-readable text and replace it with temporary tags. The
 temporary tags in Tcl are slightly different from those in ADP. If
 the first character in the temporary tag is an underscore
@@ -67,7 +67,7 @@ substitute variables, would have been very confusing</p>
 </li><li class="listitem">
 <p>
 <strong>Replace the temporary message tags in Tcl
-files. </strong> Repeat step 2 for Tcl files. Here is the
+files. </strong>Repeat step 2 for Tcl files. Here is the
 example Tcl file after conversion:</p><pre class="programlisting">
 set title [_ simulation.admin_title]
 set context [list [list . [_ simulation.SimPlay]] \
@@ -76,9 +76,9 @@ set context [list [list . [_ simulation.SimPlay]] \
                   [_ simulation.lt_Messages_for_role_pre]]
 </pre>
 </li><li class="listitem"><p>
-<strong>Internationalize SQL Code. </strong> If there is
-any user-visible Tcl code in the .sql or .xql files,
-internationalize that the same way as for the Tcl files.</p></li><li class="listitem"><p>
+<strong>Internationalize SQL Code. </strong>If there is any
+user-visible Tcl code in the .sql or .xql files, internationalize
+that the same way as for the Tcl files.</p></li><li class="listitem"><p>
 <strong>Internationalize Package Parameters. </strong> See
 <a class="xref" href="i18n-introduction" title="APM Parameters">Multilingual APM Parameters</a>
 </p></li><li class="listitem">
@@ -126,20 +126,19 @@ strftime</code>).</p>
 internationalize numbers, use <code class="computeroutput">lc_numeric $value</code>, which formats the number
 using the appropriate decimal point and thousand separator for the
 locale.</p></li><li class="listitem"><p>
-<strong>Internationalizing Forms. </strong> When coding
+<strong>Internationalizing Forms. </strong>When coding
 forms, remember to use message keys for each piece of text that is
 user-visible, including form option labels and button labels.</p></li><li class="listitem">
 <p>
-<a name="catalog-consistency-check" id="catalog-consistency-check"></a><strong>Checking the Consistency
-of Catalog Files. </strong> This section describes how to
-check that the set of keys used in message lookups in tcl, adp, and
-info files and the set of keys in the catalog file are identical.
-The scripts below assume that message lookups in adp and info files
-are on the format \#package_key.message_key\#, and that message
-lookups in Tcl files are always is done with one of the valid
-lookups described above. The script further assumes that you have
-perl installed and in your path. Run the script like this:
-<code class="computeroutput">acs-lang/bin/check-catalog.sh
+<a name="catalog-consistency-check" id="catalog-consistency-check"></a><strong>Checking the Consistency of
+Catalog Files. </strong> This section describes how to check
+that the set of keys used in message lookups in tcl, adp, and info
+files and the set of keys in the catalog file are identical. The
+scripts below assume that message lookups in adp and info files are
+on the format \#package_key.message_key\#, and that message lookups
+in Tcl files are always is done with one of the valid lookups
+described above. The script further assumes that you have perl
+installed and in your path. Run the script like this: <code class="computeroutput">acs-lang/bin/check-catalog.sh
 package_key</code>
 </p><p>where package_key is the key of the package that you want to
 test. If you don&#39;t provide the package_key argument then all
@@ -148,19 +147,19 @@ its checks primarily on en_US xml catalog files.</p>
 </li>
 </ol></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682191011512" id="idp140682191011512"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140560470346968" id="idp140560470346968"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Replace complicated keys with longer, simpler
-keys. </strong> When writing in one language, it is possible
-to create clever code to make correct text. In English, for
-example, you can put an <code class="computeroutput">if</code>
-command at the end of a word which adds "s" if a count is
-anything but 1. This pluralizes nouns correctly based on the data.
-However, it is confusing to read and, when internationalized, may
-result in message keys that are both confusing and impossible to
-set correctly in some languages. While internationalizing, watch
-out that the automate converter does not create such keys. Also,
+keys. </strong>When writing in one language, it is possible to
+create clever code to make correct text. In English, for example,
+you can put an <code class="computeroutput">if</code> command at
+the end of a word which adds "s" if a count is anything
+but 1. This pluralizes nouns correctly based on the data. However,
+it is confusing to read and, when internationalized, may result in
+message keys that are both confusing and impossible to set
+correctly in some languages. While internationalizing, watch out
+that the automate converter does not create such keys. Also,
 refactor compound text as you encounter it.</p><p>The automated system can easily get confused by tags within
 message texts, so that it tries to create two or three message keys
 for one long string with a tag in the middle. In these cases,
@@ -235,14 +234,14 @@ begins.
 &lt;/if&gt;</pre>
 </li><li class="listitem">
 <p>
-<strong>Don&#39;t combine keys in display text. </strong>
-Converting a phrase from one language to another is usually more
-complicated than simply replacing each word with an equivalent.
-When several keys are concatenated, the resulting word order will
-not be correct for every language. Different languages may use
-expressions or idioms that don&#39;t match the phrase key-for-key.
-Create complete, distinct keys instead of building text from
-several keys. For example:</p><p>Original code:</p><pre class="programlisting">
+<strong>Don&#39;t combine keys in display
+text. </strong>Converting a phrase from one language to
+another is usually more complicated than simply replacing each word
+with an equivalent. When several keys are concatenated, the
+resulting word order will not be correct for every language.
+Different languages may use expressions or idioms that don&#39;t
+match the phrase key-for-key. Create complete, distinct keys
+instead of building text from several keys. For example:</p><p>Original code:</p><pre class="programlisting">
 multirow append links "New [bug_tracker::conn Bug]" </pre><p>Problematic conversion:</p><pre class="programlisting">
 multirow append links "[_ bug-tracker.New] [bug_tracker::conn Bug]"</pre><p>Better conversion:</p><pre class="programlisting">set bug_label [bug_tracker::conn Bug]
 multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</pre><p>... and include the variable in the key: <code class="computeroutput">"New %bug_label%"</code>. This gives
@@ -253,7 +252,7 @@ the toolkit):</p><pre class="programlisting">
 \@past_version.maintainer_first_names\@ \@past_version.maintainer_last_name\@&lt;/a&gt;</pre>
 </li><li class="listitem">
 <p>
-<strong>Avoid unnecessary duplicate keys. </strong> When
+<strong>Avoid unnecessary duplicate keys. </strong>When
 phrases are exactly the same in several places, use a single
 key.</p><p>For common words such as Yes and No, you can use a library of
 keys at <a class="ulink" href="/acs-lang/admin/message-list?package%5fkey=acs%2dkernel&amp;locale=en%5fUS" target="_top">acs-kernel</a>. For example, instead of using
@@ -267,13 +266,14 @@ may not be consistent across different locales.</p><p>Additional discussion: <a 
 </li><li class="listitem">
 <p>
 <strong>Don&#39;t internationalize internal code
-words. </strong> Many packages use code words or key words,
+words. </strong>Many packages use code words or key words,
 such as "open" and "closed", which will never
 be shown to the user. They may match key values in the database, or
-be used in a switch or if statement. Don&#39;t change these.</p><p>For example, the original code is</p><pre class="programlisting">workflow::case::add_log_data \        
+be used in a switch or if statement. Don&#39;t change these.</p><p>For example, the original code is</p><pre class="programlisting">
+workflow::case::add_log_data \           
        -entry_id $entry_id \        
        -key "resolution" \          
-       -value [db_string select_resolution_code {}]</pre><p>This is incorrectly internationalized to</p><pre class="programlisting">  workflow::case::add_log_data \      
+       -value [db_string select_resolution_code {}]</pre><p>This is incorrectly internationalized to</p><pre class="programlisting">  workflow::case::add_log_data \       
        -entry_id $entry_id \
        -key "[_ bug-tracker.resolution]" \
        -value [db_string select_resolution_code {}]</pre><p>But <code class="computeroutput">resolution</code> is a keyword
@@ -284,7 +284,7 @@ text that should not have been internationalized:</p><pre class="programlisting"
 {show_patch_status "[_ bug-tracker.open]"}</pre>
 </li><li class="listitem">
 <p>
-<strong>Fix automatic truncated message keys. </strong> The
+<strong>Fix automatic truncated message keys. </strong>The
 automatic converter may create unique but crytic message keys.
 Watch out for these and replace them with more descriptive keys.
 For example:</p><pre class="programlisting">
@@ -309,9 +309,9 @@ component maintainer</code> was converted to <code class="computeroutput">[_ bug
 should be <code class="computeroutput">bug_tracker_component_maintainer</code>.</p>
 </li><li class="listitem"><p>
 <strong>Translations in Avoid "clever" message
-reuse. </strong> Translations may need to differ depending on
+reuse. </strong>Translations may need to differ depending on
 the context in which the message appears.</p></li><li class="listitem"><p>
-<strong>Avoid plurals. </strong> Different languages create
+<strong>Avoid plurals. </strong>Different languages create
 plurals differently. Try to avoid keys which will change based on
 the value of a number. OpenACS does not currently support
 internationalization of plurals. If you use two different keys, a
@@ -319,9 +319,9 @@ plural and a singular form, your application will not localize
 properly for locales which use different rules or have more than
 two forms of plurals.</p></li><li class="listitem">
 <p>
-<strong>Quoting in the message catalog for tcl. </strong>
-Watch out for quoting and escaping when editing text that is also
-code. For example, the original string</p><pre class="programlisting">
+<strong>Quoting in the message catalog for
+tcl. </strong>Watch out for quoting and escaping when editing
+text that is also code. For example, the original string</p><pre class="programlisting">
 set title "Patch \"$patch_summary\" is nice."</pre><p>breaks if the message text retains all of the escaping that was
 in the Tcl command:</p><pre class="programlisting">
 &lt;msg&gt;Patch \"$patch_summary\" is nice.&lt;/msg&gt;</pre><p>When it becomes a key, it should be:</p><pre class="programlisting">
@@ -331,7 +331,7 @@ even be recognized so you get the literal %var;noquote% in the
 output).</p>
 </li><li class="listitem">
 <p>
-<strong>Be careful with curly brackets. </strong> Code
+<strong>Be careful with curly brackets. </strong>Code
 within curly brackets isn&#39;t evaluated. Tcl uses curly brackets
 as an alternative way to build lists. But Tcl also uses curly
 brackets as an alternative to quotation marks for quoting text. So

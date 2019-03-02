@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Running a PostgreSQL database on another server}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Running a PostgreSQL database on another server}</property>
 <property name="doc(title)">Running a PostgreSQL database on another server</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -22,7 +22,7 @@ change</p><pre class="programlisting">#tcpip_socket = false</pre><p>to</p><pre c
 specific remote clients to access. Access can be controlled ...
 (add notes from forum post)</p></li><li class="listitem">
 <p>Change the OpenACS service&#39;s configuration file to point to
-the remote database. Edit <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/config.tcl</code>
+the remote database. Edit <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/config.tcl</code>
 and change</p><pre class="programlisting"></pre><p>to</p><pre class="programlisting"></pre>
 </li>
 </ul></div>
