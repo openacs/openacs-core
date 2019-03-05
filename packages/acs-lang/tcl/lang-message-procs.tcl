@@ -538,23 +538,13 @@ ad_proc -public lang::message::conflict_count {
 
     @author Peter Marklund
 } {
-    # Build any package and locale where clauses
-    set where_clauses [list]
-    foreach col {package_key locale} {
-        if { [set $col] ne "" } {
-            lappend where_clauses "$col = :${col}"
-        }
-    }
-    if {[llength $where_clause] > 0} {
-        set where_clause "and [join $where_clauses \" and \"]"
-    }
-
-    return [db_string conflict_count "
+    return [db_string conflict_count {
         select count(*)
         from lang_messages
         where conflict_p = 't'
-        $where_clause
-    "]
+          and (:package_key is null or :package_key = package_key)
+          and (:locale      is null or :locale      = locale)
+    }]
 }
 
 ad_proc -private lang::message::remove_from_cache {
