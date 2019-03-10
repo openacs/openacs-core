@@ -1005,7 +1005,7 @@ ad_proc -public ad_form {
 
                 } else {
 
-                    # The key exists, grab the existing values if we have an select_query clause
+                    # The key exists, grab the existing values if we have a select_query clause
 
                     if { ![info exists select_query] && ![info exists select_query_name] } {
                         return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query, select_query_name, or edit_request clause exists.  (This can be caused by having ad_form request blocks in the wrong order.)"
@@ -1205,7 +1205,7 @@ ad_proc -public ad_form {
 
                 # 1. an on_submit block (useful for forms that don't touch the
                 #    database or can share smart Tcl API for both add and edit forms)
-                # 2. an new_data block (when __new_p is true)
+                # 2. a new_data block (when __new_p is true)
                 # 3. an edit_data block (when __new_p is false)
                 # 4. an after_submit block (for ad_returnredirect and the like that
                 #    is the same for new and edit)

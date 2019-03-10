@@ -342,7 +342,7 @@ ad_proc -deprecated db_null {} {
 
     Deprecated: This routine was invented to provide an RDBMS-specific null
     value but doesn't actually work.  I (DRB) left it in to speed porting - we
-    should really clean up the code an pull out the calls instead, though.
+    should really clean up the code and pull out the calls instead, though.
 
     @see ""
 } {
@@ -391,7 +391,7 @@ ad_proc -public db_nextval {
     @return the next value for a sequence. This can utilize a pool of
     sequence values.
 
-    @param sequence the name of an sql sequence
+    @param sequence the name of an SQL sequence
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 
@@ -597,7 +597,7 @@ if {$useNsdbCurrentHandles} {
             if {[dict exists $currentHandles $pool]} {
                 #
                 # Are there handles, which are not active (i.e. not in
-                # an currently open "ns_db select" and "ns_db getrow"
+                # a currently open "ns_db select" and "ns_db getrow"
                 # context.
                 #
                 foreach {handle active} [dict get $currentHandles $pool] {

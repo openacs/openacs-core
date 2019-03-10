@@ -183,7 +183,7 @@ ad_proc -public ad_set_cookie {
 
 #-------------------------------------------------------------------------
 # Provide a clean way of handling exceptions in mutexed regions
-# (between locking and unlocking of an mutex). Should be used probably
+# (between locking and unlocking of a mutex). Should be used probably
 # on more places in OpenACS.
 #-------------------------------------------------------------------------
 

@@ -1,5 +1,5 @@
 ad_include_contract {
-    Generate an html version of the given package_id's admin actions.
+    Generate an HTML version of the given package_id's admin actions.
     expects to be in a conn.
 } {
     package_id:integer

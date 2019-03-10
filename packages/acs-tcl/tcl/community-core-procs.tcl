@@ -883,7 +883,7 @@ ad_proc party::types_valid_for_rel_type_multirow {
     <ul>
     <li> object_type
     <li> object_type_enc - encoded object type
-    <li> indent          - an html indentation string
+    <li> indent          - an HTML indentation string
     <li> pretty_name     - pretty name of object type
     <li> valid_p         - 1 or 0 depending on whether the type is valid
     </ul>

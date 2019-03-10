@@ -654,7 +654,7 @@ ad_proc -private sec_setup_session {
         ns_log debug "OACS= empty session_id"
 
         set session_id [sec_allocate_session]
-        # if we have a user on an newly allocated session, update
+        # if we have a user on a newly allocated session, update
         # users table
 
         ns_log debug "OACS= newly allocated session $session_id"
@@ -2723,7 +2723,7 @@ namespace eval ::security::csrf {
 
         Create a security token to protect against CSRF (Cross-Site
         Request Forgery).  The token is set (and cached) in a global
-        per-thread variable an can be included in forms e.g. via the
+        per-thread variable and can be included in forms e.g. via the
         following command.
 
         <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>

@@ -1073,7 +1073,7 @@ ad_proc -private rp_handler {} {
         #
         # On internal redirects, the current ::ad_conn(extra_url) might be
         # from a previous request, which might have lead to a not-found
-        # error pointing to a new url. This can lead to an hard-to find
+        # error pointing to a new URL. This can lead to a hard-to find
         # loop which ends with a "recursion depth exceeded". There is a
         # similar problem with ::ad_conn(package_key) and
         # ::ad_conn(package_url) Therefore, we refetch the url info in case,

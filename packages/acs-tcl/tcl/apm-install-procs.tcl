@@ -691,7 +691,7 @@ ad_proc -public apm_simple_package_install {
     package_key
 } {
     Simple basic package install function.  Wraps up
-    basically what the old install xml action did.
+    basically what the old install XML action did.
 } {
     set install_spec_file [apm_package_info_file_path $package_key]
 
@@ -2178,7 +2178,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
     @param filename relative to serverroot, leading slash needed.
     @param binds list of {variable value variable value ...}
 
-    @return root_node of the parsed xml file.
+    @return root_node of the parsed XML file.
 
     @author Jeff Davis davis@xarg.net
     @creation-date 2003-10-30
@@ -2216,10 +2216,10 @@ ad_proc -public apm::process_install_xml {
     -install_from_repository:boolean
     filename binds
 } {
-    process an xml install definition file which is expected to contain
+    process an XML install definition file which is expected to contain
     directives to install, mount and configure a series of packages.
 
-    @param filename path to the xml file relative to serverroot.
+    @param filename path to the XML file relative to serverroot.
     @param binds list of {variable value variable value ...}
 
     @return list of messages
@@ -2276,11 +2276,11 @@ ad_proc -private apm_invoke_install_proc {
     {-type "action"}
     {-node:required}
 } {
-    read an xml install element and invoke the appropriate processing
+    read an XML install element and invoke the appropriate processing
     procedure.
 
     @param type the type of element to search for
-    @param node the xml node to process
+    @param node the XML node to process
 
     @return the result of the invoked proc
 
@@ -2590,9 +2590,9 @@ ad_proc -private apm::package_version::attributes::generate_xml_element {
     -value:required
 } {
     Format an XML element wit a value depending on the specified arguments
-    @param attribute_name code the value as xml attribute
-    @param multiple treat the value as a list and produce multiple xml elements
-    @return the xml-formatted string
+    @param attribute_name code the value as XML attribute
+    @param multiple treat the value as a list and produce multiple XML elements
+    @return the XML-formatted string
 
     @author Gustaf Neumann
 } {
@@ -2635,9 +2635,10 @@ ad_proc -private apm::package_version::attributes::generate_xml {
                               -version_id $version_id \
                               -array attributes]
     set attribute_defs [apm::package_version::attributes::get_spec]
-
-    # sort the array so that the xml is always in the same order so
+    #
+    # Sort the array so that the XML is always in the same order so
     # its stable for CVS.
+    #
     foreach attribute_name [lsort [array names attributes]] {
         #
         # Only output tag if its value is non-empty

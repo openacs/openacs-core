@@ -49,7 +49,7 @@ aa_register_case \
 
 } {
     set html {
-        This is a text with an regular image <img src="/images/foo.png">,
+        This is a text with a regular image <img src="/images/foo.png">,
         image with alt text <img src="/images/bar.png" alt="flower">,
         and an embedded image <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEU..."
         alt='embedded'>.

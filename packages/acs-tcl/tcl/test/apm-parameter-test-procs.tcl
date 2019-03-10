@@ -35,7 +35,7 @@ aa_register_case \
     aa_log "Registering a global parameter"
     apm_parameter_register -parameter_id $parameter_id -scope $scope $parameter_name $description $package_key $default_value $datatype
     aa_true "check apm_parameter_register global parameter" [string equal [parameter::get_global_value -package_key $package_key -parameter $parameter_name] $default_value]
-    aa_log "Unregistering an global parameter"
+    aa_log "Unregistering a global parameter"
     apm_parameter_unregister $parameter_id
 }
 

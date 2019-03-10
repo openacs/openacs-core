@@ -478,7 +478,7 @@ ad_proc -public db_html_select_options {
     sql
 } {
 
-    Generate html option tags for an html selection widget. If select_option
+    Generate html option tags for an HTML selection widget. If select_option
     is passed, this option will be marked as selected.
 
     @author yon [yon@arsdigita.com]
@@ -513,7 +513,7 @@ ad_proc -public db_html_select_value_options {
     sql
 } {
 
-    Generate html option tags with values for an html selection widget. If
+    Generate html option tags with values for an HTML selection widget. If
     select_option is passed and there exists a value for it in the values
     list, this option will be marked as selected. The "select_option" can be
     a list, in which case all options matching a value in the list will be
@@ -1950,7 +1950,7 @@ ad_proc -public util_current_location {} {
         #
         if {[ad_conn behind_secure_proxy_p]} {
             #
-            # We know, the request was an https request
+            # We know, the request was an HTTPS request
             #
             set proto https
         }
@@ -4077,7 +4077,7 @@ ad_proc -public -deprecated util_search_list_of_lists {list_of_lists query_strin
 
 #
 # Management of resource files, to be used in sitewide-admin procs to
-# decide between CDN installations an local installations.
+# decide between CDN installations and local installations.
 #
 # The configuration information is provided via dict named resource_info,
 # containing typically the following fields (all in Camel case style):
@@ -4089,7 +4089,7 @@ ad_proc -public -deprecated util_search_list_of_lists {list_of_lists query_strin
 #   - cdn:           the CDN URL prefix for obtaining the content (e.g. //maxcdn.bootstrapcdn.com/bootstrap)
 #   - cdnHost:       CDN host, sometimes needed for content security policies
 #   - cssFiles:      list of CSS files for that package (can be provided via URN)
-#   - jsFiles:       list oj JavaScript files for that package (can be provided via URN)
+#   - jsFiles:       list of JavaScript files for that package (can be provided via URN)
 #   - extraFiles:    list of more files, probably included by cssFiles (e.g. fonts)
 #   - prefix:        used for resolving the files on the server; might either point
 #                    to the CDN or to locally installed files (typically /resources/...)

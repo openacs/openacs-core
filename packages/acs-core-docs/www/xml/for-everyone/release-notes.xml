@@ -1304,7 +1304,7 @@ END OF TEMPLATE -->
 	    <listitem><para> Use per-thread caching to reduce number of
 	    mutex lock operations and lock contention on various caches
 	    (util-memoize, xo_site_nodes, xotcl_object_types) and nsvs
-	    (e.g ds_properties) </para></listitem>
+	    (e.g. ds_properties) </para></listitem>
 	    
  	    <listitem><para>
 	      Improved templating of OpenACS core documentation
