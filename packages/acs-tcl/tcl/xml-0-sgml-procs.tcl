@@ -774,7 +774,7 @@ proc sgml::Entity {opts entityrefcmd pcdatacmd entities ref} {
 
 		if {![regexp {<|&} $map($ref)]} {
 
-		    # Simple text replacement - optimise
+		    # Simple text replacement - optimize
 
 		    uplevel #0 $pcdatacmd [list $map($ref)]
 

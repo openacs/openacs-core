@@ -772,9 +772,9 @@ ad_proc -public site_node::get_children {
 
     @option all          Set this if you want all children, not just direct children
 
-    @option package_type If specified, this will limit the returned nodes to those with an
-    package of the specified package type (normally apm_service or
-                                           apm_application) mounted. Conflicts with the -package_key option.
+    @option package_type If specified, this will limit the returned nodes to those
+    with a package of the specified package type (normally apm_service or
+    apm_application) mounted. Conflicts with the -package_key option.
 
     @param package_key   If specified, this will limit the returned nodes to those with a
     package of the specified package key mounted. Conflicts with the
@@ -1825,9 +1825,9 @@ if {$UseXotclSiteNodes} {
 
         @option all          Set this if you want all children, not just direct children
 
-        @option package_type If specified, this will limit the returned nodes to those with an
-        package of the specified package type (normally apm_service or
-                                               apm_application) mounted. Conflicts with the -package_key option.
+        @option package_type If specified, this will limit the returned nodes to those with
+        a package of the specified package type (normally apm_service or
+        apm_application) mounted. Conflicts with the -package_key option.
 
         @param package_key   If specified, this will limit the returned nodes to those with a
         package of the specified package key mounted. Conflicts with the
