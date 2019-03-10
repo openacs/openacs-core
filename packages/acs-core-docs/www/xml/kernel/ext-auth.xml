@@ -214,7 +214,7 @@ authentication process from a page linked under /acs-admin.</para>
           login process.</para></listitem>
       </itemizedlist>
       <para>The local authority driver is an encapsulation of current
-      functionality within an driver matching a service contract.  The
+      functionality within a driver matching a service contract.  The
       other drivers call external functions.  The possible functions
       for each authority are split into several drivers for convenience.
       One driver handles authentication, one account creation, and one

@@ -61,7 +61,7 @@ adaptable UI. Error handling includes inline error reporting, and is customizabl
     <para>A situation you may run into often is where you want to pull
     in form items from a sub-category when the first category is
     selected. Ad_form makes this fairly easy to do. In the definition
-    of your form element, include an html section</para>
+    of your form element, include an HTML section</para>
 
     <programlisting>    {pm_task_id:integer(select),optional
         {label "Subject"}

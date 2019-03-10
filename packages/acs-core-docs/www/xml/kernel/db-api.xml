@@ -302,7 +302,7 @@ When this SQL statement is invoked, the value for the bind variable
 <computeroutput>$some_presentation_id</computeroutput> (in the caller&#39;s environment). Note
 that bind variables are not limited to one per statement; you can use an
 arbitrary number, and each will pull from the correspondingly named Tcl
-variable. (Alternatively, you can also specify an list or <computeroutput>ns_set</computeroutput>
+variable. (Alternatively, you can also specify a list or <computeroutput>ns_set</computeroutput>
 providing bind variables&#39; values; see <emphasis>Usage</emphasis>.) 
 </para>
 

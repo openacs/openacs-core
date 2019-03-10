@@ -508,7 +508,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
       <listitem>
         <formalpara>
           <title>Replace the temporary message tags in ADP files</title>
-          <para>From the same <computeroutput>Convert ADP ...</computeroutput> page in <computeroutput>/acs-admin/apm</computeroutput> as in the last step, repeat the process but deselect <computeroutput>Find human language text ...</computeroutput> and select <computeroutput>Replace &lt;# ... #&gt; tags ...</computeroutput> and click OK.  This step replaces all of the temporary tags with "short" message lookups, inserts the message keys into the database message catalog, and then writes that catalog out to an xml file.</para>
+          <para>From the same <computeroutput>Convert ADP ...</computeroutput> page in <computeroutput>/acs-admin/apm</computeroutput> as in the last step, repeat the process but deselect <computeroutput>Find human language text ...</computeroutput> and select <computeroutput>Replace &lt;# ... #&gt; tags ...</computeroutput> and click OK.  This step replaces all of the temporary tags with "short" message lookups, inserts the message keys into the database message catalog, and then writes that catalog out to an XML file.</para>
         </formalpara>
       </listitem>
       <listitem>
@@ -679,7 +679,7 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
         where package_key is the key of the package that you want to
         test. If you don&#39;t provide the package_key argument then all
         packages with catalog files will be checked. 
-        The script will run its checks primarily on en_US xml catalog files.
+        The script will run its checks primarily on en_US XML catalog files.
       </para>
       </listitem>
     </orderedlist>

@@ -334,7 +334,7 @@ NOT IMPLEMENTED for 5.0.0.</remark></para>
 
       <para><emphasis>10.40</emphasis>Administrators can upgrade their
 servers to use new locales via the APM. <remark>NOT IMPLEMENTED in
-5.0.0; current workaround is to get an xml file and load it
+5.0.0; current workaround is to get an XML file and load it
 manually.</remark></para>
 
 

@@ -44,7 +44,7 @@
 	an XML standard for semantic markup of documentation.  That
 	means that the tags you use indicate meaning, not intended
 	appearance.  The style sheet will determine appearance.  You
-      will edit the text in an xml file, and then process the file
+      will edit the text in an XML file, and then process the file
       into html for reading.</para>
       <para>Open the file <computeroutput>index.xml</computeroutput>
       in emacs.  Examine the file.  Find the version history (look for the tag
@@ -52,7 +52,7 @@
         new record to the document version history.  Look for the
         <computeroutput>&lt;authorgroup&gt;</computeroutput> tag and
         add yourself as a second author.  Save and exit.</para>
-      <para>Process the xml file to create html documentation.  The
+      <para>Process the XML file to create html documentation.  The
       html documentation, including supporting files such as pictures,
       is stored in the <computeroutput>www/docs/</computeroutput>
       directory.  A Makefile is provided to generate html from the xml, and copy all of the

@@ -621,7 +621,7 @@
       </para>
       </listitem>
       <listitem><para>
-        The life of an http request to a dynamic, templated page
+        The life of an HTTP request to a dynamic, templated page
       </para>
       </listitem>
       <listitem><para>
@@ -1462,7 +1462,7 @@
     
     <para>
       Once you have the <xref linkend="dbprimer-validation"/>
-      installed, you can convert your xml documents to HTML or other
+      installed, you can convert your XML documents to HTML or other
       formats.
     </para>
     
