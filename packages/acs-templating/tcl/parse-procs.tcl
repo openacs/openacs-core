@@ -163,7 +163,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
         } else {
             # no template;  found_script_p tells us if adp_prepare at least found a script.
             if { !$found_script_p } {
-                # No template. Perhaps there is an html file.
+                # No template. Perhaps there is an HTML file.
                 if { [file exists $__adp_stub.html] } {
                     ns_log debug "getting output from ${__adp_stub}.html"
                     set __adp_output [template::util::read_file "${__adp_stub}.html"]

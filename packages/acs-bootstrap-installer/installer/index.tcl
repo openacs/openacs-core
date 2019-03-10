@@ -60,7 +60,7 @@ before proceeding to better understand what is contained in this release.
 
 if { [file exists [apm_install_xml_file_path]] } {
 
-    # Parse the xml document
+    # Parse the XML document
     set root_node [apm_load_install_xml_file]
 
     if { [xml_node_get_name $root_node] ne "application" } {

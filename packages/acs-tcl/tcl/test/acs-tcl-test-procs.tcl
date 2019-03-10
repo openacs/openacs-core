@@ -103,10 +103,10 @@ aa_register_case \
         puts $spec_file_id $spec
         close $spec_file_id
 
-        # Read the xml file
+        # Read the XML file
         array set spec_array [apm_read_package_info_file $spec_path]
 
-        # Assert that info parsed from xml file is correct
+        # Assert that info parsed from XML file is correct
         array set parsed_callback_array $spec_array(callbacks)
 
         aa_true "Only one permissible callback should be returned, got array [array get parsed_callback_array]" \

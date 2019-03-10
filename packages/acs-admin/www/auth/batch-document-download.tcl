@@ -1,5 +1,5 @@
 ad_page_contract {
-    Download a whole batch xml document.
+    Download a whole batch XML document.
 
     @author Peter Marklund
 } {

@@ -40,7 +40,7 @@ ad_page_contract {
   @see template::head::add_link
   @see template::head::add_script
 
-  JavaScript event handlers, such as onload, an be added to the <body> tag by 
+  JavaScript event handlers, such as onload, can be added to the <body> tag by 
   calling template::add_body_handler within your page.
 
   @see template::add_body_handler

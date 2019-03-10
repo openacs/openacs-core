@@ -497,7 +497,7 @@ ad_proc -private apm_load_install_xml_file {} {
         return ""
     }
 
-    #ns_log notice "==== LOADING xml file: $fn"
+    #ns_log notice "==== LOADING XML file: $fn"
     set file [open $fn]
     set root_node [xml_doc_get_first_node [xml_parse -persist [read $file]]]
     close $file

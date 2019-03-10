@@ -820,7 +820,7 @@ ad_proc -public -deprecated template::util::leadingTrim { value } {
     return [util::trim_leading_zeros $value]
 }
 
-# Create an html fragment to display a numeric range widget
+# Create an HTML fragment to display a numeric range widget
 # interval_def is in form { start stop interval }
 
 ad_proc -public template::widget::numericrange {element_reference tag_attributes} {
@@ -837,7 +837,7 @@ ad_proc -public template::widget::numericrange {element_reference tag_attributes
 }
 
 ad_proc -public template::widget::numericRange { name interval_def size {value ""} {tag_attributes {}} } {
-    Create an html fragment to display a numeric range widget
+    Create an HTML fragment to display a numeric range widget
     interval_def is in form { start stop interval }
 } {
   array set attributes $tag_attributes

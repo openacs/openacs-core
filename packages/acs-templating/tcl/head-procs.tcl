@@ -34,7 +34,7 @@ ad_proc -public template::register_urn {
 } {
 
     Register a URN for a resource. These URNs provide a single place
-    for e.g updating references to external resources when switching
+    for e.g. updating references to external resources when switching
     between a CDN and a local resource, or when a resource should be
     updated.
 

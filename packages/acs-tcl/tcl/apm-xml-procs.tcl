@@ -359,7 +359,7 @@ ad_proc -public apm_read_package_info_file { path } {
             set proc [apm_attribute_value $callback_node proc]
 
             if { [llength [array get callback_array $type]] != 0 } {
-                # A callback proc of this type already found in the xml file
+                # A callback proc of this type already found in the XML file
                 ns_log Error "package info file $path contains more than one callback proc of type $type"
                 continue
             }
