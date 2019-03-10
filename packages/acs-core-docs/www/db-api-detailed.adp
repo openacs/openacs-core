@@ -195,7 +195,7 @@ is pulled from the Tcl variable <code class="computeroutput">$some_presentation_
 environment). Note that bind variables are not limited to one per
 statement; you can use an arbitrary number, and each will pull from
 the correspondingly named Tcl variable. (Alternatively, you can
-also specify an list or <code class="computeroutput">ns_set</code>
+also specify a list or <code class="computeroutput">ns_set</code>
 providing bind variables' values; see <span class="emphasis"><em>Usage</em></span>.)</p><p>The value of a bind variable is taken literally by the database
 driver, so there is never any need to put single-quotes around the
 value for a bind variable, or to use <code class="computeroutput">db_quote</code> to escape single-quotes contained
@@ -683,7 +683,7 @@ the user.</p><p>The nsv containing the list is initialized by the bootstrap
 script and should never be referenced directly by user code.
 Returns the current rdbms type and version.</p>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.12.2.1 2019/02/14 16:15:00
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.12.2.2 2019/03/10 21:44:57
 gustafn Exp $)</div>
 </div>
 </div>

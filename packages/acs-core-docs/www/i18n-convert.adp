@@ -39,7 +39,7 @@ language text ...</code> and select <code class="computeroutput">Replace &lt;# .
 OK. This step replaces all of the temporary tags with
 "short" message lookups, inserts the message keys into
 the database message catalog, and then writes that catalog out to
-an xml file.</p></li><li class="listitem">
+an XML file.</p></li><li class="listitem">
 <p>
 <strong>Replace human-readable text in Tcl files with temporary
 tags. </strong>Examine all of the Tcl files in the packages
@@ -143,11 +143,11 @@ package_key</code>
 </p><p>where package_key is the key of the package that you want to
 test. If you don&#39;t provide the package_key argument then all
 packages with catalog files will be checked. The script will run
-its checks primarily on en_US xml catalog files.</p>
+its checks primarily on en_US XML catalog files.</p>
 </li>
 </ol></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140560470346968" id="idp140560470346968"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140425768588216" id="idp140425768588216"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Replace complicated keys with longer, simpler

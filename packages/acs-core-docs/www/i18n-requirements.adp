@@ -163,7 +163,7 @@ there will be default date, number and currency formats.
 <span class="emphasis"><em>10.40</em></span>Administrators can
 upgrade their servers to use new locales via the APM.
 <em><span class="remark">NOT IMPLEMENTED in 5.0.0; current
-workaround is to get an xml file and load it
+workaround is to get an XML file and load it
 manually.</span></em>
 </p>
 </blockquote></div>

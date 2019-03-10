@@ -29,12 +29,12 @@ standard directories, and copy the prepared documentation:</p><pre class="screen
 [$OPENACS_SERVICE_NAME xml]$</pre><p>OpenACS uses DocBook for documentation. DocBook is an XML
 standard for semantic markup of documentation. That means that the
 tags you use indicate meaning, not intended appearance. The style
-sheet will determine appearance. You will edit the text in an xml
+sheet will determine appearance. You will edit the text in an XML
 file, and then process the file into html for reading.</p><p>Open the file <code class="computeroutput">index.xml</code> in
 emacs. Examine the file. Find the version history (look for the tag
 <code class="computeroutput">&lt;revhistory&gt;</code>). Add a new
 record to the document version history. Look for the <code class="computeroutput">&lt;authorgroup&gt;</code> tag and add yourself as
-a second author. Save and exit.</p><p>Process the xml file to create html documentation. The html
+a second author. Save and exit.</p><p>Process the XML file to create html documentation. The html
 documentation, including supporting files such as pictures, is
 stored in the <code class="computeroutput">www/docs/</code>
 directory. A Makefile is provided to generate html from the xml,
