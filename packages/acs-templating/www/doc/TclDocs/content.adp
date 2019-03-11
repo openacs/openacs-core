@@ -458,8 +458,7 @@ specified, returns a simple list of attribute names.</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="content::get_default_content_method" id="content::get_default_content_method"><font size="+1" weight="bold">content::get_default_content_method</font></a></td></tr><tr><td>
-<blockquote>Gets the content input method most appropriate for an
-content type, based on the MIME types that are registered for that
+<blockquote>Gets the content input method most appropriate for a content type, based on the MIME types that are registered for that
 content type.</blockquote><dl><dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">

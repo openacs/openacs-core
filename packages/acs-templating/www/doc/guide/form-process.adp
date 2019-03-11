@@ -33,7 +33,7 @@ in the form for the purpose of identifying incoming
 submissions.</li><li>By default, the <kbd>formtemplate tag</kbd> sets the
 <kbd>ACTION</kbd> attribute of the <kbd>FORM</kbd> tag to the
 <em>same</em> URL as that of the form itself. The submission is
-therefor processed within the framework of the same code that was
+therefore processed within the framework of the same code that was
 used to create the form.</li>
 </ol>
 <hr>

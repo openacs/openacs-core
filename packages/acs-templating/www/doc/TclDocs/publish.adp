@@ -335,7 +335,7 @@ URL under each publish root listed under the PublishRoots parameter
 in the server&#39;s INI file (the value returnded by
 publish::get_page_root is used as the default). The file extension
 will be based on the revision&#39;s mime-type.<br>
-For example, an revision whose mime-type is { image/jpeg} for an
+For example, a revision whose mime-type is { image/jpeg} for an
 item at { Sitemap/foo/bar} may be written as
 /web/your_server_name/www/foo/bar.jpg</blockquote><dl>
 <dd>
