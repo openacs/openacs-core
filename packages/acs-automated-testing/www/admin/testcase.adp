@@ -20,7 +20,7 @@
           @url_blurb;noquote@</dd>
       </if>
       <if @testcase_inits@ ne "">
-        <dt>Initialisation Classes:</dt><dd>@testcase_inits@</dd>
+        <dt>Initialization Classes:</dt><dd>@testcase_inits@</dd>
       </if>
       <if @fails@ gt 0 and @testcase_on_error@ ne "">
         <dt class="fail">Testcase failure error response:</dt>

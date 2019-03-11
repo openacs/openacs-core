@@ -556,7 +556,7 @@ functions are marked as deprecated and will be moved into an
 "outdated" package in the 5.9 or 6.0 release)</p></li><li class="listitem"><p>General overhaul of package management</p></li><li class="listitem"><p>Install-from-local and install-from-repository can be used to
 install the provided packages based on a acs-core installation.
 This means that also DotLRN can be installed from repository or
-from local into an existing OpenACS instance.</p></li><li class="listitem"><p>Install-from-repository offers filtering functions, allows to
+from local into an existing OpenACS instance.</p></li><li class="listitem"><p>Install-from-repository offers filtering functions, allows one to
 install optionally from head-channel (for packages not in the base
 channel of the installed instance). Install-from-repository works
 more like an app-store, showing as well vendor information</p></li><li class="listitem"><p>Packages can be equipped with xml-based configuration files

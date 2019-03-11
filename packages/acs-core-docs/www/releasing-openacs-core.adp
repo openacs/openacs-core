@@ -184,7 +184,7 @@ detailed above until the process is stabilized).</p><pre class="programlisting">
 TAG=1
 
 # What release version are we building; version format should be
-# dashes rather than dots eg. OACS_VERSION=5-0-0b4
+# dashes rather than dots e.g. OACS_VERSION=5-0-0b4
 
 OACS_VERSION=5-0-0b4
 DOTLRN_VERSION=2-0-0b4
@@ -239,7 +239,7 @@ fi
 mkdir tarball
 cd tarball
 cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION acs-core
-mv opeancs-4 openacs-${OACS_VERSION//-/.}
+mv openacs-4 openacs-${OACS_VERSION//-/.}
 tar -czf ../openacs-${OACS_VERSION//-/.}.tar.gz openacs-${OACS_VERSION//-/.}
 cd ..
 

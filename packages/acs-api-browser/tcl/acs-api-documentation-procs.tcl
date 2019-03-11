@@ -296,7 +296,7 @@ ad_proc -public api_library_documentation {
 ad_proc -public api_type_documentation {
     type
 } {
-    @return html fragment of the API docs.
+    @return HTML fragment of the API docs.
 } {
     array set doc_elements [nsv_get doc_type_doc $type]
     append out "<h3>$type</h3>\n"

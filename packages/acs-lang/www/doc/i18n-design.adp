@@ -165,7 +165,7 @@ which call <kbd>lang_message_lookup</kbd>, or else use the
 
 Message catalog lookups can be potentially expensive, if many of
 them are done in a page. The templating system can already
-precompile and and cache adp pages. This works fine for a page in a
+precompile and cache adp pages. This works fine for a page in a
 specific language such as <kbd>foo.en.adp</kbd>
 , but we need to
 modify the caching mechanism if we want to use a single template

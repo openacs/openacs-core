@@ -58,7 +58,7 @@
   <pre>
     # aolserver4 recommends descriptors limit (FD_SETSIZE) to be set to 1024, 
     # which is standard for most OS distributions
-    # For freebsd systems, uncomment following line:
+    # For FreeBSD systems, uncomment following line:
     ulimit -n 1024
   </pre>
   <p>Note: This does not fix any problem associated with a crash, only makes problem evaporate for low volume traffic sites.</p>

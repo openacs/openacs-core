@@ -97,7 +97,7 @@ whenever this test fails" and "notify me whenever a test
 in this category fails"</td>
 </tr><tr>
 <td>7</td><td> </td><td>A</td><td>The results of an automated test are optionally written to an
-xml file.</td>
+XML file.</td>
 </tr>
 </tbody>
 </table></div><p>Because the current test package uses in-memory variables

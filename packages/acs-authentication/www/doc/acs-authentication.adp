@@ -22,14 +22,14 @@ service-contract</a>
 <p class="style2"> </p>
 <p class="style2">Authorities</p>
 <p>acs-authentication can have multiple authorities, each one
-represent an specific configuration of authenticatication. For
+represent a specific configuration of authenticatication. For
 instance, in your openacs installation you can have users related
 to different authorities, some of them might authenticate locally
 since they are external or invited, others belongs to your
 corporate network and already have users, so might authenticate
 against LDAP and others in your own work office might use PAM for
 authentication because your local system authentication. Plus you
-might define an specific implementation (using the set of SC) to
+might define a specific implementation (using the set of SC) to
 connect to your client DB, which is in another DB, and allow your
 clients login to certain parts of your website. Then, this is right
 way to handle all those set of users, that already might have an

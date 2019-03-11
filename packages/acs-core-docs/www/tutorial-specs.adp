@@ -34,7 +34,7 @@ file, and then process the file into html for reading.</p><p>Open the file <code
 emacs. Examine the file. Find the version history (look for the tag
 <code class="computeroutput">&lt;revhistory&gt;</code>). Add a new
 record to the document version history. Look for the <code class="computeroutput">&lt;authorgroup&gt;</code> tag and add yourself as
-a second author. Save and exit.</p><p>Process the XML file to create html documentation. The html
+a second author. Save and exit.</p><p>Process the XML file to create HTML documentation. The HTML
 documentation, including supporting files such as pictures, is
 stored in the <code class="computeroutput">www/docs/</code>
 directory. A Makefile is provided to generate html from the xml,
