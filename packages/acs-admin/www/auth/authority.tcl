@@ -36,7 +36,7 @@ set form_widgets_full {
     {short_name:text,optional
         {html {size 50}}
         {label "\#acs-admin.Short_Name\#"}
-        {mode {[ad_decode $local_authority_p 1 "display" ""]}}
+        {mode {[expr {$local_authority_p ? "display" : ""}]}}
         {help_text "[_ acs-admin.Authority_short_name_help_text]"}
     }
 
