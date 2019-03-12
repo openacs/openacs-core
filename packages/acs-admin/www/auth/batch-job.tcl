@@ -71,7 +71,8 @@ ad_form \
         foreach element_name [array names batch_job] {
             # Make certain columns pretty for display
             if { [regexp {_p$} $element_name] } {
-                set $element_name [ad_decode $batch_job($element_name) "t" "Yes" "No"]
+                set $element_name [expr {$batch_job($element_name) eq "t" ?
+                                         "[_ acs-kernel.common_Yes]" : "[_ acs-kernel.common_No]"}]
             } elseif { $element_name eq "creation_user" && $batch_job($element_name) ne "" } {
                 set $element_name [acs_community_member_link -user_id $batch_job($element_name)]
             } else {
