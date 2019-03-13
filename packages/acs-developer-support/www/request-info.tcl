@@ -94,7 +94,7 @@ if { [info exists property(conn)] } {
 
 	    append body [subst {
 		<tr valign="top"><th style="white-space: nowrap; text-align:left">$name:&nbsp;</th>
-		<td>[ad_decode $value "" "(empty)" $value]</td>
+		<td>[expr {$value eq "" ? "(empty)" : $value}]</td>
 		</tr>
 	    }]
 	}
