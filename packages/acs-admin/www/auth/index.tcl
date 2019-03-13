@@ -124,7 +124,7 @@ db_multirow -extend {
     from   auth_authorities
     order  by sort_order
 } {
-    set toggle_enabled_p [ad_decode $enabled_p "t" "f" "t"]
+    set toggle_enabled_p [expr {!$enabled_p}]
     set enabled_p_url [export_vars -base authority-set-enabled-p { authority_id {enabled_p $toggle_enabled_p} }]
     set delete_url [export_vars -base authority-delete { authority_id }]
     set sort_order_url_up [export_vars -base authority-set-sort-order { authority_id {direction up} }]
