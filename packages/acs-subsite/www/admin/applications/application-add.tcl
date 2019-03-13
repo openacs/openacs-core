@@ -29,7 +29,7 @@ ad_form -name application -cancel_url . -form {
         {label "[_ acs-subsite.Application]"}
         {options $packages}
         {help_text "The type of application you want to add.  If the application is not in the list, you may need to <a href=\"/acs-admin/install/\">install</a> it on the server."}
-        {mode {[ad_decode [ad_form_new_p -key node_id] 1 "" "display"]}}
+        {mode {[expr {[ad_form_new_p -key node_id] ? "" : "display"}]}}
     }
     {instance_name:text,optional
         {label "[_ acs-subsite.Application_name]"}
