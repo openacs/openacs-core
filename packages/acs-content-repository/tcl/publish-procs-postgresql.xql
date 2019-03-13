@@ -33,7 +33,7 @@
                        then lob::text 
                        else r.content end as content, i.storage_type 
       from cr_revisions r, cr_items i 
-      where r.item_id = i.item_id and r.revision_id = $revision_id
+      where r.item_id = i.item_id and r.revision_id = :revision_id
 
       </querytext>
 </fullquery>
