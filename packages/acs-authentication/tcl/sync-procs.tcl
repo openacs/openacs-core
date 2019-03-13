@@ -234,7 +234,7 @@ ad_proc -public auth::sync::job::create_entry {
     @param message Any error message to stick into the log.
     @return entry_id
 } {
-    set success_p_db [ad_decode $success_p 1 "t" "f"]
+    set success_p_db [expr {$success_p ? "t" : "f"}]
 
     set entry_id [db_nextval "auth_batch_job_entry_id_seq"]
 
