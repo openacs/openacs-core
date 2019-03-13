@@ -42,10 +42,10 @@ foreach dependency_type { provide require extend embed } {
 	# a *lower* version of the service; if it requires one, show packages providing
 	# a *higher* version.
 
-	set sign [ad_decode $dependency_type "provide" "<=" ">="]
+	set sign [expr {$dependency_type eq "provide" ? "<=" : ">="}]
 
 	set counter 0
-        set other_dependency_in [ad_decode $dependency_type "provide" "'requires','extends','embeds'" "'provides'"]
+        set other_dependency_in [expr {$dependency_type eq "provide" ? "'requires','extends','embeds'" : "'provides'"}]
 	db_foreach apm_specific_version_dependencies {} {
             incr counter
 	    if { $counter == 1 } {

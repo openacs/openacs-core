@@ -50,8 +50,8 @@ set page_title "Internationalizing file $next_file"
 set context_bar [ad_context_bar $page_title]
 
 # Figure out which actions to take on the selected adp:s
-set replace_text_p [ad_decode [lsearch -exact $file_action replace_text] "-1" "0" "1"]
-set replace_tags_p [ad_decode [lsearch -exact $file_action replace_tags] "-1" "0" "1"]
+set replace_text_p [expr {"replace_text" in $file_action}]
+set replace_tags_p [expr {"replace_tags" in $file_action}]
 
 # We need either or both of the actions to be selected
 if { ! $replace_text_p && ! $replace_tags_p } {

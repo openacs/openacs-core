@@ -84,7 +84,7 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
     }
 }
 
-form create file_list_form -action [ad_decode $file_type adp "version-i18n-process" "version-i18n-process-2"]
+form create file_list_form -action [expr {$file_type eq "adp" ? "version-i18n-process" : "version-i18n-process-2"}]
 
 element create file_list_form version_id \
         -datatype integer \
