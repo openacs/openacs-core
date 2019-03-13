@@ -68,7 +68,7 @@
   <msg key="by_group_type">nach Gruppentyp</msg>
   <msg key="cannot_retrieve_password">Passwort zurücksetzen durch lokale Authentifizierungsstelle nicht unterstützt</msg>
   <msg key="Cannot_see_memb_list">Liste der Teilnehmer verborgen</msg>
-  <msg key="Caption">Titel</msg>
+  <msg key="Caption">Bildunterschrift</msg>
   <msg key="Change_locale_label">Sprache einstellen</msg>
   <msg key="Change_my_email_P">Änderung meines E-Mail Privacy Levels</msg>
   <msg key="Change_my_Password">Passwort ändern</msg>
@@ -151,7 +151,7 @@
   <msg key="edit">bearbeiten</msg>
   <msg key="Edit_application_name_and_path">Name und Pfad der Anwendung bearbeiten</msg>
   <msg key="edit_asm">Verändern des markierten Fragebogens</msg>
-  <msg key="Edit_caption">Titel bearbeiten</msg>
+  <msg key="Edit_caption">Bildunterschrift bearbeiten</msg>
   <msg key="edit_comment">Kommentar bearbeiten</msg>
   <msg key="Edit_Options">Optionen editieren</msg>
   <msg key="Elements_not_editable">Einige Elemente können nicht bearbeitet werden, da sie von %authority_name% verwaltet werden.</msg>
