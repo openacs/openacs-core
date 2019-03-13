@@ -128,12 +128,12 @@ template::list::create \
         }
         comment {
             label "Error Message"
-            hide_p {[ad_decode $problems_p 1 0 1]}
+            hide_p {[expr {!$problems_p}]}
         }
         extra_p {
             label "Added"
-            display_eval {[ad_decode $extra_p 1 "*" ""]}
-            hide_p {[ad_decode $extras_p 1 0 1]}
+            display_eval {[expr {$extra_p ? "*" : ""}]}
+            hide_p {[expr {!$extras_p}]}
             html { align center }
         }
     }
