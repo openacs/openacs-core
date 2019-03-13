@@ -1322,7 +1322,20 @@ ad_proc -public ad_decode { args } {
     pairs where first element in the pair is convert from value and second
     element is convert to value. The last value is default value, which will
     be returned in the case convert from values matches the given value to
-    be decoded.
+    be decoded.<br>
+    <br>
+    Note that in most cases native tcl idioms such as expr or switch
+    will do the trick. This proc CAN make sense when one has many
+    alternatives to decode, as in such cases a switch statement would
+    not be as compact.<br>
+    <br>
+    Good usage:<br>
+    <code>ad_decode $value f Foo b Bar d Dan s Stan l Lemon m Melon
+    Unknown</code> ---> a oneliner as opposed to a long switch
+    statement<br>
+    <br>
+    Bad usage:<br>
+    <code>ad_decode $boolean_p t 0 1</code> ---> just use <code>expr {!$boolean_p}</code>
 } {
     set num_args [llength $args]
     set input_value [lindex $args 0]
