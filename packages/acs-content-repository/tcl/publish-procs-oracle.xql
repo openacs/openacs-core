@@ -4,30 +4,30 @@
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
 
-<fullquery name="publish::handle::text.get_revision_id">      
+<fullquery name="publish::handle::text.get_revision_id">
       <querytext>
 
                 begin
                 content_revision.to_temporary_clob(:revision_id);
                 end;
-        
+
       </querytext>
 </fullquery>
 
-<fullquery name="publish::handle::text.get_previous_content">      
+<fullquery name="publish::handle::text.get_previous_content">
       <querytext>
 
-                       select 
+                       select
                          content
-                       from 
+                       from
                          cr_content_text
-                       where 
+                       where
                          revision_id = :revision_id
 
       </querytext>
 </fullquery>
 
-<fullquery name="publish::write_multiple_blobs.wmb_get_blob_file">      
+<fullquery name="publish::write_multiple_blobs.wmb_get_blob_file">
       <querytext>
         select [expr {$storage_type eq "file" ? "'[cr_fs_path]' || filename" : "content"}]
           from cr_revisions where revision_id = :revision_id
@@ -35,17 +35,17 @@
 </fullquery>
 
 
-<fullquery name="publish::write_content.get_previous_content">      
+<fullquery name="publish::write_content.get_previous_content">
       <querytext>
-      
-                       select 
+
+                       select
                          content
-                       from 
+                       from
                          cr_content_text
-                       where 
+                       where
                          revision_id = :revision_id
-  
+
       </querytext>
 </fullquery>
- 
+
 </queryset>
