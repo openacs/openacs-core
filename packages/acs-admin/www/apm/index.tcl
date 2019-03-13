@@ -86,13 +86,13 @@ template::list::create -name package_list \
         }
     } -filters {owned_by {} supertype {} status {}}
 
-set performance_p [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 1] 
+set performance_p [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 1]
 set reload_links_p [string is true -strict [ns_set iget [rp_getform] reload_links_p]]
 
 db_multirow -extend {package_url maintained status action_html} packages apm_table {} {
     set package_url [export_vars -base version-view {version_id}]
     set maintained [expr {$distribution_uri eq "" ? "Locally" : "Externally"}]
-    
+
     if { $installed_p == "t" } {
         if { $enabled_p == "t" } {
             set status "Enabled"
@@ -104,17 +104,17 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
     } else {
         set status "Uninstalled"
     }
-    
+
     set file_link_list [list]
     lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"
     if { $installed_p == "t" && $enabled_p == "t" } {
         if {!$performance_p} {
             lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
-        } 
+        }
         if { !$reload_links_p || [apm_version_load_status $version_id] eq "needs_reload"} {
             lappend file_link_list "<a href=\"version-reload?version_id=$version_id\">reload changed</a>"
-        } 
-    } 
+        }
+    }
     set action_html [join $file_link_list " | "]
 }
 

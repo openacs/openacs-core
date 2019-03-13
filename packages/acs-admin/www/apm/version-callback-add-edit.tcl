@@ -4,9 +4,9 @@ ad_page_contract {
 
     @author Peter Marklund
     @creation-date 28 January 2003
-    @cvs-id $Id$  
+    @cvs-id $Id$
 } {
-    version_id:naturalnum,notnull    
+    version_id:naturalnum,notnull
     {type ""}
 }
 
@@ -43,15 +43,15 @@ set context [list [list "." "Package Manager"] [list [export_vars -base version-
 
 set type_label "Tcl procedure name"
 ad_form -name callback -cancel_url $return_url -form {
-    {version_id:integer(hidden) 
+    {version_id:integer(hidden)
       {value $version_id}
     }
 
-    {return_url:text(hidden) 
+    {return_url:text(hidden)
       {value $return_url}
     }
 
-    {edit_mode_p:text(hidden) 
+    {edit_mode_p:text(hidden)
       {value $edit_mode_p}
     }
 
@@ -79,11 +79,11 @@ ad_form -name callback -cancel_url $return_url -form {
                                                                      "and have the following required switches: [apm_arg_names_for_callback_type -type $type]"}]}
     }
 } -on_submit {
-    
+
     apm_set_callback_proc -type $type -version_id $version_id $proc
 
     apm_package_install_spec $version_id
-    
+
     ad_returnredirect $return_url
     ad_script_abort
 }
