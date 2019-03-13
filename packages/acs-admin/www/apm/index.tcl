@@ -94,15 +94,15 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
     set maintained [expr {$distribution_uri eq "" ? "Locally" : "Externally"}]
     
     if { $installed_p == "t" } {
-		if { $enabled_p == "t" } {
-		    set status "Enabled"
-		} else {
-		    set status "Disabled"
-		}
+        if { $enabled_p == "t" } {
+            set status "Enabled"
+        } else {
+            set status "Disabled"
+        }
     } elseif { $superseded_p } {
-		set status "Superseded"
+        set status "Superseded"
     } else {
-		set status "Uninstalled"
+        set status "Uninstalled"
     }
     
     set file_link_list [list]
