@@ -23,7 +23,7 @@ ad_page_contract {
 
 db_1row apm_all_version_info {}
 
-set downloaded_p [ad_decode $version_uri "" 0 1]
+set downloaded_p [expr {$version_uri ne ""}]
 
 # Obtain information about the enabled version of the package (if there is one).
 # We use rownum = 1 in case someone mucks up the database and leaves two package versions
