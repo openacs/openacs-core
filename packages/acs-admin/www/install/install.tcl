@@ -186,12 +186,12 @@ template::list::create \
         }
         package_type {
             label "Type"
-            display_eval {[ad_decode $package_type "apm_application" "Application" "Service"]}
+            display_eval {[expr {$package_type eq "apm_application" ? "[_ acs-subsite.Application]" : "[_ acs-admin.Service]"}]}
         }
         upgrade {
             label "Upgrade"
-            hide_p {[ad_decode $upgrades_p 1 0 1]}
-            display_eval {[ad_decode $install_type "upgrade" "Upgrade" ""]}
+            hide_p {[expr {!$upgrades_p}]}
+            display_eval {[expr {$install_type eq "upgrade" ? "Upgrade" : ""}]}
         }
     } -filters {
         channel {
@@ -217,8 +217,8 @@ template::list::create \
         package_type {
             label "Type"
             values {
-                {Application apm_application}
-                {Service apm_service}
+                {"[_ acs-subsite.Application]" apm_application}
+                {"[_ acs-admin.Service]" apm_service}
             }
         }
         upgrade_p {
