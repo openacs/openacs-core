@@ -17,22 +17,22 @@ set context [list [list "../developer" "Developer's Administration"] $page_title
 
 set user_id [ad_conn user_id]
 
-# Determine the user's email address.  If its not registered, put in a default.  
-set my_email [db_string email_by_user_id {
-    select email from parties where party_id = :user_id
-} -default "me"]
+# Determine the user's email address to filter packages belonging to 'me'
+set my_email [party::get -party_id $user_id -element email]
 
 set dimensional_list {
     {
         supertype "Package Type:" all {
-	    { apm_application "Applications" { where "[db_map apm_application]" } }
-	    { apm_service "Services" { where "t.package_type = 'apm_service'"} }
+	    { apm_application "Applications" { where {t.package_type = 'apm_application'} } }
+	    { apm_service "Services" { where {t.package_type = 'apm_service'}} }
 	    { all "All" {} }
 	}
     }
     {
 	owned_by "Owned by:" everyone {
-	    { me "Me" {where "[db_map everyone]"} }
+	    { me "Me" {where {exists (select 1 from apm_package_owners o
+                                      where o.version_id = v.version_id
+                                      and owner_uri='mailto:' || :my_email)}} }
 	    { everyone "Everyone" {where "1 = 1"} }
 	}
     }
