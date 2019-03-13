@@ -78,7 +78,7 @@ db_multirow -extend {
     set locale_edit_url [export_vars -base locale-edit { locale }]
     set locale_delete_url [export_vars -base locale-delete { locale }]
     set locale_make_default_url [export_vars -base locale-make-default { locale }]
-    set toggle_enabled_p [ad_decode $enabled_p "t" "f" "t"]
+    set toggle_enabled_p [expr {!$enabled_p}]
     set locale_enabled_p_url [export_vars -base locale-set-enabled-p { locale {enabled_p $toggle_enabled_p} }]
     
     set num_translated_pretty [lc_numeric $num_translated]

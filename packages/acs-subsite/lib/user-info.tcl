@@ -104,8 +104,9 @@ lappend elms_list {
     {mode $elm_mode(email)}
 }
 
-if { [acs_user::ScreenName] ne "none" } {
-    lappend elms_list [list screen_name:text[ad_decode [acs_user::ScreenName] "solicit" ",optional" ""] \
+set screen_name [acs_user::ScreenName]
+if { $screen_name ne "none" } {
+    lappend elms_list [list screen_name:text[expr {$screen_name eq "solicit" ? ",optional" : ""}] \
                            {label "[_ acs-subsite.Screen_name]"} \
                            {html {size 50}} \
                            {mode $elm_mode(screen_name)} \
