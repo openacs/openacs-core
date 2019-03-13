@@ -253,11 +253,12 @@ ad_proc -public content::keyword::get_options_flat {
 } {
     Returns a flat options list of the keywords with the given parent_id.
 } {
-    return [db_list_of_lists select_keyword_options [subst {
-    select heading, keyword_id
-    from   cr_keywords
-    where  [ad_decode $parent_id "" "parent_id is null" "parent_id = :parent_id"]
-    order  by lower(heading)}]]
+    return [db_list_of_lists select_keyword_options {
+        select heading, keyword_id
+        from   cr_keywords
+        where  ((:parent_id is null and parent_id is null) or parent_id = :parent_id)
+        order  by lower(heading)
+    }]
 }
 
 ad_proc -public content::keyword::item_get_assigned {
