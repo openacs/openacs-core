@@ -22,7 +22,7 @@ ad_proc -private install_input_widget {
     Return an HTML input widget for a parameter with an
     indication of whether the param is mandatory.
 } {
-    set type_attribute [ad_decode $type "" "" "type=\"$type\""]
+    set type_attribute [expr {$type eq "" ? "" : "type=\"$type\""}]
 
     if { $value ne "" } {
         append extra_attributes " value=\"[ns_quotehtml $value]\""
