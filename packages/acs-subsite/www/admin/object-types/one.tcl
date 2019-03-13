@@ -28,13 +28,13 @@ append page [subst {
 <ul>
   <li>Pretty Name: [lang::util::localize $pretty_name]</li>
   <li>Pretty Plural: [lang::util::localize $pretty_plural]</li>
-  <li>Abstract: [ad_decode $abstract_p "f" "False" "True"]</li>
-  <li>Dynamic: [ad_decode $dynamic_p "f" "False" "True"]</li>
-  [ad_decode $table_name "" "" "<li>Table Name: $table_name</li>"]
-  [ad_decode $id_column "" "" "<li>Primary Key: $id_column</li>"]
-  [ad_decode $name_method "" "" "<li>Name Method: $name_method</li>"]
-  [ad_decode $type_extension_table "" "" "<li>Helper Table: $type_extension_table</li>"]
-  [ad_decode $package_name "" "" "<li>Package Name: $package_name</li>"]
+  <li>Abstract: [expr {$abstract_p ? "True" : "False"}]</li>
+  <li>Dynamic: [expr {$dynamic_p ? "True" : "False"}]</li>
+  [expr {$table_name eq "" ? "" : "<li>Table Name: $table_name</li>"}]
+  [expr {$id_column eq "" ? "" : "<li>Primary Key: $id_column</li>"}]
+  [expr {$name_method eq "" ? "" : "<li>Name Method: $name_method</li>"}]
+  [expr {$type_extension_table eq "" ? "" : "<li>Helper Table: $type_extension_table</li>"}]
+  [expr {$package_name eq "" ? "" : "<li>Package Name: $package_name</li>"}]
 </ul>
 }]
 
