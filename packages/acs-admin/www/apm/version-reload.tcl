@@ -29,7 +29,7 @@ set files_to_watch [list]
 if { [llength $files] == 0 } {
     append body "There are no changed files to reload in this package.<p>"
 } else {
-    append body "Marked the following file[ad_decode [llength $files] 1 "" "s"] for reloading:<ul id='files'>\n"
+    append body "Marked the following file[expr {[llength $files] == 1 ? "" : "s"}] for reloading:<ul id='files'>\n"
 
     #
     # Source all of the marked files using the current interpreter,

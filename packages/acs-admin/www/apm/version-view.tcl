@@ -77,7 +77,7 @@ if { ![info exists installed_version_id] } {
 } else {
     set status [subst {
         [expr {$installed_version_name_greater_p ? "A newer" : "An older"}] version of this package,
-        version $installed_version_name, is installed and [ad_decode $installed_enabled_p "t" "enabled" "disabled"].
+        version $installed_version_name, is installed and [expr {$installed_enabled_p ? "enabled" : "disabled"}].
     }]
     if { !$installed_version_name_greater_p } {
         set href [export_vars -base version-upgrade {version_id}]
@@ -137,10 +137,10 @@ append body [subst {
     <table>
     <tr valign="baseline"><th align="left">Package Name:</th><td>$pretty_name</td></tr>
     <tr valign="baseline"><th align="left">Version:</th><td>$version_name</td></tr>
-    <tr valign="baseline"><th align="left">OpenACS Core:</th><td>[ad_decode $initial_install_p "t" "Yes" "No"]</td></tr>
-    <tr valign="baseline"><th align="left">Singleton:</th><td>[ad_decode $singleton_p "t" "Yes" "No"]</td></tr>
-    <tr valign="baseline"><th align="left">Implements Subsite:</th><td>[ad_decode $implements_subsite_p t Yes No]</td></tr>
-    <tr valign="baseline"><th align="left">Inherit Templates:</th><td>[ad_decode $inherit_templates_p t Yes No]</td></tr>
+    <tr valign="baseline"><th align="left">OpenACS Core:</th><td>[expr {$initial_install_p ? "Yes" : "No"}]</td></tr>
+    <tr valign="baseline"><th align="left">Singleton:</th><td>[expr {$singleton_p ? "Yes" : "No"}]</td></tr>
+    <tr valign="baseline"><th align="left">Implements Subsite:</th><td>[expr {$implements_subsite_p ? "Yes" : "No"}]</td></tr>
+    <tr valign="baseline"><th align="left">Inherit Templates:</th><td>[expr {$inherit_templates_p ? "Yes" : "No"}]</td></tr>
     <tr valign="baseline"><th align="left">Auto-mount:</th><td>$auto_mount</td></tr>
     <tr valign="baseline"><th align="left">Status:</th><td>$status</td></tr>
     <tr valign="baseline"><th align="left">Data Model:</th><td>$data_model_status</td></tr>
@@ -156,7 +156,7 @@ if { $supported_databases_list eq "" } {
 append body [subst {
     <tr valign="baseline"><th align="left">Database Support:</th><td>$supported_databases</td></tr>
     <tr valign="baseline"><th align="left">CVS:</th><td>$cvs_status</td></tr>
-    <tr valign="baseline"><th align="left">[ad_decode [llength $owners] 1 "Owner" "Owners"]:</th><td>[join $owners "<br>"]</td></tr>
+    <tr valign="baseline"><th align="left">[expr {[llength $owners] == 1 ? "Owner" : "Owners"}]:</th><td>[join $owners "<br>"]</td></tr>
     <tr valign="baseline"><th align="left">Package Key:</th><td>$package_key</td></tr>
     <tr valign="baseline"><th align="left">Summary:</th><td>$summary</td></tr>
     <tr valign="baseline"><th align="left">Description:</th><td>$description</td></tr>
@@ -175,7 +175,7 @@ foreach attribute_name [array names attributes] {
     }]
 }
 
-set vendorHTML [ad_decode $vendor_uri "" $vendor [subst {<a href="[ns_quotehtml $vendor_uri]">$vendor</a>}]]
+set vendorHTML [expr {$vendor_uri eq "" ? $vendor : [subst {<a href="[ns_quotehtml $vendor_uri]">$vendor</a>}]}]
 append body [subst {
     <tr valign="baseline"><th align="left">Vendor:</th><td>$vendorHTML</td></tr>
     <tr valign="baseline"><th align="left">Package URL:</th><td><a href="$package_uri">$package_uri</a></td></tr>
