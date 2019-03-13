@@ -25,9 +25,9 @@ append body "
 <ul>
 <li><a href=\"shell.tcl\">OpenACS Shell</a>
 <li>Developer support toolbar is currently
-[ad_decode $enabled_p 1 \
-     "on (<a href=\"set?field=ds&amp;enabled_p=0\">turn it off</a>)" \
-     "off (<a href=\"set?field=ds&amp;enabled_p=1\">turn it on</a>)"]
+[expr {$enabled_p ?
+                  "on (<a href=\"set?field=ds&amp;enabled_p=0\">turn it off</a>)" :
+                  "off (<a href=\"set?field=ds&amp;enabled_p=1\">turn it on</a>)"}]
 
 <li>Developer support information is currently
 restricted to the following IP addresses:
@@ -68,24 +68,24 @@ and has a lifetime of [parameter::get -parameter DataLifetime -default 900] sec
 <p>
 
 <li>User-switching is currently
-[ad_decode $user_switching_enabled_p 1 \
-     "on (<a href=\"set?field=user&amp;enabled_p=0\">turn it off</a>)" \
-     "off (<a href=\"set?field=user&amp;enabled_p=1\">turn it on</a>)"]
+[expr {$user_switching_enabled_p ?
+                  "on (<a href=\"set?field=user&amp;enabled_p=0\">turn it off</a>)" :
+                  "off (<a href=\"set?field=user&amp;enabled_p=1\">turn it on</a>)"}]
 
 <li>Database statistics is currently
-[ad_decode $database_enabled_p 1 \
-     "on (<a href=\"set?field=db&amp;enabled_p=0\">turn it off</a>)" \
-     "off (<a href=\"set?field=db&amp;enabled_p=1\">turn it on</a>)"]
+[expr {$database_enabled_p ?
+                  "on (<a href=\"set?field=db&amp;enabled_p=0\">turn it off</a>)" :
+                  "off (<a href=\"set?field=db&amp;enabled_p=1\">turn it on</a>)"}]
 
 <li>Template profiling is currently
-[ad_decode $profiling_enabled_p 1 \
-     "on (<a href=\"set?field=prof&amp;enabled_p=0\">turn it off</a>)" \
-     "off (<a href=\"set?field=prof&amp;enabled_p=1\">turn it on</a>)"]
+[expr {$profiling_enabled_p ?
+                  "on (<a href=\"set?field=prof&amp;enabled_p=0\">turn it off</a>)" :
+                  "off (<a href=\"set?field=prof&amp;enabled_p=1\">turn it on</a>)"}]
 
 <li>ADP reveal is currently
-[ad_decode $adp_reveal_enabled_p 1 \
-     "on (<a href=\"set?field=adp&amp;enabled_p=0\">turn it off</a>)" \
-     "off (<a href=\"set?field=adp&amp;enabled_p=1\">turn it on</a>)"]
+[expr {$adp_reveal_enabled_p ?
+                  "on (<a href=\"set?field=adp&amp;enabled_p=0\">turn it off</a>)" :
+                  "off (<a href=\"set?field=adp&amp;enabled_p=1\">turn it on</a>)"}]
 
 <p>
 <li> Help on <a href='doc/editlocal'>edit and code links</a>.
