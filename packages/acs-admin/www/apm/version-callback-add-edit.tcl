@@ -74,7 +74,9 @@ ad_form -name callback -cancel_url $return_url -form {
     }
     {proc
 	{ [apm_callback_has_valid_args -type $type -proc_name $proc] }
-	{The callback proc $proc must be defined with ad_proc [ad_decode [apm_arg_names_for_callback_type -type $type] "" "and should take no arguments" "and have the following required switches: [apm_arg_names_for_callback_type -type $type]"]}
+	{The callback proc $proc must be defined with ad_proc [expr {[apm_arg_names_for_callback_type -type $type] eq "" ?
+                                                                     "and should take no arguments" :
+                                                                     "and have the following required switches: [apm_arg_names_for_callback_type -type $type]"}]}
     }
 } -on_submit {
     
