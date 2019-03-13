@@ -12,12 +12,12 @@
 # Return a header for an installation page, suitable for ns_writing.
 # This procedure engages the installer mutex, as every installer page is a critical section.
 
-ad_proc -private install_input_widget { 
+ad_proc -private install_input_widget {
     {-type ""}
     {-size 40}
     {-extra_attributes ""}
     {-value ""}
-    param_name 
+    param_name
 } {
     Return an HTML input widget for a parameter with an
     indication of whether the param is mandatory.
@@ -27,7 +27,7 @@ ad_proc -private install_input_widget {
     if { $value ne "" } {
         append extra_attributes " value=\"[ns_quotehtml $value]\""
     }
-    
+
     set input_widget "<input name=\"$param_name\" size=\"$size\" $type_attribute $extra_attributes>"
 
     if { [install_param_mandatory_p $param_name] } {
@@ -35,7 +35,7 @@ ad_proc -private install_input_widget {
     }
 
     return $input_widget
-} 
+}
 
 ad_proc -private install_param_mandatory_p { param_name } {
     Return 1 if the given parameter with given name is
@@ -321,7 +321,7 @@ proc install_admin_widget {} {
 
 }
 
-proc install_back_button_widget {} {    
+proc install_back_button_widget {} {
     return [subst {Please <a id="install-back-button" href="#">try again</a>.
     <script type='text/javascript' nonce='[security::csp::nonce]'>
      var e = document.getElementById('install-back-button');
@@ -394,7 +394,7 @@ ad_proc -private install_do_data_model_install {} {
     "
     ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 
-    # Some APM procedures use util_memoize, so initialize the cache 
+    # Some APM procedures use util_memoize, so initialize the cache
     # before starting APM install
     array set errors {}
     apm_source [acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl errors
@@ -468,7 +468,7 @@ ad_proc -private install_do_packages_install {} {
         ns_write "<p><b><i>At least one core package has an unsatisfied dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:</i></b>"
-        
+
         ns_write "\n<ul>"
         set deps ""
         foreach dep $pkg_list {
@@ -477,7 +477,7 @@ ad_proc -private install_do_packages_install {} {
             append deps "[lindex $_pkg 0]: $_msg\n"
         }
         ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
-        
+
         ns_log Error "At least one core package has an unsatisfied dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:\n$deps"
