@@ -161,9 +161,10 @@ if { [template::form is_valid rel_type] } {
     set safe_rel_type [plsql_utility::generate_oracle_name -max_length 29 $rel_type]
     if { [plsql_utility::object_type_exists_p $safe_rel_type] } {
 	incr exception_count
-	append exception_text "<li> The specified type for this relationship, $rel_type, already exists. 
-[ad_decode $safe_rel_type $rel_type "" "Note that we converted the object type to \"$safe_rel_type\" to ensure that the name would be safe for the database."]
-Please back up and choose another.</li>"
+	append exception_text \
+            "<li> The specified type for this relationship, $rel_type, already exists. " \
+            [expr {$safe_rel_type eq $rel_type ? "" : "Note that we converted the object type to \"$safe_rel_type\" to ensure that the name would be safe for the database."}] \
+            "Please back up and choose another.</li>"
     } else {
 	# let's make sure the names are unique
 	if { [db_string pretty_name_unique {}] } {
