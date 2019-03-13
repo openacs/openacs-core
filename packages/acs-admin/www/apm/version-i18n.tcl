@@ -4,9 +4,9 @@ ad_page_contract {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
-    @cvs-id $Id$  
+    @cvs-id $Id$
 } {
-    version_id:naturalnum,notnull    
+    version_id:naturalnum,notnull
     {pre_select_files_p:boolean "1"}
     {show_status_p:boolean "0"}
     {only_text_p:boolean "0"}
@@ -25,10 +25,10 @@ set context_bar [ad_context_bar $page_title]
 set file_option_list [list]
 set adp_preselect_list [list]
 set package_key [apm_package_key_from_version_id $version_id]
-foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {	
+foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
 
     set file_regexp ".${file_type}\$"
-    
+
     if { [regexp $file_regexp $file match] } {
         set relative_path [ad_make_relative_path $file]
 
@@ -45,7 +45,7 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
                     set number_of_message_keys [llength [lang::util::get_hash_indices $file_contents]]
                     set adp_text_result_list [lang::util::replace_adp_text_with_message_tags $file report]
                     set number_of_text_snippets [llength [lindex $adp_text_result_list 0]]
-                
+
                     set status_string "$number_of_text_snippets texts, $number_of_message_tags tags, $number_of_message_keys keys"
                 }
                 tcl {
@@ -167,7 +167,7 @@ switch -- $file_type {
     sql {
 	set href1 [export_vars -base version-i18n -override {{file_type adp}} {version_id pre_select_files_p show_status_p only_text_p}]
 	set href2 [export_vars -base version-i18n -override {{file_type tcl}} {version_id pre_select_files_p show_status_p only_text_p}]
-	
+
         set file_type_filter [subst {
 	    <a href="[ns_quotehtml $href1]">Show adp files</a> |
 	    <a href="[ns_quotehtml $href2]">Show Tcl files</a> |
