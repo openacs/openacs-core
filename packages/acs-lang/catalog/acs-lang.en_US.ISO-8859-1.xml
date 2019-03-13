@@ -22,6 +22,7 @@
   <msg key="Delete_this_locale">Delete this locale</msg>
   <msg key="Disable_this_locale">Disable this locale</msg>
   <msg key="Edit_definition_of_locale">Edit definition of locale</msg>
+  <msg key="Edit_history">Edit history</msg>
   <msg key="Edit_localized_messages_for">Edit localized messages for %locales.locale_label%</msg>
   <msg key="Edit_this_message">Edit this message</msg>
   <msg key="Enable_this_locale">Enable this locale</msg>

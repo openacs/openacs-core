@@ -10,8 +10,6 @@ ad_page_contract {
 
 set list_of_locales [db_list_of_lists locale_loop { select label, locale from enabled_locales order by label }]
 
-set admin_email peter@collaboraid.biz
-
 ad_form \
     -name locale \
     -method GET \
@@ -19,6 +17,7 @@ ad_form \
         {locale:text(select)
             {label "Locale"}
             {options $list_of_locales}
+            {value $locale}
         }
         {number_of_edits:text,optional
             {label "Number of edits"}
@@ -30,10 +29,8 @@ ad_form \
         }
     }    
 
-set email_clause [ad_decode $email_exclude "" "" "and cu.email not like '%$email_exclude%'"]
-
-db_multirow -extend { key_url } history german_edit_history "
-    select q.* from (select lma.overwrite_date, 
+db_multirow -extend { key_url } history german_edit_history {
+                     select lma.overwrite_date, 
                             lma.old_message,
                             lma.message_key,
                             lma.package_key,
@@ -43,10 +40,10 @@ db_multirow -extend { key_url } history german_edit_history "
                           cc_users cu
                      where cu.user_id = lma.overwrite_user
                        and lma.locale = :locale
-                       $email_clause
-                     order by lma.overwrite_date desc) q 
-    where rownum < :number_of_edits
-" {
+                       and (:email_exclude is null or cu.email not like '%' || :email_exclude || '%')
+                     order by lma.overwrite_date desc
+                     fetch first :number_of_edits rows only
+} {
     set key_url [export_vars -base /acs-lang/admin/edit-localized-message {package_key message_key locale}]
 }
 

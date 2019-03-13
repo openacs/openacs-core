@@ -20,6 +20,7 @@
   <msg key="Delete_this_locale">Elimina questo locale</msg>
   <msg key="Disable_this_locale">Disabilita questo locale</msg>
   <msg key="Edit_definition_of_locale">Modifica la definizione del locale</msg>
+  <msg key="Edit_history">Storico modifiche</msg>
   <msg key="Edit_localized_messages_for">Modifica i messaggi localizzati per %locales.locale_label%</msg>
   <msg key="Edit_this_message">Modifica questo messaggio</msg>
   <msg key="Enable_this_locale">Abilita questo locale</msg>

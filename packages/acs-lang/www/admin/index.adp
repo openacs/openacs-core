@@ -20,6 +20,7 @@
 </if>
 
 <li><a href="lookup">#acs-lang.Look_up_message#</a></li>
+<li><a href="edit-history?locale=@system_locale@">#acs-lang.Edit_history#</a></li>
 
 <if @site_wide_admin_p;literal@ true>
   <li><a href="@import_url@" title="#acs-lang.Imports_messages_system-wide_from_catalog_files#" id="action-import">#acs-lang.Import_all_messages#</a></li>
