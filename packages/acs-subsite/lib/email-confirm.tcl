@@ -1,3 +1,11 @@
+ad_include_contract {
+    Verify users's email by checking the authentication token.
+    People normally come here from a confirmation email.
+} {
+    user_id:integer,notnull
+    token:word,notnull
+}
+
 if {![db_0or1row userp {select 1 from users where user_id = :user_id}]
     || $token ne [auth::get_user_secret_token -user_id $user_id] } {
     set title "Bad token"
