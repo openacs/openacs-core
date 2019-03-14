@@ -839,22 +839,16 @@ aa_register_case \
 
 
 aa_register_case \
-        -cats db \
-        strange_oracle_problem {
-    Strange Oracle problem when selecting by language
-
-} {
-    set language "da "
-    set locale da_DK
-
-    set db_string [db_string select_default_locale {
-        select locale
-        from   ad_locales
-        where  language = :language
-    } -default "WRONG"]
-
-    aa_false "Does not return 'WRONG'" [string equal $db_string "WRONG"]
-}
+    -cats db \
+    -procs {
+        lang::util::default_locale_from_lang
+    } default_locale_from_lang {
+        Check that the retrieval of the deafault locale for a language
+        is working
+    } {
+        set default_locale [lang::util::default_locale_from_lang en]
+        aa_true "Retrieve the default english locale works fine" {$default_locale eq "en_US"}
+    }
 
 
 aa_register_case \
