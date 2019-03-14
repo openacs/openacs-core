@@ -385,10 +385,6 @@ ad_proc -private lang::util::default_locale_from_lang_not_cached {
 
     @see lang::util::default_locale_from_lang
 } {
-    # LARS:
-    # Note that this query does not use bind variables, because these cause the query to not
-    # match any rows in Oracle when the language key is less than 3 characters,
-    # because the column is a char(3), not a varchar2(3).
     return [db_string default_locale_from_lang {
         select locale
         from ad_locales l
