@@ -6,7 +6,8 @@ ad_include_contract {
     token:word,notnull
 }
 
-if {![db_0or1row userp {select 1 from users where user_id = :user_id}]
+set user [acs_user::get_user_info -user_id $user_id]
+if {$user eq ""
     || $token ne [auth::get_user_secret_token -user_id $user_id] } {
     set title "Bad token"
     set message "The link given to authenticate your email was invalid."
@@ -14,9 +15,7 @@ if {![db_0or1row userp {select 1 from users where user_id = :user_id}]
 } else {
     auth::set_email_verified -user_id $user_id
 
-    acs_user::get -user_id $user_id -array user_info
-
-    set export_vars [export_vars -form { { username $user_info(username) } }]
+    set export_vars [export_vars -form { { username "[dict get $user username]" } }]
     set site_link [ad_site_home_link]
     set system_name [ad_system_name]
 }
