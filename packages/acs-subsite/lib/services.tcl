@@ -1,3 +1,7 @@
+# As of 2019-03-14 this include doesn't seem in use anywhere and was
+# probably superseded by acs-admin/lib/service-parameters, used
+# e.g. in /acs-admin/ URL
+
 set admin_p [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
 
 list::create \
