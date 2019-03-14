@@ -1,3 +1,7 @@
+ad_include_contract {
+    Show applications mounted under current subsite
+}
+
 set admin_p [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
 
 set actions [list]
