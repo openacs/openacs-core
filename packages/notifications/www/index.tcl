@@ -1,3 +1,7 @@
+ad_page_contract {
+    Just redirect to the manage page
+}
+
 ad_returnredirect manage
 
 # Local variables:
