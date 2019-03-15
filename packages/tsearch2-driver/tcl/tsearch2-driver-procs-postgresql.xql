@@ -58,7 +58,7 @@
   <fullquery name="dbqd.tsearch2-driver.tcl.tsearch2-driver-procs.callback::search::search::impl::tsearch2-driver.search_result_count">
   <rdbms><type>postgresql</type><version>8.4</version></rdbms>
     <querytext>
-      select count(distinct(orig_object_id)) from acs_permission__permission_p_recursive_array(array(
+      select count(distinct(orig_object_id)) from acs_permission.permission_p_recursive_array(array(
       select txt.object_id
       from [join $from_clauses ","]
       $base_query
