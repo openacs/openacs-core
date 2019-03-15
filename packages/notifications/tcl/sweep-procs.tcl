@@ -18,7 +18,11 @@ namespace eval notification::sweep {
         db_dml delete_dynamic_requests {}
 
         # before the killing starts, remove invalid requests
-        foreach request_id [db_list select_invalid_request_ids {}] {
+        foreach request_id [db_list select_invalid_request_ids {
+           select request_id
+             from notification_requests
+            where not acs_permission.permission_p(object_id, user_id, 'read')
+        }] {
             notification::request::delete -request_id $request_id
         }
 
@@ -42,7 +46,28 @@ namespace eval notification::sweep {
         # order it by user_id
         # make sure the users have not yet received this notification with outer join
         # on the mapping table and a null check
-        set notifications [db_list_of_ns_sets select_notifications {}]
+        set notifications [db_list_of_ns_sets select_notifications {
+            select notification_id,
+                   notif_subject,
+                   notif_text,
+                   notif_html,
+                   file_ids,
+                   user_id,
+                   type_id,
+                   delivery_method_id,
+                   response_id,
+                   notif_date,
+                   notif_user
+            from notifications inner join notification_requests using (type_id, object_id)
+              inner join acs_objects on (notification_requests.request_id = acs_objects.object_id)
+              left outer join notification_user_map using (notification_id, user_id)
+            where sent_date is null
+              and creation_date <= notif_date
+              and (notif_date is null or notif_date < current_timestamp)
+              and interval_id = :interval_id
+              and acs_permission.permission_p(notification_requests.object_id, notification_requests.user_id, 'read')
+          order by user_id, type_id, notif_date
+        }]
 
         if {$batched_p} {
             set prev_user_id 0
