@@ -1593,7 +1593,7 @@ namespace eval ::acs::test::xpath {
     } {
         #
         # if we have no node, use as default the root in the parent
-        # enviromnent
+        # environment
         #
         if {$node eq ""} {
             set node [uplevel {set root}]
