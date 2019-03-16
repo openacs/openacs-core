@@ -2061,6 +2061,19 @@ ad_proc -public ad_html_text_convertible_p {
     return [expr {$from in $valid_froms && $to in $valid_tos}]
 }
 
+ad_proc -public -deprecated ad_html_text_convertable_p {
+    -from
+    -to
+} {
+    The name of this proc has an spelling error. Use
+    ad_html_text_convertible_p instead.
+    @see ad_html_text_convertible_p
+} {
+    return [ad_html_text_convertible_p -from $from -to $to]
+}
+
+
+
 ad_proc -public ad_html_text_convert {
     {-from text/plain}
     {-to text/html}
