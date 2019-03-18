@@ -8,7 +8,7 @@ permission::require_permission -object_id $object_id -privilege admin
 
 db_transaction {
     foreach one_user_id $user_id {
-        db_exec_plsql add_user {}
+        permission::grant -party_id $one_user_id -object_id $object_id -privilege "read"
     }
 } on_error {
     ad_return_complaint 1 "We had a problem adding the users you selected. Sorry."
