@@ -609,7 +609,9 @@ ad_proc -public site_node::exists_p {
     {-url:required}
 } {
     Returns 1 if a site node exists at the given url and 0 otherwise.
-
+    The provided URL has to start with a slash.
+    
+    @param url URL path starting with a slash.
     @author Peter Marklund
 } {
     set url_no_trailing [string trimright $url "/"]
@@ -1768,14 +1770,16 @@ if {$UseXotclSiteNodes} {
         {-url:required}
     } {
         Returns 1 if a site node exists at the given url and 0 otherwise.
+
+        @param url URL path starting with a slash.
     } {
-
-        set url_no_trailing [string trimright $url "/"]
-
-        # get_node_id returns always a node_id, which might be the node_id
-        # of the root. In order to check, whether the provided url is
-        # really a site-node, we do an inverse lookup and check whether
-        # the returned node_id has the same url as the provided one.
+        set url_no_trailing [expr {"url" eq "/" ? "/" : [string trimright $url "/"]}]
+        #
+        # The function "get_node_id" returns always a node_id, which
+        # might be the node_id of the root. In order to check, whether
+        # the provided URL is really a site-node, we do an inverse
+        # lookup and check whether the returned node_id has the same
+        # URL as the provided one.
         #
         set node_id [::xo::site_node get_node_id -url $url_no_trailing]
         return [expr {[::xo::site_node get_url -node_id $node_id] eq "$url_no_trailing/"}]
