@@ -20,33 +20,14 @@
                      and apm_package_version__sortable_version_name(v2.version_name) >
                          apm_package_version__sortable_version_name(v.version_name)))
             and    (
-                       acs_permission__permission_p(p.package_id, :user_id, 'read')
-                    or acs_permission__permission_p(p.package_id, acs__magic_object_id('the_public'), 'read')
+                       acs_permission.permission_p(p.package_id, :user_id, 'read')
+                    or acs_permission.permission_p(p.package_id, :the_public, 'read')
                    )
             and    (not pt.singleton_p or v.auto_mount is not null)
             and    not exists (select 1
                                from site_nodes
                                where object_id = p.package_id)
 
-            order  by name
-        </querytext>
-    </fullquery>
-
-    <fullquery name="packages_mounted_select">
-        <querytext>
-            select p.package_id, 
-                   p.instance_name as name,
-                   pt.pretty_name as package_pretty_name
-            from   apm_packages p,
-                   apm_package_types pt
-            where  pt.package_key = p.package_key
-            and    (
-                       acs_permission__permission_p(p.package_id, :user_id, 'read')
-                    or acs_permission__permission_p(p.package_id, acs__magic_object_id('the_public'), 'read')
-                   )
-            and    exists (select 1
-                           from site_nodes
-                           where object_id = p.package_id)
             order  by name
         </querytext>
     </fullquery>
@@ -68,10 +49,11 @@
                      and apm_package_version__sortable_version_name(v2.version_name) >
                          apm_package_version__sortable_version_name(v.version_name)))
             and    (
-                       acs_permission__permission_p(p.package_id, :user_id, 'read')
-                    or acs_permission__permission_p(p.package_id, acs__magic_object_id('the_public'), 'read')
+                       acs_permission.permission_p(p.package_id, :user_id, 'read')
+                    or acs_permission.permission_p(p.package_id, :the_public, 'read')
                    )
-            and    (pt.singleton_p and v.auto_mount is null)
+            and    pt.singleton_p
+            and    v.auto_mount is null
             and    not exists (select 1
                                from site_nodes
                                where object_id = p.package_id)

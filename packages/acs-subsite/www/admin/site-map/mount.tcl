@@ -19,11 +19,28 @@ set context [list [list . "Site Map"] $page_title]
 
 set site_node_url [site_node::get_url -node_id $node_id]
 
+set the_public [acs_magic_object the_public]
+
 db_multirow -extend { url } unmounted packages_unmounted_select {} {
     set url [export_vars -base mount-2 { expand:multiple root_id node_id package_id }]
 }
 
-db_multirow -extend { url } mounted packages_mounted_select {} {
+db_multirow -extend { url } mounted packages_mounted_select {
+   select p.package_id,
+          p.instance_name as name,
+          pt.pretty_name as package_pretty_name
+   from   apm_packages p,
+          apm_package_types pt
+   where  pt.package_key = p.package_key
+   and    (
+              acs_permission.permission_p(p.package_id, :user_id, 'read')
+           or acs_permission.permission_p(p.package_id, :the_public, 'read')
+          )
+   and    exists (select 1
+                  from site_nodes
+                  where object_id = p.package_id)
+   order  by name
+} {
     set url [export_vars -base mount-2 { expand:multiple root_id node_id package_id}]
 }
 
