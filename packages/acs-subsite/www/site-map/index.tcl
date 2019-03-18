@@ -241,16 +241,6 @@ db_foreach nodes_select {} {
 #set new_app_form_part_3 "<p align=\"top\"><input type="submit" value=\"Mount Package\"></form></p>"
 #    multirow append nodes "" "" "" "" $new_app_form_part_1 "" "" "" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
 
-set services ""
-
-db_foreach services_select {} {
-    if {$parameter_count > 0} {
-        append services "<li><a href=\"[export_vars -base /shared/parameters { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
-    }
-} if_no_rows {
-    append services "  <li>(none)\n"
-}
-
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

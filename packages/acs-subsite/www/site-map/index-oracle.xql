@@ -3,21 +3,6 @@
 <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="path_select">
-        <querytext>
-            select node_id,
-                   name,
-                   directory_p,
-                   level,
-                   acs_object.name(object_id) as obj_name,
-                   acs_permission.permission_p(object_id, :user_id, 'admin') as admin_p
-            from site_nodes
-            start with node_id = :root_id
-            connect by node_id = prior parent_id
-            order by level desc
-        </querytext>
-    </fullquery>
-
     <fullquery name="nodes_select">
         <querytext>
             select package_id,
@@ -65,23 +50,6 @@
             connect by prior node_id = parent_id and parent_id in ([join $expand ", "])) site_map
             where site_map.object_id = p.package_id (+)
             order by url
-        </querytext>
-    </fullquery>
-
-    <fullquery name="services_select">
-        <querytext>
-            select package_id,
-                   ap.package_key,
-                   ap.instance_name,
-                   apm_package_type.num_parameters(ap.package_key) as parameter_count
-            from apm_packages ap,
-                 apm_package_types
-            where ap.package_key = apm_package_types.package_key
-            and package_type = 'apm_service'
-            and not exists (select 1 from site_nodes sn where sn.object_id = package_id)
-            and exists (select 1 from acs_object_party_privilege_map ppm 
-                        where ppm.object_id = package_id and ppm.party_id = :user_id and ppm.privilege = 'admin')
-            order by instance_name
         </querytext>
     </fullquery>
 

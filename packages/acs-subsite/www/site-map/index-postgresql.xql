@@ -36,22 +36,5 @@
             order by url
         </querytext>
     </fullquery>
-    
-    <fullquery name="services_select">
-        <rdbms><type>postgresql</type><version>8.4</version></rdbms>
-        <querytext>
-            select package_id,
-                   ap.package_key,
-                   ap.instance_name,
-                   apm_package_type__num_parameters(ap.package_key) as parameter_count
-            from apm_packages ap,
-                 apm_package_types
-            where ap.package_key = apm_package_types.package_key
-            and package_type = 'apm_service'
-            and not exists (select 1 from site_nodes sn where sn.object_id = package_id)
-            and acs_permission__permission_p(package_id, :user_id, 'admin')
-            order by instance_name
-        </querytext>
-    </fullquery>
 
 </queryset>
