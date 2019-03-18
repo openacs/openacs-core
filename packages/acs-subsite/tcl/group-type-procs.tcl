@@ -24,12 +24,17 @@ namespace eval group_type {
 
     } {
         if { $user_id eq "" } {
-            if { ![ad_conn isconnected] } {
-                error "group_type::drop_all_groups_p: User ID not specified and we have no connection from which to obtain current user ID.\n"
+            if { ![ns_conn isconnected] } {
+                error "group_type::drop_all_groups_p: User ID not specified and we have no connection from which to obtain current user ID."
             }
             set user_id [ad_conn user_id]
         }
-        return [db_string group_exists_p {}]
+        return [db_string group_exists_p {
+            select exists (select 1 from acs_objects o
+                           where object_type = :group_type
+                             and not acs_permission.permission_p(o.object_id, :user_id, 'delete'))
+              from dual
+        }]
     }
 
 
@@ -213,7 +218,12 @@ namespace eval group_type {
         db_transaction {
             # First delete the groups
             if { $package_name ne "" } {
-                foreach group_id [db_list select_group_ids {}] {
+                foreach group_id [db_list select_group_ids {
+                   select o.object_id
+                   from acs_objects o
+                   where o.object_type = :group_type
+                   and   acs_permission.permission_p(o.object_id, :user_id, 'delete')
+                }] {
                     group::delete $group_id
                 }
 
