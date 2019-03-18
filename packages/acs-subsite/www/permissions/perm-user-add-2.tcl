@@ -12,6 +12,7 @@ db_transaction {
     }
 } on_error {
     ad_return_complaint 1 "We had a problem adding the users you selected. Sorry."
+    ad_script_abort
 }
 
 ad_returnredirect $return_url
