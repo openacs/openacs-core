@@ -1,10 +1,10 @@
 ad_page_contract {
-    
+
     @author rhs@mit.edu
     @author bquinn@arsidigta.com
     @creation-date 2000-09-09
     @cvs-id $Id$
-    
+
 } {
     {expand:integer,multiple ""}
     {new_parent:integer ""}
@@ -42,7 +42,7 @@ set user_id [ad_conn user_id]
 
 if {[llength $expand] == 0} {
     #lappend expand 0
-    lappend expand $root_id 
+    lappend expand $root_id
     if { $parent_id ne "" } {
         lappend expand $parent_id
     }
@@ -63,7 +63,7 @@ template::list::create \
 		<a href="@nodes.instance_url@">@nodes.name;noquote@</a>
 		</if>
 		<else>
-		    <a href="@nodes.instance_url@">@nodes.instance;noquote@</a>   
+		    <a href="@nodes.instance_url@">@nodes.instance;noquote@</a>
 		</else>
 		<if @nodes.expand_mode@ eq 1>
 		&nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif"></a>
@@ -129,7 +129,7 @@ db_foreach nodes_select {} {
     } {
         continue
     }
-        
+
     if {$directory_p == "t"} {
 	set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
 	if {$object_id eq ""} {
@@ -140,7 +140,7 @@ db_foreach nodes_select {} {
 	    if {[ad_conn node_id] != $node_id} {
 		set unmount_url [export_vars -base unmount {expand:multiple root_id node_id}]
 	    }
-	    
+
 	    # Add a link to control permissioning
 	    if {$object_admin_p} {
 		set permissions_url [export_vars -base ../../permissions/one {object_id}]
@@ -155,11 +155,11 @@ db_foreach nodes_select {} {
 	    }
 	}
     }
-    
+
     if {[ad_conn node_id] != $node_id && $n_children == 0 && $object_id eq ""} {
 	set delete_url [export_vars -base delete {expand:multiple root_id node_id}]
     }
-    
+
     #
     # Use the indent variable to hold current indent level we'll use
     # it later to indent stuff at the end by the amount of the last
@@ -188,29 +188,29 @@ db_foreach nodes_select {} {
 		lappend urlvars "expand=$n"
 	    }
 	}
-	
+
 	if { $expand_mode == 1} {
 	    lappend urlvars "expand=$node_id"
 	}
-	
+
 	lappend urlvars "root_id=$root_id"
-	
+
 	set expand_url [join $urlvars "&"]
     } else {
 	set expand_url ""
     }
-    
+
     set name_url [export_vars {expand:multiple {root_id $node_id}}]
-        
+
     set action_type 0
     set action_form_part ""
-    
+
     if {$object_id eq ""} {
 	if {$new_application == $node_id} {
-	    
+
 	    set action_type "new_app"
 	    set action_form_part [export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]
-	    
+
 	    #Generate a package_id for double click protection
 	    set new_package_id [db_nextval acs_object_id_seq]
 	} else {
@@ -219,12 +219,12 @@ db_foreach nodes_select {} {
     } elseif {$rename_application == $node_id} {
 	set action_type "rename_app"
 	set action_form_part [export_vars -form {expand:multiple root_id node_id rename_package_id}]
-	
+
     } else {}
-    
+
     if {$node_id == $new_parent} {
 	set parent_id $new_parent
-	set node_type $new_type	
+	set node_type $new_type
 	set action_type "new_folder"
 	set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
     }
