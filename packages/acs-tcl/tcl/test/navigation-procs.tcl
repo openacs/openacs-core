@@ -96,16 +96,23 @@ aa_register_case -cats {
 
     aa_run_with_teardown -rollback -test_code {
 
+        set main_node [site_node::get -url /]
+        set this_package_id [ad_conn package_id]
+        set this_package_name [db_string get_name {
+            select instance_name from apm_packages
+            where package_id = :this_package_id
+        }]
+
         # Setup nodes from the context bar, create two random nodes to include
         set separator "-"
         set random1 [ad_generate_random_string]
-        set testnode_1 [list "/$random1/" "ACS Automated Testing"]
+        set testnode_1 [list "/$random1/" $this_package_name]
 
         set random2 [ad_generate_random_string]
-        set testnode_2 [list "[lindex $testnode_1 0]$random2/" "ACS Automated Testing"]
+        set testnode_2 [list "[lindex $testnode_1 0]$random2/" $this_package_name]
 
         set leave_node "ref_final"
-        set root_node [list "/" \#acs-kernel.Main_Site\#]
+        set root_node [list "/" [dict get $main_node instance_name]]
         if { [string match "admin/*" [ad_conn extra_url]] } {
             set admin_node [list "[ad_conn package_url]admin/" [_ acs-tcl.Administration]]
         } else {
@@ -113,14 +120,11 @@ aa_register_case -cats {
         }
 
         # Create hierarchy from the random created nodes
-        db_1row query {
-           select min(node_id) as first_node from site_nodes
-        }
-        set idp $first_node
+        set idp [dict get $main_node node_id]
         set idr_1 [site_node::new -name $random1 -parent_id $idp]
         set idr_2 [site_node::new -name $random2 -parent_id $idr_1]
-        site_node::mount -node_id $idr_1 -object_id [ad_conn package_id]
-        site_node::mount -node_id $idr_2 -object_id [ad_conn package_id]
+        site_node::mount -node_id $idr_1 -object_id $this_package_id
+        site_node::mount -node_id $idr_2 -object_id $this_package_id
         aa_log "Created two test sites nodes: testnode_1 = [lindex $testnode_1 1],\n\
                 testnode_2 = [lindex $testnode_2 1]n\
                 testnode_2 is a child of testnode_1"
