@@ -94,6 +94,10 @@ aa_register_case \
             aa_log_result fail "$spec_file returned $errMsg"
             set errp 1
         } else {
+            # Skip uninstalled packages
+            if {![apm_package_installed_p $version(package.key)]} {
+                continue
+            }
             regexp {packages/([^/]*)/} $spec_file match key
             if {$version(package.key) ne $key } {
                 aa_log_result fail "MISMATCH DIRECTORY/PACKAGE KEY: $spec_file $version(package.key) != $key"
