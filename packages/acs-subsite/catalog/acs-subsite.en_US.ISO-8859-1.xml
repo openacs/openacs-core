@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-subsite" locale="en_US" charset="ISO-8859-1">
 
+  <msg key="400_title">Server Error</msg>
+  <msg key="403_message">You don&#39;t have permissions to retrieve this page</msg>
+  <msg key="404_message">The requested file was not found</msg>
+  <msg key="404_title">Bad Request</msg>
+  <msg key="500_message">An error occurred while processing your request</msg>
+  <msg key="503_message">The service you requested is currently unavailable</msg>
   <msg key="_or">, or</msg>
   <msg key="_Update_Basic_Information">Update Basic Information</msg>
   <msg key="A_member_of_the_system">A member of the %system_name% community since</msg>
@@ -209,6 +215,8 @@ Please visit the following link to change your password now:
   <msg key="Erase_Portrait">Erase Portrait</msg>
   <msg key="erase_portrait">erase portrait</msg>
   <msg key="Error">Error</msg>
+  <msg key="Error_joining">Error Joining</msg>
+  <msg key="Error_joining_details">We experienced an error adding you to the group.</msg>
   <msg key="Error_sending_mail">Error sending mail</msg>
   <msg key="Error_sending_verification_mail">We got an error sending out the email for email verification</msg>
   <msg key="Error_trying_to_register">We experienced an error while trying to register an account for you.</msg>
@@ -260,6 +268,7 @@ Please visit the following link to change your password now:
   <msg key="Join_subsite">Join subsite</msg>
   <msg key="Join_this_community">Join this community</msg>
   <msg key="Join_this_subsite">Join this subsite</msg>
+  <msg key="Joined_group">You have joined the group %group_name%.</msg>
   <msg key="Key">Key</msg>
   <msg key="Keyword">Keyword</msg>
   <msg key="Last_name">Last name</msg>
@@ -502,7 +511,8 @@ You can always change your password by doing the following:
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Req_membership_subs">Request membership of this subsite</msg>
   <msg key="Request_Change_Password_token_email">Request to Change Password: A token for changing your password has been emailed to you. Follow the instructions in that email to change your password</msg>
-  <msg key="Request_join_submitted">Your request to join group '%group_name%' has been submitted</msg>
+  <msg key="Request_group_submitted">Your request to join group &#39;%group_name%&#39; has been submitted.</msg>
+  <msg key="Request_join_submitted">Your request to join group &#39;%group_name%&#39; has been submitted</msg>
   <msg key="Request_membership">Request membership</msg>
   <msg key="Reset_Password">Reset Password</msg>
   <msg key="return_to_application">return to application</msg>
@@ -622,15 +632,4 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Your_Portrait">Your Portrait</msg>
   <msg key="Your_system_alerts">Your %gc_system_name% alerts</msg>
   <msg key="Youre_marked_as_back">You&#39;re marked as back from vacation at %site_link%.</msg>
-  <msg key="Request_group_submitted">Your request to join group '%group_name%' has been submitted.</msg>
-  <msg key="Joined_group">You have joined the group %group_name%.</msg>
-  <msg key="Error_joining">Error Joining</msg>
-  <msg key="Error_joining_details">We experienced an error adding you to the group.</msg>
-  <msg key="404_title">Bad Request</msg>
-  <msg key="404_message">The requested file was not found</msg>
-  <msg key="403_message">You don't have permissions to retrieve this page</msg>
-  <msg key="400_title">Server Error</msg>
-  <msg key="500_message">An error occurred while processing your request</msg>    
-  <msg key="503_message">The service you requested is currently unavailable</msg>    
-
 </message_catalog>
