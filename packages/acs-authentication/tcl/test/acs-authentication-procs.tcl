@@ -89,6 +89,17 @@ aa_register_case \
             set old_portrait_id [acs_user::get_portrait_id -user_id $user_id]
             aa_equals "Portrait retrieval returns the new portrait" $new_portrait_id $old_portrait_id
 
+            set portrait_id_db [db_string get_portrait {
+                select object_id_two
+                from acs_rels r,
+                     cr_items i
+                where r.object_id_one = :user_id
+                  and i.parent_id = :user_id
+                  and r.rel_type = 'user_portrait_rel'
+                  and i.name = 'portrait-of-user-' || :user_id
+            }]
+            aa_equals "Portrait retrieval complies with data-model definition" $new_portrait_id $portrait_id_db
+
             acs_user::erase_portrait -user_id $user_id
             set new_portrait_id [acs_user::get_portrait_id -user_id $user_id]
             aa_equals "Portrait was erased correctly" $new_portrait_id 0
