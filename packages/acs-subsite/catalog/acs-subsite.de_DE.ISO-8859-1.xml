@@ -194,6 +194,8 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Erase_Portrait">Bild löschen</msg>
   <msg key="erase_portrait">Bild löschen</msg>
   <msg key="Error">Fehlerbeschreibung</msg>
+  <msg key="Error_joining">Fehler beim Hinzufügen</msg>
+  <msg key="Error_joining_details">Es gab einen Fehler beim Versuch, Sie zur Gruppe hinzuzufügen.</msg>
   <msg key="Error_sending_mail">Fehler beim Senden der E-Mail</msg>
   <msg key="Error_sending_verification_mail">Die E-Mail-Nachricht zur Überprüfung der Adresse konte nicht gesendet werden</msg>
   <msg key="Error_trying_to_register">Es trat ein Fehler auf während wir versucht haben, einen Account für Sie anzulegen.</msg>
@@ -244,6 +246,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Join_subsite">Subsite beitreten</msg>
   <msg key="Join_this_community">Diese Community hinzufügen</msg>
   <msg key="Join_this_subsite">Dieser Subsite beitreten</msg>
+  <msg key="Joined_group">Sie sind der Gruppe &#39;%group_name%&#39; beigetreten.</msg>
   <msg key="Key">Schlüssel</msg>
   <msg key="Keyword">Schlüsselwort</msg>
   <msg key="Last_name">Nachname</msg>
@@ -432,7 +435,8 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Req_membership_comm">Zugang zu dieser Gruppe beantragen</msg>
   <msg key="Req_membership_subs">Mitgliedschaft für diese Subsite beantragen</msg>
   <msg key="Request_Change_Password_token_email">Anfrage das Passwort zu ändern: Ein Token zur Passwortänderung wurde Ihnen per E-Mail zugesendet. Folgen Sie den Anweisungen in der E-Mail, um das Passwort zu ändern.</msg>
-  <msg key="Request_join_submitted">Ihre Anfrage, der Gruppe '%group_name%' beizutreten, wurde gesendet</msg>
+  <msg key="Request_group_submitted">Ihr Antrag auf Mitgliedschaft in der Gruppe &#39;%group_name%&#39; wurde gesendet.</msg>
+  <msg key="Request_join_submitted">Ihre Anfrage, der Gruppe &#39;%group_name%&#39; beizutreten, wurde gesendet</msg>
   <msg key="Request_membership">Zugang beantragen</msg>
   <msg key="Reset_Password">Passwort zurücksetzen</msg>
   <msg key="return_to_application">Zurück zur Anwendung</msg>
@@ -541,14 +545,10 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="You_dont_have_a_portrait">Sie haben noch kein Bild hochgeladen. Sie können</msg>
   <msg key="You_have_admin_rights_on">Sie haben Verwaltungsrechte für folgende Objekte:</msg>
   <msg key="You_have_no_email_alerts">Sie haben derzeit keine Benachrichtigungsfunktion aktiviert.</msg>
-  <msg key="You_joined_group">Sie sind der Gruppe '%group_name%' beigetreten</msg>
+  <msg key="You_joined_group">Sie sind der Gruppe &#39;%group_name%&#39; beigetreten</msg>
   <msg key="Your_Account">Benutzerkonto</msg>
   <msg key="Your_discussion_alerts">Ihre Benachrichtigungen für Diskussionsforen</msg>
   <msg key="Your_Portrait">Ihr Bild</msg>
   <msg key="Your_system_alerts">Ihre Benachrichtigungen für %gc_system_name%</msg>
   <msg key="Youre_marked_as_back">Sie sind unter %site_link% als wieder anwesend gekennzeichnet.</msg>
-  <msg key="Request_group_submitted">Ihr Antrag auf Mitgliedschaft in der Gruppe '%group_name%' wurde gesendet.</msg>
-  <msg key="Joined_group">Sie sind der Gruppe '%group_name%' beigetreten.</msg>
-  <msg key="Error_joining">Fehler beim Hinzufügen</msg>
-  <msg key="Error_joining_details">Es gab einen Fehler beim Versuch, Sie zur Gruppe hinzuzufügen.</msg>
 </message_catalog>
