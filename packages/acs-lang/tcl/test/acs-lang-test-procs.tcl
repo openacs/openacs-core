@@ -1126,7 +1126,9 @@ aa_register_case \
     aa_run_with_teardown -rollback -test_code {
         db_foreach get_message_keys {
             select message_key, package_key, locale, message
-            from lang_messages where not deleted_p
+            from lang_messages
+            where not deleted_p
+              and locale in (select locale from ad_locales where enabled_p)
         } {
             set error_p [catch {lang::message::check $locale $package_key $message_key $message} errmsg]
             set errmsg [expr {$error_p ? ": $errmsg" : ""}]
