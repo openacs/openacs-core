@@ -1124,10 +1124,10 @@ aa_register_case \
     This test calls the checks to ensure a message is correct on every message in the system
 } {
     aa_run_with_teardown -rollback -test_code {
-        foreach tuple [db_list_of_lists get_message_keys {
-            select message_key, package_key, locale, message from lang_messages
-        }] {
-            lassign $tuple message_key package_key locale message
+        db_foreach get_message_keys {
+            select message_key, package_key, locale, message
+            from lang_messages where not deleted_p
+        } {
             set error_p [catch {lang::message::check $locale $package_key $message_key $message} errmsg]
             set errmsg [expr {$error_p ? ": $errmsg" : ""}]
             aa_false "Message $message_key in package $package_key for locale $locale correct$errmsg" $error_p
