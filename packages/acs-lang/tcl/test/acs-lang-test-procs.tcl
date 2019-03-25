@@ -1128,8 +1128,9 @@ aa_register_case \
             select message_key, package_key, locale, message from lang_messages
         }] {
             lassign $tuple message_key package_key locale message
-            aa_false "Message $message_key in package $package_key for locale $locale correct" \
-                [catch {lang::message::check $locale $package_key $message_key $message}]
+            set error_p [catch {lang::message::check $locale $package_key $message_key $message} errmsg]
+            set errmsg [expr {$error_p ? ": $errmsg" : ""}]
+            aa_false "Message $message_key in package $package_key for locale $locale correct$errmsg" $error_p
         }
     }
 }
