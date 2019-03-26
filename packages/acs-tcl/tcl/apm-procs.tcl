@@ -2040,6 +2040,7 @@ ad_proc -private apm::metrics_internal {
     }
 
     set filelist [apm_get_package_files \
+                      -include_data_model_files \
                       -all_db_types \
                       -package_key $package_key \
                       -file_types $file_types]
@@ -2088,24 +2089,62 @@ ad_proc -private apm::metrics_internal {
     # read the files, so we can count lines and grep for procs
     set filedata [apm::read_files $package_path $filelist]
 
-    # The first 2 metrics are easy (file count and line count)
+    # The first metrics are easy and generic
     set metrics(count) [llength $filelist]
-    set metrics(lines) [llength [split $filedata \n]]
+    set lines [split $filedata \n]
+    set metrics(lines) [llength $lines]
 
-    # extract procs, depending on the file_type
+    set metrics(blank_lines) [regexp -all -line {^\s*$} $filedata]
+
+    #
+    # Count comment lines. We check here the comments available to
+    # proc_doc and add these to the line comments below.
+    #
+    set metrics(comment_lines) 0
+
+    foreach file $filelist {
+        if {[nsv_exists api_proc_doc_scripts packages/$package_key/$file]} {
+            #
+            # Add for every found entry in proc_doc the contents
+            # obtained from the doc arguement of ad_proc.
+            #
+            foreach p [nsv_get api_proc_doc_scripts packages/$package_key/$file] {
+                set proc_doc [nsv_get api_proc_doc $p]
+                set main_doc 0
+                if {[dict exists $proc_doc main]} {
+                    incr main_doc [llength [split [dict get $proc_doc main] \n]]
+                }
+                set return_doc 0
+                if {[dict exists $proc_doc return]} {
+                    incr return_doc [llength [split [dict get $proc_doc return] \n]]
+                }
+                incr metrics(comment_lines) $main_doc
+                incr metrics(comment_lines) $return_doc
+                #ns_log notice "$file: $p [nsv_exists api_proc_doc $p] main $main_doc return doc $return_doc"
+            }
+        }
+    }
+
+    #
+    # Extract procs, depending on the file_type
+    #
     switch -exact $file_type {
         tcl_procs {
             set metrics(procs) [regexp -all -line {^\s*ad_proc} $filedata]
+            set metrics(comment_lines) [regexp -all -line {^\s*#} $filedata]
         }
         test_procs {
             set metrics(procs) [regexp -all -line {^\s*aa_register_case} $filedata]
+            set metrics(comment_lines) [regexp -all -line {^\s*#} $filedata]
         }
         data_model_pg {
             set metrics(procs) [regexp -all -line -nocase {^\s*create\s+or\s+replace\s+function\s+} $filedata]
+            set metrics(comment_lines) [regexp -all -line {^\s*--} $filedata]
         }
         data_model_ora {
             set metrics(procs) [expr {[regexp -all -line -nocase {^\s+function\s+} $filedata] +
                                       [regexp -all -line -nocase {^\s+procedure\s+} $filedata]}]
+            set metrics(comment_lines) [regexp -all -line {^\s*--} $filedata]
         }
         default {
             # other file-types don't have procs
