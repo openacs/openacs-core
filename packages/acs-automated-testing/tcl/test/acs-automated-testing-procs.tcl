@@ -39,7 +39,7 @@ aa_register_case \
         ########################################################################################
         aa_section "Visit homepage with user_info, should login, last name of user should be contained"
         ########################################################################################
-        set d [acs::test::http -user_info $user_info -session $d /]
+        set d [acs::test::http -depth 3 -user_info $user_info -session $d /]
 
         acs::test::reply_has_status_code $d 200
         acs::test::reply_contains $d [dict get $user_info last_name]
@@ -49,7 +49,7 @@ aa_register_case \
         ########################################################################################
         aa_section "Make a second request, now the cookie should be used"
         ########################################################################################
-        set d [acs::test::http -user_info $user_info -session $d /]
+        set d [acs::test::http -depth 3 -user_info $user_info -session $d /]
         acs::test::reply_has_status_code $d 200
         acs::test::reply_contains $d [dict get $user_info last_name]
         aa_equals "login [dict get $d login]" [dict get $d login] via_cookie
