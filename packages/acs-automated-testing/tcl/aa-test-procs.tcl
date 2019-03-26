@@ -1152,6 +1152,7 @@ namespace eval acs::test {
         {-session ""}
         {-body}
         {-timeout 10}
+        {-depth 1}
         {-headers ""}
         {-prefix ""}
         {-verbose:boolean 1}
@@ -1160,6 +1161,9 @@ namespace eval acs::test {
 
         Run an HTTP request against the actual server inside test
         cases.
+
+        @param depth follow redirects up to specified depth. Default
+        means redirects won't be followed.
 
         @author Gustaf Neumann
     } {
@@ -1259,11 +1263,20 @@ namespace eval acs::test {
         #
         try {
             ns_log notice "acs::test:http client request (timeout $timeout): $method $url"
-            set d [ns_http run \
-                       -timeout $timeout \
-                       -method $method \
-                       {*}$extra_args \
-                       $url]
+            set location $url
+            while {$depth > 0} {
+                incr depth -1
+                set d [ns_http run \
+                           -timeout $timeout \
+                           -method $method \
+                           {*}$extra_args \
+                           $location]
+                set status   [dict get $d status]
+                set location [ns_set iget [dict get $d headers] location]
+                if {![string match "3??" $status] || $location eq ""} {
+                    break
+                }
+            }
         } finally {
             #
             # always reset after the reqest the login data nsv
