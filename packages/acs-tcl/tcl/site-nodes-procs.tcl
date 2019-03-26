@@ -215,14 +215,12 @@ ad_proc -public site_node::mount {
                  package_key $package_key package_id $package_id \
                  instance_name $instance_name package_type $package_type]
 
-        set url_by_object_id [list $node(url)]
-        if { [nsv_exists site_node_url_by_object_id $object_id] } {
-            set url_by_object_id [linsert $url_by_object_id 0 [nsv_get site_node_url_by_object_id $object_id]]
-            set url_by_object_id [lsort \
-                                      -decreasing \
-                                      -command util::string_length_compare \
-                                      $url_by_object_id]
-        }
+        set url_by_object_id [site_node::get_url_from_object_id -object_id $object_id]
+        lappend url_by_object_id $node(url)
+        set url_by_object_id [lsort \
+                                  -decreasing \
+                                  -command util::string_length_compare \
+                                  $url_by_object_id]
         nsv_set site_node_url_by_object_id $object_id $url_by_object_id
 
         if { $package_key ne "" } {
