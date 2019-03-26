@@ -46,13 +46,9 @@ ad_proc navigation::test::context_bar_multirow_filter {} {
                            [list context $context]] \
                       "/packages/acs-tcl/tcl/test/multirow-test"]
 
-        site_node::delete -node_id $idr_2
-        site_node::delete -node_id $idr_1
-
     } -teardown_code {
         site_node::delete -node_id $idr_2
         site_node::delete -node_id $idr_1
-
     }
     ns_return 200 text/html $page
 
