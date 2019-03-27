@@ -1977,9 +1977,9 @@ ad_proc -private apm::read_files {path file_list} {
 }
 
 ad_proc -public apm::metrics {
-    -package_key
-    -file_type
-    -array
+    -package_key:required
+    -file_type:required
+    -array:required
 } {
     Return some code metrics about the files in package $package_key. This
     will return an array of 3 items:
