@@ -603,6 +603,16 @@ ad_proc -public template::add_body_script {
         # browsers by checking the user agent.
         #
         security::csp::require script-src 'unsafe-inline'
+    } else {
+        #
+        # Replace potential URN in src with resolved value
+        #
+        set key ::template::head::urn($src)
+        if {[info exists $key]} {
+            set src [set $key]
+        } elseif {[string match urn:* $src]} {
+            ns_log error "URN <$src> could not be resolved"
+        }
     }
 
     lappend ::template::body_scripts $type $src $charset $defer $async $script $crossorigin $integrity
