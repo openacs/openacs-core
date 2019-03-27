@@ -1979,17 +1979,17 @@ ad_proc -private apm::read_files {path file_list} {
 ad_proc -public apm::metrics {
     -package_key:required
     -file_type:required
-    -array:required
+    -array
 } {
     Return some code metrics about the files in package $package_key. This
-    will return an array of 3 items:
+    will return an array or dict containing at least the following items:
     <ul>
     <li>count - the number of files</li>
     <li>lines - the number of lines in the files</li>
+    <li>blank_lines - the number of blank lines in the files</li>
+    <li>comment_lines - the number of blank lines in the files</li>
     <li>procs - the number of procs, if applicable (0 if not applicable)</li>
     </ul>
-    This will be placed in the array variable that is provided
-    to this proc.
     <p>
     Valid file_type's:
     <ul>
@@ -2001,6 +2001,8 @@ ad_proc -public apm::metrics {
     <li>test_procs - automated tests in package_key/tcl/test</li>
     <li>documentation - docs in package_key/www/doc</li>
     </ul>
+    When the array is provided, it will be used for setting the result.
+    Otherwise a dict with the metrics information is returned.
 
     This proc is cached.
 
@@ -2011,8 +2013,12 @@ ad_proc -public apm::metrics {
     @param file_type See options above
     @param array variable to hold the array that will be returned
 } {
-    upvar $array metrics
-    array set metrics [util_memoize [list apm::metrics_internal $package_key $file_type]]
+    set data [util_memoize [list apm::metrics_internal $package_key $file_type]]
+    if {[info exists array]} {
+        upvar $array metrics
+        array set metrics $data
+    }
+    return $data
 }
 
 ad_proc -private apm::metrics_internal {
