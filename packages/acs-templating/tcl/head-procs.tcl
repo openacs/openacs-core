@@ -457,11 +457,13 @@ ad_proc -public template::head::add_javascript {
 
 ad_proc -public template::head::add_css {
     {-alternate:boolean}
+    {-crossorigin ""}
     {-href:required}
-    {-media "all"}
-    {-title ""}
+    {-integrity ""}
     {-lang ""}
+    {-media "all"}
     {-order "0"}
+    {-title ""}
 } {
     Add a link tag with relation type 'stylesheet' or 'alternate stylesheet',
     and type 'text/css' to the head section of the document to be returned to
@@ -481,6 +483,9 @@ ad_proc -public template::head::add_css {
                      of this link
     @param lang      the lang attribute of the link tag specifying the language
                      of its attributes if they differ from the document language
+    @param crossorigin  Enumerated attribute to indicate whether CORS
+                     (Cross-Origin Resource Sharing) should be used
+    @param integrity provide hash values for W3C Subresource Integrity recommendation
 
     @see template::head::add_link
 } {
@@ -496,7 +501,9 @@ ad_proc -public template::head::add_css {
         -media $media \
         -title $title \
         -lang $lang \
-        -order $order
+        -order $order \
+        -crossorigin $crossorigin \
+        -integrity $integrity
 }
 
 ad_proc -public template::add_body_handler {
