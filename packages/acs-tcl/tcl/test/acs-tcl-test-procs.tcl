@@ -961,7 +961,7 @@ aa_register_case \
     front_page_1 {
 
     } {
-    set d [acs::test::http -depth 3 /]
+    set d [acs::test::http /]
     set main_node [site_node::get_from_url -url "/"]
     acs::test::reply_has_status_code $d 200
 }
