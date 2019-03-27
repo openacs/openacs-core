@@ -722,6 +722,16 @@ ad_proc -private template::head::resolve_urn {
     return $resource
 }
 
+ad_proc template::head::can_resolve_urn {
+    resource
+} {
+    Return a boolean value indicating, whether we can resolve the URN.
+} {
+    return [info exists ::template::head::urn($resource)]
+}
+
+
+
 ad_proc template::head::prepare_multirows {} {
     Generate multirows for meta, css, scripts
     Called only from blank-master.tcl
