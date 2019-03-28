@@ -466,7 +466,8 @@ ad_proc -public db_nextval {
                 }
             }
             if {[info exists ::db::sequences(t_$sequence)]} {
-                #ns_log notice "-- found t_$sequence"
+                #ns_log notice "-- found t_$sequence
+                #ad_log Warning "Deprecated sequence name 't_$sequence' is used. Use instead 't_$sequence'"
                 set nextval [db_string -dbn $dbn nextval "select nextval('t_$sequence')"]
             } elseif {[info exists ::db::sequences($sequence)]} {
                 #ns_log notice "-- found $sequence"
@@ -489,7 +490,7 @@ ad_proc -public db_nextval {
                 ad_log Warning "Probably deprecated sequence name '$sequence' is used (no sequence table found)"
             } else {
                 #
-                # finally, there might be a view with a nextval
+                # Finally, there might be a view with a nextval
                 #
                 ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
                 set nextval [db_string -dbn $dbn nextval "select nextval from $sequence"]
