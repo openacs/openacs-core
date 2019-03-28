@@ -14,9 +14,9 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {name_weight:optional 0}
-    {doc_weight:integer,optional 0}
-    {param_weight:integer,optional 0}
-    {source_weight:integer,optional 0}
+    {doc_weight:optional 0}
+    {param_weight:optional 0}
+    {source_weight:optional 0}
     {search_type:optional 0}
     {show_deprecated_p 0}
     {show_private_p 0}
@@ -46,7 +46,7 @@ if {$quick_view && [nsv_exists api_proc_doc $query_string]} {
 
 ###########################
 # No weighting use default:
-if { ($name_weight == 0) && ($doc_weight == 0) && ($param_weight == 0) && ($source_weight == 0) } {
+if { ($name_weight == 0) && ($doc_weight == 0) && ($param_weight == 0) && ($source_weight ==0) } {
     set name_weight 1
 }
 
@@ -72,7 +72,7 @@ foreach proc [nsv_array names api_proc_doc] {
     ###############
     ## Name Search:
     ###############
-    if {$name_weight != 0 && [string is integer -strict $name_weight]} {
+    if {$name_weight} {
         # JCD: this was a little perverse since exact matches were
         # actually worth less than matches in the name (if there were
         # 2 or more, which happens with namespaces) so I doubled the
@@ -97,7 +97,7 @@ foreach proc [nsv_array names api_proc_doc] {
     ##############
     ## Doc Search:
     ##############
-    if {$doc_weight > 0} {
+    if {$doc_weight} {
         
         set doc_string [lindex $doc_elements(main) 0]
         if {[info exists doc_elements(param)]} {
@@ -115,7 +115,7 @@ foreach proc [nsv_array names api_proc_doc] {
     #################
     ## Source Search:
     #################
-    if {$source_weight != 0} {
+    if {$source_weight} {
         if {![catch {set source [info body $proc]}]} {
             incr score [expr {$source_weight * [::apidoc::ad_keywords_score $query_string $source]}] 
         }    

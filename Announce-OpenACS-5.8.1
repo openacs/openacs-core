@@ -98,9 +98,24 @@ DotLRN packages. For DotLRN this means essentially:
 The version number of DotLRN changed to 2.8.1
 (in accordance to 5.8.1 of OpenACS). 
 
+For packaging of the beta release, we have produced just
+a tar file containing the acs-core files (see [2]). Based on
+acs-core packages, one can install/upgrade all application packages
+via install-from-repository. If you think one needs as well
+a full tar release, please let us know quickly.
+
+If possible, test the release and report errors.
+
+To all developers: please stop to commit on the oacs-5-8
+branch, this should receive only bug-fixes until the release,
+which should be really soon (e.g. next week). After the release, 
+all changes from oacs-5-8 will be merged into the HEAD branch, 
+which is the place for further development.
+
+-gustaf neumann
 
 [1] http://openacs.org/changelogs/ChangeLog-5.8.1
-============================================================================
+[2] http://openacs.org/projects/openacs/download/
 
 Package list of OpenACS 5.8.1:
 

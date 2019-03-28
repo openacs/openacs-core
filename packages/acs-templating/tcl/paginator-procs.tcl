@@ -38,7 +38,7 @@ ad_proc -public template::paginator { command args } {
   paginator::$command {*}$args
 }
 
-ad_proc -public template::paginator::create { statement_name name query count_query args } {
+ad_proc -public template::paginator::create { statement_name name query args } {
     Creates a paginator object.  Performs an initial query to get the complete
     list of rows in the query result and caches the result for subsequent
     queries.
@@ -52,10 +52,6 @@ ad_proc -public template::paginator::create { statement_name name query count_qu
 
     @param query        The actual query that returns the IDs of all rows in
                         the results.  Bind variables may be used.
-
-    @param count_query  Query returning the total number of records retrieved by 
-                        the original paginator query. This is the full number of 
-                        records, possibly exceeding number_of_pages * rows_per_page.
 
     @option timeout     The lifetime of a query result in seconds, after which
                         the query must be refreshed (if not reset).
@@ -101,9 +97,6 @@ ad_proc -public template::paginator::create { statement_name name query count_qu
 
   set cache_key	$name:$query
   set row_ids [cache get $cache_key:row_ids]
-  
-  # full number of rows returned by original paginator query
-  set full_row_count [cache get $cache_key:full_row_count]
 
     #
     # GN: In the following line, we had instead of [::cache exists
@@ -147,7 +140,7 @@ $css_link
 	      ns_write [ns_adp_parse -file $header_file]
 	  }
 	  ns_write [lindex $opts(printing_prefs) 6]
-	  init $statement_name $name $query $count_query 1
+	  init $statement_name $name $query 1
 	  ns_write [lindex $opts(printing_prefs) 7]
 	  set footer_file [lindex $opts(printing_prefs) 4]
 	  if { $footer_file ne "" } {
@@ -171,11 +164,10 @@ $css_link
 	  }
 	  ad_script_abort
       } else {
-	  init $statement_name $name $query $count_query
+	  init $statement_name $name $query
       }
   } else {
     set opts(row_ids) $row_ids
-    set opts(full_row_count) $full_row_count
     set opts(context_ids) [cache get $cache_key:context_ids]
   }
 
@@ -184,7 +176,7 @@ $css_link
   set opts(group_count) [get_group $name $opts(page_count)]
 }
 
-ad_proc -private template::paginator::init { statement_name name query count_query {print_p 0} } {
+ad_proc -private template::paginator::init { statement_name name query {print_p 0} } {
     Initialize a paginated query.  Only called by create.
 } {
   get_reference
@@ -290,11 +282,6 @@ ad_proc -private template::paginator::init { statement_name name query count_que
       set properties(row_ids) $ids
       cache set $name:$query:row_ids $ids $properties(timeout)
   }
-  
-  # Get full number of rows retrieved by original paginator query
-  set full_row_count [uplevel 3 [list db_string query $count_query]]
-  set properties(full_row_count) $full_row_count
-  cache set $name:$query:full_row_count $full_row_count $properties(timeout)
 }
 
 ad_proc -public template::paginator::get_page { name rownum } {
@@ -570,20 +557,6 @@ ad_proc -public template::paginator::get_row_count { name } {
   get_reference
 
   return $properties(row_count)
-}
-
-ad_proc -public template::paginator::get_full_row_count { name } {
-    Gets the total number of records returned by the original 
-    paginator query. This is the 'true' row_count, which won't
-    be limited to number_of_pages * rows_per_page.
-
-    @param name    The reference to the paginator object.
-
-    @return A number representing the full row count.
-} {
-  get_reference
-
-  return $properties(full_row_count)
 }
 
 ad_proc -public template::paginator::get_page_count { name } {

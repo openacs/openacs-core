@@ -518,8 +518,6 @@ ad_proc -public template::adp_compile { source_type source } {
     # the parse list now contains the code
     set code [join $parse_list "\n"]
 
-    #ns_log notice "CODE before i18n\n$code\n"
-
     # Substitute #foo# message keys with values from the message catalog
 
     # Since messages may read the variables of the adp page they go trough
@@ -534,7 +532,6 @@ ad_proc -public template::adp_compile { source_type source } {
 
     # substitute array variable references
     while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
-    while {[regsub -all [template::adp_array_variable_regexp_noi18n] $code {\1[ns_quotehtml $\2(\3)]} code]} {}
     while {[regsub -all [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
     # 
     # Some aolservers have broken implementations of ns_quotehtml
@@ -552,7 +549,6 @@ ad_proc -public template::adp_compile { source_type source } {
 
     # substitute simple variable references
     while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1[lang::util::localize ${\2}]} code]} {}
-    while {[regsub -all [template::adp_variable_regexp_noi18n] $code {\1[ns_quotehtml ${\2}]} code]} {}
     while {[regsub -all [template::adp_variable_regexp_literal] $code {\1${\2}} code]} {}
     if {[ns_quotehtml ""] eq ""} {
         while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
@@ -596,15 +592,6 @@ ad_proc -public template::adp_array_variable_regexp_literal {} {
     return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);literal@}
 }
 
-ad_proc -public template::adp_array_variable_regexp_noi18n {} {
-    adp_array_variable_regexp's pattern augmented by "noi18n"
-
-    @author Gustaf Neumann
-    @creation-date June 2015
-} {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);noi18n@}
-}
-
 ad_proc -public template::adp_variable_regexp {} {
     The regexp pattern used to find adp variables in
     a piece of text, i.e. occurenceis of @variable_name@. 
@@ -633,15 +620,6 @@ ad_proc -public template::adp_variable_regexp_literal {} {
     @creation-date Dezember 2012
 } {
     return {(^|[^\\])@([a-zA-Z0-9_:]+);literal@}
-}
-
-ad_proc -public template::adp_variable_regexp_noi18n {} {
-    adp_variable_regexp augmented by "noi18n"
-
-    @author Gustaf Neumann
-    @creation-date June 2015
-} {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+);noi18n@}
 }
 
 # Naviserver requires for disambiguation of flags and values at the

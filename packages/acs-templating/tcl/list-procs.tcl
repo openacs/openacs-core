@@ -555,9 +555,6 @@ ad_proc -public template::list::prepare {
         set last_row [expr {$first_row + ($groupsize + 1) * $page_size - 1}]
         set page_offset [expr {($page_group - 1) * $groupsize}]
 
-	# Obtain query which retrieves records count
-	set list_properties(count_query) [db_map count_query]
-	
         # Now wrap the provided query with the limit information
         set list_properties(page_query_substed) [db_map pagination_query]
 
@@ -590,7 +587,6 @@ ad_proc -public template::list::prepare {
 			     --dummy--query--name-- \
                              $list_properties(paginator_name) \
                              $list_properties(page_query_substed) \
-                             $list_properties(count_query) \
                              -pagesize $list_properties(page_size) \
                              -groupsize $list_properties(page_groupsize) \
                              -page_offset $page_offset \
@@ -990,28 +986,6 @@ ad_proc -public template::list::page_get_rowcount {
     return [template::paginator get_row_count $list_properties(paginator_name)]
 }
 
-ad_proc -public template::list::get_rowcount {
-    -name:required
-} {
-    Gets the full number of rows retrieved from this template::list. This number can
-    exceed number_of_pages * rows_per_page. If list is not paginated, size of the 
-    multirow will be returned. Multirow must exist for count to succeed on a not 
-    paginated list.
-
-    @param  name     Name of the list builder list for which you want the full number of rows.
-} {
-    # Get an upvar'd reference to list_properties
-    get_reference -name $name
-    
-    if { $list_properties(page_size) eq "" || $list_properties(page_size) == 0 } {
-        if {![template::multirow exists {*}$list_properties(multirow)]} {
-	    return {}
-	}
-	return [template::multirow size {*}$list_properties(multirow)]
-    }
-    
-    return [template::paginator get_full_row_count $list_properties(paginator_name)]
-}
 
 
 ad_proc -public template::list::orderby_clause {
