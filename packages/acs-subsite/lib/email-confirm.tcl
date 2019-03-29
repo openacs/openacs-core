@@ -12,7 +12,6 @@ if {$user eq ""
     set title "Bad token"
     set message "The link given to authenticate your email was invalid."
     ad_return_template /packages/acs-subsite/lib/message
-    ad_script_abort
 } else {
     auth::set_email_verified -user_id $user_id
     set member_state [acs_user::get_user_info -user_id $user_id -element member_state]
