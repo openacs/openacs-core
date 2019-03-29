@@ -1,7 +1,7 @@
 
 <property name="doc(title)">#acs-subsite.lt_Your_email_is_confirm#</property>
 
-<if @user_info.member_state@ eq "approved">
+<if @member_state@ eq "approved">
 
   #acs-subsite.lt_Your_email_has_been_c#
   <p>
