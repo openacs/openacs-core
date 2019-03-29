@@ -292,6 +292,49 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats smoke \
+    -procs {
+    } acs_subsite_test_email_confirmation {
+        Calls the mail confirmation page with a new user and checks
+        that result is as expected
+
+        @author Antonio Pisano
+    } {
+        try {
+            # Create dummy user
+            set user [acs::test::user::create]
+            set user_id [dict get $user user_id]
+
+            # Check if email verification status fits instance
+            # configuration
+            if {[parameter::get \
+                     -package_id [subsite::main_site_id] \
+                     -parameter RegistrationRequiresEmailVerificationP -default 0]} {
+                aa_false "Email is NOT verified" [acs_user::get_user_info \
+                                                      -user_id $user_id -element email_verified_p]
+            } else {
+                aa_log "Main subsite does not require email verification"
+            }
+
+            # Call the confirmation URL and check response
+            set token [auth::get_user_secret_token -user_id $user_id]
+            set to_addr [party::get -party_id $user_id -element email]
+            set confirmation_url [export_vars -base "/register/email-confirm" { token user_id }]
+            set d [acs::test::http $confirmation_url]
+            acs::test::reply_has_status_code $d 200
+
+            # Check that email is verified after confirmation
+            aa_true "Email is verified" [acs_user::get_user_info \
+                                             -user_id $user_id -element email_verified_p]
+        } finally {
+            # Delete the user
+            if {[info exists user_id] && [string is integer -strict $user_id]} {
+                acs_user::delete -user_id $user_id -permanent
+            }
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
