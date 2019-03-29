@@ -1262,9 +1262,9 @@ namespace eval acs::test {
         # Run actual request
         #
         try {
-            ns_log notice "acs::test:http client request (timeout $timeout): $method $url"
             set location $url
             while {$depth > 0} {
+                ns_log notice "acs::test:http client request (timeout $timeout): $method $location"
                 incr depth -1
                 set d [ns_http run \
                            -timeout $timeout \
