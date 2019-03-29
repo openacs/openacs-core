@@ -60,7 +60,7 @@ aa_register_case \
             array set main_node [site_node::get_from_url -url "/"]
             set main_group_id [application_group::group_id_from_package_id \
                               -package_id $main_node(package_id)]
-            
+
             set email "__test@test.test"
             array set creation_info [auth::create_user \
                                      -username "__test" \
@@ -69,7 +69,7 @@ aa_register_case \
                                      -last_name "__Test last" \
                                      -password 1 \
                                      -password_confirm 1]
-     
+
             group::add_member \
                 -group_id $main_group_id \
                 -user_id $creation_info(user_id) \
@@ -97,7 +97,7 @@ aa_register_case \
     -procs {subsite::main_site_id} \
     acs_subsite_trivial_smoke_test {
     Minimal smoke test.
-} {    
+} {
 
     aa_run_with_teardown \
         -rollback \
@@ -156,7 +156,7 @@ aa_register_case \
             util_memoize_flush [list acs_user::get_by_username_not_cached \
                                     -authority_id $authority_id \
                                      -username "__test1"]
-            
+
             if {[set user_1_id [acs_user::get_by_username_not_cached \
                                     -authority_id $authority_id \
                                     -username "__test1"]] eq ""} {
@@ -173,21 +173,21 @@ aa_register_case \
             # flush cache from previous call of this test
             util_memoize_flush [list acs_user::get_by_username_not_cached \
                                     -authority_id $authority_id \
-                                     -username "__test2"]            
+                                     -username "__test2"]
 
             if {[set user_2_id [acs_user::get_by_username_not_cached \
                                     -authority_id $authority_id \
-                                    -username "__test2"]] eq ""} {                
+                                    -username "__test2"]] eq ""} {
                 array set user_2 [auth::create_user \
                                       -username "__test2" \
                                       -email "__user2@test.test" \
                                       -first_names "__user2.Test first" \
                                       -last_name "__user2.Test last" \
                                       -password 1 \
-                                      -password_confirm 1]                    
+                                      -password_confirm 1]
                 set user_2_id $user_2(user_id)
             }
-            
+
             group::add_member -group_id $level_2_group -user_id $user_1_id -rel_type membership_rel
             group::add_member -group_id $level_2_group -user_id $user_1_id -rel_type admin_rel
 
