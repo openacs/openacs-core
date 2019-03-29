@@ -70,6 +70,10 @@ aa_register_case \
                                      -password 1 \
                                      -password_confirm 1]
 
+            # Make sure email is verified. The real process of
+            # verifying is tested elsewhere.
+            auth::set_email_verified -user_id $creation_info(user_id)
+
             group::add_member \
                 -group_id $main_group_id \
                 -user_id $creation_info(user_id) \
