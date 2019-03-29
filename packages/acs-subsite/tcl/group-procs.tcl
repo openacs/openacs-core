@@ -1,5 +1,3 @@
-# /packages/acs-subsite/tcl/group-procs.tcl
-
 ad_library {
 
     Procs to manage groups
@@ -606,12 +604,14 @@ ad_proc -public group::member_p {
     }
 
     if { $group_name eq "" && $group_id eq "" } {
+        ad_log warning "group::member_p: neither group_name nor group_id was provided; returning 0"
         return 0
     }
 
     if { $group_name ne "" } {
         set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
         if { $group_id eq "" } {
+            ad_log warning "group::member_p: could not lookup '$group_name' (for subsite_id '$subsite_id'); returning 0"
             return 0
         }
     }
@@ -624,9 +624,9 @@ ad_proc -public group::member_p {
 }
 
 ad_proc -private group::member_p_not_cached {
-    { -user_id "" }
-    { -group_id "" }
-    {-cascade_p ""}
+    { -user_id }
+    { -group_id }
+    { -cascade_p }
 } {
     Return 1 if the user is a member of the group specified.
     You can specify a group id.
