@@ -26,6 +26,7 @@ aa_register_case \
 
         # Create test user
         set user_info [acs::test::user::create -user_id $user_id]
+        acs::test::confirm_email -user_id $user_id
 
         ########################################################################################
         aa_section "Visit homepage as anonymous user, last name of user should not show up"
