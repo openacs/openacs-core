@@ -1064,14 +1064,17 @@ ad_proc -public ad_page_contract {
             }
 
         } else {
-
-            # no value supplied for this arg spec
-
+            #
+            # No value supplied for this arg spec.
+            #
             if { [info exists apc_default_value($formal_name)] } {
-
-                # Only use the default value if there has been no complaints so far
-                # Why? Because if there are complaints, the page isn't going to serve anyway,
-                # and because one default value may depend on another variable having a correct value.
+                #
+                # Only use the default value if there has been no
+                # complaints so far Why? Because if there are
+                # complaints, the page isn't going to serve anyway,
+                # and because one default value may depend on another
+                # variable having a correct value.
+                #
                 if { [ad_complaints_count] == 0 } {
                     # we need to set the default value
                     if { [info exists apc_internal_filter($formal_name:array)] } {
@@ -1081,9 +1084,11 @@ ad_proc -public ad_page_contract {
                     }
                 }
 
-            } elseif { ![info exists apc_internal_filter($formal_name:optional)]} {
+            } elseif { ![info exists apc_internal_filter($formal_name:optional)]
+                       && ![info exists ::ad_page_contract_validations_passed($formal_name)] } {
                 #
-                # The element is not optional.
+                # The element is not optional and it was not already
+                # flagged by the notnull constraint.
                 #
                 # Before we complain, we check, if a multirow or array
                 # with the name are already defined in the target
@@ -1096,7 +1101,8 @@ ad_proc -public ad_page_contract {
                 #
                 set multirow_name $formal_name:rowcount
                 if {![uplevel $level [list info exists $multirow_name]]
-                    && ![uplevel $level [list info exists $formal_name]] } {
+                    && ![uplevel $level [list info exists $formal_name]]
+                } {
                     ad_complain -key $formal_name [_ acs-tcl.lt_You_must_supply_a_val]
                 }
             }
