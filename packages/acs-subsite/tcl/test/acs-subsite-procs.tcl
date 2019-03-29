@@ -294,7 +294,17 @@ aa_register_case \
 
 aa_register_case \
     -cats smoke \
+    -urls {
+        /register/email-confirm
+    } \
     -procs {
+        parameter::get
+        subsite::main_site_id
+        acs_user::get_user_info
+        auth::get_user_secret_token
+        party::get
+        export_vars
+        acs_user::delete
     } acs_subsite_test_email_confirmation {
         Calls the mail confirmation page with a new user and checks
         that result is as expected
