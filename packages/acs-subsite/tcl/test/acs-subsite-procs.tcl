@@ -327,12 +327,7 @@ aa_register_case \
                 aa_log "Main subsite does not require email verification"
             }
 
-            # Call the confirmation URL and check response
-            set token [auth::get_user_secret_token -user_id $user_id]
-            set to_addr [party::get -party_id $user_id -element email]
-            set confirmation_url [export_vars -base "/register/email-confirm" { token user_id }]
-            set d [acs::test::http $confirmation_url]
-            acs::test::reply_has_status_code $d 200
+            ::acs::test::confirm_email -user_id $user_id
 
             # Check that email is verified after confirmation
             aa_true "Email is verified" [acs_user::get_user_info \

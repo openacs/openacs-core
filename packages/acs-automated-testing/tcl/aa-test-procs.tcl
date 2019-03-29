@@ -1421,6 +1421,19 @@ namespace eval acs::test {
         return $d
     }
 
+    ad_proc -public ::acs::test::confirm_email {
+        -user_id:required
+    } {
+        Confirms user email
+    } {
+        # Call the confirmation URL and check response
+        set token [auth::get_user_secret_token -user_id $user_id]
+        set to_addr [party::get -party_id $user_id -element email]
+        set confirmation_url [export_vars -base "/register/email-confirm" { token user_id }]
+        set d [acs::test::http $confirmation_url]
+        acs::test::reply_has_status_code $d 200
+    }
+
     ad_proc -public ::acs::test::visualize_control_chars {lines} {
         Quotes and therefore makes visible control chars in input lines
     } {
