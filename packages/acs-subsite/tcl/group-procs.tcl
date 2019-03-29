@@ -574,10 +574,10 @@ ad_proc -public group::default_member_state {
 
 
 ad_proc -public group::member_p {
-    { -user_id "" }
-    { -group_name "" }
-    { -group_id "" }
-    { -subsite_id "" }
+    {-user_id ""}
+    {-group_name ""}
+    {-group_id ""}
+    {-subsite_id ""}
     -cascade:boolean
 } {
     Return 1 if the user is a member of the group specified.
@@ -624,9 +624,9 @@ ad_proc -public group::member_p {
 }
 
 ad_proc -private group::member_p_not_cached {
-    { -user_id:required }
-    { -group_id:required }
-    { -cascade_p f }
+    -user_id:required
+    -group_id:required
+    {-cascade_p f}
 } {
     Return 1 if the user is a member of the group specified.
 
