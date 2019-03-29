@@ -456,7 +456,7 @@ ad_proc -private site_node::update_cache {
 
         set cur_obj_ids [list]
         db_foreach $query_name {} {
-            if {$parent_id eq ""} {
+            if {$parent_id eq "" || ![nsv_exists site_node_url_by_node_id $parent_id]} {
                 # url of root node
                 set url "/"
             } else {
