@@ -39,7 +39,11 @@ if { $type eq "" } {
     set page_title "Edit Tcl Callback"
 }
 
-set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] [list $return_url "Tcl Callbacks"] $page_title]
+set context [list \
+                 [list "." "Package Manager"] \
+                 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
+                 [list $return_url "Tcl Callbacks"] \
+                 $page_title]
 
 set type_label "Tcl procedure name"
 ad_form -name callback -cancel_url $return_url -form {
@@ -69,12 +73,12 @@ ad_form -name callback -cancel_url $return_url -form {
 
 } -validate {
     {proc
-	{ {info commands ::$proc} ne "" }
-	{The specified procedure name does not exist. Is the -procs.tcl file loaded?}
+        { {info commands ::$proc} ne "" }
+        {The specified procedure name does not exist. Is the -procs.tcl file loaded?}
     }
     {proc
-	{ [apm_callback_has_valid_args -type $type -proc_name $proc] }
-	{The callback proc $proc must be defined with ad_proc [expr {[apm_arg_names_for_callback_type -type $type] eq "" ?
+        { [apm_callback_has_valid_args -type $type -proc_name $proc] }
+        {The callback proc $proc must be defined with ad_proc [expr {[apm_arg_names_for_callback_type -type $type] eq "" ?
                                                                      "and should take no arguments" :
                                                                      "and have the following required switches: [apm_arg_names_for_callback_type -type $type]"}]}
     }
