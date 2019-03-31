@@ -399,7 +399,7 @@ aa_register_case \
         <div class="forum">
         <ul class="list-unstyled">
         <li style="clear:both;">
-        <div><a href="/forums/message-view?message_id=5388591">Annoucement: Support for markdown in richtext widget</a></div>
+        <div><a href="/forums/message-view?message_id=5388591">Announcement: Support for markdown in richtext widget</a></div>
         <div class="posting-date"> Gustaf Neumann, 1 year ago</div>
         </li>
         </ul>

@@ -1979,7 +1979,7 @@ ad_proc -deprecated ad_custom_load {user_id item_group item item_type} {
 }
 
 ad_proc -deprecated ad_custom_list {user_id item_group item_set item_type target_url custom_url {new_string "new view"}} {
-    Generates the html fragment for choosing, editing and creating
+    Generates the HTML fragment for choosing, editing and creating
     user customized data
 } {
 

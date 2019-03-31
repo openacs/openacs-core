@@ -327,10 +327,10 @@ ad_proc -private util_close_html_tags {
     <li>  close -- close this tag if left open.
     </ul>
 
-    @param break_soft the number of characters you want the html fragment
+    @param break_soft the number of characters you want the HTML fragment
     truncated to. Will allow certain tags (A, ADDRESS, NOBR) to close first.
 
-    @param break_hard the number of characters you want the html fragment
+    @param break_hard the number of characters you want the HTML fragment
     truncated to. Will truncate, regardless of what tag is currently in action.
 
     @param ellipsis  This will get put at the end of the truncated string, if the string was truncated.

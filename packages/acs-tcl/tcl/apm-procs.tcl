@@ -2112,7 +2112,7 @@ ad_proc -private apm::metrics_internal {
         if {[nsv_exists api_proc_doc_scripts packages/$package_key/$file]} {
             #
             # Add for every found entry in proc_doc the contents
-            # obtained from the doc arguement of ad_proc.
+            # obtained from the doc argument of ad_proc.
             #
             foreach p [nsv_get api_proc_doc_scripts packages/$package_key/$file] {
                 set proc_doc [nsv_get api_proc_doc $p]

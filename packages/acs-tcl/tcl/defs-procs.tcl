@@ -91,7 +91,7 @@ ad_proc -public ad_pvt_home_name {} {
 }
 
 ad_proc -public ad_pvt_home_link {} {
-    @return the html fragment for the /pvt link
+    @return the HTML fragment for the /pvt link
 } {
     return "<a href=\"[ad_pvt_home]\">[ad_pvt_home_name]</a>"
 }

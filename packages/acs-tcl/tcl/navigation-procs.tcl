@@ -19,7 +19,7 @@ ad_proc -public ad_context_bar_html {
     <pre>
     [list [list url1 text1] [list url2 text2] ... "terminal text"]
     <pre>
-    and generates the html fragment.  In general the higher level
+    and generates the HTML fragment.  In general the higher level
     proc ad_context_bar should be
     used, and then only in the sitewide master rather than on
     individual pages.
@@ -27,7 +27,7 @@ ad_proc -public ad_context_bar_html {
     @param separator The text placed between each link
     @param context list as with ad_context_bar
 
-    @return html fragment
+    @return HTML fragment
 
     @see ad_context_bar
 } {
@@ -210,7 +210,7 @@ ad_proc -public ad_navbar args {
 
     @param args list of url desc ([list [list url desc] [list url desc]])
 
-    @return html fragment
+    @return HTML fragment
 
     @see ad_context_bar_html
 } {
