@@ -151,7 +151,7 @@ proc $proc {[info args $proc]} {
         set documentation [api_proc_documentation -script $proc_index]
     }
 }
-set procViewToggleURL [export_vars -base proc-view -no_empty {proc {source_p [expr {!$source_p}]} version_id}]
+set procViewToggleURL [export_vars -base proc-view -no_empty {proc {source_p "[expr {!$source_p}]"} version_id}]
 set setDefaultURL     [export_vars -base set-default {source_p return_url}]
 
 #
