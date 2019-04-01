@@ -1111,6 +1111,7 @@ namespace eval acs::test {
         -user_id:required
         -url:required
         {-update {}}
+        {-remove {}}        
         form_content
     } {
 
@@ -1119,7 +1120,14 @@ namespace eval acs::test {
         convenience the update fields are provided to overload the
         form_content.
 
+        @param update key/attribute list of values to be updated in the form content
+        @param remove keys to be removed from the form content
+
     } {
+        if {$remove ne ""} {
+            set form_content [dict remove $form_content {*}$remove]
+            ns_log notice "DEBUG: after removing <$remove> from <$form_content>"
+        }
         foreach {att value} $update {
             dict set form_content $att $value
         }
