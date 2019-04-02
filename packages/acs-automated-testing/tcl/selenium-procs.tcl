@@ -35,12 +35,10 @@
 #
 # by Jean-Claude Wippler, 2007-02-24
 
-source [file dirname [info script]]/http.tcl
-package require http
-
 package provide selenium 0.1
 
 proc Se {cmd args} {
+    package require http
     global selenium
     switch -- $cmd {
 
