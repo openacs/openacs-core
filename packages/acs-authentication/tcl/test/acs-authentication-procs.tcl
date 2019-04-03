@@ -590,29 +590,19 @@ aa_register_case  \
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            array set test_user {
-                username "test_username"
-                email "test_username@test.test"
-                password "test_password"
-                first_names "test_first_names"
-                last_name  "test_last_name"
-            }
 
-            array set create_result [auth::create_user \
-                                         -username $test_user(username) \
-                                         -email $test_user(email) \
-                                         -password $test_user(password) \
-                                         -first_names $test_user(first_names) \
-                                         -last_name $test_user(last_name) \
-                                         -secret_question "foo" \
-                                         -secret_answer "bar"]
+            array set create_result [acs::test::user::create]
+            array set test_user [acs_user::get -user_id $create_result(user_id)]
+            set test_user(email)    $create_result(email)
+            set test_user(password) $create_result(password)
+
             aa_equals "status should be ok for creating user" $create_result(creation_status) "ok"
             if { $create_result(creation_status) ne "ok" } {
                 aa_log "Create-result: '[array get create_result]'"
             }
 
             array set reset_result [auth::password::reset \
-                                        -authority_id [auth::authority::local] \
+                                        -authority_id $test_user(authority_id) \
                                         -username $test_user(username)]
             aa_equals "status should be ok for resetting password" $reset_result(password_status) "ok"
             aa_true "Result contains new password" [info exists reset_result(password)]
@@ -620,18 +610,20 @@ aa_register_case  \
             if { [info exists reset_result(password)] } {
                 array set auth_result [auth::authentication::Authenticate \
                                            -username $test_user(username) \
-                                           -authority_id [auth::authority::local] \
+                                           -authority_id $test_user(authority_id) \
                                            -password $reset_result(password)]
                 aa_equals "can authenticate with new password" $auth_result(auth_status) "ok"
 
                 array unset auth_result
                 array set auth_result [auth::authentication::Authenticate \
                                            -username $test_user(username) \
-                                           -authority_id [auth::authority::local] \
+                                           -authority_id $test_user(authority_id) \
                                            -password $test_user(password)]
                 aa_false "cannot authenticate with old password" [string equal $auth_result(auth_status) "ok"]
             }
-            set user_id [acs_user::get_by_username -username $test_user(username)]
+            set user_id [acs_user::get_by_username \
+                             -authority_id $test_user(authority_id) \
+                             -username     $test_user(username)]
             if { $user_id ne "" } {
                 acs_user::delete -user_id $user_id
             }
