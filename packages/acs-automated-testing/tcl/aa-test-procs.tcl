@@ -531,6 +531,7 @@ ad_proc -public aa_register_case {
     set body_count 1
     foreach testcase_body \[list $args\] {
       aa_log \"Running testcase body \$body_count\"
+      set ::__aa_test_indent \[info level\]
       set catch_val \[catch \"eval \[list \$testcase_body\]\" msg\]
       if {\$catch_val != 0 && \$catch_val != 2} {
           aa_log_result \"fail\" \"$testcase_id (body \$body_count): Error during execution: \${msg}, stack trace: \n\$::errorInfo\"
@@ -679,6 +680,13 @@ ad_proc -public aa_runseries {
     aa_test::write_test_file
 }
 
+ad_proc -private aa_indent {} {
+    try to make it easier to read nested test cases.
+} {
+    if {[info exists ::__aa_test_indent]} {
+        return "<tt>[string repeat {<div class='vl'></div>} [expr {[info level] - $::__aa_test_indent -2}]]</tt>"
+    }
+}
 
 ad_proc -public aa_run_testcase {
     testcase_id
@@ -780,10 +788,10 @@ ad_proc -public aa_equals {
     global aa_package_key
 
     if {$affirm_actual eq $affirm_value} {
-        aa_log_result "pass" [subst {$affirm_name, actual = "$affirm_actual"}]
+        aa_log_result "pass" [subst {[aa_indent] $affirm_name, actual = "$affirm_actual"}]
         return 1
     } else {
-        aa_log_result "fail" [subst {$affirm_name, actual = "$affirm_actual", expected = "$affirm_value"}]
+        aa_log_result "fail" [subst {[aa_indent] $affirm_name, actual = "$affirm_actual", expected = "$affirm_value"}]
         return 0
     }
 }
@@ -807,10 +815,10 @@ ad_proc -public aa_true {
         set expr [subst {"$affirm_expr" }]
     }
     if { $result } {
-        aa_log_result "pass" "$affirm_name: $expr true"
+        aa_log_result "pass" "[aa_indent] $affirm_name: $expr true"
         return 1
     } else {
-        aa_log_result "fail" "$affirm_name: $expr false"
+        aa_log_result "fail" "[aa_indent] $affirm_name: $expr false"
         return 0
     }
 }
@@ -832,10 +840,10 @@ ad_proc -public aa_false {
 
     set result [uplevel 1 [list expr $affirm_expr]]
     if {!$result} {
-        aa_log_result "pass" [subst {$affirm_name: "$affirm_expr" false}]
+        aa_log_result "pass" [subst {[aa_indent] $affirm_name: "$affirm_expr" false}]
         return 1
     } else {
-        aa_log_result "fail" [subst {$affirm_name: "$affirm_expr" true}]
+        aa_log_result "fail" [subst {[aa_indent] $affirm_name: "$affirm_expr" true}]
         return 0
     }
 }
@@ -868,7 +876,7 @@ ad_proc -public aa_log {
         if {$::aa_run_quietly_p} {
             return
         }
-        aa_log_result "log" $log_notes
+        aa_log_result "log" "[aa_indent] $log_notes"
     } else {
         #
         # Use plain ns_log reporting
@@ -1108,10 +1116,11 @@ ad_proc -private aa_execute_rollback_tests {} {
 namespace eval acs::test {
 
     ad_proc -public ::acs::test::form_reply {
-        -user_id:required
+        {-user_id 0}
+        {-last_request ""}
         -url:required
         {-update {}}
-        {-remove {}}        
+        {-remove {}}
         form_content
     } {
 
@@ -1120,6 +1129,7 @@ namespace eval acs::test {
         convenience the update fields are provided to overload the
         form_content.
 
+        @param last_request pass optionally the past request, from which cookie and login-info can be taken
         @param update key/attribute list of values to be updated in the form content
         @param remove keys to be removed from the form content
 
@@ -1147,7 +1157,7 @@ namespace eval acs::test {
         # Send the POST request
         #
         return [http \
-                    -user_id $user_id \
+                    -user_id $user_id -last_request $last_request \
                     -method POST -body $body \
                     -headers {Content-Type application/x-www-form-urlencoded} \
                     $url]
@@ -1156,8 +1166,8 @@ namespace eval acs::test {
     ad_proc -public ::acs::test::http {
         {-user_id 0}
         {-user_info ""}
+        {-last_request ""}
         {-method GET}
-        {-session ""}
         {-body}
         {-timeout 10}
         {-depth 1}
@@ -1176,6 +1186,17 @@ namespace eval acs::test {
         @author Gustaf Neumann
     } {
         ns_log notice "::acs::test::http -user_id $user_id -user_info $user_info request $request"
+        set session ""
+        if {[dict exists $last_request session]} {
+            set session [dict get $last_request session]
+        }
+        if {$user_info eq "" && [dict exists $session user_info]} {
+            set user_info [dict get $last_request session user_info]
+            #aa_log "user_info from last_request [ns_quotehtml <$user_info>]"
+        }
+        #aa_log "HTTP: user_info [ns_quotehtml <$user_info>]"
+        #aa_log "HTTP: start session_info [ns_quotehtml <$session>]"
+
         #
         # Check, if a testURL was specified in the config file
         #
@@ -1222,23 +1243,21 @@ namespace eval acs::test {
         }
 
         #
-        # either authenticate via user_info (when specified) or via user_id
+        # Either authenticate via user_info (when specified) or via
+        # user_id.
         #
         if {$user_info ne ""} {
         } else {
-            dict set user_info address $address
             dict set user_info user_id $user_id
+            dict set user_info address $address
         }
 
         set session [::acs::test::set_user -session $session $user_info]
-
         set login [dict get $session login]
-        #aa_log "login $login"
 
         if {[dict exists $session cookies]} {
             lappend headers Cookie [dict get $session cookies]
         }
-
 
         set extra_args {}
         if {[info exists body]} {
@@ -1291,26 +1310,51 @@ namespace eval acs::test {
             #
             nsv_unset -nocomplain aa_test logindata
         }
+
         #ns_log notice "run $request returns $d"
         #ns_log notice "... [ns_set array [dict get $d headers]]"
+
         if {$verbose_p} {
             set ms [format %.2f [expr {[ns_time format [dict get $d time]] * 1000.0}]]
             aa_log "${prefix}$method $request returns [dict get $d status] in ${ms}ms"
         }
+        #aa_log "REPLY has headers [dict exists $d headers]"
         if {[dict exists $d headers]} {
             set cookies {}
             set cookie_dict {}
+            if {[dict exists $last_request cookies]} {
+                #
+                # Merge last request cookies
+                #
+                foreach cookie [split [dict get $last_request cookies] ";"] {
+                    lassign [split [string trim $cookie] =] name value
+                    dict set cookie_dict $name $value
+                    #aa_log "merge last request cookie $name $value"
+                }
+            } else {
+                #aa_log "last_req has no cookies"
+            }
             if {[dict exists $session cookies]} {
+                #
+                # Merge session cookies (e.g. from a called login
+                # inside :acs::test::set_user)
+                #
                 foreach cookie [split [dict get $session cookies] ";"] {
                     lassign [split [string trim $cookie] =] name value
                     dict set cookie_dict $name $value
+                    #aa_log "merge session cookie $name $value"
                 }
             }
+            #
+            # Merge fresh cookies
+            #
             foreach {tag value} [ns_set array [dict get $d headers]] {
+                #aa_log "received header $tag: $value"
                 if {$tag eq "set-cookie"} {
                     if {[regexp {^([^;]+);} $value . cookie]} {
                         lassign [split [string trim $cookie] =] name value
                         dict set cookie_dict $name $value
+                        aa_log "merge fresh cookie $name $value"
                     } else {
                         aa_log "Cookie has invalid syntax: $value"
                     }
@@ -1319,9 +1363,12 @@ namespace eval acs::test {
             foreach cookie_name [dict keys $cookie_dict] {
                 lappend cookies $cookie_name=[dict get $cookie_dict $cookie_name]
             }
-            dict set d cookies [join $cookies ";"]
+            dict set d session cookies [join $cookies ";"]
         }
         dict set d login $login
+        dict set d session user_info $user_info
+        #aa_log "HTTP: url $url final session_info [ns_quotehtml <[dict get $d session]>]"
+
         return $d
     }
 
@@ -1330,13 +1377,21 @@ namespace eval acs::test {
         user_info
     } {
 
-        Depending on the provided user_info, either login in or
-        perform the direct test-specific authentication. When the
-        user_id is provided, use it directly.
+        When (login) cookies are given as member of "session", use
+        these. In case the login cookie is empty (after an explicit
+        logout) do NOT automatically log in.
 
-        @param user_info dict containing user_id and/or
+        When (login) cookies are not given, use "user_info" for
+        authentication. When we have a "user_id" and "address" in the
+        "user_info", use these for direct logins. Otherwise the person
+        info (name, email, ...) to log via register.
+
+        @param session when given, use login information from there
+        @param user_info dict containing user_id+session and/or
                email, last_name, username and password
     } {
+        #aa_log "set_user has user_info $user_info, have cookies: [dict exists $session cookies]"
+
         set already_logged_in 0
         #
         # First check, if the user is already logged in via cookies
@@ -1359,12 +1414,14 @@ namespace eval acs::test {
             # The user is not logged in via cookies, check first
             # available user_id. If this dies not exist, perform login
             #
+            #aa_log "not logged in, check $user_info"
+
             if {[dict exists $user_info user_id]
                 && [dict exists $user_info address]
             } {
                 set user_id [dict get $user_info user_id]
                 if {$user_id ne 0} {
-                    aa_log "::acs::test::set_user set logindata"
+                    #aa_log "::acs::test::set_user set logindata via nsv"
                     nsv_set aa_test logindata \
                         [list \
                              peeraddr [dict get $user_info address] \
@@ -1373,11 +1430,19 @@ namespace eval acs::test {
                 } else {
                     dict set session login none
                 }
+            } elseif {[dict exists $session cookies]} {
+                #
+                # We have cookies, but are not logged in. Do NOT automatically log in.
+                #
+                dict set session login none
             } else {
-                aa_log "::acs::test::set_user perform login with $user_info"
-                foreach {att value} [::acs::test::login $user_info] {
-                    dict set session $att $value
-                }
+                #
+                # No cookies, log automatically in.
+                #
+                #aa_log "::acs::test::set_user perform login with $user_info"
+                set d [::acs::test::login $user_info]
+                #aa_log "::acs::test::set_user perform login returned session [dict get $d session]"
+                dict set session cookies [dict get $d session cookies]
                 dict set session login via_login
             }
         }
@@ -1418,13 +1483,13 @@ namespace eval acs::test {
     }
 
     ad_proc -public ::acs::test::logout {
-        -session:required
+        -last_request:required
     } {
         Logout from the current web session
 
         @param session reply dict containing cookies
     } {
-        set d [acs::test::http -session $session /register/logout]
+        set d [acs::test::http -last_request $last_request /register/logout]
         acs::test::reply_has_status_code $d 302
         return $d
     }
@@ -1547,9 +1612,9 @@ namespace eval acs::test {
     } {
         set result [string match *$string* [dict get $dict body]]
         if {$result} {
-            aa_true "${prefix} Reply contains $string" $result
+            aa_true "${prefix}Reply contains $string" $result
         } else {
-            aa_true "${prefix} Reply contains $string (<a href='[detail_link $dict]'>Details</a>)" $result
+            aa_true "${prefix}Reply contains $string (<a href='[detail_link $dict]'>Details</a>)" $result
         }
         return $result
     }
@@ -1565,9 +1630,9 @@ namespace eval acs::test {
     } {
         set result [string match *$string* [dict get $dict body]]
         if {$result} {
-            aa_false "${prefix} Reply contains no $string (<a href='[detail_link $dict]'>Details</a>)" $result
+            aa_false "${prefix}Reply contains no $string (<a href='[detail_link $dict]'>Details</a>)" $result
         } else {
-            aa_false "${prefix} Reply contains no $string" $result
+            aa_false "${prefix}Reply contains no $string" $result
         }
         return [expr {!$result}]
     }
@@ -1584,9 +1649,9 @@ namespace eval acs::test {
     } {
         set result [expr {[dict get $dict status] == $status_code}]
         if {$result} {
-            aa_true "${prefix} Reply has status code $status_code" $result
+            aa_true "${prefix}Reply has status code $status_code" $result
         } else {
-            aa_true "${prefix} Reply expected status code $status_code but got [dict get $dict status] (<a href='[detail_link $dict]'>Details</a>)" $result
+            aa_true "${prefix}Reply expected status code $status_code but got [dict get $dict status] (<a href='[detail_link $dict]'>Details</a>)" $result
         }
         return $result
     }
@@ -1760,6 +1825,7 @@ namespace eval acs::test::user {
         dict set user_info email $email
         dict set user_info first_names $first_names
         dict set user_info last_name $last_name
+        dict set user_info user_id $user_id
 
         aa_log "Created user with email='$email' and password='$password'"
 
@@ -1995,9 +2061,9 @@ ad_proc -public aa_display_result {
     @param explanation An explanation accompanying the response.
 } {
     if {$response} {
-        aa_log_result "pass" $explanation
+        aa_log_result "pass" "[aa_indent] $explanation"
     } else {
-        aa_log_result "fail" $explanation
+        aa_log_result "fail" "[aa_indent] $explanation"
     }
 }
 

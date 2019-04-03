@@ -26,6 +26,7 @@ aa_register_case \
 
         # Create test user
         set user_info [acs::test::user::create -user_id $user_id]
+        set request_info [list session user_info $user_info]
         acs::test::confirm_email -user_id $user_id
 
         ########################################################################################
@@ -38,19 +39,20 @@ aa_register_case \
         #set d [acs::test::login $user_info]
 
         ########################################################################################
-        aa_section "Visit homepage with user_info, should login, last name of user should be contained"
+        aa_section "Visit homepage with request_info, should login, last name of user should be contained"
         ########################################################################################
-        set d [acs::test::http -depth 3 -user_info $user_info -session $d /]
+        aa_log "USER_INFO $user_info"
+        set d [acs::test::http -depth 3 -user_info $user_info /]
 
         acs::test::reply_has_status_code $d 200
         acs::test::reply_contains $d [dict get $user_info last_name]
         aa_equals "login [dict get $d login]" [dict get $d login] via_login
-        aa_true "cookies are not empty '[dict get $d cookies]'" {[dict get $d cookies] ne ""}
+        aa_true "cookies are not empty '[dict get $d session cookies]'" {[dict get $d session cookies] ne ""}
 
         ########################################################################################
         aa_section "Make a second request, now the cookie should be used"
         ########################################################################################
-        set d [acs::test::http -depth 3 -user_info $user_info -session $d /]
+        set d [acs::test::http -depth 3 -last_request $d /]
         acs::test::reply_has_status_code $d 200
         acs::test::reply_contains $d [dict get $user_info last_name]
         aa_equals "login [dict get $d login]" [dict get $d login] via_cookie
@@ -58,12 +60,12 @@ aa_register_case \
         ########################################################################################
         aa_section "Logout user"
         ########################################################################################
-        set d [acs::test::logout -session $d]
+        set d [acs::test::logout -last_request $d]
 
         ########################################################################################
         aa_section "Visit homepage, last name of user should not show up"
         ########################################################################################
-        set d [acs::test::http -session $d /]
+        set d [acs::test::http -last_request $d  /]
         acs::test::reply_contains_no $d [dict get $user_info last_name]
 
     } -teardown_code {
