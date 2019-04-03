@@ -85,11 +85,11 @@
     </multiple>
   </table>
 
-  <table>
+  <table class="testlog">
     <tr>
-      <th>Time</th>
-      <th>Result</th>
-      <th>Notes</th>
+      <th class="timestamp">Time</th>
+      <th class="result">Result</th>
+      <th class="notes">Notes</th>
     </tr>
     <if @tests:rowcount;literal@ eq 0>
       <tr><td> No results </td></tr>
@@ -102,18 +102,18 @@
         <else>
           <tr class="even">
         </else>
-	<td> @tests.timestamp@ </td>
+	<td class="timestamp"> @tests.timestamp@ </td>
         <if @tests.result@ eq "fail">
           <td class="fail">FAILED</td>
-	  <td><pre>@tests.notes;literal@</pre></td>	  
+	  <td><code>@tests.notes;literal@</code></td>	  
         </if>
         <elseif @tests.result@ eq "pass">
           <td class="ok">@tests.result@</td>
-  	  <td><pre>@tests.notes;literal@</pre></td>
+  	  <td><code class="ok">@tests.notes;literal@</code></td>
         </elseif>
         <elseif @tests.result@ eq "warn">
           <td class="warn">@tests.result@</td>
-  	  <td><pre class="warn">@tests.notes;literal@</pre></td>
+  	  <td><code class="warn">@tests.notes;literal@</code></td>
         </elseif>
         <elseif @tests.result@ eq "sect">
           <td class="sect"></td>
