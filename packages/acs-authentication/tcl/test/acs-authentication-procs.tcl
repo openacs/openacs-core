@@ -786,7 +786,7 @@ aa_register_case  \
     Test auth::UseEmailForLoginP
 } {
     aa_stub auth::get_register_authority {
-        return [auth::authority::local]
+        return [auth::authority::get_id -short_name "acs_testing"]
     }
 
     aa_run_with_teardown \
@@ -816,11 +816,14 @@ aa_register_case  \
             array set elms [auth::get_registration_elements]
             aa_true "Registration elements do NOT contain username" {"username" ni [concat $elms(required) $elms(optional)]}
 
+            set authority_id [auth::authority::get_id -short_name "acs_testing"]
+
             # Create a user with no username
             set email [string tolower "[ad_generate_random_string]@foobar.com"]
             set password [ad_generate_random_string]
 
             array set result [auth::create_user \
+                                  -authority_id $authority_id \
                                   -email $email \
                                   -password $password \
                                   -first_names [ad_generate_random_string] \
@@ -834,6 +837,7 @@ aa_register_case  \
             # Authenticate as that user
             array unset result
             array set result [auth::authenticate \
+                                  -authority_id $authority_id \
                                   -email $email \
                                   -password $password \
                                   -no_cookie]
