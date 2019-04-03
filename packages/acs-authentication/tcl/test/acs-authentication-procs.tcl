@@ -453,16 +453,11 @@ aa_register_case  \
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            # create user we'll use for testing
-            set email "test2@user.com"
-            array set user_info [auth::create_user \
-                    -email $email \
-                    -first_names "Test" \
-                    -last_name "User" \
-                    -password "changeme" \
-                    -secret_question "no_question" \
-                    -secret_answer "no_answer"]
-            set user_id $user_info(user_id)
+
+            array set user_info [acs::test::user::create]
+            set email    $user_info(email)
+            set password $user_info(password)
+            set user_id  $user_info(user_id)
 
             set ::ns_sendmail_to {ns_sendmail_UNCALLED}
 
@@ -470,7 +465,7 @@ aa_register_case  \
             aa_true "Send email" [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1]
 
             # password_status "ok"
-            set old_password "changeme"
+            set old_password $password
             set new_password "changedyou"
             array set auth_info [auth::password::change \
                                      -user_id $user_id \
@@ -481,7 +476,7 @@ aa_register_case  \
                 "ok"
 
             # Check that user gets email about changed password
-            aa_equals "Email sent to user" $::ns_sendmail_to $email
+            aa_equals "Email sent to user" [string tolower $::ns_sendmail_to] [string tolower $email]
             set ::ns_sendmail_to {}
 
             # check that the new password is actually set correctly
