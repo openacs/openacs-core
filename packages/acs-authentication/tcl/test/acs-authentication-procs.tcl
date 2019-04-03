@@ -863,6 +863,7 @@ aa_register_case  \
         ad_generate_random_string
         ad_parameter_cache
         auth::create_user
+        acs_user::get_user_info
         auth::password::change
         parameter::set_value
     } \
@@ -880,27 +881,18 @@ aa_register_case  \
 
             set ::ns_sendmail_to {}
 
-            # Create a dummy local user
-            set username [ad_generate_random_string]
-            set email [string tolower "[ad_generate_random_string]@foobar.com"]
-            set password [ad_generate_random_string]
-
-            array set result [auth::create_user \
-                                  -username $username \
-                                  -email $email \
-                                  -password $password \
-                                  -first_names [ad_generate_random_string] \
-                                  -last_name [ad_generate_random_string] \
-                                  -secret_question [ad_generate_random_string] \
-                                  -secret_answer [ad_generate_random_string] \
-                                  -screen_name [ad_generate_random_string]]
+            array set result [acs::test::user::create]
+            set user [acs_user::get_user_info -user_id $result(user_id)]
+            set authority_id [dict get $user authority_id]
+            set username     [dict get $user username]
+            set email        $result(email)
+            set password     $result(password)
 
             aa_equals "Create user OK" $result(creation_status) "ok"
 
             set user_id $result(user_id)
 
-            aa_log "auth_id = [db_string sel { select authority_id from users where user_id = :user_id }]"
-
+            aa_equals "Authority from api is correct" [db_string sel { select authority_id from users where user_id = :user_id }] $authority_id
 
             # Change password
             array unset result
@@ -914,7 +906,7 @@ aa_register_case  \
             }
 
             # Check that we get email
-            aa_equals "Email sent to user" $::ns_sendmail_to $email
+            aa_equals "Email sent to user" [string tolower $::ns_sendmail_to] [string tolower $email]
             set ::ns_sendmail_to {ns_sendmail_UNCALLED}
 
             # Set parameter to false
