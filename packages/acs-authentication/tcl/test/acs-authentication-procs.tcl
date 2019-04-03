@@ -51,28 +51,22 @@ aa_register_case \
     Test the auth::authenticate proc.
 } {
 
-    # Initialize variables
-    set username "auth_create_user1"
-    set password "changeme"
-
     aa_run_with_teardown \
         -rollback \
         -test_code {
 
-            array set result [auth::create_user \
-                                  -username $username \
-                                  -email "auth_create_user1@test_user.com" \
-                                  -first_names "Test" \
-                                  -last_name "User" \
-                                  -password $password \
-                                  -secret_question "no_question" \
-                                  -secret_answer "no_answer"]
+            array set result [acs::test::user::create]
+            set password $result(password)
 
             if { ![aa_equals "creation_status for successful creation" $result(creation_status) "ok"] } {
                 aa_log "Creation result: [array get result]"
             }
 
-            set user_id [acs_user::get_by_username -username $username]
+            set user [acs_user::get_user_info -user_id $result(user_id)]
+            set authority_id [dict get $user authority_id]
+            set username     [dict get $user username]
+            set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
+            aa_equals "Username from apis matches" $result(user_id) $user_id
 
             ## Portrait api test
             set old_portrait_id [acs_user::get_portrait_id -user_id $user_id]
@@ -97,6 +91,7 @@ aa_register_case \
             # Successful authentication
             array unset result
             array set result [auth::authenticate \
+                                  -authority_id $authority_id \
                                   -no_cookie \
                                   -username $username \
                                   -password $password]
@@ -110,6 +105,7 @@ aa_register_case \
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -authority_id $authority_id \
                      -no_cookie \
                      -username $username \
                      -password "blabla"]
@@ -121,6 +117,7 @@ aa_register_case \
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -authority_id $authority_id \
                      -no_cookie \
                      -username $username \
                      -password ""]
@@ -143,6 +140,7 @@ aa_register_case \
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -authority_id $authority_id \
                      -no_cookie \
                      -username "" \
                      -password $password]
@@ -171,6 +169,7 @@ aa_register_case \
                 array unset auth_info
                 array set auth_info \
                     [auth::authenticate \
+                         -authority_id $authority_id \
                          -no_cookie \
                          -username $username \
                          -password $password]
