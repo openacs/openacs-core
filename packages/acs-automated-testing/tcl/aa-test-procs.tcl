@@ -1825,7 +1825,6 @@ namespace eval acs::test::user {
         dict set user_info email $email
         dict set user_info first_names $first_names
         dict set user_info last_name $last_name
-        dict set user_info user_id $user_id
 
         aa_log "Created user with email='$email' and password='$password'"
 
