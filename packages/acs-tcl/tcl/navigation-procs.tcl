@@ -175,6 +175,10 @@ ad_proc -public ad_context_bar {
         set node_id [ad_conn node_id]
     }
 
+    #
+    # Get context info for this node. In case of "early" errors
+    # (e.g. invalid characters in the URL), the result might be empty.
+    #
     set context [ad_context_node_list -from_node $from_node $node_id]
 
     if { [string match "admin/*" [ad_conn extra_url]] } {
@@ -183,8 +187,12 @@ ad_proc -public ad_context_bar {
     }
 
     if {[llength $args] == 0} {
-        # fix last element to just be literal string
-        lset context end [lindex $context end 1]
+        #
+        # Fix last element to just be literal string
+        #
+        if {$context ne ""} {
+            lset context end [lindex $context end 1]
+        }
     } else {
         if {![string match "\{*" $args]} {
             # args is not a list, transform it into one.
@@ -395,9 +403,9 @@ proc menu_submenu_select_list {items URLs {highlight_url "" }} {
 
 
 #     foreach naked_pattern [ad_naked_html_patterns] {
-# 	if { [string match $naked_pattern $url_stub] } {
-# 	    # want the global admins with no menu, but not the domain admin
-# 	    return ""
+#       if { [string match $naked_pattern $url_stub] } {
+#           # want the global admins with no menu, but not the domain admin
+#           return ""
 #         }
 #     }
 
@@ -413,89 +421,89 @@ proc menu_submenu_select_list {items URLs {highlight_url "" }} {
 #     set return_string ""
 
 #     if { $java_script_p } {
-#     	append return_string "
-# 	<script type='text/javascript' nonce='$::__csp_nonce'>
-# 	//<!--
+#       append return_string "
+#       <script type='text/javascript' nonce='$::__csp_nonce'>
+#       //<!--
 
-# 	go = new Image();
-# 	go.src = \"/graphics/go.gif\";
-# 	go_h = new Image();
-# 	go_h.src = \"/graphics/go_h.gif\";
+#       go = new Image();
+#       go.src = \"/graphics/go.gif\";
+#       go_h = new Image();
+#       go_h.src = \"/graphics/go_h.gif\";
 
-# 	up_one_level = new Image();
-# 	up_one_level.src = \"/graphics/36_up_one_level.gif\";
-# 	up_one_level_h = new Image();
-# 	up_one_level_h.src = \"/graphics/36_up_one_level_h.gif\";
+#       up_one_level = new Image();
+#       up_one_level.src = \"/graphics/36_up_one_level.gif\";
+#       up_one_level_h = new Image();
+#       up_one_level_h.src = \"/graphics/36_up_one_level_h.gif\";
 
-# 	back_to_top = new Image();
-# 	back_to_top.src = \"/graphics/24_back_to_top.gif\";
-# 	back_to_top_h = new Image();
-# 	back_to_top_h.src = \"/graphics/24_back_to_top_h.gif\";
+#       back_to_top = new Image();
+#       back_to_top.src = \"/graphics/24_back_to_top.gif\";
+#       back_to_top_h = new Image();
+#       back_to_top_h.src = \"/graphics/24_back_to_top_h.gif\";
 
-# 	help = new Image();
-# 	help.src = \"/graphics/help.gif\";
-# 	help_h = new Image();
-# 	help_h.src = \"/graphics/help_h.gif\";
+#       help = new Image();
+#       help.src = \"/graphics/help.gif\";
+#       help_h = new Image();
+#       help_h.src = \"/graphics/help_h.gif\";
 
-# 	rules = new Image();
-# 	rules.src = \"/graphics/rules.gif\";
-# 	rules_h = new Image();
-# 	rules_h.src = \"/graphics/rules_h.gif\";"
+#       rules = new Image();
+#       rules.src = \"/graphics/rules.gif\";
+#       rules_h = new Image();
+#       rules_h.src = \"/graphics/rules_h.gif\";"
 
-# 	foreach item $menu_items {
-# 	    if {  $item == [menu_highlight $section] } {
-# 		#this means the item was selected, so there are different gifs
-# 		append return_string "
-# 		  $item = new Image();
-# 		  $item.src =  \"/graphics/[set item]_a.gif\";
-# 		  [set item]_h = new Image();
-# 		  [set item]_h.src =  \"/graphics/[set item]_ah.gif\";"
-# 	    } else {
-# 		append return_string "
-# 		$item = new Image();
-# 		$item.src =  \"/graphics/[set item].gif\";
-# 		[set item]_h = new Image();
-# 		[set item]_h.src =  \"/graphics/[set item]_h.gif\";"
-# 	    }
+#       foreach item $menu_items {
+#           if {  $item == [menu_highlight $section] } {
+#               #this means the item was selected, so there are different gifs
+#               append return_string "
+#                 $item = new Image();
+#                 $item.src =  \"/graphics/[set item]_a.gif\";
+#                 [set item]_h = new Image();
+#                 [set item]_h.src =  \"/graphics/[set item]_ah.gif\";"
+#           } else {
+#               append return_string "
+#               $item = new Image();
+#               $item.src =  \"/graphics/[set item].gif\";
+#               [set item]_h = new Image();
+#               [set item]_h.src =  \"/graphics/[set item]_h.gif\";"
+#           }
 
-# 	}
+#       }
 
-# 	# JavaScript enabled
-# 	append return_string "
+#       # JavaScript enabled
+#       append return_string "
 
-# 	function hiLite(imgObjName) \{
-# 	    document \[imgObjName\].src = eval(imgObjName + \"_h\" + \".src\")
-# 	\}
+#       function hiLite(imgObjName) \{
+#           document \[imgObjName\].src = eval(imgObjName + \"_h\" + \".src\")
+#       \}
 
-# 	function unhiLite(imgObjName) \{
-# 	    document \[imgObjName\].src = eval(imgObjName + \".src\")
-# 	\}
+#       function unhiLite(imgObjName) \{
+#           document \[imgObjName\].src = eval(imgObjName + \".src\")
+#       \}
 
-# 	function go_to_url(url) \{
-# 		if (url \!= \"\") \{
-# 			self.location=url;
-# 		\}
-# 		return;
-# 	\}
-# 	// -->
-# 	</SCRIPT>"
+#       function go_to_url(url) \{
+#               if (url \!= \"\") \{
+#                       self.location=url;
+#               \}
+#               return;
+#       \}
+#       // -->
+#       </SCRIPT>"
 #     } else {
 
-# 	append return_string "
+#       append return_string "
 
-# 	<script type='text/javascript' nonce='$::__csp_nonce'>
-# 	//<!--
+#       <script type='text/javascript' nonce='$::__csp_nonce'>
+#       //<!--
 
-# 	function hiLite(imgObjName) \{
-# 	\}
+#       function hiLite(imgObjName) \{
+#       \}
 
-# 	function unhiLite(imgObjName) \{
-# 	\}
+#       function unhiLite(imgObjName) \{
+#       \}
 
-# 	function go_to_url(url) \{
-# 	\}
-# 	// -->
-# 	</SCRIPT>"
+#       function go_to_url(url) \{
+#       \}
+#       // -->
+#       </SCRIPT>"
 #     }
 
 #     # We divide up the screen into 4 areas top to bottom:
@@ -510,10 +518,10 @@ proc menu_submenu_select_list {items URLs {highlight_url "" }} {
 
 
 #     if {$netscape3_p} {
-# 	append return_string "<IMG src=\"/graphics/top_left_brand.gif\" width=124 height=87 border=0 align=left alt=\"Cognet\">
+#       append return_string "<IMG src=\"/graphics/top_left_brand.gif\" width=124 height=87 border=0 align=left alt=\"Cognet\">
 # <TABLE border=0 cellpadding=3 cellspacing=0>"
 #     }  else {
-# 	append return_string "
+#       append return_string "
 # <TABLE border=0 cellpadding=0 cellspacing=0 height=87 width=\"100%\" cols=100>
 #     <TR><TD width=124 align=center><IMG src=\"/graphics/top_left_brand.gif\" width=124 height=87 border=0 alt=\"Cognet\"></TD>
 #         <TD colspan=99><TABLE border=0 cellpadding=3 cellspacing=0 width=\"100%\">"
@@ -529,12 +537,12 @@ proc menu_submenu_select_list {items URLs {highlight_url "" }} {
 #                 <INPUT type=text value=\"\" name=query_string>&nbsp;&nbsp;"
 
 #     if {$netscape3_p} {
-# 	append return_string "<INPUT TYPE=submit VALUE=go>&nbsp;&nbsp;
+#       append return_string "<INPUT TYPE=submit VALUE=go>&nbsp;&nbsp;
 #              </FORM></TD></TR>
 #          </TABLE>"
 #     } else {
-# 	append return_string "<A href=\"JavaScript: document.SearchDirect.submit();\" onMouseOver=\"hiLite('go')\" onMouseOut=\"unhiLite('go')\" alt=\"search\"><img name=\"go\" src=\"/graphics/go.gif\" border=0 width=32 height=24 align=top alt=\"go\"></A>
-# 	</FORM></TD></TR>
+#       append return_string "<A href=\"JavaScript: document.SearchDirect.submit();\" onMouseOver=\"hiLite('go')\" onMouseOut=\"unhiLite('go')\" alt=\"search\"><img name=\"go\" src=\"/graphics/go.gif\" border=0 width=32 height=24 align=top alt=\"go\"></A>
+#       </FORM></TD></TR>
 #          </TABLE></TD>
 #    </TR>
 # </TABLE>"
@@ -547,18 +555,18 @@ proc menu_submenu_select_list {items URLs {highlight_url "" }} {
 #     set uplevel_string  "<TD align=right><A href=\"[menu_uplevel $section $uplink]\" onMouseOver=\"hiLite(\'up_one_level\')\" onMouseOut=\"unhiLite(\'up_one_level\')\"><img name=\"up_one_level\" src=\"/graphics/36_up_one_level.gif\" border=0 width=120 height=36 \" alt=\"Up\"></A></TD></TR>"
 
 #     foreach url_pattern [ad_no_uplevel_patterns] {
-# 	if { [regexp $url_pattern $url_stub match] } {
-# 	    set uplevel_string ""
-# 	}
+#       if { [regexp $url_pattern $url_stub match] } {
+#           set uplevel_string ""
+#       }
 #     }
 
 #     append return_string $uplevel_string
 #     append return_string "</TABLE>"
 
 #     if  {$netscape3_p} {
-# 	append return_string "<TABLE border=0 cellpadding=0 cellspacing=0 width=200 align=left>"
+#       append return_string "<TABLE border=0 cellpadding=0 cellspacing=0 width=200 align=left>"
 #     } else {
-# 	append return_string "<TABLE border=0 cellpadding=0 cellspacing=0 width=\"100%\" cols=100>
+#       append return_string "<TABLE border=0 cellpadding=0 cellspacing=0 width=\"100%\" cols=100>
 #    <TR valign=top><TD width=200 bgcolor=\"[table_background_1]\">
 #        <TABLE border=0 cellpadding=0 cellspacing=0 width=200>"
 #     }
@@ -566,18 +574,18 @@ proc menu_submenu_select_list {items URLs {highlight_url "" }} {
 # #  Navigation Table
 
 #     foreach item $menu_items {
-# 	if {  $item == [menu_highlight $section] } {
-# 	    append return_string "<TR><TD valign=bottom height=25 width=200 bgcolor=\"#FFFFFF\"><A href=\"[menu_url $item]\" onMouseOver=\"hiLite('[set item]')\" onMouseOut=\"unhiLite('[set item]')\"><img name=\"[set item]\" src=\"/graphics/[set item]_a.gif\" border=0 width=200 height=25 alt=\"$item\"></A></TD></TR>"
-# 	} else {
-# 	    append return_string "<TR><TD valign=bottom height=25 width=200 bgcolor=\"#FFFFFF\"><A href=\"[menu_url $item]\" onMouseOver=\"hiLite('[set item]')\" onMouseOut=\"unhiLite('[set item]')\"><img name=\"[set item]\" src=\"/graphics/[set item].gif\" border=0 width=200 height=25 alt=\"$item\"></A></TD></TR>"
-# 	}
+#       if {  $item == [menu_highlight $section] } {
+#           append return_string "<TR><TD valign=bottom height=25 width=200 bgcolor=\"#FFFFFF\"><A href=\"[menu_url $item]\" onMouseOver=\"hiLite('[set item]')\" onMouseOut=\"unhiLite('[set item]')\"><img name=\"[set item]\" src=\"/graphics/[set item]_a.gif\" border=0 width=200 height=25 alt=\"$item\"></A></TD></TR>"
+#       } else {
+#           append return_string "<TR><TD valign=bottom height=25 width=200 bgcolor=\"#FFFFFF\"><A href=\"[menu_url $item]\" onMouseOver=\"hiLite('[set item]')\" onMouseOut=\"unhiLite('[set item]')\"><img name=\"[set item]\" src=\"/graphics/[set item].gif\" border=0 width=200 height=25 alt=\"$item\"></A></TD></TR>"
+#       }
 #     }
 
 #     append return_string "
 #        <TR bgcolor=\"[table_background_1]\" valign=top align=left><TD width=200>
 #            <TABLE border=0 cellpadding=4 cellspacing=0 width=200>
 #     <!-- NAVIGATION BAR CONTENT GOES AFTER THIS START COMMENT USING TABLE Row and Data open and close tags -->
-# 	        [menu_subsection $section]
+#               [menu_subsection $section]
 #                 <!-- NAVIGATION BAR CONTENT GOES BEFORE THIS END COMMENT -->
 #            </TABLE></TD></TR>
 #    </TABLE>"
@@ -603,22 +611,22 @@ proc menu_submenu_select_list {items URLs {highlight_url "" }} {
 #     set full_filename "$::acs::pageroot$url_stub"
 
 #     foreach naked_pattern [ad_naked_html_patterns] {
-# 	if { [string match $naked_pattern $url_stub] } {
-# 	    return ""
-# 	}
+#       if { [string match $naked_pattern $url_stub] } {
+#           return ""
+#       }
 #     }
 
 #     set netscape3_p 0
 
 #     if {[netscape3_browser]} {
-# 	set netscape3_p 1
+#       set netscape3_p 1
 #     }
 
 #     append return_string "</TD></TR></TABLE>"
 
 #     # close up the table
 #     if {$netscape3_p != 1} {
-# 	append return_string "</TD></TR>
+#       append return_string "</TD></TR>
 #        </TABLE>"
 #     }
 
