@@ -806,14 +806,13 @@ CREATE OR REPLACE FUNCTION acs_user__new(
 DECLARE
     v_user_id                  users.user_id%TYPE;
     v_authority_id             auth_authorities.authority_id%TYPE;
-    v_person_exists            varchar;			
+    v_person_exists            integer;			
 BEGIN
     v_user_id := p_user_id;
 
-    select case when count(*) = 0 then 'f' else 't' end into v_person_exists
-    from persons where person_id = v_user_id;
+    select 1 from persons into v_person_exists where person_id = v_user_id;
 
-    if v_person_exists = 'f' then
+    if NOT FOUND then
         v_user_id := person__new(
             v_user_id, 
             p_object_type,
@@ -905,15 +904,15 @@ CREATE OR REPLACE FUNCTION acs_user__receives_alerts_p(
    receives_alerts_p__user_id integer
 ) RETURNS boolean AS $$
 DECLARE
-  counter                                   boolean;       
+  found_p boolean;       
 BEGIN
-  select case when count(*) = 0 then 'f' else 't' end into counter
-   from users
-   where no_alerts_until >= now()
-   and user_id = receives_alerts_p__user_id;
+  select exists into found_p (
+        select 1 from users
+        where no_alerts_until >= now()
+        and user_id = receives_alerts_p__user_id
+  );
 
-  return counter;
-  
+  return found_p;
 END;
 $$ LANGUAGE plpgsql stable;
 
