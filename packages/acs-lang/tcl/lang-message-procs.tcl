@@ -291,6 +291,26 @@ ad_proc -public lang::message::delete {
         ]
 }
 
+ad_proc -public lang::message::undelete {
+    -package_key:required
+    -message_key:required
+    -locale:required
+} {
+    Undeletes a message from a particular locale.
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    lang::message::edit \
+        $package_key \
+        $message_key \
+        $locale \
+        [list deleted_p f \
+              upgrade_status no_upgrade \
+              conflict_p f \
+              sync_time "" \
+        ]
+}
+
 ad_proc -public lang::message::revert {
     {-package_key:required}
     {-message_key:required}
@@ -458,46 +478,56 @@ ad_proc -private lang::message::edit {
     if { [info exists edit_array(message)] } {
         error "The proc lang::message::edit was invoked with the message attribute in the edit array. To edit the message text of a message use the lang::message::register proc instead"
     }
-
+    #
+    # Deleting/undeleting?
+    #
     if { [info exists edit_array(deleted_p)] } {
         set edit_array(deleted_p) [db_boolean [template::util::is_true $edit_array(deleted_p)]]
-
-        # If we are deleting we need to preserve the old message in the audit log
         if { [template::util::is_true $edit_array(deleted_p)] } {
+            set delete_p t
+            set delete_comment "deleted"
+        } else {
+            set delete_p f
+            set delete_comment "undeleted"
+        }
+        #
+        # If we are deleting/undeleting we need to preserve the old message in the audit log
+        #
+        # Peter TODO: should these attributes be cached?
+        #
+        lang::message::get \
+            -package_key $package_key \
+            -message_key $message_key \
+            -locale $locale \
+            -array old_message_array
 
-            # Peter TODO: should these attributes be cached?
-            lang::message::get \
-                -package_key $package_key \
-                -message_key $message_key \
-                -locale $locale \
-                -array old_message_array
+        lang::audit::changed_message \
+            $old_message_array(message) \
+            $package_key \
+            $message_key \
+            $locale \
+            $delete_comment \
+            $old_message_array(deleted_p) \
+            $old_message_array(sync_time) \
+            $old_message_array(conflict_p) \
+            $old_message_array(upgrade_status)
 
-            lang::audit::changed_message \
-                $old_message_array(message) \
-                $package_key \
-                $message_key \
-                $locale \
-                "deleted" \
-                $old_message_array(deleted_p) \
-                $old_message_array(sync_time) \
-                $old_message_array(conflict_p) \
-                $old_message_array(upgrade_status)
-
-            # If we are deleting an en_US message we need to mark the message deleted in all locales
-            if {$locale eq "en_US"} {
-                set message_locales [db_list all_message_locales {
-                    select locale
-                    from lang_messages
-                    where package_key = :package_key
-                      and message_key = :message_key
-                      and locale <> 'en_US'
-                }]
-                foreach message_locale $message_locales {
-                    lang::message::delete \
-                        -package_key $package_key \
-                        -message_key $message_key \
-                        -locale $message_locale
-                }
+        #
+        # If we are deleting an en_US message we need to mark the message as deleted in all locales
+        #
+        if {$delete_p && $locale eq "en_US"} {
+            set message_locales [db_list all_message_locales {
+                select locale
+                from lang_messages
+                where package_key = :package_key
+                  and message_key = :message_key
+                  and locale <> 'en_US'
+            }]
+            foreach message_locale $message_locales {
+                lang::message::delete \
+                    -package_key $package_key \
+                    -message_key $message_key \
+                    -locale $message_locale
             }
         }
     }
