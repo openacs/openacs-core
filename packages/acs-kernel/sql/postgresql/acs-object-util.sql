@@ -12,15 +12,14 @@ CREATE OR REPLACE FUNCTION acs_object_util__object_type_exist_p(
    p_object_type varchar
 ) RETURNS boolean AS $$
 DECLARE
-    v_exist_p           boolean := 't';
+    v_exist_p boolean;
 BEGIN
 
-
-    select (case when count(*)=1 then 't' else 'f' end) into v_exist_p
+    select true into v_exist_p
     from   acs_object_types 
     where  object_type = p_object_type;
  
-    return v_exist_p;
+    return FOUND;
 END;
 $$ LANGUAGE plpgsql stable;
 
