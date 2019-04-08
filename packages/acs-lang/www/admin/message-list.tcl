@@ -49,20 +49,20 @@ set new_message_url [export_vars -base localized-message-new { locale package_ke
 #####
 
 db_1row counts {
-    select (select count(*) 
-            from lang_messages 
-            where package_key = :package_key 
+    select (select count(*)
+            from lang_messages
+            where package_key = :package_key
             and locale = :locale
             and deleted_p = 'f') as num_translated,
-           (select count(*) 
-            from lang_messages 
-            where package_key = :package_key 
-            and locale = :default_locale 
+           (select count(*)
+            from lang_messages
+            where package_key = :package_key
+            and locale = :default_locale
             and deleted_p = 'f') as num_messages,
-            (select count(*) 
-             from lang_messages 
-             where package_key = :package_key 
-             and locale = :default_locale 
+            (select count(*)
+             from lang_messages
+             where package_key = :package_key
+             and locale = :default_locale
              and deleted_p = 't') as num_deleted
     from dual
 }
@@ -79,7 +79,7 @@ set num_deleted_pretty [lc_numeric $num_deleted]
 #
 #####
 
-# LARS: The reason I implemented this overly complex way of doing it is that I was just about to 
+# LARS: The reason I implemented this overly complex way of doing it is that I was just about to
 # merge this page with messages-search ...
 
 set where_clauses [list]
@@ -141,13 +141,13 @@ multirow append show_opts "translated" "Translated" $num_translated_pretty
 multirow append show_opts "untranslated" "Untranslated" $num_untranslated_pretty
 multirow append show_opts "deleted" "Deleted" $num_deleted_pretty
 
-multirow extend show_opts url selected_p 
+multirow extend show_opts url selected_p
 
 multirow foreach show_opts {
     set selected_p [string equal $show $value]
     if {$value eq "all"} {
         set url [export_vars -base [ad_conn url] { locale package_key }]
-    } else { 
+    } else {
         set url [export_vars -base [ad_conn url] { locale package_key {show $value} }]
     }
 }
