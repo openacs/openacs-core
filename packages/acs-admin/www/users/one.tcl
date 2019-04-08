@@ -49,8 +49,7 @@ if { $site_wide_admin_p } {
 set context [list [list "./" "Users"] "One User"]
 
 if {[db_0or1row get_item_id {
-    select live_revision as revision_id,
-           coalesce(title,'view this portrait') as portrait_title
+    select coalesce(title,'view this portrait') as portrait_title
     from acs_rels a, cr_items c, cr_revisions cr 
     where a.object_id_two = c.item_id
          and c.live_revision = cr.revision_id
