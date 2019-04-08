@@ -618,9 +618,9 @@ ad_proc -private rp_filter { why } {
     # ns_set get accepts a default value in 3rd argument only on
     # NaviServer; so perform the check in two steps for AOLserver
     # compatibility.
-    set upgrade_insecure_requests_p [ns_set get [ns_conn headers] Upgrade-Insecure-Requests]
-    if {$upgrade_insecure_requests_p ne "" &&
-        $upgrade_insecure_requests_p
+    set upgrade_insecure_requests_p [ns_set iget [ns_conn headers] Upgrade-Insecure-Requests]
+    if {$upgrade_insecure_requests_p ne ""
+        && $upgrade_insecure_requests_p
         && [security::https_available_p]
         && ![security::secure_conn_p]
     } {
