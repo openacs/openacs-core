@@ -48,7 +48,14 @@ if { $site_wide_admin_p } {
 
 set context [list [list "./" "Users"] "One User"]
 
-if {[db_0or1row get_item_id {}]} {
+if {[db_0or1row get_item_id {
+    select live_revision as revision_id,
+           coalesce(title,'view this portrait') as portrait_title
+    from acs_rels a, cr_items c, cr_revisions cr 
+    where a.object_id_two = c.item_id
+         and c.live_revision = cr.revision_id
+         and a.object_id_one = :user_id
+         and a.rel_type = 'user_portrait_rel'}]} {
     set portrait_url [export_vars -base /shared/portrait { user_id }]
 }
 
@@ -70,10 +77,10 @@ db_multirow direct_group_membership direct_group_membership {}
 # And also get the list of all groups he is a member of, direct or
 # inherited.
 db_multirow all_group_membership all_group_membership {
-  select groups.group_id, groups.group_name
-  from groups, group_member_map gm
-  where groups.group_id = gm.group_id and gm.member_id=:user_id
-  order by lower(groups.group_name)
+    select distinct lower(groups.group_name) as group_name
+    from   groups, group_member_map gm
+    where  groups.group_id = gm.group_id and gm.member_id = :user_id
+   order by lower(groups.group_name)
 }
 
 if { [auth::password::can_reset_p -authority_id $user_info(authority_id)] } {
