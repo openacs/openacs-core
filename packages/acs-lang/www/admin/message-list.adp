@@ -67,7 +67,7 @@
               </td>
               <td>@messages.default_message@</td>
               <if @default_locale@ ne @current_locale@>
-                <td>                  
+                <td>
                   <if @messages.deleted_p;literal@ true>
                     <span style="color: red; font-style: italic;">DELETED</span> (@messages.translated_message@)
                   </if>
@@ -79,7 +79,12 @@
               </if>
               <if @messages.translated_message@ not nil>
                 <td>
-                  <a href="@messages.delete_url@" title="Delete this messages"><img src="/shared/images/Delete16.gif" alt="delete" width="16" height="16"></a>
+                  <if @messages.deleted_p;literal@ true>
+                    <a href="@messages.undelete_url@" title="Undelete this message"><img src="/shared/images/Undelete16.gif" alt="delete" width="16" height="16"></a>
+                  </if>
+                  <else>
+                    <a href="@messages.delete_url@" title="Delete this message"><img src="/shared/images/Delete16.gif" alt="delete" width="16" height="16"></a>
+                  </else>
                 </td>
              </if>
             </tr>

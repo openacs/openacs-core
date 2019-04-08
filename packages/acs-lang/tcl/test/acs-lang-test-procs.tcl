@@ -353,6 +353,18 @@ ad_proc -private lang::test::execute_upgrade {
                     -package_key $package_key \
                     -message_key $message_key \
                     -locale $locale
+                # Test undelete after deleting for the first time
+                aa_log "Undeleting message $message_key"
+                lang::message::undelete \
+                    -package_key $package_key \
+                    -message_key $message_key \
+                    -locale $locale
+                # Delete the message again
+                aa_log "Deleting message $message_key definitively"
+                lang::message::delete \
+                    -package_key $package_key \
+                    -message_key $message_key \
+                    -locale $locale
             }
         } else {
             # Message is supposed to exist in DB
