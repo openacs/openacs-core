@@ -64,7 +64,8 @@ ad_form -name message_form -form {
     }
     {description:text(inform)
         {label "Description"}
-        {after_html {}}
+        {mode display}
+        {after_html {(<a href='[ns_quotehtml $description_edit_url]'>Edit</a>)}}
     }
 }
 
@@ -124,11 +125,7 @@ ad_form -extend -name message_form -form {
     }
     set original_message [ns_quotehtml $original_message]
 
-    if { $description eq "" } {
-        set description [subst {(<a href="[ns_quotehtml $description_edit_url]">add description</a>)}]
-    } else {
-        set description "[ad_text_to_html -- $description] (<a href='[ns_quotehtml $description_edit_url]'>edit</a>)"
-    }
+    set description "[ad_text_to_html -- $description]"
 
     # Augment the audit trail with info on who created the first message
     if { $current_locale ne $default_locale && $translated_p } {
