@@ -33,7 +33,7 @@ namespace eval ::apidoc {
         set ns_api_html_index $ns_api_root
     }
 
-    set tcl_api_html_index "http://www.tcl.tk/man/tcl$::tcl_version/TclCmd/contents.htm"
+    set tcl_api_html_index "https://www.tcl-lang.org/man/tcl$::tcl_version/TclCmd/contents.htm"
 
     # set style {
     #     .code .comment  {color: #006600; font-weight: normal; font-style: italic;}

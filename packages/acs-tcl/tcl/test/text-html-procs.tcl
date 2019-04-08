@@ -640,7 +640,7 @@ aa_register_case \
         <p style="margin:0;">
         This website is maintained by the OpenACS community. Any problems, email <a href="mailto:webmaster@openacs.org">webmaster</a> or <a href="/bugtracker/openacs.org/">submit</a> a bug report.
         <br>
-        (Powered by Tcl<a href="http://www.tcl.tk/"><img alt="Tcl Logo" src="/resources/openacs-bootstrap3-theme/images/plume.png" width="14" height="18"></a>,
+        (Powered by Tcl<a href="https://www.tcl-lang.org/"><img alt="Tcl Logo" src="/resources/openacs-bootstrap3-theme/images/plume.png" width="14" height="18"></a>,
          Next Scripting <a href="https://next-scripting.org/"><img alt="NSF Logo" src="/resources/openacs-bootstrap3-theme/images/next-icon.png" width="14" height="8"></a>,
          NaviServer 4.99.18 <a href="http://sourceforge.net/projects/naviserver/"><img src="/resources/openacs-bootstrap3-theme/images/ns-icon-16.png" alt="NaviServer Logo" width="12" height="12"></a>,
          IPv6)

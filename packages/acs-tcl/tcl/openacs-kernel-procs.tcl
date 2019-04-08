@@ -139,7 +139,7 @@ ad_proc -public oacs_util::csv_foreach {
 	}
 
         # handle error, return, break, continue
-	# (source: http://wiki.tcl.tk/unless last case)
+	# (source: https://wiki.tcl-lang.org/unless last case)
 	switch -exact -- $errno {
 	    0   {}
 	    1   {return -code error -errorinfo $::errorInfo \

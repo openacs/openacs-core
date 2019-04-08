@@ -3757,7 +3757,7 @@ ad_proc util::catch_exec {command result_var} {
     Catch a call to Tcl exec. Handle shell return codes
     consistently. Works like catch. The result of the exec is put into
     the variable named in result_var. Inspired by
-    http://wiki.tcl.tk/1039
+    https://wiki.tcl-lang.org/1039
 
     @param command A list of arguments to pass to exec
     @param result_var Variable name in caller's scope to set the result in
