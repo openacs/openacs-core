@@ -1544,10 +1544,10 @@ namespace eval acs::test {
     }
 
     ad_proc -public follow_link {
+        -last_request:required        
         {-user_id 0}
         {-base /}
         {-label ""}
-        {-html:required}
     } {
 
         Follow the first provided label and return the page info.
@@ -1557,6 +1557,7 @@ namespace eval acs::test {
         @author Gustaf Neumann
     } {
         set href ""
+        set html [dict get $last_request body]
         acs::test::dom_html root $html {
             foreach a [$root selectNodes //a] {
                 set link_label [string trim [$a text]]
@@ -1576,11 +1577,12 @@ namespace eval acs::test {
                 # aa_log "a TEXT '[$a asHTML]'"
             }
         }
-        aa_true "Link label for '$label' is not empty: '$href'" {$href ne ""}
+        aa_true "href '$href' of link with label '$label' is not empty (<a href='[detail_link $last_request]'>Details</a>)" \
+            {$href ne ""}
         if {![string match "/*" $href]} {
             set href $base/$href
         }
-        return [http -user_id $user_id $href]
+        return [http -last_request $last_request -user_id $user_id $href]
     }
 
 
@@ -1792,6 +1794,7 @@ namespace eval acs::test::user {
     ad_proc ::acs::test::user::create {
         {-user_id ""}
         {-admin:boolean}
+        {-locale en_US}
     } {
         Create a test user with random email and password for testing
 
@@ -1816,6 +1819,7 @@ namespace eval acs::test::user {
                            -secret_answer [ad_generate_random_string] \
                            -authority_id [auth::authority::get_id -short_name "acs_testing"]]
 
+        lang::user::set_locale -user_id [dict get $user_info user_id] $locale
         if { [dict get $user_info creation_status] ne "ok" } {
             # Could not create user
             error "Could not create test user with username=$username user_info=[array get user_info]"
