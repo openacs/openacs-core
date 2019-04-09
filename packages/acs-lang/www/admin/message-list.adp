@@ -50,8 +50,8 @@
             <th></th>
             <th>Message Key</th>
             <th>@default_locale_label@ Message</th>
-            <if @default_locale@ ne @current_locale@>
-              <th>@locale_label@ Message</th>
+            <if @default_locale_p;literal@ false>
+              <th>@current_locale_label@ Message</th>
             </if>
             <if @create_p;literal@ true>
               <th></th>
@@ -65,10 +65,17 @@
               <td>
                 <a href="@messages.edit_url@" title="Edit or comment on translation">@messages.message_key_pretty@</a>
               </td>
-              <td>@messages.default_message@</td>
-              <if @default_locale@ ne @current_locale@>
+              <td/>
+                <if @messages.deleted_p;literal@ true>
+                  <span style="color: red; font-style: italic;">DELETED</span> (@messages.default_message@)
+                </if>
+                <else>
+                  @messages.default_message@
+                </else>
+              </td>
+              <if @default_locale_p;literal@ false>
                 <td>
-                  <if @messages.deleted_p;literal@ true>
+                  <if @messages.translation_deleted_p;literal@ true>
                     <span style="color: red; font-style: italic;">DELETED</span> (@messages.translated_message@)
                   </if>
                   <else>
@@ -77,9 +84,9 @@
                   </else>
                 </td>
               </if>
-              <if @messages.translated_message@ not nil>
+              <if @default_locale_p;literal@ true or @messages.translated_message@ not nil>
                 <td>
-                  <if @messages.deleted_p;literal@ true>
+                  <if @messages.translation_deleted_p;literal@ true>
                     <a href="@messages.undelete_url@" title="Undelete this message"><img src="/shared/images/Undelete16.gif" alt="delete" width="16" height="16"></a>
                   </if>
                   <else>

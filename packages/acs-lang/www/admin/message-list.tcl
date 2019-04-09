@@ -18,131 +18,71 @@ ad_page_contract {
     }
 }
 
-# 'show' can be "all", "translated", "untranslated"
+# SWA?
+set site_wide_admin_p [acs_user::site_wide_admin_p]
 
 # We rename to avoid conflict in queries
 set current_locale $locale
+set current_locale_label [lang::util::get_label $current_locale]
 set default_locale en_US
-
-set locale_label [lang::util::get_label $current_locale]
 set default_locale_label [lang::util::get_label $default_locale]
-
-set page_title $package_key
-set context [list [list [export_vars -base package-list { locale }] $locale_label] $page_title]
-
-set site_wide_admin_p [acs_user::site_wide_admin_p]
-
-set export_messages_url [export_vars -base "export-messages" { package_key locale { return_url {[ad_return_url]} } }]
-set import_messages_url [export_vars -base "import-messages" { package_key locale { return_url {[ad_return_url]} } }]
+set default_locale_p [string equal $current_locale $default_locale]
 
 # We let you create new messages keys if you're in the default locale
-set create_p [string equal $current_locale $default_locale]
+set create_p $default_locale_p
 
-set new_message_url [export_vars -base localized-message-new { locale package_key }]
-
-
-
-#####
-#
-# Counting messages
-#
-#####
-
-db_1row counts {
-    select (select count(*)
-            from lang_messages
-            where package_key = :package_key
-            and locale = :locale
-            and deleted_p = 'f') as num_translated,
-           (select count(*)
-            from lang_messages
-            where package_key = :package_key
-            and locale = :default_locale
-            and deleted_p = 'f') as num_messages,
-            (select count(*)
-             from lang_messages
-             where package_key = :package_key
-             and locale = :default_locale
-             and deleted_p = 't') as num_deleted
-    from dual
+# Locale switch
+set languages [lang::system::get_locale_options]
+ad_form -name locale_form -action [ad_conn url] -export { tree_id category_id } -form {
+    {locale:text(select) {label "Language"} {value $locale} {options $languages}}
 }
-set num_untranslated [expr {$num_messages - $num_translated}]
-set num_messages_pretty [lc_numeric [expr {$num_messages + $num_deleted}]]
-set num_translated_pretty [lc_numeric $num_translated]
-set num_untranslated_pretty [lc_numeric $num_untranslated]
-set num_deleted_pretty [lc_numeric $num_deleted]
+set form_vars [export_ns_set_vars form {locale form:mode form:id __confirmed_p __refreshing_p formbutton:ok} [ad_conn form]]
 
+# Title and context
+set page_title $package_key
+set context [list [list [export_vars -base package-list { locale }] $current_locale_label] $page_title]
 
-#####
-#
-# Handle filtering
-#
-#####
+# Export/import/batch edit/new message URLs
+set export_messages_url [export_vars -base export-messages { package_key locale { return_url {[ad_return_url]} } }]
+set import_messages_url [export_vars -base import-messages { package_key locale { return_url {[ad_return_url]} } }]
+set new_message_url     [export_vars -base localized-message-new { locale package_key }]
+set batch_edit_url      [export_vars -base batch-editor { locale package_key show }]
 
-# LARS: The reason I implemented this overly complex way of doing it is that I was just about to
-# merge this page with messages-search ...
+# Number of messages
+set where_clause {and deleted_p = 'f'}
+set num_messages [db_string count_locale_default {}]
+set where_clause {and deleted_p = 't'}
+set num_deleted [db_string count_locale_default {}]
 
-set where_clauses [list]
-
-switch -exact $show {
-    all {
-        lappend where_clauses {lm1.deleted_p = 'f'}
-    }
-    translated {
-        lappend where_clauses {lm2.message is not null}
-        lappend where_clauses {(lm2.deleted_p = 'f' or lm2.deleted_p is null)}
-        lappend where_clauses {lm1.deleted_p = 'f'}
-    }
-    untranslated {
-        lappend where_clauses {(lm2.deleted_p = 'f' or lm2.deleted_p is null)}
-        lappend where_clauses {lm1.deleted_p = 'f'}
-        lappend where_clauses {lm2.message is null}
-    }
-    deleted {
-        lappend where_clauses {lm1.deleted_p = 't'}
-    }
-}
-
-if { [llength $where_clauses] == 0 } {
-    set where_clause {}
+# Number of translated messages in this locale
+if { $default_locale_p } {
+    set num_translated $num_messages
+    set num_translations_deleted $num_deleted
+    set num_untranslated [expr {$num_messages - $num_translated}]
+    set multirow select_messages_default
 } else {
-    set where_clause "and [join $where_clauses "\n and "]"
+    set where_clause {and lm2.message is not null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
+    set num_translated [db_string count_locale {}]
+    set where_clause {and lm2.message is null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
+    set num_untranslated [db_string count_locale {}]
+    set where_clause {and (lm1.deleted_p = 't' or lm2.deleted_p = 't')}
+    set num_translations_deleted [db_string count_locale {}]
+    set multirow select_messages
 }
 
-db_multirow -extend {
-    edit_url
-    delete_url
-    undelete_url
-    message_key_pretty
-} messages select_messages {} {
-    set edit_url        [export_vars -base edit-localized-message { locale package_key message_key show {return_url [ad_return_url]} }]
-    set undelete_url    [export_vars -base message-undelete { locale package_key message_key show {return_url [ad_return_url]} }]
-    set delete_url      [export_vars -base message-delete { locale package_key message_key show {return_url [ad_return_url]} }]
-    set message_key_pretty "$package_key.$message_key"
-}
+# Prettify values
+set num_messages_pretty             [lc_numeric [expr {$num_messages + $num_deleted}]]
+set num_translated_pretty           [lc_numeric $num_translated]
+set num_untranslated_pretty         [lc_numeric $num_untranslated]
+set num_translations_deleted_pretty [lc_numeric $num_translations_deleted]
 
-# TODO: PG
-# TODO: Create message
-
-
-set batch_edit_url [export_vars -base batch-editor { locale package_key show }]
-
-
-#####
-#
 # Slider for 'show' options
-#
-#####
-
 multirow create show_opts value label count
-
 multirow append show_opts "all" "All" $num_messages_pretty
 multirow append show_opts "translated" "Translated" $num_translated_pretty
 multirow append show_opts "untranslated" "Untranslated" $num_untranslated_pretty
-multirow append show_opts "deleted" "Deleted" $num_deleted_pretty
-
+multirow append show_opts "deleted" "Deleted" $num_translations_deleted_pretty
 multirow extend show_opts url selected_p
-
 multirow foreach show_opts {
     set selected_p [string equal $show $value]
     if {$value eq "all"} {
@@ -152,15 +92,38 @@ multirow foreach show_opts {
     }
 }
 
-
-# Locale switch
-set languages [lang::system::get_locale_options]
-
-ad_form -name locale_form -action [ad_conn url] -export { tree_id category_id } -form {
-    {locale:text(select) {label "Language"} {value $locale} {options $languages}}
+# Handle filtering
+set where_clause_default {}
+set where_clause {}
+switch -exact $show {
+    translated {
+        set where_clause_default {and lm.message is not null and lm.deleted_p = 'f'}
+        set where_clause {and lm2.message is not null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
+    }
+    untranslated {
+        set where_clause_default {and lm.message is null and lm.deleted_p = 'f'}
+        set where_clause {and lm2.message is null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
+    }
+    deleted {
+        set where_clause_default {and lm.deleted_p = 't'}
+        set where_clause {and (lm1.deleted_p = 't' or lm2.deleted_p = 't')}
+    }
 }
 
-set form_vars [export_ns_set_vars form {locale form:mode form:id __confirmed_p __refreshing_p formbutton:ok} [ad_conn form]]
+# Get the messages
+db_multirow -extend {
+    edit_url
+    delete_url
+    undelete_url
+    message_key_pretty
+} messages $multirow {} {
+    set edit_url        [export_vars -base edit-localized-message { locale package_key message_key show {return_url [ad_return_url]} }]
+    set undelete_url    [export_vars -base message-undelete { locale package_key message_key show {return_url [ad_return_url]} }]
+    set delete_url      [export_vars -base message-delete { locale package_key message_key show {return_url [ad_return_url]} }]
+    set message_key_pretty "$package_key.$message_key"
+}
+
+# TODO: Create message
 
 # Local variables:
 #    mode: tcl
