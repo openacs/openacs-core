@@ -32,7 +32,6 @@ if {[string is false $email_forgotten_password_p]} {
     ad_script_abort
 }
 
-
 ad_form -name recover \
     -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] \
     -form { {dummy:text(hidden),optional} }
@@ -79,9 +78,14 @@ set submission_p 0
 
 ad_form -extend -name recover -on_request {}
 
-# We handle form submission here, because otherwise we can't handle both the case where we use the form
-# and the case where we don't in one go
-if { [form is_valid recover] || (![form is_submission recover] && (([info exists username] && $username ne "") || ([info exists email] && $email ne ""))) } {
+#
+# We handle form submission here, because otherwise we can't handle
+# both the case where we use the form and the case where we don't in
+# one go.
+#
+if { [form is_valid recover]
+     || (![form is_submission recover] && ($username ne "" || $email ne ""))
+ } {
     array set recover_info [auth::password::recover_password \
                                 -authority_id $authority_id \
                                 -username $username \
