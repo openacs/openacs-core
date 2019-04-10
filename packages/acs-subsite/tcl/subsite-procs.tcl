@@ -853,10 +853,9 @@ ad_proc -public -callback subsite::theme_changed {
     @param new_theme the new theme
 } -
 
-
 ad_proc -public subsite::get_theme_subsites {
     -theme:required
-    -subsite_id
+    {-subsite_id ""}
     -unmodified:boolean
 } {
     Returns a list of all packages implementing subsite that are
@@ -872,26 +871,32 @@ ad_proc -public subsite::get_theme_subsites {
 
     @return list of subsite_id
 } {
-    if {![info exists subsite_id]} {
-        array set main_node [site_node::get_from_url -url "/"]
-
-        set all_subsites [list $main_node(object_id)]
-        foreach package_key [subsite::package_keys] {
-            lappend all_subsites {*}[site_node::get_children \
-                                         -all \
-                                         -package_key $package_key \
-                                         -element object_id \
-                                         -node_id $main_node(node_id)]
-        }
-    } else {
-        set all_subsites $subsite_id
+    # Retrieve subsites using this theme
+    set subsites [db_list get_theme_subsites [subst {
+        select package_id from apm_parameter_values
+        where parameter_id = (select parameter_id from apm_parameters
+                              where package_key in ('[join [subsite::package_keys] ',']')
+                              and parameter_name = 'ThemeKey')
+        and attr_value = :theme
+        and (:subsite_id is null or package_id = :subsite_id)
+    }]]
+    if {!$unmodified_p} {
+        # User wants to get all of them. The end.
+        return $subsites
     }
 
-    db_1row get_theme {
+    # User wants also to filter by those using vanilla theme
+    # parameters...
+
+    # ...retrieve theme parameters
+    if {![db_0or1row get_theme {
         select * from subsite_themes
-         where key = :theme
+        where key = :theme
+    }]} {
+        error "Theme '$theme' not found"
     }
 
+    # ...map table columns with subsite parameters...
     set settings {
         template             DefaultMaster
         css                  ThemeCSS
@@ -904,31 +909,26 @@ ad_proc -public subsite::get_theme_subsites {
         streaming_head       StreamingHead
     }
 
-    set theme_subsites {}
-    foreach subsite_id $all_subsites {
-        set subsite_theme [subsite::get_theme \
-                               -subsite_id $subsite_id]
-        if {$subsite_theme eq $theme} {
-            set collect_p 1
-            if {$unmodified_p} {
-                foreach {var param} $settings {
-                    set default [string trim [set $var]]
-                    set value   [string trim [parameter::get -parameter $param -package_id $subsite_id]]
-                    regsub -all {\r\n} $value "\n" value
-                    regsub -all {\r\n} $default "\n" default
-                    set collect_p [expr {$default eq $value}]
-                    if {!$collect_p} {
-                        ns_log notice "theme '$theme' parameter $var differs on subsite '$subsite_id': default '$default' actual value '$value'"
-                        break
-                    }
-                }
-            }
-            if {$collect_p} {
-                lappend theme_subsites $subsite_id
+    # ...foreach subsite...
+    set theme_subsites [list]
+    foreach subsite_id $subsites {
+        set collect_p true
+        # ...compare parameter value with vanilla theme value.
+        foreach {var param} $settings {
+            set default [string trim [set $var]]
+            set value   [string trim [parameter::get -parameter $param -package_id $subsite_id]]
+            regsub -all {\r\n} $value "\n" value
+            regsub -all {\r\n} $default "\n" default
+            set collect_p [expr {$default eq $value}]
+            if {!$collect_p} {
+                ns_log notice "theme '$theme' parameter $var differs on subsite '$subsite_id': default '$default' actual value '$value'"
+                break
             }
         }
+        if {$collect_p} {
+            lappend theme_subsites $subsite_id
+        }
     }
-
     return $theme_subsites
 }
 
