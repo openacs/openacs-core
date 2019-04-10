@@ -365,14 +365,16 @@ ad_proc -public acs_user::get_by_username {
     Returns user_id from authority and username. Returns the empty string if no user found.
 
     @param authority_id The authority. Defaults to local authority.
-
     @param username The username of the user you're trying to find.
 
     @return user_id of the user, or the empty string if no user found.
 }  {
-    # Default to local authority
+
     if { $authority_id eq "" } {
-        set authority_id [auth::authority::local]
+        #
+        # Get the default authority
+        #
+        set authority_id [auth::authority::get]
     }
 
     set key [list get_by_username \
@@ -407,9 +409,9 @@ ad_proc -private acs_user::get_by_username_not_cached {
 }
 
 ad_proc -public acs_user::get {
-    {-user_id {}}
-    {-authority_id {}}
-    {-username {}}
+    {-user_id ""}
+    {-authority_id ""}
+    {-username ""}
     {-element ""}
     {-array}
     {-include_bio:boolean}
@@ -614,9 +616,9 @@ ad_proc -public acs_user::flush_cache {
 }
 
 ad_proc -public acs_user::get_element {
-    {-user_id {}}
-    {-authority_id {}}
-    {-username {}}
+    {-user_id ""}
+    {-authority_id ""}
+    {-username ""}
     {-element:required}
 } {
     Get a particular element from the basic information about a user returned by acs_user::get.
