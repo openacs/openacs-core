@@ -993,8 +993,31 @@ ad_proc -private rp_handle_request {} {
         && ![string match "*/CVS/*" $dir_index]
     } {
         if { [nsv_get rp_directory_listing_p .] } {
-            ns_returnnotice 200 "Directory listing of $dir_index" \
-                [rp_html_directory_listing $dir_index]
+
+            set title "Directory listing of [ad_conn url]"
+            set context [ad_conn url]
+            set body [rp_html_directory_listing $dir_index]
+            #
+            # Provide a simple template to use the master templates
+            #
+            set code [template::adp_compile -string {
+                <master>
+                <property name="doc(title)">@title;literal@</property>
+                <property name="context">@context;literal@</property>
+                @body;noquote@
+            }]
+            #
+            # Do the remaining OpenACS ADP magic
+            #
+            append code {
+                if { [info exists __adp_master] } {
+                    set __adp_output \
+                        [template::adp_parse $__adp_master \
+                             [concat [list __adp_slave $__adp_output] [array get __adp_properties]]]
+                }
+            }
+            set __adp_stub ""
+            ns_return 200 text/html [template::adp_eval code]
             return
         }
     }
