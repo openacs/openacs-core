@@ -526,7 +526,7 @@ ad_proc -private auth::process_doc::create_contract {} {
             }
             GetElements {
                 description {
-                    Get an list of the elements handled by this batch synchronization
+                    Get a list of the elements handled by this batch synchronization
                     (first_names, last_name, username, email, etc). These elements will 
                     not be editable by the user, so as not to risk overwriting the user's 
                     changes with a later synchronization.
