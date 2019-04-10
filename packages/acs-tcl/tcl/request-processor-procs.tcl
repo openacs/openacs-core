@@ -391,7 +391,7 @@ ad_proc -private rp_html_directory_listing { dir } {
 
     # Loop through the files, adding a row to the table for each.
     foreach file [lsort [glob -nocomplain $dir/*]] {
-        set tailHtml [ns_quotethml [file tail $file]]
+        set tailHtml [ns_quotehtml [file tail $file]]
         set link "<a href=\"$tailHtml\">$tailHtml</a>"
 
         # Build the stat array containing information about the file.
