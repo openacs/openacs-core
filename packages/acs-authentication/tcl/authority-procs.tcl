@@ -540,7 +540,7 @@ ad_proc -private auth::authority::get_not_cached {
         select     [join $columns ",\n                   "]
         from       auth_authorities
         where      authority_id = :authority_id
-    } -column_array row
+    }] -column_array row
 
     return [array get row]
 }
