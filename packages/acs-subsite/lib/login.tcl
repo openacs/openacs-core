@@ -79,9 +79,8 @@ if { $return_url eq "" } {
     set return_url [ad_pvt_home]
 }
 
-set authority_options [auth::authority::get_authority_options]
 if { $authority_id eq "" } {
-    set authority_id [lindex $authority_options 0 1]
+    set authority_id [auth::authority::get]
 }
 
 set forgotten_pwd_url [auth::password::get_forgotten_url \
@@ -128,6 +127,7 @@ if { [auth::UseEmailForLoginP] } {
         set focus "email"
     }
 } else {
+    set authority_options [auth::authority::get_authority_options]
     if { [llength $authority_options] > 1 } {
         ad_form -extend -name login -form {
             {authority_id:integer(select)

@@ -33,16 +33,9 @@ if {[string is false $email_forgotten_password_p]} {
 }
 
 
-# Display form to collect username and authority
-set authority_options [auth::authority::get_authority_options]
-
-if { $authority_id eq "" } {
-    set authority_id [lindex $authority_options 0 1]
-}
-
-ad_form -name recover -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form { {dummy:text(hidden),optional} }
-    
-
+ad_form -name recover \
+    -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] \
+    -form { {dummy:text(hidden),optional} }
 
 set username_widget text
 if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs_kernel_id]] } {
@@ -57,19 +50,21 @@ if { [auth::UseEmailForLoginP] } {
 } else {
     if { [llength $authority_options] > 1 } {
         ad_form -extend -name recover -form {
-            {authority_id:integer(select) 
-                {label {[_ acs-kernel.authentication_authority]}} 
-                {options $authority_options}
+            {authority_id:integer(select)
+                {label {[_ acs-kernel.authentication_authority]}}
+                {options [auth::authority::get_authority_options]}
             }
         }
     }
-    
-    ad_form -extend -name recover -form [list [list username:text($username_widget) [list label [_ acs-subsite.Username]]]] -validate {
-        {username
-            { [acs_user::get_by_username -authority_id $authority_id -username $username] ne "" }
-            { Could not find username at authority }
+
+    ad_form -extend -name recover \
+        -form [list [list username:text($username_widget) [list label [_ acs-subsite.Username]]]] \
+        -validate {
+            {username
+                { [acs_user::get_by_username -authority_id $authority_id -username $username] ne "" }
+                { Could not find username at authority }
+            }
         }
-    }
 
     set user_id_widget_name username
     set focus "username"
