@@ -23,7 +23,7 @@
     <querytext>
 
         select count(*)
-        from   lang_messages
+        from   lang_messages lm
         where  package_key = :package_key
         and    locale = :default_locale
         $where_clause

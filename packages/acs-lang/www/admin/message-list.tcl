@@ -48,25 +48,29 @@ set import_messages_url [export_vars -base import-messages { package_key locale 
 set new_message_url     [export_vars -base localized-message-new { locale package_key }]
 set batch_edit_url      [export_vars -base batch-editor { locale package_key show }]
 
-# Number of messages
-set where_clause {and deleted_p = 'f'}
-set num_messages [db_string count_locale_default {}]
-set where_clause {and deleted_p = 't'}
-set num_deleted [db_string count_locale_default {}]
+# Define where clauses
+set num_messages_clause             {and deleted_p = 'f'}
+set num_messages_deleted_clause     {and deleted_p = 't'}
+set num_translated_clause           {and lm2.message is not null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
+set num_translated_default_clause   {and lm.message is not null and lm.deleted_p = 'f'}
+set num_untranslated_clause         {and lm2.message is null and lm1.deleted_p = 'f' and (lm2.deleted_p = 'f' or lm2.deleted_p is null)}
+set num_untranslated_default_clause {and lm.message is null and lm.deleted_p = 'f'}
+set num_translations_deleted_clause {and (lm1.deleted_p = 't' or lm2.deleted_p = 't')}
+
+# Number of total messages
+set num_messages [set where_clause $num_messages_clause;         db_string count_locale_default {}]
+set num_deleted  [set where_clause $num_messages_deleted_clause; db_string count_locale_default {}]
 
 # Number of translated messages in this locale
 if { $default_locale_p } {
-    set num_translated $num_messages
+    set num_translated           $num_messages
+    set num_untranslated         [expr {$num_messages - $num_translated}]
     set num_translations_deleted $num_deleted
-    set num_untranslated [expr {$num_messages - $num_translated}]
     set multirow select_messages_default
 } else {
-    set where_clause {and lm2.message is not null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
-    set num_translated [db_string count_locale {}]
-    set where_clause {and lm2.message is null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
-    set num_untranslated [db_string count_locale {}]
-    set where_clause {and (lm1.deleted_p = 't' or lm2.deleted_p = 't')}
-    set num_translations_deleted [db_string count_locale {}]
+    set num_translated           [set where_clause $num_translated_clause;           db_string count_locale {}]
+    set num_untranslated         [set where_clause $num_untranslated_clause;         db_string count_locale {}]
+    set num_translations_deleted [set where_clause $num_translations_deleted_clause; db_string count_locale {}]
     set multirow select_messages
 }
 
@@ -97,16 +101,16 @@ set where_clause_default {}
 set where_clause {}
 switch -exact $show {
     translated {
-        set where_clause_default {and lm.message is not null and lm.deleted_p = 'f'}
-        set where_clause {and lm2.message is not null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
+        set where_clause_default $num_translated_default_clause
+        set where_clause         $num_translated_clause
     }
     untranslated {
-        set where_clause_default {and lm.message is null and lm.deleted_p = 'f'}
-        set where_clause {and lm2.message is null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
+        set where_clause_default $num_untranslated_default_clause
+        set where_clause         $num_untranslated_clause
     }
     deleted {
-        set where_clause_default {and lm.deleted_p = 't'}
-        set where_clause {and (lm1.deleted_p = 't' or lm2.deleted_p = 't')}
+        set where_clause_default $num_messages_deleted_clause
+        set where_clause         $num_translations_deleted_clause
     }
 }
 
