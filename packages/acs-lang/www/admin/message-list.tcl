@@ -49,7 +49,8 @@ set new_message_url     [export_vars -base localized-message-new { locale packag
 set batch_edit_url      [export_vars -base batch-editor { locale package_key show }]
 
 # Define where clauses
-set num_messages_clause             {and deleted_p = 'f'}
+set num_messages_clause             {}
+set num_translated_default_clause   {and deleted_p = 'f'}
 set num_messages_deleted_clause     {and deleted_p = 't'}
 set num_translated_clause           {and lm2.message is not null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
 set num_translated_default_clause   {and lm.message is not null and lm.deleted_p = 'f'}
@@ -63,8 +64,8 @@ set num_deleted  [set where_clause $num_messages_deleted_clause; db_string count
 
 # Number of translated messages in this locale
 if { $default_locale_p } {
-    set num_translated           $num_messages
-    set num_untranslated         [expr {$num_messages - $num_translated}]
+    set num_translated           [set where_clause $num_translated_default_clause;   db_string count_locale_default {}]
+    set num_untranslated         [set where_clause $num_untranslated_default_clause; db_string count_locale_default {}]
     set num_translations_deleted $num_deleted
     set multirow select_messages_default
 } else {
@@ -75,7 +76,7 @@ if { $default_locale_p } {
 }
 
 # Prettify values
-set num_messages_pretty             [lc_numeric [expr {$num_messages + $num_deleted}]]
+set num_messages_pretty             [lc_numeric $num_messages]
 set num_translated_pretty           [lc_numeric $num_translated]
 set num_untranslated_pretty         [lc_numeric $num_untranslated]
 set num_translations_deleted_pretty [lc_numeric $num_translations_deleted]

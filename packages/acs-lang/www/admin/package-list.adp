@@ -25,6 +25,7 @@
           <th>#acs-lang.Package#</th>
           <th>#acs-lang.Translated#</th>
           <th>#acs-lang.Untranslated#</th>
+          <th>#acs-lang.Deleted#</th>
           <th>#acs-lang.Total#</th>
         </tr>
         <multiple name="packages">
@@ -43,6 +44,11 @@
             <td align="right">
               <if @packages.num_untranslated_pretty@ ne 0>
                 <a href="@packages.view_untranslated_url@" title="View all untranslated messages in package">@packages.num_untranslated_pretty@</a>
+              </if>
+            </td>
+            <td align="right">
+              <if @packages.num_deleted_pretty@ ne 0>
+                <a href="@packages.view_deleted_url@" title="View all deleted messages in package">@packages.num_deleted_pretty@</a>
               </if>
             </td>
             <td align="right">

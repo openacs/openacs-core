@@ -19,6 +19,7 @@
   <msg key="Current_system_locale_is">Current system locale is  &lt;strong&gt;%system_locale%: %system_locale_label%&lt;/strong&gt;</msg>
   <msg key="Current_system_timezone_is">Current system timezone is &lt;strong&gt;%timezone%&lt;/strong&gt;</msg>
   <msg key="Default_Locale_For_Language">Default Locale for Language</msg>
+  <msg key="Deleted">Deleted</msg>
   <msg key="Delete_this_locale">Delete this locale</msg>
   <msg key="Disable_this_locale">Disable this locale</msg>
   <msg key="Edit_definition_of_locale">Edit definition of locale</msg>

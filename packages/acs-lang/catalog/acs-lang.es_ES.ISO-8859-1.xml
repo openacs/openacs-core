@@ -17,6 +17,7 @@
   <msg key="Current_system_locale_is">El idioma actual del sistema es &lt;strong&gt;%system_locale%: %system_locale_label%&lt;/strong&gt;</msg>
   <msg key="Current_system_timezone_is">La zona horaria actual del sistema es &lt;strong&gt;%timezone%&lt;/strong&gt;</msg>
   <msg key="Default_Locale_For_Language">Configuración regional predeterminada del idioma</msg>
+  <msg key="Deleted">Eliminados</msg>
   <msg key="Delete_this_locale">Borrar este idioma</msg>
   <msg key="Disable_this_locale">Desactivar este idioma</msg>
   <msg key="Edit_definition_of_locale">Editar la definición del idioma</msg>

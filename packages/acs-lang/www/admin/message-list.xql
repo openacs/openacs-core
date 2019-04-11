@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
+
   <fullquery name="count_locale">
     <querytext>
 
