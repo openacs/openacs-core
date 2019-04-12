@@ -104,7 +104,7 @@ data it must keep track of.
 <h3>Notification Request</h3>
 
 <p>
-Given a certain notification type (e.g. "Forum Notificaton"), a
+Given a certain notification type (e.g. "Forum Notification"), a
 notification request is an association of a party, a notification
 type, and an object for which this notification type applies.
 </p>
