@@ -62,34 +62,26 @@
   <fullquery name="packages_locale_status_default">
     <querytext>
 
-        select q.*,
-               (select count(*)
-                    from   lang_messages
-                    where  package_key = q.package_key
-                    and    locale = :default_locale
-                    and    message is not null
-                    and    deleted_p = 'f'
-               ) as num_translated,
-               (select count(*)
-                    from   lang_messages
-                    where  package_key = q.package_key
-                    and    locale = :default_locale
-                    and    message is null
-                    and    deleted_p = 'f'
-               ) as num_untranslated,
-               (select count(*)
-                    from   lang_messages
-                    where  package_key = q.package_key
-                    and    locale = :default_locale
-                    and    deleted_p = 't'
-               ) as num_deleted
-        from   (select package_key,
-                       count(message_key) as num_messages
-                from   lang_messages
-                where  locale = :default_locale
-                group  by package_key
-               ) q
-        order  by package_key
+        select
+            package_key,
+            count(*)                                            as num_messages,
+            count(message_is_not_null + message_not_deleted)    as num_translated,
+            count(message_is_null + message_not_deleted)        as num_untranslated,
+            count(message_deleted)                              as num_deleted
+        from (
+            select
+                package_key,
+                case when message is null     then 1 end message_is_null,
+                case when message is not null then 1 end message_is_not_null,
+                case when deleted_p = 't'     then 1 end message_deleted,
+                case when deleted_p = 'f'     then 1 end message_not_deleted
+            from
+                lang_messages
+            where
+                locale = :default_locale
+        ) lang_messages
+        group by package_key
+        order by package_key;
 
     </querytext>
   </fullquery>
