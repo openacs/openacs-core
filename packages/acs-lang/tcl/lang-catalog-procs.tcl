@@ -495,7 +495,7 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
     # Initialize the array to return
     array set msg_catalog_array {}
 
-    # Parse the xml document
+    # Parse the XML document
     set tree [xml_parse -persist $catalog_file_contents]
 
     # Get the message catalog root node

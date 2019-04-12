@@ -1000,7 +1000,7 @@ ad_proc -public publish::write_content { revision_id args } {
   server's INI file (the value returnded by publish::get_page_root is
   used as the default). The file extension will be based on the
   revision's mime-type. <br>
-  For example, an revision whose mime-type is "image/jpeg"
+  For example, a revision whose mime-type is "image/jpeg"
   for an item at "Sitemap/foo/bar" may be written as
   /web/your_server_name/www/foo/bar.jpg
 

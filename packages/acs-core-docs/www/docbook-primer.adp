@@ -208,7 +208,7 @@ performance quality, conformance to standards, durability (handling
 of technological obsolescence), reliability, repairability, style
 of use, design (strategy in design, specifications, integrated,
 well-matched systems etc).</p></li><li class="listitem"><p>differentiate "service" by highlighting software
-availability (licensing and completeness from mature to early
+availability (licensing and completeness from mature too early
 adopters or development versions), community incident support,
 project collaborative opportunities, and contractor support
 availability</p></li><li class="listitem"><p>differentiate price (economic considerations of opensource and
