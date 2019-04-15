@@ -34,6 +34,7 @@
 
     </querytext>
   </fullquery>
+
   <fullquery name="packages_locale_status_default">
     <querytext>
 

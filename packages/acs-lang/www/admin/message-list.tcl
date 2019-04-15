@@ -48,53 +48,25 @@ set import_messages_url [export_vars -base import-messages { package_key locale 
 set new_message_url     [export_vars -base localized-message-new { locale package_key }]
 set batch_edit_url      [export_vars -base batch-editor { locale package_key show }]
 
-# Define where clauses
-set num_messages_clause             {}
-set num_translated_default_clause   {and deleted_p = 'f'}
-set num_messages_deleted_clause     {and deleted_p = 't'}
-set num_translated_clause           {and lm2.message is not null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
-set num_translated_default_clause   {and lm.message is not null and lm.deleted_p = 'f'}
-set num_untranslated_clause         {and lm2.message is null and lm1.deleted_p = 'f' and (lm2.deleted_p = 'f' or lm2.deleted_p is null)}
-set num_untranslated_default_clause {and lm.message is null and lm.deleted_p = 'f'}
-set num_translations_deleted_clause {and (lm1.deleted_p = 't' or lm2.deleted_p = 't')}
-
-# Number of total messages
-set num_messages [set where_clause $num_messages_clause;         db_string count_locale_default {}]
-set num_deleted  [set where_clause $num_messages_deleted_clause; db_string count_locale_default {}]
-
-# Number of translated messages in this locale
+# Number of messages (all, translated, untranslated and deleted) for the slider
 if { $default_locale_p } {
-    set num_translated           [set where_clause $num_translated_default_clause;   db_string count_locale_default {}]
-    set num_untranslated         [set where_clause $num_untranslated_default_clause; db_string count_locale_default {}]
-    set num_translations_deleted $num_deleted
+    db_1row count_locale_default {}
     set multirow select_messages_default
 } else {
-    set num_translated           [set where_clause $num_translated_clause;           db_string count_locale {}]
-    set num_untranslated         [set where_clause $num_untranslated_clause;         db_string count_locale {}]
-    set num_translations_deleted [set where_clause $num_translations_deleted_clause; db_string count_locale {}]
+    db_1row count_locale {}
     set multirow select_messages
 }
 
-# Prettify values
-set num_messages_pretty             [lc_numeric $num_messages]
-set num_translated_pretty           [lc_numeric $num_translated]
-set num_untranslated_pretty         [lc_numeric $num_untranslated]
-set num_translations_deleted_pretty [lc_numeric $num_translations_deleted]
-
 # Slider for 'show' options
 multirow create show_opts value label count
-multirow append show_opts "all" "All" $num_messages_pretty
-multirow append show_opts "translated" "Translated" $num_translated_pretty
-multirow append show_opts "untranslated" "Untranslated" $num_untranslated_pretty
-multirow append show_opts "deleted" "Deleted" $num_translations_deleted_pretty
+multirow append show_opts "all"             "All"           [lc_numeric $num_messages]
+multirow append show_opts "translated"      "Translated"    [lc_numeric $num_translated]
+multirow append show_opts "untranslated"    "Untranslated"  [lc_numeric $num_untranslated]
+multirow append show_opts "deleted"         "Deleted"       [lc_numeric $num_deleted]
 multirow extend show_opts url selected_p
 multirow foreach show_opts {
     set selected_p [string equal $show $value]
-    if {$value eq "all"} {
-        set url [export_vars -base [ad_conn url] { locale package_key }]
-    } else {
-        set url [export_vars -base [ad_conn url] { locale package_key {show $value} }]
-    }
+    set url [export_vars -base [ad_conn url] { locale package_key {show $value} }]
 }
 
 # Handle filtering
@@ -102,16 +74,16 @@ set where_clause_default {}
 set where_clause {}
 switch -exact $show {
     translated {
-        set where_clause_default $num_translated_default_clause
-        set where_clause         $num_translated_clause
+        set where_clause_default {and lm.message is not null and lm.deleted_p = 'f'}
+        set where_clause         {and lm2.message is not null and lm1.deleted_p = 'f' and lm2.deleted_p = 'f'}
     }
     untranslated {
-        set where_clause_default $num_untranslated_default_clause
-        set where_clause         $num_untranslated_clause
+        set where_clause_default {and lm.message is null and lm.deleted_p = 'f'}
+        set where_clause         {and lm2.message is null and lm1.deleted_p = 'f' and (lm2.deleted_p = 'f' or lm2.deleted_p is null)}
     }
     deleted {
-        set where_clause_default $num_messages_deleted_clause
-        set where_clause         $num_translations_deleted_clause
+        set where_clause_default {and deleted_p = 't'}
+        set where_clause         {and (lm1.deleted_p = 't' or lm2.deleted_p = 't')}
     }
 }
 
