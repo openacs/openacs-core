@@ -41,6 +41,8 @@
      <th>#acs-lang.Label#</th>
      <th>#acs-lang.Translated#</th>
      <th>#acs-lang.Untranslated#</th>
+     <th>#acs-lang.Deleted#</th>
+     <th>#acs-lang.Total#</th>
      <th>#acs-lang.Enabled#</th>
      <th>#acs-lang.Default_Locale_For_Language#</th>
      <th></th>
@@ -52,8 +54,26 @@
       <td>
         <a href="@locales.msg_edit_url@" title="#acs-lang.Edit_localized_messages_for#">@locales.locale_label@</a>
       </td>
-      <td align="right"><if @locales.num_translated_pretty;literal@ ne 0>@locales.num_translated_pretty@</if></td>
-      <td align="right"><if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0><if @locales.num_untranslated_pretty;literal@ ne 0>@locales.num_untranslated_pretty@</if></if></td>
+      <td align="right">
+        <if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0>
+          <if @locales.num_translated;literal@ ne 0>@locales.num_translated_pretty@</if>
+        </if>
+      </td>
+      <td align="right">
+        <if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0>
+          <if @locales.num_untranslated;literal@ ne 0>@locales.num_untranslated_pretty@</if>
+        </if>
+      </td>
+      <td align="right">
+        <if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0>
+          <if @locales.num_deleted;literal@ ne 0>@locales.num_deleted_pretty@</if>
+        </if>
+      </td>
+      <td align="right">
+        <if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0>
+          <if @locales.num_messages;literal@ ne 0>@locales.num_messages_pretty@</if>
+        </if>
+      </td>
       <td align="center">
         <if @locales.enabled_p;literal@ true>
           <a href="@locales.locale_enabled_p_url@" title="#acs-lang.Disable_this_locale#"><img src="/resources/acs-subsite/checkboxchecked.gif" height="13" width="13" style="border:0; background-color: white;" alt="#acs-lang.Disable_this_locale#"></a>
