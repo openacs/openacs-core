@@ -49,7 +49,15 @@ set usage_hide_url [export_vars -base [ad_conn url] { locale package_key message
 set usage_show_url [export_vars -base [ad_conn url] { locale package_key message_key show {usage_p 1} return_url }]
 
 set delete_url [export_vars -base message-delete { locale package_key message_key show {return_url {[ad_return_url]}} }]
+set undelete_url [export_vars -base message-undelete { locale package_key message_key show {return_url {[ad_return_url]}} }]
 
+set deleted_p [db_string get_deleted_p {
+    select deleted_p
+    from   lang_messages
+    where  package_key = :package_key
+    and    message_key = :message_key
+    and    locale = :current_locale
+}]
 
 ad_form -name message_form -form {
     {locale:text(hidden),optional {value $current_locale}}

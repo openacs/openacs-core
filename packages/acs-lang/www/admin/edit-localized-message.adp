@@ -27,6 +27,11 @@
 
 <if @create_p;literal@ true>
   <ul class="action-links">
-    <li> <a href="@delete_url@">Delete this message</a></li>
+    <if @deleted_p;literal@ true>
+      <li> <a href="@undelete_url@" title="Undelete this message">Undelete this message</a> </li>
+    </if>
+    <else>
+      <li> <a href="@delete_url@" title="Delete this message">Delete this message</a></li>
+    </else>
   </ul>
 </if>
