@@ -1084,7 +1084,7 @@ ad_proc -private rp_handler {} {
         # ::ad_conn being set up.  My fix is to simply redirect to the
         # url AOLserver substitutes if ::ad_conn does not exist
         # (rp_filter begins with ad_conn -reset) ...
-        ns_log warning "rp_handler: Obscure case, where ::ad_conn is not set, redirect to [ns_conn url]"
+        ad_log warning "rp_handler: Obscure case, where ::ad_conn is not set, redirect to [ns_conn url]"
         ad_returnredirect [ns_conn url]
         return
     }
