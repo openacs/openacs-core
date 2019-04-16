@@ -132,13 +132,9 @@ aa_register_case \
 aa_register_case \
     -cats smoke \
     -procs {
-        acs_user::get_by_username_not_cached
-        auth::authority::local
-        auth::create_user
         group::add_member
         group::new
         relation_add
-        util_memoize_flush
     } acs_subsite_check_composite_group {
     Build a 3-level hierarchy of composite groups and check memberships. This test case covers the membership and composition rel insertion triggers and composability of basic membership and admin rels.
 
@@ -154,43 +150,11 @@ aa_register_case \
             set level_2_group [group::new -group_name "Level 2 Group"]
             relation_add composition_rel $level_1_group $level_2_group
 
-            set authority_id [auth::authority::local]
+            set user_info_1 [acs::test::user::create]
+            set user_1_id [dict get $user_info_1 user_id]
 
-            # flush cache from previous call of this test
-            util_memoize_flush [list acs_user::get_by_username_not_cached \
-                                    -authority_id $authority_id \
-                                     -username "__test1"]
-
-            if {[set user_1_id [acs_user::get_by_username_not_cached \
-                                    -authority_id $authority_id \
-                                    -username "__test1"]] eq ""} {
-                array set user_1 [auth::create_user \
-                                      -username "__test1" \
-                                      -email "__user1@test.test" \
-                                      -first_names "__user1.Test first" \
-                                      -last_name "__user1.Test last" \
-                                      -password 1 \
-                                      -password_confirm 1]
-                set user_1_id $user_1(user_id)
-            }
-
-            # flush cache from previous call of this test
-            util_memoize_flush [list acs_user::get_by_username_not_cached \
-                                    -authority_id $authority_id \
-                                     -username "__test2"]
-
-            if {[set user_2_id [acs_user::get_by_username_not_cached \
-                                    -authority_id $authority_id \
-                                    -username "__test2"]] eq ""} {
-                array set user_2 [auth::create_user \
-                                      -username "__test2" \
-                                      -email "__user2@test.test" \
-                                      -first_names "__user2.Test first" \
-                                      -last_name "__user2.Test last" \
-                                      -password 1 \
-                                      -password_confirm 1]
-                set user_2_id $user_2(user_id)
-            }
+            set user_info_2 [acs::test::user::create]
+            set user_2_id [dict get $user_info_2 user_id]
 
             group::add_member -group_id $level_2_group -user_id $user_1_id -rel_type membership_rel
             group::add_member -group_id $level_2_group -user_id $user_1_id -rel_type admin_rel
