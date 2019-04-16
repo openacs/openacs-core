@@ -60,7 +60,7 @@ foreach spec_file $all_spec_files {
     set package_name $version(package-name)
     set package_key $version(package.key)
     if { [apm_package_supports_rdbms_p -package_key $package_key] } {
-        if { [apm_package_registered_p $package_key] } {
+        if { [apm_package_registered_p $package_key] && [apm_package_installed_p $package_key] } {
             # This package is already on the system
             if { [apm_higher_version_installed_p $package_key $version_name] } {
                 ns_log Notice "higher version installed of $package_key $version_name"
