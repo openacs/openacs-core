@@ -44,7 +44,6 @@ aa_register_case \
     -procs {
         acs_user::delete
         application_group::group_id_from_package_id
-        auth::create_user
         group::add_member
     } \
     acs_subsite_expose_bug_1144 {
@@ -61,22 +60,17 @@ aa_register_case \
             set main_group_id [application_group::group_id_from_package_id \
                               -package_id $main_node(package_id)]
 
-            set email "__test@test.test"
-            array set creation_info [auth::create_user \
-                                     -username "__test" \
-                                     -email $email \
-                                     -first_names "__Test first" \
-                                     -last_name "__Test last" \
-                                     -password 1 \
-                                     -password_confirm 1]
+            set user_info [acs::test::user::create]
+            set user_id [dict get $user_info user_id]
+            set email   [string tolower [dict get $user_info email]]
 
             # Make sure email is verified. The real process of
             # verifying is tested elsewhere.
-            auth::set_email_verified -user_id $creation_info(user_id)
+            auth::set_email_verified -user_id $user_id
 
             group::add_member \
                 -group_id $main_group_id \
-                -user_id $creation_info(user_id) \
+                -user_id $user_id \
                 -rel_type admin_rel
 
             set cc_users_count [db_string count_cc_users {
@@ -92,7 +86,7 @@ aa_register_case \
                 where email = :email
             }]
             aa_equals "New user occurs only once in registered_users" $registered_users_count 1
-            acs_user::delete -user_id $creation_info(user_id)
+            acs_user::delete -user_id $user_id
         }
 }
 
