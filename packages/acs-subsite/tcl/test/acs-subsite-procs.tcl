@@ -20,7 +20,6 @@ aa_register_case \
 
     @author Don Baccus
 } {
-
     aa_run_with_teardown \
         -rollback \
         -test_code {
@@ -36,7 +35,6 @@ aa_register_case \
             aa_true "Delete of group \"group_775\" succeeded." 1
         }
     }
-
 }
 
 aa_register_case \
@@ -51,14 +49,13 @@ aa_register_case \
 
     @author Peter Marklund
 } {
-
     aa_run_with_teardown \
         -rollback \
         -test_code {
 
             array set main_node [site_node::get_from_url -url "/"]
             set main_group_id [application_group::group_id_from_package_id \
-                              -package_id $main_node(package_id)]
+                                   -package_id $main_node(package_id)]
 
             set user_info [acs::test::user::create]
             set user_id [dict get $user_info user_id]
@@ -96,7 +93,6 @@ aa_register_case \
     acs_subsite_trivial_smoke_test {
     Minimal smoke test.
 } {
-
     aa_run_with_teardown \
         -rollback \
         -test_code {
@@ -112,7 +108,6 @@ aa_register_case \
     acs_subsite_unregistered_visitor {
     Test that unregistered visitor is not in any groups
 } {
-
     aa_equals "Unregistered vistior is not in any groups except The Public" \
         [db_string count_rels {
 	    select count(*)
@@ -130,7 +125,10 @@ aa_register_case \
         group::new
         relation_add
     } acs_subsite_check_composite_group {
-    Build a 3-level hierarchy of composite groups and check memberships. This test case covers the membership and composition rel insertion triggers and composability of basic membership and admin rels.
+    Build a 3-level hierarchy of composite groups and check
+    memberships. This test case covers the membership and composition
+    rel insertion triggers and composability of basic membership and
+    admin rels.
 
     @author Michael Steigman
 } {
