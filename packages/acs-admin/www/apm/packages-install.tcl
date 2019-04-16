@@ -16,10 +16,10 @@ set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
 set dimensional_list {
     {
         operation "Operation:" all {
-	    { upgrade "Upgrade" {} }
-	    { install "Install" {} }
-	    { all "All" {} }
-	}
+            { upgrade "Upgrade" {} }
+            { install "Install" {} }
+            { all "All" {} }
+        }
     }
 }
 
@@ -30,7 +30,7 @@ set dimensional_list [ad_dimensional $dimensional_list]
 #
 # If a package is in the apm_workspace dir then we assume that this is
 # the package that should be installed and we ignore any such package
-# in the packages dir.  
+# in the packages dir.
 #
 # TODO: make sure that it's a later version than that in the packages dir?
 #
@@ -91,8 +91,8 @@ if { $spec_files eq "" } {
         using the <a href="package-load">Package Loader</a>.<p>
         Return to the <a href="index">APM</a>.<p>
     }]
-} else {   
-    
+} else {
+
     append body [subst {
         <h2>Select Packages to $operation</h2><p>
         <p>Please select the set of packages you'd like to [string tolower $operation].</p>
@@ -100,7 +100,7 @@ if { $spec_files eq "" } {
         $dimensional_list
         </div>
     }]
-    
+
     set formName "pkgsForm"
     template::add_event_listener \
         -id check_all \
@@ -126,7 +126,7 @@ if { $spec_files eq "" } {
         <a href="#" id="check_all"><b>check all boxes</b></a>
     }
     #packages-install?checked_by_default_p=1
-    
+
     append body "<form name='$formName' action='packages-install-2' method='post'>\n"
 
     # Client properties do not deplete the limited URL variable space.
@@ -146,13 +146,13 @@ if { $spec_files eq "" } {
             lappend errors "<li>Unable to parse $spec_file.  The following error was generated:
         <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><p>"
         } else {
-            apm_log APMDebug "APM: Adding $package(package.key) to list for installation." 
+            apm_log APMDebug "APM: Adding $package(package.key) to list for installation."
             lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
                                        $package(embeds) $package(extends) $package(provides) $package(requires) ""]
             lappend pkg_key_list $package(package.key)
         }
     }
-    
+
     if { $checked_by_default_p } {
         set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list $operation]
     } else {
@@ -169,14 +169,14 @@ if { $spec_files eq "" } {
         <div><input type="submit" value="Next -->"></div>
         </form>
     }]
-    
+
     if {$errors ne ""} {
         append body "The following errors were generated
     <ul>
         $errors
     </ul>
     "
-    }    
+    }
 }
 
 if { [llength $not_compatible_list] > 0 } {
