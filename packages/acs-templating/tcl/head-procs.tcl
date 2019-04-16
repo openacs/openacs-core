@@ -218,6 +218,7 @@ ad_proc -public template::head::add_link {
     {-rel:required}
     {-title ""}
     {-type ""}
+    {-version ""}
 } {
     Add a link tag to the head section of the document to be returned to the
     users client.  A given target document may only be added once for a
@@ -240,9 +241,16 @@ ad_proc -public template::head::add_link {
                    this link
     @param type    the type attribute of the link tag, e.g. 'text/css'
                    separated list of values, e.g. 'screen,print,braille'
+    @param version the version of the resource, which will be appended as a query
+                   string to the end of the href (.../filename?ver=...).
+                   Useful to perform 'cache busting' in browser cached resources,
+                   to force retrieval
 
     @see ::template::head::flush_link
 } {
+    if {$version ne ""} {
+        set href "$href?ver=$version"
+    }
     set ::template::head::links($rel,$href) [list $rel $href $type $media $title $lang $order $crossorigin $integrity]
 }
 
@@ -464,6 +472,7 @@ ad_proc -public template::head::add_css {
     {-media "all"}
     {-order "0"}
     {-title ""}
+    {-version ""}
 } {
     Add a link tag with relation type 'stylesheet' or 'alternate stylesheet',
     and type 'text/css' to the head section of the document to be returned to
@@ -486,6 +495,10 @@ ad_proc -public template::head::add_css {
     @param crossorigin  Enumerated attribute to indicate whether CORS
                      (Cross-Origin Resource Sharing) should be used
     @param integrity provide hash values for W3C Subresource Integrity recommendation
+    @param version   the version of the resource, which will be appended as a query
+                     string to the end of the href (.../filename?ver=...).
+                     Useful to perform 'cache busting' in browser cached resources,
+                     to force retrieval
 
     @see template::head::add_link
 } {
@@ -503,7 +516,8 @@ ad_proc -public template::head::add_css {
         -lang $lang \
         -order $order \
         -crossorigin $crossorigin \
-        -integrity $integrity
+        -integrity $integrity \
+        -version $version
 }
 
 ad_proc -public template::add_body_handler {
