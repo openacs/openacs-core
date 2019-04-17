@@ -57,7 +57,7 @@ set deleted_p [db_string get_deleted_p {
     where  package_key = :package_key
     and    message_key = :message_key
     and    locale = :current_locale
-}]
+} -default false]
 
 ad_form -name message_form -form {
     {locale:text(hidden),optional {value $current_locale}}
