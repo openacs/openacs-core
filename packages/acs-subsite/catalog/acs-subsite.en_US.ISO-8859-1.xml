@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-subsite" locale="en_US" charset="ISO-8859-1">
 
-  <msg key="400_title">Server Error</msg>
+  <msg key="400_title">Client Error</msg>
   <msg key="403_message">You don&#39;t have permissions to retrieve this page</msg>
   <msg key="404_message">The requested file was not found</msg>
   <msg key="404_title">Bad Request</msg>
   <msg key="500_message">An error occurred while processing your request</msg>
+  <msg key="500_title">Server Error</msg>
   <msg key="503_message">The service you requested is currently unavailable</msg>
   <msg key="_or">, or</msg>
   <msg key="_Update_Basic_Information">Update Basic Information</msg>
