@@ -1170,10 +1170,11 @@ namespace eval acs::test {
     ad_proc -public ::acs::test::form_reply {
         {-user_id 0}
         {-last_request ""}
-        -url:required
+        {-form ""}
+        {-url ""}
         {-update {}}
         {-remove {}}
-        form_content
+        {form_content ""}
     } {
 
         Send a (POST) request to the specified URL based on the
@@ -1186,6 +1187,19 @@ namespace eval acs::test {
         @param remove keys to be removed from the form content
 
     } {
+        if {$form_content eq ""} {
+            set form_content [form_get_fields $form]
+        }
+        if {$form_content eq ""} {
+            error "either non-empty form or form_content has to be provided"
+        }
+        if {$url eq ""} {
+            set url [dict get $form @action]
+        }
+        if {$url eq ""} {
+            error "either form with action fields or url has to be provided"
+        }
+
         if {$remove ne ""} {
             set form_content [dict remove $form_content {*}$remove]
             ns_log notice "DEBUG: after removing <$remove> from <$form_content>"
@@ -1510,12 +1524,12 @@ namespace eval acs::test {
         @param user_info dict containing at least
                email, last_name, username and password
     } {
-        aa_log $user_info
+        #aa_log "acs::test::login with user_info $user_info"
         set d [acs::test::http -user_id 0 /register/]
         acs::test::reply_has_status_code $d 200
 
         set form [acs::test::get_form [dict get $d body ] {//form[@id='login']}]
-        set fields [dict get $form fields]
+        set fields [acs::test::form_get_fields $form]
         if {[dict exists $fields email]} {
             aa_log "login via email [dict get $user_info email]"
             dict set fields email [dict get $user_info email]
@@ -1524,11 +1538,9 @@ namespace eval acs::test {
             dict set fields username [dict get $user_info username]
         }
         dict set fields password [dict get $user_info password]
+        set form [acs::test::form_set_fields $form $fields]
 
-        set d [::acs::test::form_reply \
-                   -user_id 0 \
-                   -url [dict get $form @action] \
-                   $fields]
+        set d [::acs::test::form_reply -user_id 0 -form $form]
         acs::test::reply_has_status_code $d 302
 
         return $d
@@ -1595,8 +1607,49 @@ namespace eval acs::test {
         return $form_data
     }
 
+    ad_proc -public form_get_fields {form} {
+
+        Get the fields from a form.
+
+        @form form dict
+        @see acs::test::get_form
+
+        @author Gustaf Neumann
+    } {
+        return [dict get $form fields]
+    }
+
+    ad_proc -public form_set_fields {form fields} {
+
+        Set the fields in a form.
+
+        @form form dict
+        @fields fields in form of attribute/value pairs
+
+        @see acs::test::get_form
+
+        @author Gustaf Neumann
+    } {
+        dict set form fields $fields
+        return $form
+    }
+
+    ad_proc -public form_is_empty {form} {
+
+        Check, if the form is empty
+
+        @form form dict
+
+        @see acs::test::get_form
+
+        @author Gustaf Neumann
+    } {
+        return [expr {[llength $form] == 0}]
+    }
+
+
     ad_proc -public follow_link {
-        -last_request:required        
+        -last_request:required
         {-user_id 0}
         {-base /}
         {-label ""}
@@ -1676,7 +1729,7 @@ namespace eval acs::test {
     ad_proc -public reply_contains_no {{-prefix ""} dict string} {
 
         Convenience function for test cases to check, whether the
-        resulting page does not contains the given string.
+        resulting page does not contain the given string.
 
         @param prefix  prefix for logging
         @param dict    request reply dict, containing at least the request body
