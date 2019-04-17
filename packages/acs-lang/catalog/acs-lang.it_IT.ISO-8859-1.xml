@@ -18,6 +18,7 @@
   <msg key="Current_system_timezone_is">Il fuso orario di sistema corrente é &lt;strong&gt;%timezone%&lt;/strong&gt;</msg>
   <msg key="Default_Locale_For_Language">Locale di Default per la Lingua</msg>
   <msg key="Delete_this_locale">Elimina questo locale</msg>
+  <msg key="Deleted">Eliminato</msg>
   <msg key="Disable_this_locale">Disabilita questo locale</msg>
   <msg key="Edit_definition_of_locale">Modifica la definizione del locale</msg>
   <msg key="Edit_history">Storico modifiche</msg>

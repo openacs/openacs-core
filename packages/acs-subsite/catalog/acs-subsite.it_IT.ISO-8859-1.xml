@@ -6,6 +6,7 @@
   <msg key="404_message">Il file richiesto non è stato trovato</msg>
   <msg key="404_title">Richiesta errata</msg>
   <msg key="500_message">Si è verificato un errore nel processare la tua richiesta</msg>
+  <msg key="500_title">Errore Server</msg>
   <msg key="503_message">Il servizio richiesto è attualmente non disponibile</msg>
   <msg key="_or">, oppure</msg>
   <msg key="_Update_Basic_Information">Aggiorna Informazione di Base</msg>
