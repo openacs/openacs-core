@@ -119,7 +119,6 @@ ad_proc -public template::head::add_script {
     {-script ""}
     {-src ""}
     {-type "text/javascript"}
-    {-version ""}
 } {
     Add a script to the head section of the document to be returned to the
     users client.  A script library in an external file may only be included
@@ -143,10 +142,6 @@ ad_proc -public template::head::add_script {
     @param src     the src attribute of the script tag, i.e. the source url of the
                    script
     @param type    the type attribute of the script tag, e.g. 'text/javascript'
-    @param version the version of the resource, which will be appended as a query
-                   string to the end of the href (.../filename?ver=...).
-                   Useful to perform 'cache busting' in browser cached resources,
-                   to force retrieval
 
 } {
     if {$defer_p} {
@@ -189,9 +184,6 @@ ad_proc -public template::head::add_script {
 
         lappend ::template::head::scripts(anonymous) $type "" $charset $defer $async $script $order $crossorigin $integrity
     } else {
-        if {$version ne ""} {
-            set src "$src?ver=$version"
-        }
         set ::template::head::scripts($src) [list $type $src $charset $defer $async "" $order $crossorigin $integrity]
     }
 }
@@ -226,7 +218,6 @@ ad_proc -public template::head::add_link {
     {-rel:required}
     {-title ""}
     {-type ""}
-    {-version ""}
 } {
     Add a link tag to the head section of the document to be returned to the
     users client.  A given target document may only be added once for a
@@ -249,16 +240,9 @@ ad_proc -public template::head::add_link {
                    this link
     @param type    the type attribute of the link tag, e.g. 'text/css'
                    separated list of values, e.g. 'screen,print,braille'
-    @param version the version of the resource, which will be appended as a query
-                   string to the end of the href (.../filename?ver=...).
-                   Useful to perform 'cache busting' in browser cached resources,
-                   to force retrieval
 
     @see ::template::head::flush_link
 } {
-    if {$version ne ""} {
-        set href "$href?ver=$version"
-    }
     set ::template::head::links($rel,$href) [list $rel $href $type $media $title $lang $order $crossorigin $integrity]
 }
 
@@ -438,7 +422,6 @@ ad_proc -public template::head::add_javascript {
     {-order "0"}
     {-script ""}
     {-src ""}
-    {-version ""}
 } {
     Add a script of type 'text/javascript' to the head section of the document
     to be returned to the users client.  This function is a wrapper around
@@ -459,10 +442,6 @@ ad_proc -public template::head::add_javascript {
                    src
     @param src     the src attribute of the script tag, i.e. the source url of the
                    script
-    @param version the version of the resource, which will be appended as a query
-                   string to the end of the href (.../filename?ver=...).
-                   Useful to perform 'cache busting' in browser cached resources,
-                   to force retrieval
 
     @see template::head::add_script
 } {
@@ -474,8 +453,7 @@ ad_proc -public template::head::add_javascript {
         -script $script \
         -order $order \
         -crossorigin $crossorigin \
-        -integrity $integrity \
-        -version $version
+        -integrity $integrity
 }
 
 ad_proc -public template::head::add_css {
@@ -487,7 +465,6 @@ ad_proc -public template::head::add_css {
     {-media "all"}
     {-order "0"}
     {-title ""}
-    {-version ""}
 } {
     Add a link tag with relation type 'stylesheet' or 'alternate stylesheet',
     and type 'text/css' to the head section of the document to be returned to
@@ -510,10 +487,6 @@ ad_proc -public template::head::add_css {
     @param crossorigin  Enumerated attribute to indicate whether CORS
                      (Cross-Origin Resource Sharing) should be used
     @param integrity provide hash values for W3C Subresource Integrity recommendation
-    @param version   the version of the resource, which will be appended as a query
-                     string to the end of the href (.../filename?ver=...).
-                     Useful to perform 'cache busting' in browser cached resources,
-                     to force retrieval
 
     @see template::head::add_link
 } {
@@ -532,7 +505,6 @@ ad_proc -public template::head::add_css {
         -order $order \
         -crossorigin $crossorigin \
         -integrity $integrity \
-        -version $version
 }
 
 ad_proc -public template::add_body_handler {
