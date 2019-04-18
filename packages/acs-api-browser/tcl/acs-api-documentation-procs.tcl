@@ -1920,24 +1920,32 @@ namespace eval ::apidoc {
     } {
 
         set linkList [list]
-        set filename $::acs::rootdir/$path
-        set path_dirname [file dirname $path]
-        set file_dirname [file dirname $filename]
-        set file_rootname [file rootname [file tail $filename]]
-        regsub {(-oracle|-postgresql)$} $file_rootname {} file_rootname
-        set files \
-            [lsort -decreasing \
-                 [glob -nocomplain \
-                      -directory $file_dirname \
-                      "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]]
+        set paths $path
+        set root_path [file rootname $path]
+        set themed_path [template::themed_template $root_path]
+        if {$themed_path ne $root_path} {
+            lappend paths $themed_path
+        }
+        foreach path $paths {
+            set filename $::acs::rootdir/$path
+            set path_dirname [file dirname $path]
+            set file_dirname [file dirname $filename]
+            set file_rootname [file rootname [file tail $filename]]
+            regsub {(-oracle|-postgresql)$} $file_rootname {} file_rootname
 
-        foreach file $files {
+            lappend files {*}[glob -nocomplain \
+                                 -directory $file_dirname \
+                                 "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]
+        }
+
+        foreach file [lsort -decreasing $files] {
             set path [ns_urlencode $path_dirname/[file tail $file]]
             set link [export_vars -base content-page-view {{source_p 1} path}]
-            lappend linkList [list filename $file link $link]
+            set display_file [string range $file [string length $::acs::rootdir]+1 end]
+            lappend linkList [list filename $display_file link $link]
             if {$include_compiled && [file extension $file] eq ".adp"} {
                 set link [export_vars -base content-page-view {{source_p 1} {compiled_p 1} path}]
-                lappend linkList [list filename "$file (compiled)" link $link]
+                lappend linkList [list filename "$display_file (compiled)" link $link]
             }
         }
 
