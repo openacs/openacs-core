@@ -390,7 +390,7 @@ ad_proc -public subsite::util::sub_type_exists_p {
     @creation-date 2000-02-07
 } {
     return [db_string sub_type_exists_p {
-        select exists (select 1 from acs_object_types 
+        select exists (select 1 from acs_object_types
                               where supertype = :object_type) from dual
     }]
 }
@@ -1069,21 +1069,41 @@ ad_proc -public subsite::new_subsite_theme {
     {-resource_dir ""}
     {-streaming_head ""}
     {-local_p true}
+    {-create_or_replace:boolean}
 } {
     Add a new subsite theme, making it available to the theme configuration code.
 } {
     # the following line is for Oracle compatibility
     set local_p [expr {$local_p ? "t" : "f"}]
 
+    if {$create_or_replace_p
+        && [db_0or1row check_theme {select 1 from subsite_themes where key = :key}]
+    } {
+        subsite::update_subsite_theme \
+            -key $key \
+            -name $name \
+            -template $template \
+            -css $css \
+            -js $js \
+            -form_template $form_template \
+            -list_template $list_template \
+            -list_filter_template $list_filter_template \
+            -dimensional_template $dimensional_template \
+            -resource_dir $resource_dir \
+            -streaming_head $streaming_head \
+            -local_p $local_p
+        return
+    }
+
     db_dml insert_subsite_theme {
       insert into subsite_themes
         (key, name, template, css, js, form_template, list_template,
-	list_filter_template, dimensional_template, resource_dir,
-	streaming_head, local_p)
+        list_filter_template, dimensional_template, resource_dir,
+        streaming_head, local_p)
       values
         (:key, :name, :template, :css, :js, :form_template, :list_template,
-	:list_filter_template, :dimensional_template, :resource_dir,
-	:streaming_head, :local_p)
+        :list_filter_template, :dimensional_template, :resource_dir,
+        :streaming_head, :local_p)
     }
 }
 
