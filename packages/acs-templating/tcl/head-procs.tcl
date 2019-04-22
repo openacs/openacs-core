@@ -1059,7 +1059,12 @@ ad_proc template::add_event_listener {
     @param CSSclass  register handler for this CSS class
     @param formfield register handler for this formfield, specified
                      in a list of two elements in the form
-                     <code>{ form_id field_name }</code>
+                      <code>{ form_id field_name }</code>
+    @param usecapture indicating whether event will be dispatched to the
+                      registered listener before being dispatched to any
+                      EventTarget beneath it in the DOM tree.
+    @param preventdefault this option can the used prevent default click handling
+
     @author  Gustaf Neumann
 } {
     set prevent [expr {$preventdefault_p ? "event.preventDefault();" : ""}]
