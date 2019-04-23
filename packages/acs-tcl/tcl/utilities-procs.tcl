@@ -1459,7 +1459,7 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
     }
 
     ns_log debug "Done running scheduled proc $proc."
-    
+
     #
     # In case there are temporary xotcl objects, clean these up to
     # avoid surprises in schedued threads about pre-existing objects.
@@ -4068,6 +4068,35 @@ ad_proc -public ad_log {
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 
+ad_proc -public util::var_subst_quotehtml {string} {
+
+    Substitute in the provided string all variables with their values
+    (like "subst -nobackslashes -nocommands ..."), and perform HTML
+    quoting on the variable values before substitution.  This command
+    supports Tcl array syntax, and Tcl scalar variables with and
+    without curly braces.
+
+    @author Gustaf Neumann
+} {
+    #
+    # Protect evaluation characters
+    #
+    set escaped [string map {[ \\[ ] \\] \\ \\\\} $string]
+    #
+    # Handle array syntax:
+    #
+    regsub -all {\$([0-9a-zA-Z_:]*[\(][^\)]+[\)])} $escaped {[ns_quotehtml [set \1]]} escaped
+    #
+    # Hanlde plain variables:
+    #
+    regsub -all {\$([0-9a-zA-Z_:]+|[\{][^\}]+[\}])} $escaped {[ns_quotehtml $\1]} result
+    #
+    # Finallly, "subst" the result.
+    #
+    uplevel [list ::subst $result]
+}
+
+
 ad_proc -public -deprecated util_search_list_of_lists {list_of_lists query_string {sublist_element_pos 0}} {
     Returns position of sublist that contains QUERY_STRING at SUBLIST_ELEMENT_POS.
 
@@ -4294,6 +4323,8 @@ namespace eval util::resources {
             file rename -force -- $fn $local_path/$file
         }
     }
+
+
 
 }
 
