@@ -43,20 +43,38 @@ template::add_confirm_handler -id action-export \
     -message [_ acs-lang.Are_you_sure_you_want_to_export_all_I18N_messages_to_catalog_files]
 
 # Retrieve locale information
+set locale_list [db_list locale_list_select {select locale from ad_locales order by locale}]
+
+template::multirow create locales \
+    locale \
+    locale_label \
+    escaped_locale \
+    msg_edit_url \
+    enabled_p \
+    default_p \
+    language \
+    locale_edit_url \
+    locale_delete_url \
+    locale_make_default_url \
+    locale_enabled_p_url \
+    num_messages_pretty \
+    num_messages \
+    num_translated_pretty \
+    num_translated \
+    num_untranslated_pretty \
+    num_untranslated \
+    num_deleted_pretty \
+    num_deleted \
+    num_locales_for_language_pretty \
+    num_locales_for_language
+
+# Populate multirow
 set default_locale "en_US"
-db_multirow -extend {
-    escaped_locale
-    msg_edit_url
-    locale_edit_url
-    locale_delete_url
-    locale_make_default_url
-    locale_enabled_p_url
-    num_messages_pretty
-    num_translated_pretty
-    num_untranslated_pretty
-    num_deleted_pretty
-    num_locales_for_language_pretty
-} locales count_locales {} {
+foreach current_locale $locale_list {
+    #
+    # Get values per locale
+    #
+    db_0or1row locale_stats {}
     #
     # Encode locale
     #
@@ -81,6 +99,31 @@ db_multirow -extend {
     set num_untranslated_pretty         [lc_numeric $num_untranslated]
     set num_deleted_pretty              [lc_numeric $num_deleted]
     set num_locales_for_language_pretty [lc_numeric $num_locales_for_language]
+    #
+    # Append to multirow
+    #
+    template::multirow append locales \
+        $locale \
+        $locale_label \
+        $escaped_locale \
+        $msg_edit_url \
+        $enabled_p \
+        $default_p \
+        $language \
+        $locale_edit_url \
+        $locale_delete_url \
+        $locale_make_default_url \
+        $locale_enabled_p_url \
+        $num_messages_pretty \
+        $num_messages \
+        $num_translated_pretty \
+        $num_translated \
+        $num_untranslated_pretty \
+        $num_untranslated \
+        $num_deleted_pretty \
+        $num_deleted \
+        $num_locales_for_language_pretty \
+        $num_locales_for_language
 }
 
 # Local variables:
