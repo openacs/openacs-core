@@ -67,12 +67,14 @@ ad_proc -public rp_internal_redirect {
 
     rp_serve_abstract_file $path
 
+    #
     # Restore the file setting. We need to do this because
     # rp_serve_abstract_file sets it to the path we internally
     # redirected to, and rp_handler will cache the file setting
-    # internally in the ::tcl_url2file variable when PerformanceModeP is
-    # switched on. This way it caches the location that was originally
-    # requested, not the path that we redirected to.
+    # internally in the ::tcl_url2file variable when PerformanceModeP
+    # is switched on. This way it caches the location that was
+    # originally requested, not the path that we redirected to.
+    #
     ad_conn -set file $saved_file
 }
 
@@ -184,8 +186,10 @@ ad_proc -public ad_register_proc {
 
 } {
     if {$method eq "*"} {
+        #
         # Shortcut to allow registering filter for all methods. Just
         # call ad_register_proc again, with each of the three methods.
+        #
         foreach method { GET POST HEAD } {
             ad_register_proc -debug $debug -noinherit $noinherit $method $path $proc $arg
         }
@@ -300,7 +304,9 @@ ad_proc -private rp_invoke_proc { conn argv } {
 
 ad_proc -private rp_finish_serving_page {} {
     if { [info exists ::doc_properties(body)] } {
-        rp_debug "Returning page:[info level [expr {[info level] - 1}]]: [ns_quotehtml [string range $::doc_properties(body) 0 100]]"
+        set partial_properties [string range $::doc_properties(body) 0 100]
+        set lvl  [expr {[info level] - 1}]
+        rp_debug "Returning page:[info level $lvl: [ns_quotehtml $partial_properties]"
         doc_return 200 text/html $::doc_properties(body)
     }
 }
@@ -834,7 +840,7 @@ ad_proc -private rp_filter { why } {
     return $result
 }
 
-ad_proc rp_report_error {
+ad_proc -private rp_report_error {
     -message
 } {
 
@@ -844,11 +850,13 @@ ad_proc rp_report_error {
 
 } {
     if { ![info exists message] } {
-        # We need 'message' to be a copy, because errorInfo will get overridden by some of the template parsing below
+        #
+        # We need 'message' to be a copy, because errorInfo will get
+        # overridden by some of the template parsing below.
+        #
         set message $::errorInfo
     }
     set error_url "[ad_url][ad_conn url]?[export_entire_form_as_url_vars]"
-    #    set error_file [template::util::url_to_file $error_url]
     set error_file [ad_conn file]
     #set package_key [ad_conn package_key]
     set prev_url [get_referrer]
@@ -856,7 +864,9 @@ ad_proc rp_report_error {
     set user_id [ad_conn user_id]
     set bug_package_id [ad_conn package_id]
     set error_info $message
-    set vars_to_export [export_vars -form { error_url error_info user_id prev_url error_file feedback_id bug_package_id }]
+    set vars_to_export [export_vars -form {
+        error_url error_info user_id prev_url error_file feedback_id bug_package_id
+    }]
 
     ds_add conn error $message
 
@@ -885,9 +895,13 @@ ad_proc rp_report_error {
     ad_try {
         set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
     } on error {errorMsg} {
+        #
         # An error occurred during rendering of the error page
-        ns_log Error "rp_filter: error $errorMsg rendering error page (!)\n$::errorInfo"
-        set rendered_page "</table></table></table></h1></b></i><blockquote><pre>[ns_quotehtml $error_message]</pre></blockquote>"
+        #
+        ns_log error "rp_report_error: error $errorMsg rendering error page (!)\n$::errorInfo"
+        set rendered_page [subst {</table></table></table></h1></b></i>
+            <blockquote><pre>[ns_quotehtml $error_message]</pre></blockquote>
+        }]
     }
 
     ns_return 500 text/html $rendered_page
@@ -950,11 +964,13 @@ ad_proc -private rp_handle_request {} {
         set extra_url [ad_conn extra_url]
         if { $match_prefix ne "" } {
             if { [string first $match_prefix $extra_url] == 0 } {
-                # An empty root indicates we should reject the
+                #
+                # An empty "root" indicates we should reject the
                 # attempted reference.  This is used to block
-                # references to embedded package
-                # [sitewide-]admin pages that avoid the
-                # request processor permission check.
+                # references to embedded package [sitewide-]admin
+                # pages that avoid the request processor permission
+                # check.
+                #
                 if { $root eq "" } {
                     break
                 }
@@ -964,26 +980,42 @@ ad_proc -private rp_handle_request {} {
                 continue
             }
         }
-        ds_add rp [list notice "Trying rp_serve_abstract_file $root/$extra_url" $startclicks [clock clicks -microseconds]]
+        ds_add rp [list notice "Trying rp_serve_abstract_file $root/$extra_url" \
+                       $startclicks [clock clicks -microseconds]]
 
         ad_try {
             rp_serve_abstract_file "$root/$extra_url"
             set ::tcl_url2file([ad_conn url]) [ad_conn file]
             set ::tcl_url2path_info([ad_conn url]) [ad_conn path_info]
+
         } trap {AD EXCEPTION notfound} {val} {
+            #
+            # The file ws not found so far.
+            #
             #ns_log notice "rp_handle_request: AD_TRY NOTFOUND <$val> URL <$root/$extra_url>"
-            ds_add rp [list notice "File $root/$extra_url: Not found" $startclicks [clock clicks -microseconds]]
-            ds_add rp [list transformation [list notfound "$root / $extra_url" $val] $startclicks [clock clicks -microseconds]]
+            ds_add rp [list notice "File $root/$extra_url: Not found" \
+                           $startclicks [clock clicks -microseconds]]
+            ds_add rp [list transformation [list notfound "$root / $extra_url" $val] \
+                           $startclicks [clock clicks -microseconds]]
             continue
+
         } trap {AD EXCEPTION redirect} {url} {
+            #
+            # We have to redirect.
+            #
             #ns_log notice "rp_handle_request: AD_TRY redirect $url"
-            ds_add rp [list notice "File $root/$extra_url: Redirect" $startclicks [clock clicks -microseconds]]
-            ds_add rp [list transformation [list redirect $root/$extra_url $url] $startclicks [clock clicks -microseconds]]
+            ds_add rp [list notice "File $root/$extra_url: Redirect" \
+                           $startclicks [clock clicks -microseconds]]
+            ds_add rp [list transformation [list redirect $root/$extra_url $url] \
+                           $startclicks [clock clicks -microseconds]]
             ad_returnredirect $url
+
         } trap {AD EXCEPTION directory} {dir_index} {
             #ns_log notice "rp_handle_request: AD_TRY directory $dir_index"
-            ds_add rp [list notice "File $root/$extra_url: Directory index" $startclicks [clock clicks -microseconds]]
-            ds_add rp [list transformation [list directory $root/$extra_url $dir_index] $startclicks [clock clicks -microseconds]]
+            ds_add rp [list notice "File $root/$extra_url: Directory index" \
+                           $startclicks [clock clicks -microseconds]]
+            ds_add rp [list transformation [list directory $root/$extra_url $dir_index] \
+                           $startclicks [clock clicks -microseconds]]
             continue
         }
         return
@@ -1065,7 +1097,8 @@ ad_proc -private rp_handle_request {} {
         }
     }
 
-    ds_add rp [list transformation [list notfound $root/$extra_url notfound] $startclicks [clock clicks -microseconds]]
+    ds_add rp [list transformation [list notfound $root/$extra_url notfound] \
+                   $startclicks [clock clicks -microseconds]]
     ns_returnnotfound
 }
 
@@ -1246,18 +1279,21 @@ ad_proc -public rp_serve_concrete_file {file} {
             # raise true exception
             #
             #ns_log notice "rp_serve_concrete_file: on error $errMsg"
-            ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -microseconds] \
+            ds_add rp [list serve_file [list $file $handler] \
+                           $startclicks [clock clicks -microseconds] \
                            error "$::errorCode: $::errorInfo"]
             return -code error -errorcode $::errorCode -errorinfo $::errorInfo $errMsg
         } on ok {r} {
-            ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -microseconds]]
+            ds_add rp [list serve_file [list $file $handler] \
+                           $startclicks [clock clicks -microseconds]]
         } finally {
             rp_finish_serving_page
         }
 
     } elseif { [rp_file_can_be_public_p $file] } {
         set type [ns_guesstype $file]
-        ds_add rp [list serve_file [list $file $type] $startclicks [clock clicks -microseconds]]
+        ds_add rp [list serve_file [list $file $type] \
+                       $startclicks [clock clicks -microseconds]]
         ns_returnfile 200 $type $file
     } else {
         ad_raise notfound
