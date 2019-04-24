@@ -82,22 +82,22 @@
     </tr>
   </table>
 
-  <blockquote>
-    <div><strong>&raquo;</strong>
-    <a href="#" data-action="rerun" class="bulk-action"> Rerun selected test cases</a>
-    </div>
-    <div>
-    <strong>&raquo;</strong>
-    <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
-    </div>
-    <if @by_package_key@ ne "">
-      <div>
-      <strong>&raquo;</strong>
-      <a href="@record_url@"> Record a test</a>
-      </div>
-    </if>
- </blockquote>
   <if @view_by@ eq "package">
+    <blockquote>
+      <div><strong>&raquo;</strong>
+        <a href="#" data-action="rerun" class="bulk-action"> Rerun selected test cases</a>
+      </div>
+      <div>
+        <strong>&raquo;</strong>
+        <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
+      </div>
+      <if @by_package_key@ ne "">
+        <div>
+          <strong>&raquo;</strong>
+          <a href="@record_url@"> Record a test</a>
+        </div>
+      </if>
+    </blockquote>
     <form id="bulk-actions-form" action="">
       @bulk_actions_vars;literal@
     <table cellpadding="2px">
@@ -158,7 +158,39 @@
     </multiple>
     </table>
     </form>
-  </if><else>
+    <blockquote>
+      <div>
+        <strong>&raquo;</strong>
+        <a href="#" data-action="rerun" class="bulk-action"> Rerun selected test cases</a>
+      </div>
+      <div>
+        <strong>&raquo;</strong>
+        <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a> 
+      </div>
+      <if @by_package_key@ ne "">
+        <div>
+          <strong>&raquo;</strong>
+          <a href="@record_url@"> Record a test</a>
+        </div>
+      </if>
+    </blockquote>
+</if>
+<else>
+   <blockquote>
+     <div><strong>&raquo;</strong>
+       <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
+     </div>
+     <div>
+       <strong>&raquo;</strong>
+       <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
+     </div>
+     <if @by_package_key@ ne "">
+       <div>
+         <strong>&raquo;</strong>
+         <a href="@record_url@"> Record a test</a>
+       </div>
+     </if>
+   </blockquote>
     <table width="100%">
     <tr  style="background-color:#c0c0c0">
         <th>Package key</th>
@@ -210,25 +242,23 @@
       </tr>
     </multiple>
     </table>
+   <blockquote>
+     <div><strong>&raquo;</strong>
+       <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
+     </div>
+     <div>
+       <strong>&raquo;</strong>
+       <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
+     </div>
+     <if @by_package_key@ ne "">
+       <div>
+         <strong>&raquo;</strong>
+         <a href="@record_url@"> Record a test</a>
+       </div>
+     </if>
+   </blockquote>
   </else>
 
-  <blockquote>
-    <div>
-    <strong>&raquo;</strong>
-    <a href="#" data-action="rerun" class="bulk-action"> Rerun selected test cases</a>
-    </div>
-    <div>
-    <strong>&raquo;</strong>
-    <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a> 
-    </div>
-    <if @by_package_key@ ne "">
-      <div>
-      <strong>&raquo;</strong>
-      <a href="@record_url@"> Record a test</a>
-      </div>
-    </if>
-    
-  </blockquote>
 <p><a href="doc/">Documentation</a>
 
 <script <if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>>
