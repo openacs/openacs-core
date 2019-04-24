@@ -210,14 +210,11 @@ aa_register_case -cats {api} -procs {
         -test_code {
 
             # Successful creation
-            array set user_info [auth::create_user \
-                                     -username "auth_create_user1" \
-                                     -email "auth_create_user1@test_user.com" \
-                                     -first_names "Test" \
-                                     -last_name "User" \
-                                     -password "changeme" \
-                                     -secret_question "no_question" \
-                                     -secret_answer "no_answer"]
+            array set user_info [acs::test::user::create]
+            set user [acs_user::get -user_id $user_info(user_id)]
+            set username     [dict get $user username]
+            set email        [dict get $user email]
+            set authority_id [dict get $user authority_id]
 
             aa_true "returns creation_status" [info exists user_info(creation_status)]
 
@@ -241,8 +238,9 @@ aa_register_case -cats {api} -procs {
             # Duplicate email and username
             array unset user_info
             array set user_info [auth::create_user \
-                                     -username "auth_create_user1" \
-                                     -email "auth_create_user1@test_user.com" \
+                                     -username $username \
+                                     -email $email \
+                                     -authority_id $authority_id \
                                      -first_names "Test3" \
                                      -last_name "User" \
                                      -password "changeme" \
@@ -260,7 +258,7 @@ aa_register_case -cats {api} -procs {
                 aa_true "element_message for email exists" \
 		    {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""}
             }
-            set user_id [acs_user::get_by_username -username auth_create_user1]
+            set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
             if { $user_id ne "" } {
                 acs_user::delete -user_id $user_id
             }
@@ -268,6 +266,7 @@ aa_register_case -cats {api} -procs {
             # Missing first_names, last_name, email
             array unset user_info
             array set user_info [auth::create_user \
+                                     -authority_id $authority_id \
                                      -username "auth_create_user2" \
                                      -email "" \
                                      -first_names "" \
@@ -294,7 +293,7 @@ aa_register_case -cats {api} -procs {
                     aa_log "element_message(last_name) = $elm_msgs(last_name)"
                 }
             }
-            set user_id [acs_user::get_by_username -username auth_create_user2]
+            set user_id [acs_user::get_by_username -authority_id $authority_id -username auth_create_user2]
             if { $user_id ne "" } {
                 acs_user::delete -user_id $user_id
             }
@@ -302,6 +301,7 @@ aa_register_case -cats {api} -procs {
             # Malformed email
             array unset user_info
             array set user_info [auth::create_user \
+                                     -authority_id $authority_id \
                                      -username [ad_generate_random_string] \
                                      -email "not an email" \
                                      -first_names "[ad_generate_random_string]<[ad_generate_random_string]" \
