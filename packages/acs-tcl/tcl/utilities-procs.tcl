@@ -4087,7 +4087,7 @@ ad_proc -public util::var_subst_quotehtml {string} {
     #
     regsub -all {\$([0-9a-zA-Z_:]*[\(][^\)]+[\)])} $escaped {[ns_quotehtml [set \1]]} escaped
     #
-    # Hanlde plain variables:
+    # Handle plain variables:
     #
     regsub -all {\$([0-9a-zA-Z_:]+|[\{][^\}]+[\}])} $escaped {[ns_quotehtml $\1]} result
     #
