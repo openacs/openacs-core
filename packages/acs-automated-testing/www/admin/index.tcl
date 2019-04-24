@@ -159,7 +159,7 @@ foreach category [nsv_get aa_test categories] {
 }
 
 set record_url [export_vars -base "record-test" -url {return_url package_key}]
-ad_return_template
+set bulk_actions_vars [export_vars -form {{category $by_category} view_by quiet stress security_risk}]
 
 # Local variables:
 #    mode: tcl

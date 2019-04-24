@@ -84,7 +84,7 @@
 
   <blockquote>
     <div><strong>&raquo;</strong>
-    <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
+    <a href="#" data-action="rerun" class="bulk-action"> Rerun selected test cases</a>
     </div>
     <div>
     <strong>&raquo;</strong>
@@ -96,11 +96,25 @@
       <a href="@record_url@"> Record a test</a>
       </div>
     </if>
-
  </blockquote>
   <if @view_by@ eq "package">
+    <form id="bulk-actions-form" action="">
+      @bulk_actions_vars;literal@
     <table cellpadding="2px">
     <tr style="background-color:#c0c0c0">
+        <th>
+          <input data-toggle="true" type="checkbox" checked="true" id="toggle-all"/>
+          <script <if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>>
+            document.getElementById('toggle-all').addEventListener('click', function (e) {
+                var toggle = this.getAttribute('data-toggle') == 'false' ? 'true' : 'false';
+                this.setAttribute('data-toggle', toggle);
+                var bulkActions = document.getElementsByName('package_key');
+                for (var i = 0; i < bulkActions.length; i++) {
+                    bulkActions[i].checked = toggle == 'true';
+                }
+            });
+          </script>
+        </th>
         <th>Package key</th>
         <th>Testcases run</th>
         <th>Passes</th>
@@ -115,6 +129,7 @@
         <else>
           <tr class="even">
         </else>
+        <td><input type="checkbox" checked="true" name="package_key" value="@packageinfo.key@"/></td>
         <td> <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@packageinfo.key@&amp;view_by=testcase&amp;quiet=@quiet@">@packageinfo.key@</a></td>
         <if @packageinfo.total;literal@ eq 0>
           <td align="right">No data</td>
@@ -142,6 +157,7 @@
       </tr>
     </multiple>
     </table>
+    </form>
   </if><else>
     <table width="100%">
     <tr  style="background-color:#c0c0c0">
@@ -199,7 +215,7 @@
   <blockquote>
     <div>
     <strong>&raquo;</strong>
-    <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
+    <a href="#" data-action="rerun" class="bulk-action"> Rerun selected test cases</a>
     </div>
     <div>
     <strong>&raquo;</strong>
@@ -215,3 +231,14 @@
   </blockquote>
 <p><a href="doc/">Documentation</a>
 
+<script <if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>>
+  var bulkActions = document.getElementsByClassName('bulk-action');
+  for (var i = 0; i < bulkActions.length; i++) {
+     bulkActions[i].addEventListener('click', function(e) {
+        e.preventDefault();
+        var form = document.getElementById('bulk-actions-form');
+        form.setAttribute('action', this.getAttribute('data-action'));
+        form.submit();
+     });
+  }
+</script>

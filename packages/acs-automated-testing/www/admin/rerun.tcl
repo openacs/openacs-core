@@ -1,7 +1,7 @@
 ad_page_contract {
     @cvs-id $Id$
 } {
-    {package_key:token ""}
+    {package_key:token,multiple ""}
     {category:aa_test_category ""}
     {view_by:aa_test_view_by "package"}
     {testcase_id:word,notnull ""}
