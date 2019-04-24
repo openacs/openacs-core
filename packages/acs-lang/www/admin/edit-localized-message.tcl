@@ -48,8 +48,9 @@ set description_edit_url [export_vars -base edit-description { locale package_ke
 set usage_hide_url [export_vars -base [ad_conn url] { locale package_key message_key show return_url }]
 set usage_show_url [export_vars -base [ad_conn url] { locale package_key message_key show {usage_p 1} return_url }]
 
-set delete_url [export_vars -base message-delete { locale package_key message_key show {return_url {[ad_return_url]}} }]
-set undelete_url [export_vars -base message-undelete { locale package_key message_key show {return_url {[ad_return_url]}} }]
+set delete_url      [export_vars -base message-delete       { locale package_key message_key show {return_url {[ad_return_url]}} }]
+set undelete_url    [export_vars -base message-undelete     { locale package_key message_key show {return_url {[ad_return_url]}} }]
+set unregister_url  [export_vars -base message-unregister   { locale package_key message_key show {return_url {[ad_return_url]}} }]
 
 set deleted_p [db_string get_deleted_p {
     select deleted_p

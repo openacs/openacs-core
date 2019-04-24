@@ -29,6 +29,7 @@
   <ul class="action-links">
     <if @deleted_p;literal@ true>
       <li> <a href="@undelete_url@" title="Undelete this message">Undelete this message</a> </li>
+      <li> <a href="@unregister_url@" title="Delete this message permanently (unregister)">Delete this message permanently in all locales (unregister)</a> </li>
     </if>
     <else>
       <li> <a href="@delete_url@" title="Delete this message">Delete this message</a></li>
