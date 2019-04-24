@@ -572,14 +572,14 @@ ad_proc -public aa_runseries {
     {-security_risk 0}
     -quiet:boolean
     {-testcase_id ""}
-    {by_package_key ""}
+    {by_package_keys ""}
     {by_category ""}
 } {
     Runs a series of testcases.
 
-    Runs all cases if both package_key and
-    category are blank, otherwise it uses the package and/or category to
-    select which testcases to run.
+    Runs all cases if both by_package_keys and by_category are blank,
+    otherwise it uses the package and/or category to select which
+    testcases to run.
 
     @author Peter Harper
     @creation-date 24 July 2001
@@ -613,8 +613,8 @@ ad_proc -public aa_runseries {
 
             # try to disqualify the test case
 
-            # if category is specified,
-            if { $by_package_key ne "" && $by_package_key ne $package_key } {
+            # check if package key belongs to the ones we are testing
+            if { $by_package_keys ne "" && $package_key ni $by_package_keys } {
                 continue
             }
 
