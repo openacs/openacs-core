@@ -1361,7 +1361,7 @@ ad_proc -public ad_get_signed_cookie {
 } {
 
     set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
-    if { $cookie_value eq "" } {
+    if { $cookie_value eq "" || ![string is list $cookie_value]} {
         throw {AD_EXCEPTION NO_COOKIE} {Cookie does not exist}
     }
 
@@ -1392,7 +1392,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 } {
 
     set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
-    if { $cookie_value eq "" } {
+    if { $cookie_value eq "" || ![string is list $cookie_value]} {
         throw {AD_EXCEPTION NO_COOKIE} {Cookie does not exist}
     }
 
