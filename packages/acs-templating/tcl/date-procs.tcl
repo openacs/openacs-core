@@ -595,10 +595,16 @@ ad_proc -public template::util::date::now_min_interval {} {
   return [create {*}$now]
 }
 
-ad_proc -public template::util::date::now_min_interval_plus_hour {} {
+ad_proc -deprecated template::util::date::now_min_interval_plus_hour {} {
     Create a new Date object for the current date and time
     plus one hour
     with the default interval for minutes
+
+    Deprecated: as of 2019-04-25, no upstream code is making use of
+    this proc and more generic alteratives exist.
+
+    @see template::data::from_sql::date
+    @see clock
 
     @author Walter McGinnis (wtem@olywa.net)
     @creation-date 2002-01-06
