@@ -4068,7 +4068,10 @@ ad_proc -public ad_log {
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 
-ad_proc -public util::var_subst_quotehtml {string} {
+ad_proc -public util::var_subst_quotehtml {
+   {-ulevel 1}
+   string
+} {
 
     Substitute in the provided string all variables with their values
     (like "subst -nobackslashes -nocommands ..."), and perform HTML
@@ -4076,6 +4079,8 @@ ad_proc -public util::var_subst_quotehtml {string} {
     supports Tcl array syntax, and Tcl scalar variables with and
     without curly braces.
 
+    @param ulevel Where we should uplevel to when doing the subst's. Defaults to '1', meaning the caller's scope.
+    
     @author Gustaf Neumann
 } {
     #
@@ -4093,7 +4098,7 @@ ad_proc -public util::var_subst_quotehtml {string} {
     #
     # Finallly, "subst" the result.
     #
-    uplevel [list ::subst $result]
+    uplevel $ulevel [list ::subst $result]
 }
 
 
