@@ -452,8 +452,9 @@ ad_proc -private template::element::validate { form_id element_id } {
     set label $element(name)
   }
 
-  # Element shouldn't be validated if it's an inform widget, or the element is not in edit mode.
-  # The element will be in edit mode if its mode is either blank or set to 'edit'.
+  # Element shouldn't be validated if it's an inform widget, or the
+  # element is not in edit mode.  The element will be in edit mode if
+  # its mode is either blank or set to 'edit'.
   set is_inform [expr {$element(widget) eq "inform" || ($element(mode) ne "edit" && $element(mode) ne "" )}]
 
   # Check for required element
