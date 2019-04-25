@@ -29,6 +29,31 @@ aa_register_case \
             }
         }
 }
+
+aa_register_case \
+    -procs {
+        template::util::date::now_min_interval
+    } \
+    date_minute_interval {
+        test minute interval
+    } {
+    aa_run_with_teardown \
+        -test_code {
+            
+            set clock [clock scan "2019-04-25 16:19:00"]
+            set date [template::util::date::now_min_interval -clock $clock]
+            aa_equals "interval up from 19" $date {2019 4 25 16 20 0 {DD MONTH YYYY}}
+            
+            set clock [clock scan "2019-04-25 16:20:00"]
+            set date [template::util::date::now_min_interval -clock $clock]
+            aa_equals "interval same " $date {2019 4 25 16 20 0 {DD MONTH YYYY}}
+
+            set clock [clock scan "2019-04-25 16:21:00"]
+            set date [template::util::date::now_min_interval -clock $clock]
+            aa_equals "interval up from 21 " $date {2019 4 25 16 25 0 {DD MONTH YYYY}}
+
+        }
+}
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

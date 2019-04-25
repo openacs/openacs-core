@@ -120,8 +120,13 @@ ad_proc -public template::util::date::daysInMonth { month {year 0} } {
 }
 
 ad_proc -public template::util::date::create {
-  {year {}} {month {}} {day {}} {hours {}}
-  {minutes {}} {seconds {}} {format "DD MONTH YYYY"}
+    {year {}}
+    {month {}}
+    {day {}}
+    {hours {}}
+    {minutes {}}
+    {seconds {}}
+    {format "DD MONTH YYYY"}
 } {
     Create a new Date object
     I chose to implement the date objects as lists instead of
@@ -248,7 +253,7 @@ ad_proc -public template::util::date::get_property { what date } {
       if {[lindex $date 0] eq ""} {
         return {}
       } else {
-	  return [expr {[lindex $date 0] % 100}]
+          return [expr {[lindex $date 0] % 100}]
       }
     }
     short_hours {
@@ -256,11 +261,11 @@ ad_proc -public template::util::date::get_property { what date } {
         return {}
       } else {
         set value [expr {[lindex $date 3] % 12}]
-	if { $value == 0 } {
+        if { $value == 0 } {
           return 12
-	} else {
+        } else {
           return $value
-	}
+        }
       }
     }
     ampm {
@@ -299,7 +304,7 @@ ad_proc -public template::util::date::get_property { what date } {
           append format $space
           append format $sql_form
           set space " "
-	}
+        }
         set pad "00"
       }
       # DRB: We need to differentiate between date and timestamp, for PG, at least,
@@ -376,10 +381,10 @@ ad_proc -public template::util::date::get_property { what date } {
       set value [lc_time_fmt [join $date_list "-"] "%q"]
       unpack $date
       if { $hours ne "" && $minutes ne "" } {
-	  append value " [string range $pad [string length $hours] end]${hours}:[string range $pad [string length $minutes] end]$minutes"
-	  if { $seconds ne {} } {
-	      append value ":[string range $pad [string length $seconds] end]$seconds"
-	  }
+          append value " [string range $pad [string length $hours] end]${hours}:[string range $pad [string length $minutes] end]$minutes"
+          if { $seconds ne {} } {
+              append value ":[string range $pad [string length $seconds] end]$seconds"
+          }
       }
       return $value
     }
@@ -394,7 +399,7 @@ ad_proc -public template::util::date::get_property { what date } {
         append value " ${hours}:${minutes}"
         if { $seconds ne "" } {
           append value ":$seconds"
-	}
+        }
       }
       return [clock scan $value]
     }
@@ -482,7 +487,7 @@ ad_proc -public template::util::date::set_property { what date value } {
           return [lreplace $date 3 3 [expr {$hours + 12}]]
         } elseif {$value eq "am"} {
           return [lreplace $date 3 3 [expr {$hours % 12}]]
-	} else {
+        } else {
           return $date
         }
       }
@@ -561,44 +566,58 @@ ad_proc -public template::util::date::unpack { date } {
     uplevel [list foreach {year month day hours minutes seconds format} $date { break }]
 }
 
-ad_proc -public template::util::date::now_min_interval {} {
+ad_proc -public template::util::date::now_min_interval {
+    {-clock ""}
+} {
     Create a new Date object for the current date and time
     with the default interval for minutes
+
+    @param clock time in seconds, if not specified, it uses current time
 
     @author Walter McGinnis (wtem@olywa.net)
     @creation-date 2002-01-06
 } {
-  set now [list]
-  foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
-      lappend now [util::trim_leading_zeros $v]
-  }
+    if {$clock eq ""} {
+        set clock  [clock seconds]
+    }
 
-  # manipulate the minute value so it rounds up to nearest minute interval
-  set minute [lindex $now 4]
-  # there is a definition for minute interval: 0 59 5
-  set interval_def [defaultInterval minutes]
-  for { set i [lindex $interval_def 0] } \
-      { $i <= [lindex $interval_def 1] } \
-      { incr i [lindex $interval_def 2] } {
-      if {$minute == $i} {
-	  break
-      } elseif {$minute < $i} {
-	  set minute $i
-          break
-      }
-  }
+    set now [list]
+    foreach v [clock format $clock -format "%Y %m %d %H %M %S"] {
+        lappend now [util::trim_leading_zeros $v]
+    }
+    #
+    # Get original minute value
+    #
+    set minute [lindex $now 4]
 
-  # replace the minute value in the now list with new value
-  #set now [lreplace $now 4 4 $minute]
-  lset now 4 $minute
+    #
+    # Get interval definition for "minute" (e.g. 0 59 5)
+    #
+    lassign [defaultInterval minutes] min max interval
 
-  return [create {*}$now]
+    for { set i $min } { $i <= $max } { incr i $interval } {
+        if {$minute == $i} {
+            break
+        } elseif {$minute < $i} {
+            set minute $i
+            break
+        }
+    }
+    #
+    # Replace the minute value in the now list with new value
+    #
+    lset now 4 $minute
+
+    return [create {*}$now]
 }
 
-ad_proc -deprecated template::util::date::now_min_interval_plus_hour {} {
+ad_proc -deprecated -public template::util::date::now_min_interval_plus_hour {
+    {-clock ""}
+} {
     Create a new Date object for the current date and time
-    plus one hour
-    with the default interval for minutes
+    plus one hour with the default interval for minutes
+
+    @param clock time in seconds, if not specified, it uses current time
 
     Deprecated: as of 2019-04-25, no upstream code is making use of
     this proc and more generic alteratives exist.
@@ -609,32 +628,33 @@ ad_proc -deprecated template::util::date::now_min_interval_plus_hour {} {
     @author Walter McGinnis (wtem@olywa.net)
     @creation-date 2002-01-06
 } {
-  set now [list]
-  foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
-      lappend now [util::trim_leading_zeros $v]
-  }
+    if {$clock eq ""} {
+        set clock [clock seconds]
+    }
+    #
+    # Add one hour to the clock
+    #
+    incr clock [expr {60*60}]
 
-  # manipulate the minute value so it rounds up to nearest minute interval
-  set minute [lindex $now 4]
-  # there is a definition for minute interval: 0 59 5
-  set interval_def [defaultInterval minutes]
-  for { set i [lindex $interval_def 0] } \
-      { $i <= [lindex $interval_def 1] } \
-      { incr i [lindex $interval_def 2] } {
-      if {$minute == $i} {
-	  break
-      } elseif {$minute < $i} {
-	  set minute $i
-          break
-      }
-  }
+    set now [list]
+    foreach v [clock format $clock -format "%Y %m %d %H %M %S"] {
+        lappend now [util::trim_leading_zeros $v]
+    }
 
-  # get the hour value
-  set hour [lindex $now 3]
-  # replace the hour and minute values in the now list with new values
-  set now [lreplace $now 3 4 [incr hour] $minute]
+    # manipulate the minute value so it rounds up to nearest minute interval
+    set minute [lindex $now 4]
+    # there is a definition for minute interval: 0 59 5
+    lassign [defaultInterval minutes] min max inc
+    for {set i $min} {$i <= $max} {incr i $inc} {
+        if {$minute == $i} {
+            break
+        } elseif {$minute < $i} {
+            set minute $i
+            break
+        }
+    }
 
-  return [create {*}$now]
+    return [create {*}$now]
 }
 
 ad_proc -public template::util::date::add_time { {-time_array_name:required} {-date_array_name:required} } {
@@ -654,7 +674,7 @@ ad_proc -public template::util::date::add_time { {-time_array_name:required} {-d
 
     # create an empty date object with the new format
     set the_date [template::util::date::create \
-	    "" "" "" "" "" "" ""]
+            "" "" "" "" "" "" ""]
 
     set the_date [template::util::date::set_property format $the_date $new_format]
 
@@ -665,44 +685,44 @@ ad_proc -public template::util::date::add_time { {-time_array_name:required} {-d
 
     # add time properties
     foreach field [array names time_in] {
-	# skip format
-	if {$field ne "format" } {
-	    # Coerce values to non-negative integers
-	    if { $field ne "ampm" } {
-		if { ![regexp {[0-9]+} $time_in($field) value] } {
-		    set value {}
-		}
-	    }
-	    # If the value is not null, set it
-	    if { $value ne {} } {
-		set the_date [template::util::date::set_property $field $the_date $value]
-		if { $field ne "ampm" } {
-		    set have_values 1
-		}
-	    }
-	}
+        # skip format
+        if {$field ne "format" } {
+            # Coerce values to non-negative integers
+            if { $field ne "ampm" } {
+                if { ![regexp {[0-9]+} $time_in($field) value] } {
+                    set value {}
+                }
+            }
+            # If the value is not null, set it
+            if { $value ne {} } {
+                set the_date [template::util::date::set_property $field $the_date $value]
+                if { $field ne "ampm" } {
+                    set have_values 1
+                }
+            }
+        }
     }
 
     # add date properties
     foreach field [array names date_in] {
-	# skip format
-	if {$field ne "format" } {
-	    # Coerce values to non-negative integers
-	    if { ![regexp {[0-9]+} $date_in($field) value] } {
-		set value {}
-	    }
-	    # If the value is not null, set it
-	    if { $value ne {} } {
-		set the_date [template::util::date::set_property $field $the_date $value]
-		set have_values 1
-	    }
-	}
+        # skip format
+        if {$field ne "format" } {
+            # Coerce values to non-negative integers
+            if { ![regexp {[0-9]+} $date_in($field) value] } {
+                set value {}
+            }
+            # If the value is not null, set it
+            if { $value ne {} } {
+                set the_date [template::util::date::set_property $field $the_date $value]
+                set have_values 1
+            }
+        }
     }
 
     if { $have_values } {
-	return [list $the_date]
+        return [list $the_date]
     } else {
-	return {}
+        return {}
     }
 }
 
@@ -740,17 +760,17 @@ ad_proc -public template::util::date::validate { date error_ref } {
 
     # If the field is required, but missing, report an error
     if {[set $field] eq ""} {
-	if { [regexp $exp $format match] } {
-	    set field_pretty [_ acs-templating.${field}]
-	    lappend error_msg [_ acs-templating.lt_No_value_supplied_for_-field_pretty-]
-	}
+        if { [regexp $exp $format match] } {
+            set field_pretty [_ acs-templating.${field}]
+            lappend error_msg [_ acs-templating.lt_No_value_supplied_for_-field_pretty-]
+        }
     } else {
-	# fields should only be integers
-	if { ![regexp {^[0-9]+$} [set $field] match] } {
-	    set field_pretty [_ acs-templating.${field}]
-	    lappend error_msg [_ acs-templating.lt_The_-field_pretty-_must_be_non_negative]
-	    set $field {}
-	}
+        # fields should only be integers
+        if { ![regexp {^[0-9]+$} [set $field] match] } {
+            set field_pretty [_ acs-templating.${field}]
+            lappend error_msg [_ acs-templating.lt_The_-field_pretty-_must_be_non_negative]
+            set $field {}
+        }
     }
   }
 
@@ -767,12 +787,12 @@ ad_proc -public template::util::date::validate { date error_ref } {
           set maxdays [get_property days_in_month $date]
           if { [string trimleft $day "0"] < 1 || [string trimleft $day "0"] > $maxdays } {
             set month_pretty [template::util::date::get_property long_month_name $date]
-	      if { $month == 2 } {
-		  # February has a different number of days depending on the year
-		  append month_pretty " ${year}"
-	      }
-	      lappend error_msg [_ acs-templating.lt_day_between_for_month_pretty]
-	  }
+              if { $month == 2 } {
+                  # February has a different number of days depending on the year
+                  append month_pretty " ${year}"
+              }
+              lappend error_msg [_ acs-templating.lt_day_between_for_month_pretty]
+          }
         }
       }
     }
@@ -889,8 +909,8 @@ ad_proc -public template::widget::dateFragment {
     } else {
        # Display text entry for some elements, or if the type is text
        if { $type == "t"
-	    || [regexp "year|short_year" $fragment]
-	} {
+            || [regexp "year|short_year" $fragment]
+        } {
          set output "<input type=\"text\" name=\"$element(name).$fragment\" id=\"$element(name).$fragment\" size=\"$size\""
          append output " maxlength=\"$size\" value=\"[ad_pad -left $value $size 0]\""
          array set attributes $tag_attributes
@@ -1065,7 +1085,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     set fragment [lindex $fragment_def 1]
 
     if {[info exists id_attr_name] && $id_attr_name ne ""} {
-	  set attributes(id) "${id_attr_name}.${fragment}"
+          set attributes(id) "${id_attr_name}.${fragment}"
     }
 
     set widget [template::widget::[lindex $fragment_def 0] \
@@ -1106,7 +1126,7 @@ ad_proc -public template::data::transform::date { element_ref } {
   set element_id $element(id)
 
   set the_date [template::util::date::create \
-   {} {} {} {} {} {} [ns_queryget "$element_id.format"]]
+                    {} {} {} {} {} {} [ns_queryget "$element_id.format"]]
   set have_values 0
 
   foreach field {
@@ -1118,7 +1138,7 @@ ad_proc -public template::data::transform::date { element_ref } {
        set value [ns_queryget $key]
        # Coerce values to non-negative integers
        if { $field ne "ampm" } {
-	 if { ![regexp {[0-9]+} $value value] } {
+         if { ![regexp {[0-9]+} $value value] } {
            set value {}
          }
        }
@@ -1127,7 +1147,7 @@ ad_proc -public template::data::transform::date { element_ref } {
          set the_date [template::util::date::set_property $field $the_date $value]
          if { $field ne "ampm" } {
            set have_values 1
-	 }
+         }
        }
      }
   }
@@ -1162,16 +1182,16 @@ ad_proc -public template::util::textdate_localized_format {} {
     # this format key must now be at max five characters, and contain one y, one m and one d
     # as well as two punction marks ( - . / )
     if { [regexp {^([y|m|d])([\-|\.|/])([y|m|d])([\-|\.|/])([y|m|d])} $format match first first_punct second second_punct third]
-	 && [string length $format] == 5
+         && [string length $format] == 5
      } {
-	if { [lsort [list $first $second $third]] eq "d m y" } {
-	    # we have a valid format from acs-lang.localization-d_fmt with all 3 necessary elements
+        if { [lsort [list $first $second $third]] eq "d m y" } {
+            # we have a valid format from acs-lang.localization-d_fmt with all 3 necessary elements
             # and only two valid punctuation marks
-	    regsub {d} $format {dd} format
-	    regsub {m} $format {mm} format
-	    regsub {y} $format {yyyy} format
-	    return $format
-	}
+            regsub {d} $format {dd} format
+            regsub {m} $format {mm} format
+            regsub {y} $format {yyyy} format
+            return $format
+        }
     }
 
     # we use the iso standard
@@ -1199,8 +1219,8 @@ ad_proc -public template::data::transform::textdate { element_ref } {
     set value [ns_queryget "$element_id"]
 
     if { $value eq "" } {
-	# they didn't enter anything
-	return ""
+        # they didn't enter anything
+        return ""
     }
 
     # we get the format they need to use
@@ -1220,47 +1240,47 @@ ad_proc -public template::data::transform::textdate { element_ref } {
     set results [string trim $results]
 
     if { [regexp {([\-|\.|/])yyyy$} $format match year_punctuation] } {
-	# we might be willing to accept this date if it doesn't have a year
+        # we might be willing to accept this date if it doesn't have a year
         # at the end, since we can assume that the year is the current one
-	# this is useful for fast keyboard based date entry for formats that
+        # this is useful for fast keyboard based date entry for formats that
         # have years at the end (such as in en_US which is mm/dd/yyyy or
         # de_DE which is dd.mm.yyyy)
 
-	# we check if adding the year and punctuation makes it a valid date
-	if { [regexp $exp "${value}${year_punctuation}[dt_sysdate -format %Y]" match {*}$results] } {
-	    if { ![catch { clock scan "${year}-${month}-${day}" }] } {
-		# we add the missing year and punctuation to the value
+        # we check if adding the year and punctuation makes it a valid date
+        if { [regexp $exp "${value}${year_punctuation}[dt_sysdate -format %Y]" match {*}$results] } {
+            if { ![catch { clock scan "${year}-${month}-${day}" }] } {
+                # we add the missing year and punctuation to the value
                 # we don't return it here because formatting is done
                 # later on (i.e. adding leading zeros if needed)
-		append value "${year_punctuation}[dt_sysdate -format %Y]"
-	    }
-	}
+                append value "${year_punctuation}[dt_sysdate -format %Y]"
+            }
+        }
     }
 
     # now we verify that we have a valid date
     # and adding leading/trailing zeros if needed
     if { [regexp $exp $value match {*}$results] } {
-	# the regexp will have given us: year month day format_one format_two
-	if { [string length $month] eq "1" } {
-	    set month "0$month"
-	}
-	if { [string length $day] eq "1" } {
-	    set day "0$day"
-	}
-	if { [string length $year] eq "2" } {
-	    # we'll copy microsoft excel's default assumptions
+        # the regexp will have given us: year month day format_one format_two
+        if { [string length $month] eq "1" } {
+            set month "0$month"
+        }
+        if { [string length $day] eq "1" } {
+            set day "0$day"
+        }
+        if { [string length $year] eq "2" } {
+            # we'll copy microsoft excel's default assumptions
             # about the year it is so if the year is 29 or
             # lower its in this century otherwise its last century
-	    if { $year < 30 } {
-		set year "20$year"
-	    } else {
-		set year "19$year"
-	    }
-	}
-	return "${year}-${month}-${day}"
+            if { $year < 30 } {
+                set year "20$year"
+            } else {
+                set year "19$year"
+            }
+        }
+        return "${year}-${month}-${day}"
     } else {
-	# they did not provide a correctly formatted date so we send it back to them
-	return $value
+        # they did not provide a correctly formatted date so we send it back to them
+        return $value
     }
 }
 ad_proc -public template::widget::textdate { element_reference tag_attributes } {
@@ -1274,8 +1294,8 @@ ad_proc -public template::widget::textdate { element_reference tag_attributes } 
   if { [info exists element(value)] } {
       set textdate $element(value)
       if { [regexp {^([0-9]{4})-([0-9]{2})-([0-9]{2})$} $textdate match year month day] } {
-	  set date_valid_p [string is false [catch { clock scan "${textdate}" }]]
-	  # we have a correctly formatted iso date that we
+          set date_valid_p [string is false [catch { clock scan "${textdate}" }]]
+          # we have a correctly formatted iso date that we
           # can reformat for display, we don't use lc_time_fmt
           # because it could fail and cause a server error.
           # The date may be formatted correctly but it may be
@@ -1283,10 +1303,10 @@ ad_proc -public template::widget::textdate { element_reference tag_attributes } 
           # template::data::validate::textdate) so we need to
           # re-format the input into the format the user specified
           # by this means
-	  set textdate [template::util::textdate_localized_format]
-	  regsub {yyyy} $textdate $year textdate
-	  regsub {mm} $textdate $month textdate
-	  regsub {dd} $textdate $day textdate
+          set textdate [template::util::textdate_localized_format]
+          regsub {yyyy} $textdate $year textdate
+          regsub {mm} $textdate $month textdate
+          regsub {dd} $textdate $day textdate
       }
   } else {
       set textdate ""
