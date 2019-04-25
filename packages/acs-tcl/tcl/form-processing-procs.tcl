@@ -1141,7 +1141,10 @@ ad_proc -public ad_form {
                 if { ![template::element error_p $form_name $element_name]
                      && ![uplevel #$level [list expr $validate_expr]]
                  } {
-                    template::element set_error $form_name $element_name [util::var_subst_quotehtml -ulevel 2 $error_message]
+                    template::element set_error \
+                        $form_name \
+                        $element_name \
+                        [util::var_subst_quotehtml -level 2 $error_message]
                 }
             }
         }

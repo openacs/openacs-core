@@ -4069,7 +4069,7 @@ ad_proc -public ad_log {
 }
 
 ad_proc -public util::var_subst_quotehtml {
-   {-ulevel 1}
+   {-level 1}
    string
 } {
 
@@ -4079,8 +4079,9 @@ ad_proc -public util::var_subst_quotehtml {
     supports Tcl array syntax, and Tcl scalar variables with and
     without curly braces.
 
-    @param ulevel Where we should uplevel to when doing the subst's. Defaults to '1', meaning the caller's scope.
-    
+    @param level Where we should uplevel to when doing the subst's.
+           Defaults to '1', meaning the caller's scope.
+
     @author Gustaf Neumann
 } {
     #
@@ -4098,7 +4099,7 @@ ad_proc -public util::var_subst_quotehtml {
     #
     # Finallly, "subst" the result.
     #
-    uplevel $ulevel [list ::subst $result]
+    return [uplevel $level [list ::subst $result]]
 }
 
 
