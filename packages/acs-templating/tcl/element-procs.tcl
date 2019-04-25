@@ -531,11 +531,12 @@ ad_proc -private template::element::validate { form_id element_id } {
     foreach { v_name v_code v_message } $element(validate) {
 
       if { ! [eval $v_code] } {
-      
-	# value is invalid according to custom validation code
+
+        # value is invalid according to custom validation code
         # Do some expansion on $value, ${value}, $label, and ${label}
-	lappend v_errors [string map [list \$value $value \${value} $value \$label $label \${label} $label] $v_message]
-	set formerror($element_id:$v_name) [lindex $v_errors end]
+        set v_message [util::var_subst_quotehtml $v_message]
+        lappend v_errors $v_message
+        set formerror($element_id:$v_name) $v_message
       }
     }
   }

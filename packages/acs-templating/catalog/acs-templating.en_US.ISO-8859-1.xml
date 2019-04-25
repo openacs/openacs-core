@@ -69,11 +69,15 @@
   <msg key="Invalid_currency">Invalid currency</msg>
   <msg key="Invalid_decimal_number">Invalid decimal number</msg>
   <msg key="Invalid_email_format">Invalid email format</msg>
+  <msg key="Invalid_enumeration">Invalid enumeration</msg>
+  <msg key="Invalid_enumeration_duplicate_elements">Invalid enumeration. "%value%" does not contain unique values.</msg>
   <msg key="Invalid_filename">Invalid filename</msg>
   <msg key="Invalid_integer">Invalid integer</msg>
   <msg key="Invalid_keyword">Invalid keyword</msg>
-  <msg key="Invalid_natural_number">Invalid natural number </msg>
+  <msg key="Invalid_natural_number">Invalid natural number</msg>
+  <msg key="Invalid_number">Invalid number</msg>  
   <msg key="Invalid_url">Invalid url</msg>
+  <msg key="Invalid_url_element">Invalid url: "%value%". Please use only lowercase characters, numbers and hyphens, e.g. "foo-bar".</msg>
   <msg key="Link_Title">Link Title</msg>
   <msg key="lt_Checkuncheck_all_rows">Check/uncheck all rows</msg>
   <msg key="lt_Checkuncheck_this_row">Check/uncheck this row, and select an action to perform below</msg>

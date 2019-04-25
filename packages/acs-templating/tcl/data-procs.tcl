@@ -61,7 +61,7 @@ ad_proc -public template::data::validate::integer {
   set result [regexp {^[+-]?\d+$} $value]
 
   if { ! $result } {
-    set message "Invalid integer \"$value\""
+    set message "[_ acs-templating.Invalid_integer] \"[ns_quotehtml $value]\""
   }
    
   return $result 
@@ -88,7 +88,7 @@ ad_proc -public template::data::validate::naturalnum {
     set result [regexp {^(0*)(([1-9][0-9]*|0))$} $value match zeros value]
 
     if { ! $result } {
-    set message "Invalid natural number \"$value\""
+    set message "[_ acs-templating.Invalid_natural_number] \"[ns_quotehtml $value]\""
     }
 
   return $result
@@ -113,7 +113,7 @@ ad_proc -public template::data::validate::float {
   set result [regexp {^([+-]?)(?=\d|\.\d)\d*(\.\d*)?$} $value]
 
   if { ! $result } {
-    set message "Invalid decimal number \"$value\""
+    set message "[_ acs-templating.Invalid_decimal_number] \"[ns_quotehtml $value]\""
   }
    
   return $result 
@@ -153,7 +153,7 @@ ad_proc -public template::data::validate::boolean {
       }
       default {
          set result 0
-         set message "Invalid choice \"$value\""
+         set message "[_ acs-templating.Invalid_choice] \"[ns_quotehtml $value]\""
       }
   }
 
@@ -207,7 +207,7 @@ ad_proc -public template::data::validate::keyword {
   set result [regexp {^[a-zA-Z0-9_]+$} $value]
 
   if { ! $result } {
-    set message "Invalid keyword \"$value\""
+    set message "[_ acs-templating.Invalid_keyword] \"[ns_quotehtml $value]\""
   }
    
   return $result 
@@ -231,7 +231,7 @@ ad_proc -public template::data::validate::filename {
   set result [regexp {^[a-zA-Z0-9_-]+$} $value]
 
   if { ! $result } {
-    set message "Invalid filename \"$value\""
+    set message "[_ acs-templating.Invalid_filename] \"[ns_quotehtml $value]\""
   }
    
   return $result 
@@ -254,7 +254,7 @@ ad_proc -public template::data::validate::email {
   set result [util_email_valid_p $value]
 
   if { ! $result } {
-    set message "Invalid email format \"$value\""
+     set message "[_ acs-templating.Invalid_email_format] \"[ns_quotehtml $value]\""
   }
    
   return $result 
@@ -279,7 +279,7 @@ ad_proc -public template::data::validate::url {
   set result [regexp $expr $value]
 
   if { ! $result } {
-    set message "Invalid url \"$value\""
+    set message "[_ acs-templating.Invalid_url] \"[ns_quotehtml $value]\""
   }
    
   return $result 
@@ -311,7 +311,7 @@ ad_proc -public template::data::validate::url_element {
     set result [regexp $expr $value]
 
     if { ! $result } {
-	set message "Invalid url \"$value\". Please use only lowercase characters, numbers and hyphens, e.g. \"foo-bar\"."
+        set message "[_ acs-templating.Invalid_url_element [list value [ns_quotehtml $value]]]"
     }
    
     return $result 
@@ -462,7 +462,7 @@ ad_proc -public template::data::validate::number {
   set result [regexp {^([+-]?)(?=\d|\.\d)\d*(\.\d*)?$} $value]
 
   if { ! $result } {
-    set message "Invalid number \"$value\""
+    set message "[_ acs-templating.Invalid_number] \"[ns_quotehtml $value]\""
   }
    
   return $result 
@@ -486,7 +486,7 @@ ad_proc -public template::data::validate::enumeration {
   set result [regexp {^([A-z0-9]+,?)+$} $value]
   
   if { ! $result } {
-    set message "Invalid enumeration \"$value\""
+    set message "[_ acs-templating.Invalid_enumeration] \"[ns_quotehtml $value]\""
     return $result
   }
   
@@ -495,7 +495,7 @@ ad_proc -public template::data::validate::enumeration {
   set result [expr {[llength $list] == [llength [lsort -unique $list]]}]
   
   if { ! $result } {
-    set message "Invalid enumeration. \"$value\" does not contain unique values."
+    set message "[_ acs-templating.Invalid_enumeration_duplicate_elements [list value [ns_quotehtml $value]]]"
   }  
   
   return $result 
