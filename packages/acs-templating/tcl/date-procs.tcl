@@ -626,7 +626,7 @@ ad_proc -public template::util::date::now_min_interval_plus_hour {} {
   # get the hour value
   set hour [lindex $now 3]
   # replace the hour and minute values in the now list with new values
-  set now [lreplace $now 3 4 [incr hour $minute]]
+  set now [lreplace $now 3 4 [incr hour] $minute]
 
   return [create {*}$now]
 }
