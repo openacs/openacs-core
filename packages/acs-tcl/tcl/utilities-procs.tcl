@@ -4069,7 +4069,7 @@ ad_proc -public ad_log {
 }
 
 ad_proc -public util::var_subst_quotehtml {
-   {-level 1}
+   {-ulevel 1}
    string
 } {
 
@@ -4099,7 +4099,7 @@ ad_proc -public util::var_subst_quotehtml {
     #
     # Finallly, "subst" the result.
     #
-    return [uplevel $level [list ::subst $result]]
+    return [uplevel $ulevel [list ::subst $result]]
 }
 
 
