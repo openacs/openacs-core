@@ -128,7 +128,7 @@ ad_proc -public person::get_person_info_not_cached {
         select person_id,
                first_names,
                last_name,
-               first_names, first_names || ' ' || last_name as name,
+               first_names || ' ' || last_name as name,
                bio
           from persons
          where person_id = :person_id
