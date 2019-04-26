@@ -2,8 +2,8 @@ ad_library {
     Datatype validation for the ArsDigita Templating System
 
     @author Karl Goldstein    (karlg@arsdigita.com)
-    
-    @cvs-id $Id$    
+
+    @cvs-id $Id$
 }
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
@@ -21,24 +21,24 @@ namespace eval template::data::transform {}
 ad_proc -public template::data::validate { type value_ref message_ref } {
     This proc invokes the validation code for a given type.
 
-    @see template::data::validate::boolean 
-    @see template::data::validate::date 
-    @see template::data::validate::email 
-    @see template::data::validate::enumeration 
-    @see template::data::validate::filename 
+    @see template::data::validate::boolean
+    @see template::data::validate::date
+    @see template::data::validate::email
+    @see template::data::validate::enumeration
+    @see template::data::validate::filename
     @see template::data::validate::float
-    @see template::data::validate::integer 
-    @see template::data::validate::keyword 
-    @see template::data::validate::naturalnum 
-    @see template::data::validate::number 
-    @see template::data::validate::search 
-    @see template::data::validate::string 
-    @see template::data::validate::text 
+    @see template::data::validate::integer
+    @see template::data::validate::keyword
+    @see template::data::validate::naturalnum
+    @see template::data::validate::number
+    @see template::data::validate::search
+    @see template::data::validate::string
+    @see template::data::validate::text
     @see template::data::validate::textdate
     @see template::data::validate::timestamp
     @see template::data::validate::time_of_day
-    @see template::data::validate::url  
-} { 
+    @see template::data::validate::url
+} {
 
   return [validate::$type $value_ref $message_ref]
 }
@@ -63,8 +63,8 @@ ad_proc -public template::data::validate::integer {
   if { ! $result } {
     set message "[_ acs-templating.Invalid_integer] \"[ns_quotehtml $value]\""
   }
-   
-  return $result 
+
+  return $result
 }
 
 ad_proc -public template::data::validate::naturalnum {
@@ -115,8 +115,8 @@ ad_proc -public template::data::validate::float {
   if { ! $result } {
     set message "[_ acs-templating.Invalid_decimal_number] \"[ns_quotehtml $value]\""
   }
-   
-  return $result 
+
+  return $result
 }
 
 ad_proc -public template::data::validate::boolean {
@@ -157,7 +157,7 @@ ad_proc -public template::data::validate::boolean {
       }
   }
 
-  return $result 
+  return $result
 }
 
 ad_proc -public template::data::validate::text {
@@ -209,8 +209,8 @@ ad_proc -public template::data::validate::keyword {
   if { ! $result } {
     set message "[_ acs-templating.Invalid_keyword] \"[ns_quotehtml $value]\""
   }
-   
-  return $result 
+
+  return $result
 }
 
 ad_proc -public template::data::validate::filename {
@@ -233,8 +233,8 @@ ad_proc -public template::data::validate::filename {
   if { ! $result } {
     set message "[_ acs-templating.Invalid_filename] \"[ns_quotehtml $value]\""
   }
-   
-  return $result 
+
+  return $result
 }
 
 ad_proc -public template::data::validate::email {
@@ -256,8 +256,8 @@ ad_proc -public template::data::validate::email {
   if { ! $result } {
      set message "[_ acs-templating.Invalid_email_format] \"[ns_quotehtml $value]\""
   }
-   
-  return $result 
+
+  return $result
 }
 
 ad_proc -public template::data::validate::url {
@@ -281,8 +281,8 @@ ad_proc -public template::data::validate::url {
   if { ! $result } {
     set message "[_ acs-templating.Invalid_url] \"[ns_quotehtml $value]\""
   }
-   
-  return $result 
+
+  return $result
 }
 
 ad_proc -public template::data::validate::url_element {
@@ -290,7 +290,7 @@ ad_proc -public template::data::validate::url_element {
     message_ref
 } {
 
-    Beautiful URL elements that may only contain lower case 
+    Beautiful URL elements that may only contain lower case
     characters, numbers and hyphens.
 
     <p>
@@ -313,8 +313,8 @@ ad_proc -public template::data::validate::url_element {
     if { ! $result } {
         set message "[_ acs-templating.Invalid_url_element [list value [ns_quotehtml $value]]]"
     }
-   
-    return $result 
+
+    return $result
 }
 
 ad_proc -public template::data::validate::date {
@@ -366,7 +366,7 @@ ad_proc -public template::data::validate::textdate {
 } {
 
     upvar 2 $message_ref message $value_ref textdate
-    
+
     set error_msg [list]
     if { [info exists textdate] && $textdate ne "" } {
 	if { [regexp {^[0-9]{4}-[0-9]{2}-[0-9]{2}$} $textdate match] } {
@@ -380,7 +380,7 @@ ad_proc -public template::data::validate::textdate {
 		set day   [::string trimleft [lindex $datelist 2] 0]
 		if { $month < 1 || $month > 12 } {
 		    lappend error_msg [_ acs-templating.Month_must_be_between_1_and_12]
-		} else {		    
+		} else {
 		    set maxdays [template::util::date::get_property days_in_month $datelist]
 		    if { $day < 1 || $day > $maxdays } {
 			set month_pretty [template::util::date::get_property long_month_name $datelist]
@@ -464,8 +464,8 @@ ad_proc -public template::data::validate::number {
   if { ! $result } {
     set message "[_ acs-templating.Invalid_number] \"[ns_quotehtml $value]\""
   }
-   
-  return $result 
+
+  return $result
 }
 
 ad_proc -public template::data::validate::enumeration {
@@ -484,21 +484,21 @@ ad_proc -public template::data::validate::enumeration {
 
   # alphanumeric csv
   set result [regexp {^([A-z0-9]+,?)+$} $value]
-  
+
   if { ! $result } {
     set message "[_ acs-templating.Invalid_enumeration] \"[ns_quotehtml $value]\""
     return $result
   }
-  
+
   # unique list
   set list [split $value ,]
   set result [expr {[llength $list] == [llength [lsort -unique $list]]}]
-  
+
   if { ! $result } {
     set message "[_ acs-templating.Invalid_enumeration_duplicate_elements [list value [ns_quotehtml $value]]]"
-  }  
-  
-  return $result 
+  }
+
+  return $result
 }
 
 ad_proc -public template::data::validate::time_of_day {
