@@ -402,7 +402,7 @@ ad_proc -public template::util::list_to_multirow { name rows { level 1 } } {
 ad_proc -public template::util::list_of_ns_sets_to_multirow {
     {-rows:required}
     {-var_name:required}
-    {-level "1"}
+    {-level 1}
 } {
     Transform a list of ns_sets (e.g. produced by db_list_of_ns_sets)
     into a multirow datasource.
@@ -443,7 +443,7 @@ ad_proc -public template::util::read_file { path } {
     if {![file exists $path]} {
         error "File $path does not exist"
     }
-    
+
     #
     # Use ad_try to make sure that the file descriptor is finally
     # closed.
