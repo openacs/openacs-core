@@ -52,8 +52,8 @@
         new record to the document version history.  Look for the
         <computeroutput>&lt;authorgroup&gt;</computeroutput> tag and
         add yourself as a second author.  Save and exit.</para>
-      <para>Process the XML file to create html documentation.  The
-      html documentation, including supporting files such as pictures,
+      <para>Process the XML file to create HTML documentation.  The
+      HTML documentation, including supporting files such as pictures,
       is stored in the <computeroutput>www/docs/</computeroutput>
       directory.  A Makefile is provided to generate html from the xml, and copy all of the
       supporting files.  If Docbook is set up correctly, all you need
