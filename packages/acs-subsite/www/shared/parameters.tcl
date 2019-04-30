@@ -113,7 +113,9 @@ db_foreach select_params {} {
     set file_val [ad_parameter_from_file $parameter_name $package_key]
     if { $file_val ne "" } {
         set display_warning_p 1
-        lappend elm [list after_html "<br><span style=\"color: red; font-weight: bold;\">$file_val (*)</span>"]
+        lappend elm [list after_html [subst {
+            <br><span style="color: red; font-weight: bold;">$file_val (*)</span>
+        }]]
     }
 
     ad_form -extend -name parameters -form [list $elm]
@@ -140,13 +142,19 @@ if { $counter > 0 } {
                         -package_id $package_id \
                         -parameter $c__parameter_name \
                         -value [set $c__parameter_name]
-                    callback subsite::parameter_changed -package_id $package_id -parameter $c__parameter_name -value [set $c__parameter_name]
+                    callback subsite::parameter_changed \
+                        -package_id $package_id \
+                        -parameter $c__parameter_name \
+                        -value [set $c__parameter_name]
                 } else {
                     parameter::set_global_value \
                         -package_key $package_key \
                         -parameter $c__parameter_name \
                         -value [set $c__parameter_name]
-                    callback subsite::global_parameter_changed -package_key $package_key -parameter $c__parameter_name -value [set $c__parameter_name]
+                    callback subsite::global_parameter_changed \
+                        -package_key $package_key \
+                        -parameter $c__parameter_name \
+                        -value [set $c__parameter_name]
                 }
             }
         }
