@@ -199,7 +199,7 @@ template::head::add_style \
             width: 70%;
         }
         td pre {
-            width: 70%;
+            /*width: 70%;*/
             margin: 0px;
             border: 0px;
             /*font-size: smaller;*/
