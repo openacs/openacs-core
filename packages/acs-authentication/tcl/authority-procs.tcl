@@ -34,7 +34,7 @@ ad_proc -public auth::authority::create {
 
       <li> pretty_name         Label for the authority to be shown in a list to users picking an authority.
 
-      <li> enabled_p            't' if this authority available, 'f' if it's disabled. Defaults to 't'.
+      <li> enabled_p            't' if this authority available, 'f' if it's disabled. Defaults to 'f'.
 
       <li> sort_order          Sort ordering determines the order in which authorities are listed in the user interface.
                                Defaults to the currently highest sort order plus one.
