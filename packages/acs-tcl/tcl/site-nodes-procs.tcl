@@ -1742,7 +1742,7 @@ if {$UseXotclSiteNodes} {
         Returns an array representing the site node that matches the given url.
         Either url or node_id is required, if both are passed url is ignored.
         The array elements are: package_id, package_key, object_type, directory_p,
-        instance_name, pattern_p, parent_id, node_id, object_id, url.
+        instance_name, pattern_p, parent_id, node_id, object_id, url, name, package_type.
     } {
         return [::xo::site_node get -url $url -node_id $node_id]
     }
