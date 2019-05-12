@@ -1068,11 +1068,16 @@ ad_proc template::add_event_listener {
     @author  Gustaf Neumann
 } {
     set prevent [expr {$preventdefault_p ? "event.preventDefault();" : ""}]
-
-    set script [subst {
-        e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
-    }]
-
+    if {!$preventdefault_p && [regexp {^\s*([a-zA-Z0-9_]+)[\(]event[\)];\s*} $script . fn]} {
+        #
+        # In the most simple case, there is no need for a wrapper function.
+        #
+        set script [subst {e.addEventListener('$event', $fn, $usecapture_p);}]
+    } else {
+        set script [subst {
+            e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
+        }]
+    }
     if {[info exists id]} {
         set script [subst {
             var e = document.getElementById('$id');
