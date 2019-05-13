@@ -106,7 +106,7 @@ namespace eval membership_rel {
     ad_proc -public get {
         {-rel_id:required}
     } {
-        Return the user_id of a rel_id
+        Return user_id and group_id of a rel_id as dict.
     } {
         db_1row select_rel_id {
             select u.user_id, r.object_id_one as group_id
