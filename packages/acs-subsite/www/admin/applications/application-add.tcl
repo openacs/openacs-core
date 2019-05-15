@@ -20,6 +20,10 @@ if { [ad_form_new_p -key node_id] } {
     set focus application.instance_name
 }
 
+
+set main_subsite_id [site_node::get_node_id -url "/"]
+set main_subsite_p [expr {$node_id == $main_subsite_id}]
+
 set multiple_add_url [export_vars -base multiple-add { return_url }]
 
 ad_form -name application -cancel_url . -form {
@@ -39,7 +43,7 @@ ad_form -name application -cancel_url . -form {
     {folder:text,optional
         {label "[_ acs-subsite.URL_folder_name]"}
         {help_text "The partial URL of the new application.  This should be a short string, all lowercase, with hyphens instead of spaces. If blank, the package name is used (e.g. 'forum')."}
-        {html {size 30}}
+        {html "size 30 [expr {$main_subsite_p ? {disabled {}} : {}}]"}
     }
 } -new_request {
     # Sets return_url
@@ -104,7 +108,10 @@ ad_form -name application -cancel_url . -form {
 
     db_transaction {
         apm_package_rename -package_id $node(package_id) -instance_name $instance_name
-        
+        # Renaming the main subsite URL would make the system unusable
+        if {$main_subsite_p} {
+            set folder ""
+        }
         site_node::rename -node_id $node_id -name $folder
     }
 
