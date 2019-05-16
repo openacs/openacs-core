@@ -22,7 +22,7 @@ if { [ad_form_new_p -key node_id] } {
 
 
 set main_subsite_id [site_node::get_node_id -url "/"]
-set main_subsite_p [expr {$node_id == $main_subsite_id}]
+set main_subsite_p [expr {[info exists node_id] && $node_id == $main_subsite_id}]
 
 set multiple_add_url [export_vars -base multiple-add { return_url }]
 
