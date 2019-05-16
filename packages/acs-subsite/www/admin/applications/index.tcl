@@ -22,11 +22,11 @@ ad_form \
     -has_submit 1 \
     -html { style "float:right;" } \
     -form {
-	{search:text,optional
+        {search:text,optional
             {label ""}
-	    {html {length 20 placeholder "[_ acs-kernel.common_Search]"} }
-	    {value $search}
-	}
+            {html {length 20 placeholder "[_ acs-kernel.common_Search]"} }
+            {value $search}
+        }
     } -on_submit {}
 
 list::create \
@@ -36,7 +36,7 @@ list::create \
     -page_flush_p 1 \
     -page_size 250 \
     -page_query_name select_applications \
-    -actions { 
+    -actions {
         "#acs-subsite.Add_application#" application-add "#acs-subsite.Add_new_app#"
     } \
     -bulk_actions {
@@ -82,8 +82,8 @@ list::create \
             link_html { title "#acs-subsite.Delete_this_application#" }
         }
     } -filters {
-	search {
-	    hide_p 1
+        search {
+            hide_p 1
             where_clause {(:search is null or upper(coalesce(coalesce(m.message, md.message), p.instance_name) || n.name || pt.pretty_name) like '%' || upper(:search) || '%')}
         }
     }

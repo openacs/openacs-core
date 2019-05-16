@@ -1,7 +1,5 @@
 ad_include_contract {
 
-    /packages/subsite/www/admin/groups/elements-by-rel-type.tcl
-
     Datasource for elements-by-rel-type.adp
     (meant to be included by other templates)
 
@@ -53,22 +51,22 @@ db_multirow -extend {
         rr.pretty_name as role_pretty_name,
         rels.num_rels
     from rc_valid_rel_types g
-	 left outer join rel_segments s using (group_id, rel_type)
-     	 left outer join group_rels gr using (group_id, rel_type)
-	 left outer join
-	   (select rel_type, count(*) as num_rels
-	      from group_component_map
-	     where group_id = :group_id
-	       and group_id = container_id
-	     group by rel_type
-	      UNION ALL
-	    select rel_type, count(*) as num_rels
-	      from group_approved_member_map
-	     where group_id = :group_id
-	       and group_id = container_id
+         left outer join rel_segments s using (group_id, rel_type)
+         left outer join group_rels gr using (group_id, rel_type)
+         left outer join
+           (select rel_type, count(*) as num_rels
+              from group_component_map
+             where group_id = :group_id
+               and group_id = container_id
+             group by rel_type
+              UNION ALL
+            select rel_type, count(*) as num_rels
+              from group_approved_member_map
+             where group_id = :group_id
+               and group_id = container_id
             group by rel_type
          ) rels using (rel_type),
-    	 acs_rel_types rel_types,
+         acs_rel_types rel_types,
          acs_rel_roles rr
      where g.rel_type = rel_types.rel_type
        and rr.role = rel_types.role_two
@@ -78,7 +76,7 @@ db_multirow -extend {
     # The role pretty names can be message catalog keys that need
     # to be localized before they are displayed
     set role_pretty_name [lang::util::localize $role_pretty_name]
-    set role_pretty_plural [lang::util::localize $role_pretty_plural]    
+    set role_pretty_plural [lang::util::localize $role_pretty_plural]
 
     set create_rel_segment_url [export_vars -base "../rel-segments/new" {group_id rel_type return_url}]
     set elements_display_url [export_vars -base "elements-display" {group_id rel_type}]

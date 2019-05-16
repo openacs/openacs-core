@@ -1,5 +1,3 @@
-# /packages/acs-subsite/www/admin/groups/one.tcl
-
 ad_page_contract {
     Change default join policy for a group type.
 
@@ -36,16 +34,16 @@ if {$dynamic_p != "t" } {
 
 if {!$group_type_exists_p} {
     db_dml set_default_join_policy {
-	insert into group_types
-	(group_type, default_join_policy)
-	values
-	(:group_type, :default_join_policy)
+        insert into group_types
+        (group_type, default_join_policy)
+        values
+        (:group_type, :default_join_policy)
     }
 } else {
     db_dml update_join_policy {
-	update group_types
-	set default_join_policy = :default_join_policy
-	where group_type = :group_type
+        update group_types
+        set default_join_policy = :default_join_policy
+        where group_type = :group_type
     }
 }
 

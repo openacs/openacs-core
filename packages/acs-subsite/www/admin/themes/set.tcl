@@ -7,11 +7,11 @@ ad_page_contract {
     theme:trim
 } -validate {
     new_key_valid -requires new_key {
-	if {![db_string check_exists_theme {
-	    select 1 from subsite_themes where key = :theme
-	} -default 0]} {
-	    ad_complain "Theme with key '$theme' does not exist" 
-	}
+        if {![db_string check_exists_theme {
+            select 1 from subsite_themes where key = :theme
+        } -default 0]} {
+            ad_complain "Theme with key '$theme' does not exist"
+        }
     }
 }
 
@@ -19,3 +19,9 @@ subsite::set_theme -theme $theme
 
 ns_returnredirect "."
 ad_script_abort
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

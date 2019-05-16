@@ -38,11 +38,11 @@ if { [db_table_exists "bboard_email_alerts"] } {
     set rownum 0
 
     if { [bboard_pls_blade_installed_p] == 1 } {
-	set bboard_keyword_p 1
+        set bboard_keyword_p 1
     } else {
-	set bboard_keyword_p 0
+        set bboard_keyword_p 0
     }
-	
+
     db_foreach alerts_list {
         select bea.valid_p, bea.frequency, bea.keywords, bt.topic, bea.rowid
           from bboard_email_alerts bea, bboard_topics bt
@@ -50,31 +50,31 @@ if { [db_table_exists "bboard_email_alerts"] } {
            and bea.topic_id = bt.topic_id
          order by bea.frequency
     } {
-	incr rownum
+        incr rownum
 
-	if { $valid_p == "f" } {
-	    # alert has been disabled for some reason
-	    set bboard_rows:$rownum(status) "disable"
-	    set bboard_rows:$rownum(action_url) "/bboard/alert-reenable?rowid=[ns_urlencode $rowid]"	    
-	} else {
-	    # alert is enabled
-	    set bboard_rows:$rownum(status) "enable"
-	    set bboard_rows:$rownum(action_url) "/bboard/alert-disable?rowid=[ns_urlencode $rowid]"	    
-	}
+        if { $valid_p == "f" } {
+            # alert has been disabled for some reason
+            set bboard_rows:$rownum(status) "disable"
+            set bboard_rows:$rownum(action_url) "/bboard/alert-reenable?rowid=[ns_urlencode $rowid]"
+        } else {
+            # alert is enabled
+            set bboard_rows:$rownum(status) "enable"
+            set bboard_rows:$rownum(action_url) "/bboard/alert-disable?rowid=[ns_urlencode $rowid]"
+        }
 
-	set bboard_rows:$rownum(topic) $topic
-	set bboard_rows:$rownum(frequency) $frequency
-	set bboard_rows:$rownum(keywords) $keywords
-	
+        set bboard_rows:$rownum(topic) $topic
+        set bboard_rows:$rownum(frequency) $frequency
+        set bboard_rows:$rownum(keywords) $keywords
+
     } if_no_rows {
-	set discussion_forum_alert_p 0
+        set discussion_forum_alert_p 0
     }
 }
 
 
 if { [db_table_exists "classified_email_alerts"] } {
     set classified_email_alert_p 1
-    
+
     set gc_system_name [gc_system_name]
     set rownum 0
 
@@ -93,37 +93,37 @@ if { [db_table_exists "classified_email_alerts"] } {
     and    sysdate <= expires
     order by expires desc
     } {
-	incr rownum
-	
-	if { $valid_p == "f" } {
-	    # alert has been disabled for some reason
-	    set classified_rows:$rownum(status) "Off"
-	    set classified_rows:$rownum(action) "<a href=\"/gc/alert-reenable?alert_id=$alert_id\">Re-enable</a>"
-	} else {
-	    # alert is enabled
-	    set classified_rows:$rownum(status) "<font color=red>On</font>"
-	    set classified_rows:$rownum(action) "<a href=\"/gc/alert-disable?rowid=$rowid\">Disable</a>"
-	}
+        incr rownum
 
-	if { $alert_type eq "all" } {
-	    set classified_rows:$rownum(alert_value) "--"
-	} elseif { $alert_type eq "keywords" } {
-	    set classified_rows:$rownum(alert_value) $keywords
-	} elseif { $alert_type eq "category" } {
-	    set classified_rows:$rownum(alert_value) $category
-	} else {
-	    # I don't know what to do here...
-	    set classified_rows:$rownum(alert_value) "--"
-	}
+        if { $valid_p == "f" } {
+            # alert has been disabled for some reason
+            set classified_rows:$rownum(status) "Off"
+            set classified_rows:$rownum(action) "<a href=\"/gc/alert-reenable?alert_id=$alert_id\">Re-enable</a>"
+        } else {
+            # alert is enabled
+            set classified_rows:$rownum(status) "<font color=red>On</font>"
+            set classified_rows:$rownum(action) "<a href=\"/gc/alert-disable?rowid=$rowid\">Disable</a>"
+        }
 
-	set classified_rows:$rownum(domain) $domain
-	set classified_rows:$rownum(rowid) $row_id
-	set classified_rows:$rownum(expires) $expires
-	set classified_rows:$rownum(frequency) [gc_PrettyFrequency $frequency]
-	set classified_rows:$rownum(alert_type) $alert_type
-	
+        if { $alert_type eq "all" } {
+            set classified_rows:$rownum(alert_value) "--"
+        } elseif { $alert_type eq "keywords" } {
+            set classified_rows:$rownum(alert_value) $keywords
+        } elseif { $alert_type eq "category" } {
+            set classified_rows:$rownum(alert_value) $category
+        } else {
+            # I don't know what to do here...
+            set classified_rows:$rownum(alert_value) "--"
+        }
+
+        set classified_rows:$rownum(domain) $domain
+        set classified_rows:$rownum(rowid) $row_id
+        set classified_rows:$rownum(expires) $expires
+        set classified_rows:$rownum(frequency) [gc_PrettyFrequency $frequency]
+        set classified_rows:$rownum(alert_type) $alert_type
+
     } if_no_rows {
-	set classified_email_alert_p 0
+        set classified_email_alert_p 0
     }
 }
 

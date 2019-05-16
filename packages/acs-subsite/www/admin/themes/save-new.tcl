@@ -8,11 +8,11 @@ ad_page_contract {
     new_name:trim
 } -validate {
     new_theme_valid -requires new_theme {
-	if {[db_string check_exists_theme {
-	    select 1 from subsite_themes where key = :new_theme
-	} -default 0]} {
-	    ad_complain "Theme with key '$new_theme' exists already" 
-	}
+        if {[db_string check_exists_theme {
+            select 1 from subsite_themes where key = :new_theme
+        } -default 0]} {
+            ad_complain "Theme with key '$new_theme' exists already"
+        }
     }
 }
 
@@ -29,3 +29,9 @@ subsite::save_theme_parameters_as \
 subsite::set_theme -theme $new_theme
 
 ns_returnredirect "."
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

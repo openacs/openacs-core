@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/index.tcl
-
 ad_page_contract {
 
     View an OpenACS Object Type
@@ -53,7 +51,7 @@ set body [subst {
       <th>Table Name</th>
       <th>Column Name</th>
     </tr>
-}]    
+}]
 
 db_foreach attribute {
     select attribute_name,
@@ -89,7 +87,7 @@ append body "
     </table>"
 
     if { $i > 0 } {
-	append page "
+        append page "
 <p>
 <b>Attributes</b>:
 $body
@@ -111,8 +109,8 @@ if { $table_name ne "" } {
 
     set i 0
     db_foreach attribute_comment {} {
-	incr i
-	append body "
+        incr i
+        append body "
      <tr>
       <td>[string tolower $column_name]</td>
       <td>[string tolower $data_type]</td>
@@ -124,7 +122,7 @@ if { $table_name ne "" } {
     </table>"
 
     if { $i > 0 } {
-	append page [subst {<p><b>Table Attributes</b>:<p>$body\n}]
+        append page [subst {<p><b>Table Attributes</b>:<p>$body\n}]
     }
 }
 
@@ -133,8 +131,8 @@ set body ""
 db_foreach package_index {} {
     incr i
     append body [subst {
-	<pre class="code">[ns_quotehtml $text]</pre>
-	<p>
+        <pre class="code">[ns_quotehtml $text]</pre>
+        <p>
     }]
 }
 

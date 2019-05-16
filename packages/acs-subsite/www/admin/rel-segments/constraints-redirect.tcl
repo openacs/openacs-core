@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/rel-segments/constraints-redirect.tcl
-
 ad_page_contract {
 
     Optionally redirects user to enter constraints
@@ -20,7 +18,7 @@ if {$operation eq "yes"} {
     ad_returnredirect "constraints/new?rel_segment=$segment_id&[export_vars return_url]"
 } else {
     if { $return_url eq "" } {
-	set return_url [export_vars -base one segment_id]
+        set return_url [export_vars -base one segment_id]
     }
     ad_returnredirect $return_url
 }

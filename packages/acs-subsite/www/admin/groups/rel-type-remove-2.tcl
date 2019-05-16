@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/groups/rel-type-remove-2.tcl
-
 ad_page_contract {
 
     Removes the specified relation from the list of allowable ones
@@ -28,36 +26,36 @@ if { ![db_0or1row select_group_id {
 
 if {$operation eq "Yes, I really want to delete this relationship type"} {
     set rel_id_list [db_list select_rel_ids {
-	select r.rel_id 
+        select r.rel_id
           from acs_rels r
-	 where r.rel_type = :rel_type
-	   and r.object_id_one = :group_id
+         where r.rel_type = :rel_type
+           and r.object_id_one = :group_id
     }]
-    
+
     db_transaction {
-	# Remove each relation
-	foreach rel_id $rel_id_list {
-	    relation_remove $rel_id
-	}
+        # Remove each relation
+        foreach rel_id $rel_id_list {
+            relation_remove $rel_id
+        }
 
-	# Remove the relational segment for this group/rel type if it exists
-	if { [db_0or1row select_segments {
-	    select segment_id
-	      from rel_segments 
-	     where group_id = :group_id
-	       and rel_type = :rel_type
-	}] } {
-	    rel_segments_delete $segment_id
-	}
+        # Remove the relational segment for this group/rel type if it exists
+        if { [db_0or1row select_segments {
+            select segment_id
+              from rel_segments
+             where group_id = :group_id
+               and rel_type = :rel_type
+        }] } {
+            rel_segments_delete $segment_id
+        }
 
-	# now remove this relationship type from the list of allowable
-	# ones for this group
-	db_dml remove_relationship_type {
-	    delete from group_rels where group_rel_id = :group_rel_id
-	}
+        # now remove this relationship type from the list of allowable
+        # ones for this group
+        db_dml remove_relationship_type {
+            delete from group_rels where group_rel_id = :group_rel_id
+        }
     } on_error {
-	ad_return_error "Error removing this relationship type" $errmsg
-	ad_script_abort
+        ad_return_error "Error removing this relationship type" $errmsg
+        ad_script_abort
     }
 
 

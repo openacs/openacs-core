@@ -1,5 +1,3 @@
-# /packages/subsite/www/admin/groups/index.tcl
-
 ad_page_contract {
 
     Shows the user all groups on which s/he has permission
@@ -12,9 +10,9 @@ ad_page_contract {
     {view_by "group_type"}
 } -validate {
     view_by_valid_p {
-	if { $view_by ni {group_type rel_type}} { 
-	    ad_complain "view_by is invalid."
-	}
+        if { $view_by ni {group_type rel_type}} {
+            ad_complain "view_by is invalid."
+        }
     }
 } -properties {
     context:onevalue

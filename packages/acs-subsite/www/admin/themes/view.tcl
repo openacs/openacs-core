@@ -1,17 +1,17 @@
 ad_page_contract {
     View (and maybe edit) theme parameters
-    
+
     @author Gustaf Neumann
     @creation-date 2017-01-21
 } {
     {theme:word,trim}
 } -validate {
     theme_valid -requires theme {
-	if {![db_string check_exists_theme {
-	    select 1 from subsite_themes where key = :theme
-	} -default 0]} {
-	    ad_complain "Theme with key '$theme' does not exist" 
-	}
+        if {![db_string check_exists_theme {
+            select 1 from subsite_themes where key = :theme
+        } -default 0]} {
+            ad_complain "Theme with key '$theme' does not exist"
+        }
     }
 }
 
@@ -63,7 +63,7 @@ foreach {var param} $settings {
         lappend htmlSpecs size 80
         set currentSpec [list ${var}:text,optional [list label $param] [list html $htmlSpecs]]
     }
-    
+
     if {$currentThemeKey eq $key} {
         set currentValue [string trim [parameter::get -parameter $param -package_id $subsite_id]]
         regsub -all {\r\n} $currentValue "\n" currentValue
@@ -97,9 +97,9 @@ ad_form -name theme \
     -form $formSpec \
     -on_request {
         #ns_log notice "on request"
-        
+
     } -on_submit {
-        
+
         if {[ns_queryget formbutton:save] ne "" || [ns_queryget formbutton:overwrite] ne ""} {
             #ns_log notice "edit theme ====== SAVE form values in actual parameter settings"
             foreach {var param} $settings {
@@ -120,7 +120,7 @@ ad_form -name theme \
                 -local_p  true \
                 {*}$params
         }
-        
+
     } -after_submit {
         ad_returnredirect $return_url
         ad_script_abort

@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/attributes/value-delete-2.tcl
-
 ad_page_contract {
 
     Deletes a value
@@ -11,13 +9,13 @@ ad_page_contract {
 } {
     attribute_id:naturalnum,notnull
     enum_value:trim,notnull
-    { operation:trim "No, I want to cancel my request" } 
+    { operation:trim "No, I want to cancel my request" }
     { return_url:localurl "[export_vars -base one attribute_id]" }
 }
 
 if {$operation eq "Yes, I really want to delete this attribute value"} {
     db_transaction {
-	attribute::value_delete $attribute_id $enum_value
+        attribute::value_delete $attribute_id $enum_value
     }
 }
 

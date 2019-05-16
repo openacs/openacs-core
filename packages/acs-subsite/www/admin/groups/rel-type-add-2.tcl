@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/groups/rel-type-add-2.tcl
-
 ad_page_contract {
 
     Adds a relationship type to the list of permissible ones for this
@@ -15,17 +13,17 @@ ad_page_contract {
     { return_url:localurl "" }
 } -validate {
     rel_type_acceptable_p -requires {group_id:notnull rel_type:notnull} {
-	# This test makes sure this group can accept the specified rel
-	# type. This means the group is itself a type (or subtype) of
-	# rel_type.object_type_one
-	db_1row select_group_type {
-	    select o.object_type as group_type
-	      from acs_objects o
-	     where o.object_id = :group_id
-	}
-	if { ![db_string types_match_p {}] } {
-	    ad_complain "Groups of type \"$group_type\" cannot use relationships of type \"$rel_type.\""
-	}
+        # This test makes sure this group can accept the specified rel
+        # type. This means the group is itself a type (or subtype) of
+        # rel_type.object_type_one
+        db_1row select_group_type {
+            select o.object_type as group_type
+              from acs_objects o
+             where o.object_id = :group_id
+        }
+        if { ![db_string types_match_p {}] } {
+            ad_complain "Groups of type \"$group_type\" cannot use relationships of type \"$rel_type.\""
+        }
     }
 }
 
@@ -39,17 +37,17 @@ if { [catch {
 }   } err_msg] } {
     # Does this pair already exists?
     if { ![db_string exists_p {}] } {
-	ad_return_error "Error inserting to database" $err_msg
-	ad_script_abort
+        ad_return_error "Error inserting to database" $err_msg
+        ad_script_abort
     }
 }
 
 # Now let's see if there is no relational segment. If not, offer to create one
 if { [db_string segment_exists_p {}] } {
     if { $return_url eq "" } {
-	set return_url [export_vars -base one group_id]
+        set return_url [export_vars -base one group_id]
     }
-    ad_returnredirect $return_url 
+    ad_returnredirect $return_url
 } else {
     ad_returnredirect [export_vars -base constraints-create {group_id rel_type return_url}]
 }

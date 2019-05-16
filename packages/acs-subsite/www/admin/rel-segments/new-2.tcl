@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/rel-segments/new-2.tcl
-
 ad_page_contract {
 
     Form to create a new relational segment (Use this only if you know
@@ -21,14 +19,14 @@ ad_page_contract {
     group_name:onevalue
 } -validate {
     group_in_scope_p -requires {group_id:notnull} {
-	if { ![application_group::contains_party_p -party_id $group_id -include_self]} {
-	    ad_complain "The group either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_party_p -party_id $group_id -include_self]} {
+            ad_complain "The group either does not exist or does not belong to this subsite."
+        }
     }
     relation_in_scope_p -requires {rel_id:notnull permission_p} {
-	if { ![application_group::contains_relation_p -rel_id $rel_id]} {
-	    ad_complain "The relation either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_relation_p -rel_id $rel_id]} {
+            ad_complain "The relation either does not exist or does not belong to this subsite."
+        }
     }
 }
 

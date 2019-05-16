@@ -1,5 +1,3 @@
-# packages/acs-core-ui/www/admin/site-nodes/package-new.tcl
-
 ad_page_contract {
     Create a new package and mount it in the site map. If new_node_p is false then
     the package will be mounted at node_id. If new_node_p is true then a new node with
@@ -56,16 +54,16 @@ db_transaction {
                                                          -package_key $package_key \
                                                          -node_id $node_id \
                                                          -package_name $instance_name \
-			                                 -context_id $context_id ]
+                                                         -context_id $context_id ]
     }
 
 } on_error {
     if {![db_string package_new_doubleclick_ck {} -default 0]} {
-	ad_return_complaint 1 "Error Creating Package: The following error was generated
-		when attempting to create the package
-	<blockquote><pre>
-		[ns_quotehtml $errmsg]
-	</pre></blockquote>"
+        ad_return_complaint 1 "Error Creating Package: The following error was generated
+                when attempting to create the package
+        <blockquote><pre>
+                [ns_quotehtml $errmsg]
+        </pre></blockquote>"
     }
 }
 

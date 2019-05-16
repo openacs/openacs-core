@@ -1,6 +1,6 @@
 ad_page_contract {
     shows User A what User B has contributed to the community
-    
+
     @param user_id defaults to currently logged in user if there is one
     @cvs-id $Id$
 } {
@@ -27,12 +27,12 @@ ad_page_contract {
     valid_user_id {
         set verified_user_id [ad_conn user_id]
         set untrusted_user_id [ad_conn untrusted_user_id]
-        
+
         if {$user_id eq ""} {
             if {$verified_user_id != 0} {
                 set user_id $verified_user_id
             } else {
-                # Don't know what to do! 
+                # Don't know what to do!
                 auth::require_login
                 return
             }
@@ -75,7 +75,7 @@ set email_image "<p><b>\#acs-subsite.E_mail\#:</b>&nbsp;[email_image::get_user_e
 #
 if { $url ne ""
      && ![string match -nocase "http://*" $url]
-     && ![string match -nocase "https://*" $url]     
+     && ![string match -nocase "https://*" $url]
  } {
     set url "http://$url"
 }
@@ -104,10 +104,10 @@ if {[db_0or1row portrait_info {
         # use it.  The maintenance of the image width in i.width
         # (above) does not seem to work reliable.
         #
-	# let's show it inline
-	set inline_portrait_state "inline"
+        # let's show it inline
+        set inline_portrait_state "inline"
     } else {
-	set inline_portrait_state "link"
+        set inline_portrait_state "link"
     }
 }
 
@@ -116,7 +116,7 @@ if { [ad_conn user_id] > 0 } {
     set show_email_p 1
 } else {
     set show_email_p 0
-    # guy doesn't want his email address shown, but we can still put out 
+    # guy doesn't want his email address shown, but we can still put out
     # the home page
 }
 

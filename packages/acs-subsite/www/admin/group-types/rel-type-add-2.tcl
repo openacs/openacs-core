@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/group-types/rel-type-add-2.tcl
-
 ad_page_contract {
 
     Adds the relationship type to the list of allowable ones for this
@@ -15,12 +13,12 @@ ad_page_contract {
     { return_url:localurl "" }
 } -validate {
     rel_type_acceptable_p -requires {group_type:notnull rel_type:notnull} {
-	# This test makes sure this group_type can accept the
-	# specified rel type. This means the group type is itself a
-	# type (or subtype) of rel_type.object_type_one
-	if { ![db_string types_match_p {}] } {
-	    ad_complain "Groups of type \"$group_type\" cannot use relationships of type \"$rel_type.\""
-	}
+        # This test makes sure this group_type can accept the
+        # specified rel type. This means the group type is itself a
+        # type (or subtype) of rel_type.object_type_one
+        if { ![db_string types_match_p {}] } {
+            ad_complain "Groups of type \"$group_type\" cannot use relationships of type \"$rel_type.\""
+        }
     }
 }
 
@@ -35,10 +33,10 @@ if { [catch {
 }   } err_msg] } {
     # Does this pair already exists?
     if { ![db_string exists_p {select count(*) from group_type_rels where group_type = :group_type and rel_type = :rel_type}] } {
-	ad_return_error \
+        ad_return_error \
             "Error inserting to database" \
             $err_msg
-	ad_script_abort
+        ad_script_abort
     }
 
 }

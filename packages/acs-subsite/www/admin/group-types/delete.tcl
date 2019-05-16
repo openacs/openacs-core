@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/group-types/delete.tcl
-
 ad_page_contract {
 
     Confirms deletion of a group type
@@ -22,9 +20,9 @@ ad_page_contract {
     relations_to_this_type:onevalue
 } -validate {
     user_can_delete_type -requires {group_type:notnull} {
-	if { ![group_type::drop_all_groups_p $group_type] } {
-	    ad_complain "Groups exist that you do not have permission to delete. All groups must be deleted before you can remove a group type. Please contact the site administrator."
-	}
+        if { ![group_type::drop_all_groups_p $group_type] } {
+            ad_complain "Groups exist that you do not have permission to delete. All groups must be deleted before you can remove a group type. Please contact the site administrator."
+        }
     }
 }
 
@@ -49,15 +47,15 @@ set subtypes_exist_p [db_string number_subtypes {}]
 if { $subtypes_exist_p } {
     set return_url "[ad_conn url]?[ad_conn query]"
 
-    # Just grab direct children... 
+    # Just grab direct children...
     template::multirow create subtypes pretty_name export_vars
 
     db_foreach select_subtypes {
-	select t.object_type as group_type, t.pretty_name
+        select t.object_type as group_type, t.pretty_name
           from acs_object_types t
          where t.supertype = :group_type
     } {
-	template::multirow append subtypes $pretty_name [export_vars {group_type return_url}]
+        template::multirow append subtypes $pretty_name [export_vars {group_type return_url}]
     }
     ad_return_template "delete-subtypes-exist"
     return
@@ -73,13 +71,13 @@ if { $rel_types_depend_p } {
     template::multirow create rel_types pretty_name export_vars
 
     db_foreach select_rel_types {
-	select rel.rel_type, t.pretty_name
+        select rel.rel_type, t.pretty_name
           from acs_rel_types rel, acs_object_types t
-         where (rel.object_type_one = :group_type 
+         where (rel.object_type_one = :group_type
                 or rel.object_type_two = :group_type)
-	   and rel.rel_type = t.object_type
+           and rel.rel_type = t.object_type
     } {
-	template::multirow append rel_types $pretty_name [export_vars {rel_type return_url}]
+        template::multirow append rel_types $pretty_name [export_vars {rel_type return_url}]
     }
     ad_return_template "delete-rel-types-exist"
     return
@@ -88,7 +86,7 @@ if { $rel_types_depend_p } {
 set export_form_vars [export_vars -form {group_type return_url}]
 
 set groups_of_this_type [util_commify_number [db_string groups_of_this_type {
-    select count(o.object_id) 
+    select count(o.object_id)
       from acs_objects o
      where o.object_type = :group_type
 }]]

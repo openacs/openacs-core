@@ -23,23 +23,23 @@ ad_form -name application -cancel_url . -export { return_url } -form {
     # Find the package pretty name from the list of packages
     array set package_pretty_name [list]
     foreach elm $packages {
-	set package_pretty_name([lindex $elm 1]) [lindex $elm 0]
+        set package_pretty_name([lindex $elm 1]) [lindex $elm 0]
     }
     if { [catch {
-	foreach one_package_key $package_key {
-	    set folder [site_node::verify_folder_name \
-			    -parent_node_id [ad_conn node_id] \
-			    -instance_name $package_pretty_name($one_package_key)]
-	    
-	    site_node::instantiate_and_mount \
-		-parent_node_id [ad_conn node_id] \
-		-node_name $folder \
-		-package_name $package_pretty_name($one_package_key) \
-		-package_key $one_package_key
-	}
+        foreach one_package_key $package_key {
+            set folder [site_node::verify_folder_name \
+                            -parent_node_id [ad_conn node_id] \
+                            -instance_name $package_pretty_name($one_package_key)]
+
+            site_node::instantiate_and_mount \
+                -parent_node_id [ad_conn node_id] \
+                -node_name $folder \
+                -package_name $package_pretty_name($one_package_key) \
+                -package_key $one_package_key
+        }
     } errmsg] } {
-	ns_log Error "Error creating application: $errmsg\n$::errorInfo"
-	ad_return_error "Problem Creating Application" "We had a problem creating the application."
+        ns_log Error "Error creating application: $errmsg\n$::errorInfo"
+        ad_return_error "Problem Creating Application" "We had a problem creating the application."
     }
 } -after_submit {
     ad_returnredirect $return_url

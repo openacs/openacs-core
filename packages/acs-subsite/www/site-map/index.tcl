@@ -54,55 +54,55 @@ template::list::create \
     -multirow nodes \
     -key node_id \
     -elements {
-	 name_instance {
+         name_instance {
          label "#acs-subsite.Name#"
             html "align left"
-	    display_template {
-		<a name="@nodes.node_id@">@nodes.tree_indent;noquote@</a>
-	        <if @nodes.instance@ eq "">
-		<a href="@nodes.instance_url@">@nodes.name;noquote@</a>
-		</if>
-		<else>
-		    <a href="@nodes.instance_url@">@nodes.instance;noquote@</a>
-		</else>
-		<if @nodes.expand_mode@ eq 1>
-		&nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif"></a>
-		</if>
-		<if @nodes.expand_mode@ eq 2>
+            display_template {
+                <a name="@nodes.node_id@">@nodes.tree_indent;noquote@</a>
+                <if @nodes.instance@ eq "">
+                <a href="@nodes.instance_url@">@nodes.name;noquote@</a>
+                </if>
+                <else>
+                    <a href="@nodes.instance_url@">@nodes.instance;noquote@</a>
+                </else>
+                <if @nodes.expand_mode@ eq 1>
+                &nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif"></a>
+                </if>
+                <if @nodes.expand_mode@ eq 2>
                 &nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/up.gif"></a>
                 </if>
 
-		<if @nodes.action_type@ eq "new_folder">
-		<form name="new_parent" action="new">
-		<div>@nodes.tree_indent;noquote@
-		@nodes.action_form_part;noquote@
-		<input name="name" type="text" size="8" value="Untitled">
-		<input type="submit" value="New"></div>
-		</form>
-		</if>
-	    }
+                <if @nodes.action_type@ eq "new_folder">
+                <form name="new_parent" action="new">
+                <div>@nodes.tree_indent;noquote@
+                @nodes.action_form_part;noquote@
+                <input name="name" type="text" size="8" value="Untitled">
+                <input type="submit" value="New"></div>
+                </form>
+                </if>
+            }
         } instance_url {
             label "#acs-subsite.URL#"
             html "align left"
-	    display_template {
-		<if @nodes.action_type@ eq "new_app">
-		<form name="new_application" action="package-new">
-		<div><input name="instance_name" type="text" size="8" value="">
-		@nodes.action_form_part;noquote@
-		<input type="submit" value="New"></div>
-		</form>
-		</if>
-		<if @nodes.action_type@ eq "rename_app">
-		<form name="rename_application" action="rename">
-		<div><input name="instance_name" type="text" value="@nodes.instance@">
-		@nodes.action_form_part;noquote@
-		<input type="submit" value="Rename"></div>
-		</form>
-		</if>
-		<else>
-		@nodes.instance_url;noquote@
-		</else>
-	    }
+            display_template {
+                <if @nodes.action_type@ eq "new_app">
+                <form name="new_application" action="package-new">
+                <div><input name="instance_name" type="text" size="8" value="">
+                @nodes.action_form_part;noquote@
+                <input type="submit" value="New"></div>
+                </form>
+                </if>
+                <if @nodes.action_type@ eq "rename_app">
+                <form name="rename_application" action="rename">
+                <div><input name="instance_name" type="text" value="@nodes.instance@">
+                @nodes.action_form_part;noquote@
+                <input type="submit" value="Rename"></div>
+                </form>
+                </if>
+                <else>
+                @nodes.instance_url;noquote@
+                </else>
+            }
         }
     }
 
@@ -131,33 +131,33 @@ db_foreach nodes_select {} {
     }
 
     if {$directory_p == "t"} {
-	set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
-	if {$object_id eq ""} {
-	    set mount_url [export_vars -base mount {expand:multiple root_id node_id}]
-	    set new_app_url [export_vars -base . {expand:multiple root_id {new_application $node_id}}]
-	} else {
-	    # This makes sure you can't unmount the thing that is serving the page you're looking at.
-	    if {[ad_conn node_id] != $node_id} {
-		set unmount_url [export_vars -base unmount {expand:multiple root_id node_id}]
-	    }
+        set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
+        if {$object_id eq ""} {
+            set mount_url [export_vars -base mount {expand:multiple root_id node_id}]
+            set new_app_url [export_vars -base . {expand:multiple root_id {new_application $node_id}}]
+        } else {
+            # This makes sure you can't unmount the thing that is serving the page you're looking at.
+            if {[ad_conn node_id] != $node_id} {
+                set unmount_url [export_vars -base unmount {expand:multiple root_id node_id}]
+            }
 
-	    # Add a link to control permissioning
-	    if {$object_admin_p} {
-		set permissions_url [export_vars -base ../../permissions/one {object_id}]
-		set rename_url [export_vars -base . {expand:multiple root_id {rename_application $node_id}}]
-		set delete_url [export_vars -base instance-delete {{package_id $object_id} root_id}]
-	    }
-	    # Is the object a package?
-	    if {$package_id ne ""} {
-		if {$object_admin_p && ($parameter_count > 0)} {
-		    set parameters_url [export_vars -base "/shared/parameters" { package_id {return_url {[ad_return_url]} } }]
-		}
-	    }
-	}
+            # Add a link to control permissioning
+            if {$object_admin_p} {
+                set permissions_url [export_vars -base ../../permissions/one {object_id}]
+                set rename_url [export_vars -base . {expand:multiple root_id {rename_application $node_id}}]
+                set delete_url [export_vars -base instance-delete {{package_id $object_id} root_id}]
+            }
+            # Is the object a package?
+            if {$package_id ne ""} {
+                if {$object_admin_p && ($parameter_count > 0)} {
+                    set parameters_url [export_vars -base "/shared/parameters" { package_id {return_url {[ad_return_url]} } }]
+                }
+            }
+        }
     }
 
     if {[ad_conn node_id] != $node_id && $n_children == 0 && $object_id eq ""} {
-	set delete_url [export_vars -base delete {expand:multiple root_id node_id}]
+        set delete_url [export_vars -base delete {expand:multiple root_id node_id}]
     }
 
     #
@@ -167,37 +167,37 @@ db_foreach nodes_select {} {
     #
     set indent ""
     if { $mylevel != 1 } {
-	if { $mylevel == 2 } {
-	    append indent "&nbsp;&nbsp;"
-	} else {
-	    for {set i 1} {$i <4*$mylevel} {incr i} {
-		append indent "&nbsp;"
-	    }
-	}
+        if { $mylevel == 2 } {
+            append indent "&nbsp;&nbsp;"
+        } else {
+            for {set i 1} {$i <4*$mylevel} {incr i} {
+                append indent "&nbsp;"
+            }
+        }
     }
 
     set expand_mode 0
     if {!$root_p && $n_children > 0} {
-	set expand_mode 1
-	set urlvars [list]
-	foreach n $expand {
-	    if {$n == $node_id} {
-		set expand_mode 2
-		lappend open_nodes "$node_id"
-	    } else {
-		lappend urlvars "expand=$n"
-	    }
-	}
+        set expand_mode 1
+        set urlvars [list]
+        foreach n $expand {
+            if {$n == $node_id} {
+                set expand_mode 2
+                lappend open_nodes "$node_id"
+            } else {
+                lappend urlvars "expand=$n"
+            }
+        }
 
-	if { $expand_mode == 1} {
-	    lappend urlvars "expand=$node_id"
-	}
+        if { $expand_mode == 1} {
+            lappend urlvars "expand=$node_id"
+        }
 
-	lappend urlvars "root_id=$root_id"
+        lappend urlvars "root_id=$root_id"
 
-	set expand_url [join $urlvars "&"]
+        set expand_url [join $urlvars "&"]
     } else {
-	set expand_url ""
+        set expand_url ""
     }
 
     set name_url [export_vars {expand:multiple {root_id $node_id}}]
@@ -206,27 +206,27 @@ db_foreach nodes_select {} {
     set action_form_part ""
 
     if {$object_id eq ""} {
-	if {$new_application == $node_id} {
+        if {$new_application == $node_id} {
 
-	    set action_type "new_app"
-	    set action_form_part [export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]
+            set action_type "new_app"
+            set action_form_part [export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]
 
-	    #Generate a package_id for double click protection
-	    set new_package_id [db_nextval acs_object_id_seq]
-	} else {
-	    set action_form_part "(none)"
-	}
+            #Generate a package_id for double click protection
+            set new_package_id [db_nextval acs_object_id_seq]
+        } else {
+            set action_form_part "(none)"
+        }
     } elseif {$rename_application == $node_id} {
-	set action_type "rename_app"
-	set action_form_part [export_vars -form {expand:multiple root_id node_id rename_package_id}]
+        set action_type "rename_app"
+        set action_form_part [export_vars -form {expand:multiple root_id node_id rename_package_id}]
 
     } else {}
 
     if {$node_id == $new_parent} {
-	set parent_id $new_parent
-	set node_type $new_type
-	set action_type "new_folder"
-	set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
+        set parent_id $new_parent
+        set node_type $new_type
+        set action_type "new_folder"
+        set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
     }
 
     multirow append nodes $node_id $expand_mode $expand_url $indent $name $name_url $object_name \

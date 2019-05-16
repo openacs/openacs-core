@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/rel-segments/new-3.tcl
-
 ad_page_contract {
 
     Creates a relational segment. Finished by asking the user to
@@ -20,14 +18,14 @@ ad_page_contract {
     segment_name:onevalue
 } -validate {
     group_in_scope_p -requires {group_id:notnull} {
-	if { ![application_group::contains_party_p -party_id $group_id -include_self]} {
-	    ad_complain "The group either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_party_p -party_id $group_id -include_self]} {
+            ad_complain "The group either does not exist or does not belong to this subsite."
+        }
     }
     relation_in_scope_p -requires {rel_id:notnull permission_p} {
-	if { ![application_group::contains_relation_p -rel_id $rel_id]} {
-	    ad_complain "The relation either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_relation_p -rel_id $rel_id]} {
+            ad_complain "The relation either does not exist or does not belong to this subsite."
+        }
     }
 }
 
@@ -40,14 +38,14 @@ db_transaction {
 } on_error {
     # Let's see if this segment already exists
     set segment_id [db_string select_segment_id {
-	select s.segment_id
-	  from rel_segments s
-	 where s.group_id = :group_id
-	   and s.rel_type = :rel_type
+        select s.segment_id
+          from rel_segments s
+         where s.group_id = :group_id
+           and s.rel_type = :rel_type
     } -default ""]
     if { $segment_id eq "" } {
-	ad_return_error "Error creating segment" $errmsg
-	ad_script_abort
+        ad_return_error "Error creating segment" $errmsg
+        ad_script_abort
     }
 }
 

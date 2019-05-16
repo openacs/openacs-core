@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/group-types/delete-2.tcl
-
 ad_page_contract {
 
     Deletes a group type
@@ -16,17 +14,17 @@ ad_page_contract {
     context:onevalue
 } -validate {
     user_can_delete_group -requires {group_type:notnull} {
-	if { ![group_type::drop_all_groups_p $group_type] } {
-	    ad_complain "Groups exist that you do not have permission to delete. All groups must be deleted before you can remove a group type. Please contact the site administrator."
-	}
+        if { ![group_type::drop_all_groups_p $group_type] } {
+            ad_complain "Groups exist that you do not have permission to delete. All groups must be deleted before you can remove a group type. Please contact the site administrator."
+        }
     }
 }
 
 if { $operation ne "Yes, I really want to delete this group type" } {
     if { $return_url eq "" } {
-	ad_returnredirect [export_vars -base one {group_type}]
+        ad_returnredirect [export_vars -base one {group_type}]
     } else {
-	ad_returnredirect $return_url
+        ad_returnredirect $return_url
     }
     ad_script_abort
 }

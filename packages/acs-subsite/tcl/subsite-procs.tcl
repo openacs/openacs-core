@@ -1,5 +1,3 @@
-# /packages/subsite/tcl/subsite-procs.tcl
-
 ad_library {
 
     Procs to manage application groups

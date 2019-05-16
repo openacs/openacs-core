@@ -1,5 +1,3 @@
-# /packages/acs-subsite/www/admin/groups/one.tcl
-
 ad_page_contract {
     View one group.
 
@@ -55,24 +53,24 @@ db_1row group_info_pretty {
 set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] "One Group"]
 
 attribute::multirow \
-	-start_with group \
-	-datasource_name attributes \
-	-object_type $group_type \
-	$group_id
+        -start_with group \
+        -datasource_name attributes \
+        -object_type $group_type \
+        $group_id
 
 if {[apm_package_installed_p categories]} {
     set category_url [site_node::get_package_url -package_key categories]
 
     set mapped_trees [category_tree::get_mapped_trees $group_id]
     foreach mapped_tree $mapped_trees {
-	lassign $mapped_tree tree_id tree_name subtree_id
-	if {$subtree_id ne ""} {
-	    set tree_name "${tree_name}::[category::get_name $subtree_id]"
-	}
-	lappend category_trees $tree_name
+        lassign $mapped_tree tree_id tree_name subtree_id
+        if {$subtree_id ne ""} {
+            set tree_name "${tree_name}::[category::get_name $subtree_id]"
+        }
+        lappend category_trees $tree_name
     }
     if {$mapped_trees eq ""} {
-	set category_trees "None"
+        set category_trees "None"
     }
     set category_trees [join $category_trees ,]
 }

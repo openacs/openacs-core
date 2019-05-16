@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/groups/new.tcl
-
 ad_page_contract {
 
     Adds a new group
@@ -23,11 +21,11 @@ ad_page_contract {
     attributes:multirow
 } -validate {
     double_click -requires {group_id:notnull} {
-	if { [db_string group_exists_p {
-	    select count(*) from groups where group_id = :group_id
-	}] } {
-	    ad_complain "The specified group already exists... Maybe you double-clicked?"
-	}
+        if { [db_string group_exists_p {
+            select count(*) from groups where group_id = :group_id
+        }] } {
+            ad_complain "The specified group already exists... Maybe you double-clicked?"
+        }
     }
 }
 
@@ -111,21 +109,21 @@ attribute::add_form_elements -form_id add_group -variable_prefix rel -start_with
 if { [template::form is_request add_group] } {
 
     foreach var $export_var_list {
-	template::element create add_group $var \
-		-value [set $var] \
-		-datatype text \
-		-widget hidden
+        template::element create add_group $var \
+                -value [set $var] \
+                -datatype text \
+                -widget hidden
     }
 
     # Set the object id for the new group
     template::element set_properties add_group group_id \
-	    -value [db_nextval "acs_object_id_seq"]
+            -value [db_nextval "acs_object_id_seq"]
 
 }
 
 if { [template::form is_valid add_group] } {
     db_transaction {
-	set group_id [group::new \
+        set group_id [group::new \
                           -form_id add_group \
                           -variable_prefix group \
                           -group_id $group_id \
@@ -143,14 +141,14 @@ if { [template::form is_valid add_group] } {
     set package_url [ad_conn package_url]
 
     foreach group_rel_type $group_rel_type_list {
-	lassign $group_rel_type next_group_id next_rel_type
-	lappend return_url_list \
-	    [export_vars -base "${package_url}admin/relations/add" {
-		{group_id $next_group_id}
-		{rel_type [ad_urlencode $next_rel_type]}
-		{party_id $group_id}
-		{allow_out_of_scope_p t}
-	    }]
+        lassign $group_rel_type next_group_id next_rel_type
+        lappend return_url_list \
+            [export_vars -base "${package_url}admin/relations/add" {
+                {group_id $next_group_id}
+                {rel_type [ad_urlencode $next_rel_type]}
+                {party_id $group_id}
+                {allow_out_of_scope_p t}
+            }]
     }
 
     # Add the original return_url as the last one in the list

@@ -15,18 +15,18 @@ template::list::create \
     -multirow host_node_pairs \
     -key node_id \
     -elements {
-	host {
-	    label "[_ acs-subsite.Hostname]"
-	}
-	node_id {
-	    label "[_ acs-subsite.Root_Node]"
-	} 
-	url {
-	    label "[_ acs-subsite.Root_URL]"
-	}
-	delete_url {
-	    display_template "<if @host_node_pairs.delete_url@ not nil><a href=\"@host_node_pairs.delete_url@\" title=\"Delete this mapping\">delete</a></if>"
-	}
+        host {
+            label "[_ acs-subsite.Hostname]"
+        }
+        node_id {
+            label "[_ acs-subsite.Root_Node]"
+        }
+        url {
+            label "[_ acs-subsite.Root_URL]"
+        }
+        delete_url {
+            display_template "<if @host_node_pairs.delete_url@ not nil><a href=\"@host_node_pairs.delete_url@\" title=\"Delete this mapping\">delete</a></if>"
+        }
     }
 
 set root_node_id [site_node::get_node_id -url "/"]
@@ -67,22 +67,22 @@ set sorted_node_list [lsort -dictionary $node_list]
 
 ad_form -name add_host_node_mapping -export {parent_node_id} -form {
     {host:text(text)
-	{label "[_ acs-subsite.Hostname]"}
-	{html {size 40}}
-	{value "mydomain.com"}
-	{help_text "[_ acs-subsite.Hostname_must_be_unique]"}
+        {label "[_ acs-subsite.Hostname]"}
+        {html {size 40}}
+        {value "mydomain.com"}
+        {help_text "[_ acs-subsite.Hostname_must_be_unique]"}
     }
     {root:text(radio)
-	{label "[_ acs-subsite.Root_Node]"}
-	{options $sorted_node_list}
-	{help_text "[_ acs-subsite.Site_node_you_would_like_to_map_hostname_to]"}
+        {label "[_ acs-subsite.Root_Node]"}
+        {options $sorted_node_list}
+        {help_text "[_ acs-subsite.Site_node_you_would_like_to_map_hostname_to]"}
     }
     {submit:text(submit)
-	{label "[_ acs-subsite.Add_Pair]"}
+        {label "[_ acs-subsite.Add_Pair]"}
     }
 } -validate {
     {host
-	{![db_string check_host {select 1 from host_node_map where host = :host} -default 0]}
+        {![db_string check_host {select 1 from host_node_map where host = :host} -default 0]}
          "Host must be unique"
     }
 } -on_submit {
