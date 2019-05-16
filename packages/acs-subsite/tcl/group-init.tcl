@@ -1,4 +1,3 @@
-
 #
 # Create group cache. The sizes can be tailored in the config
 # file like the following:
@@ -10,4 +9,3 @@
     -package_key acs-subsite \
     -parameter GroupCache \
     -default_size 2000000
-

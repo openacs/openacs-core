@@ -1,5 +1,5 @@
 ad_library {
-    
+
     Initializes mappings of package directories to URLs.
 
     @cvs-id $Id$

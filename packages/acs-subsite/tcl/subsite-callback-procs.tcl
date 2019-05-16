@@ -1,5 +1,3 @@
-# /packages/acs-subsite/tcl/group-callback-procs.tcl
-
 ad_library {
 
     Procs to support a simple callback mechanism that allows other
@@ -17,7 +15,7 @@ ad_proc -public subsite_callback {
     event_type
     object_id
 } {
-    Executes any registered callbacks for this object. 
+    Executes any registered callbacks for this object.
     <p>
     <b>Example:</b>
     <pre>

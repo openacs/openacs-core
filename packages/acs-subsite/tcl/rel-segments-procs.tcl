@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/tcl/rel-segments-procs.tcl
-
 ad_library {
 
     Helpers for relational segments
@@ -27,12 +25,12 @@ ad_proc -public rel_segments_new {
 
 } {
     if { [ad_conn isconnected] } {
-	if { $creation_user eq "" } {
-	    set creation_user [ad_conn user_id]
-	}
-	if { $creation_ip eq "" } {
-	    set creation_ip [ad_conn peeraddr]
-	}
+        if { $creation_user eq "" } {
+            set creation_user [ad_conn user_id]
+        }
+        if { $creation_ip eq "" } {
+            set creation_ip [ad_conn peeraddr]
+        }
     }
     return [db_exec_plsql create_rel_segment {}]
 
@@ -50,11 +48,11 @@ ad_proc -public rel_segments_delete {
 } {
     # First delete dependent constraints.
     db_foreach select_dependent_constraints {
-	select c.constraint_id
-	  from rel_constraints c
-	 where c.required_rel_segment = :segment_id
+        select c.constraint_id
+          from rel_constraints c
+         where c.required_rel_segment = :segment_id
     } {
-	db_exec_plsql constraint_delete {}
+        db_exec_plsql constraint_delete {}
     }
 
     db_exec_plsql rel_segment_delete {}

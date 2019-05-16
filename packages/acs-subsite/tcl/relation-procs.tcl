@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/tcl/relation-procs.tcl
-
 ad_library {
 
     Helpers for dealing with relations
@@ -54,7 +52,7 @@ ad_proc -public relation_add {
 
     @param extra_vars      An ns_set of extra variables
 
-    @param variable_prefix Only form elements that begin with the 
+    @param variable_prefix Only form elements that begin with the
                            specified prefix will be processed.
 
     @param creation_user   The user who is creating the relation
@@ -62,35 +60,35 @@ ad_proc -public relation_add {
     @param creation_ip
 
     @param member_state    Only used for membership_relations.
-                           See column membership_rels.member_state 
+                           See column membership_rels.member_state
                            for more info.
 
     @return The <code>rel_id</code> of the new relation
 
 } {
     # First check if the relation already exists, and if so, just return that
-    set existing_rel_id [db_string rel_exists { 
+    set existing_rel_id [db_string rel_exists {
         select rel_id
-        from   acs_rels 
-        where  rel_type = :rel_type 
+        from   acs_rels
+        where  rel_type = :rel_type
         and    object_id_one = :object_id_one
         and    object_id_two = :object_id_two
     } -default {}]
-    
+
     if { $existing_rel_id ne "" } {
         return $existing_rel_id
     }
 
     set var_list [list \
-	    [list object_id_one $object_id_one] \
-	    [list object_id_two $object_id_two]]
+            [list object_id_one $object_id_one] \
+            [list object_id_two $object_id_two]]
 
-    # Note that we don't explicitly check whether rel_type is a type of 
-    # membership relation before adding the member_state variable.  The 
+    # Note that we don't explicitly check whether rel_type is a type of
+    # membership relation before adding the member_state variable.  The
     # package_instantiate_object proc will ignore the member_state variable
     # if the rel_type's plsql package doesn't support it.
     if {$member_state ne ""} {
-	lappend var_list [list member_state $member_state]
+        lappend var_list [list member_state $member_state]
     }
 
     # We initialize rel_id, so it's set if there's a problem
@@ -101,29 +99,29 @@ ad_proc -public relation_add {
 
     db_transaction {
 
-	set rel_id [package_instantiate_object \
-		-creation_user $creation_user \
-		-creation_ip $creation_ip \
-		-start_with "relationship" \
-		-form_id $form_id \
-		-extra_vars $extra_vars \
-		-variable_prefix $variable_prefix \
-		-var_list $var_list \
-		$rel_type]
+        set rel_id [package_instantiate_object \
+                -creation_user $creation_user \
+                -creation_ip $creation_ip \
+                -start_with "relationship" \
+                -form_id $form_id \
+                -extra_vars $extra_vars \
+                -variable_prefix $variable_prefix \
+                -var_list $var_list \
+                $rel_type]
 
-	# Check to see if constraints are violated because of this new
-	# relation
+        # Check to see if constraints are violated because of this new
+        # relation
 
-	# JCD: this is enforced by trigger so no longer check explicitly
-	# see membership_rels_in_tr
-	# 
-	# set violated_err_msg [db_string select_rel_violation {} -default ""]
-	#
-	# if { $violated_err_msg ne "" } {
-	#     error $violated_err_msg
-	# }
+        # JCD: this is enforced by trigger so no longer check explicitly
+        # see membership_rels_in_tr
+        #
+        # set violated_err_msg [db_string select_rel_violation {} -default ""]
+        #
+        # if { $violated_err_msg ne "" } {
+        #     error $violated_err_msg
+        # }
     } on_error {
-	return -code error $errmsg
+        return -code error $errmsg
     }
 
     return $rel_id
@@ -147,7 +145,7 @@ ad_proc -public relation_remove {
     # acs_rels. Note the outer joins since the segment may not exist.
     if { ![db_0or1row select_rel_info_rm {}] } {
         # Relation doesn't exist
-	return 0
+        return 0
     }
 
     # Check if we would violate some constraint by removing this relation.
@@ -161,9 +159,9 @@ ad_proc -public relation_remove {
     # acs_rels to find the group and rel_type for this relation.
 
     if { $segment_id ne "" } {
-	if { [relation_segment_has_dependent -segment_id $segment_id -party_id $party_id] } {
-	    error "Relational constraints violated by removing this relation"
-	}
+        if { [relation_segment_has_dependent -segment_id $segment_id -party_id $party_id] } {
+            error "Relational constraints violated by removing this relation"
+        }
     }
 
     db_exec_plsql relation_delete {}
@@ -190,14 +188,14 @@ ad_proc -public relation_segment_has_dependent {
 } {
 
     if { $rel_id ne "" } {
-	if { ![db_0or1row select_rel_info {}] } {
-	    # There is either no relation or no segment... thus no dependents
-	    return 0
-	}
+        if { ![db_0or1row select_rel_info {}] } {
+            # There is either no relation or no segment... thus no dependents
+            return 0
+        }
     }
 
     if { $segment_id eq "" || $party_id eq "" } {
-	error "Both of segment_id and party_id must be specified in call to relation_segment_has_dependent"
+        error "Both of segment_id and party_id must be specified in call to relation_segment_has_dependent"
     }
 
     return [db_string others_depend_p {}]
@@ -208,7 +206,7 @@ ad_proc -public relation_type_is_valid_to_group_p {
     { -group_id "" }
     rel_type
 } {
-    Returns 1 if group $group_id allows elements through a relation of 
+    Returns 1 if group $group_id allows elements through a relation of
     type $rel_type, or 0 otherwise.
 
     If there are no relational constraints that prevent $group_id from being
@@ -216,17 +214,17 @@ ad_proc -public relation_type_is_valid_to_group_p {
 
     @author Oumi Mehrotra (oumi@arsdigita.com)
     @creation-date 2000-02-07
-    
+
     @param group_id - if unspecified, then we use
                       [application_group::group_id_from_package_id]
     @param rel_type
 } {
     if {$group_id eq ""} {
-	set group_id [application_group::group_id_from_package_id]
+        set group_id [application_group::group_id_from_package_id]
     }
 
     return [db_string rel_type_valid_p {}]
-    
+
 }
 
 
@@ -246,7 +244,7 @@ ad_proc relation_types_valid_to_group_multirow {
     datasource indicates whether the type is a valid one for $group_id.
 
     If -group_id is not specified or is specified null, then the current
-    application_group will be used 
+    application_group will be used
     (determined from [application_group::group_id_from_package_id]).
 
     Includes fields that are useful for
@@ -263,7 +261,7 @@ ad_proc relation_types_valid_to_group_multirow {
 
     @param datasource_name
     @param start_with
-    @param group_id - if unspecified, then 
+    @param group_id - if unspecified, then
                       [application_group::group_id_from_package_id] is used.
 } {
 
@@ -291,20 +289,20 @@ ad_proc -public relation_required_segments_multirow {
     Also returns a list containing the most essential information.
 } {
     if {$group_id eq ""} {
-	set group_id [application_group::group_id_from_package_id]
+        set group_id [application_group::group_id_from_package_id]
     }
 
     template::multirow create $datasource_name \
-	    segment_id group_id rel_type rel_type_enc \
-	    rel_type_pretty_name group_name join_policy
+            segment_id group_id rel_type rel_type_enc \
+            rel_type_pretty_name group_name join_policy
 
 
     set group_rel_type_list [list]
 
     db_foreach select_required_rel_segments {} {
-	template::multirow append $datasource_name $segment_id $group_id $rel_type [ad_urlencode $rel_type] $rel_type_pretty_name $group_name $join_policy
+        template::multirow append $datasource_name $segment_id $group_id $rel_type [ad_urlencode $rel_type] $rel_type_pretty_name $group_name $join_policy
 
-	lappend group_rel_type_list [list $group_id $rel_type]
+        lappend group_rel_type_list [list $group_id $rel_type]
     }
     return $group_rel_type_list
 }
@@ -327,13 +325,13 @@ ad_proc -public relation::get_object_one {
     {-multiple:boolean}
 } {
     Return the object_id of object one if a relation of rel_type exists between the supplied object_id_two and it.
-    
+
     @param multiple_p If set to "t" return a list instead of only one object_id
 } {
     if {$multiple_p} {
-	return [db_list select_object_one {}]
+        return [db_list select_object_one {}]
     } else {
-	return [db_string select_object_one {} -default {}]
+        return [db_string select_object_one {} -default {}]
     }
 }
 
@@ -343,13 +341,13 @@ ad_proc -public relation::get_object_two {
     {-multiple:boolean}
 } {
     Return the object_id of object two if a relation of rel_type exists between the supplied object_id_one and it.
-    
+
     @param multiple_p If set to "t" return a list instead of only one object_id
 } {
     if {$multiple_p} {
-	return [db_list select_object_two {}]
+        return [db_list select_object_two {}]
     } else {
-	return [db_string select_object_two {} -default {}]
+        return [db_string select_object_two {} -default {}]
     }
 }
 
@@ -361,16 +359,16 @@ ad_proc -public relation::get_objects {
     Return the list of object_ids if a relation of rel_type exists between the supplied object_id and it.
 } {
     if {$object_id_one eq ""} {
-	if {$object_id_two eq ""} {
+        if {$object_id_two eq ""} {
             ad_return_error \
                 [_ acs-subsite.Missing_argument] \
                 [_ acs-subsite.lt_You_have_to_provide_a]
             ad_script_abort
-	} else {
-	    return [relation::get_object_one -object_id_two $object_id_two -rel_type $rel_type -multiple]
-	}
+        } else {
+            return [relation::get_object_one -object_id_two $object_id_two -rel_type $rel_type -multiple]
+        }
     } else {
-	return [relation::get_object_two -object_id_one $object_id_one -rel_type $rel_type -multiple]
+        return [relation::get_object_two -object_id_one $object_id_one -rel_type $rel_type -multiple]
     }
 }
 

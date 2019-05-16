@@ -111,7 +111,7 @@ ad_proc -public subsite::pivot_root {
         #
         #TODO: adjust sitenode hierarchy?
         #TODO: permissions on main subsite (has to be always world readable)
-        #TODO: memberships on site / subsite        
+        #TODO: memberships on site / subsite
         #TODO: address implications on permission management when hierarchy flips around
         #TODO: test caching implications
         #TODO: probably more
