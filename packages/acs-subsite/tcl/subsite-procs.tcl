@@ -88,7 +88,7 @@ ad_proc -public subsite::before_upgrade {
 }
 
 ad_proc -public subsite::pivot_root {
-    -node_id
+    -node_id:required
 } {
 
     Pivot the package associated with node_id onto the root.  Mounting
@@ -108,6 +108,13 @@ ad_proc -public subsite::pivot_root {
         #TODO: swap the application groups for the subsites so that
         #TODO: registered users is always the application group of the root
         #TODO: subsite.
+        #
+        #TODO: adjust sitenode hierachy?
+        #TODO: permissions on main subsite (has to be always world readable)
+        #TODO: memberships on site / subsite        
+        #TODO: address implications on permission management when hierachy flips around
+        #TODO: test caching implications
+        #TODO: probably more
     }
 }
 
