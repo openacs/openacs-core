@@ -109,10 +109,10 @@ ad_proc -public subsite::pivot_root {
         #TODO: registered users is always the application group of the root
         #TODO: subsite.
         #
-        #TODO: adjust sitenode hierachy?
+        #TODO: adjust sitenode hierarchy?
         #TODO: permissions on main subsite (has to be always world readable)
         #TODO: memberships on site / subsite        
-        #TODO: address implications on permission management when hierachy flips around
+        #TODO: address implications on permission management when hierarchy flips around
         #TODO: test caching implications
         #TODO: probably more
     }
