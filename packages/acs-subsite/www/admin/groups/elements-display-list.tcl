@@ -1,11 +1,11 @@
-# /packages/acs-subsite/www/admin/groups/elements-display.tcl
+ad_include_contract {
 
-if { ![info exists group_id] || $group_id eq "" } {
-    error "Group must be specified"
-}
+    List elements of group/rel_type
 
-if { ![info exists rel_type] || $rel_type eq "" } {
-    error "Rel type must be specified"
+} {
+    {group_id:integer,notnull}
+    {rel_type:notnull}
+    {member_state "approved"
 }
 
 if { ![info exists return_url_enc] || $return_url_enc eq "" } {
@@ -13,16 +13,16 @@ if { ![info exists return_url_enc] || $return_url_enc eq "" } {
     set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
 }
 
-if {![info exists member_state]} {
-    set member_state "approved"
-}
-
 set user_id [ad_conn user_id]
 
-# We need to know both: 
+# We need to know both:
 #    - does user have admin on group?
 #    - does user have delete on group?
-set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
+
+set admin_p [permission::permission_p \
+                 -party_id $user_id \
+                 -object_id $group_id \
+                 -privilege "admin"]
 if {$admin_p} {
     # We can skip the permissions check for "delete" because user had admin.
     set delete_p 1
@@ -39,8 +39,8 @@ set extra_tables ""
 set extra_where_clauses ""
 if {$ancestor_rel_type eq "membership_rel"} {
     if {$member_state ne ""} {
-	set extra_tables "membership_rels mr,"
-	set extra_where_clauses {
+        set extra_tables "membership_rels mr,"
+        set extra_where_clauses {
             and mr.rel_id = rels.rel_id
             and mr.member_state = :member_state}
     }
@@ -53,13 +53,13 @@ db_multirow rels relations_query {}
 set base_url [export_vars -base [ad_conn package_url]admin/groups/elements-display {group_id rel_type}]
 
 template::multirow create possible_member_states \
-	val label url
+        val label url
 
 template::multirow append possible_member_states \
-	"" "all" $base_url
+        "" "all" $base_url
 foreach state [group::possible_member_states] {
     template::multirow append possible_member_states \
-	    $state $state $base_url&member_state=[ad_urlencode $state]
+            $state $state $base_url&member_state=[ad_urlencode $state]
 }
 
 
