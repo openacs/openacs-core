@@ -98,7 +98,11 @@ if {$return_url eq ""} {
     set return_url [acs_community_member_admin_url -user_id $user_id]
 }
 
-if {$pass_through} {
+if {$pass_through || $member_state_old eq $member_state} {
+    #
+    # No need to ask the admin to send a state notification mail to
+    # the user.
+    #
     ad_returnredirect $return_url
     ad_script_abort
 }
