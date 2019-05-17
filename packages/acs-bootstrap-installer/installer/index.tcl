@@ -21,17 +21,17 @@ if { [ns_queryexists done_p] } {
     # (well, actually, /?done_p=1). This is so the user can just hit his/her
     # browser's Reload button to get the main OpenACS login page once (s)he's
     # restarted the OpenNSD.
-    
+
   if { [ad_verify_install] } {
     install_return 200 "OpenACS Installation Complete" "
 
 You have successfully installed the Open Architecture Community System (OpenACS)!
 
 <p> Your server process has been terminated.  Unless you have configured your
-web server to restart automatically, as outlined in the 
-<a href=\"http://openacs.org/doc/openacs-4/\">OpenACS 4.x Installation Guide</a>, 
+web server to restart automatically, as outlined in the
+<a href=\"http://openacs.org/doc/openacs-4/\">OpenACS 4.x Installation Guide</a>,
 you will need to start your web server again.
-When the web server restarts, OpenACS will be fully functional and you can reload 
+When the web server restarts, OpenACS will be fully functional and you can reload
 this page to access the running web server.
 "
     ns_shutdown
@@ -39,7 +39,7 @@ this page to access the running web server.
     install_return 200 "Error" "
 The installation program has encountered an error.  Please drop your OpenACS tablespace
 and the OpenACS username, recreate them, and try again.  You can log this as a bug
-using the <a href=\"http://openacs.org/bugtracker/openacs\">OpenACS Bug Tracker</a>. 
+using the <a href=\"http://openacs.org/bugtracker/openacs\">OpenACS Bug Tracker</a>.
 "
    return
   }
@@ -53,7 +53,7 @@ a suite of fully-integrated enterprise-class solutions
 for collaborative commerce.
 This is the OpenACS Installer which performs all the steps necessary
 to get the OpenACS Community System running on your server.<p>
-Please read the <a href=\"/doc/release-notes\">Release Notes</a> 
+Please read the <a href=\"/doc/release-notes\">Release Notes</a>
 before proceeding to better understand what is contained in this release.
 
 "
@@ -80,7 +80,7 @@ application after the basic OpenACS tookit has been installed.
         append body [subst {<p>
 For more information about the $acs_application(pretty_name) application visit the
 <a href="[ns_quotehtml $acs_application(home)]">$acs_application(pretty_name) home page</a>
-	}]
+        }]
     }
 } else {
     set acs_application(name) openacs
@@ -101,7 +101,7 @@ if { [nsv_exists acs_properties database_problem] } {
 
 <p><b>The first step involved in setting up your OpenACS
 installation is to configure your RDBMS, correctly install a database driver,
-and configure AOLserver to use it.  You can download 
+and configure AOLserver to use it.  You can download
 and install the latest version of the AOLserver Oracle and PostgreSQL drivers
 from the <a href='http://openacs.org/software'>OpenACS.org Software Page</a>.
 
@@ -110,7 +110,7 @@ Once you're sure everything is installed and configured correctly, restart AOLse
 "
     install_return 200 "Error" $body
     return
-} 
+}
 
 #
 # Unset array errors, in case it exists
@@ -141,7 +141,7 @@ if { [info tclversion] < 8.5 } {
     "
     set error_p 1
 }
- 
+
 # AOLserver must support ns_cache.
 if {[llength [info commands ns_cache]] < 1} {
     append errors "<li><p><strong>The <code>ns_cache</code> module is not installed.  This is required for OpenACS."
@@ -152,25 +152,25 @@ if {[llength [info commands ns_cache]] < 1} {
 if {![xml_support_ok xml_status_msg]} {
     append errors "Problems with XML support for AOLserver:<p> $xml_status_msg"
     set error_p 1
-} 
+}
 
 # AOLserver must support the "fancy" ADP parser.
 set adp_support [ns_config "ns/server/[ns_info server]/adp" DefaultParser]
 if {$adp_support ne "fancy" && [ns_info name] ne "NaviServer"} {
-    append errors "<li><p><strong>The fancy ADP parser is not enabled.  This is required to support 
+    append errors "<li><p><strong>The fancy ADP parser is not enabled.  This is required to support
 the OpenACS Templating System.  Without this templating system, none of the OpenACS pages installed by default
-will display.  Please add the following to your AOLserver configuration file (usually in 
-<code>/home/aol30/yourservname.ini</code>) or see the <a href=\"/doc/install-guide/\">Installation Guide</a> for 
+will display.  Please add the following to your AOLserver configuration file (usually in
+<code>/home/aol30/yourservname.ini</code>) or see the <a href=\"/doc/install-guide/\">Installation Guide</a> for
 more information.<p>
 <blockquote><pre>
-\[ns/server/bquinn/adp\] 
-Map=/*.adp 
+\[ns/server/bquinn/adp\]
+Map=/*.adp
 DefaultParser=fancy
 </blockquote></pre>
 After adding support for the fancy ADP parser, please restart your web server.
 </strong></p>"
     set error_p 1
-}   
+}
 
 # The server must have a large stack size (at least 128K by default, or the value specified
 # in the install.xml file)
@@ -179,7 +179,7 @@ set stacksize [ns_config "ns/threads" StackSize]
 
 if {[regexp {^([0-9.]+)([MKk])B} $stacksize . number multiplicator]} {
     switch $multiplicator {
-        "k" - "K" {set stacksize [expr {int($number * 1024.0)}]}        
+        "k" - "K" {set stacksize [expr {int($number * 1024.0)}]}
         "M"       {set stacksize [expr {int($number * 1024.0 * 1024.0)}]}
         default {ns_log warning "installer/index.tcl: invalid multiplicator $multiplicator"}
     }
@@ -199,7 +199,7 @@ ns_section \"ns/threads\"
 After adding support the larger stacksize, please restart your web server.
 </strong></p>"
     set error_p 1
-}   
+}
 
 
 # APM needs to check its permissions.
@@ -220,8 +220,8 @@ chmod -R ug+rw $::acs::rootdir
 # We have the workspace dir, but what about the package root?
 if { ![file writable [file join $::acs::rootdir packages]] } {
     append errors "<li><p><strong>The $::acs::rootdir/packages directory has incorrect permissions.  It must be owned by
-    the user executing the web server, normally <code>nsadmin</code> and the owner must have read and write 
-    privileges on this directory and all of its subdirectories.  You can correct this by running the following 
+    the user executing the web server, normally <code>nsadmin</code> and the owner must have read and write
+    privileges on this directory and all of its subdirectories.  You can correct this by running the following
     script as root.
     To give another user access to the files, add them to <code>web</code> group.
     <blockquote><pre>
@@ -238,16 +238,16 @@ db_helper_checks errors error_p
 # correctly, let's check out the actual db.
 if {$error_p} {
     append body [subst {<p>
-	<strong>At least one misconfiguration was discovered that must be corrected.
+        <strong>At least one misconfiguration was discovered that must be corrected.
         Please fix all of them, restart the web server, and try running the OpenACS installer again.
-	You can proceed without resolving these errors, but the system may not function
-	correctly.
-	</strong>
-	<p>
-	<ul>
-	$errors
-	</ul>
-	<p>
+        You can proceed without resolving these errors, but the system may not function
+        correctly.
+        </strong>
+        <p>
+        <ul>
+        $errors
+        </ul>
+        <p>
     }]
 }
 
@@ -259,7 +259,7 @@ if { ![db_table_exists apm_packages] } {
     # Get the default for system_url. First try to get it from the nssock
     # hostname setting - if that is not available then try ns_info
     if { [catch {
-	set driversection [ns_driversection]
+        set driversection [ns_driversection]
         set system_url "http://[ns_config $driversection hostname [ns_info hostname]]"
         set system_port [ns_config $driversection port [ns_conn port]]
 
@@ -369,14 +369,14 @@ The email address to send New registration notifications.<br><br>
 
 <p>
   Once your server is installed, you can choose to have users login with username instead of email.
-  This is particularly useful if you're authenticating against other services, such as LDAP or the 
+  This is particularly useful if you're authenticating against other services, such as LDAP or the
   local operating system, which may not use email as the basis of authentication.
 </p>
 
 <script type='text/javascript'>
 function updateSystemEmails() {
     var form = document.forms\[0\];
-    
+
     form.system_owner.value = form.email.value;
     form.admin_owner.value = form.email.value;
     form.host_administrator.value = form.email.value;
@@ -391,14 +391,14 @@ elem.addEventListener('change', function (event) {updateSystemEmails();});
 } else {
     # OK, apm_packages is installed - let's check out some other stuff too:
     if { ![install_good_data_model_p] } {
-	append body "<p>It appears that the OpenACS data model is only partially installed.
-	Please drop your tablespace and start from scratch."
+        append body "<p>It appears that the OpenACS data model is only partially installed.
+        Please drop your tablespace and start from scratch."
     } else {
-	append body "<p>The OpenACS data model is already installed. Click <i>Next</i> 
-	to scan the available packages.
+        append body "<p>The OpenACS data model is already installed. Click <i>Next</i>
+        to scan the available packages.
 
-	[install_next_button "packages-install"]
-	"
+        [install_next_button "packages-install"]
+        "
     }
 }
 
