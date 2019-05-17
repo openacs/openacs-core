@@ -11,6 +11,7 @@ ad_page_contract {
     {member_state:trim}
     {email_verified_p:boolean ""}
     {return_url:localurl ""}
+    {pass_through:boolean}
 } -validate {
     valid_member_state -requires member_state {
         if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
@@ -95,6 +96,11 @@ set message $email_message
 
 if {$return_url eq ""} {
     set return_url [acs_community_member_admin_url -user_id $user_id]
+}
+
+if {$pass_through} {
+    ad_returnredirect $return_url
+    ad_script_abort
 }
 
 set context [list [list "./" "Users"] "$action"]
