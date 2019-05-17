@@ -172,15 +172,23 @@ After adding support for the fancy ADP parser, please restart your web server.
     set error_p 1
 }   
 
-# AOLserver must have a large stack size (at least 128K by default, or the value specified
+# The server must have a large stack size (at least 128K by default, or the value specified
 # in the install.xml file)
 
 set stacksize [ns_config "ns/threads" StackSize]
 
+if {[regexp {^([0-9.]+)([MKk])B} $stacksize . number multiplicator]} {
+    switch $multiplicator {
+        "k" - "K" {set stacksize [expr {int($number * 1024.0)}]}        
+        "M"       {set stacksize [expr {int($number * 1024.0 * 1024.0)}]}
+        default {ns_log warning "installer/index.tcl: invalid multiplicator $multiplicator"}
+    }
+}
+
 if { ![string is integer $stacksize]
      || $stacksize < $acs_application(min_stack_size) * 1024
  } {
-    append errors "<li><p><strong>The configured AOLserver Stacksize is too small, missing, or a non-integer value.
+    append errors "<li><p><strong>The configured stacksize '$stacksize' is too small, missing, or a non-integer value.
 $acs_application(pretty_name) requires a StackSize parameter of at least
 ${acs_application(min_stack_size)}K.
 <p>Please add the following line to your .tcl configuration file
