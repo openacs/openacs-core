@@ -67,15 +67,15 @@ namespace eval ::apidoc {
     set KEYWORDS {
 
         after append apply array bgerror binary break catch cd chan
-        clock close concat continue default dict encoding eof error
+        clock close concat continue coroutine default dict encoding eof error
         eval exec expr fblocked fconfigure fcopy file fileevent flush
         for foreach format gets glob global if incr info interp join
-        lappend lassign lindex linsert list llength load lrange
-        lreplace lreverse lsearch lset lsort namespace open package
+        lappend lassign lindex linsert list llength lmap load lrange
+        lrepeat lreplace lreverse lsearch lset lsort namespace open package
         pid proc puts pwd read refchan regexp regsub rename return
-        scan seek set socket source split string subst switch tell
-        time trace try unload unset update uplevel upvar variable vwait
-        while
+        scan seek set socket source split string subst switch tailcall tell
+        throw time tm trace transchan try unload unset update uplevel upvar variable vwait
+        while yield yieldto zlib
 
     }
 
