@@ -725,7 +725,7 @@ ad_proc -private rp_filter { why } {
         ad_conn -set package_key $node(package_key)
         ad_conn -set package_url $node(url)
         ad_conn -set instance_name $node(instance_name)
-        ad_conn -set extra_url [string range $ad_conn_url [string length $node(url)] end]
+        ad_conn -set extra_url [string trimleft [string range $ad_conn_url [string length $node(url)] end] /]
     }
 
     #####
@@ -809,7 +809,7 @@ ad_proc -private rp_filter { why } {
     set result filter_ok
     if { [ad_conn object_id] ne "" } {
         ad_try -auto_abort=false {
-            switch -glob -- [ad_conn extra_url] {
+            switch -nocase -glob -- [ad_conn extra_url] {
                 admin/* {
                     #
                     # Double check if someone has not accidentally
