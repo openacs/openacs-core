@@ -2294,7 +2294,7 @@ ad_proc -private apm_invoke_install_proc {
         error "Error: got bad node \"$name\""
     }
 
-    ns_log notice "apm_invoke_install_proc: call [list ::install::xml::${type}::${name} $node]"
+    #ns_log notice "apm_invoke_install_proc: call [list ::install::xml::${type}::${name} $node]"
     if {$install_from_repository_p && $name eq "install"} {
         ns_log notice "apm_invoke_install_proc: skip [list ::install::xml::${type}::${name} $node] (install from repo)"
         set result 1
