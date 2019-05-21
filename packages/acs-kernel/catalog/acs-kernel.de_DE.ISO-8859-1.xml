@@ -139,11 +139,11 @@
   <msg key="member_state_Needs_Approval">Zugang beantragt</msg>
   <msg key="member_state_Rejected">Abgelehnt</msg>
   <msg key="member_state_account_mail_approved">Ihre Kennung auf %site_name% wurde genehmigt. Besuchen Sie %url%</msg>
-  <msg key="member_state_account_mail_banned">>Ihre Kennung auf %site_name% wurde dekativiert.</msg>  
-  <msg key="member_state_account_mail_deleted">>Ihre Kennung auf %site_name% wurde gelöscht.</msg>  
-  <msg key="member_state_account_mail_merged">>Ihre Kennung auf %site_name% wurde zusammengelegt.</msg>  
-  <msg key="member_state_account_mail_needs_approval">>Ihre Kennung auf %site_name% wurde beantragt.</msg>
-  <msg key="member_state_account_mail_rejected">>Ihre Kennung auf %site_name% wurde nicht genehmigt.</msg> 
+  <msg key="member_state_account_mail_banned">Ihre Kennung auf %site_name% wurde dekativiert.</msg>  
+  <msg key="member_state_account_mail_deleted">Ihre Kennung auf %site_name% wurde gelöscht.</msg>  
+  <msg key="member_state_account_mail_merged">Ihre Kennung auf %site_name% wurde zusammengelegt.</msg>  
+  <msg key="member_state_account_mail_needs_approval">Ihre Kennung auf %site_name% wurde beantragt.</msg>
+  <msg key="member_state_account_mail_rejected">Ihre Kennung auf %site_name% wurde nicht genehmigt.</msg> 
   <msg key="member_state_action_approved">Freischaltung von %user_name%</msg>
   <msg key="member_state_action_banned">Deaktivierung von %user_name%</msg>
   <msg key="member_state_action_deleted">Mitgliedschaft von %user_name% gelöscht</msg>
