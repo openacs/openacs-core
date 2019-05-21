@@ -1,1 +1,0 @@
-drop user :oracle_user cascade;

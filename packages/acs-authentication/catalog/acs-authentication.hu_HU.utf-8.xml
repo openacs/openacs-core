@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" locale="hu_HU" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">Érvénytelen felhasználónév vagy jelszó</msg>
-</message_catalog>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-templating" locale="sh_HR" charset="utf-8">
-
-  <msg key="required">obavezno polje</msg>
-</message_catalog>

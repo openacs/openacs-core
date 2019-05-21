@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-templating" locale="pt_PT" charset="ISO-8859-1">
-
-  <msg key="No_row_pretty_plural">Não %row_pretty_plural%.</msg>
-</message_catalog>

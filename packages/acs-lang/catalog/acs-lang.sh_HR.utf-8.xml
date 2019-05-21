@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" locale="sh_HR" charset="utf-8">
-
-  <msg key="English">Engleski</msg>
-  <msg key="French">Francuski</msg>
-  <msg key="German">Nemacki</msg>
-  <msg key="Spanish">Spanski</msg>
-</message_catalog>

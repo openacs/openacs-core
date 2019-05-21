@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" locale="fi_FI" charset="utf-8">
-
-  <msg key="member_role_pretty_name">Jäsen</msg>
-  <msg key="member_role_pretty_plural">Jäsenet</msg>
-</message_catalog>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-subsite" locale="en_GB" charset="ISO-8859-1">
-
-  <msg key="lt_Upload_your_favorite">Upload your favourite file, a scanned JPEG or GIF, from your desktop
-computer system (note that you can't refer to an image elsewhere on
-the Internet; this image must be on your computer's hard drive).</msg>
-</message_catalog>
