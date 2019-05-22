@@ -35,6 +35,8 @@ if {[info commands ns_writer] ne ""} {
     }
 }
 
+ns_ictl trace freeconn ::template::reset_request_vars
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
