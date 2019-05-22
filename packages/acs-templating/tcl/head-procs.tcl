@@ -22,10 +22,10 @@ ad_proc -private template::reset_request_vars {} {
     array unset ::template::head::links
     array unset ::template::head::metas
     array unset ::template::body_handlers
-    array unset ::template::body_scripts
 
-    set ::template::headers [list]
-    set ::template::footers [list]
+    set ::template::body_scripts {}
+    set ::template::headers {}
+    set ::template::footers {}
 }
 
 ad_proc -public template::register_urn {
