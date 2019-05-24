@@ -1,13 +1,20 @@
-# This is a set of utilities for dealing with XML in a nice way,
-# using tDOM. 
-#
-# It would be nice if this could be used without the ACS, so we're not
-# using ad_proc constructs for this at this point.
+ad_library {
+    This set of utilities was created back in the days when ns_xml was
+    the preferred AOLserver XML api. It came in handy to have such an
+    abstraction when the project switched to the tDOM library, so it
+    stayed around, even if now is composed mostly by trivial
+    oneliners. It is not clear whether it would make more sense to use
+    tDOM directly and avoid this extra layer altogether in the future.
+}
 
-##
-## The proc that checks that XML support is complete
-##
-proc xml_support_ok {varname} {
+ad_proc -public xml_support_ok {varname} {
+    The proc that checks that XML support is complete
+
+    @arg varname a variable name in the caller namespace where the
+         eventual error message will be reported
+
+    @return boolean
+} {
     upvar $varname xml_status_msg
     
     set ok_p 1
@@ -20,36 +27,54 @@ proc xml_support_ok {varname} {
     return $ok_p
 }
 
-# Parse a document and return a doc_id
-proc xml_parse args {
-#   ns_log notice "xml_parse $args"
-    if {[lindex $args 0] eq "-persist"} {
-	return [dom parse -simple [lindex $args 1]]
+ad_proc -public xml_parse {
+    -persist:boolean
+    xml
+} {
+    Parse a document and return a doc_id
+
+    @param persist decides whether returned document object will be
+    deleted when the connection is closed or will be kept in server
+    memory
+
+    @arg xml XML document
+
+    @return parsed document object handle
+} {
+    if {$persist_p} {
+	return [dom parse -simple $xml]
     } else {
-	dom parse -simple [lindex $args 0] doc
+	dom parse -simple $xml doc
 	return $doc
     }
 }
 
-# Free the doc
-proc xml_doc_free {doc_id} {
+ad_proc -public xml_doc_free {doc_id} {
+    Free the doc
+} {
 #   ns_log notice "xml_doc_free $doc_id"
     $doc_id delete
 }
 
-# Get first node
-proc xml_doc_get_first_node {doc_id} {
+ad_proc xml_doc_get_first_node {doc_id} {
+    Get first node
+} {
 #   ns_log notice "xml_doc_get_first_node $doc_id --> [[$doc_id documentElement] nodeName]"
     return [$doc_id documentElement]
 }
 
-# Get children nodes
-proc xml_node_get_children {parent_node} {
+ad_proc -public xml_node_get_children {parent_node} {
+    Get children nodes
+} {
     return [$parent_node child all]
 }
 
-# Find nodes of a parent that have a given name
-proc xml_node_get_children_by_name {parent_node name} {
+ad_proc -public xml_node_get_children_by_name {
+    parent_node
+    name
+} {
+    Find nodes of a parent that have a given name
+} {
 #   set msg "xml_node_get_children_by_name [$parent_node nodeName] $name --> "
 #   foreach child [$parent_node child all $name] {
 #	append msg "[$child nodeName] "
@@ -58,45 +83,73 @@ proc xml_node_get_children_by_name {parent_node name} {
     return [$parent_node child all $name]
 }
 
-proc xml_node_get_first_child {parent_node } {
+ad_proc -public xml_node_get_first_child {parent_node} {
+    Returns the first child node
+} {
 #   ns_log notice "xml_node_get_first_child [$parent_node nodeName] --> [[$parent_node child 1] nodeName]"
     return [$parent_node child 1]
 }
 
-proc xml_node_get_first_child_by_name {parent_node name} {
+ad_proc -public xml_node_get_first_child_by_name {
+    parent_node
+    name
+} {
+    Returns the first child node that has a given name
+} {
 #   ns_log notice "xml_node_get_first_child_by_name [$parent_node nodeName] $name --> [[$parent_node child 1 $name] nodeName]"
     return [$parent_node child 1 $name]
 }
 
-# Get Node Name
-proc xml_node_get_name {node_id} {
+ad_proc -public xml_node_get_name {node_id} {
+    Get Node Name
+} {
     return [$node_id nodeName]
 }
 
-# Get Node Attribute
-proc xml_node_get_attribute {node_id attribute_name {default ""}} {
+ad_proc -public xml_node_get_attribute {
+    node_id
+    attribute_name
+    {default ""}
+} {
+    Get Node Attribute
+} {
 #   ns_log notice "xml_node_get_attribute [$node_id nodeName] $attribute_name --> [$node_id getAttribute $attribute_name $default]"
     return [$node_id getAttribute $attribute_name $default]
 }
 
-# Set Node Attribute
-proc xml_node_set_attribute {node_id attribute_name value} {
-  $node_id setAttribute $attribute_name $value
+ad_proc -public xml_node_set_attribute {
+    node_id
+    attribute_name
+    value
+} {
+    Set Node Attribute
+} {
+    $node_id setAttribute $attribute_name $value
 }
 
-# Get Content
-proc xml_node_get_content {node_id} {
+ad_proc -public xml_node_get_content {node_id} {
+    Get Content
+} {
 #   ns_log notice "xml_node_get_content [$node_id nodeName] --> [$node_id text]"
     return [$node_id text]
 }
 
-# Get Node Type
-proc xml_node_get_type {node_id} {
+ad_proc -public xml_node_get_type {node_id} {
+    Get Node Type
+} {
     return [$node_id nodeType]
 }
 
-# Render the doc
-proc xml_doc_render {doc_id {indent_p f}} {
+ad_proc -public xml_doc_render {
+    doc_id
+    {indent_p f}
+} {
+    Render the doc
+
+    @arg indent_p decides whether results should be indented or not
+
+    @return XML
+} {
     if { [string is true $indent_p] } {
         return [$doc_id asXML]
     } else {
@@ -104,7 +157,12 @@ proc xml_doc_render {doc_id {indent_p f}} {
     }
 }
 
-proc xml_node_get_children_by_select {parent_node xpath} {
+ad_proc -public xml_node_get_children_by_select {
+    parent_node
+    xpath
+} {
+    Get children of given node that match supplied XPATH query
+} {
     return [$parent_node selectNodes $xpath]
 }
 
