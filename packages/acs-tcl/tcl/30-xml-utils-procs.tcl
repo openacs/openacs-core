@@ -20,13 +20,13 @@ ad_proc -public xml_support_ok {varname} {
     @return boolean
 } {
     upvar $varname xml_status_msg
-    
+
     set ok_p 1
 
     if {[llength [info commands tdom]] < 1} {
 	set xml_status_msg "tDOM is not installed! You must have tDOM installed, or nothing will work."
 	set ok_p 0
-    } 
+    }
 
     return $ok_p
 }
