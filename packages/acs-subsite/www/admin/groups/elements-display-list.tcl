@@ -5,7 +5,7 @@ ad_include_contract {
 } {
     {group_id:integer,notnull}
     {rel_type:notnull}
-    {member_state "approved"
+    {member_state "approved"}
 }
 
 if { ![info exists return_url_enc] || $return_url_enc eq "" } {
