@@ -2982,7 +2982,7 @@ ad_proc -public ad_generate_random_string {
 } {
     Generates a random string made of numbers and letters
 } {
-    return [string range [sec_random_token] 0 $length]
+    return [string range [sec_random_token] 0 $length-1]
 }
 
 ad_proc -public with_finally {
