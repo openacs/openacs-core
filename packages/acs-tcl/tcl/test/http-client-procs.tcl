@@ -15,71 +15,99 @@ aa_register_case \
     } {
         set endpoint_name /acs-tcl-test-http-client-procs-util-http-json-encoding
         set url [ad_url]$endpoint_name
+        set response {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
+
+        set methods {POST GET}
+        set impls [expr {[string match http://* $url] ?
+                         [lindex [util::http::apis] 0] :
+                         [lindex [util::http::apis] 1]}]
 
         aa_log "Will execute test on URL: '$url'"
 
         aa_run_with_teardown -rollback -test_code {
-            set response {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
+            foreach m $methods {
+                aa_section "$m requests"
+                foreach impl $impls {
+                    aa_section "$impl implementation"
+                    ns_register_proc $m $endpoint_name [subst {
+                        ns_return 200 application/json {$response}
+                    }]
+                    aa_log "Request with correct application/json mime_type"
+                    set r [util::http::[string tolower $m] -preference $impl -url $url]
+                    set headers [dict get $r headers]
+                    set content_type [expr {[dict exists $headers content-type] ?
+                                            [dict get $headers content-type] : [dict get $headers Content-Type]}]
+                    aa_true "Content-type is application/json" [string match "*application/json*" $content_type]
+                    aa_equals "Response from server is encoded as expected" [dict get $r page] $response
 
-            aa_log "JSON GET and POST requests with proper application/json mime type"
-            ns_register_proc GET $endpoint_name {
-                ns_return 200 application/json {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
+                    # Collect a sample of what is returned when we set
+                    # encoding of the default one for application/json
+                    # (which by RF4627 SHALL be some unicode version)
+                    if {$m eq "GET"} {
+                        set tmpfile_app_json [ad_tmpnam]
+                        if {$impls eq "curl"} {
+                            exec -ignorestderr curl $url -o $tmpfile_app_json
+                        } else {
+                            ns_http run -method GET -outputfile $tmpfile_app_json $url
+                        }
+                    }
+
+                    aa_log "Request with text/plain mime_type"
+                    ns_register_proc $m $endpoint_name [subst {
+                        ns_return 200 text/plain {$response}
+                    }]
+                    set r [util::http::[string tolower $m] -preference $impls -url $url]
+                    set headers [dict get $r headers]
+                    set content_type [expr {[dict exists $headers content-type] ?
+                                            [dict get $headers content-type] : [dict get $headers Content-Type]}]
+                    aa_true "Content-type '$content_type' is text/plain" [string match "*text/plain*" $content_type]
+                    aa_equals "Response from server is encoded as expected" [dict get $r page] $response
+
+                    aa_log "Request with text/plain mime_type and iso8859-2 charset"
+                    ns_register_proc $m $endpoint_name [subst {
+                        ns_return 200 "text/plain; charset=iso8859-2" {$response}
+                    }]
+
+                    set r [util::http::[string tolower $m] -preference $impls -url $url]
+                    set headers [dict get $r headers]
+                    set content_type [expr {[dict exists $headers content-type] ?
+                                            [dict get $headers content-type] : [dict get $headers Content-Type]}]
+                    aa_true "Content-type is text/plain" [string match "*text/plain*" $content_type]
+                    aa_true "Charset is iso8859-2" [string match "*iso8859-2*" $content_type]
+                    aa_equals "Response from server is encoded as expected" [dict get $r page] $response
+
+                    # Collect a sample of what is returned when we set
+                    # encoding of the response to iso8859-2
+                    if {$m eq "GET"} {
+                        set tmpfile_iso8859_2 [ad_tmpnam]
+                        if {$impls eq "curl"} {
+                            exec -ignorestderr curl $url -o $tmpfile_iso8859_2
+                        } else {
+                            ns_http run -method GET -outputfile $tmpfile_iso8859_2 $url
+                        }
+                    }
+
+                    # Here we expose that, when one uses the "naked"
+                    # HTTP tool util::http is wrapping, response would
+                    # not be automatically translated to the system
+                    # encoding.
+                    if {[info exists tmpfile_app_json] && [info exists tmpfile_iso8859_2]} {
+                        set rfd [open $tmpfile_app_json r]
+                        set app_json_text [read $rfd]
+                        close $rfd
+
+                        set rfd [open $tmpfile_iso8859_2 r]
+                        set iso8859_2_text [read $rfd]
+                        close $rfd
+
+                        aa_true "Setting the charset actually brings to different content in the response" {$app_json_text ne $iso8859_2_text}
+                        file delete $tmpfile_app_json $tmpfile_iso8859_2
+                    }
+                }
             }
-            set r [util::http::get -url $url]
-            set content_type [dict get [dict get $r headers] content-type]
-            aa_true "Content-type is application/json" [string match "*application/json*" $content_type]
-            aa_equals "Response from server is encoded as expected" [dict get $r page] $response
-
-            ns_register_proc POST $endpoint_name {
-                ns_return 200 application/json {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
-            }
-            set r [util::http::post -url $url]
-            set content_type [dict get [dict get $r headers] content-type]
-            aa_true "Content-type is application/json" [string match "*application/json*" $content_type]
-            aa_equals "Response from server is encoded as expected" [dict get $r page] $response
-
-
-            aa_log "JSON GET and POST requests with text/plain mime type"
-            ns_register_proc GET $endpoint_name {
-                ns_return 200 text/plain {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
-            }
-            set r [util::http::get -url $url]
-            set content_type [dict get [dict get $r headers] content-type]
-            aa_true "Content-type is text/plain" [string match "*text/plain*" $content_type]
-            aa_equals "Response from server is encoded as expected" [dict get $r page] $response
-
-            ns_register_proc POST $endpoint_name {
-                ns_return 200 text/plain {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
-            }
-            set r [util::http::post -url $url]
-            set content_type [dict get [dict get $r headers] content-type]
-            aa_true "Content-type is text/plain" [string match "*text/plain*" $content_type]
-            aa_equals "Response from server is encoded as expected" [dict get $r page] $response
-
-
-            aa_log "JSON GET and POST requests with text/plain mime type and a not RFC4627 compliant charset"
-            ns_register_proc GET $endpoint_name {
-                ns_conn encoding iso8859-15
-                ns_return 200 text/plain {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
-            }
-            set r [util::http::get -url $url]
-            set content_type [dict get [dict get $r headers] content-type]
-            aa_true "Content-type is text/plain" [string match "*text/plain*" $content_type]
-            aa_true "Charset is iso8859-15" [string match "*iso8859-15*" $content_type]
-            aa_true "Response from server is NOT encoded correctly!" {[dict get $r page] ne $response}
-
-            ns_register_proc POST $endpoint_name {
-                ns_conn encoding iso8859-15
-                ns_return 200 text/plain {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
-            }
-            set r [util::http::post -url $url]
-            set content_type [dict get [dict get $r headers] content-type]
-            aa_true "Content-type is text/plain" [string match "*text/plain*" $content_type]
-            aa_true "Charset is iso8859-15" [string match "*iso8859-15*" $content_type]
-            aa_true "Response from server is NOT encoded correctly!" {[dict get $r page] ne $response}
 
         } -teardown_code {
-            ns_unregister_proc GET $endpoint_name
-            ns_unregister_proc POST $endpoint_name
+            ns_unregister_op GET  $endpoint_name
+            ns_unregister_op POST $endpoint_name
         }
     }
