@@ -103,7 +103,10 @@ aa_register_case \
                     # HTTP tool util::http is wrapping, response would
                     # not be automatically translated to the system
                     # encoding.
-                    if {[info exists tmpfile_app_json] && [info exists tmpfile_iso8859_2]} {
+                    if {[info exists tmpfile_app_json] &&
+                        [info exists tmpfile_iso8859_2] &&
+                        [file exists $tmpfile_app_json] &&
+                        [file exists $tmpfile_iso8859_2]} {
                         set rfd [open $tmpfile_app_json r]
                         set app_json_text [read $rfd]
                         close $rfd
