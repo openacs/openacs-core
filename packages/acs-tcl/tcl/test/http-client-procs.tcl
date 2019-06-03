@@ -41,7 +41,7 @@ aa_register_case \
                     aa_equals "Response from server is encoded as expected" [dict get $r page] $response
 
                     # Collect a sample of what is returned when we set
-                    # encoding of the default one for application/json
+                    # encoding to the default one for application/json
                     # (which by RF4627 SHALL be some unicode version)
                     if {$m eq "GET"} {
                         set tmpfile_app_json [ad_tmpnam]
@@ -51,6 +51,18 @@ aa_register_case \
                             ns_http run -method GET -outputfile $tmpfile_app_json $url
                         }
                     }
+
+                    ns_register_proc $m $endpoint_name [subst {
+                        ns_return 200 "application/json;charset=UTF-8" {$response}
+                    }]
+                    aa_log "Request with correct application/json;charset=UTF-8 mime_type"
+                    set r [util::http::[string tolower $m] -preference $impl -url $url]
+                    set headers [dict get $r headers]
+                    set content_type [expr {[dict exists $headers content-type] ?
+                                            [dict get $headers content-type] : [dict get $headers Content-Type]}]
+                    aa_true "Content-type is application/json" [string match "*application/json*" $content_type]
+                    aa_true "Charset is UTF-8" [string match "*UTF-8*" $content_type]
+                    aa_equals "Response from server is encoded as expected" [dict get $r page] $response
 
                     aa_log "Request with text/plain mime_type"
                     ns_register_proc $m $endpoint_name [subst {
