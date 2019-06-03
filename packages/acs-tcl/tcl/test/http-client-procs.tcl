@@ -24,7 +24,7 @@ aa_register_case \
 
         aa_log "Will execute test on URL: '$url'"
 
-        aa_run_with_teardown -rollback -test_code {
+        aa_run_with_teardown -test_code {
             foreach m $methods {
                 aa_section "$m requests"
                 foreach impl $impls {
