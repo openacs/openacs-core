@@ -209,7 +209,7 @@ ad_proc -public auth::authenticate {
     set login_attempt_key "[ad_conn peeraddr]-[ad_conn subsite_id]"
 
     if { [::auth::login_attempts::threshold_reached_p -login_attempt_key $login_attempt_key] } {
-        set auth_message [_ acs-authentication.To_many_failed_login_attempts]
+        set auth_message [_ acs-authentication.Too_many_failed_login_attempts]
 
         return [list auth_status "failed_to_connect" \
                     auth_message $auth_message \
