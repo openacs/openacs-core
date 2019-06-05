@@ -306,153 +306,75 @@ ad_proc -public permission::get_parties_with_permission {
     return [db_list_of_lists get_parties {}]
 }
 
-if {[info commands ns_cache_eval] ne ""} {
-    #
-    # Permission cache management for NaviServer.
-    #
-    # Some of this code will go away, when abstract cache management
-    # will be introduced.
-    #
-    #
-    # run permission call or get permission from cache
-    #
-    ad_proc -private permission::cache_eval {
-        {-party_id}
-        {-object_id}
-        {-privilege}
-    } {
-        Run permission call and cache the result.
 
-        @param party_id
-        @param object_id
-        @param privilege
+ad_proc -private permission::cache_eval {
+    {-party_id}
+    {-object_id}
+    {-privilege}
+} {
+    Run permission call and cache the result.
 
-        @see permission::permission_p
-    } {
-        return [acs::permission_cache eval \
-                    -partition_key $party_id \
-                    -expires [parameter::get -package_id $::acs::kernel_id \
-                                  -parameter PermissionCacheTimeout \
-                                  -default 300] \
-                    $party_id/$object_id/$privilege {
-                        permission::permission_p_not_cached \
-                            -party_id $party_id \
-                            -object_id $object_id \
-                            -privilege $privilege
-                    }]
-    }
+    @param party_id
+    @param object_id
+    @param privilege
 
-    #
-    # flush permission cache
-    #
+    @see permission::permission_p
+} {
+    return [acs::permission_cache eval \
+                -partition_key $party_id \
+                -expires [parameter::get -package_id $::acs::kernel_id \
+                              -parameter PermissionCacheTimeout \
+                              -default 300] \
+                $party_id/$object_id/$privilege {
+                    permission::permission_p_not_cached \
+                        -party_id $party_id \
+                        -object_id $object_id \
+                        -privilege $privilege
+                }]
+}
 
-    ad_proc -public permission::cache_flush {
-        {-party_id}
-        {-object_id}
-        {-privilege}
-    } {
+#
+# flush permission cache
+#
 
-        Flush permissions from the cache. Either specify all three
-        parameters or only party_id
+ad_proc -public permission::cache_flush {
+    {-party_id}
+    {-object_id}
+    {-privilege}
+} {
 
-        @param party_id
-        @param object_id
-        @param privilege
+    Flush permissions from the cache. Either specify all three
+    parameters or only party_id
 
-        @see permission::permission_p
-    } {
-        if {[info commands ::acs::permission_cache] eq ""} {
-            return
+    @param party_id
+    @param object_id
+    @param privilege
 
-        } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
-            #
-            # All three attributes are provided
-            #
-            ::acs::permission_cache flush -partition_key $party_id $party_id/$object_id/$privilege
+    @see permission::permission_p
+} {
+    if {[info commands ::acs::permission_cache] eq ""} {
+        return
 
-        } elseif {[info exists party_id] } {
-            #
-            # At least the party_id is provided
-            #
-            ::acs::permission_cache flush_all -partition_key $party_id
-        } else {
-            #
-            # tell user, what's implemented
-            #
-            error "either specify party_id, object_id and privilege, or only party_id"
-        }
-    }
+    } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
+        #
+        # All three attributes are provided
+        #
+        ::acs::permission_cache flush -partition_key $party_id $party_id/$object_id/$privilege
 
-
-} else {
-
-    #
-    # Permission cache management for AOLserver.
-    # Use classical util_memoize cache for maximum
-    # backwards compatibility.
-    #
-
-    ad_proc -private permission::cache_eval {
-        {-party_id}
-        {-object_id}
-        {-privilege}
-    } {
-        Run permission call and cache the result.
-
-        @param party_id
-        @param object_id
-        @param privilege
-
-        @see permission::permission_p
-    } {
-        return [util_memoize \
-                    [list permission::permission_p_not_cached \
-                         -party_id $party_id \
-                         -object_id $object_id \
-                         -privilege $privilege] \
-                    [parameter::get -package_id $::acs::kernel_id \
-                         -parameter PermissionCacheTimeout \
-                         -default 300]]
-    }
-
-
-    ad_proc -public permission::cache_flush {
-        {-party_id}
-        {-object_id}
-        {-privilege}
-    } {
-
-        Flush permissions from the cache. Either specify all three
-        parameters or only party_id
-
-        @param party_id
-        @param object_id
-        @param privilege
-
-        @see permission::permission_p
-    } {
-        if {[info command ::acs::permission_cache] eq ""} {
-            return
-
-        } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {
-            #
-            # All three attributes are provided
-            #
-            util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
-
-        } elseif {[info exists party_id] } {
-            #
-            # At least the party_id is provided
-            #
-            util_memoize_flush_pattern "permission::*-party_id $party_id"
-        } else {
-            #
-            # tell user, what's implemented
-            #
-            error "either specify party_id, object_id and privilege, or only party_id"
-        }
+    } elseif {[info exists party_id] } {
+        #
+        # At least the party_id is provided
+        #
+        ::acs::permission_cache flush_all -partition_key $party_id
+    } else {
+        #
+        # tell user, what's implemented
+        #
+        error "either specify party_id, object_id and privilege, or only party_id"
     }
 }
+
+
 
 # Local variables:
 #    mode: tcl
