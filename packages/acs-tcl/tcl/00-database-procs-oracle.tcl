@@ -8,7 +8,7 @@ ad_library {
 }
 
 # This file is now obsolete.  All procs have been merged into
-# 00-database-procs.tcl, so that all supported databases are useable
+# 00-database-procs.tcl, so that all supported databases are usable
 # with the db_* API all the time, regardless of which database type
 # OpenACS is using.  --atp@piskorski.com, 2003/04/09 12:04 EDT
 
