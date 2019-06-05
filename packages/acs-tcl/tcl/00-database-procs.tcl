@@ -525,20 +525,10 @@ ad_proc -public db_nth_pool_name {
     return $pool
 }
 
+if {[acs::icanuse "ns_db currenthandles"]} {
 
-set useNsdbCurrentHandles 0
-try {
-    ns_db x
-} on error {errorMsg} {
-    if {"currenthandles," in [split $errorMsg " "]} {
-        ns_log notice "can use 'ns_db currenthandles'"
-        set useNsdbCurrentHandles 1
-    } else {
-        ns_log notice "cannot use 'ns_db currenthandles'"
-    }
-}
+    ns_log notice "... I can use 'ns_db currenthandles'"
 
-if {$useNsdbCurrentHandles} {
     #
     # This branch uses "ns_db currenthandles" to implement
     # "db_with_handle" instead of the old approach based on the global
@@ -738,6 +728,7 @@ if {$useNsdbCurrentHandles} {
     # This is the legacy branch without [ns_db currenthandles], using
     # the global state variables.
     #
+    ns_log notice "... cannot use 'ns_db currenthandles'"
 
     ad_proc -public db_with_handle {
         { -dbn "" }
