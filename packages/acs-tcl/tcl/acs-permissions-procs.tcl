@@ -18,7 +18,7 @@ ad_proc -private permission::cache_p {} {
     returns 0 or 1 depending if permission_p caching is enabled or disabled.
     by default caching is disabled.
 } {
-    set cache_p [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheP -default 0]
+    set cache_p [parameter::get -package_id $::acs::kernel_id -parameter PermissionCacheP -default 0]
     namespace eval ::permission [list proc cache_p {} "return $cache_p"]
     return $cache_p
 }
@@ -331,6 +331,9 @@ if {[info commands ns_cache_eval] ne ""} {
     } {
         return [acs::permission_cache eval \
                     -partition_key $party_id \
+                    -expires [parameter::get -package_id $::acs::kernel_id \
+                                  -parameter PermissionCacheTimeout \
+                                  -default 300] \
                     $party_id/$object_id/$privilege {
                         permission::permission_p_not_cached \
                             -party_id $party_id \
@@ -407,7 +410,7 @@ if {[info commands ns_cache_eval] ne ""} {
                          -party_id $party_id \
                          -object_id $object_id \
                          -privilege $privilege] \
-                    [parameter::get -package_id [ad_acs_kernel_id] \
+                    [parameter::get -package_id $::acs::kernel_id \
                          -parameter PermissionCacheTimeout \
                          -default 300]]
     }
