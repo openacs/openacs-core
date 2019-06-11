@@ -1347,7 +1347,7 @@ namespace eval acs::test {
             append log_line " (headers: $headers)"
         }
         if {[info exists body]} {
-            append log_line "\n$body"
+            append log_line "<pre>\n[ns_quotehtml $body]</pre>"
         }
         aa_log $log_line
 
@@ -1897,19 +1897,44 @@ namespace eval ::acs::test::xpath {
 namespace eval acs::test::user {
 
     ad_proc ::acs::test::user::create {
-        {-user_id ""}
         {-admin:boolean}
+        {-email ""}
         {-locale en_US}
+        {-password ""}
+        {-user_id ""}
     } {
-        Create a test user with random email and password for testing
+        
+        Create a test user with random email and password for testing.
+        If an email is passed in and the party identified by the
+        password exists, the user_id of this party is returned in the
+        dict.
 
-        @param admin Provide this switch to make the user site-wide admin
+        @param user_id  user_id for the user to be created
+        @param email    email for the user to be created
+        @param password password for the user to be created
+        @param admin    provide this switch to make the user site-wide admin
+        @param locale   locale for the user to be created
+
         @return The user_info dict returned by auth::create_user. Contains
                 the additional keys email and password.
     } {
+        if {$email eq ""} {
+            set email       "$username@test.test"
+        } else {
+            set party_info [party::get -email $email]
+            if {[llength $party_info] > 0} {
+                #
+                # We have such a party already. For the time being,
+                # just pick the party_id for the result.
+                #
+                dict set user_info user_id [dict get $party_info party_id]
+                return $user_info
+            }
+        }
+        if {$password eq ""} {
+            set password    [ad_generate_random_string]
+        }
         set username    "__test_user_[ad_generate_random_string]"
-        set email       "${username}@test.test"
-        set password    [ad_generate_random_string]
         set first_names [ad_generate_random_string]
         set last_name   [ad_generate_random_string]
 
@@ -1957,6 +1982,7 @@ namespace eval acs::test::user {
             -user_id $user_id \
             -permanent
     }
+
 }
 
 
