@@ -8,7 +8,7 @@ nsv_array set proc_source_file [list]
 
 
 #
-# Safetybelt for ::acs::useNsfProc for upgrade phase to oacs-5-9
+# Safety belt for ::acs::useNsfProc for upgrade phase to oacs-5-9
 #
 if {![info exists ::acs::useNsfProc]} {
     ns_log notice "use fallback value for ::acs::useNsfProc"
