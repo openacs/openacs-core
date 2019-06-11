@@ -23,9 +23,9 @@ ad_proc -public xml_support_ok {varname} {
 
     set ok_p 1
 
-    if {[llength [info commands tdom]] < 1} {
-	set xml_status_msg "tDOM is not installed! You must have tDOM installed, or nothing will work."
-	set ok_p 0
+    if {[info commands ::tdom] eq ""} {
+        set xml_status_msg "tDOM is not installed! You must have tDOM installed, or nothing will work."
+        set ok_p 0
     }
 
     return $ok_p
@@ -46,10 +46,10 @@ ad_proc -public xml_parse {
     @return parsed document object handle
 } {
     if {$persist_p} {
-	return [dom parse -simple $xml]
+        return [dom parse -simple $xml]
     } else {
-	dom parse -simple $xml doc
-	return $doc
+        dom parse -simple $xml doc
+        return $doc
     }
 }
 
