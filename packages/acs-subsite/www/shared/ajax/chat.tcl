@@ -36,7 +36,9 @@ if {[info commands ::xo::ChatClass] eq "" ||
     subscribe -
     get_all {
       set _ [c1 $m]
-      ns_return 200 text/html [subst {<HTML><body>$_</body></HTML>}]
+      if {[ns_conn isconnected]} {
+        ns_return 200 text/html [subst {<HTML><body>$_</body></HTML>}]
+      }
     }
     default {
       ns_log error "--c unknown method $m called."
