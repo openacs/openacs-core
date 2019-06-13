@@ -55,7 +55,7 @@ namespace eval ::tcltrace {
 	@param cmd the full command as executed by Tcl
 	@param op the trace operation 
     } {
-	lassign $cmd cmdname severity msg
+	set msg [join [lassign $cmd cmdname severity]]
 	set severity [string totitle $severity]
 	if {![info exists ::__log_severities]} {
 	    set ::__log_severities [::parameter::get_from_package_key \
