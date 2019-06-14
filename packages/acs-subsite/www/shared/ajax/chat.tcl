@@ -22,7 +22,6 @@ if {[info commands ::xo::ChatClass] eq "" ||
 
   #ns_log notice "### chat.tcl mode <$mode> class <$class>"
   #ns_log notice "--chat m=$m session_id=$s [clock format [lindex [split $s .] 1] -format %H:%M:%S] mode=$mode"
-
   $class create c1 -destroy_on_cleanup -chat_id $id -session_id $s -mode $mode
   switch -- $m {
     add_msg {
@@ -32,13 +31,22 @@ if {[info commands ::xo::ChatClass] eq "" ||
     get_new {
       ns_return 200 application/json [c1 $m]
     }
-    login -
-    subscribe -
-    get_all {
+    subscribe {
+      #
+      # This method might take the current connection for the
+      # subscription. If this is the case, the connection is after
+      # this call already closed. Otherwise return a short acknowledge
+      # (or error message) for termination.
+      #
       set _ [c1 $m]
       if {[ns_conn isconnected]} {
         ns_return 200 text/html [subst {<HTML><body>$_</body></HTML>}]
       }
+    }
+    login -
+    get_all {
+      set _ [c1 $m]
+      ns_return 200 text/html [subst {<HTML><body>$_</body></HTML>}]
     }
     default {
       ns_log error "--c unknown method $m called."
