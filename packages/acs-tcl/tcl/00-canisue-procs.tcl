@@ -54,7 +54,14 @@ namespace eval ::acs {
         return [expr {" $subcommand" in [split $errorMsg ","]}]
     }
 }
-# Notice: can use 'ns_db currenthandles'
+
+
+#
+# Register a features provided by the server, available to all
+# packages.  Note that packages can register some optional features
+# during bootup as well, but the developer has to care about the
+# registration and loading order.
+#
 
 ::acs::register_icanuse "ns_db currenthandles" [acs::cmd_has_subcommand ns_db currenthandles]
 ::acs::register_icanuse "ns_server ummap" [acs::cmd_has_subcommand ns_server unmap]
@@ -64,6 +71,8 @@ namespace eval ::acs {
 # (which is not available during loading).
 #
 ::acs::register_icanuse "ns_conn partialtimes" [acs::icanuse "ns_server ummap"]
+
+::acs::register_icanuse "ns_asynclogfile" {[info commands ::ns_asynclogfile] ne ""}
 
 # Local variables:
 #    mode: tcl
