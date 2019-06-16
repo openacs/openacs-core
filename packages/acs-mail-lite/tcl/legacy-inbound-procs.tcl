@@ -81,7 +81,7 @@ namespace eval acs_mail_lite {
                 # Special treatment for e-mails which look like they contain an object_id
                 set pot_object_id [lindex [split $email(to) "@"] 0]
                 ns_log Debug "Object_id for mail:: $pot_object_id"
-                if {[ad_var_type_check_number_p $pot_object_id]} {
+                if {[string is integer -strict  $pot_object_id]} {
                     if {[acs_object::object_p -id $pot_object_id]} {
                         callback acs_mail_lite::incoming_object_email -array email -object_id $pot_object_id
 

@@ -186,7 +186,9 @@ ad_proc -public acs_mail_lite::sched_parameters {
                     lpri_party_ids -
                     hpri_object_ids -
                     lpri_object_ids {
-                        set v_p [ad_var_type_check_integerlist_p $new(${spn})]
+                        # test, if list contains only integers
+                        set map [lmap x $new(${spn}) {if {[string is integer -strict $x]} continue; set x} ]
+                        set v_p [expr {$map eq ""}]
                     }
                     hpri_subject_glob -
                     lpri_subject_glob {
@@ -1287,7 +1289,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
                 # method, such as a pre-signed unique-id in message
                 # content could be added as well.
                 # For now, we warn whenever this is used.
-                if { [ad_var_type_check_number_p $pot_object_id] } {
+                if { [string is integer -strict $pot_object_id] } {
                     if { [acs_object::object_p -id h_arr(aml_object_id)] } {
                         ns_log Warning "acs_mail_lite::inbound_queue_pull \
  Accepted insecure email object_id '${pot_object_id}' \
