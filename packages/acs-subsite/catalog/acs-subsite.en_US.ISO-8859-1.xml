@@ -14,7 +14,7 @@
   <msg key="About_You">About you</msg>
   <msg key="Account_at_system_closed">Your account at %system_name% has been closed.</msg>
   <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
-  <description key="Account_close_confirm_no_label">Description please - does this refer to &#39;Close account&#39; on the &#39;Your(/My) Account&#39; page? Where ist the user taken if he doesn&#39;t confirm? On the &#39;MySpace&#39; page? (pvt=private?)
+  <description key="Account_close_confirm_no_label">Description please - does this refer to &#39;Close account&#39; on the &#39;Your(/My) Account&#39; page? Where is the user taken if he doesn&#39;t confirm? On the &#39;MySpace&#39; page? (pvt=private?)
 
 --Anja Wicht</description>
 
