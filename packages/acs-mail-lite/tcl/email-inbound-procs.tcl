@@ -154,7 +154,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
                     max_blob_chars -
                     mpri_min -
                     mpri_max {
-                        set v_p [ad_var_type_check_integer_p $new(${spn})]
+                        set v_p [string is integer -strict $new(${spn})]
                         if { $v_p } {
                             if { $new(${spn}) < 0 } {
                                 set v_p 0

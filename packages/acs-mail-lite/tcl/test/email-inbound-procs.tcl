@@ -18,7 +18,6 @@ aa_register_case \
         acs_mail_lite::unique_id_create
         acs_mail_lite::unique_id_parse
         ad_system_owner
-        ad_var_type_check_integer_p
         apm_package_id_from_key
         f::lmax
         party::get_by_email
@@ -378,13 +377,13 @@ aa_register_case \
            if { [catch { set sid [acs_mail_lite::imap_conn_go] } errmsg ] } {
                set sid "z"
            }
-           set sid_p [ad_var_type_check_integer_p $sid]
+           set sid_p [string is integer -strict $sid]
            aa_true "ref407. acs_mail_lite::imap_conn_go" $sid_p
 
            if { [catch {set sid4 [acs_mail_lite::imap_conn_go -conn_id ""] } errmsg] } {
                set sid4 "z"
            }
-           set sid4_p [ad_var_type_check_integer_p $sid4]
+           set sid4_p [string is integer -strict $sid4]
            aa_true "ref424. acs_mail_lite::imap_conn_go -conn_id ''" $sid4_p
            
            aa_log "Checking whether ns_imap is installed..."
@@ -450,7 +449,7 @@ aa_register_case \
                if { [catch {set sid3 [acs_mail_lite::imap_conn_go -conn_id $sid] } errmsg ] } {
                    set sid3 "z"
                }
-               set sid3_p [ad_var_type_check_integer_p $sid3]
+               set sid3_p [string is integer -strict $sid3]
                aa_false "ref418. acs_mail_lite::imap_conn_go -conn_id '${sid}'" $sid3_p
 
                set sid5 "all"
