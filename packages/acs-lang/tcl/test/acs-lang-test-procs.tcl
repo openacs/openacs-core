@@ -855,7 +855,7 @@ aa_register_case \
     -procs {
         lang::util::default_locale_from_lang
     } default_locale_from_lang {
-        Check that the retrieval of the deafault locale for a language
+        Check that the retrieval of the default locale for a language
         is working
     } {
         set default_locale [lang::util::default_locale_from_lang en]
