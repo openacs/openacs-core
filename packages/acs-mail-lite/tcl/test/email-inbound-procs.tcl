@@ -385,19 +385,19 @@ aa_register_case \
            }
            set sid4_p [string is integer -strict $sid4]
            aa_true "ref424. acs_mail_lite::imap_conn_go -conn_id ''" $sid4_p
-           
+
            aa_log "Checking whether ns_imap is installed..."
            set ns_imap_p [expr {[info commands ns_imap] ne ""}]
            set enabled [expr {$ns_imap_p ?
                               "enabled. Activating additional tests" :
                               "disabled. Some tests will be skipped"}]
            aa_log "...ns_imap $enabled."
-           
+
            # Following tests are expected to work only when ns_imap is
            # installed and are therefore disabled otherwise.
            if {$ns_imap_p} {
                aa_log "Start of ns_imap dependent tests."
-               
+
                aa_log "Testing imap open/close via default connection params"
                if { [catch {set conn_id [acs_mail_lite::imap_conn_close -conn_id "all"]} errmsg ] } {
                    set conn_id 1
