@@ -184,7 +184,7 @@ ad_proc util_report_library_entry {
     ns_log Notice $message
 }
 
-ad_proc check_for_form_variable_naughtiness {
+ad_proc -deprecated check_for_form_variable_naughtiness {
     name
     value
 } {
@@ -3173,8 +3173,14 @@ ad_proc util_background_reset {
 # check_for_form_variable_naughtiness. Read the documentation
 # for ad_set_typed_form_variable_filter for more details.
 
-ad_proc ad_var_type_check_integer_p {value} {
+ad_proc -deprecated ad_var_type_check_integer_p {value} {
     @return 1 if $value is an integer, 0 otherwise.
+
+    This function is deprecated.
+    Use either template::data::validate::integer
+    or "string is integer -strict" instead.
+    
+    @see ::template::data::validate::integer
 } {
 
     if { [regexp {[^0-9]} $value] } {
@@ -3184,7 +3190,7 @@ ad_proc ad_var_type_check_integer_p {value} {
     }
 }
 
-ad_proc ad_var_type_check_safefilename_p {value} {
+ad_proc -deprecated ad_var_type_check_safefilename_p {value} {
     @return 0 if the file contains ".."
 } {
 
@@ -3195,7 +3201,7 @@ ad_proc ad_var_type_check_safefilename_p {value} {
     }
 }
 
-ad_proc ad_var_type_check_dirname_p {value} {
+ad_proc -deprecated ad_var_type_check_dirname_p {value} {
     @return 0 if $value contains a / or \, 1 otherwise.
 } {
 
@@ -3206,7 +3212,7 @@ ad_proc ad_var_type_check_dirname_p {value} {
     }
 }
 
-ad_proc ad_var_type_check_number_p {value} {
+ad_proc -deprecated ad_var_type_check_number_p {value} {
     @return 1 if $value is a valid number
 } {
     if { [catch {expr {1.0 * $value}}] } {
@@ -3216,7 +3222,7 @@ ad_proc ad_var_type_check_number_p {value} {
     }
 }
 
-ad_proc ad_var_type_check_word_p {value} {
+ad_proc -deprecated ad_var_type_check_word_p {value} {
     @return 1 if $value contains only letters, numbers, dashes,
             and underscores, otherwise returns 0.
 } {
@@ -3228,7 +3234,7 @@ ad_proc ad_var_type_check_word_p {value} {
     }
 }
 
-ad_proc ad_var_type_check_nocheck_p {{value ""}} {
+ad_proc -deprecated ad_var_type_check_nocheck_p {{value ""}} {
     @return 1 regardless of the value. This is useful if you want to
             set a filter over the entire site, then create a few exceptions.
 
@@ -3240,7 +3246,7 @@ ad_proc ad_var_type_check_nocheck_p {{value ""}} {
     return 1
 }
 
-ad_proc ad_var_type_check_noquote_p {value} {
+ad_proc -deprecated ad_var_type_check_noquote_p {value} {
     @return 1 if $value contains any single-quotes
 } {
 
@@ -3251,7 +3257,7 @@ ad_proc ad_var_type_check_noquote_p {value} {
     }
 }
 
-ad_proc ad_var_type_check_integerlist_p {value} {
+ad_proc -deprecated ad_var_type_check_integerlist_p {value} {
     @return 1 if list contains only numbers, spaces, and commas.
             Example '5, 3, 1'. Note: it doesn't allow negative numbers,
             because that could let people sneak in numbers that get
@@ -3265,14 +3271,14 @@ ad_proc ad_var_type_check_integerlist_p {value} {
     }
 }
 
-ad_proc ad_var_type_check_fail_p {value} {
+ad_proc -deprecated ad_var_type_check_fail_p {value} {
     A check that always returns 0. Useful if you want to disable all access
     to a page.
 } {
     return 0
 }
 
-ad_proc ad_var_type_check_third_urlv_integer_p {{args ""}} {
+ad_proc -deprecated ad_var_type_check_third_urlv_integer_p {{args ""}} {
     @return 1 if the third path element in the URL is integer.
 } {
 
