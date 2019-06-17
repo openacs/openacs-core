@@ -96,7 +96,13 @@ ad_proc adp_parse_ad_conn_file {} {
 } {
     set ::template::parse_level ""
     #ns_log debug "adp_parse_ad_conn_file => file '[file rootname [ad_conn file]]'"
-    template::reset_request_vars
+    
+    #
+    # The proper place to reset the variables is after the request,
+    # not on the begin of a special kind of request (i.e. via "ns_ictl
+    # trace freeconn")
+    #
+    #template::reset_request_vars
 
     #
     # [ad_conn file] is always an absolute name, remove the
