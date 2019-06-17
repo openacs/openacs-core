@@ -383,7 +383,7 @@ ad_proc -public image::resize {
         set revision_id [content::item::get_best_revision -item_id $item_id]
     }
     set original_filename [content::revision::get_cr_file_path -revision_id $revision_id]
-    set tmp_filename [ns_mktemp "/tmp/XXXXXX"]
+    set tmp_filename [ns_mktemp "[ad_tmpdir]/XXXXXX"]
     array set sizes [image::get_convert_to_sizes]
 
     if {[catch {exec [image::convert_binary] -resize $sizes($size_name) $original_filename $tmp_filename} errmsg]} {

@@ -187,7 +187,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
         regsub -all {<[^<]*>} $text_to_spell_check "" text_to_spell_check
     }
 
-    set tmpfile [ns_mktemp "/tmp/webspellXXXXXX"]
+    set tmpfile [ns_mktemp "[ad_tmpdir]/webspellXXXXXX"]
     set f [open $tmpfile w]
     puts $f $text_to_spell_check
     close $f

@@ -12,7 +12,7 @@ aa_register_case \
     aa_run_with_teardown -test_code {
 
         # Create cvs file
-        set file_loc "/tmp/test.csv"
+        set file_loc "[ad_tmpdir]/test.csv"
         set file_id [open $file_loc w]
         puts $file_id "first_name,last_name,instrument"
         puts $file_id "Charles,Mingus,Bass"
@@ -52,7 +52,7 @@ aa_register_case \
     aa_run_with_teardown -rollback -test_code {
 
         # Create cvs file of persons
-        set file_loc "/tmp/test.csv"
+        set file_loc "[ad_tmpdir]/test.csv"
         set file_id [open $file_loc w]
         puts $file_id "email,first_names,last_name"
         puts $file_id "cmingus@foo.bar,Charles,Mingus"

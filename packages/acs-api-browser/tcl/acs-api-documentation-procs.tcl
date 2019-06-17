@@ -1095,7 +1095,7 @@ ad_proc -private api_inline_svg_from_dot {dot_code} {
 } {
     catch {set dot [::util::which dot]}
     if {$dot ne ""} {
-        set dir /tmp/oacs-dotcode
+        set dir [ad_tmpdir]/oacs-dotcode
         if {![file isdirectory $dir]} {
             file mkdir $dir
         }

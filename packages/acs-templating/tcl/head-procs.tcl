@@ -18,6 +18,7 @@ ad_proc -private template::reset_request_vars {} {
     returned document.  This should be called at the beginning of any request
     handled by the templating system.
 } {
+    ns_log notice "----- template::reset_request_vars"
     array unset ::template::head::scripts
     array unset ::template::head::links
     array unset ::template::head::metas

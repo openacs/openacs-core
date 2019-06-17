@@ -160,7 +160,7 @@ ad_proc -public email_image::new_item {
     set email [email_image::get_email -user_id $user_id]
     set image_name "email${user_id}.gif"
     set email_length [string length $email]
-    set dest_path "/tmp/$image_name"
+    set dest_path "[ad_tmpdir]/$image_name"
     set width [expr {($email_length * ($font_size / 2)) + 2}]
     set height $font_size
     set ypos [expr { ($height / 2) + 3 }]
@@ -245,7 +245,7 @@ ad_proc -public email_image::edit_email_image {
     set folder_id [email_image::get_folder_id]
     set image_name "email${user_id}.gif"
     set email_length [string length $new_email]
-    set dest_path "/tmp/$image_name"
+    set dest_path "[ad_tmpdir]/$image_name"
     set width [expr {($email_length * ($font_size / 2)) + 2}]
     set height $font_size
     set ypos [expr { ($height / 2) + 3 }]
