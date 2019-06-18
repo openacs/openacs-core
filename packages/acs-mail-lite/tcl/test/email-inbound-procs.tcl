@@ -377,13 +377,13 @@ aa_register_case \
            if { [catch { set sid [acs_mail_lite::imap_conn_go] } errmsg ] } {
                set sid "z"
            }
-           set sid_p [string is integer -strict $sid]
+           set sid_p [string is integer $sid]
            aa_true "ref407. acs_mail_lite::imap_conn_go" $sid_p
 
            if { [catch {set sid4 [acs_mail_lite::imap_conn_go -conn_id ""] } errmsg] } {
                set sid4 "z"
            }
-           set sid4_p [string is integer -strict $sid4]
+           set sid4_p [string is integer $sid4]
            aa_true "ref424. acs_mail_lite::imap_conn_go -conn_id ''" $sid4_p
 
            aa_log "Checking whether ns_imap is installed..."
