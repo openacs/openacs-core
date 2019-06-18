@@ -1903,7 +1903,6 @@ namespace eval acs::test::user {
         {-password ""}
         {-user_id ""}
     } {
-        
         Create a test user with random email and password for testing.
         If an email is passed in and the party identified by the
         password exists, the user_id of this party is returned in the
@@ -1918,9 +1917,7 @@ namespace eval acs::test::user {
         @return The user_info dict returned by auth::create_user. Contains
                 the additional keys email and password.
     } {
-        if {$email eq ""} {
-            set email       "$username@test.test"
-        } else {
+        if {$email ne ""} {
             set party_info [party::get -email $email]
             if {[llength $party_info] > 0} {
                 #
@@ -1935,6 +1932,7 @@ namespace eval acs::test::user {
             set password    [ad_generate_random_string]
         }
         set username    "__test_user_[ad_generate_random_string]"
+        set email       "$username@test.test"
         set first_names [ad_generate_random_string]
         set last_name   [ad_generate_random_string]
 
