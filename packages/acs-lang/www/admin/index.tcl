@@ -83,11 +83,12 @@ foreach current_locale $locale_list {
     #
     # URLs
     #
+    set toggle_enabled_p [expr {!$enabled_p}]
     dict set locale_data msg_edit_url            [export_vars -base package-list { locale }]
     dict set locale_data locale_edit_url         [export_vars -base locale-edit { locale }]
     dict set locale_data locale_delete_url       [export_vars -base locale-delete { locale }]
     dict set locale_data locale_make_default_url [export_vars -base locale-make-default { locale }]
-    dict set locale_data locale_enabled_p_url    [export_vars -base locale-set-enabled-p { locale {enabled_p $enabled_p} }]
+    dict set locale_data locale_enabled_p_url    [export_vars -base locale-set-enabled-p { locale {enabled_p $toggle_enabled_p} }]
     #
     # Numbers
     #
