@@ -17,8 +17,8 @@
   <msg key="Last_Names">Nachnamen</msg>
   <msg key="Main_Site">Main Site</msg>
   <msg key="Main_Site_Members">Mitglieder der Hauptseite</msg>
-  <msg key="Member_role_pretty_name">Teilnehmer</msg>
-  <msg key="Member_role_pretty_plural">TeilnehmerIn</msg>
+  <msg key="Member_role_pretty_name">TeilnehmerIn</msg>
+  <msg key="Member_role_pretty_plural">TeilnehmerInnen</msg>
   <msg key="Membership_Relation">Mitglieder Beziehung</msg>
   <msg key="OpenACS_Local">Lokales OpenACS</msg>
   <msg key="Parties">Parteien</msg>
