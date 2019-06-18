@@ -11,7 +11,7 @@ ad_page_contract {
     {member_state:trim}
     {email_verified_p:boolean ""}
     {return_url:localurl ""}
-    {pass_through:boolean}
+    {pass_through:boolean false}
 } -validate {
     valid_member_state -requires member_state {
         if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
