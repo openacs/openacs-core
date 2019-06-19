@@ -1,4 +1,3 @@
-#/packages/lang/tcl/ad-locale.tcl
 ad_library {
 
     Localization procedures for OpenACS
@@ -366,12 +365,21 @@ ad_proc -public lang::user::locale {
         set package_id [ad_conn package_id]
     }
 
-    # Try package level locale first
-    set locale [package_level_locale -user_id $user_id $package_id]
-
-    # If there's no package setting, then use the site-wide setting
-    if { $locale eq "" } {
+    if {$site_wide_p} {
         set locale [site_wide_locale -user_id $user_id]
+    } else {
+        #
+        # Try package level locale first unless site_wide_p was
+        # specified.
+        #
+        set locale [package_level_locale -user_id $user_id $package_id]
+        #
+        # If there's no package setting, then use the site-wide
+        # setting.
+        #
+        if { $locale eq "" } {
+            set locale [site_wide_locale -user_id $user_id]
+        }
     }
 
     return $locale
