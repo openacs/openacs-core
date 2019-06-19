@@ -1283,19 +1283,18 @@ DECLARE
   v_return               text; 
   v_storage              text;
 BEGIN
-   if value_in is null then 
-	-- this will fail more cryptically in the execute so catch now. 
-	raise exception 'acs_object__set_attribute: attempt to set % to null for object_id %',attribute_name_in, object_id_in;
-   end if;
 
-   v_storage := acs_object__get_attribute_storage(object_id_in, attribute_name_in);
-
+   v_storage    := acs_object__get_attribute_storage(object_id_in, attribute_name_in);
    v_column     := acs_object__get_attr_storage_column(v_storage);
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   execute 'update ' || v_table_name || ' set ' || quote_ident(v_column) || ' = ' || quote_literal(value_in) || ' where ' || v_key_sql;
-
+   if value_in is null then
+      execute 'update ' || v_table_name || ' set ' || v_column || ' = NULL where ' || v_key_sql;   
+   else
+      execute 'update ' || v_table_name || ' set ' || quote_ident(v_column) || ' = ' || quote_literal(value_in) || ' where ' || v_key_sql;
+   end if;
+   
    return 0; 
 END;
 $$ LANGUAGE plpgsql;
