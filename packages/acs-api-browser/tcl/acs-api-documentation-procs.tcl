@@ -1582,10 +1582,19 @@ namespace eval ::apidoc {
     }
 
     ad_proc -private search_on_webindex {-page -host -root -proc} {
-        Search for a matching link in the page and return the absolute link if found
+
+        Search for a matching link in the page and return the absolute
+        link if found. Avoid in-page links (starting with "#")
+
+        @param page HTML page
+        @param host for completing URLs starting with no "/"
+        @param root for completing URLs starting with a "/"
+        @param proc name of proc as used in link label
+
     } {
         set url ""
-        if { [regexp "<a href= *\['\"\](\[^>\"'\]+)\[\"'\]\[^>\]*>$proc</a>" $page match relative_url] } {
+        if { [regexp "<a href= *\['\"\](\[^#\]\[^>\"'\]+)\[\"'\]\[^>\]*>$proc</a>" \
+                  $page match relative_url] } {
             if {[string match "/*" $relative_url]} {
                 set url $host$relative_url
             } else {
