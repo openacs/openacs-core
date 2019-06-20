@@ -107,7 +107,7 @@ ad_form \
         {hash:text(hidden)}
     } -validate {
         { token_id {$token_id < 2**31} "invalid token id"}
-    }
+    } -csrf_protection_p true
 
 set username_widget text
 if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id $::acs::kernel_id] } {
@@ -195,23 +195,33 @@ ad_form -extend -name login -on_request {
     set expiration_time [parameter::get \
                              -parameter LoginPageExpirationTime \
                              -package_id $::acs::kernel_id \
-                             -default 600]
-    if { $expiration_time < 30 } {
-        #
-        # Sanity check: If expiration_time is less than 30 seconds,
-        # it's practically impossible to login and you will have
-        # completely hosed login on your entire site
-        #
-        ns_log warning "login: fix invalid setting of kernel parameter LoginPageExpirationTime \
-            (value $expiration_time); must be at least 30 (secs)"
-        set expiration_time 30
-    }
+                             -default 0] ;# was 600
+    #
+    # Just check the expiration time, when the configured value is >
+    # 0.  The old trick with the expiration time of the login page is
+    # not an issue of modern browsers, since the login page takes
+    # already care of avoiding caching.
+    #
+    if { $expiration_time > 0 } {
+        if { $expiration_time < 30 } {
+            #
+            # Sanity check: If expiration_time is less than 30 seconds,
+            # it's practically impossible to login and you will have
+            # completely hosed login on your entire site
+            #
+            ns_log warning "login: fix invalid setting of kernel parameter LoginPageExpirationTime \
+                (value $expiration_time); must be at least 30 (secs)"
+            set expiration_time 30
+        }
 
-    if { $hash ne $computed_hash
-         || $time < [ns_time] - $expiration_time
-     } {
-        ad_returnredirect -message [_ acs-subsite.Login_has_expired] -- [export_vars -base [ad_conn url] { return_url }]
-        ad_script_abort
+        if { $hash ne $computed_hash
+             || $time < [ns_time] - $expiration_time
+         } {
+            ad_returnredirect \
+                -message [_ acs-subsite.Login_has_expired] -- \
+                [export_vars -base [ad_conn url] { return_url }]
+            ad_script_abort
+        }
     }
 
     if { ![info exists persistent_p] || $persistent_p eq "" } {
@@ -232,7 +242,8 @@ ad_form -extend -name login -on_request {
                              -username [string trim $username] \
                              -password $password \
                              -host_node_id $host_node_id \
-                             -persistent=[expr {$allow_persistent_login_p && [template::util::is_true $persistent_p]}]]
+                             -persistent=[expr {$allow_persistent_login_p
+                                                && [template::util::is_true $persistent_p]}]]
 
     # Handle authentication problems
     switch -- $auth_info(auth_status) {
