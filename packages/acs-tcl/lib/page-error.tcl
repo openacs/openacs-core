@@ -54,6 +54,7 @@ set error_desc_email [subst {
 if { $bug_number eq "" && $send_email_p} {
     acs_mail_lite::send -send_immediately \
                         -to_addr $send_to -from_addr $public_userm_email \
+                        -mime_type "text/html" \
                         -subject $subject \
                         -body $error_desc_email
 }
