@@ -44,8 +44,8 @@ namespace eval group_type {
 
         <p><b>Example:</b>
         <pre>
-        # create a new group of type user_discount_class
-        set group_type [group_type::new -group_type $group_type \
+        # create a new group type user_discount_class
+        set group_type [group_type::new -group_type user_discount_class \
                 -supertype group \
                 "User Discount Class" "User Discount Classes"]
         </pre>
