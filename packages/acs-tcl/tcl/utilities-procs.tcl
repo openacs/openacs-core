@@ -3416,6 +3416,47 @@ ad_proc -public util::random_list_element {
     return [lindex $list $idx]
 }
 
+ad_proc -public util::content_size_pretty {
+    {-size "0"}
+    {-precision "1"}
+    {-decimal:boolean}
+} {
+    Transforms data size, provided in non-negative bytes, to KB, MB... up to YB/Yib.
+
+    @param size       Size in bytes
+    @param precision  Numbers in the fractional part
+    @param decimal    Use powers of 10 instead of 2
+
+    @return Pretty size (e.g. '5.2 MB')
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 2019-06-25
+
+} {
+    if {$decimal_p} {
+        set div 1000
+        set units [list B KB MB GB TB PB EB ZB YB]
+    } else {
+        set div 1024
+        set units [list B KiB MiB GiB TiB PiB EiB ZiB YiB]
+    }
+
+    if {$size eq ""} {
+        set size 0
+    }
+
+    set len [string length $size]
+
+    if {$size < $div} {
+        set size_pretty [format "%s B" [lc_numeric $size]]
+    } else {
+        set unit [expr {($len - 1) / 3}]
+        set size_pretty [format "%.${precision}f %s" [lc_numeric [expr {$size / pow($div,$unit)}]] [lindex $units $unit]]
+    }
+
+    return $size_pretty
+}
+
 ad_proc -public util::age_pretty {
     -timestamp_ansi:required
     -sysdate_ansi:required
