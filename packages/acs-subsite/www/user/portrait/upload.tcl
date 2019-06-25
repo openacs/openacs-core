@@ -10,7 +10,7 @@ ad_page_contract {
     last_name:onevalue
     context:onevalue
     export_vars:onevalue
-    
+
 }
 
 set current_user_id [ad_conn user_id]
@@ -103,13 +103,13 @@ ad_form -extend -name "portrait_upload" -validate {
     # generality implicit in the following if statement)
 
     {upload_file
-        
+
         { $mime_types eq "" || [lsearch $mime_types [ns_guesstype $upload_file]] > -1 }
         {Your image wasn't one of the acceptable MIME types: $mime_types}
     }
     {upload_file
 
-        { $max_bytes eq "" || [file size [ns_queryget upload_file.tmpfile]] <= $max_bytes } 
+        { $max_bytes eq "" || [file size [ns_queryget upload_file.tmpfile]] <= $max_bytes }
         {Your file is too large.  The publisher of [ad_system_name] has chosen to limit portraits to [util::content_size_pretty -size $max_bytes].  You can use PhotoShop or the GIMP (free) to shrink your image}
     }
 
@@ -122,7 +122,7 @@ ad_form -extend -name "portrait_upload" -validate {
             -description $portrait_comment \
             -filename $upload_file \
             -file [ns_queryget upload_file.tmpfile]
-        
+
     }
 
 } -after_submit {
