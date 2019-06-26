@@ -12,7 +12,7 @@ aa_register_case \
         apm_parameter_register
     } \
     test_apm_parameter__register {
-        
+
         Test the apm_parameter_register procedure
 
         @author Veronica De La Cruz (veronica@viaro.net)
@@ -54,7 +54,7 @@ aa_register_case \
     -cats {api smoke} \
     -procs {apm_package_instance_new} \
     test_apm_package_instance__new {
-        
+
         Test the apm_package_instance_new procedure
         @author Veronica De La Cruz (veronica@viaro.net)
 } {
@@ -105,7 +105,7 @@ aa_register_case \
                 set version_name1 [lindex $version 0]
                 set version_name2 [lindex $version 1]
                 set result        [lindex $version 2]
-                aa_equals "Comparing $version_name1 and $version_name2" [apm_version_names_compare $version_name1 $version_name2] "$result" 
+                aa_equals "Comparing $version_name1 and $version_name2" [apm_version_names_compare $version_name1 $version_name2] "$result"
             }
         }
 }
