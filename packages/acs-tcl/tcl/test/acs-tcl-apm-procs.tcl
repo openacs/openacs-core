@@ -78,6 +78,38 @@ aa_register_case \
     }
 }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs apm_version_names_compare \
+    apm_version_names_compare {
+
+        Test the apm_version_names_compare proc
+
+        @author Hanifa Hasan
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            set versions [list \
+                {1.2d3 3.5b -1} \
+                {3.5b 1.2d3 1} \
+                {3.5b 3.5b 0} \
+                {5.0.0d5 5.0.0b1 -1} \
+                {5.0.0a5 5.0.0b1 -1} \
+                {5.0.0d5 5.0.0a1 -1} \
+            ]
+            aa_log "-1: First version is earlier"
+            aa_log "0: Both versions are equal"
+            aa_log "1: Second version is earlier"
+            foreach version $versions {
+                set version_name1 [lindex $version 0]
+                set version_name2 [lindex $version 1]
+                set result        [lindex $version 2]
+                aa_equals "Comparing $version_name1 and $version_name2" [apm_version_names_compare $version_name1 $version_name2] "$result" 
+            }
+        }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
