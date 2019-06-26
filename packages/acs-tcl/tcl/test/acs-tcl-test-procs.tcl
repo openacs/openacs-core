@@ -1364,6 +1364,48 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke production_safe} \
+    -procs ad_decode \
+    ad_decode {
+
+        Test the ad_decode proc
+
+        @author Hanifa Hasan
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            set cases {1 one 2 two 3 three 4 four 5 five 546356 423654 sdgvlrjnevclme sdlgtmsdgvsdf}
+            set cases_complete [concat $cases "Unknown"]
+            dict for {case result} $cases {
+                aa_equals "ad_decode $case $cases_complete return $result" "$result" [ad_decode $case {*}$cases_complete]
+            }
+            aa_equals "ad_decode gibberish $cases_complete return Unknown" "Unknown" [ad_decode gibberish {*}$cases_complete]
+        }
+}
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs util::interval_pretty \
+    util__interval_pretty {
+
+        Test the util::interval_pretty proc
+
+        @author Hanifa Hasan
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            set convert_seconds {6344 "1h 45m 44s" 433 "7m 13s" 5556 "1h 32m 36s" 234 "3m 54s" 23 "23s" 604800 "168h 0m 0s"}
+            dict for {seconds result} $convert_seconds {
+                aa_true "util::interval_pretty $seconds return $result " {[util::interval_pretty -seconds $seconds] eq $result }
+            }
+            aa_equals "Empty seconds" [util::interval_pretty -seconds ""] ""
+            aa_equals "No arguments" [util::interval_pretty] ""
+        }
+}
+
+aa_register_case \
+    -cats {api smoke production_safe} \
     -procs util::content_size_pretty \
     util__content_size_pretty {
 
