@@ -3419,26 +3419,48 @@ ad_proc -public util::random_list_element {
 ad_proc -public util::content_size_pretty {
     {-size "0"}
     {-precision "1"}
-    {-decimal:boolean}
+    {-standard "decimal"}
 } {
-    Transforms data size, provided in non-negative bytes, to KB, MB... up to YB/Yib.
+    Transforms data size, provided in non-negative bytes, to KB, MB... up to YB.
 
     @param size       Size in bytes
     @param precision  Numbers in the fractional part
-    @param decimal    Use powers of 10 instead of 2
+    @param standard   Standard to use for binary prefix. Three standards are
+                      supported currently by this proc:
+                        - decimal (default): SI (base-10, 1000 B = 1kB)
+                        - binary: IEC           (base-2,  1024 B = 1KiB)
+                        - legacy: JEDEC         (base-2,  1024 B = 1KB)
 
-    @return Pretty size (e.g. '5.2 MB')
+    @return Size in given standard units (e.g. '5.2 MB')
 
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 2019-06-25
-
 } {
-    if {$decimal_p} {
-        set div 1000
-        set units [list B KB MB GB TB PB EB ZB YB]
-    } else {
-        set div 1024
-        set units [list B KiB MiB GiB TiB PiB EiB ZiB YiB]
+    switch $standard {
+        decimal {
+            #
+            # SI (base-10, 1000 B = 1KB)
+            #
+            set div 1000
+            set units [list B kB MB GB TB PB EB ZB YB]
+        }
+        binary {
+            #
+            # IEC (base-2, 1024 B = 1KiB)
+            #
+            set div 1024
+            set units [list B KiB MiB GiB TiB PiB EiB ZiB YiB]
+        }
+        legacy {
+            #
+            # JEDEC (base-2, 1024 B = 1KB)
+            #
+            set div 1024
+            set units [list B KB MB GB TB PB EB ZB YB]
+        }
+        default {
+            return "Unknown value $standard for -standard option"
+        }
     }
 
     if {$size eq ""} {
