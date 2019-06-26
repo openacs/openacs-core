@@ -21,7 +21,7 @@ aa_register_case \
         -test_code {
             set colors { 0,0,0 #000000 255,255,255 #ffffff 218,18,26 #da121a 252,221,9 #fcdd09 99,11,87 #630b57 }
             dict for { color hex } $colors {
-                aa_equals "ad_color_to_hex $color return $hex " "$hex" "[ad_color_to_hex $color]" }
+                aa_equals "ad_color_to_hex $color return $hex " "$hex" "[ad_color_to_hex $color]"
             }
         }
 }
