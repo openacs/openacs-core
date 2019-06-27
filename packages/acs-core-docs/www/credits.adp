@@ -44,8 +44,8 @@ Rubick, Fred Yankowski, Dan Chak, Sebastiano Pilla, Reuven Lerner,
 Malte Sussdorff, Stan Kaufman and Pascal Scheffers.</p><p>
 <span class="strong"><strong>All questions and
 comments</strong></span> regarding this guide should be posted on
-the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><div class="cvstag">($&zwnj;Id: credits.xml,v 1.14 2018/04/04 18:51:56
-hectorr Exp $)</div>
+the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><div class="cvstag">($&zwnj;Id: credits.xml,v 1.14.2.1 2019/04/08
+13:02:14 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="aolserver" leftLabel="Prev" leftTitle="Install AOLserver 3.3oacs1"

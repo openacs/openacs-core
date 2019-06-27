@@ -12,7 +12,7 @@ Environments"
 <a name="high-avail" id="high-avail"></a>High Availability/High Performance
 Configurations</h2></div></div></div><p>See also <a class="xref" href="remote-postgres" title="Running a PostgreSQL database on another server">the section
 called “Running a PostgreSQL database on another server”</a>.</p><div class="figure">
-<a name="idp140425765160248" id="idp140425765160248"></a><p class="title"><strong>Figure 6.1. Multiple-server
+<a name="idp140520349624120" id="idp140520349624120"></a><p class="title"><strong>Figure 6.1. Multiple-server
 configuration</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/hpha.png" align="middle" alt="Multiple-server configuration"></div></div>
 </div><br class="figure-break">
 </div>

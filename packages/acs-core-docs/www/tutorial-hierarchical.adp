@@ -11,8 +11,8 @@ Topics"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-hierarchical" id="tutorial-hierarchical"></a>Hierarchical
 data</h2></div></div></div><div class="authorblurb">
-<p>by <a class="ulink" href="http://rubick.com:8002" target="_top">Jade Rubick</a> with help from many people in the OpenACS
-community</p>
+<p>by <a class="ulink" href="http://web.archive.org/web/20151128111517/http://www.rubick.com:8002/" target="_top">Jade Rubick</a> with help from many people in the
+OpenACS community</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>One of the nice things about using the OpenACS object system is
 that it has a built-in facility for tracking hierarchical data in

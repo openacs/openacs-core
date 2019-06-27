@@ -80,7 +80,7 @@ if {[info exists note_id]} {
 
       set context_bar [ad_context_bar "Edit Note"]
 } else {
-      permission::require_permission -object_id $note_id -privilege create
+      permission::require_permission -object_id $package_id -privilege create
 
       set context_bar [ad_context_bar "New Note"]
 }
@@ -242,8 +242,8 @@ how it makes it possible to easily turn Notes into an application
 that appears to provide each user in a system with their own
 private notes database.</p><p>We also saw how to use the templating system&#39;s forms API in
 a simple way, to create forms based pages with minimal duplication
-of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.10 2017/08/07 23:47:54
-gustafn Exp $)</div>
+of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.10.2.1 2019/06/27
+18:15:11 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -15,7 +15,7 @@ installed in /package. These commands install daemontools and
 svgroup. svgroup is a script for granting permissions, to allow
 users other than root to use daemontools for specific services.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Install Daemontools</p><a class="indexterm" name="idp140425772865272" id="idp140425772865272"></a><p>
+<p>Install Daemontools</p><a class="indexterm" name="idp140520358381048" id="idp140520358381048"></a><p>
 <a class="link" href="individual-programs">download
 daemontools</a> and install it.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">

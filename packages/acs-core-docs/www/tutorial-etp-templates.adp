@@ -81,7 +81,7 @@ template.</p><pre class="screen">cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140425763698296"></a><p class="title"><strong>Table 10.1. table showing ETP
+<a name="idp140520366745944"></a><p class="title"><strong>Table 10.1. table showing ETP
 layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">
@@ -126,8 +126,8 @@ view your ETP application using the col2 template.</p></li>
 <a name="end"></a>Who Wrote This and When</h3></div></div></div><p>This problem set was originally written by Nick Carroll in
 August 2004 for the <a class="ulink" href="http://www.usyd.edu.au" target="_top">University of Sydney</a> Course EBUS5002.</p><p>This material is copyright 2004 by Nick Carroll. It may be
 copied, reused, and modified, provided credit is given to the
-original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.60.2.1
-2019/03/10 21:44:57 gustafn Exp $)</div>
+original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.60.2.3
+2019/04/30 18:53:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

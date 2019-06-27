@@ -16,7 +16,7 @@ OpenACS package</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140425764650472" id="idp140425764650472"></a>Setting Permission on an OpenACS
+<a name="idp140520359064920" id="idp140520359064920"></a>Setting Permission on an OpenACS
 package</h3></div></div></div><p>After you&#39;ve installed and mounted your package, you can
 configure each instance to act as you would like.</p><p>This is done from the Applications page. Log in, go to the Admin
 or Control Panel, click on the subsite the application is in, and
