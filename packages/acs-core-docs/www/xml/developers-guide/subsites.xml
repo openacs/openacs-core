@@ -46,7 +46,8 @@ creating such a mapping <emphasis>mounting</emphasis> the application instance a
 particular URL.  The tutorial also showed how a given URL is
 translated into a physical file to serve using the site map. We&#39;ll
 repeat this description here, assuming that you have mounted an
-instance of Notes at the URL <computeroutput>/notes</computeroutput> as we did in the <link linkend="packages-looks">packages-example</link>:
+instance of Notes at the URL <computeroutput>/notes</computeroutput>
+as we did in the <link linkend="packages-looks">packages-example</link>:
 </para>
 
 <itemizedlist>
@@ -161,7 +162,7 @@ if {[info exists note_id]} {
 
       set context_bar [ad_context_bar "Edit Note"]
 } else {
-      permission::require_permission -object_id $note_id -privilege create
+      permission::require_permission -object_id $package_id -privilege create
 
       set context_bar [ad_context_bar "New Note"]
 }
