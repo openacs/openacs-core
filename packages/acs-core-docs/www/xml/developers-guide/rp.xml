@@ -16,7 +16,7 @@
 
 <para>
 This document is a brief introduction to the OpenACS &version; Request Processor;
-more details can be found in the <xref linkend="rp-design"/>. Here we cover the high level concepts behind the
+more details can be found in the <xref linkend="rp-design"/>. Here we cover the high-level concepts behind the
 system, and implications and usage for the application developer.
 </para>
 </sect2>
