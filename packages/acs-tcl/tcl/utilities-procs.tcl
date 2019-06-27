@@ -3470,11 +3470,15 @@ ad_proc -public util::content_size_pretty {
     set len [string length $size]
 
     if {$size < $div} {
-        set size_pretty [format "%s B" [lc_numeric $size]]
+        set size_pretty [format "%s B" $size]
     } else {
         set unit [expr {($len - 1) / 3}]
-        set size_pretty [format "%.${precision}f %s" [lc_numeric [expr {$size / pow($div,$unit)}]] [lindex $units $unit]]
+        set size_pretty [format "%.${precision}f %s" [expr {$size / pow($div,$unit)}] [lindex $units $unit]]
     }
+    #
+    # Localize dot/comma just before return
+    #
+    set size_pretty "[lc_numeric [lindex $size_pretty 0]] [lindex $size_pretty 1]"
 
     return $size_pretty
 }
