@@ -9,6 +9,7 @@
   <msg key="localization-abday">{Dom} {Lun} {Mar} {Mié} {Jue} {Vie} {Sáb}</msg>
   <msg key="localization-abmon">{Ene} {Feb} {Mar} {Abr} {May} {Jun} {Jul} {Ago} {Sep} {Oct} {Nov} {Dic}</msg>
   <msg key="localization-am_str">AM</msg>
+  <msg key="localization-bytes">bytes</msg>
   <msg key="localization-currency_symbol">€</msg>
   <msg key="localization-d_fmt">%d/%m/%y</msg>
   <msg key="localization-d_t_fmt">%a %d %B %Y %H:%M %Z</msg>

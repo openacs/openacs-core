@@ -590,6 +590,79 @@ ad_proc -private lc_leading_zeros {
     return [format "%0${n_desired_digits}d" $the_integer]
 }
 
+
+ad_proc -public lc_content_size_pretty {
+    {-size "0"}
+    {-precision "1"}
+    {-standard "decimal"}
+} {
+
+    Transforms data size, provided in non-negative bytes, to KB, MB... up to YB.
+
+    @param size       Size in bytes
+    @param precision  Numbers in the fractional part
+    @param standard   Standard to use for binary prefix. Three standards are
+                      supported currently by this proc:
+                        - decimal (default): SI (base-10, 1000 bytes = 1kB)
+                        - binary: IEC           (base-2,  1024 bytes = 1KiB)
+                        - legacy: JEDEC         (base-2,  1024 bytes = 1KB)
+
+    @return Size in given standard units (e.g. '5.2 MB')
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 2019-06-25
+
+} {
+    # Localized bytes
+    set bytes [lc_get "bytes"]
+
+    switch $standard {
+        decimal {
+            #
+            # SI (base-10, 1000 bytes = 1KB)
+            #
+            set div 1000
+            set units [list $bytes kB MB GB TB PB EB ZB YB]
+        }
+        binary {
+            #
+            # IEC (base-2, 1024 bytes = 1KiB)
+            #
+            set div 1024
+            set units [list $bytes KiB MiB GiB TiB PiB EiB ZiB YiB]
+        }
+        legacy {
+            #
+            # JEDEC (base-2, 1024 bytes = 1KB)
+            #
+            set div 1024
+            set units [list $bytes KB MB GB TB PB EB ZB YB]
+        }
+        default {
+            return "Unknown value $standard for -standard option"
+        }
+    }
+
+    if {$size eq ""} {
+        set size 0
+    }
+
+    set len [string length $size]
+
+    if {$size < $div} {
+        set size_pretty [format "%s $bytes" $size]
+    } else {
+        set unit [expr {($len - 1) / 3}]
+        set size_pretty [format "%.${precision}f %s" [expr {$size / pow($div,$unit)}] [lindex $units $unit]]
+    }
+    #
+    # Localize dot/comma just before return
+    #
+    set size_pretty "[lc_numeric [lindex $size_pretty 0]] [lindex $size_pretty 1]"
+
+    return $size_pretty
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

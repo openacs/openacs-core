@@ -1404,63 +1404,6 @@ aa_register_case \
         }
 }
 
-aa_register_case \
-    -cats {api smoke production_safe} \
-    -procs util::content_size_pretty \
-    util__content_size_pretty {
-
-        Test util::content_size_pretty proc
-
-        @author Héctor Romojaro <hector.romojaro@gmail.com>
-        @creation-date 2019-06-25
-} {
-    aa_equals "No arguments binary"     [util::content_size_pretty -standard "binary"]                                          "[lc_numeric 0] B"
-    aa_equals "No arguments legacy"     [util::content_size_pretty -standard "legacy"]                                          "[lc_numeric 0] B"
-    aa_equals "No arguments decimal"    [util::content_size_pretty]                                                             "[lc_numeric 0] B"
-    aa_equals "Empty value binary"      [util::content_size_pretty -size "" -standard "binary"]                                 "[lc_numeric 0] B"
-    aa_equals "Empty value legacy"      [util::content_size_pretty -size "" -standard "legacy"]                                 "[lc_numeric 0] B"
-    aa_equals "Empty value decimal"     [util::content_size_pretty -size ""]                                                    "[lc_numeric 0] B"
-    aa_equals "1.0 KiB"                 [util::content_size_pretty -size 1024 -standard "binary"]                               "[lc_numeric 1.0] KiB"
-    aa_equals "1.0 KB"                  [util::content_size_pretty -size 1024 -standard "legacy"]                               "[lc_numeric 1.0] KB"
-    aa_equals "1.0 KB"                  [util::content_size_pretty -size 1000]                                                  "[lc_numeric 1.0] kB"
-    aa_equals "1.0 MiB"                 [util::content_size_pretty -size 1048576 -standard "binary"]                            "[lc_numeric 1.0] MiB"
-    aa_equals "1.0 MB"                  [util::content_size_pretty -size 1048576 -standard "legacy"]                            "[lc_numeric 1.0] MB"
-    aa_equals "1.0 MB"                  [util::content_size_pretty -size 1000000]                                               "[lc_numeric 1.0] MB"
-    aa_equals "1.0 GiB"                 [util::content_size_pretty -size 1073741824 -standard "binary"]                         "[lc_numeric 1.0] GiB"
-    aa_equals "1.0 GB"                  [util::content_size_pretty -size 1073741824 -standard "legacy"]                         "[lc_numeric 1.0] GB"
-    aa_equals "1.0 GB"                  [util::content_size_pretty -size 1000000000]                                            "[lc_numeric 1.0] GB"
-    aa_equals "1.0 TiB"                 [util::content_size_pretty -size 1099511627800 -standard "binary"]                      "[lc_numeric 1.0] TiB"
-    aa_equals "1.0 TB"                  [util::content_size_pretty -size 1099511627800 -standard "legacy"]                      "[lc_numeric 1.0] TB"
-    aa_equals "1.0 TB"                  [util::content_size_pretty -size 1000000000000]                                         "[lc_numeric 1.0] TB"
-    aa_equals "1.0 PiB"                 [util::content_size_pretty -size 1125899906842620 -standard "binary"]                   "[lc_numeric 1.0] PiB"
-    aa_equals "1.0 PB"                  [util::content_size_pretty -size 1125899906842620 -standard "legacy"]                   "[lc_numeric 1.0] PB"
-    aa_equals "1.0 PB"                  [util::content_size_pretty -size 1000000000000000]                                      "[lc_numeric 1.0] PB"
-    aa_equals "1.0 EiB"                 [util::content_size_pretty -size 1152921504606850000 -standard "binary"]                "[lc_numeric 1.0] EiB"
-    aa_equals "1.0 EB"                  [util::content_size_pretty -size 1152921504606850000 -standard "legacy"]                "[lc_numeric 1.0] EB"
-    aa_equals "1.0 EB"                  [util::content_size_pretty -size 1000000000000000000]                                   "[lc_numeric 1.0] EB"
-    aa_equals "1.0 ZiB"                 [util::content_size_pretty -size 1180591620717410000000 -standard "binary"]             "[lc_numeric 1.0] ZiB"
-    aa_equals "1.0 ZB"                  [util::content_size_pretty -size 1180591620717410000000 -standard "legacy"]             "[lc_numeric 1.0] ZB"
-    aa_equals "1.0 ZB"                  [util::content_size_pretty -size 1000000000000000000000]                                "[lc_numeric 1.0] ZB"
-    aa_equals "1.0 YiB"                 [util::content_size_pretty -size 1208925819614630000000000 -standard "binary"]          "[lc_numeric 1.0] YiB"
-    aa_equals "1.0 YB"                  [util::content_size_pretty -size 1208925819614630000000000 -standard "legacy"]          "[lc_numeric 1.0] YB"
-    aa_equals "1.0 YB"                  [util::content_size_pretty -size 1000000000000000000000000]                             "[lc_numeric 1.0] YB"
-    aa_equals "1.3 YiB"                 [util::content_size_pretty -size 1571603565499020000000000 -standard "binary"]          "[lc_numeric 1.3] YiB"
-    aa_equals "1.3 YB"                  [util::content_size_pretty -size 1571603565499020000000000 -standard "legacy"]          "[lc_numeric 1.3] YB"
-    aa_equals "1.3 YB"                  [util::content_size_pretty -size 1300000000000000000000000]                             "[lc_numeric 1.3] YB"
-    aa_equals "1.000 KiB"               [util::content_size_pretty -size 1024 -precision 3 -standard "binary"]                  "[lc_numeric 1.000] KiB"
-    aa_equals "1.000 KB"                [util::content_size_pretty -size 1024 -precision 3 -standard "legacy"]                  "[lc_numeric 1.000] KB"
-    aa_equals "1.000 kB"                [util::content_size_pretty -size 1000 -precision 3]                                     "[lc_numeric 1.000] kB"
-    aa_equals "1 KiB"                   [util::content_size_pretty -size 1024 -precision 0 -standard "binary"]                  "[lc_numeric 1] KiB"
-    aa_equals "1 KB"                    [util::content_size_pretty -size 1024 -precision 0 -standard "legacy"]                  "[lc_numeric 1] KB"
-    aa_equals "1 kB"                    [util::content_size_pretty -size 1000 -precision 0]                                     "[lc_numeric 1] kB"
-    aa_equals "1 KiB"                   [util::content_size_pretty -size 1044 -precision 0 -standard "binary"]                  "[lc_numeric 1] KiB"
-    aa_equals "1 KB"                    [util::content_size_pretty -size 1044 -precision 0 -standard "legacy"]                  "[lc_numeric 1] KB"
-    aa_equals "1 kB"                    [util::content_size_pretty -size 1080 -precision 0]                                     "[lc_numeric 1] kB"
-    aa_equals "1.01953 -> 1.020 KiB"    [util::content_size_pretty -size 1044 -precision 3 -standard "binary"]                  "[lc_numeric 1.020] KiB"
-    aa_equals "1.01953 -> 1.020 KB"     [util::content_size_pretty -size 1044 -precision 3 -standard "legacy"]                  "[lc_numeric 1.020] KB"
-    aa_equals "1.080 kB"                [util::content_size_pretty -size 1080 -precision 3]                                     "[lc_numeric 1.080] kB"
-}
-
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

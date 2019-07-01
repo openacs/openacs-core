@@ -11,6 +11,7 @@
   <msg key="localization-abday">{zon} {maa} {din} {woe} {don} {vr?} {zat}</msg>
   <msg key="localization-abmon">{jan} {feb} {mrt} {apr} {mei} {jun} {jul} {aug} {sep} {okt} {nov} {dec}</msg>
   <msg key="localization-am_str">Voormiddag</msg>
+  <msg key="localization-bytes">bytes</msg>
   <msg key="localization-currency_symbol">?
 </msg>
   <msg key="localization-d_fmt">%d.%m.%Y</msg>

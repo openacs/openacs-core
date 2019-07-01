@@ -110,7 +110,7 @@ ad_form -extend -name "portrait_upload" -validate {
     {upload_file
 
         { $max_bytes eq "" || [file size [ns_queryget upload_file.tmpfile]] <= $max_bytes }
-        {Your file is too large.  The publisher of [ad_system_name] has chosen to limit portraits to [util::content_size_pretty -size $max_bytes].  You can use PhotoShop or the GIMP (free) to shrink your image}
+        {Your file is too large.  The publisher of [ad_system_name] has chosen to limit portraits to [lc_content_size_pretty -size $max_bytes].  You can use PhotoShop or the GIMP (free) to shrink your image}
     }
 
 } -on_submit {

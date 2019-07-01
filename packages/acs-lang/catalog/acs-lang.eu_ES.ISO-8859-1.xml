@@ -9,6 +9,7 @@
   <msg key="localization-abday">{Iga} {Ast} {Ast} {Ast} {Ost} {Ost} {Lar}</msg>
   <msg key="localization-abmon">{Urt} {Ots} {Mar} {Api} {Mai} {Eka} {Uzt} {Abu} {Ira} {Urr} {Aza} {Abe}</msg>
   <msg key="localization-am_str">AM</msg>
+  <msg key="localization-bytes">bytes</msg>
   <msg key="localization-currency_symbol">?</msg>
   <msg key="localization-d_fmt">%y-%m-%d</msg>
   <msg key="localization-d_t_fmt">%a, %Y(e)ko %Bren %d, %T %Z</msg>
