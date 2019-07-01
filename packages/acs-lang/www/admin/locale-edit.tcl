@@ -41,7 +41,7 @@ form create locale_editing
 # look for the PDF file of Oracle 8i "national language support guide"
 
 catch {
-    set nls_values_list [db_list_of_lists select_nls_values {select parameter, value 
+    set nls_values_list [db_list_of_lists select_nls_values {select parameter, value
     from v$nls_valid_values order by parameter, value}]
 
     foreach nls_value $nls_values_list {
@@ -81,7 +81,7 @@ if { [info exists list_nls_language] } {
 
     element create locale_editing nls_territory -label "NLS Territory" \
             -datatype text -widget select -options $list_nls_territory
-    
+
     element create locale_editing nls_charset -label "NLS Charset" \
             -datatype text -widget select -options $list_nls_charset
 } else {
@@ -90,7 +90,7 @@ if { [info exists list_nls_language] } {
 
     element create locale_editing nls_territory -label "NLS Territory" \
             -datatype text -widget text
-    
+
     element create locale_editing nls_charset -label "NLS Charset" \
             -datatype text -widget text
 }
@@ -99,7 +99,7 @@ element create locale_editing mime_charset \
     -label "MIME Charset" -datatype text
 
 element create locale_editing default_p -label "Default" \
-    -datatype text -widget hidden  
+    -datatype text -widget hidden
 
 if { [form is_request locale_editing] } {
 
@@ -113,7 +113,7 @@ if { [form is_request locale_editing] } {
         where locale = :locale"
 
     set locale_language [string trim $locale_language]
-    
+
     element set_properties locale_editing locale -value $locale_locale
     element set_properties locale_editing label -value $locale_label
     element set_properties locale_editing nls_language -value $locale_nls_language
