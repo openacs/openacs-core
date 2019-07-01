@@ -658,7 +658,7 @@ ad_proc -public lc_content_size_pretty {
         #
         # 1 byte or n bytes
         #
-        if {$size eq "1"} {
+        if {$size == 1} {
             set size_pretty [format "%s $byte" $size]
         } else {
             set size_pretty [format "%s $bytes" $size]
