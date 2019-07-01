@@ -865,12 +865,12 @@ ad_proc -public lang::util::iso6392_from_language {
 
     set iso6392_code ""
     set lang_len [string length $language]
-    if { $lang_len eq 2 } {
+    if { $lang_len == 2 } {
         # input is iso-639-1 language code
 
         set iso6392_code [db_string get_iso2_code_from_iso1 {} -default ""]
 
-    } elseif { $lang_len eq 3 } {
+    } elseif { $lang_len == 3 } {
         # input is iso-639-2 language code
         # we check in the table in case the language code is wrong
 
@@ -909,12 +909,12 @@ ad_proc -public lang::util::language_label {
 
     set lang_label ""
     set lang_len [string length $language]
-    if { $lang_len eq 2 } {
+    if { $lang_len == 2 } {
         # input is iso-639-1 language code
 
         set lang_label [db_string get_label_from_iso1 {} -default ""]
 
-    } elseif { $lang_len eq 3 } {
+    } elseif { $lang_len == 3 } {
         # input is iso-639-2 language code
         # we check in the table in case the language code is wrong
 
