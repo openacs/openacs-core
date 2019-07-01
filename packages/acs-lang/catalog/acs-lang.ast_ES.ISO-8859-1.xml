@@ -7,6 +7,7 @@
   <msg key="localization-abday">{Dom} {llu} {Mar} {Mié} {Xue} {Vie} {Sab}</msg>
   <msg key="localization-abmon">{Xin} {Feb} {Mar} {Abr} {May} {Xun} {Xul} {Ago} {Set} {Otu} {Nov} {Avi}</msg>
   <msg key="localization-am_str">AM</msg>
+  <msg key="localization-bytes">bytes</msg>
   <msg key="localization-currency_symbol">$</msg>
   <msg key="localization-d_fmt">&quot;%d-%m-%y&quot;</msg>
   <msg key="localization-d_t_fmt">&quot;%a %d %B %Y %R %Z&quot;</msg>

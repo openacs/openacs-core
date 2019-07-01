@@ -11,6 +11,7 @@
   <msg key="localization-abday">{Dom} {Seg} {Ter} {Cua} {Qui} {Sex} {Sáb}</msg>
   <msg key="localization-abmon">{Xan} {Feb} {Mar} {Abr} {Mai} {Xuñ} {Xul} {Ago} {Set} {Out} {Nov} {Dec}</msg>
   <msg key="localization-am_str">AM</msg>
+  <msg key="localization-bytes">bytes</msg>
   <msg key="localization-currency_symbol">$</msg>
   <msg key="localization-d_fmt">%d-%m-%Y</msg>
   <msg key="localization-d_t_fmt">%a %d %B %Y %R %Z</msg>
