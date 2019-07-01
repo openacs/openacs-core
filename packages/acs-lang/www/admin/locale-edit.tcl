@@ -124,7 +124,7 @@ if { [form is_request locale_editing] } {
 
     set lang_query "select label from language_639_2_codes"
 
-    if { [string length $locale_language] eq 3 } {
+    if { [string length $locale_language] == 3 } {
         append lang_query " where iso_639_2 = :locale_language"
     } else {
         append lang_query " where iso_639_1 = :locale_language"

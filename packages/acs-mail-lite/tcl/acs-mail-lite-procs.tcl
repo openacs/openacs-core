@@ -432,7 +432,7 @@ namespace eval acs_mail_lite {
 
         # associate a user_id
         set rcpt_id 0
-        if { [llength $to_addr] eq 1 } {
+        if { [llength $to_addr] == 1 } {
             set rcpt_id [party::get_by_email -email $to_addr]
             if {$rcpt_id eq ""} {
                 set rcpt_id 0
