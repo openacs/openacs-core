@@ -613,8 +613,11 @@ ad_proc -public lc_content_size_pretty {
     @creation-date 2019-06-25
 
 } {
-    # Localized bytes
+    #
+    # Localized byte/s
+    #
     set bytes [lc_get "bytes"]
+    set byte  [lc_get "byte"]
 
     switch $standard {
         decimal {
@@ -642,7 +645,9 @@ ad_proc -public lc_content_size_pretty {
             return "Unknown value $standard for -standard option"
         }
     }
-
+    #
+    # For empty size, we assume 0
+    #
     if {$size eq ""} {
         set size 0
     }
@@ -650,8 +655,18 @@ ad_proc -public lc_content_size_pretty {
     set len [string length $size]
 
     if {$size < $div} {
-        set size_pretty [format "%s $bytes" $size]
+        #
+        # 1 byte or n bytes
+        #
+        if {$size eq "1"} {
+            set size_pretty [format "%s $byte" $size]
+        } else {
+            set size_pretty [format "%s $bytes" $size]
+        }
     } else {
+        #
+        # > 1K
+        #
         set unit [expr {($len - 1) / 3}]
         set size_pretty [format "%.${precision}f %s" [expr {$size / pow($div,$unit)}] [lindex $units $unit]]
     }

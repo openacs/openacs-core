@@ -47,6 +47,7 @@
   <msg key="localization-abday">{Вс} {Пн} {Вт} {Ср} {Чт} {Пт} {Сб}</msg>
   <msg key="localization-abmon">{янв} {фев} {мар} {апр} {май} {июн} {июл} {авг} {сен} {окт} {ноя} {дек}</msg>
   <msg key="localization-am_str"></msg>
+  <msg key="localization-byte">байт</msg>
   <msg key="localization-bytes">байт</msg>
   <msg key="localization-currency_symbol">руб.</msg>
   <msg key="localization-d_fmt">%d.%m.%y</msg>

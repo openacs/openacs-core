@@ -7,6 +7,7 @@
   <msg key="localization-abday">{su} {ma} {ti} {ke} {to} {pe} {la}</msg>
   <msg key="localization-abmon">{tammi} {helmi} {maalis} {huhti} {touko} {kesä} {heinä} {elo} {syys} {loka} {marras} {joulu}</msg>
   <msg key="localization-am_str"></msg>
+  <msg key="localization-byte">tavu</msg>
   <msg key="localization-bytes">tavua</msg>
   <msg key="localization-currency_symbol">€</msg>
   <msg key="localization-d_fmt">%d.%m.%Y</msg>

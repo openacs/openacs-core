@@ -8,6 +8,7 @@
   <msg key="localization-abday">{일} {월} {화} {수} {목} {금} {토}</msg>
   <msg key="localization-abmon">{1¿?} {2¿?} {3¿?} {4¿?} {5¿?} {6¿?} {7¿?} {8¿?} {9¿?} {10¿?} {11¿?} {12¿?}</msg>
   <msg key="localization-am_str">오전</msg>
+  <msg key="localization-byte">바이트</msg>
   <msg key="localization-bytes">바이트</msg>
   <msg key="localization-currency_symbol">₩</msg>
   <msg key="localization-d_fmt">%m/%d/%y</msg>

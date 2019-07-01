@@ -9,6 +9,7 @@
   <msg key="localization-abday">{أح} {إث} {ثل} {أر} {خم} {جم} {سب}</msg>
   <msg key="localization-abmon">{ك2} {شبا} {آذا} {نيس} {أيا} {حزي} {تمو} {آب} {أيل} {ت1} {ت2} {ك1}</msg>
   <msg key="localization-am_str">ص</msg>
+  <msg key="localization-byte">بايت</msg>
   <msg key="localization-bytes">بايت</msg>
   <msg key="localization-currency_symbol">ل.ل.</msg>
   <msg key="localization-d_fmt">%d/%m/%y </msg>

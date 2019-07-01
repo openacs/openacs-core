@@ -71,7 +71,10 @@ aa_register_case \
         @creation-date 2019-06-25
 
 } {
-    # Localized bytes
+    #
+    # Localized byte/s
+    #
+    set byte  [lc_get "byte"]
     set bytes [lc_get "bytes"]
 
     aa_equals "No arguments binary"     [lc_content_size_pretty -standard "binary"]                                          "[lc_numeric 0] $bytes"
@@ -80,6 +83,9 @@ aa_register_case \
     aa_equals "Empty value binary"      [lc_content_size_pretty -size "" -standard "binary"]                                 "[lc_numeric 0] $bytes"
     aa_equals "Empty value legacy"      [lc_content_size_pretty -size "" -standard "legacy"]                                 "[lc_numeric 0] $bytes"
     aa_equals "Empty value decimal"     [lc_content_size_pretty -size ""]                                                    "[lc_numeric 0] $bytes"
+    aa_equals "1 byte"                  [lc_content_size_pretty -size 1 -standard "binary"]                                  "[lc_numeric 1] $byte"
+    aa_equals "1 byte"                  [lc_content_size_pretty -size 1 -standard "legacy"]                                  "[lc_numeric 1] $byte"
+    aa_equals "1 byte"                  [lc_content_size_pretty -size 1]                                                     "[lc_numeric 1] $byte"
     aa_equals "1.0 KiB"                 [lc_content_size_pretty -size 1024 -standard "binary"]                               "[lc_numeric 1.0] KiB"
     aa_equals "1.0 KB"                  [lc_content_size_pretty -size 1024 -standard "legacy"]                               "[lc_numeric 1.0] KB"
     aa_equals "1.0 KB"                  [lc_content_size_pretty -size 1000]                                                  "[lc_numeric 1.0] kB"

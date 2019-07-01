@@ -9,6 +9,7 @@
   <msg key="localization-abday">{Aha} {Isn} {Sel} {Rab} {Kha} {Jum} {Sab}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mac} {Apr} {Mei} {Jun} {Jul} {Ogo} {Sep} {Okt} {Nov} {Dis}</msg>
   <msg key="localization-am_str">AM</msg>
+  <msg key="localization-byte">bait</msg>
   <msg key="localization-bytes">bait</msg>
   <msg key="localization-currency_symbol">$</msg>
   <msg key="localization-d_fmt">%m/%d/%y</msg>

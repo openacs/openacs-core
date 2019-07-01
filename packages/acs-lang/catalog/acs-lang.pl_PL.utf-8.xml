@@ -11,6 +11,7 @@
   <msg key="localization-abday">{Nd} {Pn} {Wt} {Śr} {Czw} {Pt} {So}</msg>
   <msg key="localization-abmon">{Sty} {Lut} {Mar} {Kwi} {Maj} {Cze} {Lip} {Sie} {Wrz} {Paź} {Lis} {Gru}</msg>
   <msg key="localization-am_str">PP</msg>
+  <msg key="localization-byte">bajt</msg>
   <msg key="localization-bytes">bajtów</msg>
   <msg key="localization-currency_symbol">zł</msg>
   <msg key="localization-d_fmt">%d-%m-%y</msg>

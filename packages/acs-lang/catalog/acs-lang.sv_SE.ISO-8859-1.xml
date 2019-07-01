@@ -8,6 +8,7 @@
   <msg key="localization-abday">{Sön} {Mån} {Tis} {Ons} {Tor} {Fre} {Lör}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mar} {Apr} {Maj} {Jun} {Jul} {Aug} {Sep} {Okt} {Nov} {Dec}</msg>
   <msg key="localization-am_str">FM</msg>
+  <msg key="localization-byte">byte</msg>
   <msg key="localization-bytes">bytes</msg>
   <msg key="localization-currency_symbol">kr</msg>
   <msg key="localization-d_fmt">%Y-%m-%d</msg>

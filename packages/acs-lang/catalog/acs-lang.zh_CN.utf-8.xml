@@ -9,6 +9,7 @@
   <msg key="localization-abday">{周日} {周一} {周二} {周三} {周四} {周五} {周六}</msg>
   <msg key="localization-abmon">{1月} {2月} {3月} {4月} {5月} {6月} {7月} {8月} {9月} {10月} {11月} {12月}</msg>
   <msg key="localization-am_str">上午</msg>
+  <msg key="localization-byte">字节</msg>
   <msg key="localization-bytes">字节</msg>
   <msg key="localization-currency_symbol">¥</msg>
   <msg key="localization-d_fmt">%y年%m月%d日</msg>

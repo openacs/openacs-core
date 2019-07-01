@@ -47,6 +47,7 @@
   <msg key="localization-abday">{So} {Mo} {Di} {Mi} {Do} {Fr} {Sa}</msg>
   <msg key="localization-abmon">{Jan} {Feb} {Mrz} {Apr} {Mai} {Jun} {Jul} {Aug} {Sep} {Okt} {Nov} {Dez}</msg>
   <msg key="localization-am_str">A.M.</msg>
+  <msg key="localization-byte">Byte</msg>
   <msg key="localization-bytes">Bytes</msg>
   <msg key="localization-currency_symbol">?</msg>
   <msg key="localization-d_fmt">%d.%m.%Y</msg>

@@ -10,7 +10,8 @@
   <msg key="localization-abday">{रवि} {सोम} {मन्गल} {बुध} {गुरु} {शुर्क} {शनि} </msg>
   <msg key="localization-abmon">{जनवरी} {फ़रवरी} {मार्च} {अप्रैल} {मई} {जून} {जुलाई} {अगस्त} {सितम्बर} {अकतूबर} {नवम्बर} {दिसम्बर} </msg>
   <msg key="localization-am_str">एम </msg>
-  <msg key="localization-bytes">बाईट</msg>
+  <msg key="localization-byte">बाईट</msg>
+  <msg key="localization-bytes">बाईटस</msg>
   <msg key="localization-currency_symbol">$</msg>
   <msg key="localization-d_fmt">%म/%ड/%य</msg>
   <msg key="localization-d_t_fmt">%अ %ब %ड, %य %र %ज़ी </msg>

@@ -11,6 +11,7 @@
   <msg key="localization-abday">{Κ} {Δ} {Τ} {Τ} {Π} {Π} {Σ}</msg>
   <msg key="localization-abmon">{Ιαν} {Φεβ} {Μαρ} {Απρ} {Μαι} {Ιουν} {Ιουλ} {Αυγ} {Σεπ} {Οκτ} {Νοε} {Δεκ}</msg>
   <msg key="localization-am_str">πμ</msg>
+  <msg key="localization-byte">byte</msg>
   <msg key="localization-bytes">bytes</msg>
   <msg key="localization-currency_symbol">Euro</msg>
   <msg key="localization-d_fmt">%d%m%y</msg>
