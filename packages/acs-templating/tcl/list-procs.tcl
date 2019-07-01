@@ -903,6 +903,7 @@ ad_proc -public template::list::csv_quote {
 
 ad_proc -public template::list::write_csv {
     -name:required
+    {-delimiter ","}
 } {
     Writes a CSV to the connection
 } {
@@ -927,7 +928,7 @@ ad_proc -public template::list::write_csv {
             lappend __csv_labels [csv_quote $element_properties(label)]
         }
     }
-    append __output "\"[join $__csv_labels "\",\""]\"\n"
+    append __output "\"[join $__csv_labels "\"$delimiter\""]\"\n"
 
     set __rowcount [template::multirow size $list_properties(multirow)]
     set __rownum 0
@@ -965,7 +966,7 @@ ad_proc -public template::list::write_csv {
                     lappend __cols [csv_quote [set $__element_name]]
                 }
             }
-            append __output "\"[join $__cols "\",\""]\"\n"
+            append __output "\"[join $__cols "\"$delimiter\""]\"\n"
         }
     }
     set oh [ns_conn outputheaders]
