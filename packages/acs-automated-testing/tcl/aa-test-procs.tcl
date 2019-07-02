@@ -1141,7 +1141,7 @@ namespace eval acs::test {
         set instance_name [expr {$instance_name eq "" ?
                                  "${package_key}-test" : [string trim $instance_name /]}]
 
-        set package_exists_p [::xo::dc 0or1row lookup_test_package {
+        set package_exists_p [db_0or1row lookup_test_package {
             select node_id, object_id as package_id
             from site_nodes
             where parent_id = :main_node_id
