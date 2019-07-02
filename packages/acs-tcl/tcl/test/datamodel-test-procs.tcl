@@ -71,7 +71,7 @@ aa_register_case \
                 set column_name [db_string get_col $get_constraint_col]
 
                 # NOT NULL constraints (oracle only)
-                if { [string equal $search_condition "\"$column_name\" IS NOT NULL"] } {
+                if { $search_condition eq "\"$column_name\" IS NOT NULL" } {
                     set constraint_type "NN"
                 }
 
