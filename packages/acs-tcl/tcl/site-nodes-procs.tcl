@@ -612,6 +612,10 @@ ad_proc -public site_node::exists_p {
     @param url URL path starting with a slash.
     @author Peter Marklund
 } {
+
+    ns_log notice "OLD nsv-based site_node::exists_p <$url>"
+            
+    
     set url_no_trailing [string trimright $url "/"]
     return [nsv_exists site_nodes "$url_no_trailing/"]
 }
@@ -1779,7 +1783,9 @@ if {$UseXotclSiteNodes} {
         # lookup and check whether the returned node_id has the same
         # URL as the provided one.
         #
+        ns_log notice "site_node::exists_p <$url>"
         set node_id [::xo::site_node get_node_id -url $url_no_trailing]
+        ns_log notice "site_node::exists_p <[list ::xo::site_node get_node_id -url $url_no_trailing]> -> $node_id"
         return [expr {[::xo::site_node get_url -node_id $node_id] eq "$url_no_trailing/"}]
     }
 

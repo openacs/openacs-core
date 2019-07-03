@@ -73,6 +73,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_conn partialtimes" [acs::icanuse "ns_server ummap"]
 
 ::acs::register_icanuse "ns_asynclogfile" {[info commands ::ns_asynclogfile] ne ""}
+::acs::register_icanuse "ns_writer" {[info commands ::ns_writer] ne ""}
 
 # Local variables:
 #    mode: tcl

@@ -802,9 +802,10 @@ ad_proc ad_parse_html_attributes_upvar {
 
     ad_proc ad_html_security_check { html } {
 
-        Returns a human-readable explanation if the user has used any HTML
-        tag other than the ones marked allowed in antispam section of ad.ini.
-        Otherwise returns an empty string.
+        Returns a human-readable explanation if the user has used any
+        HTML tag other than the ones marked allowed in antispam
+        section of the kernel parameters.  Otherwise returns an empty
+        string.
 
         @return a human-readable, plaintext explanation of what's wrong with the user's input.
 
@@ -878,7 +879,8 @@ ad_proc ad_parse_html_attributes_upvar {
                         }
 
                         if { [string tolower $attr_name] ne "style" } {
-                            if { [regexp {^\s*([^\s:]+):\/\/} $attr_value match protocol] } {
+                            if { [regexp {^\s*(([^\s:]+):\/\/|(data|javascript))} $attr_value match . p1 p2] } {
+                                set protocol [expr {$p1 ne "" ? $p1 : $p2}]
                                 if { ![info exists allowed_protocol([string tolower $protocol])]
                                      && ![info exists allowed_protocol(*)] } {
                                     return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].

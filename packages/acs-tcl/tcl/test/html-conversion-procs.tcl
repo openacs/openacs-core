@@ -101,7 +101,23 @@ aa_register_case \
     tests is href attribute is allowed of A tags
 } {
     set html "<a href=\"http://www.example/com\">An Link</a>"
-    aa_equals "href is allowed for A tags" [ad_html_security_check $html] ""
+    aa_equals "href with http:// is allowed for 'a' tags" [ad_html_security_check $html] ""
+    set html "<a href=\"https://www.example/com\">An Link</a>"
+    aa_equals "href with https:// is allowed for 'a' tags" [ad_html_security_check $html] ""
+}
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {ad_html_security_check} \
+    ad_html_security_check_forbidden_protolcols {
+    tests is href attribute is forbidden for certain tags
+} {
+    set html "<a href=\"foo://www.example/com\">An Link</a>"
+    aa_true "protocol 'foo' is not allowed" {[ad_html_security_check $html] ne ""}
+    set html "<a href=\"javascript:alert('hi')\">An Link</a>"
+    aa_true "protocol 'javascript' is not allowed" {[ad_html_security_check $html] ne ""}
+    set html "<a href=\"data:alert('hi')\">An Link</a>"
+    aa_true "protocol 'data' is not allowed" {[ad_html_security_check $html] ne ""}
 }
 
 aa_register_case \
