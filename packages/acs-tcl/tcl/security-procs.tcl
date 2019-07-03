@@ -237,7 +237,7 @@ ad_proc -private sec_handler {} {
             # after the logout this sesson_id is not accepted anymore,
             # even when below sec_session_renew time (default 5min).
             #
-            ns_log warning "downgrade login_level since session_id was invalidated"
+            ns_log warning "downgrade login_level of user $session_user_id since session_id was invalidated"
             set login_level 0
         }
 
@@ -247,7 +247,7 @@ ad_proc -private sec_handler {} {
             # login cookie, somebody tries to hack around.
             #
             set login_level 0
-            ns_log warning "downgrade login_level since there is no login cookie provided"
+            ns_log warning "downgrade login_level of user $session_user_id since there is no login cookie provided"
         }
 
         switch -- $login_level {
