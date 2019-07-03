@@ -32,11 +32,11 @@ aa_register_case \
             } else {
                 aa_log "run tests with port based on HTTPS"
                 set secure [security::get_secure_location]
-                aa_true "secure location has same proto as current location" {$insecure eq $current_location}
+                aa_true "secure location has same proto as current location" {$secure eq $current_location}
 
                 set insecure [security::get_insecure_location]
                 set ild [ns_parseurl $insecure]
-                aa_true "insecure location starts is HTTP" {[dict get $ild proto] eq "https"}
+                aa_true "insecure location starts is HTTP" {[dict get $ild proto] eq "http"}
             }
         } else {
             aa_log "skip tests with port"
