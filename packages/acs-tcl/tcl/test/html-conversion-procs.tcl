@@ -118,6 +118,8 @@ aa_register_case \
     aa_true "protocol 'javascript' is not allowed" {[ad_html_security_check $html] ne ""}
     set html "<a href=\"data:alert('hi')\">An Link</a>"
     aa_true "protocol 'data' is not allowed" {[ad_html_security_check $html] ne ""}
+    set html "<a href=\"blob:https://noth.ing/')\">An Link</a>"
+    aa_true "protocol 'blob' is not allowed" {[ad_html_security_check $html] ne ""}
 }
 
 aa_register_case \

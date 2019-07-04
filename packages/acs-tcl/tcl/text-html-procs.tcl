@@ -879,7 +879,7 @@ ad_proc ad_parse_html_attributes_upvar {
                         }
 
                         if { [string tolower $attr_name] ne "style" } {
-                            if { [regexp {^\s*(([^\s:]+):\/\/|(data|javascript))} $attr_value match . p1 p2] } {
+                            if { [regexp {^\s*(([^\s:]+):\/\/|(data|javascript|blob):)} $attr_value match . p1 p2] } {
                                 set protocol [expr {$p1 ne "" ? $p1 : $p2}]
                                 if { ![info exists allowed_protocol([string tolower $protocol])]
                                      && ![info exists allowed_protocol(*)] } {
