@@ -24,15 +24,15 @@ ad_proc -public element { command form_id element_id args } {
 
     @see template::element
     @see template::form
-} -    
+} -
 
 ad_proc -public template::element { command form_id element_id args } {
-    Manage elements of form objects. 
+    Manage elements of form objects.
     <p>
     see the individual commands for further information.
-    @param command one of create, error_p, exists, get_property, get_value, 
+    @param command one of create, error_p, exists, get_property, get_value,
                           get_values, querygetall, set_error, set_properties, set_value
-    @param form_id string identifying the form 
+    @param form_id string identifying the form
     @param element_id string identifying the element
 
     @see template::element::create
@@ -44,8 +44,8 @@ ad_proc -public template::element { command form_id element_id args } {
     @see template::element::querygetall
     @see template::element::set_error
     @see template::element::set_properties
-    @see template::element::set_value 
-    
+    @see template::element::set_value
+
     @see template::form
 } {
   template::element::$command $form_id $element_id {*}$args
@@ -63,7 +63,7 @@ ad_proc -public template::element::create { form_id element_id args } {
                           in the context of the form.
 
     @option widget        The name of an input widget for the element.  Valid
-                          widgets must have a rendering procedure defined in 
+                          widgets must have a rendering procedure defined in
                           the <tt>template::widget</tt> namespace.
 
     @option datatype      The name of a datatype for the element values.  Valid
@@ -71,29 +71,29 @@ ad_proc -public template::element::create { form_id element_id args } {
                           the <tt>template::data::validate</tt> namespace.
 
     @option label         The label for the form element.
-    
+
     @option html          A list of name-value attribute pairs to include in
                           the HTML tag for widget.  Typically used for additional
-                          formatting options, such as <tt>cols</tt> or 
+                          formatting options, such as <tt>cols</tt> or
                           <tt>rows</tt>, or for JavaScript handlers.
 
     @option maxlength     The maximum allowable length in bytes. Will be checked using
                           'string bytelength'. Will also cause 'input' widgets (text, integer, etc.)
                           to get a maxlength="..." attribute.
 
-    @option options       A list of options for select lists and button groups 
-                          (check boxes or radio buttons).  The list contains 
-                          two-element lists in the form 
+    @option options       A list of options for select lists and button groups
+                          (check boxes or radio buttons).  The list contains
+                          two-element lists in the form
                           { {label value} {label value} {label value} ...}
 
-    @option fieldset      A list of name-value attribute pairs to include in 
-	                      the HTML tag for checkboxes and radio FIELDSET.
+    @option fieldset      A list of name-value attribute pairs to include in
+                          the HTML tag for checkboxes and radio FIELDSET.
 
-    @option legend        A list of name-value attribute pairs to include in 
-	                      the HTML tag for checkboxes and radio LEGEND.
+    @option legend        A list of name-value attribute pairs to include in
+                          the HTML tag for checkboxes and radio LEGEND.
 
-    @option legendtext    A text for the LEGEND tag to include in 
-	                      the checkboxes and radio FIELDSET block
+    @option legendtext    A text for the LEGEND tag to include in
+                          the checkboxes and radio FIELDSET block
 
     @option value         The default value of the element
 
@@ -105,15 +105,15 @@ ad_proc -public template::element::create { form_id element_id args } {
                             name { expression } { message } ...}
                           where name is a unique identifier for the validation
                           step, expression is a block to Tcl code that evaluates to
-                          1 or 0, and message is to be displayed to the user when 
-                          the validation step fails, that is, if the expression 
-                          evaluates to 0. Use the special variable <tt>$value</tt> 
-  			              to refer to the value entered by the user in that field.
+                          1 or 0, and message is to be displayed to the user when
+                          the validation step fails, that is, if the expression
+                          evaluates to 0. Use the special variable <tt>$value</tt>
+                          to refer to the value entered by the user in that field.
 
     @option sign          specify for a hidden widget that its value should be
                           signed
 
-    @option help_text     Text displayed with the element 
+    @option help_text     Text displayed with the element
 
     @option help          Display helpful hints (date widget only?)
 
@@ -123,7 +123,7 @@ ad_proc -public template::element::create { form_id element_id args } {
 
     @option mode          Valid values are 'display', 'edit', and the empty string.
                           If set to 'display', the element will render as static HTML
-                          which doesn't allow editing of the value, instead of the 
+                          which doesn't allow editing of the value, instead of the
                           HTML form element (e.g. &lt;input&gt;) which would otherwise
                           get used. If set to 'edit', the element is as normal, allowing
                           the user to edit the contents. If set to the empty string or
@@ -266,15 +266,15 @@ ad_proc -public template::element::create { form_id element_id args } {
     if { [llength $opts(values)] || ! [info exists opts(value)] } {
       set opts(value) [lindex $opts(values) 0]
     }
-  } 
+  }
 
   if { $opts(widget) eq "hidden"
-       && [info exists opts(sign)] 
+       && [info exists opts(sign)]
        && $opts(sign)
-   } { 
+   } {
       if {[info exists opts(value)] } {
           set val $opts(value)
-      } else { 
+      } else {
           set val ""
       }
       template::element::create $opts(form_id) $opts(id):sig \
@@ -303,8 +303,8 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
   template::util::get_opts $args
 
     if { $opts(widget) eq "hidden"
-         && [info exists opts(sign)] 
-         && $opts(sign) 
+         && [info exists opts(sign)]
+         && $opts(sign)
          && [info exists opts(value)] } {
         if { [template::element::exists $form_id $element_id:sig] } {
             template::element::set_properties $form_id $element_id:sig \
@@ -372,7 +372,7 @@ ad_proc -public template::element::get_values { form_id element_id } {
     Retrieves the list current values for an element.  Typically used
     following a valid form submission where multiple values may have
     been submitted for a single element (i.e. for a checkbox group or
-					 multiple select box).
+    multiple select box).
 
     @param form_id     The identifier of the form containing the element.
     @param element_id  The unique identifier of the element.
@@ -407,12 +407,12 @@ ad_proc -public template::element::get_property { form_id element_id property } 
 }
 
 ad_proc -private template::element::validate { form_id element_id } {
-    Validates element values according to 3 criteria: 
+    Validates element values according to 3 criteria:
     <ol>
-    <li>required elements must have a not-null value; 
-    <li>values must match the element's declared datatype; 
-    <li>values must pass all special validation filters specified with 
-        the -validate option when the element was created.  
+    <li>required elements must have a not-null value;
+    <li>values must match the element's declared datatype;
+    <li>values must pass all special validation filters specified with
+        the -validate option when the element was created.
     </ol>
     <p>
     If validation fails for any reason,
@@ -475,7 +475,7 @@ ad_proc -private template::element::validate { form_id element_id } {
   # Prepare custom validation filters
 
   if { [info exists element(validate)] } {
-    
+
     set v_length [llength $element(validate)]
 
     if { $v_length == 2 } {
@@ -485,7 +485,7 @@ ad_proc -private template::element::validate { form_id element_id } {
 
     } elseif { $v_length % 3 } {
 
-      error "Invalid number of parameters to validate option: 
+      error "Invalid number of parameters to validate option:
              $element(validate) (Length is $v_length)"
     }
 
@@ -497,7 +497,7 @@ ad_proc -private template::element::validate { form_id element_id } {
   set v_errors [list]
 
   foreach value $values {
-  
+
     # something was submitted, now check if it is valid
 
     if { $is_optional && $value eq "" } {
@@ -615,12 +615,12 @@ ad_proc -public template::element::querygetall { element_ref } {
   } else {
     set values [template::data::transform::$datatype element]
   }
-    
+
   # Spell-checker
   array set spellcheck [template::util::spellcheck::spellcheck_properties -element_ref element]
 
   if { $spellcheck(perform_p) } {
-	
+
     set values [template::data::transform::spellcheck -element_ref element -values $values]
   }
 
@@ -666,7 +666,7 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
     @param tag_attributes A name-value list of addditional HTML
                           attributes to include in the tag, such as JavaScript
                           handlers or special formatting (i.e. ROWS and COLS
-							  for a TEXTAREA).
+                          for a TEXTAREA).
 
     @return A string containing the HTML for an INPUT, SELECT or TEXTAREA
     form element.
@@ -677,7 +677,7 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
   set element(is_rendered) t
 
   if { $element(mode) ne "edit" && [info exists element(display_value)] && $element(widget) ne "hidden" } {
-    return "$element(before_html) $element(display_value) $element(after_html)"  
+    return "$element(before_html) $element(display_value) $element(after_html)"
   } else {
     return "[string trim "$element(before_html) [template::widget::$element(widget) element $tag_attributes] $element(after_html)"]"
   }
@@ -721,7 +721,7 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
 
   set options $element(options)
   if { [info exists element(values)] } {
-    template::util::list_to_lookup $element(values) values 
+    template::util::list_to_lookup $element(values) values
   }
 
   # the data source is named formgroup by convention
@@ -733,7 +733,7 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
   for { set i 1 } { $i <= $rowcount } { incr i } {
 
     upvar #$level formgroup:$i formgroup
-    
+
     set option [lindex $options $i-1]
     set value [lindex $option 1]
 

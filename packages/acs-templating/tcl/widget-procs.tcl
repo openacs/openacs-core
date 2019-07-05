@@ -1350,7 +1350,7 @@ ad_proc -public template::widget::checkbox_text {
         append output \
             $checkbox_text \
             [subst { value="[ns_quotehtml $value]"}]
-        
+
         if { [info exists values($value)] } {
             append output { checked="checked"}
         }
