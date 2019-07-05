@@ -125,11 +125,11 @@ ad_proc -private template::data::transform::party_search {
 
     if { $value eq "" } {
         if { [string is true $is_optional] } {
-	    return ""
-	} else {
-	    template::element::set_error $element(form_id) $element_id "Please enter a search string."
-	    return [list]
-	}
+            return ""
+        } else {
+            template::element::set_error $element(form_id) $element_id "Please enter a search string."
+            return [list]
+        }
     }
 
     if {$value eq ":search:"} {
@@ -200,7 +200,6 @@ ad_proc -private template::data::transform::party_search {
 
     return $value
 }
-
 
 ad_proc -public template::widget::search {
     element_reference
@@ -351,8 +350,6 @@ ad_proc -private template::widget::textarea_internal {
     return $output
 }
 
-
-
 ad_proc -public template::widget::inform { element_reference tag_attributes } {
     A static information widget that does not submit any data
 } {
@@ -466,8 +463,6 @@ ad_proc -public template::widget::text {
   }
 }
 
-
-
 ad_proc -public template::widget::file {
     element_reference
     tag_attributes
@@ -494,8 +489,6 @@ ad_proc -public template::widget::file {
 
     return [input file element [array get attributes]]
 }
-
-
 
 ad_proc -public template::widget::password {
     element_reference
@@ -555,7 +548,6 @@ ad_proc -public template::widget::hidden {
     }
 
 }
-
 
 ad_proc -public template::widget::submit {
     element_reference
