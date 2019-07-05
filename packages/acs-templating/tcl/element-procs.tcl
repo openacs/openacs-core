@@ -140,6 +140,9 @@ ad_proc -public template::element::create { form_id element_id args } {
                           If specified, this value is used when the mode is set to 'display',
                           instead of asking the element widget to render itself in display mode.
 
+    @option multiple      A flag indicating that more than one value is expected
+                          from the input element
+
     @see template::widget
     @see template::data::validate
     @see template::form::create

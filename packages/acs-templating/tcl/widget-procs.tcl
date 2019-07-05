@@ -482,7 +482,17 @@ ad_proc -public template::widget::file {
 
     upvar $element_reference element
 
-    return [input file element $tag_attributes]
+    array set attributes $tag_attributes
+
+    #
+    # If the multiple flag is set for the element, we allow more than one file
+    # in the widget, by using the HTML5 'multiple' attribute of the 'input' tag
+    #
+    if { [info exists element(multiple)] } {
+        set attributes(multiple) {}
+    }
+
+    return [input file element [array get attributes]]
 }
 
 

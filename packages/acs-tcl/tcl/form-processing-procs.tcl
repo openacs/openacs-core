@@ -859,12 +859,7 @@ ad_proc -public ad_form {
                         template::element create $form_name __new_p -datatype integer -widget hidden -value 0
                     }
 
-                    multiple {
-                        if { $af_element_parameters($element_name:$flag) ne "" } {
-                            return -code error "element $element_name: $flag attribute can not have a parameter"
-                        }
-                    }
-
+                    multiple -
                     nospell -
                     optional {
                         if { $af_element_parameters($element_name:$flag) ne "" } {
