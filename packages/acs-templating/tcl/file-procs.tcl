@@ -15,24 +15,48 @@ ad_proc -private template::data::transform::file { element_ref } {
     @return the list { file_name temp_file_name content_mime_type }.
 } {
     upvar $element_ref element
-    return [list [template::util::file_transform $element(id)]]
+    return [template::util::file_transform $element(id)]
 }
 
 ad_proc -public template::util::file_transform { element_id } {
-    Helper proc, which gets AOLserver's variables from the query/form, and returns it as a 'file' datatype value.
-    @return the list { file_name temp_file_name content_mime_type }.
-} {
-    # Work around Windows bullshit
-    set filename [ns_queryget $element_id]
 
-    if {$filename eq ""} {
+    Helper proc, which gets AOLserver/NaviServer's variables from the
+    query/form, and returns it as a 'file' datatype value.
+
+    @return the list { file_name temp_file_name content_mime_type }.
+
+} {
+    #
+    # Get the files information using 'ns_querygetall' and return it in a list
+    # per file
+    #
+    set files [list]
+    set filenames [ns_querygetall $element_id]
+    #
+    # No files, get out
+    #
+    if {$filenames eq ""} {
         return ""
     }
+    set tmpfiles  [ns_querygetall $element_id.tmpfile]
+    set types     [ns_querygetall $element_id.content-type]
+    for {set file 0} {$file < [llength $filenames]} {incr file} {
+        set filename [lindex $filenames $file]
+        set tmpfile  [lindex $tmpfiles $file]
+        set type     [lindex $types $file]
+        #
+        # Cleanup filenames
+        #
+        regsub -all {\\+} $filename {/} filename
+        regsub -all { +} $filename {_} filename
+        set filename [lindex [split $filename "/"] end]
+        #
+        # Append to the list of lists
+        #
+        lappend files [list $filename $tmpfile $type]
+    }
 
-    regsub -all {\\+} $filename {/} filename
-    regsub -all { +} $filename {_} filename
-    set filename [lindex [split $filename "/"] end]
-    return [list $filename [ns_queryget $element_id.tmpfile] [ns_queryget $element_id.content-type]]
+    return $files
 
 }
 

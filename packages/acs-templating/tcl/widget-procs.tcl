@@ -469,6 +469,8 @@ ad_proc -public template::widget::file {
 } {
     Generate a file widget.
 
+    @see template::util::file_transform
+
     @param element_reference Reference variable to the form element
     @param tag_attributes HTML attributes to add to the tag
 
