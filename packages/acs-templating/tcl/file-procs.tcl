@@ -2,7 +2,6 @@ ad_library {
     File procs
 }
 
-
 namespace eval template {}
 namespace eval template::data {}
 namespace eval template::data::transform {}
@@ -26,20 +25,36 @@ ad_proc -public template::util::file_transform { element_id } {
     @return the list { file_name temp_file_name content_mime_type }.
 
 } {
-    #
-    # Get the files information using 'ns_querygetall' and return it in a list
-    # per file
-    #
-    set files [list]
-    set filenames [ns_querygetall $element_id]
+    if {[ns_info name] eq "NaviServer"} {
+        #
+        # NaviServer
+        #
+        # Get the files information using 'ns_querygetall'
+        #
+        set filenames [ns_querygetall $element_id]
+        set tmpfiles  [ns_querygetall $element_id.tmpfile]
+        set types     [ns_querygetall $element_id.content-type]
+    } else {
+        #
+        # AOLserver
+        #
+        # ns_querygetall behaves differently in AOLserver, using the ns_queryget
+        # legacy version instead
+        #
+        set filenames [ns_queryget $element_id]
+        set tmpfiles  [ns_queryget $element_id.tmpfile]
+        set types     [ns_queryget $element_id.content-type]
+    }
     #
     # No files, get out
     #
     if {$filenames eq ""} {
         return ""
     }
-    set tmpfiles  [ns_querygetall $element_id.tmpfile]
-    set types     [ns_querygetall $element_id.content-type]
+    #
+    # Return the files info in a list per file
+    #
+    set files [list]
     for {set file 0} {$file < [llength $filenames]} {incr file} {
         set filename [lindex $filenames $file]
         set tmpfile  [lindex $tmpfiles $file]
@@ -93,7 +108,6 @@ ad_proc -public template::util::file::get_property {
     }
 
 }
-
 
 # Local variables:
 #    mode: tcl
