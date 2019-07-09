@@ -552,7 +552,6 @@ ad_proc -public content::item::get_title {
   @return The title of the item
 
   @see content::item::get_best_revision
-  @see content::item::get_title
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
