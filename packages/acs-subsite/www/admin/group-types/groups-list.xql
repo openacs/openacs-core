@@ -9,11 +9,8 @@
               from groups g, acs_objects o 
              where g.group_id = o.object_id 
                and o.object_type = :group_type) g, 
-           (select object_id 
-            from acs_object_party_privilege_map 
-            where party_id = :user_id and privilege = 'read') perm,
            application_group_element_map m
-     where perm.object_id = g.group_id
+     where acs_permission.permission_p(g.group_id, :user_id, 'read')
        and m.package_id = :package_id
        and m.element_id = g.group_id
      order by lower(g.group_name)
