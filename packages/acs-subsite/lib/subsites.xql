@@ -30,11 +30,7 @@
       and    p.package_key  in ('[join [subsite::package_keys] {','}]')
       and    ag.package_id = p.package_id
       and    g.group_id = ag.group_id
-      and    (exists (select 1 
-                   from   all_object_party_privilege_map perm 
-                   where  perm.object_id = p.package_id
-                   and    perm.privilege = 'read'
-                   and    perm.party_id = :untrusted_user_id) or g.join_policy != 'closed')
+      and    (g.join_policy != 'closed' or acs_permission.permission_p(p.package_id, :untrusted_user_id, 'read'))
     order  by lower(instance_name)
 
       </querytext>
