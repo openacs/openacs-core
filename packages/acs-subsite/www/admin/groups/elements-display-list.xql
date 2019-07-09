@@ -7,7 +7,7 @@
 select r.rel_id, 
        party_names.party_name as element_name
 from (select DISTINCT rels.rel_id, object_id_two
-      from $extra_tables acs_rels rels, all_object_party_privilege_map perm
+      from $extra_tables acs_rels rels, acs_object_party_privilege_map perm
       where perm.object_id = rels.rel_id
         and perm.party_id = :user_id
         and perm.privilege = 'read'
