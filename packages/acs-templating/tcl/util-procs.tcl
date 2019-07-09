@@ -359,7 +359,7 @@ ad_proc -public template::util::multirow_to_list {
     @return a representation of a multirow data source as a list,
     suitable for passing by value in the form { { row } { row } { row } ... }
 
-    @see proc template::util::list_to_multirow
+    @see template::util::list_to_multirow
 } {
 
     upvar $level $name:rowcount rowcount
@@ -384,7 +384,7 @@ ad_proc -public template::util::list_to_multirow { name rows { level 1 } } {
     @param rows a representation of a multirow data source as a list,
     suitable for passing by value in the form { { row } { row } { row } ... }
 
-    @see proc template::util::multirow_to_list
+    @see template::util::multirow_to_list
 } {
 
     upvar $level $name:rowcount rowcount
