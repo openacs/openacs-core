@@ -25,50 +25,59 @@ ad_proc -public template::util::file_transform { element_id } {
     @return the list { file_name temp_file_name content_mime_type }.
 
 } {
-    if {[ns_info name] eq "NaviServer"} {
-        #
-        # NaviServer
-        #
-        # Get the files information using 'ns_querygetall'
-        #
-        set filenames [ns_querygetall $element_id]
-        set tmpfiles  [ns_querygetall $element_id.tmpfile]
-        set types     [ns_querygetall $element_id.content-type]
+    #
+    # Check if these have already been converted, then return them as they are.
+    #
+    # This may happen, for instance, during the 'preview' action of a form.
+    #
+    if { [ns_queryget $element_id.tmpfile] eq "" } {
+        set files [ns_querygetall $element_id]
     } else {
+        if {[ns_info name] eq "NaviServer"} {
+            #
+            # NaviServer
+            #
+            # Get the files information using 'ns_querygetall'
+            #
+            set filenames [ns_querygetall $element_id]
+            set tmpfiles  [ns_querygetall $element_id.tmpfile]
+            set types     [ns_querygetall $element_id.content-type]
+        } else {
+            #
+            # AOLserver
+            #
+            # ns_querygetall behaves differently in AOLserver, using the ns_queryget
+            # legacy version instead
+            #
+            set filenames [ns_queryget $element_id]
+            set tmpfiles  [ns_queryget $element_id.tmpfile]
+            set types     [ns_queryget $element_id.content-type]
+        }
         #
-        # AOLserver
+        # No files, get out
         #
-        # ns_querygetall behaves differently in AOLserver, using the ns_queryget
-        # legacy version instead
+        if {$filenames eq ""} {
+            return ""
+        }
         #
-        set filenames [ns_queryget $element_id]
-        set tmpfiles  [ns_queryget $element_id.tmpfile]
-        set types     [ns_queryget $element_id.content-type]
-    }
-    #
-    # No files, get out
-    #
-    if {$filenames eq ""} {
-        return ""
-    }
-    #
-    # Return the files info in a list per file
-    #
-    set files [list]
-    for {set file 0} {$file < [llength $filenames]} {incr file} {
-        set filename [lindex $filenames $file]
-        set tmpfile  [lindex $tmpfiles $file]
-        set type     [lindex $types $file]
+        # Return the files info in a list per file
         #
-        # Cleanup filenames
-        #
-        regsub -all {\\+} $filename {/} filename
-        regsub -all { +} $filename {_} filename
-        set filename [lindex [split $filename "/"] end]
-        #
-        # Append to the list of lists
-        #
-        lappend files [list $filename $tmpfile $type]
+        set files [list]
+        for {set file 0} {$file < [llength $filenames]} {incr file} {
+            set filename [lindex $filenames $file]
+            set tmpfile  [lindex $tmpfiles $file]
+            set type     [lindex $types $file]
+            #
+            # Cleanup filenames
+            #
+            regsub -all {\\+} $filename {/} filename
+            regsub -all { +} $filename {_} filename
+            set filename [lindex [split $filename "/"] end]
+            #
+            # Append to the list of lists
+            #
+            lappend files [list $filename $tmpfile $type]
+        }
     }
 
     return $files
