@@ -541,17 +541,21 @@ ad_proc -public content::item::get_template {
 
 ad_proc -public content::item::get_title {
     -item_id:required
-    {-is_live ""}
+    {-is_live "f"}
 } {
+
   Get the title for the item. If a live revision for the item exists,
   use the live revision. Otherwise, use the latest revision.
 
   @param item_id    The item_id of the content item
-  @param is_live
+  @param is_live    If true, return the title of the live revision, otherwise
+                    the one of the latest revision (default).
+                    Boolean, 't' or 'f'.
 
   @return The title of the item
 
   @see content::item::get_best_revision
+
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
