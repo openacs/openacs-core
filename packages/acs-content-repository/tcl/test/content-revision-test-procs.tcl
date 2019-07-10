@@ -18,6 +18,7 @@ aa_register_case \
         content::item::get_content
         content::item::new
         content::revision::new
+        content::revision::get_title
         cr_write_content 
     } \
     content_revision {
@@ -52,10 +53,11 @@ aa_register_case \
         # create a revision
         set revision_id [db_nextval "acs_object_id_seq"]
 
+        set title "Test Title"
         set returned_revision_id [content::revision::new \
                                       -revision_id $revision_id \
                                       -item_id $first_item_id \
-                                      -title "Test Title" \
+                                      -title $title \
                                       -description "Test Description" \
                                       -content "Test Content"]
         aa_true "Basic Revision created revision_id $revision_id returned_revision_id $returned_revision_id " \
@@ -64,10 +66,15 @@ aa_register_case \
         content::item::get_content -revision_id $returned_revision_id -array revision_content
         set revision_content(content) [cr_write_content -revision_id $returned_revision_id -string]
         aa_true "Revision contains correct content" {
-            $revision_content(title) eq "Test Title"
+            $revision_content(title) eq $title
             && $revision_content(content) eq "Test Content"
             && $revision_id == $revision_content(revision_id)
         }
+
+        aa_equals "Title of the revision should be $title" \
+                  "$title" \
+                  [content::revision::get_title \
+                         -revision_id $returned_revision_id]
 
         content::item::delete -item_id $first_item_id
 
