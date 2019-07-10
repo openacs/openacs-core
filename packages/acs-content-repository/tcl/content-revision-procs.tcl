@@ -417,6 +417,22 @@ ad_proc -public content::revision::revision_name {
     ] content_revision revision_name]
 }
 
+ad_proc -public content::revision::get_title {
+    -revision_id:required
+} {
+
+    Returns the title of a particular 'content_revision'.
+
+    @param revision_id The 'revision_id' of the object
+
+    @see content::item::get_title
+    @see content::revision::revision_name
+
+    @return The title of the object (text), or empty if not found.
+
+} {
+    return [db_string get_title {select title from cr_revisions where revision_id = :revision_id} -default ""]
+}
 
 ad_proc -public content::revision::to_html {
     -revision_id:required
