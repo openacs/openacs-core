@@ -12,13 +12,13 @@
 #                                   sh ../bin/create-new-catalog.sh from new
 #     where from, new is the language id you copy and create
 #
-#     eg.   ../bin/create-new-catalog.sh es_ES es_GT
+#     e.g.   ../bin/create-new-catalog.sh es_ES es_GT
 
 
 if [ $# -ne 2 ]; then
    echo ""
    echo " USAGE:   sh ../bin/create-new-catalog.sh from new "
-   echo "      eg. sh ../bin/create-new-catalog.sh es_ES es_GT"
+   echo "      e.g. sh ../bin/create-new-catalog.sh es_ES es_GT"
    echo ""
    exit 1
 
