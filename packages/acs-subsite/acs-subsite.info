@@ -9,7 +9,7 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.0d14" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.0d14.apm">
+    <version name="5.10.0d15" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.0d15.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2017-08-06</release-date>
@@ -18,7 +18,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.10.0d14"/>
+        <provides url="acs-subsite" version="5.10.0d15"/>
         <requires url="acs-authentication" version="5.10.0d5"/>
         <requires url="acs-content-repository" version="5.9.1"/>
         <requires url="acs-kernel" version="5.9.1"/>
@@ -130,6 +130,7 @@ admin {
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRedirectUrl"  description="A URL to redirect to instead of showing the normal registration page. Useful if you want to replace the registration page with a custom page." section_name="user-login"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresApprovalP"  default="0" description="set this to 1 if user does not go live immediately" section_name="user-login"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresEmailVerificationP"  default="0" description="set this to 1 if the user has to receive and email and come back to the site" section_name="user-login"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="LoginPasswordAutocomplete"  default="current-password" description="value of the attribute 'autocomplete' in the password field of the login form." section_name="user-login"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictEntireServerToRegisteredUsersP"  default="0" description="Do we want to allow only registered users to visit this subsite? (restart required)"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictToSSL"  default="admin/*" description="URLs we want restricted to SSL. Note that this only takes effect if you have an SSL listener configured on your AOLserver and kernel parameter RegisterRestrictToSSLFilters is set to 1 (its default)."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ScreenNameP"  default="0" description="Set this to 1 if you want to show screen names instead of real names." section_name="user-info"/>
