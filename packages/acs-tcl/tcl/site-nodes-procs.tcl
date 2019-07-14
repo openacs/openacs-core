@@ -1524,7 +1524,7 @@ if {$UseXotclSiteNodes} {
 
             :public method get_node_id {-url:required} {
                 #
-                # Get node_id for the provied URL. We have to
+                # Get node_id for the provided URL. We have to
                 # determine the partial URL for determining the site
                 # node.
                 #

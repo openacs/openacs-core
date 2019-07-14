@@ -134,8 +134,8 @@ ad_proc -private template:template_tag_include_helper_code {
     }
 
     #
-    # In order to avoid potential problems with the substitution
-    # pattern containing amperand or backslashes, we use here are
+    # In order to avoid potential problems with substitution
+    # patterns containing ampersand or backslashes, we use here a
     # scripted, purely string based substitution (which applies only
     # at "compilation time", therefore performance is less critical.
     #

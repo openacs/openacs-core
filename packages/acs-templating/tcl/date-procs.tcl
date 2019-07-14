@@ -620,7 +620,7 @@ ad_proc -deprecated -public template::util::date::now_min_interval_plus_hour {
     @param clock time in seconds, if not specified, it uses current time
 
     Deprecated: as of 2019-04-25, no upstream code is making use of
-    this proc and more generic alteratives exist.
+    this proc and more generic alternatives exist.
 
     @see template::data::from_sql::date
     @see clock
