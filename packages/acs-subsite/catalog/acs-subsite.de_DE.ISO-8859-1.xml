@@ -350,7 +350,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Mem_list_not_allowed">Sie sind nicht berechtigt, die Liste aller Teilnehmer zu sehen.</msg>
   <msg key="Member">Teilnehmer</msg>
   <msg key="Member_State">Teilnehmerstatus</msg>
-  <msg key="Members">Teilnehmer</msg>
+  <msg key="Members">Teilnehmer/innen</msg>
   <msg key="Members_only">Nur für Mitglieder</msg>
   <msg key="Missing_argument">Fehlendes Argument</msg>
   <msg key="Modified_theme">Geändert</msg>
