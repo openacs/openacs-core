@@ -1958,7 +1958,8 @@ namespace eval acs::test::user {
         dict set user_info first_names $first_names
         dict set user_info last_name $last_name
 
-        aa_log "Created user with email='$email' and password='$password'"
+        #aa_log "Created user with email='$email' and password='$password'"
+        aa_log "Created user with email='$email'"
 
         if { $admin_p } {
             aa_log "Making user site-wide admin"
