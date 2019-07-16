@@ -63,12 +63,13 @@ ad_proc -private sec_random_token {} {
         set request "yoursponsoredadvertisementhere"
         set start_clicks "cvs.openacs.org"
     }
-
-    if { ![info exists ::tcl_sec_seed] } {
-        set ::tcl_sec_seed "listentowmbr89.1"
+    if {[acs::icanuse "ns_crypto::randombytes"]} {
+        if {![info exists ::tcl_sec_seed]} { set ::tcl_sec_seed [ns_crypto::randombytes 16].$start_clicks }    
+        set random_base [ns_sha1 "[ns_time][ns_crypto::randombytes -encoding binary 16]$start_clicks$request$::tcl_sec_seed"]
+    } else {
+        if {![info exists ::tcl_sec_seed]} { set ::tcl_sec_seed [ns_rand].$start_clicks }
+        set random_base [ns_sha1 "[ns_time][ns_rand]$start_clicks$request$::tcl_sec_seed"]
     }
-
-    set random_base [ns_sha1 "[ns_time][ns_rand]$start_clicks$request$::tcl_sec_seed"]
     set ::tcl_sec_seed [string range $random_base 0 10]
 
     return [ns_sha1 [string range $random_base 11 39]]

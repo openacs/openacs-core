@@ -71,6 +71,7 @@ namespace eval ::acs {
 # (which is not available during loading).
 #
 ::acs::register_icanuse "ns_conn partialtimes" [acs::icanuse "ns_server ummap"]
+::acs::register_icanuse "ns_crypto::randombytes" {[info commands ::ns_crypto::randombytes] ne ""}
 
 ::acs::register_icanuse "ns_asynclogfile" {[info commands ::ns_asynclogfile] ne ""}
 ::acs::register_icanuse "ns_writer" {[info commands ::ns_writer] ne ""}
