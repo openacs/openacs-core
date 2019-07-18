@@ -982,8 +982,12 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc -public empty_string_p {query_string} {
-    returns 1 if a string is empty; this is better than using == because it won't fail on long strings of numbers
+ad_proc -deprecated -public empty_string_p {query_string} {
+    returns 1 if a string is empty; this is better than using == because it won't fail on long strings of numbers.
+
+    This might have been needed in the old good days, but not anymore.
+
+    @see string equal
 } -
 
 ad_proc -public acs_root_dir {} {
