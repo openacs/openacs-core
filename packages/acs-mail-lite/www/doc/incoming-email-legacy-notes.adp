@@ -362,31 +362,31 @@ To make things granular a separate parsing procedure should deal with loading th
     set to [acs_mail_lite::parse_email_address -email $email(to)]
     ns_log Debug &quot;acs_mail_lite::incoming_email -impl acs-mail-lite called. Recipient $to&quot;
 
-    util_unlist [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
+    lassign [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
     
     # If no user_id found or signature invalid, ignore message
     # Here we decide not to deal with the message anymore
 
 
 
-    if {[empty_string_p $user_id]} {
-    if {[empty_string_p $user_id]} {
-    ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to&quot;
+    if {$user_id eq ""} {
+        #if {$user_id eq ""} {
+        ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to&quot;
+        #} else {
+        #ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature&quot;
+        #}
     } else {
-    ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature&quot;
-    }
-    } else {
-    ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id&quot;
-    
-    if { ![acs_mail_lite::bouncing_user_p -user_id $user_id] } {
-    ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id&quot;
-    # record the bounce in the database
-    db_dml record_bounce {}
-    
-    if {![db_resultrows]} {
-    db_dml insert_bounce {}
-    }
-    }
+        ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id&quot;
+
+        if { ![acs_mail_lite::bouncing_user_p -user_id $user_id] } {
+            ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id&quot;
+            # record the bounce in the database
+            db_dml record_bounce {}
+
+            if {![db_resultrows]} {
+                db_dml insert_bounce {}
+            }
+        }
     }
     }
     
