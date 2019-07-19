@@ -122,6 +122,7 @@ aa_register_case \
     -cats smoke \
     -procs {
         group::add_member
+        group::member_p
         group::new
         relation_add
     } acs_subsite_check_composite_group {
@@ -150,6 +151,12 @@ aa_register_case \
 
             group::add_member -group_id $level_2_group -user_id $user_1_id -rel_type membership_rel
             group::add_member -group_id $level_2_group -user_id $user_1_id -rel_type admin_rel
+
+            # check that user_1 is a direct member of level_2_group via the tcl api
+            aa_true "User 1 is a direct member of Level 2 Group" [group::member_p -user_id $user_1_id -group_id $level_2_group]
+
+            # check that user_1 is a indirect member of level_1_group via the tcl api
+            aa_true "User 1 is an indirect member of Level 1 Group" [group::member_p -user_id $user_1_id -group_id $level_1_group -cascade]
 
             # check that user_1 is a member of level_1_group but not admin
             aa_true "User 1 is a member of Level 1 Group" [db_0or1row member_p {
@@ -189,7 +196,6 @@ aa_register_case \
                 AND member_id = :user_2_id
                 AND rel_type = 'admin_rel'
             }]
-
         }
 }
 
