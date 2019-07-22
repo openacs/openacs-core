@@ -4009,7 +4009,7 @@ ad_proc -public util::request_info {
                     if {[string length $v] > 100} {
                         set v "[string range $v 0 100]..."
                     }
-                    append info "\n        $k:\t$v"
+                    append info "\n        $k: $v"
                 }
             } else {
                 set ct [ns_set iget [ns_conn headers] content-type]
@@ -4028,7 +4028,7 @@ ad_proc -public util::request_info {
         if {$with_headers_p} {
             append info \n
             foreach {k v} [ns_set array [ns_conn headers]] {
-                append info "\n $k:\t$v"
+                append info "\n $k: $v"
             }
         }
     }
@@ -4071,7 +4071,11 @@ ad_proc -public ad_log {
     append request "    " \
         [util::request_info -with_headers=$with_headers]
 
-    ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
+    set prefix ""
+    foreach line [split "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n" \n] {
+        ns_log $level "$prefix$line"
+        set prefix "."
+    }
 }
 
 ad_proc -public util::var_subst_quotehtml {
