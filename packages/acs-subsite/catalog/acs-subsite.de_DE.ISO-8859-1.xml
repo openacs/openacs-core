@@ -18,7 +18,7 @@
   <msg key="Active_theme">Aktiv</msg>
   <msg key="Add">Hinzufügen</msg>
   <msg key="Add_a_group_of_this_type">Eine Gruppe dieses Typs hinzufügen</msg>
-  <msg key="Add_a_permissible_relationship_type">Permissiven Beziehungstyp hinzufügen</msg>
+  <msg key="Add_a_permissible_relationship_type">Füge einen zulässigen Beziehungstyp hinzu</msg>
   <msg key="Add_an_attribute">Ein Attribut hinzufügen</msg>
   <msg key="Add_another_hostname_URL_pair">Ein weiteres Hostname/URL-Paar hinzufügen</msg>
   <msg key="Add_application">Anwendung hinzufügen</msg>
@@ -28,7 +28,7 @@
   <msg key="Add_multiple_applications">Mehrere Anwendungen hinzufügen</msg>
   <msg key="Add_new_app">Neue Anwendung hinzufügen</msg>
   <msg key="Add_Pair">Paar hinzufügen</msg>
-  <msg key="Add_permissible_relationship_type">Permissiven Beziehungstyp hinzufügen</msg>
+  <msg key="Add_permissible_relationship_type">Zulässigen Beziehungstyp hinzufügen</msg>
   <msg key="Add_relationship_for_group__group_type">Einen Beziehungstyp für %group_type% hinzufügen</msg>
   <msg key="Add_this_user">Diesen Benutzer hinzufügen</msg>
   <msg key="Add_type">Typ hinzufügen</msg>
