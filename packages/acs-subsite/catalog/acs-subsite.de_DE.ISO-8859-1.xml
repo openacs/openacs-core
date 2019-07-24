@@ -30,10 +30,10 @@
   <msg key="Add_Pair">Paar hinzufügen</msg>
   <msg key="Add_permissible_relationship_type">Permissiven Beziehungstyp hinzufügen</msg>
   <msg key="Add_relationship_for_group__group_type">Einen Beziehungstyp für %group_type% hinzufügen</msg>
-  <msg key="Add_this_user">Diesen User hinzufügen</msg>
+  <msg key="Add_this_user">Diesen Benutzer hinzufügen</msg>
   <msg key="Add_type">Typ hinzufügen</msg>
-  <msg key="Add_User">User hinzufügen</msg>
-  <msg key="Add_users">User hinzufügen</msg>
+  <msg key="Add_User">Benutzer hinzufügen</msg>
+  <msg key="Add_users">Benutzer hinzufügen</msg>
   <msg key="Additional_Information">Zusätzliche Information</msg>
   <msg key="Admin">Verwalten</msg>
   <msg key="admin">Admin</msg>
@@ -191,8 +191,8 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Enabled">Aktiviert</msg>
   <msg key="Enter_your_username_to">Um Ihr Passwort zurücksetzen zu lassen, geben Sie bitte zunächst Ihre Benutzeridentifikation ein. </msg>
   <msg key="Erase">Löschen</msg>
-  <msg key="Erase_Portrait">Bild löschen</msg>
-  <msg key="erase_portrait">Bild löschen</msg>
+  <msg key="Erase_Portrait">Profilbild löschen</msg>
+  <msg key="erase_portrait">Profilbild löschen</msg>
   <msg key="Error">Fehlerbeschreibung</msg>
   <msg key="Error_joining">Fehler beim Hinzufügen</msg>
   <msg key="Error_joining_details">Es gab einen Fehler beim Versuch, Sie zur Gruppe hinzuzufügen.</msg>
@@ -210,8 +210,8 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Frequency">Häufigkeit</msg>
   <msg key="Gender">Geschlecht</msg>
   <msg key="Go_back">Zurück</msg>
-  <msg key="go_upload_the_users_por">Bild des Benutzers hochladen</msg>
-  <msg key="go_upload_your_portrait">ein Bild hochladen.</msg>
+  <msg key="go_upload_the_users_por">Profilbild hochladen</msg>
+  <msg key="go_upload_your_portrait">ein Profilbild hochladen.</msg>
   <msg key="Grant">Erteilen</msg>
   <msg key="Grant_Permission">Berechtigungen erteilen</msg>
   <msg key="Group_administration">Gruppenadministration</msg>
@@ -267,7 +267,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Logout">Abmelden</msg>
   <msg key="Logout_from_system">Von %system_name% abmelden</msg>
   <msg key="lt__youd_be_able_to_get">, werden Ihnen mehr Informationen über andere Mitglieder Ihrer Gruppe angezeigt.</msg>
-  <msg key="lt_Add_checked_users_to_">Markierte User zu den Usern hinzufügen, die Zugriffsrechte auf das Objekt haben.</msg>
+  <msg key="lt_Add_checked_users_to_">Markierten Benutzern Zugriff auf das Objekt gewähren.</msg>
   <msg key="lt_Cannot_join_this_grou">Diese Gruppe kann nicht hinzugefügt werden.</msg>
   <msg key="lt_Complete_List_of_ISO_">Vollständige Liste der ISO-Codes</msg>
   <msg key="lt_Continue_working_with">Weiterarbeiten mit %system_name% </msg>
@@ -298,7 +298,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="lt_Please_locate_your_co">Bitte wählen Sie aus der folgenden Liste Ihren Ländercode aus. Gehen Sie dann mit Hilfe Ihres Browsers zum  Formular zurück.</msg>
   <msg key="lt_Please_read_and_follo">Bitte führen Sie die in der E-Mail genannten Schritte aus.</msg>
   <msg key="lt_Please_try_to_a_hrefi">Bitte versuchen Sie noch einmal, sich &lt;a href=&#34;index&#34;&gt;anzumelden&lt;/a&gt;.</msg>
-  <msg key="lt_Portrait_of_first_last">Bild von %first_names% %last_name%</msg>
+  <msg key="lt_Portrait_of_first_last">Profilbild von %first_names% %last_name%</msg>
   <msg key="lt_Privileges_higher_implied">Höhere Rechte schließen niedrigere Rechte mit ein. Wenn Sie etwa Verwaltungsrechte erteilen, werden automatisch auch Lese- und Schreibrechte gewährt.</msg>
   <msg key="lt_Problem_with_authenti">Es ist ein Authentifizierungsproblem aufgetreten.</msg>
   <msg key="lt_Registration_informat">Die Registrierungsinformationen für diesen Dienst wurden an %email% gesendet.</msg>
@@ -312,7 +312,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="lt_Sure_erase_user_por">Wollen Sie das Bild dieses Benutzers wirklich löschen?</msg>
   <msg key="lt_Sure_erase_your_por">Wollen Sie Ihr Bild wirklich löschen?</msg>
   <msg key="lt_The_picture_of_you_in">Ihr Bild kann nicht angezeigt werden. Bitte </msg>
-  <msg key="lt_There_are_no_users_wh">Es existieren keine User, die nicht schon einen Zugriff auf dieses Objekt haben</msg>
+  <msg key="lt_There_are_no_users_wh">Es existieren keine Benutzer, die nicht schon einen Zugriff auf dieses Objekt haben</msg>
   <msg key="lt_There_was_a_problem_w">Es ist ein Problem bei der Authentifizierung Ihres Benutzerkontos aufgetreten.</msg>
   <msg key="lt_This_is_the_image_that">Folgendes Bild wird anderen Benutzern von %system_name% angezeigt</msg>
   <msg key="lt_This_user_doesnt_have">Dieser Benutzer hat noch kein Bild hochgeladen. Sie können</msg>
@@ -343,9 +343,9 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Make_yourself_invisible_label">Onlinestatus verbergen</msg>
   <msg key="Make_yourself_visible_label">Onlinestatus anzeigen</msg>
   <msg key="Male">Männlich</msg>
-  <msg key="Manage_Portrait">Porträt verwalten</msg>
+  <msg key="Manage_Portrait">Profilbild verwalten</msg>
   <msg key="Manage_unmounted_applications">Abgehängte Anwendungen verwalten</msg>
-  <msg key="manage_users_email">Verwalten des E-Mail Datenschutzes des Users</msg>
+  <msg key="manage_users_email">Verwalten des E-Mail Datenschutzes des Benutzers</msg>
   <msg key="Manage_your_notifications">Benachrichtigungsoptionen verwalten</msg>
   <msg key="Mem_list_not_allowed">Sie sind nicht berechtigt, die Liste aller Mitglieder zu sehen.</msg>
   <msg key="Member">Mitglieder</msg>
@@ -366,7 +366,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="no_assessment">Kein Assessment verfügbar</msg>
   <msg key="No_ISO_Codes">Keine ISO-Codes geladen</msg>
   <msg key="No_package_parameters">This package does not have any parameters.</msg>
-  <msg key="no_portrait_title_message">Ihr Bild</msg>
+  <msg key="no_portrait_title_message">Ihr Profilbild</msg>
   <msg key="No_pretty_plural">Keine %pretty_plural% vorhanden</msg>
   <msg key="No_services">Keine Dienste verfügbar</msg>
   <msg key="No_user_with_this_username">Benutzername konnte nicht gefunden werden</msg>
@@ -404,12 +404,12 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Place_of_residence">Aufenthaltsort</msg>
   <msg key="Please_return_to_home">Bitte gehen Sie zurück zu %home_link%.</msg>
   <msg key="Please_select">-- Bitte wählen Sie --</msg>
-  <msg key="Portrait">Bild</msg>
+  <msg key="Portrait">Profilbild</msg>
   <msg key="Powered_by_OpenACS">Powered by &lt;a href=&#34;http://openacs.org&#34; title=&#34;The OpenACS Project Homepage&#34;&gt;OpenACS&lt;/a&gt;</msg>
   <msg key="Pretty_name">Pretty name</msg>
   <msg key="Pretty_plural">Pretty plural</msg>
   <msg key="Privacy">Privatsphäre</msg>
-  <msg key="Problem_auth_no_memb">Es gab einen Fehler beim authentifizieren des Accounts. Sehr wahrscheinlich enthält die Datenbank User mit keinem member_state.</msg>
+  <msg key="Problem_auth_no_memb">Es gab einen Fehler beim authentifizieren des Accounts. Sehr wahrscheinlich enthält die Datenbank Benutzereinträge ohne member_state.</msg>
   <msg key="Profile">Profil</msg>
   <msg key="Question">Frage</msg>
   <msg key="Re_enable">Aktivieren</msg>
@@ -455,7 +455,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Select_Applications">Anwendungen auswählen</msg>
   <msg key="Select_Applications__helptext">If the application is not in the list, you may need to &lt;a href=\&#34;/acs-admin/install/\&#34;&gt;install&lt;/a&gt; it on the server</msg>
   <msg key="Select_relation_type">Select relation type</msg>
-  <msg key="Select_theme">Darstellung/Thema auswählen</msg>
+  <msg key="Select_theme">Design auswählen</msg>
   <msg key="Send_email_to_this_user">E-Mail an diesen Benutzer senden</msg>
   <msg key="Send_me_a_copy">Schicke eine Kopie an mich:</msg>
   <msg key="Services">Dienste</msg>
@@ -485,9 +485,9 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Thank_you">Vielen Dank.</msg>
   <msg key="The_ISO_codes_were_not">Die ISO-Codes sind auf diesem Server nicht geladen.</msg>
   <msg key="The_name_of_the_new_subsite_you_re_setting_up">Name der neuen Subsite, die Sie einrichten</msg>
-  <msg key="Theme">Thema/Darstellung</msg>
-  <msg key="theme">thema/Darstellung</msg>
-  <msg key="Themes">Themen/Darstellung</msg>
+  <msg key="Theme">Design</msg>
+  <msg key="theme">Design</msg>
+  <msg key="Themes">Designs</msg>
   <msg key="This_group_is_closed">Dies ist eine geschlossene Gruppe. Neue Mitglieder können nur durch Einladung Zugang erhalten.</msg>
   <msg key="This_group_type_can_only_be_administered_by_programmers">Diese Gruppen kann nur von Programmierern administriert werden</msg>
   <msg key="This_should_be_a_short_string">This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application.</msg>
@@ -510,21 +510,21 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Update">Aktualisieren</msg>
   <msg key="Update_Password">Passwort aktualisieren</msg>
   <msg key="upload">Hochladen</msg>
-  <msg key="upload_a_portrait">Ein Bild hochladen</msg>
-  <msg key="upload_a_replacement_por">Ein anderes Bild hochladen</msg>
-  <msg key="Upload_Portrait">Bild hochladen</msg>
+  <msg key="upload_a_portrait">Ein Profilbild hochladen</msg>
+  <msg key="upload_a_replacement_por">Ein anderes Profilbild hochladen</msg>
+  <msg key="Upload_Portrait">Profilbild hochladen</msg>
   <msg key="URL">URL</msg>
   <msg key="URL_folder_name">URL folder name</msg>
   <msg key="Usage">Nutzung</msg>
   <msg key="User_name">Benutzername</msg>
-  <msg key="User_Portrait">Portrait des Users</msg>
-  <msg key="User_Portraits">Portraits der User</msg>
-  <msg key="User_Profile">Benutzer/innen-Profil</msg>
-  <msg key="User_Profiles">Benutzer/innen-Profile</msg>
+  <msg key="User_Portrait">Profilbild</msg>
+  <msg key="User_Portraits">Profilbilder</msg>
+  <msg key="User_Profile">Benutzerprofil</msg>
+  <msg key="User_Profiles">Benutzerprofile</msg>
   <msg key="Username">Benutzeridentifikation</msg>
   <msg key="Username_not_found_for_authority">Benutzer mit Namen &#39;%username%&#39; konnte in %this_authority% nicht gefunden werden</msg>
   <msg key="Username_required">Benutzername muss angegeben werden</msg>
-  <msg key="UserSiteMap">Site Map des Users</msg>
+  <msg key="UserSiteMap">Site Map des Benutzers</msg>
   <msg key="Vacation_Info_Updated">Die Informationen zu Ihrer Abwesenheit wurden aktualisiert.</msg>
   <msg key="Vacation_information_updated">Die Informationen zu Ihrer Abwesenheit unter %site_link% wurden aktualisiert.</msg>
   <msg key="view_all_online_members">View all online members.</msg>
@@ -542,13 +542,13 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="You_can_always_re_open">Sie können es jederzeit wieder aktivieren, indem Sie</msg>
   <msg key="You_can_specify_the_default_types_of">You can specify the default types of relationships that can be used for groups of this type. Note that each group can later change its allowed relationship types.</msg>
   <msg key="You_do_not_have_admin_on">Sie haben keine Verwaltungsrechte für das Objekt %root% oder ihm untergeordnete Objekte.</msg>
-  <msg key="You_dont_have_a_portrait">Sie haben noch kein Bild hochgeladen. Sie können</msg>
+  <msg key="You_dont_have_a_portrait">Sie haben noch kein Profilbild hochgeladen. Sie können</msg>
   <msg key="You_have_admin_rights_on">Sie haben Verwaltungsrechte für folgende Objekte:</msg>
   <msg key="You_have_no_email_alerts">Sie haben derzeit keine Benachrichtigungsfunktion aktiviert.</msg>
   <msg key="You_joined_group">Sie sind der Gruppe &#39;%group_name%&#39; beigetreten</msg>
   <msg key="Your_Account">Benutzerkonto</msg>
   <msg key="Your_discussion_alerts">Ihre Benachrichtigungen für Diskussionsforen</msg>
-  <msg key="Your_Portrait">Ihr Bild</msg>
+  <msg key="Your_Portrait">Ihr Profilbild</msg>
   <msg key="Your_system_alerts">Ihre Benachrichtigungen für %gc_system_name%</msg>
   <msg key="Youre_marked_as_back">Sie sind unter %site_link% als wieder anwesend gekennzeichnet.</msg>
 </message_catalog>
