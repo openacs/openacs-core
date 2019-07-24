@@ -67,7 +67,7 @@
   <msg key="Build_Site_Map">Seitenkarte erzeugen</msg>
   <msg key="by_group_type">nach Gruppentyp</msg>
   <msg key="cannot_retrieve_password">Passwort zurücksetzen durch lokale Authentifizierungsstelle nicht unterstützt</msg>
-  <msg key="Cannot_see_memb_list">Liste der Teilnehmer verborgen</msg>
+  <msg key="Cannot_see_memb_list">Liste der Mitglieder verborgen</msg>
   <msg key="Caption">Bildunterschrift</msg>
   <msg key="Change_locale_label">Sprache einstellen</msg>
   <msg key="Change_my_email_P">Änderung meines E-Mail Privacy Levels</msg>
@@ -87,7 +87,7 @@
 
   &lt;/p&gt; &lt;p&gt; Wenn Ihr Benutzerkonto deaktiviert ist,
   erhalten Sie keine Benachrichtigungen mehr und Ihr Name
-  erscheint nicht mehr auf Teilnehmerlisten von 
+  erscheint nicht mehr auf Mitgliederlisten von 
   Communities. Ihre inhaltlichen Beiträge werden jedoch nicht
   gelöscht. &lt;/p&gt; &lt;p&gt;
 
@@ -266,7 +266,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="login_page">Anmeldeseite</msg>
   <msg key="Logout">Abmelden</msg>
   <msg key="Logout_from_system">Von %system_name% abmelden</msg>
-  <msg key="lt__youd_be_able_to_get">, werden Ihnen mehr Informationen über andere Teilnehmer Ihrer Gruppe angezeigt.</msg>
+  <msg key="lt__youd_be_able_to_get">, werden Ihnen mehr Informationen über andere Mitglieder Ihrer Gruppe angezeigt.</msg>
   <msg key="lt_Add_checked_users_to_">Markierte User zu den Usern hinzufügen, die Zugriffsrechte auf das Objekt haben.</msg>
   <msg key="lt_Cannot_join_this_grou">Diese Gruppe kann nicht hinzugefügt werden.</msg>
   <msg key="lt_Complete_List_of_ISO_">Vollständige Liste der ISO-Codes</msg>
@@ -347,10 +347,10 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Manage_unmounted_applications">Abgehängte Anwendungen verwalten</msg>
   <msg key="manage_users_email">Verwalten des E-Mail Datenschutzes des Users</msg>
   <msg key="Manage_your_notifications">Benachrichtigungsoptionen verwalten</msg>
-  <msg key="Mem_list_not_allowed">Sie sind nicht berechtigt, die Liste aller Teilnehmer zu sehen.</msg>
-  <msg key="Member">Teilnehmer</msg>
-  <msg key="Member_State">Teilnehmerstatus</msg>
-  <msg key="Members">Teilnehmer/innen</msg>
+  <msg key="Mem_list_not_allowed">Sie sind nicht berechtigt, die Liste aller Mitglieder zu sehen.</msg>
+  <msg key="Member">Mitglieder</msg>
+  <msg key="Member_State">Mitgliederstatus</msg>
+  <msg key="Members">Mitglieder</msg>
   <msg key="Members_only">Nur für Mitglieder</msg>
   <msg key="Missing_argument">Fehlendes Argument</msg>
   <msg key="Modified_theme">Geändert</msg>
@@ -488,7 +488,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Theme">Thema/Darstellung</msg>
   <msg key="theme">thema/Darstellung</msg>
   <msg key="Themes">Themen/Darstellung</msg>
-  <msg key="This_group_is_closed">Dies ist eine geschlossene Gruppe. Neue Teilnehmer können nur durch Einladung Zugang erhalten.</msg>
+  <msg key="This_group_is_closed">Dies ist eine geschlossene Gruppe. Neue Mitglieder können nur durch Einladung Zugang erhalten.</msg>
   <msg key="This_group_type_can_only_be_administered_by_programmers">Diese Gruppen kann nur von Programmierern administriert werden</msg>
   <msg key="This_should_be_a_short_string">This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application.</msg>
   <msg key="this_subsite">diese Subsite</msg>
