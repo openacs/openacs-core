@@ -721,6 +721,30 @@ ul.compact li, .action-list ul li {
     text-align: center;
 }
 
+a.acs-lang-localized,
+a.acs-lang-us_only,
+a.acs-lang-missing {
+    padding: 1px 1px 1px 1px;
+    text-decoration: none;
+    border: 1px solid red;
+}
+a.acs-lang-localized::after {
+    color: green;
+    font-weight: bold;
+    content: "o";
+}
+a.acs-lang-us_only::after {
+    color: orange;
+    font-weight: bold;
+    content: "*"; 
+}
+a.acs-lang-missing::after {
+    color: red;
+    font-weight: bold;
+    content:  "*"; 
+}
+
+
 
 /**********************************************************************
 /* DEPRECATED CLASSES

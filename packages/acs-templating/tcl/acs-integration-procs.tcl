@@ -158,17 +158,17 @@ ad_proc adp_parse_ad_conn_file {} {
                     { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
 
                 if { [lang::message::message_exists_p [ad_conn locale] $key] } {
-                    set edit_link [subst {<a href="[ns_quotehtml $edit_url]" title="$key" style="color: green;"><b>o</b></a>}]
+                    set edit_link [subst {<a class="acs-lang-localized" href="[ns_quotehtml $edit_url]" title="$key"></a>}]
                 } else {
                     if { [lang::message::message_exists_p "en_US" $key] } {
                         # Translation missing in this locale
-                        set edit_link [subst {<a href="[ns_quotehtml $edit_url]" title="$key" style="background-color: yellow; color: red;"><b>*</b></a>}]
+                        set edit_link [subst {<a class="acs-lang-us_only" href="[ns_quotehtml $edit_url]" title="$key"></a>}]
                     } else {
                         # Message key missing entirely
                         set new_url [export_vars -base "${apm_package_url}admin/localized-message-new" {
                             { locale en_US } package_key message_key { return_url [ad_return_url] }
                         }]
-                        set edit_link [subst {<a href="[ns_quotehtml $new_url]" title="$key" style="background-color: red; color: white;"><b>@</b></a>}]
+                        set edit_link [subst {<a class="acs-lang-missing" href="[ns_quotehtml $new_url]" title="$key"></a>}]
                     }
                 }
 
