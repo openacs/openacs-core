@@ -33,8 +33,21 @@ ad_proc -public ad_return_template {
     }
 
     if { $string_p } {
-        return [template::adp_parse \
-                    [template::util::url_to_file $template [ad_conn file]] {}]
+        #
+        # We have to pass the application variables to ad_parse. As it
+        # looks, we have to omit the variables in use for
+        # "template::ad_parse" internally. This is not pretty, but it
+        # should help to get the base mechanism working. There is
+        # probably a more pretty solution for this.
+        #
+        set application_vars {}
+        foreach var [uplevel [list info vars]] {
+            if {[string match __adp* $var] || [string match __args* $var]} {
+                continue
+            }
+            lappend application_vars $var [uplevel [list set $var]]
+        }
+        return [template::adp_parse [template::util::url_to_file $template [ad_conn file]] $application_vars]
     }
 }
 
@@ -96,7 +109,7 @@ ad_proc adp_parse_ad_conn_file {} {
 } {
     set ::template::parse_level ""
     #ns_log debug "adp_parse_ad_conn_file => file '[file rootname [ad_conn file]]'"
-    
+
     #
     # The proper place to reset the variables is after the request,
     # not on the begin of a special kind of request (i.e. via "ns_ictl
