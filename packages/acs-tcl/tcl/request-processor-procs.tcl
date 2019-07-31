@@ -1537,7 +1537,8 @@ ad_proc -public ad_conn {args} {
                                                      -default {en_US}]
                             return $ad_conn(locale)
                         }
-                        node_id {
+                        node_id -
+                        package_id {
                             # This is just a fallback, when the request
                             # processor has failed to set the actual site
                             # node, e.g. on invalid requests. When the
@@ -1549,17 +1550,8 @@ ad_proc -public ad_conn {args} {
                             # determine the appropriate template without
                             # the node_id. In case of failure, the
                             # toplevel node_is is returned.
-                            array set node [site_node::get -url /]
-                            set ad_conn($var) $node(node_id)
-                            ns_log notice "ad_conn: request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"
-                            return $ad_conn($var)
-                        }
-                        package_id {
-                            # This is just a fallback, when the request
-                            # processor has failed to set the actual
-                            # package_id (see as wee under node_id above).
-                            array set node [site_node::get -url /]
-                            set ad_conn($var) $node(package_id)
+                            set node [site_node::get -url /]
+                            set ad_conn($var) [dict get $node $var]
                             ns_log notice "ad_conn: request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"
                             return $ad_conn($var)
                         }
