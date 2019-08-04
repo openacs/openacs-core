@@ -4071,11 +4071,7 @@ ad_proc -public ad_log {
     append request "    " \
         [util::request_info -with_headers=$with_headers]
 
-    set prefix ""
-    foreach line [split "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n" \n] {
-        ns_log $level "$prefix$line"
-        set prefix "."
-    }
+    ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 
 ad_proc -public util::var_subst_quotehtml {
