@@ -48,7 +48,7 @@ used to construct a link and if it is " " it will have a link of
     </listitem>
     <listitem>
       <formalpara>
-        <title>Doubleclick</title>
+        <title>Double-click</title>
         <para>
 Make sure that if you submit a form, use the back button, and submit
 again that the behavior is reasonable (correct behavior depends on

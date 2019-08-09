@@ -417,7 +417,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
           <listitem>
             <para>
               For non-core packages, developers should work on a
-              checkout of the release branch of the lastest release. For example,
+              checkout of the release branch of the latest release. For example,
               if OpenACS 5.1.0 is released, developers should work on the
               oacs-5-1 branch. When oacs-5-2 is branched, developers should
               continue working on oacs-5-1 until OpenACS 5.2.0 is actually
@@ -519,7 +519,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
         <orderedlist numeration="arabic">
           <listitem>
             <para>
-              A TIP is a Techical Improvement Proposal (
+              A TIP is a Technical Improvement Proposal (
               <ulink url="http://openacs.org/forums/message-view?message_id=115576">
                 more information
               </ulink>

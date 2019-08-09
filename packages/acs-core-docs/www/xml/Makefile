@@ -5,13 +5,13 @@
 # @author davis@xarg.net Added automatic creation of an XSL link so we don't edit openacs.xsl, 
 #         added a lint target which runs xmllint, changed pdf generation to use FOP.  Made it 
 #         work on the mac.  
-# OSX note: xmllint from fink does not work, use /usr/bin/xmllint 
+# macOS note: xmllint from fink does not work, use /usr/bin/xmllint 
 #           xmllint from fink seems to work fine on osx 10.4.x
 #
 # @creation-date 2002-08-10
 # @modified-date 2003-12-06
 #
-# This simply copys all the 'files' and 'images'
+# This simply copies all the 'files' and 'images'
 #   to the appropriate directory in www so that they are accessible
 #
 # It then moves into the www directory and runs the XSLT generation

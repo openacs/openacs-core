@@ -170,8 +170,7 @@ Execution Plan
    0	  SELECT STATEMENT Optimizer=CHOOSE
    1	0   NESTED LOOPS
    2	1     TABLE ACCESS (FULL) OF 'CONSTRAINT_NAMING_EXAMPLE'
-   3	1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNI
-	  QUE)
+   3	1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNIQUE)
 </programlisting>
 
 <para>
@@ -195,7 +194,7 @@ requirement.
 <phrase>About Naming the not null constraints</phrase>
 </para>
 <para>
-Though naming "not null" constraints doesn&#39;t help immeditately in error
+Though naming "not null" constraints doesn&#39;t help immediately in error
 debugging (e.g. the error will say something like 
 "Cannot insert null value into column"), we recommend naming not null
 constraints to be consistent in our naming of all constraints.

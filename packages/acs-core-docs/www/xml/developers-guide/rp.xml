@@ -81,7 +81,7 @@ is dictated by the <ulink url="permissions">permissions system</ulink>. In
 this case, the RP checks if the user has "read" privileges on the
 object in the site map specified by the URL. This object is typically
 a package instance, but it could easily be something more granular,
-such as whehter the user can view a particular piece of content within
+such as whether the user can view a particular piece of content within
 a package instance.  This automatic check makes it easy to set up
 sites with areas that are only accessible to specific groups of users.
 </para></listitem>

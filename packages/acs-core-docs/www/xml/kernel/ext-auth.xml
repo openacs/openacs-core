@@ -716,7 +716,7 @@ through these settings:</para>
 this:</para>
       <programlisting>
 if { ![auth::split_username -username_var username -authority_var authority] } {
-    # bounce back to the form with a message saying that the login wasn&#39;t valid.
+    # bounce back to the form with a message saying that the login was not valid. 
     ad_script_abort
 }
 

@@ -1224,7 +1224,7 @@ ad_proc -private auth::local::registration::Register {
     set result(creation_status) "ok"
     # TODO: validate data (see user-new-2.tcl)
     # TODO: double-click protection
-    # Get whether they requre some sort of approval
+    # Get whether they require some sort of approval
     if { [parameter::get -parameter RegistrationRequiresApprovalP -default 0] } {
         set member_state "needs approval"
         set result(account_status) "closed"
@@ -2133,7 +2133,7 @@ University business.
 </programlisting>
 
         <para>It looks like we&#39;ll use the IMS standard for formatting of
-the doucment, but not so
+the document, but not so
 </para>
       </sect3>
       <sect3 id="standard">
