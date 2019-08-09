@@ -30,7 +30,7 @@ if { [catch {ns_cache set util_memoize __util_memoize_installed_p 1} error] } {
             return 0
         }
         #
-        # When he call above has succes, the cache is initialized, we
+        # When he call above has success, the cache is initialized, we
         # can rewrite the function in an always succeeding one and
         # return success as well.
         #

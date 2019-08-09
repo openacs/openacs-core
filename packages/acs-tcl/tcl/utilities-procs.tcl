@@ -345,7 +345,7 @@ ad_proc -public NsSettoTclString {set_id} {
 }
 
 ad_proc -public get_referrer {-relative:boolean} {
-    @return referer from the request headers.
+    @return referrer from the request headers.
     @param relative return the refer without protocol and host
 } {
     set url [ns_set get [ns_conn headers] Referer]

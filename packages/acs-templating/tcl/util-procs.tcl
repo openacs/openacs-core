@@ -629,7 +629,7 @@ ad_proc -public template::themed_template {
     Given a path like /packages/acs-admin/www/index pointing to an
     .adp file, this function tries to locate this path in the
     ResourceDir of the subsite (determined by the theme). If found the
-    themed template is returned, otherwse the passed template path.
+    themed template is returned, otherwise the passed template path.
 
     @param path absolute path within the open acs tree (without extension)
     @return path to themed template or input value (without extension)

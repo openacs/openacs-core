@@ -171,7 +171,7 @@ ad_proc -public template::list::create {
 
     @param  main_class     The main CSS class to be used in the output. The CSS class is constructed by combining the
     main_class and the sub_class with a dash in between. E.g., main_class could be 'list', and
-    sub_class could be 'narrow', in which case the resuling CSS class used would be 'list-narrow'.
+    sub_class could be 'narrow', in which case the resulting CSS class used would be 'list-narrow'.
 
     @param  sub_class      The sub-part of the CSS class to use. See 'main_class' option.
 
@@ -3435,7 +3435,7 @@ ad_proc -private template::list::prepare_filter_form {
             # hack in elements??
             if {$filter_properties(name) in [template::multirow columns $list_properties(multirow)]} {
                 # FIXME Don't do this where, don't allow filters for
-                # matching elmenet/filter names if element does not exist
+                # matching element/filter names if element does not exist
                 # check if its a dynamic element...(has select_clause)
                 list::element::create \
                     -list_name $name \

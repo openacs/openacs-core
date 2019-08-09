@@ -203,7 +203,7 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
 
     upvar $opts(uplevel) $result_name:rowcount rowcount $result_name:columns column_list
 
-    # set a local variable as to whether we are cacheing or not
+    # set a local variable as to whether we are caching or not
     if { [info exists opts(cache)] } {
         set is_cached 1
         set cached_result {}
