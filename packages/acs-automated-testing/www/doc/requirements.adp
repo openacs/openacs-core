@@ -76,7 +76,7 @@ scripts in some format other than tcl procs.)</td>
 <span class="strong">Test scripts can be imported and
 exported</span>. It should be possible to import a test into the
 database from a file, and to export it to a file. These files
-should be sharable by different OpenACS installations. It should be
+should be shareable by different OpenACS installations. It should be
 possible to import/export directly between running OpenACS sites.
 (We should look at what did and didn&#39;t work in acs-lang catalog
 files and work from there.)</td>

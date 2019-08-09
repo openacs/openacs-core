@@ -373,7 +373,7 @@ ad_proc -public aa_register_case {
         Also used, automatically, for errors sourcing test cases.
     </ul>
 
-    @param bugs A list of integers correspending to openacs.org bug numbers which relate to this test case.
+    @param bugs A list of integers corresponding to openacs.org bug numbers which relate to this test case.
     @param procs A list of OpenACS procs which are tested by this case.
     @param urls A list of URLs (relative to package) tested in web test case
 
@@ -1372,7 +1372,7 @@ namespace eval acs::test {
             }
         } finally {
             #
-            # always reset after the reqest the login data nsv
+            # always reset after the request the login data nsv
             #
             nsv_unset -nocomplain aa_test logindata
         }
@@ -1818,7 +1818,7 @@ namespace eval ::acs::test::xpath {
     ad_proc -public equals {node pairs} {
 
         Test whether provided selectors (first element of the pair)
-        return the specificed results (second element of the pair).
+        return the specified results (second element of the pair).
 
     } {
         foreach {q value} $pairs {
@@ -2144,7 +2144,7 @@ ad_proc -public aa_test::parse_test_file {
 
     set root_node [xml_doc_get_first_node $tree]
 
-    # Get the total test case cound
+    # Get the total test case count
     set testcase_count_node [xml_node_get_children_by_name $root_node testcase_count]
     set test(testcase_count) [xml_node_get_content $testcase_count_node]
 
