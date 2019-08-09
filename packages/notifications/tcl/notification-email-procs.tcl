@@ -247,7 +247,7 @@ namespace eval notification::email {
         foreach msg $messages {
             ns_log Debug "load_qmail_mail_queue: opening file: $msg"
             if {[catch {set f [open $msg r]} errmsg]} {
-                # spit out an error message for failure to open and contiue to next message
+                # spit out an error message for failure to open and continue to next message
                 ns_log Warning "load_qmail_mail_queue: error opening file $errmsg"
                 continue
             }
