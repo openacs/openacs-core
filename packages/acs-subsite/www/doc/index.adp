@@ -13,7 +13,7 @@ requirements</a></td><td>Overview of the requirements that motivated the design 
 subsites.</td>
 </tr><tr>
 <td colspan="2"><a href="/doc/subsites-design">Design</a></td><td>Overview of the API provided by ACS subsites including the
-package manger, site nodes, and request processor hooks.</td>
+package manager, site nodes, and request processor hooks.</td>
 </tr><tr>
 <td colspan="2"><a href="group-admin-pages-requirements">Group
 admin pages requirements</a></td><td>Overview of the requirements for web-based group administration

@@ -29,7 +29,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AdpRevealEnabledP"  default="0" description="Should a frame be put around each ADP file in the page, with an identifying title and hyperlink to api-doc." section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DataLifetime"  default="900" description="Number of seconds to keep connection data" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DataSweepInterval"  default="900" description="Number of seconds between sweeping for old data" section_name="developer-support"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ProfileEnabledP"  default="0" description="Remember timing informaton of included templates?" section_name="developer-support"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ProfileEnabledP"  default="0" description="Remember timing information of included templates?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DatabaseEnabledP"  default="0" description="Remember information about every database request?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledIPs"  default="*" description="remember information for which client hosts?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledOnStartupP"  default="0" description="Remember information about connections, for developers' benefit?" section_name="developer-support"/>

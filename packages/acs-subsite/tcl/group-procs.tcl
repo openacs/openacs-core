@@ -673,7 +673,7 @@ ad_proc -public group::party_member_p {
 } {
     if { $group_name ne "" } {
         if {$group_id ne ""} {
-            ad_log warning "group::party_member_p: ignore specified group_id $group_id, usin name '$group_name' instead"
+            ad_log warning "group::party_member_p: ignore specified group_id $group_id, using name '$group_name' instead"
         }
         set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
     }
@@ -757,7 +757,7 @@ ad_proc -public group::add_member {
     Can default both the rel_type and the member_state to their relevant values.
 
     @param no_perm_check avoid permission check
-    @param no_automatic_membership_rel Use this flag, when we do not wan to add automatically a membership_rel (e.g. in DotLRN)
+    @param no_automatic_membership_rel Use this flag, when we do not want to add automatically a membership_rel (e.g. in DotLRN)
     @param group_id group, to which a member should be added
     @param user_id user, which should be added to a group
     @param rel_type relationship type to be used (defaults to membership_rel)
