@@ -528,7 +528,7 @@ ad_proc -public acs_mail_lite::email_type {
     If check_subject_p is set 1, \
     checks for common subjects identifying autoreplies. \
         This is not recommended to rely on exclusively. \
-        This feature provides a framework for expaning classification of \
+        This feature provides a framework for extending classification of \
         emails for deployment routing purposes.
     </p><p>
     If array includes keys from 'ns_imap struct', such as internaldate.*, \
@@ -572,7 +572,7 @@ ad_proc -public acs_mail_lite::email_type {
                      {autoresponder} \
                      {x-autorespond} \
                     ]
-    # Theses were in auto_reply, but are not specific to replies:
+    # These were in auto_reply, but are not specific to replies:
     #                     {auto-generated}
     #             {auto-notified}
     # See section on auto_gen types. (auto-submitted and the like)
@@ -1284,7 +1284,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
                 # uses an email beginning with a number.
                 # Also, 'from' header could be spoofed..
                 # This practice should be deprecated in favor of signed
-                # acs_mail_lite::unqiue_id_create.
+                # acs_mail_lite::unique_id_create.
                 # For emails originating elsewhere, another authentication
                 # method, such as a pre-signed unique-id in message
                 # content could be added as well.
@@ -1728,7 +1728,7 @@ ad_proc -private acs_mail_lite::inbound_cache_hit_p {
     uidvalidity
     mailbox_host_name
 } {
-    Check email unqiue id (UID) against history in table.
+    Check email unique id (UID) against history in table.
     If already exists, returns 1 otherwise 0.
     Adds checked case to cache if not already there.
 
@@ -2090,7 +2090,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
 
     # Note for imap paradigm: message-id should be in form:
     # <unique_id@local_domain.example>
-    # and unqiue_id should map to
+    # and unique_id should map to
     # any package, party and/or object_id so
     # as to not leak info unnecessarily.
     # See table acs_mail_lite_send_msg_id_map
@@ -2249,7 +2249,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # notifications package parameter EmailReplyAddressPrefix
     # Mail-Followup-To is set to same value, then calls acs_mail_lite::send
 
-    lappend check_list mail-followup-to to
+    lappend check_list mail-followup-to
 
     # Contribute x-envelope-from from legacy case in
     # acs_mail_lite::bounce_prefix?

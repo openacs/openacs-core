@@ -744,7 +744,7 @@ aa_register_case \
                    party_id -
                    datetime_cs -
                    other {
-                       aa_equals "r710 test acs_mail_lite::unqiue_id $n has val ''" $v ""
+                       aa_equals "r710 test acs_mail_lite::unique_id $n has val ''" $v ""
                    }
                    datetime_not {
                        set is_integer_p [string is wideinteger -strict $v]
@@ -763,7 +763,7 @@ aa_register_case \
                    party_id -
                    datetime_cs -
                    other {
-                       aa_equals "r710 test acs_mail_lite::unqiue_id $n has val ''" $v ""
+                       aa_equals "r710 test acs_mail_lite::unique_id $n has val ''" $v ""
                    }
                    datetime_not {
                        set is_integer_p [string is wideinteger -strict $v]

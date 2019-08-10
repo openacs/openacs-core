@@ -98,7 +98,7 @@ create index acs_mail_lite_from_external_release_p_idx
 
 
 -- Can we recognize a change in server?
--- rfc3501 does not specify a unqiue server id
+-- rfc3501 does not specify a unique server id
 -- It specifies a unique id for a mailbox: UIDVALIDITY
 -- UIDVALIDITY is optional, quite useful.
 -- Rfc3501 specifies a unique id for each email: UID.

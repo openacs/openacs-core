@@ -65,7 +65,7 @@ database</li>
 </ul>
 
 In case of multiple services on one system, create a bounce email
-for each of them (e.g. changeing "bounce" to
+for each of them (e.g. changing "bounce" to
 "bounce_service1") and create a new user that runs the
 aolserver process for each of them. You do not want to have
 service1 deal with bounces for service2.

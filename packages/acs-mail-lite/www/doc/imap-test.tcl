@@ -1,5 +1,5 @@
 ad_page_contract {
-    Provies a framework for manually testing acs_mail_lite procs
+    Provides a framework for manually testing acs_mail_lite procs
     A dummy mailbox value provided to show example of what is expected.
 } {
     {user ""}

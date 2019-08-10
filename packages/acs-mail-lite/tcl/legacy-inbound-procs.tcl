@@ -250,7 +250,7 @@ namespace eval acs_mail_lite {
         {-subject ""}
         {-from ""}
     } {
-        Parse the subject, from and body to determin if the email is an auto reply
+        Parse the subject, from and body to determine if the email is an auto reply
         Typical autoreplies are "Out of office" messages. This is what the procedure does
 
         @param subject Subject of the Email that will be scanned for "out of office"

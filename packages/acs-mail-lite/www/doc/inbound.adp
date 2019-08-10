@@ -52,7 +52,7 @@
     with the bounced email address.
   </p><p>
     A separate process checks if an email account
-    needs to inactivate notifications due to chronic bounce errors:
+    needs to deactivate notifications due to chronic bounce errors:
   </p>
   <ul>
     <li>If a user's last mail bounced more than
