@@ -505,7 +505,7 @@ ad_proc -private rp_resources_filter { why } {
     set resource [join [lrange $urlv 2 end] /]
 
     # This would map resources to their alternative in the theme
-    # package. Works, but needs some extra tought regarding
+    # package. Works, but needs some extra thought regarding
     # performance etc. and is therefore commented out.
     # set path "packages/$package_key/www/resources/$resource"
     # set themed_path [template::resource_path -type templates -style $path]

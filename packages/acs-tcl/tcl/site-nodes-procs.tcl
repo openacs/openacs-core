@@ -1729,7 +1729,7 @@ if {$UseXotclSiteNodes} {
         }
 
         #
-        # In case update_cache is called after the deltion of the node
+        # In case update_cache is called after the deletion of the node
         # in the database, it is still necessary to flush for the
         # original object_id, but this can't be handled in the
         # recursive query of method "flush_cache".

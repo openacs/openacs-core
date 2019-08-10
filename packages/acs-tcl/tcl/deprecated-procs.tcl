@@ -629,7 +629,7 @@ ad_proc -public -deprecated util_unlist { list args } {
     Places the <i>n</i>th element of <code>list</code> into the variable named by
     the <i>n</i>th element of <code>args</code>.
 
-    One should use the built-in Tcl command "lassign" instread of this proc.
+    One should use the built-in Tcl command "lassign" instead of this proc.
 
     @see lassign
 
@@ -2540,7 +2540,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
     other, but not both.  NOTE: it is perfectly valid to not specify
     either, in which case no file is uploaded, but form variables are
     encoded using <tt>multipart/form-data</tt> instead of the usual
-    encoding (as noted aboved).
+    encoding (as noted above).
 
     <p>
 

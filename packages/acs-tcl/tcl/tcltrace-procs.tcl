@@ -79,7 +79,7 @@ namespace eval ::tcltrace {
         op
     } {
         
-        Generic trace proc for arbitraty commands. Simply reports
+        Generic trace proc for arbitrary commands. Simply reports
         calls to function (optionally with full context) to the error.log.
 
         @param details when set, use ad_log for reporting with full context

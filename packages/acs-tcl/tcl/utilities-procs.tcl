@@ -2952,7 +2952,7 @@ ad_proc -public xml_get_child_node_attribute_by_path {
     @param node        The node to start from
     @param path_list   List of the node to try, e.g.
     { grouptype typevalue }.
-    @param attribute_name   Attribute name at the very end of the very botton of the tree route at path_list.
+    @param attribute_name   Attribute name at the very end of the very bottom of the tree route at path_list.
 
     @author Rocael Hernandez (roc@viaro.net)
 

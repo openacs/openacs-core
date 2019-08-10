@@ -44,7 +44,7 @@ aa_register_case \
     }
 
     # - Half opened HTML into other markup: this markup will be completely rejected
-    lappend test_msgs "Test case 3: invalid unparseable markup ok"
+    lappend test_msgs "Test case 3: invalid unparsable markup ok"
     lappend test_cases {
         <noexist>sadsa</noexist> dfsdafs <a><tag</a> 3 sadASDSA
     }

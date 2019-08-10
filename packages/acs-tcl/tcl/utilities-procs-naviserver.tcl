@@ -154,7 +154,7 @@ ad_proc -public ad_set_cookie {
     with earlier versions, OpenACS 5.8 has the default set to
     "true". OpenACS 5.9 will have the flag per default set to "false".
 
-    @param value is autmatically URL encoded.
+    @param value is automatically URL encoded.
 
     @see ad_get_cookie
     @see ad_unset_cookie    

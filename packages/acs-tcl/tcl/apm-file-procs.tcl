@@ -610,7 +610,7 @@ ad_proc -private apm_load_apm_file {
         array set package [apm_read_package_info_file [file join $tmpdir $info_file]]
     } errmsg]} {
         file delete -force -- $tmpdir
-        apm_callback_and_log $callback  "The archive contains an unparseable package specification file:
+        apm_callback_and_log $callback  "The archive contains an unparsable package specification file:
     <code>$info_file</code>.  The following error was produced while trying to
     parse it: <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>.
     <p>

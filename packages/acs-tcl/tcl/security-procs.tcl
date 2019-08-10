@@ -2251,7 +2251,7 @@ ad_proc -public security::locations {} {
     set driver_info [security::configured_driver_info]
     foreach d $driver_info {
         #
-        # port == 0 means that the driver is just used for sending, but not for receiveing
+        # port == 0 means that the driver is just used for sending, but not for receiving
         #
         if {[dict get $d port] != 0} {
             set location [dict get $d location]

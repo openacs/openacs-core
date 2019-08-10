@@ -3590,7 +3590,7 @@ ad_proc -private db_exec_lob_postgresql {
             set lob_sql [uplevel $ulevel [list db_bind_var_substitution $sql]]
         }
 
-        # get the content - asssume it is in column 0, or optionally it can
+        # get the content - assume it is in column 0, or optionally it can
         # be returned as "content" with the storage type indicated by the
         # "storage_type" column.
 

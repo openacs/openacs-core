@@ -1504,7 +1504,7 @@ ad_proc ad_parse_html_attributes_upvar {
                 set string_delimiter [string index $html $string_delimiter_idx]
 
                 # If the greater than sign appears before any of the
-                # string delimters, we've found the tag end.
+                # string delimiters, we've found the tag end.
                 if { $gt_idx < $string_delimiter_idx || $string_delimiter_idx == -1 } {
                     # we found the tag end
                     set i $gt_idx
@@ -2465,7 +2465,7 @@ ad_proc -public ad_pad {
                 value must be an integer > 0.
 
     @arg padstring string that will be repeated until length of
-                   supplied string is equal or greather than length.
+                   supplied string is equal or greater than length.
 
     @return padded string
 } {

@@ -3,7 +3,7 @@ ad_library {
     the preferred AOLserver XML api. It came in handy to have such an
     abstraction when the project switched to the tDOM library, so it
     stayed around, even if now is composed mostly by trivial
-    oneliners.
+    one-liners.
 
     It is not clear whether it would make more sense to use tDOM
     directly and avoid this extra layer altogether in the future.
