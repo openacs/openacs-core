@@ -22,7 +22,7 @@ packages</em></span>, which typically provide user-level web
 services built on top of the Kernel and Core. Application packages
 are developed separately from the Kernel, and are typically
 released independently of it.</p></li>
-</ul></div><p>This document provides a high level overview of the kernel
+</ul></div><p>This document provides a high-level overview of the kernel
 package. <a class="ulink" href="index" target="_top">Documentation for other packages on this server</a>
 </p>
 </div>

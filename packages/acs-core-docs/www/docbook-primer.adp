@@ -280,7 +280,7 @@ reading logs and command line views that describe status of various
 active processes.</p></li><li class="listitem"><p>Create a list of administrative tools that are useful to
 administrating OpenACS, including developer support, schema-browser
 and API browser. Link to AOLserver&#39;s config file
-documentation.</p></li><li class="listitem"><p>Resources on high level subjects such as web services, security
+documentation.</p></li><li class="listitem"><p>Resources on high-level subjects such as web services, security
 guidelines</p></li><li class="listitem"><p>Describe typical skill sets (and perhaps mapped to standardized
 job titles) for administrating an OpenACS system (human-resources
 style). For a subsite admin/moderator attributes might include

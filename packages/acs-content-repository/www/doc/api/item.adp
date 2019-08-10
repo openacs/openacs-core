@@ -447,11 +447,11 @@ item&#39;s name</td>
 </tr><tr>
 <th align="right" valign="top">nls_language:</th><td>  </td><td>The language for the item, used for Intermedia search</td>
 </tr><tr>
-<th align="right" valign="top">text:</th><td>  </td><td>The text content of the new revision, 4000 charcters maximum.
+<th align="right" valign="top">text:</th><td>  </td><td>The text content of the new revision, 4000 characters maximum.
 Cannot be specified simultaneously with the <kbd>data</kbd>
 parameter</td>
 </tr><tr>
-<th align="right" valign="top">data:</th><td>  </td><td>The blob content of the new revison. Cannot be specified
+<th align="right" valign="top">data:</th><td>  </td><td>The blob content of the new revision. Cannot be specified
 simultaneously with the <kbd>text</kbd> parameter</td>
 </tr><tr>
 <th align="right" valign="top">relation_tag:</th><td>  </td><td>If a parent-child relationship is registered for these content

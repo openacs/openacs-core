@@ -16,7 +16,7 @@ OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="rp-overview" id="rp-overview"></a>Overview</h3></div></div></div><p>This document is a brief introduction to the OpenACS 5.9.0
 Request Processor; more details can be found in the <a class="xref" href="rp-design" title="Request Processor Design">OpenACS 4
-Request Processor Design</a>. Here we cover the high level concepts
+Request Processor Design</a>. Here we cover the high-level concepts
 behind the system, and implications and usage for the application
 developer.</p>
 </div><div class="sect2">
@@ -49,7 +49,7 @@ access privileges to the requested part of the site. In OpenACS
 the RP checks if the user has "read" privileges on the
 object in the site map specified by the URL. This object is
 typically a package instance, but it could easily be something more
-granular, such as whehter the user can view a particular piece of
+granular, such as whether the user can view a particular piece of
 content within a package instance. This automatic check makes it
 easy to set up sites with areas that are only accessible to
 specific groups of users.</p></dd><dt><span class="term">Stage 4: URL Processing, File

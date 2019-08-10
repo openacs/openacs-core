@@ -340,7 +340,7 @@ function new (
   --    @param description   A short description for the item (4000 characters maximum)
   --    @param mime_type     The file type of the item, defaults to 'text/plain'
   --    @param nls_language  The language for the item, used for Intermedia search
-  --    @param text          The text content of the new revision, 4000 charcters maximum.
+  --    @param text          The text content of the new revision, 4000 characters maximum.
   --                         Cannot be specified simultaneously with the <tt>data</tt>
   --                         parameter
   --    @param data          The blob content of the new revision. Cannot be specified 

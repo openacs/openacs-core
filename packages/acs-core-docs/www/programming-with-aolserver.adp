@@ -51,7 +51,7 @@ Procedures</h3></div></div></div><p>
 <code class="computeroutput">ns_schedule_proc</code> and
 <code class="computeroutput">ad_schedule_proc</code> each take a
 <code class="computeroutput">-thread</code> flag to cause a
-scheduled procedure to run asychronously, in its own thread. It
+scheduled procedure to run asynchronously, in its own thread. It
 almost always seems like a good idea to specify this switch, but
 there&#39;s a problem.</p><p>It turns out that whenever a task scheduled with <code class="computeroutput">ns_schedule_proc -thread</code> or <code class="computeroutput">ad_schedule_proc -thread t</code> is run,
 AOLserver creates a brand new thread and a brand new interpreter,

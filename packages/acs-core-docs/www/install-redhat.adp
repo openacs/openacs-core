@@ -232,7 +232,7 @@ and stopping programs, and directories of symlinks for each system
 level indicating which services should be up and down at any given
 service level. We&#39;ll use this system for PostgreSQL, but
 we&#39;ll use daemontools to perform a similar function for
-AOLserver. (The reason for these discrepencies is that, while
+AOLserver. (The reason for these discrepancies is that, while
 daemontools is better, it&#39;s a pain in the ass to deal with and
 nobody&#39;s had any trouble leaving PostgreSQL the way it is.)</p><pre class="screen">[root root]# <strong class="userinput"><code>service pcmcia stop</code></strong>
 [root root]# <strong class="userinput"><code>service netfs stop</code></strong>

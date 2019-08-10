@@ -123,7 +123,7 @@ constraints is optional...</h3></div></div></div><p>People disagree on whether o
 constraints. So, if you want to name them, please do so and follow
 the above naming standard. But, naming not null constraints is not
 a requirement.</p><div>About Naming the not null constraints</div><p>Though naming "not null" constraints doesn&#39;t help
-immeditately in error debugging (e.g. the error will say something
+immediately in error debugging (e.g. the error will say something
 like "Cannot insert null value into column"), we
 recommend naming not null constraints to be consistent in our
 naming of all constraints.</p><div class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.10 2018/03/24

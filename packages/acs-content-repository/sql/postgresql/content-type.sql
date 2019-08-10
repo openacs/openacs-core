@@ -697,7 +697,7 @@ $$ LANGUAGE plpgsql stable;
 -- to work reliably in PostgreSQL.  Currently we are using a rule to insert 
 -- into the input view when a new content revision is added.  Pg locks the 
 -- underlying table when the rule is dropped, so the dropping and recreating
--- of the new content revisons seems like it would be reliable, but the 
+-- of the new content revisions seems like it would be reliable, but the 
 -- possibility of a race condition exists for either the initial creation
 -- of dropping of a type.  I'm not sure if the possibility of a race condition
 -- actually exists in practice.  The thing to do here might be to just create 

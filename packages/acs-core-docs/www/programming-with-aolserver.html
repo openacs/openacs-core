@@ -28,7 +28,7 @@ AOLserver's behavior, however, "script-global" is a more
 appropriate term.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="programming-aolserver-sched-procs"></a>Threads and Scheduled Procedures</h3></div></div></div><p>
 <code class="computeroutput">ns_schedule_proc</code> and <code class="computeroutput">ad_schedule_proc</code> each take a
 <code class="computeroutput">-thread</code> flag to cause a scheduled procedure to run
-asychronously, in its own thread. It almost always seems like a good idea to
+asynchronously, in its own thread. It almost always seems like a good idea to
 specify this switch, but there's a problem. 
 </p><p>It turns out that whenever a task scheduled with <code class="computeroutput">ns_schedule_proc
 -thread</code> or <code class="computeroutput">ad_schedule_proc -thread t</code> is run, AOLserver

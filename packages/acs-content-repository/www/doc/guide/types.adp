@@ -103,7 +103,7 @@ attribute table for a particular content type. The view joins the
 attribute tables in the class hierarchy of a particular content
 type. This view may be used to query attributes when serving
 content.</p>
-<h3>Creating compund items</h3>
+<h3>Creating compound items</h3>
 <p>In many cases your content items will serve as containers for
 other items. You can include the set of allowable components as
 part of a content type definition. See <a href="object-relationships">Object Relationships</a> for

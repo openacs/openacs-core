@@ -307,7 +307,7 @@ committers</a>
 HEAD, not to release branches.</p></li><li class="listitem"><p>For core packages, bug fixes should be committed on the current
 release branch whenever applicable.</p></li><li class="listitem">
 <p>For non-core packages, developers should work on a checkout of
-the release branch of the lastest release. For example, if OpenACS
+the release branch of the latest release. For example, if OpenACS
 5.1.0 is released, developers should work on the oacs-5-1 branch.
 When oacs-5-2 is branched, developers should continue working on
 oacs-5-1 until OpenACS 5.2.0 is actually released.</p><p><span class="emphasis"><em>Reason: First, this ensures that
@@ -351,7 +351,7 @@ tip 50", "applies patch 456 by User Name",
 </li><li class="listitem">
 <p>When to TIP</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>A TIP is a Techical Improvement Proposal ( <a class="ulink" href="http://openacs.org/forums/message-view?message_id=115576" target="_top">more information</a> ). A proposed change must be
+<p>A TIP is a Technical Improvement Proposal ( <a class="ulink" href="http://openacs.org/forums/message-view?message_id=115576" target="_top">more information</a> ). A proposed change must be
 approved by TIP if:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>It changes the core data model, or</p></li><li class="listitem"><p>It will change the behavior of any core package in a way that
 affects existing code (typically, by changing public API), or</p></li><li class="listitem"><p>It is a non-backwards-compatible change to any core or standard
