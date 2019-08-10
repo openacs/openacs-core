@@ -139,7 +139,7 @@ to a desired value. It saves the value in the current session.
 
 The request processor should use the ad_locale API to figure out the
 preferred locale for a request (perhaps combining user preference with
-subsite defaults in some way). It will make this information accesible
+subsite defaults in some way). It will make this information accessible
 via the <kbd>ad_conn</kbd> function:
 
 <pre>
@@ -228,7 +228,7 @@ use the &lt;TRN&gt; tag to do the same thing from within an ADP file.
 
 <h4>Caching multilingual ADP Templates</h4> Message catalog lookups
 can be potentially expensive, if many of them are done in a page. The
-templating system can already precompile and and cache adp pages.
+templating system can already precompile and cache adp pages.
 This works fine for a page in a specific language such as
 <kbd>foo.en.adp</kbd>, but we need to modify the caching mechanism if we
 want to use a single template file to target multiple languages.
@@ -431,7 +431,7 @@ for AOLserver running on Unix systems in English.
 <p>
 This default can be
 overridden by setting the AOLserver init parameter for the MIME type
-of <kbd>.tcl</kbd> files to include an explcit character set. If an explicit
+of <kbd>.tcl</kbd> files to include an explicit character set. If an explicit
 MIME type is not found, <kbd>ns_encodingfortype</kbd> will default to the
 AOLserver init parameter value <kbd>DefaultCharset</kbd> if it is set.
 <p>
@@ -575,7 +575,7 @@ _mr fr mail_notification "Le notification du email"
 
 
 In the example above, if the catalog file was loaded from the bboard
-package, all of the keys would be prefixed autmatically with "<code>bboard.</code>".
+package, all of the keys would be prefixed automatically with "<code>bboard.</code>".
 
 <h4>Loading A Message Catalog At Package Init Time</h4>
 
@@ -649,7 +649,7 @@ of an ADP file. Here is the documentation:
     <li><code>type</code> specifies the context in which the translation is made. If omitted,
     type is user which means that the translation is provided in the user's preferred language.
     <li><code>static</code> specifies that this tag should be translated once at template compile time, rather than dynamically every time the page is run. This will be unneccessaru and will be deprecated once we
-have implemented <em>effective locale</em> based cacheing for templates.
+have implemented <em>effective locale</em> based caching for templates.
  </ul>
     Example 1: Display the text string <em>Hello</em> on an ADP page (i.e. do nothing special):
     <pre>

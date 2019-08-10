@@ -761,7 +761,7 @@ ad_proc -public lang::message::lookup {
                               identifier for each locale. All keys belong to a certain
                               package and should be prefixed with the package key of that package
                               on the format package_key.message_key (the dot is reserved for separating
-                              the package key, the rest of the key should contain only alpha-numeric
+                              the package key, the rest of the key should contain only alphanumeric
                               characters and underscores). If the key does not belong to
                               any particular package it should not contain a dot. A lookup
                               is always attempted with the exact key given to this proc.

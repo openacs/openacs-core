@@ -21,7 +21,7 @@ ad_proc -public lc_parse_number {
 } {
     Converts a number to its canonical
     representation by stripping everything but the
-    decimal separator and triming left 0's so it
+    decimal separator and trimming left 0's so it
     won't be octal. It can process the following types of numbers:
     <ul>
     <li>Just digits (allows leading zeros).
@@ -350,7 +350,7 @@ ad_proc -public lc_time_fmt_compile {
     fmt
     locale
 } {
-    Compiles ISO 14652 LC_TIME style formatting string to variable substitions and proc calls.
+    Compiles ISO 14652 LC_TIME style formatting string to variable substitutions and proc calls.
 
     @param fmt             An ISO 14652 LC_TIME style formatting string.
     @param locale          Locale identifier must be in the locale database

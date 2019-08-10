@@ -657,7 +657,7 @@ ad_proc -private lang::catalog::import_messages {
     There are three sets of keys, file, db, and base keys. For each key in
     the union of these keys there are three messages that can exist: the file message, the db message, and the base message. The
     base message serves as the base for the merge. We will distinguish all the different permutations
-    of each of the three messages existing or not, and all permutations of the messages being different from eachother.
+    of each of the three messages existing or not, and all permutations of the messages being different from each other.
     We don't distinguish how two messages are different, only whether they are different or not.
     In total that gives us 14 cases (permutations) to consider.
     </p>

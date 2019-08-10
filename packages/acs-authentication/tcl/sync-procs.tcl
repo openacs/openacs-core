@@ -522,7 +522,7 @@ ad_proc -private auth::sync::get_sync_elements {
     # but these will issue an exception below.
     #
     # TODO: using a different error-code could make the code saver, by
-    # just ingnoring such cases.
+    # just ignoring such cases.
     #
     set elms [list]
     ad_try  {

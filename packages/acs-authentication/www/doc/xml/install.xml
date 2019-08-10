@@ -14,7 +14,7 @@
 
     <sect1 id="ext-auth-pam-install">
       <title>Using Pluggable Authentication Modules (PAM) with OpenACS</title>
-      <para>OpenACS supports PAM authetication via the ns_pam module in AOLserver.</para>
+      <para>OpenACS supports PAM authentication via the ns_pam module in AOLserver.</para>
       <orderedlist>
         <listitem>
           <formalpara>
@@ -190,7 +190,7 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
     <para>You do not want to make users remember yet another password and username. If you can avoid it you do not want to store their passwords either. This document should help you set your system up so your users can seamlessly log in to your OpenACS instance using the password they are accustomed to using for other things at your institution.</para></formalpara>
     <formalpara>
     <title>Background</title>
-     <para>The original OpenACS LDAP implementation (which has been depreciated by this package) treated the LDAP server as another data store similar to Oracle or Postgresql. It opened a connection using a privileged account and read or stored an encrypted password for the user in question. This password was independent of the user's operating system or network account, and had to be synchronized if you wanted the same password for OpenACS.</para>
+     <para>The original OpenACS LDAP implementation (which has been deprecated by this package) treated the LDAP server as another data store similar to Oracle or Postgresql. It opened a connection using a privileged account and read or stored an encrypted password for the user in question. This password was independent of the user's operating system or network account, and had to be synchronized if you wanted the same password for OpenACS.</para>
      <para>Save their passwords? Sync passwords? Deal with forgotten password requests? No Thanks. Using ldap bind, you can delegate authentication completely to LDAP. This way you can let the IT department (if you are lucky) worry about password storage/synchronization/etc. The bind operation takes a username and password and returns a true of false depending on whether they match up. This document takes the 'bind' approach so that your users LDAP/AD password (or whatever else you use) can be used to login to OpenACS.</para></formalpara>
     <formalpara>
      <title>Note on Account Creation</title>

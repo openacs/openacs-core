@@ -101,7 +101,7 @@ current session.
 The request processor should use the ad_locale API to figure out
 the preferred locale for a request (perhaps combining user
 preference with subsite defaults in some way). It will make this
-information accesible via the <kbd>ad_conn</kbd>
+information accessible via the <kbd>ad_conn</kbd>
  function:
 <pre><strong>ad_conn locale</strong></pre>
 <h4>Character Sets and Encodings</h4>
@@ -307,7 +307,7 @@ generally ISO-8859-1 for AOLserver running on Unix systems in
 English.
 <p>This default can be overridden by setting the AOLserver init
 parameter for the MIME type of <kbd>.tcl</kbd> files to include an
-explcit character set. If an explicit MIME type is not found,
+explicit character set. If an explicit MIME type is not found,
 <kbd>ns_encodingfortype</kbd> will default to the AOLserver init
 parameter value <kbd>DefaultCharset</kbd> if it is set.</p>
 <p>Example AOLserver .ini configuration file to set default script
@@ -432,7 +432,7 @@ _mr fr mail_notification "Le notification du email"
 </pre>
 
 In the example above, if the catalog file was loaded from the
-bboard package, all of the keys would be prefixed autmatically with
+bboard package, all of the keys would be prefixed automatically with
 "<code>bboard.</code>
 ".
 <h4>Loading A Message Catalog At Package Init Time</h4>
@@ -507,7 +507,7 @@ translation is provided in the user&#39;s preferred language.</li><li>
 translated once at template compile time, rather than dynamically
 every time the page is run. This will be unneccessaru and will be
 deprecated once we have implemented <em>effective locale</em> based
-cacheing for templates.</li>
+caching for templates.</li>
 </ul>
 Example 1: Display the text string <em>Hello</em> on an ADP page
 (i.e. do nothing special):

@@ -256,7 +256,7 @@ ad_proc -private auth::password::create_contract {} {
             CanChangePassword {
                 description {
                     Return whether the user can change his/her password through this implementation.
-                    The value is not supposed to depend on the username and should be cachable.
+                    The value is not supposed to depend on the username and should be cacheable.
                 }
                 input {
                     parameters:string,multiple
@@ -264,7 +264,7 @@ ad_proc -private auth::password::create_contract {} {
                 output {
                     changeable_p:boolean
                 }
-                iscachable_p "t"
+                iscacheable_p "t"
             }
             ChangePassword {
                 description {
@@ -285,7 +285,7 @@ ad_proc -private auth::password::create_contract {} {
             CanRetrievePassword {
                 description {
                     Return whether the user can retrieve his/her password through this implementation.
-                    The value is not supposed to depend on the username and should be cachable.
+                    The value is not supposed to depend on the username and should be cacheable.
                 }
                 input {
                     parameters:string,multiple
@@ -293,7 +293,7 @@ ad_proc -private auth::password::create_contract {} {
                 output {
                     retrievable_p:boolean
                 }
-                iscachable_p "t"
+                iscacheable_p "t"
             }
             RetrievePassword {
                 description {
@@ -314,7 +314,7 @@ ad_proc -private auth::password::create_contract {} {
             CanResetPassword {
                 description {
                     Return whether the user can reset his/her password through this implementation.
-                    The value is not supposed to depend on the username and should be cachable.
+                    The value is not supposed to depend on the username and should be cacheable.
                 }
                 input {
                     parameters:string,multiple
@@ -322,7 +322,7 @@ ad_proc -private auth::password::create_contract {} {
                 output {
                     resettable_p:boolean
                 }
-                iscachable_p "t"
+                iscacheable_p "t"
             }
             ResetPassword {
                 description {
