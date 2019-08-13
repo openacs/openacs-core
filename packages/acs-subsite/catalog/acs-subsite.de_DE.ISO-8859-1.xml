@@ -129,7 +129,7 @@
   <msg key="Date_of_birth">Geburtsdatum</msg>
   <msg key="Default_allowed_relationship_types">Standard erlaubte Beziehungstypen</msg>
   <msg key="default_context">Standardkontext</msg>
-  <msg key="Default_join_policy">Default join policy</msg>
+  <msg key="Default_join_policy">Default Beitrittsregelung</msg>
   <msg key="Define_a_new_group_type">Neuen Gruppentyp definieren</msg>
   <msg key="Define_a_new_relationship_type">Neuen Beziehungstyp definieren</msg>
   <msg key="Delete">Löschen</msg>
@@ -242,7 +242,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="ISO_Codes_not_loaded">ISO-Codes nicht geladen</msg>
   <msg key="Join_community">Community hinzufügen</msg>
   <msg key="Join_group_name">%group_name% hinzufügen</msg>
-  <msg key="Join_policy">Join policy</msg>
+  <msg key="Join_policy">Beitrittsregelung</msg>
   <msg key="Join_subsite">Subsite beitreten</msg>
   <msg key="Join_this_community">Diese Community hinzufügen</msg>
   <msg key="Join_this_subsite">Dieser Subsite beitreten</msg>
