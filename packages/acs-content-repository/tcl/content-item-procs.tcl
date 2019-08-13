@@ -458,7 +458,6 @@ ad_proc -public content::item::get_parent_folder {
     ] content_item get_parent_folder]
 }
 
-
 ad_proc -public content::item::get_path {
     -item_id:required
     {-root_folder_id ""}
