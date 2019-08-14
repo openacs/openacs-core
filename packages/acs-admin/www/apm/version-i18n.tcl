@@ -123,7 +123,7 @@ if {$file_type eq "adp"} {
 
 if { $pre_select_files_p } {
     set href [export_vars -base version-i18n -override {{pre_select_files_p 0}} {version_id file_type show_status_p only_text_p}]
-    set pre_select_filter [subst {<a href="[ns_quotehtml $href]">Unselect all checkboxes</a>}]
+    set pre_select_filter [subst {<a href="[ns_quotehtml $href]">Deselect all checkboxes</a>}]
 } else {
     set href [export_vars -base version-i18n -override {{pre_select_files_p 1}} {version_id file_type show_status_p only_text_p}]
     set pre_select_filter [subst {<a href="[ns_quotehtml $href]">Select all checkboxes</a>}]

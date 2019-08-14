@@ -490,7 +490,7 @@ comment on table cr_folder_type_map is '
   A one-to-many mapping table of content folders to content types. 
   Basically, this table restricts the content types a folder may contain.
   Future releases will add numeric and tagged constraints similar to
-  thos available for content types.  
+  those available for content types.  
 ';
 
 -- RI Indexes 

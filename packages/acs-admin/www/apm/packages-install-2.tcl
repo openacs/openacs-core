@@ -155,7 +155,7 @@ if {$package_key eq ""} {
     } else {
 
         ### Check failed.  Offer user an explanation and an ability to
-        ### select unselect packages.
+        ### select deselect packages.
 
         #[export_vars -form {package_key}]<p>
 

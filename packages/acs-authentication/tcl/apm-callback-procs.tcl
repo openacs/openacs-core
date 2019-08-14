@@ -235,7 +235,7 @@ ad_proc -private auth::authentication::create_contract {} {
 }
 
 ad_proc -private auth::authentication::delete_contract {} {
-    Delet service contract for authentication.
+    Delete service contract for authentication.
 } {
     acs_sc::contract::delete -name "auth_authentication"
 }

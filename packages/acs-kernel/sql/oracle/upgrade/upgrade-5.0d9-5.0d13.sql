@@ -561,7 +561,7 @@ as
    -- N_GENERATIONS is how far the current DESCENDANT_ID is from
    -- OBJECT_ID.
 
-   -- This function will verfy that each actually descendant of
+   -- This function will verify that each actually descendant of
    -- OBJECT_ID has a row in the index table. It does not check that
    -- there aren't extraneous rows or that the ancestors of OBJECT_ID
    -- are maintained correctly.
@@ -4047,7 +4047,7 @@ as
 
   function violation (
     --/** Checks to see if there a relational constraint is violated
-    --    by the precense of the specified relation. If not, returns 
+    --    by the presence of the specified relation. If not, returns 
     --    null. If so, returns an appropriate error string.
     -- 
     --    @author Oumi Mehrotra (oumi@arsdigita.com)
@@ -4655,7 +4655,7 @@ as
 
   -- Return the node_id of a URL. If the url begins with '/' then the
   -- parent_id must be null. This will raise the no_data_found
-  -- exception if there is no mathing node in the site_nodes table.
+  -- exception if there is no matching node in the site_nodes table.
   -- This will match directories even if no trailing slash is included
   -- in the url.
 
@@ -5166,7 +5166,7 @@ where rc.rel_segment in (
 --                          tell you which segment -- you can get that info
 --                          from rel_constraints table or other views.
 --
--- Another Note: not all segemnts in rel_segemnts are returned by this view.
+-- Another Note: not all segments in rel_segments are returned by this view.
 -- This view only returns segments S that have at least one rel_constraints row
 -- where rel_segment = S.  Segments that have no constraints defined on them
 -- can be said to have dependency_level=0, hence the outer join and nvl in the

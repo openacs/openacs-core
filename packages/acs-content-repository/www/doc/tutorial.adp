@@ -651,7 +651,7 @@ $$ language plpgsql;
 Note that this example is for projects rather than tasks. This is
 because for the application I&#39;m writing, projects are what
 tasks are stored inside of. A project has many component tasks. If
-you were writing another application, or if I wasn&#39;t doing
+you were writing another application, or if I was not doing
 anything with projects, then this would be creating a folder for
 just tasks.
 <p>Typically, this definition would go in your
@@ -794,7 +794,7 @@ content_template defined wrong</a>
 <h3>Troubleshooting</h3>
 
 One problem I ran into while trying to get my SQL create and drop
-scripts working was that sometimes I wasn&#39;t able to delete a
+scripts working was that sometimes I was not able to delete a
 content type because I would get errors like these:
 <blockquote><pre>
 Referential Integrity: attempting to delete live_revision: 658

@@ -3,7 +3,7 @@
 --   
 -- - content_revision__del:
 --   * Removed manual nulling of live_revision and latest_revision
---     by using appropriate ond delete actions on foreign keys
+--     by using appropriate delete actions on foreign keys
 --   * Removed manual deletion of old_revision and new_revision in
 --     cr_item_publish_audit by using "on delete cascade"
 -- 

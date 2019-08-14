@@ -67,7 +67,7 @@ I install the Open Architecture Community System?</title>
 
 <para>We strongly recommend that you thoroughly examine the <link linkend="unix-install">step-by-step OpenACS
 installation</link> guide, even if you already have a working Unix and Oracle
-installtion.</para>
+installation.</para>
 
 <para>The guide contains up-to-date information on the default settings that
 OpenACS developers use to generate properly running sites.  Deviations from these

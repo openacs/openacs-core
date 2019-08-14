@@ -68,7 +68,7 @@ ad_form -name new_test -method post -export {package_key return_url} \
     -validate {
 	{ test_name
 	    { $test_name ne "" }
-	    {The name can not contain special characteres, whitespaces or be null} 
+	    {The name can not contain special characters, whitespaces or be null} 
 	}
 	{ login_type
 	    { 1 } 
@@ -157,7 +157,7 @@ aa_register_case \
        aa_log \"Running test case ${test_name} \"
        aa_log \"${test_description} \"
        set response 0
-       aa_log \" Loging in the user\"
+       aa_log \" Log-in the user\"
        $login_code
        #------------------ TwtR code -----------------
        ${test_code}

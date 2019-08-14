@@ -645,7 +645,10 @@ $$ language plpgsql;
 </pre></blockquote>
 
 
-Note that this example is for projects rather than tasks. This is because for the application I'm writing, projects are what tasks are stored inside of. A project has many component tasks. If you were writing another application, or if I wasn't doing anything with projects, then this would be creating a folder for just tasks.
+Note that this example is for projects rather than tasks. This is
+because for the application I'm writing, projects are what tasks are
+stored inside of. A project has many component tasks. If you were
+writing another application, or if I was not doing anything with projects, then this would be creating a folder for just tasks.
 
 <P>
 Typically, this definition would go in your <code>sql/postgresql/project-manager-create.sql</code> file. If this file is broken in several parts, this would go in the project-manager-create-functions.sql portion.
@@ -742,7 +745,9 @@ The only place content templates are used in OpenACS are in the 5.0 version of f
 
 <h3>Troubleshooting</h3>
 
-One problem I ran into while trying to get my SQL create and drop scripts working was that sometimes I wasn't able to delete a content type because I would get errors like these:
+One problem I ran into while trying to get my SQL create and drop
+scripts working was that sometimes I was not able to delete a content
+type because I would get errors like these:
 
 <blockquote><pre>
 Referential Integrity: attempting to delete live_revision: 658

@@ -1,7 +1,7 @@
 --
--- Replace obsolete funktion bitfromint4() by cast
+-- Replace obsolete function bitfromint4() by cast
 ---
--- ... but keep emulation function still around in case somebodes uses
+-- ... but keep emulation function still around in case somebody uses
 -- this still....
 --
 

@@ -405,7 +405,7 @@ where rc.rel_segment in (
 --                          tell you which segment -- you can get that info
 --                          from rel_constraints table or other views.
 --
--- Another Note: not all segemnts in rel_segemnts are returned by this view.
+-- Another Note: not all segments in rel_segments are returned by this view.
 -- This view only returns segments S that have at least one rel_constraints row
 -- where rel_segment = S.  Segments that have no constraints defined on them
 -- can be said to have dependency_level=0, hence the outer join and nvl in the
@@ -467,7 +467,7 @@ as
 
   function violation (
     --/** Checks to see if there a relational constraint is violated
-    --    by the precense of the specified relation. If not, returns 
+    --    by the presence of the specified relation. If not, returns 
     --    null. If so, returns an appropriate error string.
     -- 
     --    @author Oumi Mehrotra (oumi@arsdigita.com)
