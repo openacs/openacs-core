@@ -219,8 +219,8 @@ aa_register_case \
     ns_unregister_op GET /test.testf
 
     set response_body [dict get $d body]
-    ns_log notice "CONTEXT BARP $context_barp"
-    ns_log notice "RESPONS BODY $response_body"
+    ns_log notice "CONTEXT  BARP $context_barp"
+    ns_log notice "RESPONSE BODY $response_body"
     aa_equals "Context bar" [ns_quotehtml $response_body] [ns_quotehtml $context_barp]
 }
 

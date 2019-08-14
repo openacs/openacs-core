@@ -86,7 +86,7 @@
   <msg key="Page">Σελίδα με σφάλμα:</msg>
   <msg key="Page_current_of_total">Σελίδα %current% από %total% </msg>
   <msg key="Percentage_complete">Ποσοστό ολοκληρώθηκε</msg>
-  <msg key="Previus">Προηγούμενη σελίδα:</msg>
+  <msg key="Previous">Προηγούμενη σελίδα:</msg>
   <msg key="Public_User">Γενικός χρήστης</msg>
   <msg key="reject">απόρριψη</msg>
   <msg key="Report">Αναφορά σφάλματος</msg>

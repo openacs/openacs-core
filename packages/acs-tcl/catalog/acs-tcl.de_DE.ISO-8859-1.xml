@@ -89,7 +89,7 @@
   <msg key="Page">Seite mit Fehler:</msg>
   <msg key="Page_current_of_total">Seite %current% von %total%</msg>
   <msg key="Percentage_complete">Prozentsatz abgeschlossen</msg>
-  <msg key="Previus">Vorhergehende Seite:</msg>
+  <msg key="Previous">Vorhergehende Seite:</msg>
   <msg key="Public_User">Öffentlicher (nicht registrierter) User </msg>
   <msg key="reject">Ablehnen</msg>
   <msg key="Report">Fehler melden</msg>

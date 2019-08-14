@@ -87,7 +87,7 @@
   <msg key="Page">Страница с ошибкой</msg>
   <msg key="Page_current_of_total">Страница %current% из %total%</msg>
   <msg key="Percentage_complete">Процент готовности</msg>
-  <msg key="Previus">Предыдущая страница:</msg>
+  <msg key="Previous">Предыдущая страница:</msg>
   <msg key="Public_User">Публичный пользователь</msg>
   <msg key="reject">отказать</msg>
   <msg key="Report">Сообщить об ошибке</msg>

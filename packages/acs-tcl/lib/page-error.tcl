@@ -33,7 +33,7 @@ set error_desc_email [subst {
  --------------------------------------------------------<br>
                    [_ acs-tcl.Error_Report]<br>
  --------------------------------------------------------<br>
-<strong>[_ acs-tcl.Previus]</strong> [ns_quotehtml $return_url]<br>
+<strong>[_ acs-tcl.Previous]</strong> [ns_quotehtml $return_url]<br>
 <strong>[_ acs-tcl.Page]</strong> [ns_quotehtml $error_url]<br>
 <strong>[_ acs-tcl.File]</strong> [ns_quotehtml $error_file]<br>
 <strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]<br>
@@ -194,7 +194,7 @@ if {$auto_submit_p && $user_id > 0} {
             {mode display}
         }
         {previus_url:text(inform)
-            {label "[_ acs-tcl.Previus]"}
+            {label "[_ acs-tcl.Previous]"}
             {value $prev_url}
         }
         {err_url:text(inform)
@@ -264,7 +264,7 @@ if {$auto_submit_p && $user_id > 0} {
  -------------------------------------------------------- <br>
                    [_ acs-tcl.Error_Report] <br>
  -------------------------------------------------------- <br>
-<br><strong>[_ acs-tcl.Previus]</strong> [ns_quotehtml $prev_url]
+<br><strong>[_ acs-tcl.Previous]</strong> [ns_quotehtml $prev_url]
 <br><strong>[_ acs-tcl.Page]</strong> [ns_quotehtml $error_url]
 <br><strong>[_ acs-tcl.File]</strong> [ns_quotehtml $error_file]
 <br><strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]
