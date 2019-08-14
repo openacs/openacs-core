@@ -198,7 +198,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     # with the OpenACS default database pools:
     #
     # TODO: For now the below pool-checking code runs ONLY for the
-    # default database.  Should probalby extend the checking to all
+    # default database.  Should probably extend the checking to all
     # configured databases:
     #
     # --atp@piskorski.com, 2003/03/17 00:53 EST

@@ -84,7 +84,7 @@ if { ![db_string user_exists {
     #   set user_id $creation_info(user_id)
     # }
 
-    # .. so use the low level helper
+    # .. so use the low-level helper
     set user_id [auth::create_local_account_helper \
     		     $email \
     		     $first_names \

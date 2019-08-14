@@ -58,7 +58,7 @@ proc ad_get_tcl_call_stack { { level -2 }} {
         set info [info level $x]
         regsub -all \n $info {\\n} info
         #
-        # In case, we have an nsf frame, add information about the
+        # In case, we have an NSF frame, add information about the
         # current object and the current class to the debug output.
         #
         if {![catch {uplevel #$x ::nsf::current} obj]
