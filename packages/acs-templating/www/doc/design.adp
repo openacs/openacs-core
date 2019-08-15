@@ -251,7 +251,7 @@ and thus cached for future use. Tcl pages are also cached in a
 proc; this saves the trouble of reading and parsing the file the
 next time. The template system remembers the modification times of
 the adp and Tcl sources, and re-processes any requested file if the
-cached version is no longer current. Consequently, this cacheing is
+cached version is no longer current. Consequently, this caching is
 transparent in normal use.</p>
 <p>To emphasize that "normal" use essentially always
 applies, here&#39;s a scenario for abnormal use: Save version

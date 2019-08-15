@@ -18,7 +18,7 @@ Linker.prototype._createLink = function(a)
     target:   '',
     p_width:  '',
     p_height: '',
-    p_options: ['menubar=no','toolbar=yes','location=no','status=no','scrollbars=yes','resizeable=yes'],
+    p_options: ['menubar=no','toolbar=yes','location=no','status=no','scrollbars=yes','resizable=yes'],
     to:       'alice@example.com',
     subject:  '',
     body:     '',

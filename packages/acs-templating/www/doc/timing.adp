@@ -40,7 +40,7 @@ version on disk is out of date. ADP pages are compiled to TCL, and
 both ADP and Tcl pages are cached as Tcl procs. The parameter
 <code>RefreshCache</code> in section <code>template</code> can be
 set to <code>always</code> or <code>never</code> to affect the
-cacheing strategy; the latter may be useful for a production site.
+caching strategy; the latter may be useful for a production site.
 All timing is carried out for the three settings
 <code>always</code>, <code>normal</code>, and <code>never</code>;
 the associated variable is called <code>check</code>.</p>

@@ -50,7 +50,7 @@ clearly fastest. Always reparsing pages expectedly affects the
 templated page, and -2, which compiles two ADP pages, is affected
 more than -1. The benefit of -2, wrapping -1 in another include,
 isn&#39;t apparent; on the contrary, -1 is in all cases a bit
-faster than -2. The benefit of cacheing seems more than offset by
+faster than -2. The benefit of caching seems more than offset by
 the extra complexity of nesting several templates.</p>
 <h4>Invoking trace filter ad_issue_deferred_dml</h4>
 <img src="time1/stage11.gif">
