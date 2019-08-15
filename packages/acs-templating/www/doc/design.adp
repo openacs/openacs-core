@@ -265,7 +265,7 @@ parameter <code>RefreshCache</code> in section
 <code>template</code> to <code>never</code> or <code>always</code>.
 The former suppresses checking mtime and may improve performance on
 a production server, where the content pages don&#39;t change. The
-latter is only inteded for testing.</p>
+latter is only intended for testing.</p>
 <h3>VII. Data Model Discussion</h3>
 <p>This package doesn&#39;t need a data model.</p>
 <p>It comes with its own database interfaces, one for using ns_ora,

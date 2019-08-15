@@ -155,7 +155,7 @@ preserve this you must call "template::wizard
 load_last_visited_step -key $yourkey" before
 "template::wizard get_current_step", after
 "get_current_step" call "template::wizard
-save_last_visited_step -key $yourkey"</p><p>Also the wizard params name is present across the curent wizards
+save_last_visited_step -key $yourkey"</p><p>Also the wizard params name is present across the current wizards
 being used, so the developer has to be aware not to use the same
 names with different purpose. For example on main wizard with have
 a param called "name" for the user name. And on on sub

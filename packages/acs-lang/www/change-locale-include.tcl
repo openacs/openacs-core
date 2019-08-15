@@ -9,7 +9,7 @@ if { ![info exists return_url] || $return_url eq "" } {
 }
 
 #
-# Check if the passed in value or the referer is faked
+# Check if the passed in value or the referrer is faked
 #
 if {[util::external_url_p $return_url]} {
     ad_page_contract_handle_datasource_error "invalid url"

@@ -702,7 +702,7 @@ begin
    attribute_name => 'min_n_values',
    datatype => 'number',
    pretty_name => 'Minimum Number of Values',
-   pretty_plural => 'Minimum Numer of Values Settings',
+   pretty_plural => 'Minimum Number of Values Settings',
    default_value => 1
  );
 

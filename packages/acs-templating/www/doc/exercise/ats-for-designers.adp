@@ -28,7 +28,7 @@ will help us understand how it works. An ATS template itself serves
 as a reusable, unchanging framework that delivers dynamic data. The
 advantage to this is something you probably already realize: you
 need only build and edit a few pages to maintain a consistent
-presentation style while accommodating numerous permutaions of
+presentation style while accommodating numerous permutations of
 changing data.</p>
 <p>This training module will teach largely by exercise and example,
 but you should also refer regularly to the <a href="../index">ATS documents</a> provided and more specific
