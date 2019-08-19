@@ -19,11 +19,11 @@ ad_library {
  } {
      set party_id [ds_ad_conn user_id]
      if {$party_id == 0 || $party_id eq ""} {
-         # set up a fake id in order to make user_switching mode work
-         # with
-         # non logged users, if not it will enter into a infinite loop
-         # with
-         # ad_conn in any new unknown request (roc)
+         #
+         # Set up a fake id in order to make user_switching mode work
+         # with non logged-in users, if not it will enter into a
+         # infinite loop with ad_conn in any new unknown request (roc)
+         #
          set party_id "-99"
      }
      return [permission::permission_p -party_id $party_id -object_id [ds_instance_id] -privilege "admin"]
@@ -61,9 +61,21 @@ ad_library {
      if {[info exists ::ds_enabled_p]} {
          return $::ds_enabled_p
      }
-     if { [ns_conn isconnected] == 0
-          || ![nsv_exists ds_properties enabled_p]
-          || ![nsv_get ds_properties enabled_p]
+
+     #
+     # Never cache values in background tasks. When e.g. the
+     # blueprint is refreshed in the background, this would always
+     # set the ::ds_enabled_p to 1.
+     #
+     if { [ns_conn isconnected] == 0 } {
+         return 0
+     }
+     #
+     # Get the nsv values and cache it in the current thread.
+     #
+     if {
+         ![nsv_exists ds_properties enabled_p]
+         || ![nsv_get ds_properties enabled_p]
       } {
          set ::ds_enabled_p 0
      } else {
