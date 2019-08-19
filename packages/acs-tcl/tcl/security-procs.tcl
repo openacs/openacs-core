@@ -1,7 +1,7 @@
 ad_library {
 
     Provides methods for authorizing and identifying ACS users
-    (both logged in and not) and tracking their sessions.
+    (both logged-in and not) and tracking their sessions.
 
     @creation-date 16 Feb 2000
     @author Jon Salz (jsalz@arsdigita.com)
@@ -64,7 +64,7 @@ ad_proc -private sec_random_token {} {
         set start_clicks "cvs.openacs.org"
     }
     if {[acs::icanuse "ns_crypto::randombytes"]} {
-        if {![info exists ::tcl_sec_seed]} { set ::tcl_sec_seed [ns_crypto::randombytes 16].$start_clicks }    
+        if {![info exists ::tcl_sec_seed]} { set ::tcl_sec_seed [ns_crypto::randombytes 16].$start_clicks }
         set random_base [ns_sha1 "[ns_time][ns_crypto::randombytes -encoding binary 16]$start_clicks$request$::tcl_sec_seed"]
     } else {
         if {![info exists ::tcl_sec_seed]} { set ::tcl_sec_seed [ns_rand].$start_clicks }
@@ -317,7 +317,7 @@ ad_proc -private sec_handler {} {
 
         if {  $session_expr - [sec_session_renew] < [ns_time] } {
 
-            # # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
+            # # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged-in forever
             # # if only they keep requesting pages frequently enough, but the alternative was that
             # # the situation where LoginTimeout = 0 (infinite) and the user unchecks the "Remember me" checkbox
             # # would cause users' sessions to expire as soon as the session needed to be renewed
@@ -495,7 +495,7 @@ ad_proc -public ad_user_login {
         set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
     }
 
-    # If you're logged in over a secure connection, you're secure
+    # If you're logged-in over a secure connection, you're secure
     if { $secure_p } {
         ad_set_signed_cookie \
             -max_age $max_age \
@@ -669,8 +669,8 @@ ad_proc -private sec_setup_session {
         #
         # $session_id is an active verified session this call is
         # either a user logging in on an active unidentified session,
-        # or a change in identity for a browser that is already logged
-        # in.
+        # or a change in identity for a browser that is already
+        # logged-in.
         #
         set prev_user_id [ad_conn user_id]
 
@@ -989,7 +989,7 @@ ad_proc -private security::get_register_subsite {} {
             set url [subsite::get_element -element url]
             #
             # Check to see that the user (most likely "The Public"
-            # party, since there's probably no user logged in)
+            # party, since there's probably no user logged-in)
             # actually have permission to view that subsite, otherwise
             # we'll get into an infinite redirect loop.
             #
@@ -1176,10 +1176,10 @@ ad_proc -public ad_sign {
            When the value is "-1" only the user who created the signature can
            obtain the value again.
            When the value is "-2" only the user with the same csrf token can
-           obtain the value again. 
+           obtain the value again.
 
            The permissible values might be extended in the future.
-    
+
     @param value the value to be signed.
 } {
     if {$token_id eq ""} {
@@ -2813,7 +2813,7 @@ namespace eval ::security::csrf {
             set session_id [ad_conn peeraddr]
         } else {
             #
-            # User is logged in, use a session token.
+            # User is logged-in, use a session token.
             #
             set session_id [ad_conn session_id]
         }

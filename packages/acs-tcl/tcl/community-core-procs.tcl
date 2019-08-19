@@ -239,7 +239,7 @@ ad_proc -public person::get_bio {
     Get the value of the user's bio(graphy) field.
 
     @option person_id    The person_id of the person to get the bio for. Leave blank for
-       currently logged in user.
+       currently logged-in user.
 
     @option exists_var The name of a variable in the caller's namespace, which will be set to 1
                        if the bio column is not null.  Leave blank if you're not
@@ -684,7 +684,7 @@ ad_proc -public acs_user::get_user_id_by_screen_name {
 ad_proc -public acs_user::site_wide_admin_p {
     {-user_id ""}
 } {
-    Return 1 if the specified user (defaults to logged in user)
+    Return 1 if the specified user (defaults to logged-in user)
     is site-wide administrator and 0 otherwise.
 
     @param user_id The id of the user to check for admin privilege.
@@ -703,7 +703,7 @@ ad_proc -public acs_user::site_wide_admin_p {
 ad_proc -public acs_user::registered_user_p {
     {-user_id ""}
 } {
-    Return 1 if the specified user (defaults to logged in user)
+    Return 1 if the specified user (defaults to logged-in user)
     is a registered user and 0 otherwise.
 
     A registered user is a user who is in the view registered_users and
