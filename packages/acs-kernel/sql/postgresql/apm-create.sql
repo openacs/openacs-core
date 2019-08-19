@@ -906,7 +906,7 @@ attr_id := acs_attribute__create_attribute (
    'min_n_values',
    'number',
    'Minimum Number of Values',
-   'Minimum Numer of Values Settings',
+   'Minimum Number of Values Settings',
    null,
    null,
    1,

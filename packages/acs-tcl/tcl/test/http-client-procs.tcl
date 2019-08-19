@@ -1,6 +1,6 @@
 ad_library {
 
-    Tests fot HTTP client API
+    Tests for HTTP client API
 
 }
 
