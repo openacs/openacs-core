@@ -21,18 +21,19 @@ set package_id [ad_conn package_id]
 set page_title "Developer Support"
 set context {}
 
-append body "
+append body [subst {
 <ul>
-<li><a href=\"shell.tcl\">OpenACS Shell</a>
-<li>Developer support toolbar is currently
-[expr {$enabled_p ?
-                  "on (<a href=\"set?field=ds&amp;enabled_p=0\">turn it off</a>)" :
-                  "off (<a href=\"set?field=ds&amp;enabled_p=1\">turn it on</a>)"}]
+    <li><a href='shell.tcl'>OpenACS Shell</a>
+    [expr {[ns_config ns/server/[ns_info server]/module/nsshell url {}] ne {} ?
+           "<li><a href='nsshell.tcl'>NaviServer Shell</a></li>" : {}}]
+    <li>Developer support toolbar is currently
+    [expr {$enabled_p ?
+                  "on (<a href='set?field=ds&amp;enabled_p=0'>turn it off</a>)" :
+                  "off (<a href='set?field=ds&amp;enabled_p=1'>turn it on</a>)"}]
 
-<li>Developer support information is currently
-restricted to the following IP addresses:
-<ul>
-"
+    <li>Developer support information is currently restricted to the following IP addresses:
+    <ul>
+}]
 
 set enabled_ips [nsv_get ds_properties enabled_ips]
 set includes_this_ip_p 0
@@ -44,7 +45,7 @@ if { [llength $enabled_ips] == 0 } {
 	    set includes_this_ip_p 1
 	}
 	if { [regexp {[\*\?\[\]]} $ip] } {
-	    append body "<li>IPs matching the pattern \"<code>$ip</code>\"\n"
+	    append body "<li>IPs matching the pattern '<code>$ip</code>'\n"
 	} else {
 	    append body "<li>$ip\n"
 	}
@@ -57,7 +58,7 @@ if { !$includes_this_ip_p } {
 set requests [nsv_array names ds_request]
 
 set parameterHref [export_vars -base /shared/parameters { package_id { return_url {[ad_return_url]} } }]
-append body "
+append body [subst {
 </ul>
 
 <li>Information is being swept every [parameter::get -parameter DataSweepInterval -default 900] sec
@@ -69,23 +70,23 @@ and has a lifetime of [parameter::get -parameter DataLifetime -default 900] sec
 
 <li>User-switching is currently
 [expr {$user_switching_enabled_p ?
-                  "on (<a href=\"set?field=user&amp;enabled_p=0\">turn it off</a>)" :
-                  "off (<a href=\"set?field=user&amp;enabled_p=1\">turn it on</a>)"}]
+                  "on (<a href='set?field=user&amp;enabled_p=0'>turn it off</a>)" :
+                  "off (<a href='set?field=user&amp;enabled_p=1'>turn it on</a>)"}]
 
 <li>Database statistics is currently
 [expr {$database_enabled_p ?
-                  "on (<a href=\"set?field=db&amp;enabled_p=0\">turn it off</a>)" :
-                  "off (<a href=\"set?field=db&amp;enabled_p=1\">turn it on</a>)"}]
+                  "on (<a href='set?field=db&amp;enabled_p=0'>turn it off</a>)" :
+                  "off (<a href='set?field=db&amp;enabled_p=1'>turn it on</a>)"}]
 
 <li>Template profiling is currently
 [expr {$profiling_enabled_p ?
-                  "on (<a href=\"set?field=prof&amp;enabled_p=0\">turn it off</a>)" :
-                  "off (<a href=\"set?field=prof&amp;enabled_p=1\">turn it on</a>)"}]
+                  "on (<a href='set?field=prof&amp;enabled_p=0'>turn it off</a>)" :
+                  "off (<a href='set?field=prof&amp;enabled_p=1'>turn it on</a>)"}]
 
 <li>ADP reveal is currently
 [expr {$adp_reveal_enabled_p ?
-                  "on (<a href=\"set?field=adp&amp;enabled_p=0\">turn it off</a>)" :
-                  "off (<a href=\"set?field=adp&amp;enabled_p=1\">turn it on</a>)"}]
+                  "on (<a href='set?field=adp&amp;enabled_p=0'>turn it off</a>)" :
+                  "off (<a href='set?field=adp&amp;enabled_p=1'>turn it on</a>)"}]
 
 <p>
 <li> Help on <a href='doc/editlocal'>edit and code links</a>.
@@ -93,7 +94,7 @@ and has a lifetime of [parameter::get -parameter DataLifetime -default 900] sec
 
 <h3>Available Request Information</h3>
 <blockquote>
-"
+}]
 
 if { [llength $requests] == 0 } {
     append body "There is no request information available."
