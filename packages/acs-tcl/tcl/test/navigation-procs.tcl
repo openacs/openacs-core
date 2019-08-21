@@ -144,13 +144,14 @@ aa_register_case -cats {
         set context_barp ""
         foreach value $bar_components {
             append context_barp \
-                [subst {<a href="[lindex $value 0]">[lindex $value 1]</a> $separator }]
+                [subst {<a href="[ns_quotehtml [lindex $value 0]]">[ns_quotehtml [lindex $value 1]]</a> $separator }]
         }
         append context_barp "$leave_node"
         set context_bar [ad_context_bar -node_id $idr_1 -separator $separator $leave_node]
 
         # Test
-        aa_log "ad_context_bar 1: '$context_bar'\nad_context_bar 2: '$context_barp'"
+        set msg [ns_quotehtml "ad_context_bar 1: '$context_bar'\nad_context_bar 2: '$context_barp'"]
+        aa_log "<pre>$msg</pre>"
         aa_equals "Context_bar = $context_barp"  $context_bar $context_barp
 
         #-----------------------------------------------------------------------
@@ -161,10 +162,13 @@ aa_register_case -cats {
         set context_barp ""
         foreach value $bar_components {
             append context_barp \
-                [subst {<a href="[lindex $value 0]">[lindex $value 1]</a> $separator }]
+                [subst {<a href="[ns_quotehtml [lindex $value 0]]">[ns_quotehtml [lindex $value 1]]</a> $separator }]
         }
         append context_barp "$leave_node"
         set context_bar [ad_context_bar -node_id $idr_2 -separator $separator $leave_node]
+
+        set msg [ns_quotehtml "ad_context_bar 1: '$context_bar'\nad_context_bar 2: '$context_barp'"]
+        aa_log "<pre>$msg</pre>"
 
         aa_equals "Context_bar = $context_barp"  $context_bar $context_barp
 
