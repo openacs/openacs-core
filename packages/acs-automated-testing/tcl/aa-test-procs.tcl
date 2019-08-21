@@ -506,39 +506,40 @@ ad_proc -public aa_register_case {
     if {[llength $init_classes] == 0} {
         set init_class_code ""
     } else {
-        set init_class_code "
-    global aa_init_class_logs
-    upvar 2 _aa_exports _aa_exports
-    foreach init_class \[list $init_classes\] {
-      if {[llength $init_class] == 2} {
-        lassign $init_class init_class init_package_key
-      } else {
-        set init_package_key $package_key
-      }
-      foreach v \$_aa_exports(\[list \$init_package_key \$init_class\]) {
-        upvar 2 \$v \$v
-      }
-      foreach logpair \$aa_init_class_logs(\[list \$init_package_key \$init_class\]) {
-        aa_log_result \[lindex \$logpair 0\] \[lindex \$logpair 1\]
-      }
-    }
-    "
+        set init_class_code [string map [
+        list @init_classes@ [list $init_classes] @package_key@ [list $package_key]] {
+            global aa_init_class_logs
+            upvar 2 _aa_exports _aa_exports
+            foreach init_class @init_classes@ {
+                if {[llength $init_class] == 2} {
+                    lassign $init_class init_class init_package_key
+                } else {
+                    set init_package_key @package_key@
+                }
+                foreach v $_aa_exports([list $init_package_key $init_class]) {
+                    upvar 2 $v $v
+                }
+                foreach logpair $aa_init_class_logs([list $init_package_key $init_class]) {
+                    aa_log_result [lindex $logpair 0] [lindex $logpair 1]
+                }
+            }
+        }]
     }
 
-    set body "
-    $init_class_code
-    set _aa_export {}
-    set body_count 1
-    foreach testcase_body \[list $args\] {
-      aa_log \"Running testcase body \$body_count\"
-      set ::__aa_test_indent \[info level\]
-      set catch_val \[catch \"eval \[list \$testcase_body\]\" msg\]
-      if {\$catch_val != 0 && \$catch_val != 2} {
-          aa_log_result \"fail\" \"$testcase_id (body \$body_count): Error during execution: \${msg}, stack trace: \n\$::errorInfo\"
-      }
-      incr body_count
-    }
-  "
+    set body [string map [list @init_class_code@ $init_class_code @args@ [list $args]] {
+        @init_class_code@
+        set _aa_export {}
+        set body_count 1
+        foreach testcase_body @args@ {
+          aa_log "Running testcase body $body_count"
+          set ::__aa_test_indent [info level]
+          set catch_val [catch $testcase_body msg]
+          if {$catch_val != 0 && $catch_val != 2} {
+              aa_log_result "fail" "$testcase_id (body $body_count): Error during execution: $msg, stack trace: \n$::errorInfo"
+          }
+          incr body_count
+        }
+    }]
 
     ad_proc -private _${package_key}__$testcase_id {} $body
     ns_log Debug "aa_register_case: Registered test case $testcase_id in package $package_key"
@@ -559,12 +560,12 @@ ad_proc -public aa_export_vars {
     set item_id 109
     </pre>
 } {
-    uplevel "
-    foreach v $args {
-      upvar \$v \$v
-      uplevel 1 \"lappend _aa_export \$v\"
+    uplevel 1 [string map [list @args@ [list $args]] {
+        foreach v @args@ {
+          upvar $v $v
+          uplevel 1 [list lappend _aa_export $v]
+        }
     }
-  "
 }
 
 ad_proc -public aa_runseries {
@@ -1003,25 +1004,25 @@ ad_proc -public aa_run_with_teardown {
     @author Peter Marklund
 } {
     if { $rollback_p } {
-        set test_code "
+        set test_code [string map [list @test_code@ $test_code] {
             set errmsg {}
             db_transaction {
                aa_start_rollback_block
 
-               $test_code
+               @test_code@
 
                 aa_end_rollback_block
-                error \"rollback tests\"
+                error "rollback tests"
             } on_error {
                 aa_end_rollback_block
             }
 
             aa_execute_rollback_tests
 
-            if { \$errmsg ne {} && \$errmsg ne \"rollback tests\"\ } {
-                error \"\$errmsg \n\n \$::errorInfo\"
+            if { $errmsg ne {} && $errmsg ne "rollback tests" } {
+                error "$errmsg \n\n $::errorInfo"
             }
-        "
+        }]
     }
 
     # Testing
