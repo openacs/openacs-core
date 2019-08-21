@@ -1,5 +1,5 @@
 ad_library {
-    Procedures for tsearch full text enginge driver
+    Procedures for tsearch full text engine driver
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
