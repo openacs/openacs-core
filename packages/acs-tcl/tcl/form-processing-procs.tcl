@@ -806,12 +806,13 @@ ad_proc -public ad_form {
         }
     }
 
-    # Antonio Pisano: export property will eventually end up into
-    # template::form::render, where export_vars will take care of
-    # creating the required hidden form fields according to
-    # specification.
+    # Use export_vars to serialize variables from -export flag as
+    # hidden form fields. We need to do it now rather than later in
+    # the rendering, as only now the uplevel variables come from is
+    # well known.
     if { [info exists export] } {
-        template::form::set_properties $form_name export $export
+        template::form::set_properties $form_name exported_vars \
+            [uplevel [list export_vars -form $export]]
     }
 
     # We need to track these for submission time and for error checking

@@ -633,12 +633,11 @@ ad_proc -private template::form::render { id tag_attributes } {
         append output "<legend>$fieldset_legend</legend>"
     }
 
-    # Export variables specified by the export property as hidden
-    # formfields. (used e.g. by ad_form when specifying the -export
-    # flag)
-    if { [info exists form_properties(export)] } {
+    # Include exported variables created by ad_form when specifying
+    # the -export flag
+    if { [info exists form_properties(exported_vars)] } {
         append output {<!-- Exported form vars START -->}
-        append output [uplevel #$level [subst {export_vars -form {$form_properties(export)}}]]
+        append output $form_properties(exported_vars)
         append output {<!-- Exported form vars END -->}
     }
 
