@@ -10,7 +10,7 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-create or replace view content_item_globals as 
+create or replace view content_item_globals as
 select -100 as c_root_folder_id;
 
 
@@ -42,10 +42,10 @@ BEGIN
     if NOT FOUND then
        raise EXCEPTION ' -20000: Could not find a root folder for item ID %. Either the item does not exist or its parent value is corrupted.', get_root_folder__item_id;
     end if;
-  end if;    
+  end if;
 
   return v_folder_id;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -92,7 +92,7 @@ DECLARE
 BEGIN
 
   -- place the item in the context of the pages folder if no
-  -- context specified 
+  -- context specified
 
   if new__parent_id is null then
     select c_root_folder_id from content_item_globals into v_parent_id;
@@ -114,10 +114,10 @@ BEGIN
     v_title := new__title;
   end if;
 
-  if v_parent_id = -4 or 
+  if v_parent_id = -4 or
     content_folder__is_folder(v_parent_id) = 't' then
 
-    if v_parent_id != -4 and 
+    if v_parent_id != -4 and
       content_folder__is_registered(
         v_parent_id, new__content_type, 'f') = 'f' then
 
@@ -127,7 +127,7 @@ BEGIN
   else if v_parent_id != -4 then
 
      if new__relation_tag is null then
-       v_rel_tag := content_item__get_content_type(v_parent_id) 
+       v_rel_tag := content_item__get_content_type(v_parent_id)
          || '-' || new__content_type;
      else
        v_rel_tag := new__relation_tag;
@@ -136,7 +136,7 @@ BEGIN
      select object_type into v_parent_type from acs_objects
        where object_id = v_parent_id;
 
-     if NOT FOUND then 
+     if NOT FOUND then
        raise EXCEPTION '-20000: Invalid parent ID % specified in content_item.new',  v_parent_id;
      end if;
 
@@ -152,10 +152,10 @@ BEGIN
 
   v_item_id := acs_object__new(
       new__item_id,
-      new__item_subtype, 
-      new__creation_date, 
-      new__creation_user, 
-      new__creation_ip, 
+      new__item_subtype,
+      new__creation_date,
+      new__creation_user,
+      new__creation_ip,
       v_context_id,
       't',
       v_title,
@@ -195,9 +195,9 @@ BEGIN
   end if;
 
   if new__data is not null then
-  
+
     -- call content_revision__new/13
-    
+
     v_revision_id := content_revision__new(
         v_title,
 	new__description,
@@ -207,8 +207,8 @@ BEGIN
 	new__data,
         v_item_id,
         null,               -- revision_id
-        new__creation_date, 
-        new__creation_user, 
+        new__creation_date,
+        new__creation_user,
         new__creation_ip,
 	null,               -- content_length
         new__package_id
@@ -227,8 +227,8 @@ BEGIN
 	new__text,
 	v_item_id,
         null,               -- revision_id
-        new__creation_date, 
-        new__creation_user, 
+        new__creation_date,
+        new__creation_user,
         new__creation_ip,
 	null,               -- content_length
         new__package_id
@@ -329,7 +329,7 @@ CREATE OR REPLACE FUNCTION content_item__new(
 --
 -- This version passes "data" as integer (lob version), most other use
 -- "text" and "storage_type"
--- 
+--
 DECLARE
   new__relation_tag           varchar default null;
   new__is_live                boolean default 'f';
@@ -345,7 +345,7 @@ DECLARE
 BEGIN
 
   -- place the item in the context of the pages folder if no
-  -- context specified 
+  -- context specified
 
   if new__parent_id is null then
     select c_root_folder_id from content_item_globals into v_parent_id;
@@ -367,10 +367,10 @@ BEGIN
     v_title := new__title;
   end if;
 
-  if v_parent_id = -4 or 
+  if v_parent_id = -4 or
     content_folder__is_folder(v_parent_id) = 't' then
 
-    if v_parent_id != -4 and 
+    if v_parent_id != -4 and
       content_folder__is_registered(
         v_parent_id, new__content_type, 'f') = 'f' then
 
@@ -382,7 +382,7 @@ BEGIN
      select object_type into v_parent_type from acs_objects
        where object_id = v_parent_id;
 
-     if NOT FOUND then 
+     if NOT FOUND then
        raise EXCEPTION '-20000: Invalid parent ID % specified in content_item.new',  v_parent_id;
      end if;
 
@@ -398,10 +398,10 @@ BEGIN
 
   v_item_id := acs_object__new(
       new__item_id,
-      new__item_subtype, 
-      new__creation_date, 
-      new__creation_user, 
-      new__creation_ip, 
+      new__item_subtype,
+      new__creation_date,
+      new__creation_user,
+      new__creation_ip,
       v_context_id,
       't',
       v_title,
@@ -421,7 +421,7 @@ BEGIN
     content_item__is_valid_child(v_parent_id, new__content_type) = 't' then
 
     if new__relation_tag is null or new__relation_tag = '' then
-      v_rel_tag := content_item__get_content_type(v_parent_id) 
+      v_rel_tag := content_item__get_content_type(v_parent_id)
         || '-' || new__content_type;
     else
       v_rel_tag := new__relation_tag;
@@ -452,7 +452,7 @@ BEGIN
   if new__data is not null then
 
     -- call content_revision__new/12 (data is integer)
-    
+
     v_revision_id := content_revision__new(
         v_title,
 	new__description,
@@ -462,8 +462,8 @@ BEGIN
 	new__data,
         v_item_id,
         null,                -- revision_id
-        new__creation_date, 
-        new__creation_user, 
+        new__creation_date,
+        new__creation_user,
         new__creation_ip,
         new__package_id
         );
@@ -481,8 +481,8 @@ BEGIN
 	null,                -- data/text
 	v_item_id,
         null,                -- revision_id
-        new__creation_date, 
-        new__creation_user, 
+        new__creation_date,
+        new__creation_user,
         new__creation_ip,
 	null,                -- content_length
         new__package_id
@@ -496,7 +496,7 @@ BEGIN
   end if;
 
   return v_item_id;
- 
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -523,7 +523,7 @@ BEGIN
                                  new__parent_id,
                                  null,               -- item_id
                                  null,               -- locale
-                                 now(),              -- creation_date 
+                                 now(),              -- creation_date
                                  null,               -- creation_user
                                  null,               -- context_id
                                  null,               -- creation_ip
@@ -536,7 +536,7 @@ BEGIN
                                  new__text,
                                  null,               -- data
 				 null,               -- relation_tag
-				 'f',                -- is_live				 
+				 'f',                -- is_live
                                  'text',             -- storage_type
                                  new__package_id,
 				 't'                 -- with_child_rels
@@ -600,7 +600,7 @@ CREATE OR REPLACE FUNCTION content_item__new(
 DECLARE
   new__description	      varchar default null;
   new__relation_tag           varchar default null;
-  new__nls_language	      varchar default null; 
+  new__nls_language	      varchar default null;
   v_parent_id                 cr_items.parent_id%TYPE;
   v_parent_type               acs_objects.object_type%TYPE;
   v_item_id                   cr_items.item_id%TYPE;
@@ -612,7 +612,7 @@ DECLARE
 BEGIN
 
   -- place the item in the context of the pages folder if no
-  -- context specified 
+  -- context specified
 
   if new__parent_id is null then
     select c_root_folder_id from content_item_globals into v_parent_id;
@@ -634,10 +634,10 @@ BEGIN
     v_title := new__title;
   end if;
 
-  if v_parent_id = -4 or 
+  if v_parent_id = -4 or
     content_folder__is_folder(v_parent_id) = 't' then
 
-    if v_parent_id != -4 and 
+    if v_parent_id != -4 and
       content_folder__is_registered(
         v_parent_id, new__content_type, 'f') = 'f' then
 
@@ -649,7 +649,7 @@ BEGIN
      select object_type into v_parent_type from acs_objects
        where object_id = v_parent_id;
 
-     if NOT FOUND then 
+     if NOT FOUND then
        raise EXCEPTION '-20000: Invalid parent ID % specified in content_item.new',  v_parent_id;
      end if;
 
@@ -661,15 +661,15 @@ BEGIN
 
   end if; end if;
 
- 
+
   -- Create the object
 
   v_item_id := acs_object__new(
       new__item_id,
-      new__item_subtype, 
-      new__creation_date, 
-      new__creation_user, 
-      new__creation_ip, 
+      new__item_subtype,
+      new__creation_date,
+      new__creation_user,
+      new__creation_ip,
       v_context_id,
       new__security_inherit_p,
       v_title,
@@ -685,11 +685,11 @@ BEGIN
 
   -- if the parent is not a folder, insert into cr_child_rels
   if v_parent_id != -4 and
-    content_folder__is_folder(v_parent_id) = 'f' and 
+    content_folder__is_folder(v_parent_id) = 'f' and
     content_item__is_valid_child(v_parent_id, new__content_type) = 't' then
 
     if new__relation_tag is null then
-      v_rel_tag := content_item__get_content_type(v_parent_id) 
+      v_rel_tag := content_item__get_content_type(v_parent_id)
         || '-' || new__content_type;
     else
       v_rel_tag := new__relation_tag;
@@ -715,7 +715,7 @@ BEGIN
 
   end if;
 
-  if new__title is not null or 
+  if new__title is not null or
      new__text is not null then
 
     -- call content_revision__new/13
@@ -729,8 +729,8 @@ BEGIN
 	new__text,
 	v_item_id,
         null,                -- revision_id
-        new__creation_date, 
-        new__creation_user, 
+        new__creation_date,
+        new__creation_user,
         new__creation_ip,
 	null,                -- content_length
         new__package_id
@@ -769,7 +769,7 @@ BEGIN
     publish_status = 'live'
   and
     item_id = is_published__item_id;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -782,8 +782,8 @@ CREATE OR REPLACE FUNCTION content_item__is_publishable(
    is_publishable__item_id integer
 ) RETURNS boolean AS $$
 DECLARE
-  v_child_count                          integer;       
-  v_rel_count                            integer;       
+  v_child_count                          integer;
+  v_rel_count                            integer;
   v_content_type			 varchar;
   v_template_id                          cr_templates.template_id%TYPE;
   v_child_type                           record;
@@ -793,7 +793,7 @@ BEGIN
   -- check valid item_id
   select content_item__get_content_type(is_publishable__item_id) into v_content_type;
 
-  if v_content_type is null then 
+  if v_content_type is null then
 	raise exception 'content_item__is_publishable item_id % invalid',is_publishable__item_id;
   end if;
 
@@ -801,7 +801,7 @@ BEGIN
   -- make sure the # of children of each type fall between min_n and max_n
   for v_child_type in select child_type, min_n, max_n
                       from   cr_type_children
-                      where  parent_type = v_content_type 
+                      where  parent_type = v_content_type
 	              and    (min_n is not null or max_n is not null)
   LOOP
     select count(item_id) into v_child_count
@@ -810,7 +810,7 @@ BEGIN
     and    content_item__get_content_type(child_id) = v_child_type.child_type;
 
     -- make sure # of children is in range
-    if v_child_type.min_n is not null 
+    if v_child_type.min_n is not null
       and v_child_count < v_child_type.min_n then
       return 'f';
     end if;
@@ -834,13 +834,13 @@ BEGIN
     where  i.related_object_id = o.object_id
     and    i.item_id = is_publishable__item_id
     and    coalesce(content_item__get_content_type(o.object_id),o.object_type) = v_rel_type.target_type;
-      
+
     -- make sure # of object relations is in range
-    if v_rel_type.min_n is not null 
+    if v_rel_type.min_n is not null
       and v_rel_count < v_rel_type.min_n then
       return 'f';
     end if;
-    if v_rel_type.max_n is not null 
+    if v_rel_type.max_n is not null
       and v_rel_count > v_rel_type.max_n then
       return 'f';
     end if;
@@ -851,7 +851,7 @@ BEGIN
   -- KG: logic is wrong here.  Only the latest workflow matters, and even
   -- that is a little problematic because more than one workflow may be
   -- open on an item.  In addition, this should be moved to CMS.
-  
+
   -- Removed this as having workflow stuff in the CR is just plain wrong.
   -- DanW, Aug 25th, 2001.
 
@@ -863,19 +863,19 @@ BEGIN
   --                      workflow_key = 'publishing_wf'
   --                    and
   --                      object_id = is_publishable__item_id
-  -- 
+  --
   --   LOOP
   --     if v_pub_wf.state != 'finished' then
   --        return 'f';
   --     end if;
   --   end loop;
 
-  -- if NOT FOUND then 
+  -- if NOT FOUND then
   --   return 'f';
   -- end if;
 
   return 't';
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -890,9 +890,9 @@ CREATE OR REPLACE FUNCTION content_item__is_valid_child(
    is_valid_child__relation_tag varchar
 ) RETURNS boolean AS $$
 DECLARE
-  v_is_valid_child                       boolean;       
+  v_is_valid_child                       boolean;
   v_max_children                         cr_type_children.max_n%TYPE;
-  v_n_children                           integer;       
+  v_n_children                           integer;
   v_null_exists				 boolean;
 BEGIN
 
@@ -905,7 +905,7 @@ BEGIN
   and    child_type = is_valid_child__content_type
   and    (is_valid_child__relation_tag is null or is_valid_child__relation_tag = relation_tag);
 
-  if NOT FOUND then 
+  if NOT FOUND then
       return 'f';
   end if;
 
@@ -930,8 +930,8 @@ BEGIN
         and    content_item__get_content_type(child_id) = is_valid_child__content_type
         and    is_valid_child__relation_tag = relation_tag;
   end if;
-  
-  if NOT FOUND then 
+
+  if NOT FOUND then
      return 'f';
   end if;
 
@@ -940,7 +940,7 @@ BEGIN
   end if;
 
   return v_is_valid_child;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -958,9 +958,9 @@ CREATE OR REPLACE FUNCTION content_item__is_valid_child(
 -- variant without relation_tag
 --
 DECLARE
-  v_is_valid_child                       boolean;       
+  v_is_valid_child                       boolean;
   v_max_children                         cr_type_children.max_n%TYPE;
-  v_n_children                           integer;       
+  v_n_children                           integer;
 BEGIN
 
   v_is_valid_child := 'f';
@@ -971,7 +971,7 @@ BEGIN
   where  parent_type = content_item__get_content_type(is_valid_child__item_id)
   and    child_type = is_valid_child__content_type;
 
-  if NOT FOUND then 
+  if NOT FOUND then
      return 'f';
   end if;
 
@@ -986,7 +986,7 @@ BEGIN
   where  parent_id = is_valid_child__item_id
   and    content_item__get_content_type(child_id) = is_valid_child__content_type;
 
-  if NOT FOUND then 
+  if NOT FOUND then
      return 'f';
   end if;
 
@@ -995,7 +995,7 @@ BEGIN
   end if;
 
   return v_is_valid_child;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -1027,7 +1027,7 @@ BEGIN
   -- Also child relationships must be deleted. On delete cascade would
   -- not help here, as related acs_object would stay.
   PERFORM acs_object__delete(object_id)
-    from acs_objects where object_id in 
+    from acs_objects where object_id in
     (select rel_id from cr_child_rels where
          child_id  = delete__item_id or
          parent_id = delete__item_id);
@@ -1056,10 +1056,10 @@ BEGIN
 
   --
   -- Finally, delete the acs_object of the item.
-  --      
+  --
   PERFORM acs_object__delete(delete__item_id);
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1075,7 +1075,7 @@ CREATE OR REPLACE FUNCTION content_item__delete(
 DECLARE
 BEGIN
    PERFORM content_item__del (delete__item_id);
-   return 0; 
+   return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1090,18 +1090,18 @@ CREATE OR REPLACE FUNCTION content_item__edit_name(
    edit_name__name varchar
 ) RETURNS integer AS $$
 DECLARE
-  exists_id                      integer;       
+  exists_id                      integer;
 BEGIN
   select
     item_id
-  into 
+  into
     exists_id
-  from 
+  from
     cr_items
   where
     name = edit_name__name
-  and 
-    parent_id = (select 
+  and
+    parent_id = (select
 	           parent_id
 		 from
 		   cr_items
@@ -1121,7 +1121,7 @@ BEGIN
     end if;
   end if;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1137,14 +1137,14 @@ CREATE OR REPLACE FUNCTION content_item__get_id(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_item_path                    varchar; 
+  v_item_path                    varchar;
   v_root_folder_id               cr_items.item_id%TYPE;
-  get_id__parent_id              integer;       
-  child_id                       integer;       
-  start_pos                      integer default 1;        
-  end_pos                        integer;       
+  get_id__parent_id              integer;
+  child_id                       integer;
+  start_pos                      integer default 1;
+  end_pos                        integer;
   counter                        integer default 1;
-  item_name                      varchar;  
+  item_name                      varchar;
 BEGIN
 
   if get_id__root_folder_id is null then
@@ -1156,7 +1156,7 @@ BEGIN
   -- If the request path is the root, then just return the root folder
   if get_id__item_path = '/' then
     return v_root_folder_id;
-  end if;  
+  end if;
 
   -- Remove leading, trailing spaces, leading slashes
   v_item_path := rtrim(ltrim(trim(get_id__item_path), '/'), '/');
@@ -1177,16 +1177,16 @@ BEGIN
       counter := counter + 1;
     end if;
 
-    select 
+    select
       item_id into child_id
-    from 
+    from
       cr_items
     where
       parent_id = get_id__parent_id
     and
       name = item_name;
 
-    if NOT FOUND then 
+    if NOT FOUND then
        return null;
     end if;
 
@@ -1198,7 +1198,7 @@ BEGIN
     get_id__parent_id := content_symlink__resolve(get_id__parent_id);
 
     start_pos := end_pos + 1;
-      
+
   end loop;
 
   if get_id__resolve_index = 't' then
@@ -1206,7 +1206,7 @@ BEGIN
     -- if the item is a folder and has an index page, then return
 
     if content_folder__is_folder(child_id ) = 't' and
-      content_folder__get_index_page(child_id) is not null then 
+      content_folder__get_index_page(child_id) is not null then
 
       child_id := content_folder__get_index_page(child_id);
     end if;
@@ -1231,9 +1231,9 @@ CREATE OR REPLACE FUNCTION content_item__get_path(
 
 ) RETURNS varchar AS $$
 DECLARE
-  v_count                          integer;       
-  v_resolved_root_id               integer;       
-  v_path                           text    default '';  
+  v_count                          integer;
+  v_resolved_root_id               integer;
+  v_path                           text    default '';
   v_rec                            record;
   v_current_item_id                integer;
   v_current_name                   text;
@@ -1247,7 +1247,7 @@ BEGIN
   end if;
 
   -- begin walking down the path to the item (from the repository root)
- 
+
   -- if the root folder is not null then prepare for a relative path
 
   if get_path__root_folder_id is not null then
@@ -1258,7 +1258,7 @@ BEGIN
     v_resolved_root_id := content_symlink__resolve(get_path__root_folder_id);
 
     -- check to see if the item is under or out side the root_id
-    PERFORM 1 from cr_items i, 
+    PERFORM 1 from cr_items i,
         (select tree_sortkey from cr_items where item_id = v_resolved_root_id) a
     where tree_ancestor_p(a.tree_sortkey, i.tree_sortkey) and i.item_id = get_path__item_id;
 
@@ -1268,7 +1268,7 @@ BEGIN
         for v_rec in select i1.name, i1.parent_id, tree_level(i1.tree_sortkey) as tree_level
                  from cr_items i1, (select tree_ancestor_keys(tree_sortkey) as tree_sortkey from cr_items where item_id = v_resolved_root_id) i2,
                  (select tree_sortkey from cr_items where item_id = get_path__item_id) i3
-                 where 
+                 where
                  i1.parent_id <> 0
                  and i2.tree_sortkey = i1.tree_sortkey
                  and not tree_ancestor_p(i2.tree_sortkey, i3.tree_sortkey)
@@ -1285,13 +1285,13 @@ BEGIN
     for v_rec in select i1.name, i1.item_id, tree_level(i1.tree_sortkey) as tree_level
              from cr_items i1, (select tree_sortkey from cr_items where item_id = v_resolved_root_id) i2,
             (select tree_ancestor_keys(tree_sortkey) as tree_sortkey from cr_items where item_id = get_path__item_id) i3
-             where 
+             where
              i1.tree_sortkey = i3.tree_sortkey
              and i1.tree_sortkey > i2.tree_sortkey
              order by tree_level
     LOOP
         v_path := v_path || v_rec.name;
-        if v_rec.item_id <> get_path__item_id then 
+        if v_rec.item_id <> get_path__item_id then
             -- put a / if we are still going down
             v_path := v_path || '/';
         end if;
@@ -1315,7 +1315,7 @@ BEGIN
   end if;
 
   return v_path;
- 
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1331,9 +1331,9 @@ CREATE OR REPLACE FUNCTION content_item__get_virtual_path(
 
 ) RETURNS varchar AS $$
 DECLARE
-  v_path                                  varchar; 
+  v_path                                  varchar;
   v_item_id                               cr_items.item_id%TYPE;
-  v_is_folder                             boolean;       
+  v_is_folder                             boolean;
   v_index                                 cr_items.item_id%TYPE;
 BEGIN
   -- XXX possible bug: root_folder_id arg is ignored.
@@ -1352,7 +1352,7 @@ BEGIN
   end if;
 
   return v_path;
- 
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1370,22 +1370,22 @@ DECLARE
   -- blob_loc               cr_revisions.content%TYPE;
   -- v_revision             cr_items.live_revision%TYPE;
 BEGIN
-  
+
   -- FIXME:
   raise NOTICE 'not implemented for PostgreSQL';
 /*
   v_revision := content_item__get_live_revision(item_id);
 
-  select content into blob_loc from cr_revisions 
+  select content into blob_loc from cr_revisions
     where revision_id = v_revision;
 
-  if NOT FOUND then 
-    raise EXCEPTION '-20000: No live revision for content item % in content_item.write_to_file.', item_id;    
+  if NOT FOUND then
+    raise EXCEPTION '-20000: No live revision for content item % in content_item.write_to_file.', item_id;
   end if;
-  
+
   PERFORM blob_to_file(root_path || content_item__get_path(item_id), blob_loc);
 */
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1400,7 +1400,7 @@ CREATE OR REPLACE FUNCTION content_item__register_template(
    register_template__use_context varchar
 ) RETURNS integer AS $$
 DECLARE
-                                        
+
 BEGIN
 
  -- register template if it is not already registered
@@ -1422,7 +1422,7 @@ BEGIN
                  and
                    use_context = register_template__use_context );
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1439,10 +1439,10 @@ CREATE OR REPLACE FUNCTION content_item__unregister_template(
 
 ) RETURNS integer AS $$
 DECLARE
-                                        
+
 BEGIN
 
-  if unregister_template__use_context is null and 
+  if unregister_template__use_context is null and
      unregister_template__template_id is null then
 
     delete from cr_item_template_map
@@ -1469,7 +1469,7 @@ BEGIN
 
   end if; end if; end if;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1489,8 +1489,8 @@ BEGIN
 
   -- look for a template assigned specifically to this item
   select
-    template_id 
-  into 
+    template_id
+  into
      v_template_id
   from
     cr_item_template_map
@@ -1500,9 +1500,9 @@ BEGIN
     use_context = get_template__use_context;
   -- otherwise get the default for the content type
   if NOT FOUND then
-    select 
+    select
       m.template_id
-    into 
+    into
       v_template_id
     from
       cr_items i, cr_type_template_map m
@@ -1521,7 +1521,7 @@ BEGIN
   end if;
 
   return v_template_id;
- 
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
@@ -1539,13 +1539,13 @@ BEGIN
 
   select
     content_type into v_content_type
-  from 
+  from
     cr_items
-  where 
-    item_id = get_content_type__item_id;  
+  where
+    item_id = get_content_type__item_id;
 
   return v_content_type;
- 
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
@@ -1570,7 +1570,7 @@ BEGIN
     item_id = get_live_revision__item_id;
 
   return v_revision_id;
- 
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
@@ -1593,7 +1593,7 @@ BEGIN
       set
             live_revision = p__revision_id,
     	    publish_status = p__publish_status,
-            latest_revision = p__revision_id   
+            latest_revision = p__revision_id
       where
 	    item_id = (select item_id
                from   cr_revisions
@@ -1608,14 +1608,14 @@ BEGIN
                from   cr_revisions
                where  revision_id = p__revision_id);
   end if;
-   
+
   update cr_revisions
   set
     publish_date = p__publish_date
   where
     revision_id = p__revision_id;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1647,7 +1647,7 @@ BEGIN
   and
     item_id = unset_live_revision__item_id;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1664,18 +1664,18 @@ CREATE OR REPLACE FUNCTION content_item__set_release_period(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_count                                    integer;       
+  v_count                                    integer;
 BEGIN
 
-  select count(*) into v_count from cr_release_periods 
+  select count(*) into v_count from cr_release_periods
     where item_id = set_release_period__item_id;
 
   if v_count = 0 then
     insert into cr_release_periods (
       item_id, start_when, end_when
     ) values (
-      set_release_period__item_id, 
-      set_release_period__start_when, 
+      set_release_period__item_id,
+      set_release_period__start_when,
       set_release_period__end_when
     );
   else
@@ -1686,7 +1686,7 @@ BEGIN
       item_id = set_release_period__item_id;
   end if;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1699,18 +1699,18 @@ CREATE OR REPLACE FUNCTION content_item__get_revision_count(
    get_revision_count__item_id integer
 ) RETURNS integer AS $$
 DECLARE
-  v_count                       integer;       
+  v_count                       integer;
 BEGIN
 
   select
     count(*) into v_count
-  from 
+  from
     cr_revisions
   where
     item_id = get_revision_count__item_id;
 
   return v_count;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -1735,12 +1735,12 @@ BEGIN
   where
     object_id = get_context__item_id;
 
-  if NOT FOUND then 
+  if NOT FOUND then
      raise EXCEPTION '-20000: Content item % does not exist in content_item.get_context', get_context__item_id;
   end if;
 
   return v_context_id;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -1764,7 +1764,7 @@ CREATE OR REPLACE FUNCTION content_item__move(
 DECLARE
 BEGIN
 
-  if move__target_folder_id is null then 
+  if move__target_folder_id is null then
 	raise exception 'attempt to move item_id % to null folder_id', move__item_id;
   end if;
 
@@ -1773,7 +1773,7 @@ BEGIN
     PERFORM content_folder__move(move__item_id, move__target_folder_id);
 
   elsif content_folder__is_folder(move__target_folder_id) = 't' then
-   
+
 
     if content_folder__is_registered(move__target_folder_id,
           content_item__get_content_type(move__item_id),'f') = 't' and
@@ -1782,7 +1782,7 @@ BEGIN
       then
     -- update the parent_id for the item
 
-    update cr_items 
+    update cr_items
       set parent_id = move__target_folder_id,
           name = coalesce(move__name, name)
       where item_id = move__item_id;
@@ -1796,7 +1796,7 @@ BEGIN
 
   end if;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1813,7 +1813,7 @@ CREATE OR REPLACE FUNCTION content_item__generic_move(
 DECLARE
 BEGIN
 
-  if move__target_item_id is null then 
+  if move__target_item_id is null then
 	raise exception 'attempt to move item_id % to null folder_id', move__item_id;
   end if;
 
@@ -1833,7 +1833,7 @@ BEGIN
 
   -- update the parent_id for the item
 
-  update cr_items 
+  update cr_items
     set parent_id = move__target_item_id,
         name = coalesce(move__name, name)
     where item_id = move__item_id;
@@ -1847,7 +1847,7 @@ BEGIN
       where object_id = move__item_id;
   end if;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1903,7 +1903,7 @@ CREATE OR REPLACE FUNCTION content_item__copy(
 ) RETURNS integer AS $$
 DECLARE
   v_current_folder_id           cr_folders.folder_id%TYPE;
-  v_num_revisions               integer;       
+  v_num_revisions               integer;
   v_name                        cr_items.name%TYPE;
   v_content_type                cr_items.content_type%TYPE;
   v_locale                      cr_items.locale%TYPE;
@@ -1925,7 +1925,7 @@ BEGIN
         copy__creation_user,
         copy__creation_ip,
 	copy__name
-    ); 
+    );
 
   -- call content_symlink.copy if the item is a symlink
   else if content_symlink__is_symlink(copy__item_id) = 't' then
@@ -1993,7 +1993,7 @@ BEGIN
             copy__creation_user,
             null,               -- context_id
             copy__creation_ip,
-            'content_item',            
+            'content_item',
             v_content_type,
             null,               -- title
             null,               -- description
@@ -2002,7 +2002,7 @@ BEGIN
             null,               -- text
             null,               -- data
             null,               -- relation_tag
-            'f',                -- is_live	    
+            'f',                -- is_live
             v_storage_type,
 	    null,               -- package_id
 	    't'                 -- with_child_rels
@@ -2065,16 +2065,16 @@ DECLARE
   v_revision_id                               integer;
   v_rec                                       record;
 BEGIN
-  for v_rec in 
-  select 
-    r.revision_id 
-  from 
+  for v_rec in
+  select
+    r.revision_id
+  from
     cr_revisions r, acs_objects o
-  where 
+  where
     r.revision_id = o.object_id
-  and 
+  and
     r.item_id = get_latest_revision__item_id
-  order by 
+  order by
     o.creation_date desc
   LOOP
       v_revision_id := v_rec.revision_id;
@@ -2082,7 +2082,7 @@ BEGIN
   end LOOP;
 
   return v_revision_id;
- 
+
 END;
 $$ LANGUAGE plpgsql strict stable;
 
@@ -2097,7 +2097,7 @@ CREATE OR REPLACE FUNCTION content_item__get_best_revision(
 DECLARE
   v_revision_id                             cr_revisions.revision_id%TYPE;
 BEGIN
-    
+
   select
     coalesce(live_revision, latest_revision )
   into
@@ -2108,7 +2108,7 @@ BEGIN
     item_id = get_best_revision__item_id;
 
   return v_revision_id;
- 
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
@@ -2126,19 +2126,19 @@ DECLARE
   v_title                           cr_revisions.title%TYPE;
   v_content_type                    cr_items.content_type%TYPE;
 BEGIN
-  
-  select content_type into v_content_type from cr_items 
+
+  select content_type into v_content_type from cr_items
     where item_id = get_title__item_id;
 
   if v_content_type = 'content_folder' then
-    select label into v_title from cr_folders 
+    select label into v_title from cr_folders
       where folder_id = get_title__item_id;
   else if v_content_type = 'content_symlink' then
-    select label into v_title from cr_symlinks 
+    select label into v_title from cr_symlinks
       where symlink_id = get_title__item_id;
   else if v_content_type = 'content_extlink' then
     select label into v_title from cr_extlinks
-      where extlink_id = get_title__item_id;            
+      where extlink_id = get_title__item_id;
   else
     if get_title__is_live then
       select
@@ -2203,7 +2203,7 @@ BEGIN
   end if;
 
   return v_publish_date;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -2217,7 +2217,7 @@ CREATE OR REPLACE FUNCTION content_item__is_subclass(
    is_subclass__supertype varchar
 ) RETURNS boolean AS $$
 DECLARE
-  v_subclass_p                        boolean;      
+  v_subclass_p                        boolean;
   v_inherit_val                       record;
 BEGIN
   select count(*) > 0 into v_subclass_p where exists (
@@ -2249,10 +2249,10 @@ CREATE OR REPLACE FUNCTION content_item__relate(
 DECLARE
   v_content_type                 cr_items.content_type%TYPE;
   v_object_type                  acs_objects.object_type%TYPE;
-  v_is_valid                     integer;       
-  v_rel_id                       integer;       
-  v_package_id                   integer;       
-  v_exists                       integer;       
+  v_is_valid                     integer;
+  v_rel_id                       integer;
+  v_package_id                   integer;
+  v_exists                       integer;
   v_order_n                      cr_item_rels.order_n%TYPE;
 BEGIN
 
@@ -2276,7 +2276,7 @@ BEGIN
   if relate__item_id != relate__object_id then
     -- check that these two items are not related already
     --dbms_output.put_line( 'checking if the items are already related...');
-    
+
     select
       rel_id, 1 into v_rel_id, v_exists
     from
@@ -2291,7 +2291,7 @@ BEGIN
     if NOT FOUND then
        v_exists := 0;
     end if;
-    
+
     v_package_id := acs_object__package_id(relate__item_id);
 
     -- if order_n is null, use rel_id (the order the item was related)
@@ -2320,7 +2320,7 @@ BEGIN
       insert into cr_item_rels (
         rel_id, item_id, related_object_id, order_n, relation_tag
       ) values (
-        v_rel_id, relate__item_id, relate__object_id, v_order_n, 
+        v_rel_id, relate__item_id, relate__object_id, v_order_n,
         relate__relation_tag
       );
 
@@ -2341,7 +2341,7 @@ BEGIN
   end if;
 
   return v_rel_id;
- 
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2363,7 +2363,7 @@ BEGIN
   -- delete the row from the cr_item_rels table
   delete from cr_item_rels where rel_id = unrelate__rel_id;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2384,7 +2384,7 @@ BEGIN
   else
     return 'f';
   end if;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -2398,25 +2398,25 @@ CREATE OR REPLACE FUNCTION content_item__get_parent_folder(
 ) RETURNS integer AS $$
 DECLARE
   v_folder_id                              cr_folders.folder_id%TYPE;
-  v_parent_folder_p                        boolean default 'f';       
+  v_parent_folder_p                        boolean default 'f';
 BEGIN
   v_folder_id := get_parent_folder__item_id;
 
   while NOT v_parent_folder_p and v_folder_id is not null LOOP
 
     select
-      parent_id, content_folder__is_folder(parent_id) 
-    into 
+      parent_id, content_folder__is_folder(parent_id)
+    into
       v_folder_id, v_parent_folder_p
     from
       cr_items
     where
       item_id = v_folder_id;
 
-  end loop; 
+  end loop;
 
   return v_folder_id;
- 
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
@@ -2444,12 +2444,12 @@ CREATE OR REPLACE FUNCTION cr_items_publish_update_tr () RETURNS trigger AS $$
 BEGIN
   if new.live_revision <> old.live_revision or
      new.publish_status <> old.publish_status
-  then 
+  then
 
     insert into cr_item_publish_audit (
       item_id, old_revision, new_revision, old_status, new_status, publish_date
     ) values (
-      new.item_id, old.live_revision, new.live_revision, 
+      new.item_id, old.live_revision, new.live_revision,
       old.publish_status, new.publish_status,
       now()
     );
@@ -2463,4 +2463,3 @@ $$ LANGUAGE plpgsql;
 
 create trigger cr_items_publish_update_tr before update on cr_items
 for each row execute procedure cr_items_publish_update_tr ();
-
