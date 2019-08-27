@@ -383,6 +383,36 @@ ad_proc -public content::item::get_id {
     ] content_item get_id]
 }
 
+ad_proc -public content::item::get_descendants {
+    -parent_id:required
+    {-depth ""}
+} {
+    Returns the ids of every content item that is descendant of
+    supplied parent_id.
+
+    @param parent_id
+    @param depth how deep we should go in the hierarchy. 1 means
+           direct children. Returns every descendant when not
+           specified.
+
+    @return list of cr_items.item_id
+} {
+    return [db_list get_descendants {
+        with recursive descendants (item_id) as (
+           select item_id, 1 as depth
+             from cr_items
+            where parent_id = :parent_id
+
+           union all
+
+           select i.item_id, d.depth + 1
+             from cr_items i, descendants d
+            where i.parent_id = d.item_id
+              and (:depth is null or d.depth < :depth)
+        ) select * from descendants
+    }]
+}
+
 ad_proc -public content::item::get_best_revision {
     -item_id:required
 } {
