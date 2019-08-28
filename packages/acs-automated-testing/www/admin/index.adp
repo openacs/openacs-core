@@ -155,7 +155,7 @@
               OK
             </else>
           </td>
-          <td align="right"><a href=proc-coverage?package_key="@packageinfo.key@">@packageinfo.proc_coverage@</a></td>
+          <td align="right"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@</a></td>
         </else>
       </tr>
     </multiple>
