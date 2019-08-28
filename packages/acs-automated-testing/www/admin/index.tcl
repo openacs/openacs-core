@@ -91,11 +91,12 @@ if {$view_by eq "package"} {
     #
     # Prepare the template data for a view_by "package"
     #
-    template::multirow create packageinfo key total passes fails warnings
+    template::multirow create packageinfo key total passes fails warnings proc_coverage
     foreach package_key [lsort [array names packages]] {
         #ns_log notice "view_by $view_by package_key=$package_key"
         lassign $packages($package_key) total passes fails warnings
-        template::multirow append packageinfo $package_key $total $passes $fails $warnings
+        set proc_coverage [dict get [aa_test::proc_coverage -package_key $package_key] coverage]
+        template::multirow append packageinfo $package_key $total $passes $fails $warnings $proc_coverage
     }
 } else {
     #

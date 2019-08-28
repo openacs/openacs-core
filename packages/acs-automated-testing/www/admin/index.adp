@@ -121,6 +121,7 @@
         <th>Fails</th>
         <th>Warnings</th>
         <th>Result</th>
+        <th>Proc coverage</th>
     </tr>
     <multiple name="packageinfo">
         <if @packageinfo.rownum@ odd>
@@ -137,6 +138,7 @@
           <td align="right">-</td>
           <td align="right">-</td>
           <td align="right">-</td>
+          <td align="right"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@</a></td>
         </if><else>
           <td align="right"> @packageinfo.total@ </td>
           <td align="right"> @packageinfo.passes@ </td>
@@ -153,6 +155,7 @@
               OK
             </else>
           </td>
+          <td align="right"><a href=proc-coverage?package_key="@packageinfo.key@">@packageinfo.proc_coverage@</a></td>
         </else>
       </tr>
     </multiple>
