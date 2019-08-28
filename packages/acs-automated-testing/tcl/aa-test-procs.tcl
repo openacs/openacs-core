@@ -2166,6 +2166,64 @@ ad_proc -public aa_test::parse_test_file {
     set test(testcase_failure) [array get testcase_failure]
 }
 
+ad_proc aa_test::proc_coverage {
+    {-package_key ""}
+} {
+    Calculates the test proc coverage of a particular package.
+
+    If no 'package_key' is passed, then the system wide test proc coverage is
+    returned.
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 2019-08-28
+
+    @param package_key  The 'package_key' of the package to check.
+
+    @return Dict with the number of procs (procs), covered procs (covered) and
+            the coverage percentage (coverage).
+
+} {
+    set procs 0
+    set procs_covered 0
+    set proc_names [list]
+    #
+    # Get proc list to check
+    #
+    if { $package_key ne "" } {
+        foreach path [nsv_array names api_proc_doc_scripts] {
+            if { [regexp "^packages/$package_key" $path] } {
+                lappend proc_names {*}[nsv_get api_proc_doc_scripts $path]
+            }
+        }
+    } else {
+        set proc_names [nsv_array names api_proc_doc]
+    }
+    #
+    # Check if the proc is public, not deprecated, and have tests
+    #
+    foreach proc_name $proc_names {
+        array set proc_doc [nsv_get api_proc_doc $proc_name]
+        if { [info exists proc_doc(protection)]
+            && "public" in $proc_doc(protection)
+            && !($proc_doc(deprecated_p) || $proc_doc(warn_p))
+        } {
+            incr procs
+            if { [info exists proc_doc(testcase)] } {
+                incr procs_covered
+            }
+        }
+        array unset proc_doc
+    }
+    #
+    # Return the coverage precentage
+    #
+    if { $procs eq 0 } {
+        set coverage 0.0
+    } else {
+        set coverage [expr {($procs_covered / ($procs + 0.0)) * 100}]
+    }
+    return "procs $procs covered $procs_covered coverage [lc_numeric [format {%0.2f} $coverage]]%"
+}
 
 ad_proc -public aa_get_first_url {
     {-package_key:required}
