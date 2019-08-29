@@ -23,6 +23,8 @@ ad_page_contract {
 set title "System test cases"
 set return_url [ad_return_url]
 
+template::head::add_css -href /resources/acs-automated-testing/tests.css
+
 if {$by_package_key ne ""} {
     append title " for package $by_package_key"
 }
@@ -91,12 +93,14 @@ if {$view_by eq "package"} {
     #
     # Prepare the template data for a view_by "package"
     #
-    template::multirow create packageinfo key total passes fails warnings proc_coverage
+    template::multirow create packageinfo key total passes fails warnings proc_coverage proc_coverage_level
     foreach package_key [lsort [array names packages]] {
         #ns_log notice "view_by $view_by package_key=$package_key"
         lassign $packages($package_key) total passes fails warnings
-        set proc_coverage [dict get [aa_test::proc_coverage -package_key $package_key] coverage]
-        template::multirow append packageinfo $package_key $total $passes $fails $warnings $proc_coverage
+        set proc_coverage [dict get [aa::coverage::proc_coverage -package_key $package_key] coverage]
+        set proc_coverage_level [aa::coverage::proc_coverage_level $proc_coverage]
+
+        template::multirow append packageinfo $package_key $total $passes $fails $warnings $proc_coverage $proc_coverage_level
     }
 } else {
     #

@@ -138,7 +138,7 @@
           <td align="right">-</td>
           <td align="right">-</td>
           <td align="right">-</td>
-          <td align="right"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@</a></td>
+          <td align="right" class="proc_coverage_cell @packageinfo.proc_coverage_level@"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
         </if><else>
           <td align="right"> @packageinfo.total@ </td>
           <td align="right"> @packageinfo.passes@ </td>
@@ -155,7 +155,7 @@
               OK
             </else>
           </td>
-          <td align="right"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@</a></td>
+          <td align="right" class="proc_coverage_cell @packageinfo.proc_coverage_level@"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
         </else>
       </tr>
     </multiple>
