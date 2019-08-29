@@ -10,26 +10,21 @@
     text-decoration: none;
     opacity:0.3;
 }
+.proc_coverage_cell {
+    text-align: center;
+}
 .full {
     background-color: rgb(0, 204, 0);
-    text-align: center;
 }
 .high {
     background-color: rgb(204, 255, 51);
-    text-align: center;
 }
 .medium {
     background-color: rgb(255, 255, 102);
-    text-align: center;
 }
 .low {
     background-color: rgb(255, 179, 102);
-    text-align: center;
 }
 .very_low {
     background-color: rgb(255, 51, 0);
-    text-align: center;
-}
-.very_low > a {
-    !important color: white;
 }
