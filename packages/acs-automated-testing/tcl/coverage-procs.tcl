@@ -126,7 +126,7 @@ ad_proc -public aa::coverage::proc_coverage {
     return "procs $procs covered $procs_covered coverage [format {%0.2f} $coverage]"
 }
 
-ad_proc aa::coverage::proc_coverage_level {
+ad_proc -public aa::coverage::proc_coverage_level {
     coverage
 } {
     Calculates the level (high, medium, low...) of proc coverage from a
