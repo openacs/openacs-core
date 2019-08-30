@@ -160,7 +160,7 @@ ad_proc -public aa::coverage::proc_coverage_level {
     } elseif { $coverage == 100 } {
         return full
     } else {
-        return "Error: Invalid percentage"
+        return -code error "Error: Invalid coverage percentage"
     }
 }
 
