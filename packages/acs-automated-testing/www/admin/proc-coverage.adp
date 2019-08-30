@@ -6,6 +6,7 @@
     <div class="@test_coverage_level@ coverage_badge">@test_coverage_percent@%</div>
     <div class=coverage_data>
         <div class=coverage_data_elements>
+            <if @package_key@ ne "">Package: @package_key@<br/></if>
             Procs: @test_coverage_procs_nr@<br/>
             Procs covered: @test_coverage_procs_cv@<br/>
             Coverage: <span class="@test_coverage_level@ coverage_data_level">@test_coverage_level@</span>
