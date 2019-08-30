@@ -1,40 +1,93 @@
 ad_page_contract {
-    Displays procs not covered by test cases in the given package
+    Displays proc test coverage in the given package, or system wide
 
-    @author Peter Marklund
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 2019-08-29
 } {
-    package_key
+    {package_key ""}
+    orderby:token,optional
 }
 
-set all_proc_names [list]
-foreach file_path [nsv_array names api_proc_doc_scripts] {
-    if { [regexp "^packages/$package_key" $file_path] } {
-        foreach proc_name [nsv_get api_proc_doc_scripts $file_path] {
-            lappend all_proc_names $proc_name
+# CSS
+template::head::add_css -href /resources/acs-automated-testing/tests.css
+
+# Choose between global and package-wise proc test coverage
+if { $package_key eq "" } {
+    #
+    # System wide proc test coverage
+    #
+    set title "Global proc test coverage"
+    set proc_list       [aa::coverage::proc_list]
+    set test_coverage   [aa::coverage::proc_coverage]
+    set list_elements {
+        package_key {
+            label "Package"
+        }
+    }
+    set orderby_elements {
+        default_value package_key,asc
+        package_key {
+            multirow_cols package_key
+        }
+    }
+} else {
+    #
+    # Proc test coverage for a particular package
+    #
+    set title "Proc test coverage of $package_key"
+    set proc_list       [aa::coverage::proc_list -package_key $package_key]
+    set test_coverage   [aa::coverage::proc_coverage -package_key $package_key]
+    set list_elements   [list]
+    set orderby_elements {
+        default_value proc_name,asc
+    }
+}
+
+# Set context and coverage vars
+set context [list $title]
+set test_coverage_percent   [dict get $test_coverage coverage]
+set test_coverage_procs_nr  [dict get $test_coverage procs]
+set test_coverage_procs_cv  [dict get $test_coverage covered]
+set test_coverage_level     [aa::coverage::proc_coverage_level $test_coverage_percent]
+
+# Add the rest of elements
+lappend list_elements {*}{
+    proc_name {
+        label "Proc name"
+        display_template {<a href=/api-doc/proc-view?proc=@procs_mr.proc_name@>@procs_mr.proc_name@</a>}
+    }
+    covered_p {
+        label "Covered"
+        display_template {
+            <if @procs_mr.covered_p@ true>
+                <div class=covered>Yes</div>
+            </if>
+            <else>
+                <div class=uncovered>No</div>
+            </else>
         }
     }
 }
 
-set tested_proc_names [list]
-foreach testcase [nsv_get aa_test cases] {
-    set testcase_package_key [lindex $testcase 3]
-
-    if {$testcase_package_key eq $package_key} {
-        set tested_procs [lindex $testcase 10]
-        if { [llength $tested_procs] > 0 } {
-            lappend tested_proc_names {*}$tested_procs
-        }
+# Add the rest of orderby elements
+lappend orderby_elements {*}{
+    proc_name {
+        multirow_cols proc_name
+    }
+    covered_p {
+        multirow_cols covered_p
     }
 }
 
-set uncovered_procs [list]
-foreach proc_name $all_proc_names {
-    if {$proc_name ni $tested_proc_names} {
-        lappend uncovered_procs $proc_name
-    }
-}
+# Create the multirow and the template::list
+template::util::list_to_multirow procs_mr $proc_list
+template::list::create \
+    -name procs \
+    -multirow procs_mr \
+    -filters {package_key {}} \
+    -elements $list_elements \
+    -orderby $orderby_elements
 
-set uncovered_procs [join $uncovered_procs "<br>"]
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

@@ -28,3 +28,52 @@
 .very_low {
     background-color: rgb(255, 51, 0);
 }
+
+/* Test coverage stats */
+.coverage_stats {
+    margin: 22px;
+    display: flex;
+}
+.coverage_data {
+    height: 150px;
+    line-height: 150px;
+    margin-left: 25px;
+}
+.coverage_data_elements {
+    display: inline-block;
+    line-height: normal;
+    vertical-align: middle;
+    font-size: 20px;
+    text-shadow: 1px 1px #CBCEC2;
+}
+.coverage_data_level {
+    color: white;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: center;
+    display: inline-block;
+    text-shadow: none;
+}
+
+/* Test coverage badge */
+.coverage_badge {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border-radius: 10px;
+    font-size: 25px;
+    text-align: center;
+    color: white;
+    line-height: 150px;
+    border: 2px solid #CBCEC2;
+}
+
+/* Proc list */
+.covered {
+    background-color: rgb(0, 204, 0);
+    text-align: center;
+}
+.uncovered {
+    background-color: rgb(255, 51, 0);
+    text-align: center;
+}
