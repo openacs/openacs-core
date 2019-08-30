@@ -159,6 +159,11 @@
         </else>
       </tr>
     </multiple>
+    <tr>
+      <td colspan=8 class="proc_coverage_cell @global_test_coverage_level@">
+        <a href=proc-coverage>Global proc coverage: @global_test_coverage_percent@%</a>
+      </td>
+    </tr>
     </table>
     </form>
     <blockquote>
