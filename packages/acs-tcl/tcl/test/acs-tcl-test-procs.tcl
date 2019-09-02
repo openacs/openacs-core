@@ -1128,148 +1128,148 @@ aa_register_case \
     -procs {db_flush_cache} \
     db__caching {
         test db_* API caching
-} {
+    } {
 
-    # Check db_string caching
+        # Check db_string caching
 
-    # Check that cached and non-cached calls return the same value.  We need to
-    # check the caching API call twice, once to fill the cache and return the
-    # value, and again to see that the call returns the proper value from the
-    # cache.  This series ends by testing the flushing of db_cache_pool with an
-    # exact pattern.
+        # Check that cached and non-cached calls return the same value.  We need to
+        # check the caching API call twice, once to fill the cache and return the
+        # value, and again to see that the call returns the proper value from the
+        # cache.  This series ends by testing the flushing of db_cache_pool with an
+        # exact pattern.
 
-    set not_cached \
-        [db_string test1 {select first_names from persons where person_id = 0}]
-    aa_equals "Test that caching and non-caching db_string call return same result" \
-        [db_string -cache_key test1 test1 {select first_names from persons where person_id = 0}] \
-        $not_cached
-    aa_true "Test1 cached value found." \
-        ![catch {ns_cache get db_cache_pool test1} errmsg]
-    aa_equals "Test that cached db_string returns the right value from the cache" \
-        [db_string -cache_key test1 test1 {select first_names from persons where person_id = 0}] \
-        $not_cached
-    db_flush_cache -cache_key_pattern test1
-    aa_true "Flush of test1 from cache using the exact key" \
-        [catch {ns_cache get db_cache_pool test1} errmsg]
+        set not_cached \
+            [db_string test1 {select first_names from persons where person_id = 0}]
+        aa_equals "Test that caching and non-caching db_string call return same result" \
+            [db_string -cache_key test1 test1 {select first_names from persons where person_id = 0}] \
+            $not_cached
+        aa_true "Test1 cached value found." \
+            ![catch {ns_cache get db_cache_pool test1} errmsg]
+        aa_equals "Test that cached db_string returns the right value from the cache" \
+            [db_string -cache_key test1 test1 {select first_names from persons where person_id = 0}] \
+            $not_cached
+        db_flush_cache -cache_key_pattern test1
+        aa_true "Flush of test1 from cache using the exact key" \
+            [catch {ns_cache get db_cache_pool test1} errmsg]
 
-    # Check that cached and non-cached calls return the same default if no value
-    # is returned by the query.  This series ends by testing the flushing of the
-    # entire db_cache_pool cache.
+        # Check that cached and non-cached calls return the same default if no value
+        # is returned by the query.  This series ends by testing the flushing of the
+        # entire db_cache_pool cache.
 
-    set not_cached \
-        [db_string test2 {select first_names from persons where person_id=1 and person_id=2} \
-            -default foo]
-    aa_equals "Test that caching and non-caching db_string call return same default value" \
-        [db_string -cache_key test2 test2 {select first_names from persons where person_id=1 and person_id=2} \
-            -default foo] \
-        $not_cached
-    aa_true "Test2 cached value found." \
-        ![catch {ns_cache get db_cache_pool test2} errmsg]
-    aa_equals "Test that caching and non-caching db_string call return same default value" \
-        [db_string -cache_key test2 test2 {select first_names from persons where person_id=1 and person_id=2} \
-            -default foo] \
-        $not_cached
-    db_flush_cache
-    aa_true "Flush of test2 by flushing entire pool" \
-        [catch {ns_cache get db_cache_pool test2} errmsg]
+        set not_cached \
+            [db_string test2 {select first_names from persons where person_id=1 and person_id=2} \
+                -default foo]
+        aa_equals "Test that caching and non-caching db_string call return same default value" \
+            [db_string -cache_key test2 test2 {select first_names from persons where person_id=1 and person_id=2} \
+                -default foo] \
+            $not_cached
+        aa_true "Test2 cached value found." \
+            ![catch {ns_cache get db_cache_pool test2} errmsg]
+        aa_equals "Test that caching and non-caching db_string call return same default value" \
+            [db_string -cache_key test2 test2 {select first_names from persons where person_id=1 and person_id=2} \
+                -default foo] \
+            $not_cached
+        db_flush_cache
+        aa_true "Flush of test2 by flushing entire pool" \
+            [catch {ns_cache get db_cache_pool test2} errmsg]
 
-    # Check that cached and non-cached calls return an error if the query returns
-    # no data and no default is supplied.  This series ends by testing cache flushing
-    # by "string match" pattern.
+        # Check that cached and non-cached calls return an error if the query returns
+        # no data and no default is supplied.  This series ends by testing cache flushing
+        # by "string match" pattern.
 
-    aa_true "Uncached db_string call returns error if query returns no data" \
-        [catch {db_string test3 "select first_names from persons where person_id=1 and person_id=2"}]
-    aa_true "Cached db_string call returns error if query returns no data" \
-        [catch {db_string -cache_key test3 test3 "select first_names from persons where person_id=1 and person_id=2"}]
-    aa_true "db_string call returns error if caching call returned error" \
-        [catch {db_string -cache_key test3 test3 "select first_names from persons where person_id=1 and person_id=2"}]
-    db_flush_cache -cache_key_pattern tes*3
-    aa_true "Flush of test3 from cache using pattern" \
-        [catch {ns_cache get db_cache_pool test3} errmsg]
+        aa_true "Uncached db_string call returns error if query returns no data" \
+            [catch {db_string test3 "select first_names from persons where person_id=1 and person_id=2"}]
+        aa_true "Cached db_string call returns error if query returns no data" \
+            [catch {db_string -cache_key test3 test3 "select first_names from persons where person_id=1 and person_id=2"}]
+        aa_true "db_string call returns error if caching call returned error" \
+            [catch {db_string -cache_key test3 test3 "select first_names from persons where person_id=1 and person_id=2"}]
+        db_flush_cache -cache_key_pattern tes*3
+        aa_true "Flush of test3 from cache using pattern" \
+            [catch {ns_cache get db_cache_pool test3} errmsg]
 
-    # Check db_list caching
+        # Check db_list caching
 
-    set not_cached \
-        [db_list test4 {select first_names from persons where person_id = 0}]
-    aa_equals "Test that caching and non-caching db_list call return same result" \
-        [db_list -cache_key test4 test4 {select first_names from persons where person_id = 0}] \
-        $not_cached
-    aa_true "Test4 cached value found." \
-        ![catch {ns_cache get db_cache_pool test4} errmsg]
-    aa_equals "Test that cached db_list returns the right value from the cache" \
-        [db_list -cache_key test4 test4 {select first_names from persons where person_id = 0}] \
-        $not_cached
-    db_flush_cache
+        set not_cached \
+            [db_list test4 {select first_names from persons where person_id = 0}]
+        aa_equals "Test that caching and non-caching db_list call return same result" \
+            [db_list -cache_key test4 test4 {select first_names from persons where person_id = 0}] \
+            $not_cached
+        aa_true "Test4 cached value found." \
+            ![catch {ns_cache get db_cache_pool test4} errmsg]
+        aa_equals "Test that cached db_list returns the right value from the cache" \
+            [db_list -cache_key test4 test4 {select first_names from persons where person_id = 0}] \
+            $not_cached
+        db_flush_cache
 
-    # Check db_list_of_lists caching
+        # Check db_list_of_lists caching
 
-    set not_cached \
-        [db_list_of_lists test5 {select * from persons where person_id = 0}]
-    aa_equals "Test that caching and non-caching db_list_of_lists call return same result" \
-        [db_list_of_lists -cache_key test5 test5 {select * from persons where person_id = 0}] \
-        $not_cached
-    aa_true "Test5 cached value found." \
-        ![catch {ns_cache get db_cache_pool test5} errmsg]
-    aa_equals "Test that cached db_list_of_lists returns the right value from the cache" \
-        [db_list_of_lists -cache_key test5 test5 {select * from persons where person_id = 0}] \
-        $not_cached
-    db_flush_cache
+        set not_cached \
+            [db_list_of_lists test5 {select * from persons where person_id = 0}]
+        aa_equals "Test that caching and non-caching db_list_of_lists call return same result" \
+            [db_list_of_lists -cache_key test5 test5 {select * from persons where person_id = 0}] \
+            $not_cached
+        aa_true "Test5 cached value found." \
+            ![catch {ns_cache get db_cache_pool test5} errmsg]
+        aa_equals "Test that cached db_list_of_lists returns the right value from the cache" \
+            [db_list_of_lists -cache_key test5 test5 {select * from persons where person_id = 0}] \
+            $not_cached
+        db_flush_cache
 
-    # Check db_multirow caching
+        # Check db_multirow caching
 
-    db_multirow test6 test6 {select * from persons where person_id = 0}
-    set not_cached \
-        [list test6:rowcount test6:columns [array get test6:1]]
-    db_multirow -cache_key test6 test6 test6 {select * from persons where person_id = 0}
-    set cached \
-        [list test6:rowcount test6:columns [array get test6:1]]
-    aa_equals "Test that caching and non-caching db_multirow call return same result" \
+        db_multirow test6 test6 {select * from persons where person_id = 0}
+        set not_cached \
+            [list test6:rowcount test6:columns [array get test6:1]]
+        db_multirow -cache_key test6 test6 test6 {select * from persons where person_id = 0}
+        set cached \
+            [list test6:rowcount test6:columns [array get test6:1]]
+        aa_equals "Test that caching and non-caching db_multirow call return same result" \
+            $cached $not_cached
+        aa_true "Test6 cached value found." \
+            ![catch {ns_cache get db_cache_pool test6} errmsg]
+        db_multirow -cache_key test6 test6 test6 {select * from persons where person_id = 0}
+        set cached \
+            [list test6:rowcount test6:columns [array get test6:1]]
+        aa_equals "Test that cached db_multirow returns the right value from the cache" \
+            $cached $not_cached
+        db_flush_cache
+
+        # Check db_0or1row caching
+
+        set not_cached \
+           [db_0or1row test7 {select * from persons where person_id = 0} -column_array test7]
+        lappend not_cached [array get test7]
+        set cached \
+            [db_0or1row -cache_key test7 test7 {select * from persons where person_id = 0} -column_array test7]
+        lappend cached [array get test7]
+        aa_equals "Test that caching and non-caching db_0or1row call return same result for 1 row" \
+            $cached $not_cached
+        aa_true "Test7 cached value found." \
+            ![catch {ns_cache get db_cache_pool test7} errmsg]
+        set cached \
+            [db_0or1row -cache_key test7 test7 {select * from persons where person_id = 0} -column_array test7]
+        lappend cached [array get test7]
+        aa_equals "Test that cached db_0or1row returns the right value from the cache for 1 row" \
         $cached $not_cached
-    aa_true "Test6 cached value found." \
-        ![catch {ns_cache get db_cache_pool test6} errmsg]
-    db_multirow -cache_key test6 test6 test6 {select * from persons where person_id = 0}
-    set cached \
-        [list test6:rowcount test6:columns [array get test6:1]]
-    aa_equals "Test that cached db_multirow returns the right value from the cache" \
-        $cached $not_cached
-    db_flush_cache
+        db_flush_cache
 
-    # Check db_0or1row caching
+        # Check db_0or1row caching returns 0 if query returns no values
 
-    set not_cached \
-       [db_0or1row test7 {select * from persons where person_id = 0} -column_array test7]
-    lappend not_cached [array get test7]
-    set cached \
-        [db_0or1row -cache_key test7 test7 {select * from persons where person_id = 0} -column_array test7]
-    lappend cached [array get test7]
-    aa_equals "Test that caching and non-caching db_0or1row call return same result for 1 row" \
-        $cached $not_cached
-    aa_true "Test7 cached value found." \
-        ![catch {ns_cache get db_cache_pool test7} errmsg]
-    set cached \
-        [db_0or1row -cache_key test7 test7 {select * from persons where person_id = 0} -column_array test7]
-    lappend cached [array get test7]
-    aa_equals "Test that cached db_0or1row returns the right value from the cache for 1 row" \
-        $cached $not_cached
-    db_flush_cache
+        set not_cached \
+           [db_0or1row test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
+        set cached \
+            [db_0or1row -cache_key test8 test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
+        aa_equals "Test that caching and non-caching db_0or1row call return same result for 0 rows" \
+            $cached $not_cached
+        aa_true "Test8 cached value found." \
+            ![catch {ns_cache get db_cache_pool test8} errmsg]
+        set cached \
+            [db_0or1row -cache_key test8 test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
+        aa_equals "Test that cached db_0or1row returns the right value from the cache for 0 rows" \
+            $cached $not_cached
+        db_flush_cache
 
-    # Check db_0or1row caching returns 0 if query returns no values
-
-    set not_cached \
-       [db_0or1row test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
-    set cached \
-        [db_0or1row -cache_key test8 test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
-    aa_equals "Test that caching and non-caching db_0or1row call return same result for 0 rows" \
-        $cached $not_cached
-    aa_true "Test8 cached value found." \
-        ![catch {ns_cache get db_cache_pool test8} errmsg]
-    set cached \
-        [db_0or1row -cache_key test8 test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
-    aa_equals "Test that cached db_0or1row returns the right value from the cache for 0 rows" \
-        $cached $not_cached
-    db_flush_cache
-
-    # Won't check db_1row because it just calls db_0or1row
+        # Won't check db_1row because it just calls db_0or1row
 
 }
 
