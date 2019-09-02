@@ -5,7 +5,10 @@ ad_library {
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {oacs_util::csv_foreach} \
+    -procs {
+        oacs_util::csv_foreach
+        ad_tmpdir
+    } \
     csv_foreach {
     Test block execution for rows in a csv file.
 } {
@@ -45,6 +48,7 @@ aa_register_case \
     -procs {
         oacs_util::process_objects_csv
         person::get
+        ad_tmpdir
     } \
     process_objects_csv {
     Test object creation for every row in a csv file.

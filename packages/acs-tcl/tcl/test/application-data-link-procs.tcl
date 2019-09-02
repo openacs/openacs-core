@@ -4,7 +4,9 @@ ad_library {
 
 aa_register_case \
     -cats api \
-    -procs {} \
+    -procs {
+        ad_url
+    } \
     data_links_scan_links {
         Test scanning content for object URLs
 } {
@@ -94,6 +96,7 @@ aa_register_case \
     -cats api \
     -procs {
         application_data_link::scan_for_links
+        ad_url
     } \
     data_links_scan_links_with_tag {
 

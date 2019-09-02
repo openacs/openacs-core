@@ -9,6 +9,8 @@ aa_register_case \
     -procs {
         util::http::get
         util::http::post
+        ad_tmpnam
+        ad_url
     } \
     util_http_json_encoding {
         Test that JSON is encoded as expected
