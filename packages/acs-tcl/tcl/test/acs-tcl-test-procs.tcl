@@ -225,7 +225,10 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs xml_get_child_node_content_by_path \
+    -procs {
+        xml_doc_get_first_node
+        xml_get_child_node_content_by_path
+    } \
     xml_get_child_node_content_by_path {
         Test xml_get_child_node_content_by_path
 } {
@@ -757,7 +760,10 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs util::randomize_list \
+    -procs {
+        util::randomize_list
+        randomRange
+    } \
     util__randomize_list {
         Test util::randomize_list
 } {
