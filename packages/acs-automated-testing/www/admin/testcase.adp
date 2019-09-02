@@ -4,32 +4,32 @@
   <h1>@title@</h1>
   <div class="description">
     <dl>
-      <dt>Description:</dt><dd>@testcase_desc@</dd>
-      <dt>Defined in file:</dt><dd>@testcase_file@</dd>
-      <dt>Categories:</dt><dd>@testcase_cats@</dd>
+      <dt class="description-list">Description:</dt><dd>@testcase_desc@</dd>
+      <dt class="description-list">Defined in file:</dt><dd>@testcase_file@</dd>
+      <dt class="description-list">Categories:</dt><dd>@testcase_cats@</dd>
       <if @bug_blurb@ not nil>
-        <dt>Bugs:</dt><dd>This test case covers OpenACS bug number(s):
+        <dt class="description-list">Bugs:</dt><dd>This test case covers OpenACS bug number(s):
           @bug_blurb;noquote@</dd>
       </if>
       <if @proc_blurb@ not nil>  
-        <dt>Procs:</dt><dd>This test case covers OpenACS proc(s):
+        <dt class="description-list">Procs:</dt><dd>This test case covers OpenACS proc(s):
           @proc_blurb;noquote@</dd>
       </if>
       <if @url_blurb@ not nil>  
-        <dt>URLs:</dt><dd>This test case covers the following URLs:
+        <dt class="description-list">URLs:</dt><dd>This test case covers the following URLs:
           @url_blurb;noquote@</dd>
       </if>
       <if @testcase_inits@ ne "">
-        <dt>Initialization Classes:</dt><dd>@testcase_inits@</dd>
+        <dt class="description-list">Initialization Classes:</dt><dd>@testcase_inits@</dd>
       </if>
       <if @fails@ gt 0 and @testcase_on_error@ ne "">
-        <dt class="fail">Testcase failure error response:</dt>
+        <dt class="description-list fail">Testcase failure error response:</dt>
         <dd>@testcase_on_error;noquote@</dd>
       </if>
       <if @showsource;literal@ true>
         <multiple name="bodys">
-	  <if @bodys:rowcount;literal@ lt 2><dt>Body:</dt></if>
-	  <else><dt>Body (part @bodys.body_number@)</dt></else>
+	  <if @bodys:rowcount;literal@ lt 2><dt class="description-list">Body:</dt></if>
+	  <else><dt class="description-list">Body (part @bodys.body_number@)</dt></else>
           <dd><pre class="code">@bodys.body;literal@</pre></dd>
         </multiple>
       </if>
@@ -66,8 +66,8 @@
 
   <table>
     <tr>
-      <th>Result</th>
-      <th>Count</th>
+      <th class="testcase-table-header">Result</th>
+      <th class="testcase-table-header">Count</th>
     </tr>
     <multiple name="tests_quiet">
       <tr>
@@ -87,9 +87,9 @@
 
   <table class="testlog">
     <tr>
-      <th class="timestamp">Time</th>
-      <th class="result">Result</th>
-      <th class="notes">Notes</th>
+      <th class="testcase-table-header timestamp">Time</th>
+      <th class="testcase-table-header result">Result</th>
+      <th class="testcase-table-header notes">Notes</th>
     </tr>
     <if @tests:rowcount;literal@ eq 0>
       <tr><td> No results </td></tr>

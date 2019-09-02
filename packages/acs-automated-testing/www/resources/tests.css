@@ -1,3 +1,127 @@
+/*
+ * Automated testing main CSS
+ */
+
+/* Admin index styles */
+.main-table {
+    border: 0;
+    border-spacing: 0;
+    padding: 3px;
+    border-collapse: collapse;
+    width: 100%;
+}
+.main-table-header {
+    background-color: #ECECEC;
+}
+.main-table-modes {
+    text-align: center;
+    vertical-align: top;
+}
+.info-icon {
+    border: 0;
+}
+.checkbox-icon {
+    border: 0;
+    height: 13;
+    width: 13;
+}
+.checkbox-on {
+    padding-top: 2px;
+    padding-bottom: -2px;
+}
+.checkbox-off {
+    padding: 0px;
+}
+.package-table {
+    border-spacing: 3px;
+    border-collapse: separate;
+}
+table.package-table td {
+    padding: 3px;
+}
+.package-table-header {
+    background-color: #C0C0C0;
+}
+.package-table-header-package-key {
+    background-color: #C0F0C0;
+    text-align: center;
+}
+.package-table-cell {
+    text-align: right;
+}
+.result-failed {
+    background-color: red;
+    font-weight: bold;
+    color: white;
+}
+.result-warning {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+/* Testcase */
+.description h2 { 1.5em; }
+div.description dd {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+div.description dt {
+    margin-top: 12px;
+}
+.fail {
+    font-weight: bold;
+    color: red;
+}
+.ok {
+    font-weight: bold;
+    color: green;
+}
+.warn {
+    color: darkmagenta;
+}
+.sect {
+    font-size: large;
+    font-weight: bold;
+}
+td.log {
+    font-size: normal;
+    color: darkslateblue;
+    /*font-family: monospace;*/
+}
+dt.description-list {
+    font-weight: bold
+}
+.testcase-table-header {
+    background-color: #C0C0C0;
+}
+table.testlog td code {
+    background-color: inherit;
+}
+table.testlog td code.ok {
+    color: forestgreen;
+    font-weight: normal;
+}
+td.timestamp {
+    white-space: nowrap;
+}
+th.notes {
+    width: 70%;
+}
+td pre {
+    /*width: 70%;*/
+    margin: 0px;
+    border: 0px;
+    /*font-size: smaller;*/
+    padding: 2px;
+    background-color: inherit;
+}
+div.vl {
+    border-left: 1px solid #aaa;
+    padding:4px;
+    height:3ex;
+    display: inline-block;
+}
+
 /* Test coverage levels */
 .proc_coverage_cell > a {
     display: block;

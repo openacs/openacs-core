@@ -1,10 +1,10 @@
 <master>
 <property name="doc(title)">@title;literal@</property>
-  <table border="0" cellspacing="0" cellpadding="3" width="100%">
+  <table class="main-table">
     <tr>
-      <th style="background-color:#ECECEC">Category</th>
-      <th style="background-color:#ECECEC">Mode</th>
-      <th style="background-color:#ECECEC">View by</th>
+      <th class="main-table-header">Category</th>
+      <th class="main-table-header">Mode</th>
+      <th class="main-table-header">View by</th>
     </tr>
     <tr>
 
@@ -23,39 +23,39 @@
         </else>
       </multiple> ]
  <div class="form-help-text">
-                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" style="border:0">
+                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" class="info-icon">
                   View and run only tests in this category.  Tests can
       have more than one category.  (<a
       href="/api-doc/proc-view?proc=aa%5fregister%5fcase">more info</a>)
                 </div>
 
 <p><if @stress;literal@ true>                
-      <a href="index?stress=0&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" style="padding-top: 2px; padding-bottom: -2px;">
-        <img src="/resources/acs-subsite/checkboxchecked.gif" style="border:0" height="13" width="13">
+      <a href="index?stress=0&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-on">
+        <img src="/resources/acs-subsite/checkboxchecked.gif" class="checkbox-icon">
       </a>
     </if>
     <else>
-      <a href="index?stress=1&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" style="padding: 0px;">
-        <img src="/resources/acs-subsite/checkbox.gif" alt="checkbox" style="border:0" height="13" width="13">
+      <a href="index?stress=1&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-off">
+        <img src="/resources/acs-subsite/checkbox.gif" alt="checkbox" class="checkbox-icon">
       </a>
     </else>
     Include Stress tests
 </p>
 <p><if @security_risk;literal@ true>                
-      <a href="index?stress=@stress@&amp;security_risk=0&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" style="padding-top: 2px; padding-bottom: -2px;">
-        <img src="/resources/acs-subsite/checkboxchecked.gif" style="border:0" height="13" width="13">
+      <a href="index?stress=@stress@&amp;security_risk=0&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-on">
+        <img src="/resources/acs-subsite/checkboxchecked.gif" class="checkbox-icon">
       </a>
     </if>
     <else>
-      <a href="index?stress=@stress@&amp;security_risk=1&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" style="padding: 0px;">
-        <img src="/resources/acs-subsite/checkbox.gif" alt="checkbox" style="border:0" height="13" width="13">
+      <a href="index?stress=@stress@&amp;security_risk=1&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-off">
+        <img src="/resources/acs-subsite/checkbox.gif" alt="checkbox" class="checkbox-icon">
       </a>
     </else>
     Include tests that may compromise security
 </p>
     </td>
 
-    <td align="center" valign="top"> [
+    <td class="main-table-modes"> [
       <if @quiet;literal@ true>
          <strong> quiet </strong> | 
          <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0">verbose</a>
@@ -64,12 +64,12 @@
          | <strong> verbose </strong>
       </else>  ]
  <div class="form-help-text">
-                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" style="border:0">
+                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" class="info-icon">
                   Quiet mode shows only test failures.
                 </div>
     </td>
 
-    <td align="center" valign="top"> [
+    <td class="main-table-modes"> [
       <if @view_by@ eq "" or @view_by@ eq "package">
          <strong> package </strong> | 
          <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=testcase&amp;by_category=@by_category@&amp;quiet=@quiet@">testcase</a>
@@ -100,8 +100,8 @@
     </blockquote>
     <form id="bulk-actions-form" action="">
       @bulk_actions_vars;literal@
-    <table cellpadding="2px">
-    <tr style="background-color:#c0c0c0">
+    <table class="package-table">
+    <tr class="package-table-header">
         <th>
           <input data-toggle="true" type="checkbox" checked="true" id="toggle-all"/>
           <script <if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>>
@@ -133,29 +133,29 @@
         <td><input type="checkbox" checked="true" name="package_key" value="@packageinfo.key@"/></td>
         <td> <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@packageinfo.key@&amp;view_by=testcase&amp;quiet=@quiet@">@packageinfo.key@</a></td>
         <if @packageinfo.total;literal@ eq 0>
-          <td align="right">No data</td>
-          <td align="right">-</td>
-          <td align="right">-</td>
-          <td align="right">-</td>
-          <td align="right">-</td>
-          <td align="right" class="proc_coverage_cell @packageinfo.proc_coverage_level@"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
+          <td class="package-table-cell">No data</td>
+          <td class="package-table-cell">-</td>
+          <td class="package-table-cell">-</td>
+          <td class="package-table-cell">-</td>
+          <td class="package-table-cell">-</td>
+          <td class="proc_coverage_cell @packageinfo.proc_coverage_level@"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
         </if><else>
-          <td align="right"> @packageinfo.total@ </td>
-          <td align="right"> @packageinfo.passes@ </td>
-          <td align="right"> @packageinfo.fails@ </td>
-          <td align="right"> @packageinfo.warnings@ </td>
-          <td align="right">
+          <td class="package-table-cell"> @packageinfo.total@ </td>
+          <td class="package-table-cell"> @packageinfo.passes@ </td>
+          <td class="package-table-cell"> @packageinfo.fails@ </td>
+          <td class="package-table-cell"> @packageinfo.warnings@ </td>
+          <td class="package-table-cell">
             <if @packageinfo.fails@ gt 0>
-               <span style="background-color: red; color: white; font-weight: bold;">FAILED</span>
+               <span class="result-failed">FAILED</span>
             </if>
             <elseif @packageinfo.warnings@ gt 0>
-              <span style="background-color: yellow; font-weight: bold;">WARNING</span>
+              <span class="result-warning">WARNING</span>
             </elseif>
             <else>
               OK
             </else>
           </td>
-          <td align="right" class="proc_coverage_cell @packageinfo.proc_coverage_level@"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
+          <td class="proc_coverage_cell @packageinfo.proc_coverage_level@"><a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
         </else>
       </tr>
     </multiple>
@@ -200,7 +200,7 @@
      </if>
    </blockquote>
     <table width="100%">
-    <tr  style="background-color:#c0c0c0">
+    <tr class="package-table-header">
         <th>Package key</th>
         <th>Testcase id</th>
         <th>Categories</th>
@@ -213,7 +213,7 @@
     </tr>
     <multiple name="tests">
       <if @tests.marker;literal@ true>
-        <tr><td colspan="9" align="center" bgcolor="#c0f0c0"><strong>@tests.package_key@</strong></td></tr>
+        <tr><td colspan="9" class="package-table-header-package-key"><strong>@tests.package_key@</strong></td></tr>
       </if>
         <if @tests.rownum@ odd>
           <tr class="odd">
@@ -228,24 +228,24 @@
         <if @tests.timestamp@ eq "">
           <td>No data</td>
           <td>-</td>
-          <td align="right">-</td>
-          <td align="right">-</td>
+          <td class="package-table-cell">-</td>
+          <td class="package-table-cell">-</td>
         </if><else>
           <td>
             <if @tests.fails@ gt 0>
-               <span style="background-color: red; color: white; font-weight: bold; padding: 4px;">FAILED</span>
+               <span class="result-failed">FAILED</span>
             </if>
             <elseif @tests.warnings@ gt 0>
-               <span style="background-color: yellow; font-weight: bold; padding: 4px;">WARNING</span>
+               <span class="result-warning">WARNING</span>
             </elseif>
             <else>
               OK
             </else>
           </td>
           <td> @tests.timestamp@ </td>
-          <td align="right"> @tests.passes@ </td>
-          <td align="right"> @tests.fails@ </td>
-          <td align="right"> @tests.warnings@ </td>
+          <td class="package-table-cell"> @tests.passes@ </td>
+          <td class="package-table-cell"> @tests.fails@ </td>
+          <td class="package-table-cell"> @tests.warnings@ </td>
         </else>
       </tr>
     </multiple>

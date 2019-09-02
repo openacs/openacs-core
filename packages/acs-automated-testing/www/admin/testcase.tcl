@@ -21,6 +21,8 @@ ad_page_contract {
 set title "Test case $testcase_id"
 set context [list $title]
 
+template::head::add_css -href /resources/acs-automated-testing/tests.css
+
 if {$quiet} {
     set filter { and result = 'fail'}
 } else {
@@ -145,69 +147,6 @@ if {$return_url eq ""} {
 
 set quiet_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=1"
 set verbose_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=0"
-template::head::add_style \
-    -style {
-        .description h2 { 1.5em; }
-        div.description dd {
-            margin-left: 30px;
-            margin-right: 30px;
-        }
-        div.description dt {
-            margin-top: 12px;
-        }
-        .fail {
-            font-weight: bold;
-            color: red;
-        }
-        .ok {
-            font-weight: bold;
-            color: green;
-        }
-        .warn {
-            color: darkmagenta;
-        }
-        .sect {
-            font-size: large;
-            font-weight: bold;
-        }
-
-        td.log {
-            font-size: normal;
-            color: darkslateblue;
-            /*font-family: monospace;*/
-        }
-
-        dt {
-            font-weight: bold
-        }
-        th {
-            background: #c0c0c0;
-        }
-        table.testlog td code {
-            background-color: inherit;
-        }
-        table.testlog td code.ok {
-            color: forestgreen;
-            font-weight: normal;
-        }
-
-        td.timestamp {
-            white-space: nowrap;
-        }
-        
-        th.notes {
-            width: 70%;
-        }
-        td pre {
-            /*width: 70%;*/
-            margin: 0px;
-            border: 0px;
-            /*font-size: smaller;*/
-            padding: 2px;
-            background-color: inherit;
-        }
-        div.vl {border-left: 1px solid #aaa; padding:4px;height:3ex; display: inline-block;}
-    }
 
 ad_return_template
 
