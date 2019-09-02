@@ -1123,8 +1123,11 @@ aa_register_case \
             $results
     }
 
-aa_register_case -cats {api db} db__caching {
-    test db_* API caching
+aa_register_case \
+    -cats {api db} \
+    -procs {db_flush_cache} \
+    db__caching {
+        test db_* API caching
 } {
 
     # Check db_string caching
