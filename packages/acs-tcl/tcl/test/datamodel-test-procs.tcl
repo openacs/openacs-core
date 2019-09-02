@@ -8,9 +8,9 @@ ad_library {
 
 
 aa_register_case \
-    -cats {db smoke production_safe} \
+    -cats {api db smoke production_safe} \
     -error_level warning \
-    -procs {} \
+    -procs {db_name} \
     datamodel__named_constraints {
 
         Check that all the constraints meet the constraint naming

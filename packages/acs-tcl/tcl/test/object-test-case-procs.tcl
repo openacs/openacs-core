@@ -11,6 +11,7 @@ aa_register_case \
         acs_object::get
         acs_object::get_element
         acs_object::set_context_id
+        db_name
     } acs_object_procs_test \
     {
         test the acs_object::* procs
