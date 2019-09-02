@@ -59,6 +59,7 @@ aa_register_case \
     -procs {
         apm_generate_package_spec
         apm_read_package_info_file
+        db_dml
     } \
     apm__test_info_file {
         Test that the procs for interfacing with package info files -
@@ -558,6 +559,8 @@ aa_register_case \
 aa_register_case \
     -cats {api db smoke} \
     -procs {
+        db_abort_transaction
+        db_dml
         db_transaction
         db_string
     } \
@@ -1136,9 +1139,11 @@ aa_register_case \
     -cats {api db} \
     -procs {
         db_flush_cache
-        db_string
         db_list
         db_list_of_lists
+        db_multirow
+        db_0or1row
+        db_string
     } \
     db__caching {
         test db_* API caching
