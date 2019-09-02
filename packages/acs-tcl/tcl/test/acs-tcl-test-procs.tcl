@@ -1308,6 +1308,28 @@ aa_register_case \
     aa_true "registered_user_p works correct" $works_p
 }
 
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        acs_user::ban
+        acs_user::approve
+    } \
+    acs_user__ban_approve {
+        Tests the acs_user::ban and acs_user::approve procs
+
+        @author Héctor Romojaro <hector.romojaro.gomez@wu.ac.at>
+        @creation-date 2019-09-02
+} {
+    # Retrieve a registered user
+    set user_id [db_string get_registered_id {select max(user_id) from registered_users}]
+
+    # Ban and approve the user and check
+    aa_true "User is registered" [acs_user::registered_user_p -user_id $user_id]
+    acs_user::ban -user_id $user_id
+    aa_false "User banned" [acs_user::registered_user_p -user_id $user_id]
+    acs_user::approve -user_id $user_id
+    aa_true "User approved" [acs_user::registered_user_p -user_id $user_id]
+}
 
 aa_register_case \
     -cats {api smoke} \
