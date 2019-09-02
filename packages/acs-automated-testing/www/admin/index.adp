@@ -267,7 +267,7 @@
    </blockquote>
   </else>
 
-<p><a href="doc/">Documentation</a>
+<p><a href="../doc/">Documentation</a>
 
 <script <if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>>
   var bulkActions = document.getElementsByClassName('bulk-action');
