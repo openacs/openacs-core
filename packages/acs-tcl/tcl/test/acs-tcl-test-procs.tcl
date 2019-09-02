@@ -554,7 +554,10 @@ aa_register_case \
 
 aa_register_case \
     -cats {api db smoke} \
-    -procs db_transaction \
+    -procs {
+        db_transaction
+        db_string
+    } \
     db__transaction {
         Test db_transaction
 } {
@@ -1125,7 +1128,12 @@ aa_register_case \
 
 aa_register_case \
     -cats {api db} \
-    -procs {db_flush_cache} \
+    -procs {
+        db_flush_cache
+        db_string
+        db_list
+        db_list_of_lists
+    } \
     db__caching {
         test db_* API caching
     } {
