@@ -139,6 +139,7 @@ div.vl {
 }
 .full {
     background-color: rgb(0, 204, 0);
+    color: white;
 }
 .high {
     background-color: rgb(204, 255, 51);
@@ -148,9 +149,11 @@ div.vl {
 }
 .low {
     background-color: rgb(255, 179, 102);
+    color: white;
 }
 .very_low {
     background-color: rgb(255, 51, 0);
+    color: white;
 }
 
 /* Test coverage stats */
@@ -171,7 +174,6 @@ div.vl {
     text-shadow: 1px 1px #CBCEC2;
 }
 .coverage_data_level {
-    color: white;
     padding-left: 15px;
     padding-right: 15px;
     text-align: center;
@@ -186,7 +188,6 @@ div.vl {
     border-radius: 10px;
     font-size: 25px;
     text-align: center;
-    color: white;
     line-height: 150px;
     border: 2px solid #CBCEC2;
 }
