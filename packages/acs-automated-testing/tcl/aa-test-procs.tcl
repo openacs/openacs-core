@@ -526,7 +526,7 @@ ad_proc -public aa_register_case {
         }]
     }
 
-    set body [string map [list @init_class_code@ $init_class_code @args@ [list $args]] {
+    set body [string map [list @init_class_code@ $init_class_code @args@ [list $args] @testcase_id@ [list $testcase_id]] {
         @init_class_code@
         set _aa_export {}
         set body_count 1
@@ -535,7 +535,7 @@ ad_proc -public aa_register_case {
           set ::__aa_test_indent [info level]
           set catch_val [catch $testcase_body msg]
           if {$catch_val != 0 && $catch_val != 2} {
-              aa_log_result "fail" "$testcase_id (body $body_count): Error during execution: $msg, stack trace: \n$::errorInfo"
+              aa_log_result "fail" "@testcase_id@ (body $body_count): Error during execution: $msg, stack trace: \n$::errorInfo"
           }
           incr body_count
         }
@@ -547,7 +547,7 @@ ad_proc -public aa_register_case {
 }
 
 ad_proc -public aa_export_vars {
-    args
+    varnames
 } {
     Called from a initialization class constructor or a component to
     explicitly export the specified variables to the current testcase. You need
@@ -560,12 +560,12 @@ ad_proc -public aa_export_vars {
     set item_id 109
     </pre>
 } {
-    uplevel 1 [string map [list @args@ [list $args]] {
-        foreach v @args@ {
+    uplevel 1 [string map [list @varnames@ [list $varnames]] {
+        foreach v @varnames@ {
           upvar $v $v
           uplevel 1 [list lappend _aa_export $v]
         }
-    }
+    }]
 }
 
 ad_proc -public aa_runseries {
