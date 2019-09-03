@@ -73,6 +73,114 @@ aa_register_case \
     }
 }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        aa::coverage::proc_coverage
+    } \
+    aa__coverage_proc_coverage {
+
+        Simple test for the aa::coverage::proc_coverage proc.
+
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+        @creation-date 2019-09-03
+} {
+    set cases [list]
+
+    set result    [aa::coverage::proc_coverage]
+    lappend cases [list cmd {aa::coverage::proc_coverage} result "$result"]
+    set result    [aa::coverage::proc_coverage -package_key "acs-tcl"]
+    lappend cases [list cmd {aa::coverage::proc_coverage -package_key "acs-tcl"} result "$result"]
+    set result    [aa::coverage::proc_coverage -package_key "acs-kernel"]
+    lappend cases [list cmd {aa::coverage::proc_coverage -package_key "acs-kernel"} result "$result"]
+    set result    [aa::coverage::proc_coverage -package_key "acs-automated-testing"]
+    lappend cases [list cmd {aa::coverage::proc_coverage -package_key "acs-automated-testing"} result "$result"]
+
+    foreach testcase $cases {
+        dict with testcase {
+            aa_equals "$cmd dict size" "[dict size $result]" "3"
+            aa_true "$cmd procs type" {
+                [string is integer [dict get $result procs]] &&
+                [dict get $result procs] >= 0
+            }
+            aa_true "$cmd covered type" {
+                [string is integer [dict get $result covered]] &&
+                [dict get $result covered] >= 0
+            }
+            aa_true "$cmd covered <= procs" {
+                [dict get $result covered] <= [dict get $result procs]
+            }
+            aa_true "$cmd coverage type" {
+                [dict get $result coverage] >= 0 &&
+                [dict get $result coverage] <= 100
+            }
+        }
+    }
+}
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        aa::coverage::proc_covered_p
+        aa::coverage::proc_list
+    } \
+    aa__coverage_proc_proc_list_covered {
+
+        Simple test for the aa::coverage::proc_list and aa::coverage::proc_covered_p procs.
+
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+        @creation-date 2019-09-03
+} {
+    set total_proc_list [aa::coverage::proc_list]
+
+    foreach proc_info $total_proc_list {
+        dict with proc_info {
+            aa_equals "global: dict size" "[dict size $proc_info]" "3"
+            aa_true "global: package_key not empty" {[dict get $proc_info package_key] ne ""}
+            aa_true "global: proc_name not empty" {[dict get $proc_info proc_name] ne ""}
+            aa_true "global proc $proc_name: covered_p is boolean" {[string is boolean [dict get $proc_info covered_p]]}
+            aa_true "global proc $proc_name: covered_p and aa::coverage::proc_covered_p are coherent" {
+                bool([dict get $proc_info covered_p]) ==
+                bool([aa::coverage::proc_covered_p [dict get $proc_info proc_name]])
+            }
+        }
+    }
+
+    set package_list {acs-tcl acs-kernel acs-automated-testing}
+    foreach package $package_list {
+        set package_proc_list [aa::coverage::proc_list -package_key $package]
+        foreach proc_info $package_proc_list {
+            dict with proc_info {
+                aa_equals "package $package: dict size" "[dict size $proc_info]" "2"
+                aa_true "package $package: proc_name not empty" {[dict get $proc_info proc_name] ne ""}
+                aa_true "package $package proc $proc_name: covered_p is boolean" {[string is boolean [dict get $proc_info covered_p]]}
+                aa_true "package $package proc $proc_name: covered_p and aa::coverage::proc_covered_p are coherent" {
+                    bool([dict get $proc_info covered_p]) ==
+                    bool([aa::coverage::proc_covered_p [dict get $proc_info proc_name]])
+                }
+            }
+        }
+    }
+}
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        aa::coverage::proc_coverage_level
+    } \
+    aa__coverage_proc_coverage_level {
+
+        Simple test for the aa::coverage::proc_coverage_level proc.
+
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+        @creation-date 2019-09-03
+} {
+    set values {0 very_low 1 very_low 24.999 very_low 25 low 49 low 50.00 medium 74.9 medium 75 high 99 high 100 full}
+    dict for {value result} $values {
+        aa_equals "aa::coverage::proc_coverage_level $value" "[aa::coverage::proc_coverage_level $value]" "$result"
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
