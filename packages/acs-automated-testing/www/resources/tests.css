@@ -35,6 +35,7 @@
 .package-table {
     border-spacing: 3px;
     border-collapse: separate;
+    width: 100%;
 }
 table.package-table td {
     padding: 3px;
