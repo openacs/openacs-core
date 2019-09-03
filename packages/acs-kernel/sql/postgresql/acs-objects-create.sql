@@ -529,6 +529,19 @@ comment on table acs_static_attr_values is '
 -- ACS_OBJECT PACKAGE --
 ------------------------
 
+--
+-- Create an SQL schema to allow the same dot notation as in
+-- Oracle. The advantage of this notation is that the function can be
+-- called identically for PostgreSQL and Oracle, so much duplicated
+-- code can be removed.
+--
+--
+-- TODO: handling of schema names in define_function_args, port all
+-- acs_object api to the dot notation.
+--
+CREATE SCHEMA acs_object;
+
+
 select define_function_args('acs_object__initialize_attributes','object_id');
 
 
@@ -868,15 +881,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- function name
-select define_function_args('acs_object__name','object_id');
-
-
-
 --
 -- procedure acs_object__name/1
 --
-CREATE OR REPLACE FUNCTION acs_object__name(
+CREATE OR REPLACE FUNCTION acs_object.name(
    name__object_id integer
 ) RETURNS varchar AS $$
 DECLARE
@@ -935,6 +943,18 @@ BEGIN
   
 END;
 $$ LANGUAGE plpgsql stable strict;
+
+-- Backward compatibility definition for acs_object.name
+select define_function_args('acs_object__name','object_id');
+
+CREATE OR REPLACE FUNCTION acs_object__name(
+   name__object_id integer
+) RETURNS varchar AS $$
+BEGIN
+  RETURN acs_object.name(name__object_id);
+END;
+$$ LANGUAGE plpgsql stable strict;
+
 
 
 -- function default_name
