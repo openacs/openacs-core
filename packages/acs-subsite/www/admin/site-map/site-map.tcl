@@ -55,7 +55,20 @@ set user_id [ad_conn user_id]
 # table.
 #
 set head ""
-db_foreach path_select {} {
+db_foreach path_select {
+    WITH RECURSIVE site_node_path AS (
+       select node_id, parent_id, name, object_id, directory_p, 1 as level
+       from site_nodes where node_id = :root_id
+    UNION ALL
+       select c.node_id, c.parent_id, c.name, c.object_id, c.directory_p, p.level+1
+       from site_node_path p, site_nodes as c where  c.node_id = p.parent_id
+    )
+    select
+       node_id, name, directory_p, level,
+       acs_object.name(object_id) as obj_name,
+       acs_permission.permission_p(object_id, :user_id, 'admin') as admin_p
+    from   site_node_path order by level desc
+} {
     if {$node_id != $root_id && $admin_p == "t"} {
         set href [export_vars -base . {expand:multiple {root_id $node_id}}]
         append head [subst {<a href="[ns_quotehtml $href]">}]
@@ -306,7 +319,20 @@ db_foreach dbqd.acs-subsite.www.admin.site-map.site-map.nodes_select {} {
 
 set services ""
 
-db_foreach services_select {} {
+db_foreach services_select {
+    select package_id,
+           ap.package_key,
+           ap.instance_name,
+           (select count(*) from apm_parameters
+             where package_key = ap.package_key) as parameter_count
+    from apm_packages ap,
+         apm_package_types
+    where ap.package_key = apm_package_types.package_key
+    and package_type = 'apm_service'
+    and not exists (select 1 from site_nodes sn where sn.object_id = package_id)
+    and acs_permission.permission_p(package_id, :user_id,'admin')
+    order by instance_name
+} {
     if {$parameter_count > 0} {
         set href [export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]
         append services [subst {<li><a href="[ns_quotehtml $href]">$instance_name</a>}]

@@ -3,23 +3,6 @@
 <queryset>
     <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-    <fullquery name="path_select">
-        <querytext>
-	    WITH RECURSIVE site_node_path AS (
-	       select node_id, parent_id, name, object_id, directory_p, 1 as level
-	       from site_nodes where node_id = :root_id
-	    UNION ALL
-	       select c.node_id, c.parent_id, c.name, c.object_id, c.directory_p, p.level+1
-	       from site_node_path p, site_nodes as c where  c.node_id = p.parent_id
-	    )
-	    select
-	       node_id, name, directory_p, level,
-	       acs_object__name(object_id) as obj_name,
-  	       acs_permission__permission_p(object_id, :user_id, 'admin') as admin_p
-	    from   site_node_path order by level desc
-        </querytext>
-    </fullquery>
-
     <fullquery name="nodes_select">
         <rdbms><type>postgresql</type><version>8.4</version></rdbms>
         <querytext>
@@ -55,23 +38,6 @@
                   and (n.node_id = path.node_id or n.parent_id in ([join $expand ", "]))) sm0) as site_map
             on site_map.object_id = p.package_id
             order by url
-        </querytext>
-    </fullquery>
-    
-    <fullquery name="services_select">
-        <rdbms><type>postgresql</type><version>8.4</version></rdbms>
-        <querytext>
-            select package_id,
-                   ap.package_key,
-                   ap.instance_name,
-                   apm_package_type__num_parameters(ap.package_key) as parameter_count
-            from apm_packages ap,
-                 apm_package_types
-            where ap.package_key = apm_package_types.package_key
-            and package_type = 'apm_service'
-            and not exists (select 1 from site_nodes sn where sn.object_id = package_id)
-            and acs_permission__permission_p (package_id, :user_id,'admin')
-            order by instance_name
         </querytext>
     </fullquery>
 
