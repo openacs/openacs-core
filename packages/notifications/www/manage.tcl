@@ -55,7 +55,23 @@ if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
 
 set return_url [ad_conn url]
 
-db_multirow -extend { interval_url } notifications select_notifications {} {
+db_multirow -extend { interval_url } notifications select_notifications {
+     select nr.request_id,
+	    nr.type_id,
+            nt.pretty_name as type,
+            acs_object.name(nr.object_id) as object_name,
+            ni.name as interval,
+            nr.object_id
+       from notification_requests nr,
+            notification_intervals ni,
+            notification_types nt
+      where nr.user_id = :user_id
+        and nr.interval_id = ni.interval_id
+        and nr.type_id = nt.type_id
+        and nr.user_id is not null
+        and nr.dynamic_p = 'f'
+      order by lower(nt.pretty_name), object_name
+} {
     set interval_url [export_vars -base request-change-frequency { request_id {return_url [ad_return_url]} }]
     set interval [_ notifications.${interval}]
 }
