@@ -117,7 +117,15 @@ if { [template::form is_valid constraint_new] } {
 
 	# check for violations
 	template::multirow create violations rel_id name
-	db_foreach select_violated_rels {} {
+	db_foreach select_violated_rels {
+	    select viol.rel_id, acs_object.name(viol.party_id) as name
+	      from rel_constraints_violated_one viol
+	     where viol.constraint_id = :constraint_id
+	    UNION ALL
+	    select viol.rel_id, acs_object.name(viol.party_id) as name
+	      from rel_constraints_violated_two viol
+	     where viol.constraint_id = :constraint_id
+        } {
 	    template::multirow append violations $rel_id $name
 	    incr ctr
 	} 
