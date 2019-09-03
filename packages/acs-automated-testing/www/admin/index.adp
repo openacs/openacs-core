@@ -29,7 +29,7 @@
       href="/api-doc/proc-view?proc=aa%5fregister%5fcase">more info</a>)
                 </div>
 
-<p><if @stress;literal@ true>                
+<p><if @stress;literal@ true>
       <a href="index?stress=0&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-on">
         <img src="/resources/acs-subsite/checkboxchecked.gif" class="checkbox-icon">
       </a>
@@ -41,7 +41,7 @@
     </else>
     Include Stress tests
 </p>
-<p><if @security_risk;literal@ true>                
+<p><if @security_risk;literal@ true>
       <a href="index?stress=@stress@&amp;security_risk=0&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-on">
         <img src="/resources/acs-subsite/checkboxchecked.gif" class="checkbox-icon">
       </a>
@@ -57,7 +57,7 @@
 
     <td class="main-table-modes"> [
       <if @quiet;literal@ true>
-         <strong> quiet </strong> | 
+         <strong> quiet </strong> |
          <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0">verbose</a>
       </if><else>
          <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=1">quiet</a>
@@ -71,7 +71,7 @@
 
     <td class="main-table-modes"> [
       <if @view_by@ eq "" or @view_by@ eq "package">
-         <strong> package </strong> | 
+         <strong> package </strong> |
          <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=testcase&amp;by_category=@by_category@&amp;quiet=@quiet@">testcase</a>
       </if><else>
          <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;view_by=package&amp;by_category=@by_category@&amp;quiet=@quiet@">package</a>
@@ -173,7 +173,7 @@
       </div>
       <div>
         <strong>&raquo;</strong>
-        <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a> 
+        <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
       </div>
       <if @by_package_key@ ne "">
         <div>
