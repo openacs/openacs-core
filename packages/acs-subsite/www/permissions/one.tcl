@@ -40,7 +40,7 @@ db_multirow -extend {grantee_name} acl acl {
     from acs_permissions
     where object_id = :object_id
 } {
-    set grantee_name [party::name -party_id $grantee_id]
+    set grantee_name [acs_object_name $grantee_id]
 }
 
 set controls [list]

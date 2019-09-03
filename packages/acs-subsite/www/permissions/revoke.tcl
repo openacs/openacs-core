@@ -33,7 +33,7 @@ set body [subst {
 foreach item $revoke_list {
     lassign $item party_id privilege
     append body [subst {
-        <li>[party::name -party_id $party_id]</li>
+        <li>[acs_object_name $party_id]</li>
     }]
 }
 
