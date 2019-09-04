@@ -45,7 +45,8 @@ aa_register_case -cats {
         aa_true "Expired certificates have been found. Need to send an email." \
             [nsv_get __acs_admin_get_expired_certificates email_sent_p]
     } else {
-        aa_log "No expired certificates... Nothing to do."
+        aa_false "No expired certificates... Nothing to do." \
+            [nsv_get __acs_admin_get_expired_certificates email_sent_p]
     }
 
     nsv_unset __acs_admin_get_expired_certificates
