@@ -144,15 +144,10 @@ ad_proc -private lang::catalog::package_has_files_in_locale_p {package_key local
 
     @author Peter Marklund
 } {
-    ad_try {
-        glob [package_catalog_dir $package_key]/$package_key.${locale}.*
-    } on ok {r} {
-        set has_file_in_locale_p 1
-    } on error {errorMsg} {
-        set has_file_in_locale_p 0
-    }
+    set locale_files [glob -nocomplain -- \
+                          [package_catalog_dir $package_key]/$package_key.${locale}.*]
 
-    return $has_file_in_locale_p
+    return [expr {[llength $locale_files] > 0}]
 }
 
 ad_proc -private lang::catalog::get_catalog_file_path {

@@ -1149,6 +1149,29 @@ aa_register_case \
     }
 }
 
+aa_register_case \
+    -procs {
+        lang::catalog::package_has_files_in_locale_p
+    } lang_package_has_files_in_locale_p {
+        Check that this private interface returns the right value when
+        a a catalog file for a package is available or not
+    } {
+        set locale en_US
+        foreach package_key {acs-lang acs-kernel acs-subsite} {
+            aa_true "We have message keys for '$package_key'->'$locale'" \
+                [lang::catalog::package_has_files_in_locale_p $package_key $locale]
+        }
+        set bogus_package_key [ad_generate_random_string]
+        set bogus_locale [ad_generate_random_string]
+        aa_false "We don't have message keys for bogus '$bogus_package_key'->'$locale'" \
+            [lang::catalog::package_has_files_in_locale_p $bogus_package_key $locale]
+        aa_false "We don't have message keys for bogus '$package_key'->'$bogus_locale'" \
+            [lang::catalog::package_has_files_in_locale_p $package_key $bogus_locale]
+        aa_false "We don't have message keys for bogus '$bogus_package_key'->'$bogus_locale'" \
+            [lang::catalog::package_has_files_in_locale_p $bogus_package_key $bogus_locale]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
