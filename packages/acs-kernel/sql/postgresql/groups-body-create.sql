@@ -41,7 +41,7 @@ DECLARE
   v_error         text;
   map             record;
 BEGIN
-  
+
   -- First check if added this relation violated any relational constraints
   v_error := rel_constraint__violation(new.rel_id);
   if v_error is not null then
@@ -56,10 +56,10 @@ BEGIN
 
   -- Insert a row for me in the group_element_index.
   insert into group_element_index
-   (group_id, element_id, rel_id, container_id, 
+   (group_id, element_id, rel_id, container_id,
     rel_type, ancestor_rel_type)
   values
-   (v_object_id_one, v_object_id_two, new.rel_id, v_object_id_one, 
+   (v_object_id_one, v_object_id_two, new.rel_id, v_object_id_one,
     v_rel_type, 'membership_rel');
 
   if new.member_state = 'approved' then
@@ -73,7 +73,7 @@ BEGIN
      -- row in the group_element_index.
      for map in select distinct group_id
 	      from group_component_map
-	      where component_id = v_object_id_one 
+	      where component_id = v_object_id_one
      loop
 
         insert into group_element_index
@@ -186,7 +186,7 @@ DECLARE
   v_error         text;
   map             record;
 BEGIN
-  
+
   -- First check if added this relation violated any relational constraints
   v_error := rel_constraint__violation(new.rel_id);
 
@@ -235,11 +235,11 @@ BEGIN
 		  and element_id = m.element_id
 		  and rel_id = m.rel_id);
 
-  -- For all direct or indirect containers of my new composite group, 
+  -- For all direct or indirect containers of my new composite group,
   -- add me and add my elements
   for map in  select distinct group_id
 	      from group_component_map
-	      where component_id = v_object_id_one 
+	      where component_id = v_object_id_one
   LOOP
 
     -- Add a row for me
@@ -286,7 +286,7 @@ BEGIN
   return new;
 
 END;
-$$ LANGUAGE plpgsql;  
+$$ LANGUAGE plpgsql;
 
 create trigger composition_rels_in_tr after insert on composition_rels
 for each row execute procedure composition_rels_in_tr ();
@@ -322,7 +322,7 @@ BEGIN
 
   for map in  select *
 	      from group_component_map
-	      where rel_id = old.rel_id 
+	      where rel_id = old.rel_id
   LOOP
 
     delete from group_element_index
@@ -363,7 +363,7 @@ BEGIN
 				   union
 				   select v_object_id_two
 				   from dual)
-              and group_contains_p(group_id, component_id, rel_id) = 'f' 
+              and group_contains_p(group_id, component_id, rel_id) = 'f'
   LOOP
 
     delete from group_element_index
@@ -421,7 +421,7 @@ CREATE OR REPLACE FUNCTION composition_rel__new(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_rel_id               integer;       
+  v_rel_id               integer;
 BEGIN
     raise NOTICE 'composition_rel__new one % two %', object_id_one, object_id_two;
     v_rel_id := acs_rel__new (
@@ -440,7 +440,7 @@ BEGIN
      (v_rel_id);
 
     return v_rel_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -484,7 +484,7 @@ DECLARE
 BEGIN
     PERFORM acs_rel__delete(rel_id);
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -512,7 +512,7 @@ BEGIN
     for row in  select r.object_id_one as parent_id
                 from acs_rels r, composition_rels c
                 where r.rel_id = c.rel_id
-                and r.object_id_two = component_id 
+                and r.object_id_two = component_id
     LOOP
       if composition_rel__check_path_exists_p(row.parent_id, container_id) = 't' then
         return 't';
@@ -520,7 +520,7 @@ BEGIN
     end loop;
 
     return 'f';
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -539,8 +539,8 @@ CREATE OR REPLACE FUNCTION composition_rel__check_index(
    check_index__container_id integer
 ) RETURNS boolean AS $$
 DECLARE
-  result                              boolean;       
-  n_rows                              integer;       
+  result                              boolean;
+  n_rows                              integer;
   dc                                  record;
   r1                                  record;
   r2                                  record;
@@ -554,7 +554,7 @@ BEGIN
     for dc in  select r.rel_id, r.object_id_one as container_id
                from acs_rels r, composition_rels c
                where r.rel_id = c.rel_id
-               and r.object_id_two = check_index__component_id 
+               and r.object_id_two = check_index__component_id
     LOOP
 
       if composition_rel__check_path_exists_p(dc.container_id,
@@ -585,7 +585,7 @@ BEGIN
                and r.object_id_two = check_index__container_id
                union
                select check_index__container_id as container_id
-               from dual 
+               from dual
     LOOP
       -- Loop through all the components of COMPONENT_ID and make a
       -- recursive call.
@@ -595,7 +595,7 @@ BEGIN
                  and r.object_id_one = check_index__component_id
                  union
                  select check_index__component_id as component_id
-                 from dual 
+                 from dual
       LOOP
         if (r1.container_id != check_index__container_id or
             r2.component_id != check_index__component_id) and
@@ -606,7 +606,7 @@ BEGIN
     end loop;
 
     return result;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -626,8 +626,8 @@ CREATE OR REPLACE FUNCTION composition_rel__check_representation(
 DECLARE
   container_id                                 groups.group_id%TYPE;
   component_id                                 groups.group_id%TYPE;
-  result                                       boolean;     
-  row                                          record;  
+  result                                       boolean;
+  row                                          record;
 BEGIN
     result := 't';
 
@@ -649,7 +649,7 @@ BEGIN
     -- relating to this relation.
     for row in  select *
                 from group_component_index
-                where rel_id = check_representation__rel_id  
+                where rel_id = check_representation__rel_id
     LOOP
       if composition_rel__check_path_exists_p(row.component_id, row.group_id) = 'f' then
         result := 'f';
@@ -663,7 +663,7 @@ BEGIN
     end loop;
 
     return result;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -695,7 +695,7 @@ CREATE OR REPLACE FUNCTION membership_rel__new(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_rel_id               integer;       
+  v_rel_id               integer;
 BEGIN
     v_rel_id := acs_rel__new (
       new__rel_id,
@@ -713,7 +713,7 @@ BEGIN
      (v_rel_id, new__member_state);
 
     return v_rel_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -760,7 +760,7 @@ BEGIN
     set member_state = 'banned'
     where rel_id = ban__rel_id;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -783,7 +783,7 @@ BEGIN
     set member_state = 'approved'
     where rel_id = approve__rel_id;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -806,7 +806,7 @@ BEGIN
     set member_state = 'rejected'
     where rel_id = reject__rel_id;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -829,7 +829,7 @@ BEGIN
     set member_state = 'needs approval'
     where rel_id = unapprove__rel_id;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -852,7 +852,7 @@ BEGIN
     set member_state = 'deleted'
     where rel_id = deleted__rel_id;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -873,7 +873,7 @@ DECLARE
 BEGIN
     PERFORM acs_rel__delete(rel_id);
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -895,7 +895,7 @@ BEGIN
     set member_state = 'merged'
     where rel_id = merge__rel_id;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -914,8 +914,8 @@ CREATE OR REPLACE FUNCTION membership_rel__check_index(
    check_index__container_id integer
 ) RETURNS boolean AS $$
 DECLARE
-  result                              boolean;       
-  n_rows                              integer;       
+  result                              boolean;
+  n_rows                              integer;
   row                                 record;
 BEGIN
 
@@ -937,7 +937,7 @@ BEGIN
     for row in  select r.object_id_one as container_id
                 from acs_rels r, composition_rels c
                 where r.rel_id = c.rel_id
-                and r.object_id_two = check_index__group_id  
+                and r.object_id_two = check_index__group_id
     LOOP
       if membership_rel__check_index(row.container_id, check_index__member_id, check_index__container_id) = 'f' then
         result := 'f';
@@ -945,7 +945,7 @@ BEGIN
     end loop;
 
     return result;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -965,8 +965,8 @@ CREATE OR REPLACE FUNCTION membership_rel__check_representation(
 DECLARE
   group_id                      groups.group_id%TYPE;
   member_id                     parties.party_id%TYPE;
-  result                        boolean;  
-  row                           record;     
+  result                        boolean;
+  row                           record;
 BEGIN
     result := 't';
 
@@ -986,7 +986,7 @@ BEGIN
 
     for row in  select *
                 from group_member_index
-                where rel_id = check_representation__rel_id 
+                where rel_id = check_representation__rel_id
     LOOP
       if composition_rel__check_path_exists_p(row.container_id,
                                              row.group_id) = 'f' then
@@ -1000,11 +1000,11 @@ BEGIN
     end loop;
 
     return result;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
-    
+
 -- create or replace package body acs_group
 -- function new
 
@@ -1037,8 +1037,8 @@ DECLARE
   v_join_policy              groups.join_policy%TYPE;
 BEGIN
   v_group_id :=
-   party__new(new__group_id, new__object_type, new__creation_date, 
-              new__creation_user, new__creation_ip, new__email, 
+   party__new(new__group_id, new__object_type, new__creation_date,
+              new__creation_user, new__creation_ip, new__email,
               new__url, new__context_id);
 
   v_join_policy := new__join_policy;
@@ -1096,9 +1096,9 @@ BEGIN
        where group_rels.group_id = v_group_id
        and group_rels.rel_type = g.rel_type)
   ) rels;
-  
+
   return v_group_id;
-  
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1144,28 +1144,28 @@ CREATE OR REPLACE FUNCTION acs_group__delete(
 DECLARE
   row                           record;
 BEGIN
- 
+
    -- Delete all the relations of any type to this group
    for row in select r.rel_id, t.package_name
                  from acs_rels r, acs_object_types t
                 where r.rel_type = t.object_type
                   and (r.object_id_one = delete__group_id
-                       or r.object_id_two = delete__group_id) 
+                       or r.object_id_two = delete__group_id)
    LOOP
       execute 'select ' ||  row.package_name || '__delete(' || row.rel_id || ')';
    end loop;
- 
+
    -- Delete all segments defined for this group
-   for row in  select segment_id 
-                 from rel_segments 
-                where group_id = delete__group_id 
+   for row in  select segment_id
+                 from rel_segments
+                where group_id = delete__group_id
    LOOP
        PERFORM rel_segment__delete(row.segment_id);
    end loop;
 
    PERFORM party__delete(delete__group_id);
 
-   return 0; 
+   return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1183,7 +1183,7 @@ CREATE OR REPLACE FUNCTION acs_group__name(
    name__group_id integer
 ) RETURNS varchar AS $$
 DECLARE
-  name__group_name       varchar(200);  
+  name__group_name       varchar(200);
 BEGIN
   select group_name
   into name__group_name
@@ -1191,7 +1191,7 @@ BEGIN
   where group_id = name__group_id;
 
   return name__group_name;
-  
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
@@ -1243,11 +1243,11 @@ CREATE OR REPLACE FUNCTION acs_group__check_representation(
    group_id integer
 ) RETURNS boolean AS $$
 DECLARE
-  res                    boolean; 
+  res                    boolean;
   comp                   record;
-  memb                   record;      
+  memb                   record;
 BEGIN
-   if group_id is null then 
+   if group_id is null then
         --maybe we should just return 'f' instead?
 	raise exception 'acs_group__check_representation called with null group_id';
    end if;
@@ -1263,7 +1263,7 @@ BEGIN
    for comp in select c.rel_id
              from acs_rels r, composition_rels c
              where r.rel_id = c.rel_id
-             and r.object_id_one = group_id 
+             and r.object_id_one = group_id
    LOOP
      if composition_rel__check_representation(comp.rel_id) = 'f' then
        res := 'f';
@@ -1273,7 +1273,7 @@ BEGIN
    for memb in  select m.rel_id
              from acs_rels r, membership_rels m
              where r.rel_id = m.rel_id
-             and r.object_id_one = group_id 
+             and r.object_id_one = group_id
    LOOP
      if membership_rel__check_representation(memb.rel_id) = 'f' then
        res := 'f';
@@ -1284,7 +1284,7 @@ BEGIN
                   'Done running check_representation on group ' || group_id);
 
    return res;
-  
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1308,7 +1308,7 @@ CREATE OR REPLACE FUNCTION admin_rel__new(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_rel_id               integer;       
+  v_rel_id               integer;
 BEGIN
     v_rel_id := membership_rel__new (
       p_rel_id,           -- rel_id
@@ -1326,7 +1326,7 @@ BEGIN
      (v_rel_id);
 
     return v_rel_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1368,8 +1368,6 @@ DECLARE
 BEGIN
     PERFORM membership_rel__delete(rel_id);
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
-
-
