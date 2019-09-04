@@ -1196,7 +1196,6 @@ END;
 $$ LANGUAGE plpgsql stable strict;
 
 
-
 select define_function_args('acs_group__member_p','party_id,group_id,cascade_membership');
 
 --
@@ -1225,12 +1224,10 @@ BEGIN
       from acs_rels rels
     where rels.rel_type = 'membership_rel'
       and rels.object_id_one = p_group_id
-      and rels.object_id_two = p_party_id
-      and acs_permission.permission_p(rels.rel_id, p_party_id, 'read');
+      and rels.object_id_two = p_party_id;
   end if;
 END;
 $$ LANGUAGE plpgsql stable;
-
 
 
 -- function check_representation
