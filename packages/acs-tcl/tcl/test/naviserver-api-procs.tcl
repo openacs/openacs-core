@@ -1,9 +1,5 @@
 ad_library {
-    Tcl helper procedures for the acs-automated-testing tests of
-    the acs-tcl package.
-
-    @author Peter Marklund (peter@collaboraid.biz)
-    @creation-date 22 January 2003
+    Procs to test Naviserver API capabilities
 }
 
 aa_register_case \
