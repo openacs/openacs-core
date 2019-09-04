@@ -52,6 +52,42 @@ aa_register_case -cats {
     nsv_unset __acs_admin_get_expired_certificates
 }
 
+aa_register_case -cats {
+    api smoke
+} -procs {
+    apm_parameter_section_slider
+} acs_admin_apm_parameter_section_slider {
+    Check apm_parameter_section_slider
+} {
+    foreach package_key [db_list get_packages {
+        select package_key from apm_packages
+    }] {
+        set sections [db_list apm_parameter_sections {
+            select distinct(section_name)
+            from apm_parameters
+            where package_key = :package_key
+        }]
+        if {[llength $sections] <= 1} {
+            set right_sections_number 0
+        } else {
+            set right_sections_number 0
+            foreach section $sections {
+                if {$section ne ""} {
+                    incr right_sections_number
+                }
+            }
+            incr right_sections_number 2
+        }
+        set proc_sections [lindex [apm_parameter_section_slider $package_key] 0 3]
+        aa_true "Sections for '$package_key' are in the right number ([llength $proc_sections] == $right_sections_number)" {[llength $proc_sections] == $right_sections_number}
+        foreach section $proc_sections {
+            set section_name [lindex $section 0]
+            set section_length [llength $section]
+            aa_true "Section '$section_name' for '$package_key' is composed by 3 elements ($section_length)" {$section_length == 3}
+        }
+    }
+}
+
 
 # Local variables:
 #    mode: tcl
