@@ -9,11 +9,14 @@ ad_library {
 namespace eval acs_admin {
 
     ad_proc ::acs_admin::check_expired_certificates {} {
+        Check expire-dates of certificates and send warning emails to
+        the admin. In case HTTPS is not configured via the "nsssl"
+        driver, or the command line tool "openssl" openssl is
+        installed, the proc does nothing.
 
-        Check expire-dates of certificates and send warning
-        emails to the admin. In case HTTPS is not configured via the
-        "nsssl" driver, or the command line tool "openssl" openssl is
-        installed, the proc does nothing.  } {
+        @return boolean telling whether expired certificates existed
+        (true) or not (false)
+    } {
 
         set openssl [util::which openssl]
         if {[info commands ns_driver] ne "" && $openssl ne ""} {
@@ -77,6 +80,8 @@ namespace eval acs_admin {
                                    "Your friendly daemon" \n]
                 }
             }
+
+            return [expr {[llength $critCertInfo] > 0}]
         }
     }
 }

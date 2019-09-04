@@ -27,6 +27,31 @@ aa_register_case -cats {
         }
 }
 
+aa_register_case -cats {
+    api smoke
+} -procs {
+    acs_admin::check_expired_certificates
+} acs_admin_check_expired_certificates {
+    Check acs_admin::check_expired_certificates
+} {
+    nsv_set __acs_admin_get_expired_certificates email_sent_p false
+    aa_stub acs_mail_lite::send {
+        nsv_set __acs_admin_get_expired_certificates email_sent_p true
+    }
+
+    set expired_certificates_p [::acs_admin::check_expired_certificates]
+
+    if {$expired_certificates_p} {
+        aa_true "Expired certificates have been found. Need to send an email." \
+            [nsv_get __acs_admin_get_expired_certificates email_sent_p]
+    } else {
+        aa_log "No expired certificates... Nothing to do."
+    }
+
+    nsv_unset __acs_admin_get_expired_certificates
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
