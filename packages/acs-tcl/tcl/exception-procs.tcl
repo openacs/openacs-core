@@ -82,7 +82,7 @@ if {$::tcl_version >= 8.6} {
             #
             lappend extraTraps \
                 trap {AD EXCEPTION ad_script_abort} {result} [subst {
-                    ns_log notice {ad_script_abort of <$body> return value <\$result>}
+                    ns_log notice {ad_script_abort of <[list $body]> return value <\$result>}
                     ::throw {AD EXCEPTION ad_script_abort} \$result
                 }]
         }
@@ -132,7 +132,7 @@ if {$::tcl_version >= 8.6} {
             #
             lappend extraTraps \
                 trap {AD EXCEPTION ad_script_abort} {result} [subst {
-                    ns_log notice {ad_script_abort of <$body> return value <\$result>}
+                    ns_log notice {ad_script_abort of <[list $body]> return value <\$result>}
                     ::throw {AD EXCEPTION ad_script_abort} \$result
                 }]
         }
