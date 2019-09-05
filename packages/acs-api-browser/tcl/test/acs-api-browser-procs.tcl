@@ -106,6 +106,38 @@ aa_register_case \
         aa_true "This same proc is retrieved correctly" $found_p
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        api_describe_function
+    } \
+    acs_api_browser_api_describe_function {
+        Check api_apropos_functions
+    } {
+        aa_true "Searching for the empty string returns nothing" \
+            {[string length [api_describe_function ""]] == 0}
+
+        aa_true "A 'proper' search by an existing proc name returns some results" \
+            {[string length [api_describe_function api_describe_function]] > 0}
+
+        set default_results [api_describe_function api_describe_function]
+        set text_results [api_describe_function -format text/plain api_describe_function]
+        set html_results [api_describe_function -format text/html api_describe_function]
+        set anything_else_results [api_describe_function -format [ad_generate_random_string] api_describe_function]
+
+        aa_true "Default format is text/plain" \
+            {$default_results eq $text_results}
+
+        aa_false "Text format looks like text" \
+            [ad_looks_like_html_p $text_results]
+
+        aa_true "HTML format looks like HTML" \
+            [ad_looks_like_html_p $html_results]
+
+        aa_true "Specifying a bogus format also returns HTML" \
+            [ad_looks_like_html_p $anything_else_results]
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
