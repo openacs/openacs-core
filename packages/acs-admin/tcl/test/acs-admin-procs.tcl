@@ -88,6 +88,75 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api smoke
+} -procs {
+    merge::MergeUserInfo
+} acs_admin_merge_MergeUserInfo {
+    Check merge::MergeUserInfo
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            # Create 2 dummy users
+            set user_id_1 [dict get [acs::test::user::create] user_id]
+            set user_id_2 [dict get [acs::test::user::create] user_id]
+
+            # Fake non-image just to have a file to save
+            set tmpnam [ad_tmpnam].png
+            set wfd [open $tmpnam w]
+            puts $wfd [string repeat a 1000]
+            close $wfd
+            # Give a fake portrait to user_1
+            set portrait_id [acs_user::create_portrait \
+                                 -user_id $user_id_1 \
+                                 -file $tmpnam]
+            file delete $tmpnam
+
+            # Get a random object none of the two users has write
+            # privilege for
+            set random_object [db_string get_object {
+                select min(object_id) from acs_objects
+                where not acs_permission.permission_p(object_id, :user_id_1, 'write')
+                  and not acs_permission.permission_p(object_id, :user_id_2, 'write')
+            }]
+            # Set user_1 as fake creation user
+            db_dml update_object {
+                update acs_objects set
+                creation_user = :user_id_1
+                where object_id = :random_object
+            }
+            # Give user_1 the privilege
+            permission::grant -party_id $user_id_1 -object_id $random_object \
+                -privilege write
+
+            # Merge them
+            merge::MergeUserInfo \
+                -from_user_id $user_id_1 \
+                -to_user_id $user_id_2
+
+            set portrait_id_2 [acs_user::get_portrait_id -user_id $user_id_2]
+            aa_true "Users have now the same portrait ($portrait_id == $portrait_id_2)" \
+                {$portrait_id == $portrait_id_2}
+
+            set creation_user_2 [db_string get_creator {
+                select creation_user from acs_objects where object_id = :random_object
+            }]
+            aa_true "Creator of object '$random_object' is now user '$user_id_2'" \
+                {$creation_user_2 == $user_id_2}
+
+            aa_true "User '$user_id_2' has now write permission on object '$random_object'" \
+                [permission::permission_p \
+                     -party_id $user_id_2 \
+                     -object_id $random_object \
+                     -privilege "write"]
+            aa_false "User '$user_id_1' was revoked write permission on object '$random_object'" \
+                [permission::permission_p \
+                     -party_id $user_id_1 \
+                     -object_id $random_object \
+                     -privilege "write"]
+        }
+}
 
 # Local variables:
 #    mode: tcl
