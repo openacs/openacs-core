@@ -66,6 +66,46 @@ aa_register_case \
         nsv_unset -nocomplain -- $proc_name
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        api_apropos_functions
+    } \
+    acs_api_browser_api_apropos_functions {
+        Check api_apropos_functions
+    } {
+        set all_ad_procs [nsv_array names api_proc_doc]
+
+        aa_true "Searching for the empty string returns every ad_proc" \
+            {[llength [api_apropos_functions ""]] == [llength $all_ad_procs]}
+
+        while {[set bogus_proc [ad_generate_random_string]] in $all_ad_procs} {}
+        aa_true "A bogus proc returns no result" \
+            {[llength [api_apropos_functions $bogus_proc]] == 0}
+
+        set proc ns_write
+        set found_p false
+        foreach r [api_apropos_functions $proc] {
+            lassign $r name etc
+            if {$name eq $proc} {
+                set found_p true
+                break
+            }
+        }
+        aa_false "Other non ad_* api is not returned" $found_p
+
+        set proc api_apropos_functions
+        set found_p false
+        foreach r [api_apropos_functions $proc] {
+            lassign $r name etc
+            if {$name eq $proc} {
+                set found_p true
+                break
+            }
+        }
+        aa_true "This same proc is retrieved correctly" $found_p
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
