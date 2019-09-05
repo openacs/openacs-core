@@ -138,6 +138,20 @@ aa_register_case \
             [ad_looks_like_html_p $anything_else_results]
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        api_get_body
+    } \
+    acs_api_browser_api_get_body {
+        Check api_get_body
+    } {
+        foreach proc_name [nsv_array names api_proc_doc] {
+            aa_true "Something similar to a tcl body is returned for '$proc_name'" \
+                [info complete [api_get_body $proc_name]]
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
