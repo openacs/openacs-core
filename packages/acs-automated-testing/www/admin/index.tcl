@@ -34,13 +34,6 @@ if {$by_category ne ""} {
     append title ", all categories"
 }
 
-# Calculate package proc test coverage
-if { $view_by eq "package" } {
-    set global_test_coverage            [aa::coverage::proc_coverage]
-    set global_test_coverage_percent    [dict get $global_test_coverage coverage]
-    set global_test_coverage_level      [aa::coverage::proc_coverage_level $global_test_coverage_percent]
-}
-
 foreach testcase [nsv_get aa_test cases] {
     lassign $testcase testcase_id testcase_desc . package_key categories
 
@@ -97,6 +90,12 @@ db_foreach acs-automated-testing.results_queryx {
 }
 
 if {$view_by eq "package"} {
+    #
+    # Calculate package proc test coverage
+    #
+    set global_test_coverage            [aa::coverage::proc_coverage]
+    set global_test_coverage_percent    [dict get $global_test_coverage coverage]
+    set global_test_coverage_level      [aa::coverage::proc_coverage_level $global_test_coverage_percent]
     #
     # Prepare the template data for a view_by "package"
     #
