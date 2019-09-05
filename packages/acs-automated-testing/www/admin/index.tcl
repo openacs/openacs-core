@@ -34,11 +34,16 @@ if {$by_category ne ""} {
     append title ", all categories"
 }
 
+# Include all enabled packages in the package view list
+foreach enabled_package [apm_enabled_packages] {
+    set packages($enabled_package) [list 0 0 0 0]
+}
+
+# Check for testcases
 foreach testcase [nsv_get aa_test cases] {
     lassign $testcase testcase_id testcase_desc . package_key categories
 
     set results($testcase_id,$package_key) [list $testcase_desc $package_key $categories]
-    set packages($package_key) [list 0 0 0 0]
 }
 
 db_foreach acs-automated-testing.results_queryx {
