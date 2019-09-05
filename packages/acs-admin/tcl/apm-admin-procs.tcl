@@ -72,7 +72,12 @@ ad_proc -deprecated apm_header { { -form "" } args } {
     "
 }
 
-ad_proc apm_shell_wrap { cmd } {
+ad_proc -deprecated apm_shell_wrap { cmd } {
+    The value provided by this proc is unclear, quite hardcoded, and
+    it is used nowhere in usptream code.
+
+    @see many possible plain tcl idioms
+
     @return a command string, wrapped it shell-style (with backslashes)
     in case lines get too long.
 } {
