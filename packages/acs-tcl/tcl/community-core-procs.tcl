@@ -1178,10 +1178,13 @@ ad_proc -private acs_user::get_portrait_id_not_cached {
 
     @param user_id user_id of the user for whom we need the portrait
 } {
-    set item_id [content::item::get_id_by_name \
-                     -name "portrait-of-user-$user_id" \
-                     -parent_id $user_id]
-    return [expr {$item_id ne "" ? $item_id : 0}]
+    return [db_string get_portrait {
+        select c.item_id
+	from acs_rels a, cr_items c
+	where a.object_id_two = c.item_id
+	and a.object_id_one = :user_id
+	and a.rel_type = 'user_portrait_rel'
+    } -default 0]
 }
 
 ad_proc -private acs_user::flush_portrait {
