@@ -467,7 +467,28 @@ proc ad_proc args {
     }
 
     set doc_elements(script) $script
-    if { ![nsv_exists api_proc_doc $proc_name] } {
+    #
+    # As acs-automated-testing/tcl/aa-test-procs.tcl is loaded on startup before
+    # acs-bootstrap-installer/tcl/00-proc-procs.tcl, it is possible that the
+    # testcase element of the api_proc_doc nsv has been already populated,
+    # therefore creating the key for that proc on the nsv.
+    #
+    # Previously, some procs where not included in the api_proc_doc_scripts nsv
+    # because of that, as the nsv lappend was skipped if the key existed.
+    #
+    # For example:
+    # - file_storage::twt::delete_file
+    # - file_storage::twt::create_url_in_folder
+    # - file_storage::twt::create_url
+    # - ...
+    #
+    # We avoid this by checking as well if the testcase element is the only one
+    # for that particular proc in the nsv.
+    #
+    if { ![nsv_exists api_proc_doc $proc_name] ||
+         ([dict exists [nsv_get api_proc_doc $proc_name] testcase] &&
+          [dict size [nsv_get api_proc_doc $proc_name]] eq "1")
+    } {
         nsv_lappend api_proc_doc_scripts $script $proc_name
     }
 
