@@ -33,8 +33,8 @@ ad_proc -public aa::coverage::proc_list {
     {-package_key ""}
 } {
     Creates a list of the procs belonging to a particular package, with its
-    current automated testing covered status, excluding deprecated and not
-    public procs.
+    current automated testing covered status, excluding deprecated, callback
+    contracts and not public procs.
 
     If no 'package_key' is passed, then the system wide test proc coverage is
     returned.
@@ -62,6 +62,7 @@ ad_proc -public aa::coverage::proc_list {
                     if { [info exists proc_doc(protection)]
                         && "public" in $proc_doc(protection)
                         && !($proc_doc(deprecated_p) || $proc_doc(warn_p))
+                        && ![regexp {^callback::.*::contract$} "$proc_name"]
                     } {
                         set proc_data [dict create]
                         if { $package_key eq "" } {
