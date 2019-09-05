@@ -1170,7 +1170,6 @@ aa_register_case \
         aa_false "We don't have message keys for bogus '$bogus_package_key'->'$bogus_locale'" \
             [lang::catalog::package_has_files_in_locale_p $bogus_package_key $bogus_locale]
     }
-}
 
 # Local variables:
 #    mode: tcl
