@@ -32,37 +32,6 @@ aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
     aa_log "Found $good good of $count checked"
 }
 
-aa_register_case \
-    -cats {smoke production_safe} \
-    -error_level warning \
-    documentation__check_proc_testcase {
-
-    Checks if testcases exist for public procs.
-
-    @author Monika Andergassen <manderga@wu.ac.at>
-} {
-    set count 0
-    set good 0
-
-    foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
-        array set pa [nsv_get api_proc_doc $p]
-        if { [info exists pa(protection)]
-            && "public" in $pa(protection)
-            && !($pa(deprecated_p) || $pa(warn_p))
-        } {
-            incr count
-            if { [info exists pa(testcase)] } {
-                incr good
-                aa_log "Testcase found for public proc $p"
-            } else {
-                aa_log_result fail "No testcase for public proc $p"
-            }
-        }
-        array unset pa
-    }
-    aa_log "Found $good good of $count checked"
-}
-
 aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_deprecated_see {
     checks if deprecated procs have an @see clause
 
