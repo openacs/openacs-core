@@ -2020,8 +2020,13 @@ ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
     return $url
 }
 
-ad_proc api_proc_link { proc } {
+ad_proc -deprecated api_proc_link { proc } {
     @return full HTML link to the documentation for the proc.
+
+    Deprecated as it is broken because api_proc_url accepts (now?)
+    different arguments
+
+    @see api_proc_url
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
