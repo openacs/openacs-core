@@ -21,11 +21,11 @@ ad_proc -public text_templates::create_pdf_content {
     @creation-date 2005-07-07
 
     @param template_id The template to use for the preview. It is \
-	assumed that the template_id is the same as the revision_id to \
-	be used for the template.
+    assumed that the template_id is the same as the revision_id to \
+    be used for the template.
 
     @param set_var_call procedure-name which sets the variables used
-								    
+
     @return the pdf-file-name
 } {
 
@@ -41,14 +41,14 @@ ad_proc -public text_templates::create_pdf_content {
     set tmp_pdf_filename "${tmp_filename}.pdf"
     set htmldoc_bin [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"]
     if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
-	ns_log Error "Error during conversion from html to pdf: $err"
+        ns_log Error "Error during conversion from html to pdf: $err"
     }
     file delete -- $tmp_html_filename
 
     if {[file exists $tmp_pdf_filename]} {
-	return $tmp_pdf_filename
+        return $tmp_pdf_filename
     } else {
-	return ""
+        return ""
     }
 }
 
@@ -57,7 +57,7 @@ ad_proc -public text_templates::create_pdf_from_html {
     {-html_content:required}
 } {
     The HTML Content is transformed into a PDF file
-    
+
     @param html_content HTML Content that is transformed into PDF
     @return filename of the pdf file
 } {
@@ -71,12 +71,12 @@ ad_proc -public text_templates::create_pdf_from_html {
     set tmp_pdf_filename "${tmp_filename}.pdf"
     set htmldoc_bin [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"]
     if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
-	ns_log Error "Error during conversion from html to pdf: $err"
+        ns_log Error "Error during conversion from html to pdf: $err"
     }
     if {[file exists $tmp_pdf_filename]} {
-	return $tmp_pdf_filename
+        return $tmp_pdf_filename
     } else {
-	return ""
+        return ""
     }
 }
 
@@ -87,7 +87,7 @@ ad_proc -public text_templates::store_final_document {
     {-description:required}
 } {
     The document is stored in the given folder.
-    
+
     @author Christian Langmann (C_Langmann@gmx.de)
     @creation-date 2005-07-07
     @param pdf_file the pdf-file to save
@@ -95,7 +95,7 @@ ad_proc -public text_templates::store_final_document {
     @param title Title or name of the document
     @param description Description of the document
     @return item_id
-    
+
 } {
     set file_size [file size $pdf_file]
     set item_id [cr_import_content -title $title -description $description $folder_id $pdf_file $file_size application/pdf $title]
@@ -118,7 +118,7 @@ ad_proc -private text_templates::create_html_content {
 } {
 
     {*}$set_var_call
-    
+
     # retrieve template and write to tmpfile
     # set content [content::get_content_value $template_id]
     set file [open $filename]
