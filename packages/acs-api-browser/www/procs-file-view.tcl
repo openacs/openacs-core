@@ -27,20 +27,20 @@ if { ![info exists source_p] } {
 if { ![info exists version_id]
      && [regexp {^packages/([^ /]+)/} $path "" package_key] } {
     db_0or1row version_id_from_package_key {
-        select version_id 
-	from apm_enabled_package_versions 
-	where package_key = :package_key
+        select version_id
+          from apm_enabled_package_versions
+         where package_key = :package_key
     }
 }
 
 set path [apidoc::sanitize_path $path]
 if {![file readable ${::acs::rootdir}$path] || [file isdirectory ${::acs::rootdir}$path]} {
     if {[info exists version_id]} {
-	set kind procs
-	set href [export_vars -base [ad_conn package_url]/package-view {version_id {kind procs}}]
-	set link [subst {<p>Go back to <a href="[ns_quotehtml $href]">Package Documentation</a>.}]
+        set kind procs
+        set href [export_vars -base [ad_conn package_url]/package-view {version_id {kind procs}}]
+        set link [subst {<p>Go back to <a href="[ns_quotehtml $href]">Package Documentation</a>.}]
     } else {
-	set link [subst {<p>Go back to <a href="[ns_quotehtml [ad_conn package_url]]">API Browser</a>.}]
+        set link [subst {<p>Go back to <a href="[ns_quotehtml [ad_conn package_url]]">API Browser</a>.}]
     }
     ad_return_warning \
         "No such library file" \
@@ -75,7 +75,7 @@ if { [info exists version_id] } {
          where version_id = :version_id
     }
     if {[info exists pretty_name]} {
-	lappend context [list [export_vars -base package-view {version_id}] "$pretty_name $version_name"]
+        lappend context [list [export_vars -base package-view {version_id}] "$pretty_name $version_name"]
     }
 
 }
@@ -100,7 +100,7 @@ if { [nsv_exists api_proc_doc_scripts $path] } {
             }
         }
         multirow append proc_list [api_proc_pretty_name -link $proc]
-    }   
+    }
     foreach proc [lsort [nsv_get api_proc_doc_scripts $path]] {
         if { $public_p } {
             array set doc_elements [nsv_get api_proc_doc $proc]
