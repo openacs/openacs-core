@@ -152,6 +152,45 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        api_proc_documentation
+    } \
+    acs_api_browser_api_proc_documentation {
+        Check api_proc_documentation
+    } {
+        set proc api_proc_documentation
+
+        aa_true "Specifiying an invalid proc throws an error" [catch {
+            api_proc_documentation [ad_generate_random_string]
+        }]
+
+        set doc [api_proc_documentation $proc]
+        aa_true "Format is HTML" [ad_looks_like_html_p $doc]
+
+        set doc [api_proc_documentation -format text/plain $proc]
+        aa_true "Format is HTML also when specifying deprecated -format flag" [ad_looks_like_html_p $doc]
+
+        set proc_url [dict get [nsv_get api_proc_doc $proc] script]
+        set doc [api_proc_documentation -script $proc]
+        aa_true "Specifying the script flag returns the proc file" [string match *$proc_url* $doc]
+
+        set doc [api_proc_documentation -xql $proc]
+        aa_true "Specifying the xql flag returns the something about xql" [string match -nocase *xql* $doc]
+
+        set doc [api_proc_documentation -first_line_tag <h2> $proc]
+        aa_true "Specifying the first line tag prints it out around the first line" [regexp {^<h2>.*</h2>.*$} $doc]
+
+        set label [ad_generate_random_string]
+        set doc [api_proc_documentation -first_line_tag <h2> -label $label $proc]
+        aa_true "Specifying the label prints it out in the first line" [regexp [subst -nocommands {^<h2>.*$label.*</h2>.*$}] $doc]
+
+        set proc_type [ad_generate_random_string]
+        set doc [api_proc_documentation -first_line_tag <h2> -proc_type $proc_type $proc]
+        aa_true "Specifying the proc type it out in the first line" [regexp [subst -nocommands {^<h2>.*$proc_type.*</h2>.*$}] $doc]
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

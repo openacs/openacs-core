@@ -353,7 +353,7 @@ ad_proc -public api_type_documentation {
 }
 
 ad_proc -public api_proc_documentation {
-    {-format text/html}
+    -format
     -script:boolean
     -source:boolean
     -xql:boolean
@@ -365,8 +365,8 @@ ad_proc -public api_proc_documentation {
 
     Generates formatted documentation for a procedure.
 
-    @param format    the type of documentation to generate. Currently, only
-                     <code>text/html</code> and <code>text/plain</code> are supported.
+    @param format    the type of documentation to generate. This
+                     parameter is deprecated and has no effect.
     @param script    include information about what script this proc lives in?
     @param xql       include the source code for the related xql files?
     @param source    include the source code for the script?
@@ -383,8 +383,8 @@ ad_proc -public api_proc_documentation {
         ad_log warning "api_proc_documentation: received invalid proc_name <$proc_name>, try to sanitize"
         regsub -all {::::} $proc_name :: proc_name
     }
-    if { $format ne "text/html" && $format ne "text/plain" } {
-        return -code error "Only text/html and text/plain documentation are currently supported"
+    if {[info exists format]} {
+        ad_log warning "-format flag is deprecated and has no effect"
     }
     array set doc_elements {
         flags ""
