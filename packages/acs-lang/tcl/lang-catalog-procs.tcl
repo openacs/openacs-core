@@ -1150,7 +1150,7 @@ ad_proc -private lang::catalog::translate {} {
             ad_try {
                 set translated_message [lang_babel_translate $message en_$lang]
             } on error {errorMsg} {
-                ns_log Notice "Error translating $message into $lang: $errorMsg"
+                ns_log Error "Error translating $message into $lang: $errorMsg"
             } ok ok {r} {
                 lang::message::register $lang $package_key $message_key $translated_message
             }

@@ -41,7 +41,7 @@ ad_proc -public text_templates::create_pdf_content {
     set tmp_pdf_filename "${tmp_filename}.pdf"
     set htmldoc_bin [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"]
     if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
-	ns_log Notice "Error during conversion from html to pdf: $err"
+	ns_log Error "Error during conversion from html to pdf: $err"
     }
     file delete -- $tmp_html_filename
 
@@ -71,7 +71,7 @@ ad_proc -public text_templates::create_pdf_from_html {
     set tmp_pdf_filename "${tmp_filename}.pdf"
     set htmldoc_bin [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"]
     if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
-	ns_log Notice "Error during conversion from html to pdf: $err"
+	ns_log Error "Error during conversion from html to pdf: $err"
     }
     if {[file exists $tmp_pdf_filename]} {
 	return $tmp_pdf_filename
