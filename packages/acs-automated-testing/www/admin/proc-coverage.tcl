@@ -54,7 +54,7 @@ set test_coverage_level     [aa::coverage::proc_coverage_level $test_coverage_pe
 lappend list_elements {*}{
     proc_name {
         label "Proc name"
-        display_template {<a href=/api-doc/proc-view?proc=@procs_mr.proc_name@>@procs_mr.proc_name@</a>}
+        display_template {[api_proc_pretty_name -link @procs_mr.proc_name@]}
     }
     covered_p {
         label "Covered"
