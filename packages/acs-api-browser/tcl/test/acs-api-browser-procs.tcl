@@ -191,6 +191,41 @@ aa_register_case \
         aa_true "Specifying the proc type it out in the first line" [regexp [subst -nocommands {^<h2>.*$proc_type.*</h2>.*$}] $doc]
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        api_proc_pretty_name
+        api_proc_url
+    } \
+    acs_api_browser_api_proc_pretty_name {
+        Check api_proc_pretty_name and api_proc_url procs
+    } {
+        set proc api_proc_pretty_name
+        set label [ad_generate_random_string]
+        set bogus_proc [ad_generate_random_string]
+        set proc_type [ad_generate_random_string]
+
+        aa_true "A bogus proc returns the empty string" \
+            {[api_proc_pretty_name -hints_only $bogus_proc] eq ""}
+        aa_true "A bogus proc returns the empty string" \
+            {[api_proc_pretty_name -link -hints_only $bogus_proc] eq ""}
+        aa_true "A bogus proc returns the empty string" \
+            {[api_proc_pretty_name -include_debug_controls -link -hints_only $bogus_proc] eq ""}
+
+        aa_true "Hints are printed in parenthesys, the proc type belongs to the hints" \
+            [regexp "^\(.*$proc_type.*\)$" [string trim [api_proc_pretty_name -proc_type $proc_type -hints_only $proc]]]
+
+        aa_true "-include_debug_controls prints out a form" \
+            [regexp {^.*<form[^>]*>.*</form[^>]*.*$} [api_proc_pretty_name -include_debug_controls $proc]]
+
+        aa_true "-link will put the proc URL somewhere" \
+            [string match "*[ns_quotehtml [api_proc_url $proc]]*" [api_proc_pretty_name -link $proc]]
+
+        aa_true "-label will put the label somewhere if -link is specified" \
+            [string match *$label* [api_proc_pretty_name -link -label $label $proc]]
+    }
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
