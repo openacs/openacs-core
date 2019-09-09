@@ -60,7 +60,7 @@ aa_register_case -cats {
     Check apm_parameter_section_slider
 } {
     foreach package_key [db_list get_packages {
-        select package_key from apm_packages
+        select package_key from apm_package_types
     }] {
         set sections [db_list apm_parameter_sections {
             select distinct(section_name)
