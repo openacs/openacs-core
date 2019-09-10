@@ -331,6 +331,56 @@ aa_register_case \
             {[apidoc::format_see apidoc::format_see] eq [::apidoc::format_see apidoc::format_see]}
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        apidoc::tclcode_to_html
+    } \
+    acs_api_browser_apidoc_tclcode_to_html {
+        Check apidoc::tclcode_to_html
+    } {
+        set bogus_value [ad_generate_random_string]
+        aa_true "Bogus value returns itself" \
+            {[apidoc::tclcode_to_html $bogus_value] eq $bogus_value}
+
+        aa_log "Fetching a few commands to test..."
+        set commands [list]
+        foreach command [info commands] {
+            # Skip XoTcl methods
+            if {[info commands ::xotcl::Object] ne "" && [::xotcl::Object isobject [lindex $command 0]]} {
+                continue
+            }
+            # Skip some corner-case command names created by the platform... is this a bug or not?
+            if {![regexp {(template_tag_listfilters|AcsSc\.|validator1\.|!|^_[^ ]|^\d+)} $command]} {
+                lappend commands $command
+            }
+            if {[llength $commands] >= 50} {
+                break
+            }
+        }
+        if {[info commands ::xotcl::Object] ne ""} {
+            aa_log "Adding a few XoTcl classes"
+            lappend commands {*}[lrange [::xotcl::Object info instances] 0 100]
+        }
+        foreach script $commands {
+            set output [apidoc::tclcode_to_html $script]
+            aa_true "Valid input '$script' returns some HTML" \
+                [ad_looks_like_html_p $output]
+            aa_true "Valid input '$script' contains itself" \
+                {[string first $script $output] > -1}
+            aa_true "Valid input '$script' contains some sort of URL of itself" \
+                {[string first [ns_quotehtml [ad_urldecode_query $script]] $output] > -1}
+        }
+
+        aa_true "Specifying OO flags on non-OO commands is not harmful" \
+            {[apidoc::tclcode_to_html -scope [ad_generate_random_string] apidoc::tclcode_to_html] eq [apidoc::tclcode_to_html apidoc::tclcode_to_html]}
+
+        aa_true "Specifying namespace works as expected" \
+            {[string first \
+                  [ns_quotehtml [ad_urldecode_query apidoc::tclcode_to_html]] \
+                  [apidoc::tclcode_to_html -proc_namespace apidoc tclcode_to_html]] > -1}
+    }
+
 
 # Local variables:
 #    mode: tcl
