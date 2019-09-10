@@ -1476,7 +1476,7 @@ if { [apm_first_time_loading_p] } {
 }
 
 ad_proc -public ad_schedule_proc {
-    {-thread f}
+    {-thread t}
     {-once f}
     {-debug f}
     {-all_servers f}
@@ -1490,7 +1490,14 @@ ad_proc -public ad_schedule_proc {
     procedure defaults to run on only the canonical server unless the
     all_servers flag is set to true.
 
-    @param thread t/f If true run scheduled proc in its own thread
+    @param thread t/f If true run scheduled proc in its own thread.
+       Note that when scheduled procs executed in the main thread
+       these procs can delay processing of other scheduled procs for
+       a potentially long time, no other jobs will be scheduled.
+       If scheduled procs should be running at certain times, it is
+       highly recommended to run all scheduled procs in separate
+       (job execution) thread and use the main scheduled thread
+       mainly for scheduling.
     @param once t/f. If true only run the scheduled proc once
     @param debug t/f If true log debugging information
     @param all_servers If true run on all servers in a cluster
@@ -3179,7 +3186,7 @@ ad_proc -deprecated ad_var_type_check_integer_p {value} {
     This function is deprecated.
     Use either template::data::validate::integer
     or "string is integer -strict" instead.
-    
+
     @see ::template::data::validate::integer
 } {
 
