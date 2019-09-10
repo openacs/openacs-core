@@ -285,7 +285,7 @@ ad_proc -public auth::authority::delete {
     Delete an authority.
 } {
     db_exec_plsql delete_authority {}
-    util_memoize_flush_pattern auth::authority::get_id_not_cached*
+    auth::authority::get_id_flush
 }
 
 ad_proc -public auth::authority::get_authority_options {} {
