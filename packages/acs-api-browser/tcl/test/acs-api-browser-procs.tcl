@@ -279,6 +279,29 @@ aa_register_case \
             [ad_looks_like_html_p [api_script_documentation -format [ad_generate_random_string] $tmpfile]]
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        apidoc::format_author
+    } \
+    acs_api_browser_apidoc_format_author {
+        Check apidoc::format_author
+    } {
+        set input1 "test@email.com"
+        aa_true "Mailto link is generated for '$input1'" \
+            [regexp [subst -nocommands {^<a.*href=.mailto:$input1.*</a>$}] [apidoc::format_author $input1]]
+
+        set name "John Doe"
+        set email "company@domain.com"
+        set input2 "$name ($email)"
+        aa_true "Mailto link with name is generated for '$input2'" \
+            [regexp [subst -nocommands {$name.*<a.*href=.mailto:$email.*</a>}] [apidoc::format_author $input2]]
+
+        set input3 [ad_generate_random_string]
+        aa_true "Same string is returned for '$input3'" \
+            {[apidoc::format_author $input3] eq $input3}
+    }
+
 
 # Local variables:
 #    mode: tcl

@@ -1277,7 +1277,12 @@ namespace eval ::apidoc {
         Extracts information about the author and formats it into an
         HTML string.
 
-        @param author_string author information to format
+        @param author_string author information to format. 3 kind of
+               formats are expected: email (a mailto link to the email
+               is generated), whitespace-separated couple "<name> (<email>)" (a
+               mailto link for email and the name are generated) and
+               free-form (the same input string is returned).
+
         @return the formatted result
     } {
         if { [regexp {^[^ \n\r\t]+$} $author_string]
