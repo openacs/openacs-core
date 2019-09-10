@@ -302,7 +302,7 @@ ad_proc -deprecated -public api_type_documentation {
     upstream script seems to specify this value and no code seems to
     create necessary 'doc_type_doc' nsv
 
-    @see acs-api-browser/www/type-view
+    @see /packages/acs-api-browser/www/type-view.tcl
 
     @return HTML fragment of the API docs.
 } {

@@ -302,6 +302,35 @@ aa_register_case \
             {[apidoc::format_author $input3] eq $input3}
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        apidoc::format_see
+    } \
+    acs_api_browser_apidoc_format_see {
+        Check apidoc::format_see
+    } {
+        set bogus_value [ad_generate_random_string]
+        aa_true "Bogus value returns itself" \
+            {[apidoc::format_see $bogus_value] eq $bogus_value}
+
+        foreach see [list \
+                         apidoc::format_see \
+                         "/doc/[ad_generate_random_string]" \
+                         /packages/acs-api-browser/tcl/test/acs-api-browser-procs.tcl] {
+            set output [apidoc::format_see $see]
+            aa_true "Valid input '$see' returns some HTML" \
+                [ad_looks_like_html_p $output]
+            aa_true "Valid input '$see' contains itself" \
+                [string match *$see* $output]
+            aa_true "Valid input '$see' contains some sort of URL of itself" \
+                [string match *[ns_quotehtml [ad_urldecode_query $see]]* $output]
+        }
+
+        aa_true "<proc> and ::<proc> are the same thing" \
+            {[apidoc::format_see apidoc::format_see] eq [::apidoc::format_see apidoc::format_see]}
+    }
+
 
 # Local variables:
 #    mode: tcl
