@@ -919,6 +919,46 @@ aa_register_case  \
         }
 }
 
+aa_register_case  \
+    -cats {api} \
+    -procs {
+        auth::authority::delete
+        auth::authority::get_id
+    } \
+    auth_authority_delete {
+    Test authority deletion
+} {
+    aa_log "Retrieving test authority"
+    set authority_id [auth::authority::get_id -short_name "acs_testing"]
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            aa_log "Make sure test authority has no users"
+            foreach user_id [db_list get_users {
+                select user_id from users where authority_id = :authority_id
+            }] {
+                aa_log "Deleting user_id '$user_id'"
+                acs_user::delete -user_id $user_id -permanent
+            }
+
+            auth::authority::delete -authority_id $authority_id
+
+            aa_true "Authority has been deleted" \
+                {[auth::authority::get_id -short_name "acs_testing"] eq ""}
+
+        }
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            aa_log "Make sure test authority has at least one user"
+            acs::test::user::create
+
+            aa_true "Deleting an authority with users thorws an error" \
+                [catch {auth::authority::delete -authority_id $authority_id}]
+        }
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
