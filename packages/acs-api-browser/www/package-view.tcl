@@ -127,7 +127,7 @@ switch $kind {
         }
     }
     content {
-        multirow create content_pages indentation full_path content_type name type first_sentence
+        multirow create content_pages indentation full_path content_type name first_sentence
         set last_components [list]
         foreach path [apm_get_package_files -package_key $package_key -file_types content_page] {
             set components [split $path "/"]
@@ -153,13 +153,9 @@ switch $kind {
                         append indentation "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                     }
                     set name [lindex $components $i]
-                    set type ""
                     set first_sentence ""
                     if { $i == [llength $components] - 1 } {
                         set content_type page
-                        if { [info exists doc_elements(type)] } {
-                            set type $doc_elements(type)
-                        }
                         if { [info exists doc_elements(main)] } {
                             set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
                         }
@@ -167,7 +163,7 @@ switch $kind {
                         set content_type directory
                     }
                     multirow append content_pages \
-                        $indentation $full_path $content_type $name $type $first_sentence
+                        $indentation $full_path $content_type $name $first_sentence
                 }
                 set last_components $components
             } on error {errorMsg} {

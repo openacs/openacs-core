@@ -293,9 +293,17 @@ ad_proc -public api_library_documentation {
     return $out
 }
 
-ad_proc -public api_type_documentation {
+ad_proc -deprecated -public api_type_documentation {
     type
 } {
+    Deprecated: this was part of a feature which used to react to the
+    'type' property set in ad_page_contract's documentation and
+    generate an extra link in /api-doc/package-view, but currently no
+    upstream script seems to specify this value and no code seems to
+    create necessary 'doc_type_doc' nsv
+
+    @see acs-api-browser/www/type-view
+
     @return HTML fragment of the API docs.
 } {
     array set doc_elements [nsv_get doc_type_doc $type]

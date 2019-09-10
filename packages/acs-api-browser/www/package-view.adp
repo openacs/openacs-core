@@ -54,9 +54,6 @@ td.wide {width:35%;}
     <if @content_pages.content_type@ eq "page">
       <td class="wide">@content_pages.indentation;noquote@
        <strong><a href="content-page-view?version_id=@version_id@&amp;path=@content_pages.full_path@">@content_pages.name@</a></strong>
-       <if @content_pages.type@ ne "">
-         <a href="type-view?type=@content_pages.type@"></a>
-       </if>
       </td>
       <td>@content_pages.first_sentence@</td>
     </if>

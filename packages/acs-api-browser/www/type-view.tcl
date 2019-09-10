@@ -2,6 +2,9 @@ ad_page_contract {
 
     Displays information about a type.
 
+    This page is currently in a non working state, as well as the
+    api_type_documentation api it makes use of.
+
     @cvs-id $Id$
 
 } {
