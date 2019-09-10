@@ -225,6 +225,35 @@ aa_register_case \
             [string match *$label* [api_proc_pretty_name -link -label $label $proc]]
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        api_read_script_documentation
+    } \
+    acs_api_browser_api_read_script_documentation {
+        Check api_read_script_documentation
+    } {
+        set tmpfile packages/acs-automated-testing/www/[ad_generate_random_string]
+
+        aa_true "Reading info from a non-existing file returns an error" \
+            [catch {api_read_script_documentation $tmpfile}]
+
+        aa_log "Touching tmpfile $tmpfile"
+        set wfd [open [acs_root_dir]/$tmpfile w]
+        close $wfd
+
+        aa_true "Reading info from a file without documentation returns an empty list" \
+            {[llength [api_read_script_documentation $tmpfile]] == 0}
+
+        aa_log "A real file will always return a minimal set of keys"
+        set real_file packages/acs-automated-testing/www/index.tcl
+        set doc [api_read_script_documentation $real_file]
+        set doc_keys [dict keys $doc]
+        foreach key {apc_default_value apc_flags apc_arg_names main query} {
+            aa_true "'$key' key found in returned doc" {$key in $doc_keys}
+        }
+    }
+
 
 # Local variables:
 #    mode: tcl
