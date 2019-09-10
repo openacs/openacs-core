@@ -339,7 +339,7 @@ aa_register_case \
     acs_api_browser_apidoc_tclcode_to_html {
         Check apidoc::tclcode_to_html
     } {
-        set bogus_value [ad_generate_random_string]
+        set bogus_value [ad_generate_random_string][clock seconds]
         aa_true "Bogus value returns itself" \
             {[apidoc::tclcode_to_html $bogus_value] eq $bogus_value}
 
