@@ -254,6 +254,31 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats { api smoke } \
+    -procs {
+        api_script_documentation
+    } \
+    acs_api_browser_api_script_documentation {
+        Check api_script_documentation
+    } {
+        set tmpfile packages/acs-automated-testing/www/[ad_generate_random_string]
+        set real_file packages/acs-automated-testing/www/index.tcl
+
+        aa_true "This proc returns HTML with a non-existing file" [ad_looks_like_html_p [api_script_documentation $tmpfile]]
+        aa_true "This proc returns HTML with a non-existing tcl file" [ad_looks_like_html_p [api_script_documentation ${tmpfile}.tcl]]
+
+        aa_log "Touching tmpfile $tmpfile"
+        set wfd [open [acs_root_dir]/$tmpfile w]
+        close $wfd
+        aa_true "This proc returns HTML with an existing empty file" [ad_looks_like_html_p [api_script_documentation $tmpfile]]
+
+        aa_true "This proc returns HTML with a real tcl file" [ad_looks_like_html_p [api_script_documentation $real_file]]
+
+        aa_true "This proc returns HTML even when otherwise specified" \
+            [ad_looks_like_html_p [api_script_documentation -format [ad_generate_random_string] $tmpfile]]
+    }
+
 
 # Local variables:
 #    mode: tcl
