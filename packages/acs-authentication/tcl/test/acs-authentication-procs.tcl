@@ -639,8 +639,11 @@ aa_register_case  \
 aa_register_case  \
     -cats {api db} \
     -procs {
-        auth::password::retrieve
-        auth::test::get_password_vars
+        auth::authority::create
+        auth::authority::edit
+        auth::authority::delete
+        auth::authority::get_short_names
+        auth::authority::get_authority_options
     } \
     auth_authority_api {
     Test the auth::authority::create, auth::authority::edit, and auth::authority::delete procs.
@@ -669,6 +672,23 @@ aa_register_case  \
 
             set authority_id [auth::authority::create -array columns]
 
+            set proc_value [lsort [auth::authority::get_short_names]]
+            set db_value [lsort [db_list select_authority_short_names {
+                select short_name
+                from auth_authorities
+            }]]
+            aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
+
+            set proc_value [lsort [auth::authority::get_authority_options]]
+            set db_value [lsort [db_list_of_lists select_authorities {
+                select pretty_name, authority_id
+                from   auth_authorities
+                where  enabled_p = 't'
+                and    auth_impl_id is not null
+                order  by sort_order
+            }]]
+            aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
+
             set authority_added_p [db_string authority_added_p {
                 select count(*) from auth_authorities where authority_id = :authority_id
             } -default "0"]
@@ -693,6 +713,23 @@ aa_register_case  \
                 -authority_id $authority_id \
                 -array columns
 
+            set proc_value [lsort [auth::authority::get_short_names]]
+            set db_value [lsort [db_list select_authority_short_names {
+                select short_name
+                from auth_authorities
+            }]]
+            aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
+
+            set proc_value [lsort [auth::authority::get_authority_options]]
+            set db_value [lsort [db_list_of_lists select_authorities {
+                select pretty_name, authority_id
+                from   auth_authorities
+                where  enabled_p = 't'
+                and    auth_impl_id is not null
+                order  by sort_order
+            }]]
+            aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
+
             auth::authority::get \
                 -authority_id $authority_id \
                 -array edit_result
@@ -703,6 +740,23 @@ aa_register_case  \
 
             # Delete authority and test that it was actually added.
             auth::authority::delete -authority_id $authority_id
+
+            set proc_value [lsort [auth::authority::get_short_names]]
+            set db_value [lsort [db_list select_authority_short_names {
+                select short_name
+                from auth_authorities
+            }]]
+            aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
+
+            set proc_value [lsort [auth::authority::get_authority_options]]
+            set db_value [lsort [db_list_of_lists select_authorities {
+                select pretty_name, authority_id
+                from   auth_authorities
+                where  enabled_p = 't'
+                and    auth_impl_id is not null
+                order  by sort_order
+            }]]
+            aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
 
             set authority_exists_p [db_string authority_added_p {
                 select count(*) from auth_authorities where authority_id = :authority_id
