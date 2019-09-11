@@ -958,6 +958,92 @@ aa_register_case  \
         }
 }
 
+aa_register_case  \
+    -cats {api} \
+    -procs {
+        auth::authority::edit
+        auth::authority::get
+        auth::authority::get_element
+    } \
+    auth_authority_edit {
+    Test authority edit
+} {
+    aa_log "Retrieving test authority"
+    set authority_id [auth::authority::get_id -short_name "acs_testing"]
+
+    set random_string [ad_generate_random_string]
+    set random_object [db_string get_object {
+        select max(object_id) from acs_objects
+    }]
+    set random_boolean [expr {int(rand() * 10) % 2}]
+    set random_int [expr {int(rand() * pow(10, 7))}]
+
+    set valid_values [list \
+                          short_name $random_string \
+                          pretty_name $random_string \
+                          help_contact_text $random_string \
+                          help_contact_text_format "text/enhanced" \
+                          enabled_p $random_boolean \
+                          sort_order $random_int \
+                          auth_impl_id $random_object \
+                          pwd_impl_id $random_object \
+                          forgotten_pwd_url $random_string \
+                          change_pwd_url $random_string \
+                          register_impl_id $random_object \
+                          register_url $random_string \
+                          user_info_impl_id $random_object \
+                          get_doc_impl_id $random_object \
+                          process_doc_impl_id $random_object \
+                          batch_sync_enabled_p $random_boolean]
+
+    set broken_values $valid_values
+    lappend broken_values [ad_generate_random_string] ""
+
+    set illegal_values $valid_values
+    lappend illegal_values authority_id [db_string gen_id {
+        select coalesce(max(authority_id), 0) + 1 from auth_authorities
+    }]
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            array set values $broken_values
+            aa_true "Trying to update non-existing columns returns an error" \
+                [catch {auth::authority::edit -authority_id $authority_id -array values}]
+            array unset values
+
+            array set values $illegal_values
+            aa_true "Trying to update illegal columns columns returns an error" \
+                [catch {auth::authority::edit -authority_id $authority_id -array values}]
+            array unset values
+
+            array set values $valid_values
+            aa_false "Update valid columns and values is fine" \
+                [catch {auth::authority::edit -authority_id $authority_id -array values}]
+            array unset values
+
+            auth::authority::get -authority_id $authority_id -array updated_values
+            foreach {key value} $valid_values {
+                # Check if value is what we set in the update. We need
+                # to normalize booleans.
+                aa_true "(get): Value '$key' was updated to '$value'" \
+                    {[info exists updated_values($key)] && ($updated_values($key) eq $value ||
+                                                            ([string is boolean -strict $updated_values($key)] && [string is boolean -strict $value] &&
+                                                             [string is true -strict $updated_values($key)] == [string is true -strict $value]))
+                    }
+                set updated_value [auth::authority::get_element \
+                                       -authority_id $authority_id \
+                                       -element      $key]
+                aa_true "(get_element): Value '$key' was updated to '$value'" \
+                    {$updated_value eq $value ||
+                        ([string is boolean -strict $updated_value] && [string is boolean -strict $value] &&
+                         [string is true -strict $updated_value] == [string is true -strict $value])
+                    }
+            }
+        }
+}
+
+
 
 # Local variables:
 #    mode: tcl
