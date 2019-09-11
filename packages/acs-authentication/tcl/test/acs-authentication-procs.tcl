@@ -924,15 +924,34 @@ aa_register_case  \
     -procs {
         auth::authority::delete
         auth::authority::get_id
+        auth::authority::get_short_names
+        auth::authority::get_authority_options
     } \
     auth_authority_delete {
-    Test authority deletion
+    Test authority deletion and some retrieval api
 } {
     aa_log "Retrieving test authority"
     set authority_id [auth::authority::get_id -short_name "acs_testing"]
     aa_run_with_teardown \
         -rollback \
         -test_code {
+            set proc_value [lsort [auth::authority::get_short_names]]
+            set db_value [lsort [db_list select_authority_short_names {
+                select short_name
+                from auth_authorities
+            }]]
+            aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
+
+            set proc_value [lsort [auth::authority::get_authority_options]]
+            set db_value [lsort [db_list_of_lists select_authorities {
+                select pretty_name, authority_id
+                from   auth_authorities
+                where  enabled_p = 't'
+                and    auth_impl_id is not null
+                order  by sort_order
+            }]]
+            aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
+
             aa_log "Make sure test authority has no users"
             foreach user_id [db_list get_users {
                 select user_id from users where authority_id = :authority_id
@@ -946,6 +965,22 @@ aa_register_case  \
             aa_true "Authority has been deleted" \
                 {[auth::authority::get_id -short_name "acs_testing"] eq ""}
 
+            set proc_value [lsort [auth::authority::get_short_names]]
+            set db_value [lsort [db_list select_authority_short_names {
+                select short_name
+                from auth_authorities
+            }]]
+            aa_equals "(auth::authority::get_short_names): Value returned is still as expected" $proc_value $db_value
+
+            set proc_value [lsort [auth::authority::get_authority_options]]
+            set db_value [lsort [db_list_of_lists select_authorities {
+                select pretty_name, authority_id
+                from   auth_authorities
+                where  enabled_p = 't'
+                and    auth_impl_id is not null
+                order  by sort_order
+            }]]
+            aa_equals "(auth::authority::get_authority_options): Value returned is still as expected" $proc_value $db_value
         }
     aa_run_with_teardown \
         -rollback \
@@ -1042,8 +1077,6 @@ aa_register_case  \
             }
         }
 }
-
-
 
 # Local variables:
 #    mode: tcl
