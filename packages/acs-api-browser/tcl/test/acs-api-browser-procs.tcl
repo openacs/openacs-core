@@ -339,9 +339,10 @@ aa_register_case \
     acs_api_browser_apidoc_tclcode_to_html {
         Check apidoc::tclcode_to_html
     } {
-        set bogus_value [ad_generate_random_string][clock seconds]
-        aa_true "Bogus value returns itself" \
-            {[apidoc::tclcode_to_html $bogus_value] eq $bogus_value}
+        set bogus_value [ad_generate_random_string]
+        set proc_value [apidoc::tclcode_to_html $bogus_value]
+        aa_true "Bogus value returns itself ('$proc_value' eq '$bogus_value')" \
+            {$proc_value eq $bogus_value}
 
         aa_log "Fetching a few commands to test..."
         set commands [list]

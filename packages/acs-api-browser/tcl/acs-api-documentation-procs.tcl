@@ -1519,7 +1519,7 @@ namespace eval ::apidoc {
     ad_proc -private length_proc {data} {
         @return Length of a command name.
     } {
-        if {[regexp -indices {^(::)?[A-Za-z][:A-Za-z0-9_@]+} $data found]} {
+        if {[regexp -indices {^(::)?[A-Za-z0-9][:A-Za-z0-9_@]+} $data found]} {
             return [lindex $found 1]
         }
         return 0
