@@ -888,7 +888,11 @@ ad_proc -public auth::create_local_account {
 } {
     Create the local account for a user.
 
-    @param array Name of an array containing the registration elements to update.
+    @param array Name of an array containing the registration elements
+                 to update. Fields are specified by
+                 auth::get_all_registration_elements
+
+    @see auth::get_all_registration_elements
 
     @return Array list containing the following entries:
 
