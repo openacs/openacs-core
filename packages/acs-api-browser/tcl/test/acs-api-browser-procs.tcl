@@ -92,7 +92,7 @@ aa_register_case \
                 break
             }
         }
-        aa_false "Other non ad_* api is not returned" $found_p
+        aa_false "Builtin '$proc' is not returned" $found_p
 
         set proc api_apropos_functions
         set found_p false
@@ -103,7 +103,7 @@ aa_register_case \
                 break
             }
         }
-        aa_true "This same proc is retrieved correctly" $found_p
+        aa_true "ad_proc '$proc' is retrieved correctly" $found_p
     }
 
 aa_register_case \
@@ -162,7 +162,7 @@ aa_register_case \
     } {
         set proc api_proc_documentation
 
-        aa_true "Specifiying an invalid proc throws an error" [catch {
+        aa_true "Specifying an invalid proc throws an error" [catch {
             api_proc_documentation [ad_generate_random_string]
         }]
 
