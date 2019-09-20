@@ -11,11 +11,11 @@
         <dt class="description-list">Bugs:</dt><dd>This test case covers OpenACS bug number(s):
           @bug_blurb;noquote@</dd>
       </if>
-      <if @proc_blurb@ not nil>  
+      <if @proc_blurb@ not nil>
         <dt class="description-list">Procs:</dt><dd>This test case covers OpenACS proc(s):
           @proc_blurb;noquote@</dd>
       </if>
-      <if @url_blurb@ not nil>  
+      <if @url_blurb@ not nil>
         <dt class="description-list">URLs:</dt><dd>This test case covers the following URLs:
           @url_blurb;noquote@</dd>
       </if>
@@ -28,8 +28,8 @@
       </if>
       <if @showsource;literal@ true>
         <multiple name="bodys">
-	  <if @bodys:rowcount;literal@ lt 2><dt class="description-list">Body:</dt></if>
-	  <else><dt class="description-list">Body (part @bodys.body_number@)</dt></else>
+          <if @bodys:rowcount;literal@ lt 2><dt class="description-list">Body:</dt></if>
+          <else><dt class="description-list">Body (part @bodys.body_number@)</dt></else>
           <dd><pre class="code">@bodys.body;literal@</pre></dd>
         </multiple>
       </if>
@@ -52,11 +52,11 @@
     <li><a href="@resource_file_url@">Resource test definition file</a></li>
     <li><a href="@return_url@">Back to testcase list</a></li>
   </ul>
-  
+
   <p>
-    <strong>Results</strong> 
+    <strong>Results</strong>
     [<if @quiet;literal@ true>
-      <strong> quiet </strong> | 
+      <strong> quiet </strong> |
       <a href="@verbose_url@">verbose</a>
     </if><else>
       <a href="@quiet_url@">quiet</a>
@@ -102,28 +102,28 @@
         <else>
           <tr class="even">
         </else>
-	<td class="timestamp"> @tests.timestamp@ </td>
-        <if @tests.result@ eq "fail">
-          <td class="fail">FAILED</td>
-	  <td><code>@tests.notes;literal@</code></td>	  
-        </if>
-        <elseif @tests.result@ eq "pass">
-          <td class="ok">@tests.result@</td>
-  	  <td><code class="ok">@tests.notes;literal@</code></td>
-        </elseif>
-        <elseif @tests.result@ eq "warn">
-          <td class="warn">@tests.result@</td>
-  	  <td><code class="warn">@tests.notes;literal@</code></td>
-        </elseif>
-        <elseif @tests.result@ eq "sect">
-          <td class="sect"></td>
-  	  <td><div class="sect">@tests.notes;literal@</div></td>
-        </elseif>
-        <else>
-          <td class="log">@tests.result@</td>
-	  <td class="log">@tests.notes;literal@</td>
-        </else>
-      </tr>
+        <td class="timestamp"> @tests.timestamp@ </td>
+          <if @tests.result@ eq "fail">
+            <td class="fail">FAILED</td>
+            <td><code>@tests.notes;literal@</code></td>
+          </if>
+          <elseif @tests.result@ eq "pass">
+            <td class="ok">@tests.result@</td>
+            <td><code class="ok">@tests.notes;literal@</code></td>
+          </elseif>
+          <elseif @tests.result@ eq "warn">
+            <td class="warn">@tests.result@</td>
+            <td><code class="warn">@tests.notes;literal@</code></td>
+          </elseif>
+          <elseif @tests.result@ eq "sect">
+            <td class="sect"></td>
+            <td><div class="sect">@tests.notes;literal@</div></td>
+          </elseif>
+          <else>
+            <td class="log">@tests.result@</td>
+            <td class="log">@tests.notes;literal@</td>
+          </else>
+        </tr>
       </multiple>
     </else>
   </table>
