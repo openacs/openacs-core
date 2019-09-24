@@ -51,7 +51,7 @@ if {$package_key eq ""} {
                 set title "Missing Required Packages"
             }
             default {
-                error "Bad status returned from apm_depdendency_check_new: '$result(status)'"
+                error "Bad status returned from apm_dependency_check_new: '$result(status)'"
             }
         }
 
