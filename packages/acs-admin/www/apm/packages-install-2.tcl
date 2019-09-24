@@ -42,7 +42,7 @@ if {$package_key eq ""} {
         #ns_log notice "RESULT of apm_dependency_check_new: [array get result]"
 
         array set failed $result(failed)
-      
+
         switch -- $result(status) {
             ok {
                 set title "Confirm"
@@ -60,9 +60,9 @@ if {$package_key eq ""} {
         #
         set pkg_info_list {}
         foreach pkg $result(packages) {
-            
+
             #
-            # Load package info from spec file. 
+            # Load package info from spec file.
             #
             unset -nocomplain spec_file
             if {[catch {set spec_file [apm_package_info_file_path $pkg]}]} {
@@ -74,7 +74,7 @@ if {$package_key eq ""} {
                     #
                     array set package [list package.key $pkg embeds "" extends "" \
                                            provides "" requires "" properties {install ""}]
-                }                    
+                }
             }
 
             if {[info exists spec_file]} {
@@ -93,7 +93,7 @@ if {$package_key eq ""} {
             } else {
                 lassign {t ""} flag comments
                 array set properties $package(properties)
-                
+
                 set must_add {}
                 foreach p $properties(install) {
                     if {$p ni $install_pkgs && ![info exists installed($p)]} {
@@ -128,7 +128,7 @@ if {$package_key eq ""} {
 
         set body [subst {
             <h2>Additional Packages Automatically Added</h2><p>
-            
+
             Some of the packages you were trying to install required
             other packages to be installed first.  We've added these
             additional packages needed, and ask you to review the list
@@ -142,9 +142,9 @@ if {$package_key eq ""} {
             <div><input type="submit" value="Select Data Model Scripts"></div>
             </form>
         }]
-        
+
     } elseif {$result(status) eq "ok" || $force_p} {
-        
+
         # We use client properties to pass along this information as
         # it is fairly large.
         ad_set_client_property -clob t apm pkg_install_list $pkg_info_list
@@ -162,7 +162,7 @@ if {$package_key eq ""} {
         set body [subst {
 
             <h2>Unsatisfied Dependencies</h2><p>
-            
+
             Some of the packages you are trying to install have
             unsatisfied dependencies.  The packages with unsatisfied
             dependencies have been deselected.  If you wish to install
@@ -174,7 +174,7 @@ if {$package_key eq ""} {
             If you think you might want to use a package later (but not right away),
             install it but don't enable it.
         }]
-        
+
         append body \
             [apm_package_selection_widget $pkg_info_list $result(install)] \
             [subst {
@@ -183,8 +183,6 @@ if {$package_key eq ""} {
                 </form>
             }]
     }
-
-
 }
 
 ad_return_template apm
