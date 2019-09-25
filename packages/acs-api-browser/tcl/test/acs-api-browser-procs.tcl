@@ -215,8 +215,8 @@ aa_register_case \
         aa_true "Hints are printed in parenthesys, the proc type belongs to the hints" \
             [regexp "^\(.*$proc_type.*\)$" [string trim [api_proc_pretty_name -proc_type $proc_type -hints_only $proc]]]
 
-        aa_true "-include_debug_controls prints out a form" \
-            [regexp {^.*<form[^>]*>.*</form[^>]*.*$} [api_proc_pretty_name -include_debug_controls $proc]]
+        aa_true "-include_debug_controls prints out a form when XoTcl is installed" \
+            {[info commands ::xo::api] eq "" || [regexp {^.*<form[^>]*>.*</form[^>]*.*$} [api_proc_pretty_name -include_debug_controls $proc]]}
 
         aa_true "-link will put the proc URL somewhere" \
             [string match "*[ns_quotehtml [api_proc_url $proc]]*" [api_proc_pretty_name -link $proc]]
