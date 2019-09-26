@@ -1274,40 +1274,12 @@ namespace eval acs::test {
                      -package_id [apm_package_id_from_key acs-automated-testing] \
                      -parameter TestURL \
                      -default ""]
-        if {$url ne ""} {
-            set urlInfo [ns_parseurl $url]
-            set proto   [dict get $urlInfo proto]
-            set address [dict get $urlInfo host]
-        } else {
-            #
-            # There is no configuration in the config file. So try to
-            # determine it form either the current connection, or from
-            # the configured driver.
-            #
-            try {
-                #
-                # First try to get actual information from the
-                # connection. This is however only available in newer
-                # versions of NaviServer. The actual information is
-                # e.g. necessary, when the driver address is set to
-                # "0.0.0.0" or "::0" etc, and therefore every address
-                # might be provided as peer address in the check in
-                # the security-procs.
-                #
-                set address [ns_conn currentaddr]
-                set port    [ns_conn currentport]
-                set proto   [ns_conn proto]
-            } on error {errorMsg} {
-                #
-                # If this fails, fall back to configured value.
-                #
-                set driverInfo [util_driver_info]
-                set address [dict get $driverInfo address]
-                set port    [dict get $driverInfo port]
-                set proto   [dict get $driverInfo proto]
-            }
-            set url "$proto://\[$address\]:$port/$request"
+        if {$url eq ""} {
+            set url [ns_conn location]
         }
+        set urlInfo [ns_parseurl $url]
+        set address [dict get $urlInfo host]
+        set url "$url/$request"
 
         #
         # Either authenticate via user_info (when specified) or via
