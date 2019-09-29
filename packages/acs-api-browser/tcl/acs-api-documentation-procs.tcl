@@ -599,8 +599,16 @@ ad_proc -public api_proc_documentation {
     }
 
     append blocks_out [::apidoc::format_common_elements doc_elements]
+    set css {
+        /*svg g a:link {text-decoration: none;}*/
+        div.inner svg {width: 100%; margin: 0 auto;}
+        svg g polygon {fill: transparent;}
+        svg g g ellipse {fill: #eeeef4;}
+        svg g g polygon {fill: #f4f4e4;}
+    }
 
-    set callgraph [api_inline_svg_from_dot [api_call_graph_snippet -proc_name $proc_name -maxnodes 5]]
+    set callgraph [util::inline_svg_from_dot -css $css \
+                       [api_call_graph_snippet -proc_name $proc_name -maxnodes 5]]
     if {$callgraph ne ""} {
         append blocks_out "<p><dt><b>Partial Call Graph (max 5 caller/called nodes):</b></dt><dd>$callgraph</dd>\n"
     }
@@ -1091,60 +1099,6 @@ ad_proc -private api_call_graph_snippet {
     }
     #ns_log notice \n$dot_code
     append result "digraph \{api = $dpi;" $dot_code "\}"
-}
-
-ad_proc -private api_inline_svg_from_dot {dot_code} {
-
-    Transform a dot source code into an inline svg image based on code
-    from xotcl-core; should be probably move later to a different
-    place.
-
-    @author Gustaf Neumann
-} {
-    catch {set dot [::util::which dot]}
-    if {$dot ne ""} {
-        set dir [ad_tmpdir]/oacs-dotcode
-        if {![file isdirectory $dir]} {
-            file mkdir $dir
-        }
-        set dot_signature [ns_md5 $dot_code-svg]
-        set stem $dir/$dot_signature
-        if {![file exists $stem.svg]} {
-            ns_log notice "api_inline_svg_from_dot: generate $stem.svg"
-
-            set f [open $stem.dot w]; puts $f $dot_code; close $f
-
-            set f [open "|$dot -Tsvg -o $stem.svg" w]; puts $f $dot_code
-            try {
-                close $f
-            } on error {errorMsg} {
-                ns_log warning "api_inline_svg_from_dot: dot returned $errorMsg"
-            } on ok {result} {
-                set f [open $stem.svg]; set svg [read $f]; close $f
-            } finally {
-                file delete -- $stem.dot
-            }
-        } else {
-            ns_log notice "api_inline_svg_from_dot: try to reuse $stem.svg"
-        }
-        if {[file exists $stem.svg]} {
-            set f [open $stem.svg]; set svg [read $f]; close $f
-
-            # delete the first three lines generated from dot
-            regsub {^[^\n]+\n[^\n]+\n[^\n]+\n} $svg "" svg
-            set css {
-                /*svg g a:link {text-decoration: none;}*/
-                div.inner svg {width: 100%; margin: 0 auto;}
-                svg g polygon {fill: transparent;}
-                svg g g ellipse {fill: #eeeef4;}
-                svg g g polygon {fill: #f4f4e4;}
-            }
-            return "<style>$css</style><div><div class='inner'>$svg</div></div>"
-        } else {
-            ns_log warning "cannot create svg file"
-        }
-    }
-    return ""
 }
 
 ad_proc -public api_describe_function {

@@ -4136,6 +4136,75 @@ ad_proc -public -deprecated util_search_list_of_lists {list_of_lists query_strin
     return [lsearch -index $sublist_element_pos $list_of_lists $query_string]
 }
 
+namespace eval util {
+
+    ad_proc ::util::inline_svg_from_dot {{-css ""} dot_code} {
+
+        Transform a dot source code into an inline svg image based on
+        code from xotcl-core; should be probably made more
+        configurable in the future.
+
+        @param dot_code grapviz dot code
+        @result graph in HTML markup
+
+        @author Gustaf Neumann
+    } {
+        catch {set dot [::util::which dot]}
+        if {$dot ne ""} {
+            set dir [ad_tmpdir]/oacs-dotcode
+            if {![file isdirectory $dir]} {
+                file mkdir $dir
+            }
+            #
+            # Cache file in the filesystem based on an MD5 checksum
+            # derived from the dot source-cide, the format and the
+            # styling.
+            #
+            # TODO: one should provide a more general - usable for
+            # many applications - file cache with a cleanup of stale
+            # entries (maybe based on last access time, when the prile
+            # system provides it).
+            #
+            set dot_signature [ns_md5 $dot_code-svg-$css]
+            set stem $dir/$dot_signature
+            if {![file exists $stem.svg]} {
+                ns_log notice "inline_svg_from_dot: generate $stem.svg"
+
+                set f [open $stem.dot w]; puts $f $dot_code; close $f
+
+                set f [open "|$dot -Tsvg -o $stem.svg" w]; puts $f $dot_code
+                try {
+                    close $f
+                } on error {errorMsg} {
+                    ns_log warning "inline_svg_from_dot: dot returned $errorMsg"
+                } on ok {result} {
+                    set f [open $stem.svg]; set svg [read $f]; close $f
+                } finally {
+                    file delete -- $stem.dot
+                }
+            } else {
+                ns_log notice "inline_svg_from_dot: reuse $stem.svg"
+            }
+            if {[file exists $stem.svg]} {
+                set f [open $stem.svg]; set svg [read $f]; close $f
+                #
+                # Delete the first three lines generated from dot.
+                #
+                regsub {^[^\n]+\n[^\n]+\n[^\n]+\n} $svg "" svg
+                set result ""
+                if {$css ne ""} {
+                    append result <style>$css</style>
+                }
+                append result "<div class='inner'>$svg</div>"
+                return $result
+            } else {
+                ns_log warning "cannot create svg file"
+            }
+        }
+        return ""
+    }
+}
+
 #
 # Management of resource files, to be used in sitewide-admin procs to
 # decide between CDN installations and local installations.
