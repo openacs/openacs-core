@@ -2951,7 +2951,7 @@ ad_proc -public db_load_sql_data {
             set copy_command [subst -nobackslashes [read $fd]]
             close $fd
             set copy_file [ns_mktemp [ad_tmpdir]/psql-copyfile-XXXXXX]
-            set fd [open $copy_file "CREAT EXCL WRONLY" 0600]
+            set fd [open $copy_file {CREAT EXCL WRONLY} 0600]
             puts $fd $copy_command
             close $fd
 
