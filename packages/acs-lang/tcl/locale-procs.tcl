@@ -327,18 +327,29 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
 
     if { $user_id == 0 } {
         set locale [ad_get_cookie "ad_locale"]
-        #
-        # Check, if someone hacked the cookie
-        #
-        if {$locale ne "" && ![lang::conn::valid_locale_p $locale]} {
-            error "invalid locale cookie '$locale'"
+        if {$locale ne ""} {
+            #
+            # Check, if someone hacked the cookie
+            #
+            if {$locale ni [lang::system::get_locales]} {
+                ns_log warning "ignoring invalid ad_locale cookie '$locale'"
+                set locale ""
+                #
+                # The cookie was invalid, so get rid of it.
+                #
+                ad_unset_cookie "ad_locale"
+            }
         }
+        #
+        # When no locale cookie is set, or the locale is invalid, fall
+        # back to system locale.
+        #
+        if { $locale eq "" } {
+            set locale $system_locale
+        }
+
     } else {
         set locale [db_string get_user_site_wide_locale {} -default "$system_locale"]
-    }
-
-    if { $locale eq "" } {
-        set locale $system_locale
     }
 
     return $locale

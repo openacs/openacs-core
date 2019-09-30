@@ -879,7 +879,7 @@ aa_register_case \
     # We cannot test timezones if they are not installed
     if { [lang::system::timezone_support_p] } {
 
-        # Make sure we have a logged in user
+        # Make sure we have a logged-in user
         set org_user_id [ad_conn user_id]
 
         if { $org_user_id == 0 } {
