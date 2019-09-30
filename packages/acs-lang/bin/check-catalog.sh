@@ -2,7 +2,7 @@
 #
 # This script attempts to check that catalog files of a certain package
 # (or all packages if no package key is provided) are consistent with
-# eachother and that they are consistent with lookups in the code. More
+# each other and that they are consistent with lookups in the code. More
 # specifically the script does the following:
 #
 # 1) Checks that the info in the catalog filename matches info in
