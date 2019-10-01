@@ -459,13 +459,10 @@ ad_proc -private ad_parameter_cache {
     @return The cached value.
 
 } {
-    set flush_p [expr {$delete_p || [info exists set]}]
-    if {$flush_p} {
+    if {$delete_p} {
         if {[nsv_exists ad_param_$key $parameter_name]} {
             nsv_unset ad_param_$key $parameter_name
         }
-    }
-    if {$delete_p} {
         return
     }
     if {[info exists set]} {
