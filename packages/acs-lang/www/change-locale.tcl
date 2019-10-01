@@ -3,7 +3,14 @@ ad_page_contract {
 } {
     user_locale
     return_url:localurl
+} -validate {
+    valid_user_locale -requires user_locale {
+        if {![::xo::dc 0or1row user_locale_exists {select 1 from ad_locales where locale = :user_locale}] } {
+            ad_complain "invalid user_locale"
+        }
+    }
 }
+
 
 if { [catch {lang::user::set_locale $user_locale} errmsg] } {
     ns_log Error "acs-lang/www/change-locale crashed calling lang::user::set_locale with user_locale='$user_locale'\n$errmsg"
