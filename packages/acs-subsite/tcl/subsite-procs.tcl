@@ -1180,8 +1180,7 @@ ad_proc -public subsite::get_application_options {} {
 
 ad_proc -private subsite::assert_user_may_add_member {} {
     Used on pages that add users to the application group of
-    the current subsite to assert that the currently logged in
-    user may add users.
+    the current subsite to assert that the currently logged-in user may add users.
 
     @author Peter Marklund
 } {

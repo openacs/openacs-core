@@ -171,8 +171,8 @@ attribute "salary" (type integer)</font></li>
 <ol>
 <li><font>Go back to the admin page (/admin)</font></li><li><font>Click on the Groups -&gt; GuideStar.org. Add ArsDigita as
 a component</font></li><li><font>Remove the composition rel type from this
-group</font></li><li><font>Readd the composition rel type. Make sure arsdigita
-doesn&#39;t show up</font></li><li><font>remove the composition rel type</font></li><li><font>Add a permissible rel type:
+group</font></li><li><font>Re-add the composition rel type. Make sure arsdigita
+doesn&#39;t show up</font></li><li><font>Remove the composition rel type</font></li><li><font>Add a permissible rel type:
 project_lead_relation</font></li><li><font>Click yes to create a rel segment named "GuideStar
 Project Leads"</font></li><li><font>Go back to /admin/groups</font></li><li><font>Click on "relationship to site"</font></li><li><font>Remove yourself from the group.</font></li><li><font>Add yourself again as a member (using the membership
 relation). You will have to select an existing party from the

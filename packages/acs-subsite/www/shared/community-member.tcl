@@ -1,7 +1,7 @@
 ad_page_contract {
     shows User A what User B has contributed to the community
 
-    @param user_id defaults to currently logged in user if there is one
+    @param user_id defaults to currently logged-in user if there is one
     @cvs-id $Id$
 } {
     {user_id:naturalnum ""}
