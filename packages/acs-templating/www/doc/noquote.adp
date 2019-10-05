@@ -18,7 +18,7 @@ Part of the Templating System - Requirements</h2></div><hr>
 <a name="The_Templating_System" id="The_Templating_System"></a>The Templating System.</h3></div></div><p>Templating systems, as deployed by most web software, serve to
 distinguish the programming logic of the system from the
 presentation that is output to the user.</p><p>Before introduction of a templating systems to ACS, pages were
-built by outputting HTML text directly from Tcl code. Therefore it
+built by outputting HTML text directly from Tcl code. Therefore, it
 was hard for a designer or a later reviewer to change the
 appearance of the page. "Change the color of the table? How do
 I do that when I cannot even find the body tag?" At this point

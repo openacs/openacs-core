@@ -40,7 +40,7 @@ file.</p>
 <code>ns_puts</code>, <code>ns_write</code> etc., which don&#39;t
 wait till the headers are written or the page is completed; they
 may act differently than you expect.</li><li>If you can, put code in the Tcl file, not between <code>&lt;%
-%&gt;</code> in the adp page.</li><li>Put HTML in the adp page, not int the Tcl program. Put reusable
+%&gt;</code> in the adp page.</li><li>Put HTML in the adp page, not in the Tcl program. Put reusable
 HTML fragments in a separate adp file (think of it as a widget)
 that will be <code>&lt;include&gt;</code>d from several pages.
 Prefer this to writing a Tcl proc that returns HTML.</li><li>Remember to remove backslashes where you had to escape special

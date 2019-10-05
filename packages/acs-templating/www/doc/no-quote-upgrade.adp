@@ -16,7 +16,7 @@ Instead, we will assume that you have read the previous article and
 focus on the topic of this one: the changes you need to apply to
 make your module conformant to the new quoting rules.
 <p>This text is written as a result of our efforts to make the ACS
-installation for the German Bank project work, therefore it is
+installation for the German Bank project work, therefore, it is
 based on field experience rather than academic discussion. We hope
 you will find it useful.</p>
 <h3>Recap of the Theory.</h3>

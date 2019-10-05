@@ -137,7 +137,7 @@ code which calls <code>template::set_file</code> (directly or
 through <code>ad_return_template</code>). All scripts and the
 template are executed in the <em>same</em> scope, i.e., they share
 variables.</p>
-<p>Furthermore either of the final files can be omitted if it is
+<p>Furthermore, either of the final files can be omitted if it is
 not needed, giving three basic possibilities.</p>
 <center><table cellspacing="0" cellpadding="0" border="0">
 <tr>
