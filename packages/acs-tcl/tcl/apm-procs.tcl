@@ -2237,7 +2237,7 @@ ad_proc -deprecated -private apm_pretty_name_for_db_type { db_type } {
 
 } {
     set pos [lsearch -index 0 -exact $::acs::known_database_types $db_type]
-    return [lindex [lindex $::acs::known_database_types $pos] 2]
+    return [lindex $::acs::known_database_types $pos 2]
     # return [util_memoize [list db_string pretty_db_name_select "
     #     select pretty_db_name
     #     from apm_package_db_types
