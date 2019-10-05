@@ -213,7 +213,7 @@ ad_proc -public content::init {
     # Make sure that a live revision exists
     if { $rev_id eq "" } {
       if {"best" eq $revision} {
-	  # lastest_revision unless live_revision is set, then live_revision
+	  # latest_revision unless live_revision is set, then live_revision
 	  set revision_id [::content::item::get_best_revision -item_id $item_id]
       } else {
 	  # default live_revision

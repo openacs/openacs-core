@@ -185,7 +185,7 @@ ad_proc -private cr_delete_orphans {files} {
 
         set count [cr_count_file_entries $name]
         if {$count == 0} {
-            # the content entry does not exist anymore, therefore the
+            # the content entry does not exist anymore, therefore, the
             # file is an orphan and should be removed
             ns_log notice "delete orphaned file $dir$name"
             file delete -- $dir$name
