@@ -1581,7 +1581,7 @@ ad_proc -public ad_cache_returnredirect {
             if { $excluded_vars_url ne "" } {
                 append excluded_vars_url "&"
             }
-            append excluded_vars_url [export_vars -url {{"$item" "$value"}}]
+            append excluded_vars_url [export_vars {{"$item" "$value"}}]
         }
     }
 
