@@ -231,7 +231,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 			This script needs to be SUID-root, which means
 			that the script will run as root. This is necessary to ensure
 			that the AOLserver processes are killed regardless of who owns
-			them. However the script should be executable by the
+			them. However, the script should be executable by the
 			<computeroutput>web</computeroutput> group to ensure that the
 			users updating the web page can use the script, but that
 			general system users cannot run the script. You also need to

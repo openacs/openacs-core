@@ -777,7 +777,7 @@ Currently there are only session properties. Because sessions have a maximum
 life, properties have a maximum life. It would be nice to expand the
 interface to allow for more persistent properties. In the past, there was a
 sec_browser_properties table that held permanent properties about each unique
-visitor (for logged in users, these are just user properties). This was
+visitor (for logged-in users, these are just user properties). This was
 unscalable because there was no way to delete these properties, and the table
 tended to grow to millions of rows. It would be nice to view browser and
 session properties as two types of client properties, but with different

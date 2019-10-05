@@ -56,7 +56,7 @@ Followed closely on a reasonably fast machine, this document will give you a
 complete system in 4-5 hours.</para>
 
 <para>The Open Architecture Community System can now be run under <link linkend="win2k-installation">Windows</link>.
-However we advise the use of Unix, as it is the most well-tested and best
+However, we advise the use of Unix, as it is the most well-tested and best
 documented platform for OpenACS.</para>
 
 </sect2>

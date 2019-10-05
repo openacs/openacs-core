@@ -370,8 +370,7 @@ other presents an error page.</para>
 permission::permission_p -object_id $object_id -party_id $user_id -privilege $method
 </programlisting>
 
-<para>If the <computeroutput>user_id</computeroutput> argument is left out, then the currently logged in
-user is checked. To create an error page, Tcl code should call:</para>
+<para>If the <computeroutput>user_id</computeroutput> argument is left out, then the currently logged-in user is checked. To create an error page, Tcl code should call:</para>
 
 <programlisting>
 permission::require_permission -object_id $object_id -privilege $method

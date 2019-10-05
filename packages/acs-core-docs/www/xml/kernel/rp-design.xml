@@ -143,7 +143,7 @@ abstract (no extension info) file path (index). The request processor must be
 able to figure out which <emphasis role="strong">package_id</emphasis> is associated with a
 given package_url, and package mountings must be persistent across server
 restarts and users must be able to manipulate the mountings on a live site,
-therefore this mapping is stored in the database.</para>
+therefore, this mapping is stored in the database.</para>
 
 <para><emphasis role="strong">Authentication and Authorization</emphasis></para>
 

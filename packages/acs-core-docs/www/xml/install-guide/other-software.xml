@@ -534,7 +534,7 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 [root php-4.3.4]# <userinput> ./configure --with-aolserver=/usr/local/aolserver/ --with-pgsql=/usr/local/pgsql --without-mysql</userinput>
 [root php-4.3.4]# <userinput>make install</userinput>
       </screen>
-      <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
+      <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore, add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
     </sect1>
     <sect1 id="install-squirrelmail">
       <title>Install Squirrelmail for use as a webmail system for OpenACS</title>
@@ -684,7 +684,7 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
         <listitem id="configure-ns_ldap">
           <formalpara>
             <title>Configure ns_ldap for traditional use</title>
-          <para>Traditionally OpenACS has supported ns_ldap for authentication by storing the OpenACS password in an encrypted field within the LDAP server called "userPassword". Furthermore a CN field was used for searching for the username, usually userID or something similar. This field is identical to the <emphasis>username</emphasis>stored in OpenACS. Therefore the login will only work if you change login method to make use of the username instead.</para>  
+          <para>Traditionally OpenACS has supported ns_ldap for authentication by storing the OpenACS password in an encrypted field within the LDAP server called "userPassword". Furthermore, a CN field was used for searching for the username, usually userID or something similar. This field is identical to the <emphasis>username</emphasis>stored in OpenACS. Therefore, the login will only work if you change login method to make use of the username instead.</para>  
           </formalpara>
           <itemizedlist>
             <listitem><para>
