@@ -49,6 +49,6 @@ UNION ALL
    SELECT h.privilege as parent, pd.child
    FROM acs_privilege_hierarchy h, privilege_desc pd
    WHERE pd.parent = h.child_privilege
-) SELECT * FROM privilege_desc;
+) SELECT privilege_desc.parent, privilege_desc.child FROM privilege_desc;
 
 -----------------------------------------------------------------------------
