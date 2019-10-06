@@ -36,14 +36,14 @@ ad_proc -public aa::coverage::proc_list {
     current automated testing covered status, excluding deprecated, callback
     contracts and not public procs.
 
-    If no 'package_key' is passed, then the system wide test proc coverage is
-    returned.
+    If no 'package_key' is passed, or the value of the provided
+    package_key is an empty string, then the system wide test proc
+    coverage is returned.
 
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 2019-08-29
 
     @param package_key  The 'package_key' of the package to check.
-    @param deprecated   Check for test coverage also on deprecated procs.
 
     @return List of dicts, each one with the following values:
             - package_key: the package key of the package, if the 'package_key'
