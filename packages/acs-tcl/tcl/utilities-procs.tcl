@@ -4092,7 +4092,7 @@ ad_proc -public util::var_subst_quotehtml {
     supports Tcl array syntax, and Tcl scalar variables with and
     without curly braces.
 
-    @param level Where we should uplevel to when doing the subst's.
+    @param ulevel Where we should uplevel to when doing the subst's.
            Defaults to '1', meaning the caller's scope.
 
     @author Gustaf Neumann
