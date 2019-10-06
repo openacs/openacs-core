@@ -1127,7 +1127,7 @@ namespace eval acs::test {
         subsite.
 
         @param package_key package to be instantiated
-        @param instance name name of the site-node this instance will
+        @param instance_name name of the site-node this instance will
                be mounted to. Will default to <package_key>-test
         @param empty require an empty instance. If an existing
                instance is found, it will be deleted. If a package
@@ -1524,7 +1524,7 @@ namespace eval acs::test {
     } {
         Logout from the current web session
 
-        @param session reply dict containing cookies
+        @param last_request reply dict containing cookies
     } {
         set d [acs::test::http -last_request $last_request /register/logout]
         acs::test::reply_has_status_code $d 302
