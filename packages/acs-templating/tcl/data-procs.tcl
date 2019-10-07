@@ -38,6 +38,7 @@ ad_proc -public template::data::validate { type value_ref message_ref } {
     @see template::data::validate::timestamp
     @see template::data::validate::time_of_day
     @see template::data::validate::url
+    @see template::data::validate::oneof
 } {
 
   return [validate::$type $value_ref $message_ref]
@@ -516,6 +517,42 @@ ad_proc -public template::data::validate::time_of_day {
   upvar 2 $message_ref message $value_ref value
 
   return [template::util::date::validate $value message]
+}
+
+ad_proc -public template::data::validate::oneof {
+    value_ref
+    message_ref
+} {
+  Checks whether the submitted value is contained in the list of values provided via 
+  the "-options" paramater of "::template::element::create". If the 
+  paramter "-options" is not set on the element, the value is validated as "text".
+
+  @param value_ref Reference variable to the submitted value
+  @param message_ref Reference variable for returning an error message
+
+  @see template::element::create
+  @see template::data::validate::text
+  
+  @return True (1) if valid, false (0) if not
+} {
+
+  upvar 2 $message_ref message $value_ref value element element values values
+  
+  # Note: Parameter "-options" is a list containing two-element lists 
+  # in the form { {label value} {label value} {label value} ...}
+  if {[info exists element(options)] } {
+    if {[lsearch -index 1 $element(options) $value] == -1} {
+          
+      set message "[_ acs-templating.Invalid_choice] \"[ns_quotehtml $value]\""
+      return 0
+    }
+  } else {
+    ad_log Warning "template::element::validate::oneof: Parameter \"-options\"\
+                    not specified for element \"$element(name)\" in form\
+                    \"$element(form_id)\". All user submitted input will be accepted!"
+  }
+  
+  return 1
 }
 
 # Local variables:
