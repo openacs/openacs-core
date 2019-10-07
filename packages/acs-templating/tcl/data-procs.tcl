@@ -524,8 +524,8 @@ ad_proc -public template::data::validate::oneof {
     message_ref
 } {
   Checks whether the submitted value is contained in the list of values provided via 
-  the "-options" paramater of "::template::element::create". If the 
-  paramter "-options" is not set on the element, the value is validated as "text".
+  the "-options" parameter of "::template::element::create". If the 
+  parameter "-options" is not set on the element, the value is validated as "text".
 
   @param value_ref Reference variable to the submitted value
   @param message_ref Reference variable for returning an error message

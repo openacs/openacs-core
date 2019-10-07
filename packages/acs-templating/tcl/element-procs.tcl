@@ -101,14 +101,16 @@ ad_proc -public template::element::create { form_id element_id args } {
                           are allowed (checkbox groups and multiselect widgets)
 
     @option validate      A list of custom validation blocks in the form
-                          { name { expression } { message } \
-                            name { expression } { message } ...}
+                          { name { script } { message } \
+                            name { script } { message } ...}
                           where name is a unique identifier for the validation
-                          step, expression is a block to Tcl code that evaluates to
-                          1 or 0, and message is to be displayed to the user when
+                          step, expression is a block to Tcl code (script) that should
+                          set the result to 1 or 0, and message is to be displayed to the user when
                           the validation step fails, that is, if the expression
                           evaluates to 0. Use the special variable <tt>$value</tt>
                           to refer to the value entered by the user in that field.
+                          Note that e.g. in ad_form, all blocks are substituted,
+                          therefore, the script might require escaping.
 
     @option sign          specify for a hidden widget that its value should be
                           signed
