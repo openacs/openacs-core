@@ -3039,7 +3039,7 @@ ad_proc -public with_finally {
                 # means that an error was raised from an "exec". In
                 # that case the raw error just tells that the "child
                 # process exited abnormally", without given any
-                # details. Therefore we add the exit code to the
+                # details. Therefore, we add the exit code to the
                 # messages.
                 #
                 set extra "child process (pid [lindex $s_errorCode 0 1]) exited with exit-code [lindex $s_errorCode 0 end]"

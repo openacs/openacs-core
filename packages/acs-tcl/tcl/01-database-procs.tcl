@@ -1902,7 +1902,7 @@ ad_proc -public db_multirow {
 
     If "cache_key" is set, cache the array that results from the query *and*
     any code block for future use.  When this result is returned from cache,
-    THE CODE BLOCK IS NOT EXECUTED.  Therefore any values calculated by the
+    THE CODE BLOCK IS NOT EXECUTED.  Therefore, any values calculated by the
     code block that aren't listed as arguments to "extend" will
     not be created.  In practice this impacts relatively few queries, but do
     take care.

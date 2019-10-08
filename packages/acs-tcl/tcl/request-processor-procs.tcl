@@ -813,7 +813,7 @@ ad_proc -private rp_filter { why } {
                 admin/* {
                     #
                     # Double check if someone has not accidentally
-                    # granted admin to the public; furthermore require
+                    # granted admin to the public; furthermore, require
                     # login for all admin pages.
                     #
                     auth::require_login

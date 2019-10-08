@@ -55,7 +55,7 @@ ad_proc -public util_memoize {script {max_age ""}} {
 } {
     #
     # The ::util_memoize_flush proc is defined in the *-init script,
-    # after the util_memoize cache was created. Therefore is save to
+    # after the util_memoize cache was created. Therefore, is save to
     # use the util_memoize when this proc is available.
     #
     if {[info commands ::util_memoize_flush] ne ""} {

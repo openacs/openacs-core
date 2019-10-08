@@ -348,7 +348,7 @@ ad_proc -public acs_user::delete {
         change_state -user_id $user_id -state "deleted"
     } else {
         # portrait is also an entry in acs_objects with creation_user
-        # set to this user. Therefore won't be deleted by cascade and
+        # set to this user. Therefore, won't be deleted by cascade and
         # must be removed manually
         acs_user::erase_portrait -user_id $user_id
         # flush before actual deletion, so all the information is

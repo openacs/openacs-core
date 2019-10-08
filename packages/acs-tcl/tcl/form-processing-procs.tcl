@@ -1123,7 +1123,7 @@ ad_proc -public ad_form {
 
         if {[template::element::exists $form_name __csrf_token]} {
             #
-            # CSRF protection is activated, therefore validate the
+            # CSRF protection is activated, therefore, validate the
             # hidden form field content.
             #
             security::csrf::validate
