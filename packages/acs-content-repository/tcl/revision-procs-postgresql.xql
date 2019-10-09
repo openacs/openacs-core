@@ -57,7 +57,7 @@
             /* creation_ip   => */ :creation_ip,
             /* title         => */ :title,
             /* description   => */ :description,
-            /* storage_type  => */ :storage_type,
+            /* storage_type  => */ :storage_type::cr_item_storage_type_enum,
             /* content_type  => */ :image_type,
             /* nls_language  => */ null,
             /* publish_date  => */ current_timestamp,
