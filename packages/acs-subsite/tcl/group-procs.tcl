@@ -453,7 +453,7 @@ ad_proc -public group::update {
     "
 
     if {[info exists group_name]} {
-        set pretty_name [lang::util::convert_to_i18n -message_key "group_title.${group_id}" -text "$group_name"]
+        set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$group_name"]
         db_dml update_object_title {
             update acs_objects
             set title = :pretty_name
