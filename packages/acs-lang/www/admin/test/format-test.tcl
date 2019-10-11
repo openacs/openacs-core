@@ -1,4 +1,3 @@
-#/packages/lang/www/test.tcl
 ad_page_contract {
 
     Tests procedures in the lang package
@@ -20,14 +19,9 @@ set us_number [lc_numeric 123456.789 {} en_US]
 set fr_number [lc_numeric 123456.789 {} fr_FR]
 set us_parse [lc_parse_number 123,456.789 en_US]
 set fr_parse [lc_parse_number "123 456,789" fr_FR]
-set us_currency [lc_monetary_currency -label_p 1 -style local 123.4 USD en_US]
-set fr_currency [lc_monetary_currency -label_p 1 -style local 123.4 USD fr_FR]
-set us_label [lc_monetary_currency -label_p 1 -style local 1234 FRF en_US]
-set fr_label [lc_monetary_currency -label_p 1 -style local 1234 FRF fr_FR]
 set us_time [lc_time_fmt $system_time "%c" en_US]
 set fr_time [lc_time_fmt $system_time "%c" fr_FR]
 
-ad_return_template
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

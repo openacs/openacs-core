@@ -78,11 +78,6 @@ is loaded into the database.</em>
             <tr><td>Parsing a number</td>
                 <td>@us_parse@</td>
                 <td>@fr_parse@</td></tr>
-            <tr><td rowspan="2" valign="top">Displaying a monetary amount</td>
-                <td>@us_currency@</td>
-                <td>@fr_currency@</td></tr>
-            <tr><td>@us_label@</td>
-                <td>@fr_label@</td></tr>
             <tr><td>Displaying a date</td>
                 <td>@us_time@</td>
                 <td>@fr_time@</td></tr>
