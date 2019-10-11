@@ -169,6 +169,10 @@ ad_proc group::delete { group_id } {
 
     db_exec_plsql delete_group {}
 
+    # Remove the automatically generated message key localizing the
+    # group name
+    lang::message::unregister acs-translations "group_title_${group_id}"
+
     return $object_type
 }
 
