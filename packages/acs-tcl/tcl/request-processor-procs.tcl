@@ -896,17 +896,16 @@ ad_proc -private rp_report_error {
         set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
     } on error {errorMsg} {
         #
-        # An error occurred during rendering of the error page
+        # An error occurred during rendering of the error page.
         #
         ns_log error "rp_report_error: error $errorMsg rendering error page (!)\n$::errorInfo"
         set rendered_page [subst {</table></table></table></h1></b></i>
             <blockquote><pre>[ns_quotehtml $error_message]</pre></blockquote>
         }]
     }
-
-    ns_return 500 text/html $rendered_page
-
     ad_log error $error_message
+    
+    ns_return 500 text/html $rendered_page
 }
 
 ad_proc -private rp_path_prefixes {path} {
