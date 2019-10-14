@@ -524,14 +524,13 @@ ad_proc -public template::data::validate::oneof {
     message_ref
 } {
   Checks whether the submitted value is contained in the list of values provided via 
-  the "-options" parameter of "::template::element::create". If the 
-  parameter "-options" is not set on the element, the value is validated as "text".
+  the "-options" parameter of "::template::element::create". If it is set an 
+  error is thrown.
 
   @param value_ref Reference variable to the submitted value
   @param message_ref Reference variable for returning an error message
 
   @see template::element::create
-  @see template::data::validate::text
   
   @return True (1) if valid, false (0) if not
 } {
@@ -547,9 +546,8 @@ ad_proc -public template::data::validate::oneof {
       return 0
     }
   } else {
-    ad_log Warning "template::element::validate::oneof: Parameter \"-options\"\
-                    not specified for element \"$element(name)\" in form\
-                    \"$element(form_id)\". All user submitted input will be accepted!"
+    error "template::element::validate::oneof: No options specified for \
+           element $element_id in form $form_id"
   }
   
   return 1
