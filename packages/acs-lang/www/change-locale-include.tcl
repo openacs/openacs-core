@@ -37,7 +37,7 @@ ad_form \
         {package_id:naturalnum(hidden)
             {value $package_id}
         }
-        {return_url:text(hidden) 
+        {return_url:text(hidden)
             {value $return_url}
         }
         {site_wide_locale:oneof(select),multiple,optional
@@ -45,7 +45,7 @@ ad_form \
             {options $list_of_locales}
             {values "[ad_conn locale]"}
             {help_text "[_ acs-lang.Your_locale_site_wide]"}
-        }        
+        }
     }
 
 
@@ -81,7 +81,7 @@ if { $use_timezone_p } {
        }
 }
 
-# Setup of form elements done, now add the action blocks 
+# Setup of form elements done, now add the action blocks
 ad_form \
    -extend \
    -name locale \
@@ -89,32 +89,32 @@ ad_form \
        if { $package_level_locales_p } {
           set package_level_locale [lang::user::package_level_locale $package_id]
        }
-        
+
        set site_wide_locale [lang::user::site_wide_locale]
        if { $site_wide_locale eq "" } {
           set site_wide_locale [lang::system::site_wide_locale]
        }
-        
+
        if { $use_timezone_p } {
            set timezone [lang::user::timezone]
            if { $timezone eq "" } {
               set timezone [lang::system::timezone]
            }
-       }        
+       }
    } \
    -on_submit {
        lang::user::set_locale $site_wide_locale
-   
+
        if { $package_level_locales_p } {
            lang::user::set_locale -package_id $package_id $package_level_locale
        }
-    
+
        if { $use_timezone_p } {
            lang::user::set_timezone $timezone
        }
 
        ad_returnredirect $return_url
-       ad_script_abort        
+       ad_script_abort
    }
 
 # Local variables:
