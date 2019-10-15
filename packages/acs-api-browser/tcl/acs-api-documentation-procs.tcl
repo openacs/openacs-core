@@ -1793,7 +1793,7 @@ namespace eval ::apidoc {
                             ([regexp {^::(.*)} $proc_name match had_colons]
                              && $had_colons in $::apidoc::KEYWORDS)} {
 
-                            set url "/api-doc/proc-view?proc=$proc_name"
+                            set url "/api-doc/proc-view?proc=[string trimleft $proc_name :]"
                             append html "<a href='[ns_quotehtml $url]' title='Tcl command'>" \
                                 [pretty_token keyword $proc_name] </a>
 
