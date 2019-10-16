@@ -7,7 +7,7 @@
         select grantee_id, privilege
         from   acs_permissions
         where  object_id = :object_id
-        and    privilege in ('[join $privs "', '"]')
+        and    privilege in ([template::util::tcl_to_sql_list $privs])
 
       </querytext>
 </fullquery>
