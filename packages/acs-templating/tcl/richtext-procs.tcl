@@ -76,7 +76,7 @@ ad_proc -public template::data::validate::richtext {
     lassign $richtext_list contents format
 
     if { $contents ne "" && [lsearch -exact [template::util::richtext::formats] $format] == -1 } {
-        set message "Invalid format, '$format'."
+        set message "Invalid format, '[ns_quotehtml $format]'."
         return 0
     }
 
