@@ -128,3 +128,96 @@ aa_register_case \
             ns_unregister_op POST $endpoint_name
         }
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        util::http::get
+        util::http::post
+        ns_http
+    } \
+    postman_echo {
+        Test HTTP client API against Postman Echo webservice
+        (https://docs.postman-echo.com)
+    } {
+        set url "https://postman-echo.com"
+
+        set test_key "string"
+        set test_string "Umlaut ÜÄ"
+        set json_data "{\"$test_key\": \"$test_string\"}"
+
+        set get_url [export_vars -base $url/get [list [list $test_key $test_string]]]
+
+        set content_types {
+            "application/json;charset=UTF-8"
+            "application/json"
+        }
+        set implementations {
+            native curl ns_http
+        }
+
+        foreach impl $implementations {
+            foreach content_type $content_types {
+                set headers [ns_set create headers]
+                ns_set put $headers "Content-Type" $content_type
+
+                aa_log "POST request - ContentType: '$content_type' - Implementation: '$impl'"
+                if {$impl ne "ns_http"} {
+                    set r [util::http::post -preference $impl -url $url/post -body $json_data -headers $headers]
+                    set json_response [dict get $r page]
+                } else {
+                    set r [ns_http run -method POST -body $json_data -headers $headers $url/post]
+                    set json_response [dict get $r body]
+                }
+
+                set status [dict get $r status]
+                aa_equals "Server '$url' answers correctly with - status='$status'" $status 200
+
+                aa_log "Server responded with: $json_response"
+
+                set root [dom parse -json $json_response]
+                set resp_key ""
+                set resp_value ""
+                foreach node [$root childNodes] {
+                    if {[$node nodeName] eq "data"} {
+                        set child [$node firstChild]
+                        set resp_key    [$child nodeName]
+                        set resp_string [$child text]
+                    }
+                }
+
+                aa_equals "Format seems correct" $resp_key $test_key
+                aa_equals "Value is correct" $resp_string $test_string
+
+
+                aa_log "GET request - ContentType: '$content_type' - Implementation: '$impl'"
+
+                if {$impl ne "ns_http"} {
+                    set r [util::http::get -preference $impl -url $get_url -headers $headers]
+                    set json_response [dict get $r page]
+                } else {
+                    set r [ns_http run -method GET -headers $headers $get_url]
+                    set json_response [dict get $r body]
+                }
+
+                set status [dict get $r status]
+                aa_equals "Server '$url' answers correctly with - status='$status'" $status 200
+
+                aa_log "Server responded with: $json_response"
+
+                set root [dom parse -json $json_response]
+                set resp_key ""
+                set resp_value ""
+                foreach node [$root childNodes] {
+                    if {[$node nodeName] eq "args"} {
+                        set child [$node firstChild]
+                        set resp_key    [$child nodeName]
+                        set resp_string [$child text]
+                    }
+                }
+
+                aa_equals "Format seems correct" $resp_key $test_key
+                aa_equals "Value is correct" $resp_string $test_string
+            }
+        }
+    }
