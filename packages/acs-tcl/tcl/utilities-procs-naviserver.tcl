@@ -41,7 +41,7 @@ ad_proc -public ad_urlencode_folder_path {path} {
 ad_proc -public ad_urlencode_path { string } {
     Encode provided string with url-encoding for paths segments
     (instead of query segments) as defined in RFC 3986
-} { 
+} {
     return [ns_urlencode -part path -- $string]
 }
 
@@ -55,7 +55,7 @@ ad_proc -public ad_urldecode_path { string } {
 ad_proc -public ad_urlencode_query { string } {
     Encode provided string with url-encoding for query segments
     (instead of paths) as defined in RFC 3986
-} { 
+} {
     return [ns_urlencode -part query -- $string]
 }
 
@@ -77,7 +77,7 @@ ad_proc -public ad_unset_cookie {
     name
 } {
     Un-sets a cookie.
-    
+
     @see ad_get_cookie
     @see ad_set_cookie
 } {
@@ -89,9 +89,9 @@ ad_proc -public ad_unset_cookie {
 #
 ad_proc -public ad_get_cookie {
     { -include_set_cookies t }
-    name 
+    name
     { default "" }
-} { 
+} {
     Returns the value of a cookie, or $default if none exists.
 
     @see ad_set_cookie
@@ -112,9 +112,9 @@ ad_proc -public ad_set_cookie {
     {-discard f}
     {-scriptable t}
     {-samesite none}
-    name 
+    name
     {value ""}
-} { 
+} {
 
     Sets a cookie.  Cookies are name/value pairs stored in a client's
     browser and are typically sent back to the server of origin with
@@ -124,8 +124,8 @@ ad_proc -public ad_set_cookie {
     seconds (consistent with RFC 2109). max_age "inf" specifies cookies
     that never expire. The default behavior is to issue session
     cookies.
-    
-    @param expire specifies whether we should expire (clear) the cookie. 
+
+    @param expire specifies whether we should expire (clear) the cookie.
     Setting Max-Age to zero ought to do this, but it doesn't in some browsers
     (tested on IE 6).
 
@@ -137,7 +137,7 @@ ad_proc -public ad_set_cookie {
 
     @param secure specifies to the user agent that the cookie should
     only be transmitted back to the server of secure transport.
-    
+
     @param replace forces the current output headers to be checked for
     the same cookie. If the same cookie is set for a second time
     without the replace option being specified, the client will
@@ -157,7 +157,7 @@ ad_proc -public ad_set_cookie {
     @param value is automatically URL encoded.
 
     @see ad_get_cookie
-    @see ad_unset_cookie    
+    @see ad_unset_cookie
 } {
 
 
@@ -194,7 +194,7 @@ ad_proc -public ad_mutex_eval {mutex script} {
     eval".
 
     @author Gustaf Neumann
-    
+
 } {
     uplevel [list ns_mutex eval $mutex $script]
 }
@@ -205,4 +205,3 @@ ad_proc -public ad_mutex_eval {mutex script} {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-
