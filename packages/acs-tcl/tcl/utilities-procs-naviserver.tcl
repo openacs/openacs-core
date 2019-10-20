@@ -25,14 +25,15 @@ try { ns_setcookie } on error {r} {
 # NaviServer implementation of ad_url(en|de)code* procs
 #-------------------------------------------------------------------------
 
-ad_proc -public ad_urlencode_folder_path {path} {
+ad_proc -public ad_urlencode_folder_path { folder_path } {
     Perform an urlencode operation on the segments of the provided
-    folder (for a full folder path rather than path segments as in
-            ad_urlencode_path).
+    folder path, i.e. for a full folder path rather than path segments as in
+    ad_urlencode_path.
+
     @see ad_urlencode_path
 } {
-    if {$path ne ""} {
-        return [ns_urlencode -part path -- {*}[split $path /]]
+    if {$folder_path ne ""} {
+        return [ns_urlencode -part path -- {*}[split $folder_path /]]
     } else {
         return ""
     }
