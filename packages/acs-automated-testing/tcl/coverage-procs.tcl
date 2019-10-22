@@ -117,7 +117,7 @@ ad_proc -public aa::coverage::proc_coverage {
         }
     }
     #
-    # Return the coverage precentage
+    # Return the coverage percentage
     #
     if { $procs eq 0 } {
         set coverage 100.0

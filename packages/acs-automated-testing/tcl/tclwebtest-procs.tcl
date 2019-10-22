@@ -165,7 +165,7 @@ ad_proc twt::user::login { email password {username ""}}  {
             error "Failed to login user with email=\"$email\" and password=\"$password\". No user with such email in database."
         } else {
             ns_log Error "Failed to log in user with email=\"$email\" and password=\"$password\" even though email exists (password may be incorrect). response_body=[tclwebtest::response body]"
-            error "Failed to log in user with email=\"$email\" and password=\"$password\" even though email exists (password may be incorrect). User should be able to request $home_uri without redirection, however response url=$response_url"
+            error "Failed to log in user with email=\"$email\" and password=\"$password\" even though email exists (password may be incorrect). User should be able to request $home_uri without redirection (response url=$response_url)"
 
         }
     }
