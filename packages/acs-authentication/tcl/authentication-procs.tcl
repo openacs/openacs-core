@@ -1033,7 +1033,7 @@ ad_proc -public auth::create_local_account {
 
         # Update person.bio
         if { [info exists user_info(bio)] } {
-            person::update_bio \
+            person::update \
                 -person_id $user_id \
                 -bio $user_info(bio)
         }
