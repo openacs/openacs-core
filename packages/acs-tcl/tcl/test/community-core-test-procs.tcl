@@ -43,7 +43,6 @@ aa_register_case \
         person::new
         person::person_p
         person::update
-        person::update_bio
     } \
     person_procs_test \
     {
@@ -96,7 +95,7 @@ aa_register_case \
                 aa_true "name changed" [string match [person::name -person_id $prs_id] "hh$first_names hh$last_name"]
 
                 set bio "bio :: [ad_generate_random_string] :: bio"
-                person::update_bio -person_id $prs_id -bio $bio
+                person::update -person_id $prs_id -bio $bio
 
                 aa_true "bio(graphy) ok" [string match $bio [person::get_bio -person_id $prs_id -exists_var bio_p]]
 
