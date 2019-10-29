@@ -73,16 +73,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_parameter_register.apm_parameter_cache_update">      
-    <querytext>
-      select coalesce(v.package_id, 0) as package_id, p.parameter_name, 
-      case when v.value_id is null then p.default_value else v.attr_value end as attr_value
-      from apm_parameters p left outer join apm_parameter_values v
-      using (parameter_id)
-      where p.package_key = :package_key
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_enabled_packages.enabled_packages">      
     <querytext>
       select distinct package_key

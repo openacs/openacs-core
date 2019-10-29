@@ -1112,10 +1112,6 @@ ad_proc -public apm_parameter_register {
         apm_copy_param_to_descendents $package_key $parameter_name
     }
 
-    # Update the cache.
-    db_foreach apm_parameter_cache_update {} {
-        ad_parameter_cache -set $attr_value $package_id $parameter_name
-    }
     return $parameter_id
 }
 
