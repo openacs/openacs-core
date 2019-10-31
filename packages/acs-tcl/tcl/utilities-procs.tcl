@@ -1166,7 +1166,7 @@ ad_proc -public util_commify_number { num } {
     while { 1 } {
         # Regular Expression taken from Mastering Regular Expressions (Jeff Friedl)
         # matches optional leading negative sign plus any
-        # other 3 digits, starting from end
+        # other 3 digits, starting from end.
         if { ![regsub -- {^(-?[0-9]+)([0-9][0-9][0-9])} $num {\1,\2} num] } {
             break
         }
@@ -1239,11 +1239,12 @@ ad_proc -private util_WriteWithExtraOutputHeaders {
     out to the connection.  May optionally be used to write the first part
     of the page as well (saves a packet).
 } {
-    ns_set put [ad_conn outputheaders] Server "[ns_info name]/[ns_info version]"
+    set headers [ad_conn outputheaders]
+    ns_set put $headers Server "[ns_info name]/[ns_info version]"
     set set_headers_i 0
-    set set_headers_limit [ns_set size [ad_conn outputheaders]]
+    set set_headers_limit [ns_set size $headers]
     while {$set_headers_i < $set_headers_limit} {
-        append headers_so_far "[ns_set key [ad_conn outputheaders] $set_headers_i]: [ns_set value [ad_conn outputheaders] $set_headers_i]\r\n"
+        append headers_so_far "[ns_set key $headers $set_headers_i]: [ns_set value $headers $set_headers_i]\r\n"
         incr set_headers_i
     }
     append entire_string_to_write $headers_so_far "\r\n" $first_part_of_page
@@ -1257,7 +1258,7 @@ ad_proc -private ReturnHeaders {
     We use this when we want to send out just the headers
     and then do incremental writes with ns_write.  This way the user
     doesn't have to wait for streamed output (useful when doing
-                                              bulk uploads, installs, etc.).
+    bulk uploads, installs, etc.).
 
     It returns status 200 and all headers including
     any added to outputheaders.
