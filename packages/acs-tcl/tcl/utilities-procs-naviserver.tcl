@@ -97,6 +97,7 @@ ad_proc -public ad_get_cookie {
 
     @see ad_set_cookie
     @see ad_unset_cookie
+    @see ad_get_signed_cookie
 } {
     ns_getcookie -include_set_cookies $include_set_cookies -- $name $default
 }
@@ -159,6 +160,7 @@ ad_proc -public ad_set_cookie {
 
     @see ad_get_cookie
     @see ad_unset_cookie
+    @see ad_set_signed_cookie    
 } {
 
 

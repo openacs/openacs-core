@@ -1358,6 +1358,10 @@ ad_proc -public ad_get_signed_cookie {
     validation fails (maybe due to expiration).
 
     @return cookie value
+
+    @see ad_get_cookie
+    @see ad_set_signed_cookie
+    @see ad_get_signed_cookie_with_expr
 } {
 
     set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
@@ -1385,10 +1389,14 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 
     Retrieves a signed cookie. Validates a cookie against its
     cryptographic signature and ensures that the cookie has not
-    expired. Returns a two-element list, the first element of which is
-    the cookie data, and the second element of which is the expiration
-    time. Throws an exception if validation fails.
+    expired. Throws an exception when cookie does not exist or
+    validation fails.
 
+    @return Two-element list containing cookie data and expiration time
+
+    @see ad_get_cookie
+    @see ad_get_signed_cookie
+    @see ad_set_signed_cookie
 } {
 
     set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
@@ -1446,6 +1454,10 @@ ad_proc -public ad_set_signed_cookie {
 
     @param value the value for the cookie. This is automatically
     url-encoded.
+
+    @see ad_set_cookie
+    @see ad_get_signed_cookie
+    @see ad_get_signed_cookie_with_expr
 
 } {
     if { $signature_max_age eq "" } {
