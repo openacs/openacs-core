@@ -455,7 +455,7 @@ ad_proc -public template::expand_percentage_signs { message } {
             # Convert syntax to Tcl syntax:
             # It's either an array variable or a Tcl variable
             #   array variables
-            # TODO: ad_quotehtml
+            # TODO: ns_quotehtml
             # TODO: lang::util::localize
             regsub -all {[\]\[\{\}\"]\\$} $substitution {\\&} substitution
             if { [regexp {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $substitution match arr key] } {
@@ -549,17 +549,9 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     while {[regsub -all [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
     #
     # Some aolservers have broken implementations of ns_quotehtml
-    # (returning for the empty string input a one byte output). If this
-    # happens, we fall back to the "manual" ad_quotehtml. However, we
-    # prefer to use the faster (C-implemented) ns_quotehtml, since the
-    # actual substitutions occur at page-view time, and they are called
-    # therefore very often.
+    # (returning for the empty string input a one byte output). 
     #
-    if {[ns_quotehtml ""] eq ""} {
-        while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
-    } else {
-        while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
-    }
+    while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
 
     # substitute simple variable references
     while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1[lang::util::localize ${\2}]} code]} {}

@@ -1180,28 +1180,28 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
 }
 
 ad_proc -deprecated -warn util_quotehtml { arg } {
-    This proc does exactly the same as <a href="/api-doc/proc-view?proc=ad_quotehtml"><code>ad_quotehtml</code></a>.
+    This proc does exactly the same as <code>ns_quotehtml</code>.
     Use that instead. This one will be deleted eventually.
 
-    @see ad_quotehtml
+    @see ns_quotehtml
 } {
     return [ns_quotehtml $arg]
 }
 
 ad_proc -deprecated util_quote_double_quotes {arg} {
-    This proc does exactly the same as <a href="/api-doc/proc-view?proc=ad_quotehtml"><code>ad_quotehtml</code></a>.
+    This proc does exactly the same as <code>ns_quotehtml</code>.
     Use that instead. This one will be deleted eventually.
 
-    @see ad_quotehtml
+    @see ns_quotehtml
 } {
     return [ns_quotehtml $arg]
 }
 
 ad_proc -deprecated philg_quote_double_quotes {arg} {
-    This proc does exactly the same as <a href="/api-doc/proc-view?proc=ad_quotehtml"><code>ad_quotehtml</code></a>.
+    This proc does exactly the same as <code>ns_quotehtml</code>.
     Use that instead. This one will be deleted eventually.
 
-    @see ad_quotehtml
+    @see ns_quotehtml
 } {
     return [ns_quotehtml $arg]
 }

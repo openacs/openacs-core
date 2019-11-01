@@ -168,7 +168,7 @@ heading. What&#39;s wrong with this code?
 the slave template, and once by the master template. This is the
 result of how the templating system works: <em>every</em>
 occurrence of <kbd>\@<var>variable</var>\@</kbd> is converted to
-<kbd>[ad_quotehtml $<var>variable</var>]</kbd>, even when it
+<kbd>[ns_quotehtml $<var>variable</var>]</kbd>, even when it
 is used only to set a property and you would expect the quoting to
 be suppressed.</p>
 <blockquote><font size="-1">Implementation note: Ideally, the

@@ -271,7 +271,7 @@ ad_proc -public util_convert_line_breaks_to_html {
 
 
 
-ad_proc -public ad_quotehtml { arg } {
+ad_proc -deprecated -public ad_quotehtml { arg } {
 
     Quotes ampersands, double-quotes, and angle brackets in $arg.
     Analogous to ns_quotehtml except that it quotes double-quotes
@@ -283,9 +283,9 @@ ad_proc -public ad_quotehtml { arg } {
 }
 
 ad_proc -public ad_unquotehtml {arg} {
-    reverses ad_quotehtml
+    reverses ns_quotehtml
 
-    @see ad_quotehtml
+    @see ns_quotehtml
 } {
     return [string map {&amp; & &gt; > &lt; < &quot; \" &#34; \" &#39; '} $arg]
 }

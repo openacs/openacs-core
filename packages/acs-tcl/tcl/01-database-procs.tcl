@@ -1930,7 +1930,7 @@ ad_proc -public db_multirow {
     You may supply a code block, which will be executed for each row in
     the loop. This is very useful if you need to make computations that
     are better done in Tcl than in SQL, for example using ns_urlencode
-    or ad_quotehtml, etc. When the Tcl code is executed, all the columns
+    or ns_quotehtml, etc. When the Tcl code is executed, all the columns
     from the SQL query will be set as local variables in that code. Any
     changes made to these local variables will be copied back into the
     multirow.

@@ -282,7 +282,7 @@ you&#39;re compiling dynamic templates in a function or similar
 situations).</p><p>You may supply a code block, which will be executed for each row
 in the loop. This is very useful if you need to make computations
 that are better done in Tcl than in SQL, for example using
-ns_urlencode or ad_quotehtml, etc. When the Tcl code is executed,
+ns_urlencode or ns_quotehtml, etc. When the Tcl code is executed,
 all the columns from the SQL query will be set as local variables
 in that code. Any changes made to these local variables will be
 copied back into the multirow.</p><p>You may also add additional, computed columns to the multirow,
