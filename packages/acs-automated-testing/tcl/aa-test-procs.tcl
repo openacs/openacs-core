@@ -1252,7 +1252,7 @@ namespace eval acs::test {
 
         @author Gustaf Neumann
     } {
-        ns_log notice "::acs::test::http -user_id $user_id -user_info $user_info request $request"
+        ns_log notice "::acs::test::http -user_id '$user_id' -user_info '$user_info' request '$request'"
         set session ""
         if {[dict exists $last_request session]} {
             set session [dict get $last_request session]
@@ -1448,6 +1448,8 @@ namespace eval acs::test {
                 }
             }
         }
+
+        #aa_log "already_logged_in $already_logged_in"
         if {!$already_logged_in} {
             #
             # The user is not logged in via cookies, check first
