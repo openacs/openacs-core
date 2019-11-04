@@ -131,7 +131,7 @@ ad_proc -private sec_handler {} {
         #}
         if {[nsv_array exists aa_test]
             && [nsv_get aa_test logindata logindata]
-            && [ns_conn peeraddr] in [list [dict get $logindata peeraddr] 127.0.0.1]
+            && [ns_conn peeraddr] in [list [dict get $logindata peeraddr] 127.0.0.1 ::1]
         } {
             #ns_log notice logindata=$logindata
             if {[dict exists $logindata user_id]} {
