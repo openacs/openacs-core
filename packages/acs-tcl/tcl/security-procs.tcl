@@ -248,6 +248,17 @@ ad_proc -private sec_login_handler {} {
                 } else {
                     set auth_level ok
                 }
+                #
+                # In case there is no session_id, do not trust the
+                # provided cookie, since it might be stolen. In
+                # general, session cookies are recreated on the fly
+                # for the current user, but we do not want this in
+                # cases, when we have already a "valid" login cookie.
+                #
+                if {[ad_conn session_id] eq ""} {
+                    ns_log warning "downgrade auth_level of user $untrusted_user_id since session_id invalid"
+                    set auth_level expired
+                }
             }
         }
         
