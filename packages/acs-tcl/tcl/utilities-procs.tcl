@@ -4389,7 +4389,15 @@ namespace eval util::resources {
             # as well.
             #
             if {$gzip ne ""} {
-                exec $gzip -9 -k $local_path/$file
+                # By default gzip would delete the original
+                # file. Versions >= 1.6 would support the -k flag to
+                # keep it, but as installations around might ship with
+                # older versions we mimick this behavior in tcl.
+                set tmpfile [ad_tmpnam]
+                file copy -- $local_path/$file $tmpfile
+                # exec $gzip -9 -k $local_path/$file
+                exec $gzip -9 $local_path/$file
+                file rename -- $tmpfile $local_path/$file
             }
         }
 
