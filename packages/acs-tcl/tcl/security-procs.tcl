@@ -79,7 +79,10 @@ ad_proc -private sec_session_lifetime {} {
     Returns the maximum lifetime, in seconds, for sessions.
 } {
     # default value is 7 days ( 7 * 24 * 60 * 60 )
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter SessionLifetime -default 604800]
+    return [parameter::get \
+                -package_id $::acs::kernel_id \
+                -parameter SessionLifetime \
+                -default 604800]
 }
 
 ad_proc -private sec_sweep_sessions {} {
@@ -580,7 +583,9 @@ ad_proc -public ad_user_logout {
     Logs the user out.
 } {
     if {$cookie_domain eq ""} {
-        set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
+        set cookie_domain [parameter::get \
+                               -parameter CookieDomain \
+                               -package_id $::acs::kernel_id]
     }
 
     #
@@ -595,10 +600,14 @@ ad_proc -public ad_user_logout {
     # "SecureSessionCookie" was altered during a session, but this
     # should be a seldom border case.
     #
-    ad_unset_cookie -domain $cookie_domain -secure [expr {[parameter::get \
+    ad_unset_cookie \
+        -domain $cookie_domain \
+        -secure [expr {[parameter::get \
+                            -boolean \
                             -parameter SecureSessionCookie \
-                            -package_id [ad_acs_kernel_id] \
-                            -default 0] ? "t" : "f"}] ad_session_id
+                            -package_id $::acs::kernel_id \
+                            -default 0] ? "t" : "f"}] \
+        ad_session_id
     ad_unset_cookie -domain $cookie_domain -secure f ad_user_login
     ad_unset_cookie -domain $cookie_domain -secure t ad_secure_token
     ad_unset_cookie -domain $cookie_domain -secure t ad_user_login_secure
@@ -780,7 +789,9 @@ ad_proc -private sec_generate_session_id_cookie {
     ns_log Debug "Security: [ns_time] sec_generate_session_id_cookie setting session_id=$session_id, user_id=$user_id, login_level=$login_level"
 
     if {$cookie_domain eq ""} {
-        set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
+        set cookie_domain [parameter::get \
+                               -parameter CookieDomain \
+                               -package_id $::acs::kernel_id]
     }
 
     # Fetch the last value element of ad_user_login cookie (or
@@ -798,8 +809,9 @@ ad_proc -private sec_generate_session_id_cookie {
     }
     ad_set_signed_cookie \
         -secure [expr {[parameter::get \
+                            -boolean \
                             -parameter SecureSessionCookie \
-                            -package_id [ad_acs_kernel_id] \
+                            -package_id $::acs::kernel_id \
                             -default 0] ? "t" : "f"}] \
         -discard $discard \
         -replace t \
@@ -1596,7 +1608,10 @@ ad_proc -private populate_secret_tokens_cache {} {
 
 } {
 
-    set num_tokens [parameter::get -package_id [ad_acs_kernel_id] -parameter NumberOfCachedSecretTokens -default 100]
+    set num_tokens [parameter::get \
+                        -package_id $::acs::kernel_id \
+                        -parameter NumberOfCachedSecretTokens \
+                        -default 100]
 
     # this is called directly from security-init.tcl,
     # so it runs during the install before the data model has been loaded
@@ -1615,7 +1630,10 @@ ad_proc -private populate_secret_tokens_db {} {
 
 } {
 
-    set num_tokens [parameter::get -package_id [ad_acs_kernel_id] -parameter NumberOfCachedSecretTokens -default 100]
+    set num_tokens [parameter::get \
+                        -package_id $::acs::kernel_id \
+                        -parameter NumberOfCachedSecretTokens \
+                        -default 100]
     # we assume sample size of 10%.
     set num_tokens [expr {$num_tokens * 10}]
     set counter 0
@@ -1856,7 +1874,7 @@ ad_proc -public security::RestrictLoginToSSLP {} {
     return [parameter::get \
                 -boolean \
                 -parameter RestrictLoginToSSLP \
-                -package_id [ad_acs_kernel_id]]
+                -package_id $::acs::kernel_id]
 }
 
 ad_proc -public security::require_secure_conn {} {
@@ -2019,6 +2037,7 @@ ad_proc -private security::get_secure_location {} {
         # SuppressHttpPort is set.
         #
         set suppress_http_port [parameter::get -parameter SuppressHttpPort \
+                                    -boolean \
                                     -package_id [apm_package_id_from_key acs-tcl] \
                                     -default 0]
         set secure_location [util::join_location \
@@ -2051,6 +2070,7 @@ ad_proc -private security::get_insecure_location {} {
         # SuppressHttpPort is set.
         #
         set suppress_http_port [parameter::get -parameter SuppressHttpPort \
+                                    -boolean \
                                     -package_id [apm_package_id_from_key acs-tcl] \
                                     -default 0]
         set insecure_location [util::join_location \
@@ -2324,6 +2344,7 @@ ad_proc -public security::locations {} {
     # proxy's backend port. In this cases, SuppressHttpPort can be used
     #
     set suppress_http_port [parameter::get -parameter SuppressHttpPort \
+                                -boolean \
                                 -package_id [apm_package_id_from_key acs-tcl] \
                                 -default 0]
     if {$suppress_http_port} {
