@@ -224,11 +224,11 @@ ad_proc -public ad_navbar args {
 } {
     set counter 0
     foreach arg $args {
-        lappend link_list [subst {<a href="[ns_quotehtml [lindex $element 0]]">[ns_quotehtml [lindex $element 1]]</a>}]
+        lappend link_list [subst {<a href="[ns_quotehtml [lindex $arg 0]]">[ns_quotehtml [lindex $arg 1]]</a>}]
         incr counter
     }
     if { $counter } {
-        return "\[[join $link_list " | "]\]"
+        return "\[[join $link_list { | }]\]"
     } else {
         return ""
     }
