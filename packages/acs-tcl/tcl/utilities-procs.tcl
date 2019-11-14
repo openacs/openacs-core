@@ -2635,7 +2635,11 @@ ad_proc -public util_text_to_url {
     set text [string trim [string tolower $original_text]]
 
     # Save some german and french characters from removal by replacing
-    # them with their ascii counterparts.
+    # them with their ASCII counterparts.
+    #
+    # TODO: The following mappings are based on ISO8859-*, which are rarely used today.
+    #       Should be use (parts?) of ad_sanitize_filename or be replaced by it.
+    #
     set text [string map { \xe4 ae \xf6 oe \xfc ue \xdf ss \xf8 o \xe0 a \xe1 a \xe8 e \xe9 e } $text]
 
     # here's the Danish ones (hm. the o-slash conflicts with the definition above, which just says 'o')
