@@ -253,7 +253,9 @@ create table acs_objects (
 -- create index acs_objects_context_object_idx onacs_objects (context_id, object_id);
 
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
+create index acs_objects_creation_date_idx on acs_objects (creation_date);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
+create index acs_objects_last_modified_idx on acs_objects (last_modified);
 
 create index acs_objects_package_idx on acs_objects (package_id);
 create index acs_objects_title_idx on acs_objects(title);
