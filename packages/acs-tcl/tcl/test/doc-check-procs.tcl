@@ -32,6 +32,45 @@ aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
     aa_log "Found $good good of $count checked"
 }
 
+
+aa_register_case -cats {smoke production_safe} naming__proc_naming {
+    Check if names of Tcl procs follow the naming conventions
+    https://openacs.org/xowiki/Naming
+
+} {
+    set count 0
+    set good 0
+    set allowedToplevel {^(_|(ad|acs|aa|adp|api|apm|chat|db|doc|ds|dt|cr|export|fs|general_comments|lc|news|ns|package|pkg_info|relation|rp|rss|sec|server_cluster|content_search|util|xml)_.+|callback|exec)$}
+    set internalUse {^(_.+|AcsSc[.].+|callback::.+|install::.+)$}
+    set prescribed {^((after|before|notifications)-(install|instantiate|uninstall|uninstantiate|upgrade))$}
+    foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
+        if {[string match "* *" $p]} continue
+        ns_log notice "$p"
+        incr count
+        set tail [namespace tail $p]
+        if {[regexp $internalUse $p]} continue
+        set pa [nsv_get api_proc_doc $p]
+        set protection [expr {[dict exists $pa protection] && "public" in [dict get $pa protection]
+                          ? "public" : "private"}]
+
+        if {![regexp $allowedToplevel $p] && ![string match *::* $p]} {
+            if {[dict exists $pa deprecated_p] && [dict get $pa deprecated_p]} {
+                aa_log_result warning "deprecated proc '$p' ($protection) is not in a namespace"
+            } else {
+                aa_log_result fail "proc '$p' ($protection) is not in a namespace"
+            }
+        } elseif {![regexp {^[a-zA-Z_0-9_]+$} $tail]
+                  && ![regexp $prescribed $tail]
+                  && ![regexp {^(before|after)} $tail]
+              } {
+            aa_log_result fail "proc '$p' ($protection): name contains invalid characters"
+        } else {
+            incr good
+        }
+    }
+    aa_log "Found $good good of $count checked"
+}
+
 aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_deprecated_see {
     checks if deprecated procs have an @see clause
 
