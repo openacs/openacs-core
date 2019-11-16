@@ -146,7 +146,7 @@ ns_write "  <p>Done.<p>"
 #############
 
 ns_write "<p>Generating secret tokens..."
-populate_secret_tokens_db
+sec_populate_secret_tokens_db
 ns_write "  <p>Done.<p>"
 
 ##############

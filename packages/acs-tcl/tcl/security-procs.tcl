@@ -1546,7 +1546,7 @@ ad_proc -private sec_get_token {
     if { [info exists $key] } { return [set $key] }
 
     if {[array size ::security::tcl_secret_tokens] == 0} {
-        populate_secret_tokens_thread_cache
+        sec_populate_secret_tokens_thread_cache
         if { [info exists $key] } { return [set $key] }
     }
 
@@ -1579,7 +1579,7 @@ ad_proc -private sec_get_random_cached_token_id {} {
     #set list_of_names [ns_cache names secret_tokens]
     set list_of_names [array names ::security::tcl_secret_tokens]
     if {[llength $list_of_names] == 0} {
-        populate_secret_tokens_thread_cache
+        sec_populate_secret_tokens_thread_cache
         set list_of_names [array names ::security::tcl_secret_tokens]
     }
 
@@ -1587,14 +1587,14 @@ ad_proc -private sec_get_random_cached_token_id {} {
     return [lindex $list_of_names $random_seed]
 }
 
-ad_proc -private populate_secret_tokens_thread_cache {} {
+ad_proc -private sec_populate_secret_tokens_thread_cache {} {
 
     Copy secret_tokens cache to per-thread variables
 
 } {
     set ids [ns_cache names secret_tokens]
     if {[llength $ids] == 0} {
-        populate_secret_tokens_cache
+        sec_populate_secret_tokens_cache
         set ids [ns_cache names secret_tokens]
     }
     foreach name $ids {
@@ -1602,7 +1602,7 @@ ad_proc -private populate_secret_tokens_thread_cache {} {
     }
 }
 
-ad_proc -private populate_secret_tokens_cache {} {
+ad_proc -private sec_populate_secret_tokens_cache {} {
 
     Randomly populates the secret_tokens cache.
 
@@ -1623,7 +1623,7 @@ ad_proc -private populate_secret_tokens_cache {} {
     db_release_unused_handles
 }
 
-ad_proc -private populate_secret_tokens_db {} {
+ad_proc -private sec_populate_secret_tokens_db {} {
 
     Populates the secret_tokens table. Note that this will take a while
     to run.

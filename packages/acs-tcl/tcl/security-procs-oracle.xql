@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="populate_secret_tokens_db.insert_random_token">      
+<fullquery name="sec_populate_secret_tokens_db.insert_random_token">      
       <querytext>
       
 	    insert /*+ APPEND */ into secret_tokens(token_id, token, token_timestamp)
@@ -13,7 +13,7 @@
 </fullquery>
 
  
-<fullquery name="populate_secret_tokens_cache.get_secret_tokens">      
+<fullquery name="sec_populate_secret_tokens_cache.get_secret_tokens">      
       <querytext>
       
 	    select * from (
