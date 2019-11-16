@@ -11,7 +11,7 @@ aa_register_case \
     -procs {ad_proc callback} \
     ad_proc_create_callback {
 
-    Tests the creation of a callback and an implementation with 
+    Tests the creation of a callback and an implementation with
     some forced error cases.
 
 } {
@@ -45,8 +45,8 @@ aa_register_case \
             ad_proc -callback a_callback -impl impl {} { docs } { body }
         } error]
 
-    ad_proc -callback a_callback -impl an_impl {} { 
-        this is a test callback implementation 
+    ad_proc -callback a_callback -impl an_impl {} {
+        this is a test callback implementation
     } {
     }
     set impl_procs [info commands ::callback::a_callback::impl::*]
@@ -94,7 +94,8 @@ ad_proc -callback a_callback -impl fail_impl {} {
         error "should fail"
 }
 
-ad_proc -private EvilCallback {} {
+
+ad_proc -private aa_test_EvilCallback {} {
     This is a test callback implementation that should not be invoked.
 } {
         error "Should not be invoked"
@@ -140,10 +141,10 @@ aa_register_case \
     aa_true "throws error without -catch when an error occurs in a callback" \
         [catch {callback a_callback -arg1 foo bar} error]
 
-    set x [catch {callback -impl an_impl2 a_callback -arg1 foo {[EvilCallback]}} error]
+    set x [catch {callback -impl an_impl2 a_callback -arg1 foo {[aa_test_EvilCallback]}} error]
     aa_false "EvilCallback not invoked returned $error" $x
 
-    set x [catch {callback -impl an_impl2 a_callback -arg1 {[EvilCallback]} bar} error]
+    set x [catch {callback -impl an_impl2 a_callback -arg1 {[aa_test_EvilCallback]} bar} error]
     aa_false "EvilCallback not invoked returned $error" $x
 
 
