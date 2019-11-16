@@ -606,7 +606,7 @@ ad_proc -public acs_mail_lite::email_type {
                         set header $h2
                     }
                     set value [string trim [string range $row $c_idx+1 end]]
-                    # string match from proc safe_eval
+                    # string match from proc ad_safe_eval
                     if { ![string match {*[\[;]*} $value ] } {
                         # 'append' is used instead of 'set' in
                         # the rare case that there's a glitch

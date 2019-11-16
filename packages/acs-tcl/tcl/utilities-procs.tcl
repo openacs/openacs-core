@@ -1305,13 +1305,23 @@ ad_proc -public ad_apply {func arglist} {
     return [uplevel $func_and_args]
 }
 
-ad_proc -public safe_eval args {
-    Version of eval that checks its arguments for brackets
-    that may be used to execute unsafe code.
+ad_proc -public -deprecated safe_eval args {
+    Deprecated version of ad_safe_eval
+    @see ad_safe_eval
+} {
+    return [ad_safe_eval {*}$args]
+}
+
+ad_proc -public ad_safe_eval args {
+    
+    Version of "eval" that checks its arguments for brackets that may be
+    used to execute unsafe code. There are actually better ways in Tcl
+    to achive this, but it is kept for backwards compatibility.
+    
 } {
     foreach arg $args {
         if { [string match {*[\[;]*} $arg] } {
-            return -code error "Unsafe argument to safe_eval: $arg"
+            return -code error "Unsafe argument to ad_safe_eval: $arg"
         }
     }
     return [ad_apply uplevel $args]

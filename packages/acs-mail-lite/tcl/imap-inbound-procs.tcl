@@ -647,7 +647,7 @@ ad_proc -private acs_mail_lite::imap_check_incoming {
                                              -struct_list $struct_list]
 
                             if { !$error_p && [string match {[a-z]*_[a-z]*} $filter_proc] } {
-                                set hdrs_arr(aml_package_ids_list) [safe_eval ${filter_proc}]
+                                set hdrs_arr(aml_package_ids_list) [ad_safe_eval ${filter_proc}]
                             }
                             if { !$error_p } {
 

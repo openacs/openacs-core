@@ -133,7 +133,7 @@ ad_proc -private acs_mail_lite::maildir_check_incoming {
                             -header_array_name hdrs_arr
 
                         if { [string match {[a-z]*_[a-z]*} $filter_proc] } {
-                            set hdrs_arr(aml_package_ids_list) [safe_eval ${filter_proc}]
+                            set hdrs_arr(aml_package_ids_list) [ad_safe_eval ${filter_proc}]
                         }
 
                         set id [acs_mail_lite::inbound_queue_insert \
