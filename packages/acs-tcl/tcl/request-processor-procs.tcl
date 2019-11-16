@@ -1911,7 +1911,7 @@ ad_proc -private rp_lookup_node_from_host { host } {
 
 
 
-ad_proc -public request_denied_filter { why } {
+ad_proc -private rp_request_denied_filter { why } {
     Deny serving the request
 } {
     ad_return_forbidden \
@@ -1925,7 +1925,7 @@ ad_proc -public request_denied_filter { why } {
 
 if {[ns_info name] eq "NaviServer"} {
     # this is written for NaviServer 4.99.1 or newer
-    foreach filter {rp_filter rp_resources_filter request_denied_filter} {
+    foreach filter {rp_filter rp_resources_filter rp_request_denied_filter} {
         set cmd ${filter}_aolserver
         if {[info commands $cmd] ne ""} {rename $cmd ""}
         rename $filter $cmd
