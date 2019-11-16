@@ -209,7 +209,7 @@ ad_proc -private template::util::comment_text_normalize {text} {
     @param text
     @return text
 } {
-    regsub -all {"} $text {\"} text
+    regsub -all \" $text {\"} text
     regsub -all {(\n)\s*#\s*} $text {\1 } text
     regsub {(\A)\s*#\s*} $text {\1 } text
     return $text
