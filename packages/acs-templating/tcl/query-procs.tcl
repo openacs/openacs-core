@@ -99,7 +99,7 @@ ad_proc -public template::query { statement_name result_name type sql args } {
     if { [info exists opts(cache)] } {
 
         # cache the query result
-        set_cached_result
+        template::set_cached_result
     }
 
     #set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
@@ -404,7 +404,7 @@ ad_proc -private template::query::dml { statement_name db name sql } {
 }
 
 
-ad_proc -private get_cached_result { name type } {
+ad_proc -private template::get_cached_result { name type } {
     Looks in the appropriate cache for the named query result
     If a valid result is found, then sets the result in the returning
     stack frame.
@@ -483,7 +483,7 @@ ad_proc -private get_cached_result { name type } {
     return $success
 }
 
-ad_proc -private set_cached_result {} {
+ad_proc -private template::set_cached_result {} {
 
     Places a query result in the appropriate cache.
 
