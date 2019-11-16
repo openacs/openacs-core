@@ -45,7 +45,7 @@ ad_proc -public core_docs_uninstalled_packages {} {
     return [util_memoize ad_core_docs_uninstalled_packages_internal]
 }
 
-ad_proc -public core_docs_html_redirector {args} {
+ad_proc -private ad_core_docs_html_redirector {args} {
 
     Performs internal redirect requests for .html-pages to .adp
     pages if these exist.
