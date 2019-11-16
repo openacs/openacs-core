@@ -722,7 +722,7 @@ ad_proc -public template::resource_path {
     }
 }
 
-ad_proc -public stack_frame_values {level} {
+ad_proc -private template::stack_frame_values {level} {
     return the variables and arrays of one frame as HTML
 } {
 
@@ -761,10 +761,10 @@ ad_proc -public stack_dump {} {
     append page "<h1>Tcl Call Trace</h1>\n<ul>"
 
     for {set x [info level]} {$x > 0} {incr x -1} {
-        append page "<li>$x.  [info level $x]<ul>[stack_frame_values $x]</ul>\n"
+        append page "<li>$x.  [info level $x]<ul>[template::stack_frame_values $x]</ul>\n"
     }
 
-    append page "</ul>\n<h2>Globals</h2>\n<ul> [stack_frame_values 0] </ul>\n"
+    append page "</ul>\n<h2>Globals</h2>\n<ul> [template::stack_frame_values 0] </ul>\n"
 }
 
 # Local variables:
