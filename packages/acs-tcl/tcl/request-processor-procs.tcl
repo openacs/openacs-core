@@ -1855,12 +1855,12 @@ ad_proc root_of_host {host} {
 } {
     set key ::acs::root_of_host($host)
     if {[info exists $key]} {return [set $key]}
-    set $key [root_of_host_noncached $host]
+    set $key [acs::root_of_host_noncached $host]
 }
 
 
 
-ad_proc -private root_of_host_noncached {host} {
+ad_proc -private acs::root_of_host_noncached {host} {
 
     Helper function for root_of_host, which performs the actual work.
 
