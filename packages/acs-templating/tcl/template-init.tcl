@@ -13,12 +13,12 @@
 set pkg_id [apm_package_id_from_key acs-templating]
 
 if { [parameter::get -package_id $pkg_id -parameter ShowCompiledTemplatesP -default 0] } {
-  ad_register_filter postauth GET *.cmp cmp_page_filter
+  ad_register_filter postauth GET *.cmp template::cmp_page_filter
 }
 
 if { [parameter::get -package_id $pkg_id -parameter ShowDataDictionariesP -default 0] } {
-  ad_register_filter postauth GET *.dat dat_page_filter
-  ad_register_filter postauth GET *.frm frm_page_filter
+  ad_register_filter postauth GET *.dat template::dat_page_filter
+  ad_register_filter postauth GET *.frm template::frm_page_filter
 }
 
 # Local variables:

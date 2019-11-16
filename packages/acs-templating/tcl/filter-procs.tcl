@@ -71,7 +71,7 @@ ad_proc -public template::filter { command args } {
 # "/foo"-style URLs would require fixing it, too.   Also ACS 4.2 had these
 # debugging filters enabled by default.  I've turned them off by default.
 
-ad_proc -public cmp_page_filter { why } {
+ad_proc -private template::cmp_page_filter { why } {
     Show the compiled template (for debugging)
 } {
     ad_try {
@@ -95,7 +95,7 @@ ad_proc -public cmp_page_filter { why } {
     return filter_return
 }
 
-ad_proc -public dat_page_filter { why } {
+ad_proc -private template::dat_page_filter { why } {
     Show the comments for the template (for designer)
 } {
     ad_try {
@@ -123,31 +123,27 @@ ad_proc -public dat_page_filter { why } {
 
 # Return the auto-generated template for a form
 
+ad_proc -private template::frm_page_handler { } {
+    Build the form information for the form page filter.   This was
+    originally handled inline but doing so screwed up the query
+    processor.
+} {
+    set url [ns_conn url]
+    regsub {.frm} $url {} url_stub
+    regexp {^/([^/]*)(.*)} $url_stub all package_key rest
+    set __adp_stub "$::acs::rootdir/packages/$package_key/www$rest"
 
-namespace eval template {
+    # Set the parse level
+    lappend ::templating::parse_level [info level]
 
-    ad_proc -private frm_page_handler { } {
-        Build the form information for the form page filter.   This was
-        originally handled inline but doing so screwed up the query
-        processor.
-    } {
-        set url [ns_conn url]
-        regsub {.frm} $url {} url_stub
-        regexp {^/([^/]*)(.*)} $url_stub all package_key rest
-        set __adp_stub "$::acs::rootdir/packages/$package_key/www$rest"
+    # execute the code to prepare the form(s) for a template
+    adp_prepare
 
-        # Set the parse level
-        lappend ::templating::parse_level [info level]
-
-        # execute the code to prepare the form(s) for a template
-        adp_prepare
-
-        # get the form template
-        return [form::template [ns_queryget form_id] [ns_queryget form_style]]
-    }
+    # get the form template
+    return [form::template [ns_queryget form_id] [ns_queryget form_style]]
 }
 
-ad_proc -private frm_page_filter { why } {
+ad_proc -private template::frm_page_filter { why } {
     Return the form data for a request for .frm
 } {
     ad_try {
