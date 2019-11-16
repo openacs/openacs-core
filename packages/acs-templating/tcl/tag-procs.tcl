@@ -15,7 +15,7 @@ ad_library {
 # http://www.fsf.org/copyleft/gpl.html
 
 
-ad_proc -private template_tag_if_condition { chunk params condition_type } {
+ad_proc -private template::template_tag_if_condition { chunk params condition_type } {
 
     set condition "$condition_type \{"
 
@@ -66,7 +66,7 @@ ad_proc -private template_tag_if_condition { chunk params condition_type } {
     template::adp_append_code "\}"
 }
 
-ad_proc -public template_tag_if_concat_params { params } {
+ad_proc -private template::template_tag_if_concat_params { params } {
     append all the tags together and then eval as a list to restore
     quotes
 } {
@@ -94,7 +94,7 @@ ad_proc -public template_tag_if_concat_params { params } {
     return $tokens
 }
 
-ad_proc -private template_tag_subst_reference {arg} {
+ad_proc -private template::template_tag_subst_reference {arg} {
     substitute variable references
     @return variable name
 } {
@@ -107,7 +107,7 @@ ad_proc -private template_tag_subst_reference {arg} {
 }
 
 
-ad_proc -public template_tag_if_interp_expr {} {
+ad_proc -public template::template_tag_if_interp_expr {} {
     Interpret an expression as part of the simplified IF syntax
 } {
 

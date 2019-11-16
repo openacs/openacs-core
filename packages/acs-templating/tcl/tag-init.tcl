@@ -98,7 +98,7 @@ template_tag slave { params } {
 
 }
 
-ad_proc -private template:template_tag_include_helper_code {
+ad_proc -private template::template_tag_include_helper_code {
     -command
     -src
     {-ds_avail_p 0}
@@ -171,7 +171,7 @@ ad_proc -private template:template_tag_include_helper_code {
     return $snippet
 }
 
-ad_proc -private template:template_tag_include_command {src params} {
+ad_proc -private template::template_tag_include_command {src params} {
 } {
     # pass additional arguments as key-value pairs
 
@@ -193,7 +193,7 @@ ad_proc -private template:template_tag_include_command {src params} {
 #
 # Include another template in the current template
 #
-ad_proc -private template:template_tag_include_helper {params} {
+ad_proc -private template::template_tag_include_helper {params} {
 } {
     set src [ns_set iget $params src]
     set ds [ns_set iget $params ds]
@@ -205,10 +205,10 @@ ad_proc -private template:template_tag_include_helper {params} {
         ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
     }
 
-    template::adp_append_code [template:template_tag_include_helper_code \
+    template::adp_append_code [template::template_tag_include_helper_code \
                                    -ds_avail_p [expr {[info commands ::ds_adp_start_box] ne "" }] \
                                    -src $src \
-                                   -command [template:template_tag_include_command $src $params]]
+                                   -command [template::template_tag_include_command $src $params]]
 
     # End developer support frame around subordinate template.
     if { $ds && [info commands ::ds_enabled_p] ne "" && $ds_avail_p } {
@@ -222,7 +222,7 @@ template_tag include { params } {
     # the theme package
     #
     ns_set update $params src [template::themed_template [ns_set iget $params src]]
-    template:template_tag_include_helper $params
+    template::template_tag_include_helper $params
 }
 
 #
@@ -238,7 +238,7 @@ template_tag widget { params } {
     if {[file exists $::acs::rootdir/$adp_stub.adp]} {
         ns_set update $params src $adp_stub
     }
-    template:template_tag_include_helper $params
+    template::template_tag_include_helper $params
 }
 
 
@@ -464,12 +464,12 @@ template_tag grid { chunk params } {
 
 template_tag if { chunk params } {
 
-  template_tag_if_condition $chunk $params if
+    template::template_tag_if_condition $chunk $params if
 }
 
 template_tag elseif { chunk params } {
 
-  template_tag_if_condition $chunk $params elseif
+    template::template_tag_if_condition $chunk $params elseif
 }
 
 
@@ -740,7 +740,7 @@ template_tag include-optional { chunk params } {
       ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
-  set command [template:template_tag_include_command $src $params]
+  set command [template::template_tag_include_command $src $params]
 
   # __adp_include_optional_output is a list that operates like a stack
   # So first we execute the include template, and push the result onto this stack
