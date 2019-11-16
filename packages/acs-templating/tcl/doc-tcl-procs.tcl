@@ -42,7 +42,7 @@ ad_proc -private doc::util::sort_see { element1 element2 } {
     return [string compare -nocase [lindex $element1 1] [lindex $element2 1]]
 }
 
-ad_proc -private doc::sort_@see { list_ref directive_comments } {
+ad_proc -private doc::sort_see { list_ref directive_comments } {
     procedure to deal with @see comments
 } {
     upvar $list_ref see_list
@@ -335,7 +335,7 @@ ad_proc -private doc::parse_comment_text { proc_block } {
             }
 
             see {
-                doc::sort_@see proc_$directive_type $directive_comments
+                doc::sort_see proc_$directive_type $directive_comments
             }
         }
     }
@@ -401,7 +401,7 @@ ad_proc -private doc::parse_namespace { text_lines }  {
             }
 
             see {
-                doc::sort_@see namespace_$directive_type $directive_comments
+                doc::sort_see namespace_$directive_type $directive_comments
                 set has_comments 1
             }
 
@@ -412,15 +412,15 @@ ad_proc -private doc::parse_namespace { text_lines }  {
         }
     }
 
-    # the variable has_comments is set to 1 if it appears
-    # as though descriptive comments were written to describe the namespace --
-    # as would be expected if the namespace were being described
-    # for the first time; otherwise
-    # it is set to 0;  the problem i'm trying to resolve here is multiple uses
-    # of the @namespace directive and determining which occurrence of the
-    # directive is followed by comments
-    # by comments we want to parse into our static files
-
+    #
+    # The variable "has_comments" is set to 1 if it appears as though
+    # descriptive comments were written to describe the namespace --
+    # as would be expected if the namespace were being described for
+    # the first time; otherwise it is set to 0; the problem i'm trying
+    # to resolve here is multiple uses of the @namespace directive and
+    # determining which occurrence of the directive is followed by
+    # comments by comments we want to parse into our static files.
+    #
     # namespace_index tells us where to insert the info, or is -1 if
     # the namespace has already been described
     set namespace_index [template::util::alphabetized_index $namespace_list $namespace_name]
