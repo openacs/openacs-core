@@ -112,7 +112,7 @@ aa_register_case \
         api_describe_function
     } \
     acs_api_browser_api_describe_function {
-        Check api_apropos_functions
+        Check api_describe_function
     } {
         aa_true "Searching for the empty string returns nothing" \
             {[string length [api_describe_function ""]] == 0}
