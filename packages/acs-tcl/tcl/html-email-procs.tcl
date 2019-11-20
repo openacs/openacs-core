@@ -11,7 +11,23 @@ ad_library {
 # switched to using tcllib, its required for OpenACS >= 5.3
 package require mime
 
-ad_proc build_mime_message {
+ad_proc -deprecated build_mime_message args {
+    Composes multipart/alternative email containing plain text
+    and html versions of the message, parses out the headers we need,
+    constructs an array  and returns it to the caller.
+
+    This proc is based on ad_html_sendmail, written by Doug Harris at
+    the World Bank.
+
+    DEPRECATED: this proc does not comply with naming convention
+    enforced by acs-tcl.naming__proc_naming automated test
+
+    @see ad_build_mime_message
+} {
+    return [ad_build_mime_message {*}$args]
+}
+
+ad_proc ad_build_mime_message {
     text_body
     html_body
     {charset "UTF-8"}

@@ -2190,7 +2190,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # adds same unique id to 'message-id' and 'content-id'.
     # example: <17445.1479806245.127@openacs.wu-wien.ac.at.wu-wien.ac.at>
 
-    # Content-ID is added by proc:  build_mime_message
+    # Content-ID is added by proc:  ad_build_mime_message
     # which relies on tcllib mime package
     # in file acs-tcl/tcl/html-email-procs.tcl
     # message-id is built by acs_mail_lite::generate_message_id

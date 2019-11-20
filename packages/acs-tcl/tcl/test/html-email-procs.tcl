@@ -4,12 +4,12 @@ ad_library {
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {build_mime_message} \
-    build_mime_message {
+    -procs {ad_build_mime_message} \
+    ad_build_mime_message {
     Basic test of build mime message
 } {
     aa_false "Build mime message, no error" \
-        [catch {build_mime_message \
+        [catch {ad_build_mime_message \
                     "Test Message" \
                     "<p>Test Message</p>"} errmsg]
     aa_log err=$errmsg

@@ -31,7 +31,7 @@ Sending HTML email is only slightly more complicated.</p><pre class="programlist
     append message_html "   "
     set message_text [ad_html_text_convert -from html -to text $message]
         
-    set message_data [build_mime_message $message_text $message_html]
+    set message_data [ad_build_mime_message $message_text $message_html]
     
     set extra_headers [ns_set new]
 
