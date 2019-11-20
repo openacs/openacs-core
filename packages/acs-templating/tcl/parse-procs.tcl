@@ -215,7 +215,7 @@ ad_proc -private template::adp_set_vars {} {
         set __adp_level [adp_level 2]
         foreach {__adp_key __adp_value} $args {
 
-            set __adp_expr {^@([A-Za-z0-9_]+)\.\*@$}
+            set __adp_expr {^@([[:alnum:]_]+)\.\*@$}
             if { [regexp  $__adp_expr $__adp_value __adp_x __adp_name] } {
 
                 upvar #$__adp_level $__adp_name $__adp_key
@@ -458,13 +458,13 @@ ad_proc -public template::expand_percentage_signs { message } {
             # TODO: ns_quotehtml
             # TODO: lang::util::localize
             regsub -all {[\]\[\{\}\"]\\$} $substitution {\\&} substitution
-            if { [regexp {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $substitution match arr key] } {
+            if { [regexp {^%([[:alnum:]_]+)\.([[:alnum:]_]+)%$} $substitution match arr key] } {
                 # the array key name is substitured by the Tcl parser s
                 regsub -all {[\]\[\{\}\"]\\$} $key {\\&} key
                 set command "set ${arr}(${key})"
                 set substitution [uplevel $command]
             }
-            if { [regexp {^%([a-zA-Z0-9_:]+)%$} $substitution match var] } {
+            if { [regexp {^%([[:alnum:]_:]+)%$} $substitution match var] } {
                 set command "set $var"
                 set substitution [uplevel $command]
             }
@@ -532,7 +532,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     # Since messages may read the variables of the adp page they go through
     # expand_percentage_signs which amongst other things does an uplevel subst
     while {[regsub -all \
-                {([^\\])\#([-a-zA-Z0-9_:]+[.][-a-zA-Z0-9_:]+)\#} \
+                {([^\\])\#([-[:alnum:]_:]+[.][-[:alnum:]_:]+)\#} \
                 $code \
                 {\1[template::expand_percentage_signs [lang::message::lookup $__ad_conn_locale {\2} {TRANSLATION MISSING} {} -1]]} \
                 code]} {}
@@ -578,7 +578,7 @@ ad_proc -public template::adp_array_variable_regexp {} {
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 25 October 2002
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_\.:]+)@}
+    return {(^|[^\\])@([[:alnum:]_:]+)\.([[:alnum:]_\.:]+)@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_noquote {} {
@@ -587,7 +587,7 @@ ad_proc -public template::adp_array_variable_regexp_noquote {} {
     @author Dirk Gomez (openacs@dirkgomez.de)
     @creation-date 12 February 2003
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);noquote@}
+    return {(^|[^\\])@([[:alnum:]_:]+)\.([[:alnum:]_:\.]+);noquote@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_literal {} {
@@ -596,7 +596,7 @@ ad_proc -public template::adp_array_variable_regexp_literal {} {
     @author Gustaf Neumann
     @creation-date December 2012
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);literal@}
+    return {(^|[^\\])@([[:alnum:]_:]+)\.([[:alnum:]_:\.]+);literal@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_noi18n {} {
@@ -605,7 +605,7 @@ ad_proc -public template::adp_array_variable_regexp_noi18n {} {
     @author Gustaf Neumann
     @creation-date June 2015
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);noi18n@}
+    return {(^|[^\\])@([[:alnum:]_:]+)\.([[:alnum:]_:\.]+);noi18n@}
 }
 
 ad_proc -public template::adp_variable_regexp {} {
@@ -617,7 +617,7 @@ ad_proc -public template::adp_variable_regexp {} {
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 25 October 2002
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)@}
+    return {(^|[^\\])@([[:alnum:]_:]+)@}
 }
 
 ad_proc -public template::adp_variable_regexp_noquote {} {
@@ -626,7 +626,7 @@ ad_proc -public template::adp_variable_regexp_noquote {} {
     @author Dirk Gomez (openacs@dirkgomez.de)
     @creation-date 12 February 2003
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+);noquote@}
+    return {(^|[^\\])@([[:alnum:]_:]+);noquote@}
 }
 
 ad_proc -public template::adp_variable_regexp_literal {} {
@@ -635,7 +635,7 @@ ad_proc -public template::adp_variable_regexp_literal {} {
     @author Gustaf Neumann
     @creation-date Dezember 2012
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+);literal@}
+    return {(^|[^\\])@([[:alnum:]_:]+);literal@}
 }
 
 ad_proc -public template::adp_variable_regexp_noi18n {} {
@@ -644,7 +644,7 @@ ad_proc -public template::adp_variable_regexp_noi18n {} {
     @author Gustaf Neumann
     @creation-date June 2015
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+);noi18n@}
+    return {(^|[^\\])@([[:alnum:]_:]+);noi18n@}
 }
 
 # NaviServer requires for disambiguation of flags and values at the
