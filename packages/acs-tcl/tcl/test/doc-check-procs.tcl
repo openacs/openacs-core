@@ -40,6 +40,7 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
 } {
     set count 0
     set good 0
+    set allowedChars {^[a-zA-Z_0-9_]+$}
     set allowedToplevel {^(_|(ad|acs|aa|adp|api|apm|chat|db|doc|ds|dt|cr|export|fs|general_comments|lc|news|ns|package|pkg_info|relation|rp|rss|sec|server_cluster|content_search|util|xml)_.+|callback|exec)$}
     set internalUse {^(_.+|AcsSc[.].+|callback::.+|install::.+)$}
     set prescribed {^((after|before|notifications)-(install|instantiate|uninstall|uninstantiate|upgrade))$}
@@ -48,6 +49,7 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
         ns_log notice "$p"
         incr count
         set tail [namespace tail $p]
+        set qualifiers [regsub -all "::" [namespace qualifiers $p] "__"]
         if {[regexp $internalUse $p]} continue
         set pa [nsv_get api_proc_doc $p]
         set protection [expr {[dict exists $pa protection] && "public" in [dict get $pa protection]
@@ -59,11 +61,13 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
             } else {
                 aa_log_result fail "proc '$p' ($protection) is not in a namespace"
             }
-        } elseif {![regexp {^[a-zA-Z_0-9_]+$} $tail]
+        } elseif { (![regexp $allowedChars $tail]
+                        || $qualifiers ne ""
+                        && ![regexp $allowedChars $qualifiers])
                   && ![regexp $prescribed $tail]
                   && ![regexp {^(before|after)} $tail]
               } {
-            aa_log_result fail "proc '$p' ($protection): name contains invalid characters"
+            aa_log_result fail "proc '$p' ($protection): name/namespace contains invalid characters"
         } else {
             incr good
         }
