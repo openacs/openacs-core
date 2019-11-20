@@ -1691,7 +1691,7 @@ ad_proc -private template::list::prepare_filters {
             }
             switch -- $filter_properties(type) {
                 singleval {
-                    set selected_p [exists_and_equal current_filter_value $value]
+                    set selected_p [expr {[info exists current_filter_value] && $current_filter_value eq $value}]
                 }
                 multival {
                     if { ![info exists current_filter_value] || $current_filter_value eq "" } {
@@ -1716,7 +1716,7 @@ ad_proc -private template::list::prepare_filters {
                     foreach elm $value {
                         foreach { elm_key elm_value } [lrange $elm 0 1] {}
                         if {$elm_key eq $filter_properties(name)} {
-                            set selected_p [exists_and_equal current_filter_value $elm_value]
+                            set selected_p [expr {[info exists current_filter_value] && $current_filter_value eq $elm_value}]
                         }
                     }
                 }

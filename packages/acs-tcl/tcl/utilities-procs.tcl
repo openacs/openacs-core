@@ -1203,11 +1203,15 @@ ad_proc -public exists_and_not_null { varname } {
 }
 
 
-ad_proc -public exists_and_equal { varname value } {
+ad_proc -deprecated exists_and_equal { varname value } {
     Returns 1 if the variable name exists in the caller's environment
     and is equal to the given value.
 
+    DEPRECATED: the value provided by this proc is arguable, as it can
+    be replaced by a plain tcl oneliner.
+
     @see exists_and_not_null
+    @see plain tcl idioms
 
     @author Peter Marklund
 } {
