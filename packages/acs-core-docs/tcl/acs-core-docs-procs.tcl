@@ -34,7 +34,22 @@ ad_proc -private ad_core_docs_uninstalled_packages_internal {} {
 
 }
 
-ad_proc -public core_docs_uninstalled_packages {} {
+ad_proc -deprecated core_docs_uninstalled_packages {} {
+    Returns a list (in array set format) of package.key package-name
+    (used for display on the index.adp page).
+
+    Cached version of ad_core_docs_uninstalled_packages_internal
+
+    DEPRECATED: this proc does not comply with naming convention
+    enforced by acs-tcl.naming__proc_naming automated test
+
+    @see ad_core_docs_uninstalled_packages
+    @author Jeff Davis davis@xarg.net
+} {
+    return [ad_core_docs_uninstalled_packages]
+}
+
+ad_proc -public ad_core_docs_uninstalled_packages {} {
     Returns a list (in array set format) of package.key package-name
     (used for display on the index.adp page).
 
