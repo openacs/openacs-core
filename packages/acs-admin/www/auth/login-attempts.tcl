@@ -21,7 +21,7 @@ set parameter_url [export_vars -base /shared/parameters { { package_id $auth_pac
 ::template::multirow create login_attempts attempt_key attempts locked_until flush_url
 
 foreach { attempt_key seconds attempts } [::auth::login_attempts::get_all] {
-    ::template::multirow append login_attempts $attempt_key $attempts [clock_to_ansi $seconds] [export_vars -base "login-attempts-reset" {attempt_key}]
+    ::template::multirow append login_attempts $attempt_key $attempts [lc_clock_to_ansi $seconds] [export_vars -base "login-attempts-reset" {attempt_key}]
 }
 
 

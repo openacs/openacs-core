@@ -198,7 +198,23 @@ ad_proc -public lc_numeric {
     return [lc_sepfmt $out $grouping $sep]
 }
 
-ad_proc -public clock_to_ansi {
+ad_proc -deprecated clock_to_ansi {
+    seconds
+} {
+    Convert a time in the Tcl internal clock seconds format to ANSI format, usable by lc_time_fmt.
+
+    DEPRECATED: this proc does not comply with naming convention
+    enforced by acs-tcl.naming__proc_naming automated test
+
+    @author Lars Pind (lars@pinds.com)
+    @return ANSI (YYYY-MM-DD HH24:MI:SS) formatted date.
+    @see lc_time_fmt
+    @see lc_clock_to_ansi
+} {
+    return [lc_clock_to_ansi $seconds]
+}
+
+ad_proc -public lc_clock_to_ansi {
     seconds
 } {
     Convert a time in the Tcl internal clock seconds format to ANSI format, usable by lc_time_fmt.
