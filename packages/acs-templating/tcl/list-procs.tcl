@@ -547,10 +547,10 @@ ad_proc -public template::list::prepare {
         -ulevel [expr {$ulevel + 1}]
 
     # Make group_by information available to templates
-    if { [exists_and_not_null list_properties(filter,groupby)] } {
+    if { [info exists list_properties(filter,groupby)] && $list_properties(filter,groupby) ne "" } {
         set list_properties(groupby) $list_properties(filter,groupby)
     }
-    if { [exists_and_not_null list_properties(filter_label,groupby)] } {
+    if { [info exists list_properties(filter_label,groupby)] && $list_properties(filter_label,groupby) ne "" } {
         set list_properties(groupby_label) $list_properties(filter_label,groupby)
     }
 
@@ -1239,7 +1239,7 @@ ad_proc -private template::list::prepare_for_rendering {
 
             # display_eval, link_url_eval
             foreach __eval_property { display link_url } {
-                if { [exists_and_not_null element_properties(${__eval_property}_eval)] } {
+                if { [info exists element_properties(${__eval_property}_eval)] && $element_properties(${__eval_property}_eval) ne "" } {
 
                     # Set the display col to the name of the new, dynamic column
                     set element_properties(${__eval_property}_col) "$element_properties(name)___$__eval_property"
@@ -1285,7 +1285,7 @@ ad_proc -private template::list::prepare_for_rendering {
 
                 # display_eval, link_url_eval
                 foreach __eval_property { display link_url } {
-                    if { [exists_and_not_null __element_properties(${__eval_property}_eval)] } {
+                    if { [info exists element_properties(${__eval_property}_eval)] && $element_properties(${__eval_property}_eval) ne "" } {
                         set $__element_properties(${__eval_property}_col) [subst $__element_properties(${__eval_property}_eval)]
                     }
                 }

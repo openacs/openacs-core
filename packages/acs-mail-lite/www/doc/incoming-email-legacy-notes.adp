@@ -241,7 +241,7 @@ To make things granular a separate parsing procedure should deal with loading th
 
     template::util::list_of_lists_to_array $email(bodies) email_body
 
-    if {[exists_and_not_null email_body(text/html)]} {
+    if {[info exists email_body(text/html)] && $email_body(text/html) ne ""} {
 
     set body $email_body(text/html)
 
@@ -426,7 +426,7 @@ To make things granular a separate parsing procedure should deal with loading th
     # make the bodies an array
     template::util::list_of_lists_to_array $email(bodies) email_body
     
-    if {[exists_and_not_null email_body(text/html)]} {
+    if {[info exists email_body(text/html)] && $email_body(text/html) ne ""} {
     set body $email_body(text/html)
     } else {
     set body $email_body(text/plain)

@@ -1191,12 +1191,17 @@ ad_proc -public util_report_successful_library_load {
     ns_log Notice $message
 }
 
-ad_proc -public exists_and_not_null { varname } {
+ad_proc -deprecated exists_and_not_null { varname } {
     Returns 1 if the variable name exists in the caller's environment and
     is not the empty string.
 
     Note you should enter the variable name, and not the variable value
     (varname not $varname which will pass variable varnames value into this function).
+
+    DEPRECATED: the value provided by this proc is arguable, as it can
+    be replaced by a plain tcl oneliner.
+
+    @see plain tcl idioms
 } {
     upvar 1 $varname var
     return [expr { [info exists var] && $var ne "" }]

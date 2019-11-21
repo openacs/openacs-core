@@ -27,13 +27,13 @@
 				lro.lr_object_id
 			from 
 				lr_objects_developers_view lro        
-				[expr {[exists_and_not_null cs]?" ,lr_concept__all_objects lrc":""}]
+				[expr {[info exists cs] && $cs ne "" ? " ,lr_concept__all_objects lrc" : ""}]
 			where
 				lro.community_id = :c
 				and lro.restype = :restype
 				and lro.is_active = :is_active
-				[expr {[exists_and_not_null q]?"and (lower(lro.lr_title) like '%' || :q || '%' or lower(lro.shortname) like '%' || :q || '%')":"" }]
-				[expr {[exists_and_not_null cs]?" and lrc.lr_object_id  = lro.lr_object_id and lrc.lr_concept_id = :cs":""}]
+				[expr {[info exists q] && $q ne "" ? "and (lower(lro.lr_title) like '%' || :q || '%' or lower(lro.shortname) like '%' || :q || '%')":"" }]
+				[expr {[info exists cs] && $cs ne "" ? " and lrc.lr_object_id  = lro.lr_object_id and lrc.lr_concept_id = :cs":""}]
 			 	[template::list::filter_where_clauses -and -name "resource_list"]
 			 	order by lro.lr_title
     </querytext>
