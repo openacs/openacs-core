@@ -196,7 +196,7 @@ particular object you call
  </para>
 
 <programlisting>
-# sql code
+# SQL code
     acs_permission.grant_permission (
       object_id => some_object_id,
       grantee_id => some_party_id,

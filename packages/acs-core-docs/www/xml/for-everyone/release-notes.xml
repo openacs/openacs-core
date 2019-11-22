@@ -182,7 +182,7 @@ END OF TEMPLATE -->
 	      </itemizedlist>
 	    </para></listitem>
 	    <listitem><para>
-	      Marked redundant / uncalled sql functions as deprecated
+	      Marked redundant / uncalled SQL functions as deprecated
 	    </para></listitem>
 	    <listitem><para>
 	      Replaced usages of obsolete view
@@ -206,7 +206,7 @@ END OF TEMPLATE -->
 	      </itemizedlist>
 	    </para></listitem>
 	    <listitem><para>
-	      Simplified core sql functions by using defaults:
+	      Simplified core SQL functions by using defaults:
 	      <itemizedlist>
 		<listitem><para>
 		  Number of functions reduced by a factor of 2 compared to OpenACS
@@ -1158,7 +1158,7 @@ END OF TEMPLATE -->
 	      
 	      <listitem><para> Removed bug where same query-name was
 	      used in different branches of an if-statement for
-	      different sql statements, but the query-name lead to the
+	      different SQL statements, but the query-name lead to the
 	      wrong result.
 	      </para></listitem>
 
@@ -1242,8 +1242,7 @@ END OF TEMPLATE -->
 
 	    <listitem><para>
 	      Improved them-ability for display_templates. One can now
-	      provide a display_template_name (similar to the sql
-	      statement name) to refer to display templates. This
+	      provide a display_template_name (similar to the SQL statement name) to refer to display templates. This
 	      enables reusability and is theme-able.
 	    </para></listitem>
 
@@ -1563,7 +1562,7 @@ END OF TEMPLATE -->
       <listitem>
         <para>
           Made changes that extend acs-kernel&#39;s create_type and create_attribute procs,
-          so they&#39;re optionally able to create sql tables and columns.  Optional metadata
+          so they&#39;re optionally able to create SQL tables and columns.  Optional metadata
           params allow for the automatic generation of foreign key references, check
           exprs, etc.
         </para>

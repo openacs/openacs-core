@@ -878,7 +878,7 @@ cvs tag -F openacs-5-1-compat
     <para>First step is to create the notification types. To do this a script similar 
     to the one below needs to be loaded into Postgresql. I create this script in a 
     package-name/sql/postgresql/package-name-notifications-init.sql file. I then load 
-    this file from my create sql file. The following code snippet is taken from 
+    this file from my create SQL file. The following code snippet is taken from 
     Weblogger. It creates a lars_blogger_notif notification type (which was created 
     above).</para>
 
@@ -1569,8 +1569,7 @@ ad_page_contract {
     <para>If your package changes its data model, you have to write an
     upgrade script. This is very easy in OpenACS. </para>
     
-    <para>First, you want to make sure you change the original .sql
-    file so that new installation will have the new data model.</para>
+    <para>First, you want to make sure you change the original .sql file so that new installation will have the new data model.</para>
 
     <para>Next, check what version your package is currently at. For
     example, it may be at version 1.0b1. Create a file in

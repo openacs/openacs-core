@@ -70,7 +70,7 @@ set admin_user_url [acs_community_member_admin_url -user_id $user_id]
 set email_image "<p><b>\#acs-subsite.E_mail\#:</b>&nbsp;[email_image::get_user_email -user_id $user_id]</p>"
 
 #
-# "url" is obtained from the sql query above, together with
+# "url" is obtained from the SQL query above, together with
 # "first_names" etc.
 #
 if { $url ne ""

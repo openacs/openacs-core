@@ -152,7 +152,7 @@ switch -- $file_type {
         set file_type_filter [subst {
 	    <b>Show adp files</b>: $text_only_filter |
 	    <a href="[ns_quotehtml $href1]">Show Tcl files</a> |
-	    <a href="[ns_quotehtml $href2]">Show sql files</a>
+	    <a href="[ns_quotehtml $href2]">Show SQL files</a>
 	}]
     }
     tcl {
@@ -161,7 +161,7 @@ switch -- $file_type {
         set file_type_filter [subst {
 	    <a href="[ns_quotehtml $href1]">Show adp files</a> |
 	    <b>Show Tcl files</b> |
-	    <a href="[ns_quotehtml $href2]">Show sql files</a>
+	    <a href="[ns_quotehtml $href2]">Show SQL files</a>
 	}]
     }
     sql {
@@ -171,7 +171,7 @@ switch -- $file_type {
         set file_type_filter [subst {
 	    <a href="[ns_quotehtml $href1]">Show adp files</a> |
 	    <a href="[ns_quotehtml $href2]">Show Tcl files</a> |
-	    <b>Show sql files</b>
+	    <b>Show SQL files</b>
 	}]
     }
 }

@@ -177,7 +177,7 @@ namespace eval attribute {
         @author Michael Bryzek (mbryzek@arsdigita.com)
         @creation-date 12/2000
 
-        @param default If specified, we add a default clause to the sql statement
+        @param default If specified, we add a default clause to the SQL statement
 
     } {
         set type ""

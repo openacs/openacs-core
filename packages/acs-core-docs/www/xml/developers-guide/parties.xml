@@ -244,7 +244,7 @@ member of a household (indirect membership) at a video rental store.
 <programlisting>
 
 <computeroutput>
-# sql code
+# SQL code
 create or replace package membership_rel
 as
 
@@ -303,7 +303,7 @@ would result in a circular reference.</para>
 <programlisting>
 
 <computeroutput>
-# sql code
+# SQL code
 create or replace package composition_rel
 as
 
