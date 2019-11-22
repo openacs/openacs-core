@@ -1325,7 +1325,7 @@ ad_proc -public ad_safe_eval args {
     
     Version of "eval" that checks its arguments for brackets that may be
     used to execute unsafe code. There are actually better ways in Tcl
-    to achive this, but it is kept for backwards compatibility.
+    to achieve this, but it is kept for backwards compatibility.
     
 } {
     foreach arg $args {
@@ -1817,8 +1817,8 @@ ad_proc -public util_driver_info {
             set d [list proto https port [ns_config -int $section ServerPort] address [ns_config $section address]]
         }
         default {
-            ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
-            set d [list proto http port [ns_config -int $section Port]]
+            #ns_log notice "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
+            set d [list proto http port [ns_config -int $section Port] address [ns_config $section address]]
         }
     }
     lappend d hostname [ns_config $section hostname]
