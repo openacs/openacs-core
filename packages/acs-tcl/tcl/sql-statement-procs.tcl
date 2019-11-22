@@ -7,7 +7,7 @@ ad_library {
     How to use this:
 
     You simply call ad_sql_append any number of times, then ad_sql_get to feed to the database.
-    What you gain from using these two procs is that the parts of the sql statement will
+    What you gain from using these two procs is that the parts of the SQL statement will
     always be output in the right sequence.
 
 
@@ -27,7 +27,7 @@ ad_proc -public ad_sql_get {
 } {
     @param sqlarrayname array reference
 
-    @return a sql statement constructed from the pieces provided via ad_sql_append
+    @return a SQL statement constructed from the pieces provided via ad_sql_append
 
     @see ad_sql_append
 } {

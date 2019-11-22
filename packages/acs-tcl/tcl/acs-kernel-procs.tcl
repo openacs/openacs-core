@@ -44,7 +44,7 @@ ad_proc -private ad_acs_require_basic_schemata {} {
         foreach file $files {
             set fn $kernelSqlDir/$file
             if {[file readable $fn]} {
-                ns_log notice "bootstrap: upgrading sql file $fn"
+                ns_log notice "bootstrap: upgrading SQL file $fn"
                 db_source_sql_file -callback apm_dummy_callback $fn
             }
         }

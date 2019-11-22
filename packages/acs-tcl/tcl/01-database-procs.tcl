@@ -933,7 +933,7 @@ ad_proc -public db_exec_plsql {
     </pre>
 
     <p>
-    You can call several pl/sql statements at once, like this:
+    You can call several pl/SQL statements at once, like this:
 
     <p>
     <pre>
@@ -1542,7 +1542,7 @@ ad_proc -public db_list_of_ns_sets {
     Usage: <b>db_list_of_ns_sets</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
     @return a list of ns_sets with the values of each column of each row
-    returned by the sql query specified.
+    returned by the SQL query specified.
 
     @param statement_name The name of the query.
     @param sql The SQL to be executed.

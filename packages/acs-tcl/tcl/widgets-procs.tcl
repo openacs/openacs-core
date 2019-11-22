@@ -227,7 +227,7 @@ ad_proc ad_db_select_widget {
     sql_qry
     name
 } {
-    given a sql query this generates a select group.  If there is only
+    given a SQL query this generates a select group.  If there is only
     one value it returns the text and a hidden variable setting that value.
     The first selected column should contain the optionlist items. The
     second selected column should contain the optionlist values.
