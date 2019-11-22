@@ -411,7 +411,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     If provided with a WYSIWYG editor different than 'xinha' or 'tinymce',
     system will just collect formfield ids and supplied options for the
     richtext field and will provide them as-is to the blank-master environment.
-    When using a custom editor, funcional meaning of the options is totally up
+    When using a custom editor, functional meaning of the options is totally up
     to the user.
 
     <p>
