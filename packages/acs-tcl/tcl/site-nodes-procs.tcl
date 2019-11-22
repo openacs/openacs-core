@@ -133,14 +133,18 @@ ad_proc -public site_node::new {
     return $node_id
 }
 
-ad_proc -public site_node::unmount_services {
+ad_proc -public site_node::delete_service_nodes  {
     {-node_id:required}
 } {
-    unmount all shared packages under this site_node
+    Unmount and delete all (shared) service packages under this
+    site_node.
+
+    @param node_id starting node_id
 } {
-    set sub_node_ids [site_node::get_children \
-                          -node_id $node_id]
-    foreach sub_node_id $sub_node_ids {
+    set sub_node_urls [site_node::get_children \
+                           -node_id $node_id]
+    foreach sub_node_url $sub_node_urls{
+        set sub_node_id [site_node::get_element -url $sub_node_url -element node_id]
         set package_id [site_node::get_object_id -node_id $sub_node_id]
         if {$package_id ne ""
             && [db_0or1row is_apm_service {
@@ -148,6 +152,7 @@ ad_proc -public site_node::unmount_services {
                 where service_id = :package_id
             }]} {
             site_node::unmount -node_id $sub_node_id
+            site_node::delete -node_id $sub_node_id
         }
     }
 }
@@ -627,14 +632,14 @@ ad_proc -public site_node::exists_p {
 } {
     Returns 1 if a site node exists at the given url and 0 otherwise.
     The provided URL has to start with a slash.
-    
+
     @param url URL path starting with a slash.
     @author Peter Marklund
 } {
 
     ns_log notice "OLD nsv-based site_node::exists_p <$url>"
-            
-    
+
+
     set url_no_trailing [string trimright $url "/"]
     return [nsv_exists site_nodes "$url_no_trailing/"]
 }

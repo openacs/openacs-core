@@ -35,10 +35,20 @@ db_transaction {
     }
 
     if { $node_id ne "" } {
+        #
         # The package is mounted, unmount it and delete it together
-        # with the site node
+        # with the site node.
+        #
         site_node::unmount -node_id $node_id
-        site_node::unmount_services -node_id $node_id
+        #
+        # Since we do not want to delete the potentially shared
+        # service packages, delete just the service nodes but not the
+        # packages behind it.
+        #
+        site_node::delete_service_nodes -node_id $node_id
+        #
+        # Finally, delete the site-nodes and the packages under it.
+        #
         site_node::delete -node_id $node_id \
             -delete_subnodes -delete_package
     } else {
