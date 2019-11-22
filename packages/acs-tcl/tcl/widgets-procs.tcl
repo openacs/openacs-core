@@ -29,13 +29,24 @@ ad_proc us_state_widget {
     return $widget_value
 }
 
-ad_proc country_widget {
+ad_proc -deprecated country_widget {
     {default ""}
     {select_name "country_code"}
     {size_subtag "size='4'"}
 } {
     Returns a country selection box.
     This widget depends on the ref-countries package.
+
+    DEPRECATED for various reasons: doesn't comply with OpenACS naming
+    convention, difficult to sytle, no good separation of tcl and
+    HTML, 'size_subtag' is just implemented code injection and
+    furthermore, default value might depend on a parameter designed
+    just for "american readers". A better alternative would be
+    e.g. implementing this using the templating system.
+
+    @see template::widget::select
+    @see template::widget::multiselect
+    @see template::multirow
 } {
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default eq "" } {
