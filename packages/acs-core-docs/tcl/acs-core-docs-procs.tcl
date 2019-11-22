@@ -31,7 +31,6 @@ ad_proc -private ad_core_docs_uninstalled_packages_internal {} {
         lappend out {*}$pkg
     }
     return  $out
-
 }
 
 ad_proc -deprecated core_docs_uninstalled_packages {} {
