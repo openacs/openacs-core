@@ -38,6 +38,7 @@ db_transaction {
         # The package is mounted, unmount it and delete it together
         # with the site node
         site_node::unmount -node_id $node_id
+        site_node::unmount_services -node_id $node_id
         site_node::delete -node_id $node_id \
             -delete_subnodes -delete_package
     } else {

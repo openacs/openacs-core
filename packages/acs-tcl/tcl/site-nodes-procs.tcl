@@ -133,6 +133,25 @@ ad_proc -public site_node::new {
     return $node_id
 }
 
+ad_proc -public site_node::unmount_services {
+    {-node_id:required}
+} {
+    unmount all shared packages under this site_node
+} {
+    set sub_node_ids [site_node::get_children \
+                          -node_id $node_id]
+    foreach sub_node_id $sub_node_ids {
+        set package_id [site_node::get_object_id -node_id $sub_node_id]
+        if {$package_id ne ""
+            && [db_0or1row is_apm_service {
+                select 1 from apm_services where
+                where service_id = :package_id
+            }]} {
+            site_node::unmount -node_id $sub_node_id
+        }
+    }
+}
+
 ad_proc -public site_node::delete {
     {-node_id:required}
     -delete_subnodes:boolean
