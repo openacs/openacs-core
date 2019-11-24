@@ -69,7 +69,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     # There are some problems with this approach:
     #
     # 1. The "AvailablePool" parameter specifies the pools to be used by the ACS. 
-    #    The default pool needn't be listed as an available pool, therefore in a
+    #    The default pool needn't be listed as an available pool, therefore, in a
     #    mixed db environment the check strategy described above might not actually
     #    be checking any pool designated for ACS use.
     #
