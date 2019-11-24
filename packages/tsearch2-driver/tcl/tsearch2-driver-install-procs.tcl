@@ -50,7 +50,7 @@ ad_proc -public tsearch2_driver::install::preinstall_checks {
                 break
             }
         }
-        # Check if we've found it, run the sql file
+        # Check if we've found it, run the SQL file
         if { [info exists sql_file_loc] && $sql_file_loc ne "" } {
             # we found tsearch2.sql let's run it
             db_source_sql_file $sql_file_loc
