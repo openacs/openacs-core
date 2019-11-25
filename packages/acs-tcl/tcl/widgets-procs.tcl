@@ -120,7 +120,17 @@ proc month_value_list {} {
     return {1 2 3 4 5 6 7 8 9 10 11 12}
 }
 
-ad_proc future_years_list {
+ad_proc -deprecated future_years_list args {
+    Returns a list containing the next num_year years in the future.
+
+    DEPRECATED: use the version complying with naming convention
+
+    @see ad_future_years_list
+} {
+    return [ad_future_years_list {*}$args]
+}
+
+ad_proc ad_future_years_list {
     {num_year 10}
 } {
     Returns a list containing the next num_year years in the future.
