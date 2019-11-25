@@ -81,10 +81,9 @@ if {$::tcl_version >= 8.6} {
             # the debug message.
             #
             lappend extraTraps \
-                trap {AD EXCEPTION ad_script_abort} {result} [subst {
-                    ns_log notice {ad_script_abort of <[list $body]> return value <\$result>}
-                    ::throw {AD EXCEPTION ad_script_abort} \$result
-                }]
+                trap {AD EXCEPTION ad_script_abort} {result} {
+                    ::throw {AD EXCEPTION ad_script_abort} $result
+                }
         }
         #
         # Call the Tcl 8.6 built-in/compliant ::try in the scope of the caller
@@ -131,10 +130,9 @@ if {$::tcl_version >= 8.6} {
             # the debug message.
             #
             lappend extraTraps \
-                trap {AD EXCEPTION ad_script_abort} {result} [subst {
-                    ns_log notice {ad_script_abort of <[list $body]> return value <\$result>}
-                    ::throw {AD EXCEPTION ad_script_abort} \$result
-                }]
+                trap {AD EXCEPTION ad_script_abort} {result} {
+                    ::throw {AD EXCEPTION ad_script_abort} $result
+                }
         }
         #
         # Call the Tcl 8.6 built-in/compliant ::try in the scope of the caller
