@@ -17,13 +17,16 @@ ad_library {
 namespace eval template {}
 namespace eval template::element {}
 
-ad_proc -public element { command form_id element_id args } {
+ad_proc -deprecated element { command form_id element_id args } {
     element is really template::element although when in the
     "template" namespace you may omit the template:: qualifier.
     See the template::form API for creating the form element container.
 
+    DEPRECATED: please use the properly namespaced api
+
     @see template::element
     @see template::form
+    @see template::element
 } -
 
 ad_proc -public template::element { command form_id element_id args } {
