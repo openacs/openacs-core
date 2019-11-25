@@ -148,7 +148,7 @@ ad_proc -public site_node::delete_service_nodes  {
         set package_id [site_node::get_object_id -node_id $sub_node_id]
         if {$package_id ne ""
             && [db_0or1row is_apm_service {
-                select 1 from apm_services where
+                select 1 from apm_services
                 where service_id = :package_id
             }]} {
             site_node::unmount -node_id $sub_node_id
