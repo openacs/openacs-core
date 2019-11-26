@@ -1285,7 +1285,7 @@ ad_proc -private template::list::prepare_for_rendering {
 
                 # display_eval, link_url_eval
                 foreach __eval_property { display link_url } {
-                    if { [info exists element_properties(${__eval_property}_eval)] && $element_properties(${__eval_property}_eval) ne "" } {
+                    if { [info exists __element_properties(${__eval_property}_eval)] && $__element_properties(${__eval_property}_eval) ne "" } {
                         set $__element_properties(${__eval_property}_col) [subst $__element_properties(${__eval_property}_eval)]
                     }
                 }
