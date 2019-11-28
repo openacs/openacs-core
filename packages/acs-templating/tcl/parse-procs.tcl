@@ -513,7 +513,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     if {[regexp {[0-9]+%>} $chunk match]} {
         ns_log warning "ambiguous '$match'; write Tcl escapes with a space like\
       <% set x 50 %> and HTML tags with proper quoting, like <hr width=\"50%\">\
-      when compiling ADP source: template::adp_compile $source_type {$source}"
+      when compiling ADP source: [list template::adp_compile -file $file -string $string]"
     }
 
     # recursively parse the template
