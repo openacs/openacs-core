@@ -437,7 +437,7 @@ ad_proc -public install::xml::action::set-permission { node } {
 
 ad_proc -public install::xml::action::unset-permission { node } {
     Revokes a permissions on an object - has no effect if the permission is not granted directly
-    (ie does not act as negative permissions).
+    (i.e. does not act as negative permissions).
 
     <p>&lt;unset-permissions grantee=&quot;<em>party</em>&quot; privilege=&quot;<em>package-key</em> /&gt;</p>
 } {

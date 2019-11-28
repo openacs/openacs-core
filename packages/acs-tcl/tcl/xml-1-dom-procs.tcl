@@ -44,7 +44,7 @@ namespace eval dom {
 # for a node type.
 #
 # "Live" data objects are stored as a separate Tcl variable.
-# Lists, such as child node lists, are Tcl list variables (ie scalar)
+# Lists, such as child node lists, are Tcl list variables (i.e. scalar)
 # and keyed-value lists, such as attribute lists, are Tcl array
 # variables.  The accessor function returns the variable name,
 # which the application should treat as a read-only object.
