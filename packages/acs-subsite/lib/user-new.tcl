@@ -189,9 +189,15 @@ ad_form -extend -name register -on_request {
         # as well.
         #
         security::set_client_property_password $password
-        ad_returnredirect [export_vars -base $next_url {
-            user_id {account_message $creation_info(account_message)}
-        }]
+        if {$::acs::pass_password_as_query_variable} {
+            ad_returnredirect [export_vars -base $next_url {
+                user_id password {account_message $creation_info(account_message)}
+            }]
+        } else {
+            ad_returnredirect [export_vars -base $next_url {
+                user_id {account_message $creation_info(account_message)}
+            }]
+        }
         ad_script_abort
     }
 

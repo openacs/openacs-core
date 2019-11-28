@@ -1837,6 +1837,15 @@ ad_proc -public ad_set_client_property {
     util_memoize_seed [list sec_lookup_property $session_id $module $name] [list $value $secure]
 }
 
+
+#
+# Provide a global variable for devopers to activate/deactivate
+# client_property_password in case a site has good reasons not to
+# using the client property (e.g. site specific code). This is meant
+# to be transitional code.
+#
+set ::acs::pass_password_as_query_variable 0
+
 ad_proc -public security::set_client_property_password {password} {
     
     Convenience function for remembering user password as client property
@@ -1846,6 +1855,7 @@ ad_proc -public security::set_client_property_password {password} {
 } {
     ad_set_client_property -persistent f acs-admin user-password $password
 }
+
 ad_proc -public security::get_client_property_password {password} {
     
     Convenience function for retrieving user password from client property
