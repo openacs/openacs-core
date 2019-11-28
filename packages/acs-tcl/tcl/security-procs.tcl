@@ -1837,7 +1837,24 @@ ad_proc -public ad_set_client_property {
     util_memoize_seed [list sec_lookup_property $session_id $module $name] [list $value $secure]
 }
 
+ad_proc -public security::set_client_property_password {password} {
+    
+    Convenience function for remembering user password as client property
+    rather than passing it as query parameter.
 
+    @see security::get_client_property_password   
+} {
+    ad_set_client_property -persistent f acs-admin user-password $password
+}
+ad_proc -public security::get_client_property_password {password} {
+    
+    Convenience function for retrieving user password from client property
+
+    @see security::set_client_property_password
+    
+} {
+    return [ad_get_client_property acs-admin user-password]
+}
 
 #####
 #
