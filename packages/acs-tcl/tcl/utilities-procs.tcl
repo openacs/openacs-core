@@ -2781,10 +2781,15 @@ ad_proc -public util_url_valid_p { query_url } {
     return [regexp -nocase {^(http|https|ftp)://[^ ].+} [string trim $query_url]]
 }
 
-ad_proc -public value_if_exists { var_name } {
+ad_proc -deprecated value_if_exists { var_name } {
     If the specified variable exists in the calling environment,
     returns the value of that variable. Otherwise, returns the
     empty_string.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention
+    and can be replaced with a plain tcl oneliner.
+
+    @see plain tcl idioms
 } {
     upvar $var_name $var_name
     if { [info exists $var_name] } {

@@ -550,7 +550,7 @@ In
 			# extend the form to support categories
 			set package_id [ad_conn package_id]
 			    
-    			category::ad_form::add_widgets -form_name note -container_object_id $package_id -categorized_object_id [value_if_exists item_id]
+    			category::ad_form::add_widgets -form_name note -container_object_id $package_id -categorized_object_id [expr {[info exists item_id] ? $item_id : ""}]
 
     			ad_form -extend -name note -on_submit {
         			set category_ids [category::ad_form::get_categories -container_object_id $package_id]
