@@ -4,31 +4,6 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc us_state_widget {
-    {default ""}
-    {select_name "usps_abbrev"}
-} {
-    Returns a state selection box.
-    This widget depends on the ref-us-states package.
-} {
-    set widget_value "<select name=\"$select_name\">\n"
-    if { $default eq "" } {
-        append widget_value "<option value=\"\" selected=\"selected\">Choose a State</option>\n"
-    }
-
-    db_foreach all_states {
-        select state_name, abbrev from states order by state_name
-    } {
-        if { $default == $abbrev } {
-            append widget_value "<option value=\"$abbrev\" selected=\"selected\">$state_name</option>\n"
-        } else {
-            append widget_value "<option value=\"$abbrev\">$state_name</option>\n"
-        }
-    }
-    append widget_value "</select>\n"
-    return $widget_value
-}
-
 ad_proc -deprecated country_widget {
     {default ""}
     {select_name "country_code"}
