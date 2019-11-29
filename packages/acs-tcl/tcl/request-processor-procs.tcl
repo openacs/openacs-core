@@ -567,9 +567,9 @@ ad_proc -private rp_filter { why } {
     # -------------------------------------------------------------------------
     # 1. determine the root of the host and the requested URL
     ad_try {
-        set root [root_of_host [ad_host]]
+        set root [acs::root_of_host [ad_host]]
     } on error {errorMsg} {
-        ad_log warning "rp_filter: root_of_host returned error: $errorMsg"
+        ad_log warning "rp_filter: acs::root_of_host returned error: $errorMsg"
         ad_page_contract_handle_datasource_error "Host header is invalid"
         return filter_return
     }
@@ -1848,7 +1848,20 @@ ad_proc ad_port {} {
 
 namespace eval ::acs {}
 
-ad_proc root_of_host {host} {
+ad_proc -deprecated root_of_host {host} {
+
+    Maps a hostname to the corresponding sub-directory.
+
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention.
+
+    @see acs::root_of_host
+
+} {
+    return [acs::root_of_host $host]
+}
+
+ad_proc acs::root_of_host {host} {
 
     Maps a hostname to the corresponding sub-directory.
 
@@ -1859,10 +1872,9 @@ ad_proc root_of_host {host} {
 }
 
 
-
 ad_proc -private acs::root_of_host_noncached {host} {
 
-    Helper function for root_of_host, which performs the actual work.
+    Helper function for acs::root_of_host, which performs the actual work.
 
 } {
     #
