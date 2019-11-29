@@ -401,11 +401,20 @@ ad_proc -public remove_nulls_from_ns_set {
     return $new_set_id
 }
 
-ad_proc -public merge_form_with_query {
+ad_proc -deprecated merge_form_with_query {
     {-bind {}}
     form statement_name sql_qry
 } {
     Merges a form with a query string.
+
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention. Furthermore, ns_formvalueput supports a limited number
+    of HTML variants and input tag types and is subject to various
+    other limitations. For a modern implementation addressing the
+    use-case of this proc one should probably use tools such as tDOM.
+
+    @see tDOM
+    @see https://panoptic.com/wiki/aolserver/Ns_formvalueput
 
     @param form the form to be stuffed.
     @param statement_name An identifier for the sql_qry to be executed.
