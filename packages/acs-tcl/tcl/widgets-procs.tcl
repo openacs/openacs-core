@@ -73,25 +73,43 @@ ad_proc ad_generic_optionlist {
     return $return_string
 }
 
-# use ad_integer_optionlist instead of day_list
-proc day_list {} {
+ad_proc -deprecated day_list {} {
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention and does not provide much value. One can e.g. use
+    'clock' based idioms to compute the number of days that are in a
+    specific month.
+
+    @see clock
+} {
     return  {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31}
 }
 
-ad_proc month_list {} {
+ad_proc -deprecated month_list {} {
     Returns list of month abbreviations
+
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention and is not localized. 'clock' based idioms can provide
+    a localized list of months and/or message keys can be used.
 } {
     return  {Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
 }
 
-ad_proc long_month_list {} {
+ad_proc -deprecated long_month_list {} {
     Returns list of months
+
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention and is not localized. 'clock' based idioms can provide
+    a localized list of months and/or message keys can be used.
 } {
     return  {January February March April May June July August September October November December}
 }
 
-# use ad_integer_optionlist instead of month_value_list
-proc month_value_list {} {
+ad_proc -deprecated month_value_list {} {
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention and does not provide much value.
+
+    @see clock
+} {
     return {1 2 3 4 5 6 7 8 9 10 11 12}
 }
 
