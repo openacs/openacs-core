@@ -933,8 +933,12 @@ aa_register_case \
     aa_equals "0 0.89 -0.89 -1" [util::max 0 0.89 -0.89 -1] {0.89}
     aa_equals "3 1000 0 -3 -2000" [util::min 3 1000 0 -3 -2000] {-2000}
     aa_equals "3 1000 0 -3 -2000" [util::max 3 1000 0 -3 -2000] {1000}
-    aa_equals "1 2 z a b 6" [util::max 1 2 z a b 6] z
-    aa_equals "1 2 z a b 6" [util::min 1 2 z a b 6] 1
+    aa_log "List with numeric and non-numeric entries"
+    aa_equals "1 2 z a boy 6" [util::max 1 2 z a boy 6] z
+    aa_equals "1 2 z a boy 6" [util::min 1 2 z a boy 6] 1
+    aa_log "List with some weird entries"
+    aa_equals "1 -0.4 -0,4 -1000 2 @ z a b 6" [util::max 1 -0.4 -0,4 -1000 2 @ z a b 6] z
+    aa_equals "1 -0.4 -0,4 -1000 2 @ z a b 6" [util::min 1 -0.4 -0,4 -1000 2 @ z a b 6] -0,4
 }
 
 aa_register_case \
