@@ -81,7 +81,7 @@ aa_register_case \
             }] {
 
                 lassign $tuple parameter_name package_key default_value parameter_id
-                set value [random]
+                set value [util::random]
                 if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
 
                     set package_id [apm_package_id_from_key $package_key]

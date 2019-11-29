@@ -765,7 +765,7 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         util::randomize_list
-        randomRange
+        util::random_range
     } \
     util__randomize_list {
         Test util::randomize_list
@@ -780,7 +780,7 @@ aa_register_case \
     set randomized_list [util::randomize_list $org_list]
     aa_true "Ten-element list: $randomized_list" [util_sets_equal_p $org_list $randomized_list]
 
-    set len [randomRange 200]
+    set len [util::random_range 200]
     set org_list [list]
     for { set i 0 } { $i < $len } { incr i } {
         lappend org_list [ad_generate_random_string]

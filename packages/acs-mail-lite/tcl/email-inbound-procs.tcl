@@ -1899,7 +1899,7 @@ ad_proc -private acs_mail_lite::unique_id_create {
             # It will be 10 for a while..
             # so use eleven 9's
             # Some cycles are saved by using a constant
-            append uid_partial "." [randomRange 99999999999]
+            append uid_partial "." [util::random_range 99999999999]
             append uid_partial "." [lindex $uid_list 2]
 
             set uid $uid_partial

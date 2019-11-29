@@ -22,14 +22,14 @@ aa_register_case \
 
         set package_list [db_list get_packages "select package_key from apm_package_types"]
         aa_log "List of packages: \{$package_list\}"
-        set list_index [randomRange [expr {[llength $package_list] - 1}]]
+        set list_index [util::random_range [expr {[llength $package_list] - 1}]]
         set package_key [lrange $package_list $list_index $list_index]
 
         set parameter_name [ad_generate_random_string]
         set description [ad_generate_random_string]
 
         set values { {number} {string} }
-        set index [randomRange 1]
+        set index [util::random_range 1]
 
         #
         # Choose randomly string or number parameter.  Also choose
@@ -64,7 +64,7 @@ aa_register_case \
         set package_list [db_list get_packages "select package_key from apm_package_types"]
         aa_log "List of packages: \{$package_list\}"
 
-        set list_index [randomRange [expr {[llength $package_list] - 1}]]
+        set list_index [util::random_range [expr {[llength $package_list] - 1}]]
         set package_key [lrange $package_list $list_index $list_index]
         set instance_name "$package_key-[ad_generate_random_string]"
 

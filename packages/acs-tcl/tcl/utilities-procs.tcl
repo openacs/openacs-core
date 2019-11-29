@@ -433,10 +433,16 @@ ad_proc -public merge_form_with_query {
 
 
 
-ad_proc util_PrettyTclBoolean {
+ad_proc -deprecated util_PrettyTclBoolean {
     zero_or_one
 } {
     Turns a 1 (or anything else that makes a Tcl IF happy) into Yes; anything else into No
+
+    DEPRECATED: this proc is not localized, does not comply with
+    OpenACS naming convention and can be replaced by simple oneliner
+    idioms based e.g. on expr command
+
+    @see plain tcl idioms involving message keys
 } {
     if {$zero_or_one} {
         return "Yes"
@@ -445,8 +451,18 @@ ad_proc util_PrettyTclBoolean {
     }
 }
 
-ad_proc -public randomInit {seed} {
+ad_proc -deprecated randomInit {seed} {
     seed the random number generator.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention
+
+    @see util::random_init
+} {
+    return [util::random_init $seed]
+}
+
+ad_proc -public util::random_init {seed} {
+    Seed the random number generator.
 } {
     nsv_set rand ia 9301
     nsv_set rand ic 49297
@@ -454,21 +470,46 @@ ad_proc -public randomInit {seed} {
     nsv_set rand seed $seed
 }
 
-
-ad_proc -public random {} {
+ad_proc -deprecated random {} {
     Return a pseudo-random number between 0 and 1.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention
+
+    @see util::random
+} {
+    return [util::random]
+}
+
+ad_proc -public util::random {} {
+    Return a pseudo-random number between 0 and 1. The reason to have
+    this proc is that seeding can be controlled by the user and the
+    generation is independent from tcl.
+
+    @see util::random_init
 } {
     nsv_set rand seed [expr {([nsv_get rand seed] * [nsv_get rand ia] + [nsv_get rand ic]) % [nsv_get rand im]}]
     return [expr {[nsv_get rand seed]/double([nsv_get rand im])}]
 }
 
-ad_proc -public randomRange {range} {
+ad_proc -deprecated randomRange {range} {
+    Returns a pseudo-random number between 0 and range.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention
+
+    @see util::random_range
+
+    @return integer
+} {
+    return [util::random_range $range]
+}
+
+ad_proc -public util::random_range {range} {
     Returns a pseudo-random number between 0 and range.
 
     @return integer
 } {
     incr range
-    return [expr {int([random] * $range) % $range}]
+    return [expr {int([util::random] * $range) % $range}]
 }
 
 ad_proc -public db_html_select_options {
@@ -3430,7 +3471,7 @@ ad_proc -public util::randomize_list {
     set len [llength $list]
     set result [list]
     while { [llength $list] > 0 } {
-        set index [randomRange [expr {[llength $list] - 1}]]
+        set index [util::random_range [expr {[llength $list] - 1}]]
         lappend result [lindex $list $index]
         set list [lreplace $list $index $index]
     }

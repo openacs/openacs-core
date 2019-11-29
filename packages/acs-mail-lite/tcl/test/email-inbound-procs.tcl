@@ -52,19 +52,19 @@ aa_register_case \
                 set param "-"
                 append param $p
                 if { $p in $bools_list } {
-                    set val_idx [randomRange 5]
+                    set val_idx [util::random_range 5]
                     set val [lindex $bools_v_list $val_idx]
                 } elseif { $p in $integer_list } {
-                    set val [randomRange 32767]
+                    set val [util::random_range 32767]
                 } elseif { $p in $ints_list } {
                     set nums_list [list]
-                    set up_to_10 [randomRange 10]
+                    set up_to_10 [util::random_range 10]
                     for {set i 0} {$i < $up_to_10 } {incr i} {
-                        lappend nums_list [randomRange 32767]
+                        lappend nums_list [util::random_range 32767]
                     }
                     set val [join $nums_list " "]
                 } elseif { $p in $lists_list } {
-                    set val_idx [randomRange 2]
+                    set val_idx [util::random_range 2]
                     set val [lindex $nv_list_list $val_idx]
                 }
                 aa_log "r41. Testing change of parameter '${p}' from \
@@ -136,7 +136,7 @@ aa_register_case \
             set lh_list [list l h]
             set subject [ad_generate_random_string]
             set su_glob "*"
-            append su_glob [string range $subject [randomRange 8] end]
+            append su_glob [string range $subject [util::random_range 8] end]
 
            # priority_types are in order of least significant first.
            set p_type_i 0
@@ -152,7 +152,7 @@ aa_register_case \
                 }
 
                 # set new case of parameters
-                set r [randomRange 10000]
+                set r [util::random_range 10000]
                 set p_min [expr { $r + 999 } ]
                 set p_max [expr { $p_min * 1000 + $r } ]
                 set su_max $p_max
@@ -248,10 +248,10 @@ aa_register_case \
                 aa_log "r161 given: t0 '${t0}' dur_s '${dur_s}'"
                 aa_log "r161b given: s0 '${s0}' su_max '${su_max}'"
 
-                set t1 [expr { int( $t0 - $dur_s * 1.9 * [random]) } ]
-                set t2 [expr { int( $t0 - $dur_s * 1.9 * [random]) } ]
-                set s1 [expr { int( $s0 * 0.9 * [random]) } ]
-                set s2 [expr { int( $s0 * 0.9 * [random]) } ]
+                set t1 [expr { int( $t0 - $dur_s * 1.9 * [util::random]) } ]
+                set t2 [expr { int( $t0 - $dur_s * 1.9 * [util::random]) } ]
+                set s1 [expr { int( $s0 * 0.9 * [util::random]) } ]
+                set s2 [expr { int( $s0 * 0.9 * [util::random]) } ]
                 aa_log "r167 priorities: t1 '${t1}' t2 '${t2}' s1 '${s1}' s2 '${s2}'"
                 if { $t1 < $t2 } {
                     set t $t1
@@ -407,7 +407,7 @@ aa_register_case \
                aa_log "Following three tests 'pass' when no imap sessions open."
                aa_false "ref367. acs_mail_lite::imap_conn_close -conn_id 'all'" $conn_id
 
-               set conn_id [randomRange 1000]
+               set conn_id [util::random_range 1000]
                if { [catch {set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]} errmsg] } {
                    set t3 1
                }
@@ -538,16 +538,16 @@ aa_register_case \
                             x-autorespond ]
            for {set ii 1} {$ii <= $i} {incr ii } {
                # send garbage to try to confuse proc
-               set t [randomRange 4]
+               set t [util::random_range 4]
                set h ""
                # Some examples already have header types that limit
                # test type.
                if { $type_arr(${ii}) eq "auto_gen" && $t > 2 } {
-                   set t [randomRange 2]
+                   set t [util::random_range 2]
                }
 
                if { $type_arr(${ii}) eq "in_reply_to" && $t > 1 } {
-                   set t [randomRange 1]
+                   set t [util::random_range 1]
                }
                set type_test [lindex $t_olist $t]
 
@@ -565,16 +565,16 @@ aa_register_case \
                }
                if { $t < 2 } {
                    # add auto_reply headers
-                   switch [randomRange 2] {
+                   switch [util::random_range 2] {
                        0 {
-                           append h [lindex $ar_list [randomRange 5]]
+                           append h [lindex $ar_list [util::random_range 5]]
                            append h " : " [ad_generate_random_string]
                        }
                        1 {
                            append h "action : delivered"
                        }
                        2 {
-                           set h2 [lindex $s_list [randomRange 3]]
+                           set h2 [lindex $s_list [util::random_range 3]]
                            append h "action : " $h2 "\n"
                            append h "status : thisis a test"
                        }
@@ -583,22 +583,22 @@ aa_register_case \
                }
                if { $t < 1 } {
                    # add bounce headers
-                   if { [randomRange 1] } {
+                   if { [util::random_range 1] } {
                        # test original-recipient (diverted, reply)
                        append h "original-recipient : "
                        append h [ad_system_owner] "\n"
                    } else {
                        # test delivery status notification
                        append h action
-                       append h " : " [lindex $s_list [randomRange 3]]
+                       append h " : " [lindex $s_list [util::random_range 3]]
                        append h "\n" status " : "
-                       append h [expr { 99 + [randomRange 900] } ] " "
-                       append h [ad_generate_random_string [randomRange 9]]
+                       append h [expr { 99 + [util::random_range 900] } ] " "
+                       append h [ad_generate_random_string [util::random_range 9]]
                        append h "\n"
                    }
                }
                # maybe mess up capitalization
-               set c [randomRange 3]
+               set c [util::random_range 3]
                switch -exact -- $c {
                    0 {
                        set h [string tolower $h]
@@ -650,14 +650,14 @@ aa_register_case \
                $sect_id1 ""
 
 
-           set section [randomRange 100]
+           set section [util::random_range 100]
            set sect_id1 [acs_mail_lite::section_id_of $section]
            set sect_id2 [acs_mail_lite::section_id_of $section]
            aa_equals "r605 test case section '${section}'" \
                $sect_id2 $sect_id1
            set sect_arr(${sect_id1}) $section
            for {set i 0} {$i < 6} {incr i} {
-               append section "." [randomRange 100]
+               append section "." [util::random_range 100]
                set sect_id1 [acs_mail_lite::section_id_of $section]
                set sect_id2 [acs_mail_lite::section_id_of $section]
                aa_equals "r606 test case section '${section}'" \
@@ -701,13 +701,13 @@ aa_register_case \
            set object_ct [llength $object_id_list]
            for {set i 0} {$i < 12} {incr i } {
                set package_id [lindex $package_id_list \
-                                   [randomRange $package_ct]]
+                                   [util::random_range $package_ct]]
                set party_id [lindex $party_id_list \
-                                 [randomRange $party_ct]]
+                                 [util::random_range $party_ct]]
                set object_id [lindex $object_id_list \
-                                  [randomRange $object_ct]]
+                                  [util::random_range $object_ct]]
                set other [ad_generate_random_string]
-               set blank_id [randomRange 3]
+               set blank_id [util::random_range 3]
                set blank_field [lindex $fields_list $blank_id]
                set $blank_field ""
                # if package_id = aml_package_id, it still is signed here
