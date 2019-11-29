@@ -913,26 +913,28 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
-        min
-        max
+        util::min
+        util::max
     } \
     min_max {
 
-        Test min and max procs
+        Test util::min and util::max procs
 
         @creation-date 2018-09-18
         @author Héctor Romojaro <hector.romojaro@gmail.com>
 } {
-    aa_equals "Empty value" [min {}] {}
-    aa_equals "Empty value" [max {}] {}
-    aa_equals "1" [min 1] {1}
-    aa_equals "1" [max 1] {1}
-    aa_equals "1 0 -1" [min 1 0 -2] {-2}
-    aa_equals "1 0 -1" [max 1 0 -2] {1}
-    aa_equals "0 0.89 -0.89 -1" [min 0 0.89 -0.89 -1] {-1}
-    aa_equals "0 0.89 -0.89 -1" [max 0 0.89 -0.89 -1] {0.89}
-    aa_equals "3 1000 0 -3 -2000" [min 3 1000 0 -3 -2000] {-2000}
-    aa_equals "3 1000 0 -3 -2000" [max 3 1000 0 -3 -2000] {1000}
+    aa_equals "Empty value" [util::min {}] {}
+    aa_equals "Empty value" [util::max {}] {}
+    aa_equals "1" [util::min 1] {1}
+    aa_equals "1" [util::max 1] {1}
+    aa_equals "1 0 -1" [util::min 1 0 -2] {-2}
+    aa_equals "1 0 -1" [util::max 1 0 -2] {1}
+    aa_equals "0 0.89 -0.89 -1" [util::min 0 0.89 -0.89 -1] {-1}
+    aa_equals "0 0.89 -0.89 -1" [util::max 0 0.89 -0.89 -1] {0.89}
+    aa_equals "3 1000 0 -3 -2000" [util::min 3 1000 0 -3 -2000] {-2000}
+    aa_equals "3 1000 0 -3 -2000" [util::max 3 1000 0 -3 -2000] {1000}
+    aa_equals "1 2 z a b 6" [util::max 1 2 z a b 6] z
+    aa_equals "1 2 z a b 6" [util::min 1 2 z a b 6] 1
 }
 
 aa_register_case \

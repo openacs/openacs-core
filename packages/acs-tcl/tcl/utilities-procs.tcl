@@ -2792,8 +2792,41 @@ ad_proc -public value_if_exists { var_name } {
     }
 }
 
-ad_proc -public min { args } {
+ad_proc -deprecated min { args } {
     Returns the minimum of a list of numbers. Example: <code>min 2 3 1.5</code> returns 1.5.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention.
+    @see util::min
+
+    @author Ken Mayer (kmayer@bitwrangler.com)
+    @creation-date 26 September 2002
+} {
+    return [util::min $args]
+}
+
+
+ad_proc -deprecated max { args } {
+    Returns the maximum of a list of numbers. Example: <code>max 2 3 1.5</code> returns 3.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention.
+    @see util::max
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date 31 August 2000
+} {
+    return [util::max $args]
+}
+
+ad_proc -public util::min { args } {
+    Returns the minimum of a list of numbers. Example: <code>min 2 3 1.5</code> returns 1.5.
+
+    Since Tcl8.5, numerical min and max are among the math functions
+    supported by expr. The reason why this proc is still around is
+    that it supports also non-numerical values in the list, in a way
+    that is not so easily replaceable by a lsort idiom (but could).
+
+    @see expr
+    @see lsort
 
     @author Ken Mayer (kmayer@bitwrangler.com)
     @creation-date 26 September 2002
@@ -2808,8 +2841,16 @@ ad_proc -public min { args } {
 }
 
 
-ad_proc -public max { args } {
+ad_proc -public util::max { args } {
     Returns the maximum of a list of numbers. Example: <code>max 2 3 1.5</code> returns 3.
+
+    Since Tcl8.5, numerical min and max are among the math functions
+    supported by expr. The reason why this proc is still around is
+    that it supports also non-numerical values in the list, in a way
+    that is not so easily replaceable by a lsort idiom (but could).
+
+    @see expr
+    @see lsort
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 31 August 2000
