@@ -87,7 +87,7 @@ if { $default_locale ne $current_locale } {
 }
 
 ad_form -extend -name message_form -form {
-    {message:text(textarea)
+    {message:text(textarea),optional
         {label "$locale_label Message"}
         {html { rows 6 cols 40 } }
     }
@@ -127,7 +127,7 @@ ad_form -extend -name message_form -form {
         and    cu.user_id = lm.creation_user
     }]
 
-    if { [info exists message] && $message ne "" } {
+    if { [info exists message] } {
         set message $message
     } else {
         set message $original_message
