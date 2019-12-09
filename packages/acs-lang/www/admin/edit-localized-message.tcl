@@ -44,6 +44,7 @@ set context [list [list [export_vars -base package-list { locale }] $locale_labe
 set create_p [string equal $current_locale $default_locale]
 
 set description_edit_url [export_vars -base edit-description { locale package_key message_key show }]
+set default_locale_edit_url [export_vars -base edit-localized-message { {locale $default_locale} package_key message_key return_url }]
 
 set usage_hide_url [export_vars -base [ad_conn url] { locale package_key message_key show return_url }]
 set usage_show_url [export_vars -base [ad_conn url] { locale package_key message_key show {usage_p 1} return_url }]
@@ -82,6 +83,7 @@ if { $default_locale ne $current_locale } {
     ad_form -extend -name message_form -form {
         {original_message:text(inform)
             {label "$default_locale_label Message"}
+            {after_html {(<a href="[ns_quotehtml $default_locale_edit_url]">Edit</a>)}}
         }
     }
 }
