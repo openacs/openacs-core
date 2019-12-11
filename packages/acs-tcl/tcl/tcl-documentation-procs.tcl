@@ -1199,7 +1199,7 @@ ad_proc -public ad_page_contract {
                 ad_try {
                     set html [ad_parse_template \
                                   -params [list complaints [list context $::ad_page_contract_context] \
-                                               [list prev_url [get_referrer]] \
+                                               [list prev_url [util::get_referrer]] \
                                               ] [template::themed_template "/packages/acs-tcl/lib/complain"]]
                 } on error {errorMsg} {
                     set errorCode $::errorCode
@@ -2280,7 +2280,7 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
     ns_return 422 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
                                               [list exception_text $exception_text] \
-                                              [list prev_url  [get_referrer]] \
+                                              [list prev_url  [util::get_referrer]] \
                                              ]  $complaint_template]
 }
 

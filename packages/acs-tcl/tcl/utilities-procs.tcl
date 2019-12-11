@@ -334,7 +334,17 @@ ad_proc -deprecated DoubleApos {string} {
 
 # debugging kludges
 
-ad_proc -public NsSettoTclString {set_id} {
+ad_proc -deprecated NsSettoTclString {set_id} {
+    returns a plain text version of the passed ns_set id
+
+    @see util::ns_set_to_tcl_string
+
+    DEPRECATED: does not comply with OpenACS naming convention
+} {
+    return [util::ns_set_to_tcl_string $set_id]
+}
+
+ad_proc -public util::ns_set_to_tcl_string {set_id} {
     returns a plain text version of the passed ns_set id
 } {
     set result ""
@@ -344,7 +354,20 @@ ad_proc -public NsSettoTclString {set_id} {
     return $result
 }
 
-ad_proc -public get_referrer {-relative:boolean} {
+ad_proc -deprecated get_referrer args {
+    @return referrer from the request headers.
+    @param relative return the refer without protocol and host
+
+    DEPRECATED: does not comply with OpenACS naming convention.
+
+    @see util::get_referrer
+} {
+    return [util::get_referrer {*}$args]
+}
+
+ad_proc -public util::get_referrer {
+    -relative:boolean
+} {
     @return referrer from the request headers.
     @param relative return the refer without protocol and host
 } {
@@ -355,6 +378,7 @@ ad_proc -public get_referrer {-relative:boolean} {
     }
     return $url
 }
+
 
 ##
 #  Database-related code

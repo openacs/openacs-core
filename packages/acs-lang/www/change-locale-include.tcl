@@ -5,7 +5,7 @@ ad_include_contract {
     @author Christian Hvid
     @author Guenter Ernst (guenter.ernst@wu.ac.at)
 } {
-    {return_url:localurl "[get_referrer -relative]"}
+    {return_url:localurl "[util::get_referrer -relative]"}
     {package_id:naturalnum "[ad_conn package_id]"}
 }
 
