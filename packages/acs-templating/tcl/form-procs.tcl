@@ -18,10 +18,13 @@ ad_library {
 namespace eval template {}
 namespace eval template::form {}
 
-ad_proc -public form {command args} {
+ad_proc -deprecated form {command args} {
     form is really template::form although when in
     the "template" namespace you may omit the
     template::
+
+    DEPRECATED: no, you should not omit the namespace, and this proc
+    does not comply with OpenACS naming convention.
 
     @see template::form
     @see template::element
