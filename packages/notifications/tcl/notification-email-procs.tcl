@@ -320,7 +320,7 @@ namespace eval notification::email {
                 continue
             }
 
-            set body [parse_incoming_email $orig_file]
+            set body [ad_parse_incoming_email $orig_file]
 
 
 

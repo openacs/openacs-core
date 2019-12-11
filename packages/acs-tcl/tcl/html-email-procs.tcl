@@ -102,8 +102,27 @@ ad_proc ad_build_mime_message {
     return $message_data
 }
 
+ad_proc -deprecated parse_incoming_email {
+    message
+} {
+    Takes an incoming message and splits it into parts.  The main goal
+    of this proc is to return something that can be stuffed into the
+    database somewhere, such as a forum message.  Since we aggressively
+    filter HTML, the HTML tags are stripped out of the returned content.
 
-ad_proc parse_incoming_email {
+    The message may have only plain text, plain text and HTML, or plain
+    text and something else (Apple Mail uses text/enhanced, for example).
+    To make our lives simpler we support only text/html as a special case;
+    in all other cases the plain text is returned.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see ad_parse_incoming_email
+} {
+    return [ad_parse_incoming_email $message]
+}
+
+ad_proc -public ad_parse_incoming_email {
     message
 } {
     Takes an incoming message and splits it into parts.  The main goal
