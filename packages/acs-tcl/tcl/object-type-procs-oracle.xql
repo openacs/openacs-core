@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
-   <rdbms><type>oracle</type><version>8.1.6</version></rdbms>                                                                             
-<partialquery name="acs_object_type_hierarchy.object_type_not_null">      
+   <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
+<partialquery name="acs_object_type_hierarchy.object_type_not_null">
       <querytext>
 
 	select object_type,
@@ -14,8 +14,8 @@
 
       </querytext>
 </partialquery>
- 
-<partialquery name="acs_object_type_hierarchy.object_type_is_null">      
+
+<partialquery name="acs_object_type_hierarchy.object_type_is_null">
       <querytext>
 
 	select object_type,
@@ -28,7 +28,7 @@
       </querytext>
 </partialquery>
 
-<fullquery name="acs_object_type::supertype.supertypes">      
+<fullquery name="acs_object_type::supertype.supertypes">
       <querytext>
           select object_type
             from acs_object_types
