@@ -556,7 +556,7 @@ ad_proc -private template::query::flush_cache { cache_match } {
 }
 
 
-ad_proc -public multirow {
+ad_proc -deprecated multirow {
     {-ulevel 1}
     {-local:boolean}
     -unclobber:boolean
@@ -570,6 +570,8 @@ ad_proc -public multirow {
     may be omitted depending on what the namespace
     is.  .tcl pages are evaluated in the template::
     namespace.
+
+    DEPRECATED: namespace should actually NOT be omitted
 
     @see template::multirow
     @see template::query::multirow
