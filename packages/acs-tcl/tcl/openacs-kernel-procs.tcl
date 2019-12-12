@@ -1,4 +1,3 @@
-
 ad_library {
     A library of additional OpenACS utilities
 
@@ -48,6 +47,11 @@ ad_proc -public oacs_util::process_objects_csv {
             if {$n_fields == -1} {
                 break
             }
+
+            # ignore empty lines
+            if {$n_fields == 0} {
+                continue
+            } 
 
             # Process the row
             set extra_vars [ns_set create]

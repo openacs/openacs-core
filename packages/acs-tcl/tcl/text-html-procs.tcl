@@ -14,6 +14,56 @@ ad_library {
 #
 ####################
 
+ad_proc -private ad_text_cite_to_blockquote {text} {
+    
+    Convert freestanding paragraphs with lines starting with a ">" into
+    blockquotes.
+    
+} {
+    if {[string range $text 0 0 ] eq " "} {
+        set result " "
+        set text [string range $text 1 end]
+    } else {
+        set result ""        
+    }
+    #
+    # Via "doBlockquotes" we could start blockquote substitution only
+    # when a new paragraph starts; deactivated for now, can start
+    # everywhere.
+    #
+    set doBlockquotes 1 
+    set inBlockquotes 0
+
+    foreach line [split $text \n] {
+        #ns_log notice "$inBlockquotes <[expr {[string range $line 0 0] eq ">"}]>: '$line'"
+        if {$inBlockquotes} {
+            if {[string range $line 0 0] eq ">"} {
+                append blockquoted [string range $line 1 end] \n
+            } else {
+                append result "<blockquote>$blockquoted</blockquote>\n"
+                set blockquoted ""
+                set inBlockquotes 0
+                #set doBlockquotes 1
+                append result $line \n
+            }
+        } elseif {[string trim $line] eq ""} {
+            #set doBlockquotes 1
+            append result $line \n
+        } elseif {$doBlockquotes && [string range $line 0 0] eq ">"} {
+            set blockquoted  [string range $line 1 end]\n
+	    set inBlockquotes 1
+        } else {
+            #set doBlockquotes 0
+            append result $line \n
+        }
+    }
+    if {$inBlockquotes} {
+	append result "<blockquote>$blockquoted</blockquote>\n"
+    }
+
+    return $result
+}
+
 ad_proc -public ad_text_to_html {
     -no_links:boolean
     -no_lines:boolean
@@ -122,10 +172,15 @@ ad_proc -public ad_text_to_html {
         set text [string map $map $text]
     }
 
+    # Convert lines starting with a ">" into blockquotes.
+    set text [ad_text_cite_to_blockquote $text]
+    
     # Convert line breaks
     if { !$no_lines_p } {
         set text [util_convert_line_breaks_to_html -includes_html=$includes_html_p -- $text]
-        # the function strips all leading white space
+        #
+        # The function strips all leading white space!
+        #
         set space_added 0
     }
 
@@ -238,7 +293,7 @@ ad_proc -public util_convert_line_breaks_to_html {
     {-includes_html:boolean}
     text
 } {
-    Convert line breaks to <p> and <br> tags, respectively.
+    Convert line breaks to &lt;p&gt; and &lt;br&gt; tags, respectively.
 } {
     # Remove any leading or trailing whitespace
     regsub {^[\s]+} $text {} text
@@ -381,7 +436,8 @@ ad_proc -private util_close_html_tags {
             dom parse -html <body>$frag doc
         } on error {errorMsg} {
             # we got an error, so do Tcl based html completion processing
-            ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom\n$frag"
+            #ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom\n$frag"
+            ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom"            
         } on ok {r} {
             $doc documentElement root
             set html ""
@@ -1033,7 +1089,7 @@ ad_proc ad_parse_html_attributes_upvar {
     # Original purpose of this proc was to introduce a better way to
     # enforce some HTML policies on the content submitted by the uses
     # (e.g. forbid some tag/attribute like <script> etc). It has some
-    # limitations that make non-trivial its introduction, therefore is
+    # limitations that make non-trivial its introduction, therefore, is
     # currently not used around.
     ad_proc -public ad_dom_sanitize_html {
         -html:required
