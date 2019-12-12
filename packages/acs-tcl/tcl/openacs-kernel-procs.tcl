@@ -15,7 +15,7 @@ ad_proc -public oacs_util::process_objects_csv {
     {-override_headers {}}
     {-constants ""}
 } {
-    This processes a CSV of objects, taking the csv and calling package_instantiate_object 
+    This processes a CSV of objects, taking the csv and calling package_instantiate_object
     for each one.
 
     @return a list of the created object_ids
@@ -51,7 +51,7 @@ ad_proc -public oacs_util::process_objects_csv {
             # ignore empty lines
             if {$n_fields == 0} {
                 continue
-            } 
+            }
 
             # Process the row
             set extra_vars [ns_set create]
@@ -138,21 +138,21 @@ ad_proc -public oacs_util::csv_foreach {
         # Now we are ready to process the code block
         set errno [catch { uplevel 1 $code_block } error]
 
-	if {$errno > 0} {
-	  close $csv_stream
-	}
+        if {$errno > 0} {
+          close $csv_stream
+        }
 
         # handle error, return, break, continue
-	# (source: https://wiki.tcl-lang.org/unless last case)
-	switch -exact -- $errno {
-	    0   {}
-	    1   {return -code error -errorinfo $::errorInfo \
-		     -errorcode $::errorCode $error}
-	    2   {return $error}
-	    3   {break}
-	    4   {}
-	    default     {return -code $errno $error}
-	}
+        # (source: https://wiki.tcl-lang.org/unless last case)
+        switch -exact -- $errno {
+            0   {}
+            1   {return -code error -errorinfo $::errorInfo \
+                     -errorcode $::errorCode $error}
+            2   {return $error}
+            3   {break}
+            4   {}
+            default     {return -code $errno $error}
+        }
     }
 }
 
