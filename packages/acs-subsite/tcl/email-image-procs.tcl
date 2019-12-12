@@ -299,7 +299,11 @@ ad_proc -public email_image::edit_email_image {
 
             email_image::add_relation -user_id $user_id -item_id $item_id
 
-            db_dml update_cr_items {}
+            db_dml update_cr_items {
+                update cr_items
+                set live_revision  = :revision_id
+                where item_id = :item_id                
+            }
             db_dml lob_content {} -blob_files [list ${dest_path}]
             db_dml lob_size {}
         }
