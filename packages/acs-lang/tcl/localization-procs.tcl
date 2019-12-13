@@ -253,9 +253,7 @@ ad_proc -public lc_time_fmt {
 } {
     Formats a time for the specified locale.
 
-    @param datetime        Strictly in the form &quot;YYYY-MM-DD HH24:MI:SS&quot;.
-                           Formulae for calculating day of week from the Calendar FAQ
-                           (<a href="http://www.tondering.dk/claus/calendar.html">http://www.tondering.dk/claus/calendar.html</a>)
+    @param datetime Strictly one of the formats 'YYYY-MM-DD HH24:MI:SS' or 'YYYY-MM-DD'
     @param fmt             An ISO 14652 LC_TIME style formatting string.  The <b>highlighted</b> functions localize automatically based on the user's locale; other strings will use locale-specific text but not necessarily locale-specific formatting.
     <pre>
       %a           FDCC-set's abbreviated weekday name.
@@ -305,13 +303,19 @@ ad_proc -public lc_time_fmt {
       %Z           The connection's timezone, e.g. 'America/New_York'.
       %%           A <percent-sign> character.
     </pre>
-    See also <pre>man strftime</pre> on a UNIX shell prompt for more of these abbreviations.
+
     @param locale          Locale identifier must be in the locale database
-    @error                 Fails if given a non-existent locale or a malformed datetime
-                           Doesn't check for impossible dates. Ask it for 29 Feb 1999 and it will tell you it was a Monday
-                           (1st March was a Monday, it wasn't a leap year). Also it only works with the Gregorian calendar -
-                           but that's reasonable, but could be a problem if you are running a seriously historical site
-                           (or have an 'on this day in history' style page that goes back a good few hundred years).
+    @error Fails if given a non-existent locale or a malformed
+           datetime. Impossible dates will be treated as per clock
+           scan behavior and e.g. 29 Feb 1999 will be translated to
+           1st March, Monday, as it wasn't a leap year. The clock api
+           takes care of the proper handling of Julian/Gregorian
+           dates.
+
+    @see clock
+    @see http://www.tondering.dk/claus/calendar.html
+    @see man strftime on a UNIX shell prompt for more date format abbreviations.
+
     @return                A date formatted for a locale
 } {
     if { $datetime eq "" } {
@@ -322,34 +326,29 @@ ad_proc -public lc_time_fmt {
         set locale [ad_conn locale]
     }
 
-    # Some initialization...
-    # Now, expect d_fmt, t_fmt and d_t_fmt to exist of the form in ISO spec
-    # Rip $date into $lc_time_* as numbers, no leading zeroes
-    set matchdate {([0-9]{4})\-0?(1?[0-9])\-0?([1-3]?[0-9])}
-    set matchtime {0?([1-2]?[0-9]):0?([1-5]?[0-9]):0?([1-6]?[0-9])}
-    set matchfull "$matchdate $matchtime"
-
-    set lc_time_p 1
-    if {![regexp -- $matchfull $datetime match \
-              lc_time_year lc_time_month lc_time_days lc_time_hours lc_time_minutes lc_time_seconds]} {
-        if {[regexp -- $matchdate $datetime match \
-                 lc_time_year lc_time_month lc_time_days]} {
-            set lc_time_hours 0
-            set lc_time_minutes 0
-            set lc_time_seconds 0
-        } else {
+    if {[catch {
+        set date_clock [clock scan $datetime -format "%Y-%m-%d"]
+    }]} {
+        if {[catch {
+            set date_clock [clock scan $datetime -format "%Y-%m-%d %H:%M:%S"]
+        }]} {
             error "Invalid date: $datetime"
         }
     }
-    set lc_time_year [util::trim_leading_zeros $lc_time_year]
 
-    set a [expr {(14 - $lc_time_month) / 12}]
-    set y [expr {$lc_time_year - $a}]
-    set m [expr {$lc_time_month + 12*$a - 2}]
+    set date_tokens [list]
+    foreach token [clock format $date_clock -format "%Y %m %d %H %M %S %w"] {
+        lappend date_tokens [util::trim_leading_zeros $token]
+    }
 
-    # day_no becomes 0 for Sunday, through to 6 for Saturday.
-    # Perfect for addressing zero-based lists pulled from locale info.
-    set lc_time_day_no [expr {(($lc_time_days + $y + $y/4 - $y/100 + $y/400) + (31 * $m / 12)) % 7}]
+    lassign $date_tokens \
+        lc_time_year \
+        lc_time_month \
+        lc_time_days \
+        lc_time_hours \
+        lc_time_minutes \
+        lc_time_seconds \
+        lc_time_day_no
 
     #
     # Keep the results of lc_time_fmt_compile in the per-thread cache

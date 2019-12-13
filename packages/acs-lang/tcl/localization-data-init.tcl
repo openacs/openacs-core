@@ -87,11 +87,11 @@ namespace eval ::lang::util {
     # resulting in variables that look like this: $lc_time_year\345\271\264
     # Tcl will throw an error when it encounters undefined variables.
 
-    # Unsupported number things
-    set percent_match(W) ""
-    set percent_match(U) ""
-    set percent_match(u) ""
-    set percent_match(j) ""
+    # Number things. These values don't actually need localization.
+    set percent_match(W) {[clock format [clock scan ${lc_time_year}-${lc_time_month}-${lc_time_days} -format %Y-%m-%d] -format %W]}
+    set percent_match(U) {[clock format [clock scan ${lc_time_year}-${lc_time_month}-${lc_time_days} -format %Y-%m-%d] -format %U]}
+    set percent_match(u) {[clock format [clock scan ${lc_time_year}-${lc_time_month}-${lc_time_days} -format %Y-%m-%d] -format %u]}
+    set percent_match(j) {[clock format [clock scan ${lc_time_year}-${lc_time_month}-${lc_time_days} -format %Y-%m-%d] -format %j]}
     
     # Composites, now directly expanded, note that writing for %r specifically would be quicker than what we have here.
     set percent_match(T) {[lc_leading_zeros $lc_time_hours 2]:[lc_leading_zeros $lc_time_minutes 2]:[lc_leading_zeros $lc_time_seconds 2]}
