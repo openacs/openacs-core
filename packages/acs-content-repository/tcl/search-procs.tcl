@@ -5,7 +5,7 @@ ad_proc content_search__datasource {
     after search.
 } {
     db_0or1row revisions_datasource "
-	select r.revision_id as object_id, 
+	select r.revision_id as object_id,
 	       r.title,
                case i.storage_type
                     when 'lob' then r.lob::text
@@ -32,7 +32,7 @@ ad_proc content_search__url {
 } {
     set package_id [apm_package_id_from_key acs-content-repository]
     set root_url [lindex [site_node::get_url_from_object_id -object_id $package_id] 0]
-    
+
     set item_id [db_string get_item_id {
         select item_id from cr_revisions
         where revision_id = :object_id}]
@@ -40,7 +40,7 @@ ad_proc content_search__url {
     set url [content::item::get_path \
                  -item_id        $item_id \
                  -root_folder_id $root_folder_id]
-    
+
     return "[ad_url][string trimright $root_url /]$url?revision_id=$object_id"
 }
 
@@ -51,8 +51,8 @@ ad_proc image_search__datasource {
     after search.
 } {
     db_0or1row revisions_datasource {
-	select r.revision_id as object_id, 
-	       r.title as title, 
+	select r.revision_id as object_id,
+	       r.title as title,
 	       r.description as content,
 	       r.mime_type as mime,
 	       '' as keywords,
@@ -83,8 +83,8 @@ ad_proc template_search__datasource {
     after search.
 } {
     db_0or1row revisions_datasource "
-	select r.revision_id as object_id, 
-	       r.title as title, 
+	select r.revision_id as object_id,
+	       r.title as title,
                case i.storage_type
                     when 'lob' then r.lob::text
                     when 'file' then '[cr_fs_path]' || r.content
@@ -113,12 +113,12 @@ ad_proc template_search__url {
 }
 
 
-ad_proc content_search__search_ids { 
-    q 
+ad_proc content_search__search_ids {
+    q
     { offset 0 }
     { limit 100 }
 } {
-    Returns the object ids for a specified search.    
+    Returns the object ids for a specified search.
 } {
     set package_id [apm_package_id_from_key search]
     set driver [parameter::get -package_id $package_id -parameter FtsEngineDriver]
