@@ -11,12 +11,13 @@ ad_proc content_search__datasource {
     Provides data source for search interface.  Used to access content items
     after search.
 } {
-    db_0or1row revisions_datasource "
+    set cr_fs_path [cr_fs_path]
+    db_0or1row revisions_datasource {
 	select r.revision_id as object_id,
 	       r.title,
                case i.storage_type
-                    when 'lob' then r.lob::text
-                    when 'file' then '[cr_fs_path]' || r.content
+                    when 'lob' then cast(r.lob as text)
+                    when 'file' then :cr_fs_path || r.content
                     else r.content
                end as content,
 	       r.mime_type as mime,
@@ -25,7 +26,7 @@ ad_proc content_search__datasource {
 	from cr_revisions r, cr_items i
 	where revision_id = :object_id
         and i.item_id = r.item_id
-    " -column_array datasource
+    } -column_array datasource
 
     return [array get datasource]
 }
@@ -89,12 +90,13 @@ ad_proc template_search__datasource {
     Provides data source for search interface.  Used to access content items
     after search.
 } {
-    db_0or1row revisions_datasource "
+    set cr_fs_path [cr_fs_path]
+    db_0or1row revisions_datasource {
 	select r.revision_id as object_id,
 	       r.title as title,
                case i.storage_type
-                    when 'lob' then r.lob::text
-                    when 'file' then '[cr_fs_path]' || r.content
+                    when 'lob' then cast(r.lob as text)
+                    when 'file' then :cr_fs_path || r.content
                     when 'text' then r.content
                     else r.content
                end as content,
@@ -104,7 +106,7 @@ ad_proc template_search__datasource {
 	from cr_revisions r, cr_items i
 	where revision_id = :object_id
         and i.item_id = r.item_id
-    " -column_array datasource
+    } -column_array datasource
 
     return [array get datasource]
 }
