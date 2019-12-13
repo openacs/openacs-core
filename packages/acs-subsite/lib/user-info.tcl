@@ -104,8 +104,7 @@ lappend elms_list {
     {mode $elm_mode(email)}
 }
 
-set screen_name [acs_user::ScreenName]
-if { $screen_name ne "none" } {
+if {  [acs_user::ScreenName] ne "none" } {
     lappend elms_list [list screen_name:text[expr {$screen_name eq "solicit" ? ",optional" : ""}] \
                            {label "[_ acs-subsite.Screen_name]"} \
                            {html {size 50}} \
@@ -183,14 +182,13 @@ ad_form -extend -name user_info -form $elms_list -on_request {
         }
     }
 
-    array set result [auth::update_local_account \
-                          -authority_id $user(authority_id) \
-                          -username $user(username) \
-                          -array user_info]
-
+    set account_info [auth::update_local_account \
+                    -authority_id $user(authority_id) \
+                    -username $user(username) \
+                    -array user_info]
 
     # Handle authentication problems
-    switch -- $result(update_status) {
+    switch -- [dict get $account_info update_status] {
         ok {
             # Updating locale/tz data
             if { [info exists site_wide_locale] } {
@@ -200,12 +198,12 @@ ad_form -extend -name user_info -form $elms_list -on_request {
         }
         default {
             # Adding the error to the first element, but only if there are no element messages
-            if { [llength $result(element_messages)] == 0 } {
-                form set_error user_info $first_element $result(update_message)
+            if { [llength [dict get $account_info element_messages]] == 0 } {
+                form set_error user_info $first_element [dict get $account_info update_message]
             }
 
             # Element messages
-            foreach { elm_name elm_error } $result(element_messages) {
+            foreach { elm_name elm_error } [dict get $account_info element_messages] {
                 form set_error user_info $elm_name $elm_error
             }
             break
