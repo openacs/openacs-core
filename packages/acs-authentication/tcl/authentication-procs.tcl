@@ -1688,10 +1688,13 @@ ad_proc -private auth::validate_account_info {
 
     if { [info exists user(screen_name)] } {
         set screen_name_user_id [acs_user::get_user_id_by_screen_name -screen_name $user(screen_name)]
-        if { $screen_name_user_id ne "" && (!$update_p || $screen_name_user_id != $user(user_id)) } {
+        if { $screen_name_user_id ne ""
+             && (!$update_p || $screen_name_user_id != $user(user_id))
+         } {
             set element_messages(screen_name) [_ acs-subsite.screen_name_already_taken]
 
-            # We could do the same logic as below with 'stealing' the screen_name of an old, banned user.
+            # We could do the same logic as below with 'stealing' the
+            # screen_name of an old, banned user.
         }
     }
 
