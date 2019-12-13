@@ -1,3 +1,10 @@
+ad_library {
+    Content Repository Search callbacks.
+
+    These callbacks are used to implement "search" package service
+    contracts.
+}
+
 ad_proc content_search__datasource {
     object_id
 } {
