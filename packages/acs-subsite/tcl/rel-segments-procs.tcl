@@ -8,7 +8,25 @@ ad_library {
 
 }
 
-ad_proc -public rel_segments_new {
+namespace eval rel_segment {}
+
+ad_proc -deprecated rel_segments_new args {
+    Creates a new relational segment
+
+    @author Michael Bryzek (mbryzek@arsdigita.com)
+    @creation-date 12/2000
+
+    @return The <code>segment_id</code> of the new segment
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see rel_segment::new
+
+} {
+    return [rel_segment::new {*}$args]
+}
+
+ad_proc -public rel_segment::new {
     { -context_id "" }
     { -creation_user "" }
     { -creation_ip "" }
@@ -36,7 +54,23 @@ ad_proc -public rel_segments_new {
 
 }
 
-ad_proc -public rel_segments_delete {
+ad_proc -deprecated rel_segments_delete {
+    segment_id
+} {
+    Deletes the specified relational segment including all relational
+    constraints that depend on it.
+
+    @author Michael Bryzek (mbryzek@arsdigita.com)
+    @creation-date 1/12/2001
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see rel_segment::delete
+} {
+    return [rel_segment::delete $segment_id]
+}
+
+ad_proc -public rel_segment::delete {
     segment_id
 } {
     Deletes the specified relational segment including all relational

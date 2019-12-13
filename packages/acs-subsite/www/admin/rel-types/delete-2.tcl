@@ -41,7 +41,7 @@ if { $operation ne "Yes, I really want to delete this relationship type" } {
         }
 
         if { $segment_id ne "" } {
-            rel_segments_delete $segment_id
+            rel_segment::delete $segment_id
         }
 
         db_exec_plsql drop_relationship_type {}

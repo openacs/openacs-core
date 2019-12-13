@@ -153,7 +153,7 @@ ad_proc -public subsite::default::create_app_group {
 
             # Create segment of registered users
             set segment_name "$subsite_name_89 Members"
-            set segment_id [rel_segments_new $subsite_group_id membership_rel $segment_name]
+            set segment_id [rel_segment::new $subsite_group_id membership_rel $segment_name]
 
             # Create a constraint that says "to be a member of this subsite you must be a member
             # of the parent subsite.
@@ -172,7 +172,7 @@ ad_proc -public subsite::default::create_app_group {
 
             # Create segment of registered users for administrators
             set segment_name "$subsite_name_89 Administrators"
-            set admin_segment_id [rel_segments_new $subsite_group_id admin_rel $segment_name]
+            set admin_segment_id [rel_segment::new $subsite_group_id admin_rel $segment_name]
 
             # Grant admin privileges to the admin segment
             permission::grant \

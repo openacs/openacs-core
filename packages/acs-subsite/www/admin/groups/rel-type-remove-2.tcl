@@ -45,7 +45,7 @@ if {$operation eq "Yes, I really want to delete this relationship type"} {
              where group_id = :group_id
                and rel_type = :rel_type
         }] } {
-            rel_segments_delete $segment_id
+            rel_segment::delete $segment_id
         }
 
         # now remove this relationship type from the list of allowable

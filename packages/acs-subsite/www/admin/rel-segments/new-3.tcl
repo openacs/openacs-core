@@ -34,7 +34,7 @@ ad_page_contract {
 permission::require_permission -object_id $group_id -privilege "read"
 
 db_transaction {
-    set segment_id [rel_segments_new -context_id $group_id $group_id $rel_type $segment_name]
+    set segment_id [rel_segment::new -context_id $group_id $group_id $rel_type $segment_name]
 } on_error {
     # Let's see if this segment already exists
     set segment_id [db_string select_segment_id {

@@ -12,7 +12,7 @@ aa_register_case \
         group::delete
         group::new
         permission::grant
-        rel_segments_new
+        rel_segment::new
         relation_add
     } \
     acs_subsite_expose_bug_775 {
@@ -25,7 +25,7 @@ aa_register_case \
         -test_code {
 
         set group_id [group::new -group_name group_775]
-        set rel_id [rel_segments_new $group_id membership_rel segment_775]
+        set rel_id [rel_segment::new $group_id membership_rel segment_775]
         relation_add membership_rel $group_id 0
         permission::grant -object_id $group_id -party_id 0 -privilege read
 

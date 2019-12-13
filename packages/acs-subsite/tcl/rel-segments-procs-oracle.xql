@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="rel_segments_new.create_rel_segment">
+<fullquery name="rel_segment::new.create_rel_segment">
       <querytext>
 
       declare
@@ -21,7 +21,7 @@
 </fullquery>
 
 
-<fullquery name="rel_segments_delete.constraint_delete">
+<fullquery name="rel_segment::delete.constraint_delete">
       <querytext>
 
 	    begin rel_constraint.del(:constraint_id); end;
@@ -30,7 +30,7 @@
 </fullquery>
 
 
-<fullquery name="rel_segments_delete.rel_segment_delete">
+<fullquery name="rel_segment::delete.rel_segment_delete">
       <querytext>
 
 	begin rel_segment.del(:segment_id); end;
