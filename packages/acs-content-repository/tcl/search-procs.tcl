@@ -5,7 +5,88 @@ ad_library {
     contracts.
 }
 
-ad_proc content_search__datasource {
+ad_proc -deprecated content_search__datasource {
+    object_id
+} {
+    Provides data source for search interface.  Used to access content items
+    after search.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see content_search::datasource
+} {
+    return [content_search::datasource $object_id]
+}
+
+ad_proc -deprecated content_search__url {
+    object_id
+} {
+    Provides a URL for linking to content items which show up in a search
+    result set.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see content_search::url
+} {
+    return [content_search::url $object_id]
+}
+
+ad_proc -deprecated image_search__datasource {
+    object_id
+} {
+    Provides data source for search interface.  Used to access content items
+    after search.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see image_search::datasource
+} {
+    return [image_search::datasource $object_id]
+}
+
+ad_proc -deprecated image_search__url {
+    object_id
+} {
+    Provides a URL for linking to content items which show up in a search
+    result set.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see image_search::url
+} {
+    return [image_search::url $object_id]
+}
+
+ad_proc -deprecated template_search__datasource {
+    object_id
+} {
+    Provides data source for search interface.  Used to access content items
+    after search.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see template_search::datasource
+} {
+    return [template_search::datasource $object_id]
+}
+
+ad_proc -deprecated template_search__url {
+    object_id
+} {
+    Provides a URL for linking to content items which show up in a search
+    result set.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see template_search::url
+} {
+    return [template_search::url $object_id]
+}
+
+
+namespace eval content_search {}
+
+ad_proc content_search::datasource {
     object_id
 } {
     Provides data source for search interface.  Used to access content items
@@ -32,7 +113,7 @@ ad_proc content_search__datasource {
 }
 
 
-ad_proc content_search__url {
+ad_proc content_search::url {
     object_id
 } {
     Provides a URL for linking to content items which show up in a search
@@ -52,7 +133,25 @@ ad_proc content_search__url {
     return "[ad_url][string trimright $root_url /]$url?revision_id=$object_id"
 }
 
-ad_proc image_search__datasource {
+ad_proc content_search::search_ids {
+    q
+    { offset 0 }
+    { limit 100 }
+} {
+    Returns the object ids for a specified search.
+} {
+    set package_id [apm_package_id_from_key search]
+    set driver [parameter::get -package_id $package_id -parameter FtsEngineDriver]
+    array set result [acs_sc::invoke -contract FtsEngineDriver \
+                          -operation search -call_args [list $q $offset $limit] -impl $driver]
+
+    return $result(ids)
+}
+
+
+namespace eval image_search {}
+
+ad_proc image_search::datasource {
     object_id
 } {
     Provides data source for search interface.  Used to access content items
@@ -73,18 +172,19 @@ ad_proc image_search__datasource {
     return [array get datasource]
 }
 
-
-ad_proc image_search__url {
+ad_proc image_search::url {
     object_id
 } {
     Provides a URL for linking to content items which show up in a search
     result set.
 } {
-    return [content_search__url $object_id]
+    return [content_search::url $object_id]
 }
 
 
-ad_proc template_search__datasource {
+namespace eval template_search {}
+
+ad_proc template_search::datasource {
     object_id
 } {
     Provides data source for search interface.  Used to access content items
@@ -111,30 +211,13 @@ ad_proc template_search__datasource {
     return [array get datasource]
 }
 
-
-ad_proc template_search__url {
+ad_proc template_search::url {
     object_id
 } {
     Provides a URL for linking to content items which show up in a search
     result set.
 } {
-    return [content_search__url $object_id]
-}
-
-
-ad_proc content_search__search_ids {
-    q
-    { offset 0 }
-    { limit 100 }
-} {
-    Returns the object ids for a specified search.
-} {
-    set package_id [apm_package_id_from_key search]
-    set driver [parameter::get -package_id $package_id -parameter FtsEngineDriver]
-    array set result [acs_sc::invoke -contract FtsEngineDriver \
-                          -operation search -call_args [list $q $offset $limit] -impl $driver]
-
-    return $result(ids)
+    return [content_search::url $object_id]
 }
 
 # Local variables:

@@ -14,7 +14,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'content_revision',                  -- impl_name
 	   'datasource',			-- impl_operation_name
-	   'content_search__datasource',        -- impl_alias
+	   'content_search::datasource',        -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -22,7 +22,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'content_revision',                  -- impl_name
 	   'url',				-- impl_operation_name
-	   'content_search__url',               -- impl_alias
+	   'content_search::url',               -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -38,7 +38,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'image',                             -- impl_name
 	   'datasource',			-- impl_operation_name
-	   'image_search__datasource',          -- impl_alias
+	   'image_search::datasource',          -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -46,7 +46,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'image',                             -- impl_name
 	   'url',				-- impl_operation_name
-	   'image_search__url',                 -- impl_alias
+	   'image_search::url',                 -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -62,7 +62,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'content_template',                  -- impl_name
 	   'datasource',			-- impl_operation_name
-	   'template_search__datasource',       -- impl_alias
+	   'template_search::datasource',       -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -70,7 +70,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'content_template',                  -- impl_name
 	   'url',				-- impl_operation_name
-	   'template_search__url',              -- impl_alias
+	   'template_search::url',              -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
