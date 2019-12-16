@@ -414,7 +414,21 @@ ad_proc -public util_AnsiDatetoPrettyDate {
     }
 }
 
-ad_proc -public remove_nulls_from_ns_set {
+ad_proc -deprecated remove_nulls_from_ns_set {
+    old_set_id
+} {
+    Creates and returns a new ns_set without any null value fields
+
+    DEPRECATED: does not comply with OpenACS naming convention.
+
+    @see util_remove_nulls_from_ns_set
+
+    @return new ns_set
+} {
+    return [util_remove_nulls_from_ns_set $old_set_id]
+}
+
+ad_proc -public util_remove_nulls_from_ns_set {
     old_set_id
 } {
     Creates and returns a new ns_set without any null value fields
