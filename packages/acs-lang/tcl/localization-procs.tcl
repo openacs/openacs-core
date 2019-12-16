@@ -262,7 +262,11 @@ ad_proc -public lc_time_fmt {
                     12:50:14". Note that in this case all information
                     about timetzone and fractions of second will be
                     discarded.
-    @param fmt             An ISO 14652 LC_TIME style formatting string.  The <b>highlighted</b> functions localize automatically based on the user's locale; other strings will use locale-specific text but not necessarily locale-specific formatting.
+    @param fmt An ISO 14652 LC_TIME style formatting string.  The
+               <b>highlighted</b> functions localize automatically
+               based on the user's locale; other strings will use
+               locale-specific text but not necessarily
+               locale-specific formatting.
     <pre>
       %a           FDCC-set's abbreviated weekday name.
       %A           FDCC-set's full weekday name.
@@ -324,7 +328,7 @@ ad_proc -public lc_time_fmt {
     @see http://www.tondering.dk/claus/calendar.html
     @see man strftime on a UNIX shell prompt for more date format abbreviations.
 
-    @return                A date formatted for a locale
+    @return A date formatted for a locale
 } {
     if { $datetime eq "" } {
         return ""
