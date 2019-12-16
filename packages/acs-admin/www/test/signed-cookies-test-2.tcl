@@ -35,7 +35,7 @@ set list_of_names [ns_cache names secret_tokens]
 
 set list_length [llength $list_of_names]
 
-ReturnHeaders
+util_return_headers
 
 ns_write "
 [ad_header "signed cookies tests"]

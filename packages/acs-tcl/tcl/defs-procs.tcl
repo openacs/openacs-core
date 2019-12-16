@@ -624,7 +624,7 @@ ad_proc -public ad_progress_bar_begin {
     db_release_unused_handles
     ad_http_cache_control
 
-    ReturnHeaders
+    util_return_headers
     ns_write [ad_parse_template \
                   -params [list \
                                [list doc(title) $title] \

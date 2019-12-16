@@ -12,7 +12,7 @@ ad_page_contract {
     b:integer
 }
 
-ReturnHeaders "image/gif"
+util_return_headers "image/gif"
 
 if { [catch {
     set file [open [acs_package_root_dir "acs-subsite"]/www/shared/1pixel.header]

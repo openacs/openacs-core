@@ -202,7 +202,7 @@ append page_content "&lt;/ul&gt;
 [ad_footer]"
 
 doc_return 200 text/html $page_content
-</pre><p>The old convention was to call <code class="computeroutput">ReturnHeaders</code> and then <code class="computeroutput">ns_write</code> for each distinct chunk of the
+</pre><p>The old convention was to call <code class="computeroutput">util_return_headers</code> and then <code class="computeroutput">ns_write</code> for each distinct chunk of the
 page. This approach has the disadvantage of tying up a scarce and
 valuable resource (namely, a database handle) for an unpredictable
 amount of time while sending packets back to the browser, and so it

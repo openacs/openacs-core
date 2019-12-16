@@ -127,7 +127,7 @@ ad_proc -public cr_write_content {
 
             ns_set put [ns_conn outputheaders] "Content-Length" $content_length
 
-            ReturnHeaders $mime_type $content_length
+            util_return_headers $mime_type $content_length
             #
             # In a HEAD request, just send headers and no content
             #

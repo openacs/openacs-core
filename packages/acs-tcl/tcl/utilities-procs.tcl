@@ -1519,7 +1519,23 @@ ad_proc -private util_WriteWithExtraOutputHeaders {
     ns_write $entire_string_to_write
 }
 
-ad_proc -private ReturnHeaders {
+ad_proc -deprecated ReturnHeaders args {
+    We use this when we want to send out just the headers
+    and then do incremental writes with ns_write.  This way the user
+    doesn't have to wait for streamed output (useful when doing
+    bulk uploads, installs, etc.).
+
+    It returns status 200 and all headers including
+    any added to outputheaders.
+
+    DEPRECATED: does not comply with OpenACS naming convention.
+
+    @see util_return_headers
+} {
+    return [util_return_headers {*}$args]
+}
+
+ad_proc -private util_return_headers {
     {content_type text/html}
     {content_length ""}
 } {
@@ -1559,7 +1575,7 @@ ad_proc -public ad_return_top_of_page {
     Returns HTTP headers plus the top of the user-visible page.
     To be used with streaming HTML output
 } {
-    ReturnHeaders $content_type
+    util_return_headers $content_type
     if { $first_part_of_page ne "" } {
         ns_write $first_part_of_page
     }

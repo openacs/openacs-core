@@ -409,7 +409,7 @@ doc_return 200 text/html $page_content
 
 
 <para>
-The old convention was to call <computeroutput>ReturnHeaders</computeroutput> and
+The old convention was to call <computeroutput>util_return_headers</computeroutput> and
 then <computeroutput>ns_write</computeroutput> for each distinct chunk of the page. This
 approach has the disadvantage of tying up a scarce and valuable
 resource (namely, a database handle) for an unpredictable amount of
