@@ -253,7 +253,15 @@ ad_proc -public lc_time_fmt {
 } {
     Formats a time for the specified locale.
 
-    @param datetime Strictly one of the formats 'YYYY-MM-DD HH24:MI:SS' or 'YYYY-MM-DD'
+    @param datetime A time string in one of the following formats as
+                    from clock tcl command specifications: "%Y-%m-%d
+                    %H:%M:%S", "%Y-%m-%d %H:%M" and
+                    "%Y-%m-%d". Database timestamps such as
+                    "2019-12-16 12:50:14.049896+01" are also
+                    tolerated, by normalizing them to "2019-12-16
+                    12:50:14". Note that in this case all information
+                    about timetzone and fractions of second will be
+                    discarded.
     @param fmt             An ISO 14652 LC_TIME style formatting string.  The <b>highlighted</b> functions localize automatically based on the user's locale; other strings will use locale-specific text but not necessarily locale-specific formatting.
     <pre>
       %a           FDCC-set's abbreviated weekday name.
@@ -326,14 +334,21 @@ ad_proc -public lc_time_fmt {
         set locale [ad_conn locale]
     }
 
-    if {[catch {
-        set date_clock [clock scan $datetime -format "%Y-%m-%d"]
-    }]} {
-        if {[catch {
-            set date_clock [clock scan $datetime -format "%Y-%m-%d %H:%M:%S"]
-        }]} {
-            error "Invalid date: $datetime"
+    set datetime [string range [string trim $datetime] 0 18]
+    foreach format {
+        "%Y-%m-%d %H:%M:%S"
+        "%Y-%m-%d %H:%M"
+        "%Y-%m-%d"
+    } {
+        set invalid_format_p [catch {
+            set date_clock [clock scan $datetime -format $format]
+        }]
+        if {!$invalid_format_p} {
+            break
         }
+    }
+    if {$invalid_format_p} {
+        error "Invalid date: $datetime"
     }
 
     set date_tokens [list]

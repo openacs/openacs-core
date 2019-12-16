@@ -21,7 +21,7 @@ aa_register_case \
       lang::catalog::import
       lang::system::locale_set_enabled
 
-    } lang_test__lc_numeric {
+    } lang_test__lc_procs {
 
     Minimal testset for localization functions. To be extended.
 
@@ -57,6 +57,37 @@ aa_register_case \
     aa_equals "asian time " [lc_time_utc_to_local "2013-09-21 23:11:22" "Asia/Tokyo"] "2013-09-22 08:11:22"
     aa_equals "local time " [lc_time_local_to_utc "2013-09-22 08:11:22" "Asia/Tokyo"] "2013-09-21 23:11:22"
 
+    set time [lc_time_fmt "2013-09-21 23:11:22" "%c" en_US]
+    aa_equals "format en_US time" [lrange $time 0 end-1] "Sat September 21, 2013 11:11 PM"
+
+    set time [lc_time_fmt "2013-09-21 23:11:22" "%c" de_DE]
+    aa_equals "format de_DE time" [lrange $time 0 end-1] "Sa, 21. September 2013 23:11"
+
+    set time [lc_time_fmt "2013-09-21 23:11:22" "%c" it_IT]
+    aa_equals "format it_IT time" [lrange $time 0 end-1] "Sab 21 Settembre 2013 23:11"
+
+    aa_equals "asian time " [lc_time_utc_to_local "2013-09-21 23:11:22" "Asia/Tokyo"] "2013-09-22 08:11:22"
+    aa_equals "local time " [lc_time_local_to_utc "2013-09-22 08:11:22" "Asia/Tokyo"] "2013-09-21 23:11:22"
+
+    set db_timestamp "2019-12-16 12:11:52.125541+01"
+    set time [lc_time_fmt $db_timestamp "%c" en_US]
+    aa_equals "format en_US time" [lrange $time 0 end-1] "Mon December 16, 2019 12:11 PM"
+
+    set time [lc_time_fmt $db_timestamp "%c" de_DE]
+    aa_equals "format de_DE time" [lrange $time 0 end-1] "Mo, 16. Dezember 2019 12:11"
+
+    set time [lc_time_fmt $db_timestamp "%c" it_IT]
+    aa_equals "format it_IT time" [lrange $time 0 end-1] "Lun 16 Dicembre 2019 12:11"
+
+    set short_timestamp "2019-12-16 12:11"
+    set time [lc_time_fmt $short_timestamp "%c" en_US]
+    aa_equals "format en_US time" [lrange $time 0 end-1] "Mon December 16, 2019 12:11 PM"
+
+    set time [lc_time_fmt $short_timestamp "%c" de_DE]
+    aa_equals "format de_DE time" [lrange $time 0 end-1] "Mo, 16. Dezember 2019 12:11"
+
+    set time [lc_time_fmt $short_timestamp "%c" it_IT]
+    aa_equals "format it_IT time" [lrange $time 0 end-1] "Lun 16 Dicembre 2019 12:11"
   }
 }
 
