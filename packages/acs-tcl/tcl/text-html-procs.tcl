@@ -15,23 +15,23 @@ ad_library {
 ####################
 
 ad_proc -private ad_text_cite_to_blockquote {text} {
-    
+
     Convert freestanding paragraphs with lines starting with a ">" into
     blockquotes.
-    
+
 } {
     if {[string range $text 0 0 ] eq " "} {
         set result " "
         set text [string range $text 1 end]
     } else {
-        set result ""        
+        set result ""
     }
     #
     # Via "doBlockquotes" we could start blockquote substitution only
     # when a new paragraph starts; deactivated for now, can start
     # everywhere.
     #
-    set doBlockquotes 1 
+    set doBlockquotes 1
     set inBlockquotes 0
 
     foreach line [split $text \n] {
@@ -174,7 +174,7 @@ ad_proc -public ad_text_to_html {
 
     # Convert lines starting with a ">" into blockquotes.
     set text [ad_text_cite_to_blockquote $text]
-    
+
     # Convert line breaks
     if { !$no_lines_p } {
         set text [util_convert_line_breaks_to_html -includes_html=$includes_html_p -- $text]
@@ -437,7 +437,7 @@ ad_proc -private util_close_html_tags {
         } on error {errorMsg} {
             # we got an error, so do Tcl based html completion processing
             #ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom\n$frag"
-            ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom"            
+            ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom"
         } on ok {r} {
             $doc documentElement root
             set html ""
@@ -2507,7 +2507,7 @@ ad_proc -public ad_pad {
     padstring
 } {
     Tcl implementation of the pad string function found in many DBMSs.
-    
+
     One of the directional flags -left or -right must be specified and
     will dictate whether this will be a lpad or a rpad.
 
@@ -2537,7 +2537,7 @@ ad_proc -public ad_pad {
     set repetitions [expr {int(($length - $slength) / $padlength) + 1}]
     set appended [string repeat $padstring $repetitions]
     incr length -1
-    
+
     if {$left_p} {
         set string [string range $appended$string end-$length end]
     } else {
