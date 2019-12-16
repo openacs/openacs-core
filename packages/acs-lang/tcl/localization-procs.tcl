@@ -260,7 +260,7 @@ ad_proc -public lc_time_fmt {
                     "2019-12-16 12:50:14.049896+01" are also
                     tolerated, by normalizing them to "2019-12-16
                     12:50:14". Note that in this case all information
-                    about timetzone and fractions of second will be
+                    about timezone and fractions of second will be
                     discarded.
     @param fmt An ISO 14652 LC_TIME style formatting string.  The
                <b>highlighted</b> functions localize automatically
