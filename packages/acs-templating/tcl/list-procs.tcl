@@ -1841,7 +1841,7 @@ ad_proc -private template::list::render_filters {
                         $filter_properties_name \
                         $filter_properties(label) \
                         $filter_properties(clear_url) \
-                        [string_truncate -len 25 -- $label] \
+                        [ad_string_truncate -len 25 -- $label] \
                         $value \
                         $url \
                         $label \

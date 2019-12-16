@@ -2341,7 +2341,7 @@ ad_proc -public ad_html_text_convert {
             set text [util_close_html_tags $text $truncate_len $truncate_len $ellipsis $more]
         }
         text/plain {
-            set text [string_truncate -ellipsis $ellipsis -more $more -len $truncate_len -- $text]
+            set text [ad_string_truncate -ellipsis $ellipsis -more $more -len $truncate_len -- $text]
         }
     }
 
@@ -2447,7 +2447,40 @@ ad_proc util_remove_html_tags { html } {
 #
 #####
 
-ad_proc -public string_truncate {
+ad_proc -deprecated ad_string_truncate args {
+    Truncates a string to len characters adding the string provided in
+    the ellipsis parameter if the string was truncated.
+
+    The length of the resulting string, including the ellipsis, is
+    guaranteed to be shorter or equal than the len specified.
+
+    Should always be called as ad_string_truncate [-flags ...] -- string
+    since otherwise strings which start with a - will treated as
+    switches, and will cause an error.
+
+    @param len       The length to truncate to. If zero, no truncation will occur.
+
+    @param ellipsis  This will get put at the end of the truncated string, if the string was truncated.
+                     However, this counts towards the total string length, so that the returned string
+                     including ellipsis is guaranteed to be shorter or equal than the 'len' provided.
+
+    @param more      This will get put at the end of the truncated string, if the string was truncated.
+
+    @param string    The string to truncate.
+
+    @return The truncated string
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date September 8, 2002
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see ad_string_truncate
+} {
+    return [ad_string_truncate {*}$args]
+}
+
+ad_proc -public ad_string_truncate {
     {-len 200}
     {-ellipsis "..."}
     {-more ""}
@@ -2460,7 +2493,7 @@ ad_proc -public string_truncate {
     The length of the resulting string, including the ellipsis, is
     guaranteed to be shorter or equal than the len specified.
 
-    Should always be called as string_truncate [-flags ...] -- string
+    Should always be called as ad_string_truncate [-flags ...] -- string
     since otherwise strings which start with a - will treated as
     switches, and will cause an error.
 
@@ -2496,6 +2529,41 @@ ad_proc -public string_truncate {
         set string [string trimright [string range $string 0 $end_index]]${ellipsis}${more}
     }
 
+    return $string
+}
+
+ad_proc -deprecated ad_string_truncate_middle args {
+    Cut middle part of a string in case it is too long
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see ad_string_truncate_middle
+} {
+    return [ad_string_truncate_middle {*}$args]
+}
+
+ad_proc ad_string_truncate_middle {
+    {-ellipsis ...}
+    {-len 100}
+    string
+} {
+    Cut middle part of a string in case it is too long.
+
+    @param ellipsis placeholder for the portion of text being left out
+    @param len length after which we are starting cutting text
+    @param string
+
+    @see ad_string_truncate
+
+    @return truncated string
+} {
+    set string [string trim $string]
+    if {[string length $string]>$len} {
+        set half  [expr {($len-2)/2}]
+        set left  [string trimright [string range $string 0 $half]]
+        set right [string trimleft  [string range $string end-$half end]]
+        return $left$ellipsis$right
+    }
     return $string
 }
 

@@ -219,38 +219,38 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {string_truncate} \
-    string_truncate {
+    -procs {ad_string_truncate} \
+    ad_string_truncate {
     Testing string truncation
 } {
-    aa_equals "" [string_truncate -len  5 -ellipsis "" -- "foo"] "foo"
-    aa_equals "" [string_truncate -len  5 -ellipsis "" -- "foobar greble"] "fooba"
-    aa_equals "" [string_truncate -len  6 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar\tgreble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar\ngreble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar\rgreble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar\fgreble"] "foobar"
-    aa_equals "" [string_truncate -len  8 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len  9 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len 10 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len 11 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len 12 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len 13 -ellipsis "" -- "foobar greble"] "foobar greble"
+    aa_equals "" [ad_string_truncate -len  5 -ellipsis "" -- "foo"] "foo"
+    aa_equals "" [ad_string_truncate -len  5 -ellipsis "" -- "foobar greble"] "fooba"
+    aa_equals "" [ad_string_truncate -len  6 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar\tgreble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar\ngreble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar\rgreble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar\fgreble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  8 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  9 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len 10 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len 11 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len 12 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len 13 -ellipsis "" -- "foobar greble"] "foobar greble"
 
-    aa_equals "" [string_truncate -len  5 -ellipsis "..." -- "foo"] "foo"
-    aa_equals "" [string_truncate -len  5 -ellipsis "..." -- "foobar greble"] "fo..."
-    aa_equals "" [string_truncate -len  6 -ellipsis "..." -- "foobar greble"] "foo..."
-    aa_equals "" [string_truncate -len  7 -ellipsis "..." -- "foobar greble"] "foob..."
-    aa_equals "" [string_truncate -len  8 -ellipsis "..." -- "foobar greble"] "fooba..."
-    aa_equals "" [string_truncate -len  9 -ellipsis "..." -- "foobar greble"] "foobar..."
-    aa_equals "" [string_truncate -len 10 -ellipsis "..." -- "foobar greble"] "foobar..."
-    aa_equals "" [string_truncate -len 11 -ellipsis "..." -- "foobar greble"] "foobar..."
-    aa_equals "" [string_truncate -len 12 -ellipsis "..." -- "foobar greble"] "foobar..."
-    aa_equals "" [string_truncate -len 13 -ellipsis "..." -- "foobar greble"] "foobar greble"
+    aa_equals "" [ad_string_truncate -len  5 -ellipsis "..." -- "foo"] "foo"
+    aa_equals "" [ad_string_truncate -len  5 -ellipsis "..." -- "foobar greble"] "fo..."
+    aa_equals "" [ad_string_truncate -len  6 -ellipsis "..." -- "foobar greble"] "foo..."
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "..." -- "foobar greble"] "foob..."
+    aa_equals "" [ad_string_truncate -len  8 -ellipsis "..." -- "foobar greble"] "fooba..."
+    aa_equals "" [ad_string_truncate -len  9 -ellipsis "..." -- "foobar greble"] "foobar..."
+    aa_equals "" [ad_string_truncate -len 10 -ellipsis "..." -- "foobar greble"] "foobar..."
+    aa_equals "" [ad_string_truncate -len 11 -ellipsis "..." -- "foobar greble"] "foobar..."
+    aa_equals "" [ad_string_truncate -len 12 -ellipsis "..." -- "foobar greble"] "foobar..."
+    aa_equals "" [ad_string_truncate -len 13 -ellipsis "..." -- "foobar greble"] "foobar greble"
 
     set long_string [string repeat "Very long text. " 100]
-    aa_equals "No truncation" [string_truncate -len [string length $long_string] -- $long_string] $long_string
+    aa_equals "No truncation" [ad_string_truncate -len [string length $long_string] -- $long_string] $long_string
 }
 
 

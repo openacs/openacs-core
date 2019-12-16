@@ -298,7 +298,7 @@ if { $display_batch_history_p } {
         set end_time_pretty [lc_time_fmt $end_time_ansi "%x %X"]
 
         set interactive_pretty [expr {$interactive_p eq "t" ? $yes : $no}]
-        set short_message [string_truncate -len 30 -- $message]
+        set short_message [ad_string_truncate -len 30 -- $message]
 
         set actions_per_minute {}
         if { $run_time_seconds > 0 && $num_actions > 0 } {

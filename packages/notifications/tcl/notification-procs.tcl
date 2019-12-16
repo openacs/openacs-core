@@ -310,7 +310,7 @@ namespace eval notification {
                 }
 
                 # Truncate notif_subject to the max len of 100
-                set notif_subject [string_truncate -len 100 -- $notif_subject]
+                set notif_subject [ad_string_truncate -len 100 -- $notif_subject]
 
                 # Set up the vars
                 set extra_vars [ns_set create]

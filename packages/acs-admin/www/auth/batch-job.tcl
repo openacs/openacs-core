@@ -165,7 +165,7 @@ db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch
     } else {
         set short_message ""
     }
-    set short_message [string_truncate -len 75 -- $short_message]
+    set short_message [ad_string_truncate -len 75 -- $short_message]
 
     if { $user_exists_p && $user_id ne ""  } {
         set user_url [acs_community_member_admin_url -user_id $user_id]
