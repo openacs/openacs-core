@@ -753,10 +753,18 @@ ad_proc -private template::stack_frame_values {level} {
     return $varlist
 }
 
-
-
-ad_proc -public stack_dump {} {
+ad_proc -deprecated stack_dump {} {
     return the whole call stack as HTML
+
+    DEPRECATED: does not comply with OpenACS naming convention.
+
+    @see template::stack_dump
+} {
+    return [template::stack_dump]
+}
+
+ad_proc -public template::stack_dump {} {
+    Return the whole call stack as HTML
 } {
     append page "<h1>Tcl Call Trace</h1>\n<ul>"
 
