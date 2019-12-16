@@ -492,6 +492,7 @@ ad_library {
      }
 
      set you_are {}
+     set you_are_really {}
 
      if { $user_id == 0 } {
          set selected " selected"
