@@ -57,10 +57,10 @@ db_transaction {
     }
 
 } on_error {
-    if {[db_string instance_delete_doubleclick_ck {
-        select decode(count(*), 0, 0, 1) from apm_packages
+    if {[db_0or1row instance_delete_doubleclick_ck {
+        select 1 from apm_packages
         where package_id = :package_id
-    } -default 0]} {
+    }]} {
         ad_return_error "Error Deleting Instance" "The following error was returned:
         <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
     }
