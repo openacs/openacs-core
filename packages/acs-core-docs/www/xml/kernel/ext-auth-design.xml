@@ -1242,13 +1242,13 @@ ad_proc -private auth::local::registration::Register {
         }]
         # Send email verification email to user
         set confirmation_url [export_vars -base [ad_url]/register/email-confirm { row_id }]
-        with_catch errmsg {
+        ::try {
             acs_mail_lite::send \
                 -to_addr $email \
                 -from_addr $notification_address \
                 -subject "[_ acs-subsite.lt_Welcome_to_system_nam]" \
                 -body "[_ acs-subsite.lt_To_confirm_your_regis]"
-        } {
+        } on error {errmsg} {
             ns_returnerror "500" "$errmsg"
             ns_log Warning "Error sending email verification email to $email. Error: $errmsg"
         }
@@ -1258,26 +1258,26 @@ ad_proc -private auth::local::registration::Register {
     # Send password/confirmail email to user
     if { [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] || \
              [parameter::get -parameter EmailRegistrationConfirmationToUserP -default 1] } {
-        with_catch errmsg {
+        ::try {
             acs_mail_lite::send \
                 -to_addr $email \
                 -from_addr $notification_address \
                 -subject "[_ acs-subsite.lt_Welcome_to_system_nam]" \
                 -body "[_ acs-subsite.lt_Thank_you_for_visitin]"
-        } {
+        } on error {errmsg} {
             ns_returnerror "500" "$errmsg"
             ns_log Warning "Error sending registration confirmation to $email. Error: $errmsg"
         }
     }
     # Notify admin on new registration
     if {[parameter::get -parameter NotifyAdminOfNewRegistrationsP -default 0]} {
-        with_catch errmsg {
+        ::try {
             acs_mail_lite::send \
                 -to_addr $notification_address \
                 -from_addr $email \
                 -subject "[_ acs-subsite.lt_New_registration_at_s]" \
                 -body "[_ acs-subsite.lt_first_names_last_name]"
-        } {
+        } on error {errmsg} {
             ns_returnerror "500" "$errmsg"
             ns_log Warning "Error sending admin notification to $notification_address. Error: $errmsg"
         }

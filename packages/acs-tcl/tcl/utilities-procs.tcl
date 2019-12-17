@@ -1228,10 +1228,17 @@ ad_proc -public util_get_current_url {} {
     return $url
 }
 
-ad_proc -public with_catch {error_var body on_error} {
+ad_proc -deprecated with_catch {error_var body on_error} {
     execute code in body with the catch errorMessage in error_var
     and if there is a non-zero return code from body
     execute the on_error block.
+
+    DEPRECATED: does not comply with OpenACS naming convention and can
+    be replaced with better api such as ad_try or native Tcl
+    constructs such as ::try (8.6)
+
+    @see try
+    @see ad_try
 } {
     upvar 1 $error_var $error_var
     if { [catch { uplevel $body } $error_var] } {
@@ -3337,7 +3344,7 @@ ad_proc -public ad_generate_random_string {
     return [string range [sec_random_token] 0 $length-1]
 }
 
-ad_proc -public with_finally {
+ad_proc -deprecated with_finally {
     -code:required
     -finally:required
 } {
@@ -3349,6 +3356,13 @@ ad_proc -public with_finally {
 
     @param code Code to be executed that could throw and error
     @param finally Cleanup code to be executed even if an error occurs
+
+    DEPRECATED: does not comply with OpenACS naming convention and can
+    be replaced with better api such as ad_try or native Tcl
+    constructs such as ::try (8.6)
+
+    @see try
+    @see ad_try
 } {
 
     # Execute CODE.
