@@ -10,11 +10,7 @@ ad_library {
 
 }
 
-ad_proc -public subsite_callback {
-    { -object_type "" }
-    event_type
-    object_id
-} {
+ad_proc -deprecated subsite_callback args {
     Executes any registered callbacks for this object.
     <p>
     <b>Example:</b>
@@ -30,30 +26,63 @@ ad_proc -public subsite_callback {
 
     @param object_type The object's type. We look this up in the db if
     not specified
-} {
 
-    if { $object_type eq "" } {
-        db_1row select_object_type {
-            select object_type
-                from acs_objects
-                where object_id = :object_id
-        }
-    }
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see subsite::callback
+} {
+    return [subsite::callback {*}$args]
+}
+
+ad_proc -public subsite::callback {
+    { -object_type "" }
+    event_type
+    object_id
+} {
+    Executes any registered callbacks for this object.
+    <p>
+    <b>Example:</b>
+    <pre>
+    # Execute any callbacks registered for this object type or one of
+    # its parent object types
+    subsite::callback -object_type $object_type $object_id
+    </pre>
+
+
+    @author Michael Bryzek (mbryzek@arsdigita.com)
+    @creation-date 12/2000
+
+    @param object_type The object's type. We look this up in the db if
+    not specified
+} {
+    set node_id [ad_conn node_id]
+    set package_id [ad_conn package_id]
 
     # Check to see if we have any callbacks registered for this object
     # type or one of its parent object types. Put the callbacks into
     # a list as each callback may itself require a database
     # handle. Note that we need the distinct in case two callbacks are
     # registered for an object and its parent object type.
+    db_foreach get_callbacks {
+        with recursive object_hierarchy as (
+            select object_type, supertype
+              from acs_object_types
+             where object_type = coalesce(:object_type, (select object_type
+                                                         from acs_objects
+                                                         where object_id = :object_id))
 
-    set callback_list [db_list_of_lists select_callbacks {}]
+            union all
 
-    set node_id [ad_conn node_id]
-    set package_id [ad_conn package_id]
-
-    foreach row $callback_list {
-        lassign $row callback type
-
+            select t.object_type, t.supertype
+            from acs_object_types t,
+                 object_hierarchy s
+            where t.object_type = s.supertype
+        )
+        select distinct callback, callback_type as type
+          from subsite_callbacks
+        where event_type = :event_type
+          and object_type in (select object_type from object_hierarchy)
+    } {
         switch -- $type {
             tcl {
                 # Execute the Tcl procedure
