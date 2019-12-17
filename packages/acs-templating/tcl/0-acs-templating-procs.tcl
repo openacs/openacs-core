@@ -15,8 +15,21 @@ ad_library {
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
+ad_proc -public template_tag args {
+    Generic wrapper for registered tag handlers.
 
-ad_proc -public template_tag { name arglist body } {
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see template::tag
+} {
+    return [template::tag {*}$args]
+}
+
+ad_proc -public template::tag {
+    name
+    arglist
+    body
+} {
     Generic wrapper for registered tag handlers.
 } {
 
@@ -53,12 +66,11 @@ ad_proc -public template_tag { name arglist body } {
 
 	template::adp_tag_init $name
 
-	variable template::tag_stack
-	lappend tag_stack \[list $name \$params\]
+	lappend ::template::tag_stack \[list $name \$params\]
 
 	$body
 
-	template::util::lpop tag_stack
+	template::util::lpop ::template::tag_stack
 
         return \"\"
       }"

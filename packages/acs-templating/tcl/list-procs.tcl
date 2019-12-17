@@ -3077,7 +3077,7 @@ ad_proc -public template::list::orderby::set_properties {
 #
 #####
 
-template_tag listtemplate { chunk params } {
+template::tag listtemplate { chunk params } {
     set level [template::adp_level]
 
     set list_name [template::get_attribute listtemplate $params name]
@@ -3088,7 +3088,7 @@ template_tag listtemplate { chunk params } {
         "\[template::list::render -name \"$list_name\" -style \"$style\"\]"
 }
 
-template_tag listelement { params } {
+template::tag listelement { params } {
 
     set element_name [template::get_attribute listelement $params name]
 
@@ -3098,14 +3098,14 @@ template_tag listelement { params } {
         "\[template::list::element::render -list_name \${list_properties(name)} -element_name $element_name\]"
 }
 
-template_tag listrow { params } {
+template::tag listrow { params } {
     set level [template::adp_level]
 
     template::adp_append_string \
         "\[template::list::render_row -name \${list_properties(name)}\]"
 }
 
-template_tag listfilters { chunk params } {
+template::tag listfilters { chunk params } {
     set level [template::adp_level]
 
     set list_name [template::get_attribute listfilters $params name]
@@ -3115,7 +3115,7 @@ template_tag listfilters { chunk params } {
         "\[template::list::render_filters -name \"$list_name\" -style \"$style\"\]"
 }
 
-template_tag listfilters-form { chunk params } {
+template::tag listfilters-form { chunk params } {
     set level [template::adp_level]
     set list_name [template::get_attribute listfilters-form $params name]
 

@@ -238,7 +238,7 @@ ad_proc -public template::widget::table::prepare {
 
 # Register the tag that actually renders the widget
 
-template_tag tablewidget { chunk params } {
+template::tag tablewidget { chunk params } {
 
     set name [ns_set iget $params name]
     set style [ns_set iget $params style]

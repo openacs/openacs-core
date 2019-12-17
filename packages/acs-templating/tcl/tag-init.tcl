@@ -17,7 +17,7 @@
 
 # Add some escaped Tcl
 
-template_tag tcl { chunk params } {
+template::tag tcl { chunk params } {
 
   # if the chunk begins with = then add our own append
   if { [string index $chunk 0] eq "=" } {
@@ -31,7 +31,7 @@ template_tag tcl { chunk params } {
 # benefit of the master template to display appropriate context,
 # such as the title, navigation links, etc.
 
-template_tag property { chunk params } {
+template::tag property { chunk params } {
 
     set name [ns_set iget $params name]
     set adp  [ns_set iget $params adp]
@@ -51,7 +51,7 @@ template_tag property { chunk params } {
 
 # Set the master template.
 
-template_tag master { params } {
+template::tag master { params } {
 
   set src [ns_set iget $params src]
   set slave_properties_p [template::get_attribute master $params slave-properties-p 0]
@@ -78,7 +78,7 @@ template_tag master { params } {
 
 # Insert the slave template
 
-template_tag slave { params } {
+template::tag slave { params } {
 
   #Start developer support frame around subordinate template.
   if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
@@ -216,7 +216,7 @@ ad_proc -private template::template_tag_include_helper {params} {
     }
 }
 
-template_tag include { params } {
+template::tag include { params } {
     #
     # Check, if the src can be resolved against resources/templates in
     # the theme package
@@ -232,7 +232,7 @@ template_tag include { params } {
 # behaves exactly like <include> (without the resources/templates/
 # theming)
 #
-template_tag widget { params } {
+template::tag widget { params } {
     set src [ns_set iget $params src]
     set adp_stub [template::resource_path -type widgets -style $src -relative]
     if {[file exists $::acs::rootdir/$adp_stub.adp]} {
@@ -244,7 +244,7 @@ template_tag widget { params } {
 
 # Repeat a template chunk for each row of a multirow data source
 
-template_tag multiple { chunk params } {
+template::tag multiple { chunk params } {
 
   set name      [template::get_attribute multiple $params name       ]
   set startrow  [template::get_attribute multiple $params startrow  0]
@@ -295,7 +295,7 @@ template_tag multiple { chunk params } {
 
 # Repeat a template chunk for each item in a list
 
-template_tag list { chunk params } {
+template::tag list { chunk params } {
 
   # the list tag accepts a value so that it may be used without a data
   # source in the Tcl script
@@ -335,7 +335,7 @@ template_tag list { chunk params } {
 # Create a recursed group, generating a recursive multirow block until the
 # column name stays the same
 
-template_tag group { chunk params } {
+template::tag group { chunk params } {
 
   set column [template::get_attribute group $params column]
   set delimiter [template::get_attribute group $params delimiter ""]
@@ -424,7 +424,7 @@ template_tag group { chunk params } {
 # Repeat a template chunk consisting of a grid cell for each row of a
 # multirow data source
 
-template_tag grid { chunk params } {
+template::tag grid { chunk params } {
 
   set name [template::get_attribute grid $params name]
   # cols must be a float for ceil to work
@@ -462,12 +462,12 @@ template_tag grid { chunk params } {
   }"
 }
 
-template_tag if { chunk params } {
+template::tag if { chunk params } {
 
     template::template_tag_if_condition $chunk $params if
 }
 
-template_tag elseif { chunk params } {
+template::tag elseif { chunk params } {
 
     template::template_tag_if_condition $chunk $params elseif
 }
@@ -475,7 +475,7 @@ template_tag elseif { chunk params } {
 
 # Append an "else" clause to the if expression
 
-template_tag else { chunk params } {
+template::tag else { chunk params } {
 
   template::adp_append_code "else {" -nobreak
 
@@ -486,7 +486,7 @@ template_tag else { chunk params } {
 
 # Output a template chunk without parsing, for preprocessed templates
 
-template_tag noparse { chunk params } {
+template::tag noparse { chunk params } {
 
   # escape quotes
   regsub -all {[\]\[""\\$]} $chunk {\\&} quoted
@@ -497,7 +497,7 @@ template_tag noparse { chunk params } {
 # Render the HTML for the form widget, incorporating any additional
 # markup attributes specified in the template.
 
-template_tag formwidget { params } {
+template::tag formwidget { params } {
 
   set id [template::get_attribute formwidget $params id]
 
@@ -510,7 +510,7 @@ template_tag formwidget { params } {
 
 # Display the help information for an element
 
-template_tag formhelp { params } {
+template::tag formhelp { params } {
 
   set id [template::get_attribute formhelp $params id]
 
@@ -523,7 +523,7 @@ template_tag formhelp { params } {
 
 # Report a form error if one is specified.
 
-template_tag formerror { chunk params } {
+template::tag formerror { chunk params } {
 
   set id [template::get_attribute formerror $params id]
   set type [ns_set get $params type]
@@ -553,7 +553,7 @@ template_tag formerror { chunk params } {
 
 # Render a group of form widgets
 
-template_tag formgroup { chunk params } {
+template::tag formgroup { chunk params } {
 
   set id [template::get_attribute formgroup $params id]
 
@@ -580,7 +580,7 @@ template_tag formgroup { chunk params } {
 }
 
 # render one element from a formgroup
-template_tag formgroup-widget { chunk params } {
+template::tag formgroup-widget { chunk params } {
     set id [template::get_attribute formgroup-widget $params id]
 
     set row [template::get_attribute formgroup-widget $params row]
@@ -603,7 +603,7 @@ template_tag formgroup-widget { chunk params } {
 # specified in the template.  Set the magic variable "form:id"
 # for elements to reference
 
-template_tag formtemplate { chunk params } {
+template::tag formtemplate { chunk params } {
 
   set level [template::adp_level]
   set id [template::get_attribute formtemplate $params id]
@@ -664,7 +664,7 @@ template_tag formtemplate { chunk params } {
 #
 # @param params  The ns_set id for extra HTML parameters
 
-template_tag child { params } {
+template::tag child { params } {
   publish::process_tag child $params
 }
 
@@ -679,7 +679,7 @@ template_tag child { params } {
 #
 # @param params  The ns_set id for extra HTML parameters
 
-template_tag relation { params } {
+template::tag relation { params } {
   publish::process_tag relation $params
 }
 
@@ -695,7 +695,7 @@ template_tag relation { params } {
 #
 # @param params  The ns_set id for extra HTML parameters
 
-template_tag content { params } {
+template::tag content { params } {
 
   # Get item id/revision_id
   set item_id [publish::get_main_item_id]
@@ -725,7 +725,7 @@ template_tag content { params } {
 #
 # @author Lars Pind (lars@collaboraid.net)
 
-template_tag include-optional { chunk params } {
+template::tag include-optional { chunk params } {
 
   #
   # Check, if the src can be resolved against resources/templates in
@@ -772,7 +772,7 @@ template_tag include-optional { chunk params } {
 #
 # @author Lars Pind (lars@collaboraid.net)
 
-template_tag include-output { params } {
+template::tag include-output { params } {
     template::adp_append_code {
         if { [info exists __adp_include_optional_output] } {
             append __adp_output [lindex $__adp_include_optional_output end]
@@ -780,7 +780,7 @@ template_tag include-output { params } {
     }
 }
 
-template_tag trn { chunk params } {
+template::tag trn { chunk params } {
   # DRB: we have to do our own variable substitution as the template framework doesn't handle
   # it for us ... being able to use page variables here is consistent with the rest
   # of the templating engine.
@@ -852,7 +852,7 @@ template_tag trn { chunk params } {
 # The flag switch is optional and it defaults to exact if not specified.
 # Valid values are exact, regexp, and glob
 
-template_tag switch { chunk params } {
+template::tag switch { chunk params } {
 
     set sw ""
     set arg ""
@@ -882,7 +882,7 @@ template_tag switch { chunk params } {
 # case statements as part of switch statement as shown above
 #
 
-template_tag case { chunk params } {
+template::tag case { chunk params } {
 
     # Scan the parameter stack backward, looking for the tag name
 
@@ -956,7 +956,7 @@ template_tag case { chunk params } {
 
 # default value for case statement which is a sub-tag in switch tag
 
-template_tag default { chunk params } {
+template::tag default { chunk params } {
 
     # Scan the parameter stack backward, looking for the tag name
 
@@ -977,13 +977,13 @@ template_tag default { chunk params } {
 #
 # @author Ben Bytheway (ben@vrusp.com)
 
-template_tag contract { chunk params } {}
+template::tag contract { chunk params } {}
 
-template_tag comment { chunk params } {}
+template::tag comment { chunk params } {}
 
 
 
-template_tag box { chunk params } {
+template::tag box { chunk params } {
     set class [ns_set iget $params class]
     set title [ns_set iget $params title]
 

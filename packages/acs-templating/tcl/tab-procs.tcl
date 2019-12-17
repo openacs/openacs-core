@@ -198,7 +198,7 @@ ad_proc -public template::tabstrip::set_current_tab {
 
 # The tabstrip tag
 
-template_tag tabstrip { chunk params } {
+template::tag tabstrip { chunk params } {
 
   set level [template::adp_level]
 
