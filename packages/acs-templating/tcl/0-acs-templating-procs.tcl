@@ -29,33 +29,33 @@ ad_proc -public template_tag { name arglist body } {
 
   switch [llength $arglist] {
 
-    1 { 
+    1 {
 
       # empty tag
       eval "proc template_tag_$name { params } {
-	
+
 	template::adp_tag_init $name
-	
+
 	$body
 
         return \"\"
       }"
 
       if { !$exists_p } {
-        ns_adp_registerscript $name template_tag_$name 
+        ns_adp_registerscript $name template_tag_$name
       }
     }
 
-    2 { 
+    2 {
 
       # balanced tag so push on/pop off tag name and parameters on a stack
       eval "proc template_tag_$name { chunk params } {
-	
+
 	template::adp_tag_init $name
 
 	variable template::tag_stack
 	lappend tag_stack \[list $name \$params\]
-	
+
 	$body
 
 	template::util::lpop tag_stack
@@ -64,7 +64,7 @@ ad_proc -public template_tag { name arglist body } {
       }"
 
       if { !$exists_p } {
-        ns_adp_registerscript $name /$name template_tag_$name 
+        ns_adp_registerscript $name /$name template_tag_$name
       }
     }
 
