@@ -143,7 +143,7 @@ ad_proc -public site_node::delete_service_nodes  {
 } {
     set sub_node_urls [site_node::get_children \
                            -node_id $node_id]
-    foreach sub_node_url $sub_node_urls{
+    foreach sub_node_url $sub_node_urls {
         set sub_node_id [site_node::get_element -url $sub_node_url -element node_id]
         set package_id [site_node::get_object_id -node_id $sub_node_id]
         if {$package_id ne ""
