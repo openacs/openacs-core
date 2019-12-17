@@ -11,42 +11,42 @@
     <sect2>
         <title>EXT-AUTH-1: Authentication and Account Status API (4 hours)
 </title>
-        by 
+        by
         <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
-</para> 
+</para>
         <sect3>
           <title>Current Design
 </title>
           Procedures to support this feature have already been written by
           Lars. We are using the existing procedure ad_user_login and are
           deprecating ad_maybe_redirect_for_registration and making it invoke
-          auth::require_login. 
+          auth::require_login.
         </sect3>
         <sect3>
           <title>Execution Story
 </title>
           The auth::authenticate procedure will be called by the login page
           and the auth::require_login procedure at the beginning of any
-          application pages that require login. 
+          application pages that require login.
         </sect3>
         <sect3>
           <title>Tradeoffs:
 </title>
-          For this feature reliability and testing are the prime concerns. 
+          For this feature reliability and testing are the prime concerns.
         </sect3>
         <sect3 id="external_desig">
           <title>External Design
 </title>
-          The authtentication API has the following public methods: 
+          The authtentication API has the following public methods:
           <programlisting>
 <literal>ad_proc -public auth::require_login {} {
-    If the current session is not authenticated, redirect to the 
+    If the current session is not authenticated, redirect to the
     login page, and aborts the current page script.
     Otherwise, returns the user_id of the user logged in.
-    Use this in a page script to ensure that only registered and authenticated 
+    Use this in a page script to ensure that only registered and authenticated
     users can execute the page, for example for posting to a forum.
     @return user_id of user, if the user is logged in. Otherwise will issue an ad_script_abort.
     @see ad_script_abort
@@ -60,13 +60,13 @@ Marklund
     {-username:required}
     {-password:required}
 } {
-    Try to authenticate and login the user forever by validating the username/password combination, 
-    and return authentication and account status codes.    
-    
+    Try to authenticate and login the user forever by validating the username/password combination,
+    and return authentication and account status codes.
+
     @param authority_id The ID of the authority to ask to verify the user. Defaults to local authority.
     @param username Authority specific username of the user.
     @param password The password as the user entered it.
-    
+
 }
 </literal>
 </programlisting>
@@ -79,7 +79,7 @@ Marklund
             <title>Procedure
 auth::authenticate
 </title>
-            Need to stub ns_sendmail? 
+            Need to stub ns_sendmail?
             <para>Test auth_status not "ok" for:
 </para>
             <itemizedlist>
@@ -96,7 +96,7 @@ auth::authenticate
 </para>
               </listitem>
             </itemizedlist>
-            
+
             <para>Test account_status "closed" for
 </para>
             <itemizedlist>
@@ -106,7 +106,7 @@ deleted.
 </para>
               </listitem>
             </itemizedlist>
-            
+
             <para>Error handling (requires stubbing the Authenticate service
 contract):
 </para>
@@ -130,18 +130,18 @@ the variables that it should
 </para>
               </listitem>
             </itemizedlist>
-            
+
           </sect4>
         </sect3>
         <sect3 id="page_flo">
           <title>Page Flow
 </title>
-          None 
+          None
         </sect3>
         <sect3>
           <title>Data Model
 </title>
-          None 
+          None
         </sect3>
         <sect3>
           <title>TODO
@@ -163,7 +163,7 @@ invoke auth::require_login
           </itemizedlist>
         </sect3>
       </sect2>
-      
+
       <sect2>
         <sect2info>
           <title>EXT-AUTH-3: Account Creation API (5 hours)
@@ -174,17 +174,17 @@ invoke auth::require_login
         <title>EXT-AUTH-3:
 Account Creation API (5 hours)
 </title>
-        by 
+        by
         <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
-</para> 
+</para>
         <sect4 id="current_ap">
           <title>Current API
 </title>
             <programlisting>
-<literal>ad_proc ad_user_new {email first_names last_name password password_question password_answer 
+<literal>ad_proc ad_user_new {email first_names last_name password password_question password_answer
                      {url ""} {email_verified_p "t"} {member_state "approved"} {user_id ""} } {
     Creates a new user in the system.  The user_id can be specified as an argument to enable double click protection.
     If this procedure succeeds, returns the new user_id.  Otherwise, returns 0.
@@ -221,7 +221,7 @@ auth::registration::get_optional_attributes
                         the authority with lowest sort_order that has register_p set to true.
 } {
     set authorities_list [list]
-    
+
     # Always register the user locally
     lappend authorities_list [auth::authority::local]
     # Default authority_id if none was provided
@@ -238,9 +238,9 @@ auth::registration::get_optional_attributes
         } -default ""]
         if { $authority_id eq "" } {
             error "No authority_id provided and could not find an authority that can create users"
-        }    
+        }
         lappend authorities_list $authority_id
-    }    
+    }
     # Register the user both with the local authority and the external one
     db_transaction {
         foreach authority_id $authorities_list {
@@ -325,12 +325,12 @@ pages.
 acs-subsite/www/register/user-new.tcl. Again, all logic is in the
 pages.
 </para>
-          
+
         </sect3>
         <sect3>
           <title>External Design
 </title>
-          We will have to rewrite the following pages: 
+          We will have to rewrite the following pages:
           <itemizedlist>
             <listitem>
               <para>User login: /register/index
@@ -357,7 +357,7 @@ auth::local::register proc.
 </para></sect3>
             <sect3>
           <title>The code to handle the login process in /register/index.tcl would
-look like this:</title> 
+look like this:</title>
 <programlisting>
 ad_form -name user_add -form {
     {authority_id:integer(hidden)}
@@ -436,7 +436,7 @@ ad_returnredirect $return_url
         user-login.tcl. If user not registered (i.e.
         <literal>$auth_info(account_status) eq "no_account"
 </literal>),
-        user is redirected to user-register.tcl. 
+        user is redirected to user-register.tcl.
       </sect3>
       <sect3>
         <title>Error Handling
@@ -446,7 +446,7 @@ ad_returnredirect $return_url
 <literal>auth::authenticate
 </literal>
 </title>
-          Returns the array element auth_status, which can either be: 
+          Returns the array element auth_status, which can either be:
           <itemizedlist>
             <listitem>
               <para>ok: login was successful, continue
@@ -475,7 +475,7 @@ meaningful, display error message
           </itemizedlist>
               </sect4>
               <sect4>
-          <title>Also account_status is returned, which can either be:</title> 
+          <title>Also account_status is returned, which can either be:</title>
           <itemizedlist>
             <listitem>
               <para>ok: login was successful, continue
@@ -498,7 +498,7 @@ display error message
 <literal>auth::register
 </literal>
 </title>
-          Returns the array element reg_status, which can either be: 
+          Returns the array element reg_status, which can either be:
           <itemizedlist>
             <listitem>
               <para>ok: Registration was successful, continue
@@ -560,7 +560,7 @@ auth server returned unknown error".
           </listitem>
         </itemizedlist>
       </sect3>
-      
+
       <sect3>
         <title>Execution Story</title>
         <para>User login scenario:</para>
@@ -625,13 +625,13 @@ the normal OpenACS change password page.
                         <para>Otherwise, no "Change my password" link.
 </para>
                       </listitem>
-                      
+
                       <listitem>
                         <para>The change password page will call the Password
 Management API to change the password.
 </para>
                       </listitem>
-                      
+
                     </orderedlist>
                   </listitem>
                 </orderedlist>
@@ -657,9 +657,9 @@ ad_proc -public auth::password::get_change_url {
 ad_proc -public auth::password::can_change_p {
     {-user_id:required}
 } {
-    Returns whether the given user change password. 
-    This depends on the user&#39;s authority and the configuration of that authority. 
-    
+    Returns whether the given user change password.
+    This depends on the user&#39;s authority and the configuration of that authority.
+
     @param user_id The ID of the user whose password you want to change.
     @return 1 if the user can change password, 0 otherwise.
 } {
@@ -674,7 +674,7 @@ ad_proc -public auth::password::change {
     Change the user&#39;s password.
     @param user_id      The ID of the user whose password you want to change.
     @param old_password The current password of that user. This is required for security purposes.
-    
+
     @param new_password The desired new password of the user.
     @return An array list with the following entries:
     &lt;ul&gt;
@@ -689,20 +689,20 @@ ad_proc -public auth::password::change {
 }
 ad_proc -public auth::password::get_forgotten_url {
     {-authority_id:required}
-} { 
+} {
     Returns the URL to redirect to for forgotten passwords. If the
     user&#39;s authority has a "forgotten_pwd_url" set, it&#39;ll return that,
     otherwise it&#39;ll return a link to /register/email-password under the
     nearest subsite.
-        
+
     @param authority_id The ID of the authority that the user is trying to log into.
     @return A URL that can be linked to when the user has forgotten his/her password.
 } -
 ad_proc -public auth::password::can_retrieve_p {
     {-authority_id:required}
 } {
-    Returns whether the given authority can retrieve forgotten passwords. 
-    
+    Returns whether the given authority can retrieve forgotten passwords.
+
     @param authority_id The ID of the authority that the user is trying to log into.
     @return 1 if the authority allows retrieving passwords, 0 otherwise.
 } {
@@ -730,8 +730,8 @@ ad_proc -public auth::password::retrieve {
 ad_proc -public auth::password::can_reset_p {
     {-authority_id:required}
 } {
-    Returns whether the given authority can reset forgotten passwords. 
-    
+    Returns whether the given authority can reset forgotten passwords.
+
     @param authority_id The ID of the authority that the user is trying to log into.
     @return 1 if the authority allows resetting passwords, 0 otherwise.
 } {
@@ -758,7 +758,7 @@ ad_proc -public auth::password::reset {
        returned, it means that caller is responsible for informing the
        user of his/her new password.&lt;/li&gt;
     &lt;/ul&gt;
-} { 
+} {
     # Implementation note
     # Calls auth::password::ResetPassword(authority_id, username) for the user&#39;s authority.
 }
@@ -809,7 +809,7 @@ story. This section belongs there:
 </para>
           </listitem>
         </itemizedlist>
-        
+
         <para>#29, service contract for password mgmt, will have to change
 as implied by the return values of this API.
 </para>
@@ -850,7 +850,7 @@ into account:
 
       </sect3>
     </sect2>
-    
+
     <sect2>
       <sect2 id="ext-auth_#8__automating_batch_synchronizatio">
         <title>EXT-AUTH
@@ -932,19 +932,19 @@ batch_sync_enabled_p column in ?some_table?. Returns 1 or 0.
             through all enabled and batch-enabled authorities and calls
             <literal>auth::authority::batch_sync -authority_id
 integer
-</literal>. 
+</literal>.
           </sect4>
         </sect3>
         <sect3>
           <title>Internal
 Design
 </title>
-          Administration 
+          Administration
           <programlisting>
 ad_proc -public auth::authority::enable_batch_sync {
   -authority_id
 } {
- db_dml toggle_enbaled_p { 
+ db_dml toggle_enbaled_p {
      update some_table
      set    batch_sync_enabled_p = 't'
      where  authority_id = :authority_id
@@ -952,7 +952,7 @@ ad_proc -public auth::authority::enable_batch_sync {
 }
 </programlisting></sect3>
             <sect3>
-      <title>Scheduled proc:</title> 
+      <title>Scheduled proc:</title>
 <programlisting>
 ad_proc -public auth::batch_sync_sweeper {} {
    db_foreach select_authorities {
@@ -998,7 +998,7 @@ ad_proc -public auth::authority::batch_sync {
 </literal> calls
         <literal>auth::authentication::Authenticate
 </literal> which invokes
-        the service contract implementation for the authority. Returns: 
+        the service contract implementation for the authority. Returns:
         <itemizedlist>
           <listitem>
             <para>auth_status: "ok", "bad_password", "no_account",
@@ -1036,7 +1036,7 @@ ad_proc -private auth::authentication::Authenticate {
     Invoke the Authenticate service contract operation for the given authority.
     @param username Username of the user.
     @param password The password as the user entered it.
-    
+
     @param authority_id The ID of the authority to ask to verify the user. Leave blank for local authority.
 } {
     if { $authority_id eq "" } {
@@ -1059,26 +1059,26 @@ ad_proc -private auth::local::authentication::Authenticate {
     password
     {parameters {}}
 } {
-    Implements the Authenticate operation of the auth_authentication 
+    Implements the Authenticate operation of the auth_authentication
     service contract for the local account implementation.
 } {
     array set auth_info [list]
     # TODO: username = email parameter ...
     set username [string tolower $username]
-    
+
     set authority_id [auth::authority::local]
     set account_exists_p [db_0or1row select_user_info {
         select user_id
         from   cc_users
         where  username = :username
         and    authority_id = :authority_id
-    }] 
-    
+    }]
+
     if { !$account_exists_p } {
         set auth_info(auth_status) "no_account"
         return [array get auth_info]
     }
-    
+
     if { [ad_check_password $user_id $password] } {
         set auth_info(auth_status) "ok"
     } else {
@@ -1087,10 +1087,10 @@ ad_proc -private auth::local::authentication::Authenticate {
             ... display link...
        } else {
             set auth_info(auth_status) "bad_password"
-       } 
+       }
         return [array get auth_info]
     }
-    # We set 'external' account status to 'ok', because the 
+    # We set 'external' account status to 'ok', because the
     # local account status will be checked anyways
     set auth_info(account_status) ok
     return [array get auth_info]
@@ -1121,7 +1121,7 @@ ad_proc -private auth::local::authentication::Authenticate {
         <title>External Design
 </title>
         <literal>auth::registration::Register
-</literal> returns: 
+</literal> returns:
         <itemizedlist>
           <listitem>
             <para>creation_status
@@ -1162,7 +1162,7 @@ ad_proc -private auth::registration::Register {
     {-parameters ""}
 } {
     Invoke the Register service contract operation for the given authority.
-    
+
 } {
     if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
@@ -1219,7 +1219,7 @@ ad_proc -private auth::local::registration::Register {
         set result(creation_message) "We experienced an error while trying to register an account for you."
         return [array get result]
     }
-    
+
     # Creation succeeded
     set result(creation_status) "ok"
     # TODO: validate data (see user-new-2.tcl)
@@ -1446,16 +1446,16 @@ password management: 8 hours.
       <title>EXT-AUTH-16:
 Authentication Service Contract (1 hour)
 </title>
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
-</para></sect2> 
+</para></sect2>
       <title>Already done by Lars. We should ocument which messages can/should
       be HTML and which should be plain text and in general try to
-      document expected values of return variables more clearly. 
-      by</title> 
+      document expected values of return variables more clearly.
+      by</title>
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
@@ -1467,14 +1467,14 @@ Marklund
       <title>EXT-AUTH-17:
 Account Creation Service Contract (1 hour)
 </title>
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
-</para></sect2> 
+</para></sect2>
       <title>Already done by Lars. Todo: improve documentation of return values.
-      by</title> 
+      by</title>
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
@@ -1486,16 +1486,16 @@ Marklund
       <title>EXT-AUTH-18:
 Authority Configuration Data Model (2 hours)
 </title>
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
-</para></sect2> 
+</para></sect2>
       <title>The table auth_authorities already exists in acs-kernel for Oracle.
       We need to create the table for PostgreSQL and provide upgrade
       scripts. Rename column auth_p authenticate_p for readability and
-      clarity? Change column name active_p to enabled_p.</title> 
+      clarity? Change column name active_p to enabled_p.</title>
       <para>TODO: new column: help_contact_text with contact information
 (phone, email, etc.) to be displayed as a last resort when people
 are having problems with an authority.
@@ -1509,9 +1509,9 @@ are having problems with an authority.
                              constraint auth_authority_short_name_un
                              unique,
     pretty_name              varchar2(4000),
-    active_p                 char(1) default 't' 
+    active_p                 char(1) default 't'
                              constraint auth_authority_active_p_nn
-                             not null 
+                             not null
                              constraint auth_authority_active_p_ck
                              check (active_p in ('t','f')),
     sort_order               integer not null,
@@ -1555,7 +1555,7 @@ are having problems with an authority.
 </title>
         Password recovery is currently handled by
         /register/email-password.tcl, email-password-2.tcl and
-        email-password-3.tcl. All logic is placed in the pages. 
+        email-password-3.tcl. All logic is placed in the pages.
       </sect3>
       <sect3>
         <title>Execution Story
@@ -1627,7 +1627,7 @@ username, old_password, new_passwordOutput: new_password
 </para>
         The logic of bad-password will be moved into /register/index as
         part of ad_form, but the logic should look like something along the
-        lines of: 
+        lines of:
         <programlisting>
 set user_id [ad_conn]
 set authority_id [auth::authority -user_id $user_id]
@@ -1636,14 +1636,14 @@ set retrieve_password_p [auth::password::CanRetrievePassword -driver $driver]
 set reset_password_p [auth::password::CanResetPassword -driver $driver]
 </programlisting>
         If $retrieve_password_p and $reset_password_p is true, this text
-        will be displayed: 
+        will be displayed:
         <para>"If you&#39;ve forgotten your password, you can
 <ulink url="email-password?user_id=blahblah">ask this server to
 reset your password and email a new randomly generated password to
 you
 </ulink>."
 </para>
-        And email-password, should look something like this: 
+        And email-password, should look something like this:
         <programlisting>
 # Fetch the username. What proc should we use?
 set username [auth::username]
@@ -1674,7 +1674,7 @@ $body
     return
 }
 </programlisting>
-        We&#39;ll want to add a check for CanChangePassword in /pvt/home. 
+        We&#39;ll want to add a check for CanChangePassword in /pvt/home.
       </sect3>
       <sect3>
         <title>Estimate
@@ -1798,7 +1798,7 @@ test what happens.
       <sect3 id="execution_stor">
         <title>Execution story
 </title>
-        User: 
+        User:
         <itemizedlist>
           <listitem>
             <para>User visits /pvt/home
@@ -1821,7 +1821,7 @@ test what happens.
 </para>
           </listitem>
         </itemizedlist>
-        Admin: 
+        Admin:
         <itemizedlist>
           <listitem>
             <para>()</para>
@@ -1841,7 +1841,7 @@ set change_password_p [auth::password::CanChangePassword -driver $driver]
 </programlisting>
         If $change_password_p is true, we&#39;ll display the "Change my
         password" link on /pvt/home. update-password would look something
-        like this: 
+        like this:
         <programlisting>
 if {![db_0or1row select_email {}]} {
     db_release_unused_handles
@@ -1949,7 +1949,7 @@ around June 6).
         <title>Execution Story
 </title>
         A page showing who has requested a page during the last 5 minutes.
-        Could be integrated with a chat or instant messaging service. 
+        Could be integrated with a chat or instant messaging service.
       </sect3>
       <sect3>
         <title>Internal Design
@@ -1961,7 +1961,7 @@ changes necessary to security-procs.tcl to do this on an earlier
 project, but haven&#39;t quite finished the work and put it back into
 the tree.
 </para>
-        Lars? 
+        Lars?
       </sect3>
       <sect3>
         <title>Estimate
@@ -2033,7 +2033,7 @@ run the batch synchronization immediately.
         <orderedlist>
           <listitem>
             <para>OpenACS retrieves a document from the enterprise server
-containing user information. Example mechanisms: 
+containing user information. Example mechanisms:
 <itemizedlist>
                 <listitem>
                   <para>A file is delivered to an agreed-on location in the file
@@ -2103,7 +2103,7 @@ University business.
         <para>Service contract for retrieving the document:
 </para>
         <programlisting>
-    GetDocument ( 
+    GetDocument (
         type:       0 = snapshot
                     1 = incremental
         since:      date that you want the incremental update since?
@@ -2119,7 +2119,7 @@ University business.
         <para>Service contract for processing the document:
 </para>
         <programlisting>
-    ProcessDocument ( 
+    ProcessDocument (
         type:       0 = snapshot
                     1 = incremental
         since:      date that you want the incremental update since?
@@ -2173,18 +2173,18 @@ Include administration functionality.
       <sect3>
         <title>Internal Design
 </title>
-        Describe key algorithms, including pseudo-code. 
+        Describe key algorithms, including pseudo-code.
       </sect3>
       <sect3>
         <title>Data Model
 </title>
-        Describe data model changes. 
+        Describe data model changes.
       </sect3>
       <sect3>
         <title>Error Handling
 </title>
         What error codes or error conditions could result? How are they
-        handled? 
+        handled?
       </sect3>
       <sect3>
         <title>Upgrade
@@ -2197,14 +2197,14 @@ Include administration functionality.
       <title>EXT-AUTH-29:
 Password Management Service Contract (1 hour)
 </title>
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
-</para> 
+</para>
       Already done by Lars. Todo: improve documentation of return values.
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
@@ -2219,7 +2219,7 @@ Marklund
       <sect3>
         <title>External Design
 </title>
-        We&#39;ll want an API that lets us 
+        We&#39;ll want an API that lets us
         <itemizedlist>
           <listitem>
             <para>add authorities: auth::authority::new
@@ -2234,7 +2234,7 @@ Marklund
 </para>
           </listitem>
         </itemizedlist>
-        authorities. 
+        authorities.
         <para>Here goes:
 </para>
       </sect3>
@@ -2292,7 +2292,7 @@ ad_proc -public auth::authority::delete {
   {-authority_id:required}
 } {
    db_exec delete_authority {
-      delete from auth_authorities 
+      delete from auth_authorities
       where authority_id = :authority_id
    }
 }
@@ -2312,7 +2312,7 @@ ad_proc -public auth::authority::edit {
       {-register_url:required}
 } {
    db_exec edit_authority {
-      update auth_authorities 
+      update auth_authorities
       set    short_name = :short_name,
              pretty_name = :pretty_name,
              active_p = :active_p,
@@ -2350,15 +2350,15 @@ ad_proc -public auth::authority::edit {
       <title>EXT-AUTH-31:
 External Authentication Datamodel (2 hours)
 </title>
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
-</para> 
+</para>
       The columns authority_id and username have been added to the users
       table for Oracle. We need to add them for PostgreSQL and provide
-      upgrade scripts. 
+      upgrade scripts.
       <programlisting>
 <literal>create table users (
         user_id                 not null
@@ -2368,8 +2368,8 @@ Marklund
         authority_id            integer
                                 constraint users_auth_authorities_fk
                                 references auth_authorities(authority_id),
-        username                varchar2(100) 
-                                constraint users_username_nn 
+        username                varchar2(100)
+                                constraint users_username_nn
                                 not null,
         screen_name             varchar2(100)
                                 constraint users_screen_name_un
@@ -2398,7 +2398,7 @@ Marklund
 </literal>
 </programlisting>
 
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
@@ -2470,13 +2470,13 @@ auth_authorities table.
       <title>OACS-COL-1:
 Automate install and self-test (5 hours)
 </title>
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
-</para> 
-      I need to make sure the install scripts work. I then need to: 
+</para>
+      I need to make sure the install scripts work. I then need to:
       <itemizedlist>
         <listitem>
           <para>Schedule nightly recreation
@@ -2492,14 +2492,14 @@ acs-automated-testing tests and checks results
 </para>
         </listitem>
       </itemizedlist>
-      by 
+      by
       <para>
 <ulink url="peter@collaboraid.biz">Peter
 Marklund
 </ulink>
 </para>
     </sect2>
-    
+
     <sect2>
       <title>EXT AUTH #x: Title
 of feature
@@ -2623,7 +2623,7 @@ implemented.
 </para>
         <para>Risk:
 </para>
-        
+
       </sect3>
     </sect2>
 </sect1>
