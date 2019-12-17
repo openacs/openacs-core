@@ -15,7 +15,7 @@ ad_library {
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-ad_proc -public template_tag args {
+ad_proc -deprecated template_tag args {
     Generic wrapper for registered tag handlers.
 
     DEPRECATED: does not comply with OpenACS naming convention
