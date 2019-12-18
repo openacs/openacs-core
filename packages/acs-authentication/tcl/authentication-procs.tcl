@@ -1214,9 +1214,9 @@ ad_proc -public auth::update_local_account {
                     -last_name $user_info(last_name)
             }
 
-            # Update person.bio
+            # Update person's bio
             if { [info exists user_info(bio)] } {
-                person::update_bio \
+                person::update \
                     -person_id $user_id \
                     -bio $user_info(bio)
             }
