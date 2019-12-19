@@ -1,14 +1,11 @@
-#
-# API Browser search widget
-#
-# @cvs-id $Id$
-#
-# Expects: query_string:optional
-#
+ad_include_contract {
+    API Browser search widget
 
-if { ![info exists query_string] } {
-    set query_string {}
+    @cvs-id $Id$
+} {
+    {query_string ""}
 }
+
 set package_url [apm_package_url_from_key "acs-api-browser"]
 
 # AOLserver has dropped documentation, use NaviServer docs instead
