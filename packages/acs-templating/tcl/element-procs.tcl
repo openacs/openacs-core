@@ -136,6 +136,9 @@ ad_proc -public template::element::create { form_id element_id args } {
 
     @option nospell       A flag indicating that no spell-checking should be performed on
                           this element. This overrides the 'SpellcheckFormWidgets' parameter.
+    
+    @option noquote       A flag indicating that no value should not be quoted in a form.
+                          Currently only supported by the "inform" widget type.
 
     @option before_html   A chunk of HTML displayed immediately before the rendered element.
 

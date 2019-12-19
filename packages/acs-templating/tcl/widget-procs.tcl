@@ -357,7 +357,11 @@ ad_proc -public template::widget::inform { element_reference tag_attributes } {
     upvar $element_reference element
 
     if { [info exists element(value)] } {
-        return "[ns_quotehtml $element(value)][input hidden element $tag_attributes]"
+        if { [info exists element(noquote)] } {
+            return "$element(value)[input hidden element $tag_attributes]"            
+        } else {
+            return "[ns_quotehtml $element(value)][input hidden element $tag_attributes]"
+        }
     } else {
         return [input hidden element $tag_attributes]
     }

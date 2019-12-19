@@ -861,6 +861,7 @@ ad_proc -public ad_form {
                     }
 
                     multiple -
+                    noquote -                    
                     nospell -
                     optional {
                         if { $af_element_parameters($element_name:$flag) ne "" } {
