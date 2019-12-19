@@ -26,7 +26,7 @@ db_foreach audit_inv_select {
         $new_message \
         "$old_message,$new_message" \
         $comment_text
-    
+
     set new_message $old_message
 
     incr trail_counter
