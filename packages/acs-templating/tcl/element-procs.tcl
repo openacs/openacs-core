@@ -138,6 +138,8 @@ ad_proc -public template::element::create { form_id element_id args } {
                           this element. This overrides the 'SpellcheckFormWidgets' parameter.
     
     @option noquote       A flag indicating that no value should not be quoted in a form.
+                          In addition, the nonquoted inform field is not transmitted as
+                          a hidden field (which can be attacked via noquote).
                           Currently only supported by the "inform" widget type.
 
     @option before_html   A chunk of HTML displayed immediately before the rendered element.
