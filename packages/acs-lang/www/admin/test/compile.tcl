@@ -1,4 +1,10 @@
-set file [ns_queryget file]
+ad_page_contract {
+    This page will adp_compile any file in its same local directory
+    and display the result as HTML. Apparently a leftover from around
+    2002 and the GreenPeace times.
+} {
+    file:notnull
+}
 
 if { [regexp {\.\.|^/} $file] } {
 
