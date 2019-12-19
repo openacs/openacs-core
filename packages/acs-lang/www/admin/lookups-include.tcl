@@ -1,5 +1,7 @@
 ad_include_contract {
     Display message key occurrences on the system.
+
+    Note: upstream codebase seems to not mention this file anywhere.
 } {
     package_key:token,notnull
     message_key_list:notnull
