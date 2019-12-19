@@ -1,3 +1,7 @@
+ad_include_contract {
+    Display messages to translate when translator mode is enabled.
+}
+
 set locale [ad_conn locale]
 
 set display_p [expr {[lang::util::translator_mode_p] && [ad_conn locale] ne "en_US" }]

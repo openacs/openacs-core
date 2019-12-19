@@ -1,3 +1,11 @@
+ad_include_contract {
+    Display message key audits when translating a message key.
+} {
+    package_key:token,notnull
+    message_key:token,notnull
+    current_locale:token,notnull
+}
+
 set trail_counter 0
 
 set new_message [db_string current_message { select message from lang_messages where locale = :current_locale and package_key = :package_key and message_key = :message_key } -default ""]

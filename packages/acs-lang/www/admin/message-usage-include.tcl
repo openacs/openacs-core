@@ -1,9 +1,14 @@
-# @input message_key
-# @input package_key
-#
-# @author Peter Marklund (peter@collaboraid.biz)
-# @author Lars Pind (lars@collaboraid.biz)
-# @cvs-id $Id$
+ad_include_contract {
+    Display occurrences of specified message key. Used while
+    translating.
+
+    @author Peter Marklund (peter@collaboraid.biz)
+    @author Lars Pind (lars@collaboraid.biz)
+    @cvs-id $Id$
+} {
+    message_key:token,notnull
+    package_key:token,notnull
+}
 
 set full_key "$package_key.$message_key"
 
