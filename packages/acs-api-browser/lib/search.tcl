@@ -48,13 +48,13 @@ switch [db_type] {
                 set db_doc_url "http://otn.oracle.com/documentation/oracle9i.html"
 		set db_doc_search_url "http://otn.oracle.com/pls/db92/db92.drilldown"
 		set db_doc_search_export ""
-		set db_doc_search_query_name "word"	
+		set db_doc_search_query_name "word"
             }
             10* {
                 set db_doc_url ""
                 set db_doc_search_url "http://otn.oracle.com/pls/db10g/db10g.drilldown"
                 set db_doc_search_export "http://otn.oracle.com/pls/db10g/db10g.homepage"
-                set db_doc_search_query_name "word"                
+                set db_doc_search_query_name "word"
             }
             default {
                 set db_doc_url ""

@@ -1,4 +1,4 @@
-<table border="0" cellspacing="12" cellpadding="4"> 
+<table border="0" cellspacing="12" cellpadding="4">
  <tr style="background:#DDDDDD">
   <td>
     <form action="@openacs_search_url@" method="get">
@@ -14,7 +14,7 @@
        </div>
        <p><a href="@openacs_browse_url@">Browse OpenACS Tcl API</a></p>
       </td>
-      <td>       
+      <td>
        <table cellspacing="0" cellpadding="0">
          <tr><td align="right">Name contains:</td>
            <td><input type="radio" name="name_weight" value="5" checked="checked"> </td>
@@ -39,7 +39,7 @@
    </form>
   </td>
  </tr>
- 
+
  <tr style="background:#DDDDDD">
   <td colspan="2">
    <h4>OpenACS PL/SQL API Search</h4>
@@ -105,7 +105,7 @@
     <a href="/doc">Browse OpenACS documentation</a>
    </td>
   </tr>
-  
+
   <tr style="background:#DDDDDD">
    <td colspan="2">
     <h4>Deprecated Functions</h4>
