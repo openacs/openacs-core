@@ -1,3 +1,7 @@
+ad_page_contract {
+    Index page. Display the various kinds of service contracts.
+}
+
 set context [list]
 
 db_multirow defined_contracts defined_contracts {
