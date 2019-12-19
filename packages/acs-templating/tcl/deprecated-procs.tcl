@@ -134,7 +134,7 @@ ad_proc -deprecated -public template::util::multirow_foreach { name code_text } 
 	foreach column_name $columns {
 
 	    # first change all references to a column to the proper
-	    # rownum-dependent identifier, ie the array value identified
+	    # rownum-dependent identifier, i.e. the array value identified
 	    # by $<multirow_name>:<rownum>(<column_name>)
 	    regsub -all "($name).($column_name)" $running_code "$name:${i}($column_name)" running_code
 	}

@@ -351,7 +351,7 @@ ad_proc -public template::head::add_meta {
     @param scheme     the scheme attribute of the meta tag defining which
                       metadata scheme should be used to interpret the metadata,
                       e.g. 'DC' for Dublin Core (http://dublincore.org/)
-    @param content    the content attribute of the meta tag, ie the metadata
+    @param content    the content attribute of the meta tag, i.e. the metadata
                       value
     @param lang       the lang attribute of the meta tag specifying the language
                       of its attributes if they differ from the document language
