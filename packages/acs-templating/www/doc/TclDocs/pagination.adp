@@ -58,7 +58,7 @@ datasource</blockquote><dl><dd>
 <tr>
 <td align="right">
 <code>sql</code><font color="red">*</font>
-</td><td align="left">The sql query to paginate</td>
+</td><td align="left">The SQL query to paginate</td>
 </tr><tr>
 <td align="right">
 <code>page</code><font color="red">*</font>

@@ -471,7 +471,7 @@ needed.</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="content::get_sql_value" id="content::get_sql_value"><font size="+1" weight="bold">content::get_sql_value</font></a></td></tr><tr><td>
-<blockquote>Return the sql statement for a column value in an
+<blockquote>Return the SQL statement for a column value in an
 insert or update statement, using a bind variable for the actual
 value and wrapping it in a conversion function where
 appropriate.</blockquote><dl><dd>
