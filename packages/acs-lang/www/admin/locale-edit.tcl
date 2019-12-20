@@ -7,9 +7,8 @@ ad_page_contract {
     Modified by Christian Hvid
 
     @creation-date 19 march 2002
-    @cvs-id $Id$
 } {
-    locale
+    locale:word
 }
 
 # Get the locale for the user so that we 'spit' the content back in the

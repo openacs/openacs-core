@@ -7,8 +7,8 @@ ad_page_contract {
     @creation-date 26 October 2001
     @cvs-id $Id$
 } {
-    locale
-    package_key
+    locale:word
+    package_key:token
     {show "all"}
 } -validate {
     show_valid -requires { show } {

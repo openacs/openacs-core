@@ -3,8 +3,8 @@ ad_page_contract {
 
     @author Peter Marklund
 } {
-    {locale ""}
-    {package_key ""}
+    {locale:word ""}
+    {package_key:token ""}
     {return_url:localurl "/acs-lang/admin"}
 }
 

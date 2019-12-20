@@ -3,7 +3,7 @@ ad_page_contract {
     
     @author Peter Marklund
 } {
-    {locale "de_DE"}
+    {locale:word "de_DE"}
     {number_of_edits 400}
     {email_exclude ""}
 }

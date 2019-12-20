@@ -1,5 +1,3 @@
-# /packages/acs-lang/www/admin/locale-delete.tcl
-
 ad_page_contract {
 
     Deletes a locale
@@ -8,7 +6,7 @@ ad_page_contract {
     @creation-date 19 march 2002
     @cvs-id $Id$
 } {
-    locale
+    locale:word
     confirm_p:boolean,optional
 }
 

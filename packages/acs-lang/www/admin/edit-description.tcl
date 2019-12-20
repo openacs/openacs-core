@@ -4,8 +4,8 @@ ad_page_contract {
     @author Simon Carstensen
     @creation-date 2003-08-13
 } {
-    locale
-    package_key
+    locale:word
+    package_key:token
     message_key
     show:optional
     {description ""}

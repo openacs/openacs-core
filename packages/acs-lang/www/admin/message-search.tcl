@@ -4,7 +4,7 @@ ad_page_contract {
     in order to help translators ensure consistent terminology.
 
 } {
-    locale
+    locale:word
     search_locale:optional
     q:optional
 }

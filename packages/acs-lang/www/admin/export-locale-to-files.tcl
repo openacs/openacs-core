@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    locale
+    locale:word
 }
 
 set locale_label [lang::util::get_label $locale]

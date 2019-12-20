@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 26 October 2001
     @cvs-id $Id$
 } {
-    locale
+    locale:word
 } -properties {
     current_locale_label
     page_title

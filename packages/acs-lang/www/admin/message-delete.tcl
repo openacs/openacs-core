@@ -8,8 +8,8 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    locale
-    package_key
+    locale:word
+    package_key:token
     message_key
     show:optional
     confirm_p:boolean,optional

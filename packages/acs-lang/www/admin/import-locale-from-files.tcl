@@ -2,11 +2,11 @@ ad_page_contract {
     Import all catalog messages for a given locale from
     the file system. Should typically only be done once
     as it may overwrite translations already in the database
-    for the given locale
+    for the given locale.
 
     @author Peter Marklund
 } {
-    locale
+    locale:word
 }
 
 set locale_label [lang::util::get_label $locale]

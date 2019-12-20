@@ -6,7 +6,7 @@ ad_page_contract {
 
     @creation-date 2003-08-08
 } {
-    locale
+    locale:word
     enabled_p:boolean
 }
 

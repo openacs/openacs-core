@@ -3,8 +3,8 @@ ad_page_contract {
 
     @author Christian Hvid
 } {
-    locale
-    package_key
+    locale:word
+    package_key:token
     {show "all"}
     {page_start 0}
 }

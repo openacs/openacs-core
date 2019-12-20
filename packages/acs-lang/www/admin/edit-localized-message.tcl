@@ -9,10 +9,10 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    locale
-    package_key
-    message_key
-    show:optional
+    locale:word
+    package_key:token
+    message_key:token
+    show:word,optional
     {usage_p:boolean "f"}
     {return_url:localurl {}}
 }
@@ -72,7 +72,7 @@ ad_form -name message_form -form {
         {label "Message Key"}
         {value "$package_key.$message_key"}
     }
-    {description:text(inform)
+    {description:text(inform),optional
         {label "Description"}
         {mode display}
         {after_html {(<a href='[ns_quotehtml $description_edit_url]'>Edit</a>)}}

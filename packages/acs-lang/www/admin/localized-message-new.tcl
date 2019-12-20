@@ -9,8 +9,8 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    locale
-    package_key
+    locale:word
+    package_key:token
     {message_key ""}
     {return_url:localurl {[export_vars -base message-list { locale package_key }]}}
 }
