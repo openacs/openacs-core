@@ -399,8 +399,9 @@ aa_register_case \
     -procs {} \
     files__page_contracts {
 
-    Checks for files without 'ad_page_contract' or 'ad_include_contract' in
-    both 'www' and 'lib' package directories.
+    Checks for files without 'ad_page_contract', 'ad_include_contract'
+    or '::xowiki::Package initialize -ad_doc' in both 'www' and 'lib'
+    package directories.
 
     There are cases, where includelets are not stored in 'lib' but 'www', or
     have 'ad_page_contract' instead of 'ad_include_contract'.
@@ -433,21 +434,6 @@ aa_register_case \
         }]
     }
 
-    set ignorechars {
-        , " "
-        ( " " ) " " < " " > " "
-        \[ " " \] " "
-        \{ " " \} " "
-        < " " > " "
-        . " " : " "   ; " " ? " " ! " "
-        = " "
-        \r " "
-        \" " "
-        „ " " “ " " ” " "
-        ﻿ " "
-        ­ ""
-    }
-
     #inspect every Tcl file in the directory tree starting with $startdir
     set count 0
     set good 0
@@ -457,8 +443,13 @@ aa_register_case \
         set contract_found_p false
         ns_log Notice "Looking for contracts in file $file"
         while {[gets $f line] >= 0 && !$contract_found_p} {
-            set line_clean [string map $ignorechars $line]
-            if { "ad_page_contract" in "$line_clean" || "ad_include_contract" in "$line_clean" } {
+            # '::xowiki::Package initialize -ad_doc' idioms are not
+            # that easy to identify, as nothing prevents from writing
+            # them on multiple lines or using different flags... This
+            # simple pattern matching is based on ocurrences as found
+            # in upstream code.
+            set patterns [list "::xowiki::Package initialize -ad_doc" "ad_page_contract" "ad_include_contract"]
+            if {[regexp [join $patterns |] $line]} {
                 # Found contract!
                 incr good
                 set contract_found_p true
@@ -468,10 +459,10 @@ aa_register_case \
 
         # Check results on $file
         if { !$contract_found_p } {
-            aa_log_result fail "$file: no 'ad_page_contract' or 'ad_include_contract' found"
+            aa_log_result fail "$file: no 'ad_page_contract', 'ad_include_contract', or '::xowiki::Package initialize -ad_doc' found"
         }
     }
-    aa_log "$good of $count tcl files checked have 'ad_page_contract' or 'ad_include_contract'"
+    aa_log "$good of $count tcl files checked have 'ad_page_contract', 'ad_include_contract' or ::xowiki::Package initialize -ad_doc"
 }
 
 # Local variables:
