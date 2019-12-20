@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Peter Marklund
 } {
-    locale:optional
+    locale:word,optional
     package_key:optional
     upgrade_status:optional
 }
