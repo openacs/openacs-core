@@ -576,7 +576,7 @@ ad_proc -private rp_filter { why } {
     set ad_conn_url [ad_conn url]
     ad_conn -set vhost_url $ad_conn_url
 
-    if {[string first [encoding convertto utf-8 \x00] $ad_conn_url] > -1} {
+    if {[regexp  {[^[:print:]]} $ad_conn_url]} {
         ad_log warning "rp_filter: BAD CHAR in URL $ad_conn_url // rp_filter $why"
         # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
         ad_conn -set url ${root}/
