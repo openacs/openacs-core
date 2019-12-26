@@ -435,7 +435,7 @@ ad_proc -private util_close_html_tags {
         try {
             dom parse -html <body>$frag doc
         } on error {errorMsg} {
-            # we got an error, so do Tcl based html completion processing
+            # we got an error, so do Tcl based HTML completion processing
             #ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom\n$frag"
             ad_log notice "tdom can't parse the provided HTML, error=$errorMsg, checking fragment without tdom"
         } on ok {r} {

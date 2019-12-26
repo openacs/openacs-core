@@ -12,7 +12,7 @@ ad_proc -deprecated us_state_widget {
    This widget depends on the ref-us-states package.
 
     DEPRECATED for various reasons: doesn't comply with OpenACS naming
-    convention, difficult to sytle, no good separation of tcl and
+    convention, difficult to style, no good separation of Tcl and
     HTML, 'select_name' is prone to code injection and the proc
     depends on an external package. A better alternative would be
     e.g. implementing this using the templating system.
@@ -49,7 +49,7 @@ ad_proc -deprecated country_widget {
     This widget depends on the ref-countries package.
 
     DEPRECATED for various reasons: doesn't comply with OpenACS naming
-    convention, difficult to sytle, no good separation of tcl and
+    convention, difficult to style, no good separation of Tcl and
     HTML, 'size_subtag' is just implemented code injection and
     furthermore, default value might depend on a parameter designed
     just for "american readers". A better alternative would be

@@ -446,7 +446,7 @@ aa_register_case \
             # '::xowiki::Package initialize -ad_doc' idioms are not
             # that easy to identify, as nothing prevents from writing
             # them on multiple lines or using different flags... This
-            # simple pattern matching is based on ocurrences as found
+            # simple pattern matching is based on occurrences as found
             # in upstream code.
             set patterns [list "::xowiki::Package initialize -ad_doc" "ad_page_contract" "ad_include_contract"]
             if {[regexp [join $patterns |] $line]} {
