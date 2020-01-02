@@ -86,13 +86,21 @@ ad_proc -public acs_sc_binding_exists_p {
     @param contract the contract name
     @param impl the implementation name
 
-    @return 0 or 1
+    @return boolean
 
     @author Neophytos Demetriou
 } {
-
-    return [db_string binding_exists_p {}]
-
+    return [db_string binding_exists_p {
+        select exists (select 1 from acs_sc_bindings
+                       where contract_id = (select contract_id
+                                            from acs_sc_contracts
+                                            where contract_name = :contract)
+                         and impl_id = (select impl_id
+                                        from acs_sc_impls
+                                        where impl_name = :impl
+                                        and impl_contract_name = :contract))
+        from dual
+    }]
 }
 
 ad_proc -private acs_sc_generate_name {
