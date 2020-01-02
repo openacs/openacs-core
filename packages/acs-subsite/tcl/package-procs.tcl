@@ -827,7 +827,7 @@ ad_proc -public package_instantiate_object {
     set object_id [db_exec_plsql create_object {}]
 
     if { [ad_conn isconnected] } {
-        subsite_callback -object_type $object_type "insert" $object_id
+        subsite::callback -object_type $object_type "insert" $object_id
     }
 
     # BUG FIX (ben - OpenACS)
