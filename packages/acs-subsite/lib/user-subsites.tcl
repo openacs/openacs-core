@@ -1,3 +1,10 @@
+ad_include_contract {
+    Display the list of subsites a user is member of. Used e.g. in
+    /pvt/home page
+} {
+    user_id:naturalnum,notnull
+}
+
 db_multirow -extend {url admin_p admin_url member_state_pretty} groups groups {
     select ap.package_id, r.object_id_one as group_id, g.group_name, mr.member_state
     from   acs_rels r,
