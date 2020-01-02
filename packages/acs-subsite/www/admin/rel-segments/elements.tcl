@@ -24,7 +24,16 @@ ad_page_contract {
     }
 }
 
-db_1row select_segment_info {}
+db_1row select_segment_info {
+    select s.segment_name,
+           s.group_id,
+           (select pretty_plural
+            from acs_rel_roles
+            where role = r.role_two) as role_pretty_plural
+      from rel_segments s, acs_rel_types r
+     where s.segment_id = :segment_id
+       and s.rel_type = r.rel_type
+}
 
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
