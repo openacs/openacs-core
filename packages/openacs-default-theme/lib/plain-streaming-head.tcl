@@ -1,13 +1,18 @@
-# The streaming head template provides means for styling streaming
-# HTML output and supports the standard title and navigation bar
-# conventions.  It can be used e.g. like in the following:
-#
-# set title "Contents of Loaded Package"
-# set context [list [list "." "Package Manager"] [list "package-load" "Load a New Package"] $title]
-# ad_return_top_of_page [ad_parse_template -params [list context title] \
-#			   "/packages/openacs-default-theme/lib/plain-streaming-head"]
-#
-#
+ad_include_contract {
+    The streaming head template provides means for styling streaming
+    HTML output and supports the standard title and navigation bar
+    conventions.  It can be used e.g. like in the following:
+
+    set title "Contents of Loaded Package"
+    set context [list [list "." "Package Manager"] [list "package-load" "Load a New Package"] $title]
+    ad_return_top_of_page [ad_parse_template -params [list context title] \
+                               "/packages/openacs-default-theme/lib/plain-streaming-head"]
+
+    Note that as 'title' and 'context' are meant to be passed to the
+    template via the idiom above, defining them via the
+    include_contract is currently not supported.
+}
+
 set separator :
 set system_name [ad_system_name]
 set untrusted_user_id [ad_conn untrusted_user_id]
