@@ -39,8 +39,18 @@ set rel_type_enc [ad_urlencode $rel_type]
 
 # Select out the group name and the group's object type. Note we can
 # use 1row because the validate filter above will catch missing groups
-
-db_1row group_and_rel_info {}
+db_1row group_and_rel_info {
+    select (select group_name from groups
+            where group_id = :group_id) as group_name,
+           (select pretty_name from acs_object_types
+            where object_type = :rel_type) as rel_type_pretty_name,
+           r.pretty_plural as role_pretty_plural,
+           r.pretty_name as role_pretty_name
+      from acs_rel_types rel_types,
+           acs_rel_roles r
+     where r.role = rel_types.role_two
+       and rel_types.rel_type = :rel_type
+}
 
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
