@@ -1,3 +1,10 @@
+ad_page_contract {
+    This page is probably a leftover born in the times of OpenACS 4.x
+    as part of some kind of test suite.
+} {
+    l:optional
+}
+
 if {[llength $l]} {
     set car		[lindex $l 0]
     set cdr		[lrange $l 1 end]
