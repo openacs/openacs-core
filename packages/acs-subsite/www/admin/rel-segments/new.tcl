@@ -41,7 +41,10 @@ set export_vars [export_vars -form {group_id return_url}]
 # Select out all relationship types
 db_multirow rel_types select_relation_types {}
 
-db_1row select_basic_info {}
+set group_name [db_string select_basic_info {
+    select group_name from groups
+    where group_id = :group_id
+}]
 
 ad_return_template
 

@@ -17,15 +17,4 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="select_basic_info">      
-      <querytext>
-      
-    select acs_group.name(:group_id) as group_name
-      from dual
-
-      </querytext>
-</fullquery>
-
- 
 </queryset>
