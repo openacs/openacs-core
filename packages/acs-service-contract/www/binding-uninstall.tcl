@@ -7,8 +7,11 @@ ad_page_contract {
     impl_id:naturalnum,notnull
 }
 
-
-db_exec_plsql binding_uninstall "select acs_sc_binding__delete($contract_id,$impl_id)"
+db_dml binding_uninstall {
+    delete from acs_sc_bindings
+    where contract_id = :contract_id
+    and impl_id = :impl_id
+}
 
 ad_returnredirect ""
 ad_script_abort
