@@ -6,24 +6,27 @@
     <pretty-plural>Tsearch2 Drivers</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
+    <implements-subsite-p>f</implements-subsite-p>
+    <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.10.0d2" url="http://openacs.org/repository/download/apm/tsearch2-driver-5.10.0d2.apm">
+    <version name="5.10.0d3" url="http://openacs.org/repository/download/apm/tsearch2-driver-5.10.0d3.apm">
         <owner url="mailto:dave@thedesignexperience.org">Dave Bauer</owner>
         <summary>Full text search support for Search via Tsearch2.</summary>
         <release-date>2017-08-06</release-date>
         <description format="text/html">Provides an implementation for the search packages service contract for searching on PostgreSQL.</description>
         <maturity>3</maturity>
 
-        <provides url="tsearch2-driver" version="5.10.0d2"/>
+        <provides url="tsearch2-driver" version="5.10.0d3"/>
         <requires url="search" version="5.9.1"/>
 
         <callbacks>
-            <callback type="before-install" proc="tsearch2_driver::install::preinstall_checks"/>
             <callback type="after-install"  proc="tsearch2_driver::install::package_install"/>
+            <callback type="before-install"  proc="tsearch2_driver::install::preinstall_checks"/>
+            <callback type="before-uninstall"  proc="tsearch2_driver::install::before_uninstall"/>
         </callbacks>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="permission_check_enabled_p"  default="1" description="Check whether the user is allowed to read the object. This is used to filter the search results w.r.t the privileges of the user performing the query."/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="max_size_to_index"  default="0" description="Maximum size of doc to index, in bytes. 0 to index the full document. If the doc is greater than this parameter, the indexing is truncated."/>            
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="max_size_to_index"  default="0" description="Maximum size of doc to index, in bytes. 0 to index the full document. If the doc is greater than this parameter, the indexing is truncated."/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="permission_check_enabled_p"  default="1" description="Check whether the user is allowed to read the object. This is used to filter the search results w.r.t the privileges of the user performing the query."/>
         </parameters>
 
     </version>

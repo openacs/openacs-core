@@ -111,6 +111,15 @@ ad_proc -private tsearch2_driver::install::register_fts_impl {
 
 }
 
+ad_proc -private tsearch2_driver::install::before_uninstall {
+} {
+    Remove FtsEngineDriver service contract implementation
+} {
+    acs_sc::impl::delete \
+        -contract_name "FtsEngineDriver" \
+        -impl_name "tsearch2-driver"
+}
+
 #
 # Local variables:
 #    mode: tcl
