@@ -18,12 +18,10 @@ ad_page_contract {
     group_id:onevalue
     group_name:onevalue
     role_pretty_plural:onevalue
-    create_p:onevalue
     rel_type_enc:onevalue
     return_url_enc:onevalue
     member_state:onevalue
     possible_member_states:multirow
-    ancestor_rel_type:onevalue
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
         if { ![permission::permission_p -object_id $group_id -privilege "read"] } {
@@ -34,8 +32,9 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 set create_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "create"]
-set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
-set rel_type_enc [ad_urlencode $rel_type]
+
+set add_url [export_vars -base "../relations/add" {
+    group_id rel_type {return_url "[ad_conn url]?[ad_conn query]"}}]
 
 # Select out the group name and the group's object type. Note we can
 # use 1row because the validate filter above will catch missing groups
