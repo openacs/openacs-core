@@ -2,16 +2,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="cr_write_content.get_item_info">
-      <querytext>
-          select r.mime_type, i.storage_type, i.storage_area_key,
-            r.revision_id, r.content_length
-            from cr_revisions r, cr_items i
-          where i.item_id = r.item_id and
-              r.revision_id = content_item.get_live_revision(:item_id)
-      </querytext>
-</fullquery>
-
 <fullquery name="cr_write_content.write_file_content">
       <querytext>
           select :path || filename
@@ -25,27 +15,6 @@
           select content
           from cr_revisions
           where revision_id = $revision_id
-      </querytext>
-</fullquery>
-
-
-<fullquery name="cr_import_content.mime_type_register">
-      <querytext>
-          begin
-            content_type.register_mime_type('content_revision', :mime_type);
-          end;
-      </querytext>
-</fullquery>
-
-<fullquery name="cr_import_content.image_subclass">
-      <querytext>
-         select content_item.is_subclass(:image_type, 'image') from dual
-      </querytext>
-</fullquery>
-
-<fullquery name="cr_import_content.content_revision_subclass">
-      <querytext>
-         select content_item.is_subclass(:other_type, 'content_revision') from dual
       </querytext>
 </fullquery>
 
@@ -152,16 +121,6 @@
       <querytext>
          begin content_item.set_live_revision (revision_id => :revision_id);
          end;
-      </querytext>
-</fullquery>
- 
-<fullquery name="cr_import_content.set_file_content">
-      <querytext>
-          update cr_revisions
-          set filename = :filename,
-              mime_type = :mime_type,
-              content_length = :tmp_size
-          where revision_id = :revision_id
       </querytext>
 </fullquery>
 

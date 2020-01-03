@@ -2,15 +2,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="cr_write_content.get_item_info">
-      <querytext>
-          select i.storage_type, i.storage_area_key, r.mime_type,
-          r.revision_id, r.content_length
-          from cr_items i, cr_revisions r
-          where r.revision_id = content_item__get_live_revision(:item_id) and i.item_id = r.item_id
-      </querytext>
-</fullquery>
-
 <fullquery name="cr_write_content.write_file_content">
       <querytext>
           select :path || content
@@ -24,24 +15,6 @@
           select lob as content, 'lob' as storage_type
           from cr_revisions
           where revision_id = :revision_id
-      </querytext>
-</fullquery>
-
-<fullquery name="cr_import_content.mime_type_register">
-      <querytext>
-          select content_type__register_mime_type('content_revision', :mime_type)
-      </querytext>
-</fullquery>
-
-<fullquery name="cr_import_content.image_subclass">
-      <querytext>
-         select content_item__is_subclass(:image_type, 'image')
-      </querytext>
-</fullquery>
-
-<fullquery name="cr_import_content.content_revision_subclass">
-      <querytext>
-         select content_item__is_subclass(:other_type, 'content_revision')
       </querytext>
 </fullquery>
 
@@ -159,16 +132,6 @@
 <fullquery name="cr_set_imported_content_live.set_live">
       <querytext>
           select content_item__set_live_revision(:revision_id)
-      </querytext>
-</fullquery>
-
-<fullquery name="cr_import_content.set_file_content">
-      <querytext>
-          update cr_revisions
-          set content = :filename,
-              mime_type = :mime_type,
-              content_length = :tmp_size
-          where revision_id = :revision_id
       </querytext>
 </fullquery>
 

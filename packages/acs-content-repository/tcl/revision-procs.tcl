@@ -34,11 +34,28 @@ ad_proc -public cr_write_content {
     }
 
     if { [info exists item_id] } {
-        if { ![db_0or1row get_item_info ""] } {
+        if { ![db_0or1row get_item_info {
+            select i.storage_type,
+                   i.storage_area_key,
+                   r.mime_type,
+                   r.revision_id,
+                   r.content_length
+            from cr_items i, cr_revisions r
+            where i.item_id = :item_id
+              and r.revision_id = i.live_revision
+        }] } {
             error "There is no content that matches item_id '$item_id'" {} NOT_FOUND
         }
     } elseif { [info exists revision_id] } {
-        if { ![db_0or1row get_revision_info ""] } {
+        if { ![db_0or1row get_revision_info {
+            select i.storage_type,
+                   i.storage_area_key,
+                   r.mime_type,
+                   i.item_id,
+                   r.content_length
+            from cr_items i, cr_revisions r
+            where r.revision_id = :revision_id and i.item_id = r.item_id
+        }] } {
             error "There is no content that matches revision_id '$revision_id'" {} NOT_FOUND
         }
     } else {
@@ -60,7 +77,11 @@ ad_proc -public cr_write_content {
 
     switch -- $storage_type {
         text {
-            set text [db_string write_text_content ""]
+            set text [db_string write_text_content {
+                select content
+                from cr_revisions
+                where revision_id = :revision_id
+            }]
             if { $string_p } {
                 return $text
             }
@@ -223,11 +244,19 @@ ad_proc -public cr_import_content {
 
     # use content_type of existing item
     if {$old_item_p} {
-        set content_type [db_string get_content_type ""]
+        set content_type [db_string get_content_type {
+            select content_type
+            from cr_items
+            where item_id = :item_id
+        }]
     } else {
         # all we really need to know is if the mime type is mapped to image, we
         # actually use the passed in image_type or other_type to create the object
-        if {[db_string image_type_p "" -default 0]} {
+        if {[db_0or1row image_type_p {
+            select 1 from cr_content_mime_type_map
+            where mime_type = :mime_type
+            and content_type = 'image'
+        }]} {
             set content_type image
         } else {
             set content_type content_revision
@@ -237,15 +266,42 @@ ad_proc -public cr_import_content {
 
     db_transaction {
 
-        if { [db_string is_registered "" -default ""] eq "" } {
-            db_dml mime_type_insert ""
-            db_exec_plsql mime_type_register ""
+        if { ![db_0or1row is_registered {
+            select 1
+            from cr_content_mime_type_map
+            where mime_type = :mime_type
+            and content_type = 'content_revision'
+        }]} {
+            db_dml mime_type_insert {
+                insert into cr_mime_types (mime_type)
+                select :mime_type
+                from dual
+                where not exists (select 1 from cr_mime_types where mime_type = :mime_type)
+            }
+            db_dml mime_type_register {
+                insert into cr_content_mime_type_map (content_type, mime_type)
+                values ('content_revision', :mime_type)
+            }
         }
 
         switch -- $content_type {
             image {
 
-                if { [db_string image_subclass ""] == "f" } {
+                if { ![db_0or1row image_subclass {
+                    with recursive type_hierarchy as (
+                        select object_type, supertype
+                          from acs_object_types
+                         where object_type = :image_type
+                        union all
+                        select s.object_type, s.supertype
+                          from acs_object_types s,
+                               type_hierarchy h
+                         where h.object_type <> 'image'
+                           and s.object_type = h.supertype
+                        )
+                    select 1 from type_hierarchy
+                     where object_type = 'image'
+                }]} {
                     error "Image file must be stored in an image object"
                 }
 
@@ -286,7 +342,21 @@ ad_proc -public cr_import_content {
                     error "The file you uploaded was not an image (.gif, .jpg or .jpeg) file"
                 }
 
-                if { [db_string content_revision_subclass ""] == "f" } {
+                if { ![db_0or1row content_revision_subclass {
+                    with recursive type_hierarchy as (
+                        select object_type, supertype
+                          from acs_object_types
+                         where object_type = :other_type
+                        union all
+                        select s.object_type, s.supertype
+                          from acs_object_types s,
+                               type_hierarchy h
+                         where h.object_type <> 'content_revision'
+                           and s.object_type = h.supertype
+                        )
+                    select 1 from type_hierarchy
+                     where object_type = 'content_revision'
+                }]} {
                     error "Content must be stored in a content revision object"
                 }
 
@@ -303,7 +373,13 @@ ad_proc -public cr_import_content {
         switch -- $storage_type {
             file {
                 set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
-                db_dml set_file_content ""
+                db_dml set_file_content {
+                    update cr_revisions set
+                        content        = :filename,
+                        mime_type      = :mime_type,
+                        content_length = :tmp_size
+                    where revision_id = :revision_id
+                }
             }
             lob {
                 db_dml set_lob_content "" -blob_files [list $tmp_filename]
@@ -353,7 +429,11 @@ ad_proc cr_registered_type_for_mime_type {
 
     @param mime_type param The mime type
 } {
-    return [db_string registered_type_for_mime_type "" -default ""]
+    return [db_string registered_type_for_mime_type {
+        select content_type
+        from cr_content_mime_type_map
+        where mime_type = :mime_type
+    } -default ""]
 }
 
 ad_proc cr_check_mime_type {
@@ -390,11 +470,19 @@ ad_proc cr_check_mime_type {
     # future. Usages of this proc in the systems are already set to
     # give us the path to the file here.
     set extension [string tolower [string trimleft [file extension $filename] "."]]
-    if {[db_0or1row lookup_mimetype {}]} {
+    if {[db_0or1row lookup_mimetype {
+      select mime_type
+        from cr_extension_mime_type_map
+       where extension = :extension
+    }]} {
         return $mime_type
     }
     set mime_type [string tolower [ns_guesstype $filename]]
-    if {[db_0or1row lookup_mimetype {}]} {
+    if {[db_0or1row lookup_mimetype {
+      select mime_type
+        from cr_extension_mime_type_map
+       where extension = :extension
+    }]} {
         return $mime_type
     }
     set allow_mimetype_creation_p \
@@ -426,7 +514,11 @@ ad_proc -public cr_filename_to_mime_type {
         return "*/*"
     }
 
-    if {[db_0or1row lookup_mimetype {}]} {
+    if {[db_0or1row lookup_mimetype {
+        select mime_type
+          from cr_extension_mime_type_map
+         where extension = :extension
+    }]} {
         return $mime_type
     } else {
         set mime_type [string tolower [ns_guesstype $filename]]
