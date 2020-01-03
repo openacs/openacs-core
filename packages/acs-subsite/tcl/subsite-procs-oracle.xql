@@ -3,9 +3,9 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="subsite::default::create_app_group.add_constraint">      
+<fullquery name="subsite::default::create_app_group.add_constraint">
       <querytext>
-      
+
 		    BEGIN
 			:1 := rel_constraint.new(
 			constraint_name => :constraint_name,
@@ -16,7 +16,7 @@
 			creation_ip => :creation_ip
 			);
 		    END;
-		
+
       </querytext>
 </fullquery>
 
