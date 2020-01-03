@@ -50,12 +50,21 @@ if {$party_id ne ""} {
 group::get -group_id $group_id -array group_info
 
 # We assume the group is on side 1...
-db_1row rel_type_info {}
+db_1row rel_type_info {
+    select t.object_type_two,
+           t.role_two as role,
+           (select pretty_name from acs_rel_roles
+            where role = t.role_two) as role_pretty_name,
+           (select pretty_name from acs_object_types
+            where object_type = t.object_type_two) as object_type_two_name
+    from acs_rel_types t
+    where rel_type = :rel_type
+}
 
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
 set role_pretty_name [lang::util::localize $role_pretty_name]
-
+set exact_p true
 if { $exact_p == "f"
      && [subsite::util::sub_type_exists_p $rel_type] } {
 
@@ -150,18 +159,13 @@ if {$party_id ne ""} {
             -widget "inform" -value "$party_name" -label "$role_pretty_name"
 
 } else {
-    if {$object_type_two eq "party"} {
-        # We special case 'party' because we don't want to include
-        # parties whose direct object_type is:
-        #    'rel_segment' - users will get confused by segments here.
-        #    'party' - this is an abstract type and should have no objects,
-        #              but the system creates party -1 which users
-        #              shouldn't see.
 
-        set start_with "ot.object_type = 'group' or ot.object_type = 'person'"
-    } else {
-        set start_with "ot.object_type = :object_type_two"
-    }
+    # We special case 'party' because we don't want to include
+    # parties whose direct object_type is:
+    #    'rel_segment' - users will get confused by segments here.
+    #    'party' - this is an abstract type and should have no objects,
+    #              but the system creates party -1 which users
+    #              shouldn't see.
 
     # The $allow_out_of_scope_p flag controls whether or not we limit
     # the list of parties to those that belong to the current subsite
@@ -170,22 +174,53 @@ if {$party_id ne ""} {
     # the list of parties that can be added to $group_id with a relation
     # of type $rel_type.
 
-    if {$allow_out_of_scope_p == "f"} {
-        set scope_query [db_map select_parties_scope_query]
-
-        set scope_clause "
-              and p.party_id = app_elements.element_id"
-
-    } else {
-        set scope_query ""
-        set scope_clause ""
-    }
-
     # SENSITIVE PERFORMANCE - this comment tag is here to make it
     # easy for us to find all the queries that we know may be unscalable.
     # This query has been tuned as well as possible given development
     # time constraints, but more tuning may be necessary.
-    set party_option_list [db_list_of_lists select_parties {}]
+    set party_option_list [db_list_of_lists select_parties {
+        with recursive subtypes as (
+            select object_type
+              from acs_object_types
+             where (object_type = :object_type_two
+                    and :object_type_two <> 'party') or
+                   (object_type in ('person', 'group')
+                    and :object_type_two = 'party')
+
+             union all
+
+            select t.object_type
+              from acs_object_types t,
+                   subtypes s
+             where t.supertype = s.object_type
+        )
+        select DISTINCT
+               case when groups.group_id is null then
+                   case when persons.person_id is null then 'INVALID'
+                   else persons.first_names || ' ' || persons.last_name end
+               else groups.group_name end as party_name,
+               p.object_id as party_id
+          from acs_objects p
+               left join groups on groups.group_id = p.object_id
+               left join persons on persons.person_id = p.object_id,
+               subtypes s,
+               rc_parties_in_required_segs pirs
+            where p.object_type = s.object_type
+                  -- do not list the group as a possible member
+              and p.object_id <> :group_id
+                  -- do not list parties that are already members
+              and not exists (select 1 from group_element_map
+                               where element_id = p.object_id
+                                 and group_id = :group_id
+                                 and rel_type = :rel_type)
+              and pirs.rel_type = :rel_type
+              and pirs.group_id = :group_id
+              and pirs.party_id = p.object_id
+              and (:allow_out_of_scope_p <> 'f' or
+                   exists (select 1 from application_group_element_map
+                            where package_id = :package_id
+                              and element_id = p.object_id))
+    }]
 
     if { [llength $party_option_list] == 0 } {
         ad_return_template add-no-valid-parties
