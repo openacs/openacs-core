@@ -95,19 +95,19 @@
       </querytext>
 </fullquery>
 
-<fullquery name="cr_import_content.set_lob_content">      
+<fullquery name="cr_import_content.set_lob_content">
       <querytext>
-      
+
         update cr_revisions
         set mime_type = :mime_type,
         content = empty_blob()
         where revision_id = :revision_id
         returning content into :1
-	   
+
       </querytext>
 </fullquery>
 
-<fullquery name="cr_import_content.set_lob_size">      
+<fullquery name="cr_import_content.set_lob_size">
       <querytext>
 
          update cr_revisions

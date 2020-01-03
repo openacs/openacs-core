@@ -102,24 +102,24 @@
             /* creation_date  => */ current_timestamp,
             /* creation_user  => */ :creation_user,
             /* creation_ip    => */ :creation_ip,
-	    /* content_length => */ null, 
+	    /* content_length => */ null,
             /* package_id     => */ :package_id
     );
       </querytext>
 </fullquery>
- 
-<fullquery name="cr_import_content.set_lob_content">      
+
+<fullquery name="cr_import_content.set_lob_content">
       <querytext>
 
 	update cr_revisions
 	set mime_type = :mime_type,
  	   lob = [set __lob_id [db_string get_lob_id {select empty_lob()}]]
 	where revision_id = :revision_id
-	   
+
       </querytext>
 </fullquery>
- 
-<fullquery name="cr_import_content.set_lob_size">      
+
+<fullquery name="cr_import_content.set_lob_size">
       <querytext>
 
          update cr_revisions
