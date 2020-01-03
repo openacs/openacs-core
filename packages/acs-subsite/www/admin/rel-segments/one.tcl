@@ -70,7 +70,12 @@ db_multirow constraints constraints_select {
      where c.rel_segment = :segment_id
 }
 
-db_1row select_segment_info {}
+db_1row select_segment_info {
+    select count(*) as number_elements
+      from rel_segment_party_map map
+    where map.segment_id = :segment_id
+    and acs_permission.permission_p(map.party_id, :user_id, 'read')
+}
 set number_elements [util_commify_number $number_elements]
 
 set admin_p [permission::permission_p -object_id $segment_id -privilege "admin"]
