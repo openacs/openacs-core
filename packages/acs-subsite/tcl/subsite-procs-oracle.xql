@@ -20,15 +20,4 @@
       </querytext>
 </fullquery>
 
-<fullquery name="subsite::util::object_type_path_list.select_object_type_path">      
-      <querytext>
-      
-	select object_type
-	from acs_object_types
-	start with object_type = :object_type
-	connect by object_type = prior supertype
-    
-      </querytext>
-</fullquery>
-
 </queryset>

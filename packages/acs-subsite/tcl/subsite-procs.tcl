@@ -407,19 +407,22 @@ ad_proc -public subsite::util::object_type_path_list {
 } {
     @return the object type hierarchy for the given object type from ancestor_type to object_type
 } {
-    set path_list [list]
+    return [db_list select_object_type_path {
+        with recursive type_path as (
+                                     select object_type, supertype
+                                     from acs_object_types
+                                     where object_type = :object_type
 
-    set type_list [db_list select_object_type_path {}]
+                                     union all
 
-    foreach type $type_list {
-        lappend path_list $type
-        if {$type eq $ancestor_type} {
-            break
-        }
-    }
-
-    return $path_list
-
+                                     select t.object_type, t.supertype
+                                     from acs_object_types t,
+                                          type_path p
+                                     where t.object_type = p.supertype
+                                       and p.object_type <> :ancestor_type
+                                     )
+        select object_type from type_path
+    }]
 }
 
 ad_proc -public subsite::util::object_type_pretty_name {
