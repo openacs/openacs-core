@@ -64,7 +64,7 @@ db_1row rel_type_info {
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
 set role_pretty_name [lang::util::localize $role_pretty_name]
-set exact_p true
+
 if { $exact_p == "f"
      && [subsite::util::sub_type_exists_p $rel_type] } {
 
