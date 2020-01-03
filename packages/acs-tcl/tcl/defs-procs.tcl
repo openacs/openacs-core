@@ -561,7 +561,7 @@ ad_proc -public ad_return_url {
     Example setting a variable with extra_vars:
 
     <pre>
-    set return_url [ad_return_url [list some_id $some_id] [some_other_id $some_other_id]]
+    set return_url [ad_return_url [list [list some_id $some_id] [list some_other_id $some_other_id]]]
     </pre>
 
     @author Don Baccus (dhogaza@pacifier.com)
@@ -575,21 +575,25 @@ ad_proc -public ad_return_url {
 
     if {[ns_conn isconnected]} {
         set query_list [export_entire_form_as_url_vars]
-        if { [llength $query_list] == 0 } {
-            set url [ns_conn url]
-        } else {
-            set url "[ns_conn url]?[join $query_list &]"
-        }
-        if { $qualified_p } {
-            # Make the return_url fully qualified
-            set url [security::get_qualified_url $url]
-        }
+        set base_url [ns_conn url]
     } else {
         set query_list ""
-        set url $default_url
+        set base_url $default_url
     }
-    foreach {extra_arg} $extra_args {
-        lappend query_list [join $extra_arg "="]
+
+    if { [llength $query_list] == 0 } {
+        set url $base_url
+    } else {
+        set url "${base_url}?[join $query_list &]"
+    }
+
+    if {[llength $extra_args] > 0} {
+        set url [export_vars -base $url $extra_args]
+    }
+
+    if { $qualified_p } {
+        # Make the return_url fully qualified
+        set url [security::get_qualified_url $url]
     }
 
     if { $urlencode_p } {
