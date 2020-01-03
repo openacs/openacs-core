@@ -26,9 +26,19 @@ if { $operation ne "Yes, I really want to delete this relationship type" } {
 
     set user_id [ad_conn user_id]
 
-    set rel_id_list [db_list select_rel_ids {}]
+    set rel_id_list [db_list select_rel_ids {
+        select r.rel_id
+          from acs_rels r
+        where acs_permission.permission_p(r.rel_id, :user_id, 'delete')
+          and r.rel_type = :rel_type
+    }]
 
-    set segment_id [db_string select_segment_id {} -default ""]
+    set segment_id [db_string select_segment_id {
+        select s.segment_id
+          from rel_segments s
+        where acs_permission.permission_p(s.segment_id, :user_id, 'delete')
+          and s.rel_type = :rel_type
+    } -default ""]
 
     # delete all relations, all segments, and drop the relationship
     # type. This will fail if a relation / segment for this type is created
@@ -53,7 +63,7 @@ if { $operation ne "Yes, I really want to delete this relationship type" } {
     # Note that we do this outside the transaction as it commits all
     # transactions anyway
     if { [db_table_exists $table_name] } {
-        db_exec_plsql drop_type_table "drop table $table_name"
+        db_dml drop_type_table "drop table $table_name"
     }
 }
 
