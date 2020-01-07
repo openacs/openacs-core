@@ -73,14 +73,12 @@ switch -- $email_verified_p {
 ad_try {
     acs_user::change_state -user_id $user_id -state $member_state
 
-    switch -- $email_verified_p {
-        "t" {
-            db_exec_plsql approve_email {}
-        }
-        "f" {
-            db_exec_plsql unapprove_email {}
-        }
+    if {$email_verified_p ne ""} {
+        acs_user::update \
+            -user_id $user_id \
+            -email_verified_p $email_verified_p
     }
+
 } on error {errorMsg} {
     ad_return_error "Database Update Failed" "Database update failed with the following error:
     <pre>[ns_quotehtml $errorMsg]</pre>"
