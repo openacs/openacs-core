@@ -24,23 +24,4 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="attributes_select">      
-      <querytext>
-      
-    select a.attribute_id, a.pretty_name, 
-           a.ancestor_type, t.pretty_name as ancestor_pretty_name
-      from acs_object_type_attributes a,
-           (select t.object_type, t.pretty_name, level as type_level
-              from acs_object_types t
-             start with t.object_type='group'
-           connect by prior t.object_type = t.supertype) t 
-     where a.object_type = :group_type
-       and t.object_type = a.ancestor_type
-    order by type_level 
-
-      </querytext>
-</fullquery>
-
- 
 </queryset>
