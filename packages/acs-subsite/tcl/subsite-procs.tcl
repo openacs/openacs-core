@@ -841,8 +841,7 @@ ad_proc -public subsite::set_theme {
     parameter::set_value -parameter StreamingHead -package_id $subsite_id \
         -value $streaming_head
 
-
-    callback subsite::theme_changed \
+    ::callback subsite::theme_changed \
         -subsite_id $subsite_id \
         -old_theme $old_theme \
         -new_theme $theme
