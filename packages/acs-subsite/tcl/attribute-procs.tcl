@@ -425,7 +425,34 @@ namespace eval attribute {
               and a.storage in ('[join $include_storage_types "', '"]')"
         }
 
-        db_foreach select_attributes {} {
+        db_foreach select_attributes [subst -nocommands {
+            with recursive object_type_hierarchy as (
+                select object_type,
+                       0 as type_level
+                  from acs_object_types
+                 where object_type = :start_with
+
+                union all
+
+                select t.object_type,
+                       h.type_level + 1 as type_level
+                  from acs_object_types t,
+                       object_type_hierarchy h
+                 where t.supertype = h.object_type
+            )
+            select coalesce(a.column_name, a.attribute_name) as name,
+                   a.pretty_name,
+                   a.attribute_id,
+                   a.datatype,
+                   v.enum_value,
+                   v.pretty_name as value_pretty_name
+            from acs_object_type_attributes a left outer join
+                   acs_enum_values v using (attribute_id),
+                   object_type_hierarchy t
+             where a.object_type = :object_type
+               and t.object_type = a.ancestor_type $storage_clause
+            order by t.type_level, a.sort_order
+        }] {
             # Enumeration values show up more than once...
             if {$name ni $attr_list} {
                 lappend attr_list $name
@@ -480,11 +507,11 @@ namespace eval attribute {
             $object_type]
 
         if { [array size attr_props] > 0 } {
-            db_foreach attribute_select "
-            select *
-            from ($package_object_view)
-            where object_id = :object_id
-            " {
+            db_foreach attribute_select [subst -nocommands {
+                select *
+                from ($package_object_view) dummy
+                where object_id = :object_id
+            }] {
                 foreach key $attr_list {
                     set col_value [set $key]
                     set attribute_id $attr_props(id:$key)
