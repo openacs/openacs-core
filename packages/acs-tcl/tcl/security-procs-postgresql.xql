@@ -36,8 +36,9 @@
       
     select token_id, token
     from secret_tokens,
-         (select trunc(random()*(select count(*)-15 from secret_tokens))::integer as first) r
-    where token_id >= r.first and r.first+15 > token_id;
+         (select cast(random() * count(*) - :num_tokens as integer) as first
+            from secret_tokens) r
+    where token_id >= r.first and r.first + :num_tokens > token_id
 	
       </querytext>
 </fullquery>
