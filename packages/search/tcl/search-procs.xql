@@ -4,7 +4,7 @@
 
     <fullquery name="search::queue.insert">
         <querytext>
-        insert into search_observer_queue (object_id, event_date, event) values (:object_id, now(), :event)
+        insert into search_observer_queue (object_id, event_date, event) values (:object_id, current_timestamp, :event)
         </querytext>
     </fullquery>
  
