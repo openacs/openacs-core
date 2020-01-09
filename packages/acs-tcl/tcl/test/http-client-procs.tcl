@@ -47,10 +47,10 @@ aa_register_case \
                     # (which by RF4627 SHALL be some unicode version)
                     if {$m eq "GET"} {
                         set tmpfile_app_json [ad_tmpnam]
-                        if {$impls eq "curl"} {
+                        if {$impl eq "curl"} {
                             exec -ignorestderr curl $url -o $tmpfile_app_json
                         } else {
-                            ns_http run -method GET -outputfile $tmpfile_app_json $url
+                            ns_http run -method GET -spoolsize 0 -outputfile $tmpfile_app_json $url
                         }
                     }
 
@@ -94,10 +94,10 @@ aa_register_case \
                     # encoding of the response to iso8859-2
                     if {$m eq "GET"} {
                         set tmpfile_iso8859_2 [ad_tmpnam]
-                        if {$impls eq "curl"} {
+                        if {$impl eq "curl"} {
                             exec -ignorestderr curl $url -o $tmpfile_iso8859_2
                         } else {
-                            ns_http run -method GET -outputfile $tmpfile_iso8859_2 $url
+                            ns_http run -method GET -spoolsize 0 -outputfile $tmpfile_iso8859_2 $url
                         }
                     }
 
