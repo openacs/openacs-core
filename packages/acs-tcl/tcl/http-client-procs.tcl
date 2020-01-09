@@ -1757,7 +1757,7 @@ ad_proc -private util::http::curl::request {
         }
 
         set enc [util::http::get_channel_settings $content_type]
-        if {$enc ni [list "binary" [encoding system]]} {
+        if {$enc ne "binary"} {
             set body [encoding convertto $enc $body]
         }
 
