@@ -203,7 +203,7 @@ aa_register_case \
     set testnode_1 [list "/navigation_test_node1/" "navigation_test_node1"]
     set testnode_2 [list "[lindex $testnode_1 0]navigation_test_node2/" "navigation_test_node2"]
     set main_node [site_node::get -url /]
-    set root_node [list "/" [lang::util::localize [dict get $main_node instance_name]]]
+    set root_node [list "/" [lang::util::localize [dict get $main_node instance_name] [lang::system::site_wide_locale]]]
     set last_node [list "" "last"]
 
     set bar_components [list $root_node $testnode_1 $testnode_2 $last_node]
