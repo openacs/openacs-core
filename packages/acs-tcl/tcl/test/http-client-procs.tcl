@@ -161,7 +161,7 @@ aa_register_case \
                 set headers [ns_set create headers]
                 ns_set put $headers "Content-Type" $content_type
 
-                aa_log "POST request - ContentType: '$content_type' - Implementation: '$impl'"
+                aa_section " - POST request - ContentType: '$content_type' - Implementation: '$impl'"
                 if {$impl ne "ns_http"} {
                     set r [util::http::post -preference $impl -url $url/post -body $json_data -headers $headers]
                     set json_response [dict get $r page]
@@ -190,8 +190,7 @@ aa_register_case \
                 aa_equals "Value is correct" $resp_string $test_string
 
 
-                aa_log "GET request - ContentType: '$content_type' - Implementation: '$impl'"
-
+                aa_section " - GET request - ContentType: '$content_type' - Implementation: '$impl'"
                 if {$impl ne "ns_http"} {
                     set r [util::http::get -preference $impl -url $get_url -headers $headers]
                     set json_response [dict get $r page]
