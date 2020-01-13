@@ -1042,6 +1042,7 @@ ad_proc -public export_vars {
 
     # Prepend with the base URL
     if { [info exists base] && $base ne "" } {
+        set base [string trimright $base "?"]
         if { [string first ? $base] > -1 } {
             # The base already has query vars; assume that the
             # path up to this point is already correctly encoded.
