@@ -529,7 +529,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
             # off.
             #
             append output \
-                "</span>\n<script type='text/javascript' nonce='$::__csp_nonce'>\n" \
+                "</span>\n<script type='text/javascript' nonce='[security::csp::nonce]'>\n" \
                 [subst {document.write("<input name='$element(id).format' value='text/html' type='hidden'>");}] \
                 "</script>\n<noscript><div>" \
                 [subst {<span class="form-widget"><label for="$element(id).format">[_ acs-templating.Format]: </label>}] \

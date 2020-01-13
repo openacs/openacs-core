@@ -24,7 +24,7 @@ ad_return_top_of_page [ad_parse_template \
 
 ns_write [subst {
     <h2>Installing packages...</h2>
-    <script nonce='$::__csp_nonce'>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
+    <script nonce='[security::csp::nonce]'>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
     </script>
     <p>
     <ul>
@@ -110,7 +110,7 @@ foreach pkg_info $pkg_install_list {
         # probably check for such dependencies and continue if there are none.
         ns_write [subst {
 	    </ul>
-	    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);
+	    <script nonce='[security::csp::nonce]'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);
             </script>
 	}]
         ad_script_abort
@@ -133,7 +133,7 @@ if {$installed_count < 1} {
     }
 }
 ns_write [subst {
-    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
+    <script nonce='[security::csp::nonce]'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
 }]
 
 # Local variables:

@@ -23,7 +23,7 @@ set form_name "packageAdd"
 set body [subst {
 <form name='$form_name' action='package-add-2' method='post'>
 [export_vars -form {package_id version_id}] 
-<script type="text/javascript" nonce='$::__csp_nonce'>
+<script type="text/javascript" nonce='[security::csp::nonce]'>
 function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
     var form = document.getElementsByName('$form_name')\[0\];

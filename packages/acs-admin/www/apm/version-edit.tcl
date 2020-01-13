@@ -38,7 +38,7 @@ if { $version_name_index >= 0 } {
     set version_uri_suffix [string range $version_uri $version_name_index+[string length $version_name] end]
 
     append body [subst {
-<script type="text/javascript" nonce='$::__csp_nonce'>
+<script type="text/javascript" nonce='[security::csp::nonce]'>
 function updateVersionURL() {
     var form = document.forms\[0\];
     form.version_uri.value = "$version_uri_prefix" + form.version_name.value + "$version_uri_suffix";
@@ -48,7 +48,7 @@ function updateVersionURL() {
 }
 
 append body [subst {
-<script type="text/javascript" nonce='$::__csp_nonce'>
+<script type="text/javascript" nonce='[security::csp::nonce]'>
 function checkMailto(element) {
     // If it looks like an email address without a mailto: (contains an @ but
     // no colon) then prepend 'mailto:'.

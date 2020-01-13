@@ -647,7 +647,7 @@ ad_proc -public ad_progress_bar_end {
     @see ad_progress_bar_begin
 } {
     util_user_message -message $message_after_redirect
-    ns_write "<script type='text/javascript' nonce='$::__csp_nonce'>window.location='$url';</script>"
+    ns_write "<script type='text/javascript' nonce='[security::csp::nonce]'>window.location='$url';</script>"
     ns_conn close
 }
 

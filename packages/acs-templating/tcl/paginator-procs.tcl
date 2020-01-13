@@ -157,7 +157,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
                 #   nsv_set __template_cache_timeout $cache_key $opts(timeout)
                 #}
                 ns_write [subst {
-                    <script type="text/javascript" nonce="$::__csp_nonce">
+                    <script type="text/javascript" nonce="[security::csp::nonce]">
                     document.location.href="[ns_quotehtml $return_url]";
                     </script>
                     <noscript><a href="[ns_quotehtml $return_url]">Click here to continue.</a></noscript>
