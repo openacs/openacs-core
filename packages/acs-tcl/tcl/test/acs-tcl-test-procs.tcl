@@ -491,6 +491,14 @@ aa_register_case \
         [export_vars -no_empty { foo { bar "" } }] \
         "foo=1&bar="
 
+    aa_equals "base ending with '?', with vars" \
+        [export_vars -base "dummy?" { foo { bar "" } }] \
+        "dummy?foo=1&bar="
+
+    aa_equals "base ending with '?', no vars" \
+        [export_vars -base "dummy?"] \
+        "dummy"
+
     # Test base with query vars
     set var1 a
     set var2 {}
