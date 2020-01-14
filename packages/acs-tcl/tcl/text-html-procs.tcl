@@ -2447,7 +2447,7 @@ ad_proc util_remove_html_tags { html } {
 #
 #####
 
-ad_proc -deprecated ad_string_truncate args {
+ad_proc -deprecated string_truncate args {
     Truncates a string to len characters adding the string provided in
     the ellipsis parameter if the string was truncated.
 
@@ -2532,7 +2532,7 @@ ad_proc -public ad_string_truncate {
     return $string
 }
 
-ad_proc -deprecated ad_string_truncate_middle args {
+ad_proc -deprecated string_truncate_middle args {
     Cut middle part of a string in case it is too long
 
     DEPRECATED: does not comply with OpenACS naming convention
