@@ -19,14 +19,6 @@ if {![info exists ::acs::useNaviServer]} {
     set ::acs::useNaviServer [expr {[ns_info name] eq "NaviServer"}]
 }
 
-proc number_p { str } {
-    return [regexp {^[-+]?[0-9]*(.[0-9]+)?$} $str]
-
-    # Note that this will return true for empty string!
-    #
-    # TODO: Why not use Tcl's "string is double" ?
-}
-
 proc empty_string_p { query_string } {
     return [string equal $query_string ""]
 }
@@ -121,7 +113,12 @@ proc ad_parse_documentation_string { doc_string elements_var } {
 }
 
 proc ad_proc_valid_switch_p {str} {
-  return [expr {[string index $str 0] eq "-" && ![number_p $str]}]
+    #
+    # Check if this looks like a switch:
+    #   - first character is '-'
+    #   - next character is not a number
+    #
+    return [expr {[regexp {^-[^0-9].*$} $str]}]
 }
 
 proc ad_proc args {
