@@ -2,7 +2,9 @@
 <html<if @doc.lang@ not nil> lang="@doc.lang;literal@"</if>>
 <head>
     <title<if @doc.title_lang@ not nil and @doc.title_lang;literal@ ne @doc.lang;literal@> lang="@doc.title_lang;literal@"</if>>@doc.title@</title>
-
+  <if @doc.base_href@ not nil or @doc.base_target@ not nil>
+    <base<if @doc.base_href@ not nil> href="@doc.base_href;literal@"</if><if @doc.base_target@ not nil> target="@doc.base_target;literal@"</if>>
+  </if>
 <multiple name="meta">    <meta<if @meta.http_equiv@ not nil> http-equiv="@meta.http_equiv;literal@"</if><if @meta.name@ not nil> name="@meta.name;noquote@"</if><if @meta.scheme@ not nil> scheme="@meta.scheme;noquote@"</if><if @meta.lang@ not nil and @meta.lang;literal@ ne @doc.lang;literal@> lang="@meta.lang;literal@"</if> content="@meta.content@">
 </multiple>
 <multiple name="link">    <link rel="@link.rel;literal@" href="@link.href@"<if @link.lang@ not nil and @link.lang;literal@ ne @doc.lang;literal@> lang="@link.lang;literal@"</if><if @link.title@ not nil> title="@link.title@"</if><if @link.type@ not nil> type="@link.type;literal@"</if><if @link.media@ not nil> media="@link.media;literal@"</if><if @link.integrity@ not nil> integrity="@link.integrity;literal@"</if><if @link.crossorigin@ not nil> crossorigin="@link.crossorigin;literal@"</if>>
