@@ -527,6 +527,7 @@ ad_proc -public lang::user::set_timezone {
 ad_proc -public lang::conn::locale {
     {-package_id ""}
     {-site_wide:boolean}
+    {-user_id ""}
 } {
     Get the locale for this request, perhaps for a given package instance.
     This procedure will never return an error. Everything that could fail is
@@ -551,7 +552,7 @@ ad_proc -public lang::conn::locale {
 
     # use user's package level locale
 
-    set locale [lang::user::package_level_locale $package_id]
+    set locale [lang::user::package_level_locale -user_id $user_id $package_id]
 
     # if that does not exist use system's package level locale
 
@@ -562,12 +563,12 @@ ad_proc -public lang::conn::locale {
     # if that does not exist use user's site wide locale
 
     if { $locale eq "" } {
-        set locale [lang::user::site_wide_locale]
+        set locale [lang::user::site_wide_locale -user_id $user_id]
     }
 
     # Use the accept-language browser heading
 
-    if { $locale eq "" } {
+    if { $locale eq "" && [ns_conn isconnected]} {
         set locale [lang::conn::browser_locale]
     }
 
