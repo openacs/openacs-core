@@ -1022,7 +1022,7 @@ ad_proc -public ad_make_relative_path { path } {
 } -
 
 ad_proc ad_proc_valid_switch_p {str} {
-    Check of the provided argument looks like a switch (i.e. it starts
+    Check if the provided argument looks like a switch (i.e. it starts
     with a dash and is not a number).
 } -
 
