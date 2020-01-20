@@ -691,7 +691,7 @@ ad_proc -private lang::conn::get_accept_language_header {} {
 
 ad_proc -public lang::conn::language {
     {-package_id ""}
-    {-user_id_id ""}
+    {-user_id ""}
     {-site_wide:boolean}
     {-iso6392:boolean}
     {-locale ""}
