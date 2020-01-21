@@ -42,7 +42,7 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
     set good 0
     set allowedChars {^[a-zA-Z_0-9_]+$}
     set allowedToplevel {^(_|(ad|acs|aa|adp|api|apm|chat|db|doc|ds|dt|cr|export|fs|general_comments|lc|news|ns|package|pkg_info|relation|rp|rss|sec|server_cluster|content_search|util|xml)_.+|callback|exec)$}
-    set serverModuleProcs {^(h264open|h264length|h264read|h264eof|h264close)$}
+    set serverModuleProcs {^(h264open|h264length|h264read|h264eof|h264close|dom)$}
     set internalUse {^(_.+|AcsSc[.].+|callback::.+|install::.+)$}
     set prescribed {^((after|before|notifications)-(install|instantiate|uninstall|uninstantiate|upgrade))$}
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
