@@ -47,8 +47,8 @@ proc acs_bootstrap_fatal_error { message { throw_error_p 1 } } {
 
     # Define a filter procedure which displays the appropriate error message.
     proc bootstrap_write_error { args } {
-	ns_returnerror 503 "Server startup failed: [nsv_get bootstrap_fatal_error .]"
-	return "filter_return"
+        ns_returnerror 503 "Server startup failed: [nsv_get bootstrap_fatal_error .]"
+        return "filter_return"
     }
 
     # Register the filter on GET/POST/HEAD * to return this message.
@@ -57,7 +57,7 @@ proc acs_bootstrap_fatal_error { message { throw_error_p 1 } } {
     ns_register_filter preauth HEAD * bootstrap_write_error
 
     if { $throw_error_p } {
-	return -code error -errorcode bootstrap_fatal_error "Bootstrap fatal error"
+        return -code error -errorcode bootstrap_fatal_error "Bootstrap fatal error"
     }
 }
 
@@ -69,12 +69,12 @@ set errno [catch {
 
     set files [lsort [glob -nocomplain "$::acs::rootdir/packages/acs-bootstrap-installer/tcl/*-procs.tcl"]]
     if { [llength $files] == 0 } {
-	error "Unable to locate $::acs::rootdir/packages/acs-bootstrap-installer/tcl/*-procs.tcl."
+        error "Unable to locate $::acs::rootdir/packages/acs-bootstrap-installer/tcl/*-procs.tcl."
     }
 
     foreach file [lsort $files] {
-	ns_log Notice "$proc_name: sourcing $file"
-	source $file
+        ns_log Notice "$proc_name: sourcing $file"
+        source $file
     }
 
     db_bootstrap_set_db_type database_problem
@@ -103,8 +103,8 @@ set errno [catch {
     apm_bootstrap_load_libraries -procs acs-tcl
 
     if { [info exists database_problem] } {
-	# Yikes - database problems.
-	ns_log Error "$proc_name: $database_problem"
+        # Yikes - database problems.
+        ns_log Error "$proc_name: $database_problem"
 
         # Check if the admin enabled the site-failure message, display
         # it if enabled.
@@ -115,11 +115,11 @@ set errno [catch {
         }
 
         # Remember what the problem is, and run the installer.
-	nsv_set acs_properties database_problem $database_problem
-	ns_log Notice "$proc_name: database problem found; Sourcing the installer."
-	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer.tcl"
-	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer-init.tcl"
-	return
+        nsv_set acs_properties database_problem $database_problem
+        ns_log Notice "$proc_name: database problem found; Sourcing the installer."
+        source "$::acs::rootdir/packages/acs-bootstrap-installer/installer.tcl"
+        source "$::acs::rootdir/packages/acs-bootstrap-installer/installer-init.tcl"
+        return
     }
 
     # Here we need to at least load up queries for the acs-tcl and
@@ -130,12 +130,12 @@ set errno [catch {
 
     # Is OpenACS installation complete? If not, source the installer and bail out.
     if { ![ad_verify_install] } {
-	ns_log warning "$proc_name: Installation is not complete - sourcing the installer."
-	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer.tcl"
-	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer-init.tcl"
-	return
+        ns_log warning "$proc_name: Installation is not complete - sourcing the installer."
+        source "$::acs::rootdir/packages/acs-bootstrap-installer/installer.tcl"
+        source "$::acs::rootdir/packages/acs-bootstrap-installer/installer-init.tcl"
+        return
     }
-    
+
     #
     # The installation is apparently ok, we can use the database. It
     # should not be necessary to use the [ad_acs_kernel_id] redefine
@@ -146,8 +146,8 @@ set errno [catch {
 
     #
     # Load all parameters for enabled package instances.
-    # ad_parameter_cache_all  
-    
+    # ad_parameter_cache_all
+
     # Load the Tcl package init files.
     apm_bootstrap_load_libraries -init acs-tcl
 
@@ -170,10 +170,10 @@ set errno [catch {
     apm_load_packages -load_libraries_p 0 -load_queries_p 0 -packages acs-tcl
 
     if { ![nsv_exists rp_properties request_count] } {
-	# security-init.tcl has not been invoked, so it's safe to say that the
-	# core has not been properly initialized and the server will probably
-	# fail catastrophically.
-	acs_bootstrap_fatal_error "The request processor routines have not been loaded."
+        # security-init.tcl has not been invoked, so it's safe to say that the
+        # core has not been properly initialized and the server will probably
+        # fail catastrophically.
+        acs_bootstrap_fatal_error "The request processor routines have not been loaded."
     }
 
     ns_log Notice "bootstrap finished encoding [encoding system]"
@@ -189,7 +189,7 @@ if { $errno && $errno != 2 } {
     # thrown by a call to acs_bootstrap_fatal_error. If not, acs_bootstrap_fatal_error
     # was never called, so we need to call it now.
     if {$::errorCode ne "bootstrap_fatal_error"  } {
-	acs_bootstrap_fatal_error "Error during bootstrapping" 0
+        acs_bootstrap_fatal_error "Error during bootstrapping" 0
     }
 }
 
