@@ -43,6 +43,7 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
     set allowedChars {^[a-zA-Z_0-9_]+$}
     set allowedToplevel {^(_|(ad|acs|aa|adp|api|apm|chat|db|doc|ds|dt|cr|export|fs|general_comments|lc|news|ns|package|pkg_info|relation|rp|rss|sec|server_cluster|content_search|util|xml)_.+|callback|exec)$}
     set serverModuleProcs {^(h264open|h264length|h264read|h264eof|h264close|dom)$}
+    set functionalOps {^f::(-|/)$}
     set internalUse {^(_.+|AcsSc[.].+|callback::.+|install::.+)$}
     set prescribed {^((after|before|notifications)-(install|instantiate|uninstall|uninstantiate|upgrade))$}
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
@@ -51,7 +52,7 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
         incr count
         set tail [namespace tail $p]
         set qualifiers [regsub -all "::" [namespace qualifiers $p] "__"]
-        if {[regexp $internalUse $p] || [regexp $serverModuleProcs $p]} continue
+        if {[regexp $internalUse $p] || [regexp $serverModuleProcs $p] || [regexp $functionalOps $p]} continue
         set pa [nsv_get api_proc_doc $p]
         set protection [expr {[dict exists $pa protection] && "public" in [dict get $pa protection]
                           ? "public" : "private"}]
