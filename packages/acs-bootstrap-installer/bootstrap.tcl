@@ -33,7 +33,7 @@ ns_log Notice "bootstrap begin encoding [encoding system]"
 ###
 
 # A helper procedure called if a fatal error occurs.
-proc bootstrap_fatal_error { message { throw_error_p 1 } } {
+proc acs_bootstrap_fatal_error { message { throw_error_p 1 } } {
     # First of all, redefine the "rp_invoke_filter" and "rp_invoke_procs"
     # routines to do nothing, to circumvent the request processor.
     proc rp_invoke_filter { conn arg why } { return "filter_ok" }
@@ -173,7 +173,7 @@ set errno [catch {
 	# security-init.tcl has not been invoked, so it's safe to say that the
 	# core has not been properly initialized and the server will probably
 	# fail catastrophically.
-	bootstrap_fatal_error "The request processor routines have not been loaded."
+	acs_bootstrap_fatal_error "The request processor routines have not been loaded."
     }
 
     ns_log Notice "bootstrap finished encoding [encoding system]"
@@ -186,10 +186,10 @@ if { $errno && $errno != 2 } {
     # to guess what broke.
 
     # If the $::errorCode is "bootstrap_fatal_error", then the error was explicitly
-    # thrown by a call to bootstrap_fatal_error. If not, bootstrap_fatal_error was
-    # never called, so we need to call it now.
+    # thrown by a call to acs_bootstrap_fatal_error. If not, acs_bootstrap_fatal_error
+    # was never called, so we need to call it now.
     if {$::errorCode ne "bootstrap_fatal_error"  } {
-	bootstrap_fatal_error "Error during bootstrapping" 0
+	acs_bootstrap_fatal_error "Error during bootstrapping" 0
     }
 }
 
