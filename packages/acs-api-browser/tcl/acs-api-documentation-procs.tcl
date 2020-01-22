@@ -74,8 +74,8 @@ namespace eval ::apidoc {
         lrepeat lreplace lreverse lsearch lset lsort namespace open package
         pid proc puts pwd read refchan regexp regsub rename return
         scan seek set socket source split string subst switch tailcall tell
-        throw time tm trace transchan try unload unset update uplevel upvar variable vwait
-        while yield yieldto zlib
+        throw time tm trace transchan try unknown unload unset update uplevel
+        upvar variable vwait while yield yieldto zlib
 
     }
 
