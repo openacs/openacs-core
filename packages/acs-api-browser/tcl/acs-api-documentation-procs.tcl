@@ -1700,7 +1700,7 @@ namespace eval ::apidoc {
 
                 "\{" -
                 ";" {
-                    if {!$in_quotes} {
+                    if {!$in_quotes && !$in_comment} {
                         set proc_ok 1
                     }
                     append html $char
