@@ -216,10 +216,16 @@ ad_proc -public ad_return_complaint {
                                 -package_key "acs-tcl" \
                                 -parameter "ReturnComplaint" \
                                 -default "/packages/acs-tcl/lib/ad-return-complaint"]
-    ns_return 422 text/html [ad_parse_template \
-                                 -params [list [list exception_count $exception_count] \
-                                               [list exception_text $exception_text]] \
-                                         $complaint_template]
+    try {
+        set html [ad_parse_template \
+                      -params [list [list exception_count $exception_count] \
+                                   [list exception_text $exception_text]] \
+                      $complaint_template]
+    } on error {} {
+        set html [lang::util::localize $exception_text]
+    }
+
+    ns_return 422 text/html $html
 
     # raise abortion flag, e.g., for templating
     set ::request_aborted [list 422 "Problem with Your Input"]
