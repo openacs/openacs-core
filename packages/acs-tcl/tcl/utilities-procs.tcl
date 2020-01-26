@@ -9,7 +9,7 @@ ad_library {
 }
 
 #
-# Namespace handlig for the utilities is pretty arbitrary.
+# Namespace handling for the utilities is pretty arbitrary.
 # We have currently
 #   - ad_*
 #   - util_*
