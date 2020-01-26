@@ -1847,21 +1847,21 @@ ad_proc -public ad_set_client_property {
 set ::acs::pass_password_as_query_variable 0
 
 ad_proc -public security::set_client_property_password {password} {
-    
+
     Convenience function for remembering user password as client property
     rather than passing it as query parameter.
 
-    @see security::get_client_property_password   
+    @see security::get_client_property_password
 } {
     ad_set_client_property -persistent f acs-admin user-password $password
 }
 
 ad_proc -public security::get_client_property_password {password} {
-    
+
     Convenience function for retrieving user password from client property
 
     @see security::set_client_property_password
-    
+
 } {
     return [ad_get_client_property acs-admin user-password]
 }
@@ -2699,7 +2699,7 @@ namespace eval ::security::csp {
         security::csp::require img-src 'self'
         security::csp::require font-src 'self'
         security::csp::require base-uri 'self'
-        security::csp::require connect-src 'self';
+        security::csp::require connect-src 'self'
 
         #
         # Some browser (safari, chrome) need "font-src data:", maybe
