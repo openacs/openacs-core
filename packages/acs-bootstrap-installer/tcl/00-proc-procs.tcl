@@ -116,9 +116,13 @@ proc ad_proc_valid_switch_p {str} {
     #
     # Check if this looks like a switch:
     #   - first character is '-'
-    #   - next character is not a number
+    #   - next character is not a Tcl number
+    #   - next string is a printable character
     #
-    return [expr {[regexp {^-[^0-9].*$} $str]}]
+    return [expr {[string index $str 0] eq "-"
+              && ![string is double -strict $str]
+              && [regexp {^-[[:graph:]]+$} $str]
+    }]
 }
 
 proc ad_proc args {
