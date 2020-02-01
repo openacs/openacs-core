@@ -4779,9 +4779,18 @@ namespace eval util::resources {
             file rename -force -- $fn $local_path/$file
         }
     }
+}
 
-
-
+if {[info commands ns_base64urlencode] eq ""} {
+    #
+    # Compatibility for AOLserver or NaviServer before 4.99.17
+    #
+    proc ns_base64urlencode {data} {
+        return [string map {+ - / _ = {} \n {}} [ns_base64encode $data]]
+    }
+    proc ns_base64urldecode {data} {
+        return [ns_base64decode [string map {- +  _ / } $data]]
+    }
 }
 
 # Local variables:
