@@ -66,7 +66,7 @@ namespace eval ::apidoc {
 
     set KEYWORDS {
 
-        after append apply array bgerror binary break catch cd chan
+        after append apply array bgerror binary break case catch cd chan
         clock close concat continue coroutine default dict encoding eof error
         eval exec exit expr fblocked fconfigure fcopy file fileevent flush
         for foreach format gets glob global if incr info interp join
