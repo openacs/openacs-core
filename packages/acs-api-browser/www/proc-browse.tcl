@@ -9,7 +9,7 @@ ad_page_contract {
 
 } {
     { type:word "Public" }
-    { orderby:word "file"}
+    { orderby:token "file"}
 } -properties {
     title:onevalue
     context:onevalue
