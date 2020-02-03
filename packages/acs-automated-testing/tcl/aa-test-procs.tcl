@@ -2208,7 +2208,7 @@ ad_proc -public aa_selenium_init {} {
                       -package_key acs-automated-testing \
                       -parameter "SeleniumRcBrowsers" \
                       -default "*firefox"]
-    set success_p [expr {![catch {Se init $server_url $server_port ${browsers} [ad_url]} errmsg]}]
+    set success_p [expr {![catch {::acs::test::selenium::Se init $server_url $server_port ${browsers} [ad_url]} errmsg]}]
     if {!$success_p} {
         ns_log error [ad_log_stack_trace]
     }
@@ -2220,7 +2220,7 @@ aa_register_init_class \
     "selenium" \
     "Init Class for Selenium Remote Control" \
     {aa_selenium_init} \
-    {catch {Se stop} errmsg}
+    {catch {::acs::test::selenium::Se stop} errmsg}
 
 #
 # Local variables:

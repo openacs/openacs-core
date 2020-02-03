@@ -1,44 +1,62 @@
-# selenium.tcl
-#
-#       This code implements a driver to control Selenium, an open source
-#       test tool for web applications, see http://selenium.openqa.org/
-#
-#       This code is modeled after the Python and Ruby drivers.  It differs
-#       by not implementing each supported command separately, but instead
-#       using a default dispatch to pass commands to the Selenium server with
-#       very little modification.  This is why the commands are not called
-#       get_title, wait_for_page_to_load, etc. but with the same "camelCase"
-#       names used by Selenium itself, i.e. getTitle, waitForPageToLoad, etc.
-#
-#       All commands known to return a list are singled out and their return
-#       string is converted before returning the result.  Since everything is
-#       a string in Tcl, no special handling is needed for numbers and booleans
-#       (boolean results will be the same as in Selenium, i.e. "true"/"false").
-#
-# Note: This code requires a new HTTP/1.1 aware version of geturl - the current
-#       http 2.4 package in Tcl doesn't know how to keep a 1.1 connection alive
-#       and will slow down because *each* Selenium request will time out.
-#
-# Example use:
-#
-#       package require selenium
-#
-#       Se init localhost 4444 *firefox http://www.google.com/webhp
-#       Se start
-#
-#       Se open http://www.google.com/webhp
-#       Se type q "hello world"
-#       Se clickAndWait btnG
-#       Se assertTitle "hello world - Google Search"
-#
-#       Se stop
-#
-# by Jean-Claude Wippler, 2007-02-24
+# selenium-procs.tcl
 
-package provide selenium 0.1
+namespace eval ::acs::test::selenium {}
 
-proc Se {cmd args} {
-    package require http
+ad_proc -public -deprecated Se {
+    cmd
+    args
+} {
+    Deprecated: polluting the root namespace.
+
+    @see ::acs::test::selenium::Se
+} {
+    ::acs::test::selenium::Se $cmd $args
+}
+
+
+ad_proc -public ::acs::test::selenium::Se {
+    cmd
+    args
+} {
+
+    Driver to control the test web tool Selenium.
+
+    This code implements a driver to control Selenium, an open source
+    test tool for web applications, see http://selenium.openqa.org/
+
+    This code is modeled after the Python and Ruby drivers.  It differs
+    by not implementing each supported command separately, but instead
+    using a default dispatch to pass commands to the Selenium server with
+    very little modification.  This is why the commands are not called
+    get_title, wait_for_page_to_load, etc. but with the same "camelCase"
+    names used by Selenium itself, i.e. getTitle, waitForPageToLoad, etc.
+
+    All commands known to return a list are singled out and their return
+    string is converted before returning the result.  Since everything is
+    a string in Tcl, no special handling is needed for numbers and booleans
+    (boolean results will be the same as in Selenium, i.e. "true"/"false").
+
+    Note: This code requires a new HTTP/1.1 aware version of geturl - the
+          current http 2.4 package in Tcl doesn't know how to keep a 1.1
+          connection alive and will slow down because *each* Selenium request
+          will time out.
+
+    Example use:
+
+       ::acs::test::selenium::Se init localhost 4444 *firefox http://www.google.com/webhp
+       ::acs::test::selenium::Se start
+
+       ::acs::test::selenium::Se open http://www.google.com/webhp
+       ::acs::test::selenium::Se type q "hello world"
+       ::acs::test::selenium::Se clickAndWait btnG
+       ::acs::test::selenium::Se assertTitle "hello world - Google Search"
+
+       ::acs::test::selenium::Se stop
+
+    @author Jean-Claude Wippler
+    @creation-date 2007-02-24
+
+} {
     global selenium
     switch -- $cmd {
 
@@ -48,13 +66,13 @@ proc Se {cmd args} {
         }
 
         start {
-            set selenium(sessionId) [Se getNewBrowserSession \
-                                        $selenium(browserStartCommand) \
-                                        $selenium(browserURL)]
+            set selenium(sessionId) [::acs::test::selenium::Se getNewBrowserSession \
+                                                                $selenium(browserStartCommand) \
+                                                                $selenium(browserURL)]
         }
 
         stop {
-            Se testComplete
+            ::acs::test::selenium::Se testComplete
             set selenium(sessionId) ""
         }
 

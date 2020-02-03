@@ -9,9 +9,9 @@ aa_register_case \
     selenium_server_configured {
     Is the selenium server configured and working?
 } {
-    aa_false "Start Selenium RC Session" [catch {Se start} errmsg]
+    aa_false "Start Selenium RC Session" [catch {::acs::test::selenium::Se start} errmsg]
     aa_log $errmsg
-    aa_false "Open [ad_url]" [catch {Se open [ad_url]} errmsg]
+    aa_false "Open [ad_url]" [catch {::acs::test::selenium::Se open [ad_url]} errmsg]
     aa_log $errmsg
 }
 # Local variables:
