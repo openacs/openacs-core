@@ -275,9 +275,12 @@ ad_proc tsearch2::build_query { -query } {
     # remove "not" at end of query
     regsub -nocase " not$" $query {} query
 
+    # remove "not" alone
+    regsub -nocase "^not$" $query {} query
+
     # replace boolean words with boolean operators
     regsub -nocase "^not " $query {!} query
-    set query [string map {" and " " & " " or " " | " " not " " ! "} " $query "]
+    set query [string map {" and " " & " " or " " | " " not " " ! "} $query]
 
     # remove leading and trailing spaces so they aren't turned into &
     set query [string trim $query]

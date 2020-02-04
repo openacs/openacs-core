@@ -57,5 +57,21 @@ aa_register_case \
                 set query [tsearch2::build_query -query $q]
                 aa_true "Not all alone '$query'" \
                     {"" eq $query}
+
+                set q "openacs and"
+                set query [tsearch2::build_query -query $q]
+                aa_true "AND at the end of the query '$query'" \
+                    {"openacs & and" eq $query}
+
+                set q "openacs or"
+                set query [tsearch2::build_query -query $q]
+                aa_true "OR at the end of the query '$query'" \
+                    {"openacs & or" eq $query}
+
+                set q "openacs and or"
+                set query [tsearch2::build_query -query $q]
+                aa_true "AND and OR at the end of the query '$query'" \
+                    {"openacs & or" eq $query}
+
             }
     }
