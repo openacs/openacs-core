@@ -772,7 +772,7 @@ ad_proc template::head::prepare_multirows {} {
     foreach name [array names links] {
         lassign [split $name ,] rel href
         if {[::template::head::included_p $href]} {
-            template::head::flush_link -href $ref -rel $rel
+            template::head::flush_link -href $href -rel $rel
         }
     }
 
