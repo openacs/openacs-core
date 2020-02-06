@@ -309,6 +309,22 @@ ad_proc -private template::head::included_p {
     return [info exists ::template::head::included($resource)]
 }
 
+ad_proc -private template::head::included_in {
+    resource
+} {
+
+    Return the containiner resource, containing the provided resource
+
+    @author Gustaf Neumann
+    @creation-date 2020-02-01
+
+    @param resource uri resource
+    @see ::template::head::includes
+} {
+    set key ::template::head::included($resource)
+    return [expr {[info exists $key] ? [set $key] : ""}]
+}
+
 ad_proc -private template::head::flush_included {
     resource
 } {
@@ -771,8 +787,12 @@ ad_proc template::head::prepare_multirows {} {
     #
     foreach name [array names links] {
         lassign [split $name ,] rel href
-        if {[::template::head::included_p $href]} {
-            template::head::flush_link -href $href -rel $rel
+        set container [::template::head::included_in $href]
+        if {$container ne ""} {
+            set container [template::head::resolve_urn $container]
+            if {[array names links *,$container] ne ""} {
+                template::head::flush_link -href $href -rel $rel
+            }
         }
     }
 
@@ -841,8 +861,13 @@ ad_proc template::head::prepare_multirows {} {
     if {[array exists scripts]} {
 
         foreach name [array names scripts] {
-            if {[::template::head::included_p $name]} {
-                continue
+
+            set container [::template::head::included_in $name]
+            if {$container ne ""} {
+                set container [template::head::resolve_urn $container]
+                if {[array names scripts $container] ne ""} {
+                    continue
+                }
             }
 
             foreach {type src charset defer async content order crossorigin integrity} $scripts($name) {
