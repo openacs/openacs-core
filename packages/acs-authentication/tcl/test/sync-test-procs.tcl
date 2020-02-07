@@ -1025,6 +1025,12 @@ aa_register_case \
     # current IPv4 address http://127.0.0.1:.../ succeeds. However,
     # the determination of the current IP address requires NaviServer
     # 4.99.17d3 or newer, so we can't assume, this works always.
+    #
+    # If ad_url is empty, try util_current_location instead.
+    #
+    if {$url eq ""} {
+        set url [util_current_location]
+    }
     set parsed_url [ns_parseurl $url]
     if {[dict get $parsed_url host] eq "localhost"} {
         set url [dict get $parsed_url proto]://127.0.0.1:[dict get $parsed_url port]
