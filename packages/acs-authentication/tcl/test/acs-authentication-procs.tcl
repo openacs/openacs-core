@@ -129,6 +129,7 @@ aa_register_case \
             array unset auth_info
             array set auth_info \
                 [auth::authenticate \
+                     -authority_id $authority_id \
                      -no_cookie \
                      -username "blabla" \
                      -password $password]
