@@ -647,11 +647,11 @@ ad_proc -private apm_dependency_check_new {
                     lappend failed($package_key) [list $req_uri $req_version]
                     if { [info exists provided($req_uri)] } {
                         ns_log Debug "apm_dependency_check_new: Failed dependency:\
-				$package_key embeds/extends/requires $req_uri $req_version,\
-				but we only provide $provided($req_uri)"
+                                $package_key embeds/extends/requires $req_uri $req_version,\
+                                but we only provide $provided($req_uri)"
                     } else {
                         ns_log Debug "apm_dependency_check_new: Failed dependency:\
-				 $package_key embeds/extends/requires $req_uri $req_version, but we don't have it"
+                                 $package_key embeds/extends/requires $req_uri $req_version, but we don't have it"
                     }
                 }
             }
@@ -704,7 +704,7 @@ ad_proc -public apm_simple_package_install {
     }
 
     if { ![apm_package_supports_rdbms_p -package_key $package(package.key)]
-        || [apm_package_installed_p $package(package.key)]
+         || [apm_package_installed_p $package(package.key)]
      } {
         ns_log notice "apm_simple_package_install: no need to install $package(package.key)"
         return
@@ -1033,7 +1033,7 @@ ad_proc -private apm_package_install {
 ad_proc apm_unregister_disinherited_params { package_key dependency_id } {
 
     Remove parameters for package_key that have been disinherited (i.e., the
-    dependency that caused them to be inherited have been removed).  Called only
+                                                                   dependency that caused them to be inherited have been removed).  Called only
     by the APM and keep it that way, please.
 
 } {
@@ -1918,25 +1918,25 @@ ad_proc -public apm_upgrade_logic {
         {-to_version_name:required}
     } {
         apm_upgrade_logic \
-        -from_version_name $from_version_name \
-        -to_version_name $to_version_name \
-        -spec {
-            1.1 1.2 {
-                ...
+            -from_version_name $from_version_name \
+            -to_version_name $to_version_name \
+            -spec {
+                1.1 1.2 {
+                    ...
+                }
+                1.2 1.3 {
+                    ...
+                }
+                1.4d 1.4d1 {
+                    ...
+                }
+                2.1 2.3 {
+                    ...
+                }
+                2.3 2.4 {
+                    ...
+                }
             }
-            1.2 1.3 {
-                ...
-            }
-            1.4d 1.4d1 {
-                ...
-            }
-            2.1 2.3 {
-                ...
-            }
-            2.3 2.4 {
-                ...
-            }
-        }
     }
 
     </pre></blockquote>
