@@ -170,3 +170,9 @@ ad_proc -public util::html::get_form_vars {
 
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

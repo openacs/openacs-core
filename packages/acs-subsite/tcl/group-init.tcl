@@ -9,3 +9,9 @@
     -package_key acs-subsite \
     -parameter GroupCache \
     -default_size 2000000
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

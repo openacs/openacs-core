@@ -150,3 +150,9 @@ foreach msg $messages_list {
 
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

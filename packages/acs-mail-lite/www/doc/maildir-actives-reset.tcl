@@ -20,3 +20,9 @@ set content "www/doc/maildir-actives-reset"
 nsv_set acs_mail_lite sj_actives_list [list]
 append content ".. done."
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -246,3 +246,9 @@ append content \n \n [clock seconds]
 #set struct_list [list uid 12 flags {} size 33487 internaldate.day 28 internaldate.month 1 internaldate.year 2017 internaldate.hours 4 internaldate.minutes 15 internaldate.seconds 7 internaldate.zoccident 0 internaldate.zhours 0 internaldate.zminutes 0 type multipart encoding 7bit subtype MIXED body.boundary ----=_Part_22057419_699298704.1485580507727 part.1 {type multipart encoding 7bit subtype ALTERNATIVE body.boundary ----=_Part_22057420_472295197.1485580507727 part.1 {type text encoding qprint subtype PLAIN lines 87 bytes 2182 disposition INLINE body.charset UTF-8} part.2 {type text encoding qprint subtype X-WATCH-HTML lines 11 bytes 286 disposition INLINE body.charset UTF-8} part.3 {type text encoding qprint subtype HTML lines 703 bytes 26358 disposition INLINE body.charset UTF-8} part.count 3} part.2 {type text encoding base64 subtype CALENDAR lines 13 bytes 1046 disposition ATTACHMENT disposition.filename Apple_Support_Appt.ics} part.count 2 msgno 11 ]
 
 regsub -all -- {\n} $content {</br>} content
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
