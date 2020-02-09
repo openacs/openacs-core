@@ -1,7 +1,7 @@
 ad_library {
 
     Provides a simple API theme interactions
-    
+
     @author Gustaf Neumann
     @creation-date 05 July 2015
 }
@@ -14,7 +14,7 @@ ad_proc -public -callback subsite::theme_changed -impl openacs-default-theme {
 } {
 
     Implementation of the theme_changed callback which is called, whenever a theme is changed
-    
+
     @param subsite_id subsite, of which the theme was changed
     @param old_theme the name of the old theme
     @param new_theme the name of the new theme
@@ -23,3 +23,9 @@ ad_proc -public -callback subsite::theme_changed -impl openacs-default-theme {
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
