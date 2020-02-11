@@ -16,7 +16,16 @@ aa_register_case \
         Test that JSON is encoded as expected
     } {
         set endpoint_name /acs-tcl-test-http-client-procs-util-http-json-encoding
-        set url [ad_url]$endpoint_name
+        set url [ad_url]
+        #
+        # Fallback to util_current_location if ad_url returns an empty string,
+        # such in cases when the SystemUrl is not set.
+        #
+        if {$url eq ""} {
+            set url [util_current_location]
+        }
+        set url $url$endpoint_name
+
         set response {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
 
         set methods {POST GET}
