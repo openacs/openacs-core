@@ -142,16 +142,8 @@ if { $counter > 0 } {
                         -package_id $package_id \
                         -parameter $c__parameter_name \
                         -value [set $c__parameter_name]
-                    callback subsite::parameter_changed \
-                        -package_id $package_id \
-                        -parameter $c__parameter_name \
-                        -value [set $c__parameter_name]
                 } else {
                     parameter::set_global_value \
-                        -package_key $package_key \
-                        -parameter $c__parameter_name \
-                        -value [set $c__parameter_name]
-                    callback subsite::global_parameter_changed \
                         -package_key $package_key \
                         -parameter $c__parameter_name \
                         -value [set $c__parameter_name]

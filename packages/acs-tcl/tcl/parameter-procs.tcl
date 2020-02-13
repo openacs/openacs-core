@@ -43,6 +43,11 @@ ad_proc -public parameter::set_global_value {
 
     db_exec_plsql set_parameter_value {}
 
+    callback subsite::global_parameter_changed \
+        -package_key $package_key \
+        -parameter $parameter \
+        -value $value
+
     return [ad_parameter_cache -set $value $package_key $parameter]
 }
 
@@ -103,7 +108,7 @@ ad_proc -public parameter::set_value {
     {-parameter:required}
     {-value:required}
 } {
-    Set the value of a package instance parameter
+    Set the value of a package instance parameter.
 
     @param package_id what package to set the parameter in. Defaults to
     [ad_conn package_id]
@@ -115,6 +120,11 @@ ad_proc -public parameter::set_value {
     }
 
     db_exec_plsql set_parameter_value {}
+
+    callback subsite::parameter_changed \
+        -package_id $package_id \
+        -parameter $parameter \
+        -value $value
 
     return [ad_parameter_cache -delete -set $value $package_id $parameter]
 }
