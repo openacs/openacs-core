@@ -1807,9 +1807,7 @@ if {$UseXotclSiteNodes} {
         # lookup and check whether the returned node_id has the same
         # URL as the provided one.
         #
-        ns_log notice "site_node::exists_p <$url>"
         set node_id [::xo::site_node get_node_id -url $url_no_trailing]
-        ns_log notice "site_node::exists_p <[list ::xo::site_node get_node_id -url $url_no_trailing]> -> $node_id"
         return [expr {[::xo::site_node get_url -node_id $node_id] eq "$url_no_trailing/"}]
     }
 
