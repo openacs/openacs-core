@@ -877,7 +877,7 @@ ad_proc -private api_called_proc_names {
 
 ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
 
-    Add the calling information (what a the functions called by this
+    Add the calling information (what are the functions called by this
     proc_name) to the collected proc_doc information.
 
     @author Gustaf Neumann
