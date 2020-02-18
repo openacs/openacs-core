@@ -329,7 +329,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     <li> <em>height</em>: height of the xinha widget (e.g. 350px)
     <li> <em>width</em>: width of the xinha widget (e.g. 500px)
     <li> <em>plugins</em>: Tcl list of plugins to be used in xinha. There
-    is an a special plugin for the oacs file selector available, called OacsFs.
+    is a special plugin for the oacs file selector available, called OacsFs.
     If no options are specified, the following plugins will be loaded:
     <code>
     GetHtml CharacterMap ContextMenu FullScreen

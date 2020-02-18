@@ -24,7 +24,7 @@ ad_proc -public template::adp_include {
     src
     varlist
 } {
-    return a the output of a Tcl/ADP pair as a string.  adp_level is
+    return the output of a Tcl/ADP pair as a string.  adp_level is
     set to the calling procedure so that pass by reference works.
     and example of using this is in the search indexer for various content
     types:

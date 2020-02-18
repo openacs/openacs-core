@@ -175,8 +175,9 @@ ad_proc -public template::wizard::set_param { name value } {
 
 
 ad_proc -public template::wizard::set_finish_url { finish_url } {
-    <p>if the finish url is set, when a the finish button is pressed
-    it will redirect to this url</p>
+
+    Set the URL to be used for redirection, when the finish button is
+    pressed.
 
     @see template::wizard
 } {
