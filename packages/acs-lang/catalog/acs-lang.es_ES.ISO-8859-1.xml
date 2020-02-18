@@ -21,6 +21,7 @@
   <msg key="Delete_this_locale">Borrar este idioma</msg>
   <msg key="Disable_this_locale">Desactivar este idioma</msg>
   <msg key="Edit_definition_of_locale">Editar la definición del idioma</msg>
+  <msg key="Edit_history">Editar histórico</msg>
   <msg key="Edit_localized_messages_for">Editar los mensajes de %locales.locale_label%</msg>
   <msg key="Edit_this_message">Editar este mensaje</msg>
   <msg key="Enable_this_locale">Activar este idioma</msg>
