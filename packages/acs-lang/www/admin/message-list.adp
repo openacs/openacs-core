@@ -87,7 +87,7 @@
               <if @default_locale_p;literal@ true or @messages.translated_message@ not nil>
                 <td>
                   <if @messages.translation_deleted_p;literal@ true>
-                    <a href="@messages.undelete_url@" title="Undelete this message"><img src="/shared/images/Undelete16.gif" alt="delete" width="16" height="16"></a>
+                    <a href="@messages.undelete_url@" title="Undelete this message"><img src="/shared/images/Undelete16.gif" alt="undelete" width="16" height="16"></a>
                   </if>
                   <else>
                     <a href="@messages.delete_url@" title="Delete this message"><img src="/shared/images/Delete16.gif" alt="delete" width="16" height="16"></a>
