@@ -99,8 +99,9 @@ foreach pkg_info $pkg_install_list {
 	ns_log notice "===== INSTALL $package_key DONE"
 
     } errorMsg]} {
-	ns_write "Error: $errorMsg\n"
+        ns_write "Error: $errorMsg<br>\n<pre>"
 	ns_write [ns_quotehtml $::errorInfo]
+        ns_write "</pre>\n"
 	set version_id 0
     }
 

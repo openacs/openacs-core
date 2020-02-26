@@ -70,22 +70,32 @@ namespace eval ::acs_admin {
         set node_info [site_node::get_from_object_id -object_id $site_wide_subsite]
 
         set path [dict get $node_info url]$node_name
-        if {[site_node::exists_p -url $path]} {
+
+        set URL [::xo::db::sql::site_node url -node_id [::xo::db::sql::site_node node_id -url $path]]
+        ns_log notice "===== require_site_wide_package '$path' -> [site_node::exists_p -url $path] // $URL"
+        # if {[site_node::exists_p -url $path]}        
+        if {$URL eq "$path/"} {
             set node_info [site_node::get -url $path]
             set package_id [dict get $node_info object_id]
         } else {
+            ns_log notice "===== require_site_wide_package $path call instantiate_and_mount ($URL ne $path/)"
             set package_id [site_node::instantiate_and_mount \
                                 -parent_node_id [dict get $node_info node_id] \
                                 -node_name $node_name \
                                 -package_name $package_name \
                                 -package_key $package_key]
+            ns_log notice "===== require_site_wide_package $path call instantiate_and_mount DONE"
             foreach {parameter value} $parameters {
+                ns_log notice "===== require_site_wide_package $path set param $parameter -value $value"
                 parameter::set_value -package_id $package_id -parameter $parameter -value $value
+                ns_log notice "===== require_site_wide_package $path set param $parameter -value $value DONE"
             }
             if {[llength $configuration_command] > 0} {
+                ns_log notice "===== require_site_wide_package $path call config cmd"  
                 {*}$configuration_command -package_id $package_id
             }
         }
+        ns_log notice "===== require_site_wide_package $path DONE $package_id"  
         return $package_id
     }
 }
