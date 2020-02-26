@@ -1454,7 +1454,7 @@ namespace eval acs::test {
         if {!$already_logged_in} {
             #
             # The user is not logged in via cookies, check first
-            # available user_id. If this dies not exist, perform login
+            # available user_id. If this does not exist, perform login
             #
             #aa_log "not logged in, check $user_info"
 
@@ -1464,10 +1464,17 @@ namespace eval acs::test {
                 set user_id [dict get $user_info user_id]
                 if {$user_id ne 0} {
                     #aa_log "::acs::test::set_user set logindata via nsv"
+                    set address [dict get $user_info address]
+                    ad_try {
+                        set peeraddr [ns_addrbyhost $address]
+                    } on error {errorMsg} {
+                        set peeraddr $address
+                    }
+                    set address $peeraddr
                     nsv_set aa_test logindata \
                         [list \
-                             peeraddr [dict get $user_info address] \
-                             user_id [dict get $user_info user_id]]
+                             peeraddr $address \
+                             user_id $user_id]
                     dict set session login via_logindata
                 } else {
                     dict set session login none
