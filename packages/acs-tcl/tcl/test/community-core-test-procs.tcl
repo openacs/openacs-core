@@ -59,6 +59,7 @@ aa_register_case \
         array set user_info [auth::create_user  -user_id $user_id  -username $username \
                                  -email $email  -first_names $first_names  -last_name $last_name \
                                  -password $password  -secret_question [ad_generate_random_string] \
+                                 -authority_id [auth::authority::get_id -short_name "acs_testing"] \
                                  -secret_answer [ad_generate_random_string]]
 
         if { $user_info(creation_status) ne "ok" } {
