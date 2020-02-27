@@ -127,6 +127,7 @@ aa_register_case \
 
         array set user_info [auth::create_user  \
                                  -user_id $user_id  \
+                                 -authority_id [auth::authority::get_id -short_name "acs_testing"] \
                                  -username $username  \
                                  -email $email  \
                                  -first_names $first_names \
