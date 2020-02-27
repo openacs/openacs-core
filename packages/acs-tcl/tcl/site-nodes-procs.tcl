@@ -1437,6 +1437,10 @@ if {$UseXotclSiteNodes} {
                 ::acs::site_nodes_cache eval -partition_key 0 package_url-$package_key { next }
             }
 
+            :method flush_per_request_cache {} {
+                array unset ::__node_id
+            }
+
             :public method flush_pattern {{-partition_key ""} pattern} {
                 #
                 # Flush from the site-nodes caches certain
@@ -1446,6 +1450,9 @@ if {$UseXotclSiteNodes} {
                 # above. Depending on the specified pattern, it
                 # reroutes the flushing request to different caches.
                 #
+
+                :flush_per_request_cache
+                
                 switch -glob -- $pattern {
                     id-*           {set cache site_nodes_id_cache}
                     get_children-* {set cache site_nodes_children_cache}
@@ -1453,7 +1460,7 @@ if {$UseXotclSiteNodes} {
                 }
                 ::acs::$cache flush_pattern -partition_key $partition_key $pattern
             }
-
+            
             :public method flush_cache {-node_id:required,1..1 {-with_subtree:boolean true} {-url ""}} {
                 #
                 # Flush entries from site-node tree, including the current node,
@@ -1462,10 +1469,7 @@ if {$UseXotclSiteNodes} {
                 # the whole tree.
                 #
 
-                #
-                # In any case, flush as well the per-request cache
-                #
-                array unset ::__node_id
+                :flush_per_request_cache
 
                 set old_url [:get_url -node_id $node_id]
 
