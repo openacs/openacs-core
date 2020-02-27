@@ -71,11 +71,22 @@ namespace eval ::acs_admin {
 
         set path [dict get $node_info url]$node_name
         #
-        # Perform query fully uncached to avoid potential bootstrap
+        # Flush site node cache to avoid potential bootstrap
         # problems.
         #
-        set URL [xo::db::sql::site_node url -node_id [xo::db::sql::site_node node_id -url $path]]
-        if {$URL eq "$path/"} {
+        if {[info commands ::xo::site_node] ne ""} {
+            xo::site_node flush_pattern id-$path*
+        }
+
+        if {[site_node::exists_p -url $path]} {
+            #
+            # During bootstrap, the package_id might be empty, because
+            # the after_initiate callback might call the
+            # site-wide-init, which in turn might initiate another
+            # instance. Thefore, we might be called between site-node
+            # creation and mounting .. which will result in an empty
+            # package_id.
+            #
             set node_info [site_node::get -url $path]
             set package_id [dict get $node_info object_id]
         } else {
