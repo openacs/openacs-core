@@ -32,6 +32,7 @@ ad_proc -private template::reset_request_vars {} {
 ad_proc -public template::register_urn {
     -urn:required
     -resource:required
+    {-csp_list ""}
 } {
 
     Register a URN for a resource. These URNs provide a single place
@@ -48,16 +49,18 @@ ad_proc -public template::register_urn {
     if {[info exists $key]} {
         set old_resource [set $key]
         #
-        # Prefer local URNs over non-local ones
+        # Prefer local URLs over non-local ones (starting with http*:)
         #
         if {[string match //* $old_resource] || [string match http* $old_resource]} {
             ns_log notice "overwrite URN: $urn <$old_resource> with <$resource>"
             set $key $resource
+            set ::template::head::urn_csp($urn) $csp_list
         } else {
             ns_log notice "keep old URN: $urn <$old_resource> instead of <$resource>"
         }
     } else {
         set $key $resource
+        set ::template::head::urn_csp($urn) $csp_list
         ns_log notice "add URN: $urn <$resource>"
     }
 }
@@ -162,6 +165,7 @@ ad_proc -public template::head::add_script {
     #
     set key ::template::head::urn($src)
     if {[info exists $key]} {
+        template::head::require_csp $::template::head::urn_csp($src)
         set src [set $key]
     } elseif {[string match urn:* $src]} {
         ns_log error "URN <$src> could not be resolved"
@@ -634,6 +638,7 @@ ad_proc -public template::add_body_script {
         #
         set key ::template::head::urn($src)
         if {[info exists $key]} {
+            template::head::require_csp $::template::head::urn_csp($src)
             set src [set $key]
         } elseif {[string match urn:* $src]} {
             ns_log error "URN <$src> could not be resolved"
@@ -742,6 +747,7 @@ ad_proc -private template::head::resolve_urn {
 } {
     set key ::template::head::urn($resource)
     if {[info exists $key]} {
+        template::head::require_csp $::template::head::urn_csp($resource)
         set resource [set $key]
     }
     return $resource
@@ -755,7 +761,17 @@ ad_proc template::head::can_resolve_urn {
     return [info exists ::template::head::urn($resource)]
 }
 
+ad_proc -private template::head::require_csp {
+    csp_list
+} {
+    Require the CSP directives as defined for URNs.
 
+    @param csp_list flat list of pairs consisting of directives and values.
+} {
+    foreach {directive value} $csp_list {
+        security::csp::require $directive $value
+    }
+}
 
 ad_proc template::head::prepare_multirows {} {
     Generate multirows for meta, css, scripts
