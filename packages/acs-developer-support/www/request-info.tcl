@@ -68,7 +68,7 @@ if { [info exists property(conn)] } {
 		    set value "<pre>[ns_quotehtml $raw]</pre>"
 		}
 		endclicks {
-		    set value [format "%.f ms" [expr { $raw/1000.0 - [dict get $property(conn) startclicks] }]]
+		    set value [format "%.f ms" [expr { ($raw - [dict get $property(conn) startclicks]) / 1000.0 }]]
 		}
 		end {
 		    set value [clock format $raw -format "%Y-%m-%d %H:%M:%S"]
