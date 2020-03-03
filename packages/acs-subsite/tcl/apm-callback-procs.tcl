@@ -117,12 +117,14 @@ ad_proc -private subsite::after_upgrade {
                 }
             }
             5.10.0d18 5.10.0d19 {
-                db_transaction {
-                    db_foreach table_name {select table_name from acs_object_types} {
-                        set table_name_lc [string tolower $table_name]
-                        if {$table_name_lc ne $table_name} {
-                            ns_log notice "Fix case discrepancy in table_name attribute of acs_object_types: $table_name -> $table_name_lc"
-                            db_dml to_lower {update acs_object_types set table_name=:table_name_lc where table_name=:table_name}
+                if {[db_driverkey ""] eq "postgresql"} {
+                    db_transaction {
+                        db_foreach table_name {select table_name from acs_object_types} {
+                            set table_name_lc [string tolower $table_name]
+                            if {$table_name_lc ne $table_name} {
+                                ns_log notice "Fix case discrepancy in table_name attribute of acs_object_types: $table_name -> $table_name_lc"
+                                db_dml to_lower {update acs_object_types set table_name=:table_name_lc where table_name=:table_name}
+                            }
                         }
                     }
                 }
