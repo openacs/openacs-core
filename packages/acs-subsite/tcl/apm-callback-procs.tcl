@@ -129,6 +129,19 @@ ad_proc -private subsite::after_upgrade {
                     }
                 }
             }
+            5.10.0d19 5.10.0d20 {
+                if {[db_driverkey ""] eq "postgresql"} {
+                    db_transaction {
+                        db_foreach id_column {select id_column from acs_object_types} {
+                            set id_column_lc [string tolower $id_column]
+                            if {$id_column_lc ne $id_column} {
+                                ns_log notice "Fix case discrepancy in id_column attribute of acs_object_types: $id_column -> $id_column_lc"
+                                db_dml to_lower {update acs_object_types set id_column=:id_column_lc where id_column=:id_column}
+                            }
+                        }
+                    }
+                }
+            }
         }
 }
 

@@ -86,7 +86,7 @@ namespace eval group_type {
         # unique group_id primary key
 
         set id_column [db_string select_group_id_column {
-            select upper(id_column) from acs_object_types where object_type='group'
+            select id_column from acs_object_types where object_type='group'
         }]
         set package_name [string tolower $group_type]
 

@@ -4,7 +4,7 @@
 <fullquery name="group_type::new.select_group_id_column">      
       <querytext>
       
-	    select upper(id_column) from acs_object_types where object_type='group'
+	    select id_column from acs_object_types where object_type='group'
 	
       </querytext>
 </fullquery>
