@@ -22,25 +22,25 @@ set page_fragment_cache_p [ds_page_fragment_cache_enabled_p]
 foreach name [nsv_array names ds_request] {
     ns_log Debug "DS: Checking request $request, $name."
     if { [regexp {^([0-9]+)\.([a-z]+)$} $name "" m_request key] && $m_request == $request } {
-	set property($key) [nsv_get ds_request $name]
+        set property($key) [nsv_get ds_request $name]
     }
 }
 
 if { [info exists property(start)] } {
     set expired_p 0
     append body [subst {
-       <h3>Parameters</h3>
+        <h3>Parameters</h3>
 
-       <blockquote>
-       <table cellspacing=0 cellpadding=0>
-	<tr><th align="left">Request Start Time:&nbsp;</th>
-	<td>[clock format [lindex $property(start) 0] -format "%Y-%m-%d %H:%M:%S"]
+        <blockquote>
+        <table cellspacing=0 cellpadding=0>
+        <tr><th align="left">Request Start Time:&nbsp;</th>
+        <td>[clock format [lindex $property(start) 0] -format "%Y-%m-%d %H:%M:%S"]
     }]
 } else {
     set expired_p 1
     append body [subst {
-      The information for this request is gone - either the server has been restarted, or
-      the request is more than [parameter::get -parameter DeveloperSupportLifetime -default 900] seconds old.
+        The information for this request is gone - either the server has been restarted, or
+        the request is more than [parameter::get -parameter DeveloperSupportLifetime -default 900] seconds old.
     }]
     return
 }
@@ -50,54 +50,54 @@ if { [info exists property(conn)] } {
 
     foreach { key name } {
         end {Request Completion Time}
-	endclicks {Request Duration}
+        endclicks {Request Duration}
         peeraddr IP
-	method Method
-	url URL
-	query Query
+        method Method
+        url URL
+        query Query
         user_id {User ID}
         session_id {Session ID}
         browser_id {Browser ID}
         validated {Session Validation}
-	error {Error}
+        error {Error}
     } {
-	if { [dict exists $property(conn) $key] } {
-	    set raw [dict get $property(conn) $key]
-	    switch $key {
-		error {
-		    set value "<pre>[ns_quotehtml $raw]</pre>"
-		}
-		endclicks {
-		    set value [format "%.f ms" [expr { ($raw - [dict get $property(conn) startclicks]) / 1000.0 }]]
-		}
-		end {
-		    set value [clock format $raw -format "%Y-%m-%d %H:%M:%S"]
-		}
-		user_id {
-		    if { [db_0or1row user_info {
+        if { [dict exists $property(conn) $key] } {
+            set raw [dict get $property(conn) $key]
+            switch $key {
+                error {
+                    set value "<pre>[ns_quotehtml $raw]</pre>"
+                }
+                endclicks {
+                    set value [format "%.f ms" [expr { ($raw - [dict get $property(conn) startclicks]) / 1000.0 }]]
+                }
+                end {
+                    set value [clock format $raw -format "%Y-%m-%d %H:%M:%S"]
+                }
+                user_id {
+                    if { [db_0or1row user_info {
                         select first_names, last_name, email
                         from users
                         where user_id = :raw
-		    }] } {
-			set value [subst {
-			    <a href="/shared/community-member?user_id=$raw">$raw</a>:
-			    $first_names $last_name (<a href="mailto:$email">mailto:$email</a>)
-			}]
-		    } else {
-			set value $raw
-		    }
-		}
-		default {
-		    set value [ns_quotehtml $raw]
-		}
-	    }
+                    }] } {
+                        set value [subst {
+                            <a href="/shared/community-member?user_id=$raw">$raw</a>:
+                            $first_names $last_name (<a href="mailto:$email">mailto:$email</a>)
+                        }]
+                    } else {
+                        set value $raw
+                    }
+                }
+                default {
+                    set value [ns_quotehtml $raw]
+                }
+            }
 
-	    append body [subst {
-		<tr valign="top"><th style="white-space: nowrap; text-align:left">$name:&nbsp;</th>
-		<td>[expr {$value eq "" ? "(empty)" : $value}]</td>
-		</tr>
-	    }]
-	}
+            append body [subst {
+                <tr valign="top"><th style="white-space: nowrap; text-align:left">$name:&nbsp;</th>
+                <td>[expr {$value eq "" ? "(empty)" : $value}]</td>
+                </tr>
+            }]
+        }
     }
 }
 
@@ -105,70 +105,70 @@ append body "</table></blockquote>"
 
 if { [info exists property(rp)] } {
     append body [subst {
-	<h3>Request Processor</h3>
-	<ul>
+        <h3>Request Processor</h3>
+        <ul>
     }]
     foreach rp $property(rp) {
-	lassign $rp kind info startclicks endclicks action error
+        lassign $rp kind info startclicks endclicks action error
 
-	if { $kind eq "debug" && !$rp_show_debug_p } {
-	    continue
-	}
+        if { $kind eq "debug" && !$rp_show_debug_p } {
+            continue
+        }
 
-	set duration [format "%.1f ms" [expr { ($endclicks - $startclicks)/1000.0 }]]
+        set duration [format "%.1f ms" [expr { ($endclicks - $startclicks)/1000.0 }]]
 
-	if { [info exists conn(startclicks)] } {
-	    append body "<li>[format "%+06.1f" [expr { ($startclicks - $conn(startclicks))/1000.0 }]] ms: "
-	} else {
-	    append body "<li>"
-	}
+        if { [info exists conn(startclicks)] } {
+            append body "<li>[format "%+06.1f" [expr { ($startclicks - $conn(startclicks))/1000.0 }]] ms: "
+        } else {
+            append body "<li>"
+        }
 
-	switch $kind {
-	    transformation {
-		lassign $info proc from to
-		if { $to eq "" } {
-		    set to "?"
-		}
-		append body "Applied transformation from <b>$from -> $to</b> - $duration\n"
-	    }
-	    filter {
-		lassign $info . kind method path proc args
-
-		append body "Applied $kind filter: <b>$proc</b> [ns_quotehtml $args] (for $method $path) - $duration\n"
-		if {$action eq "error"} {
-		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
-		} elseif { $action ne "" } {
-		    append body "<ul><li>returned $action</ul>\n"
-		}
-	    }
-	    registered_proc {
-        set proc [lindex $info 2]
-        set args [lindex $info 3]
-		append body "Called registered procedure: <b>$proc</b> [ns_quotehtml $args] for ($method $path) - $duration\n"
-		if {$action eq "error"} {
-		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
-		}
-	    }
-	    serve_file {
-		lassign $info file handler
-		append body "Served file <b>$file</b> with <b>$handler</b> - $duration\n"
-		if {$action eq "error"} {
-		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
-		}
-	    }
-            notice {
-		append body "$info\n"
+        switch $kind {
+            transformation {
+                lassign $info proc from to
+                if { $to eq "" } {
+                    set to "?"
+                }
+                append body "Applied transformation from <b>$from -> $to</b> - $duration\n"
             }
-	    debug {
-		append body "<i>$info</i>\n"
-	    }
-	}
+            filter {
+                lassign $info . kind method path proc args
+
+                append body "Applied $kind filter: <b>$proc</b> [ns_quotehtml $args] (for $method $path) - $duration\n"
+                if {$action eq "error"} {
+                    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
+                } elseif { $action ne "" } {
+                    append body "<ul><li>returned $action</ul>\n"
+                }
+            }
+            registered_proc {
+                set proc [lindex $info 2]
+                set args [lindex $info 3]
+                append body "Called registered procedure: <b>$proc</b> [ns_quotehtml $args] for ($method $path) - $duration\n"
+                if {$action eq "error"} {
+                    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
+                }
+            }
+            serve_file {
+                lassign $info file handler
+                append body "Served file <b>$file</b> with <b>$handler</b> - $duration\n"
+                if {$action eq "error"} {
+                    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
+                }
+            }
+            notice {
+                append body "$info\n"
+            }
+            debug {
+                append body "<i>$info</i>\n"
+            }
+        }
     }
     if { !$rp_show_debug_p } {
-	set href "./request-info?[export_ns_set_vars url]&rp_show_debug_p=1"
-	append body [subst {
-	    <p><a href="[ns_quotehtml $href]">show RP debugging information</a>
-	}]
+        set href "./request-info?[export_ns_set_vars url]&rp_show_debug_p=1"
+        append body [subst {
+            <p><a href="[ns_quotehtml $href]">show RP debugging information</a>
+        }]
     }
     append body "</ul>\n"
 }
@@ -176,37 +176,37 @@ if { [info exists property(rp)] } {
 if { [info exists property(comment)] } {
     append body "<h3>Comments</h3><ul>\n"
     foreach comment $property(comment) {
-	append body "<li>[ns_quotehtml $comment]\n"
+        append body "<li>[ns_quotehtml $comment]\n"
     }
     append body "</ul>\n"
 }
 
 if { [info exists property(headers)] } {
     append body {<h3>Headers</h3>
-	<blockquote><table cellspacing="0" cellpadding="0">
+                 <blockquote><table cellspacing="0" cellpadding="0">
     }
     foreach { name value } $property(headers) {
-	append body [subst {
-	    <tr valign="top">
-	    <th align="left">$name:&nbsp;</th>
-	    <td>[ns_quotehtml $value]</td>
-	    </tr>
-	}]
+        append body [subst {
+            <tr valign="top">
+            <th align="left">$name:&nbsp;</th>
+            <td>[ns_quotehtml $value]</td>
+            </tr>
+        }]
     }
     append body "</table></blockquote>\n"
 }
 
 if { [info exists property(oheaders)] } {
     append body {<h3>Output Headers</h3>
-	<blockquote><table cellspacing="0" cellpadding="0">
+                 <blockquote><table cellspacing="0" cellpadding="0">
     }
     foreach { name value } $property(oheaders) {
-	append body [subst {
-	    <tr valign="top">
-	    <th align="left">$name:&nbsp;</th>
-	    <td>[ns_quotehtml $value]</td>
-	    </tr>
-	}]
+        append body [subst {
+            <tr valign="top">
+            <th align="left">$name:&nbsp;</th>
+            <td>[ns_quotehtml $value]</td>
+            </tr>
+        }]
     }
     append body "</table></blockquote>\n"
 }
@@ -221,25 +221,25 @@ if { ![info exists property(db)] } {
 
     foreach { handle command statement_name sql start end errno return } $property(db) {
 
-	if { $handle ne "" && [info exists pool($handle)] } {
-	    set statement_pool $pool($handle)
-	} else {
-	    set statement_pool ""
-	}
+        if { $handle ne "" && [info exists pool($handle)] } {
+            set statement_pool $pool($handle)
+        } else {
+            set statement_pool ""
+        }
 
-	if { $command eq "gethandle" } {
-	    # Remember which handle was acquired from which pool.
-	    set statement_pool $sql
-	    set value "gethandle (returned $return)"
-	    set pool($return) $sql
-	} elseif { $command eq "releasehandle" } {
-	    set value "releasehandle $handle"
-	} else {
-	    if { $statement_name eq "" } {
-		set value ""
-	    } else {
-		set value "$statement_name: "
-	    }
+        if { $command eq "gethandle" } {
+            # Remember which handle was acquired from which pool.
+            set statement_pool $sql
+            set value "gethandle (returned $return)"
+            set pool($return) $sql
+        } elseif { $command eq "releasehandle" } {
+            set value "releasehandle $handle"
+        } else {
+            if { $statement_name eq "" } {
+                set value ""
+            } else {
+                set value "$statement_name: "
+            }
 
             # Remove extra whitespace before query
             set min_whitespace -1
@@ -262,8 +262,8 @@ if { ![info exists property(db)] } {
                 set sql $new_sql
             }
 
-	    append value "$command $statement_pool $handle<pre>[ns_quotehtml $sql]</pre>"
-	}
+            append value "$command $statement_pool $handle<pre>[ns_quotehtml $sql]</pre>"
+        }
 
         if { $command ne "getrow" || [template::util::is_true $getrow_p] } {
             multirow append dbreqs $handle [lindex $command 0] $sql [format %.2f [expr { $end - $start }]] $value
@@ -291,19 +291,19 @@ if { ![info exists property(db)] } {
                 aggregate_label "Total Duration (ms)"
                 display_template {@dbreqs.value;noquote@}
             }
-        } -filters {
-            getrow_p {
-                label "Getrow"
-                values {
-                    {"Include" t}
-                    {"Exclude" f}
-                }
-                default_value t
+    } -filters {
+        getrow_p {
+            label "Getrow"
+            values {
+                {"Include" t}
+                {"Exclude" f}
             }
-            request {
-                hide_p t
-            }
+            default_value t
         }
+        request {
+            hide_p t
+        }
+    }
 
 }
 
@@ -311,21 +311,21 @@ if { ![info exists property(db)] } {
 global ds_profile__total_ms ds_profile__iterations
 
 template::list::create -name profiling -multirow profiling -elements {
-	file_links {
-	    label "Ops"
-	    display_template {
-		@profiling.file_links;noquote@
-	    }
-	}
-	tag {
-	    label "Template"
-	}
-	total_ms {
-	    label "Total time"
-	}
-	size {
-	    label "Size"
-	}
+    file_links {
+        label "Ops"
+        display_template {
+            @profiling.file_links;noquote@
+        }
+    }
+    tag {
+        label "Template"
+    }
+    total_ms {
+        label "Total time"
+    }
+    size {
+        label "Size"
+    }
 }
 
 multirow create profiling tag total_ms file_links size
