@@ -81,7 +81,7 @@ namespace eval group_type {
             }
         }
 
-        set table_name [string toupper "${group_type}_ext"]
+        set table_name "${group_type}_ext"
         # Since all group types are extensions of groups, maintain a
         # unique group_id primary key
 

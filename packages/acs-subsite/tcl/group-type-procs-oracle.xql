@@ -21,7 +21,7 @@ BEGIN
    object_type   => :group_type,
    pretty_name   => :pretty_name,
    pretty_plural => :pretty_plural,
-   table_name    => :table_name,
+   table_name    => upper(:table_name),
    id_column     => :id_column,
    package_name  => :package_name
  );
