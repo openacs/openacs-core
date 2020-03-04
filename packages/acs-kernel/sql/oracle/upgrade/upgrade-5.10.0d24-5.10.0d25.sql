@@ -13,6 +13,6 @@ begin;
 
 update acs_attributes set datatype='boolean' where object_type='apm_package_version' and attribute_name='enabled_p';
 update acs_attributes set datatype='date' where object_type='apm_package_version' and attribute_name='deactivation_date';
-update acs_attributes set datatype='string' where object_type='apm_parameter' and attribute_name='max_n_values';
+update acs_attributes set datatype='integer' where object_type='apm_parameter' and attribute_name='max_n_values';
 
-end;
+commit;
