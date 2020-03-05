@@ -66,7 +66,7 @@ switch -- $email_verified_p {
         set email_message [group::get_member_state_pretty -component account_mail \
                                -member_state $member_state \
                                -site_name [ad_system_name] \
-                               -url [ad_url]]
+                               -url [ad_conn subsite_url]]
     }
 }
 
