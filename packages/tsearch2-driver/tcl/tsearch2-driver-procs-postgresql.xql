@@ -4,10 +4,11 @@
   <rdbms><type>postgresql</type><version>8.3</version></rdbms>
     <querytext>
       insert into txt (object_id,fti)
-      values (:object_id,
-              setweight(to_tsvector(coalesce(:title,'')),'A')
-              ||setweight(to_tsvector(coalesce(:keywords,'')),'B')
-              ||to_tsvector(coalesce(:txt,'')))
+      select object_id,
+             setweight(to_tsvector(coalesce(:title,'')),'A')
+             ||setweight(to_tsvector(coalesce(:keywords,'')),'B')
+             ||to_tsvector(coalesce(:txt,'')))
+      from acs_objects where object_id = :object_id
     </querytext>
   </fullquery>
 
