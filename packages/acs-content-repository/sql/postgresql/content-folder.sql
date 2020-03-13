@@ -771,7 +771,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable;
 
-
 -- function is_sub_folder
 select define_function_args('content_folder__is_sub_folder','folder_id,target_folder_id');
 
@@ -784,47 +783,23 @@ CREATE OR REPLACE FUNCTION content_folder__is_sub_folder(
    is_sub_folder__target_folder_id integer
 ) RETURNS boolean AS $$
 DECLARE
-  v_parent_id                           integer default 0;       
-  v_sub_folder_p                        boolean default 'f';           
-  v_rec                                 record;
+  v_result                              integer;
 BEGIN
+  With RECURSIVE parents AS (
+    select item_id, parent_id from cr_items where item_id = is_sub_folder__target_folder_id
+    UNION ALL
+    select cr_items.item_id, cr_items.parent_id from cr_items, parents
+    where cr_items.item_id = parents.parent_id
+  )
+  select count(*) into v_result from parents where parent_id = is_sub_folder__folder_id limit 1;
 
-  if is_sub_folder__folder_id = content_item__get_root_folder(null) or
-    is_sub_folder__folder_id = content_template__get_root_folder() then
-
-    v_sub_folder_p := 't';
+  if v_result = 0 then
+    return 'f';
+  else
+    return 't';
   end if;
-
---               select
---                 parent_id
---               from 
---                 cr_items
---               connect by
---                 prior parent_id = item_id
---               start with
---                 item_id = is_sub_folder__target_folder_id
-
-  for v_rec in select i2.parent_id
-               from cr_items i1, cr_items i2
-               where i1.item_id = is_sub_folder__target_folder_id
-                 and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
-               order by i2.tree_sortkey desc
-  LOOP
-    v_parent_id := v_rec.parent_id;
-    exit when v_parent_id = is_sub_folder__folder_id;
-    -- we did not find the folder, reset v_parent_id
-    v_parent_id := -4;
-  end LOOP;
-
-  if v_parent_id != -4 then 
-    v_sub_folder_p := 't';
-  end if;
-
-  return v_sub_folder_p;
- 
 END;
-$$ LANGUAGE plpgsql; 
-
+$$ LANGUAGE plpgsql;
 
 -- function is_empty
 select define_function_args('content_folder__is_empty','folder_id');
