@@ -14,7 +14,7 @@ CREATE OR REPLACE FUNCTION inline_0(
 
 ) RETURNS integer AS $$
 DECLARE
-	dummy   integer;
+        dummy   integer;
 BEGIN
   PERFORM acs_object_type__create_type (
     'site_node',
@@ -41,24 +41,24 @@ drop function inline_0 ();
 -- This table allows urls to be mapped to a node_ids.
 
 create table site_nodes (
-	node_id         integer constraint site_nodes_node_id_fk
-			references acs_objects (object_id)
-			constraint site_nodes_node_id_pk
-			primary key,
-	parent_id       integer constraint site_nodes_parent_id_fk
-			references site_nodes (node_id),
-	name            text
-			constraint site_nodes_name_ck
-			check (name not like '%/%'),
-	constraint site_nodes_un
-	unique (parent_id, name),
-	-- Is it legal to create a child node?
-	directory_p     boolean not null,
-	-- Should urls that are logical children of this node be
-	-- mapped to this node?
-	pattern_p       boolean default false not null,
-	object_id       integer constraint site_nodes_object_id_fk
-			references acs_objects (object_id)
+        node_id         integer constraint site_nodes_node_id_fk
+                        references acs_objects (object_id)
+                        constraint site_nodes_node_id_pk
+                        primary key,
+        parent_id       integer constraint site_nodes_parent_id_fk
+                        references site_nodes (node_id),
+        name            text
+                        constraint site_nodes_name_ck
+                        check (name not like '%/%'),
+        constraint site_nodes_un
+        unique (parent_id, name),
+        -- Is it legal to create a child node?
+        directory_p     boolean not null,
+        -- Should urls that are logical children of this node be
+        -- mapped to this node?
+        pattern_p       boolean default false not null,
+        object_id       integer constraint site_nodes_object_id_fk
+                        references acs_objects (object_id)
 );
 
 create index site_nodes_object_id_idx on site_nodes (object_id);
@@ -93,7 +93,7 @@ BEGIN
       where node_id = new__parent_id;
 
       if v_directory_p = 'f' then
-	raise EXCEPTION '-20000: Node % is not a directory', new__parent_id;
+        raise EXCEPTION '-20000: Node % is not a directory', new__parent_id;
       end if;
     end if;
 
@@ -163,7 +163,7 @@ DECLARE
 BEGIN
     if find_pattern__node_id is null then
 --      raise no_data_found;
-	raise exception 'NO DATA FOUND';
+        raise exception 'NO DATA FOUND';
     end if;
 
     select pattern_p, parent_id into v_pattern_p, v_parent_id
@@ -245,7 +245,7 @@ BEGIN
     end if;
 
     if NOT FOUND then
-	return site_node__find_pattern(p_parent_id);
+        return site_node__find_pattern(p_parent_id);
     end if;
 
     --
@@ -258,9 +258,9 @@ BEGIN
       -- find_pattern(). Otherwise, return the found node_id
       --
       if v_trailing_slash_p is true and v_directory_p is false then
-	return site_node__find_pattern(p_parent_id);
+        return site_node__find_pattern(p_parent_id);
       else
-	return v_node_id;
+        return v_node_id;
       end if;
     else
       --
@@ -285,56 +285,56 @@ BEGIN
     raise notice 'starting site-nodes doing the recursive part -- vguerra';
 
     IF cmp_pg_version('8.4') >= 0 THEN
-	-- recursive site_nodes recursive - START
+        -- recursive site_nodes recursive - START
 
-	CREATE OR REPLACE FUNCTION site_node__url(
-	   url__node_id integer
-	) RETURNS varchar AS $$
+        CREATE OR REPLACE FUNCTION site_node__url(
+           url__node_id integer
+        ) RETURNS varchar AS $$
 
-	    WITH RECURSIVE site_nodes_path(parent_id, path, directory_p, node_id) as (
+            WITH RECURSIVE site_nodes_path(parent_id, path, directory_p, node_id) as (
 
-		select parent_id, ARRAY[name || case when directory_p then '/' else ' ' end]::text[] as path, directory_p, node_id
-		from site_nodes where node_id = url__node_id
+                select parent_id, ARRAY[name || case when directory_p then '/' else ' ' end]::text[] as path, directory_p, node_id
+                from site_nodes where node_id = url__node_id
 
-		UNION ALL
+                UNION ALL
 
-		select sn.parent_id, sn.name::text || snr.path , sn.directory_p, snr.parent_id
-		from site_nodes sn join site_nodes_path snr on sn.node_id = snr.parent_id
-		where snr.parent_id is not null
+                select sn.parent_id, sn.name::text || snr.path , sn.directory_p, snr.parent_id
+                from site_nodes sn join site_nodes_path snr on sn.node_id = snr.parent_id
+                where snr.parent_id is not null
 
-	    ) select array_to_string(path,'/') from site_nodes_path where parent_id is null
+            ) select array_to_string(path,'/') from site_nodes_path where parent_id is null
 
-	$$ LANGUAGE sql strict stable;
+        $$ LANGUAGE sql strict stable;
 
-	-- recursive site_nodes END
+        -- recursive site_nodes END
 
     ELSE
 
-	CREATE OR REPLACE FUNCTION site_node__url(
-	   url__node_id integer
-	) RETURNS varchar AS $$
-	DECLARE
-	  v_parent_id            site_nodes.node_id%TYPE;
-	  v_name                 site_nodes.name%TYPE;
-	  v_directory_p          site_nodes.directory_p%TYPE;
-	BEGIN
-	    if url__node_id is null then
-	      return '';
-	    end if;
+        CREATE OR REPLACE FUNCTION site_node__url(
+           url__node_id integer
+        ) RETURNS varchar AS $$
+        DECLARE
+          v_parent_id            site_nodes.node_id%TYPE;
+          v_name                 site_nodes.name%TYPE;
+          v_directory_p          site_nodes.directory_p%TYPE;
+        BEGIN
+            if url__node_id is null then
+              return '';
+            end if;
 
-	    select parent_id, name, directory_p into
-		   v_parent_id, v_name, v_directory_p
-	    from site_nodes
-	    where node_id = url__node_id;
+            select parent_id, name, directory_p into
+                   v_parent_id, v_name, v_directory_p
+            from site_nodes
+            where node_id = url__node_id;
 
-	    if v_directory_p = 't' then
-	      return site_node__url(v_parent_id) || v_name || '/';
-	    else
-	      return site_node__url(v_parent_id) || v_name;
-	    end if;
+            if v_directory_p = 't' then
+              return site_node__url(v_parent_id) || v_name || '/';
+            else
+              return site_node__url(v_parent_id) || v_name;
+            end if;
 
-	END;
-	$$ LANGUAGE plpgsql;
+        END;
+        $$ LANGUAGE plpgsql;
 
     END IF;
 
@@ -344,3 +344,9 @@ $inline_0$ LANGUAGE plpgsql;
 
 select inline_0();
 drop function inline_0();
+
+--
+-- Local variables:
+--   mode: sql
+--   indent-tabs-mode: nil
+-- End:

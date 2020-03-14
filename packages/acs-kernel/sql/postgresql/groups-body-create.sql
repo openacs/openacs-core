@@ -72,20 +72,20 @@ BEGIN
      -- For all groups of which I am a component, insert a
      -- row in the group_element_index.
      for map in select distinct group_id
-	      from group_component_map
-	      where component_id = v_object_id_one
+              from group_component_map
+              where component_id = v_object_id_one
      loop
 
-	insert into group_element_index
-	       (group_id, element_id, rel_id, container_id,
-	       rel_type, ancestor_rel_type)
-	values
-	       (map.group_id, v_object_id_two, new.rel_id, v_object_id_one,
-	       v_rel_type, 'membership_rel');
+        insert into group_element_index
+               (group_id, element_id, rel_id, container_id,
+               rel_type, ancestor_rel_type)
+        values
+               (map.group_id, v_object_id_two, new.rel_id, v_object_id_one,
+               v_rel_type, 'membership_rel');
 
-	if new.member_state = 'approved' then
-	   perform party_approved_member__add(map.group_id, v_object_id_two, new.rel_id, v_rel_type);
-	end if;
+        if new.member_state = 'approved' then
+           perform party_approved_member__add(map.group_id, v_object_id_two, new.rel_id, v_rel_type);
+        end if;
 
      end loop;
   end if;
@@ -114,8 +114,8 @@ BEGIN
   end if;
 
   for map in select group_id, element_id, rel_type
-	     from group_element_index
-	     where rel_id = new.rel_id
+             from group_element_index
+             where rel_id = new.rel_id
   loop
     if new.member_state = 'approved' then
       perform party_approved_member__add(map.group_id, map.element_id, new.rel_id, map.rel_type);
@@ -151,8 +151,8 @@ BEGIN
   end if;
 
   for map in select group_id, element_id, rel_type
-	     from group_element_index
-	     where rel_id = old.rel_id
+             from group_element_index
+             where rel_id = old.rel_id
   loop
     perform party_approved_member__remove(map.group_id, map.element_id, old.rel_id, map.rel_type);
   end loop;
@@ -213,10 +213,10 @@ BEGIN
   from group_approved_member_map m
   where group_id = v_object_id_two
   and not exists (select 1
-		  from group_element_map
-		  where group_id = v_object_id_one
-		  and element_id = m.member_id
-		  and rel_id = m.rel_id);
+                  from group_element_map
+                  where group_id = v_object_id_one
+                  and element_id = m.member_id
+                  and rel_id = m.rel_id);
 
   -- Make my composable elements be elements of my new composite group
   insert into group_element_index
@@ -230,16 +230,16 @@ BEGIN
   where group_id = v_object_id_two
   and t.composable_p = 't'
   and not exists (select 1
-		  from group_element_map
-		  where group_id = v_object_id_one
-		  and element_id = m.element_id
-		  and rel_id = m.rel_id);
+                  from group_element_map
+                  where group_id = v_object_id_one
+                  and element_id = m.element_id
+                  and rel_id = m.rel_id);
 
   -- For all direct or indirect containers of my new composite group,
   -- add me and add my elements
   for map in  select distinct group_id
-	      from group_component_map
-	      where component_id = v_object_id_one
+              from group_component_map
+              where component_id = v_object_id_one
   LOOP
 
     -- Add a row for me
@@ -259,10 +259,10 @@ BEGIN
     where group_id = v_object_id_two
     and t.composable_p = 't'
     and not exists (select 1
-		    from group_element_map
-		    where group_id = map.group_id
-		    and element_id = m.member_id
-		    and rel_id = m.rel_id);
+                    from group_element_map
+                    where group_id = map.group_id
+                    and element_id = m.member_id
+                    and rel_id = m.rel_id);
 
     -- Add rows for my composable elements
 
@@ -277,10 +277,10 @@ BEGIN
     where group_id = v_object_id_two
     and t.composable_p = 't'
     and not exists (select 1
-		    from group_element_map
-		    where group_id = map.group_id
-		    and element_id = m.element_id
-		    and rel_id = m.rel_id);
+                    from group_element_map
+                    where group_id = map.group_id
+                    and element_id = m.element_id
+                    and rel_id = m.rel_id);
   end loop;
 
   return new;
@@ -321,8 +321,8 @@ BEGIN
   where rel_id = old.rel_id;
 
   for map in  select *
-	      from group_component_map
-	      where rel_id = old.rel_id
+              from group_component_map
+              where rel_id = old.rel_id
   LOOP
 
     delete from group_element_index
@@ -350,20 +350,20 @@ BEGIN
 
 
   for map in  select *
-	      from group_component_map
-	      where group_id in (select group_id
-			       from group_component_map
-			       where component_id = v_object_id_one
-			       union
-			       select v_object_id_one
-			       from dual)
-	      and component_id in (select component_id
-				   from group_component_map
-				   where group_id = v_object_id_two
-				   union
-				   select v_object_id_two
-				   from dual)
-	      and group_contains_p(group_id, component_id, rel_id) = 'f'
+              from group_component_map
+              where group_id in (select group_id
+                               from group_component_map
+                               where component_id = v_object_id_one
+                               union
+                               select v_object_id_one
+                               from dual)
+              and component_id in (select component_id
+                                   from group_component_map
+                                   where group_id = v_object_id_two
+                                   union
+                                   select v_object_id_two
+                                   from dual)
+              and group_contains_p(group_id, component_id, rel_id) = 'f'
   LOOP
 
     delete from group_element_index
@@ -459,12 +459,12 @@ CREATE OR REPLACE FUNCTION composition_rel__new(
 --
 DECLARE
 BEGIN
-	return composition_rel__new(null,
-				    'composition_rel',
-				    object_id_one,
-				    object_id_two,
-				    null,
-				    null);
+        return composition_rel__new(null,
+                                    'composition_rel',
+                                    object_id_one,
+                                    object_id_two,
+                                    null,
+                                    null);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -510,12 +510,12 @@ BEGIN
     end if;
 
     for row in  select r.object_id_one as parent_id
-		from acs_rels r, composition_rels c
-		where r.rel_id = c.rel_id
-		and r.object_id_two = component_id
+                from acs_rels r, composition_rels c
+                where r.rel_id = c.rel_id
+                and r.object_id_two = component_id
     LOOP
       if composition_rel__check_path_exists_p(row.parent_id, container_id) = 't' then
-	return 't';
+        return 't';
       end if;
     end loop;
 
@@ -552,27 +552,27 @@ BEGIN
     -- GROUP_COMPONENT_INDEX contains the (GROUP_ID, DC.REL_ID,
     -- CONTAINER_ID) triple.
     for dc in  select r.rel_id, r.object_id_one as container_id
-	       from acs_rels r, composition_rels c
-	       where r.rel_id = c.rel_id
-	       and r.object_id_two = check_index__component_id
+               from acs_rels r, composition_rels c
+               where r.rel_id = c.rel_id
+               and r.object_id_two = check_index__component_id
     LOOP
 
       if composition_rel__check_path_exists_p(dc.container_id,
-			     check_index__container_id) = 't' then
-	select case when count(*) = 0 then 0 else 1 end into n_rows
-	from group_component_index
-	where group_id = check_index__container_id
-	and component_id = check_index__component_id
-	and rel_id = dc.rel_id;
+                             check_index__container_id) = 't' then
+        select case when count(*) = 0 then 0 else 1 end into n_rows
+        from group_component_index
+        where group_id = check_index__container_id
+        and component_id = check_index__component_id
+        and rel_id = dc.rel_id;
 
-	if n_rows = 0 then
-	  result := 'f';
-	  PERFORM acs_log__error('composition_rel.check_representation',
-			'Row missing from group_component_index for (' ||
-			'group_id = ' || check_index__container_id || ', ' ||
-			'component_id = ' || check_index__component_id || ', ' ||
-			'rel_id = ' || dc.rel_id || ')');
-	end if;
+        if n_rows = 0 then
+          result := 'f';
+          PERFORM acs_log__error('composition_rel.check_representation',
+                        'Row missing from group_component_index for (' ||
+                        'group_id = ' || check_index__container_id || ', ' ||
+                        'component_id = ' || check_index__component_id || ', ' ||
+                        'rel_id = ' || dc.rel_id || ')');
+        end if;
 
       end if;
 
@@ -580,28 +580,28 @@ BEGIN
 
     -- Loop through all the containers of CONTAINER_ID.
     for r1 in  select r.object_id_one as container_id
-	       from acs_rels r, composition_rels c
-	       where r.rel_id = c.rel_id
-	       and r.object_id_two = check_index__container_id
-	       union
-	       select check_index__container_id as container_id
-	       from dual
+               from acs_rels r, composition_rels c
+               where r.rel_id = c.rel_id
+               and r.object_id_two = check_index__container_id
+               union
+               select check_index__container_id as container_id
+               from dual
     LOOP
       -- Loop through all the components of COMPONENT_ID and make a
       -- recursive call.
       for r2 in  select r.object_id_two as component_id
-		 from acs_rels r, composition_rels c
-		 where r.rel_id = c.rel_id
-		 and r.object_id_one = check_index__component_id
-		 union
-		 select check_index__component_id as component_id
-		 from dual
+                 from acs_rels r, composition_rels c
+                 where r.rel_id = c.rel_id
+                 and r.object_id_one = check_index__component_id
+                 union
+                 select check_index__component_id as component_id
+                 from dual
       LOOP
-	if (r1.container_id != check_index__container_id or
-	    r2.component_id != check_index__component_id) and
-	   composition_rel__check_index(r2.component_id, r1.container_id) = 'f' then
-	  result := 'f';
-	end if;
+        if (r1.container_id != check_index__container_id or
+            r2.component_id != check_index__component_id) and
+           composition_rel__check_index(r2.component_id, r1.container_id) = 'f' then
+          result := 'f';
+        end if;
       end loop;
     end loop;
 
@@ -648,17 +648,17 @@ BEGIN
     -- Now let us check that the index doesn't have any extraneous rows
     -- relating to this relation.
     for row in  select *
-		from group_component_index
-		where rel_id = check_representation__rel_id
+                from group_component_index
+                where rel_id = check_representation__rel_id
     LOOP
       if composition_rel__check_path_exists_p(row.component_id, row.group_id) = 'f' then
-	result := 'f';
-	PERFORM acs_log__error('composition_rel.check_representation',
-		      'Extraneous row in group_component_index: ' ||
-		      'group_id = ' || row.group_id || ', ' ||
-		      'component_id = ' || row.component_id || ', ' ||
-		      'rel_id = ' || row.rel_id || ', ' ||
-		      'container_id = ' || row.container_id || '.');
+        result := 'f';
+        PERFORM acs_log__error('composition_rel.check_representation',
+                      'Extraneous row in group_component_index: ' ||
+                      'group_id = ' || row.group_id || ', ' ||
+                      'component_id = ' || row.component_id || ', ' ||
+                      'rel_id = ' || row.rel_id || ', ' ||
+                      'container_id = ' || row.container_id || '.');
       end if;
     end loop;
 
@@ -732,13 +732,13 @@ CREATE OR REPLACE FUNCTION membership_rel__new(
 --
 DECLARE
 BEGIN
-	return membership_rel__new(null,
-				   'membership_rel',
-				   object_id_one,
-				   object_id_two,
-				   'approved',
-				   null,
-				   null);
+        return membership_rel__new(null,
+                                   'membership_rel',
+                                   object_id_one,
+                                   object_id_two,
+                                   'approved',
+                                   null,
+                                   null);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -928,19 +928,19 @@ BEGIN
     if n_rows = 0 then
       result := 'f';
       PERFORM acs_log__error('membership_rel.check_representation',
-		    'Row missing from group_element_index: ' ||
-		    'group_id = ' || check_index__group_id || ', ' ||
-		    'member_id = ' || check_index__member_id || ', ' ||
-		    'container_id = ' || check_index__container_id || '.');
+                    'Row missing from group_element_index: ' ||
+                    'group_id = ' || check_index__group_id || ', ' ||
+                    'member_id = ' || check_index__member_id || ', ' ||
+                    'container_id = ' || check_index__container_id || '.');
     end if;
 
     for row in  select r.object_id_one as container_id
-		from acs_rels r, composition_rels c
-		where r.rel_id = c.rel_id
-		and r.object_id_two = check_index__group_id
+                from acs_rels r, composition_rels c
+                where r.rel_id = c.rel_id
+                and r.object_id_two = check_index__group_id
     LOOP
       if membership_rel__check_index(row.container_id, check_index__member_id, check_index__container_id) = 'f' then
-	result := 'f';
+        result := 'f';
       end if;
     end loop;
 
@@ -985,17 +985,17 @@ BEGIN
     end if;
 
     for row in  select *
-		from group_member_index
-		where rel_id = check_representation__rel_id
+                from group_member_index
+                where rel_id = check_representation__rel_id
     LOOP
       if composition_rel__check_path_exists_p(row.container_id,
-					     row.group_id) = 'f' then
-	result := 'f';
-	PERFORM acs_log__error('membership_rel.check_representation',
-		      'Extra row in group_member_index: ' ||
-		      'group_id = ' || row.group_id || ', ' ||
-		      'member_id = ' || row.member_id || ', ' ||
-		      'container_id = ' || row.container_id || '.');
+                                             row.group_id) = 'f' then
+        result := 'f';
+        PERFORM acs_log__error('membership_rel.check_representation',
+                      'Extra row in group_member_index: ' ||
+                      'group_id = ' || row.group_id || ', ' ||
+                      'member_id = ' || row.member_id || ', ' ||
+                      'container_id = ' || row.container_id || '.');
       end if;
     end loop;
 
@@ -1038,8 +1038,8 @@ DECLARE
 BEGIN
   v_group_id :=
    party__new(new__group_id, new__object_type, new__creation_date,
-	      new__creation_user, new__creation_ip, new__email,
-	      new__url, new__context_id);
+              new__creation_user, new__creation_ip, new__email,
+              new__url, new__context_id);
 
   v_join_policy := new__join_policy;
 
@@ -1050,11 +1050,11 @@ BEGIN
       where group_type = new__object_type;
 
       if v_group_type_exists_p = 1 then
-	  select default_join_policy into v_join_policy
-	  from group_types
-	  where group_type = new__object_type;
+          select default_join_policy into v_join_policy
+          from group_types
+          where group_type = new__object_type;
       else
-	  v_join_policy := 'open';
+          v_join_policy := 'open';
       end if;
   end if;
 
@@ -1084,12 +1084,12 @@ BEGIN
     ( select distinct g.rel_type
       from group_type_rels g,
       ( select parent.object_type as parent_type
-	from acs_object_types child, acs_object_types parent
-	where child.object_type <> parent.object_type
-	and child.tree_sortkey between parent.tree_sortkey
-	and tree_right(parent.tree_sortkey)
-	and child.object_type = new__object_type
-	order by parent.tree_sortkey desc) types
+        from acs_object_types child, acs_object_types parent
+        where child.object_type <> parent.object_type
+        and child.tree_sortkey between parent.tree_sortkey
+        and tree_right(parent.tree_sortkey)
+        and child.object_type = new__object_type
+        order by parent.tree_sortkey desc) types
      where g.group_type = types.parent_type
      and not exists
      ( select 1 from group_rels
@@ -1116,16 +1116,16 @@ CREATE OR REPLACE FUNCTION acs_group__new(
 --
 DECLARE
 BEGIN
-	return acs_group__new(null,
-			      'group',
-			      now(),
-			      null,
-			      null,
-			      null,
-			      null,
-			      gname,
-			      null,
-			      null);
+        return acs_group__new(null,
+                              'group',
+                              now(),
+                              null,
+                              null,
+                              null,
+                              null,
+                              gname,
+                              null,
+                              null);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1147,18 +1147,18 @@ BEGIN
 
    -- Delete all the relations of any type to this group
    for row in select r.rel_id, t.package_name
-		 from acs_rels r, acs_object_types t
-		where r.rel_type = t.object_type
-		  and (r.object_id_one = delete__group_id
-		       or r.object_id_two = delete__group_id)
+                 from acs_rels r, acs_object_types t
+                where r.rel_type = t.object_type
+                  and (r.object_id_one = delete__group_id
+                       or r.object_id_two = delete__group_id)
    LOOP
       execute 'select ' ||  row.package_name || '__delete(' || row.rel_id || ')';
    end loop;
 
    -- Delete all segments defined for this group
    for row in  select segment_id
-		 from rel_segments
-		where group_id = delete__group_id
+                 from rel_segments
+                where group_id = delete__group_id
    LOOP
        PERFORM rel_segment__delete(row.segment_id);
    end loop;
@@ -1215,7 +1215,7 @@ CREATE OR REPLACE FUNCTION acs_group__member_p(
     EXISTS (
       select 1 from group_member_map
       where group_id = p_group_id
-	and member_id = p_party_id
+        and member_id = p_party_id
     )
   ELSE
     --
@@ -1224,8 +1224,8 @@ CREATE OR REPLACE FUNCTION acs_group__member_p(
     EXISTS (
       select 1 from acs_rels rels
       where rels.rel_type = 'membership_rel'
-	and rels.object_id_one = p_group_id
-	and rels.object_id_two = p_party_id
+        and rels.object_id_one = p_group_id
+        and rels.object_id_two = p_party_id
     )
   END;
 
@@ -1251,22 +1251,22 @@ DECLARE
   memb                   record;
 BEGIN
    if group_id is null then
-	--maybe we should just return 'f' instead?
-	raise exception 'acs_group__check_representation called with null group_id';
+        --maybe we should just return 'f' instead?
+        raise exception 'acs_group__check_representation called with null group_id';
    end if;
 
    res := 't';
    PERFORM acs_log__notice('acs_group.check_representation',
-		  'Running check_representation on group ' || group_id);
+                  'Running check_representation on group ' || group_id);
 
    if acs_object__check_representation(group_id) = 'f' then
      res := 'f';
    end if;
 
    for comp in select c.rel_id
-	     from acs_rels r, composition_rels c
-	     where r.rel_id = c.rel_id
-	     and r.object_id_one = group_id
+             from acs_rels r, composition_rels c
+             where r.rel_id = c.rel_id
+             and r.object_id_one = group_id
    LOOP
      if composition_rel__check_representation(comp.rel_id) = 'f' then
        res := 'f';
@@ -1274,9 +1274,9 @@ BEGIN
    end loop;
 
    for memb in  select m.rel_id
-	     from acs_rels r, membership_rels m
-	     where r.rel_id = m.rel_id
-	     and r.object_id_one = group_id
+             from acs_rels r, membership_rels m
+             where r.rel_id = m.rel_id
+             and r.object_id_one = group_id
    LOOP
      if membership_rel__check_representation(memb.rel_id) = 'f' then
        res := 'f';
@@ -1284,7 +1284,7 @@ BEGIN
    end loop;
 
    PERFORM acs_log__notice('acs_group.check_representation',
-		  'Done running check_representation on group ' || group_id);
+                  'Done running check_representation on group ' || group_id);
 
    return res;
 
@@ -1346,13 +1346,13 @@ CREATE OR REPLACE FUNCTION admin_rel__new(
 DECLARE
 BEGIN
     return membership_rel__new(
-	null,                  -- rel_id
-	'admin_rel',         -- rel_type
-	object_id_one,         -- object_id_one
-	object_id_two,         -- object_id_two
-	'approved',          -- member_state
-	null,                  -- creation_user
-	null                   -- creation_ip
+        null,                -- rel_id
+        'admin_rel',         -- rel_type
+        object_id_one,       -- object_id_one
+        object_id_two,       -- object_id_two
+        'approved',          -- member_state
+        null,                -- creation_user
+        null                 -- creation_ip
     );
 END;
 $$ LANGUAGE plpgsql;
@@ -1374,3 +1374,10 @@ BEGIN
     return 0;
 END;
 $$ LANGUAGE plpgsql;
+
+
+--
+-- Local variables:
+--   mode: sql
+--   indent-tabs-mode: nil
+-- End:
