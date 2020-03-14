@@ -31,17 +31,17 @@ CREATE OR REPLACE FUNCTION content_folder__new(
 --
 DECLARE
 BEGIN
-        return content_folder__new(new__name,
-                                   new__label,
-                                   new__description,
-                                   new__parent_id,
-                                   null,
-                                   null,
-                                   now(),
-                                   null,
-                                   null,
-                                   new__package_id
-               );
+	return content_folder__new(new__name,
+				   new__label,
+				   new__description,
+				   new__parent_id,
+				   null,
+				   null,
+				   now(),
+				   null,
+				   null,
+				   new__package_id
+	       );
 
 END;
 $$ LANGUAGE plpgsql;
@@ -63,18 +63,18 @@ CREATE OR REPLACE FUNCTION content_folder__new(
 --
 DECLARE
 BEGIN
-        return content_folder__new(new__name,
-                                   new__label,
-                                   new__description,
-                                   new__parent_id,
-                                   null,
-                                   null,
-                                   now(),
-                                   null,
-                                   null,
-                                   't',
-                                   null
-               );
+	return content_folder__new(new__name,
+				   new__label,
+				   new__description,
+				   new__parent_id,
+				   null,
+				   null,
+				   now(),
+				   null,
+				   null,
+				   't',
+				   null
+	       );
 
 END;
 $$ LANGUAGE plpgsql;
@@ -102,18 +102,18 @@ CREATE OR REPLACE FUNCTION content_folder__new(
 --
 DECLARE
 BEGIN
-        return content_folder__new(new__name,
-                                   new__label,
-                                   new__description,
-                                   new__parent_id,
-                                   new__context_id,
-                                   new__folder_id,
-                                   new__creation_date,
-                                   new__creation_user,
-                                   new__creation_ip,
-                                   't',
-                                   null::integer
-               );
+	return content_folder__new(new__name,
+				   new__label,
+				   new__description,
+				   new__parent_id,
+				   new__context_id,
+				   new__folder_id,
+				   new__creation_date,
+				   new__creation_user,
+				   new__creation_ip,
+				   't',
+				   null::integer
+	       );
 
 END;
 $$ LANGUAGE plpgsql;
@@ -145,18 +145,18 @@ DECLARE
   v_context_id                acs_objects.context_id%TYPE;
   v_package_id                acs_objects.package_id%TYPE;
 BEGIN
-        return content_folder__new(new__name,
-                                   new__label,
-                                   new__description,
-                                   new__parent_id,
-                                   new__context_id,
-                                   new__folder_id,
-                                   new__creation_date,
-                                   new__creation_user,
-                                   new__creation_ip,
-                                   't',
-                                   new__package_id
-               );
+	return content_folder__new(new__name,
+				   new__label,
+				   new__description,
+				   new__parent_id,
+				   new__context_id,
+				   new__folder_id,
+				   new__creation_date,
+				   new__creation_user,
+				   new__creation_ip,
+				   't',
+				   new__package_id
+	       );
 END;
 $$ LANGUAGE plpgsql;
 
@@ -187,19 +187,19 @@ DECLARE
   v_context_id                acs_objects.context_id%TYPE;
 BEGIN
 
-        return content_folder__new (
-                new__name,
-                new__label,
-                new__description,
-                new__parent_id,
-                new__context_id,
-                new__folder_id,
-                new__creation_date,
-                new__creation_user,
-                new__creation_ip,
-                new__security_inherit_p,
-                null
-        );
+	return content_folder__new (
+		new__name,
+		new__label,
+		new__description,
+		new__parent_id,
+		new__context_id,
+		new__folder_id,
+		new__creation_date,
+		new__creation_user,
+		new__creation_ip,
+		new__security_inherit_p,
+		null
+	);
 
 END;
 $$ LANGUAGE plpgsql;
@@ -240,7 +240,7 @@ BEGIN
   end if;
 
   -- parent_id = security_context_root means that this is a mount point
-  if new__parent_id != -4 and 
+  if new__parent_id != -4 and
     content_folder__is_folder(new__parent_id) and
     content_folder__is_registered(new__parent_id,'content_folder','f') = 'f' then
 
@@ -251,13 +251,13 @@ BEGIN
 
     v_folder_id := content_item__new(
 	new__folder_id,
-	new__name, 
-        new__parent_id,
-        null,
-        new__creation_date, 
-        new__creation_user, 
+	new__name,
+	new__parent_id,
+	null,
+	new__creation_date,
+	new__creation_user,
 	new__context_id,
-	new__creation_ip, 
+	new__creation_ip,
 	'f',
 	'text/plain',
 	null,
@@ -265,8 +265,8 @@ BEGIN
 	new__security_inherit_p,
 	'CR_FILES',
 	'content_folder',
-        'content_folder',
-        new__package_id
+	'content_folder',
+	new__package_id
     );
 
     insert into cr_folders (
@@ -282,15 +282,15 @@ BEGIN
 
     -- inherit the attributes of the parent folder
     if new__parent_id is not null then
-    
+
       insert into cr_folder_type_map
-        select
-          v_folder_id as folder_id, content_type
-        from
-          cr_folder_type_map
+	select
+	  v_folder_id as folder_id, content_type
+	from
+	  cr_folder_type_map
 
 where
-          folder_id = new__parent_id;
+	  folder_id = new__parent_id;
     end if;
 
     -- update the child flag on the parent
@@ -301,7 +301,7 @@ where
 
   end if;
 
-  return v_folder_id; 
+  return v_folder_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -328,18 +328,18 @@ CREATE OR REPLACE FUNCTION content_folder__new(
 --
 DECLARE
 BEGIN
-        return content_folder__new(new__name,
-                                   new__label,
-                                   new__description,
-                                   new__parent_id,
-                                   new__context_id,
-                                   new__folder_id,
-                                   new__creation_date,
-                                   new__creation_user,
-                                   new__creation_ip,
-                                   new__security_inherit_p,
-                                   null::integer
-               );
+	return content_folder__new(new__name,
+				   new__label,
+				   new__description,
+				   new__parent_id,
+				   new__context_id,
+				   new__folder_id,
+				   new__creation_date,
+				   new__creation_user,
+				   new__creation_ip,
+				   new__security_inherit_p,
+				   null::integer
+	       );
 
 END;
 $$ LANGUAGE plpgsql;
@@ -357,37 +357,37 @@ CREATE OR REPLACE FUNCTION content_folder__del(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_count                        integer;       
+  v_count                        integer;
   v_child_row                    record;
-  v_parent_id                    integer;  
-  v_path                         varchar;     
+  v_parent_id                    integer;
+  v_path                         varchar;
   v_folder_sortkey               varbit;
 BEGIN
 
   if p_cascade_p = 'f' then
-    select count(*) into v_count from cr_items 
+    select count(*) into v_count from cr_items
      where parent_id = delete__folder_id;
     -- check if the folder contains any items
     if v_count > 0 then
       v_path := content_item__get_path(delete__folder_id, null);
       raise EXCEPTION '-20000: Folder ID % (%) cannot be deleted because it is not empty.', delete__folder_id, v_path;
-    end if;  
-  else 
+    end if;
+  else
   -- delete children
     select into v_folder_sortkey tree_sortkey
     from cr_items where item_id=delete__folder_id;
 
     for v_child_row in select
-        item_id, tree_sortkey, name
-        from cr_items
-        where tree_sortkey between v_folder_sortkey and tree_right(v_folder_sortkey)   
+	item_id, tree_sortkey, name
+	from cr_items
+	where tree_sortkey between v_folder_sortkey and tree_right(v_folder_sortkey)
 	and tree_sortkey != v_folder_sortkey
-        order by tree_sortkey desc
+	order by tree_sortkey desc
     loop
 	if content_folder__is_folder(v_child_row.item_id) then
 	  perform content_folder__delete(v_child_row.item_id);
-        else
-         perform content_item__delete(v_child_row.item_id);
+	else
+	 perform content_item__delete(v_child_row.item_id);
 	end if;
     end loop;
   end if;
@@ -395,24 +395,24 @@ BEGIN
   PERFORM content_folder__unregister_content_type(
       delete__folder_id,
       'content_revision',
-      't' 
+      't'
   );
 
   delete from cr_folder_type_map
     where folder_id = delete__folder_id;
 
-  select parent_id into v_parent_id from cr_items 
+  select parent_id into v_parent_id from cr_items
     where item_id = delete__folder_id;
   raise notice 'deleting folder %',delete__folder_id;
   PERFORM content_item__delete(delete__folder_id);
 
   -- check if any folders are left in the parent
-  update cr_folders set has_child_folders = 'f' 
+  update cr_folders set has_child_folders = 'f'
     where folder_id = v_parent_id and not exists (
-      select 1 from cr_items 
-        where parent_id = v_parent_id and content_type = 'content_folder');
+      select 1 from cr_items
+	where parent_id = v_parent_id and content_type = 'content_folder');
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -430,8 +430,8 @@ CREATE OR REPLACE FUNCTION content_folder__delete(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-        PERFORM content_folder__del(delete__folder_id,p_cascade_p);
-  return 0; 
+	PERFORM content_folder__del(delete__folder_id,p_cascade_p);
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -448,9 +448,9 @@ CREATE OR REPLACE FUNCTION content_folder__delete(
 -- content_folder__delete/1 maybe obsolete, when we define proper defaults for /2
 --
 DECLARE
-  v_count                        integer;       
-  v_parent_id                    integer;  
-  v_path                         varchar;     
+  v_count                        integer;
+  v_parent_id                    integer;
+  v_path                         varchar;
 BEGIN
 	return content_folder__del(
 		delete__folder_id,
@@ -492,23 +492,23 @@ BEGIN
     where object_id = edit_name__folder_id;
   end if;
 
-  if edit_name__label is not null and edit_name__label != '' and 
-     edit_name__description is not null and edit_name__description != '' then 
+  if edit_name__label is not null and edit_name__label != '' and
+     edit_name__description is not null and edit_name__description != '' then
 
     update cr_folders
       set label = edit_name__label,
       description = edit_name__description
       where folder_id = edit_name__folder_id;
 
-  else if(edit_name__label is not null and edit_name__label != '') and 
-         (edit_name__description is null or edit_name__description = '') then  
+  else if(edit_name__label is not null and edit_name__label != '') and
+	 (edit_name__description is null or edit_name__description = '') then
     update cr_folders
       set label = edit_name__label
       where folder_id = edit_name__folder_id;
 
   end if; end if;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -535,19 +535,19 @@ CREATE OR REPLACE FUNCTION content_folder__move(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_source_folder_id           integer;       
+  v_source_folder_id           integer;
   v_valid_folders_p            integer;
 BEGIN
 
-  select 
+  select
     count(*)
-  into 
+  into
     v_valid_folders_p
-  from 
+  from
     cr_folders
   where
     folder_id = move__target_folder_id
-  or 
+  or
     folder_id = move__folder_id;
 
   if v_valid_folders_p != 2 then
@@ -558,7 +558,7 @@ BEGIN
     move__folder_id = content_template__get_root_folder() then
     raise EXCEPTION '-20000: content_folder.move - Cannot move root folder';
   end if;
-  
+
   if move__target_folder_id = move__folder_id then
     raise EXCEPTION '-20000: content_folder.move - Cannot move a folder to itself';
   end if;
@@ -571,29 +571,29 @@ BEGIN
     raise EXCEPTION '-20000: content_folder.move - Destination folder does not allow subfolders';
   end if;
 
-  select parent_id into v_source_folder_id from cr_items 
+  select parent_id into v_source_folder_id from cr_items
     where item_id = move__folder_id;
 
    -- update the parent_id for the folder
-   update cr_items 
+   update cr_items
      set parent_id = move__target_folder_id,
-         name = coalesce ( move__name, name )
+	 name = coalesce ( move__name, name )
      where item_id = move__folder_id;
 
   -- update the has_child_folders flags
 
   -- update the source
-  update cr_folders set has_child_folders = 'f' 
+  update cr_folders set has_child_folders = 'f'
     where folder_id = v_source_folder_id and not exists (
-      select 1 from cr_items 
-        where parent_id = v_source_folder_id 
-          and content_type = 'content_folder');
+      select 1 from cr_items
+	where parent_id = v_source_folder_id
+	  and content_type = 'content_folder');
 
   -- update the destination
   update cr_folders set has_child_folders = 't'
     where folder_id = move__target_folder_id;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -613,10 +613,10 @@ DECLARE
 BEGIN
 
   perform content_folder__move (
-                                move__folder_id,
-                                move__target_folder_id,
-                                NULL
-                               );
+				move__folder_id,
+				move__target_folder_id,
+				NULL
+			       );
   return null;
 END;
 $$ LANGUAGE plpgsql;
@@ -649,30 +649,30 @@ DECLARE
   v_folder_contents_val        record;
 BEGIN
 
-  if copy__folder_id = content_item__get_root_folder(null) 
+  if copy__folder_id = content_item__get_root_folder(null)
      or copy__folder_id = content_template__get_root_folder() then
      raise EXCEPTION '-20000: content_folder.copy - Not allowed to copy root folder';
   end if;
 
-  select 
+  select
     count(*)
-  into 
+  into
     v_valid_folders_p
-  from 
+  from
     cr_folders
   where
     folder_id = copy__target_folder_id
-  or 
+  or
     folder_id = copy__folder_id;
 
-  if v_valid_folders_p != 2 then 
+  if v_valid_folders_p != 2 then
     raise EXCEPTION '-20000: content_folder.copy - Invalid folder(s)';
   end if;
 
-  if copy__target_folder_id = copy__folder_id then 
+  if copy__target_folder_id = copy__folder_id then
     raise EXCEPTION '-20000: content_folder.copy - Cannot copy folder to itself';
   end if;
-  
+
   if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) = 't' then
     raise EXCEPTION '-20000: content_folder.copy - Destination folder is subfolder';
   end if;
@@ -686,7 +686,7 @@ BEGIN
     name, label, description, parent_id
   into
     v_name, v_label, v_description, v_current_folder_id
-  from 
+  from
     cr_items i, cr_folders f
   where
     f.folder_id = i.item_id
@@ -701,131 +701,110 @@ BEGIN
 
       -- create the new folder
       v_new_folder_id := content_folder__new(
-          coalesce (copy__name, v_name),
+	  coalesce (copy__name, v_name),
 	  coalesce (copy__label, v_label),
 	  v_description,
 	  copy__target_folder_id,
 	  copy__target_folder_id,
-          null,
-          now(),
+	  null,
+	  now(),
 	  copy__creation_user,
 	  copy__creation_ip,
-          't',
-          null
+	  't',
+	  null
       );
 
       -- copy attributes of original folder
       insert into cr_folder_type_map
-        select 
-          v_new_folder_id as folder_id, content_type
-        from
-          cr_folder_type_map map
-        where
-          folder_id = copy__folder_id
-        and
+	select
+	  v_new_folder_id as folder_id, content_type
+	from
+	  cr_folder_type_map map
+	where
+	  folder_id = copy__folder_id
+	and
 	  -- do not register content_type if it is already registered
-          not exists ( select 1 from cr_folder_type_map
-	               where folder_id = v_new_folder_id 
+	  not exists ( select 1 from cr_folder_type_map
+		       where folder_id = v_new_folder_id
 		       and content_type = map.content_type ) ;
 
       -- for each item in the folder, copy it
       for v_folder_contents_val in select
-                                     item_id
-                                   from
-                                     cr_items
-                                   where
-                                     parent_id = copy__folder_id 
+				     item_id
+				   from
+				     cr_items
+				   where
+				     parent_id = copy__folder_id
       LOOP
-        
+
 	PERFORM content_item__copy(
 	    v_folder_contents_val.item_id,
 	    v_new_folder_id,
 	    copy__creation_user,
 	    copy__creation_ip,
-            null
+	    null
 	);
 
       end loop;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
-
-
--- function is_folder
-select define_function_args('content_folder__is_folder','item_id');
 
 
 --
 -- procedure content_folder__is_folder/1
 --
+select define_function_args('content_folder__is_folder','item_id');
+
 CREATE OR REPLACE FUNCTION content_folder__is_folder(
    item_id integer
 ) RETURNS boolean AS $$
-DECLARE
-BEGIN
 
-  return count(*) > 0 from cr_folders
-    where folder_id = item_id;
+  SELECT EXISTS (
+    SELECT 1 from cr_folders where folder_id = item_id
+  );
 
-END;
-$$ LANGUAGE plpgsql stable;
+$$ LANGUAGE sql stable strict;
 
--- function is_sub_folder
-select define_function_args('content_folder__is_sub_folder','folder_id,target_folder_id');
 
 
 --
 -- procedure content_folder__is_sub_folder/2
 --
+select define_function_args('content_folder__is_sub_folder','folder_id,target_folder_id');
+
 CREATE OR REPLACE FUNCTION content_folder__is_sub_folder(
    is_sub_folder__folder_id integer,
    is_sub_folder__target_folder_id integer
 ) RETURNS boolean AS $$
-DECLARE
-  v_result                              integer;
-BEGIN
-  With RECURSIVE parents AS (
-    select item_id, parent_id from cr_items where item_id = is_sub_folder__target_folder_id
+
+  WITH RECURSIVE parents AS (
+       select item_id, parent_id from cr_items where item_id = is_sub_folder__target_folder_id
     UNION ALL
-    select cr_items.item_id, cr_items.parent_id from cr_items, parents
-    where cr_items.item_id = parents.parent_id
+       select cr_items.item_id, cr_items.parent_id from cr_items, parents
+       where cr_items.item_id = parents.parent_id
   )
-  select count(*) into v_result from parents where parent_id = is_sub_folder__folder_id limit 1;
-
-  if v_result = 0 then
-    return 'f';
-  else
-    return 't';
-  end if;
-END;
-$$ LANGUAGE plpgsql;
-
--- function is_empty
-select define_function_args('content_folder__is_empty','folder_id');
+  SELECT EXISTS (
+    SELECT 1 FROM parents WHERE parent_id = is_sub_folder__folder_id
+  );
+$$ LANGUAGE sql stable strict;
 
 
 --
 -- procedure content_folder__is_empty/1
 --
+select define_function_args('content_folder__is_empty','folder_id');
+
 CREATE OR REPLACE FUNCTION content_folder__is_empty(
    is_empty__folder_id integer
 ) RETURNS boolean AS $$
-DECLARE
-  v_return                         boolean;    
-BEGIN
 
-  select
-    count(*) = 0 into v_return
-  from
-    cr_items
-  where
-    parent_id = is_empty__folder_id;
+  SELECT NOT EXISTS (
+    SELECT 1 from cr_items where parent_id = is_empty__folder_id
+  );
 
-  return v_return;
- 
-END;
-$$ LANGUAGE plpgsql stable;
+$$ LANGUAGE sql stable strict;
 
 
 -- procedure register_content_type
@@ -843,23 +822,23 @@ CREATE OR REPLACE FUNCTION content_folder__register_content_type(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_is_registered boolean;  
+  v_is_registered boolean;
 BEGIN
 
   if register_content_type__include_subtypes = 'f' then
 
     v_is_registered := content_folder__is_registered(
-        register_content_type__folder_id,
-	register_content_type__content_type, 
-	'f' 
+	register_content_type__folder_id,
+	register_content_type__content_type,
+	'f'
     );
 
     if v_is_registered = 'f' then
 
-        insert into cr_folder_type_map (
+	insert into cr_folder_type_map (
 	  folder_id, content_type
 	) values (
-	  register_content_type__folder_id, 
+	  register_content_type__folder_id,
 	  register_content_type__content_type
 	);
 
@@ -868,8 +847,8 @@ BEGIN
   else
 
 --    insert into cr_folder_type_map
---      select 
---        register_content_type__folder_id as folder_id, 
+--      select
+--        register_content_type__folder_id as folder_id,
 --        object_type as content_type
 --      from
 --        acs_object_types
@@ -879,25 +858,25 @@ BEGIN
 --        not exists (select 1 from cr_folder_type_map
 --                    where folder_id = register_content_type__folder_id
 --                    and content_type = acs_object_types.object_type)
---      connect by 
+--      connect by
 --        prior object_type = supertype
---      start with 
+--      start with
 --        object_type = register_content_type__content_type;
-    
+
     insert into cr_folder_type_map
-      select register_content_type__folder_id as folder_id, 
-        o.object_type as content_type
+      select register_content_type__folder_id as folder_id,
+	o.object_type as content_type
       from acs_object_types o, acs_object_types o2
       where o.object_type <> 'acs_object'
-        and not exists (select 1
-                        from cr_folder_type_map
-                        where folder_id = register_content_type__folder_id
-                          and content_type = o.object_type)
-        and o2.object_type = register_content_type__content_type
-        and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey);
+	and not exists (select 1
+			from cr_folder_type_map
+			where folder_id = register_content_type__folder_id
+			  and content_type = o.object_type)
+	and o2.object_type = register_content_type__content_type
+	and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey);
   end if;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -927,23 +906,23 @@ BEGIN
 --    delete from cr_folder_type_map
 --    where folder_id = unregister_content_type__folder_id
 --    and content_type in (select object_type
---           from acs_object_types    
+--           from acs_object_types
 --	   where object_type <> 'acs_object'
 --	   connect by prior object_type = supertype
---	   start with 
+--	   start with
 --             object_type = unregister_content_type__content_type);
 
     delete from cr_folder_type_map
     where folder_id = unregister_content_type__folder_id
     and content_type in (select o.object_type
-                           from acs_object_types o, acs_object_types o2
-	                  where o.object_type <> 'acs_object'
-                            and o2.object_type = unregister_content_type__content_type
-                            and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey));
+			   from acs_object_types o, acs_object_types o2
+			  where o.object_type <> 'acs_object'
+			    and o2.object_type = unregister_content_type__content_type
+			    and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey));
 
   end if;
 
-  return 0; 
+  return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -967,9 +946,9 @@ DECLARE
 BEGIN
 
   if is_registered__include_subtypes = 'f' or  is_registered__include_subtypes is null then
-    select 
+    select
       count(1)
-    into 
+    into
       v_is_registered
     from
       cr_folder_type_map
@@ -981,26 +960,26 @@ BEGIN
   else
 --                         select
 --                            object_type
---                          from 
+--                          from
 --                            acs_object_types
---                          where 
+--                          where
 --                            object_type <> 'acs_object'
---                          connect by 
+--                          connect by
 --                            prior object_type = supertype
---                          start with 
---                            object_type = is_registered.content_type 
+--                          start with
+--                            object_type = is_registered.content_type
 
     v_is_registered := 1;
     for v_subtype_val in select o.object_type
-                         from acs_object_types o, acs_object_types o2
-                         where o.object_type <> 'acs_object'
-                           and o2.object_type = is_registered__content_type
-                           and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
-                         order by o.tree_sortkey
+			 from acs_object_types o, acs_object_types o2
+			 where o.object_type <> 'acs_object'
+			   and o2.object_type = is_registered__content_type
+			   and o.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+			 order by o.tree_sortkey
     LOOP
       if content_folder__is_registered(is_registered__folder_id,
-                       v_subtype_val.object_type, 'f') = 'f' then
-        v_is_registered := 0;
+		       v_subtype_val.object_type, 'f') = 'f' then
+	v_is_registered := 0;
       end if;
     end loop;
   end if;
@@ -1010,7 +989,7 @@ BEGIN
   else
     return 't';
   end if;
- 
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -1029,15 +1008,15 @@ DECLARE
   v_label                           cr_folders.label%TYPE;
 BEGIN
 
-  select 
-    label into v_label 
-  from 
-    cr_folders       
-  where 
+  select
+    label into v_label
+  from
+    cr_folders
+  where
     folder_id = get_label__folder_id;
 
   return v_label;
- 
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
@@ -1081,7 +1060,7 @@ BEGIN
       content_item__get_content_type(content_symlink__resolve(item_id)),
     'content_template') = 'f';
 
-  if NOT FOUND then 
+  if NOT FOUND then
      return null;
   end if;
 
@@ -1102,14 +1081,14 @@ CREATE OR REPLACE FUNCTION content_folder__is_root(
    is_root__folder_id integer
 ) RETURNS boolean AS $$
 DECLARE
-  v_is_root                       boolean;       
+  v_is_root                       boolean;
 BEGIN
 
-  select parent_id = -4 into v_is_root 
+  select parent_id = -4 into v_is_root
     from cr_items where item_id = is_root__folder_id;
 
   return v_is_root;
- 
+
 END;
 $$ LANGUAGE plpgsql;
 
