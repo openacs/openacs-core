@@ -290,8 +290,8 @@ BEGIN
         CREATE OR REPLACE FUNCTION site_node__url(
            url__node_id integer
         ) RETURNS varchar AS $$
-        BEGIN
-            return ( With RECURSIVE site_nodes_recursion(parent_id, path, directory_p, node_id) as (
+
+            WITH RECURSIVE site_nodes_path(parent_id, path, directory_p, node_id) as (
             
                 select parent_id, ARRAY[name || case when directory_p then '/' else ' ' end]::text[] as path, directory_p, node_id
                 from site_nodes where node_id = url__node_id
@@ -299,13 +299,12 @@ BEGIN
                 UNION ALL
             
                 select sn.parent_id, sn.name::text || snr.path , sn.directory_p, snr.parent_id
-                from site_nodes sn join site_nodes_recursion snr on sn.node_id = snr.parent_id 
+                from site_nodes sn join site_nodes_path snr on sn.node_id = snr.parent_id 
                 where snr.parent_id is not null    
 
-            ) select array_to_string(path,'/') from site_nodes_recursion where parent_id is null
-        );
-        END; 
-        $$ LANGUAGE plpgsql; 
+            ) select array_to_string(path,'/') from site_nodes_path where parent_id is null
+
+        $$ LANGUAGE sql strict stable; 
 
         -- recursive site_nodes END
     
