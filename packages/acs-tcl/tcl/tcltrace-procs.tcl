@@ -87,8 +87,8 @@ namespace eval ::tcltrace {
 	@param op the trace operation 
 
     } {
-        set cmd [expr {$details_p ? "ad_log" : "ns_log"}]
-        $cmd notice "trace: $cmd"
+        set log_cmd [expr {$details_p ? "ad_log" : "ns_log"}]
+        $log_cmd notice "trace: $cmd"
     }
    
 }
