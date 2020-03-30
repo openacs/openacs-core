@@ -20,7 +20,7 @@ ad_proc -private acs_lookup_magic_object_no_cache { name } {
     return [db_string magic_object_select {} ]
 }
 
-ad_proc -private acs_lookup_magic_object { name } {
+ad_proc -private -deprecated acs_lookup_magic_object { name } {
     Non memoized version of acs_magic_object.
 
     @return the magic object's object ID 
@@ -43,7 +43,7 @@ ad_proc -public acs_magic_object { name } {
     if {[info exists $key]} {
         return [set $key]
     } else {
-        return [set $key [acs_lookup_magic_object $name]]
+        return [set $key [acs_lookup_magic_object_no_cache $name]]
     }
 }
 
