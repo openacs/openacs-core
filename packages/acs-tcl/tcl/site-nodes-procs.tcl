@@ -1331,11 +1331,22 @@ if {$UseXotclSiteNodes} {
                 -package_key acs-tcl \
                 -parameter SiteNodesCache \
                 -default_size 2000000
-
-            ::acs::Cache create ::acs::site_nodes_id_cache \
-                -package_key acs-tcl \
-                -parameter SiteNodesIdCache \
-                -default_size 100000
+            #
+            # In case we have "ns_hash" defined, we can use the
+            # "HashKeyPartitionedCache". Otherwise fall back to the
+            # plain cache.
+            #
+            if {[::acs::icanuse "ns_hash"]} {
+                ::acs::HashKeyPartitionedCache create ::acs::site_nodes_id_cache \
+                    -package_key acs-tcl \
+                    -parameter SiteNodesIdCache \
+                    -default_size 100000
+            } else {
+                ::acs::Cache create ::acs::site_nodes_id_cache \
+                    -package_key acs-tcl \
+                    -parameter SiteNodesIdCache \
+                    -default_size 100000
+            }
 
             ::acs::KeyPartitionedCache create ::acs::site_nodes_children_cache \
                 -package_key acs-tcl \
@@ -1452,7 +1463,7 @@ if {$UseXotclSiteNodes} {
                 #
 
                 :flush_per_request_cache
-                
+
                 switch -glob -- $pattern {
                     id-*           {set cache site_nodes_id_cache}
                     get_children-* {set cache site_nodes_children_cache}
@@ -1460,7 +1471,7 @@ if {$UseXotclSiteNodes} {
                 }
                 ::acs::$cache flush_pattern -partition_key $partition_key $pattern
             }
-            
+
             :public method flush_cache {-node_id:required,1..1 {-with_subtree:boolean true} {-url ""}} {
                 #
                 # Flush entries from site-node tree, including the current node,
