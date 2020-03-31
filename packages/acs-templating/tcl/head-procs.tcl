@@ -1083,6 +1083,22 @@ ad_proc template::add_refresh_on_history_handler {} {
     }
 }
 
+ad_proc template::hide {
+    -class:required
+} {
+    Hide certain CSS classes in the dom-tree by setting for elements
+    of the specified class the property "display" to "none".
+
+    @param class CSS class to be hidden
+} {
+    template::add_script -section body -script [subst -nocommands {
+        window.addEventListener('DOMContentLoaded', (event) => {
+            var els = document.getElementsByClassName("$class");
+            for(var i = 0; i < els.length; i++) { els[i].style.display = "none"; }
+        });
+    }]
+}
+
 ad_proc template::add_event_listener {
     {-event click}
     {-CSSclass "acs-listen"}
