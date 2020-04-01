@@ -1083,18 +1083,24 @@ ad_proc template::add_refresh_on_history_handler {} {
     }
 }
 
-ad_proc template::hide {
+ad_proc template::set_css_property {
     -class:required
-} {
-    Hide certain CSS classes in the dom-tree by setting for elements
-    of the specified class the property "display" to "none".
+    -property:required
+    -value:required
+} { 
+    Set the specified CSS property in the DOM tree of the browser for
+    elements for the specified class. This function should be used
+    sparely in special situations, where CSS modification other
+    approaches might be too complex.
 
-    @param class CSS class to be hidden
+    @param class CSS class for which properties is set
+    @param property CSS property
+    @param value value for the CSS property
 } {
     template::add_script -section body -script [subst -nocommands {
         window.addEventListener('DOMContentLoaded', (event) => {
             var els = document.getElementsByClassName("$class");
-            for(var i = 0; i < els.length; i++) { els[i].style.display = "none"; }
+            for(var i = 0; i < els.length; i++) { els[i].style.$property = "$value"; }
         });
     }]
 }
