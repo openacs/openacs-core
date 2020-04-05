@@ -125,7 +125,7 @@ namespace eval acs_mail_lite {
                {{from malte@cognovis.de} {to malte@cognovis.de}}
     } {
 
-        set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
+        set mail_package_id [get_package_id]
 
         # Get the SMTP Parameters
         set smtpHost [parameter::get -parameter "SMTPHost" \
@@ -195,13 +195,13 @@ namespace eval acs_mail_lite {
         for the mail procedures
     } {
         if {[catch {array set address_array $addresses}]
-            || [lsort [array names address_array] ne [list email name user_id]
-            } {
-
-            # either user just passed a normal address-list or
+            || [lsort [array names address_array]] ne [list email name user_id]
+        } {
+            #
+            # Either user just passed a normal address-list or
             # user passed an array, but forgot to provide user_ids
             # or user_names, so we have to get this data from the db
-
+            #
             if {![info exists address_array(email)]} {
                 # so user passed on a normal address-list
                 set address_array(email) $addresses
@@ -416,6 +416,7 @@ namespace eval acs_mail_lite {
         {-extraheaders ""}
         {-use_sender_p "0"}
         {-object_id ""}
+        {-experimental 0}
     } {
 
         Prepare an email to be send immediately with the option to pass in a list
@@ -471,8 +472,7 @@ namespace eval acs_mail_lite {
         @param object_id Object id that caused this email to be sent
     } {
 
-        # Package_id required by the callback (emmar: no idea what for)
-        set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
+        set mail_package_id [get_package_id]
         if {$package_id eq ""} {
             set package_id $mail_package_id
         }
@@ -566,11 +566,10 @@ namespace eval acs_mail_lite {
         set message_date [acs_mail_lite::utils::build_date]
 
         # Build the message body
-        set tokens [acs_mail_lite::utils::build_body -mime_type $mime_type -- $body]
-
+        set tokens [acs_mail_lite::utils::build_body \
+                        -mime_type $mime_type -- $body]
 
         # Add attachments if any
-
         # ...from file-storage
         if {$file_ids ne ""} {
             set item_ids [list]
@@ -652,7 +651,7 @@ namespace eval acs_mail_lite {
 
         # Rollout support
         set delivery_mode [parameter::get \
-                               -package_id [get_package_id] \
+                               -package_id $mail_package_id \
                                -parameter EmailDeliveryMode \
                                -default default]
 
@@ -664,7 +663,7 @@ namespace eval acs_mail_lite {
             filter {
                 set send_mode "smtp"
                 set allowed_addr [parameter::get \
-                                      -package_id [get_package_id] \
+                                      -package_id $mail_package_id \
                                       -parameter EmailAllow]
 
                 foreach recipient [concat $to_addr $cc_addr $bcc_addr] {
@@ -688,7 +687,7 @@ namespace eval acs_mail_lite {
                 # we need to remove the CC and BCC ones
 
                 set to_addr [parameter::get \
-                                 -package_id [get_package_id] \
+                                 -package_id $mail_package_id \
                                  -parameter EmailRedirectTo]
                 set cc_addr ""
                 set bcc_addr ""
@@ -718,12 +717,37 @@ namespace eval acs_mail_lite {
             lappend headers_list [list DCC [join $bcc_addr ","]]
         }
 
-
-
         set errorMsg ""
         set status ok
 
-        if { $send_mode eq "log" } {
+        if {$experimental && [info commands ns_smtpd] ne ""} {
+
+            foreach header $headers_list {
+                mime::setheader $tokens [lindex $header 0] [lindex $header 1]
+            }
+
+            set fullMailMessage [mime::buildmessage $tokens]
+            #ns_log notice "FULL MAIL MESSAGE\n$fullMailMessage"
+
+            set smtpHost [parameter::get -parameter "SMTPHost" \
+                              -package_id $mail_package_id \
+                              -default [ns_config ns/parameters mailhost]]
+            if {$smtpHost eq ""} {
+                set smtpHost localhost
+            }
+
+            set smtpPort [parameter::get -parameter "SMTPPort" \
+                              -package_id $mail_package_id \
+                              -default 25]
+            #
+            # Call "smtpd send" from the NaviServer nssmtpd module.
+            # When the last two arguments are not provided, the
+            # command uses host and port from the configuration
+            # section of the nssmtpd module.
+            #
+            ns_smtpd send $originator $to_addr fullMailMessage $smtpHost $smtpPort
+
+        } elseif { $send_mode eq "log" } {
 
             # Add recipients to headers
             foreach header $headers_list {
