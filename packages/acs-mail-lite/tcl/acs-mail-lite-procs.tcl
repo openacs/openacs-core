@@ -33,13 +33,19 @@ namespace eval acs_mail_lite {
         @return apm-parameter value of this package
         @see parameter::get
     } {
-        return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
+        return [parameter::get \
+                    -package_id [get_package_id] \
+                    -parameter $name \
+                    -default $default]
     }
 
     ad_proc -private mail_dir {} {
         @return incoming mail directory to be scanned for bounces
     } {
-        return [parameter::get -package_id [get_package_id] -parameter "BounceMailDir" -default ""]
+        return [parameter::get \
+                    -package_id [get_package_id] \
+                    -parameter "BounceMailDir" \
+                    -default ""]
     }
 
     #---------------------------------------
@@ -89,12 +95,15 @@ namespace eval acs_mail_lite {
         -signature:required
         -message_id:required
     } {
-        Validates if provided signature matches message_id
+        Validates if provided signature matches message_id.
+
         @option signature signature to be checked
         @option msg message-id that the signature should be checked against
         @return boolean 0 or 1
     } {
-        if {![regexp "(<\[\-0-9\]+\\.\[0-9\]+\\.oacs@[address_domain]>)" $message_id match id] || $signature ne [ns_sha1 $id] } {
+        if {![regexp "(<\[\-0-9\]+\\.\[0-9\]+\\.oacs@[address_domain]>)" $message_id match id]
+            || $signature ne [ns_sha1 $id]
+        } {
             # either couldn't find message-id or signature doesn't match
             return 0
         }
@@ -109,8 +118,11 @@ namespace eval acs_mail_lite {
     } {
         Send messages via SMTP
 
-        @param multi_token Multi Token generated which is passed directly to smtp::sendmessage
-        @param headers List of list of header key-value pairs like {{from malte@cognovis.de} {to malte@cognovis.de}}
+        @param multi_token Multi Token generated which is passed
+               directly to smtp::sendmessage
+
+        @param headers List of list of header key-value pairs like
+               {{from malte@cognovis.de} {to malte@cognovis.de}}
     } {
 
         set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
@@ -246,7 +258,9 @@ namespace eval acs_mail_lite {
         also supports multiple "TO" recipients as well as CC
         and BCC recipients. Runs entirely off MIME and SMTP to achieve this.
 
-        @param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
+        @param send_immediately The email is send immediately and not
+               stored in the acs_mail_lite_queue
+
         @param to_addr List of e-mail addresses to send this mail to.
 
         @param from_addr E-Mail address of the sender.
@@ -261,29 +275,48 @@ namespace eval acs_mail_lite {
 
         @param package_id Package ID of the sending package
 
-        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file-storage.
+        @param file_ids List of file ids (items or revisions) to be
+               send as attachments. This will only work with files stored in
+               the file-storage.
 
-        @param filesystem_files List of regular files on the filesystem to be send as attachments.
+        @param filesystem_files List of regular files on the
+               filesystem to be send as attachments.
 
-        @param delete_filesystem_files_p Decides if we want files specified by the 'file' parameter to be deleted once sent.
+        @param delete_filesystem_files_p Decides if we want files specified
+               by the 'file' parameter to be deleted once sent.
 
-        @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
+        @param mime_type MIME Type of the mail to send out. Can be
+               "text/plain", "text/html".
 
-        @param extraheaders List of keywords and their values passed in for headers. Interesting ones are: "Precedence: list" to disable autoreplies and mark this as a list message. This is as list of lists !!
+        @param extraheaders List of keywords and their values passed
+               in for headers. Interesting ones are: "Precedence:
+               list" to disable autoreplies and mark this as a list
+               message. This is as list of lists !!
 
-        @param no_callback Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks
+        @param no_callback Boolean that indicates if callback should
+               be executed or not. If you don't provide it it will
+               execute callbacks
 
-        @param use_sender Boolean indicating that from_addr should be used regardless of fixed-sender parameter
+        @param use_sender Boolean indicating that from_addr should be
+               used regardless of fixed-sender parameter
 
     } {
-
-        # check, if send_immediately is set
-        # if not, take global parameter
+        #
+        # Check, if send_immediately is set if not, take global
+        # parameter.
+        #
         if { !$send_immediately_p } {
-            set send_immediately_p [parameter::get -package_id [get_package_id] -parameter "send_immediately" -default 0]
+            set send_immediately_p [parameter::get \
+                                        -package_id [get_package_id] \
+                                        -parameter "send_immediately" \
+                                        -default 0]
         }
 
-        # if send_immediately_p true, then start acs_mail_lite::send_immediately, so mail is not stored in the db before delivery
+        #
+        # If send_immediately_p true, then start
+        # acs_mail_lite::send_immediately, so mail is not stored in
+        # the db before delivery.
+        #
         if { $send_immediately_p } {
             acs_mail_lite::send_immediately \
                 -to_addr $to_addr \
@@ -391,20 +424,50 @@ namespace eval acs_mail_lite {
         and BCC recipients. Runs entirely off MIME and SMTP to achieve this.
 
         @param to_addr List of e-mail addresses to send this mail to.
+
         @param from_addr E-Mail address of the sender.
-        @param reply_to E-Mail address to which replies should go. Defaults to from_addr
+
+        @param reply_to E-Mail address to which replies should
+               go. Defaults to from_addr
+
         @param subject of the email
+
         @param body Text body of the email
-        @param cc_addr List of CC Users e-mail addresses to send this mail to.
-        @param bcc_addr List of CC Users e-mail addresses to send this mail to.
+
+        @param cc_addr List of CC Users e-mail addresses to send this
+               mail to.
+
+        @param bcc_addr List of CC Users e-mail addresses to send this
+               mail to.
+
         @param package_id Package ID of the sending package
-        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file-storage.
-        @param filesystem_files List of regular files on the filesystem to be send as attachments.
-        @param delete_filesystem_files_p Decides if we want files specified by the 'file' parameter to be deleted once sent.
-        @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
-        @param extraheaders List of keywords and their values passed in for headers. Interesting ones are: "Precedence: list" to disable autoreplies and mark this as a list message. This is as list of lists !!
-        @param no_callback_p Indicates if callback should be executed or not. If you don't provide it it will execute callbacks.
-        @param use_sender_p Boolean indicating that from_addr should be used regardless of fixed-sender parameter
+
+        @param file_ids List of file ids (items or revisions) to be
+               send as attachments. This will only work with files
+               stored in the file-storage.
+
+        @param filesystem_files List of regular files on the
+               filesystem to be send as attachments.
+
+        @param delete_filesystem_files_p Decides if we want files
+               specified by the 'file' parameter to be deleted once
+               sent.
+
+        @param mime_type MIME Type of the mail to send out. Can be
+               "text/plain", "text/html".
+
+        @param extraheaders List of keywords and their values passed
+               in for headers. Interesting ones are: "Precedence:
+               list" to disable autoreplies and mark this as a list
+               message. This is as list of lists !!
+
+        @param no_callback_p Indicates if callback should be executed
+               or not. If you don't provide it it will execute
+               callbacks.
+
+        @param use_sender_p Boolean indicating that from_addr should
+               be used regardless of fixed-sender parameter
+
         @param object_id Object id that caused this email to be sent
     } {
 
@@ -535,8 +598,10 @@ namespace eval acs_mail_lite {
         # ...from filesystem
         if {$filesystem_files ne ""} {
             # get root of folders into which files are allowed to be sent
-            set filesystem_attachments_root [parameter::get -parameter "FilesystemAttachmentsRoot" \
-                -package_id $mail_package_id -default ""]
+            set filesystem_attachments_root [parameter::get \
+                                                 -parameter "FilesystemAttachmentsRoot" \
+                                                 -package_id $mail_package_id \
+                                                 -default ""]
             if {$filesystem_attachments_root eq ""} {
                 # on a unix system this could be '/tmp'
                 set filesystem_attachments_root [ad_tmpdir]
@@ -586,7 +651,10 @@ namespace eval acs_mail_lite {
         }
 
         # Rollout support
-        set delivery_mode [parameter::get -package_id [get_package_id] -parameter EmailDeliveryMode -default default]
+        set delivery_mode [parameter::get \
+                               -package_id [get_package_id] \
+                               -parameter EmailDeliveryMode \
+                               -default default]
 
         switch -- $delivery_mode {
             log {
@@ -595,7 +663,9 @@ namespace eval acs_mail_lite {
             }
             filter {
                 set send_mode "smtp"
-                set allowed_addr [parameter::get -package_id [get_package_id] -parameter EmailAllow]
+                set allowed_addr [parameter::get \
+                                      -package_id [get_package_id] \
+                                      -parameter EmailAllow]
 
                 foreach recipient [concat $to_addr $cc_addr $bcc_addr] {
 
@@ -617,7 +687,9 @@ namespace eval acs_mail_lite {
                 # Since we have to redirect to a list of addresses
                 # we need to remove the CC and BCC ones
 
-                set to_addr [parameter::get -package_id [get_package_id] -parameter EmailRedirectTo]
+                set to_addr [parameter::get \
+                                 -package_id [get_package_id] \
+                                 -parameter EmailRedirectTo]
                 set cc_addr ""
                 set bcc_addr ""
             }
@@ -719,7 +791,8 @@ namespace eval acs_mail_lite {
         {-values:required}
         {-text:required}
     } {
-        Interpolates a set of values into a string. This is directly copied from the bulk mail package
+        Interpolates a set of values into a string. This is directly
+        copied from the bulk mail package.
 
         @param values a list of key, value pairs, each one consisting of a
         target string and the value it is to be replaced with.
@@ -748,7 +821,7 @@ namespace eval acs_mail_lite {
 
     } {
 
-        ns_log Warning "ns_sendmail is no longer supported in OpenACS. Use acs_mail_lite::send instead."
+        ns_log warning "ns_sendmail is deprecated. Use acs_mail_lite::send instead."
 
         set extraheaders_list [list]
 

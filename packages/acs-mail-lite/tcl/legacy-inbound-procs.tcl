@@ -25,21 +25,28 @@ namespace eval acs_mail_lite {
 
         [] = optional
         <> = Package Parameters
-</pre>
-        If no SitePrefix is set we assume that there is only one OpenACS installation. Otherwise
-        only messages are dealt with which contain a SitePrefix.
-<p>
-        ReplyPrefixes are provided by packages that implement the callback acs_mail_lite::incoming_email
-        and provide a package parameter called ReplyPrefix. Only implementations are considered where the
-        implementation name is equal to the package key of the package.
-<p>
-        Also we only deal with messages that contain a valid and registered ReplyPrefix.
-        These prefixes are automatically set in the acs_mail_lite_prefixes table.
+        </pre>
+
+        If no SitePrefix is set we assume that there is only one
+        OpenACS installation. Otherwise only messages are dealt with
+        which contain a SitePrefix.
+
+        ReplyPrefixes are provided by packages that implement the
+        callback acs_mail_lite::incoming_email and provide a package
+        parameter called ReplyPrefix. Only implementations are
+        considered where the implementation name is equal to the
+        package key of the package.
+
+        Also we only deal with messages that contain a valid and
+        registered ReplyPrefix.  These prefixes are automatically set
+        in the acs_mail_lite_prefixes table.
 
         @author Nima Mazloumi (nima.mazloumi@gmx.de)
         @creation-date 2005-07-15
 
-        @option queue_dir The location of the qmail mail (BounceMailDir) queue in the file-system i.e. /home/service0/mail.
+        @option queue_dir The location of the qmail mail
+                (BounceMailDir) queue in the file-system
+                i.e. /home/service0/mail.
 
         @see acs_mail_lite::incoming_email
         @see acs_mail_lite::parse_email
@@ -75,7 +82,9 @@ namespace eval acs_mail_lite {
 
             # Do no execute any callbacks if the email is an autoreply.
             # Thanks to Vinod for the idea and the code
-            set callback_executed_p [acs_mail_lite::autoreply_p -subject $subject -from $email(from)]
+            set callback_executed_p [acs_mail_lite::autoreply_p \
+                                         -subject $subject \
+                                         -from $email(from)]
 
             if {!$callback_executed_p} {
                 # Special treatment for e-mails which look like they contain an object_id
@@ -83,7 +92,9 @@ namespace eval acs_mail_lite {
                 ns_log Debug "Object_id for mail:: $pot_object_id"
                 if {[string is integer -strict  $pot_object_id]} {
                     if {[acs_object::object_p -id $pot_object_id]} {
-                        callback acs_mail_lite::incoming_object_email -array email -object_id $pot_object_id
+                        callback acs_mail_lite::incoming_object_email \
+                            -array email \
+                            -object_id $pot_object_id
 
                         # Mark that the callback has been executed already
                         set no_callback_p 1
@@ -109,11 +120,14 @@ namespace eval acs_mail_lite {
         -file:required
         -array:required
     } {
-        An email is split into several parts: headers, bodies and files lists and all headers directly.
+        An email is split into several parts: headers, bodies and
+        files lists and all headers directly.
 
-        The headers consists of a list with header names as keys and their corresponding values. All keys are lower case.
-        The bodies consists of a list with two elements: content-type and content.
-        The files consists of a list with three elements: content-type, filename and content.
+        The headers consists of a list with header names as keys and
+        their corresponding values. All keys are lower case.  The
+        bodies consists of a list with two elements: content-type and
+        content.  The files consists of a list with three elements:
+        content-type, filename and content.
 
         The array with all the above data is upvared to the caller environment.
 
@@ -207,7 +221,7 @@ namespace eval acs_mail_lite {
         #now extract all parts (bodies/files) and fill the email array
         foreach part $all_parts {
             # Attachments have a "Content-disposition" part
-            # Therefore we filter out if it is an attachment here
+            # Therefore, we filter out if it is an attachment here
             if {[catch {mime::getheader $part Content-disposition}] || [mime::getheader $part Content-disposition] eq "inline"} {
                 switch [mime::getproperty $part content] {
                     "text/plain" {
