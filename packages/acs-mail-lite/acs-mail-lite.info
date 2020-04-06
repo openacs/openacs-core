@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.10.0d7" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.10.0d7.apm">
+    <version name="5.10.0d8" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.10.0d8.apm">
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <owner url="mailto:malte.sussdorff@cognovis.de">Malte Sussdorff</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
@@ -18,7 +18,7 @@
         <description format="text/html">This package provides a service for sending and receiving messages, messages are queued in the database to ensure reliable sending and make sending a message &#39;transactional&#39;. Replacement for acs-mail.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-mail-lite" version="5.10.0d7"/>
+        <provides url="acs-mail-lite" version="5.10.0d8"/>
         <requires url="acs-kernel" version="5.9.0"/>
         <requires url="acs-service-contract" version="5.9.0"/>
         <requires url="acs-tcl" version="5.10.0d8"/>
@@ -31,7 +31,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="BounceMailDir"  description="Location of the maildir location that accepts incoming bounces" section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="BounceScanQueue"  default="120" description="How often (in seconds) to scan for new bounces" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailAllow"  description="Tcl list of email addresses that are allowed to receive messages when delivery mode is set to filter" section_name="rollout_support"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDeliveryMode"  default="default" description="Set how message will be delivered. default: Email messages are sent in the usual manner. log: Email messages are written to the server&#39;s error log. redirect: Email messages are redirected to the addresses specified by the EmailRedirectTo parameter. If this list is absent or empty, email messages are written to the server&#39;s error log. filter: Email messages are sent to in the usual manner if the recipient appears in the EmailAllow parameter, otherwise they are logged." section_name="rollout_support"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDeliveryMode"  default="default" description="Set how message will be delivered. default: Email messages are sent via the tcllib smtpd implementation. nssmptd: try to send mail via SMTP based on the NaviServer nssmptd module. log: Email messages are written to the server&#39;s error log. redirect: Email messages are redirected to the addresses specified by the EmailRedirectTo parameter. If this list is absent or empty, email messages are written to the server&#39;s error log. filter: Email messages are sent via SMTP if the recipient appears in the EmailAllow parameter, otherwise they are logged. The setting 'filter' and 'redirect' can be combined with 'nssmptd' as in 'filter nssmtpd' to specify the delivery implementation"  section_name="rollout_support"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailRedirectTo"  description="Tcl list of email addresses to redirect to" section_name="rollout_support"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EnvelopePrefix"  default="bounce" description="The prefix for sending mail that will be handled by this instance. Use alphanumeric characters only." section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FilesystemAttachmentsRoot"  description="Path of a folder in the filesystem into which files are allowed to be read and sent as attachments. Trying to send attachments residing outside this folder will throw an error.
@@ -46,7 +46,7 @@ Default for the empty value of this parameter will be to allow only files into t
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="IMAPTimeout"  default="60" description="IMAP Timeout. Waiting time until we give up with the mailserver." section_name="IMAP"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IMAPUser"  description="IMAP User to be used for sending emails" section_name="IMAP"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IncomingDomain"  description="Email Domain for incoming messages" section_name="inbound_email"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IncomingMode" default="maildir"  description="Incoming email mode. Choices are: legacy (same behaviour up to OpenACS 5.9.1. Deprecated, will be removed in future versions), maildir (use a MailDir location for incoming email), imap (use IMAP for incoming email)." section_name="inbound_email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IncomingMode" default="maildir"  description="Incoming email mode. Choices are: legacy (same behavior up to OpenACS 5.9.1. Deprecated, will be removed in future versions), maildir (use a MailDir location for incoming email), imap (use IMAP for incoming email)." section_name="inbound_email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IncomingFilterProcName"  description="Procedure name for custom filtering of incoming email. Default is empty string." section_name="inbound_email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IncomingMailDir"  description="Location of the maildir location that accepts incoming bounces" section_name="inbound_email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="IncomingMaxAge"  default="604800" description="Maximum time to accept replies from sent email before expiring. 604800 is 1 week of (seconds). 0 = does not expire" section_name="inbound_email"/>

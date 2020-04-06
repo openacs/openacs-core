@@ -10,7 +10,7 @@ ad_library {
 
 package require mime 1.4
 package require smtp 1.4
-package require base64 2.3.1
+# package require base64 2.3.1
 
 namespace eval acs_mail_lite {
 
@@ -111,23 +111,13 @@ namespace eval acs_mail_lite {
     }
 
     #---------------------------------------
-    ad_proc -private smtp {
-        -multi_token:required
-        -headers:required
-        -originator:required
+    ad_proc -private get_delivery_parameters {} {
+        Get the SMTP Parameters and return these as a dict.
+
+        @return dict with keys identical to the package parameters
     } {
-        Send messages via SMTP
-
-        @param multi_token Multi Token generated which is passed
-               directly to smtp::sendmessage
-
-        @param headers List of list of header key-value pairs like
-               {{from malte@cognovis.de} {to malte@cognovis.de}}
-    } {
-
         set mail_package_id [get_package_id]
 
-        # Get the SMTP Parameters
         set smtpHost [parameter::get -parameter "SMTPHost" \
                       -package_id $mail_package_id \
                       -default [ns_config ns/parameters mailhost]]
@@ -138,20 +128,53 @@ namespace eval acs_mail_lite {
         set timeout [parameter::get -parameter "SMTPTimeout" \
                          -package_id $mail_package_id \
                          -default  [ns_config ns/parameters smtptimeout]]
-
         if {$timeout eq ""} {
             set timeout 60
         }
 
-        set smtpport [parameter::get -parameter "SMTPPort" \
+        set smtpPort [parameter::get -parameter "SMTPPort" \
                           -package_id $mail_package_id \
                           -default 25]
 
-        set smtpuser [parameter::get -parameter "SMTPUser" \
+        set smtpUser [parameter::get -parameter "SMTPUser" \
                           -package_id $mail_package_id]
 
-        set smtppassword [parameter::get -parameter "SMTPPassword" \
+        set smtpPassword [parameter::get -parameter "SMTPPassword" \
                               -package_id $mail_package_id]
+
+        set deliveryMode [parameter::get \
+                               -package_id $mail_package_id \
+                               -parameter EmailDeliveryMode \
+                               -default default]
+        return [list \
+                    SMTPHost $smtpHost \
+                    SMTPTimeout $timeout \
+                    SMTPPort $smtpPort \
+                    SMTPUser $smtpUser \
+                    SMTPPassword $smtpPassword \
+                    EmailDeliveryMode $deliveryMode]
+    }
+
+
+    #---------------------------------------
+    ad_proc -private smtp {
+        -multi_token:required
+        -headers:required
+        -originator:required
+        -delivery_dict:required
+    } {
+        Send messages via SMTP
+
+        @param multi_token Multi Token generated which is passed
+               directly to smtp::sendmessage
+
+        @param headers List of list of header key-value pairs like
+               {{from malte@cognovis.de} {to malte@cognovis.de}}
+
+        @param delivery_dict dictionary of delivery parameters
+               including the SMTP* configurtion parameters
+
+    } {
 
         # Consider adding code here to
         # set orignator to acs-mail-lite parameter FixedSenderEmail
@@ -162,16 +185,20 @@ namespace eval acs_mail_lite {
         foreach header $headers {
             lappend cmd -header $header
         }
-        lappend cmd -servers $smtpHost -ports $smtpport
+        lappend cmd \
+            -servers [dict get $delivery_dict SMTPHost] \
+            -ports [dict get $delivery_dict SMTPPort]
 
         #
         # Request authentication only, when user AND password are
         # specified. If only one of these is specified, issue a
         # warning and ignore the parameter.
         #
-        if {$smtpuser ne "" && $smtppassword ne ""} {
-            lappend cmd -username $smtpuser -password $smtppassword
-        } elseif {$smtpuser ne ""|| $smtppassword ne ""} {
+        set smtpUser [dict get $delivery_dict SMTPUser]
+        set smtpPassword [dict get $delivery_dict SMTPPassword]
+        if {$smtpUser ne "" && $smtpPassword ne "" } {
+            lappend cmd -username $smtpUser -password $smtpPassword
+        } elseif {$smtpUser ne ""|| $smtpPassword ne ""} {
             ns_log warning "acs-mail-lite::smtp: invalid parameter combination;\
                 when SMTPUser is specified, SMTPPassword has to be provided as well and vice versa"
         }
@@ -416,7 +443,7 @@ namespace eval acs_mail_lite {
         {-extraheaders ""}
         {-use_sender_p "0"}
         {-object_id ""}
-        {-experimental 0}
+        {-force_delivery_mode ""}
     } {
 
         Prepare an email to be send immediately with the option to pass in a list
@@ -470,6 +497,9 @@ namespace eval acs_mail_lite {
                be used regardless of fixed-sender parameter
 
         @param object_id Object id that caused this email to be sent
+
+        @param force_delivery_mode Force the specified delivery mode
+               for this single call
     } {
 
         set mail_package_id [get_package_id]
@@ -478,9 +508,9 @@ namespace eval acs_mail_lite {
         }
 
         # Decide which sender to use
-        set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
+        set fixed_sender [parameter::get \
+                              -parameter "FixedSenderEmail" \
                               -package_id $mail_package_id]
-
 
         if { $fixed_sender ne "" && !$use_sender_p} {
             set from_addr $fixed_sender
@@ -512,8 +542,9 @@ namespace eval acs_mail_lite {
 
 
         # Set originator header
-        set originator_email [parameter::get -parameter "OriginatorEmail" \
-                              -package_id $mail_package_id]
+        set originator_email [parameter::get \
+                                  -parameter "OriginatorEmail" \
+                                  -package_id $mail_package_id]
 
         # Decision based firstly on parameter,
         # and then on other values that most likely could be substituted
@@ -649,11 +680,43 @@ namespace eval acs_mail_lite {
             mime::setheader $tokens [lindex $header 0] [lindex $header 1]
         }
 
+        # Get the delivery parameters, includeing SMTP
+        set deliveryDict [get_delivery_parameters]
+
         # Rollout support
-        set delivery_mode [parameter::get \
-                               -package_id $mail_package_id \
-                               -parameter EmailDeliveryMode \
-                               -default default]
+        set default_send_mode smtp
+
+        if {$force_delivery_mode ne ""} {
+            set delivery_mode $force_delivery_mode
+        } else {
+            set delivery_mode [dict get $deliveryDict EmailDeliveryMode]
+        }
+
+        if {"nssmtpd" in $delivery_mode} {
+            #
+            # Filter the word "nssmtpd" from the EmailDeliveryMode and
+            # try to use "nssmtpd" as default_send mode
+            #
+            if {[llength $delivery_mode] > 1} {
+                # Filter "nssmtpd" from the list
+                set delivery_mode [lmap m $delivery_mode {
+                    if {$m eq "nssmtpd"} continue
+                    set m
+                }]
+            }
+            #
+            # "ns_smtpd" can be used, when it is available and no
+            # password mode is specified.
+            #
+            if { [info commands ns_smtpd] eq ""
+                 || [dict get $deliveryDict SMTPPassword] ne ""
+                 || [dict get $deliveryDict SMTPUser] ne ""
+             } {
+                ns_log warning "configured 'nssmtp' as EmailDeliveryMode but it can't be used."
+             } else {
+                 set default_send_mode nssmtpd
+             }
+        }
 
         switch -- $delivery_mode {
             log {
@@ -661,7 +724,7 @@ namespace eval acs_mail_lite {
                 set notice "logging email instead of sending"
             }
             filter {
-                set send_mode "smtp"
+                set send_mode $default_send_mode
                 set allowed_addr [parameter::get \
                                       -package_id $mail_package_id \
                                       -parameter EmailAllow]
@@ -680,8 +743,7 @@ namespace eval acs_mail_lite {
 
             }
             redirect {
-
-                set send_mode "smtp"
+                set send_mode $default_send_mode
 
                 # Since we have to redirect to a list of addresses
                 # we need to remove the CC and BCC ones
@@ -693,7 +755,7 @@ namespace eval acs_mail_lite {
                 set bcc_addr ""
             }
             default {
-                set send_mode "smtp"
+                set send_mode $default_send_mode
             }
         }
 
@@ -720,32 +782,22 @@ namespace eval acs_mail_lite {
         set errorMsg ""
         set status ok
 
-        if {$experimental && [info commands ns_smtpd] ne ""} {
+        if {$send_mode eq "nssmtpd"} {
 
             foreach header $headers_list {
                 mime::setheader $tokens [lindex $header 0] [lindex $header 1]
             }
-
             set fullMailMessage [mime::buildmessage $tokens]
-            #ns_log notice "FULL MAIL MESSAGE\n$fullMailMessage"
 
-            set smtpHost [parameter::get -parameter "SMTPHost" \
-                              -package_id $mail_package_id \
-                              -default [ns_config ns/parameters mailhost]]
-            if {$smtpHost eq ""} {
-                set smtpHost localhost
-            }
-
-            set smtpPort [parameter::get -parameter "SMTPPort" \
-                              -package_id $mail_package_id \
-                              -default 25]
             #
             # Call "smtpd send" from the NaviServer nssmtpd module.
             # When the last two arguments are not provided, the
             # command uses host and port from the configuration
             # section of the nssmtpd module.
             #
-            ns_smtpd send $originator $to_addr fullMailMessage $smtpHost $smtpPort
+            ns_smtpd send $originator $to_addr fullMailMessage \
+                [dict get $deliveryDict SMTPHost] \
+                [dict get $deliveryDict SMTPPort]
 
         } elseif { $send_mode eq "log" } {
 
@@ -768,7 +820,8 @@ namespace eval acs_mail_lite {
             ad_try {
                 acs_mail_lite::smtp -multi_token $tokens \
                     -headers $headers_list \
-                    -originator $originator
+                    -originator $originator \
+                    -deliveryDict $deliveryDict
             } on error {errorMsg} {
                 set status error
             }
