@@ -5,7 +5,6 @@ ad_library {
     @author Eric Lorenzo (eric@openforce.net)
     @creation-date 22 March 2002
     @cvs-id $Id$
-
 }
 
 package require mime 1.4
@@ -745,14 +744,22 @@ namespace eval acs_mail_lite {
             redirect {
                 set send_mode $default_send_mode
 
-                # Since we have to redirect to a list of addresses
-                # we need to remove the CC and BCC ones
 
-                set to_addr [parameter::get \
+                set redirect_to [parameter::get \
                                  -package_id $mail_package_id \
                                  -parameter EmailRedirectTo]
-                set cc_addr ""
-                set bcc_addr ""
+                if {$redirect_to eq ""} {
+                    ns_log warning "acs-mail-lite: redirect mode activated but no value for\
+                       EmailRedirectTo provided. Fall back to send_mode 'log'"
+                    set send_mode log
+                } else {
+                    set to_addr $redirect_to
+
+                    # Since we have to redirect to a list of addresses
+                    # we need to remove the CC and BCC
+                    set cc_addr ""
+                    set bcc_addr ""
+                }
             }
             default {
                 set send_mode $default_send_mode
@@ -795,9 +802,13 @@ namespace eval acs_mail_lite {
             # command uses host and port from the configuration
             # section of the nssmtpd module.
             #
-            ns_smtpd send $originator $to_addr fullMailMessage \
-                [dict get $deliveryDict SMTPHost] \
-                [dict get $deliveryDict SMTPPort]
+            try {
+                ns_smtpd send $originator $to_addr fullMailMessage \
+                    [dict get $deliveryDict SMTPHost] \
+                    [dict get $deliveryDict SMTPPort]
+            } on error {errorMsg} {
+                set status error
+            }
 
         } elseif { $send_mode eq "log" } {
 
