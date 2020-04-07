@@ -414,7 +414,7 @@ ad_proc -private site_node::update_cache {
     {-url}
     {-object_id}
 } {
-    Brings the in memory copy of the site nodes hierarchy in sync with the
+    Brings the in-memory copy of the site nodes hierarchy in sync with the
     database version. Only updates the given node and its children.
 } {
     # don't let any other thread try to do a concurrent update
@@ -1702,7 +1702,9 @@ if {$UseXotclSiteNodes} {
         # The parent_node_id should in a mount operation never be
         # empty.
         #
-        ::acs::site_nodes_cache flush_pattern -partition_key $parent_node_id get_children-$parent_node_id-*
+        ::acs::site_nodes_cache flush_pattern \
+            -partition_key $parent_node_id \
+            get_children-$parent_node_id-*
 
         #
         # DAVEB: update context_id if it is passed in some code relies
@@ -1757,7 +1759,7 @@ if {$UseXotclSiteNodes} {
         {-url ""}
         {-object_id ""}
     } {
-        Brings the in memory copy of the site nodes hierarchy in sync with the
+        Brings the in-memory copy of the site nodes hierarchy in sync with the
         database version. Only updates the given node and its children.
     } {
         ::xo::site_node flush_cache -node_id $node_id -with_subtree $sync_children_p -url $url
@@ -2039,7 +2041,7 @@ ad_proc -deprecated site_node_id {url} {
 }
 
 ad_proc -deprecated site_nodes_sync {args} {
-    Brings the in memory copy of the url hierarchy in sync with the
+    Brings the in-memory copy of the url hierarchy in sync with the
     database version.
 
     @see site_node::init_cache
