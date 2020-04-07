@@ -280,14 +280,14 @@ namespace eval ::acs {
             #
             # NaviServer variant
             #
-            :public method flush_all_pattern {{-partition_key ""} pattern} {
+            :method flush_pattern_in_all_partitions {pattern} {
                 #
                 # Flush matching entries in all partitions of a cache based on
                 # a pattern.
                 #
                 for {set i 0} {$i < ${:partitions}} {incr i} {
                     ns_cache_flush -glob ${:name}-$i $pattern
-                    ns_log notice "flush_all_pattern: ns_cache_flush ${:name}-$i $pattern"
+                    ns_log notice "flush_pattern_in_all_partitions: ns_cache_flush ${:name}-$i $pattern"
                     #ns_log notice "... content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
                 }
             }
@@ -295,7 +295,7 @@ namespace eval ::acs {
             #
             # AOLserver variant
             #
-            :public method flush_all_pattern {{-partition_key ""} pattern} {
+            :method flush_pattern_in_all_partitions {pattern} {
                 for {set i 0} {$i < ${:partitions}} {incr i} {
                     foreach name [ns_cache names ${:name}-$i $pattern] {
                         :flush -partition_key $partition_key $name
@@ -357,7 +357,7 @@ namespace eval ::acs {
             #
             # flush just in the determined partition
             #
-            :flush_all_pattern -partition_key $partition_key $pattern
+            :flush_pattern_in_all_partitions $pattern
         }
 
         :public method flush {{-partition_key:required} key} {
