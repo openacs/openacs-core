@@ -821,7 +821,7 @@ namespace eval acs_mail_lite {
                 acs_mail_lite::smtp -multi_token $tokens \
                     -headers $headers_list \
                     -originator $originator \
-                    -deliveryDict $deliveryDict
+                    -delivery_dict $deliveryDict
             } on error {errorMsg} {
                 set status error
             }
