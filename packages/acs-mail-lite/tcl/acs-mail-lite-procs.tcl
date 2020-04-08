@@ -645,7 +645,9 @@ namespace eval acs_mail_lite {
                     return
                 }
                 if {[string first $filesystem_attachments_root $f] != 0} {
-                    ns_log Error "acs-mail-lite::send: Could not send mail: file '$f' is outside the allowed root folder for attachments '$filesystem_attachments_root'"
+                    ns_log Error "acs-mail-lite::send: Could not send mail: file '$f'\
+                           is outside the allowed root folder for attachments\
+                           '$filesystem_attachments_root'"
                     return
                 }
                 set name [file tail $f]
@@ -744,14 +746,13 @@ namespace eval acs_mail_lite {
             redirect {
                 set send_mode $default_send_mode
 
-
                 set redirect_to [parameter::get \
                                  -package_id $mail_package_id \
                                  -parameter EmailRedirectTo]
                 if {$redirect_to eq ""} {
                     ns_log warning "acs-mail-lite: redirect mode activated but no value for\
-                       EmailRedirectTo provided. Fall back to send_mode 'log'"
-                    set send_mode log
+                       EmailRedirectTo provided"
+                    set send_mode ignore
                 } else {
                     set to_addr $redirect_to
 
@@ -820,13 +821,11 @@ namespace eval acs_mail_lite {
             # Retrieve the email message as a string
             set packaged [mime::buildmessage $tokens]
 
-            # Close all mime tokens
-            mime::finalize $tokens -subordinates all
-
             # Send the email message to the log
-            ns_log Notice "acs-mail-lite::send: $notice\n\n**********\nEnvelope sender: $originator\n\n$packaged\n**********"
+            ns_log Notice "acs-mail-lite::send: $notice\n\n**********\n\
+                Envelope sender: $originator\n\n$packaged\n**********"
 
-        } else {
+        } elseif {$send_mode eq "smtp"} {
 
             ad_try {
                 acs_mail_lite::smtp -multi_token $tokens \
@@ -837,10 +836,18 @@ namespace eval acs_mail_lite {
                 set status error
             }
 
-            # Close all mime tokens
-            mime::finalize $tokens -subordinates all
-
+        } else {
+            #
+            # Ignoring sending message
+            #
+            ns_log Notice "acs-mail-lite::send: ignore sending message to $to_addr"
         }
+
+        #
+        # Close all mime tokens
+        #
+        mime::finalize $tokens -subordinates all
+
 
         if { !$no_callback_p } {
             callback acs_mail_lite::send \
