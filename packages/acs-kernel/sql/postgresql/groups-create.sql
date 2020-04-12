@@ -319,6 +319,8 @@ create index group_elem_idx_rel_type_idx on group_element_index (rel_type);
 -- see http://openacs.org/forums/message-view?message_id=142769
 -- create index group_elem_idx_container_idx on group_element_index (container_id);
 
+create index group_elem_idx_container_idx on group_element_index (container_id);
+
 
 comment on table group_element_index is $$
  This table is for internal use by the parties system.  It as an auxiliary

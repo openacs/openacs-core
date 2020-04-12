@@ -269,6 +269,7 @@ create index group_elem_idx_group_idx on group_element_index (group_id);
 create index group_elem_idx_element_idx on group_element_index (element_id);
 create index group_elem_idx_rel_id_idx on group_element_index (rel_id);
 create index group_elem_idx_rel_type_idx on group_element_index (rel_type);
+create index group_elem_idx_container_idx on group_element_index(container_id);
 
 -- The index on container_id is not very good
 -- and in some cases can be quite detrimental
