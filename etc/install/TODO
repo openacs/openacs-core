@@ -1,2 +1,0 @@
-- TclWebTest selects options in selects bases on label rather than value. I would like to be able to select based on value.
-- Grep for TODO in this dir and in the tcl dir to see TODO comments in the scripts.

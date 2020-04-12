@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" locale="ms_MY" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">Nama pengguna atau kata laluan tidak sah</msg>
-</message_catalog>

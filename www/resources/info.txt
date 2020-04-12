@@ -1,3 +1,0 @@
-This directory is public and not checked for permissions.
-
-Put here your CSS file.

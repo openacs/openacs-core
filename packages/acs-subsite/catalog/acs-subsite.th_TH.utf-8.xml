@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" locale="th_TH" charset="utf-8">
-
-  <msg key="Change_pass_email_por">เปลี่ยนรหัสเข้า อีเมล์ รูปภาพ</msg>
-  <msg key="Logout">ออกจากระบบ</msg>
-  <msg key="Logout_from_system">ออกจาก %system_name%</msg>
-  <msg key="Welcome_user">ยินดีต้อนรับ, %user_name%</msg>
-</message_catalog>

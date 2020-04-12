@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" locale="th_TH" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">username หรือ password ไม่ถูกต้อง</msg>
-</message_catalog>

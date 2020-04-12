@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Using splogger for logging.
-# Using qmail-local to deliver messages to ~/Maildir/ by default.
-
-exec env - PATH="/var/qmail/bin:$PATH" \
-qmail-start ./Maildir/ splogger qmail

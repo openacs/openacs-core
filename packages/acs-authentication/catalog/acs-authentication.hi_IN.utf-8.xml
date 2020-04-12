@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" locale="hi_IN" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">नियम विरुध्द यूसरनेम या पास्वर्ड् ।</msg>
-</message_catalog>

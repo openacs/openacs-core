@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-lang" locale="ar_EG" charset="utf-8">
-
-  <msg key="English">إنجليزيّ</msg>
-  <msg key="French">فَرَنْسِيّ</msg>
-  <msg key="German">أَلْمانِيّ</msg>
-  <msg key="Spanish">إِسْبانِيّ</msg>
-</message_catalog>

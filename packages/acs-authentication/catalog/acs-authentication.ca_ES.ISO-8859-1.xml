@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-authentication" locale="ca_ES" charset="ISO-8859-1">
-
-  <msg key="Invalid_username_or_password">Usuari o contrasenya erroni </msg>
-</message_catalog>

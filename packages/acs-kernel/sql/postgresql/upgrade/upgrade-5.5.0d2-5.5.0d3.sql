@@ -1,1 +1,0 @@
-alter table groups add column description varchar(4000);

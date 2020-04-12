@@ -1,1 +1,0 @@
-alter table groups add description varchar(4000);

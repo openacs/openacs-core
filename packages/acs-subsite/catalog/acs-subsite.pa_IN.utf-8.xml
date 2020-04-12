@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" locale="pa_IN" charset="utf-8">
-
-  <msg key="Change_pass_email_por">ਗੁਪਤ-ਕੋਡ, ਈ-ਮੇਲ, ਪੋਰਟਰੇਟ</msg>
-  <msg key="Logout">ਲਾਗਆਉਟ</msg>
-  <msg key="Logout_from_system">%system_name% ਤੋਂ ਲਾਗ ਆਉਟ</msg>
-  <msg key="Welcome_user">%user_name% ਜੀ ਆਇਆਂ ਨੂੰ</msg>
-</message_catalog>
