@@ -1306,6 +1306,15 @@ if {$UseXotclSiteNodes} {
             :create site_node
         }
 
+        #
+        # For these URLs we assume that the site_node will never
+        # change, or require a broadcase flush, or reboot.
+        #
+        # TODO: make me configurable, after release of 5.10.
+        site_node eval {
+            set :static_site_nodes {/ 1 /dotlrn 1 /dotlrn/ 1 /register/ /SYSTEM/ 1}
+        }
+
         #####################################################
         # Caching
         #####################################################
@@ -1578,7 +1587,11 @@ if {$UseXotclSiteNodes} {
 
                 # Try per-request caching
                 #
-                set key ::__node_id($url)
+                if {[dict exists ${:static_site_nodes} $url]} {
+                    set key :node_id($url)
+                } else {
+                    set key ::__node_id($url)
+                }
                 if {[info exists $key]} {
                     #ns_log notice "==== returning cached value [set $key]"
                     return [set $key]
@@ -2190,3 +2203,7 @@ ad_proc -deprecated site_node::conn_url {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
+
+
+ns_server -pool monitor maxthreads 9
+ns_server -pool monitor minthreads 9
