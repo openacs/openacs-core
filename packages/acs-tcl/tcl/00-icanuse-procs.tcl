@@ -65,12 +65,10 @@ namespace eval ::acs {
 
 ::acs::register_icanuse "ns_db currenthandles" [acs::cmd_has_subcommand ns_db currenthandles]
 ::acs::register_icanuse "ns_server ummap" [acs::cmd_has_subcommand ns_server unmap]
-#
-# "ns_server ummap" was introduced in NaviServer at the same time as
-# "ns_conn partialtimes" but the latter would requires a connection
-# (which is not available during loading).
-#
-::acs::register_icanuse "ns_conn partialtimes" [acs::icanuse "ns_server ummap"]
+
+::acs::register_icanuse "ns_conn partialtimes" [acs::cmd_has_subcommand ns_conn partialtimes]
+::acs::register_icanuse "ns_conn contentsentlength" [acs::cmd_has_subcommand ns_conn contentsentlength]
+
 ::acs::register_icanuse "ns_crypto::randombytes" {[info commands ::ns_crypto::randombytes] ne ""}
 
 ::acs::register_icanuse "ns_asynclogfile" {[info commands ::ns_asynclogfile] ne ""}
