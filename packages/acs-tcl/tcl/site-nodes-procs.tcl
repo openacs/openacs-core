@@ -2203,7 +2203,3 @@ ad_proc -deprecated site_node::conn_url {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-
-
-ns_server -pool monitor maxthreads 9
-ns_server -pool monitor minthreads 9
