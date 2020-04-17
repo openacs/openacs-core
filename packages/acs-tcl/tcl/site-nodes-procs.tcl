@@ -1312,7 +1312,7 @@ if {$UseXotclSiteNodes} {
         #
         # TODO: make me configurable, after release of 5.10.
         site_node eval {
-            set :static_site_nodes {/ 1 /dotlrn 1 /dotlrn/ 1 /register/ /SYSTEM/ 1}
+            set :static_site_nodes {/ 1 /dotlrn 1 /dotlrn/ 1 /register/ 1 /SYSTEM/ 1}
         }
 
         #####################################################
