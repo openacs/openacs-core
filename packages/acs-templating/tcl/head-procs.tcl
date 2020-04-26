@@ -1023,7 +1023,7 @@ ad_proc template::get_body_event_handlers {
 
 ad_proc template::add_confirm_handler {
     {-event click}
-    {-message "Are you sure?"}
+    {-message "#acs-templating.Are_you_sure#"}
     {-CSSclass "acs-confirm"}
     {-id}
     {-formfield}
@@ -1039,8 +1039,14 @@ ad_proc template::add_confirm_handler {
                      in a list of two elements in the form
                      <code>{ form_id field_name }</code>
     @param message  Message to be displayed in the confirmation dialog
+                    if the message looks like a message key
+                    (starting and ending with a hash sign)
+                    it is treated as a message key
     @author  Gustaf Neumann
 } {
+    if {[regexp {^#(.*)*#$} $message . key]} {
+        set message [_ $key]
+    }
     set script [subst {
         if (!confirm('$message')) {
             event.preventDefault();
@@ -1087,7 +1093,7 @@ ad_proc template::set_css_property {
     -class:required
     -property:required
     -value:required
-} { 
+} {
     Set the specified CSS property in the DOM tree of the browser for
     elements for the specified class. This function should be used
     sparely in special situations, where CSS modification other
