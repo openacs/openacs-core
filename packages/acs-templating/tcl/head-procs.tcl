@@ -1038,8 +1038,8 @@ ad_proc template::add_confirm_handler {
     @param formfield register confirm handler for this formfield, specified
                      in a list of two elements in the form
                      <code>{ form_id field_name }</code>
-    @param message  Message to be displayed in the confirmation dialog
-                    if the message looks like a message key
+    @param message  Message to be displayed in the confirmation dialog.
+                    If the message looks like a message key
                     (starting and ending with a hash sign)
                     it is treated as a message key
     @author  Gustaf Neumann
