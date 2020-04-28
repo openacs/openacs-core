@@ -391,7 +391,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'png','im
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heic','image/heic' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heics','image/heic-sequence' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heif','image/heif' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heif','image/heif-sequence' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heifs','image/heif-sequence' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'pnm','image/x-portable-anymap' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ppm','image/x-portable-pixmap' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ppt','application/vnd.ms-powerpoint' );
