@@ -57,10 +57,13 @@ namespace eval ::acs {
 
 
 #
-# Register a features provided by the server, available to all
-# packages.  Note that packages can register some optional features
-# during bootup as well, but the developer has to care about the
-# registration and loading order.
+# Register features provided by the server, available to all packages.
+# These features can typically not easily be provided by compatiblity
+# routines.
+#
+# Note that packages can register some optional features during bootup
+# as well, but the developer has to care about the registration and
+# loading order.
 #
 
 ::acs::register_icanuse "ns_db currenthandles" [acs::cmd_has_subcommand ns_db currenthandles]
@@ -72,8 +75,8 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_crypto::randombytes" {[info commands ::ns_crypto::randombytes] ne ""}
 
 ::acs::register_icanuse "ns_asynclogfile" {[info commands ::ns_asynclogfile] ne ""}
-::acs::register_icanuse "ns_writer" {[info commands ::ns_writer] ne ""}
-::acs::register_icanuse "ns_hash" {[info commands ::ns_hash] ne ""}
+::acs::register_icanuse "ns_writer"       {[info commands ::ns_writer]       ne ""}
+::acs::register_icanuse "ns_hash"         {[info commands ::ns_hash]         ne ""}
 
 # Local variables:
 #    mode: tcl
