@@ -104,9 +104,12 @@ if { ![info exists passthrough] } {
     set passthrough_parameters [export_entire_form_as_url_vars $passthrough]
 }
 
-if { $limit_to_user_id ne "" } {
-    set limit_to_user_id [join $limit_to_user_id ","]
-    lappend where_clause "cc_users.user_id not in ($limit_to_user_id)"
+#
+# GN: "limit_to_user" is specified in the page_contract as scalar, but
+# is abviouly intended to accept multiple entries.
+#
+if { [llength $limit_to_user] > 0} {
+    lappend where_clause "cc_users.user_id not in ([ns_dbquotelist $limit_to_user_id])"
 }
 
 if { $limit_to_users_in_group_id ne "" } {
