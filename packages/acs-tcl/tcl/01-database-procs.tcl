@@ -3793,6 +3793,27 @@ ad_proc -public db_bounce_pools {{-dbn ""}} {
     }
 }
 
+if {[info commands ::ns_dbquotelist] eq ""} {
+    #
+    # Compatibility function for AOLserver or older versions of
+    # NaviServer. Newer versions provide this command as builtin.
+    #
+    ad_proc -public ns_dbquotelist {list {type text}} {
+        set sql ""
+        if { [llength $list] > 0 } {
+            # replace single quotes by two single quotes
+            regsub -all -- ' "$list" '' list
+            append sql \
+                "'" \
+                [join $list "', '"] \
+                "'"
+        }
+        return $sql
+    }
+} else {
+    ns_log notice "====================================================="
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
