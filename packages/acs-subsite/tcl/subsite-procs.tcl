@@ -132,11 +132,11 @@ ad_proc -public subsite::default::create_app_group {
 
 } {
     if { [application_group::group_id_from_package_id -no_complain -package_id $package_id] eq "" } {
-        array set node [site_node::get_from_object_id -object_id $package_id]
-        set node_id $node(node_id)
+        set node_info [site_node::get_from_object_id -object_id $package_id]
+        set node_id [dict get $node_info node_id]
 
         if { $name eq "" } {
-            set subsite_name $node(instance_name)
+            set subsite_name [dict get $node_info instance_name]
         } else {
             set subsite_name $name
         }
