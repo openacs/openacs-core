@@ -7,9 +7,9 @@ ad_page_contract {
 
 set page_title "Defined Subsites"
 set context [list $page_title]
-set package_ids [subsite::package_keys]
+set package_keys [subsite::package_keys]
 set subsite_number [db_string count_subsites [subst {
-    select count(*) from apm_packages where package_key in ([ns_dbquotelist $package_ids])
+    select count(*) from apm_packages where package_key in ([ns_dbquotelist $package_keys])
 }]]
 
 if {$subsite_number > 500} {
@@ -29,7 +29,7 @@ if {$subsite_number > 500} {
                p.package_id
         from   site_nodes s, apm_packages p
         where  s.object_id = p.package_id
-        and    p.package_key in ([ns_dbquotelist $package_ids])
+        and    p.package_key in ([ns_dbquotelist $package_keys])
     }] {
         set node [site_node::get -node_id $node_id]
         set path_pretty [dict get $node instance_name]

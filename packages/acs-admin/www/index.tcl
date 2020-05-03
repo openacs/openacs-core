@@ -6,10 +6,10 @@ ad_page_contract {
 }
 
 set page_title [ad_conn instance_name]
-set package_ids [subsite::package_keys]
+set package_keys [subsite::package_keys]
 set subsite_number [db_string count_subsites [subst {
     select count(p.package_id) from apm_packages p, site_nodes s
-    where  package_key in ([ns_dbquotelist $package_ids])
+    where  package_key in ([ns_dbquotelist $package_keys])
     and    s.object_id = p.package_id
 }]]
 
