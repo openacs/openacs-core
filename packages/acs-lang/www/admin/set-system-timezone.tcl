@@ -115,9 +115,9 @@ if { [info exists utc_epoch] } {
         set try_offsets [list]
         foreach offset [list $recommended_offset [expr {$recommended_offset -24}]] {
             if { $offset < 0 } {
-                lappend try_offsets '[db_quote [expr {-int(abs($offset)*60*60)}]]'
+                lappend try_offsets [expr {-int(abs($offset)*60*60)}]
             } else {
-                lappend try_offsets '[db_quote [expr {int($offset*60*60)}]]'
+                lappend try_offsets [expr {int($offset*60*60)}]
             }
         }
 
@@ -125,7 +125,7 @@ if { [info exists utc_epoch] } {
             select tz.tz, tz.gmt_offset
             from   timezones tz,
                    timezone_rules tzr
-            where  tzr.gmt_offset in ([join $try_offsets ", "])
+            where  tzr.gmt_offset in ([ns_dbquotelist $try_offsets])
             and    tzr.tz_id = tz.tz_id
             and    to_date('$utc_ansi', 'YYYY-MM-DD HH24:MI:SS') between tzr.utc_start and tzr.utc_end
             order  by tz
