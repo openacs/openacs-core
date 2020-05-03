@@ -7,10 +7,9 @@ ad_page_contract {
 
 set page_title "Defined Subsites"
 set context [list $page_title]
-
-set package_keys '[join [subsite::package_keys] ',']'
+set package_ids [subsite::package_keys]
 set subsite_number [db_string count_subsites [subst {
-    select count(*) from apm_packages where package_key in ($package_keys)
+    select count(*) from apm_packages where package_key in ([ns_dbquotelist $package_ids])
 }]]
 
 if {$subsite_number > 500} {
@@ -30,18 +29,18 @@ if {$subsite_number > 500} {
                p.package_id
         from   site_nodes s, apm_packages p
         where  s.object_id = p.package_id
-        and    p.package_key in ($package_keys)        
+        and    p.package_key in ([ns_dbquotelist $package_ids])
     }] {
         set node [site_node::get -node_id $node_id]
         set path_pretty [dict get $node instance_name]
         set parent_id   [dict get $node parent_id]
         set node_url    [dict get $node url]
-        
+
         set admin_url "${node_url}admin/"
         set parameter_url [export_vars -base /shared/parameters {package_id {return_url "[ad_conn url]"}}]
         set theme [parameter::get -parameter ThemeKey -package_id $package_id]
         set theme_url ${admin_url}themes/
-        
+
         while { $parent_id ne "" } {
             set node [site_node::get -node_id $parent_id]
             set path_pretty "[dict get $node instance_name] > $path_pretty"
@@ -89,7 +88,7 @@ if {$subsite_number > 500} {
                 sub_class narrow
                 display_template {
                     <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Manage sitemap" style="border:0">
-                    
+
                 }
                 link_url_eval {[export_vars -base /admin/site-map { {root_id $node_id} }]}
                 link_html { title "Manage sitemap" }
