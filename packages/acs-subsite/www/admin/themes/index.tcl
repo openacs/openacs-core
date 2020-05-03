@@ -29,7 +29,7 @@ list::create \
             link_url_eval {[export_vars -base view { {theme $key} }]}
             link_html { title "#acs-subsite.Edit_this_theme#" }
         }
-        
+
         key {
             label "[_ acs-subsite.Key]"
         }
@@ -93,8 +93,7 @@ list::create \
 set subsite_id [ad_conn subsite_id]
 set currentThemeKey [parameter::get -parameter ThemeKey -package_id $subsite_id]
 
-set package_keys '[join [subsite::package_keys] ',']'
-
+set package_keys [subsite::package_keys]
 db_multirow -extend {active_p modified_p delete_p usage_count} themes select_themes {} {
     set active_p [expr {$currentThemeKey eq $key}]
     set modified_p [expr {$active_p && [subsite::get_theme_subsites \
@@ -105,7 +104,7 @@ db_multirow -extend {active_p modified_p delete_p usage_count} themes select_the
         select count(*)
         from apm_parameters p, apm_parameter_values v
         where p.parameter_name = 'ThemeKey'
-        and   p.package_key in ($package_keys)
+        and   p.package_key in ([ns_dbquotelist $package_keys])
         and   p.parameter_id = v.parameter_id
         and   v.attr_value = :key
     }]]
