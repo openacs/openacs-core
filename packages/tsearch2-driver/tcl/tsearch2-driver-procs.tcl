@@ -181,7 +181,7 @@ ad_proc -callback search::search -impl tsearch2-driver {
     }
     if {$ids ne ""} {
         set need_acs_objects 1
-        lappend where_clauses "o.package_id in ([join $ids ,])"
+        lappend where_clauses "o.package_id in ([ns_dbquotelist $ids])"
     }
     if {$need_acs_objects} {
         lappend from_clauses "txt" "acs_objects o"
