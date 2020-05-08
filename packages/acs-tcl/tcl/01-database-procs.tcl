@@ -1677,161 +1677,184 @@ ad_proc -public db_foreach {
     }
 }
 
+ad_proc -private db_multirow_helper {} {
 
-proc db_multirow_helper {} {
+    Helper function for db_multirow, performing the actual DB queries.
+
+} {
     uplevel 1 {
         if { !$append_p || ![info exists counter]} {
             set counter 0
         }
 
-        db_with_handle -dbn $dbn db {
-            set selection [db_exec select $db $full_statement_name $sql]
-            set local_counter 0
+        set local_counter -1
+        #
+        # Make sure 'next_row' array doesn't exist.
+        #
+        # The variables 'this_row' and 'next_row' are used to always
+        # execute the code block one result set row behind, so that we
+        # have the opportunity to peek ahead, which allows us to do
+        # group by's inside the multirow generation.
+        #
+        # Also make the 'next_row' array available as a magic __db_multirow__next_row variable
+        #
+        upvar 1 __db_multirow__next_row next_row
+        unset -nocomplain next_row
 
-            # Make sure 'next_row' array doesn't exist
-            # The this_row and next_row variables are used to always execute the code block one result set row behind,
-            # so that we have the opportunity to peek ahead, which allows us to do group by's inside
-            # the multirow generation
-            # Also make the 'next_row' array available as a magic __db_multirow__next_row variable
-            upvar 1 __db_multirow__next_row next_row
-            unset -nocomplain next_row
+        #
+        # Execute the query in one sweep, similar to 'db_foreach'.
+        #
+        set __selections [uplevel 1 [list db_list_of_ns_sets -dbn $dbn $full_statement_name $sql]]
+        if {[llength $__selections] == 0} {
+            return
+        }
 
-            set more_rows_p 1
-            while { 1 } {
+        set more_rows_p 1
+        while { 1 } {
+            incr local_counter
 
-                if { $more_rows_p } {
-                    set more_rows_p [db_getrow $db $selection]
+            if { $more_rows_p } {
+                set more_rows_p [expr {$local_counter < [llength $__selections]}]
+                set selection [lindex $__selections $local_counter]
+            } else {
+                break
+            }
+
+            #
+            # Setup the 'columns' part, now that we know the columns
+            # in the result set in the first iteration (when
+            # $local_counter == 0).
+            #
+            if { $local_counter == 0 } {
+                for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
+                    lappend local_columns [ns_set key $selection $i]
+                }
+                lappend local_columns {*}$extend
+                if { !$append_p || ![info exists columns] } {
+                    # store the list of columns in the var_name:columns variable
+                    set columns $local_columns
                 } else {
+                    # Check that the columns match, if not throw an error
+                    if { [join [lsort -ascii $local_columns]] ne [join [lsort -ascii $columns]] } {
+                        error "Appending to a multirow with differing columns.
+    Original columns     : [join [lsort -ascii $columns] ", "].
+    Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIROW_APPEND_COLUMNS_MISMATCH"
+                    }
+                }
+
+                # In case the '-unclobber' switch is specified, save
+                # variables which we might clobber.
+                #
+                if { $unclobber_p && $code_block ne "" } {
+                    foreach col $columns {
+                        upvar 1 $col column_value __saved_$col column_save
+
+                        if { [info exists column_value] } {
+                            if { [array exists column_value] } {
+                                array set column_save [array get column_value]
+                            } else {
+                                set column_save $column_value
+                            }
+
+                            # Clear the variable
+                            unset column_value
+                        }
+                    }
+                }
+            }
+
+            if { $code_block eq "" } {
+                #
+                # There is no code block - pull values directly into
+                # the var_name array.
+                #
+                # The extra loop after the last row is only for when
+                # there's a code block.
+                #
+                if { !$more_rows_p } {
                     break
                 }
 
-                # Setup the 'columns' part, now that we know the columns in the result set
-                # And save variables which we might clobber, if '-unclobber' switch is specified.
-                if { $local_counter == 0 } {
-                    for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                        lappend local_columns [ns_set key $selection $i]
-                    }
-                    lappend local_columns {*}$extend
-                    if { !$append_p || ![info exists columns] } {
-                        # store the list of columns in the var_name:columns variable
-                        set columns $local_columns
-                    } else {
-                        # Check that the columns match, if not throw an error
-                        if { [join [lsort -ascii $local_columns]] ne [join [lsort -ascii $columns]] } {
-                            error "Appending to a multirow with differing columns.
-    Original columns     : [join [lsort -ascii $columns] ", "].
-    Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIROW_APPEND_COLUMNS_MISMATCH"
-                        }
-                    }
-
-                    # Save values of columns which we might clobber
-                    if { $unclobber_p && $code_block ne "" } {
-                        foreach col $columns {
-                            upvar 1 $col column_value __saved_$col column_save
-
-                            if { [info exists column_value] } {
-                                if { [array exists column_value] } {
-                                    array set column_save [array get column_value]
-                                } else {
-                                    set column_save $column_value
-                                }
-
-                                # Clear the variable
-                                unset column_value
-                            }
-                        }
-                    }
+                incr counter
+                upvar $level_up "$var_name:$counter" array_val
+                set array_val(rownum) $counter
+                for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
+                    set array_val([ns_set key $selection $i]) \
+                        [ns_set value $selection $i]
+                }
+            } else {
+                #
+                # There is a code block to execute.
+                # Copy next_row to this_row, if it exists
+                #
+                unset -nocomplain this_row
+                if {[info exists next_row]} {
+                    set this_row $next_row
                 }
 
-                if { $code_block eq "" } {
-                    # No code block - pull values directly into the var_name array.
+                # Pull values from the query into next_row
+                unset -nocomplain next_row
+                if { $more_rows_p } {
+                    set next_row [ns_set array $selection]
+                }
 
-                    # The extra loop after the last row is only for when there's a code block
-                    if { !$more_rows_p } {
-                        break
+                # Process the row
+                if { [info exists this_row] } {
+                    # Pull values from this_row into local variables
+                    foreach name [dict keys $this_row] {
+                        upvar 1 $name column_value
+                        set column_value [dict get $this_row $name]
                     }
+
+                    # Initialize the "extend" columns to the empty string
+                    foreach column_name $extend {
+                        upvar 1 $column_name column_value
+                        set column_value ""
+                    }
+
+                    # Execute the code block
+                    set errno [catch { uplevel 1 $code_block } error]
+                    #ns_log notice ".... code block returns errno $errno"
+
+                    # Handle or propagate the error. Can't use the usual
+                    # "return -code $errno..." trick due to the db_with_handle
+                    # wrapped around this loop, so propagate it explicitly.
+                    #
+                    switch -- $errno {
+                        0 {
+                            # TCL_OK
+                        }
+                        1 {
+                            # TCL_ERROR
+                            error $error $::errorInfo $::errorCode
+                        }
+                        2 {
+                            # TCL_RETURN
+                            error "Cannot return from inside a db_multirow loop"
+                        }
+                        3 {
+                            # TCL_BREAK
+                            #### CHECK? #ns_db flush $db
+                            break
+                        }
+                        4 {
+                            # TCL_CONTINUE
+                            continue
+                        }
+                        default {
+                            error "Unknown return code: $errno"
+                        }
+                    }
+
+                    # Pull the local variables back out and into the array.
                     incr counter
                     upvar $level_up "$var_name:$counter" array_val
                     set array_val(rownum) $counter
-                    for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                        set array_val([ns_set key $selection $i]) \
-                            [ns_set value $selection $i]
-                    }
-                } else {
-                    # There is a code block to execute
-
-                    # Copy next_row to this_row, if it exists
-                    unset -nocomplain this_row
-                    set array_get_next_row [array get next_row]
-                    if { $array_get_next_row ne "" } {
-                        array set this_row [array get next_row]
-                    }
-
-                    # Pull values from the query into next_row
-                    unset -nocomplain next_row
-                    if { $more_rows_p } {
-                        for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                            set next_row([ns_set key $selection $i]) [ns_set value $selection $i]
-                        }
-                    }
-
-                    # Process the row
-                    if { [info exists this_row] } {
-                        # Pull values from this_row into local variables
-                        foreach name [array names this_row] {
-                            upvar 1 $name column_value
-                            set column_value $this_row($name)
-                        }
-
-                        # Initialize the "extend" columns to the empty string
-                        foreach column_name $extend {
-                            upvar 1 $column_name column_value
-                            set column_value ""
-                        }
-
-                        # Execute the code block
-                        set errno [catch { uplevel 1 $code_block } error]
-
-                        # Handle or propagate the error. Can't use the usual
-                        # "return -code $errno..." trick due to the db_with_handle
-                        # wrapped around this loop, so propagate it explicitly.
-                        switch -- $errno {
-                            0 {
-                                # TCL_OK
-                            }
-                            1 {
-                                # TCL_ERROR
-                                error $error $::errorInfo $::errorCode
-                            }
-                            2 {
-                                # TCL_RETURN
-                                error "Cannot return from inside a db_multirow loop"
-                            }
-                            3 {
-                                # TCL_BREAK
-                                ns_db flush $db
-                                break
-                            }
-                            4 {
-                                # TCL_CONTINUE
-                                continue
-                            }
-                            default {
-                                error "Unknown return code: $errno"
-                            }
-                        }
-
-                        # Pull the local variables back out and into the array.
-                        incr counter
-                        upvar $level_up "$var_name:$counter" array_val
-                        set array_val(rownum) $counter
-                        foreach column_name $columns {
-                            upvar 1 $column_name column_value
-                            set array_val($column_name) $column_value
-                        }
+                    foreach column_name $columns {
+                        upvar 1 $column_name column_value
+                        set array_val($column_name) $column_value
                     }
                 }
-                incr local_counter
             }
         }
 
@@ -1860,6 +1883,7 @@ proc db_multirow_helper {} {
         unset -nocomplain next_row
     }
 }
+
 
 ad_proc -public db_multirow {
     -local:boolean
@@ -1922,7 +1946,7 @@ ad_proc -public db_multirow {
 
     If the <code>-local</code> is passed, the variables defined
     by db_multirow will be set locally (useful if you're compiling dynamic templates
-                                        in a function or similar situations). Use the <code>-upvar_level</code>
+    in a function or similar situations). Use the <code>-upvar_level</code>
     switch to specify how many levels up the variable should be set.
 
     <p>
@@ -2041,7 +2065,6 @@ ad_proc -public db_multirow {
     } else {
         db_multirow_helper
     }
-
 
     # If the if_no_rows_code is defined, go ahead and run it.
     if { $counter == 0 && [info exists if_no_rows_code_block] } {
@@ -3810,8 +3833,6 @@ if {[info commands ::ns_dbquotelist] eq ""} {
         }
         return $sql
     }
-} else {
-    ns_log notice "====================================================="
 }
 
 # Local variables:

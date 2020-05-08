@@ -58,7 +58,7 @@ namespace eval ::acs {
 
 #
 # Register features provided by the server, available to all packages.
-# These features can typically not easily be provided by compatiblity
+# These features can typically not easily be provided by compatibility
 # routines.
 #
 # Note that packages can register some optional features during bootup
