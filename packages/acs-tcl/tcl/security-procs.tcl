@@ -2738,10 +2738,14 @@ namespace eval ::security::csp {
         security::csp::require style-src 'unsafe-inline'
 
         #
-        # Define a report URI to ease debugging. CSP 3 will support a
-        # "report-to" directive, but will still support "report-uri".
+        # Use newer "report-to" will be preferred and "report-uri"
+        # deprecated.  As of May 2020: no support for "report-to" for
+        # FF (75, or forthcoming 66 and 77) or Safari.
+        # https://caniuse.com/#search=report-to
         #
         security::csp::require report-uri /SYSTEM/csp-collector.tcl
+        #ns_set [ns_conn outputheaders] Report-To "{'url':'/SYSTEM/csp-collector.tcl','group':'csp-endpoint','max-age':10886400}"
+        #security::csp::require report-to csp-endpoint
 
         #
         # We do not need object-src
