@@ -25,11 +25,11 @@ DECLARE
   v_rec                  record;
 BEGIN
     for counter in 1..v_count loop
-        for v_rec in EXECUTE 'select ' || quote_ident(v_sequence_name) || '.nextval as a_seq_val'
-        LOOP
-           a_sequence_values := a_sequence_values || '','' || v_rec.a_seq_val;
-          exit;
-        end loop;
+	for v_rec in EXECUTE 'select ' || quote_ident(v_sequence_name) || '.nextval as a_seq_val'
+	LOOP
+	   a_sequence_values := a_sequence_values || '','' || v_rec.a_seq_val;
+	  exit;
+	end loop;
     end loop;
 
     return substr(a_sequence_values, 2);
@@ -51,11 +51,11 @@ CREATE OR REPLACE FUNCTION util__logical_negation(
 DECLARE
 BEGIN
       IF true_or_false is null THEN
-        return null;
+	return null;
       ELSE IF true_or_false = 'f' THEN
-        return 't';
+	return 't';
       ELSE
-        return 'f';
+	return 'f';
       END IF; END IF;
 END;
 $$ LANGUAGE plpgsql immutable strict;
@@ -75,23 +75,23 @@ DECLARE
  v_tablename varchar;
 BEGIN
     IF (position('.' in name) = 0) THEN
-        --
+	--
 	-- table without a schema name
 	--
-        return exists (
-            select 1 from pg_class
-                where relname = name
-            and pg_table_is_visible(oid));
+	return exists (
+	    select 1 from pg_class
+		where relname = name
+	    and pg_table_is_visible(oid));
     ELSE
-        --
+	--
 	-- table with schema name
-	--    
-        SELECT split_part(name, '.', 1) into v_schema;
-        SELECT split_part(name, '.', 2) into v_tablename;
-        return exists (
-            select 1 from information_schema.tables 
-            where table_schema = v_schema
-            and   table_name = v_tablename);
+	--
+	SELECT split_part(name, '.', 1) into v_schema;
+	SELECT split_part(name, '.', 2) into v_tablename;
+	return exists (
+	    select 1 from information_schema.tables
+	    where table_schema = v_schema
+	    and   table_name = v_tablename);
    END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -113,24 +113,24 @@ DECLARE
  v_tablename varchar;
 BEGIN
     IF (position('.' in p_table) = 0) THEN
-        --
+	--
 	-- table without a schema name
 	--
-      	return exists (
-            select 1 from information_schema.columns c
-            where table_name  = lower(p_table)
-            and column_name = lower(p_column));
+	return exists (
+	    select 1 from information_schema.columns c
+	    where table_name  = lower(p_table)
+	    and column_name = lower(p_column));
     ELSE
-        --
+	--
 	-- table with schema name
-	--    
-        SELECT split_part(p_table, '.', 1) into v_schema;
-        SELECT split_part(p_table, '.', 2) into v_tablename;
-        return exists (
-            select 1 from information_schema.columns
-            where table_name  = lower(v_tablename)
-            and column_name = lower(p_column)
-            and table_schema = v_schema);
+	--
+	SELECT split_part(p_table, '.', 1) into v_schema;
+	SELECT split_part(p_table, '.', 2) into v_tablename;
+	return exists (
+	    select 1 from information_schema.columns
+	    where table_name  = lower(v_tablename)
+	    and column_name = lower(p_column)
+	    and table_schema = v_schema);
     END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -150,21 +150,21 @@ DECLARE
  v_tablename varchar;
 BEGIN
     IF (position('.' in name) = 0) THEN
-        --
+	--
 	-- view without a schema name
 	--
-        return exists (
-           select 1 from pg_views where viewname = name);
+	return exists (
+	   select 1 from pg_views where viewname = name);
     ELSE
-        --
+	--
 	-- table with schema name
-	--    
-        SELECT split_part(name, '.', 1) into v_schema;
-        SELECT split_part(name, '.', 2) into v_tablename;
-        return exists (
-            select 1 from information_schema.views
-            where table_name  = lower(v_tablename)
-            and table_schema = v_schema);
+	--
+	SELECT split_part(name, '.', 1) into v_schema;
+	SELECT split_part(name, '.', 2) into v_tablename;
+	return exists (
+	    select 1 from information_schema.views
+	    where table_name  = lower(v_tablename)
+	    and table_schema = v_schema);
     END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -203,24 +203,24 @@ DECLARE
 BEGIN
       return exists (
       select 1 from
-         information_schema.table_constraints AS tc,
-         information_schema.key_column_usage AS kcu,
-         information_schema.constraint_column_usage AS ccu
+	 information_schema.table_constraints AS tc,
+	 information_schema.key_column_usage AS kcu,
+	 information_schema.constraint_column_usage AS ccu
       where tc.constraint_name = kcu.constraint_name
-        and tc.constraint_catalog = kcu.constraint_catalog
-        and tc.constraint_schema = kcu.constraint_schema
-        and tc.table_catalog = kcu.table_catalog
-        and tc.table_schema = kcu.table_schema
-        and ccu.constraint_name = tc.constraint_name
-        and ccu.constraint_catalog = kcu.constraint_catalog
-        and ccu.constraint_schema = kcu.constraint_schema
-        and ccu.table_catalog = kcu.table_catalog
-        and ccu.table_schema = kcu.table_schema
-        and tc.constraint_type = 'FOREIGN KEY'
-        and tc.table_name   = lower(p_table)
-        and kcu.column_name = lower(p_column)
-        and ccu.table_name  = lower(p_reftable)
-        and ccu.column_name = lower(p_refcolumn));
+	and tc.constraint_catalog = kcu.constraint_catalog
+	and tc.constraint_schema = kcu.constraint_schema
+	and tc.table_catalog = kcu.table_catalog
+	and tc.table_schema = kcu.table_schema
+	and ccu.constraint_name = tc.constraint_name
+	and ccu.constraint_catalog = kcu.constraint_catalog
+	and ccu.constraint_schema = kcu.constraint_schema
+	and ccu.table_catalog = kcu.table_catalog
+	and ccu.table_schema = kcu.table_schema
+	and tc.constraint_type = 'FOREIGN KEY'
+	and tc.table_name   = lower(p_table)
+	and kcu.column_name = lower(p_column)
+	and ccu.table_name  = lower(p_reftable)
+	and ccu.column_name = lower(p_refcolumn));
 END;
 $$ LANGUAGE plpgsql;
 
@@ -239,16 +239,16 @@ DECLARE
 BEGIN
       return exists (select 1
        from
-         information_schema.table_constraints AS tc,
-         information_schema.key_column_usage  AS kcu
+	 information_schema.table_constraints AS tc,
+	 information_schema.key_column_usage  AS kcu
       where tc.constraint_name    = kcu.constraint_name
-        and tc.constraint_catalog = kcu.constraint_catalog
-        and tc.constraint_schema  = kcu.constraint_schema
-        and tc.table_catalog      = kcu.table_catalog
-        and tc.table_schema       = kcu.table_schema
-        and tc.constraint_type    = 'UNIQUE'
-        and tc.table_name   = lower(p_table)
-        and kcu.column_name = lower(p_column)
+	and tc.constraint_catalog = kcu.constraint_catalog
+	and tc.constraint_schema  = kcu.constraint_schema
+	and tc.table_catalog      = kcu.table_catalog
+	and tc.table_schema       = kcu.table_schema
+	and tc.constraint_type    = 'UNIQUE'
+	and tc.table_name   = lower(p_table)
+	and kcu.column_name = lower(p_column)
 	and (not p_single_p or (
 	   -- this to ensure the constraint involves only one
 	   -- column
@@ -274,16 +274,16 @@ DECLARE
 BEGIN
       return exists (select 1
        from
-         information_schema.table_constraints AS tc,
-         information_schema.key_column_usage  AS kcu
+	 information_schema.table_constraints AS tc,
+	 information_schema.key_column_usage  AS kcu
       where tc.constraint_name    = kcu.constraint_name
-        and tc.constraint_catalog = kcu.constraint_catalog
-        and tc.constraint_schema  = kcu.constraint_schema
-        and tc.table_catalog      = kcu.table_catalog
-        and tc.table_schema       = kcu.table_schema
-        and tc.constraint_type    = 'PRIMARY KEY'
-        and tc.table_name   = lower(p_table)
-        and kcu.column_name = lower(p_column)
+	and tc.constraint_catalog = kcu.constraint_catalog
+	and tc.constraint_schema  = kcu.constraint_schema
+	and tc.table_catalog      = kcu.table_catalog
+	and tc.table_schema       = kcu.table_schema
+	and tc.constraint_type    = 'PRIMARY KEY'
+	and tc.table_name   = lower(p_table)
+	and kcu.column_name = lower(p_column)
 	and (not p_single_p or (
 	   -- this to ensure the constraint involves only one
 	   -- column
@@ -308,7 +308,7 @@ CREATE OR REPLACE FUNCTION util__not_null_exists(
 DECLARE
 BEGIN
       return (
-        coalesce((
+	coalesce((
 	select is_nullable = 'NO'
 	  from information_schema.columns
 	 where table_name  = lower(p_table)
@@ -346,7 +346,7 @@ CREATE OR REPLACE FUNCTION util__get_primary_keys(text) RETURNS SETOF pg_attribu
   SELECT a.attname
     FROM pg_index i
     JOIN pg_attribute a ON a.attrelid = i.indrelid
-                       AND a.attnum = ANY(i.indkey)
+		       AND a.attnum = ANY(i.indkey)
   WHERE i.indrelid = $1::regclass
     AND i.indisprimary;
 $$ LANGUAGE sql;
