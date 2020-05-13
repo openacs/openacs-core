@@ -6,6 +6,7 @@ ad_include_contract {
     {pretty_name:allhtml}
     {url ""}
     {user_id:naturalnum ""}
+    {show_subscribers_p:boolean true}
 }
 
 if {$user_id eq ""} {
@@ -32,7 +33,7 @@ if {$request_id ne ""} {
     set sub_chunk [_ notifications.lt_You_may_a_hrefsub_url]
 }
 
-if { [permission::permission_p -object_id $object_id -privilege admin] } {
+if { $show_subscribers_p && [permission::permission_p -object_id $object_id -privilege admin] } {
     set subscribers_url [export_vars -base /notifications/subscribers -url {object_id}]
 }
 
