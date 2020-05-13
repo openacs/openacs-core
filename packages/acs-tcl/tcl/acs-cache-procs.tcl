@@ -79,7 +79,6 @@ namespace eval ::acs {
                 } else {
                     set expires_flag {}
                 }
-
                 try {
                     :uplevel [list ns_cache_eval {*}$expires_flag -- \
                                   [:cache_name $partition_key] $key $command]
@@ -332,9 +331,9 @@ namespace eval ::acs {
             next
         }
 
-        :public method flush {{-partition_key:integer,required} key} {
-            next
-        }
+        #:public method flush {{-partition_key:integer,required} key} {
+        #    next
+        #}
 
         :public method set {{-partition_key:integer,required} key value} {
             next
@@ -358,11 +357,6 @@ namespace eval ::acs {
             # flush just in the determined partition
             #
             :flush_pattern_in_all_partitions $pattern
-        }
-
-        :public method flush {{-partition_key:required} key} {
-            next [list -partition_key [ns_hash $partition_key] $pattern]
-
         }
 
         :public method set {{-partition_key:required} key value} {
