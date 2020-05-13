@@ -460,7 +460,10 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs export_vars \
+    -procs {
+        export_vars
+        ad_urlencode_url
+    } \
      export_vars {
         Testing export_vars
 } {
@@ -513,6 +516,35 @@ aa_register_case \
     aa_equals "base without query vars" \
         [export_vars -base $base {var1 var2}] \
         "$base?$export_no_base"
+
+    # Test just ad_urlencode_url (used by export_vars)
+    set url http://example.com/example
+    aa_equals "complex URL" \
+        [ad_urlencode_url $url] \
+        $url
+
+    set url http://example.com/foo=1/bar
+    aa_equals "complex URL with char which has to be escaped" \
+        [ad_urlencode_url $url] \
+        http://example.comfoo%3d1/bar
+
+    # Test just ad_urlencode_url: location without trailing slash
+    set url http://example.com
+    aa_equals "URL with trailing slash" \
+        [ad_urlencode_url $url] \
+        $url/
+
+    # Test just ad_urlencode_url: location with trailing slash
+    set url http://example.com/
+    aa_equals "URL without trailing slash" \
+        [ad_urlencode_url $url] \
+        $url
+
+    # Test full qualified base without query vars
+    set base http://example.com/example
+    aa_equals "base without query vars" \
+        [export_vars -base $base] \
+        $base
 }
 
 aa_register_case \

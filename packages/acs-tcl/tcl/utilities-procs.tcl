@@ -1689,7 +1689,7 @@ ad_proc -public ad_urlencode_url {url} {
                         -port [expr {[dict exists $components port] ? [dict get $components port] : ""}] \
                        ]
         set fullpath [dict get $components path]/[dict get $components tail]
-        append result / [ad_urlencode_folder_path $fullpath]
+        append result [ad_urlencode_folder_path $fullpath]
     } else {
         set result [ad_urlencode_folder_path $url]
     }
