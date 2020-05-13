@@ -2347,7 +2347,7 @@ ad_proc -public util_current_directory {} {
 }
 
 
-ad_proc -public ad_call_proc_if_exists { proc args } {
+ad_proc -deprecated -public ad_call_proc_if_exists { proc args } {
     Calls a procedure with particular arguments, only if the procedure is defined.
 } {
     if { [info commands $proc] ne "" } {
@@ -4781,17 +4781,6 @@ namespace eval util::resources {
     }
 }
 
-if {[info commands ns_base64urlencode] eq ""} {
-    #
-    # Compatibility for AOLserver or NaviServer before 4.99.17
-    #
-    proc ns_base64urlencode {data} {
-        return [string map {+ - / _ = {} \n {}} [ns_base64encode $data]]
-    }
-    proc ns_base64urldecode {data} {
-        return [ns_base64decode [string map {- +  _ / } $data]]
-    }
-}
 
 # Local variables:
 #    mode: tcl

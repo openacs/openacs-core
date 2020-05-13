@@ -78,6 +78,46 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_writer"       {[info commands ::ns_writer]       ne ""}
 ::acs::register_icanuse "ns_hash"         {[info commands ::ns_hash]         ne ""}
 
+
+#
+# Add some compatibility procs for AOLserver or older NaviServer versions
+#
+# If the list of commands is getting longer we should probably add a
+# own file. For now, it is handy to see, how to handle features, which
+# can be relatively easy emulated, and other one, which can't be
+# emulated.
+#
+if {[info commands ns_base64urlencode] eq ""} {
+    #
+    # Compatibility for AOLserver or NaviServer before 4.99.17
+    #
+    proc ns_base64urlencode {data} {
+        return [string map {+ - / _ = {} \n {}} [ns_base64encode $data]]
+    }
+    proc ns_base64urldecode {data} {
+        return [ns_base64decode [string map {- +  _ / } $data]]
+    }
+}
+
+if {[info commands ::ns_dbquotelist] eq ""} {
+    #
+    # Compatibility function for AOLserver or older versions of
+    # NaviServer. Newer versions provide this command as builtin.
+    #
+    ad_proc -public ns_dbquotelist {list {type text}} {
+        set sql ""
+        if { [llength $list] > 0 } {
+            # replace single quotes by two single quotes
+            regsub -all -- ' "$list" '' list
+            append sql \
+                "'" \
+                [join $list "', '"] \
+                "'"
+        }
+        return $sql
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
