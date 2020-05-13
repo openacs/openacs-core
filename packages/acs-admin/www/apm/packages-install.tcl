@@ -93,6 +93,8 @@ if { $spec_files eq "" } {
     }]
 } else {
 
+    ns_log notice "spec_files <$spec_files>"
+
     append body [subst {
         <h2>Select Packages to $operation</h2><p>
         <p>Please select the set of packages you'd like to [string tolower $operation].</p>
@@ -102,29 +104,6 @@ if { $spec_files eq "" } {
     }]
 
     set formName "pkgsForm"
-    template::add_event_listener \
-        -id check_all \
-        -script [subst {
-            var install_form = document.getElementsByName('$formName')\[0\];
-            for (var i = 0; i < install_form.length; ++i) {
-                install_form.elements\[i\].checked = true;
-                //install_form.elements\[i\].href = '';
-            }
-        }]
-
-    template::add_event_listener \
-        -id uncheck_all \
-        -script [subst {
-            var install_form = document.getElementsByName('$formName')\[0\];
-            for (var i = 0; i < install_form.length; ++i) {
-                install_form.elements\[i\].checked = false;
-            }
-        }]
-
-    append body {
-        <a href="#" id="uncheck_all"><b>uncheck all boxes</b></a> |
-        <a href="#" id="check_all"><b>check all boxes</b></a>
-    }
     #packages-install?checked_by_default_p=1
 
     append body "<form name='$formName' action='packages-install-2' method='post'>\n"
@@ -138,6 +117,7 @@ if { $spec_files eq "" } {
     set pkg_info_list [list]
     set pkg_key_list [list]
     apm_log APMDebug "APM: Specification files available: $spec_files"
+
     foreach spec_file $spec_files {
         ### Parse the package.
         if { [catch {
@@ -154,28 +134,28 @@ if { $spec_files eq "" } {
     }
 
     if { $checked_by_default_p } {
-        set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list $operation]
+        set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list $operation $formName]
     } else {
-        set widget [apm_package_selection_widget $pkg_info_list "" $operation]
+        set widget [apm_package_selection_widget $pkg_info_list "" $operation $formName]
     }
 
     if {$widget eq ""} {
-        append body "There are no new packages available."
-        ad_script_abort
+        append body \
+            "There are no packages to [string tolower $operation]."
+    } else {
+
+        append body \
+            $widget \
+            [subst {
+                <div><input type="submit" value="Next -->"></div>
+                </form>
+            }]
     }
-
-    append body $widget
-    append body [subst {
-        <div><input type="submit" value="Next -->"></div>
-        </form>
-    }]
-
     if {$errors ne ""} {
-        append body "The following errors were generated
-    <ul>
-        $errors
-    </ul>
-    "
+        append body [subst {The following errors were generated:
+            <ul>
+            $errors
+            </ul>}]
     }
 }
 

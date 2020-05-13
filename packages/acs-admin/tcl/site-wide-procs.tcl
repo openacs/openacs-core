@@ -48,7 +48,7 @@ namespace eval ::acs_admin {
 
         Require a package under the site-wide subsite. If such a
         package does not exist, it is created with the provided
-        parameters. When a configuratioon command is passed-in
+        parameters. When a configuration command is passed-in
         it will be called with "-package_id $package_id" of the
         new instance appended.
 
@@ -83,7 +83,7 @@ namespace eval ::acs_admin {
             # During bootstrap, the package_id might be empty, because
             # the after_initiate callback might call the
             # site-wide-init, which in turn might initiate another
-            # instance. Thefore, we might be called between site-node
+            # instance. Therefore, we might be called between site-node
             # creation and mounting .. which will result in an empty
             # package_id.
             #
