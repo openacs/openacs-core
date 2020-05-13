@@ -885,11 +885,12 @@ ad_proc -private ad_get_node_id_from_host_node_map {hostname} {
     # assumes that the host-node-map is always short. This allows us
     # as well to purge the entries without a pattern match.
     #
-    set lists [db_list_of_lists -cache_key ad_get_host_node_map \
-                  get_node_host_names {select host, node_id from host_node_map}]
-    set p [lsearch -index 0 -exact $lists $hostname]
+    set mapping [acs::site_nodes_id_cache eval ad_get_host_node_map { 
+        db_list_of_lists get_node_host_names {select host, node_id from host_node_map}
+    }]
+    set p [lsearch -index 0 -exact $mapping $hostname]
     if {$p != -1} {
-        set result [lindex $lists $p 1]
+        set result [lindex $mapping $p 1]
     } else {
         set result 0
     }
@@ -2382,9 +2383,9 @@ ad_proc -public security::locations {} {
     #
     # Add locations from host_node_map
     #
-    set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-                                      get_node_host_names {select host from host_node_map}]
-
+    set host_node_map_hosts_list [acs::site_nodes_id_cache eval security-locations-host-names { 
+        db_list get_node_host_names get_node_host_names {select host from host_node_map}
+    }]
     if { [llength $host_node_map_hosts_list] > 0 } {
         if { $suppress_http_port } {
             foreach hostname $host_node_map_hosts_list {
