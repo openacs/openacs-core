@@ -583,13 +583,12 @@ ad_proc -public apm_load_packages {
 
     @param force_reload Reload Tcl libraries even if they are already loaded.
     @param load_libraries_p Switch to indicate if Tcl libraries in (-procs.tcl and -init.tcl)
-    files should be loaded. Defaults to true.
+                            files should be loaded. Defaults to true.
     @param load_queries_p   Switch to indicate if xql query files should be loaded. Default true.
     @param packages     A list of package_keys for packages to be loaded. Defaults to
-    all enabled packages.  These packages, along with the packages
-    they depend on, will be loaded in dependency-order using the
-    information provided in the packages' "provides" and "requires"
-    attributes.
+                        all enabled packages.  These packages, along with the packages
+                        they depend on, will be loaded in dependency-order using the
+                        information provided via the "provides" and "requires" definitions.
 
     @see apm_mark_version_for_reload
 
