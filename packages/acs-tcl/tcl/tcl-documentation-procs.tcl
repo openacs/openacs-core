@@ -1653,13 +1653,16 @@ ad_page_contract_filter integer { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
+    #
+    # We can't really use "string is integer -strict", since it allows
+    # numbers, which are invalid for e.h. SQL... e.g. "0x40".
+    #
+    ## First simple a quick check avoiding the slow regexp
+    #if {[string is integer -strict $value]} {
+    #    return 1
+    #}
 
-    # First simple a quick check avoiding the slow regexp
-    if {[string is integer -strict $value]} {
-        return 1
-    }
-
-    if { [regexp {^(-)(.*)$} $value match sign rest] } {
+    if { [regexp {^(-)(\d+)$} $value _ sign rest] } {
         # Trim the value for any leading zeros
         set value $sign[util::trim_leading_zeros $rest]
         # the string might be still too large, so check again...
@@ -1679,10 +1682,13 @@ ad_page_contract_filter naturalnum { name value } {
     @creation-date 25 July 2000
 } {
 
+    # We can't really use "string is integer -strict", since it allows
+    # numbers, which are invalid for e.h. SQL... e.g. "0x40".
+    #
     # First a simple quick check to avoid the slow regexp
-    if {[string is integer -strict $value] && $value >= 0} {
-        return 1
-    }
+    # if {[string is integer -strict $value] && $value >= 0} {
+    #    return 1
+    # }
 
     # Check with leading zeros, but no "-" allowed, so it must be positive
     if { [regexp {^(0*)([1-9][0-9]*|0)$} $value match zeros value] } {
