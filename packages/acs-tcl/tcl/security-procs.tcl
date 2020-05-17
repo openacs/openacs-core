@@ -2384,7 +2384,7 @@ ad_proc -public security::locations {} {
     # Add locations from host_node_map
     #
     set host_node_map_hosts_list [acs::site_nodes_id_cache eval security-locations-host-names { 
-        db_list get_node_host_names get_node_host_names {select host from host_node_map}
+        db_list get_node_host_names {select host from host_node_map}
     }]
     if { [llength $host_node_map_hosts_list] > 0 } {
         if { $suppress_http_port } {

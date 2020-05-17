@@ -1655,7 +1655,7 @@ ad_page_contract_filter integer { name value } {
 } {
     #
     # We can't really use "string is integer -strict", since it allows
-    # numbers, which are invalid for e.h. SQL... e.g. "0x40".
+    # numbers, which are invalid for e.g. SQL... e.g. "0x40".
     #
     ## First simple a quick check avoiding the slow regexp
     #if {[string is integer -strict $value]} {
@@ -1683,7 +1683,7 @@ ad_page_contract_filter naturalnum { name value } {
 } {
 
     # We can't really use "string is integer -strict", since it allows
-    # numbers, which are invalid for e.h. SQL... e.g. "0x40".
+    # numbers, which are invalid for e.g. SQL... e.g. "0x40".
     #
     # First a simple quick check to avoid the slow regexp
     # if {[string is integer -strict $value] && $value >= 0} {
