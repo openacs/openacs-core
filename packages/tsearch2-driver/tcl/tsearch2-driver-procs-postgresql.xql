@@ -7,7 +7,7 @@
       select object_id,
              setweight(to_tsvector(coalesce(:title,'')),'A')
              ||setweight(to_tsvector(coalesce(:keywords,'')),'B')
-             ||to_tsvector(coalesce(:txt,'')))
+             ||to_tsvector(coalesce(:txt,''))
       from acs_objects where object_id = :object_id
     </querytext>
   </fullquery>
