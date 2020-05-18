@@ -205,12 +205,13 @@ ad_proc -public lang::system::get_locales {} {
 
     @author Peter Marklund
 } {
-    #set key ::__per_request(lang::system::get_locales_not_cached)
-    set key ::lang::system_get_locales_not_cached
-    if {![info exists $key]} {
-        set $key [util_memoize lang::system::get_locales_not_cached]
-    }
-    return [set $key]
+    return [acs::per_thread_cache eval -key acs-lang:system_get_locales {
+        db_list select_system_locales {
+            select locale
+            from   ad_locales
+            where  enabled_p = 't'
+        }
+    }]
 }
 
 ad_proc -public lang::system::get_locale_options {} {
@@ -234,23 +235,12 @@ ad_proc -public lang::system::locale_set_enabled {
     db_dml set_enabled_p { update ad_locales set enabled_p = :enabled_p where locale = :locale }
 
     # Flush caches
-    unset -nocomplain ::lang::system_get_locales_not_cached
+    unset -nocomplain ::acs::cache::acs-lang:system_get_locales
     util_memoize_flush_regexp {^lang::util::default_locale_from_lang_not_cached}
     util_memoize_flush_regexp {^lang::system::get_locales}
     util_memoize_flush_regexp {^lang::system::get_locale_options}
 }
 
-ad_proc -private lang::system::get_locales_not_cached {} {
-    Return all enabled locales in the system.
-
-    @author Peter Marklund
-} {
-    return [db_list select_system_locales {
-        select locale
-        from   ad_locales
-        where  enabled_p = 't'
-    }]
-}
 
 ad_proc -private lang::system::get_locale_options_not_cached {} {
     Return all enabled locales in the system in a format suitable for the options argument of a form.

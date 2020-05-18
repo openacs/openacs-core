@@ -39,12 +39,9 @@ ad_proc -public acs_magic_object { name } {
 
     @error if no object exists with that magic name.
 } {
-    set key ::acs::magic_object($name)
-    if {[info exists $key]} {
-        return [set $key]
-    } else {
-        return [set $key [acs_lookup_magic_object_no_cache $name]]
-    }
+    return [acs::per_thread_cache eval -key acs-tcl:acs_magic_object($name) {
+        acs_lookup_magic_object_no_cache $name
+    }]
 }
 
 ad_proc -public acs_object_name { object_id } {

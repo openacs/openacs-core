@@ -120,7 +120,6 @@ ad_library {
 #    ::acs::default_database
 #    ::acs::db_pools($dbn)        (used in db_available_pools)
 #    ::acs::db_pool_to_dbn($pool) (used for caching access to nsv db_pool_to_dbn)
-#    ::acs::db_driverkey($dbn)    (used for caching access to nsv db_driverkey)
 #
 # Per-thread Tcl global variables:
 #   One Tcl Array per Database Name:
@@ -194,75 +193,45 @@ ad_proc -public db_driverkey {
     @author Andrew Piskorski (atp@piskorski.com)
     @creation-date 2003/04/08
 } {
-    if { $handle_p } {
-        #
-        # In the case, the passed "dbn" is actually a
-        # handle. Determine from the handle the "pool" and from the
-        # "pool" the "dbn".
-        #
-        set handle $dbn
-        set pool [ns_db poolname $handle]
-        set key ::acs::db_pool_to_dbn($pool)
-        if {[info exists $key]} {
-            #
-            # First, try to get the variable from the per-thread
-            # variable (which is part of the blueprint).
-            #
-            set dbn [set $key]
-        } elseif { [nsv_exists db_pool_to_dbn $pool] } {
-            #
-            # Fallback to nsv (old style), when for whatever
-            # reasons, the namespaced variable is not available.
-            #
-            ns_log notice "db_driverkey $handle_p dbn <$dbn> VIA NSV"
-            set dbn [nsv_get db_pool_to_dbn $pool]
-        } else {
-            #
-            # db_pool_to_dbn_init runs on startup, so other than some
-            # broken code deleting the nsv key (very unlikely), the
-            # only way this could happen is for someone to call this
-            # proc with a db handle from a pool which is not part of
-            # any dbn.
-
-            error "No database name (dbn) found for pool '$pool'. Check the 'ns/server/[ns_info server]/acs/database' section of your config file."
-        }
-    }
-
-    set key ::acs::db_driverkey($dbn)
-    if {[info exists $key]} {
-        return [set $key]
-    }
-
-    if { ![nsv_exists db_driverkey $dbn] } {
-        # This ASSUMES that any overriding of this default value via
-        # "ns_param driverkey_dbn" has already been done:
+    return [acs::per_thread_cache eval -key acs-tcl:db_driverkey_${handle_p}_$dbn {
 
         if { $handle_p } {
-            set driver [ns_db driver $handle]
-        } else {
-            db_with_handle -dbn $dbn handle {
+            set handle $dbn
+            set pool [ns_db poolname $handle]
+            set dbn $::acs::db_pool_to_dbn($pool)
+        }
+        
+        if { ![nsv_exists db_driverkey $dbn] } {
+            #
+            # This ASSUMES that any overriding of this default value via
+            # "ns_param driverkey_dbn" has already been done:
+            #
+            if { $handle_p } {
                 set driver [ns_db driver $handle]
+            } else {
+                db_with_handle -dbn $dbn handle {
+                    set driver [ns_db driver $handle]
+                }
             }
+
+            # These are the default driverkey values, if they are not set
+            # in the config file:
+
+            if { [string match "Oracle*" $driver] } {
+                set driverkey {oracle}
+            } elseif { $driver eq "PostgreSQL" } {
+                set driverkey "postgresql"
+            } elseif { $driver eq "ODBC" } {
+                set driverkey "nsodbc"
+            } else {
+                set driverkey {}
+                ns_log Error "db_driverkey: Unknown driver '$driver'."
+            }
+
+            nsv_set db_driverkey $dbn $driverkey
         }
-
-        # These are the default driverkey values, if they are not set
-        # in the config file:
-
-        if { [string match "Oracle*" $driver] } {
-            set driverkey {oracle}
-        } elseif { $driver eq "PostgreSQL" } {
-            set driverkey "postgresql"
-        } elseif { $driver eq "ODBC" } {
-            set driverkey "nsodbc"
-        } else {
-            set driverkey {}
-            ns_log Error "db_driverkey: Unknown driver '$driver'."
-        }
-
-        nsv_set db_driverkey $dbn $driverkey
-    }
-
-    return [set $key [nsv_get db_driverkey $dbn]]
+        nsv_get db_driverkey $dbn
+    }]
 }
 
 
@@ -1689,14 +1658,14 @@ ad_proc -private db_multirow_helper {} {
 
         set local_counter -1
         #
-        # Make sure 'next_row' array doesn't exist.
+        # Make sure 'next_row' dict doesn't exist.
         #
         # The variables 'this_row' and 'next_row' are used to always
         # execute the code block one result set row behind, so that we
         # have the opportunity to peek ahead, which allows us to do
         # group by's inside the multirow generation.
         #
-        # Also make the 'next_row' array available as a magic __db_multirow__next_row variable
+        # Also make the 'next_row' dict available as a magic __db_multirow__next_row variable
         #
         upvar 1 __db_multirow__next_row next_row
         unset -nocomplain next_row
@@ -2133,7 +2102,7 @@ ad_proc -public db_multirow_group_last_row_p {
     }
     upvar 1 $column column_value
     # Otherwise, it's the last row in the group if the next row has a different value than this row
-    return [expr {$column_value ne $next_row($column) }]
+    return [expr {$column_value ne [dict get $next_row $column] }]
 }
 
 

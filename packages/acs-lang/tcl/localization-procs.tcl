@@ -373,11 +373,9 @@ ad_proc -public lc_time_fmt {
     # Keep the results of lc_time_fmt_compile in the per-thread cache
     # (namespaced variable)
     #
-    set key ::acs::lc_time_fmt_compile($fmt,$locale)
-    if {![info exists $key]} {
-        set $key [lc_time_fmt_compile $fmt $locale]
-    }
-    return [subst [set $key]]
+    return [subst [acs::per_thread_cache eval -key acs-lang:lc_time_fmt_compile($fmt,$locale) {
+        lc_time_fmt_compile $fmt $locale
+    }]]
 }
 
 ad_proc -public lc_time_fmt_compile {

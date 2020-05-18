@@ -370,6 +370,53 @@ namespace eval ::acs {
     }
 }
 
+namespace eval ::acs {
+    ##########################################################################
+    #
+    # Per-Thread Cache
+    #
+    # Cached values are stored as namespaced variables.  This kind of
+    # cache has the advantage that no lock is required, but has the
+    # disadvantage that it can be used only for values that never
+    # change. Currently, there is no interface to flush these values.
+    #
+    ##########################################################################
+    nx::Class create acs::PerThreadCache {
+        
+        :public method eval {
+            {-key:required}
+            {-no_empty:switch false}
+            cmd
+        } {
+            #
+            # Implement per-thread cache based on namespaced Tcl variables.
+            # The cached values are stored in the namespace ::acs:cache::*
+            #
+            # @param key key for caching, should start with package-keys
+            #        and a single colon to avoid name clashes
+            # @param cmd command to be executed.
+            # @return return the last value set (don't use "return").
+            #
+            set cache_key ::acs::cache::$key
+            #ns_log notice "### exists $cache_key => [info exists $cache_key]"
+
+            if {![info exists $cache_key]} {
+                #ns_log notice "### call cmd <$cmd>"
+                set value [:uplevel $cmd]
+                #ns_log notice "### cmd returns <$value> no_empty $no_empty "
+                if {$no_empty && $value eq ""} {
+                    return ""
+                }
+                set $cache_key $value
+                #ns_log notice "### [list set $cache_key $value]"
+            }
+            return [set $cache_key]
+        }
+        :create per_thread_cache
+    }
+    namespace eval ::acs::cache {}
+}
+
 
 namespace eval ::acs {
     ##########################################################################

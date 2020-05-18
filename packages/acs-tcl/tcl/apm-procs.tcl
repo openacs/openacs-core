@@ -1216,17 +1216,11 @@ namespace eval ::acs {}
 ad_proc -public apm_package_key_from_id {package_id} {
     @return The package key of the instance.
 } {
-    set key ::acs::apm_package_key_from_id($package_id)
-    if {[info exists $key]} {return [set $key]}
-    set $key [apm_package_key_from_id_not_cached $package_id]
-}
-
-ad_proc -private apm_package_key_from_id_not_cached {package_id} {
-    unmemoized version of apm_package_key_from_id
-} {
-    return [db_string apm_package_key_from_id {
-        select package_key from apm_packages where package_id = :package_id
-    } -default ""]
+    return [acs::per_thread_cache eval -key acs-tcl:apm_package_key_from_id($package_id) {
+        db_string apm_package_key_from_id {
+            select package_key from apm_packages where package_id = :package_id
+        } -default ""
+    }]
 }
 
 #
