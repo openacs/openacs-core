@@ -1662,7 +1662,7 @@ ad_page_contract_filter integer { name value } {
     #    return 1
     #}
 
-    if { [regexp {^(-)(\d+)$} $value _ sign rest] } {
+    if { [regexp {^(-)?(\d+)$} $value _ sign rest] } {
         # Trim the value for any leading zeros
         set value $sign[util::trim_leading_zeros $rest]
         # the string might be still too large, so check again...
