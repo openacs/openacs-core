@@ -1216,7 +1216,7 @@ namespace eval ::acs {}
 ad_proc -public apm_package_key_from_id {package_id} {
     @return The package key of the instance.
 } {
-    return [acs::per_thread_cache eval -key acs-tcl:apm_package_key_from_id($package_id) {
+    return [acs::per_thread_cache eval -key acs-tcl.apm_package_key_from_id($package_id) {
         db_string apm_package_key_from_id {
             select package_key from apm_packages where package_id = :package_id
         } -default ""

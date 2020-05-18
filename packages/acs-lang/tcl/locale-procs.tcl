@@ -205,7 +205,7 @@ ad_proc -public lang::system::get_locales {} {
 
     @author Peter Marklund
 } {
-    return [acs::per_thread_cache eval -key acs-lang:system_get_locales {
+    return [acs::per_thread_cache eval -key acs-lang.system_get_locales {
         db_list select_system_locales {
             select locale
             from   ad_locales
@@ -235,7 +235,7 @@ ad_proc -public lang::system::locale_set_enabled {
     db_dml set_enabled_p { update ad_locales set enabled_p = :enabled_p where locale = :locale }
 
     # Flush caches
-    unset -nocomplain ::acs::cache::acs-lang:system_get_locales
+    unset -nocomplain ::acs::cache::acs-lang.system_get_locales
     util_memoize_flush_regexp {^lang::util::default_locale_from_lang_not_cached}
     util_memoize_flush_regexp {^lang::system::get_locales}
     util_memoize_flush_regexp {^lang::system::get_locale_options}

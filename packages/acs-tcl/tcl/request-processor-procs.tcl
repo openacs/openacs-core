@@ -1866,7 +1866,7 @@ ad_proc acs::root_of_host {host} {
     Maps a hostname to the corresponding sub-directory.
 
 } {
-    return [acs::per_thread_cache eval -key acs-tcl:root_of_host($host) {
+    return [acs::per_thread_cache eval -key acs-tcl.root_of_host($host) {
         acs::root_of_host_noncached $host
     }]
 }

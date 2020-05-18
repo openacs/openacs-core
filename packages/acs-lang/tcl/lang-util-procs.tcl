@@ -368,7 +368,7 @@ ad_proc -public lang::util::charset_for_locale {
     @param locale  Name of a locale, as language_COUNTRY using ISO 639 and ISO 3166
     @return        IANA MIME character set name
 } {
-    return [acs::per_thread_cache eval -key acs-lang:charset_for_locale($locale) {
+    return [acs::per_thread_cache eval -key acs-lang.charset_for_locale($locale) {
         db_string -cache_key ad_lang_mime_charset_$locale charset_for_locale {}
     }]
 }

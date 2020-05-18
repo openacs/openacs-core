@@ -393,7 +393,7 @@ namespace eval ::acs {
             # The cached values are stored in the namespace ::acs:cache::*
             #
             # @param key key for caching, should start with package-keys
-            #        and a single colon to avoid name clashes
+            #        and a dot to avoid name clashes
             # @param cmd command to be executed.
             # @return return the last value set (don't use "return").
             #

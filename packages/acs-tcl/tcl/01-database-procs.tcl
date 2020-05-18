@@ -193,7 +193,7 @@ ad_proc -public db_driverkey {
     @author Andrew Piskorski (atp@piskorski.com)
     @creation-date 2003/04/08
 } {
-    return [acs::per_thread_cache eval -key acs-tcl:db_driverkey_${handle_p}_$dbn {
+    return [acs::per_thread_cache eval -key acs-tcl.db_driverkey_${handle_p}_$dbn {
 
         if { $handle_p } {
             set handle $dbn
