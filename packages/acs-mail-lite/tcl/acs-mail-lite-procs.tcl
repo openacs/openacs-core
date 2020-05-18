@@ -840,7 +840,7 @@ namespace eval acs_mail_lite {
             #
             # Ignoring sending message
             #
-            ns_log Notice "acs-mail-lite::send: ignore sending message to $to_addr"
+            ns_log warning "acs-mail-lite::send: ignore sending message to $to_addr"
         }
 
         #
