@@ -10,7 +10,7 @@ ad_library {
     Procs to support the acs-automated-testing package.
 
     NOTE: There's a hack in packages/acs-bootstrap-installer/bootstrap.tcl to load
-    this file on server startup before other packages' -procs files.
+    this file on server startup before the *-procs.tcl files of other packages.
 
     @author Peter Harper (peter.harper@open-msg.com)
     @creation-date 21 June 2001
