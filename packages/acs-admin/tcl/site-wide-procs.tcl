@@ -16,8 +16,7 @@ namespace eval ::acs_admin {
 
         @return package_id of the site_wide subsite
     } {
-        set key ::acs_admin::site_wide_subsite
-        if {![info exists $key]} {
+        return [acs::per_thread_cache eval -key acs-admin.site_wide_subsite {
             set subsite_name site-wide
             set subsite_parent /acs-admin
             set subsite_path $subsite_parent/$subsite_name
@@ -33,9 +32,8 @@ namespace eval ::acs_admin {
                                     -package_name $subsite_name \
                                     -package_key acs-subsite]
             }
-            set $key $subsite_id
-        }
-        return [set $key]
+            set subsite_id
+        }]
     }
 
     ad_proc require_site_wide_package {

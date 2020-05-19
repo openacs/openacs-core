@@ -8,25 +8,16 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc -public ad_acs_version_no_cache {} {
-    The OpenACS version of this instance. Uses the version name
-    of the acs-kernel package.
-
-    @author Peter Marklund
-} {
-    apm_version_get -package_key acs-kernel -array kernel
-
-    return $kernel(version_name)
-}
 ad_proc -public ad_acs_version {} {
     The OpenACS version of this instance. Uses the version name
     of the acs-kernel package.
 
     @author Peter Marklund
 } {
-    set key ::acs::version
-    if {[info exists $key]} {return [set $key]}
-    set $key [util_memoize ad_acs_version_no_cache]
+    return [acs::per_thread_cache eval -key acs-tcl.acs_version {
+        apm_version_get -package_key acs-kernel -array kernel
+        set kernel(version_name)
+    }]
 }
 
 ad_proc -public ad_acs_release_date {} {

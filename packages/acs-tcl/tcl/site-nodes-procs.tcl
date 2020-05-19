@@ -1414,12 +1414,9 @@ if {$UseXotclSiteNodes} {
             }
 
             :protected method properties {-node_id:required,integer,1..1} {
-                set key ::__site_nodes_property($node_id)
-                if {[info exists $key]} {
-                    return [set $key]
-                }
-                set $key [::acs::site_nodes_cache eval -partition_key $node_id $node_id { next }]
-                return [set $key]
+                return [acs::per_request_cache eval -key acs-tcl.site_nodes_property($node_id) {
+                    ::acs::site_nodes_cache eval -partition_key $node_id $node_id { next }
+                }]
             }
 
             :public method get_url {-node_id:required,1..1} {

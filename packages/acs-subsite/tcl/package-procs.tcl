@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/tcl/package-procs.tcl
-
 ad_library {
 
     Procs to help build PL/SQL packages
@@ -568,10 +566,10 @@ ad_proc -private package_plsql_args {
     { -object_name "NEW" }
     package_name
 } {
-    Generates a list of parameters expected to a plsql function defined within
-    a given package.
-
-    <p>
+    
+    Return a list of parameters expected to a plsql function defined
+    within a given package and cache these per thread.  Changes in the
+    interface will require a server restart.
 
     @author Ben Adida (ben@openforce.net)
     @creation-date 11/2001
@@ -580,13 +578,9 @@ ad_proc -private package_plsql_args {
     @param object_name The function name which we're looking up
     @return list of parameters
 } {
-    # Get just the args
-    set key ::acs::package_plsql_args($object_name-$package_name)
-    if {[info exists $key]} {
-        return [set $key]
-    }
-    return [set $key [db_list select_package_func_param_list {}]]
-
+    return [acs::per_thread_cache eval -key acs-subsite.package_plsql_args($object_name-$package_name) {
+        db_list select_package_func_param_list {}
+    }]
 }
 
 ad_proc -private package_function_p {
@@ -595,11 +589,9 @@ ad_proc -private package_function_p {
 } {
     @return true if the package's object is a function.
 } {
-    set key ::acs::package_function_p($object_name-$package_name)
-    if {[info exists $key]} {
-        return [set $key]
-    }
-    return [set $key [db_0or1row function_p ""]]
+    return [acs::per_thread_cache eval -key acs-subsite.package_function_p($object_name-$package_name) {
+        db_0or1row function_p ""
+    }]
 }
 
 ad_proc -private package_table_columns_for_type {

@@ -373,31 +373,45 @@ namespace eval ::acs {
 namespace eval ::acs {
     ##########################################################################
     #
-    # Per-Thread Cache
+    # acs::LockfreeCache: Per-thread and per-request Cache
     #
-    # Cached values are stored as namespaced variables.  This kind of
-    # cache has the advantage that no lock is required, but has the
-    # disadvantage that it can be used only for values that never
-    # change. Currently, there is no interface to flush these values.
+    # Lockfree cache are provided either as per-thread caches or
+    # per-request caches, sharing the property that accessing these
+    # values does not require locks.
+    #
+    # The per-thread caches use namespaced variables, which are not
+    # touched by the automatic cleanup routines of the server. So, the
+    # values cached in one requests can be used by another
+    # requests. These per-thread caches are kept as long the thread
+    # lives, there is so far no automatic mechanism to flush
+    # these. So, these are typically used for values fetched from the
+    # database, but which not not change, unless the server is
+    # restarted.
+    #
+    # Per-request caches have very short-lived. Some values are needed
+    # multiple times per request, and/or they should show consistently
+    # the same value during the request, no matter, if concurrently, a
+    # value is changed (e.g. permissions).
     #
     ##########################################################################
-    nx::Class create acs::PerThreadCache {
-        
+    nx::Class create acs::LockfreeCache {
+        :property {prefix }
+
         :public method eval {
             {-key:required}
             {-no_empty:switch false}
             cmd
         } {
             #
-            # Implement per-thread cache based on namespaced Tcl variables.
-            # The cached values are stored in the namespace ::acs:cache::*
+            # Use the "prefix" to determine whether the cache is
+            # per-thread or per-request.
             #
-            # @param key key for caching, should start with package-keys
-            #        and a dot to avoid name clashes
+            # @param key key for caching, should start with package-key
+            #            and a dot to avoid name clashes
             # @param cmd command to be executed.
-            # @return return the last value set (don't use "return").
+            # @return    return the last value set (don't use "return").
             #
-            set cache_key ::acs::cache::$key
+            set cache_key ${:prefix}$key
             #ns_log notice "### exists $cache_key => [info exists $cache_key]"
 
             if {![info exists $cache_key]} {
@@ -412,7 +426,18 @@ namespace eval ::acs {
             }
             return [set $cache_key]
         }
-        :create per_thread_cache
+        #
+        # The per-thread cache uses namespaced Tcl variables, identified
+        # by the prefix "::acs:cache::"
+        #
+        :create per_thread_cache -prefix ::acs::cache::
+
+        #
+        # The per-reuqest cache uses Tcl variables in the global
+        # namespace, such they are automatically reclaimed after the
+        # request. These use the prefix "::__acs_cache_"
+        #
+        :create per_request_cache -prefix ::__acs_cache_
     }
     namespace eval ::acs::cache {}
 }

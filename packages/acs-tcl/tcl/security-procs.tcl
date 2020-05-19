@@ -2421,21 +2421,20 @@ ad_proc -private security::provided_host_valid {host} {
     @param host host from host header field.
 } {
     #
-    # The global variable takes care of outputting error message only
+    # The per-request cache takes care of outputting error message only
     # once per request.
     #
-    set key ::__security_provided_host_validated($host)
-    if {![info exists $key]} {
-        set $key 1
+    return [acs::per_request_cache eval -key acs-tcl.security_provided_host_validated($host) {
+        set result 1
         if {$host ne ""} {
             if {![regexp {^[\w.:@+/=$%!*~\[\]-]+$} $host]} {
                 binary scan [encoding convertto utf-8 $host] H* hex
                 ad_log warning "provided host <$host> (hex $hex) contains invalid characters"
-                set $key 0
+                set result 0
             }
         }
-    }
-    return [set $key]
+        set result
+    }]
 }
 
 ad_proc -public security::validated_host_header {} {
