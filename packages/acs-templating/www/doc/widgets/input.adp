@@ -38,7 +38,7 @@ will create a radio button group with 3 options: "Cheap",
 whose value is 1000, "Medium", whose value is 50000, and
 "Expensive", whose value is 999999. The value of the
 entire widget is either the empty string (if the user did not
-select any of the radio buttons), or a the value of the currently
+select any of the radio buttons), or the value of the currently
 selected radio button. For instance, if the user selects
 "Medium" in the example above, the value of
 <code>cost</code>

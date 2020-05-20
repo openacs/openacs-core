@@ -10,7 +10,7 @@
 <h3>Summary</h3>
 <p>The <kbd>property</kbd> tag is used to set named attributes of the
 page.  The boolean attribute <kbd>adp</kbd> can be used to control, whether
-the content of the element should be processed by the ADP paraser or
+the content of the element should be processed by the ADP parser or
 not. Properties are most commonly used to pass information to a master
 template, such as a title or logo.</p>
 <h3>Usage</h3>
