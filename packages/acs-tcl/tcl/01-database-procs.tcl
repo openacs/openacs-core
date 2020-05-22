@@ -2032,6 +2032,7 @@ ad_proc -public db_multirow {
             incr count
         }
     } else {
+        set columns {}
         db_multirow_helper
     }
 

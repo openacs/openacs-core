@@ -10,7 +10,8 @@ aa_register_case \
     -cats {api db smoke} \
     -error_level "error" \
     -procs {
-	::db_transaction ::db_multirow
+	::db_multirow
+	::template::multirow
     } \
     db__transaction_bug_3440 {
 
@@ -89,8 +90,20 @@ aa_register_case \
 		aa_equals "New row exists after db_multirow with 2 tuples" $res2 "val1"
 
 	    }
+	    aa_log "Start test section 2"
 
-	    aa_log "End test section 1"
+	    #
+	    # Create a multirow woth 0 entries and append a row "manually"
+	    # For details, see # https://openacs.org/bugtracker/openacs/bug?bug_number=3441
+	    #
+	    db_multirow person_mr noxql { SELECT person_id, first_names,
+		last_name FROM persons WHERE false
+	    }
+	    
+	    aa_equals "have empty multirow" [template::multirow size person_mr] 0
+	    template::multirow append person_mr 1234 “Ed” “Grooberman”
+	    aa_equals "have one tuple in multirow" [template::multirow size person_mr] 1
+	    
 	    aa_log "Test End"
 
 	} -teardown_code {
