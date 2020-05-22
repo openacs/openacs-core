@@ -87,8 +87,8 @@ ad_form -name add_host_node_mapping -export {parent_node_id} -form {
     }
 } -on_submit {
     util_memoize_flush_regexp "rp_lookup_node_from_host"
-    acs::site_nodes_id_cache flush security-locations-host-names
-    acs::site_nodes_id_cache flush ad_get_host_node_map
+    acs::misc_cache flush security-locations-host-names
+    acs::misc_cache flush ad_get_host_node_map
 
     db_dml host_node_insert {}
 } -after_submit {
