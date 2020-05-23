@@ -521,8 +521,8 @@ ad_proc -private apm_load_libraries {
     Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl  files into the
     current interpreter for installed, enabled packages. Only loads
     files which have not yet been loaded. This is intended to be called only during server
-    initialization (since it loads libraries only into the running interpreter, as opposed
-                    to in *all* active interpreters).
+    initialization, since it loads libraries only into the running interpreter, as opposed
+    to in *all* active interpreters.
 
 } {
     set file_types [list]
@@ -577,9 +577,9 @@ ad_proc -public apm_load_packages {
     {-load_queries_p 1}
     {-packages {}}
 } {
-    Load Tcl libraries and queries for the packages with given keys. Only
-    loads procs into the current interpreter. Will
-    load Tcl tests if the acs-automated-testing package is enabled.
+    Load Tcl libraries and queries for the packages with given
+    keys into the current interpreter. Will load Tcl
+    tests when the acs-automated-testing package is enabled.
 
     @param force_reload Reload Tcl libraries even if they are already loaded.
     @param load_libraries_p Switch to indicate if Tcl libraries in (-procs.tcl and -init.tcl)
@@ -594,14 +594,18 @@ ad_proc -public apm_load_packages {
 
     @author Peter Marklund
 } {
+    set enabled_packages [apm_enabled_packages]
     if { $packages eq "" } {
-        set packages [apm_enabled_packages]
+        set packages $enabled_packages
     }
 
     set packages_to_load [list]
     foreach package_key $packages {
         foreach package_to_load [::apm_package_load_libraries_order $package_key] {
-            if {$package_to_load ni $packages_to_load} {
+            #
+            # Never add packages, which are not enabled.
+            # 
+            if {$package_to_load ni $packages_to_load && $package_to_load in $enabled_packages} {
                 lappend packages_to_load $package_to_load
             }
         }

@@ -152,9 +152,11 @@ set errno [catch {
     apm_bootstrap_load_libraries -init acs-tcl
 
     # LARS: Load packages/acs-automated-testing/tcl/aa-test-procs.tcl
-    ns_log Notice "Loading acs-automated-testing specially so other packages can define tests..."
-    apm_bootstrap_load_libraries -procs acs-automated-testing
-
+    if {[apm_load_tests_p]} {
+        ns_log Notice "Loading acs-automated-testing specially so other packages can define tests..."
+        apm_bootstrap_load_libraries -procs acs-automated-testing
+    }
+    
     # Build the list of subsite packages
     apm_build_subsite_packages_list
 
