@@ -707,6 +707,15 @@ ad_proc -private rp_filter { why } {
         # log and do nothing
         ad_log error "rp_filter: site_node::get for url $ad_conn_url returns: $errorMsg"
     } on ok {r} {
+        #
+        # When the package is mounted, but not enabled, treat it like
+        # a subsite node. Otherwise, we see unfriendly error messages
+        # about non-instantiated nsvs when e.g. automated testing is
+        # disabled.
+        #
+        if {![apm_package_enabled_p $node(package_key)]} {
+            array set node [site_node::get -url /]
+        }
 
         if {$node(url) eq "$ad_conn_url/"} {
             #ad_returnredirect $node(url)
@@ -715,7 +724,6 @@ ad_proc -private rp_filter { why } {
             rp_debug "rp_filter: return filter_return"
             return filter_return
         }
-
         ad_conn -set node_id $node(node_id)
         ad_conn -set node_name $node(name)
         ad_conn -set object_id $node(object_id)
@@ -904,7 +912,7 @@ ad_proc -private rp_report_error {
         }]
     }
     ad_log error $error_message
-    
+
     ns_return 500 text/html $rendered_page
 }
 
