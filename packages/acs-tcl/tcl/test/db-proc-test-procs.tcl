@@ -96,14 +96,26 @@ aa_register_case \
 	    # Create a multirow woth 0 entries and append a row "manually"
 	    # For details, see # https://openacs.org/bugtracker/openacs/bug?bug_number=3441
 	    #
-	    db_multirow person_mr noxql { SELECT person_id, first_names,
-		last_name FROM persons WHERE false
+	    db_multirow person_mr1 noxql {
+		SELECT person_id, first_names, last_name
+		FROM persons WHERE false
 	    }
-	    
-	    aa_equals "have empty multirow" [template::multirow size person_mr] 0
-	    template::multirow append person_mr 1234 “Ed” “Grooberman”
-	    aa_equals "have one tuple in multirow" [template::multirow size person_mr] 1
-	    
+
+	    aa_equals "have empty multirow" [template::multirow size person_mr1] 0
+	    template::multirow append person_mr1 1234 “Ed” “Grooberman”
+	    aa_equals "have one tuple in multirow" [template::multirow size person_mr1] 1
+
+	    aa_equals "columns empty" [template::multirow columns person_mr1] \
+		"person_id first_names last_name"
+
+	    set user_id [ad_conn user_id]
+	    db_multirow person_mr2 noxql {
+		SELECT person_id, first_names, last_name
+		FROM persons where person_id = :user_id
+	    }
+	    aa_equals "columns non-empty" [template::multirow columns person_mr2] \
+		"person_id first_names last_name"
+
 	    aa_log "Test End"
 
 	} -teardown_code {

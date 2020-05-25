@@ -200,7 +200,7 @@ ad_proc -public db_driverkey {
             set pool [ns_db poolname $handle]
             set dbn $::acs::db_pool_to_dbn($pool)
         }
-        
+
         if { ![nsv_exists db_driverkey $dbn] } {
             #
             # This ASSUMES that any overriding of this default value via
@@ -1504,6 +1504,7 @@ ad_proc -public db_list_of_lists {
 
 ad_proc -public db_list_of_ns_sets {
     {-dbn ""}
+    {-columns_var ""}
     statement_name
     sql
     args
@@ -1529,8 +1530,16 @@ ad_proc -public db_list_of_ns_sets {
         set result [list]
         set selection [db_exec select $db $full_statement_name $sql]
 
-        while {[db_getrow $db $selection]} {
+        while { [db_getrow $db $selection] } {
             lappend result [ns_set copy $selection]
+        }
+        if {$columns_var ne ""} {
+            upvar 1 $columns_var __columns
+            if {[acs::icanuse "ns_set keys"]} {
+                set __columns [ns_set keys $selection]
+            } else {
+                set __columns [dict keys [ns_set array $selection]]
+            }
         }
     }
 
@@ -1673,7 +1682,25 @@ ad_proc -private db_multirow_helper {} {
         #
         # Execute the query in one sweep, similar to 'db_foreach'.
         #
-        set __selections [uplevel 1 [list db_list_of_ns_sets -dbn $dbn $full_statement_name $sql]]
+        upvar 1 __db_multirow__local_columns local_columns
+        set __selections [uplevel 1 [list db_list_of_ns_sets -dbn $dbn \
+                                         -columns_var __db_multirow__local_columns \
+                                         $full_statement_name $sql]]
+
+        lappend local_columns {*}$extend
+
+        if { !$append_p || ![info exists columns] } {
+            # store the list of columns in the var_name:columns variable
+            set columns $local_columns
+        } else {
+            # Check that the columns match, if not throw an error
+            if { [join [lsort -ascii $local_columns]] ne [join [lsort -ascii $columns]] } {
+                error "Appending to a multirow with differing columns.
+    Original columns     : [join [lsort -ascii $columns] ", "].
+    Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIROW_APPEND_COLUMNS_MISMATCH"
+            }
+        }
+
         if {[llength $__selections] == 0} {
             return
         }
@@ -1695,21 +1722,6 @@ ad_proc -private db_multirow_helper {} {
             # $local_counter == 0).
             #
             if { $local_counter == 0 } {
-                for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                    lappend local_columns [ns_set key $selection $i]
-                }
-                lappend local_columns {*}$extend
-                if { !$append_p || ![info exists columns] } {
-                    # store the list of columns in the var_name:columns variable
-                    set columns $local_columns
-                } else {
-                    # Check that the columns match, if not throw an error
-                    if { [join [lsort -ascii $local_columns]] ne [join [lsort -ascii $columns]] } {
-                        error "Appending to a multirow with differing columns.
-    Original columns     : [join [lsort -ascii $columns] ", "].
-    Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIROW_APPEND_COLUMNS_MISMATCH"
-                    }
-                }
 
                 # In case the '-unclobber' switch is specified, save
                 # variables which we might clobber.
@@ -2032,7 +2044,6 @@ ad_proc -public db_multirow {
             incr count
         }
     } else {
-        set columns {}
         db_multirow_helper
     }
 
