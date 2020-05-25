@@ -181,6 +181,7 @@ ad_proc -private cr_delete_orphans {files} {
 
         if {![regexp {^[0-9/]+$} $name]} {
             ns_log notice "orphan handling: ignore strange entry from deletion log <$dir$name>"
+            continue
         }
 
         set count [cr_count_file_entries $name]
