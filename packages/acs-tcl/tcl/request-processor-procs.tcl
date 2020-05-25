@@ -286,7 +286,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
         {*}$cmd
     } trap {AD EXCEPTION ad_script_abort} {r} {
         # do nothing on ad_script_aborts
-        ns_log notice "rp_invoke_proc: aborted cmd: $cmd"
+         ns_log notice "rp_invoke_proc: aborted cmd: $cmd"
         ds_add rp [list registered_proc $cmd $startclicks [clock clicks -microseconds]]
     } on error {errMsg} {
         ds_add rp [list registered_proc $cmd $startclicks [clock clicks -microseconds] error $::errorInfo]
@@ -1116,17 +1116,27 @@ ad_proc -private rp_handler {} {
 
 } {
     if { ![info exists ::ad_conn] } {
-        # DRB: handle obscure case where we are served a request like GET
-        # http://www.google.com.  In this case AOLserver 4.0.10 (at
-        # least) doesn't run the preauth filter "rp_filter", but
+        #
+        # DRB: handle obscure case where we are served a request like
+        # GET http://www.google.com.  In this case AOLserver 4.0.10
+        # (at least) doesn't run the preauth filter "rp_filter", but
         # rather tries to serve /global/file-not-found directly.
         # rp_handler dies a horrible death if it's called without
         # ::ad_conn being set up.  My fix is to simply redirect to the
         # url AOLserver substitutes if ::ad_conn does not exist
         # (rp_filter begins with ad_conn -reset) ...
+        #
         ad_log warning "rp_handler: Obscure case, where ::ad_conn is not set, redirect to [ns_conn url]"
-        ad_returnredirect [ns_conn url]
-        return
+
+        #
+        # Before we give up, make one attempt to setup everything.
+        #
+        rp_filter preauth
+
+        if { ![info exists ::ad_conn] } {
+            ad_returnredirect [ns_conn url]
+            return
+        }
     }
 
     if {[info exists ::ad_conn(extra_url)]
