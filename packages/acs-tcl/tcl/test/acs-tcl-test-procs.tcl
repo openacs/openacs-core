@@ -502,6 +502,10 @@ aa_register_case \
         [export_vars -base "dummy?"] \
         "dummy"
 
+    aa_equals "base containing more than two slashes " \
+        [export_vars -base "http://dummywebsite.com/one/two" {{foo a} {bar b}}] \
+        "http://dummywebsite.com/one/two?foo=a&bar=b"
+
     # Test base with query vars
     set var1 a
     set var2 {}
