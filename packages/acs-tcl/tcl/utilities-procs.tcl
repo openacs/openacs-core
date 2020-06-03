@@ -1679,15 +1679,19 @@ ad_proc -public ad_urlencode_url {url} {
     (containing a location, but without query part).
     @see ad_urlencode_folder_path
 } {
-    if {[util_complete_url_p $url]} {
-        set components [ns_parseurl $url]
+    set components [ns_parseurl $url]
+    if {[dict exists $components proto]} {
         set result [util::join_location \
                         -proto [dict get $components proto] \
                         -hostname [dict get $components host] \
                         -port [expr {[dict exists $components port] ? [dict get $components port] : ""}] \
                        ]
-        set fullpath [dict get $components path]/[dict get $components tail]
-        append result [ad_urlencode_folder_path $fullpath]
+        set path [dict get $components path]
+        if {$path ne ""} {
+            set path /$path
+        }
+        set tail [dict get $components tail]
+        append result [ad_urlencode_folder_path $path/$tail]
     } else {
         set result [ad_urlencode_folder_path $url]
     }

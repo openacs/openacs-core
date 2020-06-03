@@ -530,7 +530,7 @@ aa_register_case \
     set url http://example.com/foo=1/bar
     aa_equals "complex URL with char which has to be escaped" \
         [ad_urlencode_url $url] \
-        http://example.comfoo%3d1/bar
+        http://example.com/foo%3d1/bar
 
     # Test just ad_urlencode_url: location without trailing slash
     set url http://example.com
