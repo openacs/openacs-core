@@ -1,7 +1,7 @@
 
 ad_library {
     APM callback procedures.
-    
+
     @creation-date 2003-06-12
     @author Lars Pind (lars@collaboraid.biz)
     @cvs-id $Id$
@@ -41,7 +41,7 @@ ad_proc -public notification::apm::before_uninstall {} {
 
         # Unregister email delivery method service contract implementation
         delete_email_delivery_method_impl
-        
+
         # Delete the delivery method service contract
         delete_delivery_method_contract
 
@@ -60,7 +60,7 @@ ad_proc -public notification::apm::after_upgrade {
         -spec {
             5.1.0d1 5.1.0d2 {
                 db_transaction {
-                    
+
                     # Delete and recreate contract
                     delete_delivery_method_contract
                     create_delivery_method_contract
@@ -84,7 +84,7 @@ ad_proc -public notification::apm::after_upgrade {
             }
             5.4.0d2 5.4.0d3 {
                 db_transaction {
-                    
+
                     # Delete and recreate contract
                     delete_delivery_method_contract
                     create_delivery_method_contract
@@ -120,13 +120,13 @@ ad_proc -public notification::apm::create_delivery_method_contract {} {
             operations {
                 Send {
                     description "Send a notification"
-                    input { 
+                    input {
                         from_user_id:integer
                         to_user_id:integer
                         reply_object_id:integer
                         notification_type_id:integer
                         subject:string
-                        content_text:string 
+                        content_text:string
                         content_html:string
                         file_ids:string
                     }
@@ -146,7 +146,7 @@ ad_proc -public notification::apm::delete_delivery_method_contract {} {
 
 ad_proc -public notification::apm::create_email_delivery_method_impl {} {
     Register the service contract implementation and return the impl_id
-    
+
     @return impl_id of the created implementation
 } {
     return [acs_sc::impl::new_from_spec -spec {
@@ -174,7 +174,7 @@ ad_proc -public notification::apm::register_email_delivery_method {
     -impl_id:required
 } {
     Register the email delivery method with the notifications service.
-    
+
     @param impl_id The ID of the NotificationDeliveryMethod service contract implementation.
 } {
     notification::delivery::new \
@@ -187,7 +187,7 @@ ad_proc -public notification::apm::update_email_delivery_method_impl {
     -impl_id:required
 } {
     Register the email delivery method with the notifications service.
-    
+
     @param impl_id The ID of the NotificationDeliveryMethod service contract implementation.
 } {
     set delivery_method_id [notification::delivery::get_id -short_name "email"]
@@ -201,7 +201,7 @@ ad_proc -public notification::apm::unregister_email_delivery_method {} {
     Unregister the service contract delivery method with the notifications service.
 } {
     set delivery_method_id [notification::delivery::get_id -short_name "email"]
-    
+
     notification::delivery::delete \
         -delivery_method_id $delivery_method_id
 }
@@ -217,7 +217,7 @@ ad_proc -public notification::apm::create_notification_type_contract {} {
             operations {
                 GetURL {
                     description "Gets the URL for an object in this notification type"
-                    input { 
+                    input {
                         object_id:integer
                     }
                     output {
@@ -232,7 +232,7 @@ ad_proc -public notification::apm::create_notification_type_contract {} {
                     output {
                         success_p:boolean
                     }
-                    
+
                 }
             }
         }
