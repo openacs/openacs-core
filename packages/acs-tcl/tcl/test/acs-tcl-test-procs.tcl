@@ -544,11 +544,17 @@ aa_register_case \
         [ad_urlencode_url $url] \
         $url
 
+    set url http://dummywebsite.com/one/two
+    aa_equals "base with path containing more than 1 slash" \
+        [ad_urlencode_url $url] \
+        $url
+
     # Test full qualified base without query vars
     set base http://example.com/example
     aa_equals "base without query vars" \
         [export_vars -base $base] \
         $base
+
 }
 
 aa_register_case \
