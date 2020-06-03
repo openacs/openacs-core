@@ -836,12 +836,10 @@ ad_proc -public export_vars {
 
     if { $entire_form_p } {
         set the_form [ns_getform]
-        if { $the_form ne "" } {
-            for { set i 0 } { $i < [ns_set size $the_form] } { incr i } {
-                set varname [ns_set key $the_form $i]
-                set varvalue [ns_set value $the_form $i]
-                lappend noprocessing_vars [list $varname $varvalue]
-            }
+        for { set i 0 } { $i < [ns_set size $the_form] } { incr i } {
+            set varname [ns_set key $the_form $i]
+            set varvalue [ns_set value $the_form $i]
+            lappend noprocessing_vars [list $varname $varvalue]
         }
     }
 
