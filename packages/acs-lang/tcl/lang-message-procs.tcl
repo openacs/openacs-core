@@ -872,9 +872,10 @@ ad_proc -public lang::message::lookup {
     #
     # Trying locale directly
     #
-    if { [message_exists_p -varname message $locale $key] } {
-    } else {
-        # Trying default locale for language
+    if { ![message_exists_p -varname message $locale $key] } {
+        #
+        # Trying default locale for language.
+        #
         set language [lindex [split $locale "_"] 0]
         set locale [lang::util::default_locale_from_lang $language]
         if { ![message_exists_p -varname message $locale $key] } {
