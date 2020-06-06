@@ -720,15 +720,58 @@ ad_proc -private lang::message::embedded_vars_regexp {} {
     return {^(.*?)(%%|%[-a-zA-Z0-9_:\.]+(?:;noquote)?%)(.*)$}
 }
 
-ad_proc -public lang::message::message_exists_p { locale key } {
-    Return 1 if message exists in given locale, 0 otherwise.
+if {[ns_info name] eq "NaviServer"} {
+    #
+    # NaviServer supports since ages nsv_get with an optional output
+    # variable. This cuts the number of needed lock operations per
+    # lookup into half.
+    #
+    ad_proc -public lang::message::message_exists_p { {-varname } locale key } {
+        Return 1 if message exists in given locale, 0 otherwise.
 
-    @author Peter Marklund
-} {
-    # Make sure messages are in the cache
-    lang::message::cache
+        @param varname when specified, return value in this variable
+        @author Gustaf Neumann
+    } {
+        #
+        # Make sure messages are loaded into the cache.
+        #
+        acs::per_thread_cache eval -key acs-lang.message_cache_loaded {
+            lang::message::cache
+        }
+        #
+        # Provide linkage to the output variable and perform lookup
+        #
+        if {[info exists varname]} {
+            upvar 1 $varname var
+        }
+        return [nsv_get lang_message_$locale $key var]
+    }
+} else {
+    #
+    # AOLserver compatible version
+    #
+    ad_proc -public lang::message::message_exists_p { {-varname } locale key } {
+        Return 1 if message exists in given locale, 0 otherwise.
 
-    return [nsv_exists lang_message_$locale $key]
+        @param varname when specified, return value in this variable
+        @author Gustaf Neumann
+    } {
+        #
+        # Make sure messages are loaded into the cache.
+        #
+        acs::per_thread_cache eval -key acs-lang.message_cache_loaded {
+            lang::message::cache
+        }
+        #
+        # Check vor existence and return value if required.
+        #
+        set exists [nsv_exists lang_message_$locale $key]
+        if {$exists && [info exists varname]} {
+            upvar 1 $varname var
+            set var [nsv_get lang_message_$locale $key]
+        }
+        return $exists
+    }
 }
 
 ad_proc -public lang::message::lookup {
@@ -796,7 +839,9 @@ ad_proc -public lang::message::lookup {
     @return A localized piece of text.
 } {
     # Make sure messages are in the cache
-    lang::message::cache
+    acs::per_thread_cache eval -key acs-lang.message_cache_loaded {
+        lang::message::cache
+    }
 
     # Make sure that a default of "" is transformed into Translation Missing
     # As per discussion on IRC on 2008-03-06
@@ -824,35 +869,27 @@ ad_proc -public lang::message::lookup {
         }
     }
 
-    # We remember the passed-in locale, because we want the translator mode to show which
-    # messages have been translated, and which have not.
-    set org_locale $locale
-
+    #
     # Trying locale directly
-    if { [message_exists_p $locale $key] } {
-        set message [nsv_get lang_message_$locale $key]
+    #
+    if { [message_exists_p -varname message $locale $key] } {
     } else {
         # Trying default locale for language
         set language [lindex [split $locale "_"] 0]
         set locale [lang::util::default_locale_from_lang $language]
-        if { [message_exists_p $locale $key] } {
-            set message [nsv_get lang_message_$locale $key]
-        } else {
+        if { ![message_exists_p -varname message $locale $key] } {
+            #
             # Trying system locale for package (or site-wide)
-            set locale [lang::system::locale]
-            if { [message_exists_p $locale $key] } {
-                set message [nsv_get lang_message_$locale $key]
-            } else {
+            #
+            if { ![message_exists_p -varname message [lang::system::locale] $key] } {
+                #
                 # Trying site-wide system locale
-                set locale [lang::system::locale -site_wide]
-                if { [message_exists_p $locale $key] } {
-                    set message [nsv_get lang_message_$locale $key]
-                } else {
+                #
+                if { ![message_exists_p -varname message [lang::system::locale -site_wide] $key] } {
+                    #
                     # Resorting to en_US
-                    set locale "en_US"
-                    if { [message_exists_p $locale $key] } {
-                        set message [nsv_get lang_message_$locale $key]
-                    } else {
+                    #
+                    if { ![message_exists_p -varname message "en_US" $key] } {
                         if {"TRANSLATION MISSING" ne $default} {
                             set message $default
                         } else {
@@ -894,9 +931,11 @@ ad_proc -public lang::message::lookup {
 ad_proc -private lang::message::cache {} {
     Loads the entire message catalog from the database into the cache.
 } {
-    # We segregate messages by language. It might reduce contention
-    # if we segregate instead by package. Check for problems with ns_info locks.
-
+    #
+    # We segregate messages by language. It might reduce contention if
+    # we segregate instead by package keys. Check mutex contention
+    # nsstats (with ns_info locks).
+    #
     if {[nsv_incr lang_message_cache executed_p] == 1} {
 
         set i 0
