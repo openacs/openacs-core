@@ -53,6 +53,18 @@ namespace eval ::acs {
         catch [list $cmd ""] errorMsg
         return [expr {" $subcommand" in [split $errorMsg ","]}]
     }
+
+    ad_proc -private cmd_error_contains {cmd subcommand} {
+
+        Helper proc abusing error messages to determine, whether the
+        error message contains some string. This is a weeker form of
+        cmd_has_subcommand.
+
+    } {
+        catch $cmd errorMsg
+        return [string match *$subcommand* $errorMsg]
+    }
+
 }
 
 
@@ -72,6 +84,7 @@ namespace eval ::acs {
 
 ::acs::register_icanuse "ns_conn partialtimes" [acs::cmd_has_subcommand ns_conn partialtimes]
 ::acs::register_icanuse "ns_conn contentsentlength" [acs::cmd_has_subcommand ns_conn contentsentlength]
+::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {nsv_dict get ""} -varname]
 
 ::acs::register_icanuse "ns_crypto::randombytes" {[info commands ::ns_crypto::randombytes] ne ""}
 
