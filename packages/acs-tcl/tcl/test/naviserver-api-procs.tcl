@@ -12,7 +12,7 @@ aa_register_case \
     } {
         package require base64
         #
-        # base64 encoded tring with weird spaces.
+        # base64 encoded string with weird spaces.
         #
         set base64encoded {iVBORw0KGgoAAAANSUhEUgAAAAUA
             AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO

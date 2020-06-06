@@ -350,9 +350,9 @@ aa_register_case \
     set result [ad_parse_html_attributes $html $pos]
     aa_equals "Attributes - $result" $result {foo bar}
 
-    # One Attribute with value and one whitout value
+    # One attribute with value and one without value
     set html "<tag foo = bar tob>"
-    aa_log "A tag with one Attribute with value and one whitout value - $html"
+    aa_log "A tag with one attribute with value and one without value - $html"
     set result [ad_parse_html_attributes $html $pos]
     aa_equals "Attributes - $result" $result {{foo bar} tob}
 

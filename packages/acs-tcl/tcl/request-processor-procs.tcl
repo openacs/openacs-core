@@ -418,29 +418,29 @@ ad_proc -private rp_html_directory_listing { dir } {
 # NSV arrays used by the request processor:
 #
 #   - rp_filters($method,$kind), where $method in (GET, POST, HEAD)
-#       and kind in (preauth, postauth, trace) A list of $kind filters
-#       to be considered for HTTP requests with method $method. The
-#       value is of the form
+#     and kind in (preauth, postauth, trace) A list of $kind filters
+#     to be considered for HTTP requests with method $method. The
+#     value is of the form
 #
-#             [list $priority $kind $method $path $proc $args $debug \
-    #                 $critical $description $script]
+#         [list $priority $kind $method $path $proc $args $debug \
+#               $critical $description $script]
 #
 #   - rp_registered_procs($method), where $method in (GET, POST, HEAD)
-#         A list of registered procs to be considered for HTTP requests with
-#         method $method. The value is of the form
+#     A list of registered procs to be considered for HTTP requests with
+#     method $method. The value is of the form
 #
-#             [list $method $path $proc $args $debug $noinherit \
-    #                   $description $script]
+#         [list $method $path $proc $args $debug $noinherit \
+#               $description $script]
 #
-#   - rp_system_url_sections($url_section)
-#         Indicates that $url_section is a system directory (like
-#         SYSTEM) which is exempt from Host header checks and
-#         session/security handling.
+#    - rp_extension_handlers($extension)
+#      Registers a proc used to handle requests for files with a particular
+#      extension. Used just in rp_serve_concrete_file.
 #
-# ad_register_filter and ad_register_procs are used to add elements to
-# these NSVs. We use lists rather than arrays for these data
-# structures since "array get" and "array set" are rather expensive
-# and we want to keep lookups fast.
+# "ad_register_filter", "ad_register_procs" and
+# "rp_register_extension_handler" are used to add elements to these
+# NSVs. We use lists rather than arrays for these data structures
+# since "array get" and "array set" are rather expensive and we want
+# to keep lookups fast.
 #
 #####
 
