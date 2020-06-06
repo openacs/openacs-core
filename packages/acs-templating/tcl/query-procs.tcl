@@ -1025,9 +1025,6 @@ ad_proc -public template::url { command args } {
 
 # Generic template caching
 
-nsv_set __template_cache_value . .
-nsv_set __template_cache_timeout . .
-
 ad_proc -public template::cache { command cache_key args } {
     Generic Caching
 } {
