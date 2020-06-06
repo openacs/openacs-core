@@ -128,8 +128,8 @@ lappend elms_list {
 
 set locale_options [list]
 db_foreach get_locales {} {
-    if { [lang::message::message_exists_p $locale acs-lang.this-language] } {
-        set label "[lang::message::lookup $locale  acs-lang.this-language]"
+    if { [lang::message::message_exists_p -varname label $locale acs-lang.this-language] } {
+        #set label "[lang::message::lookup $locale acs-lang.this-language]"
     }
     lappend locale_options [list ${label} $locale]
 }
