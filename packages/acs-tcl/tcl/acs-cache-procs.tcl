@@ -433,7 +433,7 @@ namespace eval ::acs {
         :create per_thread_cache -prefix ::acs::cache::
 
         #
-        # The per-reuqest cache uses Tcl variables in the global
+        # The per-request cache uses Tcl variables in the global
         # namespace, such they are automatically reclaimed after the
         # request. These use the prefix "::__acs_cache_"
         #

@@ -61,11 +61,13 @@ set UseXotclSiteNodes 0
 #
 # Turn on UseXotclSiteNodes in cases, where all requirements are met.
 # The XOTcl classes below depend on XOTcl 2, xotcl-core (in particular
-# 05-db-procs.tcl). The current implementation should with Oracle
+# 05-db-procs.tcl). The current implementation should work with Oracle
 # 11gR2 (Aug 2013) or newer, probably one "limit" clause has to be
 # replaced. The implementation does not distinguish btw. AOLserver and
 # NaviServer (uses simply ns_cache_eval for speed and simplicity).
-#
+# The code depends on xotcl-core only because of the xo::db interface,
+# which should be turned into mainstream OpenACS after the OpenACS
+# 5.10 release.
 
 if {[info commands ::nx::Object] ne ""
     && [ns_info name] eq "NaviServer"
