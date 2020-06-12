@@ -125,7 +125,7 @@ namespace eval notification::email {
        set email [party::email -party_id $to_user_id]
        set user_locale [lang::user::site_wide_locale -user_id $to_user_id]
        if { $user_locale eq "" } {
-           set user_locale lang::system::site_wide_locale
+           set user_locale [lang::system::site_wide_locale]
        }
 
        # Variable used in the content
