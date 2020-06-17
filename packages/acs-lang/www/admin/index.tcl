@@ -74,12 +74,12 @@ foreach current_locale $locale_list {
     #
     # Locale properties
     #
-    dict set locale_data locale         "$locale"
-    dict set locale_data locale_label   "$locale_label"
+    dict set locale_data locale         $locale
+    dict set locale_data locale_label   $locale_label
     dict set locale_data escaped_locale [ns_urlencode $locale]
-    dict set locale_data language       "$language"
-    dict set locale_data enabled_p      "$enabled_p"
-    dict set locale_data default_p      "$default_p"
+    dict set locale_data language       $language
+    dict set locale_data enabled_p      $enabled_p
+    dict set locale_data default_p      $default_p
     #
     # URLs
     #
@@ -92,11 +92,11 @@ foreach current_locale $locale_list {
     #
     # Numbers
     #
-    dict set locale_data num_messages                    "$num_messages"
-    dict set locale_data num_translated                  "$num_translated"
-    dict set locale_data num_untranslated                "$num_untranslated"
-    dict set locale_data num_deleted                     "$num_deleted"
-    dict set locale_data num_locales_for_language        "$num_locales_for_language"
+    dict set locale_data num_messages                    $num_messages
+    dict set locale_data num_translated                  $num_translated
+    dict set locale_data num_untranslated                $num_untranslated
+    dict set locale_data num_deleted                     $num_deleted
+    dict set locale_data num_locales_for_language        $num_locales_for_language
     dict set locale_data num_messages_pretty             [lc_numeric $num_messages]
     dict set locale_data num_translated_pretty           [lc_numeric $num_translated]
     dict set locale_data num_untranslated_pretty         [lc_numeric $num_untranslated]
@@ -105,7 +105,7 @@ foreach current_locale $locale_list {
     #
     # Append to list
     #
-    lappend locale_stat_list "$locale_data"
+    lappend locale_stat_list $locale_data
 }
 #
 # Generate multirow
