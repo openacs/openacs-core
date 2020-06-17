@@ -870,6 +870,15 @@ ad_proc -public lang::message::lookup {
     }
 
     #
+    # Probably, we should check for undefined locales passed in. We
+    # omit this for now due to missing performance evaluation of this
+    # change.
+    #
+    # elseif {$locale ni [lang::system::get_locales]} {
+    #    error "Unknown locale $locale passed as argument"
+    #}
+
+    #
     # Trying locale directly
     #
     if { ![message_exists_p -varname message $locale $key] } {
@@ -877,10 +886,20 @@ ad_proc -public lang::message::lookup {
         # Trying default locale for language.
         #
         set language [lindex [split $locale "_"] 0]
-        set locale [lang::util::default_locale_from_lang $language]
-        if { ![message_exists_p -varname message $locale $key] } {
+
+        #
+        # When the lookup returns empty (no locale for this language),
+        # or returns the same language we checked before, there is no
+        # reason for the message lookup and we can go to the next
+        # test.
+        #
+        set lang_locale [lang::util::default_locale_from_lang $language]
+        if { $lang_locale eq ""
+             || $lang_locale eq $locale
+             || ![message_exists_p -varname message $lang_locale $key]
+         } {
             #
-            # Trying system locale for package (or site-wide)
+            # Trying system locale for package
             #
             if { ![message_exists_p -varname message [lang::system::locale] $key] } {
                 #
