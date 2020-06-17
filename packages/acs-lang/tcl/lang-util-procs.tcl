@@ -384,7 +384,7 @@ ad_proc -private lang::util::default_locale_from_lang_not_cached {
 
     @see lang::util::default_locale_from_lang
 } {
-    return [db_string default_locale_from_lang {
+    set locales [db_list locales_from_lang {
         select locale
         from ad_locales l
         where language = :language
@@ -392,7 +392,15 @@ ad_proc -private lang::util::default_locale_from_lang_not_cached {
           and (default_p or not exists (select 1 from ad_locales
                                          where language = :language
                                            and locale <> l.locale))
-    } -default ""]
+    }]
+    if {[llength $locales] > 1} {
+        ad_log error "multiple locales '$locales' defined for language '$language'. Change configuration on /acs-lang/admin"
+        set locales [lindex $locales 0]
+    }
+    #
+    # return 0 or 1 locale
+    #
+    return $locales
 }
 
 ad_proc -public lang::util::default_locale_from_lang {
