@@ -394,7 +394,7 @@ ad_proc -private lang::util::default_locale_from_lang_not_cached {
                                            and locale <> l.locale))
     }]
     if {[llength $locales] > 1} {
-        ad_log error "multiple locales '$locales' defined for language '$language'. Change configuration on /acs-lang/admin"
+        ad_log error "multiple locales '$locales' defined for language '$language'. Define default locale longuage in /acs-lang/admin"
         set locales [lindex $locales 0]
     }
     #
