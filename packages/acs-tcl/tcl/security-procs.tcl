@@ -1789,7 +1789,7 @@ ad_proc -public ad_set_client_property {
     }
 
     if { $session_id eq "" } {
-        ns_log warning "could not obtain a session_id via 'ad_conn session_id'"
+        ad_log warning "could not obtain a session_id via 'ad_conn session_id'"
     } else {
 
         if { $persistent == "t" } {
@@ -2429,7 +2429,7 @@ ad_proc -private security::provided_host_valid {host} {
         if {$host ne ""} {
             if {![regexp {^[\w.:@+/=$%!*~\[\]-]+$} $host]} {
                 binary scan [encoding convertto utf-8 $host] H* hex
-                ad_log warning "provided host <$host> (hex $hex) contains invalid characters"
+                ns_log warning "provided host <$host> (hex $hex) contains invalid characters"
                 set result 0
             }
         }
