@@ -2428,8 +2428,12 @@ ad_proc -private security::provided_host_valid {host} {
         set result 1
         if {$host ne ""} {
             if {![regexp {^[\w.:@+/=$%!*~\[\]-]+$} $host]} {
+                #
+                # Don't use "ad_log", since this might leed to a recursive loop.
+                #
                 binary scan [encoding convertto utf-8 $host] H* hex
-                ns_log warning "provided host <$host> (hex $hex) contains invalid characters"
+                ns_log warning "provided host <$host> (hex $hex) contains invalid characters\n\
+                       URL: [ns_conn url\n]peer addr:[ad_conn peeraddr]"
                 set result 0
             }
         }
