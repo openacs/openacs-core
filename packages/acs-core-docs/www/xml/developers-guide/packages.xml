@@ -18,7 +18,7 @@
       OpenACS. OpenACS packages are installed and maintained with the
       OpenACS Package Manager (APM) which is part of the acs-admin
       package.  This document presents reasons for packaging software,
-      conventions for the file system and naming that must be
+      conventions for the filesystem and naming that must be
       followed, and step by step instructions for creating a new
       package for the "Notes" example package.
     </para>
@@ -65,7 +65,7 @@ ROOT/
       logic, administration pages and user pages in a single part of
       the file tree.  This means developers can track down
       <emphasis>everything</emphasis> that is related to a particular
-      package without hunting all over the file system.  Encapsulating
+      package without hunting all over the filesystem.  Encapsulating
       everything about a package in one place also makes it much
       easier to distribute packages independently from the OpenACS Core.
     </para>
@@ -463,8 +463,7 @@ ROOT/
           <listitem><para>
           This is a short text string that should uniquely name your package to
           distinguish it from all the others. It is used as a database key to
-          keep track of the package and as the name of the directory in the file
-          system where all the files related to your package will live. Example
+          keep track of the package and as the name of the directory in the filesystem where all the files related to your package will live. Example
           package keys in the current system include: <computeroutput>forums</computeroutput>,
           <computeroutput>acs-kernel</computeroutput> and so on. For the example application, we
           will use the package key <computeroutput>notes</computeroutput>.
@@ -577,7 +576,7 @@ ROOT/
           file information&quot;, then the &quot;Scan the
           <computeroutput>packages/notes</computeroutput> directory for
           additional files in this package&quot; link on that page to scan
-          the file system for new files.  This will bring you do a page
+          the filesystem for new files.  This will bring you do a page
           that lists all the files you just added and lets you add them to
           the <computeroutput>notes</computeroutput> package.
         </para>
@@ -650,7 +649,7 @@ ROOT/
 
     <para>
       In OpenACS &majorversion;, administrators can define an arbitrary mapping between the
-      URLs the user types and the actual file in the file system that is
+      URLs the user types and the actual file in the filesystem that is
       served. This mapping is called the <emphasis>site map</emphasis> and entries in the
       site map are called <emphasis>site nodes</emphasis>. Each site node maps a URL to an
       OpenACS object. Since package instances are objects, the site map allows

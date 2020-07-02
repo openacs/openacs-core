@@ -213,7 +213,7 @@ in a system.
 </para>
 <para>Explicitly defining permissions to every object individually
 would become very tedious.
-OpenACS provides a object contexts as a means for controlling permissions of a large group
+OpenACS provides an object contexts as a means for controlling permissions of a large group
 of objects at the same time. 
 </para>
 

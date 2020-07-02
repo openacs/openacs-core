@@ -977,7 +977,7 @@ this information into several files allows for flexible extensions to the APM
 architecture over time.</para>
 
 <para>APM packages currently lack provisions to verify security information.
-There are plans to add MD5 time stamps and PGP signatures to packages to
+There are plans to add MD5 timestamps and PGP signatures to packages to
 enable secure authentication of packages. These steps are necessary for APM
 to be usable as a scalable method to distribute packages on multiple
 repositories worldwide.</para>

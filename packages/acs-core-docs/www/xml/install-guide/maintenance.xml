@@ -339,7 +339,7 @@ set httpsport             8443 </programlisting>
  to different values.</para>
       </formalpara>
       <formalpara>
-        <title>Services on different host names</title>
+        <title>Services on different hostnames</title>
         <para>For example, suppose you want to support
 <computeroutput>http://service0.com</computeroutput> and
     <computeroutput>http://bar.com</computeroutput> on the same
@@ -351,8 +351,7 @@ set address                127.0.0.1 </programlisting>
 </para>
     </formalpara>
 
-    <para>If you want to install two services with different host
-    names sharing the same ip, you&#39;ll need nsvhr to redirect requests
+    <para>If you want to install two services with different hostnames sharing the same ip, you&#39;ll need nsvhr to redirect requests
     based on the contents of the tcp headers.  See <ulink
     url="http://borkware.com/rants/aolserver-vhosting/">AOLserver
     Virtual Hosting with TCP</ulink> by <ulink url="mailto:markd@borkware.com">markd</ulink>.
@@ -492,7 +491,7 @@ cvs up -Pd index.adp</programlisting>
     <sect2>
       <title>Method 2: A/B Deployment</title>
   <para>The approach taken in this section is to always create a new service with the desired changes, running in parallel with the existing site.  This guarantees control, at least at the final step of the process: you know what changes you are about to make because you can see them directly.  It does not, by itself, guarantee the entire control chain.  You need additional measures to make sure that the change you are making is exactly and completely the change you intended to make and tested previously, and nothing more.  Those additional measures typically take the form of source control tags and system version numbers.  The parallel-server approach also guarantees rollback because the original working service is not touched; it is merely set aside.</para>
-  <para>This approach can has limitations.  If the database or file system regularly receiving new data, you must interrupt this function or risk losing data in the shuffle.  It also requires extra steps if the database will be affected.</para>
+  <para>This approach can has limitations.  If the database or filesystem regularly receiving new data, you must interrupt this function or risk losing data in the shuffle.  It also requires extra steps if the database will be affected.</para>
   <sect3>
     <title>Simple A/B Deployment: Database is not changed</title>
     <figure>
@@ -688,7 +687,7 @@ logout
     users into .LRN)</para>
     </listitem>
     <listitem>
-      <para>Is the file system out of space?  Is the machine swapping to disk constantly?</para>
+      <para>Is the filesystem out of space?  Is the machine swapping to disk constantly?</para>
     </listitem>
     <listitem>
       <para>Isolating and solving database problems.</para>

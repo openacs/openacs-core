@@ -185,7 +185,7 @@ and some_table.condition_p = '$foo'</programlisting>
       cannot change the actual text of the query, only the literal
       values in the placeholders.  The database API makes bind
       variables easy to use by hooking them smoothly into the Tcl
-      runtime so you simply provide :tclvar and the value of $tclvar 
+      run time so you simply provide :tclvar and the value of $tclvar 
       is sent to the backend to actually execute the query.
     </para>
 
@@ -193,7 +193,7 @@ and some_table.condition_p = '$foo'</programlisting>
       The database API parses the query and pulls out all the bind variable
       specifications and replaces them with generic placeholders.  It then
       automatically pulls the values of the named Tcl vars out of the
-      runtime environment of the script, and passes them to the database.
+      run time environment of the script, and passes them to the database.
     </para>
 
     <para>

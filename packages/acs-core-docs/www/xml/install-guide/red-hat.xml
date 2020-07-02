@@ -136,8 +136,7 @@ If you don&#39;t know your netmask, 255.255.255.0 is usually a pretty safe
 guess.  Click <computeroutput><guibutton>Edit</guibutton></computeroutput>, uncheck <computeroutput><guilabel>Configure using <accel>D</accel>HCP</guilabel></computeroutput>
 and type in your IP and netmask.  Click <computeroutput><guibutton><accel>O</accel>k</guibutton></computeroutput>.</para>
           </listitem>
-          <listitem><para> Type in your host
-name, gateway, and DNS server(s).  Then click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.</para></listitem>
+          <listitem><para> Type in your hostname, gateway, and DNS server(s).  Then click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.</para></listitem>
           <listitem><para>We&#39;re going to use the firewall template for high
 security, meaning that we&#39;ll block almost all incoming traffic.  Then
 we&#39;ll add a few holes to the firewall for services which we need and
@@ -158,7 +157,7 @@ Port 443 is for https (http over ssl), and 8000 and 8443 are http and https acce
           </indexterm>Select any additional languages you want the
 	  computer to support and then click
 	  <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput></para></listitem>
-      <listitem><para>Choose your time zone and click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.</para></listitem>
+      <listitem><para>Choose your timezone and click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.</para></listitem>
       <listitem><para>Type in a root
 password, twice.</para>
       </listitem>

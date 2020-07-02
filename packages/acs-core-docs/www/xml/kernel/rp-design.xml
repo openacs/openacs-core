@@ -111,7 +111,7 @@ directly correspond to a file in the filesystem.</para>
 
 <listitem>
 <para><emphasis role="strong">abstract file</emphasis> or <emphasis role="strong">abstract path</emphasis> -- A URL
-that has been translated into a file system path (probably by prepending the
+that has been translated into a filesystem path (probably by prepending the
 appropriate pageroot), but still doesn&#39;t have any extension and so does
 not directly correspond to a file in the filesystem.</para>
 </listitem>

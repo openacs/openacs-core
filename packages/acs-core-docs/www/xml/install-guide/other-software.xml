@@ -236,7 +236,7 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</action></screen>
           <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer&#39;s identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you&#39;ll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
             <screen>[root qmail-1.03]# <userinput>./config-fast <replaceable>yourserver.test</replaceable></userinput>
-Your fully qualified host name is yourserver.test.
+Your fully qualified hostname is yourserver.test.
 Putting yourserver.test into control/me...
 Putting yourserver.test into control/defaultdomain...
 Putting yourserver.test into control/plusdomain...
@@ -695,7 +695,7 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
         <listitem id="configure-ns_ldap-bind">
           <formalpara>
             <title>Configure ns_ldap for use with LDAP bind</title>
-          <para>LDAP authentication usually is done by trying to bind (a.k.a. login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasis>ns_ldap bind</emphasis> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentication instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
+          <para>LDAP authentication usually is done by trying to bind (aka login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasis>ns_ldap bind</emphasis> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentication instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
           </formalpara>
         </listitem>
       </orderedlist>

@@ -768,7 +768,7 @@ END OF TEMPLATE -->
 		<itemizedlist>
 		  <listitem><para>
 		    NsShutdownWithNonZeroExitCode: tell NaviServer to return with a
-		    non-zero return code to cause restart (important under windows)
+		    nonzero return code to cause restart (important under windows)
 		  </para></listitem>
 		  <listitem><para>
 		    LogIncludeUserId: include user_id in access log
@@ -1288,7 +1288,7 @@ END OF TEMPLATE -->
 
 	    <listitem><para>
 	      Added ability to save data sent by
-	      ns_return in files on the file system. This can be used to
+	      ns_return in files on the filesystem. This can be used to
 	      validate HTML content also for password protected pages
 	      (controlled via package parameter "TclTraceSaveNsReturn" in
 	      the acs-tcl package parameters)

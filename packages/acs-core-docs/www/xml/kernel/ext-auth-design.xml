@@ -2036,8 +2036,7 @@ run the batch synchronization immediately.
 containing user information. Example mechanisms:
 <itemizedlist>
                 <listitem>
-                  <para>A file is delivered to an agreed-on location in the file
-system at an agreed-on point in time.
+                  <para>A file is delivered to an agreed-on location in the filesystem at an agreed-on point in time.
 </para>
                 </listitem>
                 <listitem>

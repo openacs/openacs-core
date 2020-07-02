@@ -72,7 +72,7 @@ pw useradd -n <replaceable>$OPENACS_SERVICE_NAME</replaceable> -g web -d /home/<
   </sect2>
 
   <sect2 id="openacs-setup">
-    <title>Set up the file system for one or more OpenACS Sites</title>
+    <title>Set up the filesystem for one or more OpenACS Sites</title>
     <para>For Linux Standard Base compliance and ease of backup,
       all of the files in each OpenACS site are stored in a
       subdirectory of

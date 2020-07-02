@@ -63,7 +63,7 @@ mounted at that location is an instance of the <computeroutput>notes</computerou
 application. 
 </para></listitem>
 <listitem><para>
-The RP asks the package manager where in the file system the Notes
+The RP asks the package manager where in the filesystem the Notes
 package lives. In the standard case, this would be
 <computeroutput>ROOT/packages/notes</computeroutput>.
 </para></listitem>

@@ -895,7 +895,7 @@ security_inherit_p = 'f'
       </tgroup>
     </informaltable>
 <para>Read <computeroutput>acs_rels</computeroutput>: right-side is a
-        subset of left-side, ie
+        subset of left-side, i.e.
         <computeroutput>object2</computeroutput> is a part of
         <computeroutput>object1</computeroutput>.
 </para>

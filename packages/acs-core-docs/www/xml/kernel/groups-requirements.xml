@@ -225,7 +225,7 @@
 
           <para>The data model should enforce these constraints:</para>
 
-          <para><emphasis role="strong">40.10</emphasis> A user must have a non-empty email address.</para>
+          <para><emphasis role="strong">40.10</emphasis> A user must have a nonempty email address.</para>
 
           <para><emphasis role="strong">40.20</emphasis> Two different users may not have the same email
             address on a single OpenACS installation; i.e., an email address identifies a

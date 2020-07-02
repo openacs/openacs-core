@@ -329,7 +329,7 @@
       <formalpara>
         <title>Web Server</title>
         <para>The web server handles incoming HTTP requests, provides
-          a runtime environment for OpenACS&#39;s Tcl code, connects to the
+          a run time environment for OpenACS&#39;s Tcl code, connects to the
           database, sends out HTTP responses, and logs requests and
           errors.  OpenACS uses AOLserver;
           <ulink url="http://openacs.org/forums/message-view?message_id=21461">some people have had success running Apache with mod_nsd</ulink>.</para>
@@ -475,7 +475,7 @@
     <listitem>
       <formalpara>
         <title>Database</title>
-        <para>The data on your site (for example, user names and passwords,
+        <para>The data on your site (for example, usernames and passwords,
           calendar entries, and notes) is stored in the database.
           OpenACS separates the database with an abstraction layer,
           which means that several different databases all function

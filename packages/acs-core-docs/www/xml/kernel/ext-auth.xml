@@ -256,8 +256,7 @@ authentication process from a page linked under /acs-admin.</para>
         <listitem><para>Authentication Driver, e.g. "RADIUS". In practice, this
           would be a reference to a service contract
           implementation.</para></listitem>
-        <listitem><para>Authentication Driver configuration settings, e.g. host
-          name, port, etc., as required by the particular driver. Note that
+        <listitem><para>Authentication Driver configuration settings, e.g. hostname, port, etc., as required by the particular driver. Note that
           this is per authority, not per driver, i.e., you can have multiple
           authorities with the same driver but different configuration
           options.</para></listitem>
@@ -275,8 +274,7 @@ authentication process from a page linked under /acs-admin.</para>
           reason we have separate drivers for authentication and account
           creation is that organizations are likely to have a home-grown
           account registration process.</para></listitem>
-        <listitem><para>Account Creation Driver configuration settings, e.g. host
-          name, port, etc., as required by the particular driver. Note that
+        <listitem><para>Account Creation Driver configuration settings, e.g. hostname, port, etc., as required by the particular driver. Note that
           this is per authority, not per driver, i.e., you can have multiple
           authorities with the same driver but different configuration
           options.</para></listitem>

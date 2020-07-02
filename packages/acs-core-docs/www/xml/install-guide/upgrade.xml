@@ -97,7 +97,7 @@
         <listitem>
           <formalpara>
             <title>Make a Backup</title>
-            <para>Back up the database and file system (see <xref linkend="snapshot-backup"/>).</para>
+            <para>Back up the database and filesystem (see <xref linkend="snapshot-backup"/>).</para>
           </formalpara>
         </listitem>
         <listitem>
@@ -114,7 +114,7 @@
         </listitem>
         <listitem>
           <formalpara>
-            <title>Upgrade the file system</title>
+            <title>Upgrade the filesystem</title>
             <para><xref linkend="upgrade-openacs-files"/></para>
           </formalpara>
         </listitem>
@@ -188,11 +188,11 @@
           </formalpara>
           <orderedlist>
             <listitem>
-              <para><link linkend="snapshot-backup">Back up the database and file system.</link></para>
+              <para><link linkend="snapshot-backup">Back up the database and filesystem.</link></para>
             </listitem>
         <listitem>
           <formalpara>
-            <title>Upgrade the file system for packages/acs-kernel</title>
+            <title>Upgrade the filesystem for packages/acs-kernel</title>
             <para><xref linkend="upgrade-openacs-files"/></para>
           </formalpara>
         </listitem>
@@ -304,12 +304,12 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
             <orderedlist>
               <listitem>
                 <formalpara>
-                  <title>Upgrade the file system for all packages in use</title>
+                  <title>Upgrade the filesystem for all packages in use</title>
                   <para><xref linkend="upgrade-openacs-files"/></para>
                 </formalpara>
               </listitem>
               <listitem>
-                <para>Go to <ulink url="/acs-admin/install">/acs-admin/install/</ulink> and click "Upgrade Your System" in "Install from local file system"</para>
+                <para>Go to <ulink url="/acs-admin/install">/acs-admin/install/</ulink> and click "Upgrade Your System" in "Install from local filesystem"</para>
               </listitem>
               <listitem>
                 <para>Select all of the packages you want to upgrade and proceed</para>
@@ -339,11 +339,11 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
         </itemizedlist>
       </para>
 
-      <para>Upgrades work by first changing the file system (via any
+      <para>Upgrades work by first changing the filesystem (via any
         of the previous methods), and then using the APM to scan the
-        file system, find upgrade scripts, and execute them. Starting
+        filesystem, find upgrade scripts, and execute them. Starting
         with OpenACS 5.0, the last method was added, which
-        automatically changes the file system for you. If you are
+        automatically changes the filesystem for you. If you are
         using the last method, you can skip this page. This page
         describes whether or not you need to be upgrading using this
         page or not:

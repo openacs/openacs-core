@@ -410,8 +410,8 @@ associated with a session to be carried over when a user logs in.</para>
 
 <para>The users table is updated by
 <computeroutput>sec_update_user_session_info</computeroutput> which is called
-when an existing session is assigned a non-zero user_id, or when a session is
-created with a non-zero user_id.</para>
+when an existing session is assigned a nonzero user_id, or when a session is
+created with a nonzero user_id.</para>
 
 </sect3>
 
@@ -455,7 +455,7 @@ db and <computeroutput>tcl_max_value</computeroutput> is incremented by
 these values are used to dynamically generate a procedure that returns a
 constant. This approach avoids (relatively) expensive calls to
 <computeroutput>ad_parameter</computeroutput> in <computeroutput>sec_handler</computeroutput>. The impact of this
-approach is that these parameters cannot be dynamically changed at runtime
+approach is that these parameters cannot be dynamically changed at run time
 and require a server restart.</para>
 
 </sect3>

@@ -655,27 +655,25 @@ search in any supported language.</para>
 
 <blockquote>
 <para><emphasis>90.10</emphasis> Provide API support for specifying
-a time zone</para>
+a timezone</para>
 
 <para><emphasis>90.20</emphasis> Provide an API for computing time
 and date operations which are aware of timezones. So for example a
 calendar module can properly synchronize items inserted into a
-calendar from users in different time zones using their own local
+calendar from users in different timezones using their own local
 times.</para>
 
 <para><emphasis>90.30</emphasis> Store all dates and times in
-universal time zone, UTC.</para>
+universal timezone, UTC.</para>
 
-<para><emphasis>90.40</emphasis> For a registered users, a time
-zone preference should be stored.</para>
+<para><emphasis>90.40</emphasis> For a registered users, a timezone preference should be stored.</para>
 
-<para><emphasis>90.50</emphasis> For a non-registered user a time
-zone preference should be attached via a session or else UTC should
+<para><emphasis>90.50</emphasis> For a non-registered user a timezone preference should be attached via a session or else UTC should
 be used to display every date and time.</para>
 
 <para><emphasis>90.60</emphasis> The default if we can&#39;t
-determine a time zone is to display all dates and times in some
-universal time zone such as GMT.</para>
+determine a timezone is to display all dates and times in some
+universal timezone such as GMT.</para>
 </blockquote>
 
 </sect2><sect2 id="VI.H_Database"><title>Database</title>

@@ -213,7 +213,7 @@ data model exist, which you can read about in <xref linkend="object-system-desig
 model, or how to store information that may change extensively between
 releases or in different client installations. Furthermore, we want to avoid
 changes to an application&#39;s database queries in the face of any custom
-extensions, since such changes are difficult or dangerous to make at runtime,
+extensions, since such changes are difficult or dangerous to make at run time,
 and can make updating the system difficult. Some example applications in OpenACS
 3.x with modifiable data models include:</para>
 

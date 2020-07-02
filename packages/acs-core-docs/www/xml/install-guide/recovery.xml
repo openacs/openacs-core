@@ -97,7 +97,7 @@
     database to a file within the file tree.  Then, you back up the
     file tree.  All of the information needed to rebuild the site,
     including the AOLserver config files, is then in tree for regular
-    file system backup.</para>
+    filesystem backup.</para>
 
     <orderedlist>
       <listitem>
@@ -210,7 +210,7 @@ exit</action></screen>
       </listitem>
       <listitem id="backup-file-system">
         <formalpara>
-          <title>Back up the file system</title>
+          <title>Back up the filesystem</title>
           <para>Back up all of the files in the service, including the
           database backup file but excluding the auto-generated
           <filename>supervise</filename> directory, which is
@@ -330,7 +330,7 @@ Shall the new user be allowed to create more new users? (y/n) <userinput>y</user
 CREATE USER
 [postgres ~]$ <userinput>exit</userinput>
 </screen>
-                <para>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  In practice, running the OpenACS initialization script is always sufficient to create any out-of-order database objects.  Next, restore the database from the dump file.  The restoration will show some error messages at the beginning for objects that were pre-created from the OpenACS initialization script, which can be ignored.</para>
+                <para>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  In practice, running the OpenACS initialization script is always sufficient to create any out-of-order database objects.  Next, restore the database from the dump file.  The restoration will show some error messages at the beginning for objects that were precreated from the OpenACS initialization script, which can be ignored.</para>
 
 <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME ~]$ <userinput>createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>

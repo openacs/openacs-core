@@ -11,7 +11,7 @@
       <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
     </authorblurb>
 
-  <para>In this chapter, <emphasis role="strong">Configuring</emphasis> refers to making changes to a new OpenACS site through the web interface.  In crude terms, these changes happen in the database, and are upgrade-safe.  <emphasis role="strong">Customizing</emphasis> refers to changes that touch the file system, and require some planning if easy upgradability is to be maintained.</para>
+  <para>In this chapter, <emphasis role="strong">Configuring</emphasis> refers to making changes to a new OpenACS site through the web interface.  In crude terms, these changes happen in the database, and are upgrade-safe.  <emphasis role="strong">Customizing</emphasis> refers to changes that touch the filesystem, and require some planning if easy upgradability is to be maintained.</para>
 
   <sect1 id="configuring-install-packages">
     <title>Installing OpenACS packages</title>

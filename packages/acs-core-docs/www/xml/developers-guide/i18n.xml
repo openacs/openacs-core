@@ -115,7 +115,7 @@
       keys and localized ADP files.  For ADP pages which are mostly
       code, replacing the message text with message key placeholders
       is simpler.  This approach also allows new translation in the
-      database, without affecting the file system.  For ADP pages
+      database, without affecting the filesystem.  For ADP pages
       which are static and mostly text, it may be easier to create a
       new ADP page for each language.  In this case, the pages are
       distinguished by a file naming convention.
@@ -129,7 +129,7 @@
     <sect2 id="i18n-locale-templates">
 
       <title>Separate Templates for each Locale</title>
-      <para>If the request processor finds a file named <computeroutput>filename.locale.adp</computeroutput>, where locale matches the user&#39;s locale, it will process that file instead of <computeroutput>filename.adp</computeroutput>.  For example, for a user with locale <computeroutput>tl_PH</computeroutput>, the file <computeroutput>index.tl_PH.adp</computeroutput>, if found, will be used instead of <computeroutput>index.adp</computeroutput>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</para>
+      <para>If the request processor finds a filenamed <computeroutput>filename.locale.adp</computeroutput>, where locale matches the user&#39;s locale, it will process that file instead of <computeroutput>filename.adp</computeroutput>.  For example, for a user with locale <computeroutput>tl_PH</computeroutput>, the file <computeroutput>index.tl_PH.adp</computeroutput>, if found, will be used instead of <computeroutput>index.adp</computeroutput>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</para>
     </sect2>
     <sect2 id="i18n-message-catalog">
     <title>Message Catalogs</title>
@@ -228,7 +228,7 @@
           </listitem> 
 
           <listitem><para>
-            Static key lookup with non-default locale: <computeroutput>[lang::message::lookup $locale package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can&#39;t result from variable evaluation.</para>
+            Static key lookup with nondefault locale: <computeroutput>[lang::message::lookup $locale package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can&#39;t result from variable evaluation.</para>
           </listitem>
 
           <listitem>

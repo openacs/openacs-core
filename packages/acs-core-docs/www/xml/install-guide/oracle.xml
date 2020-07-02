@@ -255,7 +255,7 @@ Password: ***********
       <listitem><para> 
 
           Setup the installation location for Oracle. While Oracle can
-          reside in a variety of places in the file system, OpenACS has
+          reside in a variety of places in the filesystem, OpenACS has
           adopted <computeroutput>/ora8</computeroutput> as the base
           directory.
 
@@ -1140,7 +1140,7 @@ IMPORTANT NOTE: Please delete any log and trace files previously
     <para>
       Congratulations, you have just installed Oracle 8.1.7 Server!
       However, you still need to create a database which can take about an
-      hour of non-interactive time, so don&#39;t quit yet.
+      hour of noninteractive time, so don&#39;t quit yet.
     </para>
   </sect2>
 
@@ -1304,7 +1304,7 @@ Password: *********
       <listitem><para>
           Click the &quot;<computeroutput>Save</computeroutput>&quot;
           button. Oracle will automatically save it to the correct
-          directory and with the correct file name. This will likely be
+          directory and with the correct filename. This will likely be
           <computeroutput>/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib/sqlora8.sh</computeroutput>
         </para></listitem>
 

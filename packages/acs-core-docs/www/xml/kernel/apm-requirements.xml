@@ -119,7 +119,7 @@ file)</para></listitem>
 </listitem>
 
 <listitem><para><emphasis role="strong">A registry of installed packages</emphasis>, database-backed and
-integrated with file system-based version control 
+integrated with filesystem-based version control 
 
 
 </para></listitem>
@@ -498,7 +498,7 @@ identified.</para>
 
 <itemizedlist>
 <listitem><para><emphasis role="strong">4.600.1</emphasis> Each package will have a PGP signature and there
-will be MD5 time stamps for each file within the package. 
+will be MD5 timestamps for each file within the package. 
 
 
 </para></listitem>
@@ -558,7 +558,7 @@ package cannot be created.</para>
 
 <para><emphasis role="strong">20.1</emphasis> The developer must be able to add files to the
 package. This is done by copying the files into the package directory in the
-host OS&#39;s file system. Files can be added at any point after package
+host OS&#39;s filesystem. Files can be added at any point after package
 creation.</para>
 
 <para><emphasis role="strong">20.3</emphasis> Once a package has been versioned and distributed,
@@ -566,11 +566,11 @@ no new files should be added to the package without incrementing the version
 number.</para>
 
 <para><emphasis role="strong">20.5</emphasis> The APM&#39;s UI should facilitate the process of
-adding new files, by scanning the file system for new files automatically,
+adding new files, by scanning the filesystem for new files automatically,
 and allowing the developer to confirm adding them.</para>
 
 <para><emphasis role="strong">20.10</emphasis> The developer cannot add files to a given package
-via the UI that do not exist in the file system already.</para>
+via the UI that do not exist in the filesystem already.</para>
 
 <para><emphasis role="strong">20.15</emphasis> Package file structure must follow a specified
 convention. Please see the <link linkend="apm-design">design
@@ -586,10 +586,10 @@ done in two ways.</para>
 files.</para> 
 
 <para><emphasis role="strong">30.1.1</emphasis>If a file is removed from the package list, but not
-from the file system, an error should be generated at package load time.</para>
+from the filesystem, an error should be generated at package load time.</para>
 </listitem>
 
-<listitem><para><emphasis role="strong">30.5</emphasis> Remove the file from file system. </para>
+<listitem><para><emphasis role="strong">30.5</emphasis> Remove the file from filesystem. </para>
 
 <para><emphasis role="strong">30.5.1</emphasis> The APM UI should take note of the fact that the
 file is gone and offer the developer an option to confirm the file&#39;s
@@ -603,7 +603,7 @@ deletion.
 <listitem><para><emphasis role="strong">40.0 Modify files in a package</emphasis>. </para>
 
 <para><emphasis role="strong">40.1</emphasis> The developer should be able to modify files in the
-file system. The APM UI should not interfere with this.</para>
+filesystem. The APM UI should not interfere with this.</para>
 
 <para><emphasis role="strong">40.5</emphasis> However, if the developer modifies files containing
 procedural definitions, APM UI should allow a means to <emphasis role="strong">watch</emphasis>
@@ -648,8 +648,7 @@ across server restarts.
 specification that encodes all package information.
 </para></listitem>
 
-<listitem><para><emphasis role="strong">70.0 Write an XML package specification to the file
-system</emphasis> </para>
+<listitem><para><emphasis role="strong">70.0 Write an XML package specification to the filesystem</emphasis> </para>
 
 <para><emphasis role="strong">70.1</emphasis> The developer should be able to write an up-to-date
 XML specification to disk.</para>
@@ -837,7 +836,7 @@ package that has already been installed. Deinstallation entails:</para>
 the package.</para></listitem>
 
 <listitem><para><emphasis role="strong">110.1.5</emphasis> Moving all of the files into a separate location
-in the file system from the installed packages.</para></listitem>
+in the filesystem from the installed packages.</para></listitem>
 
 <listitem><para><emphasis role="strong">4.110.1.10</emphasis> If the package is a compound package, then
 the administrator must confirm removing all sub-packages. Optionally, some
@@ -871,11 +870,9 @@ consequences throughout a site and should almost never be done.</para>
 
 <listitem><para><emphasis role="strong">150.0 Scan for new or modified packages</emphasis> </para>
 
-<para><emphasis role="strong">150.1</emphasis> The administrator should be able to scan the file
-system for any changes made in any of the installed package files.</para>
+<para><emphasis role="strong">150.1</emphasis> The administrator should be able to scan the filesystem for any changes made in any of the installed package files.</para>
 
-<para><emphasis role="strong">150.5</emphasis> The administrator should be able to scan the file
-system for any newly installed packages.
+<para><emphasis role="strong">150.5</emphasis> The administrator should be able to scan the filesystem for any newly installed packages.
 </para></listitem>
 </itemizedlist>
 
