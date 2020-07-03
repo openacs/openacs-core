@@ -113,7 +113,7 @@ aa_register_case \
 		SELECT person_id, first_names, last_name
 		FROM persons where person_id = :user_id
 	    }
-	    aa_equals "columns non-empty" [template::multirow columns person_mr2] \
+	    aa_equals "columns nonempty" [template::multirow columns person_mr2] \
 		"person_id first_names last_name"
 
 	    aa_log "Test End"

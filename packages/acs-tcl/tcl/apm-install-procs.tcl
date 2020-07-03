@@ -1982,10 +1982,10 @@ ad_proc -private apm_get_package_repository {
     {-array:required}
 } {
     Gets a list of packages available for install from either a remote package repository
-    or the local file system.
+    or the local filesystem.
 
     @param repository_url The URL for the repository channel to get from, or the empty string to
-    search the local file system instead.
+    search the local filesystem instead.
 
     @param array          Name of an array where you want the repository stored. It will be keyed by package-key,
     and each entry will be an array list returned by apm_read_package_info_file.
@@ -2641,7 +2641,7 @@ ad_proc -private apm::package_version::attributes::generate_xml {
     #
     foreach attribute_name [lsort [array names attributes]] {
         #
-        # Only output tag if its value is non-empty
+        # Only output tag if its value is nonempty
         #
         if { $attributes($attribute_name) ne "" } {
 

@@ -90,7 +90,7 @@ ad_proc rp_getform {} {
     @creation-date August 20, 2002
 
     @return the form ns_set, just like ns_getform, except it will
-    always be non-empty.
+    always be nonempty.
 
 } {
     # The form may not exist, if there's nothing in it
@@ -691,7 +691,7 @@ ad_proc -private rp_filter { why } {
 
     # DRB: a bug in ns_conn causes urlc to be set to one greater than the number of URL
     # directory elements and the trailing element of urlv to be set to
-    # {} if you hit the site with the host name alone.  This confuses code that
+    # {} if you hit the site with the hostname alone.  This confuses code that
     # expects urlc to be set to the length of urlv and urlv to have a non-null
     # trailing element except in the case where urlc is 0 and urlv the empty list.
 
@@ -1868,7 +1868,7 @@ namespace eval ::acs {}
 
 ad_proc -deprecated root_of_host {host} {
 
-    Maps a hostname to the corresponding sub-directory.
+    Maps a hostname to the corresponding subdirectory.
 
     DEPRECATED: this proc does not comply with OpenACS naming
     convention.
@@ -1881,7 +1881,7 @@ ad_proc -deprecated root_of_host {host} {
 
 ad_proc acs::root_of_host {host} {
 
-    Maps a hostname to the corresponding sub-directory.
+    Maps a hostname to the corresponding subdirectory.
 
 } {
     return [acs::per_thread_cache eval -key acs-tcl.root_of_host($host) {

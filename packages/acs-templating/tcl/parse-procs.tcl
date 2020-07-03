@@ -485,7 +485,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     Converts an ADP template into a chunk of Tcl code.  Caching this code
     avoids the need to reparse the ADP template with each request.
 
-    @param file The file name of the source
+    @param file The filename of the source
     @param string string to be compiled
     @return The compiled code.
 

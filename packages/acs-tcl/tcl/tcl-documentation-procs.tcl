@@ -743,7 +743,7 @@ ad_proc -public ad_page_contract {
     # Parse -properties argument
     #
     ####################
-    # This must happen even if the query (a.k.a. parameters, formals) is empty
+    # This must happen even if the query (aka parameters, formals) is empty
 
     if { [info exists properties] } {
         upvar 1 __page_contract_property property

@@ -87,7 +87,7 @@ ad_proc -public template::util::is_nil { ref } {
     @param ref  The name of a variable to test in the calling frame.
 
     @return 1 if the variable either not exist or is an empty string.  0 if
-    the variable is either an array reference or a non-empty scalar.
+    the variable is either an array reference or a nonempty scalar.
 } {
 
     upvar $ref var
@@ -430,7 +430,7 @@ ad_proc -public template::util::list_of_ns_sets_to_multirow {
 }
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-# * Utility procedures for interacting with the file system *
+# * Utility procedures for interacting with the filesystem *
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 ad_proc -public template::util::read_file { path } {
@@ -533,7 +533,7 @@ ad_proc -public template::util::url_to_file { url {reference_url ""} } {
 }
 
 ad_proc -public template::util::resolve_directory_url { url } {
-    Resolve the file name for a directory URL
+    Resolve the filename for a directory URL
 } {
     set path $::acs::pageroot$url
 

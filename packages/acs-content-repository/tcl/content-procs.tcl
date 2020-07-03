@@ -1,7 +1,7 @@
 ad_library {
 
     Functions that the content-repository uses to interact with the
-    file system.
+    filesystem.
 
     @author Dan Wickstrom (dcwickstrom@earthlink.net)
     @creation-date Sat May  5 13:45 2001
@@ -19,7 +19,7 @@ ad_proc -public cr_fs_path { { location CR_FILES } } {
 
 ad_proc -private cr_create_content_file_path {item_id revision_id} {
 
-    Creates a unique file in the content repository file system based off of
+    Creates a unique file in the content repository filesystem based on
     the item_id and revision_id of the content item.
 
 } {

@@ -62,7 +62,7 @@ ad_proc -public ::content::item::new {
     @param description of content_revision to be created
     @param text - text of content revision to be created
     @param tmp_filename file containing content to be added to new revision.
-           Caller is responsible to handle cleaning up the tmp file
+           Caller is responsible to handle cleaning up the temporary file
     @param nls_language - ???
     @param data - ???
     @param attributes A list of lists of pairs of additional attributes and

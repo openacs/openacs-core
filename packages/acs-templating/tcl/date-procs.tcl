@@ -443,7 +443,7 @@ ad_proc -public template::util::date::set_property { what date value } {
         return $date
     }
 
-  # Erase leading zeroes from the value, but make sure that 00
+  # Erase leading zeros from the value, but make sure that 00
   # is not completely erased - but only for single-element properties
 
   switch -- $value {
@@ -512,7 +512,7 @@ ad_proc -public template::util::date::set_property { what date value } {
     }
     ansi {
         # Some initialization...
-        # Rip $date into $ansi_* as numbers, no leading zeroes
+        # Rip $date into $ansi_* as numbers, no leading zeros
         set matchdate {([0-9]{4})\-0?(1?[0-9])\-0?([1-3]?[0-9])}
         set matchtime {0?([1-2]?[0-9]):0?([1-5]?[0-9]):0?([1-6]?[0-9])}
         set matchfull "$matchdate $matchtime"
@@ -687,7 +687,7 @@ ad_proc -public template::util::date::add_time { {-time_array_name:required} {-d
     foreach field [array names time_in] {
         # skip format
         if {$field ne "format" } {
-            # Coerce values to non-negative integers
+            # Coerce values to nonnegative integers
             if { $field ne "ampm" } {
                 if { ![regexp {[0-9]+} $time_in($field) value] } {
                     set value {}
@@ -707,7 +707,7 @@ ad_proc -public template::util::date::add_time { {-time_array_name:required} {-d
     foreach field [array names date_in] {
         # skip format
         if {$field ne "format" } {
-            # Coerce values to non-negative integers
+            # Coerce values to nonnegative integers
             if { ![regexp {[0-9]+} $date_in($field) value] } {
                 set value {}
             }
@@ -820,7 +820,7 @@ ad_proc -public template::util::date::validate { date error_ref } {
 
 
 ad_proc -public -deprecated template::util::leadingPad { string size } {
-    Pad a string with leading zeroes
+    Pad a string with leading zeros
 
     Deprecated: please use the new and more general 'ad_pad'.
 
@@ -838,7 +838,7 @@ ad_proc -public -deprecated template::util::leadingPad { string size } {
 }
 
 ad_proc -public -deprecated template::util::leadingTrim { value } {
-    Trim the leading zeroes from the value, but preserve the value
+    Trim the leading zeros from the value, but preserve the value
     as "0" if it is "00"
 
     @see util::trim_leading_zeros
@@ -1136,7 +1136,7 @@ ad_proc -public template::data::transform::date { element_ref } {
      set key "$element_id.$field"
      if { [ns_queryexists $key] } {
        set value [ns_queryget $key]
-       # Coerce values to non-negative integers
+       # Coerce values to nonnegative integers
        if { $field ne "ampm" } {
          if { ![regexp {[0-9]+} $value value] } {
            set value {}

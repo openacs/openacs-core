@@ -192,7 +192,7 @@ ad_proc -public template::util::currency::set_property {
 
 } {
 
-    # Erase leading zeroes from the value, but make sure that 00
+    # Erase leading zeros from the value, but make sure that 00
     # is not completely erased
     set value [util::trim_leading_zeros $value]
 

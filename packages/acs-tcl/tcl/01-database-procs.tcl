@@ -28,7 +28,7 @@ ad_library {
 # AOLserver, but could only use ONE database here.
 #
 # I have eliminated this restriction.  Now, in OpenACS 5.0 and later,
-# to access a non-default database, simply pass the optional -dbn
+# to access a nondefault database, simply pass the optional -dbn
 # (Database Name) switch to any of the DB API procs which support it.
 #
 # Supported AOLserver database drivers:
@@ -393,14 +393,14 @@ ad_proc -public db_nextval {
             #
             # The code above is just for documentation, how it worked
             # before the change below. We keep now a per-thread table of
-            # the "known" sequences to avoid at runtime the query,
+            # the "known" sequences to avoid at run time the query,
             # whether the specified sequence is a real sequence or a
             # view. This change makes this function more than a factor
             # of 2 faster than before.
             #
             # Note that solely the per-thread information won't work for
             # freshly created sequences. Therefore, we keep the old
-            # code for checking at runtime in the database for such
+            # code for checking at run time in the database for such
             # occurrences.
             #
             # Note that the sequence handling in OpenACS is quite a
@@ -409,7 +409,7 @@ ad_proc -public db_nextval {
             # for some sequences, additional views are defined with an
             # attribute 'nextval', and on top of this, db_nextval is
             # called sometimes with the view name and sometimes with
-            # the sequence name. Checking this at runtime is
+            # the sequence name. Checking this at run time is
             # unnecessary complex and costly.
             #
             # The best solution would certainly be to call "db_nextval"
@@ -1914,7 +1914,7 @@ ad_proc -public db_multirow {
 
     <p>
 
-    You can not simultaneously append to and cache a non-empty multirow.
+    You can not simultaneously append to and cache a nonempty multirow.
 
     <p>
 
@@ -2017,7 +2017,7 @@ ad_proc -public db_multirow {
          && $append_p
          && [info exists counter] && $counter > 0
      } {
-        return -code error "Can't append and cache a non-empty multirow datasource simultaneously"
+        return -code error "Can't append and cache a nonempty multirow datasource simultaneously"
     }
 
     if { [info exists cache_key] } {
@@ -2348,7 +2348,7 @@ ad_proc -public db_1row { args } {
 if {[info commands ns_cache_transaction_begin] eq ""} {
     #
     # When the server has no support for ns_cache_transaction_*,
-    # provide dummy procs to avoid runtime "if" statements.
+    # provide dummy procs to avoid run time "if" statements.
     #
     proc ns_cache_transaction_begin args {;}
     proc ns_cache_transaction_commit args {;}
@@ -2887,7 +2887,7 @@ ad_proc -public db_load_sql_data {
     file
 } {
     Loads a CSV formatted file into a table using PostgreSQL's COPY command or
-    Oracle's SQL*Loader utility.  The file name format consists of a sequence
+    Oracle's SQL*Loader utility.  The filename format consists of a sequence
     number used to control the order in which tables are loaded, and the table
     name with "-" replacing "_".  This is a bit of a kludge but greatly speeds
     the loading of large amounts of data, such as is done when various "ref-*"
@@ -3059,7 +3059,7 @@ ad_proc -public db_tables {
     @author Don Baccus (dhogaza@pacifier.com)
     @author Lars Pind (lars@pinds.com)
 
-    @change-log yon@arsdigita.com 20000711 changed to return lower case table names
+    @change-log yon@arsdigita.com 20000711 changed to return lowercase table names
 } {
     set proc_name {db_tables}
     set driverkey [db_driverkey $dbn]
@@ -3158,7 +3158,7 @@ ad_proc -public db_columns {{-dbn ""} table_name } {
 
     @author Lars Pind (lars@pinds.com)
 
-    @change-log yon@arsdigita.com 20000711 changed to return lower case column names
+    @change-log yon@arsdigita.com 20000711 changed to return lowercase column names
 } {
     set columns [list]
 
@@ -3211,7 +3211,7 @@ ad_proc -public db_column_type {{-dbn ""} {-complain:boolean} table_name column_
     if column name doesn't exist
     (mdettinger@arsdigita.com)
 
-    @change-log 11 July, 2000: changed to return lower case data types
+    @change-log 11 July, 2000: changed to return lowercase data types
     (yon@arsdigita.com)
 
     @change-log 11 July, 2000: changed to return error using the db_string default clause

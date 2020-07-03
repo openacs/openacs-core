@@ -703,7 +703,7 @@ ad_proc -public template::list::filter_from_clauses {
     -name:required
     -comma:boolean
 } {
-    @param  comma     Set this flag if you want the result to start with an ',' if the list of from clauses returned is non-empty.
+    @param  comma     Set this flag if you want the result to start with an ',' if the list of from clauses returned is nonempty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -725,7 +725,7 @@ ad_proc -public template::list::filter_select_clauses {
     -name:required
     -comma:boolean
 } {
-    @param  comma     Set this flag if you want the result to start with a ',' if the list of select clauses returned is non-empty.
+    @param  comma     Set this flag if you want the result to start with a ',' if the list of select clauses returned is nonempty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -747,7 +747,7 @@ ad_proc -public template::list::from_clauses {
     -name:required
     -comma:boolean
 } {
-    @param  comma     Set this flag if you want the result to start with an ',' if the list of from clauses returned is non-empty.
+    @param  comma     Set this flag if you want the result to start with an ',' if the list of from clauses returned is nonempty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -781,7 +781,7 @@ ad_proc -public template::list::element_select_clauses {
     -name:required
     -comma:boolean
 } {
-    @param  comma     Set this flag if you want the result to start with a ',' if the list of select clauses returned is non-empty.
+    @param  comma     Set this flag if you want the result to start with a ',' if the list of select clauses returned is nonempty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -803,7 +803,7 @@ ad_proc -public template::list::filter_where_clauses {
     -name:required
     -and:boolean
 } {
-    @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is non-empty.
+    @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is nonempty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -824,7 +824,7 @@ ad_proc -public template::list::element_where_clauses {
     -name:required
     -and:boolean
 } {
-    @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is non-empty.
+    @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is nonempty.
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
@@ -847,7 +847,7 @@ ad_proc -public template::list::page_where_clause {
     -and:boolean
     {-key ""}
 } {
-    @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is non-empty.
+    @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is nonempty.
 
     @param key      Specify the name of the primary key to be used in the query's where clause,
     if different from the list builder's key.
@@ -1987,7 +1987,7 @@ ad_proc -public template::list::element::create {
     <li>
     <b>link_url_col</b>: Name of column in the multirow which contains the URL to which the cell contents should point.
     If either link_url_col or link_url_eval is specified, the cell's contents will be made a link to the specified URL, if that
-    URL is non-empty.
+    URL is nonempty.
     </li>
     <li>
     <b>link_url_eval</b>: A chunk of Tcl code which will be evaluated in the context of a template::multirow foreach looping over the

@@ -180,7 +180,7 @@ ad_proc -public apm_read_package_info_file { path } {
     <li><code>files</code>: a list of files in the package,
     containing elements of the form <code>[list $path
     $type]</code> NOTE: Files are no longer stored in info files but are always retrieved
-    directly from the file system. This element in the array will always be the empty list.
+    directly from the filesystem. This element in the array will always be the empty list.
     <li><code>callbacks</code>: an array list of callbacks of the package
     on the form <code>[list callback_type1 proc_name1 callback_type2 proc_name2 ...]</code> 
     <li>Element and attribute values directly from the XML specification:

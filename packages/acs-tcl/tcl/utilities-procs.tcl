@@ -799,7 +799,7 @@ ad_proc -public export_vars {
     This avoids cluttering up the URLs with lots of unnecessary variables.
 
     @option base The base URL to make a link to. This will be prepended to the query string
-    along with a question mark (?), if the query is non-empty. So the returned
+    along with a question mark (?), if the query is nonempty. So the returned
     string can be used directly in a link. This is only relevant to URL export.
 
     @option no_base_encode Decides whether argument passed as <code>base</code> option will be
@@ -845,7 +845,6 @@ ad_proc -public export_vars {
             }
         }
     }
-
 
     #####
     #
@@ -1232,7 +1231,7 @@ ad_proc -public util_get_current_url {} {
 
 ad_proc -deprecated with_catch {error_var body on_error} {
     execute code in body with the catch errorMessage in error_var
-    and if there is a non-zero return code from body
+    and if there is a nonzero return code from body
     execute the on_error block.
 
     DEPRECATED: does not comply with OpenACS naming convention and can
@@ -1947,7 +1946,7 @@ ad_proc -public ad_returnredirect {
     @param message A message to display to the user. See util_user_message.
     @param html Set this flag if your message contains HTML. If specified, you're responsible for proper quoting
     of everything in your message. Otherwise, we quote it for you.
-    @param allow_complete_url By default we disallow redirecting to URLs outside the current host. This is based on the currently set host header or the host name in the config file if there is no host header. Set allow_complete_url if you are redirecting to a known safe external web site. This prevents redirecting to a site by URL query hacking.
+    @param allow_complete_url By default we disallow redirecting to URLs outside the current host. This is based on the currently set host header or the hostname in the config file if there is no host header. Set allow_complete_url if you are redirecting to a known safe external web site. This prevents redirecting to a site by URL query hacking.
 
     @see util_user_message
     @see ad_script_abort
@@ -2119,7 +2118,7 @@ ad_proc -public util_driver_info {
 }
 
 ad_proc util::split_host {hostspec hostnameVar portVar} {
-    Split host potentially into a host name and a port
+    Split host potentially into a hostname and a port
 } {
     upvar $hostnameVar hostname $portVar port
     if {![regexp {^(.*):(\d+)$} $hostspec . hostname port]} {
@@ -2213,7 +2212,7 @@ ad_proc -public util_current_location {} {
     This function behaves like [ad_conn location], since it returns
     the location string of the current request in the form
     protocol://hostname?:port? but it honors the "Host:" header field
-    (when the client addressed the server with a host name different
+    (when the client addressed the server with a hostname different
     to the default one from the server configuration file) and
     therefore as well the host-node mapping.  If the "Host" header
     field is missing or empty this function falls back to [ad_conn
@@ -2804,7 +2803,7 @@ ad_proc ad_sanitize_filename {
     str
 } {
     Sanitize the provided filename for modern Windows, OS X, and Unix
-    file systems (NTFS, ext, etc.). FAT 8.3 filenames are not supported.
+    filesystems (NTFS, ext, etc.). FAT 8.3 filenames are not supported.
     The generated strings should be safe against
     <a target="_blank" href="https://github.com/minimaxir/big-list-of-naughty-strings">
     https://github.com/minimaxir/big-list-of-naughty-strings
@@ -3200,7 +3199,7 @@ ad_proc -public xml_get_child_node_content_by_path {
     node
     path_list
 } {
-    Return the first non-empty contents of a child node down a given path from the current node.
+    Return the first nonempty contents of a child node down a given path from the current node.
 
     <p>
 
@@ -3672,7 +3671,7 @@ ad_proc -deprecated ad_var_type_check_third_urlv_integer_p {{args ""}} {
 ad_proc util::name_to_path {
     -name:required
 } {
-    Transforms a pretty name to a reasonable path name.
+    Transforms a pretty name to a reasonable pathname.
 } {
     regsub -all -nocase { } [string trim [string tolower $name]] {-} name
     regsub -all {[^[:alnum:]\-]} $name {} name
@@ -4184,7 +4183,7 @@ ad_proc util::catch_exec {command result_var} {
                 lassign $::errorCode  - pid code
 
                 # A child process, whose process ID was $pid,
-                # exited with a non-zero exit status, $code.
+                # exited with a nonzero exit status, $code.
                 ns_log notice "util::catch_exec: Childstatus $pid $code $result"
             }
 
@@ -4222,7 +4221,7 @@ ad_proc util::external_url_p { url } {
     check if this URL is external to the current host or a valid alternative
     valid alternatives include
     HTTPS or HTTP protocol change
-    HTTP or HTTPS port number added or removed from current host name
+    HTTP or HTTPS port number added or removed from current hostname
     or another hostname that the host responds to (from host_node_map)
 } {
     set external_url_p [util_complete_url_p $url]

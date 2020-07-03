@@ -1,6 +1,6 @@
 ad_library {
 
-    Functions that APM uses to interact with the file system and I/O.
+    Functions that APM uses to interact with the filesystem and I/O.
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Fri Oct  6 21:46:05 2000
@@ -542,7 +542,7 @@ ad_proc -private apm_load_apm_file {
 
         if {![file exists $file_path]} {
             apm_callback_and_log $callback  "
-            The file cannot be found.  Your URL or your file name is incorrect.  Please verify that the file name
+            The file cannot be found.  Your URL or your filename is incorrect.  Please verify that the filename
             is correct and try again."
             ns_log Error "Error loading APM file form url $url: The file cannot be found."
             return

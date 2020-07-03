@@ -308,7 +308,7 @@ ad_proc -private util::http::get_channel_settings {
 } {
     Helper proc to get encoding based on content_type (From xotcl/tcl/http-client-procs)
 } {
-    # In the following, I realise a IANA/MIME charset resolution
+    # In the following, I realize a IANA/MIME charset resolution
     # scheme which is compliant with RFC 3023 which deals with
     # treating XML media types properly.
     #

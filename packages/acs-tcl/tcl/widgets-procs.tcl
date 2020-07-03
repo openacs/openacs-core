@@ -232,7 +232,7 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
         set year ""
     } else {
         lassign [split $value "-"] year month day
-        # trim the day, in case we get as well a time stamp
+        # trim the day, in case we get as well a timestamp
         regexp {^([0-9]+) } $day _ day
     }
 

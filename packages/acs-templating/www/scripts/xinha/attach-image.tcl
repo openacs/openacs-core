@@ -87,7 +87,7 @@ if {$write_p} {
             set package_id $package_id
         } \
         -on_submit {
-            # check file name
+            # check filename
 
             if {$choose_file eq "" && $upload_file eq ""} {
                 template::form::set_error upload_form upload_file \

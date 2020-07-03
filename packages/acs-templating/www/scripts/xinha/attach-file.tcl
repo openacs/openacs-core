@@ -107,7 +107,7 @@ if {$write_p} {
                 template::form::set_error upload_form f_title "Specify a [_ acs-templating.Link_Title]"
             }
             set error_p 0
-            # check file name
+            # check filename
                 if { $f_url eq "" && $url_ok_btn ne ""} {
                     template::form::set_error upload_form f_url "Specify a [_ acs-templating.Link_Url]"
                     set error_p 1

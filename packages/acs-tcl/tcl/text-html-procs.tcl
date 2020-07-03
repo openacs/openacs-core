@@ -233,7 +233,7 @@ ad_proc -public ad_html_qualify_links {
 } {
 
     Convert in the HTML text relative URLs into fully qualified URLs
-    including the host name. It performs the following operations:
+    including the hostname. It performs the following operations:
 
     1. prepend paths starting with a "/" by the location (protocol and host).
     2. prepend paths not starting a "/" by the path, in case it was passed in.

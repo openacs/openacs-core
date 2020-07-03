@@ -985,9 +985,9 @@ ad_proc -private security::get_register_subsite {} {
                 set url [subsite::get_element -subsite_id $package_id -element url]
                 set url [security::get_qualified_url $url]
                 # We have a fully qualified url, but we have to remap
-                # the URL to the configured host name, since
+                # the URL to the configured hostname, since
                 # get_qualified prepends the [ad_conn location], which
-                # points to the virtual host name.
+                # points to the virtual hostname.
                 set url [security::replace_host_in_url -hostname $config_hostname $url]
             }
         } else {
@@ -2588,7 +2588,7 @@ ad_proc -public security::validated_host_header {} {
 
     #
     # We could/should check as well against a white-list of additional
-    # host names (maybe via ::acs::validated, or via config file, or
+    # hostnames (maybe via ::acs::validated, or via config file, or
     # via additional package parameter). Probably the best way is to
     # get alternate (alias) names from the driver section of the
     # current driver [ns_conn driver] (maybe check global and local).

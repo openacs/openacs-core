@@ -81,7 +81,7 @@ ad_proc -public ::content::folder::delete {
     @creation-date 2004-05-28
 
     @param folder_id item_id of the content_folder
-    @param cascade_p if true delete all children, if false, return error if folder is non-empty
+    @param cascade_p if true delete all children, if false, return error if folder is nonempty
 
     @return
 

@@ -202,7 +202,7 @@ ad_proc -public cr_import_content {
     @param object_name The name to give the result content item and revision
 
     This procedure handles all mime_type details, creating a new item of the appropriate
-    type and stuffing the content into either the file system or the database depending
+    type and stuffing the content into either the filesystem or the database depending
     on "storage_type".  The new revision is set live, and its item_id is returned to the
     caller.
 
@@ -226,7 +226,7 @@ ad_proc -public cr_import_content {
     # DRB: Eventually we should allow for text storage ... (CLOB for Oracle)
 
     if { $storage_type ne "file" && $storage_type ne "lob" } {
-        return -code error "Imported content must be stored in the file system or as a large object"
+        return -code error "Imported content must be stored in the filesystem or as a large object"
     }
 
     if {$mime_type eq "*/*"} {
@@ -556,7 +556,7 @@ ad_proc -public cr_create_mime_type {
     @author Jeff Davis (davis@xarg.net)
 } {
     # make both lower since that is the convention.
-    # should never pass in anything that is not lower cased
+    # should never pass in anything that is not lowercased
     # already but just be safe.
 
     set mime_type [string tolower $mime_type]

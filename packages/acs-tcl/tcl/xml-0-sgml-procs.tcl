@@ -711,7 +711,7 @@ proc sgml::ParseEvent:ElementClose {tag opts args} {
 #	req	normalization required
 #
 # Results:
-#	Name returned as upper-case if normalization required
+#	Name returned as uppercase if normalization required
 
 proc sgml::Normalize {name req} {
     if {$req} {
@@ -865,7 +865,7 @@ proc sgml::parseDTD {dtd args} {
 # parse:DTD:_element_
 
 # For each of these procedures, the various regular expressions they use
-# are created outside of the proc to avoid overhead at runtime
+# are created outside of the proc to avoid overhead at run time
 
 # sgml::DTD:ELEMENT --
 #

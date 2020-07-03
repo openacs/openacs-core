@@ -20,10 +20,10 @@ ad_proc -private memoizing_procs_test::return_string {
 ad_proc -private memoizing_procs_test::return_upper_case_text {
     {-txt:required}
 } {
-    Test proc that returns a string in upper case
+    Test proc that returns a string in uppercase
 } {
     set response $txt
-    append response " in upper case is "
+    append response " in uppercase is "
     append response [string toupper $txt]
     return $response
 }

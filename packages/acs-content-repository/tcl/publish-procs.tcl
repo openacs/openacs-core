@@ -229,7 +229,7 @@ ad_proc -public publish::handle_binary_file {
 
   @param url_ref
      The name of the variable in the calling frame that will
-     receive the relative URL of the file in the file system
+     receive the relative URL of the file in the filesystem
      which contains the content blob
 
   @param error_ref

@@ -171,7 +171,7 @@ ad_proc -public image::get_info {
     it in the future. One important difference is this proc won't fail
     in case of error.
 
-    @param filename Name of the image file in the file system.
+    @param filename Name of the image file in the filesystem.
     @param array   Name of an array where you want the information returned.
 
     @see image::imagemagick_identify

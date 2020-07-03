@@ -291,7 +291,7 @@ ad_proc -public template::data::validate::url_element {
     message_ref
 } {
 
-    Beautiful URL elements that may only contain lower case
+    Beautiful URL elements that may only contain lowercase
     characters, numbers and hyphens.
 
     <p>

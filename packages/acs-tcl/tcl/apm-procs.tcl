@@ -879,7 +879,7 @@ ad_proc -public apm_load_any_changed_libraries {
 
 ad_proc -private apm_package_reload_cmds {files} {
 
-    Map file names into reloading cmds. For every file, a loading
+    Map filenames into reloading cmds. For every file, a loading
     command is appended to the result. The command might be empty.
 
     @return list of Tcl cmds to be executed to load these files.
@@ -1612,7 +1612,7 @@ ad_proc -public apm_invoke_callback_proc {
         }
     }
 
-    # We have a non-empty name of a callback proc to invoke
+    # We have a nonempty name of a callback proc to invoke
     # Form the full command including arguments
     set command [list {*}$proc_name {*}[apm_callback_format_args -type $type -arg_list $arg_list]]
 

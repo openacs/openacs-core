@@ -15,7 +15,7 @@ namespace eval content {
 
 
 ad_proc -public content::get_template_root {} {
-    Find the directory in the file system where templates are stored.
+    Find the directory in the filesystem where templates are stored.
     There are a variety of ways in which this can be set. The proc
     looks for that directory in the following places in this order:
     (1) the TemplateRoot parameter of the package for which the request is
@@ -291,7 +291,7 @@ ad_return_template
 
 
 ad_proc -public content::deploy { url_stub } {
-    render the template and write it to the file system
+    render the template and write it to the filesystem
     with template::util::write_file
 } {
     set output_path $::acs::pageroot$url_stub

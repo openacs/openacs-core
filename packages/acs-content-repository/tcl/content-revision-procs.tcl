@@ -64,7 +64,7 @@ ad_proc -public ::content::revision::new {
 
     @param is_live True is revision should be set live
 
-    @param tmp_filename file containing content to be added to revision. Caller is responsible to handle cleaning up the tmp file
+    @param tmp_filename file containing content to be added to revision. Caller is responsible to handle cleaning up the temporary file
 
     @param package_id
 
@@ -187,7 +187,7 @@ ad_proc -public ::content::revision::update_content {
     @param content Content to add to resivsion
     @param storage_type text, file, or lob
     @param mime_type mime type of the content
-    @param tmp_filename For file storage type a filename can be specified. It will be added to the contnet repository. Caller is responsible to handle cleaning up the tmp file
+    @param tmp_filename For file storage type a filename can be specified. It will be added to the content repository. Caller is responsible to handle cleaning up the temporary file
 
     @return
 
