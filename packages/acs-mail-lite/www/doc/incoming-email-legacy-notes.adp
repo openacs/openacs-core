@@ -52,7 +52,7 @@ To make things granular a separate parsing procedure should deal with loading th
   
   <p>
     The headers consists of a list with header names as keys and their corresponding values.
-    All keys are lower case.
+    All keys are lowercase.
   </p>
   
   <p>
@@ -156,7 +156,7 @@ To make things granular a separate parsing procedure should deal with loading th
     foreach part $all_parts {
 
     # Attachments have a &quot;Content-disposition&quot; part
-    # Therefore we filter out if it is an attachment here
+    # Therefore, we filter out if it is an attachment here
     if {[catch {mime::getheader $part Content-disposition}]} {
     switch [mime::getproperty $part content] {
     &quot;text/plain&quot; {
@@ -191,7 +191,7 @@ To make things granular a separate parsing procedure should deal with loading th
 </pre>
 
   <p>
-    Note that the files ie attachments are actually stored in the /tmp directory from where they can be processed further.
+    Note that the files i.e. attachments are actually stored in the /tmp directory from where they can be processed further.
     It is up to the callback to decide if to import the file into OpenACS or not.
     Once all callbacks have been fired files in /tmp will have to be deleted again though.
 </p>
@@ -487,7 +487,7 @@ To make things granular a separate parsing procedure should deal with loading th
 
   <ul>
 	<li>${component_name}-bugs@openacs.org (where component_name could be openacs or dotlrn or contacts or whatever), to store a new bug in bug-tracker.</li>
-	<li>username@openacs.org (to do mail-through using the user name, which allows you to hide the actual e-mail of the user whom you are contacting).</li>
+	<li>username@openacs.org (to do mail-through using the username, which allows you to hide the actual e-mail of the user whom you are contacting).</li>
   </ul>
 
   <h2>Cleanup</h2>

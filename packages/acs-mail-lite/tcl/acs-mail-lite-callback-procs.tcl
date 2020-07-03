@@ -194,7 +194,7 @@ ad_proc -public -callback acs_mail_lite::email_inbound -impl acs-mail-lite {
     # Values default to empty string.
 
     # headers_arr is an array of header values indexed by header name.
-    # header names are in original upper and lower case, which may
+    # header names are in original uppercase and lowercase, which may
     # have some significance in filtering cases. Although case should
     # should not be relied on for obtaining a value.
     # Some header indexes are created by ACS Mail Lite procs during

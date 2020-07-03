@@ -363,23 +363,22 @@ in any supported language.</p>
 <h3>VI.G Time Zones</h3>
 <blockquote>
 <strong>90.10</strong> Provide API support for
-specifying a time zone
+specifying a timezone
 <p>
 <strong>90.20</strong> Provide an API for computing time and
 date operations which are aware of timezones. So for example a
 calendar module can properly synchronize items inserted into a
-calendar from users in different time zones using their own local
+calendar from users in different timezones using their own local
 times.</p><p>
 <strong>90.30</strong> Store all dates and times in universal
-time zone, UTC.</p><p>
-<strong>90.40</strong> For a registered users, a time zone
+timezone, UTC.</p><p>
+<strong>90.40</strong> For a registered users, a timezone
 preference should be stored.</p><p>
-<strong>90.50</strong> For a non-registered user a time zone
+<strong>90.50</strong> For a non-registered user a timezone
 preference should be attached via a session or else UTC should be
 used to display every date and time.</p><p>
 <strong>90.60</strong> The default if we can&#39;t determine a
-time zone is to display all dates and times in some universal time
-zone such as GMT.</p>
+timezone is to display all dates and times in some universal timezone such as GMT.</p>
 </blockquote>
 <h3>VI.H Database</h3>
 <blockquote><p>

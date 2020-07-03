@@ -56,12 +56,12 @@ the user&#39;s native country, region, or culture.
 Java Locale API</a> there is an optional <em>variant</em> which can
 be added to a locale, which we will omit in the Tcl API.</p>
 <p>The <em>language</em> is a valid <strong>ISO Language
-Code</strong>. These codes are the lower-case two-letter codes as
+Code</strong>. These codes are the lowercase two-letter codes as
 defined by ISO-639. You can find a full list of these codes at a
 number of sites, such as:<br><a href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
 </p>
 <p>The <em>country</em> is a valid <strong>ISO Country
-Code</strong>. These codes are the upper-case two-letter codes as
+Code</strong>. These codes are the uppercase two-letter codes as
 defined by ISO-3166. You can find a full list of these codes at a
 number of sites, such as:<br><a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
 </p>
@@ -445,7 +445,7 @@ The API function
 Is used to load the message catalogs for a package. The catalog
 files are stored in a package subdirectory called
 <kbd>catalog</kbd>
-. Their file names have the form
+. Their filenames have the form
 <kbd>*.<em>encoding</em>.cat</kbd>
 , where <em>encoding</em>
  is the

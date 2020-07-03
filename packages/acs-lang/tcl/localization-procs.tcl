@@ -520,7 +520,7 @@ ad_proc -public lc_time_conn_to_system {
     using the OpenACS timezone setting and user's preference
 
     @param time_value        Timestamp from conn input in the ISO datetime format.
-    @return                  Timestamp in the database's time zone, also in ISO datetime format.
+    @return                  Timestamp in the database's timezone, also in ISO datetime format.
 } {
     if { ![ad_conn isconnected] } {
         return $time_value
@@ -629,7 +629,7 @@ ad_proc -public lc_content_size_pretty {
     {-standard "decimal"}
 } {
 
-    Transforms data size, provided in non-negative bytes, to KB, MB... up to YB.
+    Transforms data size, provided in nonnegative bytes, to KB, MB... up to YB.
 
     @param size       Size in bytes
     @param precision  Numbers in the fractional part

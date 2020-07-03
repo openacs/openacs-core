@@ -92,7 +92,7 @@ auth       sufficient   /lib/security/pam_radius_auth.so
 <p>Modify the AOLserver configuration file to use this PAM domain.
 Edit the line</p><pre class="programlisting">
 ns_param   PamDomain             "<span class="replaceable"><span class="replaceable">service0</span></span>"</pre><p>So that the value of the parameter matches the name (just the
-file name, not the fully pathed name) of the domain file in</p><pre class="programlisting">/etc/pam.d/</pre>
+filename, not the fully pathed name) of the domain file in</p><pre class="programlisting">/etc/pam.d/</pre>
 </li>
 </ol></div>
 </li><li><p>

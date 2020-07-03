@@ -196,7 +196,7 @@ ad_proc -public auth::authenticate {
     <li> account_url:     A URL to redirect the user to. Could e.g. ask the user to update his password.
     <li> account_message: Human-readable message about account status. Guaranteed to be set if auth_status is not ok
     and account_url is empty.
-    If non-empty, must be relayed to the user regardless of account_status. May contain HTML.
+    If nonempty, must be relayed to the user regardless of account_status. May contain HTML.
     This proc is responsible for concatenating any remote and/or local account messages into
     one single message which can be displayed to the user.
 
@@ -487,18 +487,18 @@ ad_proc -public auth::create_user {
     <ul>
     <li> creation_status:  ok, data_error, reg_error, failed_to_connect. Says whether user creation succeeded.
     <li> creation_message: Information about the problem, to be relayed to the user. If creation_status is not ok, then either
-    creation_message or element_messages is guaranteed to be non-empty, and both are
+    creation_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list.  May contain HTML.
     <li> element_messages: list of (element_name, message, element_name, message, ...) of
     errors on the individual registration elements.
     to be relayed on to the user. If creation_status is not ok, then either
-    creation_message or element_messages is guaranteed to be non-empty, and both are
+    creation_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list. Cannot contain HTML.
     <li> account_status:   ok, closed. Only set if creation_status was ok, this says whether the newly created account
     is ready for use or not. For example, we may require approval, in which case the account
     would be created but closed.
     <li> account_message:  A human-readable explanation of why the account was closed. May include HTML, and thus shouldn't
-    be quoted. Guaranteed to be non-empty if account_status is not ok.
+    be quoted. Guaranteed to be nonempty if account_status is not ok.
     <li> user_id:          The user_id of the created user. Only when creation_status is ok.
     </ul>
 
@@ -899,18 +899,18 @@ ad_proc -public auth::create_local_account {
     <ul>
     <li> creation_status:  ok, data_error, reg_error, failed_to_connect. Says whether user creation succeeded.
     <li> creation_message: Information about the problem, to be relayed to the user. If creation_status is not ok, then either
-    creation_message or element_messages is guaranteed to be non-empty, and both are
+    creation_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list.  May contain HTML.
     <li> element_messages: list of (element_name, message, element_name, message, ...) of
     errors on the individual registration elements.
     to be relayed on to the user. If creation_status is not ok, then either
-    creation_message or element_messages is guaranteed to be non-empty, and both are
+    creation_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list. Cannot contain HTML.
     <li> account_status:   ok, closed. Only set if creation_status was ok, this says whether the newly created account
     is ready for use or not. For example, we may require approval, in which case the account
     would be created but closed.
     <li> account_message:  A human-readable explanation of why the account was closed. May include HTML, and thus shouldn't
-    be quoted. Guaranteed to be non-empty if account_status is not ok.
+    be quoted. Guaranteed to be nonempty if account_status is not ok.
     </ul>
 
     All entries are guaranteed to always be set, but may be empty.
@@ -1161,12 +1161,12 @@ ad_proc -public auth::update_local_account {
     <ul>
     <li> update_status:    ok, data_error, update_error, failed_to_connect. Says whether user update succeeded.
     <li> update_message:   Information about the problem, to be relayed to the user. If update_status is not ok, then either
-    update_message or element_messages is guaranteed to be non-empty, and both are
+    update_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list.  May contain HTML.
     <li> element_messages: list of (element_name, message, element_name, message, ...) of
     errors on the individual registration elements.
     to be relayed on to the user. If update_status is not ok, then either
-    udpate_message or element_messages is guaranteed to be non-empty, and both are
+    udpate_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list. Cannot contain HTML.
     </ul>
 
@@ -1286,7 +1286,7 @@ ad_proc -public auth::delete_local_account {
     <ul>
     <li> delete_status:  ok, delete_error, failed_to_connect. Says whether user deletion succeeded.
     <li> delete_message: Information about the problem, to be relayed to the user.
-    If delete_status is not ok, then delete_message is guaranteed to be non-empty. May contain HTML.
+    If delete_status is not ok, then delete_message is guaranteed to be nonempty. May contain HTML.
     </ul>
 
     All entries are guaranteed to always be set, but may be empty.

@@ -1049,7 +1049,7 @@ aa_register_case \
 
     @author Peter Marklund
 } {
-    # Create the test package in the file system
+    # Create the test package in the filesystem
     lang::test::setup_test_package
 
     # Can't run this test case with the usual rollback switch since if everything

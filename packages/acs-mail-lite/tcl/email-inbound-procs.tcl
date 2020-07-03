@@ -445,7 +445,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
     ns_log Dev "inbound_prioritize: range '${range}' d_max '${d_max}' mp '${mp}'"
 
     # number of variables in fine granularity calcs:
-    # char_size, date time stamp
+    # char_size, date timestamp
     set varnum 2
     # Get most recent scan start time for reference to batch present time
     set start_cs [nsv_get acs_mail_lite si_start_t_cs]
@@ -720,7 +720,7 @@ ad_proc -public acs_mail_lite::email_type {
                 append dti "+"
             } else {
                 # Comment from panda-imap/src/c-client/mail.h:
-                # /* non-zero if west of UTC */
+                # /* nonzero if west of UTC */
                 # See also discussion beginning with:
                 # /* occidental *from Greenwich) timezones */
                 # in panda-imap/src/c-client/mail.c

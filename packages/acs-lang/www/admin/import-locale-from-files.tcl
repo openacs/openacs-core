@@ -1,6 +1,6 @@
 ad_page_contract {
     Import all catalog messages for a given locale from
-    the file system. Should typically only be done once
+    the filesystem. Should typically only be done once
     as it may overwrite translations already in the database
     for the given locale.
 

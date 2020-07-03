@@ -24,7 +24,7 @@ aa_register_case \
         -rollback \
         -test_code {
 
-            # Start non-interactive job
+            # Start noninteractive job
 
             set job_id [auth::sync::job::start \
                             -authority_id [auth::authority::local]]
@@ -72,7 +72,7 @@ aa_register_case \
 
             aa_equals "Number of problems" $job(num_problems) 1
 
-            aa_false "Log URL non-empty" {$job(log_url) eq ""}
+            aa_false "Log URL nonempty" {$job(log_url) eq ""}
 
             # Purge not deleting the job
             auth::sync::purge_jobs \
@@ -111,7 +111,7 @@ aa_register_case \
         -rollback \
         -test_code {
 
-            # Start non-interactive job
+            # Start noninteractive job
 
             set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
 
@@ -352,7 +352,7 @@ aa_register_case \
 
             aa_equals "Number of problems" $job(num_problems) 2
 
-            aa_false "Log URL non-empty" {$job(log_url) eq ""}
+            aa_false "Log URL nonempty" {$job(log_url) eq ""}
 
         }
 }
@@ -376,7 +376,7 @@ aa_register_case \
         -rollback \
         -test_code {
 
-            # Start non-interactive job
+            # Start noninteractive job
 
             set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
 
@@ -503,7 +503,7 @@ aa_register_case \
 
             aa_equals "Number of problems" $job(num_problems) 0
 
-            aa_false "Log URL non-empty" {$job(log_url) eq ""}
+            aa_false "Log URL nonempty" {$job(log_url) eq ""}
 
         }
 }

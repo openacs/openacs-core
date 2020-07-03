@@ -522,7 +522,7 @@ aa_register_case  \
                                            -username $test_vars(username)]
 
             aa_equals "status ok" $password_result(password_status) "ok"
-            aa_true "non-empty message" {$password_result(password_message) ne ""}
+            aa_true "nonempty message" {$password_result(password_message) ne ""}
         }
 }
 

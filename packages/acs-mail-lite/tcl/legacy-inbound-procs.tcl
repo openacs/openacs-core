@@ -69,7 +69,7 @@ namespace eval acs_mail_lite {
             ns_log Debug "load_mails: opening $msg"
             array set email {}
 
-            # This will parse the E-mail and extract the files to the file system
+            # This will parse the E-mail and extract the files to the filesystem
             parse_email -file $msg -array email
 
             set email(to) [parse_email_address -email $email(to)]
@@ -124,7 +124,7 @@ namespace eval acs_mail_lite {
         files lists and all headers directly.
 
         The headers consists of a list with header names as keys and
-        their corresponding values. All keys are lower case.  The
+        their corresponding values. All keys are lowercase.  The
         bodies consists of a list with two elements: content-type and
         content.  The files consists of a list with three elements:
         content-type, filename and content.

@@ -777,7 +777,7 @@ ad_proc -private auth::sync::get_doc::file::GetParameters {} {
 ad_proc -private auth::sync::get_doc::file::GetDocument {
     parameters
 } {
-    Retrieve the document from local file system
+    Retrieve the document from local filesystem
 } {
     array set result {
         doc_status failed_to_conntect

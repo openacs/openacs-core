@@ -636,7 +636,7 @@ namespace eval acs_mail_lite {
                 set filesystem_attachments_root [ad_tmpdir]
             }
             foreach f $filesystem_files {
-                # make the file name absolute
+                # make the filename absolute
                 if {[file pathtype $f] ne "absolute"} {
                     set f [file join [pwd] $f]
                 }

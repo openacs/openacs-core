@@ -630,7 +630,7 @@ ad_proc -private lang::catalog::import_messages {
       messages for the merge is the messages in the db from the last time
       db and catalog file were in sync for the corresponding message key. The first such sync point
       is the initial import of a message. After that, any export of messages to
-      the file system will be a sync point. Also, after an upgrade, a large number
+      the filesystem will be a sync point. Also, after an upgrade, a large number
       of the resulting messages in the db will be identical to those in the file (the
       file messages take precedence on conflict) and those messages will also be sync points.
       A message being in sync between db and file is indicated by the lang_message.sync_time

@@ -37,7 +37,7 @@
           <span>|</span></li>
           <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API&nbsp;doc</a></li>
           <if @xocore_url@ ne ""><span>|</span>
-           <li><a href="@xocore_url@" title="XoTcl Documentation Browser">XoTcl</a></li>
+           <li><a href="@xocore_url@" title="XOTcl Documentation Browser">XOTcl</a></li>
           </if>
           <if @rm_url@ ne ""><span>|</span>
            <li><a href="@rm_url@" title="View requests in the request monitor">Requests</a></li>
