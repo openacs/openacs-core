@@ -178,7 +178,7 @@ namespace eval notification {
         set requests_p [notification::request::request_exists -object_id $object_id -type_id $type_id]
 
         # We're only going to do anything if there are people who have requests,
-        # or if we have a non-empty subset and a force flag.
+        # or if we have a nonempty subset and a force flag.
 
         set subset_arg_p [expr {[llength $subset] > 0}]
         set already_notified_arg_p [expr {[llength $already_notified] > 0}]
