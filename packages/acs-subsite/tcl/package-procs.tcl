@@ -751,7 +751,7 @@ ad_proc -public package_instantiate_object {
     # function. Pieces is just a list of lists where each list contains only
     # one item - the name of the parameter. We keep track of
     # parameters we've already added in the array param_array (all keys are
-    # in upper case)
+    # in uppercase)
 
     set pieces [list]
 
@@ -872,7 +872,7 @@ ad_proc -public package_exec_plsql {
     # function. Pieces is just a list of lists where each list contains only
     # one item - the name of the parameter. We keep track of
     # parameters we've already added in the array param_array (all keys are
-    # in upper case)
+    # in uppercase)
 
     set pieces [list]
 

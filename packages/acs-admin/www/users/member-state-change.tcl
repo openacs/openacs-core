@@ -35,10 +35,10 @@ if {![db_0or1row get_states {
     return
 }
 
-set user [acs_user::get -user_id $user_id]
-set name   [dict get $user name]
-set email  [dict get $user email]
-set rel_id [dict get $user rel_id]
+set user_info [acs_user::get -user_id $user_id]
+set name   [dict get $user_info name]
+set email  [dict get $user_info email]
+set rel_id [dict get $user_info rel_id]
 
 #
 # This page is used for state changes in the member_state, and as well

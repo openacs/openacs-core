@@ -1216,7 +1216,7 @@ ad_proc -public subsite::get_url {
     If -absolute is supplied then this function will generate absolute URLs.
 
     If the site is currently being accessed via a host node mapping then URLs
-    will omit the corresponding subsite url stub.  The host name will be used
+    will omit the corresponding subsite url stub.  The hostname will be used
     for any appropriate subsite when absolute URLs are generated.
 
     @param node_id the subsite's node_id (defaults to nearest subsite node).
@@ -1268,7 +1268,7 @@ ad_proc -public subsite::get_url {
 
     #
     # If the provided host is not empty, get it from the host header
-    # field (when connected) or from the configured host name.
+    # field (when connected) or from the configured hostname.
     #
     if {$force_host eq "any"} {
         if {[info exists driver_info(vhost)]} {

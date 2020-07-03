@@ -242,7 +242,7 @@ namespace eval attribute {
         }
 
         if { $table_name eq "" || $column_name eq "" } {
-            # We have to have both a non-empty table name and column name
+            # We have to have both a nonempty table name and column name
             error "We do not have enough information to automatically remove this attribute. Namely, we are missing either the table name or the column name"
         }
 

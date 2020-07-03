@@ -497,25 +497,25 @@ ad_proc -public group::get_member_state_pretty {
             set message #acs-kernel.member_state_$member_state#
         }
         action {
-            if {$user_name eq ""} { error "user_name must be specified and must be non-empty" }
+            if {$user_name eq ""} { error "user_name must be specified and must be nonempty" }
             set message #acs-kernel.member_state_action_$member_state#
         }
         account_mail {
-            if {$site_name eq ""} { error "site_name must be specified and must be non-empty" }
+            if {$site_name eq ""} { error "site_name must be specified and must be nonempty" }
             if {[string match "#*#" $site_name]} {
                 # site names can be localized
                 set site_name [lang::util::localize $site_name $locale]
             }
-            if {$url eq ""} { error "url must be specified and must be non-empty" }
+            if {$url eq ""} { error "url must be specified and must be nonempty" }
             set message #acs-kernel.member_state_account_mail_$member_state#
         }
         community_mail {
-            if {$community_name eq ""} { error "community_name must be specified and must be non-empty" }
+            if {$community_name eq ""} { error "community_name must be specified and must be nonempty" }
             if {[string match "#*#" $community_name]} {
                 # community_names can be localized
                 set community_name [lang::util::localize $community_name $locale]
             }
-            if {$url eq ""} { error "url must be specified and must be non-empty" }
+            if {$url eq ""} { error "url must be specified and must be nonempty" }
             set message #acs-kernel.member_state_community_mail_$member_state#
         }
         default {
@@ -744,7 +744,7 @@ ad_proc -public group::admin_p {
                           -object_id_two $user_id \
                           -rel_type "admin_rel"]
 
-    # The party is an admin if the call above returned something non-empty
+    # The party is an admin if the call above returned something nonempty
     return [expr {$admin_rel_id ne ""}]
 }
 

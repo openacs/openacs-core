@@ -16,17 +16,17 @@ away <br>and replaced by the chosen packages from the OpenACS repository.
 
 <li><h3>Install from Local File System</h3>
 
-<p>Install/upgrade packages from the local file system (@local_path@).
+<p>Install/upgrade packages from the local filesystem (@local_path@).
 <br>Use this if your site has
 custom code or your packages are kept in a local code repository.
 <a href="/doc/upgrade-openacs-files">Help</a>.</p>
 
 <p><a href="@local_install_url@" class="button">Install</a> or
-<a href="@local_upgrade_url@" class="button">upgrade</a> from the local file system.</p>
+<a href="@local_upgrade_url@" class="button">upgrade</a> from the local filesystem.</p>
 
 <li><h3>Install from URL or Local Path</h3>
-<p>Load a single package an archive stored an a non-standard place on
-your local file system or from a URL.</p>
+<p>Load a single package an archive stored a non-standard place on
+your local filesystem or from a URL.</p>
 <p><a href="/acs-admin/apm/package-load" class="button">Load</a> from URL or Local Path</p>
 </ul>
 <hr>

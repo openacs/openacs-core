@@ -51,7 +51,7 @@ if {$ancestor_rel_type eq "membership_rel"} {
     set rel_member_state ""
 }
 
-# Select out the user name and the user's object type. The validate
+# Select out the username and the user's object type. The validate
 # filter above will catch missing parties
 
 acs_object_type::get -object_type $user_type -array object_type
@@ -223,8 +223,8 @@ if { [template::form is_valid add_user] } {
         if {[parameter::get -parameter NotifyAdminOfNewRegistrationsP -default 0]} {
 
             set creation_user [ad_conn user_id]
-            set user [acs_user::get -user_id $creation_user]
-            set creation_name "[dict get $user name] ([dict get $user email])"
+            set user_info [acs_user::get -user_id $creation_user]
+            set creation_name "[dict get $user_info name] ([dict get $user_info email])"
 
             # we're supposed to notify the administrator when someone new registers
 

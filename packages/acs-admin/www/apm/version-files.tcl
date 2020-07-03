@@ -52,7 +52,7 @@ foreach path [apm_get_package_files -package_key $package_key] {
 	}
     }
 
-    # For every changed component (at least the file name), write a row in the table.
+    # For every changed component (at least the filename), write a row in the table.
     while { $i < [llength $components] } {
 	append body "<tr><td>"
 	for { set j 0 } { $j < $i } { incr j } {

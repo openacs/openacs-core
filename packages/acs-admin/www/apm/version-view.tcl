@@ -200,7 +200,7 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
             <p>
             In order to contribute this package back to the OpenACS community,
             <ol>
-            <li>download the .apm-file to your file system and</li>
+            <li>download the .apm-file to your filesystem and</li>
             <li>submit the .apm-file
             <a href="[ns_quotehtml $href]" target="_blank">to
             the package repository of OpenACS</a>.</li>

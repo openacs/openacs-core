@@ -156,7 +156,7 @@ foreach package_key $install_order {
     }]
     
     # Install the package -- this actually copies the files into the
-    # right place in the file system and backs up any old files
+    # right place in the filesystem and backs up any old files
 
     set version_id [apm_package_install \
                         -enable \

@@ -37,7 +37,7 @@ ad_page_contract {
         }
     }
 } -errors {
-    name_root_ck {Folder or file names cannot contain '/'}
+    name_root_ck {Folder or filenames cannot contain '/'}
     name_duplicate_ck {The URL mapping you are creating is already in use.  Please delete the other one or change your URL.}
     node_type_ck {The node type you specified is invalid}
 }

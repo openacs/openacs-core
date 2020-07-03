@@ -1,5 +1,5 @@
 ad_page_contract {
-    Install from local file system
+    Install from local filesystem
 } {
     {package_type ""}
     {upgrade_p:boolean 0}
@@ -35,7 +35,7 @@ if {$maturity eq ""} {
 }
 
 #
-# Set page title to reflect install from repository or from file system
+# Set page title to reflect install from repository or from filesystem
 #
 
 if { $repository_url ne "" } {

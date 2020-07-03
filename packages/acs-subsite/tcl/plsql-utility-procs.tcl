@@ -130,8 +130,8 @@ object_type    => group,
         { -include_object_id "f" }
         stem
     } {
-        Returns an object name of max_length characters, in lower
-        case, beginning with stem but without any unsafe characters. Only
+        Returns an object name of max_length characters, in lowercase,
+        beginning with stem but without any unsafe characters. Only
         allowed characters are numbers, letter, underscore, dash and space,
         though the returned word will start with a letter. Throws an
         error if no safe name could be generated.

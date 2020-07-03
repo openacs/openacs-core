@@ -14,12 +14,12 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 
-set user [acs_user::get -user_id $user_id]
-set first_names [dict get $user first_names]
-set last_name   [dict get $user last_name]
-set email       [dict get $user email]
-set url         [dict get $user url]
-set full_name   [dict get $user name]
+set user_info   [acs_user::get -user_id $user_id]
+set first_names [dict get $user_info first_names]
+set last_name   [dict get $user_info last_name]
+set email       [dict get $user_info email]
+set url         [dict get $user_info url]
+set full_name   [dict get $user_info name]
 if { [string trim $full_name] eq "" } {
     set full_name "name unknown"
 }
