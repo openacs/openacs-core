@@ -1093,7 +1093,7 @@ ad_proc -public ad_dispatch {
     return [ad_apply ${method_name}__$type $args]
 }
 
-ad_proc -public ad_assert_arg_value_in_list {
+ad_proc -public -deprecated ad_assert_arg_value_in_list {
     arg_name
     allowed_values_list
 } {
