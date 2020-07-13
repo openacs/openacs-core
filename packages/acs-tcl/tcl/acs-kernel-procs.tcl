@@ -43,7 +43,7 @@ ad_proc -private ad_acs_require_basic_schemata {} {
         set files "upgrade-5.9.1d10-5.9.1d11.sql"
         foreach file $files {
             set fn $kernelSqlDir/$file
-            if {[file readable $fn]} {
+            if {[ad_file readable $fn]} {
                 ns_log notice "bootstrap: upgrading SQL file $fn"
                 db_source_sql_file -callback apm_dummy_callback $fn
             }

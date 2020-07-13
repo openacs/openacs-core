@@ -34,8 +34,8 @@ ad_proc apm_scan_packages {
     # Loop through all directories in the /packages directory, searching each for a
     # .info file.
     foreach dir [lsort [glob -nocomplain "$path/*"]] {
-        set package_key [file tail $dir]
-        if { ![file isdirectory $dir] } {
+        set package_key [ad_file tail $dir]
+        if { ![ad_file isdirectory $dir] } {
             continue
         }
         if { [apm_ignore_file_p $dir] } {
@@ -800,7 +800,7 @@ ad_proc -private apm_package_install {
 
         # Backup any existing (old) package in packages dir first
         set old_package_path [acs_package_root_dir $package_key]
-        if { [file exists $old_package_path] } {
+        if { [ad_file exists $old_package_path] } {
             util::backup_file -file_path $old_package_path
         }
 
@@ -809,7 +809,7 @@ ad_proc -private apm_package_install {
 
         # We moved the spec file, so update its path
         set package_path $old_package_path
-        set spec_file_path [apm_package_info_file_path -path [file dirname $package_path] $package_key]
+        set spec_file_path [apm_package_info_file_path -path [ad_file dirname $package_path] $package_key]
     }
 
     ad_try {
@@ -1010,7 +1010,7 @@ ad_proc -private apm_package_install {
         }
 
 
-        if {[file exists $::acs::rootdir/packages/$package_key/install.xml]} {
+        if {[ad_file exists $::acs::rootdir/packages/$package_key/install.xml]} {
             #
             # Run install.xml only for new installs
             #
@@ -1477,7 +1477,7 @@ ad_proc -private apm_package_install_spec { version_id } {
 
     ns_log Debug "apm_package_install_spec: Checking existence of package directory."
     set root [acs_package_root_dir $package_key]
-    if { ![file exists $root] } {
+    if { ![ad_file exists $root] } {
         file mkdir $root
         # doesn't work under windows.  its not very useful anyway.
         #    file attributes $root -permissions [parameter::get -parameter InfoFilePermissionsMode -default 0755]
@@ -1498,7 +1498,7 @@ ad_proc -private apm_package_install_spec { version_id } {
         # create minimal directories
         foreach dir {www www/doc tcl tcl/test sql sql/postgresql sql/oracle} {
             set path "[acs_package_root_dir $package_key]/$dir"
-            if { ![file exists $path] } {
+            if { ![ad_file exists $path] } {
                 file mkdir $path
             }
         }
@@ -2186,7 +2186,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
     # Abort if there is no install.xml file
     set filename $::acs::rootdir$filename
 
-    if { ![file exists $filename] } {
+    if { ![ad_file exists $filename] } {
         error "File $filename not found"
     }
 

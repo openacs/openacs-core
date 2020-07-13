@@ -127,8 +127,8 @@ ad_proc -public doc_adp_execute_file {
 	set tcl_code [doc_adp_compile $adp_code]
     } else {
 	set reparse_p 0
-	set mtime [file mtime $file_name]
-	set size [file size $file_name]
+	set mtime [ad_file mtime $file_name]
+	set size [ad_file size $file_name]
 	
 	# See whether the file has been cached, i.e., the __doc_adp_cache_info,$file_name
 	# proc has been declared. If it has, the proc will return a two-element list

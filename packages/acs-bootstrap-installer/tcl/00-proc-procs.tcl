@@ -884,7 +884,7 @@ ad_proc -public callback {
     as follows:
     <dl>
      <dt>return -code ok or "<b>return</b>"</dt>
-     <dd>With a plain return, a non-empty return value will be lappended to
+     <dd>With a plain return, a nonempty return value will be lappended to
        the list of returns from the callback function</dd>
 
      <dt>return -code error or "<b>error</b>"</dt>
@@ -905,7 +905,7 @@ ad_proc -public callback {
 
      <dt>return -code break</dt>
      <dd>return the current list of returned values including this implementations
-       return value if non-empty</dd>
+       return value if nonempty</dd>
 
      <dt>return -code continue</dt>
      <dd>Continue processing, ignore the return value from this implementation</dd>
@@ -924,7 +924,7 @@ ad_proc -public callback {
 
     @param args pass the set of arguments on to each callback
 
-    @return list of the returns from each callback that does a normal (non-empty) return
+    @return list of the returns from each callback that does a normal (nonempty) return
 
     @see ad_proc
 } {
@@ -1018,7 +1018,7 @@ ad_proc -public acs_root_dir {} {
 
 ad_proc -public acs_package_root_dir { package_key } {
     Returns the path root for a particular package within the OpenACS installation.
-    For example /web/yourserver/packages/foo, i.e., a full file system path with no ending slash.
+    For example /web/yourserver/packages/foo, i.e., a full filesystem path with no ending slash.
 } -
 
 ad_proc -public ad_make_relative_path { path } {
@@ -1130,6 +1130,27 @@ ad_proc -public ad_with_deprecated_code_p {} {
     return [ns_config ns/server/[ns_info server]/acs WithDeprecatedCode 1]
 }
 
+ad_proc ad_file {subcmd arg1 args} {
+    
+    Tcl supports csh-style tilde substitution. If a filename starts
+    with a tilde, then the filename will be interpreted as if the
+    first element is replaced with the location of the home directory
+    for the given user. If the user does not exist, an exception is
+    raised. (e.g. [file dirname ~gustafn.foo]).
+    
+    https://www.tcl-lang.org/man/tcl/TclCmd/filename.htm#M20
+
+    This little proc can be used in cases, where (a) the
+    tilde-substitution is unwanted, and where the "name" argument
+    (usually the first argument after the subcommand) might contain
+    user provided values.
+    
+} {
+    if {[string range $arg1 0 1] eq {~}} {
+        set arg1 ./$arg1
+    }
+    ::file $subcmd $arg1 {*}$args
+}
 
 # Local variables:
 #    mode: tcl

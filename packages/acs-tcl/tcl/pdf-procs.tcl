@@ -45,7 +45,7 @@ ad_proc -public text_templates::create_pdf_content {
     }
     file delete -- $tmp_html_filename
 
-    if {[file exists $tmp_pdf_filename]} {
+    if {[ad_file exists $tmp_pdf_filename]} {
         return $tmp_pdf_filename
     } else {
         return ""
@@ -73,7 +73,7 @@ ad_proc -public text_templates::create_pdf_from_html {
     if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
         ns_log Error "Error during conversion from html to pdf: $err"
     }
-    if {[file exists $tmp_pdf_filename]} {
+    if {[ad_file exists $tmp_pdf_filename]} {
         return $tmp_pdf_filename
     } else {
         return ""
@@ -97,7 +97,7 @@ ad_proc -public text_templates::store_final_document {
     @return item_id
 
 } {
-    set file_size [file size $pdf_file]
+    set file_size [ad_file size $pdf_file]
     set item_id [cr_import_content -title $title -description $description $folder_id $pdf_file $file_size application/pdf $title]
     return $item_id
 }

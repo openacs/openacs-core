@@ -35,8 +35,8 @@ namespace eval ::tcltrace {
 		regsub {/$} $name /index name
 		set fullname [ad_tmpdir]/ns_saved$name.html
 		ns_log notice "before-ns_return: save content of ns_return to file:$fullname"
-		set dirname [file dirname $fullname]
-		if {![file isdirectory $dirname]} {
+		set dirname [ad_file dirname $fullname]
+		if {![ad_file isdirectory $dirname]} {
 		    file mkdir $dirname
 		}
 		set f [open $fullname w]

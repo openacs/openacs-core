@@ -637,16 +637,16 @@ ad_proc util::http::post {
                     return -code error "${this_proc}:  No file specified"
                 }
                 set file [dict get $f file]
-                if {![file exists $file]} {
+                if {![ad_file exists $file]} {
                     return -code error "${this_proc}:  Error reading file: $file not found"
                 }
-                if {![file readable $file]} {
+                if {![ad_file readable $file]} {
                     return -code error "${this_proc}:  Error reading file: $file permission denied"
                 }
 
                 dict set f filename [expr {[dict exists $f filename] ?
                                             [dict get $f filename] :
-                                            [file tail $file]}]
+                                            [ad_file tail $file]}]
             }
 
             # Filename and fieldname must be in the file dict at this
@@ -830,7 +830,7 @@ ad_proc -private util::http::append_to_payload {
     if {$file eq ""} {
         set content_size [string length $content]
     } else {
-        set content_size [file size $file]
+        set content_size [ad_file size $file]
     }
 
     # Content size seems ok. Now try applying encoding

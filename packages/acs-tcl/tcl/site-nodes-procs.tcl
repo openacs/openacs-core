@@ -1006,13 +1006,13 @@ ad_proc -public site_node::verify_folder_name {
     if { $parent_node(package_key) ne "" } {
         # Find all the page or directory names under this package
         foreach path [glob -nocomplain -types d "[acs_package_root_dir $parent_node(package_key)]/www/*"] {
-            lappend existing_urls [lindex [file split $path] end]
+            lappend existing_urls [lindex [ad_file split $path] end]
         }
         foreach path [glob -nocomplain -types f "[acs_package_root_dir $parent_node(package_key)]/www/*.adp"] {
-            lappend existing_urls [file rootname [lindex [file split $path] end]]
+            lappend existing_urls [file rootname [lindex [ad_file split $path] end]]
         }
         foreach path [glob -nocomplain -types f "[acs_package_root_dir $parent_node(package_key)]/www/*.tcl"] {
-            set name [file rootname [lindex [file split $path] end]]
+            set name [file rootname [lindex [ad_file split $path] end]]
             if { $name ni $existing_urls } {
                 lappend existing_urls $name
             }
@@ -2188,7 +2188,7 @@ ad_proc -deprecated site_node::conn_url {
 } {
     set ns_conn_url [ns_conn url]
     set subsite_get_url [subsite::get_url]
-    set joined_url [file join $subsite_get_url $ns_conn_url]
+    set joined_url [ad_file join $subsite_get_url $ns_conn_url]
     # join drops ending slash for some cases. Add back if appropriate.
     if { [string index $ns_conn_url end] eq "/" && [string index $joined_url end] ne "/" } {
         append joined_url "/"

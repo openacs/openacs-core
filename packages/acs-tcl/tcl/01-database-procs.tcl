@@ -2777,8 +2777,8 @@ ad_proc -public db_source_sql_file {
 
         oracle {
             set user_pass [db_get_sql_user -dbn $dbn]
-            cd [file dirname $file]
-            set fp [open "|[file join $::env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r+"]
+            cd [ad_file dirname $file]
+            set fp [open "|[ad_file join $::env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r+"]
             fconfigure $fp -buffering line
             puts $fp "exit"
 
@@ -2792,7 +2792,7 @@ ad_proc -public db_source_sql_file {
         }
 
         postgresql {
-            set file_name [file tail $file]
+            set file_name [ad_file tail $file]
 
             set pguser [db_get_username]
             if { $pguser ne "" } {
@@ -2825,7 +2825,7 @@ ad_proc -public db_source_sql_file {
             }
 
             set errno [catch {
-                cd [file dirname $file]
+                cd [ad_file dirname $file]
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file [db_get_database] $pgpass" "r"]
             } errorMsg]
 
@@ -2916,9 +2916,9 @@ ad_proc -public db_load_sql_data {
             puts $fd1 $file_contents
             close $fd1
 
-            cd [file dirname $file]
+            cd [ad_file dirname $file]
 
-            set fd [open "|[file join $::env(ORACLE_HOME) bin sqlldr] userid=$user_pass control=$tmpnam" "r"]
+            set fd [open "|[ad_file join $::env(ORACLE_HOME) bin sqlldr] userid=$user_pass control=$tmpnam" "r"]
 
             while { [gets $fd line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
@@ -3027,7 +3027,7 @@ ad_proc -public db_source_sqlj_file {
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     set user_pass [db_get_sql_user -dbn $dbn]
-    set fp [open "|[file join $::env(ORACLE_HOME) bin loadjava] -verbose -user $user_pass $file" "r"]
+    set fp [open "|[ad_file join $::env(ORACLE_HOME) bin loadjava] -verbose -user $user_pass $file" "r"]
 
     # Despite the fact that this works, the text does not get written to the stream.
     # The output is generated as an error when you attempt to close the input stream as
@@ -3513,7 +3513,7 @@ ad_proc -private db_exec_lob_oracle {
             switch -- $original_type {
 
                 blob_get_file {
-                    if {[file exists $content]} {
+                    if {[ad_file exists $content]} {
                         file copy -- $content $file
                         return $selection
                     } else {
@@ -3523,7 +3523,7 @@ ad_proc -private db_exec_lob_oracle {
 
                 write_blob {
 
-                    if {[file exists $content]} {
+                    if {[ad_file exists $content]} {
                         set ofp [open $content r]
                         fconfigure $ofp -encoding binary
                         ns_writefp $ofp
@@ -3620,7 +3620,7 @@ ad_proc -private db_exec_lob_postgresql {
                 if {[info exists storage_type]} {
                     switch -- $storage_type {
                         file {
-                            if {[file exists $content]} {
+                            if {[ad_file exists $content]} {
                                 set ifp [open $content r]
 
                                 # DRB: this could be made faster by setting the buffersize
@@ -3650,7 +3650,7 @@ ad_proc -private db_exec_lob_postgresql {
                             error "invalid storage type"
                         }
                     }
-                } elseif {[file exists $content]} {
+                } elseif {[ad_file exists $content]} {
                     set ifp [open $content r]
                     fconfigure $ifp -translation binary
                     set data [read $ifp]
@@ -3668,7 +3668,7 @@ ad_proc -private db_exec_lob_postgresql {
                 if {[info exists storage_type]} {
                     switch -- $storage_type {
                         file {
-                            if {[file exists $content]} {
+                            if {[ad_file exists $content]} {
                                 file copy -- $content $file
                             } else {
                                 error "file: $content doesn't exist"
@@ -3687,7 +3687,7 @@ ad_proc -private db_exec_lob_postgresql {
                             error "invalid storage type"
                         }
                     }
-                } elseif {[file exists $content]} {
+                } elseif {[ad_file exists $content]} {
                     file copy -- $content $file
                 } elseif {[regexp {^[0-9]+$} $content match]} {
                     ns_pg blob_select_file $db $content $file
@@ -3707,7 +3707,7 @@ ad_proc -private db_exec_lob_postgresql {
                 if {[info exists storage_type]} {
                     switch -- $storage_type {
                         file {
-                            if {[file exists $content]} {
+                            if {[ad_file exists $content]} {
                                 set ofp [open $content r]
                                 fconfigure $ofp -encoding binary
                                 ns_writefp $ofp
@@ -3733,7 +3733,7 @@ ad_proc -private db_exec_lob_postgresql {
                             error "invalid storage type"
                         }
                     }
-                } elseif {[file exists $content]} {
+                } elseif {[ad_file exists $content]} {
                     set ofp [open $content r]
                     fconfigure $ofp -encoding binary
                     ns_writefp $ofp

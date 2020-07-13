@@ -85,7 +85,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     #
     # 2. There was no checking to make sure that *all* pools are correctly
     #    configured.  Even in an Oracle-only environment one could easy mistype a
-    #    user name or the like for one of the pools set aside for ACS use, and
+    #    username or the like for one of the pools set aside for ACS use, and
     #    this would not be cleanly caught and reported.
     #
     # 3. There was no checking to make sure that *all* pools are of the same RDBMS

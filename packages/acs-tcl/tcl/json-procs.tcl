@@ -396,7 +396,7 @@ ad_proc -private util::json::object2json {objectVal} {
             lappend values "\"$key\":[util::json::gen_inner $val]"
         }
     }
-    return "\{[join $values ,]\}"
+    return "\{[ns_dbquotelist $values]\}"
 }
 
 ad_proc -private util::json::array2json {arrayVal} {
@@ -414,7 +414,7 @@ ad_proc -private util::json::array2json {arrayVal} {
             lappend values [util::json::gen_inner $val]
         }
     }
-    return "\[[join $values ,]\]"
+    return "\[[ns_dbquotelist $values]\]"
 }
 
 ad_proc util::json::gen {value} {

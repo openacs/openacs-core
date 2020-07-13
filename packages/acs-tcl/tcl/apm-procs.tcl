@@ -389,8 +389,8 @@ ad_proc -private apm_mark_files_for_reload {
 
         # If the file exists, and either has never been loaded or has an mtime
         # which differs the mtime it had when last loaded, mark to be loaded.
-        if { [file isfile $full_path] } {
-            set mtime [file mtime $full_path]
+        if { [ad_file isfile $full_path] } {
+            set mtime [ad_file mtime $full_path]
             if { $force_reload_p
                  || (![nsv_exists apm_library_mtime $relative_path]
                      || [nsv_get apm_library_mtime $relative_path] != $mtime
@@ -481,8 +481,8 @@ ad_proc -private apm_version_load_status { version_id } {
         set full_path "[acs_package_root_dir $package_key]/$file"
         # If $file had a different mtime when it was last loaded, return
         # needs_reload. (If the file should exist but doesn't, just skip it.)
-        if { [file exists $full_path]
-             &&  [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
+        if { [ad_file exists $full_path]
+             &&  [ad_file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
          } {
             return "needs_reload"
         }
@@ -498,8 +498,8 @@ ad_proc -private apm_version_load_status { version_id } {
         set full_path "[acs_package_root_dir $package_key]/$file"
         # If $file had a different mtime when it was last loaded, return
         # needs_reload. (If the file should exist but doesn't, just skip it.)
-        if { [file exists $full_path]
-             && [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
+        if { [ad_file exists $full_path]
+             && [ad_file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
          } {
             return "needs_reload"
         }
@@ -718,7 +718,7 @@ ad_proc -private apm_subdirs { path } {
 } {
     set dirs [list]
     lappend dirs $path
-    foreach subdir [glob -nocomplain -type d [file join $path *]] {
+    foreach subdir [glob -nocomplain -type d [ad_file join $path *]] {
         lappend dirs {*}[apm_subdirs $subdir]
     }
     return $dirs
@@ -749,9 +749,9 @@ ad_proc -private apm_get_changed_watched_files {} {
         set path "$::acs::rootdir/$file"
         ns_log Debug "APM: File being watched: $path"
 
-        if { [file exists $path]
+        if { [ad_file exists $path]
              && (![nsv_exists apm_library_mtime $file]
-                 || [file mtime $path] ne [nsv_get apm_library_mtime $file])
+                 || [ad_file mtime $path] ne [nsv_get apm_library_mtime $file])
          } {
             lappend files_to_reload $file
         }
@@ -898,7 +898,7 @@ ad_proc -private apm_package_reload_cmds {files} {
         if { ![info exists reloaded_files($file)] } {
             # File is usually of form packages/package_key
             set file_path "$::acs::rootdir/$file"
-            set file_ext [file extension $file_path]
+            set file_ext [ad_file extension $file_path]
             switch -- $file_ext {
                 .tcl {
                     # Make sure this is not a -init.tcl file as those should only be sourced on server startup

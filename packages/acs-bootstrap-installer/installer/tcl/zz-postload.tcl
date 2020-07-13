@@ -34,7 +34,8 @@ foreach init_item [nsv_get ad_after_server_initialization .] {
 # the subdirectory and it would not be searched.
 
 proc __is_xql {arg} { 
-    return [expr {[file isdirectory $arg] || [file extension $arg] eq ".xql"}]}
+    return [expr {[file isdirectory $arg] || [file extension $arg] eq ".xql"}]
+}
 
 # We need to load query files for the top-level stuff in www and Tcl
 # dirs is the list of directories to walk for xql files.  Packages .xql

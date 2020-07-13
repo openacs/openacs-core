@@ -397,7 +397,7 @@ ad_proc -private rp_html_directory_listing { dir } {
 
     # Loop through the files, adding a row to the table for each.
     foreach file [lsort [glob -nocomplain $dir/*]] {
-        set tailHtml [ns_quotehtml [file tail $file]]
+        set tailHtml [ns_quotehtml [ad_file tail $file]]
         set link "<a href=\"$tailHtml\">$tailHtml</a>"
 
         # Build the stat array containing information about the file.
@@ -509,22 +509,22 @@ ad_proc -private rp_resources_filter { why } {
     # performance etc. and is therefore commented out.
     # set path "packages/$package_key/www/resources/$resource"
     # set themed_path [template::resource_path -type templates -style $path]
-    # if { [file isfile $themed_path] } {
+    # if { [ad_file isfile $themed_path] } {
     #     return [rp_serve_resource_file $themed_path]
     # }
 
     set path "[acs_package_root_dir $package_key]/www/resources/$resource"
-    if { [file isfile $path] } {
+    if { [ad_file isfile $path] } {
         return [rp_serve_resource_file $path]
     }
 
     set path $::acs::rootdir/www/[ns_conn url]
-    if { [file isfile $path] } {
+    if { [ad_file isfile $path] } {
         return [rp_serve_resource_file $path]
     }
 
     set path [acs_package_root_dir acs-subsite]/www/[ns_conn url]
-    if { [file isfile $path] } {
+    if { [ad_file isfile $path] } {
         return [rp_serve_resource_file $path]
     }
 
@@ -1213,7 +1213,7 @@ ad_proc -private rp_serve_abstract_file {
     @see rp_internal_redirect
 } {
     if {[string index $path end] eq "/"} {
-        if { [file isdirectory $path] } {
+        if { [ad_file isdirectory $path] } {
             # The path specified was a directory; return its index file.
 
             # Directory name with trailing slash. Search for an index.* file.
@@ -1225,7 +1225,7 @@ ad_proc -private rp_serve_abstract_file {
         } else {
 
             # If there's a trailing slash on the path, the URL must refer to a
-            # directory (which we know doesn't exist, since [file isdirectory $path]
+            # directory (which we know doesn't exist, since [ad_file isdirectory $path]
             # returned 0).
             ad_raise notfound
         }
@@ -1233,14 +1233,14 @@ ad_proc -private rp_serve_abstract_file {
 
     ### no more trailing slash.
 
-    if { [file isfile $path] } {
+    if { [ad_file isfile $path] } {
         # It's actually a file.
         ad_conn -set file $path
     } else {
         # The path provided doesn't correspond directly to a file - we
         # need to glob.   (It could correspond directly to a directory.)
 
-        if { ![file isdirectory [file dirname $path]] } {
+        if { ![file isdirectory [ad_file dirname $path]] } {
             ad_raise notfound
         }
 
@@ -1248,7 +1248,7 @@ ad_proc -private rp_serve_abstract_file {
 
         if { [ad_conn file] eq "" } {
 
-            if { [file isdirectory $path] && !$noredirect_p } {
+            if { [ad_file isdirectory $path] && !$noredirect_p } {
                 # Directory name with no trailing slash. Redirect to the same
                 # URL but with a trailing slash.
 
@@ -1275,7 +1275,7 @@ ad_proc -private rp_serve_abstract_file {
 ad_proc -public rp_serve_concrete_file {file} {
     Serves a file.
 } {
-    set extension [file extension $file]
+    set extension [ad_file extension $file]
     set startclicks [clock clicks -microseconds]
 
     if { [nsv_exists rp_extension_handlers $extension] } {
@@ -1332,7 +1332,7 @@ ad_proc -private rp_file_can_be_public_p { path } {
     perform its own checks, if any.
 } {
     #  first check that we are not serving a forbidden file like a .xql, a backup or CVS file
-    if {[file extension $path] eq ".xql"
+    if {[ad_file extension $path] eq ".xql"
         && ![parameter::get -parameter ServeXQLFiles -package_id $::acs::kernel_id -default 0] } {
         # Can't use ad_return_exception_page because it depends upon an initialized ad_conn
         ns_log Warning "An attempt was made to access an .XQL resource: {$path}."

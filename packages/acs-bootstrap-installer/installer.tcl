@@ -108,7 +108,7 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
             lappend missing_params $mandatory_params_array($param_name)
         }
     } else {
-        # Form is non-empty
+        # Form is nonempty
 
         # Loop over all params
         set all_param_names [concat [array names mandatory_params_array] \

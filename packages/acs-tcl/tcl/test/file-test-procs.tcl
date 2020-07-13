@@ -26,7 +26,7 @@ aa_register_case \
     foreach {package_key version} [array get installed_versions] {
         lappend files {*}[lmap f [apm_get_package_files \
                                       -package_key $package_key] {
-            if {[file extension $f] ne ".tcl"} continue
+            if {[ad_file extension $f] ne ".tcl"} continue
             set f $startdir/$package_key/$f
         }]
     }
@@ -53,7 +53,7 @@ aa_register_case \
 } {
     # couple of local helper procs
     proc ::tcl_p {file} {
-        return [expr {[string match {*.tcl} $file] || [file isdirectory $file]}]
+        return [expr {[string match {*.tcl} $file] || [ad_file isdirectory $file]}]
     }
 
     # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
@@ -169,7 +169,7 @@ aa_register_case \
                     set db [apm_guess_db_type $package $file]
                     if {[string is space $db]
                         || $db eq $db_type} {
-                        set tail [file tail $file]
+                        set tail [ad_file tail $file]
                         if {[regexp {\-(.*)-(.*).sql} $tail match v1 v2]} {
                             set v1s [apm_version_sortable $v1]
                             set v2s [apm_version_sortable $v2]
@@ -259,7 +259,7 @@ aa_register_case \
 
         regexp {(.*)[.]xql$} $file match base
 
-        if {![file exists ${base}.tcl] && ![file exists ${base}.vuh]} {
+        if {![ad_file exists ${base}.tcl] && ![ad_file exists ${base}.vuh]} {
             # the file did not exist so we must have a -db extension...
             regexp {(.*?)(-)?([A-Za-z_]*)[.]xql$} $file match base dummy db
 
@@ -298,8 +298,8 @@ aa_register_case \
 
     foreach xql [array names allxql] {
         # check there is a corresponding .tcl file
-        if {![file exists ${xql}.tcl]
-            && ![file exists ${xql}.vuh]} {
+        if {![ad_file exists ${xql}.tcl]
+            && ![ad_file exists ${xql}.vuh]} {
             # JCD: Hack to exclude calendar/www/views which is the only current file which has
             # no associated Tcl file.
             if {[string first calendar/www/views $allxql($xql)] <  0} {
@@ -350,7 +350,7 @@ aa_register_case \
     foreach {package_key version} [array get installed_versions] {
         lappend files {*}[lmap f [apm_get_package_files \
                                       -package_key $package_key] {
-            if {[file extension $f] ne ".tcl"} continue
+            if {[ad_file extension $f] ne ".tcl"} continue
             set f $startdir/$package_key/$f
         }]
     }
@@ -427,7 +427,7 @@ aa_register_case \
                                       -package_key $package_key \
                                       -file_types {content_page include_page}] {
             # Ignore non .tcl files
-            if {[file extension $f] ne ".tcl"} continue
+            if {[ad_file extension $f] ne ".tcl"} continue
             # Ignore docs
             if { "$package_key" eq "acs-core-docs" } continue
             set f $startdir/$package_key/$f

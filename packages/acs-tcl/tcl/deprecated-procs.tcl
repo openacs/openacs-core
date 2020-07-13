@@ -1105,13 +1105,13 @@ ad_proc -deprecated doc_find_template { filename } { Finds a master.adp file whi
 
     set start [clock clicks -milliseconds]
 
-    set dir [file dirname $filename]
+    set dir [ad_file dirname $filename]
     while { [string length $dir] > 1 && [string first $path_root $dir] == 0 } {
 	# Only look in directories under the path root.
 	if { [file isfile "$dir/master.adp"] } {
 	    return "$dir/master.adp"
 	}
-	set dir [file dirname $dir]
+	set dir [ad_file dirname $dir]
     }
 
     if { [file exists "$path_root/templates/master.adp"] } {
@@ -2609,11 +2609,11 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
     }
 
     if {[info exists file]} {
-        if {![file exists $file]} {
+        if {![ad_file exists $file]} {
             error "Error reading file: $file not found"
         }
 
-        if {![file readable $file]} {
+        if {![ad_file readable $file]} {
             error "Error reading file: $file permission denied"
         }
 
@@ -2623,7 +2623,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
         close $fp
 
         if {![info exists filename]} {
-            set filename [file tail $file]
+            set filename [ad_file tail $file]
         }
 
         if {$mime_type eq "*/*" || $mime_type eq ""} {

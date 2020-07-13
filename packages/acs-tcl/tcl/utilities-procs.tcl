@@ -63,9 +63,9 @@ ad_proc util::zip {
     #
     # Split the source
     #
-    if {[file isfile $source]} {
-        set filename [file tail $source]
-        set in_path  [file dirname $source]
+    if {[ad_file isfile $source]} {
+        set filename [ad_file tail $source]
+        set in_path  [ad_file dirname $source]
     } else {
         set filename "."
         set in_path  $source
@@ -2340,7 +2340,7 @@ ad_proc -public util_current_directory {} {
     if {$lastchar eq "/" } {
         return $path
     } else {
-        set file_dirname [file dirname $path]
+        set file_dirname [ad_file dirname $path]
         # Treat the case of the root directory special
         if {$file_dirname eq "/" } {
             return /
@@ -2828,7 +2828,7 @@ ad_proc ad_sanitize_filename {
     # dots other than in file extension are dangerous. Put inside two
     # '#' character will be seen as message keys and file-storage is
     # currently set to interpret them.
-    set str_ext [file extension $str]
+    set str_ext [ad_file extension $str]
     set str_noext [string range $str 0 end-[string length $str_ext]]
     regsub -all {\.} $str_noext $replace_with str_noext
     set str ${str_noext}${str_ext}
@@ -3701,7 +3701,7 @@ ad_proc -public util::backup_file {
             set backup_path "${file_path}${backup_suffix}.${backup_counter}"
         }
 
-        if { ![file exists $backup_path] } {
+        if { ![ad_file exists $backup_path] } {
             # We found a non-existing backup path
             break
         }
@@ -4048,11 +4048,11 @@ ad_proc -public util::find_all_files {
 
                     set filename [lindex [split $file "/"] end]
                     set file_extension [lindex [split $filename "."] end]
-                    if { [file isfile $file] } {
+                    if { [ad_file isfile $file] } {
                         if {$extension eq "" || $file_extension eq $extension} {
                             lappend files [list $filename $file]
                         }
-                    } elseif { [file isdirectory $file] } {
+                    } elseif { [ad_file isdirectory $file] } {
                         if { $include_dirs == 1 } {
                             lappend files $file
                         }
@@ -4120,9 +4120,9 @@ ad_proc -public util::which {prog} {
         }
     }
     foreach dir $searchdirs {
-        set fullname [file join $dir $prog]
+        set fullname [ad_file join $dir $prog]
         foreach ext $exts {
-            if {[file executable $fullname$ext]} {
+            if {[ad_file executable $fullname$ext]} {
                 return $fullname$ext
             }
         }
@@ -4334,9 +4334,9 @@ ad_proc -public util::disk_cache_eval {
         set hash [ns_sha1 $call]
         set dir [ad_tmpdir]/oacs-cache/$key
         set file_name $dir/$id-$hash
-        if {![file isdirectory $dir]} {file mkdir $dir}
+        if {![ad_file isdirectory $dir]} {file mkdir $dir}
         ns_mutex eval [nsv_get ad_disk_cache mutex] {
-            if {[file readable $file_name]} {
+            if {[ad_file readable $file_name]} {
                 set result [template::util::read_file $file_name]
             } else {
                 set result [{*}$call]
@@ -4516,7 +4516,7 @@ namespace eval util {
         catch {set dot [::util::which dot]}
         if {$dot ne ""} {
             set dir [ad_tmpdir]/oacs-dotcode
-            if {![file isdirectory $dir]} {
+            if {![ad_file isdirectory $dir]} {
                 file mkdir $dir
             }
             #
@@ -4531,7 +4531,7 @@ namespace eval util {
             #
             set dot_signature [ns_md5 $dot_code-svg-$css]
             set stem $dir/$dot_signature
-            if {![file exists $stem.svg]} {
+            if {![ad_file exists $stem.svg]} {
                 ns_log notice "inline_svg_from_dot: generate $stem.svg"
 
                 set f [open $stem.dot w]; puts $f $dot_code; close $f
@@ -4549,7 +4549,7 @@ namespace eval util {
             } else {
                 ns_log notice "inline_svg_from_dot: reuse $stem.svg"
             }
-            if {[file exists $stem.svg]} {
+            if {[ad_file exists $stem.svg]} {
                 set f [open $stem.svg]; set svg [read $f]; close $f
                 #
                 # Delete the first three lines generated from dot.
@@ -4615,7 +4615,7 @@ namespace eval util::resources {
         if {[dict exists $resource_info downloadURLs]} {
             ns_log notice "we have downloadURLs <[dict get $resource_info downloadURLs]>"
             foreach url [dict get $resource_info downloadURLs] {
-                lappend downloadFiles [file tail $url]
+                lappend downloadFiles [ad_file tail $url]
             }
         }
         set files [concat \
@@ -4631,7 +4631,7 @@ namespace eval util::resources {
             } else {
                 set path $resource_dir/$version_dir/$file
             }
-            if {![file readable $path/]} {
+            if {![ad_file readable $path/]} {
                 set installed 0
                 break
             }
@@ -4655,7 +4655,7 @@ namespace eval util::resources {
         set can_install 1
         set resource_dir [dict get $resource_info resourceDir]
 
-        if {![file isdirectory $resource_dir]} {
+        if {![ad_file isdirectory $resource_dir]} {
             try {
                 file mkdir $resource_dir
             } on error {errorMsg} {
@@ -4664,14 +4664,14 @@ namespace eval util::resources {
         }
         if {$can_install && $version_dir ne ""} {
             set path $resource_dir/$version_dir
-            if {![file isdirectory $path]} {
+            if {![ad_file isdirectory $path]} {
                 try {
                     file mkdir $path
                 } on error {errorMsg} {
                     set can_install 0
                 }
             } else {
-                set can_install [file writable $path]
+                set can_install [ad_file writable $path]
             }
         }
         return $can_install
@@ -4709,7 +4709,7 @@ namespace eval util::resources {
             append local_path /$version_dir
             append download_prefix /$version_dir
         }
-        if {![file writable $local_path]} {
+        if {![ad_file writable $local_path]} {
             file mkdir $local_path
         }
 
@@ -4734,8 +4734,8 @@ namespace eval util::resources {
             } else {
                 error "download from $download_prefix/$file failed: $result"
             }
-            set local_root [file dirname $local_path/$file]
-            if {![file isdirectory $local_root]} {
+            set local_root [ad_file dirname $local_path/$file]
+            if {![ad_file isdirectory $local_root]} {
                 file mkdir $local_root
             }
             file rename -force -- $fn $local_path/$file
@@ -4743,7 +4743,7 @@ namespace eval util::resources {
             #
             # Remove potentially stale gzip file.
             #
-            if {[file exists $local_path/$file.gz]} {
+            if {[ad_file exists $local_path/$file.gz]} {
                 file delete $local_path/$file.gz
             }
 
@@ -4779,7 +4779,7 @@ namespace eval util::resources {
                     error "download from $url failed: $result"
                 }
             }
-            set file [file tail $url]
+            set file [ad_file tail $url]
             file rename -force -- $fn $local_path/$file
         }
     }

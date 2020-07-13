@@ -32,8 +32,8 @@ ad_proc -public apm_workspace_dir {} {
     Return the path to the apm-workspace, creating the directory if necessary.
 
 } {
-    set path [file join $::acs::rootdir apm-workspace]
-    if { [file isdirectory $path] } {
+    set path [ad_file join $::acs::rootdir apm-workspace]
+    if { [ad_file isdirectory $path] } {
         return $path
     } else {
         return [apm_mkdir $path]
@@ -47,7 +47,7 @@ ad_proc -public apm_workspace_install_dir {} {
 } {
     set base_path [apm_workspace_dir]
     set install_path "$base_path/install"
-    if { [file isdirectory $install_path] } {
+    if { [ad_file isdirectory $install_path] } {
         return $install_path
     } else {
         return [apm_mkdir $install_path]
@@ -111,7 +111,7 @@ ad_proc -public apm_package_info_file_path {
     } else {
         set path $path/$package_key
     }
-    if { [file exists $path/$package_key.info] } {
+    if { [ad_file exists $path/$package_key.info] } {
         return $path/$package_key.info
     }
     error "The directory $path does not contain a package specification file ($package_key.info)."
@@ -467,7 +467,7 @@ ad_proc -private apm_transfer_file {
             set h [ns_http queue -timeout $timeout:0 $url]
             set replyHeaders [ns_set create]
             ns_http wait -file F -headers $replyHeaders -spoolsize 1 $h
-            if {[file exists $output_file_name]} {file delete -- $output_file_name}
+            if {[ad_file exists $output_file_name]} {file delete -- $output_file_name}
             file rename -- $F $output_file_name
             set location [ns_set iget $replyHeaders location]
             if {$location eq ""} break
@@ -540,7 +540,7 @@ ad_proc -private apm_load_apm_file {
             return
         }
 
-        if {![file exists $file_path]} {
+        if {![ad_file exists $file_path]} {
             apm_callback_and_log $callback  "
             The file cannot be found.  Your URL or your filename is incorrect.  Please verify that the filename
             is correct and try again."
@@ -553,7 +553,7 @@ ad_proc -private apm_load_apm_file {
     if { [catch {
         set files [split [string trim \
                               [exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]]] "\n"]
-        apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
+        apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [ad_file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
     } errmsg] } {
         apm_callback_and_log $callback "The follow error occurred during the uncompression process:
     <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><br>
@@ -582,7 +582,7 @@ ad_proc -private apm_load_apm_file {
             return
         }
 
-        if { [llength $components] == 2 && [file extension $file] eq ".info" } {
+        if { [llength $components] == 2 && [ad_file extension $file] eq ".info" } {
             if { [info exists info_file] } {
                 apm_callback_and_log $callback  "The archive contains more than one <tt>package/*/*.info</tt> file, so it is not a valid APM file.</ul>\n"
                 ns_log Error "Error loading APM file form url $url: Invalid APM file. More than one package .info file."
@@ -607,7 +607,7 @@ ad_proc -private apm_load_apm_file {
     #exec sh -c "cd $tmpdir ; [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] xf - $info_file" 2> [apm_dev_null]
 
     if { [catch {
-        array set package [apm_read_package_info_file [file join $tmpdir $info_file]]
+        array set package [apm_read_package_info_file [ad_file join $tmpdir $info_file]]
     } errmsg]} {
         file delete -force -- $tmpdir
         apm_callback_and_log $callback  "The archive contains an unparsable package specification file:
@@ -631,7 +631,7 @@ ad_proc -private apm_load_apm_file {
     } else {
 
         set install_path [apm_workspace_install_dir]
-        if { ![file isdirectory $install_path] } {
+        if { ![ad_file isdirectory $install_path] } {
             file mkdir $install_path
         }
 

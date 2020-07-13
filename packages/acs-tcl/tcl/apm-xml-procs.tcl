@@ -219,7 +219,7 @@ ad_proc -public apm_read_package_info_file { path } {
 } {
     # If the .info file hasn't changed since last read (i.e., has the same
     # mtime), return the cached info list.
-    set mtime [file mtime $path]
+    set mtime [ad_file mtime $path]
     if { [nsv_exists apm_version_properties $path] } {
 	set cached_version [nsv_get apm_version_properties $path]
 	if { [lindex $cached_version 0] == $mtime } {

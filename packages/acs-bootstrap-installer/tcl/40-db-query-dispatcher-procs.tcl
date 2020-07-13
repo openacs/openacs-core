@@ -641,7 +641,7 @@ ad_proc -private db_qd_internal_get_queryname_root {relative_path} {
     # remove the prepended "/packages/" string
     regsub {^\/?packages\/} $relative_path {} relative_path
 
-    # remove the last chunk of the file name, since we're just looking for the root path
+    # remove the last chunk of the filename, since we're just looking for the root path
     # NOTE: THIS MAY NEED BETTER ABSTRACTION, since this assumes a naming scheme
     # of -rdbms.XXX (ben)
     regsub {\.xql} $relative_path {} relative_path
