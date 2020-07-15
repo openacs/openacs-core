@@ -1697,6 +1697,11 @@ ad_proc -private apm_data_model_scripts_find {
     } else {
         lappend types_to_retrieve "data_model_upgrade"
     }
+
+    if {![apm_package_enabled_p $package_key]} {
+        ns_log notice "apm_data_model_scripts_find: ignore upgrade attempt for disabled package $package_key"
+        return ""
+    }
     set data_model_list [list]
     set upgrade_file_list [list]
     set ctl_file_list [list]
