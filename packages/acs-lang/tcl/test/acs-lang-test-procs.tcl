@@ -996,36 +996,60 @@ aa_register_case \
     Test that we fall back to 'default locale for language' when requesting a message
     which exists in default locale for language, but not in the current locale
 } {
-    # Assuming we have en_US and en_GB
-
-    set package_key "acs-lang"
-    set message_key [ad_generate_random_string]
-
-    set us_message [ad_generate_random_string]
-    set gb_message [ad_generate_random_string]
-
-    set error_p 0
-    ad_try {
+    #
+    # Check if en_GB is enabled
+    #
+    set enabled_p [nsv_array exists lang_message_en_GB]
+    #
+    # Run the test
+    #
+    aa_run_with_teardown -test_code {
+        #
+        # Enable en_GB if necessary
+        #
+        if { ! $enabled_p } {
+            lang::system::locale_set_enabled \
+                -locale en_GB \
+                -enabled_p 1
+            lang::catalog::import -locales en_GB
+        }
+        #
+        # Create messages
+        #
+        set package_key "acs-lang"
+        set message_key [ad_generate_random_string]
+        set us_message  [ad_generate_random_string]
+        set gb_message  [ad_generate_random_string]
+        #
+        # Test missing en_GB returns en_US message key
+        #
         lang::message::register "en_US" $package_key $message_key $us_message
-
         aa_equals "Looking up message in GB returns US message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
             $us_message
-
+        #
+        # Test existing en_GB returns en_GB message key
+        #
         lang::message::register "en_GB" $package_key $message_key $gb_message
-
         aa_equals "Looking up message in GB returns GB message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
             $gb_message
-    } on error {errorMsg} {
-        set error_p 1
-        set saved_errorInfo $::errorInfo
-        error $errorMsg $saved_errorInfo
-
-    } finally {
-        # Clean up
+    } -teardown_code {
+        #
+        # Clean up messages
+        #
         db_dml delete_msg { delete from lang_messages where package_key = :package_key and message_key = :message_key }
         db_dml delete_key { delete from lang_message_keys where package_key = :package_key and message_key = :message_key }
+        #
+        # Disable en_GB if it was disabled previously
+        #
+        if { ! $enabled_p } {
+            lang::system::locale_set_enabled \
+                -locale en_GB \
+                -enabled_p 0
+            nsv_unset lang_message_en_GB
+            db_dml delete_messages { delete from lang_messages where locale = 'en_GB' }
+        }
     }
 }
 
