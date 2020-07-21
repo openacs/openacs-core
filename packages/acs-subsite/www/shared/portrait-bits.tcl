@@ -46,13 +46,13 @@ if { $item_id != 0} {
         #
 
         set folder [acs_root_dir]/portrait-thumbnails
-        if {![file exists $folder]} {
+        if {![ad_file exists $folder]} {
             file mkdir $folder
         }
 
         set filename $folder/$itemInfo(revision_id).$size
 
-        if {![file exists $filename]} {
+        if {![ad_file exists $filename]} {
             switch -- $itemInfo(storage_type) {
                 "file" {
                     set input_file [content::revision::get_cr_file_path -revision_id $itemInfo(revision_id)]
@@ -92,7 +92,7 @@ if { $item_id != 0} {
         # Test again if the file exists, we might have converted the
         # file by the if-clause above.
         #
-        if {[file exists $filename]} {
+        if {[ad_file exists $filename]} {
             ns_setexpires 86400 ;# 1 day
             #
             # We had "ad_returnfile_background" before, which is a

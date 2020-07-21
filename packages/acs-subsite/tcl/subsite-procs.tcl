@@ -524,7 +524,7 @@ ad_proc -public subsite::define_pageflow {
                 }
                 array set subsection_a $subsection_spec
                 set subsection_a(name) $subsection_name
-                set subsection_a(folder) [file join $section_a(folder) $subsection_a(folder)]
+                set subsection_a(folder) [ad_file join $section_a(folder) $subsection_a(folder)]
 
                 add_section_row \
                     -array subsection_a \
@@ -574,7 +574,7 @@ ad_proc -public subsite::add_section_row {
         set current_url "[string range $current_url 0 [string last / $current_url]]."
     }
 
-    set info(url) [file join $info(folder) $info(url)]
+    set info(url) [ad_file join $info(folder) $info(url)]
     regsub {/\.$} $info(url) / info(url)
 
     # Default to not selected
@@ -584,7 +584,7 @@ ad_proc -public subsite::add_section_row {
         set selected_p 1
     } else {
         foreach pattern $info(selected_patterns) {
-            set full_pattern [file join $info(folder) $pattern]
+            set full_pattern [ad_file join $info(folder) $pattern]
             if { [string match $full_pattern $current_url] } {
                 set selected_p 1
                 break
@@ -598,7 +598,7 @@ ad_proc -public subsite::add_section_row {
         $info(name) \
         $info(label) \
         $info(title) \
-        [file join $base_url $info(url)] \
+        [ad_file join $base_url $info(url)] \
         $selected_p \
         $link_p
 
