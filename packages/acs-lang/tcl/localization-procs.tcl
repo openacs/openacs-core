@@ -499,7 +499,7 @@ ad_proc -public lc_time_system_to_conn {
     @param time_value        Timestamp from the database in the ISO datetime format.
     @return                  Timestamp in conn's local time, also in ISO datetime format.
 } {
-    if { ![ad_conn isconnected] } {
+    if { ![ns_conn isconnected] } {
         return $time_value
     }
 
@@ -522,7 +522,7 @@ ad_proc -public lc_time_conn_to_system {
     @param time_value        Timestamp from conn input in the ISO datetime format.
     @return                  Timestamp in the database's timezone, also in ISO datetime format.
 } {
-    if { ![ad_conn isconnected] } {
+    if { ![ns_conn isconnected] } {
         return $time_value
     }
 

@@ -80,7 +80,7 @@ ad_proc -public lang::system::locale {
         return [site_wide_locale]
     }
 
-    if { $package_id eq "" && [ad_conn isconnected] } {
+    if { $package_id eq "" && [ns_conn isconnected] } {
         set package_id [ad_conn package_id]
     }
 
@@ -733,7 +733,7 @@ ad_proc -public lang::conn::timezone {} {
     }
 
     set timezone {}
-    if { [ad_conn isconnected] } {
+    if { [ns_conn isconnected] } {
         set timezone [lang::user::timezone]
     }
 

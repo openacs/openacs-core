@@ -1010,7 +1010,7 @@ ad_proc -private security::get_register_subsite {} {
         #
         # We are on normal subsite
         #
-        if { [ad_conn isconnected] } {
+        if { [ns_conn isconnected] } {
             set url [subsite::get_element -element url]
             #
             # Check to see that the user (most likely "The Public"
@@ -1078,7 +1078,7 @@ ad_proc -public ad_get_login_url {
     # because that will frequently interfere with the normal login
     # procedure.
     #
-    if { [ad_conn isconnected] && $return_p && ![string match "register/*" [ad_conn extra_url]] } {
+    if { [ns_conn isconnected] && $return_p && ![string match "register/*" [ad_conn extra_url]] } {
         #
         # In a few cases, we do not need to add a fully qualified
         # return url. The secure cases have to be still tested.

@@ -120,7 +120,7 @@ ad_proc -public auth::password::change {
 
             # Refresh the current user's cookies, so he doesn't get logged out,
             # if this user was logged in before changing password
-            if { [ad_conn isconnected] && $user_id == $connection_user_id } {
+            if { [ns_conn isconnected] && $user_id == $connection_user_id } {
                 auth::issue_login -account_status [ad_conn account_status] -user_id $user_id
             }
         }

@@ -281,7 +281,7 @@ namespace eval notification {
                 }
             }
 
-            if { $notif_user eq "" && [ad_conn isconnected] } {
+            if { $notif_user eq "" && [ns_conn isconnected] } {
                 set notif_user [ad_conn user_id]
             }
 

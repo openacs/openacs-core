@@ -852,7 +852,7 @@ ad_proc -public lang::message::lookup {
     if { $locale eq "" } {
         # No locale provided
 
-        if { [ad_conn isconnected] } {
+        if { [ns_conn isconnected] } {
             # We are in an HTTP connection (request) so use that locale
             set locale [ad_conn locale]
         } else {

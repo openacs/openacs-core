@@ -42,7 +42,7 @@ ad_proc -public rel_segment::new {
     @return The <code>segment_id</code> of the new segment
 
 } {
-    if { [ad_conn isconnected] } {
+    if { [ns_conn isconnected] } {
         if { $creation_user eq "" } {
             set creation_user [ad_conn user_id]
         }

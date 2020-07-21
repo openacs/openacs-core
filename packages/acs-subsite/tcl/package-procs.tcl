@@ -521,7 +521,7 @@ ad_proc -private package_insert_default_comment { } {
     @creation-date 12/29/2000
 
 } {
-    set author [expr {[ad_conn isconnected] ?
+    set author [expr {[ns_conn isconnected] ?
                       [acs_user::get_element -element name] : "Unknown"}]
     set creation_date [db_string current_timestamp {
         select current_timestamp from dual}]
@@ -721,7 +721,7 @@ ad_proc -public package_instantiate_object {
         set package_name $acs_type(package_name)
     }
 
-    if { [ad_conn isconnected] } {
+    if { [ns_conn isconnected] } {
         if { $creation_user eq "" } {
             set creation_user [ad_conn user_id]
         }
@@ -818,7 +818,7 @@ ad_proc -public package_instantiate_object {
 
     set object_id [db_exec_plsql create_object {}]
 
-    if { [ad_conn isconnected] } {
+    if { [ns_conn isconnected] } {
         subsite::callback -object_type $object_type "insert" $object_id
     }
 

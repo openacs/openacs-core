@@ -1222,7 +1222,7 @@ ad_proc -public subsite::get_url {
     @param node_id the subsite's node_id (defaults to nearest subsite node).
     @param absolute_p whether to include the host in the returned url.
 } {
-    if {[ad_conn isconnected]} {
+    if {[ns_conn isconnected]} {
         if {$node_id eq ""} {
             set node_id [ad_conn subsite_node_id]
         }

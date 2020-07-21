@@ -43,7 +43,7 @@ namespace eval site_node_apm_integration {
         @return empty string if not found.
     } {
         if {$package_id eq ""} {
-            if {[ad_conn isconnected]} { 
+            if {[ns_conn isconnected]} { 
                 set package_id [ad_conn package_id]
             } else { 
                 error "Not in a connection and no package_id provided"

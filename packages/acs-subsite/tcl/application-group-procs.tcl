@@ -25,7 +25,7 @@ ad_proc -public application_group::contains_party_p {
 
 } {
 
-    if {$package_id eq "" && [ad_conn isconnected]} {
+    if {$package_id eq "" && [ns_conn isconnected]} {
         set package_id [ad_conn package_id]
     }
 
@@ -79,7 +79,7 @@ ad_proc -public application_group::contains_relation_p {
     [ad_conn package_id]).
 } {
 
-    if {$package_id eq "" && [ad_conn isconnected]} {
+    if {$package_id eq "" && [ns_conn isconnected]} {
         set package_id [ad_conn package_id]
     }
 
@@ -115,7 +115,7 @@ ad_proc -public application_group::contains_segment_p {
 
 } {
 
-    if {$package_id eq "" && [ad_conn isconnected]} {
+    if {$package_id eq "" && [ns_conn isconnected]} {
         set package_id [ad_conn package_id]
     }
 
@@ -150,7 +150,7 @@ ad_proc -public application_group::group_id_from_package_id {
     empty string if the application group doesn't exist.
 } {
 
-    if { [ad_conn isconnected] && $package_id eq "" } {
+    if { [ns_conn isconnected] && $package_id eq "" } {
         set package_id [ad_conn package_id]
     }
 
@@ -201,7 +201,7 @@ ad_proc -public application_group::new {
     Returns the group_id of the new application group.
 } {
 
-    if { [ad_conn isconnected] } {
+    if { [ns_conn isconnected] } {
         # Since we have a connection, default user_id / peeraddr
         # if they're not specified
         if { $creation_user eq "" } {

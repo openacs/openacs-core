@@ -50,7 +50,7 @@ namespace eval membership_rel {
             # bumped back to needs_approval right after an administrator has approved them,
             # even if the user doesn't log in the meantime.
 
-            if { [ad_conn isconnected] } {
+            if { [ns_conn isconnected] } {
                 set user_id [ad_conn user_id]
             } else {
                 set user_id ""
