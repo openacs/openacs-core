@@ -114,11 +114,16 @@ if {[info commands ns_base64urlencode] eq ""} {
 }
 
 if {[info commands ::ns_dbquotelist] eq ""} {
-    #
-    # Compatibility function for AOLserver or older versions of
-    # NaviServer. Newer versions provide this command as builtin.
-    #
-    ad_proc -public ns_dbquotelist {list {type text}} {
+    ad_proc -public ns_dbquotelist {
+        list
+        {type text}
+    } {
+        Quote a list as a safe SQL list to be used e.g. in "in"
+        statements.
+
+        Compatibility function for AOLserver or older versions of
+        NaviServer. Newer versions provide this command as builtin.
+    } {
         set sql ""
         if { [llength $list] > 0 } {
             # replace single quotes by two single quotes
