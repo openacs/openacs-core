@@ -426,6 +426,14 @@ namespace eval ::acs {
             }
             return [set $cache_key]
         }
+
+        :public method flush {
+           {-pattern *}
+        } {
+            set pattern ${:prefix}${pattern}
+            unset -nocomplain {*}[info vars $pattern]
+        }
+
         #
         # The per-thread cache uses namespaced Tcl variables, identified
         # by the prefix "::acs:cache::"

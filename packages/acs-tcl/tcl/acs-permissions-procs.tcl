@@ -173,7 +173,7 @@ ad_proc -private permission::permission_p_not_cached {
 ad_proc -private permission::permission_thread_cache_flush {} {
     Flush thread cache
 } {
-    array unset ::permission__permission_p__cache
+    acs::per_request_cache flush -pattern acs-tcl.permission_p__cache*
 }
 
 ad_proc -public permission::require_permission {
