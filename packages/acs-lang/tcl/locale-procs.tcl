@@ -733,7 +733,7 @@ ad_proc -public lang::conn::timezone {} {
     }
 
     set timezone {}
-    if { [ns_conn isconnected] } {
+    if { [ad_conn isconnected] } {
         set timezone [lang::user::timezone]
     }
 
