@@ -92,6 +92,8 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_writer"       {[info commands ::ns_writer]       ne ""}
 ::acs::register_icanuse "ns_hash"         {[info commands ::ns_hash]         ne ""}
 
+catch {ns_ictl trace foo} ::errorMsg
+::acs::register_icanuse "ns_ictl trace idle" {"idle" in [split $::errorMsg " "]}
 
 #
 # Add some compatibility procs for AOLserver or older NaviServer versions
