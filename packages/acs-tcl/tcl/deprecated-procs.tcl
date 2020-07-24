@@ -3223,6 +3223,673 @@ namespace eval party {
 
 }
 
+########################################################################
+# deprecated utilities-procs.tcl
+########################################################################
+
+ad_proc -deprecated check_for_form_variable_naughtiness {
+    name
+    value
+} {
+    stuff to process the data that comes
+    back from the users
+
+    if the form looked like
+    <input type=text name=yow> and <input type=text name=bar>
+    then after you run this function you'll have Tcl vars
+    $foo and $bar set to whatever the user typed in the form
+
+    this uses the initially nauseating but ultimately delicious
+    Tcl system function "uplevel" that lets a subroutine bash
+    the environment and local vars of its caller.  It ain't Common Lisp...
+
+    This is an ad-hoc check to make sure users aren't trying to pass in
+    "naughty" form variables in an effort to hack the database by passing
+    in SQL. It is called in all instances where a Tcl variable
+    is set from a form variable.
+
+    Checks the given variable for against known form variable exploits.
+    If it finds anything objectionable, it throws an error.
+} {
+    # security patch contributed by michael@cleverly.com
+    if { [string match "QQ*" $name] } {
+        error "Form variables should never begin with QQ!"
+    }
+
+    # contributed by michael@cleverly.com
+    if { "Vform_counter_i" eq $name } {
+        error "Vform_counter_i not an allowed form variable"
+    }
+
+    # The statements below make ACS more secure, because it prevents
+    # overwrite of variables from something like set_the_usual_form_variables
+    # and it will be better if it was in the system. Yet, it is commented
+    # out because it will cause an unstable release. To add this security
+    # feature, we will need to go through all the code in the ACS and make
+    # sure that the code doesn't try to overwrite intentionally and also
+    # check to make sure that when Tcl files are sourced from another proc,
+    # the appropriate variables are unset.  If you want to install this
+    # security feature, then you can look in the release notes for more info.
+    #
+    # security patch contributed by michael@cleverly.com,
+    # fixed by iwashima@arsdigita.com
+    #
+    # upvar 1 $name name_before
+    # if { [info exists name_before] } {
+    # The variable was set before the proc was called, and the
+    # form attempts to overwrite it
+    # error "Setting the variables from the form attempted to overwrite existing variable $name"
+    # }
+
+    # no naughtiness with uploaded files (discovered by ben@mit.edu)
+    # patch by richardl@arsdigita.com, with no thanks to
+    # jsc@arsdigita.com.
+    if { [string match "*tmpfile" $name] } {
+        set tmp_filename [ns_queryget $name]
+
+        # ensure no .. in the path
+        ns_normalizepath $tmp_filename
+
+        set passed_check_p 0
+
+        # check to make sure path is to an authorized directory
+        set tmpdir_list [ad_parameter_all_values_as_list -package_id [ad_conn subsite_id] TmpDir]
+        if { $tmpdir_list eq "" } {
+            set tmpdir_list [list [ns_config ns/parameters tmpdir] "/var/tmp" "/tmp"]
+        }
+
+        foreach tmpdir $tmpdir_list {
+            if { [string match "$tmpdir*" $tmp_filename] } {
+                set passed_check_p 1
+                break
+            }
+        }
+
+        if { !$passed_check_p } {
+            error "You specified a path to a file that is not allowed on the system!"
+        }
+
+    }
+
+    # integrates with the ad_set_typed_form_variable_filter system
+    # written by dvr@arsdigita.com
+
+    # see if this is one of the typed variables
+    global ad_typed_form_variables
+
+    if { [info exists ad_typed_form_variables] } {
+
+        foreach typed_var_spec $ad_typed_form_variables {
+            set typed_var_name [lindex $typed_var_spec 0]
+
+            if { ![string match $typed_var_name $name] } {
+                # no match. Go to the next variable in the list
+                continue
+            }
+
+            # the variable matched the pattern
+            set typed_var_type [lindex $typed_var_spec 1]
+
+            if { "" eq $typed_var_type } {
+                # if they don't specify a type, the default is 'integer'
+                set typed_var_type integer
+            }
+
+            set variable_safe_p [ad_var_type_check_${typed_var_type}_p $value]
+
+            if { !$variable_safe_p } {
+                ns_returnerror 500 "variable $name failed '$typed_var_type' type check"
+                ns_log Error "check_for_form_variable_naughtiness: [ad_conn url] called with \$$name = $value"
+                error "variable $name failed '$typed_var_type' type check"
+                ad_script_abort
+            }
+
+            # we've found the first element in the list that matches,
+            # and we don't want to check against any others
+            break
+        }
+    }
+}
+
+
+
+ad_proc -deprecated DoubleApos {string} {
+
+    When the value "O'Malley" is inserted int an SQL database, the
+    single quote can cause troubles in SQL, one has to insert
+    'O''Malley' instead.
+
+    Deprecated: in general, one should be using bind variables rather than
+    calling DoubleApos.
+
+    @see ns_dbquotevalue
+    @see bind variables
+
+    @return string with single quotes converted to a pair of single quotes
+} {
+    set result [ns_dbquotevalue $string]
+    # remove the leading quote if necessary
+    if {[string range $result 0 0] eq '} {
+        set result [string range $result 1 end-1]
+    }
+    return $result
+}
+
+
+
+# debugging kludges
+
+ad_proc -deprecated NsSettoTclString {set_id} {
+    returns a plain text version of the passed ns_set id
+
+    @see util::ns_set_to_tcl_string
+
+    DEPRECATED: does not comply with OpenACS naming convention
+} {
+    return [util::ns_set_to_tcl_string $set_id]
+}
+
+ad_proc -public util::ns_set_to_tcl_string {set_id} {
+    returns a plain text version of the passed ns_set id
+} {
+    set result ""
+    for {set i 0} {$i<[ns_set size $set_id]} {incr i} {
+        append result "[ns_set key $set_id $i] : [ns_set value $set_id $i]\n"
+    }
+    return $result
+}
+
+ad_proc -deprecated get_referrer args {
+    @return referrer from the request headers.
+    @param relative return the refer without protocol and host
+
+    DEPRECATED: does not comply with OpenACS naming convention.
+
+    @see util::get_referrer
+} {
+    return [util::get_referrer {*}$args]
+}
+
+ad_proc -deprecated remove_nulls_from_ns_set {
+    old_set_id
+} {
+    Creates and returns a new ns_set without any null value fields
+
+    DEPRECATED: does not comply with OpenACS naming convention.
+
+    @see util_remove_nulls_from_ns_set
+
+    @return new ns_set
+} {
+    return [util_remove_nulls_from_ns_set $old_set_id]
+}
+
+ad_proc -deprecated merge_form_with_query {
+    {-bind {}}
+    form statement_name sql_qry
+} {
+    Merges a form with a query string.
+
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention. Furthermore, ns_formvalueput supports a limited number
+    of HTML variants and input tag types and is subject to various
+    other limitations. For a modern implementation addressing the
+    use-case of this proc one should probably use tools such as tDOM.
+
+    @see tDOM
+    @see https://panoptic.com/wiki/aolserver/Ns_formvalueput
+
+    @param form the form to be stuffed.
+    @param statement_name An identifier for the sql_qry to be executed.
+    @param sql_qry The sql that must be executed.
+    @param bind A ns_set stuffed with bind variables for the sql_qry.
+} {
+    set set_id [ns_set create]
+
+    ns_log debug "merge_form_with_query: statement_name = $statement_name"
+    ns_log debug "merge_form_with_query: sql_qry = $sql_qry"
+    ns_log debug "merge_form_with_query: set_id = $set_id"
+
+    db_0or1row $statement_name $sql_qry -bind $bind -column_set set_id
+
+    if { $set_id ne "" } {
+
+        for {set i 0} {$i < [ns_set size $set_id]} {incr i} {
+            set form [ns_formvalueput $form [ns_set key $set_id $i] [ns_set value $set_id $i]]
+        }
+
+    }
+    return $form
+}
+
+
+
+
+ad_proc -deprecated util_PrettyTclBoolean {
+    zero_or_one
+} {
+    Turns a 1 (or anything else that makes a Tcl IF happy) into Yes; anything else into No
+
+    DEPRECATED: this proc is not localized, does not comply with
+    OpenACS naming convention and can be replaced by simple oneliner
+    idioms based e.g. on expr command
+
+    @see plain tcl idioms involving message keys
+} {
+    if {$zero_or_one} {
+        return "Yes"
+    } else {
+        return "No"
+    }
+}
+
+ad_proc -deprecated randomInit {seed} {
+    seed the random number generator.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention
+
+    @see util::random_init
+} {
+    return [util::random_init $seed]
+}
+
+ad_proc -deprecated random {} {
+    Return a pseudo-random number between 0 and 1.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention
+
+    @see util::random
+} {
+    return [util::random]
+}
+
+ad_proc -deprecated randomRange {range} {
+    Returns a pseudo-random number between 0 and range.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention
+
+    @see util::random_range
+
+    @return integer
+} {
+    return [util::random_range $range]
+}
+
+ad_proc -deprecated with_catch {error_var body on_error} {
+    execute code in body with the catch errorMessage in error_var
+    and if there is a nonzero return code from body
+    execute the on_error block.
+
+    DEPRECATED: does not comply with OpenACS naming convention and can
+    be replaced with better api such as ad_try or native Tcl
+    constructs such as ::try (8.6)
+
+    @see try
+    @see ad_try
+} {
+    upvar 1 $error_var $error_var
+    if { [catch { uplevel $body } $error_var] } {
+        set code [catch {uplevel $on_error} string]
+        # Return out of the caller appropriately.
+        if { $code == 1 } {
+            return -code error -errorinfo $::errorInfo -errorcode $::errorCode $string
+        } elseif { $code == 2 } {
+            return -code return $string
+        } elseif { $code == 3 } {
+            return -code break
+        } elseif { $code == 4 } {
+            return -code continue
+        } elseif { $code > 4 } {
+            return -code $code $string
+        }
+    }
+}
+
+ad_proc -deprecated exists_and_not_null { varname } {
+    Returns 1 if the variable name exists in the caller's environment and
+    is not the empty string.
+
+    Note you should enter the variable name, and not the variable value
+    (varname not $varname which will pass variable varnames value into this function).
+
+    DEPRECATED: the value provided by this proc is arguable, as it can
+    be replaced by a plain tcl oneliner.
+
+    @see plain tcl idioms
+} {
+    upvar 1 $varname var
+    return [expr { [info exists var] && $var ne "" }]
+}
+
+
+ad_proc -deprecated exists_and_equal { varname value } {
+    Returns 1 if the variable name exists in the caller's environment
+    and is equal to the given value.
+
+    DEPRECATED: the value provided by this proc is arguable, as it can
+    be replaced by a plain tcl oneliner.
+
+    @see exists_and_not_null
+    @see plain tcl idioms
+
+    @author Peter Marklund
+} {
+    upvar 1 $varname var
+
+    return [expr { [info exists var] && $var eq $value } ]
+}
+
+ad_proc -deprecated ReturnHeaders args {
+    We use this when we want to send out just the headers
+    and then do incremental writes with ns_write.  This way the user
+    doesn't have to wait for streamed output (useful when doing
+    bulk uploads, installs, etc.).
+
+    It returns status 200 and all headers including
+    any added to outputheaders.
+
+    DEPRECATED: does not comply with OpenACS naming convention.
+
+    @see util_return_headers
+} {
+    return [util_return_headers {*}$args]
+}
+
+ad_proc -public -deprecated safe_eval args {
+    Deprecated version of ad_safe_eval
+    @see ad_safe_eval
+} {
+    return [ad_safe_eval {*}$args]
+}
+
+ad_proc -deprecated -public ad_call_proc_if_exists { proc args } {
+    Calls a procedure with particular arguments, only if the procedure is defined.
+
+    Deprecated: very simple tcl commands idioms can replace this proc
+
+    @see "info commands" based idioms
+} {
+    if { [info commands $proc] ne "" } {
+        $proc {*}$args
+    }
+}
+
+ad_proc -deprecated value_if_exists { var_name } {
+    If the specified variable exists in the calling environment,
+    returns the value of that variable. Otherwise, returns the
+    empty_string.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention
+    and can be replaced with a plain tcl oneliner.
+
+    @see plain tcl idioms
+} {
+    upvar $var_name $var_name
+    if { [info exists $var_name] } {
+        return [set $var_name]
+    }
+}
+
+ad_proc -deprecated min { args } {
+    Returns the minimum of a list of numbers. Example: <code>min 2 3 1.5</code> returns 1.5.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention.
+    @see util::min
+
+    @author Ken Mayer (kmayer@bitwrangler.com)
+    @creation-date 26 September 2002
+} {
+    return [util::min $args]
+}
+
+ad_proc -deprecated max { args } {
+    Returns the maximum of a list of numbers. Example: <code>max 2 3 1.5</code> returns 3.
+
+    DEPRECATED: this proc does not respect OpenACS naming convention.
+    @see util::max
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date 31 August 2000
+} {
+    return [util::max $args]
+}
+
+ad_proc -deprecated with_finally {
+    -code:required
+    -finally:required
+} {
+    Execute CODE, then execute cleanup code FINALLY.
+    If CODE completes normally, its value is returned after
+    executing FINALLY.
+    If CODE exits non-locally (as with error or return), FINALLY
+    is executed anyway.
+
+    @param code Code to be executed that could throw and error
+    @param finally Cleanup code to be executed even if an error occurs
+
+    DEPRECATED: does not comply with OpenACS naming convention and can
+    be replaced with better api such as ad_try or native Tcl
+    constructs such as ::try (8.6)
+
+    @see try
+    @see ad_try
+} {
+
+    # Execute CODE.
+    set return_code [catch {uplevel $code} string]
+
+    if {[info exists ::errorInfo]} {
+        set s_errorInfo $::errorInfo
+    } else {
+        set s_errorInfo ""
+    }
+    if {[info exists ::errorCode]} {
+        set s_errorCode $::errorCode
+    } else {
+        set s_errorCode ""
+    }
+
+    # As promised, always execute FINALLY.  If FINALLY throws an
+    # error, Tcl will propagate it the usual way.  If FINALLY contains
+    # stuff like break or continue, the result is undefined.
+    uplevel $finally
+
+    switch -- $return_code {
+        0 {
+            # CODE executed without a non-local exit -- return what it
+            # evaluated to.
+            return $string
+        }
+        1 {
+            # Error
+            if {[lindex $s_errorCode 0 0] eq "CHILDSTATUS"} {
+                #
+                # GN: In case the errorCode starts with CHILDSTATUS it
+                # means that an error was raised from an "exec". In
+                # that case the raw error just tells that the "child
+                # process exited abnormally", without given any
+                # details. Therefore, we add the exit code to the
+                # messages.
+                #
+                set extra "child process (pid [lindex $s_errorCode 0 1]) exited with exit-code [lindex $s_errorCode 0 end]"
+                append string " ($extra)"
+                set s_errorInfo $extra\n$s_errorInfo
+            }
+            return -code error -errorinfo $s_errorInfo -errorcode $s_errorCode $string
+        }
+        2 {
+            # Return from the caller.
+            return -code return $string
+        }
+        3 {
+            # break
+            return -code break
+        }
+        4 {
+            # continue
+            return -code continue
+        }
+        default {
+            return -code $return_code $string
+        }
+    }
+}
+
+#####
+#
+# This is some old security crud from before we had ad_page_contract
+#
+#####
+
+
+#
+# All the ad_var_type_check* procs get called from
+# check_for_form_variable_naughtiness. Read the documentation
+# for ad_set_typed_form_variable_filter for more details.
+
+ad_proc -deprecated ad_var_type_check_integer_p {value} {
+    @return 1 if $value is an integer, 0 otherwise.
+
+    This function is deprecated.
+    Use either template::data::validate::integer
+    or "string is integer -strict" instead.
+
+    @see ::template::data::validate::integer
+} {
+
+    if { [regexp {[^0-9]} $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+ad_proc -deprecated ad_var_type_check_safefilename_p {value} {
+    @return 0 if the file contains ".."
+} {
+
+    if { [string match "*..*" $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+ad_proc -deprecated ad_var_type_check_dirname_p {value} {
+    @return 0 if $value contains a / or \, 1 otherwise.
+} {
+
+    if { [regexp {[/\\]} $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+ad_proc -deprecated ad_var_type_check_number_p {value} {
+    @return 1 if $value is a valid number
+} {
+    if { [catch {expr {1.0 * $value}}] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+ad_proc -deprecated ad_var_type_check_word_p {value} {
+    @return 1 if $value contains only letters, numbers, dashes,
+            and underscores, otherwise returns 0.
+} {
+
+    if { [regexp {[^-A-Za-z0-9_]} $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+ad_proc -deprecated ad_var_type_check_nocheck_p {{value ""}} {
+    @return 1 regardless of the value. This is useful if you want to
+            set a filter over the entire site, then create a few exceptions.
+
+    For example:
+
+      ad_set_typed_form_variable_filter /my-dangerous-page.tcl {user_id nocheck}
+      ad_set_typed_form_variable_filter /*.tcl user_id
+} {
+    return 1
+}
+
+ad_proc -deprecated ad_var_type_check_noquote_p {value} {
+    @return 1 if $value contains any single-quotes
+} {
+
+    if { [string match "*'*" $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+ad_proc -deprecated ad_var_type_check_integerlist_p {value} {
+    @return 1 if list contains only numbers, spaces, and commas.
+            Example '5, 3, 1'. Note: it doesn't allow negative numbers,
+            because that could let people sneak in numbers that get
+            treated like math expressions like '1, 5-2'
+} {
+
+    if { [regexp {[^ 0-9,]} $value] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+ad_proc -deprecated ad_var_type_check_fail_p {value} {
+    A check that always returns 0. Useful if you want to disable all access
+    to a page.
+} {
+    return 0
+}
+
+ad_proc -deprecated ad_var_type_check_third_urlv_integer_p {{args ""}} {
+    Deprecated: too specific to make sense as a public api, can be
+    replaced via a simple tcl oneliner
+
+    @see simple tcl oneliner
+
+    @return 1 if the third path element in the URL is integer.
+} {
+
+    set third_url_element [lindex [ad_conn urlv] 3]
+
+    if { [regexp {[^0-9]} $third_url_element] } {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+ad_proc -public -deprecated util_search_list_of_lists {list_of_lists query_string {sublist_element_pos 0}} {
+    Returns position of sublist that contains QUERY_STRING at SUBLIST_ELEMENT_POS.
+
+    The function can be replaced by "lsearch -index $pos $list_of_lists $query_string"
+    @see lsearch
+} {
+    #set sublist_index 0
+    #foreach sublist $list_of_lists {
+    #    set comparison_element [lindex $sublist $sublist_element_pos]
+    #    if { $query_string eq $comparison_element  } {
+    #        return $sublist_index
+    #    }
+    #    incr sublist_index
+    #}
+    # didn't find it
+    #return -1
+
+    return [lsearch -index $sublist_element_pos $list_of_lists $query_string]
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
