@@ -63,7 +63,7 @@ aa_register_case \
         aa_true "Property now has 2 values" \
             {[llength [dict get [nsv_get api_proc_doc $proc_name] $property]] == 2}
 
-        nsv_unset -nocomplain -- $proc_name
+        nsv_unset -nocomplain -- api_proc_doc $proc_name
     }
 
 aa_register_case \
