@@ -2035,6 +2035,15 @@ ad_proc -deprecated ad_custom_page_defaults {defaults} {
 
 ad_proc -deprecated ad_custom_form {return_url item_group item} {
     sets up the head of a form to feed to /tools/form-custom.tcl
+
+    Deprecated: there are many better ways now to create forms in
+    OpenACS
+
+    @see ad_form
+    @see template::form
+    @see ::Generic::Form
+    @see ::xowiki::Form
+    @see ::xowiki::FormPage
 } {
     append html "<form method=\"get\" action=\"/tools/form-custom\">\n"
     if {$return_url ne ""} {
