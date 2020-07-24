@@ -325,9 +325,11 @@ ad_proc -deprecated DoubleApos {string} {
     single quote can cause troubles in SQL, one has to insert
     'O''Malley' instead.
 
-    <p>
-    In general, one should be using bind variables rather than
+    Deprecated: in general, one should be using bind variables rather than
     calling DoubleApos.
+
+    @see ns_dbquotevalue
+    @see bind variables
 
     @return string with single quotes converted to a pair of single quotes
 } {
