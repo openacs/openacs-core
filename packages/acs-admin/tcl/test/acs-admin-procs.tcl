@@ -158,6 +158,40 @@ aa_register_case -cats {
         }
 }
 
+aa_register_case -cats {
+    api smoke
+} -procs {
+    acs_admin::require_site_wide_subsite
+    acs_admin::require_site_wide_package
+} acs_admin_require_site_wide {
+    Basic check for acs_admin::require_site_wide_subsite and
+    acs_admin::require_site_wide_package
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+            set sws [acs_admin::require_site_wide_subsite]
+            set swp [acs_admin::require_site_wide_package -package_key acs-subsite]
+
+            set subsite_name site-wide
+            set subsite_parent /acs-admin
+            set subsite_path $subsite_parent/$subsite_name
+            set node_info [site_node::get -url $subsite_path]
+
+            set node_id [dict get $node_info node_id]
+            set subsite_id [dict get $node_info object_id]
+
+            aa_true "Site-wide subsite is where expected" {$subsite_id == $sws}
+            aa_true "Site wide package was mounted properly" [db_0or1row check_swa_package {
+                select 1 from site_nodes n, apm_packages p
+                where n.parent_id = :node_id
+                and p.package_id = n.object_id
+                and p.package_key = 'acs-subsite'
+                and p.package_id = :swp
+            }]
+        }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
