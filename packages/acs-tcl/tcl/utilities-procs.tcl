@@ -3656,6 +3656,11 @@ ad_proc -deprecated ad_var_type_check_fail_p {value} {
 }
 
 ad_proc -deprecated ad_var_type_check_third_urlv_integer_p {{args ""}} {
+    Deprecated: too specific to make sense as a public api, can be
+    replaced via a simple tcl oneliner
+
+    @see simple tcl oneliner
+
     @return 1 if the third path element in the URL is integer.
 } {
 
