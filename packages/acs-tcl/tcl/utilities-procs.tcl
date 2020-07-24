@@ -2353,6 +2353,10 @@ ad_proc -public util_current_directory {} {
 
 ad_proc -deprecated -public ad_call_proc_if_exists { proc args } {
     Calls a procedure with particular arguments, only if the procedure is defined.
+
+    Deprecated: very simple tcl commands idioms can replace this proc
+
+    @see "info commands" based idioms
 } {
     if { [info commands $proc] ne "" } {
         $proc {*}$args

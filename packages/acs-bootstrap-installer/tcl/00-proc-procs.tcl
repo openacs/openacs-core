@@ -1103,6 +1103,10 @@ ad_proc -public -deprecated ad_assert_arg_value_in_list {
     @param arg_name The name of the argument to check
     @param allowed_values_list The list of values that are permissible for the argument
 
+    Deprecated: this proc can be replaced via very simple expr or if idioms
+
+    @see native if or expr idioms
+
     @return Returns 1 if the argument has a valid value, throws an informative
                     error otherwise.
 
