@@ -4073,7 +4073,9 @@ namespace eval util::resources {
                           [dict get $resource_info extraFiles] \
                          ] {
 
+            #ns_log notice "::util::resources::download $download_prefix/$file"
             set result [util::http::get -url $download_prefix/$file -spool]
+            #ns_log notice "... returned status code [dict get $result status]"
             if {[dict get $result status] == 200} {
                 set fn [dict get $result file]
             } else {
@@ -4123,9 +4125,9 @@ namespace eval util::resources {
                 } else {
                     error "download from $url failed: $result"
                 }
+                set file [ad_file tail $url]
+                file rename -force -- $fn $local_path/$file
             }
-            set file [ad_file tail $url]
-            file rename -force -- $fn $local_path/$file
         }
     }
 }

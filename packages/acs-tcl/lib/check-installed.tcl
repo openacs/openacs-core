@@ -16,7 +16,7 @@ ad_include_contract {
 
 set resource_dir  [dict get $resource_info resourceDir]
 set cdn           [dict get $resource_info cdn]
-set resource_name  [dict get $resource_info resourceName]
+set resource_name [dict get $resource_info resourceName]
 
 #
 # Check, if the resources are already installed.
