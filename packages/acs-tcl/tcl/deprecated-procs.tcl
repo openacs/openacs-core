@@ -3389,15 +3389,7 @@ ad_proc -deprecated NsSettoTclString {set_id} {
     return [util::ns_set_to_tcl_string $set_id]
 }
 
-ad_proc -public util::ns_set_to_tcl_string {set_id} {
-    returns a plain text version of the passed ns_set id
-} {
-    set result ""
-    for {set i 0} {$i<[ns_set size $set_id]} {incr i} {
-        append result "[ns_set key $set_id $i] : [ns_set value $set_id $i]\n"
-    }
-    return $result
-}
+
 
 ad_proc -deprecated get_referrer args {
     @return referrer from the request headers.

@@ -3847,6 +3847,16 @@ ad_proc -public util::var_subst_quotehtml {
 
 namespace eval util {
 
+    ad_proc -public ::util::ns_set_to_tcl_string {set_id} {
+        returns a plain text version of the passed ns_set id
+    } {
+        set result ""
+        for {set i 0} {$i<[ns_set size $set_id]} {incr i} {
+            append result "[ns_set key $set_id $i] : [ns_set value $set_id $i]\n"
+        }
+        return $result
+    }
+
     ad_proc ::util::inline_svg_from_dot {{-css ""} dot_code} {
 
         Transform a dot source code into an inline svg image based on
