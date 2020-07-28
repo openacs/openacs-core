@@ -1254,6 +1254,9 @@ ad_proc -private util::http::native::run {
                      -timeout $timeout \
                      -method $method \
                      -headers $headers]
+        if {[regexp {https://([^/]+)/} $url . hostname]} {
+            lappend cmd -hostname $hostname
+        }
         if {$body_file ne ""} {
             lappend cmd -body_file $body_file
         } elseif {$body ne ""} {
@@ -1263,7 +1266,7 @@ ad_proc -private util::http::native::run {
             lappend cmd -spoolsize 0
         }
         lappend cmd $url
-
+        #ns_log notice "NS_HTTP $cmd"
         set r [{*}$cmd]
     } else {
         # Older Naviservers used different commands depending if http
