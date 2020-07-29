@@ -1698,7 +1698,7 @@ ad_proc -private apm_data_model_scripts_find {
         lappend types_to_retrieve "data_model_upgrade"
     }
 
-    if {![apm_package_enabled_p $package_key]} {
+    if {[ad_verify_install] && ![apm_package_enabled_p $package_key]} {
         ns_log notice "apm_data_model_scripts_find: ignore upgrade attempt for disabled package $package_key"
         return ""
     }
