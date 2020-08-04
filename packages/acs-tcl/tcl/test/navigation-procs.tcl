@@ -62,7 +62,7 @@ aa_register_case \
         ad_context_bar_html
     } ad_context_bar_html {
 
-    Test if returns a HTML fragment from a list.
+    Test if returns an HTML fragment from a list.
 
 } {
 

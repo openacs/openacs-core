@@ -3,7 +3,7 @@ ad_library {
 # xml.tcl --
 #
 #	This file provides XML services.
-#	These services include a XML document instance and DTD parser,
+#	These services include an XML document instance and DTD parser,
 #	as well as support for generating XML.
 #
 # Copyright (c) 1998,1999 Zveno Pty Ltd

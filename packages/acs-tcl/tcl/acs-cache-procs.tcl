@@ -101,7 +101,7 @@ namespace eval ::acs {
                 #
                 # Set some value in the cache. This code uses
                 # ns_cache_eval to achieve this behavior, which is
-                # typically a AOLserver idiom and should be avoided.
+                # typically an AOLserver idiom and should be avoided.
                 #
                 if {![info exists partition_key]} {
                     set partition_key $key

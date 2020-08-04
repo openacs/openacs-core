@@ -164,7 +164,7 @@ proc sgml::tokenise {sgml elemExpr elemSub args} {
 
 # sgml::parseEvent --
 #
-#	Produces an event stream for a XML/HTML document,
+#	Produces an event stream for an XML/HTML document,
 #	given the Tcl list format returned by tokenise.
 #
 #	This procedure checks that the document is well-formed,
@@ -817,7 +817,7 @@ proc sgml::Entity {opts entityrefcmd pcdatacmd entities ref} {
 # DTD parser for SGML (XML).
 #
 # This DTD actually only handles XML DTDs.  Other language's
-# DTD's, such as HTML, must be written in terms of a XML DTD.
+# DTD's, such as HTML, must be written in terms of an XML DTD.
 #
 # A DTD is represented as a three element Tcl list.
 # The first element contains the content models for elements,

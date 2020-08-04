@@ -68,7 +68,7 @@ ad_proc -public util::http::basic_auth {
     -username:required
     -password:required
 } {
-    Builds BASIC authentication header for a HTTP request
+    Builds BASIC authentication header for an HTTP request
 
     @param headers  ns_set of request headers that will be populated with auth header.
                     If not specified, a new ns_set will be created. Existing header
@@ -308,7 +308,7 @@ ad_proc -private util::http::get_channel_settings {
 } {
     Helper proc to get encoding based on content_type (From xotcl/tcl/http-client-procs)
 } {
-    # In the following, I realize a IANA/MIME charset resolution
+    # In the following, I realize an IANA/MIME charset resolution
     # scheme which is compliant with RFC 3023 which deals with
     # treating XML media types properly.
     #
