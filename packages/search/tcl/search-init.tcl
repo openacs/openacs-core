@@ -12,7 +12,7 @@ ad_proc -private search::init::schedule_indexer {} {
     restart their server after mounting search.
 
 } {
-    set package_id [apm_package_id_from_key search]
+    set package_id [apm_package_id_from_key_not_cached search]
     if { $package_id != 0 } {
         ad_schedule_proc \
             -thread t [parameter::get \
