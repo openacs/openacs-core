@@ -6,6 +6,13 @@ ad_library {
     @author Gustaf Neumann
 }
 
+if {[info commands ::try] eq ""} {
+    package require try
+    ns_log warning "*******************************************"
+    ns_log warning "* This version of OpenACS requires Tcl 8.6"
+    ns_log warning "*******************************************"
+}
+
 namespace eval ::acs {
     ad_proc -public icanuse {feature} {
 
