@@ -18,7 +18,7 @@ set logmaxbackup [ns_config -int "ns/parameters" logmaxbackup 0]
 
 if { $logmaxbackup } {
     ad_schedule_proc -all_servers t -schedule_proc ns_schedule_daily \
-	[list 00 00] util::roll_server_log
+        [list 00 00] util::roll_server_log
 }
 
 # Local variables:

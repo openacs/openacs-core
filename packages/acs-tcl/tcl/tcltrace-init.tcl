@@ -14,10 +14,10 @@ foreach {parameter default cmd} {
     TclTraceSaveNsReturn   0  {trace add execution ::ns_return  enter {::tcltrace::before-ns_return}}
 } {
     if {[::parameter::get_from_package_key \
-	     -package_key acs-tcl \
-	     -parameter $parameter \
-	     -default $default] ne $default} {
-	append trace \n$cmd 
+             -package_key acs-tcl \
+             -parameter $parameter \
+             -default $default] ne $default} {
+        append trace \n$cmd
     }
 }
 
