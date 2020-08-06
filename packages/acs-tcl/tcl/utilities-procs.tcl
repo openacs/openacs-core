@@ -2339,7 +2339,7 @@ ad_proc -public ad_ns_set_keys {
     {-exclude ""}
     set_id
 } {
-    Returns the keys of a ns_set as a Tcl list, like <code>array names</code>.
+    Returns the keys of an ns_set as a Tcl list, like <code>array names</code>.
 
     @param colon If set, will prepend all the keys with a colon; useful for bind variables
     @param exclude Optional Tcl list of key names to exclude
@@ -2713,7 +2713,7 @@ ad_proc -public util_ns_set_to_list {
 
 
 ad_proc -public util_list_to_ns_set { aList } {
-    Convert a list in the form "key value key value ..." into a ns_set.
+    Convert a list in the form "key value key value ..." into an ns_set.
 
     @param aList The list to convert
 

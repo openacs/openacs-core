@@ -2160,7 +2160,7 @@ ad_proc -public ad_html_text_convert {
 
     <p>
 
-    Text to html does ad_text_to_html, and html to text does a
+    Text to HTML does ad_text_to_html, and HTML to text does an
     ad_html_to_text. See those procs for details.
 
     <p>

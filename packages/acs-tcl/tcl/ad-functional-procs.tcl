@@ -319,7 +319,7 @@ ad_proc -public thd {xs} "returns the third element of a list" {
 # set last_names  [map snd $people]
 # set emails      [map thd $people]
 
-ad_proc -public flip {f a b} "takes a binary function f and two arguments a and b
+ad_proc -public flip {f a b} "takes a binary function 'f' and two arguments 'a' and 'b'
                        and returns f b a (arguments are flipped)" {
     $f $b $a
 }

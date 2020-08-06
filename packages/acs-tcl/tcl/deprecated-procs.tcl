@@ -1276,7 +1276,7 @@ ad_proc -deprecated ad_table {
     build and return an HTML fragment given an active query and a data definition.
     <ul>
     <li> sql_qry -- The query that should be executed to generate the table. <br>
-    You can specify an optional -bind argument to specify a ns_set of bind variables.
+    You can specify an optional -bind argument to specify an ns_set of bind variables.
     <li> Tdatadef -- the table declaration.
     </ul>
 

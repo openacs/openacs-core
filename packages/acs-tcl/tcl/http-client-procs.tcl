@@ -21,7 +21,7 @@ ad_proc -private util::http::set_cookies {
     {-pattern ""}
 } {
     Extracts cookies from response headers. This is done reading every <code>set-cookie</code> header
-    and populating a ns_set of request headers suitable for issuing <code>util::http</code> requests.
+    and populating an ns_set of request headers suitable for issuing <code>util::http</code> requests.
 
     @param resp_headers Response headers, in a list form as returned by <code>util::http</code> API.
 
@@ -1215,7 +1215,7 @@ namespace eval util::http::native {}
 # This conversion is not needed (anymore?) for native implementation
 # ad_proc -private util::http::native::timeout {input} {
 
-#     Convert the provided value to a ns_time format
+#     Convert the provided value to an ns_time format
 #     used by NaviServer
 
 # } {

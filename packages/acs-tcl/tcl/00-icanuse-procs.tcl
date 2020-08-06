@@ -19,7 +19,7 @@ namespace eval ::acs {
         Check, if a (previously registered) feature can be used in an
         installation. These features are typically version dependent
         features of NaviServer. The checking of the availability of
-        these feratures is typically more complex than a plain "info
+        these features is typically more complex than a plain "info
         commands ...".
 
         @param feature name for a feature, can contain blanks
