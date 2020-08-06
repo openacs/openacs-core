@@ -529,7 +529,7 @@ filesystem</para>
     <sect3 id="Submitted_Form_Data_Character_Set">
       <title>Submitted Form Data Character Set</title>
 
-      <para><emphasis>50.30</emphasis> Data which is submitted with a
+      <para><emphasis>50.30</emphasis> Data which is submitted with an
          HTTP request using a GET or POST method may be in any character
          set. The system must be able to determine the encoding of the form
          data and convert it to Unicode on demand.  </para>

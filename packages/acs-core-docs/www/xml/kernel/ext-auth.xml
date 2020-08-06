@@ -150,7 +150,7 @@ parts. Each has a section below.</para>
           <seg>Username is email switch</seg>
         </seglistitem>
       </segmentedlist>
-      <para>Users will log in using a username, a authority, and a
+      <para>Users will log in using a username, an authority, and a
       password.  The authority is the source for user/password
       verification.  OpenACS can be an authority itself. </para>
       
@@ -401,7 +401,7 @@ Registration</title>
       <para>If a user doesn&#39;t have an account, the site-wide
 configuration can allow the user to register for one, as defined in
 the configuration discussed above. This section is about normal
-account registration through a authority driver.</para>
+account registration through an authority driver.</para>
       <para>The account creation service contract implementation will
 need to tell us which information to ask the user for:</para>
       <itemizedlist>

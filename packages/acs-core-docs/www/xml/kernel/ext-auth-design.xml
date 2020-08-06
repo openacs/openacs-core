@@ -196,7 +196,7 @@ Marklund
         <sect4 id="new_ap">
           <title>New API
 </title>
-          <para>TODO: Make a auth::create_user return values from
+          <para>TODO: Make an auth::create_user return values from
 auth::registration::Register.
 </para>
           <para>TODO: Make the auth::create_user proc honor site-wide setting
