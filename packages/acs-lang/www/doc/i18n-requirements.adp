@@ -279,7 +279,7 @@ filename.</p><p>
 <strong>50.20</strong> Tcl page script files can be authored in
 any character set. The system must have a way to determine the
 character set before loading the files, probably from the
-filename.</p><h4>Submitted Form Data Character Set</h4><strong>50.30</strong> Data which is submitted with a HTTP request
+filename.</p><h4>Submitted Form Data Character Set</h4><strong>50.30</strong> Data which is submitted with an HTTP request
 using a GET or POST method may be in any character set. The system
 must be able to determine the encoding of the form data and convert
 it to Unicode on demand.

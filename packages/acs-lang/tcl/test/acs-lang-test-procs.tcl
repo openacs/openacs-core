@@ -1178,7 +1178,7 @@ aa_register_case \
         lang::catalog::package_has_files_in_locale_p
     } lang_package_has_files_in_locale_p {
         Check that this private interface returns the right value when
-        a a catalog file for a package is available or not
+        a catalog file for a package is available or not
     } {
         set locale en_US
         foreach package_key {acs-lang acs-kernel acs-subsite} {
