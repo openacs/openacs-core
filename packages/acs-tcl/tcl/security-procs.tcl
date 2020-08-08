@@ -2816,7 +2816,7 @@ namespace eval ::security::csrf {
 
         The optional argument user_id is currently ignored, but it is
         there, since there are algorithms published to calculate the
-        CSRF token based on an user_id. So far, i found no evidence
+        CSRF token based on a user_id. So far, i found no evidence
         that these should be used, but the argument is there as a
         reminder, such the interface does not have to be used, when we
         switch to such an algorithm.

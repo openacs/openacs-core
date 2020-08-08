@@ -22,7 +22,7 @@ aa_register_case \
 
 } {
     aa_run_with_teardown -rollback -test_code {
-        # We get an user_id as party_id.
+        # We get a user_id as party_id.
         set user_id [db_nextval acs_object_id_seq]
 
         # Create the user
@@ -105,7 +105,7 @@ aa_register_case \
 
 } {
     aa_run_with_teardown -rollback -test_code {
-        # We get an user_id as party_id.
+        # We get a user_id as party_id.
         set user_id [db_nextval acs_object_id_seq]
 
         # Create the user

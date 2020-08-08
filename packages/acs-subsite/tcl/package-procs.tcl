@@ -661,7 +661,7 @@ ad_proc -public package_instantiate_object {
     @param creation_user The current user. Defaults to <code>[ad_conn
                                                               user_id]</code> if not specified and there is a connection
 
-    @param creation_ip The current user's ip address. Defaults to <code>[ad_conn
+    @param creation_ip The current user's IP address. Defaults to <code>[ad_conn
                                                                          peeraddr]</code> if not specified and there is a connection
 
     @param package_name The PL/SQL package associated with this object

@@ -533,7 +533,7 @@ aa_register_case \
     # Test offending post sent by Dave Bauer
 
     set offending_post {
-I have a dynamically assigned ip address, so I use dyndns.org to
+I have a dynamically assigned IP address, so I use dyndns.org to
 change
 addresses for my acs server.
 Mail is sent to any yahoo address fine. Mail sent to aol fails. I am

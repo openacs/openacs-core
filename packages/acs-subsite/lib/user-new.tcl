@@ -209,7 +209,7 @@ ad_form -extend -name register -on_request {
     }
 
     # If the user is self registering, then try to set the preferred
-    # locale (assuming the user has set it as a anonymous visitor
+    # locale (assuming the user has set it as an anonymous visitor
     # before registering).
     if { $self_register_p } {
         # We need to explicitly get the cookie and not use
