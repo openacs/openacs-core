@@ -75,7 +75,7 @@ db_multirow user_contributions user_contributions {
 }
 
 # cro@ncacasi.org 2002-02-20 
-# Boy is this query wacked, but I think I am starting to understand
+# Boy, is this query wacked, but I think I am starting to understand
 # how this groups thing works.
 # Find out which groups this user belongs to where he was added to the group
 # directly (e.g. his membership is not by virtue of the group being

@@ -84,7 +84,7 @@ foreach path [apm_get_package_files -package_key $package_key] {
 		set server_rel_path "packages/$package_key/$path"
 		if { [apm_file_watchable_p $server_rel_path] } {
 		    if { [nsv_exists apm_reload_watch $server_rel_path] } {
-			# This procs file is already being watched.
+			# This "-procs" file is already being watched.
 			append body "<td>&nbsp;being watched&nbsp;</td>"
 		    } else {
 			if {![parameter::get -package_id [ad_acs_kernel_id] \

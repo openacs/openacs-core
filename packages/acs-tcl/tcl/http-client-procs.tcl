@@ -554,7 +554,7 @@ ad_proc util::http::post {
     states that method should not change when 301 or 302 are returned,
     and that GET should be used on a 303 response, but most HTTP
     clients fail in respecting this and switch to a GET request
-    independently. This options forces this kinds of redirect to
+    independently. This option forces this kinds of redirect to
     conserve their original method.
 
     @param max_depth is the maximum number of redirects the proc is
@@ -970,7 +970,7 @@ ad_proc -private util::http::follow_redirects {
     states that method should not change when 301 or 302 are returned,
     and that GET should be used on a 303 response, but most HTTP
     clients fail in respecting this and switch to a GET request
-    independently. This options forces this kinds of redirect to
+    independently. This option forces this kinds of redirect to
     conserve their original method.
 
     @param max_depth is the maximum number of redirects the proc is
@@ -1150,7 +1150,7 @@ ad_proc -private util::http::request {
     states that method should not change when 301 or 302 are returned,
     and that GET should be used on a 303 response, but most HTTP
     clients fail in respecting this and switch to a GET request
-    independently. This options forces this kinds of redirect to
+    independently. This option forces this kinds of redirect to
     conserve their original method. Notice that, as from RFC, a 303
     redirect won't send again any data to the server, as specification
     says we can assume variables to have been received.
@@ -1395,7 +1395,7 @@ ad_proc -private util::http::native::request {
     states that method should not change when 301 or 302 are returned,
     and that GET should be used on a 303 response, but most HTTP
     clients fail in respecting this and switch to a GET request
-    independently. This options forces this kinds of redirect to
+    independently. This option forces this kinds of redirect to
     conserve their original method. Notice that, as from RFC, a 303
     redirect won't send again any data to the server, as specification
     says we can assume variables to have been received.
@@ -1683,7 +1683,7 @@ ad_proc -private util::http::curl::request {
     states that method should not change when 301 or 302 are returned,
     and that GET should be used on a 303 response, but most HTTP
     clients fail in respecting this and switch to a GET request
-    independently. This options forces this kinds of redirect to
+    independently. This option forces this kinds of redirect to
     conserve their original method.
     Be aware that curl allows the POSTing of 303 requests only since
     version 7.26. Versions prior than this will follow 303 redirects
