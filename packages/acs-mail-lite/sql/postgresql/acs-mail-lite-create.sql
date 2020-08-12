@@ -107,8 +107,6 @@ create table acs_mail_lite_from_external (
        release_p boolean
 );
 
-create index acs_mail_lite_from_external_aml_email_id_idx
-       on acs_mail_lite_from_external (aml_email_id);
 create index acs_mail_lite_from_external_processed_p_idx
        on acs_mail_lite_from_external (processed_p);
 create index acs_mail_lite_from_external_release_p_idx

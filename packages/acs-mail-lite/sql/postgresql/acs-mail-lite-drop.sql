@@ -38,7 +38,6 @@ drop index acs_mail_lite_email_uid_id_map_src_ext_id_idx;
 
 drop table acs_mail_lite_email_uid_id_map;
 
-drop index acs_mail_lite_from_external_aml_email_id_idx;
 drop index acs_mail_lite_from_external_processed_p_idx;
 drop index acs_mail_lite_from_external_release_p_idx;
 
