@@ -178,6 +178,14 @@ proc ad_proc args {
         }
     }
 
+    # Callback hooks and callback implementations are treated as
+    # private: rationale is they never get called by other packages
+    # directly.
+    if {$callback ne ""} {
+        set public_p 0
+        set private_p 1
+    }
+
     if { $public_p && $private_p } {
         return -code error "Mutually exclusive switches -public and -private passed to ad_proc"
     }
