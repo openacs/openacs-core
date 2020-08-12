@@ -34,36 +34,36 @@ CREATE TABLE acs_mail_lite_queue (
 );
 
 create table acs_mail_lite_mail_log (
-    party_id                     integer
-                                constraint amlml_party_id_fk
-                                references parties (party_id)
-                                on delete cascade
-				constraint acs_mail_lite_log_pk
-				primary key,
-    last_mail_date		timestamptz default current_timestamp
+    party_id                  integer
+                              constraint amlml_party_id_fk
+                              references parties (party_id)
+                              on delete cascade
+                              constraint acs_mail_lite_log_pk
+                              primary key,
+    last_mail_date            timestamptz default current_timestamp
 );
 
 
 create table acs_mail_lite_bounce (
-    party_id                     integer
-                                constraint amlb_party_id_fk
-                                references parties (party_id)
-                                on delete cascade
-				constraint acs_mail_lite_bou_pk
-				primary key,
-    bounce_count		integer default 1
+    party_id                  integer
+                              constraint amlb_party_id_fk
+                              references parties (party_id)
+                              on delete cascade
+                              constraint acs_mail_lite_bou_pk
+                              primary key,
+    bounce_count              integer default 1
 );
 
 
 create table acs_mail_lite_bounce_notif (
-    party_id                    integer
-				constraint amlbn_party_id_fk
-                                references parties (party_id)
-                                on delete cascade
-				constraint acs_mail_lite_bounce_notif_pk
-				primary key,
-    notification_time		timestamptz default current_timestamp,
-    notification_count		integer default 0
+    party_id                  integer
+                              constraint amlbn_party_id_fk
+                              references parties (party_id)
+                              on delete cascade
+                              constraint acs_mail_lite_bounce_notif_pk
+                              primary key,
+    notification_time         timestamptz default current_timestamp,
+    notification_count        integer default 0
 );
 
 --
@@ -75,14 +75,14 @@ create sequence acs_mail_lite_in_id_seq;
 
 -- table tracking incoming email
 create table acs_mail_lite_from_external (
-       aml_email_id         integer primary key 
-                            not null 
-                            DEFAULT nextval ('acs_mail_lite_id_seq'), 
+       aml_email_id         integer primary key
+                            not null
+                            DEFAULT nextval ('acs_mail_lite_id_seq'),
        -- Priority for processing incoming email in queue.
        -- Lower number processed first.
        priority             integer,
        -- using varchar instead of text for indexing
-       -- to and from email are defined according to headers. 
+       -- to and from email are defined according to headers.
        -- See table acs_mail_lite_ie_headers
        to_email_addrs       varchar(1000),
        from_email_addrs     text,
@@ -94,11 +94,11 @@ create table acs_mail_lite_from_external (
        size_chars           numeric,
        -- time email received from server in seconds since tcl epoch
        received_cs          bigint,
-       -- Answers question: 
+       -- Answers question:
        -- Has all ACS Mail Lite processes finished for this email?
        -- Processes like parsing email, bounced email, input validation
        processed_p      boolean,
-       -- Answers question: 
+       -- Answers question:
        -- Have all callbacks related to this email finished processing?
        -- Upon release, delete  all components of aml_email_id also from
        -- tables acs_mail_lite_ie_headers, acs_mail_lite_ie_body_parts, and
@@ -107,31 +107,31 @@ create table acs_mail_lite_from_external (
        release_p boolean
 );
 
-create index acs_mail_lite_from_external_aml_email_id_idx 
+create index acs_mail_lite_from_external_aml_email_id_idx
        on acs_mail_lite_from_external (aml_email_id);
-create index acs_mail_lite_from_external_processed_p_idx 
+create index acs_mail_lite_from_external_processed_p_idx
        on acs_mail_lite_from_external (processed_p);
-create index acs_mail_lite_from_external_release_p_idx 
+create index acs_mail_lite_from_external_release_p_idx
        on acs_mail_lite_from_external (release_p);
 
 
 
 -- Some services are offered between sessions of importing incoming email.
--- A unique ID provided by 
--- acs_mail_lite_email_uid_id_map.uid_ext 
+-- A unique ID provided by
+-- acs_mail_lite_email_uid_id_map.uid_ext
 -- is designed to
 -- support UIDs for each email that are consistent between import sessions
--- from external source, such as specified by IMAP4 rfc3501 
+-- from external source, such as specified by IMAP4 rfc3501
 -- https://tools.ietf.org/html/rfc3501
 -- It is also expected that each mailbox.host, mailbox and user are
 -- consistent for duration of the service.
 -- And yet, experience knows that sometimes email servers change
 -- and UIDs for an email change with it.
--- Users switching email servers of an email account using a IMAP4 client 
+-- Users switching email servers of an email account using a IMAP4 client
 -- might hassle with moving email, but
 -- in the process they generally know what is happening. They don't re-read
--- all the email. 
--- We want to avoid this server re-reading and processing email 
+-- all the email.
+-- We want to avoid this server re-reading and processing email
 -- that has already been processed, when the UID of emails change.
 -- The Questions become:
 
@@ -140,14 +140,14 @@ create index acs_mail_lite_from_external_release_p_idx
 -- A server migration or restore with some conflicting UIDs.
 
 -- Can we recognize a change in server?
--- If so, can we signal ACS Mail Lite to ignore existing email 
+-- If so, can we signal ACS Mail Lite to ignore existing email
 -- in a new environment?
 -- Also, we should have a manual override to not ignore or ignore
 -- in case of false positive and false negative triggers.
 
 -- Can we recognize if another user accesses the same email account
 -- and arbitrarily selects some prior messages to unread?
--- Yes. The purpose of acs_mail_lite_email_uid_id_map is to act as a log 
+-- Yes. The purpose of acs_mail_lite_email_uid_id_map is to act as a log
 -- of prior processed messages.
 -- If total new messages is a significant percentage of all messages
 -- and service has been working for a week or more,
@@ -171,39 +171,39 @@ create index acs_mail_lite_from_external_release_p_idx
 -- Rfc3501 specifies a unique id for each email: UID.
 -- We can assign each email a more unique reference:
 -- mailbox.host + mailbox.name + UIDVALIDITY (of mailbox) + UID.
--- We are more specific so that we detect more subtle cases of 
+-- We are more specific so that we detect more subtle cases of
 -- server change, where checks by UID and UIDVALIDITY may not.
 
 
 -- For example, when migrating email service and
 -- and the new system initially restores the UIVALIDITY and message UID,
 -- but references a different state of each email. The cause
--- of such cases are reasonable. For example, restoring 
+-- of such cases are reasonable. For example, restoring
 -- from backup to a new email host or restoring
 -- before some batch event changed a bunch of things. So,
 -- src_ext = mailbox.host + (user?) + mailbox.name + UIDVALIDITY
 -- Leave user out for now..
--- Priority is to have a robust way to ignore 
+-- Priority is to have a robust way to ignore
 -- prior messages recognized as 'new' messages.
 
 create table acs_mail_lite_email_uid_id_map (
        -- unqique internal inbound email id
        -- src_ext_id identifies source, but is redundant
-       -- for identifying a unique email. 
+       -- for identifying a unique email.
        aml_email_id  integer not null,
        --uisng varchar instead of text for indexing purposes
        -- Each UID externally defined such as from imap4 server
        uid_ext varchar(3000) not null,
        -- Each external source may apply a different uid.
-       -- This is essentially an arbitrary constant frame reference between 
+       -- This is essentially an arbitrary constant frame reference between
        -- connecting sessions with external server in most scenarios.
        -- For IMAP4v1 rfc3501  2.3.1.1. item 4 ..combination of
-       -- mailbox.name, UIDVALIDITY, and UID must refer to a single 
-       -- immutable message on that server forever. 
-       -- default is: 
-       -- ExternalSource parameter mailbox.name  
+       -- mailbox.name, UIDVALIDITY, and UID must refer to a single
+       -- immutable message on that server forever.
+       -- default is:
+       -- ExternalSource parameter mailbox.name
        -- and UIDVALIDITY with dash as delimiter
-       -- where ExternalSource parameter is 
+       -- where ExternalSource parameter is
        -- either blank or maybe mailbox.host for example.
        -- external source reference id
        -- see acs_mail_lite_email_src_ext_id_map.aml_src_id
@@ -211,9 +211,9 @@ create table acs_mail_lite_email_uid_id_map (
 );
 
 create index acs_mail_lite_email_uid_id_map_uid_ext_idx
-	on acs_mail_lite_email_uid_id_map (uid_ext);
+    on acs_mail_lite_email_uid_id_map (uid_ext);
 create index acs_mail_lite_email_uid_id_map_src_ext_id_idx
-	on acs_mail_lite_email_uid_id_map (src_ext_id);
+    on acs_mail_lite_email_uid_id_map (src_ext_id);
 
 create table acs_mail_lite_email_src_ext_id_map (
        aml_src_id integer not null,
@@ -228,7 +228,7 @@ create table acs_mail_lite_email_src_ext_id_map (
 -- Choices are updates via nsv variables and database value updates.
 -- Choices via database have persistence across server restarts.
 -- Defaults are set in acs_mail_lite::sched_parameters
--- These all are used in context of processing incoming email 
+-- These all are used in context of processing incoming email
 -- unless stated otherwise.
 -- Most specific flag takes precedence.
 -- If an email is flagged high priority by package_id and
@@ -244,7 +244,7 @@ create table acs_mail_lite_ui (
        reprocess_old_p boolean,
        -- Max number of concurrent threads for high priority processing
        max_concurrent integer,
-       -- Any incoming email body part over this size is stored in file 
+       -- Any incoming email body part over this size is stored in file
        -- instead of database.
        max_blob_chars integer,
        -- Minimum threshold for default medium (standard) priority
@@ -259,9 +259,9 @@ create table acs_mail_lite_ui (
        hpri_party_ids text,
        --space delimited list of party_ids to process at low priority
        lpri_party_ids text,
-       -- a glob for searching subjects to flag for fast/high priority 
+       -- a glob for searching subjects to flag for fast/high priority
        hpri_subject_glob text,
-       -- a glob for searching subjects to flag for low priority 
+       -- a glob for searching subjects to flag for low priority
        lpri_subject_glob text,
        --space delimited list of object_ids to process at fast/high priority
        hpri_object_ids text,
@@ -306,7 +306,7 @@ create table acs_mail_lite_imap_conn (
 -- incoming email headers
 -- There should be a size limit per unit time from each source
 -- to prevent DDOS attacks and such (at least to the imap system).
--- 
+--
 create table acs_mail_lite_ie_headers (
        -- incoming email
        -- only includes headers useful in processing the queue
@@ -324,7 +324,7 @@ create table acs_mail_lite_ie_headers (
 );
 
 create index acs_mail_lite_ie_headers_aml_email_id_idx
-	on acs_mail_lite_ie_headers (aml_email_id);
+    on acs_mail_lite_ie_headers (aml_email_id);
 
 -- incoming email body parts
 -- including email file attachments and file content
@@ -334,7 +334,7 @@ create index acs_mail_lite_ie_headers_aml_email_id_idx
 create table acs_mail_lite_ie_parts (
        aml_email_id integer,
        section_id integer,
-       
+
        -- In addition to content_type, there is a special case:
        -- headers, which contains all headers for email
        -- content_type = c_type
@@ -349,7 +349,7 @@ create table acs_mail_lite_ie_parts (
 );
 
 create index acs_mail_lite_ie_parts_aml_email_id_idx
-	on acs_mail_lite_ie_parts (aml_email_id);
+    on acs_mail_lite_ie_parts (aml_email_id);
 
 
 -- incoming email parts, name value pairs of
@@ -363,7 +363,7 @@ create table acs_mail_lite_ie_part_nv_pairs (
 );
 
 create index acs_mail_lite_ie_part_nv_pairs_aml_email_id_idx
-	on acs_mail_lite_ie_part_nv_pairs (aml_email_id);
+    on acs_mail_lite_ie_part_nv_pairs (aml_email_id);
 
 create table acs_mail_lite_ie_section_ref_map (
        -- 'Section' refers to usage with 'part' reference in 'ns_imap body'
@@ -395,9 +395,9 @@ create table acs_mail_lite_ie_section_ref_map (
 );
 
 create index acs_mail_lite_ie_section_ref_map_section_ref_idx
-	on acs_mail_lite_ie_section_ref_map (section_ref);
+    on acs_mail_lite_ie_section_ref_map (section_ref);
 create index acs_mail_lite_ie_section_ref_map_section_id_idx
-	on acs_mail_lite_ie_section_ref_map (section_id);
+    on acs_mail_lite_ie_section_ref_map (section_id);
 
 --
 -- TODO: this table does not exists for Oracle.... Not needed there?
@@ -414,7 +414,7 @@ create table acs_mail_lite_send_msg_id_map (
                      constraint aml_from_external_party_id_fk
                      references parties (party_id)
                      on delete cascade,
-       object_id     integer 
+       object_id     integer
                      constraint aml_from_external_obect_id_fk
                      references acs_objects (object_id)
                      on delete cascade,

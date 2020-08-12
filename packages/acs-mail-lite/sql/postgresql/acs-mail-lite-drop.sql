@@ -7,8 +7,8 @@
 
 drop table acs_mail_lite_queue;
 
-drop table acs_mail_lite_mail_log; 
-drop table acs_mail_lite_bounce; 
+drop table acs_mail_lite_mail_log;
+drop table acs_mail_lite_bounce;
 drop table acs_mail_lite_bounce_notif;
 
 -- inbound email data model
@@ -42,10 +42,7 @@ drop index acs_mail_lite_from_external_aml_email_id_idx;
 drop index acs_mail_lite_from_external_processed_p_idx;
 drop index acs_mail_lite_from_external_release_p_idx;
 
-
-
 drop table acs_mail_lite_from_external;
-
 
 drop sequence acs_mail_lite_id_seq;
 drop sequence acs_mail_lite_in_id_seq;
