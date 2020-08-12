@@ -424,9 +424,6 @@ create table acs_mail_lite_send_msg_id_map (
        other         text
 );
 
-create index acs_mail_lite_send_msg_id_map_msg_id_idx
-       on acs_mail_lite_send_msg_id_map (msg_id);
-
 --
 -- Speed up referential integrity
 --

@@ -12,7 +12,6 @@ drop table acs_mail_lite_bounce;
 drop table acs_mail_lite_bounce_notif;
 
 -- inbound email data model
-drop index acs_mail_lite_send_msg_id_map_msg_id_idx;
 drop table acs_mail_lite_send_msg_id_map;
 
 drop index acs_mail_lite_ie_part_nv_pairs_aml_email_id_idx;
