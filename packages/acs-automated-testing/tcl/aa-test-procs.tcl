@@ -924,7 +924,7 @@ ad_proc -public aa_log_result {
     # environment. Otherwise, report and return.
     #
     if {![info exists ::aa_run_quietly_p]} {
-            ns_log warning "aa_log_result: called outside the testing environment. Test result: $test_result Test notes: $test_note"
+            ns_log warning "aa_log_result: called outside the testing environment. Test result: $test_result Test notes: $test_notes"
             return
     }
     #
