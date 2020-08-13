@@ -920,6 +920,14 @@ ad_proc -public aa_log_result {
     global aa_error_level
 
     #
+    # When aa_run_quietly_p exists, we run inside the testing
+    # environment. Otherwise, report and return.
+    #
+    if {![info exists ::aa_run_quietly_p]} {
+            ns_log warning "aa_log_result: called outside the testing environment. Test result: $test_result Test notes: $test_note"
+            return
+    }
+    #
     # If logging is happened whilst in a initialization class, store the log
     # entry, but don't write it to the database.  Individual testcase will make
     # their own copies of these log entries.
