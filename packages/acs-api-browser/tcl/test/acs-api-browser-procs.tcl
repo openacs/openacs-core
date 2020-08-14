@@ -107,7 +107,7 @@ aa_register_case \
     }
 
 aa_register_case \
-    -cats { api smoke } \
+    -cats { api smoke production_safe } \
     -procs {
         api_describe_function
     } \
@@ -153,7 +153,7 @@ aa_register_case \
     }
 
 aa_register_case \
-    -cats { api smoke } \
+    -cats { api smoke production_safe } \
     -procs {
         api_proc_documentation
     } \
@@ -192,7 +192,7 @@ aa_register_case \
     }
 
 aa_register_case \
-    -cats { api smoke } \
+    -cats { api smoke production_safe } \
     -procs {
         api_proc_pretty_name
         api_proc_url
@@ -280,7 +280,7 @@ aa_register_case \
     }
 
 aa_register_case \
-    -cats { api smoke } \
+    -cats { api smoke production_safe } \
     -procs {
         apidoc::format_author
     } \
@@ -303,7 +303,7 @@ aa_register_case \
     }
 
 aa_register_case \
-    -cats { api smoke } \
+    -cats { api smoke production_safe } \
     -procs {
         apidoc::format_see
     } \
@@ -332,7 +332,7 @@ aa_register_case \
     }
 
 aa_register_case \
-    -cats { api smoke } \
+    -cats { api smoke production_safe } \
     -procs {
         apidoc::tclcode_to_html
     } \
