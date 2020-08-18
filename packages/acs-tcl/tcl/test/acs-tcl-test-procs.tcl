@@ -278,7 +278,7 @@ aa_register_case \
 }
 
 aa_register_case \
-    -cats {api} \
+    -cats {api smoke production_safe} \
     -procs {
         site_node::get_children
         site_node::get_node_id
@@ -288,41 +288,53 @@ aa_register_case \
     } site_node_get_children {
     Test site_node::get_children
 } {
+    #
+    # Check if the number of nodes in the system is large, and avoid testing
+    # on all children if that is the case, as it can take too long
+    #
+    set max_nodes 1000
+    set current_nodes [db_string nodes_number {select count(1) from site_nodes}]
+    if {$current_nodes > $max_nodes} {
+        set all_switch {}
+        aa_log "Large number of nodes ($current_nodes > $max_nodes), testing only the root node and its direct children"
+    } else {
+        set all_switch {-all}
+    }
+    #
     # Start with a known site-map entry
-    set node_id [site_node::get_node_id -url "/"]
-
-    set child_node_ids [site_node::get_children \
-                            -all \
+    #
+    set node_id         [site_node::get_node_id -url "/"]
+    set child_node_ids  [site_node::get_children \
                             -element node_id \
+                            {*}$all_switch \
                             -node_id $node_id]
-
-    # lsearch returns '-1' if not found
+    #
+    # Check that site_node::get_children does not return the root node
+    # (lsearch returns '-1' if not found)
+    #
     aa_equals "site_node::get_children does not return root node" [lsearch -exact $child_node_ids $node_id] -1
-
-
-    # -package_key
-    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filters { package_key "acs-admin" }]
-
+    #
+    # Filter by package_key should be equivalent to using -package_key
+    #
+    set nodes [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -filters { package_key "acs-admin" }]
     aa_equals "package_key arg. identical to -filters" \
-        [site_node::get_children -all -element node_id -node_id $node_id -package_key "acs-admin"] \
+        [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -package_key "acs-admin"] \
         $nodes
-
     aa_equals "Found exactly one acs-admin node" [llength $nodes] 1
-
-
-    # -package_type
-    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filters { package_type "apm_service" }]
+    #
+    # Filtering by package_type should be equivalent to using -package_type
+    #
+    set nodes [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -filters { package_type "apm_service" }]
     aa_equals "package_type arg. identical to filter_element package_type" \
-        [site_node::get_children -all -element node_id -node_id $node_id -package_type "apm_service"] \
+        [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -package_type "apm_service"] \
         $nodes
 
     aa_true "Found at least one apm_service node" {[llength $nodes] > 0}
-
-    # nonexistent package_type
+    #
+    # Check for nonexistent package_type
+    #
     aa_true "No nodes with package type 'foo'" \
-        {[llength [site_node::get_children -all -element node_id -node_id $node_id -package_type "foo"]] == 0}
-
-
+        {[llength [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -package_type "foo"]] == 0}
 }
 
 aa_register_case \
