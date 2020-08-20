@@ -88,7 +88,15 @@ namespace eval ::tcltrace {
 
     } {
         set log_cmd [expr {$details_p ? "ad_log" : "ns_log"}]
-        $log_cmd notice "trace: $cmd"
+        set abbrev_cmd [lmap w $cmd {
+            regsub -all \n $w {\n} w
+            regsub -all \r $w {\r} w            
+            if {[string length $w] > 100} {
+                set w [string range $w 0 100]...
+            }
+            set w
+        }]
+        $log_cmd notice "trace: [join $abbrev_cmd { }]"
     }
    
 }

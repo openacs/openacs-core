@@ -29,7 +29,8 @@ foreach {parameter default cmd} {
 set traced_cmds {}
 #set traced_cmds {::nsv_get}
 #set traced_cmds {::ns_setcookie ::ns_getcookie ::ns_deletecookie}
-#set traced_cmds {::nsv_get ::ns_return ::ns_returnnotfound ::ns_returnfile ::ns_returnmoved}
+#set traced_cmds {::ns_return ::ns_returnnotfound ::ns_returnfile ::ns_returnmoved}
+#set traced_cmds [lsort [info commands ::ns_return*]]
 foreach cmd $traced_cmds {
     append trace "\ntrace add execution $cmd  enter {::tcltrace::before}"
 }
