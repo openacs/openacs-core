@@ -16,7 +16,7 @@ ad_proc -private ref_countries::apm::after_upgrade {
     apm_upgrade_logic \
         -from_version_name $from_version_name \
         -to_version_name $to_version_name \
-        -spec {  
+        -spec {
             5.6.0d1 5.6.0d2 {
 
                 set new_countries {"ÅLAND ISLANDS" AX
