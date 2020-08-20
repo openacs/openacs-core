@@ -125,3 +125,38 @@ aa_register_case \
 	    # It will run whether or not the -test_code succeeds, and runs after the DB transaction has been rolled back.
 	}
     }; # db_transaction_bug_3440
+
+aa_register_case -cats {
+        db
+        production_safe
+    } nullchar {
+        Null character is properly translated in a round trip through the
+        database engine.
+
+        PostgreSQL only.
+
+        @author Nathan Coulter
+        @creation-date 2020-08-20
+} {
+    set val1 \x00
+    set queries {
+       variable {
+           select :val1;
+       }
+    }
+    switch [db_type] {
+       postgresql {
+           lappend queries literal {
+               select '\x00'::bytea;
+           }
+       }
+    }
+    foreach {type query} $queries {
+       set status [catch {
+           db_string noxql $query
+       } value copts]
+       aa_equals [list $type {Sql executed successfully?}] $status 0
+       aa_true [list $type {Value is the null character?}] [
+           expr {$value eq "\x00"}]
+    }
+}
