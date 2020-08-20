@@ -197,6 +197,7 @@ function acs_ListBulkActionMultiFormClick(formName, url) {
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log('change href');
