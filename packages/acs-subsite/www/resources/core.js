@@ -177,7 +177,7 @@ function acs_ListBulkActionMultiFormClick(formName, url) {
     var formData = new FormData();
 
     for (var form of forms) {
-        if (forms.name == formName) {
+        if (form.name == formName) {
             relevantForms.push(form);
         }
     }
