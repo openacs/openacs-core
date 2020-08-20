@@ -286,7 +286,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
         {*}$cmd
     } trap {AD EXCEPTION ad_script_abort} {r} {
         # do nothing on ad_script_aborts
-         ns_log notice "rp_invoke_proc: aborted cmd: $cmd"
+        ns_log notice "rp_invoke_proc: aborted cmd: $cmd"
         ds_add rp [list registered_proc $cmd $startclicks [clock clicks -microseconds]]
     } on error {errMsg} {
         ds_add rp [list registered_proc $cmd $startclicks [clock clicks -microseconds] error $::errorInfo]
@@ -997,7 +997,7 @@ ad_proc -private rp_handle_request {} {
 
         } trap {AD EXCEPTION notfound} {val} {
             #
-            # The file ws not found so far.
+            # The file was not found so far.
             #
             #ns_log notice "rp_handle_request: AD_TRY NOTFOUND <$val> URL <$root/$extra_url>"
             ds_add rp [list notice "File $root/$extra_url: Not found" \
