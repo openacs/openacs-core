@@ -11,7 +11,7 @@ ad_library {
 
 namespace eval ref-timezones::apm {}
 
-ad_proc -public ref-timezones::apm::after_upgrade {
+ad_proc -private ref_timezones::apm::after_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
 } {
