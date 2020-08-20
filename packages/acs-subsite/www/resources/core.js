@@ -165,6 +165,50 @@ function acs_ListBulkActionClick(formName, url) {
   form.submit();
 }
 
+//
+// The function acs_ListBulkActionMultiFormClick() is similar to
+// acs_ListBulkActionClick() but it iterates over all forms with the
+// same name and submits the input elements of all such forms.
+//
+function acs_ListBulkActionMultiFormClick(formName, url) {
+    var forms = document.forms;
+    if (forms == null) return;
+
+    var relevantForms = [];
+    var formData = new FormData();
+
+    for (var form of forms) {
+        if (forms.name == formName) {
+            relevantForms.push(form);
+        }
+    }
+    //console.log("relevant forms " + relevantForms.length);
+    if (relevantForms.length == 0) {
+        console.log("no form named " + formName + " found");
+        return;
+    }
+    
+    for (var form of relevantForms) {
+        var fd = new FormData(form);
+        for (var pair of fd.entries()) {
+            //console.log(pair[0] + ': ' + pair[1]);
+            formData.append(pair[0], pair[1]);
+        }        
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log('change href');
+            // We need the following round-trip just to show the
+            // updated page (e.g. clipboard count).
+            window.location.replace(url);
+        }
+    };
+    xhr.send(formData);
+}
+
 function acs_KeypressGoto(theUrl, event) {
 	var key;
     	if (event) {
@@ -1661,8 +1705,8 @@ function checkCalendar(ev) {
 // The format specifies how the date is going to be returned. You can combine
 // the letters y, m, d, D or M in any way you want with any separator that
 // you want (e.g. "," or "-" or ".")
-// The letter D will return the name of the day (e.g Fri, Mon, etc.) and
-// M will return the name of the month (e.g Oct, Spt, Jan, etc.)
+// The letter D will return the name of the day (e.g. Fri, Mon, etc.) and
+// M will return the name of the month (e.g. Oct, Spt, Jan, etc.)
 function showCalendar(id,dateformat) {
   var el = document.getElementById(id);
   if (calendar != null) {
