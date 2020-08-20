@@ -1,9 +1,7 @@
-# 
-
 ad_library {
-    
+
     APM Callback procs
-    
+
     @author Victor Guerra (vguerra@wu-wien.ac.at)
     @creation-date 2008-12-16
     @cvs-id $Id$
@@ -31,7 +29,6 @@ ad_proc -private ref_timezones::apm::after_upgrade {
                 set entries [db_string _ "select count(*) from timezones"]
                 ns_log Notice "$entries time zones loaded"
             }
-            
         }
 }
 
