@@ -1,7 +1,7 @@
 namespace eval openacs_default_theme {}
 namespace eval openacs_default_theme::install {}
 
-ad_proc openacs_default_theme::install::after_install {} {
+ad_proc -private openacs_default_theme::install::after_install {} {
     Package after installation callback proc.  Add our themes, and set the acs-subsite's
     default master template parameter's default value to our "plain" theme.
 } {
