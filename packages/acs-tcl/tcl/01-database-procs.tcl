@@ -3693,12 +3693,6 @@ ad_proc -private db_exec_lob_postgresql {
                     ns_pg blob_select_file $db $content $file
                 } else {
                     error "invalid query"
-
-                    # TODO: Page /file-storage/download-archive/index
-                    # fails here on cvs head both before and after my
-                    # mult-db db_* API work, I don't know why.  See bug:
-                    #   http://openacs.org/bugtracker/openacs/com/file-storage/bug?bug%5fnumber=427
-                    # --atp@piskorski.com, 2003/04/09 18:04 EDT
                 }
             }
 

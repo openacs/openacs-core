@@ -980,7 +980,7 @@ ad_proc -public util_report_successful_library_load {
 }
 
 
-# some procs to make it easier to deal with CSV files (reading and writing)
+# Some procs to make it easier to deal with CSV files (reading and writing)
 # added by philg@mit.edu on October 30, 1999
 
 ad_proc util_escape_quotes_for_csv {string} {
@@ -998,8 +998,9 @@ ad_proc -public oacs_util::process_objects_csv {
     {-override_headers {}}
     {-constants ""}
 } {
-    This processes a CSV of objects, taking the csv and calling package_instantiate_object
-    for each one.
+    
+    This processes a comma separated set of objects, taking the CSV
+    and calling package_instantiate_object for each one.
 
     @return a list of the created object_ids
 } {
@@ -1075,12 +1076,12 @@ ad_proc -public oacs_util::csv_foreach {
     {-array_name:required}
     code_block
 } {
-    reads a csv and executes code block for each row in the csv.
+    Reads a CSV string and executes code block for each row in the CSV.
 
-    @param file the csv file to read.
+    @param file the CSV file to read.
     @param header_line the line with the list of var names
-    @param override_headers the list of variables in the csv
-    @param array_name the name of the array to set with the values from the csv as each line is read.
+    @param override_headers the list of variables in the CSV
+    @param array_name the name of the array to set with the values from the CSV as each line is read.
 } {
     # FIXME: We should catch the error here
     set csv_stream [open $file r]

@@ -10,11 +10,11 @@ aa_register_case \
         ad_tmpdir
     } \
     csv_foreach {
-    Test block execution for rows in a csv file.
+    Test block execution for rows in a CSV file.
 } {
     aa_run_with_teardown -test_code {
 
-        # Create cvs file
+        # Create CSV file
         set file_loc "[ad_tmpdir]/test.csv"
         set file_id [open $file_loc w]
         puts $file_id "first_name,last_name,instrument"
@@ -33,7 +33,7 @@ aa_register_case \
         oacs_util::csv_foreach -file $file_loc -array_name row {
             lappend artist_list "$row(first_name) $row(last_name) - $row(instrument)"
         }
-        aa_equals "Getting artists from csv file" $artist_list {{Charles Mingus - Bass}\
+        aa_equals "Getting artists from CSV file" $artist_list {{Charles Mingus - Bass}\
                                                                     {Miles Davis - Trumpet}\
                                                                     {Jhon Coltrane - Saxo}\
                                                                     {Charlie Parker - Saxo}\
@@ -51,11 +51,11 @@ aa_register_case \
         ad_tmpdir
     } \
     process_objects_csv {
-    Test object creation for every row in a csv file.
+    Test object creation for every row in a CSV file.
 } {
     aa_run_with_teardown -rollback -test_code {
 
-        # Create cvs file of persons
+        # Create CSV file of persons
         set file_loc "[ad_tmpdir]/test.csv"
         set file_id [open $file_loc w]
         puts $file_id "email,first_names,last_name"
