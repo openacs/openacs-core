@@ -290,9 +290,15 @@ ad_return_template
 
 
 
-ad_proc -public content::deploy { url_stub } {
+ad_proc -deprecated content::deploy { url_stub } {
     render the template and write it to the filesystem
     with template::util::write_file
+
+    DEPRECATED: since its birth ~2003 this proc refers to a
+    nonexistent variable and is therefore broken.
+
+    @see modern ways to produce templated content e.g. theme packages or
+         xowiki pages
 } {
     set output_path $::acs::pageroot$url_stub
 
