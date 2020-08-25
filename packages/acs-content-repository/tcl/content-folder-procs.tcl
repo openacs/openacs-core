@@ -314,24 +314,42 @@ ad_proc -public content::folder::is_sub_folder {
         content_folder is_sub_folder]
 }
 
-ad_proc content::folder::get_folder_from_package {
+ad_proc -deprecated content::folder::get_folder_from_package {
     -package_id:required
 } {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-01-06
 
     Returns the folder_id of the package instance. Cached
+
+    DEPRECATED: this proc assumes there will be just one folder for
+                each package, which is not true in general!
+
+    @see other packages as file-storage or xowiki define the concept
+         of a root_folder. This is explicitly meant to be unique for
+         each package. If your package can guarantee there will only
+         be one folder per package, you should write your own api for
+         it.
 } {
     return [util_memoize [list content::folder::get_folder_from_package_not_cached -package_id $package_id]]
 }
 
-ad_proc -private content::folder::get_folder_from_package_not_cached {
+ad_proc -deprecated content::folder::get_folder_from_package_not_cached {
     -package_id:required
 } {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-01-06
 
     Returns the folder_id of the package instance
+
+    DEPRECATED: this proc assumes there will be just one folder for
+                each package, which is not true in general!
+
+    @see other packages as file-storage or xowiki define the concept
+         of a root_folder. This is explicitly meant to be unique for
+         each package. If your package can guarantee there will only
+         be one folder per package, you should write your own api for
+         it.
 } {
     return [db_string get_folder_id {
         select folder_id from cr_folders where package_id = :package_id
