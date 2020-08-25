@@ -8,7 +8,7 @@ ad_library {
 
 aa_register_case \
     group_localization_leftovers {
-        Checks that not leftover group title localizations can be
+        Checks that no leftover group title localizations can be
         found belonging to groups that do not exist anymore.
     } {
         aa_false "Leftover group localization message keys do not exist in the database" [db_string leftovers_exist {
