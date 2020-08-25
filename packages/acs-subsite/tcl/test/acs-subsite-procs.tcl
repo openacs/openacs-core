@@ -51,6 +51,9 @@ aa_register_case \
                              -text $new_value]
 
         aa_equals "One can override the previously existing message key safely" $new_value [_ ${package_key}.$message_key]
+
+        aa_log "Cleaning up"
+        lang::message::unregister $package_key $message_key
     }
 
 aa_register_case \
