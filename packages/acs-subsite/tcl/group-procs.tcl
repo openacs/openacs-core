@@ -128,7 +128,10 @@ ad_proc -public group::new {
     # key, there is no need to convert this a second time.
 
     if {![regexp [lang::util::message_key_regexp] $pretty_name]} {
-        set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
+        set pretty_name [lang::util::convert_to_i18n \
+                             -object_id $group_id \
+                             -message_key "group_title_${group_id}" \
+                             -text $pretty_name]
     }
 
     # Update the title to the pretty name

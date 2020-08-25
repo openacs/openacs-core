@@ -97,6 +97,7 @@ ad_proc -public lang::message::register {
     {-upgrade_status "no_upgrade"}
     {-conflict:boolean}
     {-comment ""}
+    {-object_id ""}
     locale
     package_key
     message_key
@@ -140,6 +141,10 @@ ad_proc -public lang::message::register {
     @param conflict         Set this switch if the upgrade represents a conflict between
                             changes made in the database and in catalog files.
 
+    @param object_id        Bind this message key to an acs_object, so that
+                            upon deletion, the message key will be
+                            removed as well.
+
     @see lang::message::lookup
     @see _
 } {
@@ -162,7 +167,12 @@ ad_proc -public lang::message::register {
 
     if { ! $key_exists_p } {
         if {$locale eq "en_US"} {
-            db_dml insert_message_key {}
+            db_dml insert_message_key {
+                insert into lang_message_keys
+                (message_key, package_key, object_id)
+                values
+                (:message_key, :package_key, :object_id)
+            }
         } else {
             # Non-default locale
             # The system will not function correctly if there are keys registered in other locales

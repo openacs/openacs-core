@@ -10,15 +10,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="lang::message::register.insert_message_key">
-    <querytext> 
-        insert into lang_message_keys
-            (message_key, package_key)
-          values
-            (:message_key, :package_key)
-    </querytext>
-  </fullquery>
-
   <fullquery name="lang::message::register.lang_message_insert">      
     <querytext>
       insert into lang_messages ([join $col_clauses ", "]) 

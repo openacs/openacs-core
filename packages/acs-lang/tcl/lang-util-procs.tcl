@@ -781,8 +781,13 @@ ad_proc -public lang::util::convert_to_i18n {
     {-message_key ""}
     {-prefix ""}
     {-text:required}
+    {-object_id ""}
 } {
     Internationalising of Attributes. This is done by storing the attribute with its acs-lang key
+
+    @param object_id bind the newly created message key to this
+                     acs_object id. Upon object's deletion, the
+                     message key will be deleted as well.
 } {
 
     # If the package acs-translations is installed do the conversion
@@ -802,7 +807,9 @@ ad_proc -public lang::util::convert_to_i18n {
 	}
 
 	# Register the language keys
-	lang::message::register en_US $package_key $message_key $text
+	lang::message::register \
+            -object_id $object_id \
+            en_US $package_key $message_key $text
 	if {$locale ne ""} {
 	    lang::message::register $locale $package_key $message_key $text
 	}
