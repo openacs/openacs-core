@@ -7,6 +7,21 @@ ad_library {
 }
 
 aa_register_case \
+    group_localization_leftovers {
+        Checks that not leftover group title localizations can be
+        found belonging to groups that do not exist anymore.
+    } {
+        aa_false "Leftover group localization message keys do not exist in the database" [db_string leftovers_exist {
+            select exists (select 1 from lang_message_keys k
+                           where package_key = 'acs-translations'
+                           and message_key like 'group_title_%'
+                           and not exists (select 1 from groups
+                                           where group_id = cast(split_part(k.message_key, '_', 3) as integer)))
+            from dual
+        }]
+    }
+
+aa_register_case \
     -procs {
         group::delete
         group::new
