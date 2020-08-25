@@ -7,6 +7,53 @@ ad_library {
 }
 
 aa_register_case \
+    -procs {
+        group::delete
+        group::new
+        _
+        lang::util::convert_to_i18n
+    } \
+    group_localization {
+        Create a group and check that the automagical localization
+        cleans after itself once it has been deleted.
+    } {
+        set group_name [ad_generate_random_string]
+
+        aa_log "Creating group '$group_name'"
+        set group_id [group::new -group_name $group_name]
+        set package_key acs-translations
+        set message_key "group_title_${group_id}"
+
+        aa_true "Message key was registered correctly" [db_string get_key {
+            select exists (select 1 from lang_message_keys
+                           where package_key = :package_key
+                           and message_key = :message_key)
+            from dual
+        }]
+
+        aa_equals "Pretty group name was stored correctly" $group_name [_ ${package_key}.$message_key]
+
+        aa_log "Deleting group"
+        group::delete $group_id
+
+        aa_false "Message key was deleted correctly" [db_string get_key {
+            select exists (select 1 from lang_message_keys
+                           where package_key = :package_key
+                           and message_key = :message_key)
+            from dual
+        }]
+
+        aa_false "Message key has been flushed from all possible caches" {$group_name eq [_ ${package_key}.$message_key]}
+
+        set new_value [ad_generate_random_string]
+        set pretty_name [lang::util::convert_to_i18n \
+                             -message_key $message_key \
+                             -text $new_value]
+
+        aa_equals "One can override the previously existing message key safely" $new_value [_ ${package_key}.$message_key]
+    }
+
+aa_register_case \
     -bugs {775} \
     -procs {
         group::delete
