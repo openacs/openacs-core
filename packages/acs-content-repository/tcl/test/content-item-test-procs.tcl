@@ -13,7 +13,12 @@ aa_register_case \
         ad_generate_random_string
         content::folder::delete
         content::folder::is_empty
+        content::folder::is_folder
+        content::folder::is_root
         content::folder::new
+        content::folder::get_index_page
+        content::folder::get_label
+        content::folder::is_registered
         content::folder::register_content_type
         content::item::delete
         content::item::get
@@ -34,19 +39,50 @@ aa_register_case \
         -rollback \
         -test_code {
 
+            # <= 0 because it is -4 for Postgres and 0 for
+            # Oracle... Here we assume every normal folder will have
+            # something bigger than 0
+            set root_folder_id [db_string get_root_folder {
+                select min(item_id) from cr_items
+                where content_type = 'content_folder'
+                and parent_id <= 0
+            }]
+            aa_true "Folder $root_folder_id is a root folder" \
+                [content::folder::is_root -folder_id $root_folder_id]
+
             #########################################################
             # create a cr_folder
             #########################################################
+            set first_folder_label [ad_generate_random_string]
             set first_folder_id [db_nextval "acs_object_id_seq"]
             set returned_first_folder_id [content::folder::new \
                                               -folder_id $first_folder_id \
+                                              -label $first_folder_label \
                                               -name "test_folder_${first_folder_id}"]
+
+            aa_false "Folder $first_folder_id is not a root folder" \
+                [content::folder::is_root -folder_id $first_folder_id]
+
+            aa_false "'content_revision' is not registered on the folder" \
+                [content::folder::is_registered \
+                     -folder_id $first_folder_id \
+                     -content_type content_revision]
 
             content::folder::register_content_type \
                 -folder_id $first_folder_id \
                 -content_type "content_revision"
 
+            aa_true "'content_revision' is now registered on the folder" \
+                [content::folder::is_registered \
+                     -folder_id $first_folder_id \
+                     -content_type content_revision]
+
             aa_true "Folder created" {$first_folder_id == $returned_first_folder_id}
+
+            aa_true "Folder is a folder" [content::folder::is_folder -item_id $first_folder_id]
+
+            aa_equals "Folder has the right label" \
+                $first_folder_label [content::folder::get_label -folder_id $first_folder_id]
 
             set is_empty [content::folder::is_empty -folder_id $first_folder_id]
             aa_true "Folder is empty" [string is true $is_empty]
@@ -78,6 +114,8 @@ aa_register_case \
 
             aa_true "First item created" {$first_item_id == $returned_first_item_id}
 
+            aa_false "First item is not a folder" [content::folder::is_folder -item_id $first_item_id]
+
             aa_true "first item exists" {[content::item::get -item_id $first_item_id] == 1}
 
             aa_true "First item's revision exists" \
@@ -89,6 +127,19 @@ aa_register_case \
             # check the folder is not empty now.
             set is_empty [content::folder::is_empty -folder_id $first_folder_id]
             aa_true "Folder 1 is not empty" [string is false $is_empty]
+
+            #########################################################
+            # create an index cr_item
+            #########################################################
+
+            set index_item_id [content::item::new \
+                                   -name index \
+                                   -parent_id $first_folder_id \
+                                   -is_live "t" \
+                                   -attributes [list [list title "$test_name"]]]
+
+            aa_equals "Items $index_item_id is index in a folder $first_folder_id" \
+                $index_item_id [content::folder::get_index_page -folder_id $first_folder_id]
 
             #########################################################
             # create a cr_item with evil string
