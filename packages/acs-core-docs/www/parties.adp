@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Parties in OpenACS}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Parties in OpenACS}</property>
 <property name="doc(title)">Parties in OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -139,11 +139,11 @@ organizations (other groups) as members. Hence the membership
 relation between groups and <span class="emphasis"><em>parties</em></span>. However, someone is not a
 member of Greenpeace just because they are a member of a group that
 is a member of Greenpeace. Now, consider a multinational
-corporation (MC) that has a U.S. division and a Eurasian division.
+corporation (MC) that has a U.S. division and an Eurasian division.
 A member of either the U.S. or Eurasian division is automatically a
 member of the MC. In this situation the U.S. and Eurasian divisions
 are "components" of the MC, i.e., membership <span class="emphasis"><em>is</em></span> transitive with respect to
-composition. Furthermore, a member of a European (or other) office
+composition. Furthermore, a member of an European (or other) office
 of the MC is automatically a member of the MC.</p><p><span class="strong"><strong>Group
 Membership</strong></span></p><p>Group memberships can be created and manipulated using the
 membership_rel package. Only one membership object can be created

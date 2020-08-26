@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using Form Builder: building html forms dynamically}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using Form Builder: building html forms dynamically}</property>
 <property name="doc(title)">Using Form Builder: building html forms dynamically</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Starting and Stopping an OpenACS instance.}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Starting and Stopping an OpenACS instance.}</property>
 <property name="doc(title)">Starting and Stopping an OpenACS instance.</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

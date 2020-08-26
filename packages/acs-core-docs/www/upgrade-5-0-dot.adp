@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Upgrading an OpenACS 5.0.0 or greater installation}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading an OpenACS 5.0.0 or greater installation}</property>
 <property name="doc(title)">Upgrading an OpenACS 5.0.0 or greater installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

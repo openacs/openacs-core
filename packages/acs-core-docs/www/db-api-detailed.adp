@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Database Access API}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Database Access API}</property>
 <property name="doc(title)">Database Access API</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

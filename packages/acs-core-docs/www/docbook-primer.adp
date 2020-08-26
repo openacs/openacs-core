@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Documentation Guide}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Documentation Guide}</property>
 <property name="doc(title)">OpenACS Documentation Guide</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

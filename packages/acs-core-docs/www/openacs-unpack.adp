@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Unpack the OpenACS tarball}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Unpack the OpenACS tarball}</property>
 <property name="doc(title)">Unpack the OpenACS tarball</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

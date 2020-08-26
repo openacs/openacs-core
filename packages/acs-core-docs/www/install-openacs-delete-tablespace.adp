@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Deleting a tablespace}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Deleting a tablespace}</property>
 <property name="doc(title)">Deleting a tablespace</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Diagnosing Performance Problems}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Diagnosing Performance Problems}</property>
 <property name="doc(title)">Diagnosing Performance Problems</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

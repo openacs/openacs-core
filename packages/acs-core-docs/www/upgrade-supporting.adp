@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Upgrading Platform components}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading Platform components}</property>
 <property name="doc(title)">Upgrading Platform components</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

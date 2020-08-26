@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {External Authentication Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {External Authentication Requirements}</property>
 <property name="doc(title)">External Authentication Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

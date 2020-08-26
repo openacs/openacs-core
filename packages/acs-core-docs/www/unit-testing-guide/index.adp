@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS4 Unit Tests}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS4 Unit Tests}</property>
 <property name="doc(title)">ACS4 Unit Tests</property>
 <master>
 <h2>ACS4 Unit Tests</h2>

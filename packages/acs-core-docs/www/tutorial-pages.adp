@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Creating Web Pages}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Creating Web Pages}</property>
 <property name="doc(title)">Creating Web Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Vacuum Postgres nightly}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Vacuum Postgres nightly}</property>
 <property name="doc(title)">Vacuum Postgres nightly</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {External uptime validation}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {External uptime validation}</property>
 <property name="doc(title)">External uptime validation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix C. Credits}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix C. Credits}</property>
 <property name="doc(title)">Appendix C. Credits</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

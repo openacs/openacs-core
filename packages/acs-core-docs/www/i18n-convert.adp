@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How to Internationalize a Package}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How to Internationalize a Package}</property>
 <property name="doc(title)">How to Internationalize a Package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

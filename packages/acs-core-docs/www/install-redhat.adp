@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix A. Install Red Hat 8/9}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix A. Install Red Hat 8/9}</property>
 <property name="doc(title)">Appendix A. Install Red Hat 8/9</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

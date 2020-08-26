@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Full Text Search using Tsearch2}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Full Text Search using Tsearch2}</property>
 <property name="doc(title)">Install Full Text Search using Tsearch2</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

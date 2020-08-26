@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Documenting Tcl Files: Page Contracts and Libraries}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Documenting Tcl Files: Page Contracts and Libraries}</property>
 <property name="doc(title)">Documenting Tcl Files: Page Contracts and Libraries</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

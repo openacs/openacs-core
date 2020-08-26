@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Manual backup and recovery}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Manual backup and recovery}</property>
 <property name="doc(title)">Manual backup and recovery</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

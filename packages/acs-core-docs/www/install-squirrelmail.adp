@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Squirrelmail for use as a webmail system for
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Squirrelmail for use as a webmail system for
 OpenACS}</property>
 <property name="doc(title)">Install Squirrelmail for use as a webmail system for
 OpenACS</property>

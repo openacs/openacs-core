@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Permissions Tediously Explained}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Permissions Tediously Explained}</property>
 <property name="doc(title)">OpenACS Permissions Tediously Explained</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

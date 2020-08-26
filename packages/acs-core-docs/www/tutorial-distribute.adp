@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Prepare the package for distribution.}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Prepare the package for distribution.}</property>
 <property name="doc(title)">Prepare the package for distribution.</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

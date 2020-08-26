@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Variables}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Variables}</property>
 <property name="doc(title)">Variables</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
