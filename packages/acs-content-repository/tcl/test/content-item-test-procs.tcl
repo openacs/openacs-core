@@ -1,9 +1,7 @@
-# 
-
 ad_library {
-    
+
     Tests for content item
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
     @cvs-id $Id$
@@ -46,7 +44,7 @@ aa_register_case \
 
             content::folder::register_content_type \
                 -folder_id $first_folder_id \
-                -content_type "content_revision" 
+                -content_type "content_revision"
 
             aa_true "Folder created" {$first_folder_id == $returned_first_folder_id}
 
@@ -95,7 +93,7 @@ aa_register_case \
             #########################################################
             # create a cr_item with evil string
             #########################################################
-            
+
             set evil_string {-Bad [BAD] \077 \{ $Bad }
             set evil_test_name  "${evil_string}cr_test_item[ad_generate_random_string]"
             aa_log "evil_test_name is $evil_test_name"
@@ -119,11 +117,11 @@ aa_register_case \
             #########################################################
             # delete the evil_name item
             #########################################################
-            
+
             # in oracle content_item.del is not a function and cannot
             # return true or false so we have to rely on a query to
             # see if the item exists or not
-            
+
             content::item::delete -item_id $evil_item_id
             array unset evil_name
             aa_true "evil_name item no longer exists" {
@@ -157,11 +155,11 @@ aa_register_case \
                 -pretty_name "Attribute Name" \
                 -pretty_plural "Attribute Names" \
                 -column_spec "text"
-            
+
             # todo test that new item is NOT allowed to be created
             # unless registered by catching error when creating new
             # item
-            
+
             #########################################################
             # register new type to folder
             #########################################################
@@ -207,12 +205,12 @@ aa_register_case \
                 -array_name new_type_item
             aa_true "Item updated $new_type_item(name) $new_type_item(publish_status)" \
                 {$new_type_item(name) eq "new_name" && $new_type_item(publish_status) eq "live"}
-            
+
             #########################################################
             # copy it
             #########################################################
             #TODO
-            
+
             #########################################################
             # move the copy
             #########################################################
@@ -236,7 +234,7 @@ aa_register_case \
                 -array_name renamed_item
             aa_true "Item renamed" \
                 {$new_name eq $renamed_item(name)}
-                     
+
 
             #########################################################
             # publish it
@@ -251,8 +249,8 @@ aa_register_case \
 
             #########################################################
             # new from tmpfile
-            #########################################################            
-            set tmp_item_name [ns_mktemp "__content_item_test_XXXXXX"] 
+            #########################################################
+            set tmp_item_name [ns_mktemp "__content_item_test_XXXXXX"]
             set tmp_item_id [content::item::new \
                                  -name $tmp_item_name \
                                  -title $tmp_item_name \
