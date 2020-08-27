@@ -166,6 +166,10 @@ ad_proc -public lang::message::register {
     set key_exists_p [db_string message_key_exists_p {}]
 
     if { ! $key_exists_p } {
+        # The system will not function correctly if there are keys
+        # registered in other locales than en_US. If this is a new
+        # message key for a locale different than en_US, register the
+        # en_US version first.
         if {$locale eq "en_US"} {
             db_dml insert_message_key {
                 insert into lang_message_keys
@@ -174,13 +178,16 @@ ad_proc -public lang::message::register {
                 (:message_key, :package_key, :object_id)
             }
         } else {
-            # Non-default locale
-            # The system will not function correctly if there are keys registered in other locales
-            # than en_US that are not present for en_US. This introduces the inconvenience of having to
-            # register the en_US messages first, but that is manageable
-            set error_message "lang::message::register - refusing to register message for non-en_US locale ${locale}. The message key ${package_key}.${message_key} must be registered in en_US first"
-            ns_log Error $error_message
-            error $error_message
+            lang::message::register \
+                -update_sync=$update_sync_p \
+                -upgrade_status $upgrade_status \
+                -conflict=$conflict_p \
+                -comment $comment \
+                -object_id $object_id \
+                -locale en_US \
+                $package_key \
+                $message_key \
+                $message
         }
     }
 

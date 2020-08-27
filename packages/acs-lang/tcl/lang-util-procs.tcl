@@ -776,7 +776,7 @@ ad_proc -private lang::util::escape_vars_if_not_null {
 }
 
 ad_proc -public lang::util::convert_to_i18n {
-    {-locale ""}
+    {-locale "en_US"}
     {-package_key "acs-translations"}
     {-message_key ""}
     {-prefix ""}
@@ -807,12 +807,7 @@ ad_proc -public lang::util::convert_to_i18n {
 	}
 
 	# Register the language keys
-	lang::message::register \
-            -object_id $object_id \
-            en_US $package_key $message_key $text
-	if {$locale ne ""} {
-	    lang::message::register $locale $package_key $message_key $text
-	}
+        lang::message::register $locale $package_key $message_key $text
 
 	return "#${package_key}.${message_key}#"
     } else {
