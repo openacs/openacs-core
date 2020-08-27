@@ -1225,6 +1225,20 @@ if {$UseXotclSiteNodes} {
                 return $return_val
             }
 
+            :method has_children {
+                -node_id:required,integer,1..1
+            } {
+                #
+                # Check, if the provided site-node has children.
+                #
+                # @return boolean value.
+                #
+                ns_log notice "NO-CACHE has_children called with $node_id"
+                
+                ::xo::dc get_value -prepare integer has_children {
+                    select exists(select 1 from site_nodes where parent_id = :node_id)
+                }
+            }          
 
             #
             # @method get_urls_from_object_id
@@ -1407,6 +1421,15 @@ if {$UseXotclSiteNodes} {
                 }
             }
 
+            :method has_children {
+                -node_id:required,integer,1..1
+            } {
+                ::acs::site_nodes_children_cache eval -partition_key $node_id \
+                    has_children-$node_id {
+                        next
+                    }
+            }           
+
             :public method get_node_id {-url:required} {
                 #
                 # Cache the result of the upstream implementation of
@@ -1431,7 +1454,9 @@ if {$UseXotclSiteNodes} {
                 if {$node_id eq ""} {
                     set result ""
                 } else {
-                    set result [::acs::site_nodes_cache eval -partition_key $node_id url-$node_id { next }]
+                    set result [::acs::site_nodes_cache eval \
+                                    -partition_key $node_id \
+                                    url-$node_id { next }]
                 }
                 return $result
             }
@@ -1474,7 +1499,8 @@ if {$UseXotclSiteNodes} {
 
                 switch -glob -- $pattern {
                     id-*           {set cache site_nodes_id_cache}
-                    get_children-* {set cache site_nodes_children_cache}
+                    get_children-* -
+                    has_children   {set cache site_nodes_children_cache}
                     default        {set cache site_nodes_cache}
                 }
                 ::acs::$cache flush_pattern -partition_key $partition_key $pattern
@@ -1526,6 +1552,7 @@ if {$UseXotclSiteNodes} {
                             ::acs::site_nodes_cache flush -partition_key $object_id urls-$object_id
                         }
                         :flush_pattern -partition_key $node_id get_children-$node_id-*
+                        ::acs::site_nodes_children_cache flush -partition_key $node_id $key has_children-$node_id
                     }
                     regsub {/$} $old_url "" old_url
                     :flush_pattern id-$old_url*
@@ -1555,19 +1582,6 @@ if {$UseXotclSiteNodes} {
             #
             # is sufficient for replacing all entries above.
             #
-
-            :method has_children {
-                -node_id:required,integer,1..1
-            } {
-                #
-                # Check, if the provided site-node has children.
-                #
-                # @return boolean value.
-                #
-                ::xo::dc get_value -prepare integer has_children {
-                    select exists(select 1 from site_nodes where parent_id = :node_id)
-                }
-            }
 
             :public method get_node_id {-url:required} {
                 #
