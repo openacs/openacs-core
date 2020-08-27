@@ -184,7 +184,7 @@ ad_proc -public lang::message::register {
                 -conflict=$conflict_p \
                 -comment $comment \
                 -object_id $object_id \
-                -locale en_US \
+                en_US \
                 $package_key \
                 $message_key \
                 $message
