@@ -900,8 +900,16 @@ ad_proc -private rp_report_error {
         lset params 0 [list stacktrace $message]
     }
 
-    ad_try {
+    ad_try -auto_abort=false {
         set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
+        
+    } trap {AD EXCEPTION ad_script_abort} {r} {
+        #
+        # ad_parse_template was script-aborted
+        #
+        ns_log warning "rp_report_error: error template with message '$error_message' aborted"
+        return
+        
     } on error {errorMsg} {
         #
         # An error occurred during rendering of the error page.
