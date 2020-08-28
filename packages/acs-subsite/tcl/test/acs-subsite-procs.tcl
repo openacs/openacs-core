@@ -188,6 +188,7 @@ aa_register_case \
     -procs {
         group::add_member
         group::member_p
+        group::admin_p
         group::new
         relation_add
     } acs_subsite_check_composite_group {
@@ -219,6 +220,7 @@ aa_register_case \
 
             # check that user_1 is a direct member of level_2_group via the tcl api
             aa_true "User 1 is a direct member of Level 2 Group" [group::member_p -user_id $user_1_id -group_id $level_2_group]
+            aa_true "User 1 is an admin of Level 2 Group" [group::admin_p -group_id $level_2_group -user_id $user_1_id]
 
             # check that user_1 is a indirect member of level_1_group via the tcl api
             aa_true "User 1 is an indirect member of Level 1 Group" [group::member_p -user_id $user_1_id -group_id $level_1_group -cascade]
