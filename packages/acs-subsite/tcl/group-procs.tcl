@@ -138,6 +138,12 @@ ad_proc -public group::new {
     if {$pretty_name ne ""} {
         db_dml title_update "update acs_objects set title = :pretty_name where object_id = :group_id"
     }
+
+    # Make sure the resolving of group id by name has a chance to
+    # include this new group
+    util_memoize_flush_pattern [list group::get_id_not_cached \
+                                    -group_name $group_name]*
+
     return $group_id
 }
 
