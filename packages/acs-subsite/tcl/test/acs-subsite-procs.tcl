@@ -272,6 +272,9 @@ aa_register_case \
         group_type::new
         acs_object_type::get
         group::new
+        group::get_id
+        group::title
+        group::description
         group::get
         group_type::delete
         _
@@ -311,6 +314,13 @@ aa_register_case \
                               -pretty_name $pretty_name \
                               $group_type]
 
+            set api_group_id [group::get_id -group_name $group_name]
+            aa_equals "group::get_id -group_name $group_name returns the same id as that from group::new" \
+                $group_id $api_group_id
+            aa_true "group::get_id -group_name $group_name returns a valid object_id" [db_0or1row check {
+                select 1 from acs_objects where object_id = :api_group_id
+            }]
+
             # Test group info
             set group [group::get -group_id $group_id]
             set expected_group_name  [dict get $group group_name]
@@ -318,6 +328,13 @@ aa_register_case \
             set expected_pretty_name [_ [string trim [dict get $group title] "#"]]
             aa_true "Group was created with supplied values: $group_name eq $expected_group_name && $pretty_name eq $expected_pretty_name" \
                 {$group_name eq $expected_group_name && $pretty_name eq $expected_pretty_name}
+
+            aa_equals "group::description returns the expected value" \
+                [group::description -group_id $group_id] \
+                [db_string description {select description from groups where group_id = :group_id}]
+            aa_equals "group::title returns the expected value" \
+                [group::title -group_id $group_id] \
+                [db_string title {select title from acs_objects where object_id = :group_id}]
 
         } finally {
             # Cleanup
