@@ -158,6 +158,73 @@ aa_register_case \
     aa_equals "1.080 kB"                [lc_content_size_pretty -size 1080 -precision 3]                                     "[lc_numeric 1.080] kB"
 }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs lang::util::convert_to_i18n \
+    lang_test__convert_to_i18n {
+
+        Tests lang::util::convert_to_i18n
+
+    } {
+        aa_run_with_teardown -rollback -test_code {
+            set package_key acs-translations
+            set message_key [ad_generate_random_string]
+            set text [ad_generate_random_string]
+            aa_log "Registering new #${package_key}.$message_key# in it_IT first"
+            lang::util::convert_to_i18n \
+                -locale it_IT \
+                -package_key $package_key \
+                -message_key $message_key \
+                -text $text
+
+            aa_true "Fallback en_US message was registered for #${package_key}.$message_key#" [db_string check {
+                select exists (select 1 from lang_messages
+                               where package_key = :package_key
+                               and message_key = :message_key
+                               and locale = 'en_US'
+                               and message = :text)
+                from dual
+            }]
+
+            aa_log "Update the en_US message for #${package_key}.$message_key#"
+            set en_text [ad_generate_random_string]
+            lang::util::convert_to_i18n \
+                -locale en_US \
+                -package_key $package_key \
+                -message_key $message_key \
+                -text $en_text
+            aa_true "Fallback en_US message was updated for #${package_key}.$message_key#" [db_string check {
+                select exists (select 1 from lang_messages
+                               where package_key = :package_key
+                               and message_key = :message_key
+                               and locale = 'en_US'
+                               and message = :en_text)
+                from dual
+            }]
+
+            aa_log "Update the it_IT message for #${package_key}.$message_key#"
+            set it_text [ad_generate_random_string]
+            lang::util::convert_to_i18n \
+                -locale it_IT \
+                -package_key $package_key \
+                -message_key $message_key \
+                -text $it_text
+            aa_true "Fallback it_IT message was updated, while en_US message was unaffected #${package_key}.$message_key#" [db_string check {
+                select exists (select 1 from lang_messages
+                               where package_key = :package_key
+                               and message_key = :message_key
+                               and locale = 'en_US'
+                               and message = :en_text) and
+                       exists (select 1 from lang_messages
+                               where package_key = :package_key
+                               and message_key = :message_key
+                               and locale = 'it_IT'
+                               and message = :it_text)
+                from dual
+            }]
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
