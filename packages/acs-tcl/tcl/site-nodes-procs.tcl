@@ -1731,6 +1731,8 @@ if {$UseXotclSiteNodes} {
         ::acs::site_nodes_cache flush_pattern \
             -partition_key $parent_node_id \
             get_children-$parent_node_id-*
+        ::acs::site_nodes_children_cache flush \
+            -partition_key $parent_node_id has_children-$parent_node_id
 
         #
         # DAVEB: update context_id if it is passed in some code relies
