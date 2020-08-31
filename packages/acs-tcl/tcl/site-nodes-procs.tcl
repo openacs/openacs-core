@@ -1552,7 +1552,7 @@ if {$UseXotclSiteNodes} {
                             ::acs::site_nodes_cache flush -partition_key $object_id urls-$object_id
                         }
                         :flush_pattern -partition_key $node_id get_children-$node_id-*
-                        ::acs::site_nodes_children_cache flush -partition_key $node_id $key has_children-$node_id
+                        ::acs::site_nodes_children_cache flush -partition_key $node_id has_children-$node_id
                     }
                     regsub {/$} $old_url "" old_url
                     :flush_pattern id-$old_url*
