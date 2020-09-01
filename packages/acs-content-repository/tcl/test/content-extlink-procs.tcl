@@ -55,13 +55,13 @@ aa_register_case \
             aa_true "New link is actually there" [content::extlink::is_extlink -item_id $link_id]
 
             aa_true "New link was saved with supplied info" [db_string check_info {
-                select exists (select 1 from cr_extlinks e, cr_items i
-                               where extlink_id = :link_id
-                               and i.item_id = e.extlink_id
-                               and i.name = :name
-                               and url = :url
-                               and label = :label
-                               and description = :description)
+                select case when exists (select 1 from cr_extlinks e, cr_items i
+                                         where extlink_id = :link_id
+                                         and i.item_id = e.extlink_id
+                                         and i.name = :name
+                                         and url = :url
+                                         and label = :label
+                                         and description = :description) then 1 else 0
                 from dual
             }]
 
@@ -75,10 +75,10 @@ aa_register_case \
                 -description $description
 
             aa_true "Link was edited with supplied info" [db_string check_info {
-                select exists (select 1 from cr_extlinks where extlink_id = :link_id
-                               and url = :url
-                               and label = :label
-                               and description = :description)
+                select case when exists (select 1 from cr_extlinks where extlink_id = :link_id
+                                         and url = :url
+                                         and label = :label
+                                         and description = :description) then 1 else 0
                 from dual
             }]
 
