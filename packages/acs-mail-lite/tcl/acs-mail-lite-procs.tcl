@@ -243,7 +243,14 @@ namespace eval acs_mail_lite {
             # now get the user_names and user_ids
             foreach email $address_list {
                 set email [string tolower $email]
-                if {[db_0or1row get_user_name_and_id ""]} {
+                if {[db_0or1row get_user_name_and_id {
+                    select person_id as user_id, first_names || ' ' || last_name as user_name
+                    from parties, persons
+                    where email = :email
+                      and party_id = person_id
+                     order by party_id desc
+                    fetch first 1 rows only
+                }]} {
                     lappend address_array(email) $email
                     lappend address_array(name) $user_name
                     lappend address_array(user_id) $user_id
