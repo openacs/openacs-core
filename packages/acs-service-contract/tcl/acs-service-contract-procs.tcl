@@ -91,14 +91,16 @@ ad_proc -public acs_sc_binding_exists_p {
     @author Neophytos Demetriou
 } {
     return [db_string binding_exists_p {
-        select exists (select 1 from acs_sc_bindings
-                       where contract_id = (select contract_id
-                                            from acs_sc_contracts
-                                            where contract_name = :contract)
-                         and impl_id = (select impl_id
-                                        from acs_sc_impls
-                                        where impl_name = :impl
-                                        and impl_contract_name = :contract))
+        select case when exists
+        (select 1 from acs_sc_bindings
+         where contract_id = (select contract_id
+                              from acs_sc_contracts
+                              where contract_name = :contract)
+           and impl_id = (select impl_id
+                          from acs_sc_impls
+                          where impl_name = :impl
+                          and impl_contract_name = :contract))
+        then 1 else 0 end
         from dual
     }]
 }

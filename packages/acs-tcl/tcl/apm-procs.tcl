@@ -993,9 +993,11 @@ ad_proc -private apm_package_installed_p_not_cached {
     package_key
 } {
     return [db_string apm_package_installed_p {
-        select exists (select 1 from apm_package_versions
-                        where package_key = :package_key
-                          and installed_p) from dual
+        select case when exists
+        (select 1 from apm_package_versions
+         where package_key = :package_key
+         and installed_p) then 1 else 0 end
+        from dual
     }]
 }
 

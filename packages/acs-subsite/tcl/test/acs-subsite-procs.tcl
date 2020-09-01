@@ -12,11 +12,12 @@ aa_register_case \
         found belonging to groups that do not exist anymore.
     } {
         aa_false "Leftover group localization message keys do not exist in the database" [db_string leftovers_exist {
-            select exists (select 1 from lang_message_keys k
-                           where package_key = 'acs-translations'
-                           and message_key like 'group_title_%'
-                           and not exists (select 1 from groups
-                                           where group_id = cast(split_part(k.message_key, '_', 3) as integer)))
+            select case when exists (select 1 from lang_message_keys k
+                                     where package_key = 'acs-translations'
+                                     and message_key like 'group_title_%'
+                                     and not exists (select 1 from groups
+                                                     where group_id = cast(split_part(k.message_key, '_', 3) as integer)))
+            then 1 else 0 end
             from dual
         }]
     }
@@ -40,9 +41,10 @@ aa_register_case \
         set message_key "group_title_${group_id}"
 
         aa_true "Message key was registered correctly" [db_string get_key {
-            select exists (select 1 from lang_message_keys
-                           where package_key = :package_key
-                           and message_key = :message_key)
+            select case when exists (select 1 from lang_message_keys
+                                     where package_key = :package_key
+                                     and message_key = :message_key)
+            then 1 else 0 end
             from dual
         }]
 
@@ -52,9 +54,10 @@ aa_register_case \
         group::delete $group_id
 
         aa_false "Message key was deleted correctly" [db_string get_key {
-            select exists (select 1 from lang_message_keys
-                           where package_key = :package_key
-                           and message_key = :message_key)
+            select case when exists (select 1 from lang_message_keys
+                                     where package_key = :package_key
+                                     and message_key = :message_key)
+            then 1 else 0 end
             from dual
         }]
 

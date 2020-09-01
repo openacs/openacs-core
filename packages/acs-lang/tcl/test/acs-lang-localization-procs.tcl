@@ -178,11 +178,11 @@ aa_register_case \
                 -text $it_text
 
             aa_true "#${package_key}.$message_key#: fallback en_US message was registered" [db_string check {
-                select exists (select 1 from lang_messages
+                select case when exists (select 1 from lang_messages
                                where package_key = :package_key
                                and message_key = :message_key
                                and locale = 'en_US'
-                               and message = :it_text)
+                               and message = :it_text) then 1 else 0 end
                 from dual
             }]
 
@@ -194,16 +194,16 @@ aa_register_case \
                 -message_key $message_key \
                 -text $en_text
             aa_true "#${package_key}.$message_key#: en_US message was updated, while it_IT message was not affected" [db_string check {
-                select exists (select 1 from lang_messages
-                               where package_key = :package_key
-                               and message_key = :message_key
-                               and locale = 'en_US'
-                               and message = :en_text) and
-                       exists (select 1 from lang_messages
-                               where package_key = :package_key
-                               and message_key = :message_key
-                               and locale = 'it_IT'
-                               and message = :it_text)
+                select case when exists (select 1 from lang_messages
+                                         where package_key = :package_key
+                                         and message_key = :message_key
+                                         and locale = 'en_US'
+                                         and message = :en_text) and
+                                 exists (select 1 from lang_messages
+                                         where package_key = :package_key
+                                         and message_key = :message_key
+                                         and locale = 'it_IT'
+                                         and message = :it_text) then 1 else 0 end
                 from dual
             }]
 
@@ -215,16 +215,16 @@ aa_register_case \
                 -message_key $message_key \
                 -text $it_text
             aa_true "#${package_key}.$message_key#: it_IT message was updated, while en_US message was not affected" [db_string check {
-                select exists (select 1 from lang_messages
-                               where package_key = :package_key
-                               and message_key = :message_key
-                               and locale = 'en_US'
-                               and message = :en_text) and
-                       exists (select 1 from lang_messages
-                               where package_key = :package_key
-                               and message_key = :message_key
-                               and locale = 'it_IT'
-                               and message = :it_text)
+                select case when exists (select 1 from lang_messages
+                                         where package_key = :package_key
+                                         and message_key = :message_key
+                                         and locale = 'en_US'
+                                         and message = :en_text) and
+                                 exists (select 1 from lang_messages
+                                         where package_key = :package_key
+                                         and message_key = :message_key
+                                         and locale = 'it_IT'
+                                         and message = :it_text) then 1 else 0 end
                 from dual
             }]
         }

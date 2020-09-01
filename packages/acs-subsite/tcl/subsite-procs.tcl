@@ -323,8 +323,11 @@ ad_proc -public subsite::util::sub_type_exists_p {
     @creation-date 2000-02-07
 } {
     return [db_string sub_type_exists_p {
-        select exists (select 1 from acs_object_types
-                              where supertype = :object_type) from dual
+        select case when exists
+        (select 1 from acs_object_types
+         where supertype = :object_type)
+        then 1 else 0 end
+        from dual
     }]
 }
 

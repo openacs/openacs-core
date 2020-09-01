@@ -1236,7 +1236,10 @@ if {$UseXotclSiteNodes} {
                 ns_log notice "NO-CACHE has_children called with $node_id"
 
                 ::xo::dc get_value -prepare integer has_children {
-                    select exists(select 1 from site_nodes where parent_id = :node_id)
+                    select case when exists
+                    (select 1 from site_nodes where parent_id = :node_id)
+                    then 1 else 0 end
+                    from dual
                 }
             }
 
