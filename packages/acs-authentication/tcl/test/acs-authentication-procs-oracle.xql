@@ -3,15 +3,6 @@
 <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="auth::test::get_admin_user_id.select_user_id">
-        <querytext>
-            select q.user_id from
-            (select user_id
-            from users
-            where acs_permission.permission_p(:context_root_id, user_id, 'admin') = 't') q where rownum = 1
-        </querytext>
-    </fullquery>
-
     <fullquery name="auth::test::get_password_vars.select_vars">
         <querytext>
             select q.* from

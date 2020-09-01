@@ -19,7 +19,11 @@ ad_proc -private auth::test::get_admin_user_id {} {
 } {
     set context_root_id [acs_magic_object security_context_root]
 
-    return [db_string select_user_id {}]
+    return [db_string select_user_id {
+        select min(user_id)
+          from users
+        where acs_permission.permission_p(:context_root_id, user_id, 'admin')
+    }]
 }
 
 ad_proc -private auth::test::get_password_vars {
