@@ -61,7 +61,7 @@ aa_register_case \
                                          and i.name = :name
                                          and url = :url
                                          and label = :label
-                                         and description = :description) then 1 else 0
+                                         and description = :description) then 1 else 0 end
                 from dual
             }]
 
@@ -78,7 +78,7 @@ aa_register_case \
                 select case when exists (select 1 from cr_extlinks where extlink_id = :link_id
                                          and url = :url
                                          and label = :label
-                                         and description = :description) then 1 else 0
+                                         and description = :description) then 1 else 0 end
                 from dual
             }]
 
