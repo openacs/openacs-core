@@ -51,7 +51,7 @@ aa_register_case \
             # "db_foreach" loop, performing as well SQL queries
             # and try to get value inserted above after the loop.
             #
-            set sql "SELECT privilege FROM acs_privileges limit 2"
+            set sql "SELECT privilege FROM acs_privileges fetch first 2 rows only"
             db_foreach noxql $sql {
                 set temp1 [db_string noxql "SELECT 1 FROM dual"]
                 aa_log "... db_foreach got '$temp1'"
@@ -64,7 +64,7 @@ aa_register_case \
             # "db_multirow" loop, performing as well SQL queries
             # and try to get value inserted above after the loop.
             #
-            set sql "SELECT privilege FROM acs_privileges limit 1"
+            set sql "SELECT max(privilege) FROM acs_privileges"
             db_multirow -local mrow noxql $sql {
             # Code executed for each row. Set extended columns, etc.
                 set temp1 [db_string noxql "SELECT 1 FROM dual"]
@@ -77,7 +77,7 @@ aa_register_case \
             # "db_multirow" loop, performing as well SQL queries
             # and try to get value inserted above after the loop.
             #
-            set sql "SELECT privilege FROM acs_privileges limit 2"
+            set sql "SELECT privilege FROM acs_privileges fetch first 2 rows only"
             db_multirow -local mrow noxql $sql {
             # Code executed for each row. Set extended columns, etc.
                 set temp1 [db_string noxql "SELECT 1 FROM dual"]
