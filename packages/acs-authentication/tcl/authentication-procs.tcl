@@ -1767,7 +1767,7 @@ ad_proc -private auth::can_admin_system_without_authority_p {
     # admin rights on the magic object 'security_context_root')?
     #
     return [db_string admins_left_p {
-        select exists (select 1
+        select case when exists (select 1
         from acs_permissions p,
              party_approved_member_map m,
              acs_magic_objects amo,
@@ -1778,7 +1778,8 @@ ad_proc -private auth::can_admin_system_without_authority_p {
         and u.user_id = m.member_id
         and u.member_state = 'approved'
         and u.authority_id <> :authority_id
-        and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')) from dual
+        and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')) then 1 else 0 end
+        from dual
     }]
 }
 
