@@ -116,7 +116,13 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
         set email(reply_id) $reply_id
         set email(user_id) $user_id
 
-        if {[db_0or1row select_impl {}]} {
+        if {[db_0or1row select_impl {
+            select impl_owner_name as package_key
+            from acs_sc_impls
+            where impl_id = (select min(sc_impl_id)
+                             from notification_types
+                             where type_id = :type_id)
+        }]} {
             ns_log Notice "acs_mail_lite::incoming_email -impl notifications: calling notifications::incoming_email implementation for package $package_key"
             if { [catch {callback -impl $package_key notifications::incoming_email -array email} error] } {
                 ns_log Notice "acs_mail_lite::incoming_email -impl notifications: $error"

@@ -36,14 +36,4 @@
       </querytext>
     </fullquery>
 
-    <fullquery name="callback::acs_mail_lite::incoming_email::impl::notifications.select_impl">
-        <querytext>
-        select sc.impl_owner_name as package_key from notification_types n, acs_sc_impls sc
-        where
-        n.sc_impl_id = sc.impl_id and
-        n.type_id = :type_id
-        limit 1
-        </querytext>
-    </fullquery>
-
 </queryset>
