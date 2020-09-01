@@ -35,7 +35,7 @@ set sql [subst {select
                  from auth_authorities
                  where sort_order $op :sort_order
                  order by sort_order $orderby_direction
-                 limit 1}]
+                 fetch first 1 rows only}]
 
 if {[db_0or1row dbqd..get_swap_authority $sql]} {
     # adjust sort_order of the passed in authority
