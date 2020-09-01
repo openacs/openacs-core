@@ -1234,11 +1234,11 @@ if {$UseXotclSiteNodes} {
                 # @return boolean value.
                 #
                 ns_log notice "NO-CACHE has_children called with $node_id"
-                
+
                 ::xo::dc get_value -prepare integer has_children {
                     select exists(select 1 from site_nodes where parent_id = :node_id)
                 }
-            }          
+            }
 
             #
             # @method get_urls_from_object_id
@@ -1428,7 +1428,7 @@ if {$UseXotclSiteNodes} {
                     has_children-$node_id {
                         next
                     }
-            }           
+            }
 
             :public method get_node_id {-url:required} {
                 #
