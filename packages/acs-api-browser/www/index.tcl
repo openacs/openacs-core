@@ -29,7 +29,13 @@ if  { [info exists about_package_key] } {
     multirow create disabled_packages
     multirow create uninstalled_packages
 
-    if { [db_0or1row get_local_package_version_id {} ] } {
+    if { [db_0or1row get_local_package_version_id {
+        select min(version_id)
+          from apm_package_version_info
+        where installed_p = 't'
+          and enabled_p = 't'
+          and package_key = :about_package_key
+    }] } {
         rp_form_update version_id $version_id
         rp_internal_redirect package-view
         ad_script_abort
