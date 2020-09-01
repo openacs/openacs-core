@@ -119,7 +119,8 @@ ad_proc -public acs_mail_lite::sched_parameters {
         lpri_object_ids,
         reject_on_hit,
         reject_on_miss
-        from acs_mail_lite_ui limit 1
+        from acs_mail_lite_ui
+        fetch first 1 rows only
     } ]
 
     if { !$exists_p } {

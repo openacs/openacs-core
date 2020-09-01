@@ -55,7 +55,8 @@ ad_proc -private acs_mail_lite::imap_conn_set {
     set changes_p [array exists new]
     set exists_p [db_0or1row acs_mail_lite_imap_conn_r {
         select ho,pa,po,ti,us,na,fl
-        from acs_mail_lite_imap_conn limit 1
+        from acs_mail_lite_imap_conn
+        fetch first 1 rows only
     } ]
 
     if { !$exists_p } {
