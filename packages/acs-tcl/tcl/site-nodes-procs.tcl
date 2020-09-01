@@ -1530,18 +1530,17 @@ if {$UseXotclSiteNodes} {
                     ::acs::site_nodes_children_cache flush_all
 
                 } else {
-                    set limit_clause [expr {$with_subtree ? "" : "limit 1"}]
                     #
-                    # Get subtree from db; probably Oracle does not support "limit 1" yet
+                    # Get subtree from db
                     #
-                    set tree [::xo::dc list_of_lists -prepare integer [current method]-flush-tree [subst {
+                    set tree [::xo::dc list_of_lists -prepare {integer boolean} get_subtree [subst {
                         WITH RECURSIVE site_node_tree AS (
                             select node_id, parent_id, object_id from site_nodes where node_id = :node_id
                         UNION ALL
                             select child.node_id, child.parent_id, child.object_id from site_node_tree, site_nodes as child
                             where  child.parent_id = site_node_tree.node_id
+                              and :with_subtree
                         ) select [xo::dc map_function_name site_node__url(node_id)], node_id, object_id from site_node_tree
-                        $limit_clause
                     }]]
                     foreach entry $tree {
                         lassign $entry url node_id object_id
