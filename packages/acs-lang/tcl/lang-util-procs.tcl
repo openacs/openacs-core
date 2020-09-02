@@ -807,7 +807,9 @@ ad_proc -public lang::util::convert_to_i18n {
 	}
 
 	# Register the language keys
-        lang::message::register $locale $package_key $message_key $text
+        lang::message::register \
+            -object_id $object_id \
+            $locale $package_key $message_key $text
 
 	return "#${package_key}.${message_key}#"
     } else {
