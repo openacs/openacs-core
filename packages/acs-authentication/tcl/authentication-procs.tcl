@@ -1766,20 +1766,22 @@ ad_proc -private auth::can_admin_system_without_authority_p {
     # Is there a user from other authorities having swa admins (having
     # admin rights on the magic object 'security_context_root')?
     #
-    return [db_string admins_left_p {
-        select case when exists (select 1
-        from acs_permissions p,
+    return [db_0or1row admins_left_p {
+        select 1 from dual where exists
+        (
+          select 1
+          from acs_permissions p,
              party_approved_member_map m,
              acs_magic_objects amo,
              cc_users u
-        where amo.name = 'security_context_root'
-        and p.object_id = amo.object_id
-        and p.grantee_id = m.party_id
-        and u.user_id = m.member_id
-        and u.member_state = 'approved'
-        and u.authority_id <> :authority_id
-        and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')) then 1 else 0 end
-        from dual
+          where amo.name = 'security_context_root'
+          and p.object_id = amo.object_id
+          and p.grantee_id = m.party_id
+          and u.user_id = m.member_id
+          and u.member_state = 'approved'
+          and u.authority_id <> :authority_id
+          and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')
+        )
     }]
 }
 

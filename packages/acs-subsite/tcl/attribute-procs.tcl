@@ -17,14 +17,12 @@ ad_page_contract_filter attribute_dynamic_p { name value } {
     @creation-date 12/30/2000
 
 } {
-    set dynamic_p [db_string attribute_for_dynamic_object_p {
-        select case when exists
+    set dynamic_p [db_0or1row attribute_for_dynamic_object_p {
+        select 1 from dual where exists
         (select 1 from acs_attributes a, acs_object_types t
          where t.dynamic_p = 't'
          and a.object_type = t.object_type
          and a.attribute_id = :value)
-        then 1 else 0 end
-        from dual
     }]
     if {!$dynamic_p} {
         ad_complain "Attribute does not belong to a dynamic object and cannot be modified"
