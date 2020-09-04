@@ -72,17 +72,10 @@ if { [parameter::get -package_id $::acs::kernel_id -parameter DebugP -default 0]
     }
 }
 
-if {[nsv_exists rp_properties request_count] == 0} {
-    #
-    # Run this only once at startup, and not on re-inits
-    #
-    nsv_set rp_properties request_count 0
-
-    foreach httpMethod {GET HEAD POST} {
-        ns_register_filter preauth $httpMethod /resources/* rp_resources_filter
-        ns_register_filter preauth $httpMethod * rp_filter
-        ns_register_proc $httpMethod / rp_handler
-    }
+foreach httpMethod {GET HEAD POST} {
+    ns_register_filter preauth $httpMethod /resources/* rp_resources_filter
+    ns_register_filter preauth $httpMethod * rp_filter
+    ns_register_proc $httpMethod / rp_handler
 }
 
 set unreg_cmd [expr {$::acs::useNaviServer ? "ns_unregister_op" : "ns_unregister_proc"}]
