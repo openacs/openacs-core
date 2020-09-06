@@ -78,6 +78,7 @@ foreach httpMethod {GET HEAD POST} {
     ns_register_proc $httpMethod / rp_handler
 }
 
+
 set unreg_cmd [expr {$::acs::useNaviServer ? "ns_unregister_op" : "ns_unregister_proc"}]
 
 # Unregister any GET/HEAD/POST handlers for /*.tcl (since they
@@ -186,6 +187,12 @@ ad_after_server_initialization procs_register {
             $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]
     }
 }
+
+#
+# Set a flag for bootststrap that at least, the request processor has
+# done all essential initialization
+#
+nsv_set rp_properties request_count 0
 
 # Local variables:
 #    mode: tcl
