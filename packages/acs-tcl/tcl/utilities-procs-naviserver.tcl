@@ -13,22 +13,15 @@ if {[ns_info name] ne "NaviServer"} {
     return
 }
 
-#
-# If the server supports samesite cookie, set the samesite as provided.
-#
-try { ns_setcookie } on error {r} {
-    set ::acs::serverSupports(samesiteCookie) [string match "*-samesite*" $r]
-}
-
-
 #-------------------------------------------------------------------------
 # NaviServer implementation of ad_url(en|de)code* procs
 #-------------------------------------------------------------------------
 
 ad_proc -public ad_urlencode_folder_path { folder_path } {
+
     Perform an urlencode operation on the segments of the provided
-    folder path, i.e. for a full folder path rather than path segments as in
-    ad_urlencode_path.
+    folder path, i.e. for a full folder path rather than path segments
+    as in ad_urlencode_path.
 
     @see ad_urlencode_path
 } {
@@ -160,7 +153,7 @@ ad_proc -public ad_set_cookie {
 
     @see ad_get_cookie
     @see ad_unset_cookie
-    @see ad_set_signed_cookie    
+    @see ad_set_signed_cookie
 } {
 
 
@@ -174,7 +167,7 @@ ad_proc -public ad_set_cookie {
         }
     }
 
-    if {$samesite ne "none" && $::acs::serverSupports(samesiteCookie)} {
+    if {$samesite ne "none" && [::acs::icanuse "ns_setcookie -samesite"]} {
         set samesiteFlag "-samesite $samesite"
     } else {
         set samesiteFlag ""

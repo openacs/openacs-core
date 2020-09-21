@@ -85,11 +85,12 @@ namespace eval ::acs {
 # loading order.
 #
 
-::acs::register_icanuse "ns_db currenthandles" [acs::cmd_has_subcommand ns_db currenthandles]
-::acs::register_icanuse "ns_server unmap" [acs::cmd_has_subcommand ns_server unmap]
-::acs::register_icanuse "ns_set keys" [acs::cmd_has_subcommand ns_set keys]
+::acs::register_icanuse "ns_db currenthandles"      [acs::cmd_has_subcommand ns_db currenthandles]
+::acs::register_icanuse "ns_server unmap"           [acs::cmd_has_subcommand ns_server unmap]
+::acs::register_icanuse "ns_set keys"               [acs::cmd_has_subcommand ns_set keys]
+::acs::register_icanuse "ns_setcookie -samesite"    [acs::cmd_error_contains ns_setcookie -samesite]
 
-::acs::register_icanuse "ns_conn partialtimes" [acs::cmd_has_subcommand ns_conn partialtimes]
+::acs::register_icanuse "ns_conn partialtimes"      [acs::cmd_has_subcommand ns_conn partialtimes]
 ::acs::register_icanuse "ns_conn contentsentlength" [acs::cmd_has_subcommand ns_conn contentsentlength]
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {nsv_dict get ""} -varname]
 
