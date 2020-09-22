@@ -3,7 +3,7 @@ ad_page_contract {
     rewritten by philg@mit.edu on October 31, 1999
     makes heavy use of procedures in /tcl/ad-user-contributions-summary.tcl
     modified by mobin January 27, 2000 5:08 am
-    
+
     @cvs-id $Id$
 } {
     user_id:naturalnum,notnull
@@ -19,15 +19,28 @@ if {[array size user_info] == 0} {
 set user_info(last_visit_pretty) [lc_time_fmt $user_info(last_visit_ansi) "%q %X"]
 set user_info(creation_date_pretty) [lc_time_fmt $user_info(creation_date) "%q"]
 set user_info(url) [acs_community_member_url -user_id $user_id]
-set user_info(by_ip_url) [export_vars -base "complex-search" { { target one } { ip $user_info(creation_ip) } }]
+set user_info(by_ip_url) [export_vars -base "complex-search" {
+    { target one } { ip $user_info(creation_ip) }
+}]
+set ip_info_url "/acs-admin/ip-info"
 
+if {[db_0or1row get_last_contrib {
+    select object_id, title, creation_date, creation_ip from acs_objects
+    where object_id = (select max(object_id) from acs_objects where creation_user = :user_id)}]} {
+    set user_info(last_contrib) "[lc_time_fmt $creation_date %q] on $title ($object_id)"
+    set user_info(last_contrib_ip) $creation_ip
+    set user_info(last_contrib_ip_url) [export_vars -base "complex-search" { { target one } { ip $user_info(last_contrib_ip) } }]
+} else {
+    set user_info(last_contrib) none
+    set user_info(last_contrib_ip) ""
+}
 set return_url [ad_return_url]
 
 set delete_user_url [export_vars -base delete-user { user_id return_url {permanent f}}]
 set delete_user_permanent_url [export_vars -base delete-user { user_id {return_url /acs-admin/users} {permanent t}}]
 
 #
-# RBM: Check if the requested user is a site-wide admin and warn the 
+# RBM: Check if the requested user is a site-wide admin and warn the
 # viewer in that case (so that a ban/deletion can be avoided).
 #
 
@@ -50,7 +63,7 @@ set context [list [list "./" "Users"] "One User"]
 
 if {[db_0or1row get_item_id {
     select coalesce(title,'view this portrait') as portrait_title
-    from acs_rels a, cr_items c, cr_revisions cr 
+    from acs_rels a, cr_items c, cr_revisions cr
     where a.object_id_two = c.item_id
          and c.live_revision = cr.revision_id
          and a.object_id_one = :user_id
@@ -74,7 +87,7 @@ db_multirow user_contributions user_contributions {
      order by pretty_name, creation_date desc, object_name
 }
 
-# cro@ncacasi.org 2002-02-20 
+# cro@ncacasi.org 2002-02-20
 # Boy, is this query wacked, but I think I am starting to understand
 # how this groups thing works.
 # Find out which groups this user belongs to where he was added to the group
