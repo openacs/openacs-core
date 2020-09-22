@@ -1608,8 +1608,9 @@ ad_proc -public db_foreach {
         upvar 1 $column_set selection
     }
 
+    set bindArg [expr {[info exists bind] ? [list -bind $bind] : ""}]
     set counter 0
-    foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn $statement_name $sql]] {
+    foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn $statement_name $sql {*}${bindArg}]] {
         incr counter
         if { ![info exists column_set] } {
             set set_array [ns_set array $selection]
