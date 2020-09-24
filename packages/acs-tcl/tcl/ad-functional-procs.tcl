@@ -45,7 +45,7 @@ namespace eval ::f {
 # Lambda
 # --------------------------------------------------------------------------------
 
-ad_proc -public lambda {args body} {
+ad_proc -public -deprecated lambda {args body} {
     The lambda function - one of the foundations of functional programming -
     defines an anonymous proc and returns it. This is useful if you quickly
     need an auxiliary function for a small task. 
@@ -64,6 +64,12 @@ ad_proc -public lambda {args body} {
     Although lambda defines a proc and therefore consumes memory, executing
     the same lambda expression twice will just re-define this proc.
     Thus, there is no memory leak, if you have a lambda inside a loop.
+
+    DEPRECATED: As of tcl8.5, Tcl has native support for 'lambda' provided by
+                means of 'apply' per TIP 194. Tcllib provides a 'lambda' package
+                with procs that make use of it.
+
+    @see tcllib lambda package
 } {
     proc $args.$body $args $body
     return $args.$body
