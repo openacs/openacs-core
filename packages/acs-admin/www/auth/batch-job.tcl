@@ -78,7 +78,6 @@ ad_form \
             } else {
                 set $element_name [ns_quotehtml $batch_job($element_name)]
             }
-            ns_log notice "element_name $element_name '[set $element_name]'"
         }
 
         set job_start_time [lc_time_fmt $batch_job(job_start_time) "%x %X"]
