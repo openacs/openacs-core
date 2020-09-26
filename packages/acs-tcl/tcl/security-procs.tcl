@@ -1453,7 +1453,7 @@ ad_proc -public ad_set_signed_cookie {
     {-path "/"}
     {-secret ""}
     {-token_id ""}
-    {-samesite strict}
+    {-samesite lax}
     name
     value
 } {
