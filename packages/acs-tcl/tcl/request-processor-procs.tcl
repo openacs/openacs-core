@@ -621,9 +621,6 @@ ad_proc -private rp_filter { why } {
     # Check, if we are supposed to upgrade insecure requests. This
     # should be after the canonical check to avoid multiple redirects.
     #
-    # ns_set get accepts a default value in 3rd argument only on
-    # NaviServer; so perform the check in two steps for AOLserver
-    # compatibility.
     set upgrade_insecure_requests_p [ns_set iget [ns_conn headers] Upgrade-Insecure-Requests]
     if {$upgrade_insecure_requests_p ne ""
         && $upgrade_insecure_requests_p
@@ -902,14 +899,14 @@ ad_proc -private rp_report_error {
 
     ad_try -auto_abort=false {
         set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
-        
+
     } trap {AD EXCEPTION ad_script_abort} {r} {
         #
         # ad_parse_template was script-aborted
         #
         ns_log warning "rp_report_error: error template with message '$error_message' aborted"
         return
-        
+
     } on error {errorMsg} {
         #
         # An error occurred during rendering of the error page.
@@ -1440,6 +1437,7 @@ ad_proc -public ad_conn {args} {
     ajax_p,
     behind_proxy_p,
     behind_secure_proxy_p,
+    bot_p,
     browser_id,
     deferred_dml,
     extra_url,
@@ -1649,15 +1647,34 @@ ad_proc -public ad_conn {args} {
 
                         mobile_p {
                             #
-                            # Check, if we are used from a mobile device (based on user_agent).
+                            # Check, if we are used from a mobile
+                            # device (heuristic based on user_agent).
                             #
                             if {[ns_conn isconnected]} {
-                                set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+                                set user_agent [string tolower [ns_set iget [ns_conn headers] User-Agent]]
                                 set ad_conn(mobile_p) [regexp (android|webos|iphone|ipad) $user_agent]
                             } else {
                                 set ad_conn(mobile_p) 0
                             }
                             return $ad_conn(mobile_p)
+                        }
+
+                        bot_p {
+                            #
+                            # Check, if we are used from a bot
+                            # (heuristic based on user_agent).
+                            #
+                            if {[ns_conn isconnected]} {
+                                if {[::acs::icanuse "ns_conn pool"] && [ns_conn pool] eq "bots"} {
+                                    set ad_conn(bot_p) 1
+                                } else {
+                                    set user_agent [string tolower [ns_set iget [ns_conn headers] User-Agent]]
+                                    set ad_conn(bot_p) [regexp (crawl|bot) $user_agent]
+                                }
+                            } else {
+                                set ad_conn(bot_p) 0
+                            }
+                            return $ad_conn(bot_p)
                         }
 
                         ajax_p {

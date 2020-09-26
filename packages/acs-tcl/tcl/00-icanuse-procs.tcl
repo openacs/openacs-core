@@ -85,23 +85,19 @@ namespace eval ::acs {
 # loading order.
 #
 
+::acs::register_icanuse "ns_asynclogfile"           {[info commands ::ns_asynclogfile] ne ""}
+::acs::register_icanuse "ns_conn contentsentlength" [acs::cmd_has_subcommand ns_conn contentsentlength]
+::acs::register_icanuse "ns_conn partialtimes"      [acs::cmd_has_subcommand ns_conn partialtimes]
+::acs::register_icanuse "ns_conn pool"              [acs::cmd_has_subcommand ns_conn pool]
+::acs::register_icanuse "ns_crypto::randombytes"    {[info commands ::ns_crypto::randombytes] ne ""}
 ::acs::register_icanuse "ns_db currenthandles"      [acs::cmd_has_subcommand ns_db currenthandles]
+::acs::register_icanuse "ns_hash"                   {[info commands ::ns_hash] ne ""}
+::acs::register_icanuse "ns_ictl trace idle"        [acs::cmd_error_contains {ns_ictl trace foo} idle]
 ::acs::register_icanuse "ns_server unmap"           [acs::cmd_has_subcommand ns_server unmap]
 ::acs::register_icanuse "ns_set keys"               [acs::cmd_has_subcommand ns_set keys]
 ::acs::register_icanuse "ns_setcookie -samesite"    [acs::cmd_error_contains ns_setcookie -samesite]
-
-::acs::register_icanuse "ns_conn partialtimes"      [acs::cmd_has_subcommand ns_conn partialtimes]
-::acs::register_icanuse "ns_conn contentsentlength" [acs::cmd_has_subcommand ns_conn contentsentlength]
+::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {nsv_dict get ""} -varname]
-
-::acs::register_icanuse "ns_crypto::randombytes" {[info commands ::ns_crypto::randombytes] ne ""}
-
-::acs::register_icanuse "ns_asynclogfile" {[info commands ::ns_asynclogfile] ne ""}
-::acs::register_icanuse "ns_writer"       {[info commands ::ns_writer]       ne ""}
-::acs::register_icanuse "ns_hash"         {[info commands ::ns_hash]         ne ""}
-
-catch {ns_ictl trace foo} ::errorMsg
-::acs::register_icanuse "ns_ictl trace idle" {"idle" in [split $::errorMsg " "]}
 
 #
 # Add some compatibility procs for AOLserver or older NaviServer versions
