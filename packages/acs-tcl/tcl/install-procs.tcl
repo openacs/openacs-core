@@ -477,12 +477,8 @@ ad_proc -public install::xml::action::set-join-policy { node } {
 
     foreach object $objects {
         set group_id [apm_invoke_install_proc -type object_id -node $object]
-
-        group::get -group_id $group_id -array group
-        set group(join_policy) $join_policy
-        group::update -group_id $group_id -array group
+        group::update -group_id $group_id [list join_policy $join_policy]
     }
-    return
 }
 
 ad_proc -public install::xml::action::create-user { node } {

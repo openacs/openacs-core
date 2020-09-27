@@ -83,9 +83,8 @@ ad_form -extend -name subsite -form {
         subsite::set_theme -subsite_id $new_package_id -theme $theme
 
         # Set join policy
-        set group(join_policy) $join_policy
         set member_group_id [application_group::group_id_from_package_id -package_id $new_package_id]
-        group::update -group_id $member_group_id -array group
+        group::update -group_id $member_group_id [list join_policy $join_policy]
 
         # Add current user as admin
         group::add_member \
