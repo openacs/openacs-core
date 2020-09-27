@@ -430,28 +430,33 @@ ad_proc -public group::description {
 
 ad_proc -public group::update {
     {-group_id:required}
-    {-array:required}
+    {-array}
+    {dict ""}
 } {
-    Updates a group.
+
+    Updates a group.The updated values can be either specified as dict or as array.
+    Valid columns are group_name, join_policy.
+    Valid join_policy values are 'open', 'closed', 'needs approval'.
 
     @param group_id The ID of the group to update.
-
     @param array    Name of array containing the columns to update.
-                    Valid columns are group_name, join_policy.
-                    Valid join_policy values are 'open', 'closed', 'needs approval'.
-
+    @param dict     dict for columns to update.
 } {
-    upvar $array row
 
     # Construct clauses for the update statement
     set columns { group_name join_policy description }
+    if {[llength $dict] == 0} {
+        upvar $array row
+        set dict [array get row]
+    }
     set set_clauses [list]
-    foreach name [array names row] {
+    
+    foreach {name value} $dict {
         if {$name ni $columns} {
             error "Attribute '$name' isn't valid for groups."
         }
         lappend set_clauses "$name = :$name"
-        set $name $row($name)
+        set $name $value
     }
 
     if { [llength $set_clauses] == 0 } {
@@ -461,12 +466,14 @@ ad_proc -public group::update {
 
     db_dml update_group "
         update groups
-        set    [join $set_clauses ", "]
+        set    [join $set_clauses ,]
         where  group_id = :group_id
     "
 
     if {[info exists group_name]} {
-        set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$group_name"]
+        set pretty_name [lang::util::convert_to_i18n \
+                             -message_key "group_title_${group_id}" \
+                             -text "$group_name"]
         db_dml update_object_title {
             update acs_objects
             set title = :pretty_name
