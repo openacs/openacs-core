@@ -1641,13 +1641,13 @@ proc sgml::noop args {
 #	Identity function.
 #
 # Arguments:
-#	a	arbitrary argument
+#	arg	arbitrary argument
 #
 # Results:
-#	$a
+#	$arg
 
-proc sgml::identity a {
-    return $a
+proc sgml::identity arg {
+    return $arg
 }
 
 # sgml::Error --
