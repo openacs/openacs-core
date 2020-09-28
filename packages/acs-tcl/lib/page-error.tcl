@@ -39,7 +39,7 @@ set error_desc_email [subst {
 <strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]<br>
 <strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ns_quotehtml $user_id]<br>
 <strong>IP:</strong> [ns_quotehtml [ns_conn peeraddr]]<br>
-<strong>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
+<strong>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set iget [ns_conn headers] User-Agent]]<br>
 <br>
 -----------------------------<br>
 [_ acs-tcl.Error_details]<br>
@@ -269,7 +269,7 @@ if {$auto_submit_p && $user_id > 0} {
 <br><strong>[_ acs-tcl.File]</strong> [ns_quotehtml $error_file]
 <br><strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]
 <br><strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ns_quotehtml $user_id]
-<br>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set get [ns_conn headers] User-Agent]]
+<br>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set iget [ns_conn headers] User-Agent]]
 <br><br><strong>[_ acs-tcl.User_comments]</strong>
 <br>
 [ns_quotehtml [template::util::richtext::get_property contents $description]]<br>

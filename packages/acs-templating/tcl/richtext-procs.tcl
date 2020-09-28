@@ -449,7 +449,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         set attributes(id) $element(id)
         set package_id_templating [apm_package_id_from_key "acs-templating"]
 
-        set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+        set user_agent [string tolower [ns_set iget [ns_conn headers] User-Agent]]
 
         if {[string first "safari" $user_agent] != -1} {
             if {[regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version]

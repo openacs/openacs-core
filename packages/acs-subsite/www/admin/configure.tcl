@@ -1,6 +1,6 @@
 ad_page_contract {
     Configuration home page.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-06-13
     @cvs-id $Id$

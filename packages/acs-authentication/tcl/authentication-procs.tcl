@@ -64,7 +64,7 @@ ad_proc -public auth::require_login {
     # When submitting needs authentication, OpenACS generates the redirect to
     # /register with the form-data coded into the URL to continue there.....
 
-    # set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+    # set user_agent [string tolower [ns_set iget [ns_conn headers] User-Agent]]
     # ns_log notice "URL have url, len=[string length $return_url] $user_agent"
 
     if {[string length $return_url] > 2083} {

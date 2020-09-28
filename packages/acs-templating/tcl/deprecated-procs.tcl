@@ -262,7 +262,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
       # Check browser's User-Agent header for compatibility with htmlArea
       ad_return_complaint 1 "use htmlareap = $htmlarea_p"
       if { $htmlarea_p } {
-          set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+          set user_agent [string tolower [ns_set iget [ns_conn headers] User-Agent]]
           if { [string first "opera" $user_agent] != -1 } { 
               # Opera - doesn't work, even though Opera claims to be IE
               set htmlarea_p 0

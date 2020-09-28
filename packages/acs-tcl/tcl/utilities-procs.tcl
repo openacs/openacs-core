@@ -199,7 +199,7 @@ ad_proc -public util::get_referrer {
     @return referrer from the request headers.
     @param relative return the refer without protocol and host
 } {
-    set url [ns_set get [ns_conn headers] Referer]
+    set url [ns_set iget [ns_conn headers] Referer]
     if {$relative_p} {
         # In case the referrer URL has a protocol and host remove it
         regexp {^[a-z]+://[^/]+(/.*)$} $url . url

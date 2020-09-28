@@ -298,7 +298,7 @@ proc java_script_capabilities {} {
     set netscape_p 0
 
     # get the version
-    set user_agent [ns_set get [ad_conn headers] User-Agent]
+    set user_agent [ns_set iget [ad_conn headers] User-Agent]
     regexp -nocase "mozilla/(\[^\.\ \]*)" $user_agent match version
 
     # IE browsers have MSIE and Mozilla in their user-agent header
@@ -327,7 +327,7 @@ proc netscape3_browser {} {
     set netscape_p 0
 
     # get the version
-    set user_agent [ns_set get [ad_conn headers] User-Agent]
+    set user_agent [ns_set iget [ad_conn headers] User-Agent]
     regexp -nocase "mozilla/(\[^\.\ \]*)" $user_agent match version
 
     # IE browsers have MSIE and Mozilla in their user-agent header
