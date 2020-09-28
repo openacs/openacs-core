@@ -885,7 +885,7 @@ ad_proc -private ad_get_node_id_from_host_node_map {hostname} {
     # assumes that the host-node-map is always short. This allows us
     # as well to purge the entries without a pattern match.
     #
-    set mapping [acs::misc_cache eval ad_get_host_node_map { 
+    set mapping [acs::misc_cache eval ad_get_host_node_map {
         db_list_of_lists get_node_host_names {select host, node_id from host_node_map}
     }]
     set p [lsearch -index 0 -exact $mapping $hostname]
@@ -2383,7 +2383,7 @@ ad_proc -public security::locations {} {
     #
     # Add locations from host_node_map
     #
-    set host_node_map_hosts_list [acs::misc_cache eval security-locations-host-names { 
+    set host_node_map_hosts_list [acs::misc_cache eval security-locations-host-names {
         db_list get_node_host_names {select host from host_node_map}
     }]
     if { [llength $host_node_map_hosts_list] > 0 } {
@@ -2802,7 +2802,10 @@ namespace eval ::security::csrf {
     #    security::csrf::new
     #    security::csrf::validate
 
-    ad_proc -public ::security::csrf::new {{-tokenname __csrf_token} -user_id} {
+    ad_proc -public ::security::csrf::new {
+        {-tokenname __csrf_token}
+        -user_id
+    } {
 
         Create a security token to protect against CSRF (Cross-Site
         Request Forgery).  The token is set (and cached) in a global
@@ -2837,10 +2840,13 @@ namespace eval ::security::csrf {
     #
     # validate
     #
-    ad_proc -public ::security::csrf::validate {{-tokenname __csrf_token} {-allowempty false}} {
+    ad_proc -public ::security::csrf::validate {
+        {-tokenname __csrf_token}
+        {-allowempty false}
+    } {
 
-        Validate a CSRF token and call security::csrf::fail the request if
-        invalid.
+        Validate a CSRF token and call security::csrf::fail the
+        request if invalid.
 
         @return nothing
     } {
@@ -2903,7 +2909,9 @@ namespace eval ::security::csrf {
     #
     # Generate CSRF token
     #
-    ad_proc -private ::security::csrf::token { {-tokenname __csrf_token} } {
+    ad_proc -private ::security::csrf::token {
+        {-tokenname __csrf_token}
+    } {
 
         Generate a CSRF token and return it
 
