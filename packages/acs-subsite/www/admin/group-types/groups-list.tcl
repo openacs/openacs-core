@@ -1,10 +1,10 @@
-# /packages/acs-subsite/www/admin/group-types/groups-list.tcl
+ad_page_contract {
+    Group type list
+} {
+    group_type:notnull
+}
 
 # sets up datasource for groups-list.adp
-
-if { ![info exists group_type] || $group_type eq "" } {
-    error "Group type must be specified"
-}
 
 set user_id    [ad_conn user_id]
 set package_id [ad_conn package_id]
