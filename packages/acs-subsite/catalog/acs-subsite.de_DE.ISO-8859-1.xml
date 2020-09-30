@@ -106,7 +106,7 @@
   <msg key="Confirm">Bestätigen</msg>
   <msg key="confirmation_password_changed">Die Änderung Ihres Passworts war erfolgreich.</msg>
   <msg key="Continue">Fortsetzen</msg>
-  <msg key="Continue_to_your_account">Weiter nach %pvt_home_name%</msg>
+  <msg key="Continue_to_your_account">Weiter zum %pvt_home_name%</msg>
   <msg key="Convert_to_descendent_subsite_type">In nachfolgenden Subsite-Typ umwandeln</msg>
   <msg key="Core_Services">Zentrale Services</msg>
   <msg key="Country_Name">Land</msg>
