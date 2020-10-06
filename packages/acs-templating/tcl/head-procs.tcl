@@ -1090,22 +1090,31 @@ ad_proc template::add_refresh_on_history_handler {} {
 }
 
 ad_proc template::set_css_property {
-    -class:required
+    -class
+    -querySelector
     -property:required
     -value:required
 } {
     Set the specified CSS property in the DOM tree of the browser for
-    elements for the specified class. This function should be used
-    sparely in special situations, where CSS modification other
-    approaches might be too complex.
+    elements for the specified class or query selector. This function
+    should be used sparely in special situations, where CSS
+    modification other approaches might be too complex.
 
     @param class CSS class for which properties is set
+    @param querySelector CSS querySelector via the javascript function querySelectorAll
     @param property CSS property
     @param value value for the CSS property
 } {
+    if {[info exists class]} {
+        set selector [subst {document.getElementsByClassName("$class")}]
+    } elseif {[info exists querySelector]} {
+        set selector [subst {document.querySelectorAll("$querySelector")}]
+    } else {
+        error "either 'class' or 'querySelector' must be specified"
+    }
     template::add_script -section body -script [subst -nocommands {
         window.addEventListener('DOMContentLoaded', (event) => {
-            var els = document.getElementsByClassName("$class");
+            var els = $selector;
             for(var i = 0; i < els.length; i++) { els[i].style.$property = "$value"; }
         });
     }]
