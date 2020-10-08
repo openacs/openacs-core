@@ -34,7 +34,7 @@ ad_page_contract {
             ad_complain "dts: invalid interval"
         }
     }
-    
+
     csrf { csrf::validate }
 }
 
@@ -72,7 +72,7 @@ if { $num <= 0} {
 
 
 #
-# Work out the date restriction 
+# Work out the date restriction
 #
 set df ""
 set dt ""
@@ -98,7 +98,7 @@ if {$search_package_id eq "" && [parameter::get -package_id $package_id -paramet
     set subsite_packages [concat [ad_conn subsite_id] [subsite::util::packages -node_id [ad_conn node_id]]]
     lappend params $subsite_packages
     set search_package_id $subsite_packages
-} elseif {$search_package_id ne ""} { 
+} elseif {$search_package_id ne ""} {
   lappend params $search_package_id
 }
 
@@ -168,7 +168,7 @@ if { $num > 0 } { append url_advanced_search "&num=$num" }
 set query $q
 set nquery [llength [split $q]]
 set stopwords $result(stopwords)
-set nstopwords [llength $result(stopwords)] 
+set nstopwords [llength $result(stopwords)]
 
 template::multirow create searchresult title_summary txt_summary url_one object_id
 
