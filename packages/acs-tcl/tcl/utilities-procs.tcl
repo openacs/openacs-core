@@ -152,19 +152,12 @@ ad_proc util::unzip {
 
     @param destination must be the name of a valid directory to contain decompressed files
 } {
-    set unzip [util::which unzip]
-    if {$unzip eq ""} {
+    set unzipCmd [util::which unzip]
+    if {$unzipCmd eq ""} {
         error "unzip command not found on the system."
     }
-    set cmd [list exec $unzip]
-    if {$overwrite_p} {
-        lappend cmd -o
-    } else {
-        # -n means we don't overwrite existing files
-        lappend cmd -n
-    }
-    lappend cmd $source -d $destination
-    {*}$cmd
+    # -n means we don't overwrite existing files
+    exec $unzipCmd [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
 }
 
 # Let's define the nsv arrays out here, so we can call nsv_exists
@@ -1003,7 +996,7 @@ ad_proc -public oacs_util::process_objects_csv {
     {-override_headers {}}
     {-constants ""}
 } {
-    
+
     This processes a comma separated set of objects, taking the CSV
     and calling package_instantiate_object for each one.
 
