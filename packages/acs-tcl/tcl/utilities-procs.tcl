@@ -153,11 +153,16 @@ ad_proc util::unzip {
     @param destination must be the name of a valid directory to contain decompressed files
 } {
     set unzip [util::which unzip]
-    if {$unzip eq ""} {error "unzip command not found on the system."}
-    # -n means we don't overwrite existing files
+    if {$unzip eq ""} {
+        error "unzip command not found on the system."
+    }
     set cmd [list exec $unzip]
-    if {$overwrite_p} {lappend cmd -o
-    } else {lappend cmd -n}
+    if {$overwrite_p} {
+        lappend cmd -o
+    } else {
+        # -n means we don't overwrite existing files
+        lappend cmd -n
+    }
     lappend cmd $source -d $destination
     {*}$cmd
 }
