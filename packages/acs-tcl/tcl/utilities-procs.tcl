@@ -160,11 +160,14 @@ ad_proc util::unzip {
     exec $unzipCmd [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
 }
 
-# Let's define the nsv arrays out here, so we can call nsv_exists
-# on their keys without checking to see if it already exists.
-# we create the array by setting a bogus key.
+ad_proc -private -deprecated proc_source_file_full_path {proc_name} {
 
-proc proc_source_file_full_path {proc_name} {
+    This is an used function solely kept here for (unclear) backward
+    compatibility in acs-bootstrap-installer/tcl/00-proc-procs.tcl.
+    AFIKT, there is no need for this function in OpenACS, it should be
+    removed after the release of OpenACS 5.10.
+
+} {
     if { ![nsv_exists proc_source_file $proc_name] } {
         return ""
     } else {
