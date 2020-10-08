@@ -1,5 +1,5 @@
 ad_library {
-    Sweep the all the files in the system looking for systematic errors.
+    Sweep all the files in the system looking for systematic errors.
 
     @author Jeff Davis
     @creation-date 2005-02-28
