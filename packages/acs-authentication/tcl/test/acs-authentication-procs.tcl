@@ -904,6 +904,8 @@ aa_register_case  \
 
             aa_equals "Authentication OK" $result(auth_status) "ok"
 
+        } -teardown_code {
+            ad_parameter_cache -delete [ad_acs_kernel_id] UseEmailForLoginP
         }
 }
 
