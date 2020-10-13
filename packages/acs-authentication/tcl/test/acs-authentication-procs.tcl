@@ -641,134 +641,135 @@ aa_register_case  \
 #
 ###########
 
-aa_register_case  \
-    -cats {api db} \
-    -procs {
-        auth::authority::create
-        auth::authority::edit
-        auth::authority::delete
-        auth::authority::get_short_names
-        auth::authority::get_authority_options
-    } \
-    auth_authority_api {
-    Test the auth::authority::create, auth::authority::edit, and auth::authority::delete procs.
+aa_register_case -cats {
+    api db
+} -procs {
+    auth::authority::create
+    auth::authority::edit
+    auth::authority::delete
+    auth::authority::get_short_names
+    auth::authority::get_authority_options
+    auth::authority::get_id
+} auth_authority_api {
+    Test authorty creation, edition, deletion and some retrieval api.
 } {
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
+    aa_run_with_teardown -rollback -test_code {
 
-            # Add authority and test that it was added correctly.
-            array set columns {
-                pretty_name "Test authority"
-                help_contact_text "Blah blah"
-                enabled_p "t"
-                sort_order "1000"
-                auth_impl_id ""
-                pwd_impl_id ""
-                forgotten_pwd_url ""
-                change_pwd_url ""
-                register_impl_id ""
-                register_url ""
-                get_doc_impl_id ""
-                process_doc_impl_id ""
-                batch_sync_enabled_p "f"
-            }
-            set columns(short_name) [ad_generate_random_string]
-
-            set authority_id [auth::authority::create -array columns]
-
-            set proc_value [lsort [auth::authority::get_short_names]]
-            set db_value [lsort [db_list select_authority_short_names {
-                select short_name
-                from auth_authorities
-            }]]
-            aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
-
-            set proc_value [lsort [auth::authority::get_authority_options]]
-            set db_value [lsort [db_list_of_lists select_authorities {
-                select pretty_name, authority_id
-                from   auth_authorities
-                where  enabled_p = 't'
-                and    auth_impl_id is not null
-                order  by sort_order
-            }]]
-            aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
-
-            set authority_added_p [db_string authority_added_p {
-                select count(*) from auth_authorities where authority_id = :authority_id
-            } -default "0"]
-
-            aa_true "was the authority added?" $authority_added_p
-
-            aa_log "authority_id = '$authority_id'"
-
-            # Edit authority and test that it has actually changed.
-            array set columns {
-                pretty_name "Test authority2"
-                help_contact_text "Blah blah2"
-                enabled_p "f"
-                sort_order "1001"
-                forgotten_pwd_url "foobar.com"
-                change_pwd_url "foobar.com"
-                register_url "foobar.com"
-            }
-            set columns(short_name) [ad_generate_random_string]
-
-            auth::authority::edit \
-                -authority_id $authority_id \
-                -array columns
-
-            set proc_value [lsort [auth::authority::get_short_names]]
-            set db_value [lsort [db_list select_authority_short_names {
-                select short_name
-                from auth_authorities
-            }]]
-            aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
-
-            set proc_value [lsort [auth::authority::get_authority_options]]
-            set db_value [lsort [db_list_of_lists select_authorities {
-                select pretty_name, authority_id
-                from   auth_authorities
-                where  enabled_p = 't'
-                and    auth_impl_id is not null
-                order  by sort_order
-            }]]
-            aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
-
-            auth::authority::get \
-                -authority_id $authority_id \
-                -array edit_result
-
-            foreach column [array names columns] {
-                aa_equals "edited column $column" $edit_result($column) $columns($column)
-            }
-
-            # Delete authority and test that it was actually added.
-            auth::authority::delete -authority_id $authority_id
-
-            set proc_value [lsort [auth::authority::get_short_names]]
-            set db_value [lsort [db_list select_authority_short_names {
-                select short_name
-                from auth_authorities
-            }]]
-            aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
-
-            set proc_value [lsort [auth::authority::get_authority_options]]
-            set db_value [lsort [db_list_of_lists select_authorities {
-                select pretty_name, authority_id
-                from   auth_authorities
-                where  enabled_p = 't'
-                and    auth_impl_id is not null
-                order  by sort_order
-            }]]
-            aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
-
-            set authority_exists_p [db_string authority_added_p {
-                select count(*) from auth_authorities where authority_id = :authority_id
-            } -default "0"]
-
-            aa_false "was the authority deleted?" $authority_exists_p
+        # Add authority and test that it was added correctly.
+        array set columns {
+            pretty_name "Test authority"
+            help_contact_text "Blah blah"
+            enabled_p "t"
+            sort_order "1000"
+            auth_impl_id ""
+            pwd_impl_id ""
+            forgotten_pwd_url ""
+            change_pwd_url ""
+            register_impl_id ""
+            register_url ""
+            get_doc_impl_id ""
+            process_doc_impl_id ""
+            batch_sync_enabled_p "f"
         }
+        set columns(short_name) [ad_generate_random_string]
+
+        set authority_id [auth::authority::create -array columns]
+        set expected_authority_id [auth::authority::get_id -short_name $columns(short_name)]
+
+        aa_equals "(auth::authority::get_id): Value returned is as expected" $expected_authority_id $authority_id
+
+        set proc_value [lsort [auth::authority::get_short_names]]
+        set db_value [lsort [db_list select_authority_short_names {
+            select short_name
+            from auth_authorities
+        }]]
+        aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
+
+        set proc_value [lsort [auth::authority::get_authority_options]]
+        set db_value [lsort [db_list_of_lists select_authorities {
+            select pretty_name, authority_id
+            from   auth_authorities
+            where  enabled_p = 't'
+            and    auth_impl_id is not null
+            order  by sort_order
+        }]]
+        aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
+
+        set authority_added_p [db_string authority_added_p {
+            select count(*) from auth_authorities where authority_id = :authority_id
+        } -default "0"]
+
+        aa_true "was the authority added?" $authority_added_p
+
+        aa_log "authority_id = '$authority_id'"
+
+        # Edit authority and test that it has actually changed.
+        array set columns {
+            pretty_name "Test authority2"
+            help_contact_text "Blah blah2"
+            enabled_p "f"
+            sort_order "1001"
+            forgotten_pwd_url "foobar.com"
+            change_pwd_url "foobar.com"
+            register_url "foobar.com"
+        }
+        set columns(short_name) [ad_generate_random_string]
+
+        auth::authority::edit \
+            -authority_id $authority_id \
+            -array columns
+
+        set proc_value [lsort [auth::authority::get_short_names]]
+        set db_value [lsort [db_list select_authority_short_names {
+            select short_name
+            from auth_authorities
+        }]]
+        aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
+
+        set proc_value [lsort [auth::authority::get_authority_options]]
+        set db_value [lsort [db_list_of_lists select_authorities {
+            select pretty_name, authority_id
+            from   auth_authorities
+            where  enabled_p = 't'
+            and    auth_impl_id is not null
+            order  by sort_order
+        }]]
+        aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
+
+        auth::authority::get \
+            -authority_id $authority_id \
+            -array edit_result
+
+        foreach column [array names columns] {
+            aa_equals "edited column $column" $edit_result($column) $columns($column)
+        }
+
+        # Delete authority and test that it was actually added.
+        auth::authority::delete -authority_id $authority_id
+
+        set proc_value [lsort [auth::authority::get_short_names]]
+        set db_value [lsort [db_list select_authority_short_names {
+            select short_name
+            from auth_authorities
+        }]]
+        aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
+
+        set proc_value [lsort [auth::authority::get_authority_options]]
+        set db_value [lsort [db_list_of_lists select_authorities {
+            select pretty_name, authority_id
+            from   auth_authorities
+            where  enabled_p = 't'
+            and    auth_impl_id is not null
+            order  by sort_order
+        }]]
+        aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
+
+        set authority_exists_p [db_string authority_added_p {
+            select count(*) from auth_authorities where authority_id = :authority_id
+        } -default "0"]
+
+        aa_false "was the authority deleted?" $authority_exists_p
+    }
 }
 
 
@@ -975,80 +976,6 @@ aa_register_case  \
             aa_equals "Email NOT sent to user" $::ns_sendmail_to {ns_sendmail_UNCALLED}
 
             ad_parameter_cache -delete [ad_acs_kernel_id] EmailAccountOwnerOnPasswordChangeP
-        }
-}
-
-aa_register_case  \
-    -cats {api} \
-    -procs {
-        auth::authority::delete
-        auth::authority::get_id
-        auth::authority::get_short_names
-        auth::authority::get_authority_options
-    } \
-    auth_authority_delete {
-    Test authority deletion and some retrieval api
-} {
-    aa_log "Retrieving test authority"
-    set authority_id [auth::authority::get_id -short_name "acs_testing"]
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
-            set proc_value [lsort [auth::authority::get_short_names]]
-            set db_value [lsort [db_list select_authority_short_names {
-                select short_name
-                from auth_authorities
-            }]]
-            aa_equals "(auth::authority::get_short_names): Value returned is as expected" $proc_value $db_value
-
-            set proc_value [lsort [auth::authority::get_authority_options]]
-            set db_value [lsort [db_list_of_lists select_authorities {
-                select pretty_name, authority_id
-                from   auth_authorities
-                where  enabled_p = 't'
-                and    auth_impl_id is not null
-                order  by sort_order
-            }]]
-            aa_equals "(auth::authority::get_authority_options): Value returned is as expected" $proc_value $db_value
-
-            aa_log "Make sure test authority has no users"
-            foreach user_id [db_list get_users {
-                select user_id from users where authority_id = :authority_id
-            }] {
-                aa_log "Deleting user_id '$user_id'"
-                acs_user::delete -user_id $user_id -permanent
-            }
-
-            auth::authority::delete -authority_id $authority_id
-
-            aa_true "Authority has been deleted" \
-                {[auth::authority::get_id -short_name "acs_testing"] eq ""}
-
-            set proc_value [lsort [auth::authority::get_short_names]]
-            set db_value [lsort [db_list select_authority_short_names {
-                select short_name
-                from auth_authorities
-            }]]
-            aa_equals "(auth::authority::get_short_names): Value returned is still as expected" $proc_value $db_value
-
-            set proc_value [lsort [auth::authority::get_authority_options]]
-            set db_value [lsort [db_list_of_lists select_authorities {
-                select pretty_name, authority_id
-                from   auth_authorities
-                where  enabled_p = 't'
-                and    auth_impl_id is not null
-                order  by sort_order
-            }]]
-            aa_equals "(auth::authority::get_authority_options): Value returned is still as expected" $proc_value $db_value
-        }
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
-            aa_log "Make sure test authority has at least one user"
-            acs::test::user::create
-
-            aa_true "Deleting an authority with users throws an error" \
-                [catch {auth::authority::delete -authority_id $authority_id}]
         }
 }
 
