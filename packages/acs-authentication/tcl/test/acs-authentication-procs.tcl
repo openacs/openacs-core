@@ -1047,7 +1047,7 @@ aa_register_case  \
             aa_log "Make sure test authority has at least one user"
             acs::test::user::create
 
-            aa_true "Deleting an authority with users thorws an error" \
+            aa_true "Deleting an authority with users throws an error" \
                 [catch {auth::authority::delete -authority_id $authority_id}]
         }
 }
