@@ -363,7 +363,7 @@ aa_register_case -cats {db api smoke} -procs {
 }
 
 aa_register_case \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -error_level {warning} \
     -procs {
         auth::get_registration_elements
@@ -380,7 +380,7 @@ aa_register_case \
 }
 
 aa_register_case  \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -error_level {warning} \
     -procs {
          auth::get_registration_form_elements
@@ -400,7 +400,7 @@ aa_register_case  \
 ###########
 
 aa_register_case  \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -procs {
         auth::password::get_change_url
         auth::test::get_password_vars
@@ -420,7 +420,7 @@ aa_register_case  \
 }
 
 aa_register_case  \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -error_level {warning} \
     -procs {
         auth::password::can_change_p
@@ -531,7 +531,7 @@ aa_register_case  \
 }
 
 aa_register_case  \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -procs {
         auth::password::get_forgotten_url
         auth::test::get_password_vars
@@ -557,7 +557,7 @@ aa_register_case  \
 }
 
 aa_register_case  \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -procs {
         auth::password::retrieve
         auth::test::get_password_vars
