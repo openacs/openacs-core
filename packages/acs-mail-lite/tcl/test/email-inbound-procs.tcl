@@ -695,7 +695,7 @@ aa_register_case \
            set party_id_list [db_list parties_rall { select
                distinct party_id from parties }]
            set object_id_list [db_list acs_objects_rall { select
-               distinct object_id from acs_objects} ]
+               distinct object_id from acs_objects fetch first 100 rows only} ]
            set package_ct [llength $package_id_list]
            set party_ct [llength $party_id_list]
            set object_ct [llength $object_id_list]
