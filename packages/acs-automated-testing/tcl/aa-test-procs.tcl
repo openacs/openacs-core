@@ -1156,7 +1156,7 @@ namespace eval acs::test {
             from site_nodes
             where parent_id = :main_node_id
             and name = :instance_name
-            and object_id != null
+            and object_id is not null
         }]
 
         if {$package_exists_p} {
