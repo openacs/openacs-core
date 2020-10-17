@@ -970,10 +970,10 @@ ad_proc -public apm_package_registered_p {
     Returns 0 otherwise.
 } {
     ### Query the database for the indicated package_key
-    return [db_string apm_package_registered_p {
+    return [db_0or1row apm_package_registered_p {
         select 1 from apm_package_types
         where package_key = :package_key
-    } -default 0]
+    }]
 }
 
 ad_proc -public apm_package_installed_p {
@@ -992,12 +992,11 @@ ad_proc -public apm_package_installed_p {
 ad_proc -private apm_package_installed_p_not_cached {
     package_key
 } {
-    return [db_string apm_package_installed_p {
-        select case when exists
+    return [db_0or1row apm_package_installed_p {
+        select 1 from dual where exists
         (select 1 from apm_package_versions
          where package_key = :package_key
-         and installed_p) then 1 else 0 end
-        from dual
+         and installed_p)
     }]
 }
 
