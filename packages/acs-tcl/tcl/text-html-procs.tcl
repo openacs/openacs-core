@@ -51,14 +51,14 @@ ad_proc -private ad_text_cite_to_blockquote {text} {
             append result $line \n
         } elseif {$doBlockquotes && [string range $line 0 0] eq ">"} {
             set blockquoted  [string range $line 1 end]\n
-	    set inBlockquotes 1
+            set inBlockquotes 1
         } else {
             #set doBlockquotes 0
             append result $line \n
         }
     }
     if {$inBlockquotes} {
-	append result "<blockquote>$blockquoted</blockquote>\n"
+        append result "<blockquote>$blockquoted</blockquote>\n"
     }
 
     return $result
@@ -869,6 +869,13 @@ ad_proc ad_parse_html_attributes_upvar {
         @creation-date 20 July 2000
 
     } {
+        #
+        # Allow in testing mode always a "form" tag, independent of
+        # the parameter settings.  There should be a nicer way of
+        # doing this...
+        #
+        set extra_tags [expr {[info exists ::__aa_testing_mode] ? "form" : ""}]
+
         if { [string first <% $html] > -1 } {
             return "For security reasons, you're not allowed to have the less-than-percent combination in your input."
         }
@@ -879,15 +886,16 @@ ad_proc ad_parse_html_attributes_upvar {
 
         # Use the antispam tags for this package instance and whatever is on the kernel.
         set allowed_tags_list [concat \
-                                   [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedTag antispam] \
+                                   $extra_tags \
+                                   [ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedTag antispam] \
                                    [ad_parameter_all_values_as_list AllowedTag antispam]]
 
         set allowed_attributes_list [concat \
-                                         [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedAttribute antispam] \
+                                         [ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedAttribute antispam] \
                                          [ad_parameter_all_values_as_list AllowedAttribute antispam]]
 
         set allowed_protocols_list [concat \
-                                        [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedProtocol antispam] \
+                                        [ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedProtocol antispam] \
                                         [ad_parameter_all_values_as_list AllowedProtocol antispam]]
 
         foreach attribute $allowed_attributes_list {
@@ -1168,21 +1176,21 @@ ad_proc ad_parse_html_attributes_upvar {
         if {![info exists allowed_tags]} {
             # Use the antispam tags for this package instance and whatever is on the kernel.
             set allowed_tags {}
-            lappend allowed_tags_list {*}[ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedTag antispam]
+            lappend allowed_tags_list {*}[ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedTag antispam]
             lappend allowed_tags_list {*}[ad_parameter_all_values_as_list AllowedTag antispam]
         }
 
         array set allowed_attribute {}
         if {![info exists allowed_attributes]} {
             set allowed_attributes {}
-            lappend allowed_attributes {*}[ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedAttribute antispam]
+            lappend allowed_attributes {*}[ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedAttribute antispam]
             lappend allowed_attributes {*}[ad_parameter_all_values_as_list AllowedAttribute antispam]
         }
 
         array set allowed_protocol {}
         if {![info exists allowed_protocols]} {
             set allowed_protocols {}
-            lappend allowed_protocols {*}[ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedProtocol antispam]
+            lappend allowed_protocols {*}[ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedProtocol antispam]
             lappend allowed_protocols {*}[ad_parameter_all_values_as_list AllowedProtocol antispam]
         }
 
