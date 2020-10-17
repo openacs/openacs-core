@@ -706,12 +706,10 @@ ad_proc -public group::party_member_p {
         # will be there for both their roles of member and
         # administrator).
         set result [db_0or1row party_is_member {
-            select case when exists
+            select 1 from dual where exists
             (select 1 from group_approved_member_map
              where member_id = :party_id
              and group_id = :group_id)
-            then 1 else 0 end
-            from dual
         }]
     }
     return $result
