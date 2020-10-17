@@ -1123,15 +1123,24 @@ ad_proc -public apm_parameter_unregister {
     {-callback apm_dummy_callback}
     {-package_key ""}
     {-parameter ""}
-    parameter_id
+    {-parameter_id ""}
 } {
     Unregisters a parameter from the system.
 } {
     if { $parameter_id eq "" } {
-        set parameter_id [db_string select_parameter_id {}]
+        set parameter_id [db_string select_parameter_id {
+            select parameter_id
+            from apm_parameters
+            where package_key = :package_key
+            and parameter_name = :parameter
+        }]
     }
 
-    db_1row get_scope_and_name {}
+    db_1row get_scope_and_name {
+        select scope, parameter_name
+        from apm_parameters
+        where parameter_id = :parameter_id
+    }
 
     ns_log Debug "apm_parameter_unregister: Unregistering parameter $parameter_id."
 
