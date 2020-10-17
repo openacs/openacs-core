@@ -2433,7 +2433,7 @@ ad_proc -private security::provided_host_valid {host} {
                 #
                 binary scan [encoding convertto utf-8 $host] H* hex
                 ns_log warning "provided host <$host> (hex $hex) contains invalid characters\n\
-                       URL: [ns_conn url\n]peer addr:[ad_conn peeraddr]"
+                       URL: [ns_conn url]\npeer addr:[ad_conn peeraddr]"
                 set result 0
             }
         }
