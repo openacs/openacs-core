@@ -14,7 +14,7 @@ ad_page_contract {
 
 if { $scope eq "global" } {
     permission::require_permission \
-        -object_id [acs_lookup_magic_object security_context_root] \
+        -object_id [acs_magic_object security_context_root] \
         -privilege admin
     db_1row select_pretty_name {}
 

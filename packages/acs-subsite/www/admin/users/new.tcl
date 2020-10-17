@@ -179,7 +179,7 @@ if { [template::form is_valid add_user] } {
 
             # Hack for adding users to the main subsite, whose application group is the registered users group.
 
-            if { $add_to_group_id != [acs_lookup_magic_object "registered_users"] ||
+            if { $add_to_group_id != [acs_magic_object "registered_users"] ||
                  $add_with_rel_type ne "membership_rel"
              } {
                 relation_add -member_state $rel_member_state $add_with_rel_type $add_to_group_id $user_id
