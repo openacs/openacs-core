@@ -139,7 +139,10 @@ aa_register_case -cats {
         # Case 1: node_id = testnode_1
         #-----------------------------------------------------------------------
         aa_log "Case 1: node_id = testnode_1 <$testnode_1>"
-        set bar_components [list $root_node $testnode_1 $admin_node]
+        set bar_components [list $root_node $testnode_1]
+        if {$admin_node ne ""} {
+            lappend bar_components $admin_node
+        }
         #aa_log "bar_components $bar_components"
         set context_barp ""
         foreach value $bar_components {
@@ -158,7 +161,10 @@ aa_register_case -cats {
         # Case 2: node_id = testnode_2 (testnode2 is a testnode_1 children)
         #-----------------------------------------------------------------------
         aa_log "Case 2: node_id = testnode_2 (testnode2 is a testnode_1 children)"
-        set bar_components [list $root_node $testnode_1 $testnode_2 $admin_node]
+        set bar_components [list $root_node $testnode_1 $testnode_2]
+        if {$admin_node ne ""} {
+            lappend bar_components $admin_node
+        }
         set context_barp ""
         foreach value $bar_components {
             append context_barp \
@@ -176,7 +182,10 @@ aa_register_case -cats {
         # Case 3: from_node = testnode_1 and node_id = testnode_2
         #----------------------------------------------------------------------------
         aa_log "Case 3: from_node = testnode_1 and node_id = testnode_2"
-        set bar_components [list $testnode_1 $testnode_2 $admin_node]
+        set bar_components [list $testnode_1 $testnode_2]
+        if {$admin_node ne ""} {
+            lappend bar_components $admin_node
+        }
         set context_barp ""
         foreach value $bar_components {
             append context_barp \
