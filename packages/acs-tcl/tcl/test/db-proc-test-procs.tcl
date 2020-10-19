@@ -126,7 +126,7 @@ aa_register_case \
     }
 }; # db_transaction_bug_3440
 
-aa_register_case -cats {
+aa_register_case -error_level warning -cats {
         db
         production_safe
     } nullchar {
