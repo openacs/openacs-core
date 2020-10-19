@@ -1124,9 +1124,27 @@ ad_proc -public apm_parameter_unregister {
     {-package_key ""}
     {-parameter ""}
     {-parameter_id ""}
+    {parameter_id_legacy ""}
 } {
     Unregisters a parameter from the system.
+
+    @param parameter_id_legacy DEPRECATED: previous versions of this
+                               proc would specify parameter_id as an
+                               unnamed argument. This has now be
+                               changed to a flag, but the old syntax
+                               is still tolerated in old code. This
+                               will generate a warning though and will
+                               be dropped in future versions.
 } {
+    # Transitional code to support legacy definition of parameter_id
+    # specified as an unnamed argument.
+    if {$parameter_id_legacy ne "" &&
+        $parameter_id eq ""
+    } {
+        set parameter_id $parameter_id_legacy
+        ns_log warning "apm_parameter_unregister: use of unnamed argument is deprecated for this proc, please use -parameter_id flag"
+    }
+
     if { $parameter_id eq "" } {
         set parameter_id [db_string select_parameter_id {
             select parameter_id
