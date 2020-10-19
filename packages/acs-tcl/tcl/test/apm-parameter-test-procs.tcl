@@ -29,14 +29,14 @@ aa_register_case \
     set package_id [apm_package_id_from_key $package_key]    
     aa_true "check apm_parameter_register instance parameter" [string equal [parameter::get -package_id $package_id -parameter $parameter_name] $default_value]
     aa_log "Unregistering an instance parameter"
-    apm_parameter_unregister $parameter_id
+    apm_parameter_unregister -parameter_id $parameter_id
 
     set scope "global"
     aa_log "Registering a global parameter"
     apm_parameter_register -parameter_id $parameter_id -scope $scope $parameter_name $description $package_key $default_value $datatype
     aa_true "check apm_parameter_register global parameter" [string equal [parameter::get_global_value -package_key $package_key -parameter $parameter_name] $default_value]
     aa_log "Unregistering a global parameter"
-    apm_parameter_unregister $parameter_id
+    apm_parameter_unregister -parameter_id $parameter_id
 }
 
 aa_register_case \
@@ -69,7 +69,7 @@ aa_register_case \
             aa_equals "check global parameter value set/get" \
                 [parameter::get_global_value -package_key acs-tcl -parameter x_test_x] \
                 3
-            apm_parameter_unregister $parameter_id
+            apm_parameter_unregister -parameter_id $parameter_id
 
             foreach tuple [db_list_of_lists get_param {
                 select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
