@@ -1834,16 +1834,30 @@ ad_proc -public apm_package_instance_new {
             set instance_name  "$p_name"
         }
     }
+    #
+    # Do not do anything for already instantiated singleton packages
+    #
+    if {![db_0or1row instantiated_singleton_p {
+        select package_id
+          from apm_package_types t,
+               apm_packages p
+         where t.singleton_p
+           and t.package_key = p.package_key
+           and t.package_key = :package_key}]
+    } {
+        #
+        # Instantiate package
+        #
+        set package_id [db_exec_plsql invoke_new {}]
 
-    set package_id [db_exec_plsql invoke_new {}]
+        apm_parameter_sync $package_key $package_id
 
-    apm_parameter_sync $package_key $package_id
-
-    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
-        apm_invoke_callback_proc \
-            -package_key $inherited_package_key \
-            -type after-instantiate \
-            -arg_list [list package_id $package_id]
+        foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
+            apm_invoke_callback_proc \
+                -package_key $inherited_package_key \
+                -type after-instantiate \
+                -arg_list [list package_id $package_id]
+        }
     }
 
     return $package_id
