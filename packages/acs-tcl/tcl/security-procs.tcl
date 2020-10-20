@@ -2457,6 +2457,11 @@ ad_proc -public security::validated_host_header {} {
     if {$host eq ""} {
         return ""
     }
+    #
+    # Domain names are case insensitive. So convert it to lower to
+    # avoid surprises.
+    #
+    set host [string tolower $host]
 
     #
     # Check, if we have validated it before, or it belongs to the
