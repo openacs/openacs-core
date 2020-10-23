@@ -11,8 +11,8 @@ namespace eval acs_admin {
     ad_proc ::acs_admin::check_expired_certificates {} {
         Check expire-dates of certificates and send warning emails to
         the admin. In case HTTPS is not configured via the "nsssl"
-        driver, or the command line tool "openssl" openssl is
-        installed, the proc does nothing.
+        driver, or the command line tool "openssl" is not installed,
+        the proc does nothing.
 
         @return boolean telling whether expired certificates existed
         (true) or not (false)
