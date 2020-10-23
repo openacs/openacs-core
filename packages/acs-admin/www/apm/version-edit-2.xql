@@ -15,7 +15,7 @@
       
 	    select version_name as old_version_name, version_uri as old_version_uri 
 	    from apm_package_versions
-	    where version_id = $version_id
+	    where version_id = :version_id
 	
       </querytext>
 </fullquery>

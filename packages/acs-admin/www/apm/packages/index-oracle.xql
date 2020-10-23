@@ -25,7 +25,7 @@
    from cr_revisions 
   where revision_id = (select content_item.get_latest_revision(item_id) 
                          from apm_package_versions
-                  	where version_id = $version_id)
+                  	where version_id = :version_id)
 
       </querytext>
 </fullquery>
