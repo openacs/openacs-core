@@ -127,7 +127,7 @@ create index acs_mail_lite_from_external_release_p_idx
 -- consistent for duration of the service.
 -- And yet, experience knows that sometimes email servers change
 -- and UIDs for an email change with it.
--- Users switching email servers of an email account using a IMAP4 client 
+-- Users switching email servers of an email account using an IMAP4 client 
 -- might hassle with moving email, but
 -- in the process they generally know what is happening. They don't re-read
 -- all the email. 
