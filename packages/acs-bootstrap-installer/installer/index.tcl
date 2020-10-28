@@ -143,7 +143,7 @@ if { [info tclversion] < 8.5 } {
 }
 
 # AOLserver must support ns_cache.
-if {[info commands ns_cache] eq ""} {
+if {[namespace which ns_cache] eq ""} {
     append errors "<li><p><strong>The <code>ns_cache</code> module is not installed.  This is required for OpenACS."
     set error_p 1
 }

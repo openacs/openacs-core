@@ -72,7 +72,7 @@ namespace eval ::acs_admin {
         # Flush site node cache to avoid potential bootstrap
         # problems.
         #
-        if {[info commands ::xo::site_node] ne ""} {
+        if {[namespace which ::xo::site_node] ne ""} {
             xo::site_node flush_pattern id-$path*
         }
 

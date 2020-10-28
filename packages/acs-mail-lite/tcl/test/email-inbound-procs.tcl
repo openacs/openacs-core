@@ -387,7 +387,7 @@ aa_register_case \
            aa_true "ref424. acs_mail_lite::imap_conn_go -conn_id ''" $sid4_p
 
            aa_log "Checking whether ns_imap is installed..."
-           set ns_imap_p [expr {[info commands ns_imap] ne ""}]
+           set ns_imap_p [expr {[namespace which ns_imap] ne ""}]
            set enabled [expr {$ns_imap_p ?
                               "enabled. Activating additional tests" :
                               "disabled. Some tests will be skipped"}]

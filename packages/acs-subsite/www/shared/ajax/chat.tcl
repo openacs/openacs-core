@@ -14,7 +14,7 @@ ad_page_contract {
   {mode ""}
 }
 
-if {[info commands ::xo::ChatClass] eq "" ||
+if {[namespace which ::xo::ChatClass] eq "" ||
     ![::xo::ChatClass is_chat_p $class]} {
   ns_returnnotfound
 

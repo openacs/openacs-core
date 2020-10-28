@@ -68,7 +68,7 @@ proc aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
             }
         }
         ::proc $proc_name_new $args $new_body
-    } elseif {$::acs::useNsfProc && [info commands $proc_name_old] ne ""} {
+    } elseif {$::acs::useNsfProc && [namespace which $proc_name_old] ne ""} {
         #
         # We copy a nsf::proc
         #

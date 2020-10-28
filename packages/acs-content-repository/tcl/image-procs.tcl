@@ -325,7 +325,7 @@ ad_proc -public image::mime_type {
 
     @param filename Filename of image file
 } {
-    if {[info commands ns_imgmime] ne ""} {
+    if {[namespace which ns_imgmime] ne ""} {
         set mime_type [ns_imgmime $filename]
         if {$mime_type ne "image/unknown"} {
             return $mime_type

@@ -2172,7 +2172,7 @@ ad_proc -public security::driver {} {
     return $::acs::sdriver
 }
 
-if {[info commands ns_driver] ne ""} {
+if {[namespace which ns_driver] ne ""} {
 
     ad_proc -private security::configured_driver_info {} {
 
@@ -2649,7 +2649,7 @@ namespace eval ::security::csp {
             }
             set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
 
-            if {[info commands ::crypto::hmac] ne ""} {
+            if {[namespace which ::crypto::hmac] ne ""} {
                 set token  [::crypto::hmac string $secret $session_id-[clock clicks -microseconds]]
             } else {
                 set token  [ns_sha1 "$secret-$session_id-[clock clicks -microseconds]"]
@@ -2933,7 +2933,7 @@ namespace eval ::security::csrf {
             set token [set $globalTokenName]
         } else {
             set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
-            if {[info commands ::crypto::hmac] ne ""} {
+            if {[namespace which ::crypto::hmac] ne ""} {
                 set token [::crypto::hmac string $secret [session_id]]
             } else {
                 set token [ns_sha1 $secret-[session_id]]

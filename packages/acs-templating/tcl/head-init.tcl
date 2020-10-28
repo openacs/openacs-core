@@ -7,7 +7,7 @@
 #
 # Gustaf Neumann, March 2019
 #
-if {[info commands ns_writer] ne ""} {
+if {[namespace which ns_writer] ne ""} {
     ns_register_proc GET __urn/* {
         set URN [string range [ns_conn url] 7 end]
         ns_log notice "URN handler checks URN <$URN>"

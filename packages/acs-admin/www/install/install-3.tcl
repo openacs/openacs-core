@@ -197,7 +197,7 @@ foreach package_key $install_order {
         #
         #   - fix the behavior in AOLserver
         #
-        if {[info commands ::nstrace::statescript] ne ""} {
+        if {[namespace which ::nstrace::statescript] ne ""} {
             #
             # NaviServer variant:
             #   - nstrace::statescript produces the blueprint

@@ -1458,7 +1458,7 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
     set procedure_name [string tolower "[string trim $package_key]_post_instantiation"]
     # Change all "-" to "_" to mimic our Tcl standards
     regsub -all {\-} $procedure_name "_" procedure_name
-    if { [info commands ::$procedure_name] eq "" } {
+    if { [namespace which ::$procedure_name] eq "" } {
         # No such procedure exists...
         return ""
     }
@@ -1768,7 +1768,7 @@ ad_proc -private apm_callback_has_valid_args {
     @author Peter Marklund
 } {
 
-    if { [info commands ::$proc_name] eq "" } {
+    if { [namespace which ::$proc_name] eq "" } {
         return 0
     }
 
@@ -1784,7 +1784,7 @@ ad_proc -private apm_callback_has_valid_args {
         return [expr {[info args ::$proc_name] eq ""}]
     }
 
-    if {[info commands ::nsf::cmd::info] ne ""} {
+    if {[namespace which ::nsf::cmd::info] ne ""} {
         #
         # We can compare the signature of via nsf procs
         #

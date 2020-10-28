@@ -12,7 +12,7 @@ ad_library {
 # Define dummy stubs in case the required commands are not available.
 #
 foreach one_proc {ns_startcontent ns_encodingfortype} {
-    if {[info commands $one_proc] eq ""} {
+    if {[namespace which $one_proc] eq ""} {
         proc $one_proc {args} { }
     }
 }

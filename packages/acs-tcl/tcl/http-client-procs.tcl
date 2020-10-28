@@ -246,10 +246,10 @@ ad_proc -private util::http::native_https_api_not_cached {
     # Since NaviServer 4.99.12 ns_http handles also HTTPS
     if {[apm_version_names_compare \
              [ns_info patchlevel] "4.99.12"] >= 0} {
-        return [info commands ns_http]
+        return [namespace which ns_http]
     }
     # Default: check if we have ns_ssl
-    return [info commands ns_ssl]
+    return [namespace which ns_ssl]
 }
 
 ad_proc -private util::http::native_https_api {
@@ -275,7 +275,7 @@ ad_proc -private util::http::apis_not_cached {
         lappend https "curl"
     }
 
-    if {[info commands ns_http] ne ""} {
+    if {[namespace which ns_http] ne ""} {
         lappend http  "native"
     }
 
@@ -1451,7 +1451,7 @@ ad_proc -private util::http::native::request {
 
     # zlib is mandatory when requiring compression
     if {$gzip_request_p || $gzip_response_p} {
-        if {[info commands zlib] eq ""} {
+        if {[namespace which zlib] eq ""} {
             return -code error "${this_proc}:  zlib support not enabled"
         }
     }
@@ -1744,7 +1744,7 @@ ad_proc -private util::http::curl::request {
 
     # zlib is mandatory when compressing the input
     if {$gzip_request_p} {
-        if {[info commands zlib] eq ""} {
+        if {[namespace which zlib] eq ""} {
             return -code error "${this_proc}:  zlib support not enabled"
         }
     }

@@ -350,7 +350,7 @@ ad_proc -public permission::cache_flush {
 
     @see permission::permission_p
 } {
-    if {[info commands ::acs::permission_cache] eq ""} {
+    if {[namespace which ::acs::permission_cache] eq ""} {
         return
 
     } elseif {[info exists party_id] && [info exists object_id] && [info exists privilege]} {

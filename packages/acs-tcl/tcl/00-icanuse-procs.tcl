@@ -6,7 +6,7 @@ ad_library {
     @author Gustaf Neumann
 }
 
-if {[info commands ::try] eq ""} {
+if {[namespace which ::try] eq ""} {
     package require try
     ns_log warning "*******************************************"
     ns_log warning "* This version of OpenACS requires Tcl 8.6"
@@ -107,7 +107,7 @@ namespace eval ::acs {
 # can be relatively easy emulated, and other one, which can't be
 # emulated.
 #
-if {[info commands ns_base64urlencode] eq ""} {
+if {[namespace which ns_base64urlencode] eq ""} {
     #
     # Compatibility for AOLserver or NaviServer before 4.99.17
     #
@@ -119,7 +119,7 @@ if {[info commands ns_base64urlencode] eq ""} {
     }
 }
 
-if {[info commands ::ns_dbquotelist] eq ""} {
+if {[namespace which ::ns_dbquotelist] eq ""} {
     ad_proc -public ns_dbquotelist {
         list
         {type text}

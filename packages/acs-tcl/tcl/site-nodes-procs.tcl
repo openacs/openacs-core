@@ -69,7 +69,7 @@ set UseXotclSiteNodes 0
 # which should be turned into mainstream OpenACS after the OpenACS
 # 5.10 release.
 
-if {[info commands ::nx::Object] ne ""
+if {[namespace which ::nx::Object] ne ""
     && [ns_info name] eq "NaviServer"
     && [db_driverkey ""] eq "postgresql"
     && [db_string check_base_tables {select 1 from pg_class where relname = 'apm_package_versions'} -default 0]
@@ -1338,7 +1338,7 @@ if {$UseXotclSiteNodes} {
         # Caching
         #####################################################
 
-        if {[info commands ::ns_cache_names] ne ""} {
+        if {[namespace which ::ns_cache_names] ne ""} {
             set createCache [expr {"site_nodes_cache" ni [::ns_cache_names]}]
         } else {
             set createCache [catch {ns_cache flush site_nodes_cache NOTHING}]
@@ -1672,7 +1672,7 @@ if {$UseXotclSiteNodes} {
 
          }
         site_node object mixins add SiteNodesCache
-        if {[info commands ns_urlspace] ne ""} {
+        if {[namespace which ns_urlspace] ne ""} {
             set ::acs::siteNodesID [ns_urlspace new]
             ns_log notice \
                 "... using ns_urlspace $::acs::siteNodesID for reduced redundancy in site node caches"
@@ -1775,7 +1775,7 @@ if {$UseXotclSiteNodes} {
             # interface might not be initialized yet. However, in this
             # situation, there is nothing to flush yet.
             #
-            if {[info commands ::xo::db::sql::site_node] ne ""} {
+            if {[namespace which ::xo::db::sql::site_node] ne ""} {
                 #ns_log notice "call [list ::xo::site_node flush_cache -node_id $root_node_id]"
                 ::xo::site_node flush_cache -node_id $root_node_id
             }

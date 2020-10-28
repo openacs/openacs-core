@@ -131,7 +131,7 @@ ad_proc -private subsite::after_upgrade {
             5.2.0a2 5.2.0a3 {
                 db_transaction {
                     db_foreach select_group_name {select group_id, group_name from groups} {
-                        if { [info commands "::lang::util::convert_to_i18n"] ne "" } {
+                        if { [namespace which ::lang::util::convert_to_i18n] ne "" } {
                             set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$group_name"]
                         } else {
                             set pretty_name "$group_name"
@@ -154,7 +154,7 @@ ad_proc -private subsite::after_upgrade {
             5.2.0a2 5.2.0a3 {
                 db_transaction {
                     db_foreach select_group_name {select group_id, group_name from groups} {
-                        if { [info commands "::lang::util::convert_to_i18n"] ne "" } {
+                        if { [namespace which ::lang::util::convert_to_i18n] ne "" } {
                             set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$group_name"]
                         } else {
                             set pretty_name "$group_name"

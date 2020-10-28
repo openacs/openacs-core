@@ -615,7 +615,7 @@ ad_proc -public template::element::querygetall { element_ref } {
 
   set transform_proc "::template::data::transform::$datatype"
 
-  if {[info commands $transform_proc] eq ""} {
+  if {[namespace which $transform_proc] eq ""} {
 
     set values [ns_querygetall $element(id)]
 

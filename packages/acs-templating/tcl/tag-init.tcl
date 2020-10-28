@@ -81,7 +81,9 @@ template::tag master { params } {
 template::tag slave { params } {
 
   #Start developer support frame around subordinate template.
-  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
+  if { [namespace which ::ds_enabled_p] ne ""
+      && [namespace which ::ds_adp_start_box] ne "" } {
+
       ::ds_adp_start_box
   }
 
@@ -92,7 +94,9 @@ template::tag slave { params } {
   }
 
   #End developer support frame around subordinate template.
-  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
+  if { [namespace which ::ds_enabled_p] ne ""
+      && [namespace which ::ds_adp_end_box] ne "" } {
+
       ::ds_adp_end_box
   }
 
@@ -198,20 +202,20 @@ ad_proc -private template::template_tag_include_helper {params} {
     set src [ns_set iget $params src]
     set ds [ns_set iget $params ds]
     if {$ds eq ""} {set ds 1}
-    set ds_avail_p [expr {[info commands ::ds_adp_start_box] ne "" }]
+    set ds_avail_p [expr {[namespace which ::ds_adp_start_box] ne "" }]
 
     #Start developer support frame around subordinate template.
-    if { $ds && [info commands ::ds_enabled_p] ne "" && $ds_avail_p } {
+    if { $ds && [namespace which ::ds_enabled_p] ne "" && $ds_avail_p } {
         ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
     }
 
     template::adp_append_code [template::template_tag_include_helper_code \
-                                   -ds_avail_p [expr {[info commands ::ds_adp_start_box] ne "" }] \
+                                   -ds_avail_p [expr {[namespace which ::ds_adp_start_box] ne "" }] \
                                    -src $src \
                                    -command [template::template_tag_include_command $src $params]]
 
     # End developer support frame around subordinate template.
-    if { $ds && [info commands ::ds_enabled_p] ne "" && $ds_avail_p } {
+    if { $ds && [namespace which ::ds_enabled_p] ne "" && $ds_avail_p } {
         ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
     }
 }
@@ -736,7 +740,9 @@ template::tag include-optional { chunk params } {
   if {$ds eq ""} {set ds 1}
 
   #Start developer support frame around subordinate template.
-  if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne ""} {
+  if { $ds && [namespace which ::ds_enabled_p] ne ""
+      && [namespace which ::ds_adp_start_box] ne ""} {
+
       ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
@@ -762,8 +768,10 @@ template::tag include-optional { chunk params } {
   "
 
   #End developer support frame around subordinate template.
-  if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
-      ::ds_adp_end_box -stub [subst -nocmmands {[template::util::url_to_file "$src" "\$__adp_stub"]}]
+  if { $ds && [namespace which ::ds_enabled_p] ne ""
+      && [namespace which ::ds_adp_end_box] ne "" } {
+      ::ds_adp_end_box -stub [
+          subst -nocommands {[template::util::url_to_file "$src" "\$__adp_stub"]}]
   }
 
 }

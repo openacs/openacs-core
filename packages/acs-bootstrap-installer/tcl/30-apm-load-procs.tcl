@@ -451,7 +451,7 @@ ad_proc -private apm_bootstrap_load_libraries {
 
         # Call db_release_unused_handles, only if the library defining it
         # (10-database-procs.tcl) has been sourced yet.
-        if { [info commands db_release_unused_handles] ne ""} {
+        if { [namespace which db_release_unused_handles] ne ""} {
             db_release_unused_handles
         }
     }

@@ -53,7 +53,7 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
     }
 
     # Now rename exec; protect cases, where file is loaded multiple times
-    if {[info commands ::real_exec] eq ""} {rename exec real_exec}
+    if {[namespace which ::real_exec] eq ""} {rename exec real_exec}
 
     ad_proc exec {args} {This is the wrapped version of exec} {proxy::exec -call $args}
 }

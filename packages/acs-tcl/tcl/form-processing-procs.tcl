@@ -886,17 +886,17 @@ ad_proc -public ad_form {
                     }
 
                     default {
-                        if { [info commands "::template::data::validate::$flag"] eq "" } {
+                        if { [namespace which ::template::data::validate::$flag] eq "" } {
                            return -code error "element $element_name: data type \"$flag\" is not valid"
                         }
                         lappend form_command "-datatype" $flag
                         set af_type(${form_name}__$element_name) $flag
                         if { $af_element_parameters($element_name:$flag) eq "" } {
-                            if { [info commands "::template::widget::$flag"] ne "" } {
+                            if { [namespace which ::template::widget::$flag] ne "" } {
                                 lappend form_command "-widget" $flag
                             }
                         } else {
-                            if { [info commands "::template::widget::$af_element_parameters($element_name:$flag)"] eq ""} {
+                            if { [namespace which ::template::widget::$af_element_parameters($element_name:$flag)] eq "" } {
                                 return -code error "element $element_name: widget \"$af_element_parameters($element_name:$flag)\" does not exist"
                             }
                             lappend form_command "-widget" $af_element_parameters($element_name:$flag)
@@ -921,17 +921,17 @@ ad_proc -public ad_form {
     foreach element_name $af_element_names($form_name) {
         if { [llength $element_name] == 1 } {
             if { [info exists af_from_sql(${form_name}__$element_name)] } {
-                if { [info commands "::template::util::$af_type(${form_name}__$element_name)::acquire"] eq "" } {
+                if { [namespace which ::template::util::$af_type(${form_name}__$element_name)::acquire] eq "" } {
                     return -code error "\"from_sql\" not valid for type \"$af_type(${form_name}__$element_name)\""
                 }
             }
             if { [info exists af_to_sql(${form_name}__$element_name)] } {
-                if { [info commands ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
+                if { [namespace which ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
                     return -code error "\"to_sql\" not valid for type \"$af_type(${form_name}__$element_name)\""
                 }
             }
             if { [info exists af_to_html(${form_name}__$element_name)] } {
-                if { [info commands ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
+                if { [namespace which ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
                     return -code error "\"to_html\" not valid for type \"$af_type(${form_name}__$element_name)\""
                 }
             }
@@ -1024,7 +1024,7 @@ ad_proc -public ad_form {
                                 set values($element_name) \
                                     [template::util::$af_type(${form_name}__$element_name)::acquire \
                                          $af_from_sql(${form_name}__$element_name) $values($element_name)]
-                            } elseif { [info commands ::template::data::from_sql::$af_type(${form_name}__$element_name)] ne "" } {
+                            } elseif { [namespace which ::template::data::from_sql::$af_type(${form_name}__$element_name)] ne "" } {
                                 set values($element_name) [template::data::from_sql::$af_type(${form_name}__$element_name) $values($element_name)]
                             }
                         }

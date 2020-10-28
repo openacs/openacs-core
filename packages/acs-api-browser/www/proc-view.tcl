@@ -89,12 +89,12 @@ proc $proc {[info args $proc]} {
 }
 </pre></p>
         }]
-    } elseif {[info commands $absolute_proc] eq $absolute_proc} {
+    } elseif {[namespace which $absolute_proc] eq $absolute_proc} {
 
         #
         # In case the cmd is an object, redirect to the object browser
         #
-        if {[info commands ::nsf::is] ne "" && [nsf::is object $absolute_proc]} {
+        if {[namespace which ::nsf::is] ne "" && [nsf::is object $absolute_proc]} {
             ad_returnredirect [export_vars -base /xotcl/show-object {{object $absolute_proc}}]
             ad_script_abort
         }

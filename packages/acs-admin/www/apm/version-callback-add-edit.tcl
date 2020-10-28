@@ -73,7 +73,7 @@ ad_form -name callback -cancel_url $return_url -form {
 
 } -validate {
     {proc
-        { {info commands ::$proc} ne "" }
+        { {namespace which ::$proc} ne "" }
         {The specified procedure name does not exist. Is the -procs.tcl file loaded?}
     }
     {proc

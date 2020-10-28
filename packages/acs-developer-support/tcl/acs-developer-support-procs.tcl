@@ -555,7 +555,7 @@ ad_library {
  ad_proc -private ds_ad_conn { args } {
      Get the "real" user id.
  } {
-     if {[info commands orig_ad_conn] ne ""} {
+     if {[namespace which orig_ad_conn] ne ""} {
        return [orig_ad_conn {*}$args]
      } else {
        return [ad_conn {*}$args]
@@ -636,7 +636,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
     Replace the ad_get_user procs with our own versions
 } {
     if { $enabled_p } {
-        if { [info commands orig_ad_conn] eq ""} {
+        if { [namespace which orig_ad_conn] eq ""} {
             #ds_comment "Enabling user-switching"
             # let the user stay who he is now (but ignore any error trying to do so)
             catch {
@@ -649,7 +649,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
         }
     } else {
         #ds_comment "Disabling user-switching"
-        if { [info commands orig_ad_conn] ne ""} {
+        if { [namespace which orig_ad_conn] ne ""} {
             rename ad_conn {}
             rename orig_ad_conn ad_conn
         }

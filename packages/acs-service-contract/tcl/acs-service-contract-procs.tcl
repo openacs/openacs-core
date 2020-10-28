@@ -57,14 +57,14 @@ ad_proc -public acs_sc::invoke {
 
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
-    if { [info commands $proc_name] ne "" } {
+    if { [namespace which $proc_name] ne "" } {
         return [ad_apply $proc_name $call_args]
     }
 
     if { $error_p } {
         error "Operation $operation is not implemented in '$impl' implementation of contract '$contract'"
     } else {
-        ns_log warning "ACS-SC: Function Not Found: $proc_name [info commands $proc_name]"
+        ns_log warning "ACS-SC: Function Not Found: $proc_name [namespace which $proc_name]"
     }
     return
 }
@@ -253,7 +253,7 @@ ad_proc acs_sc_update_alias_wrappers {} {
             # Check, if the wrapper exists already
             #
             set proc_name [acs_sc_generate_name $impl_contract_name $impl_name $impl_operation_name]
-            if {[info commands ::$proc_name] eq ""} {
+            if {[namespace which ::$proc_name] eq ""} {
                 #
                 # Create it new.
                 #

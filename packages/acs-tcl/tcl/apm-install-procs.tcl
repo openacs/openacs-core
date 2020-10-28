@@ -677,7 +677,7 @@ ad_proc -private apm_load_catalog_files {
     @author Peter Marklund
 } {
     # If acs-lang hasn't been installed yet we simply return
-    if { [info commands lang::catalog::import] eq "" || ![apm_package_installed_p acs-lang] } {
+    if { [namespace which lang::catalog::import] eq "" || ![apm_package_installed_p acs-lang] } {
         return
     }
 
@@ -2293,7 +2293,7 @@ ad_proc -private apm_invoke_install_proc {
     @creation-date 2004-06-16
 } {
     set name [xml_node_get_name $node]
-    set command [info commands ::install::xml::${type}::${name}]
+    set command [namespace which ::install::xml::${type}::${name}]
 
     if {$command eq ""} {
         error "Error: got bad node \"$name\""

@@ -2346,7 +2346,7 @@ ad_proc -public db_1row { args } {
     }
 }
 
-if {[info commands ns_cache_transaction_begin] eq ""} {
+if {[namespace which ns_cache_transaction_begin] eq ""} {
     #
     # When the server has no support for ns_cache_transaction_*,
     # provide dummy procs to avoid run time "if" statements.

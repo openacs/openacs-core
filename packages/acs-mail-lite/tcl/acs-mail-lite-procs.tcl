@@ -716,7 +716,7 @@ namespace eval acs_mail_lite {
             # "ns_smtpd" can be used, when it is available and no
             # password mode is specified.
             #
-            if { [info commands ns_smtpd] eq ""
+            if { [namespace which ns_smtpd] eq ""
                  || [dict get $deliveryDict SMTPPassword] ne ""
                  || [dict get $deliveryDict SMTPUser] ne ""
              } {

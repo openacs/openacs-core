@@ -368,7 +368,7 @@ namespace eval attribute {
         if {$datatype eq "enumeration"} {
             return 1
         }
-        if { [info commands "::template::data::validate::$datatype"] eq "" } {
+        if { [namespace which ::template::data::validate::$datatype] eq "" } {
             return 0
         }
         return 1

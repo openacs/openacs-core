@@ -114,7 +114,7 @@ proc xml::parser {args} {
 	set name parser[incr ParserCounter]
     }
 
-    if {[info commands [namespace current]::$name] ne {}} {
+    if {[namespace which [namespace current]::$name] ne {}} {
 	return -code error "unable to create parser object \"[namespace current]::$name\" command"
     }
 

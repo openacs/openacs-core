@@ -458,7 +458,7 @@ ad_proc -private apm_transfer_file {
         ns_log notice "we can use the http::util:: interface using the $httpImpls implementation"
         set result [util::http::get -url $url -timeout $timeout -spool]
         file rename [dict get $result file] $output_file_name
-    } elseif {[info commands ::ns_http] ne "" && [apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
+    } elseif {[namespace which ::ns_http] ne "" && [apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
         #
         # ... use ns_http when we have a version with the "-file" flag ...
         #
@@ -474,7 +474,7 @@ ad_proc -private apm_transfer_file {
             ns_log notice "Transfer $url redirected to $location ..."
             set url $location
         }
-    } elseif {[info commands ::xo::HttpRequest] ne ""} {
+    } elseif {[namespace which ::xo::HttpRequest] ne ""} {
         #
         # ... use xo::HttpRequest...
         #

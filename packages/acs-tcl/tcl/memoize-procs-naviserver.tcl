@@ -58,7 +58,7 @@ ad_proc -public util_memoize {script {max_age ""}} {
     # after the util_memoize cache was created. Therefore, is safe to
     # use the util_memoize when this proc is available.
     #
-    if {[info commands ::util_memoize_flush] ne ""} {
+    if {[namespace which ::util_memoize_flush] ne ""} {
         if {$max_age ne ""} {
             set max_age "-expires $max_age"
         }

@@ -212,11 +212,15 @@ aa_register_case \
         aa_true "A bogus proc returns the empty string" \
             {[api_proc_pretty_name -include_debug_controls -link -hints_only $bogus_proc] eq ""}
 
-        aa_true "Hints are printed in parenthesys, the proc type belongs to the hints" \
-            [regexp "^\(.*$proc_type.*\)$" [string trim [api_proc_pretty_name -proc_type $proc_type -hints_only $proc]]]
+        aa_true "Hints are printed in parentheses, the proc type belongs to the hints" [
+            regexp "^\(.*$proc_type.*\)$" [string trim [
+                api_proc_pretty_name -proc_type $proc_type -hints_only $proc]]]
 
-        aa_true "-include_debug_controls prints out a form when XOTcl is installed" \
-            {[info commands ::xo::api] eq "" || [regexp {^.*<form[^>]*>.*</form[^>]*.*$} [api_proc_pretty_name -include_debug_controls $proc]]}
+        aa_true "-include_debug_controls prints out a form when XOTcl is installed" {
+            [namespace which ::xo::api] eq "" || [
+                regexp {^.*<form[^>]*>.*</form[^>]*.*$} [
+                    api_proc_pretty_name -include_debug_controls $proc]]
+        }
 
         aa_true "-link will put the proc URL somewhere" \
             [string match "*[ns_quotehtml [api_proc_url $proc]]*" [api_proc_pretty_name -link $proc]]
@@ -348,10 +352,12 @@ aa_register_case \
         set commands [list]
         foreach command [info commands] {
             # Skip XOTcl methods
-            if {[info commands ::xotcl::Object] ne "" && [::xotcl::Object isobject [lindex $command 0]]} {
+            if {[namespace which ::xotcl::Object] ne ""
+                && [::xotcl::Object isobject [lindex $command 0]]} {
                 continue
             }
-            # Skip some corner-case command names created by the platform... is this a bug or not?
+            # Skip some corner-case command names created by the platform... is
+            # this a bug or not?
             if {![regexp {(template_tag_listfilters|AcsSc\.|validator1\.|!|^_[^ ]|^\d+)} $command]} {
                 lappend commands $command
             }
@@ -359,7 +365,7 @@ aa_register_case \
                 break
             }
         }
-        if {[info commands ::xotcl::Object] ne ""} {
+        if {[namespace which ::xotcl::Object] ne ""} {
             aa_log "Adding a few XOTcl classes"
             lappend commands {*}[lrange [::xotcl::Object info instances] 0 100]
         }

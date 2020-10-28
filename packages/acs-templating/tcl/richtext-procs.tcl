@@ -253,7 +253,8 @@ ad_proc -public template::util::richtext::get_tag {
 } {
     set tag textarea
     if {[dict exists $options editor]
-        && [info commands ::richtext::[dict get $options editor]::get_tag] ne ""
+        && [namespace which ::richtext::[
+            dict get $options editor]::get_tag] ne ""
     } {
         set tag [::richtext::[dict get $options editor]::get_tag -options $options]
     }

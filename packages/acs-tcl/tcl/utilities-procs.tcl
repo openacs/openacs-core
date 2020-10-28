@@ -1399,7 +1399,7 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
     # In case there are temporary XOTcl objects, clean these up to
     # avoid surprises in schedued threads about pre-existing objects.
     #
-    if {[info commands ::xo::at_cleanup] ne ""} {
+    if {[namespace which ::xo::at_cleanup] ne ""} {
         ::xo::at_cleanup
     }
 }

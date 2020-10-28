@@ -16,7 +16,7 @@
 # The following code allows ad_proc to be used
 # here (a local workalike is declared if absent).
 # added 2002-09-11 Jeff Davis (davis@xarg.net)
-if {[info commands ad_library] ne "" } { 
+if {[namespace which ad_library] ne "" } { 
     ad_library {
         Query Dispatching for multi-RDBMS capability
 
@@ -26,7 +26,7 @@ if {[info commands ad_library] ne "" } {
     } 
 }
 
-if { [info commands ad_proc] ne ""} {
+if { [namespace which ad_proc] ne ""} {
     set remove_ad_proc_p 0
 } else { 
     set remove_ad_proc_p 1
@@ -237,7 +237,7 @@ ad_proc -public db_qd_load_query_file {file_path {errorVarName ""}} {
 }
 
 # small compatibility function to avoid existence checks at runtime
-if {[info commands ::nsf::strip_proc_name] eq ""} {
+if {[namespace which ::nsf::strip_proc_name] eq ""} {
     namespace eval ::nsf {
         proc ::nsf::strip_proc_name {name} {return $name}
     }

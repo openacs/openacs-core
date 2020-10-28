@@ -63,7 +63,7 @@ namespace eval ::acs {
             ::acs::clusterwide ns_cache flush [:cache_name $partition_key] $key
         }
 
-        if {[info commands ns_cache_eval] ne ""} {
+        if {[namespace which ns_cache_eval] ne ""} {
             #
             # NaviServer variant
             #
@@ -275,7 +275,7 @@ namespace eval ::acs {
             }
         }
 
-        if {[info commands ns_cache_eval] ne ""} {
+        if {[namespace which ns_cache_eval] ne ""} {
             #
             # NaviServer variant
             #

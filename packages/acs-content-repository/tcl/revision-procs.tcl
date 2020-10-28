@@ -117,7 +117,7 @@ ad_proc -public cr_write_content {
                         ns_set put [ns_conn outputheaders] "Content-Length" 0
                         ns_return 200 text/plain {}
                     } else {
-                        if {[info commands ad_returnfile_background] eq "" || [security::secure_conn_p]} {
+                        if {[namespace which ad_returnfile_background] eq "" || [security::secure_conn_p]} {
                             ns_returnfile 200 $mime_type $filename
                         } else {
                             ad_returnfile_background 200 $mime_type $filename

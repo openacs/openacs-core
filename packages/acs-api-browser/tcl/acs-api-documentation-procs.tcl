@@ -409,7 +409,7 @@ ad_proc -public api_proc_documentation {
     array set default_values $doc_elements(default_values)
 
     if {![info exists label]} {
-        if {[llength $proc_name] > 1 && [info commands ::xo::api] ne ""} {
+        if {[llength $proc_name] > 1 && [namespace which ::xo::api] ne ""} {
             set label [::xo::api method_label $proc_name]
         } else {
             set label $proc_name
@@ -438,7 +438,7 @@ ad_proc -public api_proc_documentation {
     append out $first_line_tag$pretty_name$end_tag
 
     if {[regexp {^(.*) (inst)?proc (.*)$} $proc_name match cl prefix method]
-        && [info commands ::xo::api] ne ""
+        && [namespace which ::xo::api] ne ""
     } {
         set xotclArgs 1
         set scope ""
@@ -450,7 +450,7 @@ ad_proc -public api_proc_documentation {
         }
     } else {
         set xotclArgs 0
-        if {[info commands ::xo::api] ne "" && [::xo::api isclass "" [lindex $proc_name 1]]} {
+        if {[namespace which ::xo::api] ne "" && [::xo::api isclass "" [lindex $proc_name 1]]} {
             set name [lindex $proc_name 1]
             set pretty_proc_name "[$name info class] [::xo::api object_link {} $name]"
         } else {
@@ -736,8 +736,9 @@ ad_proc api_proc_pretty_name {
         } else {
             append out $label
         }
-        set debug_html [expr {$include_debug_controls_p && [info commands ::xo::api] ne ""
-                              ? [::xo::api debug_widget $proc] : ""}]
+        set debug_html [expr {$include_debug_controls_p
+			&& [namespace which ::xo::api] ne ""
+			  ? [::xo::api debug_widget $proc] : ""}]
     }
     if {[nsv_exists api_proc_doc $proc]} {
         set doc_elements [nsv_get api_proc_doc $proc]
@@ -1067,7 +1068,7 @@ ad_proc -private api_call_graph_snippet {
     #
     set called_procs {}
     foreach c [api_called_proc_names -proc_name $proc_name] {
-        if {[info commands $c] eq $c
+        if {[namespace which $c] eq $c
             && $c ni $callers
             && $c ne $proc_name
         } {
@@ -1146,7 +1147,7 @@ ad_proc -public api_get_body {proc_name} {
     #
     regsub -all {([?*])} $proc_name {\\\1} proc_name_pattern
 
-    if {[info commands ::xo::api] ne ""
+    if {[namespace which ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
         if {[regexp {^(.*) (.*)$} $obj match scope obj]} {
             if {[::xo::api scope_eval $scope ::nsf::is object $obj]} {
@@ -1158,10 +1159,10 @@ ad_proc -public api_get_body {proc_name} {
             }
         }
         return ""
-    } elseif {[info commands ::xo::api] ne ""
+    } elseif {[namespace which ::xo::api] ne ""
               && [regexp {^([^ ]+) (Class|Object) (.*)$} $proc_name . thread kind obj]} {
         return [::xo::api get_object_source $thread $obj]
-    } elseif {[info commands ::xo::api] ne ""
+    } elseif {[namespace which ::xo::api] ne ""
               && [regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
         return [::xo::api get_object_source "" $obj]
     } elseif {[info procs $proc_name_pattern] ne ""} {
@@ -1446,7 +1447,7 @@ namespace eval ::apidoc {
 
     } {
 
-        if {[info commands ::xo::api] ne ""} {
+        if {[namespace which ::xo::api] ne ""} {
             set scope [::xo::api scope_from_proc_index $proc_name]
         } else {
             set scope ""
@@ -1625,7 +1626,7 @@ namespace eval ::apidoc {
         # to api-doc pages.  Perhaps we should hyperlink them to the Tcl man pages?
         # else and elseif are be treated as special cases later
 
-        if {[info commands ::xo::api] ne ""} {
+        if {[namespace which ::xo::api] ne ""} {
             set XOTCL_KEYWORDS [list self my next]
             # Only command names are highlighted, otherwise we could add XOTcl method
             # names by [lsort -unique [concat [list self my next] ..
@@ -1810,8 +1811,9 @@ namespace eval ::apidoc {
                         } elseif {[string match "*__arg_parser" $proc_name]} {
                             append html [pretty_token helper $proc_name]
 
-                        } elseif {$proc_namespace ne ""
-                                  && [info commands ::${proc_namespace}::${proc_name}] ne ""}  {
+                        } elseif {$proc_namespace ne "" && [
+                            namespace which ::${proc_namespace}::${proc_name}]
+                                ne ""}  {
 
                             if {[is_object $scope ${proc_namespace}::${proc_name}]} {
                                 set url [::xo::api object_url \
@@ -1824,10 +1826,11 @@ namespace eval ::apidoc {
                                 append html "<a href='[ns_quotehtml $url]' title='API command'>" \
                                     [pretty_token proc $proc_name] </a>
                             }
-                        } elseif {[info commands ::$proc_name] ne ""} {
-                            set absolute_name [expr {[string match "::*" $proc_name]
-                                                     ? $proc_name
-                                                     : "::${proc_name}"}]
+                        } elseif {[namespace which ::$proc_name] ne ""} {
+                            set absolute_name [expr {
+                                [string match "::*" $proc_name]
+                                     ? $proc_name : "::${proc_name}"
+                            }]
                             if {[is_object $scope $absolute_name]} {
                                 set url [::xo::api object_url \
                                              -show_source 1 -show_methods 2 \

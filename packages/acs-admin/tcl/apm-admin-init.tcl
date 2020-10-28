@@ -21,7 +21,7 @@ if {0} {
         #
         ns_register_filter trace GET /repository/* repository-download
         
-        if {[info commands ::xo::db::require] ne ""} {
+        if {[namespace which ::xo::db::require] ne ""} {
             ::xo::db::require table apm_package_downloads {
                 time     timestamp
                 ip       text

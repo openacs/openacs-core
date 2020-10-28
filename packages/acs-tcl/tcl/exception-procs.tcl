@@ -11,7 +11,7 @@ if {$::tcl_version eq "8.5"} {
     #
     package require try
 }
-if {[info commands "::try"] eq ""} {
+if {[namespace which ::try] eq ""} {
     error "This version of OpenACS requires the ::try command (built-in in 8.6+, package for 8.5"
 }
 

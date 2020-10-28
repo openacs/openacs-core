@@ -19,7 +19,7 @@ namespace eval acs_admin {
     } {
 
         set openssl [util::which openssl]
-        if {[info commands ns_driver] ne "" && $openssl ne ""} {
+        if {[namespace which ns_driver] ne "" && $openssl ne ""} {
             #
             # Get certificates to check expire dates
             #

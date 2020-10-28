@@ -12,11 +12,11 @@ ns_cache create util_memoize -size \
 # on whether clustering is enabled and what command is available for
 # cluster-wide flushing.
 
-if {[info commands ncf.send] ne ""} {
+if {[namespace which ncf.send] ne ""} {
     set flush_body {
         ncf.send util_memoize $script
     }
-} elseif {[server_cluster_enabled_p] && [info commands server_cluster_httpget_from_peers] ne ""} {
+} elseif {[server_cluster_enabled_p] && [namespace which server_cluster_httpget_from_peers] ne ""} {
     set flush_body {
         server_cluster_httpget_from_peers "/SYSTEM/flush-memoized-statement.tcl?statement=[ns_urlencode $script]"
     }

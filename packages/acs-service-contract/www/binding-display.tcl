@@ -42,29 +42,28 @@ template::list::create \
     }
 
 db_multirow -extend {check} binding binding {
-    select impl_operation_name, impl_alias, impl_pl 
-    from acs_sc_impl_aliases 
+    select impl_operation_name, impl_alias, impl_pl
+    from acs_sc_impl_aliases
     where impl_name = :impl_name and impl_contract_name = :contract_name
     order by lower(impl_operation_name)
-    
 } {
     if {$impl_pl eq "TCL"} {
         regsub {^::} $impl_alias {} impl_alias
-        if {[info commands ::$impl_alias] ne ""} {
+        if {[namespace which ::$impl_alias] ne ""} {
             append impl_alias "</b> {[info args ::$impl_alias]}"
-        } elseif {[llength $impl_alias] > 1 
-		  && [info commands ::xotcl::Object] ne "" 
-		  && [::xotcl::Object isobject [lindex $impl_alias 0]]
-		  && [[lindex $impl_alias 0] info methods [lindex $impl_alias 1]] ne ""} {
-	    # - it looks like a method, 
-	    # - we have XOTcl installed, 
-	    # - the first word is an object, 
-	    # - the second word is a method for the object, 
-	    # ... so provide a link to the XOTcl API browser
-	    set href "/xotcl/show-object?object=[lindex $impl_alias 0]&show_methods=2"
-	    append impl_alias "<a href='[ns_quotehtml $href]'>" \
-		"<img border='0' src='/resources/acs-subsite/ZoomIn16.gif'></a>"
-	} else {
+        } elseif {[llength $impl_alias] > 1
+          && [namespace which ::xotcl::Object] ne ""
+          && [::xotcl::Object isobject [lindex $impl_alias 0]]
+          && [[lindex $impl_alias 0] info methods [lindex $impl_alias 1]] ne ""} {
+            # - it looks like a method,
+            # - we have XOTcl installed,
+            # - the first word is an object,
+            # - the second word is a method for the object,
+            # ... so provide a link to the XOTcl API browser
+            set href "/xotcl/show-object?object=[lindex $impl_alias 0]&show_methods=2"
+            append impl_alias "<a href='[ns_quotehtml $href]'>" \
+                "<img border='0' src='/resources/acs-subsite/ZoomIn16.gif'></a>"
+        } else {
             append impl_alias {</b> - <b style="color: red">NOT FOUND!</b>}
         }
         set impl_alias "<b>$impl_alias"

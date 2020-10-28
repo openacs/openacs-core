@@ -198,7 +198,7 @@ ad_proc -public publish::proc_exists { namespace_name proc_name } {
 
 } {
 
-    return [expr {[info commands ${namespace_name}::$proc_name] ne ""}]
+    return [expr {[namespace which ${namespace_name}::$proc_name] ne ""}]
 }
 
 ##########################################################

@@ -2009,7 +2009,7 @@ return $html
 #
 ####################
 
-if {[info commands ns_reflow_text] eq ""} {
+if {[namespace which ns_reflow_text] eq ""} {
     #
     # Define compatibility function for those implementations, that do
     # not have the built-in version of NaviServer
@@ -2256,7 +2256,7 @@ ad_proc -public ad_html_text_convert {
                     #
                     # Try syntax highlighting just when target is text/html
                     #
-                    if {[info commands ::Markdown::register] ne ""} {
+                    if {[namespace which ::Markdown::register] ne ""} {
                         #
                         # We can register a converter
                         #
@@ -2265,7 +2265,7 @@ ad_proc -public ad_html_text_convert {
 
                     set text [Markdown::convert $text]
 
-                    if {[info commands ::Markdown::get_lang_counter] ne ""} {
+                    if {[namespace which ::Markdown::get_lang_counter] ne ""} {
 
                         set d [::Markdown::get_lang_counter]
                         if {$d ne ""} {

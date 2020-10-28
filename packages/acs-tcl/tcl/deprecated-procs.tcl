@@ -866,7 +866,7 @@ ad_proc -deprecated ad_footer {
     } else {
 	set curriculum_bar ""
     }
-    if { [info commands ds_link] ne "" } {
+    if { [namespace which ds_link] ne "" } {
 	set ds_link [ds_link]
     } else {
 	set ds_link ""
@@ -913,7 +913,7 @@ ad_proc -deprecated ad_admin_footer {} {
 
     @see  Documentation on the site master template for the proper way to standardize page footers
 } {
-    if { [info commands ds_link] ne "" } {
+    if { [namespace which ds_link] ne "" } {
 	set ds_link [ds_link]
     } else {
 	set ds_link ""
@@ -3601,7 +3601,7 @@ ad_proc -deprecated -public ad_call_proc_if_exists { proc args } {
 
     @see "info commands" based idioms
 } {
-    if { [info commands $proc] ne "" } {
+    if { [namespace which $proc] ne "" } {
         $proc {*}$args
     }
 }

@@ -87,7 +87,7 @@ template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/c
 # e.g. the blank master is installed before the subsite definitions
 # for the page_plugin callback.  Templates are required to be very
 # robust.
-if {[info commands ::callback::subsite::page_plugin::*] ne ""} {
+if {[llength [info commands ::callback::subsite::page_plugin::*]]} {
     callback subsite::page_plugin
 }
 
@@ -213,7 +213,7 @@ if {[lang::util::translator_mode_p]} {
 
 # Determine if developer support is installed and enabled
 #
-if {[llength [info commands ::ds_show_p]] == 1 && [ds_show_p]} {
+if {[namespace which ::ds_show_p] ne {} && [ds_show_p]} {
     template::head::add_css \
         -href "/resources/acs-developer-support/acs-developer-support.css" \
         -media "all"
@@ -271,7 +271,7 @@ template::head::prepare_multirows
 # blocked out.
 #
 if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -default 0]
-    && [info commands ::security::csp::render] ne ""
+    && [namespace which ::security::csp::render] ne ""
 } {
     set csp [::security::csp::render]
     if {$csp ne ""} {
