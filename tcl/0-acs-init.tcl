@@ -35,7 +35,7 @@ namespace eval acs {
     set ::acs::pageroot [expr {$::acs::useNaviServer ? [ns_server pagedir] : [ns_info pageroot]}]
     set ::acs::tcllib   [expr {$::acs::useNaviServer ? [ns_server tcllib] : [ns_info tcllib]}]
     set ::acs::rootdir  [file dirname [string trimright $::acs::tcllib "/"]]
-    set ::acs::useNsfProc [expr {[info commands ::nsf::proc] ne ""}]
+    set ::acs::useNsfProc [expr {[namespace which ::nsf::proc] ne ""}]
 }
 
 # Determine the OpenACS root directory, which is the directory right above the
@@ -53,7 +53,7 @@ if { [file isfile $bootstrap_file] } {
     # Check that the appropriate version of tDom (http://www.tdom.org)
     # is installed and spit out a comment or try to install it if not.
     #
-    if {[info commands domNode] eq ""} { 
+    if {[namespace which domNode] eq ""} { 
 	if {[ns_info version] < 4} {
 	    ns_log Error "0-acs-init.tcl: domNode command not found -- libtdom.so not loaded?"
 	} elseif {[ns_info version] >= 4} {
