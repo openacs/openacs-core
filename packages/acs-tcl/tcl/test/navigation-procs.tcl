@@ -11,7 +11,7 @@ namespace eval navigation::test {}
 ad_proc navigation::test::context_bar_multirow_filter {} {
     Procedure for the context_bar_multirow test filter
 } {
-    aa_run_with_teardown -test_code {
+    aa_run_with_teardown -rollback -test_code {
         set testnode_1 [list "/navigation_test_node1/" "navigation_test_node1"]
         set testnode_2 [list "[lindex $testnode_1 0]navigation_test_node2/" "navigation_test_node2"]
 
