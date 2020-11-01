@@ -802,7 +802,7 @@ ad_proc -public apm_load_any_changed_libraries {
         }
         if {[llength $files] > 0} {
             ns_log notice "### blueprint_reloading: [llength $files] files $files"
-            ::xo::broadcast send {ns_ictl markfordelete}
+
             #
             # Transform files into reload-cmds
             #
