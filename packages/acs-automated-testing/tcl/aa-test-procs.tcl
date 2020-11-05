@@ -678,13 +678,6 @@ ad_proc -public aa_runseries {
     }
     set aa_in_init_class ""
 
-    #
-    # Cleanup temporary XOTcl objects
-    #
-    if {[namespace which ::xo::at_cleanup] ne ""} {
-        ::xo::at_cleanup
-    }
-
     # Generate the XML report file
     aa_test::write_test_file
 }
@@ -777,6 +770,13 @@ ad_proc -public aa_run_testcase {
 
     aa_log_final $aa_testcase_passes $aa_testcase_fails
     unset aa_testcase_id
+
+    #
+    # Cleanup temporary XOTcl objects
+    #
+    if {[namespace which ::xo::at_cleanup] ne ""} {
+        ::xo::at_cleanup
+    }
 }
 
 
