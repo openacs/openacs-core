@@ -13,15 +13,23 @@ namespace eval notification::sweep {
     ad_proc -public cleanup_notifications {} {
         Clean up the notifications that have been sent out (DRB: inefficiently...).
     } {
-        # LARS:
-        # Also sweep the dynamic notification requests that have been sent out
-        db_dml delete_dynamic_requests {}
-
         # before the killing starts, remove invalid requests
         foreach request_id [db_list select_invalid_request_ids {
            select request_id
              from notification_requests
-            where not acs_permission.permission_p(object_id, user_id, 'read')
+            where
+                  -- LARS:
+                  -- Also sweep the dynamic notification requests that have been sent out
+                  (dynamic_p = 't' and
+                   exists (select 1
+                           from    notifications n,
+                                   notification_user_map num
+                           where   n.type_id = type_id
+                           and     n.object_id = object_id
+                           and     num.notification_id = n.notification_id
+                           and     num.user_id = user_id))
+
+               or not acs_permission.permission_p(object_id, user_id, 'read')
         }] {
             notification::request::delete -request_id $request_id
         }
