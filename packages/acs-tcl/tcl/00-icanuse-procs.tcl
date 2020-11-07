@@ -96,6 +96,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_server unmap"           [acs::cmd_has_subcommand ns_server unmap]
 ::acs::register_icanuse "ns_set keys"               [acs::cmd_has_subcommand ns_set keys]
 ::acs::register_icanuse "ns_setcookie -samesite"    [acs::cmd_error_contains ns_setcookie -samesite]
+::acs::register_icanuse "ns_urlencode -part oauth1" [acs::cmd_error_contains {ns_urlencode -part xxx} oauth1]
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {nsv_dict get ""} -varname]
 
