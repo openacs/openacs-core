@@ -18,7 +18,7 @@ namespace eval notification::sweep {
            select request_id
              from notification_requests
             where
-                  -- LARS:
+                  -- LARS
                   -- Also sweep the dynamic notification requests that have been sent out
                   (dynamic_p = 't' and
                    exists (select 1
