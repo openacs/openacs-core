@@ -7,7 +7,7 @@ ad_library {
 
 
 aa_register_case \
-    -cats {web api smoke} \
+    -cats {web api smoke production_safe} \
     -procs {ad_dom_sanitize_html} \
     ad_dom_sanitize_html {
 
@@ -725,7 +725,7 @@ aa_register_case \
 }
 
 aa_register_case \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -procs {ad_js_escape} \
     ad_js_escape {
 
@@ -751,7 +751,7 @@ aa_register_case \
 }
 
 aa_register_case \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -procs {ad_pad} \
     ad_pad {
 
@@ -793,7 +793,7 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_qualify_links} \
+    -procs {ad_html_qualify_links production_safe} \
     ad_html_qualify_links {
 
         Test if ad_html_qualify_links is working as expected.
