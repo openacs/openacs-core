@@ -772,6 +772,8 @@ aa_register_case \
     set result [ad_pad -left $string $length $padstring]
 
     aa_true " - Result is exactly $length long " {[string length $result] == $length}
+    incr length -1
+    set string [string range $string end-$length end]
     aa_true " - String is at right end " [regexp "^.*${string}\$" $result]
 
     aa_section "Testing right pad"
@@ -787,6 +789,8 @@ aa_register_case \
     set result [ad_pad -right $string $length $padstring]
 
     aa_true " - Result is exactly $length long " {[string length $result] == $length}
+    incr length -1
+    set string [string range $string 0 $length-1]
     aa_true " - String is at left end " [regexp "^${string}.*\$" $result]
 
 }
