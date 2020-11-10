@@ -79,7 +79,7 @@ aa_register_case \
     lappend test_results_trivial $test_case
     lappend test_results_no_js $test_case
     lappend test_results_no_outer_urls $test_case
-    lappend test_results_fixing_markup $test_case    
+    lappend test_results_fixing_markup $test_case
 
     # Try test cases allowing all kind of markup
     foreach \
@@ -672,7 +672,7 @@ aa_register_case \
                      -allowed_protocols * \
                      -unallowed_tags $unallowed_tags \
                      -validate]
-    aa_true "$msg with validate?" $valid_p    
+    aa_true "$msg with validate?" $valid_p
     aa_false $msg? [regexp {<(div|style|script)\s*[^>]*>} $result]
 
     set msg "In our index page is removing attributes ok"
@@ -704,7 +704,7 @@ aa_register_case \
                      -allowed_protocols * \
                      -unallowed_protocols $unallowed_protocols \
                      -validate]
-    aa_true "$msg with validate?" $valid_p    
+    aa_true "$msg with validate?" $valid_p
     aa_false $msg? [regexp {<([a-z]\w*)\s+[^>]*(href|src|content|action)="(http|javascript):.*"[^>]*>} $result]
 
     set msg "In our index page is removing outer links ok"
@@ -737,7 +737,7 @@ aa_register_case \
 
     set string   "\n\r\t  \n\n\n \t\t \b \v\v\v  \f"
     set expected {\n\r\t  \n\n\n \t\t \b \v\v\v  \f}
-    
+
     aa_true " - String of only escape sequences " {[ad_js_escape $string] eq $expected}
 
     set string   "\n\r\t  \na word  \'\n\n \t\"\" aaaaa\' \'\'\'\b \v\v\v  \f"
@@ -758,7 +758,7 @@ aa_register_case \
     Test if ad_pad is working as expected
 
 } {
-    
+
     aa_section "Testing left pad"
 
     set string [ad_generate_random_string]
@@ -768,7 +768,7 @@ aa_register_case \
     aa_log " - string: $string"
     aa_log " - length: $length"
     aa_log " - padstring: $padstring"
-    
+
     set result [ad_pad -left $string $length $padstring]
 
     aa_true " - Result is exactly $length long " {[string length $result] == $length}
@@ -783,12 +783,12 @@ aa_register_case \
     aa_log " - string: $string"
     aa_log " - length: $length"
     aa_log " - padstring: $padstring"
-    
+
     set result [ad_pad -right $string $length $padstring]
 
     aa_true " - Result is exactly $length long " {[string length $result] == $length}
     aa_true " - String is at left end " [regexp "^${string}.*\$" $result]
-    
+
 }
 
 aa_register_case \
@@ -797,20 +797,20 @@ aa_register_case \
     ad_html_qualify_links {
 
         Test if ad_html_qualify_links is working as expected.
-        
+
         @author Gustaf Neumann
 } {
-    
+
     aa_section "Testing without path"
 
     set rURL "relative/r.txt"
     set aURL "/dotlrn/clubs/club1/mytext.docx"
     set fqURL "https://openacs.org/doc/"
-    
+
     set html [subst {<div><div class="table">
         A relative URL <a href="$rURL">relative/r.txt</a>
         An absolute URL <a href="$aURL">mytext.docx</a>
-        A fully qualified URL <a href="$fqURL">Documentation</a>        
+        A fully qualified URL <a href="$fqURL">Documentation</a>
     }]
     set result [ad_html_qualify_links -location {http://myhost/} $html]
 
