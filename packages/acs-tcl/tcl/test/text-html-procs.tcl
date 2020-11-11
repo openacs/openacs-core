@@ -796,8 +796,8 @@ aa_register_case \
 }
 
 aa_register_case \
-    -cats {api smoke} \
-    -procs {ad_html_qualify_links production_safe} \
+    -cats {api smoke production_safe} \
+    -procs {ad_html_qualify_links} \
     ad_html_qualify_links {
 
         Test if ad_html_qualify_links is working as expected.
