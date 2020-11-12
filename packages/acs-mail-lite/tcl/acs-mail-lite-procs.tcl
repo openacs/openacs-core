@@ -805,15 +805,6 @@ namespace eval acs_mail_lite {
             set fullMailMessage [mime::buildmessage $tokens]
 
             #
-            # 'dot-stuffing' as defined by RFC 5321 section 4.5.2:
-            #
-            # "Before sending a line of mail text, the SMTP client checks the
-            #  first character of the line.  If it is a period, one additional
-            #  period is inserted at the beginning of the line."
-            #
-            set fullMailMessage [string map {\n\. \n\.\.} $fullMailMessage]
-
-            #
             # Call "smtpd send" from the NaviServer nssmtpd module.
             # When the last two arguments are not provided, the
             # command uses host and port from the configuration
