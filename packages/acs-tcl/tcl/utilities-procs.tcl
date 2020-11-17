@@ -162,7 +162,7 @@ ad_proc util::unzip {
 
 ad_proc -private -deprecated proc_source_file_full_path {proc_name} {
 
-    This is an used function solely kept here for (unclear) backward
+    This is a used function solely kept here for (unclear) backward
     compatibility in acs-bootstrap-installer/tcl/00-proc-procs.tcl.
     AFIKT, there is no need for this function in OpenACS, it should be
     removed after the release of OpenACS 5.10.
