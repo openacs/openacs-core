@@ -57,13 +57,16 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
     }
 
     # Now rename exec; protect cases, where file is loaded multiple times
-    if {[namespace which ::real_exec] eq ""} {rename exec real_exec}
+    if {[namespace which ::real_exec] eq ""} {
+        rename exec real_exec
+    }
 
     ad_proc exec {-ignorestderr:boolean -- args} {
         This is the wrapped version of exec
     } {
         proxy::exec -ignorestderr=$ignorestderr_p -call $args
     }
+
 }
 
 # Local variables:
