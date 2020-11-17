@@ -604,7 +604,7 @@ ad_proc -public apm_load_packages {
         foreach package_to_load [::apm_package_load_libraries_order $package_key] {
             #
             # Never add packages, which are not enabled.
-            # 
+            #
             if {$package_to_load ni $packages_to_load && $package_to_load in $enabled_packages} {
                 lappend packages_to_load $package_to_load
             }
@@ -802,7 +802,7 @@ ad_proc -public apm_load_any_changed_libraries {
         }
         if {[llength $files] > 0} {
             ns_log notice "### blueprint_reloading: [llength $files] files $files"
-
+            #::xo::broadcast send {ns_ictl markfordelete}
             #
             # Transform files into reload-cmds
             #
@@ -811,8 +811,28 @@ ad_proc -public apm_load_any_changed_libraries {
             # Execute these cmds in a fresh interp to produce a new
             # blueprint.
             #
-            ns_log notice "### blueprint_reloading: cmds:\n[join $cmds \;\n]"
+            set before [list epoch [ns_ictl epoch] size [string length [ns_ictl get]]]
+            ns_log notice "### blueprint_reloading: before $before cmds:\n[join $cmds \;\n]"
+            
             ns_eval [join $cmds \;]
+
+            #
+            # The current thread has still the old blueprint. If we
+            # would modfiy the naviserver sources, it would be simple
+            # the show the diffs. here, it is more involved. The see
+            # the effect in size on the blueprint, we have to run the
+            # change statistics in a fresh thread.  Let us hope that
+            # the ns_job thread update is not deferred by "ns_ictl
+            # maxconcurrentupdates", so we report as well the
+            # epoch. If there is a new epoch shown, one can be sure
+            # that we see the updated size. Otherwise, one will see
+            # this on the next reload in the log file.
+            #
+            ns_job queue ns_eval_q:[ns_info server] [subst -nocommands {
+                set after [list epoch [ns_ictl epoch] size [string length [ns_ictl get]]]
+                set diff [expr {[dict get [set after] size] - [dict get {$before} size]}]
+                ns_log notice "### blueprint_reloading: after [set after] diff [set diff]"
+            }]
         }
     }
 
@@ -2278,7 +2298,6 @@ ad_proc -deprecated -private apm_pretty_name_for_db_type { db_type } {
     #     where db_type_key = :db_type
     # " -default "all" -bind [list db_type $db_type]]]
 }
-
 
 #
 # Local variables:
