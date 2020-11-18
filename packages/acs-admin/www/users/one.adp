@@ -2,7 +2,7 @@
 <property name="doc(title)">@user_info.first_names;noquote@ @user_info.last_name;noquote@</property>
 <property name="context">@context;literal@</property>
 
-<h2>Basic Information</h2>
+<h1>Basic Information</h1>
 
 <include src="/packages/acs-subsite/lib/user-info" user_id="@user_id;literal@" return_url="@return_url;literal@">
 
@@ -60,17 +60,9 @@ above.
   </multiple>
 </ul>
 
-<multiple name="user_contributions">
+<h2>Contributions of this user</h2>
 
-  <h2>@user_contributions.pretty_plural@</h2>
-  <ul>
-
-  <group column="pretty_name">
-    <li>@user_contributions.creation_date@: @user_contributions.object_name@</li>
-  </group>
-  </ul>
-
-</multiple>
+<p>Number of contributions of this user: <a href="./one-contributions?user_id=@user_id@">@number_contributions@</a></p>
 
 <h2>Administrative Actions</h2>
 

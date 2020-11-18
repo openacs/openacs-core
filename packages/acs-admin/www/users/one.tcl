@@ -73,19 +73,13 @@ if {[db_0or1row get_item_id {
 
 set user_finite_state_links [join [ad_registration_finite_state_machine_admin_links $user_info(member_state) $user_info(email_verified_p) $user_id] " | "]
 
+set number_contributions [db_string nr_contribs {
+    select count(*) from acs_objects
+    where creation_user = :user_id
+}]
+
 
 # XXX Make sure to make the following into links and this looks okay
-
-db_multirow user_contributions user_contributions {
-    select at.pretty_name,
-           at.pretty_plural,
-           to_char(a.creation_date, 'YYYY-MM-DD HH24:MI:SS') as creation_date,
-           acs_object.name(a.object_id) as object_name
-      from acs_objects a, acs_object_types at
-     where a.object_type = at.object_type
-       and a.creation_user = :user_id
-     order by pretty_name, creation_date desc, object_name
-}
 
 # cro@ncacasi.org 2002-02-20
 # Boy, is this query wacked, but I think I am starting to understand
@@ -110,7 +104,6 @@ if { [auth::password::can_reset_p -authority_id $user_info(authority_id)] } {
 }
 
 set portrait_manage_url [export_vars -base /user/portrait/ { user_id return_url }]
-
 
 ad_return_template
 
