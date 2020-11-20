@@ -815,7 +815,6 @@ ad_proc -public apm_load_any_changed_libraries {
             ns_log notice "### blueprint_reloading: before $before cmds:\n[join $cmds \;\n]"
             
             ns_eval [join $cmds \;]
-
             #
             # The current thread has still the old blueprint. If we
             # would modfiy the naviserver sources, it would be simple
@@ -829,9 +828,19 @@ ad_proc -public apm_load_any_changed_libraries {
             # this on the next reload in the log file.
             #
             ns_job queue ns_eval_q:[ns_info server] [subst -nocommands {
-                set after [list epoch [ns_ictl epoch] size [string length [ns_ictl get]]]
+                #
+                # Warning: Avoid dollar-substitution here, unless
+                # wanted at job registration time.
+                #
+                set blueprint [ns_ictl get]
+                set after [list epoch [ns_ictl epoch] size [string length [set blueprint]]]
                 set diff [expr {[dict get [set after] size] - [dict get {$before} size]}]
                 ns_log notice "### blueprint_reloading: after [set after] diff [set diff]"
+                if {0 && [set diff] != 0} {
+                    set F [open /tmp/__blueprint.[clock seconds] w]
+                    puts [set F] [set blueprint]
+                    close [set F]
+                }
             }]
         }
     }
