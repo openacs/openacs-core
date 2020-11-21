@@ -355,11 +355,14 @@ proc ad_proc args {
     set n_positionals_with_defaults 0
     array set default_values [list]
     array set flags [list]
+    set seen_arg_checkers_p 0
     set varargs_p 0
     set switch_code ""
-
+    
+    #
     # If the first element contains 0 or more than 2 elements, then it must
     # be an old-style ad_proc. Mangle effective_arg_list accordingly.
+    #
     if { [llength $arg_list] > 0 } {
         set first_arg [lindex $arg_list 0]
         if { [llength $first_arg] == 0 || [llength $first_arg] > 2 } {
@@ -399,7 +402,20 @@ proc ad_proc args {
             foreach flag [split [lindex $arg_split 1] ","] {
                 set flag [string trim $flag]
                 if { $flag ne "required" && $flag ne "boolean" } {
-                    return -code error "Invalid flag \"$flag\""
+                    #
+                    # In earlier versions, we used to raise an error here
+                    #
+                    #    return -code error "Invalid flag \"$flag\""
+                    #
+                    # However, since XOTcl 2 (and nsf::proc) support
+                    # arg checkers since many years, and since XOTcl
+                    # is a required component of OpenACS, we can allow
+                    # these as well safely. However, in order to avoid
+                    # surprises during upgrades, we should avoid the
+                    # checker usage in acs-core, until OpenACS 5.10 is
+                    # released.
+                    #
+                    set seen_arg_checkers_p 1
                 }
                 lappend arg_flags $flag
             }
@@ -494,9 +510,11 @@ proc ad_proc args {
     # We avoid this by checking as well if the testcase element is the only one
     # for that particular proc in the nsv.
     #
-    if { ![nsv_exists api_proc_doc $proc_name] ||
-         ([dict exists [nsv_get api_proc_doc $proc_name] testcase] &&
-          [dict size [nsv_get api_proc_doc $proc_name]] eq "1")
+    if { ![nsv_exists api_proc_doc $proc_name]
+         || (
+             [dict exists [nsv_get api_proc_doc $proc_name] testcase]
+             && [dict size [nsv_get api_proc_doc $proc_name]] eq "1"
+             )
     } {
         nsv_lappend api_proc_doc_scripts $script $proc_name
     }
@@ -549,7 +567,7 @@ proc ad_proc args {
                  "    ::callback::${callback}::contract__arg_parser\n${log_code}$code_block"]
         }
 
-    } elseif { $callback eq "" && [llength $switches] == 0 } {
+    } elseif { $callback eq "" && [llength $switches] == 0 && !$seen_arg_checkers_p} {
         #
         # Nothing special is used in the argument definition, create a
         # plain proc
