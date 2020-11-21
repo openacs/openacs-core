@@ -873,6 +873,11 @@ ad_proc -private rp_report_error {
         error_url error_info user_id prev_url error_file feedback_id bug_package_id
     }]
 
+    if {![ns_conn isconnected]} {
+        ad_log warning "rp_report_error: request handler received error after connection was closed: $message\n$error_url"
+        return
+    }
+
     ds_add conn error $message
 
     set params [list]
