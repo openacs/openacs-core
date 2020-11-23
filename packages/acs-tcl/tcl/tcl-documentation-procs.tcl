@@ -628,7 +628,9 @@ ad_proc -public ad_page_contract {
             set apc_default_value($name) [lindex $element 1]
         }
 
-        set pre_flag_list [split [string tolower $flags] ,]
+        set pre_flag_list [split $flags ,]
+        # set pre_flag_list [split [string tolower $flags] ,]
+
         set flag_list [list]
 
         # find parameterized flags
