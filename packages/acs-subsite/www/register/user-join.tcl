@@ -119,14 +119,14 @@ if { [form size join] > 0 } {
 if { $not_hidden == 0 || [template::form is_valid join] } {
 
     db_transaction {
-        
+
         #----------------------------------------------------------------------
         # Join all required segments
         #----------------------------------------------------------------------
 
         for { set rownum 1 } { $rownum <= $num_required_segments } { incr rownum } {
             set required_seg [template::multirow get required_segments $rownum]
-            
+
             if { ![group::member_p -group_id $required_segments(group_id)] } {
                 switch -- $required_segments(join_policy) {
                     "needs approval" {
@@ -152,7 +152,7 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
                                 $user_id]
             }
         }
-        
+
         #----------------------------------------------------------------------
         # Join the actual group
         #----------------------------------------------------------------------
@@ -183,7 +183,7 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
         ad_return_error [_ acs-subsite.Error_joining] [_ acs-subsite.Error_joining_details]
         ad_script_abort
     }
-    
+
     switch -- $member_state {
         "approved" { set message "[_ acs-subsite.You_joined_group]." }
         "needs approval" { set message "[_ acs-subsite.Request_join_submitted]." }
