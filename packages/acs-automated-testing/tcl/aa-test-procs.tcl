@@ -1557,6 +1557,37 @@ namespace eval acs::test {
         return $d
     }
 
+
+    ad_proc -public ::acs::test::get_url_from_location {
+        dict
+    } {
+        Determine the url based on the location field provided from
+        the result dict (as returned from acs::test::http).
+
+        @param dict dict containing an ns_set called headers
+        @see acs::test::http
+    } {
+        set location [ns_set iget [dict get $dict headers] Location ""]
+        if {$location ne ""} {
+            set urlDict [ns_parseurl $location]
+            #aa_log "parse url '$location' => $urlDict"
+            if {[dict get $urlDict tail] ne ""} {
+                set url [dict get $urlDict path]/[dict get $urlDict tail]
+            } else {
+                set url [dict get $urlDict path]/
+            }
+            if {[dict exists $urlDict query]} {
+                set query [dict get $urlDict query]
+                if {$query ne ""} {
+                    append url "?$query"
+                }
+            }
+        } else {
+            set url ""
+        }
+        return $url
+    }
+
     ad_proc -public ::acs::test::confirm_email {
         -user_id:required
     } {
