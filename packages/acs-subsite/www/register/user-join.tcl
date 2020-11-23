@@ -1,5 +1,3 @@
-# /packages/acs-subsite/www/admin/relations/add.tcl
-
 ad_page_contract {
     Add the user to the subsite application group.
 
