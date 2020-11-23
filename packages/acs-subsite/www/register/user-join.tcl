@@ -25,7 +25,17 @@ ad_page_contract {
     }
 }
 
-set user_id [auth::require_login]
+# Don't lose the return url when somebody tries to join a subsite
+# before login.
+if {$return_url eq ""} {
+    set user_id [auth::require_login]
+} else {
+    set user_id [auth::get_user_id]
+    if {$user_id == 0} {
+        ad_returnredirect [export_vars -base [ad_get_login_url] {return_url}]
+        ad_script_abort
+    }
+}
 
 group::get -group_id $group_id -array group_info
 
