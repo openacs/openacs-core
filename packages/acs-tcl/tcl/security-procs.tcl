@@ -1527,6 +1527,32 @@ ad_proc -public ad_set_signed_cookie {
 #
 #####
 
+if {[ns_info name] eq "NaviServer"} {
+    ad_proc -private sec_get_token_from_nsv {token_id token_var} {
+
+        Just for compatibility with AOLserver, which does not support
+        an atomic check and get operation for nsv.
+
+    } {
+        upvar $token_var token
+        return [nsv_get secret_tokens $token_id token]
+    }
+} else {
+    ad_proc -private sec_get_token_from_nsv {token_id token_var} {
+
+        Compatibility function for AOLserver, which does not support
+        nsv_get with the optional output variable.
+
+    } {
+        upvar $token_var token
+        if {[nsv_exists secret_tokens $token_id]} {
+            set token [nsv_get secret_tokens $token_id]
+            return 1
+        }
+        return 0
+    }
+}
+
 ad_proc -private sec_get_token {
     token_id
 } {
@@ -1543,30 +1569,42 @@ ad_proc -private sec_get_token {
 
 } {
 
+    #
+    # First check the per-thread cache to obtain a token from the
+    # token_id.
+    #
     set key ::security::tcl_secret_tokens($token_id)
-    if { [info exists $key] } { return [set $key] }
+    if { [info exists $key] } {
+        return [set $key]
+    }
 
+    #
+    # If there is no secret token available per thread,
+    # get it and try again.
+    #
     if {[array size ::security::tcl_secret_tokens] == 0} {
         sec_populate_secret_tokens_thread_cache
-        if { [info exists $key] } { return [set $key] }
+        if { [info exists $key] } {
+            return [set $key]
+        }
     }
 
     #
     # We might get token_ids from previous runs, so we have fetch these
-    # in case of a validation
+    # from the secret tokens cache, or from the data base.
     #
-    set token [ns_cache eval secret_tokens $token_id {
+    if {![sec_get_token_from_nsv $token_id token]} {
         set token [db_string get_token {select token from secret_tokens
             where token_id = :token_id} -default 0]
-
-        # Very important to throw the error here if $token == 0
-
-        if { $token == 0 } {
+        if {$token ne 0} {
+            nsv_set secret_tokens $token_id $token
+        } else {
+            #
+            # Very important to throw the error here if $token == 0
+            #
             error "Invalid token ID"
         }
-
-        return $token
-    }]
+    }
 
     set $key $token
     return $token
@@ -1593,13 +1631,13 @@ ad_proc -private sec_populate_secret_tokens_thread_cache {} {
     Copy secret_tokens cache to per-thread variables
 
 } {
-    set ids [ns_cache names secret_tokens]
-    if {[llength $ids] == 0} {
+    set secret_tokens [nsv_array get secret_tokens]
+    if {[llength $secret_tokens] == 0} {
         sec_populate_secret_tokens_cache
-        set ids [ns_cache names secret_tokens]
+        set secret_tokens [nsv_array get secret_tokens]
     }
-    foreach name $ids {
-        set ::security::tcl_secret_tokens($name) [ns_cache get secret_tokens $name]
+    foreach {id token} $secret_tokens {
+        set ::security::tcl_secret_tokens($id) $token
     }
 }
 
@@ -1608,7 +1646,6 @@ ad_proc -private sec_populate_secret_tokens_cache {} {
     Randomly populates the secret_tokens cache.
 
 } {
-
     set num_tokens [parameter::get \
                         -package_id $::acs::kernel_id \
                         -parameter NumberOfCachedSecretTokens \
@@ -1618,7 +1655,7 @@ ad_proc -private sec_populate_secret_tokens_cache {} {
     # so it runs during the install before the data model has been loaded
     if { [db_table_exists secret_tokens] } {
         db_foreach get_secret_tokens {} {
-            ns_cache set secret_tokens $token_id $token
+            nsv_set secret_tokens $token_id $token
         }
     }
     db_release_unused_handles
@@ -2114,18 +2151,21 @@ ad_proc -private security::get_insecure_location {} {
 
 if {[ns_info name] ne "NaviServer"} {
     #
-    # Compatibility function for AOLserver, which allows abstracts
-    # from the configuration section in the config files. NaviServer
-    # supports in general global and per-server defined drivers. The
-    # emulated version just supports per-server configurations, since
-    # these are the only ones supported by AOLserver.
+    # Compatibility function for AOLserver, which abstracts from the
+    # configuration section in the config files. NaviServer supports
+    # in general global and per-server defined drivers.
+    #
+    # In the emulated version for AOLserver just report the per-server
+    # configurations, since these are the only ones supported by
+    # AOLserver.
     #
     ad_proc -public ns_driversection {
         {-driver "nssock"}
         {-server ""}
     } {
-        Return the section name in the config file containing configuration information about the
-        network connection.
+        Return the section name in the config file containing
+        configuration information about the network connection.
+
         @param driver (e.g. nssock)
         @param server symobolic server name
         @return name of section of the drive in the config file
