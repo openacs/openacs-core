@@ -3672,7 +3672,7 @@ ad_proc ad_tmpdir {} {
 #
 
 if { [apm_first_time_loading_p] } {
-    nsv_set ad_disk_cache mutex [ns_mutex create]
+    nsv_set ad_disk_cache mutex [ns_mutex create disk_cache]
 }
 
 ad_proc -public util::disk_cache_flush {

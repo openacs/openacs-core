@@ -1333,9 +1333,8 @@ if { [apm_first_time_loading_p] } {
     nsv_array set ad_page_contract_filter_rules {}
     array set ::acs::ad_page_contract_filter_rules {}
 
-    nsv_set ad_page_contract_mutex filters [ns_mutex create]
-    nsv_set ad_page_contract_mutex filter_rules [ns_mutex create]
-
+    nsv_set ad_page_contract_mutex filters [ns_mutex create page_contract_filter]
+    nsv_set ad_page_contract_mutex filter_rules [ns_mutex create page_contract_filter_rule]
 }
 
 ad_proc -public ad_page_contract_filter {
