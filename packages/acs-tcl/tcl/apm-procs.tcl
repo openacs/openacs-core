@@ -817,7 +817,7 @@ ad_proc -public apm_load_any_changed_libraries {
             ns_eval [join $cmds \;]
             #
             # The current thread has still the old blueprint. If we
-            # would modfiy the naviserver sources, it would be simple
+            # would modify the naviserver sources, it would be simple
             # the show the diffs. here, it is more involved. The see
             # the effect in size on the blueprint, we have to run the
             # change statistics in a fresh thread.  Let us hope that
