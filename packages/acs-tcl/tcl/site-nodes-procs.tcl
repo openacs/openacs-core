@@ -1233,7 +1233,7 @@ if {$UseXotclSiteNodes} {
                 #
                 # @return boolean value.
                 #
-                ns_log notice "NO-CACHE has_children called with $node_id"
+                # ns_log notice "non-cached version of has_children called with $node_id"
 
                 ::xo::dc get_value -prepare integer has_children {
                     select case when exists
