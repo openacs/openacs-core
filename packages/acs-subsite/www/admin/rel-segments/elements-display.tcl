@@ -2,6 +2,7 @@ ad_include_contract {
     Included from elements.
 } {
     segment_id:integer,notnull
+    segment_name:notnull
     group_id:integer,notnull
 }
 
