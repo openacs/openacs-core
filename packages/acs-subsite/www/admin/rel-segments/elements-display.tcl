@@ -1,4 +1,10 @@
-# included from elements.
+ad_include_contract {
+    Included from elements.
+} {
+    segment_id:integer,notnull
+    group_id:integer,notnull
+}
+
 permission::require_permission -object_id $segment_id -privilege "read"
 
 set write_p [permission::permission_p -object_id $segment_id -privilege "write"]
