@@ -72,7 +72,16 @@ if { [parameter::get -package_id $::acs::kernel_id -parameter DebugP -default 0]
     }
 }
 
-foreach httpMethod {GET HEAD POST} {
+#
+# Traditionally, the filters are registered for OpenACS just for GET,
+# HEAD, and POST methods. Some applications might want to extend this
+# like (e.g. for REST interfaces)
+#
+#    set httpMethods {GET HEAD POST PUT}
+#
+set httpMethods {GET HEAD POST}
+
+foreach httpMethod $httpMethods {
     ns_register_filter preauth $httpMethod /resources/* rp_resources_filter
     ns_register_filter preauth $httpMethod * rp_filter
     ns_register_proc $httpMethod / rp_handler
