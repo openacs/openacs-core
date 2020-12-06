@@ -381,17 +381,22 @@ namespace eval ::acs {
     #
     # The per-thread caches use namespaced variables, which are not
     # touched by the automatic cleanup routines of the server. So, the
-    # values cached in one requests can be used by another
-    # requests. These per-thread caches are kept as long the thread
-    # lives, there is so far no automatic mechanism to flush
-    # these. So, these are typically used for values fetched from the
-    # database, but which not not change, unless the server is
-    # restarted.
+    # values cached in one requests can be used by some later request
+    # in the same thread. The entries are kept in per-thread caches as
+    # long as the thread lives, there is so far no automatic mechanism
+    # to flush these. So, per-thread caches are typically used for
+    # values fetched from the database, which do not change, unless
+    # the server is restarted.
     #
-    # Per-request caches have very short-lived. Some values are needed
-    # multiple times per request, and/or they should show consistently
-    # the same value during the request, no matter, if concurrently, a
-    # value is changed (e.g. permissions).
+    # Per-request caches have very short-lived entries. Some values
+    # are needed multiple times per request, and/or they should show
+    # consistently the same value during the same request, no matter,
+    # if concurrently, a value is changed (e.g. permissions).
+    #
+    # Note: the usage of per-thread caches is only recommended for
+    # static values, which do no change during the life time of the
+    # server, since there is so far no automatic measure in place to
+    # the flush values in every thread.
     #
     ##########################################################################
     nx::Class create acs::LockfreeCache {
