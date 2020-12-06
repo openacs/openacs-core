@@ -113,43 +113,44 @@ ad_proc -public util::html::get_form_vars {
     @return var specification in a form suitable for the <code>vars</code>
             argument of proc <code>export_vars</code>.
 } {
-    array set fo $form
-    
+    set varDict ""
+    #
     # Extract value from every field
-    foreach field $fo(fields) {
-        array unset fld
-        array set fld $field
-        array unset a
-        array set a $fld(attributes)
+    #
+    foreach field [dict get $form fields] {
+        set attributes [dict get $field attributes]
         # no name, no variable
-        if {![info exists a(name)] || $a(name) eq ""} continue
-        set name $a(name) ; set tag $fld(tag)
+        if {![dict exists $attributes name]
+            || [dict get $attributes name] eq ""} {
+            continue
+        }
+        set name [dict get $attributes name]
+        set tag  [dict get $field tag]
         switch -- $tag {
             "input" {
-                if {[info exists a(value)]} {
-                    lappend v($name) $a(value)
+                if {[dict exists $attributes value]} {
+                    dict lappend varDict $name [dict get $attributes value]
                 }
             }
             "textarea" {
                 if {[info exists fld(value)]} {
-                    lappend v($name) $fld(value)
+                    dict lappend varDict $name [dict get $field value]
                 }
             }
             "select" {
-                foreach option $fld(options) {
-                    array set o $option
-                    array set a $o(attributes)
-                    if {[info exists a(selected)]} {
-                        lappend v($name) $o(value)
+                foreach option [dict get $field options] {
+                    set oAttributes [dict get $option attributes]
+                    if {[dict exists $oAttributes selected]} {
+                        dict lappend varDict $name [dict get $oAttributes value]
                     }
                 }
             }
         }
     }
     
-    # Now vars must be translated in export_vars form
+    # Now varDict must be translated in export_vars form
     set vars [list]
-    foreach {name value} [array get v] {
+    foreach {name value} $varDict {
       # Multiple values must be specified 
       # with the :multiple modifier
       if {[llength $value] > 1} {
