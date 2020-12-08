@@ -902,7 +902,14 @@ ad_proc template::head::prepare_multirows {} {
         template::multirow sort headscript order
         array unset scripts
     }
+    template:::prepare_body_script_multirow
+}
 
+ad_proc -private template::prepare_body_script_multirow {} {
+    Generate multirows body_scripts.  Called from
+    template::head::prepare_multirows and from steaming output
+    handler.
+} {
     # Generate the body <script /> tag multirow
     variable ::template::body_scripts
     template::multirow create body_script type src charset defer async content crossorigin integrity
@@ -919,7 +926,6 @@ ad_proc template::head::prepare_multirows {} {
         }
         unset body_scripts
     }
-
 }
 
 ad_proc template::get_header_html {
@@ -970,7 +976,11 @@ ad_proc template::get_footer_html {
 
 ad_proc template::get_body_event_handlers {
 } {
-    Get body event handlers specified with template::add_body_handler
+
+    Get body event handlers specified with template::add_body_handler.
+    The proc clears the golbal variable ::template::body_handlers
+    after having processed its content.
+
 } {
     #
     # Concatenate the JavaScript event handlers for the body tag
@@ -1005,11 +1015,11 @@ ad_proc template::get_body_event_handlers {
             # (https://developer.mozilla.org/en-US/docs/Web/Events)
             #
             regsub ^on $event "" event
-            append js [subst {
-                window.addEventListener('$event', function () {
-                    [join $script { }]
-                }, false);
-            }]
+            append js [ns_trim -delimiter | [subst {
+                | window.addEventListener('$event', function () {
+                |     [join $script { }]
+                | }, false);
+                |}]]
         }
         if {$js ne ""} {
             template::add_body_script -script $js
@@ -1153,37 +1163,42 @@ ad_proc template::add_event_listener {
         #
         set script [subst {e.addEventListener('$event', $fn, $usecapture_p);}]
     } else {
-        set script [subst {
-            e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
+        set script [ns_trim -delimiter | {
+           | e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
         }]
     }
     if {[info exists id]} {
-        set script [subst {
-            var e = document.getElementById('$id');
-            if (e !== null) {$script}
-        }]
+        set script [ns_trim -delimiter | [subst {
+            | var e = document.getElementById('$id');
+            | if (e !== null) {$script}
+            |}]]
     } elseif {[info exists formfield]} {
         lassign $formfield id name
-        set script [subst {
-            var e = document.getElementById('$id').elements.namedItem('$name');
-            if (e !== null) {$script}
-        }]
+        set script [ns_trim -delimiter | [subst {
+            | var e = document.getElementById('$id').elements.namedItem('$name');
+            | if (e !== null) {$script}
+            |}]]
     } else {
         #
-        # In case, no id is provided, use the "CSSclass"
+        # In case, no "id" is provided, use the "CSSclass"
         #
-        set script [subst {
-            var elems = document.getElementsByClassName('$CSSclass');
-            for (var i = 0, l = elems.length; i < l; i++) {
-               var e = elems\[i\];
-               $script
-            }
-        }]
+        set script [ns_trim -delimiter | [subst {
+            | var elems = document.getElementsByClassName('$CSSclass');
+            | for (var i = 0, l = elems.length; i < l; i++) {
+            |   var e = elems\[i\];
+            |   $script
+            |}}]]
     }
 
     template::add_body_script -script $script
 }
 
+ad_proc template::collect_body_scripts {} {
+    Collect the body scripts via an easy to call function, hiding the
+    template used for the implementation.
+} {
+    return [template::adp_include /packages/acs-templating/lib/body_scripts {}]
+}
 
 # Local variables:
 #    mode: tcl
