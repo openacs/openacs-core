@@ -2542,8 +2542,14 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                         set db_state(db_abort_p,$dbh) 0
                         ns_db dml $dbh "abort transaction"
                         ns_cache_transaction_rollback
-                        # We still have the transaction generated error.  We don't want to throw it, so we log it.
-                        ns_log Error "Aborting transaction due to error:\n$errmsg"
+                        #
+                        # We still have the transaction generated
+                        # error.  We don't want to throw it, so we log
+                        # it, unless it is "rollback tests"
+                        #
+                        if {$errmsg ne "rollback tests"} {
+                            ns_log Error "Aborting transaction due to error:\n$errmsg"
+                        }
                     } else {
                         # Propagate the error up to the next level.
                         error $errmsg $::errorInfo $::errorCode
