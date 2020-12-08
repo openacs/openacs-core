@@ -2532,7 +2532,10 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                     ns_db dml $dbh "abort transaction"
                     ns_cache_transaction_rollback
                 }
-                # We throw this error because it was thrown from the error handling code that the programmer must fix.
+                #
+                # We throw this error because it was thrown from the
+                # error handling code that the programmer must fix.
+                #
                 error $on_errmsg $::errorInfo $::errorCode
             } else {
                 # Good, no error thrown by the on_error block.
@@ -2555,8 +2558,12 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                         error $errmsg $::errorInfo $::errorCode
                     }
                 } else {
-                    # The on_error block has resolved the transaction error.  If we're at the top, commit and exit.
-                    # Otherwise, we continue on through the lower transaction levels.
+                    #
+                    # The on_error block has resolved the transaction
+                    # error.  If we're at the top, commit and exit.
+                    # Otherwise, we continue on through the lower
+                    # transaction levels.
+                    #
                     if { $level == 1} {
                         ns_db dml $dbh "end transaction"
                         ns_cache_transaction_commit
