@@ -129,7 +129,8 @@ if {[namespace which ::ns_dbquotelist] eq ""} {
         statements.
 
         Compatibility function for AOLserver or older versions of
-        NaviServer. Newer versions provide this command as builtin.
+        NaviServer. Newer versions of NaviServer provide this command
+        as builtin.
     } {
         set sql ""
         if { [llength $list] > 0 } {
@@ -141,6 +142,34 @@ if {[namespace which ::ns_dbquotelist] eq ""} {
                 "'"
         }
         return $sql
+    }
+}
+
+if {[namespace which ::ns_trim] eq ""} {
+
+    # ns_trim -- delimiter line trim command
+    #
+    #   Strip from the begin of every line characters whitespace followed
+    #   by the specified delimiter character. Example:
+    #
+    #     puts [ns_trim -delimiter | {
+    #         | Hello
+    #         | World!
+    #     }]
+    #
+    #   This function could/should be coded in C for speed.
+    #
+    
+    ad_proc ns_trim {{-delimiter ""} text} {
+        if {$delimiter ne ""} {
+            set re "^\\s*\[$delimiter\](.*)$"
+        } else {
+            set re "^\\s*(\S*.*)$"        
+        }
+        join [lmap line [split $text \n] {
+            regexp $re $line . line
+            set line
+        }] \n
     }
 }
 
