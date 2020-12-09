@@ -147,20 +147,22 @@ if {[namespace which ::ns_dbquotelist] eq ""} {
 
 if {[namespace which ::ns_trim] eq ""} {
 
-    # ns_trim -- delimiter line trim command
-    #
-    #   Strip from the begin of every line characters whitespace followed
-    #   by the specified delimiter character. Example:
-    #
-    #     puts [ns_trim -delimiter | {
-    #         | Hello
-    #         | World!
-    #     }]
-    #
-    #   This function could/should be coded in C for speed.
-    #
-    
-    ad_proc ns_trim {{-delimiter ""} text} {
+    ad_proc ns_trim {
+        {-delimiter ""}
+        text
+    } {
+        Delimiter line trim command
+
+        Strip from the begin of every line characters whitespace followed
+        by the specified delimiter character. Example:
+
+        puts [ns_trim -delimiter | {
+            | Hello
+            | World!
+        }]
+
+        This function could/should be coded in C for speed.
+    } {
         if {$delimiter ne ""} {
             set re "^\\s*\[$delimiter\](.*)$"
         } else {
