@@ -2438,11 +2438,11 @@ ad_proc ad_sanitize_filename {
 
     #
     # Remove Control characters (0x00–0x1f and 0x80–0x9f)
-    # and reserved characters (/, ?, <, >, \, :, *, | and ")
-    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"]+} $str "" str
+    # and reserved characters (/, ?, <, >, \, :, *, |, ; and ")
+    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"|;]+} $str "" str
 
     # allow a custom replacement char, that must be safe.
-    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"|\.]+} $replace_with "" replace_with
+    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"|;|\.]+} $replace_with "" replace_with
     if {$replace_with eq ""} {error "-replace_with must be a safe filesystem character"}
 
     # dots other than in file extension are dangerous. Put inside two
