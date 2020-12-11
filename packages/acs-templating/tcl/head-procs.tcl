@@ -1163,9 +1163,9 @@ ad_proc template::add_event_listener {
         #
         set script [subst {e.addEventListener('$event', $fn, $usecapture_p);}]
     } else {
-        set script [ns_trim -delimiter | {
+        set script [ns_trim -delimiter | [subst {
            | e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
-        }]
+        }]]
     }
     if {[info exists id]} {
         set script [ns_trim -delimiter | [subst {
