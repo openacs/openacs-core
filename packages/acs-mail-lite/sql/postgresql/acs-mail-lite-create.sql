@@ -33,6 +33,8 @@ CREATE TABLE acs_mail_lite_queue (
     use_sender_p              boolean
 );
 
+create index acs_mail_lite_queue_package_id_idx on acs_mail_lite_queue(package_id);
+
 create table acs_mail_lite_mail_log (
     party_id                  integer
                               constraint amlml_party_id_fk
