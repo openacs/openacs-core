@@ -323,7 +323,7 @@ aa_register_case \
                 aa_true "earlier email assigned first \
  ${f1} '$p_arr(${f1})' < ${f2} '$p_arr(${f2})' " $cron_p
 
-                # verify larger size has slower or equal priority
+                # verify larger size has lower or equal priority
                 if { $p_arr(${z1}) <= $p_arr(${z2}) } {
                     set size_p 1
                 } else {
@@ -342,7 +342,7 @@ aa_register_case \
                         } else {
                             set within_limits_p 0
                         }
-                        aa_true "r266; prioirty for case '${j}' '${p_max}' < \
+                        aa_true "r266; priority for case '${j}' '${p_max}' < \
   '$p_arr(${j})' < '${s0}' is within limits." $within_limits_p
                     }
                 } elseif { $p eq "h" } {
