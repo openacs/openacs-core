@@ -700,6 +700,12 @@ namespace eval acs_mail_lite {
             set delivery_mode [dict get $deliveryDict EmailDeliveryMode]
         }
 
+        foreach w $delivery_mode {
+            if {$w ni {smtp nssmtpd default log redirect ignore}} {
+                ns_log warning "unexpected entry '$w' in parameter EmailDeliveryMode (ignored)"
+            }
+        }
+
         if {"nssmtpd" in $delivery_mode} {
             #
             # Filter the word "nssmtpd" from the EmailDeliveryMode and
@@ -805,7 +811,7 @@ namespace eval acs_mail_lite {
             set fullMailMessage [mime::buildmessage $tokens]
 
             #
-            # Call "smtpd send" from the NaviServer nssmtpd module.
+            # Call "ns_smtpd send" from the NaviServer nssmtpd module.
             # When the last two arguments are not provided, the
             # command uses host and port from the configuration
             # section of the nssmtpd module.
