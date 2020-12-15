@@ -314,8 +314,8 @@ aa_register_case \
 
                 aa_log "p_arr(s2) = '$p_arr(s2)'"
 
-                # verify earlier is higher priority
-                if { $p_arr(${f1}) < $p_arr(${f2}) } {
+                # verify earlier is higher or equal priority
+                if { $p_arr(${f1}) <= $p_arr(${f2}) } {
                     set cron_p 1
                 } else {
                     set cron_p 0
@@ -323,8 +323,8 @@ aa_register_case \
                 aa_true "earlier email assigned first \
  ${f1} '$p_arr(${f1})' < ${f2} '$p_arr(${f2})' " $cron_p
 
-                # verify larger size has slower priority
-                if { $p_arr(${z1}) < $p_arr(${z2}) } {
+                # verify larger size has slower or equal priority
+                if { $p_arr(${z1}) <= $p_arr(${z2}) } {
                     set size_p 1
                 } else {
                     set size_p 0
