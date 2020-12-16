@@ -218,7 +218,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         set param_unknown 0
         set proc_doc [nsv_get api_proc_doc $p]
-        if {[dict exists $proc_doc param]} {
+        set deprecated_p [expr {[dict exists $proc_doc deprecated_p] &&
+                                [dict get $proc_doc deprecated_p]}]
+        if {!$deprecated_p && [dict exists $proc_doc param]} {
             incr count
             set params [dict get $proc_doc param]
             #
