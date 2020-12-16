@@ -53,7 +53,7 @@ namespace eval ::acs_admin {
         @param package_key of the required package
         @param node_name name of the mount point (defaults to the package_key)
         @param package_name name of the package_instance (defaults to the package_key)
-        @param parameter package parameter for initialization of the package
+        @param parameters package parameter for initialization of the package
         @param configuration_command when a configuratio
 
         @return package_id of the required package
