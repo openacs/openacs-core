@@ -743,7 +743,11 @@ if {[ns_info name] eq "NaviServer"} {
     # variable. This cuts the number of needed lock operations per
     # lookup into half.
     #
-    ad_proc -public lang::message::message_exists_p { {-varname } locale key } {
+    ad_proc -public lang::message::message_exists_p {
+        -varname
+        locale
+        key
+    } {
         Return 1 if message exists in given locale, 0 otherwise.
 
         @param varname when specified, return value in this variable
@@ -767,7 +771,11 @@ if {[ns_info name] eq "NaviServer"} {
     #
     # AOLserver compatible version
     #
-    ad_proc -public lang::message::message_exists_p { {-varname } locale key } {
+    ad_proc -public lang::message::message_exists_p {
+        -varname
+        locale
+        key
+    } {
         Return 1 if message exists in given locale, 0 otherwise.
 
         @param varname when specified, return value in this variable
