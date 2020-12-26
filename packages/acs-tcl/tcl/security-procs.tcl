@@ -2240,7 +2240,7 @@ if {[namespace which ns_driver] ne ""} {
             lappend result [list \
                                 proto $proto \
                                 driver [dict get $i module] \
-                                host [dict get $li host] \
+                                host [dict get $li address] \
                                 location $location port $port suffix $suffix]
         }
         return $result
