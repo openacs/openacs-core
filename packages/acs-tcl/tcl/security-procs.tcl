@@ -2222,25 +2222,51 @@ if {[namespace which ns_driver] ne ""} {
         @see util_driver_info
 
     } {
-        set defaultport {http 80 https 433}
+        set protos {http 80 https 433}
         set result {}
         foreach i [ns_driver info] {
             set type     [dict get $i type]
             set location [dict get $i location]
             set proto    [dict get $i protocol]
-            set li       [ns_parseurl $location]
+            if {$location ne ""} {
+                set li [ns_parseurl $location]
 
-            if {[dict exists $li port]} {
-                set port [dict get $li port]
-                set suffix ":$port"
+                if {[dict exists $li port]} {
+                    set port [dict get $li port]
+                    set suffix ":$port"
+                } else {
+                    set port [dict get $protos $proto]
+                    set suffix ""
+                }
             } else {
-                set port [dict get $defaultport $proto]
-                set suffix ""
+                #
+                # In case we have no "location" defined (e.g. virtual
+                # hosting), get "port" and suffix directly from the
+                # driver.
+                #
+                if {[dict exists $i port]} {
+                    set port [lindex [dict get $i port] 0]
+                    set defaultport [dict get $i defaultport]
+                } else {
+                    set driver_section [ns_driversection -driver [dict exists $i module]]
+                    set port [ns_config -int $driver_section port]
+                    set defaultport [dict get $protos $proto]
+                }
+                #
+                # Newer versions of NaviServer support multiple ports
+                # per driver. For now, take the first one (similar with "address" below).
+                #
+                set port [lindex [dict get $i port] 0]
+                if {$port eq $defaultport} {
+                    set suffix ""
+                } else {
+                    set suffix ":$port"
+                }
             }
             lappend result [list \
                                 proto $proto \
                                 driver [dict get $i module] \
-                                host [dict get $li address] \
+                                host [lindex [dict get $i address] 0] \
                                 location $location port $port suffix $suffix]
         }
         return $result
