@@ -20,7 +20,7 @@ aa_register_case \
         aa_equals "Basic sanitizing" [ad_sanitize_filename $str] "A  ßCoOOetcpasswdl#  f__ilename "
         aa_equals "Collapsing spaces" [ad_sanitize_filename -collapse_spaces $str] "A-ßCoOOetcpasswdl#-f__ilename-"
         aa_equals "Collapsing spaces with a custom separator" [ad_sanitize_filename -replace_with _ -collapse_spaces $str] "A_ßCoOOetcpasswdl#_f__ilename_"
-        aa_equals "Collapsing spaces with a custom separator, to lower case" [ad_sanitize_filename -tolower -replace_with _ -collapse_spaces $str] [string tolower "A_ßCoOOetcpasswdl#_f__ilename_"]
+        aa_equals "Collapsing spaces with a custom separator, to lowercase" [ad_sanitize_filename -tolower -replace_with _ -collapse_spaces $str] [string tolower "A_ßCoOOetcpasswdl#_f__ilename_"]
 
         aa_true "Sanitizing to an existing filename without resolving throws an error" [catch {
             ad_sanitize_filename \
@@ -54,7 +54,7 @@ aa_register_case \
         aa_equals "Basic sanitizing" [ad_sanitize_filename $str] "A  ßCoOOetcpasswdl#  f__ilename .extension"
         aa_equals "Collapsing spaces" [ad_sanitize_filename -collapse_spaces $str] "A-ßCoOOetcpasswdl#-f__ilename-.extension"
         aa_equals "Collapsing spaces with a custom separator" [ad_sanitize_filename -replace_with _ -collapse_spaces $str] "A_ßCoOOetcpasswdl#_f__ilename_.extension"
-        aa_equals "Collapsing spaces with a custom separator, to lower case" [ad_sanitize_filename -tolower -replace_with _ -collapse_spaces $str] [string tolower "A_ßCoOOetcpasswdl#_f__ilename_.extension"]
+        aa_equals "Collapsing spaces with a custom separator, to lowercase" [ad_sanitize_filename -tolower -replace_with _ -collapse_spaces $str] [string tolower "A_ßCoOOetcpasswdl#_f__ilename_.extension"]
 
         aa_true "Sanitizing to an existing filename without resolving throws an error" [catch {
             ad_sanitize_filename \
