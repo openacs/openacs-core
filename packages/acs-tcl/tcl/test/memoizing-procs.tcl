@@ -32,15 +32,36 @@ aa_register_case \
     -cats {api smoke} \
     -procs {util_memoize util_memoize_cached_p} \
     util_memoize_cache {
-    Test cache of a proc executed before
+    Test caching of a cmd call
 } {
-    aa_log "caching a proc"
-    util_memoize {memoizing_procs_test::return_string -name "foobar"} 
+    aa_log "caching a cmd call"
+    util_memoize {memoizing_procs_test::return_string -name "foobar"}
     aa_log "checking if the proc is cached"
     set success_p [util_memoize_cached_p {memoizing_procs_test::return_string -name "foobar"}]
 
-    aa_equals "proc was cached successful" $success_p 1
+    aa_equals "cmd call was cached successful" $success_p 1
 }
+
+aa_register_case \
+    -cats {api smoke} \
+    -bugs {3448} \
+    -procs {util_memoize util_memoize_cached_p} \
+    util_memoize_cache_script {
+        Test passing a script to util_memoize.
+    } {
+        aa_log "caching a script"
+        set script {
+            set x 1
+            set y 2
+            expr {$x + $y}
+        }
+        set r [util_memoize $script]
+        aa_equals "the script was executed successfully via util_memoize" $r 3
+
+        set success_p [util_memoize_cached_p $script]
+        aa_equals "the script is recognized as being cached" $success_p 1
+    }
+
 
 aa_register_case \
     -cats {api smoke} \
@@ -49,7 +70,7 @@ aa_register_case \
     Test flush of a proc cached
 } {
     aa_log "caching"
-    util_memoize {memoizing_procs_test::return_string -name "foobar"} 
+    util_memoize {memoizing_procs_test::return_string -name "foobar"}
     aa_log "checking if the proc is cached"
     aa_log "flushing"
     util_memoize_flush_regexp {return_upper_case_text}
