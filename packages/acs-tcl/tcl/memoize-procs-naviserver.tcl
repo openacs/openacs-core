@@ -54,17 +54,21 @@ ad_proc -public util_memoize {script {max_age ""}} {
     @return The possibly-cached value returned by <i>script</i>.
 } {
     #
-    # The ::util_memoize_flush proc is defined in the *-init script,
-    # after the util_memoize cache was created. Therefore, is safe to
-    # use the util_memoize when this proc is available.
+    # When util_memoize is called before the cache is created dont
+    # raise an error but eval without caching.
     #
-    if {[namespace which ::util_memoize_flush] ne ""} {
+    # The AOLserver version of the proc says "no uplevel", so do not
+    # uplevel here either.
+    #
+    # https://github.com/openacs/openacs-core/blob/master/packages/acs-tcl/tcl/memoize-procs-aolserver.tcl#L16
+    #
+    if {[ns_cache_exists util_memoize]} {
         if {$max_age ne ""} {
             set max_age "-expires $max_age"
         }
         ns_cache_eval {*}$max_age -- util_memoize $script [list eval $script]
     } else {
-        uplevel $script
+        eval $script
     }
 }
 
