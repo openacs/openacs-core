@@ -104,11 +104,11 @@ BEGIN
    'group',
    'composite',
     0, 
-    null,
+    null::integer,
    'group',
    'component',
    0,
-   null,
+   null::integer,
    't'
    );
 
@@ -127,13 +127,13 @@ BEGIN
    'rel_id',                         -- id_column
    'membership_rel',                 -- package_name
    'group',                          -- object_type_one
-   null,                               -- role_one
-   0,                                  -- min_n_rels_one
-   null,                               -- max_n_rels_one
+   null,                             -- role_one
+   0,                                -- min_n_rels_one
+   null::integer,                    -- max_n_rels_one
    'person',                         -- object_type_two
    'member',                         -- role_two
-   0,                                  -- min_n_rels_two
-   null,                                -- max_n_rels_two
+   0,                                -- min_n_rels_two
+   null::integer,                    -- max_n_rels_two
    't'
    );
 
@@ -153,11 +153,11 @@ BEGIN
    'group',                          -- object_type_one
    null,                             -- role_one
    0,                                -- min_n_rels_one
-   null,                             -- max_n_rels_one
+   null::integer,                    -- max_n_rels_one
    'person',                         -- object_type_two
    'admin',                          -- role_two
    0,                                -- min_n_rels_two
-   null,                             -- max_n_rels_two
+   null::integer,                    -- max_n_rels_two
    false                             -- composable_p
    );
 
