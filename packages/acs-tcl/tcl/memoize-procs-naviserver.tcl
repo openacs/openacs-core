@@ -54,7 +54,7 @@ ad_proc -public util_memoize {script {max_age ""}} {
     @return The possibly-cached value returned by <i>script</i>.
 } {
     #
-    # When util_memoize is called before the cache is created dont
+    # When util_memoize is called before the cache is created don't
     # raise an error but eval without caching.
     #
     # The AOLserver version of the proc says "no uplevel", so do not

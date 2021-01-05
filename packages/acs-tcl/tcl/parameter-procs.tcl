@@ -61,7 +61,7 @@ ad_proc -public parameter::get_global_value {
     Get the value of a global package parameter.
 
     @param localize should we attempt to localize the parameter
-    @param boolean insure boolean parameters are normalized to 0 or 1
+    @param boolean ensure boolean parameters are normalized to 0 or 1
     @param package_key identifies the package to which the global param belongs
     @param parameter which parameter's value to get
     @param default what to return if we don't find a value. Defaults to returning the empty string.
@@ -139,7 +139,7 @@ ad_proc -public parameter::get {
     Get the value of a package instance parameter.
 
     @param localize should we attempt to localize the parameter
-    @param boolean insure boolean parameters are normalized to 0 or 1
+    @param boolean ensure boolean parameters are normalized to 0 or 1
     @param package_id what package to get the parameter from. Defaults to
     [ad_conn package_id]
     @param parameter which parameter's value to get

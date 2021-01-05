@@ -68,7 +68,7 @@
   <code>apt-get install libssl-dev libpam-unix2 libpam0g-dev libkrb5-dev</code>
   <p>Build panda-imap with:</p>
   <code>make ldb EXTRACFLAGS=-fPIC</code>
-  <p>If your system requires ipv4 only, add the flags:
+  <p>If your system requires IPv4 only, add the flags:
     <code>IP=4 IP6=4 SSLTYPE=nopwd</code> like this:</p>
   <code>make ldb EXTRACFLAGS=-fPIC IP=4 IP6=4 SSLTYPE=nopwd</code>
   <p>Some of these are defaults, but the defaults weren't recognized on the test system,

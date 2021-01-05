@@ -158,8 +158,8 @@ load_last_visited_step -key $yourkey" before
 save_last_visited_step -key $yourkey"</p><p>Also the wizard params name is present across the current wizards
 being used, so the developer has to be aware not to use the same
 names with different purpose. For example on main wizard with have
-a param called "name" for the user name. And on on sub
+a param called "name" for the username. And on on sub
 wizard we have the param again called "name" but used for
-the file name.</p>
+the filename.</p>
 </li>
 </ul>

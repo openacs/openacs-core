@@ -129,7 +129,7 @@ was written to the filesystem.</td>
 <td align="right">
 <code>url_ref</code><font color="red">*</font>
 </td><td align="left">The name of the variable in the calling frame that
-will receive the relative URL of the file in the file system which
+will receive the relative URL of the file in the filesystem which
 contains the content blob</td>
 </tr><tr>
 <td align="right">

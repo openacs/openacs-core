@@ -1577,7 +1577,7 @@ ad_proc -public ad_conn {args} {
                             # error message, the templating system cannot
                             # determine the appropriate template without
                             # the node_id. In case of failure, the
-                            # toplevel node_is is returned.
+                            # top-level node_is is returned.
                             set node [site_node::get -url /]
                             set ad_conn($var) [dict get $node $var]
                             ns_log notice "ad_conn: request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"

@@ -190,7 +190,7 @@ proc dom::DOMImplementation {method args} {
 	    # Initialise child node list
 	    set ${varPrefix}1 {}
 
-	    # Return the new toplevel node
+	    # Return the new top-level node
 	    return ${name}(node1)
 
 	}

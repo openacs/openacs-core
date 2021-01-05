@@ -5,7 +5,7 @@ under <strong>@resources@</strong>.</if>
 <else><p>In the current installation the @resource_name@ is used via CDN <strong>@cdn@</strong>.
   <if @writable@ true>
   <p>Do you want to <a href="@download_url@" class="button">download</a>
-  version @version@ of @resource_name@ to your file system?</p>
+  version @version@ of @resource_name@ to your filesystem?</p>
   </if>
   <else>
   <p>The directory <strong>@path@</strong> is NOT writable for the server. In
