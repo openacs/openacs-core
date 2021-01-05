@@ -64,7 +64,7 @@ over insecure connections. This means that users will need to
 reauthenticate themselves over SSL when performing some action that
 requires secure authentication.</p><p>Although this makes the site less user friendly, this design
 significantly increases the security of the system because this
-insures that the authentication tokens presented to a secure
+ensures that the authentication tokens presented to a secure
 section of the web site were not sniffed. The system is not
 entirely secure, since the actual authentication password can be
 sniffed from the system, after which the sniffer can apply for a
@@ -206,7 +206,7 @@ system.</p>
 <a name="session-creation" id="session-creation"></a>Session Creation</h4></div></div></div><p>The creation and setup of sessions is handled in <code class="computeroutput">sec_setup_session</code>, which is called either
 to create a new session from <code class="computeroutput">sec_handler</code> or from <code class="computeroutput">ad_user_login</code> when there is a change in
 authorization level. The session management code must do two
-things: insure that session-level data does not float between
+things: ensure that session-level data does not float between
 users, and update the users table which has columns for
 <code class="computeroutput">n_sessions</code>, <code class="computeroutput">last_visit</code>, and <code class="computeroutput">second_to_last_visit</code>.</p><p>If there is no session already setup on this hit, a new session
 is created. This happens when <code class="computeroutput">sec_setup_session</code> is called from
@@ -215,8 +215,8 @@ from a user to another user, a new session is created, otherwise,
 the current session is continued, simply with a higher
 authorization state. This allows for data associated with a session
 to be carried over when a user logs in.</p><p>The users table is updated by <code class="computeroutput">sec_update_user_session_info</code> which is
-called when an existing session is assigned a non-zero user_id, or
-when a session is created with a non-zero user_id.</p>
+called when an existing session is assigned a nonzero user_id, or
+when a session is created with a nonzero user_id.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="passwords" id="passwords"></a>Passwords</h4></div></div></div><p>
@@ -495,7 +495,7 @@ have a maximum life, properties have a maximum life. It would be
 nice to expand the interface to allow for more persistent
 properties. In the past, there was a sec_browser_properties table
 that held permanent properties about each unique visitor (for
-logged in users, these are just user properties). This was
+logged-in users, these are just user properties). This was
 unscalable because there was no way to delete these properties, and
 the table tended to grow to millions of rows. It would be nice to
 view browser and session properties as two types of client

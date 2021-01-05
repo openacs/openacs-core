@@ -19,9 +19,8 @@ or newer to upgrade OpenACS beyond 4.6.3. See <a class="link" href="upgrade-supp
 7.3</a>; <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
 “Version Compatibility Matrix”</a>
 </p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p><a class="link" href="snapshot-backup" title="Manual backup and recovery">Back up the database and file
-system.</a></p></li><li class="listitem"><p>
-<strong>Upgrade the file system for
+<li class="listitem"><p><a class="link" href="snapshot-backup" title="Manual backup and recovery">Back up the database and filesystem.</a></p></li><li class="listitem"><p>
+<strong>Upgrade the filesystem for
 packages/acs-kernel. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called “Upgrading the
 OpenACS files”</a>
 </p></li><li class="listitem">

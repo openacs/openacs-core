@@ -135,7 +135,7 @@ coding standards; is fully internationalized; available on both
 supported databases.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Level 4:
 Deprecated.</strong></span> The package was in some earlier version
-is use, but was probably replaced by a another package. The package
+is use, but was probably replaced by another package. The package
 description should point to a preferred version.</p></li>
 </ul></div>
 </div><div class="sect2">

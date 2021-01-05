@@ -60,7 +60,7 @@ URL with no extension that doesn&#39;t directly correspond to a
 file in the filesystem.</p></li><li class="listitem"><p>
 <span class="strong"><strong>abstract file</strong></span> or
 <span class="strong"><strong>abstract path</strong></span> -- A URL
-that has been translated into a file system path (probably by
+that has been translated into a filesystem path (probably by
 prepending the appropriate pageroot), but still doesn&#39;t have
 any extension and so does not directly correspond to a file in the
 filesystem.</p></li><li class="listitem"><p>
@@ -86,7 +86,7 @@ info) file path (index). The request processor must be able to
 figure out which <span class="strong"><strong>package_id</strong></span> is associated with a
 given package_url, and package mountings must be persistent across
 server restarts and users must be able to manipulate the mountings
-on a live site, therefore this mapping is stored in the
+on a live site, therefore, this mapping is stored in the
 database.</p><p><span class="strong"><strong>Authentication and
 Authorization</strong></span></p><p>Once the request processor has located both the package_id and
 concrete file associated with the request, authentication is

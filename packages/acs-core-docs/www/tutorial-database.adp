@@ -44,7 +44,7 @@ Objects</a>. <a class="ulink" href="/doc/acs-content-repository" target="_top">M
 Repository</a>.)</p><div class="figure">
 <a name="idp140520359845544" id="idp140520359845544"></a><p class="title"><strong>Figure 9.2. Tutorial Data
 Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
-</div><br class="figure-break"><p>The top of each sql file has some standard comments, including
+</div><br class="figure-break"><p>The top of each SQL file has some standard comments, including
 doc tags such as <code class="computeroutput">\@author</code> which
 will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id:$</code> will automatically be expanded when
 the file is checked in to cvs.</p><pre class="screen">[$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/sql/postgresql</code></strong>
@@ -105,7 +105,7 @@ psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE will create implicit tr
                          0
 (1 row)
 
-[$OPENACS_SERVICE_NAME postgresql]$</pre><p>If there are errors, use them to debug the sql file and try
+[$OPENACS_SERVICE_NAME postgresql]$</pre><p>If there are errors, use them to debug the SQL file and try
 again. If there are errors in the database table creation, you may
 need to run the drop script to drop the table so that you can
 recreate it. The drop script will probably have errors since some

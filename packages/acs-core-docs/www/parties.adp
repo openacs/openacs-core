@@ -154,7 +154,7 @@ membership (membership via some composite relationship). For
 example, a person might be listed in a system as both an individual
 (direct membership) and a member of a household (indirect
 membership) at a video rental store.</p><pre class="programlisting"><code class="computeroutput">
-# sql code
+# SQL code
 create or replace package membership_rel
 as
 
@@ -203,7 +203,7 @@ component of itself either directly or indirectly. This constraint
 is maintained for you by the API. So users do not see some random
 PL/SQL error message, do not give them the option to create a
 composition relation that would result in a circular reference.</p><pre class="programlisting"><code class="computeroutput">
-# sql code
+# SQL code
 create or replace package composition_rel
 as
 

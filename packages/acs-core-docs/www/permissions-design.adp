@@ -211,7 +211,7 @@ procedure revoke_permission (
 returns true or false, the other presents an error page.</p><p>To receive a true or false value, Tcl code should call:</p><pre class="programlisting">
 permission::permission_p -object_id $object_id -party_id $user_id -privilege $method
 </pre><p>If the <code class="computeroutput">user_id</code> argument is
-left out, then the currently logged in user is checked. To create
+left out, then the currently logged-in user is checked. To create
 an error page, Tcl code should call:</p><pre class="programlisting">
 permission::require_permission -object_id $object_id -privilege $method
 </pre><p>These procedures are defined in <code class="computeroutput">acs-permissions-procs.tcl</code>.</p>

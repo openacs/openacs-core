@@ -108,7 +108,7 @@ APIs</td>
 <td class="seg">EXT-AUTH-28</td><td class="seg">A</td><td class="seg">Username is email switch</td>
 </tr>
 </tbody>
-</table></div><p>Users will log in using a username, a authority, and a password.
+</table></div><p>Users will log in using a username, an authority, and a password.
 The authority is the source for user/password verification. OpenACS
 can be an authority itself.</p><p>Each user in OpenACS will belong to exactly one authority, which
 can either be the "local" OpenACS users table, in which
@@ -177,7 +177,7 @@ changing passwords.</p><div class="segmentedlist"><table border="1" cellpadding=
 </tr></tbody>
 </table></div><p>Each authority is defined like this:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Authority pretty-name, e.g. "URZ"</p></li><li class="listitem"><p>Authentication Driver, e.g. "RADIUS". In practice,
-this would be a reference to a service contract implementation.</p></li><li class="listitem"><p>Authentication Driver configuration settings, e.g. host name,
+this would be a reference to a service contract implementation.</p></li><li class="listitem"><p>Authentication Driver configuration settings, e.g. hostname,
 port, etc., as required by the particular driver. Note that this is
 per authority, not per driver, i.e., you can have multiple
 authorities with the same driver but different configuration
@@ -191,7 +191,7 @@ features.</p></li><li class="listitem"><p>Account Creation Driver, e.g. "RADIUS"
 this would be a reference to a service contract implementation. The
 reason we have separate drivers for authentication and account
 creation is that organizations are likely to have a home-grown
-account registration process.</p></li><li class="listitem"><p>Account Creation Driver configuration settings, e.g. host name,
+account registration process.</p></li><li class="listitem"><p>Account Creation Driver configuration settings, e.g. hostname,
 port, etc., as required by the particular driver. Note that this is
 per authority, not per driver, i.e., you can have multiple
 authorities with the same driver but different configuration
@@ -283,7 +283,7 @@ available tomorrow. If not, contact X."</p>
 <a name="Account_Registratio" id="Account_Registratio"></a>Account Registration</h4></div></div></div><p>If a user doesn&#39;t have an account, the site-wide
 configuration can allow the user to register for one, as defined in
 the configuration discussed above. This section is about normal
-account registration through a authority driver.</p><p>The account creation service contract implementation will need
+account registration through an authority driver.</p><p>The account creation service contract implementation will need
 to tell us which information to ask the user for:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Required Fields: A list of fields which are required.</p></li><li class="listitem"><p>Optional Fields: A list of fields which are optional.</p></li>
 </ul></div><p>The fields to choose from are these:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">

@@ -14,11 +14,10 @@ the OpenACS files</h2></div></div></div><div class="sect2">
 <a name="idp140520283780216" id="idp140520283780216"></a>Choosing a Method to Upgrade your
 Files</h3></div></div></div><p>OpenACS is distributed in many different ways:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>as a collection of files</p></li><li class="listitem"><p>as one big tarball</p></li><li class="listitem"><p>via CVS</p></li><li class="listitem"><p>via automatic download from within the APM (package manager)</p></li>
-</ul></div><p>Upgrades work by first changing the file system (via any of the
-previous methods), and then using the APM to scan the file system,
+</ul></div><p>Upgrades work by first changing the filesystem (via any of the
+previous methods), and then using the APM to scan the filesystem,
 find upgrade scripts, and execute them. Starting with OpenACS 5.0,
-the last method was added, which automatically changes the file
-system for you. If you are using the last method, you can skip this
+the last method was added, which automatically changes the filesystem for you. If you are using the last method, you can skip this
 page. This page describes whether or not you need to be upgrading
 using this page or not: <a class="xref" href="upgrade-5-0-dot" title="Upgrading an OpenACS 5.0.0 or greater installation">the
 section called “Upgrading an OpenACS 5.0.0 or greater

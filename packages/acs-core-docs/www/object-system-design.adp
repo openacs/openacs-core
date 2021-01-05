@@ -229,7 +229,7 @@ constraints on the data.</p></li>
 still keeping track of the fact that each member of a subtype (i.e.
 for each row in the subtype&#39;s table), is also a member of the
 parent type (i.e. there is a corresponding row in the parent type
-table). Therefore, applications an use this mechanism without
+table). Therefore, applications use this mechanism without
 worrying about this bookkeeping themselves, and we avoid having
 applications pollute the core data model with their specific
 information.</p>
@@ -345,7 +345,7 @@ alternative. Here, some notion of subtyping is embedded into an
 existing SQL or SQL-like database engine. Examples of systems like
 this include the new Informix, PostgreSQL 7, and Oracle has
 something like this too. The main problem with these systems: each
-one implements their own non-portable extensions to SQL to
+one implements their own nonportable extensions to SQL to
 implement subtyping. Thus, making OpenACS data models portable
 would become even more difficult. In addition, each of these object
 systems have strange limitations that make using inheritance

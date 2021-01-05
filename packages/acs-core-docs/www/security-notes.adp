@@ -19,7 +19,7 @@ secure.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="security-notes-https-sessions" id="security-notes-https-sessions"></a>HTTPS and the sessions
 system</h3></div></div></div><p>If a user switches to HTTPS after logging into the system via
-HTTP, the user must obtain a secure token. To insure security, the
+HTTP, the user must obtain a secure token. To ensure security, the
 <span class="emphasis"><em>only way</em></span> to obtain a secure
 token in the security system is to authenticate yourself via
 password over an HTTPS connection. Thus, users may need to log on

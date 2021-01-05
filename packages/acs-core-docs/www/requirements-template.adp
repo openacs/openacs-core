@@ -106,7 +106,7 @@ requirements as well.</p></li>
 <a name="yourpackage-requirements-implementation" id="yourpackage-requirements-implementation"></a>Optional:
 Implementation Notes</h3></div></div></div><p><span class="emphasis"><em>Although in theory coding comes after
 design, which comes after requirements, we do not, and perhaps
-should not, always follow such a rigid process (a.k.a. the
+should not, always follow such a rigid process (aka the
 waterfall lifecycle). Often, there is a pre-existing system or
 prototype first, and thus you may want to write some thoughts on
 implementation, for aiding and guiding yourself or other

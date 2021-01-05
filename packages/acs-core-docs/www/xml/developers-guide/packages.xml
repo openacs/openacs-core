@@ -576,7 +576,7 @@ ROOT/
           file information&quot;, then the &quot;Scan the
           <computeroutput>packages/notes</computeroutput> directory for
           additional files in this package&quot; link on that page to scan
-          the filesystem for new files.  This will bring you do a page
+          the filesystem for new files.  This will bring you to a page
           that lists all the files you just added and lets you add them to
           the <computeroutput>notes</computeroutput> package.
         </para>

@@ -15,7 +15,7 @@ known-good versions of a service, such as at initial installation
 and just before an upgrade. First, you back up the database to a
 file within the file tree. Then, you back up the file tree. All of
 the information needed to rebuild the site, including the AOLserver
-config files, is then in tree for regular file system backup.</p><div class="orderedlist"><ol class="orderedlist" type="1">
+config files, is then in tree for regular filesystem backup.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p><strong>Back up the database to a file. </strong></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
@@ -101,7 +101,7 @@ exit</span></span>
 </ul></div>
 </li><li class="listitem">
 <a name="backup-file-system" id="backup-file-system"></a><p>
-<strong>Back up the file system. </strong>Back up all of
+<strong>Back up the filesystem. </strong>Back up all of
 the files in the service, including the database backup file but
 excluding the auto-generated <code class="filename">supervise</code> directory, which is unnecessary and has
 complicated permissions.</p><p>In the tar command,</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -188,7 +188,7 @@ are not guaranteed to be created in the right order. In practice,
 running the OpenACS initialization script is always sufficient to
 create any out-of-order database objects. Next, restore the
 database from the dump file. The restoration will show some error
-messages at the beginning for objects that were pre-created from
+messages at the beginning for objects that were precreated from
 the OpenACS initialization script, which can be ignored.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>createdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>

@@ -635,7 +635,7 @@ single file. This approach has certain advantages, such as
 centralization, but splitting this information into several files
 allows for flexible extensions to the APM architecture over
 time.</p><p>APM packages currently lack provisions to verify security
-information. There are plans to add MD5 time stamps and PGP
+information. There are plans to add MD5 timestamps and PGP
 signatures to packages to enable secure authentication of packages.
 These steps are necessary for APM to be usable as a scalable method
 to distribute packages on multiple repositories worldwide.</p><p>Another anticipated change is to split the APM UI into separate

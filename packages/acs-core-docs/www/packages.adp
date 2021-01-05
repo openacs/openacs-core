@@ -18,7 +18,7 @@ OpenACS documentation staff.</div><div class="sect2">
 OpenACS. OpenACS packages are installed and maintained with the
 OpenACS Package Manager (APM) which is part of the acs-admin
 package. This document presents reasons for packaging software,
-conventions for the file system and naming that must be followed,
+conventions for the filesystem and naming that must be followed,
 and step by step instructions for creating a new package for the
 "Notes" example package.</p>
 </div><div class="sect2">
@@ -51,7 +51,7 @@ ROOT/
 <a name="packages-looks" id="packages-looks"></a>What a Package Looks Like</h3></div></div></div><p>Each package encapsulates all of its data model, library code,
 logic, administration pages and user pages in a single part of the
 file tree. This means developers can track down <span class="emphasis"><em>everything</em></span> that is related to a
-particular package without hunting all over the file system.
+particular package without hunting all over the filesystem.
 Encapsulating everything about a package in one place also makes it
 much easier to distribute packages independently from the OpenACS
 Core.</p><p>In order to make this work, we need a system that keeps track of
@@ -277,7 +277,7 @@ for easy reference:</p><div class="variablelist"><dl class="variablelist">
 <dt><span class="term">Package Key</span></dt><dd><p>This is a short text string that should uniquely name your
 package to distinguish it from all the others. It is used as a
 database key to keep track of the package and as the name of the
-directory in the file system where all the files related to your
+directory in the filesystem where all the files related to your
 package will live. Example package keys in the current system
 include: <code class="computeroutput">forums</code>, <code class="computeroutput">acs-kernel</code> and so on. For the example
 application, we will use the package key <code class="computeroutput">notes</code>.</p></dd><dt><span class="term">Package Name</span></dt><dd><p>This is a short human readable name for your package. For our
@@ -309,8 +309,7 @@ and <code class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-drop.s
 click the link called "notes" to go to the management
 page for the new package. Now click the link called "Manage
 file information", then the "Scan the <code class="computeroutput">packages/notes</code> directory for additional
-files in this package" link on that page to scan the file
-system for new files. This will bring you do a page that lists all
+files in this package" link on that page to scan the filesystem for new files. This will bring you to a page that lists all
 the files you just added and lets you add them to the <code class="computeroutput">notes</code> package.</p><p>Note that while the <code class="computeroutput">.sql</code>
 files have been added to the package, they <span class="emphasis"><em>have not</em></span> been loaded into the database.
 For the purposes of development, you have to load the data model by
@@ -350,8 +349,7 @@ didn&#39;t put the pages underneath <code class="computeroutput">ROOT/www</code>
 What we have to do is <span class="emphasis"><em>mount</em></span>
 the application into the site map. That is, we have to define the
 URL from which the application will serve its pages.</p><p>In OpenACS 5, administrators can define an arbitrary mapping
-between the URLs the user types and the actual file in the file
-system that is served. This mapping is called the <span class="emphasis"><em>site map</em></span> and entries in the site map are
+between the URLs the user types and the actual file in the filesystem that is served. This mapping is called the <span class="emphasis"><em>site map</em></span> and entries in the site map are
 called <span class="emphasis"><em>site nodes</em></span>. Each site
 node maps a URL to an OpenACS object. Since package instances are
 objects, the site map allows us to easily map package instances to

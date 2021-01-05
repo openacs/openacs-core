@@ -291,7 +291,7 @@ probably from the filename.</p>
 <a name="Submitted_Form_Data_Character_Set" id="Submitted_Form_Data_Character_Set"></a>Submitted Form Data
 Character Set</h4></div></div></div><p>
 <span class="emphasis"><em>50.30</em></span> Data which is
-submitted with a HTTP request using a GET or POST method may be in
+submitted with an HTTP request using a GET or POST method may be in
 any character set. The system must be able to determine the
 encoding of the form data and convert it to Unicode on demand.</p><p>
 <span class="emphasis"><em>50.35</em></span> The developer must
@@ -401,23 +401,23 @@ handle full-text search in any supported language.</p>
 <a name="VI.G_Time_Zones" id="VI.G_Time_Zones"></a>Time Zones</h3></div></div></div><div class="blockquote"><blockquote class="blockquote">
 <p>
 <span class="emphasis"><em>90.10</em></span> Provide API support
-for specifying a time zone</p><p>
+for specifying a timezone</p><p>
 <span class="emphasis"><em>90.20</em></span> Provide an API for
 computing time and date operations which are aware of timezones. So
 for example a calendar module can properly synchronize items
-inserted into a calendar from users in different time zones using
+inserted into a calendar from users in different timezones using
 their own local times.</p><p>
 <span class="emphasis"><em>90.30</em></span> Store all dates and
-times in universal time zone, UTC.</p><p>
+times in universal timezone, UTC.</p><p>
 <span class="emphasis"><em>90.40</em></span> For a registered
-users, a time zone preference should be stored.</p><p>
+users, a timezone preference should be stored.</p><p>
 <span class="emphasis"><em>90.50</em></span> For a
-non-registered user a time zone preference should be attached via a
+non-registered user a timezone preference should be attached via a
 session or else UTC should be used to display every date and
 time.</p><p>
 <span class="emphasis"><em>90.60</em></span> The default if we
-can&#39;t determine a time zone is to display all dates and times
-in some universal time zone such as GMT.</p>
+can&#39;t determine a timezone is to display all dates and times
+in some universal timezone such as GMT.</p>
 </blockquote></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

@@ -113,8 +113,7 @@ you intended to make and tested previously, and nothing more. Those
 additional measures typically take the form of source control tags
 and system version numbers. The parallel-server approach also
 guarantees rollback because the original working service is not
-touched; it is merely set aside.</p><p>This approach can has limitations. If the database or file
-system regularly receiving new data, you must interrupt this
+touched; it is merely set aside.</p><p>This approach can has limitations. If the database or filesystem regularly receiving new data, you must interrupt this
 function or risk losing data in the shuffle. It also requires extra
 steps if the database will be affected.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">

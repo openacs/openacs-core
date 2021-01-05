@@ -25,7 +25,7 @@ service.</p>
 </li><li class="listitem"><p>Copy this <a class="ulink" href="files/restart-aolserver.txt" target="_top">file</a> into <code class="computeroutput">/var/tmp/restart-aolserver.txt</code>.</p></li><li class="listitem">
 <p>This script needs to be SUID-root, which means that the script
 will run as root. This is necessary to ensure that the AOLserver
-processes are killed regardless of who owns them. However the
+processes are killed regardless of who owns them. However, the
 script should be executable by the <code class="computeroutput">web</code> group to ensure that the users updating
 the web page can use the script, but that general system users
 cannot run the script. You also need to have Perl installed and

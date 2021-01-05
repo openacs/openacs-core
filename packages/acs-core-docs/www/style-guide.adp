@@ -14,7 +14,7 @@ Standards"
 <a name="style-guide-motivation" id="style-guide-motivation"></a>Motivation</h3></div></div></div><p>Why have coding standards for OpenACS? And if the code works why
 change it to adhere to some arbitrary rules?</p><p>Well, first lets consider the OpenACS code base (all this as of
 December 2003 and including dotLRN). There are about 390,000 lines
-of Tcl code, about 460,000 lines of sql (in datamodel scripts and
+of Tcl code, about 460,000 lines of SQL (in datamodel scripts and
 .xql files), about 80,000 lines of markup in .adp files, and about
 100,000 lines of documentation. All told, just about a million
 lines of "stuff". In terms of logical units there are

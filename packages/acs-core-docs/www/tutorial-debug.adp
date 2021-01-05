@@ -78,7 +78,7 @@ been asking for some guidelines on how to write automated tests.
 I&#39;ve done several tests by now and have found the process to be
 extremely easy and useful. It&#39;s a joy to work with automated
 testing once you get the hang of it.</p><p>Create the directory that will contain the test script and edit
-the script file. The directory location and file name are standards
+the script file. The directory location and filename are standards
 which are recognized by the automated testing package:</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
 [$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
 [$OPENACS_SERVICE_NAME test]$ <strong class="userinput"><code>emacs myfirstpackages-procs.tcl</code></strong>

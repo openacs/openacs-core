@@ -71,8 +71,7 @@ configuration file)</p></li><li class="listitem"><p>Upgrading packages, without 
 </ul></div>
 </li><li class="listitem"><p>
 <span class="strong"><strong>A registry of installed
-packages</strong></span>, database-backed and integrated with file
-system-based version control</p></li><li class="listitem">
+packages</strong></span>, database-backed and integrated with filesystem-based version control</p></li><li class="listitem">
 <p><span class="strong"><strong>Web-based tools for package
 development:</strong></span></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Creating new packages locally</p></li><li class="listitem"><p>Releasing new versions of locally-created packages</p></li><li class="listitem"><p>Uploading packages to a global package repository on the web</p></li><li class="listitem"><p>Use of these tools should be safe, i.e. installing or removing a
@@ -262,7 +261,7 @@ API.</p>
 identified.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <span class="strong"><strong>4.600.1</strong></span> Each
-package will have a PGP signature and there will be MD5 time stamps
+package will have a PGP signature and there will be MD5 timestamps
 for each file within the package.</p></li><li class="listitem"><p>
 <span class="strong"><strong>4.600.5</strong></span> The APM
 will provide a facility to validate both the PGP signature and MD5
@@ -310,18 +309,17 @@ created.</p>
 package</strong></span></p><p>
 <span class="strong"><strong>20.1</strong></span> The developer
 must be able to add files to the package. This is done by copying
-the files into the package directory in the host OS&#39;s file
-system. Files can be added at any point after package creation.</p><p>
+the files into the package directory in the host OS&#39;s filesystem. Files can be added at any point after package creation.</p><p>
 <span class="strong"><strong>20.3</strong></span> Once a package
 has been versioned and distributed, no new files should be added to
 the package without incrementing the version number.</p><p>
 <span class="strong"><strong>20.5</strong></span> The APM&#39;s
 UI should facilitate the process of adding new files, by scanning
-the file system for new files automatically, and allowing the
+the filesystem for new files automatically, and allowing the
 developer to confirm adding them.</p><p>
 <span class="strong"><strong>20.10</strong></span> The developer
 cannot add files to a given package via the UI that do not exist in
-the file system already.</p><p>
+the filesystem already.</p><p>
 <span class="strong"><strong>20.15</strong></span> Package file
 structure must follow a specified convention. Please see the
 <a class="link" href="apm-design" title="Package Manager Design">design document</a> for what we do
@@ -335,12 +333,12 @@ can be done in two ways.</p><div class="itemizedlist"><ul class="itemizedlist" s
 <span class="strong"><strong>30.1</strong></span> Access the APM
 UI, browse the file list, and remove files.</p><p>
 <span class="strong"><strong>30.1.1</strong></span>If a file is
-removed from the package list, but not from the file system, an
+removed from the package list, but not from the filesystem, an
 error should be generated at package load time.</p>
 </li><li class="listitem">
 <p>
 <span class="strong"><strong>30.5</strong></span> Remove the
-file from file system.</p><p>
+file from filesystem.</p><p>
 <span class="strong"><strong>30.5.1</strong></span> The APM UI
 should take note of the fact that the file is gone and offer the
 developer an option to confirm the file&#39;s deletion.</p>
@@ -351,7 +349,7 @@ developer an option to confirm the file&#39;s deletion.</p>
 <span class="strong"><strong>40.0 Modify files in a
 package</strong></span>.</p><p>
 <span class="strong"><strong>40.1</strong></span> The developer
-should be able to modify files in the file system. The APM UI
+should be able to modify files in the filesystem. The APM UI
 should not interfere with this.</p><p>
 <span class="strong"><strong>40.5</strong></span> However, if
 the developer modifies files containing procedural definitions, APM
@@ -393,7 +391,7 @@ should be able to view the XML package specification that encodes
 all package information.</p>
 </li><li class="listitem">
 <p><span class="strong"><strong>70.0 Write an XML package
-specification to the file system</strong></span></p><p>
+specification to the filesystem</strong></span></p><p>
 <span class="strong"><strong>70.1</strong></span> The developer
 should be able to write an up-to-date XML specification to
 disk.</p><p>
@@ -561,7 +559,7 @@ been installed. Deinstallation entails:</p><div class="orderedlist"><ol class="o
 <span class="strong"><strong>110.1.1</strong></span> Running any
 data model scripts necessary to drop the package.</p></li><li class="listitem"><p>
 <span class="strong"><strong>110.1.5</strong></span> Moving all
-of the files into a separate location in the file system from the
+of the files into a separate location in the filesystem from the
 installed packages.</p></li><li class="listitem"><p>
 <span class="strong"><strong>4.110.1.10</strong></span> If the
 package is a compound package, then the administrator must confirm
@@ -590,10 +588,10 @@ throughout a site and should almost never be done.</p>
 <p><span class="strong"><strong>150.0 Scan for new or modified
 packages</strong></span></p><p>
 <span class="strong"><strong>150.1</strong></span> The
-administrator should be able to scan the file system for any
+administrator should be able to scan the filesystem for any
 changes made in any of the installed package files.</p><p>
 <span class="strong"><strong>150.5</strong></span> The
-administrator should be able to scan the file system for any newly
+administrator should be able to scan the filesystem for any newly
 installed packages.</p>
 </li>
 </ul></div>

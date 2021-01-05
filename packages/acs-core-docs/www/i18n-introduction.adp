@@ -36,7 +36,7 @@ in APM Parameters. OpenACS provides two approaches, message keys
 and localized ADP files. For ADP pages which are mostly code,
 replacing the message text with message key placeholders is
 simpler. This approach also allows new translation in the database,
-without affecting the file system. For ADP pages which are static
+without affecting the filesystem. For ADP pages which are static
 and mostly text, it may be easier to create a new ADP page for each
 language. In this case, the pages are distinguished by a file
 naming convention.</p><div class="sect2">
@@ -118,7 +118,7 @@ formats:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style
 <li class="listitem"><p>Typical static key lookup: <code class="computeroutput">[_
 package_key.message_key]</code> - The message key and package key
 used here must be string literals, they can&#39;t result from
-variable evaluation.</p></li><li class="listitem"><p>Static key lookup with non-default locale: <code class="computeroutput">[lang::message::lookup $locale
+variable evaluation.</p></li><li class="listitem"><p>Static key lookup with nondefault locale: <code class="computeroutput">[lang::message::lookup $locale
 package_key.message_key]</code> - The message key and package key
 used here must be string literals, they can&#39;t result from
 variable evaluation.</p></li><li class="listitem"><p>Dynamic key lookup: <code class="computeroutput">[lang::util::localize

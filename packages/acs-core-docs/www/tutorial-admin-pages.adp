@@ -61,7 +61,7 @@ set parameters_url [export_vars -base "/shared/parameters" {
 a link to it somewhere in the system so that admins don&#39;t have
 to type in the <code class="computeroutput">/admin</code> every
 time they need to reach it. You could put a static link to the
-toplevel <code class="computeroutput">index.adp</code> but that
+top-level <code class="computeroutput">index.adp</code> but that
 might be distracting for people who are not admins. Besides, some
 people consider it impolite to first offer a link and then display
 a nasty "You don&#39;t have permission to access this

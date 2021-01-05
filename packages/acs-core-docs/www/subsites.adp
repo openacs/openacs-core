@@ -37,7 +37,7 @@ how a given URL is translated into a physical file to serve using
 the site map. We&#39;ll repeat this description here, assuming that
 you have mounted an instance of Notes at the URL <code class="computeroutput">/notes</code> as we did in the <a class="link" href="packages" title="What a Package Looks Like">packages-example</a>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>AOLserver receives your request for the URL <code class="computeroutput">/notes/somepage</code>.</p></li><li class="listitem"><p>This URL is passed to the request processor.</p></li><li class="listitem"><p>The RP looks up the URL in the site map, and sees that the
-object mounted at that location is an instance of the <code class="computeroutput">notes</code> application.</p></li><li class="listitem"><p>The RP asks the package manager where in the file system the
+object mounted at that location is an instance of the <code class="computeroutput">notes</code> application.</p></li><li class="listitem"><p>The RP asks the package manager where in the filesystem the
 Notes package lives. In the standard case, this would be
 <code class="computeroutput">ROOT/packages/notes</code>.</p></li><li class="listitem"><p>The RP translates the URL to serve a page relative to the page
 root of the application, which is <code class="computeroutput">ROOT/packages/notes/www/</code>. Therefore, the

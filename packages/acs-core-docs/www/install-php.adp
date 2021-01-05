@@ -25,7 +25,7 @@ mirror</p><pre class="screen">[root root]# <strong class="userinput"><code>cd /u
 [root php-4.3.4]# <strong class="userinput"><code>make install</code></strong>
 </pre><p>Once installed you can enable this by configuring your config
 file. Make sure your config file supports php (it should have a php
-section with it). Furthermore add <strong class="userinput"><code>index.php</code></strong> as the last element to
+section with it). Furthermore, add <strong class="userinput"><code>index.php</code></strong> as the last element to
 your <code class="computeroutput">directoryfile</code>
 directive.</p>
 </div>

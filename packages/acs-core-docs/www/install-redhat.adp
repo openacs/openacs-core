@@ -87,7 +87,7 @@ don&#39;t know your netmask, 255.255.255.0 is usually a pretty safe
 guess. Click <code class="computeroutput"><span class="guibutton"><span class="guibutton">Edit</span></span></code>,
 uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Configure using <u><span class="accel">D</span></u>HCP</span></span></code> and type in your IP
 and netmask. Click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
-<u><span class="accel">O</span></u>k</span></span></code>.</p></li><li class="listitem"><p>Type in your host name, gateway, and DNS server(s). Then click
+<u><span class="accel">O</span></u>k</span></span></code>.</p></li><li class="listitem"><p>Type in your hostname, gateway, and DNS server(s). Then click
 <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">N</span></u>ext</span></span></code>.</p></li><li class="listitem"><p>We&#39;re going to use the firewall template for high security,
 meaning that we&#39;ll block almost all incoming traffic. Then
@@ -105,7 +105,7 @@ development server we&#39;ll be setting up.</p></li>
 <a class="indexterm" name="idp140520348490504" id="idp140520348490504"></a>Select any additional languages you want
 the computer to support and then click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">N</span></u>ext</span></span></code>
-</p></li><li class="listitem"><p>Choose your time zone and click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
+</p></li><li class="listitem"><p>Choose your timezone and click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">N</span></u>ext</span></span></code>.</p></li><li class="listitem"><p>Type in a root password, twice.</p></li><li class="listitem">
 <p>On the Package selection page, we&#39;re going to uncheck a lot
 of packages that install software we don&#39;t need, and add

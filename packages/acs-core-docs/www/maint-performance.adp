@@ -12,7 +12,7 @@ Environments"
 <a name="maint-performance" id="maint-performance"></a>Diagnosing Performance Problems</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Did performance problems happen overnight, or did they sneak up
 on you? Any clue what caused the performance problems (e.g. loading
-20K users into .LRN)</p></li><li class="listitem"><p>Is the file system out of space? Is the machine swapping to disk
+20K users into .LRN)</p></li><li class="listitem"><p>Is the filesystem out of space? Is the machine swapping to disk
 constantly?</p></li><li class="listitem">
 <p>Isolating and solving database problems.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Without daily internal maintenance, most databases slowly

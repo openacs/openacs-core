@@ -57,7 +57,7 @@ pw useradd -n <span class="replaceable"><span class="replaceable">$OPENACS_SERVI
 </pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="openacs-setup" id="openacs-setup"></a>Set up the file system for one or more OpenACS
+<a name="openacs-setup" id="openacs-setup"></a>Set up the filesystem for one or more OpenACS
 Sites</h3></div></div></div><p>For Linux Standard Base compliance and ease of backup, all of
 the files in each OpenACS site are stored in a subdirectory of
 <code class="computeroutput">/var/lib/aolserver</code>, one
@@ -359,8 +359,7 @@ Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc</code></strong>
 [$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>emacs config.tcl</code></strong>
 </pre><p>You can continue without changing any values in the file.
-However, if you don&#39;t change <code class="computeroutput">address</code> to match the computer&#39;s ip
-address, you won&#39;t be able to browse to your server from other
+However, if you don&#39;t change <code class="computeroutput">address</code> to match the computer&#39;s IP address, you won&#39;t be able to browse to your server from other
 machines.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <span class="emphasis"><em>httpport</em></span> - If you want

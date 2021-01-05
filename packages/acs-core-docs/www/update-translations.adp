@@ -14,14 +14,14 @@ OpenACS"
 <p>Identify any new locales that have been created. For each new
 locale, check the parameters, especially that the locale is in the
 format <span class="emphasis"><em>[two-letter code for language,
-lower-case]_[TWO-LETTER CODE FOR COUNTRY, UPPER-CASE]</em></span>,
+lowercase]_[TWO-LETTER CODE FOR COUNTRY, UPPER-CASE]</em></span>,
 and create a sql command. A example sql command for creating a
 locale is:</p><pre class="programlisting">insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
        values ('fa_IR', 'Farsi (IR)', 'fa', 'IR', 'FARSI', 'IRAN', 'AL24UTFFSS', 
         'windows-1256', 't', 'f');</pre><p>Put this command into the following four files. For the upgrade
-files, the correct file name will depend on the exact version.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+files, the correct filename will depend on the exact version.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/postgresql/ad-locales.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/postgresql/upgrade/upgrade-<span class="replaceable"><span class="replaceable">current-version</span></span>.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/oracle/ad-locales.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/oracle/upgrade/upgrade-<span class="replaceable"><span class="replaceable">current-version</span></span>.sql</code></p></li>
 </ul></div>
 </li><li class="listitem"><p>Make a backup of the production database. Restore it as a new

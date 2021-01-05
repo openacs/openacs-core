@@ -67,7 +67,7 @@ of applications</p></li><li class="listitem"><p>Various fixes for sitewide-admin
 in OpenACS 5.9.0):</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>36 files deleted</p></li><li class="listitem"><p>Removed more than 100 obsolete named queries</p></li><li class="listitem"><p>Stripped misleading SQL statements</p></li>
 </ul></div>
-</li><li class="listitem"><p>Marked redundant / uncalled sql functions as deprecated</p></li><li class="listitem"><p>Replaced usages of obsolete view
+</li><li class="listitem"><p>Marked redundant / uncalled SQL functions as deprecated</p></li><li class="listitem"><p>Replaced usages of obsolete view
 "all_object_party_privilege_map" by
 "acs_object_party_privilege_map"</p></li><li class="listitem">
 <p>Removed type discrepancy introduced in 2002:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -75,7 +75,7 @@ in OpenACS 5.9.0):</p><div class="itemizedlist"><ul class="itemizedlist" style="
 acs_object_types.object_type as foreign key</p></li>
 </ul></div>
 </li><li class="listitem">
-<p>Simplified core sql functions by using defaults:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<p>Simplified core SQL functions by using defaults:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Number of functions reduced by a factor of 2 compared to OpenACS
 5.9.0 (while providing compatibility for clients using old
 versions),</p></li><li class="listitem"><p>Reduced code redundancy</p></li><li class="listitem">
@@ -314,7 +314,7 @@ HTTPS)</p></li><li class="listitem"><p>CSPEnabledP: activate/deactivate CSP</p><
 <p>acs-kernel (recommended to be set via config file in section
 "ns/server/${server}/&gt;acs"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>NsShutdownWithNonZeroExitCode: tell NaviServer to return with a
-non-zero return code to cause restart (important under windows)</p></li><li class="listitem"><p>LogIncludeUserId: include user_id in access log</p></li>
+nonzero return code to cause restart (important under windows)</p></li><li class="listitem"><p>LogIncludeUserId: include user_id in access log</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>acs-api-browser:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p>ValidateCSRFP: make checking of CSRF optional (default 1)</p></li></ul></div>
@@ -391,7 +391,7 @@ workflow "allocate" actions</p></li><li class="listitem"><p>Internationalized mo
 </ul></div>
 </li><li class="listitem">
 <p>xotcl-request-monitor</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>Added class "BanUser" (use. e.g. ip address to
+<li class="listitem"><p>Added class "BanUser" (use. e.g. IP address to
 disallow requests from a user via request monitor)</p></li><li class="listitem"><p>Added support for optional user tracking in database</p></li><li class="listitem"><p>Added support for monitoring response-time for certain URLs via
 munin</p></li><li class="listitem"><p>Increased usage of XOTcl 2.0 variable resolver (potentially
 speed improvement 4x)</p></li><li class="listitem"><p>Performed some refactoring of response-time handling to allow
@@ -443,7 +443,7 @@ functions.</p></li><li class="listitem">
 <p>Cleanup of .xql files in acs-subsite:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Some cleanup of .xql files: removed misleading sql-statements
 from db_* calls, which were ignored due .xql files</p></li><li class="listitem"><p>Removed bug where same query-name was used in different branches
-of an if-statement for different sql statements, but the query-name
+of an if-statement for different SQL statements, but the query-name
 lead to the wrong result.</p></li><li class="listitem"><p>Removed multiple entries of same query name from .xql files
 (e.g. the entry
 "package_create_attribute_list.select_type_info" was 7
@@ -474,7 +474,7 @@ packages in order to create responsive designs, reduce hard-coding
 of paths, HTML etc.</p></li><li class="listitem"><p>Improved include-handling: All includes are now theme-able,
 interfaces of includes can be defined with
 "ad_include_contract" (similar to ad_page_contract).</p></li><li class="listitem"><p>Improved them-ability for display_templates. One can now provide
-a display_template_name (similar to the sql statement name) to
+a display_template_name (similar to the SQL statement name) to
 refer to display templates. This enables reusability and is
 theme-able.</p></li><li class="listitem"><p>Dimensional slider reform (ad_dimensional): Removed hard-coded
 table layout from dimensional slider. Add backwards compatible
@@ -496,7 +496,7 @@ developer support output when developer support is activated
 (controlled via package parameter
 "TclTraceLogServerities" in the acs-tcl package
 parameters)</p></li><li class="listitem"><p>Added ability to save data sent by ns_return in files on the
-file system. This can be used to validate HTML content also for
+filesystem. This can be used to validate HTML content also for
 password protected pages (controlled via package parameter
 "TclTraceSaveNsReturn" in the acs-tcl package
 parameters)</p></li><li class="listitem"><p>New API function "ad_log" having the same interface as
@@ -594,7 +594,7 @@ committers.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-7-0" id="release-notes-5-7-0"></a>Release 5.7.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Made changes that extend acs-kernel&#39;s create_type and
 create_attribute procs, so they&#39;re optionally able to create
-sql tables and columns. Optional metadata params allow for the
+SQL tables and columns. Optional metadata params allow for the
 automatic generation of foreign key references, check exprs,
 etc.</p></li></ul></div>
 </div><div class="sect2">

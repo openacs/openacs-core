@@ -21,7 +21,7 @@ notifications package with your package.</p><p>First step is to create the notif
 script similar to the one below needs to be loaded into Postgresql.
 I create this script in a
 package-name/sql/postgresql/package-name-notifications-init.sql
-file. I then load this file from my create sql file. The following
+file. I then load this file from my create SQL file. The following
 code snippet is taken from Weblogger. It creates a
 lars_blogger_notif notification type (which was created above).</p><pre class="programlisting">
     create function inline_0() returns integer as $$

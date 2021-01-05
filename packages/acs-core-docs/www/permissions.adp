@@ -109,7 +109,7 @@ read, write, create and delete privileges, because some operations
 explicitly require admin privileges. No substitutions.</p><p>To give a user permission to perform a particular operation on a
 particular object you call <code class="computeroutput">acs_permission.grant_permission</code> like
 this:</p><pre class="programlisting">
-# sql code
+# SQL code
     acs_permission.grant_permission (
       object_id =&gt; some_object_id,
       grantee_id =&gt; some_party_id,
@@ -119,7 +119,7 @@ this:</p><pre class="programlisting">
 </pre><p>Using just these mechanisms is enough for developers and
 administrators to effectively define access control for every
 object in a system.</p><p>Explicitly defining permissions to every object individually
-would become very tedious. OpenACS provides a object contexts as a
+would become very tedious. OpenACS provides object contexts as a
 means for controlling permissions of a large group of objects at
 the same time.</p>
 </div><div class="sect2">

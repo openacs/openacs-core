@@ -27,11 +27,11 @@ over imported translations.</p></li>
 have custom code, and your site is in a CVS repository, upgrade
 with these steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<strong>Upgrade the file system for all packages in
+<strong>Upgrade the filesystem for all packages in
 use. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called “Upgrading the
 OpenACS files”</a>
 </p></li><li class="listitem"><p>Go to <a class="ulink" href="/acs-admin/install" target="_top">/acs-admin/install/</a> and click "Upgrade Your
-System" in "Install from local file system"</p></li><li class="listitem"><p>Select all of the packages you want to upgrade and proceed</p></li><li class="listitem"><p>After upgrade is complete, restart the server as indicated.</p></li><li class="listitem"><p>If you are using locales other than en_US, go to acs-lang/admin
+System" in "Install from local filesystem"</p></li><li class="listitem"><p>Select all of the packages you want to upgrade and proceed</p></li><li class="listitem"><p>After upgrade is complete, restart the server as indicated.</p></li><li class="listitem"><p>If you are using locales other than en_US, go to acs-lang/admin
 and "Import all Messages" to load the new translated
 messages. Your local translations, if any, will take precedence
 over imported translations.</p></li>

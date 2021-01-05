@@ -265,7 +265,7 @@ your index page:</p><pre class="programlisting">
                         &lt;/group&gt;
                 &lt;/multiple&gt;
                 &lt;a href="\@package_url\@view?\@YOURPARAMS\@"&gt;All Items&lt;/if&gt;
-          </pre><p>Finally you need a an <code class="computeroutput">index.vuh</code> in your www folder to rewrite the
+          </pre><p>Finally you need an <code class="computeroutput">index.vuh</code> in your www folder to rewrite the
 URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty URLs">the section called “Using .vuh
 files for pretty URLs”</a>:</p><pre class="programlisting">
           set url /[ad_conn extra_url]

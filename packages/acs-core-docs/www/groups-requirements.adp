@@ -167,7 +167,7 @@ Users</strong></span></span></dt><dd>
 who has registered with an OpenACS site. A user may have additional
 attributes, such as a screen name.</p><p>The data model should enforce these constraints:</p><p>
 <span class="strong"><strong>40.10</strong></span> A user must
-have a non-empty email address.</p><p>
+have a nonempty email address.</p><p>
 <span class="strong"><strong>40.20</strong></span> Two different
 users may not have the same email address on a single OpenACS
 installation; i.e., an email address identifies a single user on

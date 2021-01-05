@@ -27,7 +27,7 @@ OpenACS documentation staff.</div><p>In this chapter, <span class="strong"><stro
 changes to a new OpenACS site through the web interface. In crude
 terms, these changes happen in the database, and are upgrade-safe.
 <span class="strong"><strong>Customizing</strong></span> refers to
-changes that touch the file system, and require some planning if
+changes that touch the filesystem, and require some planning if
 easy upgradability is to be maintained.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

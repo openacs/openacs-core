@@ -110,7 +110,7 @@ product, as well as starting and stopping the database.</p><pre class="programli
 that password.</p>
 </li><li class="listitem">
 <p>Setup the installation location for Oracle. While Oracle can
-reside in a variety of places in the file system, OpenACS has
+reside in a variety of places in the filesystem, OpenACS has
 adopted <code class="computeroutput">/ora8</code> as the base
 directory.</p><p>
 <span class="strong"><strong>Note:</strong></span> the Oracle
@@ -403,7 +403,7 @@ disappeared!</p></li>
 </li>
 </ul></div><p>Congratulations, you have just installed Oracle 8.1.7 Server!
 However, you still need to create a database which can take about
-an hour of non-interactive time, so don&#39;t quit yet.</p>
+an hour of noninteractive time, so don&#39;t quit yet.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-create" id="install-oracle-create"></a>Creating the First Database</h3></div></div></div><p>This step will take you through the steps of creating a
@@ -450,7 +450,7 @@ information to a shell script</code>" and click
 going to examine the contents of this file before creating our
 database.)</p></li><li class="listitem"><p>Click the "<code class="computeroutput">Save</code>"
 button. Oracle will automatically save it to the correct directory
-and with the correct file name. This will likely be <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib/sqlora8.sh</code>
+and with the correct filename. This will likely be <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib/sqlora8.sh</code>
 </p></li><li class="listitem"><p>It will alert you that the script has been saved
 successfully.</p></li><li class="listitem">
 <p>Now we need to customize the database configuration a bit. While

@@ -39,14 +39,14 @@ build.xml file so it will know how to talk to your server. You will
 need to give it a base URL, a username, and password for that user.
 are the "JVMARG" lines in the "JUNIT" section.
 ). In the near future, this will be moved out of the subdirectories
-and either into the toplevel build.xml file or into a configuration
+and either into the top-level build.xml file or into a configuration
 file.</p>
 <p>You should now be ready to run the tests. Go to your
 server&#39;s "packages" directory and type <code>source
 ./paths.sh</code> to set up your classpath. Now type
-<code>ant</code>. Ant should find the toplevel build.xml file,
+<code>ant</code>. Ant should find the top-level build.xml file,
 check that it can see JUnit, compile your java files, and finally
-call Ant on each of the sub-directory build.xml files to run the
+call Ant on each of the subdirectory build.xml files to run the
 tests. You should be shown a report of which tests failed and which
 succeeded.</p>
 <h3>Adding Your Own Unit Tests</h3>
