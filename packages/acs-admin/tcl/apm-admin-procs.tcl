@@ -249,7 +249,7 @@ ad_proc -public apm_higher_version_installed_p {
 ad_proc -private apm_build_repository {
     {-debug:boolean 0}
     {-channels *}
-    {-head_channel 5-10}
+    {-head_channel HEAD}
 } {
 
     Rebuild the repository on the local machine.
@@ -338,6 +338,8 @@ ad_proc -private apm_build_repository {
     }
 
     set channel_tag($head_channel) HEAD
+    set channel_tag(5-10) oacs-5-10
+
     ns_log Notice "Repository: Channels are: [array get channel_tag]"
 
 
@@ -526,10 +528,10 @@ ad_proc -private apm_build_repository {
         set fw [open "${channel_dir}index.adp" w]
         set packages [lsort $packages]
         puts $fw "<master>\n<property name=\"doc(title)\">OpenACS $channel Compatible Packages</property>\n\n"
-        puts $fw "<h1>OpenACS $channel Core and compatible packages</h1>
+        puts $fw "<h1>OpenACS $channel (CVS tag $channel_tag($channel))</h1>
            <p>Packages can be installed with the OpenACS Automated Installer on
            your OpenACS site at <code>/acs-admin/install</code>.  Only packages
-           designated compatible with your OpenACS kernel will be shown.</p>
+           potentially compatible with your OpenACS kernel will be shown.</p>
         "
         set category_title(core) "Core Packages"
         set package_keys(core) {
@@ -625,6 +627,9 @@ ad_proc -private apm_build_repository {
             #
             set tag_order([format %.3d $major]-[format %.3d $minor]-[format %.3d $patch]) $channel
             set tag_label($channel) "OpenACS $major.$minor.$patch"
+        } else {
+            set tag_order(999-999-999) $channel
+            set tag_label($channel) "OpenACS $channel"            
         }
     }
 
