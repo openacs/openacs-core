@@ -16,20 +16,28 @@ set max_failed_login_attempts [parameter::get_from_package_key \
                                   -default 0]
 
 set auth_package_id [apm_package_id_from_key "acs-authentication"]
-set parameter_url [export_vars -base /shared/parameters { { package_id $auth_package_id } { return_url [ad_return_url] } }]
+set parameter_url [export_vars -base /shared/parameters {
+    { package_id $auth_package_id }
+    { return_url [ad_return_url] }
+}]
 
 ::template::multirow create login_attempts attempt_key attempts locked_until flush_url
 
 foreach { attempt_key seconds attempts } [::auth::login_attempts::get_all] {
-    ::template::multirow append login_attempts $attempt_key $attempts [lc_clock_to_ansi $seconds] [export_vars -base "login-attempts-reset" {attempt_key}]
+    ::template::multirow append login_attempts \
+        $attempt_key $attempts [lc_clock_to_ansi $seconds] \
+        [export_vars -base "login-attempts-reset" {attempt_key}]
 }
-
 
 list::create \
     -name "login_attempts" \
     -multirow "login_attempts" \
-    -actions [list "Flush all" "[export_vars -base "login-attempts-reset" {{attempt_key all}}]" "Clear all login attempts" \
-                   "Configure" "[export_vars -base "/shared/parameters" {{package_id $auth_package_id} {return_url [ad_return_url]}}]" "Configure"] \
+    -actions [list "Flush all" \
+                  [export_vars -base "login-attempts-reset" {{attempt_key all}}] \
+                  "Clear all login attempts" \
+                  "Configure" \
+                  [export_vars -base "/shared/parameters" {{package_id $auth_package_id} {return_url [ad_return_url]}}] \
+                  "Configure"] \
     -bulk_actions {"Flush selected attempts" "login-attempts-reset" "Flush selected attempts"} \
     -bulk_action_method "post" \
     -pass_properties {max_failed_login_attempts} \
