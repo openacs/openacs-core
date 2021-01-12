@@ -191,7 +191,16 @@ ad_proc -private sec_handler {} {
 
         if {$session_user_id > 0} {
             try {
-                sec_login_read_cookie
+                set login_cookie [sec_login_read_cookie]
+                set auth_token [lindex $login_cookie 2]
+
+                #
+                # Verify currently stored user authentication token
+                # against the one on the login cookie.
+                #
+                if {$auth_token ne [sec_get_user_auth_token $session_user_id]} {
+                    throw {AD_EXCEPTION USER_AUTH_TOKEN_INVALID} "User authentication token is invalid."
+                }
 
             } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
                 #
@@ -205,9 +214,20 @@ ad_proc -private sec_handler {} {
                 #
                 ns_log notice "=== invalid login_cookie"
 
-            } on ok {login_list} {
+            } trap {AD_EXCEPTION USER_AUTH_TOKEN_INVALID} {errorMsg} {
+                #
+                # Invalid user auth token in the login cookie. This
+                # happens e.g. when user changed their password, hence
+                # all logins on different devices must be
+                # invalidated. Make sure to log the current user out
+                # and update session cookie and ad_conn information.
+                #
+                ad_user_logout
+                sec_login_handler
+
+            } on ok {} {
                 set login_cookie_exists_p 1
-                set persistent_login_p [lindex $login_list end]
+                set persistent_login_p [lindex $login_cookie end]
             }
         }
 
@@ -319,18 +339,7 @@ ad_proc -private sec_handler {} {
         ::security::log timeout "SessionRefresh in [expr {($session_expr - [sec_session_renew]) - [ns_time]}] secs"
 
         if {  $session_expr - [sec_session_renew] < [ns_time] } {
-
-            # # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged-in forever
-            # # if only they keep requesting pages frequently enough, but the alternative was that
-            # # the situation where LoginTimeout = 0 (infinite) and the user unchecks the "Remember me" checkbox
-            # # would cause users' sessions to expire as soon as the session needed to be renewed
             sec_generate_session_id_cookie
-
-            # apisano 2018-06-08: as discussed in
-            # https://openacs.org/forums/message-view?message_id=1691183#msg_1691183,
-            # this would break sec_change_user_auth_token as a mean to
-            # invalidate user login...
-            #sec_login_handler
         }
     }
     #
