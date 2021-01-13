@@ -188,8 +188,7 @@ ad_proc -public util::http::cookie_auth {
     return $headers
 }
 
-ad_proc -private util::http::available {
-    -url
+ad_proc -public util::http::available {
     {-preference {native curl}}
 } {
 

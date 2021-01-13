@@ -453,32 +453,11 @@ ad_proc -private apm_transfer_file {
     # 5 minutes
     set timeout 300
 
-    set httpImpls [util::http::available -url $url -spool]
+    set httpImpls [util::http::available]
     if {$httpImpls ne ""} {
         ns_log notice "we can use the http::util:: interface using the $httpImpls implementation"
         set result [util::http::get -url $url -timeout $timeout -spool]
         file rename [dict get $result file] $output_file_name
-    } elseif {
-        [namespace which ::ns_http] ne ""
-        && [apm_version_names_compare \
-            [regsub -nocase {rc[[:digit:]]*$} [ns_info patchlevel] {}] \
-            "4.99.5"] == 1
-    } {
-        #
-        # ... use ns_http when we have a version with the "-file" flag ...
-        #
-        foreach i {1 2 3} {
-            ns_log notice "Transfer $url to $output_file_name based on ns_http"
-            set h [ns_http queue -timeout $timeout:0 $url]
-            set replyHeaders [ns_set create]
-            ns_http wait -file F -headers $replyHeaders -spoolsize 1 $h
-            if {[ad_file exists $output_file_name]} {file delete -- $output_file_name}
-            file rename -- $F $output_file_name
-            set location [ns_set iget $replyHeaders location]
-            if {$location eq ""} break
-            ns_log notice "Transfer $url redirected to $location ..."
-            set url $location
-        }
     } elseif {[namespace which ::xo::HttpRequest] ne ""} {
         #
         # ... use xo::HttpRequest...
