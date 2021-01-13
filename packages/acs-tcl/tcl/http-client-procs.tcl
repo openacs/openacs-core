@@ -190,6 +190,7 @@ ad_proc -public util::http::cookie_auth {
 
 ad_proc -public util::http::available {
     {-preference {native curl}}
+    args
 } {
 
     Return the preferred HTTP API among those available based on
@@ -202,6 +203,10 @@ ad_proc -public util::http::available {
                       'curl', which wraps the command line utility
                       (available on every system with curl installed).
 } {
+    if {[llength $args] > 0} {
+        ns_log warning "util::http::available: possible deprecated arguments specified ($args)"
+    }
+
     set preferred [lindex $preference 0]
 
     if {$preferred eq "native" &&
