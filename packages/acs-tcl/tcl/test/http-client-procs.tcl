@@ -29,9 +29,7 @@ aa_register_case \
         set response {{key1: "äöü", key2: "äüö", key3: "Ilić"}}
 
         set methods {POST GET}
-        set impls [expr {[string match http://* $url] ?
-                         [lindex [util::http::apis] 0] :
-                         [lindex [util::http::apis] 1]}]
+        set impls {curl native}
 
         aa_log "Will execute test on URL: '$url'"
 

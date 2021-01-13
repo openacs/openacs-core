@@ -188,119 +188,36 @@ ad_proc -public util::http::cookie_auth {
     return $headers
 }
 
-ad_proc -public util::http::available {
+ad_proc -private util::http::available {
     -url
     {-preference {native curl}}
-    -force_ssl:boolean
-    -spool:boolean
 } {
 
-    Check, if for the given url and preferences the current
-    installation supports util::http::* . If not, please use
-    NaviServer, configure nsssl, and/or install curl.
+    Return the preferred HTTP API among those available based on
+    preference and OpenACS installation capabilities.
 
     @param preference decides which available implementation prefer in
                       respective order. Choice is between 'native',
-                      based on ns_ api, available for NaviServer only
-                      and giving the best performances and 'curl',
-                      which wraps the command line utility (available
-                      on every system with curl installed).
-
-    @param force_ssl specifies whether we want to use SSL despite the
-                     url being in http:// form. Default behavior is to
-                     use SSL on https:// URLs only.
-
+                      based on ns_http api, available for NaviServer
+                      only and giving the best performances and
+                      'curl', which wraps the command line utility
+                      (available on every system with curl installed).
 } {
-    set ssl_p [expr {$force_ssl_p || [string match "https://*" $url]}]
-    set key ::util::http::available($ssl_p,$preference,$spool_p)
-    if {[info exists $key]} {
-        return [set $key]
-    }
+    set preferred [lindex $preference 0]
 
-    if {$force_ssl_p || [string match "https://*" $url]} {
-        set apis [lindex [apis] 1]
+    if {$preferred eq "native" &&
+        [ns_info name] eq "NaviServer" &&
+        [apm_version_names_compare [ns_info patchlevel] "4.99.15"]} {
+        # Naviserver has ns_http since before version 4.99.15, but
+        # with different features and syntax that we do not want to
+        # support anymore. Fallback will be curl in these cases.
+        return "native"
+    } elseif {[util::which curl] ne ""} {
+        return "curl"
     } else {
-        set apis [lindex [apis] 0]
-    }
-
-    # just allow spool when NaviServer os 4.99.6 or newer
-    if {$spool_p && [apm_version_names_compare [ns_info patchlevel] "4.99.6"] == -1} {
-        if {"native" in $apis} {
-            set index [lsearch $apis "native"]
-            set apis [lreplace $apis $index $index]
-        }
-    }
-
-    set $key ""
-    foreach p $preference {
-        if {$p in $apis} {
-            set $key $p
-            break
-        }
-    }
-
-    return [set $key]
-}
-
-ad_proc -private util::http::native_https_api_not_cached {
-} {
-    Obtains the right HTTPS native API
-} {
-    # Since NaviServer 4.99.12 ns_http handles also HTTPS
-    if {[apm_version_names_compare \
-             [ns_info patchlevel] "4.99.12"] >= 0} {
-        return [namespace which ns_http]
-    }
-    # Default: check if we have ns_ssl
-    return [namespace which ns_ssl]
-}
-
-ad_proc -private util::http::native_https_api {
-} {
-    Obtains implemented apis for HTTP communication
-} {
-    set key ::util::http::native_https_api
-    if {[info exists $key]} {
-        return [set $key]
-    } else {
-        return [set $key [util::http::native_https_api_not_cached]]
+        return ""
     }
 }
-
-ad_proc -private util::http::apis_not_cached {
-} {
-    Obtains implemented apis for HTTP communication
-} {
-    set http  [list]
-    set https [list]
-    if {[util::which curl] ne ""} {
-        lappend http  "curl"
-        lappend https "curl"
-    }
-
-    if {[namespace which ns_http] ne ""} {
-        lappend http  "native"
-    }
-
-    if {[util::http::native_https_api] ne ""} {
-        lappend https "native"
-    }
-
-    return [list $http $https]
-}
-
-ad_proc -private util::http::apis {
-} {
-    Obtains implemented apis for HTTP communication
-} {
-    set key ::util::http::apis
-    if {[info exists $key]} {
-        return [set $key]
-    } else {
-        return [set $key [util::http::apis_not_cached]]
-    }
-}
-
 
 #
 ## Procs common to both implementations
@@ -1229,7 +1146,7 @@ ad_proc -private util::http::request {
 } {
     set this_proc [lindex [info level 0] 0]
 
-    set impl [available -url $url -force_ssl=$force_ssl_p -preference $preference -spool=$spool_p]
+    set impl [util::http::available -preference $preference]
     if {$impl eq ""} {
         return -code error "${this_proc}:  HTTP client functionalities for this protocol are not available with current system configuration."
     }
@@ -1257,127 +1174,6 @@ ad_proc -private util::http::request {
 #
 
 namespace eval util::http::native {}
-
-# This conversion is not needed (anymore?) for native implementation
-# ad_proc -private util::http::native::timeout {input} {
-
-#     Convert the provided value to an ns_time format
-#     used by NaviServer
-
-# } {
-#     if {[string is integer -strict $input]} {
-#         return $input:0
-#     } elseif {[string is double -strict $input]} {
-#         set secs [expr {int($input)}]
-#         return $secs:[expr {($input - $secs)*1000000}]
-#     }
-#     return $input
-# }
-ad_proc -private util::http::native::run {
-    -url
-    {-method GET}
-    {-headers ""}
-    {-body ""}
-    {-body_file ""}
-    {-timeout 30}
-    -force_ssl:boolean
-    -gzip_response:boolean
-    -spool:boolean
-} {
-    Over time, Naviserver ns_http capabilities, return values and
-    arguments changed. This proc, probably meant to be transitional,
-    supports the different api variants with a common interface.
-
-    Parameters have the same meaning documented in util::http::native::request
-
-    @see util::http::native::request
-
-    @return a dict in the format returned by 'ns_http run' command on
-            a modern Naviserver.
-} {
-    if {[apm_version_names_compare [ns_info patchlevel] "4.99.15"] == 1} {
-        set cmd [list ns_http run \
-                     -timeout $timeout \
-                     -method $method \
-                     -headers $headers]
-        if {[regexp {https://([^/]+)/} $url . hostname]} {
-            lappend cmd -hostname $hostname
-        }
-        if {$body_file ne ""} {
-            lappend cmd -body_file $body_file
-        } elseif {$body ne ""} {
-            lappend cmd -body $body
-        }
-        if {$spool_p} {
-            lappend cmd -spoolsize 0
-        }
-        lappend cmd $url
-        #ns_log notice "NS_HTTP $cmd"
-        set r [{*}$cmd]
-    } else {
-        # Older Naviservers used different commands depending if http
-        # or https was required
-        if {$force_ssl_p || [string match "https://*" $url]} {
-            set http_api [util::http::native_https_api]
-            if {$http_api eq ""} {
-                error "${this_proc}:  SSL not enabled"
-            }
-        } else {
-            set http_api "ns_http"
-        }
-
-        set queue_cmd [list $http_api queue \
-                           -timeout $timeout \
-                           -method $method \
-                           -headers $headers]
-        if {$body_file ne ""} {
-            lappend queue_cmd -body_file $body_file
-        } elseif {$body ne ""} {
-            lappend queue_cmd -body $body
-        }
-        lappend queue_cmd $url
-
-        # Older Naviservers would specify additional arguments:
-        # - ns_set for response headers in the command line.
-        # - variables where request's body, status and spool file would be returned
-        set resp_headers [ns_set create resp_headers]
-        set wait_cmd [list $http_api wait -headers $resp_headers -status status -timeout $timeout]
-        if {$spool_p} {
-            lappend wait_cmd -spoolsize 0 -file spool_file
-            set page ""
-        } else {
-            lappend wait_cmd -result page
-        }
-
-        if {$gzip_response_p} {
-            # NaviServer since 4.99.6 can decompress response transparently
-            if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
-                lappend wait_cmd -decompress
-            }
-        }
-
-        # Queue call to the url and wait for response: older
-        # Naviservers would queue and wait for the request complete in
-        # separate steps
-        set start_time [ns_time get]
-        set r [{*}$wait_cmd [{*}$queue_cmd]]
-        set end_time [ns_time get]
-        # Older Naviservers would not return request time. As a
-        # fallback, we calculate this manually.
-        set time [ns_time diff $end_time $start_time]
-
-        set r [dict create \
-                   body $page \
-                   time $time \
-                   headers $resp_headers \
-                   status $status]
-        if {[info exists spool_file]} {
-            dict set r file $spool_file
-        }
-    }
-
-    return $r
-}
 
 ad_proc -private util::http::native::request {
     -url
@@ -1536,16 +1332,25 @@ ad_proc -private util::http::native::request {
     }
 
     ## Issuing of the request
-    set r [util::http::native::run \
-               -url $url \
-               -method $method \
-               -headers $headers \
-               -body $body \
-               -body_file $body_file \
-               -timeout $timeout \
-               -force_ssl=$force_ssl_p \
-               -gzip_response=$gzip_response_p \
-               -spool=$spool_p]
+    set cmd [list ns_http run \
+                 -timeout $timeout \
+                 -method $method \
+                 -headers $headers]
+    if {[regexp {https://([^/]+)/} $url . hostname]} {
+        lappend cmd -hostname $hostname
+    }
+    if {$body_file ne ""} {
+        lappend cmd -body_file $body_file
+    } elseif {$body ne ""} {
+        lappend cmd -body $body
+    }
+    if {$spool_p} {
+        lappend cmd -spoolsize 0
+    }
+    lappend cmd $url
+    #ns_log notice "NS_HTTP $cmd"
+    set r [{*}$cmd]
+
     set resp_headers [dict get $r headers]
     set status       [dict get $r status]
     set time         [dict get $r time]
@@ -1598,16 +1403,6 @@ ad_proc -private util::http::native::request {
     }
 
     ## Decoding of the response
-
-    # If response was compressed and our NaviServer
-    # is prior 4.99.6, we have to decompress on our own.
-    if {$content_encoding eq "gzip"} {
-      if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
-        if {$spool_file eq "" } {
-            set page [zlib gunzip $page]
-        }
-      }
-    }
 
     # Translate into proper encoding
     set enc [util::http::get_channel_settings $content_type]
