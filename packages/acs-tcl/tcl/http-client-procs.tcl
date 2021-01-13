@@ -20,21 +20,22 @@ ad_proc -private util::http::set_cookies {
     {-cookie_names ""}
     {-pattern ""}
 } {
-    Extracts cookies from response headers. This is done reading every <code>set-cookie</code> header
-    and populating an ns_set of request headers suitable for issuing <code>util::http</code> requests.
+    Extracts cookies from response headers. This is done reading every
+    'set-cookie' header and populating an ns_set of request
+    headers suitable for issuing 'util::http' requests.
 
-    @param resp_headers Response headers, in a list form as returned by <code>util::http</code> API.
+    @param resp_headers Response headers, in a list form as returned by 'util::http' API.
 
     @param headers      ns_set of request headers that will be populated with extracted cookies.
                         If not specified, a new ns_set will be created. Existing cookies will be
                         overwritten.
 
     @param cookie_names Cookie names we want to retrieve. Other cookies will be ignored.
-                        If omitted together with <code>-pattern</code> proc will include
+                        If omitted together with '-pattern' proc will include
                         every cookie.
 
-    @param pattern      Cookies which name respects this pattern as in <code>string match</code>
-                        will be included. If omitted together with <code>-cookie_names</code> proc
+    @param pattern      Cookies which name respects this pattern as in 'string match'
+                        will be included. If omitted together with '-cookie_names' proc
                         will include every cookie.
 
     @return ns_set of headers containing received cookies
@@ -100,14 +101,14 @@ ad_proc -public util::http::cookie_auth {
     This proc implements the generic pattern for cookie-based authentication: user
     logs in a webpage providing username, password and optionally other information
     in a form, page replies generating one or more authentication cookies by which
-    user will be recognized on subsequent interaction with the server.<br>
-    <br>
+    user will be recognized on subsequent interaction with the server.
+
     By this method was possible, for example, to authenticate on a remote OpenACS
-    installation providing <code>email</code> and <code>password</code> as credentials
-    to the /register/ page, and using <code>ad_session_id</code> and <code>ad_user_login</code>
-    as <code>auth_cookies</code>.<br>
+    installation providing 'email' and 'password' as credentials
+    to the /register/ page, and using 'ad_session_id' and 'ad_user_login'
+    as 'auth_cookies'.
     This proc is a bit hacky and is nowadays not clear if it makes sense anymore...
-    <br>
+
     This proc takes care to submit to the login form also every other formfield on the
     login page. This is important because this (often hidden) formfields can contain tokens
     necessary for the authentication process.
@@ -116,13 +117,13 @@ ad_proc -public util::http::cookie_auth {
                         If not specified, a new ns_set will be created. Existing cookies
                         will be overwritten.
 
-    @param auth_vars    Variables issued to the login page in <code>export_vars -url</code> form.
+    @param auth_vars    Variables issued to the login page in 'export_vars -url' form.
 
     @param auth_url     Login url
 
     @param auth_cookies Cookies we should look for in the response from the login page to obtain
                         authentication data. If not specified, this will refer to every cookie
-                        received into <code>set-cookie</code> response headers.
+                        received into 'set-cookie' response headers.
 
     @param auth_form    Form to put our data into. If not specified, there must be only one form
                         on the login page, otherwise proc will throw an error.
@@ -412,7 +413,7 @@ ad_proc util::http::get {
     -spool:boolean
     {-preference {native curl}}
 } {
-    Issue an HTTP GET request to <code>url</code>.
+    Issue an HTTP GET request to 'url'.
 
     @param headers specifies an ns_set of extra headers to send
     to the server when doing the request.  Some options exist that
@@ -442,9 +443,9 @@ ad_proc util::http::get {
     a floating point number or an ns_time value.
 
     @return Returns the data as dict with elements
-    <code>headers</code>, <code>page</code>, <code>file</code>,
-    <code>status</code>, <code>time</code> (elapsed request time in
-    ns_time format), and <code>modified</code>.
+    'headers', 'page', 'file',
+    'status', 'time' (elapsed request time in
+    ns_time format), and 'modified'.
 
 } {
     return [util::http::request \
@@ -482,7 +483,7 @@ ad_proc util::http::post {
     @param body is the payload for the request and will be
     passed as is (useful for many purposes, such as webDav).  A
     convenient way to specify form variables through this argument is
-    passing a string obtained by <code>export_vars -url</code>.
+    passing a string obtained by 'export_vars -url'.
 
     @param max_body_size this value in number of characters will tell
     how big can the whole body payload get before we start spooling
@@ -494,37 +495,35 @@ ad_proc util::http::post {
     of body's string representation.
 
     @param files File upload can be specified using actual files on the
-    filesystem or binary strings of data using the <code>-files</code>
-    parameter.  <code>-files</code> must be a dict (flat list of key value pairs).
-    Keys of <code>-files</code> parameter are:
+    filesystem or binary strings of data using the '-files'
+    parameter.  '-files' must be a dict (flat list of key value pairs).
+    Keys of '-files' parameter are:
 
-    <ul>
-    <li>data: binary data to be sent. If set, has precedence on 'file' key</li>
-    <li>file: path for the actual file on filesystem</li>
-    <li>filename: name the form will receive for this file</li>
-    <li>fieldname: name the field this file will be sent as</li>
-    <li>mime_type: mime_type the form will receive for this file</li>
-    </ul>
+     - data: binary data to be sent. If set, has precedence on 'file' key
+     - file: path for the actual file on filesystem
+     - filename: name the form will receive for this file
+     - fieldname: name the field this file will be sent as
+     - mime_type: mime_type the form will receive for this file
 
     If 'filename' is missing and an actual file is being sent, it will
-    be set as the same name as the file.<br/> If 'mime_type' is
-    missing, it will be guessed from 'filename'. If result is */* or
-    an empty mime_type, 'application/octet-stream' will be used<br/>
-    If <code>-base64</code> flag is set, files will be base64 encoded
-    (useful for some kind of form).
+    be set as the same name as the file. If 'mime_type' is missing, it
+    will be guessed from 'filename'. If result is */* or an empty
+    mime_type, 'application/octet-stream' will be used If '-base64'
+    flag is set, files will be base64 encoded (useful for some kind of
+    form).
 
     @param formvars Other form variables can be passed easily
-    through<code>-formvars</code> using <code>export_vars -url</code>
+    through'-formvars' using 'export_vars -url'
     and will be translated for the proper type of form. This is useful
     when we intend to send files together with variables to a
     form. URL variables, as with GET requests, are also sent, but an
     error is thrown if URL variables conflict with those specified in
     other ways.
 
-    <p> Default behavior is to build payload as an
+     Default behavior is to build payload as an
     'application/x-www-form-urlencoded' payload if no files are
     specified, and 'multipart/form-data' otherwise. If
-    <code>-multipart</code> flag is set, format will be forced to
+    '-multipart' flag is set, format will be forced to
     multipart.
 
     @param headers specifies an ns_set of extra headers to send to the
@@ -579,9 +578,9 @@ ad_proc util::http::post {
     a floating point number or an ns_time value.
 
     @return Returns the data as dict with elements
-    <code>headers</code>, <code>page</code>, <code>file</code>,
-    <code>status</code>, <code>time</code> (elapsed request time in
-    ns_time format), and <code>modified</code>.
+    'headers', 'page', 'file',
+    'status', 'time' (elapsed request time in
+    ns_time format), and 'modified'.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -916,8 +915,8 @@ ad_proc -private util::http::follow_redirects {
 } {
     Follow redirects. This proc is required because we want
     to be able to follow a redirect until a certain depth and
-    then stop without throwing an error.<br>
-    <br>
+    then stop without throwing an error.
+
     Happens at times that even a redirect page contains
     very important information we want to be able to reach.
     An example could be authentication headers. By putting
@@ -927,18 +926,18 @@ ad_proc -private util::http::follow_redirects {
     @param body is the payload for the request and will be passed as
     is (useful for many purposes, such as webDav).  A convenient way
     to specify form variables through this argument is passing a
-    string obtained by <code>export_vars -url</code>.  <p> Default
+    string obtained by 'export_vars -url'.   Default
     behavior is to build payload as an
     'application/x-www-form-urlencoded' payload if no files are
     specified, and 'multipart/form-data' otherwise. If
-    <code>-multipart</code> flag is set, format will be forced to
+    '-multipart' flag is set, format will be forced to
     multipart.
 
     @param body_file is an alternative way to specify the payload,
     useful in cases such as the upload of big files by POST. If
-    specified, will have precedence over the <code>body</code>
+    specified, will have precedence over the 'body'
     parameter. Content of the file won't be encoded according with the
-    content type of the request as happen with <code>body</code>
+    content type of the request as happen with 'body'
 
     @param delete_body_file decides whether remove body payload file
     once the request is over.
@@ -995,9 +994,9 @@ ad_proc -private util::http::follow_redirects {
     a floating point number or an ns_time value.
 
     @return Returns the data as dict with elements
-    <code>headers</code>, <code>page</code>, <code>file</code>,
-    <code>status</code>, <code>time</code> (elapsed request time in
-    ns_time format), and <code>modified</code> from the last followed
+    'headers', 'page', 'file',
+    'status', 'time' (elapsed request time in
+    ns_time format), and 'modified' from the last followed
     redirect, or an empty string if request was not a redirection.
 
 } {
@@ -1117,13 +1116,13 @@ ad_proc -private util::http::request {
     @param body is the payload for the request and will be passed as
     is (useful for many purposes, such as webDav).  A convenient way
     to specify form variables for POST payloads through this argument
-    is passing a string obtained by <code>export_vars -url</code>.
+    is passing a string obtained by 'export_vars -url'.
 
     @param body_file is an alternative way to specify the payload,
     useful in cases such as the upload of big files by POST. If
-    specified, will have precedence over the <code>body</code>
+    specified, will have precedence over the 'body'
     parameter. Content of the file won't be encoded according with the
-    content type of the request as happen with <code>body</code>
+    content type of the request as happen with 'body'
 
     @param delete_body_file decides whether remove body payload file
     once the request is over.
@@ -1177,9 +1176,9 @@ ad_proc -private util::http::request {
     a floating point number or an ns_time value.
 
     @return Returns the data as dict with elements
-    <code>headers</code>, <code>page</code>, <code>file</code>,
-    <code>status</code>, <code>time</code> (elapsed request time in
-    ns_time format), and <code>modified</code>.
+    'headers', 'page', 'file',
+    'status', 'time' (elapsed request time in
+    ns_time format), and 'modified'.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -1362,13 +1361,13 @@ ad_proc -private util::http::native::request {
     @param body is the payload for the request and will be passed as
     is (useful for many purposes, such as webDav).  A convenient way
     to specify form variables for POST payloads through this argument
-    is passing a string obtained by <code>export_vars -url</code>.
+    is passing a string obtained by 'export_vars -url'.
 
     @param body_file is an alternative way to specify the payload,
     useful in cases such as the upload of big files by POST. If
-    specified, will have precedence over the <code>body</code>
+    specified, will have precedence over the 'body'
     parameter. Content of the file won't be encoded according with the
-    content type of the request as happen with <code>body</code>
+    content type of the request as happen with 'body'
 
     @param delete_body_file decides whether remove body payload file
     once the request is over.
@@ -1416,9 +1415,9 @@ ad_proc -private util::http::native::request {
     a floating point number or an ns_time value.
 
     @return Returns the data as dict with elements
-    <code>headers</code>, <code>page</code>, <code>file</code>,
-    <code>status</code>, <code>time</code> (elapsed request time in
-    ns_time format), and <code>modified</code>.
+    'headers', 'page', 'file',
+    'status', 'time' (elapsed request time in
+    ns_time format), and 'modified'.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -1644,13 +1643,13 @@ ad_proc -private util::http::curl::request {
     @param body is the payload for the request and will be passed as
     is (useful for many purposes, such as webDav).  A convenient way
     to specify form variables for POST payloads through this argument
-    is passing a string obtained by <code>export_vars -url</code>.
+    is passing a string obtained by 'export_vars -url'.
 
     @param body_file is an alternative way to specify the payload,
     useful in cases such as the upload of big files by POST. If
-    specified, will have precedence over the <code>body</code>
+    specified, will have precedence over the 'body'
     parameter. Content of the file won't be encoded according with the
-    content type of the request as happen with <code>body</code>
+    content type of the request as happen with 'body'
 
     @param delete_body_file decides whether remove body payload file
     once the request is over.
@@ -1664,8 +1663,8 @@ ad_proc -private util::http::curl::request {
     requests, and exploiting it can be desirable to send very large
     files via POST, because no extra space will be required on the
     disk to prepare the request payload using this feature. Files by
-    this parameter are couples in the form <code>{ form_field_name
-    file_path_on_filesystem }</code>
+    this parameter are couples in the form '{ form_field_name
+    file_path_on_filesystem }'
 
     @param gzip_response informs the server that we are
     capable of receiving gzipped responses.  If server complies to our
@@ -1708,11 +1707,9 @@ ad_proc -private util::http::curl::request {
     before 7.32.0 just accept integer, the granularity is set to
     seconds.
 
-    @return Returns the data as dict with elements
-    <code>headers</code>, <code>page</code>, <code>file</code>,
-    <code>status</code>, <code>time</code> (elapsed request time in
-    ns_time format), and <code>modified</code>.
-
+    @return Returns the data as dict with elements 'headers', 'page',
+            'file', 'status', 'time' (elapsed request time in ns_time
+            format), and 'modified'.
 } {
     set this_proc [lindex [info level 0] 0]
 
