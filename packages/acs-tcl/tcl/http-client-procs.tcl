@@ -102,10 +102,11 @@ ad_proc -public util::http::cookie_auth {
     in a form, page replies generating one or more authentication cookies by which
     user will be recognized on subsequent interaction with the server.<br>
     <br>
-    By this method it is possible, for example, to authenticate on a remote OpenACS
+    By this method was possible, for example, to authenticate on a remote OpenACS
     installation providing <code>email</code> and <code>password</code> as credentials
     to the /register/ page, and using <code>ad_session_id</code> and <code>ad_user_login</code>
     as <code>auth_cookies</code>.<br>
+    This proc is a bit hacky and is nowadays not clear if it makes sense anymore...
     <br>
     This proc takes care to submit to the login form also every other formfield on the
     login page. This is important because this (often hidden) formfields can contain tokens
