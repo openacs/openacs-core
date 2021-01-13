@@ -207,7 +207,10 @@ ad_proc -private util::http::available {
 
     if {$preferred eq "native" &&
         [ns_info name] eq "NaviServer" &&
-        [apm_version_names_compare [ns_info patchlevel] "4.99.15"] >= 0} {
+        [apm_version_names_compare \
+            [regsub -nocase {rc[[:digit:]]*$} [ns_info patchlevel] {}] \
+            "4.99.15"] >= 0
+    } {
         # Naviserver has ns_http since before version 4.99.15, but
         # with different features and syntax that we do not want to
         # support anymore. Fallback will be curl in these cases.
