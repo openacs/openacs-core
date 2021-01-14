@@ -41,9 +41,9 @@ aa_register_case \
         }
 
         foreach flag $flags {
-            aa_true "string flag '$flag' is recognized" [acs::cmd_has_subcommand string $flag]
+            aa_true "string subcommand '$flag' is recognized" [acs::cmd_has_subcommand string $flag]
         }
 
         set flag [ad_generate_random_string]
-        aa_false "string has no flag called '$flag'" [acs::cmd_has_subcommand string $flag]
+        aa_false "string has no subcommand called '$flag'" [acs::cmd_has_subcommand string $flag]
     }
