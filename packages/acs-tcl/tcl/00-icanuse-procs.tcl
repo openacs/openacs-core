@@ -54,17 +54,21 @@ namespace eval ::acs {
     ad_proc -private cmd_has_subcommand {cmd subcommand} {
 
         Helper proc abusing error messages to determine, whether as
-        submethod is available.
+        submethod is available, since there is in Tcl no generic way
+        to determine subcommands for a command.
 
+        Note: Use this with caution, this is NOT GUARANTEED to work
+        with every command, since many commands require e.g. a
+        connection or return different error messages. When using this
+        in more cases, test first!
+
+        Therefore, this is a PRIVATE function, not intenended for
+        public use.
     } {
-        set has_p true
-        if {[catch [list $cmd $subcommand] errorMsg]} {
-            if {[regexp "^.*\"$subcommand\": must be .*\$" $errorMsg]} {
-                set has_p false
-            }
-        }
-
-        return $has_p
+        catch [list $cmd ""] errorMsg
+        regsub ", or " $errorMsg ", " errorMsg
+        regsub "^.*must be " $errorMsg " " errorMsg
+        return [expr {" $subcommand" in [split $errorMsg ","]}]
     }
 
     ad_proc -private cmd_error_contains {cmd subcommand} {
@@ -106,9 +110,10 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {nsv_dict get ""} -varname]
 
-# Note: NaviServer has ns_http since version 4.99.5, but supports the
-# run subcommand only since 4.99.15.
-::acs::register_icanuse "ns_http" [acs::cmd_has_subcommand ns_http run]
+# The feature NaviServer to return a dict as result of "ns_http run"
+# came at the same time, when "ns_http stats" was introduced.
+::acs::register_icanuse "ns_http results dict"      [acs::cmd_has_subcommand ns_http stats]
+
 
 #
 # Add some compatibility procs for AOLserver or older NaviServer versions
@@ -176,7 +181,7 @@ if {[namespace which ::ns_trim] eq ""} {
         if {$delimiter ne ""} {
             set re "^\\s*\[$delimiter\](.*)$"
         } else {
-            set re "^\\s*(\S*.*)$"        
+            set re "^\\s*(\S*.*)$"
         }
         join [lmap line [split $text \n] {
             regexp $re $line . line

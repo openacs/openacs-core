@@ -209,7 +209,7 @@ ad_proc -public util::http::available {
 
     set preferred [lindex $preference 0]
 
-    if {$preferred eq "native" && [acs::icanuse ns_http]} {
+    if {$preferred eq "native" && [acs::icanuse "ns_http results dict"]} {
         return "native"
     } elseif {[util::which curl] ne ""} {
         return "curl"

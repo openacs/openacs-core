@@ -48,7 +48,7 @@ aa_register_case \
         set flag [ad_generate_random_string]
         aa_false "string has no subcommand called '$flag'" [acs::cmd_has_subcommand string $flag]
 
-        aa_section "Test a NaviServer command"
+        aa_section "Test NaviServer subcommands"
         set flags {
             get
             set
