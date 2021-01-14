@@ -15,14 +15,11 @@ ad_schedule_proc -thread f [parameter::get -parameter SessionSweepInterval -defa
 
 # Verify that the secret_tokens table is populated
 set secret_tokens_exists [db_string secret_tokens_exists {select decode(count(*),0,0,1) from secret_tokens}]
-
 if { $secret_tokens_exists == 0 } {
     sec_populate_secret_tokens_db
 }
 
-ns_log Notice "security-init.tcl: Creating secret_tokens ns_cache..."
-ns_cache create secret_tokens -size 65536
-ns_log Notice "security-init.tcl: Populating secret_tokens ns_cache..."
+ns_log Notice "security-init.tcl: Populating secret_tokens cache in nsvs..."
 sec_populate_secret_tokens_cache
 
 # These procedures are dynamically defined so that parameter::get
