@@ -57,8 +57,14 @@ namespace eval ::acs {
         submethod is available.
 
     } {
-        catch [list $cmd ""] errorMsg
-        return [expr {" $subcommand" in [split $errorMsg ","]}]
+        set has_p true
+        if {[catch [list $cmd $subcommand] errorMsg]} {
+            if {[regexp {^unknown or ambiguous subcommand .*$} $errorMsg]} {
+                set has_p false
+            }
+        }
+
+        return $has_p
     }
 
     ad_proc -private cmd_error_contains {cmd subcommand} {
