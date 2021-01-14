@@ -59,7 +59,7 @@ namespace eval ::acs {
     } {
         set has_p true
         if {[catch [list $cmd $subcommand] errorMsg]} {
-            if {[regexp {^unknown or ambiguous subcommand .*$} $errorMsg]} {
+            if {[regexp "^.*\"$subcommand\": must be .*\$" $errorMsg]} {
                 set has_p false
             }
         }
