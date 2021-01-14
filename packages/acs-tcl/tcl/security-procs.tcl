@@ -2834,7 +2834,7 @@ namespace eval ::security::csp {
         #
         # We do not need object-src
         #
-        security::csp::require object-src 'none'
+        security::csp::require object-src 'self'
 
         security::csp::require form-action 'self'
         security::csp::require frame-ancestors 'self'
