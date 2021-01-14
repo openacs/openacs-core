@@ -106,6 +106,10 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {nsv_dict get ""} -varname]
 
+# Note: NaviServer has ns_http since version 4.99.5, but supports the
+# run subcommand only since 4.99.15.
+::acs::register_icanuse "ns_http" [acs::cmd_has_subcommand ns_http run]
+
 #
 # Add some compatibility procs for AOLserver or older NaviServer versions
 #
