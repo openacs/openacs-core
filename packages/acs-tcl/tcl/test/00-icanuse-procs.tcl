@@ -17,7 +17,6 @@ aa_register_case \
         aa_section "Test a plain Tcl command"
         set flags {
             bytelength
-            cat
             compare
             equal
             first
