@@ -60,6 +60,11 @@ above.
   </multiple>
 </ul>
 
+<if @notifications_mounted_p;literal@ true>
+  <h2>Notifications</h2>
+  Manage notifications of userid <a href='@notifications_manage_url;literal@'>@user_id;literal@</a>.
+</if>
+
 <h2>Contributions of this user</h2>
 
 <p>Number of contributions of this user: <a href="./one-contributions?user_id=@user_id@">@number_contributions@</a></p>
@@ -67,6 +72,7 @@ above.
 <h2>Administrative Actions</h2>
 
 <ul>
+
 <if @site_wide_admin_p;literal@ true>
   <li><a href="@modify_admin_url;noi18n@">Revoke site-wide administration privileges</a></li>
 </if>

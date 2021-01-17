@@ -58,6 +58,11 @@ if { $site_wide_admin_p } {
     set modify_admin_url [export_vars -base modify-admin-privileges {user_id:sign(max_age=60) {action:sign grant}}]
 }
 
+set notifications_mount_url [site_node::get_package_url -package_key notifications]
+set notifications_mounted_p [expr {$notifications_mount_url ne ""}]
+if {$notifications_mounted_p} {
+    set notifications_manage_url [export_vars -base $notifications_mount_url/manage {user_id}]
+}
 
 set context [list [list "./" "Users"] "One User"]
 
