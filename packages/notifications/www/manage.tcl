@@ -9,10 +9,15 @@ ad_page_contract {
 }
 
 auth::require_login
-set doc(title) [_ notifications.Manage_Notifications]
 if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
-    # we need to verify that they are an admin
+    #
+    # Manage notification of someone else.  We need to verify that
+    # current user is an admin.
+    #
     permission::require_permission -object_id [ad_conn package_id] -privilege "admin"
+
+    set user_dict [acs_user::get -user_id $user_id]
+    set doc(title) "Manage notifications of [dict get $user_dict email]"
     set elements {
         type {
             label {[_ notifications.Notification_type]}
@@ -24,9 +29,20 @@ if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
         interval {
             label {[_ notifications.Frequency]}
         }
+        action {
+            label {[_ notifications.Action]}
+            display_template {\#notifications.Unsubscribe\#}
+            link_url_eval {[export_vars -base request-delete { request_id {return_url [ad_return_url]} }]}
+            link_html {title "\#notifications.Unsubscribe_from_object_name\#"}
+        }
     }
     set notice "[acs_community_member_link -user_id $user_id -label [person::name -person_id $user_id]] - [_ notifications.Notifications]"
 } else {
+    #
+    # Manage own notifications.
+    #
+    set doc(title) #notifications.Manage_Notifications#
+
     set user_id [ad_conn user_id]
     set elements {
         type {
@@ -57,7 +73,7 @@ set return_url [ad_conn url]
 
 db_multirow -extend { interval_url } notifications select_notifications {
      select nr.request_id,
-	    nr.type_id,
+            nr.type_id,
             nt.pretty_name as type,
             acs_object.name(nr.object_id) as object_name,
             ni.name as interval,
