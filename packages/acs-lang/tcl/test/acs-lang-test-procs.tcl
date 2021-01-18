@@ -1195,6 +1195,23 @@ aa_register_case \
             [lang::catalog::package_has_files_in_locale_p $bogus_package_key $bogus_locale]
     }
 
+aa_register_case \
+    -procs {} catalog_files_are_valid_xml {
+        Make sure that what is found in	catalog	files is valid XML
+    } {
+        set catalog_files [list]
+        foreach package_key [db_list get_packages {select distinct package_key from apm_packages}] {
+            lappend catalog_files {*}[lang::catalog::get_catalog_paths_for_import -package_key $package_key]
+        }
+
+        foreach f $catalog_files {
+            set rfd [open $f r]
+            set xml [read $rfd]
+            close $rfd
+            aa_false "Catalog file '$f' apears to be valid XML" [catch {dom parse $xml doc}]
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
