@@ -1241,9 +1241,9 @@ ad_proc -public subsite::get_url {
             append result "[dict get $subsite_node name]/"
         } else {
             #
-            # The subsite is nost-node mapped and addressed via this
+            # The subsite is host-node mapped and addressed via this
             # URL (as determied via the host header field). In this
-            # case, the path leading to the side-node must be removed,
+            # case, the path leading to the site-node must be removed,
             # according to the documentation.
             #
             set host $mapped_vhost
