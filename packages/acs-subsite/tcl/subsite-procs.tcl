@@ -1158,7 +1158,7 @@ ad_proc -public subsite::get_url {
             set node_id [ad_conn subsite_node_id]
         }
 
-        array set subsite_node [site_node::get -node_id $node_id]
+        set subsite_node [site_node::get -node_id $node_id]
         util_driver_info -array driver_info
         set main_host $driver_info(hostname)
 
@@ -1172,7 +1172,7 @@ ad_proc -public subsite::get_url {
     } elseif {$node_id eq ""} {
         error "You must supply node_id when not connected."
     } else {
-        array set subsite_node [site_node::get -node_id $node_id]
+        set subsite_node [site_node::get -node_id $node_id]
         set request_vhost_p 0
         #
         # Provide fallback values from the first configured driver
@@ -1213,10 +1213,9 @@ ad_proc -public subsite::get_url {
         set host $driver_info(hostname)
     }
 
-
     set result ""
     if { $request_vhost_p } {
-        set root_p [expr {$subsite_node(parent_id) eq ""}]
+        set root_p [expr {[dict get $subsite_node parent_id] eq ""}]
         set search_vhost $host
 
         # TODO: This should be cached
@@ -1235,16 +1234,23 @@ ad_proc -public subsite::get_url {
 
         if {$mapped_vhost eq ""} {
             set result [subsite::get_url \
-                            -node_id $subsite_node(parent_id) \
+                            -node_id [dict get $subsite_node parent_id] \
                             -absolute_p $absolute_p \
                             -strict_p $strict_p \
                             -force_host $host]
-            append result "$subsite_node(name)/"
+            append result "[dict get $subsite_node name]/"
         } else {
+            #
+            # The subsite is nost-node mapped and addressed via this
+            # URL (as determied via the host header field). In this
+            # case, the path leading to the side-node must be removed,
+            # according to the documentation.
+            #
             set host $mapped_vhost
+            dict set subsite_node url /
         }
-
     }
+
     if {$result eq ""} {
         if {$absolute_p} {
             set result [util::join_location \
@@ -1252,7 +1258,7 @@ ad_proc -public subsite::get_url {
                             -hostname $host \
                             -port $port]
         }
-        append result $subsite_node(url)
+        append result [dict get $subsite_node url]
     }
 
     return $result
