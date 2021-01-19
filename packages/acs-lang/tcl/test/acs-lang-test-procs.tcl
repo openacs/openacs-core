@@ -1196,8 +1196,13 @@ aa_register_case \
     }
 
 aa_register_case \
-    -procs {} catalog_files_are_valid_xml {
-        Make sure that what is found in	catalog	files is valid XML
+    -procs {} catalog_files_are_tdom_parsable_xml {
+
+        Make sure that what is found in catalog files is parsable by
+        tDOM.  Note that the files are neither "valid XML" nor
+        "well-formed XML" due to the fact that the "msg" content might
+        contain HTML.
+
     } {
         set catalog_files [list]
         foreach package_key [db_list get_packages {select distinct package_key from apm_packages}] {
