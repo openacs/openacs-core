@@ -1152,6 +1152,12 @@ ad_proc -public subsite::get_url {
 
     @param node_id the subsite's node_id (defaults to nearest subsite node).
     @param absolute_p whether to include the host in the returned url.
+    
+    @param force_host Use a certain host. In case "any" is specified,
+           and we have a host-node-mapping (e.g. non-connected cases)
+           behave like a virtual server on the first host-node-mapping
+           entry. In connected cases, "any" means: take whatever is
+           provided via vhost.
 } {
     if {[ns_conn isconnected]} {
         if {$node_id eq ""} {
@@ -1181,6 +1187,31 @@ ad_proc -public subsite::get_url {
         set driver_info(proto) [dict get $d proto]
         set driver_info(port) [dict get $d port]
         set driver_info(hostname) [dict get $d host]
+
+    }
+
+    #
+    # In case we have no vhost, and $force_host is "any", and we have
+    # a host-node-mapping (e.g. non-connected cases) behave like a
+    # virtual server on the first host-node-mapping entry.
+    #
+    if {$force_host eq "any" && ![info exists driver_info(vhost)]} {        
+        #
+        # Get the first entry from the host_node_map, use sorting
+        # to get stable answers.
+        #
+        # TODO: This should be cached
+        #
+        set force_host [db_list get_vhost {
+            select host from host_node_map
+            where node_id = :node_id
+            order by host
+            fetch first 1 row only
+        }]
+        if {$force_host ne ""} {
+            set request_vhost_p 1
+            set driver_info(vhost) $force_host
+        }
     }
 
     #
@@ -1199,14 +1230,11 @@ ad_proc -public subsite::get_url {
 
     #
     # If the provided host is not empty, get it from the host header
-    # field (when connected) or from the configured hostname.
+    # field (when provided) or from the provided or configured
+    # hostname.
     #
-    if {$force_host eq "any"} {
-        if {[info exists driver_info(vhost)]} {
-            set host $driver_info(vhost)
-        } else {
-            error "The option '-force_host any' is only valid when connected"
-        }
+    if {$force_host eq "any" && [info exists driver_info(vhost)]} {
+        set host $driver_info(vhost)
     } elseif {$force_host ne ""} {
         set host $force_host
     } else {
@@ -1219,11 +1247,12 @@ ad_proc -public subsite::get_url {
         set search_vhost $host
 
         # TODO: This should be cached
-        set mapped_vhost [lindex [db_list get_vhost {
+        set mapped_vhost [db_list get_vhost {
             select host from host_node_map
             where node_id = :node_id
             order by host = :search_vhost desc
-        }] 0]
+            fetch first 1 row only
+        }]
 
         if {$root_p && $mapped_vhost eq ""} {
             if {$strict_p} {
