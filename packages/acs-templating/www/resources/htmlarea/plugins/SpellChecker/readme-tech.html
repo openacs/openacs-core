@@ -24,7 +24,7 @@
       <li>spell-checker-logic.cgi &mdash; Perl CGI script that checks a text
         given through POST for spelling errors</li>
 
-      <li>spell-checker-style.css &mdash; style for mispelled words</li>
+      <li>spell-checker-style.css &mdash; style for misspelled words</li>
 
       <li>lang/en.js &mdash; main language file (English).</li>
 
@@ -36,7 +36,7 @@
       When an end-user clicks the "spell-check" button in the HTMLArea
       editor, a new window is opened with the URL of "spell-check-ui.html".
       This window initializes itself with the text found in the editor (uses
-      <tt>window.opener.SpellChecker.editor</tt> global variable) and it
+      <kbd>window.opener.SpellChecker.editor</kbd> global variable) and it
       submits the text to the server-side script "spell-check-logic.cgi".
       The target of the FORM is an inline frame which is used both to
       display the text and correcting.
@@ -48,7 +48,7 @@
       clear marks of which words are incorrect, along with suggestions for
       each of them.  This file is then loaded in the inline frame.  Upon
       loading, a JavaScript function from "spell-check-ui.js" is called.
-      This function will retrieve all mispelled words from the HTML of the
+      This function will retrieve all misspelled words from the HTML of the
       iframe and will setup the user interface so that it allows correction.
     </p>
 
@@ -63,7 +63,7 @@
       yet (<a
         href="http://mail.gnu.org/archive/html/aspell-user/2000-11/msg00007.html">thread concerning Aspell and Unicode</a>).
       This mean that words containing Unicode
-      characters that are not in 0..255 are likely to be reported as "mispelled" by Aspell.</strike>
+      characters that are not in 0..255 are likely to be reported as "misspelled" by Aspell.</strike>
     </p>
 
     <p>

@@ -13,6 +13,8 @@ ad_page_contract {
 } -properties {
     context:onevalue
     page_title:onevalue
+} -validate {
+    csrf { csrf::validate }
 }
 
 # When using ad_form to generate or edit acs_objects, the object type's

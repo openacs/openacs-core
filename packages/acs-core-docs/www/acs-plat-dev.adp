@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Part IV. For OpenACS Platform
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Part IV. For OpenACS Platform
 Developers}</property>
 <property name="doc(title)">Part IV. For OpenACS Platform
 Developers</property>
@@ -12,7 +12,7 @@ Developers</property>
 <div class="titlepage"><div><div><h1 class="title">
 <a name="acs-plat-dev" id="acs-plat-dev"></a>Part IV. For OpenACS
 Platform Developers</h1></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="chapter"><a href="kernel-doc">15. Kernel
 Documentation</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="kernel-overview">Overview</a></span></dt><dt><span class="sect1"><a href="object-system-requirements">Object Model

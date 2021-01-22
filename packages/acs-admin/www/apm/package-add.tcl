@@ -21,10 +21,10 @@ set context [list \
 		 $title]
 
 set form_name "packageAdd"
-set body "<form name='$form_name' action='package-add-2' method='post'>\n"
-append body [subst {
+set body [subst {
+<form name='$form_name' action='package-add-2' method='post'>
 [export_vars -form {package_id version_id}] 
-<script type="text/javascript">
+<script type="text/javascript" nonce='$::__csp_nonce'>
 function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
     var form = document.getElementsByName('$form_name')\[0\];
@@ -33,16 +33,14 @@ function updateURLs() {
     if ((form.version_name.value != '') && (form.version_uri.value == ''))
         form.version_uri.value = 'http://openacs.org/repository/download/apm/' + form.package_key.value + '-' + form.version_name.value + '.apm';
 }
-</script>
 
-<script type="text/javascript">
 function checkMailto(element) {
     // If it looks like an email address without a mailto: (contains an @ but
     // no colon) then prepend 'mailto:'.
     if (element.value.indexOf('@') >= 0 && element.value.indexOf(':') < 0)
         element.value = 'mailto:' + element.value;
 }
-</script>
+ </script>
 
 <table>
 
@@ -56,7 +54,7 @@ Files for your package will be placed in a directory with this name.</td>
 
 <tr>
   <th align="right" nowrap>Package Key:</th>
-  <td><input name="package_key" size="30" onChange="updateURLs()"></td>
+  <td><input name="package_key" size="30" class="update-url"></td>
 </tr>
 
 <tr>
@@ -151,7 +149,7 @@ an optional suffix of <strong>d</strong> for development, <strong>a</strong> for
 
 <tr>
   <th align="right" nowrap>Initial Version:</th>
-  <td><input name="version_name" size="10" onChange="updateURLs()"></td>
+  <td><input class="update-url" name="version_name" size="10"></td>
 </tr>
 
 <tr>
@@ -210,7 +208,7 @@ for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
 </tr>
 <tr>
   <th align="right" nowrap>Primary Owner URL:</th>
-  <td><input name="owner_uri" size="30" value="mailto:$email" onChange="checkMailto(this)"></td>
+  <td><input name="owner_uri" size="30" value="mailto:$email" class="check-mailto"></td>
 </tr>
 <tr>
   <th align="right" nowrap>Secondary Owner:</th>
@@ -218,7 +216,7 @@ for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
 </tr>
 <tr>
   <th align="right" nowrap>Secondary Owner URL:</th>
-  <td><input name="owner_uri" size="30" onChange="checkMailto(this)"></td>
+  <td><input name="owner_uri" size="30" class="check-mailto"></td>
 </tr>
 
 <tr>
@@ -257,10 +255,13 @@ this package, please load them manually into your database.
 </table>
 }]
 
+
+# Add event listener for updating urls and checking mailto urls
+
+template::add_event_listener -CSSclass "update-url" -event change -script {updateURLs();}
+template::add_event_listener -CSSclass "check-mailto" -event change -script {checkMailto(this);}
+
 ad_return_template apm
-
-
-
 
 # Local variables:
 #    mode: tcl

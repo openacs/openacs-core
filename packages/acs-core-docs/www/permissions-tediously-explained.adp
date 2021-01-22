@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Permissions Tediously Explained}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Permissions Tediously Explained}</property>
 <property name="doc(title)">OpenACS Permissions Tediously Explained</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -87,7 +87,7 @@ the form:</p><p>Who (<code class="computeroutput">grantee_id</code>) can do what
 require application developers to store permission information
 explicitly about every object, i.e. if the system has 100,000 and
 1,000 users who have the <span class="emphasis"><em>read</em></span> privilege on all objects, then we
-would need to store 100,000,000 entries of the form:</p><div class="informaltable"><table cellspacing="0" border="1">
+would need to store 100,000,000 entries of the form:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><thead><tr>
@@ -130,8 +130,8 @@ are discussed in the following sections.</p>
 <a name="permissions-tedious-context-hierarchy" id="permissions-tedious-context-hierarchy"></a>Context
 Hierarchy</h3></div></div></div><p>Suppose objects <span class="emphasis"><em>A</em></span>,
 <span class="emphasis"><em>B</em></span>, ..., and <span class="emphasis"><em>F</em></span> form the following hierarchy.</p><div class="table">
-<a name="idp140400238400304" id="idp140400238400304"></a><p class="title"><b>Table 11.2. Context
-Hierarchy Example</b></p><div class="table-contents"><table summary="Context Hierarchy Example" cellspacing="0" border="1">
+<a name="idp140592100090856" id="idp140592100090856"></a><p class="title"><strong>Table 11.2. Context Hierarchy
+Example</strong></p><div class="table-contents"><table class="table" summary="Context Hierarchy Example" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><tbody>
@@ -156,8 +156,8 @@ Hierarchy Example</b></p><div class="table-contents"><table summary="Context Hie
 </table></div>
 </div><br class="table-break"><p>This can be represented in the <a class="xref" href="permissions-tediously-explained">acs_objects</a>
 table by the following entries:</p><div class="table">
-<a name="idp140400238771344" id="idp140400238771344"></a><p class="title"><b>Table 11.3. acs_objects
-example data</b></p><div class="table-contents"><table summary="acs_objects example data" cellspacing="0" border="1">
+<a name="idp140592100109768" id="idp140592100109768"></a><p class="title"><strong>Table 11.3. acs_objects example
+data</strong></p><div class="table-contents"><table class="table" summary="acs_objects example data" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2">
 </colgroup><thead><tr>
@@ -184,7 +184,7 @@ mind, if we want to record the fact that user Joe has the
 <span class="emphasis"><em>read</em></span> privilege on objects
 <span class="emphasis"><em>A</em></span>, ..., <span class="emphasis"><em>F</em></span>, we only need to record one entry in
 the <a class="xref" href="permissions-tediously-explained">acs_permissions</a>
-table.</p><div class="informaltable"><table cellspacing="0" border="1">
+table.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><thead><tr>
@@ -195,10 +195,10 @@ table.</p><div class="informaltable"><table cellspacing="0" border="1">
 </table></div><p>The fact that Joe can also read <span class="emphasis"><em>B</em></span>, <span class="emphasis"><em>C</em></span>, ..., and <span class="emphasis"><em>F</em></span> can be derived by ascertaining that
 these objects are children of <span class="emphasis"><em>A</em></span> by traversing the context hierarchy.
 As it turns out, hierarchical queries are expensive. As Rafael
-Schloming put it so aptly, <span class="emphasis"><em>Oracle can't
-deal with hierarchies for shit.</em></span>
+Schloming put it so aptly, <span class="emphasis"><em>Oracle
+can&#39;t deal with hierarchies for shit.</em></span>
 </p><p>One way to solve this problem is to cache a flattened view of
-the context tree like so:</p><div class="informaltable"><table cellspacing="0" border="1">
+the context tree like so:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><thead><tr>
@@ -295,10 +295,10 @@ begin
     end if;
 end;
 </pre><p>One final note about <a class="xref" href="permissions-tediously-explained">acs_objects</a>.
-By setting an object's <code class="computeroutput">security_inherit_p</code> column to 'f', you can
-stop permissions from cascading down the context tree. In the
-following example, Joe does not have the read permissions on
-<span class="emphasis"><em>C</em></span> and <span class="emphasis"><em>F</em></span>.</p><div class="informaltable"><table cellspacing="0" border="1">
+By setting an object&#39;s <code class="computeroutput">security_inherit_p</code> column to 'f',
+you can stop permissions from cascading down the context tree. In
+the following example, Joe does not have the read permissions on
+<span class="emphasis"><em>C</em></span> and <span class="emphasis"><em>F</em></span>.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><tbody>
@@ -337,7 +337,7 @@ this is no longer recommended practice.</p><p>By defining parent-child relations
 OpenACS data model makes it easier for developers to manage
 permissions. Instead of granting a user explicit <span class="emphasis"><em>read</em></span>, <span class="emphasis"><em>write</em></span>, <span class="emphasis"><em>delete</em></span>, and <span class="emphasis"><em>create</em></span> privileges on an object, it is
 sufficient to grant the user the <span class="emphasis"><em>admin</em></span> privilege to which the first four
-privileges are tied. Privileges are structured as follows.</p><div class="informaltable"><table cellspacing="0" border="1">
+privileges are tied. Privileges are structured as follows.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3"><col align="center" class="c4">
 </colgroup><tbody>
@@ -394,7 +394,7 @@ context hierarchy.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-tedious-party-hierarchy" id="permissions-tedious-party-hierarchy"></a>Party Hierarchy</h3></div></div></div><p>Now for the third hierarchy playing a promiment role in the
-permission system. The party data model is set up as follows.</p><div class="informaltable"><table cellspacing="0" border="1">
+permission system. The party data model is set up as follows.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2">
 </colgroup><tbody>
@@ -489,7 +489,7 @@ and <code class="computeroutput">acs_rels</code> tables:</p><a name="acs_rels" i
   );
     
 </pre><p>The <a class="xref" href="permissions-tediously-explained">acs_rels</a> table
-entries would look like so:</p><div class="informaltable"><table cellspacing="0" border="1">
+entries would look like so:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><thead><tr>
@@ -517,7 +517,7 @@ create table <span class="bold"><strong>composition_rels</strong></span> (
 );
     
 </pre><p>The relevant entries in the <a class="xref" href="permissions-tediously-explained">acs_rels</a> look
-like so.</p><div class="informaltable"><table cellspacing="0" border="1">
+like so.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><thead><tr>
@@ -663,7 +663,7 @@ OpenACS. This is accessible from Tcl via the <code class="computeroutput">permis
     as
       exists_p char(1);
     begin
-      -- XXX This must be fixed: -1 shouldn't be hardcoded (it is the public)
+      -- XXX This must be fixed: -1 shouldn&#39;t be hardcoded (it is the public)
       select decode(count(*),0,'f','t') into exists_p
         from <a class="xref" href="permissions-tediously-explained">acs_object_party_privilege_map</a>
        where object_id = permission_p.object_id
@@ -725,7 +725,7 @@ merely runs a delete statement like so:</p><pre class="programlisting">
      and privilege = revoke_permission.privilege;
     
 </pre><p>Note that in the above example, <code class="computeroutput">acs_permissions</code> had only one entry that
-needed to be deleted:</p><div class="informaltable"><table cellspacing="0" border="1">
+needed to be deleted:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><thead><tr>

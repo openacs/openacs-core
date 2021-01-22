@@ -1,8 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Developer Guide: Workflow}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Workflow}</property>
 <property name="doc(title)">Content Repository Developer Guide: Workflow</property>
 <master>
 <h2>Applying Workflow to Content Items</h2>
+<strong>
+<a href="../index">Content Repository</a> : Developer
+Guide</strong>
 <p>This document describes the workflow API calls necessary to
 apply a simple workflow to a content item.</p>
 <h3>Workflow Description</h3>
@@ -35,7 +38,7 @@ tasks, this signifies approval.</li><li>Check the item in and move to a previous
 rejection.</li>
 </ol>
 <p>This simple workflow is defined in
-<tt>sql/workflows/author-edit-publish.sql</tt>.</p>
+<kbd>sql/workflows/author-edit-publish.sql</kbd>.</p>
 <h3>Workflow Creation</h3>
 <p>Production of a content item frequently begins with a concept
 which is initiated by the publisher and then executed by the staff.
@@ -65,18 +68,19 @@ end;
 <p>In this case, only one assignment is made per task. You can make
 as many assignments per task as desired. There is currently no
 workflow API to set deadlines, so you must write your own DML to
-insert a row into <tt>wf_case_deadlines</tt> if you wish to allow
+insert a row into <kbd>wf_case_deadlines</kbd> if you wish to allow
 the publisher to set deadlines ahead of time.</p>
-<p>The above workflow is created in the <b>Default</b> context. In
-practice, you may wish to create one or more contexts in which to
-create your workflows. Contexts may be used to represent different
-departments within an organization.</p>
-<p>The <tt>start_case</tt> enables the first task in the workflow,
-in this case <b>Authoring</b>.</p>
+<p>The above workflow is created in the <strong>Default</strong>
+context. In practice, you may wish to create one or more contexts
+in which to create your workflows. Contexts may be used to
+represent different departments within an organization.</p>
+<p>The <kbd>start_case</kbd> enables the first task in the
+workflow, in this case <strong>Authoring</strong>.</p>
 <h3>Check Out Item</h3>
 <p>If multiple persons are assigned to the same task, it is useful
-to allow a single person to "check out" or lock an item while they
-are working. This is accomplished with the following API calls:</p>
+to allow a single person to "check out" or lock an item
+while they are working. This is accomplished with the following API
+calls:</p>
 <pre>
 declare
   v_journal_id integer;
@@ -121,8 +125,8 @@ end;
 <p>Upon finishing a task, you must notify the workflow engine where
 to go next. In this case, an author wishes to simply check an item
 back in without actually completing the authoring task. The
-<tt>set_attribute_value</tt> procedure must thus be used to set
-<tt>next_place</tt> to the starting place of the workflow.</p>
+<kbd>set_attribute_value</kbd> procedure must thus be used to set
+<kbd>next_place</kbd> to the starting place of the workflow.</p>
 <h3>Finish Task</h3>
 <p>The process to finish a task varies slightly depending on
 whether the user has previously checked out the item out or not. If
@@ -150,11 +154,12 @@ begin
 end;
 /
 </pre>
-<p>In this case an author is finishing the <b>Authoring</b> task,
-upon which the workflow engine will move the workflow to the
-<b>Authored</b> state (as indicated by the <tt>next_place</tt>
-attribute). If the author had previously checked out the item, then
-only the second step is required.</p>
+<p>In this case an author is finishing the
+<strong>Authoring</strong> task, upon which the workflow engine
+will move the workflow to the <strong>Authored</strong> state (as
+indicated by the <kbd>next_place</kbd> attribute). If the author
+had previously checked out the item, then only the second step is
+required.</p>
 <h3>Approve or Reject</h3>
 <p>Approval steps more commonly do not involve an explicit
 check-out process. The code is thus virtually identical to that
@@ -180,10 +185,10 @@ end;
 /
 </pre>
 <p>Note the distinction between approval or rejection is determined
-solely by the value of the <tt>next_place</tt> attribute.</p>
+solely by the value of the <kbd>next_place</kbd> attribute.</p>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: <tt>$&zwnj;Id: workflow.html,v 1.1.1.1 2001/03/13 22:59:26
-ben Exp $</tt>
+Last Modified: <kbd>$&zwnj;Id: workflow.html,v 1.1.1.1.30.1 2016/06/22
+07:40:41 gustafn Exp $</kbd>

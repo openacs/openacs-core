@@ -14,7 +14,7 @@
 <p>
 
 
-<b>Test 1</b>
+<strong>Test 1</strong>
 <p>
 <em>Verify that the message catalog loader ran
 successfully at server startup.</em>
@@ -28,7 +28,7 @@ successfully at server startup.</em>
 </table>
 <p>
 
-<b>Test 2</b>
+<strong>Test 2</strong>
 <p>
 <em>Verify that the &lt;trn&gt; ADP tag works when the user's preferred
 language is set to 

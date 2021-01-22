@@ -1,8 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Design}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Design}</property>
 <property name="doc(title)">Content Repository Design</property>
 <master>
 <h2>Content Repository Design</h2>
+<strong>
+<a href="/doc">ACS Documentation</a> : <a href="index">Content Repository</a>
+</strong>
 <h3>I. Essentials</h3>
 <ul><li><a href="requirements">Feature Requirements
 Document</a></li></ul>
@@ -56,20 +59,21 @@ Objects.</p>
 Object Model. As such the same design tradeoffs apply.</p>
 <p>The content repository stores all revisions of all content items
 in a single table, rather than maintaining separate tables for
-"live" and other revisions. The single-table approach dramatically
-simplifies most operations on the repository, including adding
-revisions, marking a "live" revision, and maintaining a full
-version history. The drawback of this approach is that accessing
-live content is less efficient. Given the ID of a content item, it
-is not possible to directly access the live content associated with
-that item. Instead, an extra join to the revisions table is
-required. Depending on the production habits of the publisher, the
-amount of live content in the repository may be eclipsed by large
-numbers of infrequently accessed working drafts. The impact of this
-arrangement is minimized by storing the actual content data in a
-separate tablespace (preferably on a separate disk) from the actual
-revisions table, reducing its size and allows the database server
-to scan and read it more efficiently.</p>
+"live" and other revisions. The single-table approach
+dramatically simplifies most operations on the repository,
+including adding revisions, marking a "live" revision,
+and maintaining a full version history. The drawback of this
+approach is that accessing live content is less efficient. Given
+the ID of a content item, it is not possible to directly access the
+live content associated with that item. Instead, an extra join to
+the revisions table is required. Depending on the production habits
+of the publisher, the amount of live content in the repository may
+be eclipsed by large numbers of infrequently accessed working
+drafts. The impact of this arrangement is minimized by storing the
+actual content data in a separate tablespace (preferably on a
+separate disk) from the actual revisions table, reducing its size
+and allows the database server to scan and read it more
+efficiently.</p>
 <h3>VI. Further Reading</h3>
 <p>The <a href="object-model">Object Model</a> provides a
 graphic overview of the the how the content repository is designed.
@@ -80,5 +84,5 @@ development tasks using the content repository.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: design.html,v 1.1.1.1 2001/03/13 22:59:26 ben
-Exp $
+Last Modified: $&zwnj;Id: design.html,v 1.1.1.1.30.1 2016/06/22 07:40:41
+gustafn Exp $

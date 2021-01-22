@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Debugging and Automated Testing}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Debugging and Automated Testing}</property>
 <property name="doc(title)">Debugging and Automated Testing</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -15,20 +15,21 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140400238522704" id="idp140400238522704"></a>Debugging</h3></div></div></div><p>
-<b>Developer Support. </b>The Developer Support
-package adds several goodies: debug information for every page; the
-ability to log comments to the page instead of the error log, and
-fast user switching so that you can test pages as anonymous and as
-dummy users without logging in and out.</p><p>
-<b>PostgreSQL. </b>You can work directly with the
-database to do debugging steps like looking directly at tables and
-testing stored procedures. Start emacs. Type <strong class="userinput"><code>M-x sql-postgres</code></strong>. Press enter for
-server name and use <strong class="userinput"><code><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
+<a name="idp140592107822152" id="idp140592107822152"></a>Debugging</h3></div></div></div><p>
+<strong>Developer Support. </strong>The Developer
+Support package adds several goodies: debug information for every
+page; the ability to log comments to the page instead of the error
+log, and fast user switching so that you can test pages as
+anonymous and as dummy users without logging in and out.</p><p>
+<strong>PostgreSQL. </strong>You can work directly
+with the database to do debugging steps like looking directly at
+tables and testing stored procedures. Start emacs. Type
+<strong class="userinput"><code>M-x sql-postgres</code></strong>.
+Press enter for server name and use <strong class="userinput"><code><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 for database name. You can use C-(up arrow) and C-(down arrow) for
-command history.</p><p>Hint: "Parse error near *" usually means that an xql file wasn't
-recognized, because the tcl file is choking on the *SQL*
-placeholder that it falls back on.</p><p><b>Watching the server log. </b></p><p>To set up real-time monitoring of the AOLserver error log,
+command history.</p><p>Hint: "Parse error near *" usually means that an xql
+file wasn&#39;t recognized, because the Tcl file is choking on the
+*SQL* placeholder that it falls back on.</p><p><strong>Watching the server log. </strong></p><p>To set up real-time monitoring of the AOLserver error log,
 <span class="bold"><strong>type</strong></span>
 </p><pre class="screen">
 less /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/openacs-dev-error.log
@@ -44,7 +45,7 @@ G goes to the end.<br>
           </p></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140400226871904" id="idp140400226871904"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
+<a name="idp140592107831512" id="idp140592107831512"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
 <thead><tr class="segtitle">
 <th>Test Num</th><th>Action</th><th>Expected Result</th>
 </tr></thead><tbody>
@@ -68,18 +69,18 @@ title.</td>
 mfp::note::delete.</td><td class="seg">Proc should return 0 for success.</td>
 </tr>
 </tbody>
-</table></div><p>Other things to test: try to delete someone else's note. Try to
-delete your own note. Edit your own note. Search for a note.</p>
+</table></div><p>Other things to test: try to delete someone else&#39;s note. Try
+to delete your own note. Edit your own note. Search for a note.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140400226911568" id="idp140400226911568"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
+<a name="idp140592102696792" id="idp140592102696792"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
 <p>by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a> and Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
-<a class="indexterm" name="idp140400226913616" id="idp140400226913616"></a> It seems to me that a lot of people have
+<a class="indexterm" name="idp140592102521720" id="idp140592102521720"></a> It seems to me that a lot of people have
 been asking for some guidelines on how to write automated tests.
-I've done several tests by now and have found the process to be
-extremely easy and useful. It's a joy to work with automated
+I&#39;ve done several tests by now and have found the process to be
+extremely easy and useful. It&#39;s a joy to work with automated
 testing once you get the hang of it.</p><p>Create the directory that will contain the test script and edit
 the script file. The directory location and file name are standards
 which are recognized by the automated testing package:</p><pre class="screen">
@@ -92,23 +93,24 @@ ad_library {
     ...
 }
 </pre><p>To create a test case you call <code class="computeroutput">
-<a class="ulink" href="/api-doc/proc-view?proc=aa%5fregister%5fcase" target="_top">aa_register_case</a> test_case_name.</code>. Once you've
-created the test case you start writing the needed logic. We'll use
-the tutorial package, "myfirstpackage," as an example. Let's say
-you just wrote an <a class="ulink" href="/api-doc" target="_top">API</a> for adding and deleting notes in the notes packages
-and wanted to test that. You'd probably want to write a test that
-first creates a note, then verifies that it was inserted, then
-perhaps deletes it again, and finally verifies that it is gone.</p><p>Naturally this means you'll be adding a lot of bogus data to the
-database, which you're not really interested in having there. To
-avoid this I usually do two things. I always put all my test code
-inside a call to aa_run_with_teardown which basically means that
-all the inserts, deletes, and updates will be rolled back once the
-test has been executed. A very useful feature. Instead of inserting
-bogus data like: <code class="computeroutput">set name
-"Simon"</code>, I tend to generate a random script in order avoid
-inserting a value that's already in the database:</p><pre class="screen">
+<a class="ulink" href="/api-doc/proc-view?proc=aa%5fregister%5fcase" target="_top">aa_register_case</a> test_case_name.</code>. Once you&#39;ve
+created the test case you start writing the needed logic. We&#39;ll
+use the tutorial package, "myfirstpackage," as an
+example. Let&#39;s say you just wrote an <a class="ulink" href="/api-doc" target="_top">API</a> for adding and deleting notes in
+the notes packages and wanted to test that. You&#39;d probably want
+to write a test that first creates a note, then verifies that it
+was inserted, then perhaps deletes it again, and finally verifies
+that it is gone.</p><p>Naturally this means you&#39;ll be adding a lot of bogus data to
+the database, which you&#39;re not really interested in having
+there. To avoid this I usually do two things. I always put all my
+test code inside a call to aa_run_with_teardown which basically
+means that all the inserts, deletes, and updates will be rolled
+back once the test has been executed. A very useful feature.
+Instead of inserting bogus data like: <code class="computeroutput">set name "Simon"</code>, I tend to
+generate a random script in order avoid inserting a value
+that&#39;s already in the database:</p><pre class="screen">
 set name [ad_generate_random_string]
-</pre><p>Here's how the test case looks so far:</p><pre class="screen">
+</pre><p>Here&#39;s how the test case looks so far:</p><pre class="screen">
 aa_register_case mfp_basic_test {
     My test
 } {
@@ -118,42 +120,45 @@ aa_register_case mfp_basic_test {
 
        }
 }
-</pre><p>Now let's look at the actual test code. That's the code that
-goes inside <code class="computeroutput">-test_code {}</code>. We
-want to implement test case API-001, "Given an object id from
-API-001, invoke mfp::note::get. Proc should return the specific
-word in the title."</p><pre class="programlisting">
+</pre><p>Now let&#39;s look at the actual test code. That&#39;s the code
+that goes inside <code class="computeroutput">-test_code {}</code>.
+We want to implement test case API-001, "Given an object id
+from API-001, invoke mfp::note::get. Proc should return the
+specific word in the title."</p><pre class="programlisting">
       set name [ad_generate_random_string]
       set new_id [mfp::note::add -title $name]
       aa_true "Note add succeeded" ([info exists new_id] &amp;&amp; $new_id ne "")
 </pre><p>To test our simple case, we must load the test file into the
 system (just as with the /tcl file in the basic tutorial, since the
-file didn't exist when the system started, the system doesn't know
-about it.) To make this file take effect, go to the <a class="ulink" href="/acs-admin/apm" target="_top">APM</a> and choose
-"Reload changed" for "MyFirstPackage". Since we'll be changing it
-frequently, select "watch this file" on the next page. This will
-cause the system to check this file every time any page is
-requested, which is bad for production systems but convenient for
-developing. We can also add some aa_register_case flags to make it
-easier to run the test. The <code class="computeroutput">-procs</code> flag, which indicates which procs
+file didn&#39;t exist when the system started, the system
+doesn&#39;t know about it.) To make this file take effect, go to
+the <a class="ulink" href="/acs-admin/apm" target="_top">APM</a>
+and choose "Reload changed" for
+"MyFirstPackage". Since we&#39;ll be changing it
+frequently, select "watch this file" on the next page.
+This will cause the system to check this file every time any page
+is requested, which is bad for production systems but convenient
+for developing. We can also add some aa_register_case flags to make
+it easier to run the test. The <code class="computeroutput">-procs</code> flag, which indicates which procs
 are tested by this test case, makes it easier to find procs in your
-package that aren't tested at all. The <code class="computeroutput">-cats</code> flag, setting categories, makes it
+package that aren&#39;t tested at all. The <code class="computeroutput">-cats</code> flag, setting categories, makes it
 easier to control which tests to run. The <code class="computeroutput">smoke</code> test setting means that this is a
 basic test case that can and should be run any time you are doing
 any test. (<a class="ulink" href="http://www.nedbatchelder.com/blog/20030408T062805.html" target="_top">a definition of "smoke test"</a>)</p><p>Once the file is loaded, go to <a class="ulink" href="/test" target="_top">ACS Automated Testing</a> and click on
 myfirstpackage. You should see your test case. Run it and examine
 the results.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140400240668880" id="idp140400240668880"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn't test
-the code in our adp/tcl pairs. For this, we can use TCLwebtest.
-TCLwebtest must be <a class="link" href="install-tclwebtest" title="Install tclwebtest.">installed</a> for this test to work.
-This provides a <a class="ulink" href="http://tclwebtest.sourceforge.net/doc/api_public.html" target="_top">library of functions</a> that make it easy to call a page
-through HTTP, examine the results, and drive forms. TCLwebtest's
-functions overlap slightly with acs-automated-testing; see the
-example provided for one approach on integrating them.</p>
+<a name="idp140592102416504" id="idp140592102416504"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn&#39;t
+test the code in our adp/tcl pairs. For this, we can use
+TCLwebtest. TCLwebtest must be <a class="link" href="install-tclwebtest" title="Install tclwebtest.">installed</a>
+for this test to work. This provides a <a class="ulink" href="http://tclwebtest.sourceforge.net/doc/api_public.html" target="_top">library of functions</a> that make it easy to call a page
+through HTTP, examine the results, and drive forms.
+TCLwebtest&#39;s functions overlap slightly with
+acs-automated-testing; see the example provided for one approach on
+integrating them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140400236360192" id="idp140400236360192"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
+<a name="idp140592102047384" id="idp140592102047384"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
 deliberately bad data. The complete test looks like:</p><pre class="programlisting">
 ad_library {
     Test cases for my first package.
@@ -218,7 +223,7 @@ aa_register_case \
         
         \@author Peter Marklund
     } {
-        # we need to get a user_id here so that it's available throughout
+        # we need to get a user_id here so that it&#39;s available throughout
         # this proc
         set user_id [db_nextval acs_object_id_seq]
 
@@ -226,7 +231,7 @@ aa_register_case \
 
         # NOTE: Never use the aa_run_with_teardown with the rollback switch
         # when running Tclwebtest tests since this will put the test code in
-        # a transaction and changes won't be visible across HTTP requests.
+        # a transaction and changes won&#39;t be visible across HTTP requests.
         
         aa_run_with_teardown -test_code {
             
@@ -276,7 +281,7 @@ aa_register_case \
             # 1) go directly to the database to get the id
             # 2) require an API function that takes name and returns ID
             # 3) screen-scrape for the ID
-            # all options are problematic.  We'll do #1 in this example:
+            # all options are problematic.  We&#39;ll do #1 in this example:
 
             set note_id [db_string get_note_id_from_name " 
                 select item_id 

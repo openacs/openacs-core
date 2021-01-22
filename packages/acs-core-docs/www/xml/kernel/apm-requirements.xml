@@ -260,11 +260,11 @@ exhibits different behavior.</para>
 
 
 <itemizedlist>
-<listitem><para><ulink url="/doc/core-arch-guide/apm">APM 3.3 Design document</ulink></para></listitem>
+<listitem><para><ulink url="apm-design">APM 3.3 Design document</ulink></para></listitem>
 
-<listitem><para><ulink url="/doc/packaging">Five minute guide to packaging a module</ulink></para></listitem>
+<listitem><para><ulink url="packages">Five minute guide to packaging a module</ulink></para></listitem>
 
-<listitem><para><ulink url="/doc/core-arch-guide/subcommunities">Sub-communities</ulink></para></listitem>
+<listitem><para><ulink url="subsites-requirements">Sub-sites</ulink></para></listitem>
 </itemizedlist>
 
 </sect2>
@@ -324,7 +324,7 @@ the APM API can return the status of the package on the local OpenACS
 instance.</para>
 
 <!--
-      <para><emphasis role="strong">4.400.1</emphasis> Given a package's URL, the system API can be
+      <para><emphasis role="strong">4.400.1</emphasis> Given a package&#39;s URL, the system API can be
       queried for the existence of that installed package locally.
 
       

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-subsite {Subsite}} {Group Admin Pages - Design}</property>
+<property name="context">{/doc/acs-subsite {ACS Subsite}} {Group Admin Pages - Design}</property>
 <property name="doc(title)">Group Admin Pages - Design</property>
 <master>
 <h2>Group Admin Pages - Design</h2>
@@ -15,13 +15,13 @@ test</a></li>
 </ul>
 <h3>II. Introduction</h3>
 
-The group administration packages provides a "control panel" to
-allow the administrator of a subsite to control the groups in use
-on that subsite. Administrators manage the types of groups in use
-on a subsite. For each of these group types, the administrator can
-create new groups, specify applicable relationship types, create
-relations between these groups, and modify attributes of the types
-and groups.
+The group administration packages provides a "control
+panel" to allow the administrator of a subsite to control the
+groups in use on that subsite. Administrators manage the types of
+groups in use on a subsite. For each of these group types, the
+administrator can create new groups, specify applicable
+relationship types, create relations between these groups, and
+modify attributes of the types and groups.
 <h3>III. Historical Considerations</h3>
 
 Versions 4.0.x of the ACS lacked a useful group administration
@@ -111,8 +111,9 @@ acs_object_types.dynamic_p       char(1) default 'f'
                                  constraint acs_obj_types_dynamic_p_ck
                                  check (dynamic_p in ('t', 'f'))
 </pre>
-<p><b>Note that the <code>dynamic_p</code> is still experimental
-and may be removed in a future version of ACS</b></p>
+<p><strong>Note that the <code>dynamic_p</code> is still
+experimental and may be removed in a future version of
+ACS</strong></p>
 <h3>VII. Data Model Discussion</h3>
 
 ...
@@ -138,9 +139,9 @@ object types.
 <p>We also may add a few additional package parameters
 including:</p>
 <ul>
-<li>"Create Group Types" (Boolean). Determines whether new group
-types can be created dynamically.</li><li>"Create Relationship Types" (Boolean). Determines whether new
-relationship types can be created dynamically.</li>
+<li>"Create Group Types" (Boolean). Determines whether
+new group types can be created dynamically.</li><li>"Create Relationship Types" (Boolean). Determines
+whether new relationship types can be created dynamically.</li>
 </ul>
 <h3>XI. Authors</h3>
 

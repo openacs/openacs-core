@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Adding Comments}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Adding Comments}</property>
 <property name="doc(title)">Adding Comments</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,7 +9,7 @@ Chapter 10. Advanced Topics"
 		    rightLink="tutorial-admin-pages" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-comments" id="tutorial-comments"></a>Adding Comments</h2></div></div></div><p>You can track comments for any ACS Object. Here we'll track
+<a name="tutorial-comments" id="tutorial-comments"></a>Adding Comments</h2></div></div></div><p>You can track comments for any ACS Object. Here we&#39;ll track
 comments for notes. On the note-edit.tcl/adp pair, which is used to
 display individual notes, we want to put a link to add comments at
 the bottom of the screen. If there are any comments, we want to
@@ -21,7 +21,7 @@ note-edit.tcl:</p><pre class="programlisting">
   { return_url "[ad_conn url]?[ad_conn query]"} 
  }]
  
-</pre><p>This calls a global, public tcl function that the
+</pre><p>This calls a global, public Tcl function that the
 general_comments package registered, to get its url. You then embed
 in that url the id of the note and its title, and set the
 return_url to the current url so that the user can return after

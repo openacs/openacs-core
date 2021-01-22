@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Adding in parameters for your package}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Adding in parameters for your package}</property>
 <property name="doc(title)">Adding in parameters for your package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -14,7 +14,7 @@ package</h2></div></div></div><p>Each instance of a package can have paramaters 
 it. These are like preferences, and they can be set by the
 administrator for each application to change the behavior of your
 application.</p><p>To add parameters for your package, go to the Automatic Package
-Manager (/acs-admin/apm)</p><p>Click on your package</p><p>Under the Manage section, click on Parameters</p><p>It's fairly self-explanatory at this point. Create the
+Manager (/acs-admin/apm)</p><p>Click on your package</p><p>Under the Manage section, click on Parameters</p><p>It&#39;s fairly self-explanatory at this point. Create the
 parameters you want, and then access them in your code using the
 parameter::get procedure.</p>
 </div>

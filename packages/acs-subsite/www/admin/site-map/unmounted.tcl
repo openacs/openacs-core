@@ -12,12 +12,16 @@ set page_title "Unmounted Packages"
 set context [list [list "." "Site Map"] $page_title]
 set user_id [ad_conn user_id]
 
-db_multirow -extend {instance_delete_url} packages_normal packages_normal_select {} {
+db_multirow -extend {instance_delete_url delete_id} packages_normal packages_normal_select {} {
     set instance_delete_url [export_vars -base instance-delete package_id]
+    set delete_id action-delete-$package_id
+    template::add_confirm_handler -id $delete_id -message "Are you sure you want to delete package $name"
 }
 
-db_multirow -extend {instance_delete_url} packages_singleton packages_singleton_select {} {
+db_multirow -extend {instance_delete_url delete_id} packages_singleton packages_singleton_select {} {
     set instance_delete_url [export_vars -base instance-delete package_id]
+    set delete_id action-delete-$package_id
+    template::add_confirm_handler -id $delete_id -message "Are you sure you want to delete package $name"
 }
 
 # Local variables:

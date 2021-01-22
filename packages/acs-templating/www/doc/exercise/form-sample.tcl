@@ -108,7 +108,7 @@ if { [form is_valid add_entry] } {
       )"
 
     # can't seem to get orable to bind array variables birthday.day, birthday.month and birthday.year
-    # okay, turns out oracle doesn't support arrays, will have to do this in tcl first
+    # okay, turns out oracle doesn't support arrays, will have to do this in Tcl first
  
     template::forward form-sample.acs
 }
@@ -117,7 +117,7 @@ db_multirow address get_address ""
 
 set rowcount [set address:rowcount]
 
-if { $rowcount > [expr {$start_row + $num_rows}] } {
+if { $rowcount > $start_row + $num_rows } {
     set next_set [expr {$start_row + $num_rows}]
 } else {
     set next_set ""
@@ -133,7 +133,7 @@ if { $previous_set < 1} {
     set previous_set 1 
 }
 
-if {$rowcount > [expr {$next_set + $num_rows}]} {
+if {$rowcount > $next_set + $num_rows} {
     set last_set [expr {$rowcount - ($rowcount % $num_rows)}]
 } else {
     set last_set ""

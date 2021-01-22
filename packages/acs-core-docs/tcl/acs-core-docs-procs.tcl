@@ -45,6 +45,61 @@ ad_proc -public core_docs_uninstalled_packages {} {
     return [util_memoize core_docs_uninstalled_packages_internal]
 }
 
+ad_proc -public core_docs_html_redirector {args} { 
+
+    Performs an internal redirect requests for .html-pages to .adp
+    pages if these exist.
+    
+    @author Gustaf Neumann
+} {
+    #
+    # There is no [ad_conn file] processed yet. Therefore, we have to
+    # compute the path (consider just the path after the package_url
+    # for file name construction).
+    #
+    set url [ad_conn url]
+    #
+    # For now, ignore all version info
+    #
+    regsub {^/doc/(current|openacs-[0-9-]+|HEAD)/} $url /doc/ url
+        
+    set path    [string range $url [string length [ad_conn package_url]] end]
+    set html_fn [acs_package_root_dir [ad_conn package_key]]/www/$path
+    if {[file exists $html_fn]} {
+        #
+        # true acs-core-docs
+        #
+    } elseif {[regexp {^([a-z0-9_-]+)/(.+)$} $path _ pkg path]} {
+        #
+        # package acs-core-docs
+        #
+        set html_fn [acs_package_root_dir $pkg]/www/doc/$path
+        #ns_log notice "... pkg doc <$html_fn>"
+    }
+    set adp_fn  [file rootname $html_fn].adp
+
+    if {[file readable $adp_fn]} {
+        #
+        # Perform an internal redirect to the .adp file and stop the filter chain
+        #
+        #ns_log notice "===== core_docs_html_redirector <$args> url <[ad_conn url]> <[ad_conn file]> ADP exists -> break"
+        rp_internal_redirect -absolute_path $adp_fn
+        #
+        # do NOT run any more post-authorization filters and do NOT
+        # run the function registered, but run the trace to get the
+        # entry logged in access.log
+        #
+        return filter_return
+        
+    } else {
+        #
+        # Continue with business as usual
+        #
+        return filter_ok
+    }
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     {node_id:naturalnum,multiple ""}
     {package_id:naturalnum,multiple ""}
-    {return_url .}
+    {return_url:localurl .}
     {confirm_p:boolean 0}
 }
 

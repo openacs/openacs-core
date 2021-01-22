@@ -1,7 +1,6 @@
 <master>
 <property name="&doc">doc</property>
 <property name="context">@context;literal@</property>
-<property name="javascript">@javascript;literal@</property>
 
 <h1>@doc.title@</h1>
 

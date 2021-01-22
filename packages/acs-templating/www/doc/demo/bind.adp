@@ -1,4 +1,7 @@
 <html>
+<head>
+<title>Demo: Sample user</title>
+</head>
   <body>
   <h1>Sample User</h1>
   <table>

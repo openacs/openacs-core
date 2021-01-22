@@ -22,7 +22,7 @@ ad_page_contract {
     is signed and verified.
 } {
     session_property:array,verify
-    return_url
+    return_url:localurl
 } -validate {
     referrer_error {
         if { $session_property(referrer) ne [get_referrer] } {

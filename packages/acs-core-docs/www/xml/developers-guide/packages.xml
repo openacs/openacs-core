@@ -62,7 +62,7 @@ ROOT/
 
     <para>
       Each package encapsulates all of its data model, library code,
-      logic, adminstration pages and user pages in a single part of
+      logic, administration pages and user pages in a single part of
       the file tree.  This means developers can track down
       <emphasis>everything</emphasis> that is related to a particular
       package without hunting all over the file system.  Encapsulating
@@ -75,14 +75,14 @@ ROOT/
       packages that have been installed in the server, where those packages
       have been installed, and a standard way to map URLs that a client
       sends to our server to the right page in the appropriate
-      package. While we're at it, this tool should also automate
+      package. While we&#39;re at it, this tool should also automate
       package installation, dependency checking, upgrades, and package
       removal. In OpenACS &majorversion;, this tool is called the <link linkend="packages-apm">APM</link>.
     </para>
 
     <para>
       <indexterm id="baby"><primary>OpenACS Package</primary></indexterm>
-      To illustrate the general structure of a package, let's see what the
+      To illustrate the general structure of a package, let&#39;s see what the
       package for the "notes" application should look like.
     </para>
 
@@ -221,9 +221,9 @@ ROOT/
           files. In Oracle this can be done by including 
           <emphasis>@@ filename</emphasis> in the creation or drop
           scripts. See the <ulink
-        url="http://www.orafaq.com/faqplus.htm#AT">
+        url="http://www.orafaq.com/wiki/Scripts">
         Oracle FAQ</ulink> for examples. In
-          PostgreSQL the same is acomplished by including <emphasis>\i filename</emphasis>.
+          PostgreSQL the same is accomplished by including <emphasis>\i filename</emphasis>.
         </entry>
         <entry>
           <computeroutput>sql/&lt;database&gt;/*.sql</computeroutput>
@@ -415,7 +415,7 @@ ROOT/
     <para>
       The following sections will show you how to make a package for the
       Notes application. In addition, they will discuss some site
-      management features in OpenACS &majorversion; that take advantage of the APM's package
+      management features in OpenACS &majorversion; that take advantage of the APM&#39;s package
       instance model. The two most important of these are <emphasis>subsites</emphasis>,
       and the <emphasis>site map</emphasis> tool, which can be used to map applications to
       one or more arbitrary URLs in a running site.
@@ -452,7 +452,7 @@ ROOT/
 
 
       <listitem><para>Fill out the form for adding a new package. The form explains what
-      everything means, but we'll repeat the important bits here for easy
+      everything means, but we&#39;ll repeat the important bits here for easy
       reference:
 
       <variablelist>
@@ -486,8 +486,8 @@ ROOT/
           <listitem><para>
           If your package name is a nice singular noun, this should be the
           plural form of it. I assume the plural form is used when multiple
-          instances of the package are used by a single service. We'll talk more
-          about package instances later. Our example apllication doesn't really
+          instances of the package are used by a single service. We&#39;ll talk more
+          about package instances later. Our example apllication doesn&#39;t really
           have a good plural name. So just make it also be "Notes".
         </para></listitem>
         </varlistentry>
@@ -558,7 +558,7 @@ ROOT/
           The directory that APM created will be empty except for the
           <computeroutput>notes.info</computeroutput> file. Create a file
           called
-          <computeroutput>ROOT/packages/notes/sql/oracle/notes-create.sql</computeroutput>. We'll
+          <computeroutput>ROOT/packages/notes/sql/oracle/notes-create.sql</computeroutput>. We&#39;ll
           fill this file with our <link linkend="objects">data model</link>
           very soon. Create a file called
           <computeroutput>ROOT/packages/notes/sql/oracle/notes-drop.sql</computeroutput>. This
@@ -599,7 +599,7 @@ ROOT/
       
       <listitem><para>The new package has been created and installed in the server. At
       this point, you should add your package files to your CVS repository.
-      I'll assume that you have set up your development repository according
+      I&#39;ll assume that you have set up your development repository according
       to the standards described in 
       <link linkend="cvs-service-import">this appendix</link>. If so, then you just do this:
     </para>
@@ -637,11 +637,11 @@ ROOT/
 
     <para>
       At this point, you are probably excited to see your new package in
-      action. But, we haven't added any user visible pages yet. By
+      action. But, we haven&#39;t added any user visible pages yet. By
       convention, user visible pages go in the
       <computeroutput>ROOT/packages/notes/www</computeroutput> directory. So go there and add a
       file called <computeroutput>hello.html</computeroutput> with some text in it. Now we have
-      to make the user pages visible in the site. Since we didn't put the
+      to make the user pages visible in the site. Since we didn&#39;t put the
       pages underneath <computeroutput>ROOT/www</computeroutput> they will not appear on their
       own.  What we have to do is <emphasis>mount</emphasis> the application into the site
       map. That is, we have to define the URL from which the application
@@ -690,7 +690,7 @@ ROOT/
       <computeroutput>ROOT/packages/notes/www</computeroutput>. At this point, you can
       experiment with the site map by mounting multiple instances of the not
       yet written Notes application at various places in the site. In a
-      later document, we'll see how to write your application so that the
+      later document, we&#39;ll see how to write your application so that the
       code can detect from what URL it was invoked. This is the key
       to supporting <link linkend="subsites">subsites</link>.
     </para>
@@ -721,7 +721,7 @@ ROOT/
     </para></listitem>
       <listitem><para>
       Writes out package distribution files for other people to download and
-      install. We'll cover this later.
+      install. We&#39;ll cover this later.
     </para></listitem>
     </itemizedlist>
 

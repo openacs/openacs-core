@@ -93,7 +93,7 @@
     </itemizedlist>
 
     <para>
-      Note: it's entirely possible that a discussion of what a package
+      Note: it&#39;s entirely possible that a discussion of what a package
       is not intended to do differs from a discussion of future
       improvements for the package.
     </para>
@@ -140,7 +140,7 @@
 
     <para>
       Note that such a discussion may differ from a discussion of a
-      package's potential future improvements.
+      package&#39;s potential future improvements.
     </para>
 
   </sect2>
@@ -187,7 +187,7 @@
     
 
     <para>
-      Here's where you discuss the abstractions used by your package, such
+      Here&#39;s where you discuss the abstractions used by your package, such
       as the procedures encapsulating the legal transactions on the data
       model.  Explain the organization of procedures and their
       particulars (detail above and beyond what is documented in the
@@ -210,7 +210,7 @@
       Remember that the correctness, completeness, and stability of the API
       and interface are what experienced members of our audience are looking
       for.  This is a cultural shift for us at aD (as of mid-year 2000), in
-      that we've previously always looked at the data models as key, and
+      that we&#39;ve previously always looked at the data models as key, and
       seldom spent much effort on the API (e.g. putting raw SQL in pages to
       handle transactions, instead of encapsulating them via procedures).
       Experience has taught us that we need to focus on the API for
@@ -279,8 +279,8 @@
 
     <para>
       You may want to include page mockups, site-maps, or other visual aids.
-      Ideally this section is informed by some prototyping you've done, to
-      establish the package's usability with the client and other interested
+      Ideally this section is informed by some prototyping you&#39;ve done, to
+      establish the package&#39;s usability with the client and other interested
       parties.
     </para>
 
@@ -293,7 +293,7 @@
 
     <para>
       Finally, note that as our templating system becomes more entrenched
-      within the OpenACS, this section's details are likely to shift from UI
+      within the OpenACS, this section&#39;s details are likely to shift from UI
       specifics to template interface specifics.
     </para>
 
@@ -337,8 +337,8 @@
 
 
     <para>
-      Although a system's data model file often contains this information,
-      this isn't always the case.  Furthermore, data model files often
+      Although a system&#39;s data model file often contains this information,
+      this isn&#39;t always the case.  Furthermore, data model files often
       undergo substantial revision, making it difficult to track down the
       system creator. An additional complication: package documentation may
       be authored by people not directly involved in coding.  Thus to avoid

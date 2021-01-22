@@ -65,7 +65,7 @@ set errno [catch {
     # Used for ns_logs:
     set proc_name {Bootstrap}
 
-    # Load the special bootstrap tcl library.
+    # Load the special bootstrap Tcl library.
 
     set files [lsort [glob -nocomplain "$::acs::rootdir/packages/acs-bootstrap-installer/tcl/*-procs.tcl"]]
     if { [llength $files] == 0 } {
@@ -128,14 +128,23 @@ set errno [catch {
     apm_bootstrap_load_queries acs-tcl
     apm_bootstrap_load_queries acs-bootstrap-installer
 
-    # Is OpenACS installation complete? If not, source the installer and bail.
+    # Is OpenACS installation complete? If not, source the installer and bail out.
     if { ![ad_verify_install] } {
-	ns_log Notice "$proc_name: Installation is not complete - sourcing the installer."
+	ns_log warning "$proc_name: Installation is not complete - sourcing the installer."
 	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer.tcl"
 	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer-init.tcl"
 	return
     }
+    
+    #
+    # The installation is apparently ok, we can use the database. It
+    # should not be necessary to use the [ad_acs_kernel_id] redefine
+    # trick, but to use a plain variable in the ::acs namespace.
+    #
+    set ::acs::kernel_id [ad_acs_kernel_id_mem]
+    ns_log notice "bootstrap: setting ::acs::kernel_id to $::acs::kernel_id"
 
+    #
     # Load all parameters for enabled package instances.
     # ad_parameter_cache_all  
     
@@ -145,16 +154,6 @@ set errno [catch {
     # LARS: Load packages/acs-automated-testing/tcl/aa-test-procs.tcl
     ns_log Notice "Loading acs-automated-testing specially so other packages can define tests..."
     apm_bootstrap_load_libraries -procs acs-automated-testing
-
-    # Package libraries are now loaded in dependency order, rather than
-    # alphabetically.  This code is obsolete and has been commented out
-    # for 5.7.
-
-    #if {[info commands ::xotcl::Class] ne "" &&
-    #    [file isdirectory $::acs::rootdir/packages/xotcl-core]} {
-    #   apm_bootstrap_load_libraries -procs xotcl-core
-    #   apm_bootstrap_load_libraries -init xotcl-core
-    #}
 
     # Build the list of subsite packages
     apm_build_subsite_packages_list
@@ -182,7 +181,7 @@ set errno [catch {
 }]
 
 if { $errno && $errno != 2 } {
-    # An error occured while bootstrapping. Handle it by registering a filter
+    # An error occurred while bootstrapping. Handle it by registering a filter
     # to display the error message, rather than leaving the site administrator
     # to guess what broke.
 

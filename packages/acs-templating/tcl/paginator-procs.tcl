@@ -1,13 +1,17 @@
-# Query paginator for the ArsDigita Templating System
+ad_library {
+    Query paginator for the ArsDigita Templating System
+
+    @author Karl Goldstein    (karlg@arsdigita.com)
+
+    @cvs-id $Id$
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein    (karlg@arsdigita.com)
-
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 namespace eval template::paginator {}
@@ -38,7 +42,7 @@ ad_proc -public template::paginator { command args } {
   paginator::$command {*}$args
 }
 
-ad_proc -public template::paginator::create { statement_name name query count_query args } {
+ad_proc -public template::paginator::create { statement_name name query args } {
     Creates a paginator object.  Performs an initial query to get the complete
     list of rows in the query result and caches the result for subsequent
     queries.
@@ -114,7 +118,8 @@ ad_proc -public template::paginator::create { statement_name name query count_qu
     # problem.
     #
     if { ($row_ids eq {} && ![::cache exists $cache_key])
-	 || ([info exists opts(flush_p)] && $opts(flush_p) == "t") } {
+	 || ([info exists opts(flush_p)] && $opts(flush_p) == "t")
+     } {
       if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
 	  set title [lindex $opts(printing_prefs) 0]
 	  set stylesheet [lindex $opts(printing_prefs) 1]
@@ -152,15 +157,13 @@ $css_link
 	  }
 	  set return_url [lindex $opts(printing_prefs) 5]
 	  if { $return_url ne "" } {
-	      # Not sure, what the intented semantics of this command was...
+	      # Not sure, what the intended semantics of this command was...
 	      #if { [llength $opts(row_ids)]==0 } {
 	      #	  nsv_set __template_cache_timeout $cache_key $opts(timeout)
 	      #}
 	      ns_write [subst {
-          <script type="text/javascript">
-          <!-- Begin
+          <script type="text/javascript" nonce="$::__csp_nonce">
 	  document.location.href="[ns_quotehtml $return_url]";
-          // End -->
           </script>
 	  <noscript><a href="[ns_quotehtml $return_url]">Click here to continue.</a></noscript>
 	      }]
@@ -208,7 +211,8 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
   if {$original_query eq ""} {
       # ...which was slightly modified to keep the original query untampered.
       set list_name [lindex [split $name ,] 0]
-      if {![catch {template::list::get_reference -name $list_name}]} {
+      if {[info exists ::[template::list::get_refname -name $list_name]]} {
+          template::list::get_reference -name $list_name
           set original_query $list_properties(page_query_original)
       }
   }
@@ -641,7 +645,7 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
     </tr>
     <tr>
       <td>previous_page:</td>
-                 <td>preceeding page or empty string if at beginning</td>
+                 <td>preceding page or empty string if at beginning</td>
     </tr>
     <tr>
       <td>next_group:</td>

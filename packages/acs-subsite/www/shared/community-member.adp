@@ -18,7 +18,7 @@
 </else>
 
 <p>
-  #acs-subsite.A_member_of_the_system# <b>@pretty_creation_date@</b>.
+  #acs-subsite.A_member_of_the_system# <strong>@pretty_creation_date@</strong>.
 </p>
 
 <if @member_state@ eq "deleted">
@@ -39,37 +39,35 @@
 </else>
 
 <p>
-  <b>#acs-subsite.Name#:</b> @first_names@ @last_name@
+  <strong>#acs-subsite.Name#:</strong> @first_names@ @last_name@
 </p>
 
-<if @show_email_p@ true>
- 	@email_image;noquote@
-</if>
+<if @show_email_p;literal@ true>@email_image;noquote@</if>
 
 <if @verified_user_id@ ne 0 and @url@ not nil>
   <p>
-    <b>#acs-subsite.Home_page#:</b> 
+    <strong>#acs-subsite.Home_page#:</strong> 
     <a href="@url@">@url@</a>
   </p>
 </if>
 
-<if @verified_user_id@ ne 0 and @bio@ not nil>
-  <p>
-    <b>#acs-subsite.Biography#:</b>
-   </p>
-   <blockquote>
-     @bio;noquote@
-   </blockquote>
+<if @verified_user_id@ ne 0>
+    <if @bio@ not nil>
+      <p>
+	<strong>#acs-subsite.Biography#:</strong>
+      </p>
+      <blockquote>
+	@bio;noquote@
+      </blockquote>
+    </if>
 </if>
-
-
-<if @untrusted_user_id@ eq 0>
+<else>
   <blockquote>
     #acs-subsite.If_you_were_to# <a href="@subsite_url@register/index?@login_export_vars@">#acs-subsite.log_in#</a>#acs-subsite.lt__youd_be_able_to_get#
   </blockquote>
-</if>
+</else>
 
-<if @site_wide_admin_p@>
+<if @site_wide_admin_p;literal@ true>
   <h3>#acs-subsite.lt_For_Site-Wide_Adminis#</h3>
   <ul class="action-links">
     <li><a href="@admin_user_url@">#acs-subsite.Administrative_options#</a></li>

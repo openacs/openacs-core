@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Appendix B. Install additional
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix B. Install additional
 supporting software}</property>
 <property name="doc(title)">Appendix B. Install additional
 supporting software</property>
@@ -7,13 +7,13 @@ supporting software</property>
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="install-redhat" leftLabel="Prev"
 		    title="
-Part II. Administrator's Guide"
+Part II. Administrator&#39;s Guide"
 		    rightLink="openacs-unpack" rightLabel="Next">
 		<div class="appendix">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="install-more-software" id="install-more-software"></a>Appendix B. Install
 additional supporting software</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="openacs-unpack">Unpack the
 OpenACS tarball</a></span></dt><dt><span class="sect1"><a href="install-cvs">Initialize CVS
 (OPTIONAL)</a></span></dt><dt><span class="sect1"><a href="psgml-for-emacs">Add PSGML
@@ -40,7 +40,7 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>This section assumes that the source tarballs for supporting
 software are in <code class="computeroutput">/tmp</code>. It
 assumes that you begin each continuous block of commands as root,
-and you should end each block as root. It doesn't care which
+and you should end each block as root. It doesn&#39;t care which
 directory you start in. Text instructions always precede the
 commands they refer to.</p>
 </div>

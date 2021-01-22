@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Writing OpenACS Application Pages}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Writing OpenACS Application Pages}</property>
 <property name="doc(title)">Writing OpenACS Application Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -14,15 +14,15 @@ Chapter 11. Development Reference"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="subsites-overview" id="subsites-overview"></a>Overview</h3></div></div></div><p>In this document, we'll examine the user interface pages of the
-Notes application in more detail, covering two separate aspects of
-page development in OpenACS. First, we'll talk about the code
-needed to make your pages aware of which application instance they
-are running in. Second, we'll talk about using the form builder to
-develop form-based user interfaces in OpenACS. While these seem
-like unrelated topics, they both come up in the example page that
-we are going to look at, so it makes sense to address them at the
-same time.</p>
+<a name="subsites-overview" id="subsites-overview"></a>Overview</h3></div></div></div><p>In this document, we&#39;ll examine the user interface pages of
+the Notes application in more detail, covering two separate aspects
+of page development in OpenACS. First, we&#39;ll talk about the
+code needed to make your pages aware of which application instance
+they are running in. Second, we&#39;ll talk about using the form
+builder to develop form-based user interfaces in OpenACS. While
+these seem like unrelated topics, they both come up in the example
+page that we are going to look at, so it makes sense to address
+them at the same time.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="subsites-instances" id="subsites-instances"></a>Application Instances and Subsites</h3></div></div></div><p>As you will recall from the <a class="link" href="packages" title="OpenACS Packages">packages</a> tutorial, the Request
@@ -34,8 +34,8 @@ instances to particular URLs within a site. We call creating such a
 mapping <span class="emphasis"><em>mounting</em></span> the
 application instance at a particular URL. The tutorial also showed
 how a given URL is translated into a physical file to serve using
-the site map. We'll repeat this description here, assuming that you
-have mounted an instance of Notes at the URL <code class="computeroutput">/notes</code> as we did in the <a class="link" href="packages" title="What a Package Looks Like">packages-example</a>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+the site map. We&#39;ll repeat this description here, assuming that
+you have mounted an instance of Notes at the URL <code class="computeroutput">/notes</code> as we did in the <a class="link" href="packages" title="What a Package Looks Like">packages-example</a>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>AOLserver receives your request for the URL <code class="computeroutput">/notes/somepage</code>.</p></li><li class="listitem"><p>This URL is passed to the request processor.</p></li><li class="listitem"><p>The RP looks up the URL in the site map, and sees that the
 object mounted at that location is an instance of the <code class="computeroutput">notes</code> application.</p></li><li class="listitem"><p>The RP asks the package manager where in the file system the
 Notes package lives. In the standard case, this would be
@@ -60,8 +60,8 @@ extra_url]</code></span></dt><dd><p>If we found the URL in the site map, this is
 following the part that matched a site map entry.</p></dd>
 </dl></div><p>In the Notes example, we are particularly interested in the
 <code class="computeroutput">package_id</code> field. If you study
-the data model and code, you'll see why. As we said before in the
-<a class="link" href="objects" title="OpenACS Data Models and the Object System">data modeling</a>
+the data model and code, you&#39;ll see why. As we said before in
+the <a class="link" href="objects" title="OpenACS Data Models and the Object System">data modeling</a>
 tutorial, the Notes application points the <code class="computeroutput">context_id</code> of each Note object that it
 creates to the package instance that created it. That is, the
 <code class="computeroutput">context_id</code> corresponds exactly
@@ -110,7 +110,7 @@ db_dml new_note {
 the template system. This API allows you to write forms-based pages
 without generating a lot of duplicated HTML in your pages. It also
 encapsulates most of the common logic that we use in dealing with
-forms, which we'll discuss next.</p>
+forms, which we&#39;ll discuss next.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="subsites-using-forms" id="subsites-using-forms"></a>Using Forms</h3></div></div></div><p>The forms API is pretty simple: You use calls in the
@@ -208,9 +208,9 @@ if {[template::form is_valid new_note]} {
   ad_returnredirect "."
 }
 
-</pre><p>In this simple example, we don't do any custom validation. The
-nice thing about using this API is that the forms library handles
-all of the HTML rendering, input validation and database
+</pre><p>In this simple example, we don&#39;t do any custom validation.
+The nice thing about using this API is that the forms library
+handles all of the HTML rendering, input validation and database
 transaction logic on your behalf. This means that you can write
 pages without duplicating all of that code in every set of pages
 that uses forms.</p>
@@ -222,10 +222,10 @@ package repository, mount an instance of Notes somewhere in your
 server and then try out the user interface pages. It should become
 clear that in a real site, you would be able to, say, create a
 custom instance of Notes for every registered user, mount that
-instance at the user's home page, and set up the permissions so
+instance at the user&#39;s home page, and set up the permissions so
 that the instance is only visible to that user. The end result is a
 site where users can come and write notes to themselves.</p><p>This is a good example of the leverage available in the OpenACS
-5.7.0 system. The code that we have written for Notes is not at all
+5.9.0 system. The code that we have written for Notes is not at all
 more complex than a similar application without access control or
 site map awareness. By adding a small amount of code, we have taken
 a small, simple, and special purpose application to something that
@@ -234,16 +234,16 @@ complete with multi-user features, access control, and centralized
 administration.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="subsites-summary" id="subsites-summary"></a>Summary</h3></div></div></div><p>In OpenACS 5.7.0, application pages and scripts can be aware of
+<a name="subsites-summary" id="subsites-summary"></a>Summary</h3></div></div></div><p>In OpenACS 5.9.0, application pages and scripts can be aware of
 the package instance, or subsite in which they are executing. This
 is a powerful general purpose mechanism that can be used to
 structure web services in very flexible ways.</p><p>We saw how to use this mechanism in the Notes application and
 how it makes it possible to easily turn Notes into an application
 that appears to provide each user in a system with their own
-private notes database.</p><p>We also saw how to use the templating system's forms API in a
-simple way, to create forms based pages with minimal duplication of
-code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.9 2014/10/27 16:39:30
-victorg Exp $)</div>
+private notes database.</p><p>We also saw how to use the templating system&#39;s forms API in
+a simple way, to create forms based pages with minimal duplication
+of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.9.2.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

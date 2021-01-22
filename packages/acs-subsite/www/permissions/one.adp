@@ -19,7 +19,7 @@
       @export_form_vars;noquote@
       <multiple name="acl">
         <if @mainsite_p@ true and @acl.grantee_id@ eq "-1">
-	<div>@acl.grantee_name@, @acl.privilege@ <b>#acs-subsite.perm_cannot_be_removed#</b></div>
+	<div>@acl.grantee_name@, @acl.privilege@ <strong>#acs-subsite.perm_cannot_be_removed#</strong></div>
 	</if>
         <else>
           <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@" 
@@ -38,7 +38,7 @@
   @controls;noquote@
 
   <h3>#acs-subsite.Children#</h3>
-  <if @children_p@>
+  <if @children_p;literal@ true>
     <if @children:rowcount@ gt 0>
       <ul>
         <multiple name="children">
@@ -53,7 +53,7 @@
     </else>
   </if>
 
-  <if @children_p@ eq "f">
+  <if @children_p;literal@ false>
     <if @num_children@ gt 0> #acs-subsite.lt_num_children_Children# [<a href="one?object_id=@object_id@&amp;children_p=t">#acs-subsite.Show#</a>]</if>
     <else>
       <em>#acs-subsite.none#</em>

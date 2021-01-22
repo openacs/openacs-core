@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-lang {Localization}} {ACS 4 Globalization Detailed Design}</property>
+<property name="context">{/doc/acs-lang {ACS Localization}} {ACS 4 Globalization Detailed Design}</property>
 <property name="doc(title)">ACS 4 Globalization Detailed Design</property>
 <master>
 <h2>ACS 4 Globalization Detailed Design</h2>
@@ -37,59 +37,61 @@ ultimate Java APIs. This means that using the same templates if
 possible, as well as the same message catalogs and format strings
 should be a strong goal.</p>
 </li><li>Reusability</li><li>Testability
-<p>A set of unit tests are included in the <tt>acs-lang</tt>
+<p>A set of unit tests are included in the <kbd>acs-lang</kbd>
 package, to allow automatic testing after installation.</p>
 </li>
 </ul>
 <h3>VI. API</h3>
 <h4>VI.A Locale API</h4>
-<b>10.30</b>
- A Locale object represents a specific geographical,
-political, or cultural region. An operation that requires a Locale
-to perform its task is called locale-sensitive and uses the Locale
-to tailor information for the user. For example, displaying a
-number is a locale-sensitive operation--the number should be
-formatted according to the customs/conventions of the user's native
-country, region, or culture.
-<p>We will refer to a Locale by a combination of a <i>language</i>
-and <i>country</i>. In the <a href="http://java.sun.com/products/jdk/1.2/docs/api/java/util/Locale.html">
-Java Locale API</a> there is an optional <i>variant</i> which can
+<strong>10.30</strong>
+ A Locale object represents a specific
+geographical, political, or cultural region. An operation that
+requires a Locale to perform its task is called locale-sensitive
+and uses the Locale to tailor information for the user. For
+example, displaying a number is a locale-sensitive operation--the
+number should be formatted according to the customs/conventions of
+the user&#39;s native country, region, or culture.
+<p>We will refer to a Locale by a combination of a
+<em>language</em> and <em>country</em>. In the <a href="http://java.sun.com/products/jdk/1.2/docs/api/java/util/Locale.html">
+Java Locale API</a> there is an optional <em>variant</em> which can
 be added to a locale, which we will omit in the Tcl API.</p>
-<p>The <i>language</i> is a valid <b>ISO Language Code</b>. These
-codes are the lower-case two-letter codes as defined by ISO-639.
-You can find a full list of these codes at a number of sites, such
-as:<br><a href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
+<p>The <em>language</em> is a valid <strong>ISO Language
+Code</strong>. These codes are the lower-case two-letter codes as
+defined by ISO-639. You can find a full list of these codes at a
+number of sites, such as:<br><a href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
 </p>
-<p>The <i>country</i> is a valid <b>ISO Country Code</b>. These
-codes are the upper-case two-letter codes as defined by ISO-3166.
-You can find a full list of these codes at a number of sites, such
-as:<br><a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
+<p>The <em>country</em> is a valid <strong>ISO Country
+Code</strong>. These codes are the upper-case two-letter codes as
+defined by ISO-3166. You can find a full list of these codes at a
+number of sites, such as:<br><a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
 </p>
 <p>Examples are</p>
 <blockquote>
-<tt>en_US</tt> English US<br><tt>ja_JP</tt> Japanese<br><tt>fr_FR</tt> France French.</blockquote>
+<kbd>en_US</kbd> English US<br><kbd>ja_JP</kbd> Japanese<br><kbd>fr_FR</kbd> France French.</blockquote>
 <p>The i18n module figures out the locale for a current request
-makes it accessible via the <tt><b>ad_locale</b></tt> function:</p>
+makes it accessible via the <kbd><strong>ad_locale</strong></kbd>
+function:</p>
 <pre>
-[<b>ad_locale user <i>locale</i>
-</b>] =&gt; fr_FR
-[<b>ad_locale subsite <i>locale</i>
-</b>] =&gt; en_US
+[<strong>ad_locale user <em>locale</em>
+</strong>] =&gt; fr_FR
+[<strong>ad_locale subsite <em>locale</em>
+</strong>] =&gt; en_US
 </pre>
 
-It has not yet been decided how the user's preferred locale will be
-initialized. For now, there is a site wide default package
-parameter <tt>[parameter::get -parameter DefaultLocale -default
-"en_US"]</tt>
-, and an API for setting the locale with the
-preference stored in a session variable: The <tt>ad_locale_set</tt>
-
-function is used to set the user's preferred locale to a desired
-value. It saves the value in the current session.
+It has not yet been decided how the user&#39;s preferred locale
+will be initialized. For now, there is a site wide default package
+parameter <kbd>[parameter::get -parameter DefaultLocale -default
+"en_US"]</kbd>
+, and an API for setting the locale with
+the preference stored in a session variable: The
+<kbd>ad_locale_set</kbd>
+ function is used to set the user&#39;s
+preferred locale to a desired value. It saves the value in the
+current session.
 <pre>
-<b>ad_locale_set</b> locale "en_US"
-       <i>will also automatically set [ad_locale user language]
-          ( to "en" in this case)</i>
+<strong>ad_locale_set</strong> locale "en_US"
+       <em>will also automatically set [ad_locale user language]
+          ( to "en" in this case)</em>
 
     ad_locale_set timezone "PST"
 
@@ -99,30 +101,30 @@ value. It saves the value in the current session.
 The request processor should use the ad_locale API to figure out
 the preferred locale for a request (perhaps combining user
 preference with subsite defaults in some way). It will make this
-information accesible via the <tt>ad_conn</tt>
+information accesible via the <kbd>ad_conn</kbd>
  function:
-<pre><b>ad_conn locale</b></pre>
+<pre><strong>ad_conn locale</strong></pre>
 <h4>Character Sets and Encodings</h4>
 
-We refer to <i>MIME character set names</i>
+We refer to <em>MIME character set names</em>
  which are the valid
 values which can be passed in a MIME header, such as
 <pre>
-Content-Type: text/html; charset=<b>iso-8859-1</b>
+Content-Type: text/html; charset=<strong>iso-8859-1</strong>
 </pre>
 <p>You can obtain the preferred character set for a locale via the
-<tt>ad_locale</tt> API shown below:</p>
+<kbd>ad_locale</kbd> API shown below:</p>
 <pre>
 set locale "en_US"
-[<b>ad_locale charset <i>$locale</i>
-</b>] =&gt; "iso-8859-1" or "shift_jis"
+[<strong>ad_locale charset <em>$locale</em>
+</strong>] =&gt; "iso-8859-1" or "shift_jis"
 </pre>
 
 Returns a case-insensitive name of a MIME character set.
 <p>We already have an AOLserver function to convert a MIME charset
 name to a Tcl encoding name:</p>
 <pre>
-[<b>ns_encodingforcharset</b> "iso-8859-1"] =&gt; iso8859-1
+[<strong>ns_encodingforcharset</strong> "iso-8859-1"] =&gt; iso8859-1
 </pre>
 <h3>Templating</h3>
 
@@ -130,22 +132,22 @@ The goal of templates is to separate program logic from data
 presentation.
 <p>For presenting data in multiple languages, there are two basic
 ways to use templates for a given abstract URL. Say we have the URL
-"foo", for example. We can provide templates for it in the
-following ways:</p>
+"foo", for example. We can provide templates for it in
+the following ways:</p>
 <ul>
 <li>
-<b>Separate template for each target language</b><p>Have a copy of each template file in each language you support,
-e.g., <tt>foo.en.adp</tt>, <tt>foo.fr.adp</tt>,
-<tt>foo.de.adp</tt>, etc.</p><p>We will refer to this style of template pages as
-<i>language-specific templates</i>.</p>
+<strong>Separate template for each target language</strong><p>Have a copy of each template file in each language you support,
+e.g., <kbd>foo.en.adp</kbd>, <kbd>foo.fr.adp</kbd>,
+<kbd>foo.de.adp</kbd>, etc.</p><p>We will refer to this style of template pages as
+<em>language-specific templates</em>.</p>
 </li><li>
-<b>A single template file for multiple languages</b><p>You write your template to contain references to translation
+<strong>A single template file for multiple languages</strong><p>You write your template to contain references to translation
 strings either from data sources or using &lt;TRN&gt; tags.</p><p>For example, a site might support multiple languages, but use a
-single file <tt>foo.adp</tt> which contains no language-specific
+single file <kbd>foo.adp</kbd> which contains no language-specific
 content, and would only make use of data sources or &lt;TRN&gt;
 tags which in turn use the message catalog to look up
-language-specific content.</p><p>We will refer to this style of page as a <i>multilingual
-template</i>.</p>
+language-specific content.</p><p>We will refer to this style of page as a <em>multilingual
+template</em>.</p>
 </li>
 </ul>
 
@@ -155,60 +157,63 @@ separate template page for each language would be easiest.
 <p>But for a page which has a very fixed format, such as a data
 entry form, it would mean a lot less redundant work to use a single
 template source page to handle all the languages, and to have
-<b>all</b> language-dependent strings be looked in a message
-catalog. We can do this either by creating data sources which call
-<tt>lang_message_lookup</tt>, or else use the &lt;TRN&gt; tag to do
-the same thing from within an ADP file.</p>
+<strong>all</strong> language-dependent strings be looked in a
+message catalog. We can do this either by creating data sources
+which call <kbd>lang_message_lookup</kbd>, or else use the
+&lt;TRN&gt; tag to do the same thing from within an ADP file.</p>
 <h4>Caching multilingual ADP Templates</h4>
 
 Message catalog lookups can be potentially expensive, if many of
 them are done in a page. The templating system can already
 precompile and and cache adp pages. This works fine for a page in a
-specific language such as <tt>foo.en.adp</tt>
+specific language such as <kbd>foo.en.adp</kbd>
 , but we need to
 modify the caching mechanism if we want to use a single template
 file to target multiple languages.
-<h4>Computing the <i>Effective Locale</i>
+<h4>Computing the <em>Effective Locale</em>
 </h4>
-<p>Let's say you have a template file "foo.adp" and it contains
-calls to look up message strings using the TRN tag:</p>
+<p>Let&#39;s say you have a template file "foo.adp" and
+it contains calls to look up message strings using the TRN tag:</p>
 <blockquote><pre>
 &lt;master&gt;
 &lt;trn key=username_prompt&gt;Please enter your username&lt;/tr&gt;
-&lt;input type=text name=username&gt;
+&lt;input type="text" name=username&gt;
 &lt;p&gt;
 &lt;trn key=password_prompt&gt;Enter Password:&lt;/trn&gt;
 &lt;input type=password name=passwd&gt;
 </pre></blockquote>
 
-If the user requests the page <tt>foo</tt>
+If the user requests the page <kbd>foo</kbd>
 , and their
-<b>ad_locale</b>
- is "en_US" then <i>effective locale</i>
- is
-"en_US". Message lookups are done using the effective locale. If
-the user's locale is "fr_FR", then the effective locale will be
+<strong>ad_locale</strong>
+ is "en_US" then <em>effective
+locale</em>
+ is "en_US". Message lookups are done using
+the effective locale. If the user&#39;s locale is
+"fr_FR", then the effective locale will be
 "fr_FR".
 <p>If we evaluate the TRN tags at compile time then we need to
-associate the <i>effective locale</i> in which the page was
+associate the <em>effective locale</em> in which the page was
 evaluated with the cached compiled page code.</p>
 <p>The effective locale of a template page that has an explicit
-locale, such as a file named "foo.en.adp" or "foo.en_US.adp", will
-be that explicit locale. So for example, even if a user has a
-preferred locale of "fr_FR", if there is only a page named
-"foo.en.adp", then that page will be evaluated (and cached) with an
-effective locale of en_US.</p>
+locale, such as a file named "foo.en.adp" or
+"foo.en_US.adp", will be that explicit locale. So for
+example, even if a user has a preferred locale of
+"fr_FR", if there is only a page named
+"foo.en.adp", then that page will be evaluated (and
+cached) with an effective locale of en_US.</p>
 <h4>VI.B Naming of Template Files To Encode Language and Character
 Set</h4>
-<b>10.40</b>
- The templating system will use the Locale API to
-obtain the preferred locale for a page request, and will attempt to
-find a template file which most closely matches that locale.
+<strong>10.40</strong>
+ The templating system will use the Locale
+API to obtain the preferred locale for a page request, and will
+attempt to find a template file which most closely matches that
+locale.
 <p>We will use the following convention for naming template files:
-<tt>filename.<i>locale_or_language</i>.adp</tt>.</p>
+<kbd>filename.<em>locale_or_language</em>.adp</kbd>.</p>
 <p>Examples:</p>
 <blockquote><pre>
-foo.<i>en_US</i>.adp
+foo.<em>en_US</em>.adp
 foo.en.adp
 
 foo.fr_FR.adp
@@ -218,41 +223,42 @@ foo.ja_JP.adp
 foo.ja.adp
 
 </pre></blockquote>
-<p>The user request has a <i>locale</i> which is of the form
-<i>language_country</i>. If someone wants English, they will
+<p>The user request has a <em>locale</em> which is of the form
+<em>language_country</em>. If someone wants English, they will
 implicitly be choosing a default, such as en_US or en_GB. The
 default locale for a language can be configured in the system
-locale tables. So for example the default locale for "en" could be
-"en_US".</p>
+locale tables. So for example the default locale for "en"
+could be "en_US".</p>
 <p>The algorithm for finding the best matching template for a
 request in a given locale is given below:</p>
 <ol>
-<li>Find the desired target locale using <tt>[ad_conn locale]</tt>
-NOTE: This will always be a specific Locale (i.e.,
+<li>Find the desired target locale using <kbd>[ad_conn
+locale]</kbd> NOTE: This will always be a specific Locale (i.e.,
 language_COUNTRY)</li><li>Look for a template file whose locale suffix matches exactly.
 <p>For example, if the filename in the URL request is simply
-<tt>foo</tt> and <tt>[ad_conn locale]</tt> returns en_US then look
-for a file named <tt>foo.en_US.adp</tt>.</p>
+<kbd>foo</kbd> and <kbd>[ad_conn locale]</kbd> returns en_US then
+look for a file named <kbd>foo.en_US.adp</kbd>.</p>
 </li><li>If an exact match is not found, look for template files whose
 name matches the language portion of the target locale.
-<p>For example, if the URL request name is <tt>foo</tt> and
-<tt>[ad_conn locale]</tt> returns en_US and a file named
-<tt>foo.en_US.adp</tt> is not found, then look for all templates
-matching "en_*" as well as any template which just has the "en"
-suffix.</p><p>So for example if the user's locale en_GB and the following
-files exist:</p><p><tt>foo.en_US.adp</tt></p><p>then use <tt>foo.en_US.adp</tt>
-</p><p>If however both <tt>foo.en_US.adp</tt> and <tt>foo.en.adp</tt>
-exist, then use <tt>foo.<b>en</b>.adp</tt> preferentially, i.e.,
-don't switch locales if you can avoid it. The reasoning here is
+<p>For example, if the URL request name is <kbd>foo</kbd> and
+<kbd>[ad_conn locale]</kbd> returns en_US and a file named
+<kbd>foo.en_US.adp</kbd> is not found, then look for all templates
+matching "en_*" as well as any template which just has
+the "en" suffix.</p><p>So for example if the user&#39;s locale en_GB and the following
+files exist:</p><p><kbd>foo.en_US.adp</kbd></p><p>then use <kbd>foo.en_US.adp</kbd>
+</p><p>If however both <kbd>foo.en_US.adp</kbd> and
+<kbd>foo.en.adp</kbd> exist, then use
+<kbd>foo.<strong>en</strong>.adp</kbd> preferentially, i.e.,
+don&#39;t switch locales if you can avoid it. The reasoning here is
 that people can be very touchy about switching locales, so if there
 is a generic matching language template available for a language,
 use it rather than using an incorrect locale-specific template.</p>
 </li><li>If no locale-specific template is found, look for a template
 matching just the language
 <p>I.e., if the request is for en_US, and there exists a file
-<tt>foo.en.adp</tt>, use that.</p>
+<kbd>foo.en.adp</kbd>, use that.</p>
 </li><li>If no locale-specific template is found, look for a simple .adp
-file, such as <tt>foo.adp</tt>.</li>
+file, such as <kbd>foo.adp</kbd>.</li>
 </ol>
 <p>Once a template file is found we must decide what character set
 it is authored in, so that we can correctly load it into Tcl (which
@@ -261,20 +267,20 @@ converts it to UTF8 internally).</p>
 in UTF8, but that is just not a practical thing to enforce at this
 point, I believe. Many designers and other people who actually
 author the HTML template files will still find it easier to use
-legacy tools that author in their "native" character sets, such as
-ShiftJIS in Japan, or BIG5 in China.</p>
+legacy tools that author in their "native" character
+sets, such as ShiftJIS in Japan, or BIG5 in China.</p>
 <p>So we make the convention that the template file is authored in
-it's <i>effective locale</i>'s character set. For multilingual
-templates, we will load the template in the site default character
-set as specified by the AOLserver <tt>OutputCharset</tt>
-initializatoin parameter. For now, we will say that authoring
-generic multilingual adp files can and should be done in ASCII.
-Eventually we can switch to using UTF8.</p>
+it&#39;s <em>effective locale</em>'s character set. For
+multilingual templates, we will load the template in the site
+default character set as specified by the AOLserver
+<kbd>OutputCharset</kbd> initializatoin parameter. For now, we will
+say that authoring generic multilingual adp files can and should be
+done in ASCII. Eventually we can switch to using UTF8.</p>
 <p>A character set corresponding to a locale can be found using the
-<tt>[<b>ad_locale charset</b><i>$locale</i>]</tt> command. The
-templating system should call this right after it computes the
-effective locale, so it can set up that charset encoding conversion
-before reading the template file from disk.</p>
+<kbd>[<strong>ad_locale charset</strong><em>$locale</em>]</kbd>
+command. The templating system should call this right after it
+computes the effective locale, so it can set up that charset
+encoding conversion before reading the template file from disk.</p>
 <p>We read the template file using this encoding, and set the
 default output character set to it as well. Inside of either the
 .adp page or the parent .tcl page, it is possible for the developer
@@ -286,23 +292,24 @@ output to ISO-8859-1, you would do</p>
 ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=iso-8859-1"       
 </pre>
 <blockquote><font color="green">
-<i>design question</i>We should
+<em>design question</em>We should
 have an API for this. The hack now is that the adp handler
-<b>adp_parse_ad_locale user_file</b> looks at the output headers,
-and if it sees a content type with an explicit charset, it passes
-it along to <b>ns_return</b>.</font></blockquote>
-<p>The default character set for a template <tt>.adp</tt> file
+<strong>adp_parse_ad_locale user_file</strong> looks at the output
+headers, and if it sees a content type with an explicit charset, it
+passes it along to <strong>ns_return</strong>.</font></blockquote>
+<p>The default character set for a template <kbd>.adp</kbd> file
 should be the default system encoding.</p>
 <h4>VI.C Loading Regular Tcl Script Files</h4>
-<b>10.50</b>
- By default, tcl and template files in the system will
-be loaded using the default system encoding. This is generally
-ISO-8859-1 for AOLserver running on Unix systems in English.
+<strong>10.50</strong>
+ By default, tcl and template files in the
+system will be loaded using the default system encoding. This is
+generally ISO-8859-1 for AOLserver running on Unix systems in
+English.
 <p>This default can be overridden by setting the AOLserver init
-parameter for the MIME type of <tt>.tcl</tt> files to include an
+parameter for the MIME type of <kbd>.tcl</kbd> files to include an
 explcit character set. If an explicit MIME type is not found,
-<tt>ns_encodingfortype</tt> will default to the AOLserver init
-parameter value <tt>DefaultCharset</tt> if it is set.</p>
+<kbd>ns_encodingfortype</kbd> will default to the AOLserver init
+parameter value <kbd>DefaultCharset</kbd> if it is set.</p>
 <p>Example AOLserver .ini configuration file to set default script
 file and template file charset to ShiftJIS:</p>
 <blockquote><pre>
@@ -336,14 +343,15 @@ key string. The API for using the message catalog is as
 follows:</p>
 <blockquote>
 <pre>
-<b>lang_message_lookup</b><em>locale</em><em>key</em> [default_string]
+<strong>lang_message_lookup</strong><em>locale</em><em>key</em> [default_string]
 </pre><code>lang_message_lookup</code> is abbreviated by the procedure
-named "<b><code>_</code></b>", which is the convention used by the
-GNU strings message catalog package.</blockquote>
+named "<strong><code>_</code></strong>", which is the
+convention used by the GNU strings message catalog
+package.</blockquote>
 
 The locale arg can actually be a full locale, or else a simple
-language abbrev, such as <i>fr</i>
-, <i>en</i>
+language abbrev, such as <em>fr</em>
+, <em>en</em>
 , etc. The lookup
 rules for finding strings based on key and locale are tried in
 order as follows:
@@ -355,55 +363,57 @@ prefix.</li><li>Lookup is tried with language and key without package
 prefix.</li>
 </ol>
 
-Example: You are looking up the message string "Title" in the
-<tt>notes</tt>
+Example: You are looking up the message string "Title" in
+the <kbd>notes</kbd>
  package.
 <pre>
-[<b>lang_message_lookup</b> $locale notes.title "Title"]
+[<strong>lang_message_lookup</strong> $locale notes.title "Title"]
 
 can be abbreviated by
-[<b>_</b> $locale notes.title "Title"]
+[<strong>_</strong> $locale notes.title "Title"]
 
-<i># message key "title" is implicitly with respect to package key
-#  "notes", i.e., notes.title</i>
+<em># message key "title" is implicitly with respect to package key
+#  "notes", i.e., notes.title</em>
 [_ $locale title "Title"]
 
 </pre>
 
-The string is looked up by the symbolic key <tt>notes.title</tt>
+The string is looked up by the symbolic key <kbd>notes.title</kbd>
 
-(or <tt>title</tt>
+(or <kbd>title</kbd>
  for short), and the constant value
-<tt>"Title"</tt>
- is supplied as documentation and as a default
-value. Having a default value allows developers to code their
-application immediately without waiting to populate the message
-catalog.
+<kbd>"Title"</kbd>
+ is supplied as documentation and as a
+default value. Having a default value allows developers to code
+their application immediately without waiting to populate the
+message catalog.
 <h4>Default Package Namespace</h4>
 
 By default, keys are prefixed with the name of the current package
 (if a page request is being processed). So a lookup of the key
-"title" in a page in the bboard package will actually reference the
-"bboard.title" entry in the message catalog.
+"title" in a page in the bboard package will actually
+reference the "bboard.title" entry in the message
+catalog.
 <p>You can override this behavior by either using a fully qualified
-key such as <tt>bboard.title</tt> or else by changing the message
-catalog namespace using the <tt>lang_set_package</tt> command:</p>
+key such as <kbd>bboard.title</kbd> or else by changing the message
+catalog namespace using the <kbd>lang_set_package</kbd>
+command:</p>
 <pre>
-[<b>lang_set_package</b> "bboard"]
+[<strong>lang_set_package</strong> "bboard"]
 </pre>
 
 So for example code that runs in a scheduled proc, where there is
-not necessarily any concept of a "current package", would either
-use fully qualified keys to look up messages, or else call
-<tt>lang_set_package</tt>
+not necessarily any concept of a "current package", would
+either use fully qualified keys to look up messages, or else call
+<kbd>lang_set_package</kbd>
  before doing a message lookup.
 <h4>Message Catalog Definition Files</h4>
 
 A message catalog is defined by placing a file in the
-<tt>catalog</tt>
- subdirectory of a package. Each file defines a set
-of messages in different locales, and the file is written in a
-character set specified by it's file suffix:
+<kbd>catalog</kbd>
+ subdirectory of a package. Each file defines a
+set of messages in different locales, and the file is written in a
+character set specified by it&#39;s file suffix:
 <pre>
 /packages/bboard/catalog/
                          bboard.iso-8859-1
@@ -429,19 +439,19 @@ bboard package, all of the keys would be prefixed autmatically with
 
 The API function
 <pre>
-<b>lang_catalog_load</b><i>package_key</i>
+<strong>lang_catalog_load</strong><em>package_key</em>
 </pre>
 
 Is used to load the message catalogs for a package. The catalog
-files are stored in a package subdirectory called <tt>catalog</tt>
-.
-Their file names have the form <tt>*.<i>encoding</i>.cat</tt>
-,
-where <i>encoding</i>
- is the name of a MIME charset encoding
-(<i>not</i>
- a Tcl charset name as was used in a previous version of
-this command).
+files are stored in a package subdirectory called
+<kbd>catalog</kbd>
+. Their file names have the form
+<kbd>*.<em>encoding</em>.cat</kbd>
+, where <em>encoding</em>
+ is the
+name of a MIME charset encoding (<em>not</em>
+ a Tcl charset name as
+was used in a previous version of this command).
 <pre>
 /packages/bboard/catalog
                         /main.iso8859-1.cat
@@ -459,7 +469,7 @@ _mr fr alerts.mail_notification "Le notification du email"
 </pre></blockquote>
 
 which will be stored with the full key of
-<tt>bboard.alerts.mail_notification</tt>
+<kbd>bboard.alerts.mail_notification</kbd>
 .
 <h4>Calling the Message Catalog API from inside of Templates</h4>
 
@@ -488,15 +498,15 @@ translated string. Takes three optional parameters:
 it is omitted this procedure returns simply the text enclosed by
 the tags.</li><li>
 <code>lang</code> specifies the language of the text string
-enclosed within the flags. If it is ommitted value defaults to
+enclosed within the flags. If it is omitted value defaults to
 English.</li><li>
 <code>type</code> specifies the context in which the
 translation is made. If omitted, type is user which means that the
-translation is provided in the user's preferred language.</li><li>
+translation is provided in the user&#39;s preferred language.</li><li>
 <code>static</code> specifies that this tag should be
 translated once at templat compile time, rather than dynamically
 every time the page is run. This will be unneccessaru and will be
-deprecated once we have implemented <i>effective locale</i> based
+deprecated once we have implemented <em>effective locale</em> based
 cacheing for templates.</li>
 </ul>
 Example 1: Display the text string <em>Hello</em> on an ADP page
@@ -506,7 +516,7 @@ Example 1: Display the text string <em>Hello</em> on an ADP page
     
 </pre>
 Example 2: Assign the key key <em>hello</em> to the text string
-<em>Hello</em> and display the translated string in the user's
+<em>Hello</em> and display the translated string in the user&#39;s
 preferred language:
 <pre>
     &lt;trn key="hello"&gt;Hello&lt;/trn&gt;
@@ -514,7 +524,7 @@ preferred language:
 </pre>
 Example 3: Specify that <em>Bonjour</em> needs to be registered as
 the French translation for the key <em>hello</em> (in addition to
-displaying the translation in the user's preferred language):
+displaying the translation in the user&#39;s preferred language):
 <pre>
     &lt;trn key="hello" lang="fr"&gt;Bonjour&lt;/trn&gt;
     
@@ -594,18 +604,18 @@ Multilingual Site Article</a>
 like the original table, with the addition of a language column
 that you can specify in the queries.</p>
 <h4>Drawbacks to Splitting Tables</h4>
-<b>It is not totally transparent to developers</b>
+<strong>It is not totally transparent to developers</strong>
 <br>
 
 Every query against the table which requests or modifies
 language-dependent columns must now include a WHERE clause to
 select the language.
 <p>
-<b>Extra join may slow things down</b><br>
+<strong>Extra join may slow things down</strong><br>
 The extra join of the two tables may cause queries to slow down,
 although I am not sure what the actual performance hit might be. It
-shouldn't be too large, because the join is against a fully indexed
-table.</p>
+shouldn&#39;t be too large, because the join is against a fully
+indexed table.</p>
 <h3>VIII. User Interface</h3>
 <h3>IX. Configuration/Parameters</h3>
 <h3>X. Code Examples</h3>
@@ -639,8 +649,8 @@ ad_proc adp_parse_ad_conn_file {} {
 <li>System creator</li><li>System owner: hqm\@arsdigita.com</li><li>Documentation author: hqm\@arsdigita.com</li>
 </ul>
 <h3>XII. Revision History</h3>
-<p><i>The revision history table below is for this template -
-modify it as needed for your actual design document.</i></p>
+<p><em>The revision history table below is for this template -
+modify it as needed for your actual design document.</em></p>
 <table bgcolor="#EFEFEF" cellpadding="2" cellspacing="2" width="90%"><tbody>
 <tr bgcolor="#E0E0E0">
 <th width="10%">Document Revision #</th><th width="50%">Action Taken, Notes</th><th>When?</th><th>By Whom?</th>

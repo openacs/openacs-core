@@ -32,17 +32,16 @@ if {$object_id ne ""} {
     permission::require_permission -object_id $object_id -privilege admin
 }
 
-if {$new_parent ne ""} {
-    set javascript "onLoad=\"javascript:document.new_parent.name.focus();document.new_parent.name.select()\""
-} elseif {$new_application ne ""} {
-    set javascript "onLoad=\"javascript:document.new_application.instance_name.focus();document.new_application.instance_name.select()\""
-} elseif {$rename_application ne ""} {
-   set javascript "onLoad=\"javascript:document.rename_application.instance_name.focus();document.rename_application.instance_name.select()\""
-} else {
-    set javascript ""
-}
-set javascript "onload=\"javascript:document.check_checkbox()\""
-
+#set onload "document.check_checkbox();"
+# if {$onload ne ""} {
+#     template::add_body_handler -event onload -script $onload
+# }
+#
+#template::add_body_script -script {
+#    function check_checkbox () {
+#        window.document.nodes.node_id.checked = 'true';
+#    }
+#}
 
 set parent_link [export_vars -base . {expand:multiple {root_id $parent_id}}]
 
@@ -96,14 +95,14 @@ template::list::create \
 	    display_template {
 		<if @nodes.instance_url@ eq "/">
   		    <input type="checkbox" name="checkbox" checked disabled>
-		    <input type="hidden" name="checkbox" value=@nodes.node_id@>
+		    <input type="hidden" name="checkbox" value="@nodes.node_id@">
 		</if>
 		<else>
-		    <if @nodes.view_p@ eq t>
-		        <input type="checkbox" name="checkbox" value=@nodes.node_id@ checked> 
+		    <if @nodes.view_p@ true>
+		        <input type="checkbox" name="checkbox" value="@nodes.node_id@" checked> 
 		    </if>
 		    <else>
-                        <input type="checkbox" name="checkbox" value=@nodes.node_id@ >  
+                        <input type="checkbox" name="checkbox" value="@nodes.node_id@" >  
 		    </else>
 		</else>
 	    }

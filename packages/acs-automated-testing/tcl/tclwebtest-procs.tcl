@@ -53,7 +53,7 @@ ad_proc twt::do_request { page_url } {
     }
 
     if { $error_p } {
-        # Either some non-socket error, or a socket problem occuring with more than
+        # Either some non-socket error, or a socket problem occurring with more than
         # $retry_max times. Propagate the error while retaining the stack trace
         aa_log "twt::do_request failed with error=\"$errmsg\" response_url=\"[tclwebtest::response url]\". See error log for the HTML response body"
         ns_log Error "twt::do_request failed with error=\"$errmsg\" response_url=\"[tclwebtest::response url]\" response_body=\"[tclwebtest::response body]\""
@@ -192,11 +192,11 @@ ad_proc twt::user::login { email password {username ""}}  {
     set response_url [tclwebtest::response url]
 
     if { ![string match "*${home_uri}*" $response_url] } {
-        if { [cc_lookup_email_user $email] eq "" } {
+        if { [party::get_by_email -email $email] eq "" } {
             error "Failed to login user with email=\"$email\" and password=\"$password\". No user with such email in database."
         } else {
-            ns_log Error "Failed to log in user with email=\"$email\" and password=\"$password\" eventhough email exists (password may be incorrect). response_body=[tclwebtest::response body]"
-            error "Failed to log in user with email=\"$email\" and password=\"$password\" eventhough email exists (password may be incorrect). User should be able to request $home_uri without redirection, however response url=$response_url"
+            ns_log Error "Failed to log in user with email=\"$email\" and password=\"$password\" even though email exists (password may be incorrect). response_body=[tclwebtest::response body]"
+            error "Failed to log in user with email=\"$email\" and password=\"$password\" even though email exists (password may be incorrect). User should be able to request $home_uri without redirection, however response url=$response_url"
 
         }
     }

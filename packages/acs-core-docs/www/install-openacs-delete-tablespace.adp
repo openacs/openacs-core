@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Deleting a tablespace}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Deleting a tablespace}</property>
 <property name="doc(title)">Deleting a tablespace</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -18,9 +18,9 @@ you can use the <code class="computeroutput">drop user</code>
 command in SVRMGRL with the <code class="computeroutput">cascade</code> option. This command will drop the
 user and every database object the user owns.</p><pre class="programlisting">
 SVRMGR&gt; <strong class="userinput"><code>drop user <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> cascade;</code></strong>
-</pre><p>If this does not work because svrmgrl "cannot drop a user that
-is currently connected", make sure to kill the AOLserver using this
-user. If it still does not work, do:</p><pre class="programlisting">
+</pre><p>If this does not work because svrmgrl "cannot drop a user
+that is currently connected", make sure to kill the AOLserver
+using this user. If it still does not work, do:</p><pre class="programlisting">
 SVRMGR&gt; <strong class="userinput"><code>select username, sid, serial# from v$session where lower(username)='<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>';</code></strong>
 </pre><p>and then</p><pre class="programlisting">
 SVRMGR&gt; <strong class="userinput"><code>alter system kill session '<span class="replaceable"><span class="replaceable">sid, serial#</span></span>';</code></strong>
@@ -36,12 +36,11 @@ SVRMGR&gt; <strong class="userinput"><code>drop tablespace <span class="replacea
 <a name="install-openacs-delete-postgres-tablespace" id="install-openacs-delete-postgres-tablespace"></a>Deleting a
 PostgreSQL tablespace</h3></div></div></div><p>Dropping a PostgreSQL tablespace is easy. You have to stop any
 AOLserver instances that are using the database that you wish to
-drop. If you're using daemontools, this is simple, just use the
-'down' flag (-d). If you're using inittab, you have to comment out
-your server in <code class="computeroutput">/etc/inittab</code>,
-reread the inittab with <code class="computeroutput">/sbin/init
-q</code>, and then <code class="computeroutput">restart-aolserver
-<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+drop. If you&#39;re using daemontools, this is simple, just use the
+'down' flag (-d). If you&#39;re using inittab, you have to
+comment out your server in <code class="computeroutput">/etc/inittab</code>, reread the inittab with
+<code class="computeroutput">/sbin/init q</code>, and then
+<code class="computeroutput">restart-aolserver <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code>.</p><p>Then, to drop the db, just do:</p><pre class="programlisting">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>dropdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>

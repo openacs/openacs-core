@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install nsopenssl}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install nsopenssl}</property>
 <property name="doc(title)">Install nsopenssl</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -16,9 +16,9 @@ software"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>This AOLserver module is required if you want people to connect
 to your site via https. These commands compile nsopenssl and
-install it, along with a tcl helper script to handle https
+install it, along with a Tcl helper script to handle https
 connections. You will also need ssl certificates. Because those
-should be different for each server service, you won't need
+should be different for each server service, you won&#39;t need
 <a class="link" href="install-ssl">those
 instructions</a> until later.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -87,7 +87,7 @@ symlinks</p><pre class="screen">
 ln -s /usr/local/ssl/lib/libssl.so.0.9.7 libssl.so.0.9.7
 ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
 </span></span>
-</pre><p>SSL support must be enabled seperately in each OpenACS server
+</pre><p>SSL support must be enabled separately in each OpenACS server
 (<a class="xref" href="install-ssl">Generate
 ssl certificates</a>.</p><p>If your ports for SSL are privileged (below 1024), you will have
 to start AOLserver with prebinds for both your HTTP and your HTTPS
@@ -96,9 +96,9 @@ port (usually by adding <code class="computeroutput">-b
 </code> to the
 nsd call. If you are using daemontools, this can be changed in your
 <code class="computeroutput">etc/daemontools/run file</code>).</p><p>To enable SSL support in your server, make sure your
-etc/config.tcl file has a section on "OpenSSL 3 with AOLserver4".
-If that section is not present, try looking at the README file in
-<code class="computeroutput">/usr/local/src/aolserver/nsopenssl</code>.</p>
+etc/config.tcl file has a section on "OpenSSL 3 with
+AOLserver4". If that section is not present, try looking at
+the README file in <code class="computeroutput">/usr/local/src/aolserver/nsopenssl</code>.</p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

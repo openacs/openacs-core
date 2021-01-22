@@ -1,27 +1,34 @@
 ad_page_contract {
   @cvs-id $Id$
 } {
-  {grid ""}
+  {grid:boolean ""}
 } -properties {}
 
+set title "Sandwich Demo"
 
-form create sandwich
-
-element create sandwich grid \
-  -label "grid" -optional \
-  -datatype text -widget hidden
-
-element create sandwich nickname -html { size 30 } \
-  -label "Sandwich Name" -datatype text
-
-element create sandwich protein \
- -label "Protein" -datatype text -widget radio \
- -options { {Bacon bacon} {Chicken chicken} {Beef beef} }
-
-element create sandwich vitamins \
- -label "Vitamins" -datatype text -widget checkbox -optional \
- -options { {Lettuce lettuce} {Tomato tomato} \
-            {Pickle pickle} {Sprouts sprouts} }
+form create sandwich -has_submit 1 \
+    -elements {
+        grid -label "grid" -optional -datatype text -widget hidden
+    
+        nickname -html { size 30 } -label "Sandwich Name" -datatype text
+    
+        protein -label "Protein" -datatype text -widget radio \
+            -options { \
+                           {Bacon bacon} \
+                           {Chicken chicken} \
+                           {Beef beef} \
+                       }
+    
+        vitamins -label "Vitamins" -datatype text -widget checkbox -optional \
+            -options { \
+                           {Lettuce lettuce} \
+                           {Tomato tomato} \
+                           {Pickle pickle} \
+                           {Sprouts sprouts} \
+                       }
+        
+        ok -widget submit -label Submit
+    }
 
 # Set defaults
 if { [form is_request sandwich] } {
@@ -32,7 +39,7 @@ if { [form is_request sandwich] } {
 
 # Choose standard or gridded output
 if {[element get_value sandwich grid] == "t"} {
-  ad_return_template sandwich-grid
+    ad_return_template sandwich-grid
 }
 
 # Local variables:

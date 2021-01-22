@@ -92,6 +92,7 @@ namespace eval rel_types {
 	object_type_two
 	min_n_rels_two
 	max_n_rels_two
+        {composable_p "t"}
     } {
 	Creates a new relationship type named rel_type
 

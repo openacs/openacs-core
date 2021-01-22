@@ -54,7 +54,7 @@
 	<ul>
 	  <li>
 	    <p>
-	      <b>A common solution.</b> Programmers and designers
+	      <strong>A common solution.</strong> Programmers and designers
 	      should only have to learn a single system that serves as
 	      a UI substrate for all the functionally specific modules
 	      used on a site. The system should not make any
@@ -66,8 +66,8 @@
 
 	  <li>
 	    <p>
-	      <b>Separation of code (Tcl, Java and SQL) and layout
-		(HTML).</b> Programmers should be able to specify the
+	      <strong>Separation of code (Tcl, Java and SQL) and layout
+		(HTML).</strong> Programmers should be able to specify the
 	      data sources and other properties of the template
 	      independently of the HTML template used to present the
 	      data.  HTML authors should be to able to write templates
@@ -78,7 +78,7 @@
 
 	  <li>
 	    <p>
-	      <b>Separation of page components.</b> There should be
+	      <strong>Separation of page components.</strong> There should be
 	      provisions so that pages can be broken into discrete
 	      components to simplify maintenance of the HTML code and
 	      allow for reuse in different contexts.  Examples of
@@ -90,7 +90,7 @@
 
 	  <li>
 	    <p>
-	      <b>Global control over presentation.</b> There should be
+	      <strong>Global control over presentation.</strong> There should be
 	      a way to define one or more standard master templates
 	      used by most pages on a site, so that changes to the
 	      overall look and feel of a site can be made in one
@@ -99,7 +99,7 @@
 
 	  <li>
 	    <p>
-	      <b>Dynamic selection of presentation style.</b> Given
+	      <strong>Dynamic selection of presentation style.</strong> Given
 	      that the same data may be presented in many different
 	      ways, there should be a general mechanism for selecting
 	      a specific presentation (including file format, layout,
@@ -110,7 +110,7 @@
 
 	  <li>
 	    <p>
-	      <b>Usability.</b> Programmers should be able to develop
+	      <strong>Usability.</strong> Programmers should be able to develop
 	      template specifications using their standard tools for
 	      writing and maintaining code on the server. HTML authors
 	      should be able to access information about template
@@ -324,7 +324,7 @@
         <code>-properties</code> block indicates a set of data
 	sources that will be made available to the template.
       <li>
-	The rest of the tcl script executes, defining these data 
+	The rest of the Tcl script executes, defining these data 
 	sources.  It may change the name of the page being served by
         calling <code>template::set_file</code> directly or through
         the wrapper <code>ad_return_template</code>.
@@ -344,14 +344,14 @@
     <p>
       Below is a diagram of the typical call stack when processing a
       page without dependent pages.  To conform to the Tcl notion of
-      what's up and down (as in <b>up</b>var), the stack grows down.
+      what's up and down (as in <strong>up</strong>var), the stack grows down.
     <p>
     <blockquote>
       <table>
 	<tr>
-	  <th align=left>Level</th>
-	  <th align=left>Procedure</th>
-	  <th align=left>Arguments</th>
+	  <th align="left">Level</th>
+	  <th align="left">Procedure</th>
+	  <th align="left">Arguments</th>
 	</tr>
         <tr><td>#1</td><td>rp_handler</td><td></td></tr>
         <tr><td>#2</td><td>rp_serve_abstract_file</td>
@@ -363,7 +363,7 @@
                        <td>/web/<em>service</em>/www/page {}</td></tr>
         <tr><td>(6)</td>
                        <td>template::adp_prepare</td> <td></td></tr>
-	<tr><td><b>#5</b></td>
+	<tr><td><strong>#5</strong></td>
 	   <td>template::code::tcl::/web/<em>service</em>/www/page</td></tr>
       </table>
     </blockquote>
@@ -392,12 +392,12 @@
     
     <h4>Caching and Template Compilation</h4>
     <p>
-      To improve performance, adp pages are compiled into a tcl proc,
+      To improve performance, adp pages are compiled into a Tcl proc,
       and thus cached for future use.  Tcl pages are also cached in a
       proc; this saves
       the trouble of reading and parsing the file the next time.  The
       template system remembers the modification times of the adp and
-      tcl sources, and re-processes any requested file if the cached
+      Tcl sources, and re-processes any requested file if the cached
       version is no longer current.  Consequently, this cacheing is
       transparent in normal use.
     </p>
@@ -485,7 +485,7 @@
     
     <h3>XII.  Revision History</h3>
 
-    <table cellpadding=2 cellspacing=2 width="90%" bgcolor="#efefef">
+    <table cellpadding="2" cellspacing="2" width="90%" bgcolor="#efefef">
       <tr bgcolor="#e0e0e0">
 	<th width="10%">Document Revision #</th>
 	<th width="50%">Action Taken, Notes</th>

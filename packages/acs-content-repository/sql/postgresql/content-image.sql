@@ -111,7 +111,6 @@ end;
 
 
 
--- added
 select define_function_args('image__new','name,parent_id;null,item_id;null,revision_id;null,mime_type;jpeg,creation_user;null,creation_ip;null,relation_tag;null,title;null,description;null,is_live;f,publish_date;now(),path,file_size,height,width,package_id;null');
 
 --
@@ -134,7 +133,7 @@ CREATE OR REPLACE FUNCTION image__new(
    new__file_size integer,
    new__height integer,
    new__width integer,
-   new__package_id integer        -- default null
+   new__package_id integer default null
 
 ) RETURNS integer AS $$
 DECLARE
@@ -189,12 +188,13 @@ DECLARE
       new__publish_date,
       new__mime_type,
       new__nls_language,
-      null,
+      new__path,
       v_item_id,
       new__revision_id,
       new__creation_date,
       new__creation_user,
       new__creation_ip,
+      new__file_size,
       v_package_id
     );
 
@@ -202,12 +202,6 @@ DECLARE
     (image_id, height, width)
     values
     (v_revision_id, new__height, new__width);
-
-    -- update revision with image file info
-    update cr_revisions
-    set content_length = new__file_size,
-    content = new__path
-    where revision_id = v_revision_id;
 
     -- is_live => 't' not used as part of content_item.new
     -- because content_item.new does not let developer specify revision_id,
@@ -222,58 +216,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
---
--- procedure image__new/16
---
-CREATE OR REPLACE FUNCTION image__new(
-   new__name varchar,
-   new__parent_id integer,        -- default null
-   new__item_id integer,          -- default null
-   new__revision_id integer,      -- default null
-   new__mime_type varchar,        -- default jpeg
-   new__creation_user integer,    -- default null
-   new__creation_ip varchar,      -- default null
-   new__relation_tag varchar,     -- default null
-   new__title varchar,            -- default null
-   new__description varchar,      -- default null
-   new__is_live boolean,          -- default f
-   new__publish_date timestamptz, -- default now()
-   new__path varchar,
-   new__file_size integer,
-   new__height integer,
-   new__width integer
-
-) RETURNS integer AS $$
-DECLARE
-  BEGIN
-    return image__new(new__name,
-                      new__parent_id,
-                      new__item_id,
-                      new__revision_id,
-                      new__mime_type,
-                      new__creation_user,
-                      new__creation_ip,
-                      new__relation_tag,
-                      new__title,
-                      new__description,
-                      new__is_live,
-                      new__publish_date,
-                      new__path,
-                      new__file_size,
-                      new__height,
-                      new__width,
-                      null
-    );
-END; 
-$$ LANGUAGE plpgsql;
-
 -- DRB's version
-
-
-
 --
 -- procedure image__new/16
+--
+-- compared to image_new/17:
+--    * has no relation_tag, is_live, path, file_size
+--    * but has storage_type, content_type, nls_language
 --
 CREATE OR REPLACE FUNCTION image__new(
    p_name varchar,
@@ -285,17 +234,16 @@ CREATE OR REPLACE FUNCTION image__new(
    p_creation_ip varchar,   -- default null
    p_title varchar,         -- default null
    p_description varchar,   -- default null
-   p_storage_type varchar,
+   p_storage_type cr_items.storage_type%TYPE,
    p_content_type varchar,
    p_nls_language varchar,
    p_publish_date timestamptz,
    p_height integer,
    p_width integer,
-   p_package_id integer     -- default null
+   p_package_id integer default null
 
 ) RETURNS integer AS $$
 DECLARE
-
     v_item_id		 cr_items.item_id%TYPE;
     v_revision_id	 cr_revisions.revision_id%TYPE;
     v_package_id	 acs_objects.package_id%TYPE;
@@ -339,12 +287,13 @@ DECLARE
       p_publish_date,
       p_mime_type,
       p_nls_language,
-      null,
+      null,            -- text
       v_item_id,
       p_revision_id,
       current_timestamp,
       p_creation_user,
       p_creation_ip,
+      null,            -- content_length
       v_package_id
     );
 
@@ -359,53 +308,6 @@ $$ LANGUAGE plpgsql;
 
 
 
---
--- procedure image__new/15
---
-CREATE OR REPLACE FUNCTION image__new(
-   p_name varchar,
-   p_parent_id integer,     -- default null
-   p_item_id integer,       -- default null
-   p_revision_id integer,   -- default null
-   p_mime_type varchar,     -- default jpeg
-   p_creation_user integer, -- default null
-   p_creation_ip varchar,   -- default null
-   p_title varchar,         -- default null
-   p_description varchar,   -- default null
-   p_storage_type varchar,
-   p_content_type varchar,
-   p_nls_language varchar,
-   p_publish_date timestamptz,
-   p_height integer,
-   p_width integer
-
-) RETURNS integer AS $$
-DECLARE
-  BEGIN
-    return image__new(p_name,
-                      p_parent_id,
-                      p_item_id,
-                      p_revision_id,
-                      p_mime_type,
-                      p_creation_user,
-                      p_creation_ip,
-                      p_title,
-                      p_description,
-                      p_storage_type,
-                      p_content_type,
-                      p_nls_language,
-                      p_publish_date,
-                      p_height,
-                      p_width,
-                      null
-    );
-END; 
-$$ LANGUAGE plpgsql;
-
-
-
-
--- added
 select define_function_args('image__new_revision','item_id,revision_id,title,description,publish_date,mime_type,nls_language,creation_user,creation_ip,height,width,package_id');
 
 --
@@ -423,7 +325,7 @@ CREATE OR REPLACE FUNCTION image__new_revision(
    p_creation_ip varchar,
    p_height integer,
    p_width integer,
-   p_package_id integer
+   p_package_id integer default null
 ) RETURNS integer AS $$
 DECLARE
    v_revision_id      integer;
@@ -443,12 +345,13 @@ BEGIN
       p_publish_date,
       p_mime_type,
       p_nls_language,
-      null,
+      null,               -- content_length
       p_item_id,
       p_revision_id,
       current_timestamp,
       p_creation_user,
       p_creation_ip,
+      null,               -- content_length
       v_package_id
     );
 
@@ -463,46 +366,7 @@ $$ LANGUAGE plpgsql;
 
 
 
---
--- procedure image__new_revision/11
---
-CREATE OR REPLACE FUNCTION image__new_revision(
-   p_item_id integer,
-   p_revision_id integer,
-   p_title varchar,
-   p_description varchar,
-   p_publish_date timestamptz,
-   p_mime_type varchar,
-   p_nls_language varchar,
-   p_creation_user integer,
-   p_creation_ip varchar,
-   p_height integer,
-   p_width integer
-) RETURNS integer AS $$
-DECLARE
-   v_revision_id      integer;
-BEGIN
-   return image__new_revision(p_item_id,
-                              p_revision_id,
-                              p_title,
-                              p_description,
-                              p_publish_date,
-                              p_mime_type,
-                              p_nls_language,
-                              p_creation_user,
-                              p_creation_ip,
-                              p_height,
-                              p_width,
-                              p_revision_id,
-                              null
-   );
 
-END;
-$$ LANGUAGE plpgsql;
-
-
-
--- added
 select define_function_args('image__delete','v_item_id');
 
 --

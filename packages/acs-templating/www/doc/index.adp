@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templates}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templates}</property>
 <property name="doc(title)">Templates</property>
 <master>
 <h1>Templating System</h1>
@@ -28,10 +28,9 @@ Guide</a></td><td>Writing a Template, the ADP part of a page</td>
 <a href="developer-guide">Developer Guide</a>
  </td><td>API for programming the Tcl part of a page</td>
 </tr><tr>
-<td></td><td>
-<a href="api/">API</a>, <a href="TclDocs/content">TclDoc</a>    </td><td>Object and API Reference</td>
+<td></td><td><a href="api/">API</a></td><!-- , <a href="TclDocs/content.html">TclDoc</a> &nbsp;&nbsp;&nbsp; --><td>API Reference</td>
 </tr><tr>
-<td colspan="2"><a href="migration">Migration</a></td><td>Bringing legacy tcl pages to use the template system.</td>
+<td colspan="2"><a href="migration">Migration</a></td><td>Bringing legacy Tcl pages to use the template system.</td>
 </tr><tr>
 <td colspan="2"><a href="demo/">Demonstration</a></td><td>Samples of the various mechanisms, with both Tcl and ADP
 parts.</td>
@@ -40,8 +39,9 @@ parts.</td>
 <h2>Release Notes</h2>
 <p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 <hr>
-<address><a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a></address>
+
+Original maintainer: Christian Brechbühler
+(christian\@arsdigita.com) 
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: index.html,v 1.6.2.2 2015/08/21 10:28:47
+Last modified: $&zwnj;Id: index.html,v 1.6.2.5 2017/04/22 18:30:26
 gustafn Exp $

@@ -80,7 +80,8 @@ function new (
   is_live       in char default 'f',
   storage_type  in cr_items.storage_type%TYPE default 'lob',
   security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
-  package_id    in acs_objects.package_id%TYPE default null
+  package_id    in acs_objects.package_id%TYPE default null,
+  with_child_rels in boolean default 't'
 ) return cr_items.item_id%TYPE
 is
   v_parent_id      cr_items.parent_id%TYPE;
@@ -197,7 +198,8 @@ begin
 
   -- if the parent is not a folder, insert into cr_child_rels
   -- We checked above before creating the object that it is a valid rel
-  if v_parent_id ^= -4 and
+  if content_item.new.with_child_rels = 't' and
+    v_parent_id ^= -4 and
     content_folder.is_folder(v_parent_id) = 'f' then
 
     v_rel_id := acs_object.new(
@@ -1076,7 +1078,8 @@ end get_live_revision;
 
 procedure set_live_revision (
   revision_id    in cr_revisions.revision_id%TYPE,
-  publish_status in cr_items.publish_status%TYPE default 'ready'
+  publish_status in cr_items.publish_status%TYPE default 'ready',
+  publish_date   in cr_revisions.publish_date%TYPE default sysdate
 ) is
 begin
 
@@ -1096,7 +1099,7 @@ begin
   update
     cr_revisions
   set
-    publish_date = sysdate
+    publish_date = set_live_revision.publish_date
   where
     revision_id = set_live_revision.revision_id;
 

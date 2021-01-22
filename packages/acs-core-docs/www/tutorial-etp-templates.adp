@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Edit This Page Templates}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Edit This Page Templates}</property>
 <property name="doc(title)">OpenACS Edit This Page Templates</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -28,7 +28,7 @@ some reason, then you only need to make that change in one
 location, instead of across many files.</p><p>In this problem set you will familiarise yourself with the
 templating system in openacs. This will be achieved through
 customising an existing edit-this-page application template.</p><p>Before proceeding, it is strongly advised to read the templating
-documentation on your openacs installation
+documentation on your OpenACS installation
 (http://localhost:8000/doc/acs-templating). The documentation lists
 the special tags available for ADP files.</p>
 </div><div class="sect2">
@@ -54,8 +54,8 @@ cd ~/openacs/packages
             cvs -d:pserver:anonymous\@openacs.org:/cvsroot co edit-this-page
 </pre>
 </li><li class="listitem"><p>Go to the package manager at http://yoursite/acs-admin/apm. And
-install the new package: edit-this-page.</p></li><li class="listitem"><p>Or use the "Add Application" form available on the Main
-site.</p></li>
+install the new package: edit-this-page.</p></li><li class="listitem"><p>Or use the "Add Application" form available on the
+Main site.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -86,8 +86,8 @@ cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140400202467616"></a><p class="title"><b>TableÂ 10.1.Â table showing
-ETP layout</b></p><div class="table-contents"><table summary="table showing ETP layout" cellspacing="0" border="1" width="250">
+<a name="idp140592099042408"></a><p class="title"><strong>TableÂ 10.1.Â table
+showing ETP layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">
 </colgroup><tbody>
@@ -97,10 +97,10 @@ ETP layout</b></p><div class="table-contents"><table summary="table showing ETP 
 </tbody>
 </table></div>
 </div><br class="table-break">
-</li><li class="listitem"><p>The "Main Content" pane should contain the editable content that
-ETP provides.</p></li><li class="listitem"><p>The "Header" should display the title of the page that you set
-in ETP.</p></li><li class="listitem"><p>The "Sidebar" should display the extlinks that you add as a
-content item in ETP.</p></li>
+</li><li class="listitem"><p>The "Main Content" pane should contain the editable
+content that ETP provides.</p></li><li class="listitem"><p>The "Header" should display the title of the page that
+you set in ETP.</p></li><li class="listitem"><p>The "Sidebar" should display the extlinks that you add
+as a content item in ETP.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -130,11 +130,11 @@ view your ETP application using the col2 template.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="end"></a>Who Wrote This and When</h3></div></div></div><p>This problem set was originally written by <a class="ulink" href="http://www.weg.ee.usyd.edu.au/people/ncarroll" target="_top">Nick Carroll</a> in August 2004 for the <a class="ulink" href="http://www.usyd.edu.au" target="_top">University of
-Sydney</a> Course <a class="ulink" href="http://www.weg.ee.usyd.edu.au/courses/ebus5002" target="_top">EBUS5002</a>.</p><p>This material is copyright 2004 by Nick Carroll. It may be
+<a name="end"></a>Who Wrote This and When</h3></div></div></div><p>This problem set was originally written by Nick Carroll in
+August 2004 for the <a class="ulink" href="http://www.usyd.edu.au" target="_top">University of Sydney</a> Course EBUS5002.</p><p>This material is copyright 2004 by Nick Carroll. It may be
 copied, reused, and modified, provided credit is given to the
-original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.52 2015/06/27
-17:19:13 gustafn Exp $)</div>
+original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.52.2.7
+2017/06/17 10:15:41 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

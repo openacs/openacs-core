@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Sending HTML email from your application}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Sending HTML email from your application}</property>
 <property name="doc(title)">Sending HTML email from your application</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

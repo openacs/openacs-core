@@ -682,8 +682,9 @@ aa_register_case  \
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {}
             aa_true "Param UseEmailForLoginP {} -> true" [auth::UseEmailForLoginP]
 
+            # "foo" is an invalid value, it can't be true
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {foo}
-            aa_true "Param UseEmailForLoginP foo -> true" [auth::UseEmailForLoginP]
+            aa_false "Param UseEmailForLoginP foo -> false" [auth::UseEmailForLoginP]
             
             # Test login/registration
             

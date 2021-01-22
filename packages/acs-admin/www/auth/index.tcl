@@ -64,7 +64,7 @@ list::create \
                   <case value="can_select">
                     <a href="@authorities.registration_url@" 
                        title="\#acs-admin.Make_this_the_authority_for_registering_new_users\#"
-                       onclick="return confirm('\#acs-admin.You_are_changing_all_user_registrations_to_be_in_authority_authorities_pretty_name\#');">
+                       id="@authorities.select_id;literal@">
                 <img src="/resources/acs-subsite/radio.gif" height="13" width="13" style="background-color: white; border: 0;" alt="unchecked">
                     </a> 
                   </case>
@@ -89,7 +89,7 @@ list::create \
                 <if @authorities.short_name@ ne local>
                   <a href="@authorities.delete_url@"
                      title="Delete this authority"
-                     onclick="return confirm('\#acs-admin.Are_you_sure_you_want_to_delete_authority_authorities_pretty_name\#');">
+                     id="@authorities.delete_id;literal@">
                     <img src="/shared/images/Delete16.gif" height="16" width="16" alt="\#acs-admin.Delete\#" style="border:0">
                   </a>
                 </if>
@@ -97,6 +97,7 @@ list::create \
             sub_class narrow
         }        
     }
+
 
 # The authority currently selected for registering users
 set register_authority_id [auth::get_register_authority]
@@ -108,6 +109,7 @@ db_multirow -extend {
     delete_url
     registration_url
     registration_status
+    select_id delete_id
 } authorities authorities_select {
     select authority_id,
            short_name,
@@ -127,7 +129,8 @@ db_multirow -extend {
     set delete_url [export_vars -base authority-delete { authority_id }]
     set sort_order_url_up [export_vars -base authority-set-sort-order { authority_id {direction up} }]
     set sort_order_url_down [export_vars -base authority-set-sort-order { authority_id {direction down} }]
-
+    set select_id select-authority-$authority_id
+    set delete_id delete-authority-$authority_id
     if {$authority_id eq $register_authority_id} {
         # The authority is selected as register authority
         set registration_status "selected"
@@ -135,10 +138,20 @@ db_multirow -extend {
         # The authority can be selected as register authority
         set registration_status "can_select"
         set registration_url [export_vars -base authority-registration-select { authority_id }]
+        template::add_confirm_handler \
+            -id $select_id \
+            -message [_ acs-admin.You_are_changing_all_user_registrations_to_be_in_authority_authorities_pretty_name \
+                          [list authorities.pretty_name $pretty_name]]
     } else {
         # This authority has no account creation driver
         set registration_status "cannot_select"
-    }    
+    }
+    if {$short_name ne "local"} {
+        template::add_confirm_handler \
+            -id $delete_id \
+            -message [_ acs-admin.Are_you_sure_you_want_to_delete_authority_authorities_pretty_name \
+                          [list authorities.pretty_name $pretty_name]]
+    }
 }
 
 set auth_package_id [apm_package_id_from_key "acs-authentication"]

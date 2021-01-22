@@ -162,13 +162,13 @@ below.</p>
 <form onsubmit="return false;">
 <textarea id="TA" style="width: 100%; height: 15em;">
 <p>Here is some sample text in textarea that's been transformed with <font
-color="#0000CC"><b>HTMLArea</b></font>.<br />
-You can make things <b>bold</b>, <i>italic</i>, <u>underline</u>.  You can change the
-<font size="3">size</font> and <b><font color="#0000CC">c</font><font color="#00CC00">o</font><font color="#00CCCC">l</font><font color="#CC0000">o</font><font color="#CC00CC">r</font><font color="#CCCC00">s</font><font color="#CCCCCC">!</font></b>
+color="#0000CC"><strong>HTMLArea</strong></font>.<br />
+You can make things <strong>bold</strong>, <em>italic</em>, <u>underline</u>.  You can change the
+<font size="3">size</font> and <strong><font color="#0000CC">c</font><font color="#00CC00">o</font><font color="#00CCCC">l</font><font color="#CC0000">o</font><font color="#CC00CC">r</font><font color="#CCCC00">s</font><font color="#CCCCCC">!</font></strong>
 And lots more...</p>
 
-<p align="center"><font size="4" color="#ff0000"><b><u>Try HTMLArea
-today!</u></b></font><br /></p>
+<p align="center"><font size="4" color="#ff0000"><strong><u>Try HTMLArea
+today!</u></strong></font><br /></p>
 </textarea>
 </form>
 
@@ -406,19 +406,19 @@ config.registerButton({
 });</pre>
 
 <p>You might notice that the "action" function receives two parameters:
-<b>editor</b> and <b>id</b>.  In the examples above we only used the
-<b>editor</b> parameter.  But it could be helpful for you to understand
+<strong>editor</strong> and <strong>id</strong>.  In the examples above we only used the
+<strong>editor</strong> parameter.  But it could be helpful for you to understand
 both:</p>
 
 <ul>
-  <li><b>editor</b> is a reference to the HTMLArea object.  Since our entire
+  <li><strong>editor</strong> is a reference to the HTMLArea object.  Since our entire
   code now has an <acronym title="Object Oriented Programming">OOP</acronym>-like
   design, you need to have a reference to
   the editor object in order to do things with it.  In previous versions of
   HTMLArea, in order to identify the object an ID was used -- the ID of the
   HTML element.  In this version ID-s are no longer necessary.</li>
 
-  <li><b>id</b> is the button ID.  Wondering why is this useful?  Well, you
+  <li><strong>id</strong> is the button ID.  Wondering why is this useful?  Well, you
   could use the same handler function (presuming that it's not an anonymous
   function like in the examples above) for more buttons.  You can <a
   href="#btnex">see an example</a> a bit later in this document.</li>
@@ -472,7 +472,7 @@ this. ;)</p>
 
 <pre class="code"
 ><span class="comment">// All our custom buttons will call this function when clicked.
-// We use the <b>buttonId</b> parameter to determine what button
+// We use the <strong>buttonId</strong> parameter to determine what button
 // triggered the call.
 </span><span class="keyword">function</span> <span class="function-name">clickHandler</span>(editor, buttonId) {
   <span class="keyword">switch</span> (buttonId) {

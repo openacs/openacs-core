@@ -10,7 +10,7 @@
   from acs_objects o
   where exists (
     SELECT 1 
-      FROM all_object_party_privilege_map map
+      FROM acs_object_party_privilege_map map
      WHERE map.object_id = o.object_id
        and map.party_id = :user_id
        and map.privilege = 'admin')

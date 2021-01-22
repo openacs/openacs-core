@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---  Upgrade to enhance the perfomance of the acs-content-repository when adding / editing an 
+--  Upgrade to enhance the performance of the acs-content-repository when adding / editing an 
 --  cr_item, special fix for postgres to avoid using max() which is quite slow.
 --  Now update tree_sortkey in the process fix dups and add max_child_sortkey
 --

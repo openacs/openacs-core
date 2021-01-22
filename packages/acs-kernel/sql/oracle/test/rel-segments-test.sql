@@ -222,7 +222,7 @@ begin
   acs_rel_segment.del(seg_E_yippes);
   acs_rel_segment.del(acs_rel_segment.get(F,'membership_rel'));
 
-  -- Remove the test memebership relations
+  -- Remove the test membership relations
   for r in (select * from blah_member_rels) loop
     blah_member_rel.del(r.rel_id);
   end loop;

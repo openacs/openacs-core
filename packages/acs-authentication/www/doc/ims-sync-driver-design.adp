@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {IMS Sync driver design}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {IMS Sync driver design}</property>
 <property name="doc(title)">IMS Sync driver design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -13,9 +13,9 @@ driver design</h2></div></div></div><div class="authorblurb">by <a href="mailto:
 authors, and may be edited by OpenACS documentation staff.</div><div class="sect2" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="id2453048" id="id2453048"></a>TODO</h3></div></div></div><p>We need examples of how the communication would be done from our
-clients.</p><p>The "GetDocument" communications service contract could be a
-generic system-wide service contract.</p><p>We might need a source/ID column in the users table to identify
-where they're imported from for doing updates, particularly if
+clients.</p><p>The "GetDocument" communications service contract
+could be a generic system-wide service contract.</p><p>We might need a source/ID column in the users table to identify
+where they&#39;re imported from for doing updates, particularly if
 importing from multiple sources (or when some users are local.)</p>
 </div><div class="sect2" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
@@ -24,10 +24,11 @@ Story</h3></div></div></div><div class="orderedlist"><ol type="1">
 <li><p>We will parse a document in the <a href="http://www.imsglobal.org/enterprise/index.cfm" target="_top">IMS
 Enterprise Specification</a> format (<a href="http://www.imsglobal.org/enterprise/entv1p1/imsent_bestv1p1.html#1404584" target="_top">example XML document</a>), and translate it into
 calls to the batch user sync API.</p></li><li><p>The document will contain either the complete user listitemst
-(IMS: "snapshot"), or an incremental user listitemst (IMS: "Event
-Driven" -- contains only adds, edits, and deletes). You could for
-example do a complete transfer once a month, and incrementals every
-night. The invocation should decide which type is returned.</p></li>
+(IMS: "snapshot"), or an incremental user listitemst
+(IMS: "Event Driven" -- contains only adds, edits, and
+deletes). You could for example do a complete transfer once a
+month, and incrementals every night. The invocation should decide
+which type is returned.</p></li>
 </ol></div><p>The design should favor interoperability, reliability and
 robustness.</p><pre class="programlisting">
 &lt;enterprise&gt;
@@ -148,9 +149,10 @@ for { ... loop over persons in the document ... } {
 </pre><p>Mandatory fields which we can rely on are:</p><div class="orderedlist"><ol type="1">
 <li><p>sourcedid: ID as defined by the source system. Used for
 username.</p></li><li><p>name.fn (formatted name). Used for first_names, last_name</p></li>
-</ol></div><p>Note that we require 'email' attribute, but the IMS Enterprise
-spec does not. Hence, unless we change our data model to allow
-users without an email address, we will have to throw an error.</p><p>Here's how we map IMS enterprise to OpenACS tables.</p><div class="orderedlist"><ol type="1">
+</ol></div><p>Note that we require 'email' attribute, but the IMS
+Enterprise spec does not. Hence, unless we change our data model to
+allow users without an email address, we will have to throw an
+error.</p><p>Here&#39;s how we map IMS enterprise to OpenACS tables.</p><div class="orderedlist"><ol type="1">
 <li>
 <p>username:</p><div class="orderedlist"><ol type="a">
 <li><p>&lt;userid&gt; <span class="emphasis"><em>...</em></span>
@@ -192,8 +194,8 @@ Resources</h3></div></div></div><div class="itemizedlist"><ul type="disc">
 article says that IMS Enterprise 1.1 (current version) does not
 address the communication model, which is critically missing for
 real seamless interoperability. IMS Enterprise 2.0 will address
-this, but Blackboard, who's influential in the IMS committee, is
-adopting OKI's programming interrfaces for this.</p></li><li><p><a href="http://www.cetis.ac.uk/content/20030717185453" target="_top">IMS and OKI, the wire and the socket</a></p></li>
+this, but Blackboard, who&#39;s influential in the IMS committee,
+is adopting OKI&#39;s programming interrfaces for this.</p></li><li><p><a href="http://www.cetis.ac.uk/content/20030717185453" target="_top">IMS and OKI, the wire and the socket</a></p></li>
 </ul></div>
 </div>
 </div>

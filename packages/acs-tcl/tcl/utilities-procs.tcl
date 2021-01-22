@@ -167,9 +167,9 @@ ad_proc check_for_form_variable_naughtiness {
         set passed_check_p 0
 
         # check to make sure path is to an authorized directory
-        set tmpdir_list [ad_parameter_all_values_as_list TmpDir]
+        set tmpdir_list [ad_parameter_all_values_as_list -package_id [ad_conn subsite_id] TmpDir]
         if { $tmpdir_list eq "" } {
-            set tmpdir_list [list "/var/tmp" "/tmp"]
+            set tmpdir_list [list [ns_config ns/parameters tmpdir] "/var/tmp" "/tmp"]
         }
 
         foreach tmpdir $tmpdir_list {
@@ -254,10 +254,16 @@ ad_proc -public NsSettoTclString {set_id} {
     return $result
 }
 
-ad_proc -public get_referrer {} {
-    gets the Referer for the headers
-} { 
-    return [ns_set get [ns_conn headers] Referer]
+ad_proc -public get_referrer {-relative:boolean} {
+    @return referer from the request headers.
+    @param relative return the refer without protocol and host
+} {
+    set url [ns_set get [ns_conn headers] Referer]
+    if {$relative_p} {
+        # In case the referrer URL has a protocol and host remove it
+        regexp {^[a-z]+://[^/]+(/.*)$} $url . url
+    }
+    return $url
 }
 
 ##
@@ -270,7 +276,7 @@ ad_proc -deprecated ad_dbclick_check_dml {
 } {
     This proc is used for pages using double click protection. table_name
     is table_name for which we are checking whether the double click
-    occured. id_column_name is the name of the id table
+    occurred. id_column_name is the name of the id table
     column. generated_id is the generated id, which is supposed to have
     been generated on the previous page. return_url is url to which this 
     procedure will return redirect in the case of successful insertion in
@@ -544,6 +550,7 @@ ad_proc -public export_vars {
     -entire_form:boolean
     -no_empty:boolean
     {-base}
+    -no_base_encode:boolean
     {-anchor}
     {-exclude {}}
     {-override {}}
@@ -688,6 +695,9 @@ ad_proc -public export_vars {
     along with a question mark (?), if the query is non-empty. so the returned
     string can be used directly in a link. This is only relevant to URL export.
 
+    @option no_base_encode Decides whether argument passed as <code>base</code> option will be
+                           encoded by ad_urlencode_url proc
+
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
 } {
@@ -700,6 +710,17 @@ ad_proc -public export_vars {
     if { !$form_p && !$url_p } {
         set url_p 1
     }
+
+    #
+    # TODO: At least the parsing of the options should be transformed
+    # to produce a single dict, containing the properties of all form
+    # vars (probably optionally) and specified arguments. The dict
+    # should be the straightforeward source for the genertion of the
+    # output set. One should be able to speed the code significantly
+    # up (at least for the standard cases).
+    #
+    # -Gustaf Neumann
+    #
 
     # 'noprocessing_vars' is yet another container of variables, 
     # only this one doesn't have the values subst'ed
@@ -896,7 +917,7 @@ ad_proc -public export_vars {
     if { $url_p } {
         set export_list [list]
         for { set i 0 } { $i < $export_size } { incr i } {
-            lappend export_list [ns_urlencode [ns_set key $export_set $i]]=[ns_urlencode [ns_set value $export_set $i]]
+            lappend export_list [ad_urlencode_query [ns_set key $export_set $i]]=[ad_urlencode_query [ns_set value $export_set $i]]
         }
         set export_string [join $export_list "&"]
     } else {
@@ -914,19 +935,21 @@ ad_proc -public export_vars {
 
     # Prepend with the base URL
     if { [info exists base] && $base ne "" } {
-        if { $export_string ne "" } {
-            if { [string first ? $base] > -1 } {
-                # The base already has query vars
-                set export_string "$base&$export_string"
-            } else { 
-                # The base has no query vars
-                set export_string "$base?$export_string"
-            }
+        if { [string first ? $base] > -1 } {
+            # The base already has query vars; assume that the
+            # path up to this point is already correctly encoded.
+            set export_string $base[expr {$export_string ne "" ? "&$export_string" : ""}]
         } else {
-            set export_string $base
+            # The base has no query vars: encode url part if not
+            # explicitly said otherwise. Include also as exception
+            # trivial case of the base being the dummy url '#'.
+            if {!$no_base_encode_p && $base ne "#"} {
+                set base [ad_urlencode_url $base]
+            }
+            set export_string $base[expr {$export_string ne "" ? "?$export_string" : ""}]
         }
     }
-    
+
     # Append anchor
     if { [info exists anchor] && $anchor ne "" } {
         append export_string "\#$anchor"
@@ -1114,7 +1137,7 @@ ad_proc -deprecated export_form_vars {
     You can append :multiple to the name of a variable. In this case, the value will be treated as a list,
     and each of the elements output separately.
     <p>
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
     <p>
 
     Example usage: <code>[export_vars -form -sign {foo bar:multiple baz}]</code>
@@ -1159,7 +1182,7 @@ ad_proc -public export_entire_form {} {
     generally not be used. It's much better to explicitly name 
     the variables you want to export.  
 
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
 
     @see export_vars
 } {
@@ -1185,7 +1208,7 @@ ad_proc export_ns_set_vars {
     format = url, a url parameter string will be returned. If format = form, a
     block of hidden form fragments will be returned.  
 
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
     
     @param format either url or form 
     @param exclusion_list list of fields to exclude 
@@ -1207,7 +1230,7 @@ ad_proc export_ns_set_vars {
             set value [ns_set value $setid $set_counter_i]
             if {$name ni $exclusion_list && $name ne ""} {
                 if {$format eq "url"} {
-                    lappend return_list "[ns_urlencode $name]=[ns_urlencode $value]"
+                    lappend return_list "[ad_urlencode_query $name]=[ad_urlencode_query $value]"
                 } else {
                     lappend return_list " name=\"[ns_quotehtml $name]\" value=\"[ns_quotehtml $value]\""
                 }
@@ -1226,7 +1249,7 @@ ad_proc -deprecated export_url_vars {
     -sign:boolean
     args 
 } {
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
 
     Returns a string of key=value pairs suitable for inclusion in a
     URL; you can pass it any number of variables as arguments.  If any are
@@ -1297,7 +1320,7 @@ ad_proc -deprecated export_url_vars {
 ad_proc -public export_entire_form_as_url_vars { 
     {vars_to_passthrough ""}
 } {
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
 
     Returns a URL parameter string of name-value pairs of all the form
     parameters passed to this page. If vars_to_passthrough is given, it
@@ -1316,7 +1339,7 @@ ad_proc -public export_entire_form_as_url_vars {
                 $vars_to_passthrough eq "" 
                 || ($varname in $vars_to_passthrough)
             } {
-                lappend params "[ns_urlencode $varname]=[ad_urlencode_query $varvalue]" 
+                lappend params "[ad_urlencode_query $varname]=[ad_urlencode_query $varvalue]" 
             }
         }
         return [join $params "&"]
@@ -1655,6 +1678,7 @@ ad_proc -private util_WriteWithExtraOutputHeaders {
 
 ad_proc -private ReturnHeaders {
     {content_type text/html}
+    {content_length ""}
 } {
     We use this when we want to send out just the headers
     and then do incremental writes with ns_write.  This way the user
@@ -1664,13 +1688,14 @@ ad_proc -private ReturnHeaders {
     It returns status 200 and all headers including
     any added to outputheaders.
 } {
-
-    if {[string match "text/*" $content_type] && ![string match "*charset=*" $content_type]} {
+    set text_p [string match "text/*" $content_type]
+    if {$text_p && ![string match "*charset=*" $content_type]} {
         append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
     }
 
     if {[ns_info name] eq "NaviServer"} {
-        ns_headers 200 $content_type
+        set binary [expr {$text_p ? "" : "-binary"}]
+        ns_headers {*}$binary 200 $content_type {*}$content_length
     } else {
         set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
@@ -1715,17 +1740,6 @@ ad_proc -public safe_eval args {
         }
     }
     return [ad_apply uplevel $args]
-}
-
-ad_proc -public -deprecated lmap {list proc_name} {
-    Applies proc_name to each item of the list, appending the result of 
-    each call to a new list that is the return value.
-} {
-    set lmap [list]
-    foreach item $list {
-        lappend lmap [safe_eval $proc_name $item]
-    }
-    return $lmap
 }
 
 ad_proc -public ad_decode { args } {
@@ -1773,54 +1787,105 @@ ad_proc -public ad_urlencode { string } {
 }
 
 if {[ns_info name] eq "NaviServer"} {
+    #
+    # NaviServer
+    #
+    ad_proc -public ad_urlencode_folder_path {path} {
+        Perform an urlencode operation on the segments of the provided
+        folder (for a full folder path rather than path segments as in
+        ad_urlencode_path).
+        @see ad_urlencode_path
+    } {
+        return [ns_urlencode -part path -- {*}[split $path /]]
+    }
+    
     ad_proc -public ad_urlencode_path { string } {
-        encode provided string with url-encoding for paths (instead of queries) as defined in RFC 3986
+        Encode provided string with url-encoding for paths segments
+        (instead of query segments) as defined in RFC 3986
     } { 
         return [ns_urlencode -part path -- $string]
     }
     ad_proc -public ad_urldecode_path { string } {
-        decode provided string with url-encoding for paths (instead of queries) as defined in RFC 3986
+        Decode provided string with url-encoding for paths segments
+        (instead of query segments) as defined in RFC 3986
     } {
         return [ns_urldecode -part path -- $string]
     }
     ad_proc -public ad_urlencode_query { string } {
-        encode provided string with url-encoding for query (instead of paths) as defined in RFC 3986
+        Encode provided string with url-encoding for query segments
+        (instead of paths) as defined in RFC 3986
     } { 
         return [ns_urlencode -part query -- $string]
     }
     ad_proc -public ad_urldecode_query { string } {
-        decode provided string with url-encoding for query (instead of paths) as defined in RFC 3986
+        Decode provided string with url-encoding for query segments
+        (instead of path segments) as defined in RFC 3986
     } {
         return [ns_urldecode -part query -- $string]
     }
 } else {
+    #
+    # AOLserver
+    #
+
+    ad_proc -public ad_urlencode_folder_path {path} {
+        Perform an urlencode operation on the segments of the provided
+        folder (for a full folder path rather than path segments as in
+        ad_urlencode_path).
+        @see ad_urlencode_path        
+    } {
+        set segments {}
+        foreach segment [split $path /] {
+            lappend segments [ns_urlencode $segment]
+        }
+        return [join $segments /]
+    }
+    
     ad_proc -public ad_urlencode_path { string } {
-        encode provided string with url-encodingfor paths; 
-        same as ad_urlencode, since aolserver does not support this difference
+        Encode provided string with url-encoding for path segments; 
+        same as ad_urlencode, since AOLserver does not support this difference
     } {
         return [ad_urlencode $string]
     }
     ad_proc -public ad_urldecode_path { string } {
-        decode provided string with url-encoding for paths; 
-        same as ns_urldecode, since aolserver does not support this difference
+        Decode provided string with url-encoding for path segments; 
+        same as ns_urldecode, since AOLserver does not support this difference
     } {
         return [ns_urldecode $string]
     }
     ad_proc -public ad_urlencode_query { string } {
-        encode provided string with url-encodingfor paths; 
-        same as ad_urlencode, since aolserver does not support this difference
+        Encode provided string with url-encodingfor path segments; 
+        same as ad_urlencode, since AOLserver does not support this difference
     } {
         return [ad_urlencode $string]
     }
     ad_proc -public ad_urldecode_query { string } {
-        decode provided string with url-encoding for paths; 
-        same as ns_urldecode, since aolserver does not support this difference
+        Decode provided string with url-encoding for path segments; 
+        same as ns_urldecode, since AOLserver does not support this difference
     } {
         return [ns_urldecode $string]
     }    
 }
 
-
+ad_proc -public ad_urlencode_url {url} {
+    Perform an urlencode operation on a potentially full url
+    (containing a location, but without query part).
+    @see ad_urlencode_folder_path
+} {
+    if {[util_complete_url_p $url]} {
+        set components [ns_parseurl $url]
+        set result [util::join_location \
+                        -proto [dict get $components proto] \
+                        -hostname [dict get $components host] \
+                        -port [expr {[dict exists $components port] ? [dict get $components port] : ""}] \
+                       ]
+        set fullpath [dict get $components path]/[dict get $components tail]
+        append result / [ad_urlencode_folder_path $fullpath]
+    } else {
+        set result [ad_urlencode_folder_path $url]
+    }
+    return $result
+}
 
 if {[ns_info name] eq "NaviServer"} {
     #
@@ -1936,7 +2001,7 @@ if {[ns_info name] eq "NaviServer"} {
     #
     # Use plain AOLserver
     #
-
+    
     #
     # Unset Cookie
     #
@@ -1977,7 +2042,7 @@ if {[ns_info name] eq "NaviServer"} {
                 if { [string tolower [ns_set key $headers $i]] eq "set-cookie" 
                      && [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value] 
                  } {
-                    return $value
+                    return [ns_urldecode $value]
                 }
             }
         }
@@ -1993,7 +2058,7 @@ if {[ns_info name] eq "NaviServer"} {
             if { $value eq "\"\"" } {
                 set value ""
             }
-            return $value
+            return [ns_urldecode $value]
         }
 
         return $default
@@ -2075,7 +2140,7 @@ if {[ns_info name] eq "NaviServer"} {
         if { $value eq "" } {
             set cookie "$name=\"\""
         } else {
-            set cookie "$name=$value"
+            set cookie "$name=[ns_urlencode $value]"
         }
 
         if { $path ne "" } {
@@ -2258,7 +2323,7 @@ ad_proc -deprecated util_ReturnMetaRefresh {
     ad_return_top_of_page [subst {
         <head>
         <meta http-equiv="refresh" content="$seconds_delay;URL=[ns_quotehtml $url]">
-        <script type="text/javascript">
+        <script type="text/javascript" nonce="$::__csp_nonce">
         window.location.href = "[ns_quotehtml $url]";
         </script>
         </head>
@@ -2395,10 +2460,9 @@ ad_proc -public ad_returnredirect {
         set url [util_current_location]$target_url
     } else {
         # URL is relative to current directory.
-        if {$target_url eq "."} {
-            set url [util_current_location][util_current_directory]
-        } else {
-            set url [util_current_location][util_current_directory]$target_url
+        set url [util_current_location][ad_urlencode_folder_path [util_current_directory]]
+        if {$target_url ne "."} {
+            append url $target_url
         }
     }
 
@@ -2473,6 +2537,8 @@ ad_proc -public util_get_user_messages {
     }
 }
 
+
+
 ad_proc -public util_complete_url_p {string} {
     Determine whether string is a complete URL, i.e.
     wheteher it begins with protocol: where protocol
@@ -2497,15 +2563,16 @@ ad_proc -public util_absolute_path_p {path} {
 }
 
 ad_proc -public util_driver_info {
-    {-array:required} 
+    {-array} 
     {-driver ""}
 } {
-    Returns the protocol and port for the specified driver.
+    Returns the protocol and port for the specified (or current) driver.
 
     @param driver the driver to query (defaults to [ad_conn driver])
     @param array the array to populate with proto and port
+
+    @see security::configured_driver_info
 } {
-    upvar $array result
 
     if {$driver eq ""} {
         set driver [ad_conn driver]
@@ -2513,40 +2580,149 @@ ad_proc -public util_driver_info {
 
     set section [ns_driversection -driver $driver]
 
-    switch $driver {
-        nsudp -
-        nssock {
-            set result(proto) http
-            set result(port) [ns_config -int $section Port]
+    switch -glob -- $driver {
+        nsudp* -
+        nssock* {
+            set d [list proto http port [ns_config -int $section Port]] 
         }
         nsunix {
-            set result(proto) http
-            set result(port) {}
+            set d [list proto http port ""]
         }
-        nsssl - nsssle {
-            set result(port) [ns_config -int $section Port]
-            set result(proto) https
+        nsssl* - nsssle {
+            set d [list proto https port [ns_config -int $section Port]]
         }
         nsopenssl {
-            set result(port) [ns_config -int $section ServerPort]
-            set result(proto) https
+            set d [list proto https port [ns_config -int $section ServerPort]]
         }
         default {
             ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
-            set result(port) [ns_config -int $section Port]
-            set result(proto) http
+            set d [list proto http port [ns_config -int $section Port]]
         }
     }
+    lappend d hostname [ns_config $section hostname]
+    
+    if {[info exists array]} {
+        upvar $array result
+        array set result $d
+    }
+    return $d
+}
+
+ad_proc util::split_host {hostspec hostnameVar portVar} {
+    Split host potentially into a host name and a port
+} {
+    upvar $hostnameVar hostname $portVar port
+    if {![regexp {^(.*):(\d+)$} $hostspec . hostname port]} {
+        set port ""
+        set hostname $hostspec
+    }
+    regexp {^\[(.+)\]$} $hostname . hostname
+}
+
+ad_proc util::split_location {location protoVar hostnameVar portVar} {
+    Split the provided location into "proto", "hostname" and
+    "port".  The results are returned to the provided output
+    variables.  The function supports IP-literal notation according to
+    RFC 3986 section 3.2.2.
+    
+    @author Gustaf Neumann
+    @return boolean value indicating success
+    @see util::join_location
+} {
+    upvar $protoVar proto $hostnameVar hostname $portVar port
+
+    set urlInfo [ns_parseurl $location]
+    if {[dict exists $urlInfo proto] && [dict exists $urlInfo host]} {
+        set proto [dict get $urlInfo proto]
+        set hostname [dict get $urlInfo host]
+        if {[dict exists $urlInfo port]} {
+            set port [dict get $urlInfo port]
+        } else {
+            set port [dict get {http 80 https 443} $proto]
+        }
+        set success 1
+    } else {
+        set success 0
+    }
+    return $success 
+}
+
+ad_proc util::join_location {{-proto ""} {-hostname} {-port ""}} {
+    Join hostname and port and use IP-literal notation when necessary.
+    The function is the inverse function of  util::split_location.
+    @return location consisting of hostname and optionally port 
+    @author Gustaf Neumann
+    @see util::split_location
+} {
+    set result ""
+    if {$proto ne ""} {
+        append result $proto://
+        #
+        # When the specified port is equal to the default port, omit
+        # it from the result.
+        #
+        if {$port ne "" && $port eq [dict get {http 80 https 443} $proto]} {
+            set port ""
+        }
+    }
+    if {[string match *:* $hostname]} {
+        append result "\[$hostname\]"
+    } else {
+        append result $hostname
+    }
+    if {$port ne ""} {
+        append result :$port
+    }
+    return $result
+}
+
+ad_proc -public util::configured_location {{-suppress_port:boolean}} {
+
+    Return the configured location as configured for the current
+    network driver. While [util_current_location] honors the virtual
+    host information of the host header field,
+    util::configured_location returns the main configured location
+    (probably the main subsite). This also differs from [ad_url],
+    which returns always the same value from the kernel parameter,
+    since it returns either the https or http result.
+
+    @return the configured location in the form "proto://hostname?:port?"
+
+    @see ad_url
+    @see util_current_location
+} {
+    set driver_info [util_driver_info]
+    return [util::join_location \
+                -proto    [dict get $driver_info proto] \
+                -hostname [dict get $driver_info hostname] \
+                -port     [expr {$suppress_port_p ? "" : [dict get $driver_info port]}]]
 }
 
 ad_proc -public util_current_location {} {
-    Like ad_conn location - Returns the location string of the current
-    request in the form protocol://hostname[:port] but it looks at the
-    "Host:" header, that is, takes into account the host name the client
-    used although it may be different from the host name from the server
-    configuration file.  If the Host header is missing or empty 
-    util_current_location falls back to ad_conn location.
+    
+    Like [ad_conn location] - Returns the location string of the
+    current request in the form protocol://hostname?:port? but it
+    looks at the "Host:" header field, that is, takes into account the
+    host name the client used although it may be different from the
+    host name from the server configuration file.  If the Host header
+    is missing or empty util_current_location falls back to ad_conn
+    location.
+
+    @return the configured location in the form "protocol://hostname?:port?"
+
+    @see util::configured_location
+    @see ad_url
+    @see ad_conn
 } {
+
+    #
+    # Compute util_current_location only once per request and cache
+    # the result per thread.
+    #
+    if {[info exists ::__util_current_location]} {
+        return $::__util_current_location
+    }
+    
     set default_port(http) 80
     set default_port(https) 443
     #
@@ -2563,14 +2739,7 @@ ad_proc -public util_current_location {} {
     # "hostname" and "port" will be the default and might be
     # overwritten by more specific information.
     #
-    if {[regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} [ns_conn location] . proto hostname port]} {
-        if {$proto ne ""} {
-            lassign [split $proto :] proto .
-        }
-        if {$port eq ""} {
-            set port $default_port($proto)
-        }
-    } else {
+    if {![util::split_location [ns_conn location] proto hostname port]} {
         ns_log Error "util_current_location got invalid information from driver '[ns_conn location]'"
         # provide fallback info
         set hostname [ns_info hostname]
@@ -2581,13 +2750,11 @@ ad_proc -public util_current_location {} {
         set port  $default_port($proto)
     }
 
-    set headers [ns_conn headers]
-    if { [ns_config "ns/parameters" ReverseProxyMode false]
-         && [ns_set ifind $headers X-Forwarded-For] > -1} {
+    if { [ad_conn behind_proxy_p] } {
         #
         # We are running behind a proxy
         #
-        if {[ns_set iget $headers X-SSL-Request] == 1} {
+        if {[ad_conn behind_secure_proxy_p]} {
             #
             # We know, the request was an https request
             #
@@ -2611,23 +2778,29 @@ ad_proc -public util_current_location {} {
     # In case the "Host:" header field was provided, use the "hostame"
     # and maybe the "port" from there (this has the highest priority)
     #
-    set Host [ns_set iget $headers Host]
+    set Host [security::validated_host_header]
+    #ns_log notice "util_current_location validated host header <$Host>"
     if {$Host ne ""} {
-        lassign [split $Host ":"] Host_hostname Host_port
-        set hostname $Host_hostname
+        util::split_host $Host hostname Host_port
         if {$Host_port ne ""} {
             set port $Host_port
         }
+    } else {
+        ns_log notice "ignore non-existing or untrusted host header, fall back to <$hostname>"
     }
     
     #
     # We have all information, return the data...
     #
     if {$suppress_port || $port eq $default_port($proto) || $port eq ""} {
-        return $proto://$hostname
+        set result ${proto}://${hostname}
     } else {
-        return "$proto://$hostname:$port"
+        set result ${proto}://${hostname}:${port}
     }
+
+    set ::__util_current_location $result
+    #ns_log notice "util_current_location returns <$result> based on hostname <$hostname>"
+    return $result
 }
 
 ad_proc -public util_current_directory {} {
@@ -2640,9 +2813,9 @@ ad_proc -public util_current_directory {} {
     so that programs that use this proc don't have to treat
     the root directory as a special case.
 } {
-    set path [ad_conn url]
+    set path [ad_conn vhost_url]
 
-    set lastchar [string range $path end end]
+    set lastchar [string index $path end]
     if {$lastchar eq "/" } {
         return $path
     } else { 
@@ -2668,23 +2841,56 @@ ad_proc -public ad_call_proc_if_exists { proc args } {
 ad_proc -public ad_get_tcl_call_stack { 
     {level -2} 
 } {
-    Returns a stack trace from where the caller was called.
-    See also ad_print_stack_trace which generates a more readable 
-    stack trace at the expense of truncating args.
+    
+    Returns a stack trace from where the caller was called.  See also
+    ad_print_stack_trace which generates a more readable stack trace
+    at the expense of truncating args.
 
     @param level The level to start from, relative to this
-    proc. Defaults to -2, meaning the proc that called this 
-    proc's caller.
-
+    proc. Defaults to -2, meaning the proc that called this proc's
+    caller. Per default, don't show "ad_log", when this calls
+    ad_get_tcl_call_stack.
 
     @author Lars Pind (lars@pinds.com)
 
     @see ad_print_stack_trace
 } {
     set stack ""
+    #
+    # keep the previous state of ::errorInfo
+    #
+    set errorInfo $::errorInfo
+    
     for { set x [expr {[info level] + $level}] } { $x > 0 } { incr x -1 } {
-        append stack "    called from [info level $x]\n"
+        set info [info level $x]
+        regsub -all \n $info {\\n} info
+        #
+        # In case, we have an nsf frame, add information about the
+        # current object and the current class to the debug output.
+        #
+        if {![catch {uplevel #$x ::nsf::current} obj]
+            && ![catch {uplevel #$x [list ::nsf::current class]} class]
+        } {
+            set objInfo [list $obj $class]
+            set info "{$objInfo} $info"
+        }
+        #
+        # Don't produce too long lines
+        #
+        if {[string length $info]>200} {
+            set arglist ""
+            foreach arg $info {
+                if {[string length $arg]>40} {set arg [string range $arg 0 40]...}
+                lappend arglist $arg
+            }
+            set info $arglist
+        }
+        append stack "    called from $info\n"
     }
+    #
+    # restore previous state of ::errorInfo
+    #
+    set ::errorInfo $errorInfo
     return $stack
 }
 
@@ -3074,6 +3280,120 @@ ad_proc -public util_wrap_list {
     return $out
 }
 
+# apisano 2017-06-08: this should someday replace proc
+# util_text_to_url, but it is unclear to me whether we want two
+# different semantics to sanitize URLs and filesystem names or
+# not. For the time being I have replaced util_text_to_url in every
+# place where this was used to sanitize filenames.
+ad_proc ad_sanitize_filename {
+    -no_resolve:boolean
+    {-existing_names ""}
+    -collapse_spaces:boolean
+    {-replace_with "-"}
+    -tolower:boolean
+    str
+} {
+    Sanitize the provided filename for modern Windows, OS X, and Unix
+    file systems (NTFS, ext, etc.). FAT 8.3 filenames are not supported.
+    The generated strings should be safe against
+    <a target="_blank" href="https://github.com/minimaxir/big-list-of-naughty-strings">
+    https://github.com/minimaxir/big-list-of-naughty-strings
+    </a>
+
+    @author Gustaf Neumann
+} {
+    #
+    # Trim trailing periods and spaces (for Windows)
+    #
+    set str [string trim $str { .}]
+
+    #
+    # Remove Control characters (0x00–0x1f and 0x80–0x9f)
+    # and reserved characters (/, ?, <, >, \, :, *, |, and ")
+    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"]+} $str "" str
+
+    # allow a custom replacement char, that must be safe.
+    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"|\.]+} $replace_with "" replace_with
+    if {$replace_with eq ""} {error "-replace_with must be a safe filesystem character"}
+
+    # dots other than in file extension are dangerous. Put inside two
+    # '#' character will be seen as message keys and file-storage is
+    # currently set to interpret them.
+    set str_ext [file extension $str]
+    set str_noext [string range $str 0 end-[string length $str_ext]]
+    regsub -all {\.} $str_noext $replace_with str_noext
+    set str ${str_noext}${str_ext}
+
+    #
+    # Remove Unix reserved filenames (. and ..)
+    # reserved names in windows
+    set l [string length $str]
+    if {($l <  3 && $str in {"." ".."}) ||
+        ($l == 3 && $str in {CON PRN AUX NUL}) ||
+        ($l == 4 && $str in {
+            COM1 COM2 COM3 COM4 COM5 COM6 COM7 COM8 COM9
+            LPT1 LPT2 LPT3 LPT4 LPT5 LPT6 LPT7 LPT8 LPT9
+        })
+    } {
+        set str ""
+    } elseif {$l > 255} {
+        #
+        # Truncate the name to 255 characters
+        #
+        set str [string range $str 0 254]
+    }
+
+    #
+    # The transformations above are necessary. The following
+    # transformation are optional.
+    #
+    if {$collapse_spaces_p} {
+        #
+        # replace all consecutive spaces by a single char
+        #
+        regsub -all {[ ]+} $str $replace_with str
+    }
+    if {$tolower_p} {
+        #
+        # replace all consecutive spaces by a single "-"
+        #
+        set str [string tolower $str]
+    }
+
+    # check if the resulting name is already present
+    if {$str in $existing_names} {
+
+        if { $no_resolve_p } {
+            # name is already present in the existing_names list and we
+            # are asked to not automatically resolve the collision
+            error "The name $str is already present"
+        } else {
+            # name is already present in the existing_names list -
+            # compute an unoccupied replacement using a pattern like
+            # this: if foo is taken, try foo-2, then foo-3 etc.
+
+            # Holes will not be re-occupied. E.g. if there's foo-2 and
+            # foo-4, a foo-5 will be created instead of foo-3. This
+            # way confusion through replacement of deleted content
+            # with new stuff is avoided.
+
+            set number 2
+
+            foreach name $existing_names {
+
+                if { [regexp "${str}${replace_with}(\\d+)\$" $name match n] } {
+                    # matches the foo-123 pattern
+                    if { $n >= $number } { set number [expr {$n + 1}] }
+                }
+            }
+
+            set str "$str$replace_with$number"
+        }
+    }
+
+    return $str
+}
+
 ad_proc -public util_text_to_url { 
     {-existing_urls {}}
     {-no_resolve:boolean}
@@ -3113,10 +3433,10 @@ ad_proc -public util_text_to_url {
 
     # Save some german and french characters from removal by replacing
     # them with their ascii counterparts.
-    set text [string map { \x00e4 ae \x00f6 oe \x00fc ue \x00df ss \x00f8 o \x00e0 a \x00e1 a \x00e8 e \x00e9 e } $text]
+    set text [string map { \xe4 ae \xf6 oe \xfc ue \xdf ss \xf8 o \xe0 a \xe1 a \xe8 e \xe9 e } $text]
 
     # here's the Danish ones (hm. the o-slash conflicts with the definition above, which just says 'o')
-    set text [string map { \x00e6 ae \x00f8 oe \x00e5 aa \x00C6 Ae \x00d8 Oe \x00c5 Aa } $text]
+    set text [string map { \xe6 ae \xf8 oe \xe5 aa \xC6 Ae \xd8 Oe \xc5 Aa } $text]
 
     # substitute all non-word characters
     regsub -all {([^a-z0-9])+} $text $replacement text
@@ -3247,30 +3567,6 @@ ad_proc -public max { args } {
         }
     }
     return $max
-}
-
-# usage: 
-#   suppose the variable is called "expiration_date"
-#   put "[ad_dateentrywidget expiration_date]" in your form
-#     and it will expand into lots of weird generated var names
-#   put ns_dbformvalue [ns_getform] expiration_date date expiration_date
-#     and whatever the user typed will be set in $expiration_date
-
-proc ad_dateentrywidget {column {default_date "1940-11-03"}} {
-    if {[ns_info name] ne "NaviServer"} {
-        ns_share NS
-    } else {
-        set NS(months) [list January February March April May June \
-                            July August September October November December]
-    }
-    set output "<select name=\"$column.month\">\n"
-    for {set i 0} {$i < 12} {incr i} {
-        append output "<option> [lindex $NS(months) $i]</option>\n"
-    }
-
-    append output "</select>&nbsp;<input name=\"$column.day\" type=\"text\" size=\"3\" maxlength=\"2\">&nbsp;<input name=\"$column.year\" type=\"text\" size=\"5\" maxlength=\"4\">"
-
-    return [ns_dbformvalueput $output $column date $default_date]
 }
 
 ad_proc -public util_ns_set_to_list {
@@ -4068,7 +4364,7 @@ ad_proc -public util::backup_file {
     }
 
     #exec "mv" "$file_path" "$backup_path"
-    file rename $file_path $backup_path
+    file rename -- $file_path $backup_path
 }
 
 
@@ -4338,7 +4634,7 @@ ad_proc -public util::string_length_compare { s1 s2 } {
 ad_proc -public util::roll_server_log {} {
     Invoke the AOLserver ns_logroll command with some bookend log records.  This rolls the error log, not the access log.
 } { 
-    # This param controlls how many backups of the server log to keep, 
+    # This param controls how many backups of the server log to keep, 
     ns_config -int "ns/parameters" logmaxbackup 10
     ns_log Notice "util::roll_server_log: Rolling the server log now..." 
     ns_logroll 
@@ -4438,8 +4734,6 @@ ad_proc -public util::string_check_urlsafe {
 
 ad_proc -public util::which {prog} {
 
-    @author Gustaf Neumann
-
     Use environment variable PATH to search for the specified executable
     program. Replacement for UNIX command "which", avoiding exec.
 
@@ -4453,6 +4747,7 @@ ad_proc -public util::which {prog} {
     @return fully qualified name including path, when specified program is found, 
     or otherwise empty string
 
+    @author Gustaf Neumann
 } {
     switch $::tcl_platform(platform) {
         windows {
@@ -4498,8 +4793,9 @@ ad_proc util::catch_exec {command result_var} {
     @param command A list of arguments to pass to exec
     @param result_var Variable name in caller's scope to set the result in
 
-    @return 0 or 1. 0 if no error, 1 if an error occured. If an error occured
-    the error message will be put into result_var in the caller's scope.
+    @return 0 or 1. 0 if no error, 1 if an error occurred. If an error
+    occurred the error message will be put into result_var in the
+    caller's scope.
 
     @author Dave Bauer
     @creation-date 2008-01-28
@@ -4566,7 +4862,7 @@ ad_proc util::catch_exec {command result_var} {
                 # failed.  The error code is in $errName, and a                 
                 # human-readable message is in $msg.                            
                 ns_log notice "util::catch_exec: posix $errName $msg $result"
-                set result "an error occured $errName \"$msg\""
+                set result "an error occurred $errName \"$msg\""
                 return 1
             }
 
@@ -4582,16 +4878,26 @@ ad_proc util::external_url_p { url } {
     HTTP or HTTPS port number added or removed from current host name    
     or another hostname that the host responds to (from host_node_map)
 } {
-    set locations_list [security::locations]
-    # there may be as many as 3 valid full urls from one hostname
     set external_url_p [util_complete_url_p $url]
-
-    # more valid url pairs with host_node_map
-    foreach location $locations_list {
-        set encoded_location [ns_urlencode $location]
-        #       ns_log Notice "util::external_url_p location \"$location/*\" url $url match [string match "${encoded_location}/*" $url]"
-        set external_url_p [expr { $external_url_p && ![string match "$location/*" $url] } ] 
-        set external_url_p [expr { $external_url_p && ![string match "${encoded_location}/*" $url] } ] 
+    #
+    # Only if the URL is syntactical a URL with a protocol, it might
+    # be external.
+    #
+    if {$external_url_p} {
+        #
+        # If it has a protocol, we have to be able to find it in security::locations
+        #
+        set locations_list [security::locations]
+        # more valid url pairs with host_node_map
+        
+        foreach location $locations_list {
+            set len [string length $location]
+            #ns_log notice "util::external_url_p location match <$location/*> with <$url> sub <[string range $url 0 $len-1]>"
+            if {[string range $url 0 $len-1] eq $location} {
+                set external_url_p 0
+                break
+            }
+        }
     }
     return $external_url_p
 }
@@ -4701,8 +5007,8 @@ ad_proc -public util::disk_cache_flush {
 } {
     set dir [ad_tmpdir]/$key
     foreach file [flib -nocomplain $dir/$id-*] {
-        file delete $file
-        ns_log notice "FLUSH file delete $file"
+        file delete -- $file
+        ns_log notice "FLUSH file delete -- $file"
     }
 }
 
@@ -4735,6 +5041,83 @@ ad_proc -public util::disk_cache_eval {
     return $result
 }
 
+ad_proc -public util::request_info {
+    {-with_headers:boolean false}
+} {
+    
+    Produce a string containing the detailed request information.
+    This is in particular useful for debugging, when errors are raised.
+    
+    @param with_headers Include request headers
+    @author Gustaf Neumann
+
+} {
+    set info ""
+    if {[ns_conn isconnected]} {
+        #
+        # Base information
+        #
+        append info "    " \
+            [ns_conn method] \
+            " [util_current_location][ns_conn url]?[ns_conn query]" \
+            " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]"
+        
+        if {[ns_conn method] eq "POST"} {
+            # 
+            # POST data info
+            #
+            if {[ns_conn flags] & 1} {
+                append info "\n    connection already closed, cooked form-content:"
+                foreach {k v} [ns_set array [ns_getform]] {
+                    if {[string length $v] > 100} {
+                        set v "[string range $v 0 100]..."
+                    }
+                    append info "\n        $k:\t$v"
+                }
+            } else {
+                set ct [ns_set iget [ns_conn headers] content-type]
+                if {[string match text/* $ct] || $ct eq "application/x-www-form-urlencoded"} {
+                    set data [ns_conn content]
+                    if {[string length $data] < 2000} {
+                        append info "\n        post-data: $data"
+                    }
+                }
+            }
+        }
+
+        #
+        # Optional header info
+        #
+        if {$with_headers_p} {
+            append info \n
+            foreach {k v} [ns_set array [ns_conn headers]] {
+                append info "\n $k:\t$v"
+            }
+        }
+    }
+    return $info
+}
+
+ad_proc util::trim_leading_zeros { 
+    string 
+} {
+    Returns a string w/ leading zeros trimmed.
+    Used to get around Tcl interpreter problems w/ thinking leading
+    zeros are octal.
+    
+    If string is real and mod(number)<1, then we have pulled off
+    the leading zero; i.e. 0.231 -> .231 -- this is still fine
+    for Tcl though...
+} {
+    if {$string ne ""} {
+        set string [string trimleft $string 0]
+        if {$string eq ""} {
+            set string 0
+        }
+    }
+    return $string
+}
+
 ad_proc -public ad_log {
     level
     message
@@ -4747,16 +5130,76 @@ ad_proc -public ad_log {
 
     @author Gustaf Neumann
 } {
-    set prefix ""
-    if {[ns_conn isconnected]} {
-        set headers [ns_conn headers]
-        append prefix \
-            [ns_conn method] \
-            " http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]" \
-            " referred by '[get_referrer]'\n"
-    }
-    ns_log $level "${prefix}${message}\n[uplevel ad_get_tcl_call_stack]"
+    set with_headers [expr {$level in {error Error}}]
+    append request "    " \
+        [util::request_info -with_headers=$with_headers]
+    
+    ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
+
+
+if {[info commands ns_parseurl] eq ""} {
+    #
+    # In case, we are not running under NaviServer, provide a proc
+    # compatible with NaviServer's built in ns_parseurl.
+    #
+    ad_proc ns_parseurl {url} {
+        Emulation of NaviServer's ns_parseurl
+        
+        @author Gustaf Neumann
+    } {
+        #puts stderr url=$url
+        set result ""
+        if {[regexp {^([a-zA-Z]+):(.*)$} $url . proto url]} {
+            #
+            # a protocol was specified
+            #
+            lappend result proto $proto
+        }
+        if {[regexp {^//([^/]+)(/?.*)$} $url . host url]} {
+            #
+            # two slashes -> host is specified
+            #
+            if {[regexp {^\[(.*)\]:([0-9]+)$} $host . host port]} {
+                # IP literal notation followed by port
+                lappend result host $host port $port
+            } elseif {[regexp {^\[(.*)\]$} $host . host port]} {
+                # IP literal notation followed with no port
+                lappend result host $host
+            } elseif {[regexp {^(.*):([0-9]+)$} $host . host port]} {
+                lappend result host $host port $port
+            } else {
+                lappend result host $host
+            }
+        }
+        if {[regexp {^/(.*)/([^/]+)$} $url . path tail]} {
+            lappend result path $path tail $tail
+        } elseif {[regexp {^/([^/]+)$} $url . tail]} {
+            lappend result path "" tail $tail
+        } elseif {$url in {"/" ""}} {
+            lappend result path {} tail {}
+        } else {
+            lappend result tail $url
+        }
+        return $result
+    }
+}
+
+if {[info commands ns_md5] eq ""} {
+    #
+    # In case, we are not running under NaviServer, provide a proc
+    # compatible with NaviServer's built in ns_md5
+    #
+    ad_proc ns_md5 {value} {
+        Emulation of NaviServer's ns_md5
+        
+        @author Gustaf Neumann
+    } {
+        package require md5
+        return [md5::Hex [md5::md5 -- $value]]
+    }
+}
+
 
 # Local variables:
 #    mode: tcl

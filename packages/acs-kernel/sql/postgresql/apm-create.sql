@@ -46,54 +46,54 @@ create table apm_package_types (
                                 not null
 );
 
-comment on table apm_package_types is '
+comment on table apm_package_types is $$
  This table holds additional knowledge level attributes for the
  apm_package type and its subtypes.
-';
+$$;
 
 
-comment on column apm_package_types.package_key is '
+comment on column apm_package_types.package_key is $$
  The package_key is what we call the package on this system.
-';
+$$;
 
-comment on column apm_package_types.package_uri is '
+comment on column apm_package_types.package_uri is $$
  The package URI indicates where the package can be downloaded and 
  is a unique identifier for the package.
-';
+$$;
 
-comment on column apm_package_types.spec_file_path is '
+comment on column apm_package_types.spec_file_path is $$
  The path to the package specification file.
-';
+$$;
 
-comment on column apm_package_types.spec_file_mtime is '
+comment on column apm_package_types.spec_file_mtime is $$
  The last time a spec file was modified.  This information is maintained in the 
 database so that if a user changes the specification file by editing the file
 (as opposed to using the UI, the system can read the .info file and update
 the information in the database appropriately.
-';
+$$;
 
-comment on column apm_package_types.initial_install_p is '
+comment on column apm_package_types.initial_install_p is $$
  Indicates if the package should be installed during initial installation,
  in other words whether or not this package is part of the OpenACS core.
-';
+$$;
 
-comment on column apm_package_types.singleton_p is '
+comment on column apm_package_types.singleton_p is $$
  Indicates if the package can be used for subsites.  If this is set to 
- ''t'', the package can be enabled for any subsite.  Otherwise, it is 
+ 't', the package can be enabled for any subsite.  Otherwise, it is 
  restricted to the acs-admin/ subsite.
-';
+$$;
 
-comment on column apm_package_types.implements_subsite_p is '
+comment on column apm_package_types.implements_subsite_p is $$
   If true, this package implements subsite semantics, typically by extending the
   acs-subsite package.  Used by the admin "mount subsite" UI, the request processor (for
-  setting ad_conn''s subsite_* attributes), etc.
-';
+  setting ad_conn's subsite_* attributes), etc.
+$$;  -- '
 
-comment on column apm_package_types.inherit_templates_p is '
+comment on column apm_package_types.inherit_templates_p is $$
   If true, inherit templates from packages this package extends.  If false, only
-  templates in this package''s www subdirectory tree will be mapped to URLs by the
+  templates in this package's www subdirectory tree will be mapped to URLs by the
   request processor.
-';
+$$;  -- '
 
 CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
 BEGIN
@@ -175,11 +175,11 @@ create table apm_packages (
 
 create index apm_packages_package_key_idx on apm_packages (package_key);
 
--- This cant be added at table create time since acs_objects is created before apm_packages;
+-- This can't be added at table create time since acs_objects is created before apm_packages;
 alter table acs_objects add constraint acs_objects_package_id_fk foreign key (package_id) references apm_packages(package_id) on delete set null;
 
 comment on table apm_packages is '
-   This table maintains the list of all package instances in the sytem. 
+   This table maintains the list of all package instances in the system. 
 ';
 
 comment on column apm_packages.instance_name is '
@@ -249,7 +249,7 @@ comment on table apm_package_versions is '
  bboard-1.0.1, etc.
 ';
 
-comment on column apm_package_versions.version_name is '
+comment on column apm_package_versions.version_name is $$
 A version number consists of: 
    1.A major version number. 
    2.Optionally, up to three minor version numbers. 
@@ -260,10 +260,10 @@ A version number consists of:
          No letter at all, indicating a final release.
 In addition, the letters d, a, and b may be followed by another integer, indicating a version within the release. 
 For those who like regular expressions: 
-     version_number := integer (''.'' integer){0,3} ((''d''|''a''|''b'') integer?)?
+     version_number := integer ('.' integer){0,3} (('d'|'a'|'b') integer?)?
 So the following is a valid progression for version numbers: 
      0.9d, 0.9d1, 0.9a1, 0.9b1, 0.9b2, 0.9, 1.0, 1.0.1, 1.1b1, 1.1
-';
+$$;
 
 comment on column apm_package_versions.version_uri is '
   This column should uniquely identify a package version.  This URI should in practice be a URL at which this specific
@@ -281,18 +281,18 @@ comment on column apm_package_versions.description_format is '
  Must indicate whether the description is plain text or HTML.
 ';
 
-comment on column apm_package_versions.description is '
+comment on column apm_package_versions.description is $$
 Type a one-paragraph description of your package. This is probably analogous 
-to the first paragraph in your package''s documentation.  This is used to describe
+to the first paragraph in your package's documentation.  This is used to describe
 the system to users considering installing it.
-';
+$$;
 
-comment on column apm_package_versions.release_date is '
+comment on column apm_package_versions.release_date is $$
 This tracks when the package was released. Releasing a package means
 freezing the code and files, creating an archive, and making the
-package available for donwload. XXX (bquinn): I''m skeptical about the
+package available for donwload. XXX (bquinn): I'm skeptical about the
 usefulness of storing this information here.
-';
+$$;
 
 comment on column apm_package_versions.vendor is '
 If the package is being released by a company or some kind of organization, 
@@ -669,7 +669,7 @@ comment on column apm_package_callbacks.type is '
   values are given by the Tcl proc apm_supported_callback_types.
 ';
 
--- Ths view faciliates accessing information about package versions by joining
+-- Ths view facilitates accessing information about package versions by joining
 -- the apm_package_types information and acs_object_types information (which is
 -- invariant across versions) with the specific version information.
 

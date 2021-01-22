@@ -8,14 +8,9 @@
       select 
 	n.template_demo_note_id, 
 	n.title
-      from template_demo_notes n, acs_objects o
+      from  template_demo_notes n, acs_objects o
       where n.template_demo_note_id = o.object_id
-        and exists (select 1
-                    from acs_object_party_privilege_map
-                    where object_id = template_demo_note_id
-                      and party_id = :user_id
-                      and privilege = 'read')
-
+      and   acs_permission__permission_p(template_demo_note_id, :user_id, 'read')
     </querytext>
   </fullquery>
  

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>PL/SQL Standards</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-filenaming.html" title="ACS File Naming and Formatting Standards"><link rel="next" href="variables.html" title="Variables"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-filenaming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="variables.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div></div><div class="authorblurb"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>PL/SQL Standards</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-filenaming.html" title="ACS File Naming and Formatting Standards"><link rel="next" href="variables.html" title="Variables"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-filenaming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="variables.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div></div><div class="authorblurb"><p>
 By Richard Li and Yon Feldman
 </p>
           OpenACS docs are written by the named authors, and may be edited
@@ -26,7 +26,7 @@ By Richard Li and Yon Feldman
    </p></li></ol></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-plsql-code"></a>Code</h3></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
     Encapsulation of related fuctionality is key to maintainability
     and upgradeability of our software. Try to bundle your code into
-    <a class="ulink" href="http://oradoc.photo.net/ora816/appdev.816/a77069/08_packs.htm#4376" target="_top">packages</a>
+    <a class="ulink" href="https://docs.oracle.com/database/121/LNPLS/packages.htm#LNPLS009" target="_top">packages</a>
     whenever possible. This will make upgrading, bug fixing, and
     customizing, among other things, a possibility.
    </p></li><li class="listitem"><p>
@@ -81,7 +81,7 @@ By Richard Li and Yon Feldman
       </code>
      
 </pre><p>
-    To achieve this we must fully qualify arguements passed into
+    To achieve this we must fully qualify arguments passed into
     procedures or functions when using them inside a SQL
     statement. This will get rid of any ambiguities in your code,
     i.e. it will tell the parser when you want the value of the column
@@ -139,7 +139,7 @@ By Richard Li and Yon Feldman
 </pre><p>
    takes the optional argument <code class="computeroutput">object_id</code>. Do this to
    allow people to use the same API call when they are doing double
-   click protection, that is, tehy have already gotten an
+   click protection, that is, they have already gotten an
    <code class="computeroutput">object_id</code> and now they want to create the object with
    that <code class="computeroutput">object_id</code>.
    </p></li></ol></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-style"></a>Style</h3></div></div></div><p>
@@ -152,4 +152,4 @@ By Richard Li and Yon Feldman
     as possible to all source code readers.
    </p></li><li class="listitem"><p>
     Lowercase everything, with the exception of %TYPE and %ROWTYPE.
-   </p></li></ol></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eng-standards-filenaming.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="variables.html">Next</a></td></tr><tr><td width="40%" align="left">ACS File Naming and Formatting Standards </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> Variables</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/eng-standards-plsql.html#comments">View comments on this page at openacs.org</a></center></body></html>
+   </p></li></ol></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eng-standards-filenaming.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="variables.html">Next</a></td></tr><tr><td width="40%" align="left">ACS File Naming and Formatting Standards </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> Variables</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

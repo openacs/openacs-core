@@ -8,7 +8,8 @@
 -- @cvs-id $Id$
 --
 
--- set feedback off
+--\set ECHO queries
+\set VERBOSITY 'verbose'
 
 \i postgresql.sql
 \i lob.sql
@@ -32,9 +33,8 @@
 \i site-nodes-create.sql
 \i site-node-object-map-create.sql
 \i apm-create.sql
-\i acs-create.sql
 
+\i acs-create.sql
 \i acs-create-2.sql
---
 
 -- set feedback on

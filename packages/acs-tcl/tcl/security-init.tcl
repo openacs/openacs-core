@@ -21,7 +21,7 @@ if { $secret_tokens_exists == 0 } {
 }
 
 ns_log Notice "security-init.tcl: Creating secret_tokens ns_cache..."
-ns_cache create secret_tokens -size 32768
+ns_cache create secret_tokens -size 65536
 ns_log Notice "security-init.tcl: Populating secret_tokens ns_cache..."
 populate_secret_tokens_cache
 
@@ -39,6 +39,10 @@ proc sec_login_timeout {} "
     return \"[parameter::get -package_id [ad_acs_kernel_id] -parameter LoginTimeout -default 28800]\"
 "
 
+#
+# If there is a re-init, make sure the global handler-variables are reset
+#
+sec_handler_reset
 
 # Local variables:
 #    mode: tcl

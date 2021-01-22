@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Subsites Design Document}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Subsites Design Document}</property>
 <property name="doc(title)">Subsites Design Document</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -41,14 +41,15 @@ implicitly support subsites as a whole.</p>
 <a name="subsites-design-hist-considerations" id="subsites-design-hist-considerations"></a>Historical
 Considerations</h3></div></div></div><p>The subsites problem actually has several quite diverse origins.
 It was originally recognized as a toolkit feature in the form of
-"scoping". The basic concept behind scoping was to allow one scoped
-OpenACS installation to behave as multiple unscoped OpenACS
-installations so that one OpenACS install could serve multiple
-communities. Each piece of application data was tagged with a
-"scope" consisting of the (user_id, group_id, scope) triple. In
-practice the highly denormalized data models that this method uses
-produced large amounts of very redundant code and in general made
-it an extremely cumbersome process to "scopify" a module.</p><p>Before the advent of scoping there were several cases of client
+"scoping". The basic concept behind scoping was to allow
+one scoped OpenACS installation to behave as multiple unscoped
+OpenACS installations so that one OpenACS install could serve
+multiple communities. Each piece of application data was tagged
+with a "scope" consisting of the (user_id, group_id,
+scope) triple. In practice the highly denormalized data models that
+this method uses produced large amounts of very redundant code and
+in general made it an extremely cumbersome process to
+"scopify" a module.</p><p>Before the advent of scoping there were several cases of client
 projects implementing their own version of scoping in special
 cases. One example being the wineaccess multi-retailer ecommerce.
 (Remember the other examples and get details. Archnet?,
@@ -218,9 +219,9 @@ package instance.</p><pre class="programlisting"><code class="computeroutput">[a
 </code></pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="subsites-design-data-model" id="subsites-design-data-model"></a>Data Model Discussion</h3></div></div></div><p>The subsites implementation doesn't really have it's own data
-model, although it depends heavily on the site-nodes data model,
-and the APM data model.</p>
+<a name="subsites-design-data-model" id="subsites-design-data-model"></a>Data Model Discussion</h3></div></div></div><p>The subsites implementation doesn&#39;t really have it&#39;s own
+data model, although it depends heavily on the site-nodes data
+model, and the APM data model.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="subsites-design-ui" id="subsites-design-ui"></a>User Interface</h3></div></div></div><p>The primary elements of the subsite user interface consist of
@@ -242,14 +243,15 @@ functionality required for subsites. It is likely that as
 developers begin to use the subsites system for more sophisticated
 projects, it will become necessary to develop tools to help build
 tightly integrated packages. The general area this falls under is
-"inter-package communication". An actual implementation of this
-could be anything from clever use of configuration parameters to
-lots of package level introspection. Another area that is currently
-underdeveloped is the ability to "tar up" and distribute a
-particular configuration of site nodes/packages. As we build more
-fundamental applications that can be applied in more general areas,
-this feature will become more and more in demand since more
-problems will be solvable by configuration instead of coding.</p>
+"inter-package communication". An actual implementation
+of this could be anything from clever use of configuration
+parameters to lots of package level introspection. Another area
+that is currently underdeveloped is the ability to "tar
+up" and distribute a particular configuration of site
+nodes/packages. As we build more fundamental applications that can
+be applied in more general areas, this feature will become more and
+more in demand since more problems will be solvable by
+configuration instead of coding.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="subsites-design-authors" id="subsites-design-authors"></a>Authors</h3></div></div></div><p><a class="ulink" href="mailto:rhs\@mit.edu" target="_top">rhs\@mit.edu</a></p>

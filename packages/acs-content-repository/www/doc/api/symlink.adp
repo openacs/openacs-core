@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_symlink}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_symlink}</property>
 <property name="doc(title)">Package: content_symlink</property>
 <master>
 <h2>content_symlink</h2>
@@ -20,31 +20,29 @@ They are simply used to create links between content items.</p>
 See also: content_item, content_folder
 <p> </p>
 <h3><a name="api">API</a></h3>
-<ul><li>
-<font size="+1">Function:</font>
-content_symlink.is_symlink</li></ul>
-<p>Determines if the item is a symlink</p>
-<table cellpadding="3" cellspacing="0" border="0">
+<ul>
+<li>
+<font size="+1">Function:</font> content_symlink.is_symlink
+<p>Determines if the item is a symlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the item is a symlink, 'f' otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if the item is a symlink, 'f'
+otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">item_id:</th><td>  </td><td>The item id</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function is_symlink (
   item_id          in cr_items.item_id%TYPE
 ) return char;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_symlink.resolve</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Function:</font> content_symlink.new</li></ul>
-<p>Create a new symlink, linking two items</p>
-<table cellpadding="3" cellspacing="0" border="0">
+</table><p> </p>
+</li><li>
+<font size="+1">Function:</font> content_symlink.new
+<p>Create a new symlink, linking two items</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -65,16 +63,16 @@ folder and not a generic content item.</td>
 <th align="right" valign="top">symlink_id:</th><td>  </td><td>The id of the new symlink. A new id will be allocated by
 default</td>
 </tr><tr>
-<th align="right" valign="top">creation_date:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_date:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr><tr>
-<th align="right" valign="top">creation_ip:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_ip:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr><tr>
-<th align="right" valign="top">creation_user:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_user:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function new (
   name          in cr_items.name%TYPE default null,
   label         in cr_symlinks.label%TYPE default null,
@@ -88,15 +86,13 @@ function new (
   creation_ip   in acs_objects.creation_ip%TYPE default null
 ) return cr_symlinks.symlink_id%TYPE;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new, content_symlink.resolve</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Function:</font> content_symlink.resolve</li></ul>
-<p>Resolves the symlink and returns the target item id.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+</table><p> </p>
+</li><li>
+<font size="+1">Function:</font> content_symlink.resolve
+<p>Resolves the symlink and returns the target item id.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -104,21 +100,19 @@ function new (
 item id if the item is not in fact a symlink</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">item_id:</th><td>  </td><td>The item id to be resolved</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function resolve (
   item_id       in cr_items.item_id%TYPE
 ) return cr_items.item_id%TYPE;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_symlink.is_symlink</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Function:</font>
-content_symlink.resolve_content_type</li></ul>
-<p>Gets the content type of the target item.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+content_symlink.resolve_content_type
+<p>Gets the content type of the target item.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
@@ -126,21 +120,19 @@ content_symlink.resolve_content_type</li></ul>
 null. the item is not in fact a symlink</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">item_id:</th><td>  </td><td>The item id to be resolved</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function resolve_content_type (
   item_id       in cr_items.item_id%TYPE
 ) return cr_items.content_type%TYPE;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.resolve</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Procedure:</font> content_symlink.copy</li></ul>
+</table><p> </p>
+</li><li>
+<font size="+1">Procedure:</font> content_symlink.copy
 <p>Copies the symlink itself to another folder, without resolving
-the symlink</p>
-<table cellpadding="3" cellspacing="0" border="0">
+the symlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -149,35 +141,35 @@ the symlink</p>
 </tr><tr>
 <th align="right" valign="top">target_folder_id:</th><td>  </td><td>The id of the folder where the symlink is to be copied</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure copy (
   symlink_id            in cr_symlinks.symlink_id%TYPE,
   target_folder_id      in cr_folders.folder_id%TYPE
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_item.copy</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Procedure:</font> content_symlink.delete</li></ul>
-<p>Deletes the symlink</p>
-<table cellpadding="3" cellspacing="0" border="0">
+</table><p> </p>
+</li><li>
+<font size="+1">Procedure:</font> content_symlink.delete
+<p>Deletes the symlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">symlink_id:</th><td>  </td><td>The id of the symlink to delete</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure delete (
   symlink_id    in cr_symlinks.symlink_id%TYPE
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, acs_object.delete</td>
 </tr>
 </table>
+</li>
+</ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: symlink.html,v 1.2 2014/10/27 16:39:14 victorg
-Exp $
+Last Modified: $&zwnj;Id: symlink.html,v 1.2.2.2 2016/06/22 07:40:41
+gustafn Exp $

@@ -155,7 +155,7 @@ create table notifications (
                                     constraint notif_notif_date_nn
                                     not null,
     -- this is to allow responses to notifications
-    response_id                     constraint notif_reponse_id_fk
+    response_id                     constraint notif_response_id_fk
                                     references acs_objects (object_id)
                                     on delete cascade,
     notif_user                      integer

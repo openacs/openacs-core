@@ -77,7 +77,7 @@
   <msg key="localization-t_fmt">%H:%M</msg>
   <msg key="localization-thousands_sep">.</msg>
   <msg key="Look_up_message">Buscar mensaje</msg>
-  <msg key="Make_this_locale_the_default_locale_for_language">Establecer como idioma por defecto para el lenguaje '%locales.language%'</msg>
+  <msg key="Make_this_locale_the_default_locale_for_language">Establecer como idioma por defecto para el lenguaje &#39;%locales.language%&#39;</msg>
   <msg key="Message_key">Clave de mensaje</msg>
   <msg key="Off">Desactivar</msg>
   <msg key="On">Activar</msg>

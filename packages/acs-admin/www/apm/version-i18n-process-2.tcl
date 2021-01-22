@@ -1,5 +1,5 @@
 ad_page_contract {
-    Internationalize a certain adp or tcl file.
+    Internationalize a certain adp or Tcl file.
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002

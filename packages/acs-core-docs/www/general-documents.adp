@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 1. High level information:
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 1. High level information:
 What is OpenACS?}</property>
 <property name="doc(title)">Chapter 1. High level information:
 What is OpenACS?</property>
@@ -13,7 +13,7 @@ Part I. OpenACS For Everyone"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="general-documents" id="general-documents"></a>Chapter 1. High
 level information: What is OpenACS?</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="openacs-overview">Overview</a></span></dt><dt><span class="sect1"><a href="release-notes">OpenACS
 Release Notes</a></span></dt>
 </dl>

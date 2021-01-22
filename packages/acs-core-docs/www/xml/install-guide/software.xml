@@ -214,9 +214,9 @@
         <listitem>
           <formalpara>
             <title>FreeBSD</title>
-            <para><ulink url="http://www.orchardlabs.com/freebsd/">FreeBSD guide</ulink>.  The OpenACS Reference Platform uses shell scripts written for bash, which is the
+            <para><ulink url="https://web.archive.org/web/20011204174701/http://www.orchardlabs.com:80/freebsd/">FreeBSD guide</ulink>.  The OpenACS Reference Platform uses shell scripts written for bash, which is the
               standard Linux shell.  If you are using a different
-              shell, you will need to substitute your shell's
+              shell, you will need to substitute your shell&#39;s
               conventions for setting environment variables when
               appropriate, and install bash to work with the scripts. Substitute <userinput>fetch</userinput> when the instructions suggest you use 
               <userinput>wget</userinput> to download software.</para>
@@ -329,7 +329,7 @@
       <formalpara>
         <title>Web Server</title>
         <para>The web server handles incoming HTTP requests, provides
-          a runtime environment for OpenACS's Tcl code, connects to the
+          a runtime environment for OpenACS&#39;s Tcl code, connects to the
           database, sends out HTTP responses, and logs requests and
           errors.  OpenACS uses AOLserver;
           <ulink url="http://openacs.org/forums/message-view?message_id=21461">some people have had success running Apache with mod_nsd</ulink>.</para>
@@ -355,7 +355,7 @@
       </para>
 
       <para>
-        It's also possible to download all the pieces and patches yourself:
+        It&#39;s also possible to download all the pieces and patches yourself:
       </para>
       
       <itemizedlist>
@@ -369,7 +369,7 @@
               url="http://prdownloads.sourceforge.net/aolserver/nspostgres-3.5.tar.gz?download">SourceForge</ulink>. If
               you do decide to use nspostgres.so, you have to remember to
               change the AOLserver config file to point to nspostgres.so
-              instead of postgres.so. This guide uses Mat Kovach's distro
+              instead of postgres.so. This guide uses Mat Kovach&#39;s distro
               (i.e. postgres.so)
 
           </para></listitem>
@@ -381,7 +381,7 @@
           </para></listitem>
         
         <listitem><para>
-            The patch for aolserver 3.x that makes <computeroutput>ns_uuencode</computeroutput>
+            The patch for AOLserver 3.x that makes <computeroutput>ns_uuencode</computeroutput>
             work for binary files is available at <ulink
               url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=474259&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
           </para></listitem> 
@@ -405,14 +405,14 @@
           aolserver3.x requires <ulink
             url="http://www.scottg.net/download/nsopenssl-2.1a.tar.gz">nsopenssl 2.1a</ulink>. aolserver4.x requires nsopenssl3; see
           <ulink url="http://www.aolserver.com/">aolserver.com</ulink> for latest release. (<ulink
-            url="http://www.scottg.net/webtools/aolserver/modules/nsopenssl/">home page</ulink>)
+            url="http://panoptic.com/wiki/aolserver/Nsopenssl">home page</ulink>)
         </para>
       </formalpara>
     </listitem>
     
     <listitem id="nspam-download">
       <formalpara>
-        <title><ulink url="http://braindamage.alal.com/software/nspam.html">ns_pam</ulink> 0.1 or newer, OPTIONAL</title>
+        <title><ulink url="http://wayback.archive.org/web/20050228071203/http://braindamage.alal.com/software/nspam.html">ns_pam</ulink> 0.1 or newer, OPTIONAL</title>
         <para>Provides PAM capabilities for AOLserver.  You
           need this if you want OpenACS users to authenticate
           through a PAM module (such as RADIUS).</para>
@@ -489,7 +489,7 @@
           <formalpara>
             <title>Oracle 8.1.7 (Either this or PostgreSQL is REQUIRED)</title>
             <para>You can register and download Oracle from <ulink
-                url="http://otn.oracle.com/software/content.html">Oracle
+                url="https://www.oracle.com/downloads/index.html">Oracle
                 TechNet</ulink>.  You need this if you want to use an
               Oracle database.</para>
           </formalpara>

@@ -1,14 +1,21 @@
-# Wizard tool for the ArsDigita Templating System
+ad_library {
+    Wizard tool for the ArsDigita Templating System
 
-# Copyright (C) 1999-2000 ArsDigita Corporation
+    @author Karl Goldstein    (karlg@arsdigita.com)
+    @author Jun Yamog
+
+    @cvs-id $Id$
+}
+
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 # heavily modified by Jun Yamog on June 2003
 
-# wizard-procs.tcl,v 1.1.2.1 2001/01/04 20:14:57 brech Exp
+# Copyright (C) 1999-2000 ArsDigita Corporation
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 namespace eval template::wizard {}
@@ -61,7 +68,7 @@ ad_proc -public template::wizard::create { args } {
     same as your current wizard file.  Has no effect for subwizards.</li>
     <li>name - use to distinguish between the different wizards, since you can
     have 1 or more subwizard. name must be no spaces, alpanumeric similar
-    to normal tcl variable naming convention</li>
+    to normal Tcl variable naming convention</li>
     <li>params - are used to keep values that you would like to pass on to 
     the other steps</li>
     <li>steps - are use to define what includes to use for each step of the
@@ -124,8 +131,8 @@ ad_proc -public template::wizard::get_param { name } {
     get the current value of the param which was set by "template::wizard set_param",
     while ad_page_contract will not pick that up since it will get what is the request
     http var value.  This is because "template::wizard get_param" gets the value
-    from the tcl var while ad_page_contract gets the value from the http var.
-    So while processing in tcl that value may change.
+    from the Tcl var while ad_page_contract gets the value from the http var.
+    So while processing in Tcl that value may change.
     </p>
 
     @see template::wizard
@@ -353,7 +360,7 @@ ad_proc -private template::wizard::get_wizards_levels {} {
     set level [expr {$parse_level - 1}]
 
     set levels {}
-    for {set i $level} {$i > 1} {set i [expr {$i - 1}]} {
+    for {set i $level} {$i > 1} {incr i -1} {
         upvar #$i wizard:name parent_wizard
         if {[info exists parent_wizard]} {
             lappend levels $i
@@ -653,7 +660,7 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
 }
 
 ad_proc -public template::wizard::get_action_url {} {
-    Retreive the URL to the action
+    Retrieve the URL to the action
 
     @see template::wizard
 } {

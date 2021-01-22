@@ -36,7 +36,7 @@ aa_register_case -cats {api smoke} ad_proc_cache {
     aa_log "checking if the proc is cached"
     set success_p [util_memoize_cached_p {memoizing_procs_test::return_string -name "foobar"}]
 
-    aa_equals "proc was cached succesful" $success_p 1
+    aa_equals "proc was cached successful" $success_p 1
 }
 
 aa_register_case -cats {api smoke} ad_proc_flush {
@@ -48,7 +48,7 @@ aa_register_case -cats {api smoke} ad_proc_flush {
     aa_log "flushing"
     util_memoize_flush_regexp {return_upper_case_text}
     set success_p [util_memoize_cached_p {memoizing_procs_test::return_upper_case_text -txt "foobar"}]
-    aa_equals "proc was flushed succesful" $success_p 0
+    aa_equals "proc was flushed successful" $success_p 0
 }
 
 

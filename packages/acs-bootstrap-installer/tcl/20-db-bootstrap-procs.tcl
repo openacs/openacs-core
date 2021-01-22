@@ -29,7 +29,7 @@ ad_proc -private db_pool_to_dbn_init {} {
 
     @see db_driverkey
 } {
-    foreach dbn [nsv_array names {db_available_pools}] {
+    foreach dbn [nsv_array names db_available_pools] {
         foreach pool [db_available_pools $dbn] {
             nsv_set db_pool_to_dbn $pool $dbn
         }
@@ -232,14 +232,19 @@ ad_proc db_bootstrap_set_db_type { errors } {
             ns_db releasehandle $db
             if { $this_suffix eq "" } {
                 ns_log Notice "$proc_name: couldn't determine RDBMS type of database pool \"$pool\"."
-                lappend bad_pools "<li>OpenACS could not determine the RDBMS type associated with
-    pool \"$pool\"."
+                lappend bad_pools "<li>OpenACS could not determine the RDBMS type associated with pool \"$pool\"."
                 set long_error 1
             } elseif { [nsv_get ad_database_type .] eq "" } {
                 nsv_set ad_database_type . $this_suffix
+                #
+                # For the time being, keep the info in the nsv for
+                # backwards compatibility and and a version in a
+                # per-thead (namespaced) variable
+                #
+                set ::acs::database_type $this_suffix
+                
             } elseif { ![string match $this_suffix [nsv_get ad_database_type .]] } {
-                ns_log Notice "$proc_name: Database pool \"$pool\" type \"$this_suffix\" differs from
-    \"[nsv_get ad_database_type .]\"."
+                ns_log Notice "$proc_name: Database pool \"$pool\" type \"$this_suffix\" differs from \"[nsv_get ad_database_type .]\"."
                 lappend bad_pools "<li>Database pool \"$pool\" is of type \"$this_suffix\".  The
     first database pool available to OpenACS was of type \"[nsv_get ad_database_type .]\".  All database
     pools must be configured to use the same RDMBS engine, user and database."

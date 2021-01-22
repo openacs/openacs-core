@@ -15,7 +15,7 @@ ad_page_contract {
     default_value:trim
     datatype:notnull,trim
     required_p:boolean,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_vars:onevalue

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {How to Update the OpenACS.org repository}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How to Update the OpenACS.org repository}</property>
 <property name="doc(title)">How to Update the OpenACS.org repository</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -17,13 +17,14 @@ and adjust the Configuration Settings.</p></li><li class="listitem"><p>Request /
 oacs-x-y, and build a repository channel for each of those branches
 where x&gt;=5 (so not for 4.6 and earlier). It will also build a
 channel for HEAD, which will be named after what you set in
-'head_channel' above.</p></li><li class="listitem"><p>For each channel, it'll do an anonymous checkout of packges and
-contrib/packages, then build .apm files for each package in the
-checkout.</p></li><li class="listitem"><p>The files will be stored on the server's hard drive in the
-directory specified by the 'repository_dir' variable in the page
-script, by default "$::acs::rootdir/www/repository/".</p></li>
+'head_channel' above.</p></li><li class="listitem"><p>For each channel, it&#39;ll do an anonymous checkout of packges
+and contrib/packages, then build .apm files for each package in the
+checkout.</p></li><li class="listitem"><p>The files will be stored on the server&#39;s hard drive in the
+directory specified by the 'repository_dir' variable in the
+page script, by default
+"$::acs::rootdir/www/repository/".</p></li>
 </ol></div></li><li class="listitem">
-<p>If you're on openacs.org, everything should now be fine.
+<p>If you&#39;re on openacs.org, everything should now be fine.
 Otherwise, you need to move the entire directory tree to
 openacs.org:/web/openacs/www/repository, replacing what was already
 there.</p><p>This is automated on OpenACS.org by having a dedicated site just

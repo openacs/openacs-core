@@ -8,13 +8,14 @@
   <msg key="Account_at_system_closed">Su cuenta en %system_name% ha sido cancelada.</msg>
   <msg key="Account_close_confirm_no_label">No, volver a %pvt_home_name%</msg>
   <msg key="Account_close_confirm_yes_label">Sí, cancelar mi cuenta</msg>
-  <msg key="Account_closed">&lt;p&gt;Su cuenta se encuentra cerrada por el momento.&lt;/p&gt;&lt;p&gt;Si usted lo desea, podemos &lt;a href=&quot;%restore_url%&quot;&gt;reactivar su cuenta&lt;/a&gt;.&lt;/p&gt;</msg>
+  <msg key="Account_closed">&lt;p&gt;Su cuenta se encuentra cerrada por el momento.&lt;/p&gt;&lt;p&gt;Si usted lo desea, podemos &lt;a href=&#34;%restore_url%&#34;&gt;reactivar su cuenta&lt;/a&gt;.&lt;/p&gt;</msg>
   <msg key="Account_closed_title">Cuenta cerrada</msg>
-  <msg key="Account_closed_workspace_msg">&lt;p&gt;Su cuenta está actualmente &lt;strong&gt;cancelada&lt;/strong&gt;. &lt;a href=&quot;%login_url%&quot;&gt;Conectese&lt;/a&gt; de nuevo para ver que puede hacer al respecto.&lt;/p&gt;</msg>
+  <msg key="Account_closed_workspace_msg">&lt;p&gt;Su cuenta está actualmente &lt;strong&gt;cancelada&lt;/strong&gt;. &lt;a href=&#34;%login_url%&#34;&gt;Conectese&lt;/a&gt; de nuevo para ver que puede hacer al respecto.&lt;/p&gt;</msg>
   <msg key="Account_not_avail_now">Esta cuenta no está disponible en este momento.</msg>
   <msg key="Account_reopened_message">Su cuenta en %system_name% ha sido reactivada. Bienvenido de nuevo.</msg>
   <msg key="Account_reopened_title">Cuenta reactivada</msg>
   <msg key="Action">Acción</msg>
+  <msg key="Active_theme">Activo</msg>
   <msg key="Add">Añadir</msg>
   <msg key="Add_a_group_of_this_type">Añadir un grupo de este tipo</msg>
   <msg key="Add_a_permissible_relationship_type">Añadir un tipo de relación</msg>
@@ -95,6 +96,7 @@
   <msg key="confirmation_password_changed">Usted ha seleccionado una nueva contraseña con éxito</msg>
   <msg key="Continue">Continuar</msg>
   <msg key="Continue_to_your_account">Continuar a %pvt_home_name%</msg>
+  <msg key="Convert_to_descendent_subsite_type">Convertir al tipo del subsitio descendiente</msg>
   <msg key="Core_Services">Servicios del Core</msg>
   <msg key="Country_Name">País</msg>
   <msg key="create">Crear</msg>
@@ -124,6 +126,7 @@
   <msg key="Delete_selected_app">Borrar aplicaciones seleccionadas</msg>
   <msg key="Delete_this_application">Borrar esta aplicación</msg>
   <msg key="Delete_this_group_type">Borrar este tipo de grupo</msg>
+  <msg key="Delete_this_theme">Borrar éste Tema</msg>
   <msg key="Description">Descripción</msg>
   <msg key="Details_for__group_type_pretty_name">Detalles de %group_type_pretty_name%</msg>
   <msg key="DevAdmin">Administración de desarrolladores</msg>
@@ -140,6 +143,7 @@
   <msg key="Edit_caption">Editar Leyenda</msg>
   <msg key="edit_comment">editar comentario</msg>
   <msg key="Edit_Options">Opciones</msg>
+  <msg key="Edit_this_theme">Editar este tema</msg>
   <msg key="Elements_not_editable">Algunos elementos no pueden ser editados ya que están siendo administrados por %authority_name%.</msg>
   <msg key="Email">Correo electrónico</msg>
   <msg key="Email_already_exists">Email ya existe</msg>
@@ -172,6 +176,8 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Erase_Portrait">Borrar foto</msg>
   <msg key="erase_portrait">borrar foto</msg>
   <msg key="Error">Error</msg>
+  <msg key="Error_joining">Error al unirse</msg>
+  <msg key="Error_joining_details">Ha ocurrido un error al ser añadido al grupo.</msg>
   <msg key="Error_sending_mail">Error al enviar el correo</msg>
   <msg key="Error_sending_verification_mail">Ha habido un error al enviar el correo para la verificación por correo</msg>
   <msg key="Error_trying_to_register">Ha habido un error al intentar registrar una cuenta para usted.</msg>
@@ -191,6 +197,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
   <msg key="Group_administration">Administración de grupos</msg>
+  <msg key="Group_members">Miembros del grupo: %group_name%</msg>
   <msg key="Group_type">Tipo de grupo</msg>
   <msg key="Group_type_administration">Administración de tipos de grupos</msg>
   <msg key="Group_Types">Tipos de Grupo</msg>
@@ -221,6 +228,8 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Join_subsite">Unirse al subsitio</msg>
   <msg key="Join_this_community">Unirse a esta comunidad</msg>
   <msg key="Join_this_subsite">Unirse a este subsitio</msg>
+  <msg key="Joined_group">Se ha unido al grupo %group_name%.</msg>
+  <msg key="Key">Clave</msg>
   <msg key="Keyword">Palabra clave</msg>
   <msg key="Last_name">Apellidos</msg>
   <msg key="Last_name_not_provided_by_authority">La entidad de autenticación no nos ha proporcionado su apellido. Por favor, introduzca su apellido.</msg>
@@ -264,15 +273,15 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_It_would_be_a_very_ba">Puede ser una mala idea escoger esta opción si está usando un ordenador compartido (de una biblioteca o colegio por ejemplo). Cualquier usuario que utilice este ordenador podría hacerse pasar por usted en nuestra plataforma.</msg>
   <msg key="lt_New_registration_at_s">Nuevo registro en %system_url%</msg>
   <msg key="lt_Note_text_in_red_below">La nota en rojo debajo de los campos de entrada de cada parámetro indica que el valor del mismo está sobreescrito por una entrada en el archivo de parámetros de OpenACS. Se aconseja el uso de dicho archivo, pero algunos sitios lo necesitan para asignar valores específicos a los parámetros, independientes de las tablas apm_parameter.</msg>
-  <msg key="lt_Note_that_you_can_era">Tenga en cuenta que puede eliminar su dirección de correo y contraseña de la memoria de su ordenador, pulsando la opción &quot;Salir&quot; de su portal.</msg>
+  <msg key="lt_Note_that_you_can_era">Tenga en cuenta que puede eliminar su dirección de correo y contraseña de la memoria de su ordenador, pulsando la opción &#34;Salir&#34; de su portal.</msg>
   <msg key="lt_num_children_Children">%num_children% Hijos ocultos</msg>
-  <msg key="lt_On_portrait_publish_d">El día %portrait_publish_date%, ha subido &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
+  <msg key="lt_On_portrait_publish_d">El día %portrait_publish_date%, ha subido &lt;a href=&#34;%subsite_url%user/portrait/?return_url=%pvt_home_url%&#34;&#34;&gt;%portrait_title%&lt;/a&gt;</msg>
   <msg key="lt_Our_server_can_tell_y">Nuestro servidor le puede decir a su navegador que recuerde algunas cosas como su correo y su contraseña. Esto es conveniente si usted es la única persona que usa su ordenador, así no tiene que repetirnos ni su correo ni su contraseña.</msg>
   <msg key="lt_Password_Confirmation">Introduzca de nuevo la contraseña:</msg>
   <msg key="lt_Personal_Home_Page_UR">URL de su página personal:</msg>
-  <msg key="lt_Please_locate_your_co">Por favor localice el código de su país en la lista, después utilice &quot;regresar&quot; de su navegador para regresar al formulario anterior.</msg>
+  <msg key="lt_Please_locate_your_co">Por favor localice el código de su país en la lista, después utilice &#34;regresar&#34; de su navegador para regresar al formulario anterior.</msg>
   <msg key="lt_Please_read_and_follo">Por favor, siga las instrucciones dadas en ese correo.</msg>
-  <msg key="lt_Please_try_to_a_hrefi">Por favor, intente &lt;a href=&quot;index&quot;&gt;entrar&lt;/a&gt; de nuevo</msg>
+  <msg key="lt_Please_try_to_a_hrefi">Por favor, intente &lt;a href=&#34;index&#34;&gt;entrar&lt;/a&gt; de nuevo</msg>
   <msg key="lt_Portrait_of_first_last">Foto de %first_names% %last_name%</msg>
   <msg key="lt_Privileges_higher_implied">Los privilegios de la parte de arriba en la jerarquía implican todos los privilegios de abajo, ejemplo: cuando otorga privilegios de administración, estan implicados automáticamentelos privilegios de escritura, lectura, etc.</msg>
   <msg key="lt_Problem_with_authenti">Problema con la autentificación</msg>
@@ -304,7 +313,7 @@ El equipo de %system_name%</msg>
   <msg key="lt_Upload_your_favorite">Suba su foto favorita, un archivo escaneado en formato JPEG o GIF de su ordenador(No puede subir una imagen desde ningún sitio de internet; tiene que estar en su disco duro).</msg>
   <msg key="lt_Uploaded_pretty_date">Subido: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Subido: %pretty_date%</msg>
-  <msg key="lt_Use_the_Browse_button">Utilice el botón &quot;Examinar...&quot; para localizar su archivo, después pulse botón &quot;Abrir&quot;.</msg>
+  <msg key="lt_Use_the_Browse_button">Utilice el botón &#34;Examinar...&#34; para localizar su archivo, después pulse botón &#34;Abrir&#34;.</msg>
   <msg key="lt_User_has_portrait_title">Este usuario ha subido una biografia o una foto</msg>
   <msg key="lt_We_cant_find_you">No se le ha podido encontrar (usuario %user_id%) en la tabla de usuarios. Probablemente su cuenta ha sido borrada.</msg>
   <msg key="lt_We_had_a_problem_proc">Ha ocurrido un problema procesando su solicitud.</msg>
@@ -319,7 +328,7 @@ El equipo de %system_name%</msg>
   <msg key="lt_Your_email_has_been_c_1">Su correo ha sido confirmado. Ahora, debe esperar la aprobación del administrador de %system_name%.</msg>
   <msg key="lt_Your_email_is_confirm">Su correo ha sido confirmado</msg>
   <msg key="lt_Your_login_has_expire">Su sesión ha caducado. Por favor introduzca su contraseña para seguir trabajando.</msg>
-  <msg key="lt_Your_URL_doesnt_have_">La URL introducida no es válida. Un ejemplo de URL válida es &quot;%valid_url_example%&quot;.</msg>
+  <msg key="lt_Your_URL_doesnt_have_">La URL introducida no es válida. Un ejemplo de URL válida es &#34;%valid_url_example%&#34;.</msg>
   <msg key="mail_a_message_to">Enviar un mensaje a:</msg>
   <msg key="Make_administrator">Convertir en administrador</msg>
   <msg key="Make_member">Crear un miembro</msg>
@@ -336,6 +345,7 @@ El equipo de %system_name%</msg>
   <msg key="Members">Miembros</msg>
   <msg key="Members_only">Sólo miembros</msg>
   <msg key="Missing_argument">Faltan argumentos</msg>
+  <msg key="Modified_theme">Modificado</msg>
   <msg key="mount">montar</msg>
   <msg key="My_Account">Mi Cuenta</msg>
   <msg key="Name">Nombre y apellidos:</msg>
@@ -356,7 +366,7 @@ El equipo de %system_name%</msg>
   <msg key="none">ninguno</msg>
   <msg key="Not_logged_in">No registrado</msg>
   <msg key="Not_valid_email_addr">Esta no es una dirección de correo válida</msg>
-  <msg key="Note_Relational_segments_are_created_from_the_groups_administration_pages">Nota: Los segmentos relacional son creados desde la &lt;a href='../group/'&gt;Página de administración de grupos&lt;/a&gt;</msg>
+  <msg key="Note_Relational_segments_are_created_from_the_groups_administration_pages">Nota: Los segmentos relacional son creados desde la &lt;a href=&#39;../group/&#39;&gt;Página de administración de grupos&lt;/a&gt;</msg>
   <msg key="Notes">Notas:</msg>
   <msg key="Notice">Aviso:</msg>
   <msg key="number_of_groups_defined">número de grupos definidos</msg>
@@ -374,7 +384,7 @@ El equipo de %system_name%</msg>
   <msg key="Parameters">Parámetros</msg>
   <msg key="parameters">parámetros</msg>
   <msg key="Password">Contraseña</msg>
-  <msg key="Password_changed_body">Su información en %system_name%: %account_id_label%: %account_id% Su contraseña para esta cuenta ha sido modificiada. No necesita hacer nada, se le envía este correo para proteger la seguridad de su cuenta. --------------- Puede cambiar su contraseña siguiendo los siguientes pasos: 1. Entre en %system_name% 2. Haga click en el enlace &quot;%pvt_home_name%&quot; 3. Escoja &quot;%password_update_link_text%&quot;</msg>
+  <msg key="Password_changed_body">Su información en %system_name%: %account_id_label%: %account_id% Su contraseña para esta cuenta ha sido modificiada. No necesita hacer nada, se le envía este correo para proteger la seguridad de su cuenta. --------------- Puede cambiar su contraseña siguiendo los siguientes pasos: 1. Entre en %system_name% 2. Haga click en el enlace &#34;%pvt_home_name%&#34; 3. Escoja &#34;%password_update_link_text%&#34;</msg>
   <msg key="Password_changed_subject">Contraseña modificada</msg>
   <msg key="Password_regular_change_now">su contraseña debe ser cambiada regularmente. Por favor cambie su contraseña ahora.</msg>
   <msg key="Passwords_dont_match">Las contraseñas no coinciden</msg>
@@ -387,7 +397,7 @@ El equipo de %system_name%</msg>
   <msg key="Please_return_to_home">Por favor vuelva a %home_link%.</msg>
   <msg key="Please_select">-- Por favor selecciona --</msg>
   <msg key="Portrait">Foto</msg>
-  <msg key="Powered_by_OpenACS">Powered by &lt;a href=&quot;http://openacs.org&quot; title=&quot;The OpenACS Project Homepage&quot;&gt;OpenACS&lt;/a&gt;</msg>
+  <msg key="Powered_by_OpenACS">Powered by &lt;a href=&#34;http://openacs.org&#34; title=&#34;The OpenACS Project Homepage&#34;&gt;OpenACS&lt;/a&gt;</msg>
   <msg key="Pretty_name">Nombre</msg>
   <msg key="Pretty_plural">Nombre en plural</msg>
   <msg key="Privacy">Privacidad</msg>
@@ -418,6 +428,8 @@ El equipo de %system_name%</msg>
   <msg key="Req_membership_comm">Solicitar pertenecer a esta comunidad</msg>
   <msg key="Req_membership_subs">Solicitar pertenecer a este subsitio</msg>
   <msg key="Request_Change_Password_token_email">Solicitud de cambio de contraseña: se le ha enviado un correo para cambiar su contraseña. Siga las instrucciones de dicho correo.</msg>
+  <msg key="Request_group_submitted">La petición para unirse al grupo &#39;%group_name%&#39; ha sido enviada.</msg>
+  <msg key="Request_join_submitted">La petición para unirse al grupo &#39;%group_name%&#39; ha sido enviada.</msg>
   <msg key="Request_membership">Solicitar la entrada</msg>
   <msg key="Reset_Password">Reiniciar contraseña</msg>
   <msg key="return_to_application">volver a la aplicación</msg>
@@ -434,8 +446,9 @@ El equipo de %system_name%</msg>
   <msg key="See_full_size">Ver a tamaño completo</msg>
   <msg key="Select_an_Object_by_Id">Seleccionar un objeto por Id </msg>
   <msg key="Select_Applications">Selecciona las aplicaciones</msg>
-  <msg key="Select_Applications__helptext">Si una aplicación no aparece en la lista, necesitará &lt;a href=\&quot;/acs-admin/install/\&quot;&gt;instalarla&lt;/a&gt; en el servidor</msg>
+  <msg key="Select_Applications__helptext">Si una aplicación no aparece en la lista, necesitará &lt;a href=\&#34;/acs-admin/install/\&#34;&gt;instalarla&lt;/a&gt; en el servidor</msg>
   <msg key="Select_relation_type">Selecciona el tipo de relación</msg>
+  <msg key="Select_theme">Seleccionar Tema</msg>
   <msg key="Send_email_to_this_user">Enviar email a este usuario</msg>
   <msg key="Send_me_a_copy">Envienme una copia:</msg>
   <msg key="Services">Servicios</msg>
@@ -457,7 +470,7 @@ El equipo de %system_name%</msg>
   <msg key="subcommunity">subcomunidad</msg>
   <msg key="subsite">subsitio</msg>
   <msg key="Subsite_Configuration">Configuración del Subsitio</msg>
-  <msg key="Subsite_Home">Inico %subsite_name%</msg>
+  <msg key="Subsite_Home">Inicio %subsite_name%</msg>
   <msg key="Subsite_name">Nombre del subsitio</msg>
   <msg key="Subsite_Package">Paquete del subsitio</msg>
   <msg key="Subsites">Subsitios</msg>
@@ -469,12 +482,13 @@ El equipo de %system_name%</msg>
   <msg key="The_name_of_the_new_subsite_you_re_setting_up">El nombre del nuevo subsitio que está configurando</msg>
   <msg key="Theme">Theme</msg>
   <msg key="theme">theme</msg>
+  <msg key="Themes">Temas</msg>
   <msg key="This_group_is_closed">Este grupo es cerrado. Solo puede ser miembro por invitación.</msg>
   <msg key="This_group_type_can_only_be_administered_by_programmers">Este tipo de grupo sólo puede ser administrado por programadores</msg>
   <msg key="This_should_be_a_short_string">Debe ser una cadena corta, todo en minúsculas, con guiones en lugar de espacios, se utilizará en la dirección de la nueva aplicación. Si deja en blanco, vamos a generar una en nombre de la aplicación.</msg>
   <msg key="this_subsite">este subsitio</msg>
   <msg key="This_user_has_left_the">Este usuario ha dejado la comunidad.</msg>
-  <msg key="To_add_a_group_first_select_a_group_type_above_or_go_to_the">Para añadir un grupo primero selecciona un tipo de grupos de la página &lt;a href=&quot;../group-types/&quot;&gt;administración de tipos de grupo&lt;/a&gt;</msg>
+  <msg key="To_add_a_group_first_select_a_group_type_above_or_go_to_the">Para añadir un grupo primero selecciona un tipo de grupos de la página &lt;a href=&#34;../group-types/&#34;&gt;administración de tipos de grupo&lt;/a&gt;</msg>
   <msg key="To_add_an_application_to_this_site">Para &lt;strong&gt;añadir una nueva aplicación&lt;/strong&gt; en este sitio, cree un &lt;em&gt;nuevo subdirectorio&lt;/em&gt; bajo el directorio seleccionado. Entonces elija &lt;em&gt;nueva aplicación&lt;/em&gt; para seleccionar e instalar el paquete a instanciar. La aplicación estará disponible en la URL mostrada.</msg>
   <msg key="To_configure_an_application_select_set_parameters">Para &lt;strong&gt;configurar&lt;/strong&gt; una aplicación, seleccione &lt;em&gt;parámetros&lt;/em&gt; para ver y editar las opciones específicas de la aplicación. &lt;em&gt;Permisos&lt;/em&gt; permite otorgar privilegios a los usuarios y grupos sobre aplicaciones específicas u otros datos de la aplicación. Para más información sobre parámetros y permisos, ver la documentación específica del paquete.</msg>
   <msg key="To_copy_an_application_instance_to_another">Para &lt;strong&gt;copiar&lt;/strong&gt; una aplicación a otra URL, crear una nueva carpeta y entonces seleccionar &lt;em&gt;montar&lt;/em&gt;. Seleccionar la aplicación que será copiada desde la lista de paquetes disponibles.</msg>
@@ -495,13 +509,14 @@ El equipo de %system_name%</msg>
   <msg key="Upload_Portrait">Subir una foto</msg>
   <msg key="URL">URL</msg>
   <msg key="URL_folder_name">Nombre de carpeta</msg>
+  <msg key="Usage">Uso</msg>
   <msg key="User_name">Nombre de usuario</msg>
   <msg key="User_Portrait">Fotografía del usuario</msg>
   <msg key="User_Portraits">Fotografías de usuario</msg>
   <msg key="User_Profile">Perfil de usuario</msg>
   <msg key="User_Profiles">Perfiles de usuario</msg>
   <msg key="Username">Nombre de usuario</msg>
-  <msg key="Username_not_found_for_authority">No se encontró ningún usuario con nombre de usuario '%username%' en la autoridad %this_authority%</msg>
+  <msg key="Username_not_found_for_authority">No se encontró ningún usuario con nombre de usuario &#39;%username%&#39; en la autoridad %this_authority%</msg>
   <msg key="Username_required">Nombre de usuario requerido</msg>
   <msg key="UserSiteMap">Mapa del sitio del usuario</msg>
   <msg key="Vacation_Info_Updated">Información de Vacaciones Actualizada </msg>
@@ -524,6 +539,7 @@ El equipo de %system_name%</msg>
   <msg key="You_dont_have_a_portrait">Usted no tiene una foto. Puede añadirla si lo desea.</msg>
   <msg key="You_have_admin_rights_on">Tiene derechos de administración en los siguientes objetos:</msg>
   <msg key="You_have_no_email_alerts">No tiene avisos de correo activados.</msg>
+  <msg key="You_joined_group">Se ha unido al grupo %group_name%.</msg>
   <msg key="Your_Account">Su Cuenta</msg>
   <msg key="Your_discussion_alerts">Sus avisos en los foros</msg>
   <msg key="Your_Portrait">Su foto</msg>

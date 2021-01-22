@@ -53,8 +53,8 @@
       <para>
         With this setup, you will be asked for your password with
         each cvs command.  To avoid this, set up ssh certificate
-        authentication for your openacs account.  (<ulink
-        url="http://www.uberdose.com/kbase/ssh-automatic-login/">More
+        authentication for your OpenACS account.  (<ulink
+        url="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server">More
         information</ulink>)
       </para>
 
@@ -71,14 +71,16 @@ cvs -q</action></screen>
         <para>Administrator Note: These are the steps to grant CVS commit rights to a user:</para>
       <orderedlist>
         <listitem>
-          <para>Create the user's account.  On cvs.openacs.org:</para>
+          <para>Create the user&#39;s account.  On cvs.openacs.org:</para>
           <screen><action>sudo bash
 /usr/sbin/useradd -c "<replaceable>Real Name</replaceable>" -G cvs -p <replaceable>passwd</replaceable> <replaceable>username</replaceable>
 /usr/sbin/usermod -G cvs,<replaceable>username</replaceable> <replaceable>username</replaceable>
           </action></screen>
         </listitem>
         <listitem>
-          <para>Grant cvs access to the user account.  On any machine, in a temporary directory:</para>
+          <para>Grant cvs access to the user account.  On any machine,
+	  in a temporary directory:
+	  </para>
           <screen><action>cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
 emacs avail</action></screen>
@@ -148,9 +150,9 @@ cvs up -d <replaceable>packagename</replaceable></action></screen>
     <sect3>
       <title>Checkout .LRN</title>
       <para>
-        .LRN consists of a given version openacs core, plus a set of
+        .LRN consists of a given version OpenACS core, plus a set of
         packages. These are collectively packages together to form a
-        distrubution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
+        distribution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
         .LRN also uses an OpenACS install.xml file during installation;
         this file is distributed within the dotlrn package and must be
         moved. To get a development checkout of .LRN in the subdirectory
@@ -177,7 +179,7 @@ mv dotlrn/install.xml ..</action></screen>
     <sect3>
       <title>Modules</title>
       <para>
-        All OpenACS code resides within a single CVS module, <computeroutput>openacs-4</computeroutput>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <computeroutput>openacs-4</computeroutput> are repackaged as smaller modules.</para>
+        All OpenACS code resides within a single CVS module, <computeroutput>openacs-4</computeroutput>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all OpenACS code of any type.  For convenience, subsets of <computeroutput>openacs-4</computeroutput> are repackaged as smaller modules.</para>
         
         <para>
           <computeroutput>acs-core</computeroutput> contains only critical common
@@ -245,7 +247,7 @@ ref-timezones search</programlisting>
                   calendar package. All non-core, non-dotlrn packages should have a
                   tag of this style, based on the package name. Many packages have
                   not been re-released since the new naming convention was adopted
-                  and so don't have a tag of this type.
+                  and so don&#39;t have a tag of this type.
                 </para>
               </listitem>
 
@@ -275,7 +277,7 @@ ref-timezones search</programlisting>
             added to core packages on release branches.  For all other
             packages, release branches are the recommended location
             for development.  For example, if you are working on
-            calendar, which is compatible with openacs 5.0 but not
+            calendar, which is compatible with OpenACS 5.0 but not
                 5.1, work on the oacs-5-0 branch.</para>
               </listitem>
         <listitem>
@@ -314,7 +316,7 @@ ref-timezones search</programlisting>
         </listitem>
               <listitem>
                 <para>
-                  Confirm via the <ulink url="http://cvs.openacs.org/cvs/openacs-4/">
+                  Confirm via the <ulink url="http://cvs.openacs.org/browse/OpenACS/openacs-4/">
                     OpenACS CVS browser </ulink>
                   that your changes are where you intended them to be.
                 </para>
@@ -477,9 +479,9 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
         be addressed with another upgrade script. E.g., the last planned
         upgrade script for a package previously in dev 1 would be
         upgrade-2.0.0d1-2.0.0b1.sql, not upgrade-2.0.0d1-2.0.0.sql. Note
-        that using rc1 instead of b1 would be nice, because that's the
+        that using rc1 instead of b1 would be nice, because that&#39;s the
         convention with release codes in cvs, but the package manager
-        doesn't support rc tags.</emphasis>
+        doesn&#39;t support rc tags.</emphasis>
       </para>
 
           </listitem>
@@ -629,9 +631,9 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
           </listitem>
         </orderedlist>
         <para>
-          For example, adding a new API function wouldn't require a
+          For example, adding a new API function wouldn&#39;t require a
           TIP. Changing an existing API function by adding an optional new
-          flag which defaults to no-effect wouldn't require a TIP. Added a
+          flag which defaults to no-effect wouldn&#39;t require a TIP. Added a
           new mandatory flag to an existing function would require a
           TIP.
         </para>
@@ -715,13 +717,13 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
       <listitem>
         <para>
           Commit one cohesive bug fix or feature change at a time.
-          Don't put a bunch of unrelated changes into one commit.
+          Don&#39;t put a bunch of unrelated changes into one commit.
         </para>
       </listitem>
       <listitem>
         <para>
           Before you throw out or change a piece of code that you
-          don't fully understand, use cvs annotate and cvs log on the file to
+          don&#39;t fully understand, use cvs annotate and cvs log on the file to
           see who wrote the code and why. Consider contacting the
           author.
         </para>
@@ -764,52 +766,35 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
       <listitem>
         <para>
           The 
-            <ulink url="http://cvs.openacs.org/cvs/">
-              OpenACS cvs web</ulink>
-            and
-            <ulink url="http://xarg.net/tools/cvs/">
-              Jeff's cvs
-              browser
-            </ulink>
-            are useful tools in understanding what is
-            happening with the code.
+            <ulink url="http://cvs.openacs.org/">
+              OpenACS cvs web browser</ulink>
+              is a useful tools in understanding what is
+              happening with the code.
           </para>
         </listitem>
         <listitem>
           <para>
-            There is a mailing list of cvs changes at
-      <ulink url="http://willfork.com/mailman/listinfo/openacs-cvs-list">
-        willfork.com
-      </ulink>
-          </para>
-        </listitem>
-        <listitem>
-          <para>There is an RSS feed of cvs changes at 
-          <ulink url="http://xarg.net/tools/cvs/rss/?days=3">
-            RSS feed
-          </ulink>
+            There is general information about CVS at 
+      <ulink url="http://www.nongnu.org/cvs/">
+        nongnu.org
+      </ulink>.
           </para>
         </listitem>
 
         
         <listitem>
           <para>
-            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs.html">cvs manual</ulink>
+            <ulink url="http://web.mit.edu/gnu/doc/html/cvs_20.html">cvs manual</ulink>
           </para>
         </listitem>
         <listitem>
           <para>
-            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_7.html#SEC66">adding files/dirs with cvs</ulink>
+            <ulink url="http://cvsbook.red-bean.com/cvsbook.html">Open Source Development with CVS, 3rd Edition</ulink>
           </para>
         </listitem>
         <listitem>
           <para>
-            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_10.html#SEC82">file locking etc. with cvs</ulink>
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            <ulink url="http://www.piskorski.com/docs/cvs-conventions.html">Piskorski's cvs refs</ulink>
+            <ulink url="http://www.piskorski.com/docs/cvs-conventions.html">Piskorski&#39;s cvs refs</ulink>
           </para>
         </listitem>
         <listitem>

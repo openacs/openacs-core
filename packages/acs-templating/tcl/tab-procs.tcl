@@ -1,11 +1,11 @@
-####################################
-#
-# Procs for creating the tabbed UI
-#
+ad_library {
+    Procs for creating the tabbed UI
+}
+
 # The tabs object is basically just a form
 # Each tab is a formwidget
-
 # A tab is just a formwidget
+
 
 namespace eval template {}
 namespace eval template::widget {}

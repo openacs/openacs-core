@@ -7,7 +7,7 @@ ad_page_contract {
     message
     first_names
     last_name
-    user_id
+    user_id:naturalnum,notnull
     {referer "/acs-admin/users"}
 } -properties {
     context:onevalue

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Internationalization Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Internationalization Requirements}</property>
 <property name="doc(title)">OpenACS Internationalization Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -27,7 +27,7 @@ with the lowest development and maintenance cost.</p>
 <a name="i18n-requirements-definitions" id="i18n-requirements-definitions"></a>Definitions</h3></div></div></div><div class="variablelist"><dl class="variablelist">
 <dt><span class="term">internationalization (i18n)</span></dt><dd><p>The provision within a computer program of the capability of
 making itself adaptable to the requirements of different native
-languages, local customs and coded character sets.</p></dd><dt><span class="term">locale</span></dt><dd><p>The definition of the subset of a user's environment that
+languages, local customs and coded character sets.</p></dd><dt><span class="term">locale</span></dt><dd><p>The definition of the subset of a user&#39;s environment that
 depends on language and cultural conventions.</p></dd><dt><span class="term">localization (L10n)</span></dt><dd><p>The process of establishing information within a computer system
 specific to the operation of particular native languages, local
 customs and coded character sets.</p></dd><dt><span class="term">globalization</span></dt><dd><p>A product development approach which ensures that software
@@ -103,9 +103,9 @@ multiple languages simultaneously. For example, www.un.org with
 content and navigation in multiple languages.</p><p>The site would have an end-user visible UI to support these
 languages, and the content management system must allow articles to
 be posted in these languages. In some cases it may be necessary to
-make the modules' admin UI's operate in more than one supported
-language, while in other cases the backend admin interface can
-operate in a single language.</p>
+make the modules' admin UI&#39;s operate in more than one
+supported language, while in other cases the backend admin
+interface can operate in a single language.</p>
 </li><li class="listitem"><p>A developer is writing a new module, and wants to make it easy
 for someone to localize it. There should be a clear path to author
 the module so that future developers can easily add support for
@@ -121,19 +121,17 @@ presentation.</p></li>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="V._Related_Links" id="V._Related_Links"></a>Related Links</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><span class="emphasis"><em>System/Package "coversheet" - where
-all documentation for this software is linked off
+<li class="listitem"><p><span class="emphasis"><em>System/Package "coversheet"
+- where all documentation for this software is linked off
 of</em></span></p></li><li class="listitem"><p><span class="emphasis"><em><a class="link" href="i18n-design" title="Design Notes">Design
-document</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em><a class="link" href="i18n" title="Chapter 14. Internationalization">Developer's
-guide</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em>User's guide</em></span></p></li><li class="listitem">
+document</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em><a class="link" href="i18n" title="Chapter 14. Internationalization">Developer&#39;s
+guide</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em>User&#39;s guide</em></span></p></li><li class="listitem">
 <p><span class="emphasis"><em>Other-cool-system-related-to-this-one
 document</em></span></p><p><a class="ulink" href="http://www.li18nux.net/" target="_top">LI18NUX 2000 Globalization Specification:
 http://www.li18nux.net/</a></p><p><a class="ulink" href="http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html" target="_top">Mozilla i18N Guidelines:
-http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</a></p><p><a class="ulink" href="http://sunsite.berkeley.edu/amher/iso_639.html" target="_top">ISO
-639:1988 Code for the representation of names of languages
-http://sunsite.berkeley.edu/amher/iso_639.html</a></p><p><a class="ulink" href="http://www.niso.org/3166.html" target="_top">ISO 3166-1:1997 Codes for the representation of names of
-countries and their subdivisions Part 1: Country codes
-http://www.niso.org/3166.html</a></p><p><a class="ulink" href="http://www.isi.edu/in-notes/iana/assignments/character-sets" target="_top">IANA Registry of Character Sets</a></p>
+http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</a></p><p><a class="ulink" href="https://www.iso.org/standard/4766.html" target="_top">ISO 639:1988 Code for the representation of names of
+languages</a></p><p><a class="ulink" href="https://www.iso.org/standard/24591.html" target="_top">ISO 3166-1:1997 Codes for the representation of names
+of countries and their subdivisions Part 1: Country codes</a></p><p><a class="ulink" href="http://www.isi.edu/in-notes/iana/assignments/character-sets" target="_top">IANA Registry of Character Sets</a></p>
 </li><li class="listitem"><p><span class="emphasis"><em>Test plan</em></span></p></li><li class="listitem"><p><span class="emphasis"><em>Competitive system(s)</em></span></p></li>
 </ul></div>
 </div><div class="sect2">
@@ -266,10 +264,10 @@ filesystem</p></li><li class="listitem"><p>Accepting form input data from users<
 <li class="listitem"><p>When the acs-templating package opens an an ADP or Tcl file, it
 assumes the file is iso-8859-1. If the output charset
 (OutputCharset) in the AOLserver config file is set, then
-acs-templating assumes it's that charset. Writing Files</p></li><li class="listitem"><p>When the acs-templating package writes an an ADP or Tcl file, it
+acs-templating assumes it&#39;s that charset. Writing Files</p></li><li class="listitem"><p>When the acs-templating package writes an an ADP or Tcl file, it
 assumes the file is iso-8859-1. If the output charset
 (OutputCharset) in the AOLserver config file is set, then
-acs-templating assumes it's that charset.</p></li>
+acs-templating assumes it&#39;s that charset.</p></li>
 </ul></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Tcl_Source_File_Character_Set" id="Tcl_Source_File_Character_Set"></a>Tcl Source File Character
@@ -300,8 +298,8 @@ encoding of the form data and convert it to Unicode on demand.</p><p>
 be able to override the default system choice of character set when
 parsing and validating user form data. <em><span class="remark">INCOMPLETE - form widgets in
 acs-templating/tcl/date-procs.tcl are not internationalized. Also,
-acs-templating's UI needs to be internationalized by replacing all
-user-visible strings with message keys.</span></em>
+acs-templating&#39;s UI needs to be internationalized by replacing
+all user-visible strings with message keys.</span></em>
 </p><p>
 <span class="emphasis"><em>50.30.10</em></span>In Japan and some
 other Asian languages where there are multiple character set
@@ -364,7 +362,8 @@ datasource column may include a datatype so that the templating
 system can format the output for the current locale. The datatype
 is defined by a standard OpenACS datatype plus a format token or
 format string, for example: a date column might be specified as
-'current_date:date LONG,' or 'current_date:date "YYYY-Mon-DD"'</p>
+'current_date:date LONG,' or 'current_date:date
+"YYYY-Mon-DD"'</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Forms" id="Forms"></a>Forms</h4></div></div></div><div class="blockquote"><blockquote class="blockquote">
@@ -390,10 +389,10 @@ correct collation (sorting order) on lists of strings in
 locale-dependent way.</p><p>
 <span class="emphasis"><em>80.20</em></span> For the Tcl API, we
 will say that locale-dependent sorting will use Oracle SQL
-operations (i.e., we won't provide a Tcl API for this). We require
-a Tcl API function to return the correct incantation of NLS_SORT to
-use for a given locale with <code class="literal">ORDER BY</code>
-clauses in queries.</p><p>
+operations (i.e., we won&#39;t provide a Tcl API for this). We
+require a Tcl API function to return the correct incantation of
+NLS_SORT to use for a given locale with <code class="literal">ORDER
+BY</code> clauses in queries.</p><p>
 <span class="emphasis"><em>80.40</em></span> The system must
 handle full-text search in any supported language.</p>
 </blockquote></div>
@@ -417,8 +416,8 @@ non-registered user a time zone preference should be attached via a
 session or else UTC should be used to display every date and
 time.</p><p>
 <span class="emphasis"><em>90.60</em></span> The default if we
-can't determine a time zone is to display all dates and times in
-some universal time zone such as GMT.</p>
+can&#39;t determine a time zone is to display all dates and times
+in some universal time zone such as GMT.</p>
 </blockquote></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -426,7 +425,7 @@ some universal time zone such as GMT.</p>
 <span class="emphasis"><em>100.10</em></span> Since UTF8 strings
 can use up to three (UCS2) or six (UCS4) bytes per character, make
 sure that column size declarations in the schema are large enough
-to accomodate required data (such as email addresses in Japanese).
+to accommodate required data (such as email addresses in Japanese).
 <em><span class="remark">Since 5.0.0, this is covered in the
 database install instructions for both PostgreSQL and
 Oracle.</span></em>
@@ -465,7 +464,7 @@ system, we want to reduce the implementation risk by breaking the
 implementation into phases.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="i18n-requirements-revision-history" id="i18n-requirements-revision-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="i18n-requirements-revision-history" id="i18n-requirements-revision-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

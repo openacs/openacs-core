@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {group_id:naturalnum,notnull {[application_group::group_id_from_package_id]}}
-    return_url:optional
+    return_url:localurl,optional
 }
 
 set user_id [auth::require_login]

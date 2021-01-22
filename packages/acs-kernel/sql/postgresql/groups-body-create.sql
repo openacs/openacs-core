@@ -32,12 +32,12 @@ drop function membership_rels_in_tr ();
 -- procedure membership_rels_in_tr/0
 --
 CREATE OR REPLACE FUNCTION membership_rels_in_tr(
-
 ) RETURNS trigger AS $$
 DECLARE
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
   v_rel_type      acs_rels.rel_type%TYPE;
+  v_composable_p  acs_rel_types.composable_p%TYPE;
   v_error         text;
   map             record;
 BEGIN
@@ -48,9 +48,10 @@ BEGIN
       raise EXCEPTION '-20000: %', v_error;
   end if;
 
-  select object_id_one, object_id_two, rel_type
-  into v_object_id_one, v_object_id_two, v_rel_type
-  from acs_rels
+  select object_id_one, object_id_two, r.rel_type, composable_p
+  into v_object_id_one, v_object_id_two, v_rel_type, v_composable_p
+  from acs_rels r
+  join acs_rel_types t on (r.rel_type = t.rel_type)
   where rel_id = new.rel_id;
 
   -- Insert a row for me in the group_element_index.
@@ -65,26 +66,29 @@ BEGIN
     perform party_approved_member__add(v_object_id_one, v_object_id_two, new.rel_id, v_rel_type);
   end if;
 
-  -- For all groups of which I am a component, insert a
-  -- row in the group_element_index.
-  for map in select distinct group_id
+  -- If this rel_type composable...
+  if v_composable_p = 't' then
+
+     -- For all groups of which I am a component, insert a
+     -- row in the group_element_index.
+     for map in select distinct group_id
 	      from group_component_map
 	      where component_id = v_object_id_one 
-  loop
+     loop
 
-    insert into group_element_index
-     (group_id, element_id, rel_id, container_id,
-      rel_type, ancestor_rel_type)
-    values
-     (map.group_id, v_object_id_two, new.rel_id, v_object_id_one,
-      v_rel_type, 'membership_rel');
+        insert into group_element_index
+               (group_id, element_id, rel_id, container_id,
+               rel_type, ancestor_rel_type)
+        values
+               (map.group_id, v_object_id_two, new.rel_id, v_object_id_one,
+               v_rel_type, 'membership_rel');
 
-    if new.member_state = 'approved' then
-      perform party_approved_member__add(map.group_id, v_object_id_two, new.rel_id, v_rel_type);
-    end if;
+        if new.member_state = 'approved' then
+           perform party_approved_member__add(map.group_id, v_object_id_two, new.rel_id, v_rel_type);
+        end if;
 
-  end loop;
-
+     end loop;
+  end if;
   return new;
 
 END;
@@ -214,15 +218,17 @@ BEGIN
 		  and element_id = m.member_id
 		  and rel_id = m.rel_id);
 
-  -- Make my elements be elements of my new composite group
+  -- Make my composable elements be elements of my new composite group
   insert into group_element_index
    (group_id, element_id, rel_id, container_id,
     rel_type, ancestor_rel_type)
   select distinct
    v_object_id_one, element_id, rel_id, container_id,
-   rel_type, ancestor_rel_type
+   m.rel_type, ancestor_rel_type
   from group_element_map m
+  join acs_rel_types t on (m.rel_type = t.rel_type)
   where group_id = v_object_id_two
+  and t.composable_p = 't'
   and not exists (select 1
 		  from group_element_map
 		  where group_id = v_object_id_one
@@ -247,25 +253,29 @@ BEGIN
 
     -- Add to party_approved_member_map
 
-    perform party_approved_member__add(map.group_id, member_id, rel_id, rel_type)
+    perform party_approved_member__add(map.group_id, member_id, rel_id, m.rel_type)
     from group_approved_member_map m
+    join acs_rel_types t on (m.rel_type = t.rel_type)
     where group_id = v_object_id_two
+    and t.composable_p = 't'
     and not exists (select 1
 		    from group_element_map
 		    where group_id = map.group_id
 		    and element_id = m.member_id
 		    and rel_id = m.rel_id);
 
-    -- Add rows for my elements
+    -- Add rows for my composable elements
 
     insert into group_element_index
      (group_id, element_id, rel_id, container_id,
       rel_type, ancestor_rel_type)
     select distinct
      map.group_id, element_id, rel_id, container_id,
-     rel_type, ancestor_rel_type
+     m.rel_type, ancestor_rel_type
     from group_element_map m
+    join acs_rel_types t on (m.rel_type = t.rel_type)
     where group_id = v_object_id_two
+    and t.composable_p = 't'
     and not exists (select 1
 		    from group_element_map
 		    where group_id = map.group_id
@@ -396,12 +406,7 @@ for each row execute procedure composition_rels_del_tr ();
 -- create or replace package body composition_rel
 -- function new
 
--- old define_function_args('composition_rel__new','rel_id,rel_type;composition_rel,object_id_one,object_id_two,creation_user,creation_ip')
--- new
 select define_function_args('composition_rel__new','rel_id;null,rel_type;composition_rel,object_id_one,object_id_two,creation_user;null,creation_ip;null');
-
-
-
 
 --
 -- procedure composition_rel__new/6
@@ -418,6 +423,7 @@ CREATE OR REPLACE FUNCTION composition_rel__new(
 DECLARE
   v_rel_id               integer;       
 BEGIN
+    raise NOTICE 'composition_rel__new one % two %', object_id_one, object_id_two;
     v_rel_id := acs_rel__new (
       new__rel_id,
       rel_type,
@@ -1191,7 +1197,6 @@ $$ LANGUAGE plpgsql stable strict;
 
 
 
--- added
 select define_function_args('acs_group__member_p','party_id,group_id,cascade_membership');
 
 --
@@ -1204,19 +1209,24 @@ CREATE OR REPLACE FUNCTION acs_group__member_p(
 ) RETURNS boolean AS $$
 DECLARE
 BEGIN
-  if p_cascade_membership  then
+  if p_cascade_membership then
+    --
+    -- Direct and indirect memberships
+    --
     return count(*) > 0
       from group_member_map
-      where group_id = p_group_id and
-            member_id = p_party_id;
+      where group_id = p_group_id
+        and member_id = p_party_id;
   else
+    --
+    -- Only direct memberships
+    --
     return count(*) > 0
-      from acs_rels rels, all_object_party_privilege_map perm
-    where perm.object_id = rels.rel_id
-           and perm.privilege = 'read'
-           and rels.rel_type = 'membership_rel'
-	   and rels.object_id_one = p_group_id
-           and rels.object_id_two = p_party_id;
+      from acs_rels rels
+    where rels.rel_type = 'membership_rel'
+      and rels.object_id_one = p_group_id
+      and rels.object_id_two = p_party_id
+      and acs_permission.permission_p(rels.rel_id, p_party_id, 'read');
   end if;
 END;
 $$ LANGUAGE plpgsql stable;
@@ -1283,18 +1293,9 @@ $$ LANGUAGE plpgsql;
 
 
 
--- show errors
-
-
 -- create or replace package body admin_rel
--- function new
 
--- old define_function_args('admin_rel__new','rel_id,rel_type;admin_rel,object_id_one,object_id_two,member_state;approved,creation_user,creation_ip')
--- new
 select define_function_args('admin_rel__new','rel_id;null,rel_type;admin_rel,object_id_one,object_id_two,member_state;approved,creation_user;null,creation_ip;null');
-
-
-
 
 --
 -- procedure admin_rel__new/7
@@ -1332,9 +1333,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- function new
-
-
 --
 -- procedure admin_rel__new/2
 --
@@ -1359,10 +1357,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- procedure delete
 
 
--- added
 select define_function_args('admin_rel__delete','rel_id');
 
 --

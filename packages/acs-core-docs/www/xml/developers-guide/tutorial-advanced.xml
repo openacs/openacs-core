@@ -12,14 +12,14 @@
     <para>This tutorial covers topics which are not essential to
     creating a minimal working package.  Each section can be used
     independently of all of the others; all sections assume that
-    you've completed the basic tutorial.</para>
+    you&#39;ve completed the basic tutorial.</para>
 
     <sect1 id="tutorial-specs">
       <title>Write the Requirements and Design Specs</title>
       <para>Before you get started you should make yourself familiar with
       the tags that are used to write your documentation. For tips on
         editing SGML files in emacs, see <xref linkend="docbook-primer"/>.</para>
-      <para>It's time to document.  For the tutorial we'll use
+      <para>It&#39;s time to document.  For the tutorial we&#39;ll use
       pre-written documentation.  When creating a package
       from scratch, start by copying the documentation template from
 	<computeroutput>/var/lib/aolserver/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</computeroutput>
@@ -82,7 +82,7 @@ Writing index.html for book
       <title>Add the new package to CVS</title>
       <para>Before you do any more work, make sure that your work is
       protected by putting it all into cvs.  The <computeroutput>cvs
-      add</computeroutput> command is not recursive, so you'll have to
+      add</computeroutput> command is not recursive, so you&#39;ll have to
       traverse the directory tree manually and add as you go.  (<ulink
       url="http://www.piskorski.com/docs/cvs-conventions.html">More on
       CVS</ulink>)</para>
@@ -181,7 +181,7 @@ done
         In this problem set you will familiarise yourself with the templating system in openacs. This will be achieved through customising an existing edit-this-page application template.
       </para>
       <para>
-        Before proceeding, it is strongly advised to read the templating documentation on your openacs installation (http://localhost:8000/doc/acs-templating). The documentation lists the special tags available for ADP files.
+        Before proceeding, it is strongly advised to read the templating documentation on your OpenACS installation (http://localhost:8000/doc/acs-templating). The documentation lists the special tags available for ADP files.
       </para>
     </sect2>
     
@@ -327,7 +327,7 @@ done
     
     <sect2 id="end">
       <title>Who Wrote This and When</title>
-      <para>This problem set was originally written by <ulink url="http://www.weg.ee.usyd.edu.au/people/ncarroll">Nick Carroll</ulink> in August 2004 for the <ulink url="http://www.usyd.edu.au">University of Sydney</ulink> Course <ulink url="http://www.weg.ee.usyd.edu.au/courses/ebus5002">EBUS5002</ulink>.</para>
+      <para>This problem set was originally written by Nick Carroll in August 2004 for the <ulink url="http://www.usyd.edu.au">University of Sydney</ulink> Course EBUS5002.</para>
       <para>This material is copyright 2004 by Nick Carroll.  It may be copied, reused, and modified, provided credit is given to the original author.</para>
       <para><phrase role="cvstag">($Id$)</phrase></para>
     </sect2>
@@ -336,7 +336,7 @@ done
 
   <sect1 id="tutorial-comments">
      <title>Adding Comments</title>
-     <para>You can track comments for any ACS Object.  Here we'll track
+     <para>You can track comments for any ACS Object.  Here we&#39;ll track
      comments for notes.  On the note-edit.tcl/adp pair, which is used to
      display individual notes, we want to put a link to add comments at
      the bottom of the screen.  If there are any comments, we want to
@@ -349,7 +349,7 @@ done
   { return_url "[ad_conn url]?[ad_conn query]"} 
  }]
  </programlisting>
-     <para>This calls a global, public tcl function that the
+     <para>This calls a global, public Tcl function that the
      general_comments package registered, to get its url. You then
      embed in that url the id of the note and its title, and set the
      return_url to the current url so that the user can return after
@@ -380,7 +380,7 @@ done
        Delete Selected button on the bottom of the list.
        </para></listitem>
        <listitem><para>Dedicated admin pages.  If you want admins to have
-       access to data that users aren't interested in or aren't allowed
+       access to data that users aren&#39;t interested in or aren&#39;t allowed
        to see you will need dedicated admin pages.  The conventional
        place to put those dedicated admin pages is in the
  <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/admin</computeroutput>
@@ -389,7 +389,7 @@ done
 <screen>[$OPENACS_SERVICE_NAME www]$ <userinput>mkdir admin</userinput></screen>
 <screen>[$OPENACS_SERVICE_NAME www]$ <userinput>cd admin</userinput></screen>
       <para>
-      Even if your application doesn't need any admin pages of its own you will
+      Even if your application doesn&#39;t need any admin pages of its own you will
       usually need at least one simple page with a bunch of links to existing
       administration UI such as Category Management or standard Parameters UI.
       Adding the link to Category Management is described in the section on
@@ -431,12 +431,12 @@ set parameters_url [export_vars -base "/shared/parameters" {
 
 <para>
 Now that you have the first admin page it would be nice to have a link to it
-somewhere in the system so that admins don't have to type in the
+somewhere in the system so that admins don&#39;t have to type in the
 <computeroutput>/admin</computeroutput> every time they need to reach it.  You
 could put a static link to the toplevel
 <computeroutput>index.adp</computeroutput> but that might be distracting for
 people who are not admins.  Besides, some people consider it impolite to first
-offer a link and then display a nasty "You don't have permission to access this
+offer a link and then display a nasty "You don&#39;t have permission to access this
 page" message.
 </para>
 <para>
@@ -477,20 +477,20 @@ In
     <para>extended by <ulink url="mailto:nima.mazloumi@gmx.de">Nima Mazloumi</ulink></para>
   </authorblurb>
     <para>You can associate any ACS Object with one or more categories.
-    In this tutorial we'll show how to equip your application with user
+    In this tutorial we&#39;ll show how to equip your application with user
     interface to take advantage of the Categories service.
     </para>
     <para>
-    We'll start by installing the Categories service.  Go to
+    We&#39;ll start by installing the Categories service.  Go to
     <computeroutput>/acs/admin</computeroutput> and install it.  This step
-    won't be necessary for the users of your applications because you'll create
+    won&#39;t be necessary for the users of your applications because you&#39;ll create
     a dependency with the Package Manager which will take care that the
     Categories service always gets installed when your application gets
     installed.
     </para>
     <para>
     Now that we have installed the Categories service we can proceed to
-    modifying our application so that it can take advantage of it.  We'll do it
+    modifying our application so that it can take advantage of it.  We&#39;ll do it
     in three steps:
     </para>
     <orderedlist>
@@ -520,7 +520,7 @@ In
           file:
           </para>
           <programlisting>
-   			&lt;a href="@category_map_url@"&lt;#categories.Site_wide_Categories#&lt;/a&gt;
+   	          &lt;a href="@category_map_url@"&gt;#&shy;categories.Site_wide_Categories#&lt;/a&gt;
           </programlisting>     
           <para>The link created by the above code (<computeroutput>category_map_url</computeroutput>) 
           will take the admin to the generic
@@ -543,12 +543,12 @@ In
           to categorize items.  The easiest way to do this is by adding the
           <computeroutput>category</computeroutput> widget type of the
           form builder to <computeroutput>note-edit.tcl</computeroutput>.
-          To achieve this we'll need to use the <computeroutput>-extend</computeroutput>
-          switch to the <computeroutput>ad_form</computeroutput> command. Here's the "meat" of the
+          To achieve this we&#39;ll need to use the <computeroutput>-extend</computeroutput>
+          switch to the <computeroutput>ad_form</computeroutput> command. Here&#39;s the "meat" of the
           <computeroutput>note-edit.tcl</computeroutput> page:</para>
           <programlisting>
-			    #extend the form to support categories
-			    set package_id [ad_conn package_id]
+			# extend the form to support categories
+			set package_id [ad_conn package_id]
 			    
     			category::ad_form::add_widgets -form_name note -container_object_id $package_id -categorized_object_id [value_if_exists item_id]
 
@@ -583,7 +583,7 @@ should be deleted.  It also looks for a confirmation variable, which
 should initially be absert.  If it is absent, we create a form to
 allow the user to confirm the deletion.  Note that in
 <computeroutput>entry-edit.tcl</computeroutput> we used <computeroutput>ad_form</computeroutput> to access the Form Template
-commands; here, we call them directly because we don't need the extra
+commands; here, we call them directly because we don&#39;t need the extra
 features of ad_form.  The form calls itself, but
 with hidden variables carrying both
 <computeroutput>note_id</computeroutput> and
@@ -608,7 +608,8 @@ script execution.</para>
 &lt;/queryset&gt;</programlisting>
       <para>And the adp page:</para>
       <screen>[$OPENACS_SERVICE_NAME@yourserver www]$ <userinput>emacs note-delete.adp</userinput></screen>
-      <programlisting>&lt;master&gt;
+      <programlisting>
+&lt;master&gt;
 &lt;property name="title"&gt;@title@&lt;/property&gt;
 &lt;property name="context"&gt;{@title@}&lt;/property&gt;
 &lt;h2&gt;@title@&lt;/h2&gt;
@@ -635,7 +636,7 @@ form generated by the ad_form command with the matching name.  Test it
           <programlisting>
 			&lt;a href=configure?&lt;%=[export_vars -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
 			&lt;if @use_categories_p@&gt;
-   			&lt;a href="@category_map_url@"&lt;#categories.Site_wide_Categories#&lt;/a&gt;
+   			&lt;a href="@category_map_url@"&gt;#&shy;categories.Site_wide_Categories#&lt;/a&gt;
    			&lt;/if&gt;
           </programlisting>
           <para>Now create a configure page</para>
@@ -743,7 +744,7 @@ form generated by the ad_form command with the matching name.  Test it
         		set category_name [category::get_name $category_id]
         		if { $category_name eq "" } {
             		ad_return_exception_page 404 "No such category" "Site-wide \
-          			Category with ID $category_id doesn't exist"
+          			Category with ID $category_id doesn&#39;t exist"
             		return
         		}
         		# Show Category in context bar
@@ -782,13 +783,12 @@ form generated by the ad_form command with the matching name.  Test it
  	  <para>Finally you need a an <computeroutput>index.vuh</computeroutput> in your 
  	  www folder to rewrite the URLs correctly, <xref linkend="tutorial-vuh"/>:</para>
  	  <programlisting>
- 	  	set url /[ad_conn extra_url]
+ 	  set url /[ad_conn extra_url]
 
-		if {[regexp {^/+cat/+([^/]+)/*} $url \
-          ignore_whole category_id]} {
-          rp_form_put category_id $category_id
-		}
-		rp_internal_redirect "/packages/YOURPACKAGE/www/index" 	  
+	  if {[regexp {^/+cat/+([^/]+)/*} $url ignore_whole category_id]} {
+              rp_form_put category_id $category_id
+	  }
+	  rp_internal_redirect "/packages/YOURPACKAGE/www/index" 	  
  	  </programlisting>
  	  <para>Now when ever the user select a category only notes that belong to this category are displayed.</para>
  	  </listitem>  
@@ -846,10 +846,10 @@ form generated by the ad_form command with the matching name.  Test it
     developer, there are a couple of steps you need to take in order
     to release a new version of your package. </para>
 
-    <para>For the sake of this example, let's assume you are the
+    <para>For the sake of this example, let&#39;s assume you are the
     package owner of the <computeroutput>notes</computeroutput>
     package. It is currently at version 1.5, and you are planning on
-    releasing version 1.6. It is also located in OpenACS's CVS.</para>
+    releasing version 1.6. It is also located in OpenACS&#39;s CVS.</para>
 
     <para>To release your package:</para>
     <screen>cd /path/to/notes
@@ -870,7 +870,7 @@ cvs tag -F openacs-5-1-compat
     </authorblurb>
 
     <para>The notifications package allows you to send notifications through any 
-    defined communications medium (e.g. email, sms) upon some event occuring within 
+    defined communications medium (e.g. email, sms) upon some event occurring within 
     the system.</para>
     <para>This tutorial steps through the process of integrating the notifications 
     package with your package.</para>
@@ -954,7 +954,7 @@ cvs tag -F openacs-5-1-compat
       -- @creation-date 2002-05-16
       --
       -- This code is newly concocted by Ben, but with significant concepts and code
-      -- lifted from Gilbert's UBB forums. Thanks Orchard Labs.
+      -- lifted from Gilbert&#39;s UBB forums. Thanks Orchard Labs.
       -- Lars and Jade in turn lifted this from gwong and ben.
 
 create function inline_0 ()
@@ -1054,7 +1054,7 @@ drop function inline_0();
             -notif_text $new_content
     </programlisting>
 
-    <para>This code is placed in the tcl procedure that creates blog
+    <para>This code is placed in the Tcl procedure that creates blog
     entries, right after the entry gets created in the code. The
     <computeroutput>$blog(package_id)</computeroutput> is the OpenACS
     object_id of the Weblogger instance to which the entry has been
@@ -1138,7 +1138,7 @@ drop function inline_0();
     <computeroutput>tree_level()</computeroutput> function, which
     gives you the level, starting from 1, 2, 3... </para>
 
-    <para>Here's an example, pulling all of the children for a given
+    <para>Here&#39;s an example, pulling all of the children for a given
   parent:</para> 
 
     <programlisting>
@@ -1155,14 +1155,14 @@ drop function inline_0();
       and parent.key = :the_parent_key;
       </programlisting>
 
-    <para>The reason we substract the parent's tree_level from the
-    child's tree_level is that the tree_levels are global, so if you
-    want the parent's tree_level to start with 0, you'll want the
-    subtraction in there. This is a reason you'll commonly see magic
+    <para>The reason we subtract the parent&#39;s tree_level from the
+    child&#39;s tree_level is that the tree_levels are global, so if you
+    want the parent&#39;s tree_level to start with 0, you&#39;ll want the
+    subtraction in there. This is a reason you&#39;ll commonly see magic
     numbers in tree_sortkey SQL queries, like
     <computeroutput>tree_level(children.tree_sortkey) -
     4</computeroutput>. That is basically an incorrect way to do it,
-    and subtracting the parent's tree_level is the preferred method.</para>
+    and subtracting the parent&#39;s tree_level is the preferred method.</para>
 
     <para>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</para>
 
@@ -1257,14 +1257,14 @@ db_multirow \
       <programlisting>&lt;table border="0" width="100%"&gt;
   &lt;tr&gt;
     &lt;td valign="top" width="50%"&gt;
-      &lt;table class="element" border=0 cellpadding="0" cellspacing="0" width="100%"&gt;
+      &lt;table class="element" border="0" cellpadding="0" cellspacing="0" width="100%"&gt;
         &lt;tr&gt; 
-          &lt;td colspan=3 class="element-header-text"&gt;
+          &lt;td colspan="3" class="element-header-text"&gt;
             &lt;bold&gt;Groups&lt;/bold&gt;
          &lt;/td&gt;
        &lt;/tr&gt;
        &lt;tr&gt;
-         &lt;td colspan=3 class="dark-line" height="0"&gt;&lt;img src="/resources/acs-subsite/spacer.gif"&gt;&lt;/td&gt;&lt;/tr&gt;
+         &lt;td colspan="3" class="dark-line" height="0"&gt;&lt;img src="/resources/acs-subsite/spacer.gif"&gt;&lt;/td&gt;&lt;/tr&gt;
           &lt;tr&gt;
             &lt;td class="light-line" width="1"&gt;
               &lt;img src="/resources/acs-subsite/spacer.gif" width="1"&gt;
@@ -1367,7 +1367,7 @@ db_multirow \
 }</programlisting>
       </listitem>
       <listitem>
-        <para>In your code, always call my_proc.  There will be a seperate cache item for each unique call to my_proc_not_cached so that calls with different arguments are cached seperately. You can flush the cache for each cache key by calling util_memoize_flush my_proc_not_cached args.</para>
+        <para>In your code, always call my_proc.  There will be a separate cache item for each unique call to my_proc_not_cached so that calls with different arguments are cached separately. You can flush the cache for each cache key by calling util_memoize_flush my_proc_not_cached args.</para>
       </listitem>
       <listitem>
         <para>
@@ -1384,7 +1384,7 @@ db_multirow \
         </itemizedlist>
       </listitem>
       <listitem>
-        <para>If you are correctly flushing the cached value, then it will need to be reloaded.  You may wish to pre-load it, so that the loading delay does not impact users.  If you have a sequence of pages, you could call the cached proc in advance, to increase the chances that it's loaded and current when the user reaches it.  Or, you can call (and discard) it immediately after flushing it.</para>
+        <para>If you are correctly flushing the cached value, then it will need to be reloaded.  You may wish to pre-load it, so that the loading delay does not impact users.  If you have a sequence of pages, you could call the cached proc in advance, to increase the chances that it&#39;s loaded and current when the user reaches it.  Or, you can call (and discard) it immediately after flushing it.</para>
       </listitem>
     </orderedlist>
   </sect1>
@@ -1434,7 +1434,7 @@ db_multirow \
 	} ...
 	</programlisting>
 	<warning>
-	<para>You must not give your your form the same name that your page has. Otherwise HTMLArea won't load.</para>
+	<para>You must not give your your form the same name that your page has. Otherwise HTMLArea won&#39;t load.</para>
 	</warning>
 	<para>Convert your textarea widget to a richtext widget and enable htmlarea.</para>
 	<para>The <code>htmlarea_p</code>-flag can be used to prevent 
@@ -1455,7 +1455,7 @@ db_multirow \
 	<code>ad_form</code> or you will have problems 
 	displaying the content or handling the data manipulation correctly.</para>
 	<para>Depending on the data model of your package you either support a content format 
-	or don't. If you don't you can assume <code>"text/html"</code> or 
+	or don&#39;t. If you don&#39;t you can assume <code>"text/html"</code> or 
 	<code>"text/richtext"</code> or <code>"text/enhanced"</code>.</para>
 	<para>The relevant parts in your <code>ad_form</code> definition are the 
 	switches <code>-new_data</code>, <code>-edit_data</code>, 
@@ -1474,7 +1474,7 @@ db_multirow \
 	</programlisting>
 	<para>Now the correct values for <code>my_input_field_2</code> and 
 	<code>format</code> are passed to the <code>-new_data</code> and 
-	<code>-edit_data</code> blocks which don't need to get touched.</para>
+	<code>-edit_data</code> blocks which don&#39;t need to get touched.</para>
 	<para>To make HTMLArea optional per package instance define a string parameter 
 	<code>UseWysiwygP</code> which defaults <code>0</code> for your 
 	package using the APM.</para>
@@ -1494,34 +1494,34 @@ db_multirow \
 	<para>All you need now is a configuration page where the user can change this setting. Create a 
 	<code>configure.tcl</code> file:</para>
 	<programlisting>
-	ad_page_contract {
+ad_page_contract {
 
-    	This page allows a faq admin to change the UseWysiwygP setting
+    This page allows a faq admin to change the UseWysiwygP setting
 
-	} {
-    	{return_url ""}
-	}
+} {
+    {return_url ""}
+}
 
-	set title "Should we support WYSIWYG?"
-	set context [list $title]
+    set title "Should we support WYSIWYG?"
+    set context [list $title]
 
-	set use_wysiwyg_p
+    set use_wysiwyg_p
 
-	ad_form -name categories_mode -form {
-    	{enabled_p:text(radio)
-        	{label "Enable WYSIWYG"}
-        	{options {{Yes t} {No f}}}
-        	{value $use_wysiwyg_p}
-    	}
-    	{return_url:text(hidden) {value $return_url}}
-    	{submit:text(submit) {label "Change"}}
-	} -on_submit {
-    	parameter::set_value  -parameter "UseWysiwygP" -value $enabled_p
-    	if {$return_url ne ""} {
-        	ns_returnredirect $return_url
-    	}
-	}
-	</programlisting>
+    ad_form -name categories_mode -form {
+        {enabled_p:text(radio)
+       	    {label "Enable WYSIWYG"}
+            {options {{Yes t} {No f}}}
+            {value $use_wysiwyg_p}
+        }
+        {return_url:text(hidden) {value $return_url}}
+        {submit:text(submit) {label "Change"}}
+    } -on_submit {
+        parameter::set_value  -parameter "UseWysiwygP" -value $enabled_p
+        if {$return_url ne ""} {
+            ns_returnredirect $return_url
+        }
+    }
+</programlisting>
 	<para>In the corresponding ADP file write</para>
 	<programlisting>
 	&lt;master&gt;
@@ -1555,7 +1555,7 @@ db_multirow \
 
     <para>Under the Manage section, click on Parameters</para>
 
-    <para>It's fairly self-explanatory at this point. Create the
+    <para>It&#39;s fairly self-explanatory at this point. Create the
     parameters you want, and then access them in your code using the
     parameter::get procedure.</para>
 
@@ -1596,7 +1596,7 @@ db_multirow \
     legacy.</para>
     <orderedlist>
       <listitem>
-        <para>Modify config.tcl to accomodate the legacy database, and to
+        <para>Modify config.tcl to accommodate the legacy database, and to
         ensure that the legacy database is not used for standard
         OpenACS queries:</para>
         <programlisting>ns_section ns/db/pools
@@ -1659,7 +1659,7 @@ ns_param pools_legacy [list legacy]</programlisting>
           <code>db_</code> API calls.  For
           example, suppose there is a table called "foo" in the legacy
           system, with a field "bar".  List "bar" for all records with
-          this tcl file:</para>
+          this Tcl file:</para>
         <programlisting>db_foreach -dbn legacy get_bar_query {
   select bar from foo
   limit 10
@@ -1674,7 +1674,7 @@ ns_param pools_legacy [list legacy]</programlisting>
   <sect1 id="tutorial-future-topics">
   <title>Future Topics</title>
     <itemizedlist>
-      <listitem><para>How to enforce security so that users can't
+      <listitem><para>How to enforce security so that users can&#39;t
       change other users records</para>
       </listitem>
       <listitem><para>How to use the content management tables so that
@@ -1683,9 +1683,9 @@ ns_param pools_legacy [list legacy]</programlisting>
       Builder HTML forms.</para></listitem>
       <listitem><para>How to make your package searchable with OpenFTS/Oracle</para></listitem>
       <listitem><para>How to prepare pagelets for inclusion in other pages</para></listitem>
-      <listitem><para>How and when to put procedures in a tcl procedure library</para></listitem>
+      <listitem><para>How and when to put procedures in a Tcl procedure library</para></listitem>
       <listitem><para>More on ad_form - data validation, other stuff.
-      (plan to draw from Jon Griffin's doc)</para></listitem>
+      (plan to draw from Jon Griffin&#39;s doc)</para></listitem>
       <listitem><para>partialquery in xql</para></listitem>
       <listitem><para>How to use the html/text entry widget to get the
       "does this look right" confirm page </para></listitem>

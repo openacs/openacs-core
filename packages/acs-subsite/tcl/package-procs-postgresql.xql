@@ -38,13 +38,13 @@
 <fullquery name="package_create.package_valid_p">      
       <querytext>
       
-	    select case when exists (select 1 
-                                       from user_objects 
-                                      where status = 'INVALID'
-                                        and object_name = upper(:package_name)
-                                        and object_type = upper(:type))
-                        then 0 else 1 end
-	      
+--	    select case when exists (select 1 
+--                                       from user_objects 
+--                                      where status = 'INVALID'
+--                                        and object_name = upper(:package_name)
+--                                        and object_type = upper(:type))
+--                        then 0 else 1 end
+            select 1 from dual;     
 	
       </querytext>
 </fullquery>
@@ -104,7 +104,7 @@
 		  and t2.object_type = :start_with) t
          where a.object_type = :object_type
            and t.object_type = a.ancestor_type $storage_clause
-         order by type_level, attribute_id
+         order by type_level, sort_order, attribute_id
       </querytext>
 </fullquery>
 

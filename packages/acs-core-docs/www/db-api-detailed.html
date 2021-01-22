@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Database Access API</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 15. Kernel Documentation"><link rel="previous" href="apm-design.html" title="Package Manager Design"><link rel="next" href="i18n-requirements.html" title="OpenACS Internationalization Requirements"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api-detailed"></a>Database Access API</h2></div></div></div><div class="authorblurb"><p>By <a class="ulink" href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a>. Revised and expanded by Roberto Mello (rmello at fslc dot usu dot edu), July 2002. </p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Database Access API</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="kernel-doc.html" title="Chapter 15. Kernel Documentation"><link rel="previous" href="apm-design.html" title="Package Manager Design"><link rel="next" href="i18n-requirements.html" title="OpenACS Internationalization Requirements"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><th width="60%" align="center">Chapter 15. Kernel Documentation</th><td width="20%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api-detailed"></a>Database Access API</h2></div></div></div><div class="authorblurb"><p>By <a class="ulink" href="mailto:jsalz@mit.edu" target="_top">Jon Salz</a>. Revised and expanded by Roberto Mello (rmello at fslc dot usu dot edu), July 2002. </p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</p></li><li class="listitem"><p>Tcl initialization: /packages/acs-kernel/database-init.tcl</p></li></ul></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bigpicture"></a>The Big Picture</h3></div></div></div><p>
@@ -475,7 +475,7 @@ db_dml insert_photos {
         insert photos(photo_id, image, thumbnail_image)
         values(photo_id_seq.nextval, empty_blob(), empty_blob())
         returning image, thumbnail_image into :1, :2
-    }  -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
+    } -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
 
 </pre><p>
 This inserts a new row into the <code class="computeroutput">photos</code> table, with the contents
@@ -494,7 +494,7 @@ of the files <code class="computeroutput">/var/tmp/the_photo</code> and
 <span class="strong"><strong>db_write_blob</strong></span> <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 
 <span class="strong"><strong>db_blob_get_file</strong></span> <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
-</pre><p>Analagous to <code class="computeroutput">ns_ora write_clob/write_blob/blob_get_file</code>. 
+</pre><p>Analogous to <code class="computeroutput">ns_ora write_clob/write_blob/blob_get_file</code>. 
 
 
 </p></dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput"><a name="kernel.dbapi_db_release_unused_handles"></a>db_release_unused_handles</code></strong></span></span></dt><dd><pre class="programlisting">
@@ -508,19 +508,17 @@ transactions are supported (<code class="computeroutput">end transaction</code> 
 transactions. It is possible to specify an optional <code class="computeroutput">on_error</code>
 code block that will be executed if some code in <span class="emphasis"><em>code_block</em></span> throws
 an exception. The variable <code class="computeroutput">errmsg</code> will be bound in that scope.
-If there is no <code class="computeroutput">on_error</code> code, any
-  errors will be propagated. </p>
-  <p>Example:</p><pre class="programlisting">
+If there is no <code class="computeroutput">on_error</code> code, any errors will be propagated. </p><p>Example:</p><pre class="programlisting">
 
 proc replace_the_foo { col } {
     db_transaction {
         db_dml delete {delete from foo}
-        db_dml insert {insert into foo(col) values(:col)}
+        db_dml insert {insert into foo(col) values($col)}
     }
 }
 
 proc print_the_foo {} {
-    doc_body_append "foo is [db_string get_foo {select col from foo}]&lt;br&gt;\n"
+    doc_body_append "foo is [db_string "select col from foo"]&lt;br&gt;\n"
 }
 
 replace_the_foo 8
@@ -730,4 +728,4 @@ db_with_handle db {
 			The nsv containing the list is initialized by the bootstrap script and should
 			never be referenced directly by user code.
 			Returns the current rdbms type and version.
-		</p></dd></dl></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">Package Manager Design </td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right"> OpenACS Internationalization Requirements</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/db-api-detailed.html#comments">View comments on this page at openacs.org</a></center></body></html>
+		</p></dd></dl></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">Package Manager Design </td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right"> OpenACS Internationalization Requirements</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

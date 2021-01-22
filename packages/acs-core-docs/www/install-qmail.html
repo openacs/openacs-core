@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install qmail (OPTIONAL)</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-daemontools.html" title="Install Daemontools (OPTIONAL)"><link rel="next" href="analog-install.html" title="Install Analog web file analyzer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-daemontools.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="analog-install.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-qmail"></a>Install qmail (OPTIONAL)</h2></div></div></div><p>Qmail is a Mail Transfer Agent.  It handles incoming and
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install qmail (OPTIONAL)</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-daemontools.html" title="Install Daemontools (OPTIONAL)"><link rel="next" href="analog-install.html" title="Install Analog web file analyzer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-daemontools.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="analog-install.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="install-qmail"></a>Install qmail (OPTIONAL)</h2></div></div></div><p>Qmail is a Mail Transfer Agent.  It handles incoming and
       outgoing mail.  Install qmail if you want your OpenACS server to
       send and receive mail, and you don't want to use an alternate
       MTA.</p><p>Red Hat 9: all djb tools (qmail, daemontools, ucspi) will
@@ -30,7 +30,7 @@ running the tcpserver program which is part of ucspi-tcp:</p><pre class="screen"
 tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] [ -B banner ] [ -g gid ] [ -u uid
 ] [ -b backlog ] [ -l localname ] [ -t timeout ] host port program
 [root ucspi-tcp-0.88]#
-</pre><p><a class="indexterm" name="idp140400245078464"></a>
+</pre><p><a class="indexterm" name="idp140592107236824"></a>
 (I'm not sure if this next step is 100% necessary, but when I skip it
 I get problems.  If you get the error <code class="computeroutput">553 sorry, that domain isn't in my list of allowed rcpthosts (#5.7.1)</code> then you need to do this.)  AOLserver sends outgoing mail via the ns_sendmail
 command, which pipes a command to the sendmail executable.  Or, in our
@@ -41,10 +41,10 @@ address that means the local machine - the "loopback" interface).
 Unless this mail is addressed to the same machine, qmail thinks that
 it's an attempt to relay mail, and rejects it.  So these two commands
 set up an exception so that any mail sent from 127.0.0.1 is allowed to
-send outgoing mail.</p><pre class="screen">[root ucspi-tcp-0.88]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</code></strong>
+send outgoing mail.</p><pre class="screen">[root ucspi-tcp-0.88]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</code></strong>
 [root ucspi-tcp-0.88]# <strong class="userinput"><code>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</code></strong>
-<span class="action"><span class="action">cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
-tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </span></span></pre></li><li class="listitem"><p><b>Install Qmail. </b><a class="indexterm" name="idp140400245085072"></a></p><p><a class="link" href="individual-programs.html#ucspi-download" title="ucspi-tcp 0.88, OPTIONAL">Download qmail</a>,
+<span class="action"><span class="action">cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
+tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </span></span></pre></li><li class="listitem"><p><b>Install Qmail. </b><a class="indexterm" name="idp140592107243816"></a></p><p><a class="link" href="individual-programs.html#ucspi-download" title="ucspi-tcp 0.88, OPTIONAL">Download qmail</a>,
             set up the standard supporting users and build the binaries:</p><pre class="screen">[root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>wget http://www.qmail.org/netqmail-1.04.tar.gz</code></strong>
 [root src]# <strong class="userinput"><code>tar xzf netqmail-1.04.tar.gz</code></strong>
@@ -103,7 +103,7 @@ useradd -g qmail -d /var/qmail qmails
 cd netqmail-1.04
 ./collate.sh
 cd netqmail-1.04
-make setup check</span></span></pre><p>Replace sendmail with qmail's wrapper.</p><a class="indexterm" name="idp140400245101504"></a><pre class="screen">[root qmail-1.03]# <strong class="userinput"><code>rm -f /usr/bin/sendmail /usr/sbin/sendmail</code></strong>
+make setup check</span></span></pre><p>Replace sendmail with qmail's wrapper.</p><a class="indexterm" name="idp140592107290328"></a><pre class="screen">[root qmail-1.03]# <strong class="userinput"><code>rm -f /usr/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]# <strong class="userinput"><code>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]#
 <span class="action"><span class="action">rm -f /usr/bin/sendmail /usr/sbin/sendmail
@@ -125,13 +125,13 @@ Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
 <span class="action"><span class="action">cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root 
 chmod 644 ~alias/.qmail* 
 /var/qmail/bin/maildirmake ~alias/Maildir/ 
-chown -R alias.nofiles /var/qmail/alias/Maildir</span></span></pre><a class="indexterm" name="idp140400245115344"></a><p>Configure qmail to use the Maildir delivery format
+chown -R alias.nofiles /var/qmail/alias/Maildir</span></span></pre><a class="indexterm" name="idp140592107304760"></a><p>Configure qmail to use the Maildir delivery format
           (instead of mbox), and install a version of the qmail startup script modified to use Maildir.</p><pre class="screen">[root alias]# <strong class="userinput"><code>echo "./Maildir" &gt; /var/qmail/bin/.qmail</code></strong>
-[root alias]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</code></strong>
+[root alias]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</code></strong>
 [root alias]# <strong class="userinput"><code>chmod 755 /var/qmail/rc</code></strong>
 [root alias]# 
 <span class="action"><span class="action">echo "./Maildir" &gt; /var/qmail/bin/.qmail 
-cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
+cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc 
 chmod 755 /var/qmail/rc 
 </span></span></pre><p>Set up the skeleton directory so that new users will
           be configured for qmail.</p><pre class="screen">[root root]# <strong class="userinput"><code>/var/qmail/bin/maildirmake /etc/skel/Maildir</code></strong>
@@ -143,13 +143,13 @@ echo "./Maildir/" &gt; /etc/skel/.qmail</span></span></pre><p>As recommended, we
 [root root]# <strong class="userinput"><code>mkdir -p /var/qmail/supervise/qmail-smtpd/log</code></strong>
 [root root]# <strong class="userinput"><code>mkdir /var/log/qmail</code></strong>
 [root root]# <strong class="userinput"><code>chown qmaill /var/log/qmail</code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /var/qmail/bin/qmailctl</code></strong>
 [root root]# <strong class="userinput"><code>ln -s /var/qmail/bin/qmailctl /usr/bin</code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</code></strong>
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run </code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run</code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run</code></strong>
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /var/qmail/supervise/qmail-send/run</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /var/qmail/supervise/qmail-send/log/run</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /var/qmail/supervise/qmail-smtpd/run</code></strong>
@@ -160,13 +160,13 @@ echo "./Maildir/" &gt; /etc/skel/.qmail</span></span></pre><p>As recommended, we
 mkdir -p /var/qmail/supervise/qmail-smtpd/log
 mkdir /var/log/qmail
 chown qmaill /var/log/qmail
-cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
+cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmailctl.txt /var/qmail/bin/qmailctl
 chmod 755 /var/qmail/bin/qmailctl
 ln -s /var/qmail/bin/qmailctl /usr/bin
-cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
-cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
-cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
-cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
+cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail-send-run.txt /var/qmail/supervise/qmail-send/run
+cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail-send-log-run.txt /var/qmail/supervise/qmail-send/log/run
+cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail-smtpd-run.txt /var/qmail/supervise/qmail-smtpd/run
+cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail-smtpd-log-run.txt /var/qmail/supervise/qmail-smtpd/log/run
 chmod 755 /var/qmail/supervise/qmail-send/run
 chmod 755 /var/qmail/supervise/qmail-send/log/run
 chmod 755 /var/qmail/supervise/qmail-smtpd/run
@@ -179,4 +179,4 @@ ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service
 /service/qmail-smtpd/log: up (pid 32705) 430 seconds
 messages in queue: 0
 messages in queue but not yet preprocessed: 0
-[root root]#</pre><p>Further verify by sending and receiving email.  Incoming mail for root is stored in <code class="computeroutput">/var/qmail/alias/Maildir</code>. </p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-daemontools.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="analog-install.html">Next</a></td></tr><tr><td width="40%" align="left">Install Daemontools (OPTIONAL) </td><td width="20%" align="center"><a accesskey="u" href="install-more-software.html">Up</a></td><td width="40%" align="right"> Install Analog web file analyzer</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/install-qmail.html#comments">View comments on this page at openacs.org</a></center></body></html>
+[root root]#</pre><p>Further verify by sending and receiving email.  Incoming mail for root is stored in <code class="computeroutput">/var/qmail/alias/Maildir</code>. </p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-daemontools.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="analog-install.html">Next</a></td></tr><tr><td width="40%" align="left">Install Daemontools (OPTIONAL) </td><td width="20%" align="center"><a accesskey="u" href="install-more-software.html">Up</a></td><td width="40%" align="right"> Install Analog web file analyzer</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

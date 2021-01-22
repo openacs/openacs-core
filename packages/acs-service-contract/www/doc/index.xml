@@ -70,7 +70,7 @@ The Service Contract interface specification was inspired by
 <title>Hitchiker's Guide to Service Contract Definitions</title>
 <itemizedlist>
 <listitem><para>
-contract - analagous to interface, contracts serve as logical 
+contract - analogous to interface, contracts serve as logical 
                   containers for operations.</para></listitem>
 <listitem><para>
 operation - a method of an interface. defines a method signature,
@@ -85,7 +85,7 @@ implementation alias - is the method of an implementation that
 <listitem><para>
 bindings - association between an interface and an implementation.</para></listitem>
 <listitem><para>
-types - define the kind of input and outputs a operation recieves.</para></listitem>
+types - define the kind of input and outputs a operation receives.</para></listitem>
 </itemizedlist>
 
 </section>

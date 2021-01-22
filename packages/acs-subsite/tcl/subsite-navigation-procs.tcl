@@ -175,8 +175,13 @@ ad_proc -private subsite_navigation::add_section_row {
         set navigation_id ""
     }
 
+    set joined_url [file join $base_url $info(url)]
+    if {[string index $info(url) end] eq "/"} {
+        append joined_url /
+    }
+    
     template::multirow append $multirow \
-        $group $info(label) [file join $base_url $info(url)] \
+        $group $info(label) $joined_url \
         "" $info(title) "" $info(accesskey) "" $navigation_id [template::multirow size $multirow] \
         $info(name) $parent $info(display_template)
 

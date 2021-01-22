@@ -30,6 +30,11 @@ set admin_login_url [export_vars -base "$service(url)/register/auto-login" {{ema
 set rebuild_url [export_vars -base rebuild-server { { server $service(name) } }]
 set rebuild_log_url "/rebuild-$service(name).log"
 
+template::add_confirm_handler \
+    -id "action-rebuild" \
+    -message "Are you sure you want to wipe and rebuild this server?"
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

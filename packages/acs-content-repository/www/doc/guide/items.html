@@ -4,13 +4,13 @@
   </head>
   <body>
   <h2>Creating Content Items</h2>
-  <b><a href="../index.html">Content Repository</a> :  
-    Developer Guide</b>
+  <strong><a href="../index.html">Content Repository</a> :  
+    Developer Guide</strong>
 <hr>
 
 <h3>Use the Content Item API to create the item</h3>
 
-<p>Content items are initialized using the <tt>content_item.new</tt>
+<p>Content items are initialized using the <kbd>content_item.new</kbd>
 function.  A name is the only parameter required to create an item:</p>
 
 <pre>item_id := content_item.new( name => 'my_item' );</pre>
@@ -27,9 +27,9 @@ with the repository hierarchy:</p>
 <p>The parent ID must be another content item, or a subclass of
 content item such as a folder.</p>
 
-<p>The <tt>content_item.new</tt> function accepts a number of other
-optional parameters.  The standard <tt>creation_date</tt>,
-<tt>creation_user</tt> and <tt>creation_ip</tt> should be specified
+<p>The <kbd>content_item.new</kbd> function accepts a number of other
+optional parameters.  The standard <kbd>creation_date</kbd>,
+<kbd>creation_user</kbd> and <kbd>creation_ip</kbd> should be specified
 for auditing purposes.  You can also create the initial revision and
 publish text items in a single step:</p>
 
@@ -44,15 +44,15 @@ publish text items in a single step:</p>
 
 <p>If either the title or text are not null, the function will create
 the first revision of the item.  It will also mark the item as live if
-the <tt>is_live</tt> parameter is true.  The alternative to this one
+the <kbd>is_live</kbd> parameter is true.  The alternative to this one
 step method is to create a content item and then add a revision using 
 the Content Revision API.</p>
 
 <h3>Publishing a content item</h3>
 
 <p>If a content item has at least one revision, then it can be published by
-calling the <tt>content_item.set_live_revision</tt> procedure, which takes
-as input a <tt>revision_id</tt>:</p>
+calling the <kbd>content_item.set_live_revision</kbd> procedure, which takes
+as input a <kbd>revision_id</kbd>:</p>
 
 <pre>content_item.set_live_revision( revision_id => :revision_id );</pre>
 

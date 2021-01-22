@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Installing SSL Support for an OpenACS service}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Installing SSL Support for an OpenACS service}</property>
 <property name="doc(title)">Installing SSL Support for an OpenACS service</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -38,8 +38,8 @@ ships with a built-in list of acceptable Certificate Authorities
 approved CA will work smoothly. Any other certificate will cause
 browsers to produce some messages or block the site. Unfortunately,
 getting a site certificate signed by a CA costs money. In this
-section, we'll generate an unsigned certificate which will work in
-most browsers, albeit with pop-up messages.</p><p>Use an OpenSSL perl script to generate a certificate and
+section, we&#39;ll generate an unsigned certificate which will work
+in most browsers, albeit with pop-up messages.</p><p>Use an OpenSSL perl script to generate a certificate and
 key.</p><p>Debian users: use /usr/lib/ssl/misc/CA.pl instead of
 /usr/share/ssl/CA</p><p>Mac OS X users: use perl /System/Library/OpenSSL/misc/CA.pl
 -newcert instead of /usr/share/ssl/CA</p><pre class="screen">
@@ -58,13 +58,12 @@ Certificate (and private key) is in newreq.pem
 </pre><p>
 <code class="computeroutput">newreq.pem</code> contains our
 certificate and private key. The key is protected by a passphrase,
-which means that we'll have to enter the pass phrase each time the
-server starts. This is impractical and unnecessary, so we create an
-unprotected version of the key. <span class="emphasis"><em>Security
-implication</em></span>: if anyone gets access to the file
-keyfile.pem, they effectively own the key as much as you do.
-Mitigation: don't use this key/cert combo for anything besides
-providing ssl for the web site.</p><pre class="screen">
+which means that we&#39;ll have to enter the pass phrase each time
+the server starts. This is impractical and unnecessary, so we
+create an unprotected version of the key. <span class="emphasis"><em>Security implication</em></span>: if anyone gets
+access to the file keyfile.pem, they effectively own the key as
+much as you do. Mitigation: don&#39;t use this key/cert combo for
+anything besides providing ssl for the web site.</p><pre class="screen">
 [root misc]# <strong class="userinput"><code>openssl rsa -in newreq.pem -out keyfile.pem</code></strong>
 read RSA key
 Enter PEM pass phrase:

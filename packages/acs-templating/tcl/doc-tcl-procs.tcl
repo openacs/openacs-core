@@ -1,13 +1,17 @@
-# Documentation procedures for the ArsDigita Templating System
+ad_library {
+    Documentation procedures for the ArsDigita Templating System
+
+    @author Simon Huynh (shuynh@arsdigita.com)
+
+    @cvs-id $Id$
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Simon Huynh (shuynh@arsdigita.com)
-
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval doc {}
 namespace eval doc::util {}
@@ -138,7 +142,7 @@ ad_proc -private doc::util::text_divider { text_ref marker } {
 
 ad_proc -private -deprecated template::util::server_root {} {
     uses ns_library to find the server root, may not always be accurate
-    because it essentially asks for the tcl library path and
+    because it essentially asks for the Tcl library path and
     strips off the last /tcl directory.
 
     @see use $::acs::rootdir instead
@@ -389,7 +393,7 @@ ad_proc -private doc::parse_comment_text { proc_block } {
 }
 
 ad_proc -private doc::parse_namespace { text_lines }  {
-    text between two namespace markers in a tcl library file and 
+    text between two namespace markers in a Tcl library file and 
     parses out procedure source and comments
 
     @author simon
@@ -456,7 +460,7 @@ ad_proc -private doc::parse_namespace { text_lines }  {
     # as would be expected if the namespace were being described 
     # for the first time; otherwise
     # it is set to 0;  the problem i'm trying to resolve here is multiple uses 
-    # of the @namespace directive and determining which occurance of the 
+    # of the @namespace directive and determining which occurrence of the 
     # directive is followed by comments
     # by comments we want to parse into our static files
 
@@ -485,7 +489,7 @@ ad_proc -private doc::parse_namespace { text_lines }  {
     if { $has_comments } {
 	
 	# this check determines whether or not we want the comments
-	# following this occurrance of the @namespace directive for 
+	# following this occurrence of the @namespace directive for 
 	# this namespace to be included in our static files
 
         set namespace_info [list name "$namespace_name" overview "$namespace_description" author "$namespace_author" see "$namespace_see"]
@@ -583,7 +587,7 @@ ad_proc -private doc::parse_file { path } {
 }
 
 ad_proc -private doc::parse_tcl_library { dir_list } {
-    takes the absolute path of the tcl library directory and parses through it
+    takes the absolute path of the Tcl library directory and parses through it
 
     @see doc::parse_file 
     @see template::util::comment_text_normalize

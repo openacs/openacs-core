@@ -6,6 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     user_id:naturalnum,multiple
+    {return_url:localurl "."}
 }
 
 set group_id [application_group::group_id_from_package_id]
@@ -18,7 +19,7 @@ foreach id $user_id {
         -user_id $user_id
 }
 
-ad_returnredirect .
+ad_returnredirect $return_url
 
 # Local variables:
 #    mode: tcl

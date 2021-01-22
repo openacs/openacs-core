@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Package Manager Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Design}</property>
 <property name="doc(title)">Package Manager Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -22,9 +22,9 @@ diagram</a></p></li><li class="listitem">
 <li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dprocs%2etcl" target="_top">apm-procs.tcl</a></p></li><li class="listitem"><p>
 <a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dinstall%2dprocs%2etcl" target="_top">apm-install-procs.tcl</a> (Supports installation of
 packages)</p></li><li class="listitem"><p>
-<a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2f20%2dapm%2dload%2dprocs%2etcl" target="_top">20-apm-load-procs.tcl</a> (Bootstraps APM for server
+<a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dbootstrap%2dinstaller%2ftcl%2f30%2dapm%2dload%2dprocs%2etcl" target="_top">30-apm-load-procs.tcl</a> (Bootstraps APM for server
 startup)</p></li><li class="listitem"><p>
-<a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dadmin%2dprocs%2etcl" target="_top">apm-admin-procs.tcl</a> (Supports APM UI)</p></li>
+<a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dadmin%2ftcl%2fapm%2dadmin%2dprocs%2etcl" target="_top">apm-admin-procs.tcl</a> (Supports APM UI)</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>PL/SQL file</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p><a class="ulink" href="/doc/sql/display-sql?url=apm-create.sql&amp;package_key=acs-kernel" target="_top">apm-create.sql</a></p></li></ul></div>
@@ -52,7 +52,7 @@ the <a class="ulink" href="/doc/acs-content-repository" target="_top">OpenACS Co
 and the <a class="link" href="kernel-doc" title="Chapter 15. Kernel Documentation">OpenACS
 Kernel</a>, which includes APM.</p></li>
 </ul></div><p>An installation of the OpenACS includes the OpenACS Kernel, some
-services that extend the kernel's functionality, and some
+services that extend the kernel&#39;s functionality, and some
 applications intended for end-users. Packages function as
 individual pieces of <a class="link" href="subsites-design" title="Subsites Design Document">subsites</a>. A subsite can
 contain multiple application and service instances that provide the
@@ -61,17 +61,18 @@ subsite.</p><p>This architecture supports the growth of collaborative commerce.
 For example, Jane User starts a forum focusing on the merits of
 View Cameras by creating an instance of the Forum application for
 her personal subsite on an OpenACS Installation. Jack User
-discovers Jane's forum and includes a link to it in his subsite. As
-interest in Jane's forum grows, she creates a subsite specializing
-in providing information about View cameras. This subsite now
-includes several package instances beyond Forum; it could
-potentially include its own Ecommerce capabilities (ala <a class="ulink" href="http://shopping.yahoo.com" target="_top">Yahoo!
-Shopping</a>). This could include a knowledge management
-application that allows users to spread expertise about view
-cameras and a portal application that links to reliable camera
+discovers Jane&#39;s forum and includes a link to it in his
+subsite. As interest in Jane&#39;s forum grows, she creates a
+subsite specializing in providing information about View cameras.
+This subsite now includes several package instances beyond Forum;
+it could potentially include its own Ecommerce capabilities (ala
+<a class="ulink" href="http://shopping.yahoo.com" target="_top">Yahoo! Shopping</a>). This could include a knowledge
+management application that allows users to spread expertise about
+view cameras and a portal application that links to reliable camera
 models and resellers. Any subsite enabled package that is added to
 the OpenACS installation through APM is another potential package
-instance that can become part of Jane's View Camera subsite.</p><p>The APM provides an architecture for packaging software, making
+instance that can become part of Jane&#39;s View Camera
+subsite.</p><p>The APM provides an architecture for packaging software, making
 instances of that software available to subsites, specifying
 configuration parameters for each instance, and managing the
 creation and release of new packages.</p>
@@ -100,15 +101,15 @@ the data model should <span class="emphasis"><em>not</em></span>
 affect dependent packages. Rather, the package interface should
 provide a level of abstraction above the data model (as well as the
 rest of the package implementation). Then, users of the package can
-take advantage of implementation improvements that don't affect the
-interface (e.g., faster performance from intelligent
+take advantage of implementation improvements that don&#39;t affect
+the interface (e.g., faster performance from intelligent
 denormalization of the data model), without having to worry that
 code outside the package will now break.</p>
 </li><li class="listitem"><p>A typical ACS-backed site only uses a few of the modules
 included in the distribution, yet there was no well-understood way
 to pick only what you needed when installing the ACS, or even to
-uninstall what you didn't need, post-installation. Unwanted code
-had to be removed manually.</p></li><li class="listitem"><p>Releasing a new version of the ACS was complicated, owing again
+uninstall what you didn&#39;t need, post-installation. Unwanted
+code had to be removed manually.</p></li><li class="listitem"><p>Releasing a new version of the ACS was complicated, owing again
 to the monolithic nature of the software. Since we released
 everything in the ACS together, all threads of ACS development had
 to converge on a single deadline, after which we would undertake a
@@ -136,13 +137,13 @@ and any software platform has the potential to develop problems
 like those described above. Fortunately, there are many precedents
 for systematic solutions, including:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<a class="ulink" href="http://www.debian.org/" target="_top">Debian GNU/Linux</a> and the <a class="ulink" href="http://www.debian.org/doc/packaging-manuals/packaging.html/" target="_top">Debian Packaging manual</a>
+<a class="ulink" href="http://www.debian.org/" target="_top">Debian GNU/Linux</a> and the <a class="ulink" href="https://www.debian.org/doc/manuals/maint-guide/" target="_top">Debian Packaging manual</a>
 </p></li><li class="listitem"><p>
 <a class="ulink" href="http://www.freebsd.org/" target="_top">FreeBSD</a> has <a class="ulink" href="http://www.freebsd.org/handbook/ports.html" target="_top">the
 Ports collection</a>
 </p></li><li class="listitem"><p>
 <a class="ulink" href="http://www.redhat.com/" target="_top">Red
-Hat Linux</a> has <a class="ulink" href="http://rpm.redhat.com/" target="_top">the Red Hat Package Manager (RPM)</a>
+Hat Linux</a> has <a class="ulink" href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/ch-rpm.html" target="_top">the Red Hat Package Manager (RPM)</a>
 </p></li>
 </ul></div><p>Borrowing from all of the above, OpenACS 3.3 introduces its own
 package management system, the OpenACS Package Manager (APM), which
@@ -150,8 +151,8 @@ consists of:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-s
 <li class="listitem">
 <p>
 <span class="strong"><strong>a standard format for APM
-packages</strong></span> (also called "OpenACS packages"),
-including:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+packages</strong></span> (also called "OpenACS
+packages"), including:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>version numbering, independent of any other package and the
 OpenACS as a whole</p></li><li class="listitem"><p>specification of the package interface</p></li><li class="listitem"><p>specification of dependencies on other packages (if any)</p></li><li class="listitem"><p>attribution (who wrote it) and ownership (who maintains it)</p></li>
 </ul></div>
@@ -214,8 +215,8 @@ that has an API, data model, and a UI:</p><div class="itemizedlist"><ul class="i
 </ul></div><p><span class="strong"><strong>Authoring a
 Package</strong></span></p><p>Full instructions on how to prepare an OpenACS package are
 available in <a class="xref" href="packages" title="OpenACS Packages">Packages</a>. The API here can be invoked
-manually by a package's data model creation script, but need not to
-be used. This API is part of the <a class="ulink" href="/api-doc/plsql-subprogram-one?type=PACKAGE&amp;name=APM" target="_top">APM PL/SQL package</a>.</p><pre class="programlisting">
+manually by a package&#39;s data model creation script, but need
+not to be used. This API is part of the <a class="ulink" href="/api-doc/plsql-subprogram-one?type=PACKAGE&amp;name=APM" target="_top">APM PL/SQL package</a>.</p><pre class="programlisting">
 
 -- Informs the APM that this application is available for use.
 procedure register_application (
@@ -333,8 +334,8 @@ function edit (
 ) return apm_package_versions.version_id%TYPE;
 
 </pre><p>Versions can be enabled or disabled. Enabling a version
-instructs APM to source the package's libraries on startup and to
-make the package available to the OpenACS.</p><pre class="programlisting">
+instructs APM to source the package&#39;s libraries on startup and
+to make the package available to the OpenACS.</p><pre class="programlisting">
 
 procedure enable (
     version_id          in apm_package_versions.version_id%TYPE
@@ -489,13 +490,13 @@ show errors
 for each Instance</strong></span></p><p>A parameter is a setting that can be changed on a package
 instance basis. Parameters are registered on each <code class="computeroutput">package_key</code>, and the values are associated
 with each instance. Parameters can have default values and can be
-of type 'string' or 'number.' There is support with this API for
-setting a number of minimum and maximum values for each parameter,
-but for most instances, the minimum and maximum should be 1. It is
-useful to allow or require multiple values for packages that need
-to store multiple pieces of information under one parameter.
-Default values are automatically set when instances are created,
-but can be changed for each instance.</p><p>All of the functions below are in the <a class="ulink" href="/api-doc/plsql-subprogram-one?type=PACKAGE&amp;name=APM" target="_top">APM PL/SQL package</a>.</p><pre class="programlisting">
+of type 'string' or 'number.' There is support with
+this API for setting a number of minimum and maximum values for
+each parameter, but for most instances, the minimum and maximum
+should be 1. It is useful to allow or require multiple values for
+packages that need to store multiple pieces of information under
+one parameter. Default values are automatically set when instances
+are created, but can be changed for each instance.</p><p>All of the functions below are in the <a class="ulink" href="/api-doc/plsql-subprogram-one?type=PACKAGE&amp;name=APM" target="_top">APM PL/SQL package</a>.</p><pre class="programlisting">
 
 -- Indicate to APM that a parameter is available to the system.
 function register_parameter (
@@ -576,7 +577,7 @@ is registered. When a new application or service is installed on an
 OpenACS instance, a corresponding row in this table is inserted
 with information about the type of package, e.g. if the <a class="ulink" href="/doc/forum" target="_top">forum package</a> is
 installed on your OpenACS server, a row in <code class="computeroutput">apm_package_types</code> will be created, noting
-that it's an application package type.</p><p>The <code class="computeroutput">apm_packages</code> table is
+that it&#39;s an application package type.</p><p>The <code class="computeroutput">apm_packages</code> table is
 used to contain information about the <span class="emphasis"><em>instances</em></span> of packages currently created
 in the system. The <code class="computeroutput">package_key</code>
 column references the <code class="computeroutput">apm_package_types</code> table to ensure that no
@@ -614,9 +615,8 @@ public interface for querying file information.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="apm-design-ui" id="apm-design-ui"></a>User Interface</h3></div></div></div><p>The <a class="ulink" href="/acs-admin/apm" target="_top">APM's
-user interface</a> is part of the <a class="ulink" href="/acs-admin" target="_top">OpenACS Administration Service</a>. The
-UI is the primary point of contact with APM by developers and
+<a name="apm-design-ui" id="apm-design-ui"></a>User Interface</h3></div></div></div><p>The <a class="ulink" href="/acs-admin/apm" target="_top">APM&#39;s user interface</a> is part of the <a class="ulink" href="/acs-admin" target="_top">OpenACS Administration Service</a>.
+The UI is the primary point of contact with APM by developers and
 administrators. It is part of OpenACS Administration, because only
 the site-wide administrator should be able to access it. Thus in
 order to develop a package, the developer must be granted site-wide
@@ -671,7 +671,7 @@ versions by Jon Salz, Michael Yoon, and Lars Pind.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="apm-design-rev-history" id="apm-design-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="apm-design-rev-history" id="apm-design-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

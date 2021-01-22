@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Core and .LRN}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Core and .LRN}</property>
 <property name="doc(title)">OpenACS Core and .LRN</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -12,31 +12,32 @@ Chapter 16. Releasing OpenACS"
 <a name="releasing-openacs-core" id="releasing-openacs-core"></a>OpenACS
 Core and .LRN</h2></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<b>Update Translations. </b><a class="xref" href="update-translations" title="How to Update the translations">the section called
+<strong>Update Translations. </strong><a class="xref" href="update-translations" title="How to Update the translations">the section called
 &ldquo;How to Update the
 translations&rdquo;</a>
 </p></li><li class="listitem">
 <p>
-<b>Rebuild the Changelog. </b>Rebuild the Changelog.
-I use a tool called cvs2cl. Run this command from the package root
-to automatically generate a Changelog file in the same dir. We
-generate two changelogs, one for the minor branch and one for the
-most recent release. The example below is for OpenACS 5.0.2:</p><pre class="screen"><span class="action"><span class="action">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
+<strong>Rebuild the Changelog. </strong>Rebuild the
+Changelog. I use a tool called cvs2cl. Run this command from the
+package root to automatically generate a Changelog file in the same
+dir. We generate two changelogs, one for the minor branch and one
+for the most recent release. The example below is for OpenACS
+5.0.2:</p><pre class="screen"><span class="action"><span class="action">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME
 cvs2cl -F <span class="replaceable"><span class="replaceable">oacs-5-0</span></span> --delta <span class="replaceable"><span class="replaceable">openacs-5-0-0-final</span></span>:<span class="replaceable"><span class="replaceable">oacs-5-0</span></span> -f ChangeLog
 cvs2cl -F <span class="replaceable"><span class="replaceable">oacs-5-0</span></span> --delta <span class="replaceable"><span class="replaceable">openacs-5-0-1-final</span></span>:<span class="replaceable"><span class="replaceable">oacs-5-0</span></span> -f ChangeLog-recent</span></span></pre>
 </li><li class="listitem">
 <p>
-<b>Update Version Numbers. </b>The version numbers
-in the documentation and in the packages must be updated. This
-should only happen after a release candidate is approved.</p><p class="remark"><em><span class="remark">.LRN: this must be
+<strong>Update Version Numbers. </strong>The version
+numbers in the documentation and in the packages must be updated.
+This should only happen after a release candidate is approved.</p><p class="remark"><em><span class="remark">.LRN: this must be
 repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and
 for any modified modules in the .LRN prerequisites (dotlrn-prereq
-in openacs cvs tree). My current working model is that I
-bulk-update .LRN and OpenACS core but that I don't touch
-dotlrn-prereq modules - I just use the most recent release and it's
-up to individual package developers to tag and <a class="link" href="releasing-package" title="How to package and release an OpenACS Package">release those
+in OpenACS cvs tree). My current working model is that I
+bulk-update .LRN and OpenACS core but that I don&#39;t touch
+dotlrn-prereq modules - I just use the most recent release and
+it&#39;s up to individual package developers to tag and <a class="link" href="releasing-package" title="How to package and release an OpenACS Package">release those
 packages</a> when they change. This model is already broken because
-following it means that dotlrn-prereqs don't get new
+following it means that dotlrn-prereqs don&#39;t get new
 translations.</span></em></p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Update
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/variables.ent
@@ -61,10 +62,10 @@ automated tests pass.</p></li><li class="listitem"><p>Commit changes to CVS</p><
 </ol></div>
 </li><li class="listitem">
 <p>
-<b>Tag the files in CVS. </b>The steps to this point
-should have ensured that the head of the current branch contains
-the full set of code to release. Now we need to tag it as the code
-to be released.</p><div class="orderedlist"><ol class="orderedlist" type="a">
+<strong>Tag the files in CVS. </strong>The steps to
+this point should have ensured that the head of the current branch
+contains the full set of code to release. Now we need to tag it as
+the code to be released.</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>Check out OpenACS Core. The files must be checked out through a
 cvs account with write access and should be a checkout from the
@@ -77,9 +78,9 @@ cd dotlrn-packages
 cvs -d /dotlrn-cvsroot checkout -r <span class="replaceable"><span class="replaceable">dotlrn-2-0</span></span> dotlrn-all
 </span></span></pre>
 </li><li class="listitem">
-<p>Tag the tree. If it's a final release of core, move or create
-the appropriate openacs-major-minor-compat tag. (Ie, if releasing
-5.0.3 final, move the openacs-5-0-compat flag.)</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/openacs-4
+<p>Tag the tree. If it&#39;s a final release of core, move or
+create the appropriate openacs-major-minor-compat tag. (Ie, if
+releasing 5.0.3 final, move the openacs-5-0-compat flag.)</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/openacs-4
 cvs tag -F <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span>
 cvs tag -F <span class="replaceable"><span class="replaceable">openacs-5-0-compat</span></span>
 </span></span></pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
@@ -97,18 +98,18 @@ of old branches, <code class="computeroutput">cvs status -v
 somefile</code>.</p><pre class="screen">
 cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-0</span></span>
 </pre>
-</div><p>If doing .LRN: Since the .LRN packages aren't all in one module,
-we iterate through all of the modules. Log in first (cvs login) so
-that you don't have to log in for each module.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/dotlrn-packages
+</div><p>If doing .LRN: Since the .LRN packages aren&#39;t all in one
+module, we iterate through all of the modules. Log in first (cvs
+login) so that you don&#39;t have to log in for each module.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp/dotlrn-packages
 for dir in *; do ( cd $dir &amp;&amp; cvs tag <span class="replaceable"><span class="replaceable">dotlrn-2-0-2-final</span></span> ); done
 for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <span class="replaceable"><span class="replaceable">openacs-5-0-compat</span></span> ); done
 </span></span></pre><p>Note that for the compat tag we use the <span class="action"><span class="action">-F</span></span> flag which will
 force the tag to the new version (just in case someone has created
-the tag already on another version). Excercise care when doing this
-since you don't want to inadvertently move a prior release tag.
+the tag already on another version). Exercise care when doing this
+since you don&#39;t want to inadvertently move a prior release tag.
 Also if the tagging goes horribly wrong for some reason you can
-delete the tag via "<span class="command"><strong>cvs tag -d
-&lt;symbolic_tag&gt;</strong></span>".</p>
+delete the tag via <span class="command"><strong>cvs tag -d
+&lt;symbolic_tag&gt;</strong></span>.</p>
 </li><li class="listitem">
 <p>Apply the <code class="computeroutput">final</code> tag across
 the tree. First, check out the entire OpenACS tree, getting the
@@ -121,9 +122,9 @@ cvs tag <span class="replaceable"><span class="replaceable">openacs-5-1-2-final<
 </li>
 </ol></div>
 </li><li class="listitem">
-<p><b>Make the tarball(s). </b></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<p><strong>Make the tarball(s). </strong></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
-<p><b>openacs-core. </b></p><div class="orderedlist"><ol class="orderedlist" type="a">
+<p><strong>openacs-core. </strong></p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>Go to a new working space and export the tagged files.</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/tarball
 cd /var/tmp/tarball
@@ -136,11 +137,11 @@ tar cz -f <span class="replaceable"><span class="replaceable">openacs-5.0.0a1.ta
 </li>
 </ol></div>
 </li><li class="listitem">
-<p><b>dotlrn. </b></p><div class="orderedlist"><ol class="orderedlist" type="a">
+<p><strong>dotlrn. </strong></p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>Go to a new working space and export the tagged files. (was
 getting errors here trying to use -d, so gave up and just moved
-things from openacs-4 to openacs at the end)</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/dotlrn-tarball
+things from openacs-4 to OpenACS at the end)</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/dotlrn-tarball
 cd /var/tmp/dotlrn-tarball
 cvs -d /cvsroot export -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> acs-core
 cd /var/tmp/dotlrn-tarball/openacs-4/packages
@@ -162,25 +163,26 @@ tar cz -f <span class="replaceable"><span class="replaceable">dotlrn-2.0.0a1.tar
 </li>
 </ul></div>
 </li><li class="listitem"><p>
-<b>Test the new tarball(s). </b>Download the
-tarballs just created and install them and make sure everything
+<strong>Test the new tarball(s). </strong>Download
+the tarballs just created and install them and make sure everything
 looks okay and that automated tests pass.</p></li><li class="listitem">
 <p>
-<b>Update Web site. </b>Update the different places
-on OpenACS.org where we track status.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<strong>Update Web site. </strong>Update the
+different places on OpenACS.org where we track status.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Release Status for the current version - something like
 http://openacs.org/projects/openacs/5.0/milestones</p></li><li class="listitem"><p>Home page of openacs.org</p></li><li class="listitem"><p>Post a new news item</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>
-<b>Clean Up. </b>Clean up after yourself.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
+<strong>Clean Up. </strong>Clean up after
+yourself.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
 rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span>
 rm -rf /var/tmp/openacs-4</span></span></pre>
 </li>
 </ol></div><p>Here is a shell script that automates packaging the tarball
-(it's a bit out of date with the new steps - I've been doing
-everything manually or with little throwaway scripts as detailed
-above until the process is stabilized).</p><pre class="programlisting">
+(it&#39;s a bit out of date with the new steps - I&#39;ve been
+doing everything manually or with little throwaway scripts as
+detailed above until the process is stabilized).</p><pre class="programlisting">
 #!/bin/bash
 
 # if TAG=1 create the cvs tags otherwise assume they exist.
@@ -262,8 +264,8 @@ tar -czf ../dotlrn-${DOTLRN_VERSION//-/.}.tar.gz dotlrn-${DOTLRN_VERSION//-/.}
 
 # Clean up after ourselves...
 cd $BASE &amp;&amp; rm -rf dotlrn-tarball tarball openacs-4 dotlrn-packages
-</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.22 2014/10/27
-16:39:30 victorg Exp $)</div>
+</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.22.2.5
+2017/04/22 17:18:48 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="releasing-openacs" leftLabel="Prev" leftTitle="

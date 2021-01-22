@@ -21,7 +21,7 @@
 	    <else>
 	      <tr style="background-color:#f8f8ee">
 	    </else>
-	      <td><b>@caches.name@</b></td>
+	      <td><strong>@caches.name@</strong></td>
 	      <td align="right">@caches.entries@</td>
 	      <td align="right">@caches.flushed@</td>
 	      <td align="right">@caches.hit_rate@%</td>

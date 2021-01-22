@@ -45,11 +45,11 @@ aa_register_case content_folder {
             #########################################################
             # create a child folder
             #########################################################
-           set child_folder_id [db_nextval "acs_object_id_seq"]
+            set child_folder_id [db_nextval "acs_object_id_seq"]
             set returned_child_folder_id [content::folder::new \
                                               -folder_id $child_folder_id \
                                               -parent_id $first_folder_id \
-                                          -name "test_folder_${first_folder_id}"]
+                                              -name "test_folder_${first_folder_id}"]
             #########################################################
             # check if child is a subfolder of parent
             #########################################################

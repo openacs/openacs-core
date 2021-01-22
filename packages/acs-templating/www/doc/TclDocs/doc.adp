@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
 <h2>Namespace doc</h2>
@@ -12,16 +12,16 @@ methods.</blockquote>
 <p align="right">
 <font color="red">*</font> indicates required</p>
 <p>
-<b>Private Methods</b>:<br>
+<strong>Private Methods</strong>:<br>
 </p>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name=""></a><br><small><i>  by simon</i></small>
+<a name=""></a><br><small><em>  by simon</em></small>
 </td></tr><tr><td>
 <blockquote>called by parse_file, this procedure is given the body
-of text between two namespace markers in a tcl library file and
+of text between two namespace markers in a Tcl library file and
 parses out procedure source and comments</blockquote><dl><dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>text_lines</code><font color="red">*</font>
 </td><td align="left">namespace text body</td>
@@ -49,7 +49,7 @@ be generated automatically). - \@option (for switches such as -foo)
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>called by parse_comment_text</blockquote><dl><dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>comment_text</code><font color="red">*</font>
 </td><td align="left">this should include the source text</td>
@@ -60,7 +60,7 @@ be generated automatically). - \@option (for switches such as -foo)
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>called by parse_namespace</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>comment_text</code><font color="red">*</font>
@@ -76,11 +76,11 @@ be generated automatically). - \@option (for switches such as -foo)
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
-<blockquote>takes the absolute path of the tcl library directory
+<blockquote>takes the absolute path of the Tcl library directory
 and parses through it</blockquote><dl>
-<dt><b>Returns:</b></dt><dd>a long lists of lists of lists, each list element contains a
+<dt><strong>Returns:</strong></dt><dd>a long lists of lists of lists, each list element contains a
 three-element list of the format { {info} {public procedures
-listing } {private procedures listing} }</dd><dt><b>See Also:</b></dt><dd>namespace - <a href="util">util</a><br>
+listing } {private procedures listing} }</dd><dt><strong>See Also:</strong></dt><dd>namespace - <a href="util">util</a><br>
 </dd><dd>proc - <a href="doc">doc::parse_file</a><br><a href="util">template::util::comment_text_normalize</a><br>
 </dd>
 </dl>

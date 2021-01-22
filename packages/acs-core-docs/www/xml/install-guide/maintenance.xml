@@ -130,9 +130,9 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
       </para>
             <para>
 
-        Most of this information comes from Tom Jackson's <ulink
-          url="http://zmbh.com/daemontools-aolserver/daemontools-aolserver.html">AOLserver+Daemontools
-          Mini-HOWTO</ulink>.
+        More information can be found on the <ulink
+          url="http://panoptic.com/wiki/aolserver/How_to_start_stop_AOLserver_using_Daemontools">AOLserver
+	Daemontools</ulink> page.
 </para>
         </listitem>
       </orderedlist>
@@ -202,12 +202,12 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
             <listitem><para> 
 				Install a script called
 				<computeroutput>restart-aolserver</computeroutput>. This
-				script doesn't actually restart AOLserver - it just kills
+				script doesn&#39;t actually restart AOLserver - it just kills
 				it.  
 			  </para></listitem>
             
             <listitem><para>
-				Ask the OS to restart our service whenever it's not
+				Ask the OS to restart our service whenever it&#39;s not
 				running. We do this by adding a line to
 				<computeroutput>/etc/inittab</computeroutput>.
 			  </para></listitem>
@@ -250,8 +250,8 @@ Password: ***********
 
       <listitem><para> 
 			Test the <computeroutput>restart-aolserver</computeroutput>
-			script. We'll first kill all running servers to clean the
-			slate. Then, we'll start one server and use
+			script. We&#39;ll first kill all running servers to clean the
+			slate. Then, we&#39;ll start one server and use
 			<computeroutput>restart-aolserver</computeroutput> to kill
 			it. If it works, then there should be no more servers
 			running. You should see the following lines. </para>
@@ -352,7 +352,7 @@ set address                127.0.0.1 </programlisting>
     </formalpara>
 
     <para>If you want to install two services with different host
-    names sharing the same ip, you'll need nsvhr to redirect requests
+    names sharing the same ip, you&#39;ll need nsvhr to redirect requests
     based on the contents of the tcp headers.  See <ulink
     url="http://borkware.com/rants/aolserver-vhosting/">AOLserver
     Virtual Hosting with TCP</ulink> by <ulink url="mailto:markd@borkware.com">markd</ulink>.
@@ -402,10 +402,10 @@ set address                127.0.0.1 </programlisting>
       <para>To set up a developmental installation, first set up
       either your developmental installation or your production
       installation, and follow the instructions for committing your
-      files to CVS. We'll assume in this example that you set up the
+      files to CVS. We&#39;ll assume in this example that you set up the
       production server (service0). To set up the developmental instance,
       you then follow the intall guide again, this time creating a new
-      user (service0-dev) that you'll use for the new installation. To get
+      user (service0-dev) that you&#39;ll use for the new installation. To get
       the files for service0-dev, you check them out from cvs (check out
       service0). </para>
 
@@ -418,18 +418,18 @@ emacs web/etc/config.tcl
 emacs web/etc/daemontools/run
 </programlisting>
 
-      <para>In the config.tcl file, you'll probably want to pay attention
+      <para>In the config.tcl file, you&#39;ll probably want to pay attention
       the rollout support section. That will ensure that email on your
       developmental server will not be sent out to the general world.</para>
 
       <para>Also, instead of going through the OpenACS online
-      installer, you'll actually load live data into your production
+      installer, you&#39;ll actually load live data into your production
       server. </para>
 
       <para>You can even automate the process of getting live data
       from your production server. Copy something like this to
-      /home/service0-dev/bin and put it in service0-dev's crontab to
-      run once a night. You'll need to make sure the database backups
+      /home/service0-dev/bin and put it in service0-dev&#39;s crontab to
+      run once a night. You&#39;ll need to make sure the database backups
       are set up in service0's crontab, and that if the servers are on
       different physical machines, that the database backup is copied
       to the developmental machine once per night.</para>
@@ -462,7 +462,7 @@ mv /var/lib/aolserver/service0/database-backup/service0-nightly-backup.dmp.gz /v
 if the file is /var/lib/aolserver/service0-dev/www/index.adp, do: 
 
 cd /var/lib/aolserver/service0-dev/www
-cvs diff index.adp (this is optional; it's just a
+cvs diff index.adp (this is optional; it&#39;s just a
 reality check)
 the lines starting &gt; will be added and the lines
 starting &lt; will be removed, when you commit
@@ -480,7 +480,7 @@ cvs up -Pd index.adp</programlisting>
 
       <para>If you make changes that require changes to the database,
       test them out first on service0-dev, using either -create.sql or
-      upgrade scripts. Once you've tested them, you then update and
+      upgrade scripts. Once you&#39;ve tested them, you then update and
       run the upgrade scripts from the package manager. </para>
 
 <para>The production site can run "HEAD" from cvs.</para>
@@ -570,7 +570,7 @@ cvs up -Pd index.adp</programlisting>
 chmod 700 /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/etc/certs</action></screen>            
           </listitem>
           <listitem>
-            <para>It takes two files to support an SSL connection.  The certificate is the public half of the key pair - the server sends the certificate to browser requesting ssl.  The key is the private half of the key pair.  In addition, the certificate must be signed by Certificate Authority or browsers will protest.  Each web browser ships with a built-in list of acceptable Certificate Authorities (CAs) and their keys.  Only a site certificate signed by a known and approved CA will work smoothly.  Any other certificate will cause browsers to produce some messages or block the site.  Unfortunately, getting a site certificate signed by a CA costs money.  In this section, we'll generate an unsigned certificate which will work in most browsers, albeit with pop-up messages.</para>
+            <para>It takes two files to support an SSL connection.  The certificate is the public half of the key pair - the server sends the certificate to browser requesting ssl.  The key is the private half of the key pair.  In addition, the certificate must be signed by Certificate Authority or browsers will protest.  Each web browser ships with a built-in list of acceptable Certificate Authorities (CAs) and their keys.  Only a site certificate signed by a known and approved CA will work smoothly.  Any other certificate will cause browsers to produce some messages or block the site.  Unfortunately, getting a site certificate signed by a CA costs money.  In this section, we&#39;ll generate an unsigned certificate which will work in most browsers, albeit with pop-up messages.</para>
             <para>Use an OpenSSL perl script to generate a certificate and key.</para>
 
         <para>
@@ -592,7 +592,7 @@ Enter PEM pass phrase:</screen>
             <para>Enter a pass phrase for the CA certificate.  Then, answer the rest of the questions.  At the end you should see this:</para>
         <screen>Certificate (and private key) is in newreq.pem
 [$OPENACS_SERVICE_NAME certs]$</screen>
-        <para><computeroutput>newreq.pem</computeroutput> contains our certificate and private key.  The key is protected by a passphrase, which means that we'll have to enter the pass phrase each time the server starts.  This is impractical and unnecessary, so we create an unprotected version of the key.  <emphasis>Security implication</emphasis>: if anyone gets access to the file keyfile.pem, they effectively own the key as much as you do.  Mitigation: don't use this key/cert combo for anything besides providing ssl for the web site.</para>
+        <para><computeroutput>newreq.pem</computeroutput> contains our certificate and private key.  The key is protected by a passphrase, which means that we&#39;ll have to enter the pass phrase each time the server starts.  This is impractical and unnecessary, so we create an unprotected version of the key.  <emphasis>Security implication</emphasis>: if anyone gets access to the file keyfile.pem, they effectively own the key as much as you do.  Mitigation: don&#39;t use this key/cert combo for anything besides providing ssl for the web site.</para>
             <screen>[root misc]# <userinput>openssl rsa -in newreq.pem -out keyfile.pem</userinput>
 read RSA key
 Enter PEM pass phrase:
@@ -642,9 +642,9 @@ cp -r /usr/share/analog-5.32/images www/log/</action></screen>
         <para>Edit
 <computeroutput>/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</computeroutput> and change the variable in <computeroutput>HOSTNAME "[my
 organisation]"</computeroutput> to reflect your website title.  If you
-don't want the traffic log to be publicly visible, change
+don&#39;t want the traffic log to be publicly visible, change
 <computeroutput>OUTFILE /var/lib/aolserver/$OPENACS_SERVICE_NAME/www/log/traffic.html</computeroutput> to use a private
-directory. You'll also need to edit all instances of service0 to your $OPENACS_SERVICE_NAME.</para>
+directory. You&#39;ll also need to edit all instances of service0 to your $OPENACS_SERVICE_NAME.</para>
       </listitem>
       <listitem>
         <para>Run it.</para>
@@ -694,7 +694,7 @@ logout
       <para>Isolating and solving database problems.</para>
     <itemizedlist>
       <listitem>
-          <para>Without daily internal maintenance, most databases slowly degrade in performance.  For PostGreSQL, see <xref linkend="install-next-nightly-vacuum"/>.  For Oracle, use <computeroutput>exec dbms_stats.gather_schema_stats('SCHEMA_NAME')</computeroutput> (<ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle notes</ulink>).</para>
+          <para>Without daily internal maintenance, most databases slowly degrade in performance.  For PostGreSQL, see <xref linkend="install-next-nightly-vacuum"/>.  For Oracle, use <computeroutput>exec dbms_stats.gather_schema_stats('SCHEMA_NAME')</computeroutput> (<ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski&#39;s Oracle notes</ulink>).</para>
       </listitem>
       <listitem>
         <para>You can track the exact amount of time each database query on a page takes:</para>
@@ -771,7 +771,7 @@ Password:</screen>
  order by s.username ,s.sid ,s.serial# ,sql.piece ;</programlisting>
         <para>To kill a troubled process:</para>
         <programlisting>alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#</programlisting>
-        <para>(See <ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle notes</ulink>)</para>
+        <para>(See <ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski&#39;s Oracle notes</ulink>)</para>
         </listitem>
 
         <listitem>
@@ -809,9 +809,9 @@ openacs.org=&gt;</programlisting>
       what is going on inside Oracle. Oracle provides Statspack, a package to
       monitor and save the state of the v$ performance views. These reports
       help finding severe problems by exposing summary data about the Oracle
-      wait interface, executed queries. You'll find the installation
+      wait interface, executed queries. You&#39;ll find the installation
       instructions in $ORACLE_HOME/rdbms/admin/spdoc.txt. Follow the
-      instructions carefully and take periodic snapshots, this way you'll be
+      instructions carefully and take periodic snapshots, this way you&#39;ll be
       able to look at historical performance data.
     </para>
 
@@ -838,7 +838,7 @@ openacs.org=&gt;</programlisting>
     up to 80.000 permutations are being tested in a Oracle 8i). To get an
     adequate cost estimate, the CBO needs to have adequate statistics. For
     that Oracle supplies the <ulink
-    url="http://download-west.oracle.com/docs/cd/B10501_01/appdev.920/a96612/d_stats.htm#999107">dbms_stats
+    url="http://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_stats.htm#CIHBIEII">dbms_stats
     package</ulink>.
       </para>
     </sect3>

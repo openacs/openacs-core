@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {External uptime validation}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {External uptime validation}</property>
 <property name="doc(title)">External uptime validation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -19,5 +19,4 @@ you should get back the string <code class="computeroutput">success</code>.</p>
 		    rightLink="maint-performance" rightLabel="Next" rightTitle="Diagnosing Performance Problems"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="maintenance-web" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/current/uptime.html#comments">View comments
-on this page at openacs.org</a></center>
+		

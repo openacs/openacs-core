@@ -110,7 +110,7 @@ ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
 ad_proc -public cr_file_size {relative_file_path} {
 
     Returns the size of a file stored in the content repository.  Takes the 
-    relative file path of the content repository file as an arguement.
+    relative file path of the content repository file as an argument.
 
 } {
     return [file size [cr_fs_path]$relative_file_path]
@@ -188,7 +188,7 @@ ad_proc -private cr_delete_orphans {files} {
             # the content entry does not exist anymore, therefore the
             # file is an orphan and should be removed
             ns_log notice "delete orphaned file $dir$name"
-            file delete $dir$name
+            file delete -- $dir$name
           }
     }
 }

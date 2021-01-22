@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     role:notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 

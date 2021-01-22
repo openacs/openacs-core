@@ -4,12 +4,19 @@
 #    @author Peter Marklund (peter@collaboraid.biz)
 #    @author Christian Hvid
 
-if { (![info exists return_url] || $return_url eq "") } {
-    # Use referer header
-    set return_url [ns_set iget [ns_conn headers] referer]
+if { ![info exists return_url] || $return_url eq "" } {
+    set return_url [get_referrer -relative]
 }
 
-if { (![info exists package_id] || $package_id eq "") } {
+#
+# Check if the passed in value or the referer is faked
+#
+if {[util::external_url_p $return_url]} {
+    ad_page_contract_handle_datasource_error "invalid url"
+    ad_script_abort
+}
+
+if { ![info exists package_id] || $package_id eq "" } {
     set package_id [ad_conn package_id]
 }
 
@@ -50,6 +57,15 @@ element create locale return_url_info -datatype text -widget hidden -optional
 if { [form is_valid locale] } {
     set return_url [element get_value locale return_url_info]
     set package_id [element get_value locale package_id_info]
+
+    if {[util::external_url_p $return_url]} {
+        ad_return_complaint 1 "invalid url"
+        ad_script_abort
+    }
+    if {![string is integer -strict $package_id]} {
+        ad_return_complaint 1 "invalid package_id"
+        ad_script_abort
+    }
 }
 
 # are we selecting package level locale as well?

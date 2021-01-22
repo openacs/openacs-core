@@ -207,8 +207,8 @@ createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
     </table>
 
     <para>
-      None of these locations are set in stone - they're simply
-      the values that we've chosen.  The values that you'll
+      None of these locations are set in stone - they&#39;re simply
+      the values that we&#39;ve chosen.  The values that you&#39;ll
       probably want to change, such as service name, are
       <replaceable>marked like this</replaceable>.  The other
       values we recommend you leave unchanged unless you have a
@@ -230,8 +230,8 @@ createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
     <title>Getting Help during installation</title>
 
     <para>
-      We'll do our best to assure that following our instructions will get
-      you to the promised land. If something goes wrong, don't
+      We&#39;ll do our best to assure that following our instructions will get
+      you to the promised land. If something goes wrong, don&#39;t
       panic. There are plenty of ways to get help. Here are some tips:
     </para>
 
@@ -248,11 +248,11 @@ createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
 
       <listitem>
         <para>
-          We'll point out where the error logs for the various pieces of
-          software are. Output from those logs will help us help you. Don't
+          We&#39;ll point out where the error logs for the various pieces of
+          software are. Output from those logs will help us help you. Don&#39;t
           worry if you feel overwhelmed by all the information in the error
-          logs. Over time, you'll find that they make more and more
-          sense. Soon, you'll actually look forward to errors so that you
+          logs. Over time, you&#39;ll find that they make more and more
+          sense. Soon, you&#39;ll actually look forward to errors so that you
           can run to the log and diagnose the problem. 
         </para>
       </listitem>
@@ -260,8 +260,8 @@ createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
       <listitem>
         <para>
           Search the <ulink url="http://openacs.org/forums/">forums at
-            openacs.org</ulink> - you'll often find many people who have
-          struggled through the same spot that you're in.
+            openacs.org</ulink> - you&#39;ll often find many people who have
+          struggled through the same spot that you&#39;re in.
         </para>
       </listitem>
 
@@ -276,7 +276,7 @@ createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
       <listitem>
         <para>
           Ask questions at the irc channel on <ulink url="http://freenode.net">freenode.net</ulink>
-          (#openacs). They're knowledgeable and quite friendly
+          (#openacs). They&#39;re knowledgeable and quite friendly
           if you can keep them on topic.
         </para>
       </listitem>
@@ -285,10 +285,10 @@ createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
         <para>
           Post a question on the <ulink
             url="http://openacs.org/forums/">forums</ulink>. Make sure
-          you've done a search first. When you do post, be sure to include
+          you&#39;ve done a search first. When you do post, be sure to include
           your setup information (OS, etc) as well as the exact commands
           that are failing with the accompanying error.  If
-          there's a SQL error in the Tcl error or in the log,
+          there&#39;s a SQL error in the Tcl error or in the log,
           post that too.
         </para>
       </listitem>

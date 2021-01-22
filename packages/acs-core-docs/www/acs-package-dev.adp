@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Part III. For OpenACS Package
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Part III. For OpenACS Package
 Developers}</property>
 <property name="doc(title)">Part III. For OpenACS Package
 Developers</property>
@@ -14,7 +14,7 @@ Developers</property>
 Package Developers</h1></div></div></div><div class="partintro">
 <p>Tutorials and reference material for creating new OpenACS
 packages.</p><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="chapter"><a href="tutorial">9. Development
 Tutorial</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="tutorial-newpackage">Creating
@@ -79,7 +79,7 @@ Internationalization</a></span></dt><dd><dl>
 Overview</a></span></dt><dt><span class="sect1"><a href="i18n-introduction">How
 Internationalization/Localization works in OpenACS</a></span></dt><dt><span class="sect1"><a href="i18n-convert">How to
 Internationalize a Package</a></span></dt><dt><span class="sect1"><a href="i18n-design">Design
-Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator's Guide</a></span></dt>
+Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator&#39;s Guide</a></span></dt>
 </dl></dd><dt><span class="appendix"><a href="cvs-tips">D. Using CVS
 with an OpenACS Site</a></span></dt>
 </dl>

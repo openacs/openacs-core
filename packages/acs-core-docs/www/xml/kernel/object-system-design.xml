@@ -557,11 +557,11 @@ form:</para>
 <programlisting>
 
 <computeroutput>create table acs_object_types (
-        object_type          varchar(100) not null primary key,
+        object_type          varchar(1000) not null primary key,
         supertype            references acs_object_types (object_type),
         abstract_p           char(1) default &#39;f&#39; not null
-        pretty_name          varchar(100) not null unique,
-        pretty_plural        varchar(100) not null unique,
+        pretty_name          varchar(1000) not null unique,
+        pretty_plural        varchar(1000) not null unique,
         table_name           varchar(30) not null unique,
         id_column            varchar(30) not null,
         name_method          varchar(30),
@@ -685,7 +685,7 @@ for each group membership relation in which they participated.</para>
 <programlisting>
 
 <computeroutput>create table acs_rel_types (
-        rel_type        varchar(100) not null
+        rel_type        varchar(1000) not null
                         references acs_object_types(object_type),
         object_type_one not null
                         references acs_object_types (object_type),

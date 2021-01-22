@@ -1,10 +1,13 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Developer Guide: Defining Content
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Defining Content
 Types}</property>
 <property name="doc(title)">Content Repository Developer Guide: Defining Content
 Types</property>
 <master>
 <h2>Defining Content Types</h2>
+<strong>
+<a href="../index">Content Repository</a> : Developer
+Guide</strong>
 <p>The content repository requires you to define each type of
 content supported by your supplication. Content types are defined
 as <a href="?">ACS Object Types</a>, and may be created in the same
@@ -17,8 +20,8 @@ context of the content repository.</p>
 <li>Text or binary data stored as a single object</li><li>Structured attributes stored as distinct values</li>
 </ol>
 <p>Note that a content type does <em>not</em> have to store its
-primary content in the <tt>BLOB</tt> column of the
-<tt>cr_revisions</tt> table. There is some additional overhead
+primary content in the <kbd>BLOB</kbd> column of the
+<kbd>cr_revisions</kbd> table. There is some additional overhead
 associated with retrieving small passages of text from the BLOB
 column compared to an attribute column. In most cases the
 difference is trivial (fewer than about 10 microseconds), but if
@@ -27,7 +30,7 @@ become significant. If the primary content will always be small, it
 is perfectly acceptable to store the content in an attribute column
 instead.</p>
 <p>Basic attributes for all content types are stored in the
-<tt>cr_revisions</tt> (note that they are stored in the revisions
+<kbd>cr_revisions</kbd> (note that they are stored in the revisions
 table so that attributes may be updated for each new revision of
 the actual data). Most types of content require more than the basic
 attributes. For example, when storing images you will usually want
@@ -51,7 +54,7 @@ create table cr_<em>content_type</em> (
 );
 </pre>
 <p>Note that your extended attribute table must reference the
-<tt>cr_revisions</tt> table, <em>not</em><tt>cr_items</tt>. As
+<kbd>cr_revisions</kbd> table, <em>not</em><kbd>cr_items</kbd>. As
 mentioned above, this allows you to maintain multiple revisions of
 the attribute data in tandem with revisions of the content object
 itself.</p>
@@ -84,22 +87,22 @@ begin
 
  ...
 </pre>
-<p>The <tt>content_type</tt> methods use the core ACS Object Type
+<p>The <kbd>content_type</kbd> methods use the core ACS Object Type
 API to create an object type for each content type, and to add
 attributes to the object type. In addition,
-<tt>content_type.create_type</tt> will create the extended
+<kbd>content_type.create_type</kbd> will create the extended
 attribute table with an appropriately defined primary key column
 (referencing its supertype) if the table does not already exist.
-Likewise, <tt>content_type.create_attribute</tt> will add a column
-to the table if the column does not already exist.</p>
-<p>Most importantly, the <tt>content_type</tt> methods call
-<tt>content_type.refresh_view</tt> after each change to the content
-type definition. Each content type must have an associated
-attribute view named <tt>
-<em>table_name</em>x</tt>, where
-<em><tt>table_name</tt></em> is the name of the extended attribute
-table for a particular content type. The view joins the
-<tt>acs_objects</tt>, <tt>cr_revisions</tt>, and all extended
+Likewise, <kbd>content_type.create_attribute</kbd> will add a
+column to the table if the column does not already exist.</p>
+<p>Most importantly, the <kbd>content_type</kbd> methods call
+<kbd>content_type.refresh_view</kbd> after each change to the
+content type definition. Each content type must have an associated
+attribute view named <kbd>
+<em>table_name</em>x</kbd>, where
+<em><kbd>table_name</kbd></em> is the name of the extended
+attribute table for a particular content type. The view joins the
+<kbd>acs_objects</kbd>, <kbd>cr_revisions</kbd>, and all extended
 attribute tables in the class hierarchy of a particular content
 type. This view may be used to query attributes when serving
 content.</p>
@@ -110,5 +113,5 @@ part of a content type definition. See <a href="object-relationships">Object Rel
 details.</p>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: types.html,v 1.1.1.1 2001/03/13 22:59:26 ben
-Exp $</p>
+<p>Last Modified: $&zwnj;Id: types.html,v 1.1.1.1.30.1 2016/06/22
+07:40:41 gustafn Exp $</p>

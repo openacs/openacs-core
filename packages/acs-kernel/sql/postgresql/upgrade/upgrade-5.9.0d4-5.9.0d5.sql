@@ -125,7 +125,7 @@ $$ LANGUAGE plpgsql;
 -- (sometimes implicitely, e.g. via acs_objects.*) the
 -- tree_sortkey. We perform this operation here (since the views were
 -- dropped by this upgrade script) but as well in update scripts for
--- the relevant packages refering explicitly to the tree_sortkey
+-- the relevant packages referring explicitly to the tree_sortkey
 -- fields.
 --
 

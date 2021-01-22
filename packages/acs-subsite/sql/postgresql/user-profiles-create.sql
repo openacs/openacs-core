@@ -65,7 +65,8 @@ BEGIN
 	'user',
 	'user',
 	0,
-	null
+	null,
+	'f'
     );
 
     return 0;

@@ -229,14 +229,16 @@ db_foreach user_search_admin $query {
     set user_search:[set rowcount](first_names) $first_names
     set user_search:[set rowcount](last_name) $last_name
     set user_search:[set rowcount](email) $email
-    set user_search:[set rowcount](export_vars) [export_vars {user_id_from_search first_names_from_search last_name_from_search email_from_search}]
+    set user_search:[set rowcount](export_vars) [export_vars {
+        user_id_from_search first_names_from_search last_name_from_search email_from_search
+    }]
     set user_search:[set rowcount](member_state) $member_state
     
     if { $member_state ne "approved" } {
         set user_search:[set rowcount](user_finite_state_links) \
             [join [ad_registration_finite_state_machine_admin_links \
                        $member_state $email_verified_p $user_id_from_search \
-                       [export_vars -base complex-search {
+                       [export_vars -base /acs-admin/users/complex-search {
                            email last_name keyword target passthrough limit_to_users_in_group_id only_authorized_p
                        }]] " | "]
     } else {

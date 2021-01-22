@@ -17,7 +17,7 @@
     Aolserver or Postgres. Several people have
     reported problems while trying to install using apt-get
     instead of from source. If you have the time to debug these
-    and submit what you did, that's great, but if not, you
+    and submit what you did, that&#39;s great, but if not, you
     should stick to installing from source. 
   </para>
 
@@ -74,7 +74,7 @@ cd /usr/local/src/aolserver
 
       <para><computeroutput>conf-inst</computeroutput> should contain the
           location where AOLserver is to be installed.  Overwrite the
-          tarball's default value with our default value, <computeroutput>/usr/local/aolserver</computeroutput>:</para>
+          tarball&#39;s default value with our default value, <computeroutput>/usr/local/aolserver</computeroutput>:</para>
       <screen>[root aolserver]# <userinput>echo "/usr/local/aolserver" > conf-inst</userinput>
 [root aolserver]#</screen>
       
@@ -95,7 +95,7 @@ cd /usr/local/src/aolserver
       <screen>[root aolserver]# <userinput>export POSTGRES=/usr/local/pgsql; ./conf</userinput>
 Building in /usr/local/aolserver
 with the following modules:
-aolserver
+AOLserver
 nscache
 nsrewrite
 nssha1
@@ -126,7 +126,7 @@ Done Building Sat Mar  8 10:31:35 PST 2003
 	  sets database environment variables before starting
 	  AOLserver; this allows the AOLserver instance can
 	  communicate with the database.  There is one script each for
-	  Oracle and PostgreSQL.  They don't conflict, so if you plan
+	  Oracle and PostgreSQL.  They don&#39;t conflict, so if you plan
 	  to use both databases, install both.</para>
       </formalpara>
       <itemizedlist>
@@ -228,7 +228,7 @@ ln -s libtdom0.7.8.so libtdom.so</action></screen>
     <listitem id="install-aolserver-permissions">
       <formalpara>
         <title>Test AOLserver</title>
-      <para>In order to test AOLserver, we'll run it using the
+      <para>In order to test AOLserver, we&#39;ll run it using the
       sample-config.tcl file provided in the AOLserver distribution,
       under the nobody user and <computeroutput>web</computeroutput>
       group.  The sample-config.tcl configuration writes to the
@@ -260,8 +260,8 @@ ls -l</action></screen>
       <para>Note: AOLserver4.x does not include a default start page, so we create one for this test. Type 
         <userinput>echo "Welcome to AOLserver" > /usr/local/aolserver40r8/servers/server1/pages/index.html</userinput>
       </para>
-      <para>Now, we'll run a quick test to ensure AOLserver is running
-          correctly. We'll use the sample config file provided with
+      <para>Now, we&#39;ll run a quick test to ensure AOLserver is running
+          correctly. We&#39;ll use the sample config file provided with
           AOLserver. This file will attempt to guess your IP address and
           hostname. It will then start up the server at port 8000 of that
           IP address.</para>
@@ -274,7 +274,7 @@ ls -l</action></screen>
 [08/Mar/2003:15:07:18][31175.8192][-main-] Notice: config.tcl: finished reading
 config file.</screen>
 
-        <para>The first warning, about nsssl, can be ignored.  We won't be using nsssl; we'll be using nsopenssl instead, and we haven't fully configured it yet.  The nscp warning refers to the fact that, without a user and password in the config file, the administrative panel of AOLserver won't load.  We don't plan to use it and can ignore that error as well.  Any other warning or error is unexpected and probably a problem.</para>
+        <para>The first warning, about nsssl, can be ignored.  We won&#39;t be using nsssl; we&#39;ll be using nsopenssl instead, and we haven&#39;t fully configured it yet.  The nscp warning refers to the fact that, without a user and password in the config file, the administrative panel of AOLserver won&#39;t load.  We don&#39;t plan to use it and can ignore that error as well.  Any other warning or error is unexpected and probably a problem.</para>
 
       <para>
 
@@ -283,7 +283,7 @@ config file.</screen>
           <computeroutput>Lynx</computeroutput> <emphasis>on the same
           computer</emphasis> and surfing over to your web page.  If
           you browse from another computer and the sample config file
-          didn't guess your hostname or ip correctly, you'll get a
+          didn&#39;t guess your hostname or ip correctly, you&#39;ll get a
           false negative test.
 
         </para>
@@ -293,9 +293,9 @@ config file.</screen>
         <para>
 
           You should see a &quot;Welcome to AOLserver&quot; page. If this
-          doesn't work, try going to
+          doesn&#39;t work, try going to
           <computeroutput>http://127.0.0.1:8000/</computeroutput>. If this
-          still doesn't work, check out the <xref
+          still doesn&#39;t work, check out the <xref
           linkend="install-aolserver-troubleshooting"/> section below.  Note that you will not be able to browse to the web page from another machine, because AOLserver is only listening to the local address.
 
         </para>
@@ -319,7 +319,7 @@ config file.</screen>
           xreflabel="Troubleshooting AOLserver">
       <formalpara>
         <title>Troubleshooting.</title>
-      <para>If you can't view the welcome page, it's likely there's a
+      <para>If you can&#39;t view the welcome page, it&#39;s likely there&#39;s a
       problem with your server configuration. Start by viewing your
       AOLserver log, which is in
       <computeroutput>/usr/local/aolserver/log/server.log</computeroutput>.
@@ -353,10 +353,10 @@ set address         [ns_info address]</screen>
 
     <para>
 
-      If you get an error that nssock can't get the requested address, you
+      If you get an error that nssock can&#39;t get the requested address, you
       can set these manually. If you type 0.0.0.0, AOLserver will try to
       listen on all available addresses.  <emphasis>Note</emphasis>:
-      <computeroutput>ns_info address</computeroutput> doesn't appear
+      <computeroutput>ns_info address</computeroutput> doesn&#39;t appear
       to be supported in current versions of AOLserver.
 
     </para>

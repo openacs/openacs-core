@@ -1,7 +1,7 @@
 --
 -- acs-kernel/sql/acs-permissions-create.sql
 --
--- The ACS core permissioning system. The knowledge level of system
+-- The ACS core permission system. The knowledge level of system
 -- allows you to define a hierarchichal system of privilages.  The
 -- operational level allows you to grant to any party a privilege on
 -- any object.
@@ -19,33 +19,33 @@
 ---------------------------------------------
 
 create table acs_privileges (
-	privilege	varchar(100) not null constraint acs_privileges_privilege_pk
-			primary key,
-	pretty_name	varchar(100),
-	pretty_plural	varchar(100)
+    privilege	    varchar(100) not null constraint acs_privileges_privilege_pk
+    		    primary key,
+    pretty_name	    varchar(100),
+    pretty_plural   varchar(100)
 );
 
 create table acs_privilege_hierarchy (
-	privilege	varchar(100) not null 
-                        constraint acs_priv_hier_priv_fk
-			references acs_privileges (privilege),
-        child_privilege	varchar(100) not null 
-                        constraint acs_priv_hier_child_priv_fk
-			references acs_privileges (privilege),
-	constraint acs_privilege_hierarchy_pk
-	primary key (privilege, child_privilege)
+    privilege	    varchar(100) not null 
+                    constraint acs_priv_hier_priv_fk
+    		    references acs_privileges (privilege),
+    child_privilege varchar(100) not null 
+                    constraint acs_priv_hier_child_priv_fk
+    		    references acs_privileges (privilege),
+    constraint acs_privilege_hierarchy_pk
+    primary key (privilege, child_privilege)
 );
 
 create index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
 
 create table acs_privilege_hierarchy_index (
-	privilege       varchar(100) not null 
-                        constraint acs_priv_hier_priv_fk
-			references acs_privileges (privilege),
-        child_privilege varchar(100) not null 
-                        constraint acs_priv_hier_child_priv_fk
-			references acs_privileges (privilege),
-        tree_sortkey    varbit
+    privilege       varchar(100) not null 
+                    constraint acs_priv_hier_priv_fk
+    		    references acs_privileges (privilege),
+    child_privilege varchar(100) not null 
+                    constraint acs_priv_hier_child_priv_fk
+    		    references acs_privileges (privilege),
+    tree_sortkey    varbit
 );
 
 create index priv_hier_sortkey_idx on 
@@ -57,13 +57,12 @@ acs_privilege_hierarchy_index (tree_sortkey);
 -- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
 
 create table acs_privilege_descendant_map (
-	privilege       varchar(100) not null 
-                        constraint acs_priv_hier_priv_fk
-			references acs_privileges (privilege),
-        descendant      varchar(100) not null 
-                        constraint acs_priv_hier_child_priv_fk
-			references acs_privileges (privilege)
-
+    privilege       varchar(100) not null 
+                    constraint acs_priv_hier_priv_fk
+    		    references acs_privileges (privilege),
+    descendant      varchar(100) not null 
+                    constraint acs_priv_hier_child_priv_fk
+    		    references acs_privileges (privilege)
 );
 
 -- DRB: Empirical testing showed that even with just 61 entries in the new table
@@ -215,7 +214,6 @@ execute procedure acs_priv_del_tr ();
 
 
 
--- added
 select define_function_args('priv_recurse_subtree','nkey,child_priv');
 
 --
@@ -291,7 +289,6 @@ comment on table acs_privilege_hierarchy is '
 
 
 
--- added
 select define_function_args('acs_privilege__create_privilege','privilege,pretty_name;null,pretty_plural;null');
 
 --
@@ -333,7 +330,6 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
 select define_function_args('acs_privilege__drop_privilege','privilege');
 
 --
@@ -353,7 +349,6 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
 select define_function_args('acs_privilege__add_child','privilege,child_privilege');
 
 --
@@ -376,7 +371,6 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
 select define_function_args('acs_privilege__remove_child','privilege,child_privilege');
 
 --
@@ -402,20 +396,20 @@ $$ LANGUAGE plpgsql;
 ------------------------------------
 
 create table acs_permissions (
-	object_id		integer not null
-				constraint acs_permissions_object_id_fk
-				references acs_objects (object_id)
-                                on delete cascade,
-	grantee_id		integer not null
-				constraint acs_permissions_grantee_id_fk
-				references parties (party_id)
-                                on delete cascade,
-	privilege		varchar(100) not null 
-                                constraint acs_permissions_privilege_fk
-				references acs_privileges (privilege)
-                                on delete cascade,
-	constraint acs_permissions_pk
-	primary key (object_id, grantee_id, privilege)
+    object_id		integer not null
+    			constraint acs_permissions_object_id_fk
+    			references acs_objects (object_id)
+                        on delete cascade,
+    grantee_id		integer not null
+    			constraint acs_permissions_grantee_id_fk
+    			references parties (party_id)
+                        on delete cascade,
+    privilege		varchar(100) not null 
+                        constraint acs_permissions_privilege_fk
+    			references acs_privileges (privilege)
+                        on delete cascade,
+    constraint acs_permissions_pk
+    primary key (object_id, grantee_id, privilege)
 );
 
 create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
@@ -460,13 +454,17 @@ where c.ancestor_id = p.object_id
   and pdm.privilege = p.privilege
   and pamm.party_id = p.grantee_id;
 
+
+--
+-- Obsolete and deprecated view.
+--
 create view all_object_party_privilege_map as
 select * from acs_object_party_privilege_map;
 
 
 -- This table acts as a mutex for inserts/deletes from acs_permissions.
 -- This is used since postgresql's exception handing mechanism is non-
--- existant.  A dup insert on acs_permissions will roll-back the 
+-- existent.  A dup insert on acs_permissions will roll-back the 
 -- transaction and give an error, which is not what we want.  Using a 
 -- separate table for locking allows us exclusive access for 
 -- inserts/deletes, but does not block readers.  That way we don't 
@@ -492,24 +490,225 @@ for each row execute procedure acs_permissions_lock_tr();
 
 
 
--- added
-select define_function_args('acs_permission__grant_permission','object_id,grantee_id,privilege');
 
 --
--- procedure acs_permission__grant_permission/3
+-- Create an SQL schema to allow the same dot notation as in
+-- Oracle. The advantage of this notation is that the function can be
+-- called identically for PostgreSQL and Oracle, so much duplicated
+-- code can be removed.
 --
-CREATE OR REPLACE FUNCTION acs_permission__grant_permission(
-   grant_permission__object_id integer,
-   grant_permission__grantee_id integer,
-   grant_permission__privilege varchar
+-- Actually, at least all permission functions should be defined this
+-- way, keeping the old "__" notation around for backwards
+-- compatibility for custom packages.
+--
+-- TODO: handling of schema names in define_function_args
+--
+CREATE SCHEMA acs_permission;
+
+
+--
+-- procedure acs_permission.permission_p/3
+--
+CREATE OR REPLACE FUNCTION acs_permission.permission_p(
+       p_object_id integer,
+       p_party_id  integer,
+       p_privilege varchar
+) RETURNS boolean AS $$
+DECLARE
+    v_security_context_root   integer;
+BEGIN
+    v_security_context_root := acs__magic_object_id('security_context_root');
+
+    RETURN EXISTS (WITH RECURSIVE
+        object_context(object_id, context_id) AS (
+
+            SELECT p_object_id, p_object_id 
+            FROM acs_objects 
+            WHERE object_id = p_object_id
+
+            UNION ALL
+
+            SELECT ao.object_id,
+                   CASE WHEN (ao.security_inherit_p = 'f' OR ao.context_id IS NULL) 
+                   THEN v_security_context_root ELSE ao.context_id END
+            FROM object_context oc, acs_objects ao
+            WHERE ao.object_id = oc.context_id
+            AND ao.object_id != v_security_context_root
+
+        ), privilege_ancestors(privilege, child_privilege) AS (
+
+            SELECT p_privilege, p_privilege 
+   
+            UNION ALL
+
+            SELECT aph.privilege, aph.child_privilege
+            FROM privilege_ancestors pa
+            JOIN acs_privilege_hierarchy aph ON aph.child_privilege = pa.privilege
+
+        )
+        SELECT 1 FROM acs_permissions p
+        JOIN  party_approved_member_map pap ON pap.party_id  =  p.grantee_id
+        JOIN  privilege_ancestors pa        ON  pa.privilege =  p.privilege
+        JOIN  object_context oc             ON  p.object_id  =  oc.context_id      
+        WHERE pap.member_id = p_party_id
+    );
+END;
+$$ LANGUAGE plpgsql stable;
+
+
+--
+-- procedure acs_permission.permission_p_recursive_array/3
+--
+--      Return for a an array of objects a set of objects where the
+--      specified user has the specified rights.
+
+CREATE OR REPLACE FUNCTION  acs_permission.permission_p_recursive_array(
+       p_objects   integer[],
+       p_party_id  integer, 
+       p_privilege varchar
+) RETURNS table (object_id integer, orig_object_id integer) AS $$
+DECLARE
+    v_security_context_root  integer;
+BEGIN
+    v_security_context_root := acs__magic_object_id('security_context_root');
+
+    RETURN QUERY WITH RECURSIVE
+       object_context(obj_id, context_id, orig_obj_id) AS (
+
+           SELECT unnest(p_objects), unnest(p_objects), unnest(p_objects)
+           UNION ALL
+           SELECT
+              ao.object_id,
+              CASE WHEN (ao.security_inherit_p = 'f' OR ao.context_id IS NULL) 
+              THEN v_security_context_root ELSE ao.context_id END, 
+              oc.orig_obj_id
+           FROM  object_context oc, acs_objects ao
+           WHERE ao.object_id = oc.context_id
+           AND   ao.object_id != v_security_context_root
+
+       ), privilege_ancestors(privilege, child_privilege) AS (
+
+           SELECT p_privilege, p_privilege
+           UNION ALL
+           SELECT aph.privilege, aph.child_privilege
+           FROM   privilege_ancestors pa
+           JOIN   acs_privilege_hierarchy aph ON aph.child_privilege = pa.privilege
+
+       )
+       SELECT p.object_id, oc.orig_obj_id
+       FROM  acs_permissions p
+       JOIN  party_approved_member_map pap ON pap.party_id =  p.grantee_id
+       JOIN  privilege_ancestors pa        ON pa.privilege =  p.privilege
+       JOIN  object_context oc             ON p.object_id  =  oc.context_id
+       WHERE pap.member_id = p_party_id;
+END; 
+$$ LANGUAGE plpgsql stable;
+
+
+--
+-- procedure acs_permission.parties_with_object_privilege/2
+--
+--     Find all party_ids which have a given privilege on a given
+--     object. The function is equivalent to an SQL query on the
+--     deprecated acs_object_party_privilege_map such as e.g.:
+--
+--   select p.party_id
+--   from acs_object_party_privilege_map p
+--   where p.object_id = :object_id
+--   and p.privilege = 'admin';
+--
+
+CREATE OR REPLACE FUNCTION acs_permission.parties_with_object_privilege(
+       p_object_id integer, 
+       p_privilege varchar
+) RETURNS table (party_id integer) AS $$
+DECLARE
+    v_security_context_root  integer;
+BEGIN
+    v_security_context_root := acs__magic_object_id('security_context_root');
+
+    RETURN QUERY
+    WITH RECURSIVE
+       object_context(obj_id, context_id, orig_obj_id) AS (
+           SELECT p_object_id, p_object_id, p_object_id
+           UNION ALL
+           SELECT
+              ao.object_id,
+              CASE WHEN (ao.security_inherit_p = 'f' OR ao.context_id IS NULL) 
+              THEN v_security_context_root ELSE ao.context_id END, 
+              oc.orig_obj_id
+           FROM  object_context oc, acs_objects ao
+           WHERE ao.object_id = oc.context_id
+           AND   ao.object_id != v_security_context_root
+           
+       ), privilege_ancestors(privilege, child_privilege) AS (
+           SELECT p_privilege, p_privilege
+           UNION ALL
+           SELECT aph.privilege, aph.child_privilege
+           FROM privilege_ancestors pa
+           JOIN acs_privilege_hierarchy aph ON aph.child_privilege = pa.privilege
+       )
+       SELECT pap.member_id
+       FROM  acs_permissions p
+       JOIN  party_approved_member_map pap ON pap.party_id =  p.grantee_id
+       JOIN  privilege_ancestors pa        ON pa.privilege =  p.privilege
+       JOIN  object_context oc             ON p.object_id  =  oc.context_id;
+END; 
+$$ LANGUAGE plpgsql stable;
+
+--
+-- procedure acs_permission.permissions_all/1
+--
+--    Return the permissions for an object from the object context
+--    hierarchy. The call
+--
+--         select * from acs_permission.permissions_all(:object_id)
+--
+--    is compatible with the old/Oracle call
+--
+--         select * from acs_permission_all where where object_id = :object_id
+--
+--
+CREATE OR REPLACE FUNCTION acs_permission.permissions_all(
+       p_object_id integer
+) RETURNS table (object_id integer, grantee_id integer, privilege varchar) AS $$
+DECLARE
+    v_security_context_root  integer;
+BEGIN
+    v_security_context_root := acs__magic_object_id('security_context_root');
+
+    RETURN QUERY
+    WITH RECURSIVE object_context(obj_id, context_id, orig_obj_id) AS (
+           SELECT p_object_id, p_object_id, p_object_id
+           UNION ALL
+           SELECT
+              ao.object_id,
+              CASE WHEN (ao.security_inherit_p = 'f' OR ao.context_id IS NULL) 
+              THEN v_security_context_root ELSE ao.context_id END, 
+              oc.orig_obj_id
+           FROM  object_context oc, acs_objects ao
+           WHERE ao.object_id = oc.context_id
+           AND   ao.object_id != v_security_context_root
+    )
+    select p_object_id, p.grantee_id, p.privilege
+    from object_context oc, acs_permissions p where p.object_id = oc.context_id;
+END;
+$$ LANGUAGE plpgsql stable;
+
+--
+-- procedure acs_permission.grant_permission/3
+--
+CREATE OR REPLACE FUNCTION acs_permission.grant_permission(
+   p_object_id integer,
+   p_grantee_id integer,
+   p_privilege varchar
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
     insert into acs_permissions
       (object_id, grantee_id, privilege)
-      values
-      (grant_permission__object_id, grant_permission__grantee_id, 
-      grant_permission__privilege);
+    values
+      (p_object_id, p_grantee_id, p_privilege);
     
     return 0;
 EXCEPTION 
@@ -519,173 +718,86 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- procedure revoke_permission
-
-
--- added
-select define_function_args('acs_permission__revoke_permission','object_id,grantee_id,privilege');
-
 --
--- procedure acs_permission__revoke_permission/3
+-- procedure acs_permission.revoke_permission/3
 --
-CREATE OR REPLACE FUNCTION acs_permission__revoke_permission(
-   revoke_permission__object_id integer,
-   revoke_permission__grantee_id integer,
-   revoke_permission__privilege varchar
+CREATE OR REPLACE FUNCTION acs_permission.revoke_permission(
+   p_object_id integer,
+   p_grantee_id integer,
+   p_privilege varchar
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
     delete from acs_permissions
-    where object_id = revoke_permission__object_id
-    and grantee_id = revoke_permission__grantee_id
-    and privilege = revoke_permission__privilege;
+    where object_id = p_object_id
+    and grantee_id = p_grantee_id
+    and privilege = p_privilege;
 
     return 0; 
 END;
 $$ LANGUAGE plpgsql;
 
--- Really speedy version of permission_p written by Don Baccus
 
 
 
--- added
+---
+--- Functions for backwards compatibility
+---
 select define_function_args('acs_permission__permission_p','object_id,party_id,privilege');
-
-
-CREATE FUNCTION inline_0()
-RETURNS integer AS $inline_0$
+DROP FUNCTION IF EXISTS acs_permission__permission_p(integer, integer, varchar);
+CREATE OR REPLACE FUNCTION acs_permission__permission_p(
+       p_object_id integer,
+       p_party_id  integer,
+       p_privilege varchar
+) RETURNS boolean AS $$
 BEGIN
-
-    raise notice 'starting permissions recursive -- vguerra';
-
-    IF cmp_pg_version('8.4') >= 0 THEN
-        -- recursive site_nodes recursive - START
-
-        --
-        -- procedure acs_permission__permission_p/3
-        --
-        CREATE OR REPLACE FUNCTION acs_permission__permission_p(
-           permission_p__object_id integer,
-           permission_p__party_id integer,
-           permission_p__privilege varchar
-        ) RETURNS boolean AS $$
-        DECLARE
-            exists_p                          boolean;
-        BEGIN
-            return exists (With RECURSIVE object_context(object_id, context_id) AS (
-
-                    select permission_p__object_id, permission_p__object_id 
-                    from acs_objects 
-                    where object_id = permission_p__object_id
-
-                    union all
-
-                    select ao.object_id,
-                    case when (ao.security_inherit_p = 'f' or ao.context_id is null) 
-                    then acs__magic_object_id('security_context_root') else ao.context_id end
-                    from object_context oc, acs_objects ao
-                    where ao.object_id = oc.context_id
-                    and ao.object_id != acs__magic_object_id('security_context_root')
-
-                ), privilege_ancestors(privilege, child_privilege) AS (
-
-                    select permission_p__privilege, permission_p__privilege 
-                   
-                    union all
-
-                    select aph.privilege, aph.child_privilege
-                    from privilege_ancestors pa join acs_privilege_hierarchy aph
-                    on aph.child_privilege = pa.privilege
-
-                ) select
-                  1
-                  from
-                  acs_permissions p
-                  join  party_approved_member_map pap on pap.party_id   =  p.grantee_id
-                  join  privilege_ancestors pa  on  pa.privilege  =  p.privilege
-                  join  object_context oc on  p.object_id =  oc.context_id      
-                  where pap.member_id = permission_p__party_id
-                );
-        END;
-        $$ LANGUAGE plpgsql stable;
-
-
-        -- for tsearch
-
-        perform define_function_args('acs_permission__permission_p_recursive_array','a_objects,a_party_id,a_privilege');
-
-        CREATE OR REPLACE FUNCTION  acs_permission__permission_p_recursive_array(
-            permission_p__objects integer[],
-            permission_p__party_id integer, 
-            permission_p__privilege varchar
-        ) RETURNS table (object_id integer, orig_object_id integer) as $$
-        BEGIN
-            return query With RECURSIVE object_context(obj_id, context_id, orig_obj_id) AS (
-
-                    select unnest(permission_p__objects), unnest(permission_p__objects), unnest(permission_p__objects)
-
-                    union all
-
-                    select ao.object_id,
-                    case when (ao.security_inherit_p = 'f' or ao.context_id is null) 
-                    then acs__magic_object_id('security_context_root') else ao.context_id END, 
-                    oc.orig_obj_id
-                    from object_context oc, acs_objects ao
-                    where ao.object_id = oc.context_id
-                    and ao.object_id != acs__magic_object_id('security_context_root')
-
-                ), privilege_ancestors(privilege, child_privilege) AS (
-
-                   select permission_p__privilege, permission_p__privilege
-
-                   union all
-
-                   select aph.privilege, aph.child_privilege
-                   from privilege_ancestors pa join acs_privilege_hierarchy aph
-                   on aph.child_privilege = pa.privilege
-
-                ) select
-                  p.object_id, oc.orig_obj_id
-                  from
-                  acs_permissions p
-                  join  party_approved_member_map pap on pap.party_id   =  p.grantee_id
-                  join  privilege_ancestors pa  on  pa.privilege  =  p.privilege
-                  join  object_context oc on  p.object_id =  oc.context_id
-                  where pap.member_id = permission_p__party_id
-              ;
-        END; 
-        $$ LANGUAGE plpgsql stable;
-
-        -- recursive site_nodes END
-
-    ELSE
-
-        CREATE OR REPLACE FUNCTION acs_permission__permission_p(
-           permission_p__object_id integer,
-           permission_p__party_id integer,
-           permission_p__privilege varchar
-        ) RETURNS boolean AS $$
-        DECLARE
-            exists_p                          boolean;
-        BEGIN
-          return exists (select 1
-                         from acs_permissions p, party_approved_member_map m,
-                           acs_object_context_index c, acs_privilege_descendant_map h
-                         where p.object_id = c.ancestor_id
-                           and h.descendant = permission_p__privilege
-                           and c.object_id = permission_p__object_id
-                           and m.member_id = permission_p__party_id
-                           and p.privilege = h.privilege
-                           and p.grantee_id = m.party_id);
-        END;
-        $$ LANGUAGE plpgsql stable;
-
-    END IF;
-    raise notice 'ending permissions recursive -- vguerra';
-
-    return null;
+  RETURN acs_permission.permission_p(p_object_id, p_party_id, p_privilege);
 END; 
-$inline_0$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql stable;
 
-select inline_0();
-drop function inline_0();
+
+select define_function_args('acs_permission__permission_p_recursive_array','objects,party_id,privilege');
+DROP FUNCTION IF EXISTS acs_permission__permission_p_recursive_array(integer[], integer, varchar);
+CREATE OR REPLACE FUNCTION acs_permission__permission_p_recursive_array(
+       p_objects   integer[],
+       p_party_id  integer, 
+       p_privilege varchar
+) RETURNS table (object_id integer, orig_object_id integer) AS $$
+  SELECT acs_permission.permission_p_recursive_array($1, $2, $3);
+$$ LANGUAGE sql stable;
+
+
+select define_function_args('acs_permission__grant_permission','object_id,grantee_id,privilege');
+DROP FUNCTION IF EXISTS acs_permission__grant_permission(integer, integer, varchar);
+CREATE OR REPLACE FUNCTION acs_permission__grant_permission(
+   p_object_id integer,
+   p_grantee_id integer,
+   p_privilege varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
+  RETURN acs_permission.grant_permission(p_object_id, p_grantee_id, p_privilege);
+END; 
+$$ LANGUAGE plpgsql;
+
+
+select define_function_args('acs_permission__revoke_permission','object_id,grantee_id,privilege');
+DROP FUNCTION IF EXISTS acs_permission__revoke_permission(integer, integer, varchar);
+CREATE OR REPLACE FUNCTION acs_permission__revoke_permission(
+   p_object_id integer,
+   p_grantee_id integer,
+   p_privilege varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
+    RETURN acs_permission.revoke_permission(p_object_id, p_grantee_id, p_privilege);
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+--
+-- Local variables:
+--   mode: sql
+--   indent-tabs-mode: nil
+-- End:

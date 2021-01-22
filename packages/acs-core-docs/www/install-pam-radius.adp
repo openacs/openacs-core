@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install PAM Radius for use as external
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install PAM Radius for use as external
 authentication}</property>
 <property name="doc(title)">Install PAM Radius for use as external
 authentication</property>
@@ -26,8 +26,8 @@ work with PAM LDAP accordingly and differences will be shown at the
 end of the file.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <a name="install-ns_pam" id="install-ns_pam"></a><p>
-<b>Install ns_pam. </b>Download and install
-ns_pam</p><pre class="screen">
+<strong>Install ns_pam. </strong>Download and
+install ns_pam</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver/</code></strong>
           [root aolserver]# <strong class="userinput"><code>wget http://braindamage.alal.com/software/ns_pam-0.1.tar.gz</code></strong>
           [root aolserver]# <strong class="userinput"><code>tar xvfz ns_pam-0.1.tar.gz</code></strong>
@@ -43,8 +43,8 @@ make install INST=/usr/local/aolserver
 </pre>
 </li><li class="listitem">
 <a name="configure-ns_pam" id="configure-ns_pam"></a><p>
-<b>Configure ns_pam. </b>Configure AOLserver for
-ns_pam</p><p>To enable ns_pam in AOLServer you will first have to edit your
+<strong>Configure ns_pam. </strong>Configure
+AOLserver for ns_pam</p><p>To enable ns_pam in AOLServer you will first have to edit your
 config.tcl file and enable the loading of the ns_pam module and
 configure the aolservers pam configuration file.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Change <span class="emphasis"><em>config.tcl</em></span>. Remove
@@ -63,8 +63,8 @@ section <code class="computeroutput">ns/server/${server}/module/nspam</code> wit
 </ul></div>
 </li><li class="listitem">
 <a name="configure-pam-radius" id="configure-pam-radius"></a><p>
-<b>Configure PAM Radius. </b>Configure and install
-PAM Radius</p><p>You have to make sure that pam_radius v.1.3.16 or higher is
+<strong>Configure PAM Radius. </strong>Configure and
+install PAM Radius</p><p>You have to make sure that pam_radius v.1.3.16 or higher is
 installed, otherwise you will have to install it.</p><pre class="screen">
 [root ns_pam]# <strong class="userinput"><code>cd /usr/local/src/</code></strong>
           [root src]# <strong class="userinput"><code>wget ftp://ftp.freeradius.org/pub/radius/pam_radius-1.3.16.tar</code></strong>

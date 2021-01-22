@@ -6,7 +6,7 @@ ad_page_contract {
 
 } {
     mime_type:notnull
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 set doc(title) "Add an extension"

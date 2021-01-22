@@ -436,7 +436,7 @@ ad_proc -public -deprecated item::get_content_type { item_id } {
 
   @public get_content_type
  
-  Retrieves the content type of tyhe item. If the item does not exist,
+  Retrieves the content type of the item. If the item does not exist,
   returns an empty string.
  
   @param  item_id   The item id

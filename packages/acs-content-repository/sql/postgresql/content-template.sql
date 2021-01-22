@@ -106,13 +106,18 @@ BEGIN
         new__creation_ip,
         'content_item',
         'content_template',
-        null,
-        null,
+        null,   -- title
+        null,   -- description
         'text/plain',
-        null,
-        null,
-        'text'
-    );
+        null,   -- nls_language
+        null,   -- text
+        null,   -- data
+        null,   -- relation_tag
+        'f',    -- is_live
+        'text', -- storage_type
+        null,   -- package_id
+        't'     -- with_child_rels
+    );  
 
     insert into cr_templates ( 
       template_id 

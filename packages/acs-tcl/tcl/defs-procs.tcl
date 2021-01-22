@@ -123,6 +123,8 @@ ad_proc -public ad_publisher_name {} {
 ad_proc -public ad_url {} {
     This will be called by email alerts. Do not use ad_conn location
     @return the system url as defined in the kernel parameter SystemURL.
+    @see util::configured_location
+    @see util_current_location
 } {
     return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]
 }
@@ -246,16 +248,15 @@ $extra_stuff_for_document_head
 <title>$page_title</title>
 </head>
 "
-
     array set attrs [list]
-
     set attrs(bgcolor) [parameter::get -package_id [ad_acs_kernel_id] -parameter bgcolor -default "white"]
     set attrs(text)    [parameter::get -package_id [ad_acs_kernel_id] -parameter textcolor -default "black"]
 
     if { $focus ne "" } {
-	set attrs(onLoad) "javascript:document.${focus}.focus()"
+        template::add_body_script -script [subst {
+            window.addEventListener('load', function () {document.${focus}.focus()}, false);
+        }]
     }
-
     foreach attr [array names attrs] {
 	lappend attr_list "$attr=\"$attrs($attr)\""
     }
@@ -739,7 +740,7 @@ ad_proc doc_return {args} {
     of every non-templated user-viewable page. 
 
 } {
-    # Aolserver/Naviserver releases handles automatically since ages
+    # AOLserver/NaviServer releases handles automatically since ages
     #db_release_unused_handles
     ad_http_cache_control
     ns_return {*}$args
@@ -792,23 +793,18 @@ ad_proc -public ad_return_url {
     if { [llength $query_list] == 0 } {
         set url [ns_conn url]
     } else {
-        set url "[ns_conn url]?[join $query_list "&"]"
+        set url "[ns_conn url]?[join $query_list &]"
     }
-    
+
     if { $qualified_p } {
         # Make the return_url fully qualified
-        if { [security::secure_conn_p] } {
-            set url [security::get_secure_qualified_url $url]
-        } else {
-            set url [security::get_insecure_qualified_url $url]
-        }
+        set url [security::get_qualified_url $url]
     }
 
     if { $urlencode_p } {
-        return [ns_urlencode $url]
-    } else {
-        return $url
+        set url [ns_urlencode $url]
     }
+    return $url
 }
 
 ad_proc -public ad_progress_bar_begin {
@@ -838,7 +834,13 @@ ad_proc -public ad_progress_bar_begin {
     ad_http_cache_control
     
     ReturnHeaders
-    ns_write [ad_parse_template -params [list [list title $title] [list message_1 $message_1] [list message_2 $message_2]] $template]
+    ns_write [ad_parse_template \
+                  -params [list \
+                               [list doc(title) $title] \
+                               [list title $title] \
+                               [list message_1 $message_1] \
+                               [list message_2 $message_2]] \
+                  $template]
 }
 
 ad_proc -public ad_progress_bar_end {
@@ -850,7 +852,7 @@ ad_proc -public ad_progress_bar_end {
     @see ad_progress_bar_begin
 } { 
     util_user_message -message $message_after_redirect
-    ns_write "<script type=\"text/javascript\">window.location='$url';</script>"
+    ns_write "<script type='text/javascript' nonce='$::__csp_nonce'>window.location='$url';</script>"
     ns_conn close
 }
 

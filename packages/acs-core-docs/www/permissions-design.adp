@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Permissions Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Permissions Design}</property>
 <property name="doc(title)">Permissions Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -30,11 +30,11 @@ might decide that the transaction that bans a user from a sub-site
 is an operation a site administrator is able to assign to a
 particular user. Or perhaps an application developer might decide
 that viewing a certain set of pages within the application is an
-operation to be individually granted or revoked from a user. It's
-expected that the Permissions system will be seeing a lot of use -
-almost every page will make at least one permissions API call, and
-some will make several.</p><p>For programmers, the Permissions API provides a means to work
-with access control in a consistent manner. If a programmer's
+operation to be individually granted or revoked from a user.
+It&#39;s expected that the Permissions system will be seeing a lot
+of use - almost every page will make at least one permissions API
+call, and some will make several.</p><p>For programmers, the Permissions API provides a means to work
+with access control in a consistent manner. If a programmer&#39;s
 OpenACS package defines new methods for itself, the Permissions API
 must provide simple calls to determine whether the current user is
 authorized to perform the given method. In addition, using the
@@ -52,9 +52,9 @@ page-by-page basis. For example, a typical module might allow any
 registered user to access its pages read-only, but only allow
 members of a certain group to make changes. The way this group was
 determined also varied greatly between modules. Some modules used
-"roles", while others did not. Other modules did all access control
-based simply on coded rules regarding who can act on a given
-database row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions
+"roles", while others did not. Other modules did all
+access control based simply on coded rules regarding who can act on
+a given database row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions
 and access control were many, the two major ones being
 inconsistency, and repeated/redundant code. Thus the drive in
 OpenACS 4 to provide a unified, consistent permissions system that
@@ -90,10 +90,10 @@ any object in the system - this is a denormalization of
 </p></dd>
 </dl></div><p>There are also a number of views to make it easier to ask
 specific questions about permissions. For example, a number of the
-above tables describe "direct" or explicit permissions. Inheritance
-and default values can, however, introduce permissions which are
-not directly specified. (For example, read access on a forum allows
-read access on all the messages in the forum.)</p><p>The following views provide flattened versions of inherited
+above tables describe "direct" or explicit permissions.
+Inheritance and default values can, however, introduce permissions
+which are not directly specified. (For example, read access on a
+forum allows read access on all the messages in the forum.)</p><p>The following views provide flattened versions of inherited
 information:</p><div class="variablelist"><dl class="variablelist">
 <dt><span class="term"><code class="computeroutput">acs_privilege_method_map</code></span></dt><dd><p>Map of privileges to the methods they contain either directly or
 because of another privilege which is included (at any depth).</p></dd><dt><span class="term"><code class="computeroutput">acs_object_grantee_priv_map</code></span></dt><dd><p>Relation on (<span class="emphasis"><em>object</em></span>,
@@ -124,8 +124,8 @@ which:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-t
 indirectly a member of</p></li><li class="listitem"><p>privileges get associated with the methods of any other
 privileges they have taken methods from (at any level) (see
 <code class="computeroutput">acs_privilege_hierarchy</code>)</p></li><li class="listitem"><p>objects get access control from direct grants, or inherit
-permissions from their context (unless the "don't inherit" flag is
-set)</p></li>
+permissions from their context (unless the "don&#39;t
+inherit" flag is set)</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -134,19 +134,21 @@ permissions system fall:</p><div class="itemizedlist"><ul class="itemizedlist" s
 <li class="listitem"><p>Modification of methods and privileges</p></li><li class="listitem"><p>Modification of permissions</p></li><li class="listitem"><p>Queries on permissions</p></li>
 </ul></div><p>
 <span class="strong"><strong>"Modification of methods and
-privileges."</strong></span> This refers to actions that happen
-mainly at package installation time - a package will create a
-number of methods for its own use, then associate them with the
-system's standard privileges, or new privileges which the package
-has created. The association step might also happen later, if the
-site-wide administrator chooses to change permissions policy.</p><p>These steps involve directly manipulating the <code class="computeroutput">acs_methods</code>, <code class="computeroutput">acs_privileges</code>, and <code class="computeroutput">acs_privilege_method_rules</code> tables. A web
+privileges."</strong></span> This refers to actions that
+happen mainly at package installation time - a package will create
+a number of methods for its own use, then associate them with the
+system&#39;s standard privileges, or new privileges which the
+package has created. The association step might also happen later,
+if the site-wide administrator chooses to change permissions
+policy.</p><p>These steps involve directly manipulating the <code class="computeroutput">acs_methods</code>, <code class="computeroutput">acs_privileges</code>, and <code class="computeroutput">acs_privilege_method_rules</code> tables. A web
 page for manipulating these features should be limited to site-wide
 administrators.</p><p>
 <span class="strong"><strong>"Modification of
-permissions"</strong></span> - involves fairly common operations.
-Users are typically able to administer permissions for objects they
-themselves create. The two basic operations here are "grant" and
-"revoke". Granting permissions is done via <code class="computeroutput">acs_permissions.grant_permission</code>, and
+permissions"</strong></span> - involves fairly common
+operations. Users are typically able to administer permissions for
+objects they themselves create. The two basic operations here are
+"grant" and "revoke". Granting permissions is
+done via <code class="computeroutput">acs_permissions.grant_permission</code>, and
 revocation via <code class="computeroutput">acs_permissions.revoke_permission</code>. These
 directly manipulate the <code class="computeroutput">acs_permissions</code> table.</p><p>Web pages for making these changes are available to all users,
 so they should not be in an admin area. In order to grant and
@@ -154,17 +156,17 @@ revoke permissions on an object, the user must have the
 <code class="computeroutput">administer_privileges</code> method
 permission on that object.</p><p>
 <span class="strong"><strong>"Queries on
-permissions"</strong></span> - by far the most common operation is
-querying the permissions database. Several kinds of questions are
-commonly asked: First, and most commonly, "Can this party perform
-this method on this object?" Two Tcl functions are provided to
-answer this - one which returns a boolean, the other of which
-results in an error page. These tcl functions directly access the
-<code class="computeroutput">acs_object_party_method_map</code>.</p><p>The second most commonly asked question occurs when a list of
+permissions"</strong></span> - by far the most common
+operation is querying the permissions database. Several kinds of
+questions are commonly asked: First, and most commonly, "Can
+this party perform this method on this object?" Two Tcl
+functions are provided to answer this - one which returns a
+boolean, the other of which results in an error page. These Tcl
+functions directly access the <code class="computeroutput">acs_object_party_method_map</code>.</p><p>The second most commonly asked question occurs when a list of
 objects is being displayed, often in order to provide appropriate
-UI functionality: "For this party, what methods are available on
-these objects?" Here, the SQL query needs to filter based on
-whether the party/user can perform some operation on the object.
+UI functionality: "For this party, what methods are available
+on these objects?" Here, the SQL query needs to filter based
+on whether the party/user can perform some operation on the object.
 This is done via a join or sub-select against <code class="computeroutput">acs_object_party_method_map</code>, or by calling
 the Tcl functions for appropriate methods.</p><p>Finally, when administering the permissions for an object, a web
 page needs to know all permissions directly granted on that object.
@@ -204,9 +206,9 @@ procedure revoke_permission (
   privilege    acs_permissions.privilege%TYPE
 );
 </pre><p>These procedures are defined in <a class="ulink" href="/doc/sql/display-sql?url=acs-permissions-create.sql&amp;package_key=acs-kernel" target="_top"><code class="computeroutput">permissions-create.sql</code></a>
-</p><p><span class="strong"><strong>Tcl Procedures</strong></span></p><p>Two tcl procedures provide a simple call for the query, "Can
-this user perform this method on this object?" One returns true or
-false, the other presents an error page.</p><p>To receive a true or false value, Tcl code should call:</p><pre class="programlisting">
+</p><p><span class="strong"><strong>Tcl Procedures</strong></span></p><p>Two Tcl procedures provide a simple call for the query,
+"Can this user perform this method on this object?" One
+returns true or false, the other presents an error page.</p><p>To receive a true or false value, Tcl code should call:</p><pre class="programlisting">
 permission::permission_p -object_id $object_id -party_id $user_id -privilege $method
 </pre><p>If the <code class="computeroutput">user_id</code> argument is
 left out, then the currently logged in user is checked. To create
@@ -226,10 +228,10 @@ revoked.</p><p>Granting permissions currently (as of 10/2000) works by
 providing a list of all possible permissions and a list of all
 parties in the system. (For large sites, some future search
 mechanism will be necessary.) After choosing privileges to grant,
-the user is returned to the "edit privileges for one object"
-screen.</p><p>If it makes sense, the system will also display a checkbox which
+the user is returned to the "edit privileges for one
+object" screen.</p><p>If it makes sense, the system will also display a checkbox which
 the user may select to toggle whether permissions are inherited
-from the object's context.</p><p>There are a number of potential future enhancements for the
+from the object&#39;s context.</p><p>There are a number of potential future enhancements for the
 permissions UI, outlined below.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -242,9 +244,9 @@ Change</h3></div></div></div><p>The most important future changes to the Permiss
 likely to be in the UI:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>There should be a page displaying a list of all objects for
 which the current user is allowed to administer privileges.</p></li><li class="listitem"><p>Users should be able to view the permissions on any object, or
-perhaps on objects which they have the "read_permissions" method.
-This would allow them to see what grants are affecting their
-objects through inheritance.</p></li>
+perhaps on objects which they have the "read_permissions"
+method. This would allow them to see what grants are affecting
+their objects through inheritance.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -255,7 +257,7 @@ H. Schloming</a></p></dd><dt><span class="term">Documentation author</span></dt>
 </dl></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-design-rev-history" id="permissions-design-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="permissions-design-rev-history" id="permissions-design-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

@@ -65,10 +65,13 @@ template::list::create \
 
 set distinct [array size ip_p]
 
-# run standard Unix uptime command to get load average (crude measure of 
-# system health)
+# run standard GNU uptime command to get load average (crude measure
+# of system health).
+if {[set uptime [util::which uptime]] eq ""} {
+    error "'uptime' command not found on the system"
+}
 
-if [catch { set uptime_output [exec /usr/bin/uptime] } errmsg] {
+if {[catch { set uptime_output [exec $uptime] } errmsg]} {
    # whoops something wrong with uptime (check path)
    set uptime_output "ERROR running uptime, check path in script"
 }

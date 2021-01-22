@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Using CVS for backup-recovery}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using CVS for backup-recovery}</property>
 <property name="doc(title)">Using CVS for backup-recovery</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,10 +11,10 @@ Chapter 8. Backup and Recovery"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="backups-with-cvs" id="backups-with-cvs"></a>Using CVS for backup-recovery</h2></div></div></div><p>CVS-only backup is often appropriate for development sites. If
 you are already using CVS and your data is not important, you
-probably don't need to do anything to back up your files. Just make
-sure that your current work is checked into the system. You can
-then roll back based on date - note the current system time, down
-to the minute. For maximum safety, you can apply a tag to your
+probably don&#39;t need to do anything to back up your files. Just
+make sure that your current work is checked into the system. You
+can then roll back based on date - note the current system time,
+down to the minute. For maximum safety, you can apply a tag to your
 current files. You will still need to back up your database.</p><p>Note that, if you did the CVS options in this document, the
 <code class="filename">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc</code>
 directory is not included in cvs and you may want to add it.</p><pre class="screen">

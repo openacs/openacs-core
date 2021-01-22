@@ -1,7 +1,7 @@
 ad_page_contract {} {
     object_id:naturalnum,notnull
     user_id:multiple,naturalnum
-    return_url
+    return_url:localurl
 }
 
 permission::require_permission -object_id $object_id -privilege admin

@@ -129,32 +129,19 @@ proc _http_read {timeout sock length} {
 
 } ;# _http_read
 
-# tcl page support
+# Tcl page support
 
 proc ns_putscript {conn ignored} {
 	ns_returnbadrequest $conn "Cannot PUT a script file"
 }
 
-if {[ns_info name] ne "NaviServer"} {
-  #
-  # Naviserver has dropped support for ns_share.
-  #
-  ns_share NS
-  set NS(months) [list January February March April May June \
-                      July August September October November December]
-}
-
 # _ns_dateentrywidget is not very popular and is not
-# internationalized. We keep it in Naviserver for backward
-# compatibility. It should become deprecated.
+# internationalized. We keep it for backward compatibility. It should
+# become deprecated.
 proc _ns_dateentrywidget {column} {
 
-    if {[ns_info name] ne "NaviServer"} {
-        ns_share NS
-    } else {
-        set NS(months) [list January February March April May June \
-                            July August September October November December]
-    }
+    set NS(months) [list January February March April May June \
+                        July August September October November December]
 
     set output "<select name='$column.month'>\n"
     for {set i 0} {$i < 12} {incr i} {

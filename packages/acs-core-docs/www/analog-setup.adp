@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Set up Log Analysis Reports}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Set up Log Analysis Reports}</property>
 <property name="doc(title)">Set up Log Analysis Reports</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -27,12 +27,12 @@ mkdir www/log
 cp -r /usr/share/analog-5.32/images www/log/</span></span>
 </pre><p>Edit <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</code>
 and change the variable in <code class="computeroutput">HOSTNAME
-"[my organisation]"</code> to reflect your website title. If you
-don't want the traffic log to be publicly visible, change
-<code class="computeroutput">OUTFILE
+"[my organisation]"</code> to reflect your website title.
+If you don&#39;t want the traffic log to be publicly visible,
+change <code class="computeroutput">OUTFILE
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/www/log/traffic.html</code>
-to use a private directory. You'll also need to edit all instances
-of service0 to your $OPENACS_SERVICE_NAME.</p>
+to use a private directory. You&#39;ll also need to edit all
+instances of service0 to your $OPENACS_SERVICE_NAME.</p>
 </li><li class="listitem">
 <p>Run it.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</code></strong>

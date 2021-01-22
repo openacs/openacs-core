@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {ACS File Naming and Formatting Standards}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS File Naming and Formatting Standards}</property>
 <property name="doc(title)">ACS File Naming and Formatting Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -24,27 +24,24 @@ the following three purposes:</p><div class="itemizedlist"><ul class="itemizedli
 editing, linking, etc)</p></li><li class="listitem"><p>housing procedures, packages, data models and other prerequisite
 code Essentially, we want our files named in a fashion that
 reflects their purpose.</p></li>
-</ul></div><p>Under the page root (and the template root if using the
-<a class="ulink" href="style" target="_top">Style package</a>):</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+</ul></div><p>Under the page root:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>For naming files that enable a specific action on an object, use
-this format:</p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em><code class="computeroutput">object-verb.extension</code></em></span></p></blockquote></div><p>For example, the page to erase a user's portrait from the
+this format:</p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em><code class="computeroutput">object-verb.extension</code></em></span></p></blockquote></div><p>For example, the page to erase a user&#39;s portrait from the
 database is <code class="computeroutput">/admin/users/portrait-erase.tcl</code>.</p>
 </li><li class="listitem">
 <p>However, modules typically deal with only one primary type of
 object - e.g., the Bookmarks module deals mainly with bookmarks -
-and so action-type files in modules don't need to be specified by
-the object they act on. Example: the user pages for the Bookmarks
-module live in the <code class="computeroutput">/bookmarks/</code>
-directory, and so there is no need to name the bookmark editing
-page with a redundant url: <code class="computeroutput">/bookmarks/bookmark-edit.tcl</code>. Instead, we
-omit the object type, and use this convention:</p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em><code class="computeroutput">verb.extension</code></em></span></p></blockquote></div><p>Thus, the page to edit a bookmark is <code class="computeroutput">/bookmarks/edit.tcl</code>.</p>
+and so action-type files in modules don&#39;t need to be specified
+by the object they act on. Example: the user pages for the
+Bookmarks module live in the <code class="computeroutput">/bookmarks/</code> directory, and so there is no
+need to name the bookmark editing page with a redundant url:
+<code class="computeroutput">/bookmarks/bookmark-edit.tcl</code>.
+Instead, we omit the object type, and use this convention:</p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em><code class="computeroutput">verb.extension</code></em></span></p></blockquote></div><p>Thus, the page to edit a bookmark is <code class="computeroutput">/bookmarks/edit.tcl</code>.</p>
 </li><li class="listitem">
 <p>For naming files that display the properties of a primary object
 - such as the bookmark object within the bookmark module - use this
-convention:</p><div class="blockquote"><blockquote class="blockquote"><p>
-<code class="computeroutput">one.</code><span class="emphasis"><em><code class="computeroutput">extension</code></em></span>
-</p></blockquote></div><p>For example, the page to view one bookmark is <code class="computeroutput">/bookmarks/one.tcl</code>. Note that no verb is
+convention:</p><div class="blockquote"><blockquote class="blockquote"><p><code class="computeroutput">one.extension</code></p></blockquote></div><p>For example, the page to view one bookmark is <code class="computeroutput">/bookmarks/one.tcl</code>. Note that no verb is
 necessary for display-type files.</p>
 </li><li class="listitem">
 <p>Otherwise, if the object to be displayed is not the primary
@@ -84,13 +81,13 @@ use the convention:</p><div class="blockquote"><blockquote class="blockquote"><p
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-urls" id="eng-standards-filenaming-urls"></a>URLs</h3></div></div></div><p>File names also appear <span class="emphasis"><em>within</em></span> pages, as linked URLs and form
-targets. When they do, always use <a class="ulink" href="abstract-url" target="_top">abstract URLs</a> (e.g., <code class="computeroutput">user-delete</code> instead of <code class="computeroutput">user-delete.tcl</code>), because they enhance
+targets. When they do, always use <a class="ulink" href="rp-design" target="_top">abstract URLs</a> (e.g., <code class="computeroutput">user-delete</code> instead of <code class="computeroutput">user-delete.tcl</code>), because they enhance
 maintainability.</p><p>Similarly, when linking to the index page of a directory, do not
 explicitly name the index file (<code class="computeroutput">index.tcl</code>, <code class="computeroutput">index.adp</code>, <code class="computeroutput">index.html</code>, etc.). Instead, use just the
 directory name, for both relative links (<code class="computeroutput">subdir/</code>) and absolute links (<code class="computeroutput">/top-level-dir/</code>). If linking to the
 directory in which the page is located, use the empty string
-(<code class="computeroutput">""</code>), which browsers will
-resolve correctly.</p>
+(<code class="computeroutput">""</code>), which browsers
+will resolve correctly.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-headers" id="eng-standards-filenaming-headers"></a>File Headers and Page
@@ -115,9 +112,9 @@ purposes:</p><pre class="programlisting">
 # www/register/user-login-2.tcl
 
 ad_page_contract {
-    Verify the user's password and issue the cookie.
+    Verify the user&#39;s password and issue the cookie.
     
-    \@param user_id The user's id in users table.
+    \@param user_id The user&#39;s id in users table.
     \@param password_from_from The password the user entered.
     \@param return_url What url to return to after successful login.
     \@param persistent_cookie_p Specifies whether a cookie should be set to keep the user logged in forever.
@@ -132,7 +129,7 @@ ad_page_contract {
 </pre><p>Salient features of <code class="computeroutput">ad_page_contract</code>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>A mandatory documentation string is the first argument. This has
 the standard form with javadoc-style \@author, \@cvs-id, etc, and
-should contain a short description of the recieved variables and
+should contain a short description of the received variables and
 any necessary explanations.</p></li><li class="listitem"><p>The second argument specifies the page inputs. The syntax for
 switches/flags (e.g. multiple-list, array, etc.) uses a colon (:)
 followed by any number of flags separated by commas (,), e.g.
@@ -140,10 +137,11 @@ followed by any number of flags separated by commas (,), e.g.
 particular, <code class="computeroutput">multiple</code> and
 <code class="computeroutput">array</code> are the flags that
 correspond to the old <code class="computeroutput">ad_page_variables</code> flags.</p></li><li class="listitem"><p>There are new flags: <code class="computeroutput">trim</code>,
-<code class="computeroutput">notnull</code> and <code class="computeroutput">optional</code>. They do what you'd expect; values
-will not be trimmed, unless you mark them for it; empty strings are
-valid input, unless you specify notnull; and a specified variable
-will be considered required, unless you declare it optional.</p></li><li class="listitem"><p>
+<code class="computeroutput">notnull</code> and <code class="computeroutput">optional</code>. They do what you&#39;d expect;
+values will not be trimmed, unless you mark them for it; empty
+strings are valid input, unless you specify notnull; and a
+specified variable will be considered required, unless you declare
+it optional.</p></li><li class="listitem"><p>
 <code class="computeroutput">ad_page_contract</code> can do
 validation for you: the flags <code class="computeroutput">integer</code> and <code class="computeroutput">sql_identifier</code> will make sure that the
 values supplied are integers/sql_identifiers. The <code class="computeroutput">integer</code> flag will also trim leading zeros.
@@ -155,7 +153,7 @@ variables makes such previous variable syntax obsolete.</p></li>
 </ul></div><div>Using ad_library</div><p>For shared Tcl library files, use <a class="link" href="tcl-doc" title="ad_library"><code class="computeroutput">ad_library</code></a> after the file path comment.
 Its only argument is a doc_string in the standard (javadoc-style)
 format, like <code class="computeroutput">ad_page_contract</code>.
-Don't forget to put the \@cvs-id in there. Here is an example of
+Don&#39;t forget to put the \@cvs-id in there. Here is an example of
 using ad_library:</p><pre class="programlisting">
 # tcl/wp-defs.tcl
 
@@ -169,15 +167,14 @@ ad_library {
 header structure is recommended:</p><pre class="programlisting">
 -- <span class="emphasis"><em>path relative to the ACS root directory</em></span>
 --
--- <span class="emphasis"><em>brief description of the file's purpose</em></span>
+-- <span class="emphasis"><em>brief description of the file&#39;s purpose</em></span>
 --
 -- <span class="emphasis"><em>author</em></span>
 -- <span class="emphasis"><em>created</em></span>
 --
 -- <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id$</a>
-</pre><p>Of course, replace "<code class="computeroutput">--</code>" with
-the comment delimiter appropriate for the language in which you are
-programming.</p>
+</pre><p>Of course, replace "<code class="computeroutput">--</code>" with the comment delimiter
+appropriate for the language in which you are programming.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-pages" id="eng-standards-filenaming-pages"></a>Page Construction</h3></div></div></div><p>Construct the page as one Tcl variable (name it <code class="computeroutput">page_content</code>), and then send it back to the
@@ -210,17 +207,17 @@ page. This approach has the disadvantage of tying up a scarce and
 valuable resource (namely, a database handle) for an unpredictable
 amount of time while sending packets back to the browser, and so it
 should be avoided in most cases. (On the other hand, for a page
-that requires an expensive database query, it's better to call
+that requires an expensive database query, it&#39;s better to call
 <code class="computeroutput">ad_return_top_of_page</code> first, so
 that the user is not left to stare at an empty page while the query
 is running.)</p><p>Local procedures (i.e., procedures defined and used only within
-one page) should be prefixed with "<span class="emphasis"><em><code class="computeroutput">module_</code></em></span>" and should be used
-rarely, only when they are exceedingly useful.</p>
+one page) should be prefixed with "<span class="emphasis"><em><code class="computeroutput">module_</code></em></span>" and should be
+used rarely, only when they are exceedingly useful.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-tcllib" id="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>Further standards for Tcl library files are under discussion; we
-plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: filenaming.xml,v 1.7 2014/10/27 16:39:31
-victorg Exp $)</div>
+plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: filenaming.xml,v 1.7.2.3 2017/04/21
+15:07:52 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

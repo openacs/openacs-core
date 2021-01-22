@@ -17,7 +17,7 @@
   </div>
 </table>
 
-<if @source_p@ eq 0>
+<if @source_p;literal@ false>
 [ <a href="@procViewToggleURL;noi18n@">show source</a> ]
 </if>
 <else>

@@ -35,10 +35,10 @@ apm-procs.tcl</ulink></para></listitem>
 <listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dinstall%2dprocs%2etcl">
 apm-install-procs.tcl</ulink> (Supports installation of packages)</para></listitem>
 
-<listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2f20%2dapm%2dload%2dprocs%2etcl">
-20-apm-load-procs.tcl</ulink> (Bootstraps APM for server startup)</para></listitem>
+<listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dbootstrap%2dinstaller%2ftcl%2f30%2dapm%2dload%2dprocs%2etcl">
+30-apm-load-procs.tcl</ulink> (Bootstraps APM for server startup)</para></listitem>
 
-<listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dadmin%2dprocs%2etcl">
+<listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dadmin%2ftcl%2fapm%2dadmin%2dprocs%2etcl">
 apm-admin-procs.tcl</ulink> (Supports APM UI)</para></listitem>
 </itemizedlist>
 </listitem>
@@ -229,13 +229,13 @@ Fortunately, there are many precedents for systematic solutions,
 including:</para>
 
 <itemizedlist>
-<listitem><para><ulink url="http://www.debian.org/">Debian GNU/Linux</ulink> and the <ulink url="http://www.debian.org/doc/packaging-manuals/packaging.html/">Debian
+<listitem><para><ulink url="http://www.debian.org/">Debian GNU/Linux</ulink> and the <ulink url="https://www.debian.org/doc/manuals/maint-guide/">Debian
 Packaging manual</ulink></para></listitem>
 
 <listitem><para><ulink url="http://www.freebsd.org/">FreeBSD</ulink> has <ulink url="http://www.freebsd.org/handbook/ports.html">the Ports
 collection</ulink></para></listitem>
 
-<listitem><para><ulink url="http://www.redhat.com/">Red Hat Linux</ulink> has <ulink url="http://rpm.redhat.com/">the Red Hat Package Manager (RPM)</ulink></para></listitem>
+<listitem><para><ulink url="http://www.redhat.com/">Red Hat Linux</ulink> has <ulink url="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/ch-rpm.html">the Red Hat Package Manager (RPM)</ulink></para></listitem>
 </itemizedlist>
 
 <para>Borrowing from all of the above, OpenACS 3.3 introduces its own package

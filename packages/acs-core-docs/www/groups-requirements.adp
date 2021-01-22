@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Groups Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups Requirements}</property>
 <property name="doc(title)">Groups Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -24,30 +24,30 @@ services for different user communities.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="groups-requirements-vision" id="groups-requirements-vision"></a>Vision Statement</h3></div></div></div><p>A powerful web service that can meet the needs of large
-enterprises must be able to model the the real world's very rich
-organizational structures and many ways of decomposing the same
-organization. For example, a corporation can be broken into
+enterprises must be able to model the the real world&#39;s very
+rich organizational structures and many ways of decomposing the
+same organization. For example, a corporation can be broken into
 structures (the corporation, its divisions, and their departments)
 or regions (the Boston office, the LA office); a person who is
 employed by (is a member of) a specific department is also a member
 of the division and the corporation, and works at (is a member of,
-but in a different sense) a particular office. OpenACS's Parties
-and Groups system will support such complex relations
+but in a different sense) a particular office. OpenACS&#39;s
+Parties and Groups system will support such complex relations
 faithfully.</p><p><span class="strong"><strong>Historical
 Motivations</strong></span></p><p>The primary limitation of the OpenACS 3.x user group system is
-that it restricts the application developer to representing a "flat
-group" that contains only users: The <code class="computeroutput">user_groups</code> table may contain the
+that it restricts the application developer to representing a
+"flat group" that contains only users: The <code class="computeroutput">user_groups</code> table may contain the
 <code class="computeroutput">group_id</code> of a parent group, but
 parent-child relationship support is limited because it only allows
 one kind of relationship between groups to be represented.
-Moreover, the Oracle database's limited support for tree-like
+Moreover, the Oracle database&#39;s limited support for tree-like
 structures makes the queries over these relationships
 expensive.</p><p>In addition, the Module Scoping design in OpenACS 3.0 introduced
 a <span class="emphasis"><em>party</em></span> abstraction - a
 thing that is a person or a group of people - though not in the
 form of an explicit table. Rather, the triple of <code class="computeroutput">scope</code>, <code class="computeroutput">user_id</code>, and <code class="computeroutput">group_id</code> columns was used to identify the
 party. One disadvantage of this design convention is that it
-increases a data model's complexity by requiring the programmer
+increases a data model&#39;s complexity by requiring the programmer
 to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>add these three columns to each "scoped" table</p></li><li class="listitem"><p>define a multi-column check constraint to protect against data
 corruption (e.g., a row with a <code class="computeroutput">scope</code> value of "group" but a null
@@ -116,7 +116,7 @@ chapters would be modeled as groups, and Eddie would be a user.
 There would be a composition relationship between each Sierra Club
 chapter and the Sierra Club. Membership relationships would exist
 between Eddie and the Massachusetts Chapter, between Eddie and the
-Sierra Club (due to Eddie's membership in the Massachusetts
+Sierra Club (due to Eddie&#39;s membership in the Massachusetts
 chapter), and between the Sierra Club and Greenpeace.</p><p>Membership requirements can vary from group to group. The
 parties and groups system must provide a base type that specifies
 the bare minimum necessary to join a group.</p><p>The parties and groups system must support constraints between a
@@ -297,14 +297,13 @@ group as a component of a second group</strong></span></span></dt><dd><p>The par
 as a component of a second group. This API is subject to the
 constraints laid out in the data model.</p></dd><dt><span class="term"><span class="strong"><strong>120.0 Remove a
 party as a member of a group</strong></span></span></dt><dd><p>The parties and groups system provides an API for deleting a
-party's membership in a group. This API is subject to the
+party&#39;s membership in a group. This API is subject to the
 constraints laid out in the data model.</p></dd><dt><span class="term"><span class="strong"><strong>125.0 Remove a
 group as a component of a second group</strong></span></span></dt><dd><p>The parties and groups system provides an API for deleting a
-group's composition in a second group. This API is subject to the
-constraints laid out in the data model.</p></dd><dt><span class="term"><span class="strong"><strong>130.0
+group&#39;s composition in a second group. This API is subject to
+the constraints laid out in the data model.</p></dd><dt><span class="term"><span class="strong"><strong>130.0
 Membership check</strong></span></span></dt><dd><p>The parties and groups system provides an API for answering the
-question: "Is party <span class="strong"><strong>P</strong></span>
-a member of group <span class="strong"><strong>G</strong></span>?"</p></dd><dt><span class="term"><span class="strong"><strong>135.0
+question: "Is party <span class="strong"><strong>P</strong></span> a member of group <span class="strong"><strong>G</strong></span>?"</p></dd><dt><span class="term"><span class="strong"><strong>135.0
 Composition check</strong></span></span></dt><dd><p>The parties and groups system provides an API for answering the
 question: "Is group <span class="strong"><strong>G<sub>C</sub>
 </strong></span> a component of group
@@ -319,8 +318,8 @@ question: "Of which groups is party <span class="strong"><strong>P</strong></spa
 Component-of-groups query</strong></span></span></dt><dd><p>The parties and groups system provides an API for answering the
 question: "Of which groups is group <span class="strong"><strong>G</strong></span> a component?"</p></dd><dt><span class="term"><span class="strong"><strong>160.0 Allowed
 membership check</strong></span></span></dt><dd><p>The parties and groups system provides an API for answering the
-question: "Is party <span class="strong"><strong>P</strong></span>
-allowed to become a member of group <span class="strong"><strong>G</strong></span>?"</p></dd><dt><span class="term"><span class="strong"><strong>165.0 Allowed
+question: "Is party <span class="strong"><strong>P</strong></span> allowed to become a member of
+group <span class="strong"><strong>G</strong></span>?"</p></dd><dt><span class="term"><span class="strong"><strong>165.0 Allowed
 composition check</strong></span></span></dt><dd><p>The parties and groups system provides an API for answering the
 question: "Is group <span class="strong"><strong>G<sub>C</sub>
 </strong></span> allowed to become a
@@ -358,7 +357,7 @@ membership and composition checks outlined in 130.x to 165.x</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="groups-requirements-rev-history" id="groups-requirements-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="groups-requirements-rev-history" id="groups-requirements-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

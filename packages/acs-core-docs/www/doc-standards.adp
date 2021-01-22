@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 13. Documentation
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 13. Documentation
 Standards}</property>
 <property name="doc(title)">Chapter 13. Documentation
 Standards</property>
@@ -14,7 +14,7 @@ Developers"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="doc-standards" id="doc-standards"></a>Chapter 13. Documentation
 Standards</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="docbook-primer">OpenACS
 Documentation Guide</a></span></dt><dt><span class="sect1"><a href="psgml-mode">Using PSGML mode
 in Emacs</a></span></dt><dt><span class="sect1"><a href="nxml-mode">Using nXML mode in

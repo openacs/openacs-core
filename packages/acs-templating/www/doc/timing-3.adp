@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Template Timing Results}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Template Timing Results}</property>
 <property name="doc(title)">Template Timing Results</property>
 <master>
 <h3>Results</h3>
@@ -11,9 +11,10 @@ defined in a .data file that has a different XML syntax.</p>
 more entries, these lack from templated pages, and hence I
 suppressed them. The log message that marks the beginning of each
 phase is written in the lower right of the graphs. Each curve curve
-plots 288 page requests. As I didn't back port of the configurable
-cache refreshing stragegy ('never' or 'always'), I show all graphs
-in the 'normal' colors. The label is 'do', though.</p>
+plots 288 page requests. As I didn&#39;t back port of the
+configurable cache refreshing stragegy ('never' or
+'always'), I show all graphs in the 'normal'
+colors. The label is 'do', though.</p>
 <h4>Individual Stages</h4>
 <p><img src="time3/stage00.gif"></p>
 <p><img src="time3/stage01.gif"></p>
@@ -30,11 +31,11 @@ in the 'normal' colors. The label is 'do', though.</p>
 the one below, which only uses the first 32 measurements. The
 curves are less smooth, but the message is the same.</p>
 <p><img src="time3a/stage09.gif"></p>
-<p>In ACS 3.4.6, Tcl-only pages are sereved <b>faster</b> than in
-4.0 beta-2. The templated pages are delivered much <b>slower</b>.
-The first time the template system reads a templated page, it takes
-about 3 seconds! The result is cached, mitigating the problem a
-lot.</p>
+<p>In ACS 3.4.6, Tcl-only pages are sereved <strong>faster</strong>
+than in 4.0 beta-2. The templated pages are delivered much
+<strong>slower</strong>. The first time the template system reads a
+templated page, it takes about 3 seconds! The result is cached,
+mitigating the problem a lot.</p>
 <hr>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbuehler</a></address>

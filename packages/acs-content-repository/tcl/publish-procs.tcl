@@ -72,7 +72,7 @@ ad_proc -public publish::get_publish_roots {} {
 }
 
 ad_proc -public publish::mkdirs { path } {
-    Create all the directories neccessary to save the specified file
+    Create all the directories necessary to save the specified file
     
     @param path  The path to the file that is about to be saved
 } {
@@ -225,17 +225,17 @@ ad_proc -public publish::handle_binary_file {
  
   @param revision_id_ref {<i>required</i>} 
      The name of the variable in the calling frame that will
-     recieve the revision_id whose content blob was written
+     receive the revision_id whose content blob was written
      to the filesystem. 
  
   @param url_ref   
      The name of the variable in the calling frame that will
-     recieve the relative URL of the file in the file system
+     receive the relative URL of the file in the file system
      which contains the content blob
     
   @param error_ref 
      The name of the variable in the calling frame that will
-     recieve an error message. If no error has ocurred, this
+     receive an error message. If no error has occurred, this
      variable will be set to the empty string ""
   
   @option embed    
@@ -1065,7 +1065,7 @@ ad_proc -public publish::write_content { revision_id args } {
       # crap out if the file already exists, but on the other hand, we shouldn't accidentally
       # overwrite files
       if { [file exists $root_path$file_url] } {
-          file delete $root_path$file_url
+          file delete -- $root_path$file_url
       }
 
       # Write blob/text to file

@@ -14,7 +14,7 @@
         <li><a href="@url_previous@">&lt;</a></li>
       </else>
       <multiple name="results_paginator">
-        <if @results_paginator.current_p@>
+        <if @results_paginator.current_p;literal@ true>
           <li class="current">@results_paginator.item@</li>
         </if>
         <else>

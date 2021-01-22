@@ -369,7 +369,7 @@ ad_proc -private lang::test::execute_upgrade {
     aa_log "locale=$locale ----------3. Make changes to catalog files and do first upgrade----------"
 
     # Update the catalog file
-    file delete -force $catalog_file_path
+    file delete -force -- $catalog_file_path
     lang::catalog::export_to_file $catalog_file_path [array get file_messages]
     aa_true "First upgrade: catalog file $catalog_file_path updated" [file exists $catalog_file_path]
 
@@ -474,8 +474,8 @@ aa_register_case \
 	lang::util::get_temporary_tags_indices
     } util__replace_temporary_tags_with_lookups {
 
-    A test tcl file and catalog file are created. The temporary tags in the
-    tcl file are replaced with message lookups and keys and messages are appended
+    A test Tcl file and catalog file are created. The temporary tags in the
+    Tcl file are replaced with message lookups and keys and messages are appended
     to the catalog file.
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -500,7 +500,7 @@ aa_register_case \
     # NOTE: must be kept up-to-date for teardown to work
     set expected_new_keys [list Auto_Key key_1_1] 
 
-    # Write the test tcl file
+    # Write the test Tcl file
     set tcl_file_id [open "$::acs::rootdir/$tcl_file" w]    
     set new_key_1 "_"
     set new_text_1 "Auto Key"
@@ -526,14 +526,14 @@ aa_register_case \
         return $catalog_file
     "
 
-    # Replace message tags in the tcl file and insert into catalog file
+    # Replace message tags in the Tcl file and insert into catalog file
     lang::util::replace_temporary_tags_with_lookups $tcl_file
 
     aa_unstub lang::catalog::get_catalog_file_path
 
     # Read the contents of the catalog file
     array set catalog_array [lang::catalog::parse [lang::catalog::read_file $catalog_file]]
-    array set updated_messages_array [lindex [array get catalog_array messages] 1]
+    array set updated_messages_array $catalog_array(messages)
 
     # Assert that the old messages are unchanged
     foreach old_message_key [array names messages_array] { 
@@ -551,23 +551,23 @@ aa_register_case \
     aa_true "third key not inserted" [string equal [lindex [array get updated_messages_array $new_key_3] 1] \
                                                    $messages_array($new_key_3)]
 
-    # Check that there are no tags left in the tcl file
+    # Check that there are no tags left in the Tcl file
     set tcl_file_id [open "$::acs::rootdir/$tcl_file" r]
     set updated_tcl_contents [read $tcl_file_id]
     close $tcl_file_id
-    aa_true "tags in tcl file replaced" [expr {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}]
+    aa_true "tags in Tcl file replaced" [expr {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}]
 
     # Delete the test message keys
     foreach message_key [concat [array names messages_array] $expected_new_keys] {
         lang::message::unregister $package_key $message_key
     }
     # Delete the catalog files
-    file delete $catalog_backup_file
-    file delete $catalog_file
+    file delete -- $catalog_backup_file
+    file delete -- $catalog_file
 
-    # Delete the tcl files
-    file delete "$::acs::rootdir/$tcl_file"
-    file delete "$::acs::rootdir/$tcl_backup_file"
+    # Delete the Tcl files
+    file delete -- $::acs::rootdir/$tcl_file
+    file delete -- $::acs::rootdir/$tcl_backup_file
 }
 
 aa_register_case \
@@ -663,7 +663,7 @@ Test text"
             [regexp $expected_adp_pattern $adp_contents match]
 
     # Remove the adp test file
-    file delete $adp_file_path
+    file delete -- $adp_file_path
 }
 
 aa_register_case \
@@ -857,11 +857,11 @@ aa_register_case \
         set system_timezone [lang::system::timezone]
         set user_timezone [lang::user::timezone]
 
-
         set timezones [lc_list_all_timezones]
+        set n [expr {[llength $timezones]-1}]
         
-        set desired_user_timezone [lindex [lindex $timezones [randomRange [expr {[llength $timezones]-1}]]] 0]
-        set desired_system_timezone [lindex [lindex $timezones [randomRange [expr {[llength $timezones]-1}]]] 0]
+        set desired_user_timezone [lindex [lindex $timezones [randomRange $n]] 0]
+        set desired_system_timezone [lindex [lindex $timezones [randomRange $n]] 0]
         
         set error_p 0
         with_catch errmsg {
@@ -995,7 +995,7 @@ aa_register_case \
     # Create the test package in the file system
     lang::test::setup_test_package
 
-    # Can't run this test case with the usual rollback switch since if everthing
+    # Can't run this test case with the usual rollback switch since if everything
     # is wrapped in one transaction then the creation_date of the messages will be the
     # same and the query in lang::catalog::last_sync_messages will return duplicates.
     aa_run_with_teardown \

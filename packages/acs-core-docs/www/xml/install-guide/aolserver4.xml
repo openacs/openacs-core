@@ -16,7 +16,7 @@
     <listitem>
       <formalpara>
         <title>Check suitability of previously installed TCL</title>
-        <para>Start tcl (type <userinput>tclsh</userinput> or find it using <userinput>which tclsh</userinput>).
+        <para>Start Tcl (type <userinput>tclsh</userinput> or find it using <userinput>which tclsh</userinput>).
         </para>
       </formalpara>
       <screen>[root root]% <userinput>info exists tcl_platform(threaded)</userinput>
@@ -29,8 +29,8 @@ info exists tcl_platform(threaded)
 info patchlevel
 </action></screen>
       <para>If the first command returns anything other than <computeroutput>1</computeroutput>, 
-        then tcl is not threaded. If tcl is threaded and the version is 8.4 or higher, then installing
-        tcl from source is optional.
+        then Tcl is not threaded. If Tcl is threaded and the version is 8.4 or higher, then installing
+        Tcl from source is optional.
       </para>
       <formalpara id="tcl-download">
         <title>Retrieve Tcl 8.4 (or higher)</title>
@@ -39,9 +39,9 @@ info patchlevel
         <para>Note for Debian users: you can apt-get install
       tcl8.4-dev if you have the right version (stable users will need
       to add tcl8.4 to their sources.list file as described on the
-      <link linkend="postgres">Install Postgres</link> page). You'll
+      <link linkend="postgres">Install Postgres</link> page). You&#39;ll
       have to use /usr/lib/tcl8.4/ instead of /usr/local/lib when you
-      try to find the tcl libraries, however.</para>
+      try to find the Tcl libraries, however.</para>
 
       <para>If you have not installed Tcl already, download the latest Tcl version from Sourceforge</para>
       <para><emphasis role="bold">Debian:</emphasis>
@@ -70,7 +70,7 @@ make install</action>
     <listitem id="aolserver4-download">
       <formalpara>
         <title>Retrieve AOLserver</title>
-        <para>Download the aolserver from CVS.</para>
+        <para>Download the AOLserver from CVS.</para>
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>mkdir aolserver40r10</userinput>
@@ -88,7 +88,7 @@ make install</action>
 <action>cd /usr/local/src
 mkdir aolserver40r10
 cd aolserver40r10
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 aolserver
+cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 AOLserver
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
@@ -100,7 +100,7 @@ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tcllib co -r tcllib-1-
     <listitem id="aolserver4-install">
       <formalpara>
         <title>Configure, compile and install AOLserver</title>
-        <para>Many people need to run more than one version of AOLserver in parallel.  This section accomodates future upgrades by installing AOLserver 4 in <computeroutput>/usr/local/aolserver40r9</computeroutput>.</para>
+        <para>Many people need to run more than one version of AOLserver in parallel.  This section accommodates future upgrades by installing AOLserver 4 in <computeroutput>/usr/local/aolserver40r9</computeroutput>.</para>
       </formalpara>
         <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver40r10/aolserver</userinput>
 [root aolserver]# <userinput>./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/</userinput>
@@ -170,7 +170,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
               <para>Edit the <computeroutput>CONFIG</computeroutput> file. Uncomment the instructions meant for AOLserver 4, but edit it to look like this:</para>
               <screen>../configure --enable-threads --disable-tdomalloc
           --prefix=/usr/local/aolserver --with-tcl=/usr/local/lib</screen>
-              <para>Note that the location of the Tcl library may vary on differnt platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</para>
+              <para>Note that the location of the Tcl library may vary on different platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</para>
               <para>Now you can compile and configure tDOM</para>
               <screen>[root unix]# <userinput>sh CONFIG</userinput>
 [root unix]# <userinput>make install</userinput></screen>
@@ -200,7 +200,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
       Note that this section requires you to have OpenACS files available, which
       you can get through CVS, through a tarball, or by other
       means. You can come back to this section after you acquire the
-      OpenACS code, but don't forget to come back. (Note to
+      OpenACS code, but don&#39;t forget to come back. (Note to
       maintainers: this should be moved to the next page and
       integrated into the text there)
     </para>

@@ -7,10 +7,25 @@ ad_library {
     @cvs-id $Id$
 }
 
+#
+# Make sure, the following global kernel_is is always set, also on upgrading acs-reloads
+#
+set ::acs::kernel_id [ad_acs_kernel_id]
+
+if {[nsv_exists rp_properties request_count] != 0} {
+    #
+    # This is a re-init. There is no need, to rerun the code
+    # below. Setting e.g. filters multiple times might have unwanted
+    # behavor in the server
+    #
+    ns_log notice "request-processor re-init"
+    return
+}
+
 # These procedures are dynamically defined at startup to alleviate
 # lock contention. Thanks to davis@xarg.net.
 
-if { [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 0] } {
+if { [parameter::get -package_id $::acs::kernel_id -parameter PerformanceModeP -default 0] } {
   ad_proc -private rp_performance_mode {} {
     Returns 1 if the request processor is in performance mode, 0 otherwise.
   } {
@@ -24,8 +39,8 @@ if { [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP 
   }
 }
 
-if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0] ||
-     [parameter::get -package_id [ad_acs_kernel_id] -parameter LogDebugP -default 0]
+if { [parameter::get -package_id $::acs::kernel_id -parameter DebugP -default 0] ||
+     [parameter::get -package_id $::acs::kernel_id -parameter LogDebugP -default 0]
  } { 
 
     ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
@@ -34,16 +49,15 @@ if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0
 	timestamp. 
 	
     } {
-	if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0] } { 
+	if { [parameter::get -package_id $::acs::kernel_id -parameter DebugP -default 0] } { 
 	    set clicks [clock clicks -milliseconds]
 	    ds_add rp [list debug $string $clicks $clicks]
 	}
-	if { [parameter::get -package_id [ad_acs_kernel_id] -parameter LogDebugP -default 0]
-	     || $debug == "t" 
-	     || $debug eq "1"
+	if { [parameter::get -package_id $::acs::kernel_id -parameter LogDebugP -default 0]
+	     || [string is true -strict $debug]
 	 } {
 	    if { [info exists ::ad_conn(start_clicks)] } {
-		set timing " ([expr {([clock clicks -milliseconds] - $::ad_conn(start_clicks))}] ms)"
+		set timing " ([expr {[clock clicks -milliseconds] - $::ad_conn(start_clicks)}] ms)"
 	    } else {
 		set timing ""
 	    }
@@ -58,28 +72,29 @@ if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0
     }
 }
 
+if {[nsv_exists rp_properties request_count] == 0} {
+    #
+    # Run this only once at startup, and not on re-inits
+    #
+    nsv_set rp_properties request_count 0
 
-# JCD this belongs in acs-permission-init.tcl but I did not want to duplicate [ad_acs_kernel_id]
-# Nuke the existing definition. and create one with the parameter set
-
-#JCD move into first call of cache_p
-
-
-nsv_set rp_properties request_count 0
-
-foreach method {GET HEAD POST} {
-  ns_register_filter preauth $method /resources/* rp_resources_filter
-  ns_register_filter preauth $method * rp_filter
-  ns_register_proc $method / rp_handler
+    foreach httpMethod {GET HEAD POST} {
+        ns_register_filter preauth $httpMethod /resources/* rp_resources_filter
+        ns_register_filter preauth $httpMethod * rp_filter
+        ns_register_proc $httpMethod / rp_handler
+    }
 }
 
-# Unregister any GET/HEAD/POST handlers for /*.tcl (since they
-# interfere with the abstract URL system). AOLserver automatically
-# registers these in file.tcl if EnableTclPages=On.
+set unreg_cmd [expr {$::acs::useNaviServer ? "ns_unregister_op" : "ns_unregister_proc"}]
 
-ns_unregister_proc GET /*.tcl
-ns_unregister_proc HEAD /*.tcl
-ns_unregister_proc POST /*.tcl
+# Unregister any GET/HEAD/POST handlers for /*.tcl (since they
+# interfere with the abstract URL system of OpenACS). AOLserver/
+# NaviServer automatically register these when EnableTclPages is
+# configured as true.
+
+$unreg_cmd GET /*.tcl
+$unreg_cmd HEAD /*.tcl
+$unreg_cmd POST /*.tcl
 
 set listings [ns_config "ns/server/[ns_info server]" "directorylisting" "none"]
 if { $listings eq "fancy" || $listings eq "simple" } {
@@ -177,8 +192,6 @@ ad_after_server_initialization procs_register {
 	    $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]
     }
 }
-
-
 
 # Local variables:
 #    mode: tcl

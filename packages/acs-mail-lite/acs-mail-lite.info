@@ -9,19 +9,19 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.9.0.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.9.1.apm">
         <owner url="mailto:malte.sussdorff@cognovis.de">Malte Sussdorff</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <vendor url="http://www.openacs.org">OpenACS</vendor>
         <description format="text/html">This package provides a service for sending messages, queueing messages in the database to ensure reliable sending and make sending a message 'transactional'. Replacement for acs-mail.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-mail-lite" version="5.9.0"/>
-        <requires url="acs-kernel" version="5.9.0"/>
-        <requires url="acs-service-contract" version="5.9.0"/>
-        <requires url="acs-tcl" version="5.9.0"/>
+        <provides url="acs-mail-lite" version="5.9.1"/>
+        <requires url="acs-kernel" version="5.9.1"/>
+        <requires url="acs-service-contract" version="5.9.1"/>
+	<requires url="acs-tcl" version="5.9.1"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="acs_mail_lite::after_upgrade"/>
@@ -38,7 +38,7 @@
 Set this parameter to the root of your filesystem will disable this restriction.
 Default for the empty value of this parameter will be to allow only files into the temporary folder of the system, as in '[ns_tmpdir]'" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedFont"  description="Font definition (after the font tag) that will always be wrapped around HTML e-mail. Example: face=Verdana size=2. Default is empty" section_name="email"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedSenderEmail"  description="Email addres that will be always the email stored in the sender. Default is empty" section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="FixedSenderEmail"  description="Email address that will be always the email stored in the sender. Default is empty" section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="FolderID"  description="Folder ID of a folder in the content repository that contains files that can be included using checkboxes in each e-mail send out of the system. This effects /lib/email" section_name="email"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="MMEncodeBin"  default="/usr/bin/mmencode" description="Location of mmencode executable." section_name="email"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="MaxBounceCount"  default="10" description="Number of bounced emails after resulting in disabling an email-address" section_name="email"/>

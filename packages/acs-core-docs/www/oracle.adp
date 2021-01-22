@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install Oracle 8.1.7}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
 <property name="doc(title)">Install Oracle 8.1.7</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -14,57 +14,54 @@ Chapter 3. Complete Installation"
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>If you are installing PostGreSQL instead of Oracle, skip this
-section.</p><p>OpenACS 5.7.0 will install with Oracle 9i but has not been
+section.</p><p>OpenACS 5.9.0 will install with Oracle 9i but has not been
 extensively tested so may still have bugs or tuning issues. See
-<a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle 9i notes</a> for
+<a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski&#39;s Oracle 9i notes</a> for
 guidance.</p><p>This installation guide attempts to present all of the
 information necessary to complete an OpenACS installation. We try
 hard to make all of the steps possible in one pass, rather than
 having a step which amounts to "go away and develop a profound
 understanding of software X and then come back and, in 99% of all
-cases, type these two lines." The exception to our rule is Oracle
-production systems. This page describes a set of steps to get a
-working Oracle development server, but it is <span class="strong"><strong>unsuitable for production systems</strong></span>.
+cases, type these two lines." The exception to our rule is
+Oracle production systems. This page describes a set of steps to
+get a working Oracle development server, but it is <span class="strong"><strong>unsuitable for production systems</strong></span>.
 If you will be using OpenACS on Oracle in a production environment,
 you will experience many problems unless you develop a basic
 understanding of Oracle which is outside the scope of this
-document. T</p><p>This document assumes that you'll be installing Oracle on the
-same box as AOLserver. For more details on a remote Oracle
-installation, see Daryl Biberdorf's <a class="ulink" href="http://openacs.org/new-file-storage/one-file?file_id=273" target="_top">document</a>.</p><p>Useful links to find help on how to set up Oracle under Linux
+document. T</p><p>This document assumes that you&#39;ll be installing Oracle on
+the same box as AOLserver. For more details on a remote Oracle
+installation, see Daryl Biberdorf&#39;s <a class="ulink" href="http://openacs.org/new-file-storage/one-file?file_id=273" target="_top">document</a>.</p><p>Useful links to find help on how to set up Oracle under Linux
 are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="http://dizwell.com/html/oracle_on_linux.html" target="_top">Dizwell - Howard Roger's company - on Oracle on
-Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li>
+<li class="listitem"><p><a class="ulink" href="https://www.dizwell.com/wordpress/technical-articles/oracle/" target="_top">Dizwell - on Oracle on Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li>
 </ul></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-getit" id="install-oracle-getit"></a>Acquire Oracle</h3></div></div></div><p>Production Oracle systems should run on certified platforms.
 Follow the <a class="ulink" href="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1" target="_top">metalink note 223718.1</a>to find certified
-platforms. If you don't have metalink access, take a look at the
-Oracle on Linux FAQ: <a class="ulink" href="http://otn.oracle.com/tech/linux/htdocs/linux_techsupp_faq.html#Linux_Distributions" target="_top">Which Linux Distributions Are Directly Supported By
-Oracle?</a>. In summary, free and inexpensive Linux distributions
-are not certified.</p><p>If you don't have an account at <a class="ulink" href="http://otn.oracle.com" target="_top">OTN</a> get one: you can
-download the Oracle software from the <a class="ulink" href="http://otn.oracle.com/software/products/database/oracle10g/index.html" target="_top">Oracle Downloads</a> page. It is also get the CDs
-shipped to you for a nominal fee from the <a class="ulink" href="http://oraclestore.oracle.com/OA_HTML/ibeCCtdMinisites.jsp?language=US" target="_top">Oracle Store</a>.</p><p>Each Oracle release comes with extensive and usually quite
+platforms. If you don&#39;t have metalink access, take a look at
+the Oracle on Linux FAQ: <a class="ulink" href="http://www.orafaq.com/wiki/Linux_FAQ" target="_top">Which Linux
+Distributions Are Directly Supported By Oracle?</a>. In summary,
+free and inexpensive Linux distributions are not certified.</p><p>You can download the Oracle software from the <a class="ulink" href="https://www.oracle.com/downloads/index.html" target="_top">Oracle Downloads</a> page.</p><p>Each Oracle release comes with extensive and usually quite
 well-written documentation. Your first step should be to thoroughly
 read the release notes for your operating system and your Oracle
 version. Find the docs here:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="http://otn.oracle.com/documentation/oracle8i.html" target="_top">Oracle 8i Release Documentation</a></p></li><li class="listitem"><p><a class="ulink" href="http://otn.oracle.com/documentation/oracle9i.html" target="_top">Oracle 9i Release Documentation</a></p></li><li class="listitem"><p><a class="ulink" href="http://otn.oracle.com/documentation/database10g.html" target="_top">Oracle 10g Release Documentation</a></p></li>
+<li class="listitem"><p><a class="ulink" href="http://www.oracle.com/technetwork/documentation/oracle8i-085806.html" target="_top">Oracle 8i Release Documentation</a></p></li><li class="listitem"><p><a class="ulink" href="https://docs.oracle.com/cd/B10501_01/server.920/a96531/ch4_doc.htm" target="_top">Oracle 9i Release Documentation</a></p></li><li class="listitem"><p><a class="ulink" href="https://docs.oracle.com/cd/B19306_01/server.102/b14214/chapter2.htm#g62359" target="_top">Oracle 10g Release Documentation</a></p></li>
 </ul></div><p>It is generally useful to run a particular Oracle version with
 its latest patchset. At the time of writing these were 8.1.7.4 and
 9.2.0.5, both of which are considered to be very stable.</p><p>To be able to download a patchset, you need a (to-pay-for)
-account on <a class="ulink" href="metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate patchset by
-following <a class="ulink" href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew's suggestion</a>.</p>
+account on <a class="ulink" href="http://metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate patchset
+by following <a class="ulink" href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew&#39;s suggestion</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-keepinmind" id="install-oracle-keepinmind"></a>Things to Keep in Mind</h3></div></div></div><p>Oracle is very well-documented software, the <a class="ulink" href="http://tahiti.oracle.com" target="_top">online
 documentation</a> comes with printable PDFs and full-text search.
 Altogether there is more than 20.000 pages of documentation, so do
 not expect to understand Oracle within in a few hours. The best
-starting pointing into Oracle is the Concepts book. Here's the
+starting pointing into Oracle is the Concepts book. Here&#39;s the
 <a class="ulink" href="http://otn.oracle.com/pls/tahiti/tahiti.to_toc?pathname=server.817%2Fa76965%2Ftoc.htm&amp;remark=docindex" target="_top">8i version</a> and the <a class="ulink" href="http://otn.oracle.com/pls/db92/db92.to_toc?pathname=server.920%2Fa96524%2Ftoc.htm&amp;remark=docindex" target="_top">9.2 version</a>.</p><p>To give you an idea of how configurable Oracle is and how much
 thought you may need to put into buying the proper hardware and
-creating a sane setup, you should thoroughly read Cary Millsap's
-<a class="ulink" href="http://www.miracleas.dk/BAARF/0.Millsap1996.08.21-VLDB.pdf" target="_top">Configuring Oracle Server for VLDB</a> and the
-<a class="ulink" href="http://download-west.oracle.com/docs/html/A97297_01/appg_ofa.htm#sthref787" target="_top">Optimal Flexible Architecture</a> standard.</p><p>Throughout these instructions, we will refer to a number of
+creating a sane setup, you should thoroughly read Cary
+Millsap&#39;s <a class="ulink" href="http://www.miracleas.dk/BAARF/0.Millsap1996.08.21-VLDB.pdf" target="_top">Configuring Oracle Server for VLDB</a> and the
+<a class="ulink" href="https://en.wikipedia.org/wiki/Optimal_Flexible_Architecture" target="_top">Optimal Flexible Architecture</a> standard.</p><p>Throughout these instructions, we will refer to a number of
 configurable settings and advise certain defaults. With the
 exception of passwords, we advise you to follow these defaults
 unless you know what you are doing. Subsequent documents will
@@ -87,7 +84,7 @@ open_cursors = 500
 </pre><pre class="programlisting">
 nls_date_format = "YYYY-MM-DD"
 </pre><p>For additional resources/documentation, please see this
-<a class="ulink" href="http://openacs.org/forums/message-view?message_id=28829" target="_top">thread</a> and <a class="ulink" href="http://openacs.org/forums/message-view?message_id=67108" target="_top">Andrew Piskorski's mini-guide</a>.</p>
+<a class="ulink" href="http://openacs.org/forums/message-view?message_id=28829" target="_top">thread</a> and <a class="ulink" href="http://openacs.org/forums/message-view?message_id=67108" target="_top">Andrew Piskorski&#39;s mini-guide</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-preinstall" id="install-oracle-preinstall"></a>Pre-Installation Tasks</h3></div></div></div><p>Though Oracle 8.1.7 has an automated installer, we still need to
@@ -131,7 +128,7 @@ root:/ora8# chown -R oracle.dba /ora8
 root:/ora8# exit
 </pre>
 </li><li class="listitem">
-<p>Set up the <code class="computeroutput">oracle</code> user's
+<p>Set up the <code class="computeroutput">oracle</code> user&#39;s
 environment</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>Log in as the user <code class="computeroutput">oracle</code> by
@@ -241,13 +238,13 @@ directory that was created when you expanded the archive.</p><pre class="program
 </ul></div><p>Check to make sure the file is there.</p><pre class="programlisting">
 oracle:/where/oracle/Disk1$ ls
 doc  index.htm  install  runInstaller  stage  starterdb
-</pre><p>If you don't see <code class="computeroutput">runInstaller</code>, you are in the wrong
+</pre><p>If you don&#39;t see <code class="computeroutput">runInstaller</code>, you are in the wrong
 directory.</p>
 </li><li class="listitem">
 <p>Run the installer</p><pre class="programlisting">
 oracle:/where/oracle/Disk1$ ./runInstaller
-</pre><p>A window will open that welcomes you to the 'Oracle Universal
-Installer' (OUI). Click on "<code class="computeroutput">Next</code>"</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+</pre><p>A window will open that welcomes you to the 'Oracle
+Universal Installer' (OUI). Click on "<code class="computeroutput">Next</code>"</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3><p>Some people have had trouble with this step on RedHat 7.3 and
 8.0. If so, try the following steps before calling <span class="command"><strong>./runInstaller</strong></span>:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Execute the following command: <span class="command"><strong>/usr/i386-glibc21-linux/bin/i386-glibc21-linux-env.sh</strong></span>
@@ -258,20 +255,20 @@ LD_ASSUME_KERNEL=2.2.5</strong></span>
 </div>
 </li><li class="listitem">
 <p>The "File Locations" screen in the OUI:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>"Source" path should have been prefilled with "(wherever you
-mounted the CDROM)<code class="computeroutput">/stage/products.jar</code>"</p></li><li class="listitem">
+<li class="listitem"><p>"Source" path should have been prefilled with
+"(wherever you mounted the CDROM)<code class="computeroutput">/stage/products.jar</code>"</p></li><li class="listitem">
 <p>"destination" path says "<code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7</code>"</p><p>If the destination is not correct it is because your environment
 variables are not set properly. Make sure you logged on as
 <code class="computeroutput">oracle</code> using <code class="computeroutput">su - oracle</code>. If so, edit the <code class="computeroutput">~/.bash_profile</code> as you did in <a class="xref" href="oracle" title="Pre-Installation Tasks">the section called
 &ldquo;Pre-Installation Tasks&rdquo;</a>
 </p>
-</li><li class="listitem"><p>Click "Next" (a pop up window will display Loading Product
-information).</p></li>
+</li><li class="listitem"><p>Click "Next" (a pop up window will display Loading
+Product information).</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>The "Unix Group Name" screen in the OUI:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>The Unix Group name needs to be set to '<code class="computeroutput">oinstall</code>' ( we made this Unix group earlier
-).</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>A popup window appears instantly, requesting you to run a script
+<li class="listitem"><p>The Unix Group name needs to be set to '<code class="computeroutput">oinstall</code>' ( we made this Unix group
+earlier ).</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>A popup window appears instantly, requesting you to run a script
 as root:</p></li><li class="listitem"><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;"><li class="listitem">
 <p>Debian users need to link <code class="computeroutput">/bin/awk</code> to <code class="computeroutput">/usr/bin/awk</code> before running the script
 below</p><pre class="programlisting">
@@ -303,17 +300,20 @@ Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
 </li><li class="listitem">
 <p>The "Available Product Components" screen</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>In addition to the defaults, make sure that "Oracle SQLJ
-8.1.7.0," "Oracle Protocol Support 8.1.7.0.0," and "Linux
-Documentation 8.1.7.0.0" are also checked.</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>A progress bar will appear for about 1 minute.</p></li>
+8.1.7.0," "Oracle Protocol Support 8.1.7.0.0," and
+"Linux Documentation 8.1.7.0.0" are also checked.</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>A progress bar will appear for about 1 minute.</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>The "Component Locations" screen in the OUI</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>Click on the "Java Runtime Environment 1.1.8" It should have the
-path "<code class="computeroutput">/ora8/m01/app/oracle/jre/1.1.8</code>"</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>A progress bar will appear for about 1 minute.</p></li>
+<li class="listitem"><p>Click on the "Java Runtime Environment 1.1.8" It
+should have the path "<code class="computeroutput">/ora8/m01/app/oracle/jre/1.1.8</code>"</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>A progress bar will appear for about 1 minute.</p></li>
 </ul></div>
 </li><li class="listitem">
-<p>The "Privileged Operation System Groups" screen in the OUI</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>Enter "dba" for "Database Administrator (OSDBA) Group"</p></li><li class="listitem"><p>Enter "dba" for the "Database Operator (OSOPER) Group"</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>A progress bar will appear for about 1 minute.</p></li>
+<p>The "Privileged Operation System Groups" screen in the
+OUI</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<li class="listitem"><p>Enter "dba" for "Database Administrator (OSDBA)
+Group"</p></li><li class="listitem"><p>Enter "dba" for the "Database Operator (OSOPER)
+Group"</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>A progress bar will appear for about 1 minute.</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>The "Authentication Methods" screen</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p>Click "Next"</p></li></ul></div>
@@ -324,24 +324,25 @@ path "<code class="computeroutput">/ora8/m01/app/oracle/jre/1.1.8</code>"</p></l
 </ul></div>
 </li><li class="listitem">
 <p>The "Create a Database" screen in the OUI</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>Select "No" as we will do this later, after some important
-configuration changes.</p></li><li class="listitem"><p>Click "Next"</p></li>
+<li class="listitem"><p>Select "No" as we will do this later, after some
+important configuration changes.</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>The next screen is "Oracle Product Support"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>TCP should be checked with "Status" listed as Required</p></li><li class="listitem"><p>Click "Next"</p></li>
+<li class="listitem"><p>TCP should be checked with "Status" listed as
+Required</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>The "Summary" screen in the OUI</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>Check the "Space Requirements" section to verify you have enough
-disk space for the install.</p></li><li class="listitem"><p>Check that "(144 products)" is in the "New Installations"
-section title.</p></li><li class="listitem"><p>Click "Install"</p></li><li class="listitem"><p>A progress bar will appear for about 20 - 30 minutes. Now is a
-good time to take a break.</p></li><li class="listitem"><p>A "Setup Privileges" window will popup towards the end of the
-installation asking you to run a script as <code class="computeroutput">root</code>
+<li class="listitem"><p>Check the "Space Requirements" section to verify you
+have enough disk space for the install.</p></li><li class="listitem"><p>Check that "(144 products)" is in the "New
+Installations" section title.</p></li><li class="listitem"><p>Click "Install"</p></li><li class="listitem"><p>A progress bar will appear for about 20 - 30 minutes. Now is a
+good time to take a break.</p></li><li class="listitem"><p>A "Setup Privileges" window will popup towards the end
+of the installation asking you to run a script as <code class="computeroutput">root</code>
 </p></li><li class="listitem">
 <p>Run the script. Switch to the oracle user first to set the
 environment appropriately and then do <span class="command"><strong>su</strong></span> to get root privileges, while
-keeping the oracle user's enviroment.</p><pre class="programlisting">
+keeping the oracle user&#39;s environment.</p><pre class="programlisting">
 [joeuser ~]$ su - oracle
 Password: *********
 [oracle ~]$ su
@@ -384,40 +385,44 @@ it is not necessary.</p></li>
 <p>The "Configuration Tools" screen in the OUI</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p>This window displays the config tools that will automatically be
 launched.</p></li></ul></div>
 </li><li class="listitem">
-<p>The "Welcome" screen in the "net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>Make sure the "Perform Typical installation" is <span class="strong"><strong>not</strong></span> selected.</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>The "Directory Service Access" screen in the "Net 8
-Configuration Assistant"</p></li><li class="listitem"><p>Select "No"</p></li><li class="listitem"><p>Click "Next"</p></li>
+<p>The "Welcome" screen in the "net 8 Configuration
+Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<li class="listitem"><p>Make sure the "Perform Typical installation" is
+<span class="strong"><strong>not</strong></span> selected.</p></li><li class="listitem"><p>Click "Next"</p></li><li class="listitem"><p>The "Directory Service Access" screen in the "Net
+8 Configuration Assistant"</p></li><li class="listitem"><p>Select "No"</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
-<p>The "Listener Configuration, Listener Name" screen in the "Net 8
-Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<p>The "Listener Configuration, Listener Name" screen in
+the "Net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Accept the default listener name of "LISTENER"</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
-<p>The "Listener Configuration, Select Protocols" screen in the
-"Net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>The only choice in "Select protocols:" should be "TCP/IP"</p></li><li class="listitem"><p>Click "Next"</p></li>
+<p>The "Listener Configuration, Select Protocols" screen
+in the "Net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<li class="listitem"><p>The only choice in "Select protocols:" should be
+"TCP/IP"</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
-<p>The "Listener Configuration TCP/IP Protocol" screen in the "Net
-8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<p>The "Listener Configuration TCP/IP Protocol" screen in
+the "Net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Default Port should be 1521 and selected.</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
-<p>The "Listener Configuration, More Listeners" screen in the "Net
-8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<p>The "Listener Configuration, More Listeners" screen in
+the "Net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Select "No"</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
-<p>The "Listener Configuration Done" screen in the "Net 8
-Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p>Click "Next"</p></li></ul></div>
+<p>The "Listener Configuration Done" screen in the
+"Net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p>Click "Next"</p></li></ul></div>
 </li><li class="listitem">
-<p>The "Naming Methods Configuration" screen in the "Net 8
-Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<p>The "Naming Methods Configuration" screen in the
+"Net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Select "No"</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
-<p>The "Done" screen in the "Net 8 Configuration Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p>Click "Finish"</p></li></ul></div>
+<p>The "Done" screen in the "Net 8 Configuration
+Assistant"</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p>Click "Finish"</p></li></ul></div>
 </li><li class="listitem">
 <p>The "End of Installation" screen in the OUI</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Click "Exit"</p></li><li class="listitem"><p>Click "Yes" on the confirmation pop up window.</p></li><li class="listitem"><p>The Oracle Universal Installer window should have
@@ -426,16 +431,12 @@ disappeared!</p></li>
 </li>
 </ul></div><p>Congratulations, you have just installed Oracle 8.1.7 Server!
 However, you still need to create a database which can take about
-an hour of non-interactive time, so don't quit yet.</p>
+an hour of non-interactive time, so don&#39;t quit yet.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-create" id="install-oracle-create"></a>Creating the First Database</h3></div></div></div><p>This step will take you through the steps of creating a
 customized database. Be warned that this process takes about an
-hour on a Pentium II with 128 MB of RAM.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
-<h3 class="title">Note</h3><p>RedHat 7.3 and 8.0 users: Before running <span class="command"><strong>dbassist</strong></span>, do the following.</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>Download the <a class="ulink" href="http://otn.oracle.com/software/products/oracle8i/htdocs/linuxsoft.html" target="_top">glibc patch</a> from Oracle Technet into <code class="computeroutput">/var/tmp</code>.</p></li><li class="listitem"><p>cd $ORACLE_HOME</p></li><li class="listitem"><p>tar xzf /var/tmp/glibc2.1.3-stubs.tgz</p></li><li class="listitem"><p>./setup_stubs</p></li>
-</ol></div>
-</div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+hour on a Pentium II with 128 MB of RAM.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>Make sure you are running X. Open up a terminal and <code class="computeroutput">su</code> to oracle and then run the <code class="computeroutput">dbassist</code> program.</p><pre class="programlisting">
 [joeuser ~]$ xhost +localhost
@@ -445,8 +446,8 @@ Password: *********
 [oracle ~]$ dbassist
 </pre>
 </li><li class="listitem">
-<p>The "Welcome" screen in the Oracle Database Configuration Agent
-(ODCA)</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<p>The "Welcome" screen in the Oracle Database
+Configuration Agent (ODCA)</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Select "Create a database"</p></li><li class="listitem"><p>Click "Next"</p></li>
 </ul></div>
 </li><li class="listitem">
@@ -464,20 +465,21 @@ Password: *********
 </li><li class="listitem"><p>Select "<code class="computeroutput">Dedicated Server
 Mode</code>", click "<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Accept all of the options, and click <code class="computeroutput">Next</code> Oracle Visual Information Retrieval
 may be grayed out. If so, you can ignore it; just make sure that
-everything else is checked.</p></li><li class="listitem"><p>For "Global Database Name", enter "<code class="computeroutput">ora8</code>"; for "SID", also enter "<code class="computeroutput">ora8</code>" (it should do this automatically).
-Click <code class="computeroutput">"Change Character Set</code> and
-select <code class="computeroutput">UTF8</code>. Click
-"<code class="computeroutput">Next</code>".</p></li><li class="listitem"><p>Accept the defaults for the next screen (control file location).
-Click "<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Go to the "temporary" and "rollback" tabs, and change the Size
-(upper-right text box) to <code class="computeroutput">150</code>MB. Click "<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Increase the redo log sizes to <code class="computeroutput">10000K</code> each. Click "<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Use the default checkpoint interval &amp; timeout. Click
-"<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Increase "<code class="computeroutput">Processes</code>" to
-<code class="computeroutput">100</code>; "<code class="computeroutput">Block Size</code>" to <code class="computeroutput">4096</code> (better for small Linux boxes; use
+everything else is checked.</p></li><li class="listitem"><p>For "Global Database Name", enter "<code class="computeroutput">ora8</code>"; for "SID", also enter
+"<code class="computeroutput">ora8</code>" (it should do
+this automatically). Click <code class="computeroutput">"Change Character Set</code> and select
+<code class="computeroutput">UTF8</code>. Click "<code class="computeroutput">Next</code>".</p></li><li class="listitem"><p>Accept the defaults for the next screen (control file location).
+Click "<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Go to the "temporary" and "rollback" tabs,
+and change the Size (upper-right text box) to <code class="computeroutput">150</code>MB. Click "<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Increase the redo log sizes to <code class="computeroutput">10000K</code> each. Click "<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Use the default checkpoint interval &amp; timeout. Click
+"<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Increase "<code class="computeroutput">Processes</code>" to <code class="computeroutput">100</code>; "<code class="computeroutput">Block Size</code>" to <code class="computeroutput">4096</code> (better for small Linux boxes; use
 8192 for a big Solaris machine).</p></li><li class="listitem"><p>Accept the defaults for the Trace File Directory. Click
-"<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Finally, select "<code class="computeroutput">Save information
-to a shell script</code>" and click "<code class="computeroutput">Finish</code>" (We're going to examine the
-contents of this file before creating our database.)</p></li><li class="listitem"><p>Click the "<code class="computeroutput">Save</code>" button.
-Oracle will automatically save it to the correct directory and with
-the correct file name. This will likely be <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib/sqlora8.sh</code>
+"<code class="computeroutput">Next</code>"</p></li><li class="listitem"><p>Finally, select "<code class="computeroutput">Save
+information to a shell script</code>" and click
+"<code class="computeroutput">Finish</code>" (We&#39;re
+going to examine the contents of this file before creating our
+database.)</p></li><li class="listitem"><p>Click the "<code class="computeroutput">Save</code>"
+button. Oracle will automatically save it to the correct directory
+and with the correct file name. This will likely be <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib/sqlora8.sh</code>
 </p></li><li class="listitem"><p>It will alert you that the script has been saved
 successfully.</p></li><li class="listitem">
 <p>Now we need to customize the database configuration a bit. While
@@ -496,7 +498,7 @@ nls_date_format = "YYYY-MM-DD"
 </pre>
 </li><li class="listitem">
 <p>Now find the <code class="computeroutput">open_cursors</code>
-line in the file. If you're using <code class="computeroutput">emacs</code> scroll up to the top of the buffer
+line in the file. If you&#39;re using <code class="computeroutput">emacs</code> scroll up to the top of the buffer
 and do <code class="computeroutput">CTRL-S</code> and type
 <code class="computeroutput">open_cursors</code> to find the line.
 The default is <code class="computeroutput">100</code>. Change it
@@ -519,26 +521,26 @@ Try running the script there if your first attempt does not
 succeed.</p>
 </li><li class="listitem">
 <p>Your database will now be built. It will take &gt; 1 hour - no
-fooling. You will see lots of errors scroll by (like: "ORA-01432:
-public synonym to be dropped does not exist") Fear not, this is
-normal.</p><p>Eventually, you'll be returned to your shell prompt. In the
-meantime, relax, you've earned it.</p>
+fooling. You will see lots of errors scroll by (like:
+"ORA-01432: public synonym to be dropped does not exist")
+Fear not, this is normal.</p><p>Eventually, you&#39;ll be returned to your shell prompt. In the
+meantime, relax, you&#39;ve earned it.</p>
 </li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="istall-oracle-test" id="istall-oracle-test"></a>Acceptance Test</h3></div></div></div><p>For this step, open up a terminal and <code class="computeroutput">su</code> to <code class="computeroutput">oracle</code> as usual. You should be running X
 and Netscape (or other web browser) for this phase.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>You need to download the "Oracle Acceptance Test" file. It's
-available <a class="ulink" href="files/acceptance-sql.txt" target="_top">here</a> and at <a class="ulink" href="http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt" target="_top">http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt</a>.
+<li class="listitem"><p>You need to download the "Oracle Acceptance Test"
+file. It&#39;s available <a class="ulink" href="files/acceptance-sql.txt" target="_top">here</a> and at <a class="ulink" href="http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt" target="_top">http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt</a>.
 Save the file to <code class="computeroutput">/var/tmp</code>
 </p></li><li class="listitem">
 <p>In the oracle shell, copy the file.</p><pre class="programlisting">
 [oracle ~]$ cp /var/tmp/acceptance-sql.txt /var/tmp/acceptance.sql
 </pre>
 </li><li class="listitem">
-<p>Once you've got the acceptance test file all set, stay in your
-term and type the following:</p><pre class="programlisting">
+<p>Once you&#39;ve got the acceptance test file all set, stay in
+your term and type the following:</p><pre class="programlisting">
 [oracle ~]$ sqlplus system/manager
 </pre><p>SQL*Plus should startup. If you get an <code class="computeroutput">ORA-01034: Oracle not Available</code> error, it
 is because your Oracle instance is not running. You can manually
@@ -549,9 +551,9 @@ SVRMGR&gt; connect internal
 SVRMGR&gt; startup
 </pre>
 </li><li class="listitem">
-<p>Now that you're into SQL*Plus, change the default passwords for
-system, sys, and ctxsys to "alexisahunk" (or to something you'll
-remember):</p><pre class="programlisting">
+<p>Now that you&#39;re into SQL*Plus, change the default passwords
+for system, sys, and ctxsys to "alexisahunk" (or to
+something you&#39;ll remember):</p><pre class="programlisting">
 SQL&gt; alter user system identified by alexisahunk;
 SQL&gt; alter user sys identified by alexisahunk;
 SQL&gt; alter user ctxsys identified by alexisahunk;
@@ -559,7 +561,7 @@ SQL&gt; alter user ctxsys identified by alexisahunk;
 </li><li class="listitem">
 <p>Verify that your date settings are correct.</p><pre class="programlisting">
 SQL&gt; select sysdate from dual;
-</pre><p>If you don't see a date that fits the format <code class="computeroutput">YYYY-MM-DD</code>, please read <a class="xref" href="oracle" title="Troubleshooting Oracle Dates">the section called
+</pre><p>If you don&#39;t see a date that fits the format <code class="computeroutput">YYYY-MM-DD</code>, please read <a class="xref" href="oracle" title="Troubleshooting Oracle Dates">the section called
 &ldquo;Troubleshooting Oracle
 Dates&rdquo;</a>.</p>
 </li><li class="listitem">
@@ -567,7 +569,7 @@ Dates&rdquo;</a>.</p>
 intense acceptance test. This usually takes around 30 minutes.</p><pre class="programlisting">
 SQL&gt; \@ /var/tmp/acceptance.sql
 
-; A bunch of lines will scroll by.  You'll know if the test worked if
+; A bunch of lines will scroll by.  You&#39;ll know if the test worked if
 ; you see this at the end:
 
 SYSDATE
@@ -586,7 +588,7 @@ see <a class="xref" href="oracle" title="Creating the First Database">the sectio
 &ldquo;Creating the First Database&rdquo;</a>
 above. You can set the parameter using the <code class="computeroutput">dbassist</code> program or by setting the
 <code class="computeroutput">DB_BLOCK_SIZE</code> parameter in your
-database's creation script.</p><p>If there were no errors, then consider yourself fortunate. Your
+database&#39;s creation script.</p><p>If there were no errors, then consider yourself fortunate. Your
 Oracle installation is working.</p>
 </li>
 </ul></div>
@@ -594,8 +596,8 @@ Oracle installation is working.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-automating" id="install-oracle-automating"></a>Automating Startup &amp;
 Shutdown</h3></div></div></div><p>You will want to automate the database startup and shutdown
-process. It's probably best to have Oracle spring to life when you
-boot up your machine.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+process. It&#39;s probably best to have Oracle spring to life when
+you boot up your machine.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>Oracle includes a script called <code class="computeroutput">dbstart</code> that can be used to automatically
 start the database. Unfortunately, the script shipped in the Linux
@@ -605,7 +607,7 @@ Follow these directions to apply it. First, save <a class="ulink" href="files/db
 [oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart
 </pre>
 </li><li class="listitem">
-<p>While you're logged in as <code class="computeroutput">oracle</code>, you should configure the
+<p>While you&#39;re logged in as <code class="computeroutput">oracle</code>, you should configure the
 <code class="computeroutput">oratab</code> file to load your
 database at start. Edit the file <code class="computeroutput">/etc/oratab</code>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
@@ -615,9 +617,9 @@ ora8:/ora8/m01/app/oracle/product/8.1.7:N
 databases, the format of this file is:</p><p><span class="emphasis"><em><code class="computeroutput">service_name:$ORACLE_HOME:Y || N (for
 autoload)</code></em></span></p>
 </li><li class="listitem">
-<p>Change the last letter from "N" to "Y". This tells Oracle that
-you want the database to start when the machine boots. It should
-look like this.</p><pre class="programlisting">
+<p>Change the last letter from "N" to "Y". This
+tells Oracle that you want the database to start when the machine
+boots. It should look like this.</p><pre class="programlisting">
 ora8:/ora8/m01/app/oracle/product/8.1.7:Y
 </pre>
 </li><li class="listitem"><p>Save the file &amp; quit the terminal.</p></li>
@@ -870,8 +872,8 @@ Dates</h3></div></div></div><p>Oracle has an internal representation for storing
 on the number of seconds elapsed since some date. However, for the
 purposes of inputing dates into Oracle and getting them back out,
 Oracle needs to be told to use a specific date format. By default,
-it uses an Oracle-specific format which isn't copacetic. You want
-Oracle to use the ANSI-compliant date format which is of form
+it uses an Oracle-specific format which isn&#39;t copacetic. You
+want Oracle to use the ANSI-compliant date format which is of form
 <code class="computeroutput">'YYYY-MM-DD'</code>.</p><p>To fix this, you should include the following line in
 <code class="computeroutput">$ORACLE_HOME/dbs/init</code><span class="emphasis"><em>SID</em></span><code class="computeroutput">.ora</code> or for the default case, <code class="computeroutput">$ORACLE_HOME/dbs/initora8.ora</code>
 </p><pre class="programlisting">
@@ -887,8 +889,8 @@ SQL&gt; column sysdate format a15
 SQL&gt; select sysdate from dual;
 </pre><p>If the date does not conform to this format, double-check that
 you included the necessary line in the init scripts. If it still
-isn't working, make sure that you have restarted the database since
-adding the line:</p><pre class="programlisting">
+isn&#39;t working, make sure that you have restarted the database
+since adding the line:</p><pre class="programlisting">
 [joeuser ~]$ svrmgrl
 SVRMGR&gt; connect internal
 Connected.
@@ -898,16 +900,16 @@ Database dismounted.
 ORACLE instance shut down.
 SVRMGR&gt; startup
 ORACLE instance started.
-</pre><p>If you're sure that you have restarted the database since adding
-the line, check your initialization scripts. Make sure that the
-following line is not included:</p><pre class="programlisting">
+</pre><p>If you&#39;re sure that you have restarted the database since
+adding the line, check your initialization scripts. Make sure that
+the following line is not included:</p><pre class="programlisting">
 export nls_lang = american
 </pre><p>Setting this environment variable will override the date
 setting. Either delete this line and login again or add the
 following entry to your login scripts <span class="emphasis"><em>after</em></span> the <code class="computeroutput">nls_lang</code> line:</p><pre class="programlisting">
 export nls_date_format = 'YYYY-MM-DD'
-</pre><p>Log back in again. If adding the <code class="computeroutput">nls_date_format</code> line doesn't help, you can
-ask for advice in our <a class="ulink" href="http://www.openacs.org/forums/" target="_top">OpenACS
+</pre><p>Log back in again. If adding the <code class="computeroutput">nls_date_format</code> line doesn&#39;t help, you
+can ask for advice in our <a class="ulink" href="http://www.openacs.org/forums/" target="_top">OpenACS
 forums</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -931,7 +933,7 @@ SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> 
 </pre>
 </li>
 </ul></div>
-</li></ul></div><p>For more information on Oracle, please consult the <a class="ulink" href="http://oradoc.photo.net/" target="_top">documentation</a>.</p>
+</li></ul></div><p>For more information on Oracle, please consult the <a class="ulink" href="https://docs.oracle.com/en/database/" target="_top">documentation</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="oracle-next-steps" id="oracle-next-steps"></a>Oracle Next Steps</h3></div></div></div><p><a class="xref" href="maint-performance" title="Creating an appropriate tuning and monitoring environment">the
@@ -939,7 +941,7 @@ section called &ldquo;Creating an appropriate tuning
 and monitoring environment&rdquo;</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-oracle-defaults" id="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table cellspacing="0" border="1">
+<a name="install-oracle-defaults" id="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col>
 </colgroup><thead><tr>
@@ -961,8 +963,8 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.6 2017/06/17
+08:29:28 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
@@ -971,5 +973,4 @@ supporting software"
 		    rightLink="postgres" rightLabel="Next" rightTitle="Install PostgreSQL"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="complete-install" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/current/oracle.html#comments">View comments
-on this page at openacs.org</a></center>
+		

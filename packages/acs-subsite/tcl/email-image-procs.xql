@@ -39,26 +39,8 @@
 <fullquery name="email_image::update_private_p.update_users">
   <querytext>
         update users
-        set priv_email  = :level
+        set priv_email = :level
         where user_id = :user_id
-  </querytext>
-</fullquery>
-
-
-
-<fullquery name="email_image::new_item.update_cr_items_new">
-  <querytext>
-        update cr_items
-        set live_revision  = :revision_id
-        where item_id = :item_id
-  </querytext>
-</fullquery>
-
-<fullquery name="email_image::edit_email_image.update_cr_items">
-  <querytext>
-        update cr_items
-        set live_revision  = :revision_id
-        where item_id = :item_id
   </querytext>
 </fullquery>
   

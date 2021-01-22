@@ -230,13 +230,14 @@ select nextval('t_acs_object_id_seq') as nextval;
 create table acs_objects (
 	object_id		integer not null
 				constraint acs_objects_object_id_pk primary key,
-	object_type		varchar(100) not null
+	object_type		varchar(1000) not null
 				constraint acs_objects_object_type_fk
 				references acs_object_types (object_type),
         title			varchar(1000) default null,
         package_id		integer default null,
-        context_id		integer constraint acs_objects_context_id_fk
-				references acs_objects(object_id),
+        context_id		integer
+				CONSTRAINT acs_objects_context_id_fk
+				REFERENCES acs_objects(object_id) ON DELETE CASCADE,
 	security_inherit_p	boolean default 't' not null,
 	creation_user		integer,
 	creation_date		timestamptz default current_timestamp not null,
@@ -290,19 +291,19 @@ for each row execute procedure acs_objects_last_mod_update_tr ();
 -- show errors
 
 comment on table acs_objects is '
-The root table for the acs object heirarchy.  It all starts here folks.
+The root table for the acs object hierarchy.  It all starts here folks.
 ';
 
-comment on column acs_objects.context_id is '
+comment on column acs_objects.context_id is $$
  The context_id column points to an object that provides a context for
  this object. Often this will reflect an observed hierarchy in a site,
  for example a bboard message would probably list a bboard topic as
- it''s context, and a bboard topic might list a sub-site as it''s
+ it's context, and a bboard topic might list a sub-site as it's
  context. Whenever we ask a question of the form "can user X perform
  action Y on object Z", the acs security model will defer to an
- object''s context if there is no information about user X''s
+ object's context if there is no information about user X's
  permission to perform action Y on object Z.
-';
+$$;
 
 comment on column acs_objects.creation_user is '
  Who created the object; may be null since objects can be created by
@@ -331,11 +332,11 @@ comment on column acs_objects.title is '
 
 create table acs_object_context_index (
 	object_id	integer not null
-                        constraint acs_obj_context_idx_obj_id_fk
-			references acs_objects(object_id),
+			CONSTRAINT acs_obj_context_idx_obj_id_fk
+			REFERENCES acs_objects(object_id) ON DELETE CASCADE,
 	ancestor_id	integer not null
-                        constraint acs_obj_context_idx_anc_id_fk
-			references acs_objects(object_id),
+			CONSTRAINT acs_obj_context_idx_anc_id_fk
+			REFERENCES acs_objects(object_id) ON DELETE CASCADE,
 	n_generations	integer not null
 			constraint acs_obj_context_idx_n_gen_ck
 			check (n_generations >= 0),
@@ -477,19 +478,6 @@ $$ LANGUAGE plpgsql;
 create trigger acs_objects_context_id_up_tr after update on acs_objects
 for each row execute procedure acs_objects_context_id_up_tr ();
 
-CREATE OR REPLACE FUNCTION acs_objects_context_id_del_tr () RETURNS trigger AS $$
-BEGIN
-  delete from acs_object_context_index
-  where object_id = old.object_id;
-
-  return old;
-
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger acs_objects_context_id_del_tr before delete on acs_objects
-for each row execute procedure acs_objects_context_id_del_tr ();
-
 ----------------------
 -- ATTRIBUTE VALUES --
 ----------------------
@@ -519,7 +507,7 @@ comment on table acs_attribute_values is '
 ';
 
 create table acs_static_attr_values (
-	object_type	varchar(100) not null
+	object_type	varchar(1000) not null
 			constraint acs_static_a_v_obj_id_fk
 			references acs_object_types (object_type) on delete cascade,
 	attribute_id	integer not null
@@ -1082,7 +1070,7 @@ BEGIN
        end if;
 
      else
-       -- Specific attribute: table name/column need to be retreived
+       -- Specific attribute: table name/column need to be retrieved
  
        if v_static = 'f' then
          select 
@@ -1390,15 +1378,15 @@ BEGIN
    -- N_GENERATIONS is how far ancestor_id is from object_id
 
    -- Note that this function is only supposed to verify that the
-   -- index contains each ancestor for OBJECT_ID. It doesn''t
+   -- index contains each ancestor for OBJECT_ID. It doesn't
    -- guarantee that there aren''t extraneous rows or that
-   -- OBJECT_ID''s children are contained in the index. That is
-   -- verified by seperate functions.
+   -- OBJECT_ID's children are contained in the index. That is
+   -- verified by separate functions.
 
    result := 't';
 
    -- Grab the context and security_inherit_p flag of the current
-   -- ancestor''s parent.
+   -- ancestor's parent.
    select context_id, security_inherit_p 
    into check_object_ancestors__context_id, 
         check_object_ancestors__security_inherit_p
@@ -1409,7 +1397,7 @@ BEGIN
      if check_object_ancestors__context_id is null then
        result := 't';
      else
-       -- This can be a constraint, can''t it?
+       -- This can be a constraint, can't it?
        PERFORM acs_log__error('acs_object.check_representation',
                      'Object 0 doesn''t have a null context_id');
        result := 'f';
@@ -1463,7 +1451,7 @@ BEGIN
    -- N_GENERATIONS is how far the current DESCENDANT_ID is from
    -- OBJECT_ID.
 
-   -- This function will verfy that each actualy descendant of
+   -- This function will verfy that each actually descendant of
    -- OBJECT_ID has a row in the index table. It does not check that
    -- there aren't extraneous rows or that the ancestors of OBJECT_ID
    -- are maintained correctly.

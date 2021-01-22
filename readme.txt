@@ -1,6 +1,6 @@
 This is OpenACS - the Open Architecture Community System.
 
-Version 5.9.0
+Version 5.9.1
 -------------
 
 Full documentation is located in the tarball at
@@ -20,7 +20,7 @@ at http://openacs.org/doc
 
 Please report bugs via http://openacs.org/bugtracker/openacs/
 and any questions and feedback at http://openacs.org/forums/.  Send 
-documentation questions and corrections to docs@openacs.org.
+documentation questions and corrections to oct@openacs.org.
 
 ---------------
 

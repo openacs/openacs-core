@@ -319,6 +319,17 @@ proc install_admin_widget {} {
 
 }
 
+proc install_back_button_widget {} {    
+    return [subst {Please <a id="install-back-button" href="#">try again</a>.
+    <script type='text/javascript' nonce='[security::csp::nonce]'>
+     var e = document.getElementById('install-back-button');
+     e.addEventListener('click', function (event) {
+        event.preventDefault();
+        history.back();
+     }, false);
+    </script>}]
+}
+
 proc install_redefine_ad_conn {} {
 
     # Peter Marklund
@@ -340,12 +351,7 @@ ad_proc -public ad_windows_p {} {
     Returns 1 if the ACS is running under Windows.
     Note,  this procedure is a best guess, not sure of a better way of determining:
 } {
-    set thisplatform [ns_info platform]
-    if {$thisplatform eq "win32"} {
-        return 1
-    } else {
-        return 0
-    }
+    return [expr {[ns_info platform] in {win32 win64}}]
 }
 
 ad_proc -private install_load_errors_formatted {errorVarName} {
@@ -408,6 +414,7 @@ ad_proc -private install_do_data_model_install {} {
     Done installing the OpenACS kernel data model.<p>
 
     "
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 
     # Some APM procedures use util_memoize, so initialize the cache 
     # before starting APM install
@@ -429,7 +436,8 @@ ad_proc -private install_do_data_model_install {} {
     # Preload all the .info files so the next page is snappy.
     apm_dependency_check -initial_install [apm_scan_packages -new [file join $::acs::rootdir packages]]
 
-    ns_write "Done loading package .info files<p>"    
+    ns_write "Done loading package .info files<p>"
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 }
 
 ad_proc -private install_do_packages_install {} {
@@ -445,6 +453,8 @@ ad_proc -private install_do_packages_install {} {
             } -default 0]
             if {$kernel_id > 0} {
                 proc ad_acs_kernel_id {} "return $kernel_id"
+                ns_log notice "installer: setting ::acs::kernel_id to $kernel_id"
+                set ::acs::kernel_id $kernel_id
             }
             return $kernel_id
         } else {
@@ -480,12 +490,20 @@ ad_proc -private install_do_packages_install {} {
         ns_write "<p><b><i>At least one core package has an unsatisifed dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:</i></b>"
-
+        
         ns_write "\n<ul>"
+        set deps ""
         foreach dep $pkg_list {
             lassign $dep _name _path _a _b _pkg _deps _flag _msg
             ns_write "<li>[lindex $_pkg 0]: $_msg</li>"
+            append deps "[lindex $_pkg 0]: $_msg\n"
         }
+        ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
+        
+        ns_log Error "At least one core package has an unsatisifed dependency.\
+              No packages have been installed missing: [lindex $dependency_results 2]. \
+              Here's what the APM has computed:\n$deps"
+
         return
     }
 
@@ -514,6 +532,7 @@ ad_proc -private install_do_packages_install {} {
     }
 
     ns_write "All Packages Installed."
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 }
 
 # Register the install handler.

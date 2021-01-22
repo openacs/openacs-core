@@ -162,7 +162,7 @@ ad_proc -deprecated ad_maybe_redirect_for_registration {} {
     location. All variables in ns_getform (both posts and gets) will
     be maintained. Note that this will return out of its caller so that
     the caller need not explicitly call "return". Returns the user id
-    if login was succesful.
+    if login was successful.
 
     @see auth::require_login
 } {

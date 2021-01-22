@@ -19,7 +19,18 @@ namespace eval acs_mail_lite {
     } {
         set domain [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "BounceDomain"]
         if { $domain eq "" } {
-	    regsub {http://} [ns_config [ns_driversection -driver nssock] hostname] _ domain
+            #
+            # If there is no domain configured, use the configured
+            # hostname as domain name
+            #
+            foreach driver {nsssl nssock} {
+                set driver_section [ns_driversection -driver $driver]
+                set configured_hostname [ns_config $driver_section hostname]
+                if {$configured_hostname ne ""} {
+                    set domain $configured_hostname
+                    break
+                }
+            }
 	}
 	return $domain
     }
@@ -108,7 +119,7 @@ namespace eval acs_mail_lite {
 	    }
 
             #let's delete the file now
-            if {[catch {file delete $msg} errmsg]} {
+            if {[catch {file delete -- $msg} errmsg]} {
                 ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
             } else {
 		ns_log Debug "load_mails: deleted $msg"
@@ -123,7 +134,7 @@ namespace eval acs_mail_lite {
     } {
 	An email is splitted into several parts: headers, bodies and files lists and all headers directly.
 	
-	The headers consists of a list with header names as keys and their correponding values. All keys are lower case.
+	The headers consists of a list with header names as keys and their corresponding values. All keys are lower case.
 	The bodies consists of a list with two elements: content-type and content.
 	The files consists of a list with three elements: content-type, filename and content.
 	
@@ -173,7 +184,7 @@ namespace eval acs_mail_lite {
 	    set content [read $stream]
 	    close $stream
 	    ns_log error $content
-	    file delete $file
+	    file delete -- $file
 	    return
 	}
 	

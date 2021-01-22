@@ -29,6 +29,7 @@ if {$package_key eq ""} {
     #
     #####
     apm_get_package_repository -array repository
+    apm_get_installed_versions -array installed
 
     set install_pkgs $package_key
     while 1 {
@@ -63,15 +64,24 @@ if {$package_key eq ""} {
             #
             # Load package info from spec file. 
             #
+            unset -nocomplain spec_file
             if {[catch {set spec_file [apm_package_info_file_path $pkg]}]} {
-                #
-                # In case the spec file is not found (unknown package)
-                # produce an empty entry.
-                #
-                array set package [list package.key $pkg embeds "" extends "" \
-                                       provides "" requires "" properties {install ""}]
-            } else {
+                set workspace_dir [apm_workspace_install_dir]
+                if {[catch {set spec_file [apm_package_info_file_path -path $workspace_dir $pkg]}]} {
+                    #
+                    # In case the spec file is not found (unknown package)
+                    # produce an empty entry.
+                    #
+                    array set package [list package.key $pkg embeds "" extends "" \
+                                           provides "" requires "" properties {install ""}]
+                }                    
+            }
+
+            if {[info exists spec_file]} {
                 array set package [apm_read_package_info_file $spec_file]
+            } else {
+                ad_return_complaint 1 "Could not find .info file of dependency: $pkg."
+                ad_script_abort
             }
 
             if {[info exists failed($pkg)]} {
@@ -86,13 +96,14 @@ if {$package_key eq ""} {
                 
                 set must_add {}
                 foreach p $properties(install) {
-                    if {$p ni $install_pkgs} {
+                    if {$p ni $install_pkgs && ![info exists installed($p)]} {
+                        #ns_log notice "+++ install_pkgs <$p> ni <$install_pkgs> and not already installed"
                         lappend must_add $p
                     }
                 }
                 if {[llength $must_add] > 0} {
-                    lappend install_pkgs {*}$must_add
                     ns_log notice "+++ install_pkgs <$install_pkgs> after must_add <$must_add>"
+                    lappend install_pkgs {*}$must_add
                     set fixpoint_p 0
                     break
                 }

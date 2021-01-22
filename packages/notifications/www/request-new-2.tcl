@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     type_id:naturalnum,notnull
     object_id:naturalnum,notnull
-    return_url
+    return_url:localurl
 }
 
 set user_id [ad_conn user_id]

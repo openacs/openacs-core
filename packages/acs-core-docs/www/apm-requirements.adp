@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Package Manager Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Requirements}</property>
 <property name="doc(title)">Package Manager Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -27,7 +27,7 @@ number <span class="strong"><strong>4</strong></span>.</p><p>We gratefully ackno
 original design documentation which suggested these features, as
 well as the influence of the design and open-source implementation
 of the Red Hat Package manager, the Debian packaging system, and
-PERL's CPAN in the development of the ideas behind this
+PERL&#39;s CPAN in the development of the ideas behind this
 document.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -83,7 +83,8 @@ package should never break an OpenACS installation</p></li>
 configuration:</strong></span></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>The ability to change package parameter values on-line through a
 simple web interface.</p></li><li class="listitem"><p>A new ad_parameter which does not require a monolithic site-wide
-parameter's file or server restarts for changes to take effect.</p></li><li class="listitem"><p>The ability to manage multiple package instances at the sub-site
+parameter&#39;s file or server restarts for changes to take
+effect.</p></li><li class="listitem"><p>The ability to manage multiple package instances at the sub-site
 level.</p></li>
 </ul></div>
 </li>
@@ -94,17 +95,18 @@ level.</p></li>
 may or may not overlap:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
 <span class="strong"><strong>Developers</strong></span>
-(referred to as 'the developer') use the APM to create a software
-package for distribution and use the procedural API for direct
-control of the APM system.</p></li><li class="listitem"><p>
+(referred to as 'the developer') use the APM to create a
+software package for distribution and use the procedural API for
+direct control of the APM system.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Site-wide
-administrators</strong></span> (referred to as 'the administrator')
-use the APM to install packages for their OpenACS instance, and
-optionally make them available to sub-sites.</p></li><li class="listitem"><p>
+administrators</strong></span> (referred to as 'the
+administrator') use the APM to install packages for their
+OpenACS instance, and optionally make them available to
+sub-sites.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Sub-site
-administrators</strong></span> (referred to as 'the sub-admin') use
-an administration interface to configure and enable packages for
-their sub-site.</p></li>
+administrators</strong></span> (referred to as 'the
+sub-admin') use an administration interface to configure and
+enable packages for their sub-site.</p></li>
 </ol></div><p><span class="strong"><strong>Initial Package
 Development</strong></span></p><p>
 <span class="strong"><strong>David Developer</strong></span>
@@ -113,9 +115,9 @@ the OpenACS. He distributes his data model, procedure code, UI
 pages, and his documentation according to the APM specification. He
 splits the documentation and the code into sub-packages, and
 creates a KM installation-chain to install both with the APM
-developer UI. Noting that his software was built with <span class="strong"><strong>Patricia Programmer</strong></span>'s Super Widget
-toolkit, he specifies that as a dependency. Moreover, since this
-package is capable of being used at the sub-site level, David
+developer UI. Noting that his software was built with <span class="strong"><strong>Patricia Programmer</strong></span>'s Super
+Widget toolkit, he specifies that as a dependency. Moreover, since
+this package is capable of being used at the sub-site level, David
 configures this option in the package. When the package development
 is complete, David uses the APM developer UI to construct a
 distribution file. He assigns it a version number, 1.0, and makes
@@ -123,19 +125,20 @@ the package available for download at the OpenACS package
 repository.</p><p><span class="strong"><strong>Initial Package
 Installation</strong></span></p><p>
 <span class="strong"><strong>Annie Admin</strong></span> learns
-of David's KM system by browsing the OpenACS package repository.
-Annie Admin uses the APM administrator UI on her system. She
-selects to install a package from a URL and types the URL displayed
-on the system. The APM automatically downloads the package. The
-dependency checker notices that Patricia's Super Widget toolkit is
-required, so it warns Annie of this. Annie selects an option to
-find a package that satisfies the dependency at the OpenACS APM
-repository. The APM informs Annie that it can download and install
-Jim's Super Widget toolkit. Annie confirms this option. After
-successfully installing Jim's toolkit, Annie proceeds to install
-David's KM system. The data model is loaded and all of the files
-necessary for the software are installed. Because installation was
-successful, the package is available for use.</p><p>Since the package is available for use, its initialization
+of David&#39;s KM system by browsing the OpenACS package
+repository. Annie Admin uses the APM administrator UI on her
+system. She selects to install a package from a URL and types the
+URL displayed on the system. The APM automatically downloads the
+package. The dependency checker notices that Patricia&#39;s Super
+Widget toolkit is required, so it warns Annie of this. Annie
+selects an option to find a package that satisfies the dependency
+at the OpenACS APM repository. The APM informs Annie that it can
+download and install Jim&#39;s Super Widget toolkit. Annie confirms
+this option. After successfully installing Jim&#39;s toolkit, Annie
+proceeds to install David&#39;s KM system. The data model is loaded
+and all of the files necessary for the software are installed.
+Because installation was successful, the package is available for
+use.</p><p>Since the package is available for use, its initialization
 routines are set to run automatically on server startup. Annie is
 warned that since there are initialization routines, she must
 restart the server for the package to be ready for use. Annie
@@ -164,7 +167,7 @@ number and makes km v 1.1 available for download at the
 repository.</p><p>Sally SubAdmin asks Annie Administrator to upgrade the package
 using the APM UI. This upgrade supersedes the old version of KM at
 the site-wide level. Once Annie upgrades the package, the new
-version starts working immediately in Sally's sub-site.</p><p><span class="strong"><strong>Procedural API</strong></span></p><p>
+version starts working immediately in Sally&#39;s sub-site.</p><p><span class="strong"><strong>Procedural API</strong></span></p><p>
 <span class="strong"><strong>Danielle Developer</strong></span>
 wants her software to perform different actions depending on what
 version of another package is installed. She uses the APM
@@ -174,8 +177,9 @@ exhibits different behavior.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="apm-requirements-links" id="apm-requirements-links"></a>Related Links</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="/doc/core-arch-guide/apm" target="_top">APM 3.3 Design document</a></p></li><li class="listitem"><p><a class="ulink" href="/doc/packaging" target="_top">Five minute
-guide to packaging a module</a></p></li><li class="listitem"><p><a class="ulink" href="/doc/core-arch-guide/subcommunities" target="_top">Sub-communities</a></p></li>
+<li class="listitem"><p><a class="ulink" href="apm-design" target="_top">APM 3.3 Design
+document</a></p></li><li class="listitem"><p><a class="ulink" href="packages" target="_top">Five minute guide
+to packaging a module</a></p></li><li class="listitem"><p><a class="ulink" href="subsites-requirements" target="_top">Sub-sites</a></p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -187,7 +191,8 @@ Identification</strong></span> (All of these items are entered by
 the developer using the developer UI.)</p><p>
 <span class="strong"><strong>4.500.1</strong></span> A human
 readable package key that is guaranteed to be unique to the local
-OpenACS site must be maintained by the APM. For example, "apm."</p><p>
+OpenACS site must be maintained by the APM. For example,
+"apm."</p><p>
 <span class="strong"><strong>4.500.5</strong></span> A package
 id (primary key) that is guaranteed to be unique to the local site
 must be maintained by the APM. For example, "25."</p><p>
@@ -271,11 +276,11 @@ because the actions taken here can dramatically affect the state of
 the running OpenACS.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="apm-requirements-dev-interface" id="apm-requirements-dev-interface"></a>Requirements: The Developer's
-Interface</h3></div></div></div><p>The intent of the developer's interface is to enable the
+<a name="apm-requirements-dev-interface" id="apm-requirements-dev-interface"></a>Requirements: The
+Developer&#39;s Interface</h3></div></div></div><p>The intent of the developer&#39;s interface is to enable the
 developer to construct and maintain APM packages. It will be
-possible to disable the developer's interface for production sites
-to help reduce the chance of site failure; much of the
+possible to disable the developer&#39;s interface for production
+sites to help reduce the chance of site failure; much of the
 functionality here can have cascading effects throughout the
 OpenACS and should not be used on a production site.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
@@ -305,15 +310,15 @@ created.</p>
 package</strong></span></p><p>
 <span class="strong"><strong>20.1</strong></span> The developer
 must be able to add files to the package. This is done by copying
-the files into the package directory in the host OS's file system.
-Files can be added at any point after package creation.</p><p>
+the files into the package directory in the host OS&#39;s file
+system. Files can be added at any point after package creation.</p><p>
 <span class="strong"><strong>20.3</strong></span> Once a package
 has been versioned and distributed, no new files should be added to
 the package without incrementing the version number.</p><p>
-<span class="strong"><strong>20.5</strong></span> The APM's UI
-should facilitate the process of adding new files, by scanning the
-file system for new files automatically, and allowing the developer
-to confirm adding them.</p><p>
+<span class="strong"><strong>20.5</strong></span> The APM&#39;s
+UI should facilitate the process of adding new files, by scanning
+the file system for new files automatically, and allowing the
+developer to confirm adding them.</p><p>
 <span class="strong"><strong>20.10</strong></span> The developer
 cannot add files to a given package via the UI that do not exist in
 the file system already.</p><p>
@@ -338,7 +343,7 @@ error should be generated at package load time.</p>
 file from file system.</p><p>
 <span class="strong"><strong>30.5.1</strong></span> The APM UI
 should take note of the fact that the file is gone and offer the
-developer an option to confirm the file's deletion.</p>
+developer an option to confirm the file&#39;s deletion.</p>
 </li>
 </ul></div>
 </li><li class="listitem">
@@ -355,8 +360,8 @@ automatically reload them if changed. See requirement 50.0 for more
 detail.</p><p>
 <span class="strong"><strong>40.10</strong></span> Also,
 although a change in files implies that the package distribution
-file is out of date, it is the developer's responsibility to update
-it.</p>
+file is out of date, it is the developer&#39;s responsibility to
+update it.</p>
 </li><li class="listitem">
 <p>
 <span class="strong"><strong>4.45.0 Manage Package Dependency
@@ -402,9 +407,9 @@ generation</strong></span></p><p>
 should be able to generate a .APM distribution file for the package
 with just one click.</p><p>
 <span class="strong"><strong>130.5</strong></span> Generating a
-distribution file implies doing an "up-to-date" check on all of the
-files. If any of the files have changed since package installation,
-then a new version of the package is created.</p>
+distribution file implies doing an "up-to-date" check on
+all of the files. If any of the files have changed since package
+installation, then a new version of the package is created.</p>
 </li><li class="listitem">
 <p><span class="strong"><strong>140.0 Access CVS
 information</strong></span></p><p>
@@ -436,9 +441,9 @@ on the sub-package.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="apm-requirements-admin-interface" id="apm-requirements-admin-interface"></a>Requirements: The Site-Wide
-Administrator's Interface</h3></div></div></div><p>The requirement of the administrator's interface is to enable
-the administrator to install, enable, upgrade, disable, deinstall,
-and delete packages.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+Administrator&#39;s Interface</h3></div></div></div><p>The requirement of the administrator&#39;s interface is to
+enable the administrator to install, enable, upgrade, disable,
+deinstall, and delete packages.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p><span class="strong"><strong>80.0 Package
 Enable/Disable</strong></span></p><p>
@@ -541,8 +546,8 @@ necessary and included upgrade scripts.</p></li><li class="listitem"><p>
 <span class="strong"><strong>100.1.5</strong></span> Replacing
 any old files with new versions.</p></li><li class="listitem"><p>
 <span class="strong"><strong>100.1.10</strong></span> Marking
-the old version of the package as 'superseded' and disabling
-it.</p></li><li class="listitem"><p>
+the old version of the package as 'superseded' and
+disabling it.</p></li><li class="listitem"><p>
 <span class="strong"><strong>100.1.15</strong></span> Assuming
 no errors from above, the new package is enabled.</p></li>
 </ol></div>
@@ -595,12 +600,12 @@ installed packages.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="apm-requirements-sub-admin-intf" id="apm-requirements-sub-admin-intf"></a>Requirements: The Sub-Site
-Administrator's Interface</h3></div></div></div><p>If the developer is in charge of creating packages and the
+Administrator&#39;s Interface</h3></div></div></div><p>If the developer is in charge of creating packages and the
 administrator for installing them, then the sub-site administrator
 is responsible for configuring and enabling packages. In order for
 a package to be available for a sub-site it must be associated with
-the sub-site's type specification. This interface is part of the
-sub-site /admin interface.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+the sub-site&#39;s type specification. This interface is part of
+the sub-site /admin interface.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <span class="strong"><strong>4.300</strong></span> Creating a
@@ -610,12 +615,12 @@ sub-site /admin interface, there should be an option to view all
 packages available in the system as well as an option to add a
 package to the subsite.</p><p>
 <span class="strong"><strong>4.300.5</strong></span> From the
-"add" option, the sub-admin can select from a list of packages
-registered as available in the sub-site type to which the sub-site
-belongs.</p><p>
+"add" option, the sub-admin can select from a list of
+packages registered as available in the sub-site type to which the
+sub-site belongs.</p><p>
 <span class="strong"><strong>4.300.19</strong></span> Once a
 package instance is added, it is available on the list of the
-subsite's available packages.</p>
+subsite&#39;s available packages.</p>
 </li><li class="listitem">
 <p>
 <span class="strong"><strong>4.305</strong></span> Configuring a
@@ -668,7 +673,7 @@ attribute values. Consequently, the implementation of these
 features should be quite straightforward.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="apm-requirements-rev-history" id="apm-requirements-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="apm-requirements-rev-history" id="apm-requirements-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

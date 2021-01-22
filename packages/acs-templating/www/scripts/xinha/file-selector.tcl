@@ -206,36 +206,13 @@ if {$selector_type eq "image"} {
 set filter_clause [expr {$file_types eq "*" ? "" :
 			 "and (type like '$file_types' or type = 'folder')" }]
 
-set fs_sql "select object_id, name, live_revision, type, title,
-	   to_char(last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
-	   content_size, url, sort_key, file_upload_name,
-	   case
-	     when :folder_path is null
-	     then fs_objects.name
-	     else :folder_path || '/' || name
-	   end as file_url,
-	   case
-	     when last_modified >= (now() - cast('99999' as interval))
-	     then 1
-	     else 0
-	   end as new_p
-	from fs_objects
-	where parent_id = :folder_id
-	and exists (select 1
-	   from acs_object_party_privilege_map m
-	   where m.object_id = fs_objects.object_id
-	     and m.party_id = :user_id
-	     and m.privilege = 'read')
-	 $filter_clause
-	 $order_by_clause"
-
 db_multirow -extend { 
   icon last_modified_pretty content_size_pretty 
   properties_link properties_url folder_p title
-} contents get_fs_contents $fs_sql {
-  set last_modified_ansi [lc_time_system_to_conn $last_modified_ansi]
+} contents get_fs_contents {} {
+  set last_modified_ansi   [lc_time_system_to_conn $last_modified_ansi]
   set last_modified_pretty [lc_time_fmt $last_modified_ansi "%x %X"]
-  set content_size_pretty [lc_numeric $content_size]
+  set content_size_pretty  [lc_numeric $content_size]
 
   if {$type eq "folder"} {
     # append content_size_pretty " [_ file-storage.items]"

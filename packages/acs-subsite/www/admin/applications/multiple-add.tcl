@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-05-28
     @cvs-id $Id$
 } {
-    {return_url "."}
+    {return_url:localurl "."}
 }
 
 set doc(title) "[_ acs-subsite.Add_multiple_applications]"

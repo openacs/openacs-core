@@ -9,14 +9,14 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.1d1" url="http://openacs.org/repository/download/apm/acs-templating-5.9.1d1.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/acs-templating-5.9.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The templating system provides the tag library and support routines
 that allow developers and graphic designers to work
-independently. Templates specify the layout of the page seperately
+independently. Templates specify the layout of the page separately
 from the contents of the page. Graphic designers work primarily on the
 layout part of the template (the template), while programmers work
 primarily a script that generates the the content part of the template
@@ -27,8 +27,9 @@ layout of a site can be more easily administered.
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-templating" version="5.9.1d1"/>
-        <requires url="acs-kernel" version="5.9.0"/>
+        <provides url="acs-templating" version="5.9.1"/>
+        <requires url="acs-kernel" version="5.9.1"/>
+        <requires url="acs-tcl" version="5.9.1"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="template::apm::before_upgrade"/>
@@ -46,32 +47,9 @@ layout of a site can be more easily administered.
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SpellcheckUseDictsP"  default="0" description="If set to 1 (i.e. true) the dictionaries returned by aspell will be displayed in the spell check drop down."/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="TemplateCacheSize"  default="200000" description="Size of the Template Cache (used by the &quot;cache&quot; proc in templating)"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="TemplateQueryCacheSize"  default="20000" description="Cache for Template Queries"/>
-            <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="TinyMCEDefaultConfig"  default="{mode &quot;exact&quot;} 
-{relative_urls &quot;false&quot;}
-{height &quot;450px&quot;}
-{width &quot;100%&quot;}
-{plugins &quot;style,layer,table,save,iespell,preview,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras&quot;}
-{browsers &quot;msie,gecko,safari,opera&quot;}
-{apply_source_formatting &quot;true&quot;}
-{paste_auto_cleanup_on_paste true}
-{paste_convert_headers_to_strong true}
-{fix_list_elements true}
-{fix_table_elements true}
-{theme &quot;openacs&quot;}
-{theme_openacs_toolbar_location &quot;top&quot;}
-{theme_openacs_toolbar_align &quot;left&quot;}
-{theme_openacs_statusbar_location &quot;bottom&quot;}
-{theme_openacs_resizing true}
-{theme_openacs_disable &quot;styleselect&quot;}
-{theme_openacs_buttons1_add_before &quot;save,separator&quot;} 
-{theme_openacs_buttons2_add &quot;separator,preview,separator,forecolor,backcolor&quot;} 
-{theme_openacs_buttons2_add_before &quot;cut,copy,paste,pastetext,pasteword,separator,search,replace,separator&quot;} 
-{theme_openacs_buttons3_add_before &quot;tablecontrols,separator&quot;} 
-{theme_openacs_buttons3_add &quot;iespell,media,separator,print,separator,fullscreen&quot;} 
-{extended_valid_elements &quot;img[id|class|style|title|lang|onmouseover|onmouseout|src|alt|name|width|height],hr[id|class|style|title],span[id|class|style|title|lang]&quot;}
-{element_format &quot;html&quot;}" description="This is a tcl list of default tinymce config options as found in http://wiki.moxiecode.com/index.php/TinyMCE:Configuration "/>
+            <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="TinyMCEDefaultConfig"  default="" description="Legacy placeholder. Configure this parameter in the richtext-tinymce package, not here."/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="UseHtmlAreaForRichtextP"  default="0" description="Should the richtext widget use the htmlArea widget for richtext editing. 1 = yes, 0 = no. We will also check the browser's User-Agent header to find out if htmlArea works with the given browser."/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="XinhaDefaultPlugins"  default="GetHtml CharacterMap ContextMenu ListType TableOperations EditTag LangMarks Abbreviation" description="When xinha is specified as richtext editor (see parameter RichTextEditor) then use the following xinha plugins per default."/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="XinhaDefaultPlugins"  default="" description="Legacy placeholder. Configure this parameter in the richtext-xinha package, not here."/>
         </parameters>
 
     </version>

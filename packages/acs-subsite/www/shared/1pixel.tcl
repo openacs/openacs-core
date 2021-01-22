@@ -31,7 +31,7 @@ if { [catch {
     seek $file 0
     ns_writefp $file
     close $file
-    file delete $file_name
+    file delete -- $file_name
 
     set file [open [acs_package_root_dir "acs-subsite"]/www/shared/1pixel.footer]
     ns_writefp $file

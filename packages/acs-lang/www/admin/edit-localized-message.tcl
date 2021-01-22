@@ -14,7 +14,7 @@ ad_page_contract {
     message_key
     show:optional
     {usage_p:boolean "f"}
-    {return_url {}}
+    {return_url:localurl {}}
 }
 
 if { [string length $locale] == 2 } {

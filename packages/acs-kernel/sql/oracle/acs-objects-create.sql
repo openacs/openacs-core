@@ -461,7 +461,7 @@ as
  ) return acs_objects.package_id%TYPE;
 
  -- Determine where the attribute is stored and what sql needs to be
- -- in the where clause to retreive it
+ -- in the where clause to retrieve it
  -- Used in get_attribute and set_attribute
  procedure get_attribute_storage ( 
    object_id_in      in  acs_objects.object_id%TYPE,
@@ -521,7 +521,7 @@ as
    and a.storage = 'generic'
    and a.static_p = 'f';
 
-   -- Retreive type for static attributes
+   -- Retrieve type for static attributes
    select object_type into v_object_type from acs_objects
      where object_id = initialize_attributes.object_id;
 
@@ -804,7 +804,7 @@ as
        end if;
 
      else
-       -- Specific attribute: table name/column need to be retreived
+       -- Specific attribute: table name/column need to be retrieved
  
        if v_static = 'f' then
          select 
@@ -971,7 +971,7 @@ as
    -- index contains each ancestor for OBJECT_ID. It doesn''t
    -- guarantee that there aren''t extraneous rows or that
    -- OBJECT_ID''s children are contained in the index. That is
-   -- verified by seperate functions.
+   -- verified by separate functions.
 
    result := 't';
 
@@ -1021,7 +1021,7 @@ as
    -- N_GENERATIONS is how far the current DESCENDANT_ID is from
    -- OBJECT_ID.
 
-   -- This function will verfy that each actualy descendant of
+   -- This function will verfy that each actually descendant of
    -- OBJECT_ID has a row in the index table. It does not check that
    -- there aren't extraneous rows or that the ancestors of OBJECT_ID
    -- are maintained correctly.
@@ -1086,7 +1086,7 @@ as
 		  object_id || '.');
 
    -- If this fails then there isn''t even an object associated with
-   -- this id. I'm going to let that error propogate as an exception.
+   -- this id. I'm going to let that error propagate as an exception.
    select object_type into object_type
    from acs_objects
    where object_id = check_representation.object_id;

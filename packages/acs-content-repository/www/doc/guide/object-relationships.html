@@ -4,7 +4,7 @@
   </head>
   <body>
   <h2>Object Relationships</h2>
-  <b><a href="../index.html">Content Repository</a> : Developer Guide</b>
+  <strong><a href="../index.html">Content Repository</a> : Developer Guide</strong>
 <hr>
 
 <p>Many applications of the content repository require that content
@@ -36,7 +36,7 @@ another item.  An article divided into sections, or a news story with
 an associated photo are one example of this.  These "parent-child"
 relationships are handled by the basic hierarchical organization of the
 content repository.  Every item has a parent item, represented internally
-by the <tt>parent_id</tt> column in the <tt>cr_items</tt> table.</p>
+by the <kbd>parent_id</kbd> column in the <kbd>cr_items</kbd> table.</p>
 
 <p>It is often desirable to constrain the number and content type of
 child items.  For example, the specifications for a news story may
@@ -47,33 +47,33 @@ report would have a logical order in which they would need to be
 presented to the user.  The layout for a photo album may have a special
 position for a "featured" photo.</p>
 
-<table border=0 width=100% >
+<table border="0" width="100%" >
 <tr>
-<td align=center><img src=article.gif border=1></td>
-<td align=center><img src=photo.gif border=1></td>
+<td align="center"><img src=article.gif border="1"></td>
+<td align="center"><img src=photo.gif border="1"></td>
 </tr>
 </table>
 
-<p>The content repository accomodates these situations in the
+<p>The content repository accommodates these situations in the
 following ways:</p>
 
 <ul>
-<li>An API procedure, <tt>content_type.register_child_type</tt>, may be
+<li>An API procedure, <kbd>content_type.register_child_type</kbd>, may be
 used to specify the minimum and maximum number of children of a
 particular content type that an item may have.  You may optionally
 specify a "tag" for identifying child items of the same type.  For
 example, you may want to allow only 1 image with the "featured" tag,
 and up to 8 other images without this.</p>
 
-<li>A Boolean API function, <TT>content_item.is_valid_child</tt>,
+<li>A Boolean API function, <kbd>content_item.is_valid_child</kbd>,
 which checks all registered child constraints on the content type of
 an item and returns true if it is currently possible to add an child
 of a particular type to tan item.  Note that this function does not
 protect against concurrent transactions; it is only foolproof if you
-lock the <tt>cr_child_rels</tt> table beforehand.</p>
+lock the <kbd>cr_child_rels</kbd> table beforehand.</p>
 
-<li>A mapping table, <tt>cr_child_rels</tt>, which contains two
-attributes, <tt>order_n</tt> and <tt>relation_tag</tt>, that may be
+<li>A mapping table, <kbd>cr_child_rels</kbd>, which contains two
+attributes, <kbd>order_n</kbd> and <kbd>relation_tag</kbd>, that may be
 used to characterize the parent-child relationship.  Parent-child
 relationships are themselves treated as ACS Objects, so this table may
 be extended with additional attributes as required by the
@@ -82,7 +82,7 @@ developer.</p>
 
 <p>Note that there is no currently no explicit API to "add a child."
 You specify the parent of an item upon creating it.  You can use the
-API procedure <tt>content_item.move</tt> to change the parent of an
+API procedure <kbd>content_item.move</kbd> to change the parent of an
 item.</p>
 
 <h3>Item-Object Relationships</h3>
@@ -99,24 +99,24 @@ data model and API for managing these constraints that parallels what
 is provided for parent-child relationships:</p>
 
 <ul>
-<li>An API procedure, <tt>content_type.register_relation_type</tt>,
+<li>An API procedure, <kbd>content_type.register_relation_type</kbd>,
 may be used to specify the minimum and maximum number of relations
 with a particular object type that an item may have.  There is no
 limitation on the type of objects that may be related to content
 items.  If you wish to relate content items to other content items,
 however, the object type should specify a content type (a subtype of
-<tt>content_revision</tt>) rather than simply <tt>content_item</tt>.
+<kbd>content_revision</kbd>) rather than simply <kbd>content_item</kbd>.
 As for parent-child relationship constraints, ou may optionally
 specify a "tag" for identifying related objects of the same type.
 </p>
 
-<li>A Boolean API function, <TT>content_item.is_valid_relation</tt>,
+<li>A Boolean API function, <kbd>content_item.is_valid_relation</kbd>,
 which checks all registered constraints on the content type of an item
 and returns true if it is currently possible to relate an object of a
 particular type to an item.</p>
 
-<li>A mapping table, <tt>cr_item_rels</tt>, which contains two
-attributes, <tt>order_n</tt> and <tt>relation_tag</tt>, that may be
+<li>A mapping table, <kbd>cr_item_rels</kbd>, which contains two
+attributes, <kbd>order_n</kbd> and <kbd>relation_tag</kbd>, that may be
 used to characterize the item-object relationship.  Item-object
 relationships are themselves treated as ACS Objects, so this table may
 be extended with additional attributes as required by the
@@ -133,7 +133,7 @@ object.</p>
 
 <hr>
 <a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
-Last modified: <tt>$Id$</tt>
+Last modified: <kbd>$Id$</kbd>
 </body>
 </html>
 

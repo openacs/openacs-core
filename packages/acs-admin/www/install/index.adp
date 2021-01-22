@@ -21,8 +21,8 @@ away <br>and replaced by the chosen packages from the OpenACS respository.
 custom code or your packages are kept in a local code repository.
 <a href="/doc/upgrade-openacs-files">Help</a>.</p>
 
-<p><a href="@local_install_url@" class="button">Install or upgrade</a>
-from the local file system.</p>
+<p><a href="@local_install_url@" class="button">Install</a> or
+<a href="@local_upgrade_url@" class="button">upgrade</a> from the local file system.</p>
 
 <li><h3>Install from URL or Local Path</h3>
 <p>Load a single package an archive stored an a non-standard place on

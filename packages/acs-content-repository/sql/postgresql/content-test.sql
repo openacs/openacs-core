@@ -387,9 +387,9 @@ BEGIN
                                                          sub_sub_folder_id
                                   )
            );
-   PERFORM content_test__put_line('This is a path to an item from a non-existant item');
+   PERFORM content_test__put_line('This is a path to an item from a non-existent item');
    PERFORM content_test__put_line('Path for ' || item_id || 
-                                  ' from nonexistant_id: ' || 
+                                  ' from nonexistent_id: ' || 
                                   -300 || ' is ' || 
                                   content_item__get_path(item_id,-300)
            );

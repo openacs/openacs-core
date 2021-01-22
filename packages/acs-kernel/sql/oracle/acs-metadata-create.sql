@@ -1,7 +1,7 @@
 --
 -- acs-kernel/sql/acs-metadata-create.sql
 --
--- A generic metadata system that allows table inheritence. This is
+-- A generic metadata system that allows table inheritance. This is
 -- based in many ways on Problem Set 4 by Philip Greenspun
 -- (philg@mit.edu), and the user-groups data model by Tracy Adams
 -- (teadams@mit.edu).
@@ -867,7 +867,7 @@ is
       -- Add the appropriate column to the table
 
       -- We can only create the table column if
-      -- 1. the attribute is declared type_specific (generic storage uses an auxillary table)
+      -- 1. the attribute is declared type_specific (generic storage uses an auxiliary table)
       -- 2. the attribute is not declared static
       -- 3. it does not already exist in the table
 

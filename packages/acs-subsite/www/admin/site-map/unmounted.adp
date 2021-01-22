@@ -7,7 +7,7 @@
   <ul>
    <if @packages_normal:rowcount@ ne 0>
     <multiple name="packages_normal">
-     <li>@packages_normal.name@ (@packages_normal.package_key@): [<a href="@packages_normal.instance_delete_url@" onclick="return confirm('Are you sure you want to delete package @packages_normal.name@');">delete</a>]</li>
+     <li>@packages_normal.name@ (@packages_normal.package_key@): [<a href="@packages_normal.instance_delete_url@" id="@packages_normal.delete_id;literal@">delete</a>]</li>
     </multiple>
    </if>
    <else>
@@ -20,7 +20,7 @@
   <ul>
    <if @packages_singleton:rowcount@ ne 0>
     <multiple name="packages_singleton">
-     <li>@packages_singleton.name@  (@packages_singleton.package_key@): [<a href="@packages_singleton.instance_delete_url@" onclick="return confirm('Are you sure you want to delete package @packages_singleton.name@');">delete</a>]</li>
+     <li>@packages_singleton.name@  (@packages_singleton.package_key@): [<a href="@packages_singleton.instance_delete_url@" id="@packages_singleton.delete_id;literal@">delete</a>]</li>
     </multiple>
    </if>
    <else>

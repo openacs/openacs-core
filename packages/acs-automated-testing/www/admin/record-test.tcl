@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     package_key
-    {return_url ""}
+    {return_url:localurl ""}
 } -properties {
 } -validate {
 } -errors {
@@ -18,7 +18,7 @@ ad_page_contract {
 # Todo
 # This is a first attempt of integrating the TwtR
 # with oacs.  I think it is a good point to start
-# but in the ToDo list would be really usefull to 
+# but in the ToDo list would be really useful to 
 # have:
 # - Parsing the Test code to replace fixed values with
 #   Random ones (i.e. names, descriptions, intervals,
@@ -50,7 +50,7 @@ ad_form -name new_test -method post -export {package_key return_url} \
 	{ search_str:text,optional
 	    {label "Search String"}
 	    {html {size 50}}
-	    {help_text "Sometimes, you might need this string to check if the test is successfull or no (i.e. testing Warning messages) <br> If you want to check more than one string, use a comma to separate the different strings"}
+	    {help_text "Sometimes, you might need this string to check if the test is successful or no (i.e. testing Warning messages) <br> If you want to check more than one string, use a comma to separate the different strings"}
 	}
 	{ login_type:integer(select)
 	    {label "Login Type"}
@@ -84,7 +84,7 @@ ad_form -name new_test -method post -export {package_key return_url} \
     } \
     -new_data {
 	
-	# Open the automated tests tcl file 
+	# Open the automated tests Tcl file 
 	# of this package key and add the
 	# test code to the script, then
 	# do an eval to load the test proc.

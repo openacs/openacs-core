@@ -6,7 +6,7 @@
 <p>Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="Search">
 </formtemplate>
 
-<include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale;literal@" />
+<include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale;literal@" >
 
 <if @locale_enabled_p@ and @site_wide_admin_p@>
   <ul class="action-links">

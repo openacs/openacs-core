@@ -157,25 +157,25 @@ ad_proc -public relation_remove {
     # acs_rels to find the group and rel_type for this relation.
 
     if { $segment_id ne "" } {
-	if { [relation_segment_has_dependant -segment_id $segment_id -party_id $party_id] } {
+	if { [relation_segment_has_dependent -segment_id $segment_id -party_id $party_id] } {
 	    error "Relational constraints violated by removing this relation"
 	}
     }
 
-    db_exec_plsql relation_delete "begin ${package_name}.del(:rel_id); end;"
+    db_exec_plsql relation_delete {}
 
     return 1
 }
 
 
 
-ad_proc -public relation_segment_has_dependant {
+ad_proc -public relation_segment_has_dependent {
     { -rel_id "" }
     { -segment_id "" }
     { -party_id "" }
 } {
     Returns 1 if the specified segment/party combination has a
-    dependant (meaning a constraint would be violated if we removed this
+    dependent (meaning a constraint would be violated if we removed this
     relation). 0 otherwise. Either <code>rel_id</code> or
     <code>segment_id</code> and <code>party_id</code> must be
     specified. <code>rel_id</code> takes precedence.
@@ -187,13 +187,13 @@ ad_proc -public relation_segment_has_dependant {
 
     if { $rel_id ne "" } {
 	if { ![db_0or1row select_rel_info {}] } {
-	    # There is either no relation or no segment... thus no dependants
+	    # There is either no relation or no segment... thus no dependents
 	    return 0
 	}
     }
 
     if { $segment_id eq "" || $party_id eq "" } {
-	error "Both of segment_id and party_id must be specified in call to relation_segment_has_dependant"
+	error "Both of segment_id and party_id must be specified in call to relation_segment_has_dependent"
     }
 
     return [db_string others_depend_p {}]

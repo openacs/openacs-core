@@ -6,7 +6,7 @@
   </head>
   <body>
   <h2>Publishing Content</h2>
-  <b><a href="../index.html">Content Repository</a> : Developer Guide</b>
+  <strong><a href="../index.html">Content Repository</a> : Developer Guide</strong>
 <hr>
 
 <p>The content repository does not place any restrictions on the
@@ -20,7 +20,7 @@ publication, regardless of the specific presentation layer used.  The
 following diagram illustrates the steps typically involved in such a
 publication process:</p>
 
-<img src=flow.gif border=1>
+<img src=flow.gif border="1">
 
 <p>In general, there is an initial <em>resolution</em> step in which
 the server must identify the appropriate content item and then decide
@@ -31,12 +31,12 @@ the data and layout into a rendered page.</p>
 
     <h3>Matching URLs to Content Items</h3>
     <p>The primary mechanism for matching URLs to Content Items are
-      <em>virtual URL handlers</em>, <tt>.vuh</tt> files. An
+      <em>virtual URL handlers</em>, <kbd>.vuh</kbd> files. An
       explanation of virtual URL handlers can be found in the tutorial on
       the <a href="/doc/request-processor.html">Request Processor</a>.
     </p>
     
-    <p> Here is an example <tt>index.vuh</tt> file that you can adapt to
+    <p> Here is an example <kbd>index.vuh</kbd> file that you can adapt to
       your own purposes:
     </p>
     <pre>
@@ -62,34 +62,34 @@ if { [content::init the_url the_root $content_root $template_root] } {
   ns_returnnotfound
 }
 </pre>
-    <p> The <tt>content_root</tt> and <tt>template_root</tt> parameters
+    <p> The <kbd>content_root</kbd> and <kbd>template_root</kbd> parameters
       select the content and template root folders. In the example, they
       are just the default roots that the content repository initializes on
       installation. If you want to store your content completely
       independent from that of other packages, you can initialize your own
-      content root and pass that folder's ID on to <tt>content::init</tt>.
+      content root and pass that folder's ID on to <kbd>content::init</kbd>.
     </p>
     <p> To publish content through URLs that are underneath
-      <tt>/mycontent</tt> you need to do the following:
+      <kbd>/mycontent</kbd> you need to do the following:
     </p>
     <ol>
-      <li> Create a directory <tt>mycontent</tt> in your server's page root
-	and an <tt>index.vuh</tt> file in that directory.
+      <li> Create a directory <kbd>mycontent</kbd> in your server's page root
+	and an <kbd>index.vuh</kbd> file in that directory.
       </li>
-      <li> Adapt the <tt>set content_root ...</tt> and <tt>set
-	  template_root ..</tt> statements in the example above so that
+      <li> Adapt the <kbd>set content_root ...</kbd> and <kbd>set
+	  template_root ..</kbd> statements in the example above so that
 	they are being set to the content and template root folders that
 	  you want to publish content from.
       </li>
-      <li> Change the <tt>set the_url ...</tt> statement so that the
-	variable <tt>the_url</tt> contains the absolute path to the content
+      <li> Change the <kbd>set the_url ...</kbd> statement so that the
+	variable <kbd>the_url</kbd> contains the absolute path to the content
 	item you wish to serve from your (or the default) content root.
       </li>
     </ol>
-    <p> If you use the example <tt>index.vuh</tt> file above unaltered for
-      requests to <tt>my_content</tt>, a request for
-      <tt>http://yourserver/mycontent/news/articles/42</tt> would request
-      the content item <tt>/news/articles/42</tt> from the content
+    <p> If you use the example <kbd>index.vuh</kbd> file above unaltered for
+      requests to <kbd>my_content</kbd>, a request for
+      <kbd>http://yourserver/mycontent/news/articles/42</kbd> would request
+      the content item <kbd>/news/articles/42</kbd> from the content
       repository on the default content root folder.      
     </p>
 
@@ -104,17 +104,17 @@ existing content type, a view is created (or recreated) that joins the
 attribute tables for the entire chain of inheritance for that content
 type.  The view always has the same name as the attribute table for
 the content table, with an "x" appended to distinguish it from the
-table itself (for example, if the attribute table for <b>Press
-Releases</b> is <tt>press_releases</tt>, then the view will be named
-<tt>press_releasesx</tt>.  Querying this view is a convenient means of
+table itself (for example, if the attribute table for <strong>Press
+Releases</strong> is <kbd>press_releases</kbd>, then the view will be named
+<kbd>press_releasesx</kbd>.  Querying this view is a convenient means of
 accessing any attribute associated with a content item.
 </p>
 <p>
-As a shortcut, the item's template may call <tt>content::get_content</tt> 
+As a shortcut, the item's template may call <kbd>content::get_content</kbd> 
 in its Tcl file in order to automatically retrieve the current item's 
 attributes. The attributes will be placed in a onerow datasource called 
-<tt>content</tt> . The template may then call 
-<tt>template::util::array_to_vars content</tt> in order to convert
+<kbd>content</kbd> . The template may then call 
+<kbd>template::util::array_to_vars content</kbd> in order to convert
 the onerow datasource to local variables.
 </p>
 <p>

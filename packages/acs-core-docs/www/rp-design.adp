@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Request Processor Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Request Processor Design}</property>
 <property name="doc(title)">Request Processor Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -17,7 +17,8 @@ OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="rp-design-essentials" id="rp-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="xref" href="rp-requirements" title="Request Processor Requirements">OpenACS 4 Request Processor
-Requirements</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-procs.tcl" target="_top">/packages/acs-tcl/tcl/request-processor-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-init.tcl" target="_top">/packages/acs-tcl/tcl/request-processor-init.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-procs.tcl" target="_top">/packages/acs-tcl/tcl/site-nodes-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-init.tcl" target="_top">/packages/acs-tcl/tcl/site-nodes-init.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/doc/sql/display-sql?package_key=acs-kernel&amp;url=site-nodes-create.sql" target="_top">/packages/acs-kernel/sql/site-nodes-create.sql</a></p></li>
+Requirements</a></p></li><li class="listitem"><p><a class="ulink" href="request-processor" target="_top">Request
+Processor Stages and API</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-procs.tcl" target="_top">/packages/acs-tcl/tcl/request-processor-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-init.tcl" target="_top">/packages/acs-tcl/tcl/request-processor-init.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-procs.tcl" target="_top">/packages/acs-tcl/tcl/site-nodes-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-init.tcl" target="_top">/packages/acs-tcl/tcl/site-nodes-init.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/doc/sql/display-sql?package_key=acs-kernel&amp;url=site-nodes-create.sql" target="_top">/packages/acs-kernel/sql/site-nodes-create.sql</a></p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -55,13 +56,13 @@ is the pageroot for the <span class="emphasis"><em>package_key</em></span> packa
 global namespace containing variables associated with the current
 request.</p></li><li class="listitem"><p>
 <span class="strong"><strong>abstract URL</strong></span> -- A
-URL with no extension that doesn't directly correspond to a file in
-the filesystem.</p></li><li class="listitem"><p>
+URL with no extension that doesn&#39;t directly correspond to a
+file in the filesystem.</p></li><li class="listitem"><p>
 <span class="strong"><strong>abstract file</strong></span> or
 <span class="strong"><strong>abstract path</strong></span> -- A URL
 that has been translated into a file system path (probably by
-prepending the appropriate pageroot), but still doesn't have any
-extension and so does not directly correspond to a file in the
+prepending the appropriate pageroot), but still doesn&#39;t have
+any extension and so does not directly correspond to a file in the
 filesystem.</p></li><li class="listitem"><p>
 <span class="strong"><strong>concrete file</strong></span> or
 <span class="strong"><strong>concrete path</strong></span> -- A
@@ -89,9 +90,9 @@ on a live site, therefore this mapping is stored in the
 database.</p><p><span class="strong"><strong>Authentication and
 Authorization</strong></span></p><p>Once the request processor has located both the package_id and
 concrete file associated with the request, authentication is
-performed by the <a class="ulink" href="../sessions" target="_top">session</a> security system. After authentication has been
-performed the user is authorized to have read access for the given
-package by the <a class="xref" href="permissions-design" title="Permissions Design">OpenACS 4 Permissions Design</a>. If
+performed by the <a class="ulink" href="security-design" target="_top">session</a> security system. After authentication has
+been performed the user is authorized to have read access for the
+given package by the <a class="xref" href="permissions-design" title="Permissions Design">OpenACS 4 Permissions Design</a>. If
 authorization succeeds then the request is served, otherwise it is
 aborted.</p><p><span class="strong"><strong>Concrete File
 Search</strong></span></p><p>To actually serve a file, the request processor generates an
@@ -111,7 +112,7 @@ file is found at any of the searched locations then it is
 served.</p><p><span class="strong"><strong>Virtual URL
 Handlers</strong></span></p><p>If no file is found during the concrete file search, then the
 request processor searches the filesystem for a <span class="strong"><strong>virtual url handler</strong></span> (<span class="strong"><strong>.vuh</strong></span>) file. This file contains
-normal tcl code, and is in fact handled by the same extension
+normal Tcl code, and is in fact handled by the same extension
 handling procedure that handles .tcl files. The only way this file
 is treated differently is in how the request processor searches for
 it. When a lookup fails, the request processor generates each valid
@@ -149,9 +150,9 @@ entries in the mapping.</p>
 <a name="rp-design-req-env" id="rp-design-req-env"></a>Request Environment</h3></div></div></div><p>The request environment is managed by the procedure <span class="strong"><strong>ad_conn</strong></span>. Variables can be set and
 retrieved through use of the ad_conn procedure. The following
 variables are available for public use. If the ad_conn procedure
-doesn't recognize a variable being passed to it for a lookup, it
-tries to get a value using ns_conn. This guarantees that ad_conn
-subsumes the functionality of ns_conn.</p><div class="informaltable"><table cellspacing="0" border="0">
+doesn&#39;t recognize a variable being passed to it for a lookup,
+it tries to get a value using ns_conn. This guarantees that ad_conn
+subsumes the functionality of ns_conn.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="0">
 <colgroup>
 <col class="c1"><col class="c2">
 </colgroup><tbody>
@@ -192,8 +193,8 @@ user_id]</code></td><td valign="top">User_id of a person if the person is logged
 Otherwise, it is blank</td>
 </tr><tr>
 <td valign="top"><code class="computeroutput">[ad_conn
-sec_validated]</code></td><td valign="top">This becomes "secure" when the connection uses
-SSL</td>
+sec_validated]</code></td><td valign="top">This becomes "secure" when the
+connection uses SSL</td>
 </tr><tr><td colspan="2"></td></tr><tr><td colspan="2"><span class="strong"><strong>Database
 API</strong></span></td></tr><tr>
 <td valign="top"><code class="computeroutput">[ad_conn

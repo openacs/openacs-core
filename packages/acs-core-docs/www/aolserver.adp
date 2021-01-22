@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install AOLserver 3.3oacs1}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install AOLserver 3.3oacs1}</property>
 <property name="doc(title)">Install AOLserver 3.3oacs1</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -18,12 +18,12 @@ OpenACS documentation staff.</div><p>We recommend the use of <a class="link" hre
 instructions are retained as a resource.</p><p>Debian users: we do not recommend installing Debian packages for
 Aolserver or Postgres. Several people have reported problems while
 trying to install using apt-get instead of from source. If you have
-the time to debug these and submit what you did, that's great, but
-if not, you should stick to installing from source.</p><div class="orderedlist"><ol class="orderedlist" type="1">
+the time to debug these and submit what you did, that&#39;s great,
+but if not, you should stick to installing from source.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <a name="aolserver-tarball" id="aolserver-tarball"></a><p>
-<b>Unpack the Aolserver tarball. </b>Download the
-<a class="link" href="individual-programs">aolserver tarball</a>
+<strong>Unpack the Aolserver
+tarball. </strong>Download the <a class="link" href="individual-programs">aolserver tarball</a>
 and unpack it.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar.gz</code></strong>
@@ -48,9 +48,10 @@ get with <a class="xref" href="openacs-unpack" title="Unpack the OpenACS tarball
 tarball&rdquo;</a>.</p>
 </li><li class="listitem">
 <a name="install-aolserver-compile" id="install-aolserver-compile"></a><p>
-<b>Compile AOLserver. </b>Compile and install
-AOLserver. First, prepare the installation directory and the source
-code. The message about BUILD-MODULES can be ignored.</p><pre class="screen">
+<strong>Compile AOLserver. </strong>Compile and
+install AOLserver. First, prepare the installation directory and
+the source code. The message about BUILD-MODULES can be
+ignored.</p><pre class="screen">
 root\@yourserver root]# <strong class="userinput"><code>mkdir -p /usr/local/aolserver</code></strong>
 [root root]# <strong class="userinput"><code>cd /usr/local/src/aolserver</code></strong>
 [root aolserver]# <strong class="userinput"><code>./conf-clean</code></strong>
@@ -65,7 +66,7 @@ then su (without the -) root to set the environment variables
 properly.</p><p>
 <code class="computeroutput">conf-inst</code> should contain the
 location where AOLserver is to be installed. Overwrite the
-tarball's default value with our default value, <code class="computeroutput">/usr/local/aolserver</code>:</p><pre class="screen">
+tarball&#39;s default value with our default value, <code class="computeroutput">/usr/local/aolserver</code>:</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>echo "/usr/local/aolserver" &gt; conf-inst</code></strong>
 [root aolserver]#
 </pre><p>
@@ -83,7 +84,7 @@ these symlinks: <code class="computeroutput">ln -s
 [root aolserver]# <strong class="userinput"><code>export POSTGRES=/usr/local/pgsql; ./conf</code></strong>
 Building in /usr/local/aolserver
 with the following modules:
-aolserver
+AOLserver
 nscache
 nsrewrite
 nssha1
@@ -111,39 +112,40 @@ If you run into problems running AOLserver, check these files for
 build errors.</p>
 </li><li class="listitem">
 <a name="aolserver-db-wrapper" id="aolserver-db-wrapper"></a><p>
-<b>Add a database-specific wrapper script. </b>This
-script sets database environment variables before starting
-AOLserver; this allows the AOLserver instance can communicate with
-the database. There is one script each for Oracle and PostgreSQL.
-They don't conflict, so if you plan to use both databases, install
-both.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<strong>Add a database-specific wrapper
+script. </strong>This script sets database environment
+variables before starting AOLserver; this allows the AOLserver
+instance can communicate with the database. There is one script
+each for Oracle and PostgreSQL. They don&#39;t conflict, so if you
+plan to use both databases, install both.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>Oracle</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/aolserver/bin</code></strong>
-[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</code></strong>
+[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</code></strong>
 [root bin]# <strong class="userinput"><code>chmod 750 nsd-oracle</code></strong>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</span></span>
 </pre>
 </li><li class="listitem">
 <p>PostgreSQL</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/aolserver/bin</code></strong>
-[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</code></strong>
+[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</code></strong>
 [root bin]# <strong class="userinput"><code>chmod 755 nsd-postgres</code></strong>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</span></span>
 </pre>
 </li>
 </ul></div>
 </li><li class="listitem">
 <a name="install-tdom" id="install-tdom"></a><p>
-<b>Install tDOM. </b>Download the <a class="link" href="individual-programs">tDOM tarball</a>,
-unpack it, adjust the configuration file to match our patched
-distribution of aolserver, and compile it.</p><pre class="screen">
+<strong>Install tDOM. </strong>Download the
+<a class="link" href="individual-programs">tDOM
+tarball</a>, unpack it, adjust the configuration file to match our
+patched distribution of aolserver, and compile it.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz</code></strong>
 --16:40:58--  http://www.tdom.org/tDOM-0.7.8.tar.gz
@@ -206,13 +208,14 @@ ln -s libtdom0.7.8.so libtdom.so</span></span>
 (OPTIONAL)</p></li><li class="listitem"><p>
 <a class="link" href="install-nspam" title="Install nspam">Install nspam</a> (OPTIONAL)</p></li><li class="listitem">
 <a name="install-aolserver-permissions" id="install-aolserver-permissions"></a><p>
-<b>Test AOLserver. </b>In order to test AOLserver,
-we'll run it using the sample-config.tcl file provided in the
-AOLserver distribution, under the nobody user and <code class="computeroutput">web</code> group. The sample-config.tcl
-configuration writes to the default log locations, so we need to
-give it permission to do so or it will fail. Grant the <code class="computeroutput">web</code> group permission to write to
-<code class="computeroutput">/usr/local/aolserver/log</code> and
-<code class="computeroutput">/usr/local/aolserver/servers</code>.</p><pre class="screen">
+<strong>Test AOLserver. </strong>In order to test
+AOLserver, we&#39;ll run it using the sample-config.tcl file
+provided in the AOLserver distribution, under the nobody user and
+<code class="computeroutput">web</code> group. The
+sample-config.tcl configuration writes to the default log
+locations, so we need to give it permission to do so or it will
+fail. Grant the <code class="computeroutput">web</code> group
+permission to write to <code class="computeroutput">/usr/local/aolserver/log</code> and <code class="computeroutput">/usr/local/aolserver/servers</code>.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/aolserver</code></strong>
 [root aolserver]# <strong class="userinput"><code>chown -R root.web log servers</code></strong>
 [root aolserver]# <strong class="userinput"><code>chmod -R g+w log servers</code></strong>
@@ -235,8 +238,8 @@ ls -l</span></span>
 create one for this test. Type <strong class="userinput"><code>echo
 "Welcome to AOLserver" &gt;
 /usr/local/aolserver40r8/servers/server1/pages/index.html</code></strong>
-</p><p>Now, we'll run a quick test to ensure AOLserver is running
-correctly. We'll use the sample config file provided with
+</p><p>Now, we&#39;ll run a quick test to ensure AOLserver is running
+correctly. We&#39;ll use the sample config file provided with
 AOLserver. This file will attempt to guess your IP address and
 hostname. It will then start up the server at port 8000 of that IP
 address.</p><pre class="screen">
@@ -247,21 +250,21 @@ address.</p><pre class="screen">
 -- user/password is not set.
 [08/Mar/2003:15:07:18][31175.8192][-main-] Notice: config.tcl: finished reading
 config file.
-</pre><p>The first warning, about nsssl, can be ignored. We won't be
-using nsssl; we'll be using nsopenssl instead, and we haven't fully
-configured it yet. The nscp warning refers to the fact that,
-without a user and password in the config file, the administrative
-panel of AOLserver won't load. We don't plan to use it and can
-ignore that error as well. Any other warning or error is unexpected
-and probably a problem.</p><p>Test to see if AOLserver is working by starting <code class="computeroutput">Mozilla</code> or <code class="computeroutput">Lynx</code><span class="emphasis"><em>on the same
+</pre><p>The first warning, about nsssl, can be ignored. We won&#39;t be
+using nsssl; we&#39;ll be using nsopenssl instead, and we
+haven&#39;t fully configured it yet. The nscp warning refers to the
+fact that, without a user and password in the config file, the
+administrative panel of AOLserver won&#39;t load. We don&#39;t plan
+to use it and can ignore that error as well. Any other warning or
+error is unexpected and probably a problem.</p><p>Test to see if AOLserver is working by starting <code class="computeroutput">Mozilla</code> or <code class="computeroutput">Lynx</code><span class="emphasis"><em>on the same
 computer</em></span> and surfing over to your web page. If you
-browse from another computer and the sample config file didn't
-guess your hostname or ip correctly, you'll get a false negative
-test.</p><pre class="screen">
+browse from another computer and the sample config file didn&#39;t
+guess your hostname or ip correctly, you&#39;ll get a false
+negative test.</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>lynx localhost:8000</code></strong>
-</pre><p>You should see a "Welcome to AOLserver" page. If this doesn't
-work, try going to <code class="computeroutput">http://127.0.0.1:8000/</code>. If this still
-doesn't work, check out the <a class="xref" href="aolserver">Troubleshooting
+</pre><p>You should see a "Welcome to AOLserver" page. If this
+doesn&#39;t work, try going to <code class="computeroutput">http://127.0.0.1:8000/</code>. If this still
+doesn&#39;t work, check out the <a class="xref" href="aolserver">Troubleshooting
 AOLserver</a> section below. Note that you will not be able to
 browse to the web page from another machine, because AOLserver is
 only listening to the local address.</p><p>Shutdown the test server:</p><pre class="screen">
@@ -274,10 +277,10 @@ the <a class="xref" href="install-openacs-keepalive" title="Starting and Stoppin
 alive</a> section.</p>
 </li><li class="listitem">
 <a name="install-aolserver-troubleshooting" id="install-aolserver-troubleshooting"></a><p>
-<b>Troubleshooting. </b>If you can't view the
-welcome page, it's likely there's a problem with your server
-configuration. Start by viewing your AOLserver log, which is in
-<code class="computeroutput">/usr/local/aolserver/log/server.log</code>. You
+<strong>Troubleshooting. </strong>If you can&#39;t
+view the welcome page, it&#39;s likely there&#39;s a problem with
+your server configuration. Start by viewing your AOLserver log,
+which is in <code class="computeroutput">/usr/local/aolserver/log/server.log</code>. You
 should also try to find lines of the form:</p><pre class="screen">
 [01/Jun/2000:12:11:20][5914.4051][-nssock-] Notice: nssock: listening on http://localhost.localdomain:8000 (127.0.0.1:8000)
 [01/Jun/2000:12:11:20][5914.4051][-nssock-] Notice: accepting connections
@@ -289,9 +292,9 @@ word <code class="computeroutput">Error</code> instead of
 grabs your address and hostname from your OS settings.</p><pre class="screen">
 set hostname        [ns_info hostname]
 set address         [ns_info address]
-</pre><p>If you get an error that nssock can't get the requested address,
-you can set these manually. If you type 0.0.0.0, AOLserver will try
-to listen on all available addresses. <span class="emphasis"><em>Note</em></span>: <code class="computeroutput">ns_info address</code> doesn't appear to be
+</pre><p>If you get an error that nssock can&#39;t get the requested
+address, you can set these manually. If you type 0.0.0.0, AOLserver
+will try to listen on all available addresses. <span class="emphasis"><em>Note</em></span>: <code class="computeroutput">ns_info address</code> doesn&#39;t appear to be
 supported in current versions of AOLserver.</p><pre class="screen">
 set hostname        [ns_info hostname]
 #set address         [ns_info address]
@@ -300,8 +303,8 @@ set address 0.0.0.0
 </li><li class="listitem"><p>
 <a class="link" href="analog-install" title="Install Analog web file analyzer">Install Analog</a> web file
 analyzer. (OPTIONAL)</p></li>
-</ol></div><div class="cvstag">($&zwnj;Id: aolserver.xml,v 1.22 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</ol></div><div class="cvstag">($&zwnj;Id: aolserver.xml,v 1.22.14.2 2017/04/22
+17:18:48 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="install-ldap-radius" leftLabel="Prev" leftTitle="Install LDAP for use as external

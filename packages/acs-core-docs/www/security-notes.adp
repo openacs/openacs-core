@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Security Notes}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Notes}</property>
 <property name="doc(title)">Security Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

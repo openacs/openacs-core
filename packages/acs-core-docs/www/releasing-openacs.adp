@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 16. Releasing
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 16. Releasing
 OpenACS}</property>
 <property name="doc(title)">Chapter 16. Releasing
 OpenACS</property>
@@ -13,7 +13,7 @@ OpenACS Platform Developers"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="releasing-openacs" id="releasing-openacs"></a>Chapter 16. Releasing
 OpenACS</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="section"><a href="releasing-openacs-core">OpenACS Core and .LRN</a></span></dt><dt><span class="section"><a href="update-repository">How to
 Update the OpenACS.org repository</a></span></dt><dt><span class="section"><a href="releasing-package">How to
 package and release an OpenACS Package</a></span></dt><dt><span class="section"><a href="update-translations">How to

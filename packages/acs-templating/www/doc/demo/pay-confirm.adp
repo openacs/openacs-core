@@ -1,5 +1,6 @@
 <html>
-  <head>
+<head>
+<title>Demo: Payment</title>
   <style>
     h1 { font-family: Arial, Helvetica }
     th { font-family: Arial, Helvetica }

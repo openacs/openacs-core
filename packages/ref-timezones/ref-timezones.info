@@ -7,17 +7,17 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/ref-timezones-5.9.0.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/ref-timezones-5.9.1.apm">
         <owner url="mailto:jon@mayuli.com">Jon Griffin</owner>
         <summary>Timezone data for acs-reference.</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/plain">This is the timezone data for the acs-reference data package.  Used by acs-lang (among others) for localized times.</description>
 
-        <provides url="ref-timezones" version="5.9.0"/>
-        <requires url="acs-kernel" version="5.9.0"/>
-        <requires url="acs-reference" version="5.9.0"/>
+        <provides url="ref-timezones" version="5.9.1"/>
+        <requires url="acs-kernel" version="5.9.1"/>
+        <requires url="acs-reference" version="5.9.1"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="ref-timezones::apm::after_upgrade"/>

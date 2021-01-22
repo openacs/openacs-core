@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Diagnosing Performance Problems}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Diagnosing Performance Problems}</property>
 <property name="doc(title)">Diagnosing Performance Problems</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -19,20 +19,21 @@ constantly?</p></li><li class="listitem">
 degrade in performance. For PostGreSQL, see <a class="xref" href="install-next-nightly-vacuum" title="Vacuum Postgres nightly">the section called
 &ldquo;Vacuum Postgres nightly&rdquo;</a>. For
 Oracle, use <code class="computeroutput">exec
-dbms_stats.gather_schema_stats('SCHEMA_NAME')</code> (<a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle notes</a>).</p></li><li class="listitem">
+dbms_stats.gather_schema_stats('SCHEMA_NAME')</code>
+(<a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski&#39;s Oracle notes</a>).</p></li><li class="listitem">
 <p>You can track the exact amount of time each database query on a
 page takes:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Go to <a class="ulink" href="/acs-admin/install" target="_top">Main Site : Site-Wide Administration : Install
 Software</a>
-</p></li><li class="listitem"><p>Click on "Install New Application" in "Install from OpenACS
-Repository"</p></li><li class="listitem"><p>Choose "ACS Developer Support"&gt;</p></li><li class="listitem"><p>After install is complete, restart the server.</p></li><li class="listitem"><p>Browse to Developer Support, which is automatically mounted at
-<code class="computeroutput"><a class="ulink" href="/ds" target="_top">/ds</a></code>.</p></li><li class="listitem"><p>Turn on Database statistics</p></li><li class="listitem"><p>Browse directly to a slow page and click "Request Information"
-at the bottom of the page.</p></li><li class="listitem">
+</p></li><li class="listitem"><p>Click on "Install New Application" in "Install
+from OpenACS Repository"</p></li><li class="listitem"><p>Choose "ACS Developer Support"&gt;</p></li><li class="listitem"><p>After install is complete, restart the server.</p></li><li class="listitem"><p>Browse to Developer Support, which is automatically mounted at
+<code class="computeroutput"><a class="ulink" href="/ds" target="_top">/ds</a></code>.</p></li><li class="listitem"><p>Turn on Database statistics</p></li><li class="listitem"><p>Browse directly to a slow page and click "Request
+Information" at the bottom of the page.</p></li><li class="listitem">
 <p>This should return a list of database queries on the page,
 including the exact query (so it can be cut-paste into psql or
 oracle) and the time each query took.</p><div class="figure">
-<a name="idp140400227094992" id="idp140400227094992"></a><p class="title"><b>Figure 6.8. Query
-Analysis example</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/query-duration.png" alt="Query Analysis example"></div></div>
+<a name="idp140592101531128" id="idp140592101531128"></a><p class="title"><strong>Figure 6.8. Query
+Analysis example</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/query-duration.png" alt="Query Analysis example"></div></div>
 </div><br class="figure-break">
 </li>
 </ol></div>
@@ -72,7 +73,7 @@ select s.username
 </pre><p>To kill a troubled process:</p><pre class="programlisting">
 alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#
 </pre><p>(See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew
-Piskorski's Oracle notes</a>)</p>
+Piskorski&#39;s Oracle notes</a>)</p>
 </li><li class="listitem">
 <p>Identify a runaway Postgres query. First, logging must be
 enabled in the database. This imposes a performance penalty and
@@ -112,24 +113,24 @@ finding out what is going on inside Oracle. Oracle provides
 Statspack, a package to monitor and save the state of the v$
 performance views. These reports help finding severe problems by
 exposing summary data about the Oracle wait interface, executed
-queries. You'll find the installation instructions in
+queries. You&#39;ll find the installation instructions in
 $ORACLE_HOME/rdbms/admin/spdoc.txt. Follow the instructions
-carefully and take periodic snapshots, this way you'll be able to
-look at historical performance data.</p><p>Also turn on the timed_statistics in your init.ora file, so that
+carefully and take periodic snapshots, this way you&#39;ll be able
+to look at historical performance data.</p><p>Also turn on the timed_statistics in your init.ora file, so that
 Statspack reports (and all other Oracle reports) are timed, which
 makes them a lot more meaningful. The overhead of timing data is
 about 1% per Oracle Support information.</p><p>To be able to get a overview of how Oracle executes a particular
-query, install "autotrace". I usually follow the instructions here
-<a class="ulink" href="http://asktom.oracle.com/~tkyte/article1/autotrace.html" target="_top">http://asktom.oracle.com/~tkyte/article1/autotrace.html</a>.</p><div class="sect3">
+query, install "autotrace". I usually follow the
+instructions here <a class="ulink" href="http://asktom.oracle.com/~tkyte/article1/autotrace.html" target="_top">http://asktom.oracle.com/~tkyte/article1/autotrace.html</a>.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140400227055392" id="idp140400227055392"></a>Make sure, that the Oracle CBO works with
+<a name="idp140592104105016" id="idp140592104105016"></a>Make sure, that the Oracle CBO works with
 adequate statistics</h4></div></div></div><p>The Oracle Cost Based optimizer is a piece of software that
-tries to find the "optimal" execution plan for a given SQL
-statement. For that it estimates the costs of running a SQL query
-in a particular way (by default up to 80.000 permutations are being
-tested in a Oracle 8i). To get an adequate cost estimate, the CBO
-needs to have adequate statistics. For that Oracle supplies the
-<a class="ulink" href="http://download-west.oracle.com/docs/cd/B10501_01/appdev.920/a96612/d_stats.htm#999107" target="_top">dbms_stats package</a>.</p>
+tries to find the "optimal" execution plan for a given
+SQL statement. For that it estimates the costs of running a SQL
+query in a particular way (by default up to 80.000 permutations are
+being tested in a Oracle 8i). To get an adequate cost estimate, the
+CBO needs to have adequate statistics. For that Oracle supplies the
+<a class="ulink" href="http://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_stats.htm#CIHBIEII" target="_top">dbms_stats package</a>.</p>
 </div>
 </div>
 </div>

@@ -8,7 +8,7 @@ ad_page_contract {
     @creation-date 2000-08-20
     @cvs-id $Id$
 } {
-    object_id:naturalnum,notnull
+    object_id:integer,notnull
     {children_p:boolean "f"}
     {application_url ""}
 }
@@ -30,11 +30,9 @@ set name [db_string name {}]
 
 set context [list [list "./" [_ acs-subsite.Permissions]] [_ acs-subsite.Permissions_for_name]]
 
-db_multirow inherited inherited_permissions {} { 
-}
+db_multirow inherited inherited_permissions {} {}
 
-db_multirow acl acl {} {
-}
+db_multirow acl acl {} {}
 
 set controls [list]
 set controlsUrl [export_vars -base grant {application_url object_id}]
@@ -50,7 +48,7 @@ if { $security_inherit_p == "t" && $context_id ne "" } {
     lappend controls "<a href=\"[ns_quotehtml $toggleUrl]\">Inherit Permissions from [ns_quotehtml $context_name]</a>"
 }
 
-set controls "\[ [join $controls " | "] \]"
+set controls "\[ [join $controls { | }] \]"
 
 set export_form_vars [export_vars -form {object_id application_url}]
 

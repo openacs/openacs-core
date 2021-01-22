@@ -12,7 +12,7 @@ ad_page_contract {
 } {
     group_id:naturalnum,notnull
     rel_type:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -validate {
     rel_type_acceptable_p -requires {group_id:notnull rel_type:notnull} {
 	# This test makes sure this group can accept the specified rel

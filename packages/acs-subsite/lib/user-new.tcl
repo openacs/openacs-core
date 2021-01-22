@@ -1,30 +1,38 @@
-# Expects parameters:
-#
-# self_register_p - Is the form for users who self register (1) or
-#                   for administrators who create other users (0)?
-# next_url        - Any url to redirect to after the form has been submitted. The
-#                   variables user_id, password, and account_messages will be added to the URL. Optional.
-# email           - Prepopulate the register form with given email. Optional.
-# return_url      - URL to redirect to after creation, will not get any query vars added
-# rel_group_id    - The name of a group which you want to relate this user to after creating the user.
-#                   Will add an element to the form where the user can pick a relation among the permissible 
-#                   rel-types for the group.
+ad_include_contract {
+    ADP include for adding new users
 
+    Expects parameters:
+    
+    @param self_register_p Is the form for users who self register (1) or
+                           for administrators who create oher users (0)?
+    
+    @param next_url        Any url to redirect to after the form has been
+                           submitted.  The variables user_id,
+                           password, and account_messages will be
+                           added to the URL. Optional.
+
+    @email                 Prepopulate the register form with given email.
+                           Optional.
+
+    @return_url            URL to redirect to after creation, will not get any
+                           query vars added
+
+    @rel_group_id          The name of a group which you want to relate this
+                           user to after creating the user.  Will add
+                           an element to the form where the user can
+                           pick a relation among the permissible
+                           rel-types for the group. Can be empty.
+    
+} {
+    {self_register_p:boolean 1}
+    {next_url ""}
+    {email ""}
+    {return_url ""}
+    {rel_group_id:integer ""}
+}
 
 # Check if user can self register
 auth::self_registration
-
-# Set default parameter values
-array set parameter_defaults {
-    self_register_p 1
-    next_url {}
-    return_url {}
-}
-foreach parameter [array names parameter_defaults] { 
-    if { (![info exists $parameter] || $parameter eq "") } { 
-        set $parameter $parameter_defaults($parameter)
-    }
-}
 
 # Redirect to HTTPS if so configured
 if { [security::RestrictLoginToSSLP] } {
@@ -53,14 +61,22 @@ if { $callback_url ne "" } {
 # Pre-generate user_id for double-click protection
 set user_id [db_nextval acs_object_id_seq]
 
-ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]  -validate {
+ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]
+
+#
+# Standard validator
+#
+set validate {
     {email
         {[string equal "" [party::get_by_email -email $email]]}
         "[_ acs-subsite.Email_already_exists]"
     }
 }
 
-if { ([info exists rel_group_id] && $rel_group_id ne "") } {
+#
+# Handling of additional groups
+#
+if { $rel_group_id ne "" } {
     ad_form -extend -name register -form {
         {rel_group_id:integer(hidden),optional}
     }
@@ -80,6 +96,12 @@ if { ([info exists rel_group_id] && $rel_group_id ne "") } {
         }
     }
 }
+
+#
+# Register the validators after all form-fields were added (in case
+# conditional fields were added needing validators).
+#
+ad_form -extend -name register -validate $validate
 
 ad_form -extend -name register -on_request {
     # Populate elements from local variables
@@ -101,7 +123,7 @@ ad_form -extend -name register -on_request {
                                      -secret_question $secret_question \
                                      -secret_answer $secret_answer]
 	
-        if { $creation_info(creation_status) eq "ok" && ([info exists rel_group_id] && $rel_group_id ne "") } {
+        if { $creation_info(creation_status) eq "ok" && $rel_group_id ne "" } {
             group::add_member \
                 -group_id $rel_group_id \
                 -user_id $user_id \
@@ -168,7 +190,7 @@ ad_form -extend -name register -on_request {
     
     
     # User is registered and logged in
-    if { (![info exists return_url] || $return_url eq "") } {
+    if { $return_url eq "" } {
         # Redirect to subsite home page.
         set return_url [subsite::get_element -element url]
     }
@@ -191,7 +213,9 @@ ad_form -extend -name register -on_request {
     if { $creation_info(account_message) ne "" && $self_register_p } {
         # Only do this if user is self-registering
         # as opposed to creating an account for someone else
-        ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" { { message $creation_info(account_message) } return_url }]
+        ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" {
+            { message $creation_info(account_message) } return_url
+        }]
         ad_script_abort
     } else {
         # No messages

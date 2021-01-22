@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 10. Advanced Topics}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 10. Advanced Topics}</property>
 <property name="doc(title)">Chapter 10. Advanced Topics</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -12,7 +12,7 @@ Developers"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="tutorial-advanced" id="tutorial-advanced"></a>Chapter 10. Advanced
 Topics</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="tutorial-specs">Write the
 Requirements and Design Specs</a></span></dt><dt><span class="sect1"><a href="tutorial-cvs">Add the new
 package to CVS</a></span></dt><dt><span class="sect1"><a href="tutorial-etp-templates">OpenACS Edit This Page
@@ -36,8 +36,8 @@ database</a></span></dt><dt><span class="sect1"><a href="tutorial-future-topics"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>This tutorial covers topics which are not essential to creating
 a minimal working package. Each section can be used independently
-of all of the others; all sections assume that you've completed the
-basic tutorial.</p>
+of all of the others; all sections assume that you&#39;ve completed
+the basic tutorial.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="tutorial-debug" leftLabel="Prev" leftTitle="Debugging and Automated Testing"

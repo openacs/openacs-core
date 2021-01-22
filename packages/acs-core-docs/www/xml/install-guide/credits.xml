@@ -25,7 +25,7 @@
 	  </para></listitem>
 
 	  <listitem><para> 
-		  <ulink url="http://www.orchardlabs.com/freebsd/">Gilbert Wong's FreeBSD
+		  <ulink url="https://web.archive.org/web/20011204174701/http://www.orchardlabs.com:80/freebsd/">Gilbert Wong&#39;s FreeBSD
 		  installation guide</ulink>
 		</para></listitem> 
 
@@ -69,10 +69,10 @@
     <title>Where did this document come from?</title>
     <para>
       This document was created by <ulink
-      url="mailto:vinod@kurup.com">Vinod Kurup</ulink>, but it's really
+      url="mailto:vinod@kurup.com">Vinod Kurup</ulink>, but it&#39;s really
       just plagiarism from a number of documents that came before it. If
-      I've used something that you've written without proper credit, let me
-      know and I'll fix it right away.
+      I&#39;ve used something that you&#39;ve written without proper credit, let me
+      know and I&#39;ll fix it right away.
     </para>
     <para>Versions 4.6.2 to present were edited by <ulink
     url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>.
@@ -89,19 +89,19 @@
         </para></listitem> 
 
       <listitem><para> 
-          <ulink url="http://www.orchardlabs.com/">Gilbert Wong's FreeBSD
+          <ulink url="http://www.orchardlabs.com/">Gilbert Wong&#39;s FreeBSD
           installation guide</ulink>
         </para></listitem> 
 
       <listitem><para> 
-          <ulink url="http://kurup.com/acs/openacs-4.html">Vinod Kurup's Brief OpenACS4
+          <ulink url="http://kurup.com/acs/openacs-4.html">Vinod Kurup&#39;s Brief OpenACS4
           installation guide</ulink>
         </para></listitem>
 
       <listitem><para> 
           <ulink
-          url="http://www.aufrecht.org/openacs-4.5-quick-guide/">Joel
-          Aufrecht's OpenACS 4.5 Quick Guide.</ulink>
+          url="https://web.archive.org/web/20081005114800/http://aufrecht.org:80/openacs-4.5-quick-guide/">Joel
+          Aufrecht&#39;s OpenACS 4.5 Quick Guide.</ulink>
         </para></listitem> 
 
     </itemizedlist>
@@ -113,50 +113,17 @@
     <section id="os-install" xreflabel="Linux Install Guides">
     <title>Linux Install Guides</title>
     <para>
-      Here's a list of some helpful documentation for various OS's
+      Here&#39;s a list of some helpful documentation for <ulink
+      url="http://openacs.org/xowiki/openacs-system-install">installing
+      OpenACS on various operating systems</ulink>
     </para>
 
-    <itemizedlist>
-      <listitem><para>
-          <ulink url="http://tinyplanet.ca/pubs/debian/">Painless Debian
-          GNU/Linux</ulink> by Stephen van Egmond
-        </para></listitem>
-
-      <listitem><para> 
-
-          <ulink
-          url="http://www.debian.org/releases/stable/installmanual">Official
-          Debian Guide</ulink> 
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink
-          url="http://www.redhat.com/docs/manuals/linux/">RedHat</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink
-          url="http://www.linux-mandrake.com/en/fdoc.php3">Mandrake</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink url="http://sdb.suse.de/sdb/en/html/">SuSE</ulink>
-
-        </para></listitem>
-
-    </itemizedlist>
     </section>
 
   <section id="os-security" xreflabel="Security Information">
     <title>Security Information</title>
     <para>
-      Once you get your OS installed, it's imperative that you secure your
+      Once you get your OS installed, it&#39;s imperative that you secure your
       installation. As Jon Griffin repeatedly warns us, "No distribution is
       secure out of the box."  The Reference Platform implements
       some basic precautions, but security is a process, not a
@@ -174,23 +141,23 @@
         </para>
       </listitem>
       <listitem><para> 
-          <ulink url="http://jongriffin.com/static/linuxnotes">Jon
-          Griffin's notes</ulink>
+          <ulink url="https://web.archive.org/web/20060622032854/http://jongriffin.com/static/linuxnotes">Jon
+          Griffin&#39;s notes</ulink>
           </para></listitem>
       <listitem><para> 
-          <ulink url="http://www.seifried.org/lasg/">Linux Administrators
+          <ulink url="http://www.linuxtopia.org/online_books/linux_administrators_security_guide/">Linux Administrators
           Security Guide</ulink>
           </para></listitem>
       <listitem><para> 
           <ulink
-            url="http://www.suse.com/en/support/howto/secure_webserv/index.html">Installation
+            url="http://www.linuxsecurity.com/content/view/110249/">Installation
             of a Secure Webserver</ulink>
         </para></listitem>
 
       <listitem><para> 
           <ulink
             url="http://www.counterpane.com/crypto-gram.html">Bruce
-          Schneier's Crypto-Gram</ulink>, especially <ulink
+          Schneier&#39;s Crypto-Gram</ulink>, especially <ulink
           url="http://www.counterpane.com/crypto-gram-0103.html#1">The
           security patch treadmill</ulink> and <ulink
           url="http://www.counterpane.com/crypto-gram-0107.html#5">Monitoring First</ulink>.</para>
@@ -214,7 +181,7 @@
 
             <ulink
             url="http://www.amazon.com/exec/obidos/ASIN/1558605347/photonetA">Philip
-            and Alex's Guide to Web Publishing</ulink> - A very readable
+            and Alex&#39;s Guide to Web Publishing</ulink> - A very readable
             guide to database-backed community websites.
 
           </para></listitem>
@@ -241,7 +208,7 @@
 
             <ulink
             url="http://www.amazon.com/exec/obidos/ASIN/076453162X/photonetA">UNIX
-            System Administrator's Bible</ulink> -  (LePage and Iarerra 1998;
+            System Administrator&#39;s Bible</ulink> -  (LePage and Iarerra 1998;
             IDG) 
 
           </para></listitem>
@@ -271,7 +238,7 @@
       <itemizedlist>
         <listitem><para>
 
-            <ulink url="http://www.geek-girl.com/unix.html">The UNIX
+            <ulink url="https://web.archive.org/web/19990302021704/http://www.geek-girl.com:80/unix.html">The UNIX
               Reference Desk</ulink>
 
           </para></listitem>

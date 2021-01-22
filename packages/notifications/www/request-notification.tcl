@@ -122,7 +122,7 @@ template::list::create \
 	}
     }
     
-db_multirow notify_users notify_users { *SQL* }
+db_multirow notify_users notify_users {}
 
 
 

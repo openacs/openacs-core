@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Overview}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Overview}</property>
 <property name="doc(title)">Templating System User Guide: Overview</property>
 <master>
 <h2>Overview</h2>
@@ -37,7 +37,7 @@ represents the object, its data, and methods for updating the data.
 The <strong>view</strong> provides a user a UI to see and
 manipulate the data in the model. The <strong>controller</strong>
 provides the system necessary to connect the model and the view to
-the user's requests. This <a href="templating.jpg">diagram</a>
+the user&#39;s requests. This <a href="templating.jpg">diagram</a>
 summarizes how the process flow of the templating system using the
 MVC framework. The filename <strong>dynamic-page</strong> is simply
 an example.</p>
@@ -58,12 +58,12 @@ designer and does not need to write HTML markup. These tasks are
 separated into separate files so that the two tasks do not
 interfere with each other.</p>
 <p>The design of the templating system makes it easier to include
-reusable presentation components as <a href="components">included templates</a> and <a href="master">master templates</a>, as explained in "<a href="composite">Composite Page</a>". Moreover, the ACS Core pages
-are templated which enables users of the ACS who want to customize
-their look and feel to update a site-wide master or the individual
-templates without touching the application logic. If a bug is fixed
-in the application logic, the application logic script can be
-replaced without affecting the template.</p>
+reusable presentation components as <a href="components">included templates</a> and <a href="master">master templates</a>, as explained in "<a href="composite">Composite Page</a>". Moreover, the ACS Core
+pages are templated which enables users of the ACS who want to
+customize their look and feel to update a site-wide master or the
+individual templates without touching the application logic. If a
+bug is fixed in the application logic, the application logic script
+can be replaced without affecting the template.</p>
 <p>The rest of this document explains the steps necessary to write
 a templated page.</p>
 <h3>Choose the data you wish to present</h3>
@@ -71,14 +71,15 @@ a templated page.</p>
 to a first approximation, on the data you wish to present to the
 user. For example, a site that allows users to manage their car
 maintenance records might want to present the following data on the
-user's home page:</p>
+user&#39;s home page:</p>
 <ul>
-<li>The user's name.</li><li>The user's city of residence.</li><li>A list of the user's cars, showing the year, make, and
-model.</li><li>A list of messages or alerts related to the user's cars.</li><li>A list of local events or special offers from mechanics or
+<li>The user&#39;s name.</li><li>The user&#39;s city of residence.</li><li>A list of the user&#39;s cars, showing the year, make, and
+model.</li><li>A list of messages or alerts related to the user&#39;s
+cars.</li><li>A list of local events or special offers from mechanics or
 dealers.</li>
 </ul>
 <p>Note that our definition of <em>data</em> encompasses
-<em>everything that is unique to a particular user's
+<em>everything that is unique to a particular user&#39;s
 experience</em>. It does <em>not</em> include text or other layout
 features that will appear the same for all users.</p>
 <p>Each of the items in the above list constitutes a <em>data
@@ -90,9 +91,9 @@ present on each page as part of the site specification.</p>
 page, the developer writes a Tcl script to <a href="data">implement the data sources</a>. The Tcl script should
 be located under the page root at the URL of the finished page. For
 example, a dynamic page that will be located at
-<tt>http://yoursite.com/cars.acs</tt> requires a Tcl script located
-on the server at <tt>/web/yoursite/www/cars.tcl</tt> (or wherever
-your pages happen to be located).</p>
+<kbd>http://yoursite.com/cars.acs</kbd> requires a Tcl script
+located on the server at <kbd>/web/yoursite/www/cars.tcl</kbd> (or
+wherever your pages happen to be located).</p>
 <p>In addition to setting data sources, the Tcl script may perform
 any other required tasks, such as checking permissions, performing
 database transactions or sending email. It may also redirect to
@@ -115,9 +116,9 @@ code and accessed by the designer or publisher for reference.</p>
 <h3>Write the Template</h3>
 <p>The final step is to <a href="templates">write a
 template</a> specifying the layout of the page. Template files must
-have the <tt>adp</tt> extension. By default the system looks for
+have the <kbd>adp</kbd> extension. By default the system looks for
 the template at the same location as the associated Tcl script,
-such as <tt>/web/yoursite/www/cars.adp</tt>.</p>
+such as <kbd>/web/yoursite/www/cars.adp</kbd>.</p>
 <p>The layout is mostly HTML, with a small number of additional
 custom tags to control the presentation of dynamic data on the
 page. In most cases, the initial draft of the template will be

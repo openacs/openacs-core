@@ -22,7 +22,7 @@
             <para>OpenACS supports PAM support via the PAM AOLserver
         module.  PAM is system of modular support, and can provide
         local (unix password), RADIUS, LDAP (<ulink
-        url="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html">more
+        url="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html">more
         information</ulink>), and other forms of
         authentication.  Note that due to security issues, the
         AOLserver PAM module cannot be used for local password
@@ -125,7 +125,7 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
                 <listitem>
                   <formalpara>
                     <title>LDAP in PAM</title>
-                    <para><ulink url="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html#AEN110">more information</ulink></para>
+                    <para><ulink url="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html#AEN110">more information</ulink></para>
                   </formalpara>
                 </listitem>
               </itemizedlist>
@@ -190,7 +190,7 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
     <para>You do not want to make users remember yet another password and username. If you can avoid it you do not want to store their passwords either. This document should help you set your system up so your users can seamlessly log in to your OpenACS instance using the password they are accustomed to using for other things at your institution.</para></formalpara>
     <formalpara>
     <title>Background</title>
-     <para>The original OpenACS LDAP implementation (which has been depreciated by this package) treated the LDAP server as another data store similar to Oracle or Postgresql. It opened a connection using a priveleged account and read or stored an encrypted password for the user in question. This password was independent of the user's operating system or network account, and had to be synchronized if you wanted the same password for OpenACS.</para>
+     <para>The original OpenACS LDAP implementation (which has been depreciated by this package) treated the LDAP server as another data store similar to Oracle or Postgresql. It opened a connection using a privileged account and read or stored an encrypted password for the user in question. This password was independent of the user's operating system or network account, and had to be synchronized if you wanted the same password for OpenACS.</para>
      <para>Save their passwords? Sync passwords? Deal with forgotten password requests? No Thanks. Using ldap bind, you can delegate authentication completely to LDAP. This way you can let the IT department (if you are lucky) worry about password storage/synchronization/etc. The bind operation takes a username and password and returns a true of false depending on whether they match up. This document takes the 'bind' approach so that your users LDAP/AD password (or whatever else you use) can be used to login to OpenACS.</para></formalpara>
     <formalpara>
      <title>Note on Account Creation</title>
@@ -303,7 +303,7 @@ if {[ns_ldap bind $lh $fdn $password]} {
 </orderedlist>
 <formalpara>
  <title>Troubleshooting</title>
- <para>If you're having trouble figuring out some the values for the ldapm, see this useful page on <ulink url="http://bugzilla.glob.com.au/activedirectory/">setting up Active Directory integration with Bugzilla</ulink>. It explains how distinguished names are defined in Active Directory, and how to test that you have the correct values for connectivity and base DN using the OpenLDAP command-line utility ldapsearch.</para>
+ <para>If you're having trouble figuring out some the values for the ldapm, see this useful page on <ulink url="https://www.rhyous.com/2009/11/10/how-to-configure-bugzilla-to-authenticate-to-active-directory/">setting up Active Directory integration with Bugzilla</ulink>. It explains how distinguished names are defined in Active Directory, and how to test that you have the correct values for connectivity and base DN using the OpenLDAP command-line utility ldapsearch.</para>
 <para>John had an issue where nsldap was not loading because AOLServer couldn't find the openldap client libraries, but he was able to fix it by adding the openldap libraries to his LD_LIBRARY_PATH (e.g. /usr/local/openldap/lib)</para></formalpara>
  <formalpara>
   <title>Credits</title>

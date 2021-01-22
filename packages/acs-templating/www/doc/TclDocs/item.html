@@ -62,13 +62,13 @@ Listing of public methods:<br>
 </blockquote>
 
 <h3>Method Detail</h3>
-<p align=right>
+<p align="right">
 <font color=red>*</font> indicates required
 </p>
 
 
-<b>Public Methods:</b><br>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<strong>Public Methods:</strong><br>
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::content_is_null"><font size="+1" weight=bold>item::content_is_null</font></a>
   
 </td>
@@ -79,19 +79,19 @@ Determines if the content for the revision is null (not mereley zero-length)
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>revision_id</code>
+  <td align="right"><code>revision_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The revision id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   1 if the content is null, 0 otherwise
 
@@ -101,7 +101,7 @@ Determines if the content for the revision is null (not mereley zero-length)
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::content_methods_by_type"><font size="+1" weight=bold>item::content_methods_by_type</font></a>
   
 </td>
@@ -112,27 +112,27 @@ Determines all the valid content methods for instantiating a content type. Possi
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>content_type</code>
+  <td align="right"><code>content_type</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The content type</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   A Tcl list of all possible content methods
 
-  <dt><b>Options:</b>
+  <dt><strong>Options:</strong>
   <table>
   
-  <tr><td align=right><code>get_labels</code></td>
-  <td align=left>
+  <tr><td align="right"><code>get_labels</code></td>
+  <td align="left">
   
   Return not just a list of types, but a list of name-value pairs, as in the -options ATS switch for form widgets</td></tr>
   
@@ -144,7 +144,7 @@ Determines all the valid content methods for instantiating a content type. Possi
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_best_revision"><font size="+1" weight=bold>item::get_best_revision</font></a>
   
 </td>
@@ -155,23 +155,23 @@ Attempts to retrieve the live revision for the item. If no live revision exists,
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The best revision id for the item, or an empty string if no revisions exist
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_item_from_revision">item::get_item_from_revision</a></br><a href="item.html#item::get_live_revision">item::get_live_revision</a></br>
 </dl>
@@ -180,30 +180,30 @@ Attempts to retrieve the live revision for the item. If no live revision exists,
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_content_type"><font size="+1" weight=bold>item::get_content_type</font></a>
   
 </td>
 </tr>
 <tr><td>
 <blockquote>
-Retrieves the content type of tyhe item. If the item does not exist, returns an empty string.
+Retrieves the content type of the item. If the item does not exist, returns an empty string.
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The content type of the item, or an empty string if no such item exists
 
@@ -213,7 +213,7 @@ Retrieves the content type of tyhe item. If the item does not exist, returns an 
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_extended_url"><font size="+1" weight=bold>item::get_extended_url</font></a>
   
 </td>
@@ -224,40 +224,40 @@ Retrieves the relative URL of the item with a file extension based on the item's
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The relative URL of the item with the appropriate file extension or an empty string on failure
 
-  <dt><b>Options:</b>
+  <dt><strong>Options:</strong>
   <table>
   
-  <tr><td align=right><code>template_extension</code></td>
-  <td align=left>
+  <tr><td align="right"><code>template_extension</code></td>
+  <td align="left">
   
   Signifies that the file extension should be retrieved using the mime_type of the template assigned to the item, not from the item itself. The live revision of the template is used. If there is no template which could be used to render the item, or if the template has no live revision, the extension defaults to { .html}</td></tr>
   
-  <tr><td align=right><code>revision_id</code></td>
-  <td align=left>
+  <tr><td align="right"><code>revision_id</code></td>
+  <td align="left">
   
-    <i>default</i> the live revision;
+    <em>default</em> the live revision;
   
   Specifies the revision_id which will be used to retrieve the item's mime_type. This option is ignored if the -template_extension option is specified.</td></tr>
   
   </table>
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_mime_info">item::get_mime_info</a></br><a href="item.html#item::get_template_id">item::get_template_id</a></br><a href="item.html#item::get_url">item::get_url</a></br>
 </dl>
@@ -266,7 +266,7 @@ Retrieves the relative URL of the item with a file extension based on the item's
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_id"><font size="+1" weight=bold>item::get_id</font></a>
   
 </td>
@@ -277,30 +277,30 @@ Looks up the URL and gets the item id at that URL, if any.
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>url</code>
+  <td align="right"><code>url</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The URL</td></tr>
   
   <tr>
-  <td align=right><code>root_folder</code>
+  <td align="right"><code>root_folder</code>
   
-     </td><td align=left> <i>default</i> The Sitemap; 
+     </td><td align="left"> <em>default</em> The Sitemap; 
     
   The ID of the root folder to use for resolving the URL</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The item ID of the item at that URL, or the empty string on failure
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_url">item::get_url</a></br>
 </dl>
@@ -309,7 +309,7 @@ Looks up the URL and gets the item id at that URL, if any.
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_item_from_revision"><font size="+1" weight=bold>item::get_item_from_revision</font></a>
   
 </td>
@@ -320,23 +320,23 @@ Gets the item_id of the item to which the revision belongs.
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>revision_id</code>
+  <td align="right"><code>revision_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The revision id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The item_id of the item to which this revision belongs
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_best_revision">item::get_best_revision</a></br><a href="item.html#item::get_live_revision">item::get_live_revision</a></br>
 </dl>
@@ -345,7 +345,7 @@ Gets the item_id of the item to which the revision belongs.
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_live_revision"><font size="+1" weight=bold>item::get_live_revision</font></a>
   
 </td>
@@ -356,23 +356,23 @@ Retrieves the live revision for the item. If the item has no live revision, retu
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The live revision id for the item, or an empty string if no live revision exists
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_best_revision">item::get_best_revision</a></br><a href="item.html#item::get_item_from_revision">item::get_item_from_revision</a></br>
 </dl>
@@ -381,7 +381,7 @@ Retrieves the live revision for the item. If the item has no live revision, retu
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_mime_info"><font size="+1" weight=bold>item::get_mime_info</font></a>
   
 </td>
@@ -392,26 +392,26 @@ Creates a onerow datasource in the calling frame which holds the mime_type and f
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>revision_id</code>
+  <td align="right"><code>revision_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The revision id</td></tr>
   
   <tr>
-  <td align=right><code>datasource_ref</code>
+  <td align="right"><code>datasource_ref</code>
   
-     </td><td align=left> <i>default</i> mime_info; 
+     </td><td align="left"> <em>default</em> mime_info; 
     
   The name of the datasource to be created. The datasource will have two columns, mime_type and file_extension. return 1 (one) if the revision exists, 0 (zero) otherwise.</td></tr>
   
    </table>
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_extended_url">item::get_extended_url</a></br>
 </dl>
@@ -420,34 +420,34 @@ Creates a onerow datasource in the calling frame which holds the mime_type and f
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_publish_status"><font size="+1" weight=bold>item::get_publish_status</font></a>
   
 </td>
 </tr>
 <tr><td>
 <blockquote>
-Get the publish status of the item. The publish status will be one of the following: <ul> <li><tt>production</tt> - The item is still in production. The workflow (if any) is not finished, and the item has no live revision.</li> <li><tt>ready</tt> - The item is ready for publishing</li> <li><tt>live</tt> - The item has been published</li> <li><tt>expired</tt> - The item has been published in the past, but its publication has expired</li> </ul>
+Get the publish status of the item. The publish status will be one of the following: <ul> <li><kbd>production</kbd> - The item is still in production. The workflow (if any) is not finished, and the item has no live revision.</li> <li><kbd>ready</kbd> - The item is ready for publishing</li> <li><kbd>live</kbd> - The item has been published</li> <li><kbd>expired</kbd> - The item has been published in the past, but its publication has expired</li> </ul>
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The publish status of the item, or the empty string on failure 
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::is_publishable">item::is_publishable</a></br>
 </dl>
@@ -456,7 +456,7 @@ Get the publish status of the item. The publish status will be one of the follow
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_revision_content"><font size="+1" weight=bold>item::get_revision_content</font></a>
   
 </td>
@@ -467,35 +467,35 @@ Create a onerow datasource called content in the calling frame which contains al
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>revision_id</code>
+  <td align="right"><code>revision_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The revision whose attributes are to be retrieved</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   1 on success (and create a content array in the calling frame), 0 on failure  
 
-  <dt><b>Options:</b>
+  <dt><strong>Options:</strong>
   <table>
   
-  <tr><td align=right><code>item_id</code></td>
-  <td align=left>
+  <tr><td align="right"><code>item_id</code></td>
+  <td align="left">
   
-    <i>default</i> <i>auto-generated</i>;
+    <em>default</em> <em>auto-generated</em>;
   
   The item_id of the corresponding item.</td></tr>
   
   </table>
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_content_type">item::get_content_type</a></br><a href="item.html#item::get_mime_info">item::get_mime_info</a></br>
 </dl>
@@ -504,7 +504,7 @@ Create a onerow datasource called content in the calling frame which contains al
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_template_id"><font size="+1" weight=bold>item::get_template_id</font></a>
   
 </td>
@@ -515,30 +515,30 @@ Retrieves the template which can be used to render the item. If there is a templ
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
   <tr>
-  <td align=right><code>context</code>
+  <td align="right"><code>context</code>
   
-     </td><td align=left> <i>default</i> 'public'; 
+     </td><td align="left"> <em>default</em> 'public'; 
     
   The context in which the template will be used.</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The template_id of the template which can be used to render the item, or an empty string on failure 
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_template_url">item::get_template_url</a></br>
 </dl>
@@ -547,7 +547,7 @@ Retrieves the template which can be used to render the item. If there is a templ
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_template_url"><font size="+1" weight=bold>item::get_template_url</font></a>
   
 </td>
@@ -558,30 +558,30 @@ Retrieves the relative URL of the template which can be used to render the item.
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
   <tr>
-  <td align=right><code>context</code>
+  <td align="right"><code>context</code>
   
-     </td><td align=left> <i>default</i> 'public'; 
+     </td><td align="left"> <em>default</em> 'public'; 
     
   The context in which the template will be used.</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The template_id of the template which can be used to render the item, or an empty string on failure 
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_template_id">item::get_template_id</a></br>
 </dl>
@@ -590,7 +590,7 @@ Retrieves the relative URL of the template which can be used to render the item.
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_title"><font size="+1" weight=bold>item::get_title</font></a>
   
 </td>
@@ -601,23 +601,23 @@ Get the title for the item. If a live revision for the item exists, use the live
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The title of the item 
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_best_revision">item::get_best_revision</a></br>
 </dl>
@@ -626,7 +626,7 @@ Get the title for the item. If a live revision for the item exists, use the live
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::get_url"><font size="+1" weight=bold>item::get_url</font></a>
   
 </td>
@@ -637,23 +637,23 @@ Retrieves the relative URL stub to th item. The URL is relative to the page root
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   The relative URL to the item, or an empty string on failure
 
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="item.html#item::get_extended_url">item::get_extended_url</a></br>
 </dl>
@@ -662,7 +662,7 @@ Retrieves the relative URL stub to th item. The URL is relative to the page root
 </table>
 
 <p>
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="item::is_publishable"><font size="+1" weight=bold>item::is_publishable</font></a>
   
 </td>
@@ -673,19 +673,19 @@ Determine if the item is publishable. The item is publishable only if: <ul> <li>
 </blockquote>
 <dl>
 
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   
   <tr>
-  <td align=right><code>item_id</code>
+  <td align="right"><code>item_id</code>
   <font color=red>*</font></td>
-       <td align=left>
+       <td align="left">
     
   The item id</td></tr>
   
    </table>
 
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   1 if the item is publishable, 0 otherwise
 
@@ -701,7 +701,7 @@ Determine if the item is publishable. The item is publishable only if: <ul> <li>
 
 
 
-<p align=right>
+<p align="right">
 <font color=red>*</font> indicates required
 </p>
 

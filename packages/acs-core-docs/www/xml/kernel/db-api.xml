@@ -870,7 +870,7 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 <emphasis role="strong">db_blob_get_file</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
-<para>Analagous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
+<para>Analogous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
 
 
 </para></listitem>
@@ -983,13 +983,13 @@ several nested transactions, all of them are terminated. Use this instead of
     <para>
     Each row also has a column, rownum, automatically
     added and set to the row number, starting with 1. Note that this will
-    override any column in the SQL statement named 'rownum', also if you're
+    override any column in the SQL statement named 'rownum', also if you&#39;re
     using the Oracle rownum pseudo-column.
     </para>                                                                                                                                           
 
     <para>
     If the <computeroutput>-local</computeroutput> is passed, the variables defined
-    by db_multirow will be set locally (useful if you're compiling dynamic templates
+    by db_multirow will be set locally (useful if you&#39;re compiling dynamic templates
     in a function or similar situations).
     </para>
     
@@ -1011,7 +1011,7 @@ several nested transactions, all of them are terminated. Use this instead of
     </para>                                                                                                                                           
 
     <para>
-    If you're constructing your multirow through multiple queries with the
+    If you&#39;re constructing your multirow through multiple queries with the
     same set of columns, but with different rows, you can use the
     <computeroutput>-append</computeroutput> switch. This causes the rows returned by this query
     to be appended to the rows already in the multirow, instead of starting
@@ -1175,7 +1175,7 @@ db_with_handle db {
 		</programlisting>
 		<para>
 			Returns 1 if db_type_list contains the current RDMBS type.  A package
-			intended to run with a given RDBMS must note this in it's package info
+			intended to run with a given RDBMS must note this in it&#39;s package info
 			file regardless of whether or not it actually uses the database. 
 		</para>
 	 </listitem>

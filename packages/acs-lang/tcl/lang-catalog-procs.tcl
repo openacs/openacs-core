@@ -338,7 +338,7 @@ ad_proc -private lang::catalog::export_to_file {
         array set old_filename_info [apm_parse_catalog_path $old_catalog_file]
 
         if {$old_filename_info(locale) eq $filename_info(locale)} {
-            file delete $old_catalog_file
+            file delete -- $old_catalog_file
         }
     }
 
@@ -583,11 +583,11 @@ ad_proc -private lang::catalog::import_from_file {
     }
 
     # Get the messages array, and the list of message keys to iterate over
-    array set messages_array [lindex [array get catalog_array messages] 1]
+    array set messages_array $catalog_array(messages)
     set messages_array_names [array names messages_array]
 
     # Get the descriptions array
-    array set descriptions_array [lindex [array get catalog_array descriptions] 1]
+    array set descriptions_array $catalog_array(descriptions)
 
     ns_log Notice "Loading messages in file $file_path"
 
@@ -1144,9 +1144,9 @@ ad_proc -private lang::catalog::translate {} {
     set default_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
     db_foreach get_untranslated_messages {} {    
         foreach lang [list es_ES fr_FR de_DE] {
-            if [catch {
+            if {[catch {
                 set translated_message [lang_babel_translate $message en_$lang]
-            } errmsg] {
+            } errmsg]} {
                 ns_log Notice "Error translating $message into $lang: $errmsg"
             } else {
                 lang::message::register $lang $package_key $message_key $translated_message

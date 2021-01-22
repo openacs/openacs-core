@@ -9,30 +9,26 @@
 if { ![info exists query_string] } {
     set query_string {}
 }
-
-set aolserver_tcl_api_root "http://www.aolserver.com/docs/devel/tcl/api/"
-
-set tcl_docs_root "http://tcl.tk/man/tcl[info tclversion]/TclCmd/contents.htm"
-
 set package_url [apm_package_url_from_key "acs-api-browser"]
 
-set openacs_search_url "${package_url}proc-search"
+# AOLserver has dropped documentation, use NaviServer docs instead
+#set server_tcl_api_root     "http://www.aolserver.com/docs/devel/tcl/api/"
+set server_tcl_api_root      "https://naviserver.sourceforge.io/n/toc.html"
 
-set openacs_browse_url "${package_url}proc-browse"
+set tcl_docs_root            "http://tcl.tk/man/tcl[info tclversion]/TclCmd/contents.htm"
 
+set openacs_search_url       "${package_url}proc-search"
+set openacs_browse_url       "${package_url}proc-browse"
 set openacs_plsql_browse_url "${package_url}plsql-subprograms-all"
-
-set aolserver_search_url "${package_url}tcl-proc-view"
-
-set tcl_search_url "${package_url}tcl-doc-search"
-
+set aolserver_search_url     "${package_url}tcl-proc-view"
+set tcl_search_url           "${package_url}tcl-doc-search"
 
 switch [db_type] {
     postgresql {
         set db_pretty "PostgreSQL [db_version]"
         set db_doc_url "http://www.postgresql.org/docs/[db_version]/interactive/index.html"
-        set db_doc_search_url "http://search.postgresql.org/www.search"
-        set db_doc_search_export [export_vars -form { { ul "http://www.postgresql.org/docs/[db_version]/static/%" } }]
+        set db_doc_search_url "https://www.postgresql.org/search"
+        set db_doc_search_export [export_vars -form { { ul "https://www.postgresql.org/docs/[db_version]/static/%" } }]
         set db_doc_search_query_name "q"
     }
     oracle {

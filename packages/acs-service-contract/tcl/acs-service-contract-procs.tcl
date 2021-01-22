@@ -209,7 +209,7 @@ ad_proc -private acs_sc_get_statement {
 } {
     Builds the statement to call from the provided metadata.
 
-    @param impl_alias tcl or plpgsql proc to call
+    @param impl_alias Tcl or plpgsql proc to call
     @param impl_pl programmimg language of the proc to call (TCL or PLPGSQL)
     @param arguments list of argument names
 

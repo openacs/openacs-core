@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     object_type:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_form_vars:onevalue

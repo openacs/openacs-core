@@ -9,18 +9,19 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/search-5.9.0.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/search-5.9.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Site wide search</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
-        <description format="text/html">Site wide search implemented with service contracts, currently supports postgres via the tsearch2 driver (OpenFTS still support but deprecated).</description>
+        <description format="text/html">Site wide search implemented with service contracts, currently supports PostgreSQL via the tsearch2 driver and Oracle via the intermedia-driver.</description>
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="search" version="5.9.0"/>
-        <requires url="acs-service-contract" version="5.9.0"/>
-        <requires url="acs-templating" version="5.9.0"/>
+        <provides url="search" version="5.9.1"/>
+        <requires url="acs-service-contract" version="5.9.1"/>
+        <requires url="acs-tcl" version="5.9.1"/>
+        <requires url="acs-templating" version="5.9.1"/>
 
         <callbacks>
             <callback type="after-instantiate"  proc="search::install::after_instantiate"/>
@@ -34,6 +35,7 @@
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SubsiteSearchP"  default="0" description="If mounted in a subsite should the search be restricted to items in the subsite by default.  Requires that package_id in acs_objects be properly populated."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="Symbol2Interval"  default="m3 {3 month ago} m6 {6 month ago} y1 {1 year ago}" description="Translate symbol to date interval."/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="Syndicate"  default="0" description="Should syndication data be stored when indexing for search."/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ValidateCSRFP"  default="1" description="Boolean parameter to activate/deactivate CSRF protection for this package instance"/>
         </parameters>
 
     </version>

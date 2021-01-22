@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-service-contract {Service Contracts}} {ACS Service Contract Documentation}</property>
+<property name="context">{/doc/acs-service-contract {ACS Service Contracts}} {ACS Service Contract Documentation}</property>
 <property name="doc(title)">ACS Service Contract Documentation</property>
 <master>
 <h1>ACS Service Contract Documentation</h1>
@@ -30,16 +30,16 @@ only available through tcl.</p>
 documentation through ad_proc.</p>
 <p>The Service Contract interface specification was inspired by
 WDSL, the interface specfication for web services.</p>
-<h2>Hitchiker's Guide to Service Contract Definitions</h2>
+<h2>Hitchiker&#39;s Guide to Service Contract Definitions</h2>
 <ul>
-<li>contract - analagous to interface, contracts serve as logical
+<li>contract - analogous to interface, contracts serve as logical
 containers for operations.</li><li>operation - a method of an interface. defines a method
 signature, including both input and outputs as well as metadata
 such as caching.</li><li>implementation - an implementation is a set of concrete
 functions that fufills an interface.</li><li>implementation alias - is the method of an implementation that
 fufills a given operation of the contract.</li><li>bindings - association between an interface and an
 implementation.</li><li>types - define the kind of input and outputs a operation
-recieves.</li>
+receives.</li>
 </ul>
 <h2>Usage</h2>
 <h3>Design the Contract</h3>
@@ -47,7 +47,7 @@ recieves.</li>
 mind that all implementations need to implement it and that
 extension of the contract after deployment is often not practical.
 In other words take the time to do a little future proofing and
-thinking about possible uses that you weren't planning on.</p>
+thinking about possible uses that you weren&#39;t planning on.</p>
 <h3>Defining Operations</h3>
 <p>Next define the logical operations that will make up your
 contract</p>

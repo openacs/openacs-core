@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Design Notes}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Design Notes}</property>
 <property name="doc(title)">Design Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -14,17 +14,18 @@ this by calling <code class="computeroutput">lang::conn::locale</code>, which lo
 following in order of precedence:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Use user preference for this package (stored in
 ad_locale_user_prefs)</p></li><li class="listitem"><p>Use system preference for the package (stored in
-apm_packages)</p></li><li class="listitem"><p>Use user's general preference (stored in user_preferences)</p></li><li class="listitem"><p>Use Browser header (<code class="computeroutput">Accept-Language</code> HTTP header)</p></li><li class="listitem"><p>Use system locale (an APM parameter for acs_lang)</p></li><li class="listitem"><p>default to en_US</p></li>
+apm_packages)</p></li><li class="listitem"><p>Use user&#39;s general preference (stored in
+user_preferences)</p></li><li class="listitem"><p>Use Browser header (<code class="computeroutput">Accept-Language</code> HTTP header)</p></li><li class="listitem"><p>Use system locale (an APM parameter for acs_lang)</p></li><li class="listitem"><p>default to en_US</p></li>
 </ol></div><p>For ADP pages, message key lookup occurs in the templating
 engine. For Tcl pages, message key lookup happens with the
 <code class="computeroutput">_</code> function. In both cases, if
 the requested locale is not found but a locale which is the default
-for the language which matches your locale's language is found,
+for the language which matches your locale&#39;s language is found,
 then that locale is offered instead.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="i18n-convert" leftLabel="Prev" leftTitle="How to Internationalize a Package"
-		    rightLink="i18n-translators" rightLabel="Next" rightTitle="Translator's Guide"
+		    rightLink="i18n-translators" rightLabel="Next" rightTitle="Translator&#39;s Guide"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="i18n" upLabel="Up"> 
 		

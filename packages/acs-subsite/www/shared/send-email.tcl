@@ -4,7 +4,7 @@ ad_page_contract {
     @author Miguel Marin (miguelmarin@viaro.net) Viaro Networks (www.viaro.net)
 } {
     sendto:notnull
-    {return_url ""}
+    {return_url:localurl ""}
 } -properties {
     context:onevalue
 }
@@ -24,7 +24,7 @@ set from [email_image::get_email -user_id $user_id]
 ad_form -name send-email -export {sendto return_url} -form {
     {from:text(text),optional
         {label "From:"}
-        {html {{disabled ""} {size 40}}}
+        {html {disabled "" size 40}}
         {value $from}
     }
     {subject:text(text)

@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date October 24, 2002
     @cvs-id $Id$
 } {
-    {return_url "."}
+    {return_url:localurl "."}
 }
 
 lang::util::translator_mode_set [expr {![lang::util::translator_mode_p]}] 

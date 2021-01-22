@@ -7,24 +7,25 @@
   <msg key="About_You">About you</msg>
   <msg key="Account_at_system_closed">Your account at %system_name% has been closed.</msg>
   <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
-  <description key="Account_close_confirm_no_label">Description please - does this refer to 'Close account' on the 'Your(/My) Account' page? Where ist the user taken if he doesn't confirm? On the 'MySpace' page? (pvt=private?)
+  <description key="Account_close_confirm_no_label">Description please - does this refer to &#39;Close account&#39; on the &#39;Your(/My) Account&#39; page? Where ist the user taken if he doesn&#39;t confirm? On the &#39;MySpace&#39; page? (pvt=private?)
 
 --Anja Wicht</description>
 
   <msg key="Account_close_confirm_yes_label">Yes, please close my account</msg>
   <msg key="Account_closed">
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
-    &lt;p&gt;If you wish, we can &lt;a href=&quot;%restore_url%&quot;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
+    &lt;p&gt;If you wish, we can &lt;a href=&#34;%restore_url%&#34;&gt;reopen your account&lt;/a&gt;.&lt;/p&gt;
   </msg>
   <msg key="Account_closed_title">Account Closed</msg>
   <msg key="Account_closed_workspace_msg">&lt;p&gt;        Your account is currently &lt;strong&gt;closed&lt;/strong&gt;.
-      &lt;a href=&quot;%login_url%&quot;&gt;Log in&lt;/a&gt; again to see what you can do about it.
+      &lt;a href=&#34;%login_url%&#34;&gt;Log in&lt;/a&gt; again to see what you can do about it.
     &lt;/p&gt;
   </msg>
   <msg key="Account_not_avail_now">This account is not available at this time.</msg>
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
   <msg key="Action">Action</msg>
+  <msg key="Active_theme">Active</msg>
   <msg key="Add">Add</msg>
   <msg key="Add_a_group_of_this_type">Add a group of this type</msg>
   <msg key="Add_a_permissible_relationship_type">Add a permissible relationship type</msg>
@@ -84,7 +85,7 @@
   <msg key="Change_pass_email_por">Change password, email, portrait</msg>
   <msg key="change_password_email_body_0">You have (or someone impersonating you has) requested to change your
 system password. To complete the change, visit the following link:</msg>
-  <msg key="change_password_email_body_1">If you are not the person who made this request, you don't need to take any action.</msg>
+  <msg key="change_password_email_body_1">If you are not the person who made this request, you don&#39;t need to take any action.</msg>
   <msg key="change_password_email_subject">Change Password Request for</msg>
   <msg key="Check_Your_Inbox">Check Your Inbox</msg>
   <msg key="Children">Children</msg>
@@ -97,7 +98,7 @@ system password. To complete the change, visit the following link:</msg>
 &lt;p&gt; Closing your account means that we will no longer send you email
 notifications, nor will you show up in lists of members at
 %system_name%. Your contributions to the community, however, will be
-preserved, as they're part of the community's history. &lt;/p&gt;
+preserved, as they&#39;re part of the community&#39;s history. &lt;/p&gt;
 
 &lt;p&gt; Note that you may reopen your account at any time, simply by
 logging in again. &lt;/p&gt;
@@ -144,12 +145,13 @@ logging in again. &lt;/p&gt;
   <msg key="Delete_selected_app">Delete selected applications</msg>
   <msg key="Delete_this_application">Delete this application</msg>
   <msg key="Delete_this_group_type">Delete this group type</msg>
+  <msg key="Delete_this_theme">Delete this theme</msg>
   <msg key="Description">Description</msg>
-  <msg key="Details_for__group_type_pretty_name">Details for %group_type_pretty_name%</msg>
+  <msg key="Details_for__group_type_pretty_name">Details for Group Type &#34;%group_type_pretty_name%&#34;</msg>
   <msg key="DevAdmin">DevAdmin</msg>
   <description key="DevAdmin">Can we please have a description about the purpose of this key?</description>
 
-  <msg key="Developers_Admin">Developer's Administration</msg>
+  <msg key="Developers_Admin">Developer&#39;s Administration</msg>
   <msg key="Direct_Permissions">Direct Permissions</msg>
   <msg key="Disable">Disable</msg>
   <msg key="Disabled">Disabled</msg>
@@ -162,6 +164,7 @@ logging in again. &lt;/p&gt;
   <msg key="Edit_caption">Edit Caption</msg>
   <msg key="edit_comment">edit comment</msg>
   <msg key="Edit_Options">Edit Options</msg>
+  <msg key="Edit_this_theme">Edit this theme</msg>
   <msg key="Elements_not_editable">Certain elements are not editable, because they are managed by %authority_name%.</msg>
   <msg key="Email">Email</msg>
   <msg key="Email_already_exists">#acs-subsite.Email# already exists</msg>
@@ -182,7 +185,7 @@ Please visit the following link to change your password now:
 </msg>
   <msg key="email_body_Registration_password">Thank you for registering at %system_name%.
 
-Here's how you can log in at %system_url%:
+Here&#39;s how you can log in at %system_url%:
 	    
 %account_id_label%: %account_id%
 %password_label%: %password%
@@ -192,8 +195,8 @@ Please visit the following link to change your password now:
 %reset_password_url%
 </msg>
   <msg key="Email_Confirmation">Email Confirmation</msg>
-  <msg key="email_dont_show">Don't show my E-mail</msg>
-  <msg key="email_dont_show_admin">Don't show E-mail</msg>
+  <msg key="email_dont_show">Don&#39;t show my E-mail</msg>
+  <msg key="email_dont_show_admin">Don&#39;t show E-mail</msg>
   <msg key="email_not_available">Not available</msg>
   <msg key="Email_not_provided_by_authority">An email address is not on record for your account. Please enter your email address.</msg>
   <msg key="Email_not_Requested">Email not Requested</msg>
@@ -220,11 +223,12 @@ Please visit the following link to change your password now:
   <msg key="Frequency">Frequency</msg>
   <msg key="Gender">Gender</msg>
   <msg key="Go_back">Go back</msg>
-  <msg key="go_upload_the_users_por">go upload the user's portrait</msg>
+  <msg key="go_upload_the_users_por">go upload the user&#39;s portrait</msg>
   <msg key="go_upload_your_portrait">go upload your portrait</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
   <msg key="Group_administration">Group administration</msg>
+  <msg key="Group_members">Members of Group: %group_name%</msg>
   <msg key="Group_type">Group type</msg>
   <msg key="Group_type_administration">Group type administration</msg>
   <msg key="Group_Types">Group Types</msg>
@@ -255,6 +259,7 @@ Please visit the following link to change your password now:
   <msg key="Join_subsite">Join subsite</msg>
   <msg key="Join_this_community">Join this community</msg>
   <msg key="Join_this_subsite">Join this subsite</msg>
+  <msg key="Key">Key</msg>
   <msg key="Keyword">Keyword</msg>
   <msg key="Last_name">Last name</msg>
   <msg key="Last_name_not_provided_by_authority">Last name was not provided by the login authority. Please enter your last name.</msg>
@@ -273,15 +278,15 @@ Please visit the following link to change your password now:
   <msg key="login_page">login page</msg>
   <msg key="Logout">Logout</msg>
   <msg key="Logout_from_system">Logout from %system_name%</msg>
-  <msg key="lt__youd_be_able_to_get">, you'd be able to get more information on your fellow community member.</msg>
+  <msg key="lt__youd_be_able_to_get">, you&#39;d be able to get more information on your fellow community member.</msg>
   <msg key="lt_Add_checked_users_to_">Add checked users to users who have permissions on your object.</msg>
   <msg key="lt_Cannot_join_this_grou">Cannot join this group.</msg>
   <msg key="lt_Complete_List_of_ISO_">Complete List of ISO Codes</msg>
   <msg key="lt_Continue_working_with">Continue working with %system_name%</msg>
   <msg key="lt_deleteaifif_nodespara">delete&lt;/a&gt;
 		&lt;/if&gt;
-		&lt;if @nodes.parameters_url@ ne &quot;&quot;&gt;
-		  &lt;a href=&quot;@nodes.parameters_url@&quot;&gt;&lt;#_ parameters</msg>
+		&lt;if @nodes.parameters_url@ ne &#34;&#34;&gt;
+		  &lt;a href=&#34;@nodes.parameters_url@&#34;&gt;&lt;#_ parameters</msg>
   <description key="lt_deleteaifif_nodespara">Something went horribly wrong here!</description>
 
   <msg key="lt_Do_not_inherit_from_p">Do not inherit from %parent_object_name%</msg>
@@ -290,16 +295,16 @@ Please visit the following link to change your password now:
 %system_url%</msg>
   <msg key="lt_For_Site-Wide_Adminis">For Site-Wide Administrators</msg>
   <msg key="lt_Grant_Permission_on_n">Grant Permission on %name%</msg>
-  <msg key="lt_Heres_what_the_databa">Here's what the database reported:</msg>
+  <msg key="lt_Heres_what_the_databa">Here&#39;s what the database reported:</msg>
   <msg key="lt_How_would_you_like_the">How would you like the world to see %first_names% %last_name%?</msg>
-  <msg key="lt_If_you_dont_think_the">If you don't think the person has an account already:</msg>
+  <msg key="lt_If_you_dont_think_the">If you don&#39;t think the person has an account already:</msg>
   <msg key="lt_If_you_happen_to_know">If you happen to know or believe that the person you would like to
   invite already has an account on this system:</msg>
   <msg key="lt_If_you_need_this_func">If you need this functionality, please load acs-reference and ref-countries.</msg>
   <msg key="lt_Inherit_from_parent_o">Inherit from %parent_object_name%</msg>
   <msg key="lt_Inherit_permissions_f">Inherit permissions from the %parent_object_name%</msg>
   <msg key="lt_Inherited_Permissions">Inherited Permissions</msg>
-  <msg key="lt_It_would_be_a_very_ba">It would be a very bad idea to choose this option if you're using a
+  <msg key="lt_It_would_be_a_very_ba">It would be a very bad idea to choose this option if you&#39;re using a
 shared computer in a library or school.  Any subsequent user of this
 machine would be able to masquerade as you on our service.</msg>
   <msg key="lt_New_registration_at_s">New registration at %system_url%</msg>
@@ -309,19 +314,19 @@ machine would be able to masquerade as you on our service.</msg>
     instance-specific values for parameters independent of the apm_parameter
     tables.</msg>
   <msg key="lt_Note_that_you_can_era">Note that you can erase your saved email address and password by
-choosing the &quot;log out&quot; option from your workspace.</msg>
+choosing the &#34;log out&#34; option from your workspace.</msg>
   <msg key="lt_num_children_Children">%num_children% Children Hidden</msg>
-  <msg key="lt_On_portrait_publish_d">On %portrait_publish_date%, you uploaded &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
+  <msg key="lt_On_portrait_publish_d">On %portrait_publish_date%, you uploaded &lt;a href=&#34;%subsite_url%user/portrait/?return_url=%pvt_home_url%&#34;&gt;%portrait_title%&lt;/a&gt;</msg>
   <msg key="lt_Our_server_can_tell_y">Our server can tell your browser to remember certain things, such as
 your email address and password.  This is convenient for you because,
-if you're the only person who uses your computer, you won't have to
+if you&#39;re the only person who uses your computer, you won&#39;t have to
 keep telling us your email address and password.</msg>
   <msg key="lt_Password_Confirmation">Re-type password</msg>
   <msg key="lt_Personal_Home_Page_UR">Personal Home Page URL:</msg>
-  <msg key="lt_Please_locate_your_co">Please locate your country's code among those listed below then use
-the &quot;back&quot; button on your browser to return to the previous form.</msg>
+  <msg key="lt_Please_locate_your_co">Please locate your country&#39;s code among those listed below then use
+the &#34;back&#34; button on your browser to return to the previous form.</msg>
   <msg key="lt_Please_read_and_follo">Please read and follow the instructions in this email.</msg>
-  <msg key="lt_Please_try_to_a_hrefi">Please try to &lt;a href=&quot;index&quot;&gt;log in&lt;/a&gt; again</msg>
+  <msg key="lt_Please_try_to_a_hrefi">Please try to &lt;a href=&#34;index&#34;&gt;log in&lt;/a&gt; again</msg>
   <msg key="lt_Portrait_of_first_last">Portrait of %first_names% %last_name%</msg>
   <msg key="lt_Privileges_higher_implied">Privileges higher in the hierarchy imply all the privileges below, e.g. when you grant admin, then read, write etc. are implied automatically.</msg>
   <msg key="lt_Problem_with_authenti">Problem with authentication</msg>
@@ -332,15 +337,15 @@ to the %system_name% administrator.   It is still
 waiting approval.</msg>
   <msg key="lt_Saving_email_address_">Saving email address and password</msg>
   <msg key="lt_Show_everyone_else_at">Show everyone else at %system_name% how great looking you are:</msg>
-  <msg key="lt_Sorry_but_it_seems_th">Sorry but it seems that you've been banned from %system_name%.</msg>
+  <msg key="lt_Sorry_but_it_seems_th">Sorry but it seems that you&#39;ve been banned from %system_name%.</msg>
   <msg key="lt_Stop_inheriting_permi">Stop inheriting permissions from the %parent_object_name%</msg>
-  <msg key="lt_Sure_erase_user_por">Are you sure that you want to erase this user's portrait?</msg>
+  <msg key="lt_Sure_erase_user_por">Are you sure that you want to erase this user&#39;s portrait?</msg>
   <msg key="lt_Sure_erase_your_por">Are you sure that you want to erase your portrait?</msg>
   <msg key="lt_The_picture_of_you_in">The picture of you in the system is invalid. Please</msg>
-  <msg key="lt_There_are_no_users_wh">There are no users who don't already have access to this object</msg>
+  <msg key="lt_There_are_no_users_wh">There are no users who don&#39;t already have access to this object</msg>
   <msg key="lt_There_was_a_problem_w">There was a problem with authenticating your account</msg>
   <msg key="lt_This_is_the_image_that">This is the image that we show to other users at %system_name%</msg>
-  <msg key="lt_This_user_doesnt_have">This user doesn't have a portrait yet. You can</msg>
+  <msg key="lt_This_user_doesnt_have">This user doesn&#39;t have a portrait yet. You can</msg>
   <msg key="lt_This_user_is_deleted">This user is deleted and banned from the community.</msg>
   <msg key="lt_To_confirm_your_regis">Hello,
 
@@ -353,28 +358,28 @@ If you have not registered with %system_name%, please ignore this message.
 Thanks,
 The %system_name% Team.</msg>
   <msg key="lt_Upload_your_favorite">Upload your favorite file, a scanned JPEG or GIF, from your desktop
-computer system (note that you can't refer to an image elsewhere on
-the Internet; this image must be on your computer's hard drive).</msg>
+computer system (note that you can&#39;t refer to an image elsewhere on
+the Internet; this image must be on your computer&#39;s hard drive).</msg>
   <msg key="lt_Uploaded_pretty_date">Uploaded:  %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Uploaded: %publish_date%</msg>
-  <msg key="lt_Use_the_Browse_button">Use the &quot;Browse...&quot; button to locate your file, then click &quot;Open&quot;.</msg>
+  <msg key="lt_Use_the_Browse_button">Use the &#34;Browse...&#34; button to locate your file, then click &#34;Open&#34;.</msg>
   <msg key="lt_User_has_portrait_title">This user has a entered a biography or uploaded a portrait</msg>
-  <msg key="lt_We_cant_find_you">We can't find you (user %user_id%) in the users table.  Probably your
+  <msg key="lt_We_cant_find_you">We can&#39;t find you (user %user_id%) in the users table.  Probably your
 account was deleted for some reason.</msg>
   <msg key="lt_We_had_a_problem_proc">We had a problem processing your entry.</msg>
   <msg key="lt_We_were_not_awaiting_">We were not awaiting your email.  There must be some mistake.</msg>
   <msg key="lt_Welcome_to_system_nam">%system_name% Validation Email</msg>
   <msg key="lt_What_other_people_see">What other people see when they click your name</msg>
-  <msg key="lt_You_cant_have_a_lt_in">You can't have a &amp;lt; in your first name because it will look like an HTML tag and confuse other users.</msg>
-  <msg key="lt_You_cant_have_a_lt_in_1">You can't have a &amp;lt; in your last name because it will look like an HTML tag and confuse other users.</msg>
+  <msg key="lt_You_cant_have_a_lt_in">You can&#39;t have a &amp;lt; in your first name because it will look like an HTML tag and confuse other users.</msg>
+  <msg key="lt_You_cant_have_a_lt_in_1">You can&#39;t have a &amp;lt; in your last name because it will look like an HTML tag and confuse other users.</msg>
   <msg key="lt_You_have_to_provide_a">You have to provide at least an object_id_on or object_id_two</msg>
-  <msg key="lt_You_wont_get_any_email">You won't get any email until after %pretty_date%.</msg>
+  <msg key="lt_You_wont_get_any_email">You won&#39;t get any email until after %pretty_date%.</msg>
   <msg key="lt_Your_email_has_been_c">Welcome. You have successfully validated your email address and you are now registered to %system_name%. To get started, click below to login.</msg>
   <msg key="lt_Your_email_has_been_c_1">Your email has been confirmed. You are now awaiting approval
     from the %system_name% administrator.</msg>
   <msg key="lt_Your_email_is_confirm">Your email is confirmed</msg>
   <msg key="lt_Your_login_has_expire">Your login has expired. Please retype your password to continue working.</msg>
-  <msg key="lt_Your_URL_doesnt_have_">Your URL doesn't have the correct form.  A valid URL would be something like &quot;%valid_url_example%&quot;.</msg>
+  <msg key="lt_Your_URL_doesnt_have_">Your URL doesn&#39;t have the correct form.  A valid URL would be something like &#34;%valid_url_example%&#34;.</msg>
   <msg key="mail_a_message_to">Mail a message to:</msg>
   <msg key="Make_administrator">Make administrator</msg>
   <msg key="Make_member">Make member</msg>
@@ -391,6 +396,7 @@ account was deleted for some reason.</msg>
   <msg key="Members">Members</msg>
   <msg key="Members_only">Members only</msg>
   <msg key="Missing_argument">Missing argument</msg>
+  <msg key="Modified_theme">Modified</msg>
   <msg key="mount">mount</msg>
   <msg key="My_Account">Your Account</msg>
   <msg key="Name">Name</msg>
@@ -413,7 +419,7 @@ account was deleted for some reason.</msg>
 
   <msg key="Not_logged_in">Not logged in</msg>
   <msg key="Not_valid_email_addr">This is not a valid email address</msg>
-  <msg key="Note_Relational_segments_are_created_from_the_groups_administration_pages">Note: Relational segments are created from the &lt;a href='../groups/'&gt;groups administration pages&lt;/a&gt;</msg>
+  <msg key="Note_Relational_segments_are_created_from_the_groups_administration_pages">Note: Relational segments are created from the &lt;a href=&#39;../groups/&#39;&gt;groups administration pages&lt;/a&gt;</msg>
   <msg key="Notes">Notes:</msg>
   <msg key="Notice">Notice:</msg>
   <msg key="number_of_groups_defined">number of groups defined</msg>
@@ -435,7 +441,7 @@ account was deleted for some reason.</msg>
 
 %account_id_label%: %account_id%
 
-Your password for this account has recently been changed. You don't
+Your password for this account has recently been changed. You don&#39;t
 need to do anything, this message is simply a notification to protect
 the security of your account.
 
@@ -445,13 +451,13 @@ You can always change your password by doing the following:
 
 1. Log in to %system_name%
 
-2. Click on the &quot;%pvt_home_name%&quot; link
+2. Click on the &#34;%pvt_home_name%&#34; link
 
-3. Choose &quot;%password_update_link_text%&quot;</msg>
+3. Choose &#34;%password_update_link_text%&#34;</msg>
   <msg key="Password_changed_subject">Password changed</msg>
   <msg key="Password_regular_change_now">Your password must be changed
   regularly. Please change your password now.</msg>
-  <msg key="Passwords_dont_match">Passwords don't match</msg>
+  <msg key="Passwords_dont_match">Passwords don&#39;t match</msg>
   <msg key="perm_cannot_be_removed">This permission cannot be removed.</msg>
   <msg key="Permissions">Permissions</msg>
   <msg key="permissions">permissions</msg>
@@ -461,7 +467,7 @@ You can always change your password by doing the following:
   <msg key="Please_return_to_home">Please return to %home_link%.</msg>
   <msg key="Please_select">-- Please select --</msg>
   <msg key="Portrait">Portrait</msg>
-  <msg key="Powered_by_OpenACS">Powered by &lt;a href=&quot;http://openacs.org&quot; title=&quot;The OpenACS Project Homepage&quot;&gt;OpenACS&lt;/a&gt;</msg>
+  <msg key="Powered_by_OpenACS">Powered by &lt;a href=&#34;http://openacs.org&#34; title=&#34;The OpenACS Project Homepage&#34;&gt;OpenACS&lt;/a&gt;</msg>
   <msg key="Pretty_name">Pretty name</msg>
   <msg key="Pretty_plural">Pretty plural</msg>
   <msg key="Privacy">Privacy</msg>
@@ -478,7 +484,7 @@ You can always change your password by doing the following:
   <msg key="Registration">%system_name% Registration</msg>
   <msg key="Registration_Approval_Notice">
     &lt;p&gt; Thank you for registering for %system_name%. An administrator has been notified of your request. &lt;/p&gt;
-    &lt;p&gt; Once you're approved, you'll get an email message and you can return to start using %system_name%. &lt;/p&gt;
+    &lt;p&gt; Once you&#39;re approved, you&#39;ll get an email message and you can return to start using %system_name%. &lt;/p&gt;
   </msg>
   <msg key="Registration_intro">Your email address is your %system_name% login. We will send you a validation message to confirm that you own this address.</msg>
   <msg key="Reject">Reject</msg>
@@ -495,6 +501,7 @@ You can always change your password by doing the following:
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Req_membership_subs">Request membership of this subsite</msg>
   <msg key="Request_Change_Password_token_email">Request to Change Password: A token for changing your password has been emailed to you. Follow the instructions in that email to change your password</msg>
+  <msg key="Request_join_submitted">Your request to join group '%group_name%' has been submitted</msg>
   <msg key="Request_membership">Request membership</msg>
   <msg key="Reset_Password">Reset Password</msg>
   <msg key="return_to_application">return to application</msg>
@@ -511,8 +518,9 @@ You can always change your password by doing the following:
   <msg key="See_full_size">See full size</msg>
   <msg key="Select_an_Object_by_Id">Select an Object by Id:</msg>
   <msg key="Select_Applications">Select Applications</msg>
-  <msg key="Select_Applications__helptext">If the application is not in the list, you may need to &lt;a href=\&quot;/acs-admin/install/\&quot;&gt;install&lt;/a&gt; it on the server</msg>
+  <msg key="Select_Applications__helptext">If the application is not in the list, you may need to &lt;a href=\&#34;/acs-admin/install/\&#34;&gt;install&lt;/a&gt; it on the server</msg>
   <msg key="Select_relation_type">Select relation type</msg>
+  <msg key="Select_theme">Select Theme</msg>
   <msg key="Send_email_to_this_user">Send email to this user</msg>
   <msg key="Send_me_a_copy">Send me a copy:</msg>
   <msg key="Services">Services</msg>
@@ -525,7 +533,7 @@ You can always change your password by doing the following:
   <msg key="Site_node_you_would_like_to_map_hostname_to">Site node you would like to map hostname to</msg>
   <msg key="Site_Wide_Admin">Site Wide Administration</msg>
   <msg key="Site_wide_administration">Site-wide administration</msg>
-  <msg key="sorry_forgotten_pwd">Sorry, we can't help you with your forgotten password.</msg>
+  <msg key="sorry_forgotten_pwd">Sorry, we can&#39;t help you with your forgotten password.</msg>
   <msg key="Status">Status</msg>
   <msg key="Story_Behind_Photo">Story Behind Photo</msg>
   <msg key="Story_behind_photo">Story Behind Photo</msg>
@@ -543,15 +551,16 @@ You can always change your password by doing the following:
   <msg key="Supertype">Supertype</msg>
   <msg key="Thank_you">Thank you.</msg>
   <msg key="The_ISO_codes_were_not">The ISO codes were not loaded on this server.</msg>
-  <msg key="The_name_of_the_new_subsite_you_re_setting_up">The name of the new subsite you're setting up</msg>
+  <msg key="The_name_of_the_new_subsite_you_re_setting_up">The name of the new subsite you&#39;re setting up</msg>
   <msg key="Theme">Theme</msg>
   <msg key="theme">theme</msg>
+  <msg key="Themes">Themes</msg>
   <msg key="This_group_is_closed">This group is closed. New members can only get access by invitation.</msg>
   <msg key="This_group_type_can_only_be_administered_by_programmers">This group type can only be administered by programmers</msg>
   <msg key="This_should_be_a_short_string">This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application.</msg>
   <msg key="this_subsite">this subsite</msg>
   <msg key="This_user_has_left_the">This user has left the community.</msg>
-  <msg key="To_add_a_group_first_select_a_group_type_above_or_go_to_the">To add a group first select a group type above or go to the &lt;a href=&quot;../group-types/&quot;&gt;group type administration&lt;/a&gt; page</msg>
+  <msg key="To_add_a_group_first_select_a_group_type_above_or_go_to_the">To add a group first select a group type above or go to the &lt;a href=&#34;../group-types/&#34;&gt;group type administration&lt;/a&gt; page</msg>
   <msg key="To_add_an_application_to_this_site">To &lt;strong&gt;add an application&lt;/strong&gt; to this site, use &lt;em&gt;new sub folder&lt;/em&gt; to create a new site node beneath under the selected folder. Then choose &lt;em&gt;new application&lt;/em&gt; to select an installed application package for instantiation. The application will then be available at the displayed URL. </msg>
   <msg key="To_configure_an_application_select_set_parameters">To &lt;strong&gt;configure&lt;/strong&gt; an application select &lt;em&gt;set parameters&lt;/em&gt; to view and edit application specific options. &lt;em&gt;set permissions&lt;/em&gt; allows one to grant privileges to users and groups to specific application instances or other application data. For more info on parameters and permissions, see the package specific documentation.</msg>
   <msg key="To_copy_an_application_instance_to_another">To &lt;strong&gt;copy&lt;/strong&gt; an application instance to another URL, create a new folder as above, then select &lt;em&gt;mount&lt;/em&gt;.  Select the application to be copied from the list of available packages.</msg>
@@ -576,15 +585,16 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Upload_Portrait">Upload Portrait</msg>
   <msg key="URL">URL</msg>
   <msg key="URL_folder_name">URL folder name</msg>
+  <msg key="Usage">Usage</msg>
   <msg key="User_name">User name</msg>
   <msg key="User_Portrait">User Portrait</msg>
   <msg key="User_Portraits">User Portraits</msg>
   <msg key="User_Profile">User Profile</msg>
   <msg key="User_Profiles">User Profiles</msg>
   <msg key="Username">Username</msg>
-  <msg key="Username_not_found_for_authority">No user with username '%username%' found for authority %this_authority%</msg>
+  <msg key="Username_not_found_for_authority">No user with username &#39;%username%&#39; found for authority %this_authority%</msg>
   <msg key="Username_required">Username required</msg>
-  <msg key="UserSiteMap">User's Site Map</msg>
+  <msg key="UserSiteMap">User&#39;s Site Map</msg>
   <msg key="Vacation_Info_Updated">Vacation Information Updated</msg>
   <msg key="Vacation_information_updated">Your vacation information at %site_link% has been updated.</msg>
   <msg key="view_all_online_members">View all online members.</msg>
@@ -594,20 +604,25 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Welcome_user">Welcome, %user_name%</msg>
   <msg key="When_leaving_checkbox_empty">When you leave a checkbox empty here then that privilege will be revoked from the party you choose in case it has been granted to that party before.</msg>
   <msg key="Whos_Online_link_label">Users currently online</msg>
-  <msg key="Whos_Online_title">Who's Online</msg>
+  <msg key="Whos_Online_title">Who&#39;s Online</msg>
   <msg key="write">Write</msg>
-  <msg key="Yes_I_am_sure">Yes, I'm sure</msg>
+  <msg key="Yes_I_am_sure">Yes, I&#39;m sure</msg>
   <msg key="You_are_in_the_follow">You are in the following groups:</msg>
   <msg key="You_can_also_browse_from">You can also browse from the</msg>
   <msg key="You_can_always_re_open">You can always re-open it by</msg>
   <msg key="You_can_specify_the_default_types_of">You can specify the default types of relationships that can be used for groups of this type. Note that each group can later change its allowed relationship types.</msg>
-  <msg key="You_do_not_have_admin_on">You do not have admin rights on object %root% or any of it's children</msg>
-  <msg key="You_dont_have_a_portrait">You don't have a portrait yet. You can</msg>
+  <msg key="You_do_not_have_admin_on">You do not have admin rights on object %root% or any of it&#39;s children</msg>
+  <msg key="You_dont_have_a_portrait">You don&#39;t have a portrait yet. You can</msg>
   <msg key="You_have_admin_rights_on">You have admin rights on the following objects:</msg>
   <msg key="You_have_no_email_alerts">You currently have no email alerts registered.</msg>
+  <msg key="You_joined_group">You have joined the group &#39;%group_name%&#39;</msg>
   <msg key="Your_Account">Your Account</msg>
   <msg key="Your_discussion_alerts">Your discussion forum alerts</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
   <msg key="Your_system_alerts">Your %gc_system_name% alerts</msg>
-  <msg key="Youre_marked_as_back">You're marked as back from vacation at %site_link%.</msg>
+  <msg key="Youre_marked_as_back">You&#39;re marked as back from vacation at %site_link%.</msg>
+  <msg key="Request_group_submitted">Your request to join group '%group_name%' has been submitted.</msg>
+  <msg key="Joined_group">You have joined the group %group_name%.</msg>
+  <msg key="Error_joining">Error Joining</msg>
+  <msg key="Error_joining_details">We experienced an error adding you to the group.</msg>
 </message_catalog>

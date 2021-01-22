@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     rel_type:notnull,rel_type_dynamic_p
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     rel_type_pretty_name:onevalue
@@ -18,7 +18,7 @@ ad_page_contract {
     counts:onerow
 }
 
-set context [list [list "" "Relationship types"] [[export_vars -base one rel_type] "One type"] "Delete type"]
+set context [list [list "" "Relationship types"] [list [export_vars -base one rel_type] "One type"] "Delete type"]
 
 set rel_type_pretty_name [db_string select_pretty_name {
     select t.pretty_name

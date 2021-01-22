@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>CVS Guidelines</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="style-guide.html" title="OpenACS Style Guide"><link rel="next" href="eng-standards-versioning.html" title="Release Version Numbering"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="style-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-versioning.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cvs-guidelines"></a>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>CVS Guidelines</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="style-guide.html" title="OpenACS Style Guide"><link rel="next" href="eng-standards-versioning.html" title="Release Version Numbering"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="style-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-versioning.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cvs-guidelines"></a>
     CVS Guidelines
   </h2></div></div></div><div class="authorblurb"><div class="cvstag">($Id$)</div><p>
       By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki, and Jade Rubick.
     </p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="using-cvs-with-openacs"></a>Using CVS with OpenACS</h3></div></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140400239493344"></a>Getting Started</h4></div></div></div><p>
+        </div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="using-cvs-with-openacs"></a>Using CVS with OpenACS</h3></div></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140592118797960"></a>Getting Started</h4></div></div></div><p>
         All OpenACS code is available anonymously.  To get code
       anonymously, use the parameter
       <code class="computeroutput">-d:pserver:anonymous@cvs.openacs.org:/cvsroot</code> immediately after <code class="computeroutput">cvs</code> in a cvs command to check out or export code.
@@ -36,7 +36,7 @@
 </pre><p>
         With this setup, you will be asked for your password with
         each cvs command.  To avoid this, set up ssh certificate
-        authentication for your openacs account.  (<a class="ulink" href="http://www.uberdose.com/kbase/ssh-automatic-login/" target="_top">More
+        authentication for your OpenACS account.  (<a class="ulink" href="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server" target="_top">More
         information</a>)
       </p><p>
         You may want to set some more default actions for CVS usage.
@@ -44,51 +44,53 @@
         <code class="computeroutput">~/.cvsrc</code> with the contents:
       </p><pre class="screen"><span class="action"><span class="action">cvs -z6
 cvs -q</span></span></pre><p><code class="computeroutput">-z6</code> speeds up cvs access over the network quite a bit by enabling compressed
-        connection by default.  <code class="computeroutput">-q</code> suppresses some verbose output from commands.  For example, it makes the output of <code class="computeroutput">cvs up</code> much easier to read.</p><div class="sidebar"><div class="titlepage"></div><p>Administrator Note: These are the steps to grant CVS commit rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Create the user's account.  On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
+        connection by default.  <code class="computeroutput">-q</code> suppresses some verbose output from commands.  For example, it makes the output of <code class="computeroutput">cvs up</code> much easier to read.</p><div class="sidebar"><div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div><p>Administrator Note: These are the steps to grant CVS commit rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Create the user's account.  On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
 /usr/sbin/useradd -c "<span class="replaceable"><span class="replaceable">Real Name</span></span>" -G cvs -p <span class="replaceable"><span class="replaceable">passwd</span></span> <span class="replaceable"><span class="replaceable">username</span></span>
 /usr/sbin/usermod -G cvs,<span class="replaceable"><span class="replaceable">username</span></span> <span class="replaceable"><span class="replaceable">username</span></span>
-          </span></span></pre></li><li class="listitem"><p>Grant cvs access to the user account.  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
+          </span></span></pre></li><li class="listitem"><p>Grant cvs access to the user account.  On any machine,
+	  in a temporary directory:
+	  </p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
-emacs avail</span></span></pre><p>Add an avail line of the form:</p><pre class="programlisting">avail|<span class="replaceable"><span class="replaceable">username</span></span>|openacs-4</pre><pre class="screen"><span class="action"><span class="action">cvs commit -m "added commit on X for username" avail</span></span></pre></li></ol></div></div><div class="sidebar"><div class="titlepage"></div><p>Branimir suggests an additional level of abstraction.  If you put</p><pre class="programlisting">Host cvs-server
+emacs avail</span></span></pre><p>Add an avail line of the form:</p><pre class="programlisting">avail|<span class="replaceable"><span class="replaceable">username</span></span>|openacs-4</pre><pre class="screen"><span class="action"><span class="action">cvs commit -m "added commit on X for username" avail</span></span></pre></li></ol></div></div><div class="sidebar"><div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div><p>Branimir suggests an additional level of abstraction.  If you put</p><pre class="programlisting">Host cvs-server
       HostName cvs.openacs.org
-      User <span class="replaceable"><span class="replaceable">yournamehere</span></span></pre><p>into your <code class="computeroutput">~/.ssh/config</code> file, then you can use <code class="computeroutput">-d :ext:cvs-server:/cvsroot</code> instead of <code class="computeroutput">-d :ext:cvs.openacs.org:/cvsroot</code>.  You can then change the definition of <code class="computeroutput">cvs-server</code> by changing one file instead of editing hundreds of <code class="computeroutput">CVSROOT/Repository</code> files.</p></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140400238527856"></a>Checkout for Package Development</h4></div></div></div><p>If you are actively developing a non-core package, you
+      User <span class="replaceable"><span class="replaceable">yournamehere</span></span></pre><p>into your <code class="computeroutput">~/.ssh/config</code> file, then you can use <code class="computeroutput">-d :ext:cvs-server:/cvsroot</code> instead of <code class="computeroutput">-d :ext:cvs.openacs.org:/cvsroot</code>.  You can then change the definition of <code class="computeroutput">cvs-server</code> by changing one file instead of editing hundreds of <code class="computeroutput">CVSROOT/Repository</code> files.</p></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140592118827320"></a>Checkout for Package Development</h4></div></div></div><p>If you are actively developing a non-core package, you
       should work from the latest core release branch.  Currently this
-      is oacs-5-7.  This ensures that you are working on top
+      is oacs-5-9.  This ensures that you are working on top
       of a stable OpenACS core, but still allows you to commit feature
-      changes to non-core packages.  To check out all packages,</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co -r oacs-5-7 openacs-4</span></span></pre><p>If you work in the directories created with this command, all of your
-            cvs updates and commits will be confined to the oacs-5-7
+      changes to non-core packages.  To check out all packages,</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co -r oacs-5-9 openacs-4</span></span></pre><p>If you work in the directories created with this command, all of your
+            cvs updates and commits will be confined to the oacs-5-9
             branch.  Your work will be merged back to HEAD for you
             with each release.</p><p>Because the entire openacs-4 directory is large, you may
       want to use only acs-core plus some specific modules.  To do
-      this, check out core first:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot -r oacs-5-7 checkout acs-core</span></span></pre><p>Then add modules as needed:</p><pre class="screen"><span class="action"><span class="action">cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages
+      this, check out core first:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot -r oacs-5-9 checkout acs-core</span></span></pre><p>Then add modules as needed:</p><pre class="screen"><span class="action"><span class="action">cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages
 cvs up -d <span class="replaceable"><span class="replaceable">packagename</span></span></span></span></pre><p>... where <span class="replaceable"><span class="replaceable">packagename</span></span> is the
             name of the package you want. Visit the <a class="ulink" href="http://openacs.org/packages" target="_top"> Package
             Inventory</a> and <a class="ulink" href="http://openacs.org/projects/openacs/packages/" target="_top">Package
             maintainers and status</a> for a list of available
             packages and their current state.
-      </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140400232839328"></a>Checkout for Core Development</h4></div></div></div><p>If you are actively developing packages in the OpenACS
+      </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140592118836152"></a>Checkout for Core Development</h4></div></div></div><p>If you are actively developing packages in the OpenACS
       Core, work from the HEAD branch.  HEAD is used for active
               development of the next version of core OpenACS. It may be very
               buggy; it may not even install correctly. Do not use this branch for
               development of non-core features unless your work depends on some
               of the HEAD core work. To check out HEAD, omit the
-              <code class="computeroutput">-r</code> tag.</p><p></p><p>To check out HEAD for development, which requires an OpenACS developer account:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>To check out HEAD anonymously:</p><pre class="screen"><span class="action"><span class="action">cvs -d:pserver:anonymous@cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140400256015792"></a>Checkout .LRN</h4></div></div></div><p>
-        .LRN consists of a given version openacs core, plus a set of
+              <code class="computeroutput">-r</code> tag.</p><p></p><p>To check out HEAD for development, which requires an OpenACS developer account:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>To check out HEAD anonymously:</p><pre class="screen"><span class="action"><span class="action">cvs -d:pserver:anonymous@cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140592118841528"></a>Checkout .LRN</h4></div></div></div><p>
+        .LRN consists of a given version OpenACS core, plus a set of
         packages. These are collectively packages together to form a
-        distrubution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
+        distribution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
         .LRN also uses an OpenACS install.xml file during installation;
         this file is distributed within the dotlrn package and must be
         moved. To get a development checkout of .LRN in the subdirectory
         <code class="literal">dotlrn</code>:
-      </p><pre class="screen"><span class="action"><span class="action">cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r oacs-5-7 acs-core
+      </p><pre class="screen"><span class="action"><span class="action">cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 acs-core
 mv openacs-4 dotlrn
 cd dotlrn/packages
-cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r oacs-5-7 dotlrn-all
+cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 dotlrn-all
 mv dotlrn/install.xml ..</span></span></pre></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="working-with-cvs"></a>Working with CVS</h4></div></div></div><p>
       Once you have a checkout you can use some commands to track
       what has changed since you checked out your copy.  <code class="computeroutput">cvs -n update</code> does not change any files, but reports which changes have been updated or locally modified, or are not present in CVS.
-    </p><p>To update your files, use <code class="computeroutput">cvs update</code>.  This will merge changes from the repository with your local files.  It has no effect on the cvs.openacs.org repository.</p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="openacs-cvs-concepts"></a>OpenACS CVS Concepts</h3></div></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140400233018368"></a>Modules</h4></div></div></div><p>
-        All OpenACS code resides within a single CVS module, <code class="computeroutput">openacs-4</code>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <code class="computeroutput">openacs-4</code> are repackaged as smaller modules.</p><p>
+    </p><p>To update your files, use <code class="computeroutput">cvs update</code>.  This will merge changes from the repository with your local files.  It has no effect on the cvs.openacs.org repository.</p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="openacs-cvs-concepts"></a>OpenACS CVS Concepts</h3></div></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140592118849288"></a>Modules</h4></div></div></div><p>
+        All OpenACS code resides within a single CVS module, <code class="computeroutput">openacs-4</code>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all OpenACS code of any type.  For convenience, subsets of <code class="computeroutput">openacs-4</code> are repackaged as smaller modules.</p><p>
           <code class="computeroutput">acs-core</code> contains only critical common
           packages. It does not have any user applications, such as forums,
           bug-tracker, calendar, or ecommerce.  These can be added at
@@ -115,7 +117,7 @@ ref-timezones search</pre><p>
           <code class="computeroutput">project-manager-all</code> contains the packages required, in combination with acs-core, to run the project-manager package.
         </p><p>
           Each OpenACS package (i.e., directory in <code class="computeroutput">openacs-4/packages/</code>) is also aliased as a module of the same name.
-        </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140400256395728"></a>
+        </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140592118857720"></a>
         Tags and Branches
       </h4></div></div></div><p>
         Tags and Branches look similar in commands, but behave differently. A tag is a fixed point on a branch.  Check out
@@ -152,7 +154,7 @@ ref-timezones search</pre><p>
             added to core packages on release branches.  For all other
             packages, release branches are the recommended location
             for development.  For example, if you are working on
-            calendar, which is compatible with openacs 5.0 but not
+            calendar, which is compatible with OpenACS 5.0 but not
                 5.1, work on the oacs-5-0 branch.</p></li><li class="listitem"><p><code class="computeroutput">HEAD</code> is a branch used
           for development of core packages.</p></li></ul></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="contributing-code"></a>Contributing code back to OpenACS</h3></div></div></div><p>There are three main ways to contribute code to OpenACS:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>To contribute a small fix, if you do not have a developer account, submit a <a class="ulink" href="http://openacs.org/bugtracker/openacs/patch-submission-instructions.htm" target="_top">patch</a>.</p></li><li class="listitem"><p>If you are making many changes, or would like to become a direct contributor, send mail to <a class="ulink" href="mailto:oct@openacs.org" target="_top">the Core Team</a> asking for commit rights.  You can then commit code directly to the repository:</p><div class="orderedlist"><ol class="orderedlist" type="a"><li class="listitem"><p>Use one of the checkout methods described above to get files to your system.  This takes the place of steps 1 and 2 in <a class="xref" href="openacs.html#install-from-tarball" title="Installation Option 2: Install from tarball">the section called “Installation Option 2: Install from tarball”</a>.  Continue setting up the site as described there.</p></li><li class="listitem"><p>Fix bugs and add features.</p></li><li class="listitem"><p>
             Commit that file (or files): </p><pre class="screen"><span class="action"><span class="action">cvs commit -m "what I did and why" filename</span></span></pre><p>
@@ -160,7 +162,7 @@ ref-timezones search</pre><p>
             one, this commit automagically moves back upstream to the Mother
             Ship repository at cvs.openacs.org.  The names of the changed files, and your comments, are sent to a mailing list for OpenACS developers.  A Core Team developer may review or roll back your changes if necessary.
           </p></li><li class="listitem"><p>
-                  Confirm via the <a class="ulink" href="http://cvs.openacs.org/cvs/openacs-4/" target="_top">
+                  Confirm via the <a class="ulink" href="http://cvs.openacs.org/browse/OpenACS/openacs-4/" target="_top">
                     OpenACS CVS browser </a>
                   that your changes are where you intended them to be.
                 </p></li></ol></div></li><li class="listitem"><p>Add a new package.  Contact the <a class="ulink" href="mailto:oct@openacs.org" target="_top">Core Team</a> to get approval and to get a module alias created.</p><div class="orderedlist"><ol class="orderedlist" type="a"><li class="listitem"><p>
@@ -315,7 +317,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
           flag which defaults to no-effect wouldn't require a TIP. Added a
           new mandatory flag to an existing function would require a
           TIP.
-        </p></li></ol></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140400238139536"></a>
+        </p></li></ol></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140592118962952"></a>
       Informal Guidelines
     </h4></div></div></div><p>
       Informal guidelines which may be obsolete in places and should be reviewed:
@@ -391,34 +393,23 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
           systematic fashion.
         </p></li></ul></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="cvs-resources"></a>Additional Resources for CVS</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           The 
-            <a class="ulink" href="http://cvs.openacs.org/cvs/" target="_top">
-              OpenACS cvs web</a>
-            and
-            <a class="ulink" href="http://xarg.net/tools/cvs/" target="_top">
-              Jeff's cvs
-              browser
-            </a>
-            are useful tools in understanding what is
-            happening with the code.
+            <a class="ulink" href="http://cvs.openacs.org/" target="_top">
+              OpenACS cvs web browser</a>
+              is a useful tools in understanding what is
+              happening with the code.
           </p></li><li class="listitem"><p>
-            There is a mailing list of cvs changes at
-      <a class="ulink" href="http://willfork.com/mailman/listinfo/openacs-cvs-list" target="_top">
-        willfork.com
-      </a>
-          </p></li><li class="listitem"><p>There is an RSS feed of cvs changes at 
-          <a class="ulink" href="http://xarg.net/tools/cvs/rss/?days=3" target="_top">
-            RSS feed
-          </a>
+            There is general information about CVS at 
+      <a class="ulink" href="http://www.nongnu.org/cvs/" target="_top">
+        nongnu.org
+      </a>.
           </p></li><li class="listitem"><p>
-            <a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs.html" target="_top">cvs manual</a>
+            <a class="ulink" href="http://web.mit.edu/gnu/doc/html/cvs_20.html" target="_top">cvs manual</a>
           </p></li><li class="listitem"><p>
-            <a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_7.html#SEC66" target="_top">adding files/dirs with cvs</a>
-          </p></li><li class="listitem"><p>
-            <a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_10.html#SEC82" target="_top">file locking etc. with cvs</a>
+            <a class="ulink" href="http://cvsbook.red-bean.com/cvsbook.html" target="_top">Open Source Development with CVS, 3rd Edition</a>
           </p></li><li class="listitem"><p>
             <a class="ulink" href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">Piskorski's cvs refs</a>
           </p></li><li class="listitem"><p>
             <a class="ulink" href="http://openacs.org/doc/current/backups-with-cvs.html" target="_top">backup with cvs</a>
           </p></li><li class="listitem"><p>
             <a class="ulink" href="http://openacs.org/forums/message-view?message_id=178551" target="_top">merging 2 file heirarchies with cvs</a>
-          </p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="style-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="eng-standards-versioning.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Style Guide </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> Release Version Numbering</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/cvs-guidelines.html#comments">View comments on this page at openacs.org</a></center></body></html>
+          </p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="style-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="eng-standards-versioning.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Style Guide </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> Release Version Numbering</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

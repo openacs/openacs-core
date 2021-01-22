@@ -13,7 +13,7 @@
   <multiple name=elements>
 
     <if @elements.section@ not nil>
-      <tr><td colspan="2" bgcolor="#FFFFFF"><b>@elements.section@</b></td></tr>
+      <tr><td colspan="2" bgcolor="#FFFFFF"><strong>@elements.section@</strong></td></tr>
     </if>
 
     <group column="section">
@@ -33,7 +33,7 @@
       <else>
        <tr>
         <if @elements.label@ not nil>
-	<td><b>@elements.label;noquote@</b>&nbsp;&nbsp;
+	<td><strong>@elements.label;noquote@</strong>&nbsp;&nbsp;
           <if @elements.help_text@ not nil>
             <br>&nbsp;&nbsp;
             <font size="-1"><noparse><formhelp id=@elements.id@></noparse></font><br>
@@ -51,7 +51,7 @@
 	      </formgroup>
 	      </table>
 	      <formerror id=@elements.id@><br>
-                <font color="red"><b>\@formerror.@elements.id@;noquote\@</b></font>
+                <font color="red"><strong>\@formerror.@elements.id@;noquote\@</strong></font>
               </formerror>
             </noparse>
 	    </td>	    
@@ -67,7 +67,7 @@
                 <else><td nowrap></else>
 		<noparse><formwidget id=@elements.id@>
 		<formerror id=@elements.id@><br><font 
-		   color="red"><b>\@formerror.@elements.id@;noquote\@<b></font>
+		   color="red"><strong>\@formerror.@elements.id@;noquote\@<strong></font>
                 </formerror></noparse>
 	      </td>
 	    </else>

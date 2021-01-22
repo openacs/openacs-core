@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install Daemontools (OPTIONAL)}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Daemontools (OPTIONAL)}</property>
 <property name="doc(title)">Install Daemontools (OPTIONAL)</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -16,7 +16,7 @@ installed in /package. These commands install daemontools and
 svgroup. svgroup is a script for granting permissions, to allow
 users other than root to use daemontools for specific services.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Install Daemontools</p><a class="indexterm" name="idp140400245018848" id="idp140400245018848"></a><p>
+<p>Install Daemontools</p><a class="indexterm" name="idp140592107210552" id="idp140592107210552"></a><p>
 <a class="link" href="individual-programs">download
 daemontools</a> and install it.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
@@ -117,8 +117,8 @@ root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle ser
 </li><li class="listitem">
 <p>Install a script to grant non-root users permission to control
 daemontools services.</p><pre class="screen">
-[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</code></strong>
-[root root]# <strong class="userinput"><code>chmod 755 /usr/local/bin/svgroup</code></strong><span class="action"><span class="action">cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</code></strong>
+[root root]# <strong class="userinput"><code>chmod 755 /usr/local/bin/svgroup</code></strong><span class="action"><span class="action">cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
 chmod 755 /usr/local/bin/svgroup</span></span>
 </pre>
 </li>

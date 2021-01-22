@@ -6,7 +6,7 @@ ad_page_contract {
     token:notnull,trim
     user_id:naturalnum,notnull
     
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 set subsite_id [ad_conn subsite_id]

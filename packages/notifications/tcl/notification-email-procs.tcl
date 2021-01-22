@@ -116,7 +116,7 @@ namespace eval notification::email {
     } {
 
        # Get user data
-       set email [cc_email_from_party $to_user_id]
+       set email [party::email -party_id $to_user_id]
        set user_locale [lang::user::site_wide_locale -user_id $to_user_id]
        if { $user_locale eq "" } {
            set user_locale lang::system::site_wide_locale
@@ -135,11 +135,8 @@ namespace eval notification::email {
            set content $content_html
        }
 
-       # DAVEB convert relative URLs to fully qualified URLs
-       set host "[string trimright [ad_url] "/"]/"
-       set re {(href|src)=['\"][^(http|https|mailto:)]/?([^'\"]+?)['\"]}
-       set subspec "\\1='${host}\\2'"
-       set content [regsub -all $re $content $subspec]
+       # convert relative URLs to fully qualified URLs
+       set content [ad_html_qualify_links $content]
 
        # Use this to build up extra mail headers        
        set extra_headers [list]
@@ -150,7 +147,7 @@ namespace eval notification::email {
        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
        if { $from_user_id ne "" && $from_user_id != 0 && [db_0or1row get_person {}]} {
-           set from_email [cc_email_from_party $from_user_id]
+           set from_email [party::email -party_id $from_user_id]
 	   
            # Set the Mail-Followup-To address to the
            # address of the notifications handler.
@@ -311,7 +308,7 @@ namespace eval notification::email {
             # the rest of the foreach as well
             if { $is_auto_reply_p } {
                 ns_log Debug "load_qmail_mail_queue: message $msg is from an auto-responder, skipping"
-                if {[catch {file delete $msg} errmsg]} {
+                if {[catch {file delete -- $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
                 }
                 continue
@@ -337,7 +334,7 @@ namespace eval notification::email {
             set to [parse_email_address $to]
 
             # Find the from user
-            set from_user [cc_lookup_email_user $from]
+            set from_user [party::get_by_email -email $from]
 
             # We don't accept empty users for now
             if {$from_user eq ""} {
@@ -349,7 +346,7 @@ namespace eval notification::email {
 		    -message_headers $orig_headers \
 		    -reason "Invalid sender.  You must be a member of the site and\nyour From address must match your registered address."
 
-                if {[catch {file delete $msg} errmsg]} {
+                if {[catch {file delete -- $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg: $errmsg"
                 }
                 continue
@@ -367,7 +364,7 @@ namespace eval notification::email {
 		    -message_headers $orig_headers \
 		    -reason "Invalid To Address"
 
-                if {[catch {file delete $msg} errmsg]} {
+                if {[catch {file delete -- $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message file $msg: $errmsg"
                 }
                 continue
@@ -387,7 +384,7 @@ namespace eval notification::email {
 	        set headers $orig_headers
                 db_dml holdinsert {} -clobs [list $to_addr $headers $body]
 
-                if {[catch {file delete $msg} errmsg]} { 
+                if {[catch {file delete -- $msg} errmsg]} { 
 		    ns_log Error "load_qmail_mail_queue: unable to delete queued message $msg: $errmsg"
 		}
 

@@ -27,14 +27,14 @@ ad_proc -public content::permission::grant_permission {
     -object_id:required
     -holder_id:required
     -privilege:required
-    -recepient_id:required
+    -recipient_id:required
     {-is_recursive ""}
     {-object_type ""}
 } {
     @param object_id
     @param holder_id
     @param privilege
-    @param recepient_id
+    @param recipient_id
     @param is_recursive
     @param object_type
 } {
@@ -42,7 +42,7 @@ ad_proc -public content::permission::grant_permission {
         [list object_id $object_id ] \
         [list holder_id $holder_id ] \
         [list privilege $privilege ] \
-        [list recepient_id $recepient_id ] \
+        [list recipient_id $recipient_id ] \
         [list is_recursive $is_recursive ] \
         [list object_type $object_type ] \
     ] content_permission grant_permission]

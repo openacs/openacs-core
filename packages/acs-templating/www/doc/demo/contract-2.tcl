@@ -1,19 +1,20 @@
 ad_page_contract {
-  @cvs-id $Id$
+    @cvs-id $Id$
 } {
-  count:naturalnum
-  noun:notnull,nohtml
-  { plural:nohtml "" }
+    count:naturalnum
+    noun:notnull,nohtml
+    { plural:nohtml "" }
 } -validate {
-  supersticion -requires {count} {
-    if {$count == 13} {
-      ad_complain
+    supersticion -requires {count} {
+        if {$count == 13} {
+            ad_complain
+        }
     }
-  }
+    csrf { csrf::validate }   
 } -errors {
-  supersticion {This number brings you no luck.}
+    supersticion {This number brings you no luck.}
 } -properties {
-  phrase:onevalue
+    phrase:onevalue
 } -return_errors error_list
 
 if {[info exists error_list]} {

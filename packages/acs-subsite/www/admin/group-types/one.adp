@@ -4,26 +4,31 @@
 				   
 <h1>@doc.title@</h1>
 
+<ul>
+<li>Group: @type_info.pretty_name@
+<li>Supertype: <a href="one?group_type=@type_info.supertype@">@type_info.supertype@</a>
+</ul>
+
 <h2>#acs-subsite.Groups_of_this_type#</h2>
 
-<ul>
+<blockquote>
   <if @groups:rowcount@ eq 0>
-    <li>(#acs-subsite.none#)</li>
+    <p>(#acs-subsite.none#)</p>
   </if>
   <else>
-    <multiple name="groups">
+  <ul>
+  <multiple name="groups">
       <if @groups.rownum@ gt 25>
         <li> <a href="groups-display?group_type=@group_type_enc@">#acs-subsite.View_all_groups_of_this_type#</a> </li>
       </if>
       <else>
-        <li> <a href="../groups/one?group_id=@groups.group_id@">@groups.group_name@</a> </li>
+        <li> <a href="../groups/one?group_id=@groups.group_id;literal@">@groups.group_name@</a> </li>
       </else>
-    </multiple>
+  </multiple>
+  </ul>
   </else>
-</ul>
-<ul>
-  <li><a href="@add_group_url@">#acs-subsite.Add_a_group_of_this_type#</a></li>
-</ul>
+  <a href="@add_group_url@" class="button">#acs-subsite.Add_a_group_of_this_type#</a>
+</blockquote>
 
 <h2>#acs-subsite.Attributes_of_this_type_of_group#</h2>
 
@@ -42,8 +47,8 @@
   </if>
 </ul>
 <ul>
-  <if @dynamic_p@ eq "t"> 
-      <li><a href="@add_attribute_url@">#acs-subsite.Add_an_attribute#</a></li>
+  <if @dynamic_p;literal@ true> 
+      <li><a href="@add_attribute_url@" class="button">#acs-subsite.Add_an_attribute#</a></li>
   </if>
   <else>
       <li>#acs-subsite.Attributes_can_only_be_added_by_programmers#</li>
@@ -67,19 +72,19 @@
   </else>
 </ul>
 <ul>
-  <li><a href="rel-type-add?group_type=@group_type_enc@">#acs-subsite.Add_a_permissible_relationship_type#</a></li>
+  <li><a href="rel-type-add?group_type=@group_type_enc@" class="button">#acs-subsite.Add_a_permissible_relationship_type#</a></li>
 </ul>
 
 
 <h2>#acs-subsite.Administration#</h2>
 
 <ul>
-  <if @dynamic_p@ eq "t"> 
+  <if @dynamic_p;literal@ true> 
 
       <li>#acs-subsite.Default_join_policy#: @default_join_policy@
            (<a href="change-join-policy?group_type=@group_type_enc@">#acs-subsite.edit#</a>)
         </li>
-      <li> <a href="delete?group_type=@group_type_enc@">#acs-subsite.Delete_this_group_type#</a>
+      <li> <a href="delete?group_type=@group_type_enc@" class="button">#acs-subsite.Delete_this_group_type#</a>
       </li>
   </if>
   <else>

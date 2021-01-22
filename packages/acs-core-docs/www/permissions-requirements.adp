@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Permissions Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Permissions Requirements}</property>
 <property name="doc(title)">Permissions Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -21,26 +21,27 @@ on a given OpenACS 4 system.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-requirements-vision" id="permissions-requirements-vision"></a>Vision Statement</h3></div></div></div><p>Any multi-user software system must address the general problem
-of permissions, or "who can do what, on what." On web services,
-which typically involve large numbers of users belonging to
-different groups, permissions handling is a critical need: access
-to content, services, and information generally must be controlled.
-The OpenACS 4 Permissions system is meant to serve as a consistent,
-unified interface for higher-level OpenACS applications to handle
-permissions. Consolidating access control in such a manner reduces
-both cost and risk: cost, in that less code has to be written and
-maintained for dealing with recurring permissions situations; risk,
-in that we need not rely on any single programmer's diligence to
-ensure access control is implemented and enforced correctly.</p><p><span class="strong"><strong>Historical
+of permissions, or "who can do what, on what." On web
+services, which typically involve large numbers of users belonging
+to different groups, permissions handling is a critical need:
+access to content, services, and information generally must be
+controlled. The OpenACS 4 Permissions system is meant to serve as a
+consistent, unified interface for higher-level OpenACS applications
+to handle permissions. Consolidating access control in such a
+manner reduces both cost and risk: cost, in that less code has to
+be written and maintained for dealing with recurring permissions
+situations; risk, in that we need not rely on any single
+programmer&#39;s diligence to ensure access control is implemented
+and enforced correctly.</p><p><span class="strong"><strong>Historical
 Motivations</strong></span></p><p>In earlier versions of the OpenACS, permissions and access
 control was handled on a module-by-module basis, often even on a
 page-by-page basis. For example, a typical module might allow any
 registered user to access its pages read-only, but only allow
 members of a certain group to make changes. The way this group was
 determined also varied greatly between modules. Some modules used
-"roles", while others did not. Other modules did all access control
-based simply on coded rules regarding who can act on a given
-database row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions
+"roles", while others did not. Other modules did all
+access control based simply on coded rules regarding who can act on
+a given database row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions
 and access control were many, the two major ones being
 inconsistency, and repeated/redundant code. Thus the drive in
 OpenACS 4 to provide a unified, consistent permissions system that
@@ -63,19 +64,20 @@ common administrative interfaces.</p>
 three-way relation, like that between the parts of most simple
 sentences. A simple sentence generally has three parts, a subject,
 an object, and a verb - in the context of OpenACS Permissions, our
-simple sentence is, "Can this party perform this operation on this
-target?" Definitions:</p><p>The subject of the sentence is "<span class="strong"><strong>party</strong></span>" - a distinguishable actor
-whose access may be controlled, this special word is used because
-one person may be represented by several parties, and one party may
-represent many users (or no users at all).</p><p>The object of the sentence is "<span class="strong"><strong>target</strong></span>" - this is an entity, or
-object, that the party wishes to perform some action on. An
+simple sentence is, "Can this party perform this operation on
+this target?" Definitions:</p><p>The subject of the sentence is "<span class="strong"><strong>party</strong></span>" - a distinguishable
+actor whose access may be controlled, this special word is used
+because one person may be represented by several parties, and one
+party may represent many users (or no users at all).</p><p>The object of the sentence is "<span class="strong"><strong>target</strong></span>" - this is an entity,
+or object, that the party wishes to perform some action on. An
 entity/object here is anything that can be put under access
-control.</p><p>The verb of the sentence is "operation" - a behavior on the
-OpenACS system subject to control, this word is used to represent
-the fact that a single operation may be part of many larger actions
-the system wants to perform. If "foo" is an operation, than we
-sometimes refer to the foo "privilege" to mean that a user has the
-privilege to perform that operation.</p><p>Examples of the essential question addressed by the Permissions
+control.</p><p>The verb of the sentence is "operation" - a behavior
+on the OpenACS system subject to control, this word is used to
+represent the fact that a single operation may be part of many
+larger actions the system wants to perform. If "foo" is
+an operation, than we sometimes refer to the foo
+"privilege" to mean that a user has the privilege to
+perform that operation.</p><p>Examples of the essential question addressed by the Permissions
 system: Can jane\@attacker.com delete the web security forum? Can
 the Boston office (a party) within the VirtuaCorp intranet/website
 create its own news instance?</p>
@@ -91,12 +93,12 @@ single entity (this would imply down to the level of a row in the
 OpenACS Objects data model).</p><p><span class="strong"><strong>20.0 Operations</strong></span></p><p>The system itself must be able to answer the essential
 permissions question as well as several derived questions.</p><div class="blockquote"><blockquote class="blockquote">
 <p><span class="strong"><strong>20.10 Basic Access
-Check</strong></span></p><p>The system must be able to answer the question, "May party P
-perform operation O on target T?"</p>
+Check</strong></span></p><p>The system must be able to answer the question, "May party
+P perform operation O on target T?"</p>
 </blockquote></div><div class="blockquote"><blockquote class="blockquote">
 <p><span class="strong"><strong>20.20 Allowed Parties
-Check</strong></span></p><p>The system must be able to answer the question, "Which parties
-may perform operation O on target T?"</p>
+Check</strong></span></p><p>The system must be able to answer the question, "Which
+parties may perform operation O on target T?"</p>
 </blockquote></div><div class="blockquote"><blockquote class="blockquote">
 <p><span class="strong"><strong>20.30 Allowed Operations
 Check</strong></span></p><p>The system must be able to answer the question, "Which
@@ -112,21 +114,23 @@ targets may party P perform operation O?"</p>
 Requirements</h3></div></div></div><p><span class="strong"><strong>40.0 Scale of
 Privileges</strong></span></p><p>Privileges must be designed with appropriate scope for a given
 OpenACS package. Some privileges are of general utility (e.g.
-"read" and "write"). Others are of more limited use (e.g.
-"moderate" - applies mainly to a package like forum, where many
-users are contributing content simultaneously). A package defining
-its own privileges should do so with moderation, being careful not
-to overload a privilege like "read" to mean too many things.</p><p><span class="strong"><strong>50.0 Aggregation of Operations
+"read" and "write"). Others are of more limited
+use (e.g. "moderate" - applies mainly to a package like
+forum, where many users are contributing content simultaneously). A
+package defining its own privileges should do so with moderation,
+being careful not to overload a privilege like "read" to
+mean too many things.</p><p><span class="strong"><strong>50.0 Aggregation of Operations
 (Privileges)</strong></span></p><p>For user interface purposes, it can be appropriate to group
 certain privileges under others. For example, anyone with the
-"admin" privilege may also automatically receive "read", "write",
-"delete", etc. privileges.</p><p><span class="strong"><strong>60.0 Aggregation of Parties
+"admin" privilege may also automatically receive
+"read", "write", "delete", etc.
+privileges.</p><p><span class="strong"><strong>60.0 Aggregation of Parties
 (Groups)</strong></span></p><p>The system must allow aggregation of parties. The exact method
 used for aggregation will probably be addressed by the OpenACS 4
-"Groups" system. Regardless of the exact behavior of aggregate
-parties, if an aggregate party exists, then access which is granted
-to the aggregate party should be available to all members of that
-aggregate.</p><p><span class="strong"><strong>70.0 Scope of Access
+"Groups" system. Regardless of the exact behavior of
+aggregate parties, if an aggregate party exists, then access which
+is granted to the aggregate party should be available to all
+members of that aggregate.</p><p><span class="strong"><strong>70.0 Scope of Access
 Control</strong></span></p><div class="blockquote"><blockquote class="blockquote">
 <p><span class="strong"><strong>70.10 Context</strong></span></p><p>There must be a method for objects to receive default access
 control from some context. For example, if you do not have read
@@ -164,7 +168,7 @@ should be fairly small and simple.</p><p>In particular, constraining a <code cla
 has access to should not add more than one line to a query.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-requirements-history" id="permissions-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="permissions-requirements-history" id="permissions-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

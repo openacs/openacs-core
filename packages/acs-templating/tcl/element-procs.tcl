@@ -1,14 +1,18 @@
-# Form element procedures for the OpenACS Templating System
-#
+ad_library {
+    Form element procedures for the OpenACS Templating System
+
+    @author Karl Goldstein    (karlg@arsdigita.com)
+    @author Stanislav Freidin (sfreidin@arsdigita.com)
+
+    @cvs-id $Id$
+}
+
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein    (karlg@arsdigita.com)
-#          Stanislav Freidin (sfreidin@arsdigita.com)
-#
-# $Id$
 #
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 namespace eval template::element {}
@@ -384,7 +388,7 @@ ad_proc -public template::element::get_property { form_id element_id property } 
 
     @param form_id     The identifier of the form containing the element.
     @param element_id  The unique identifier of the element.
-    @param property    The property to be retreived
+    @param property    The property to be retrieved
 
     @return The value of the property, or "" if the property does not exist
 
@@ -460,7 +464,7 @@ ad_proc -private template::element::validate { form_id element_id } {
     set formerror($element_id:required) [_ acs-templating.Element_is_required]
 
     if {$element(widget) in {hidden submit}} {
-       ns_log Warning "template::element::validate: No value for hidden/submit element $label"
+        ad_log warning "template::element::validate: No value for $element(widget) element $label"
      }
   }
 
@@ -518,8 +522,8 @@ ad_proc -private template::element::validate { form_id element_id } {
       lappend v_errors $message
       set formerror($element_id:data) $message
 
-      if { [lsearch -exact {hidden submit} $element(widget)] } {
-	ns_log Warning "template::element::validate: Invalid value for hidden/submit element $label: $message"
+      if { $element(widget) in {hidden submit} } {
+          ad_log warning "template::element::validate: Invalid value for $element(widget) element $label: $message"
       }
     }
 

@@ -1,3 +1,10 @@
+
+if {![acs_user::site_wide_admin_p]} {
+    ad_return_forbidden "Permission Denied" \
+        "<blockquote><p>You don't have permissions to run this script"
+    ad_script_abort
+}
+
 # @datasource namespaces multirow
 # Data for all namespaces in the package
 # @column name
@@ -5,7 +12,7 @@
 
 # @private write_to_file
 # this procedure is only used here; inadvertently
-# replicated some other proc, don't move to tcl library
+# replicated some other proc, don't move to Tcl library
 
 proc ::template::util::write_to_file { file_name output} {
 

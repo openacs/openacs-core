@@ -75,13 +75,17 @@ ad_proc -public ::content::item::new {
     if {$creation_user eq ""} {
         set creation_user [ad_conn user_id]
     }
-
     if {$creation_ip eq ""} {
         set creation_ip [ad_conn peeraddr]
     }
     if {$package_id eq ""} {
         set package_id [ad_conn package_id]
     }
+
+    set mime_type [cr_check_mime_type \
+                       -filename  $name \
+                       -mime_type $mime_type \
+                       -file      $tmp_filename]
 
     set var_list [list]
     lappend var_list \
@@ -102,52 +106,52 @@ ad_proc -public ::content::item::new {
         [list is_live $is_live ] \
         [list storage_type $storage_type]
 
-    # we don't pass title, text, or data to content_item__new
-    # because the magic revision creation of the pl/sql proc does
-    # not create a proper subtype of content revision, also it
-    # can't set attributes of an extended type
+    # we don't pass title, text, or data to content_item__new because
+    # the magic revision creation of the pl/sql proc does not create a
+    # proper subtype of content revision, also it can't set attributes
+    # of an extended type
 
-    # the content type is not the object type of the cr_item so we pass in
-    # the cr_item subtype here and content_type as part of
+    # the content type is not the object type of the cr_item so we
+    # pass in the cr_item subtype here and content_type as part of
     # var_list
     db_transaction {
         # An explict lock was necessary for PostgreSQL between 8.0 and
-        # 8.2; left the following statement here for documentary purposes
+        # 8.2; left the following statement here for documentary
+        # purposes
         #
         # db_dml lock_objects "LOCK TABLE acs_objects IN SHARE ROW EXCLUSIVE MODE"
 
-    set item_id [package_exec_plsql \
-             -var_list $var_list \
-             content_item new]
-    # if we have attributes we pass in everything
-    # and create a revision with all subtype attributes that were
-    # passed in
+        set item_id [package_exec_plsql \
+                         -var_list $var_list \
+                         content_item new]
+        # if we have attributes we pass in everything and create a
+        # revision with all subtype attributes that were passed in
 
-    # since we can't rely on content_item__new to create a revision
-    # we have to pass is_live to content::revision::new and
-    # set the live revision there
-    if {([info exists title] && $title ne "")
+        # since we can't rely on content_item__new to create a
+        # revision we have to pass is_live to content::revision::new
+        # and set the live revision there
+        if {([info exists title] && $title ne "")
             || ([info exists text] && $text ne "")
-        || ([info exists data] && $data ne "")
-        || ([info exists tmp_filename] && $tmp_filename ne "")
-        || [llength $attributes]
-    } {
-        content::revision::new \
-        -item_id $item_id \
-        -title $title \
-        -description $description \
-        -content $text \
-        -mime_type $mime_type \
-        -content_type $content_type \
-        -is_live $is_live \
-        -package_id $package_id \
-        -creation_user $creation_user \
-        -creation_ip $creation_ip \
-        -creation_date $creation_date \
-        -nls_language $nls_language \
-        -tmp_filename $tmp_filename \
-        -attributes $attributes
-    }
+            || ([info exists data] && $data ne "")
+            || ([info exists tmp_filename] && $tmp_filename ne "")
+            || [llength $attributes]
+        } {
+            content::revision::new \
+                -item_id $item_id \
+                -title $title \
+                -description $description \
+                -content $text \
+                -mime_type $mime_type \
+                -content_type $content_type \
+                -is_live $is_live \
+                -package_id $package_id \
+                -creation_user $creation_user \
+                -creation_ip $creation_ip \
+                -creation_date $creation_date \
+                -nls_language $nls_language \
+                -tmp_filename $tmp_filename \
+                -attributes $attributes
+        }
     }
     return $item_id
 }
@@ -220,11 +224,11 @@ ad_proc -public ::content::item::get {
     @creation-date 2004-05-28
 
     @param item_id
-    @param revision live, latest, or best (live if it exists, otherwise latest)
+    @param revision live, latest
     @param array_name name of array to upvar content into
     @return upvars array_name containing all attributes of the content
     type except content
-    @return returns 0 if item does not exists or 1 if query was sucessful
+    @return returns 0 if item does not exists or 1 if query was successful
 
     @error
 } {
@@ -234,7 +238,7 @@ ad_proc -public ::content::item::get {
     }
     set content_type [content_type -item_id $item_id]
     if {$content_type eq ""} {
-        # content_type query was unsucessful, item does not exist
+        # content_type query was unsuccessful, item does not exist
         return 0
     }
     if {"content_folder" eq $content_type} {
@@ -849,8 +853,10 @@ ad_proc -public content::item::upload_file {
         }
 
         set existing_filenames [db_list get_parent_existing_filenames {}]
-        set filename [util_text_to_url \
-              -text ${title} -existing_urls "$existing_filenames" -replacement "_"]
+        set filename [ad_sanitize_filename \
+                          -existing_names $existing_filenames \
+                          -collapse_spaces \
+                          -replace_with "_" $title]
 
         set revision_id [cr_import_content \
                              -storage_type "file" -title $title \

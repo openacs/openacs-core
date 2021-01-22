@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     {group_id:naturalnum,notnull {[application_group::group_id_from_package_id]}}
     {rel_type:notnull "membership_rel"}
-    {return_url {}}
+    {return_url:localurl {}}
 } -properties {
     context:onevalue
     role_pretty_name:onevalue
@@ -171,14 +171,14 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
 
     } on_error {
         ns_log Error "user-join: Error when adding user to group: $errmsg\n$::errorInfo"
-        
-        ad_return_error "Error Joining" "We experienced an error adding you to the group."
+
+        ad_return_error [_ acs-subsite.Error_joining] [_ acs-subsite.Error_joining_details]
         ad_script_abort
     }
     
     switch $member_state {
-        "approved" { set message "You have joined the group \"$group_name\"." }
-        "needs approval" { set message "Your request to join group \"$group_name\" has been submitted." }
+        "approved" { set message "[_ acs-subsite.You_joined_group]." }
+        "needs approval" { set message "[_ acs-subsite.Request_join_submitted]." }
     }
 
 

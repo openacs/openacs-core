@@ -8,7 +8,7 @@ ad_page_contract {
 } {
     field 
     enabled_p:boolean
-    {return_url "."}
+    {return_url:localurl "."}
 }
 
 ds_require_permission [ad_conn package_id] "admin"

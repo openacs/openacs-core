@@ -658,8 +658,7 @@ ad_proc -private lang::message::format {
                     append formated_message $percent_match
                 } else {
                     # Do the substitution
-                
-                    append formated_message [lindex [array get value_array $variable_string] 1]
+                    append formated_message $value_array($variable_string)
                 }
             } else {
                 regexp {^([^.]+)(?:\.([^.]+))?$} $variable_string match variable_name array_key
@@ -864,7 +863,7 @@ ad_proc -public lang::message::lookup {
             }
             
             # encode the key in the page
-            set message "$message\x002(\x001$key\x001)\x002"
+            set message "$message\x02(\x01$key\x01)\x02"
         }
     }
 
@@ -946,7 +945,7 @@ ad_proc -public _mr { locale key message } {
     Inserts the message into the table lang_messages
     if it does not exist and updates if it does.
 
-    For backward compability - it assumes that the key 
+    For backward compatibility - it assumes that the key 
     is the concatenation of message and package key
     like this:
 

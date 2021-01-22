@@ -8,7 +8,7 @@ ad_page_contract {
     @creation-date 2007-09-29
     @cvs-id $Id$
 } {
-    {return_url ""}
+    {return_url:localurl ""}
     {css_list}
 } -properties {
 } -validate {

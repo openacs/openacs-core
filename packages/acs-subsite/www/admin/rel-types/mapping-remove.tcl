@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     { group_rel_type_id:naturalnum "" }
     { group_rel_id:naturalnum "" }
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     rel_pretty_name:onevalue

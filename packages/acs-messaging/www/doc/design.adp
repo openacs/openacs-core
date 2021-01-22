@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-messaging {Messaging}} {ACS Messaging Design}</property>
+<property name="context">{/doc/acs-messaging {ACS Messaging}} {ACS Messaging Design}</property>
 <property name="doc(title)">ACS Messaging Design</property>
 <master>
 <h2>ACS Messaging Design</h2>
@@ -28,25 +28,26 @@ simple procedures that do the right thing when sending email.
 Another example: if we built the IMAP server functionality 3.4
 webmail provides against acs-messaging, then bboard forums, pages
 of comments, and webmail folders could be viewed uniformly through
-your email client. The IMAP mapping isn't quite trivial, but you
-can see the idea.To reiterate, if applications are storing the same
-sort of data (a text-ish messages with optional attachments and
-replies), they should store them the same way. Then code from
+your email client. The IMAP mapping isn&#39;t quite trivial, but
+you can see the idea.To reiterate, if applications are storing the
+same sort of data (a text-ish messages with optional attachments
+and replies), they should store them the same way. Then code from
 particular applications can possibly be refactored into generic
-functionality.spam/general alerts/etc isn't meant to be replaced by
-ACS Messaging, at least not with what is there currently. Currently
-it is just a store; but we intend it to be the canonical store for
-messages that need to be stored in the database. If messages are
-automatically generated from other user objects, they might need to
-be queue'd up or archived in the RDBMS. If so this should be done
-in the acs-messaging tables. We can implement the generic incoming
-email system by stashing messages in acs-messaging, then
-dispatching the message id to package specific code for
-processing.Currently (11/2000), ACS Messaging is very slim; it just
-supports bboard. We intend to add attachments (most likely
-implemented as content repository items that are children of the
-message), extensible headers (just like the webmail datamodel), and
-versioning as provided by the content repository.
+functionality.spam/general alerts/etc isn&#39;t meant to be
+replaced by ACS Messaging, at least not with what is there
+currently. Currently it is just a store; but we intend it to be the
+canonical store for messages that need to be stored in the
+database. If messages are automatically generated from other user
+objects, they might need to be queue&#39;d up or archived in the
+RDBMS. If so this should be done in the acs-messaging tables. We
+can implement the generic incoming email system by stashing
+messages in acs-messaging, then dispatching the message id to
+package specific code for processing.Currently (11/2000), ACS
+Messaging is very slim; it just supports bboard. We intend to add
+attachments (most likely implemented as content repository items
+that are children of the message), extensible headers (just like
+the webmail datamodel), and versioning as provided by the content
+repository.
 <h2>API</h2>
 
 ACS Messaging provides the <code>acs_messages_all</code>

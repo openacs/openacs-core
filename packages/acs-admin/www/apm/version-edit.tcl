@@ -38,20 +38,17 @@ if { $version_name_index >= 0 } {
     set version_uri_suffix [string range $version_uri $version_name_index+[string length $version_name] end]
 
     append body [subst {
-<script type="text/javascript">
+<script type="text/javascript" nonce='$::__csp_nonce'>
 function updateVersionURL() {
     var form = document.forms\[0\];
     form.version_uri.value = "$version_uri_prefix" + form.version_name.value + "$version_uri_suffix";
 }
-</script>
-}]
-    set version_name_on_change "onChange=\"updateVersionURL()\""
-} else {
-    set version_name_on_change ""
+</script>}]
+    template::add_event_listener -CSSclass "update-version-url" -event change -script {updateVersionURL();}
 }
 
 append body [subst {
-<script type="text/javascript">
+<script type="text/javascript" nonce='$::__csp_nonce'>
 function checkMailto(element) {
     // If it looks like an email address without a mailto: (contains an @ but
     // no colon) then prepend 'mailto:'.
@@ -112,7 +109,7 @@ edit the information regarding existing version of the package.</td>
 
 <tr>
   <th style="text-align:right; white-space: nowrap">Version:</th>
-  <td><input name="version_name" size="10" value="$version_name" $version_name_on_change>
+  <td><input name="version_name" size="10" value="$version_name" class="update-version-url">
 </td>
 </tr>
 
@@ -194,7 +191,7 @@ foreach owner_info $owners {
 </tr>
 <tr>
   <th style="text-align:right; white-space: nowrap">$prompt URL:</th>
-  <td><input name="owner_uri" size="30" value="$owner_uri" onChange="checkMailto(this)"></td>
+  <td><input name="owner_uri" size="30" value="$owner_uri" class="check-mailto"></td>
 </tr>
     }]
 }
@@ -232,6 +229,8 @@ append body [subst {
 </table>
 </form>
 }]
+
+template::add_event_listener -CSSclass "check-mailto" -event change -script {checkMailto(this);}
 
 ad_return_template apm
 

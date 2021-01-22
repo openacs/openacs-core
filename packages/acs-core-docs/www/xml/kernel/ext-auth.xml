@@ -9,7 +9,7 @@
 <title>External Authentication Requirements</title>
   <sect2><title>Vision</title>
     <para>People have plenty of usernames and passwords already, we
-don't want them to have yet another. We want people to be able to
+don&#39;t want them to have yet another. We want people to be able to
 log in to OpenACS with the same password they use to log in to any
 other system.</para>
 
@@ -19,36 +19,36 @@ account on a central server (e.g. LDAP or RADIUS), and when they
 log on to OpenACS, an account will automatically be created for
 them here.</para>
     <para>Finally, security is increased with fewer passwords, since
-users generally can't remember all those passwords, so they tend to
+users generally can&#39;t remember all those passwords, so they tend to
 keep them all the same and never change them.</para>
   </sect2>
   <sect2 id="Design_Goal"><title>Design Goals</title>
     <itemizedlist>
-      <listitem><para>Transparent: Users don't have to do anything special to
+      <listitem><para>Transparent: Users don&#39;t have to do anything special to
         get an account on the local OpenACS system, if they already have an
         account on the external authentication server.</para></listitem>
-      <listitem><para>Fall-back: Users who don't have an account on the
+      <listitem><para>Fall-back: Users who don&#39;t have an account on the
         external authentication server are still allowed to create a local
         account on OpenACS. This could be for external students who should
-        have access to .LRN, but not to the rest of the university's
+        have access to .LRN, but not to the rest of the university&#39;s
         resources.</para></listitem>
       <listitem><para>Authentication Client Only: We want OpenACS to be able to
-        authenticate by asking some remote authority to verify the user's
+        authenticate by asking some remote authority to verify the user&#39;s
         username/password combination. The goal is explicitly <emphasis>not</emphasis> (at this
         point) to have OpenACS act as an authentication server for other
         systems, although this could be easily added later. The goal is
         also <emphasis>not</emphasis> to devise an infrastructure for letting OpenACS access
-        resources in various other systems on the user's behalf, such as
+        resources in various other systems on the user&#39;s behalf, such as
         IMAP, iCalendar, SMB file servers, etc., although this is
         definitely an interesting use-case.</para></listitem>
       <listitem><para>Easy configuration: We would like people to be able to
         configure this without having to write code. In particular, we want
         to build drivers that know how to talk with LDAP, RADIUS, PAM,
-        etc., and which won't have to be locally modified. Only
+        etc., and which won&#39;t have to be locally modified. Only
         configuration and policies should change, code should
         not.</para></listitem>
       <listitem><para>Usability: The solution must be easy to use for end users
-        and administrators alike. There's frequently a positive feedback
+        and administrators alike. There&#39;s frequently a positive feedback
         effect between usability and security, because when authentication
         schemes have poor usability, users will think up ways to circumvent
         them.</para></listitem>
@@ -72,7 +72,7 @@ parts. Each has a section below.</para>
         of a certain type, e.g. PAM, RADIUS, LDAP, or Active
         Directory.</para></listitem>
       <listitem><para>Authentication API: The API through which login pages and
-        applications talk to the authentication service. There's one and
+        applications talk to the authentication service. There&#39;s one and
         only one implementation of the authentication API, namly the one
         included in OpenACS Core.</para></listitem>
       <listitem><para>Authentication Driver API: The service contract which
@@ -163,12 +163,12 @@ by an authentication driver.</para>
 email address, it can look like an email address but not be the
 name of an actual email mailbox, or it can be something else
 entirely.</para>
-      <para>We're assuming that user information (name, email, etc.) will
+      <para>We&#39;re assuming that user information (name, email, etc.) will
 either already be in the users table through a batch
 synchronization job, or that the relevant authentication
 implementation supports real-time synchronization of user data.
-Specifically, if you want remote users who haven't yet logged in to
-OpenACS to show up in user searches, you'll have to do the batch
+Specifically, if you want remote users who haven&#39;t yet logged in to
+OpenACS to show up in user searches, you&#39;ll have to do the batch
 synchronization.</para>
       <para>All in all, the login box will be an includeable template and
 look like this:</para>
@@ -184,7 +184,7 @@ Authority: [URZ   ]
 </programlisting>
  
      
-      <para>If there's only one active authority, we don't display the
+      <para>If there&#39;s only one active authority, we don&#39;t display the
 authority drop-down element at all.</para>
     </sect3>
 
@@ -208,7 +208,7 @@ authentication process from a page linked under /acs-admin.</para>
           be created, using the relevant driver, if account registration is
           allowed.</para></listitem>
         <listitem><para>Username is email? - instead of asking for username,
-          we'll ask for email. And we'll store the value in both columns,
+          we&#39;ll ask for email. And we&#39;ll store the value in both columns,
           username and email. This is a setting that spans all authorities, and
           is primarily meant for backwards compatibility with the old OpenACS
           login process.</para></listitem>
@@ -265,10 +265,10 @@ authentication process from a page linked under /acs-admin.</para>
           login through some authority without having to delete the authority, and
           hence also all the users who belong to that authority.</para></listitem>
         <listitem><para>ForgottenPasswordUrl - a URL to redirect to instead of
-          trying to use the authentication driver's password management
+          trying to use the authentication driver&#39;s password management
           features.</para></listitem>
         <listitem><para>ChangePasswordUrl - a URL to redirect to instead of
-          trying to use the authentication driver's password management
+          trying to use the authentication driver&#39;s password management
           features.</para></listitem>
         <listitem><para>Account Creation Driver, e.g. "RADIUS". In practice, this
           would be a reference to a service contract implementation. The
@@ -296,7 +296,7 @@ find a mechanism for the driver to tell us which configuration
 options are available, a way to set these, and a way for the driver
 to access these settings.</para>
       <para>OpenACS will come pre-configured with one authority, which is
-the "local" authority, meaning we'll authenticate as normal using the
+the "local" authority, meaning we&#39;ll authenticate as normal using the
 local users table. This will, just like any other authority, be
 implemetned using a service contract.</para>
     </sect3>
@@ -330,20 +330,20 @@ and Linking Users</title>
         <seglistitem>
           <seg>EXT-AUTH-15</seg>
           <seg>B</seg>
-          <seg>On-demand syncronization</seg>
+          <seg>On-demand synchronization</seg>
         </seglistitem>
       </segmentedlist>
       
       <para>Regardless of the login method, the user needs to have a row
 in the OpenACS users table. This can happen through a batch job, in
 real-time, or both in combination.  We use the <ulink
-url="http://ims.edna.edu.au/enterprise/">IMS Enterprise 1.1</ulink> specification. </para>
+url="https://www.imsglobal.org/enterprise/index.html">IMS Enterprise 1.1</ulink> specification. </para>
       <para>Batch job means that we do a synchronization (import new
 users, modify changed, purge deleted) on a regular interval, e.g.
 every night. You can also decide to have a monthly full
-synchronization, plus daily incremental ones. That's up to you. The
+synchronization, plus daily incremental ones. That&#39;s up to you. The
 advantage is that you have all users in OpenACS, so when you search
-for a user, you'll see all the organization's users, not just those
+for a user, you&#39;ll see all the organization&#39;s users, not just those
 who happen to have used the OpenACS-based system. The down-side is
 that it takes some time for user information to propagate. This can
 be remedied by using the real-time solution.  The batch job will also
@@ -351,7 +351,7 @@ require error logging and an admin interface to view logs.</para>
       <para>If an email already belongs to some
 other user, we log it as an error.</para>
       <para>A user will always belong to exactly one authority, which can be
-either the "local" authority or some other. Thus, the OpenACS user's
+either the "local" authority or some other. Thus, the OpenACS user&#39;s
 table will have to be augmented with the following columns:</para>
       <itemizedlist>
         <listitem><para>Authority. Reference to the site-wide authorities list. The
@@ -359,7 +359,7 @@ table will have to be augmented with the following columns:</para>
         <listitem><para>Authority-specific username.</para></listitem>
       </itemizedlist>
       <para>Real-time means that the first time the user logs into
-OpenACS, we'll query the authority that authenticated him
+OpenACS, we&#39;ll query the authority that authenticated him
 for information about this user. That authentication authority will
 then give us at least first names, last name and email. The pros
 and cons are the opposite of batch jobs. Using both in combination
@@ -367,12 +367,12 @@ is ideal.</para>
       <para>Note: One solution to the "two users from different authorities
 have the same email" problem above would be to allow users to
 belong to multiple authorities. Then we would notice that the email
-already exists, ask the user if he thinks he's the same person, and
+already exists, ask the user if he thinks he&#39;s the same person, and
 if so, ask him to prove so by authenticating using the other
-authority. Thus he'll have just authenticated in two different
-authorities, and we can record that this is the same person. We'd still
+authority. Thus he&#39;ll have just authenticated in two different
+authorities, and we can record that this is the same person. We&#39;d still
 have a problem if there was an email conflict between two accounts
-on the same authority. Hm. I don't think it's worth spending too much
+on the same authority. Hm. I don&#39;t think it&#39;s worth spending too much
 time trying to solve this problem through software.</para>
       <segmentedlist>
         <segtitle>EXT-AUTH-31</segtitle>
@@ -384,23 +384,23 @@ time trying to solve this problem through software.</para>
           </seglistitem>
       </segmentedlist>
       <para>After having authenticated using the relevant authority driver,
-we'll look for the username/authority pair in the users table.</para>
-      <para>If we don't find any, that means that we're either not doing
+we&#39;ll look for the username/authority pair in the users table.</para>
+      <para>If we don&#39;t find any, that means that we&#39;re either not doing
 batch synchronizing, or that the user has been added since the last
-sync. In that case, we'll try to do a real-time synchronization, if
-the driver supports it. If it does, it'll return email,
-first_names, last_name, and other relevant information, and we'll
+sync. In that case, we&#39;ll try to do a real-time synchronization, if
+the driver supports it. If it does, it&#39;ll return email,
+first_names, last_name, and other relevant information, and we&#39;ll
 create a row in the local users table using that
 information.</para>
-      <para>If that doesn't work, we'll tell the user that their account
-isn't yet available, and the driver will supply a message for us,
+      <para>If that doesn&#39;t work, we&#39;ll tell the user that their account
+isn&#39;t yet available, and the driver will supply a message for us,
 which could say "The account should be available tomorrow. If not,
 contact X."</para>
     </sect3>
 
     <sect3 id="Account_Registratio"><title>Account
 Registration</title>
-      <para>If a user doesn't have an account, the site-wide
+      <para>If a user doesn&#39;t have an account, the site-wide
 configuration can allow the user to register for one, as defined in
 the configuration discussed above. This section is about normal
 account registration through a authority driver.</para>
@@ -448,7 +448,7 @@ in hashed form.</para>
 Management</title>
       <para>Password management is about changing password, retrieving
 password, and resetting password.</para>
-      <para>It's up to the authority driver implementation to decide whether
+      <para>It&#39;s up to the authority driver implementation to decide whether
 to support any or all of these features, and to say so using the
 CanXXX methods (see driver API below).</para>
       <para>Additionally, the authority can be configured with a URL to
@@ -468,7 +468,7 @@ HTTPS</title>
           </seglistitem>
       </segmentedlist>
       <para>Login pages must be able to be sent over a secure connection
-(https), so your password won't get sent over the wire in
+(https), so your password won&#39;t get sent over the wire in
 cleartext, while leaving the rest of the site non-secure (http). I
 believe that this requires some (minor) changes to the current
 session handling code.</para>
@@ -478,23 +478,23 @@ session handling code.</para>
 Verification</title>
       <para>Email verification needs to be handled both at registration
 and at login.</para>
-      <para>In both cases, it'll be handled by the driver sending
+      <para>In both cases, it&#39;ll be handled by the driver sending
 automatically sending the email containing a link for the user to
 verify his account. Then the driver will return an account status
 of "closed,temporary", and a message that says "Check your inbox
 and click the link in the email".</para>
       <para>OpenACS will have a page which receives the email
 verification, for use by local accounts. Other authorities will
-have to implement their own page, most likely on the authority's
+have to implement their own page, most likely on the authority&#39;s
 own server.</para>
     </sect3></sect2>
 
   <sect2 id="Other_Item"><title>Other Items</title>
     <para>There are a number of items which touch on external
-authentication and session management. And even though they're not
+authentication and session management. And even though they&#39;re not
 directly linked to external authentication, I would recommend that
-we handle a number of them, either because they're important for
-security, or because it makes sense to fix them while we're messing
+we handle a number of them, either because they&#39;re important for
+security, or because it makes sense to fix them while we&#39;re messing
 with this part of the codebase anyway.</para>
 
 
@@ -512,8 +512,8 @@ Untrusted Logins and Login Levels</title>
       <para>I like the idea of having multiple login levels:</para>
       <orderedlist>
         <listitem><para>Not logged in</para></listitem>
-        <listitem><para>Untrusted login: We'll show you un-sensitive personal
-          content, but won't let you modify anything or see personal data. A
+        <listitem><para>Untrusted login: We&#39;ll show you un-sensitive personal
+          content, but won&#39;t let you modify anything or see personal data. A
           normal login becomes untrusted after a certain amount of time, and
           the user will have to re-enter his/her password in order to gain
           access to personal data. Untrusted login never expires, unless
@@ -528,18 +528,18 @@ Untrusted Logins and Login Levels</title>
           password. This would be for sensitive actions, such as credit card
           transactions.</para></listitem>
         </orderedlist>
-      <para>There are two advantages to this. First, when people's login
+      <para>There are two advantages to this. First, when people&#39;s login
 expires, we can ask them to re-enter only their password, and not
-both username and password, since we'll still remember who they
+both username and password, since we&#39;ll still remember who they
 were the last time their login was valid. This is a much faster
 operation (the password input field will be focused by default, so
 you just type your password and hit Return) that typing both
 username and password, which will make it practical to have your
-site configured to expire people's login after e.g. 2, 4, or 8
+site configured to expire people&#39;s login after e.g. 2, 4, or 8
 hours.</para>
       <para>The other advantage is that we can still offer certain
 functionality to you, even when your login is not trusted. For
-example, we could let you browse publically available forums, and
+example, we could let you browse publicly available forums, and
 only when you want to post do you need to log in. This makes it
 even more feasible to have a more secure login expiration
 setting.</para>
@@ -547,11 +547,11 @@ setting.</para>
 bounce to the login page if the user is only logged in at the
 untrusted level. Only if you explicitly say
 <literal>auth::require_login -untrusted</literal> will we give you
-the user_id of a user who's only logged in in untrusted
+the user_id of a user who&#39;s only logged in in untrusted
 mode.</para>
       <para>Similarly, <literal>ad_conn user_id</literal> will continue
 to return 0 (not logged in) when the user is only logged in
-untrusted, and we'll supply another variable, <literal>ad_conn
+untrusted, and we&#39;ll supply another variable, <literal>ad_conn
 untrusted_user_id</literal>, which wlll be set to the user_id for
 all login levels.</para>
       <para>This should ensure that we get full access to the new
@@ -572,11 +572,11 @@ Make Non-Persistent Login Work</title>
       </segmentedlist>
       <para>Currently, OpenACS is unusable in practice without persistent
 login. The login will expire after just a few minutes of
-inactivity, and you'll get bounced to the login page where you have
+inactivity, and you&#39;ll get bounced to the login page where you have
 to enter both email and password again. Unacceptable in
 practice.</para>
       <para>We should change the default, so a non-persistent login
-doesn't expire until you either close your browser, or a few hours
+doesn&#39;t expire until you either close your browser, or a few hours
 have elapsed. Even if you are constantly active, the login should
 still expire after at most x number of hours. We can still make the
 login expire after a period of inactivity, but the amount of time
@@ -618,7 +618,7 @@ Expire All Logins</title>
           <seg>rewrite cookie handling</seg>
           </seglistitem>
       </segmentedlist>
-      <para>Currently, if you've ever left a permanent login cookie on
+      <para>Currently, if you&#39;ve ever left a permanent login cookie on
 someone elses machine, that person will be forever logged in until
 he/she explicitly logs out. You can change your password, you can
 do anything you want, but unless a logout is requested from that
@@ -626,14 +626,14 @@ particular browser, that browser will be logged in forever.</para>
       <para>I want to change our session handling code so that old login
 cookies can be expired. This would be done automatically whenever
 you change your password, and we could also offer a link which does
-this without changing passwords. It's an important security
+this without changing passwords. It&#39;s an important security
 measure.</para>
       <para>The implementation is simply to autogenerate some secret
 token which is stored in the users table, and is also stored in the
-cookie somehow. Then, whenever we want to expire all logins, we'll
+cookie somehow. Then, whenever we want to expire all logins, we&#39;ll
 just regenerate a new secret token, and the other cookies will be
-void. Of course, we don't want to incur a DB hit on every request,
-so we'll need to cache the secret token, or only check it when
+void. Of course, we don&#39;t want to incur a DB hit on every request,
+so we&#39;ll need to cache the secret token, or only check it when
 refreshing the session cookie, which, I believe, normally happens
 every 10 minutes or so.</para>
     </sect3>
@@ -650,7 +650,7 @@ Email account owner on password change</title>
           </seglistitem>
       </segmentedlist>
       <para>As an additional security measure, we should email the
-account's email address whenever the password is changed, so that
+account&#39;s email address whenever the password is changed, so that
 he/she is at least alerted to the fact.</para>
     </sect3>
 
@@ -686,29 +686,29 @@ Login Without Explicit Authority</title>
           <seg>Login without explicit domain</seg>
           </seglistitem>
       </segmentedlist>
-      <para>In order to make it easier for people, we've been toying with
+      <para>In order to make it easier for people, we&#39;ve been toying with
 the idea of a functionality like this:</para>
       <itemizedlist>
         <listitem><para>If the user enters "foobar@ix.urz.uni-heidelberg.de", it
           is translated to mean username = "foobar", authority =
           "ix.urz.uni-heidelberg.de".</para></listitem>
-        <listitem><para>If the user enters "foobar", it's recognized to not
+        <listitem><para>If the user enters "foobar", it&#39;s recognized to not
           include any authority, and the default authority of
           "ix.urz.uni-heidelberg.de" is used.</para></listitem>
-        <listitem><para>If the user enters "foo@bar.com", it's recognized as not
-          belonging to any known authority, and as such, it's translated to mean
+        <listitem><para>If the user enters "foo@bar.com", it&#39;s recognized as not
+          belonging to any known authority, and as such, it&#39;s translated to mean
           username = "foo@bar.com", authority = "local".</para></listitem>
       </itemizedlist>
       <para>If this is deemed desirable, a way to implement this would be
 through these settings:</para>
       <itemizedlist>
-        <listitem><para>Split: A regexp which will split the user's entry into
+        <listitem><para>Split: A regexp which will split the user&#39;s entry into
           username and authority parts. For example "^([^@]+)(@[^@]+)?$". An
           easier to use but less flexible method would be that you simply
           specify a certain character to split by, such as "@" or "\". If the
-          regexp doesn't match, or in the latter case, if there's more than
+          regexp doesn&#39;t match, or in the latter case, if there&#39;s more than
           one occurrence of the specified character sequence, the split will
-          fail, signaling that the user's entry was not valid.</para></listitem>
+          fail, signaling that the user&#39;s entry was not valid.</para></listitem>
         <listitem><para>Default authority: The default authority will be the first one
           in the sort order.</para></listitem>
       </itemizedlist>
@@ -716,7 +716,7 @@ through these settings:</para>
 this:</para>
       <programlisting>
 if { ![auth::split_username -username_var username -authority_var authority] } {
-    # bounce back to the form with a message saying that the login wasn't valid.
+    # bounce back to the form with a message saying that the login wasn&#39;t valid.
     ad_script_abort
 }
 
@@ -727,30 +727,30 @@ if { ![auth::split_username -username_var username -authority_var authority] } {
     </sect3>
 
 
-    <sect3 id="Optional__Whois_Onlin"><title>Optional: Who's Online</title>
+    <sect3 id="Optional__Whois_Onlin"><title>Optional: Who&#39;s Online</title>
       <segmentedlist>
         <segtitle>EXT-AUTH-27</segtitle>
         <?dbhtml list-presentation="req-table"?>
         <seglistitem>
           <seg>EXT-AUTH-27</seg>
           <seg>B</seg>
-          <seg>Who's online list</seg>
+          <seg>Who&#39;s online list</seg>
           </seglistitem>
       </segmentedlist>
-      <para>While we're touching the session handling code, anyway, it
-would be nice to add a feature to show who's currently online, a
+      <para>While we&#39;re touching the session handling code, anyway, it
+would be nice to add a feature to show who&#39;s currently online, a
 nice real-time collaboration feature frequently requested by
 members of the community. This is particularly interesting when
 integrated with a chat or instant messaging service like
 Jabber.</para>
-      <para>What I'm concretely suggesting is that we keep a record of
+      <para>What I&#39;m concretely suggesting is that we keep a record of
 which authenticated users have requested pags on the site in the
 last x minutes (typically about 5), and thus are considered to be
-currently online. There's nothing more to it. This lets us display
+currently online. There&#39;s nothing more to it. This lets us display
 a list of "active users" somewhere on the site, and make their name
 a link to a real-time chat service like Jabber.</para>
-      <para>We've already made the changes necessary to
-security-procs.tcl to do this on an earlier project, but haven't
+      <para>We&#39;ve already made the changes necessary to
+security-procs.tcl to do this on an earlier project, but haven&#39;t
 quite finished the work and put it back into the tree.</para>
     </sect3>
 
@@ -770,7 +770,7 @@ the login process for that particular subsite. This would probably
 only entail letting the subsite admin leave out certain authorities
 defined site-wide, and change the sort order.</para>
       <para>I think we should leave this out until we have a use case for
-it, someone who'd need it.</para>
+it, someone who&#39;d need it.</para>
     </sect3>
 
     <sect3 id="Future__Making_the_Authentication_API_itself"><title>Future:
@@ -790,9 +790,9 @@ Making the Authentication API itself a service contract</title>
         </seglistitem>
       </segmentedlist>
       <para>For completely free-form authentication logic and mechanisms,
-something like Andrew Grumet's
+something like Andrew Grumet&#39;s
 <ulink url="http://openacs.org/new-file-storage/download/oacs-pam.html?version_id=687">Pluggable
-Authentication for OACS Draft</ulink> is interesting. He's
+Authentication for OACS Draft</ulink> is interesting. He&#39;s
 proposing a scheme where the entire user interaction is
 encapsulated in, and left entirely to, a service contract. This
 certainly opens up more advanced possibilities, such as perhaps
@@ -822,18 +822,18 @@ Authenticating against multiple servers simultaneously</title>
 can be logged into multiple authorities at the same time. This is
 useful if, for example, you need to get login tokens such as
 Kerberos tickets for access to shared resources.</para>
-      <para>I can see the value in this, but for simplicity's sake, I'm
+      <para>I can see the value in this, but for simplicity&#39;s sake, I&#39;m
 in favor of keeping this use-case out of the loop until we have
 someone with a real requirement who could help us guide
 development.</para>
       <para>For now, OpenACS is still more of an integrated suite, it
-doesn't access many outside applications. I think it would be
+doesn&#39;t access many outside applications. I think it would be
 excellent for OpenACS to do so, e.g. by using an IMAP server to
 store emails, an iCal server to store calendar appointments, LDAP
 for user/group data and access control lists, SMB for file storage,
-etc. But at the moment, we don't have any users of such things that
-are ready. We have some who are on the steps, but let's wait till
-they're there.</para>
+etc. But at the moment, we don&#39;t have any users of such things that
+are ready. We have some who are on the steps, but let&#39;s wait till
+they&#39;re there.</para>
     </sect3>
     <sect3 id="Implement_Specific_Driver">
       <title>Implement
@@ -873,15 +873,15 @@ Specific Drivers</title>
           <seg>Create Auth. driver for LDAP</seg>
         </seglistitem>
       </segmentedlist>
-      <para>We'll need drivers for:</para>
+      <para>We&#39;ll need drivers for:</para>
       <itemizedlist>
         <listitem><para>Operating system (Linux/Solaris) PAM: Delegate to the
           operating system, which can then talk to RADIUS, LDAP, whatever.
-          This is convenient because there'll be plenty of drivers for the OS
-          PAM level, so we don't have to write them all ourselves. The
-          downside is that we can't do things like account creation, password
+          This is convenient because there&#39;ll be plenty of drivers for the OS
+          PAM level, so we don&#39;t have to write them all ourselves. The
+          downside is that we can&#39;t do things like account creation, password
           management, real-time account synchronization, etc., not supported
-          by PAM (I'm not entirely sure what is and is not
+          by PAM (I&#39;m not entirely sure what is and is not
           supported).</para></listitem>
         <listitem><para>RADIUS</para></listitem>
         <listitem><para>LDAP</para></listitem>
@@ -890,7 +890,7 @@ Specific Drivers</title>
         <para>RADIUS is a simple username/password-type authentication
 server.</para>
         <para>It also supports sending a challenge to which the user must
-respond with the proper answer (e.g. mother's maiden name, or could
+respond with the proper answer (e.g. mother&#39;s maiden name, or could
 be additional password), but we will not support this
 feature.</para>
         <para>A RADIUS client
@@ -904,8 +904,7 @@ module</ulink> for Zope
   </sect2>
 
   <sect2 id="Feedbac"><title>Feedback</title>
-    <para>We'd really appreciate feedback on this proposal. Please
-follow up at
+    <para>We&#39;d really appreciate feedback on this proposal. Please follow up at
 <ulink url="http://openacs.org/forums/message-view?message_id=97341">this
 openacs.org forums thread</ulink>.</para>
   </sect2>
@@ -913,7 +912,7 @@ openacs.org forums thread</ulink>.</para>
   <sect2 id="Reference"><title>References</title>
     <itemizedlist>
       <listitem>
-        <para>      <ulink url="http://ims.edna.edu.au/enterprise/">IMS Enterprise</ulink></para>
+        <para>      <ulink url="https://www.imsglobal.org/enterprise/index.html/">IMS Enterprise</ulink></para>
       </listitem>
       <listitem><para><ulink url="http://openacs.org/projects/openacs/packages/ex-auth/">Threads
 and links</ulink> collected by Carl Blesius.</para></listitem>
@@ -922,7 +921,7 @@ PAM specification</ulink></para></listitem>
       <listitem><para><ulink url="http://openacs.org/new-file-storage/download/oacs-pam.html?version_id=687">Draft
 Proposal</ulink> by Andrew Grumet.</para></listitem>
       <listitem><para><ulink url="http://www.yale.edu/tp/auth/">Yale
-CAS</ulink>, a centrl authentication service a' la
+CAS</ulink>, a central authentication service a' la
         Passport.</para></listitem>
     </itemizedlist>
     </sect2>
@@ -949,5 +948,5 @@ CAS</ulink>, a centrl authentication service a' la
       </tgroup>
     </informaltable>
   </sect2>
-  </sect1>
+</sect1>
 

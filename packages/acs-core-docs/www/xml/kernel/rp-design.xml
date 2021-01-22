@@ -22,6 +22,10 @@
 <para><xref linkend="rp-requirements"/></para>
 </listitem>
 
+<listitem>
+<para><ulink url="request-processor">Request Processor Stages and API</ulink></para>
+</listitem>
+
 <listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-procs.tcl">
 /packages/acs-tcl/tcl/request-processor-procs.tcl</ulink></para></listitem>
 
@@ -144,7 +148,7 @@ therefore this mapping is stored in the database.</para>
 <para><emphasis role="strong">Authentication and Authorization</emphasis></para>
 
 <para>Once the request processor has located both the package_id and concrete
-file associated with the request, authentication is performed by the <ulink url="../sessions.html">session</ulink> security system. After authentication has
+file associated with the request, authentication is performed by the <ulink url="security-design.html">session</ulink> security system. After authentication has
 been performed the user is authorized to have read access for the given
 package by the <xref linkend="permissions-design"/>.
 If authorization succeeds then the request is served, otherwise it is
@@ -169,7 +173,7 @@ file is found at any of the searched locations then it is served.</para>
 
 <para>If no file is found during the concrete file search, then the request
 processor searches the filesystem for a <emphasis role="strong">virtual url handler</emphasis>
-(<emphasis role="strong">.vuh</emphasis>) file. This file contains normal tcl code, and is in
+(<emphasis role="strong">.vuh</emphasis>) file. This file contains normal Tcl code, and is in
 fact handled by the same extension handling procedure that handles .tcl
 files. The only way this file is treated differently is in how the request
 processor searches for it. When a lookup fails, the request processor

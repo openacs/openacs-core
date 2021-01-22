@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Release Version Numbering}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Release Version Numbering}</property>
 <property name="doc(title)">Release Version Numbering</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,12 +10,13 @@ Chapter 12. Engineering Standards"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-versioning" id="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: eng-standards-versioning.xml,v 1.10
-2006/07/17 05:38:37 torbenb Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
+<div class="cvstag">($&zwnj;Id: eng-standards-versioning.xml,v 1.10.14.2
+2016/10/28 20:26:53 gustafn Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>OpenACS version numbers help identify at a high-level what is in
 a particular release and what has changed since the last
-release.</p><p>A "version number" is really just a string of the form:</p><div class="blockquote"><blockquote class="blockquote"><p>
+release.</p><p>A "version number" is really just a string of the
+form:</p><div class="blockquote"><blockquote class="blockquote"><p>
 <span class="emphasis"><em>major</em></span>.<span class="emphasis"><em>minor</em></span>.<span class="emphasis"><em>dot</em></span>[ <span class="emphasis"><em>milestone</em></span> ]</p></blockquote></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>A <span class="emphasis"><em>major</em></span> number change
 indicates a fundamental change in the architecture of the system,
@@ -58,9 +59,9 @@ etc.</p>
 </pre><p>Version numbers are also recorded in the CVS repository so that
 the code tree can be restored to the exact state it was in for a
 particular release. To translate between a distribution tar file
-(acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for '-'.The entire
-release history of the toolkit is recorded in the tags for the
-top-level <code class="computeroutput">readme.txt</code> file:</p><pre class="programlisting">
+(acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for
+'-'.The entire release history of the toolkit is recorded
+in the tags for the top-level <code class="computeroutput">readme.txt</code> file:</p><pre class="programlisting">
 &gt; cvs log readme.txt
 RCS file: /usr/local/cvsroot/acs/readme.txt,v
 Working file: readme.txt
@@ -134,7 +135,11 @@ conflicts with existing level 2 packages.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Level 3: Mature and
 Standard.</strong></span> Same as level 2, plus meets published
 coding standards; is fully internationalized; available on both
-supported databases.</p></li>
+supported databases.</p></li><li class="listitem"><p>
+<span class="strong"><strong>Level 4:
+Deprecated.</strong></span> The package was in some earlier version
+is use, but was probably replaced by a another package. The package
+description should point to a preferred version.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -158,10 +163,10 @@ then it is impossible to add any more database upgrades without
 incrementing the overall package version.</p></li><li class="listitem"><p>Use only the d, a, and b letters in OLDVERSION and NEWVERSION.
 rc is not supported by OpenACS APM.</p></li><li class="listitem"><p>The distance from OLDVERSION to NEWVERSION should never span a
 release. For example if we had a bug fix in acs-kernel on 5.1.0 you
-wouldn't want a file upgrade-5.0.4-5.1.0d1.sql since if you
+wouldn&#39;t want a file upgrade-5.0.4-5.1.0d1.sql since if you
 subsequently need to provide a 5.0.4-5.0.5 upgrade you will have to
-rename the 5.0.4-5.1.0 upgrade since you can't have upgrades which
-overlap like that. Instead, use <code class="computeroutput">upgrade-5.1.0d1-5.1.0d2.sql</code>
+rename the 5.0.4-5.1.0 upgrade since you can&#39;t have upgrades
+which overlap like that. Instead, use <code class="computeroutput">upgrade-5.1.0d1-5.1.0d2.sql</code>
 </p></li>
 </ol></div>
 </div>

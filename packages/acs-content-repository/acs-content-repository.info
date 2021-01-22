@@ -6,33 +6,36 @@
     <pretty-plural>ACS Content Repository Services</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
-
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-content-repository-5.9.0.apm">
+    <implements-subsite-p>f</implements-subsite-p>
+    <inherit-templates-p>t</inherit-templates-p>
+    
+    <version name="5.9.2d1" url="http://openacs.org/repository/download/apm/acs-content-repository-5.9.2d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides the API for creating and managing user generated content including 
          full support for versioning, rendering content to the filesystem, folders and composite content items, and
          other CMS backing functionality.  Utilized by Bug Tracker, File Storage, and other packages.
-        </description>
+    </description>
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-content-repository" version="5.9.0"/>
-        <requires url="acs-kernel" version="5.9.0"/>
-        <requires url="acs-service-contract" version="5.9.0"/>
-        <requires url="search" version="5.9.0"/>
+        <provides url="acs-content-repository" version="5.9.2d1"/>
+        <requires url="acs-kernel" version="5.9.1"/>
+        <requires url="acs-service-contract" version="5.9.1"/>
+        <requires url="acs-tcl" version="5.9.1"/>
+        <requires url="search" version="5.9.1"/>
 
         <callbacks>
-          <callback type="after-upgrade"  proc="content::apm::after_upgrade"/>
+            <callback type="after-upgrade"  proc="content::apm::after_upgrade"/>
         </callbacks>
-
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CRFileLocationRoot"  default="content-repository-content-files" description="The directory to which files are published and from where they are retrieved when a files is served. It is taken to be relative to $::acs::rootdir unless FileLocationRelativeP is set to 1" section_name="files"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="FileLocationRelativeP"  default="1" description="Defaults to 1 which means the FileLocation parameter is relative to the web servers root folder. If set to 0, the FileLocation parameter is an absolute path and so can contain a drive letter for example. Important note: if you change this parameter to 0, remember the system will attempt to retrieve existing files from the new location. You will also need to bounce the server after changing this or the FileLocation value." section_name="files"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ImageMagickConvertBinary"  default="/usr/bin/convert" description="Binary to use with the image:: procs in packages/acs-content-repository/tcl/image-procs.tcl" section_name="files"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="TemplateRoot"  default="templates" description="The directory to which templates are published and from where they are retrieved when a page is served. If the value does not start with a '/', it is taken to be relative to $::acs::rootdir. Packages that use the content-repository can override this setting by defining their own TemplateRoot parameter." section_name="templates"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="AllowMimeTypeCreationP"  default="0" description="Decides whether we allow unknown mimetypes to be automatically registered when encountered. Default is to allow only already registered mimetypes to be put into Content Repository." section_name="files"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="CRFileLocationRoot"  default="content-repository-content-files" description="The directory to which files are published and from where they are retrieved when a files is served. It is taken to be relative to $::acs::rootdir unless FileLocationRelativeP is set to 1" section_name="files"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="FileLocationRelativeP"  default="1" description="Defaults to 1 which means the FileLocation parameter is relative to the web servers root folder. If set to 0, the FileLocation parameter is an absolute path and so can contain a drive letter for example. Important note: if you change this parameter to 0, remember the system will attempt to retrieve existing files from the new location. You will also need to bounce the server after changing this or the FileLocation value." section_name="files"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ImageMagickConvertBinary"  default="/usr/bin/convert" description="Binary to use with the image:: procs in packages/acs-content-repository/tcl/image-procs.tcl" section_name="files"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TemplateRoot"  default="templates" description="The directory to which templates are published and from where they are retrieved when a page is served. If the value does not start with a &#39;/&#39;, it is taken to be relative to $::acs::rootdir. Packages that use the content-repository can override this setting by defining their own TemplateRoot parameter." section_name="templates"/>
         </parameters>
 
     </version>

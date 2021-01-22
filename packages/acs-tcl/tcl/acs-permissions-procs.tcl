@@ -133,9 +133,6 @@ ad_proc -public permission::permission_p {
 }
 
 
-# accepts nocache to match permission_p arguments 
-# since we alias it to permission::permission_p if
-# caching disabled.
 ad_proc -private permission::permission_p_not_cached {
     {-no_cache:boolean}
     {-party_id ""}
@@ -144,26 +141,31 @@ ad_proc -private permission::permission_p_not_cached {
 } {
     does party X have privilege Y on object Z
 
+    This function accepts "-no_cache" just to match the permission_p
+    signature since we alias it to permission::permission_p when
+    caching is disabled.
+
     @see permission::permission_p
 } {
     if { $party_id eq "" } {
         set party_id [ad_conn user_id]
     }
 
-    # We have a thread-local cache here
-    global permission__permission_p__cache
-    if { ![info exists permission__permission_p__cache($party_id,$object_id,$privilege)] } {
-        set permission__permission_p__cache($party_id,$object_id,$privilege) [expr {[db_exec_plsql select_permission_p {}] ? 1 : 0 }]
+    # We have a per-request cache here
+    set key ::permission__permission_p__cache($party_id,$object_id,$privilege)
+    if { ![info exists $key] } {
+        set $key [db_string select_permission_p {
+            select acs_permission.permission_p(:object_id, :party_id, :privilege)::integer from dual
+        }]
     }
-    return $permission__permission_p__cache($party_id,$object_id,$privilege)
+    return [set $key]
 }
 
 
 ad_proc -private permission::permission_thread_cache_flush {} {
     Flush thread cache
 } {
-    global permission__permission_p__cache
-    array unset permission__permission_p__cache
+    array unset ::permission__permission_p__cache
 }
 
 ad_proc -public permission::require_permission {
@@ -178,7 +180,8 @@ ad_proc -public permission::require_permission {
     }
 
     if {![permission_p -party_id $party_id -object_id $object_id -privilege $privilege]} {
-        if {!${party_id}} {
+
+        if {!${party_id} && ![ad_conn ajax_p]} {
             auth::require_login
         } else {
             ns_log notice "permission::require_permission: $party_id doesn't have $privilege on object $object_id"
@@ -268,7 +271,6 @@ ad_proc -public permission::require_write_permission {
 
     @param creation_user Optionally specify creation_user directly as an optimization. 
                          Otherwise a query will be executed.
-
     @param party_id      The party to have or not have write permission.
 
     @see permission::write_permission_p
@@ -279,64 +281,21 @@ ad_proc -public permission::require_write_permission {
     } 
 }
 
-
-
-ad_proc -deprecated ad_permission_grant {
-    user_id
-    object_id
-    privilege
+ad_proc -public permission::get_parties_with_permission {
+    {-object_id:required}
+    {-privilege "admin"}
 } {
-    Grant a permission
+    Return a list of lists of party_id and acs_object.title,
+    having a given privilege on the given object
 
-    @author ben@openforce.net
+    @param obect_id 
+    @param privilege
 
-    @see permission::grant
-} {
-    permission::grant -party_id $user_id -object_id $object_id -privilege $privilege
-}
-
-ad_proc -deprecated ad_permission_revoke {
-    user_id
-    object_id
-    privilege
-} {
-    Revoke a permission
-
-    @author ben@openforce.net
-
-    @see permission::revoke
-} {
-    permission::revoke -party_id $user_id -object_id $object_id -privilege $privilege
-}
-
-ad_proc -deprecated ad_permission_p {
-    {-user_id ""}
-    object_id
-    privilege
-} { 
     @see permission::permission_p
 } {
-    return [permission::permission_p -party_id $user_id -object_id $object_id -privilege $privilege]
+    return [db_list_of_lists get_parties {}]
 }
 
-ad_proc -deprecated ad_require_permission {
-  object_id
-  privilege
-} {
-    @see permission::require_permission
-} { 
-    permission::require_permission -object_id $object_id -privilege $privilege
-}
-
-ad_proc -private -deprecated ad_admin_filter {} {
-    permission::require_permission -object_id [ad_conn object_id] -privilege "admin"
-    return filter_ok
-}
-
-ad_proc -private -deprecated  ad_user_filter {} {
-    permission::require_permission -object_id [ad_conn object_id] -privilege "read"
-    return filter_ok
-}
 
 # Local variables:
 #    mode: tcl

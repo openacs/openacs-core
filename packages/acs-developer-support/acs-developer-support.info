@@ -8,20 +8,21 @@
     <singleton-p>t</singleton-p>
     <auto-mount>ds</auto-mount>
 
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-developer-support-5.9.0.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/acs-developer-support-5.9.1.apm">
         <owner url="mailto:lars@pinds.com">Lars Pind</owner>
         <summary>Profiling for requests including database timing information.</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Developer support stores timing and other logged information for requests 
         to support debugging and tuning and supports user switching and a Tcl Shell to invoke arbitrary tcl code on the server.
         </description>
         <maturity>3</maturity>
 
-        <provides url="acs-developer-support" version="5.9.0"/>
-	<requires url="acs-kernel" version="5.9.0"/>
+        <provides url="acs-developer-support" version="5.9.1"/>
+	<requires url="acs-tcl" version="5.9.1"/>
+	<requires url="acs-kernel" version="5.9.1"/>
         
-        <requires url="acs-templating" version="5.9.0"/>
+        <requires url="acs-templating" version="5.9.1"/>
 
         <callbacks>
         </callbacks>

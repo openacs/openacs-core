@@ -2,7 +2,7 @@
   <property name="doc(title)">@page_title;literal@</property>
   <property name="context">@context;literal@</property>
 
-<if @problems_p@ true>
+<if @problems_p;literal@ true>
 
   <p> We're sorry. Some packages which are required in order to
   install the packages you want could not be found. </p>
@@ -24,10 +24,10 @@
 
 <if @continue_url@ not nil>
   <p>
-    &raquo; <a href="@continue_url@">Install above <if @install:rowcount@ eq 1>package</if><else>packages</else></a>
+    <a href="@continue_url@" class="button">Install above <if @install:rowcount@ eq 1>package</if><else>packages</else></a>
   </p>
 </if>
-<if @problems_p@ true>
+<if @problems_p;literal@ true>
 
   <p> Please hit the Back button in your browser and go back and remove the packages we cannot install.</p>
 

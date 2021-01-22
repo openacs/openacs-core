@@ -23,7 +23,7 @@ set user_info(by_ip_url) [export_vars -base "complex-search" { { target one } { 
 set return_url [ad_return_url]
 
 set delete_user_url [export_vars -base delete-user { user_id return_url {permanent f}}]
-set delete_user_permanent_url [export_vars -base delete-user { user_id return_url {permanent t}}]
+set delete_user_permanent_url [export_vars -base delete-user { user_id {return_url /acs-admin/users} {permanent t}}]
 
 #
 # RBM: Check if the requested user is a site-wide admin and warn the 
@@ -35,7 +35,7 @@ set warning_p 0
 set ad_conn_user_id [ad_conn user_id]
 
 #
-# Define the url for switching side-wide admin priviledges with a timeout of 60 seconds
+# Define the url for switching side-wide admin privileges with a timeout of 60 seconds
 #
 if { $site_wide_admin_p } {
     set modify_admin_url [export_vars -base modify-admin-privileges {user_id:sign(max_age=60) {action:sign revoke}}]

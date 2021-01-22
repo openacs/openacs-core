@@ -20,18 +20,18 @@ modules. The goal is to make it possible to support delivery of
 applications which work properly in multiple locales with the
 lowest development and maintenance cost. 
 <h4>Definitions</h4>
-<blockquote><b>internationalization (i18n)</b> 
+<blockquote><strong>internationalization (i18n)</strong> 
 <p>The provision within a computer program of the capability of
 making itself adaptable to the requirements of different native
 languages, local customs and coded character sets.</p>
-<p><b>locale</b></p>
+<p><strong>locale</strong></p>
 <p>The definition of the subset of a user's environment that
 depends on language and cultural conventions.</p>
-<p><b>localization (L10n)</b></p>
+<p><strong>localization (L10n)</strong></p>
 <p>The process of establishing information within a computer system
 specific to the operation of particular native languages, local
 customs and coded character sets.</p>
-<p><b>globalization</b></p>
+<p><strong>globalization</strong></p>
 <p>A product development approach which ensures that software
 products are usable in the worldwide markets through a combination
 of internationalization and localization.</p>
@@ -138,16 +138,16 @@ presentation.</li>
 ... ? Anyone know how they deal with i18n ?</p>
 <h3>V. Related Links</h3>
 <ul>
-<li><i>System/Package "coversheet" - where all documentation for
-this software is linked off of</i></li>
-<li><i>Design document</i></li>
-<li><i>Developer's guide</i></li>
-<li><i>User's guide</i></li>
-<li><i>Other-cool-system-related-to-this-one document</i><br>
+<li><em>System/Package "coversheet" - where all documentation for
+this software is linked off of</em></li>
+<li><em>Design document</em></li>
+<li><em>Developer's guide</em></li>
+<li><em>User's guide</em></li>
+<li><em>Other-cool-system-related-to-this-one document</em><br>
 <a href="http://www.li18nux.net/">LI18NUX 2000 Globalization
 Specification: http://www.li18nux.net/</a> 
-<p><a href=
-"http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html">Mozilla
+<p><a href="
+"http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html"">Mozilla
 i18N Guidelines:
 http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</a></p>
 <p><a href="http://sunsite.berkeley.edu/amher/iso_639.html">ISO
@@ -156,12 +156,12 @@ http://sunsite.berkeley.edu/amher/iso_639.html</a></p>
 <p><a href="http://www.niso.org/3166.html">ISO 3166-1:1997 Codes
 for the representation of names of countries and their subdivisions
 Part 1: Country codes http://www.niso.org/3166.html</a></p>
-<p><a href=
-"http://www.isi.edu/in-notes/iana/assignments/character-sets">IANA
+<p><a href="
+"http://www.isi.edu/in-notes/iana/assignments/character-sets"">IANA
 Registry of Character Sets</a></p>
 </li>
-<li><i>Test plan</i></li>
-<li><i>Competitive system(s)</i></li>
+<li><em>Test plan</em></li>
+<li><em>Competitive system(s)</em></li>
 </ul>
 <h3>VI Requirements</h3>
 Because the requirements for globalization affect many areas of the
@@ -169,41 +169,41 @@ system, we will break up the requirements into phases, with a base
 required set of features, and then stages of increasing
 functionality. 
 <h3>VI.A Locales</h3>
-<b>10.0</b> A standard representation of locale will be used
+<strong>10.0</strong> A standard representation of locale will be used
 throughout the system. A locale refers to a language and territory,
 and is uniquely identified by a combination of ISO language and ISO
 country abbreviations. 
-<blockquote>See <a href=
-"http://acs40.arsdigita.com/doc/acs-content-repository/requirements.html">
+<blockquote>See <a href="
+"http://acs40.arsdigita.com/doc/acs-content-repository/requirements.html"">
 Content Repository Requirement 100.20</a> 
-<p><b>10.10</b> Provide a consistent representation and API for
+<p><strong>10.10</strong> Provide a consistent representation and API for
 creating and referencing a locale</p>
-<p><b>10.20</b> There will be a Tcl library of locale-aware
+<p><strong>10.20</strong> There will be a Tcl library of locale-aware
 formatting and parsing functions for numbers, dates and times.
-<i>Note that Java has builtin support for these already</i>.</p>
-<p><b>10.30</b> For each locale there will be default date, number
+<em>Note that Java has builtin support for these already</em>.</p>
+<p><strong>10.30</strong> For each locale there will be default date, number
 and currency formats.</p>
 </blockquote>
 <h3>VI.B Associating a Locale with a Request</h3>
-<b>20.0</b> The request processor must have a mechanism for
+<strong>20.0</strong> The request processor must have a mechanism for
 associating a locale with each request. This locale is then used to
 select the appropriate template for a request, and will also be
 passed as the locale argument to the message catalog or
 locale-specific formatting functions. 
 <blockquote>
-<p><b>20.10</b> The locale for a request should be computed by the
+<p><strong>20.10</strong> The locale for a request should be computed by the
 following method, in descending order of priority:</p>
 <ul class="noindent">
 <li>get locale associated with subsite or package id</li>
 <li>get locale from user preference</li>
 <li>get locale from site wide default 
-<p><b>20.20</b> An API will be provided for getting the current
+<p><strong>20.20</strong> An API will be provided for getting the current
 request locale from the <code>ad_conn</code> structure.</p>
 </li>
 </ul>
 </blockquote>
 <h3>VI.C Resource Bundles / Content Repository</h3>
-<b>30.0</b> A mechanism must be provided for a developer to group a
+<strong>30.0</strong> A mechanism must be provided for a developer to group a
 set of arbitrary content resources together, keyed by a unique
 identifier and a locale. 
 <p>For example, what approaches could be used to implement a
@@ -219,48 +219,48 @@ content-item containers in the Content Repository, or some
 convention assigning a common prefix to key strings in the message
 catalog.</p>
 <h3>VI.D Message Catalog for String Translation</h3>
-<b>40.0</b> A message catalog facility will provide a database of
+<strong>40.0</strong> A message catalog facility will provide a database of
 translations for constant strings for multilingual applications. It
 must support the following: 
 <blockquote>
-<p><b>40.10</b> Each message will referenced via unique a key.</p>
-<p><b>40.20</b> The key for a message will have some hierarchical
+<p><strong>40.10</strong> Each message will referenced via unique a key.</p>
+<p><strong>40.20</strong> The key for a message will have some hierarchical
 structure to it, so that sets of messages can be grouped with
 respect to a module name or package path.</p>
-<p><b>40.30</b> The API for lookup of a message will take a locale
+<p><strong>40.30</strong> The API for lookup of a message will take a locale
 and message key as arguments, and return the appropriate
 translation of that message for the specifed locale.</p>
-<p><b>40.40</b> The API for lookup of a message will accept an
+<p><strong>40.40</strong> The API for lookup of a message will accept an
 optional default string which can be used if the message key is not
 found in the catalog. This lets the developer get code working and
 tested in a single language before having to initialize or update a
 message catalog.</p>
-<p><b>40.50</b> For use within templates, custom tags which invoke
+<p><strong>40.50</strong> For use within templates, custom tags which invoke
 the message lookup API will be provided.</p>
-<p><b>40.60</b> Provide a method for importing and exporting a flat
+<p><strong>40.60</strong> Provide a method for importing and exporting a flat
 file of translation strings, in order to make it as easy as
 possible to create and modify message translations in bulk without
 having to use a web interface.</p>
-<p><b>40.70</b> Since translations may be in different character
+<p><strong>40.70</strong> Since translations may be in different character
 sets, there must be provision for writing and reading catalog files
 in different character sets. A mechanism must exist for identifying
 the character set of a catalog file before reading it.</p>
-<p><b>40.80</b> There should be a mechanism for tracking
+<p><strong>40.80</strong> There should be a mechanism for tracking
 dependencies in the message catalog, so that if a string is
 modified, the other translations of that string can be flagged as
 needing update.</p>
-<p><b>40.90</b> The message lookup must be as efficient as possible
+<p><strong>40.90</strong> The message lookup must be as efficient as possible
 so as not to slow down the delivery of pages.</p>
 <p><br>
-<font color="#080EFF"><i>Design question: Is there any reason to
+<font color="#080EFF"><em>Design question: Is there any reason to
 implement the message catalog on top of the content repository as
 the underlying storage and retrieval service, with a layer of
 caching for performance? Would we get a nice user interface and
-version control almost for free?</i></font></p>
+version control almost for free?</em></font></p>
 </blockquote>
 <h3>VI.E Character Set Encoding</h3>
-<b>Character Sets</b> 
-<p><b>50.0</b> A locale will have a primary associated character
+<strong>Character Sets</strong> 
+<p><strong>50.0</strong> A locale will have a primary associated character
 set which is used to encode text in the language. When given a
 locale, we can query the system for the associated character set to
 use.</p>
@@ -281,136 +281,136 @@ filesystem</li>
 <li>Writing data to the filesystem</li>
 </ul>
 <p><br>
-<font color="#080EFF"><i>Design question: Do we want to mandate
+<font color="#080EFF"><em>Design question: Do we want to mandate
 that all template files be stored in UTF8? I don't think so,
 because most people don't have Unicode editors, or don't want to be
 bothered with an extra step to convert files to UTF8 and back when
-editing them in their favorite editor.</i></font></p>
-<p><font color="#080EFF"><i>Same question for script and template
+editing them in their favorite editor.</em></font></p>
+<p><font color="#080EFF"><em>Same question for script and template
 files, how do we know what language and character set they are
 authored in? Should we overload the filename suffix (e.g.,
-'.shiftjis.adp', '.ja_JP.euc.adp')?</i></font></p>
-<p><font color="#080EFF"><i>The simplest design is probably just to
+'.shiftjis.adp', '.ja_JP.euc.adp')?</em></font></p>
+<p><font color="#080EFF"><em>The simplest design is probably just to
 assign a default mapping from each locale to character a set: e.g.
 ja_JP -&gt; ShiftJIS, fr_FR -&gt; ISO-8859-1. +++ (see new ACS/Java
-notes) +++</i></font></p>
+notes) +++</em></font></p>
 <blockquote>
 <h4>Tcl Source File Character Set</h4>
 There are two classes of Tcl files loaded by the system; library
 files loaded at server startup, and page script files, which are
 run on each page request. 
 <p><br>
-<font color="#080EFF"><i>Should we require all Tcl files be stored
+<font color="#080EFF"><em>Should we require all Tcl files be stored
 as UTF8? That seems too much of a burden on
-developers.</i></font></p>
-<p><b>50.10</b> Tcl library files can be authored in any character
+developers.</em></font></p>
+<p><strong>50.10</strong> Tcl library files can be authored in any character
 set. The system must have a way to determine the character set
 before loading the files, probably from the filename.</p>
-<p><b>50.20</b> Tcl page script files can be authored in any
+<p><strong>50.20</strong> Tcl page script files can be authored in any
 character set. The system must have a way to determine the
 character set before loading the files, probably from the
 filename.</p>
 <h4>Submitted Form Data Character Set</h4>
-<b>50.30</b> Data which is submitted with a HTTP request using a
+<strong>50.30</strong> Data which is submitted with a HTTP request using a
 GET or POST method may be in any character set. The system must be
 able to determine the encoding of the form data and convert it to
 Unicode on demand. 
-<p><b>50.35</b> The developer must be able to override the default
+<p><strong>50.35</strong> The developer must be able to override the default
 system choice of character set when parsing and validating user
 form data.</p>
-<p><b>50.30.10</b> Extra hair: In Japan and some other Asian
+<p><strong>50.30.10</strong> Extra hair: In Japan and some other Asian
 languages where there are multiple character set encodings in
 common use, the server may need to attempt to do an auto-detection
 of the character set, because buggy browsers may submit form data
 in an unexpected alternate encoding.</p>
 <h4>Output Character Set</h4>
-<b>50.40</b> The output character set for a page request will be
+<strong>50.40</strong> The output character set for a page request will be
 determined by default by the locale associated with the request
 (see requirement 20.0). 
-<p><b>50.50</b> It must be possible for a developer to manually
+<p><strong>50.50</strong> It must be possible for a developer to manually
 override the output character set encoding for a request using an
 API function.</p>
 </blockquote>
 <h3>VI.F ACS Kernel Issues</h3>
-<blockquote><b>60.10</b> All ACS error messages must use the
+<blockquote><strong>60.10</strong> All ACS error messages must use the
 message catalog and the request locale to generate error message
 for the appropriate locale. 
-<p><b>60.20</b> Web server error messages such as 404, 500, etc
+<p><strong>60.20</strong> Web server error messages such as 404, 500, etc
 must also be delivered in the appropriate locale.</p>
-<p><b>60.30</b> Where files are written or read from disk, their
+<p><strong>60.30</strong> Where files are written or read from disk, their
 filenames must use a character set and character values which are
 safe for the underlying operating system.</p>
 </blockquote>
 <h3>VI.G Templates</h3>
-<blockquote><b>70.0</b> For a given abstract URL, the designer may
+<blockquote><strong>70.0</strong> For a given abstract URL, the designer may
 create multiple locale-specific template files may be created (one
 per locale or language) 
-<p><b>70.10</b> For a given page request, the system must be able
+<p><strong>70.10</strong> For a given page request, the system must be able
 to select an approprate locale-specific template file to use. The
 request locale is computed as per (see requirement 20.0).</p>
-<p><font color="#080EFF"><i>Design note: this would probably be
+<p><font color="#080EFF"><em>Design note: this would probably be
 implemented by suffixing the locale or a locale abbreviation to the
-template filename, such as <tt>foo.ja.adp</tt> or
-<tt>foo.en_GB.adp</tt>.</i></font></p>
-<p><b>70.20</b>A template file may be created for a partial locale
+template filename, such as <kbd>foo.ja.adp</kbd> or
+<kbd>foo.en_GB.adp</kbd>.</em></font></p>
+<p><strong>70.20</strong>A template file may be created for a partial locale
 (language only, without a territory), and the request processor
 should be able to find the closest match for the current request
 locale.</p>
-<p><b>70.30</b> A template file may be created in any character
+<p><strong>70.30</strong> A template file may be created in any character
 set. The system must have a way to know which character set a
 template file contains, so it can properly process it.</p>
 <h4>Formatting Datasource Output in Templates</h4>
-<b>70.50</b> The properties of a datasource column may include a
+<strong>70.50</strong> The properties of a datasource column may include a
 datatype so that the templating system can format the output for
 the current locale. The datatype is defined by a standard ACS
 datatype plus a format token or format string, for example: a date
 column might be specified as 'current_date:date LONG,' or
 'current_date:date "YYYY-Mon-DD"' 
 <h4>Forms</h4>
-<b>70.60</b> The forms API must support construction of
+<strong>70.60</strong> The forms API must support construction of
 locale-specific HTML form widgets, such as date entry widgets, and
 form validation of user input data for locale-specific data, such
 as dates or numbers. 
-<p><b>70.70</b> For forms which allow users to upload files, a
+<p><strong>70.70</strong> For forms which allow users to upload files, a
 standard method for a user to indicate the charset of a text file
 being uploaded must be provided.</p>
-<p><font color="#080EFF"><i>Design note: this presumably applies to
-uploading data to the content repository as well</i></font></p>
+<p><font color="#080EFF"><em>Design note: this presumably applies to
+uploading data to the content repository as well</em></font></p>
 </blockquote>
 <h3>VI.H Sorting and Searching</h3>
-<blockquote><b>80.10</b> Support API for correct collation (sorting
+<blockquote><strong>80.10</strong> Support API for correct collation (sorting
 order) on lists of strings in locale-dependent way. 
-<p><b>80.20</b> For the Tcl API, we will say that locale-dependent
+<p><strong>80.20</strong> For the Tcl API, we will say that locale-dependent
 sorting will use Oracle SQL operations (i.e., we won't provide a
 Tcl API for this). We require a Tcl API function to return the
 correct incantation of NLS_SORT to use for a given locale with
 <code>ORDER BY</code> clauses in queries.</p>
-<p><b>80.40</b> The system must handle full-text search in any
+<p><strong>80.40</strong> The system must handle full-text search in any
 supported language.</p>
 </blockquote>
 <h3>VI.G Time Zones</h3>
-<blockquote><b>90.10</b> Provide API support for specifying a time
+<blockquote><strong>90.10</strong> Provide API support for specifying a time
 zone 
-<p><b>90.20</b> Provide an API for computing time and date
+<p><strong>90.20</strong> Provide an API for computing time and date
 operations which are aware of timezones. So for example a calendar
 module can properly synchronize items inserted into a calendar from
 users in different time zones using their own local times.</p>
-<p><b>90.30</b> Store all dates and times in universal time zone,
+<p><strong>90.30</strong> Store all dates and times in universal time zone,
 UTC.</p>
-<p><b>90.40</b> For a registered users, a time zone preference
+<p><strong>90.40</strong> For a registered users, a time zone preference
 should be stored.</p>
-<p><b>90.50</b> For a non-registered user a time zone preference
+<p><strong>90.50</strong> For a non-registered user a time zone preference
 should be attached via a session or else UTC should be used to
 display every date and time.</p>
-<p><b>90.60</b> The default if we can't determine a time zone is to
+<p><strong>90.60</strong> The default if we can't determine a time zone is to
 display all dates and times in some universal time zone such as
 GMT.</p>
 </blockquote>
 <h3>VI.H Database</h3>
 <blockquote>
-<p><b>100.10</b> Since UTF8 strings can use up to three (UCS2) or
+<p><strong>100.10</strong> Since UTF8 strings can use up to three (UCS2) or
 six (UCS4) bytes per character, make sure that column size
-declarations in the schema are large enough to accomodate required
+declarations in the schema are large enough to accommodate required
 data (such as email addresses in Japanese).</p>
 </blockquote>
 <h3>VI.I Email and Messaging</h3>
@@ -418,9 +418,9 @@ When sending an email message, just as when delivering the content
 in web page over an HTTP connection, it is necessary to be able to
 specify what character set encoding to use. 
 <blockquote>
-<p><b>110.10</b> The email message sending API will allow for a
+<p><strong>110.10</strong> The email message sending API will allow for a
 character set encoding to be specified.</p>
-<p><b>110.20</b> The email accepting API will allow for character
+<p><strong>110.20</strong> The email accepting API will allow for character
 set to be parsed correctly (hopefully a well formatted message will
 have a MIME character set content type header)</p>
 </blockquote>
@@ -459,8 +459,8 @@ wording</td>
 </tbody>
 </table>
 <hr>
-<address><a href=
-"mailto:hqm@arsdigita.com">hqm@arsdigita.com</a></address>
+<address><a href="
+"mailto:hqm@arsdigita.com"">hqm@arsdigita.com</a></address>
 <p>Last modified: $Date$</p>
 </body>
 </html>

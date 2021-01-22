@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Timing a Templated Page}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Timing a Templated Page}</property>
 <property name="doc(title)">Timing a Templated Page</property>
 <master>
 <h2>Timing a Templated Page</h2>
@@ -24,13 +24,11 @@ This page documents the attempt to verify this requirement.
 numbers into continued fractions. I created three versions:</p>
 <ul>
 <li>
-<a href="/acs-templating/admin/test/chain-frac-0?x=3.14159265358979323846">chain-frac-0</a>,
-a Tcl page with inline HTML,</li><li>
-<a href="/acs-templating/admin/test/chain-frac-1?x=3.14159265358979323846">chain-frac-1</a>,
-a templated page, i.e. a Tcl and an HTML file, and</li><li>
-<a href="/acs-templating/admin/test/chain-frac-2?x=3.14159265358979323846">chain-frac-2</a>,
-an ADP page that simply <code>&lt;include&gt;</code>s
-chain-frac-1.</li>
+<a href="">chain-frac-0</a>, a Tcl page with inline HTML,</li><li>
+<a href="">chain-frac-1</a>, a templated page, i.e. a Tcl and
+an HTML file, and</li><li>
+<a href="">chain-frac-2</a>, an ADP page that simply
+<code>&lt;include&gt;</code>s chain-frac-1.</li>
 </ul>
 <p>The reason for creating <code>chain-frac-2.adp</code> is that in
 this way, the script <code>chain-frac-1.tcl</code> is handled
@@ -47,12 +45,12 @@ All timing is carried out for the three settings
 the associated variable is called <code>check</code>.</p>
 <p>I created a script in e-Tester that requests the three pages
 from my development server on dev0103-001. One timing of requesting
-a page isn't very expressive. A lot of factors affect the page load
-time. To offset these and get better results, I repeatedly request
-the pages. For the timing, I have e-Tester iterate this script 200
-times. To compesate for varying load on the machine, i ran the
-iteration twice for each setting of <code>RefreshCache</code> at
-different times of the day.</p>
+a page isn&#39;t very expressive. A lot of factors affect the page
+load time. To offset these and get better results, I repeatedly
+request the pages. For the timing, I have e-Tester iterate this
+script 200 times. To compesate for varying load on the machine, i
+ran the iteration twice for each setting of
+<code>RefreshCache</code> at different times of the day.</p>
 <p>The timing information is taken from the error log file entries
 that the request processor produces with parameter
 <code>LogDebugP=1</code>. For finer granularity I changed rp_debug
@@ -128,8 +126,8 @@ a normal distribution, you get the erf shape; for a uniform
 distribution it is a ramp. This form of presentation throws away no
 information, and it shows all about the distribution of a single
 variable. I am pretty sure the times that different stages of one
-request take are statistically dependent, but I don't consider that
-for the time being. The median is the abscissa <var>t</var> at
+request take are statistically dependent, but I don&#39;t consider
+that for the time being. The median is the abscissa <var>t</var> at
 which the ordinate <var>F</var>(<var>t</var>)=1/2.</p><p>The curves for all nine experiments are drawn in the same graph
 for comparison. Note that the abscissa is scaled very differently
 for various stages.</p><h4>Steps</h4><ul>
@@ -154,19 +152,19 @@ approximately acs-4-0-beta-R20001001.</li><li>
 approximately acs-4-0-beta-2-R20001009.</li><li>
 <a href="timing-3">graphs</a> from reusia.boston, from ACS
 3.4.6 tarball. This comparison is not completely fair.</li>
-</ul><h3>V. Conclusion</h3><p>Currently, the template system doesn't meet the performance
+</ul><h3>V. Conclusion</h3><p>Currently, the template system doesn&#39;t meet the performance
 requirement.</p><p>Earlier on dev0103-001, templated pages loaded fast enough.
 Although the processing stage seems to a lot be more than 10%
 slower, the overall performance is rather increased than slowed by
 templating.</p><p>On reusia.boston, we had a much better performance of the
 request processor. The processing times of the pages proper (stage
-10 before, 11 now) didn't change much; we just got clearer results.
-The total processing time of Tcl-only pages is around 155ms, while
-templated pages take around 220ms, that is 42% longer (or Tcl-only
-pages take 30% less).</p><p>Relative times depend on the other components of the pipeline.
+10 before, 11 now) didn&#39;t change much; we just got clearer
+results. The total processing time of Tcl-only pages is around
+155ms, while templated pages take around 220ms, that is 42% longer
+(or Tcl-only pages take 30% less).</p><p>Relative times depend on the other components of the pipeline.
 The difference of 65ms is a large percentage of a total serving
 time of 155ms; when other parts of the system (e.g., the request
-processor) were slower, this wasn't that noticeable.</p><p>For ACS 3.4, Tcl-only chain-frac-0 pages take 115ms, where the
+processor) were slower, this wasn&#39;t that noticeable.</p><p>For ACS 3.4, Tcl-only chain-frac-0 pages take 115ms, where the
 templated versisons are much slower, 320ms for chain-frac-1 and 340
 for -2.</p><h3>VI. Further Work</h3><p>Tune templating in ACS 4.0.</p><hr><address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address><!-- Created: Fri Oct  6 15:45:48 EDT 2000 --><!-- hhmts start -->

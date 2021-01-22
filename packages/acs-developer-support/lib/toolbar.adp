@@ -8,7 +8,7 @@
       <td class="actions">
         <ul>
           <multiple name="ds_buttons">
-            <li><a href="@ds_buttons.toggle_url@" class="@ds_buttons.state@" title="@ds_buttons.title@">@ds_buttons.label@</a></li>
+            <li><a id="ACS_DS_@ds_buttons.label@" href="@ds_buttons.toggle_url@" class="@ds_buttons.state@" title="@ds_buttons.title@">@ds_buttons.label@</a></li>
           </multiple>
         </ul>
       </td>
@@ -53,7 +53,7 @@
           <input type="hidden" name="name_weight" value="5">
           <input type="hidden" name="param_weight" value="3">
           <input type="hidden" name="doc_weight" value="2">
-          <input name="query_string" onfocus="if(this.value=='Search API')this.value='';" onblur="if(this.value=='')this.value='Search API';" value="Search API">
+          <input name="query_string" placeholder="Search API">
           <input type="submit" value="Go"></div>
         </form>
       </td>

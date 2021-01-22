@@ -7,14 +7,14 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-translations-5.9.0.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/acs-translations-5.9.1.apm">
         <owner url="mailto:sussdorff@sussdorff.de">Malte Sussdorff</owner>
         <summary>Package for storing dynamic translations</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <description format="text/html">Package for storing dynamic translations</description>
         <maturity>3</maturity>
 
-        <provides url="acs-translations" version="5.9.0"/>
+        <provides url="acs-translations" version="5.9.1"/>
 
         <callbacks>
         </callbacks>

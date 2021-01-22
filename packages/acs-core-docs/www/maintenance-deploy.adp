@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Staged Deployment for Production Networks}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Staged Deployment for Production Networks}</property>
 <property name="doc(title)">Staged Deployment for Production Networks</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,8 +11,8 @@ Chapter 6. Production Environments"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="maintenance-deploy" id="maintenance-deploy"></a>Staged Deployment for Production
 Networks</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: maintenance.xml,v 1.30 2010/12/11
-23:36:32 ryang Exp $)</div><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+<div class="cvstag">($&zwnj;Id: maintenance.xml,v 1.30.6.3 2017/06/17
+08:29:28 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>This section describes two minimal-risk methods for deploying
@@ -24,19 +24,19 @@ tested.</p></li><li class="listitem"><p>Rollback: If anything goes wrong, you ca
 working configuration safely and quickly.</p></li>
 </ul></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140400237692688" id="idp140400237692688"></a>Method 1: Deployment with CVS</h3></div></div></div><p>With this method, we control the files on a site via CVS. This
+<a name="idp140592101338280" id="idp140592101338280"></a>Method 1: Deployment with CVS</h3></div></div></div><p>With this method, we control the files on a site via CVS. This
 example uses one developmental server (service0-dev) and one
 production server (service0). Depending on your needs, you can also
 have a staging server for extensive testing before you go live. The
 only way files should move between the server instances is via
 cvs.</p><p>To set up a developmental installation, first set up either your
 developmental installation or your production installation, and
-follow the instructions for committing your files to CVS. We'll
+follow the instructions for committing your files to CVS. We&#39;ll
 assume in this example that you set up the production server
 (service0). To set up the developmental instance, you then follow
 the intall guide again, this time creating a new user
-(service0-dev) that you'll use for the new installation. To get the
-files for service0-dev, you check them out from cvs (check out
+(service0-dev) that you&#39;ll use for the new installation. To get
+the files for service0-dev, you check them out from cvs (check out
 service0).</p><pre class="programlisting">
 su - service0-dev
 co -d /cvsroot service0
@@ -44,16 +44,17 @@ mv service0 /var/lib/aolserver/service0-dev
 ln -s /home/service0-dev/web /var/lib/aolserver/service0-dev
 emacs web/etc/config.tcl
 emacs web/etc/daemontools/run
-</pre><p>In the config.tcl file, you'll probably want to pay attention
-the rollout support section. That will ensure that email on your
-developmental server will not be sent out to the general world.</p><p>Also, instead of going through the OpenACS online installer,
-you'll actually load live data into your production server.</p><p>You can even automate the process of getting live data from your
+</pre><p>In the config.tcl file, you&#39;ll probably want to pay
+attention the rollout support section. That will ensure that email
+on your developmental server will not be sent out to the general
+world.</p><p>Also, instead of going through the OpenACS online installer,
+you&#39;ll actually load live data into your production server.</p><p>You can even automate the process of getting live data from your
 production server. Copy something like this to
-/home/service0-dev/bin and put it in service0-dev's crontab to run
-once a night. You'll need to make sure the database backups are set
-up in service0's crontab, and that if the servers are on different
-physical machines, that the database backup is copied to the
-developmental machine once per night.</p><pre class="programlisting">
+/home/service0-dev/bin and put it in service0-dev&#39;s crontab to
+run once a night. You&#39;ll need to make sure the database backups
+are set up in service0's crontab, and that if the servers are
+on different physical machines, that the database backup is copied
+to the developmental machine once per night.</p><pre class="programlisting">
 /usr/local/bin/svc -d /service/service0-dev
 /bin/sleep 60
 # this deletes the dev database!
@@ -75,7 +76,7 @@ old.</p><p>To make changes on service0-dev:</p><pre class="programlisting">
 if the file is /var/lib/aolserver/service0-dev/www/index.adp, do: 
 
 cd /var/lib/aolserver/service0-dev/www
-cvs diff index.adp (this is optional; it's just a
+cvs diff index.adp (this is optional; it&#39;s just a
 reality check)
 the lines starting &gt; will be added and the lines
 starting &lt; will be removed, when you commit
@@ -88,21 +89,21 @@ cd /var/lib/aolserver/service0/www
 cvs up -Pd index.adp
 </pre><p>If you make changes that require changes to the database, test
 them out first on service0-dev, using either -create.sql or upgrade
-scripts. Once you've tested them, you then update and run the
+scripts. Once you&#39;ve tested them, you then update and run the
 upgrade scripts from the package manager.</p><p>The production site can run "HEAD" from cvs.</p><p>The drawback to using HEAD as the live code is that you cannot
 commit new work on the development server without erasing the
-definition of 'working production code.' So a better method is to
-use a tag. This guarantees that, at any time in the future, you can
-retrieve exactly the same set of code. This is useful for both of
-the characteristics of safe change deployment. For control, you can
-use tags to define a body of code, test that code, and then know
-that what you are deploying is exactly that code. For rollback, you
-can use return to the last working tag if the new tag (or new,
-untagged changes) cause problems. .... example of using tags to
-follow ...</p>
+definition of 'working production code.' So a better method
+is to use a tag. This guarantees that, at any time in the future,
+you can retrieve exactly the same set of code. This is useful for
+both of the characteristics of safe change deployment. For control,
+you can use tags to define a body of code, test that code, and then
+know that what you are deploying is exactly that code. For
+rollback, you can use return to the last working tag if the new tag
+(or new, untagged changes) cause problems. .... example of using
+tags to follow ...</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140400237672576" id="idp140400237672576"></a>Method 2: A/B Deployment</h3></div></div></div><p>The approach taken in this section is to always create a new
+<a name="idp140592101350328" id="idp140592101350328"></a>Method 2: A/B Deployment</h3></div></div></div><p>The approach taken in this section is to always create a new
 service with the desired changes, running in parallel with the
 existing site. This guarantees control, at least at the final step
 of the process: you know what changes you are about to make because
@@ -118,29 +119,29 @@ system regularly receiving new data, you must interrupt this
 function or risk losing data in the shuffle. It also requires extra
 steps if the database will be affected.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140400237674992" id="idp140400237674992"></a>Simple A/B Deployment: Database is not
+<a name="idp140592101352744" id="idp140592101352744"></a>Simple A/B Deployment: Database is not
 changed</h4></div></div></div><div class="figure">
-<a name="idp140400237675632" id="idp140400237675632"></a><p class="title"><b>Figure 6.2. Simple A/B
-Deployment - Step 1</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-1.png" align="middle" alt="Simple A/B Deployment - Step 1"></div></div>
+<a name="idp140592101353384" id="idp140592101353384"></a><p class="title"><strong>Figure 6.2. Simple
+A/B Deployment - Step 1</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-1.png" align="middle" alt="Simple A/B Deployment - Step 1"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140400237678320" id="idp140400237678320"></a><p class="title"><b>Figure 6.3. Simple A/B
-Deployment - Step 2</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-2.png" align="middle" alt="Simple A/B Deployment - Step 2"></div></div>
+<a name="idp140592101356072" id="idp140592101356072"></a><p class="title"><strong>Figure 6.3. Simple
+A/B Deployment - Step 2</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-2.png" align="middle" alt="Simple A/B Deployment - Step 2"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140400237681008" id="idp140400237681008"></a><p class="title"><b>Figure 6.4. Simple A/B
-Deployment - Step 3</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-3.png" align="middle" alt="Simple A/B Deployment - Step 3"></div></div>
+<a name="idp140592101358760" id="idp140592101358760"></a><p class="title"><strong>Figure 6.4. Simple
+A/B Deployment - Step 3</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/simple-deploy-3.png" align="middle" alt="Simple A/B Deployment - Step 3"></div></div>
 </div><br class="figure-break">
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140400237683824" id="idp140400237683824"></a>Complex A/B Deployment: Database is
+<a name="idp140592101361576" id="idp140592101361576"></a>Complex A/B Deployment: Database is
 changed</h4></div></div></div><div class="figure">
-<a name="idp140400237684464" id="idp140400237684464"></a><p class="title"><b>Figure 6.5. Complex A/B
-Deployment - Step 1</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-1.png" align="middle" alt="Complex A/B Deployment - Step 1"></div></div>
+<a name="idp140592101362216" id="idp140592101362216"></a><p class="title"><strong>Figure 6.5. Complex A/B Deployment
+- Step 1</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-1.png" align="middle" alt="Complex A/B Deployment - Step 1"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140400237687152" id="idp140400237687152"></a><p class="title"><b>Figure 6.6. Complex A/B
-Deployment - Step 2</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-2.png" align="middle" alt="Complex A/B Deployment - Step 2"></div></div>
+<a name="idp140592101364904" id="idp140592101364904"></a><p class="title"><strong>Figure 6.6. Complex A/B Deployment
+- Step 2</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-2.png" align="middle" alt="Complex A/B Deployment - Step 2"></div></div>
 </div><br class="figure-break"><div class="figure">
-<a name="idp140400237689840" id="idp140400237689840"></a><p class="title"><b>Figure 6.7. Complex A/B
-Deployment - Step 3</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-3.png" align="middle" alt="Complex A/B Deployment - Step 3"></div></div>
+<a name="idp140592101367592" id="idp140592101367592"></a><p class="title"><strong>Figure 6.7. Complex A/B Deployment
+- Step 3</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/complex-deploy-3.png" align="middle" alt="Complex A/B Deployment - Step 3"></div></div>
 </div><br class="figure-break">
 </div>
 </div>

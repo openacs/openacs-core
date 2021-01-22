@@ -15,15 +15,9 @@ namespace eval membership_rel {
         Change the state of a membership relation
     } {
         db_transaction {
-
+            
             # We need the id of the user that we are changing state for
-            set rel_user_id [db_string select_rel_user_id { 
-                select u.user_id
-                from   acs_rels r,
-                users u
-                where  r.rel_id = :rel_id 
-                and    u.user_id = r.object_id_two
-            } -default {}]
+            set rel_user_id [get_user_id -rel_id $rel_id]
 
             # If user is being undeleted - remove him from the public group
             acs_user::get -user_id $rel_user_id -array user
@@ -107,6 +101,37 @@ namespace eval membership_rel {
         Unapprove a membership relation
     } {
         change_state -rel_id $rel_id -state "needs approval"
+    }
+
+    ad_proc -public get {
+        {-rel_id:required}
+    } {
+        Return the user_id of a rel_id
+    } {
+        db_1row select_rel_id { 
+            select u.user_id, r.object_id_one as group_id
+            from   acs_rels r,
+            users u
+            where  r.rel_id = :rel_id 
+            and    u.user_id = r.object_id_two
+        }
+        return [list user_id $user_id group_id $group_id]
+    }
+
+    ad_proc -public get_user_id {
+        {-rel_id:required}
+    } {
+        Return the user_id of a rel_id
+    } {
+        return [dict get [get -rel_id $rel_id] user_id]
+    }
+    
+    ad_proc -public get_group_id {
+        {-rel_id:required}
+    } {
+        Return the group_id of a rel_id
+    } {
+        return [dict get [get -rel_id $rel_id] group_id]
     }
 
 }

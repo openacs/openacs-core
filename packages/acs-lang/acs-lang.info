@@ -9,10 +9,10 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-lang-5.9.0.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/acs-lang-5.9.1.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <description format="text/plain">Internationalization and localization support routines and admin UI for manipulating Locales,
 request processor hooks, templating, accessing and managing the message catalog, and
@@ -20,12 +20,13 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-lang" version="5.9.0"/>
-        <requires url="acs-kernel" version="5.9.0"/>
-        <requires url="acs-translations" version="5.9.0"/>
-        <requires url="ref-timezones" version="5.9.0"/>
-        <requires url="ref-countries" version="5.9.0"/>
-        <requires url="ref-language" version="5.9.0"/>
+        <provides url="acs-lang" version="5.9.1"/>
+        <requires url="acs-kernel" version="5.9.1"/>
+	<requires url="acs-tcl" version="5.9.1"/>
+        <requires url="acs-translations" version="5.9.1"/>
+        <requires url="ref-timezones" version="5.9.1"/>
+        <requires url="ref-countries" version="5.9.1"/>
+        <requires url="ref-language" version="5.9.1"/>
 
         <callbacks>
             <callback type="after-install"  proc="lang::apm::after_install"/>

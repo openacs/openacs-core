@@ -12,49 +12,59 @@ namespace eval party {}
 namespace eval person {}
 namespace eval acs_user {}
 
-ad_proc -private cc_lookup_screen_name_user { screen_name } {
+ad_proc -deprecated -private cc_lookup_screen_name_user { screen_name } {
+    @see acs_user::get_user_id_by_screen_name
+} {
     return [db_string user_select {} -default {}]
 }
 
-ad_proc cc_screen_name_user { screen_name } {
+ad_proc -deprecated cc_screen_name_user { screen_name } {
 
-    Returns the user ID for a particular screen name, or an empty string
+    @return Returns the user ID for a particular screen name, or an empty string
     if none exists.
+
+    @see acs_user::get_user_id_by_screen_name
 
 } {
     return [util_memoize [list cc_lookup_screen_name_user $screen_name]]
 }
 
-ad_proc -private cc_lookup_email_user { email } {
+ad_proc -deprecated -private cc_lookup_email_user { email } {
     Return the user_id of a user given the email. Returns the empty string if no such user exists.
+    @see party::get_by_email
 } {
     return [db_string user_select {} -default {}]
 }
 
-ad_proc -public cc_email_from_party { party_id } {
+ad_proc -public -deprecated cc_email_from_party { party_id } {
     @return The email address of the indicated party.
+    @see party::email
 } {
     return [db_string email_from_party {} -default {}]
 }
 
-ad_proc cc_email_user { email } {
+ad_proc -deprecated cc_email_user { email } {
 
-    Returns the user ID for a particular email address, or an empty string
+    @return Returns the user ID for a particular email address, or an empty string
     if none exists.
 
+    @see party::get_by_email
 } {
     return [util_memoize [list cc_lookup_email_user $email]]
 }
 
-ad_proc -private cc_lookup_name_group { name } {
+ad_proc -deprecated -private cc_lookup_name_group { name } {
+    @see group::get_id
+} {
     return [db_string group_select {} -default {}]
 }
 
-ad_proc cc_name_to_group { name } {
+ad_proc -deprecated cc_name_to_group { name } {
 
     Returns the group ID for a particular name, or an empty string
     if none exists.
-
+    
+    @see group::get_id
 } {
     return [util_memoize [list cc_lookup_name_group $name]]
 }
@@ -104,7 +114,7 @@ ad_proc -public person::person_p {
     return [util_memoize [list ::person::person_p_not_cached -party_id $party_id]]
 }
 
-ad_proc -public person::person_p_not_cached {
+ad_proc -private person::person_p_not_cached {
     {-party_id:required}
 } {
     is this party a person? Cached
@@ -144,7 +154,7 @@ ad_proc -public person::delete {
 ad_proc -public person::get {
     {-person_id:required} 
 } {
-    get info for a person as a tcl array in list form
+    get info for a person as a Tcl array in list form
 } {
     db_1row get_person {}
     
@@ -180,7 +190,7 @@ ad_proc -public person::name_flush {
     acs_user::flush_cache -user_id $person_id
 }
 
-ad_proc -public person::name_not_cached {
+ad_proc -private person::name_not_cached {
     {-person_id ""}
     {-email ""}
 } {
@@ -211,7 +221,7 @@ ad_proc -public person::update {
 # DRB: Though I've moved the bio field to type specific rather than generic storage, I've
 # maintained the API semantics exactly as they were before mostly in order to make upgrade
 # possible.  In the future, the number of database hits can be diminished by getting rid of
-# the seperate queries for bio stuff. However, I have removed bio_mime_type because it's
+# the separate queries for bio stuff. However, I have removed bio_mime_type because it's
 # unused and unsupported in the existing code.
 
 ad_proc -public person::get_bio {
@@ -349,9 +359,9 @@ ad_proc -public acs_user::get_by_username {
 	util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
     }
     return $user_id
-}    
+}
 
-ad_proc -public acs_user::get_by_username_not_cached {
+ad_proc -private acs_user::get_by_username_not_cached {
     {-authority_id:required}
     {-username:required}
 } {
@@ -366,12 +376,11 @@ ad_proc -public acs_user::get_by_username_not_cached {
     return [db_string user_id_from_username {} -default {}]
 }    
 
-
 ad_proc -public acs_user::get {
     {-user_id {}}
     {-authority_id {}}
     {-username {}}
-    {-array:required}
+    {-array}
     {-include_bio:boolean}
 } {
     Get basic information about a user. Uses util_memoize to cache info from the database.
@@ -403,16 +412,21 @@ ad_proc -public acs_user::get {
       <li> email_bouncing_p
       <li> no_alerts_until
       <li> last_visit
+      <li> last_visit_ansi
       <li> second_to_last_visit
+      <li> second_to_last_visit_ansi
       <li> n_sessions
       <li> password_question
       <li> password_answer
       <li> password_changed_date
       <li> member_state
       <li> rel_id
+      <li> password_age_days
+      <li> creation_date
+      <li> creation_ip
       <li> bio (if -include_bio switch is present)
     </ul>
-
+    @result dict of attributes
     @author Lars Pind (lars@collaboraid.biz)
 } {
     if { $user_id eq "" } {
@@ -425,17 +439,20 @@ ad_proc -public acs_user::get {
         }
     }
 
-    upvar $array row
     if { $user_id ne "" } {
-        array set row [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
+        set data [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
     } else {
-        array set row [util_memoize [list acs_user::get_from_username_not_cached $username $authority_id] [cache_timeout]]
-        set user_id $row(user_id)
+        set data [util_memoize [list acs_user::get_from_username_not_cached $username $authority_id] [cache_timeout]]
     }
 
     if { $include_bio_p } {
-        set row(bio) [person::get_bio -person_id $user_id]
+        lappend data bio [person::get_bio -person_id [dict get $data user_id]]
     }
+    if {[info exists array]} {
+        upvar $array row
+        array set row $data
+    }
+    return $data
 }
 
 ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
@@ -477,13 +494,20 @@ ad_proc -public acs_user::flush_cache {
     @author Peter Marklund
 } {
     util_memoize_flush [list acs_user::get_from_user_id_not_cached $user_id]
-    
-    # get username and authority_id so we can flush the get_from_username_not_cached proc
-    if { ![catch { 
-        acs_user::get -user_id $user_id -array user
-    }] } {
-        util_memoize_flush [list acs_user::get_from_username_not_cached $user(username) $user(authority_id)]
-	util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $user(authority_id) -username $user(username)]
+    #
+    # Get username and authority_id so we can flush the
+    # get_from_username_not_cached proc.
+    #
+    # Note, that it might be the case, that this function is called
+    # for user_ids, which are "persons", but do not qualify as
+    # "users". Therefore, the catch is used (like in earlier versions)
+    #
+    catch {
+        set u [acs_user::get -user_id $user_id]
+        set username     [dict get $u username]
+        set authority_id [dict get $u authority_id]
+        util_memoize_flush [list acs_user::get_from_username_not_cached $username $authority_id]
+        util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
     }
 }
 
@@ -671,17 +695,22 @@ ad_proc -public party::approved_members {
     @author Peter Marklund
 } {
     if { $object_type ne "" } {
-        set from_clause ", acs_objects ao"
-        set where_clause "and pamm.member_id = ao.object_id
-             and ao.object_type = :object_type"
+        set sql {
+            select pamm.member_id
+            from party_approved_member_map pamm, acs_objects ao
+            where pamm.party_id  = :party_id
+            and   pamm.member_id = ao.object_id
+            and   ao.object_type = :object_type
+        }
+    } {
+        set sql {
+            select pamm.member_id
+            from party_approved_member_map pamm
+            where pamm.party_id = :party_id
+        }
     }
 
-    return [db_list select_party_members "
-             select pamm.member_id
-             from party_approved_member_map pamm
-             $from_clause
-             where pamm.party_id = :party_id
-             $where_clause"]
+    return [db_list select_party_members $sql]
 }
 
 ad_proc -public acs_user::get_portrait_id {
@@ -694,7 +723,7 @@ ad_proc -public acs_user::get_portrait_id {
     return [util_memoize [list acs_user::get_portrait_id_not_cached -user_id $user_id] 600]
 }
 
-ad_proc -public acs_user::get_portrait_id_not_cached {
+ad_proc -private acs_user::get_portrait_id_not_cached {
     {-user_id:required}
 } {
     Return the image_id of the portrait of a user, if it does not exist, return 0

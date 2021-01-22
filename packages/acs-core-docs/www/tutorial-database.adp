@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Setting Up Database Objects}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Setting Up Database Objects}</property>
 <property name="doc(title)">Setting Up Database Objects</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -15,7 +15,7 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140400238468672" id="idp140400238468672"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
+<a name="idp140592104860472" id="idp140592104860472"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
 scripts are database-specific and are thus in either the
 <code class="computeroutput">myfirstpackage/sql/oracle</code> or
 <code class="computeroutput">myfirstpackage/sql/postgresql</code>
@@ -42,8 +42,8 @@ objects, we can also use some content repository functions to
 simplify our database creation. (<a class="ulink" href="objects" target="_top">More information about ACS
 Objects</a>. <a class="ulink" href="/doc/acs-content-repository" target="_top">More information about the Content
 Repository</a>.)</p><div class="figure">
-<a name="idp140400235553088" id="idp140400235553088"></a><p class="title"><b>Figure 9.2. Tutorial
-Data Model</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
+<a name="idp140592094116616" id="idp140592094116616"></a><p class="title"><strong>Figure 9.2. Tutorial Data
+Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
 </div><br class="figure-break"><p>The top of each sql file has some standard comments, including
 doc tags such as <code class="computeroutput">\@author</code> which
 will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id:$</code> will automatically be expanded when
@@ -51,8 +51,8 @@ the file is checked in to cvs.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/sql/postgresql</code></strong>
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-create.sql</code></strong>
 </pre><p>Paste the text below into the file, save, and close.</p><div class="figure">
-<a name="idp140400240736048" id="idp140400240736048"></a><p class="title"><b>Figure 9.3. The
-Database Creation Script</b></p><div class="figure-contents"><pre class="programlisting">
+<a name="idp140592098943512" id="idp140592098943512"></a><p class="title"><strong>Figure 9.3. The
+Database Creation Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- creation script
 --
 -- \@author joel\@aufrecht.org
@@ -73,16 +73,16 @@ select content_type__create_type(
 select content_folder__register_content_type(-100,'mfp_note','t');
 </pre></div>
 </div><br class="figure-break"><p>The creation script calls a function in PL/pgSQL (PL/pgSQL is a
-procedural language extention to sql), <code class="computeroutput"><a class="ulink" href="/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fcreate%5ftype" target="_top">content_type__create_type</a></code>, which in turn
+procedural language extension to sql), <code class="computeroutput"><a class="ulink" href="/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fcreate%5ftype" target="_top">content_type__create_type</a></code>, which in turn
 creates the necessary database changes to support our data object.
-Notice the use of "mfp." This is derived from "My First Package"
-and ensures that our object is unlikely to conflict with objects
-from other packages.</p><p>Create a database file to drop everything if the package is
+Notice the use of "mfp." This is derived from "My
+First Package" and ensures that our object is unlikely to
+conflict with objects from other packages.</p><p>Create a database file to drop everything if the package is
 uninstalled.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-drop.sql</code></strong>
 </pre><div class="figure">
-<a name="idp140400239144736" id="idp140400239144736"></a><p class="title"><b>Figure 9.4. Database
-Deletion Script</b></p><div class="figure-contents"><pre class="programlisting">
+<a name="idp140592099179128" id="idp140592099179128"></a><p class="title"><strong>Figure 9.4. Database Deletion
+Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- drop script
 --
 -- \@author joel\@aufrecht.org
@@ -113,7 +113,7 @@ psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE will create implicit tr
 again. If there are errors in the database table creation, you may
 need to run the drop script to drop the table so that you can
 recreate it. The drop script will probably have errors since some
-of the things it's trying to drop may be missing. They can be
+of the things it&#39;s trying to drop may be missing. They can be
 ignored.</p><p>Once you get the same output as shown above, test the drop
 script:</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>psql service0 -f myfirstpackage-drop.sql</code></strong>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install PHP for use in AOLserver}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install PHP for use in AOLserver}</property>
 <property name="doc(title)">Install PHP for use in AOLserver</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

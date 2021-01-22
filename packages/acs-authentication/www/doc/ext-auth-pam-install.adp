@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Using Pluggable Authentication Modules (PAM) with
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Using Pluggable Authentication Modules (PAM) with
 OpenACS}</property>
 <property name="doc(title)">Using Pluggable Authentication Modules (PAM) with
 OpenACS</property>
@@ -15,16 +15,16 @@ Pluggable Authentication Modules (PAM) with OpenACS</h2></div></div></div><p>Ope
 AOLserver.</p><div class="orderedlist"><ol type="1">
 <li>
 <p>
-<b>Add PAM support to AOLserver. </b>OpenACS supports PAM
-support via the PAM AOLserver module. PAM is system of modular
-support, and can provide local (unix password), RADIUS, LDAP
-(<a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more information</a>), and other forms of
+<strong>Add PAM support to
+AOLserver. </strong>OpenACS supports PAM support via
+the PAM AOLserver module. PAM is system of modular support, and can
+provide local (unix password), RADIUS, LDAP (<a href="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more information</a>), and other forms of
 authentication. Note that due to security issues, the AOLserver PAM
 module cannot be used for local password authentication.</p><div class="orderedlist"><ol type="a">
 <li>
 <p>
-<a name="install-nspam" id="install-nspam"></a><b>Compile and
-install ns_pam. </b>Download the <a href="/doc/nspam-download" target="_top">tarball</a> to <code class="computeroutput">/tmp</code>.</p><p>Debian users: first do <strong class="userinput"><code>apt-get
+<a name="install-nspam" id="install-nspam"></a><strong>Compile
+and install ns_pam. </strong>Download the <a href="/doc/nspam-download" target="_top">tarball</a> to <code class="computeroutput">/tmp</code>.</p><p>Debian users: first do <strong class="userinput"><code>apt-get
 install libpam-dev</code></strong>
 </p><pre class="screen">
 [root\@yourserver root]# <strong class="userinput"><code>cd /usr/local/src/aolserver</code></strong>
@@ -52,15 +52,15 @@ make install</span></span>
 </pre>
 </li><li>
 <p>
-<b>Set up a PAM domain. </b>A PAM domain is a set of rules
-for granting privileges based on other programs. Each instance of
-AOLserver uses a domain; different aolserver instances can use the
-same domain but one AOLserver instance cannot use two domains. The
-domain describes which intermediate programs will be used to check
-permissions. You may need to install software to perform new types
-of authentication.</p><div class="itemizedlist"><ul type="disc">
+<strong>Set up a PAM domain. </strong>A PAM domain
+is a set of rules for granting privileges based on other programs.
+Each instance of AOLserver uses a domain; different aolserver
+instances can use the same domain but one AOLserver instance cannot
+use two domains. The domain describes which intermediate programs
+will be used to check permissions. You may need to install software
+to perform new types of authentication.</p><div class="itemizedlist"><ul type="disc">
 <li>
-<p><b>RADIUS in PAM. </b></p><div class="orderedlist"><ol type="i">
+<p><strong>RADIUS in PAM. </strong></p><div class="orderedlist"><ol type="i">
 <li>
 <p>Untar the <a href="/doc/individual-programs" target="_top">pam_radius tarball</a> and compile and install. (<a href="http://www.freeradius.org/pam_radius_auth/" target="_top">more
 information</a>)</p><pre class="screen">
@@ -101,29 +101,31 @@ file name, not the fully pathed name) of the domain file in</p><pre class="progr
 </li>
 </ol></div>
 </li><li><p>
-<b>LDAP in PAM. </b><a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html#AEN110" target="_top">more information</a>
+<strong>LDAP in PAM. </strong><a href="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html#AEN110" target="_top">more information</a>
 </p></li>
 </ul></div>
 </li><li>
-<p><b>Modify the AOLserver configuration file to support
-ns_pam. </b></p><p>In <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</code>, enable
+<p><strong>Modify the AOLserver configuration file to support
+ns_pam. </strong></p><p>In <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</code>, enable
 the nspam module by uncommenting this line:</p><pre class="programlisting">
 ns_param   nspam           ${bindir}/nspam.so
 </pre>
 </li>
 </ol></div>
 </li><li><p>
-<b>Install auth-pam OpenACS service package. </b><a href="/acs-admin/install/" target="_top">Install</a><code class="computeroutput">auth-pam</code> and restart the server.</p></li><li>
+<strong>Install auth-pam OpenACS service
+package. </strong><a href="/acs-admin/install/" target="_top">Install</a><code class="computeroutput">auth-pam</code> and
+restart the server.</p></li><li>
 <p>
-<a name="ext-auth-create-authority" id="ext-auth-create-authority"></a><b>Create an OpenACS
-authority. </b>OpenACS supports multiple authentication
-authorities. The OpenACS server itself is the "Local Authority,"
-used by default.</p><div class="orderedlist"><ol type="a">
+<a name="ext-auth-create-authority" id="ext-auth-create-authority"></a><strong>Create an OpenACS
+authority. </strong>OpenACS supports multiple
+authentication authorities. The OpenACS server itself is the
+"Local Authority," used by default.</p><div class="orderedlist"><ol type="a">
 <li><p>Browse to the authentication administration page, <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span><a href="/acs-admin/auth/" target="_top">/acs-admin/auth/</a>
 </code>. Create and name an
 authority (in the sitewide admin UI)</p></li><li><p>Set Authentication to PAM.</p></li><li><p>If the PAM domain defines a <code class="computeroutput">password</code> command, you can set Password
-Management to PAM. If not, the PAM module cannot change the user's
-password and you should leave this option Disabled.</p></li><li><p>Leave Account Registration disabed.</p></li><li><p><a href="configure-batch-sync" title="Configure Batch Synchronization">Configure Batch
+Management to PAM. If not, the PAM module cannot change the
+user&#39;s password and you should leave this option Disabled.</p></li><li><p>Leave Account Registration disabed.</p></li><li><p><a href="configure-batch-sync" title="Configure Batch Synchronization">Configure Batch
 Synchronization</a></p></li>
 </ol></div>
 </li>

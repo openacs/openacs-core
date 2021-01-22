@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 12. Engineering
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 12. Engineering
 Standards}</property>
 <property name="doc(title)">Chapter 12. Engineering
 Standards</property>
@@ -14,7 +14,7 @@ Developers"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="eng-standards" id="eng-standards"></a>Chapter 12. Engineering
 Standards</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="style-guide">OpenACS Style
 Guide</a></span></dt><dt><span class="sect1"><a href="cvs-guidelines">CVS
 Guidelines</a></span></dt><dt><span class="sect1"><a href="eng-standards-versioning">Release Version

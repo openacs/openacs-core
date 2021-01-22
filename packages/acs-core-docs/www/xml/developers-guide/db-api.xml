@@ -14,7 +14,7 @@
   <sect2 id="db-api-overview">
     <title>Overview</title>
     <para>
-      One of OpenACS's great strengths is that code written for it is
+      One of OpenACS&#39;s great strengths is that code written for it is
       very close to the database. It is very easy to interact with the
       database from anywhere within OpenACS, and we have a
       coherent API for database access which makes this even easier.
@@ -32,7 +32,7 @@
     <para>
       The OpenACS database API is meant to save developers from making
       common mistakes and to provide a more structured syntax for
-      specifying database operations, including transactions.  Here's
+      specifying database operations, including transactions.  Here&#39;s
       an example of the API.
     </para>
     <programlisting>
@@ -171,8 +171,8 @@ and some_table.condition_p = '$foo'</programlisting>
       What the DB API (in conjuntion with the database drivers
       implemented for aolserver) do is send the SQL statement to the
       server for parsing, then <emphasis>bind</emphasis> values to the
-      variables and sends those values along seperately as a second
-      step. This seperate binding step is where the term
+      variables and sends those values along separately as a second
+      step. This separate binding step is where the term
       <emphasis>bind variable</emphasis> comes from.
     </para>
 
@@ -212,7 +212,7 @@ db_foreach my_query { select :table from some_table where :condition }
     
 
     <para>
-      SQL will not allow a literal to occur where we've put the bind
+      SQL will not allow a literal to occur where we&#39;ve put the bind
       variables, so the query is syntactically incorrect. You have to
       remember that while the bind variable syntax looks similar to variable
       interpolation in Tcl, It is <emphasis>not the same thing at all</emphasis>.
@@ -498,13 +498,13 @@ db_abort_transaction
     <para>
     Each row also has a column, rownum, automatically
     added and set to the row number, starting with 1. Note that this will
-    override any column in the SQL statement named 'rownum', also if you're
+    override any column in the SQL statement named 'rownum', also if you&#39;re
     using the Oracle rownum pseudo-column.
     </para>                                                                                                                                           
 
     <para>
     If the <computeroutput>-local</computeroutput> is passed, the variables defined
-    by db_multirow will be set locally (useful if you're compiling dynamic templates
+    by db_multirow will be set locally (useful if you&#39;re compiling dynamic templates
     in a function or similar situations).
     </para>
     
@@ -526,7 +526,7 @@ db_abort_transaction
     </para>
 
     <para>
-    If you're constructing your multirow through multiple queries with the
+    If you&#39;re constructing your multirow through multiple queries with the
     same set of columns, but with different rows, you can use the
     <computeroutput>-append</computeroutput> switch. This causes the rows returned by this query
     to be appended to the rows already in the multirow, instead of starting
@@ -580,7 +580,7 @@ multirow foreach assets {
 }
           </programlisting>
 
-          <para>Technically it's equivalent to using a code block on
+          <para>Technically it&#39;s equivalent to using a code block on
           the end of your db_multirow.</para>
 
   	</listitem>
@@ -886,7 +886,7 @@ db_write_blob <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bi
 db_blob_get_file <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 	  </programlisting>
 
-	  <para>Analagous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
+	  <para>Analogous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
 
 
 	  </para>

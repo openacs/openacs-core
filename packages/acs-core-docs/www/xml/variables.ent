@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!ENTITY version "5.7.0">
-<!ENTITY tarballpath "openacs-5.7.0">
-<!ENTITY cvsversiontag "oacs-5-7-0-final">
+<!ENTITY version "5.9.0">
+<!ENTITY tarballpath "openacs-5.9.0">
+<!ENTITY cvsversiontag "oacs-5-9-0-final">
 <!ENTITY majorversion "5">
-<!ENTITY minorversion "7">
-<!ENTITY releasebranch "oacs-5-7">
+<!ENTITY minorversion "9">
+<!ENTITY releasebranch "oacs-5-9">

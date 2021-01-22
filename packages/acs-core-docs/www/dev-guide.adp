@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 11. Development
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 11. Development
 Reference}</property>
 <property name="doc(title)">Chapter 11. Development
 Reference</property>
@@ -14,7 +14,7 @@ Developers"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="dev-guide" id="dev-guide"></a>Chapter 11. Development
 Reference</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="packages">OpenACS
 Packages</a></span></dt><dt><span class="sect1"><a href="objects">OpenACS Data Models
 and the Object System</a></span></dt><dt><span class="sect1"><a href="request-processor">The

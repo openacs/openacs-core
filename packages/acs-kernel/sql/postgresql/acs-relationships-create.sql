@@ -22,11 +22,11 @@ create table acs_rel_roles (
 );
 
 create table acs_rel_types (
-	rel_type	varchar(100) not null
+	rel_type	varchar(1000) not null
 			constraint acs_rel_types_rel_type_pk primary key
 			constraint acs_rel_types_rel_type_fk
 			references acs_object_types(object_type),
-	object_type_one	varchar(100) not null
+	object_type_one	varchar(1000) not null
 			constraint acs_rel_types_obj_type_1_fk
 			references acs_object_types (object_type),
 	role_one	varchar(100) constraint acs_rel_types_role_one_fk
@@ -37,7 +37,7 @@ create table acs_rel_types (
 	max_n_rels_one	integer
 			constraint acs_rel_types_max_n_1_ck
 			check (max_n_rels_one >= 0),
-	object_type_two	varchar(100) not null
+	object_type_two	varchar(1000) not null
 			constraint acs_rel_types_obj_type_2_fk
 			references acs_object_types (object_type),
 	role_two	varchar(100) constraint acs_rel_types_role_two_fk
@@ -48,6 +48,8 @@ create table acs_rel_types (
 	max_n_rels_two	integer
 			constraint acs_rel_types_max_n_2_ck
 			check (max_n_rels_two >= 0),
+        composable_p    boolean
+	                default 't' not null,
 	constraint acs_rel_types_n_rels_one_ck
 	check (min_n_rels_one <= max_n_rels_one),
 	constraint acs_rel_types_n_rels_two_ck
@@ -59,7 +61,7 @@ create index acs_rel_types_role_one_idx on acs_rel_types (role_one);
 create index acs_rel_types_objtypetwo_idx on acs_rel_types (object_type_two);
 create index acs_rel_types_role_two_idx on acs_rel_types (role_two);
 
-comment on table acs_rel_types is '
+comment on table acs_rel_types is $$
  Each row in <code>acs_rel_types</code> represents a type of
  relationship between objects. For example, the following DML
  statement:
@@ -69,9 +71,9 @@ comment on table acs_rel_types is '
    object_type_one, role_one, min_n_rels_one, max_n_rels_one,
    object_type_two, role_two, min_n_rels_two, max_n_rels_two)
  values
-  (''employment'',
-   ''person'', ''employee'', 0, null,
-   ''company'', ''employer'', 0, null)
+  ('employment',
+   'person', 'employee', 0, null,
+   'company', 'employer', 0, null)
  </pre></blockquote>
  defines an "employment" relationship type that can be expressed in
  in natural language as:
@@ -79,7 +81,7 @@ comment on table acs_rel_types is '
  A person may be the employee of zero or more companies, and a company
  may be the employer of zero or more people.
  </blockquote>
-';
+$$;
 
 
 
@@ -197,11 +199,39 @@ $$ LANGUAGE plpgsql stable strict;
 -- procedure create_type
 
 
--- added
-select define_function_args('acs_rel_type__create_type','rel_type,pretty_name,pretty_plural,supertype;relationship,table_name,id_column,package_name,object_type_one,role_one;null,min_n_rels_one,max_n_rels_one,object_type_two,role_two;null,min_n_rels_two,max_n_rels_two');
+-- procedure create_type
+
+--  acs_rel_type__create_type /15 vs. /16 has
+--  /15 has no "roles" (one and two), but "type_extension_table"
+
+-- /16
+--   pos 1-7: same as /15
+--   pos 08: object_type_one (varchar) 
+--   pos 09: role_one (varchar) 
+--   pos 10: min_n_rels_one (integer)
+--   pos 11: max_n_rels (integer)
+--   pos 12: object_type_one (varchar) 
+--   pos 13: role_two (varchar) 
+--   pos 14: min_n_rels_two (integer)
+--   pos 15: max_n_rels_two (integer) 
+--   pos 16: composable_p (boolean)
+
+-- /15 
+--   pos 1-7: same as /15
+--   pos 08: type_extension_table (varchar)
+--   pos 09: object_type_one (varchar) 
+--   pos 10: min_n_rels_one (integer)
+--   pos 11: max_n_rels (integer)
+--   pos 12: object_type_two (varchar) 
+--   pos 13: min_n_rels_two (integer)
+--   pos 14: max_n_rels_two (integer) 
+--   pos 15: composable_p (boolean)
+
+
+select define_function_args('acs_rel_type__create_type','rel_type,pretty_name,pretty_plural,supertype;relationship,table_name,id_column,package_name,object_type_one,role_one;null,min_n_rels_one,max_n_rels_one,object_type_two,role_two;null,min_n_rels_two,max_n_rels_two,composable_p;t');
 
 --
--- procedure acs_rel_type__create_type/15
+-- procedure acs_rel_type__create_type/16
 --
 CREATE OR REPLACE FUNCTION acs_rel_type__create_type(
    create_type__rel_type varchar,
@@ -218,7 +248,8 @@ CREATE OR REPLACE FUNCTION acs_rel_type__create_type(
    create_type__object_type_two varchar,
    create_type__role_two varchar,  -- default null
    create_type__min_n_rels_two integer,
-   create_type__max_n_rels_two integer
+   create_type__max_n_rels_two integer,
+   create_type__composable_p boolean default true
 
 ) RETURNS integer AS $$
 DECLARE
@@ -245,13 +276,15 @@ BEGIN
       object_type_one, role_one,
       min_n_rels_one, max_n_rels_one,
       object_type_two, role_two,
-      min_n_rels_two, max_n_rels_two)
+      min_n_rels_two, max_n_rels_two,
+      composable_p)
     values
      (create_type__rel_type,
       create_type__object_type_one, create_type__role_one,
       create_type__min_n_rels_one, create_type__max_n_rels_one,
       create_type__object_type_two, create_type__role_two,
-      create_type__min_n_rels_two, create_type__max_n_rels_two);
+      create_type__min_n_rels_two, create_type__max_n_rels_two,
+      create_type__composable_p);
 
     return 0; 
 END;
@@ -259,11 +292,10 @@ $$ LANGUAGE plpgsql;
 
 
 
--- procedure create_type
 
 
 --
--- procedure acs_rel_type__create_type/14
+-- procedure acs_rel_type__create_type/15
 --
 CREATE OR REPLACE FUNCTION acs_rel_type__create_type(
    create_type__rel_type varchar,
@@ -279,7 +311,8 @@ CREATE OR REPLACE FUNCTION acs_rel_type__create_type(
    create_type__max_n_rels_one integer,
    create_type__object_type_two varchar,
    create_type__min_n_rels_two integer,
-   create_type__max_n_rels_two integer
+   create_type__max_n_rels_two integer,
+   create_type__composable_p boolean default true
 
 ) RETURNS integer AS $$
 DECLARE
@@ -308,13 +341,15 @@ BEGIN
       object_type_one, role_one,
       min_n_rels_one, max_n_rels_one,
       object_type_two, role_two,
-      min_n_rels_two, max_n_rels_two)
+      min_n_rels_two, max_n_rels_two,
+      composable_p)
     values
      (create_type__rel_type,
       create_type__object_type_one, create_type__role_one,
       create_type__min_n_rels_one, create_type__max_n_rels_one,
       create_type__object_type_two, create_type__role_two,
-      create_type__min_n_rels_two, create_type__max_n_rels_two);
+      create_type__min_n_rels_two, create_type__max_n_rels_two,
+      create_type__composable_p);
 
     return 0; 
 END;
@@ -522,8 +557,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-create trigger acs_rels_in_tr before insert or update on acs_rels
-for each row execute procedure acs_rels_in_tr ();
+
+ create trigger acs_rels_in_tr before insert or update on acs_rels
+ for each row execute procedure acs_rels_in_tr ();
 
 -- show errors
 
@@ -553,11 +589,7 @@ for each row execute procedure acs_rels_in_tr ();
 -- function new
 
 
--- old define_function_args('acs_rel__new','rel_id,rel_type,object_id_one,object_id_two,context_id,creation_user,creation_ip')
--- new
 select define_function_args('acs_rel__new','rel_id;null,rel_type;relationship,object_id_one,object_id_two,context_id;null,creation_user;null,creation_ip;null');
-
-
 
 --
 -- procedure acs_rel__new/7

@@ -1,8 +1,9 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {ACS Content Repository}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {ACS Content Repository}</property>
 <property name="doc(title)">ACS Content Repository</property>
 <master>
 <h1>ACS Content Repository</h1>
+<strong><a href="/doc">ACS Documentation</a></strong>
 <ul>
 <li><a href="design">Introduction</a></li><li><a href="install">Installation</a></li><li><a href="tutorial">Tutorial</a></li><li><a href="object-model">Object Model</a></li><li>
 <p>Developer Guide</p><ul>
@@ -38,5 +39,5 @@ repository</a></li>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Revised: $&zwnj;Id: index.html,v 1.2.18.2 2015/08/21 10:49:20
+Last Revised: $&zwnj;Id: index.html,v 1.2.18.3 2016/06/22 07:40:41
 gustafn Exp $

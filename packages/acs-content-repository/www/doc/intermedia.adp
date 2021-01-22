@@ -1,8 +1,9 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository: Testing Intermedia}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository: Testing Intermedia}</property>
 <property name="doc(title)">Content Repository: Testing Intermedia</property>
 <master>
 <h2>Testing Intermedia</h2>
+<strong><a href="index">Content Repository</a></strong>
 <p>Even if you follow the instructions in the <a href="install">installation notes</a>, content searches may
 inexplicably fail to work. This document describes how to create a
 simple test case independent of the content repository to verify
@@ -39,7 +40,7 @@ create index cr_test_documents_idx on cr_test_documents ( doc )
 <h3>Load test documents</h3>
 <p>You can use SQL*Loader to load some documents into the test
 table. First create a control file named
-<tt>cr-test-docs.ctl</tt>:</p>
+<kbd>cr-test-docs.ctl</kbd>:</p>
 <pre>
 load data
 INFILE 'cr-test-docs.data'
@@ -86,5 +87,5 @@ SQL&gt; select score(1), doc_id from cr_test_documents
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $&zwnj;Id: intermedia.html,v 1.1.1.1 2001/03/13 22:59:26
-ben Exp $
+Last revised: $&zwnj;Id: intermedia.html,v 1.1.1.1.30.1 2016/06/22
+07:40:41 gustafn Exp $

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Hierarchical data}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Hierarchical data}</property>
 <property name="doc(title)">Hierarchical data</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -40,7 +40,7 @@ hierarchical queries, you can do them as follows:</p><pre class="programlisting"
       o.tree_sortkey"
     
 </pre><p>Note the use of the <code class="computeroutput">tree_level()</code> function, which gives you the
-level, starting from 1, 2, 3...</p><p>Here's an example, pulling all of the children for a given
+level, starting from 1, 2, 3...</p><p>Here&#39;s an example, pulling all of the children for a given
 parent:</p><pre class="programlisting">
       SELECT 
       children.*,
@@ -54,13 +54,13 @@ parent:</p><pre class="programlisting">
       and parent.tree_sortkey &lt;&gt; children.tree_sortkey
       and parent.key = :the_parent_key;
       
-</pre><p>The reason we substract the parent's tree_level from the child's
-tree_level is that the tree_levels are global, so if you want the
-parent's tree_level to start with 0, you'll want the subtraction in
-there. This is a reason you'll commonly see magic numbers in
-tree_sortkey SQL queries, like <code class="computeroutput">tree_level(children.tree_sortkey) - 4</code>. That
+</pre><p>The reason we subtract the parent&#39;s tree_level from the
+child&#39;s tree_level is that the tree_levels are global, so if
+you want the parent&#39;s tree_level to start with 0, you&#39;ll
+want the subtraction in there. This is a reason you&#39;ll commonly
+see magic numbers in tree_sortkey SQL queries, like <code class="computeroutput">tree_level(children.tree_sortkey) - 4</code>. That
 is basically an incorrect way to do it, and subtracting the
-parent's tree_level is the preferred method.</p><p>This example does not include the parent. To return the entire
+parent&#39;s tree_level is the preferred method.</p><p>This example does not include the parent. To return the entire
 subtree including the parent, leave out the non-equals clause:</p><pre class="programlisting">
       SELECT
       subtree.*,

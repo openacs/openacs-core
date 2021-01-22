@@ -1,10 +1,13 @@
-# Table widget for the ArsDigita Templating System
+ad_library {
+    Table widget for the ArsDigita Templating System
+
+    @author Karl Goldstein    (karlg@arsdigita.com)
+    @author Stanislav Freidin (sfreidin@arsdigita.com)
+    
+    @cvs-id $Id$
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein    (karlg@arsdigita.com)
-#          Stanislav Freidin (sfreidin@arsdigita.com)
-     
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -21,12 +24,12 @@
 #       presentation is the html code that will be shown in the table cell
 #         (defaults to "@row.value@", see below)
 #     The column definition will be extracted from the query results
-#     if it is ommitted. 
+#     if it is omitted. 
 #
 # 2). The SQL query that will be executed to get the rows. The orderby
 #      clause will be appended to the query (-query, required).
 #
-# 3). The template to render the table (-style, optional). If ommitted, 
+# 3). The template to render the table (-style, optional). If omitted, 
 #     the code inside the
 #       <tablewidget> tag will be used
 #
@@ -63,7 +66,7 @@ ad_proc -public template::widget::table::create {
   set widget(name) $name
    
   template::widget::table::get_params $name 2
-  template::widget::table::prepare $statment_name $name 2
+  template::widget::table::prepare $statement_name $name 2
 }
 
 ad_proc -public template::widget::table::get_params {
@@ -107,7 +110,7 @@ ad_proc -public template::widget::table::prepare {
   name
   {level 1}
 } {
-  Compose the query, if neccessary, and define the datasources
+  Compose the query, if necessary, and define the datasources
 } {
   
   upvar $level "tablewidget:${name}" widget

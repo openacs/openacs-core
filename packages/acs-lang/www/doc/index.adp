@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-lang {Localization}} {ACS Localization Documentation}</property>
+<property name="context">{/doc/acs-lang {ACS Localization}} {ACS Localization Documentation}</property>
 <property name="doc(title)">ACS Localization Documentation</property>
 <master>
 <h1>ACS Localization Documentation</h1>

@@ -7,7 +7,7 @@ ad_library {
 }
 
 aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
-    Test all known tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
+    Test all known Tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -23,7 +23,7 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
 
     aa_log "Checks starting from $startdir"
 
-    #inspect every tcl file in the directory tree starting with $startdir
+    #inspect every Tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
         incr nfiles
 
@@ -56,7 +56,7 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
 
     aa_log "Checks starting from $startdir"
     set count 0
-    #inspect every tcl file in the directory tree starting with $startdir
+    #inspect every Tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
 
         if {[string match "*/acs-tcl/tcl/test/file-test-procs.tcl" $file]} continue
@@ -71,7 +71,7 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
 
     }
 
-    aa_log "Checked $count tcl files"
+    aa_log "Checked $count Tcl files"
 }
 
 aa_register_case -cats {smoke production_safe} files__check_info_files {
@@ -190,9 +190,9 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
 
 aa_register_case -cats {smoke} files__check_xql_files {
     Check for some common errors in the xql files like 
-    missing rdbms, missing corresponding tcl files, etc.
+    missing rdbms, missing corresponding Tcl files, etc.
 
-    Not production safe since malformed xql can crass aolserver in the parse.
+    Not production safe since malformed xql can crass AOLserver in the parse.
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -206,7 +206,7 @@ aa_register_case -cats {smoke} files__check_xql_files {
     
     aa_log "Checks starting from $startdir"
 
-    #inspect every tcl file in the directory tree starting with $startdir
+    #inspect every Tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::xql_p $startdir] { 
 
         set fp [open $file "r"]
@@ -276,7 +276,7 @@ aa_register_case -cats {smoke} files__check_xql_files {
         if {![file exists ${xql}.tcl]
             && ![file exists ${xql}.vuh]} {
             # JCD: Hack to exclude calendar/www/views which is the only current file which has
-            # no associated tcl file.
+            # no associated Tcl file.
             if {[string first calendar/www/views $allxql($xql)] <  0} {
                 aa_log_result fail "missing .tcl or .vuh file for $allxql($xql)"
             }

@@ -22,13 +22,13 @@ ad_return_top_of_page [ad_parse_template \
                            -params [list context title] \
                            [template::streaming_template]]
 
-ns_write {
+ns_write [subst {
     <h2>Installing packages...</h2>
-    <script>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
+    <script nonce='$::__csp_nonce'>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
     </script>
     <p>
     <ul>
-}
+}]
 
 
 # We have a set of SQL files that need to be sourced at the appropriate time.
@@ -51,13 +51,14 @@ foreach pkg_info $pkg_install_list {
 	continue
     }
 
-    if {[apm_package_version_installed_p $version(package.key) $version(name)] } {
-	#ns_log notice "===== ALREADY-installed $version(package.key)"
+    set package_key $version(package.key)
+
+    if {[apm_package_version_installed_p $package_key $version(name)] } {
+	#ns_log notice "===== ALREADY installed $package_key"
 	# Already installed.
 	continue
     }
 
-    set package_key $version(package.key)
     set version_files $version(files)
 
     set data_model_files [list]
@@ -86,7 +87,7 @@ foreach pkg_info $pkg_install_list {
     set enable_p 1
 
     if {[catch {
-	ns_log notice "===== INSTALL $version(package.key)"
+	ns_log notice "===== INSTALL $package_key"
 	set version_id [apm_package_install \
 			    -enable=$enable_p \
 			    -package_path $package_path \
@@ -95,7 +96,7 @@ foreach pkg_info $pkg_install_list {
 			    -data_model_files $data_model_files \
 			    -mount_path $selected_mount_path \
 			    $spec_file]
-	ns_log notice "===== INSTALL $version(package.key) DONE"
+	ns_log notice "===== INSTALL $package_key DONE"
 
     } errorMsg]} {
 	ns_write "Error: $errorMsg\n"
@@ -107,10 +108,11 @@ foreach pkg_info $pkg_install_list {
         # Installation of the package failed and we shouldn't continue with installation
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
-        ns_write {
+        ns_write [subst {
 	    </ul>
-	    <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
-	}
+	    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);
+            </script>
+	}]
         ad_script_abort
     }
 
@@ -126,13 +128,13 @@ if {$installed_count < 1} {
 } else {
     ns_write {</ul><p>
 	Done installing packages.
-	<p>You should restart the server now to make installed and upgraded packages available. 
-	<a href="../server-restart">Click here</a> to restart the server now.</p>
+	<p>You should restart the server now to make installed and upgraded packages available.</p>
+        <p><a href="../server-restart" class="button">Click here</a> to restart the server now.</p>
     }
 }
-ns_write {
-    <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
-}
+ns_write [subst {
+    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
+}]
 
 # Local variables:
 #    mode: tcl

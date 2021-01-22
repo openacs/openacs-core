@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-developer-support {Developer Support}} {ACS Developer Support}</property>
+<property name="context">{/doc/acs-developer-support {ACS Developer Support}} {ACS Developer Support}</property>
 <property name="doc(title)">ACS Developer Support</property>
 <master>
 <h1>ACS Developer Support</h1>
@@ -17,16 +17,16 @@ in:
 <h2>The Big Picture</h2>
 <p>Software development is a big feedback loop: a developer writes
 something, tests it, and then repeats until the results are
-satisfactory. It's important to streamline this cycle by having a
-development environment which makes it easy to analyze what the
+satisfactory. It&#39;s important to streamline this cycle by having
+a development environment which makes it easy to analyze what the
 software is doing under the hood.</p>
 <h2>Peeking Under the Hood</h2>
 <p>Our development environment previously consisted largely of
 Emacs, and <tt>tail -f
 /web/servername/log/servername-error.log</tt>. Now this has been
 augmented: <tt>ad_footer</tt> and <tt>ad_admin_footer</tt> now
-display a link entitled <i>Developer Information</i>. (You can use
-the <tt>ds_link</tt> procedure to generate the link yourself.)
+display a link entitled <em>Developer Information</em>. (You can
+use the <tt>ds_link</tt> procedure to generate the link yourself.)
 Following the link displays a screenful of information
 including:</p>
 <ul>
@@ -47,15 +47,15 @@ anyone else would pose a huge security risk.</p>
 
 Tired of using <tt>ns_log</tt>
  to instrument your code, then
-grokking the error log to see what's wrong with your page? Use the
-<tt>ds_comment</tt>
+grokking the error log to see what&#39;s wrong with your page? Use
+the <tt>ds_comment</tt>
  routine instead:
 <blockquote><pre>
 ds_comment "Foo is $foo"
 </pre></blockquote>
 
 Your comment will show up at the bottom of the page, beneath the
-<i>Developer Information</i>
+<em>Developer Information</em>
  link (but only for site-wide
 administrators). It will also be displayed on the Developer
 Information page itself.

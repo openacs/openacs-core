@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Object Model Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Model Requirements}</property>
 <property name="doc(title)">Object Model Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -25,23 +25,23 @@ services to application data objects, examples of which
 include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Bboard messages</p></li><li class="listitem"><p>A user home page</p></li><li class="listitem"><p>A ticket in the Ticket Tracker</p></li><li class="listitem"><p>A photograph in the PhotoDB</p></li>
 </ul></div><p>In the past, developers had to use ad-hoc and inconsistent
-schemes to interface to the various "general" services mentioned
-above. Since each service used its own scheme for storing its
-metadata and mapping this data to application objects, we could not
-implement any kind of centralized management system or consistent
-administrative pages for all the services. Consequently, a large
-amount of duplicate code appeared throughout the system for dealing
-with these services.</p><p>Unifying and "normalizing" these interfaces, to minimize the
-amount of code repetition in applications, is a primary goal of
-OpenACS 4. Thus the Object Model (OM, also referred to later as the
-object system) is concerned primarily with the storage and
-management of <span class="emphasis"><em>metadata</em></span>, on
-any object within a given instance of OpenACS 4. The term
-"metadata" refers to any extra data the OM stores on behalf of the
-application - outside of the application's data model - in order to
-enable certain generic services. The term "object" refers to any
-entity being represented within the OpenACS, and typically
-corresponds to a single row within the relational database.</p>
+schemes to interface to the various "general" services
+mentioned above. Since each service used its own scheme for storing
+its metadata and mapping this data to application objects, we could
+not implement any kind of centralized management system or
+consistent administrative pages for all the services. Consequently,
+a large amount of duplicate code appeared throughout the system for
+dealing with these services.</p><p>Unifying and "normalizing" these interfaces, to
+minimize the amount of code repetition in applications, is a
+primary goal of OpenACS 4. Thus the Object Model (OM, also referred
+to later as the object system) is concerned primarily with the
+storage and management of <span class="emphasis"><em>metadata</em></span>, on any object within a given
+instance of OpenACS 4. The term "metadata" refers to any
+extra data the OM stores on behalf of the application - outside of
+the application&#39;s data model - in order to enable certain
+generic services. The term "object" refers to any entity
+being represented within the OpenACS, and typically corresponds to
+a single row within the relational database.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="object-system-requirements-vision" id="object-system-requirements-vision"></a>Vision Statement</h3></div></div></div><p>The OpenACS 4 Object Model must address five high-level
@@ -57,15 +57,15 @@ objects for access control. User/groups also uses <code class="computeroutput">(
 to identify data associated with a single membership relation.</p><p>Also in OpenACS 3.x, many utility modules exist that do nothing
 more than attach some extra attributes to existing application
 data. For example, general comments maintains a mapping table that
-maps application "page" data (static or dynamic) to one or more
-user comments on the page, by constructing a unique identifier for
-each page. This identifier is usually a combination of the table in
-which the data is stored, and the value of the primary key value
-for the particular page. This idiom is referred to as the
-"(on_which_table + on_what_id)" method for identifying application
-data. General comments stores its map from pages to comments using
-a "(on_which_table + on_what_id)" key, plus the id of the comment
-itself.</p><p>All of these composite key constructions are implicit object
+maps application "page" data (static or dynamic) to one
+or more user comments on the page, by constructing a unique
+identifier for each page. This identifier is usually a combination
+of the table in which the data is stored, and the value of the
+primary key value for the particular page. This idiom is referred
+to as the "(on_which_table + on_what_id)" method for
+identifying application data. General comments stores its map from
+pages to comments using a "(on_which_table + on_what_id)"
+key, plus the id of the comment itself.</p><p>All of these composite key constructions are implicit object
 identifiers: they build a unique ID out of other pieces of the data
 model. The problem is that their definition and use is ad-hoc and
 inconsistent. This makes the construction of generic
@@ -75,9 +75,9 @@ for tagging application objects with unique identifiers.</p><p><span class="stro
 Control</strong></span></p><p>Access control should be as transparent as possible to the
 application developer. Until the implementation of the general
 permissions system, every OpenACS application had to manage access
-control to its data separately. Later on, a notion of "scoping" was
-introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider some
-hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table cellspacing="0" border="1">
+control to its data separately. Later on, a notion of
+"scoping" was introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider
+some hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>
@@ -91,10 +91,10 @@ hypothetical rows in the <code class="computeroutput">address_book</code> table:
 <td>...</td><td><code class="computeroutput">public</code></td><td></td><td></td><td>...</td>
 </tr>
 </tbody>
-</table></div><p>The first row represents an entry in User 123's personal address
-book, the second row represents an entry in User Group 456's shared
-address book, and the third row represents an entry in the site's
-public address book.</p><p>In this way, the scoping columns identify the security context
+</table></div><p>The first row represents an entry in User 123's personal
+address book, the second row represents an entry in User Group
+456's shared address book, and the third row represents an
+entry in the site&#39;s public address book.</p><p>In this way, the scoping columns identify the security context
 in which a given object belongs, where each context is <span class="emphasis"><em>either</em></span> a person <span class="emphasis"><em>or</em></span> a group of people <span class="emphasis"><em>or</em></span> the general public (itself a group of
 people).</p><p>The problem with this scheme is that we are limited to using
 only users and groups as scopes for access control, limiting
@@ -111,9 +111,9 @@ of the central tables in the system became bloated as they were
 extended to support an increasing number of modules. The
 <code class="computeroutput">users</code> table is the best case in
 point: it became full of columns that exist for various special
-applications (e.g. user portraits), but that aren't really related
-to each other in any way except that they store information on
-users, i.e. the table became grossly denormalized. Normalizing
+applications (e.g. user portraits), but that aren&#39;t really
+related to each other in any way except that they store information
+on users, i.e. the table became grossly denormalized. Normalizing
 (breaking-down) this table into several pieces, each of which is
 specific to a particular application, would improve maintainability
 greatly. Furthermore, the ability to allow applications or users to
@@ -128,7 +128,7 @@ the OM does the bookkeeping necessary to make this easier,
 providing a generic API for object creation that automatically
 keeps track of the location and relationships between data.</p><p>
 <span class="strong"><strong>Design Note:</strong></span> While
-this doesn't really belong in a requirements document, the fact
+this doesn&#39;t really belong in a requirements document, the fact
 that we are constrained to using relational databases means that
 certain constraints on the overall design of the object data model
 exist, which you can read about in <a class="xref" href="object-system-design" title="Summary and Design Considerations">Summary and Design
@@ -136,9 +136,9 @@ Considerations</a>.</p><p><span class="strong"><strong>Modifiable Data
 Models</strong></span></p><p>Another recurring applications problem is how to store a
 modifiable data model, or how to store information that may change
 extensively between releases or in different client installations.
-Furthermore, we want to avoid changes to an application's database
-queries in the face of any custom extensions, since such changes
-are difficult or dangerous to make at runtime, and can make
+Furthermore, we want to avoid changes to an application&#39;s
+database queries in the face of any custom extensions, since such
+changes are difficult or dangerous to make at runtime, and can make
 updating the system difficult. Some example applications in OpenACS
 3.x with modifiable data models include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>User/groups: developers and users can attach custom data to
@@ -146,8 +146,8 @@ group types, groups, and members of groups.</p></li><li class="listitem"><p>In t
 attributes for catalog products, and the <code class="computeroutput">ec_custom_product_field_values</code> table stores
 values for those attributes.</p></li><li class="listitem"><p>In the PhotoDB data model, the <code class="computeroutput">ph_custom_photo_fields</code> table defines
 attributes for the photographs owned by a specific user, and tables
-named according to the convention "<code class="computeroutput">ph_user_&lt;user_id&gt;_custom_info</code>" are
-used to store values for those attributes.</p></li>
+named according to the convention "<code class="computeroutput">ph_user_&lt;user_id&gt;_custom_info</code>"
+are used to store values for those attributes.</p></li>
 </ul></div><p>Thus the Object Model must provide a general mechanism for
 applications and developers to modify or extend data models,
 without requiring changes to the SQL schema of the system. This
@@ -236,7 +236,7 @@ requirements:</p><p><span class="strong"><strong>10.10
 Uniqueness</strong></span></p><p>The object ID should be unique among all the IDs in the entire
 OpenACS system in which the object lives.</p><p><span class="strong"><strong>10.20 Useful as a
 Reference</strong></span></p><p>Applications should be able to use the unique object ID as a
-reference, with which they can fetch any or all of the object's
+reference, with which they can fetch any or all of the object&#39;s
 attributes.</p><p><span class="strong"><strong>10.30 Storable</strong></span></p><p>Object IDs should be storable in tables. e.g. you should be able
 to use them to implement mapping tables between objects, to
 represent relationships.</p><p><span class="strong"><strong>10.40 Moveable</strong></span></p><p>Objects should be mobile between databases. That is, information
@@ -318,11 +318,11 @@ the values that an attribute may hold, for the purposes of
 maintaining application specific integrity rules.</p>
 </dd><dt><span class="term"><span class="strong"><strong>50.0 Object
 Contexts</strong></span></span></dt><dd>
-<p>In OpenACS 3.x, there was a notion of "scope" for application
-objects. An object could be belong to one of three scopes: public,
-group or user. This provided a crude way to associate objects with
-particular scopes in the system, but it was awkward to use and
-limited in flexibility.</p><p>The OpenACS 4 Object Model provides a generalized notion of
+<p>In OpenACS 3.x, there was a notion of "scope" for
+application objects. An object could be belong to one of three
+scopes: public, group or user. This provided a crude way to
+associate objects with particular scopes in the system, but it was
+awkward to use and limited in flexibility.</p><p>The OpenACS 4 Object Model provides a generalized notion of
 scope that allows developers to represent a hierarchy of object
 <span class="emphasis"><em>contexts</em></span>. These contexts are
 used as the basis for the permissions system. In general, if an
@@ -332,21 +332,21 @@ the <a class="link" href="permissions-requirements" title="Permissions Requireme
 separate documents.</p><p>The context data model should provide the following
 facilities:</p><p><span class="strong"><strong>50.10 Unique ID</strong></span></p><p>Every context should have a unique ID in the system.</p><p><span class="strong"><strong>50.20 Tree
 Structure</strong></span></p><p>The data model should support a tree structured organization of
-contexts. That is, contexts can be logically "contained" within
-other contexts (i.e. contexts have parents) and contexts can
+contexts. That is, contexts can be logically "contained"
+within other contexts (i.e. contexts have parents) and contexts can
 contain other contexts (i.e. contexts can have children).</p><p><span class="strong"><strong>50.30 Data Model
 Constraints</strong></span></p><p>All objects must have a context ID. This ID must refer to an
 existing context or be NULL. The meaning of a NULL context is
 determined by the implementation.</p><p><span class="strong"><strong>Note:</strong></span></p><p>The current system interprets the NULL context as meaning the
-default "site-wide" context in some sense. I wanted to note this
-fact for others, but there is no need to make this a requirement of
-the system. I think it would be reasonable to have a NULL context
-be an error (psu 8/24/2000).</p>
+default "site-wide" context in some sense. I wanted to
+note this fact for others, but there is no need to make this a
+requirement of the system. I think it would be reasonable to have a
+NULL context be an error (psu 8/24/2000).</p>
 </dd><dt><span class="term"><span class="strong"><strong>55.0 Object
 Relations</strong></span></span></dt><dd><p>The data model should include a notion of pair-wise relations
 between objects. Relations should be able to record simple facts of
-the form "object X is related to object Y by relationship R," and
-also be able to attach attributes to these facts.</p></dd>
+the form "object X is related to object Y by relationship
+R," and also be able to attach attributes to these facts.</p></dd>
 </dl></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -381,8 +381,8 @@ should be an error to delete types that have dependent subtypes.
 This API is subject to the constraints laid out in the data
 model.</p><p><span class="strong"><strong>80.10.10</strong></span></p><p>However, the programmer should also be able to specify that all
 the subtypes and instances of those subtypes be destroyed before
-destroying the object type. This is similar to a "delete cascade"
-constraint in SQL.</p>
+destroying the object type. This is similar to a "delete
+cascade" constraint in SQL.</p>
 </dd><dt><span class="term"><span class="strong"><strong>90.0 Object
 Instance Creation and Destruction</strong></span></span></dt><dd>
 <p>The system must provide API calls to manage the creation and
@@ -396,8 +396,8 @@ the default context that the object will live in.</p><p><span class="strong"><st
 Instance</strong></span></p><p>The OM should provide an API call for object deletion. Objects
 can be deleted only when no other objects in the system refer to
 them. Since it might not be practical to provide a mechanism like
-"delete cascade" here in a reliable way, providing such a facility
-in the system is optional.</p>
+"delete cascade" here in a reliable way, providing such a
+facility in the system is optional.</p>
 </dd><dt><span class="term"><span class="strong"><strong>94.0 Object
 Relation Creation and Destruction</strong></span></span></dt><dd><p>The system must provide API calls to manage the creation and
 destruction of object relations.</p></dd><dt><span class="term"><span class="strong"><strong>94.10 Create an
@@ -425,9 +425,10 @@ Use</strong></span></span></dt><dd>
 in one way or another. Since it is important that the largest
 audience of developers possible adopts and uses the OM, it must be
 easy to incorporate into applications, and it must not impose undue
-requirements on an application's data model. In other words, it
-should be easy to "hook into" the object model, and that ability
-should not have a major impact on the application data model.</p><p>
+requirements on an application&#39;s data model. In other words, it
+should be easy to "hook into" the object model, and that
+ability should not have a major impact on the application data
+model.</p><p>
 <span class="strong"><strong>Note:</strong></span> Is the API
 the only way to obtain values? How does this integrate with
 application level SQL queries?</p>
@@ -435,7 +436,7 @@ application level SQL queries?</p>
 </dl></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="object-system-requirements-history" id="object-system-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="object-system-requirements-history" id="object-system-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

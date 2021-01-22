@@ -7,6 +7,8 @@ ad_page_contract {
   @cvs-id $Id$
 } {
   template_demo_note_id:naturalnum,notnull,multiple
+} -validate {
+    csrf { csrf::validate }
 }
 
 foreach template_demo_note_id $template_demo_note_id {

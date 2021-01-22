@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Detailed Design Documentation Template}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Detailed Design Documentation Template}</property>
 <property name="doc(title)">Detailed Design Documentation Template</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -41,13 +41,13 @@ classes of users) to accomplish.</p></li><li class="listitem"><p>Within reasonab
 allow users to accomplish.</p></li><li class="listitem"><p>The application domains where this package is most likely to be
 of use.</p></li><li class="listitem"><p>A high-level overview of how the package meets its requirements
 (which should have been documented elsewhere). This is to include
-relevant material from the "features" section of the cover sheet
-(the cover sheet is a wrapper doc with links to all other package
-docs).</p></li>
+relevant material from the "features" section of the
+cover sheet (the cover sheet is a wrapper doc with links to all
+other package docs).</p></li>
 </ul></div><p>Also worthy of treatment in this section:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>When applicable, a careful demarcation between the functionality
 of this package and others which - at least superficially - appear
-to address the same requirements.</p></li></ul></div><p>Note: it's entirely possible that a discussion of what a package
-is not intended to do differs from a discussion of future
+to address the same requirements.</p></li></ul></div><p>Note: it&#39;s entirely possible that a discussion of what a
+package is not intended to do differs from a discussion of future
 improvements for the package.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -72,7 +72,7 @@ software, the reasons for this should be discussed here; our sales
 team needs to be ready for inquiries regarding features our
 software lacks.</p></li>
 </ul></div><p>Note that such a discussion may differ from a discussion of a
-package's potential future improvements.</p>
+package&#39;s potential future improvements.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-design-design-tradeoffs" id="yourpackage-design-design-tradeoffs"></a>Design Tradeoffs</h3></div></div></div><p>No single design solution can optimize every desirable software
@@ -90,11 +90,11 @@ Some areas of importance to keep in mind are:</p><p>Areas of interest to users:<
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="yourpackage-design-api" id="yourpackage-design-api"></a>API</h3></div></div></div><p>Here's where you discuss the abstractions used by your package,
-such as the procedures encapsulating the legal transactions on the
-data model. Explain the organization of procedures and their
-particulars (detail above and beyond what is documented in the
-code), including:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="yourpackage-design-api" id="yourpackage-design-api"></a>API</h3></div></div></div><p>Here&#39;s where you discuss the abstractions used by your
+package, such as the procedures encapsulating the legal
+transactions on the data model. Explain the organization of
+procedures and their particulars (detail above and beyond what is
+documented in the code), including:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Problem-domain components: key algorithms, e.g. a specialized
 statistics package would implement specific mathematical
 procedures.</p></li><li class="listitem"><p>User-interface components: e.g. HTML widgets that the package
@@ -104,8 +104,8 @@ often correspond to tasks.</p></li>
 </ul></div><p>Remember that the correctness, completeness, and stability of
 the API and interface are what experienced members of our audience
 are looking for. This is a cultural shift for us at aD (as of
-mid-year 2000), in that we've previously always looked at the data
-models as key, and seldom spent much effort on the API (e.g.
+mid-year 2000), in that we&#39;ve previously always looked at the
+data models as key, and seldom spent much effort on the API (e.g.
 putting raw SQL in pages to handle transactions, instead of
 encapsulating them via procedures). Experience has taught us that
 we need to focus on the API for maintainability of our systems in
@@ -114,11 +114,12 @@ the face of constant change.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-design-data-model" id="yourpackage-design-data-model"></a>Data Model Discussion</h3></div></div></div><p>The data model discussion should do more than merely display the
 SQL code, since this information is already be available via a link
-in the "essentials" section above. Instead, there should be a
-high-level discussion of how your data model meets your solution
-requirements: why the database entities were defined as they are,
-and what transactions you expect to occur. (There may be some
-overlap with the API section.) Here are some starting points:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+in the "essentials" section above. Instead, there should
+be a high-level discussion of how your data model meets your
+solution requirements: why the database entities were defined as
+they are, and what transactions you expect to occur. (There may be
+some overlap with the API section.) Here are some starting
+points:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>The data model discussion should address the intended usage of
 each entity (table, trigger, view, procedure, etc.) when this
 information is not obvious from an inspection of the data model
@@ -140,18 +141,19 @@ include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style
 <li class="listitem"><p>Developers</p></li><li class="listitem"><p>OpenACS administrators (previously known as site-wide
 administrators)</p></li><li class="listitem"><p>Subsite administrators</p></li><li class="listitem"><p>End users</p></li>
 </ul></div><p>You may want to include page mockups, site-maps, or other visual
-aids. Ideally this section is informed by some prototyping you've
-done, to establish the package's usability with the client and
-other interested parties.</p><p><span class="emphasis"><em>Note: In order that developer
+aids. Ideally this section is informed by some prototyping
+you&#39;ve done, to establish the package&#39;s usability with the
+client and other interested parties.</p><p><span class="emphasis"><em>Note: In order that developer
 documentation be uniform across different system documents, these
-users should herein be designated as "the developer," "the
-OpenACS-admin," "the sub-admin," and "the user,"
-respectively.</em></span></p><p>Finally, note that as our templating system becomes more
-entrenched within the OpenACS, this section's details are likely to
-shift from UI specifics to template interface specifics.</p>
+users should herein be designated as "the developer,"
+"the OpenACS-admin," "the sub-admin," and
+"the user," respectively.</em></span></p><p>Finally, note that as our templating system becomes more
+entrenched within the OpenACS, this section&#39;s details are
+likely to shift from UI specifics to template interface
+specifics.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="yourpackage-design-config" id="yourpackage-design-config"></a>Configuration/Parameters</h3></div></div></div><p>Under OpenACS 5.7.0, parameters are set at two levels: at the
+<a name="yourpackage-design-config" id="yourpackage-design-config"></a>Configuration/Parameters</h3></div></div></div><p>Under OpenACS 5.9.0, parameters are set at two levels: at the
 global level by the OpenACS-admin, and at the subsite level by a
 sub-admin. In this section, list and discuss both levels of
 parameters.</p>
@@ -161,24 +163,24 @@ parameters.</p>
 Change</h3></div></div></div><p>If the system presently lacks useful/desirable features, note
 details here. You could also comment on non-functional improvements
 to the package, such as usability.</p><p>Note that a careful treatment of the earlier "competitive
-analysis" section can greatly facilitate the documenting of this
-section.</p>
+analysis" section can greatly facilitate the documenting of
+this section.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="yourpackage-design-authors" id="yourpackage-design-authors"></a>Authors</h3></div></div></div><p>Although a system's data model file often contains this
-information, this isn't always the case. Furthermore, data model
-files often undergo substantial revision, making it difficult to
-track down the system creator. An additional complication: package
-documentation may be authored by people not directly involved in
-coding. Thus to avoid unnecessary confusion, include email links to
-the following roles as they may apply:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="yourpackage-design-authors" id="yourpackage-design-authors"></a>Authors</h3></div></div></div><p>Although a system&#39;s data model file often contains this
+information, this isn&#39;t always the case. Furthermore, data
+model files often undergo substantial revision, making it difficult
+to track down the system creator. An additional complication:
+package documentation may be authored by people not directly
+involved in coding. Thus to avoid unnecessary confusion, include
+email links to the following roles as they may apply:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>System creator</p></li><li class="listitem"><p>System owner</p></li><li class="listitem"><p>Documentation author</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-design-revision-history" id="yourpackage-design-revision-history"></a>Revision History</h3></div></div></div><p><span class="emphasis"><em>The revision history table below is
 for this template - modify it as needed for your actual design
-document.</em></span></p><div class="informaltable"><table cellspacing="0" border="1">
+document.</em></span></p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><thead><tr>
@@ -192,8 +194,8 @@ document.</em></span></p><div class="informaltable"><table cellspacing="0" borde
 <td>0.1</td><td>Creation</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: design-template.xml,v 1.8 2006/07/17
-05:38:37 torbenb Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: design-template.xml,v 1.8.14.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

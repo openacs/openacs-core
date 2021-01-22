@@ -6,19 +6,19 @@
 <master>
 <h1>Tsearch2 Full-text Search Engine Driver for OpenACS 5.x</h1>
 <p>Tsearch2 Driver provides full-text searching of a PostgreSQL
-database by using PostgreSQL's tsearch2 FtsEngineDriver</p>
+database by using PostgreSQL&#39;s tsearch2 FtsEngineDriver</p>
 <h2>Requirements for this search implementation</h2>
 <ul>
-<li>OpenACS 5.x</li><li>PostgreSQL 7.3 or newer</li><li>PostgreSQL's <a href="http://openacs.org/xowiki/pages/en/postgresql-tsearch2">tsearch2
+<li>OpenACS 5.x</li><li>PostgreSQL 7.3 or newer</li><li>PostgreSQL&#39;s <a href="http://openacs.org/xowiki/pages/en/postgresql-tsearch2">tsearch2
 module installed</a>. (Pg versions 7.3 and 7.4 require a patch and
 tsearch2.sql to be loaded into the database)</li><li>This package installed</li><li>search package to be mounted somewhere.</li><li>FtsEngineDriver parameter of search package set to
 "tsearch2-driver".</li><li>indexing some data</li>
 </ul>
 <h2>
-<a name="install-fts-engine" id="install-fts-engine"></a>Install OpenACS' Tsearch2 Full-Text Search
-Package</h2>
+<a name="install-fts-engine" id="install-fts-engine"></a>Install OpenACS' Tsearch2 Full-Text
+Search Package</h2>
 <ol type="1">
-<li><p>If you have not yet, install <a href="http://openacs.org/xowiki/pages/en/postgresql-tsearch2">PostgreSQL's
+<li><p>If you have not yet, install <a href="http://openacs.org/xowiki/pages/en/postgresql-tsearch2">PostgreSQL&#39;s
 tsearch2 module</a>.</p></li><li><p>Click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Admin</span></span></code> on the
 top of the default home page. If prompted, log in with the account
 and password you entered during install.</p></li><li><p>Click on the <code class="computeroutput"><span class="guilabel"><span class="guilabel">Install
@@ -29,8 +29,8 @@ PostgreSQL database, the installer will automatically enable
 tsearch in your OpenACS database instance.</p></li><li><p>Restart AOLserver. Wait a minute, then browse back to the home
 page.</p></li><li><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Admin</span></span></code> on the
 top of the screen.</p></li><li><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Main Site
-Administration</span></span></code> in the "Subsite Administration"
-section.</p></li><li><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
+Administration</span></span></code> in the "Subsite
+Administration" section.</p></li><li><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
 the "Advanced Features" section.</p></li><li>
 <p>Mount the Search interface in the site-map.</p><ol type="a">
 <li><p>Click the <code class="computeroutput"><span class="guilabel"><span class="guilabel">new sub
@@ -87,8 +87,8 @@ indexed.</p>
 package-key/sql/postgresql/package-key-sc-create.sql. View these
 examples for how to implement:</p>
 <ul>
-<li><a href="http://cvs.openacs.org/cvs/openacs-4/packages/edit-this-page/sql/postgresql/edit-this-page-sc-create.sql?view=markup">
-packages/edit-this-page/sql/postgresql/edit-this-page-sc-create.sql</a></li><li><a href="http://cvs.openacs.org/cvs/openacs-4/packages/lars-blogger/sql/postgresql/lars-blogger-sc-create.sql?view=markup">
+<li><a href="https://github.com/openacs/edit-this-page/blob/master/sql/postgresql/edit-this-page-create.sql">
+packages/edit-this-page/sql/postgresql/edit-this-page-sc-create.sql</a></li><li><a href="https://github.com/openacs/lars-blogger/blob/master/sql/postgresql/lars-blogger-sc-create.sql">
 packages/lars-blogger/sql/postgresql/lars-blogger-sc-create.sql</a></li>
 </ul>
 <h2>Indexing pre-existing content that has been indexed before</h2>
@@ -98,7 +98,7 @@ search service), you have to tell the search package to
 reindex:</p>
 <pre>
     insert into search_observer_queue (
-            select <i>my_id</i>, now(),'INSERT' from <i>my_table</i>
+            select <em>my_id</em>, now(),'INSERT' from <em>my_table</em>
             );
   
 </pre>

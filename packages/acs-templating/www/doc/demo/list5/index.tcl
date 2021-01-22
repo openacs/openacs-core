@@ -6,7 +6,7 @@ ad_page_contract {
   @creation-date 2000-10-23
   @cvs-id $Id$
 } -query {
-  orderby:optional
+  orderby:token,optional
 } -properties {
   notes:multirow
   context:onevalue

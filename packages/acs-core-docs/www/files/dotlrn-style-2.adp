@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {My Space - SloanSpace}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {My Space - SloanSpace}</property>
 <property name="doc(title)">My Space - SloanSpace</property>
 <master>
 <ul id="breadcrumbs">
@@ -33,7 +33,7 @@
 <div class="portlet">
 <h2>Latest News</h2><h3>MBA 101</h3><ul>
 <li>
-<a href="#">Here's what we have to say</a><p class="poster">Posted by Anders Pollas on May 21 2004</p>
+<a href="#">Here&#39;s what we have to say</a><p class="poster">Posted by Anders Pollas on May 21 2004</p>
 </li><li>
 <a href="#">Another subject</a><p class="poster">Posted by Anders Pollas on May 17 2004</p>
 </li>

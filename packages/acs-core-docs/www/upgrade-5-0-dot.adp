@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Upgrading an OpenACS 5.0.0 or greater installation}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading an OpenACS 5.0.0 or greater installation}</property>
 <property name="doc(title)">Upgrading an OpenACS 5.0.0 or greater installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -13,30 +13,30 @@ Chapter 5. Upgrading"
 installation</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
-<b>Upgrading a stock site. </b>If you have no custom
-code, and your site is not in a CVS repository, upgrade with these
-steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>Go to <a class="ulink" href="/acs-admin/install" target="_top">/acs-admin/install/</a> and click "Upgrade Your System" in
-"Install from OpenACS Repository"</p></li><li class="listitem"><p>Select all of the packages you want to upgrade and proceed</p></li><li class="listitem"><p>After upgrade is complete, restart the server as indicated.</p></li><li class="listitem"><p>If you are using locales other than en_US, go to acs-lang/admin
-and "Import all Messages" to load the new translated messages. Your
-local translations, if any, will take precedence over imported
-translations.</p></li>
+<strong>Upgrading a stock site. </strong>If you have
+no custom code, and your site is not in a CVS repository, upgrade
+with these steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><p>Go to <a class="ulink" href="/acs-admin/install" target="_top">/acs-admin/install/</a> and click "Upgrade Your
+System" in "Install from OpenACS Repository"</p></li><li class="listitem"><p>Select all of the packages you want to upgrade and proceed</p></li><li class="listitem"><p>After upgrade is complete, restart the server as indicated.</p></li><li class="listitem"><p>If you are using locales other than en_US, go to acs-lang/admin
+and "Import all Messages" to load the new translated
+messages. Your local translations, if any, will take precedence
+over imported translations.</p></li>
 </ol></div>
 </li><li class="listitem">
 <p>
-<b>Upgrading a Custom or CVS site. </b>If you have
-custom code, and your site is in a CVS repository, upgrade with
-these steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<strong>Upgrading a Custom or CVS site. </strong>If
+you have custom code, and your site is in a CVS repository, upgrade
+with these steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<b>Upgrade the file system for all packages in
-use. </b><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
+<strong>Upgrade the file system for all packages in
+use. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
 &ldquo;Upgrading the OpenACS
 files&rdquo;</a>
-</p></li><li class="listitem"><p>Go to <a class="ulink" href="/acs-admin/install" target="_top">/acs-admin/install/</a> and click "Upgrade Your System" in
-"Install from local file system"</p></li><li class="listitem"><p>Select all of the packages you want to upgrade and proceed</p></li><li class="listitem"><p>After upgrade is complete, restart the server as indicated.</p></li><li class="listitem"><p>If you are using locales other than en_US, go to acs-lang/admin
-and "Import all Messages" to load the new translated messages. Your
-local translations, if any, will take precedence over imported
-translations.</p></li>
+</p></li><li class="listitem"><p>Go to <a class="ulink" href="/acs-admin/install" target="_top">/acs-admin/install/</a> and click "Upgrade Your
+System" in "Install from local file system"</p></li><li class="listitem"><p>Select all of the packages you want to upgrade and proceed</p></li><li class="listitem"><p>After upgrade is complete, restart the server as indicated.</p></li><li class="listitem"><p>If you are using locales other than en_US, go to acs-lang/admin
+and "Import all Messages" to load the new translated
+messages. Your local translations, if any, will take precedence
+over imported translations.</p></li>
 </ol></div>
 </li>
 </ul></div>

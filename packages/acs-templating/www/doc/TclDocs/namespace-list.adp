@@ -1,9 +1,9 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {}</property>
-<property name="doc(title)"></property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {All Namespaces}</property>
+<property name="doc(title)">All Namespaces</property>
 <master>
-<a href="namespaces" target="mainFrame"><font size="+1" bold="">All Namespaces</font></a>
-<br>
+<h1><a href="namespaces" target="mainFrame">All
+Namespaces</a></h1>
 <table border="0" width="100%"><tr><td nowrap="nowrap" align="left">  <a href="doc" target="mainFrame">doc</a><br>
   <a href="doc__util" target="mainFrame">doc::util</a><br>
   <a href="form" target="mainFrame">form</a><br>

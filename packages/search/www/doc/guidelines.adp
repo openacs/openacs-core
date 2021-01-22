@@ -13,19 +13,19 @@ Making an object type searchable involves three steps:
 In most of the cases, choosing the object type is straightforward.
 However, if your object type uses the content repository then you
 should make sure that your object type is a subclass of the
-"content_revision" class. You should also make sure all content is
-created using that subclass, rather than simply create content with
-the "content_revision" type.
+"content_revision" class. You should also make sure all
+content is created using that subclass, rather than simply create
+content with the "content_revision" type.
 <ul>
-<li>Object types that don't use the CR, can be specified using
+<li>Object types that don&#39;t use the CR, can be specified using
 <code>acs_object_type__create_type</code>, but those that use the
 CR need to use <code>content_type__create_type</code>.
 <code>content_type__create_type</code> overloads
 <code>acs_object_type__create_type</code> and provides two views
 for inserting and viewing content data, and the CR depends on these
 views.</li><li>Whenever you call content_item__new, call it with
-'content_revision' as the item_subtype and 'your_content_type' as
-the content_type.</li>
+'content_revision' as the item_subtype and
+'your_content_type' as the content_type.</li>
 </ul><h3>Implement FtsContentProvider</h3>
 FtsContentProvider is comprised of two abstract operations, namely
 <code>datasource</code> and <code>url</code>. The specification for
@@ -70,9 +70,9 @@ You should adapt this association to reflect your implementation.
 That is, change <code>impl_name</code> with your object type and
 the <code>impl_owner_name</code> to the package key. Next, you have
 to create associations between the operations of
-<code>FtsContentProvider</code> and your concrete functions. Here's
-how an association between an operation and a concrete function
-looks like:
+<code>FtsContentProvider</code> and your concrete functions.
+Here&#39;s how an association between an operation and a concrete
+function looks like:
 <pre><code>select acs_sc_impl_alias__new(
            'FtsContentProvider',                -- impl_contract_name
            'note',                              -- impl_name
@@ -91,7 +91,7 @@ If your object type uses the content repository to store its items,
 then you are done. If not, an extra step is required to inform the
 search_observer_queue of new content items, updates or deletions.
 We do this by adding triggers on the table that stores the content
-items of your object type. Here's how that part looks like for
+items of your object type. Here&#39;s how that part looks like for
 <code>note</code>.
 <pre><code>create function notes__itrg ()
 returns opaque as $$

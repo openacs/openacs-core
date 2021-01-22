@@ -5,7 +5,7 @@ ad_page_contract {
 
 } {
     checkbox:integer,multiple,optional
-    return_url 
+    return_url:localurl 
 } 
 
 set user_id [auth::require_login]

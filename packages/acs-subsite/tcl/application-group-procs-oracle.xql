@@ -36,12 +36,7 @@
 <fullquery name="application_group::group_id_from_package_id.application_group_from_package_id_query">      
       <querytext>
       
-	    begin
-	    :1 := application_group.group_id_from_package_id (
-	        package_id => :package_id,
-	        no_complain_p => :no_complain_p
-	    );
-	    end;
+       select application_group.group_id_from_package_id(:package_id, :no_complain_p) from dual;
 	
       </querytext>
 </fullquery>

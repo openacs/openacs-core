@@ -5,10 +5,10 @@ ad_page_contract {
 } {
     q:trim
     {t:trim ""}
-    {offset:naturalnum 0}
-    {num:naturalnum 0}
-    {dfs:word,trim ""}
-    {dts:word,trim ""}
+    {offset:naturalnum,notnull 0}
+    {num:range(0|200) 0}
+    {dfs:word,trim,notnull ""}
+    {dts:word,trim,notnull ""}
     {search_package_id:naturalnum ""}
     {scope ""}
     {object_type:token ""}
@@ -18,12 +18,29 @@ ad_page_contract {
             ad_complain "#search.lt_You_must_specify_some#"
         }
     }
+    valid_dfs -requires dfs {
+        if {![array exists symbol2interval]} {
+            array set symbol2interval [parameter::get -package_id [ad_conn package_id] -parameter Symbol2Interval]
+        }
+        if {$dfs ni [array names symbol2interval]} {
+            ad_complain "dfs: invalid interval"
+        }
+    }
+    valid_dts -requires dts {
+        if {![array exists symbol2interval]} {
+            array set symbol2interval [parameter::get -package_id [ad_conn package_id] -parameter Symbol2Interval]
+        }
+        if {$dts ni [array names symbol2interval]} {
+            ad_complain "dts: invalid interval"
+        }
+    }
+    
+    csrf { csrf::validate }
 }
 
 set page_title "Search Results"
 
 set package_id [ad_conn package_id]
-
 set package_url [ad_conn package_url]
 set package_url_with_extras $package_url
 
@@ -64,7 +81,6 @@ if { $dfs eq "all" } {
     set dfs ""
 }
 
-array set symbol2interval [parameter::get -package_id $package_id -parameter Symbol2Interval]
 if { $dfs ne "" } {
     set df [db_exec_plsql get_df "select now() + '$symbol2interval($dfs)'::interval"]
 }
@@ -146,6 +162,7 @@ if { $info(automatic_and_queries_p) && "and" in $q } {
 
 set url_advanced_search ""
 append url_advanced_search "advanced-search?q=$urlencoded_query"
+if {[info exists ::__csrf_token]} {append url_advanced_search "&__csrf_token=$::__csrf_token"}
 if { $num > 0 } { append url_advanced_search "&num=$num" }
 
 set query $q

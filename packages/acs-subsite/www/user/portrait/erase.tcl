@@ -3,7 +3,7 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    {return_url "" }
+    {return_url:localurl "" }
     {user_id:naturalnum ""}
 } -properties {
     context:onevalue

@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     node_id:naturalnum,optional
-    {return_url "."}
+    {return_url:localurl "."}
 }
 
 set page_title "[_ acs-subsite.New_Application]"

@@ -4,7 +4,7 @@
   <li>OpenACS Packages
     <ul>
     <li><a href="@acs_admin_url@apm">Package Manager</a>
-    <li><a href="@acs_admin_url@install">Install Packages</a>
+    <li><a href="@acs_admin_url@install/">Install or Upgrade Packages</a>
     <li><a href="@acs_lang_admin_url@">Internationalization/Localization</a>
     </ul>
   <li><a href="developer">Developer Tools</a>

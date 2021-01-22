@@ -1,17 +1,19 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Widget Reference: Date}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Widget Reference: Date}</property>
 <property name="doc(title)">Templating System Widget Reference: Date</property>
 <master>
 <h2>The Date Widget</h2>
+<strong>
+<a href="../index">Templating System</a> : <a href="index">Widget Reference</a> : Date</strong>
 <h3>Overview</h3>
 <p>The date widget provides a versatile HTML control for entering
 dates in a variety of formats. The widget operates in conjunction
 with various <code>template::util::date</code> functions in order
-to validate and manipulate the user's input. Please see the
+to validate and manipulate the user&#39;s input. Please see the
 <a href="../demo/index">demo</a> pages for some examples of
-the widget's behavior.</p>
+the widget&#39;s behavior.</p>
 <h3>The Date Object</h3>
-<p>The widget's value is a Date object, defined in
+<p>The widget&#39;s value is a Date object, defined in
 <code>template::util::date</code>. The date object stores 7 fields:
 the year, month, day, hours, minutes, seconds, and the format in
 which these values should be displayed. The function
@@ -76,8 +78,8 @@ Takes into account the leap years.</td><td><code>29</code></td>
 it is less than 69; otherwise, 1900 is added to the year.</td><td><code>99</code></td>
 </tr><tr>
 <td><code>short_hours</code></td><td>Yes</td><td>Yes</td><td>The hour, in 12-hour format. When mutating, the hour is always
-assumed to be in the "a.m." range; the <code>ampm</code> field may
-be used to change this.</td><td><code>3</code></td>
+assumed to be in the "a.m." range; the <code>ampm</code>
+field may be used to change this.</td><td><code>3</code></td>
 </tr><tr>
 <td><code>ampm</code></td><td>Yes</td><td>Yes</td><td>The meridian indicator: either <code>am</code> or
 <code>pm</code>. Can be used in conjunction with the
@@ -100,14 +102,14 @@ is currently the only way to perform arithmetic operations on
 dates, such as adding a day, comparing two dates, etc.</td><td>(An integer representing the number of elapsed seconds)</td>
 </tr>
 </table>
-<p>For example, the following code produces the tomorrow's date in
-SQL:</p>
+<p>For example, the following code produces the tomorrow&#39;s date
+in SQL:</p>
 <blockquote><pre>
 
 # Create a blank date
 set today_date [template::util::date::create]
 
-# Get the tomorrow's date
+# Get the tomorrow&#39;s date
 set clock_value [clock scan "1 day" -base [clock seconds]]
 set tomorrow_date [template::util::date::set_property \
   clock $today_date $clock_value]
@@ -192,10 +194,10 @@ three values: the starting value, the ending value, and the
 step</td><td nowrap="nowrap"><code>-minute_interval {0 59 5}</code></td>
 </tr><tr>
 <td><code>-help</code></td><td>Causes the date widget to display a description of each date
-fragment widget showing the purpose of the widget, such as "Year"
-or "24-Hour"</td><td><code>-help</code></td>
+fragment widget showing the purpose of the widget, such as
+"Year" or "24-Hour"</td><td><code>-help</code></td>
 </tr>
 </table>
 <p>Examples of various Date widgets can be found on the <a href="/ats/demo/index">demo</a> pages.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

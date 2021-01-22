@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Write the Requirements and Design Specs}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Write the Requirements and Design Specs}</property>
 <property name="doc(title)">Write the Requirements and Design Specs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -13,9 +13,9 @@ Chapter 10. Advanced Topics"
 the tags that are used to write your documentation. For tips on
 editing SGML files in emacs, see <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the
 section called &ldquo;OpenACS Documentation
-Guide&rdquo;</a>.</p><p>It's time to document. For the tutorial we'll use pre-written
-documentation. When creating a package from scratch, start by
-copying the documentation template from <code class="computeroutput">/var/lib/aolserver/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</code>
+Guide&rdquo;</a>.</p><p>It&#39;s time to document. For the tutorial we&#39;ll use
+pre-written documentation. When creating a package from scratch,
+start by copying the documentation template from <code class="computeroutput">/var/lib/aolserver/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</code>
 to <code class="computeroutput">myfirstpackage/www/docs/xml/index.xml</code>.</p><p>You then edit that file with emacs to write the requirements and
 design sections, generate the html, and start coding. Store any
 supporting files, like page maps or schema diagrams, in the

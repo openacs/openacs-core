@@ -34,7 +34,7 @@ ad_proc -public application_data_link::new {
         -relation_tag $relation_tag
 	
     }]}  {
-	# check if error occured because of existing link
+	# check if error occurred because of existing link
     if { [application_data_link::exist_link -object_id $this_object_id -target_object_id $target_object_id -relation_tag $relation_tag] eq "1" } {
 	    ns_log Debug "application_data_link::new: link already exists" 
 	} else {  
@@ -319,7 +319,7 @@ ad_proc -public application_data_link::update_links_from {
 
     @param object_id Object_id to update
     @param text Text to scan for references
-    @param linked_object_ids List of object ids to update the links to. Links not in this list will be deleted, and any in this list that are not in teh database will be added.
+    @param linked_object_ids List of object ids to update the links to. Links not in this list will be deleted, and any in this list that are not in the database will be added.
     @param relation_tag Relationship identifier
 
     @return List of updated linked object_ids

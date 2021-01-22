@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Using PSGML mode in Emacs}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using PSGML mode in Emacs}</property>
 <property name="doc(title)">Using PSGML mode in Emacs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -18,8 +18,8 @@ information</a>.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="psgml-mode-whatisit" id="psgml-mode-whatisit"></a>What it is</h3></div></div></div><p>PSGML Mode is a mode for editing, umm, SGML and XML documents in
 emacs. It can parse a DTD and help you insert the right tags in the
-right place, knows about tags' attributes and can tell you in which
-contexts a tag can be used. <span class="emphasis"><em>If</em></span> you give it the right DTD, that is.
+right place, knows about tags' attributes and can tell you in
+which contexts a tag can be used. <span class="emphasis"><em>If</em></span> you give it the right DTD, that is.
 But even without a DTD, it can save you some typing since pressing
 <code class="computeroutput">C-c/</code> will close an open tag
 automatically.</p>
@@ -29,10 +29,9 @@ automatically.</p>
 find out whether your emacs has it with the <code class="computeroutput">locate-library</code> command. In Emacs, type
 <code class="computeroutput">M-x locate-library</code> and enter
 <code class="computeroutput">psgml</code>. Emacs will tell you if
-it found it or not.</p><p>If you don't have PSGML preinstalled in your Emacs, there are
-two things you can do:</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>On Linux: Get the <a class="ulink" href="ftp://sourceware.cygnus.com:/pub/docbook-tools/docware/RPMS/noarch/psgml-1.2.1-1.noarch.rpm" target="_top">psgml rpm</a> from <a class="ulink" href="http://sources.redhat.com/docbook-tools/" target="_top">RedHat's
-docbook-tools</a> and install it as usual.</p></li><li class="listitem"><p>On other systems: Get the tarball from the <a class="ulink" href="http://www.lysator.liu.se/~lenst/about_psgml/" target="_top">PSGML Website.</a> Unpack it and follow the install
+it found it or not.</p><p>If you don&#39;t have PSGML preinstalled in your Emacs, there
+are two things you can do:</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><p>On Linux: Get the <a class="ulink" href="ftp://sourceware.cygnus.com:/pub/docbook-tools/docware/RPMS/noarch/psgml-1.2.1-1.noarch.rpm" target="_top">psgml rpm</a> from <a class="ulink" href="http://sources.redhat.com/docbook-tools/" target="_top">RedHat&#39;s docbook-tools</a> and install it as usual.</p></li><li class="listitem"><p>On other systems: Get the tarball from the <a class="ulink" href="https://www.emacswiki.org/emacs/PsgmlMode" target="_top">PSGML Website.</a> Unpack it and follow the install
 instructions.</p></li>
 </ol></div>
 </div><div class="sect2">
@@ -52,13 +51,13 @@ DTD</a> zip archive from <a class="ulink" href="http://docbook.org/" target="_to
 </li><li class="listitem">
 <p>Create a file with the name <code class="computeroutput">CATALOG</code> in the <code class="computeroutput">dtd</code> directory and put the line</p><pre class="programlisting">
       CATALOG "docbook-xml/docbook.cat"
-</pre><p>in it. By maintaining your own <code class="computeroutput">CATALOG</code>, it is easy to add more DTD's
+</pre><p>in it. By maintaining your own <code class="computeroutput">CATALOG</code>, it is easy to add more DTD&#39;s
 without changing your emacs settings. (<span class="emphasis"><em>How about that HTML 4.01 DTD you always wanted to
 get from <a class="ulink" href="http://www.w3.org/TR/html4/" target="_top">W3C</a> ? The DTD is in the zip archives and tarballs
 available on the site.</em></span>)</p>
 </li>
-</ol></div><p>That's it. Now you are ready to tell emacs all about PSGML mode
-and that funky <code class="computeroutput">CATALOG</code>
+</ol></div><p>That&#39;s it. Now you are ready to tell emacs all about PSGML
+mode and that funky <code class="computeroutput">CATALOG</code>
 </p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -117,12 +116,12 @@ include a DOCTYPE declaration in your file.</p><pre class="programlisting">
 file <code class="computeroutput">top.xml</code>, that the element
 in the parent that will enclose the current document is a
 <code class="computeroutput">book</code> and that the current
-file's topmost element is a <code class="computeroutput">sect1</code>.</p>
+file&#39;s topmost element is a <code class="computeroutput">sect1</code>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="psgml-mode-usage" id="psgml-mode-usage"></a>How to use it</h3></div></div></div><p>Of course, you should read the emacs texinfo pages that come
 with PSGML mode from start to finish. Barring that, here are some
-handy commands:</p><div class="informaltable"><table cellspacing="0" border="0">
+handy commands:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="0">
 <colgroup>
 <col><col>
 </colgroup><thead><tr>
@@ -134,7 +133,7 @@ elements that are valid</td>
 </tr><tr>
 <td><code class="computeroutput">C-c C-a</code></td><td>Edit attributes of enclosing element.</td>
 </tr><tr>
-<td><code class="computeroutput">C-c C-x C-i</code></td><td>Show information about the document's DTD.</td>
+<td><code class="computeroutput">C-c C-x C-i</code></td><td>Show information about the document&#39;s DTD.</td>
 </tr><tr>
 <td><code class="computeroutput">C-c C-x C-e</code></td><td>Describe element. Shows for one element which elements can be
 parents, what its contents can be and lists its attributes.</td>
@@ -146,8 +145,8 @@ parents, what its contents can be and lists its attributes.</td>
 <a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called
 &ldquo;OpenACS Documentation
 Guide&rdquo;</a>
-</p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.8 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.8.14.1 2017/06/15
+13:56:42 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -43,13 +43,13 @@
   </else>
 
   <ul>
-    <li><a href="rerun?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;quiet=@quiet@">Rerun this test case</a></li>
+    <li><a href="@rerun_url@">Rerun this test case</a></li>
     <li><a href="@resource_file_url@">Resource test definition file</a></li>
     <li><a href="@return_url@">Back to testcase list</a></li>
   </ul>
   
   <p>
-    <b>Results</b> 
+    <strong>Results</strong> 
     [<if @quiet@ eq "1">
       <strong> quiet </strong> | 
       <a href="@verbose_url@">verbose</a>
@@ -66,7 +66,15 @@
     </tr>
     <multiple name="tests_quiet">
       <tr>
-        <td>@tests_quiet.result@</td>
+        <if @tests_quiet.result@ eq "fail">
+          <td class="fail">FAILED</td>
+        </if>
+        <elseif @tests_quiet.result@ eq "pass">
+          <td class="ok">@tests_quiet.result@</td>
+        </elseif>
+        <else>
+          <td>@tests_quiet.result@</td>
+        </else>
         <td align="right" class="@tests_quiet.result@">@tests_quiet.count@</td>
       </tr>
     </multiple>
@@ -94,8 +102,11 @@
         <if @tests.result@ eq "fail">
           <td class="fail">FAILED</td>
         </if>
-        <else>
+        <elseif @tests.result@ eq "pass">
           <td class="ok">@tests.result@</td>
+        </elseif>
+        <else>
+          <td>@tests.result@</td>
         </else>
         <td><pre>@tests.notes@</pre></td>
       </tr>
@@ -104,7 +115,7 @@
   </table>
 
   <ul>
-    <li><a href="rerun?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;quiet=@quiet@">Rerun this test case</a></li>
+    <li><a href="@rerun_url@">Rerun this test case</a></li>
     <li><a href="@resource_file_url@">Resource test definition file</a></li>
     <li><a href="@return_url@">Back to testcase list</a></li>
   </ul>

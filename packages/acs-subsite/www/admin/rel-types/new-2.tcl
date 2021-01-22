@@ -21,7 +21,7 @@ ad_page_contract {
     role_two:optional
     min_n_rels_two:optional
     max_n_rels_two:optional
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     supertype_pretty_name:onevalue

@@ -410,7 +410,7 @@ ad_proc -private apm_bootstrap_load_libraries {
     package_key
     {errorVarName ""}
 } {
-    Scan all the files in the tcl dir of the package and load those asked for by the init
+    Scan all the files in the "tcl" dir of the package and load those asked for by the init
     and procs flags.
 
     This proc is an analog of apm_load_libraries.  In addition though
@@ -491,12 +491,14 @@ ad_proc -private apm_load_install_xml_file {} {
 
     @author Peter Marklund
 } {
+    set fn [apm_install_xml_file_path]
     # Abort if there is no install.xml file
-    if { ![file exists [apm_install_xml_file_path]] } {
+    if { ![file exists $fn] } {
         return ""
     }
 
-    set file [open [apm_install_xml_file_path]]
+    #ns_log notice "==== LOADING xml file: $fn"
+    set file [open $fn]
     set root_node [xml_doc_get_first_node [xml_parse -persist [read $file]]]
     close $file
 
@@ -607,11 +609,20 @@ ad_proc apm_bootstrap_upgrade {
 } {
     set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/tcl
     foreach file [glob -nocomplain $source/*tcl] {
-        file copy -force $file $::acs::rootdir/tcl
+        file copy -force -- $file $::acs::rootdir/tcl/
+        #
+        # It would be good to allow changes in the setup here, but for
+        # that, e.g. 0-acs-tcl has to be split up into two parts: (a)
+        # setup of variables, and (b) sourcing everything.
+        #
+        # source $::acs::rootdir/tcl/[file tail $file]
     }
     set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/www
     foreach file [glob -nocomplain $source/*tcl $source/*adp] {
-        file copy -force $file $::acs::rootdir/www
+        file copy -force -- $file $::acs::rootdir/www/
+    }
+    foreach file [glob -nocomplain $source/SYSTEM/*tcl] {
+        file copy -force -- $file $::acs::rootdir/www/SYSTEM/
     }
 }
 

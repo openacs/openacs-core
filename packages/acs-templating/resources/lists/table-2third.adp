@@ -46,15 +46,19 @@
           </if>
 
           <if \@list_properties.page_size_variable_p@ eq 1>
-            </td><td align="right" width="5%">
-            <form name="\@list_properties.name@_resize" method="GET" action="">
-              \@list_properties.page_size_export_chunk;noquote@
-              <select name="page_size" onChange="acs_ListBulkActionClick('\@list_properties.name@_resize', '\@list_properties.url@'); return false;">
+            <div align="right" width="5%">
+              <form name="\@list_properties.name@_resize" method="GET" action="">
+                \@list_properties.page_size_export_chunk;noquote@
+	        <tcl>template::add_event_listener -event change -id "$list_properties(name)_resize-control" -script [subst {
+                  acs_ListBulkActionClick('$list_properties(name)_resize', '$list_properties(url)');
+                }]</tcl>
+                <select id='\@list_properties.name@_resize-control' name="page_size">	      
                 <multiple name="page_sizes">
                   <option value="\@page_sizes.value@"<if \@list_properties.page_size@ eq \@page_sizes.value@> selected</if>>\@page_sizes.name@
                 </multiple>
-              </select>
-            </form>
+                </select>
+              </form>
+	    </div>
           </if>
         </ul>
       </div>
@@ -96,12 +100,12 @@
       <group column="subrownum">
         <th class="@elements.class@"@elements.cell_attributes;noquote@ id="@list_properties.name@_@elements.name@">
           <if @elements.orderby_url@ not nil>
-            <if @elements.ordering_p@ true>
+            <if @elements.ordering_p;literal@ true>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
-              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" alt="#acs-templating.descending_order#" style="border:0"></if><else><img src="/resources/acs-templating/sort-ascending.png" alt="#acs-templating.ascending_order#" style="border:0"></else></a>
+              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" alt="#acs-templating.descending_order#" style="border:0;" width="10" height="10"></if><else><img src="/resources/acs-templating/sort-ascending.png" alt="#acs-templating.ascending_order#" style="border:0;" width="10" height="10"></else></a>
             </if>
             <else>
-              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a> <img src="/resources/acs-templating/sort-neither.png" alt="#acs-templating.not_ordered#" style="border:0">
+              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a> <img src="/resources/acs-templating/sort-neither.png" alt="#acs-templating.not_ordered#" style="border:0;" width="10" height="10">
             </else>
           </if>
           <else>
@@ -118,7 +122,7 @@
     <multiple name="@list_properties.multirow@">
   </noparse>
       
-  <if @list_properties.aggregates_p@ true>
+  <if @list_properties.aggregates_p;literal@ true>
     <noparse><if \@@list_properties.multirow@.rownum@ eq \@@list_properties.multirow@:rowcount@></noparse>
       <multiple name="elements">
         <tfoot>
@@ -239,7 +243,10 @@
     <!-- list-button-bar-bottom div -->
     <div class="list-button-bar-bottom">
         <multiple name="bulk_actions">
-        <input type="submit" title="@bulk_actions.title@" onclick="@list_properties.bulk_action_click_function@('@list_properties.name@', '@bulk_actions.url@'); return false;" value="@bulk_actions.label@" class="button">
+	<% template::add_event_listener -id "$list_properties(name)-bulk_action-$bulk_actions(rownum)" -script [subst {
+	    $list_properties(bulk_action_click_function)('$list_properties(name)', '$bulk_actions(url)');
+	}] %>
+        <input type="submit" title="@bulk_actions.title@" id="@list_properties.name;literal@-bulk_action-@bulk_actions.rownum;literal@" value="@bulk_actions.label@" class="button">
         </multiple>
     </div>
     <!-- end of list-button-bar-bottom div -->

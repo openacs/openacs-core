@@ -20,9 +20,10 @@ foreach var_name {system_owner admin_owner host_administrator outgoing_sender ne
 #############
 
 if {$password ne $password_confirmation  } {
-    install_return 200 "Passwords Don't Match" "
-The passwords you've entered don't match. Please <a href=\"javascript:history.back()\">try again</a>.
-"
+    install_return 200 "Passwords Don't Match" [subst {
+The passwords you've entered don't match. 
+[install_back_button_widget]
+    }]
     return
 }
 
@@ -99,15 +100,11 @@ if { ![db_string user_exists {
 
     if { !$user_id } {
 
-	install_return 200 "Unable to Create Administrator" "
-    
+	install_return 200 "Unable to Create Administrator" [subst {
 Unable to create the site-wide administrator:
-   
 <blockquote><pre>[ns_quotehtml $::errorInfo]</pre></blockquote>
-    
-Please <a href=\"javascript:history.back()\">try again</a>.
-    
-"
+[install_back_button_widget]            
+}
         return
     }
 

@@ -31,9 +31,9 @@
     </ul>
   </li>
   <li>Test failures
-    <if @has_test_report_p@>
+    <if @has_test_report_p;literal@ true>
       <if @testcase_failures:rowcount@ eq 0>
-        <i>none</i>
+        <em>none</em>
       </if>
       <else>
         <table>
@@ -57,7 +57,7 @@
     </else>
   </li>
   <li>
-    <a href="@rebuild_url@" onclick="return confirm('Are you sure you want to wipe and rebuild this server?');">Rebuild this server now</a>
+    <a href="@rebuild_url@" id="action-rebuild" class="button">Rebuild this server now</a>
   </li>
   <li>
     <a href="@rebuild_log_url@">Rebuild log</a>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-automated-testing {Automated Testing}} {Usage}</property>
+<property name="context">{/doc/acs-automated-testing {ACS Automated Testing}} {Usage}</property>
 <property name="doc(title)">Usage</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -13,8 +13,8 @@
 Aufrecht</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>Here's the entire chain of code used to set up auto-rebuilding
-servers on test.openacs.org</p><div class="itemizedlist"><ul type="disc">
+OpenACS documentation staff.</div><p>Here&#39;s the entire chain of code used to set up
+auto-rebuilding servers on test.openacs.org</p><div class="itemizedlist"><ul type="disc">
 <li>
 <p>The master server shows the status of all other servers. For
 test.openacs.org, it listens on port 80.</p><div class="orderedlist"><ol type="1">

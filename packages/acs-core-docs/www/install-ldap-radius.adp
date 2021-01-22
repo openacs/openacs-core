@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install LDAP for use as external authentication}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install LDAP for use as external authentication}</property>
 <property name="doc(title)">Install LDAP for use as external authentication</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -21,8 +21,8 @@ approach usually taken by auth-ldap. Both will be dealt with in
 these section</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <a name="install-openldap" id="install-openldap"></a><p>
-<b>Install openldap. </b>Download and install
-ns_ldap</p><pre class="screen">
+<strong>Install openldap. </strong>Download and
+install ns_ldap</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/</code></strong>
           [root src]# <strong class="userinput"><code>wget ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.2.17.tgz</code></strong>
           [root src]# <strong class="userinput"><code>tar xvfz openldap-2.2.17.tgz</code></strong>
@@ -40,8 +40,8 @@ make install
 </pre>
 </li><li class="listitem">
 <a name="install-ns_ldap" id="install-ns_ldap"></a><p>
-<b>Install ns_ldap. </b>Download and install
-ns_ldap</p><pre class="screen">
+<strong>Install ns_ldap. </strong>Download and
+install ns_ldap</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver/</code></strong>
           [root aolserver]# <strong class="userinput"><code>wget http://www.sussdorff.de/ressources/nsldap.tgz</code></strong>
           [root aolserver]# <strong class="userinput"><code>tar xfz nsldap.tgz</code></strong>
@@ -57,34 +57,35 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
 </pre>
 </li><li class="listitem">
 <a name="configure-ns_ldap" id="configure-ns_ldap"></a><p>
-<b>Configure ns_ldap for traditional
-use. </b>Traditionally OpenACS has supported ns_ldap
-for authentification by storing the OpenACS password in an
-encrypted field within the LDAP server called "userPassword".
-Furthermore a CN field was used for searching for the username,
-usually userID or something similar. This field is identical to the
-<span class="emphasis"><em>username</em></span>stored in OpenACS.
-Therefore the login will only work if you change login method to
-make use of the username instead.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Change <span class="emphasis"><em>config.tcl</em></span>. Remove
+<strong>Configure ns_ldap for traditional
+use. </strong>Traditionally OpenACS has supported
+ns_ldap for authentification by storing the OpenACS password in an
+encrypted field within the LDAP server called
+"userPassword". Furthermore a CN field was used for
+searching for the username, usually userID or something similar.
+This field is identical to the <span class="emphasis"><em>username</em></span>stored in OpenACS. Therefore the
+login will only work if you change login method to make use of the
+username instead.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Change <span class="emphasis"><em>config.tcl</em></span>. Remove
 the <span class="emphasis"><em>#</em></span> in front of
 <code class="computeroutput">ns_param nsldap
 ${bindir}/nsldap.so</code> to enable the loading of the ns_ldap
 module.</p></li></ul></div>
 </li><li class="listitem">
 <a name="configure-ns_ldap-bind" id="configure-ns_ldap-bind"></a><p>
-<b>Configure ns_ldap for use with LDAP
-bind. </b>LDAP authentication usually is done by trying
-to bind (aka. login) a user with the LDAP server. The password of
-the user is not stored in any field of the LDAP server, but kept
-internally. The latest version of ns_ldap supports this method with
-the <span class="emphasis"><em>ns_ldap bind</em></span> command.
-All you have to do to enable this is to configure auth_ldap to make
-use of the BIND authentification instead. Alternatively you can
-write a small script on how to calculate the username out of the
-given input (e.g. if the OpenACS username is malte.fb03.tu, the
-LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this
-example is encoded in auth_ldap and you just have to comment it out
-to make use of it).</p>
+<strong>Configure ns_ldap for use with LDAP
+bind. </strong>LDAP authentication usually is done by
+trying to bind (aka. login) a user with the LDAP server. The
+password of the user is not stored in any field of the LDAP server,
+but kept internally. The latest version of ns_ldap supports this
+method with the <span class="emphasis"><em>ns_ldap bind</em></span>
+command. All you have to do to enable this is to configure
+auth_ldap to make use of the BIND authentification instead.
+Alternatively you can write a small script on how to calculate the
+username out of the given input (e.g. if the OpenACS username is
+malte.fb03.tu, the LDAP request can be translated into
+"ou=malte,ou=fb03,o=tu" (this example is encoded in
+auth_ldap and you just have to comment it out to make use of
+it).</p>
 </li>
 </ol></div>
 </div>

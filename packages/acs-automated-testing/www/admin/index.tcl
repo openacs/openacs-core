@@ -21,6 +21,7 @@ ad_page_contract {
     quiet:onevalue
 }
 set title "System test cases"
+set return_url [ad_return_url]
 
 if {$by_package_key ne ""} {
     append title " for package $by_package_key"
@@ -95,7 +96,7 @@ if {$view_by eq "package"} {
     #
     # Prepare the template data for a view_by "testcase"
     #
-    template::multirow create tests id description package_key categories \
+    template::multirow create tests id url description package_key categories \
         timestamp passes fails marker
     set old_package_key ""
     foreach testcase [nsv_get aa_test cases] {
@@ -124,7 +125,11 @@ if {$view_by eq "package"} {
             } else {
                 set marker 0
             }
-            template::multirow append tests $testcase_id $testcase_desc \
+            set testcase_url [export_vars -base "testcase" -url {testcase_id package_key view_by {category by_category} quiet return_url}]
+            template::multirow append tests \
+                $testcase_id \
+                $testcase_url \
+                $testcase_desc \
                 $package_key \
                 $categories_str \
                 $testcase_timestamp \
@@ -147,11 +152,8 @@ foreach category [nsv_get aa_test categories] {
         template::multirow append exclusion_categories $category
     }
 }
-#
-# Set return url 
-#
 
-set record_url [export_vars -base "record-test" -url {{return_url [ad_return_url]} package_key}]
+set record_url [export_vars -base "record-test" -url {return_url package_key}]
 ad_return_template
 
 # Local variables:

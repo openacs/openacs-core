@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Installation}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Installation}</property>
 <property name="doc(title)">Installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,7 +11,7 @@
 <div><div><h2 class="title">
 <a name="ext-auth-install" id="ext-auth-install"></a>Installation</h2></div></div><hr>
 </div><div class="toc">
-<p><b>Table of Contents</b></p><dl>
+<p><strong>Table of Contents</strong></p><dl>
 <dt><span class="sect1"><a href="ext-auth-pam-install">Using
 Pluggable Authentication Modules (PAM) with OpenACS</a></span></dt><dt><span class="sect1"><a href="ext-auth-ldap-install">Using
 LDAP/Active Directory with OpenACS</a></span></dt><dt><span class="sect1"><a href="configure-batch-sync">Configure Batch

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Slave}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: Slave}</property>
 <property name="doc(title)">Templating System Tag Reference: Slave</property>
 <master>
 <h2>Slave</h2>
@@ -8,7 +8,7 @@
  : <a href="index">Tag Reference</a>
  : Slave
 <h3>Summary</h3>
-<p>The <tt>slave</tt> tag is used to mark the position in the
+<p>The <kbd>slave</kbd> tag is used to mark the position in the
 master template where the body template should be inserted.</p>
 <h3>Usage</h3>
 <pre>
@@ -23,7 +23,7 @@ master template where the body template should be inserted.</p>
 &lt;hr&gt;
 </pre>
 <h3>Note(s)</h3>
-<ul><li><p>See <a href="property"><tt>property</tt></a> and <a href="master"><tt>master</tt></a> for more information related to
+<ul><li><p>See <a href="property"><kbd>property</kbd></a> and <a href="master"><kbd>master</kbd></a> for more information related to
 master templates.</p></li></ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

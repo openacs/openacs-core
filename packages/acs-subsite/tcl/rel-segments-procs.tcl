@@ -48,8 +48,8 @@ ad_proc -public rel_segments_delete {
     @creation-date 1/12/2001
 
 } {
-    # First delete dependant constraints.
-    db_foreach select_dependant_constraints {
+    # First delete dependent constraints.
+    db_foreach select_dependent_constraints {
 	select c.constraint_id
 	  from rel_constraints c
 	 where c.required_rel_segment = :segment_id

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Packages</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Packages</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div></div><p>
@@ -13,7 +13,7 @@
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div></div><p>
       Here is how an OpenACS 5 server is laid out
       starting from the Server root (ROOT):
-    </p><div class="figure"><a name="idp140400239317232"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
+    </p><div class="figure"><a name="idp140592107056328"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
         Various executables and scripts for server maintanence.
@@ -33,7 +33,7 @@ ROOT/
     www/
         Pages not in packages (static content, customized pages)</pre></div></div><br class="figure-break"></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-looks"></a>What a Package Looks Like</h3></div></div></div><p>
       Each package encapsulates all of its data model, library code,
-      logic, adminstration pages and user pages in a single part of
+      logic, administration pages and user pages in a single part of
       the file tree.  This means developers can track down
       <span class="emphasis"><em>everything</em></span> that is related to a particular
       package without hunting all over the file system.  Encapsulating
@@ -51,7 +51,7 @@ ROOT/
       <a class="indexterm" name="baby"></a>
       To illustrate the general structure of a package, let's see what the
       package for the "notes" application should look like.
-    </p><div class="figure"><a name="idp140400255532528"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
+    </p><div class="figure"><a name="idp140592107063624"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
         |
@@ -124,7 +124,7 @@ ROOT/
       directories.  This makes it suitable for storing icons, css
       files, javascript, and other static content which can be treated
       this way.
-    </p><div class="table"><a name="idp140400239747488"></a><p class="title"><b>Table 11.1. Package files</b></p><div class="table-contents"><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
+    </p><div class="table"><a name="idp140592107069416"></a><p class="title"><b>Table 11.1. Package files</b></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
           maintained by the OpenACS Package Manager (APM).  It specifies
           information about the package including its parameters and its
           files.</td><td><code class="computeroutput">notes.info</code></td></tr><tr><td>Data Model Creation Script</td><td>
@@ -149,9 +149,9 @@ ROOT/
           files and then have the scripts source the other data model
           files. In Oracle this can be done by including 
           <span class="emphasis"><em>@@ filename</em></span> in the creation or drop
-          scripts. See the <a class="ulink" href="http://www.orafaq.com/faqplus.htm#AT" target="_top">
+          scripts. See the <a class="ulink" href="http://www.orafaq.com/wiki/Scripts" target="_top">
         Oracle FAQ</a> for examples. In
-          PostgreSQL the same is acomplished by including <span class="emphasis"><em>\i filename</em></span>.
+          PostgreSQL the same is accomplished by including <span class="emphasis"><em>\i filename</em></span>.
         </td><td>
           <code class="computeroutput">sql/&lt;database&gt;/*.sql</code>
         </td></tr><tr><td>Data Model Upgrade Scripts</td><td>
@@ -427,4 +427,4 @@ ROOT/
     </p></li><li class="listitem"><p>
       Writes out package distribution files for other people to download and
       install. We'll cover this later.
-    </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="apm-design.html" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements.html" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 11. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>
+    </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="apm-design.html" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements.html" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 11. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

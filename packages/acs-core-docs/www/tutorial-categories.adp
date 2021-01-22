@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Categories}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -14,15 +14,15 @@ Chapter 10. Advanced Topics"
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>You can associate any ACS Object with one or more categories. In
-this tutorial we'll show how to equip your application with user
-interface to take advantage of the Categories service.</p><p>We'll start by installing the Categories service. Go to
+this tutorial we&#39;ll show how to equip your application with
+user interface to take advantage of the Categories service.</p><p>We&#39;ll start by installing the Categories service. Go to
 <code class="computeroutput">/acs/admin</code> and install it. This
-step won't be necessary for the users of your applications because
-you'll create a dependency with the Package Manager which will take
-care that the Categories service always gets installed when your
-application gets installed.</p><p>Now that we have installed the Categories service we can proceed
+step won&#39;t be necessary for the users of your applications
+because you&#39;ll create a dependency with the Package Manager
+which will take care that the Categories service always gets
+installed when your application gets installed.</p><p>Now that we have installed the Categories service we can proceed
 to modifying our application so that it can take advantage of it.
-We'll do it in three steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
+We&#39;ll do it in three steps:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>The Categories service provides a mechanism to associate one or
 more <span class="emphasis"><em>category trees</em></span> that are
@@ -39,7 +39,7 @@ file:</p><pre class="programlisting">
           
 </pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.adp</code>
 file:</p><pre class="programlisting">
-                        &lt;a href="\@category_map_url\@"&lt;<span>#</span>categories.Site_wide_Categories#&lt;/a&gt;
+                  &lt;a href="\@category_map_url\@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
           
 </pre><p>The link created by the above code (<code class="computeroutput">category_map_url</code>) will take the admin to
 the generic admin UI where he can pick category trees that make
@@ -50,9 +50,9 @@ that category trees will be associated with the object identified
 by this <code class="computeroutput">package_id</code>. The
 categorization service is actually more general than that: instead
 of <code class="computeroutput">package_id</code> you could use an
-ID of some other object that serves as a "container" in your
-application. For example, if your discussion forums application
-supports multiple forums you would use <code class="computeroutput">forum_id</code> to associate category trees with
+ID of some other object that serves as a "container" in
+your application. For example, if your discussion forums
+application supports multiple forums you would use <code class="computeroutput">forum_id</code> to associate category trees with
 just that one forum rather than the entire application
 instance.</p>
 </li><li class="listitem">
@@ -60,10 +60,10 @@ instance.</p>
 categorize items. The easiest way to do this is by adding the
 <code class="computeroutput">category</code> widget type of the
 form builder to <code class="computeroutput">note-edit.tcl</code>.
-To achieve this we'll need to use the <code class="computeroutput">-extend</code> switch to the <code class="computeroutput">ad_form</code> command. Here's the "meat" of the
-<code class="computeroutput">note-edit.tcl</code> page:</p><pre class="programlisting">
-                            #extend the form to support categories
-                            set package_id [ad_conn package_id]
+To achieve this we&#39;ll need to use the <code class="computeroutput">-extend</code> switch to the <code class="computeroutput">ad_form</code> command. Here&#39;s the
+"meat" of the <code class="computeroutput">note-edit.tcl</code> page:</p><pre class="programlisting">
+                        # extend the form to support categories
+                        set package_id [ad_conn package_id]
                             
                         category::ad_form::add_widgets -form_name note -container_object_id $package_id -categorized_object_id [value_if_exists item_id]
 
@@ -100,7 +100,7 @@ variable, which should initially be absert. If it is absent, we
 create a form to allow the user to confirm the deletion. Note that
 in <code class="computeroutput">entry-edit.tcl</code> we used
 <code class="computeroutput">ad_form</code> to access the Form
-Template commands; here, we call them directly because we don't
+Template commands; here, we call them directly because we don&#39;t
 need the extra features of ad_form. The form calls itself, but with
 hidden variables carrying both <code class="computeroutput">note_id</code> and <code class="computeroutput">confirm_p</code>. If confirm_p is present, we
 delete the record, set redirection back to the index, and abort
@@ -137,15 +137,15 @@ samplenotes.</p>
 <p>We will now make categories optional on package instance level
 and also add a configuration page to allow the package admin to
 enable/disable categories for his package.</p><p>Go to the APM and create a number parameter with the name
-"<code class="computeroutput">EnableCategoriesP</code>" and the
-default value "<code class="computeroutput">0</code>".</p><p>Add the following lines to your <code class="computeroutput">index.tcl</code>:</p><pre class="programlisting">
+"<code class="computeroutput">EnableCategoriesP</code>"
+and the default value "<code class="computeroutput">0</code>".</p><p>Add the following lines to your <code class="computeroutput">index.tcl</code>:</p><pre class="programlisting">
           set return_url [ns_conn url]
           set use_categories_p [parameter::get -parameter "EnableCategoriesP"]
           
 </pre><p>Change your to this:</p><pre class="programlisting">
                         &lt;a href=configure?&lt;%=[export_vars -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
                         &lt;if \@use_categories_p\@&gt;
-                        &lt;a href="\@category_map_url\@"&lt;<span>#</span>categories.Site_wide_Categories#&lt;/a&gt;
+                        &lt;a href="\@category_map_url\@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
                         &lt;/if&gt;
           
 </pre><p>Now create a configure page</p><pre class="programlisting">
@@ -247,7 +247,7 @@ your index page:</p><pre class="programlisting">
                         set category_name [category::get_name $category_id]
                         if { $category_name eq "" } {
                         ad_return_exception_page 404 "No such category" "Site-wide \
-                                Category with ID $category_id doesn't exist"
+                                Category with ID $category_id doesn&#39;t exist"
                         return
                         }
                         # Show Category in context bar
@@ -286,13 +286,12 @@ your index page:</p><pre class="programlisting">
 URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty urls">the section called
 &ldquo;Using .vuh files for pretty
 urls&rdquo;</a>:</p><pre class="programlisting">
-                set url /[ad_conn extra_url]
+          set url /[ad_conn extra_url]
 
-                if {[regexp {^/+cat/+([^/]+)/*} $url \
-          ignore_whole category_id]} {
-          rp_form_put category_id $category_id
-                }
-                rp_internal_redirect "/packages/YOURPACKAGE/www/index"    
+          if {[regexp {^/+cat/+([^/]+)/*} $url ignore_whole category_id]} {
+              rp_form_put category_id $category_id
+          }
+          rp_internal_redirect "/packages/YOURPACKAGE/www/index"          
           
 </pre><p>Now when ever the user select a category only notes that belong
 to this category are displayed.</p>

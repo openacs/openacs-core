@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Using the Wizard}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Using the Wizard}</property>
 <property name="doc(title)">Using the Wizard</property>
 <master>
 <h2>Overview Of How To Make A Wizard</h2>
@@ -21,16 +21,16 @@ ex.
 its the same as your current wizard file. Has no effect for
 subwizards.</li><li>name - use to distinguish between the different wizards, since
 you can have 1 or more subwizard. name must be no spaces,
-alpanumeric similar to normal tcl variable naming convention</li><li>params - are used to keep values that you would like to pass on
+alpanumeric similar to normal Tcl variable naming convention</li><li>params - are used to keep values that you would like to pass on
 to the other steps</li><li>steps - are use to define what includes to use for each step of
 the wizard</li>
 </ul>
 </li><li>
-<p>Add the "template::wizard get_current_step" on wizard.tcl. Make
-sure that you call any "template::wizard set_param" if needed
-before calling get_current_step. get_current_step will redirect to
-the wizard -action properly setting all -params value and its other
-needed http state vars</p><p>Note: the wizard will rewrite the url always. Only self
+<p>Add the "template::wizard get_current_step" on
+wizard.tcl. Make sure that you call any "template::wizard
+set_param" if needed before calling get_current_step.
+get_current_step will redirect to the wizard -action properly
+setting all -params value and its other needed http state vars</p><p>Note: the wizard will rewrite the url always. Only self
 submitting forms are preserved. Once the form is finished
 processing the wizard will take over and rewrite the url.</p>
 </li><li>Create the wizard template file (ex. wizard.adp). This file
@@ -40,12 +40,12 @@ ex.
        &lt;include src="\@wizard:current_url\@"&gt;
     
 </pre>
-</li><li>Create the individual steps, these are just normal tcl and/or
+</li><li>Create the individual steps, these are just normal Tcl and/or
 adp files. So make a step1.tcl, step1.adp, step2.tcl, step2.adp,
 step3.tcl and step3.adp. Normally this files are self submitting
-forms</li><li>Add "template:wizard forward" on each step (eg. step1.tcl,
-step2.tcl, step3.tcl) , usually the code where the step is
-processed and successful.</li><li>On each step add the wizard buttons on the .tcl files. Ex.
+forms</li><li>Add "template:wizard forward" on each step (eg.
+step1.tcl, step2.tcl, step3.tcl) , usually the code where the step
+is processed and successful.</li><li>On each step add the wizard buttons on the .tcl files. Ex.
 step1.tcl will include
 <pre>
     template::wizard submit myform -buttons {back next}
@@ -80,14 +80,14 @@ On your adp file do the following:
     
 </pre>
 </li><li>
-<h3>How do you set the value of a wizard param?</h3><p>Use "template::wizard set_param myparam_name" to set it.
-Normally you place this in the steps of the wizard where the form
-has been processed. A param is normally used when you want to reuse
-a value across the steps.</p><p>Note: if you are to use "template::wizard set_param" on a wizard
-file ex. (wizard.tcl). Make sure to do it before "template::wizard
-get_current_step". So when "template::wizard get_current_step"
-redirects it will properly set the correct values of the param to
-the new value.</p>
+<h3>How do you set the value of a wizard param?</h3><p>Use "template::wizard set_param myparam_name" to set
+it. Normally you place this in the steps of the wizard where the
+form has been processed. A param is normally used when you want to
+reuse a value across the steps.</p><p>Note: if you are to use "template::wizard set_param"
+on a wizard file ex. (wizard.tcl). Make sure to do it before
+"template::wizard get_current_step". So when
+"template::wizard get_current_step" redirects it will
+properly set the correct values of the param to the new value.</p>
 </li><li>
 <h3>How do you get the value of a wizard param?</h3>
 For example you wizard was created this way:
@@ -120,14 +120,15 @@ or
     set my_param2 [template::wizard get_param my_param2]
     
 </pre>
-Note: "template::wizard get_param" has the advantage of getting the
-param value during the response time. What does this mean? It will
-properly get the current value of the param which was set by
-"template::wizard set_param", while ad_page_contract will not pick
-that up since it will get what is the request http var value. This
-is because "template::wizard get_param" gets the value from the tcl
-var while ad_page_contract gets the value from the http var. So
-while processing in tcl that value may change.</li><li>
+Note: "template::wizard get_param" has the advantage of
+getting the param value during the response time. What does this
+mean? It will properly get the current value of the param which was
+set by "template::wizard set_param", while
+ad_page_contract will not pick that up since it will get what is
+the request http var value. This is because "template::wizard
+get_param" gets the value from the Tcl var while
+ad_page_contract gets the value from the http var. So while
+processing in Tcl that value may change.</li><li>
 <h3>How can you get the url of a wizard that is not your current
 step?</h3>
 You can use the following on your wizard.adp
@@ -164,12 +165,14 @@ can however do checking on each step.</li><li>
 as a subwizard.</p><p>Note: That visited steps will loose its value when moving from
 one subwizard to another subwizard in the same level. In order to
 preserve this you must call "template::wizard
-load_last_visited_step -key $yourkey" before "template::wizard
-get_current_step", after "get_current_step" call "template::wizard
+load_last_visited_step -key $yourkey" before
+"template::wizard get_current_step", after
+"get_current_step" call "template::wizard
 save_last_visited_step -key $yourkey"</p><p>Also the wizard params name is present across the curent wizards
 being used, so the developer has to be aware not to use the same
 names with different purpose. For example on main wizard with have
-a param called "name" for the user name. And on on sub wizard we
-have the param again called "name" but used for the file name.</p>
+a param called "name" for the user name. And on on sub
+wizard we have the param again called "name" but used for
+the file name.</p>
 </li>
 </ul>

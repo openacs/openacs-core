@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Configuring an OpenACS package}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Configuring an OpenACS package}</property>
 <property name="doc(title)">Configuring an OpenACS package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -17,12 +17,12 @@ package</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140400237553440" id="idp140400237553440"></a>Configuring an OpenACS package</h3></div></div></div><p>After you've installed and mounted your package, you can
+<a name="idp140592104638184" id="idp140592104638184"></a>Configuring an OpenACS package</h3></div></div></div><p>After you&#39;ve installed and mounted your package, you can
 configure each instance to act as you would like.</p><p>This is done from the Applications page. Log in, go to the Admin
 or Control Panel, click on the subsite the application is in, and
-click on Applications. If you click on the 'Parameters' link, you
-will see a list of parameters that you can change for this
-application.</p>
+click on Applications. If you click on the 'Parameters'
+link, you will see a list of parameters that you can change for
+this application.</p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

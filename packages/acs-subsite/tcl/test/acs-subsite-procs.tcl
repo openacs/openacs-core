@@ -105,6 +105,105 @@ aa_register_case -cats smoke acs_subsite_unregistered_visitor {
 	      and a.name = 'the_pubic'" -default 0] 0
 }
 
+
+aa_register_case -cats smoke acs_subsite_check_composite_group {
+    Build a 3-level hierarchy of composite groups and check memberships. This test case covers the membership and composition rel insertion triggers and composability of basic membership and admin rels.
+
+    @author Michael Steigman
+} {
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+
+            # create groups and relate them to one another
+            set level_1_group [group::new -group_name "Level 1 Group"]
+            set level_2_group [group::new -group_name "Level 2 Group"]
+            relation_add composition_rel $level_1_group $level_2_group
+
+            set authority_id [auth::authority::local]
+
+            # flush cache from previous call of this test
+            util_memoize_flush [list acs_user::get_by_username_not_cached \
+                                    -authority_id $authority_id \
+                                     -username "__test1"]
+            
+            if {[set user_1_id [acs_user::get_by_username_not_cached \
+                                    -authority_id $authority_id \
+                                    -username "__test1"]] eq ""} {
+                array set user_1 [auth::create_user \
+                                      -username "__test1" \
+                                      -email "__user1@test.test" \
+                                      -first_names "__user1.Test first" \
+                                      -last_name "__user1.Test last" \
+                                      -password 1 \
+                                      -password_confirm 1]
+                set user_1_id $user_1(user_id)
+            }
+
+            # flush cache from previous call of this test
+            util_memoize_flush [list acs_user::get_by_username_not_cached \
+                                    -authority_id $authority_id \
+                                     -username "__test2"]            
+
+            if {[set user_2_id [acs_user::get_by_username_not_cached \
+                                    -authority_id $authority_id \
+                                    -username "__test2"]] eq ""} {                
+                array set user_2 [auth::create_user \
+                                      -username "__test2" \
+                                      -email "__user2@test.test" \
+                                      -first_names "__user2.Test first" \
+                                      -last_name "__user2.Test last" \
+                                      -password 1 \
+                                      -password_confirm 1]                    
+                set user_2_id $user_2(user_id)
+            }
+            
+            group::add_member -group_id $level_2_group -user_id $user_1_id -rel_type membership_rel
+            group::add_member -group_id $level_2_group -user_id $user_1_id -rel_type admin_rel
+
+            # check that user_1 is a member of level_1_group but not admin
+            aa_true "User 1 is a member of Level 1 Group" [db_0or1row member_p {
+                SELECT 1
+                FROM group_member_map
+                WHERE group_id = :level_1_group
+                AND member_id = :user_1_id
+                AND rel_type = 'membership_rel'
+            }]
+
+            aa_false "User 1 is not an admin of Level 1 Group" [db_0or1row member_p {
+                SELECT 1
+                FROM group_member_map
+                WHERE group_id = :level_1_group
+                AND member_id = :user_1_id
+                AND rel_type = 'admin_rel'
+            }]
+            # create new group then relate it to level_2_group
+            set level_3_group [group::new -group_name "Level 3 Group"]
+            group::add_member -group_id $level_3_group -user_id $user_2_id -rel_type membership_rel
+            group::add_member -group_id $level_3_group -user_id $user_2_id -rel_type admin_rel
+            relation_add composition_rel $level_2_group $level_3_group
+
+            # check that user_2 is a member of level_1_group but not admin
+            aa_true "User 2 is a member of Level 1 Group" [db_0or1row member_p {
+                SELECT 1
+                FROM group_member_map
+                WHERE group_id = :level_1_group
+                AND member_id = :user_2_id
+                AND rel_type = 'membership_rel'
+            }]
+
+            aa_false "User 2 is not an admin of Level 1 Group" [db_0or1row member_p {
+                SELECT 1
+                FROM group_member_map
+                WHERE group_id = :level_1_group
+                AND member_id = :user_2_id
+                AND rel_type = 'admin_rel'
+            }]
+
+        }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

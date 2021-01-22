@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Documenting Tcl Files: Page Contracts and Libraries}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Documenting Tcl Files: Page Contracts and Libraries}</property>
 <property name="doc(title)">Documenting Tcl Files: Page Contracts and Libraries</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -22,15 +22,15 @@ at the top of the file:</p><pre class="programlisting">
 #
 # <span class="emphasis"><em>path from server home</em></span>/<span class="emphasis"><em>filename</em></span>
 #
-# <span class="emphasis"><em>Brief description of the file's purpose</em></span>
+# <span class="emphasis"><em>Brief description of the file&#39;s purpose</em></span>
 #
-# <span class="emphasis"><em>author's email address</em></span>, <span class="emphasis"><em>file creation date</em></span>
+# <span class="emphasis"><em>author&#39;s email address</em></span>, <span class="emphasis"><em>file creation date</em></span>
 #
 # <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38 torbenb Exp $</a>
 #
 </pre><p>In addition, the inputs expected by a Tcl page (i.e., form
 variables) would be enumerated in a call to <code class="computeroutput">ad_page_variables</code>, in effect, documenting
-the page's argument list.</p><p>The problem with these practices is that the documentation is
+the page&#39;s argument list.</p><p>The problem with these practices is that the documentation is
 only accessible by reading the source file itself. For this reason,
 ACS 3.4 introduces a new API for documenting Tcl files and, on top
 of that, a web-based user interface for browsing the
@@ -50,22 +50,23 @@ the top of every library file (i.e., all files in the <code class="computeroutpu
 <li class="listitem"><p>Facilitates automatic generation of human-readable
 documentation.</p></li><li class="listitem"><p>Promotes security, by introducing a standard and automated way
 to check inputs to scripts for correctness.</p></li><li class="listitem"><p>Allows graphical designers to determine easily how to customize
-sites' UIs, e.g., what properties are available in templates.</p></li><li class="listitem"><p>Allows the request processor to be intelligent: a script can
+sites' UIs, e.g., what properties are available in
+templates.</p></li><li class="listitem"><p>Allows the request processor to be intelligent: a script can
 specify in its contract which type of abstract document it returns,
 and the request processor can transform it automatically into
-something useful to a particular user agent. (Don't worry about
-this for now - it's not complete for ACS 3.4.)</p></li>
+something useful to a particular user agent. (Don&#39;t worry about
+this for now - it&#39;s not complete for ACS 3.4.)</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="tcl-doc-ad-page-contract" id="tcl-doc-ad-page-contract"></a>ad_page_contract</h3></div></div></div><p>Currently <code class="computeroutput">ad_page_contract</code>
 serves mostly as a replacement for <code class="computeroutput">ad_page_variables</code>. Eventually, it will be
-integrated closely with the documents API so that each script's
+integrated closely with the documents API so that each script&#39;s
 contract will document precisely the set of properties available to
 graphical designers in templates. (Document API integration is
-subject to change, so we don't decsribe it here yet; for now, you
-can just consider <code class="computeroutput">ad_page_contract</code> a newer, better,
-documented <code class="computeroutput">ad_page_variables</code>.)</p><p>Let's look at an example usage of <code class="computeroutput">ad_page_contract</code>:</p><pre class="programlisting">
+subject to change, so we don&#39;t decsribe it here yet; for now,
+you can just consider <code class="computeroutput">ad_page_contract</code> a newer, better,
+documented <code class="computeroutput">ad_page_variables</code>.)</p><p>Let&#39;s look at an example usage of <code class="computeroutput">ad_page_contract</code>:</p><pre class="programlisting">
 
 # /packages/acs-kernel/api-doc/www/package-view.tcl
 ad_page_contract {
@@ -91,11 +92,11 @@ ad_page_contract {
 </pre><p>Note that:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <span class="strong"><strong>By convention, <code class="computeroutput">ad_page_contract</code> should be preceded by a
-comment line containing the file's path</strong></span>. The
+comment line containing the file&#39;s path</strong></span>. The
 comment is on line 1, and the contract starts on line 2.</p></li><li class="listitem"><p>
-<span class="strong"><strong><code class="computeroutput">ad_page_contract</code></strong></span>'s first
-argument is the list of expected arguments from the HTTP query
-(<code class="computeroutput">version_id</code>, <code class="computeroutput">public_p</code>, <code class="computeroutput">kind</code>, and <code class="computeroutput">format</code>). Like <code class="computeroutput">ad_page_variables</code>, <code class="computeroutput">ad_page_contract</code> sets the corresponding Tcl
+<span class="strong"><strong><code class="computeroutput">ad_page_contract</code></strong></span>'s
+first argument is the list of expected arguments from the HTTP
+query (<code class="computeroutput">version_id</code>, <code class="computeroutput">public_p</code>, <code class="computeroutput">kind</code>, and <code class="computeroutput">format</code>). Like <code class="computeroutput">ad_page_variables</code>, <code class="computeroutput">ad_page_contract</code> sets the corresponding Tcl
 variables when the page is executed.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Arguments can have
 defaults</strong></span>, specified using the same syntax as in the
@@ -109,10 +110,11 @@ argument with a colon and one or more of the following strings
 (separated by commas):</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>
 <span class="strong"><strong><code class="computeroutput">optional</code></strong></span>: the query
-argument doesn't need to be provided; if it's not, the variable for
-that argument simply won't be set. For instance, if I call the
-script above without a <code class="computeroutput">public_p</code>
-in the query, then in the page body <code class="computeroutput">[info exists public_p]</code> will return 0.</p></li><li class="listitem"><p>
+argument doesn&#39;t need to be provided; if it&#39;s not, the
+variable for that argument simply won&#39;t be set. For instance,
+if I call the script above without a <code class="computeroutput">public_p</code> in the query, then in the page
+body <code class="computeroutput">[info exists public_p]</code>
+will return 0.</p></li><li class="listitem"><p>
 <span class="strong"><strong><code class="computeroutput">integer</code></strong></span>: the argument must
 be an integer (<code class="computeroutput">ad_page_contract</code>
 will fail and display and error if not). This flag, like the next,
@@ -127,8 +129,10 @@ return true).</p></li><li class="listitem"><p>
 <span class="strong"><strong><code class="computeroutput">multiple</code></strong></span>: the argument may
 be specified arbitrarily many times in the query string, and the
 variable will be set to a list of all those values (or an empty
-list if it's unspecified). This is analogous to the <code class="computeroutput">-multiple-list</code> flag to <code class="computeroutput">ad_page_variables</code>, and is useful for
-handling form input generated by <code class="computeroutput">&lt;SELECT MULTIPLE&gt;</code> tags and
+list if it&#39;s unspecified). This is analogous to the
+<code class="computeroutput">-multiple-list</code> flag to
+<code class="computeroutput">ad_page_variables</code>, and is
+useful for handling form input generated by <code class="computeroutput">&lt;SELECT MULTIPLE&gt;</code> tags and
 checkboxes.</p><p>For instance, if <code class="computeroutput">dest_user_id:multiple</code> is specified in the
 contract, and the query string is</p><pre class="programlisting">
 
@@ -157,8 +161,8 @@ contract, and the query string is</p><pre class="programlisting">
 <span class="strong"><strong>You can provide structured,
 HTML-formatted documentation for your contract</strong></span>.
 Note that format is derived heavily from Javadoc: a general
-description of the script's functionality, followed optionally by a
-series of named attributes tagged by at symbols (<code class="computeroutput">\@</code>). You are encouraged to provide:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+description of the script&#39;s functionality, followed optionally
+by a series of named attributes tagged by at symbols (<code class="computeroutput">\@</code>). You are encouraged to provide:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>A description of the functionality of the page. If the
 description contains more than one sentence, the first sentence
 should be a brief summary.</p></li><li class="listitem">
@@ -168,10 +172,10 @@ allowable query argument. The format is</p><pre class="programlisting">
 \@param <span class="emphasis"><em>parameter-name</em></span><span class="emphasis"><em>description...</em></span>
 </pre>
 </li><li class="listitem"><p>An <span class="strong"><strong><code class="computeroutput">\@author</code></strong></span> tag for each
-author. Specify the author's name, followed his or her email
+author. Specify the author&#39;s name, followed his or her email
 address in parentheses.</p></li><li class="listitem"><p>A <span class="strong"><strong><code class="computeroutput">\@creation-date</code></strong></span> tag
 indicating when the script was first created.</p></li><li class="listitem"><p>A <span class="strong"><strong><code class="computeroutput">\@cvs-id</code></strong></span> tag containing the
-page's CVS identification string. Just use <code class="computeroutput">$&zwnj;Id: tcl-documentation.html,v 1.2 2000/09/19
+page&#39;s CVS identification string. Just use <code class="computeroutput">$&zwnj;Id: tcl-documentation.html,v 1.2 2000/09/19
 07:22:35 ron Exp $</code> when creating the file, and CVS will
 substitute an appropriate string when you check the file in.</p></li>
 </ul></div><p>These <code class="computeroutput">\@</code> tags are optional,
@@ -193,7 +197,7 @@ at the beginning of every Tcl page. Instead of:</p><pre class="programlisting">
 #
 # $&zwnj;Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38 torbenb Exp $
 
-</pre><p>you'll now write:</p><pre class="programlisting">
+</pre><p>you&#39;ll now write:</p><pre class="programlisting">
 
 # /packages/acs-kernel/00-proc-procs.tcl
 ad_library {
@@ -208,14 +212,14 @@ ad_library {
 }
 
 </pre><p>Note that format is derived heavily from Javadoc: a general
-description of the script's functionality, followed optionally by a
-series of named attributes tagged by at symbols (<code class="computeroutput">\@</code>). HTML formatting is allowed. You are
+description of the script&#39;s functionality, followed optionally
+by a series of named attributes tagged by at symbols (<code class="computeroutput">\@</code>). HTML formatting is allowed. You are
 encouraged to provide:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>An <span class="strong"><strong><code class="computeroutput">\@author</code></strong></span> tag for each
-author. Specify the author's name, followed his or her email
+author. Specify the author&#39;s name, followed his or her email
 address in parentheses.</p></li><li class="listitem"><p>A <span class="strong"><strong><code class="computeroutput">\@creation-date</code></strong></span> tag
 indicating when the script was first created.</p></li><li class="listitem"><p>A <span class="strong"><strong><code class="computeroutput">\@cvs-id</code></strong></span> tag containing the
-page's CVS identification string. Just use <code class="computeroutput">$&zwnj;Id: tcl-documentation.html,v 1.2 2000/09/19
+page&#39;s CVS identification string. Just use <code class="computeroutput">$&zwnj;Id: tcl-documentation.html,v 1.2 2000/09/19
 07:22:35 ron Exp $</code> when creating the file, and CVS will
 substitute an appropriate string when you check the file in.</p></li>
 </ul></div><div class="cvstag">($&zwnj;Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38

@@ -8,12 +8,12 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     rel_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_vars:onevalue
     rel:onerow
-    dependants:multirow
+    dependents:multirow
 } -validate {
     permission_p -requires {rel_id:notnull} {
 	if { ![relation_permission_p -privilege delete $rel_id] } {
@@ -38,15 +38,15 @@ if { ![db_0or1row select_rel_info {} -column_array rel]
 # Now let's see if removing this relation would violate some
 # constraint.
 
-if { [relation_segment_has_dependant -rel_id $rel_id] } {
+if { [relation_segment_has_dependent -rel_id $rel_id] } {
     set return_url "[ad_conn url]?[ad_conn query]"
     # We can't remove this relation - display the violations
-    template::multirow create dependants rel_id rel_type_pretty_name object_id_one_name object_id_two_name export_vars
+    template::multirow create dependents rel_id rel_type_pretty_name object_id_one_name object_id_two_name export_vars
 
-    db_foreach select_dependants {} {
-	template::multirow append dependants $rel_id $rel_type_pretty_name $object_id_one_name $object_id_two_name [export_vars {rel_id return_url}]
+    db_foreach select_dependents {} {
+	template::multirow append dependents $rel_id $rel_type_pretty_name $object_id_one_name $object_id_two_name [export_vars {rel_id return_url}]
     }
-    ad_return_template remove-dependants-exist
+    ad_return_template remove-dependents-exist
     return
 }
 

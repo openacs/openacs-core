@@ -7,7 +7,7 @@
 -- @cvs-id $Id$
 --
 
--- this script was orignally created by daveb -- upgrade-5.2.0d15-5.2.0a1.sql
+-- this script was originally created by daveb -- upgrade-5.2.0d15-5.2.0a1.sql
 
 -- patch#548 bug#1937
 

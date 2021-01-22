@@ -122,7 +122,6 @@ if { [llength $requests] == 0 } {
 		unset conn
 	    }
 	    array set conn [nsv_get ds_request $request]
-
 	    if { [catch {
 		set start [ns_fmttime [lindex [nsv_get ds_request "$id.start"] 0] "%T"]
 	    }] } {
@@ -130,7 +129,7 @@ if { [llength $requests] == 0 } {
 	    }
 
 	    if { [info exists conn(startclicks)] && [info exists conn(endclicks)] } {
-		set duration "[expr { ($conn(endclicks) - $conn(startclicks))}] ms"
+		set duration "[expr { ($conn(endclicks) - $conn(startclicks)) / 1000.0 }] ms"
 	    } else {
 		set duration ""
 	    }

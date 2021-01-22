@@ -98,7 +98,7 @@ ns_write "<li>Channels are: [array get channel_tag]</ul>\n"
 #----------------------------------------------------------------------
 
 # Wipe and re-create the working directory
-file delete -force $work_dir
+file delete -force -- $work_dir
 file mkdir ${work_dir}
 cd $work_dir
     
@@ -106,7 +106,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
     ns_write "<h2>Channel $channel using tag $channel_tag($channel)</h2><ul>"
 
     # Wipe and re-create the checkout directory
-    file delete -force "${work_dir}openacs-4"
+    file delete -force -- "${work_dir}openacs-4"
     
     # Prepare channel directory
     set channel_dir "${work_dir}repository/${channel}/"
@@ -297,12 +297,12 @@ set repository_bak "[string range $repository_dir 0 end-1].bak"
 ns_write "<li>Moving work repository $work_repository_dirname to live repository dir at <a href=\"/repository\/>$repository_dir</a>\n"
 
 if { [file exists $repository_bak] } {
-    file delete -force $repository_bak
+    file delete -force -- $repository_bak
 }
 if { [file exists $repository_dirname] } {
-    file rename $repository_dirname $repository_bak
+    file rename -- $repository_dirname $repository_bak
 }
-file rename $work_repository_dirname  $repository_dirname
+file rename -- $work_repository_dirname  $repository_dirname
 
 ns_write "</ul> <h2>DONE</h2>\n"
 

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Appendix D. Using CVS with an
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix D. Using CVS with an
 OpenACS Site}</property>
 <property name="doc(title)">Appendix D. Using CVS with an
 OpenACS Site</property>
@@ -18,9 +18,9 @@ an OpenACS Site</h2></div></div></div><div class="authorblurb">
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
-<a name="cvs-service-import" id="cvs-service-import"></a><b>Add
-the Service to CVS - OPTIONAL. </b><a class="indexterm" name="idp140400226929072" id="idp140400226929072"></a>These steps
-take an existing OpenACS directory and add it to a <a class="link" href="install-cvs" title="Initialize CVS (OPTIONAL)">CVS
+<a name="cvs-service-import" id="cvs-service-import"></a><strong>Add the Service to CVS -
+OPTIONAL. </strong><a class="indexterm" name="idp140592106625944" id="idp140592106625944"></a>These steps take
+an existing OpenACS directory and add it to a <a class="link" href="install-cvs" title="Initialize CVS (OPTIONAL)">CVS
 repository</a>.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>Create and set permissions on a subdirectory in the local cvs
@@ -56,15 +56,15 @@ move aside, and then check out all of the files. In the cvs import
 command, <code class="computeroutput"><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code> refers to
 the cvs repository to use; it uses the CVSROOT plus this string,
 i.e. <code class="computeroutput">/cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-</code>. "OpenACS"
-is the vendor tag, and "oacs-5-7-0-final" is the release tag. These
-tags will be useful in upgrading and branching. -m sets the version
-comment.</p><pre class="screen">
+</code>.
+"OpenACS" is the vendor tag, and
+"oacs-5-9-0-final" is the release tag. These tags will be
+useful in upgrading and branching. -m sets the version comment.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs import -m "initial install" <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> OpenACS oacs-5-7-0-final</code></strong>
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs import -m "initial install" <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> OpenACS oacs-5-9-0-final</code></strong>
 N <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/license.txt
 N <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/readme.txt
 <span class="emphasis"><em>(many lines omitted)</em></span>
@@ -76,7 +76,7 @@ No conflicts created by this import
 [root root]#
 <span class="action"><span class="action">su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-cvs import -m "initial install" <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> OpenACS oacs-5-7-0-final
+cvs import -m "initial install" <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> OpenACS oacs-5-9-0-final
 exit</span></span>
 </pre><p>Move the original directory to a temporary location, and check
 out the cvs repository in its place.</p><pre class="screen">
@@ -113,7 +113,7 @@ temporary copy of the uploaded files.</p></li>
 </ol></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="i18n-translators" leftLabel="Prev" leftTitle="Translator's Guide"
+		    leftLink="i18n-translators" leftLabel="Prev" leftTitle="Translator&#39;s Guide"
 		    rightLink="acs-plat-dev" rightLabel="Next" rightTitle="Part IV. For
 OpenACS Platform Developers"
 		    homeLink="index" homeLabel="Home" 

@@ -7,7 +7,7 @@
 
 -- Moving primary key constraint on host_node_map from node_id column
 -- to host column.  Fortunately, nothing references the table, so a
--- simple drop-rebuild is feasable
+-- simple drop-rebuild is feasible
 alter table host_node_map rename to host_node_map_old;
 
 create table host_node_map (

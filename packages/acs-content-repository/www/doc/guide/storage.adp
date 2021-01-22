@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {}</property>
 <property name="doc(title)"></property>
 <master>
 <h2>Storing Data in the Content Repository</h2>
@@ -30,7 +30,7 @@ the very least:</p>
   );
 </pre>
 <p>Content types are nothing more than standard ACS Objects that
-inherit from <tt>content_revision</tt>:</p>
+inherit from <kbd>content_revision</kbd>:</p>
 <pre>
 begin
 
@@ -64,11 +64,12 @@ end;
 /
 show errors
 </pre>
-<p>Note that content types always extend <tt>content_revision</tt>,
-rather than <tt>content_item</tt>. This is because we want to store
-multiple revisions of both the actual data (in this case the image)
-as well as associated attributes (the width and height of the image
-may vary among revisions).</p>
+<p>Note that content types always extend
+<kbd>content_revision</kbd>, rather than <kbd>content_item</kbd>.
+This is because we want to store multiple revisions of both the
+actual data (in this case the image) as well as associated
+attributes (the width and height of the image may vary among
+revisions).</p>
 <h3>Define a Relationship to a Target Object</h3>
 <p>The content repository implements a flexible mechanism for
 organizing data in a hierarchical fashion in a manner similar to a
@@ -94,11 +95,11 @@ Objects:</p>
      max_n_rels_two =&gt; 1
   );
 </pre>
-<p>Note that the <tt>user</tt> object is related to a
-<tt>content_item</tt> object rather than an <tt>image</tt> object
-directly. Each <tt>image</tt> object represents only a single
-revision of a portrait. Revisions always exist in the context of an
-item.</p>
+<p>Note that the <kbd>user</kbd> object is related to a
+<kbd>content_item</kbd> object rather than an <kbd>image</kbd>
+object directly. Each <kbd>image</kbd> object represents only a
+single revision of a portrait. Revisions always exist in the
+context of an item.</p>
 <h3>Store Objects</h3>
 <p>Now we have defined both a content type and relationship type,
 we can start storing portraits. The DML for processing a new
@@ -119,5 +120,5 @@ portrait upload form would look like this:</p>
 </pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: storage.html,v 1.1.1.1 2001/03/13 22:59:26
-ben Exp $</p>
+<p>Last Modified: $&zwnj;Id: storage.html,v 1.1.1.1.30.1 2016/06/22
+07:40:41 gustafn Exp $</p>

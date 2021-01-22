@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install Full Text Search using OpenFTS (deprecated see
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Full Text Search using OpenFTS (deprecated see
 tsearch2)}</property>
 <property name="doc(title)">Install Full Text Search using OpenFTS (deprecated see
 tsearch2)</property>
@@ -24,7 +24,7 @@ requiring only compilation of one module from PostgreSQL contrib,
 with an automated install process using the tsearch2-driver
 package.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-openfts" id="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140400245241472" id="idp140400245241472"></a><p>If you want full text search, and you are running PostgreSQL,
+<a name="install-openfts" id="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140592107433768" id="idp140592107433768"></a><p>If you want full text search, and you are running PostgreSQL,
 install this module to support FTS. Do this step after you have
 installed both PostgreSQL and AOLserver. You will need the
 <a class="link" href="individual-programs">openfts tarball</a> in
@@ -36,7 +36,7 @@ requires.</p><pre class="screen">
 [postgres pgsql]$ <strong class="userinput"><code>cd /usr/local/src/postgresql-7.3.4/contrib/tsearch/</code></strong>
 [postgres tsearch]$ <strong class="userinput"><code>make</code></strong>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in &gt;tsearch.sql
-/usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l<span class="emphasis"><em>(many lines omitted)</em></span>
+/usr/bin/flex  -8 -Ptsearch_yy -o&#39;parser.c' parser.l<span class="emphasis"><em>(many lines omitted)</em></span>
 rm -f libtsearch.so
 ln -s libtsearch.so.0.0 libtsearch.so
 [postgres tsearch]$ <strong class="userinput"><code>make install</code></strong>
@@ -84,7 +84,7 @@ tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
 ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
 make
-cd aolserver
+cd AOLserver
 make
 cp nsfts.so /usr/local/aolserver/bin
 </span></span>
@@ -119,7 +119,7 @@ exit</span></span>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-openfts-postgres" id="install-openfts-postgres"></a>Install OpenFTS prerequisites in
-PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140400245270848" id="idp140400245270848"></a><p>If you are installing Full Text Search, add required packages to
+PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140592107463144" id="idp140592107463144"></a><p>If you are installing Full Text Search, add required packages to
 the new database. (In order for full text search to work, you must
 also <a class="link" href="install-full-text-search-openfts" title="Install OpenFTS module">install</a> the PostgreSQL OpenFTS module
 and prerequisites.)</p><pre class="screen">
@@ -137,15 +137,16 @@ CREATE
 /usr/local/pgsql/bin/psql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</span></span>
 </pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3><p>If you get the error <code class="computeroutput">ERROR: could
-not access file "$libdir/tsearch": no such file or directory</code>
-It is probably because PostgreSQL's libdir configuration variable
-points to a diffent directory than where tsearch is. You can find
-out where PostgreSQL expects to find tsearch via</p><pre class="screen"><strong class="userinput"><code>pg_config --pkglibdir</code></strong></pre>
+not access file "$libdir/tsearch": no such file or
+directory</code> It is probably because PostgreSQL&#39;s libdir
+configuration variable points to a diffent directory than where
+tsearch is. You can find out where PostgreSQL expects to find
+tsearch via</p><pre class="screen"><strong class="userinput"><code>pg_config --pkglibdir</code></strong></pre>
 </div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="enable-openfts" id="enable-openfts"></a>Enable OpenFTS in config.tcl</h3></div></div></div><p>If you have <a class="link" href="install-full-text-search-openfts" title="Install OpenFTS module">installed OpenFTS</a>, you can enable it
-for this service. Uncomment this line from <code class="computeroutput">config.tcl</code>. (To uncomment a line in a tcl
+for this service. Uncomment this line from <code class="computeroutput">config.tcl</code>. (To uncomment a line in a Tcl
 file, remove the <code class="computeroutput">#</code> at the
 beginning of the line.)</p><pre class="programlisting">
 #ns_param   nsfts           ${bindir}/nsfts.so
@@ -167,13 +168,13 @@ next to OpenFTS Driver.</p></li><li class="listitem">
 </pre>
 </li><li class="listitem"><p>Wait a minute, then browse back to the home page.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Admin</span></span></code> on the
 top of the screen.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Main Site
-Administration</span></span></code> in the "Subsite Administration"
-section.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
+Administration</span></span></code> in the "Subsite
+Administration" section.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
 the "Advanced Features" section.</p></li><li class="listitem">
 <p>Mount the OpenFTS Full Text Search Engine in the site map.</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Click the <code class="computeroutput"><span class="guilabel"><span class="guilabel">new sub
-folder</span></span></code> link on the "/" line, the first line
-under Main Site:/.</p></li><li class="listitem"><p>Type <strong class="userinput"><code>openfts</code></strong> and
+folder</span></span></code> link on the "/" line, the
+first line under Main Site:/.</p></li><li class="listitem"><p>Type <strong class="userinput"><code>openfts</code></strong> and
 click <code class="computeroutput"><span class="guibutton"><span class="guibutton">New</span></span></code>.</p></li><li class="listitem"><p>On the new <code class="computeroutput"><span class="guilabel"><span class="guilabel">openfts</span></span></code>
 line, click the <code class="computeroutput"><span class="guilabel"><span class="guilabel">mount</span></span></code>
 link.</p></li><li class="listitem"><p>Click <code class="computeroutput"><span class="guilabel"><span class="guilabel">OpenFTS

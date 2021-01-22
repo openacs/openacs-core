@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {How Internationalization/Localization works in
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How Internationalization/Localization works in
 OpenACS}</property>
 <property name="doc(title)">How Internationalization/Localization works in
 OpenACS</property>
@@ -15,20 +15,20 @@ Chapter 14. Internationalization"
 works in OpenACS</h2></div></div></div><p>This document describes how to develop internationalized OpenACS
 packages, including writing new packages with internationalization
 and converting old packages. Text that users might see is
-"localizable text"; replacing monolingual text and single-locale
-date/time/money functions with generic functions is
-"internationalization"; translating first generation text into a
-specific language is "localization." At a minimum, all packages
-should be internationalized. If you do not also localize your
-package for different locales, volunteers may use a public
-"localization server" to submit suggested text. Otherwise, your
-package will not be usable for all locales.</p><p>The main difference between monolingual and internationalized
+"localizable text"; replacing monolingual text and
+single-locale date/time/money functions with generic functions is
+"internationalization"; translating first generation text
+into a specific language is "localization." At a minimum,
+all packages should be internationalized. If you do not also
+localize your package for different locales, volunteers may use a
+public "localization server" to submit suggested text.
+Otherwise, your package will not be usable for all locales.</p><p>The main difference between monolingual and internationalized
 packages is that all user-visible text in the code of an
-internationalized package are coded as "message keys." The message
-keys correspond to a message catalog, which contains versions of
-the text for each available language. Script files (.adp and .tcl
-and .vuh), database files (.sql), and APM parameters are
-affected.</p><p>Other differences include: all dates read or written to the
+internationalized package are coded as "message keys."
+The message keys correspond to a message catalog, which contains
+versions of the text for each available language. Script files
+(.adp and .tcl and .vuh), database files (.sql), and APM parameters
+are affected.</p><p>Other differences include: all dates read or written to the
 database must use internationalized functions. All displayed dates
 must use internationalized functions. All displayed numbers must
 use internationalized functions.</p><p>Localizable text must be handled in ADP files, in Tcl files, and
@@ -49,7 +49,7 @@ interface.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="i18n-locale-templates" id="i18n-locale-templates"></a>Separate Templates for each Locale</h3></div></div></div><p>If the request processor finds a file named <code class="computeroutput">filename.locale.adp</code>, where locale matches
-the user's locale, it will process that file instead of
+the user&#39;s locale, it will process that file instead of
 <code class="computeroutput">filename.adp</code>. For example, for
 a user with locale <code class="computeroutput">tl_PH</code>, the
 file <code class="computeroutput">index.tl_PH.adp</code>, if found,
@@ -67,18 +67,19 @@ text in a certain language with internal message keys, which can
 then be dynamically replaced with real human language in the
 desired locale. Message keys themselves should be in ASCII English,
 as should all code. Three different syntaxes are possible for
-message keys.</p><p>"Short" syntax is the recommended syntax and should be used for
-new development. When internationalizing an existing package, you
-can use the "temporary" syntax, which the APM can use to
-auto-generate missing keys and automatically translate to the short
-syntax. The "verbose" syntax is useful while developing, because it
-allows default text so that the page is usable before you have done
-localization.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+message keys.</p><p>"Short" syntax is the recommended syntax and should be
+used for new development. When internationalizing an existing
+package, you can use the "temporary" syntax, which the
+APM can use to auto-generate missing keys and automatically
+translate to the short syntax. The "verbose" syntax is
+useful while developing, because it allows default text so that the
+page is usable before you have done localization.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>The <span class="strong"><strong>short</strong></span>:
 <code class="computeroutput">#<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>#</code>
-</p><p>The advantage of the short syntax is that it's short. It's as
-simple as inserting the value of a variable. Example: <span class="replaceable"><span class="replaceable"><span>#</span>forum.title#</span></span>
+</p><p>The advantage of the short syntax is that it&#39;s short.
+It&#39;s as simple as inserting the value of a variable. Example:
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">forum.title</span></span>#</code>
 </p>
 </li><li class="listitem">
 <p>The <span class="strong"><strong>verbose</strong></span>:
@@ -88,9 +89,10 @@ text</span></span>&lt;/trn&gt;</code>
 </p><p>The verbose syntax allows you to specify a default text in a
 certain language. This syntax is not recommended anymore, but it
 can be convenient for development, because it still works even if
-you haven't created the message in the message catalog yet, because
-what it'll do is create the message key with the default text from
-the tag as the localized message. Example: <span class="emphasis"><em>&lt;trn key="forum.title"
+you haven&#39;t created the message in the message catalog yet,
+because what it&#39;ll do is create the message key with the
+default text from the tag as the localized message. Example:
+<span class="emphasis"><em>&lt;trn key="forum.title"
 locale="en_US"&gt;Title&lt;/trn&gt;</em></span>
 </p>
 </li><li class="listitem">
@@ -99,8 +101,8 @@ locale="en_US"&gt;Title&lt;/trn&gt;</em></span>
 text</span></span>#&gt;</code>
 </p><p>This syntax has been designed to make it easy to
 internationalize existing pages. This is not a syntax that stays in
-the page. As you'll see later, it'll be replaced with the short
-syntax by a special feature of the APM. You may leave out the
+the page. As you&#39;ll see later, it&#39;ll be replaced with the
+short syntax by a special feature of the APM. You may leave out the
 message_key by writing an underscore (_) character instead, in
 which case a message key will be auto-generated by the APM.
 Example: <span class="emphasis"><em>&lt;_ Title&gt;</em></span>
@@ -115,11 +117,11 @@ Tcl files all message lookups *must* be on either of the following
 formats:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Typical static key lookup: <code class="computeroutput">[_
 package_key.message_key]</code> - The message key and package key
-used here must be string literals, they can't result from variable
-evaluation.</p></li><li class="listitem"><p>Static key lookup with non-default locale: <code class="computeroutput">[lang::message::lookup $locale
+used here must be string literals, they can&#39;t result from
+variable evaluation.</p></li><li class="listitem"><p>Static key lookup with non-default locale: <code class="computeroutput">[lang::message::lookup $locale
 package_key.message_key]</code> - The message key and package key
-used here must be string literals, they can't result from variable
-evaluation.</p></li><li class="listitem"><p>Dynamic key lookup: <code class="computeroutput">[lang::util::localize
+used here must be string literals, they can&#39;t result from
+variable evaluation.</p></li><li class="listitem"><p>Dynamic key lookup: <code class="computeroutput">[lang::util::localize
 $var_with_embedded_message_keys]</code> - In this case the message
 keys in the variable <code class="computeroutput">var_with_embedded_message_keys</code> must appear
 as string literals <code class="computeroutput">\#package_key.message_key\#</code> somewhere in
@@ -153,21 +155,21 @@ translators is made easier the longer the phrases to translate
 are). In those cases, follow these steps:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>For each message call in the text, decide on a variable name and
 replace the procedure call with a variable lookup on the syntax
-%var_name%. Remember to initialize a tcl variable with the same
-name on some line above the text.</p></li><li class="listitem"><p>If the text is in a tcl file you must replace variable lookups
-(occurences of $var_name or ${var_name}) with %var_name%</p></li><li class="listitem"><p>You are now ready to follow the normal procedure and mark up the
+%var_name%. Remember to initialize a Tcl variable with the same
+name on some line above the text.</p></li><li class="listitem"><p>If the text is in a Tcl file you must replace variable lookups
+(occurrences of $var_name or ${var_name}) with %var_name%</p></li><li class="listitem"><p>You are now ready to follow the normal procedure and mark up the
 text using a tempoarary message tag (&lt;#_
 text_with_percentage_vars#&gt;) and run the action replace tags
 with keys in the APM.</p></li>
 </ul></div><p>The variable values in the message are usually fetched with
-upvar, here is an example from dotlrn: <code class="computeroutput">ad_return_complaint 1 "Error: A [parameter::get
--parameter classes_pretty_name] must have
+upvar, here is an example from dotlrn: <code class="computeroutput">ad_return_complaint 1 "Error: A
+[parameter::get -parameter classes_pretty_name] must have
 &lt;em&gt;no&lt;/em&gt;[parameter::get -parameter
-class_instances_pretty_plural] to be deleted"</code> was replaced
-by: <code class="computeroutput">set subject [parameter::get
--localize -parameter classes_pretty_name] set class_instances
-[parameter::get -localize -parameter class_instances_pretty_plural]
-ad_return_complaint 1 [_
+class_instances_pretty_plural] to be deleted"</code> was
+replaced by: <code class="computeroutput">set subject
+[parameter::get -localize -parameter classes_pretty_name] set
+class_instances [parameter::get -localize -parameter
+class_instances_pretty_plural] ad_return_complaint 1 [_
 dotlrn.class_may_not_be_deleted]</code>
 </p><p>This kind of interpolation also works in adp files where adp
 variable values will be inserted into the message.</p><p>Alternatively, you may pass in an array list of the variable
@@ -175,32 +177,32 @@ values to be interpolated into the message so that our example
 becomes:</p><pre class="screen"><strong class="userinput"><code>set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
 
 ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
-</code></strong></pre><p>When we were done going through the tcl files we ran the
+</code></strong></pre><p>When we were done going through the Tcl files we ran the
 following commands to check for mistakes:</p><pre class="screen">
 # Message tags should usually not be in curly braces since then the message lookup may not be
 # executed then (you can usually replace curly braces with the list command). Find message tags 
 # in curly braces (should return nothing, or possibly a few lines for inspection)
 <strong class="userinput"><code>find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'</code></strong>
 
-# Check if you've forgotten space between default key and text in message tags (should return nothing)
+# Check if you&#39;ve forgotten space between default key and text in message tags (should return nothing)
 <strong class="userinput"><code>find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'</code></strong>
 
-# Review the list of tcl files with no message lookups
+# Review the list of Tcl files with no message lookups
 <strong class="userinput"><code>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</code></strong>
 </pre><p>When you feel ready you may vist your package in the <a class="ulink" href="/acs-admin/apm" target="_top">package manager</a> and
-run the action "Replace tags with keys and insert into catalog" on
-the Tcl files that you've edited to replace the temporary tags with
-calls to the message lookup procedure.</p><div class="sect4">
+run the action "Replace tags with keys and insert into
+catalog" on the Tcl files that you&#39;ve edited to replace
+the temporary tags with calls to the message lookup procedure.</p><div class="sect4">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="i18n-date-time-number" id="i18n-date-time-number"></a>Dates, Times, and Numbers in Tcl
 files</h5></div></div></div><p>Most date, time, and number variables are calculated in Tcl
 files. Dates and times must be converted when stored in the
 database, when retrieved from the database, and when displayed. All
-dates are stored in the database in the server's timezone, which is
-an APM Parameter set at <code class="computeroutput">/acs-lang/admin/set-system-timezone</code> and
+dates are stored in the database in the server&#39;s timezone,
+which is an APM Parameter set at <code class="computeroutput">/acs-lang/admin/set-system-timezone</code> and
 readable at <code class="computeroutput">lang::system::timezone.</code>. When retrieved
 from the database and displayed, dates and times must be localized
-to the user's locale.</p>
+to the user&#39;s locale.</p>
 </div>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
@@ -209,23 +211,24 @@ case, instead of storing the real text in the parameter, you should
 use message keys using the short notation above, i.e. <span class="strong"><strong>#<span class="emphasis"><em>package_key.message_key</em></span>#</strong></span>.</p><p>In order to avoid clashes with other uses of the hash character,
 you need to tell the APM that the parameter value needs to be
 localized when retrieving it. You do that by saying: <span class="strong"><strong>parameter::get -localize</strong></span>.</p><p>Here are a couple of examples. Say we have the following two
-parameters, taken directly from the dotlrn package.</p><div class="informaltable"><table cellspacing="0" border="1">
+parameters, taken directly from the dotlrn package.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col class="c1"><col class="c2">
 </colgroup><thead><tr>
 <th>Parameter Name</th><th>Parameter Value</th>
 </tr></thead><tbody>
 <tr>
-<td>class_instance_pages_csv</td><td><span>#</span>dotlrn.class_page_home_title#,Simple
-2-Column;<span>#</span>dotlrn.class_page_calendar_title#,Simple
-1-Column;<span>#</span>dotlrn.class_page_file_storage_title#,Simple
+<td>class_instance_pages_csv</td><td>
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_home_title</span></span>#</code>,Simple
+2-Column;<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_calendar_title</span></span>#</code>,Simple
+1-Column;<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_file_storage_title</span></span>#</code>,Simple
 1-Column</td>
 </tr><tr>
-<td>departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td>
+<td>departments_pretty_name</td><td><code class="computeroutput">#<span class="replaceable"><span class="replaceable">departments_pretty_name</span></span>#</code></td>
 </tr>
 </tbody>
-</table></div><p>Then, depending on how we retrieve the value, here's what we
-get:</p><div class="informaltable"><table cellspacing="0" border="1">
+</table></div><p>Then, depending on how we retrieve the value, here&#39;s what we
+get:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col class="c1"><col class="c2">
 </colgroup><thead><tr>
@@ -239,7 +242,7 @@ class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simpl
 <td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter
 departments_pretty_name</td><td>Abteilung</td>
 </tr><tr>
-<td>parameter::get -parameter departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td>
+<td>parameter::get -parameter departments_pretty_name</td><td><code class="computeroutput">#<span class="replaceable"><span class="replaceable">departments_pretty_name</span></span>#</code></td>
 </tr>
 </tbody>
 </table></div><p>The value in the rightmost column in the table above is the

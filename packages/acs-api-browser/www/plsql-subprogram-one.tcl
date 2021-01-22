@@ -22,12 +22,8 @@ set context [list {"plsql-subprograms-all" "All PL/SQL Subprograms"} "One PL/SQL
 
 set source_text ""
 
-db_foreach source_text "select text
-from user_source
-where name = upper(:name)
-and type = upper(:type)
-order by line" {
-    append source_text $text
+db_foreach source_text {} {
+    append source_text $text \n\n\n
 }
 
 switch $type {

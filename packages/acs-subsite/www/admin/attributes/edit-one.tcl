@@ -12,7 +12,7 @@ ad_page_contract {
     attribute_id:naturalnum
     id_column:trim,integer
     { attribute_value "" }
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     focus:onevalue

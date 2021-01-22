@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Building Reusable Template
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Building Reusable Template
 Components}</property>
 <property name="doc(title)">Templating System User Guide: Building Reusable Template
 Components</property>
@@ -19,14 +19,15 @@ page.</li><li>Many popular portal sites allow users to customize their home
 pages by choosing and arranging a set of small layout components
 within a table grid.</li>
 </ul>
-<p>The templating system makes it easy to build <a href="composite">reusable components</a> for any of the above
-scenarios. The basic process is to build a container template,
-which delineates the skeletal layout of the page. Component
-templates may then be placed in the container template with the
-<tt>include</tt> tag. The container may pass arguments to the
-components as needed for personalization or any other purpose.</p>
+<p>The templating system makes it easy to build <a href="">reusable
+components</a> for any of the above scenarios. The basic process is
+to build a container template, which delineates the skeletal layout
+of the page. Component templates may then be placed in the
+container template with the <kbd>include</kbd> tag. The container
+may pass arguments to the components as needed for personalization
+or any other purpose.</p>
 <!--
  <h3>Building the Container Template</h3>
  <h3>Including Component Templates</h3>
 --><hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

@@ -5,7 +5,7 @@ ad_page_contract {
 } {
     {locale ""}
     {package_key ""}
-    {return_url "/acs-lang/admin"}
+    {return_url:localurl "/acs-lang/admin"}
 }
 
 set page_title "Import messages"

@@ -1,8 +1,9 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository: Object Model}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository: Object Model}</property>
 <property name="doc(title)">Content Repository: Object Model</property>
 <master>
 <h2>Object Model</h2>
+<strong><a href="index">Content Repository</a></strong>
 <p>The content repository is an extension of the ACS Object Model.
 The following diagram illustrates the relationship among the
 standard object types defined by the content repository (click on a
@@ -10,7 +11,7 @@ box to view a description and API summary for a particular object
 type):</p>
 <img name="objectmodel" src="object-model.gif" width="500" height="400" border="0" usemap="#m_object_model" id="objectmodel">
 <map name="m_object_model" id="m_object_model">
-<area shape="rect" coords="191,45,287,90" href="api/keyword.html"><area shape="rect" coords="39,224,135,269" href="api/object.html"><area shape="rect" coords="345,306,440,364" href="api/custom.html"><area shape="rect" coords="191,123,287,168" href="api/item.html"><area shape="rect" coords="191,313,287,358" href="api/revision.html"><area shape="rect" coords="343,25,439,70" href="api/folder.html"><area shape="rect" coords="345,89,441,134" href="api/template.html"><area shape="rect" coords="344,154,440,199" href="api/symlink.html"><area shape="rect" coords="345,221,441,266" href="api/extlink.html">
+<area shape="rect" coords="191,45,287,90" href="api/keyword.html"><area shape="rect" coords="39,224,135,269" href="api/object.html"><area shape="rect" coords="345,306,440,364" href="api/type.html"><area shape="rect" coords="191,123,287,168" href="api/item.html"><area shape="rect" coords="191,313,287,358" href="api/revision.html"><area shape="rect" coords="343,25,439,70" href="api/folder.html"><area shape="rect" coords="345,89,441,134" href="api/template.html"><area shape="rect" coords="344,154,440,199" href="api/symlink.html"><area shape="rect" coords="345,221,441,266" href="api/extlink.html">
 </map>
 <p>Note that content revisions and content items inherit separately
 from the root of the object model. Each item may be related to one
@@ -29,5 +30,5 @@ necessary to create a custom subtype of Content Item itself.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $&zwnj;Id: object-model.html,v 1.1.1.1 2001/03/13 22:59:26
-ben Exp $
+Last revised: $&zwnj;Id: object-model.html,v 1.1.1.1.30.2 2017/04/15
+11:00:21 gustafn Exp $

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-subsite {Subsite}} {Group Admin Pages - Requirements}</property>
+<property name="context">{/doc/acs-subsite {ACS Subsite}} {Group Admin Pages - Requirements}</property>
 <property name="doc(title)">Group Admin Pages - Requirements</property>
 <master>
 <h2><font><font>Group Admin Pages - Requirements</font></font></h2>
@@ -17,11 +17,11 @@ define attributes for new types.</font></p>
 <h3><font>II. Vision Statement</font></h3>
 <font>From <a href="/doc/subsites-requirements">/doc/subsites-requirements.html</a>:</font>
 <blockquote><font>The other piece of the subsite system is a
-subsite package that provides subsite admins a "control panel" for
-administering their subsite. This is the same package used to
-provide all the community core functionality available at the
-"main" site which is in fact simply another
-subsite.</font></blockquote>
+subsite package that provides subsite admins a "control
+panel" for administering their subsite. This is the same
+package used to provide all the community core functionality
+available at the "main" site which is in fact simply
+another subsite.</font></blockquote>
 <font>This control panel needs to treat individual groups as
 belonging to a single instance of a subsite. However, groups
 themselves are not enough. We must allow a subsite to specify its
@@ -40,15 +40,15 @@ of the subsite. Without this ability, a user with administrative
 privilege of one subsite can administer all other groups in the
 system.</font>
 <h3><font>IV. Use case and User Scenarios</font></h3>
-<font><b>The Intranet Application</b></font>
+<font><strong>The Intranet Application</strong></font>
 <p><font>The Intranet application may model employees in many ways.
-Without loss of generality, we assume each employee is a "person"
-with an "employment relation" to a company. Figure 1 shows an
-outline of what the ACS Site Map may look like with several
-companies. Note that each company represents one instance of the
-intranet application.</font></p>
+Without loss of generality, we assume each employee is a
+"person" with an "employment relation" to a
+company. Figure 1 shows an outline of what the ACS Site Map may
+look like with several companies. Note that each company represents
+one instance of the intranet application.</font></p>
 <center><table border="1" cellspacing="5" cellpadding="5"><tr><td align="center">
-<img src="intranet-company-structure.gif" border="0"><br><hr><b>Figure 1: Structure of Multiple Intranets</b>
+<img src="intranet-company-structure.gif" border="0"><br><hr><strong>Figure 1: Structure of Multiple Intranets</strong>
 </td></tr></table></center>
 <font>The employment relation is a subtype of the ACS Membership
 Relation with additional attributes specific to employees (e.g.
@@ -70,29 +70,33 @@ automatically maintain permissions from subsite to object
 type.</font></font></blockquote>
 <h3><font>VI.A Requirements: Data Model</font></h3>
 <dl>
-<dt><font><b>10.10 Default relationship types for group
-types</b></font></dt><dd><p><font>Each group type should specify a set of permissible
-relationship types to use for groups of that type.</font></p></dd><dt><font><br></font></dt><dt><font><b>10.20 Default relationship types for
-groups</b></font></dt><dd><p><font>The administrator must be able to specify the permissible
+<dt><font><strong>10.10 Default relationship types for group
+types</strong></font></dt><dd><p><font>Each group type should specify a set of permissible
+relationship types to use for groups of that type.</font></p></dd><dt><font><br></font></dt><dt><font><strong>10.20 Default relationship types for
+groups</strong></font></dt><dd><p><font>The administrator must be able to specify the permissible
 relationship types to use for each group. The defaults are
 inherited from the list of permissible relationship types for the
-group's type.</font></p></dd>
+group&#39;s type.</font></p></dd>
 </dl>
 <h3><font>VI.B Requirements: API</font></h3>
 <dl>
-<dt><font><b>20.10 Define a new group type</b></font></dt><dd><p><font>Users should be able to create a new type of
-group.</font></p></dd><dt><font><b>30.10 Specify attributes</b></font></dt><dd><p><font>Users should be able to dynamically add attributes to
+<dt><font><strong>20.10 Define a new group
+type</strong></font></dt><dd><p><font>Users should be able to create a new type of
+group.</font></p></dd><dt><font><strong>30.10 Specify attributes</strong></font></dt><dd><p><font>Users should be able to dynamically add attributes to
 group types. These attributes should be stored
-efficiently.</font></p></dd><dt><font><b>35.10 Remove attributes</b></font></dt><dd><p><font>Users should be able to dynamically remove attributes from
+efficiently.</font></p></dd><dt><font><strong>35.10 Remove attributes</strong></font></dt><dd><p><font>Users should be able to dynamically remove attributes from
 a group type. Removing the attribute removes all values specified
-for that attribute.</font></p></dd><dt><font><b>40.10 Relationship Constraints</b></font></dt><dd><p><font>The API must support the following types of constraints on
-relationships:</font></p></dd><dt><font><b>40.10.10 Permissible relationships</b></font></dt><dd><p><font>Each group type should maintain a list of all relationship
+for that attribute.</font></p></dd><dt><font><strong>40.10 Relationship
+Constraints</strong></font></dt><dd><p><font>The API must support the following types of constraints on
+relationships:</font></p></dd><dt><font><strong>40.10.10 Permissible
+relationships</strong></font></dt><dd><p><font>Each group type should maintain a list of all relationship
 types that can be used to add elements to groups of this group
-type.</font></p></dd><dt><font><b>40.10.20 Constraints on relationships</b></font></dt><dd><p><font>Relationships listed as allowable for a given group type
+type.</font></p></dd><dt><font><strong>40.10.20 Constraints on
+relationships</strong></font></dt><dd><p><font>Relationships listed as allowable for a given group type
 should link to more information about the relationship type,
 including any constraints that must be satisfied before relations
-of the specified type are created.</font></p></dd><dt><font><b>40.10.30 Constrain membership to a given
-group</b></font></dt><dd><p><font>The system provides a well-defined API call that adds a
+of the specified type are created.</font></p></dd><dt><font><strong>40.10.30 Constrain membership to a given
+group</strong></font></dt><dd><p><font>The system provides a well-defined API call that adds a
 given relationship type to the list of allowable relationship types
 to apply to a given group or group type. Any subtype of an
 allowable relationship type will also be allowed.</font></p></dd>
@@ -100,43 +104,46 @@ allowable relationship type will also be allowed.</font></p></dd>
 <h3><font>VI.C Requirements: User Interface</font></h3>
 <dl>
 <dt><font>
-<b>100.10</b> Create a group type with
+<strong>100.10</strong> Create a group type with
 attributes</font></dt><dd><p><font>When creating a new group type, the UI should support ACS
 datatypes with appropriate UI.</font></p></dd><dt><font>
-<b>130.10</b> Group type summary page</font></dt><dd><blockquote><dl>
+<strong>130.10</strong> Group type summary
+page</font></dt><dd><blockquote><dl>
 <dt><font>
-<b>130.10.10</b> Display allowable relationship
+<strong>130.10.10</strong> Display allowable relationship
 types</font></dt><dd><p><font>The group type summary page should display all the
 relationship types used to add relations to groups of this type and
 allow the user to add permissible relationship types or to remove
 existing ones.</font></p></dd><dt><font>
-<b>130.10.20</b> Display groups</font></dt><dd><p><font>Display all groups of this type, based on permissions. UI
+<strong>130.10.20</strong> Display groups</font></dt><dd><p><font>Display all groups of this type, based on permissions. UI
 should scale well with a large number of groups.</font></p></dd><dt><font>
-<b>110.10</b> Create an instance of a particular group
-type</font></dt><dd><p><font>When creating a new group of the specified type, the UI
+<strong>110.10</strong> Create an instance of a
+particular group type</font></dt><dd><p><font>When creating a new group of the specified type, the UI
 must request values for each of the attributes of that type,
 including attributes of all supertypes (up the type tree until the
 object of type 'group').</font></p></dd><dt><font>
-<b>130.10.20</b> Display type attributes</font></dt><dd><p><font>Display all attributes for this group type, including
+<strong>130.10.20</strong> Display type
+attributes</font></dt><dd><p><font>Display all attributes for this group type, including
 supertypes.</font></p></dd><dt><font>
-<b>130.10.20</b> Delete group type</font></dt><dd><p><font>Allow administrators to delete the group type. This action
+<strong>130.10.20</strong> Delete group type</font></dt><dd><p><font>Allow administrators to delete the group type. This action
 removes all groups of this type.</font></p></dd>
 </dl></blockquote></dd>
 </dl>
 <dl><dt><font>
-<b>150.10</b> Group instance summary page</font></dt></dl>
+<strong>150.10</strong> Group instance summary
+page</font></dt></dl>
 <blockquote><dl>
 <dt><font>
-<b>150.10.10</b> Display relations</font></dt><dd><p><font>Each group should display all the parties related to it
+<strong>150.10.10</strong> Display relations</font></dt><dd><p><font>Each group should display all the parties related to it
 and through what relationship type. Offer links to remove each
 relation or to add a new relation of a given type. The UI for
 relations should scale well.</font></p></dd><dt><font>
-<b>150.10.20</b> Display attributes</font></dt><dd><p><font>Display all attributes of the group with links to edit
+<strong>150.10.20</strong> Display attributes</font></dt><dd><p><font>Display all attributes of the group with links to edit
 each.</font></p></dd><dt><font>
-<b>150.10.20</b> Delete group</font></dt><dd><p><font>Allow administrators to delete the group including all
+<strong>150.10.20</strong> Delete group</font></dt><dd><p><font>Allow administrators to delete the group including all
 relations to the group.</font></p></dd><dt><font>
-<b>150.20</b> Integration with relational Segments and
-Constraints</font></dt><dd><p><font>The group summary page should offer links to define
+<strong>150.20</strong> Integration with relational
+Segments and Constraints</font></dt><dd><p><font>The group summary page should offer links to define
 relational segments for the group, based on a particular
 relationship type. The UI must also integrate with the relational
 constraints data model to support defining constraints on
@@ -158,5 +165,5 @@ intra-party relations.</font></p></dd>
 <address><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></address>
 <br>
-<font size="-1">$&zwnj;Id: group-admin-pages-requirements.html,v 1.2
-2001/08/11 21:31:03 ben Exp $</font>
+<font size="-1">$&zwnj;Id: group-admin-pages-requirements.html,v 1.2.30.1
+2016/07/18 11:40:32 gustafn Exp $</font>

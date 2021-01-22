@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The Request Processor</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="next" href="db-api.html" title="The OpenACS Database Access API"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="objects.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="db-api.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="request-processor"></a>The Request Processor</h2></div></div></div><div class="authorblurb"><p>By Pete Su</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The Request Processor</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="objects.html" title="OpenACS Data Models and the Object System"><link rel="next" href="db-api.html" title="The OpenACS Database Access API"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="objects.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="db-api.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="request-processor"></a>The Request Processor</h2></div></div></div><div class="authorblurb"><p>By Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="rp-overview"></a>Overview</h3></div></div></div><p>
-This document is a brief introduction to the OpenACS 5.7.0 Request Processor;
+This document is a brief introduction to the OpenACS 5.9.0 Request Processor;
 more details can be found in the <a class="xref" href="rp-design.html" title="Request Processor Design">OpenACS 4 Request Processor Design</a>. Here we cover the high level concepts behind the
 system, and implications and usage for the application developer.
 </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="rp-thenewway"></a>Request Processor</h3></div></div></div><p>
-The 5.7.0 Request Processor is a global filter and set of Tcl procs that
+The 5.9.0 Request Processor is a global filter and set of Tcl procs that
 respond to every incoming URL reaching the server. The following
 diagram summarizes the stages of the request processor assuming a URL
 request like <code class="computeroutput">http://someserver.com/notes/somepage.adp</code>.
@@ -36,9 +36,9 @@ detail in its own document. It examines the client request and either
 extracts or sets up new session tokens for the user.
 </p></dd><dt><span class="term">Stage 3: Authorization</span></dt><dd><p>
 Next, the Request Processor checks if the user has appropriate access
-privileges to the requested part of the site. In OpenACS 5.7.0, access control
+privileges to the requested part of the site. In OpenACS 5.9.0, access control
 is dictated by the <a class="ulink" href="permissions" target="_top">permissions system</a>. In
-this case, the RP checks if the user has "read" priviledges on the
+this case, the RP checks if the user has "read" privileges on the
 object in the site map specified by the URL. This object is typically
 a package instance, but it could easily be something more granular,
 such as whehter the user can view a particular piece of content within
@@ -127,4 +127,4 @@ of the package.
 </span></dt><dd><p>
 In a .vuh file, path_info is the trailing part of the URL not matched
 by the .vuh file.
-</p></dd></dl></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="objects.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="db-api.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Data Models and the Object System </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> The OpenACS Database Access API</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/request-processor.html#comments">View comments on this page at openacs.org</a></center></body></html>
+</p></dd></dl></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="objects.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="db-api.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Data Models and the Object System </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> The OpenACS Database Access API</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

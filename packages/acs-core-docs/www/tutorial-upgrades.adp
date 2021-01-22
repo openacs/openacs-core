@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Distributing upgrades of your package}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Distributing upgrades of your package}</property>
 <property name="doc(title)">Distributing upgrades of your package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -17,10 +17,10 @@ OpenACS documentation staff.</div><p>The OpenACS Package Repository builds a lis
 can be installed on OpenACS installations, and can be used by
 administrators to update their packages. If you are a package
 developer, there are a couple of steps you need to take in order to
-release a new version of your package.</p><p>For the sake of this example, let's assume you are the package
-owner of the <code class="computeroutput">notes</code> package. It
-is currently at version 1.5, and you are planning on releasing
-version 1.6. It is also located in OpenACS's CVS.</p><p>To release your package:</p><pre class="screen">
+release a new version of your package.</p><p>For the sake of this example, let&#39;s assume you are the
+package owner of the <code class="computeroutput">notes</code>
+package. It is currently at version 1.5, and you are planning on
+releasing version 1.6. It is also located in OpenACS&#39;s CVS.</p><p>To release your package:</p><pre class="screen">
 cd /path/to/notes
 cvs commit -m "Update package to version 1.6."
 cvs tag notes-1-6-final

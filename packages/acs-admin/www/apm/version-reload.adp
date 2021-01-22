@@ -11,15 +11,3 @@
 
 @body;noquote@
 
-<!--
-<script type="text/javascript">
-  <% template::head::add_javascript -src "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" %>
-  $('#files dd').click(function () {
-	$(this).slideToggle();
-  });
-  $('#files dt').click(function () {
-	$(this.nextElementSibling).slideToggle();
-  });
-</script>
-
--->

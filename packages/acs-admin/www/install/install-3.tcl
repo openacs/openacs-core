@@ -89,19 +89,32 @@ foreach package_key $install_order {
     array unset version
     array set version $repository($package_key)
     
-    if { ([info exists version(download_url)] && $version(download_url) ne "") } {
+    if { [info exists version(download_url)] && $version(download_url) ne "" } {
+        ns_write [subst {
+            <p>Transferring $version(download_url) ...
+            <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+        }]
         set spec_file [apm_load_apm_file -url $version(download_url)]
         if { $spec_file eq "" } {
-            ns_log Error "Error downloading package $package_key from $version(download_url). Installing package failed."
+            set msg "Error downloading package $package_key from $version(download_url). Installing package failed."
+            ns_write [subst {
+                <p>$msg
+                <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+            }]
+            ns_log Error $msg
             set success_p 0
             continue
         }
+        ns_write [subst {
+            Done<br>
+            <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+        }]
         set package_path "[apm_workspace_install_dir]/$package_key"
     } else {
         set spec_file $version(path)
         set package_path "$::acs::rootdir/packages/$package_key"
     }
-        
+
     set final_version_name $version(name)
 
     if { [apm_package_version_installed_p $version(package.key) $version(name)] } {
@@ -139,13 +152,15 @@ foreach package_key $install_order {
 
     ns_write [subst {
 	<p>Installing $package_key ...<br>
-	<script>window.scrollTo(0,document.body.scrollHeight);</script>
+	<script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
     }]
     
     # Install the package -- this actually copies the files into the
     # right place in the file system and backs up any old files
+
     set version_id [apm_package_install \
                         -enable \
+                        -install_from_repository \
                         -package_path $package_path \
                         -load_data_model \
                         -data_model_files $data_model_files \
@@ -159,8 +174,58 @@ foreach package_key $install_order {
     } else {
 	ns_write "... installation OK <br>\n"
     }
+
+    if {$success_p} {
+        #
+        # The update has finished successfully. Since all the new
+        # files were sourced, the actual connection thread is already
+        # up to date.  In order to provide this code to the other
+        # threads, it is necessary to update the internal
+        # blueprint. This works different in NaviServer and AOLserver,
+        # and is supported only by NaviServer for the time being.
+        #
+        # Other options:
+        #
+        #   - run apm_package_install via "ns_eval": does not work,
+        #     since "ns_eval" runs a script twice, a package can only
+        #     be installed once.
+        #        
+        #   - run parts of apm_package_install: e.g. loading just the
+        #     procs does not work, when it depends e.g. on package
+        #     parameters, which have as well be updated in the
+        #     blueprint.
+        #
+        #   - fix the behavior in AOLserver
+        #
+        if {[info commands ::nstrace::statescript] ne ""} {
+            #
+            # NaviServer variant:
+            #   - nstrace::statescript produces the blueprint
+            #   - "ns_ictl  save" updates it in the server
+            #
+            ns_ictl save [nstrace::statescript]
+            ns_write "... blueprint updated <br>\n"
+        } else {
+            #
+            # AOLserver: _ns_savenamespaces produces the update script
+            # and updates the blueprint, .... but it kills the
+            # internal state of the server. After running this
+            # command, e.g. all ns_sets are gone, later commands run
+            # into problems.
+            #
+            # _ns_savenamespaces
+        }
+    } else {
+        #
+        # At least one update has failed. Since it is not clear whether or
+        # not library files were sourced, it is necessary to delete this
+        # thread asap to avoid potential confusion with already updated
+        # procs.
+        #
+        ns_ictl markfordelete
+    }
     ns_write {
-	<script>window.scrollTo(0,document.body.scrollHeight);</script>
+	<script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
     }
 }
 
@@ -171,7 +236,6 @@ foreach package_key $install_order {
 #####
 
 ad_progress_bar_end -url [export_vars -base install-4 { repository_url success_p }]
-
 
 
 # Local variables:

@@ -1,8 +1,11 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Writing Templates}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Writing Templates}</property>
 <property name="doc(title)">Templating System User Guide: Writing Templates</property>
 <master>
 <h2>Writing Templates</h2>
+<strong>
+<a href="../index">Templating System</a> : User
+Guide</strong>
 <p>Templates are the primary means for separating the work of
 developers and designers. A template is written by a designer and
 consists largely of static HTML (or other markup). The template
@@ -24,20 +27,20 @@ Substitution</a>.</p>
 <p>To speed development and ensure consistency of design, template
 authors are encouraged to assemble pages from distinct component
 templates that may be recycled in different contexts. One typical
-practice is to build a "master" template for an entire section of a
-site, with a common header, footer and sidebar layout. For each
-page request, the "content" template is incorporated dynamically
-into a specified area of the master template, usually a table
-cell.</p>
+practice is to build a "master" template for an entire
+section of a site, with a common header, footer and sidebar layout.
+For each page request, the "content" template is
+incorporated dynamically into a specified area of the master
+template, usually a table cell.</p>
 <p>(graphic)</p>
 <p>Another common practice is to build small reusable templates
 that may be included in other templates as logical components. This
-may be useful for common "widgets" such as search boxes or lists of
-related links, as well as for building configurable portal pages
-where users may assemble different types of content to their
-liking.</p>
+may be useful for common "widgets" such as search boxes
+or lists of related links, as well as for building configurable
+portal pages where users may assemble different types of content to
+their liking.</p>
 <p>(graphic)</p>
-<p>See <a href="../tagref/include"><tt>include</tt></a>.</p>
+<p>See <a href="../tagref/include"><kbd>include</kbd></a>.</p>
 <h3>Property Declarations</h3>
 <p>Template authors need a simple mechanism for declaring
 properties within the templates. The most common use of such
@@ -46,13 +49,13 @@ template, such as the title, navigation links, and whether to
 include a search box. The data dictionary specifies available
 properties as well as the set of valid values when appropriate.</p>
 <p>(graphic)</p>
-<p>See <a href="../tagref/property"><tt>property</tt></a>.</p>
+<p>See <a href="../tagref/property"><kbd>property</kbd></a>.</p>
 <h3>Conditional Insertion</h3>
 <p>Designers often need to tailor the layout depending on the
 specific data being presented. For example, when presenting a list
 of library books that a user has checked out, the designer might
 want to highlight the overdue ones in red.</p>
-<p>See <a href="../tagref/if"><tt>if..else</tt></a>.</p>
+<p>See <a href="../tagref/if"><kbd>if..else</kbd></a>.</p>
 <h3>Iteration</h3>
 <p>Dynamic pages often present lists of values or records, each of
 which typically represents the results of a database query.
@@ -70,10 +73,10 @@ subheading for each office.</p></li><li><p>Colors or patterns may alternate betw
 designer may want to have alternate between white and gray bands in
 a table.</p></li>
 </ol>
-<p>To accomodate these type of scenarios, the template parser sets
+<p>To accommodate these type of scenarios, the template parser sets
 some additional variables that the designer can reference to vary
 the layout from item to item.</p>
-<p>See <a href="../tagref/multiple"><tt>multiple</tt></a>,
-<a href="../tagref/group"><tt>group</tt></a>, <a href="../tagref/list"><tt>list</tt></a>.</p>
+<p>See <a href="../tagref/multiple"><kbd>multiple</kbd></a>,
+<a href="../tagref/group"><kbd>group</kbd></a>, <a href="../tagref/list"><kbd>list</kbd></a>.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

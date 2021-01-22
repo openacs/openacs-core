@@ -38,7 +38,7 @@ least:</p>
   );</pre>
 
 <p>Content types are nothing more than standard ACS Objects that inherit
-from <tt>content_revision</tt>:
+from <kbd>content_revision</kbd>:
 
 <pre>begin
 
@@ -72,8 +72,8 @@ end;
 /
 show errors</pre>
 
-<p>Note that content types always extend <tt>content_revision</tt>,
-rather than <tt>content_item</tt>.  This is because we want to store
+<p>Note that content types always extend <kbd>content_revision</kbd>,
+rather than <kbd>content_item</kbd>.  This is because we want to store
 multiple revisions of both the actual data (in this case the image) as
 well as associated attributes (the width and height of the image may
 vary among revisions).</p>
@@ -105,9 +105,9 @@ Objects:</p>
      max_n_rels_two => 1
   );</pre>
 
-<p>Note that the <tt>user</tt> object is related to a
-<tt>content_item</tt> object rather than an <tt>image</tt> object
-directly.  Each <tt>image</tt> object represents only a single
+<p>Note that the <kbd>user</kbd> object is related to a
+<kbd>content_item</kbd> object rather than an <kbd>image</kbd> object
+directly.  Each <kbd>image</kbd> object represents only a single
 revision of a portrait.  Revisions always exist in the context of an
 item.</p>
 

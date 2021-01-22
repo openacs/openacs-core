@@ -1,16 +1,16 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Appendix C. Credits}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix C. Credits}</property>
 <property name="doc(title)">Appendix C. Credits</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="aolserver" leftLabel="Prev"
 		    title="
-Part II. Administrator's Guide"
+Part II. Administrator&#39;s Guide"
 		    rightLink="install-origins" rightLabel="Next">
 		<div class="appendix">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="credits" id="credits"></a>Appendix C. Credits</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="section"><a href="install-origins">Where did
 this document come from?</a></span></dt><dt><span class="section"><a href="os-install">Linux Install
 Guides</a></span></dt><dt><span class="section"><a href="os-security">Security
@@ -25,7 +25,7 @@ OpenACS documentation staff.</div><p>
 this guide from many sources of information.</p><p>
 <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a> updated the document starting in March
 2003.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="http://openacs.org/doc/openacs/install/" target="_top">OpenACS 3.x Installation Guide</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.orchardlabs.com/freebsd/" target="_top">Gilbert Wong's FreeBSD installation guide</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.kurup.com/acs/openacs-4.html" target="_top">My own Brief OpenACS4 installation guide</a></p></li>
+<li class="listitem"><p><a class="ulink" href="http://openacs.org/doc/openacs/install/" target="_top">OpenACS 3.x Installation Guide</a></p></li><li class="listitem"><p><a class="ulink" href="https://web.archive.org/web/20011204174701/http://www.orchardlabs.com:80/freebsd/" target="_top">Gilbert Wong&#39;s FreeBSD installation guide</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.kurup.com/acs/openacs-4.html" target="_top">My own Brief OpenACS4 installation guide</a></p></li>
 </ul></div><p>Acknowledgments for versions of the above documents go (in no
 particular order) to Bryan Quinn, Adam Farkas, Brian Stein, Doug
 Hoffman, Ravi Jasuja, Hiro Iwashima, Ryan Lee, Jonathan Goler,
@@ -44,8 +44,8 @@ Rubick, Fred Yankowski, Dan Chak, Sebastiano Pilla, Reuven Lerner,
 Malte Sussdorff, Stan Kaufman and Pascal Scheffers.</p><p>
 <span class="strong"><strong>All questions and
 comments</strong></span> regarding this guide should be posted on
-the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><div class="cvstag">($&zwnj;Id: credits.xml,v 1.12 2006/07/17 05:38:37
-torbenb Exp $)</div>
+the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><div class="cvstag">($&zwnj;Id: credits.xml,v 1.12.14.5 2017/06/18
+09:08:36 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="aolserver" leftLabel="Prev" leftTitle="Install AOLserver 3.3oacs1"

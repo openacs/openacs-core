@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {System/Application Requirements Template}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {System/Application Requirements Template}</property>
 <property name="doc(title)">System/Application Requirements Template</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -30,9 +30,9 @@ understand.</em></span></p>
 <a name="yourpackage-requirements-vision" id="yourpackage-requirements-vision"></a>Vision Statement</h3></div></div></div><p><span class="emphasis"><em>Very broadly, describe how the system
 meets a need of a business, group, the OpenACS as a whole, etc.
 Make sure that technical and non-technical readers alike would
-understand what the system would do and why it's useful. Whenever
-applicable, you should explicitly state what the business value of
-the system is.</em></span></p>
+understand what the system would do and why it&#39;s useful.
+Whenever applicable, you should explicitly state what the business
+value of the system is.</em></span></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-requirements-system-app-overview" id="yourpackage-requirements-system-app-overview"></a>System/Application
@@ -40,9 +40,9 @@ Overview</h3></div></div></div><p><span class="emphasis"><em>Discuss the high-le
 the components that make up the system. You can go by functional
 areas, by the main transactions the system allows,
 etc.</em></span></p><p><span class="emphasis"><em>You should also state the context and
-dependencies of the system here, e.g. if it's an application-level
-package for OpenACS 4, briefly describe how it uses kernel
-services, like permissions or subsites.</em></span></p>
+dependencies of the system here, e.g. if it&#39;s an
+application-level package for OpenACS 4, briefly describe how it
+uses kernel services, like permissions or subsites.</em></span></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-requirements-cases" id="yourpackage-requirements-cases"></a>Use-cases and
@@ -55,8 +55,8 @@ them.</em></span></p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-requirements-competitive-analysis" id="yourpackage-requirements-competitive-analysis"></a>Optional:
 Competitive Analysis</h3></div></div></div><p><span class="emphasis"><em>Describe other systems or services
-that are comparable to what you're building. If applicable, say why
-your implementation will be superior, where it will match the
+that are comparable to what you&#39;re building. If applicable, say
+why your implementation will be superior, where it will match the
 competition, and where/why it will lack existing best-of-breed
 capabilities. This section is also in the Design doc, so write
 about it where you deem most appropriate.</em></span></p>
@@ -64,8 +64,8 @@ about it where you deem most appropriate.</em></span></p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-requirements-links" id="yourpackage-requirements-links"></a>Related Links</h3></div></div></div><p>Include all pertinent links to supporting and related material,
 such as:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>System/Package "coversheet" - where all documentation for this
-software is linked off of</p></li><li class="listitem"><p>Design document</p></li><li class="listitem"><p>Developer's guide</p></li><li class="listitem"><p>User's guide</p></li><li class="listitem"><p>Other-cool-system-related-to-this-one document</p></li><li class="listitem"><p>Test plan</p></li><li class="listitem"><p>Competitive system(s)</p></li>
+<li class="listitem"><p>System/Package "coversheet" - where all documentation
+for this software is linked off of</p></li><li class="listitem"><p>Design document</p></li><li class="listitem"><p>Developer&#39;s guide</p></li><li class="listitem"><p>User&#39;s guide</p></li><li class="listitem"><p>Other-cool-system-related-to-this-one document</p></li><li class="listitem"><p>Test plan</p></li><li class="listitem"><p>Competitive system(s)</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -75,8 +75,8 @@ needed. Within each section, create a list denominated with unique
 identifiers that reflect any functional hierarchy present, e.g.
 20.5.13. - for the first number, leave generous gaps on the first
 writing of requirements (e.g. 1, 10, 20, 30, 40, etc.) because
-you'll want to leave room for any missing key requirements that may
-arise.</em></span></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem">
+you&#39;ll want to leave room for any missing key requirements that
+may arise.</em></span></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem">
 <p><span class="strong"><strong>10.0 A Common
 Solution</strong></span></p><p>Programmers and designers should only have to learn a single
 system that serves as a UI substrate for all the functionally
@@ -86,7 +86,7 @@ should look or function.</p><p><span class="strong"><strong>10.0.5</strong></spa
 any module using a single methodology with minimal exposure to
 code.</p>
 </blockquote></div>
-</li></ul></div><p>For guidelines writing requirements, take a <a class="ulink" href="http://www.arsdigita.com/ad-sepg/process/requirements-quality.html" target="_top">look at the quality standards</a>, along with a good
+</li></ul></div><p>For guidelines writing requirements, take a look at <a class="ulink" href="http://www.utm.mx/~caff/doc/OpenUPWeb/openup/guidances/guidelines/writing_good_requirements_48248536.html" target="_top">quality standards</a> or <a class="ulink" href="https://ep.jhu.edu/about-us/news-and-media/writing-good-requirements-checklists" target="_top">requirements checklist</a>, along with a good
 example, such as <a class="xref" href="apm-requirements" title="Package Manager Requirements">Package Manager
 Requirements</a>.</p><p>Besides writing requirements in natural language, consider using
 the following techniques as needed:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -113,7 +113,7 @@ implementation, for aiding and guiding yourself or other
 programmers.</em></span></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="yourpackage-revision-history" id="yourpackage-revision-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="yourpackage-revision-history" id="yourpackage-revision-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><thead><tr>
@@ -127,8 +127,8 @@ programmers.</em></span></p>
 <td>0.1</td><td>Created</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.6
-2006/07/17 05:38:37 torbenb Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.6.14.2
+2017/06/15 13:56:42 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

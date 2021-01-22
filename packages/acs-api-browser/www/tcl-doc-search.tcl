@@ -7,30 +7,31 @@ ad_page_contract {
     title:onevalue
     context:onevalue
     tcl_proc:onevalue
+} -validate {
+    csrf { csrf::validate }
 }
 
-set tcl_docs_root "http://tcl.tk/man/tcl[info tclversion]/TclCmd/"
-set tcl_docs_url "${tcl_docs_root}contents.htm"
 
-with_catch errmsg {
-    set tcl_docs_index_result [util_memoize [list util::http::get -url $tcl_docs_url]]
-    set tcl_docs_index_page [dict get $tcl_docs_index_result page]
-} {
-    ad_return_error "Cannot Connect" "We're sorry, but we're having problems connecting to the server containing the Tcl documentation: $tcl_docs_url"
+#
+# Try Tcl command documentation
+#
+
+regexp {^(.*)/[^/]+} $::apidoc::tcl_api_html_index _ root
+append root /
+
+set url [apidoc::get_doc_url \
+             -cmd $tcl_proc \
+             -index $::apidoc::tcl_api_html_index \
+             -root $root \
+             -host $root]
+
+if {$url ne ""} {
+    ns_log notice "api-doc/www/proc-view got URL <$url>"
+    ad_returnredirect -allow_complete_url $url
     ad_script_abort
 }
 
-set tcl_proc [lindex $tcl_proc 0] 
-set len [string length $tcl_proc]
-
-for { set i [expr { $len-1 }] } { $i >= 0 } { incr i -1 } {
-    set search_for [string range $tcl_proc 0 $i]
-    if { [regexp "<a href=\"(\[^>\]+)\">$search_for</a>" $tcl_docs_index_page match relative_url] } {
-        ad_returnredirect -allow_complete_url "$tcl_docs_root$relative_url"
-        ad_script_abort
-    } 
-}
-
+set tcl_docs_url $::apidoc::tcl_api_html_index
 set title "Tcl API Procedure Search for: \"$tcl_proc\""
 set context [list "Tcl API Search: $tcl_proc"]
 

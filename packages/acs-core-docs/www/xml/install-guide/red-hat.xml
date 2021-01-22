@@ -15,7 +15,7 @@
     software.  You should do this section as-is if you have a machine
     you can reformat and you want to be sure that your installation
     works and is secure; it should take about an hour.  (In my
-    experience, it's almost always a net time savings of several hours
+    experience, it&#39;s almost always a net time savings of several hours
     to install a new machine from scratch compared to installing each
     of these packages installed independently.)</para>
 
@@ -61,15 +61,15 @@
 
     <orderedlist>
       <listitem id="install-first-step"><para>Unplug the network cable from your
-          computer.  We don't want to connect to the network
-          until we're sure the computer is secure.  
+          computer.  We don&#39;t want to connect to the network
+          until we&#39;re sure the computer is secure.  
            <indexterm>
             <primary>security</primary>
             <secondary>definition</secondary>
           </indexterm>
   (Wherever you see
           the word secure, you should always read it as, "secure
-          enough for our purposes, given the amount of work we're
+          enough for our purposes, given the amount of work we&#39;re
           willing to exert and the estimated risk and
           consequences.")</para>
       </listitem>
@@ -81,7 +81,7 @@
           prompt, press Enter for a
           graphical install.  The text install is fairly different, so
           if you need to do that instead proceed with caution, because
-          the guide won't match the steps.</para></listitem>
+          the guide won&#39;t match the steps.</para></listitem>
       <listitem><para>Checking the media is probably a waste of
           time, so when it asks press Tab and
           then Enter to skip it.</para></listitem>
@@ -94,7 +94,7 @@
       <listitem><para>Choose your mouse type and Click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput></para></listitem>
 
       <listitem><para>Red Hat has several templates for new
-          computers.  We'll start with the "Server" template and then
+          computers.  We&#39;ll start with the "Server" template and then
           fine-tune it during the rest of the install.  Choose
 	<computeroutput><guilabel>Server</guilabel></computeroutput>
 	and click
@@ -102,8 +102,8 @@
       </listitem>
 
       <listitem>
-        <para>Reformat the hard drive.  If you know what you're doing,
-	do this step on your own.  Otherwise:  we're going to let the
+        <para>Reformat the hard drive.  If you know what you&#39;re doing,
+	do this step on your own.  Otherwise:  we&#39;re going to let the
 	installer wipe out the everything on the main hard drive and then arrange things to
 	its liking.</para>
         <orderedlist>
@@ -123,24 +123,24 @@
             <primary>security</primary>
             <secondary>firewall</secondary>
           </indexterm>
-Again, if you know what you're doing, do this step
+Again, if you know what you&#39;re doing, do this step
           yourself, being sure to note the firewall holes. Otherwise,
           follow the instructions in this step to set up a computer directly connected to the internet with a dedicated IP address.</para>
         <orderedlist>
           <listitem><para>DHCP is a system by which a computer that
 joins a network (such as on boot) can request a temporary IP address
 and other network information.  Assuming the machine has a dedicated
-IP address (if it doesn't, it will be tricky to access the OpenACS
-service from the outside world), we're going to set up that address.
-If you don't know your netmask, 255.255.255.0 is usually a pretty safe
+IP address (if it doesn&#39;t, it will be tricky to access the OpenACS
+service from the outside world), we&#39;re going to set up that address.
+If you don&#39;t know your netmask, 255.255.255.0 is usually a pretty safe
 guess.  Click <computeroutput><guibutton>Edit</guibutton></computeroutput>, uncheck <computeroutput><guilabel>Configure using <accel>D</accel>HCP</guilabel></computeroutput>
 and type in your IP and netmask.  Click <computeroutput><guibutton><accel>O</accel>k</guibutton></computeroutput>.</para>
           </listitem>
           <listitem><para> Type in your host
 name, gateway, and DNS server(s).  Then click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.</para></listitem>
-          <listitem><para>We're going to use the firewall template for high
-security, meaning that we'll block almost all incoming traffic.  Then
-we'll add a few holes to the firewall for services which we need and
+          <listitem><para>We&#39;re going to use the firewall template for high
+security, meaning that we&#39;ll block almost all incoming traffic.  Then
+we&#39;ll add a few holes to the firewall for services which we need and
 know are secure.  Choose <computeroutput><guilabel>Hi<accel>g</accel>h</guilabel></computeroutput>
 security level. Check
 <computeroutput><guilabel>WWW</guilabel></computeroutput>,
@@ -148,7 +148,7 @@ security level. Check
 <computeroutput><guilabel>Mail (SMTP)</guilabel></computeroutput>.  In the <computeroutput><guilabel>Other <accel>p</accel>orts</guilabel></computeroutput>
 box, enter <userinput>443, 8000, 8443</userinput>.  Click
 <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.
-Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we'll be setting up.</para>
+Port 443 is for https (http over ssl), and 8000 and 8443 are http and https access to the development server we&#39;ll be setting up.</para>
           </listitem>
         </orderedlist>
       </listitem>
@@ -162,15 +162,15 @@ Port 443 is for https (http over ssl), and 8000 and 8443 are http and https acce
       <listitem><para>Type in a root
 password, twice.</para>
       </listitem>
-	<listitem><para>On the Package selection page, we're going to
-uncheck a lot of packages that install software we don't need, and add
+	<listitem><para>On the Package selection page, we&#39;re going to
+uncheck a lot of packages that install software we don&#39;t need, and add
 packages that have stuff we do need.  You should install everything
-we're installing here or the guide may not work for you; you can
+we&#39;re installing here or the guide may not work for you; you can
 install extra stuff, or ignore the instructions here to not install
-stuff, with relative impunity - at worst, you'll introduce a security
-risk that's still screened by the firewall, or a resource hog.  Just
-don't install a database or web server, because that would conflict
-with the database and web server we'll install later.
+stuff, with relative impunity - at worst, you&#39;ll introduce a security
+risk that&#39;s still screened by the firewall, or a resource hog.  Just
+don&#39;t install a database or web server, because that would conflict
+with the database and web server we&#39;ll install later.
 </para><simplelist>
 <member>check <computeroutput><guilabel>Editors</guilabel></computeroutput> (this installs emacs<indexterm><primary>emacs</primary><secondary>installation</secondary></indexterm>),</member>
 <member>click <computeroutput><guilabel>Details</guilabel></computeroutput> next to <computeroutput><guilabel>Text-based Internet</guilabel></computeroutput>, check <computeroutput><guilabel>lynx</guilabel></computeroutput>, and click <computeroutput><guibutton><accel>O</accel>K</guibutton></computeroutput>;</member>
@@ -188,7 +188,7 @@ with the database and web server we'll install later.
 </listitem>
   <listitem><para>We need to fine-tune the exact list of packages.
 The same rules apply as in the last step - you can add more stuff, but
-you shouldn't remove anything the guide adds.  We're going to go
+you shouldn&#39;t remove anything the guide adds.  We&#39;re going to go
 through all the packages in one big list, so select
 <computeroutput><guilabel><accel>F</accel>lat
 View</guilabel></computeroutput> and wait. In a minute, a
@@ -199,21 +199,21 @@ list of packages will appear.</para>
 <member>uncheck<computeroutput><guilabel>isdn4k-utils</guilabel></computeroutput> (unless you are using isdn, this installs a useless daemon), </member>
 <member>check <computeroutput><guilabel>mutt</guilabel></computeroutput> (a mail program that reads Maildir),</member>
 <member>uncheck <computeroutput><guilabel>nfs-utils</guilabel></computeroutput> (nfs is a major security risk), </member>
-<member>uncheck <computeroutput><guilabel>pam-devel</guilabel></computeroutput> (I don't remember why, but we don't want this), </member>
+<member>uncheck <computeroutput><guilabel>pam-devel</guilabel></computeroutput> (I don&#39;t remember why, but we don&#39;t want this), </member>
 <member>uncheck <computeroutput><guilabel>portmap</guilabel></computeroutput>, </member>
-<member>uncheck <computeroutput><guilabel>postfix</guilabel></computeroutput> (this is an MTA, but we're going to install qmail later), </member>
+<member>uncheck <computeroutput><guilabel>postfix</guilabel></computeroutput> (this is an MTA, but we&#39;re going to install qmail later), </member>
 <member>check  <computeroutput><guilabel>postgresql-devel</guilabel></computeroutput>,</member>
 <member>uncheck <computeroutput><guilabel>rsh</guilabel></computeroutput> (rsh is a security hole), </member>
-<member>uncheck <computeroutput><guilabel>sendmail</guilabel></computeroutput> (sendmail is an insecure MTA; we're going to install qmail instead later),</member>
+<member>uncheck <computeroutput><guilabel>sendmail</guilabel></computeroutput> (sendmail is an insecure MTA; we&#39;re going to install qmail instead later),</member>
 <member>check <computeroutput><guilabel>tcl</guilabel></computeroutput> (we need tcl), and </member>
-<member>uncheck <computeroutput><guilabel>xinetd</guilabel></computeroutput> (xinetd handles incoming tcp connections.  We'll install a different, more secure program, ucspi-tcp).</member>
+<member>uncheck <computeroutput><guilabel>xinetd</guilabel></computeroutput> (xinetd handles incoming tcp connections.  We&#39;ll install a different, more secure program, ucspi-tcp).</member>
 <member>Click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput></member>
 </simplelist>
 
 </listitem>
-  <listitem><para>Red Hat isn't completely happy with the combination
-of packages we've selected, and wants to satisfy some dependencies.
-Don't let it.  On the next screen, choose
+  <listitem><para>Red Hat isn&#39;t completely happy with the combination
+of packages we&#39;ve selected, and wants to satisfy some dependencies.
+Don&#39;t let it.  On the next screen, choose
 <computeroutput><guilabel>I<accel>g</accel>nore Package
 Dependencies</guilabel></computeroutput> and click
 <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.
@@ -228,7 +228,7 @@ asked.</para></listitem>
         <listitem><para>If you know how to use it, create a boot
         disk.  Since you can also boot into recovery mode with the
         Install CDs, this is less useful than it used to be, and we
-        won't bother.  Select <computeroutput><guilabel>No,I <accel>d</accel>o not want to create a boot disk</guilabel></computeroutput> and click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.</para></listitem>
+        won&#39;t bother.  Select <computeroutput><guilabel>No,I <accel>d</accel>o not want to create a boot disk</guilabel></computeroutput> and click <computeroutput><guibutton><accel>N</accel>ext</guibutton></computeroutput>.</para></listitem>
       
       <listitem><para>Click <computeroutput><guilabel><accel>E</accel>xit</guilabel></computeroutput>, remove the CD, and watch the
 computer reboot.
@@ -267,7 +267,7 @@ Password:
             <screen><userinput>emacs /etc/ssh/sshd_config</userinput></screen>
           </listitem>
           <listitem>
-	    <para>Search for the word "root" by typing <userinput>C-s</userinput> (that's emacs-speak for control-s) and then <userinput>root</userinput>.</para>
+	    <para>Search for the word "root" by typing <userinput>C-s</userinput> (that&#39;s emacs-speak for control-s) and then <userinput>root</userinput>.</para>
           </listitem>
           <listitem>
             <para>Make the following changes:</para>
@@ -291,7 +291,7 @@ Password:
       </listitem>
       <listitem> 
        <para>
-         Red Hat still installed a few services we don't need, and
+         Red Hat still installed a few services we don&#39;t need, and
          which can be security holes.  Use the service command to turn
          them off, and then use chkconfig to automatically edit the
          System V init directories to permanently (The System V init
@@ -299,10 +299,10 @@ Password:
          bunch of scripts for starting and stopping programs, and
          directories of symlinks for each system level indicating
          which services should be up and down at any given service
-         level.  We'll use this system for PostgreSQL, but we'll use
+         level.  We&#39;ll use this system for PostgreSQL, but we&#39;ll use
          daemontools to perform a similar function for AOLserver.
          (The reason for this discrepencies is that, while daemontools
-         is better, it's a pain in the ass to deal with and nobody's
+         is better, it&#39;s a pain in the ass to deal with and nobody&#39;s
          had any trouble leaving PostgreSQL the way it is.)
        </para>
 <screen>[root root]# <userinput>service pcmcia stop</userinput>
@@ -322,11 +322,11 @@ chkconfig --del netfs</action></screen>
       </listitem>
       <listitem>
         <para>Verify that you have connectivity by going to another
-          computer and ssh'ing to
+          computer and ssh&#39;ing to
           <replaceable>yourserver</replaceable>, logging in as
           remadmin, and promoting yourself to root:</para>
 <screen>[joeuser@someotherserver]$ <userinput> ssh <replaceable>remadmin@yourserver.test</replaceable></userinput>
-The authenticity of host 'yourserver.test (1.2.3.4)' can't be established.
+The authenticity of host 'yourserver.test (1.2.3.4)' can&#39;t be established.
 DSA key fingerprint is 10:b9:b6:10:79:46:14:c8:2d:65:ae:c1:61:4b:a5:a5.
 Are you sure you want to continue connecting (yes/no)? <userinput>yes</userinput>
 Warning: Permanently added 'yourserver.test (1.2.3.4)' (DSA) to the list of known hosts.
@@ -337,8 +337,8 @@ Password:
 [root root]#</screen>
       </listitem>
       <listitem>
-        <para>If you didn't burn a CD of patches and use it, can still
-          download and install the necessary patches.  Here's how to
+        <para>If you didn&#39;t burn a CD of patches and use it, can still
+          download and install the necessary patches.  Here&#39;s how to
           do it for the kernel; you should also check for other
           critical packages.</para>
         <para>Upgrade the kernel to fix a security hole.  The default

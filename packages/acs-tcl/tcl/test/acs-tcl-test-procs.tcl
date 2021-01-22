@@ -111,7 +111,7 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
     } error]
 
     # Teardown
-    file delete $spec_path
+    file delete -- $spec_path
     foreach {type proc} [array get callback_array] {
       db_dml remove_callback {delete from apm_package_callbacks 
                               where version_id = :version_id
@@ -194,7 +194,7 @@ aa_register_case -cats {db api smoke} apm__test_callback_invoke {
     } error]
 
     # Teardown
-    file delete $file_path
+    file delete -- $file_path
     apm_remove_callback_proc -package_key $package_key -type $type
 
     if { $error_p } {
@@ -522,15 +522,15 @@ aa_register_case -cats {api db smoke} db__transaction {
     # verify the on_error clause is called
     set error_called 0
     catch {db_transaction { set foo } on_error {set error_called 1}} errMsg
-    aa_equals "error clause invoked on tcl error" \
+    aa_equals "error clause invoked on Tcl error" \
         $error_called 1
 
-    # Check that the tcl error propigates up from the code block
+    # Check that the Tcl error propigates up from the code block
     set error_p [catch {db_transaction { error "BAD CODE"}} errMsg]
     aa_equals "Tcl error propigates to errMsg from code block" \
         $errMsg "Transaction aborted: BAD CODE"
 
-    # Check that the tcl error propigates up from the on_error block
+    # Check that the Tcl error propigates up from the on_error block
     set error_p [catch {db_transaction {set foo} on_error { error "BAD CODE"}} errMsg]
     aa_equals "Tcl error propigates to errMsg from on_error block" \
         $errMsg "BAD CODE"
@@ -1132,6 +1132,56 @@ aa_register_case -cats {api smoke} acs_user__registered_user_p {
     aa_true "registered_user_p works correct" $works_p
 }
 
+
+aa_register_case -cats {api smoke} util__ns_parseurl {
+    Test ns_parseurl
+
+    @author Gustaf Neumann
+} {
+    aa_equals "full url, no port" \
+        [ns_parseurl http://openacs.org/www/t.html] \
+        {proto http host openacs.org path www tail t.html}
+    
+    aa_equals "full url, with port" \
+        [ns_parseurl http://openacs.org:80/www/t.html] \
+        {proto http host openacs.org port 80 path www tail t.html}
+    
+    aa_equals "full url, no port, no component" \
+        [ns_parseurl http://openacs.org/] \
+        {proto http host openacs.org path {} tail {}}
+
+    aa_equals "full url, no port, no component, no trailing slash" \
+        [ns_parseurl http://openacs.org] \
+        {proto http host openacs.org path {} tail {}}
+    
+    aa_equals "full url, no port, one component" \
+        [ns_parseurl http://openacs.org/t.html] \
+        {proto http host openacs.org path {} tail t.html}
+
+    #
+    # relative URLs
+    #
+    aa_equals "relative url" \
+        [ns_parseurl /www/t.html] \
+        {path www tail t.html}
+    
+    # legacy NaviServer for pre HTTP/1.0, desired?
+    
+    aa_equals "legacy NaviServer, pre HTTP/1.0, no leading /" \
+        [ns_parseurl www/t.html] \
+        {tail www/t.html}
+
+    #
+    # protocol relative (protocol agnostic) URLs (contained in RFC 3986)
+    #
+    aa_equals "protocol relative url with port" \
+        [ns_parseurl //openacs.org/www/t.html] \
+        {host openacs.org path www tail t.html}
+    
+    aa_equals "protocol relative url without port" \
+        [ns_parseurl //openacs.org:80/www/t.html] \
+        {host openacs.org port 80 path www tail t.html}    
+}
 
 # Local variables:
 #    mode: tcl

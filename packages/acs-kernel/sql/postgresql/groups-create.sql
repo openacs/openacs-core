@@ -108,7 +108,8 @@ BEGIN
    'group',
    'component',
    0,
-   null
+   null,
+   't'
    );
 
 
@@ -132,7 +133,8 @@ BEGIN
    'person',                         -- object_type_two
    'member',                         -- role_two
    0,                                  -- min_n_rels_two
-   null                                -- max_n_rels_two
+   null,                                -- max_n_rels_two
+   't'
    );
 
  --
@@ -149,13 +151,14 @@ BEGIN
    'rel_id',                         -- id_column
    'admin_rel',                      -- package_name
    'group',                          -- object_type_one
-   null,                               -- role_one
-   0,                                  -- min_n_rels_one
-   null,                               -- max_n_rels_one
+   null,                             -- role_one
+   0,                                -- min_n_rels_one
+   null,                             -- max_n_rels_one
    'person',                         -- object_type_two
    'admin',                          -- role_two
-   0,                                  -- min_n_rels_two
-   null                                -- max_n_rels_two   
+   0,                                -- min_n_rels_two
+   null,                             -- max_n_rels_two
+   false                             -- composable_p
    );
 
   return 0;
@@ -170,7 +173,7 @@ drop function inline_0 ();
 -- show errors
 
 create table group_types (
-        group_type              varchar(400) not null
+        group_type              varchar(1000) not null
                                 constraint group_types_group_type_pk primary key
                                 constraint group_types_group_type_fk
                                 references acs_object_types (object_type),
@@ -204,11 +207,11 @@ create table groups (
 
 create table group_type_rels (
        group_rel_type_id      integer constraint gtr_group_rel_type_id_pk primary key,
-       rel_type		      varchar(100) not null 
+       rel_type		      varchar(1000) not null 
                               constraint group_type_rels_rel_type_fk
                               references acs_rel_types (rel_type)
                               on delete cascade,
-       group_type	      varchar(100) not null 
+       group_type	      varchar(1000) not null 
                               constraint group_type_rels_group_type_fk
                               references acs_object_types (object_type)
                               on delete cascade,
@@ -228,7 +231,7 @@ comment on table group_type_rels is '
 
 create table group_rels (
        group_rel_id           integer constraint group_rels_group_rel_id_pk primary key,
-       rel_type		      varchar(100) not null 
+       rel_type		      varchar(1000) not null 
                               constraint group_rels_rel_type_fk
                               references acs_rel_types (rel_type)
                               on delete cascade,
@@ -295,7 +298,7 @@ create table group_element_index (
 			constraint group_element_index_cont_id_fk
 			references groups (group_id)
                         on delete cascade,
-        rel_type        varchar(100) not null
+        rel_type        varchar(1000) not null
                         constraint group_elem_index_rel_type_fk
                         references acs_rel_types (rel_type)
                         on delete cascade,
@@ -317,13 +320,13 @@ create index group_elem_idx_rel_type_idx on group_element_index (rel_type);
 -- create index group_elem_idx_container_idx on group_element_index (container_id);
 
 
-comment on table group_element_index is '
+comment on table group_element_index is $$
  This table is for internal use by the parties system.  It as an auxiliary
  table, a denormalization of data, that is used to improve performance.
  Do not query on this table or insert into it.  Query on group_element_map
- instead.  And insert by using the API''s for membership_rel, composition_rel, 
+ instead.  And insert by using the API's for membership_rel, composition_rel, 
  or some sub-type of those relationship types.
-';
+$$;   -- ease life of syntax high-lighter '
 
 
 -----------
@@ -355,7 +358,7 @@ create view group_distinct_member_map
 as select distinct group_id, member_id
    from group_approved_member_map;
 
--- some more views, like party_memeber_map and party_approved_member_map,
+-- some more views, like party_member_map and party_approved_member_map,
 -- are created in rel-segments-create.sql
 
 -- Just in case someone is still querying the group_component_index and
@@ -475,7 +478,7 @@ for each row  execute procedure  composition_rels_in_tr();
 
 
 ---------------------------------------------
--- POPULATE DATA FOR PERMISSABLE REL TYPES --
+-- POPULATE DATA FOR PERMISSIBLE REL TYPES --
 ---------------------------------------------
 
 -- define standard types for groups of type 'group'

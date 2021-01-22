@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Parties in OpenACS}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Parties in OpenACS}</property>
 <property name="doc(title)">Parties in OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -22,10 +22,11 @@ It is often the case with such applications that both individuals
 and groups are treated identically. Modelling individuals and
 groups as specializations of one supertype is a practical way to
 manage both. This concept is so mundane that there is no need to
-invent special terminology. This supertype is called a "party".</p><p>A classic example of the "party" supertype is evident in address
-books. A typical address book might contain the address of a
-doctor, grocery store, and friend. The first field in an entry in
-the address book is not labeled a person or company, but a
+invent special terminology. This supertype is called a
+"party".</p><p>A classic example of the "party" supertype is evident
+in address books. A typical address book might contain the address
+of a doctor, grocery store, and friend. The first field in an entry
+in the address book is not labeled a person or company, but a
 "party".</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -123,10 +124,10 @@ relations between parties and groups.</p><p><span class="strong"><strong>Group R
 membership relations and composite relations. The full range of
 sophisticated group structures that exist in the real world can be
 modelled in OpenACS by these two relationship types.</p><p>Membership relations represent direct membership relation
-between parties and groups. A party may be a "member" of a group.
-Direct membership relations are common in administrative practices,
-and do not follow basic set theory rules. If A is a member of B,
-and B is a member of C, A is <span class="strong"><strong>not</strong></span> a member of C. Membership
+between parties and groups. A party may be a "member" of
+a group. Direct membership relations are common in administrative
+practices, and do not follow basic set theory rules. If A is a
+member of B, and B is a member of C, A is <span class="strong"><strong>not</strong></span> a member of C. Membership
 relations are not transitive.</p><p>Composition relation represents composite relation between
 <span class="emphasis"><em>two groups</em></span>. Composite
 relation is transitive. That is, it works like memberships in set
@@ -228,13 +229,14 @@ show errors
 <a name="parties-views" id="parties-views"></a>Views</h3></div></div></div><p>The parties data model does a reasonable job of representing
 many of the situations one is likely to encounter when modeling
 organizational structures. We still need to be able to efficiently
-answer questions like "what members are in this group and all of
-its components?", and "of what groups is this party a member either
-directly or indirectly?". Composition relations allow you to
-describe an arbitrary Directed Acyclic Graph (DAG) between a group
-and its components. For these reasons the party system provides a
-bunch of views that take advantage of the internal representation
-of group relations to answer questions like these very quickly.</p><p>The <code class="computeroutput">group_component_map</code> view
+answer questions like "what members are in this group and all
+of its components?", and "of what groups is this party a
+member either directly or indirectly?". Composition relations
+allow you to describe an arbitrary Directed Acyclic Graph (DAG)
+between a group and its components. For these reasons the party
+system provides a bunch of views that take advantage of the
+internal representation of group relations to answer questions like
+these very quickly.</p><p>The <code class="computeroutput">group_component_map</code> view
 returns all the subcomponents of a group including components of
 sub components and so forth. The <code class="computeroutput">container_id</code> column is the <code class="computeroutput">group_id</code> of the group in which <code class="computeroutput">component_id</code> is directly contained. This
 allows you to easily distinguish whether a component is a direct

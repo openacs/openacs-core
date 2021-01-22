@@ -7,23 +7,25 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.9.1d1" url="http://openacs.org/repository/download/apm/acs-api-browser-5.9.1d1.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/acs-api-browser-5.9.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Interactive documentation for the Tcl and SQL APIs.</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
-        <description format="text/html">On line interactive documentation for the locally installed Tcl and SQL APIs.  Links to the Tcl core and AOLServer online documentation as well.</description>
+        <description format="text/html">On line interactive documentation for the locally installed Tcl and SQL APIs.  Links to the Tcl core and NaviServer/AOLServer online documentation as well.</description>
 
-        <provides url="acs-api-browser" version="5.9.1d1"/>
-        <requires url="acs-kernel" version="5.9.0"/>
+        <provides url="acs-api-browser" version="5.9.1"/>
+	<requires url="acs-tcl" version="5.9.1"/>
+        <requires url="acs-kernel" version="5.9.1"/>
 
         <callbacks>
         </callbacks>
         <parameters>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="FancySourceFormattingP"  default="1" description="Should we highlight syntax and hyperlink procedure names when showing procedure source code?  (1 for yes, 0 for no)"/>
+	    <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ValidateCSRFP"  default="1" description="Boolean parameter to activate/deactivate CSRF protection for this package instance"/>
         </parameters>
 
     </version>

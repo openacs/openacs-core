@@ -5,7 +5,7 @@
 <p> @message;noquote@ </p>
 
 <if @return_url@ not nil>
-  <b>&raquo;</b> <a href="@return_url@">#acs-subsite.lt_Continue_working_with#</a>
+  <strong>&raquo;</strong> <a href="@return_url@">#acs-subsite.lt_Continue_working_with#</a>
 </if>
 
 

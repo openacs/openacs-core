@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Template Designer Guide}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Template Designer Guide}</property>
 <property name="doc(title)">Template Designer Guide</property>
 <master>
 <h2>Designer Guide</h2>
@@ -13,11 +13,11 @@ author uses a small set of special markup tags to reference dynamic
 data prepared by the developer.The tags allow authors to accomplish
 four basic tasks that are not possible with standard HTML:</p>
 <ul>
-<li>Embed a dynamic variable in a template (<tt><a href="tagref/variable">var</a></tt>).</li><li>Repeat a template section for each object in a dynamic list of
-objects (<tt><a href="tagref/multiple">multiple</a></tt>,
-<tt><a href="tagref/grid">grid</a></tt>).</li><li>Output different template sections depending on the value of
-one or more dynamic variables (<tt><a href="tagref/if">if</a></tt>).</li><li>Provide a mechanism for building complete pages from multiple
-component templates (<tt><a href="tagref/include">include</a></tt>).</li>
+<li>Embed a dynamic variable in a template (<kbd><a href="tagref/variable">var</a></kbd>).</li><li>Repeat a template section for each object in a dynamic list of
+objects (<kbd><a href="tagref/multiple">multiple</a></kbd>,
+<kbd><a href="tagref/grid">grid</a></kbd>).</li><li>Output different template sections depending on the value of
+one or more dynamic variables (<kbd><a href="tagref/if">if</a></kbd>).</li><li>Provide a mechanism for building complete pages from multiple
+component templates (<kbd><a href="tagref/include">include</a></kbd>).</li>
 </ul>
 <p>A reasonably skilled template author should be able to implement
 a template without any assistance from the developer, other than
@@ -36,22 +36,24 @@ Substitution</a>.</p>
 <p>To speed development and ensure consistency of design, template
 authors are encouraged to assemble pages from distinct component
 templates that may be recycled in different contexts. One typical
-practice is to build a "master" template for an entire section of a
-site, with a common header, footer and sidebar layout. For each
-page request, the "content" template is incorporated dynamically
-into a specified area of the master template, usually a table
-cell.</p>
+practice is to build a "master" template for an entire
+section of a site, with a common header, footer and sidebar layout.
+For each page request, the "content" template is
+incorporated dynamically into a specified area of the master
+template, usually a table cell.</p>
 <p>(graphic)</p>
 <p>Another common practice is to build small reusable templates
 that may be included in other templates as logical components. This
-may be useful for common "widgets" such as search boxes or lists of
-related links, as well as for building configurable portal pages
-where users may assemble different types of content to their
-liking.</p>
+may be useful for common "widgets" such as search boxes
+or lists of related links, as well as for building configurable
+portal pages where users may assemble different types of content to
+their liking.</p>
 <p>(graphic)</p>
-<p>See <a href="tagref/include"><tt>include</tt></a> and
-<a href="tagref/master"><tt>master</tt></a>. See also <a href="guide/components">Building reusable layout components</a> and
-<a href="guide/master">Using master templates</a>.</p>
+<p>See <a href="tagref/include"><kbd>include</kbd></a> and
+<a href="tagref/master"><kbd>master</kbd></a>. See also
+<a href="guide/components">Building reusable layout
+components</a> and <a href="guide/master">Using master
+templates</a>.</p>
 <h4>Property Declarations</h4>
 <p>Template authors need a simple mechanism for declaring
 properties within the templates. The most common use of such
@@ -60,13 +62,13 @@ template, such as the title, navigation links, and whether to
 include a search box. The data dictionary specifies available
 properties as well as the set of valid values when appropriate.</p>
 <p>(graphic)</p>
-<p>See <a href="tagref/property"><tt>property</tt></a>.</p>
+<p>See <a href="tagref/property"><kbd>property</kbd></a>.</p>
 <h4>Conditional Insertion</h4>
 <p>Designers often need to tailor the layout depending on the
 specific data being presented. For example, when presenting a list
 of library books that a user has checked out, the designer might
 want to highlight the overdue ones in red.</p>
-<p>See <a href="tagref/if"><tt>if..else</tt></a>.</p>
+<p>See <a href="tagref/if"><kbd>if..else</kbd></a>.</p>
 <h4>Iteration</h4>
 <p>Dynamic pages often present lists of values or records, each of
 which typically represents the results of a database query.
@@ -84,12 +86,12 @@ subheading for each office.</p></li><li><p>Colors or patterns may alternate betw
 designer may want to have alternate between white and gray bands in
 a table.</p></li>
 </ol>
-<p>To accomodate these type of scenarios, the template parser sets
+<p>To accommodate these type of scenarios, the template parser sets
 some additional variables that the designer can reference to vary
 the layout from item to item.</p>
-<p>See <a href="tagref/multiple"><tt>multiple</tt></a>,
-<a href="tagref/group"><tt>group</tt></a>, <a href="tagref/grid"><tt>grid</tt></a>.</p>
-<a href="tagref/list"><!-- invisible<tt>list</tt>.--></a>
+<p>See <a href="tagref/multiple"><kbd>multiple</kbd></a>,
+<a href="tagref/group"><kbd>group</kbd></a>, <a href="tagref/grid"><kbd>grid</kbd></a>.</p>
+<a href="tagref/list"><!-- invisible<kbd>list</kbd>.--></a>
 <h3>Notes</h3>
 <ul>
 <li><p>Template tags are processed by the server each time a page is
@@ -102,8 +104,8 @@ This usually does not affect how browsers display the page.
 However, if a page layout depends on the presence or absence of
 whitespace between HTML tags for proper display, then special care
 must be taken with dynamic tags to avoid adding whitespace.</p><p>When placed on a line by themselves, tags that are containers
-for template sections (<tt>grid</tt>, <tt>if</tt>, and
-<tt>multiple</tt>) will cause newlines to be added to the page at
+for template sections (<kbd>grid</kbd>, <kbd>if</kbd>, and
+<kbd>multiple</kbd>) will cause newlines to be added to the page at
 the beginning and end of the section. This can be avoided by
 crowding the start and end tags like so:</p><pre>
 &lt;td&gt;&lt;if %x% eq 5&gt;&lt;img src="five.gif"&gt;&lt;/if&gt;
@@ -112,10 +114,10 @@ crowding the start and end tags like so:</p><pre>
 reduces the legibility of the template to others who need to edit
 the template later.</p>
 </li><li><p>
-<b>Caution:</b>   Do not write to the connection.
+<strong>Caution:</strong>   Do not write to the connection.
 Specifically, if you must use the <code>&lt;% %&gt;</code> tag, do
 not call <code>ns_puts</code>, because it will not work the same
-way as in AOLserver's ADP pages.</p></li>
+way as in AOLserver&#39;s ADP pages.</p></li>
 </ul>
 <hr>
 <address><a href="mailto:christian\@arsdigita.com">Christian

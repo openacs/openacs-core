@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Internationalization and Localization Overview}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Internationalization and Localization Overview}</property>
 <property name="doc(title)">Internationalization and Localization Overview</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,8 +11,8 @@ Chapter 14. Internationalization"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="i18n-overview" id="i18n-overview"></a>Internationalization and Localization
 Overview</h2></div></div></div><div class="table">
-<a name="i18n-l10n-process" id="i18n-l10n-process"></a><p class="title"><b>Table 14.1. Internationalization and
-Localization Overview</b></p><div class="table-contents"><table summary="Internationalization and Localization Overview" cellspacing="0" border="1">
+<a name="i18n-l10n-process" id="i18n-l10n-process"></a><p class="title"><strong>Table 14.1. Internationalization
+and Localization Overview</strong></p><div class="table-contents"><table class="table" summary="Internationalization and Localization Overview" cellspacing="0" border="1">
 <colgroup>
 <col class="step"><col class="description"><col class="who">
 </colgroup><thead><tr>
@@ -29,7 +29,7 @@ information</a>)</td><td>Package Developer</td>
 <td>The translation server is updated with the new package.</td><td>Translation server maintainers</td>
 </tr><tr>
 <td>Localization</td><td>Translators work in their respective locales to write text for
-each message key. (<a class="link" href="i18n-translators" title="Translator's Guide">More information</a>)</td><td>Translators</td>
+each message key. (<a class="link" href="i18n-translators" title="Translator&#39;s Guide">More information</a>)</td><td>Translators</td>
 </tr><tr>
 <td rowspan="3">Release Management</td><td>The translated text in the database of the translation server
 is compared to the current translations in the OpenACS code base,

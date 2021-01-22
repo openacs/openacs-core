@@ -76,10 +76,4 @@
       </querytext>
 </fullquery>
 
-<fullquery name="group::party_member_p.party_is_member">      
-      <querytext>
-	  select 1 from group_approved_member_map where member_id = :party_id and group_id = :group_id
-      </querytext>
-</fullquery>
-
 </queryset>

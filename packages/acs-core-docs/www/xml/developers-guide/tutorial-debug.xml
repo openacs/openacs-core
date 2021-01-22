@@ -31,7 +31,7 @@
 </para>
     </formalpara>
     <para>Hint: "Parse error near *" usually means that an xql file
-      wasn't recognized, because the tcl file is choking on the *SQL*
+      wasn&#39;t recognized, because the Tcl file is choking on the *SQL*
       placeholder that it falls back on.</para>
     <formalpara>
       <title>Watching the server log</title>
@@ -85,7 +85,7 @@ G goes to the end.
             <seg>Proc should return 0 for success.</seg>
           </seglistitem>
         </segmentedlist>
-        <para>Other things to test: try to delete someone else's
+        <para>Other things to test: try to delete someone else&#39;s
         note.  Try to delete your own note.  Edit your own note.
         Search for a note.</para>
   </sect2>
@@ -98,7 +98,7 @@ G goes to the end.
     </authorblurb>
 
     <para><indexterm><primary>Automated tests</primary></indexterm>
-    It seems to me that a lot of people have been asking for some guidelines on how to write automated tests. I've done several tests by now and have found the process to be extremely easy and useful. It's a joy to work with automated testing once you get the hang of it.</para>
+    It seems to me that a lot of people have been asking for some guidelines on how to write automated tests. I&#39;ve done several tests by now and have found the process to be extremely easy and useful. It&#39;s a joy to work with automated testing once you get the hang of it.</para>
     <para>Create the directory that will contain the test
     script and edit the script file.  The directory location and file name are standards which are recognized by the automated testing package:</para>
     <screen>[$OPENACS_SERVICE_NAME www]$<userinput> mkdir /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/tcl/test</userinput>
@@ -111,25 +111,25 @@ G goes to the end.
 </screen>
         <para>To create a test case you call
 <computeroutput><ulink url="/api-doc/proc-view?proc=aa%5fregister%5fcase">aa_register_case</ulink> test_case_name.</computeroutput>.   
-Once you've created the test case you start writing the needed logic.
-We'll use the tutorial package, "myfirstpackage," as an example.
-Let's say you just wrote an <ulink url="/api-doc">API</ulink> for adding and deleting notes in the
-notes packages and wanted to test that. You'd probably want to write a
+Once you&#39;ve created the test case you start writing the needed logic.
+We&#39;ll use the tutorial package, "myfirstpackage," as an example.
+Let&#39;s say you just wrote an <ulink url="/api-doc">API</ulink> for adding and deleting notes in the
+notes packages and wanted to test that. You&#39;d probably want to write a
 test that first creates a note, then verifies that it was inserted,
 then perhaps deletes it again, and finally verifies that it is
 gone.</para> 
 
 <para>
-Naturally this means you'll be adding a lot of bogus data to the
-database, which you're not really interested in having there. To avoid
+Naturally this means you&#39;ll be adding a lot of bogus data to the
+database, which you&#39;re not really interested in having there. To avoid
 this I usually do two things. I always put all my test code inside a
 call to aa_run_with_teardown which basically means that all the
 inserts, deletes, and updates will be rolled back once the test has
 been executed. A very useful feature. Instead of inserting bogus data
-like:        <computeroutput>set name "Simon"</computeroutput>, I tend to generate a random script in order avoid inserting a value that's already in the database:</para>
+like:        <computeroutput>set name "Simon"</computeroutput>, I tend to generate a random script in order avoid inserting a value that&#39;s already in the database:</para>
 <screen>set name [ad_generate_random_string]
 </screen>
-<para>Here's how the test case looks so far:</para>
+<para>Here&#39;s how the test case looks so far:</para>
 
 <screen>aa_register_case mfp_basic_test {
     My test
@@ -141,17 +141,17 @@ like:        <computeroutput>set name "Simon"</computeroutput>, I tend to genera
        }
 }
 </screen>
-<para>Now let's look at the actual test code. That's the code that
+<para>Now let&#39;s look at the actual test code. That&#39;s the code that
 goes inside <computeroutput>-test_code {}</computeroutput>.  We want to implement test case API-001, "Given an object id from API-001, invoke mfp::note::get.  Proc should return the specific word in the title."</para>
     <programlisting>
       set name [ad_generate_random_string]
       set new_id [mfp::note::add -title $name]
       aa_true "Note add succeeded" ([info exists new_id] &amp;&amp; $new_id ne "")</programlisting>
-    <para>To test our simple case, we must load the test file into the system (just as with the /tcl file in the basic tutorial, since the file didn't exist when the system started, the system doesn't know about it.)  To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload changed" for "MyFirstPackage".  Since we'll be changing it frequently, select "watch this file" on the next page.  This will cause the system to check this file every time any page is requested, which is bad for production systems but convenient for developing.  We can also add some aa_register_case flags to make it easier to run the test.  The <computeroutput>-procs</computeroutput> flag, which indicates which procs are tested by this test case, makes it easier to find procs in your package that aren't tested at all.  The <computeroutput>-cats</computeroutput> flag, setting categories, makes it easier to control which tests to run.  The <computeroutput>smoke</computeroutput> test setting means that this is a basic test case that can and should be run any time you are doing any test. (<ulink url="http://www.nedbatchelder.com/blog/20030408T062805.html">a definition of "smoke test"</ulink>)</para>
+    <para>To test our simple case, we must load the test file into the system (just as with the /tcl file in the basic tutorial, since the file didn&#39;t exist when the system started, the system doesn&#39;t know about it.)  To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload changed" for "MyFirstPackage".  Since we&#39;ll be changing it frequently, select "watch this file" on the next page.  This will cause the system to check this file every time any page is requested, which is bad for production systems but convenient for developing.  We can also add some aa_register_case flags to make it easier to run the test.  The <computeroutput>-procs</computeroutput> flag, which indicates which procs are tested by this test case, makes it easier to find procs in your package that aren&#39;t tested at all.  The <computeroutput>-cats</computeroutput> flag, setting categories, makes it easier to control which tests to run.  The <computeroutput>smoke</computeroutput> test setting means that this is a basic test case that can and should be run any time you are doing any test. (<ulink url="http://www.nedbatchelder.com/blog/20030408T062805.html">a definition of "smoke test"</ulink>)</para>
       <para>Once the file is loaded, go to <ulink url="/test">ACS Automated Testing</ulink> and click on myfirstpackage.  You should see your test case.  Run it and examine the results.</para>
     <sect3>
       <title>TCLWebtest tests</title>
-      <para>API testing can only test part of our package - it doesn't test the code in our adp/tcl pairs.  For this, we can use TCLwebtest.  TCLwebtest must be <link linkend="install-tclwebtest">installed</link> for this test to work.  This provides a <ulink url="http://tclwebtest.sourceforge.net/doc/api_public.html">library of functions</ulink> that make it easy to call a page through HTTP, examine the results, and drive forms.  TCLwebtest's functions overlap slightly with acs-automated-testing; see the example provided for one approach on integrating them.</para>
+      <para>API testing can only test part of our package - it doesn&#39;t test the code in our adp/tcl pairs.  For this, we can use TCLwebtest.  TCLwebtest must be <link linkend="install-tclwebtest">installed</link> for this test to work.  This provides a <ulink url="http://tclwebtest.sourceforge.net/doc/api_public.html">library of functions</ulink> that make it easy to call a page through HTTP, examine the results, and drive forms.  TCLwebtest&#39;s functions overlap slightly with acs-automated-testing; see the example provided for one approach on integrating them.</para>
     </sect3>
     <sect3>
       <title>Example</title>

@@ -177,8 +177,9 @@ After adding support for the fancy ADP parser, please restart your web server.
 
 set stacksize [ns_config "ns/threads" StackSize]
 
-if { ![string is integer $stacksize] ||
-     $stacksize < [expr {$acs_application(min_stack_size) * 1024}] } {
+if { ![string is integer $stacksize]
+     || $stacksize < $acs_application(min_stack_size) * 1024
+ } {
     append errors "<li><p><strong>The configured AOLserver Stacksize is too small, missing, or a non-integer value.
 $acs_application(pretty_name) requires a StackSize parameter of at least
 ${acs_application(min_stack_size)}K.
@@ -225,7 +226,7 @@ chmod -R ug+rw $::acs::rootdir/packages
 
 db_helper_checks errors error_p
 
-# Now that we know that the database and aolserver are set up
+# Now that we know that the database and AOLserver are set up
 # correctly, let's check out the actual db.
 if {$error_p} {
     append body [subst {<p>
@@ -263,9 +264,7 @@ if { ![db_table_exists apm_packages] } {
         set system_url "http://yourdomain.com"
     }
 
-    set email_input_widget [install_input_widget \
-                                -extra_attributes "onChange=\"updateSystemEmails()\"" \
-                                email]
+    set email_input_widget [install_input_widget -extra_attributes {id="email-addr"} email]
     append body "
 
 <h2>System Configuration</h2>
@@ -274,47 +273,35 @@ We'll need to create a site-wide administrator for your server (like the root
 user in UNIX). Please type in the email address, first and last name, and password
 for this user.
 
-<script type=\"text/javascript\">
-function updateSystemEmails() {
-    var form = document.forms\[0\];
-    
-    form.system_owner.value = form.email.value;
-    form.admin_owner.value = form.email.value;
-    form.host_administrator.value = form.email.value;
-    form.outgoing_sender.value = form.email.value;
-    form.new_registrations.value = form.email.value;
-}
-</script>
-
-<form action=\"installer/install\" method=\"POST\">
+<form action='installer/install' method='POST'>
 
 <table>
 <tr>
-  <th span=3>System Administrator</th>
+  <th span='3'>System Administrator</th>
 </tr>
 
 <tr>
-  <th align=right>Email:</th>
+  <th align='right'>Email:</th>
 <td>$email_input_widget</td>
 </tr>
 <tr>
-  <th align=right>Username:</th>
+  <th align='right'>Username:</th>
   <td>[install_input_widget username]</td>
 </tr>
 <tr>
-  <th align=right>First Name:</th>
+  <th align='right'>First Name:</th>
   <td>[install_input_widget first_names]</td>
 </tr>
 <tr>
-  <th align=right>Last Name:</th>
+  <th align='right'>Last Name:</th>
   <td>[install_input_widget last_name]</td>
 </tr>
 <tr>
-  <th align=right>Password:</th>
+  <th align='right'>Password:</th>
   <td>[install_input_widget -size 12 -type password password]</td>
 </tr>
 <tr>
-  <th align=right>Password (again):</th>
+  <th align='right'>Password (again):</th>
   <td>[install_input_widget -size 12 -type password password_confirmation]</td>
 </tr>
 
@@ -323,50 +310,50 @@ function updateSystemEmails() {
 </tr>
 
 <tr>
-  <th align=right>System URL:</th>
+  <th align='right'>System URL:</th>
   <td>[install_input_widget -value $system_url system_url]<br>
 The canonical URL of your system as visible from the outside world<br>
 Usually it should include the port if your server is not on port 80<br><br>
 </tr>
 <tr>
-  <th align=right>System Name:</th>
+  <th align='right'>System Name:</th>
   <td>[install_input_widget -value "yourdomain Network" system_name]<br>
 The name of your system.<br><br>
 </tr>
 <tr>
-  <th align=right>Publisher Name:</th>
+  <th align='right'>Publisher Name:</th>
   <td>[install_input_widget -value "Yourdomain Network, Inc." publisher_name]<br>
 The legal name of the person or corporate entity responsible for the site.<br><br>
 </tr>
 <tr>
-  <th align=right>System Owner:</th>
+  <th align='right'>System Owner:</th>
   <td>[install_input_widget system_owner]<br>
 The email address signed at the bottom of user-visible pages.<br><br>
 </tr>
 <tr>
-  <th align=right>Admin Owner:</th>
+  <th align='right'>Admin Owner:</th>
   <td>[install_input_widget admin_owner]<br>
 The email address signed on administrative pages.<br><br>
 </tr>
 <tr>
-  <th align=right>Host Administrator:</th>
+  <th align='right'>Host Administrator:</th>
   <td>[install_input_widget host_administrator]<br>
 A person whom people can contact if they experience technical problems.<br><br>
 </tr>
 <tr>
-  <th align=right>Outgoing Email Sender:</th>
+  <th align='right'>Outgoing Email Sender:</th>
   <td>[install_input_widget outgoing_sender]<br>
 The email address that will sign outgoing alerts.
 </tr>
 <tr>
-  <th align=right>New Registration Email:</th>
+  <th align='right'>New Registration Email:</th>
   <td>[install_input_widget new_registrations]<br>
 The email address to send New registration notifications.<br><br>
 </tr>
 </table>
 
 <center>
-<input type=submit value=\"Start installation ->\">
+<input type='submit' value='Start installation ->'>
 </center>
 </form>
 
@@ -377,6 +364,21 @@ The email address to send New registration notifications.<br><br>
   This is particularly useful if you're authenticating against other services, such as LDAP or the 
   local operating system, which may not use email as the basis of authentication.
 </p>
+
+<script type='text/javascript'>
+function updateSystemEmails() {
+    var form = document.forms\[0\];
+    
+    form.system_owner.value = form.email.value;
+    form.admin_owner.value = form.email.value;
+    form.host_administrator.value = form.email.value;
+    form.outgoing_sender.value = form.email.value;
+    form.new_registrations.value = form.email.value;
+}
+var elem = document.getElementById('email-addr');
+elem.addEventListener('change', function (event) {updateSystemEmails();});
+</script>
+
     "
 } else {
     # OK, apm_packages is installed - let's check out some other stuff too:

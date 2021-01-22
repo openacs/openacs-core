@@ -101,8 +101,7 @@ ad_proc -public group::new {
         error "Object type \"$group_type\" does not exist"
     }
 
-    set var_list [list]
-    lappend var_list [list context_id $context_id]
+    set var_list [list context_id $context_id]
     lappend var_list [list $id_column $group_id]
     if { $group_name ne "" } {
         lappend var_list [list group_name $group_name]
@@ -122,18 +121,21 @@ ad_proc -public group::new {
     	$group_type]
 
     # We can't change the group_name to an I18N version as this would
-    # break compatability with group::member_p -group_name and the
+    # break compatibility with group::member_p -group_name and the
     # like. So instead we change the title of the object of the group
     # (through the pretty name). We just have to change the display of
     # groups to the title at the appropriate places.
+    #
+    # In case, a pretty_name was already provided in form of a message
+    # key, there is no need to convert this a second time.
 
-    if { [info commands "::lang::util::convert_to_i18n"] ne "" } {
+    if {![regexp [lang::util::message_key_regexp] $pretty_name]} {
 	set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
     } 
 	
     # Update the title to the pretty name
     if {$pretty_name ne ""} {
-	db_dml title_update "update acs_objects set title=:pretty_name where object_id = :group_id"
+	db_dml title_update "update acs_objects set title = :pretty_name where object_id = :group_id"
     }
     return $group_id
 }
@@ -240,9 +242,11 @@ ad_proc -public group::get_id {
 
     @return the first group_id of the groups found for that group_name.
 
-    @error
 } {
-    return [util_memoize [list group::get_id_not_cached -group_name $group_name -subsite_id $subsite_id -application_group_id ""]]
+    return [util_memoize [list group::get_id_not_cached \
+                              -group_name $group_name \
+                              -subsite_id $subsite_id \
+                              -application_group_id $application_group_id]]
 }
 
 ad_proc -private group::get_id_not_cached {
@@ -262,14 +266,20 @@ ad_proc -private group::get_id_not_cached {
 
     @error
 } {
-    if {([info exists subsite_id] && $subsite_id ne "")} {
-	set application_group_id [application_group::group_id_from_package_id -package_id [ad_conn subsite_id]]
+    if {$subsite_id ne ""} {
+        if {$application_group_id ne ""} {
+            ad_log warning "group::get_id '$group_name': overwriting specified application_group_id by application group of subsite"
+        }
+	set application_group_id [application_group::group_id_from_package_id -package_id $subsite_id]
     } 
     
-    if {([info exists application_group_id] && $application_group_id ne "")} {
+    if {$application_group_id ne ""} {
 	set group_ids [db_list get_group_id_with_application {}]
     } else {
 	set group_ids [db_list get_group_id {}]
+    }
+    if {[llength $group_ids] > 1} {
+        ad_log warning "group::get_id for '$group_name' returns more than one value; returning the first one"
     }
     return [lindex $group_ids 0]
 }
@@ -431,20 +441,57 @@ ad_proc -public group::possible_member_states {} {
 
 ad_proc -public group::get_member_state_pretty {
     {-member_state:required}
+    {-component pretty_name}
+    {-user_name ""}
+    {-community_name ""}
+    {-site_name ""}
+    {-url ""}
+    {-locale ""}
 } {
     Returns the pretty-name of a member state.
 } {
-    array set message_key_array {
-        approved #acs-kernel.member_state_approved#
-        "needs approval" #acs-kernel.member_state_needs_approval#
-        banned #acs-kernel.member_state_banned#
-        rejected #acs-kernel.member_state_rejected#
-        deleted #acs-kernel.member_state_deleted#
-        merged #acs-kernel.member_state_merged#
+    if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
+        error "invalid member_state '$member_state'"
     }
-
-    return [lang::util::localize $message_key_array($member_state)]
+    #
+    # We can't use spaces in message keys, so replace it with a "_".
+    #
+    regsub -all " " $member_state "_" member_state
+    
+    switch $component {
+        pretty_name {
+            set message #acs-kernel.member_state_$member_state#
+        }
+        action {
+            if {$user_name eq ""} { error "user_name must be specified and must be non-empty" }
+            set message #acs-kernel.member_state_action_$member_state#
+        }
+        account_mail {
+            if {$site_name eq ""} { error "site_name must be specified and must be non-empty" }
+            if {[string match "#*#" $site_name]} {
+                # site names can be localized
+                set site_name [lang::util::localize $site_name $locale]
+            }
+            if {$url eq ""} { error "url must be specified and must be non-empty" }
+            set message #acs-kernel.member_state_account_mail_$member_state#                            
+        }
+        community_mail {
+            if {$community_name eq ""} { error "community_name must be specified and must be non-empty" }
+            if {[string match "#*#" $community_name]} {
+                # community_names can be localized
+                set community_name [lang::util::localize $community_name $locale]
+            }
+            if {$url eq ""} { error "url must be specified and must be non-empty" }
+            set message #acs-kernel.member_state_community_mail_$member_state#
+        }
+        default {
+            error "invalid component '$component'"
+        }
+    }
+    
+    return [lang::util::localize $message $locale]
 }
+
 
 ad_proc -public group::get_join_policy_options {} {
     Returns a list of valid join policies in a format suitable for a form builder drop-down.
@@ -457,7 +504,7 @@ ad_proc -public group::get_join_policy_options {} {
 
 ad_proc -public group::default_member_state {
     { -join_policy "" }
-    { -create_p "" }
+    { -create_p false }
     -no_complain:boolean
 } {
     If user has 'create' privilege on group_id OR 
@@ -539,7 +586,7 @@ ad_proc -public group::member_p {
     return [util_memoize [list group::member_p_not_cached -group_id $group_id -user_id $user_id -cascade_p $cascade_p]]
 }
 
-ad_proc -public group::member_p_not_cached {
+ad_proc -private group::member_p_not_cached {
     { -user_id "" }
     { -group_id "" }
     {-cascade_p ""}
@@ -569,38 +616,48 @@ ad_proc -public group::member_p_not_cached {
 
 ad_proc -public group::party_member_p {
     -party_id
-    { -group_name "" }
     { -group_id "" }
+    { -group_name "" }
     { -subsite_id "" }
 } {
-    Return 1 if the party is an approved member of the group specified.
-    You can specify a group name or group id.
-    </p><p>
-    <strong>Note:</strong> The group name is <strong>not</strong> unique
-    by definition,
-    and if you call this function with a duplicate group name it 
-    <strong>will</strong> bomb!!! Using the group name as a parameter is
-    thus strongly discouraged unless you are really, really sure the 
-    name is unique.</p>
-    <p>The party must have specifically
-    been granted membership on the group in question.</p>
+    
+    Return 1 if the party is an approved member of the group
+    specified.
+
+    One can specify a group_id (preferred) or a group name.
+    <strong>Note:</strong> The group name is <strong>not</strong>
+    unique by definition, and if you call this function with a
+    duplicate group name it <strong>will</strong> return the first one
+    (arbitrary)!!! Using the group name as a parameter is thus
+    strongly discouraged unless you are really, really sure the name
+    is unique.</p>
+
+    <p>The party must have specifically been granted
+    membership on the group in question.</p>
     
 } {
-
-    if { $group_name eq "" && $group_id eq "" } {
-	return 0
-    }
-
     if { $group_name ne "" } {
+        if {$group_id ne ""} {
+            ad_log warning "group::party_member_p: ignore specified group_id $group_id, usin name '$group_name' instead"
+        }
 	set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
-	if { $group_id eq "" } {
-	    return 0
-	}
     }
 
-    set result [lindex [db_list party_is_member {}] 0]
-    
-    return [template::util::is_true $result]
+    if { $group_id eq "" } {
+        set result 0
+    } else {
+        # Limiting to one row is required for those groups that define
+        # relational segments (e.g. subsites, as for admins two rows
+        # will be there for both their roles of member and
+        # administrator).
+        set result [db_0or1row party_is_member {
+            select 1 from group_approved_member_map
+            where member_id = :party_id
+            and group_id = :group_id
+            limit 1
+        }]
+    }
+    return $result
 }
 
 ad_proc -public group::get_rel_segment {
@@ -638,7 +695,7 @@ ad_proc -public group::admin_p {
     {-group_id:required}
     {-user_id:required}
 } {
-    @return 1 if user_id is in teh admin_rel for group_id
+    @return 1 if user_id is in the admin_rel for group_id
 } {
     set admin_rel_id [relation::get_id \
                           -object_id_one $group_id \

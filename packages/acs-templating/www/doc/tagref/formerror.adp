@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: formerror}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: formerror}</property>
 <property name="doc(title)">Templating System Tag Reference: formerror</property>
 <master>
 <h2>formerror</h2>
@@ -8,7 +8,7 @@
  : <a href="index">Tag Reference</a>
  : formerror
 <h3>Summary</h3>
-<p>The <tt>formerror</tt> tag is used to specify the presentation
+<p>The <kbd>formerror</kbd> tag is used to specify the presentation
 of a form validation error.</p>
 <h3>Usage</h3>
 <pre>
@@ -25,7 +25,7 @@ of a form validation error.</p>
     &lt;/td&gt;
   &lt;/tr&gt;
   &lt;/table&gt;&lt;br&gt;
-  &lt;input type=submit value="Submit"&gt;
+  &lt;input type="submit" value="Submit"&gt;
   &lt;/formtemplate&gt;
 </pre>
 <p>Another example:</p>
@@ -44,7 +44,7 @@ of a form validation error.</p>
   &lt;/tr&gt;
   &lt;/formerror&gt;
   &lt;/table&gt;&lt;br&gt;
-  &lt;input type=submit value="Submit"&gt;
+  &lt;input type="submit" value="Submit"&gt;
   &lt;/formtemplate&gt;
 </pre>
 <p>This adds another table row which contains the error message for
@@ -52,12 +52,12 @@ that widget in red color. If there is no error then the table row
 will not be added.</p>
 <h3>Notes</h3>
 <ul>
-<li><p>The contents of the <tt>formerror</tt> tag may appear on the
+<li><p>The contents of the <kbd>formerror</kbd> tag may appear on the
 form when a submission is returned to the user for correction.</p></li><li><p>The contents of the tag may use the special variables
-<tt>label</tt> and <tt>value</tt> to refer to the element label and
-submitted value.</p></li><li><p>You can use the variable \@formerror.element_id\@ to refer to the
+<kbd>label</kbd> and <kbd>value</kbd> to refer to the element label
+and submitted value.</p></li><li><p>You can use the variable \@formerror.element_id\@ to refer to the
 automatically generated error message within the formerror
-tags.</p></li><li><p>The <tt>type</tt> attribute is optional and is used to
+tags.</p></li><li><p>The <kbd>type</kbd> attribute is optional and is used to
 distinguish messages for specific types of validation errors. Each
 element may have any number of error messages associated with it,
 corresponding to each of the validation checks performed by the
@@ -65,11 +65,11 @@ developer in the script associated with template.</p></li><li><p>If the contents
 (&lt;formerror&gt;&lt;/formerror&gt;), the message specified by the
 developer in the script are inserted when appropriate. This is
 particularly useful for international sites, where locale-dependent
-messages may be stored in the database.</p></li><li><p>If the <tt>type</tt> attribute is not specified <em>and</em> the
-contents of the tag are empty, all appropriate messages are
-inserted (separated by &lt;,br&gt; tags).</p></li><li><p>See the <a href="formwidget"><tt>formwidget</tt></a> and
-<a href="formgroup"><tt>formgroup</tt></a> tags for more
+messages may be stored in the database.</p></li><li><p>If the <kbd>type</kbd> attribute is not specified <em>and</em>
+the contents of the tag are empty, all appropriate messages are
+inserted (separated by &lt;,br&gt; tags).</p></li><li><p>See the <a href="formwidget"><kbd>formwidget</kbd></a> and
+<a href="formgroup"><kbd>formgroup</kbd></a> tags for more
 information on writing the body of a dynamic form template.</p></li>
 </ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

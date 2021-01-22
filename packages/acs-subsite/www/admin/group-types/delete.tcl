@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     group_type:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     subtypes:multirow
     context:onevalue

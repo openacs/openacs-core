@@ -35,10 +35,6 @@ if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
     ad_script_abort
 }
 
-if {$package_key ne ""} {
-    set safe_p [regexp {/?(.*)} $url package_url]
-}
-
 
 if {$db eq ""} { 
 
@@ -62,12 +58,18 @@ if {$db eq ""} {
 
     # we have a db.  
 
+
     if {$db eq "sql"} { 
         set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/$url"]       
     } else { 
         set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/$db/$url"]       
     }
-        
+
+    if {$package_key ne ""} {
+        set safe_p [regexp {/?(.*)} $url package_url]
+    } else {
+        set safe_p 0
+    }
 
     if { $safe_p && [llength $files] > 0 } {
         ns_returnfile 200 text/plain $files

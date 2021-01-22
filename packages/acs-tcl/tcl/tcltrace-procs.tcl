@@ -13,7 +13,12 @@ ad_library {
 namespace eval ::tcltrace {
 
     ad_proc -private before-ns_return { cmd op } {
-	Execute this proc before ns_return is called
+        
+	Execute this proc before ns_return is called.
+        This proc saves the request in a file, which can be later
+        used for validating the returned HTML. This works as well
+        for admin pages, which can not be validated via web based
+        HTML validators without giving away admin privileges.
 
 	@param cmd the full command as executed by Tcl
 	@param op the trace operation 
@@ -43,6 +48,7 @@ namespace eval ::tcltrace {
 	}
     }
 
+ 
     ad_proc -private before-ns_log { cmd op } {
 	Execute this proc before ns_log is called
 
@@ -54,7 +60,7 @@ namespace eval ::tcltrace {
 	if {![info exists ::__log_severities]} {
 	    set ::__log_severities [::parameter::get_from_package_key \
 					-package_key acs-tcl \
-					-parameter TclTraceLogServerities \
+					-parameter TclTraceLogSeverities \
 					-default ""]
 	}
 	if {$severity in $::__log_severities} {
@@ -70,7 +76,7 @@ namespace eval ::tcltrace {
     ad_proc -private before { cmd op } {
         Simple trace proc for arbitraty commands. simply reports traces to error.log.
     } {
-        ns_log notice $cmd
+        ns_log notice "trace: $cmd"
     }
    
 }

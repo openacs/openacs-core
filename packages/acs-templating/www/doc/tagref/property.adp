@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Property}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: Property}</property>
 <property name="doc(title)">Templating System Tag Reference: Property</property>
 <master>
 <h2>Property</h2>
@@ -8,7 +8,7 @@
  : <a href="index">Tag Reference</a>
  : Property
 <h3>Summary</h3>
-<p>The <tt>property</tt> tag is used to set display attributes of
+<p>The <kbd>property</kbd> tag is used to set display attributes of
 the page. The contents of the tag may be plain text, static HTML,
 or a dynamic template that references local data sources.
 Properties are most commonly used to pass information to a master
@@ -24,7 +24,7 @@ template, such as a title or logo.</p>
 ...
 </pre>
 <h3>Note(s)</h3>
-<ul><li><p>See <a href="master"><tt>master</tt></a> and <a href="slave"><tt>slave</tt></a> for more information about master
+<ul><li><p>See <a href="master"><kbd>master</kbd></a> and <a href="slave"><kbd>slave</kbd></a> for more information about master
 templates.</p></li></ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

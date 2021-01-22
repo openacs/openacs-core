@@ -16,9 +16,13 @@ namespace eval ::apidoc {
         # NaviServer at sourceforge
         #
         set ns_api_host  "http://naviserver.sourceforge.net/"
-        set ns_api_index "n/naviserver/files/"
-        set ns_api_root ${ns_api_host}${ns_api_index}
-        set ns_api_html_index $ns_api_root/commandlist.html
+        set ns_api_index [list "n/naviserver/files/" "n/"]
+        set ns_api_root  [list \
+                              ${ns_api_host}[lindex $ns_api_index 0] \
+                              ${ns_api_host}[lindex $ns_api_index 1] ]
+        set ns_api_html_index [list \
+                                   [lindex $ns_api_root 0]commandlist.html \
+                                   [lindex $ns_api_root 1]toc.html ]
     } else {
         #
         # AOLserver wiki on panpotic
@@ -748,7 +752,7 @@ ad_proc -public api_describe_function {
 
 
 ad_proc -public api_get_body {proc_name} {
-    This function returns the body of a tcl proc or an xotcl method.
+    This function returns the body of a Tcl proc or an xotcl method.
     @param proc_name the name spec of the proc
     @return body of the specified prox
 } {
@@ -760,7 +764,7 @@ ad_proc -public api_get_body {proc_name} {
             return [::xo::api get_method_source "" $obj $prefix $method]
         }
     } elseif {[info commands ::xo::api] ne ""
-              && [regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name . thread kind obj]} {
+              && [regexp {^([^ ]+) (Class|Object) (.*)$} $proc_name . thread kind obj]} {
         return [::xo::api get_object_source $thread $obj]
     } elseif {[info commands ::xo::api] ne ""
               && [regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
@@ -805,10 +809,10 @@ namespace eval ::apidoc {
         @param see a string expected to comtain the resource to format
         @return the html string representing the resource
     } {
-        regsub -all {proc *} $see {} see
+        #regsub -all {proc *} $see {} see
         set see [string trim $see]
         if {[nsv_exists api_proc_doc $see]} {
-            set href [export_vars -base proc-view {{proc $see}}]
+            set href [export_vars -base /api-doc/proc-view {{proc $see}}]
             return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
         }
         if {[string match "/doc/*" $see]
@@ -1146,6 +1150,35 @@ namespace eval ::apidoc {
         return $url
     }
 
+    ad_proc -private get_doc_url {-cmd -index -root -host} {
+
+        foreach i $index r $root {
+            set result [util_memoize [list ::util::http::get -url $i]]
+            set page   [dict get $result page]
+
+            #
+            # Since man pages contain often a summary of multiple commands, try
+            # abbreviation in case the full name is not found (e.g. man page "nsv"
+            # contains "nsv_array", "nsv_set" etc.)
+            #
+            set url ""
+            for {set i [string length $cmd]} {$i > 1} {incr i -1} {
+                set proc [string range $cmd 0 $i]
+                set url [apidoc::search_on_webindex \
+                             -page $page \
+                             -root $r \
+                             -host $host \
+                             -proc $proc]
+                if {$url ne ""} {
+                    ns_log notice "=== cmd <$cmd> --> $url"
+                    return $url
+                }
+            }
+        }
+        ns_log notice "=== cmd <$cmd> not found on <$index> root <$root> host <$host>"
+        return ""
+    }
+
     ad_proc -private pretty_token {kind token} {
         Encode the specified token in HTML
     } {
@@ -1280,6 +1313,59 @@ namespace eval ::apidoc {
                         set procl [length_proc [string range $data $i end]]
                         set proc_name [string range $data $i $i+$procl]
 
+                        if {$proc_name eq "ad_proc"} {
+                            #
+                            # Pretty print comment after ad_proc rather than trying to index keywords
+                            #
+                            set endPos [string first \n $data $i+1]
+                            if {$endPos > -1} {
+                                set line0 [string range $data $i $endPos]
+                                set line [string trim $line0]
+                                #
+                                # Does the line end with a open brace?
+                                #
+                                if {[string index $line end] eq "\{"} {
+                                    # Do we have a signature of an
+                                    # ad_proc (ad_proc ?-options ...?
+                                    # name args) before that?
+                                    #
+                                    # Note, that this handles just
+                                    # single line ad-proc signatures,
+                                    # not multi-line argument lists.
+                                    
+                                    set start [string range $line 0 end-1]
+                                    set elements 3
+                                    for {set idx 1} {[string index [lindex $start $idx] 0] eq "-"} {incr idx} {
+                                        incr elements
+                                    }
+                                    
+                                    if {[llength $start] == $elements} {
+                                        #
+                                        # Read next lines until brace is balanced.
+                                        #
+                                        set comment_start [expr {[string last "\{" $line] + $i}]
+                                        set comment_end [expr {$comment_start + 1}]
+                                        while {![info complete [string range $data $comment_start $comment_end]]
+                                               && $comment_end < $l} {
+                                            incr comment_end
+                                        }
+                                        if {$comment_end < $l} {
+                                            ns_log notice "AD_PROC CAND COMM [string range $data $comment_start $comment_end]"
+                                            set url ""
+                                            append html \
+                                                "<a href='/api-doc/proc-view?proc=ad_proc' title='ad_proc'>" \
+                                                [pretty_token proc ad_proc] </a> \
+                                                [string range $data $i+7 $comment_start] \
+                                                "<span class='comment'>" \
+                                                [string range $data $comment_start+1 $comment_end-1] \
+                                                "</span>\}" 
+                                            set i $comment_end
+                                            continue
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if {$proc_name eq "*" || $proc_name eq "@"} {
                             append html $proc_name
                         } elseif {$proc_name in $::apidoc::KEYWORDS ||
@@ -1383,7 +1469,7 @@ namespace eval ::apidoc {
 
     ad_proc -private xql_links_list { path } {
         
-        Returns list of xql files related to tcl script file
+        Returns list of xql files related to Tcl script file
         @param path path and filename from $::acs::rootdir
         
     } {
@@ -1419,16 +1505,8 @@ namespace eval ::apidoc {
         
         @return sanitized path
     } {
-
-        if {[regsub -all {[.][.]/} $path "" shortened_path]} {
-            set filename "$::acs::rootdir/$path"
-            ns_log notice [subst {INTRUDER ALERT:\n\nsomesone tried to snarf '$filename'!
-                file exists: [file exists $filename] user_id: [ad_conn user_id] peer: [ad_conn peeraddr]
-            }]
-            set path $shortened_path
-        }
-
-        if {![string match "$prefix/*" $path]} {
+        set path [ns_normalizepath $path]
+        if {![string match "/$prefix/*" $path]} {
             set filename "$::acs::rootdir/$path"
             ns_log notice [subst {INTRUDER ALERT:\n\nsomesone tried to snarf '$filename'!
                 file exists: [file exists $filename] user_id: [ad_conn user_id] peer: [ad_conn peeraddr]
@@ -1468,7 +1546,7 @@ ad_proc api_proc_link { proc } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "<a href=\"[ns_htmlencode [api_proc_url $proc]]\">$proc</a>"
+    return "<a href=\"[ns_quotehtml [api_proc_url $proc]]\">$proc</a>"
 }
 
 

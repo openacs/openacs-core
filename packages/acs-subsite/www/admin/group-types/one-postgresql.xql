@@ -9,15 +9,11 @@
     select my_view.group_name, my_view.group_id
     from (select DISTINCT g.group_name, g.group_id
            from acs_objects o, groups g,
-                application_group_element_map app_group, 
-                all_object_party_privilege_map perm
-          where perm.object_id = g.group_id
-            and perm.party_id = :user_id
-            and perm.privilege = 'read'
-            and g.group_id = o.object_id
+                application_group_element_map app_group
+          where g.group_id = o.object_id
             and o.object_type = :group_type
-            and app_group.package_id = :package_id
-            and app_group.element_id = g.group_id
+            and (app_group.package_id = :package_id and app_group.element_id = g.group_id or o.object_id = -2)
+	    and acs_permission__permission_p(g.group_id, :user_id, 'read')	   
           order by g.group_name, g.group_id) my_view 
     limit 26
 

@@ -62,6 +62,7 @@ ad_proc -public parameter::get_global_value {
     @param default what to return if we don't find a value. Defaults to returning the empty string.
 
     @return The string trimmed (leading and trailing spaces removed) parameter value
+    @see parameter::get
 } {
 
     # Is there a parameter by this name in the parameter file?  If so, it takes precedence.
@@ -144,6 +145,7 @@ ad_proc -public parameter::get {
     @param default what to return if we don't find a value. Defaults to returning the empty string.
 
     @return The string trimmed (leading and trailing spaces removed) parameter value
+    @see parameter::get_global_value
 } {
 
     if {$package_id eq ""} {
@@ -249,7 +251,7 @@ ad_proc -public parameter::get_from_package_key {
     # 2. try to get a package_id for this package_key and use the standard
     # parameter::get function to get the value
     if {$value eq ""} {
-        with_catch errmsg {
+        if {[catch {
             set value [parameter::get \
                              -localize=$localize_p \
                              -boolean=$boolean_p \
@@ -257,7 +259,7 @@ ad_proc -public parameter::get_from_package_key {
                              -parameter $parameter \
                              -default $default \
                             ]
-        } {
+        } errorMsg]} {
             set value $default
         }
     }

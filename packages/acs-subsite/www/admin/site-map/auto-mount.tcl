@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     package_key:notnull
     node_id:naturalnum,notnull
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 subsite::auto_mount_application -node_id $node_id $package_key

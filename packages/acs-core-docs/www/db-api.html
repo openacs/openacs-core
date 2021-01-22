@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The OpenACS Database Access API</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The OpenACS Database Access API</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div></div><p>
     By Pete Su and Jon Salz. Modified by Roberto Mello.
   </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-overview"></a>Overview</h3></div></div></div><p>
       One of OpenACS's great strengths is that code written for it is
@@ -103,8 +103,8 @@ and some_table.condition_p = '$foo'</pre><p>
       What the DB API (in conjuntion with the database drivers
       implemented for aolserver) do is send the SQL statement to the
       server for parsing, then <span class="emphasis"><em>bind</em></span> values to the
-      variables and sends those values along seperately as a second
-      step. This seperate binding step is where the term
+      variables and sends those values along separately as a second
+      step. This separate binding step is where the term
       <span class="emphasis"><em>bind variable</em></span> comes from.
     </p><p>
       This split has several advantages. First, type checking happens
@@ -526,11 +526,11 @@ db_dml <span class="emphasis"><em>statement-name</em></span> <span class="emphas
 	    insert. Only one of <code class="computeroutput">-blobs</code>, <code class="computeroutput">-clobs</code>,
 	    <code class="computeroutput">-blob_files</code>, and <code class="computeroutput">-clob_files</code> may be provided.</p><p>Example:</p><pre class="programlisting">
 
-db_dml insert_photos "
+db_dml insert_photos {
         insert photos(photo_id, image, thumbnail_image)
         values(photo_id_seq.nextval, empty_blob(), empty_blob())
         returning image, thumbnail_image into :1, :2
-    "  -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
+    }  -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
 
 	  </pre><p>
 	    This inserts a new row into the <code class="computeroutput">photos</code> table, with the contents
@@ -549,7 +549,7 @@ db_write_clob <span class="emphasis"><em>statement-name</em></span> <span class=
 db_write_blob <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 
 db_blob_get_file <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
-	  </pre><p>Analagous to <code class="computeroutput">ns_ora write_clob/write_blob/blob_get_file</code>. 
+	  </pre><p>Analogous to <code class="computeroutput">ns_ora write_clob/write_blob/blob_get_file</code>. 
 
 
 	  </p></dd><dt><span class="term"><code class="computeroutput"><a name="devguide.dbapi_db_release_unused_handles"></a>db_release_unused_handles</code></span></dt><dd><pre class="programlisting">
@@ -573,7 +573,7 @@ proc replace_the_foo { col } {
 }
 
 proc print_the_foo {} {
-    doc_body_append "foo is [db_string get_foo {select col from foo}]&lt;br&gt;\n"
+    doc_body_append "foo is [db_string "select col from foo"]&lt;br&gt;\n"
 }
 
 replace_the_foo 8
@@ -638,9 +638,8 @@ set baz ""
 
 # Clean out the foo table
 #
-db_dml unused "delete from foo"
-
-db_dml unused "insert into foo(baz) values('$baz')"
+db_dml unused {delete from foo}
+db_dml unused {insert into foo(baz) values(:baz)}
 
 set n_rows [db_string unused "select count(*) from foo where baz is null"]
 #
@@ -653,7 +652,7 @@ set n_rows [db_string unused "select count(*) from foo where baz is null"]
 	    <code class="computeroutput">null</code> by writing: 
 	  </p><pre class="programlisting">
 
-db_dml foo_insert "insert into foo(baz) values(:1)" {[db_nullify_empty_string $baz]}
+db_dml foo_insert {insert into foo(baz) values(:1)} {[db_nullify_empty_string $baz]}
 
 	  </pre></dd></dl></div><p>
       </p><div class="cvstag">($Id$)</div><p>
@@ -689,4 +688,4 @@ db_list -cache_key page_${page_id}_get_elements get_elements {}
 
 db_flush_cache -cache_key_pattern page_${page_id}_*
 
-    </pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr><tr><td width="40%" align="left">The Request Processor </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Using Templates in OpenACS</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/db-api.html#comments">View comments on this page at openacs.org</a></center></body></html>
+    </pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr><tr><td width="40%" align="left">The Request Processor </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> Using Templates in OpenACS</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

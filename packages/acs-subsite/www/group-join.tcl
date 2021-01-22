@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-08-07
     @cvs-id $Id$
 } {
-    {return_url "."}
+    {return_url:localurl "."}
 }
 
 auth::require_login

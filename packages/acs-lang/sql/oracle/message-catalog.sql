@@ -116,7 +116,7 @@ create sequence lang_messages_audit_id_seq;
 create table lang_translate_columns (   
         column_id integer 
 	    constraint ltc_column_id_pk primary key,
-        -- cant do references on user_tables cause oracle sucks
+        -- can't do references on user_tables cause oracle sucks
         on_which_table varchar2(50),
         on_what_column varchar2(50),
         --

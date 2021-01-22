@@ -1,3 +1,4 @@
+# -*- tcl -*-
 # packages/acs-subsite/www/image.vuh
 #
 # Subsite handler for images
@@ -6,11 +7,14 @@
 # @creation-date 2006-08-01
 # @cvs-id $Id$
 
-if {![regexp {^/([0-9]+)(/(private)/([0-9]+))?(/(.*))?$} [ad_conn path_info] match object_id private_slash private private_parent_id anchor]} {
-    ad_return_warning "Invalid object id" [subst {
+if {![regexp {^/([0-9]+)(/(private)/([0-9]+))?(/(.*))?$} [ad_conn path_info] match object_id private_slash private private_parent_id anchor]
+    || [string match "0*" $object_id]
+    || $object_id > 2**31
+} {
+    ad_page_contract_handle_datasource_error "Invalid object id: 
         The identifier given for this object is invalid.  Please check your url 
         or contact the webmaster if you think it should work.
-    }]
+    "
     return
 }
 
@@ -52,3 +56,9 @@ if { $private eq "private" } {
 # find a cr_item and serve it
 
 cr_write_content -item_id $object_id
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

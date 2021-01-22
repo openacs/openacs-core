@@ -15,7 +15,7 @@ ad_page_contract {
 }
 # 
 
-if [catch { ns_dbformvalue [ns_getform] on_vacation_until date on_vacation_until } errmsg] {
+if {[catch { ns_dbformvalue [ns_getform] on_vacation_until date on_vacation_until } errmsg]} {
     ad_return_error "Invalid date" "AOLserver didn't like the date that you entered."
     return
 }

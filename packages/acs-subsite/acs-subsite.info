@@ -9,22 +9,22 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.1d1" url="http://openacs.org/repository/download/apm/acs-subsite-5.9.1d1.apm">
+    <version name="5.9.2d2" url="http://openacs.org/repository/download/apm/acs-subsite-5.9.2d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2015-10-04</release-date>
+        <release-date>2017-08-06</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.9.1d1"/>
-        <requires url="acs-authentication" version="5.9.0"/>
-        <requires url="acs-content-repository" version="5.9.0"/>
-        <requires url="acs-kernel" version="5.9.0"/>
-        <requires url="acs-tcl" version="5.9.0"/>
-        <requires url="acs-lang" version="5.9.0"/>
-        <requires url="acs-mail-lite" version="5.9.0"/>
+        <provides url="acs-subsite" version="5.9.2d2"/>
+        <requires url="acs-authentication" version="5.9.1"/>
+        <requires url="acs-content-repository" version="5.9.1"/>
+        <requires url="acs-kernel" version="5.9.1"/>
+        <requires url="acs-tcl" version="5.9.2d3"/>
+        <requires url="acs-lang" version="5.9.1"/>
+        <requires url="acs-mail-lite" version="5.9.1"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="subsite::before_upgrade"/>
@@ -124,7 +124,7 @@ admin {
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ScreenNameP"  default="0" description="Set this to 1 if you want to show screen names instead of real names." section_name="user-info"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowApplications"  default="1" description="Show individual tabs for mounted applications within this subsite" section_name="Navigation Tabs"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowContextBarP"  default="1" description="Should context bars appear on pages?"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowMembersListTo"  default="1" description="Who can see the subsite members list. 0 = Everyone; 1 = Members; 2 = Only administrators."/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowMembersListTo"  default="1" description="Who can see the subsite members list. 0 = Everyone; 1 = Members; 2 = Only administrators; 3 = members, unless subsite."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SolicitPortraitP"  default="1" description="Set this to 1 if you want users to be asked to submit a portrait." section_name="user-info"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SomeAmericanReadersP"  default="1" description="is it even worth bothering asking for state and zip code?"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="StreamingHead"  default="/packages/openacs-default-theme/lib/plain-streaming-head" description="Path to the head template (skin) for streaming HTML-output.   Set by the admin theme-switching UI." section_name="theming"/>
@@ -134,7 +134,7 @@ admin {
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="ThemeJS"  default=""
 		       description="A list of lists of JS specifications of the form '-attribute value' pairs to use with this theme. The allowed attributes are defined by the arguments of template::add_script.  Set by the admin theme-switching UI." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ThemeKey"  default="default_plain" description="Key of the acs-templating theme for this subsite.  Set by the admin theme-switching UI." section_name="theming"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="/tmp /var/tmp" description="What tmp directories are used on this system? Note the leading / character."/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="" description="What tmp directories are used on this system? Could be something like '/tmp /var/tmp', note the leading / character. If this value is empty, 'ns_config ns/parameters tmpdir' is used"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserHomeTemplate"  default="/packages/acs-subsite/lib/home" description="Name of the template used for the user home page" section_name="Templates"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserInfoTemplate"  default="/packages/acs-subsite/lib/user-info" description="Name of the template used for description of a user" section_name="Templates"/>
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="UserNavbarTabsList"  default="home {label #acs-subsite.Subsite_Home#}" description="Navigation tabs to show to users" section_name="Navigation Tabs"/>

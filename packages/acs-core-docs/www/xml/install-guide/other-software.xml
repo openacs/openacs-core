@@ -14,7 +14,7 @@
       <para>This section assumes that the source tarballs for supporting
     software are in <computeroutput>/tmp</computeroutput>.  It assumes
     that you begin each continuous block of commands as root, and you
-    should end each block as root.  It doesn't care which directory
+    should end each block as root.  It doesn&#39;t care which directory
     you start in.  Text instructions always precede the commands they
       refer to.</para>
 
@@ -208,7 +208,7 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
       <title>Install qmail (OPTIONAL)</title>
       <para>Qmail is a Mail Transfer Agent.  It handles incoming and
       outgoing mail.  Install qmail if you want your OpenACS server to
-      send and receive mail, and you don't want to use an alternate
+      send and receive mail, and you don&#39;t want to use an alternate
       MTA.</para>
       <para>Red Hat 9: all djb tools (qmail, daemontools, ucspi) will
       fail to compile in Red Hat 9 because of changes to glibc (<ulink url="http://moni.csi.hu/pub/glibc-2.3.1/">patches</ulink>)</para>
@@ -256,15 +256,15 @@ tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] 
               <primary>qmail</primary>
               <secondary>rcpthosts error message</secondary>
             </indexterm>
-(I'm not sure if this next step is 100% necessary, but when I skip it
-I get problems.  If you get the error <computeroutput>553 sorry, that domain isn't in my list of allowed rcpthosts (#5.7.1)</computeroutput> then you need to do this.)  AOLserver sends outgoing mail via the ns_sendmail
+(I&#39;m not sure if this next step is 100% necessary, but when I skip it
+I get problems.  If you get the error <computeroutput>553 sorry, that domain isn&#39;t in my list of allowed rcpthosts (#5.7.1)</computeroutput> then you need to do this.)  AOLserver sends outgoing mail via the ns_sendmail
 command, which pipes a command to the sendmail executable.  Or, in our
 case, the qmail replacement wrapper for the sendmail executable.  In
 some cases, though, the outgoing mail requset is apparently sent
 through tcp/ip, so that it comes to qmail from 127.0.0.1 (a special IP
 address that means the local machine - the "loopback" interface).
 Unless this mail is addressed to the same machine, qmail thinks that
-it's an attempt to relay mail, and rejects it.  So these two commands
+it&#39;s an attempt to relay mail, and rejects it.  So these two commands
 set up an exception so that any mail sent from 127.0.0.1 is allowed to
 send outgoing mail.</para>
           <screen>[root ucspi-tcp-0.88]# <userinput>cp /tmp/&tarballpath;/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</userinput>
@@ -342,7 +342,7 @@ cd netqmail-1.04
 ./collate.sh
 cd netqmail-1.04
 make setup check</action></screen>
-          <para>Replace sendmail with qmail's wrapper.</para>
+          <para>Replace sendmail with qmail&#39;s wrapper.</para>
           <indexterm>
             <primary>sendmail</primary>
             <secondary>removing</secondary>
@@ -352,7 +352,7 @@ make setup check</action></screen>
 [root qmail-1.03]#
 <action>rm -f /usr/bin/sendmail /usr/sbin/sendmail
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</action></screen>
-          <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer's identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you'll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
+          <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer&#39;s identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you&#39;ll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
             <screen>[root qmail-1.03]# <userinput>./config-fast <replaceable>yourserver.test</replaceable></userinput>
 Your fully qualified host name is yourserver.test.
 Putting yourserver.test into control/me...
@@ -364,7 +364,7 @@ Now qmail will refuse to accept SMTP messages except to yourserver.test.
 Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
 [root qmail-1.03]#
 <action>./config-fast <replaceable>yourserver.test</replaceable></action></screen>
-          <para>All incoming mail that isn't for a specific user is handled by the <computeroutput>alias</computeroutput> user.  This includes all root mail.  These commands prepare the alias user to receive mail.</para>
+          <para>All incoming mail that isn&#39;t for a specific user is handled by the <computeroutput>alias</computeroutput> user.  This includes all root mail.  These commands prepare the alias user to receive mail.</para>
           <screen>[root qmail-1.03]# <userinput>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root</userinput>
 [root alias]# <userinput>chmod 644 ~alias/.qmail*</userinput>
 [root alias]# <userinput>/var/qmail/bin/maildirmake ~alias/Maildir/</userinput>
@@ -432,7 +432,7 @@ chmod 755 /var/qmail/supervise/qmail-smtpd/run
 chmod 755 /var/qmail/supervise/qmail-smtpd/log/run
 ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service
 </action></screen>
-          <para>Wait ten seconds or so, and then verify that that the four qmail processes are running.  If uptimes don't rise above 1 second, this may indicate broken scripts that are continuously restarting.  In that case, start debugging by checking permissions.</para>
+          <para>Wait ten seconds or so, and then verify that that the four qmail processes are running.  If uptimes don&#39;t rise above 1 second, this may indicate broken scripts that are continuously restarting.  In that case, start debugging by checking permissions.</para>
           <screen>[root root]# <userinput>qmailctl stat</userinput>
 /service/qmail-send: up (pid 32700) 430 seconds
 /service/qmail-send/log: up (pid 32701) 430 seconds
@@ -497,7 +497,7 @@ mv analog-5.32 /usr/share/</action></screen>
           <secondary>installation</secondary>
         </indexterm>
       <para>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
-      AOLserver.  You will need the tseach2 module form PostgreSQL
+      AOLserver.  You will need the tsearch2 module form PostgreSQL
       contrib. This is included with the PostgreSQL full source
       distribution. It is also available with the PostgreSQL contrib
       package provided by most distribution packages. On debian it is
@@ -511,7 +511,7 @@ mv analog-5.32 /usr/share/</action></screen>
           tsearch2 from a package, you can use the
           http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_update.sql
           regprocedure script to update the database after tsearch2 is
-          installed into it. TODO link to section decribing how to fix
+          installed into it. TODO link to section describing how to fix
           an existing tsearch2 database with this patch.</para>
           </listitem>
         <listitem>
@@ -735,7 +735,7 @@ where it says
 [postgres pgsql]$ <userinput>cd /usr/local/src/postgresql-7.3.4/contrib/tsearch/</userinput>
 [postgres tsearch]$ <userinput>make</userinput>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in >tsearch.sql
-/usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l<emphasis>(many lines omitted)</emphasis>
+/usr/bin/flex  -8 -Ptsearch_yy -o&#39;parser.c' parser.l<emphasis>(many lines omitted)</emphasis>
 rm -f libtsearch.so
 ln -s libtsearch.so.0.0 libtsearch.so
 [postgres tsearch]$ <userinput>make install</userinput>
@@ -783,7 +783,7 @@ tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
 ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
 make
-cd aolserver
+cd AOLserver
 make
 cp nsfts.so /usr/local/aolserver/bin
 </action></screen>
@@ -843,7 +843,7 @@ CREATE
         <para>
           If you get the error 
           <computeroutput>ERROR: could not access file "$libdir/tsearch": no such file or directory</computeroutput>
-          It is probably because PostgreSQL's libdir configuration variable points to a diffent directory than where tsearch is.
+          It is probably because PostgreSQL&#39;s libdir configuration variable points to a diffent directory than where tsearch is.
           You can find out where PostgreSQL expects to find tsearch via
           <screen><userinput>pg_config --pkglibdir</userinput></screen>
         </para>
@@ -852,7 +852,7 @@ CREATE
       
       <sect2 id="enable-openfts">
         <title>Enable OpenFTS in config.tcl</title>
-        <para>If you have <link linkend="install-openfts">installed OpenFTS</link>, you can enable it for this service.  Uncomment this line from <computeroutput>config.tcl</computeroutput>.  (To uncomment a line in a tcl file, remove the <computeroutput>#</computeroutput> at the beginning of the line.)</para>
+        <para>If you have <link linkend="install-openfts">installed OpenFTS</link>, you can enable it for this service.  Uncomment this line from <computeroutput>config.tcl</computeroutput>.  (To uncomment a line in a Tcl file, remove the <computeroutput>#</computeroutput> at the beginning of the line.)</para>
         <programlisting>#ns_param   nsfts           ${bindir}/nsfts.so</programlisting>
       </sect2>
 
@@ -1008,9 +1008,9 @@ line, click
 
       <para>This AOLserver module is required if you want people to connect to your site via
           https.  These commands compile nsopenssl and install it,
-          along with a tcl helper script to handle https connections.
+          along with a Tcl helper script to handle https connections.
           You will also need ssl certificates.  Because those should
-          be different for each server service, you won't need <link
+          be different for each server service, you won&#39;t need <link
           linkend="ssl-certificates">those instructions</link> until
       later. </para>
       <sect2 id="install-nsopenssl-aolserver3">
@@ -1088,7 +1088,7 @@ ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
 </screen>
 </para>
 
-      <para>SSL support must be enabled seperately in each OpenACS
+      <para>SSL support must be enabled separately in each OpenACS
         server (<xref linkend="ssl-certificates"/>. </para>
 
       <para>If your ports for SSL are privileged (below 1024), you
@@ -1145,7 +1145,7 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
         <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
       </authorblurb>
       
-      <para>This section is work in progress. It will detail how you can install Squirrelmail as a webmail frontend for OpenACS, thereby neglecting the need to have a seperate webmail package within OpenACS</para>
+      <para>This section is work in progress. It will detail how you can install Squirrelmail as a webmail frontend for OpenACS, thereby neglecting the need to have a separate webmail package within OpenACS</para>
       <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]# <userinput>cd www</userinput>
 [$OPENACS_SERVICE_NAME www]# <userinput>wget http://cesnet.dl.sourceforge.net/sourceforge/squirrelmail/squirrelmail-1.4.4.tar.gz</userinput>
 [$OPENACS_SERVICE_NAME www]# <userinput>tar xfz squirrelmail-1.4.4.tar.gz</userinput>

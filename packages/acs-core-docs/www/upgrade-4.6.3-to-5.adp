@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Upgrading OpenACS 4.6.3 to 5.0}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading OpenACS 4.6.3 to 5.0}</property>
 <property name="doc(title)">Upgrading OpenACS 4.6.3 to 5.0</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,26 +11,26 @@ Chapter 5. Upgrading"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="upgrade-4.6.3-to-5" id="upgrade-4.6.3-to-5"></a>Upgrading OpenACS 4.6.3 to 5.0</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<b>Oracle. </b>This forum posting documents
-<a class="ulink" href="http://openacs.org/forums/message-view?message_id=201394" target="_top">how to upgrade an Oracle installation from OpenACS 4.6.3 to
+<strong>Oracle. </strong>This forum posting
+documents <a class="ulink" href="http://openacs.org/forums/message-view?message_id=201394" target="_top">how to upgrade an Oracle installation from OpenACS 4.6.3 to
 5</a> .</p></li><li class="listitem">
 <p>
-<b>PostGreSQL. </b>You must use PostGreSQL 7.3.x or
-newer to upgrade OpenACS beyond 4.6.3. See <a class="link" href="upgrade-supporting" title="Upgrading from PostGreSQL 7.2 to 7.3">Upgrade PostGreSQL to
+<strong>PostGreSQL. </strong>You must use PostGreSQL
+7.3.x or newer to upgrade OpenACS beyond 4.6.3. See <a class="link" href="upgrade-supporting" title="Upgrading from PostGreSQL 7.2 to 7.3">Upgrade PostGreSQL to
 7.3</a>; <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
 &ldquo;Version Compatibility
 Matrix&rdquo;</a>
 </p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p><a class="link" href="snapshot-backup" title="Manual backup and recovery">Back up the database and file
 system.</a></p></li><li class="listitem"><p>
-<b>Upgrade the file system for
-packages/acs-kernel. </b><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
+<strong>Upgrade the file system for
+packages/acs-kernel. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
 &ldquo;Upgrading the OpenACS
 files&rdquo;</a>
 </p></li><li class="listitem">
 <p>Upgrade the kernel manually. (There is a script to do most of
-the rest: <a class="ulink" href="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</a>).
-You'll still have to do a lot of stuff manually, but automated
+the rest: <a class="ulink" href="http://cvs.openacs.org/browse/OpenACS/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?r=1.6" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</a>).
+You&#39;ll still have to do a lot of stuff manually, but automated
 trial and error is much more fun.)</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
@@ -70,7 +70,7 @@ psql -f upgrade-4.7d2-4.7d3.sql <span class="replaceable"><span class="replaceab
 </code></strong></pre>
 </li><li class="listitem">
 <p>(This step may overlap with the two previous steps, but I think
-it's harmless?) Create a file which will be executed on startup
+it&#39;s harmless?) Create a file which will be executed on startup
 which takes care of a few issues with authentication and
 internationalization: create <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/tcl/zzz-postload.tcl
 containing:</p><pre class="programlisting">
@@ -97,7 +97,7 @@ Restart. If everything is still working, make another backup of the
 database.</p></li><li class="listitem"><p>Upgrade other packages <a class="link" href="upgrade-4.5-to-4.6" title="Use APM to upgrade the database">via the APM</a>
 </p></li>
 </ol></div><p>See also these forum posts: <a class="ulink" href="http://openacs.org/forums/message-view?message_id=143497" target="_top">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final
-results</a>, <a class="ulink" href="http://openacs.org/forums/message-view?message_id=152200" target="_top">OpenACS 5.0 Upgrade Experiences</a>.</p><p>There are a few things you might want to do once you've
+results</a>, <a class="ulink" href="http://openacs.org/forums/message-view?message_id=152200" target="_top">OpenACS 5.0 Upgrade Experiences</a>.</p><p>There are a few things you might want to do once you&#39;ve
 upgraded. First, the acs-kernel parameters need to be set to allow
 HREF and IMG tags, if you want users who can edit HTML to be able
 to insert HREF and IMG tags. Also, you might need to set the

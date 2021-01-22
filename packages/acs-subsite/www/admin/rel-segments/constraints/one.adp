@@ -13,7 +13,7 @@ In other words, before creating a @rel.rel_type_pretty_name@ to the group @props
 the @rel.role_pretty_name@ must be a @req_rel.role_pretty_name@ of the group @props.req_group_name@.
 
 
-<if @admin_p@ eq 1>
+<if @admin_p;literal@ true>
   <h4>Administration</h4>
   <ul>
     <li> <a href="delete?constraint_id=@props.constraint_id@">Delete this constraint</a>

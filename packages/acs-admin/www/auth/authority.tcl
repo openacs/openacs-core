@@ -9,7 +9,7 @@ ad_page_contract {
 }
 
 set page_title ""
-if { ([info exists authority_id] && $authority_id ne "") } {
+if { [info exists authority_id] && $authority_id ne "" } {
     # Initial request in display or edit mode or a submit of the form
     set authority_exists_p [db_string authority_exists_p {
         select count(*)
@@ -273,7 +273,6 @@ if { $display_batch_history_p } {
         set end_time_pretty [lc_time_fmt $end_time_ansi "%x %X"]
 
         set interactive_pretty [ad_decode $interactive_p "t" "Yes" "No"]
-        
         set short_message [string_truncate -len 30 -- $message]
 
         set actions_per_minute {}
@@ -282,8 +281,12 @@ if { $display_batch_history_p } {
         }
         set run_time [util::interval_pretty -seconds $run_time_seconds]
     }
-    if { ([info exists get_doc_impl_id] && $get_doc_impl_id ne "") && ([info exists process_doc_impl_id] && $process_doc_impl_id ne "") } {
+    if { ([info exists get_doc_impl_id] && $get_doc_impl_id ne "")
+         && ([info exists process_doc_impl_id] && $process_doc_impl_id ne "") } {
         set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]
+        template::add_confirm_handler \
+            -id batch-sync-run \
+            -message "Are you sure you want to run a batch job to sync the user database now?"
     } else {
         # If there's neither a driver, nor any log history to display, hide any mention of batch jobs
         if { ${batch_jobs:rowcount} == 0 } {
@@ -294,8 +297,10 @@ if { $display_batch_history_p } {
 
 set context [list [list "." "Authentication"] $page_title]
 
-if { ([info exists authority_id] && $authority_id ne "") } {
-    set num_users [lc_numeric [db_string num_users_in_auhtority { select count(*) from users where authority_id = :authority_id }]]
+if { [info exists authority_id] && $authority_id ne "" } {
+    set num_users [lc_numeric [db_string num_users_in_auhtority {
+        select count(*) from users where authority_id = :authority_id
+    }]]
 } else {
     set num_users 0
 }

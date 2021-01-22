@@ -1,6 +1,6 @@
 
 # FIXME: Peter M - This file cannot be watched with the APM as it
-# re-initializes the reload level to 0 everytime it is sourced. Could
+# re-initializes the reload level to 0 every time it is sourced. Could
 # we move these initialization to an -init.tcl file instead?
 
 # Initialize loader NSV arrays. See apm-procs.tcl for a description of

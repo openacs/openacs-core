@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Template System}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Template System}</property>
 <property name="doc(title)">Template System</property>
 <master>
 <h2>The Template System -- Design Document</h2>
@@ -15,7 +15,7 @@ documentation.</li><li>ACS administrator directory -- none.</li><li>Subsite admi
 procedures show up here. To minimize dependencies across packages,
 in particular on <code>ad_proc</code> from <code>acs-kernel</code>,
 this package uses <code>proc</code>.</li><li>PL/SQL API -- none.</li><li>Data model -- none. Templating does not depend on a database
-system at all. There's the one table
+system at all. There&#39;s the one table
 <code>ad_template_sample_users</code> that some of the
 demonstrations use.</li><li><a href="requirements">Requirements document</a></li><li>ER diagram -- none.</li><li>Transaction flow diagram -- none.</li>
 </ul>
@@ -27,50 +27,51 @@ accomplish.</em><p>The overall goal of the templating system is to provide the
 publishing team with a set of tools for simplifying the development
 and maintenance of the user interface. In particular:</p><ul>
 <li><p>
-<b>A common solution.</b> Programmers and designers should only
-have to learn a single system that serves as a UI substrate for all
-the functionally specific modules used on a site. The system should
-not make any assumptions about how pages should look or function.
-Designers should be able to change the default presentation of any
-module using a single metholodogy with minimal exposure to
-code.</p></li><li><p>
-<b>Separation of code (Tcl, Java and SQL) and layout (HTML).</b>
-Programmers should be able to specify the data sources and other
-properties of the template independently of the HTML template used
-to present the data. HTML authors should be to able to write
-templates that reference the data sources and properties without
-further intervention from the programmer to produce a finished
-page.</p></li><li><p>
-<b>Separation of page components.</b> There should be provisions
-so that pages can be broken into discrete components to simplify
-maintenance of the HTML code and allow for reuse in different
-contexts. Examples of common page components include a navigation
-bar, a search box, or a section of a report or story. Another
-common example is a portal page that allows the user to choose from
-a palette of features to display.</p></li><li><p>
-<b>Global control over presentation.</b> There should be a way
-to define one or more standard master templates used by most pages
-on a site, so that changes to the overall look and feel of a site
-can be made in one place.</p></li><li><p>
-<b>Dynamic selection of presentation style.</b> Given that the
-same data may be presented in many different ways, there should be
-a general mechanism for selecting a specific presentation
+<strong>A common solution.</strong> Programmers and designers
+should only have to learn a single system that serves as a UI
+substrate for all the functionally specific modules used on a site.
+The system should not make any assumptions about how pages should
+look or function. Designers should be able to change the default
+presentation of any module using a single metholodogy with minimal
+exposure to code.</p></li><li><p>
+<strong>Separation of code (Tcl, Java and SQL) and layout
+(HTML).</strong> Programmers should be able to specify the data
+sources and other properties of the template independently of the
+HTML template used to present the data. HTML authors should be to
+able to write templates that reference the data sources and
+properties without further intervention from the programmer to
+produce a finished page.</p></li><li><p>
+<strong>Separation of page components.</strong> There should be
+provisions so that pages can be broken into discrete components to
+simplify maintenance of the HTML code and allow for reuse in
+different contexts. Examples of common page components include a
+navigation bar, a search box, or a section of a report or story.
+Another common example is a portal page that allows the user to
+choose from a palette of features to display.</p></li><li><p>
+<strong>Global control over presentation.</strong> There should
+be a way to define one or more standard master templates used by
+most pages on a site, so that changes to the overall look and feel
+of a site can be made in one place.</p></li><li><p>
+<strong>Dynamic selection of presentation style.</strong> Given
+that the same data may be presented in many different ways, there
+should be a general mechanism for selecting a specific presentation
 (including file format, layout, character set and language) for
 each page request, depending on characteristics such as user
 preference, location, browser type and/or device.</p></li><li><p>
-<b>Usability.</b> Programmers should be able to develop template
-specifications using their standard tools for writing and
-maintaining code on the server. HTML authors should be able to
-access information about template specifications and work on
-templates remotely without needing shell access to the server.</p></li>
+<strong>Usability.</strong> Programmers should be able to
+develop template specifications using their standard tools for
+writing and maintaining code on the server. HTML authors should be
+able to access information about template specifications and work
+on templates remotely without needing shell access to the
+server.</p></li>
 </ul>
 </li><li>
 <p><em>What this package is not intended to allow users to
 accomplish.</em></p><ul>
-<li>Tcl "pages" that do not return anything visible to the user.
-Such pages may be, e.g., the <code>action=</code> target of a form.
-They typically call <code>ad_returnredirect</code> after completing
-their job.</li><li>Tcl scripts that are scheduled to run in the server without a
+<li>Tcl "pages" that do not return anything visible to
+the user. Such pages may be, e.g., the <code>action=</code> target
+of a form. They typically call <code>ad_returnredirect</code> after
+completing their job.</li><li>Tcl scripts that are scheduled to run in the server without a
 connection to a user.</li>
 </ul>
 </li><li>
@@ -83,7 +84,7 @@ an HTTP[S] request.</p>
 <li>It supplies a set of <a href="tagref/index">custom markup
 tags</a>.</li><li>The proc <code>ad_page_contract</code> (from the acs kernel)
 should be used to specify what makes the dynamic part of the page.
-There's also an API for creating forms and for creating and
+There&#39;s also an API for creating forms and for creating and
 manipulating multirow data sources.</li><li>The mechanism for dynamically generating pages combines data
 and layout. It also allows coposition of modular pages from
 reusable widges and skins. It is not limited to HTML.</li><li>The <code>&lt;master&gt;</code> tag specifies a master
@@ -94,22 +95,22 @@ master template.</li>
 </ul>
 <h3>III. Historical Considerations</h3>
 <p>Karl Goldstein designed the templating system. First it was
-called "Karl's Templates" or "The New Templating System" to
-distinguish it from the obsolescent templates or "Styles" by Philip
-Greenspun. An extended and improved version was named "Dynamic
-Publishing System". It wasn't part of the ACS yet, but client
-projects like iluvCAMP used it successfully. Newcomers were
-consistently puzzled by the <code>.data</code> files, which
-specified the datasources in an apparently unfamiliar XML syntax.
-(The <code>.form</code> files specified elements in an HTML form
-similarly.) To mitigate this initial shock, Karl redesigned
-templates to let the programmer specify datasources and forms in a
-<code>.tcl</code> script. The system is present as packages
-<code>templates</code> and <code>form-manager</code> in ACS 3.4.
-Both these packages are now merged and appear as
-<code>acs-templating</code> starting in ACS 4.0. The architecture
-of the package was changed several times to meet the emerging
-coding/style constraints of ACS 4.0.</p>
+called "Karl&#39;s Templates" or "The New Templating
+System" to distinguish it from the obsolescent templates or
+"Styles" by Philip Greenspun. An extended and improved
+version was named "Dynamic Publishing System". It
+wasn&#39;t part of the ACS yet, but client projects like iluvCAMP
+used it successfully. Newcomers were consistently puzzled by the
+<code>.data</code> files, which specified the datasources in an
+apparently unfamiliar XML syntax. (The <code>.form</code> files
+specified elements in an HTML form similarly.) To mitigate this
+initial shock, Karl redesigned templates to let the programmer
+specify datasources and forms in a <code>.tcl</code> script. The
+system is present as packages <code>templates</code> and
+<code>form-manager</code> in ACS 3.4. Both these packages are now
+merged and appear as <code>acs-templating</code> starting in ACS
+4.0. The architecture of the package was changed several times to
+meet the emerging coding/style constraints of ACS 4.0.</p>
 <h3>V. Design Tradeoffs</h3>
 <p>As indicated above, the primary attribute that the page tries to
 achieve is the separation of code and layout. The primary sacrifice
@@ -152,15 +153,15 @@ request processor as the handler for both <code>adp</code> and
 <code>tcl</code> extensions.</li><li>Reliability and robustness (medium): Considering how many parts
 have to play together, one might not predict a very reliable
 system. In practice, the package works reliably. It is robust to
-user errors in the sense that it won't error out if a file is
+user errors in the sense that it won&#39;t error out if a file is
 missing or such; rather it quietly proceeds. Error reporting to the
 user is not very sophisticated.</li><li>Usability (high): Emphasis has been put on the easy use of the
 system. In particular, a graphics designer should only have to
 learn a small number of special markup tags.</li><li>Maintainability (medium): The code is well structured in
 reasonably sized procedures, and well commented.</li><li>Portability (high): Unlike most other parts of the ACS, the
-templating system can work standalone. It doesn't need the database
-nor the acs-kernel or any other part of the ACS. All you need is
-AOLserver with the fancy ADP parser.</li><li>Reusability (low): Many parts of the templating system are
+templating system can work standalone. It doesn&#39;t need the
+database nor the acs-kernel or any other part of the ACS. All you
+need is AOLserver with the fancy ADP parser.</li><li>Reusability (low): Many parts of the templating system are
 actually generally reusable, and probably should be extracted into
 a common set of utility procs used by this package and the ACS;
 this would reduce code duplication. The API lets programmers call
@@ -188,9 +189,9 @@ serving a templated page involves.
 <ol>
 <li>The request processor gets a url and maps it to a
 <code>.adp</code> or <code>.tcl</code> file. As both invoke the
-same handler, it doesn't matter that adp take precendence.</li><li>If a <code>.tcl</code> file is present, its <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>
+same handler, it doesn&#39;t matter that adp take precendence.</li><li>If a <code>.tcl</code> file is present, its <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>
 in the <code>-properties</code> block indicates a set of data
-sources that will be made available to the template.</li><li>The rest of the tcl script executes, defining these data
+sources that will be made available to the template.</li><li>The rest of the Tcl script executes, defining these data
 sources. It may change the name of the page being served by calling
 <code>template::set_file</code> directly or through the wrapper
 <code>ad_return_template</code>.</li><li>The corresponding template (file <em>stub</em>.adp) is
@@ -207,7 +208,8 @@ parsing happens recursively.
 <h4>Tcl Call Stack</h4>
 <p>Below is a diagram of the typical call stack when processing a
 page without dependent pages. To conform to the Tcl notion of
-what's up and down (as in <b>up</b>var), the stack grows down.</p>
+what&#39;s up and down (as in <strong>up</strong>var), the stack
+grows down.</p>
 <blockquote><table>
 <tr>
 <th align="left">Level</th><th align="left">Procedure</th><th align="left">Arguments</th>
@@ -224,7 +226,7 @@ what's up and down (as in <b>up</b>var), the stack grows down.</p>
 </tr><tr>
 <td>(6)</td><td>template::adp_prepare</td><td></td>
 </tr><tr>
-<td><b>#5</b></td><td>template::code::tcl::/web/<em>service</em>/www/page</td>
+<td><strong>#5</strong></td><td>template::code::tcl::/web/<em>service</em>/www/page</td>
 </tr>
 </table></blockquote>
 <p>Levels #1 to #3 exposed here are request processor internals. In
@@ -244,28 +246,28 @@ be pushed to the list, and popped when that proc returned. This
 next level will appear as #6, due to the repeated
 <code>uplevel</code>ing.</p>
 <h4>Caching and Template Compilation</h4>
-<p>To improve performance, adp pages are compiled into a tcl proc,
+<p>To improve performance, adp pages are compiled into a Tcl proc,
 and thus cached for future use. Tcl pages are also cached in a
 proc; this saves the trouble of reading and parsing the file the
 next time. The template system remembers the modification times of
-the adp and tcl sources, and re-processes any requested file if the
+the adp and Tcl sources, and re-processes any requested file if the
 cached version is no longer current. Consequently, this cacheing is
 transparent in normal use.</p>
-<p>To emphasize that "normal" use essentially always applies,
-here's a scenario for abnormal use: Save version <var>n</var> of a
-file at 11:36:05.1; request a page that uses it at 11:36:05.3;
-modify and save version <var>n</var>+1 of the file at 11:36:05.9.
-If you work that fast (!), the new version will have the same
-modification time -- kept with 1 second resolution in Unix --, and
-will not be refreshed.</p>
+<p>To emphasize that "normal" use essentially always
+applies, here&#39;s a scenario for abnormal use: Save version
+<var>n</var> of a file at 11:36:05.1; request a page that uses it
+at 11:36:05.3; modify and save version <var>n</var>+1 of the file
+at 11:36:05.9. If you work that fast (!), the new version will have
+the same modification time -- kept with 1 second resolution in Unix
+--, and will not be refreshed.</p>
 <p>For timing measurements and performance tuning, you can set the
 parameter <code>RefreshCache</code> in section
 <code>template</code> to <code>never</code> or <code>always</code>.
 The former suppresses checking mtime and may improve performance on
-a production server, where the content pages don't change. The
+a production server, where the content pages don&#39;t change. The
 latter is only inteded for testing.</p>
 <h3>VII. Data Model Discussion</h3>
-<p>This packages doesn't need a data model.</p>
+<p>This packages doesn&#39;t need a data model.</p>
 <p>It comes with its own database interfaces, one for using ns_ora,
 the Oracle driver from ArsDigita, and one for ns_db, the builtin
 database interface of the AOL server. If you are programming under
@@ -273,7 +275,7 @@ the ACS, you should use neither of these, but rather the
 <code>db_*</code> interface, in particular
 <code>db_multirow</code>.</p>
 <h3>VIII. User Interface</h3>
-<p>This packages doesn't have a user interface. It is the
+<p>This packages doesn&#39;t have a user interface. It is the
 <em>substrate</em> of all user interfaces, be it user or admin
 pages.</p>
 <h3>IX. Configuration/Parameters</h3>
@@ -289,9 +291,10 @@ There are two parameters.
 </pre>
 <h3>X. Future Improvements/Areas of Likely Change</h3>
 <p>Passing datasources by reference is new. The acs-templating
-syntax <code>&amp;formal="actual"</code> is different from the
-independent ATS, which used <code>formal="\@actual.*\@"</code>. The
-latter is phased out.</p>
+syntax <code>&amp;formal="actual"</code> is different
+from the independent ATS, which used
+<code>formal="\@actual.*\@"</code>. The latter is phased
+out.</p>
 <p>We intend to add a <code>&lt;which&gt;</code>,
 <code>&lt;switch&gt;</code>, or <code>&lt;case&gt;</code> tag, to
 complement sequential nested
@@ -324,5 +327,5 @@ McLoghlin and Wu</a>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbuehler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: design.html,v 1.4 2015/06/16 08:53:38 gustafn
-Exp $
+Last modified: $&zwnj;Id: design.html,v 1.4.2.3 2017/04/22 18:30:26
+gustafn Exp $

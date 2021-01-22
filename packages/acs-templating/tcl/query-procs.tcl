@@ -1,12 +1,11 @@
 ad_library {
-
     Database Query API for the ArsDigita Templating System
 
     @creation-date 29 September 2000
     @author Karl Goldstein (karlg@arsdigita.com)
-            Stanislav Freidin (sfreidin@arsdigita.com)
+    @author Stanislav Freidin (sfreidin@arsdigita.com)
+    
     @cvs-id $Id$
-
 }
 
 namespace eval template {}
@@ -28,9 +27,10 @@ namespace eval template::query {}
 # transaction control and handle allocation into the templating query interface
 # allowing the two db api's to be mixed together. 
 
+
 ad_proc -public template::query { statement_name result_name type sql args } {
-    Public interface to template query api.  This routine parses the arguements and
-    dispatches to the query command specified by the type arguement.
+    Public interface to template query api.  This routine parses the arguments and
+    dispatches to the query command specified by the type argument.
 
     @option maxrows    Limits the query results of a multirow query
                        to a fixed number of rows.
@@ -610,7 +610,7 @@ ad_proc -public multirow {
     multirow is really template::multirow or possibly 
     template::query::multirow depending on context.
     the "template::" or "template::query::"
-    may be ommitted depending on what the namespace 
+    may be omitted depending on what the namespace 
     is.  .tcl pages are evaluated in the template:: 
     namespace.
 
@@ -766,7 +766,7 @@ ad_proc -public template::multirow {
       set index [lindex $args 0]
       set column [lindex $args 1]
       # Set an array reference if no column is specified
-      if {$column eq {}} {
+      if {$column eq ""} {
 
         # If -local was specified, the upvar is done with a relative stack frame
         # index, and we must take into account the fact that the uplevel moves up
@@ -780,9 +780,14 @@ ad_proc -public template::multirow {
         }
 
       } else {
-        # If a column is specified, just return the value for it
-        upvar $multirow_level_up $name:$index arr
-        return $arr($column)
+          # If a column is specified, just return the value for it
+          upvar $multirow_level_up $name:$index arr
+          if {[info exists arr($column)]} {
+              return $arr($column)
+          } else {
+              ns_log warning "can't obtain template variable form ${name}:${index}: $column"
+              return ""
+          }
       }
     }
     
@@ -1113,7 +1118,7 @@ ad_proc -public cache { command cache_key args } {
 	    set _ [lindex $args 0]
       } else {
 	#
-	# Use a pair for aolserver
+	# Use a pair for AOLserver
 	#
 	ns_cache set template_cache $cache_key [list $timeout [lindex $args 0]]
       }

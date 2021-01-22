@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install Full Text Search using Tsearch2}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Full Text Search using Tsearch2}</property>
 <property name="doc(title)">Install Full Text Search using Tsearch2</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -18,9 +18,9 @@ using Tsearch2</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="idp140400245157392" id="idp140400245157392"></a><p>If you want full text search, and you are running PostgreSQL,
+<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="idp140592107348664" id="idp140592107348664"></a><p>If you want full text search, and you are running PostgreSQL,
 install this module to support FTS. Do this step after you have
-installed both PostgreSQL and AOLserver. You will need the tseach2
+installed both PostgreSQL and AOLserver. You will need the tsearch2
 module form PostgreSQL contrib. This is included with the
 PostgreSQL full source distribution. It is also available with the
 PostgreSQL contrib package provided by most distribution packages.
@@ -31,7 +31,7 @@ tsearch2 patch to correctly restore from a pg_dump backup. If you
 installed tsearch2 from a package, you can use the
 http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_update.sql
 regprocedure script to update the database after tsearch2 is
-installed into it. TODO link to section decribing how to fix an
+installed into it. TODO link to section describing how to fix an
 existing tsearch2 database with this patch.</p></li><li class="listitem">
 <p>As of May 9, 2004 there is a source patch available for
 tsearch2. The patch provides changes to the pg_ts_ configuration
@@ -98,8 +98,8 @@ tsearch in your OpenACS database instance.</p></li><li class="listitem">
 </pre>
 </li><li class="listitem"><p>Wait a minute, then browse back to the home page.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Admin</span></span></code> on the
 top of the screen.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Main Site
-Administration</span></span></code> in the "Subsite Administration"
-section.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
+Administration</span></span></code> in the "Subsite
+Administration" section.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
 the "Advanced Features" section.</p></li><li class="listitem">
 <p>Mount the Search interface in the site map.</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Click the <code class="computeroutput"><span class="guilabel"><span class="guilabel">new sub

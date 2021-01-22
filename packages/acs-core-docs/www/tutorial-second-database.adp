@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Connect to a second database}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Connect to a second database}</property>
 <property name="doc(title)">Connect to a second database</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -13,7 +13,7 @@ Chapter 10. Advanced Topics"
 databases. In this example, the OpenACS site uses a PostGre
 database, and accesses another PostGre database called legacy.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Modify config.tcl to accomodate the legacy database, and to
+<p>Modify config.tcl to accommodate the legacy database, and to
 ensure that the legacy database is not used for standard OpenACS
 queries:</p><pre class="programlisting">
 ns_section ns/db/pools
@@ -72,8 +72,9 @@ ns_param pools_legacy [list legacy]
 </pre>
 </li><li class="listitem">
 <p>To use the legacy database, use the <code class="code">-dbn</code> flag for any of the <code class="code">db_</code> API calls. For example, suppose there is a table
-called "foo" in the legacy system, with a field "bar". List "bar"
-for all records with this tcl file:</p><pre class="programlisting">
+called "foo" in the legacy system, with a field
+"bar". List "bar" for all records with this Tcl
+file:</p><pre class="programlisting">
 db_foreach -dbn legacy get_bar_query {
   select bar from foo
   limit 10

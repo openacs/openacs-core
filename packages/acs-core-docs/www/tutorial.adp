@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 9. Development
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 9. Development
 Tutorial}</property>
 <property name="doc(title)">Chapter 9. Development
 Tutorial</property>
@@ -14,7 +14,7 @@ Developers"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="tutorial" id="tutorial"></a>Chapter 9. Development
 Tutorial</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="tutorial-newpackage">Creating
 an Application Package</a></span></dt><dt><span class="sect1"><a href="tutorial-database">Setting Up
 Database Objects</a></span></dt><dt><span class="sect1"><a href="tutorial-pages">Creating Web

@@ -135,6 +135,11 @@ ad_proc -public ::content::revision::new {
         select table_name from acs_object_types where object_type = :content_type
     }]
 
+    set mime_type [cr_check_mime_type \
+                       -filename  $title \
+                       -mime_type $mime_type \
+                       -file      $tmp_filename]
+    
     set query_text "insert into ${table_name}i
                     (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, object_package_id, mime_type $attribute_names)
             values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :package_id, :mime_type $attribute_values)"
@@ -174,7 +179,7 @@ ad_proc -public ::content::revision::update_content {
     
 } {
     
-    Update content column seperately. Oracle does not allow insert
+    Update content column separately. Oracle does not allow insert
     into a BLOB.
     
     This assumes that if storage type is lob and no file is specified

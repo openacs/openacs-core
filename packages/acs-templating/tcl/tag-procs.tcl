@@ -1,15 +1,19 @@
-# Auxiliary Procs for Tag Handlers for the ArsDigita Templating System
+ad_library {
+    Auxiliary Procs for Tag Handlers for the ArsDigita Templating System
+
+    @author Karl Goldstein         (karlg@arsdigita.com)
+    @author Stanislav Freidin      (sfreidin@arsdigita.com)
+    @author Christian Brechbuehler (chrisitan@arsdigita.com)
+
+    @cvs-id $Id$
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein         (karlg@arsdigita.com)
-#          Stanislav Freidin      (sfreidin@arsdigita.com)
-#          Christian Brechbuehler (chrisitan@arsdigita.com)
-
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 ad_proc -private template_tag_if_condition { chunk params condition_type } {
 
@@ -18,7 +22,7 @@ ad_proc -private template_tag_if_condition { chunk params condition_type } {
     # parse simplified conditional expression
     set args [template_tag_if_concat_params $params]
 
-    if [catch {
+    if {[catch {
 
         while { 1 } { 
 
@@ -44,7 +48,7 @@ ad_proc -private template_tag_if_condition { chunk params condition_type } {
             set args [lrange $args 1 end] 
         }
 
-    } errorMsg] {
+    } errorMsg]} {
 
         set condition "$condition_type \{ 1 "
         set chunk $errorMsg

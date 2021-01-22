@@ -1,10 +1,11 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Appendix D: Parsing templates in
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Appendix D: Parsing templates in
 memory}</property>
 <property name="doc(title)">Templating System Appendix D: Parsing templates in
 memory</property>
 <master>
 <h2>Parsing Templates in Memory</h2>
+<strong><a href="../index">Templating System</a></strong>
 <p>The templating system code is oriented towards parsing templates
 stored in the file system, in conjunction with a Tcl script that is
 also stored as a file. However, when the template is not actually
@@ -12,7 +13,8 @@ stored in the file system, you will need to parse it as a string in
 memory. Two common situations in which this occurs are:</p>
 <ul>
 <li>Templates are stored in the database.</li><li>Templates are generated dynamically, possibly based in turn on
-a "style" template. This is how ATS auto-generates forms.</li>
+a "style" template. This is how ATS auto-generates
+forms.</li>
 </ul>
 <h3>The Parsing Process</h3>
 <p>Whether the template is ultimately stored in a file or not, the
@@ -80,22 +82,21 @@ Also see the "<a href="../demo/index">string</a>
 <h3>Generating Templates from Other Templates</h3>
 <p>In some cases, the template itself may be based on yet another
 base template. For example, the templating system itself generates
-form templates based on a generic "style" template. The generic
-template primarily depends on a single data source,
-<tt>elements</tt>, which references the element list for a
-particular form object. A single <tt>multiple</tt>loop is used to
-lay out the specific <tt>formwidget</tt> and <tt>formgroup</tt>
+form templates based on a generic "style" template. The
+generic template primarily depends on a single data source,
+<kbd>elements</kbd>, which references the element list for a
+particular form object. A single <kbd>multiple</kbd>loop is used to
+lay out the specific <kbd>formwidget</kbd> and <kbd>formgroup</kbd>
 tags, along with labels and validation text, for the form. The
 output of this first step is then rendered into HTML and returned
 to the user.</p>
-<p>Note that the generic "style" template contains templating tags
-(<tt>formwidget</tt>, <tt>formgroup</tt>, <tt>if</tt> etc.) that
-must be "protected" during the first step. The templating system
-provides the <a href="../tagref/noparse"><tt>noparse</tt></a>
-tag to do this.</p>
+<p>Note that the generic "style" template contains
+templating tags (<kbd>formwidget</kbd>, <kbd>formgroup</kbd>,
+<kbd>if</kbd> etc.) that must be "protected" during the
+first step. The templating system provides the <a href="../tagref/noparse"><kbd>noparse</kbd></a> tag to do this.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-<br>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> --><br>
 
-Last modified: $&zwnj;Id: memory.html,v 1.1.1.1 2001/03/13 22:59:27 ben
-Exp $
+
+Last modified: $&zwnj;Id: memory.html,v 1.1.1.1.30.2 2016/12/01 20:43:45
+antoniop Exp $

@@ -61,7 +61,7 @@
         and so on:</p>
 
       <blockquote><pre>
-          <B>Task</B>
+          <strong>Task</strong>
           Title
           Description
           Task Number
@@ -71,7 +71,7 @@
       
       <p>First of all, let's get some terminology out of the
         way. Columns of a table are referred to as
-        <i>attributes</i> in content repository-speak. </p>
+        <em>attributes</em> in content repository-speak. </p>
               
       The steps to set up your data model are as follows:
       <ol>
@@ -102,7 +102,7 @@
       
       <p>You will have two tables: one with versioned attributes, and one without versioned attributes.</p>
 
-      <p><i>Convention:</i> often, developers will name the first table by what it is (in my case <b>pm_tasks</b>), and the second, versioned table by the same name, but with _revisions at the end. Thus, I'll name my second table <b>pm_tasks_revisions</b>. </p>
+      <p><em>Convention:</em> often, developers will name the first table by what it is (in my case <strong>pm_tasks</strong>), and the second, versioned table by the same name, but with _revisions at the end. Thus, I'll name my second table <strong>pm_tasks_revisions</strong>. </p>
 
       This is actually very easy:
       <P>
@@ -114,7 +114,7 @@
             constraint pm_tasks_revisions_id_pk
             primary key
             constraint pm_tasks_revisions_id_fk
-            references <b>cr_revisions</b>(revision_id)
+            references <strong>cr_revisions</strong>(revision_id)
             on delete cascade,
             title
             varchar(100),
@@ -132,7 +132,7 @@
             constraint pm_tasks_id_pk
             primary key
             constraint pm_tasks_id_fk
-            references <b>cr_items</b>(item_id)
+            references <strong>cr_items</strong>(item_id)
             on delete cascade,
             task_number
             integer
@@ -152,9 +152,9 @@
 
       <p>Notice that each table uses as its primary key a reference to
       either the <code>cr_revisions</code> table or the
-      <code>cr_items</code> table. A <i>content item</i> is basically
-      just some content: either text or binary data. The <i>contents
-      revisions</i> table keeps track of which version from the
+      <code>cr_items</code> table. A <em>content item</em> is basically
+      just some content: either text or binary data. The <em>contents
+      revisions</em> table keeps track of which version from the
       tasks_revisions table is the most current, and which one is
       live. </p>
 
@@ -188,7 +188,7 @@
       <p>You then need to add in all the attributes, so that the
       content repository can do some magic things behind the
       scenes. The content repository doesn't know about what's inside
-      of the <i>pm_tasks</i> and <i>pm_tasks_revisions</i> tables, so
+      of the <em>pm_tasks</em> and <em>pm_tasks_revisions</em> tables, so
       we teach it:</p>
 
       <blockquote><pre>
@@ -231,7 +231,7 @@
 
       <P>
    
-     <B>Side effect</B>: once you've created the content type, the
+     <strong>Side effect</strong>: once you've created the content type, the
      content repository creates a view for you called
      <code>pm_tasks_revisionsx</code>. Note the x at the end of the
      name. If you're using Postgres, I believe it will also create a
@@ -252,14 +252,14 @@
       you've added. Another nice thing is that all that messy business
       of defining your attributes through the API is taken care of.</p>
 
-      <p><I>Types</i> is the content repository are another term for
+      <p><em>Types</em> is the content repository are another term for
       tables, although that doesn't explain it completely. Types are
       also kept track of within OpenACS, in the
       <code>acs_object_types</code> table, so the system knows about
       the tables you create, and can do some intelligent things with
       them. </p>
 
-      <p>A lot of the <i>intelligent things</i> you can do with this
+      <p>A lot of the <em>intelligent things</em> you can do with this
         information is still being built. But imagine for example that
         you are using the project manager package I've written. You
         work at an ice cream company, and every task that is done also
@@ -343,7 +343,7 @@ The task number is stored in pm_tasks, the title and description are stored in p
 
 <p />
 
-Whenever you make a change to this item, you don't change the table yourself, but <b>add</b> a revision, using your <code>pm_task__new_task_revision</code> function (which we'll write in a little bit). This function adds another revision, but <i>not</i> another item or cr_item. After you've added another revision, you'll have two revisions and one item. Two entries in cr_revisions (and pm_tasks_revisions), and one item in cr_items and pm_tasks. <p />
+Whenever you make a change to this item, you don't change the table yourself, but <strong>add</strong> a revision, using your <code>pm_task__new_task_revision</code> function (which we'll write in a little bit). This function adds another revision, but <em>not</em> another item or cr_item. After you've added another revision, you'll have two revisions and one item. Two entries in cr_revisions (and pm_tasks_revisions), and one item in cr_items and pm_tasks. <p />
 
 The cr_revisions table keeps track of which item is the most recent, and which item is &quot;live&quot;. For the edit-this-page application, for example, this is used to keep track of which revision to a page is actually being served to users. <p />
 
@@ -351,7 +351,7 @@ In your code, you'll use your pm_tasks_revisionsx view, which joins the pm_tasks
 
 <h3>Defining your pl/sql functions</h3>
 
-You can see the actual functions used in project manager via the <a href="http://cvs.openacs.org/cvs/openacs-4/contrib/packages/project-manager/sql/postgresql/">CVS browser's entry for project-manager</a>. Note these are a little more expanded than what I've used in the examples above. 
+You can see the actual functions used in project manager via the <a href="https://github.com/openacs/project-manager/tree/master/sql/postgresql/">GitHub browser's entry for project-manager</a>. Note these are a little more expanded than what I've used in the examples above. 
 
 <p />
 
@@ -526,31 +526,31 @@ $$ language plpgsql;
 
 cr_items:
 <blockquote>
- <B>item_id</b> - unique id for this item, will be different than the revision_id<BR>
- <b>parent_id</b> - used to group items into a hierarchy (see below)<BR>
- <b>name</b> - this is used to make a URL by the content repository. It must be unique per content folder. You can use a number, or something like project_231. One way to do this is to set it equal to a title plus the item_id.<BR>
- <b>locale</b> - not sure, probably for internationalization support<BR>
- <b>live_revision</b> - this is equal to the cr_revision table's revision_id that is the live version<BR>
- <b>latest_revision</b> - this is equal to the cr_revision table's revision_id that is the latest version<BR>
- <b>publish_status</b> - not sure<BR>
- <b>content_type</b> - not sure <BR>
- <b>storage_type</b> - not sure, probably text or binary?<BR>
- <b>storage_area_key</b> - not sure<BR>
- <b>tree_sortkey</b> - a utility column used in hierarchical queries. <BR>
+ <strong>item_id</strong> - unique id for this item, will be different than the revision_id<BR>
+ <strong>parent_id</strong> - used to group items into a hierarchy (see below)<BR>
+ <strong>name</strong> - this is used to make a URL by the content repository. It must be unique per content folder. You can use a number, or something like project_231. One way to do this is to set it equal to a title plus the item_id.<BR>
+ <strong>locale</strong> - not sure, probably for internationalization support<BR>
+ <strong>live_revision</strong> - this is equal to the cr_revision table's revision_id that is the live version<BR>
+ <strong>latest_revision</strong> - this is equal to the cr_revision table's revision_id that is the latest version<BR>
+ <strong>publish_status</strong> - not sure<BR>
+ <strong>content_type</strong> - not sure <BR>
+ <strong>storage_type</strong> - not sure, probably text or binary?<BR>
+ <strong>storage_area_key</strong> - not sure<BR>
+ <strong>tree_sortkey</strong> - a utility column used in hierarchical queries. <BR>
 </blockquote>
 
 cr_revisions:
 <blockquote>
- <b>revision_id</b> - a unique id for this revision. <BR>
- <b>item_id</b> - a reference to the item_id for this revision<BR>
- <b>title</b> - you can use this for your application. For example, My Big Project<BR>
- <b>description</b> - you can use this for your application, as a longer description.<BR>
- <b>publish_date</b> - the date this was published. Not sure if this is for your use, or internal<BR>
- <b>mime_type</b> - the mime type.<BR>
- <b>nls_language</b> - I believe this is for internationalization <BR>
- <b>lob</b> - the binary content.<BR>
- <b>content</b> - the text content.<BR>
- <b>content_length</b> - the length of the text or binary content?<BR>
+ <strong>revision_id</strong> - a unique id for this revision. <BR>
+ <strong>item_id</strong> - a reference to the item_id for this revision<BR>
+ <strong>title</strong> - you can use this for your application. For example, My Big Project<BR>
+ <strong>description</strong> - you can use this for your application, as a longer description.<BR>
+ <strong>publish_date</strong> - the date this was published. Not sure if this is for your use, or internal<BR>
+ <strong>mime_type</strong> - the mime type.<BR>
+ <strong>nls_language</strong> - I believe this is for internationalization <BR>
+ <strong>lob</strong> - the binary content.<BR>
+ <strong>content</strong> - the text content.<BR>
+ <strong>content_length</strong> - the length of the text or binary content?<BR>
 </blockquote>
 
 
@@ -568,7 +568,7 @@ The facility for this is built into the <code>cr_items</code> data model. This m
       Column      |          Type          |          Modifiers          
 ------------------+------------------------+-----------------------------
  item_id          | integer                | not null
- <B>parent_id</B>        | integer                | not null
+ <strong>parent_id</strong>        | integer                | not null
  name             | character varying(400) | not null
  locale           | character varying(4)   | 
  live_revision    | integer                | 
@@ -673,7 +673,7 @@ However, in many cases you are not creating more than one folder. In fact, the o
  description        | text                    | 
  has_child_folders  | boolean                 | default 'f'
  has_child_symlinks | boolean                 | default 'f'
- <b>package_id</b>         | integer                 | 
+ <strong>package_id</strong>         | integer                 | 
 </pre></blockquote>
 
 Note that there is a <code>package_id</code> column. The nice thing about this column is that you can use it to find the root repository, if you only have one folder per instance of your application. You can get your package_id using this call within your .tcl file:
@@ -698,7 +698,7 @@ If you have problems with your drop script in OpenACS 4.6.2, then <a href="http:
 
 You now have a shiny new data model that handles revisions and all sorts of other things we haven't gotten to yet. Now, in your Tcl pages and your ps/sql code, you can...
 <P>
-<table border=1 cellpadding=1 cellspacing=0>
+<table border="1" cellpadding="1" cellspacing="0">
 <tr>
 <th>Get latest revision (Tcl)
 <td>set live_revision_id [db_exec_plsql get_live_revision {select content_item__get_live_revision(:item_id)}]

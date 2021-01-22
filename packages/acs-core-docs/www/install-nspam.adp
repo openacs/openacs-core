@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install nspam}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install nspam}</property>
 <property name="doc(title)">Install nspam</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

@@ -1,14 +1,18 @@
-# Form widgets for the ArsDigita Templating System
+ad_library {
+    Form widgets for the ArsDigita Templating System
+
+    @author Karl Goldstein    (karlg@arsdigita.com)
+    @author Stanislav Freidin (sfreidin@arsdigita.com)
+     
+    @cvs-id $Id$
+}
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein    (karlg@arsdigita.com)
-#          Stanislav Freidin (sfreidin@arsdigita.com)
-     
-# $Id$
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 namespace eval template::widget {}
@@ -385,39 +389,38 @@ ad_proc -public template::widget::input {
 	set attributes(id) "$element(name)" 
     }
 
-    
     # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
     if { $element(mode) ne "edit" && $type ni { hidden submit button clear checkbox radio } } {
         set output ""
         if { [info exists element(value)] } {
             append output [ns_quotehtml $element(value)]
-            append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ns_quotehtml $element(value)]\">"
+            append output [subst {<input type="hidden" name="$element(name)" value="[ns_quotehtml $element(value)]">}]
         }
     } else {
-        set output "<input type=\"$type\" name=\"$element(name)\""
+        set output [subst {<input type="$type" name="$element(name)"}]
 
         if { $element(mode) ne "edit" && $type ni { hidden submit button clear } } {
             append output " disabled"
         }
 
-
         if { [info exists element(value)] } {
-            append output " value=\"[ns_quotehtml $element(value)]\""
+            append output [subst { value="[ns_quotehtml $element(value)]"}]
         } 
 
         foreach name [array names attributes] {
             if {$attributes($name) eq {}} {
                 append output " $name"
             } else {
-                append output " $name=\"$attributes($name)\""
+                append output [subst { $name="$attributes($name)"}]
             }
         }
 
         if { [info exists element(maxlength)] } {
-            append output " maxlength=\"$element(maxlength)\""
+            append output [subst { maxlength="$element(maxlength)"}]
         }
 
         append output " >"
+
     }
 
     return $output
@@ -700,16 +703,16 @@ ad_proc -public template::widget::menu {
                 append output ">\n"
 
                 foreach option $options_list {
-
-                    set label [lindex $option 0]
-                    set value [lindex $option 1]
+                    lassign $option label value
 
                     append output [subst { <option value="[ns_quotehtml $value]"}]
                     if { [info exists values($value)] } {
                         append output [subst { selected="selected"}]
                     }
-
-                    append output [subst {>[ns_quotehtml $label]</option>\n}]
+                    # Whe option element contains "normal" character data,
+                    # which must not contain any "<". For details, see:
+                    # https://www.w3.org/TR/html-markup/syntax.html#normal-character-data
+                    append output [subst {>[string map {< "&lt;" > "&gt;"} $label]</option>\n}]
                 }
                 append output "</select>"
             }
@@ -1296,13 +1299,13 @@ ad_proc -public template::widget::checkbox_text {
     set output {}
     
     # edit mode
-    set checkbox_text "<input type=checkbox name=$element(name)"
+    set checkbox_text [subst {<input type="checkbox" name="$element(name)"}]
 
     foreach name [array names attributes] {
 	if {$attributes($name) eq {}} {
 	    append checkbox_text " $name"
 	} else {
-	    append checkbox_text " $name=\"$attributes($name)\""
+	    append checkbox_text [subst { $name="$attributes($name)"}]
 	}
     }
     

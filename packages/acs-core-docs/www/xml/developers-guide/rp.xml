@@ -66,7 +66,7 @@ your pages aware of which instance was requested.
 <listitem><para>
 Next, the Request Processor examines the request for session
 information. Session information is generally sent from the client
-(the user's browser) to the server via cookies. The <link linkend="security-notes">security/session handler</link> is described in
+(the user&#39;s browser) to the server via cookies. The <link linkend="security-notes">security/session handler</link> is described in
 detail in its own document. It examines the client request and either
 extracts or sets up new session tokens for the user.
 </para></listitem>
@@ -78,7 +78,7 @@ extracts or sets up new session tokens for the user.
 Next, the Request Processor checks if the user has appropriate access
 privileges to the requested part of the site. In OpenACS &version;, access control
 is dictated by the <ulink url="permissions">permissions system</ulink>. In
-this case, the RP checks if the user has "read" priviledges on the
+this case, the RP checks if the user has "read" privileges on the
 object in the site map specified by the URL. This object is typically
 a package instance, but it could easily be something more granular,
 such as whehter the user can view a particular piece of content within
@@ -98,22 +98,22 @@ extensions, i.e. files that end with: <computeroutput>.html</computeroutput>,
 </para>
 
 <para>
-If the RP can't find any matching files with the expected extensions,
+If the RP can&#39;t find any matching files with the expected extensions,
 it will look for virtual-url-handler files, or <computeroutput>.vuh</computeroutput>
 files. A <computeroutput>.vuh</computeroutput> file will be executed as if it were a Tcl
 file, but with the tail end of the URL removed. This allows the code
 in the <computeroutput>.vuh</computeroutput> file to act like a registered procedure for
 an entire subtree of the URL namespace.  Thus a <computeroutput>.vuh</computeroutput> file
 can be thought of as a replacement for filters and registered procs,
-except that they integrate cleanly and correctly with the RP's URL
+except that they integrate cleanly and correctly with the RP&#39;s URL
 mapping mechanisms.  The details of how to use these files are
 described in <xref linkend="rp-design"/>.
 </para>
 
 <para>
 Once the appropriate file is found, it is either served directly if
-it's static content, or sent to the template system or the standard
-Tcl interpreter if it's a dynamic page.
+it&#39;s static content, or sent to the template system or the standard
+Tcl interpreter if it&#39;s a dynamic page.
 </para>
 
 </listitem>
@@ -128,7 +128,7 @@ Tcl interpreter if it's a dynamic page.
 <para>
 Once the flow of control reaches a dynamic page, the Request Processor
 has populated the environment of the request with several pieces of
-useful information. The RP's environment is accessible through the
+useful information. The RP&#39;s environment is accessible through the
 <computeroutput>ad_conn</computeroutput> interface, and the following calls should be
 useful to you when developing dynamic pages:
 </para>

@@ -1,4 +1,7 @@
 <html>
+<head>
+<title>Chain Fraction</title>
+</head>
   <body>
     <h2>Chain Fraction</h2>
     <h3>Natural <var>e</var></h3>

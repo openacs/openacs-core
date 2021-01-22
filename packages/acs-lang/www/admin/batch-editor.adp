@@ -14,13 +14,13 @@
   Show: 
   <multiple name="show_opts">
     <if @show_opts.rownum@ gt 1> | </if>
-    <if @show_opts.selected_p@><b>@show_opts.label@ (@show_opts.count@)</b> </if>
+    <if @show_opts.selected_p;literal@ true><strong>@show_opts.label@ (@show_opts.count@)</strong> </if>
     <else><a href="@show_opts.url@">@show_opts.label@ (@show_opts.count@)</a> </else>
   </multiple>
 </p>
 
 <if @total@ eq 0>
-  <i>No messages</i>
+  <em>No messages</em>
 </if>
 <else>
   <if @pagination:rowcount@ ne "1">
@@ -29,7 +29,7 @@
           <tr>
             <group column="group">    
               <if @pagination.selected@ eq "1">
-                <td class="high"><b>@pagination.text@</b>
+                <td class="high"><strong>@pagination.text@</strong>
               </if>
               <else>
                 <td>
@@ -51,7 +51,7 @@
           <tr>
             <group column="group">    
               <if @pagination.selected@ eq "1">
-                <td class="high"><b>@pagination.text@</b>
+                <td class="high"><strong>@pagination.text@</strong>
               </if>
               <else>
                 <td>

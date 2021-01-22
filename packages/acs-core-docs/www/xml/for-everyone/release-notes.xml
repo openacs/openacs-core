@@ -1,6 +1,6 @@
 <?xml version='1.0' ?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 
 <!ENTITY % myvars SYSTEM "../variables.ent">
 %myvars;
@@ -8,475 +8,1543 @@
 <sect1 id="release-notes" xreflabel="OpenACS &version; Release Notes">
   <title>OpenACS Release Notes</title>
   
-<!-- copy everything between and including the sect2 tags to make a 
-     new release notes section:
+  <!-- copy everything between and including the sect2 tags to make a 
+       new release notes section:
 
 BEGINNING OF TEMPLATE
-  <sect2 id="release-notes-x-x-x">
-  <title>Version X.X.X Template</title>
-  <authorblurb>
-      by <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink>
-  </authorblurb>
-    
-    <para>
-        This is a final release of OpenACS X.X.X.  To upgrade from a
-        previous version, see <xref linkend="upgrade-detail"/>.
-  </para>
-    
-    <para>
-        Please report bugs using our
-        <ulink url="http://openacs.org/bugtracker/openacs/">
-          Bug Tracker</ulink> at the <ulink
-          url="http://openacs.org/">OpenACS website</ulink>.
-  </para>
-    
-  </sect2>
+<sect2 id="release-notes-x-x-x">
+<title>Version X.X.X Template</title>
+<authorblurb>
+by <ulink url="mailto:dhogaza@pacifier.com">Don Baccus</ulink>
+</authorblurb>
+
+<para>
+This is a final release of OpenACS X.X.X.  To upgrade from a
+previous version, see <xref linkend="upgrade-detail"/>.
+</para>
+
+<para>
+Please report bugs using our
+<ulink url="http://openacs.org/bugtracker/openacs/">
+Bug Tracker</ulink> at the <ulink
+url="http://openacs.org/">OpenACS website</ulink>.
+</para>
+
+</sect2>
 END OF TEMPLATE -->
 
-<!--
-<para>The ChangeLogs include an annotated list of changes (<xref
-linkend="changelog-latest"></xref>) since the last release and in the
-entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
--->
+  <!--
+      <para>The ChangeLogs include an annotated list of changes (<xref
+      linkend="changelog-latest"></xref>) since the last release and in the
+      entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
+  -->
 
-<sect2 id="release-notes-5-9-0">
-  <title>Release 5.9.0</title>
-  <itemizedlist>
-    <listitem><para>
-      The release of OpenACS 5.9.0 contains the 78 packages of the oacs-5-9 branch.
-      These packages include the OpenACS core packages, the major
-      application packages (e.g. most the ones used on OpenACS.org), and
-      DotLRN 2.9.0.
-    </para></listitem>
+  <sect2 id="release-notes-5-9-1">
+    <title>Release 5.9.2</title>
+    <itemizedlist>
+      <listitem><para>
+	The release of OpenACS 5.9.1 contains the 88 packages of the oacs-5-9
+	branch.  These packages include the OpenACS core packages, the major
+	application packages (e.g. most the ones used on OpenACS.org), and
+	DotLRN 2.9.1. 
+      </para></listitem>
 
-    <listitem><para>
-      Summary of changes:
-      <itemizedlist>
-	<listitem><para>SQL:
+      <listitem><para>
+	Summary of changes:
 	<itemizedlist>
-
+	  
 	  <listitem><para>
-            Improved performance of acs-object deletion.
+	    Refactoring of rich-text editor integration
+	    <itemizedlist>
+	      <listitem><para>
+		Driving force: Debian packaging (e.g. js minified code is not
+		allowed)
+	      </para></listitem>
+	      <listitem><para>
+		Moved out code from acs-templating, provided interfaces to add
+		many different richtext editors as separate packages
+	      </para></listitem>
+	      <listitem><para>
+		New OpenACS packages:
+		<itemizedlist>
+		  <listitem><para>richtext-xinha</para></listitem>
+		  <listitem><para>richtext-tinymce</para></listitem>
+		  <listitem><para>
+		    richtext-ckeditor4 (has ability to choose between CDN and local
+		    installation via web interface)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	    </itemizedlist>
 	  </para></listitem>
-
+	  
 	  <listitem><para>
-            Replaced many manual referential integrity calls by
-	    built-in handing in PostgreSQL.
-	  </para></listitem>
-
-	  <listitem><para>
-            Removed various manual bookkeeping and deletion operations
-	    in the content repository by built-in handing in PostgreSQL.
-	  </para></listitem>
-
-	  <listitem><para>
-            Removed tree_sortkey on acs-objects to reduce its size and
-	    to speedup operations, where the context-id is changed
-	    (could take on large installation several minutes in
-	    earlier versions)
-	  </para></listitem>
-
-	  <listitem><para>
-            Removed several uncalled / redundant SQL statements and functions.
-	  </para></listitem>
-
-	  <listitem><para> Cleanup of .xql files in acs-subsite:
-	  <itemizedlist spacing='compact' mark='opencircle'>
-	    <listitem><para> Some cleanup of .xql files: removed
-	    misleading sql-statements from db_* calls, which were
-	    ignored due .xql files
+	    Improving admin interface
+	    <itemizedlist>
+	      <listitem><para>New theme manager:
+	      <itemizedlist>
+		<listitem><para>Goals:
+		<itemizedlist>
+		  <listitem><para>
+		    Make it easier to keep track of themes with local
+		    modifications
+		  </para></listitem>
+		  <listitem><para>
+		    Make it easier to create local modification a new themes and to
+		    update these
+		  </para></listitem>
+		  <listitem><para>
+		    Show differences between default theme parameter (in DB) and
+		    actual settings (in subsite parameters)
+		  </para></listitem>
+		  <listitem><para>
+		    Allow to delete unused themes
+		  </para></listitem>
+		  <listitem><para>
+		    Give site admin hints, which theme is used at which
+		    subsite
+		  </para></listitem>
+		  <listitem><para>Ease theme switching</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>
+		  Added a subsite::theme_changed callback to be able to handle
+		  theme changes in custom themes (was also necessary for proper
+		  integration with DotLRN theming)
+		</para></listitem>
+		<listitem><para>
+		  Added support for these features under subsite admin
+		  (/admin/)
+		</para></listitem>
+		<listitem><para>
+		  Improved support for themed templates via
+		  [template::themed_template]
+		</para></listitem>
+	      </itemizedlist>
+	      </para></listitem>
+	      <listitem><para>
+		Improved (broken) interface to define/manage groups over web
+		interface
+	      </para></listitem>
+	      <listitem><para>
+		Allow to send as well mail, when membership was rejected
+	      </para></listitem>
+	      <listitem><para>
+		New functions [membership_rel::get_user_id],
+		[membership_rel::get] and [membership_rel::get_group_id] to avoid
+		code duplication
+	      </para></listitem>
+	      
+	      <listitem><para>
+		Added support to let user include %forgotten_password_url%
+		in self-registration emails (e.g. in message key
+		acs-subsite.email_body_Registration_password)
 	    </para></listitem>
 	    
-	    <listitem><para> Removed bug where same query-name was
-	    used in different branches of an if-statement for
-	    different sql statements, but the query-name lead to the
-	    wrong result.
+	    <listitem><para>
+	      Improved subsite/www/members
+	      <itemizedlist>
+		<listitem><para>Make it possible to manage members of arbitrary groups</para></listitem>
+		<listitem><para>Improved performance for large groups</para></listitem>
+		<listitem><para>Improved configurability: when ShowMembersListTo is set to
+		&quot;3&quot;, show list to members only, when this is not the
+		whole subsite</para></listitem>
+	      </itemizedlist>
 	    </para></listitem>
-
-	    <listitem><para> Removed multiple entries of same query
-	    name from .xql files (e.g. the entry
-	    "package_create_attribute_list.select_type_info" was
-	    7 (!) times in a single .xql file)
+	    <listitem><para>
+	      Improved user interface for /admin/applications for large number of
+	      applications
 	    </para></listitem>
-
-	  </itemizedlist>	    
-
-	  </para></listitem>
-	</itemizedlist>	    
-	</para></listitem>
-
-	<listitem><para>Web Interface:
-	<itemizedlist>
-
- 	  <listitem><para>
-            Improve Performance of WebSites created with OpenACS:
-	    e.g. move core.js to a body requests, provide kernel
-	    parameter ResourcesExpireInterval to specify expiration
-	    times for resources.
-	  </para></listitem>
-
- 	  <listitem><para>
-            Much better protection against XSS attacks.
-	  </para></listitem>
-	  
- 	  <listitem><para>
-            Improved HTML validity (especially for admin pages)
-	  </para></listitem>
-
-	  <listitem><para>
-            Improved admin interface:
-	    <itemizedlist spacing='compact' mark='opencircle'>
-	      	   
-	      <listitem><para>
-		Placed all installation options to a single page.
-	      </para></listitem>
-
-	      <listitem><para>
-		Added pagination to /admin/applications (was unusable
-		for large sites)
-	      </para></listitem>
-
-	      <listitem><para>
-		New admin pages for subsites linked from
-		site-wide-admin package (/acs-admin).
-	      </para></listitem>
-
-	      <listitem><para>
-		Added explanatory text to several admin pages.
-	      </para></listitem>
-
+	    <listitem><para>Various fixes for sitewide-admin pages (under /acs-admin)</para></listitem>
+	    <listitem><para>
+	      Update blueprint in &quot;install from
+	      repository&quot; (currently just working in NaviServer)
+	    </para></listitem>
 	    </itemizedlist>
 	  </para></listitem>
 
- 	  <listitem><para> Add lightweight support for ckeditor4 for
- 	  templating::richtext widget (configurable via package
- 	  parameter "RichTextEditor" of acs-templating. ckeditor4
- 	  supports mobile devices (such as iPad, ...)
- 	  </para></listitem>
-	</itemizedlist>
-	</para></listitem>
-
-	<listitem><para>Templating:
-	<itemizedlist>
-
- 	  <listitem><para>
-            Improved theme-ability: Moved more information into theme
-	    packages in order to create responsive designs, reduce
-	    hard-coding of paths, HTML etc.
-	  </para></listitem>
-
- 	  <listitem><para>
-            Improved include-handling: All includes are now
-	    theme-able, interfaces of includes can be defined with
-	    "ad_include_contract" (similar to ad_page_contract).
-	  </para></listitem>
-
-	  <listitem><para>
-            Improved them-ability for display_templates. One can now
-	    provide a display_template_name (similar to the sql
-	    statement name) to refer to display templates. This
-	    enables reusability and is theme-able.
-	  </para></listitem>
-
-	  <listitem><para> Dimensional slider reform (ad_dimensional):
- 	  Removed hard-coded table layout from dimensional slider. Add
- 	  backwards compatible templates Move hard-coded styles into
- 	  theme styling </para></listitem>
-
-	  <listitem><para>
-	    Notification chunks are now theme-able as well (using ad_include_contrat)
-	  </para></listitem>
-
-	  <listitem><para>
-            Complete template variable suffixes (adding noi18n,
-	    addressing bug #2692, full list is now: noquote, noi18n, literal)
-	  </para></listitem>
-
-	  <listitem><para>
-	    Added timeout and configurable secrets for signed url
-	    parameters to export_vars/page_contracts.
-	    This can be used to secure sensitive operations
-	    such as granting permissions since a link can be set to
-	    timeout after e.g. 60 seconds; after that, the link is
-	    invalid. A secret (password) can be set in section
-	    ns/server/$server/acs parameter "parametersecret".
 	  
-	    For example, one can use now "user_id:sign(max_age=60)" in
-	    export_vars to let the exported variable expire after 60 seconds.
+	  <listitem><para>SQL
+	  <itemizedlist>
+	    <listitem><para>
+	      Further cleanup of .xql files (like what as done for
+	      acs-subsite in OpenACS 5.9.0):
+	      <itemizedlist>
+		<listitem><para>
+		  36 files deleted
+		</para></listitem>
+		<listitem><para>
+		  Removed more than 100 obsolete named queries
+		</para></listitem>
+		<listitem><para>
+		  Stripped misleading SQL statements
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    <listitem><para>
+	      Marked redundant / uncalled sql functions as deprecated
+	    </para></listitem>
+	    <listitem><para>
+	      Replaced usages of obsolete view
+	      &quot;all_object_party_privilege_map&quot; by
+	      &quot;acs_object_party_privilege_map&quot;
+	    </para></listitem>
+
+	    <listitem><para>
+	      Removed type discrepancy introduced in 2002:
+	      <itemizedlist>
+		<listitem><para>
+		  acs_object_types.object_type has type varchar(1000), while
+		</para></listitem>
+		<listitem><para>
+		  acs_object_types.supertype has type varchar(100)
+		</para></listitem>
+		<listitem><para>
+		  ... several more data types are involved, using
+		  acs_object_types.object_type as foreign key
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    <listitem><para>
+	      Simplified core sql functions by using defaults:
+	      <itemizedlist>
+		<listitem><para>
+		  Number of functions reduced by a factor of 2 compared to OpenACS
+		  5.9.0 (while providing compatibility for clients using old
+		  versions),
+		</para></listitem>
+		<listitem><para>
+		  Reduced code redundancy
+		</para></listitem>
+		<listitem><para>
+		  Affected functions:
+		  <itemizedlist>
+		    <listitem><para>Reduced content_item__new from 12 versions to 6,
+		    </para></listitem>
+		    <listitem><para>Reduce content_revision__new from 7 to 4
+		    </para></listitem>
+		    <listitem><para>
+		      Similar in image__new, image__new_revision, content_item__copy,
+		      content_item__get_title, content_item__move
+		    </para></listitem>
+		  </itemizedlist>
+		</para></listitem>
+		<listitem><para>
+		  PostgreSQL 9.5 supports named parameter in the same syntax as in Oracle.
+		  Further reduction of variants will be possible, once OpenACS
+		  requires at least PostgreSQL 9.5
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    <listitem><para>
+	      Reduced usage of deprecated versions of SQL functions (mostly
+	      content repository calls)
+	    </para></listitem>
+	    <listitem><para>
+	      Reduced generation of dead tuples by combining multiple DML
+	      statements to one (reduces costs of checkpoint cleanups in
+	      PostgreSQL)
+	    </para></listitem>
+	    <listitem><para>
+	      Permission queries:
+	      <itemizedlist>
+		<listitem><para>
+		  Improved performance
+		</para></listitem>
+		<listitem><para>
+		  Support PACKAGE.FUNCTION notation for PostgreSQL to
+		  allow calls permission queries exactly 
+		  the same way as in Oracle (e.g. "acs_permission.permission_p()").
+		  This helps to reduce the number of postgres specific .xql
+		  files.
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    <listitem><para>
+	      Modernize SQL:
+	      <itemizedlist>
+		<listitem><para>
+		  Use real Boolean types instead of character(1)
+		  (done for new-portal, forums, faq, attachments, categories, dotlrn,
+		  dotlrn-forums, evaluation)
+		</para></listitem>
+
+		<listitem><para>
+		  Use real enumeration types rather than check constraints (done
+		  for storage_type text/file/lob)
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	  </itemizedlist>
 	  </para></listitem>
+
 	  
-	</itemizedlist>
-	</para></listitem>
-
-	
-	<listitem><para>Misc:
-	<itemizedlist>
 	  <listitem><para>
-            Added ability to show ns_log statements of current request
-	    to developer support output when developer support is
-	    activated (controlled via package parameter "TclTraceLogServerities"
-	    in the acs-tcl package parameters)
-	  </para></listitem>
-
-	  <listitem><para>
-	    Added ability to save data sent by
-	    ns_return in files on the file system. This can be used to
-	    validate HTML content also for password protected pages
-	    (controlled via package parameter "TclTraceSaveNsReturn" in
-	    the acs-tcl package parameters)
-	  </para></listitem>
-	  
-	  <listitem><para>
-            New api function "ad_log" having the same interface as
-	    ns_log, but which logs the calling information (like URL
-	    and call-stack) to ease tracking of errors.
-	  </para></listitem>	  
-
-	  <listitem><para> Use per-thread caching to reduce number of
-	  mutex lock operations and lock contention on various caches
-	  (util-memoize, xo_site_nodes, xotcl_object_types) and nsvs
-	  (e.g ds_properties) </para></listitem>
-	  
- 	  <listitem><para>
-            Improved templating of OpenACS core documentation
-	  </para></listitem>
-
-	  <listitem><para>
-            Improved Russian Internationalization
-	  </para></listitem>
-	  
- 	  <listitem><para>
-            Make pretty-names of acs-core packages more consistent
-	  </para></listitem>
-
-	  <listitem><para>
-            Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as deprecated
-	  </para></listitem>
-
-	  <listitem><para>
-            Many more bug fixes (from bug tracker and extra) and
-	    performance improvements.
-	  </para></listitem>
-
-	  
- 	  <listitem><para>
-	    Version numbers:
-	    <itemizedlist spacing='compact' mark='opencircle'>
-	      <listitem><para>
-		Require PG 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)
-	      </para></listitem>
-
-	      <listitem><para>
-		Require XOTcl 2.0 (presented at the Tcl conference in 2011). 
-	      </para></listitem>
-
-	    </itemizedlist>
- 	  </para></listitem>
-	</itemizedlist>
-	</para></listitem>
-	
-	<listitem><para>Changes in application packages:
-	<itemizedlist>
-	  <listitem><para>
-	    Various bug
-	    fixes and improvements for e.g. file-storage, forums, news,
-	    notifications, xowiki.
-	  </para></listitem>
-	</itemizedlist>
-	</para></listitem>
-      </itemizedlist>
-    </para> </listitem>
-  </itemizedlist>
-  
-  <para> Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 by the
-  following statistics
-  <programlisting>
-      3658 files changed, 120800 insertions(+), 97617 deletions(-)
-  </programlisting>
-  contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf Neumann, Antonio Pisano) and
-  patch/bugfix providers (Frank Bergmann, Andrew Helsley, Felix
-  Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).
-These are significantly more  changes as the differences
-in the last releases. All packages of the release were tested with
-PostgreSQL 9.4.* and Tcl 8.5.*.
-  For more
-  details, consult the  
-  <ulink
-      href="http://fisheye.openacs.org/browse/~br=oacs-5-9/OpenACS/openacs-4/ChangeLog?hb=true">
-  raw ChangeLog</ulink>.
-  </para>
-</sect2>
-
-
-
-<sect2  id="release-notes-5-8-1">
-  <title>Release 5.8.1</title>
-  <itemizedlist>
-    <listitem><para>
-      The release contains the 78 packages of the oacs-5-8 branch.
-      These packages contain the OpenACS core packages, major
-      application packages (e.g. most the ones used on OpenACS.org), and
-      DotLRN.
-    </para></listitem>
-
-    <listitem><para>
-      All packages have the following properties:
-      <itemizedlist>
-	<listitem><para>SQL:
-	<itemizedlist>
-
-	  <listitem><para>
-            All packages are PostgreSQL 9.1+ compatible 
-            (tested with PostgreSQL 9.3)
-	  </para></listitem>
-
-	  <listitem><para>
-            All SQL files with stored procedures use the
-            recommended $$ quoting
-	  </para></listitem>
-
-	  <listitem><para>
-            All SQL-functions have regular function arguments
-            instead of the old-style aliases
-	  </para></listitem>
-
-	  <listitem><para>
-            The function_args() (query-able meta-data) are
-            completed and fixed
-	  </para></listitem>
-
-	  <listitem><para>
-            Incompatible functions (e.g. for sequences) are
-            replaced.
-	  </para></listitem>
-	</itemizedlist>	    
-	</para></listitem>
-
-	<listitem><para>Tcl:
-	<itemizedlist>
-
- 	  <listitem><para>
-            All packages were brought up Tcl 8.5, including
-            the actual Tcl idioms where appropriate (e.g.
-            using the safer expand operator, range indices,
-            dict, lassign, etc.)
-	  </para></listitem>
-
- 	  <listitem><para>
-            The code was updated to prefer byte-compiled functions
-            instead of legacy functions from ancient Tcl versions.
-	  </para></listitem>
-
- 	  <listitem><para>
-            The code works with NaviServer and AOLserver.
-	  </para></listitem>
-	</itemizedlist>
-	</para></listitem>
-
-	<listitem><para>API:
-	<itemizedlist>
-
- 	  <listitem><para>
-            All packages are free from calls to deprecated code
-            (157 functions are marked as deprecated and will be
-            moved into an "outdated" package in the 5.9 or 6.0
-	    release)
-	  </para></listitem>
-
- 	  <listitem><para>
-	    General overhaul of package management
-	  </para></listitem>
-
- 	  <listitem><para>
-            Install-from-local and install-from-repository can be used
-            to install the provided packages based on a acs-core
-            installation. This means that also DotLRN can be
-            installed from repository or from
-            local into an existing OpenACS instance.
-	  </para></listitem>
-
- 	  <listitem><para>
-            Install-from-repository offers filtering functions, allows
-            to install optionally from head-channel (for packages
-            not in the base channel of the installed instance).
-            Install-from-repository works more like an app-store,
-            showing as well vendor information
-	  </para></listitem>
-
- 	  <listitem><para>
-            Packages can be equipped with xml-based configuration files
-            (e.g. changing parameters for style packages)
-	  </para></listitem>
-
- 	  <listitem><para>
-            Package developers can upload .apm packages via workflow
-            for review by core members and for inclusion to the
-            repository. The option is integrated with package
-            management, the link is offered for local packages.
-            We hope to attract additional vendors (universities,
-            companies) to make their packages available on this
-	    path.
-	  </para></listitem>
-
- 	  <listitem><para>
-            New management-functions for package instances
-            (list, create, delete package instances)
-	  </para></listitem>
-	  
- 	  <listitem><para>
-            Substantially improved API browser:
+	    CR hygienics (reduce cr bloat)
 	    <itemizedlist>
- 	      <listitem><para>
-		Show just relevant parts of .xql files for a function
-	      </para></listitem>
-
- 	      <listitem><para>
-		Provide syntax-highlighting for www scripts as well
-	      </para></listitem>
-
- 	      <listitem><para>
-		Handle more special cases like e.g. util_memoize
-	      </para></listitem>
-
- 	      <listitem><para>
-		Provide links to Tcl functions depending on the installed
-		Tcl version
-	      </para></listitem>
-
- 	      <listitem><para>
-		Provide links to NaviServer or OpenACS functions depending
-		on installed version
-	      </para></listitem>
-
- 	      <listitem><para>
-		Syntax highlighter uses CSS rather than hard-coded markup
-	      </para></listitem>
-
- 	      <listitem><para>
-		Significant performance improvement for large
-		installations
+	      <listitem><para>
+		Provided means to avoid insert/update/delete operations in the
+		search queue:</para>
+		<para>OpenACS adds for every new revision often multiple
+		entries to the search_queue, without providing any means to prevent
+		this. This requires for busy sites very short intervals between
+		queue sweeps (otherwise too many entries pile up). Another
+		consequence is that this behavior keeps the PostgreSQL
+		auto-vacuum daemons permanently active. Many of these operations
+		are useless in cases where the content repository is used for
+		content that should not be provided via search. The changed
+		behavior should honors a publish-date set to the future, since it
+		will not add any content with future publish dates to the
+		search-queue.</para>
+	      </listitem>
+	      <listitem><para>
+		Reduced number of insert cr_child_rels operations, just when
+		needed:
+	      </para>
+	      <para>cr_child_rels provide only little benefit (allow to use
+	      roles in a child-rel), but the common operation is a well available
+	      in cr_items via the parent_id. cr_child_rels do not help for
+	      recursive queries either. One option would be to add an additional
+	      argument for content_item__new to omit child-rel creation (default
+	      is old behavior) and adapt the other cases.
 	      </para></listitem>
 	    </itemizedlist>
- 	  </para></listitem>
+	  </para></listitem>
+	  
+	  <listitem><para>
+	    Security improvements
+	    <itemizedlist>
+	      <listitem><para>
+		Added support against <ulink url="/xowiki/CSRF">CSRF</ulink> (cross site request
+		forgery)
+		<itemizedlist>
+		  <listitem><para>
+		    OpenACS maintains a per-request CSRF token that ensures
+		    that form replies are coming just from sites that received the
+		    form
+		  </para></listitem>
+		  <listitem><para>
+		    CSRF support is optional for packages where CSRF is less
+		    dangerous, and such requests are wanted (e.g. search and api-browser)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      <listitem><para>
+		Added Support for W3C &quot;Upgrade-Insecure-Headers&quot; (see
+		https://www.w3.org/TR/upgrade-insecure-requests/):
+		</para><para>For standard
+		compliant upgrade for requests from HTTP to HTTPS
+	      </para></listitem>
+	      <listitem><para>
+		Added support for W3C &quot;Subresource Integrity&quot; (SRI;
+		see https://www.w3.org/TR/SRI/)
+	      </para></listitem>
+	      <listitem><para>
+		Added support for W3C &quot;Content Security Policy&quot;
+		(<ulink url="/xowiki/CSP">CSP</ulink>; see https://www.w3.org/TR/CSP/)
+		<itemizedlist>
+		  <listitem><para>
+		    Removed &quot;javascript:*&quot; links (all such urls are removed
+		    from the 90 packages in oacs-5-9, excluding js libraries
+		    (ajaxhelper) and richtext code)
+		  </para></listitem>
+		  <listitem><para>
+		    Removed &quot;onclick&quot;, &quot;onfocus&quot;,
+		    &quot;onblur&quot;, &quot;onchange&quot; handlers from all
+		    .adp and .tcl files in the 90 packages in oacs-5-9
+		    (excluding js libraries (ajaxhelper) and richtext code)
+		  </para></listitem>
+		  <listitem><para>
+		    Added optional nonces to all &lt;script&gt; elements with
+		    literal JavaScript content
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      <listitem><para>
+		Removed &quot;generic downloader&quot;,
+		which allowed to download arbitrary content items, when item_id was
+		known (bug-fix)
+	      </para></listitem>
+	      <listitem><para>
+		Improved protection against XSS and SQL-injection (strengthen
+		page contracts, add validators, added page_contract_filter
+		&quot;localurl&quot;, improve HTML escaping, and
+		URI encoding)
+	      </para></listitem>
+	      <listitem><para>
+		Fixed for potential traversal attack
+		(acs-api-documentation-procs)
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+
+	  <listitem><para>
+	    Improvements for &quot;host-node mapped&quot; subsites
+	    <itemizedlist>
+	      <listitem><para>
+		Fixed links from host-node mapped subsite pages to
+		swa-functions (must be always on main subsite)
+	      </para></listitem>
+	      <listitem><para>
+		Made &quot;util_current_directory&quot;
+		aware of host-node-mapped subsites
+	      </para></listitem>
+	      <listitem><para>
+		Added ability to pass
+		&quot;-cookie_domain&quot; to make it possible
+		to use the same cookie for different domains
+	      </para></listitem>
+	      <listitem><para>
+		Fixed result of affected commands
+		&quot;util_current_location&quot;,
+		&quot;ad_return_url&quot;,
+		&quot;ad_get_login_url&quot; and
+		&quot;ad_get_logout_url&quot; for HTTP and
+		HTTPS, when UseHostnameDomainforReg is 0 or 1.
+	      </para></listitem>
+	      <listitem><para>
+		Improved UI for host-node maps when a large number of site
+		nodes exists
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>Reform of acs-rels
+	  <itemizedlist>
+	    <listitem><para>
+	      Made acs-rels configurable to give the developer the option to
+	      specify, whether these are composable or not (default fully
+	      backward compatible). This is required to control transitivity in
+	      rel-segments
+	    </para></listitem>
+	    <listitem><para>
+	      The code changes are based on a patch provided
+	      by Michael Steigmann. For details, see:
+	      <itemizedlist>
+		<listitem><para>
+		  <ulink url="http://openacs.org/forums/message-view?message_id=4031049">http://openacs.org/forums/message-view?message_id=4031049</ulink>
+		</para></listitem>
+		<listitem><para>
+		  <ulink url="http://openacs.org/forums/message-view?message_id=5330734">http://openacs.org/forums/message-view?message_id=5330734</ulink>
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	  </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>
+	    Improved status code handlers for AJAX scenarios
+	    <itemizedlist>
+	      <listitem><para>
+		Don&#39;t report data source errors with status code 200 (use
+		422 instead)
+	      </para></listitem>
+	      <listitem><para>
+		Let &quot;permission::require_permission&quot; return forbidden (403) in
+		AJAX calls (determined via [ad_conn ajaxp])
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>
+	    Improved Internationalization
+	    <itemizedlist>
+	      <listitem><para>
+		Extended language catalogs for
+		<itemizedlist>
+		  <listitem><para>
+		    Russian (thanks to v v)
+		  </para></listitem>
+		  <listitem><para>
+		    Italian (thanks to Antonio Pisano)
+		  </para></listitem>
+		  <listitem><para>
+		    Spanish (thanks to Hector Romojaro)
+		  </para></listitem>
+		  <listitem><para>
+		    German (thanks to Markus Moser)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      <listitem><para>
+		Added (missing) message keys
+	      </para></listitem>
+	      <listitem><para>
+		Improved wording of entries
+	      </para></listitem>
+	      <listitem><para>
+		Added message keys for member_state changes, provide API via
+		group::get_member_state_pretty
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>
+	    Improved online documentation (/doc)
+	    <itemizedlist>
+	      <listitem><para>Fixed many broken links
+	      </para></listitem>
+	      <listitem><para>Removed fully obsolete sections
+	      </para></listitem>
+	      <listitem><para>Improved markup (modernize HTML)
+	      </para></listitem>
+	      <listitem><para>Updated various sections
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+
+	  <listitem><para>
+	    Misc code improvements:
+	    <itemizedlist>
+	      <listitem><para>
+		18 issues from the OpenACS-bug-tracker fixed
+	      </para></listitem>
+	      <listitem><para>
+		Made code more robust against invalid/incorrect input
+		(page_contracts, validators, values obtained from header fields
+		such as Accept-Language)
+	      </para></listitem>
+	      <listitem><para>
+		Fixed quoting of message keys on many places
+	      </para></listitem>
+	      <listitem><para>
+		Improved exception handling (often, a
+		&quot;catch&quot; swallows to much, e.g. 
+		script_aborts), introducing
+		&quot;ad_exception&quot;.
+	      </para></listitem>
+	      
+	      <listitem><para>
+		Generalized handling of leading zeros:
+		<itemizedlist>
+		  <listitem><para>
+		    Fixed cases where leading zeros could lead to unwanted octal
+		    interpretations
+		  </para></listitem>
+		  <listitem><para>
+		    Switch to use of &quot;
+		    util::trim_leading_zeros&quot; instead of
+		    &quot;template::util::leadingTrim&quot;,
+		    &quot;dt_trim_leading_zeros&quot; and
+		    &quot;template::util::leadingTrim&quot;,
+		    marked the latter as deprecated
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	    
+	    <listitem><para>
+	      URL encoding
+	      <itemizedlist>
+		<listitem><para>
+		  &quot;ad_urlencode_folder_path&quot;: new
+		  function to perform an urlencode operation on the segments of the
+		  provided folder path
+		</para></listitem>
+		<listitem><para>
+		  &quot;export_vars&quot;: encode path always
+		  correctly, except -no_base_encode is specified
+		</para></listitem>
+		<listitem><para>
+		  Fixed encoding of the URL path in
+		  &quot;ad_returnredirect&quot;
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    
+	    <listitem><para>
+	      Improvements for &quot;ad_conn&quot;:
+	      <itemizedlist>
+		<listitem><para>Added [ad_conn behind_proxy_p] to check, whether the request is
+		coming from behind a proxy server
+		</para></listitem>
+		<listitem><para>Added [ad_conn behind_secure_proxy_p] to check, whether the
+		request is coming from behind a secure proxy server
+		</para></listitem>
+		<listitem><para>Added [ad_conn ajax_p] to check, whether the request is an AJAX
+		requests (assumption: AJAX request sets header-field
+		Requested-With: XMLHttpRequest&quot;)
+		</para></listitem>
+		<listitem><para>Added [ad_conn vhost_url] to obtain the url of host-node-mapped
+		subsites
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    
+	    <listitem><para>Added various missing upgrade scripts (missing since many years)
+	    of changes that were implemented for new installs to reduce
+	    differences between &quot;new&quot;-and
+	    &quot;old&quot; (upgraded) installations
+	    </para></listitem>
+	    
+	    <listitem><para>
+	      Templating
+	      <itemizedlist>
+		<listitem><para>Get rid of various pesky &quot;MISSING FORMWIDGET:
+		...formbutton:ok&quot; messages
+		</para></listitem>
+		<listitem><para>Improved support for javascript event handlers in
+		template::head
+		</para></listitem>
+		<listitem><para>New functions
+		&quot;template::add_event_listener&quot; and
+		&quot;template::add_confirm_handler&quot;
+		</para></listitem>
+		<listitem><para>Fix handling, when &quot;page_size_variable_p&quot; is set (was
+		broken since ages)
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    
+	    <listitem><para>
+	      Improved location and URL handling:
+	      <itemizedlist>
+		<listitem><para>
+		  Refactored and commented
+		  &quot;util_current_location&quot; to address
+		  security issues, handle IPv6 addresses, IP literal notation,
+		  multiple drivers, &quot;
+		</para></listitem>
+		<listitem><para>
+		  Improved &quot;security::get_secure_location&quot;
+		  (align with documentation)
+		</para></listitem>
+		<listitem><para>
+		  New functions:
+		  <itemizedlist>
+		    <listitem><para>
+		      &quot;util::configured_location&quot;
+		    </para></listitem>
+		    <listitem><para>
+		      &quot;util::join_location&quot;,
+		      &quot;util::split_location&quot;
+		    </para></listitem>
+		  </itemizedlist>
+		  for working on HTTP locations to reduce scattered regexps handling
+		  URL components
+		</para></listitem>
+		<listitem><para>Improved IPv6 support
+		</para></listitem>
+		<listitem><para>Use native &quot;ns_parseurl&quot; when
+		available, provide backward compatible version for AOLserver
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    
+	    <listitem><para>
+	      MIME types:
+	      <itemizedlist>
+		<listitem><para>Added more Open XML formats for MS-Office to allowed content
+		types
+		</para></listitem>
+		<listitem><para>Modernized entries to IANA recommendations
+		</para></listitem>
+		<listitem><para>New function &quot;cr_check_mime_type&quot;
+		centralizing the retrieval of the mime_type from uploaded
+		content
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    
+	    <listitem><para>Finalized cleanup of permissions (started in OpenACS 5.9.0):
+	    <itemizedlist>
+	      <listitem><para>Get rid of &quot;acs_object_context_index
+	      &quot; (and therefore on &quot;acs_object_party_privilege_map
+	      &quot; as well) on PostgreSQL.
+	    </para>
+	    <para> Reasons:
+	    <itemizedlist>
+	      <listitem><para>huge table,</para></listitem>
+	      <listitem><para>expensive maintenance, used only in a few places,</para></listitem>
+	    </itemizedlist>
+	      </para></listitem>
+	    </itemizedlist>
+	    </para></listitem>
+
+	    <listitem><para>
+	      Misc new functions:
+	      <itemizedlist>
+		<listitem><para> &quot;lang::util::message_key_regexp&quot;:
+		factor out scattered regexp for detecting message keys
+		</para></listitem>
+		<listitem><para> &quot;ns_md5&quot; and
+		&quot;ns_parseurl&quot;: improve compatibility between
+		AOLserver and NaviServer </para></listitem>
+		<listitem><para> &quot;ad_dom_sanitize_html&quot;: allow to
+		specify different sets of tags, attributes and protocols and
+		&quot;ad_dom_fix_html&quot;, which is a light weight tidy
+		variant.  </para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    
+	    <listitem><para>
+	      Improved HTML rendering (acs-api-browser), provide width and
+	      height to speed up rendering
+	    </para></listitem>
+	    <listitem><para>
+	      Improved ADP files (e.g. missing doc(title))
+	    </para></listitem>
+	    <listitem><para>
+	      Added usage of
+	      &quot;ad_include_contract&quot; on more
+	      occasions
+	    </para></listitem>
+	    
+	    <listitem><para>
+	      Modernize Tcl and HTML coding
+	    </para></listitem>
+	    <listitem><para>
+	      Reduced dependency on external programs (use Tcl functions
+	      instead)
+	    </para></listitem>
+	    <listitem><para>
+	      Improved robustness of &quot;file
+	      delete&quot; operations all over the code
+	    </para></listitem>
+	    <listitem><para>
+	      Improved documentation, fix demo pages
+	    </para></listitem>
+	    <listitem><para>Aligned usages of log notification levels (distinction between
+	    &quot;error&quot;,
+	    &quot;warning&quot; and
+	    &quot;notice&quot;) with coding-standards
+	    </para></listitem>
+	    
+	    <listitem><para>Cleaned up deprecated calls:
+	    <itemizedlist>
+	      <listitem><para>
+		Removed usage of deprecated API functions (e.g.
+		&quot;cc_lookup_email_user&quot;,
+		&quot;cc_email_from_party&quot;,
+		&quot;util_unlist&quot;, ...)
+	      </para></listitem>
+	      <listitem><para>Moved more deprecated procs to acs-outdated
+	      </para></listitem>
+	      <listitem><para>Marked remaining (and unused)
+	      &quot;cc_*&quot; functions as well as
+	      deprecated.
+	      </para></listitem>
+	    </itemizedlist>
+	    
+	    </para></listitem>
+	    <listitem><para>
+	      Improved Oracle and windows support
+	    </para></listitem>
+	    <listitem><para>
+	      Fixed common spelling errors and standardize spelling of product
+	      names all over the code (comments, documentation, ...)
+	    </para></listitem>
+	    <listitem><para>
+	      Many more small bug fixes
+	    </para></listitem>
+	  </itemizedlist>
+	</para></listitem>
+
+	<listitem><para>Packages:
+	<itemizedlist>
+	  <listitem><para>
+	    New Package Parameters
+	    <itemizedlist>
+	      <listitem><para>
+		acs-kernel:
+		<itemizedlist>
+		  <listitem><para>
+		    MaxUrlLength: remove hard-coded constant in request processor
+		    for max accepted url paths
+		  </para></listitem>
+		  <listitem><para>
+		    SecureSessionCookie: Let site admin determine, whether or not to
+		    use secured session cookies (useful, when not all requests are over
+		    HTTPS)
+		  </para></listitem>
+		  <listitem><para>
+		    CSPEnabledP: activate/deactivate CSP
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      
+	      <listitem><para>
+		acs-kernel (recommended to be set via config file in section
+		&quot;ns/server/${server}/&gt;acs&quot;
+		<itemizedlist>
+		  <listitem><para>
+		    NsShutdownWithNonZeroExitCode: tell NaviServer to return with a
+		    non-zero return code to cause restart (important under windows)
+		  </para></listitem>
+		  <listitem><para>
+		    LogIncludeUserId: include user_id in access log
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      
+	      <listitem><para>
+		acs-api-browser:
+		<itemizedlist>
+		  <listitem><para>
+		    ValidateCSRFP: make checking of CSRF optional (default 1)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      
+	      <listitem><para>
+		acs-content-repository:
+		<itemizedlist>
+		  <listitem><para>
+		    AllowMimeTypeCreationP: Decides whether we allow unknown mime
+		    types to be automatically registered (default: 0}
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      
+	      <listitem><para>
+		news-portlet:
+		<itemizedlist>
+		  <listitem><para>
+		    display_item_lead_p: Should we display news leads in the
+		    portlet? (default 0)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      
+	      <listitem><para>
+		search:
+		<itemizedlist>
+		  <listitem><para>
+		    ValidateCSRFP: make checking of CSRF optional (default 1)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      
+	      <listitem><para>
+		xotcl-request-monitor:
+		<itemizedlist>
+		  <listitem><para>do_track_activity: turn activity
+		  monitoring on or off (default 0)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	</itemizedlist>
+	
+	<itemizedlist>
+	  <listitem><para>
+	    New OpenACS packages:
+	    <itemizedlist>
+	      <listitem><para>
+		richtext-xinha
+	      </para></listitem>
+	      <listitem><para>
+		richtext-tinymce
+	      </para></listitem>
+	      <listitem><para>
+		richtext-ckeditor4 (has ability to choose between CDN and local
+		installation via GUI)
+	      </para></listitem>
+	      <listitem><para>
+		openacs-bootstrap3-theme (as used on openacs.org)
+	      </para></listitem>
+	      <listitem><para>
+		dotlrn-bootstrap3-theme
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	</itemizedlist>
+	
+	<itemizedlist>
+	  <listitem><para>
+	    xotcl-core:
+	    <itemizedlist>
+	      <listitem><para>
+		Improved XOTcl 2.0 and NX support (e.g. api-browser)
+	      </para></listitem>
+	      <listitem><para>
+		Added &quot;-debug&quot;,
+		&quot;-deprecated&quot; to ad_* defined
+		methods (such as e.g.
+		&quot;ad_instproc&quot;)
+	      </para></listitem>
+	      <listitem><para>
+		Make use of explicit &quot;create&quot;
+		statements when creating XOTcl/NX objects (makes it easier to grab
+		intentions and to detect typos)
+	      </para></listitem>
+	      <listitem><para>
+		Added parameter to
+		&quot;get_instance_from_db&quot; to specify,
+		whether the loaded objects should be initialized
+	      </para></listitem>
+	      <listitem><para>
+		Added support for PostgreSQL prepared statements of SQL
+		interface in ::xo::dc (nsdb driver)
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>
+	    xowiki:
+	    <itemizedlist>
+	      <listitem><para>
+		Named all web-callable methods www-NAME (to make it clear, what
+		is called, what has to be checked especially carefully)
+	      </para></listitem>
+	      <listitem><para>
+		Moved templates from www into xowiki/resources to avoid naming
+		conflicts
+	      </para></listitem>
+	      <listitem><para>
+		Improved ckeditor support
+	      </para></listitem>
+	      <listitem><para>
+		Added usage of prepared statements for common queries
+	      </para></listitem>
+	      <listitem><para>
+		Improved error handling
+	      </para></listitem>
+	      <listitem><para>
+		Better value checking for query parameter, error reporting via
+		ad_return_complaint
+	      </para></listitem>
+	      <listitem><para>
+		Added option &quot;-path_encode&quot; to methods
+		&quot;pretty_link&quot; and &quot;folder_path&quot; to allow to
+		control, whether the result should be encoded or not (default
+		true)
+	      </para></listitem>
+	      <listitem><para>
+		Form fields:
+		<itemizedlist>
+		  <listitem><para>
+		    Improved repeatable form fields (esp. composite cases),
+		    don&#39;t require preallocation (can be costly in composite
+		    cases)
+		  </para></listitem>
+		  <listitem><para>
+		    Added signing of form-fields
+		  </para></listitem>
+		  <listitem><para>
+		    Added HTML5 attributes such as
+		    &quot;multiple&quot; (for
+		    &quot;file&quot;) or
+		    &quot;autocomplete&quot;
+		  </para></listitem>
+		  <listitem><para>
+		    Fixed generation of &quot;orderby&quot;
+		    attribute based on form-field names
+		  </para></listitem>
+		  <listitem><para>
+		    richtext: allow to specify
+		    &quot;extraAllowedContent&quot; via
+		    options
+		  </para></listitem>
+		  <listitem><para>
+		    Improved layout of horizontal check boxes
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      
+	      <listitem><para>
+		Menu bar:
+		<itemizedlist>
+		  <listitem><para>
+		    Added dropzone (requires bootstrap): drag and drop file upload
+		  </para></listitem>
+		  <listitem><para>
+		    Added mode toggle (requires bootstrap)
+		  </para></listitem>
+		  <listitem><para>
+		    Extended default policies for handling e.g. dropzone
+		    (file-upload method)
+		  </para></listitem>
+		  <listitem><para>
+		    Distinguish between &quot;startpage&quot;
+		    (menu.Package.Startpage) and &quot;table of contents&quot;
+		    (menu.Package.Toc)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      
+	      <listitem><para>
+		Notifications:
+		<itemizedlist>
+		  <listitem><para>
+		    Added support for better tailorable notifications: introduced
+		    method &quot;notification_render&quot;
+		    (similar to &quot;search_render&quot;)
+		  </para></listitem>
+		  <listitem><para>
+		    Added support for tailorable subject lines (method
+		    &quot;notification_subject&quot;)
+		  </para></listitem>
+		</itemizedlist>
+	      </para></listitem>
+	      <listitem><para>
+		Improved bootstrap support, use
+		&quot;bootstrap&quot; as
+		PreferredCSSToolkit
+	      </para></listitem>
+	      <listitem><para>
+		Switched to ckeditor4 as PreferredRichtextEditor
+	      </para></listitem>
+	      <listitem><para>
+		Improved handling of script-abort from within the payload of
+		::xowiki::Object payloads
+	      </para></listitem>
+	      <listitem><para>
+		Added parameter to
+		&quot;get_all_children&quot; to specify,
+		whether the child objects should be initialized
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>
+	    xowf:
+	    <itemizedlist>
+	      <listitem><para>
+		Added property &quot;payload&quot; to
+		&quot;WorkflowConstruct&quot; in order to simplify customized
+		workflow &quot;allocate&quot; actions
+	      </para></listitem>
+	      <listitem><para>
+		Internationalized more menu buttons
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>
+	    xotcl-request-monitor
+	    <itemizedlist>
+	      <listitem><para>
+		Added class &quot;BanUser&quot; (use. e.g. ip
+		address to disallow requests from a user via request monitor)
+	      </para></listitem>
+	      <listitem><para>
+		Added support for optional user tracking in database
+	      </para></listitem>
+	      <listitem><para>
+		Added support for monitoring response-time for certain urls via
+		munin
+	      </para></listitem>
+	      <listitem><para>
+		Increased usage of XOTcl 2.0 variable resolver (potentially
+		speed improvement 4x)
+	      </para></listitem>
+	      <listitem><para>
+		Performed some refactoring of response-time handling to allow
+		site-admin to make e.g. use of NaviServer&#39;s dynamic connection
+		pool management (not included in CVS)
+	      </para></listitem>
+	      <listitem><para>
+		Added support for partial times in long-calls.tcl to ease
+		interpretation of unexpected slow calls
+	      </para></listitem>
+	      <listitem><para>
+		last100.tcl: Don&#39;t report hrefs to URLs, except to SWAs
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>
+	    chat:
+	    <itemizedlist>
+	      <listitem><para>
+		Introduced new options to set chat rooms so login and/or logout
+		message are not issued every time a user enters/exits a chat-room
+		(important for chats with huge number of participants)
+	      </para></listitem>
+	      <listitem><para>
+		Parameterized viewing of chat-logs
+	      </para></listitem>
+	      <listitem><para>
+		Fixed cases of over-/under-quoting
+	      </para></listitem>
+	      <listitem><para>
+		Fixed JavaScript for IE, where innerHTML can cause
+		problems
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+
+	  <listitem><para>
+	    file-storage:
+	    <itemizedlist>
+	      <listitem><para>
+		Don&#39;t show action keys, when user has no
+		permissions
+	      </para></listitem>
+	      <listitem><para>
+		Added support for copying of same-named files into a folder
+		(adding suffix)
+	      </para></listitem>
+	      <listitem><para>
+		Fixed old bugs in connection with
+		&quot;views&quot; package
+	      </para></listitem>
+	    </itemizedlist>
+	  </para></listitem>
+		
 	</itemizedlist>
 	</para></listitem>
       </itemizedlist>
-    </para> </listitem>
+    </para></listitem>
   </itemizedlist>
-  <para> Altogether, OpenACS 5.8.1 differs from OpenACS 5.8.0 in
-  about 100,000 modifications (6145 commits) contributed by 5
-  committers.
+
+ 
+  <para> Altogether, OpenACS 5.9.1 differs from OpenACS 5.9.1 by the
+    following statistics
+    <programlisting>
+       3548 files changed, 113292 insertions(+), 90507 deletions(-)
+    </programlisting>
+    contributed by 5 committers (Michael Aram, Gustaf Neumann, Antonio
+    Pisano, Hector Romojaro, Thomas Renner) and 8 patch/bugfix providers
+    (Frank Bergmann, Günter Ernst, Brian Fenton, Felix Mödritscher, Marcus
+    Moser, Franz Penz, Stefan Sobernig, Michael Steigman). All packages of
+    the release were tested with PostgreSQL 9.6.* and Tcl 8.5.*.
   </para>
+  <para>
+    For more details, consult the
+    <ulink href="http://openacs.org/changelogs/ChangeLog-5.9.1">raw ChangeLog</ulink>.
+  </para>  
 </sect2>
+
+  
+  <sect2 id="release-notes-5-9-0">
+    <title>Release 5.9.0</title>
+    <itemizedlist>
+      <listitem><para>
+	The release of OpenACS 5.9.0 contains the 78 packages of the oacs-5-9 branch.
+	These packages include the OpenACS core packages, the major
+	application packages (e.g. most the ones used on OpenACS.org), and
+	DotLRN 2.9.0.
+      </para></listitem>
+
+      <listitem><para>
+	Summary of changes:
+	<itemizedlist>
+	  <listitem><para>SQL:
+	  <itemizedlist>
+
+	    <listitem><para>
+	      Improved performance of acs-object deletion.
+	    </para></listitem>
+
+	    <listitem><para>
+	      Replaced many manual referential integrity calls by
+	      built-in handing in PostgreSQL.
+	    </para></listitem>
+
+	    <listitem><para>
+	      Removed various manual bookkeeping and deletion operations
+	      in the content repository by built-in handing in PostgreSQL.
+	    </para></listitem>
+
+	    <listitem><para>
+	      Removed tree_sortkey on acs-objects to reduce its size and
+	      to speedup operations, where the context-id is changed
+	      (could take on large installation several minutes in
+	      earlier versions)
+	    </para></listitem>
+
+	    <listitem><para>
+	      Removed several uncalled / redundant SQL statements and functions.
+	    </para></listitem>
+
+	    <listitem><para> Cleanup of .xql files in acs-subsite:
+	    <itemizedlist>
+	      <listitem><para> Some cleanup of .xql files: removed
+	      misleading sql-statements from db_* calls, which were
+	      ignored due .xql files
+	      </para></listitem>
+	      
+	      <listitem><para> Removed bug where same query-name was
+	      used in different branches of an if-statement for
+	      different sql statements, but the query-name lead to the
+	      wrong result.
+	      </para></listitem>
+
+	      <listitem><para> Removed multiple entries of same query
+	      name from .xql files (e.g. the entry
+	      "package_create_attribute_list.select_type_info" was
+	      7 (!) times in a single .xql file)
+	      </para></listitem>
+
+	    </itemizedlist>	    
+
+	    </para></listitem>
+	  </itemizedlist>	    
+	  </para></listitem>
+
+	  <listitem><para>Web Interface:
+	  <itemizedlist>
+
+ 	    <listitem><para>
+	      Improve Performance of WebSites created with OpenACS:
+	      e.g. move core.js to a body requests, provide kernel
+	      parameter ResourcesExpireInterval to specify expiration
+	      times for resources.
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      Much better protection against XSS attacks.
+	    </para></listitem>
+	    
+ 	    <listitem><para>
+	      Improved HTML validity (especially for admin pages)
+	    </para></listitem>
+
+	    <listitem><para>
+	      Improved admin interface:
+	      <itemizedlist>
+	      	
+		<listitem><para>
+		  Placed all installation options to a single page.
+		</para></listitem>
+
+		<listitem><para>
+		  Added pagination to /admin/applications (was unusable
+		  for large sites)
+		</para></listitem>
+
+		<listitem><para>
+		  New admin pages for subsites linked from
+		  site-wide-admin package (/acs-admin).
+		</para></listitem>
+
+		<listitem><para>
+		  Added explanatory text to several admin pages.
+		</para></listitem>
+
+	      </itemizedlist>
+	    </para></listitem>
+
+ 	    <listitem><para> Add lightweight support for ckeditor4 for
+ 	    templating::richtext widget (configurable via package
+ 	    parameter "RichTextEditor" of acs-templating. ckeditor4
+ 	    supports mobile devices (such as iPad, ...)
+ 	    </para></listitem>
+	  </itemizedlist>
+	  </para></listitem>
+
+	  <listitem><para>Templating:
+	  <itemizedlist>
+
+ 	    <listitem><para>
+	      Improved theme-ability: Moved more information into theme
+	      packages in order to create responsive designs, reduce
+	      hard-coding of paths, HTML etc.
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      Improved include-handling: All includes are now
+	      theme-able, interfaces of includes can be defined with
+	      "ad_include_contract" (similar to ad_page_contract).
+	    </para></listitem>
+
+	    <listitem><para>
+	      Improved them-ability for display_templates. One can now
+	      provide a display_template_name (similar to the sql
+	      statement name) to refer to display templates. This
+	      enables reusability and is theme-able.
+	    </para></listitem>
+
+	    <listitem><para> Dimensional slider reform (ad_dimensional):
+ 	    Removed hard-coded table layout from dimensional slider. Add
+ 	    backwards compatible templates Move hard-coded styles into
+ 	    theme styling </para></listitem>
+
+	    <listitem><para>
+	      Notification chunks are now theme-able as well (using ad_include_contrat)
+	    </para></listitem>
+
+	    <listitem><para>
+	      Complete template variable suffixes (adding noi18n,
+	      addressing bug #2692, full list is now: noquote, noi18n, literal)
+	    </para></listitem>
+
+	    <listitem><para>
+	      Added timeout and configurable secrets for signed url
+	      parameters to export_vars/page_contracts.
+	      This can be used to secure sensitive operations
+	      such as granting permissions since a link can be set to
+	      timeout after e.g. 60 seconds; after that, the link is
+	      invalid. A secret (password) can be set in section
+	      ns/server/$server/acs parameter "parametersecret".
+	      
+	      For example, one can use now "user_id:sign(max_age=60)" in
+	      export_vars to let the exported variable expire after 60 seconds.
+	    </para></listitem>
+	    
+	  </itemizedlist>
+	  </para></listitem>
+
+	  
+	  <listitem><para>Misc:
+	  <itemizedlist>
+	    <listitem><para>
+	      Added ability to show ns_log statements of current request
+	      to developer support output when developer support is
+	      activated (controlled via package parameter "TclTraceLogServerities"
+	      in the acs-tcl package parameters)
+	    </para></listitem>
+
+	    <listitem><para>
+	      Added ability to save data sent by
+	      ns_return in files on the file system. This can be used to
+	      validate HTML content also for password protected pages
+	      (controlled via package parameter "TclTraceSaveNsReturn" in
+	      the acs-tcl package parameters)
+	    </para></listitem>
+	    
+	    <listitem><para>
+	      New api function "ad_log" having the same interface as
+	      ns_log, but which logs the calling information (like URL
+	      and call-stack) to ease tracking of errors.
+	    </para></listitem>	  
+
+	    <listitem><para> Use per-thread caching to reduce number of
+	    mutex lock operations and lock contention on various caches
+	    (util-memoize, xo_site_nodes, xotcl_object_types) and nsvs
+	    (e.g ds_properties) </para></listitem>
+	    
+ 	    <listitem><para>
+	      Improved templating of OpenACS core documentation
+	    </para></listitem>
+
+	    <listitem><para>
+	      Improved Russian Internationalization
+	    </para></listitem>
+	    
+ 	    <listitem><para>
+	      Make pretty-names of acs-core packages more consistent
+	    </para></listitem>
+
+	    <listitem><para>
+	      Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as deprecated
+	    </para></listitem>
+
+	    <listitem><para>
+	      Many more bug fixes (from bug tracker and extra) and
+	      performance improvements.
+	    </para></listitem>
+
+	    
+ 	    <listitem><para>
+	      Version numbers:
+	      <itemizedlist>
+		<listitem><para>
+		  Require PostgreSQL 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)
+		</para></listitem>
+
+		<listitem><para>
+		  Require XOTcl 2.0 (presented at the Tcl conference in 2011). 
+		</para></listitem>
+
+	      </itemizedlist>
+ 	    </para></listitem>
+	  </itemizedlist>
+	  </para></listitem>
+	  
+	  <listitem><para>Changes in application packages:
+	  <itemizedlist>
+	    <listitem><para>
+	      Various bug
+	      fixes and improvements for e.g. file-storage, forums, news,
+	      notifications, xowiki.
+	    </para></listitem>
+	  </itemizedlist>
+	  </para></listitem>
+	</itemizedlist>
+      </para> </listitem>
+    </itemizedlist>
+    
+    <para> Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 by the
+    following statistics
+    <programlisting>
+      3658 files changed, 120800 insertions(+), 97617 deletions(-)
+    </programlisting>
+    contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf Neumann, Antonio Pisano) and
+    patch/bugfix providers (Frank Bergmann, Andrew Helsley, Felix
+    Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).
+    These are significantly more  changes as the differences
+    in the last releases. All packages of the release were tested with
+    PostgreSQL 9.4.* and Tcl 8.5.*.
+    </para>
+    <para>
+    For more details, consult the
+    <ulink href="http://openacs.org/changelogs/ChangeLog-5.9.0">raw ChangeLog</ulink>.
+    </para>
+  </sect2>
+
+
+
+  <sect2  id="release-notes-5-8-1">
+    <title>Release 5.8.1</title>
+    <itemizedlist>
+      <listitem><para>
+	The release contains the 78 packages of the oacs-5-8 branch.
+	These packages contain the OpenACS core packages, major
+	application packages (e.g. most the ones used on OpenACS.org), and
+	DotLRN.
+      </para></listitem>
+
+      <listitem><para>
+	All packages have the following properties:
+	<itemizedlist>
+	  <listitem><para>SQL:
+	  <itemizedlist>
+
+	    <listitem><para>
+	      All packages are PostgreSQL 9.1+ compatible 
+	      (tested with PostgreSQL 9.3)
+	    </para></listitem>
+
+	    <listitem><para>
+	      All SQL files with stored procedures use the
+	      recommended $$ quoting
+	    </para></listitem>
+
+	    <listitem><para>
+	      All SQL-functions have regular function arguments
+	      instead of the old-style aliases
+	    </para></listitem>
+
+	    <listitem><para>
+	      The function_args() (query-able meta-data) are
+	      completed and fixed
+	    </para></listitem>
+
+	    <listitem><para>
+	      Incompatible functions (e.g. for sequences) are
+	      replaced.
+	    </para></listitem>
+	  </itemizedlist>	    
+	  </para></listitem>
+
+	  <listitem><para>Tcl:
+	  <itemizedlist>
+
+ 	    <listitem><para>
+	      All packages were brought up Tcl 8.5, including
+	      the actual Tcl idioms where appropriate (e.g.
+	      using the safer expand operator, range indices,
+	      dict, lassign, etc.)
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      The code was updated to prefer byte-compiled functions
+	      instead of legacy functions from ancient Tcl versions.
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      The code works with NaviServer and AOLserver.
+	    </para></listitem>
+	  </itemizedlist>
+	  </para></listitem>
+
+	  <listitem><para>API:
+	  <itemizedlist>
+
+ 	    <listitem><para>
+	      All packages are free from calls to deprecated code
+	      (157 functions are marked as deprecated and will be
+	      moved into an "outdated" package in the 5.9 or 6.0
+	      release)
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      General overhaul of package management
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      Install-from-local and install-from-repository can be used
+	      to install the provided packages based on a acs-core
+	      installation. This means that also DotLRN can be
+	      installed from repository or from
+	      local into an existing OpenACS instance.
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      Install-from-repository offers filtering functions, allows
+	      to install optionally from head-channel (for packages
+	      not in the base channel of the installed instance).
+	      Install-from-repository works more like an app-store,
+	      showing as well vendor information
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      Packages can be equipped with xml-based configuration files
+	      (e.g. changing parameters for style packages)
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      Package developers can upload .apm packages via workflow
+	      for review by core members and for inclusion to the
+	      repository. The option is integrated with package
+	      management, the link is offered for local packages.
+	      We hope to attract additional vendors (universities,
+	      companies) to make their packages available on this
+	      path.
+	    </para></listitem>
+
+ 	    <listitem><para>
+	      New management-functions for package instances
+	      (list, create, delete package instances)
+	    </para></listitem>
+	    
+ 	    <listitem><para>
+	      Substantially improved API browser:
+	      <itemizedlist>
+ 		<listitem><para>
+		  Show just relevant parts of .xql files for a function
+		</para></listitem>
+
+ 		<listitem><para>
+		  Provide syntax-highlighting for www scripts as well
+		</para></listitem>
+
+ 		<listitem><para>
+		  Handle more special cases like e.g. util_memoize
+		</para></listitem>
+
+ 		<listitem><para>
+		  Provide links to Tcl functions depending on the installed
+		  Tcl version
+		</para></listitem>
+
+ 		<listitem><para>
+		  Provide links to NaviServer or OpenACS functions depending
+		  on installed version
+		</para></listitem>
+
+ 		<listitem><para>
+		  Syntax highlighter uses CSS rather than hard-coded markup
+		</para></listitem>
+
+ 		<listitem><para>
+		  Significant performance improvement for large
+		  installations
+		</para></listitem>
+	      </itemizedlist>
+ 	    </para></listitem>
+	  </itemizedlist>
+	  </para></listitem>
+	</itemizedlist>
+      </para> </listitem>
+    </itemizedlist>
+    <para> Altogether, OpenACS 5.8.1 differs from OpenACS 5.8.0 in
+    about 100,000 modifications (6145 commits) contributed by 5
+    committers.
+    </para>
+  </sect2>
 
   <sect2  id="release-notes-5-8-0">
     <title>Release 5.8.0</title>
     <itemizedlist>
       <listitem><para>
-	  Compatibility with PostgreSQL 9.2:
-	  The new version installs without any need for special parameter
-	  settings in new PostgreSQL versions. This makes it easier to use
-	  e.g. shared or packaged PostgreSQL installations.
+	Compatibility with PostgreSQL 9.2:
+	The new version installs without any need for special parameter
+	settings in new PostgreSQL versions. This makes it easier to use
+	e.g. shared or packaged PostgreSQL installations.
       </para></listitem>
       <listitem><para>Compatibility with NaviServer 4.99.5 or newer</para></listitem>
       <listitem><para>Performance and scalability improvements</para></listitem>
@@ -488,20 +1556,20 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
     </para>
 
   </sect2>
-    
+  
   <sect2 id="release-notes-5-7-0">
     <title>Release 5.7.0</title>
     <itemizedlist>
       <listitem>
         <para>
-          Made changes that extend acs-kernel's create_type and create_attribute procs,
-          so they're optionally able to create sql tables and columns.  Optional metadata
+          Made changes that extend acs-kernel&#39;s create_type and create_attribute procs,
+          so they&#39;re optionally able to create sql tables and columns.  Optional metadata
           params allow for the automatic generation of foreign key references, check
           exprs, etc.
         </para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
 
   <sect2 id="release-notes-5-6-0">
@@ -512,13 +1580,13 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
           Added new package dependency type, "embeds".  This is a variant of the
           "extends" package dependency type added in OpenACS 5.5.0.  It allows one
           to write embeddable packages, with scripts made visible in client packages
-          using URLs which include the embedded package's package key.  An example
+          using URLs which include the embedded package&#39;s package key.  An example
           embeddable package might be a rewritten "attachments" package.  The current
           implementation requires a global instance be mounted, and client packages
           generate urls to that global instance.  Among other things, this leads to
           the user navigating to the top-level subsite, losing any subsite theming
           that might be associated with a community.  Using "embeds", a rewritten
-          package would run in the client package's context, maintaining theming and
+          package would run in the client package&#39;s context, maintaining theming and
           automatically associating attachments with the client package.
         </para>
         <para>
@@ -544,18 +1612,18 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
           Support for 3-chars language codes in acs-lang
         </para>
         <para>
-         Added OOXML mime types in acs-content-repository
+          Added OOXML mime types in acs-content-repository
         </para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-5-0">
     <title>Release 5.5.0</title>
     <itemizedlist>
       <listitem>
         <para>PostgreSQL 8.3 is now fully supported, including the use of the built-in
-          standard version of tsearch2.
+        standard version of tsearch2.
         </para>
         <para>TinyMCE has been upgraded to 3.2.4.1 with language pack support.
         </para>
@@ -569,9 +1637,9 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
           combines the semantics of both.
         </para>
         <para>
-           Added new package attribute "implements-subsite-p" (default "f").  If true,
-           this package may be mounted as a subsite and is expected to implement subsite
-           semantics.  Typically used by packages which extend acs-subsite.
+          Added new package attribute "implements-subsite-p" (default "f").  If true,
+          this package may be mounted as a subsite and is expected to implement subsite
+          semantics.  Typically used by packages which extend acs-subsite.
         </para>
         <para>
           Added new package attribute "inherit-templates-p" (default "t").  If true,
@@ -603,7 +1671,7 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
         </para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-4-2">
     <title>Release 5.4.2</title>
@@ -611,12 +1679,12 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
       <listitem>
         <para>This is a minor bugfix release.
         </para>
-        <para>Site node caching was removed as doesn't work correctly</para>
+        <para>Site node caching was removed as doesn&#39;t work correctly</para>
         <para>Critical issues with search on oracle were fixed</para>
         <para>More html strict work etc</para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
 
   <sect2 id="release-notes-5-4-1">
@@ -624,10 +1692,10 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
     <itemizedlist>
       <listitem>
         <para>This is a minor bugfix release.
-              </para>
+        </para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
 
   <sect2 id="release-notes-5-4-0">
@@ -635,24 +1703,24 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
     <itemizedlist>
       <listitem>
         <para>New Templating API added to add scripts, css, etc to the HTML HEAD and BODY 
-              sections of the generated HTML document.  Please see 
-              /packages/acs-templating/tcl/head-procs.tcl or visit the template::head procs
-              in the API browser for details.
-              </para>
+        sections of the generated HTML document.  Please see 
+        /packages/acs-templating/tcl/head-procs.tcl or visit the template::head procs
+        in the API browser for details.
+        </para>
         <para>Templates have been modified to comply with HTML strict</para>
-        <para>The Search package's results page has been improved</para>
+        <para>The Search package&#39;s results page has been improved</para>
         <para>TinyMCE WYSIWYG support has been added, RTE and HTMLArea support dropped</para>
-        <para>acs-mail-lite's send has been cleaned up to properly encode content, to handle
-              file attachments, etc.  "complex-send" will disappear from acs-core in a future
-              release.</para>
+        <para>acs-mail-lite&#39;s send has been cleaned up to properly encode content, to handle
+        file attachments, etc.  "complex-send" will disappear from acs-core in a future
+        release.</para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
 
-<para>The ChangeLogs include an annotated list of changes (<xref
-linkend="changelog-latest"></xref>) since the last release and in the
-entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
+  <para>The ChangeLogs include an annotated list of changes (<xref
+  linkend="changelog-latest"></xref>) since the last release and in the
+  entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
   <sect2 id="release-notes-5-3-1">
     <title>Release 5.3.1</title>
@@ -662,15 +1730,15 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         <para>New TIPs implemented.</para>
         <para>All Core Automated Tests for Postgres pass.</para>
         <para>New Site and Blank master templates and CSS compatible with the .LRN Zen
-              work.  Compatibility master templates are provided for existing sites.</para>
+        work.  Compatibility master templates are provided for existing sites.</para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
 
-<para>The ChangeLogs include an annotated list of changes (<xref
-linkend="changelog-latest"></xref>) since the last release and in the
-entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
+  <para>The ChangeLogs include an annotated list of changes (<xref
+  linkend="changelog-latest"></xref>) since the last release and in the
+  entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
   <sect2 id="release-notes-5-3-0">
     <title>Release 5.3.0</title>
@@ -681,7 +1749,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         <para>All Core Automated Tests for Postgres pass.</para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-2-0">
     <title>Release 5.2.0</title>
@@ -692,7 +1760,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         <para>This release does <emphasis role="strong">not</emphasis> include new translations.</para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-1-4">
     <title>Release 5.1.4</title>
@@ -704,7 +1772,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         <para>This release does <emphasis role="strong">not</emphasis> include new translations.</para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-1-3">
     <title>Release 5.1.3</title>
@@ -714,7 +1782,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         </para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-1-2">
     <title>Release 5.1.2</title>
@@ -726,10 +1794,10 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
       </listitem>
       <listitem>
         <para>For a complete change list, see the  Change list since
-          5.1.0 in <xref linkend="changelog"></xref>.</para>
+        5.1.0 in <xref linkend="changelog"></xref>.</para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-1-1">
     <title>Release 5.1.1</title>
@@ -743,133 +1811,133 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
       </listitem>
       <listitem>
         <para><ulink url="
-            http://openacs.org/bugtracker/openacs/com/acs-lang/bug?bug%5fnumber=1519">Bug
-            1519</ulink> fixed.  This involved renaming all catalog
-          files for ch_ZH, TH_TH, AR_EG, AR_LB, ms_my, RO_RO, FA_IR,
-          and HR_HR.  If you work with any of those locales, you
-          should do a full catalog export and then import (via
-          <ulink url="/acs-lang/admin">/acs-lang/admin</ulink>) after
-          upgrading acs-lang.  (And, of course, make a backup of both
-          the files and database before upgrading.)</para>
+			  http://openacs.org/bugtracker/openacs/com/acs-lang/bug?bug%5fnumber=1519">Bug
+        1519</ulink> fixed.  This involved renaming all catalog
+        files for ch_ZH, TH_TH, AR_EG, AR_LB, ms_my, RO_RO, FA_IR,
+        and HR_HR.  If you work with any of those locales, you
+        should do a full catalog export and then import (via
+        <ulink url="/acs-lang/admin">/acs-lang/admin</ulink>) after
+        upgrading acs-lang.  (And, of course, make a backup of both
+        the files and database before upgrading.)</para>
       </listitem>
       <listitem>
         <para>Other bug fixes since 5.1.0: <ulink
-            url="http://openacs.org/bugtracker/openacs/bug?bug_number=1785">1785</ulink>,
-          <ulink
-            url="http://openacs.org/bugtracker/openacs/bug?bug_number=1793">1793</ulink>,
-      and over a dozen additional bug fixes.</para>
+        url="http://openacs.org/bugtracker/openacs/bug?bug_number=1785">1785</ulink>,
+        <ulink
+	    url="http://openacs.org/bugtracker/openacs/bug?bug_number=1793">1793</ulink>,
+	and over a dozen additional bug fixes.</para>
       </listitem>
       <listitem>
         <para>For a complete change list, see the  Change list since
-          5.0.0 in <xref linkend="changelog"></xref>.</para>
+        5.0.0 in <xref linkend="changelog"></xref>.</para>
       </listitem>
     </itemizedlist>
-   </sect2>
+  </sect2>
 
 
-   <sect2 id="release-notes-5-1-0">
-     <title>Release 5.1.0</title>
- 
-       <itemizedlist>
-         <listitem>
+  <sect2 id="release-notes-5-1-0">
+    <title>Release 5.1.0</title>
+    
+    <itemizedlist>
+      <listitem>
         <para>Lots of little tweaks and fixes</para>
       </listitem>
       <listitem>
-          <para>Complete Change list since 5.0.0 in Changelog</para>
+        <para>Complete Change list since 5.0.0 in Changelog</para>
       </listitem>
       <listitem><para><ulink
-      url="http://openacs.org/bugtracker/openacs/core?filter%2efix%5ffor%5fversion=125273&amp;filter%2estatus=closed">Many Bug fixes</ulink></para>
-      </listitem></itemizedlist>
-   </sect2>
+			  url="http://openacs.org/bugtracker/openacs/core?filter%2efix%5ffor%5fversion=125273&amp;filter%2estatus=closed">Many Bug fixes</ulink></para>
+    </listitem></itemizedlist>
+  </sect2>
 
   <sect2 id="release-notes-5-0-4">
     <title>Release 5.0.4</title>
 
-      <itemizedlist>
-        <listitem>
+    <itemizedlist>
+      <listitem>
         <para>New translations, including for .LRN 2.0.2.</para>
-        </listitem>
+      </listitem>
     </itemizedlist>
-    </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-0-3">
     <title>Release 5.0.3</title>
 
-      <itemizedlist>
-        <listitem>
+    <itemizedlist>
+      <listitem>
         <para>Bug fixes: <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1560">1560</ulink>, <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1556">#1556. Site becomes unresponsive, requires restart</ulink></para>
-        </listitem>
+      </listitem>
     </itemizedlist>
-    </sect2>
+  </sect2>
 
 
   <sect2 id="release-notes-5-0-2">
     <title>Release 5.0.2</title>
 
-      <itemizedlist>
-        <listitem>
+    <itemizedlist>
+      <listitem>
         <para>Bug fixes: <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1495">#1495. Croatian enabled by default</ulink>, <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1496">#1496. APM automated install fails if files have spaces in their names</ulink>, <ulink url="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=1494">#1494. automated upgrade crashes (halting the upgrade process)</ulink></para>
-        </listitem>
-        <listitem>
-          <para>Complete Change list since 5.0.0 in Changelog</para>
-        </listitem>
-        <listitem>
+      </listitem>
+      <listitem>
+        <para>Complete Change list since 5.0.0 in Changelog</para>
+      </listitem>
+      <listitem>
         <para>File tagging scheme in CVS changed to follow <ulink url="http://openacs.org/forums/message-view?message_id=161375">TIP #46: (Approved) Rules for Version Numbering and CVS tagging of Packages</ulink></para>
-        </listitem>
+      </listitem>
     </itemizedlist>
-    </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-0-1">
     <title>Release 5.0.1</title>
-      <itemizedlist>
-        <listitem>
-          <para>All work on the translation server from 7 Nov 2003 to 7 Feb 2004 is now included in catalogs.</para>
-        </listitem>
-        <listitem>
-          <para>One new function in acs-tcl, util::age_pretty</para>
-        </listitem>
-        <listitem>
-          <para>Complete Change list since 5.0.0 in Changelog</para>
-        </listitem>
-        <listitem>
-          <para>Many documentation updates and doc bug fixes </para>
-        </listitem>
+    <itemizedlist>
+      <listitem>
+        <para>All work on the translation server from 7 Nov 2003 to 7 Feb 2004 is now included in catalogs.</para>
+      </listitem>
+      <listitem>
+        <para>One new function in acs-tcl, util::age_pretty</para>
+      </listitem>
+      <listitem>
+        <para>Complete Change list since 5.0.0 in Changelog</para>
+      </listitem>
+      <listitem>
+        <para>Many documentation updates and doc bug fixes </para>
+      </listitem>
     </itemizedlist>
-    </sect2>
+  </sect2>
 
   <sect2 id="release-notes-5-0-0">
     <title>Release 5.0.0</title>
 
     <para>
-        This is OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  This release contains work done on the translation server http://translate.openacs.org through 7 Nov 2003.  
-  </para>
+      This is OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  This release contains work done on the translation server http://translate.openacs.org through 7 Nov 2003.  
+    </para>
     
     <para>
-        Please report bugs using our
-        <ulink url="http://openacs.org/bugtracker/openacs/">
-          Bug Tracker</ulink> at the <ulink
-          url="http://openacs.org/">OpenACS website</ulink>.
-  </para>
+      Please report bugs using our
+      <ulink url="http://openacs.org/bugtracker/openacs/">
+        Bug Tracker</ulink> at the <ulink
+        url="http://openacs.org/">OpenACS website</ulink>.
+    </para>
     
-  <para>
-        You may want to begin by reading our installation documentation for
-        <xref linkend="unix-install"/>.  Note that the Windows documentation is
-        not current for OpenACS &version;, but an alternative is to use John
-        Sequeira's <ulink
-        url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
-        project</ulink>.
-  </para>
+    <para>
+      You may want to begin by reading our installation documentation for
+      <xref linkend="unix-install"/>.  Note that the Windows documentation is
+      not current for OpenACS &version;, but an alternative is to use John
+      Sequeira&#39;s <ulink
+      url="http://www.jsequeira.com/oasis/about.html">Oasis VM
+      project</ulink>.
+    </para>
     
-  <para>
-        After installation, the full documentation set can be found by visiting
-        <filename>http://yourserver/doc</filename>.
-  </para>
+    <para>
+      After installation, the full documentation set can be found by visiting
+      <filename>http://yourserver/doc</filename>.
+    </para>
 
-  <para>
-        New features in this release:       
-  </para>
+    <para>
+      New features in this release:       
+    </para>
     
-  <itemizedlist>
+    <itemizedlist>
       <listitem>
         <para>
           Internationalization support. 
@@ -889,7 +1957,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
           authentication, password management, account creation, and account import mechanisms.
 
           This includes improvements to the basic cookie handling, so logins can be expired without the 
-          user's identity being completely lost. You can set login to expire after a certain period 
+          user&#39;s identity being completely lost. You can set login to expire after a certain period 
           (e.g. 8 hours, then password must be refreshed), or you can have all issues login cookies
           expired at once, e.g. if you have left a permanent login cookie on a public machine somewhere.
         </para>
@@ -907,12 +1975,12 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
           administration, your workspace, and login/logout, and is rendered
           using CSS.
 
-          And there's a new community template
+          And there&#39;s a new community template
           (/packages/acs-subsite/www/group-master), which provides useful
           navigation to the applications and administrative UI in a
           subsite.
 
-          In addition, there's new, simpler UI for managing members of a
+          In addition, there&#39;s new, simpler UI for managing members of a
           subsite, instantiating and mounting applications, setting
           permissions, parameters, etc.
 
@@ -923,7 +1991,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
           The list builder has been added for easily generating templated
           tables and lists, with features such as filtering, sorting,
-          actions on multiple rows with checkboxes, etc. Most of all, it's
+          actions on multiple rows with checkboxes, etc. Most of all, it&#39;s
           fast to use, and results in consistently-looking,
           consistently-behaving, templated tables.
         </para>
@@ -941,7 +2009,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
       <listitem>
         <para>
           Security enhancements. 
-  
+	  
           HTML quoting now happens in the templating system, greatly
           minimizing the chance that users can sneak malicious HTML
           into the pages of other users.
@@ -956,7 +2024,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
       <listitem>
         <para>
-          Who's online feature.
+          Who&#39;s online feature.
         </para>
       </listitem>
 
@@ -966,14 +2034,14 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         </para>
       </listitem>
 
-  </itemizedlist>
+    </itemizedlist>
 
 
-  <para>
-        Potential incompatibilities:
-  </para>
+    <para>
+      Potential incompatibilities:
+    </para>
 
-  <itemizedlist>
+    <itemizedlist>
       <listitem>
         <para>
           With the release of OpenACS 5, PostgreSQL 7.2 is no longer supported.
@@ -984,27 +2052,27 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
       <listitem>
         <para>
-           The undocumented special handling of ~ and +variable+ in
-           formtemplates, found in <filename>packages/acs-templating/resources/*</filename>,
-           has been removed in favor of using &lt;noparse&gt; and
-           \@variable\@ (the standard templating mechanisms).  Locally
-           provided formtemplate styles still using these mechanisms
-           will break.
+          The undocumented special handling of ~ and +variable+ in
+          formtemplates, found in <filename>packages/acs-templating/resources/*</filename>,
+          has been removed in favor of using &lt;noparse&gt; and
+          \@variable\@ (the standard templating mechanisms).  Locally
+          provided formtemplate styles still using these mechanisms
+          will break.
         </para>
       </listitem>
 
       <listitem>
         <para>
-           Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
-                ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
+          Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
+          ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
         </para>
       </listitem>
 
-  </itemizedlist>
+    </itemizedlist>
 
 
 
-  <para><phrase role="cvstag">($Id$)</phrase></para>
+    <para><phrase role="cvstag">($Id$)</phrase></para>
   </sect2>
 
 
@@ -1029,27 +2097,27 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
     <para><ulink url="release-notes-4-5.html">Release Notes for 4.5</ulink></para>
   </sect2>
 
-<!-- skipping next sect2 id=changelog-latest until after 5.2.0; since the changelog resets with 
-     minor releases, changelog-latest = changelog
--->
+  <!-- skipping next sect2 id=changelog-latest until after 5.2.0; since the changelog resets with 
+       minor releases, changelog-latest = changelog
+  -->
 
-<!--
-     <sect2 id="changelog-latest">
-       <title>Changelog (most recent release only)</title>
-       <programlisting><xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
-     </sect2>
--->
+  <!--
+      <sect2 id="changelog-latest">
+      <title>Changelog (most recent release only)</title>
+      <programlisting><xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
+      </sect2>
+  -->
 
-<!-- &lt;if&gt; needs to be escaped, such as in changelog enteries 
-     before processing will validate
--->
-<!--
-  <sect2 id="changelog">
-    <title>Changelog for &releasebranch;</title>
-<programlisting>
-<xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include>
-</programlisting>
-  </sect2>
--->
+  <!-- &lt;if&gt; needs to be escaped, such as in changelog enteries 
+       before processing will validate
+  -->
+  <!--
+      <sect2 id="changelog">
+      <title>Changelog for &releasebranch;</title>
+      <programlisting>
+      <xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include>
+      </programlisting>
+      </sect2>
+  -->
 
 </sect1>

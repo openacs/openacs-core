@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="search" locale="it_IT" charset="ISO-8859-1">
+
+  <msg key="________Search_took">. La ricerca ha impiegato</msg>
+  <msg key="Advanced_Search">Ricerca Avanzata</msg>
+  <msg key="advanced_search">&#34;ricerca avanzata&#34;</msg>
+  <msg key="anytime">in qualunque momento</msg>
+  <msg key="Date_Range">Range di Date</msg>
+  <msg key="details">dettagli</msg>
+  <msg key="Enter_keywords_to_search_for">Inserisci delle parole chiave per cercare</msg>
+  <msg key="Feeling_Lucky">Mi Sento Fortunato</msg>
+  <msg key="lt_bstopwordsb_is_a_very">&#34;&lt;b&gt;%stopwords%&lt;/b&gt;&#34; è una parola molto comune e non è stata inclusa nella tua ricerca.</msg>
+  <msg key="lt_FtsEngineDriver_not_a">FtsEngineDriver non disponibile!</msg>
+  <msg key="lt_Make_sure_all_words_a">Assicurati che tutte le parole siano digitate correttamente</msg>
+  <msg key="lt_No_pages_were_found_c">Nessuna pagina è stata trovata contenente &#34;</msg>
+  <msg key="lt_The_following_words_a">Le seguenti parole sono molto comuni e non sono state incluse nella tua ricerca:</msg>
+  <msg key="lt_Tip_In_most_browsers_">Suggerimento: in molti browser puoi premere il tasto invio invece di cliccare il pulsante di ricerca.</msg>
+  <msg key="lt_Try_different_keyword">Prova parole chiave differenti.</msg>
+  <msg key="lt_Try_more_general_keyw">Prova parole chiave più generiche.</msg>
+  <msg key="lt_Try_your_query_on_stw">Prova la tua query su: %stw;noquote%</msg>
+  <msg key="lt_You_must_specify_some">Devi specificare qualche parola chiave</msg>
+  <msg key="nbspDisplay">&amp;nbsp;Mostra</msg>
+  <msg key="Next">Prossima</msg>
+  <msg key="of_about">di circa</msg>
+  <msg key="past_3_months">scorsi 3 mesi</msg>
+  <msg key="past_6_months">scorsi 6 mesi</msg>
+  <msg key="past_year">l&#39;anno scorso</msg>
+  <msg key="Previous">Precedente</msg>
+  <msg key="Result_page">Pagina di risultato:</msg>
+  <msg key="Results">Risultati</msg>
+  <msg key="results">risultati</msg>
+  <msg key="Search">Cerca</msg>
+  <msg key="Searched_for_query">Risultati di ricerca per &lt;strong&gt;%query%&lt;/strong&gt;</msg>
+  <msg key="seconds">secondi.</msg>
+  <msg key="selected">selezionato</msg>
+  <msg key="Suggestions">Suggerimenti:</msg>
+  <msg key="The">l&#39;operatore &#34;&lt;b&gt;AND&lt;/b&gt;&#34; non è necessario -- includiamo già  tutti i termini di ricerca per default.</msg>
+  <msg key="Try_fewer_keywords">Prova meno parole chiave.</msg>
+  <msg key="Untitled">Senza Titolo</msg>
+</message_catalog>

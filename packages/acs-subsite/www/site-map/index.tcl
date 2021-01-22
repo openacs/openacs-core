@@ -26,16 +26,12 @@ array set node [site_node::get -node_id $root_id]
 set parent_id $node(parent_id)
 set object_id $node(object_id)
 
-if {$new_parent ne ""} {
-    set javascript "onLoad=\"javascript:document.new_parent.name.focus();document.new_parent.name.select()\""
-} elseif {$new_application ne ""} {
-    set javascript "onLoad=\"javascript:document.new_application.instance_name.focus();document.new_application.instance_name.select()\""
-} elseif {$rename_application ne ""} {
-   set javascript "onLoad=\"javascript:document.rename_application.instance_name.focus();document.rename_application.instance_name.select()\""
-} else {
-    set javascript ""
-}
-set javascript "onload=\"javascript:document.check_checkbox()\""
+# template::add_body_script -script {
+#     function check_checkbox () {
+#         window.document.nodes.node_id.checked = 'true';
+#     }
+# }
+# template::add_body_handler -event onload -script "check_checkbox();"
 
 
 set parent_link [export_vars -base . {expand:multiple {root_id $parent_id}}]
@@ -144,7 +140,7 @@ db_foreach nodes_select {} {
     set parameters_url ""
     set permissions_url ""
 
-    if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id ne "" && $mylevel > 2 } { continue } 
+    if { $parent_id ni $open_nodes && $parent_id ne "" && $mylevel > 2 } { continue } 
         
     if {$directory_p == "t"} {
 	set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
@@ -211,7 +207,7 @@ db_foreach nodes_select {} {
 	
 	lappend urlvars "root_id=$root_id"
 	
-	set expand_url "[join $urlvars "&"]"
+	set expand_url [join $urlvars "&"]
     } else {
 	set expand_url ""
     }
@@ -225,7 +221,7 @@ db_foreach nodes_select {} {
 	if {$new_application == $node_id} {
 	    
 	    set action_type "new_app"
-	    set action_form_part "[export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]"
+	    set action_form_part [export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]
 	    
 	    #Generate a package_id for double click protection
 	    set new_package_id [db_nextval acs_object_id_seq]

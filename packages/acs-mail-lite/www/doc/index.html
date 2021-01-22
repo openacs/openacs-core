@@ -17,12 +17,12 @@ If the sending fails, the mail will be placed in the outgoing queue
 again and be given another try a few minutes later when processing
 the queue again.
 <p>
-Each email contains an X-Envelope-From adress constructed as
+Each email contains an X-Envelope-From address constructed as
 follows:<br>
-The adress starts with "bounce" (can be changed by a parameter)
+The address starts with "bounce" (can be changed by a parameter)
 followed by the user_id, a hashkey and the package_id of the
 package instance that sent the email, separated by "-". The
-domain name of this adress can be changed with a parameter.
+domain name of this address can be changed with a parameter.
 <p>
 The system checks every 2 minutes (configurable) in a certain
 maildirectory (configurable) for newly bounced emails, so the
@@ -32,7 +32,7 @@ directory. The system then processes each of the bounced emails,
 strips out the message_id and verifies the hashkey in the bounce-address.
 After that the package-key of the package sending the original mail
 is found out by using the package_id provided in the bounce
-adress. With that, the system then tries to invoke a callback
+address. With that, the system then tries to invoke a callback
 procedure via a service contract if one is registered for that
 particular package-key. This enables each package to deal with
 bouncing mails on their own - probably logging this in special tables.

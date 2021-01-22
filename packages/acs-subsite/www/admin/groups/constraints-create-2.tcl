@@ -13,7 +13,7 @@ ad_page_contract {
     group_id:notnull,naturalnum
     rel_type:notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 set operation [string trim [string tolower $operation]]

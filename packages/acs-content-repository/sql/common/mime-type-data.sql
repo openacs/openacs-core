@@ -5,15 +5,15 @@
 --
 -- data assembly Jeff Davis davis@xarg.net 
 
--- Here are Mime types + text description + cannonical extension
+-- Here are Mime types + text description + canonical extension
 --
 -- mapping of extension to mime type done later.
 
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Unkown'                  , '*/*'                           , '' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Unknown'                 , '*/*'                           , '' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'AutoCAD drawing files'   , 'application/acad'              , 'dwg' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Andrew data stream'      , 'application/andrew-inset'      , 'ez' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'ClarisCAD files'         , 'application/clariscad'         , 'ccad' );
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - Comma separated value'   , 'application/csv'               , 'csv' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - Comma separated value', 'text/csv'                  , 'csv' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'MATRA Prelude drafting'  , 'application/drafting'          , 'drw' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'DXF (AutoCAD)'           , 'application/dxf'               , 'dxf' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Filemaker Pro'           , 'application/filemaker'         , 'fm' );
@@ -29,7 +29,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'PDF'       
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'PostScript'              , 'application/postscript'        , 'ps' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'RTF - Rich Text Format'  , 'application/rtf'               , 'rtf' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Stereolithography'       , 'application/sla'               , 'stl');
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'VCard'                   , 'application/vcard'             , 'vcf');
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'VCard'                   , 'text/vcard'                    , 'vcf');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'VDA-FS Surface data'     , 'application/vda'               , 'vda');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'SSOYE Koan Files'        , 'application/vnd.koan'          , 'skp');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'FrameMaker MIF format'   , 'application/vnd.mif'           , 'mif' );
@@ -56,12 +56,12 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive Deb
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Macromedia Director'     , 'application/x-director'        , 'dxr' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'TeX DVI file'            , 'application/x-dvi'             , 'dvi' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive GNU Tar'         , 'application/x-gtar'            , 'gtar');
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive gzip compressed' , 'application/x-gzip'            , 'gz' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive gzip compressed' , 'application/gzip'              , 'gz' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'CGI Script'              , 'application/x-httpd-cgi'       , 'cgi');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Adobe Illustrator'       , 'application/x-illustrator'     , 'ai' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Installshield data'      , 'application/x-installshield'   , 'wis');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Java Network Launching Protocol', 'application/x-java-jnlp-file', 'jnlp');
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Javascript'              , 'application/x-javascript'      , 'js' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Javascript'              , 'application/javascript'        , 'js' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'LaTeX source'            , 'application/x-latex'           , 'latex' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Windows Media Services (wmd)', 'application/x-ms-wmd'      , 'wmd');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Windows Media Services (wmz)', 'application/x-ms-wmz'      , 'wmz');
@@ -74,7 +74,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Audio Real'
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Quattro Pro'             , 'application/x-quattro-pro'     , 'wq1');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive RAR'             , 'application/x-rar-compressed'  , 'rar');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Session Description Protocol', 'application/sdp'           , 'sdp' );
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Macromedia Shockwave'    , 'application/x-shockwave-flash' , 'swf' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Macromedia Shockwave'    , 'application/vnd.adobe.flash-movie', 'swf' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'SQL'                     , 'application/x-sql'             , 'sql' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive Mac Stuffit compressed'  , 'application/x-stuffit'         , 'sit' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive SVR4 cpio'       , 'application/x-sv4cpio'         , 'sv4cpio');
@@ -143,6 +143,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - XML 
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - Structured enhanced text', 'text/x-setext'                 , 'etx');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - XSL'              , 'text/xsl'                      , 'xsl' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Video FLI'               , 'video/fli'                     , 'fli');
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Video FLASH'             , 'video/x-flv'                   , 'flv');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Video MPEG'              , 'video/mpeg'                    , 'mpg' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Video MPEG-2'            , 'video/mpeg2'                   , 'mpv2' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Video Quicktime'         , 'video/quicktime'               , 'mov' );
@@ -177,6 +178,30 @@ insert into cr_mime_types (label,mime_type,file_extension) values ('SPPS data fi
 insert into cr_mime_types (label,mime_type,file_extension) values ('SPPS data file','application/x-spss-outputfile', 'spo');
 insert into cr_mime_types (label,mime_type,file_extension) values ('Video MP4', 'video/mp4', 'mp4');
 insert into cr_mime_types (label,mime_type,file_extension) values ('XPInstall', 'application/x-xpinstall', 'xpi'); 
+insert into cr_mime_types (label,mime_type,file_extension) values ('iCalendar'                , 'text/calendar'                  , 'ics'); 
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Microsoft Portable Executable'                 , 'application/vnd.microsoft.portable-executable'   , 'exe' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Virtue MTS'                                    , 'model/vnd.mts'                                   , 'mts' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Microsoft Document Imaging Format'             , 'image/vnd.ms-modi'                               , 'mdi' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'WSDL - Web Services Description Language'      , 'application/wsdl+xml'                            , 'wsdl' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'VPIM voice message'                            , 'multipart/voice-message'                         , 'vpm' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Mathematica Notebook Player'                   , 'application/vnd.wolfram.player'                  , 'nbp' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'SMART Notebook'                                , 'application/vnd.smart.notebook'                  , 'notebook' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Novadigm RADIA and EDM products'               , 'application/vnd.novadigm.ext'                    , 'ext' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Novadigm RADIA and EDM products'               , 'application/vnd.novadigm.edx'                    , 'edx' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Microsoft XML Paper Specification'             , 'application/vnd.ms-xpsdocument'                  , 'xps' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Microsoft Windows Media Player Playlist'       , 'application/vnd.ms-wpl'                          , 'wpl' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Microsoft Office System Release Theme'         , 'application/vnd.ms-officetheme'                  , 'thmx' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Lotus Wordpro'                                 , 'application/vnd.lotus-wordpro'                   , 'lwp' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'GeoGebra'                                      , 'application/vnd.geogebra.file'                   , 'ggb' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Forms Data Format'                             , 'application/vnd.fdf'                             , 'fdf' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Solids'                                        , 'application/solids'                              , 'sol' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Synchronized Multimedia Integration Language'  , 'application/smil+xml'                            , 'smi' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'PKCS #10 - Certification Request Standard'     , 'application/pkcs10'                              , 'p' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'OpenXPS'                                       , 'application/oxps'                                , 'oxps' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Mathematica Notebooks'                         , 'application/mathematica'                         , 'nb' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( ''                                              , 'application/base64'                              , 'mm' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'BioPAX OWL'                                    , 'application/vnd.biopax.rdf+xml'                  , 'owl' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Tcpdump Packet Capture'                        , 'application/vnd.tcpdump.pcap'                    , 'pcap' );
 
 -- Open Documents MIME types
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.text', 'odt', 'OpenDocument Text');
@@ -196,12 +221,12 @@ insert into cr_mime_types (mime_type, file_extension, label) values ('applicatio
 
 -- Open XML formats for MS-Office
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'xlsx', 'Microsoft Office Excel');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.spreadsheetml.template', 'xltx', 'Microsoft Office Excel Template');
+insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.spreadsheetml-template', 'xltx', 'Microsoft Office Excel Template');
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.presentationml.presentation', 'pptx', 'Microsoft Office PowerPoint Presentation');
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.presentationml.slideshow', 'ppsx', 'Microsoft Office PowerPoint Slideshow');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.presentationml.template', 'potx', 'Microsoft Office PowerPoint Template');
+insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.presentationml-template', 'potx', 'Microsoft Office PowerPoint Template');
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx', 'Microsoft Office Word');
-insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.wordprocessingml.template', 'dotx', 'Microsoft Office Word Template');
+insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.openxmlformats-officedocument.wordprocessingml-template', 'dotx', 'Microsoft Office Word Template');
 
 -- Extension to mime type maps.
 
@@ -235,7 +260,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'o','appl
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'so','application/octet-stream' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'a','application/octet-stream' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'dll','application/octet-stream' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'exe','application/octet-stream' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'exe','application/vnd.microsoft.portable-executable' );
 
 -- all the rest
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'aab','application/x-authorware-bin' );
@@ -263,7 +288,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'class','
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'cpio','application/x-cpio' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'cpt','application/mac-compactpro' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'css','text/css' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'csv','application/csv');
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'csv','text/csv');
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'cur','application/octet-stream' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'dcr','application/x-director' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'deb','application/x-debian-package' );
@@ -290,11 +315,12 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'fh','ima
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'fif','image/fif' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'fit','image/x-fits');
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'fli','video/fli' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'flv','video/x-flv' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'fm','application/filemaker');
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gif','image/gif' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gtar','application/x-gtar' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gz','application/x-gzip' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gzip','application/x-gzip' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gz','application/gzip' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gzip','application/gzip' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'hdf','application/hdf');
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'hqx','application/mac-binhex40' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'html','text/html' );
@@ -308,7 +334,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'jnlp','a
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'jpeg','image/jpeg' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'jpe','image/jpeg' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'jpg','image/jpeg' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'js','application/x-javascript' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'js','application/javascript' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'kar','audio/midi' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'latex','application/x-latex' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'lha','application/octet-stream' );
@@ -401,7 +427,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'stm','au
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'sv4cpio','application/x-sv4cpio' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'sv4crc','application/x-sv4crc' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'svg','image/svg+xml');
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'swf','application/x-shockwave-flash' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'swf','application/vnd.adobe.flash-movie' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 't','application/x-troff' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'tar','application/x-tar' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'tex','application/x-tex' );
@@ -417,7 +443,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ult','au
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ustar','application/x-ustar' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'uu','application/octet-stream' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vcd','application/x-cdlink' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vcf','application/vcard' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vcf','text/vcard' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vdo','video/vdo' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vda','application/vda' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vivo','video/vnd.vivo' );
@@ -476,6 +502,29 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ('sav', 'ap
 insert into cr_extension_mime_type_map (extension, mime_type) values ('spo', 'application/x-spss-outputfile');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('mp4', 'video/mp4');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('xpi', 'application/x-xpinstall');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('ics', 'text/calendar');
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'edx','application/vnd.novadigm.edx' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ext','application/vnd.novadigm.ext' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'fdf','application/vnd.fdf' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ggb','application/vnd.geogebra.file' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'lwp','application/vnd.lotus-wordpro' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mdi','image/vnd.ms-modi' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mm','application/base64' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mts','model/vnd.mts' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'nb','application/mathematica' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'nbp','application/vnd.wolfram.player' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'notebook','application/vnd.smart.notebook' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'owl','application/vnd.biopax.rdf+xml' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'oxps','application/oxps' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'p','application/pkcs10' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'pcap','application/vnd.tcpdump.pcap' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'smi','application/smil+xml' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'sol','application/solids' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'thmx','application/vnd.ms-officetheme' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vpm','multipart/voice-message' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'wpl','application/vnd.ms-wpl' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'wsdl','application/wsdl+xml' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'xps','application/vnd.ms-xpsdocument' );
 
 -- Open Documents MIME types
 insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.oasis.opendocument.text', 'odt');
@@ -495,12 +544,25 @@ insert into cr_extension_mime_type_map (mime_type, extension) values ('applicati
 
 -- Open XML formats for MS-Office
 insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'xlsx');
-insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.spreadsheetml.template', 'xltx');
+insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.spreadsheetml-template', 'xltx');
 insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.presentationml.presentation', 'pptx');
 insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.presentationml.slideshow', 'ppsx');
-insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.presentationml.template', 'potx');
+insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.presentationml-template', 'potx');
 insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx');
-insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.wordprocessingml.template', 'dotx');
+insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.openxmlformats-officedocument.wordprocessingml-template', 'dotx');
+
+
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office Word macro enabled', 'application/vnd.ms-word.document.macroenabled.12', 'docm' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office Word Template macro enabled', 'application/vnd.ms-word.template.macroenabled.12', 'dotm' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office Excel macro enabled', 'application/vnd.ms-excel.sheet.macroenabled.12', 'xlsm' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office Excel Template macro enabled', 'application/vnd.ms-excel.template.macroenabled.12', 'xltm' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office Excel Addin macro enabled', 'application/vnd.ms-excel.addin.macroenabled.12', 'xlam' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office Excel Sheet binary macro enabled', 'application/vnd.ms-excel.sheet.binary.macroenabled.12', 'xlsb' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office PowerPoint Addin macro enabled', 'application/vnd.ms-powerpoint.addin.macroenabled.12', 'ppam' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office PowerPoint Presentation macro enabled', 'application/vnd.ms-powerpoint.presentation.macroenabled.12', 'pptm' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office PowerPoint Template macro enabled', 'application/vnd.ms-powerpoint.template.macroenabled.12', 'potm' from dual;
+insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office PowerPoint Slideshow macro enabled', 'application/vnd.ms-powerpoint.slideshow.macroenabled.12', 'ppsm' from dual;
+
 
 
 --  Here are some less common mime types and extensions not defined here.
@@ -511,9 +573,7 @@ insert into cr_extension_mime_type_map (mime_type, extension) values ('applicati
 --  mbd       | application/mbedlet
 --  pps       | application/pps
 --  prt       | application/pro_eng
---  smi       | application/smil
 --  smil      | application/smil
---  sol       | application/solids
 --  step      | application/step
 --  stp       | application/step
 --  vmd       | application/vocaltec-media-desc

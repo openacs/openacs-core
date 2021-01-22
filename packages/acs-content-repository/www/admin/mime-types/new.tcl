@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 set doc(title) "Create a new MIME Type"

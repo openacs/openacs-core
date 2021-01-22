@@ -146,24 +146,33 @@ the next.  These rules are fine-tuned with each release; an example is <ulink ur
             ...
     </programlisting>
     <itemizedlist>
-      <listitem><para>
-        <emphasis role="strong">Level -1: Incompatible.</emphasis> This package is not supported for this platform and should not be expected to work.
+      <listitem><para> <emphasis role="strong">Level -1:
+      Incompatible.</emphasis> This package is not supported for this
+      platform and should not be expected to work.  </para></listitem>
+      <listitem><para> <emphasis role="strong">Level 0: New
+      Submission.</emphasis> This is the default for packages that do
+      not have maturity explicitly set, and for new contributions. The
+      only criterion for level 0 is that at least one person asserts
+      that it works on a given platform.  </para></listitem>
+      <listitem><para> <emphasis role="strong">Level 1:
+      Immature.</emphasis> Has no open priority 1 or priority 2
+      bugs. Has been installed by at least 10? different people,
+      including 1 core developer. Has been available in a stable
+      release for at least 1 month. Has API documentation.
       </para></listitem>
-      <listitem><para>
-        <emphasis role="strong">Level 0: New Submission.</emphasis> This is the default for packages that do not have maturity explicitly set, 
-        and for new contributions. The only criterion for level 0 is that at least one person asserts that it works on a given platform.
-      </para></listitem>
-      <listitem><para>
-        <emphasis role="strong">Level 1: Immature.</emphasis> Has no open priority 1 or priority 2 bugs. Has been installed by at least
-        10? different people, including 1 core developer. Has been available in a stable release for at least 1 month. Has API documentation.
-      </para></listitem>
-      <listitem><para>
-        <emphasis role="strong">Level 2: Mature.</emphasis> Same as Level 1, plus has install guide and user documentation; 
-        no serious deviations from general coding practices; no namespace conflicts with existing level 2 packages.
-      </para></listitem>
-      <listitem><para>
-        <emphasis role="strong">Level 3: Mature and Standard.</emphasis> Same as level 2, plus meets published coding standards; 
-        is fully internationalized; available on both supported databases.
+      <listitem><para> <emphasis role="strong">Level 2:
+      Mature.</emphasis> Same as Level 1, plus has install guide and
+      user documentation; no serious deviations from general coding
+      practices; no namespace conflicts with existing level 2
+      packages.  </para></listitem>
+      <listitem><para> <emphasis role="strong">Level 3: Mature and
+      Standard.</emphasis> Same as level 2, plus meets published
+      coding standards; is fully internationalized; available on both
+      supported databases.  </para></listitem>
+      <listitem><para> <emphasis role="strong">Level 4:
+      Deprecated.</emphasis> The package was in some earlier version
+      is use, but was probably replaced by a another package. The
+      package description should point to a preferred version.
       </para></listitem>
     </itemizedlist>
 </sect2>
@@ -195,7 +204,7 @@ the next.  These rules are fine-tuned with each release; an example is <ulink ur
       </listitem>
       <listitem>
         <para>The distance from OLDVERSION to NEWVERSION should never span a release.   For example if we had a bug fix in
-acs-kernel on 5.1.0 you wouldn't want a file upgrade-5.0.4-5.1.0d1.sql since if you subsequently need to provide a 5.0.4-5.0.5 upgrade you will have to rename the 5.0.4-5.1.0 upgrade since you can't have upgrades which overlap like that.  Instead, use <computeroutput>upgrade-5.1.0d1-5.1.0d2.sql</computeroutput>
+acs-kernel on 5.1.0 you wouldn&#39;t want a file upgrade-5.0.4-5.1.0d1.sql since if you subsequently need to provide a 5.0.4-5.0.5 upgrade you will have to rename the 5.0.4-5.1.0 upgrade since you can&#39;t have upgrades which overlap like that.  Instead, use <computeroutput>upgrade-5.1.0d1-5.1.0d2.sql</computeroutput>
 </para>
       </listitem>
     </orderedlist>

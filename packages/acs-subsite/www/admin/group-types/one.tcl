@@ -35,8 +35,9 @@ if { ![db_0or1row select_pretty_name {}] } {
 }
 
 set doc(title) [_ acs-subsite.Details_for__group_type_pretty_name]
-
 set context [list [list "[ad_conn package_url]admin/group-types/" [_ acs-subsite.Group_Types]] $group_type_pretty_name]
+
+acs_object_type::get -object_type $group_type -array type_info
 
 # Pull out the first 25 groups of this type. If there are more, we'll
 # offer a link to display them all. Alphabetize the first 25 groups
@@ -62,7 +63,9 @@ db_multirow allowed_relations relations_select {
 # See if we need to offer a link to add a rel type
 set more_relation_types_p [rel_types::additional_rel_types_p -group_type $group_type]
 
-set add_group_url [export_vars -base "../parties/new" {{party_type $group_type} {add_with_rel_type composition_rel} return_url}]
+set add_group_url [export_vars -base "../groups/new" {
+    {group_type $group_type} {add_with_rel_type composition_rel} return_url
+}]
 
 set add_attribute_url [export_vars -base "../attributes/add" {{object_type $group_type} return_url}]
 

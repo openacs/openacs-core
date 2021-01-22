@@ -18,7 +18,7 @@ ad_proc -private apm_mkdir {path} {
     }] } {
         # There must be a file blocking the directory creation.
         if { [catch {
-            file delete -force $path
+            file delete -force -- $path
             file mkdir $path
         } errmsg]} {
             error "Error creationg directory $path: $errmsg"
@@ -151,7 +151,7 @@ ad_proc -private apm_extract_tarball { version_id dir } {
     #ns_log notice "exec sh -c 'cd $dir ; [apm_gzip_cmd] -d -q -c $apm_file | [apm_tar_cmd] xf - 2>/dev/null'"
     exec [apm_gzip_cmd] -d -q -c -S .apm $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
 
-    file delete $apm_file
+    file delete -- $apm_file
 }
 
 
@@ -162,14 +162,10 @@ ad_proc -private apm_generate_tarball { version_id } {
     
 } {
     set package_key [apm_package_key_from_version_id $version_id]
-    set files [apm_get_package_files -all_db_types -package_key $package_key]
+    set files [apm_get_package_files -all -package_key $package_key]
     set tmpfile [ad_tmpnam]
     
-    db_1row package_key_select {
-        select package_key 
-        from apm_package_version_info 
-        where version_id = :version_id
-    }
+    db_1row package_key_select {}
 
     # Generate a command like:
     #
@@ -197,63 +193,45 @@ ad_proc -private apm_generate_tarball { version_id } {
     set user_id     [ad_conn user_id]
     set name        "tarball-for-package-version-${version_id}"
     set title       "${package_key}-tarball"
+    set description "gzipped tarfile"
+    set mime_type   "text/plain"
 
-    set create_item "
-                  begin
-                   :1 := content_item.new(name        => :name,
-                                          creation_ip => :creation_ip
-                         );
-                  end;"
-
-    set create_revision "
-                  begin
-                   :1 := content_revision.new(title => :title,
-                                              description => 'gzipped tarfile',
-                                              text => 'not_important',
-                                              mime_type => 'text/plain',
-                                              item_id => :item_id,
-                                              creation_user => :user_id,
-                                              creation_ip => :creation_ip
-                         );
-
-                   update cr_items
-                   set live_revision = :1
-                   where item_id = :item_id;
-                 end;"
-
-    db_1row item_exists_p {select case when item_id is null 
-        then 0 
-        else item_id 
-        end as item_id
-        from apm_package_versions 
-        where version_id = :version_id}
+    db_1row item_exists_p {}
 
     if {!$item_id} {
         # content item hasen't been created yet - create one.        
-        set item_id [db_exec_plsql create_item $create_item]
-        db_dml set_item_id "update apm_package_versions 
-                               set item_id = :item_id 
-                             where version_id = :version_id"
-        set revision_id [db_exec_plsql create_revision $create_revision]
+        set item_id [content::item::new \
+                         -name          $name \
+                         -title         $title \
+                         -description   $description \
+                         -mime_type     $mime_type \
+                         -creation_user $user_id \
+                         -creation_ip   $creation_ip \
+                         -is_live       true]
         
-    } else {
-        #tarball exists, so all we have to do is to make a new revision for it
-        #Let's check if a current revision exists:
-        if {![db_0or1row get_revision_id {
-            select live_revision as revision_id
-            from cr_items
-            where item_id = :item_id
-        }] || $revision_id eq ""} {
-            # It's an insert rather than an update            
-            set revision_id [db_exec_plsql create_revision $create_revision]
-        }
+        db_dml set_item_id {}
+    }
+
+    set revision_id [content::item::get_live_revision -item_id $item_id]
+    
+    # No live revision for this item. Possible if somebody already
+    # generated the archive, then deleted or modified the revision
+    # manually or by other means. We create a new live revision.
+    if {$revision_id eq ""} {
+        set revision_id [content::revision::new -item_id $item_id \
+                             -title         $title \
+                             -description   $description \
+                             -mime_type     $mime_type \
+                             -creation_user $user_id \
+                             -creation_ip   $creation_ip \
+                             -is_live       true]
     }
 
     db_dml update_tarball {} -blob_files [list $tmpfile]
 
     db_dml update_content_length {}
 
-    file delete $tmpfile
+    file delete -- $tmpfile
 }
 
 
@@ -335,7 +313,7 @@ ad_proc -public apm_file_watchable_p { path } {
     Given the path of a file determine if it is
     appropriate to be watched for reload. The file should
     be db compatible with the system and be of right 
-    type (for example contain tcl procs or xql queries).
+    type (for example contain Tcl procs or xql queries).
 
     @param The path of the file relative to server root
 
@@ -490,10 +468,13 @@ ad_proc -private apm_transfer_file {
     # if the optional xotcl-core components are available...
     #
     
+    # 5 minutes
+    set timeout 300
+    
     set httpImpls [util::http::available -url $url -spool]
     if {$httpImpls ne ""} {
         ns_log notice "we can use the http::util:: interface using the $httpImpls implementation"
-        set result [util::http::get -url $url -spool]
+        set result [util::http::get -url $url -timeout $timeout -spool]
         file rename [dict get $result file] $output_file_name
     } elseif {[info commands ::ns_http] ne "" && [apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
         # 
@@ -501,11 +482,11 @@ ad_proc -private apm_transfer_file {
         #
         foreach i {1 2 3} {
             ns_log notice "Transfer $url to $output_file_name based on ns_http"
-            set h [ns_http queue -timeout 60:0 $url]
+            set h [ns_http queue -timeout $timeout:0 $url]
             set replyHeaders [ns_set create]
             ns_http wait -file F -headers $replyHeaders -spoolsize 1 $h
-            if {[file exists $output_file_name]} {file delete $output_file_name}
-            file rename $F $output_file_name
+            if {[file exists $output_file_name]} {file delete -- $output_file_name}
+            file rename -- $F $output_file_name
             set location [ns_set iget $replyHeaders location]
             if {$location eq ""} break
             ns_log notice "Transfer $url redirected to $location ..."
@@ -592,7 +573,7 @@ ad_proc -private apm_load_apm_file {
                               [exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]]] "\n"]
         apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
     } errmsg] } {
-        apm_callback_and_log $callback "The follow error occured during the uncompression process:
+        apm_callback_and_log $callback "The follow error occurred during the uncompression process:
     <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><br>
     "
                 ns_log Error "Error loading APM file form url $url: $errmsg\n$::errorInfo"
@@ -646,7 +627,7 @@ ad_proc -private apm_load_apm_file {
     if { [catch {
         array set package [apm_read_package_info_file [file join $tmpdir $info_file]]
     } errmsg]} {
-        file delete -force $tmpdir
+        file delete -force -- $tmpdir
         apm_callback_and_log $callback  "The archive contains an unparseable package specification file: 
     <code>$info_file</code>.  The following error was produced while trying to 
     parse it: <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>.
@@ -656,7 +637,7 @@ ad_proc -private apm_load_apm_file {
                 ns_log Error "Error loading APM file form url $url: Bad package .info file. $errmsg\n$::errorInfo"
         return
     }
-    file delete -force $tmpdir
+    file delete -force -- $tmpdir
     set package_key $package(package.key)
     set pretty_name $package(package-name)
     set version_name $package(name)
@@ -667,13 +648,12 @@ ad_proc -private apm_load_apm_file {
         ns_log Error "Error loading APM file form url $url: Package $pretty_name $version_name is already installed"
     } else {
         
-        set install_path "[apm_workspace_install_dir]"
-        
+        set install_path [apm_workspace_install_dir]
         if { ![file isdirectory $install_path] } {
             file mkdir $install_path
         }
         
-        apm_callback_and_log $callback  "<li>Extracting files into the filesytem."
+        apm_callback_and_log $callback  "<li>Extracting files into the filesystem."
         apm_callback_and_log $callback  "<li>$pretty_name $version_name ready for installation."
 
         #ns_log notice "exec sh -c 'cd $install_path ; [apm_gzip_cmd] -d -q -c $file_path | [apm_tar_cmd] xf -' 2>/dev/null"

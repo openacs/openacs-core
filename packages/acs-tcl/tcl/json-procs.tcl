@@ -96,7 +96,7 @@ ad_proc -private util::json::validate {jsonText} {
 
 ad_proc util::json::parse {jsonText} {
 
-    Parse JSON text into a tcl list.
+    Parse JSON text into a Tcl list.
 
     @param jsonText JSON text
     @return List containing the object represented by jsonText

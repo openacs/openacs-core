@@ -7,25 +7,14 @@ ad_page_contract {
     title:onevalue
     context:onevalue
     tcl_proc:onevalue
+} -validate {
+    csrf { csrf::validate }    
 }
 
-set ns_api_index_result [util_memoize [list ::util::http::get -url $::apidoc::ns_api_html_index]]
-set ns_api_index_page [dict get $ns_api_index_result page]
-
-#
-# Since man pages contain often a summary of multiple commands, try
-# abbreviation in case the full name is not found (e.g. man page "nsv"
-# contains "nsv_array", "nsv_set" etc.)
-#
-for {set i [string length $tcl_proc]} {$i > 1} {incr i -1} {
-    set proc [string range $tcl_proc 0 $i]
-    set url [apidoc::search_on_webindex \
-		 -page $ns_api_index_page \
-		 -root $::apidoc::ns_api_root \
-		 -host $::apidoc::ns_api_host \
-		 -proc $proc]
-    if {$url ne ""} break
-}
+set url [apidoc::get_doc_url -cmd $tcl_proc \
+             -index $::apidoc::ns_api_html_index \
+             -root $::apidoc::ns_api_root \
+             -host $::apidoc::ns_api_host]
 
 if {$url ne ""} {
     ad_returnredirect -allow_complete_url $url
@@ -34,7 +23,7 @@ if {$url ne ""} {
 
 set title "[ns_info name] Tcl API Search for: \"$tcl_proc\""
 set context [list "Tcl API Search: $tcl_proc"]
-
+set doc_url [lindex $::apidoc::ns_api_html_index 0]
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

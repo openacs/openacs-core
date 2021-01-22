@@ -9,7 +9,7 @@
   <multiple name="proc_list">
   <% if { $proc_list(file) != $last_file } { %>
     <% if {[incr count] >1} { %> </ul> <% } %>
-    <b>@proc_list.file@</b> <ul>
+    <strong>@proc_list.file@</strong> <ul>
     <% set last_file @proc_list.file@ %>
   <% } %>
   <li><a href="@proc_list.url@">@proc_list.proc@</a>

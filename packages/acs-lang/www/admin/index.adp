@@ -2,28 +2,28 @@
   <property name="doc(title)">@page_title;literal@</property>
   <property name="context">@context;literal@</property>
 
-<include src="/packages/acs-lang/lib/conflict-link" />
+<include src="/packages/acs-lang/lib/conflict-link" >
 
 <h1>@page_title@</h1>
 
 <h2>#acs-lang.Actions#</h2>
 <ul class="action-links">
   <li>#acs-lang.Toggle_translator_mode#: 
-    <if @translator_mode_p@ true><strong>#acs-lang.On#</strong> | <a href="translator-mode-toggle">#acs-lang.Off#</a></if>
+    <if @translator_mode_p;literal@ true><strong>#acs-lang.On#</strong> | <a href="translator-mode-toggle">#acs-lang.Off#</a></if>
     <else><a href="translator-mode-toggle">#acs-lang.On#</a> | <strong>#acs-lang.Off#</strong></else>
   </li>
 
   <li><a href="@parameter_url@">#acs-lang.Change_system_locale#</a>: #acs-lang.Current_system_locale_is#</li>
 
-<if @timezone_p@>
+<if @timezone_p;literal@ true>
   <li><a href="set-system-timezone">#acs-lang.Change_system_timezone#</a>: #acs-lang.Current_system_timezone_is#</li>
 </if>
 
 <li><a href="lookup">#acs-lang.Look_up_message#</a></li>
 
-<if @site_wide_admin_p@>
-  <li><a href="@import_url@" title="#acs-lang.Imports_messages_system-wide_from_catalog_files#" onclick="return confirm('#acs-lang.Are_you_sure_you_want_to_import_all_I18N_messages_from_catalog_files#');">#acs-lang.Import_all_messages#</a></li>
-  <li><a href="@export_url@" title="#acs-lang.Export_messages_system-wide_to_catalog_files#" onclick="return confirm('#acs-lang.Are_you_sure_you_want_to_export_all_I18N_messages_to_catalog_files#');">#acs-lang.Export_all_messages#</a></li>
+<if @site_wide_admin_p;literal@ true>
+  <li><a href="@import_url@" title="#acs-lang.Imports_messages_system-wide_from_catalog_files#" id="action-import">#acs-lang.Import_all_messages#</a></li>
+  <li><a href="@export_url@" title="#acs-lang.Export_messages_system-wide_to_catalog_files#" id="action-export">#acs-lang.Export_all_messages#</a></li>
 </if>
 
 </ul>
@@ -54,7 +54,7 @@
       <td align="right"><if @locales.num_translated_pretty@ ne 0>@locales.num_translated_pretty@</if></td>
       <td align="right"><if @locales.enabled_p@ true or @locales.num_translated@ gt 0><if @locales.num_untranslated_pretty@ ne 0>@locales.num_untranslated_pretty@</if></if></td>
       <td align="center">
-        <if @locales.enabled_p@ true>
+        <if @locales.enabled_p;literal@ true>
           <a href="@locales.locale_enabled_p_url@" title="#acs-lang.Disable_this_locale#"><img src="/resources/acs-subsite/checkboxchecked.gif" height="13" width="13" style="border:0; background-color: white;" alt="#acs-lang.Disable_this_locale#"></a>
         </if>
         <else>
@@ -62,7 +62,7 @@
         </else>
       </td>
       <td align="center">
-          <if @locales.default_p@ eq "t">
+          <if @locales.default_p;literal@ true>
             <if @locales.num_locales_for_language@ eq 1>
               <span style="font-style: italic; color: gray;" title="#acs-lang.This_is_the_only_locale_for_this_language#"></span>
             </if>

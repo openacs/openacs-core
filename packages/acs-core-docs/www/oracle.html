@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install Oracle 8.1.7</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="unix-installation.html" title="Install a Unix-like system and supporting software"><link rel="next" href="postgres.html" title="Install PostgreSQL"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oracle"></a>Install Oracle 8.1.7</h2></div></div></div><div class="authorblurb"><p>By <a class="ulink" href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install Oracle 8.1.7</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="unix-installation.html" title="Install a Unix-like system and supporting software"><link rel="next" href="postgres.html" title="Install PostgreSQL"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="oracle"></a>Install Oracle 8.1.7</h2></div></div></div><div class="authorblurb"><p>By <a class="ulink" href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>
     If you are installing PostGreSQL instead of Oracle, skip this section.
   </p><p>
-    OpenACS 5.7.0 will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle 9i notes</a> for guidance.
+    OpenACS 5.9.0 will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle 9i notes</a> for guidance.
   </p><p>
       This installation guide attempts to present all of the information necessary to complete an OpenACS installation.  We try hard to make all of the steps possible in one pass, rather than having a step which amounts to "go away and develop a profound understanding of software X and then come back and, in 99% of all cases, type these two lines."  The exception to our rule is Oracle production systems.  This page describes a set of steps to get a working Oracle development server, but it is <span class="strong"><strong>unsuitable for production systems</strong></span>.  If you will be using OpenACS on Oracle in a production environment, you will experience many problems unless you develop a basic understanding of Oracle which is outside the scope of this document.  T
     </p><p>
@@ -16,35 +16,32 @@
       
     </p><p>
       
-    Useful links to find help on how to set up Oracle under Linux are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="ulink" href="http://dizwell.com/html/oracle_on_linux.html" target="_top">Dizwell - Howard
-        Roger's company - on Oracle on Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li></ul></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-getit"></a>Acquire Oracle</h3></div></div></div><p>
+    Useful links to find help on how to set up Oracle under Linux are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="ulink" href="https://www.dizwell.com/wordpress/technical-articles/oracle/" target="_top">Dizwell
+	- on Oracle on Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li></ul></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-getit"></a>Acquire Oracle</h3></div></div></div><p>
       Production Oracle systems should run on certified platforms.  Follow the
       <a class="ulink" href="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1" target="_top">metalink
       note 223718.1</a>to find certified platforms. If you don't have
-      metalink access, take a look at the Oracle on Linux FAQ: <a class="ulink" href="http://otn.oracle.com/tech/linux/htdocs/linux_techsupp_faq.html#Linux_Distributions" target="_top">Which
+      metalink access, take a look at the Oracle on Linux FAQ: <a class="ulink" href="http://www.orafaq.com/wiki/Linux_FAQ" target="_top">Which
       Linux Distributions Are Directly Supported By Oracle?</a>. In summary,
       free and inexpensive Linux distributions are not certified.
     </p><p>
-      If you don't have an account at <a class="ulink" href="http://otn.oracle.com" target="_top">OTN</a>
-      get one: you can download the Oracle software from the <a class="ulink" href="http://otn.oracle.com/software/products/database/oracle10g/index.html" target="_top">
-      Oracle Downloads</a> page. It is also get the CDs shipped to you for
-      a nominal fee from the <a class="ulink" href="http://oraclestore.oracle.com/OA_HTML/ibeCCtdMinisites.jsp?language=US" target="_top">Oracle
-      Store</a>.
+      You can download the Oracle software from the <a class="ulink" href="https://www.oracle.com/downloads/index.html" target="_top">
+      Oracle Downloads</a> page. 
     </p><p>
       Each Oracle release comes with extensive and usually quite well-written
     documentation. Your first step should be to thoroughly read the release
     notes for your operating system and your Oracle version. Find the docs
     here:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-          <a class="ulink" href="http://otn.oracle.com/documentation/oracle8i.html" target="_top">Oracle 8i
+          <a class="ulink" href="http://www.oracle.com/technetwork/documentation/oracle8i-085806.html" target="_top">Oracle 8i
           Release Documentation</a></p></li><li class="listitem"><p>
-              <a class="ulink" href="http://otn.oracle.com/documentation/oracle9i.html" target="_top">Oracle 9i Release Documentation</a>
+              <a class="ulink" href="https://docs.oracle.com/cd/B10501_01/server.920/a96531/ch4_doc.htm" target="_top">Oracle 9i Release Documentation</a>
             </p></li><li class="listitem"><p>
-          <a class="ulink" href="http://otn.oracle.com/documentation/database10g.html" target="_top">Oracle
+          <a class="ulink" href="https://docs.oracle.com/cd/B19306_01/server.102/b14214/chapter2.htm#g62359" target="_top">Oracle
           10g Release Documentation</a></p></li></ul></div><p> It is generally useful to run a particular Oracle version with its
     latest patchset. At the time of writing these were 8.1.7.4 and 9.2.0.5,
     both of which are considered to be very stable.
     </p><p> 
-      To be able to download a patchset, you need a (to-pay-for) account on <a class="ulink" href="metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate
+      To be able to download a patchset, you need a (to-pay-for) account on <a class="ulink" href="http://metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate
       patchset by following <a class="ulink" href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew's
       suggestion</a>.
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-keepinmind"></a>Things to Keep in Mind</h3></div></div></div><p>
@@ -59,7 +56,7 @@
       To give you an idea of how configurable Oracle is and how much thought
       you may need to put into buying the proper hardware and creating a sane
       setup, you should thoroughly read Cary Millsap's <a class="ulink" href="http://www.miracleas.dk/BAARF/0.Millsap1996.08.21-VLDB.pdf" target="_top">Configuring
-      Oracle Server for VLDB</a> and the <a class="ulink" href="http://download-west.oracle.com/docs/html/A97297_01/appg_ofa.htm#sthref787" target="_top">Optimal
+      Oracle Server for VLDB</a> and the <a class="ulink" href="https://en.wikipedia.org/wiki/Optimal_Flexible_Architecture" target="_top">Optimal
       Flexible Architecture</a> standard.
     </p><p>
       Throughout these instructions, we will refer to a number of
@@ -532,7 +529,7 @@ Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
             Run the script. Switch to the oracle user first
             to set the environment appropriately and then do
             <span class="command"><strong>su</strong></span> to get root privileges, while keeping
-            the oracle user's enviroment.
+            the oracle user's environment.
             </p><pre class="programlisting">
 [joeuser ~]$ su - oracle
 Password: *********
@@ -654,16 +651,7 @@ IMPORTANT NOTE: Please delete any log and trace files previously
       This step will take you through the steps of creating a customized
       database. Be warned that this process takes about an hour on a
       Pentium II with 128 MB of RAM.
-    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>RedHat 7.3 and 8.0 users: Before running <span class="command"><strong>dbassist</strong></span>, do the following.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
-            Download the <a class="ulink" href="http://otn.oracle.com/software/products/oracle8i/htdocs/linuxsoft.html" target="_top">glibc
-            patch</a> from Oracle Technet into <code class="computeroutput">/var/tmp</code>.
-          </p></li><li class="listitem"><p>
-            cd $ORACLE_HOME
-            </p></li><li class="listitem"><p>
-            tar xzf /var/tmp/glibc2.1.3-stubs.tgz
-            </p></li><li class="listitem"><p>
-            ./setup_stubs
-            </p></li></ol></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p> 
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p> 
           Make sure you are running X. Open up a terminal and
           <code class="computeroutput">su</code> to oracle and then run the
           <code class="computeroutput">dbassist</code> program.
@@ -1232,10 +1220,10 @@ SQL&gt; drop user <span class="emphasis"><em>oracle_user_name</em></span> cascad
               your database entirely.
             </p><pre class="programlisting">
 SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> including contents cascade constraints;</pre></li></ul></div></li></ul></div><p>
-      For more information on Oracle, please consult the <a class="ulink" href="http://oradoc.photo.net/" target="_top">documentation</a>.
-    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="oracle-next-steps"></a>Oracle Next Steps</h3></div></div></div><p><a class="xref" href="maint-performance.html#install-oracle-monitoring" title="Creating an appropriate tuning and monitoring environment">the section called “Creating an appropriate tuning and monitoring environment”</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Variable</th><th>Value</th><th>Reason</th></tr></thead><tbody><tr><td>ORACLE_HOME</td><td>/ora8/m01/app/oracle/product/8.1.7</td><td>This is the default Oracle installation directory.</td></tr><tr><td>ORACLE_SERVICE</td><td>ora8</td><td>The service name is a domain-qualified identifier for
+      For more information on Oracle, please consult the <a class="ulink" href="https://docs.oracle.com/en/database/" target="_top">documentation</a>.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="oracle-next-steps"></a>Oracle Next Steps</h3></div></div></div><p><a class="xref" href="maint-performance.html#install-oracle-monitoring" title="Creating an appropriate tuning and monitoring environment">the section called “Creating an appropriate tuning and monitoring environment”</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Variable</th><th>Value</th><th>Reason</th></tr></thead><tbody><tr><td>ORACLE_HOME</td><td>/ora8/m01/app/oracle/product/8.1.7</td><td>This is the default Oracle installation directory.</td></tr><tr><td>ORACLE_SERVICE</td><td>ora8</td><td>The service name is a domain-qualified identifier for
               your Oracle server.</td></tr><tr><td>ORACLE_SID</td><td>ora8</td><td>This is an identifier for your Oracle server.</td></tr><tr><td>ORACLE_OWNER</td><td>oracle</td><td>The user who owns all of the oracle files.</td></tr><tr><td>ORACLE_GROUP</td><td>dba</td><td>The special oracle group. Users in the dba group are
               authorized to do a <code class="computeroutput">connect
               internal</code> within
               <code class="computeroutput">svrmgrl</code> to gain full system
-              access to the Oracle system.</td></tr></tbody></table></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr><tr><td width="40%" align="left">Install a Unix-like system and supporting software </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> Install PostgreSQL</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/oracle.html#comments">View comments on this page at openacs.org</a></center></body></html>
+              access to the Oracle system.</td></tr></tbody></table></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr><tr><td width="40%" align="left">Install a Unix-like system and supporting software </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> Install PostgreSQL</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

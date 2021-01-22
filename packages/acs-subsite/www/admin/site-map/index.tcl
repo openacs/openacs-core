@@ -32,15 +32,26 @@ if {$object_id ne ""} {
     permission::require_permission -object_id $object_id -privilege admin
 }
 
-if {$new_parent ne ""} {
-    set javascript "onLoad=\"javascript:document.new_parent.name.focus();document.new_parent.name.select()\""
-} elseif {$new_application ne ""} {
-    set javascript "onLoad=\"javascript:document.new_application.instance_name.focus();document.new_application.instance_name.select()\""
-} elseif {$rename_application ne ""} {
-    set javascript "onLoad=\"javascript:document.rename_application.instance_name.focus();document.rename_application.instance_name.select()\""
-} else {
-    set javascript ""
-}
+# if {$new_parent ne ""} {
+#     set onload "document.new_parent.name.focus();document.new_parent.name.select();"
+# } elseif {$new_application ne ""} {
+#     set onload "document.new_application.instance_name.focus();document.new_application.instance_name.select();"
+# } elseif {$rename_application ne ""} {
+#     set onload "document.rename_application.instance_name.focus();document.rename_application.instance_name.select();"
+# } else {
+#     set onload ""
+# }
+#
+# if {$onload ne ""} {
+#     template::add_body_handler -event onload -script $onload
+# }
+#
+#template::add_body_script -script {
+#    function check_checkbox () {
+#        window.document.nodes.node_id.checked = 'true';
+#    }
+#}
+
 
 set parent_link [export_vars -base . {expand:multiple {root_id $parent_id}}]
 
@@ -111,7 +122,7 @@ template::list::create \
                   (<a href="?@nodes.expand_url@#@nodes.node_id@">-</a>)
                 </if>
                 <if @nodes.instance_url@ ne none>
-                  <a href="?@nodes.name_url@">@nodes.name;noquote@</a>
+                  <a href="@nodes.name_url@">@nodes.name;noquote@</a>
                 </if><else>
                   @nodes.name;noquote@
                 </else>
@@ -176,7 +187,7 @@ template::list::create \
                   <a href="@nodes.rename_url@#rename">[_ acs-subsite.rename]</a>
                 </if>
                 <if @nodes.delete_url@ ne "">
-                  <a href="@nodes.delete_url@" onclick="return confirm('Are you sure you want to delete node @nodes.name@ and any package mounted there?');">[_ acs-subsite.delete]</a>
+                <a href="@nodes.delete_url@" id="@nodes.delete_id;literal@">[_ acs-subsite.delete]</a>
                 </if>
                 <if @nodes.parameters_url@ ne "">
                   <a href="@nodes.parameters_url@">[_ acs-subsite.parameters]</a>
@@ -194,7 +205,7 @@ template::list::create \
 multirow create nodes \
     node_id expand_mode expand_url tree_indent name name_url instance instance_url type \
     action_type action_form_part add_folder_url new_app_url unmount_url mount_url \
-    rename_url delete_url parameters_url permissions_url extra_form_part
+    rename_url delete_url parameters_url permissions_url extra_form_part delete_id
 
 set open_nodes [list]
 
@@ -208,13 +219,13 @@ db_foreach nodes_select {} {
     set parameters_url ""
     set permissions_url ""
 
-    if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id ne "" && $mylevel > 2 } { continue }
+    if { $parent_id ni $open_nodes && $parent_id ne "" && $mylevel > 2 } { continue }
 
     if {$directory_p == "t"} {
         set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
         if {$object_id eq ""} {
             set mount_url [export_vars -base mount {expand:multiple root_id node_id}]
-            set new_app_url [export_vars {expand:multiple root_id {new_application $node_id}}]
+            set new_app_url [export_vars -base . {expand:multiple root_id {new_application $node_id}}]
         } else {
             # This makes sure you can't unmount the thing that is serving the page you're looking at.
             if {[ad_conn node_id] != $node_id} {
@@ -298,12 +309,16 @@ db_foreach nodes_select {} {
         set action_type "new_folder"
         set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
     }
-
+    set delete_id delete-$node_id
+    
     multirow append nodes \
         $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name \
         $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url \
-        $rename_url $delete_url $parameters_url $permissions_url ""
+        $rename_url $delete_url $parameters_url $permissions_url "" $delete_id
 
+    template::add_confirm_handler \
+        -id $delete_id \
+        -message "Are you sure you want to delete node $name and any package mounted there?"
 }
 
 set new_app_form_part_1 [subst {

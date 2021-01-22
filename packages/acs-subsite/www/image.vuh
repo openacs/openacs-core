@@ -1,4 +1,4 @@
-# packages/acs-subsite/www/image.vuh
+# -*- tcl -*- packages/acs-subsite/www/image.vuh
 #
 # Subsite handler for images
 #
@@ -8,7 +8,7 @@
 set url [ad_conn path_info]
 if {![regexp {^/([0-9]+)(/(|thumbnail|avatar|info))?(/(private)/([0-9]+))?(/(.*))?$} $url match object_id extra_arg_slash extra_arg private_slash private private_parent_id filename_slash filename anchor]} {
     ad_return_warning "Invalid object id" [subst {
-        The identifier given for this object ($url) is invalid.  Please check your url 
+        The identifier given for this object ([ns_quotehtml $url]) is invalid.  Please check your url 
         or contact the webmaster if you think it should work.
     }]
     return
@@ -65,3 +65,9 @@ if {$extra_arg eq "info"} {
 } else {
     cr_write_content -item_id $object_id
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

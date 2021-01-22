@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     segment_id:naturalnum,notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 } -validate {
     segment_exists_p -requires {segment_id:notnull} {
 	if { ![rel_segments_permission_p -privilege delete $segment_id] } {

@@ -308,6 +308,14 @@ ad_proc -private package_create {
         db_exec_plsql $stmt_name $code
 
         # Let's check to make sure the package is valid
+        #
+        # This seems to be a speciality in Oracle: The status of a
+        # program unit (PL/SQL package, procedure, or function) is set
+        # to INVALID if a database object on which it depends is
+        # changed. That program unit must then be recompiled (which
+        # Oracle Database will often do automatically the next time
+        # you try to use that program unit).
+        #
         if { ![db_string package_valid_p {}] } {
             error "$object_type \"$package_name\" is not valid after compiling:\n\n$code\n\n"
         }
@@ -396,7 +404,7 @@ ad_proc -public package_object_view_reset {
     object_type
 } {
     Resets the cached views for all chains (e.g. all variations of
-                                            start_with in package_object_view) for the specified object type.
+    start_with in package_object_view) for the specified object type.
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 12/2000

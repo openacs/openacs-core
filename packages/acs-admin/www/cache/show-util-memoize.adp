@@ -2,7 +2,7 @@
     <property name="doc(title)">@page_title;literal@</property>
     <property name="context">@context;literal@</property>
 
-    Search for <b><code>@pattern@</code></b>:
+    Search for <strong><code>@pattern@</code></strong>:
 
     <if @matches:rowcount@ not nil and @matches:rowcount@ gt 0>
       @matches:rowcount@ matches found.<p></p>
@@ -60,6 +60,6 @@
 	from the cache</a>-->
     </if>
     <else>
-      <i>no matches found</i>
+      <em>no matches found</em>
     </else>
 

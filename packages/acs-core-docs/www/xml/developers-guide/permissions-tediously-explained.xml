@@ -359,7 +359,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
       ..., and <emphasis>F</emphasis> can be derived by ascertaining that these objects 
       are children of <emphasis>A</emphasis> by traversing the context hierarchy.
       As it turns out, hierarchical queries are expensive.  As
-      Rafael Schloming put it so aptly, <emphasis>Oracle can't deal with hierarchies for shit.</emphasis> 
+      Rafael Schloming put it so aptly, <emphasis>Oracle can&#39;t deal with hierarchies for shit.</emphasis> 
     </para>
 
     <para>
@@ -535,7 +535,7 @@ end;
     <para>
       One final note about 
       <xref linkend="acs_objects"/>. By setting
-      an object's <computeroutput>security_inherit_p</computeroutput> column to 'f', you can stop permissions
+      an object&#39;s <computeroutput>security_inherit_p</computeroutput> column to 'f', you can stop permissions
       from cascading down the context tree. In the following example, Joe does not have
       the read permissions on <emphasis>C</emphasis> and <emphasis>F</emphasis>. 
     </para>
@@ -1129,7 +1129,7 @@ from
     as
       exists_p char(1);
     begin
-      -- XXX This must be fixed: -1 shouldn't be hardcoded (it is the public)
+      -- XXX This must be fixed: -1 shouldn&#39;t be hardcoded (it is the public)
       select decode(count(*),0,'f','t') into exists_p
         from <xref linkend="acs_object_party_privilege_map"/>
        where object_id = permission_p.object_id

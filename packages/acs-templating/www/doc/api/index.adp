@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Object and API Reference}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Object and API Reference}</property>
 <property name="doc(title)">Object and API Reference</property>
 <master>
 <h2>Object and API Reference</h2>

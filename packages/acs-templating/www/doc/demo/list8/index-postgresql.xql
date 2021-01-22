@@ -16,14 +16,12 @@
 	acs_objects o,
 	persons p
       where n.template_demo_note_id = o.object_id
-	and p.person_id = o.creation_user
-        and exists (select 1
-                    from acs_object_party_privilege_map
-                    where object_id = n.template_demo_note_id
-                      and party_id = :user_id
-                      and privilege = 'read')
-	[template::list::filter_where_clauses -and -name notes]
+      and   p.person_id = o.creation_user
+      and   acs_permission__permission_p(n.template_demo_note_id, :user_id, 'read')
+      
+      [template::list::filter_where_clauses -and -name notes]
       [template::list::orderby_clause -orderby -name notes]
+      
     </querytext>
   </fullquery>
  
@@ -41,13 +39,11 @@
 	acs_objects o,
 	persons p
       where n.template_demo_note_id = o.object_id
-	and p.person_id = o.creation_user
-        and exists (select 1
-                    from acs_object_party_privilege_map
-                    where object_id = n.template_demo_note_id
-                      and party_id = :user_id
-                      and privilege = 'read')
-	[template::list::page_where_clause -and -name notes -key template_demo_note_id]
+      and   p.person_id = o.creation_user
+      and   acs_permission__permission_p(n.template_demo_note_id, :user_id, 'read')
+
+      [template::list::page_where_clause -and -name notes -key template_demo_note_id]
+      
     </querytext>
   </fullquery>
  

@@ -57,7 +57,8 @@ BEGIN
       'content_item',
       null,
       0,
-      1
+      1,
+      'f'
   );
 
   return 0;

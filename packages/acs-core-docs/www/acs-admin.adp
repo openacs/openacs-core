@@ -1,7 +1,7 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Part II. Administrator's
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Part II. Administrator&#39;s
 Guide}</property>
-<property name="doc(title)">Part II. Administrator's
+<property name="doc(title)">Part II. Administrator&#39;s
 Guide</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,9 +10,9 @@ Guide</property>
 		    rightLink="install-overview" rightLabel="Next">
 		<div class="part">
 <div class="titlepage"><div><div><h1 class="title">
-<a name="acs-admin" id="acs-admin"></a>Part II. Administrator's
+<a name="acs-admin" id="acs-admin"></a>Part II. Administrator&#39;s
 Guide</h1></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="chapter"><a href="install-overview">2.
 Installation Overview</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="install-steps">Basic
@@ -24,8 +24,8 @@ Unix-like system and supporting software</a></span></dt><dt><span class="sect1">
 8.1.7</a></span></dt><dt><span class="sect1"><a href="postgres">Install
 PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install AOLserver
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
-5.7.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
-Installation Guide for Windows2000</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
+5.9.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
+Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
 Installation Guide for Mac OS X</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="configuring-new-site">4.
 Configuring a new OpenACS Site</a></span></dt><dd><dl>

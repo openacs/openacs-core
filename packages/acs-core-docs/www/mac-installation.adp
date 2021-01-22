@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Installation Guide for Mac OS X}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Installation Guide for Mac OS X}</property>
 <property name="doc(title)">OpenACS Installation Guide for Mac OS X</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -16,7 +16,7 @@ victorg Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="win2k-installation" leftLabel="Prev" leftTitle="OpenACS Installation Guide for
-Windows2000"
+Windows"
 		    rightLink="configuring-new-site" rightLabel="Next" rightTitle="
 Chapter 4. Configuring a new OpenACS
 Site"

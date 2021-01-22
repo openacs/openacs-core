@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {AOLserver keepalive with inittab}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {AOLserver keepalive with inittab}</property>
 <property name="doc(title)">AOLserver keepalive with inittab</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -15,9 +15,9 @@ supervised</a>.</p><p>This step should be completed as root. This can break ever
 service on your machine, so proceed with caution.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>There are 2 general steps to getting this working.</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>Install a script called <code class="computeroutput">restart-aolserver</code>. This script doesn't
-actually restart AOLserver - it just kills it.</p></li><li class="listitem"><p>Ask the OS to restart our service whenever it's not running. We
-do this by adding a line to <code class="computeroutput">/etc/inittab</code>.</p></li>
+<li class="listitem"><p>Install a script called <code class="computeroutput">restart-aolserver</code>. This script doesn&#39;t
+actually restart AOLserver - it just kills it.</p></li><li class="listitem"><p>Ask the OS to restart our service whenever it&#39;s not running.
+We do this by adding a line to <code class="computeroutput">/etc/inittab</code>.</p></li>
 </ol></div><p>Calling <code class="computeroutput">restart-aolserver</code>
 kills our service. The OS notices that our service is not running,
 so it automatically restarts it. Thus, calling <code class="computeroutput">restart-aolserver</code> effectively restarts our
@@ -40,8 +40,8 @@ Password: ***********
 </pre>
 </li><li class="listitem">
 <p>Test the <code class="computeroutput">restart-aolserver</code>
-script. We'll first kill all running servers to clean the slate.
-Then, we'll start one server and use <code class="computeroutput">restart-aolserver</code> to kill it. If it works,
+script. We&#39;ll first kill all running servers to clean the
+slate. Then, we&#39;ll start one server and use <code class="computeroutput">restart-aolserver</code> to kill it. If it works,
 then there should be no more servers running. You should see the
 following lines.</p><pre class="programlisting">
 [joeuser ~]$ killall nsd

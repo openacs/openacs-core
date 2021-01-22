@@ -289,38 +289,54 @@ ad_proc -public template::widget::richtext_or_file {
 
   if {$element(mode) eq "edit"} {
       if { $storage_type eq "" } {
-          append output "<input type=\"radio\" name=\"$element(id).storage_type\" id=\"$element(id).storage_type_text\" value=\"text\" "
-          append output "checked "
-          append output "onclick=\"javascript:acs_RichText_Or_File_InputMethodChanged('$element(form_id)', '$element(id)', this);\">"
-          append output "<label for=\"$element(id).storage_type_text\">Enter text</label><blockquote>"
+          append output [subst {
+              <input type="radio" name="$element(id).storage_type" id="$element(id).storage_type_text" value="text"
+                checked>
+              <label for="$element(id).storage_type_text">Enter text</label><blockquote>
+          }]
+          template::add_event_listener \
+              -id "$element(id).storage_type_file" \
+              -script [subst {acs_RichText_Or_File_InputMethodChanged('$element(form_id)', '$element(id)', this);}]
+
       } else {
-          append output "<input type=\"hidden\" name=\"$element(id).storage_type\" value=\"[ns_quotehtml $storage_type]\">"
+          append output [subst {
+              <input type="hidden" name="$element(id).storage_type" value="[ns_quotehtml $storage_type]">
+          }]
       }
 
       if { $storage_type eq "" || $storage_type eq "text" } {
-          append output {<script type="text/javascript"><!--} \n {acs_RichText_WriteButtons();  //--></script>}
-
-          append output [textarea_internal "$element(id).text" attributes $text]
-          append output "<br>Format: [menu "$element(id).mime_type" [template::util::richtext_or_file::format_options] $mime_type attributes]"
+          append output [subst {<script type="text/javascript" nonce='$::__csp_nonce'><!--}] \
+              \n {acs_RichText_WriteButtons();  //--></script>} \
+              [textarea_internal "$element(id).text" attributes $text] \
+              [subst {<br>Format: \
+                          [menu "$element(id).mime_type" \
+                               [template::util::richtext_or_file::format_options] \
+                               $mime_type \
+                               attributes]}]
       }
 
       if { $storage_type eq "" } {
-          append output "</blockquote>"
-          append output "<input type=\"radio\" name=\"$element(id).storage_type\" id=\"$element(id).storage_type_file\" value=\"file\" "
-          append output "onclick=\"javascript:acs_RichText_Or_File_InputMethodChanged('$element(form_id)', '$element(id)', this);\">"
-          append output "<label for=\"$element(id).storage_type_file\">Upload a file</label>"
-          append output "<blockquote>"
+          append output [subst {
+              </blockquote>
+              <input type="radio" name="$element(id).storage_type" id="$element(id).storage_type_file" value="file">
+              <label for="$element(id).storage_type_file">Upload a file</label>
+              <blockquote>
+          }]
+          template::add_event_listener \
+              -id "$element(id).storage_type_file" \
+              -script [subst {acs_RichText_Or_File_InputMethodChanged('$element(form_id)', '$element(id)', this);}]
+
       }
 
       if {$storage_type eq "file"} {
-          append output [template::util::richtext_or_file::get_property html_value $element(value)]
-          append output "<p>Replace uploaded file: "
-          append output "<input type=\"file\" name=\"$element(id).file\">" 
+          append output \
+              [template::util::richtext_or_file::get_property html_value $element(value)] \
+              "<p>Replace uploaded file: " \
+              [subst {<input type="file" name="$element(id).file">}]
       }
       if { $storage_type eq "" } {
-          append output "<input type=\"file\" name=\"$element(id).file\" disabled>" 
+          append output [subst {<input type="file" name="$element(id).file" disabled>}]
       }
-
       
       if { $storage_type eq "" } {
           append output "</blockquote>"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Security Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Requirements}</property>
 <property name="doc(title)">Security Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -24,17 +24,17 @@ user identity. The level of personalization may be as simple as
 displaying the name of the user on certain pages or can be as
 sophisticated as dynamically recommending sections of site that the
 user may be interested in based on prior browsing history. In any
-case, the user's identity must be validated and made available to
-the rest of the system. In addition, sites such as ecommerce
+case, the user&#39;s identity must be validated and made available
+to the rest of the system. In addition, sites such as ecommerce
 vendors require that the user identity be securely validated.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="security-requirements-system-overview" id="security-requirements-system-overview"></a>Security System
 Overview</h3></div></div></div><p>The security system consists of a number of subsystems.</p><p><span class="strong"><strong>Signed Cookies</strong></span></p><p>Cookies play a key role in storing user information. However,
-since they are stored in plaintext on a user's system, the validity
-of cookies is an important issue in trusting cookie information.
-Thus, we want to be able to validate a cookie, but we also want to
-validate the cookie without a database hit.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+since they are stored in plaintext on a user&#39;s system, the
+validity of cookies is an important issue in trusting cookie
+information. Thus, we want to be able to validate a cookie, but we
+also want to validate the cookie without a database hit.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <span class="strong"><strong>10.0 Guaranteed Tamper
 Detection</strong></span> Any tampering of cookie data should be

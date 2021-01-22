@@ -13,7 +13,7 @@ ad_page_contract {
     rel_type:notnull
     { party_id:naturalnum "" }
     { exact_p:boolean "f" }
-    { return_url "" }
+    { return_url:localurl "" }
     { allow_out_of_scope_p:boolean "f" }
 } -properties {
     context:onevalue
@@ -44,20 +44,12 @@ ad_page_contract {
 
 set context [list "Add relation"]
 
-set export_var_list [list group_id rel_type exact_p return_url allow_out_of_scope_p]
-
+set export_var_list {group_id rel_type exact_p return_url allow_out_of_scope_p}
 if {$party_id ne ""} {
     lappend export_var_list party_id
 }
 
-set create_p [group::permission_p -privilege create $group_id]
-
-
-db_1row group_info {
-    select group_name, join_policy
-    from groups
-    where group_id = :group_id
-}
+group::get -group_id $group_id -array group_info
 
 # We assume the group is on side 1... 
 db_1row rel_type_info {}
@@ -65,17 +57,6 @@ db_1row rel_type_info {}
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed
 set role_pretty_name [lang::util::localize $role_pretty_name]
-
-if {$ancestor_rel_type eq "membership_rel"} {
-    if {$join_policy eq "closed" && !$create_p} {
-	ad_complain "You do not have permission to add elements to $group_name"
-	return
-    }
-
-    set member_state [group::default_member_state -join_policy $join_policy -create_p $create_p]
-} else {
-    set member_state ""
-}
 
 if { $exact_p == "f" 
      && [subsite::util::sub_type_exists_p $rel_type] } {
@@ -141,12 +122,12 @@ element::create add_relation rel_id -widget hidden -value [db_nextval "acs_objec
 
 if { [template::form is_valid add_relation] } {
 
-    db_transaction {
-	set rel_id [relation_add -form_id add_relation -member_state $member_state $rel_type $group_id $party_id]
-    } on_error {
-	ad_return_error "Error creating the relation" "We got the following error message while trying to create this relation: <pre>$errmsg</pre>"
-	ad_script_abort
+    if {[catch {
+        group::add_member -group_id $group_id -user_id $party_id -rel_type $rel_type
+    } errorMsg]} {
+        ad_complain $errorMsg
     }
+
     if { $return_url eq "" } { 
 	set return_url [export_vars -base one rel_id]
     }

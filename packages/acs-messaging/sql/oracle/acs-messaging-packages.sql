@@ -206,24 +206,35 @@ as
         v_revision_id  cr_revisions.revision_id%TYPE;
     begin
     
-        -- generate a message id now so we can get an rfc822 message-id
-        if message_id is null then
-            select acs_object_id_seq.nextval into v_message_id from dual;
-        else
-            v_message_id := message_id;
-        end if;
+        -- -- generate a message id now so we can get an rfc822 message-id
+        -- if message_id is null then
+        --     select acs_object_id_seq.nextval into v_message_id from dual;
+        -- else
+        --     v_message_id := message_id;
+        -- end if;
 
-        -- this needs to be fixed up, but Oracle doesn't give us a way
-        -- to get the FQDN
+        -- -- this needs to be fixed up, but Oracle doesn't give us a way
+        -- -- to get the FQDN
+        -- if rfc822_id is null then
+        --     v_rfc822_id := sysdate || '.' || v_message_id || '@' ||
+        --         utl_inaddr.get_host_name || '.hate';
+        -- else
+        --     v_rfc822_id := rfc822_id;
+        -- end if;
+
+	-- Antonio Pisano 2016-09-20
+	-- rfc822_id MUST come from the tcl, no more
+	-- sql tricks to retrieve one if missing.
+	-- Motivations:
+	-- 1) duplication. We have same logics in acs_mail_lite::generate_message_id
+	-- 2) what if SystemURL is https?
+	-- 3) empty SystemURL would break General Comments
         if rfc822_id is null then
-            v_rfc822_id := sysdate || '.' || v_message_id || '@' ||
-                utl_inaddr.get_host_name || '.hate';
-        else
-            v_rfc822_id := rfc822_id;
+	   RAISE SELF_IS_NULL;
         end if;
 
         v_message_id := content_item.new (
-            name           => v_rfc822_id,
+            name           => rfc822_id,
             parent_id      => parent_id,
             content_type   => 'acs_message_revision',
             item_id        => message_id,
@@ -238,7 +249,7 @@ as
         insert into acs_messages 
             (message_id, reply_to, sent_date, sender, rfc822_id)
         values 
-            (v_message_id, reply_to, sent_date, sender, v_rfc822_id);
+            (v_message_id, reply_to, sent_date, sender, rfc822_id);
 
         -- create an initial revision for the new message
         v_revision_id := acs_message.edit (

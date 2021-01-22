@@ -16,7 +16,7 @@ if {$current_channel eq ""} {
     set channel $current_channel
 }
 if {$head_channel eq ""} {
-    set head_channel [lindex [apm_get_repository_channels $repository_url] 0]
+    set head_channel [lindex [apm_get_repository_channels] 0 0]
 }
 
 #
@@ -57,24 +57,44 @@ apm_get_installed_versions -array installed_versions
 set upgrades_p 0
 array set package [list]
 
-if {$channel eq ""} {set channel $current_channel}
-set fetch_url $repository_url/$channel/
+if {$channel eq ""} {
+    set channel $current_channel
+}
+
+if {[regexp {^(.*/)(\d+-\d+)/$} $repository_url . base_url passed_in_channel]} {
+    #
+    # The passed in repository_url has already a channel
+    #
+    set fetch_url $repository_url
+} else {
+    #
+    # The passed in repository_url has no channel
+    #
+    set base_url  $repository_url
+    set fetch_url $base_url/$channel/
+}
 
 apm_get_package_repository -repository_url $fetch_url -array repository
 
+if {$channel ne $current_channel} {
+    apm_get_package_repository -repository_url $base_url/$current_channel/ -array current_repository
+}
+
 foreach package_key [array names repository] {
     set version $repository($package_key)
-
+    #
     # Ignore the package in the following cases:
     #  - maturity is below specified level
     #  - package is deprecated
     #  - package is not supported by the installed database
-    #  - don't offer "-portlet" alone (currently only useful in
-    #    connection with DotLRN)
+    #  - don't offer "-portlet" alone (currently only useful in connection with DotLRN)
+    #  - dont't offer packages of HEAD, when these are included in the current channel
+    #
     if {[dict get $version maturity] < $maturity
 	|| [dict get $version maturity] == 4
 	|| ![apm_package_supports_rdbms_p -package_key $package_key]
 	|| [string match "*-portlet" $package_key]
+        || ($channel ne $current_channel && [info exists current_repository($package_key)])
     } continue
 
     if { $package_type eq "" || [dict get $version package.type] eq $package_type } {
@@ -128,14 +148,17 @@ multirow -unclobber foreach packages {
     set install_url [export_vars -base install-2 { package_key {repository_url $fetch_url}}]
 }
 
+set operation_label [expr {$upgrade_p ? "Upgrade" : "Install"}]
+
 # Build the list-builder list
 template::list::create \
     -name packages \
     -multirow packages \
     -key package_key \
-    -bulk_actions {
-        "Install or upgrade checked applications" "install-2" "Install or upgrade checked applications"
-    } \
+    -bulk_actions [list \
+                       "$operation_label checked applications" \
+                       "install-2" \
+                       "$operation_label checked applications" ] \
     -bulk_action_export_vars {
         {repository_url $fetch_url}
     } \
@@ -174,8 +197,8 @@ template::list::create \
         channel {
             label "Channel"
             values {
-                {Current $current_channel}
-                {Head $head_channel}
+                {"$current_channel" $current_channel}
+                {"Supplemental" $head_channel}
             }
             default_value $current_channel
         }
@@ -183,10 +206,10 @@ template::list::create \
         maturity {
             label "Maturity at least"
             values {
-                {New 0}
-                {Immature 1}
-                {Mature 2}
-                {"Mature and Standard" 3}
+                {"[_ acs-tcl.maturity_new_submission]" 0}
+                {"[_ acs-tcl.maturity_immature]" 1}
+                {"[_ acs-tcl.maturity_mature]" 2}
+                {"[_ acs-tcl.maturity_mature_and_standard]" 3}
             }
 	    default_value default_maturity
         }

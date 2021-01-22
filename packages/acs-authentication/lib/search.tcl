@@ -11,7 +11,7 @@ ad_page_contract {
     To add a member of a group
     add_to_subsite (list of label url)
     add_to_main_site (optional) (list of label url)
-    group_id (optional default to subsite applicaiton group)
+    group_id (optional default to subsite application group)
     rel_type (default to membership_rel)
 
 } {

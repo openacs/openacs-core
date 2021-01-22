@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Request Processor Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Request Processor Requirements}</property>
 <property name="doc(title)">Request Processor Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -29,8 +29,8 @@ to build a web toolkit full of reusable and reconfigurable
 components.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="rp-requirements-system-overview" id="rp-requirements-system-overview"></a>System Overview</h3></div></div></div><p>The request processor's functionality can be split into two main
-pieces.</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<a name="rp-requirements-system-overview" id="rp-requirements-system-overview"></a>System Overview</h3></div></div></div><p>The request processor&#39;s functionality can be split into two
+main pieces.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>Set up the environment in which a server side script expects to
 run. This includes things like:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -65,8 +65,8 @@ be mounted at more than one location in the URL space.</p>
 Context</strong></span></p><div class="blockquote"><blockquote class="blockquote"><p>
 <span class="strong"><strong>20.10</strong></span> The request
 processor must be able to determine a primary context or state
-associated with a pageroot based on it's location within the URL
-space.</p></blockquote></div><p><span class="strong"><strong>30.0
+associated with a pageroot based on it&#39;s location within the
+URL space.</p></blockquote></div><p><span class="strong"><strong>30.0
 Authentication</strong></span></p><div class="blockquote"><blockquote class="blockquote"><p>
 <span class="strong"><strong>30.10</strong></span> The request
 processor must be able to verify that the connecting browser

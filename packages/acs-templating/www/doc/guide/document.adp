@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Documenting Data
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Documenting Data
 Sources}</property>
 <property name="doc(title)">Templating System User Guide: Documenting Data
 Sources</property>
@@ -27,9 +27,9 @@ structure comments on a datasource in the following way:</p>
   # the name of the user
   
   # \@data_input add_entry form
-  # a form for adding entries to user's address book 
+  # a form for adding entries to user&#39;s address book 
   # \@input first_names text 
-  # entry subject's first and middle names
+  # entry subject&#39;s first and middle names
   # \@input last_name text
   # \@input title text form of address for entry subject
   # \@input birthday date birthdate w/ "MONTH DD YYYY" format
@@ -41,22 +41,22 @@ structure comments on a datasource in the following way:</p>
 <ul>
 <li>all datasources (onevalues, onelists, multilists, multirows)
 are documented with the datasource directive, their name, the type
-of datasource, and then necessary comments:</li><li style="list-style: none"><blockquote><code># \@datasource <i>name</i> &lt;<i>type of
-datasource</i>&gt; <i>comments</i>
+of datasource, and then necessary comments:</li><li style="list-style: none"><blockquote><code># \@datasource <em>name</em> &lt;<em>type of
+datasource</em>&gt; <em>comments</em>
 </code></blockquote></li><li>multirow datasources are followed with a series of column
-directives, column names, and associated explanations:</li><li style="list-style: none"><blockquote><code># \@column <i>name</i><i>comments</i>
+directives, column names, and associated explanations:</li><li style="list-style: none"><blockquote><code># \@column <em>name</em><em>comments</em>
 </code></blockquote></li><li>forms are documented with the data_input directive, and are
 also followed with a series of input directives with the name and
 type of input widgets, and necessary comments:</li><li style="list-style: none">
-<blockquote><code># \@data_input <i>name</i> form <i>comments</i> #
-\@input <i>name</i> &lt;<i>type of form entry</i>&gt;
-<i>comments</i>
+<blockquote><code># \@data_input <em>name</em> form
+<em>comments</em> # \@input <em>name</em> &lt;<em>type of form
+entry</em>&gt; <em>comments</em>
 </code></blockquote>
 Possible form entry types include text (or textentry), date,
 checkbox, radio, select, multiselect and textbox</li>
 </ul>
 <p>Once the templates have been enabled, the designer can simply
 visit the URL from which the page will be served, substituting
-<tt>acs</tt> with the <tt>dat</tt> extension.</p>
+<kbd>acs</kbd> with the <kbd>dat</kbd> extension.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

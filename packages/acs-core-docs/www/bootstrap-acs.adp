@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Bootstrapping OpenACS}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Bootstrapping OpenACS}</property>
 <property name="doc(title)">Bootstrapping OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -43,8 +43,8 @@ has always been, the same for all AOLservers, regardless of whether
 they are running OpenACS.</p><p>Next AOLserver sources, in lexicographical order, each file in
 the <code class="computeroutput">/tcl</code> directory. The first
 such file is <code class="computeroutput">0-acs-init.tcl</code>,
-which doesn't do much directly except to determine the OpenACS path
-root (e.g., <code class="computeroutput">/var/lib/aolserver/</code><span class="emphasis"><em><code class="computeroutput">yourservername</code></em></span>) by trimming the
+which doesn&#39;t do much directly except to determine the OpenACS
+path root (e.g., <code class="computeroutput">/var/lib/aolserver/</code><span class="emphasis"><em><code class="computeroutput">yourservername</code></em></span>) by trimming the
 final component from the path to the Tcl library directory
 (<code class="computeroutput">/var/lib/aolserver/</code><span class="emphasis"><em><code class="computeroutput">yourservername</code></em></span><code class="computeroutput">/tcl</code>).
 But <code class="computeroutput">0-acs-init.tcl</code>'s has an
@@ -53,7 +53,7 @@ does the following:</p><div class="orderedlist"><ol class="orderedlist" type="1"
 <li class="listitem"><p>
 <span class="strong"><strong>Initialize some NSVs used by the
 core</strong></span>. These NSVs are documented in <code class="computeroutput">/packages/acs-core/apm-procs.tcl</code> - no need
-to worry about them unless you're an OpenACS core hacker.</p></li><li class="listitem"><p>
+to worry about them unless you&#39;re an OpenACS core hacker.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Verify the deletion of obsolete
 OpenACS files</strong></span>. The <code class="computeroutput">/tcl</code> directory has evolved quite a bit over
 the months and years, and a few files have come and gone. The
@@ -70,25 +70,26 @@ lexicographical order. These procedure are needed to perform any of
 the following steps.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Ensure that the database is
 available</strong></span> by grabbing and releasing a handle. If we
-can't obtain a handle, we terminate initialization (since OpenACS
-couldn't possibly start up the server without access to the
-database).</p></li><li class="listitem"><p>
+can&#39;t obtain a handle, we terminate initialization (since
+OpenACS couldn&#39;t possibly start up the server without access to
+the database).</p></li><li class="listitem"><p>
 <span class="strong"><strong>Register any new packages in the
 <code class="computeroutput">/packages</code>
 directory</strong></span>. In each directory inside <code class="computeroutput">/packages</code>, we look for a <code class="computeroutput">.info</code> file; if we find a package that
-hasn't yet been registered with the package manager (i.e., it's
-been copied there manually), we insert information about it into
-the database. (The first time OpenACS starts up, <span class="emphasis"><em>no</em></span> packages will have been registered in
-the database yet, so this step will registers every single package
-in the <code class="computeroutput">/packages</code> directory.)
-Note that packages discovered here are initially disabled; they
-must be manually enabled in the package manager before they can be
-used.</p></li><li class="listitem"><p>
+hasn&#39;t yet been registered with the package manager (i.e.,
+it&#39;s been copied there manually), we insert information about
+it into the database. (The first time OpenACS starts up,
+<span class="emphasis"><em>no</em></span> packages will have been
+registered in the database yet, so this step will registers every
+single package in the <code class="computeroutput">/packages</code>
+directory.) Note that packages discovered here are initially
+disabled; they must be manually enabled in the package manager
+before they can be used.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Ensure that the <code class="computeroutput">acs-kernel</code> package is
-enabled</strong></span>. If the OpenACS core isn't initialized, the
-server couldn't possibly be operational, so if there's no enabled
-version of the OpenACS core we simply mark the latest installed one
-as enabled.</p></li><li class="listitem"><p>
+enabled</strong></span>. If the OpenACS core isn&#39;t initialized,
+the server couldn&#39;t possibly be operational, so if there&#39;s
+no enabled version of the OpenACS core we simply mark the latest
+installed one as enabled.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Load <code class="computeroutput">*-procs.tcl</code> files for enabled
 packages</strong></span>, activating their APIs.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Load <code class="computeroutput">*-init.tcl</code> files for enabled
@@ -97,8 +98,8 @@ filters and procedures, initialize data structures, etc.</p></li><li class="list
 <span class="strong"><strong>Verify that the core has been
 properly initialized</strong></span> by checking for the existence
 of an NSV created by the request processor initialization code. If
-it's not present, the server won't be operational, so we log an
-error.</p></li>
+it&#39;s not present, the server won&#39;t be operational, so we
+log an error.</p></li>
 </ol></div><p>At this point, <code class="computeroutput">bootstrap.tcl</code>
 is done executing. AOLserver proceeds to source the remaining files
 in the <code class="computeroutput">/tcl</code> directory (i.e.,

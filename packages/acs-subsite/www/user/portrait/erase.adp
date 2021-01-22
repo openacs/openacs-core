@@ -2,7 +2,7 @@
 <property name="&doc">doc</property>
 <property name="context">@context;literal@</property>
 
-<if @admin_p@ eq 0>
+<if @admin_p;literal@ false>
   <p>#acs-subsite.lt_Sure_erase_your_por#</p>
 </if>
 <else>

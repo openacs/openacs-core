@@ -21,7 +21,7 @@
 
 <fullquery name="cr_write_content.write_lob_content">
       <querytext>
-          select lob as content
+          select lob as content, 'lob' as storage_type
           from cr_revisions
           where revision_id = :revision_id
       </querytext>
@@ -105,8 +105,12 @@
             /* mime_type     => */ null,
             /* nls_language  => */ null,
             /* text          => */ null,
+            /* data          => */ null,
+            /* relation_tag  => */ null,
+            /* is live       => */ 'f',
             /* storage_type  => */ :storage_type,
-            /* package_id    => */ :package_id
+            /* package_id    => */ :package_id,
+            /* w_child_rels  => */ 't'
     );
       </querytext>
 </fullquery>
@@ -114,18 +118,19 @@
 <fullquery name="cr_import_content.content_revision_new">
       <querytext>
          select content_revision__new (
-            /* title         => */ :title,
-            /* description   => */ :description,
-            /* publish_date  => */ current_timestamp,
-            /* mime_type     => */ :mime_type,
-            /* nls_language  => */ null,
-            /* data          => */ null,
-            /* item_id       => */ :item_id,
-            /* revision_id   => */ :revision_id,
-            /* creation_date => */ current_timestamp,
-            /* creation_user => */ :creation_user,
-            /* creation_ip   => */ :creation_ip,
-            /* package_id    => */ :package_id
+            /* title          => */ :title,
+            /* description    => */ :description,
+            /* publish_date   => */ current_timestamp,
+            /* mime_type      => */ :mime_type,
+            /* nls_language   => */ null,
+            /* data           => */ null,
+            /* item_id        => */ :item_id,
+            /* revision_id    => */ :revision_id,
+            /* creation_date  => */ current_timestamp,
+            /* creation_user  => */ :creation_user,
+            /* creation_ip    => */ :creation_ip,
+	    /* content_length => */ null, 
+            /* package_id     => */ :package_id
     );
       </querytext>
 </fullquery>

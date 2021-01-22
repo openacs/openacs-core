@@ -40,26 +40,13 @@ set extra_where_clauses ""
 if {$ancestor_rel_type eq "membership_rel"} {
     if {$member_state ne ""} {
 	set extra_tables "membership_rels mr,"
-	set extra_where_clauses "
-        and mr.rel_id = rels.rel_id
-        and mr.member_state = :member_state"
+	set extra_where_clauses {
+            and mr.rel_id = rels.rel_id
+            and mr.member_state = :member_state}
     }
 }
 
-db_multirow rels relations_query "
-select r.rel_id, 
-       party_names.party_name as element_name
-from (select /*+ ORDERED */ DISTINCT rels.rel_id, object_id_two
-      from $extra_tables acs_rels rels, all_object_party_privilege_map perm
-      where perm.object_id = rels.rel_id
-        and perm.party_id = :user_id
-        and perm.privilege = 'read'
-        and rels.rel_type = :rel_type
-        and rels.object_id_one = :group_id $extra_where_clauses) r, 
-     party_names 
-where r.object_id_two = party_names.party_id
-order by lower(element_name)
-"
+db_multirow rels relations_query {}
 
 # Build the member state dimensional slider
 

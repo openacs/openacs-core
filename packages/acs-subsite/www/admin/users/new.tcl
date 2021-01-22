@@ -12,7 +12,7 @@ ad_page_contract {
     { user_type:notnull "user" }
     { user_type_exact_p:boolean t }
     { user_id:naturalnum "" }
-    { return_url "" }
+    { return_url:localurl "" }
     {add_to_group_id:naturalnum ""}
     {add_with_rel_type "user_profile"}
     {group_rel_type_list ""}

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install a Unix-like system and supporting software}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install a Unix-like system and supporting software}</property>
 <property name="doc(title)">Install a Unix-like system and supporting software</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -27,7 +27,7 @@ better than make. (<a class="ulink" href="http://openacs.org/forums/message-view
 is a native replacement for wget.</p>
 </div>
 </li>
-</ul></div><p>Note: Instructions for installing tDOM and threaded tcl are
+</ul></div><p>Note: Instructions for installing tDOM and threaded Tcl are
 included with the AOLserver4 installation instructions, if these
 are not yet installed.</p><p>The following programs may be useful or required for some
 configurations. They are included in most distributions:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -38,7 +38,7 @@ emacs keybindings for DocBook SGML)</p></li><li class="listitem"><p>daemontools 
 must first do <a class="xref" href="install-steps" title="Setting a global shell variable for cut and paste">Setting a
 global shell variable for cut and paste</a>.</p><p>To install a machine to the specifications of the Reference
 Platform, do the <a class="link" href="install-redhat" title="Appendix A. Install Red Hat 8/9">walkthrough
-of the Red Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($&zwnj;Id: os.xml,v 1.15.14.1 2015/09/28 07:54:30
+of the Red Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($&zwnj;Id: os.xml,v 1.15.14.2 2017/04/22 17:18:48
 gustafn Exp $)</div>
 </div>
 </div>

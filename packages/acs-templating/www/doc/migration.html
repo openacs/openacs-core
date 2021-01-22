@@ -12,10 +12,10 @@
     
     <h3>In a Nutshell</h3>
 
-    When templatizing a legacy tcl page, your task is to
-    <b>separate</b> code and graphical presentation.  The latter goes
+    When templatizing a legacy Tcl page, your task is to
+    <strong>separate</strong> code and graphical presentation.  The latter goes
     into an ADP file; it contains essentially HTML, augmented by a few
-    special tags and the <code>@<i>variable</i>@</code> construct.
+    special tags and the <code>@<em>variable</em>@</code> construct.
     The code goes into a Tcl script.  In other words, a templated page
     consists of two files, a Tcl part that puts its results in data
     sources, and an ADP page (the template), into which these data
@@ -36,7 +36,7 @@
     <p>
       At the end of the Tcl script, you should call
       <code>ad_return_template</code>.  The template runs after the
-      tcl script, and can use these data sources.
+      Tcl script, and can use these data sources.
 
     <p>
       Make sure that the fancy adp parser is enabled in your AOL ini
@@ -54,19 +54,19 @@
 	wait till the headers are written or the page is completed; they
 	may act differently than you expect.
       <li>
-	If you can, put code in the tcl file, not between <code>&lt;%
+	If you can, put code in the Tcl file, not between <code>&lt;%
 	%&gt;</code> in the adp page.
       <li>
-	Put HTML in the adp page, not int the tcl program.  Put
+	Put HTML in the adp page, not int the Tcl program.  Put
 	reusable HTML fragments in a separate adp file (think of it as 
 	a widget) that will be <code>&lt;include&gt;</code>d from
-	several pages.  Prefer this to writing a tcl proc that returns 
+	several pages.  Prefer this to writing a Tcl proc that returns 
 	HTML.
       <li>
 	Remember to remove backslashes where you had to escape special 
 	characters, as in <blockquote>
 	  <pre>Nuts  <font color="red">\</font>$2.70 <font color="red">\</font
-	      >[&lt;a href=<font color="red">\</font>"shoppe<font
+	      >[&lt;a href="<font" color="red">\</font>"shoppe<font
               color="red">\</font>"&gt;buy&lt;/a&gt;<font
 	      color=red>\</font>]
 	  </pre>
@@ -90,17 +90,17 @@
       <code>&lt;form&gt;</code>.  I reformatted it a bit to make three
       panes fit next to each other and to line up corresponding code.
     </p>
-    <table cellspacing=5 bgcolor="#ccddff">
+    <table cellspacing="5" bgcolor="#ccddff">
       <tr bgcolor="#cccccc">
-	<th rowspan=2>old tcl code</th>
-	<th colspan=2>new</th>
+	<th rowspan="2">old Tcl code</th>
+	<th colspan="2">new</th>
       </tr>
       <tr bgcolor="#cccccc">
 	<th><code>packages/news/www/item-view.tcl</code></th>
 	<th><code>packages/news/www/item-view.adp</code></th>
       </tr>
       <tr>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 # /packages/news/admin/index.tcl
 ad_page_contract {
@@ -148,7 +148,7 @@ $body
 return</font>
 	  </pre>
 	</td>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 
 ad_page_contract {
@@ -195,7 +195,7 @@ set context_bar [ad_context_bar \
 ad_return_template
 	  </pre>
 	</td>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 
 
@@ -249,17 +249,17 @@ ad_return_template
     following example shows the part of the <code>index</code> page of
     the News module that uses the mechanism, not a whole page.
 
-    <table cellspacing=5 bgcolor="#ccddff">
+    <table cellspacing="5" bgcolor="#ccddff">
       <tr bgcolor="#cccccc">
-	<th rowspan=2>old tcl code</th>
-	<th colspan=2>new</th>
+	<th rowspan="2">old Tcl code</th>
+	<th colspan="2">new</th>
       </tr>
       <tr bgcolor="#cccccc">
 	<th><code>packages/news/www/index.tcl</code></th>
 	<th><code>packages/news/www/index.adp</code></th>
       </tr>
       <tr>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 <font color="#999999">ad_page_contract {
 
@@ -275,7 +275,7 @@ ad_return_template
 }</font>
 	  </pre>
 	</td>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 <font color="#999999">ad_page_contract {
 
@@ -293,7 +293,7 @@ ad_return_template
   context_bar:onevalue
   subsite_id:onevalue
   subsite:multirow
-</font>  <b>item</b>:multirow<font color="#999999">
+</font>  <strong>item</strong>:multirow<font color="#999999">
   footer:onevalue
 }</font>
 	  </pre>
@@ -301,11 +301,11 @@ ad_return_template
 	<td> &nbsp; </td>
       </tr>
       <tr bgcolor="#cccccc">
-	<td align=center><b>...</b></td>
-	<td align=center><b>...</b></td>
-	<td align=center><b>...</b></td>
+	<td align="center"><strong>...</strong></td>
+	<td align="center"><strong>...</strong></td>
+	<td align="center"><strong>...</strong></td>
       <tr>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 append body "
 &lt;ul&gt;
@@ -319,8 +319,8 @@ append body "
     and (   expiration_date is null
          or expiration_date &gt; sysdate)
 } {
-    append body "&lt;li&gt;&lt;a href=
-	\"item-view?news_item_id=<font color=blue>"\
+    append body "&lt;li&gt;&lt;a href="
+	\"item-view?news_item_id=<font" color="b"lue>"\
 	"</font>$news_item_id\"
 	&gt;$title&lt;/a&gt;\n"
 
@@ -341,13 +341,13 @@ append body "
 &lt;/ul&gt;
 "</pre>
 	</td>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 
 
 
 
-<font color=green>db_multirow <b>item</b></font> news_items_select {
+<font color=green>db_multirow <strong>item</strong></font> news_items_select {
     select news_item_id, title
     from news_items_obj
     where context_id = :subsite_id
@@ -357,13 +357,13 @@ append body "
 }
 	  </pre>
 	</td>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 
 &lt;ul&gt;
 
 
-&lt;multiple name=<b>item</b>&gt;
+&lt;multiple name=<strong>item</strong>&gt;
 
 
 
@@ -372,12 +372,12 @@ append body "
 
 
   &lt;li&gt;&lt;a href=
-      "item-view?news_item_id=<font color=blue>&lt;%
-      %&gt;</font>@<b>item</b>.news_item_id@"
-      &gt;@<b>item</b>.title@&lt;/a&gt;
+      "item-view?news_item_id=<font color="b"lue>&lt;%
+      %&gt;</font>@<strong>item</strong>.news_item_id@"
+      &gt;@<strong>item</strong>.title@&lt;/a&gt;
 &lt;/multiple&gt;
 
-&lt;if @<b>item</b>:rowcount@ eq 0&gt;
+&lt;if @<strong>item</strong>:rowcount@ eq 0&gt;
   &lt;li&gt;There are
   currently no news items
   available.
@@ -420,20 +420,20 @@ append body "
     own multirow variable.  In the excert below, taken from
     /pvt/alerts.tcl and /pvt/alerts.adp, the foreach logic made it
     hard to use the db_multirow because it needed a combination of the
-    output from sql and also the output of tcl procedures using that
+    output from sql and also the output of Tcl procedures using that
     value.
 
-    <table cellspacing=5 bgcolor="#ccddff">
+    <table cellspacing="5" bgcolor="#ccddff">
       <tr bgcolor="#cccccc">
-	<th rowspan=2>old tcl code</th>
-	<th colspan=2>new</th>
+	<th rowspan="2">old Tcl code</th>
+	<th colspan="2">new</th>
       </tr>
       <tr bgcolor="#cccccc">
 	<th><code>packages/acs-core-ui/www/pvt/alerts.tcl</code></th>
 	<th><code>packages/acs-core-ui/www/pvt/alerts.adp</code></th>
       </tr>
       <tr>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 <font color="#999999">ad_page_contract {
     @cvs-id $Id$
@@ -441,7 +441,7 @@ append body "
 }</font>	  
 	  </pre>
 	</td>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 <font color="#999999">ad_page_contract {
     @cvs-id $Id$
@@ -462,11 +462,11 @@ append body "
 	<td> &nbsp; </td>
       </tr>
       <tr bgcolor="#cccccc">
-	<td align=center><b>...</b></td>
-	<td align=center><b>...</b></td>
-	<td align=center><b>...</b></td>
+	<td align="center"><strong>...</strong></td>
+	<td align="center"><strong>...</strong></td>
+	<td align="center"><strong>...</strong></td>
       <tr>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 
 
@@ -494,15 +494,15 @@ if { [db_table_exists "bboard_email_alerts"] } {
      <font color="#999999"># alert has been disabled </font>
      set status "<font color="#999999">Disabled</font>"
      set action "
-     <font color="#999999">&lt;a href=\"/bboard/alert-reenable\"&gt;
-     Re-enable&lt;/a&gt;</font>"
+     <font color="#999999">&lt;a href="\"/bboard/alert-reenable\"&gt;
+"     Re-enable&lt;/a&gt;</font>"
    } else {
      <font color="#999999"># alert is enabled</font>
      set status "
      <font color="#999999">&lt;font color=red&gt;Enabled&lt;/font&gt;</font>"
      set action "
-     <font color="#999999">&lt;a href=\"/bboard/alert-disable\"&gt;
-     Disable&lt;/a&gt;</font>"
+     <font color="#999999">&lt;a href="\"/bboard/alert-disable\"&gt;
+"     Disable&lt;/a&gt;</font>"
    }
 
    append existing_alert_rows "<font color="#999999">&lt;tr&gt;
@@ -546,7 +546,7 @@ if { [db_table_exists "bboard_email_alerts"] } {
 }
 	  </pre>
 	</td>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 set discussion_forum_alert_p 0
 
@@ -596,7 +596,7 @@ if { [db_table_exists "bboard_email_alerts"] } {
 	  
 	  </pre>
 	</td>
-	<td valign=top>
+	<td valign="top">
 	  <pre>
 
 

@@ -5,5 +5,5 @@
 <p> Batch sync completed. </p>
 
 <p> 
-  <b>&raquo;</b> <a href="@job_url@">View job results</a>
+  <strong>&raquo;</strong> <a href="@job_url@">View job results</a>
 </p>

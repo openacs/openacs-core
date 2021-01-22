@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Creating and Populating
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Creating and Populating
 Forms}</property>
 <property name="doc(title)">Templating System User Guide: Creating and Populating
 Forms</property>
@@ -11,21 +11,21 @@ Forms</property>
 <p>This document outlines the steps necessary to build a dynamic
 form in Tcl code.</p>
 <p>
-<b>Important Note:</b> The <tt><a href="http://openacs.org//api-doc/proc-view?proc=ad%5fform">ad_form</a></tt>
+<strong>Important Note:</strong> The <kbd><a href="http://openacs.org//api-doc/proc-view?proc=ad%5fform">ad_form</a></kbd>
 function has been written to be a more consistent, easier way to
 create and manage dynamic forms. Behind the scenes it uses the
-templating system's form builder, but it hides much of its
+templating system&#39;s form builder, but it hides much of its
 complexity. You should definitely look at it and at the pages that
 use it in the survey package.</p>
 <h3>Create a form</h3>
-<p>Use the <tt>form create</tt> command to initialize a form:</p>
+<p>Use the <kbd>form create</kbd> command to initialize a form:</p>
 <pre>
 form create add_user
 </pre>
 <p>See the <a href="../api/form">form API</a> for optional
 parameters to this command.</p>
 <h3>Add elements</h3>
-<p>Once the form is created, use the <tt>element create</tt>
+<p>Once the form is created, use the <kbd>element create</kbd>
 command to add elements to it:</p>
 <pre>
 element create add_user first_name -datatype text \ 
@@ -53,8 +53,8 @@ if { [template::form is_request add_user] } {
   template::element set_properties add_user user_id -value $user_id
 }
 </pre>
-<p>This may also be done using the <tt>value</tt> option to
-<tt>element create</tt>. In this case the value is set separately
+<p>This may also be done using the <kbd>value</kbd> option to
+<kbd>element create</kbd>. In this case the value is set separately
 to avoid the additional database query during a submission.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

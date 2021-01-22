@@ -40,7 +40,7 @@ ad_proc -public email_image::get_user_email {
     {-bgcolor "" }
     {-transparent "" }
 } {
-    Returns the email in differnet diferent ways (text level 4, image or text and image level 3, link level 2, ...)
+    Returns the email in differnet different ways (text level 4, image or text and image level 3, link level 2, ...)
     according to the priv_email field in the users table. To create an image the ImageMagick software is required, 
     if ImageMagick is not present then the @ symbol in the email will be shown as an image. When creating an image 
     you can choose the background color (In this format \#xxxxxx). Also you can make the background color transparent 
@@ -173,13 +173,13 @@ ad_proc -public email_image::new_item {
                              -description "User email image"  -creation_ip $creation_ip ]
         
         email_image::add_relation -user_id $user_id -item_id $item_id
-        db_dml update_cr_items_new {}
+        content::item::set_live_revision -revision_id $revision_id
         db_dml new_lob_content {} -blob_files [list ${dest_path}]
         db_dml lob_size {}
     }
     
     # Delete the temporary file created by ImageMagick
-    catch { file delete  $dest_path } errMsg
+    catch { file delete -- $dest_path } errMsg
     
     set img_src [ns_quotehtml "/shared/email-image-bits.tcl?user_id=$user_id&revision_id=$revision_id"]
     set send_email_url [ns_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
@@ -250,7 +250,7 @@ ad_proc -public email_image::edit_email_image {
             set revision_id [content::revision::new -item_id $item_id -title $image_name \
                                  -mime_type $mime_type  \
                                  -description "User email image" -creation_ip $creation_ip ]
-            db_dml update_cr_items {}
+            content::item::set_live_revision -revision_id $revision_id
             db_dml lob_content {} -blob_files [list ${dest_path}]
             db_dml lob_size {}
         }
@@ -271,7 +271,7 @@ ad_proc -public email_image::edit_email_image {
         }
     }
     # Delete the temporary file created by ImageMagick
-    catch { file delete  $dest_path } errMsg
+    catch { file delete -- $dest_path } errMsg
 }
 
 

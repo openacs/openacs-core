@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     group_type
-    { return_url "" }
+    { return_url:localurl "" }
     { operation "" }
 } -properties {
     context:onevalue
@@ -78,14 +78,7 @@ db_transaction {
     # First delete the groups
     if { $package_name ne "" } {
 
-	foreach group_id [db_list select_group_ids {
-	    select o.object_id
-	    from acs_objects o, acs_object_party_privilege_map perm
-	    where perm.object_id = o.object_id
-              and perm.party_id = :user_id
-              and perm.privilege = 'delete'
-	      and o.object_type = :group_type
-	}] {
+	foreach group_id [db_list select_group_ids {}] {
 	    group::delete $group_id
 	}
     }

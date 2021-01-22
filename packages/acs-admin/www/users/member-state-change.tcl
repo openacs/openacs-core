@@ -8,9 +8,15 @@ ad_page_contract {
 
 } {
     user_id:naturalnum,notnull
-    {member_state "no_change"}
-    {email_verified_p:boolean "no_change"}
-    {return_url ""}
+    {member_state:trim}
+    {email_verified_p:boolean ""}
+    {return_url:localurl ""}
+} -validate {
+    valid_member_state -requires member_state {
+        if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
+            ad_complain "invalid member_state '$member_state'"
+        }
+    }
 } -properties {
     context:onevalue
     export_vars:onevalue
@@ -24,45 +30,34 @@ if {![db_0or1row get_states {}]} {
     return
 }
 
-set action ""
-
-switch $member_state {
-    "approved" {
-	set action "Approve $name"
-	set email_message "Your membership in [ad_system_name] has been approved. Please return to [ad_url]."
-    }
-    "banned" {
-	set action "Ban $name"
-	set email_message "You have been banned from [ad_system_name]."
-    }
-    "rejected" {
-	set action "Reject $name"
-	set email_message "Your account have been rejected from [ad_system_name]."
-    }
-    "deleted" {
-	set action "Delete $name"
-	set email_message "Your account have been deleted from [ad_system_name]."
-    }
-    "needs approval" {
-	set action "Require Admin Approval for $name"
-	set email_message "Your account at [ad_system_name] is awaiting approval from an administrator."
-    }
-}
-
+#
+# This page is used for state changes in the member_state, and as well
+# on email confirm require and approve operations.
+#
 switch $email_verified_p {
     "t" {
-	set action "Approve Email for $name"
-	set email_message "Your email in [ad_system_name] has been approved.  Please return to [ad_url]."
+        set user_name     $name
+        set url           [ad_url]
+        set site_name     [ad_system_name]
+        set action        [lang::util::localize #acs-kernel.email_action_approved#]
+        set email_message [lang::util::localize #acs-kernel.email_mail_approved#]
     }
     "f" {
-	set action "Require Email from $name"
-	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_url]/register/email-confirm"
+        set user_name     $name
+        set url           [ad_url]/register/email-confirm
+        set site_name     [ad_system_name]
+        set action        [lang::util::localize #acs-kernel.email_action_needs_approval#]
+        set email_message [lang::util::localize #acs-kernel.email_mail_needs_approval#]
     }
-}
-
-if {$action eq ""} {
-    ad_return_complaint 1 "Not valid action: You have not changed the user in any way"
-    return
+    default {
+        set action        [group::get_member_state_pretty -component action \
+                               -member_state $member_state \
+                               -user_name $name]
+        set email_message [group::get_member_state_pretty -component account_mail \
+                               -member_state $member_state \
+                               -site_name [ad_system_name] \
+                               -url [ad_url]]
+    }
 }
 
 if {[catch {
@@ -90,9 +85,6 @@ set message $email_message
 
 if {$return_url eq ""} {
     set return_url [export_vars -base /acs-admin/users/one {user_id}]
-} else {
-    ad_returnredirect $return_url
-    ad_script_abort
 }
 
 set context [list [list "./" "Users"] "$action"]

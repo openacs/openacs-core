@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Notifications}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Notifications}</property>
 <property name="doc(title)">Notifications</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -16,7 +16,7 @@ Carstensen</a>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>The notifications package allows you to send notifications
 through any defined communications medium (e.g. email, sms) upon
-some event occuring within the system.</p><p>This tutorial steps through the process of integrating the
+some event occurring within the system.</p><p>This tutorial steps through the process of integrating the
 notifications package with your package.</p><p>First step is to create the notification types. To do this a
 script similar to the one below needs to be loaded into Postgresql.
 I create this script in a
@@ -93,7 +93,7 @@ with the above script.</p><pre class="programlisting">
       -- \@creation-date 2002-05-16
       --
       -- This code is newly concocted by Ben, but with significant concepts and code
-      -- lifted from Gilbert's UBB forums. Thanks Orchard Labs.
+      -- lifted from Gilbert&#39;s UBB forums. Thanks Orchard Labs.
       -- Lars and Jade in turn lifted this from gwong and ben.
 
 create function inline_0 ()
@@ -189,7 +189,7 @@ entry added. We do this using the notification::new procedure</p><pre class="pro
             -notif_subject $blog(title) \
             -notif_text $new_content
     
-</pre><p>This code is placed in the tcl procedure that creates blog
+</pre><p>This code is placed in the Tcl procedure that creates blog
 entries, right after the entry gets created in the code. The
 <code class="computeroutput">$blog(package_id)</code> is the
 OpenACS object_id of the Weblogger instance to which the entry has

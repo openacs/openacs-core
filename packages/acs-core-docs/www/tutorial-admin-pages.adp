@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Admin Pages}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Admin Pages}</property>
 <property name="doc(title)">Admin Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -17,15 +17,15 @@ admins have privilege to bulk-delete items you could provide
 checkboxes next to every item seen on a list and the Delete
 Selected button on the bottom of the list.</p></li><li class="listitem">
 <p>Dedicated admin pages. If you want admins to have access to data
-that users aren't interested in or aren't allowed to see you will
-need dedicated admin pages. The conventional place to put those
-dedicated admin pages is in the <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin</code>
+that users aren&#39;t interested in or aren&#39;t allowed to see
+you will need dedicated admin pages. The conventional place to put
+those dedicated admin pages is in the <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin</code>
 directory.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>mkdir admin</code></strong>
 </pre><pre class="screen">
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>cd admin</code></strong>
-</pre><p>Even if your application doesn't need any admin pages of its own
-you will usually need at least one simple page with a bunch of
+</pre><p>Even if your application doesn&#39;t need any admin pages of its
+own you will usually need at least one simple page with a bunch of
 links to existing administration UI such as Category Management or
 standard Parameters UI. Adding the link to Category Management is
 described in the section on categories. The listing below adds a
@@ -62,13 +62,14 @@ set parameters_url [export_vars -base "/shared/parameters" {
 }]
 
 </pre><p>Now that you have the first admin page it would be nice to have
-a link to it somewhere in the system so that admins don't have to
-type in the <code class="computeroutput">/admin</code> every time
-they need to reach it. You could put a static link to the toplevel
-<code class="computeroutput">index.adp</code> but that might be
-distracting for people who are not admins. Besides, some people
-consider it impolite to first offer a link and then display a nasty
-"You don't have permission to access this page" message.</p><p>In order to display the link to the admin page only to users
+a link to it somewhere in the system so that admins don&#39;t have
+to type in the <code class="computeroutput">/admin</code> every
+time they need to reach it. You could put a static link to the
+toplevel <code class="computeroutput">index.adp</code> but that
+might be distracting for people who are not admins. Besides, some
+people consider it impolite to first offer a link and then display
+a nasty "You don&#39;t have permission to access this
+page" message.</p><p>In order to display the link to the admin page only to users
 that have admin privileges add the following code near the top of
 <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.tcl</code>:</p><pre class="programlisting">
 

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Groups Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups Design}</property>
 <property name="doc(title)">Groups Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -34,19 +34,19 @@ services for different user communities.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="groups-design-hist-considerations" id="groups-design-hist-considerations"></a>Historical
 Considerations</h3></div></div></div><p>The primary limitation of the OpenACS 3.x user group system is
-that it restricts the application developer to representing a "flat
-group" that contains only users: The <code class="computeroutput">user_groups</code> table may contain the
+that it restricts the application developer to representing a
+"flat group" that contains only users: The <code class="computeroutput">user_groups</code> table may contain the
 <code class="computeroutput">group_id</code> of a parent group, but
 parent-child relationship support is limited because it only allows
 one kind of relationship between groups to be represented.
-Moreover, the Oracle database's limited support for tree-like
+Moreover, the Oracle database&#39;s limited support for tree-like
 structures makes the queries over these relationships
 expensive.</p><p>In addition, the Module Scoping design in OpenACS 3.0 introduced
 a <span class="emphasis"><em>party</em></span> abstraction - a
 thing that is a person or a group of people - though not in the
 form of an explicit table. Rather, the triple of <code class="computeroutput">scope</code>, <code class="computeroutput">user_id</code>, and <code class="computeroutput">group_id</code> columns was used to identify the
 party. One disadvantage of this design convention is that it
-increases a data model's complexity by requiring the programmer
+increases a data model&#39;s complexity by requiring the programmer
 to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>add these three columns to each "scoped" table</p></li><li class="listitem"><p>define a multi-column check constraint to protect against data
 corruption (e.g., a row with a <code class="computeroutput">scope</code> value of "group" but a null
@@ -60,16 +60,16 @@ procedures to check both the <code class="computeroutput">user_id</code> and <co
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="groups-design-design-tradeoffs" id="groups-design-design-tradeoffs"></a>Design Tradeoffs</h3></div></div></div><p>The core of the Group Systems data model is quite simple, but it
-was designed in the hopes of modeling "real world" organizations
-which can be complex graph structures. The Groups System only
-considers groups that can be modeled using directed acyclic graphs,
-but queries over these structures are still complex enough to slow
-the system down. Since almost every page will have at least one
-membership check, a number of triggers, views, and auxiliary tables
-have been created in the hopes of increasing performance. To keep
-the triggers simple and the number of triggers small, the data
-model disallows updates on the membership and composition tables,
-only inserts and deletes are permitted.</p><p>The data model has tried to balance the need to model actual
+was designed in the hopes of modeling "real world"
+organizations which can be complex graph structures. The Groups
+System only considers groups that can be modeled using directed
+acyclic graphs, but queries over these structures are still complex
+enough to slow the system down. Since almost every page will have
+at least one membership check, a number of triggers, views, and
+auxiliary tables have been created in the hopes of increasing
+performance. To keep the triggers simple and the number of triggers
+small, the data model disallows updates on the membership and
+composition tables, only inserts and deletes are permitted.</p><p>The data model has tried to balance the need to model actual
 organizations without making the system too complex or too slow.
 The added triggers, views, and tables and will increase storage
 requirements and the insert and delete times in an effort to speed
@@ -82,8 +82,9 @@ tables:</p><div class="variablelist"><dl class="variablelist">
 <dt><span class="term"><code class="computeroutput">parties</code></span></dt><dd><p>The set of all defined parties: any <span class="emphasis"><em>person</em></span>, <span class="emphasis"><em>user</em></span>, or <span class="emphasis"><em>group</em></span> must have a corresponding row in
 this table.</p></dd><dt><span class="term"><code class="computeroutput">persons</code></span></dt><dd><p>The set of all defined persons. To allow easy sorting of
 persons, the name requirement <a class="link" href="groups-requirements">30.10</a> is
-met by splitting the person's name into two columns: <code class="computeroutput">first_names</code> and <code class="computeroutput">last_name</code>.</p></dd><dt><span class="term"><code class="computeroutput">users</code></span></dt><dd><p>The set of all registered users; this table includes information
-about the user's email address and the user's visits to the
+met by splitting the person&#39;s name into two columns:
+<code class="computeroutput">first_names</code> and <code class="computeroutput">last_name</code>.</p></dd><dt><span class="term"><code class="computeroutput">users</code></span></dt><dd><p>The set of all registered users; this table includes information
+about the user&#39;s email address and the user&#39;s visits to the
 site.</p></dd><dt><span class="term"><code class="computeroutput">user_preferences</code></span></dt><dd><p>Preferences for the user.</p></dd><dt><span class="term"><code class="computeroutput">groups</code></span></dt><dd><p>The set of all defined groups.</p></dd><dt><span class="term"><code class="computeroutput">group_types</code></span></dt><dd><p>When a new type of group is created, this table holds additional
 knowledge level attributes for the group and its subtypes.</p></dd><dt><span class="term"><code class="computeroutput">membership_rels</code></span></dt><dd><p>The set of direct membership relationships between a group and a
 party.</p></dd><dt><span class="term"><code class="computeroutput">group_member_index</code></span></dt><dd><p>A mapping of a party <span class="strong"><strong>P</strong></span> to the groups {<span class="strong"><strong>G<sub>i</sub>
@@ -104,10 +105,10 @@ type of group is required, the group type can be extended by an
 application developer. Membership constraints can be specified at
 creation time by passing a parent group to the constructor.</p><p>The <code class="computeroutput">membership_rels</code> and
 <code class="computeroutput">composition_rels</code> tables
-indicate a group's direct members and direct components; these
+indicate a group&#39;s direct members and direct components; these
 tables do not provide a record of the members or components that
 are in the group by virtue of being a member or component of one of
-the group's component groups. Site pages will query group
+the group&#39;s component groups. Site pages will query group
 membership often, but the network of component groups can become a
 very complex directed acyclic graph and traversing this graph for
 every query will quickly degrade performance. To make membership
@@ -130,10 +131,8 @@ this mapping includes the type of relationship by including the
 appropriate<code class="computeroutput">rel_id</code> from the
 <code class="computeroutput">membership_rels</code> table.</p></dd><dt><span class="term"><code class="computeroutput">group_approved_member_map</code></span></dt><dd><p>A mapping of a party to the groups the party is an approved
 member of (<code class="computeroutput">member_state</code> is
-'approved'); this mapping includes the type of relationship by
-including the appropriate<code class="computeroutput">rel_id</code>
-from the <code class="computeroutput">membership_rels</code>
-table.</p></dd><dt><span class="term"><code class="computeroutput">group_distinct_member_map</code></span></dt><dd><p>A person may appear in the group member map multiple times, for
+'approved'); this mapping includes the type of relationship
+by including the appropriate<code class="computeroutput">rel_id</code> from the <code class="computeroutput">membership_rels</code> table.</p></dd><dt><span class="term"><code class="computeroutput">group_distinct_member_map</code></span></dt><dd><p>A person may appear in the group member map multiple times, for
 example, by being a member of two different groups that are both
 components of a third group. This view is strictly a mapping of
 <span class="strong"><strong>approved</strong></span> members to
@@ -201,8 +200,8 @@ function person.name (
 </pre><p><span class="strong"><strong>User</strong></span></p><p>
 <code class="computeroutput">acs_user.new</code> creates a new
 user and returns the <code class="computeroutput">user_id</code>.
-The function must be given the user's email address and the full
-name of the user in two pieces: <code class="computeroutput">first_names</code> and <code class="computeroutput">last_name</code>. All other fields are optional.
+The function must be given the user&#39;s email address and the
+full name of the user in two pieces: <code class="computeroutput">first_names</code> and <code class="computeroutput">last_name</code>. All other fields are optional.
 The interface for this function is:</p><pre class="programlisting">
 function acs_user.new (
   user_id            users.user_id%TYPE,
@@ -230,13 +229,13 @@ procedure acs_user.delete (
 );
 </pre><p>
 <code class="computeroutput">acs_user.receives_alerts_p</code>
-returns 't' if the user should receive email alerts and 'f'
-otherwise. The interface for this function is:</p><pre class="programlisting">
+returns 't' if the user should receive email alerts and
+'f' otherwise. The interface for this function is:</p><pre class="programlisting">
 function acs_user.receives_alerts_p (
   user_id       users.user_id%TYPE
 ) return varchar;
 </pre><p>Use the procedures <code class="computeroutput">acs_user.approve_email</code> and <code class="computeroutput">acs_user.unapprove_email</code> to specify whether
-the user's email address is valid. The interface for these
+the user&#39;s email address is valid. The interface for these
 procedures are:</p><pre class="programlisting">
 procedure acs_user.approve_email (
   user_id       users.user_id%TYPE
@@ -248,10 +247,11 @@ procedure acs_user.unapprove_email (
 </pre><p><span class="strong"><strong>Group</strong></span></p><p>
 <code class="computeroutput">acs_group.new</code> creates a new
 group and returns the <code class="computeroutput">group_id</code>.
-All fields are optional and default to null except for <code class="computeroutput">object_type</code> which defaults to 'group',
-<code class="computeroutput">creation_date</code> which defaults to
-<code class="computeroutput">sysdate</code>, and <code class="computeroutput">group_name</code> which is required. The interface
-for this function is:</p><pre class="programlisting">
+All fields are optional and default to null except for <code class="computeroutput">object_type</code> which defaults to
+'group', <code class="computeroutput">creation_date</code>
+which defaults to <code class="computeroutput">sysdate</code>, and
+<code class="computeroutput">group_name</code> which is required.
+The interface for this function is:</p><pre class="programlisting">
 function acs_group.new (
   group_id           groups.group_id%TYPE,
   object_type        acs_objects.object_type%TYPE,
@@ -271,8 +271,9 @@ function acs_group.name (
 ) return varchar;
 </pre><p>
 <code class="computeroutput">acs_group.member_p</code> returns
-'t' if the specified party is a member of the specified group.
-Returns 'f' otherwise. The interface for this function is:</p><pre class="programlisting">
+'t' if the specified party is a member of the specified
+group. Returns 'f' otherwise. The interface for this
+function is:</p><pre class="programlisting">
 function acs_group.member_p (
   group_id      groups.group_id%TYPE,
   party_id      parties.party_id%TYPE,
@@ -281,9 +282,10 @@ function acs_group.member_p (
 Relationship</strong></span></p><p>
 <code class="computeroutput">membership_rel.new</code> creates a
 new membership relationship type between two parties and returns
-the relationship type's <code class="computeroutput">rel_id</code>.
-All fields are optional and default to null except for <code class="computeroutput">rel_type</code> which defaults to membership_rel.
-The interface for this function is:</p><pre class="programlisting">
+the relationship type&#39;s <code class="computeroutput">rel_id</code>. All fields are optional and default
+to null except for <code class="computeroutput">rel_type</code>
+which defaults to membership_rel. The interface for this function
+is:</p><pre class="programlisting">
 function membership_rel.new (
   rel_id             membership_rels.rel_id%TYPE,
   rel_type           acs_rels.rel_type%TYPE,
@@ -304,8 +306,8 @@ procedure membership_rel.ban (
 </pre><p>
 <code class="computeroutput">membership_rel.approve</code> sets
 the <code class="computeroutput">member_state</code> of the given
-<code class="computeroutput">rel_id</code> to 'approved'. The
-interface for this procedure is:</p><pre class="programlisting">
+<code class="computeroutput">rel_id</code> to 'approved'.
+The interface for this procedure is:</p><pre class="programlisting">
 procedure membership_rel.approve (
   rel_id           membership_rels.rel_id%TYPE
 );
@@ -328,8 +330,8 @@ procedure membership_rel.unapprove (
 </pre><p>
 <code class="computeroutput">membership_rel.deleted</code> sets
 the <code class="computeroutput">member_state</code> of the given
-<code class="computeroutput">rel_id</code> to 'deleted'. The
-interface for this procedure is:</p><pre class="programlisting">
+<code class="computeroutput">rel_id</code> to 'deleted'.
+The interface for this procedure is:</p><pre class="programlisting">
 procedure membership_rel.deleted (
   rel_id           membership_rels.rel_id%TYPE
 );
@@ -343,9 +345,9 @@ procedure membership_rel.delete (
 </pre><p><span class="strong"><strong>Composition
 Relationship</strong></span></p><p>
 <code class="computeroutput">composition_rel.new</code> creates
-a new composition relationship type and returns the relationship's
-<code class="computeroutput">rel_id</code>. All fields are optional
-and default to null except for <code class="computeroutput">rel_type</code> which defaults to composition_rel.
+a new composition relationship type and returns the
+relationship&#39;s <code class="computeroutput">rel_id</code>. All
+fields are optional and default to null except for <code class="computeroutput">rel_type</code> which defaults to composition_rel.
 The interface for this function is:</p><pre class="programlisting">
 function membership_rel.new (
   rel_id             composition_rels.rel_id%TYPE,
@@ -386,7 +388,7 @@ H. Schloming</a></p></dd><dt><span class="term">Documentation author</span></dt>
 </dl></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="groups-design-rev-history" id="groups-design-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="groups-design-rev-history" id="groups-design-rev-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><thead><tr>

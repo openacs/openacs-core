@@ -6,11 +6,11 @@
     
     <center>
     <p/>
-    <b>
+    <strong>
       The user @from_first_names@ @from_last_name@ (@from_email@) will be deleted.
-    <b/>
+    </strong>
     <p/>
-    <b style="color:red">
+    <strong style="color:red">
       These accounts will be merged and the <u>good and final account</u> will be: 
 
     <p/>
@@ -19,9 +19,9 @@
     <span style="font-size:14pt;">@to_first_names@ @to_last_name@ (@to_email@)</span>	      
     <p/>
 
-    </b>
+    </strong>
     <p/>
-      <b>WARNING:</b> Are you are absolutely sure to merge these accounts? 
+      <strong>WARNING:</strong> Are you are absolutely sure to merge these accounts? 
     <p/>
     <form action=merge-final method=get>
       <table>

@@ -22,18 +22,18 @@ possible with standard HTML:</p>
 <ul>
 
 <li>Embed a dynamic variable in a template 
-(<tt><a href="tagref/variable.html">var</a></tt>).
+(<kbd><a href="tagref/variable.html">var</a></kbd>).
 
 <li>Repeat a template section for each object in a dynamic list of objects
-(<tt><a href="tagref/multiple.html">multiple</a></tt>, 
- <tt><a href="tagref/grid.html">grid</a></tt>).
+(<kbd><a href="tagref/multiple.html">multiple</a></kbd>, 
+ <kbd><a href="tagref/grid.html">grid</a></kbd>).
 
 <li>Output different template sections depending on the value of one or more
-dynamic variables (<tt><a href="tagref/if.html">if</a></tt>).
+dynamic variables (<kbd><a href="tagref/if.html">if</a></kbd>).
 
 <li>Provide a mechanism for building complete pages from multiple
 component templates 
-(<tt><a href="tagref/include.html">include</a></tt>).
+(<kbd><a href="tagref/include.html">include</a></kbd>).
 
 </ul>
 
@@ -77,8 +77,8 @@ may assemble different types of content to their liking.</p>
 
 <p>(graphic)</p>
 
-<p>See <a href="tagref/include.html"><tt>include</tt></a> and <a
-href="tagref/master.html"><tt>master</tt></a>.  See also <a
+<p>See <a href="tagref/include.html"><kbd>include</kbd></a> and <a
+href="tagref/master.html"><kbd>master</kbd></a>.  See also <a
 href="guide/components.html">Building reusable layout components</a>
 and <a href="guide/master.html">Using master templates</a>.
 
@@ -95,7 +95,7 @@ valid values when appropriate.</p>
 
 <p>(graphic)</p>
 
-<p>See <a href="tagref/property.html"><tt>property</tt></a>.</p>
+<p>See <a href="tagref/property.html"><kbd>property</kbd></a>.</p>
 
 <h4>Conditional Insertion</h4>
 
@@ -104,7 +104,7 @@ data being presented.  For example, when presenting a list of library
 books that a user has checked out, the designer might want to
 highlight the overdue ones in red.</p>
 
-<p>See <a href="tagref/if.html"><tt>if..else</tt></a>.</p>
+<p>See <a href="tagref/if.html"><kbd>if..else</kbd></a>.</p>
 
 <h4>Iteration</h4>
 
@@ -127,14 +127,14 @@ need to vary the design depending on the context.  For example:</p>
       in a table.</p>
 </ol>
 
-<p>To accomodate these type of scenarios, the template parser sets
+<p>To accommodate these type of scenarios, the template parser sets
 some additional variables that the designer can reference to vary
 the layout from item to item.</p>
 
-<p>See <a href="tagref/multiple.html"><tt>multiple</tt></a>,
-       <a href="tagref/group.html"><tt>group</tt></a>,
-       <a href="tagref/grid.html"><tt>grid</tt></a>.</p>
-       <a href="tagref/list.html"><!-- invisible<tt>list</tt>.--></a></p>
+<p>See <a href="tagref/multiple.html"><kbd>multiple</kbd></a>,
+       <a href="tagref/group.html"><kbd>group</kbd></a>,
+       <a href="tagref/grid.html"><kbd>grid</kbd></a>.</p>
+       <a href="tagref/list.html"><!-- invisible<kbd>list</kbd>.--></a></p>
 </include>
 
     <h3>Notes</h3>
@@ -154,7 +154,7 @@ whitespace between HTML tags for proper display, then special
 care must be taken with dynamic tags to avoid adding whitespace.  </p>
 
 <p>When placed on a line by themselves, tags that are containers for
-template sections (<tt>grid</tt>, <tt>if</tt>, and <tt>multiple</tt>)
+template sections (<kbd>grid</kbd>, <kbd>if</kbd>, and <kbd>multiple</kbd>)
 will cause newlines to be added to the page at the beginning and end
 of the section.  This can be avoided by crowding the start and end
 tags like so:
@@ -169,7 +169,7 @@ reduces the legibility of the template to others who need to edit the
 template later.</p>
 
       <li><p>
-	  <b>Caution:</b> &nbsp;
+	  <strong>Caution:</strong> &nbsp;
 	  Do not write to the connection.  Specifically, if you must use the
 	  <code>&lt;% %&gt;</code> tag, do not call <code>ns_puts</code>,
 	  because it will not work the same way as in AOLserver's ADP

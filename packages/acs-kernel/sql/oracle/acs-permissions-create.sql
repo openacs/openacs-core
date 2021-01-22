@@ -194,8 +194,10 @@ where c.ancestor_id = p.object_id
   and pdm.privilege = p.privilege
   and pamm.party_id = p.grantee_id;
 
+--
 -- Kept to avoid breaking existing code, should eventually go away.
-
+-- Obsolete and deprecated view.
+--
 create or replace view all_object_party_privilege_map as
 select * from acs_object_party_privilege_map;
 

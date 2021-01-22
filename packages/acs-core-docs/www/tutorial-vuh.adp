@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Using .vuh files for pretty urls}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using .vuh files for pretty urls}</property>
 <property name="doc(title)">Using .vuh files for pretty urls</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -28,20 +28,26 @@ referring links in note-list. First, add the vuh:</p><pre class="screen">
 
 set query [ad_conn url]
 
-set request [string range $query [expr [string last / $query] + 1] end]
+set request [string range $query [string last / $query]+1 end]
 
 rp_form_put item_id $request
 
 set internal_path "/packages/[ad_conn package_key]/www/note-edit"
 
 rp_internal_redirect $internal_path
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
 </pre><p>We parse the incoming request and treat everything after the
 final / as the item id. Note that this simple redirection will lose
 any additional query parameters passed in. Many OpenACS objects
 maintain a pretty-name, which is a unique, human-readable string,
-usually derived from title, which makes an even better 'pretty url'
-than a numeric id; this requires that your display page be able to
-look up an item based on pretty id.</p><p>We use <code class="computeroutput">rp_form_put</code> to store
+usually derived from title, which makes an even better 'pretty
+url' than a numeric id; this requires that your display page be
+able to look up an item based on pretty id.</p><p>We use <code class="computeroutput">rp_form_put</code> to store
 the item id in the internal register that the next page is
 expecting, and then redirects the request in process internally
 (ie, without a browser refresh).</p><p>Next, modify note-list so that its link is of the new form.:</p><pre class="screen">

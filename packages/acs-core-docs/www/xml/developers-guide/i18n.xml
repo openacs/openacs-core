@@ -9,8 +9,8 @@
 
   <authorblurb>
     <para>
-      By <ulink url="http://www.petermarklund.com/">Peter Marklund</ulink>
-      and <ulink url="http://www.pinds.com/">Lars Pind</ulink>
+      By <ulink url="mailto:peter@collaboraid.biz">Peter Marklund</ulink>
+      and <ulink url="mailto:lars@collaboraid.biz">Lars Pind</ulink>
     </para>
   </authorblurb>
 
@@ -129,7 +129,7 @@
     <sect2 id="i18n-locale-templates">
 
       <title>Separate Templates for each Locale</title>
-      <para>If the request processor finds a file named <computeroutput>filename.locale.adp</computeroutput>, where locale matches the user's locale, it will process that file instead of <computeroutput>filename.adp</computeroutput>.  For example, for a user with locale <computeroutput>tl_PH</computeroutput>, the file <computeroutput>index.tl_PH.adp</computeroutput>, if found, will be used instead of <computeroutput>index.adp</computeroutput>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</para>
+      <para>If the request processor finds a file named <computeroutput>filename.locale.adp</computeroutput>, where locale matches the user&#39;s locale, it will process that file instead of <computeroutput>filename.adp</computeroutput>.  For example, for a user with locale <computeroutput>tl_PH</computeroutput>, the file <computeroutput>index.tl_PH.adp</computeroutput>, if found, will be used instead of <computeroutput>index.adp</computeroutput>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</para>
     </sect2>
     <sect2 id="i18n-message-catalog">
     <title>Message Catalogs</title>
@@ -163,9 +163,9 @@
             <computeroutput>#<replaceable>package_key.message_key</replaceable>#</computeroutput>
           </para>
           <para>
-            The advantage of the short syntax is that it's short. It's
+            The advantage of the short syntax is that it&#39;s short. It&#39;s
             as simple as inserting the value of a variable.  Example:
-            <replaceable><span>#</span>forum.title#</replaceable>
+            <computeroutput>#<replaceable>forum.title</replaceable>#</computeroutput>
           </para>
         </listitem>
 
@@ -180,8 +180,8 @@
             The verbose syntax allows you to specify a default text in
             a certain language. This syntax is not recommended
             anymore, but it can be convenient for development, because
-            it still works even if you haven't created the message
-            in the message catalog yet, because what it'll do is
+            it still works even if you haven&#39;t created the message
+            in the message catalog yet, because what it&#39;ll do is
             create the message key with the default text from the tag
             as the localized message.  Example: <emphasis>&lt;trn
             key="forum.title" locale="en_US"&gt;Title&lt;/trn&gt;</emphasis>
@@ -197,7 +197,7 @@
           <para>
             This syntax has been designed to make it easy to
             internationalize existing pages. This is not a syntax that
-            stays in the page. As you'll see later, it'll be replaced
+            stays in the page. As you&#39;ll see later, it&#39;ll be replaced
             with the short syntax by a special feature of the APM. You
             may leave out the message_key by writing an underscore (_)
             character instead, in which case a message key will be
@@ -224,11 +224,11 @@
 
       <para>
         <itemizedlist>
-          <listitem><para>Typical static key lookup: <computeroutput>[_ package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can't result from variable evaluation.</para>
+          <listitem><para>Typical static key lookup: <computeroutput>[_ package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can&#39;t result from variable evaluation.</para>
           </listitem> 
 
           <listitem><para>
-            Static key lookup with non-default locale: <computeroutput>[lang::message::lookup $locale package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can't result from variable evaluation.</para>
+            Static key lookup with non-default locale: <computeroutput>[lang::message::lookup $locale package_key.message_key]</computeroutput> - The message key and package key used here must be string literals, they can&#39;t result from variable evaluation.</para>
           </listitem>
 
           <listitem>
@@ -280,9 +280,9 @@
             <para>
               For each message call in the text, decide on a variable name and replace
             the procedure call with a variable lookup on the syntax %var_name%. Remember
-            to initialize a tcl variable with the same name on some line above the text.</para></listitem>
-        <listitem><para>If the text is in a tcl file you must replace variable lookups 
-            (occurences of $var_name or ${var_name}) with %var_name%</para></listitem>
+            to initialize a Tcl variable with the same name on some line above the text.</para></listitem>
+        <listitem><para>If the text is in a Tcl file you must replace variable lookups 
+            (occurrences of $var_name or ${var_name}) with %var_name%</para></listitem>
         <listitem><para>You are now ready to follow the normal procedure and mark up the text using a 
             tempoarary message tag (&lt;#_ text_with_percentage_vars#&gt;) and run the action 
             replace tags with keys in the APM.</para></listitem>
@@ -321,7 +321,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 </screen>
 
       <para>
-        When we were done going through the tcl files we ran the following
+        When we were done going through the Tcl files we ran the following
         commands to check for mistakes:
       </para>
 
@@ -331,10 +331,10 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 # in curly braces (should return nothing, or possibly a few lines for inspection)
 <userinput>find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'</userinput>
 
-# Check if you've forgotten space between default key and text in message tags (should return nothing)
+# Check if you&#39;ve forgotten space between default key and text in message tags (should return nothing)
 <userinput>find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'</userinput>
 
-# Review the list of tcl files with no message lookups
+# Review the list of Tcl files with no message lookups
 <userinput>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</userinput>
 </screen>
 
@@ -342,7 +342,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
         When you feel ready you may vist your package in the
         <ulink url="/acs-admin/apm">package manager</ulink>
         and run the action "Replace tags with keys
-        and insert into catalog" on the Tcl files that you've edited to
+        and insert into catalog" on the Tcl files that you&#39;ve edited to
         replace the temporary tags with calls to the message lookup
         procedure.
       </para>
@@ -354,13 +354,13 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
     <para>
       Most date, time, and number variables are calculated in Tcl files.  Dates and times must be converted when stored in the database,
       when retrieved from the database, and when displayed.  All dates
-      are stored in the database in the server's timezone, which is an
+      are stored in the database in the server&#39;s timezone, which is an
       APM Parameter set at
       <computeroutput>/acs-lang/admin/set-system-timezone</computeroutput>
       and readable at
       <computeroutput>lang::system::timezone.</computeroutput>.  When
       retrieved from the database and displayed, dates and times must
-      be localized to the user's locale.
+      be localized to the user&#39;s locale.
     </para>
     </sect4>
     </sect3>
@@ -402,18 +402,18 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
           <tbody>
             <row>
                <entry>class_instance_pages_csv</entry>
-               <entry><span>#</span>dotlrn.class_page_home_title#,Simple 2-Column;<span>#</span>dotlrn.class_page_calendar_title#,Simple 1-Column;<span>#</span>dotlrn.class_page_file_storage_title#,Simple 1-Column</entry>
+               <entry><computeroutput>#<replaceable>dotlrn.class_page_home_title</replaceable>#</computeroutput>,Simple 2-Column;<computeroutput>#<replaceable>dotlrn.class_page_calendar_title</replaceable>#</computeroutput>,Simple 1-Column;<computeroutput>#<replaceable>dotlrn.class_page_file_storage_title</replaceable>#</computeroutput>,Simple 1-Column</entry>
             </row>
             <row>
                <entry>departments_pretty_name</entry>
-               <entry><span>#</span>departments_pretty_name#</entry>
+               <entry><computeroutput>#<replaceable>departments_pretty_name</replaceable>#</computeroutput></entry>
             </row>
           </tbody>
         </tgroup>
       </informaltable>
 
       <para>
-        Then, depending on how we retrieve the value, here's what we get:
+        Then, depending on how we retrieve the value, here&#39;s what we get:
       </para>
   
       <informaltable frame="all">
@@ -437,7 +437,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
             </row>
             <row>
                <entry>parameter::get -parameter departments_pretty_name</entry>
-               <entry><span>#</span>departments_pretty_name#</entry>
+               <entry><computeroutput>#<replaceable>departments_pretty_name</replaceable>#</computeroutput></entry>
             </row>
           </tbody>
         </tgroup>
@@ -514,7 +514,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
       <listitem>
         <formalpara>
           <title>Replace human-readable text in Tcl files with temporary tags</title>
-          <para>Examine all of the tcl files in the packages for human-readable text and replace it with temporary tags.  The temporary tags in Tcl are slightly different from those in ADP.  If the first character in the temporary tag is an underscore (<computeroutput>_</computeroutput>), then the message keys will be auto-generated from the original message text.  Here is an unmodified tcl file:</para>
+          <para>Examine all of the Tcl files in the packages for human-readable text and replace it with temporary tags.  The temporary tags in Tcl are slightly different from those in ADP.  If the first character in the temporary tag is an underscore (<computeroutput>_</computeroutput>), then the message keys will be auto-generated from the original message text.  Here is an unmodified Tcl file:</para>
         </formalpara>
 <programlisting>
 set title "Messages for $a(name) in $b(label)"
@@ -538,7 +538,7 @@ set context [list [list . &lt;#_ SimPlay#&gt;] \
       <listitem>
         <formalpara>
           <title>Replace the temporary message tags in Tcl files</title>
-          <para>Repeat step 2 for tcl files.  Here is the example Tcl file after conversion:</para>
+          <para>Repeat step 2 for Tcl files.  Here is the example Tcl file after conversion:</para>
         </formalpara>
         <programlisting>
 set title [_ simulation.admin_title]
@@ -582,14 +582,14 @@ grep -r "to_date.*H" *
         </listitem>
 
         <listitem>
-          <para>In Tcl files where the date fields are used, convert the datetime from local server timezone, which is how it's stored in the database, to the user's timezone for display.  Do this with the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_system_to_conn">lc_time_system_to_conn</ulink></computeroutput>:</para>
+          <para>In Tcl files where the date fields are used, convert the datetime from local server timezone, which is how it&#39;s stored in the database, to the user&#39;s timezone for display.  Do this with the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_system_to_conn">lc_time_system_to_conn</ulink></computeroutput>:</para>
 <programlisting>
 set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
-          <para>When a datetime will be written to the database, first convert it from the user's local time to the server's timezone with <computeroutput><ulink url="/api-doc/proc-view?proc=lc%5ftime%5fconn%5fto%5fsystem">lc_time_conn_to_system</ulink></computeroutput>.
+          <para>When a datetime will be written to the database, first convert it from the user&#39;s local time to the server&#39;s timezone with <computeroutput><ulink url="/api-doc/proc-view?proc=lc%5ftime%5fconn%5fto%5fsystem">lc_time_conn_to_system</ulink></computeroutput>.
 </para>
         </listitem>
         <listitem>
-          <para>When a datetime field will be displayed, format it using the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_fmt">lc_time_fmt</ulink></computeroutput>. lc_time_fmt takes two parameters, datetime and format code.  Several format codes are usable for localization; they are placeholders that format dates with the appropriate codes for the user's locale.  These codes are: <computeroutput>%x, %X, %q, %Q, and %c.</computeroutput></para>
+          <para>When a datetime field will be displayed, format it using the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_fmt">lc_time_fmt</ulink></computeroutput>. lc_time_fmt takes two parameters, datetime and format code.  Several format codes are usable for localization; they are placeholders that format dates with the appropriate codes for the user&#39;s locale.  These codes are: <computeroutput>%x, %X, %q, %Q, and %c.</computeroutput></para>
           <programlisting>set foo_date_pretty [lc_time_fmt $foo_date_ansi "%x %X"]</programlisting>
 
         <para>
@@ -664,7 +664,7 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
         message lookups in tcl, adp, and info files and the set of keys in
         the catalog file are identical.  The scripts below assume that
         message lookups in adp and info files are on the format
-        \#package_key.message_key\#, and that message lookups in tcl files
+        \#package_key.message_key\#, and that message lookups in Tcl files
         are always is done with one of the valid lookups described above. The script further assumes
         that you have perl installed and in your path.  Run the script like
         this:
@@ -677,7 +677,7 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
 
       <para>
         where package_key is the key of the package that you want to
-        test. If you don't provide the package_key argument then all
+        test. If you don&#39;t provide the package_key argument then all
         packages with catalog files will be checked. 
         The script will run its checks primarily on en_US xml catalog files.
       </para>
@@ -748,7 +748,7 @@ begins.
   &lt;/if&gt;
 
 &lt;if @components.view_bugs_url@ not nil&gt;
-&lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;
+&lt;a href="@components.view_bugs_url@" title="#&shy;bug-tracker.View_the_bug_fo_component#"&gt;
 &lt;/if&gt;
 @components.num_bugs@ 
 &lt;if @components.num_bugs@ eq 1&gt;
@@ -764,17 +764,17 @@ begins.
           <para>It would probably be better to do this as something like:</para>
 <programlisting>&lt;if @components.view_bugs_url@ not nil&gt;
   &lt;if @components.num_bugs@ eq 1&gt;
-    &lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.one_bug#&lt;/a&gt;
+    &lt;a href="@components.view_bugs_url@" title="#&shy;bug-tracker.View_the_bug_fo_component#"&gt;#&shy;bug-tracker.one_bug#&lt;/a&gt;
   &lt;/if&gt;&lt;else&gt;
-    &lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.N_bugs#&lt;/a&gt;
+    &lt;a href="@components.view_bugs_url@" title="#&shy;bug-tracker.View_the_bug_fo_component#"&gt;#&shy;bug-tracker.N_bugs#&lt;/a&gt;
   &lt;/else&gt;
 &lt;/if&gt;</programlisting>
         </listitem>
 
         <listitem>
           <formalpara>
-            <title>Don't combine keys in  display text</title>
-            <para>Converting a phrase from one language to another is usually more complicated than simply replacing each word with an equivalent.  When several keys are concatenated, the resulting word order will not be correct for every language.  Different languages may use expressions or idioms that don't match the phrase key-for-key.  Create complete, distinct keys instead of building text from several keys.  For example:</para>
+            <title>Don&#39;t combine keys in  display text</title>
+            <para>Converting a phrase from one language to another is usually more complicated than simply replacing each word with an equivalent.  When several keys are concatenated, the resulting word order will not be correct for every language.  Different languages may use expressions or idioms that don&#39;t match the phrase key-for-key.  Create complete, distinct keys instead of building text from several keys.  For example:</para>
           </formalpara>
           <para>Original code:</para>
           <programlisting>multirow append links "New [bug_tracker::conn Bug]" </programlisting>
@@ -787,7 +787,7 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programl
 
 
           <para>In this example of bad i18n, full name is created by concatenating first and last name (admittedly this is pervasive in the toolkit):</para>
-          <programlisting>&lt;a href="@past_version.maintainer_url@" title="#bug-tracker.Email# @past_version.maintainer_email@"&gt;
+          <programlisting>&lt;a href="@past_version.maintainer_url@" title="#&shy;bug-tracker.Email# @past_version.maintainer_email@"&gt;
 @past_version.maintainer_first_names@ @past_version.maintainer_last_name@&lt;/a&gt;</programlisting>
         </listitem>
         
@@ -820,8 +820,8 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programl
 
           <listitem>
             <formalpara>
-              <title>Don't internationalize internal code words</title>
-              <para>Many packages use code words or key words, such as "open" and "closed", which will never be shown to the user.  They may match key values in the database, or be used in a switch or if statement.  Don't change these.</para>
+              <title>Don&#39;t internationalize internal code words</title>
+              <para>Many packages use code words or key words, such as "open" and "closed", which will never be shown to the user.  They may match key values in the database, or be used in a switch or if statement.  Don&#39;t change these.</para>
             </formalpara>
             <para>For example, the original code is </para>
           <programlisting>workflow::case::add_log_data \ 	    
@@ -833,7 +833,7 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programl
        -entry_id $entry_id \
        -key "[_ bug-tracker.resolution]" \
        -value [db_string select_resolution_code {}]</programlisting>
-       <para>But <computeroutput>resolution</computeroutput> is a keyword in a table and in the code, so this breaks the code.  It should not have been internationalized at all.  Here's another example of text that should not have been internationalized:</para>
+       <para>But <computeroutput>resolution</computeroutput> is a keyword in a table and in the code, so this breaks the code.  It should not have been internationalized at all.  Here&#39;s another example of text that should not have been internationalized:</para>
        <programlisting>{show_patch_status "open"}</programlisting>
        <para>It is broken if changed to</para>
        <programlisting>{show_patch_status "[_ bug-tracker.open]"}</programlisting>
@@ -850,14 +850,14 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</programl
 and users with write permission on this Bug Tracker project (package instance) may do so.&lt;/msg&gt;
 &lt;msg key="You_2"&gt;You do not have permission to edit this patch. Only the submitter of the patch 
 and users with write permission on the Bug Tracker project (package instance) may do so.&lt;/msg&gt;</programlisting>
-          <para>These would be more useful if they were, "you_can_filter", "you_do_not_have_permission_to_map_this_patch", and "you_do_not_have_permission_to_edit_this_patch".  Don't worry about exactly matching the english text, because that might change; instead try to capture the meaning of the phrase.  Ask yourself, if I was a translator and didn't know how this application worked, would this key and text make translation easy for me?
+          <para>These would be more useful if they were, "you_can_filter", "you_do_not_have_permission_to_map_this_patch", and "you_do_not_have_permission_to_edit_this_patch".  Don&#39;t worry about exactly matching the english text, because that might change; instead try to capture the meaning of the phrase.  Ask yourself, if I was a translator and didn&#39;t know how this application worked, would this key and text make translation easy for me?
 </para>
-          <para>Sometimes the automatic converter creates keys that don't semantically match their text.  Fix these:</para>
+          <para>Sometimes the automatic converter creates keys that don&#39;t semantically match their text.  Fix these:</para>
           <programlisting>&lt;msg key="Fix"&gt;for version&lt;/msg&gt;
 &lt;msg key="Fix_1"&gt;for&lt;/msg&gt;
 &lt;msg key="Fix_2"&gt;for Bugs&lt;/msg&gt;</programlisting>
 
-          <para>Another example: <computeroutput>Bug-tracker component maintainer"</computeroutput> was converted to <computeroutput>"[_ bug-tracker.Bug-tracker]"</computeroutput>.  Instead, it should be <computeroutput>bug_tracker_component_maintainer</computeroutput>.</para>
+          <para>Another example: <computeroutput>Bug-tracker component maintainer</computeroutput> was converted to <computeroutput>[_ bug-tracker.Bug-tracker]</computeroutput>.  Instead, it should be <computeroutput>bug_tracker_component_maintainer</computeroutput>.</para>
         </listitem>
 
         <listitem>
@@ -882,24 +882,24 @@ the message appears.
             <para>Watch out for quoting and escaping when editing text that is also code.  For example, the original string </para>
           </formalpara>
           <programlisting>set title "Patch \"$patch_summary\" is nice."</programlisting>
-          <para>breaks if the message text retains all of the escaping that was in the tcl command:</para>
+          <para>breaks if the message text retains all of the escaping that was in the Tcl command:</para>
           <programlisting>&lt;msg&gt;Patch \&quot;$patch_summary\&quot; is nice.&lt;/msg&gt;</programlisting>
           <para>When it becomes a key, it should be:</para>
           <programlisting>&lt;msg&gt;Patch &quot;$patch_summary&quot; is nice.&lt;/msg&gt;</programlisting>
           <para>Also, some keys had %var;noquote%, which is not needed since those
-          variables are not quoted (and in fact the variable won't even be
+          variables are not quoted (and in fact the variable won&#39;t even be
           recognized so you get the literal %var;noquote% in the output).</para>
         </listitem>
 
         <listitem>
           <formalpara>
             <title>Be careful with curly brackets</title>
-            <para>Code within curly brackets isn't evaluated.  Tcl uses curly brackets as an alternative way to build lists.  But Tcl also uses curly brackets as an alternative to quotation marks for quoting text.  So this original code</para>
+            <para>Code within curly brackets isn&#39;t evaluated.  Tcl uses curly brackets as an alternative way to build lists.  But Tcl also uses curly brackets as an alternative to quotation marks for quoting text.  So this original code</para>
           </formalpara>
           <programlisting>array set names { key "Pretty" ...} </programlisting>
           <para>... if converted to </para>
           <programlisting>array set names { key "[_bug-tracker.Pretty]" ...} </programlisting>
-          <para>... won't work since the _ func will not be called.  Instead, it should be </para>
+          <para>... won&#39;t work since the _ func will not be called.  Instead, it should be </para>
           <programlisting>array set names [list key [_bug-tracker.Pretty] ...]</programlisting>
          </listitem>
       </itemizedlist>
@@ -913,17 +913,17 @@ the message appears.
       <listitem><para>Use user preference for this package (stored in ad_locale_user_prefs)</para></listitem>
       <listitem><para>Use system preference for the package (stored in apm_packages)</para>
       </listitem>
-      <listitem><para>Use user's general preference (stored in user_preferences)</para></listitem>
+      <listitem><para>Use user&#39;s general preference (stored in user_preferences)</para></listitem>
       <listitem><para>Use Browser header (<computeroutput>Accept-Language</computeroutput> HTTP header)</para></listitem>
       <listitem><para>Use system locale (an APM parameter for acs_lang)</para></listitem>
 <listitem><para>default to en_US</para></listitem>
     </orderedlist>
-    <para>For ADP pages, message key lookup occurs in the templating engine.  For Tcl pages, message key lookup happens with the <computeroutput>_</computeroutput> function.  In both cases, if the requested locale is not found but a locale which is the default for the language which matches your locale's language is
+    <para>For ADP pages, message key lookup occurs in the templating engine.  For Tcl pages, message key lookup happens with the <computeroutput>_</computeroutput> function.  In both cases, if the requested locale is not found but a locale which is the default for the language which matches your locale&#39;s language is
 found, then that locale is offered instead.</para>
   </sect1>
 
   <sect1 id="i18n-translators">
-    <title>Translator's Guide</title>
+    <title>Translator&#39;s Guide</title>
     <para>Most translators use the <ulink url="http://translate.openacs.org">OpenACS Public Translation Server</ulink>, because the process of getting new message keys onto the server and getting new translations back into the distribution are handled by the maintainers of that machine.  You can also do translation work on your own OpenACS site; this makes your own translations more readily available to you but also means that your work will not be shared with other users unless you take extra steps (contacting an OpenACS core developer or submitting a patch) to get your work back to the OpenACS core.</para>
     <para>The basic steps for translators:</para>
     <itemizedlist>
@@ -960,6 +960,6 @@ found, then that locale is offered instead.</para>
 
       </listitem>
     </itemizedlist>
-    <para>When creating a new locale based on an existing one, such as creating the Guatamalan version of Spanish, you can copy the existing locale's catalog files using the script <computeroutput>/packages/acs-core-docs/www/files/create-new-catalog.sh</computeroutput>.</para>
+    <para>When creating a new locale based on an existing one, such as creating the Guatemalan version of Spanish, you can copy the existing locale&#39;s catalog files using the script <computeroutput>/packages/acs-core-docs/www/files/create-new-catalog.sh</computeroutput>.</para>
   </sect1>
 </chapter>

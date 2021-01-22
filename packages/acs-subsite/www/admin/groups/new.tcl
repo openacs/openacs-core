@@ -15,7 +15,7 @@ ad_page_contract {
     { group_id:naturalnum "" }
     {add_to_group_id:integer ""}
     {add_with_rel_type "composition_rel"}
-    { return_url "" }
+    { return_url:localurl "" }
     {group_rel_type_list ""}
 } -properties {
     context:onevalue
@@ -125,12 +125,20 @@ if { [template::form is_request add_group] } {
 
 if { [template::form is_valid add_group] } {
     db_transaction {
-	group::new -form_id add_group -variable_prefix group -group_id $group_id -context_id [ad_conn package_id] $group_type 
-	relation_add -member_state $member_state $add_with_rel_type $add_to_group_id $group_id
+	set group_id [group::new \
+                          -form_id add_group \
+                          -variable_prefix group \
+                          -group_id $group_id \
+                          -context_id [ad_conn package_id] \
+                          $group_type]
+        relation_add -member_state $member_state $add_with_rel_type $add_to_group_id $group_id
     }
 
-    # there may be more segments to put this new group in before the
-    # user's original request is complete.   So build a return_url stack
+    #
+    # There may be more segments to put this new group in before the
+    # user's original request is complete.  So build a return_url
+    # stack.
+    #
     set package_url [ad_conn package_url]
 
     foreach group_rel_type $group_rel_type_list {

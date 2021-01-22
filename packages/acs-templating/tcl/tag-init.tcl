@@ -201,7 +201,7 @@ template_tag multiple { chunk params } {
   for { set $i [expr {1 + $startrow}] } { \$$i <= \${$name:rowcount}"
 
   if {$maxrows >= 0} {
-    template::adp_append_code " && \$$i <= [expr {$maxrows + $startrow}]" \
+    template::adp_append_code " && \$$i <= $maxrows + $startrow" \
 	-nobreak
   }
   
@@ -214,7 +214,7 @@ template_tag multiple { chunk params } {
       template::adp_append_code " if { \$$i < \${$name:rowcount}"
 
       if {$maxrows >= 0} {
-	  template::adp_append_code " && \$$i < [expr {$maxrows + $startrow}]" \
+	  template::adp_append_code " && \$$i < $maxrows + $startrow" \
 	      -nobreak
       }
 
@@ -235,7 +235,7 @@ template_tag multiple { chunk params } {
 template_tag list { chunk params } {
 
   # the list tag accepts a value so that it may be used without a data
-  # source in the tcl script
+  # source in the Tcl script
 
   set value [ns_set iget $params value]
 
@@ -253,7 +253,7 @@ template_tag list { chunk params } {
 
   } else {
 
-    # Expect a data source from the tcl script
+    # Expect a data source from the Tcl script
     set name [template::get_attribute list $params name]
     template::adp_append_code "\nset {$name:rowcount} \[llength \${$name}\]\n"
   }
@@ -779,7 +779,7 @@ template_tag trn { chunk params } {
 }
 
 
-# DanW: implements a switch statement just like in tcl
+# DanW: implements a switch statement just like in Tcl
 # use as follows:
 #
 # <switch flag=regexp @some_var@>

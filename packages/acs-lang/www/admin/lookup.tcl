@@ -17,9 +17,15 @@ ad_form -name lookup -form {
         {label "[_ acs-lang.Locale]"}
         {help_text "[_ acs-lang.Can_be_two_character]"}
     }
-} -on_submit {
-    # No substitution
-    set message [lang::message::lookup $locale $key]
+} -on_submit {    
+    if {[catch {
+        # No substitution
+        set message [lang::message::lookup $locale $key]
+    } errmsg]} {
+        ad_return_complaint 1 $errmsg
+        ad_log error $errmsg
+        ad_script_abort
+    }
     
     set keyv [split $key "."]
     set package_key [lindex $keyv 0]

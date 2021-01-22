@@ -43,7 +43,7 @@ ad_proc -public text_templates::create_pdf_content {
     if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
 	ns_log Notice "Error during conversion from html to pdf: $err"
     }
-    file delete $tmp_html_filename
+    file delete -- $tmp_html_filename
 
     if {[file exists $tmp_pdf_filename]} {
 	return $tmp_pdf_filename

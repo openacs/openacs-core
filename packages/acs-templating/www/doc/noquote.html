@@ -65,12 +65,16 @@ returns the quoted string. In ACS 3.x, properly written code was
 expected to call ns_quotehtml every time it published a string to a
 web page. For example:
 </p><pre class="programlisting">
-doc_body_append &quot;&lt;ul&gt;\n&quot; set db [ns_db gethandle] set selection
-[ns_db select $db {SELECT name FROM bboard_forums}] while {[ns_db
-getrow $db $selection]} { set_variables_after_query doc_body_append
-&quot;&lt;li&gt;Forum: &lt;tt&gt;[ns_quotehtml $name]&lt;/tt&gt;\n&quot; }
+doc_body_append &quot;&lt;ul&gt;\n&quot;
+set db [ns_db gethandle]
+set selection [ns_db select $db {SELECT name FROM bboard_forums}]
+while {[ns_db getrow $db $selection]} {
+    set_variables_after_query
+    doc_body_append &quot;&lt;li&gt;Forum: &lt;tt&gt;[ns_quotehtml $name]&lt;/tt&gt;\n&quot;
+}
 doc_body_append &quot;&lt;/ul&gt;\n&quot;
-</pre><p>Obviously, this was very error-prone, and more often than not,
+</pre>
+<p>Obviously, this was very error-prone, and more often than not,
       the programmers would forget to quote the variables that come
       from the database or from the user. This would &quot;usually&quot; work,
       but in some cases it would lead to broken pages and even pose a
@@ -94,8 +98,11 @@ doc_body_append &quot;&lt;/ul&gt;\n&quot;
       the presentation template, and the programming logic code. The
       template will look like this:
 </p><pre class="programlisting">
-&lt;ul&gt; &lt;multiple name=forums&gt; &lt;li&gt;Forum:
-  &lt;tt&gt;@forums.name@&lt;/tt&gt; &lt;/multiple&gt; &lt;/ul&gt;
+&lt;ul&gt;
+  &lt;multiple name=forums&gt;
+    &lt;li&gt;Forum: &lt;tt&gt;@forums.name@&lt;/tt&gt;
+  &lt;/multiple&gt;
+&lt;/ul&gt;
 </pre><p>Once you understand the (simple) workings of the multiple tag,
       this version strikes you as much more readable than the old
       one. But we're not done yet: we need to write the Tcl code that
@@ -104,7 +111,9 @@ doc_body_append &quot;&lt;/ul&gt;\n&quot;
       and assigns variables from each row to template variables in
       each pass of a multiple of our choice.
 </p><pre class="programlisting">
-db_multirow forums get_forum_names { SELECT name FROM forums }
+db_multirow forums get_forum_names {
+  SELECT name FROM forums
+}
 </pre><p>
       At this point the careful reader will wonder at which point the
       forum name gets quoted, and if so, how does the templating
@@ -125,13 +134,14 @@ uglier in its own subtle way. The trick is to remember that our
 templating still supports all the ADP features, including embedding
 Tcl code in the template. Thus instead of referring to the multirow
 variable with the @forums.name@ variable substitutions, we use
-&lt;%= [ns_quotehtml @forums.name@] %&gt;. This works
+&lt;%=Â [ns_quotehtmlÂ @forums.name@]Â %&gt;. This works
 correctly, but obviously breaks the abstraction barrier between ADP
 and Tcl syntaxes. The practical result of breaking the abstraction is
 that every occurrence of Tcl code in an ADP template will have to be
 painstakingly reviewed and converted once ADPs start being invoked by
 Java code rather than Tcl.
-</p><p>At this point, most programmers simply give up and
+</p>
+<p>At this point, most programmers simply give up and
 <span class="emphasis"><em>don't quote their variables at all 
 </em></span>. Quoting is
 handled only in the areas where it is really crucial and where not
@@ -141,8 +151,9 @@ exaggeration; it has been proven by auditing the ACS 4.0, both
 manually and through grepping for ns_quotehtml. Strangely, this
 otherwise sad fact allows us to deploy a very radical but much more
 robust solution to the problem.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="Quote_Always,_Except_When_Told_Not_to"></a>Quote Always, Except When Told Not to.
-</h3></div></div><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div>
+  <h3 class="title"><a name="Quote_Always,_Except_When_Told_Not_to"></a>Quote Always, Except When Told Not to.</h3>
+</div></div><p>
       At the time when we came to realize how serious the quoting
       deficiencies of ACS 4.0 were, we were about two weeks away from
       the release of a project for the German Bank. There was simply
@@ -197,11 +208,7 @@ public. Explanation on how to port your existing modules and the
 &quot;gotchas&quot; that one can expect follows in a 
 <a href="">separate document 
 </a>.
-</p><p>The discussion about speed, i.e. benchmarking results
-before and after the change, is 
-<a href="speed.html" target="_top">also available
-</a>.
-</p><p>
+</p>><p>
 <span class="emphasis"><em>
 <a href="mailto:hniksic@xemacs.org" target="_top">Hrvoje Niksic
 </a>

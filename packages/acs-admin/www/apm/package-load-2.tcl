@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     {url ""}
     {file_path ""}
-    {delete 0}
+    {delete:boolean 0}
 } -validate {
     
     url_xor_file_path {
@@ -24,7 +24,7 @@ ad_page_contract {
 }
 
 if {$delete} {
-    file delete -force [apm_workspace_install_dir]
+    file delete -force -- [apm_workspace_install_dir]
 }
 
 set title "Contents of Loaded Package"
@@ -55,7 +55,7 @@ if {$file_path eq ""} {
 ns_log Debug "APM: Loading $file_path"
 
 # If file_path ends in .apm, then load the single package.
-if { [file extension $file_path] eq "apm" || $url_param ne ""} {
+if { [file extension $file_path] eq ".apm" || $url_param ne ""} {
     apm_load_apm_file {*}$url_param -callback apm_ns_write_callback $file_path
 } else {
     # See if this is a directory.

@@ -42,9 +42,10 @@ set return_url_enc [ad_urlencode $return_url]
 # Select out the group name and the group's object type. Note we can
 # use 1row because the validate filter above will catch missing groups
 
-db_1row group_info {
+db_1row group_info_pretty {
     select g.group_name, g.join_policy,
-           o.object_type as group_type
+           o.object_type as group_type,
+           t.pretty_name as group_type_pretty_name
       from groups g, acs_objects o, acs_object_types t
      where g.group_id = o.object_id
        and o.object_type = t.object_type

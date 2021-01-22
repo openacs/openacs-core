@@ -32,9 +32,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select safe_drop_cosntraint('notifications', 'notif_reponse_id_fk');
+select safe_drop_cosntraint('notifications', 'notif_response_id_fk');
 
-alter table notifications add constraint notif_reponse_id_fk
+alter table notifications add constraint notif_response_id_fk
                               foreign key (response_id)
                               references acs_objects (object_id)
                               on delete cascade;

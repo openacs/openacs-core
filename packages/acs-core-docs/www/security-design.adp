@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Security Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Design}</property>
 <property name="doc(title)">Security Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -76,7 +76,7 @@ occur over HTTPS.</p>
 <div class="titlepage"><div><div><h4 class="title">
 <a name="authentication-details" id="authentication-details"></a>Details</h4></div></div></div><p>The authentication system issues up to four signed cookies (see
 below), with each cookie serving a different purpose. These cookies
-are:</p><div class="informaltable"><table cellspacing="0" border="1">
+are:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>
@@ -107,7 +107,7 @@ secure hash</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>ad_secure_token</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem"><p>is a session-level cookie from the browser's standpoint</p></li><li class="listitem"><p>its signature expires in SessionLifetime seconds</p></li><li class="listitem"><p>contains random garbage (ns_time) to prevent attack against the
+<li class="listitem"><p>is a session-level cookie from the browser&#39;s standpoint</p></li><li class="listitem"><p>its signature expires in SessionLifetime seconds</p></li><li class="listitem"><p>contains random garbage (ns_time) to prevent attack against the
 secure hash</p></li><li class="listitem"><p>user_id is extraneous</p></li>
 </ul></div>
 </li>
@@ -133,8 +133,8 @@ ad_conn.</p>
 function <code class="computeroutput">ad_secure_conn_p</code> is
 used to determine whether or not the URL being accessed is requires
 a secure login. The function simply checks if the location begins
-with "https". (This is safe because the location is set during the
-server initialization.)</p><p>If secure authentication is required, the <code class="computeroutput">ad_secure_token</code> cookie is checked to make
+with "https". (This is safe because the location is set
+during the server initialization.)</p><p>If secure authentication is required, the <code class="computeroutput">ad_secure_token</code> cookie is checked to make
 sure its data matches the data stored in <code class="computeroutput">ad_session_id</code>. This is true for all pages
 except those that are part of the login process. On these pages,
 the user can not yet have received the appropriate <code class="computeroutput">ad_secure_token</code> cookie, so no check against
@@ -161,7 +161,7 @@ of three actions taken on it:</p><div class="itemizedlist"><ul class="itemizedli
 <li class="listitem"><p>set: cookie with no expiration is set</p></li><li class="listitem"><p>delete: set to "" with max age of 0, so it is expired
 immediately</p></li><li class="listitem"><p>nothing: if the cookie is present, it remains</p></li>
 </ul></div><p>The current state of the permanent login cookies is not taken
-into account when determining the appropriate action.</p><div class="informaltable"><table cellspacing="0" border="1">
+into account when determining the appropriate action.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col><col>
 </colgroup><tbody>
@@ -305,16 +305,17 @@ indicates no time out on the signature.</p><p>Signed cookies include in their RF
 of the value and the signature. In addition to the expiration of
 the digital signature, RFC 2109 specifies an optional max age that
 is returned to the client. For most cookies, this max age matches
-the expiration date of the cookie's signature. The standard
+the expiration date of the cookie&#39;s signature. The standard
 specifies that when the max age is not included, the cookie should
-be "discarded when the user agent exits." Because we can not trust
-the client to do this, we must specify a timeout for the signature.
-The SessionLifetime parameter is used for this purpose, as it
-represents the maximum possible lifetime of a single session.</p><p>RFC 2109 specifies this optional "secure" parameter which
-mandates that the user-agent use "secure means" to contact the
-server when transmitting the cookie. If a secure cookie is returned
-to the client over https, then the cookie will never be transmitted
-over insecure means.</p><div class="sect4">
+be "discarded when the user agent exits." Because we can
+not trust the client to do this, we must specify a timeout for the
+signature. The SessionLifetime parameter is used for this purpose,
+as it represents the maximum possible lifetime of a single
+session.</p><p>RFC 2109 specifies this optional "secure" parameter
+which mandates that the user-agent use "secure means" to
+contact the server when transmitting the cookie. If a secure cookie
+is returned to the client over https, then the cookie will never be
+transmitted over insecure means.</p><div class="sect4">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="signature-performance" id="signature-performance"></a>Performance</h5></div></div></div><p>Performance is a key goal of this implementation of signed
 cookies. To maximize performance, we will use the following
@@ -347,8 +348,8 @@ cleared when the thread is destroyed by AOLserver.</p>
 <div class="titlepage"><div><div><h5 class="title">
 <a name="signature-security" id="signature-security"></a>Security</h5></div></div></div><p>Storing information on a client always presents an additional
 security risk.</p><p>Since we are only validating the information and not trying to
-protect it as a secret, we don't use salt. Cryptographic salt is
-useful if you are trying to protect information from being read
+protect it as a secret, we don&#39;t use salt. Cryptographic salt
+is useful if you are trying to protect information from being read
 (e.g., hashing passwords).</p>
 </div>
 </div><div class="sect3">
@@ -356,10 +357,10 @@ useful if you are trying to protect information from being read
 <a name="external-ssl" id="external-ssl"></a>External SSL</h4></div></div></div><p>External SSL mechanisms (firewall, dedicated hardware, etc.) can
 be used by creating two pools of AOLservers. In one pool the
 servers should be configured with the location parameter of nssock
-module set to "https://yourservername". The servers in the other
-pool are configured as normal. The external SSL agent should direct
-SSL queries to the pool of secure servers, and it should direct
-non-SSL queries to the insecure servers.</p>
+module set to "https://yourservername". The servers in
+the other pool are configured as normal. The external SSL agent
+should direct SSL queries to the pool of secure servers, and it
+should direct non-SSL queries to the insecure servers.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="PRNG" id="PRNG"></a>PRNG</h4></div></div></div><p>The pseudorandom number generator depends primarily on ns_rand,

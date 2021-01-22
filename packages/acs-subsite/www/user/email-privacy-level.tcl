@@ -4,7 +4,7 @@ ad_page_contract {
     @author Miguel Marin (miguelmarin@viaro.net) Viaro Networks (www.viaro.net)
 } {
     {user_id:naturalnum ""}
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 if { $return_url eq "" } {
@@ -21,8 +21,12 @@ if {$user_id eq ""} {
 ad_form -name private-email -export return_url -form {
     {level:integer(select)
 	{label "\#acs-subsite.Change_my_email_P\#:"}
-	{options {{"[_ acs-subsite.email_as_text]" 4} {"[_ acs-subsite.email_as_image]" 3} \
-		      {"[_ acs-subsite.email_as_a_form]" 2} {"[_ acs-subsite.email_dont_show]" 1}}}
+	{options {
+            {"[_ acs-subsite.email_as_text]" 4}
+            {"[_ acs-subsite.email_as_image]" 3} 
+            {"[_ acs-subsite.email_as_a_form]" 2}
+            {"[_ acs-subsite.email_dont_show]" 1}
+        }}
     }
 } -on_request {
     set level [email_image::get_priv_email -user_id $user_id]

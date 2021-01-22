@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Starting and Stopping an OpenACS instance.}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Starting and Stopping an OpenACS instance.}</property>
 <property name="doc(title)">Starting and Stopping an OpenACS instance.</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -13,10 +13,10 @@ Chapter 6. Production Environments"
 instance.</h2></div></div></div><p>The simplest way to start and stop and OpenACS site is to run
 the startup shell script provided, <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/daemontools/run</code>.
 This runs as a regular task, and logs to the logfile. To stop the
-site, kill the script.</p><p>A more stable way to run OpenACS is with a "keepalive" mechanism
-of some sort, so that whenever the server halts or is stopped for a
-reset, it restarts automatically. This is recommended for
-development and production servers.</p><p>The Reference Platform uses Daemontools to control AOLserver. A
+site, kill the script.</p><p>A more stable way to run OpenACS is with a "keepalive"
+mechanism of some sort, so that whenever the server halts or is
+stopped for a reset, it restarts automatically. This is recommended
+for development and production servers.</p><p>The Reference Platform uses Daemontools to control AOLserver. A
 simpler method, using <code class="computeroutput">init</code>, is
 <a class="link" href="install-openacs-inittab" title="AOLserver keepalive with inittab">here</a>.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Daemontools must already be installed. If not, <a class="link" href="install-daemontools" title="Install Daemontools (OPTIONAL)">install it</a>.</p></li><li class="listitem">
@@ -109,11 +109,11 @@ server.</p><pre class="screen">
 </li><li class="listitem">
 <p>Verify that the controls work. You may want to <code class="computeroutput">tail -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-error.log</code>
 in another window, so you can see what happens when you type these
-commands.</p><p>Most of this information comes from Tom Jackson's <a class="ulink" href="http://zmbh.com/daemontools-aolserver/daemontools-aolserver.html" target="_top">AOLserver+Daemontools Mini-HOWTO</a>.</p>
+commands.</p><p>More information can be found on the <a class="ulink" href="http://panoptic.com/wiki/aolserver/How_to_start_stop_AOLserver_using_Daemontools" target="_top">AOLserver Daemontools</a> page.</p>
 </li>
 </ol></div><div class="table">
-<a name="idp140400237760704" id="idp140400237760704"></a><p class="title"><b>Table 6.1. How it
-Works</b></p><div class="table-contents"><table summary="How it Works" cellspacing="0" border="1">
+<a name="idp140592099316488" id="idp140592099316488"></a><p class="title"><strong>Table 6.1. How it
+Works</strong></p><div class="table-contents"><table class="table" summary="How it Works" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col><col><col>
 </colgroup><thead><tr>

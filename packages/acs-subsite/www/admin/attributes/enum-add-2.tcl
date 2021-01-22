@@ -12,7 +12,7 @@ ad_page_contract {
     attribute_id:naturalnum,notnull
     attribute_enum_values:array,trim,optional
     { operation:trim "Finish adding values" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 set max_sort_order [db_string select_max_sort_order {}]

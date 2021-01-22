@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
 <h2>Namespace widget</h2>
@@ -14,13 +14,13 @@ Listing of public methods:<br>
 <h3>Method Detail</h3>
 <p align="right">
 <font color="red">*</font> indicates required</p>
-<b>Public Methods:</b>
+<strong>Public Methods:</strong>
 <br>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="widget::param_element_create" id="widget::param_element_create"><font size="+1" weight="bold">widget::param_element_create</font></a></td></tr><tr><td>
 <blockquote>Dipatches subprocs to generate the form elements for
 setting an attribute widget param</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>form</code><font color="red">*</font>
@@ -60,15 +60,15 @@ param. One of literal, eval, query</td>
 </td></tr>
 </table>
 <p>
-<b>Private Methods</b>:<br>
+<strong>Private Methods</strong>:<br>
 </p>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name="widget::create_options_param" id="widget::create_options_param"><font size="+1" weight="bold">widget::create_options_param</font></a><br><small><i>  by Michael Pih</i></small>
+<a name="widget::create_options_param" id="widget::create_options_param"><font size="+1" weight="bold">widget::create_options_param</font></a><br><small><em>  by Michael Pih</em></small>
 </td></tr><tr><td>
 <blockquote>Create the options param form widget for adding/editing
 metadata form widgets</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>form</code><font color="red">*</font>
@@ -100,11 +100,11 @@ value (literal, query, eval)</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name="widget::create_param_source" id="widget::create_param_source"><font size="+1" weight="bold">widget::create_param_source</font></a><br><small><i>  by Michael Pih</i></small>
+<a name="widget::create_param_source" id="widget::create_param_source"><font size="+1" weight="bold">widget::create_param_source</font></a><br><small><em>  by Michael Pih</em></small>
 </td></tr><tr><td>
 <blockquote>Create default param_source form widget for
 adding/editing metadata form widgets</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>form</code><font color="red">*</font>
@@ -126,11 +126,11 @@ the form</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name="widget::create_param_type" id="widget::create_param_type"><font size="+1" weight="bold">widget::create_param_type</font></a><br><small><i>  by Michael Pih</i></small>
+<a name="widget::create_param_type" id="widget::create_param_type"><font size="+1" weight="bold">widget::create_param_type</font></a><br><small><em>  by Michael Pih</em></small>
 </td></tr><tr><td>
 <blockquote>Create default param_type form widget for
 adding/editing metadata form widgets</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>form</code><font color="red">*</font>
@@ -147,11 +147,11 @@ the form</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name="widget::create_param_value" id="widget::create_param_value"><font size="+1" weight="bold">widget::create_param_value</font></a><br><small><i>  by Michael Pih</i></small>
+<a name="widget::create_param_value" id="widget::create_param_value"><font size="+1" weight="bold">widget::create_param_value</font></a><br><small><em>  by Michael Pih</em></small>
 </td></tr><tr><td>
 <blockquote>Create default param_value form widget for
 adding/editing metadata form widgets</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>form</code><font color="red">*</font>
@@ -173,11 +173,11 @@ widget param is mandatory</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name="widget::create_text_param" id="widget::create_text_param"><font size="+1" weight="bold">widget::create_text_param</font></a><br><small><i>  by Michael Pih</i></small>
+<a name="widget::create_text_param" id="widget::create_text_param"><font size="+1" weight="bold">widget::create_text_param</font></a><br><small><em>  by Michael Pih</em></small>
 </td></tr><tr><td>
 <blockquote>Create default text param form widget for
 adding/editing metadata form widgets</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>form</code><font color="red">*</font>
@@ -204,11 +204,11 @@ value (literal, query, eval)</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name="widget::create_values_param" id="widget::create_values_param"><font size="+1" weight="bold">widget::create_values_param</font></a><br><small><i>  by Michael Pih</i></small>
+<a name="widget::create_values_param" id="widget::create_values_param"><font size="+1" weight="bold">widget::create_values_param</font></a><br><small><em>  by Michael Pih</em></small>
 </td></tr><tr><td>
 <blockquote>Create the values param form widget for adding/editing
 metadata widgets</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>form</code><font color="red">*</font>
@@ -240,11 +240,11 @@ value (literal, query, eval)</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name="widget::process_param" id="widget::process_param"><font size="+1" weight="bold">widget::process_param</font></a><br><small><i>  by Michael Pih</i></small>
+<a name="widget::process_param" id="widget::process_param"><font size="+1" weight="bold">widget::process_param</font></a><br><small><em>  by Michael Pih</em></small>
 </td></tr><tr><td>
 <blockquote>Edits a metadata form widget parameter from the
 form</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>db</code><font color="red">*</font>

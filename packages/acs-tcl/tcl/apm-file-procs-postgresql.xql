@@ -3,63 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="apm_generate_tarball.create_item">      
-      <querytext>
-
-select content_item__new(
-         varchar :name,
-         null,
-         null,
-         null,
-         now(),
-         null,
-         null,
-         :creation_ip,
-         'content_item',
-         'content_revision',
-         null,
-         null,
-         'text/plain',
-         null,
-         null,
-         'file'
-         )
-
-      </querytext>
-</fullquery>
-
-<fullquery name="apm_generate_tarball.create_revision">      
-      <querytext>
-
-  declare
-        v_revision_id      integer;
-  begin
-
-  v_revision_id := content_revision__new(
-                                       :title,
-                                       'gzipped tarfile',
-                                       now(),
-                                       'text/plain',
-                                       null,
-                                       'not_important',
-                                       :item_id,
-                                       null,
-                                       now(),
-                                       :user_id,
-                                       :creation_ip
-                                       );
-
-  update cr_items
-  set live_revision = v_revision_id
-  where item_id = :item_id;
-
-  return v_revision_id;
-
-  end;
-
-      </querytext>
-</fullquery>
-
 <fullquery name="apm_generate_tarball.update_tarball">      
       <querytext>
 

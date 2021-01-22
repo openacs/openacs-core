@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 6. Production
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 6. Production
 Environments}</property>
 <property name="doc(title)">Chapter 6. Production
 Environments</property>
@@ -7,13 +7,13 @@ Environments</property>
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="upgrade-supporting" leftLabel="Prev"
 		    title="
-Part II. Administrator's Guide"
+Part II. Administrator&#39;s Guide"
 		    rightLink="install-openacs-keepalive" rightLabel="Next">
 		<div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="maintenance-web" id="maintenance-web"></a>Chapter 6. Production
 Environments</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="install-openacs-keepalive">Starting and Stopping an OpenACS
 instance.</a></span></dt><dt><span class="sect1"><a href="install-openacs-inittab">AOLserver keepalive with
 inittab</a></span></dt><dt><span class="sect1"><a href="install-next-add-server">Running multiple services on one

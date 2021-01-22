@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-service-contract {Service Contracts}} {}</property>
+<property name="context">{/doc/acs-service-contract {ACS Service Contracts}} {}</property>
 <property name="doc(title)"></property>
 <master>
 
@@ -18,5 +18,5 @@ Binding - A concrete implementation for a particular interface.
 Function - The implementation of an operation. Actors Registrar -
 An entity that defines the specification of a contract and
 registers it with the repository. Provider - Provides an
-implementation of the contract. Dependant - Something that uses a
+implementation of the contract. Dependent - Something that uses a
 contract.

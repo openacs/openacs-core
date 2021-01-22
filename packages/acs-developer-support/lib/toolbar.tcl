@@ -44,13 +44,29 @@ if { $show_p } {
 
     multirow append ds_buttons ADP \
         "Toggle ADP reveal" \
-        {javascript:void(d=document);void(el=d.getElementsByTagName('span'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}} \
+        \# \
         [ad_decode [ds_adp_reveal_enabled_p] 1 "on" "off"]
+
+    template::add_body_script -script {
+        document.getElementById('ACS_DS_ADP').addEventListener('click', function (event) {
+            var el=document.getElementsByTagName('span');
+            event.preventDefault();
+            for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=document.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}
+        });
+    }
 
     multirow append ds_buttons FOT \
         "Toggle Footer display" \
-        {javascript:void(d=document);void(el=d.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-footer'){void(el[i].className='developer-support-footer-off')}else{if(el[i].className=='developer-support-footer-off'){void(el[i].className='developer-support-footer')}}};} \
+        \# \
         off
+
+    template::add_body_script -script {
+        document.getElementById('ACS_DS_FOT').addEventListener('click', function (event) {
+            var el=document.getElementsByTagName('div');
+            event.preventDefault();
+            for(i=0;i<el.length;i++){if(el[i].className=='developer-support-footer'){void(el[i].className='developer-support-footer-off')}else{if(el[i].className=='developer-support-footer-off'){void(el[i].className='developer-support-footer')}}};
+        });
+    }
 
     set oacs_shell_url "${ds_url}shell"
     set auto_test_url [site_node::get_package_url -package_key acs-automated-testing]

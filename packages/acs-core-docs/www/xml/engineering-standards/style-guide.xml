@@ -20,16 +20,16 @@
     <para>
       Well, first lets consider the OpenACS code base (all this as of
       December 2003 and including dotLRN).  There are about 390,000
-      lines of tcl code, about 460,000 lines of sql (in datamodel
+      lines of Tcl code, about 460,000 lines of sql (in datamodel
       scripts and .xql files), about 80,000 lines of markup in .adp
       files, and about 100,000 lines of documentation.  All told, just
       about a million lines of "stuff".  In terms of logical units
       there are about 160 packages, 800 tables, 2,000 stored
-      procedures, about 2,000 functional pages, and about 3,200 tcl
+      procedures, about 2,000 functional pages, and about 3,200 Tcl
       procedures.
     </para>
     <para>
-      When confronted by this much complexity it's important to be
+      When confronted by this much complexity it&#39;s important to be
       able to make sense of it without having to wade through it all.
       Things should be coherent, things should be named predictably
       and behave like you would expect, and your guess about what
@@ -59,10 +59,10 @@
           <para>
             Some of the file naming rules are requirements for things
             to function correctly (for example data model creation
-            scripts and tcl library files must be named properly to be
+            scripts and Tcl library files must be named properly to be
             used), while some are suggestions (the
             <emphasis>object-verb</emphasis> naming convention) which
-            if ignored won't break anything, but if you follow the
+            if ignored won&#39;t break anything, but if you follow the
             rules people will be able to understand your package much
             more easily.
           </para>
@@ -124,7 +124,7 @@
           <para>
             The code base is very large and if things are formatted
             consistently it is easier to read.  Also, if it conforms
-            to the standard it won't be reformatted (which can mask
+            to the standard it won&#39;t be reformatted (which can mask
             the change history and making tracking down bugs much
             harder).  Using spaces rather than tabs makes patches
             easier to read and manage and does not force other
@@ -139,10 +139,10 @@
         <formalpara>
           <title>Use the standard APIs</title>
           <para>
-            Don't reinvent the wheel.  Prefer extending an existing
+            Don&#39;t reinvent the wheel.  Prefer extending an existing
             core API to creating your own.  If something in the core
-            does not meet your particular needs it probably won't meet
-            others as well and fleshing out the core API's makes the
+            does not meet your particular needs it probably won&#39;t meet
+            others as well and fleshing out the core API&#39;s makes the
             toolkit more useful for everyone and more easily extended.
           </para>
         </formalpara>
@@ -173,7 +173,7 @@
         </formalpara>
         <para>
           Create bug tracker tickets for things you are going to work
-          on yourself (just in case you don't get to it and to act as
+          on yourself (just in case you don&#39;t get to it and to act as
           a pointer for others who might encounter the same problem).
         </para>
       </listitem>

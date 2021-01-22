@@ -62,10 +62,14 @@
 
 <div class="navheader" style="display:table;width:100%;border-top:1px dashed #ddd;border-bottom:1px dashed #ddd;padding:5px 0;">
     <span style="display:table-cell;text-align:left;width:20%;padding-left:20px;">
+    <if @leftLink@ not nil>
         <a accesskey="p" href="@leftLink@" class="arrow_box-left">@leftLabel@</a>
+    </if>
     </span>
-    <span style="display:table-cell;text-align:center;width:60%;"><b>@title@</b></span>
+    <span style="display:table-cell;text-align:center;width:60%;"><strong>@title@</strong></span>
     <span style="display:table-cell;text-align:right;width:20%;padding-right:20px;">
+    <if @rightLink@ not nil>
         <a accesskey="n" href="@rightLink@" class="arrow_box">@rightLabel@</a>
+    </if>
     </span>
 </div>

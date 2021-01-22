@@ -13,7 +13,7 @@
     </multiple>
     </ul>
   </if><else>
-    for users matching <b> @combine_method@ </b> of the criteria:
+    for users matching <strong> @combine_method@ </strong> of the criteria:
     <ul>
     <multiple name="criteria">
       <li> @criteria.data@ </li>
@@ -43,7 +43,7 @@
 
   <if @user_search:rowcount@ gt 30>
 
-    <if @only_authorized_p@ eq 0>
+    <if @only_authorized_p;literal@ false>
       <p>
         We're showing all users, authorized or not (<a href="complex-search?@export_authorize@&amp;only_authorized_p=1">
         show only authorized</a>).

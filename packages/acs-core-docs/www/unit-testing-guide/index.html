@@ -20,17 +20,17 @@ code breaks any functionality requirements.
 <h3>Installation</h3>
 
 The ACS4 unit testing suite requires several pieces of software to function.
-First, you'll need to install <a href="http://jakarta.apache.org/ant/">Ant</a>.
-Ant is a build tool similar to make.  It's used to both build your test cases
-and run the tests themselves.  The basic Ant functionality doesn't have 
-everything needed to automate the testing, so you'll want to obtain David 
-Eison's ForeachFileAntTask.java, available
+First, you&#39;ll need to install <a href="http://jakarta.apache.org/ant/">Ant</a>.
+Ant is a build tool similar to make.  It&#39;s used to both build your test cases
+and run the tests themselves.  The basic Ant functionality doesn&#39;t have 
+everything needed to automate the testing, so you&#39;ll want to obtain David 
+Eison&#39;s ForeachFileAntTask.java, available
 at <a href="http://cvs.arsdigita.com/cgi-bin/cvsweb.pl/acs-java-4/WEB-INF/src/com/arsdigita/build/">http://cvs.arsdigita.com/cgi-bin/cvsweb.pl/acs-java-4/WEB-INF/src/com/arsdigita/build/</a>.  Compile the files and make sure that they
 are in your classpath.
 
 <p>
 
-Once Ant is working, you'll need to obtain copies of both
+Once Ant is working, you&#39;ll need to obtain copies of both
 <a href="http://www.junit.org/">JUnit</a> and
 <a href="http://httpunit.sourceforge.net/">HTTPUnit</a>.  JUnit
 is a framework to automate the running of unit tests, and HTTPUnit provides
@@ -47,7 +47,7 @@ file or into a configuration file.
 
 <p>
 
-You should now be ready to run the tests.  Go to your server's "packages"
+You should now be ready to run the tests.  Go to your server&#39;s "packages"
 directory and type <code>source ./paths.sh</code> to set up your classpath.
 Now type <code>ant</code>.  Ant should find the toplevel build.xml file,
 check that it can see JUnit, compile your java files, and finally call Ant on 
@@ -60,7 +60,7 @@ be shown a report of which tests failed and which succeeded.
 
 Adding new test cases is meant to be as easy as possible.  Simple create a
 new function in the appropriate .java file, making sure that the function
-name begins with "test".  I've adopted a naming convention where the function
+name begins with "test".  I&#39;ve adopted a naming convention where the function
 name consists of the word "test", a short description of what the function
 does (with words delimited by underscores), followed finally by the QAS 
 testcase ID, if such a testcase exists.  If you need to test an area of the 

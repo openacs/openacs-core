@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Categories</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-admin-pages.html" title="Admin Pages"><link rel="next" href="profile-code.html" title="Profile your code"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-admin-pages.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="profile-code.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-categories"></a>Categories</h2></div></div></div><div class="authorblurb"><p>extended by <a class="ulink" href="mailto:nima.mazloumi@gmx.de" target="_top">Nima Mazloumi</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Categories</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="tutorial-advanced.html" title="Chapter 10. Advanced Topics"><link rel="previous" href="tutorial-admin-pages.html" title="Admin Pages"><link rel="next" href="profile-code.html" title="Profile your code"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="tutorial-admin-pages.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Advanced Topics</th><td width="20%" align="right"> <a accesskey="n" href="profile-code.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tutorial-categories"></a>Categories</h2></div></div></div><div class="authorblurb"><p>extended by <a class="ulink" href="mailto:nima.mazloumi@gmx.de" target="_top">Nima Mazloumi</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>You can associate any ACS Object with one or more categories.
@@ -38,7 +38,7 @@
             <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.adp</code>
           file:
           </p><pre class="programlisting">
-   			&lt;a href="@category_map_url@"&lt;<span>#</span>categories.Site_wide_Categories#&lt;/a&gt;
+   	          &lt;a href="@category_map_url@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
           </pre><p>The link created by the above code (<code class="computeroutput">category_map_url</code>) 
           will take the admin to the generic
           admin UI where he can pick category trees that make sense for this
@@ -62,8 +62,8 @@
           To achieve this we'll need to use the <code class="computeroutput">-extend</code>
           switch to the <code class="computeroutput">ad_form</code> command. Here's the "meat" of the
           <code class="computeroutput">note-edit.tcl</code> page:</p><pre class="programlisting">
-			    #extend the form to support categories
-			    set package_id [ad_conn package_id]
+			# extend the form to support categories
+			set package_id [ad_conn package_id]
 			    
     			category::ad_form::add_widgets -form_name note -container_object_id $package_id -categorized_object_id [value_if_exists item_id]
 
@@ -113,7 +113,8 @@ script execution.</p><p>The database commands:</p><pre class="screen">[$OPENACS_
       select samplenote__name(:note_id)
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">[$OPENACS_SERVICE_NAME@yourserver www]$ <strong class="userinput"><code>emacs note-delete.adp</code></strong></pre><pre class="programlisting">&lt;master&gt;
+&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">[$OPENACS_SERVICE_NAME@yourserver www]$ <strong class="userinput"><code>emacs note-delete.adp</code></strong></pre><pre class="programlisting">
+&lt;master&gt;
 &lt;property name="title"&gt;@title@&lt;/property&gt;
 &lt;property name="context"&gt;{@title@}&lt;/property&gt;
 &lt;h2&gt;@title@&lt;/h2&gt;
@@ -132,7 +133,7 @@ form generated by the ad_form command with the matching name.  Test it
           </pre><p>Change your to this:</p><pre class="programlisting">
 			&lt;a href=configure?&lt;%=[export_vars -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
 			&lt;if @use_categories_p@&gt;
-   			&lt;a href="@category_map_url@"&lt;<span>#</span>categories.Site_wide_Categories#&lt;/a&gt;
+   			&lt;a href="@category_map_url@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
    			&lt;/if&gt;
           </pre><p>Now create a configure page</p><pre class="programlisting">
           	ad_page_contract {
@@ -260,11 +261,10 @@ form generated by the ad_form command with the matching name.  Test it
 		&lt;a href="@package_url@view?@YOURPARAMS@"&gt;All Items&lt;/if&gt;
  	  </pre><p>Finally you need a an <code class="computeroutput">index.vuh</code> in your 
  	  www folder to rewrite the URLs correctly, <a class="xref" href="tutorial-vuh.html" title="Using .vuh files for pretty urls">the section called “Using .vuh files for pretty urls”</a>:</p><pre class="programlisting">
- 	  	set url /[ad_conn extra_url]
+ 	  set url /[ad_conn extra_url]
 
-		if {[regexp {^/+cat/+([^/]+)/*} $url \
-          ignore_whole category_id]} {
-          rp_form_put category_id $category_id
-		}
-		rp_internal_redirect "/packages/YOURPACKAGE/www/index" 	  
- 	  </pre><p>Now when ever the user select a category only notes that belong to this category are displayed.</p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-admin-pages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="profile-code.html">Next</a></td></tr><tr><td width="40%" align="left">Admin Pages </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Profile your code</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/tutorial-categories.html#comments">View comments on this page at openacs.org</a></center></body></html>
+	  if {[regexp {^/+cat/+([^/]+)/*} $url ignore_whole category_id]} {
+              rp_form_put category_id $category_id
+	  }
+	  rp_internal_redirect "/packages/YOURPACKAGE/www/index" 	  
+ 	  </pre><p>Now when ever the user select a category only notes that belong to this category are displayed.</p></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tutorial-admin-pages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="profile-code.html">Next</a></td></tr><tr><td width="40%" align="left">Admin Pages </td><td width="20%" align="center"><a accesskey="u" href="tutorial-advanced.html">Up</a></td><td width="40%" align="right"> Profile your code</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

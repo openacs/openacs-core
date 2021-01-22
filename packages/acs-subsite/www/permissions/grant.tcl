@@ -9,7 +9,7 @@ ad_page_contract {
     object_id:naturalnum,notnull
     privileges:multiple,optional
     {application_url ""}
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 permission::require_permission -object_id $object_id -privilege admin
@@ -103,11 +103,14 @@ incr maxlevel
 
 foreach element $hierarchy {
     lassign $element level privilege
-
-    lappend select_list [list "[string repeat "&nbsp;&nbsp;&nbsp;" $level] $privilege" $privilege]
+    lappend select_list [list "[string repeat {&nbsp;&nbsp;&nbsp;} $level] $privilege" $privilege]
 }
 
-ad_form -name grant -export {return_url} -form {
+ad_form \
+    -name grant \
+    -export {return_url} \
+    -has_submit 1 \
+    -form {
     {object_id:text(hidden)
         {value $object_id}
     }

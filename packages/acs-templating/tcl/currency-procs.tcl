@@ -1,17 +1,20 @@
-# Currency widgets for the OpenACS Templating System
-
-# This is free software distributed under the terms of the GNU Public
-# License.  Full text of the license is available from the GNU Project:
-# http://www.fsf.org/copyleft/gpl.html
-
-# @author Don Baccus (dhogaza@pacifier.com)
+ad_library {
+    Currency widgets for the OpenACS Templating System
+    
+    @author Don Baccus (dhogaza@pacifier.com)
+}
 
 # These are modelled somewhat after the date procs.
 
 # DRB: This was totally non-functional in ACS 4.2 Classic.  It's now partly
 # functional in that we accept and process currency values.  We really need
 # to tie this in with the acs-lang money database as this code's far too
-# simplistic.
+# simplistic.    
+
+# This is free software distributed under the terms of the GNU Public
+# License.  Full text of the license is available from the GNU Project:
+# http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 namespace eval template::util {}
@@ -152,7 +155,7 @@ ad_proc -private template::data::transform::currency {
                     set have_values 1
                 }
 		set fractional_part_format [lindex $format 3]
-		for { set j [string length $value] } { $j < $fractional_part_format } { set j [expr {$j + 1}] } {
+		for { set j [string length $value] } { $j < $fractional_part_format } { incr j } {
 		    append $value 0
 		}
 	    }
@@ -196,7 +199,7 @@ ad_proc -public template::util::currency::set_property {
 
     # Erase leading zeroes from the value, but make sure that 00
     # is not completely erased
-    set value [template::util::leadingTrim $value]
+    set value [util::trim_leading_zeros $value]
 
     set format [lindex $currency_list 5]
 

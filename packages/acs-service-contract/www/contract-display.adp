@@ -4,7 +4,7 @@
 
     <ul>
       <multiple name=contract>
-        <li> <b>@contract.operation_name@</b> -
+        <li> <strong>@contract.operation_name@</strong> -
               @contract.operation_desc@ 
           <ul>
             <group column="operation_name">

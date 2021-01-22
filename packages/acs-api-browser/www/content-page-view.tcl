@@ -11,7 +11,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum,optional
-    source_p:boolean,optional,trim
+    source_p:boolean,optional,trim,notnull
     path:trim,notnull
 } -properties {
     title:onevalue
@@ -26,6 +26,7 @@ set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_
 
 if { ![info exists source_p] } {
     set source_p $default_source_p
+    if {$source_p eq ""} {set source_p 0}
 }
 
 if { ![info exists version_id] && 
@@ -67,7 +68,7 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
 }
 
 set mime_type [ns_guesstype $path]
-if {![string match "text/*" $mime_type]} {
+if {![string match "text/*" $mime_type] && [file extension $path] ne ".xql"} {
     set source_p 0
     set source_link 0
 } else {
@@ -75,7 +76,11 @@ if {![string match "text/*" $mime_type]} {
 }
 if { $source_p } {
     set file_contents [template::util::read_file $::acs::rootdir/$path]
-    set file_contents [apidoc::tclcode_to_html $file_contents]
+    if {[file extension $path] eq ".tcl"} {
+        set file_contents [apidoc::tclcode_to_html $file_contents]
+    } else {
+        set file_contents [ns_quotehtml $file_contents]
+    }
 }
 
 template::util::list_to_multirow xql_links [::apidoc::xql_links_list $path]

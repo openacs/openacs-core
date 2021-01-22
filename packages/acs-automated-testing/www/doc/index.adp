@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-automated-testing {Automated Testing}} {Automated Testing}</property>
+<property name="context">{/doc/acs-automated-testing {ACS Automated Testing}} {Automated Testing}</property>
 <property name="doc(title)">Automated Testing</property>
 <master>
 <div class="article" lang="en">

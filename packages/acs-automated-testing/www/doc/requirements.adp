@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-automated-testing {Automated Testing}} {Requirements}</property>
+<property name="context">{/doc/acs-automated-testing {ACS Automated Testing}} {Requirements}</property>
 <property name="doc(title)">Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -50,7 +50,7 @@ those commands fail gracefully.</td>
 <span class="strong">tclwebtest is easy to install</span>.
 Tclwebtest installation is fully documented and can be installed
 with less than five steps. (Install is documented in 5.0, but
-there's a can't-find-config error; also, some new work in
+there&#39;s a can&#39;t-find-config error; also, some new work in
 tclwebtest HEAD needs to packaged in a new tarball release.)</td>
 </tr><tr>
 <td>2</td><td>Done</td><td>Done</td><td>
@@ -78,7 +78,7 @@ exported</span>. It should be possible to import a test into the
 database from a file, and to export it to a file. These files
 should be sharable by different OpenACS installations. It should be
 possible to import/export directly between running OpenACS sites.
-(We should look at what did and didn't work in acs-lang catalog
+(We should look at what did and didn&#39;t work in acs-lang catalog
 files and work from there.)</td>
 </tr><tr>
 <td>5</td><td> </td><td>B</td><td>
@@ -87,14 +87,14 @@ create and run tests from the web interface without writing code.
 <p>1) UI to turn on macro mode.</p><p>2) basic recording: when you fill out a form while macro mode is
 on, the submit is caught and displayed as tclwebtest code, and then
 executed.</p><p>3) UI for creating aa_true tests automatically, based on the
-content of the page. (For example, a form that says "the returned
-page must contain [ type regexp here] that spits out aa_true "test
-X" [string regexp blah blah]</p>
+content of the page. (For example, a form that says "the
+returned page must contain [ type regexp here] that spits out
+aa_true "test X" [string regexp blah blah]</p>
 </td>
 </tr><tr>
-<td>6</td><td> </td><td>A</td><td>Notification subscriptions are available for "email me whenever
-this test fails" and "notify me whenever a test in this category
-fails"</td>
+<td>6</td><td> </td><td>A</td><td>Notification subscriptions are available for "email me
+whenever this test fails" and "notify me whenever a test
+in this category fails"</td>
 </tr><tr>
 <td>7</td><td> </td><td>A</td><td>The results of an automated test are optionally written to an
 xml file.</td>
@@ -162,5 +162,4 @@ started</a>
 		    rightLink="" rightLabel="" rightTitle=""
 		    homeLink="index" homeLabel="Home" 
 		    upLink="index" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/requirements.html#comments">View comments
-on this page at openacs.org</a></center>
+		

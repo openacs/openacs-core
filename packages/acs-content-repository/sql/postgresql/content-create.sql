@@ -56,7 +56,7 @@ comment on table cr_extension_mime_type_map is '
 \i ../common/mime-type-data.sql
 
 create table cr_content_mime_type_map (
-  content_type  varchar(100)
+  content_type  varchar(1000)
 		constraint cr_content_mime_map_ctyp_fk
 		references acs_object_types,
   mime_type	varchar(200)
@@ -115,10 +115,10 @@ insert into cr_locales (
 --------------------------------------------------------------
 
 create table cr_type_children (
-  parent_type   varchar(100)
+  parent_type   varchar(1000)
 		constraint cr_type_children_parent_type_fk
 		references acs_object_types,
-  child_type    varchar(100)
+  child_type    varchar(1000)
 		constraint cr_type_children_child_type_fk
 		references acs_object_types,
   relation_tag  varchar(100),
@@ -138,10 +138,10 @@ create index cr_type_children_chld_type_idx ON cr_type_children(child_type);
 
 
 create table cr_type_relations (
-  content_type  varchar(100)
+  content_type  varchar(1000)
 		constraint cr_type_relations_parent_fk
 		references acs_object_types,
-  target_type   varchar(100)
+  target_type   varchar(1000)
 		constraint cr_type_relations_child_fk
 		references acs_object_types,
   relation_tag  varchar(100),
@@ -163,6 +163,7 @@ create index cr_type_relations_tgt_typ_idx ON cr_type_relations(target_type);
 --------------------------------------------------------------
 -- CONTENT ITEMS
 --------------------------------------------------------------
+CREATE TYPE cr_item_storage_type_enum AS ENUM ('text', 'file', 'lob');
 
 -- Define the cr_items table
 
@@ -189,12 +190,10 @@ create table cr_items (
                       check (publish_status in 
                             ('production', 'ready', 'live', 'expired')
                             ),
-  content_type        varchar(100)
+  content_type        varchar(1000)
                       constraint cr_items_content_type_fk
                       references acs_object_types,
-  storage_type        varchar(10) default 'text' not null
-                      constraint cr_items_storage_type_ck
-                      check (storage_type in ('lob','text','file')),
+  storage_type        cr_item_storage_type_enum default 'text' not null,
   storage_area_key    varchar(100) default 'CR_FILES' not null,
   tree_sortkey        varbit not null,
   max_child_sortkey   varbit
@@ -232,7 +231,7 @@ comment on table cr_files_to_delete is '
 ';
 
 
--- DCW, this can't be defined in the apm_package_versions table defintion,
+-- DCW, this can't be defined in the apm_package_versions table definition,
 -- because cr_items is created afterwards.
 
 alter table apm_package_versions add
@@ -390,10 +389,14 @@ create table cr_child_rels (
                      references acs_objects,
   parent_id          integer
                      constraint cr_child_rels_parent_id_nn
-                     not null,
+                     not null
+		     CONSTRAINT cr_child_rels_parent_id_fk
+                     REFERENCES acs_objects(object_id) ON DELETE CASCADE,
   child_id           integer
                      constraint cr_child_rels_child_id_nn
-                     not null,
+                     not null
+		     CONSTRAINT cr_child_rels_child_id_fk
+		     REFERENCES cr_items(item_id) ON DELETE CASCADE,
   relation_tag       varchar(100),
   order_n            integer
 );
@@ -416,8 +419,8 @@ create table cr_item_rels (
                      constraint cr_item_rels_rel_id_fk
                      references acs_objects,
   item_id            integer
-                     constraint cr_item_rels_item_id_fk
-                     references cr_items,
+		     CONSTRAINT cr_item_rels_item_id_fk
+		     REFERENCES cr_items(item_id) ON DELETE CASCADE,
   related_object_id  integer
                      constraint cr_item_rels_rel_obj_fk
                      references acs_objects,
@@ -485,8 +488,8 @@ create table cr_revisions (
 create index cr_revisions_lob_idx ON cr_revisions(lob);
 create index cr_revisions_item_id_idx ON cr_revisions(item_id);
 
-create trigger cr_revisions_lob_trig before delete or update or insert
-on cr_revisions for each row execute procedure on_lob_ref();
+CREATE TRIGGER cr_revisions_lob_trig AFTER UPDATE or DELETE or INSERT
+ON cr_revisions FOR EACH ROW EXECUTE PROCEDURE on_lob_ref();
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);
@@ -827,7 +830,7 @@ create table cr_folder_type_map (
   folder_id	integer
 		constraint cr_folder_type_map_fldr_fk
 		references cr_folders on delete cascade,
-  content_type  varchar(100)
+  content_type  varchar(1000)
 		constraint cr_folder_type_map_typ_fk
 		references acs_object_types on delete cascade,
   constraint cr_folder_type_map_pk
@@ -876,7 +879,7 @@ insert into cr_template_use_contexts values ('admin');
 insert into cr_template_use_contexts values ('public');
 
 create table cr_type_template_map (
-  content_type     varchar(100)
+  content_type     varchar(1000)
                    constraint cr_type_template_map_typ_fk
                    references acs_object_types
                    constraint cr_type_template_map_typ_nn
@@ -950,8 +953,8 @@ create table cr_symlinks (
 		  constraint cr_symlinks_symlink_id_pk 
                   primary key,
   target_id       integer
-                  constraint cr_symlinks_target_id_fk
-		  references cr_items
+  		  CONSTRAINT cr_symlinks_target_id_fk
+		  REFERENCES cr_items(item_id) ON DELETE CASCADE
 		  constraint cr_symlinks_target_id_nn
 		  not null,
   label		  varchar(1000)
@@ -1375,16 +1378,19 @@ BEGIN
 
   v_revision_id := content_revision__new(
                'Template',
-               NULL,
-               now(),
-               'text/html',
-               null,
+               null,           -- description
+               now(),          -- publish_date
+               'text/html',    -- mime_type
+               null,           -- nls_language
                '<html><body>@text;noquote@</body></html>',
                v_item_id,
-               NULL,
-               now(),
-               null,
-               null);
+               null,           -- revision_id
+               now(),          -- creation_date
+               null,           -- creation_user
+               null,           -- creation_ip
+	       null,           -- content_length
+	       null            -- package_id
+	       );
 
   update 
     cr_revisions

@@ -319,6 +319,12 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
 
     if { $user_id == 0 } {
         set locale [ad_get_cookie "ad_locale"]
+        #
+        # Check, if someone hacked the cookie
+        #
+        if {$locale ne "" && ![lang::conn::valid_locale_p $locale]} {
+            error "invalid locale cookie '$locale'"
+        }
     } else {
         set locale [db_string get_user_site_wide_locale {} -default "$system_locale"]
     }
@@ -611,17 +617,28 @@ ad_proc -private lang::conn::browser_locale {} {
     }
 }
 
-ad_proc -private lang::conn::get_accept_language_header {} {
+ad_proc -private lang::conn::valid_locale_p {locale} {
+    Check, of the provided locale is syntactically correct
+} {
+    return [regexp {^[a-zA-Z]+(_[a-zA-Z0-9]+)?$} $locale]
+}
 
+ad_proc -private lang::conn::get_accept_language_header {} {
+    Obtain a list of locals from the request headers.
+    @return a list of locales in the syntax used by OpenACS (ISO codes)
+} {
     set acclang [ns_set iget [ns_conn headers] "Accept-Language"]
 
     # Split by comma, and get rid of any ;q=0.5 parts
     # acclang is something like 'da,en-us;q=0.8,es-ni;q=0.5,de;q=0.3'
     set acclangv [list]
     foreach elm [split $acclang ","] {
-        # Get rid of trailing ;q=0.5 part
-        set elm [lindex [split $elm ";"] 0]
-
+        # Get rid of trailing ;q=0.5 part and trim spaces
+        set elm [string trimleft [lindex [split $elm ";"] 0] " "]
+        # Ignore the default catchall setting "*"
+        if {$elm eq "*"} {
+            continue
+        }
         # elm is now either like 'da' or 'en-us'
         # make it into something like 'da' or 'en_US'
         set elmv [split $elm "-"]
@@ -629,8 +646,11 @@ ad_proc -private lang::conn::get_accept_language_header {} {
         if { [llength $elmv] > 1 } {
             append elm "_[string toupper [lindex $elmv 1]]"
         }
-
-        lappend acclangv $elm
+        if {[lang::conn::valid_locale_p $elm]} {
+            lappend acclangv $elm
+        } else {
+            error "invalid locale in provided Accept-Language header field"
+        }
     }
     
     return $acclangv

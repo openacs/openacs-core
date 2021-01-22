@@ -587,7 +587,7 @@ proc http::geturl { url args } {
 	# get trying to write the post data.  Having both fileevents active
 	# changes the timing and the behavior, but no two platforms
 	# (among Solaris, Linux, and NT)  behave the same, and none 
-	# behave all that well in any case.  Servers should always read thier
+	# behave all that well in any case.  Servers should always read their
 	# POST data if they expect the client to read their response.
 		
 	if {$isQuery || $isQueryChannel} {
@@ -1005,7 +1005,7 @@ proc http::CopyStart {s token} {
 #
 # Arguments
 #	token	The token returned from http::geturl
-#	count	The amount transfered
+#	count	The amount transferred
 #
 # Side Effects
 #	Invokes callbacks
@@ -1133,7 +1133,7 @@ proc http::mapReply {string} {
     # The spec says: "non-alphanumeric characters are replaced by '%HH'"
     # 1 leave alphanumerics characters alone
     # 2 Convert every other character to an array lookup
-    # 3 Escape constructs that are "special" to the tcl parser
+    # 3 Escape constructs that are "special" to the Tcl parser
     # 4 "subst" the result, doing all the array substitutions
 
     regsub -all \[^$alphanumeric\] $string {$formMap(&)} string
@@ -1164,7 +1164,7 @@ proc http::ProxyRequired {host} {
 
 # http::CharsetToEncoding --
 #
-# 	Tries to map a given IANA charset to a tcl encoding.
+# 	Tries to map a given IANA charset to a Tcl encoding.
 #	If no encoding can be found, returns binary.
 #
 

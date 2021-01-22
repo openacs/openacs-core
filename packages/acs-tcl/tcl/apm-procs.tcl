@@ -1294,13 +1294,25 @@ ad_proc -private apm_package_url_from_key_mem {package_key} {
 # package_key -> version_id 
 #
 
-ad_proc -public apm_version_id_from_package_key { package_key } {
-    Return the id of the enabled version of the given package_key.
+ad_proc -public apm_version_id_from_package_key {
+    {-all:boolean}
+    package_key
+} {
+    Return the id of the (per default enabled) version of the given package_key.
     If no such version id can be found, returns the empty string.
 
+    @param all when specified, return the the enabled or disabled version_ids of the package_key.
+    @param package_key
     @author Peter Marklund
+
+    @return the supposedly unique version_id for the enabled package, or a list of
+            all the enabled and disabled versions when -all flag is specified
 } {
-    return [db_string get_id {} -default ""]
+    if {$all_p} {
+        return [db_list get_id {}]
+    } else {
+        return [db_string get_enabled_id {} -default ""]
+    }
 }
 
 #
@@ -1319,7 +1331,7 @@ ad_proc -public apm_package_key_from_version_id {version_id} {
 
 ad_proc -private apm_package_key_from_version_id_mem {version_id} {
     Returns the package_key for the given APM package version id. Goes to the database
-    everytime called.
+    every time called.
 
     @author Peter Marklund (peter@collaboraid.biz)
 } {
@@ -1687,13 +1699,23 @@ ad_proc -private apm_callback_has_valid_args {
     }
 
     set test_arg_list ""
+    set test_arg_list_spec ""
     foreach arg_name [apm_arg_names_for_callback_type -type $type] {
         lappend test_arg_list -$arg_name value
+        lappend test_arg_list_spec -${arg_name}:required        
     }
 
     if { $test_arg_list eq "" } {
         # The callback proc should take no args
         return [expr {[info args ::$proc_name] eq ""}]
+    }
+    
+    if {[info commands ::nsf::cmd::info] ne ""} {
+        #
+        # We can compare the signature of via nsf procs
+        #
+        return [expr {[::nsf::cmd::info parameter ::$proc_name] eq $test_arg_list_spec}]
+
     }
 
     # The callback proc should have required arg switches. Check

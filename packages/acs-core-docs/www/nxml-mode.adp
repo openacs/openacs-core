@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Using nXML mode in Emacs}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using nXML mode in Emacs}</property>
 <property name="doc(title)">Using nXML mode in Emacs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

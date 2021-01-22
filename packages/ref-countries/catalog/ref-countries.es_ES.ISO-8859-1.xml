@@ -10,6 +10,7 @@
   <msg key="AM">Armenia</msg>
   <msg key="AN">Antillas Holandesas</msg>
   <msg key="AO">Angola</msg>
+  <msg key="AQ">Antártica</msg>
   <msg key="AR">Argentina</msg>
   <msg key="AS">Samoa Estadounidense</msg>
   <msg key="AT">Austria</msg>
@@ -48,6 +49,7 @@
   <msg key="CN">China</msg>
   <msg key="CO">Colombia</msg>
   <msg key="CR">Costa Rica</msg>
+  <msg key="CS">Serbia y Montenegro</msg>
   <msg key="CU">Cuba</msg>
   <msg key="CV">Cabo Verde</msg>
   <msg key="CX">Isla de Navidad</msg>
@@ -214,6 +216,7 @@
   <msg key="TM">Turkmenistán</msg>
   <msg key="TN">Túnez</msg>
   <msg key="TO">Tonga</msg>
+  <msg key="TP">Timor Oriental</msg>
   <msg key="TR">Turquía</msg>
   <msg key="TT">Trinidad y Tobago</msg>
   <msg key="TV">Tuvalu</msg>
@@ -221,6 +224,7 @@
   <msg key="TZ">Tanzania</msg>
   <msg key="UA">Ucrania</msg>
   <msg key="UG">Uganda</msg>
+  <msg key="UM">Islas Ultramarinas Menores de Estados Unidos</msg>
   <msg key="US">Estados Unidos</msg>
   <msg key="UY">Uruguay</msg>
   <msg key="UZ">Uzbekistán</msg>

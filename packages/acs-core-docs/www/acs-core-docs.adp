@@ -1,17 +1,17 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Core Documentation}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Core Documentation}</property>
 <property name="doc(title)">OpenACS Core Documentation</property>
 <master>
-<include src="navheader"
-		    leftLink="requirements-template" leftLabel="Prev"
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="" leftLabel=""
 		    title=""
 		    rightLink="for-everyone" rightLabel="Next">
 		<div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140717547632592" id="idp140717547632592"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140198977745328" id="idp140198977745328"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
 Everyone</a></span></dt><dd><dl>
 <dt><span class="chapter"><a href="general-documents">1. High
@@ -19,8 +19,8 @@ level information: What is OpenACS?</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="openacs-overview">Overview</a></span></dt><dt><span class="sect1"><a href="release-notes">OpenACS
 Release Notes</a></span></dt>
 </dl></dd>
-</dl></dd><dt><span class="part"><a href="acs-admin">II. Administrator's
-Guide</a></span></dt><dd><dl>
+</dl></dd><dt><span class="part"><a href="acs-admin">II.
+Administrator&#39;s Guide</a></span></dt><dd><dl>
 <dt><span class="chapter"><a href="install-overview">2.
 Installation Overview</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="install-steps">Basic
@@ -32,8 +32,8 @@ Unix-like system and supporting software</a></span></dt><dt><span class="sect1">
 8.1.7</a></span></dt><dt><span class="sect1"><a href="postgres">Install
 PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install AOLserver
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
-5.7.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
-Installation Guide for Windows2000</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
+5.9.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
+Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
 Installation Guide for Mac OS X</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="configuring-new-site">4.
 Configuring a new OpenACS Site</a></span></dt><dd><dl>
@@ -45,8 +45,8 @@ an OpenACS package</a></span></dt><dt><span class="sect1"><a href="how-do-I">How
 I?</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="upgrade">5.
 Upgrading</a></span></dt><dd><dl>
-<dt><span class="sect1"><a href="upgrade-overview">Overview</a></span></dt><dt><span class="sect1"><a href="upgrade-4.5-to-4.6.html">Upgrading
-4.5 or higher to 4.6.3</a></span></dt><dt><span class="sect1"><a href="upgrade-4.6.3-to-5.html">Upgrading
+<dt><span class="sect1"><a href="upgrade-overview">Overview</a></span></dt><dt><span class="sect1"><a href="upgrade-4.5-to-4.6">Upgrading
+4.5 or higher to 4.6.3</a></span></dt><dt><span class="sect1"><a href="upgrade-4.6.3-to-5">Upgrading
 OpenACS 4.6.3 to 5.0</a></span></dt><dt><span class="sect1"><a href="upgrade-5-0-dot">Upgrading an
 OpenACS 5.0.0 or greater installation</a></span></dt><dt><span class="sect1"><a href="upgrade-openacs-files">Upgrading the OpenACS
 files</a></span></dt><dt><span class="sect1"><a href="upgrade-supporting">Upgrading
@@ -111,7 +111,8 @@ Tutorial</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="tutorial-newpackage">Creating
 an Application Package</a></span></dt><dt><span class="sect1"><a href="tutorial-database">Setting Up
 Database Objects</a></span></dt><dt><span class="sect1"><a href="tutorial-pages">Creating Web
-Pages</a></span></dt>
+Pages</a></span></dt><dt><span class="sect1"><a href="tutorial-debug">Debugging and
+Automated Testing</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="tutorial-advanced">10.
 Advanced Topics</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="tutorial-specs">Write the
@@ -143,7 +144,8 @@ Application Pages</a></span></dt><dt><span class="sect1"><a href="parties">Parti
 OpenACS</a></span></dt><dt><span class="sect1"><a href="permissions-tediously-explained">OpenACS Permissions
 Tediously Explained</a></span></dt><dt><span class="sect1"><a href="object-identity">Object
 Identity</a></span></dt><dt><span class="sect1"><a href="programming-with-aolserver">Programming with
-AOLserver</a></span></dt>
+AOLserver</a></span></dt><dt><span class="sect1"><a href="form-builder">Using Form
+Builder: building html forms dynamically</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="eng-standards">12.
 Engineering Standards</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="style-guide">OpenACS Style
@@ -168,7 +170,7 @@ Internationalization</a></span></dt><dd><dl>
 Overview</a></span></dt><dt><span class="sect1"><a href="i18n-introduction">How
 Internationalization/Localization works in OpenACS</a></span></dt><dt><span class="sect1"><a href="i18n-convert">How to
 Internationalize a Package</a></span></dt><dt><span class="sect1"><a href="i18n-design">Design
-Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator's Guide</a></span></dt>
+Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator&#39;s Guide</a></span></dt>
 </dl></dd><dt><span class="appendix"><a href="cvs-tips">D. Using CVS
 with an OpenACS Site</a></span></dt>
 </dl></dd><dt><span class="part"><a href="acs-plat-dev">IV. For OpenACS
@@ -203,7 +205,7 @@ Update the translations</a></span></dt>
 </dl></dd><dt><span class="index"><a href="ix01">Index</a></span></dt>
 </dl>
 </div><div class="list-of-figures">
-<p><b>List of Figures</b></p><dl>
+<p><strong>List of Figures</strong></p><dl>
 <dt>4.1. <a href="how-do-I">Site
 Templates</a>
 </dt><dt>4.2. <a href="how-do-I">Granting
@@ -251,7 +253,7 @@ layout diagram</a>
 </dt>
 </dl>
 </div><div class="list-of-tables">
-<p><b>List of Tables</b></p><dl>
+<p><strong>List of Tables</strong></p><dl>
 <dt>2.1. <a href="install-steps">Default
 directories for a standard install</a>
 </dt><dt>2.2. <a href="individual-programs">Version
@@ -273,16 +275,15 @@ Localization Overview</a>
 </dt>
 </dl>
 </div><div class="list-of-examples">
-<p><b>List of Examples</b></p><dl><dt>12.1. <a href="variables">Getting
+<p><strong>List of Examples</strong></p><dl><dt>12.1. <a href="variables">Getting
 datetime from the database ANSI-style</a>
 </dt></dl>
 </div>
 </div>
-<include src="navfooter"
-		    leftLink="requirements-template" leftLabel="Prev" leftTitle=""
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="" leftLabel="" leftTitle=""
 		    rightLink="for-everyone" rightLabel="Next" rightTitle="
 Part I. OpenACS For Everyone"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-package-dev" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/current/index.html#comments">View comments
-on this page at openacs.org</a></center>
+		    homeLink="" homeLabel="" 
+		    upLink="" upLabel=""> 
+		

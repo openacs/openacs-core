@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     rel_type:notnull,rel_type_dynamic_p
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 if { $operation ne "Yes, I really want to delete this relationship type" } {

@@ -23,7 +23,7 @@
     from (select /*+ ORDERED */ DISTINCT  g.group_name, g.group_id
            from acs_objects o, groups g,
                 application_group_element_map app_group, 
-                all_object_party_privilege_map perm
+                acs_object_party_privilege_map perm
           where perm.object_id = g.group_id
             and perm.party_id = :user_id
             and perm.privilege = 'read'

@@ -38,7 +38,7 @@ ACS Service Contract Documentation
 
   Hitchiker's Guide to Service Contract Definitions
 
-    - contract - analagous to interface, contracts serve as logical 
+    - contract - analogous to interface, contracts serve as logical 
 		  containers for operations.
 
     - operation - a method of an interface. defines a method signature,
@@ -53,7 +53,7 @@ ACS Service Contract Documentation
 
     - bindings - association between an interface and an implementation.
 
-    - types - define the kind of input and outputs a operation recieves.
+    - types - define the kind of input and outputs a operation receives.
 
   Usage
 

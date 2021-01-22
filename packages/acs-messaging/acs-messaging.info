@@ -6,23 +6,25 @@
     <pretty-plural>ACS Messaging Services</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
+    <implements-subsite-p>f</implements-subsite-p>
+    <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-messaging-5.9.0.apm">
+    <version name="5.9.1" url="http://openacs.org/repository/download/apm/acs-messaging-5.9.1.apm">
         <owner url="mailto:akk+@cs.cmu.edu">Anukul Kapoor</owner>
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>General messaging for bboard and general comments.</summary>
-        <release-date>2015-10-04</release-date>
-        <maturity>3</maturity>
+        <release-date>2017-08-06</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
-	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
         <description format="text/html">Provides generic message services, with email sending.  acs-mail-lite and notifications are the 
-        prefered packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
+        preferred packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
+        <license>GPL</license>
+        <maturity>3</maturity>
 
-        <provides url="acs-messaging" version="5.9.0"/>
-        <requires url="acs-content-repository" version="5.9.0"/>
-        <requires url="acs-kernel" version="5.9.0"/>
-        <requires url="acs-mail-lite" version="5.9.0"/>
+        <provides url="acs-messaging" version="5.9.1"/>
+        <requires url="acs-content-repository" version="5.9.1"/>
+        <requires url="acs-kernel" version="5.9.1"/>
+        <requires url="acs-mail-lite" version="5.9.1"/>
 
         <callbacks>
         </callbacks>
@@ -32,7 +34,3 @@
 
     </version>
 </package>
-
-
-
-
