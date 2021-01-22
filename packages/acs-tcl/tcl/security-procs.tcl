@@ -1831,7 +1831,7 @@ if {[info commands ns_driver] ne ""} {
             lappend result [list \
                                 proto $proto \
                                 driver [dict get $i module] \
-                                host [dict get $li host] \
+                                host [lindex [dict get $i address] 0] \
                                 location $location port $port suffix $suffix]
         }
         return $result
