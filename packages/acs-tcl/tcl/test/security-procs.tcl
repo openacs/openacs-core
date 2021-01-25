@@ -42,7 +42,33 @@ aa_register_case \
                     set url [ns_conn location]
                 }
                 set url "$url/$test_url"
-                set headers [ns_conn headers]
+
+                # This test strictly requires a cookie-based
+                # authentication, and not e.g. a test authentication
+                # such as that we obtain via acs::test::login. A user
+                # agent relying on such test authentication (e.g. in a
+                # continuous integration pipeline) would fail this
+                # test. Let's forge one: login the current user so
+                # that cookies are set, retrieve such cookies and set
+                # them as headers of the next HTTP request.
+                # set headers [ns_conn headers]
+                set headers [ns_set create]
+                ad_user_login $user_id
+                set cookies [list]
+                foreach cookie {
+                    ad_session_id
+                    ad_user_login
+                    ad_user_login_secure
+                    ad_secure_token
+                } {
+                    set cookie_value [ns_getcookie -include_set_cookies true -- $cookie ""]
+		    if {$cookie_value ne ""} {
+                        lappend cookies $cookie=\"${cookie_value}\"
+                    }
+                }
+                if {[llength $cookies] > 0} {
+                    ns_set put $headers cookie [join $cookies "; "]
+                }
 
                 aa_section "Request the page as myself"
                 set r [ns_http run -headers $headers -method GET $url]
@@ -61,4 +87,3 @@ aa_register_case \
                 ns_unregister_op GET $test_url
             }
     }
-
