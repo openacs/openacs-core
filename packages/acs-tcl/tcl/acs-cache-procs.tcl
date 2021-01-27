@@ -400,7 +400,27 @@ namespace eval ::acs {
     #
     ##########################################################################
     nx::Class create acs::LockfreeCache {
-        :property {prefix }
+        :property {prefix}
+
+        :public method get {
+            {-key:required}
+            var
+        } {
+            #
+            # Get entry with the provided key from this cache if it
+            # exists. In most cases, the "eval" method should be used.
+            #
+            # @param key cache key
+            # @return return boolean value indicating success.
+            #
+            set cache_key ${:prefix}$key
+            if {[info exists $cache_key]} {
+                :upvar $var value
+                set value [set $cache_key]
+                return 1
+            }
+            return 0
+        }
 
         :public method eval {
             {-key:required}
@@ -435,6 +455,10 @@ namespace eval ::acs {
         :public method flush {
            {-pattern *}
         } {
+            #
+            # Flush a cache entry based on the pattern (which might be
+            # wild-card-free).
+            #
             set pattern ${:prefix}${pattern}
             unset -nocomplain {*}[info vars $pattern]
         }
