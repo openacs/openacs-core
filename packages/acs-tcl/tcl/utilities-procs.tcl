@@ -1199,6 +1199,9 @@ ad_proc -private util_return_headers {
         set binary [expr {$text_p ? "" : "-binary"}]
         ns_headers {*}$binary 200 $content_type {*}$content_length
     } else {
+        if {$content_length ne ""} {
+            ns_set put [ns_conn outputheaders] "Content-Length" $content_length
+        }
         set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
