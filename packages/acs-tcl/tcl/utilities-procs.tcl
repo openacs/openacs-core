@@ -1192,7 +1192,7 @@ ad_proc -private util_return_headers {
 } {
     set text_p [string match "text/*" $content_type]
     if {$text_p && ![string match "*charset=*" $content_type]} {
-        append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
+        append content_type "; charset=[ns_config ns/parameters OutputCharset utf-8]"
     }
 
     if {[ns_info name] eq "NaviServer"} {
