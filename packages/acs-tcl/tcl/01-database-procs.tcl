@@ -321,7 +321,7 @@ ad_proc -deprecated db_null {} {
 ad_proc -public db_quote { string } {
     Quotes a string value to be placed in a SQL statement.
 } {
-    regsub -all {'} "$string" {''} result
+    regsub -all -- {'} "$string" {''} result
     return $result
 }
 

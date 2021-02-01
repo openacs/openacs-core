@@ -28,10 +28,10 @@ ad_proc -public template::parse_directives {
 } {
 
     # remove carriage returns if present
-    regsub -all {\r|\r\n} $code {\n} code
+    regsub -all -- {\r|\r\n} $code {\n} code
 
     # remove extra blank lines
-    regsub -all {(\n)\n} $code {\1} code
+    regsub -all -- {(\n)\n} $code {\1} code
 
     set lines [split $code "\n"]
 

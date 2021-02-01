@@ -177,7 +177,7 @@ ad_proc -public template::form::create { id args } {
     if { [info exists opts(elements)] } {
 
     # strip carriage returns
-        regsub -all {\r} $opts(elements) {} element_data
+        regsub -all -- {\r} $opts(elements) {} element_data
 
         foreach element [split $element_data "\n"] {
             set element [string trim $element]

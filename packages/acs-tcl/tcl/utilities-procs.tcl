@@ -172,7 +172,7 @@ ad_proc -private -deprecated proc_source_file_full_path {proc_name} {
         return ""
     } else {
         set tentative_path [nsv_get proc_source_file $proc_name]
-        regsub -all {/\./} $tentative_path {/} result
+        regsub -all -- {/\./} $tentative_path {/} result
         return $result
     }
 }
@@ -185,7 +185,7 @@ ad_proc util_report_library_entry {
     private Tcl library files contain errors.
 } {
     set tentative_path [info script]
-    regsub -all {/\./} $tentative_path {/} scrubbed_path
+    regsub -all -- {/\./} $tentative_path {/} scrubbed_path
     if { $extra_message eq ""  } {
         set message "Loading $scrubbed_path"
     } else {
@@ -587,12 +587,12 @@ ad_proc -public export_vars {
 
             if { $precedence_type ne "noprocessing_vars" } {
                 # Hide escaped colons for below split
-                regsub -all {\\:} $var_spec "!!cOlOn!!" var_spec
+                regsub -all -- {\\:} $var_spec "!!cOlOn!!" var_spec
 
                 set name_spec [split [lindex $var_spec 0] ":"]
 
                 # Replace escaped colons with single colon
-                regsub -all {!!cOlOn!!} $name_spec ":" name_spec
+                regsub -all -- {!!cOlOn!!} $name_spec ":" name_spec
 
                 set name [lindex $name_spec 0]
             } else {
@@ -971,7 +971,7 @@ ad_proc -public util_report_successful_library_load {
     files contain errors.
 } {
     set tentative_path [info script]
-    regsub -all {/\./} $tentative_path {/} scrubbed_path
+    regsub -all -- {/\./} $tentative_path {/} scrubbed_path
     if { $extra_message eq ""  } {
         set message "Done... $scrubbed_path"
     } else {
@@ -1302,8 +1302,8 @@ ad_proc -public ad_urlencode { string } {
     same as ns_urlencode except that dash and underscore are left unencoded.
 } {
     set encoded_string [ns_urlencode $string]
-    regsub -all {%2d} $encoded_string {-} encoded_string
-    regsub -all {%5f} $encoded_string {_} ad_encoded_string
+    regsub -all -- {%2d} $encoded_string {-} encoded_string
+    regsub -all -- {%5f} $encoded_string {_} ad_encoded_string
     return $ad_encoded_string
 }
 
@@ -1610,7 +1610,7 @@ ad_proc -public ad_returnredirect {
     }
 
     # Sanitize URL to avoid potential injection attack
-    regsub -all {[\r\n]} $url "" url
+    regsub -all -- {[\r\n]} $url "" url
 
     ns_returnredirect $url
 }
@@ -2389,7 +2389,7 @@ ad_proc -public util_wrap_list {
     set line_length 0
     set line_number 0
     foreach item $items {
-        regsub -all {<[^>]+>} $item "" item_notags
+        regsub -all -- {<[^>]+>} $item "" item_notags
         if { $line_length > $indent } {
             if { $line_length + 1 + [string length $item_notags] > $length } {
                 append out "$eol\n"
@@ -2442,10 +2442,10 @@ ad_proc ad_sanitize_filename {
     #
     # Remove Control characters (0x00–0x1f and 0x80–0x9f)
     # and reserved characters (/, ?, <, >, \, :, *, |, ; and ")
-    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"|;]+} $str "" str
+    regsub -all -- {[\u0000-\u001f|/|?|<|>|\\:*|\"|;]+} $str "" str
 
     # allow a custom replacement char, that must be safe.
-    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"|;|\.]+} $replace_with "" replace_with
+    regsub -all -- {[\u0000-\u001f|/|?|<|>|\\:*|\"|;|\.]+} $replace_with "" replace_with
     if {$replace_with eq ""} {error "-replace_with must be a safe filesystem character"}
 
     # dots other than in file extension are dangerous. Put inside two
@@ -2453,7 +2453,7 @@ ad_proc ad_sanitize_filename {
     # currently set to interpret them.
     set str_ext [ad_file extension $str]
     set str_noext [string range $str 0 end-[string length $str_ext]]
-    regsub -all {\.} $str_noext $replace_with str_noext
+    regsub -all -- {\.} $str_noext $replace_with str_noext
     set str ${str_noext}${str_ext}
 
     #
@@ -2483,7 +2483,7 @@ ad_proc ad_sanitize_filename {
         #
         # replace all consecutive spaces by a single char
         #
-        regsub -all {[ ]+} $str $replace_with str
+        regsub -all -- {[ ]+} $str $replace_with str
     }
     if {$tolower_p} {
         #
@@ -2575,7 +2575,7 @@ ad_proc -public util_text_to_url {
     set text [string map { \xe6 ae \xf8 oe \xe5 aa \xC6 Ae \xd8 Oe \xc5 Aa } $text]
 
     # substitute all non-word characters
-    regsub -all {([^a-z0-9])+} $text $replacement text
+    regsub -all -- {([^a-z0-9])+} $text $replacement text
 
     set text [string trim $text $replacement]
 
@@ -3043,8 +3043,8 @@ ad_proc util::name_to_path {
 } {
     Transforms a pretty name to a reasonable pathname.
 } {
-    regsub -all -nocase { } [string trim [string tolower $name]] {-} name
-    regsub -all {[^[:alnum:]\-]} $name {} name
+    regsub -all -nocase -- { } [string trim [string tolower $name]] {-} name
+    regsub -all -- {[^[:alnum:]\-]} $name {} name
     return $name
 }
 
@@ -3088,9 +3088,9 @@ ad_proc -public util::backup_file {
 ad_proc -public util::subst_safe { string } {
     Make string safe for subst'ing.
 } {
-    regsub -all {\$} $string {\$} string
-    regsub -all {\[} $string {\[} string
-    regsub -all {\]} $string {\]} string
+    regsub -all -- {\$} $string {\$} string
+    regsub -all -- {\[} $string {\[} string
+    regsub -all -- {\]} $string {\]} string
     return $string
 }
 
@@ -3838,11 +3838,11 @@ ad_proc -public util::var_subst_quotehtml {
     #
     # Handle array syntax:
     #
-    regsub -all {\$([0-9a-zA-Z_:]*[\(][^\)]+[\)])} $escaped {[ns_quotehtml [set \1]]} escaped
+    regsub -all -- {\$([0-9a-zA-Z_:]*[\(][^\)]+[\)])} $escaped {[ns_quotehtml [set \1]]} escaped
     #
     # Handle plain variables:
     #
-    regsub -all {\$([0-9a-zA-Z_:]+|[\{][^\}]+[\}])} $escaped {[ns_quotehtml $\1]} result
+    regsub -all -- {\$([0-9a-zA-Z_:]+|[\{][^\}]+[\}])} $escaped {[ns_quotehtml $\1]} result
     #
     # Finallly, "subst" the result.
     #
@@ -4106,7 +4106,7 @@ namespace eval util::resources {
             # Remove potentially stale gzip file.
             #
             if {[ad_file exists $local_path/$file.gz]} {
-                file delete $local_path/$file.gz
+                file delete -- $local_path/$file.gz
             }
 
             #

@@ -66,7 +66,7 @@ namespace eval ::tcltrace {
 	if {$severity in $::__log_severities} {
 	    # we do not want i18n raw strings substituted via ds_comment.
 	    # Maybe we should add this substitution there....
-	    regsub -all {\#([a-zA-Z0-9._-]+)\#} $msg {\&#35;\1\&#35;} msg
+	    regsub -all -- {\#([a-zA-Z0-9._-]+)\#} $msg {\&#35;\1\&#35;} msg
 	    catch {ds_comment "$cmdname $severity $msg"}
 	} else {
 	    #catch {ds_comment "ignore $severity $msg"}

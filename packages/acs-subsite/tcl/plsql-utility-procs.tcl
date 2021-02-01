@@ -151,12 +151,12 @@ object_type    => group,
             set suffix ""
         }
         # Leave only letters, numbers, underscores, dashes, and spaces
-        regsub -all {[^ _\-a-z0-9]} [string tolower $stem] "" stem
+        regsub -all -- {[^ _\-a-z0-9]} [string tolower $stem] "" stem
         # Make sure it starts with a letter
         regsub {^[^a-z]} $stem "" stem
 
         # change spaces to underscores
-        regsub -all {\s+} $stem "_" stem
+        regsub -all -- {\s+} $stem "_" stem
         #Trim to fit in $max_length character limit
         set max_length_without_suffix [expr {$max_length - [string length $suffix]}]
         if { [string length $stem] >= $max_length_without_suffix } {

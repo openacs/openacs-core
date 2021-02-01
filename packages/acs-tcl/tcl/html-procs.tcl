@@ -162,7 +162,7 @@ ad_proc -public util::html::get_form_vars {
       }
       # Formfield's name can contain colons,
       # I need to escape them.
-      regsub -all {:} $name {\:} name
+      regsub -all -- {:} $name {\:} name
       lappend vars [list $name $value]
     }
     

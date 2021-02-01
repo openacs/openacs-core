@@ -880,7 +880,7 @@ ad_proc -public content::item::upload_file {
             # extension also matches any char unless it is escaped.  Like Malte, I
             # see no reason to get rid of the extension in the title anyway ...
 
-            # regsub -all ".${extension}\$" $filename "" title
+            # regsub -all -- ".${extension}\$" $filename "" title
             set title $filename
         }
 

@@ -31,7 +31,7 @@ ad_proc -public ad_print_stack_trace {} {
             if {[string length $call] > 160} {
                 set call "[string range $call 0 150]..."
             }
-            regsub -all {\n} $call {\\n} call
+            regsub -all -- {\n} $call {\\n} call
             lappend callStack "   $call"
             if {$i > 1} {
                 lappend callStack "invoked from within"

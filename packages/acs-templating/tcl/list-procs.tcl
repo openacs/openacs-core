@@ -897,7 +897,7 @@ ad_proc -public template::list::csv_quote {
 } {
     Quote a string for inclusion as a csv element
 } {
-    regsub -all {\"} $string {""} result
+    regsub -all -- {\"} $string {""} result
     return $result
 }
 

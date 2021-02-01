@@ -20,7 +20,7 @@ namespace eval template::util {}
 
 ad_proc -private doc::util::dbl_colon_fix { text } {
 
-  regsub -all {::} $text {__} text
+  regsub -all -- {::} $text {__} text
   return $text
 }
 
@@ -172,8 +172,8 @@ ad_proc -private template::util::quote_space {text} {
     @return same text but with a space behind each quote; double quotes
     that are already trailed by a space are unaffected
 } {
-    regsub -all {"} $text {" } text
-    regsub -all {"  } $text {" } text
+    regsub -all -- {"} $text {" } text
+    regsub -all -- {"  } $text {" } text
     return $text
 }
 
@@ -181,16 +181,16 @@ ad_proc -private doc::util::bracket_space {text} {
     puts a space after all closing curly brackets, does not
     add a space when brackets are already followed by a space
 } {
-    regsub -all {(\})} $text {\1 } text
-    regsub -all {(\})  } $text {\1 } text
+    regsub -all -- {(\})} $text {\1 } text
+    regsub -all -- {(\})  } $text {\1 } text
     return $text
 }
 
 ad_proc -private doc::util::escape_square_brackets {text} {
     escapes out all square brackets
 } {
-    regsub -all {(\[)} $text {\\\1} text
-    regsub -all {(\])} $text {\\\1} text
+    regsub -all -- {(\[)} $text {\\\1} text
+    regsub -all -- {(\])} $text {\\\1} text
     return $text
 }
 
@@ -210,7 +210,7 @@ ad_proc -private template::util::comment_text_normalize {text} {
     @return text
 } {
     regsub -all \" $text {\"} text
-    regsub -all {(\n)\s*#\s*} $text {\1 } text
+    regsub -all -- {(\n)\s*#\s*} $text {\1 } text
     regsub {(\A)\s*#\s*} $text {\1 } text
     return $text
 }

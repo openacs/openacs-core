@@ -184,7 +184,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 
     # if HTML then substitute out all HTML tags
     if { $html_p } {
-        regsub -all {<[^<]*>} $text_to_spell_check "" text_to_spell_check
+        regsub -all -- {<[^<]*>} $text_to_spell_check "" text_to_spell_check
     }
 
     set tmpfile [ns_mktemp "[ad_tmpdir]/webspellXXXXXX"]
@@ -318,7 +318,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
         if {"miss" eq $errtype} {
             regsub "\#$errnum\#" $formtext "<input type=\"text\" name=\"${var_to_spellcheck}.error_$errnum\" value=\"$errword\" size=\"$wordlen\" >" formtext
         } elseif {"nearmiss" eq $errtype} {
-            regsub -all ", " $erroptions "," erroptions
+            regsub -all -- ", " $erroptions "," erroptions
             set options [split $erroptions ","]
             set select_text "<select name=\"${var_to_spellcheck}.error_$errnum\">\n<option value=\"$errword\">$errword</option>\n"
             foreach option $options {
@@ -334,15 +334,15 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     ####
     upvar $formtext_to_display_ref formtext_to_display
 
-    regsub -all "\r\n" $formtext "<br>" formtext_to_display
+    regsub -all -- "\r\n" $formtext "<br>" formtext_to_display
 
     # We replace <a></a> with  <u></u> because misspelled text in link titles
     # would lead to strange browser behavior where the select boxes with the
     # proposed changes would itself be a link!!!
     # It seemed like an okay idea to make the text underlined so it would a) work,
     # b) still resemble a link ...
-    regsub -all {<a [^<]*>} $formtext_to_display "<u>" formtext_to_display
-    regsub -all {</a>} $formtext_to_display "</u>" formtext_to_display
+    regsub -all -- {<a [^<]*>} $formtext_to_display "<u>" formtext_to_display
+    regsub -all -- {</a>} $formtext_to_display "</u>" formtext_to_display
 
     append formtext_to_display "<input type=\"hidden\" name=\"${var_to_spellcheck}.merge_text\" value=\"[ns_quotehtml $processed_text]\" >"
 

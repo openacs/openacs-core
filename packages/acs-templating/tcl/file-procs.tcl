@@ -70,8 +70,8 @@ ad_proc -public template::util::file_transform { element_id } {
             #
             # Cleanup filenames
             #
-            regsub -all {\\+} $filename {/} filename
-            regsub -all { +} $filename {_} filename
+            regsub -all -- {\\+} $filename {/} filename
+            regsub -all -- { +} $filename {_} filename
             set filename [lindex [split $filename "/"] end]
             #
             # Append to the list of lists

@@ -128,17 +128,17 @@ proc sgml::tokenise {sgml elemExpr elemSub args} {
     }
 
     # Protect Tcl special characters
-    regsub -all {([{}\\])} $sgml {\\\1} sgml
+    regsub -all -- {([{}\\])} $sgml {\\\1} sgml
 
     # Do the translation
 
     if {[info exists options(-statevariable)]} {
         upvar #0 $opts(-statevariable) unused
         if {[info exists unused]} {
-            regsub -all $elemExpr $unused$sgml $elemSub sgml
+            regsub -all -- $elemExpr $unused$sgml $elemSub sgml
             unset unused
         } else {
-            regsub -all $elemExpr $sgml $elemSub sgml
+            regsub -all -- $elemExpr $sgml $elemSub sgml
         }
         set sgml "{} {} {} \{$sgml\}"
 
@@ -154,7 +154,7 @@ proc sgml::tokenise {sgml elemExpr elemSub args} {
         # Performance note (Tcl 8.0):
         #	In this case, no conversion to list object is performed
 
-        regsub -all $elemExpr $sgml $elemSub sgml
+        regsub -all -- $elemExpr $sgml $elemSub sgml
         set sgml "{} {} {} \{$sgml\}"
     }
 
@@ -546,14 +546,14 @@ proc sgml::parseEvent {sgml args} {
             } {
 
                 # protect Tcl specials
-                regsub -all {([][$\\])} $text {\\\1} text
+                regsub -all -- {([][$\\])} $text {\\\1} text
                 # Mark entity references
-                regsub -all {&([^;]+);} $text [format {%s; %s {\1} ; %s %s} \}\} [namespace code [list Entity options $options(-entityreferencecommand) $options(-characterdatacommand) $options(-entityvariable)]] [list uplevel #0 $options(-characterdatacommand)] \{\{] text
+                regsub -all -- {&([^;]+);} $text [format {%s; %s {\1} ; %s %s} \}\} [namespace code [list Entity options $options(-entityreferencecommand) $options(-characterdatacommand) $options(-entityvariable)]] [list uplevel #0 $options(-characterdatacommand)] \{\{] text
                 set text "uplevel #0 $options(-characterdatacommand) {{$text}}"
                 eval $text
             } else {
                 # Restore protected special characters
-                regsub -all {\\([{}\\])} $text {\1} text
+                regsub -all -- {\\([{}\\])} $text {\1} text
                 uplevel #0 $options(-characterdatacommand) [list $text]
             }
         } elseif {[string length [string trim $text]]} {
@@ -851,7 +851,7 @@ proc sgml::parseDTD {dtd args} {
 
     set exp <!([cl ^$Wsp>]+)[cl $Wsp]*([cl ^$Wsp]+)[cl $Wsp]*([cl ^>]*)>
     set sub {{\1} {\2} {\3} }
-    regsub -all $exp $dtd $sub dtd
+    regsub -all -- $exp $dtd $sub dtd
 
     foreach {decl id value} $dtd {
         catch {DTD:[string toupper $decl] $id $value} err
@@ -986,9 +986,9 @@ proc sgml::CModelMakeSyntaxTree {state spec} {
         return -code error "illegal characters in specification"
     }
 
-    regsub -all [format {(%s)[%s]*(\?|\*|\+)?[%s]*(,|\|)?} $name $Wsp $Wsp] $spec [format {%sCModelSTname %s {\1} {\2} {\3}} \n $state] spec
-    regsub -all {\(} $spec "\nCModelSTopenParen $state " spec
-    regsub -all [format {\)[%s]*(\?|\*|\+)?[%s]*(,|\|)?} $Wsp $Wsp] $spec [format {%sCModelSTcloseParen %s {\1} {\2}} \n $state] spec
+    regsub -all -- [format {(%s)[%s]*(\?|\*|\+)?[%s]*(,|\|)?} $name $Wsp $Wsp] $spec [format {%sCModelSTname %s {\1} {\2} {\3}} \n $state] spec
+    regsub -all -- {\(} $spec "\nCModelSTopenParen $state " spec
+    regsub -all -- [format {\)[%s]*(\?|\*|\+)?[%s]*(,|\|)?} $Wsp $Wsp] $spec [format {%sCModelSTcloseParen %s {\1} {\2}} \n $state] spec
 
     array set var {stack {} state start}
     eval $spec
@@ -1540,10 +1540,10 @@ proc sgml::DTD:ATTLIST {id value} {
     } else {
         # Parse the attribute list.  If it were regular, could just use foreach,
         # but some attributes may have values.
-        regsub -all {([][$\\])} $value {\\\1} value
-        regsub -all $attlist_exp $value {[DTDAttribute {\1} {\2} {\3}]} value
-        regsub -all $attlist_enum_exp $value {[DTDAttribute {\1} {\2} {\3}]} value
-        regsub -all $attlist_fixed_exp $value {[DTDAttribute {\1} {\2} {\3} {\4}]} value
+        regsub -all -- {([][$\\])} $value {\\\1} value
+        regsub -all -- $attlist_exp $value {[DTDAttribute {\1} {\2} {\3}]} value
+        regsub -all -- $attlist_enum_exp $value {[DTDAttribute {\1} {\2} {\3}]} value
+        regsub -all -- $attlist_fixed_exp $value {[DTDAttribute {\1} {\2} {\3} {\4}]} value
         subst $value
         set am($id) [array get attlist]
     }
@@ -1677,7 +1677,7 @@ proc sgml::Error args {
 #	As above
 
 proc sgml::zapWhite data {
-    regsub -all "\[ \t\r\n\]+" $data { } data
+    regsub -all -- "\[ \t\r\n\]+" $data { } data
     return $data
 }
 

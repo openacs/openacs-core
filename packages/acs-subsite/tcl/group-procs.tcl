@@ -506,7 +506,7 @@ ad_proc -public group::get_member_state_pretty {
     #
     # We can't use spaces in message keys, so replace it with a "_".
     #
-    regsub -all " " $member_state "_" member_state
+    regsub -all -- " " $member_state "_" member_state
 
     switch -- $component {
         pretty_name {

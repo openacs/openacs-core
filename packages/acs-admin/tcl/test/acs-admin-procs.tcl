@@ -111,7 +111,7 @@ aa_register_case -cats {
             set portrait_id [acs_user::create_portrait \
                                  -user_id $user_id_1 \
                                  -file $tmpnam]
-            file delete $tmpnam
+            file delete -- $tmpnam
 
             # Get a random object none of the two users has write
             # privilege for

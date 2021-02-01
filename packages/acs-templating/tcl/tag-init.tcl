@@ -38,10 +38,10 @@ template::tag property { chunk params } {
     if {$adp eq ""} {set adp 0}
 
     # quote dollar signs, square bracket and quotes
-    regsub -all {[\]\[\"\\$]} $chunk {\\&} quoted_chunk
+    regsub -all -- {[\]\[\"\\$]} $chunk {\\&} quoted_chunk
     if {$adp} {
-        regsub -all {<tcl>} $quoted_chunk {<%} quoted_chunk
-        regsub -all {</tcl>} $quoted_chunk {%>} quoted_chunk
+        regsub -all -- {<tcl>} $quoted_chunk {<%} quoted_chunk
+        regsub -all -- {</tcl>} $quoted_chunk {%>} quoted_chunk
 
         template::adp_append_code "set __adp_properties($name) \[ns_adp_parse -string \"$quoted_chunk\"\]"
     } else {
@@ -493,7 +493,7 @@ template::tag else { chunk params } {
 template::tag noparse { chunk params } {
 
   # escape quotes
-  regsub -all {[\]\[""\\$]} $chunk {\\&} quoted
+  regsub -all -- {[\]\[""\\$]} $chunk {\\&} quoted
 
   template::adp_append_string $quoted
 }
@@ -829,7 +829,7 @@ template::tag trn { chunk params } {
   }
 
   # quote dollar signs, square bracket and quotes
-  regsub -all {[\]\[""\\$]} $chunk {\\&} quoted_chunk
+  regsub -all -- {[\]\[""\\$]} $chunk {\\&} quoted_chunk
 
   template::adp_append_code \
       [subst -nocommands {append __adp_output [_ $locale $key $quoted_chunk]}]

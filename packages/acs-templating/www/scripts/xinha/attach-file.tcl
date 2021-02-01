@@ -212,7 +212,7 @@ if {$write_p} {
                         set file_name [lindex $recent_files_options [lsearch -index 1 $recent_files_options $item_id] 0]
 
                         # we have to get rid of the icon from the form.
-                        set file_name [regsub -all {<.*?>} $file_name {}]
+                        set file_name [regsub -all -- {<.*?>} $file_name {}]
                     }
                 }
                 set file_name [string trim $file_name]

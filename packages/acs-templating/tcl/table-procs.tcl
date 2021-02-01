@@ -155,7 +155,7 @@ ad_proc -public template::widget::table::prepare {
             # Append to the row html
             if { $presentation ne "" } {
             # Debug !
-                regsub -all {"} $presentation {\\"} presentation
+                regsub -all -- {"} $presentation {\\"} presentation
                 append eval_code "set row($row_key) \"$presentation\"\n"
             } else {
                 append eval_code "set row($row_key) <td>\$$column_name</td>\n"

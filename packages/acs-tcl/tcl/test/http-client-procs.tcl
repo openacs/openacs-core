@@ -125,7 +125,7 @@ aa_register_case \
                         close $rfd
 
                         aa_true "Setting the charset actually brings to different content in the response" {$app_json_text ne $iso8859_2_text}
-                        file delete $tmpfile_app_json $tmpfile_iso8859_2
+                        file delete -- $tmpfile_app_json $tmpfile_iso8859_2
                     }
                 }
             }

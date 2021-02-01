@@ -59,8 +59,8 @@ ad_proc -private doc_adp_quote_tcl_string { string } {
     Quotes special Tcl characters and newlines.
 
 } {
-    regsub -all {([\{\}\[\]\$\"\\])} $string {\\\1} string
-    regsub -all {\n} $string {\\n} string
+    regsub -all -- {([\{\}\[\]\$\"\\])} $string {\\\1} string
+    regsub -all -- {\n} $string {\\n} string
     return "\"$string\""
 }
 

@@ -330,7 +330,7 @@ proc xml::noop args {}
 #	As above
 
 proc xml::zapWhite data {
-    regsub -all "\[ \t\r\n\]+" $data { } data
+    regsub -all -- "\[ \t\r\n\]+" $data { } data
     return $data
 }
 

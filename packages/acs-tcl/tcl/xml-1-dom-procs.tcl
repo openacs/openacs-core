@@ -1723,7 +1723,7 @@ proc dom::Encode value {
 	' &apos;
     }
 
-    regsub -all {([$<>&"'])} $value {$Entity(\1)} value
+    regsub -all -- {([$<>&"'])} $value {$Entity(\1)} value
 
     return [subst -nocommand -nobackslash $value]
 }

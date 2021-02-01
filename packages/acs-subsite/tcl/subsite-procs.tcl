@@ -855,8 +855,8 @@ ad_proc -public subsite::get_theme_subsites {
         foreach {var param} $settings {
             set default [string trim [set $var]]
             set value   [string trim [parameter::get -parameter $param -package_id $subsite_id]]
-            regsub -all {\r\n} $value "\n" value
-            regsub -all {\r\n} $default "\n" default
+            regsub -all -- {\r\n} $value "\n" value
+            regsub -all -- {\r\n} $default "\n" default
             set collect_p [expr {$default eq $value}]
             if {!$collect_p} {
                 ns_log notice "theme '$theme' parameter $var differs on subsite '$subsite_id': default '$default' actual value '$value'"

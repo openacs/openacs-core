@@ -42,7 +42,7 @@ ad_proc acs_mail_lite::utils::build_subject {
     #
     set subject [string trim $subject]
 
-    if {[regsub -all {[\r\n]} $subject " " s]} {
+    if {[regsub -all -- {[\r\n]} $subject " " s]} {
         ad_log warning "subject line contains line breaks (replaced by space): '$subject' -> '$s'"
         set subject $s
     }

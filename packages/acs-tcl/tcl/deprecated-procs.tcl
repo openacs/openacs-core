@@ -1739,7 +1739,7 @@ ad_proc -deprecated ad_table_form {
             } else {
                 set out $options
             }
-            regsub -all {@@} $out $i out
+            regsub -all -- {@@} $out $i out
             append html "<tr><th>[expr {$i + 1}]</th>$out</tr>\n"
         }
     }

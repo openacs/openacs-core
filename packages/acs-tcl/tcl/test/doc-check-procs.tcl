@@ -52,7 +52,7 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
         ns_log notice "$p"
         incr count
         set tail [namespace tail $p]
-        set qualifiers [regsub -all "::" [namespace qualifiers $p] "__"]
+        set qualifiers [regsub -all -- "::" [namespace qualifiers $p] "__"]
         if {[regexp $internalUse $p] || [regexp $serverModuleProcs $p] || [regexp $functionalOps $p] || [regexp $xmlRPC $p]} continue
         set pa [nsv_get api_proc_doc $p]
         set protection [expr {[dict exists $pa protection] && "public" in [dict get $pa protection]

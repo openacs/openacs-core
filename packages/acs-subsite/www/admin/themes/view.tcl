@@ -66,9 +66,9 @@ foreach {var param} $settings {
 
     if {$currentThemeKey eq $key} {
         set currentValue [string trim [parameter::get -parameter $param -package_id $subsite_id]]
-        regsub -all {\r\n} $currentValue "\n" currentValue
+        regsub -all -- {\r\n} $currentValue "\n" currentValue
         set value [string trim [set $var]]
-        regsub -all {\r\n} $value "\n" value
+        regsub -all -- {\r\n} $value "\n" value
         if {$currentValue ne $value} {
             lappend currentSpec [list help_text "differs"]
             ns_log notice "current value \n<$currentValue>\ndiffers from\n<$value>"

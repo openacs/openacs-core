@@ -956,7 +956,7 @@ ad_proc -private apm_package_version_release_tag { package_key version_name } {
     Returns a CVS release tag for a particular package key and version name.
 
 } {
-    regsub -all {\.} [string toupper "$package_key-$version_name"] "-" release_tag
+    regsub -all -- {\.} [string toupper "$package_key-$version_name"] "-" release_tag
     return $release_tag
 }
 
@@ -1485,7 +1485,7 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
 } {
     set procedure_name [string tolower "[string trim $package_key]_post_instantiation"]
     # Change all "-" to "_" to mimic our Tcl standards
-    regsub -all {\-} $procedure_name "_" procedure_name
+    regsub -all -- {\-} $procedure_name "_" procedure_name
     if { [namespace which ::$procedure_name] eq "" } {
         # No such procedure exists...
         return ""

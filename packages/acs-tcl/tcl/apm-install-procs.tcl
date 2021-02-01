@@ -2340,7 +2340,7 @@ ad_proc -private apm::package_version::attributes::set_all_instances_names {} {
             where package_key = :package_key
         } {
             # Removing the character "#".
-            regsub -all {[\#]*} $instance_name {\1} instance_name
+            regsub -all -- {[\#]*} $instance_name {\1} instance_name
 
             # Verifying whether this instance_name is a message_key
             set is_msg [lang::message::message_exists_p [ad_conn locale] $instance_name]

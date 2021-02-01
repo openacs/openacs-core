@@ -1176,8 +1176,8 @@ ad_proc -public template::util::textdate_localized_format {} {
     # %d-%m-%y  %d.%m.%y  %d/%m-%y  %d/%m/%y  %m/%d/%y  %y-%m-%d  %y.%m.%d  &quot;%d-%m-%y&quot;
 
     set format [lc_get "d_fmt"]
-    regsub -all -nocase {\&quot;} $format {} format
-    regsub -all -nocase {\%} $format {} format
+    regsub -all -nocase -- {\&quot;} $format {} format
+    regsub -all -nocase -- {\%} $format {} format
     set format [string tolower $format]
     # this format key must now be at max five characters, and contain one y, one m and one d
     # as well as two punction marks ( - . / )
@@ -1226,9 +1226,9 @@ ad_proc -public template::data::transform::textdate { element_ref } {
     # we get the format they need to use
     set format [template::util::textdate_localized_format]
     set exp $format
-    regsub -all {(\-|\.|/)} $exp {(\1)} exp
-    regsub -all {dd|mm} $exp {([0-9]{1,2})} exp
-    regsub -all {yyyy} $exp {([0-9]{2,4})} exp
+    regsub -all -- {(\-|\.|/)} $exp {(\1)} exp
+    regsub -all -- {dd|mm} $exp {([0-9]{1,2})} exp
+    regsub -all -- {yyyy} $exp {([0-9]{2,4})} exp
 
     # results is what comes out in a regexp
     set results $format

@@ -137,12 +137,12 @@ ad_proc adp_parse_ad_conn_file {} {
             set apm_package_url [apm_package_url_from_key "acs-lang"]
 
             # Attempt to move all message keys outside of tags
-            while { [regsub -all {(<[^>]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
+            while { [regsub -all -- {(<[^>]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
 
             # Attempt to move all message keys outside of <select>...</select> statements
-            regsub -all -nocase {(<option\s[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
+            regsub -all -nocase -- {(<option\s[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
 
-            while { [regsub -all -nocase {(<select[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template {\2\1} parsed_template] } {}
+            while { [regsub -all -nocase -- {(<select[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template {\2\1} parsed_template] } {}
 
             set start 0
             while { [regexp -nocase -indices -start $start {(<select[^\x02]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template indices select_idx message_idx] } {

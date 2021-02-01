@@ -133,7 +133,7 @@ namespace eval doc {
     if { [info exists tags(see)] } {
       if { ![info exists opts(link_url_stub)] } {
         # Just remove the links
-        regsub -all {\{([^\}]*)\}} $tags(see) {\1} new_see
+        regsub -all -- {\{([^\}]*)\}} $tags(see) {\1} new_see
         set tags(see) $new_see
       } else {
         if { ![info exists opts(link_package_name)] } {
@@ -143,9 +143,9 @@ namespace eval doc {
           set opts(link_proc_name) proc_name
 	}
        
-        regsub -all {\&} $opts(link_url_stub) {\\\&} stub
+        regsub -all -- {\&} $opts(link_url_stub) {\\\&} stub
         set subspec "<a href=\"${stub}${opts(link_package_name)}=\\1\\&$opts(link_proc_name)=\\2\">\\1.\\2</a>"
-        regsub -all {\{([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)\}} $tags(see) $subspec new_see
+        regsub -all -- {\{([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)\}} $tags(see) $subspec new_see
         set tags(see) $new_see
       }        
     }

@@ -107,7 +107,7 @@ ad_proc -public api_read_script_documentation {
     set file [open "$::acs::rootdir/$path" "r"]
     while { [gets $file line] >= 0 } {
         # Eliminate any comment characters.
-        regsub -all {\#.*$} $line "" line
+        regsub -all -- {\#.*$} $line "" line
         set line [string trim $line]
         if { $line ne "" } {
             set has_contract_p [regexp {(^ad_(page|include)_contract\s)|(Package initialize )} $line]
@@ -389,7 +389,7 @@ ad_proc -public api_proc_documentation {
     #
     if {[string match *::::* $proc_name]} {
         ad_log warning "api_proc_documentation: received invalid proc_name <$proc_name>, try to sanitize"
-        regsub -all {::::} $proc_name :: proc_name
+        regsub -all -- {::::} $proc_name :: proc_name
     }
     if {[info exists format]} {
         ad_log warning "-format flag is deprecated and has no effect"
@@ -793,7 +793,7 @@ ad_proc -public api_add_to_proc_doc {
     @param proc_name name is fully qualified name without leading colons proc procs,
         XOTcl methods are a triple with the fully qualified class name,
         then proc|instproc and then the method name.
-    @param property name of property such as "testcase"
+    @param property name of property such as "main" "testcase" "calledby" "deprecated_p" "script" "protection"
     @param value    value of the property
 
 } {
@@ -1145,7 +1145,7 @@ ad_proc -public api_get_body {proc_name} {
     # In case the proc_name contains magic chars, these have to be
     # escaped for Tcl commands expecting a pattern (e.g. "info procs")
     #
-    regsub -all {([?*])} $proc_name {\\\1} proc_name_pattern
+    regsub -all -- {([?*])} $proc_name {\\\1} proc_name_pattern
 
     if {[namespace which ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
@@ -1205,7 +1205,7 @@ namespace eval ::apidoc {
         @param see a string expected to contain the resource to format
         @return the html string representing the resource
     } {
-        #regsub -all {proc *} $see {} see
+        #regsub -all -- {proc *} $see {} see
         set see [string trim $see]
         if {[nsv_exists api_proc_doc $see]} {
             set href [export_vars -base /api-doc/proc-view {{proc $see}}]
@@ -1403,7 +1403,7 @@ namespace eval ::apidoc {
     } {
         # turn keywords into space-separated things
         # replace one or more commands with a space
-        regsub -all {,+} $keywords " " keywords
+        regsub -all -- {,+} $keywords " " keywords
 
         set score 0
         foreach word $keywords {

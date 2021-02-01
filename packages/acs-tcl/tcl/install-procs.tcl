@@ -113,7 +113,7 @@ ad_proc -public install::xml::action::mount { node } {
     set out [list]
 
     # Remove double slashes
-    regsub -all {//} $mount_point "/" mount_point
+    regsub -all -- {//} $mount_point "/" mount_point
     set mount_point [string trim $mount_point " /"]
 
     if {[string is space $mount_point] || $mount_point eq "/"} {
@@ -197,7 +197,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
     set out [list]
 
     # Remove double slashes
-    regsub -all {//} $mount_point "/" mount_point
+    regsub -all -- {//} $mount_point "/" mount_point
     set mount_point [string trim $mount_point " /"]
 
     if {[string is space $mount_point] || $mount_point eq "/"} {
@@ -1038,7 +1038,7 @@ ad_proc -public install::xml::object_id::package { node } {
     }
 
     # Remove double slashes
-    regsub -all {//} $url "/" url
+    regsub -all -- {//} $url "/" url
 
     if { $package_key ne "" && $url ne "" } {
         error "set-parameter: Can't specify both package and url for $url and $package_key"

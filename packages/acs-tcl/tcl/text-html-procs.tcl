@@ -186,10 +186,10 @@ ad_proc -public ad_text_to_html {
 
     if { !$no_quote_p } {
         # Convert every two spaces to an nbsp
-        regsub -all {  } $text "\\\&nbsp; " text
+        regsub -all -- {  } $text "\\\&nbsp; " text
 
         # Convert tabs to four nbsp's
-        regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
+        regsub -all -- {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
     }
 
     if { $nr_links > 0} {
@@ -197,14 +197,14 @@ ad_proc -public ad_text_to_html {
         # Move the end of the link before any punctuation marks at the
         # end of the URL.
         #
-        regsub -all {([\]!?.:;,<>\(\)\}\"'-]+)(\u0003)} $text {\2\1} text
+        regsub -all -- {([\]!?.:;,<>\(\)\}\"'-]+)(\u0003)} $text {\2\1} text
 
         #
         # Convert the marked links and emails into "<a href=...>..."
         #
-        regsub -all {\u0002([^\u0003]+?)\u0003} $text {<a href="\1">\1</a>} text
+        regsub -all -- {\u0002([^\u0003]+?)\u0003} $text {<a href="\1">\1</a>} text
 
-        set changed_back [regsub -all {(\u0002|\u0003)} $text {} text]
+        set changed_back [regsub -all -- {(\u0002|\u0003)} $text {} text]
         if {$includes_html_p} {
             #
             # All markers should be gone now.
@@ -270,7 +270,7 @@ ad_proc -public ad_html_qualify_links {
     #
     if {[info exists path]} {
         set path "[string trim $path /]/"
-        regsub -all {(href|src)\s*=\s*['\"]([^/][^\u0001:'\"]+?)['\"]} $html \
+        regsub -all -- {(href|src)\s*=\s*['\"]([^/][^\u0001:'\"]+?)['\"]} $html \
             "\\1='${location}${path}\\2'" html
     }
 
@@ -300,14 +300,14 @@ ad_proc -public util_convert_line_breaks_to_html {
     regsub {[\s]+$} $text {} text
 
     # Make sure all line breaks are single \n's
-    regsub -all {\r\n} $text "\n" text
-    regsub -all {\r} $text "\n" text
+    regsub -all -- {\r\n} $text "\n" text
+    regsub -all -- {\r} $text "\n" text
 
     # Remove whitespace before \n's
-    regsub -all {[ \t]+\n} $text "\n" text
+    regsub -all -- {[ \t]+\n} $text "\n" text
 
     # Wrap P's around paragraphs
-    regsub -all {([^\n\s])\n\n+([^\n\s])} $text {\1<p>\2} text
+    regsub -all -- {([^\n\s])\n\n+([^\n\s])} $text {\1<p>\2} text
 
     # remove line breaks right before and after HTML tags that will insert a paragraph break themselves
     if { $includes_html_p } {
@@ -316,10 +316,10 @@ ad_proc -public util_convert_line_breaks_to_html {
     }
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
-    regsub -all {\n} $text "<br>\n" text
+    regsub -all -- {\n} $text "<br>\n" text
 
     # Add line breaks to P tags
-    #regsub -all {</p>} $text "</p>\n" text
+    #regsub -all -- {</p>} $text "</p>\n" text
 
     return $text
 }
@@ -529,7 +529,7 @@ ad_proc -private util_close_html_tags {
 
     # First try to fix up < not part of a tag.
 
-    regsub -all {<([^/[:alpha:]!])} $frag {\&lt;\1} frag
+    regsub -all -- {<([^/[:alpha:]!])} $frag {\&lt;\1} frag
     # no we do is chop off any trailing unclosed tag
     # since when we substr blobs this sometimes happens
 
@@ -1434,14 +1434,14 @@ ad_proc ad_parse_html_attributes_upvar {
         string map [list \n \\n \b \\b \f \\f \r \\r \t \\t \v \\v \" {\"} ' {\'}] $string
 
         # Escape quotes and backslashes (non greedy)
-        #regsub -all {.??([^\\])?('|\"|\\)} $string {\1\\\2} string
+        #regsub -all -- {.??([^\\])?('|\"|\\)} $string {\1\\\2} string
         # Escape characters are replaced with their escape sequence
-        #regsub -all {\b} $string {\\b} string
-        #regsub -all {\f} $string {\\f} string
-        #regsub -all {\n} $string {\\n} string
-        #regsub -all {\r} $string {\\r} string
-        #regsub -all {\t} $string {\\t} string
-        #regsub -all {\v} $string {\\v} string
+        #regsub -all -- {\b} $string {\\b} string
+        #regsub -all -- {\f} $string {\\f} string
+        #regsub -all -- {\n} $string {\\n} string
+        #regsub -all -- {\r} $string {\\r} string
+        #regsub -all -- {\t} $string {\\t} string
+        #regsub -all -- {\v} $string {\\v} string
 
         #return $string
     }
@@ -1787,7 +1787,7 @@ ad_proc ad_parse_html_attributes_upvar {
         # If we're not in a PRE
         if { $output(pre) <= 0 } {
             # collapse all whitespace
-            regsub -all {\s+} $text { } text
+            regsub -all -- {\s+} $text { } text
 
             # if there's only spaces in the string, wait until later
             if {$text eq " "} {
@@ -1807,10 +1807,10 @@ ad_proc ad_parse_html_attributes_upvar {
             }
         } else {
             # we're in a PRE: clean line breaks and tabs
-            regsub -all {\r\n} $text "\n" text
-            regsub -all {\r} $text "\n" text
+            regsub -all -- {\r\n} $text "\n" text
+            regsub -all -- {\r} $text "\n" text
             # tabs become four spaces
-            regsub -all {[\v\t]} $text {    } text
+            regsub -all -- {[\v\t]} $text {    } text
         }
 
         # output any pending paragraph breaks, line breaks or spaces.
@@ -1853,7 +1853,7 @@ ad_proc ad_parse_html_attributes_upvar {
 
                 # convert &nbsp;'s
                 # We do this now, so that they're displayed, but not treated, whitespace.
-                regsub -all {&nbsp;} $word { } word
+                regsub -all -- {&nbsp;} $word { } word
 
                 set wordlen [string length $word]
                 switch -glob -- $word {
@@ -1920,14 +1920,14 @@ ad_proc ad_parse_html_attributes_upvar {
         consider how they interact with character encodings.
 
     } {
-        regsub -all {&lt;} $html {<} html
-        regsub -all {&gt;} $html {>} html
-        regsub -all {&quot;} $html "\"" html
-        regsub -all {&mdash;} $html {--} html
-        regsub -all {&#151;} $html {--} html
+        regsub -all -- {&lt;} $html {<} html
+        regsub -all -- {&gt;} $html {>} html
+        regsub -all -- {&quot;} $html "\"" html
+        regsub -all -- {&mdash;} $html {--} html
+        regsub -all -- {&#151;} $html {--} html
         # Need to do the &amp; last, because otherwise it could interfere with the other expansions,
         # e.g., if the text said &amp;lt;, that would be translated into <, instead of &lt;
-        regsub -all {&amp;} $html {\&} html
+        regsub -all -- {&amp;} $html {\&} html
         return $html
     }
 
@@ -2444,7 +2444,7 @@ ad_proc -public ad_looks_like_html_p {
 ad_proc util_remove_html_tags { html } {
     Removes everything between &lt; and &gt; from the string.
 } {
-    regsub -all {<[^>]*>} $html {} html
+    regsub -all -- {<[^>]*>} $html {} html
     return $html
 }
 

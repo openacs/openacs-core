@@ -457,10 +457,10 @@ ad_proc -public template::expand_percentage_signs { message } {
             #   array variables
             # TODO: ns_quotehtml
             # TODO: lang::util::localize
-            regsub -all {[\]\[\{\}\"]\\$} $substitution {\\&} substitution
+            regsub -all -- {[\]\[\{\}\"]\\$} $substitution {\\&} substitution
             if { [regexp {^%([[:alnum:]_]+)\.([[:alnum:]_]+)%$} $substitution match arr key] } {
                 # the array key name is substitured by the Tcl parser s
-                regsub -all {[\]\[\{\}\"]\\$} $key {\\&} key
+                regsub -all -- {[\]\[\{\}\"]\\$} $key {\\&} key
                 set command "set ${arr}(${key})"
                 set substitution [uplevel $command]
             }
@@ -506,9 +506,9 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     # substitute <% ... %> blocks with registered tags so they can be handled
     # by our proc rather than evaluated.
 
-    regsub -all {<%} $chunk {<tcl>} chunk
+    regsub -all -- {<%} $chunk {<tcl>} chunk
     # avoid substituting when it is a percentage attribute to an HTML tag.
-    regsub -all {([^0-9])%>} $chunk {\1</tcl>} chunk
+    regsub -all -- {([^0-9])%>} $chunk {\1</tcl>} chunk
     # warn about the first ambiguity in the source
     if {[regexp {[0-9]+%>} $chunk match]} {
         ns_log warning "ambiguous '$match'; write Tcl escapes with a space like\
@@ -544,23 +544,23 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     # variable references.
 
     # substitute array variable references
-    while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
-    while {[regsub -all [template::adp_array_variable_regexp_noi18n] $code {\1[ns_quotehtml $\2(\3)]} code]} {}
-    while {[regsub -all [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
+    while {[regsub -all -- [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
+    while {[regsub -all -- [template::adp_array_variable_regexp_noi18n] $code {\1[ns_quotehtml $\2(\3)]} code]} {}
+    while {[regsub -all -- [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
     #
     # Some aolservers have broken implementations of ns_quotehtml
     # (returning for the empty string input a one byte output). 
     #
-    while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
+    while {[regsub -all -- [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
 
     # substitute simple variable references
-    while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1[lang::util::localize ${\2}]} code]} {}
-    while {[regsub -all [template::adp_variable_regexp_noi18n] $code {\1[ns_quotehtml ${\2}]} code]} {}
-    while {[regsub -all [template::adp_variable_regexp_literal] $code {\1${\2}} code]} {}
+    while {[regsub -all -- [template::adp_variable_regexp_noquote] $code {\1[lang::util::localize ${\2}]} code]} {}
+    while {[regsub -all -- [template::adp_variable_regexp_noi18n] $code {\1[ns_quotehtml ${\2}]} code]} {}
+    while {[regsub -all -- [template::adp_variable_regexp_literal] $code {\1${\2}} code]} {}
     if {[ns_quotehtml ""] eq ""} {
-        while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
+        while {[regsub -all -- [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
     } else {
-        while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
+        while {[regsub -all -- [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
     }
 
     # unescape protected # references
@@ -690,7 +690,7 @@ ad_proc -private template::adp_quote_chunk { chunk_var_name quoted_var_name } {
 } {
     upvar $chunk_var_name chunk $quoted_var_name quoted
 
-    regsub -all {[\]\[\{\}\"\\$]} $chunk {\\&} quoted
+    regsub -all -- {[\]\[\{\}\"\\$]} $chunk {\\&} quoted
 }
 
 ad_proc -private template::adp_append_string { s } {

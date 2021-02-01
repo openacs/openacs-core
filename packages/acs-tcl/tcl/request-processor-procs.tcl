@@ -1372,7 +1372,7 @@ ad_proc -private rp_concrete_file {
     # Sub out funky characters in the pathname, so the user can't request
     # http://www.arsdigita.com/*/index (causing a potentially expensive glob
     # and bypassing registered procedures)!
-    regsub -all {[^0-9a-zA-Z_/:.]} $path {\\&} path_glob
+    regsub -all -- {[^0-9a-zA-Z_/:.]} $path {\\&} path_glob
 
     # Grab a list of all available files with extensions.
     set files [glob -nocomplain "$path_glob$extension_pattern"]

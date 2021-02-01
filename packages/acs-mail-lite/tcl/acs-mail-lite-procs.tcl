@@ -909,7 +909,7 @@ namespace eval acs_mail_lite {
         @return the interpolated string
     } {
         foreach pair $values {
-            regsub -all [lindex $pair 0] $text [lindex $pair 1] text
+            regsub -all -- [lindex $pair 0] $text [lindex $pair 1] text
         }
         return $text
     }

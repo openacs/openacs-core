@@ -110,7 +110,7 @@ ad_proc -public template::wizard::create { args } {
     if { [info exists opts(steps)] } {
 
         # strip carriage returns
-        regsub -all {\r} $opts(steps) {} step_data
+        regsub -all -- {\r} $opts(steps) {} step_data
 
         foreach step [split $step_data "\n"] {
 
