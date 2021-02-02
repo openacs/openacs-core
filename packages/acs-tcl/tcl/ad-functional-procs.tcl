@@ -535,7 +535,14 @@ ad_proc -public cons {x xs} "inserts x at the front of the list xs" {
     concat [list $x] $xs
 }
 
-ad_proc -public reverse {xs} "reverses the list xs" {
+ad_proc -deprecated -public reverse {xs} {
+    reverses the list xs.
+
+    Tcl has a built-in support for reversing lists: "lreverse".
+    Use this instead.    
+
+    @see lreverse
+} {
     fold [bind flip cons] {} $xs
 }
 
