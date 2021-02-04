@@ -478,7 +478,7 @@ ad_proc -private apm_build_repository {
                             set packages_root_path [file join {*}[lrange [file split $spec_file] 0 end-2]]
 
                             set tmp_filename [ad_tmpnam]
-                            lappend cmd  --files-from $tmp_filename -C $packages_root_path
+                            lappend cmd -C $packages_root_path --files-from $tmp_filename
 
                             set fp [open $tmp_filename w]
                             foreach file $files {
@@ -629,7 +629,7 @@ ad_proc -private apm_build_repository {
             set tag_label($channel) "OpenACS $major.$minor.$patch"
         } else {
             set tag_order(999-999-999) $channel
-            set tag_label($channel) "OpenACS $channel"            
+            set tag_label($channel) "OpenACS $channel"
         }
     }
 
