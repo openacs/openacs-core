@@ -2499,7 +2499,7 @@ ad_proc -private security::provided_host_valid {host} {
     # The per-request cache takes care of outputting error message only
     # once per request.
     #
-    return [acs::per_request_cache eval -key acs-tcl.security_provided_host_validated($host) {
+    return [acs::per_request_cache eval -key acs-tcl.security_provided_host_validated-$host {
         set result 1
         if {$host ne ""} {
             if {![regexp {^[\w.:@+/=$%!*~\[\]-]+$} $host]} {

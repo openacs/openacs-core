@@ -162,7 +162,7 @@ ad_proc -private permission::permission_p_not_cached {
     }
 
     # We have a per-request cache here
-    return [acs::per_request_cache eval -key acs-tcl.permission_p__cache($party_id,$object_id,$privilege) {
+    return [acs::per_request_cache eval -key acs-tcl.permission_p__cache-$party_id,$object_id,$privilege {
         db_string select_permission_p {
             select acs_permission.permission_p(:object_id, :party_id, :privilege)::integer from dual
         }

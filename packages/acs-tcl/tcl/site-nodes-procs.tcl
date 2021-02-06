@@ -1442,7 +1442,7 @@ if {$UseXotclSiteNodes} {
             }
 
             :protected method properties {-node_id:required,integer,1..1} {
-                return [acs::per_request_cache eval -key acs-tcl.site_nodes_property($node_id) {
+                return [acs::per_request_cache eval -key acs-tcl.site_nodes_property-$node_id {
                     ::acs::site_nodes_cache eval -partition_key $node_id $node_id { next }
                 }]
             }
