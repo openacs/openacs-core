@@ -60,10 +60,14 @@ ad_proc -public aa::coverage::proc_list {
                 foreach proc_name [nsv_get api_proc_doc_scripts $path] {
                     array set proc_doc [nsv_get api_proc_doc $proc_name]
                     if { [info exists proc_doc(protection)]
-                        && "public" in $proc_doc(protection)
-                        && !($proc_doc(deprecated_p) || $proc_doc(warn_p))
-                        && ![regexp {^callback::.*::contract$} "$proc_name"]
-                    } {
+                         && "public" in $proc_doc(protection)
+                         && !($proc_doc(deprecated_p) || $proc_doc(warn_p))
+                         && ![regexp {^callback::.*::contract$} $proc_name]
+                         && ![string match xo::db::sql::* $proc_name]
+                         && ![string match " Class *" $proc_name]
+                         && ![string match " Object *" $proc_name]
+                     } {
+                        ns_log notice "proc-doc, for <$proc_name>"
                         set proc_data [dict create]
                         if { $package_key eq "" } {
                             dict set proc_data package_key $package_name
