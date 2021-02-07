@@ -150,7 +150,7 @@ ad_proc -public aa_register_init_class {
     constructor
     destructor
 } {
-    Registers a initialization class to be used by one or more testcases.  An
+    Registers an initialization class to be used by one or more testcases.  An
     initialization class can be assigned to a testcase via the
     aa_register_case proc.
 
@@ -550,7 +550,7 @@ ad_proc -public aa_register_case {
 ad_proc -public aa_export_vars {
     varnames
 } {
-    Called from a initialization class constructor or a component to
+    Called from an initialization class constructor or a component to
     explicitly export the specified variables to the current testcase. You need
     to call aa_export_vars <b>before</b> you create the variables.
 
@@ -935,7 +935,7 @@ ad_proc -public aa_log_result {
             return
     }
     #
-    # If logging is happened whilst in a initialization class, store the log
+    # If logging is happened whilst in an initialization class, store the log
     # entry, but don't write it to the database.  Individual testcase will make
     # their own copies of these log entries.
     #
@@ -1209,7 +1209,7 @@ namespace eval acs::test {
             set form_content [form_get_fields $form]
         }
         if {$form_content eq ""} {
-            error "either non-empty form or form_content has to be provided"
+            error "either nonempty form or form_content has to be provided"
         }
         if {$url eq ""} {
             set url [dict get $form @action]
@@ -1800,7 +1800,7 @@ namespace eval ::acs::test::xpath {
     #
     # All procs in this namespace have the signature
     #   root xpath
-    # where root is a dom-node and xpath a an XPath expression.
+    # where "root" is a DOM-node and "xpath" is an XPath expression.
     #
     ad_proc -public get_text {root xpath} {
         Get a text element from tdom via XPath expression.
@@ -1824,7 +1824,7 @@ namespace eval ::acs::test::xpath {
 
     ad_proc -public non_empty {node selectors} {
 
-        Test if provided selectors return non-empty results
+        Test if provided selectors return nonempty results
 
     } {
         #
