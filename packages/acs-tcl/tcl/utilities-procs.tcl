@@ -3798,13 +3798,13 @@ ad_proc util::trim_leading_zeros {
 
 ad_proc -public ad_log {
     level
-    message
+    args
 } {
     Output ns_log message with detailed context. This function is
     intended to be used typically with "error" to ease debugging.
 
     @param level Severity level such as "error" or "warning".
-    @param message Log message
+    @param args Log message
 
     @author Gustaf Neumann
 } {
@@ -3812,7 +3812,7 @@ ad_proc -public ad_log {
     append request "    " \
         [util::request_info -with_headers=$with_headers]
 
-    ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
+    ns_log $level {*}$args "\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 
 ad_proc -public util::var_subst_quotehtml {
