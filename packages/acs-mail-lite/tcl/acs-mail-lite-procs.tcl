@@ -529,6 +529,20 @@ namespace eval acs_mail_lite {
 
         # Get any associated data indicating need to sign message-id
 
+        # Recipients might be specified as "DisplayName <email>". This
+        # format is valid for the "To:" email header, but not for the
+        # "RCPT TO", hence we strip the eventually-present display
+        # name from the latter.
+        set to_addr_header $to_addr
+        set to_addr [list]
+        foreach addr $to_addr_header {
+            if {[regexp {^.* <(.*)>$} $addr _ email]} {
+                lappend to_addr $email
+            } else {
+                lappend to_addr $addr
+            }
+        }
+
         # associate a user_id
         set rcpt_id 0
         if { [llength $to_addr] == 1 } {
@@ -783,7 +797,7 @@ namespace eval acs_mail_lite {
         # Prepare the headers list of recipients
         set headers_list [list [list From $from_addr] \
                               [list Reply-To $reply_to] \
-                              [list To [join $to_addr ","]]]
+                              [list To [join $to_addr_header ","]]]
 
         if { $cc_addr ne "" } {
             lappend headers_list [list CC [join $cc_addr ","]]
