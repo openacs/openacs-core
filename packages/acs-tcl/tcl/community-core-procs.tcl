@@ -92,27 +92,31 @@ ad_proc -public person::get_person_info {
     @param element if specified, only value in dict with this key will
                    be returned.
 
+    @return a dict or a single string value if <code>-element</code>
+            was specified.
+
     @see person::get
 
-    @return a dict or a single string value if <code>-element</code>
-    was specified.
 } {
-    set key [list get_person_info $person_id]
-
-    set person [ns_cache eval person_info_cache $key {
-        person::get_person_info_not_cached -person_id $person_id
-    }]
-
-    # don't cache invalid persons
-    if {[llength $person] == 0} {
-        ns_cache flush person_info_cache $key
+    while {1} {
+        set person_info [ns_cache eval person_info_cache $person_id {
+            set person_info [person::get_person_info_not_cached -person_id $person_id]
+            #
+            # Don't cache empty dicts for invalid person_ids.
+            #
+            if {[llength $person_info] == 0} {
+                break
+            }
+            return $person_info
+        }]
+        break
     }
 
     if {$element ne ""} {
-        return [expr {[dict exists $person $element] ?
-                      [dict get $person $element] : ""}]
+        return [expr {[dict exists $person_info $element] ?
+                      [dict get $person_info $element] : ""}]
     } else {
-        return $person
+        return $person_info
     }
 }
 
@@ -148,8 +152,7 @@ ad_proc -public person::flush_person_info {
 
     @see person::get_person_info
 } {
-    set key [list get_person_info $person_id]
-    ns_cache flush person_info_cache $key
+    ns_cache flush person_info_cache $person_id
 }
 
 ad_proc -deprecated -public person::name_flush {
@@ -379,15 +382,21 @@ ad_proc -public acs_user::get_by_username {
 
     set key [list get_by_username \
                  -authority_id $authority_id -username $username]
-    set user_id [ns_cache eval user_info_cache $key {
-        acs_user::get_by_username_not_cached \
-            -authority_id $authority_id \
-            -username     $username
-    }]
 
-    # don't cache invalid usernames
-    if {$user_id eq ""} {
-        ns_cache flush user_info_cache $key
+    while {1} {
+        set user_id [ns_cache eval user_info_cache $key {
+            set user_id [acs_user::get_by_username_not_cached \
+                             -authority_id $authority_id \
+                             -username     $username]
+            #
+            # Don't cache results from invalid usernames.
+            #
+            if {$user_id eq ""} {
+                break
+            }
+            return $user_id 
+        }]
+        break
     }
 
     return $user_id
@@ -397,10 +406,10 @@ ad_proc -private acs_user::get_by_username_not_cached {
     {-authority_id:required}
     {-username:required}
 } {
-    Returns user_id from authority and username. Returns the empty string if no user found.
+    Returns user_id from authority and username. Returns the empty
+    string if no user found.
 
     @param authority_id The authority. Defaults to local authority.
-
     @param username The username of the user you're trying to find.
 
     @return user_id of the user, or the empty string if no user found.
@@ -513,20 +522,25 @@ ad_proc acs_user::get_user_info {
 } {
     set key [list get_user_info $user_id]
 
-    set user [ns_cache eval user_info_cache $key {
-        acs_user::get_user_info_not_cached -user_id $user_id
-    }]
-
-    # don't cache invalid users
-    if {[llength $user] == 0} {
-        ns_cache flush user_info_cache $key
+    while {1} {
+        set user_info [ns_cache eval user_info_cache $key {
+            set user_info [acs_user::get_user_info_not_cached -user_id $user_id]
+            #
+            # Don't cache results from lookups of invalid users.
+            #
+            if {[llength $user_info] == 0} {
+                break
+            }
+            return $user_info
+        }]
+        break
     }
 
     if {$element ne ""} {
-        return [expr {[dict exists $user $element] ?
-                      [dict get $user $element] : ""}]
+        return [expr {[dict exists $user_info $element] ?
+                      [dict get $user_info $element] : ""}]
     } else {
-        return $user
+        return $user_info
     }
 }
 
@@ -773,21 +787,25 @@ ad_proc -public party::get {
         set party_id [party::get_by_email -email $email]
     }
 
-    set key [list get $party_id]
-    set data [ns_cache eval party_info_cache $key {
-        party::get_not_cached -party_id $party_id
-    }]
-
-    # don't cache invalid parties
-    if {[llength $data] == 0} {
-        ns_cache flush party_info_cache $key
+    while {1} {
+        set party_info [ns_cache eval party_info_cache $party_id {
+            set party_info [party::get_not_cached -party_id $party_id]
+            #
+            # Don't cache results form invalid parties.
+            #
+            if {[llength $party_info] == 0} {
+                break
+            }
+            return $party_info
+        }]
+        break
     }
 
     if {$element ne ""} {
-        return [expr {[dict exists $data $element] ?
-                      [dict get $data $element] : ""}]
+        return [expr {[dict exists $party_info $element] ?
+                      [dict get $party_info $element] : ""}]
     } else {
-        return $data
+        return $party_info
     }
 }
 
@@ -853,13 +871,8 @@ ad_proc -public party::flush_cache {
     Flush the party cache
 } {
     set email [party::get -party_id $party_id -element email]
-
-    set keys [list]
-    lappend keys \
-        [list get $party_id] \
-        [list get_by_email $email]
-
-    foreach key $keys {
+    
+    foreach key [list $party_id [list get_by_email $email]] {
         ns_cache flush party_info_cache $key
     }
 }
@@ -1096,15 +1109,20 @@ ad_proc -public party::get_by_email {
     @return party_id
 } {
     set key [list get_by_email $email]
-    set party_id [ns_cache eval party_info_cache $key {
-        party::get_by_email_not_cached -email $email
-    }]
-
-    # don't cache invalid parties
-    if {$party_id eq ""} {
-        ns_cache flush party_info_cache $key
+    while {1} {
+        set party_id [ns_cache eval party_info_cache $key {
+            set party_id [party::get_by_email_not_cached -email $email]
+            #
+            # Don't cache results from invalid parties.
+            #
+            if {$party_id eq ""} {
+                break
+            }
+            return $party_id
+        }]
+        break
     }
-
+    
     return $party_id
 }
 
