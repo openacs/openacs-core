@@ -343,7 +343,7 @@ ad_proc -public acs_user::delete {
     @param permanent If provided the user will be deleted permanently
                        from the database. Otherwise the user
                        state will merely be set to "deleted".
-} {    
+} {
     if { ! $permanent_p } {
         change_state -user_id $user_id -state "deleted"
     } else {
@@ -353,7 +353,7 @@ ad_proc -public acs_user::delete {
         acs_user::erase_portrait -user_id $user_id
         # flush before actual deletion, so all the information is
         # there to be retrieved
-        acs_user::flush_cache -user_id $user_id        
+        acs_user::flush_cache -user_id $user_id
         db_exec_plsql permanent_delete {}
     }
 }
@@ -696,8 +696,8 @@ ad_proc -public acs_user::site_wide_admin_p {
     }
 
     return [permission::permission_p -party_id $user_id \
-		-object_id [acs_magic_object security_context_root] \
-		-privilege "admin"]
+                -object_id [acs_magic_object security_context_root] \
+                -privilege "admin"]
 }
 
 ad_proc -public acs_user::registered_user_p {
@@ -1180,10 +1180,10 @@ ad_proc -private acs_user::get_portrait_id_not_cached {
 } {
     return [db_string get_portrait {
         select c.item_id
-	from acs_rels a, cr_items c
-	where a.object_id_two = c.item_id
-	and a.object_id_one = :user_id
-	and a.rel_type = 'user_portrait_rel'
+        from acs_rels a, cr_items c
+        where a.object_id_two = c.item_id
+        and a.object_id_one = :user_id
+        and a.rel_type = 'user_portrait_rel'
     } -default 0]
 }
 
@@ -1266,6 +1266,249 @@ ad_proc -public acs_user::erase_portrait {
     }
 
     acs_user::flush_portrait -user_id $user_id
+}
+
+ad_proc -public acs_user::promote_person_to_user {
+    -person_id
+    {-authority_id ""}
+    {-username ""}
+    {-password ""}
+    {-locale ""}
+} {
+    Promotes a person/party to an ACS user.
+
+    @param person_id the person_id in the acs system that should be promoted to a user.
+    @param username the username to be used for this user.
+           Defaults to the person's email
+    @param password the password to be used for this user.
+           Defaults to a randomly generated password.
+    @param authority_id the authority that will be used for the user.
+    @param locale locale to be used in user preferences.
+           Defaults to the site wide locale is taken.
+
+    @return The user_id of the person promoted to user
+
+    @error  An error is thrown
+            if the username is already in use,
+            or the person_id has no email address,
+            or if person_id is not in the persons table.
+
+    @see acs_user::get_by_username
+} {
+    ns_log notice "CALL  acs_user::promote_person_to_user"
+
+    if { $username eq "" } {
+        #
+        # Take the email as username, if no username was provided.
+        #
+        set party_info [party::get -party_id $person_id]
+        if {[llength $party_info] > 0} {
+            set username [string tolower [dict get $party_info email]]
+        }
+        if { $username eq "" } {
+            error "The party to be promoted does either not exist or has no email address"
+        }
+    }
+
+    #
+    # Make sure this username is not already in use.
+    #
+    set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
+    if {$user_id ne ""} {
+        error "The username '$username' is already in use."
+    }
+
+    #
+    # The person to be promoted has to be a valid person
+    #
+    set person_info [person::get -person_id $person_id]
+    if {[llength $party_info] == 0} {
+        error "No person with person_id $person_id defined"
+    }
+
+    #
+    # Determine locale to be used in the user preferences
+    #
+    if {$locale eq ""} {
+        set locale [lang::system::locale -site_wide]
+    }
+    ns_log notice "CALL  transaction"
+
+    db_transaction {
+        #
+        # Set up variables for the new user.
+        #
+        set first_names [dict get $person_info first_names]
+        set last_name [dict get $person_info last_name]
+
+        #
+        # Generate salt
+        #
+        set salt [sec_random_token]
+        #
+        # If password was not passed in, generate that too.
+        #
+        if { $password == "" } {
+            set password [sec_random_token]
+        }
+        set hashed_password [ns_sha1 "$password$salt"]
+
+        ns_log notice "CALL  acs_user__new(:person_id, --user_id
+                                 'user', --object_type
+                                 now(), --creation_date
+                                 null, --creation_user
+                                 null, --creation_ip
+                                 null, --authority_id
+                                 :username, --username
+                                 null, --email
+                                 null, --url
+                                 :first_names, --first_names
+                                 :last_name, --last_name
+                                 :hashed_password, --password
+                                 :salt, --salt
+                                 null, --screen_name
+                                 't', --email_verified_p
+                                 null --context_id
+                                 )"
+        db_exec_plsql noxql {
+            SELECT acs_user__new(:person_id, --user_id
+                                 'user', --object_type
+                                 now(), --creation_date
+                                 null, --creation_user
+                                 null, --creation_ip
+                                 null, --authority_id
+                                 :username, --username
+                                 null, --email
+                                 null, --url
+                                 :first_names, --first_names
+                                 :last_name, --last_name
+                                 :hashed_password, --password
+                                 :salt, --salt
+                                 null, --screen_name
+                                 't', --email_verified_p
+                                 null --context_id
+                                 )
+        }
+        # Add user to 'registered_users' group and set permissions
+        db_exec_plsql noxql {
+            SELECT membership_rel__new (
+                            null,
+                            'membership_rel',
+                            acs__magic_object_id('registered_users'),
+                            :person_id,
+                            'approved',
+                            null,
+                            null)
+        }
+        #
+        # Update user preferences
+        #
+        db_dml noxql {
+            update user_preferences
+            set locale = :locale
+            where user_id = :person_id
+        }
+
+        #
+        # Update object type.
+        #
+        db_dml update_object_type {
+            UPDATE acs_objects
+            SET    object_type = 'user'
+            WHERE  object_id = :person_id
+        }
+
+        # A user needs read and write permissions on themselves
+        permission::grant -party_id $person_id -object_id $person_id -privilege "read"
+        permission::grant -party_id $person_id -object_id $person_id -privilege "write"
+    }
+
+    #
+    # Flush the cache. It should not be necessary to flush the
+    # person_info cache, since the "person" is still around.
+    #
+    acs_user::flush_cache -user_id $person_id
+
+    return $person_id
+}
+
+
+ad_proc -public acs_user::demote_user {
+    -user_id
+    -delete_portrait:boolean
+} {
+    Demotes an ACS user to a person/party.
+
+    This will fail if other tables have content referencing the users
+    table.  It is probably best for tables created in other packages
+    to reference persons, parties, or acs_objects instead.  This proc
+    could be extended with an option to find all referenced tables and
+    remove rows referencing this user.
+
+    @param user_id the user_id in the acs system that should be demoted.
+    @param delete_portrait Delete the portrait of the user
+
+    @error An error is thrown if user_id is not in the users table.
+} {
+    #
+    # Make sure this user exists
+    #
+    set user_info [acs_user::get -user_id $user_id]
+    if { [llength $user_info] == 0 } {
+        return -error "This user does not exist."
+    }
+
+    # revoke permissions
+    db_dml noxql {
+       DELETE FROM acs_permissions
+       WHERE grantee_id = :user_id
+    }
+
+    db_multirow -local rels noxql {
+        SELECT rel_id
+        FROM acs_rels
+        WHERE rel_type = 'membership_rel'
+          AND object_id_two = :user_id
+    }
+    template::multirow -local foreach rels {
+        if { ![relation_remove $rel_id] } {
+            # didn't delete anything - error?
+        }
+    }
+
+    db_dml noxql {
+        DELETE FROM user_preferences
+        WHERE user_id = :user_id
+    }
+    db_dml noxql {
+        DELETE FROM users
+        WHERE user_id = :user_id
+    }
+
+    #
+    # Update object type.
+    #
+    db_dml update_object_type {
+        UPDATE acs_objects
+        SET    object_type = 'person'
+        WHERE  object_id = :user_id
+    }
+
+
+    #
+    # Remove the portrait on request.
+    #
+    if {$delete_portrait_p} {
+        acs_user::erase_portrait -user_id $user_id
+    }
+
+    #
+    # Always flush the cache. It should not be necessary to flush the
+    # person_info cache, since the "person" is still around.
+    #
+    acs_user::flush_cache -user_id $user_id
+
+    return
 }
 
 # Local variables:
