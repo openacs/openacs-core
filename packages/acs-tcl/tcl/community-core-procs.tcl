@@ -1313,7 +1313,6 @@ ad_proc -public acs_user::promote_person_to_user {
 
     @see acs_user::get_by_username
 } {
-    ns_log notice "CALL  acs_user::promote_person_to_user"
 
     if { $username eq "" } {
         #
@@ -1350,7 +1349,6 @@ ad_proc -public acs_user::promote_person_to_user {
     if {$locale eq ""} {
         set locale [lang::system::locale -site_wide]
     }
-    ns_log notice "CALL  transaction"
 
     db_transaction {
         #
