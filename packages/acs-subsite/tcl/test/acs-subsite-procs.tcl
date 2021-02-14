@@ -24,9 +24,10 @@ aa_register_case \
 
 aa_register_case \
     -procs {
+        _
         group::delete
         group::new
-        _
+        lang::message::unregister
         lang::util::convert_to_i18n
     } \
     group_localization {
@@ -77,6 +78,7 @@ aa_register_case \
 aa_register_case \
     -bugs {775} \
     -procs {
+        aa_error
         group::delete
         group::new
         permission::grant
@@ -108,9 +110,12 @@ aa_register_case \
 aa_register_case \
     -bugs {1144} \
     -procs {
+        acs::test::user::create
         acs_user::delete
         application_group::group_id_from_package_id
+        auth::set_email_verified
         group::add_member
+        site_node::get_from_url
     } \
     acs_subsite_expose_bug_1144 {
     Exposes Bug 1144.
@@ -189,9 +194,10 @@ aa_register_case \
 aa_register_case \
     -cats smoke \
     -procs {
+        acs::test::user::create
         group::add_member
-        group::member_p
         group::admin_p
+        group::member_p
         group::new
         relation_add
     } acs_subsite_check_composite_group {
@@ -358,6 +364,8 @@ aa_register_case \
         party::get
         export_vars
         acs_user::delete
+        acs::test::confirm_email
+        acs::test::user::create
     } acs_subsite_test_email_confirmation {
         Calls the mail confirmation page with a new user and checks
         that result is as expected

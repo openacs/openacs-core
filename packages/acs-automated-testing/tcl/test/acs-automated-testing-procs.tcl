@@ -8,10 +8,22 @@ ad_library {
 aa_register_case \
     -cats {api web} \
     -procs {
-        acs::test::user::create
+        aa_equals
+        aa_false
+        aa_log
+        aa_register_case
+        aa_run_with_teardown
+        aa_section
+        aa_true
+        acs::test::confirm_email
         acs::test::http
         acs::test::login
         acs::test::logout
+        acs::test::reply_contains
+        acs::test::reply_contains_no
+        acs::test::reply_has_status_code
+        acs::test::user::create
+        acs::test::user::delete
     } \
     webtest_example {
 
@@ -48,6 +60,7 @@ aa_register_case \
         acs::test::reply_contains $d [dict get $user_info last_name]
         aa_equals "login [dict get $d login]" [dict get $d login] via_login
         aa_true "cookies are not empty '[dict get $d session cookies]'" {[dict get $d session cookies] ne ""}
+        aa_false "cookies are not empty '[dict get $d session cookies]'" {[dict get $d session cookies] eq ""}
 
         ########################################################################################
         aa_section "Make a second request, now the cookie should be used"
@@ -76,7 +89,10 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
+        aa_register_case
         aa::coverage::proc_coverage
+        aa_equals
+        aa_true
     } \
     aa__coverage_proc_coverage {
 
@@ -121,8 +137,11 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
+        aa_register_case        
         aa::coverage::proc_covered_p
         aa::coverage::proc_list
+        aa_equals
+        aa_true
     } \
     aa__coverage_proc_proc_list_covered {
 
@@ -151,7 +170,7 @@ aa_register_case \
         set package_proc_list [aa::coverage::proc_list -package_key $package]
         foreach proc_info $package_proc_list {
             dict with proc_info {
-                aa_equals "package $package: dict size" "[dict size $proc_info]" "2"
+                aa_equals "package $package: dict size" [dict size $proc_info] "2"
                 aa_true "package $package: proc_name not empty" {[dict get $proc_info proc_name] ne ""}
                 aa_true "package $package proc $proc_name: covered_p is boolean" {[string is boolean [dict get $proc_info covered_p]]}
                 aa_true "package $package proc $proc_name: covered_p and aa::coverage::proc_covered_p are coherent" {
@@ -166,7 +185,9 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
+        aa_register_case        
         aa::coverage::proc_coverage_level
+        aa_equals
     } \
     aa__coverage_proc_coverage_level {
 

@@ -793,9 +793,6 @@ ad_proc -public aa_equals {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    global aa_testcase_id
-    global aa_package_key
-
     if {$affirm_actual eq $affirm_value} {
         aa_log_result "pass" [subst {[aa_indent] $affirm_name, actual = "$affirm_actual"}]
         return 1

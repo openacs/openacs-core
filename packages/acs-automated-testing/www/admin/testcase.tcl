@@ -5,7 +5,7 @@ ad_page_contract {
     package_key:token
     {showsource:boolean 0}
     {quiet:boolean 1}
-    {return_url ""}
+    {return_url:localurl ""}
 } -properties {
     title:onevalue
     context_bar:onevalue
