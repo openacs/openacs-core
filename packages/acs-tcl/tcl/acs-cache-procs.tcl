@@ -413,10 +413,9 @@ namespace eval ::acs {
             # @param key cache key
             # @return return boolean value indicating success.
             #
-            set cache_key ${:prefix}$key
-            if {[info exists $cache_key]} {
+            if {[info exists ${:prefix}] && [dict exists [set ${:prefix}] $key]} {
                 :upvar $var value
-                set value [set $cache_key]
+                set value [dict get [set ${:prefix}] $key]
                 return 1
             }
             return 0
@@ -436,20 +435,21 @@ namespace eval ::acs {
             # @param cmd command to be executed.
             # @return    return the last value set (don't use "return").
             #
-            set cache_key ${:prefix}$key
-            #ns_log notice "### exists $cache_key => [info exists $cache_key]"
+            #set cache_key ${:prefix}$key
+            #ns_log notice "### exists $cache_key => [dict exists ${:prefix} $key]"
 
-            if {![info exists $cache_key]} {
+            if {![info exists ${:prefix}] || ![dict exists [set ${:prefix}] $key]} {
                 #ns_log notice "### call cmd <$cmd>"
                 set value [:uplevel $cmd]
                 #ns_log notice "### cmd returns <$value> no_empty $no_empty "
                 if {$no_empty && $value eq ""} {
                     return ""
-                }
-                set $cache_key $value
-                #ns_log notice "### [list set $cache_key $value]"
+                }                
+                dict set ${:prefix} $key $value
+                #ns_log notice "### [list  dict set ${:prefix} $key $value]"
             }
-            return [set $cache_key]
+            #ns_log notice "### will return [list  dict get ${:prefix} $key]"
+            return [dict get [set ${:prefix}] $key]
         }
 
         :public method flush {
@@ -459,22 +459,36 @@ namespace eval ::acs {
             # Flush a cache entry based on the pattern (which might be
             # wild-card-free).
             #
-            set pattern ${:prefix}${pattern}
-            unset -nocomplain {*}[info vars $pattern]
+            if {[info exists ${:prefix}]} {            
+                if {$pattern eq "*"} {
+                    ns_log notice "### dict flush ${:prefix} <$pattern>" 
+                    unset ${:prefix}
+                } elseif {[string first "*" $pattern] != -1} {
+                    #
+                    # A real pattern with wild-card was provided.
+                    #                    
+                    set keys [dict keys [set ${:prefix}] $pattern]
+                    ns_log notice "### dict flush ${:prefix} <$pattern> -> [llength $keys]]" 
+                    foreach key $keys {
+                        dict unset ${:prefix} $key
+                    }
+                } elseif [dict exists [set ${:prefix}] $pattern] {
+                    dict unset ${:prefix} $pattern
+                }
+            }
         }
-
         #
         # The per-thread cache uses namespaced Tcl variables, identified
         # by the prefix "::acs:cache::"
         #
-        :create per_thread_cache -prefix ::acs::cache::
+        :create per_thread_cache -prefix ::acs::cache
 
         #
         # The per-request cache uses Tcl variables in the global
         # namespace, such they are automatically reclaimed after the
         # request. These use the prefix "::__acs_cache_"
         #
-        :create per_request_cache -prefix ::__acs_cache_
+        :create per_request_cache -prefix ::__acs_cache
     }
     namespace eval ::acs::cache {}
 }

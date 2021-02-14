@@ -40,36 +40,47 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
 } {
     set count 0
     set good 0
-    set allowedChars {^[a-zA-Z_0-9_]+$}
+    set allowedChars {^[a-zA-Z0-9_]+$}
     set allowedToplevel {^(_|(ad|acs|aa|adp|api|apm|chat|db|doc|ds|dt|cr|export|fs|general_comments|lc|news|ns|package|pkg_info|relation|rp|rss|sec|server_cluster|content_search|util|xml)_.+|callback|exec)$}
     set serverModuleProcs {^(h264open|h264length|h264read|h264eof|h264close|dom|bin|zip|transform|md5|base64|berkdb)$}
     set xmlRPC {^system\.(add|listMethods|multicall|methodHelp)$}
     set functionalOps {^f::(-|/)$}
-    set internalUse {^(_.+|AcsSc[.].+|callback::.+|install::.+)$}
-    set prescribed {^((after|before|notifications)-(install|instantiate|uninstall|uninstantiate|upgrade))$}
+    set internalUse {^(_.+|AcsSc[.].+|callback::.+|install::.+|.*[-](lob|text|gridfs|file))$}
+    set prescribed {^((after|before|notifications)-([a-zA-Z0-9_]+))$}
+
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         if {[string match "* *" $p]} continue
-        ns_log notice "$p"
+        set info [nsv_get api_proc_doc $p]
+        if {![dict exists $info script]} {
+            aa_log "$p has no script (probably a referenced C-level cmd or a proc (no ad_proc)"
+        } elseif {[dict get $info script] eq ""} {
+            continue
+        }
         incr count
         set tail [namespace tail $p]
         set qualifiers [regsub -all -- "::" [namespace qualifiers $p] "__"]
-        if {[regexp $internalUse $p] || [regexp $serverModuleProcs $p] || [regexp $functionalOps $p] || [regexp $xmlRPC $p]} continue
-        set pa [nsv_get api_proc_doc $p]
-        set protection [expr {[dict exists $pa protection] && "public" in [dict get $pa protection]
+        if {[regexp $internalUse $p]
+            || [regexp $serverModuleProcs $p]
+            || [regexp $functionalOps $p]
+            || [regexp $xmlRPC $p]
+        } {
+            continue
+        }
+        set protection [expr {[dict exists $info protection] && "public" in [dict get $info protection]
                           ? "public" : "private"}]
 
         if {![regexp $allowedToplevel $p] && ![string match *::* $p]} {
-            if {[dict exists $pa deprecated_p] && [dict get $pa deprecated_p]} {
+            if {[dict exists $info deprecated_p] && [dict get $info deprecated_p]} {
                 aa_log_result warning "deprecated proc '$p' ($protection) is not in a namespace"
             } else {
-                aa_log_result fail "proc '$p' ($protection) is not in a namespace"
+                aa_log_result fail "proc '$p' ($protection) is not in a namespace: $info"
             }
         } elseif { (![regexp $allowedChars $tail]
-                        || $qualifiers ne ""
-                        && ![regexp $allowedChars $qualifiers])
-                  && ![regexp $prescribed $tail]
-                  && ![regexp {^(before|after)} $tail]
-              } {
+                    || $qualifiers ne ""
+                    && ![regexp $allowedChars $qualifiers]
+                    )
+                   && ![regexp $prescribed $tail]
+               } {
             aa_log_result fail "proc '$p' ($protection): name/namespace contains invalid characters"
         } else {
             incr good
