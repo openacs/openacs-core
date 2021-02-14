@@ -1182,6 +1182,15 @@ ad_proc ad_file {subcmd arg1 args} {
     ::file $subcmd $arg1 {*}$args
 }
 
+# if {[cmd_exists xxx]}
+if {[info commands ::nsf::cmd::info ] ne ""} {
+    interp alias {} cmd_exists {} ::nsf::cmd::info exists
+} else {
+    ad_proc -private cmd_exists {cmd} {
+        expr {[::namespace which $cmd] ne ""}
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

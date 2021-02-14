@@ -121,11 +121,15 @@ ad_proc -public apm_guess_file_type { package_key path } {
         set type "template"
     } elseif { [llength $components] == 1 &&
                ($extension eq ".html" || $extension eq ".adp") } {
-        # HTML or ADP file in the top level of a package - assume it's documentation.
+        #
+        # HTML or ADP file in the top level of a package - assume it
+        # is documentation.
+        #
         set type "documentation"
 
-        # RBM: Changed the next elseif to check for 'www' or 'admin-www' only n levels down
-        # the path, since that'd be the minimum in a path counting from the pageroot
+        # RBM: Changed the next elseif to check for 'www' or
+        # 'admin-www' only n levels down the path, since that'd be the
+        # minimum in a path counting from the pageroot
 
     } elseif { "www" in $components_lesser || "admin-www" in $components_lesser } {
         set type "content_page"

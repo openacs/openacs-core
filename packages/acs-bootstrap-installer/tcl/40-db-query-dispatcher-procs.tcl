@@ -6,11 +6,11 @@
 # The Query Dispatcher is documented at http://openacs.org/
 # The Query Dispatcher needs tDOM (http://tdom.org) to work.
 
-# This doesn't use the ad_proc construct, or any significant aD constructs,
-# because we want this piece to be usable in a separate context. While this makes
-# the coding somewhat more complicated, it's still easy to document and write clear,
-# virgin Tcl code.
-
+# This doesn't use the ad_proc construct, or any significant aD
+# constructs, because we want this piece to be usable in a separate
+# context. While this makes the coding somewhat more complicated, it
+# is still easy to document and write clear, virgin Tcl code.
+#
 
 
 # The following code allows ad_proc to be used
@@ -592,7 +592,7 @@ ad_proc -private db_qd_internal_store_cache {fullquery} {
     Store in Cache.  The load_location is the file where this query was found.
 } { 
 
-    # Check if it's compatible at all!
+    # Check if it is compatible at all!
     set rdbms [db_fullquery_get_rdbms $fullquery]
     if {![db_rdbms_compatible_p $rdbms [db_current_rdbms]]} {
         # The query isn't compatible, probably because of a too high version
@@ -678,7 +678,7 @@ ad_proc -private db_qd_internal_parse_init {stuff_to_parse file_path} {
     # Get the list of queries out
     set root_node [xml_doc_get_first_node $parsed_doc]
 
-    # Check that it's a queryset
+    # Check if the node is a queryset
     if {[xml_node_get_name $root_node] ne "queryset"} {
 	# db_qd_log Error "OH OH, error, first node is [xml_node_get_name $root_node] and not 'queryset'"
         return ""
@@ -768,8 +768,10 @@ ad_proc -private db_qd_internal_parse_one_query_from_xml_node {one_query_node {d
 
 ad_proc -private db_rdbms_parse_from_xml_node {rdbms_node} {
     Parse and RDBMS struct from an XML fragment node
-} { 
-    # Check that it's RDBMS
+} {
+    #
+    # Check if the DOM node refers to a RDBMS.
+    #
     if {[xml_node_get_name $rdbms_node] ne "rdbms"} {
 	db_qd_log Debug "db_rdbms_parse_from_xml_node: PARSER = BAD RDBMS NODE!"
 	return {}
