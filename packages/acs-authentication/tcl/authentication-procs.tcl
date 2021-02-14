@@ -1987,7 +1987,9 @@ ad_proc -private ::auth::login_attempts::threshold_reached_p {
                                        -package_key "acs-authentication" \
                                        -default 0]
 
-    if {$max_failed_login_attempts > 0 && [::auth::login_attempts::get -key $login_attempt_key] > $max_failed_login_attempts} {
+    if {$max_failed_login_attempts > 0
+        && [::auth::login_attempts::get -key $login_attempt_key] > $max_failed_login_attempts
+    } {
         return 1
     } else {
         return 0
