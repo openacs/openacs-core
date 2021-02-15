@@ -1176,9 +1176,7 @@ ad_proc ad_file {subcmd arg1 args} {
     user provided values.
     
 } {
-    if {[string range $arg1 0 1] eq {~}} {
-        set arg1 ./$arg1
-    }
+    regsub {^~+/*} $arg1 {./} arg1
     ::file $subcmd $arg1 {*}$args
 }
 
