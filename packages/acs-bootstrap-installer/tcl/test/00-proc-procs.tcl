@@ -8,7 +8,7 @@ aa_register_case \
     ad_file {
         Basic test of ad_file, showing why this has been introduced.
     } {
-        set non_existing_user [ad_generate_random_string]
+        set non_existing_user "openacstestuser2352rfwef432fg543wf3asdf32rdddsfs65"
         set tilde_filename ~$non_existing_user
 
         aa_false "'file tail' works as expected without a tilde character" [catch {
