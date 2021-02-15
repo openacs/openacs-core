@@ -7,7 +7,9 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
+aa_register_case -cats {smoke production_safe} -procs {
+    aa_log_result
+} documentation__check_proc_doc {
     checks if documentation exists for public procs.
 
     @author Jeff Davis davis@xarg.net
@@ -33,7 +35,9 @@ aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
 }
 
 
-aa_register_case -cats {smoke production_safe} naming__proc_naming {
+aa_register_case -cats {smoke production_safe} -procs {
+    aa_log_result
+} naming__proc_naming {
     Check if names of Tcl procs follow the naming conventions
     https://openacs.org/xowiki/Naming
 
@@ -89,7 +93,9 @@ aa_register_case -cats {smoke production_safe} naming__proc_naming {
     aa_log "Found $good good of $count checked"
 }
 
-aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_deprecated_see {
+aa_register_case -cats {smoke production_safe} -error_level warning -procs {
+    aa_log_result    
+} documentation__check_deprecated_see {
     checks if deprecated procs have an @see clause
 
     @author Jeff Davis davis@xarg.net
@@ -113,7 +119,10 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     aa_log "Found $good of $count procs checked"
 }
 
-aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_typos {
+aa_register_case -cats {smoke production_safe} -error_level warning -procs {
+    aa_log_result
+    acs_package_root_dir
+} documentation__check_typos {
 
     Search for spelling errors in the proc documentation, using a list of common
     typos based on the one included in the lintian Debian package:
@@ -133,7 +142,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     @creation-date 2018-07-23
 
 } {
-    set typo_list "[acs_package_root_dir "acs-tcl"]/tcl/test/doc-check-procs-common-typos.txt"
+    set typo_list "[acs_package_root_dir acs-tcl]/tcl/test/doc-check-procs-common-typos.txt"
     set typos [dict create]
 
     # Create the typo dictionary with values from the common typos file
@@ -195,7 +204,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     aa_log "Documentation seems typo free in $good of $count checked procs (total typo checks: $checks)"
 }
 
-aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_parameters {
+aa_register_case -cats {smoke production_safe} -error_level warning -procs {
+    aa_log_result    
+} documentation__check_parameters {
 
     Check if the parameters defined in the proc doc as '@param' are actual
     parameters.

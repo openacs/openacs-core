@@ -8,7 +8,11 @@ ad_library {
 
 aa_register_case \
     -cats {smoke production_safe} \
-    -procs {apm_get_installed_versions apm_get_package_files} \
+    -procs {
+        apm_get_installed_versions
+        apm_get_package_files
+        ad_file
+    } \
     files__tcl_file_syntax_errors {
 
         Test all known Tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
@@ -45,7 +49,10 @@ aa_register_case \
 aa_register_case \
     -cats {smoke production_safe} \
     -error_level error \
-    -procs {} \
+    -procs {
+        ad_file
+        ad_find_all_files
+    } \
     files__tcl_file_common_errors {
     Check for some common error patterns.
 
@@ -80,7 +87,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {smoke production_safe} \
-    -procs {apm_read_package_info_file} \
+    -procs {
+        apm_read_package_info_file
+        aa_log_result
+        apm_package_installed_p
+    } \
     files__check_info_files {
 
         Check that all the info files parse correctly and are
@@ -142,6 +153,7 @@ aa_register_case \
         apm_get_package_files
         apm_guess_db_type
         apm_version_sortable
+        ad_file
     } \
     files__check_upgrade_ordering {
 
@@ -213,6 +225,7 @@ aa_register_case \
         apm_get_package_files
         db_qd_internal_prepare_queryfile_content
         xml_parse
+        ad_file
     } \
     files__check_xql_files {
 
@@ -328,7 +341,11 @@ aa_register_case \
 aa_register_case \
     -cats {production_safe} \
     -error_level notice \
-    -procs {} \
+    -procs {
+        ad_file
+        apm_get_installed_versions
+        apm_get_package_files
+    } \
     files__trailing_whitespace {
 
         Looks for trailing whitespace: spaces or tabs at the end of lines.
@@ -396,7 +413,11 @@ aa_register_case \
 aa_register_case \
     -cats {smoke production_safe} \
     -error_level warning \
-    -procs {} \
+    -procs {
+        ad_file
+        apm_get_installed_versions
+        apm_get_package_files
+    } \
     files__page_contracts {
 
     Checks for files without 'ad_page_contract', 'ad_include_contract'

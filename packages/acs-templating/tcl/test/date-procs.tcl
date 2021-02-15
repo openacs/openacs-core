@@ -14,8 +14,9 @@ aa_register_case \
     -procs {
         template::util::date::get_property
         template::util::date::now
-    } \
-    sql_date {
+        db_type
+        db_version
+    } sql_date {
     test sql date transform
 } {
     aa_run_with_teardown \
@@ -39,11 +40,11 @@ aa_register_case \
     } {
     aa_run_with_teardown \
         -test_code {
-            
+
             set clock [clock scan "2019-04-25 16:19:00"]
             set date [template::util::date::now_min_interval -clock $clock]
             aa_equals "interval up from 19" $date {2019 4 25 16 20 0 {DD MONTH YYYY}}
-            
+
             set clock [clock scan "2019-04-25 16:20:00"]
             set date [template::util::date::now_min_interval -clock $clock]
             aa_equals "interval same " $date {2019 4 25 16 20 0 {DD MONTH YYYY}}

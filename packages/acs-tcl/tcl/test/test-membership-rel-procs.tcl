@@ -17,6 +17,7 @@ aa_register_case \
         membership_rel::reject
         membership_rel::unapprove
         membership_rel::change_state
+        ::acs::test::user::create
     } \
     ad_proc_change_state_member  {
 

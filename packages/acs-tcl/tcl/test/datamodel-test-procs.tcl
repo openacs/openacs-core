@@ -10,7 +10,11 @@ ad_library {
 aa_register_case \
     -cats {api db smoke production_safe} \
     -error_level warning \
-    -procs {db_name} \
+    -procs {
+        db_name
+        aa_log_result
+        ad_decode
+    } \
     datamodel__named_constraints {
 
         Check that all the constraints meet the constraint naming
@@ -22,7 +26,8 @@ aa_register_case \
     set db_is_pg_p [string equal [db_name] "PostgreSQL"]
 
     if { $db_is_pg_p } {
-        set get_constraints "select
+        set get_constraints {
+            select
                 cla.relname as table_name,
                 con.conrelid,
                 con.conname as constraint_name,
@@ -35,23 +40,30 @@ aa_register_case \
                 END as constraint_type,
                 con.conkey,
                 '' as search_condition
-                from
+            from
                 pg_constraint con,
                 pg_class cla
-                where con.conrelid != 0 and cla.oid=con.conrelid
-                order by table_name,constraint_name"
-        set get_constraint_col "select attname from pg_attribute where attnum = :columns_list and attrelid = :conrelid"
+            where con.conrelid != 0 and cla.oid=con.conrelid
+            order by table_name,constraint_name
+        }
+        set get_constraint_col {
+            select attname from pg_attribute where attnum = :columns_list and attrelid = :conrelid
+        }
     } else {
         # Oracle
-        set get_constraints "select
+        set get_constraints {
+            select
                 acc.*, ac.search_condition,
                   decode(ac.constraint_type,'C','CK','R','FK','P','PK','U','UN','') as constraint_type
-                from
+            from
                   (select count(column_name) as columns, table_name, constraint_name from user_cons_columns group by table_name, constraint_name) acc,
                   user_constraints ac
-                where ac.constraint_name = acc.constraint_name
-                order by acc.table_name, acc.constraint_name"
-        set get_constraint_col "select column_name from user_cons_columns where constraint_name = :constraint_name"
+            where ac.constraint_name = acc.constraint_name
+            order by acc.table_name, acc.constraint_name
+        }
+        set get_constraint_col {
+            select column_name from user_cons_columns where constraint_name = :constraint_name
+        }
     }
 
     db_foreach check_constraints $get_constraints {
@@ -102,7 +114,10 @@ aa_register_case \
 
 aa_register_case \
     -cats {db smoke production_safe} \
-    -procs {db_table_exists} \
+    -procs {
+        db_table_exists
+        aa_log_result
+    } \
     datamodel__acs_object_type_check {
 
         Check that the object type tables exist and that the id column is
@@ -164,7 +179,10 @@ aa_register_case \
 
 aa_register_case \
     -cats {db smoke production_safe} \
-    -procs {db_column_type db_columns} \
+    -procs {
+        db_column_type db_columns
+        aa_log_result
+    } \
     datamodel__acs_attribute_check {
 
         Check that the acs_attribute column is present and the

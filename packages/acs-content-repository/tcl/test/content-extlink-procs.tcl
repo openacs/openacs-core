@@ -13,6 +13,7 @@ aa_register_case \
         content::extlink::delete
         content::extlink::copy
         content::extlink::name
+        content::folder::register_content_type
     } \
     content_extlink {
         content extlink test

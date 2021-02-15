@@ -10,6 +10,7 @@ aa_register_case \
     -cats { api } \
     -procs {
         site_node::delete
+        site_node::get
         site_node::get_node_id
         site_node::get_url
         site_node::get_url_from_object_id

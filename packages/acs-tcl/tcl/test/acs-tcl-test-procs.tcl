@@ -57,8 +57,10 @@ aa_stub apm_arg_names_for_callback_type {
 aa_register_case \
     -cats {api db smoke} \
     -procs {
+        acs_package_root_dir
         apm_generate_package_spec
         apm_read_package_info_file
+        apm_supported_callback_types
         db_dml
     } \
     apm__test_info_file {
@@ -189,8 +191,14 @@ aa_register_case \
 
 aa_register_case \
     -cats {db api smoke} \
-    -procs apm_invoke_callback_proc \
-    apm__test_callback_invoke {
+    -procs {
+        apm_invoke_callback_proc
+        apm_remove_callback_proc
+        apm_set_callback_proc
+        apm_supported_callback_types
+        apm_test_callback_file_path
+        apm_version_id_from_package_key
+    } apm__test_callback_invoke {
         Test the proc apm_invoke_callback_proc
 
         @author Peter Marklund
@@ -1040,7 +1048,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {web smoke} \
-    front_page_1 {
+    -procs {
+        acs::test::http
+        acs::test::reply_has_status_code
+        site_node::get_from_url
+    } front_page_1 {
 
     } {
     set d [acs::test::http -depth 3 /]
@@ -1050,8 +1062,9 @@ aa_register_case \
 
 aa_register_case \
     -cats {smoke api} \
-    -procs util::age_pretty \
-    util__age_pretty {
+    -procs {
+        util::age_pretty
+    } util__age_pretty {
         Test the util::age_pretty proc.
 } {
     aa_log "Forcing locale to en_US for all strings so that tests work in any locale"
@@ -1112,7 +1125,10 @@ aa_register_case \
 }
 
 aa_register_case \
-    -procs db_bind_var_substitution \
+    -procs {
+        db_bind_var_substitution
+        db_type
+    } \
     -cats {api} \
     db_bind_var_substitution {
         Test the proc db_bind_var_substitution.

@@ -11,6 +11,7 @@ aa_register_case \
     -procs {
         party::email
         party::get_by_email
+        acs::test::user::create
     } \
     community_cc_procs \
     {
@@ -31,10 +32,13 @@ aa_register_case \
                 [string match $email_p [string tolower $user_info(email)]]
         }
 
-}
+    }
+
 aa_register_case \
     -cats {api smoke} \
     -procs {
+        auth::authority::get_id
+        auth::create_user
         party::email
         person::delete
         person::get
@@ -109,6 +113,8 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke} \
     -procs {
+        auth::authority::get_id
+        auth::create_user
         party::get_by_email
         party::update
     } \

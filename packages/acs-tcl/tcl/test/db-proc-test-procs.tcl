@@ -10,8 +10,12 @@ aa_register_case \
     -cats {api db smoke} \
     -error_level "error" \
     -procs {
-        ::db_multirow
-        ::template::multirow
+        db_dml
+        db_foreach
+        db_multirow
+        db_string
+        db_transaction
+        template::multirow
     } \
     db__transaction_bug_3440 {
 
@@ -32,66 +36,66 @@ aa_register_case \
             aa_log "Start test section 1"
 
             db_transaction {
-            #
-            # Insert an element to the test table
-            #
-            set dml "INSERT INTO test_tbl1 (value) values('val1') RETURNING id;"
-            set row_id [db_string noxql $dml]
-            set sql_row_id "SELECT value FROM test_tbl1 where id = :row_id"
+                #
+                # Insert an element to the test table
+                #
+                set dml "INSERT INTO test_tbl1 (value) values('val1') RETURNING id;"
+                set row_id [db_string noxql $dml]
+                set sql_row_id "SELECT value FROM test_tbl1 where id = :row_id"
+                
+                #
+                # Retrieve it once.
+                #
+                set sql "SELECT value FROM test_tbl1 where id = :row_id"
+                set res1 [db_string noxql $sql -default "None"]
+                aa_equals "New row exists before db_multirow call" $res1 "val1"
+                
+                #
+                # Run a query returning more than one row in a
+                # "db_foreach" loop, performing as well SQL queries
+                # and try to get value inserted above after the loop.
+                #
+                set sql "SELECT privilege FROM acs_privileges fetch first 2 rows only"
+                db_foreach noxql $sql {
+                    set temp1 [db_string noxql "SELECT 1 FROM dual"]
+                    aa_log "... db_foreach got '$temp1'"
+                }
+                set res2 [db_string noxql $sql_row_id -default "None"]
+                aa_equals "New row exists after db_foreach" $res2 "val1"
+                
+                #
+                # Run a query returning a single row in a
+                # "db_multirow" loop, performing as well SQL queries
+                # and try to get value inserted above after the loop.
+                #
+                set sql "SELECT max(privilege) FROM acs_privileges"
+                db_multirow -local mrow noxql $sql {
+                    # Code executed for each row. Set extended columns, etc.
+                    set temp1 [db_string noxql "SELECT 1 FROM dual"]
+                }
+                set res2 [db_string noxql $sql_row_id -default "None"]
+                aa_equals "New row exists after db_multirow with 1 tuple" $res2 "val1"
+                
+                #
+                # Run a query returning more than a row in a
+                # "db_multirow" loop, performing as well SQL queries
+                # and try to get value inserted above after the loop.
+                #
+                set sql "SELECT privilege FROM acs_privileges fetch first 2 rows only"
+                db_multirow -local mrow noxql $sql {
+                    # Code executed for each row. Set extended columns, etc.
+                    set temp1 [db_string noxql "SELECT 1 FROM dual"]
+                }
 
-            #
-            # Retrieve it once.
-            #
-            set sql "SELECT value FROM test_tbl1 where id = :row_id"
-            set res1 [db_string noxql $sql -default "None"]
-            aa_equals "New row exists before db_multirow call" $res1 "val1"
-
-            #
-            # Run a query returning more than one row in a
-            # "db_foreach" loop, performing as well SQL queries
-            # and try to get value inserted above after the loop.
-            #
-            set sql "SELECT privilege FROM acs_privileges fetch first 2 rows only"
-            db_foreach noxql $sql {
-                set temp1 [db_string noxql "SELECT 1 FROM dual"]
-                aa_log "... db_foreach got '$temp1'"
-            }
-            set res2 [db_string noxql $sql_row_id -default "None"]
-            aa_equals "New row exists after db_foreach" $res2 "val1"
-
-            #
-            # Run a query returning a single row in a
-            # "db_multirow" loop, performing as well SQL queries
-            # and try to get value inserted above after the loop.
-            #
-            set sql "SELECT max(privilege) FROM acs_privileges"
-            db_multirow -local mrow noxql $sql {
-            # Code executed for each row. Set extended columns, etc.
-                set temp1 [db_string noxql "SELECT 1 FROM dual"]
-            }
-            set res2 [db_string noxql $sql_row_id -default "None"]
-            aa_equals "New row exists after db_multirow with 1 tuple" $res2 "val1"
-
-            #
-            # Run a query returning more than a row in a
-            # "db_multirow" loop, performing as well SQL queries
-            # and try to get value inserted above after the loop.
-            #
-            set sql "SELECT privilege FROM acs_privileges fetch first 2 rows only"
-            db_multirow -local mrow noxql $sql {
-            # Code executed for each row. Set extended columns, etc.
-                set temp1 [db_string noxql "SELECT 1 FROM dual"]
-            }
-
-            # Asof acs-tcl 5.10.0d31
-            # If db_multirow above is limited to 1 row, the following succeeds.
-            # If the db_multirow has more than 1 row, it fails.
-            set res2 [db_string noxql $sql_row_id -default "None"]
-            aa_equals "New row exists after db_multirow with 2 tuples" $res2 "val1"
-
+                # Asof acs-tcl 5.10.0d31
+                # If db_multirow above is limited to 1 row, the following succeeds.
+                # If the db_multirow has more than 1 row, it fails.
+                set res2 [db_string noxql $sql_row_id -default "None"]
+                aa_equals "New row exists after db_multirow with 2 tuples" $res2 "val1"
+                
             }
             aa_log "Start test section 2"
-
+            
             #
             # Create a multirow woth 0 entries and append a row "manually"
             # For details, see # https://openacs.org/bugtracker/openacs/bug?bug_number=3441
@@ -129,6 +133,9 @@ aa_register_case \
 aa_register_case -error_level warning -cats {
         db
         production_safe
+    } -procs {
+        db_type
+        db_string
     } nullchar {
         Null character is properly translated in a round trip through the
         database engine.
@@ -155,9 +162,8 @@ aa_register_case -error_level warning -cats {
        set status [catch {
            db_string noxql $query
        } value copts]
-       aa_equals [list $type {Sql executed successfully?}] $status 0
-       aa_true [list $type {Value is the null character?}] [
-           expr {$value eq "\x00"}]
+       aa_equals [list $type {SQL executed successfully?}] $status 0
+        aa_true [list $type {Value is the null character?}] {$value eq "\x00"}
     }
 }
 

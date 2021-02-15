@@ -1013,7 +1013,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs acs_sc::invoke \
+    -procs {
+        ad_url
+        acs_sc::invoke
+        util_current_location
+    } \
     sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {

@@ -72,6 +72,7 @@ aa_register_case \
         cr_item_search::assert_not_in_queue
         cr_item_search::remove_from_queue
         cr_item_search::test_setup
+        db_name
     } \
     cr_item_search_triggers {
       Test search update trigger

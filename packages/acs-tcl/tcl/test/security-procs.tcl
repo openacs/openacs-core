@@ -7,6 +7,9 @@ ad_library {
 aa_register_case \
     -cats { api } \
     -procs {
+        ad_user_login
+        apm_package_id_from_key
+        parameter::get
         sec_change_user_auth_token
     } \
     logout_from_everywhere {
@@ -62,7 +65,7 @@ aa_register_case \
                     ad_secure_token
                 } {
                     set cookie_value [ns_getcookie -include_set_cookies true -- $cookie ""]
-		    if {$cookie_value ne ""} {
+                    if {$cookie_value ne ""} {
                         lappend cookies $cookie=\"${cookie_value}\"
                     }
                 }

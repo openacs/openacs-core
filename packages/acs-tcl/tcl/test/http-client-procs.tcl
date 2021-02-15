@@ -139,6 +139,7 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke} \
     -procs {
+        export_vars
         util::http::get
         util::http::post
         ns_http

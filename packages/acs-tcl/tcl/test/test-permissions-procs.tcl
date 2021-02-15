@@ -15,6 +15,7 @@ aa_register_case \
         permission::revoke
         site_node::instantiate_and_mount
         db_nextval
+        acs::test::user::create
     } \
     ad_proc_permission_grant_and_revoke {
 
@@ -98,6 +99,7 @@ aa_register_case \
         permission::revoke
         site_node::instantiate_and_mount
         db_nextval
+        acs::test::user::create
     } \
     ad_proc_permission_permission_p {
 

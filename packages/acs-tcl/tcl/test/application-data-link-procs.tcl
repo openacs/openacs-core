@@ -6,6 +6,7 @@ aa_register_case \
     -cats api \
     -procs {
         ad_url
+        application_data_link::scan_for_links
     } \
     data_links_scan_links {
         Test scanning content for object URLs

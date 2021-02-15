@@ -38,18 +38,20 @@ ad_proc -private auth::test::get_password_vars {
 
 ####
 
-
 aa_register_case \
     -cats {api} \
     -procs {
+        acs::test::user::create
+        acs_package_root_dir
         acs_user::change_state
+        acs_user::create_portrait
         acs_user::delete
+        acs_user::erase_portrait
         acs_user::get_by_username
+        acs_user::get_portrait_id
+        acs_user::get_user_info
         auth::authenticate
         auth::create_user
-        acs_user::get_portrait_id
-        acs_user::erase_portrait
-        acs_user::create_portrait
     } \
     auth_authenticate {
     Test the auth::authenticate proc.
@@ -201,6 +203,8 @@ aa_register_case -cats {api} -procs {
     acs_user::get_by_username
     ad_generate_random_string
     auth::create_user
+    acs::test::user::create
+    acs_user::get
 
 }  auth_create_user {
     Test the auth::create_user proc.
@@ -233,7 +237,7 @@ aa_register_case -cats {api} -procs {
             }
 
             aa_false "No creation_message for successful creation" \
-		{[info exists user_info(creation_message)] && $user_info(creation_message) ne ""}
+                {[info exists user_info(creation_message)] && $user_info(creation_message) ne ""}
             aa_true "returns user_id" [info exists user_info(user_id)]
 
             if { [info exists user_info(user_id)] } {
@@ -259,9 +263,9 @@ aa_register_case -cats {api} -procs {
                 array unset elm_msgs
                 array set elm_msgs $user_info(element_messages)
                 aa_true "element_message for username exists" \
-		    {[info exists elm_msgs(username)] && $elm_msgs(username) ne ""}
+                    {[info exists elm_msgs(username)] && $elm_msgs(username) ne ""}
                 aa_true "element_message for email exists" \
-		    {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""}
+                    {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""}
             }
             set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
             if { $user_id ne "" } {
@@ -288,7 +292,7 @@ aa_register_case -cats {api} -procs {
                 array set elm_msgs $user_info(element_messages)
 
                 if { [aa_true "element_message(email) exists" \
-			  {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""} ]} {
+                          {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""} ]} {
                     aa_log "element_message(email) = $elm_msgs(email)"
                 }
                 if { [aa_true "element_message(first_names) exists" [info exists elm_msgs(first_names)] ]} {
@@ -439,6 +443,8 @@ aa_register_case  \
 aa_register_case  \
     -cats {api} \
     -procs {
+        aa_stub
+        acs::test::user::create
         acs_user::delete
         ad_acs_kernel_id
         ad_check_password
@@ -502,6 +508,7 @@ aa_register_case  \
     -procs {
         auth::password::recover_password
         auth::test::get_password_vars
+        aa_stub
     } \
     auth_password_recover {
     Test the auth::password::recover_password proc.
@@ -577,7 +584,10 @@ aa_register_case  \
 aa_register_case  \
     -cats {api} \
     -procs {
+        aa_stub
+        acs::test::user::create
         acs_user::delete
+        acs_user::get
         acs_user::get_by_username
         auth::authentication::Authenticate
         auth::authority::local
@@ -645,11 +655,13 @@ aa_register_case -cats {
     api db
 } -procs {
     auth::authority::create
-    auth::authority::edit
     auth::authority::delete
-    auth::authority::get_short_names
+    auth::authority::edit
+    auth::authority::get
     auth::authority::get_authority_options
     auth::authority::get_id
+    auth::authority::get_short_names
+    db_list_of_lists
 } auth_authority_api {
     Test authorty creation, edition, deletion and some retrieval api.
 } {
@@ -833,10 +845,13 @@ aa_register_case  \
 aa_register_case  \
     -cats {api} \
     -procs {
+        aa_stub
         ad_acs_kernel_id
         ad_generate_random_string
+        ad_parameter_cache
         auth::UseEmailForLoginP
         auth::authenticate
+        auth::authority::get_id
         auth::authority::local
         auth::create_user
         auth::get_registration_elements
@@ -912,11 +927,13 @@ aa_register_case  \
 aa_register_case  \
     -cats {api} \
     -procs {
+        aa_stub
+        acs::test::user::create
+        acs_user::get_user_info
         ad_acs_kernel_id
         ad_generate_random_string
         ad_parameter_cache
         auth::create_user
-        acs_user::get_user_info
         auth::password::change
         parameter::set_value
     } \
@@ -987,6 +1004,7 @@ aa_register_case  \
         auth::authority::edit
         auth::authority::get
         auth::authority::get_element
+        auth::authority::get_id
     } \
     auth_authority_edit {
     Test authority edit
