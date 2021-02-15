@@ -110,6 +110,7 @@ aa_register_case \
     -cats { api smoke production_safe } \
     -procs {
         api_describe_function
+        ad_looks_like_html_p
     } \
     acs_api_browser_api_describe_function {
         Check api_describe_function
@@ -156,6 +157,7 @@ aa_register_case \
     -cats { api smoke production_safe } \
     -procs {
         api_proc_documentation
+        ad_looks_like_html_p
     } \
     acs_api_browser_api_proc_documentation {
         Check api_proc_documentation
@@ -233,6 +235,7 @@ aa_register_case \
     -cats { api smoke } \
     -procs {
         api_read_script_documentation
+        acs_root_dir
     } \
     acs_api_browser_api_read_script_documentation {
         Check api_read_script_documentation
@@ -310,6 +313,7 @@ aa_register_case \
     -cats { api smoke production_safe } \
     -procs {
         apidoc::format_see
+        ad_looks_like_html_p
     } \
     acs_api_browser_apidoc_format_see {
         Check apidoc::format_see
@@ -339,6 +343,8 @@ aa_register_case \
     -cats { api smoke production_safe } \
     -procs {
         apidoc::tclcode_to_html
+        ad_looks_like_html_p
+        ad_urldecode_query
     } \
     acs_api_browser_apidoc_tclcode_to_html {
         Check apidoc::tclcode_to_html

@@ -19,8 +19,14 @@ aa_register_case \
         acs_mail_lite::unique_id_parse
         ad_system_owner
         apm_package_id_from_key
-        f::lmax
         party::get_by_email
+        acs_root_dir
+        mime::uniqueID
+        template::util::is_true
+        util::random
+        util::random_list_element
+        util::random_range
+        util::randomize_list
     } acs_mail_lite_inbound_procs_check {
         Test acs-mail-lite procs in email-inbound-procs.tcl
     } {
@@ -243,7 +249,7 @@ aa_register_case \
                 foreach section $ns_section_list {
                     lappend size_list [ns_config -int -min 0 $section maxinput]
                 }
-                set s0  [f::lmax $size_list]
+                set s0 [tcl::mathfunc::max {*}$size_list]
 
                 aa_log "r161 given: t0 '${t0}' dur_s '${dur_s}'"
                 aa_log "r161b given: s0 '${s0}' su_max '${su_max}'"

@@ -1376,7 +1376,9 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs acs_user::registered_user_p \
+    -procs {
+        acs_user::registered_user_p
+    } \
     acs_user__registered_user_p {
         Tests the acs_user::registered_user_p procedure
 
@@ -1403,6 +1405,7 @@ aa_register_case \
     -procs {
         acs_user::ban
         acs_user::approve
+        acs_user::registered_user_p
     } \
     acs_user__ban_approve {
         Tests the acs_user::ban and acs_user::approve procs

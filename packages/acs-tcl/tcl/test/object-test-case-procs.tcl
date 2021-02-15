@@ -13,6 +13,7 @@ aa_register_case \
         acs_object::set_context_id
         db_name
         db_nextval
+        apm_package_id_from_key
     } acs_object_procs_test \
     {
         test the acs_object::* procs

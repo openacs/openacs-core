@@ -31,6 +31,7 @@ aa_register_case -cats {
     api smoke
 } -procs {
     acs_admin::check_expired_certificates
+    aa_stub
 } acs_admin_check_expired_certificates {
     Check acs_admin::check_expired_certificates
 } {
@@ -92,6 +93,12 @@ aa_register_case -cats {
     api smoke
 } -procs {
     merge::MergeUserInfo
+    acs::test::user::create
+    acs_user::create_portrait
+    acs_user::get_portrait_id
+    ad_tmpnam
+    permission::grant
+    permission::permission_p
 } acs_admin_merge_MergeUserInfo {
     Check merge::MergeUserInfo
 } {
@@ -163,6 +170,7 @@ aa_register_case -cats {
 } -procs {
     acs_admin::require_site_wide_subsite
     acs_admin::require_site_wide_package
+    site_node::get
 } acs_admin_require_site_wide {
     Basic check for acs_admin::require_site_wide_subsite and
     acs_admin::require_site_wide_package

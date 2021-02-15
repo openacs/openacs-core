@@ -495,6 +495,8 @@ aa_register_case \
         lang::test::get_dir
         lang::util::get_temporary_tags_indices
         lang::util::replace_temporary_tags_with_lookups
+        aa_stub
+        aa_unstub
     } util__replace_temporary_tags_with_lookups {
 
     A test Tcl file and catalog file are created. The temporary tags in the
@@ -770,6 +772,7 @@ aa_register_case \
             lang::system::set_locale
             lang::system::site_wide_locale
             parameter::set_value
+            parameter::get
         } locale__test_system_package_setting {
     Tests whether the system package level setting works
 
@@ -817,10 +820,11 @@ aa_register_case \
 }
 
 aa_register_case \
-        -procs {
-            lang::conn::browser_locale
-            lang::system::locale_set_enabled
-        } locale__test_lang_conn_browser_locale {
+    -procs {
+        lang::conn::browser_locale
+        lang::system::locale_set_enabled
+        lang::test::assert_browser_locale
+    } locale__test_lang_conn_browser_locale {
 
     @author Peter Marklund
     @creation-date 2003-08-13
@@ -872,6 +876,7 @@ aa_register_case \
             lang::user::set_timezone
             lang::user::timezone
             lc_list_all_timezones
+            util::random_range
         } set_get_timezone {
 
     Test that setting and getting user timezone works
@@ -990,8 +995,10 @@ aa_register_case \
 
 aa_register_case \
     -procs {
+        lang::catalog::import
         lang::message::lookup
         lang::message::register
+        lang::system::locale_set_enabled
     } locale_language_fallback {
     Test that we fall back to 'default locale for language' when requesting a message
     which exists in default locale for language, but not in the current locale
@@ -1196,7 +1203,9 @@ aa_register_case \
     }
 
 aa_register_case \
-    -procs {} catalog_files_are_tdom_parsable_xml {
+    -procs {
+        ::lang::catalog::get_catalog_paths_for_import
+    } catalog_files_are_tdom_parsable_xml {
 
         Make sure that what is found in catalog files is parsable by
         tDOM.  Note that the files are neither "valid XML" nor

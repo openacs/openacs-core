@@ -93,8 +93,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke production_safe} \
-    -procs lc_content_size_pretty \
-    lang_test__lc_content_size_pretty {
+    -procs {
+        lc_get
+        lc_numeric
+        lc_content_size_pretty
+    } lang_test__lc_content_size_pretty {
 
         Test lc_content_size_pretty proc
 
