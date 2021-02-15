@@ -145,6 +145,8 @@ aa_register_case \
         apm_package_install_callbacks
         apm_remove_callback_proc
         apm_post_instantiation_tcl_proc_from_key
+        apm_supported_callback_types
+        apm_version_id_from_package_key
     } \
     apm__test_callback_get_set {
         Test the procs apm_get_callback_proc,
@@ -1378,6 +1380,8 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         acs_user::registered_user_p
+        acs_user::approve
+        acs_user::ban
     } \
     acs_user__registered_user_p {
         Tests the acs_user::registered_user_p procedure

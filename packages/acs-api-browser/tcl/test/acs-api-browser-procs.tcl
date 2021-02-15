@@ -264,6 +264,8 @@ aa_register_case \
 aa_register_case \
     -cats { api smoke } \
     -procs {
+        acs_root_dir
+        ad_looks_like_html_p
         api_script_documentation
     } \
     acs_api_browser_api_script_documentation {
@@ -314,6 +316,7 @@ aa_register_case \
     -procs {
         apidoc::format_see
         ad_looks_like_html_p
+        ad_urldecode_query
     } \
     acs_api_browser_apidoc_format_see {
         Check apidoc::format_see

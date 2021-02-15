@@ -201,6 +201,12 @@ aa_register_case \
     -cats {api smoke web} \
     -procs {
         ad_context_bar_multirow
+        acs::test::http
+        acs::test::reply_has_status_code
+        lang::system::site_wide_locale
+        lang::util::localize
+        navigation::test::context_bar_multirow_filter
+        site_node::get
     } \
     ad_context_bar_multirow {
 
