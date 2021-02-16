@@ -462,7 +462,7 @@ aa_register_case \
         set f [open $file "r"]
         incr count
         set contract_found_p false
-        ns_log Notice "Looking for contracts in file $file"
+        #ns_log notice "Looking for contracts in file $file"
         while {[gets $f line] >= 0 && !$contract_found_p} {
             # '::xowiki::Package initialize -ad_doc' idioms are not
             # that easy to identify, as nothing prevents from writing
