@@ -32,6 +32,8 @@ aa_register_case -cats {
 } -procs {
     acs_admin::check_expired_certificates
     aa_stub
+
+    exec
 } acs_admin_check_expired_certificates {
     Check acs_admin::check_expired_certificates
 } {
@@ -171,6 +173,8 @@ aa_register_case -cats {
     acs_admin::require_site_wide_subsite
     acs_admin::require_site_wide_package
     site_node::get
+
+    apm_arg_names_for_callback_type
 } acs_admin_require_site_wide {
     Basic check for acs_admin::require_site_wide_subsite and
     acs_admin::require_site_wide_package

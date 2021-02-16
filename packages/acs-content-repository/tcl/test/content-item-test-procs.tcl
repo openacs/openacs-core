@@ -30,6 +30,8 @@ aa_register_case \
         content::type::attribute::new
         content::type::delete
         content::type::new
+
+        package_object_attribute_list
     } \
     content_item {
     content item test
@@ -187,8 +189,8 @@ aa_register_case \
             # create a new content type
             #########################################################
 
-	    catch {content::type::delete -content_type "test_type"} errmsg
-	    set new_type_id [content::type::new \
+            catch {content::type::delete -content_type "test_type"} errmsg
+            set new_type_id [content::type::new \
                -content_type "test_type" \
                 -pretty_name "test_type" \
                 -pretty_plural "test_type" \

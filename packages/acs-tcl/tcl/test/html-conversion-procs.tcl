@@ -8,7 +8,11 @@ ad_library {
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_to_text} \
+    -procs {
+        ad_html_to_text
+
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_to_text_bold {
 
     Test if it converts "b" tags correctly.
@@ -21,7 +25,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_to_text} \
+    -procs {
+        ad_html_to_text
+
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_to_text_anchor {
 
     Test if it converts "a" tags correctly.
@@ -42,7 +50,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_to_text} \
+    -procs {
+        ad_html_to_text
+
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_to_text_image {
 
     Test if it converts "img" tags correctly.
@@ -96,7 +108,12 @@ following text
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_security_check} \
+    -procs {
+        ad_html_security_check
+
+        ad_parameter_all_values_as_list
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_security_check_href_allowed {
     tests is href attribute is allowed of A tags
 } {
@@ -108,7 +125,12 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_security_check} \
+    -procs {
+        ad_html_security_check
+
+        ad_parameter_all_values_as_list
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_security_check_forbidden_protolcols {
     tests is href attribute is forbidden for certain tags
 } {
@@ -138,7 +160,14 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_text_convert ad_enhanced_text_to_html} \
+    -procs {
+        ad_html_text_convert
+        ad_enhanced_text_to_html
+
+        ad_html_text_convertible_p
+        ad_enhanced_text_to_plain_text
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_text_convert {
     Testing ad_html_text_convert.
 } {

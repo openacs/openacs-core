@@ -111,6 +111,8 @@ aa_register_case \
     -procs {
         api_describe_function
         ad_looks_like_html_p
+
+        util_wrap_list
     } \
     acs_api_browser_api_describe_function {
         Check api_describe_function
@@ -158,6 +160,8 @@ aa_register_case \
     -procs {
         api_proc_documentation
         ad_looks_like_html_p
+
+        util_wrap_list
     } \
     acs_api_browser_api_proc_documentation {
         Check api_proc_documentation

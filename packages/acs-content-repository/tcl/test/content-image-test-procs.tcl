@@ -82,6 +82,8 @@ aa_register_case \
         content::folder::register_content_type
         content::item::get_id
         image::new
+
+        package_object_attribute_list
     } \
     image_new {
 

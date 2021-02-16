@@ -16,7 +16,7 @@ aa_register_case \
     } \
     acs_content_repository_trivial_smoke_test {
     Minimal smoke test.
-} {    
+} {
 
     aa_run_with_teardown \
         -rollback \
@@ -46,7 +46,7 @@ aa_register_case \
             # teardown doesn't seem to eliminate this:
             set delete_result [content::keyword::delete -keyword_id $new_keyword_id]
 
-            # would test that delete works but there's no relevant function in the API 
+            # would test that delete works but there's no relevant function in the API
         }
 }
 

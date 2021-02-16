@@ -29,6 +29,8 @@ aa_register_case \
         group::new
         lang::message::unregister
         lang::util::convert_to_i18n
+
+        util_memoize_flush_pattern
     } \
     group_localization {
         Create a group and check that the automagical localization
@@ -84,6 +86,8 @@ aa_register_case \
         permission::grant
         rel_segment::new
         relation_add
+
+        util_memoize_flush_pattern
     } \
     acs_subsite_expose_bug_775 {
     Exposes Bug 775.
@@ -200,11 +204,14 @@ aa_register_case \
         group::member_p
         group::new
         relation_add
+
+        util_memoize_flush_pattern
     } acs_subsite_check_composite_group {
-    Build a 3-level hierarchy of composite groups and check
-    memberships. This test case covers the membership and composition
-    rel insertion triggers and composability of basic membership and
-    admin rels.
+        
+        Build a 3-level hierarchy of composite groups and check
+        memberships. This test case covers the membership and composition
+        rel insertion triggers and composability of basic membership and
+        admin rels.
 
     @author Michael Steigman
 } {

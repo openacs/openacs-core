@@ -10,8 +10,7 @@ aa_register_case \
     -procs {
         aa_equals
         aa_false
-        aa_log
-        aa_register_case
+        aa_log        
         aa_run_with_teardown
         aa_section
         aa_true
@@ -24,6 +23,9 @@ aa_register_case \
         acs::test::reply_has_status_code
         acs::test::user::create
         acs::test::user::delete
+
+        aa_register_case
+        aa_runseries
     } \
     webtest_example {
 
@@ -89,10 +91,12 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
-        aa_register_case
         aa::coverage::proc_coverage
         aa_equals
         aa_true
+
+        aa_register_case
+        aa_runseries
     } \
     aa__coverage_proc_coverage {
 
@@ -137,11 +141,13 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
-        aa_register_case        
         aa::coverage::proc_covered_p
         aa::coverage::proc_list
         aa_equals
         aa_true
+
+        aa_register_case
+        aa_runseries
     } \
     aa__coverage_proc_proc_list_covered {
 
@@ -185,9 +191,11 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
-        aa_register_case        
         aa::coverage::proc_coverage_level
         aa_equals
+
+        aa_runseries
+        aa_register_case                
     } \
     aa__coverage_proc_coverage_level {
 

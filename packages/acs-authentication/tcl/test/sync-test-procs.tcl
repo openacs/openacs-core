@@ -543,6 +543,8 @@ aa_register_case \
         auth::sync::job::get_entries
         auth::sync::job::get_entry
         util_sets_equal_p
+
+        util_text_to_url
     } \
     sync_batch_ims_example_doc {
     Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
@@ -740,6 +742,8 @@ aa_register_case \
         auth::sync::job::get
         auth::sync::job::get_entries
         auth::sync::job::get_entry
+
+        util_text_to_url
     } \
     sync_batch_ims_test {
     Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
@@ -1017,6 +1021,11 @@ aa_register_case \
         ad_url
         acs_sc::invoke
         util_current_location
+
+        util_text_to_url
+        ad_sign
+        ad_get_signed_cookie_with_expr
+        ad_verify_signature_with_expr
     } \
     sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.

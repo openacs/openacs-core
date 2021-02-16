@@ -1070,6 +1070,11 @@ aa_register_case \
         lang::test::execute_upgrade
         lang::test::setup_test_package
         lang::test::teardown_test_package
+
+        apm_package_info_file_path
+        apm_callback_and_log
+        apm_interface_add
+        apm_version_enable
     } upgrade {
     Test that a package can be upgraded with new
     catalog files and that the resulting keys and messages

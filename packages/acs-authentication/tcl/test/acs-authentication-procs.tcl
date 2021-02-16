@@ -52,6 +52,11 @@ aa_register_case \
         acs_user::get_user_info
         auth::authenticate
         auth::create_user
+
+        util_text_to_url
+        package_instantiate_object
+        cr_filename_to_mime_type
+        package_exec_plsql
     } \
     auth_authenticate {
     Test the auth::authenticate proc.
@@ -206,6 +211,8 @@ aa_register_case -cats {api} -procs {
     acs::test::user::create
     acs_user::get
 
+    util_text_to_url
+    package_instantiate_object
 }  auth_create_user {
     Test the auth::create_user proc.
 } {
@@ -371,6 +378,8 @@ aa_register_case \
     -error_level {warning} \
     -procs {
         auth::get_registration_elements
+
+        util_text_to_url
     } \
     auth_get_registration_elements {
     Test the auth::get_registration_elements proc
@@ -453,6 +462,8 @@ aa_register_case  \
         auth::password::change
         parameter::get
         parameter::set_value
+
+        util_text_to_url
     } \
     auth_password_change {
     Test the auth::password::change proc.
@@ -509,6 +520,9 @@ aa_register_case  \
         auth::password::recover_password
         auth::test::get_password_vars
         aa_stub
+
+        util_text_to_url
+        ad_sign
     } \
     auth_password_recover {
     Test the auth::password::recover_password proc.
@@ -542,6 +556,8 @@ aa_register_case  \
     -procs {
         auth::password::get_forgotten_url
         auth::test::get_password_vars
+
+        util_text_to_url
     } \
     auth_password_get_forgotten_url {
     Test the auth::password::get_forgotten_url proc.
@@ -568,6 +584,8 @@ aa_register_case  \
     -procs {
         auth::password::retrieve
         auth::test::get_password_vars
+
+        util_text_to_url
     } \
     auth_password_retrieve {
     Test the auth::password::retrieve proc.
@@ -593,6 +611,8 @@ aa_register_case  \
         auth::authority::local
         auth::create_user
         auth::password::reset
+
+        util_text_to_url
     } \
     auth_password_reset {
     Test the auth::password::reset proc.
@@ -795,6 +815,8 @@ aa_register_case  \
         auth::driver::get_parameter_values
         auth::driver::get_parameters
         auth::driver::set_parameter_value
+
+        util_text_to_url
     } \
     auth_driver_get_parameter_values {
     Test the auth::driver::set_parameter_values proc.
@@ -856,6 +878,8 @@ aa_register_case  \
         auth::create_user
         auth::get_registration_elements
         parameter::set_value
+
+        util_text_to_url
     } \
     auth_use_email_for_login_p {
     Test auth::UseEmailForLoginP
@@ -936,6 +960,8 @@ aa_register_case  \
         auth::create_user
         auth::password::change
         parameter::set_value
+
+        util_text_to_url
     } \
     auth_email_on_password_change {
     Test acs-kernel.EmailAccountOwnerOnPasswordChangeP parameter
