@@ -239,6 +239,7 @@ aa_register_case \
     -procs {
         xml_doc_get_first_node
         xml_get_child_node_content_by_path
+        xml_parse
     } \
     xml_get_child_node_content_by_path {
         Test xml_get_child_node_content_by_path

@@ -249,7 +249,7 @@ aa_register_case \
                 foreach section $ns_section_list {
                     lappend size_list [ns_config -int -min 0 $section maxinput 0]
                 }
-                set s0 [tcl::mathfunc::max {*}$size_list]
+                set s0 [lindex [lsort $size_list] end]
 
                 aa_log "r161 given: t0 '${t0}' dur_s '${dur_s}'"
                 aa_log "r161b given: s0 '${s0}' su_max '${su_max}'"
