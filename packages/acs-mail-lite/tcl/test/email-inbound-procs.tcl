@@ -247,7 +247,7 @@ aa_register_case \
                 set size_list [list $su_max]
                 set ns_section_list [list nssock nssock_v4 nssock_v6]
                 foreach section $ns_section_list {
-                    lappend size_list [ns_config -int -min 0 $section maxinput]
+                    lappend size_list [ns_config -int -min 0 $section maxinput 0]
                 }
                 set s0 [tcl::mathfunc::max {*}$size_list]
 
