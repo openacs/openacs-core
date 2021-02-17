@@ -663,7 +663,9 @@ ad_proc -public aa_runseries {
     # Run each testcase
     #
     foreach testcase_id $testcase_ids {
+        ns_log notice "========================================= start $testcase_id"
         aa_run_testcase $testcase_id
+        ns_log notice "========================================= end $testcase_id"
     }
 
     #
@@ -862,9 +864,7 @@ ad_proc -public aa_section {
     aa_log_result "sect" $log_notes
 }
 
-ad_proc -public aa_log {
-    log_notes
-} {
+ad_proc -public aa_log { args } {
     Writes a log message to the testcase log.
     Call this function within a testcase, stub or component.
 
@@ -873,7 +873,7 @@ ad_proc -public aa_log {
 } {
     #global aa_testcase_id
     #global aa_package_key
-
+    set log_notes [join $args " "]
     #
     # When aa_run_quietly_p exists, we run inside the testing
     # environment.
