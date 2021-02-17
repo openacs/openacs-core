@@ -151,7 +151,7 @@ ad_proc apm_callback_and_log { { -severity Notice } callback message } {
     ns_log $severity [ad_html_to_text -maxlen 140 -- $message]
 }
 
-ad_proc apm_one_package_descendents {
+ad_proc -private apm_one_package_descendents {
     package_key
 } {
 
@@ -265,7 +265,7 @@ ad_proc apm_one_package_inherit_order {
     lappend ::apm_package_inherit_order $package_key
 }
 
-ad_proc apm_one_package_load_libraries_dependencies {
+ad_proc -private apm_one_package_load_libraries_dependencies {
     package_key
 } {
 
@@ -350,7 +350,7 @@ ad_proc apm_package_url_resolution {
 }
 
 
-ad_proc apm_package_load_libraries_order {
+ad_proc -private apm_package_load_libraries_order {
     package_key
 } {
     Wrapper that returns the cached package library load order list.
