@@ -21,7 +21,7 @@ ad_proc apm_parameter_section_slider {package_key} {
         lappend section_list [list $package_key $package_key [list "where" "section_name is null"]]
         foreach section $sections {
             if { $section ne "" } {
-                lappend section_list [list $section $section [list "where" "section_name = '[db_quote $section]'"]]
+                lappend section_list [list $section $section [list "where" "section_name = [ns_dbquotevalue $section]"]]
             }
         }
         lappend section_list [list all "All" [list]]

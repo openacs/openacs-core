@@ -75,7 +75,7 @@ namespace eval plpgsql_utility {
             } elseif { $arg_default eq "" || $arg_default eq "null"} {
                 lappend pieces "NULL"
             } elseif { [string tolower $arg_default] ni $reserved_default_values } {
-                lappend pieces "'[db_quote $arg_default]'"
+                lappend pieces [ns_dbquotevalue $arg_default]
             } else {
                 lappend pieces $arg_default
             }

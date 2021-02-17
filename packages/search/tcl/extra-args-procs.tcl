@@ -19,7 +19,7 @@ ad_proc -callback search::extra_arg -impl object_type {
     if {$object_table_alias eq "" || ![info exists object_table_alias] || $value eq ""} {
         return [list]
     }
-    return [list from_clause {} where_clause "$object_table_alias.object_type = '[db_quote $value]'"]
+    return [list from_clause {} where_clause "$object_table_alias.object_type = [ns_dbquotevalue $value]"]
 
 }
 

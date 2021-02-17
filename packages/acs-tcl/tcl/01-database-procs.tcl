@@ -318,8 +318,13 @@ ad_proc -deprecated db_null {} {
     return ""
 }
 
-ad_proc -public db_quote { string } {
-    Quotes a string value to be placed in a SQL statement.
+ad_proc -deprecated db_quote { string } {
+    
+    Quotes a string value to be placed in a SQL statement.  Use the
+    built-in ns_dbquotevalue instead, which cares also about the
+    surrounding quotes.
+    
+    @see ns_dbquotevalue
 } {
     regsub -all -- {'} "$string" {''} result
     return $result
