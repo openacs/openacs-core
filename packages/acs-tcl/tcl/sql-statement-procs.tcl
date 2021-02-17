@@ -20,14 +20,17 @@ ad_library {
     stmt(where) { condition1 condition2 } join by and
     stmt(groupby) { groupcol1 groupcol2 } join by ,
     stmt(orderby) { {ordercol1 asc} {ordercol2 desc}} join by ,
+
+    This is unused and untested code.
 }
 
-ad_proc -public ad_sql_get { 
+ad_proc -deprecated -public ad_sql_get { 
     sqlarrayname
 } {
     @param sqlarrayname array reference
 
     @return a SQL statement constructed from the pieces provided via ad_sql_append
+    This is unused and untested code.
 
     @see ad_sql_append
 } {
@@ -57,7 +60,7 @@ ad_proc -public ad_sql_get {
     return $sql_string
 }
 
-ad_proc -public ad_sql_append { 
+ad_proc -deprecated -public ad_sql_append { 
     {-select {}}
     {-from {}}
     {-where {}}
@@ -66,6 +69,8 @@ ad_proc -public ad_sql_append {
     sqlarrayname
 } { 
     Adds to the SQL statement.
+
+    This is unused and untested code.
 } {
     upvar $sqlarrayname sql
     if { $select ne "" } {
