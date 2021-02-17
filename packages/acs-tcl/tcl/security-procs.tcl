@@ -698,9 +698,9 @@ ad_proc -private sec_setup_session {
     } else {
         #
         # $session_id is an active verified session this call is
-        # either a user logging in on an active unidentified session,
-        # or a change in identity for a browser that is already
-        # logged-in.
+        # either a user doing a log-in on an active unidentified
+        # session, or a change in identity for a browser that is
+        # already logged-in.
         #
         set prev_user_id [ad_conn user_id]
 
