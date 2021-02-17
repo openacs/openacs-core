@@ -2339,13 +2339,17 @@ ad_proc -public ad_tcl_list_list_to_ns_set {
     return $set_id
 }
 
-ad_proc -public ad_ns_set_keys {
+ad_proc -public -deprecated ad_ns_set_keys {
     -colon:boolean
     {-exclude ""}
     set_id
 } {
     Returns the keys of an ns_set as a Tcl list, like <code>array names</code>.
 
+    This proc can be easily replaced by a Tcl dict
+    operation. Furthermore, newer versions of NaviServer have "ns_set
+    keys" and "ns_set values" operations.
+    
     @param colon If set, will prepend all the keys with a colon; useful for bind variables
     @param exclude Optional Tcl list of key names to exclude
 

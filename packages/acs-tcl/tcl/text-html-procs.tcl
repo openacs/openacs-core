@@ -965,7 +965,7 @@ ad_proc ad_parse_html_attributes_upvar {
     # proc might also be used in order to improve some OpenACS
     # routines, like util_close_html_tags. As it has some limitations,
     # this is left to future considerations.
-    ad_proc -public ad_dom_fix_html {
+    ad_proc -private ad_dom_fix_html {
         -html:required
         {-marker "root"}
         -dom:boolean
