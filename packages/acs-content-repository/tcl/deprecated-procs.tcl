@@ -161,7 +161,7 @@ ad_proc -public -deprecated cr::keyword::item_get_assigned {
     if {[info exists parent_id]} {
 	set keyword_list [content::keyword::item_get_assigned -parent_id $parent_id -item_id $item_id]
     } else {
-	set keyword_list [content::keyword::item_get_assigned -parent_id $parent_id -item_id $item_id]
+	set keyword_list [content::keyword::item_get_assigned -item_id $item_id]
     }
 
     return $keyword_list
