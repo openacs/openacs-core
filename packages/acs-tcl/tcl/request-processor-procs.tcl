@@ -1636,18 +1636,26 @@ ad_proc -public ad_conn {args} {
                             return 0
                         }
                         peeraddr {
-                            if {[ns_config "ns/parameters" ReverseProxyMode false]} {
+                            #
+                            # Newer versions of NaviServer (4.99.20)
+                            # handle already ReverseProxyMode
+                            # internally.
+                            #
+                            if {![acs::icanuse "ns_conn peeraddr -source"]
+                                && [ns_config "ns/parameters" ReverseProxyMode false]
+                            } {
+                                #
                                 # Try to get the address provided by a
                                 # reverse proxy such as NGINX via
-                                # X-Forwarded-For, if available
+                                # X-Forwarded-For, if available.
+                                #
                                 set headers [ns_conn headers]
                                 set i [ns_set ifind $headers "X-Forwarded-For"]
                                 if {$i > -1 } {
                                     return [ns_set value $headers $i]
                                 }
                             }
-                            # return the physical peer address
-                            return [ns_conn $var]
+                            return [set ad_conn(peeraddr) [ns_conn peeraddr]]
                         }
 
                         mobile_p {

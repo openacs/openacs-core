@@ -110,10 +110,13 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {nsv_dict get ""} -varname]
 
-# The feature NaviServer to return a dict as result of "ns_http run"
-# came at the same time, when "ns_http stats" was introduced.
+#
+# The following commands check indirectly the availability, since the
+# commands require connections etc.  These features were introduced
+# after the queried functionality was introduced.
+#
 ::acs::register_icanuse "ns_http results dict"      [acs::cmd_has_subcommand ns_http stats]
-
+::acs::register_icanuse "ns_conn peeraddr -source"  [acs::cmd_has_subcommand ns_connchan status]
 
 #
 # Add some compatibility procs for AOLserver or older NaviServer versions
