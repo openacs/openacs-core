@@ -316,7 +316,7 @@ if {$auto_submit_p && $user_id > 0} {
         # update the element_name list and bug array with category stuff
         foreach {category_id category_name} [bug_tracker::category_types] {
             lappend element_names $category_id
-            set bug($category_id) [cr::keyword::item_get_assigned -item_id $bug(bug_id) -parent_id $category_id]
+            set bug($category_id) [content::keyword::item_get_assigned-item_id $bug(bug_id) -parent_id $category_id]
             if {$bug($category_id) eq "" } {
                 set bug($category_id) [bug_tracker::get_default_keyword -parent_id $category_id]
             }
