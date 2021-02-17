@@ -67,7 +67,7 @@ ad_proc -public aa::coverage::proc_list {
                          && ![string match " Class *" $proc_name]
                          && ![string match " Object *" $proc_name]
                      } {
-                        ns_log notice "proc-doc, for <$proc_name>"
+                        #ns_log notice "proc-doc, for <$proc_name>"
                         set proc_data [dict create]
                         if { $package_key eq "" } {
                             dict set proc_data package_key $package_name
