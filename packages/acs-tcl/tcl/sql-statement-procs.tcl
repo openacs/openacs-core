@@ -24,6 +24,11 @@ ad_library {
     This is unused and untested code.
 }
 
+if {![ad_with_deprecated_code_p]} {
+    ns_log notice "deprecated-procs: skip deprecated code"
+    return
+}
+
 ad_proc -deprecated -public ad_sql_get { 
     sqlarrayname
 } {
