@@ -1007,20 +1007,19 @@ ad_proc -private lang::message::cache {} {
 #
 #####
 
-ad_proc -public _mr { locale key message } {
+ad_proc -private -deprecated _mr { locale key message } {
 
     Registers a message in a given locale or language.
     Inserts the message into the table lang_messages
     if it does not exist and updates if it does.
 
-    For backward compatibility - it assumes that the key
-    is the concatenation of message and package key
-    like this:
+    It assumes that the key is the concatenation of message and
+    package key like this:  package_key.message_key
 
-    package_key.message_key
-
-    @author Jeff Davis (davis@xarg.net)
-
+    Actually, there is very little need for this proc (which is not
+    used in the 300+ packages in the repository), therefore, it is
+    marked as deprecated. Use lang::message::register instead.
+    
     @param locale  Abbreviation for language of the message or the locale.
     @param key     Unique identifier for this message. Will be the same identifier
                    for each language
