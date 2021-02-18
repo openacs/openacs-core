@@ -116,7 +116,7 @@ namespace eval acs_mail_lite {
         }
     }
 
-    ad_proc parse_email {
+    ad_proc -private parse_email {
         -file:required
         -array:required
     } {

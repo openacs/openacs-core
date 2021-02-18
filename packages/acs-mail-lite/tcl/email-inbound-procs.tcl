@@ -2344,7 +2344,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     return $context_list
 }
 
-ad_proc acs_mail_lite::bounce_ministry {
+ad_proc -private acs_mail_lite::bounce_ministry {
     -header_array_name:required
 } {
     Check if this email is notifying original email bounced.
@@ -2449,7 +2449,7 @@ ad_proc -private acs_mail_lite::bounce_prefix {} {
     return [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "EnvelopePrefix"]
 }
 
-ad_proc -public acs_mail_lite::bouncing_user_p {
+ad_proc -private acs_mail_lite::bouncing_user_p {
     -user_id:required
 } {
     Checks if email address of user is bouncing mail
@@ -2530,7 +2530,7 @@ To re-enable your email notifications, please visit\n${href}"
 }
 
 
-ad_proc -public acs_mail_lite::bounce_address {
+ad_proc -private acs_mail_lite::bounce_address {
     -user_id:required
     -package_id:required
     -message_id:required

@@ -2184,7 +2184,7 @@ if {[ns_info name] ne "NaviServer"} {
     }
 }
 
-ad_proc -public ad_server_modules {} {
+ad_proc -private ad_server_modules {} {
     Return the list of the available server modules
     @author Gustaf Neumann
 } {

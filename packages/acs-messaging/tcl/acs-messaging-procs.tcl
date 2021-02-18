@@ -29,7 +29,7 @@ ad_page_contract_filter acs_message_id { name value } {
     return 1
 }
 
-ad_proc -public acs_messaging_format_as_html {
+ad_proc -private acs_messaging_format_as_html {
     {mime_type}
     {content}
 } {

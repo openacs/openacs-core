@@ -289,7 +289,7 @@ ad_proc -public acs_sc::contract::operation::delete {
     }
 }
 
-ad_proc -public acs_sc::contract::operation::parse_operations_spec {
+ad_proc -private acs_sc::contract::operation::parse_operations_spec {
     {-name:required}
     {-spec:required}
 } {
@@ -305,7 +305,7 @@ ad_proc -public acs_sc::contract::operation::parse_operations_spec {
     }
 }
 
-ad_proc -public acs_sc::contract::operation::parse_spec {
+ad_proc -private acs_sc::contract::operation::parse_spec {
     {-contract_name:required}
     {-operation:required}
     {-spec:required}

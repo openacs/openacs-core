@@ -5,7 +5,7 @@ ad_library {
   @cvs-id $Id$
 }
 
-ad_proc -public ad_acs_administrator_exists_p {} {
+ad_proc -private ad_acs_administrator_exists_p {} {
 
     @return 1 if a user with admin privileges exists, 0 otherwise.
 

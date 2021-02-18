@@ -1890,7 +1890,7 @@ ad_proc ad_host {} {
     }
 }
 
-ad_proc ad_port {} {
+ad_proc -private ad_port {} {
     Returns the port as it was typed in the browser,
     provided forcehostp is set to 0.
 } {

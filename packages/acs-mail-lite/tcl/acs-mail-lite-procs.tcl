@@ -78,7 +78,7 @@ namespace eval acs_mail_lite {
 
 
     #---------------------------------------
-    ad_proc -public generate_message_id {
+    ad_proc -private generate_message_id {
     } {
         Generate an id suitable as a Message-Id: header for an email.
         @return valid message-id for mail header

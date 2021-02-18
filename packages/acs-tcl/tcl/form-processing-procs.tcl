@@ -1299,7 +1299,7 @@ ad_proc -public ad_form {
 
 }
 
-ad_proc -public ad_set_element_value {
+ad_proc -private ad_set_element_value {
     -element:required
     value
 } {
