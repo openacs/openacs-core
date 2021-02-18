@@ -15,7 +15,7 @@ ad_library {
     @cvs-id $Id$
 }
  
-ad_proc -public aa_example_write_audit_entry {
+ad_proc -private aa_example_write_audit_entry {
   name
   value
 } {

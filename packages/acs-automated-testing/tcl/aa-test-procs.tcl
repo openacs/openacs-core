@@ -569,7 +569,7 @@ ad_proc -public aa_export_vars {
     }]
 }
 
-ad_proc -public aa_runseries {
+ad_proc -private aa_runseries {
     {-stress 0}
     {-security_risk 0}
     -quiet:boolean
@@ -692,7 +692,7 @@ ad_proc -private aa_indent {} {
     }
 }
 
-ad_proc -public aa_run_testcase {
+ad_proc -private aa_run_testcase {
     testcase_id
 } {
     @author Peter Harper
@@ -978,7 +978,7 @@ ad_proc -public aa_log_result {
     db_dml test_result_insert {}
 }
 
-ad_proc -public aa_log_final {
+ad_proc -private aa_log_final {
     test_passes
     test_fails
 } {
@@ -1425,7 +1425,7 @@ namespace eval acs::test {
         return $d
     }
 
-    ad_proc -public ::acs::test::set_user {
+    ad_proc -private ::acs::test::set_user {
         {-session ""}
         user_info
     } {
@@ -1512,7 +1512,7 @@ namespace eval acs::test {
     }
 
 
-    ad_proc -public ::acs::test::login {
+    ad_proc -private ::acs::test::login {
         user_info
     } {
         Login (register operation) in a web session
@@ -2226,7 +2226,7 @@ ad_proc -public aa_display_result {
     }
 }
 
-ad_proc -public aa_selenium_init {} {
+ad_proc -private aa_selenium_init {} {
     Setup a global Selenium RC server connection
 
     @return true is everything is ok, false if there was any error
