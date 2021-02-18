@@ -16,6 +16,12 @@ aa_register_case \
       lc_time_fmt
       lc_time_utc_to_local
       lc_time_local_to_utc
+      lc_clock_to_ansi
+      lc_time_conn_to_system
+      lc_time_system_to_conn
+      lc_time_tz_convert
+      lang::system::set_timezone
+      lang::conn::timezone
 
       lang::catalog::import
       lang::catalog::import
@@ -88,6 +94,29 @@ aa_register_case \
 
     set time [lc_time_fmt $short_timestamp "%c" it_IT]
     aa_equals "format it_IT time" [lrange $time 0 end-1] "Lun 16 Dicembre 2019 12:11"
+
+    set time [lc_clock_to_ansi 1613657099]
+    aa_equals "lc_clock_to_ansi" $time "2021-02-18 15:04:59"
+
+    set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "2021-02-18 15:04:59"]
+    aa_equals "lc_time_tz_convert form and to Europe/Vienna" $time "2021-02-18 15:04:59"
+
+    set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "2021-02-18 15:04:59"]
+    aa_equals "lc_time_tz_convert form and to Europe/Vienna" $time "2021-02-18 09:04:59"
+
+    #
+    # There is no easy way to change the conn::timezone. So set the
+    # system timezone to the lang::conn::timezone to get a
+    # reproducable result. Since we are running in a transaction, no
+    # harm is done.
+    #
+    lang::system::set_timezone [lang::conn::timezone]
+    set time [lc_time_conn_to_system "2021-02-18 15:04:59"]
+    aa_equals "lc_time_conn_to_system" $time "2021-02-18 15:04:59"
+
+    set time [lc_time_system_to_conn "2021-02-18 15:04:59"]
+    aa_equals "lc_time_system_to_conn" $time "2021-02-18 15:04:59"
+
   }
 }
 

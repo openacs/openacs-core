@@ -378,7 +378,7 @@ ad_proc -public lc_time_fmt {
     }]]
 }
 
-ad_proc -public lc_time_fmt_compile {
+ad_proc -private lc_time_fmt_compile {
     fmt
     locale
 } {

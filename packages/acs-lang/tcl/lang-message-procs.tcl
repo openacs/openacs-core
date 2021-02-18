@@ -308,7 +308,7 @@ ad_proc -public lang::message::delete {
         ]
 }
 
-ad_proc -public lang::message::undelete {
+ad_proc -private lang::message::undelete {
     -package_key:required
     -message_key:required
     -locale:required
@@ -328,7 +328,7 @@ ad_proc -public lang::message::undelete {
         ]
 }
 
-ad_proc -public lang::message::revert {
+ad_proc -private lang::message::revert {
     {-package_key:required}
     {-message_key:required}
     {-locale:required}
@@ -358,7 +358,7 @@ ad_proc -public lang::message::revert {
         $last_overwritten_message
 }
 
-ad_proc -public lang::message::get_element {
+ad_proc -private lang::message::get_element {
     -package_key:required
     -message_key:required
     -locale:required
@@ -573,7 +573,7 @@ ad_proc -private lang::message::edit {
     }
 }
 
-ad_proc -public lang::message::conflict_count {
+ad_proc -private lang::message::conflict_count {
     {-package_key ""}
     {-locale ""}
 } {
