@@ -461,7 +461,6 @@ aa_register_case \
             }
         }
     }
-}
 
 # Local variables:
 #    mode: tcl
