@@ -63,7 +63,7 @@ ad_proc -public template::adp_include {
     return $__adp_out
 }
 
-ad_proc -private template::adp_parse { __adp_stub __args } {
+ad_proc -public template::adp_parse { __adp_stub __args } {
     Execute procedures to prepare data sources and then to output
     template.  Assumes adp_level is set on entry.  in general the
     public version template::adp_include should be used for generating
@@ -704,15 +704,16 @@ ad_proc -private template::adp_append_string { s } {
     adp_append_code "append __adp_output \"$s\""
 }
 
-ad_proc -private template::adp_append_code { code { nobreak "" } } {
+ad_proc -public template::adp_append_code { code { nobreak "" } } {
     Adds a line of code to the Tcl output from the compiler.
+    Called also from developer support.
 
     @param code       A line of Tcl code
 
     @option nobreak   Flag indicating that code should be appended to the
     current last line rather than adding a new line, for
     cases where code must continue on the same line, such
-    as the else tag
+    as the "else" tag.
 } {
     if { [string is space $code] } { return }
 
@@ -825,7 +826,7 @@ ad_proc -private template::enclosing_tag {
     return $name
 }
 
-ad_proc -private template::get_attribute { tag params name { default "ERROR" } } {
+ad_proc -public template::get_attribute { tag params name { default "ERROR" } } {
     Retrieves a named attribute value from the parameter set passed to a
     tag handler.  If a default is not specified, assumes the attribute
     is required and throws an error.

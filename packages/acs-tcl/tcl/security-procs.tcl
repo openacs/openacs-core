@@ -950,7 +950,7 @@ ad_proc -private security::replace_host_in_url {-hostname url} {
     return $location/[join $elements /]
 }
 
-ad_proc -private security::get_register_subsite {} {
+ad_proc security::get_register_subsite {} {
 
     Returns a URL pointing to the subsite, on which the
     register/unregister should be performed. If there is no current
@@ -2223,7 +2223,7 @@ ad_proc -public security::driver {} {
 
 if {[namespace which ns_driver] ne ""} {
 
-    ad_proc -private security::configured_driver_info {} {
+    ad_proc -public security::configured_driver_info {} {
 
         Return a list of dicts containing type, driver, location and port
         of all configured drivers
@@ -2283,7 +2283,7 @@ if {[namespace which ns_driver] ne ""} {
 
 } else {
 
-    ad_proc -private security::configured_driver_info {} {
+    ad_proc -public security::configured_driver_info {} {
         set result ""
         #
         # Find the first insecure driver based on driver names from

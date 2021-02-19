@@ -438,7 +438,7 @@ ad_proc -public ad_parameter_from_file {
 }
 
 
-ad_proc -private ad_parameter_cache {
+ad_proc -public ad_parameter_cache {
     -set
     -delete:boolean
     -global:boolean

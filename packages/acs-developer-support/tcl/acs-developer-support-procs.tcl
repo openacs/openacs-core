@@ -389,7 +389,7 @@ ad_library {
      }
  }
 
- ad_proc -private ds_add { name args } {
+ ad_proc -public ds_add { name args } {
      Sets a developer-support property for the current request.
  } {
      if { [ds_enabled_p] && [ds_collection_enabled_p] } {

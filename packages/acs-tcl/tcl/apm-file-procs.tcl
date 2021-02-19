@@ -416,7 +416,7 @@ ad_proc -public apm_gzip_cmd {} {
 }
 
 
-ad_proc -private apm_tar_cmd {} {
+ad_proc -public apm_tar_cmd {} {
 
     @return A valid command name for tar.
 

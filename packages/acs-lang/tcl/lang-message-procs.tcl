@@ -727,7 +727,7 @@ ad_proc -private lang::message::format {
     return $formatted_message
 }
 
-ad_proc -private lang::message::embedded_vars_regexp {} {
+ad_proc -public lang::message::embedded_vars_regexp {} {
     The regexp pattern used to loop over variables embedded in
     message catalog texts.
 
