@@ -402,6 +402,67 @@ aa_register_case \
     }
 
 
+aa_register_case \
+    -cats {smoke production_safe} \
+    -procs {
+        aa_error
+        api_called_proc_names
+        apidoc::get_doc_property
+    } \
+    callgraph__bad_calls {
+
+        Checks for calls of deprecated procs and for private calls in
+        other packages. Remember: "private" means "package private", a
+        "private" proc must be only directly called by a proc of the
+        same package
+
+        This test covers only library functions.
+
+        @author Gustaf Neumann
+
+        @creation-date 2020-02-18
+    } {
+
+        foreach caller [lsort -dictionary [nsv_array names api_proc_doc]] {
+            #set caller db_transaction
+            set called_procs [api_called_proc_names -proc_name $caller]
+            set caller_deprecated_p [apidoc::get_doc_property $caller deprecated_p 0]
+            set caller_package_key [apidoc::get_doc_property $caller package_key ""]
+            foreach called $called_procs {
+                #ns_log notice "$caller calls $called"
+                set msg "proc $caller calls deprecated proc: $called"
+                if {[apidoc::get_doc_property $called deprecated_p 0]} {
+                    if {$caller_deprecated_p} {
+                        aa_log_result warning "deprecated $msg"
+                    } else {
+                        aa_error "$msg<br>\
+                            <small><code>[apidoc::get_doc_property $caller script]</code></small><br>\
+                            <small><code>[apidoc::get_doc_property $called script]</code></small>"
+                    }
+                }
+                set package_key [apidoc::get_doc_property $called package_key ""]
+                if {$caller_package_key ne ""
+                    && $package_key ne ""
+                    && $caller_package_key ne $package_key
+                } {
+                    if {[apidoc::get_doc_property $called protection public] eq "private"
+                        && ![string match AcsSc.* $caller]
+                    } {
+                        set msg "proc $caller_package_key.$caller calls private $package_key.$called"
+                        if {$caller_deprecated_p} {
+                            aa_log_result warning "deprecated $msg"
+                        } else {
+                            aa_error "$msg<br>\
+                                <small><code>[apidoc::get_doc_property $caller script]</code></small><br>\
+                                <small><code>[apidoc::get_doc_property $called script]</code></small>"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

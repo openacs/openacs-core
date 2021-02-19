@@ -737,8 +737,8 @@ ad_proc api_proc_pretty_name {
             append out $label
         }
         set debug_html [expr {$include_debug_controls_p
-			&& [namespace which ::xo::api] ne ""
-			  ? [::xo::api debug_widget $proc] : ""}]
+                        && [namespace which ::xo::api] ne ""
+                          ? [::xo::api debug_widget $proc] : ""}]
     }
     if {[nsv_exists api_proc_doc $proc]} {
         set doc_elements [nsv_get api_proc_doc $proc]
@@ -1176,6 +1176,17 @@ ad_proc -public api_get_body {proc_name} {
 
 
 namespace eval ::apidoc {
+
+    ad_proc -private get_doc_property {proc_name property {default ""}} {
+        Return a certain doc property valie, if property exists
+    } {
+        if {[nsv_get api_proc_doc $proc_name doc]} {
+            if {[dict exists $doc $property]} {
+                return [dict get $doc $property]
+            }
+        }
+        return $default
+    }
 
     ad_proc -private get_xql_snippet {-proc_name -xql_file} {
         @return matching xql snippet for specified proc_name
@@ -1788,8 +1799,16 @@ namespace eval ::apidoc {
                                 }
                             }
                         }
-                        if {$proc_name in {* @ ?}} {
+                        #
+                        # The last three words in the following clause
+                        # are deprecated procs which are unfortunatley
+                        # picked up as commands by
+                        # apidoc::tclcode_to_html. Therefore, we
+                        # ignore these explicitly.
+                        #
+                        if {$proc_name in {* @ ? min max random}} {
                             append html $proc_name
+
                         } elseif {$proc_name in $::apidoc::KEYWORDS ||
                             ([regexp {^::(.*)} $proc_name match had_colons]
                              && $had_colons in $::apidoc::KEYWORDS)} {
@@ -1811,9 +1830,8 @@ namespace eval ::apidoc {
                         } elseif {[string match "*__arg_parser" $proc_name]} {
                             append html [pretty_token helper $proc_name]
 
-                        } elseif {$proc_namespace ne "" && [
-                            namespace which ::${proc_namespace}::${proc_name}]
-                                ne ""}  {
+                        } elseif {$proc_namespace ne ""
+                                  && [namespace which ::${proc_namespace}::${proc_name}] ne ""}  {
 
                             if {[is_object $scope ${proc_namespace}::${proc_name}]} {
                                 set url [::xo::api object_url \
@@ -1827,10 +1845,10 @@ namespace eval ::apidoc {
                                     [pretty_token proc $proc_name] </a>
                             }
                         } elseif {[namespace which ::$proc_name] ne ""} {
-                            set absolute_name [expr {
-                                [string match "::*" $proc_name]
-                                     ? $proc_name : "::${proc_name}"
-                            }]
+
+                            set absolute_name [expr {[string match "::*" $proc_name]
+                                                     ? $proc_name : "::${proc_name}" }]
+
                             if {[is_object $scope $absolute_name]} {
                                 set url [::xo::api object_url \
                                              -show_source 1 -show_methods 2 \
