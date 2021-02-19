@@ -1800,13 +1800,13 @@ namespace eval ::apidoc {
                             }
                         }
                         #
-                        # The last three words in the following clause
+                        # The last four words in the following clause
                         # are deprecated procs which are unfortunatley
                         # picked up as commands by
                         # apidoc::tclcode_to_html. Therefore, we
                         # ignore these explicitly.
                         #
-                        if {$proc_name in {* @ ? min max random}} {
+                        if {$proc_name in {* @ ? min max random content_type}} {
                             append html $proc_name
 
                         } elseif {$proc_name in $::apidoc::KEYWORDS ||
