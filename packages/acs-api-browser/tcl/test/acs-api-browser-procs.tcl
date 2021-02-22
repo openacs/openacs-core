@@ -423,6 +423,15 @@ aa_register_case \
         @creation-date 2020-02-18
     } {
 
+        # Fetch service-contract procs to exclude them from the check
+        # when they are called from within the acs-service-contract
+        # package.
+        foreach alias [db_list get_sc_aliases {
+            select distinct impl_alias from acs_sc_impl_aliases
+        }] {
+            set sc_aliases($alias) 1
+        }
+
         foreach caller [lsort -dictionary [nsv_array names api_proc_doc]] {
             #set caller db_transaction
             set called_procs [api_called_proc_names -proc_name $caller]
@@ -445,6 +454,12 @@ aa_register_case \
                     && $package_key ne ""
                     && $caller_package_key ne $package_key
                 } {
+                    # It is fine for acs-service-contract to invoke
+                    # contract implementations.
+                    if {$caller_package_key eq "acs-service-contract" &&
+                        [info exists sc_aliases($called)]} {
+                        continue
+                    }
                     if {[apidoc::get_doc_property $called protection public] eq "private"
                         && ![string match AcsSc.* $caller]
                     } {

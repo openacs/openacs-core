@@ -134,7 +134,7 @@ ad_proc -private auth::local::authentication::MergeUser {
 }
 
 
-ad_proc -public auth::local::authentication::Authenticate {
+ad_proc -private auth::local::authentication::Authenticate {
     username
     password
     {parameters {}}
@@ -170,7 +170,7 @@ ad_proc -public auth::local::authentication::Authenticate {
     return [array get auth_info]
 }
 
-ad_proc -public auth::local::authentication::GetParameters {} {
+ad_proc -private auth::local::authentication::GetParameters {} {
     Implements the GetParameters operation of the auth_authentication
     service contract for the local account implementation.
 } {
@@ -431,7 +431,7 @@ ad_proc -private auth::local::registration::unregister_impl {} {
     acs_sc::impl::delete -contract_name "auth_registration" -impl_name "local"
 }
 
-ad_proc -public auth::local::registration::GetElements {
+ad_proc -private auth::local::registration::GetElements {
     {parameters ""}
 } {
     Implements the GetElements operation of the auth_registration
@@ -457,7 +457,7 @@ ad_proc -public auth::local::registration::GetElements {
     return [array get result]
 }
 
-ad_proc -public auth::local::registration::Register {
+ad_proc -private auth::local::registration::Register {
     parameters
     username
     authority_id
@@ -571,7 +571,7 @@ ad_proc -public auth::local::registration::Register {
     return [array get result]
 }
 
-ad_proc -public auth::local::registration::GetParameters {} {
+ad_proc -private auth::local::registration::GetParameters {} {
     Implements the GetParameters operation of the auth_registration
     service contract for the local account implementation.
 } {
