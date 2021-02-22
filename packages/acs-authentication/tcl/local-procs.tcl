@@ -134,7 +134,7 @@ ad_proc -private auth::local::authentication::MergeUser {
 }
 
 
-ad_proc -private auth::local::authentication::Authenticate {
+ad_proc -public auth::local::authentication::Authenticate {
     username
     password
     {parameters {}}
@@ -170,7 +170,7 @@ ad_proc -private auth::local::authentication::Authenticate {
     return [array get auth_info]
 }
 
-ad_proc -private auth::local::authentication::GetParameters {} {
+ad_proc -public auth::local::authentication::GetParameters {} {
     Implements the GetParameters operation of the auth_authentication
     service contract for the local account implementation.
 } {
