@@ -15,7 +15,7 @@ package require smtp 1.4
 package require base64 2.3.1
 namespace eval acs_mail_lite {
 
-    ad_proc -private load_mails {
+    ad_proc -deprecated load_mails {
         -queue_dir:required
     } {
         Scans for incoming email. The function requires

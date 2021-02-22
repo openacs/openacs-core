@@ -67,7 +67,7 @@ ad_proc -public -callback acs_mail_lite::files {
 } {
 } -
 
-ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
+ad_proc -deprecated -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     -array:required
     -package_id:required
 } {
