@@ -762,7 +762,7 @@ aa_register_case \
     aa_section "Testing left pad"
 
     set string [ad_generate_random_string]
-    set length [expr {int(rand()*1000)}]
+    set length [expr {1 + int(rand()*1000)}]
     set padstring [ad_generate_random_string]
 
     aa_log " - string: $string"
@@ -779,7 +779,7 @@ aa_register_case \
     aa_section "Testing right pad"
 
     set string [ad_generate_random_string]
-    set length [expr {int(rand()*1000)}]
+    set length [expr {1 + int(rand()*1000)}]
     set padstring [ad_generate_random_string]
 
     aa_log " - string: $string"
