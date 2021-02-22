@@ -1178,7 +1178,7 @@ ad_proc -private util_WriteWithExtraOutputHeaders {
     ns_write $entire_string_to_write
 }
 
-ad_proc -private util_return_headers {
+ad_proc -public util_return_headers {
     {content_type text/html}
     {content_length ""}
 } {

@@ -1,5 +1,5 @@
 
-ad_proc -private db_available_pools {dbn} {
+ad_proc -public db_available_pools {dbn} {
     Returns a list of the available pools for the given database name.
 
     <p>

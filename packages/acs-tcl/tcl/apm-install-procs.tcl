@@ -144,7 +144,7 @@ ad_proc -private pkg_info_new {
     return [list $package_key $spec_file_path $embeds $extends $provides $requires $dependency_p $comment]
 }
 
-ad_proc -private pkg_info_key {pkg_info} {
+ad_proc -public pkg_info_key {pkg_info} {
 
     @return The package-key  stored in the package info map.
 
@@ -152,7 +152,7 @@ ad_proc -private pkg_info_key {pkg_info} {
     return [lindex $pkg_info 0]
 }
 
-ad_proc -private pkg_info_spec {pkg_info} {
+ad_proc -public pkg_info_spec {pkg_info} {
 
     @return The .info file stored in the package info map.
 
@@ -160,7 +160,7 @@ ad_proc -private pkg_info_spec {pkg_info} {
     return [lindex $pkg_info 1]
 }
 
-ad_proc -private pkg_info_path {pkg_info} {
+ad_proc -public pkg_info_path {pkg_info} {
 
 
     @return The full path of the packages dir stored in the package info map.
@@ -203,7 +203,7 @@ ad_proc -private pkg_info_requires {pkg_info} {
     return [lindex $pkg_info 5]
 }
 
-ad_proc -private pkg_info_dependency_p {pkg_info} {
+ad_proc -public pkg_info_dependency_p {pkg_info} {
 
     @return Does it pass the dependency checker?  "" Means it has not been run yet.
 
@@ -211,7 +211,7 @@ ad_proc -private pkg_info_dependency_p {pkg_info} {
     return [lindex $pkg_info 6]
 }
 
-ad_proc -private pkg_info_comment {pkg_info} {
+ad_proc -public pkg_info_comment {pkg_info} {
 
     @return Any comment specified about this package.
 
@@ -751,7 +751,7 @@ ad_proc -public apm_simple_package_install {
     }
 }
 
-ad_proc -private apm_package_install {
+ad_proc -public apm_package_install {
     {-enable:boolean}
     {-callback apm_dummy_callback}
     {-load_data_model:boolean}
@@ -1140,7 +1140,7 @@ ad_proc -private apm_package_deinstall {
     return 1
 }
 
-ad_proc -private apm_package_delete {
+ad_proc -public apm_package_delete {
     {-sql_drop_scripts ""}
     {-callback apm_dummy_callback}
     {-remove_files:boolean}
@@ -2276,7 +2276,7 @@ ad_proc -public apm::process_install_xml {
     return $out
 }
 
-ad_proc -private apm_invoke_install_proc {
+ad_proc -public apm_invoke_install_proc {
     {-install_from_repository:boolean}
     {-type "action"}
     {-node:required}

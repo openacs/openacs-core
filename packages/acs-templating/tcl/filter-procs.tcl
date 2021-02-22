@@ -123,7 +123,7 @@ ad_proc -private template::dat_page_filter { why } {
 
 # Return the auto-generated template for a form
 
-ad_proc -private template::frm_page_handler { } {
+ad_proc -public template::frm_page_handler { } {
     Build the form information for the form page filter.   This was
     originally handled inline but doing so screwed up the query
     processor.

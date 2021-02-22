@@ -349,7 +349,17 @@ ad_library {
      }
  }
 
- ad_proc -private ds_collect_db_call { db command statement_name sql start_time errno error } {
+ ad_proc -public ds_collect_db_call {
+     db
+     command
+     statement_name
+     sql
+     start_time
+     errno
+     error
+ } {
+     Collects stats for a single database call
+ } {
      if { [ds_enabled_p] && [ds_collection_enabled_p] && [ds_database_enabled_p] } {
          set bound_sql $sql
 

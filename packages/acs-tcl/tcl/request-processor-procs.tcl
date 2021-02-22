@@ -1764,7 +1764,7 @@ ad_proc -private rp_register_extension_handler { extension args } {
     nsv_set rp_extension_handlers ".$extension" $args
 }
 
-ad_proc -private rp_handle_tcl_request {} {
+ad_proc -public rp_handle_tcl_request {} {
 
     Handles a request for a .tcl file.
     Sets up the stack of datasource frames, in case the page is templated.

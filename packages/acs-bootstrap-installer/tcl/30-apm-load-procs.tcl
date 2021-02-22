@@ -224,7 +224,7 @@ ad_proc -public apm_get_package_files {
     return $matching_files
 }
 
-ad_proc -private apm_parse_catalog_path { file_path } {
+ad_proc -public apm_parse_catalog_path { file_path } {
     Given the path of a file attempt to extract package_key,
     prefix, charset and locale
     information from the path assuming the path is on valid format
@@ -520,7 +520,7 @@ ad_proc -private apm_install_xml_file_path {} {
     return "$::acs::rootdir/install.xml"
 }
 
-ad_proc -private apm_ignore_file_p {
+ad_proc -public apm_ignore_file_p {
     {-data_model_files:boolean}
     path
 } {
