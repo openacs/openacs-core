@@ -59,6 +59,7 @@ if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
     array set info [acs_sc::invoke -contract FtsEngineDriver -operation info -call_args [list] -impl $driver]
 }
 
+
 if { [array get info] eq "" } {
     ns_return 200 text/html [_ search.lt_FtsEngineDriver_not_a]
     ad_script_abort
