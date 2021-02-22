@@ -9,7 +9,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc -private apm_required_attribute_value { element attribute } {
+ad_proc -public apm_required_attribute_value { element attribute } {
 
     Returns an attribute of an XML element, throwing an error if the attribute
     is not set.

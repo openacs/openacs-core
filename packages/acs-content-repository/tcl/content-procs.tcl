@@ -17,7 +17,7 @@ ad_proc -public cr_fs_path { { location CR_FILES } } {
     return [nsv_get CR_LOCATIONS $location]
 }
 
-ad_proc -private cr_create_content_file_path {item_id revision_id} {
+ad_proc -public cr_create_content_file_path {item_id revision_id} {
 
     Creates a unique file in the content repository filesystem based on
     the item_id and revision_id of the content item.
