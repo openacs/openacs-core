@@ -172,9 +172,26 @@ ad_proc -public ::content::item::delete {
 
     @param item_id
 } {
-    return [package_exec_plsql \
-                -var_list [list [list item_id $item_id]] \
-                content_item del]
+    set result 0
+    db_1row get_storage_type {select storage_type, storage_area_key from cr_items where item_id = :item_id}
+
+    set cleanup_data [::content::revision::collect_cleanup_data \
+                          -item_id $item_id \
+                          -storage_type $storage_type]
+    db_transaction {
+        set result [package_exec_plsql \
+                        -var_list [list [list item_id $item_id]] \
+                        content_item del]
+        #
+        # In case, everything goes well in the call above, we perform
+        # the cleanup.
+        #
+        ::content::revision::cleanup \
+            -storage_area_key $storage_area_key \
+            -storage_type $storage_type \
+            -data $cleanup_data
+    }
+    return $result
 }
 
 ad_proc -public ::content::item::rename {
@@ -278,7 +295,8 @@ ad_proc -public ::content::item::update {
 
     @param item_id item to update
 
-    @param attributes A list of pairs of additional attributes and their values to get. Each pair is a list of two elements: key => value
+    @param attributes A list of pairs of additional attributes and their values to get.
+           Each pair is a list of two elements: key => value
 
     @return
 
@@ -1074,7 +1092,10 @@ ad_proc -public content::item::get_content {
 #
 #
 #
-ad_proc -public content::item::get_revision_content { -revision_id:required -item_id } {
+ad_proc -public content::item::get_revision_content {
+    -revision_id:required
+    -item_id
+} {
 
   Create a onerow datasource called content in the calling frame
   which contains all attributes for the revision (including inherited

@@ -2,7 +2,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="cr_write_content.write_file_content">
+<fullquery name="cr_write_content-file.write_file_content">
       <querytext>
           select :path || filename
           from cr_revisions

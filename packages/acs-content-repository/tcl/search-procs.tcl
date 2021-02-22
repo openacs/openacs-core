@@ -5,88 +5,9 @@ ad_library {
     contracts.
 }
 
-ad_proc -deprecated content_search__datasource {
-    object_id
-} {
-    Provides data source for search interface.  Used to access content items
-    after search.
-
-    DEPRECATED: does not comply with OpenACS naming convention
-
-    @see content_search::datasource
-} {
-    return [content_search::datasource $object_id]
-}
-
-ad_proc -deprecated content_search__url {
-    object_id
-} {
-    Provides a URL for linking to content items which show up in a search
-    result set.
-
-    DEPRECATED: does not comply with OpenACS naming convention
-
-    @see content_search::url
-} {
-    return [content_search::url $object_id]
-}
-
-ad_proc -deprecated image_search__datasource {
-    object_id
-} {
-    Provides data source for search interface.  Used to access content items
-    after search.
-
-    DEPRECATED: does not comply with OpenACS naming convention
-
-    @see image_search::datasource
-} {
-    return [image_search::datasource $object_id]
-}
-
-ad_proc -deprecated image_search__url {
-    object_id
-} {
-    Provides a URL for linking to content items which show up in a search
-    result set.
-
-    DEPRECATED: does not comply with OpenACS naming convention
-
-    @see image_search::url
-} {
-    return [image_search::url $object_id]
-}
-
-ad_proc -deprecated template_search__datasource {
-    object_id
-} {
-    Provides data source for search interface.  Used to access content items
-    after search.
-
-    DEPRECATED: does not comply with OpenACS naming convention
-
-    @see template_search::datasource
-} {
-    return [template_search::datasource $object_id]
-}
-
-ad_proc -deprecated template_search__url {
-    object_id
-} {
-    Provides a URL for linking to content items which show up in a search
-    result set.
-
-    DEPRECATED: does not comply with OpenACS naming convention
-
-    @see template_search::url
-} {
-    return [template_search::url $object_id]
-}
-
-
 namespace eval content_search {}
 
-ad_proc content_search::datasource {
+ad_proc -private content_search::datasource {
     object_id
 } {
     Provides data source for search interface.  Used to access content items
@@ -94,26 +15,25 @@ ad_proc content_search::datasource {
 } {
     set cr_fs_path [cr_fs_path]
     db_0or1row revisions_datasource {
-	select r.revision_id as object_id,
-	       r.title,
+        select r.revision_id as object_id,
+               r.title,
                case i.storage_type
                     when 'lob' then cast(r.lob as text)
                     when 'file' then :cr_fs_path || r.content
                     else r.content
                end as content,
-	       r.mime_type as mime,
+               r.mime_type as mime,
            '' as keywords,
-	       i.storage_type
-	from cr_revisions r, cr_items i
-	where revision_id = :object_id
+               i.storage_type
+        from cr_revisions r, cr_items i
+        where revision_id = :object_id
         and i.item_id = r.item_id
     } -column_array datasource
 
     return [array get datasource]
 }
 
-
-ad_proc content_search::url {
+ad_proc -private content_search::url {
     object_id
 } {
     Provides a URL for linking to content items which show up in a search
@@ -133,7 +53,7 @@ ad_proc content_search::url {
     return "[ad_url][string trimright $root_url /]$url?revision_id=$object_id"
 }
 
-ad_proc content_search::search_ids {
+ad_proc -private content_search::search_ids {
     q
     { offset 0 }
     { limit 100 }
@@ -151,28 +71,28 @@ ad_proc content_search::search_ids {
 
 namespace eval image_search {}
 
-ad_proc image_search::datasource {
+ad_proc -private image_search::datasource {
     object_id
 } {
     Provides data source for search interface.  Used to access content items
     after search.
 } {
     db_0or1row revisions_datasource {
-	select r.revision_id as object_id,
-	       r.title as title,
-	       r.description as content,
-	       r.mime_type as mime,
-	       '' as keywords,
+        select r.revision_id as object_id,
+               r.title as title,
+               r.description as content,
+               r.mime_type as mime,
+               '' as keywords,
            'text' as storage_type
-	from cr_revisions r
-	where revision_id = :object_id
+        from cr_revisions r
+        where revision_id = :object_id
 
     } -column_array datasource
 
     return [array get datasource]
 }
 
-ad_proc image_search::url {
+ad_proc -private image_search::url {
     object_id
 } {
     Provides a URL for linking to content items which show up in a search
@@ -184,7 +104,7 @@ ad_proc image_search::url {
 
 namespace eval template_search {}
 
-ad_proc template_search::datasource {
+ad_proc -private template_search::datasource {
     object_id
 } {
     Provides data source for search interface.  Used to access content items
@@ -192,26 +112,26 @@ ad_proc template_search::datasource {
 } {
     set cr_fs_path [cr_fs_path]
     db_0or1row revisions_datasource {
-	select r.revision_id as object_id,
-	       r.title as title,
+        select r.revision_id as object_id,
+               r.title as title,
                case i.storage_type
                     when 'lob' then cast(r.lob as text)
                     when 'file' then :cr_fs_path || r.content
                     when 'text' then r.content
                     else r.content
                end as content,
-	       r.mime_type as mime,
-	       '' as keywords,
-	       i.storage_type
-	from cr_revisions r, cr_items i
-	where revision_id = :object_id
+               r.mime_type as mime,
+               '' as keywords,
+               i.storage_type
+        from cr_revisions r, cr_items i
+        where revision_id = :object_id
         and i.item_id = r.item_id
     } -column_array datasource
 
     return [array get datasource]
 }
 
-ad_proc template_search::url {
+ad_proc -private template_search::url {
     object_id
 } {
     Provides a URL for linking to content items which show up in a search

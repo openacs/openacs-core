@@ -44,7 +44,7 @@ ad_proc -public -deprecated cr::keyword::new {
     set creation_ip [ad_conn peeraddr]
 
     if {$package_id eq ""} {
-	set package_id [ad_conn package_id]
+        set package_id [ad_conn package_id]
     }
 
     set keyword_id [db_exec_plsql content_keyword_new {}]
@@ -127,19 +127,19 @@ ad_proc -public -deprecated cr::keyword::item_assign {
 } {
     # First, unassign for the parents of each/all
     if {$singular_p} {
-	foreach keyword $keyword_id {
-	    set parent_id [db_string get_parent_id {
-		select parent_id
-		from cr_keywords
-		where keyword_id = :keyword
-	    }]
-	    item_unassign_children -item_id $item_id -parent_id $parent_id
-	}
+        foreach keyword $keyword_id {
+            set parent_id [db_string get_parent_id {
+                select parent_id
+                from cr_keywords
+                where keyword_id = :keyword
+            }]
+            item_unassign_children -item_id $item_id -parent_id $parent_id
+        }
     }
 
     # Now assign for each/all
     foreach keyword $keyword_id {
-	db_exec_plsql keyword_assign {}
+        db_exec_plsql keyword_assign {}
     }
 
     return $item_id
@@ -159,9 +159,9 @@ ad_proc -public -deprecated cr::keyword::item_get_assigned {
 } {
 
     if {[info exists parent_id]} {
-	set keyword_list [content::keyword::item_get_assigned -parent_id $parent_id -item_id $item_id]
+        set keyword_list [content::keyword::item_get_assigned -parent_id $parent_id -item_id $item_id]
     } else {
-	set keyword_list [content::keyword::item_get_assigned -item_id $item_id]
+        set keyword_list [content::keyword::item_get_assigned -item_id $item_id]
     }
 
     return $keyword_list
@@ -221,7 +221,7 @@ ad_proc -deprecated content_symlink::new {
     set creation_ip [ad_conn peeraddr]
 
     if {$package_id eq ""} {
-	set package_id [ad_conn package_id]
+        set package_id [ad_conn package_id]
     }
 
     return [db_exec_plsql symlink_new {}]
@@ -293,30 +293,30 @@ ad_proc content_symlink::symlink_name {
 }
 
 ad_proc -public -deprecated content_symlink::resolve {
-	-item_id:required
+        -item_id:required
 } {
-	@param item_id item_id of content_symlink item to resolve
+        @param item_id item_id of content_symlink item to resolve
 
-	@return item_id of symlink target
-	@see content::symlink::resolve
+        @return item_id of symlink target
+        @see content::symlink::resolve
 } {
 
-	return [db_exec_plsql resolve_symlink ""]
+        return [db_exec_plsql resolve_symlink ""]
 
 }
 
 ad_proc -public -deprecated content_symlink::resolve_content_type {
-	-item_id:required
+        -item_id:required
 } {
 
-	@param item_id item_id of symlink
+        @param item_id item_id of symlink
 
-	@return content_type of target item
-	@see content::symlink::resolve_content_type
+        @return content_type of target item
+        @see content::symlink::resolve_content_type
 
 } {
 
-	return [db_exec_plsql resolve_content_type ""]
+        return [db_exec_plsql resolve_content_type ""]
 
 }
 
@@ -615,8 +615,8 @@ ad_proc -public -deprecated item::get_extended_url { item_id args } {
       set revision_id [::content::item::get_live_revision -item_id $item_id]
 
       if { [template::util::is_nil revision_id] } {
-	ns_log warning "item::get_best_revision: No live revision for content item $item_id"
-	return ""
+        ns_log warning "item::get_best_revision: No live revision for content item $item_id"
+        return ""
       }
 
     } else {
@@ -1056,7 +1056,7 @@ ad_proc -deprecated content_extlink::new {
     set creation_ip [ad_conn peeraddr]
 
     if {$package_id eq ""} {
-	set package_id [ad_conn package_id]
+        set package_id [ad_conn package_id]
     }
 
     return [db_exec_plsql extlink_new {}]
@@ -1183,6 +1183,90 @@ ad_proc -public -deprecated folder::delete {
 } {
     db_exec_plsql delete_folder {}
 }
+
+##################################################################################
+#
+# From search-procs.tcl
+#
+##################################################################################
+ad_proc -deprecated content_search__datasource {
+    object_id
+} {
+    Provides data source for search interface.  Used to access content items
+    after search.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see content_search::datasource
+} {
+    return [content_search::datasource $object_id]
+}
+
+ad_proc -deprecated content_search__url {
+    object_id
+} {
+    Provides a URL for linking to content items which show up in a search
+    result set.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see content_search::url
+} {
+    return [content_search::url $object_id]
+}
+
+ad_proc -deprecated image_search__datasource {
+    object_id
+} {
+    Provides data source for search interface.  Used to access content items
+    after search.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see image_search::datasource
+} {
+    return [image_search::datasource $object_id]
+}
+
+ad_proc -deprecated image_search__url {
+    object_id
+} {
+    Provides a URL for linking to content items which show up in a search
+    result set.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see image_search::url
+} {
+    return [image_search::url $object_id]
+}
+
+ad_proc -deprecated template_search__datasource {
+    object_id
+} {
+    Provides data source for search interface.  Used to access content items
+    after search.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see template_search::datasource
+} {
+    return [template_search::datasource $object_id]
+}
+
+ad_proc -deprecated template_search__url {
+    object_id
+} {
+    Provides a URL for linking to content items which show up in a search
+    result set.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see template_search::url
+} {
+    return [template_search::url $object_id]
+}
+
 
 # Local variables:
 #    mode: tcl

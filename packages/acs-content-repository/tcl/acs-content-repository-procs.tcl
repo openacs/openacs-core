@@ -46,6 +46,16 @@ ad_proc -private cr_delete_scheduled_files {} {
     cr_cleanup_orphaned_files
 }
 
+ad_proc -private cr_cleanup_orphaned_files {} {
+
+    Helper proc to cleanup orphaned files in the content
+    repository. Orphaned files can be created during aborted
+    transactions involving the files being added to the content
+    repository.
+
+} {
+    cr_delete_orphans [cr_get_file_creation_log]
+}
 
 
 ##
@@ -84,7 +94,7 @@ ad_proc -private cr_scan_mime_types {} {
 ##
 
 
-ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
+ad_proc -private cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
 
     Check for orphaned files in the content repository directory, and
     delete such files if required.  Orphaned files might be created,
@@ -124,6 +134,16 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
     return $result
 }
 
+ad_proc -private acs_cr_scheduled_release_exec {} {
+
+    This was handled by oracle, but since other dbs, such as PostgreSQL don't 
+    support job submission, the job scheduling has been moved to aolserver.
+    (OpenACS - DanW)
+
+} {
+
+    db_exec_plsql schedule_releases {}
+}
 #
 # Local variables:
 #    mode: tcl

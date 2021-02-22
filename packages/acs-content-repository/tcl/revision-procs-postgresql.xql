@@ -2,7 +2,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="cr_write_content.write_file_content">
+<fullquery name="cr_write_content-file.write_file_content">
       <querytext>
           select :path || content
           from cr_revisions

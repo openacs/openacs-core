@@ -12,7 +12,7 @@
     <type>oracle</type>
     <version>8.1.6</version>
   </rdbms>
-  <fullquery name="content::revision::update_content.update_content">
+  <fullquery name="content::revision::update_content-text.update_content">
     <querytext>
         update cr_revisions
         set    content = empty_blob()
@@ -21,6 +21,15 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="content::revision::update_content-lob.update_content">
+    <querytext>
+        update cr_revisions
+        set    content = empty_blob()
+        where  revision_id = :revision_id
+        returning content into :1
+    </querytext>
+  </fullquery>
+  
   <fullquery name="content::revision::item_id.item_id">
     <querytext>
       select item_id
@@ -29,7 +38,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="content::revision::update_content.set_lob_size">      
+  <fullquery name="content::revision::update_content-lob.set_size">
       <querytext>
 
          update cr_revisions
@@ -39,16 +48,18 @@
       </querytext>
   </fullquery>
 
-  <fullquery name="content::revision::update_content.set_file_content">
+
+  <fullquery name="content::revision::update_content-lob.set_content">
       <querytext>
-          update cr_revisions
-          set filename = :filename,
-              mime_type = :mime_type,
-              content_length = :tmp_size
-          where revision_id = :revision_id
+
+        update cr_revisions
+        set mime_type = :mime_type,
+        content = empty_blob()
+        where revision_id = :revision_id
+
       </querytext>
   </fullquery>
-
+  
   <fullquery name="content::revision::get_cr_file_path.get_storage_key_and_path">
     <querytext>	
       select storage_area_key, 

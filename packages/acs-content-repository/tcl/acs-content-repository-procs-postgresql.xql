@@ -13,5 +13,13 @@
       </querytext>
 </fullquery>
 
+<fullquery name="acs_cr_scheduled_release_exec.schedule_releases">      
+      <querytext>
+
+         select cr_scheduled_release_exec();
+
+      </querytext>
+</fullquery>
+
 </queryset>
 

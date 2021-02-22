@@ -1,6 +1,6 @@
 ad_library {
 
-    Procedures to manipulate content revisions
+    CRUD procedures for content revisions
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-04
@@ -64,7 +64,8 @@ ad_proc -public ::content::revision::new {
 
     @param is_live True is revision should be set live
 
-    @param tmp_filename file containing content to be added to revision. Caller is responsible to handle cleaning up the temporary file
+    @param tmp_filename file containing content to be added to revision.
+           The caller is responsible for cleaning up the temporary file.
 
     @param package_id
 
@@ -133,9 +134,12 @@ ad_proc -public ::content::revision::new {
                        -mime_type $mime_type \
                        -file      $tmp_filename]
 
-    set query_text "insert into ${table_name}i
-                    (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, object_package_id, mime_type $attribute_names)
-            values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :package_id, :mime_type $attribute_values)"
+    set query_text [subst {
+        insert into ${table_name}i
+        (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, object_package_id, mime_type $attribute_names)
+        values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :package_id, :mime_type $attribute_values)
+    }]
+
     db_transaction {
         # An explicit lock was necessary for PostgreSQL between 8.0 and
         # 8.2; left the following statement here for documentary purposes
@@ -148,6 +152,7 @@ ad_proc -public ::content::revision::new {
         # the postgres "insert into view" is rewritten by the rule into a "select"
         [expr {[db_driverkey ""] eq "postgresql" ? "db_0or1row" : "db_dml"}] \
             insert_revision $query_text
+
         ::content::revision::update_content \
             -item_id $item_id \
             -revision_id $revision_id \
@@ -162,14 +167,292 @@ ad_proc -public ::content::revision::new {
     return $revision_id
 }
 
-ad_proc -public ::content::revision::update_content {
-    -item_id
-    -revision_id
-    -content
-    -storage_type
-    -mime_type
-    {-tmp_filename ""}
+#
+# ::content::revision::collect_cleanup_data
+#
 
+ad_proc -private ::content::revision::collect_cleanup_data {
+    -item_id:required
+    -storage_type:required
+} {
+    return [::content::revision::collect_cleanup_data-$storage_type -item_id $item_id]
+}
+
+ad_proc -private ::content::revision::collect_cleanup_data-text {
+    -item_id:required
+} {
+    return
+}
+
+ad_proc -private ::content::revision::collect_cleanup_data-lob {
+    -item_id:required
+} {
+    return
+}
+
+ad_proc -private ::content::revision::collect_cleanup_data-file {
+    -item_id:required
+} {
+    return [db_list get_files {select content from cr_revisions where item_id = :item_id}]
+}
+
+#
+# ::content::revision::cleanup
+#
+ad_proc -private ::content::revision::cleanup {
+    -storage_type:required
+    -storage_area_key:required
+    -data:required
+} {
+    return [::content::revision::cleanup-$storage_type \
+                -storage_area_key $storage_area_key \
+                -data $data]
+}
+
+ad_proc -private ::content::revision::cleanup-text {
+    -storage_area_key:required
+    -data:required
+} {
+    return
+}
+
+ad_proc -private ::content::revision::cleanup-lob {
+    -storage_area_key:required
+    -data:required
+} {
+    return
+}
+
+ad_proc -private ::content::revision::cleanup-file {
+    -storage_area_key:required
+    -data:required
+} {
+
+    This function cleans-up files AFTER the DB-entry was deleted.  If
+    the transaction is aborted, the file will not be executed and the
+    file will survive. Thus function should make
+    cr_check_orphaned_files obsolete, which does not scale.
+
+    @see cr_check_orphaned_files
+} {
+    set dir [cr_fs_path $storage_area_key]
+    foreach filename $data {
+        ns_log notice "DELETE FILE $dir$filename"
+        file delete $dir$filename
+    }
+}
+
+
+ad_proc -private ::content::revision::check_files {
+    {-max_results 5000}
+    {-max_checks 10000}
+    {-returnlist:boolean}
+} {
+    Figure out, how many files in the CR are not linked to the
+    revisions in the content repository, and report them
+    optionally.
+
+    @author Gustaf Neumann
+
+    @param max_results stop after having found so many non-referenced files
+    @param max_checks stop after having checked so many non-referenced files
+    @param returnlist return the non-referenced files as part of the result
+} {
+    set paths [cr_fs_path CR_FILES]
+    set prefix_length [string length $paths]
+    set count 1
+    set missing 0
+    set files {}
+    while {[llength $paths] > 0} {
+        # get the first path
+        set paths [lassign $paths path]
+        #ns_log notice "popping path '$path' form paths, remaining [llength $paths]"
+
+        set children [glob -nocomplain -directory $path *]
+        foreach child $children {
+            if {[file tail $child] in {. ..}} {
+                continue
+            }
+            if {[file isdirectory $child]} {
+                #
+                # Using "lappend" leads to a breadth-search: might be
+                # slow when the directories a huge, since it takes a
+                # while until leaves are found.
+                #
+                #lappend paths $child
+
+                set paths [lreplace $paths -1 -2 $child]
+                #ns_log notice "child is dir $child"
+            } else {
+                set suffix [string range $child $prefix_length end]
+                set success [cr_count_file_entries $suffix]
+                if {$success == 0} {
+                    ns_log notice "check_files: $count file $child not in db entries"
+                    incr missing
+                    lappend files $child
+                }
+                incr count
+                if {$count >= $max_checks || $missing >= $max_results} break
+
+            }
+        }
+        if {$count >= $max_checks || $missing >= $max_results} break
+    }
+    set msg "$missing of $count files are not ok (not contained in db entries)"
+    if {$returnlist_p} {
+        append msg \n [join $files \n]
+    }
+    return $msg
+}
+
+ad_proc -private ::content::revision::check_dirs {
+    {-max_results 5000}
+    {-max_checks 10000}
+    {-returnlist:boolean}
+    {-prune:boolean}
+} {
+    Figure out, how many directories in the CR are empty, report them
+    optionally or delete them optionally.
+
+    @author Gustaf Neumann
+
+    @param max_results stop after having found so many empty directories
+    @param max_checks stop after having checked so many directories
+    @param prune delete the found empty directories
+    @param returnlist return the directories as part of the result
+} {
+    set paths [cr_fs_path CR_FILES]
+    set prefix_length [string length $paths]
+    set count 1
+    set empty_dirs 0
+    set dirs 0
+    set empty_dir_list {}
+    while {[llength $paths] > 0} {
+        # get the first path
+        set paths [lassign $paths path]
+        #ns_log notice "popping path '$path' form paths, remaining [llength $paths]"
+
+        set children [glob -nocomplain -directory $path *]
+        set nr_children 0
+        incr dirs
+        foreach child $children {
+            if {[file tail $child] in {. ..}} {
+                continue
+            }
+            if {[file isdirectory $child]} {
+                #
+                # Using "lappend" leads to a breadth-search: might be
+                # slow when the directories a huge, since it takes a
+                # while until leaves are found.
+                #
+                #lappend paths $child
+
+                set paths [lreplace $paths -1 -2 $child]
+                #ns_log notice "child is dir $child"
+            }
+            incr nr_children
+        }
+        if {$nr_children == 0} {
+            incr empty_dirs
+            ns_log notice "check_dirs: directory $path is empty ($empty_dirs out of $dirs)"
+            lappend empty_dir_list $path
+            if {$prune_p && [regexp {^\d+$} [file tail $path]]} {
+                file delete $path
+            }
+        }
+        if {$empty_dirs >= $max_results || $dirs >= $max_checks} {
+            break
+        }
+    }
+    set msg "$empty_dirs out of $dirs directories are empty"
+    ns_log notice "check_dirs: $msg"
+    if {$returnlist_p} {
+        append msg \n [join $empty_dir_list \n]
+    }
+    return $msg
+}
+
+ad_proc -private ::content::revision::file_stats {
+    {-max 10000}
+} {
+
+    Determine some basic statistics about files in the CR based on a
+    sample. This is useful for large installations with several
+    million of files, where a detailed analysis would take very long.
+
+    @author Gustaf Neumann
+
+    @param max number of revisions with storage-type "file" to check
+    @result some statistics
+} {
+    set tuples [db_list_of_lists get_file_names {
+        select i.item_id, revision_id, mime_type, content_length
+        from cr_items i, cr_revisions r
+        where storage_type = 'file'
+        and storage_area_key = 'CR_FILES'
+        and  r.item_id = i.item_id
+        FETCH FIRST :max ROWS ONLY
+    }]
+    set count 0
+    set total_length 0
+    set empty_files 0
+    foreach tuple $tuples {
+        lassign $tuple item_id revision_id mime_type content_length
+        incr count
+        if {$content_length eq ""} {
+            ns_log warning "file_stats: entry has no content_length: revision_id $revision_id mime_type $mime_type"
+        } else {
+            incr total_length $content_length
+        }
+        incr mime_types($mime_type)
+        incr revisions_for_item($item_id)
+        if {$content_length < 1} {
+            incr empty_files
+        }
+    }
+    set result ""
+    if {$count > 0} {
+        set backup_files 0
+        set files_with_multiple_revisions 0
+        foreach {item_id revs} [array get revisions_for_item] {
+            if {$revs > 1} {
+                incr files_with_multiple_revisions
+                incr backup_files [expr {$revs - 1}]
+            }
+        }
+        set most_common [lrange [lsort \
+                                     -integer \
+                                     -stride 2 \
+                                     -index 1 \
+                                     -decreasing \
+                                     [array get mime_types]
+                                ] 0 11]
+
+        append result \
+            "checked files                : $count\n" \
+            "files with multiple revisions: $files_with_multiple_revisions\n" \
+            "backup files                 : $backup_files\n" \
+            "empty files                  : $empty_files\n" \
+            "avg file size                : [format %10.2f [expr {$total_length*1.0/$count}]]\n" \
+            "mime_types: $most_common"
+        ns_log notice "file_stats: $result"
+    }
+    return $result
+}
+
+
+
+
+#
+# ::content::revision::update_content
+#
+ad_proc -private ::content::revision::update_content {
+    -item_id:required
+    -revision_id:required
+    -content:required
+    -storage_type:required
+    -mime_type:required
+    {-tmp_filename ""}
 } {
 
     Update content column separately. Oracle does not allow insert
@@ -187,42 +470,76 @@ ad_proc -public ::content::revision::update_content {
     @param content Content to add to resivsion
     @param storage_type text, file, or lob
     @param mime_type mime type of the content
-    @param tmp_filename For file storage type a filename can be specified. It will be added to the content repository. Caller is responsible to handle cleaning up the temporary file
-
-    @return
-
-    @error
+    @param tmp_filename For storage types except 'text'
+           a filename can be specified
+           instead of 'content'. The caller is responsible
+           for cleaning up the temporary file
 } {
+    ns_log notice "============== update_content-$storage_type $revision_id content '$content' mime_type $mime_type tmp_filename '$tmp_filename'"
+    ::content::revision::update_content-$storage_type \
+        -item_id $item_id \
+        -revision_id $revision_id \
+        -content $content \
+        -mime_type $mime_type \
+        -tmp_filename $tmp_filename
+}
 
-    switch -- $storage_type {
-        file {
-            if {$tmp_filename eq ""} {
-                set filename [cr_create_content_file_from_string $item_id $revision_id $content]
-            } else {
-                set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
-            }
-            set tmp_size [file size [cr_fs_path]$filename]
-            db_dml set_file_content ""
-        }
-        lob {
-            if {$tmp_filename ne ""} {
-            # handle file
-                set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
-                db_dml set_lob_content "" -blob_files [list $tmp_filename]
-                db_dml set_lob_size ""
-            } else {
-            # handle blob
-                db_dml update_content "" -blobs [list $content]
-            }
-        }
-        default {
-            # HAM : 112505
-            # I added a default switch because in some cases
-            # storage type is text and revision is not being updated
-            db_dml update_content "" -blobs [list $content]
-        }
+ad_proc -private ::content::revision::update_content-text {
+    -item_id:required
+    -revision_id:required
+    -content:required
+    -mime_type:required
+    {-tmp_filename ""}
+} {
+    db_dml update_content "" -blobs [list $content]
+
+    if {$tmp_filename ne ""} {
+        # Traditionally, a provided tmp_file is not handled. I
+        # could/should be probably supported in the future.
+        ns_log warning "::content::revision::update_content-text: provided tmp_filename is ignored"
     }
 }
+
+ad_proc -private ::content::revision::update_content-file {
+    -item_id:required
+    -revision_id:required
+    -content:required
+    -mime_type:required
+    {-tmp_filename ""}
+} {
+    if {$tmp_filename eq ""} {
+        set filename [cr_create_content_file_from_string $item_id $revision_id $content]
+    } else {
+        set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
+    }
+    set tmp_size [file size [cr_fs_path]$filename]
+    db_dml set_file_content {
+        update cr_revisions
+        set content = :filename,
+            mime_type = :mime_type,
+            content_length = :tmp_size
+        where revision_id = :revision_id
+    }
+}
+
+ad_proc -private ::content::revision::update_content-lob {
+    -item_id:required
+    -revision_id:required
+    -content:required
+    -mime_type:required
+    {-tmp_filename ""}
+} {
+    if {$tmp_filename ne ""} {
+        # handle file
+        set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
+        db_dml set_content "" -blob_files [list $tmp_filename]
+        db_dml set_size ""
+    } else {
+        # handle blob
+        db_dml update_content "" -blobs [list $content]
+    }
+}
+
 
 ad_proc -public content::revision::content_copy {
     -revision_id:required
@@ -365,7 +682,11 @@ ad_proc -public content::revision::item_id {
 
   @return The item_id of the item to which this revision belongs
 } {
-    return [db_string item_id {} -default ""]
+    return [db_string item_id {
+        select item_id
+        from cr_revisions
+        where revision_id = :revision_id
+    } -default ""]
 }
 
 
@@ -493,7 +814,7 @@ ad_proc -public content::revision::get_cr_file_path {
     # the file path is stored in filename column on oracle
     # and content in PostgreSQL, but we alias to filename so it makes
     # sense
-    db_1row get_storage_key_and_path ""
+    db_1row get_storage_key_and_path {}
     return [cr_fs_path $storage_area_key]${filename}
 }
 

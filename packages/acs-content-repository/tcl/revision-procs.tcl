@@ -1,15 +1,21 @@
-# upload an item revision from a file
+ad_library {
+
+    Tcl API for adding file content to the database and for sending
+    file content to back to the client.
+
+    @creation-date 2004-05-28
+}
 
 ad_proc -public cr_write_content {
     -string:boolean
     -item_id
     -revision_id
 } {
-    Write out the specified content to the current HTML connection or return
-    it to the caller by using the -string flag.  Only one of
-    item_id and revision_id should be passed to this procedure.  If item_id is
-    provided the item's live revision will be written, otherwise the specified
-    revision.
+    Write out the specified content to the current HTTP connection or
+    return it to the caller by using the -string flag.  Only one of
+    item_id and revision_id should be passed to this procedure.  If
+    item_id is provided the item's live revision will be written,
+    otherwise the specified revision.
 
     This routine was written to centralize the downloading of data from
     the content repository.  Previously, similar code was scattered among
@@ -39,6 +45,7 @@ ad_proc -public cr_write_content {
                    i.storage_area_key,
                    r.mime_type,
                    r.revision_id,
+                   r.content,
                    r.content_length
             from cr_items i, cr_revisions r
             where i.item_id = :item_id
@@ -52,6 +59,7 @@ ad_proc -public cr_write_content {
                    i.storage_area_key,
                    r.mime_type,
                    i.item_id,
+                   r.content,
                    r.content_length
             from cr_items i, cr_revisions r
             where r.revision_id = :revision_id and i.item_id = r.item_id
@@ -62,106 +70,128 @@ ad_proc -public cr_write_content {
         error "Either revision_id or item_id must be specified"
     }
 
-    if { $storage_type ne "file"
-         && $storage_type ne "text"
-         && $storage_type ne "lob"
-     } {
+    if { [info commands ::cr_write_content-$storage_type] eq "" } {
         error "Storage type '$storage_type' is invalid."
     }
 
-    # I set content length to 0 here because otherwise I need to do
-    # db-specific queries for get_revision_info
-    if {$content_length eq ""} {
-        set content_length 0
-    }
-
-    switch -- $storage_type {
-        text {
-            set text [db_string write_text_content {
-                select content
-                from cr_revisions
-                where revision_id = :revision_id
-            }]
-            if { $string_p } {
-                return $text
-            }
-            ns_return 200 $mime_type $text
-        }
-        file {
-            set path [cr_fs_path $storage_area_key]
-            set filename [db_string write_file_content ""]
-            if {$filename eq ""} {
-                error "No content for the revision $revision_id.\
-                    This seems to be an error which occurred during the upload of the file"
-            } elseif {![file readable $filename]} {
-                ns_log Error "Could not read file $filename. Maybe the content repository is (partially) missing?"
-                ns_return 404 text/plain {}
-            } else {
-                if { $string_p } {
-                    set fd [open $filename "r"]
-                    fconfigure $fd \
-                        -translation binary \
-                        -encoding [encoding system]
-                    set text [read $fd]
-                    close $fd
-                    return $text
-                } else {
-                    # JCD: for webdavfs there needs to be a content-length 0 header
-                    # but ns_returnfile does not send one.   Also, we need to
-                    # ns_return size 0 files since if fastpath is enabled ns_returnfile
-                    # simply closes the connection rather than send anything (including
-                    # any headers).  This bug is fixed in AOLServer 4.0.6 and later
-                    # but work around it for now.
-                    set size [file size $filename]
-                    if {!$size} {
-                        ns_set put [ns_conn outputheaders] "Content-Length" 0
-                        ns_return 200 text/plain {}
-                    } else {
-                        if {[namespace which ad_returnfile_background] eq "" || [security::secure_conn_p]} {
-                            ns_returnfile 200 $mime_type $filename
-                        } else {
-                            ad_returnfile_background 200 $mime_type $filename
-                        }
-                    }
-                }
-            }
-        }
-        lob  {
-
-            if { $string_p } {
-                return [db_blob_get write_lob_content ""]
-            }
-
-            #
-            # Need to set content_length header here.
-            #
-            # Unfortunately, old versions of OpenACS did not set the
-            # content_length correctly, so we fix this here locally.
-            #
-            if {$content_length eq "0" && [db_driverkey ""] eq "postgresql"} {
-                set content_length [db_string get_lob_length {
-                    select sum(byte_len)
-                    from cr_revisions, lob_data
-                    where revision_id = :revision_id and lob_id = cr_revisions.lob
-                }]
-            }
-
-            ns_set put [ns_conn outputheaders] "Content-Length" $content_length
-
-            util_return_headers $mime_type $content_length
-            #
-            # In a HEAD request, just send headers and no content
-            #
-            if {![string equal -nocase "head" [ns_conn method]]} {
-                db_write_blob write_lob_content ""
-            } else {
-                ns_conn close
-            }
-        }
-    }
-
-    return
+    return [cr_write_content-$storage_type \
+                -string=$string_p \
+                -item_id $item_id \
+                -revision_id $revision_id \
+                -mime_type $mime_type \
+                -content $content \
+                -content_length $content_length \
+                -storage_area_key $storage_area_key]
 }
+
+
+ad_proc -private cr_write_content-text {
+    -string:boolean
+    -item_id
+    -revision_id
+    -mime_type
+    -content
+    -content_length
+    -storage_area_key
+} {
+    if { $string_p } {
+        return $content
+    }
+    ns_return 200 $mime_type $content
+}
+
+ad_proc -private cr_write_content-file {
+    -string:boolean
+    -item_id
+    -revision_id
+    -mime_type
+    -content
+    -content_length
+    -storage_area_key
+    -filename
+} {
+    if {![info exists filename]} {
+        set path [cr_fs_path $storage_area_key]
+        set filename $path$content
+    }
+    if {$filename eq ""} {
+        error "No content for the revision $revision_id.\
+                            This seems to be an error which occurred during the upload of the file"
+
+    } elseif {![file readable $filename]} {
+        ns_log Error "Could not read file $filename. Maybe the content repository is (partially) missing?"
+        ns_return 404 text/plain {}
+
+    } elseif { $string_p } {
+        set fd [open $filename "r"]
+        fconfigure $fd \
+            -translation binary \
+            -encoding [encoding system]
+        set text [read $fd]
+        close $fd
+        return $text
+
+    } else {
+        # JCD: for webdavfs there needs to be a content-length 0 header
+        # but ns_returnfile does not send one.   Also, we need to
+        # ns_return size 0 files since if fastpath is enabled ns_returnfile
+        # simply closes the connection rather than send anything (including
+        # any headers).  This bug is fixed in AOLServer 4.0.6 and later
+        # but work around it for now.
+        set size [file size $filename]
+        if {$size == 0} {
+            ns_set put [ns_conn outputheaders] "Content-Length" 0
+            ns_return 200 text/plain {}
+        } else {
+            if {[namespace which ad_returnfile_background] eq "" || [security::secure_conn_p]} {
+                ns_returnfile 200 $mime_type $filename
+            } else {
+                ad_returnfile_background 200 $mime_type $filename
+            }
+        }
+    }
+}
+
+ad_proc -private cr_write_content-lob {
+    -string:boolean
+    -item_id
+    -revision_id
+    -mime_type
+    -content
+    -content_length
+    -storage_area_key
+} {
+
+    if { $string_p } {
+        return [db_blob_get write_lob_content ""]
+    }
+
+    #
+    # Unfortunately, old versions of OpenACS did not set the
+    # content_length correctly, so we fix this here locally.
+    #
+    if {$content_length eq "" && [db_driverkey ""] eq "postgresql"} {
+        set content_length [db_string get_lob_length {
+            select sum(byte_len)
+            from cr_revisions, lob_data
+            where revision_id = :revision_id and lob_id = cr_revisions.lob
+        }]
+    }
+
+    util_return_headers $mime_type $content_length
+    #
+    # In a HEAD request, just send headers and no content
+    #
+    if {![string equal -nocase "head" [ns_conn method]]} {
+        db_write_blob write_lob_content ""
+    } else {
+        ns_conn close
+    }
+}
+
+#
+# Loading content into a revision of the content repository
+#
 
 ad_proc -public cr_import_content {
     {-storage_type "file"}
@@ -368,25 +398,15 @@ ad_proc -public cr_import_content {
             }
         }
 
-        # insert the attachment into the database
-
-        switch -- $storage_type {
-            file {
-                set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
-                db_dml set_file_content {
-                    update cr_revisions set
-                        content        = :filename,
-                        mime_type      = :mime_type,
-                        content_length = :tmp_size
-                    where revision_id = :revision_id
-                }
-            }
-            lob {
-                db_dml set_lob_content "" -blob_files [list $tmp_filename]
-                db_dml set_lob_size ""
-            }
-        }
-
+        ns_log notice "TESTIONG ::content::revision::update_content -storage_type $storage_type"
+        # insert the content into the database
+        ::content::revision::update_content \
+            -storage_type $storage_type \
+            -item_id $item_id \
+            -revision_id $revision_id \
+            -content "" \
+            -mime_type $mime_type \
+            -tmp_filename $tmp_filename
     }
 
     return $revision_id
@@ -555,10 +575,11 @@ ad_proc -public cr_create_mime_type {
 
     @author Jeff Davis (davis@xarg.net)
 } {
-    # make both lower since that is the convention.
-    # should never pass in anything that is not lowercased
-    # already but just be safe.
-
+    #
+    # Convert "mime_type" and "extension" to lowercase since that is
+    # the convention in the database.  One should never pass in
+    # anything that is not lowercased already but just be safe.
+    #
     set mime_type [string tolower $mime_type]
     set extension [string tolower $extension]
 
