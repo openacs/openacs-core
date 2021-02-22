@@ -828,7 +828,7 @@ ad_proc -private db_qd_make_absolute_path {relative_root suffix} {
 ##
 ## Extra Utilities to Massage the system and Rub it in all the right ways
 ##
-ad_proc -private db_qd_internal_prepare_queryfile_content {file_content} {
+ad_proc -public db_qd_internal_prepare_queryfile_content {file_content} {
     Prepare raw .xql-file content form xml-parsing via quoting
 } {
 
