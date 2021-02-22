@@ -1320,8 +1320,17 @@ ad_proc -public apm_package_id_from_key {package_key} {
     return $result
 }
 
+ad_proc -public apm_flush_package_id_cache {package_key} {    
+    Flush the package id cache for this package at least in the
+    current thread.  TODO: should be refactored together with the
+    2level cache (per thread and util_memoize).
+} {
+    unset -nocomplain ::apm::package_id_from_key($package_key)
+    util_memoize_flush [list apm_package_id_from_key_not_cached $package_key]
+}
+
 ad_proc -private apm_package_id_from_key_not_cached {package_key} {
-    unmemoized version of apm_package_id_from_key
+    DB accessing version of apm_package_id_from_key.
 } {
     return [db_string apm_package_id_from_key {
         select package_id from apm_packages where package_key = :package_key
