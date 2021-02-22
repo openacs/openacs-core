@@ -762,11 +762,27 @@ ad_proc -public mul {n fraction} "multiplies n with a fraction (given as a tuple
     expr {($n/$g)*$num/($denom/$g)}
 }
 
-ad_proc -public choose {n k} "Here's how to compute 'n choose k' like a real nerd." {
+ad_proc -deprecated choose {n k} {
+    Here's how to compute 'n choose k' like a real nerd.
+
+    DEPRECATED: As of tcl8.5, Tcl has native support for 'lambda' provided by
+                means of 'apply' per TIP 194. Tcllib provides a 'lambda' package
+                with procs that make use of it.
+
+    @see https://www.tcl-lang.org/man/tcl/TclCmd/apply.htm
+} {
     fold mul 1 [transpose [list [iterate $k [bind flip - 1] $n] [enum_from_to 1 $k]]]
 }
 
-ad_proc -public pascal {size} "prints Pascal's triangle" {
+ad_proc -deprecated pascal {size} {
+    prints Pascal's triangle
+
+    DEPRECATED: As of tcl8.5, Tcl has native support for 'lambda' provided by
+                means of 'apply' per TIP 194. Tcllib provides a 'lambda' package
+                with procs that make use of it.
+
+    @see https://www.tcl-lang.org/man/tcl/TclCmd/apply.htm
+} {
     for {set n 0} {$n<=$size} {incr n} {
         puts [map [bind choose $n] [enum_from_to 0 $n]]
     }
