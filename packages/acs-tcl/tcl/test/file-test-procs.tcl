@@ -223,7 +223,7 @@ aa_register_case \
     -procs {
         apm_get_installed_versions
         apm_get_package_files
-        db_qd_internal_prepare_queryfile_content
+        db_qd_prepare_queryfile_content
         xml_parse
         ad_file
     } \
@@ -258,7 +258,7 @@ aa_register_case \
         set data [read $fp]
         close $fp
         ns_log debug "acs_tcl__check_xql_files: read $file"
-        set data [db_qd_internal_prepare_queryfile_content $data]
+        set data [db_qd_prepare_queryfile_content $data]
 
         set parse_failed_p [catch {set parse [xml_parse $data]} errMsg]
         aa_false "xql $file correctly parsed" $parse_failed_p

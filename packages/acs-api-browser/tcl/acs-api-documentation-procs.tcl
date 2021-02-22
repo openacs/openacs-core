@@ -1194,7 +1194,7 @@ namespace eval ::apidoc {
         set content [template::util::read_file $::acs::rootdir/$xql_file]
 
         # make parsable XML, replace "partialquery" by "fullquery"
-        set prepared_content [db_qd_internal_prepare_queryfile_content $content]
+        set prepared_content [db_qd_prepare_queryfile_content $content]
 
         dom parse -simple $prepared_content doc
         $doc documentElement root

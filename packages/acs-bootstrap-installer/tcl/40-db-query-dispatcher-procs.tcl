@@ -509,7 +509,7 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
     set whole_file [read $file_pointer]
 
     # PREPARE THE FILE (ben - this is in case the file needs massaging before parsing)
-    set whole_file [db_qd_internal_prepare_queryfile_content $whole_file]
+    set whole_file [db_qd_prepare_queryfile_content $whole_file]
 
     # Iterate and parse out each query
     set parsing_state [db_qd_internal_parse_init $whole_file $file_tag]
@@ -825,11 +825,10 @@ ad_proc -private db_qd_make_absolute_path {relative_root suffix} {
 }
 
 
-##
-## Extra Utilities to Massage the system and Rub it in all the right ways
-##
-ad_proc -public db_qd_internal_prepare_queryfile_content {file_content} {
-    Prepare raw .xql-file content form xml-parsing via quoting
+ad_proc -public db_qd_prepare_queryfile_content {file_content} {    
+    Prepare raw .xql-file content form xml-parsing via quoting.  The
+    result is parsable XML, where "partialquery" is replaced by
+    "fullquery".
 } {
 
     set new_file_content ""
