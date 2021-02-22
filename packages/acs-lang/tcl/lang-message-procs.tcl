@@ -618,7 +618,7 @@ ad_proc -private lang::message::remove_from_cache {
     }
 }
 
-ad_proc -private lang::message::get_embedded_vars {
+ad_proc -public lang::message::get_embedded_vars {
     message
 } {
     Returns a list of embedded substitution variables on the form %varname% in a message.
@@ -648,7 +648,7 @@ ad_proc -private lang::message::get_embedded_vars {
     return $variables_list
 }
 
-ad_proc -private lang::message::format {
+ad_proc -public lang::message::format {
     localized_message
     {value_array_list {}}
     {upvar_level 3}

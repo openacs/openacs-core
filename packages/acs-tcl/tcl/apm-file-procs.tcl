@@ -343,7 +343,7 @@ ad_proc -public apm_file_watchable_p { path } {
     return $watchable_p
 }
 
-ad_proc -private apm_watch_all_files { package_key } {
+ad_proc -public apm_watch_all_files { package_key } {
     Watch all Tcl procs and xql query files in the given
     package
 

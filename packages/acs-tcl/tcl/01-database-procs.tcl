@@ -1171,7 +1171,7 @@ ad_proc -private db_bind_var_quoted_p { sql bind_start_idx bind_end_idx} {
     return 0
 }
 
-ad_proc -private db_bind_var_substitution { sql { bind "" } } {
+ad_proc -public db_bind_var_substitution { sql { bind "" } } {
 
     This proc emulates the bind variable substitution in the PostgreSQL driver.
     Since this is a temporary hack, we do it in Tcl instead of hacking up the
