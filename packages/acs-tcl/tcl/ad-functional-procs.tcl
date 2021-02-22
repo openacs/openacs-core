@@ -69,7 +69,7 @@ ad_proc -public -deprecated lambda {args body} {
                 means of 'apply' per TIP 194. Tcllib provides a 'lambda' package
                 with procs that make use of it.
 
-    @see tcllib lambda package
+    @see https://www.tcl-lang.org/man/tcl/TclCmd/apply.htm
 } {
     proc $args.$body $args $body
     return $args.$body
@@ -86,9 +86,15 @@ ad_proc -public -deprecated lambda {args body} {
 # binding values to arguments of a function
 # --------------------------------------------------------------------------------
 
-ad_proc -public bind {f args} {
+ad_proc -deprecated bind {f args} {
     binds args to the first k arguments of the n-ary function f
     and returns the resulting (n-k)-ary function
+
+    DEPRECATED: As of tcl8.5, Tcl has native support for 'lambda' provided by
+    means of 'apply' per TIP 194. Tcllib provides a 'lambda' package
+    with procs that make use of it.
+
+    @see https://www.tcl-lang.org/man/tcl/TclCmd/apply.htm
 } {
     set i 0
     foreach arg $args {
@@ -101,7 +107,15 @@ ad_proc -public bind {f args} {
     lambda [lrange $proc_args [llength $args] $num_proc_args] $code
 }
 
-ad_proc -public bind2nd {f arg} "binds arg to the 2nd argument of f" {
+ad_proc -deprecated bind2nd {f arg} {
+    binds arg to the 2nd argument of f
+
+    DEPRECATED: As of tcl8.5, Tcl has native support for 'lambda' provided by
+    means of 'apply' per TIP 194. Tcllib provides a 'lambda' package
+    with procs that make use of it.
+
+    @see https://www.tcl-lang.org/man/tcl/TclCmd/apply.htm
+} {
     set code "set [lindex [info args $f] 1] {$arg}\n"
     append code [info body $f]
     set proc_args [info args $f]
@@ -271,12 +285,18 @@ ad_proc -public qsort {xs {value id}} "sorts a sequence with the quicksort algor
 # % qsort {Oracle ArsDigita SAP Vignette} [lambda {s} {string length $s}]
 # SAP Oracle Vignette ArsDigita
 
-ad_proc -public const {k} {
+ad_proc -deprecated const {k} {
     Returns a unary function that ignores its argument and constantly returns k.
     <h4>Example</h4>
     <ul><li><code>
     map [const 7] [list 1 2 3 4 5] = {7 7 7 7 7}
     </code></ul>
+
+    DEPRECATED: As of tcl8.5, Tcl has native support for 'lambda' provided by
+    means of 'apply' per TIP 194. Tcllib provides a 'lambda' package
+    with procs that make use of it.
+
+    @see https://www.tcl-lang.org/man/tcl/TclCmd/apply.htm
 } {
     lambda {x} [list return $k]
 }
