@@ -410,7 +410,7 @@ ad_proc -private site_node::init_cache {} {
     }
 }
 
-ad_proc -private site_node::update_cache {
+ad_proc -public site_node::update_cache {
     {-sync_children:boolean}
     {-node_id:required}
     {-url}
@@ -1783,7 +1783,7 @@ if {$UseXotclSiteNodes} {
         #ns_log notice "site_node::init_cache $root_node_id DONE"
     }
 
-    ad_proc -private site_node::update_cache {
+    ad_proc -public site_node::update_cache {
         {-sync_children:boolean}
         {-node_id:required}
         {-url ""}
