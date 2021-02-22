@@ -115,8 +115,7 @@ ad_proc -private search::indexer {} {
 
         # DRB: only do Oracle shit for oracle (doh)
         if { [ns_config "ns/db/drivers" oracle] ne "" } {
-            nsv_incr search_static_variables item_counter
-            if {[nsv_get search_static_variables item_counter] > 1000} {
+            if {[nsv_incr search_static_variables item_counter] > 1000} {
                 nsv_set search_static_variables item_counter 0
                 db_exec_plsql optimize_intermedia_index {begin
                     ctx_ddl.sync_index ('swi_index');

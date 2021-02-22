@@ -1,7 +1,12 @@
 namespace eval search {}
 namespace eval search::init {}
 
-nsv_set search_static_variables item_counter 0
+#
+# The nsv "search_static_variables" is for Oracle only.
+#
+if { [ns_config "ns/db/drivers" oracle] ne "" } {    
+    nsv_set search_static_variables item_counter 0
+}
 
 ad_proc -private search::init::schedule_indexer {} {
 
