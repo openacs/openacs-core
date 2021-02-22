@@ -7,7 +7,7 @@ ad_library {
     @author Bart Teeuwisse (bart.teeuwisse@thecodemill.biz)
     @creation-date Fri Oct  6 21:47:39 2000
     @cvs-id $Id$
-} 
+}
 
 ad_proc -private apm_required_attribute_value { element attribute } {
 
@@ -47,7 +47,7 @@ ad_proc -private apm_tag_value {
 
     if { $node ne "" } {
 	return [xml_node_get_content $node]
-    }    
+    }
     ns_log Debug "apm_tag_value $root $property_name $default --> $default"
     return $default
 }
@@ -111,7 +111,7 @@ ad_proc -private apm_generate_package_spec { version_id } {
                      -indentation "        "]
 
     append spec "\n"
-    
+
     apm_log APMDebug "APM: Writing Dependencies."
     db_foreach dependency_info {} {
         append spec "        <$dependency_type url=\"[ns_quotehtml $service_uri]\" version=\"[ns_quotehtml $service_version]\"/>\n"
@@ -143,7 +143,7 @@ ad_proc -private apm_generate_package_spec { version_id } {
 	if { $description ne "" } {
 	    append spec " description=\"[ns_quotehtml $description]\""
 	}
-	
+
 	if { $section_name ne "" } {
 	    append spec " section_name=\"[ns_quotehtml $section_name]\""
 	}
@@ -155,7 +155,7 @@ ad_proc -private apm_generate_package_spec { version_id } {
 
     append spec "        </parameters>\n\n"
 
-    
+
     append spec "    </version>
 </package>
 "
@@ -182,7 +182,7 @@ ad_proc -public apm_read_package_info_file { path } {
     $type]</code> NOTE: Files are no longer stored in info files but are always retrieved
     directly from the filesystem. This element in the array will always be the empty list.
     <li><code>callbacks</code>: an array list of callbacks of the package
-    on the form <code>[list callback_type1 proc_name1 callback_type2 proc_name2 ...]</code> 
+    on the form <code>[list callback_type1 proc_name1 callback_type2 proc_name2 ...]</code>
     <li>Element and attribute values directly from the XML specification:
     <code>package.key</code>,
     <code>package.url</code>,
@@ -206,9 +206,9 @@ ad_proc -public apm_read_package_info_file { path } {
     <code>maturity_text</code>.
 
     </ul>
-    
+
     This routine will typically be called like so:
-    
+
     <blockquote><pre>array set version_properties [apm_read_package_info_file $path]</pre></blockquote>
 
     to populate the <code>version_properties</code> array.
@@ -351,7 +351,7 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set callbacks_node_list [xml_node_get_children_by_name $version callbacks]
     foreach callbacks_node $callbacks_node_list {
-        
+
         set callback_node_list [xml_node_get_children_by_name $callbacks_node callback]
         foreach callback_node $callback_node_list {
 
@@ -363,7 +363,7 @@ ad_proc -public apm_read_package_info_file { path } {
                 ns_log Error "package info file $path contains more than one callback proc of type $type"
                 continue
             }
-            
+
             if {$type ni [apm_supported_callback_types]} {
                 # The callback type is not supported
                 ns_log Error "package info file $path contains an unsupported\
@@ -396,7 +396,7 @@ ad_proc -public apm_read_package_info_file { path } {
     foreach node [xml_node_get_children_by_name $version parameters] {
 	set parameter_nodes [xml_node_get_children_by_name $node parameter]
 
-	foreach parameter_node $parameter_nodes {	  
+	foreach parameter_node $parameter_nodes {
 	    set default_value [apm_attribute_value $parameter_node default]
 	    set min_n_values [apm_attribute_value $parameter_node min_n_values]
 	    set max_n_values [apm_attribute_value $parameter_node max_n_values]
@@ -415,7 +415,7 @@ ad_proc -public apm_read_package_info_file { path } {
 						$datatype $min_n_values $max_n_values $default_value]
 	}
     }
-    
+
     # Release the XML tree
     xml_doc_free $tree
 
