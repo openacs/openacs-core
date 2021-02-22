@@ -431,7 +431,7 @@ ad_proc -private auth::local::registration::unregister_impl {} {
     acs_sc::impl::delete -contract_name "auth_registration" -impl_name "local"
 }
 
-ad_proc -private auth::local::registration::GetElements {
+ad_proc -public auth::local::registration::GetElements {
     {parameters ""}
 } {
     Implements the GetElements operation of the auth_registration
@@ -457,7 +457,7 @@ ad_proc -private auth::local::registration::GetElements {
     return [array get result]
 }
 
-ad_proc -private auth::local::registration::Register {
+ad_proc -public auth::local::registration::Register {
     parameters
     username
     authority_id
@@ -571,7 +571,7 @@ ad_proc -private auth::local::registration::Register {
     return [array get result]
 }
 
-ad_proc -private auth::local::registration::GetParameters {} {
+ad_proc -public auth::local::registration::GetParameters {} {
     Implements the GetParameters operation of the auth_registration
     service contract for the local account implementation.
 } {

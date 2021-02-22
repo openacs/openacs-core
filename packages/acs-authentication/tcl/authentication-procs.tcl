@@ -1577,7 +1577,7 @@ ad_proc -public auth::get_local_account_status {
     return $result
 }
 
-ad_proc -private auth::get_user_secret_token {
+ad_proc -public auth::get_user_secret_token {
     -user_id:required
 } {
     Get a secret token for the user. Can be used for email verification purposes.

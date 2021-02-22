@@ -48,7 +48,7 @@ namespace eval security {
 #      1 = ok,
 #      2 = auth ok, but account closed
 
-ad_proc -private sec_random_token {} {
+ad_proc -public sec_random_token {} {
     Generates a random token.
 } {
     # ::tcl_sec_seed is used to maintain a small subset of the previously
@@ -394,7 +394,7 @@ ad_proc -private sec_login_read_cookie {} {
 }
 
 
-ad_proc -private sec_login_handler {} {
+ad_proc -public sec_login_handler {} {
 
     If a login cookie exists, it is checked for expiration
     (depending on LoginTimeout) and the account status is validated.
@@ -1562,7 +1562,7 @@ if {[ns_info name] eq "NaviServer"} {
     }
 }
 
-ad_proc -private sec_get_token {
+ad_proc -public sec_get_token {
     token_id
 } {
 
@@ -2030,7 +2030,7 @@ ad_proc -private security::get_http_port {} {
 }
 
 
-ad_proc -private security::get_qualified_url { url } {
+ad_proc -public security::get_qualified_url { url } {
     @return secure or insecure qualified url
 } {
     if { [security::secure_conn_p] || [ad_conn behind_secure_proxy_p] } {
@@ -2093,7 +2093,7 @@ ad_proc -private security::get_qualified_uri_part { url } {
     return $uri
 }
 
-ad_proc -private security::get_secure_location {} {
+ad_proc -public security::get_secure_location {} {
     Return the current location in secure (https) mode.
 
     @author Peter Marklund
