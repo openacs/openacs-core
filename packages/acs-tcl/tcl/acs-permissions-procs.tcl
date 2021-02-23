@@ -32,7 +32,6 @@ ad_proc -public permission::grant {
 } {
     db_exec_plsql grant_permission {}
     permission::cache_flush -party_id $party_id -object_id $object_id -privilege $privilege
-    permission::permission_thread_cache_flush
 }
 
 ad_proc -public permission::revoke {
@@ -44,7 +43,6 @@ ad_proc -public permission::revoke {
 } {
     db_exec_plsql revoke_permission {}
     permission::cache_flush -party_id $party_id -object_id $object_id -privilege $privilege
-    permission::permission_thread_cache_flush
 }
 
 # args to permission_p and permission_p_no_cache must match
@@ -350,6 +348,8 @@ ad_proc -public permission::cache_flush {
 
     @see permission::permission_p
 } {
+    permission::permission_thread_cache_flush
+
     if {[namespace which ::acs::permission_cache] eq ""} {
         return
 
