@@ -528,18 +528,23 @@ ad_proc -public install::xml::action::create-user { node } {
             # Need to find out which username was set
             set username $result(username)
 
-            array set result [auth::local::registration::Register \
-                {} \
-                $username \
-                [auth::authority::local] \
-                $first_names \
-                $last_name \
-                $screen_name \
-                $email \
-                $url \
-                $password \
-                $secret_question \
-                $secret_answer]
+            set call_args [list \
+                               {} \
+                               $username \
+                               [auth::authority::local] \
+                               $first_names \
+                               $last_name \
+                               $screen_name \
+                               $email \
+                               $url \
+                               $password \
+                               $secret_question \
+                               $secret_answer]
+            array set result [acs_sc::invoke \
+                                  -contract "auth_registration" \
+                                  -operation "Register" \
+                                  -impl local \
+                                  -call_args $call_args]
         }
     } else {
         array set result [auth::create_user -email $email \
