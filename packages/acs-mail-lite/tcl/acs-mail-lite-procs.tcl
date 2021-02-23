@@ -909,12 +909,16 @@ namespace eval acs_mail_lite {
     }
 
     #---------------------------------------
-    ad_proc -private message_interpolate {
+    ad_proc -deprecated -private message_interpolate {
         {-values:required}
         {-text:required}
     } {
         Interpolates a set of values into a string. This is directly
         copied from the bulk mail package.
+
+        DEPRECATED: duplicated code from bulk-mail that could be replaced by
+                    "string map"
+        @see "string map"
 
         @param values a list of key, value pairs, each one consisting of a
         target string and the value it is to be replaced with.
