@@ -11,7 +11,10 @@ ad_proc -public acs_message_p {
 } {
     Check if an integer is a valid OpenACS message id.
 } {
-    return [string equal [db_exec_plsql acs_message_p {}] "t"]
+    return [db_0or1row is_message {
+        select 1 from acs_messages
+        where message_id = :message_id
+    }]
 }
 
 ad_page_contract_filter acs_message_id { name value } {
