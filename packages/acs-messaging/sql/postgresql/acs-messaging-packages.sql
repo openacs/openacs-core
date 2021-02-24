@@ -170,8 +170,12 @@ DECLARE
             'text/plain',			  -- 13  mime_type
             null,				  -- 14  nls_language
             null,				  -- 15  text
-            'text',				  -- 16  storage_type
-            p_package_id                          -- 17  package_id
+            null,                                 -- 16  data
+            null,                                 -- 17  relation_tag
+            'f',                                  -- 18  is_live            
+            'text',				  -- 19  storage_type
+            p_package_id,                         -- 20  package_id
+            't'                                   -- 21  with_child_rels
         );
 
         insert into acs_messages 
