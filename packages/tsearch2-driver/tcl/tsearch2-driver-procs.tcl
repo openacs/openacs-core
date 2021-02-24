@@ -329,7 +329,7 @@ ad_proc tsearch2::build_query_postgres { -query } {
     @return returns formatted query string for tsearch2 tsquery
 } {
     ad_try {
-        ::xo::dc 1row build_querystring {select websearch_to_tsquery(:query) as query from dual}
+        db_1row build_querystring {select websearch_to_tsquery(:query) as query from dual}
     } on error {errorMsg} {
         ns_log warning "tsearch2 websearch_to_tsquery failed, fall back to tcl query builder query was: $query errorMsg: $errorMsg"
         set query [tsearch2::build_query_tcl -query $query]
