@@ -135,6 +135,7 @@ ad_proc -callback search::search -impl tsearch2-driver {
     # Clean up query for tsearch2
     #
     set query [tsearch2::build_query -query $query]
+    # ns_log notice "-----build_query returned: $query"
 
     set where_clauses ""
     set from_clauses ""
@@ -240,7 +241,7 @@ ad_proc -public tsearch2::driver_info {
     return [list package_key tsearch2-driver version 2 automatic_and_queries_p 0  stopwords_p 1]
 }
 
-ad_proc tsearch2::build_query { -query } {
+ad_proc tsearch2::build_query_tcl { -query } {
     Convert conjunctions to query characters for tsearch2
     and => &
     not => !
@@ -299,6 +300,60 @@ ad_proc tsearch2::build_query { -query } {
     if {[regsub {!|\||\&} $query {}] eq ""} {
         set query ""
     }
+    return $query
+}
+
+ad_proc tsearch2::build_query_postgres { -query } {
+    Convert conjunctions to query characters for tsearch2
+    use websearch_to_tsquery which is integrated in postgres >= 11
+
+    websearch_to_tsquery creates a tsquery value from querytext using
+    an alternative syntax in which simple unformatted text is a valid
+    query. Unlike plainto_tsquery and phraseto_tsquery, it also
+    recognizes certain operators. Moreover, this function should never
+    raise syntax errors, which makes it possible to use raw user-supplied
+    input for search. The following syntax is supported:
+
+    <ul>
+        <li>unquoted text: text not inside quote marks will be converted
+        to terms separated by & operators, as if processed by plainto_tsquery.</li>
+        <li>"quoted text": text inside quote marks will be converted to terms
+        separated by <-> operators, as if processed by phraseto_tsquery.</li>
+        <li>OR: logical or will be converted to the | operator.</li>
+        <li>-: the logical not operator, converted to the the ! operator.</li>
+    </ul>
+    For further documentation see also:
+    https://www.postgresql.org/docs/11/textsearch-controls.html#TEXTSEARCH-PARSING-QUERIES
+
+    @param query string to convert
+    @return returns formatted query string for tsearch2 tsquery
+} {
+    ad_try {
+        ::xo::dc 1row build_querystring {select websearch_to_tsquery(:query) as query from dual}
+    } on error {errorMsg} {
+        ns_log warning "tsearch2 websearch_to_tsquery failed, fall back to tcl query builder query was: $query errorMsg: $errorMsg"
+        set query [tsearch2::build_query_tcl -query $query]
+    }
+    return $query
+}
+
+ad_proc tsearch2::build_query {
+    -query
+} {
+    Build query string for tsearch2
+
+    @param query string to convert
+    @return returns formatted query string for tsearch2 tsquery
+} {
+    if {$::tsearch2_driver::use_web_search_p
+        && [db_compatible_rdbms_p postgresql]
+        && [lindex [split [db_version] .] 0] >= 11
+    } {
+        set query [tsearch2::build_query_postgres -query $query]
+    } else {
+        set query [tsearch2::build_query_tcl -query $query]
+    }
+
     return $query
 }
 
