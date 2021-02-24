@@ -1063,7 +1063,7 @@ ad_proc -private ad_proc_valid_switch_p {str} {
 
 
 # procedures for doing type based dispatch
-ad_proc -public ad_method {
+ad_proc -deprecated ad_method {
     method_name
     type
     argblock
@@ -1084,7 +1084,7 @@ ad_proc -public ad_method {
     ad_proc ${method_name}__$type $argblock $docblock $body
 }
 
-ad_proc -public ad_call_method {
+ad_proc -deprecated ad_call_method {
     method_name
     object_id
     args
@@ -1106,7 +1106,7 @@ ad_proc -public ad_call_method {
     return [ad_apply ${method_name}__[util_memoize [list acs_object_type $object_id]] [concat $object_id $args]]
 }
 
-ad_proc -public ad_dispatch {
+ad_proc -deprecated ad_dispatch {
     method_name
     type
     args

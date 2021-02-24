@@ -63,7 +63,7 @@ ad_proc -public db_rdbms_create {type version} {
     return [list $type $version]
 }
 
-ad_proc -public db_rdbms_get_type {rdbms} {
+ad_proc -private db_rdbms_get_type {rdbms} {
     @param rdbms descriptor constructed by db_rdbms_create
 
     @return rdbms name
@@ -71,7 +71,7 @@ ad_proc -public db_rdbms_get_type {rdbms} {
     return [lindex $rdbms 0]
 }
 
-ad_proc -public db_rdbms_get_version {rdbms} {
+ad_proc -private db_rdbms_get_version {rdbms} {
     @param rdbms descriptor constructed by db_rdbms_create
 
     @return version identifier
@@ -79,7 +79,7 @@ ad_proc -public db_rdbms_get_version {rdbms} {
     return [lindex $rdbms 1]
 }
 
-ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
+ad_proc -private db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     @return 0 if test incompatible with pattern, 1 if miscible
 } {
     #db_qd_log QDDebug "The RDBMS_TEST is [db_rdbms_get_type $rdbms_test] - " \
@@ -123,7 +123,7 @@ ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
 
 
 
-ad_proc -public db_fullquery_create {queryname querytext bind_vars_lst query_type rdbms load_location} {
+ad_proc -private db_fullquery_create {queryname querytext bind_vars_lst query_type rdbms load_location} {
     FullQuery Data Abstraction Constructor
 } {
     return [list $queryname $querytext $bind_vars_lst $query_type $rdbms $load_location]
@@ -147,7 +147,7 @@ ad_proc -public db_fullquery_get_querytext {fullquery} {
     return [lindex $fullquery 1]
 }
 
-ad_proc -public db_fullquery_get_bind_vars {fullquery} {
+ad_proc -private db_fullquery_get_bind_vars {fullquery} {
     Accessor for fullquery data abstraction
     @param fullquery datastructure constructed by db_fullquery_create
     @return bind vars
@@ -163,7 +163,7 @@ ad_proc -public db_fullquery_get_query_type {fullquery} {
     return [lindex $fullquery 3]
 }
 
-ad_proc -public db_fullquery_get_rdbms {fullquery} {
+ad_proc -private db_fullquery_get_rdbms {fullquery} {
     Accessor for fullquery data abstraction
     @param fullquery datastructure constructed by db_fullquery_create
     @return rdbms descriptor
@@ -171,7 +171,7 @@ ad_proc -public db_fullquery_get_rdbms {fullquery} {
     return [lindex $fullquery 4]
 }
 
-ad_proc -public db_fullquery_get_load_location {fullquery} {
+ad_proc -private db_fullquery_get_load_location {fullquery} {
     Accessor for fullquery data abstraction
     @param fullquery datastructure constructed by db_fullquery_create
     @return load location
@@ -186,7 +186,7 @@ ad_proc -public db_fullquery_get_load_location {fullquery} {
 #
 ################################################
 
-ad_proc -public db_qd_pick_most_specific_query {rdbms query_1 query_2} {
+ad_proc -private db_qd_pick_most_specific_query {rdbms query_1 query_2} {
     For now, we're going to say that versions are numbers and that
     there is always backwards compatibility.
 } {
@@ -473,7 +473,7 @@ ad_proc -public db_map {snippet_name} {
     return [uplevel 1 [list subst -nobackslashes $sql]]
 }
 
-ad_proc -public db_fullquery_compatible_p {fullquery {rdbms {}}} {
+ad_proc -private db_fullquery_compatible_p {fullquery {rdbms {}}} {
     Check compatibility of a FullQuery against an RDBMS
 
     This procedure returns true or false. The RDBMS argument

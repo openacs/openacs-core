@@ -43,7 +43,7 @@ ad_proc -private db_pool_to_dbn_init {} {
 }
 
 
-ad_proc db_bootstrap_set_db_type { errors } {
+ad_proc -private db_bootstrap_set_db_type { errors } {
 
     @author Don Baccus (dhogaza@pacifier.com)
     @param errors Name of variable in caller's space that should receive
