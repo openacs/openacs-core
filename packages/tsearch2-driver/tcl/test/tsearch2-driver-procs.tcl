@@ -92,6 +92,21 @@ aa_register_case -cats {
     aa_equals "Driver info" [tsearch2::driver_info] $expected_driver_info
 }
 
+aa_register_case -cats {
+    api
+    production_safe
+    smoke
+} -procs {
+    tsearch2::summary
+} summary {
+    Test tsearch2::summary
+} {
+    set query bold
+    set txt "wow, this is bold"
+    set expected "wow, this is <b>bold</b>"
+    aa_equals "Summary" [tsearch2::summary $query $txt] $expected
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
