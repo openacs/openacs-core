@@ -8,6 +8,40 @@ ad_library {
     @cvs-id $Id$
 }
 
+ad_proc -private tsearch2::index_exists_p {
+    object_id
+} {
+    Helper proc to check if an object is indexed
+} {
+    return [db_0or1row object_exists {
+                select 1 from txt where object_id=:object_id
+    }]
+}
+
+ad_proc -private tsearch2::indexed_keywords_p {
+    -object_id
+    -keywords
+} {
+    Helper proc to check if the keywords are indexed
+} {
+    if {[db_0or1row object_details {
+            select fti from txt where object_id=:object_id
+    }]} {
+        set splitted_fti [split $fti ']
+        foreach keyword $keywords {
+            if {$keyword ni $splitted_fti} {
+                aa_log "Keyword ($keyword) not found in fti: $fti"
+                return false
+            } else {
+                aa_log "Keyword ($keyword) found"
+            }
+        }
+        return true
+    } else {
+        return false
+    }
+}
+
 aa_register_case -cats {
     api
     production_safe
@@ -100,6 +134,63 @@ aa_register_case -cats {
     set txt "wow, this is bold"
     set expected "wow, this is <b>bold</b>"
     aa_equals "Summary" [tsearch2::summary $query $txt] $expected
+}
+
+aa_register_case -cats {
+    api
+} -procs {
+    tsearch2::index
+    tsearch2::unindex
+    tsearch2::update_index
+} index_unindex {
+    Test indexing/unindexing
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Create test object
+        #
+        set object_id [package_instantiate_object acs_object]
+        #
+        # Check that index does not exist yet
+        #
+        aa_false "Index does not exist yet" \
+            [tsearch2::index_exists_p $object_id]
+        #
+        # Index the object
+        #
+        set txt "This is just a test object"
+        set title "Test object"
+        set keywords "test foo bar"
+        aa_log "Indexing object_id $object_id"
+        tsearch2::index $object_id $txt $title $keywords
+        #
+        # Check if exists and looks ok
+        #
+        aa_true "Index exists"      [tsearch2::index_exists_p $object_id]
+        aa_true "Index is correct"  [tsearch2::indexed_keywords_p \
+                                        -object_id $object_id\
+                                        -keywords $keywords]
+        #
+        # Update object
+        #
+        set txt "This is just a test object with edited text"
+        set title "Test object updated"
+        set keywords "test foo bar monger"
+        tsearch2::update_index $object_id $txt $title $keywords
+        #
+        # Check if the keywords have been updated in the index
+        #
+        aa_true "Index is correct"  [tsearch2::indexed_keywords_p \
+                                        -object_id $object_id\
+                                        -keywords $keywords]
+        #
+        # Unindex object
+        #
+        aa_log "Unindexing object_id $object_id"
+        tsearch2::unindex $object_id
+        aa_false "Index does not exist anymore" \
+            [tsearch2::index_exists_p $object_id]
+    }
 }
 
 # Local variables:
