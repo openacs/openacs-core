@@ -77,6 +77,21 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    production_safe
+} -procs {
+    tsearch2::driver_info
+} driver_info {
+    Trivial test for driver_info
+} {
+    set expected_driver_info [list package_key tsearch2-driver \
+                                   version 2 \
+                                   automatic_and_queries_p 0 \
+                                   stopwords_p 1]
+    aa_equals "Driver info" [tsearch2::driver_info] $expected_driver_info
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
