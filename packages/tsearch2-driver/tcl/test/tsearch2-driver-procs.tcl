@@ -7,8 +7,10 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case \
-    -procs {
+aa_register_case -cats {
+        api
+        production_safe
+    } -procs {
         tsearch2::build_query
     } build_query {
         build_query test
