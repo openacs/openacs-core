@@ -1,7 +1,7 @@
 namespace eval search {}
 namespace eval search::install {}
 
-ad_proc search::install::after_instantiate {
+ad_proc -private search::install::after_instantiate {
     -package_id:required
 } {
     Package after instantiation callback proc.

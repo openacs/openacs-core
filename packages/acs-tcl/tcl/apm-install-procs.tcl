@@ -1231,7 +1231,7 @@ ad_proc -private apm_package_version_delete {
     db_exec_plsql apm_version_delete {}
 }
 
-ad_proc -public apm_package_version_count {package_key} {
+ad_proc -private apm_package_version_count {package_key} {
 
     @return The number of versions of the indicated package.
 } {

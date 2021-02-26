@@ -9,7 +9,7 @@ ad_library {
 
 namespace eval notification::apm {}
 
-ad_proc -public notification::apm::after_install {} {
+ad_proc -private notification::apm::after_install {} {
     After install callback.  Create service contracts.
 } {
     db_transaction {
@@ -28,7 +28,7 @@ ad_proc -public notification::apm::after_install {} {
     }
 }
 
-ad_proc -public notification::apm::before_uninstall {} {
+ad_proc -private notification::apm::before_uninstall {} {
     Before uninstall callback.  Get rid of service contracts.
 } {
     db_transaction {
@@ -48,7 +48,7 @@ ad_proc -public notification::apm::before_uninstall {} {
     }
 }
 
-ad_proc -public notification::apm::after_upgrade {
+ad_proc -private notification::apm::after_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
 } {
@@ -110,7 +110,7 @@ ad_proc -public notification::apm::after_upgrade {
 }
 
 
-ad_proc -public notification::apm::create_delivery_method_contract {} {
+ad_proc -private notification::apm::create_delivery_method_contract {} {
     Create the delivery method service contract.
 } {
     acs_sc::contract::new_from_spec \
@@ -138,13 +138,13 @@ ad_proc -public notification::apm::create_delivery_method_contract {} {
         }
 }
 
-ad_proc -public notification::apm::delete_delivery_method_contract {} {
+ad_proc -private notification::apm::delete_delivery_method_contract {} {
     Delete the delivery method contract.
 } {
     acs_sc::contract::delete -name "NotificationDeliveryMethod"
 }
 
-ad_proc -public notification::apm::create_email_delivery_method_impl {} {
+ad_proc -private notification::apm::create_email_delivery_method_impl {} {
     Register the service contract implementation and return the impl_id
 
     @return impl_id of the created implementation
@@ -160,7 +160,7 @@ ad_proc -public notification::apm::create_email_delivery_method_impl {} {
     }]
 }
 
-ad_proc -public notification::apm::delete_email_delivery_method_impl {
+ad_proc -private notification::apm::delete_email_delivery_method_impl {
     {-impl_name "notification_email"}
 } {
     Unregister the NotificationDeliveryMethod service contract implementation for email.
@@ -170,7 +170,7 @@ ad_proc -public notification::apm::delete_email_delivery_method_impl {
         -impl_name $impl_name
 }
 
-ad_proc -public notification::apm::register_email_delivery_method {
+ad_proc -private notification::apm::register_email_delivery_method {
     -impl_id:required
 } {
     Register the email delivery method with the notifications service.
@@ -183,7 +183,7 @@ ad_proc -public notification::apm::register_email_delivery_method {
         -pretty_name "Email"
 }
 
-ad_proc -public notification::apm::update_email_delivery_method_impl {
+ad_proc -private notification::apm::update_email_delivery_method_impl {
     -impl_id:required
 } {
     Register the email delivery method with the notifications service.
@@ -197,7 +197,7 @@ ad_proc -public notification::apm::update_email_delivery_method_impl {
         -sc_impl_id $impl_id
 }
 
-ad_proc -public notification::apm::unregister_email_delivery_method {} {
+ad_proc -private notification::apm::unregister_email_delivery_method {} {
     Unregister the service contract delivery method with the notifications service.
 } {
     set delivery_method_id [notification::delivery::get_id -short_name "email"]
@@ -206,7 +206,7 @@ ad_proc -public notification::apm::unregister_email_delivery_method {} {
         -delivery_method_id $delivery_method_id
 }
 
-ad_proc -public notification::apm::create_notification_type_contract {} {
+ad_proc -private notification::apm::create_notification_type_contract {} {
     Create the notification type service contract, used by client packages to define notification
     types specific to the client's object types.
 } {
@@ -238,7 +238,7 @@ ad_proc -public notification::apm::create_notification_type_contract {} {
         }
 }
 
-ad_proc -public notification::apm::delete_notification_type_contract {} {
+ad_proc -private notification::apm::delete_notification_type_contract {} {
     Delete the notification type service contract.
 } {
     acs_sc::contract::delete -name "NotificationType"

@@ -412,7 +412,7 @@ ad_proc -public image::resize {
     return $resize_item_id
 }
 
-ad_proc -public image::get_size_item_id {
+ad_proc -private image::get_size_item_id {
     -item_id
     -size_name
 } {

@@ -6,13 +6,13 @@ ad_library {
     @creation-date 22 January 2003
 }
 
-ad_proc apm_test_callback_file_path {} {
+ad_proc -private apm_test_callback_file_path {} {
     The path of the test file used to check that the callback proc executed ok.
 } {
     return "[acs_package_root_dir acs-tcl]/tcl/test/callback_proc_test_file"
 }
 
-ad_proc apm_test_callback_proc {
+ad_proc -private apm_test_callback_proc {
     {-arg1:required}
     {-arg2:required}
 } {

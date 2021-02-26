@@ -8,7 +8,7 @@ ad_library {
 
 namespace eval navigation::test {}
 
-ad_proc navigation::test::context_bar_multirow_filter {} {
+ad_proc -private navigation::test::context_bar_multirow_filter {} {
     Procedure for the context_bar_multirow test filter
 } {
     aa_run_with_teardown -rollback -test_code {
