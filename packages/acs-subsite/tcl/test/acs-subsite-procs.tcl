@@ -408,6 +408,87 @@ aa_register_case \
         }
     }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    attribute::add
+    attribute::exists_p
+    attribute::delete
+} acs_subsite_attributes {
+    Test different attribute procs
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 26 February 2021
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Create user to be the creator of the 
+        #
+        #
+        # Create new dynamic object_type
+        #
+        set pretty_name "foo_type"
+        set object_type $pretty_name
+        set name_method "${object_type}.name"
+        if {[db_name] eq "PostgreSQL"} {
+            set type_create_sql "select acs_object_type__create_type (
+                                          :object_type,
+                                          :pretty_name,
+                                          :pretty_name,
+                                          'acs_object',
+                                          null,
+                                          null,
+                                          null,
+                                          'f',
+                                          null,
+                                          :name_method,
+                                          't',
+                                          't');"
+        } else {
+            # oracle
+            set type_create_sql "begin
+                acs_object_type.create_type (
+                        object_type => :object_type,
+                        pretty_name => :pretty_name,
+                        pretty_plural => :pretty_name,
+                        supertype => 'acs_object',
+                        abstract_p => 'f',
+                        name_method => :name_method,
+                        create_table_p => 't',
+                        dynamic_p => 't');
+                end;"
+        }
+        aa_log "Create object_type: $object_type"
+        db_exec_plsql type_create $type_create_sql
+        #
+        # Create new attribute
+        #
+        set attribute_name "foo"
+        set attribute_name_plural "foos"
+        set attribute_type "text"
+        set min_n_values 1
+        set max_n_values 1
+        set default_value "fooooo"
+        aa_log "Add new attribute $attribute_name to object_type: $object_type"
+        set attribute_id [attribute::add -min_n_values $min_n_values \
+                                         -max_n_values $max_n_values \
+                                         -default $default_value \
+                                         $object_type \
+                                         $attribute_type \
+                                         $attribute_name \
+                                         $attribute_name_plural]
+        aa_true "New attribute exists" \
+            [attribute::exists_p $object_type $attribute_name]
+        #
+        # Delete attribute
+        #
+        attribute::delete $attribute_id
+        aa_false "Attribute exists after deletion" \
+            [attribute::exists_p $object_type $attribute_name]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
