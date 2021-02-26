@@ -187,10 +187,11 @@ aa_register_case \
 } {
     aa_equals "Unregistered vistior is not in any groups except The Public" \
         [db_string count_rels {
-	    select count(*)
-	    from group_member_map g, acs_magic_objects a
-	    where g.member_id = 0
-	      and g.group_id <> a.object_id
+           select count(*)
+             from group_member_map g,
+                  acs_magic_objects a
+            where g.member_id = 0
+              and g.group_id <> a.object_id
               and a.name = 'the_public'} -default 0] 0
 }
 
@@ -207,7 +208,7 @@ aa_register_case \
 
         util_memoize_flush_pattern
     } acs_subsite_check_composite_group {
-        
+
         Build a 3-level hierarchy of composite groups and check
         memberships. This test case covers the membership and composition
         rel insertion triggers and composability of basic membership and
@@ -423,7 +424,7 @@ aa_register_case -cats {
 } {
     aa_run_with_teardown -rollback -test_code {
         #
-        # Create user to be the creator of the 
+        # Create user to be the creator of the
         #
         #
         # Create new dynamic object_type
