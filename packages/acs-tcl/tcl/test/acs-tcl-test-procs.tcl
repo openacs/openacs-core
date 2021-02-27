@@ -64,6 +64,7 @@ aa_register_case \
         db_dml
 
         apm_attribute_value
+        db_1row
     } \
     apm__test_info_file {
         Test that the procs for interfacing with package info files -
@@ -298,8 +299,9 @@ aa_register_case \
     -procs {
         site_node::get_children
         site_node::get_node_id
-    } \
-    -on_error {
+
+        db_1row
+    } -on_error {
         site_node::get_children returns root node!
     } site_node_get_children {
     Test site_node::get_children
@@ -445,8 +447,11 @@ anybody have any ideas?
 
 aa_register_case \
     -cats {api smoke} \
-    -procs ad_page_contract_filter_invoke \
-    ad_page_contract_filters {
+    -procs {
+        ad_page_contract_filter_invoke
+
+        ad_complain
+    } ad_page_contract_filters {
         Test ad_page_contract_filters
 } {
     set filter integer
@@ -634,183 +639,6 @@ aa_register_case \
 }
 
 
-aa_register_case \
-    -cats {api db smoke} \
-    -procs {
-        db_abort_transaction
-        db_dml
-        db_transaction
-        db_string
-    } \
-    db__transaction {
-        Test db_transaction
-} {
-
-    # create a temp table for testing
-    catch {db_dml remove_table {drop table tmp_db_transaction_test}}
-    db_dml new_table {create table tmp_db_transaction_test (a integer constraint tmp_db_transaction_test_pk primary key, b integer)}
-
-
-    aa_equals "Test we can insert a row in a db_transaction clause" \
-        [catch {db_transaction {db_dml test1 {insert into tmp_db_transaction_test(a,b) values (1,2)}}}] 0
-
-    aa_equals "Verify clean insert worked" \
-        [db_string check1 {select a from tmp_db_transaction_test} -default missing] 1
-
-    # verify the on_error clause is called
-    set error_called 0
-    catch {db_transaction { set foo } on_error {set error_called 1}} errMsg
-    aa_equals "error clause invoked on Tcl error" \
-        $error_called 1
-
-    # Check that the Tcl error propagates up from the code block
-    set error_p [catch {db_transaction { error "BAD CODE"}} errMsg]
-    aa_equals "Tcl error propagates to errMsg from code block" \
-        $errMsg "Transaction aborted: BAD CODE"
-
-    # Check that the Tcl error propagates up from the on_error block
-    set error_p [catch {db_transaction {set foo} on_error { error "BAD CODE"}} errMsg]
-    aa_equals "Tcl error propagates to errMsg from on_error block" \
-        $errMsg "BAD CODE"
-
-
-    # check a dup insert fails and the primary key constraint comes back in the error message.
-    set error_p [catch {db_transaction {db_dml test2 {insert into tmp_db_transaction_test(a,b) values (1,2)}}} errMsg]
-    aa_true "error thrown inserting duplicate row" $error_p
-    aa_true "error message contains constraint violated" [string match -nocase {*tmp_db_transaction_test_pk*} $errMsg]
-
-    # check a sql error calls on_error clause
-    set error_called 0
-    set error_p [catch {db_transaction {db_dml test3 {insert into tmp_db_transaction_test(a,b) values (1,2)}} on_error {set error_called 1}} errMsg]
-    aa_false "no error thrown with on_error clause" $error_p
-    aa_equals "error message empty with on_error clause" \
-        $errMsg {}
-
-    # Check on explicit aborts
-    set error_p [catch {
-        db_transaction {
-            db_dml test4 {
-                insert into tmp_db_transaction_test(a,b) values (2,3)
-            }
-            db_abort_transaction
-        }
-    } errMsg]
-    aa_true "error thrown with explicit abort" $error_p
-    aa_equals "row not inserted with explicit abort" \
-        [db_string check4 {select a from tmp_db_transaction_test where a = 2} -default missing] "missing"
-
-    # Check a failed sql command can do sql in the on_error block
-    set sqlok {}
-    set error_p [catch {
-        db_transaction {
-            db_dml test5 {
-                insert into tmp_db_transaction_test(a,b) values (1,2)
-            }
-        } on_error {
-            set sqlok [db_string check5 {select a from tmp_db_transaction_test where a = 1}]
-        }
-    } errMsg]
-    aa_false "No error thrown doing sql in on_error block" $error_p
-    aa_equals "Query succeeds in on_error block" \
-        $sqlok 1
-
-
-    # Check a failed transactions dml is rolled back in the on_error block
-    set error_p [catch {
-        db_transaction {
-            error "BAD CODE"
-        } on_error {
-            db_dml test6 {
-                insert into tmp_db_transaction_test(a,b) values (3,4)
-            }
-        }
-    } errMsg]
-    aa_false "No error thrown doing insert dml in on_error block" $error_p
-    aa_equals "Insert in on_error block rolled back, code error" \
-        [db_string check6 {select a from tmp_db_transaction_test where a = 3} -default {missing}] missing
-
-
-    # Check a failed transactions dml is rolled back in the on_error block
-    set error_p [catch {
-        db_transaction {
-            db_dml test7 {
-                insert into tmp_db_transaction_test(a,b) values (1,2)
-            }
-        } on_error {
-            db_dml test8 {
-                insert into tmp_db_transaction_test(a,b) values (3,4)
-            }
-        }
-    } errMsg]
-    aa_false "No error thrown doing insert dml in on_error block" $error_p
-    aa_equals "Insert in on_error block rolled back, sql error" \
-        [db_string check8 {select a from tmp_db_transaction_test where a = 3} -default {missing}] missing
-
-
-
-    # check nested db_transactions work properly with clean code
-    set error_p [catch {
-        db_transaction {
-            db_dml test9 {
-                insert into tmp_db_transaction_test(a,b) values (5,6)
-            }
-            db_transaction {
-                db_dml test10 {
-                    insert into tmp_db_transaction_test(a,b) values (6,7)
-                }
-            }
-        }
-    } errMsg]
-    aa_false "No error thrown doing nested db_transactions" $error_p
-    aa_equals "Data inserted in  outer db_transaction" \
-        [db_string check9 {select a from tmp_db_transaction_test where a = 5} -default {missing}] 5
-    aa_equals "Data inserted in nested db_transaction" \
-        [db_string check10 {select a from tmp_db_transaction_test where a = 6} -default {missing}] 6
-
-
-
-    # check error in outer transaction rolls back nested transaction
-    set error_p [catch {
-        db_transaction {
-            db_dml test11 {
-                insert into tmp_db_transaction_test(a,b) values (7,8)
-            }
-            db_transaction {
-                db_dml test12 {
-                    insert into tmp_db_transaction_test(a,b) values (8,9)
-                }
-            }
-            error "BAD CODE"
-        }
-    } errMsg]
-    aa_true "Error thrown doing nested db_transactions" $error_p
-    aa_equals "Data rolled back in outer db_transactions with error in outer" \
-        [db_string check11 {select a from tmp_db_transaction_test where a = 7} -default {missing}] missing
-    aa_equals "Data rolled back in nested db_transactions with error in outer" \
-        [db_string check12 {select a from tmp_db_transaction_test where a = 8} -default {missing}] missing
-
-    # check error in outer transaction rolls back nested transaction
-    set error_p [catch {
-        db_transaction {
-            db_dml test13 {
-                insert into tmp_db_transaction_test(a,b) values (9,10)
-            }
-            db_transaction {
-                db_dml test14 {
-                    insert into tmp_db_transaction_test(a,b) values (10,11)
-                }
-                error "BAD CODE"
-            }
-        }
-    } errMsg]
-    aa_true "Error thrown doing nested db_transactions: $errMsg" $error_p
-    aa_equals "Data rolled back in outer db_transactions with error in nested" \
-        [db_string check13 {select a from tmp_db_transaction_test where a = 9} -default {missing}] missing
-    aa_equals "Data rolled back in nested db_transactions with error in nested" \
-        [db_string check14 {select a from tmp_db_transaction_test where a = 10} -default {missing}] missing
-
-    db_dml drop_table {drop table tmp_db_transaction_test}
-}
 
 
 aa_register_case \
@@ -1156,6 +984,8 @@ aa_register_case \
         acs_user::registered_user_p
         acs_user::approve
         acs_user::ban
+
+        db_1row
     } \
     acs_user__registered_user_p {
         Tests the acs_user::registered_user_p procedure
@@ -1184,6 +1014,8 @@ aa_register_case \
         acs_user::ban
         acs_user::approve
         acs_user::registered_user_p
+
+        db_1row
     } \
     acs_user__ban_approve {
         Tests the acs_user::ban and acs_user::approve procs
