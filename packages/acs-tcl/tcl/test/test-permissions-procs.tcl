@@ -100,6 +100,8 @@ aa_register_case \
         site_node::instantiate_and_mount
         db_nextval
         acs::test::user::create
+
+        db_1row
     } \
     ad_proc_permission_permission_p {
 

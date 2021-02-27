@@ -207,6 +207,8 @@ aa_register_case \
         lang::util::localize
         navigation::test::context_bar_multirow_filter
         site_node::get
+
+        db_1row
     } \
     ad_context_bar_multirow {
 

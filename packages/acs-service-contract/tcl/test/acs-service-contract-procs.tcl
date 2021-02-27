@@ -14,6 +14,8 @@ aa_register_case \
         acs_sc::impl::new_from_spec
         auth::local::authentication::Authenticate
         auth::local::authentication::GetParameters
+
+        apm_mark_files_for_reload
     } \
     acs_sc_impl_new_from_spec {
     Test the acs_sc::impl::new_from_spec proc.

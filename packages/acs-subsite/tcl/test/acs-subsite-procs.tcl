@@ -416,6 +416,8 @@ aa_register_case -cats {
     attribute::add
     attribute::exists_p
     attribute::delete
+
+    db_column_exists
 } acs_subsite_attributes {
     Test different attribute procs
 

@@ -14,6 +14,8 @@ aa_register_case \
         db_name
         db_nextval
         apm_package_id_from_key
+
+        db_1row
     } acs_object_procs_test \
     {
         test the acs_object::* procs

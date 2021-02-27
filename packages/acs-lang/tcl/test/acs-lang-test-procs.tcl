@@ -1075,6 +1075,8 @@ aa_register_case \
         apm_callback_and_log
         apm_interface_add
         apm_version_enable
+        apm_package_install
+        apm_package_delete
     } upgrade {
     Test that a package can be upgraded with new
     catalog files and that the resulting keys and messages

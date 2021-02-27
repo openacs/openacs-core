@@ -10,6 +10,8 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         apm_parameter_register
+
+        db_1row
     } \
     test_apm_parameter__register {
 
@@ -64,7 +66,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {apm_package_instance_new} \
+    -procs {
+        apm_package_instance_new
+        
+        db_1row
+    } \
     test_apm_package_instance__new {
 
         Test the apm_package_instance_new procedure
@@ -98,8 +104,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke production_safe} \
-    -procs apm_version_names_compare \
-    apm_version_names_compare {
+    -procs {
+        apm_version_names_compare
+
+        db_1row
+    } apm_version_names_compare {
 
         Test the apm_version_names_compare proc
 

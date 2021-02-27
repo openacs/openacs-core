@@ -12,6 +12,8 @@ aa_register_case \
         apm_parameter_unregister
         parameter::get
         parameter::get_global_value
+
+        db_1row
     } \
     parameter_register_test {
     Test the registration of a parameter
@@ -55,6 +57,9 @@ aa_register_case \
         parameter::set_value
         db_list_of_lists
         util::random
+
+        db_1row
+        "::xowiki::Package proc is_xowiki_p"
     } \
     parameter__check_procs {
     Test the parameter::* procs

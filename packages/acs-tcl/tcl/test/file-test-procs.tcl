@@ -417,6 +417,8 @@ aa_register_case \
         ad_file
         apm_get_installed_versions
         apm_get_package_files
+
+        apm_ignore_file_p
     } \
     files__page_contracts {
 

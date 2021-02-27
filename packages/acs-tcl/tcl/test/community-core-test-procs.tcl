@@ -12,6 +12,8 @@ aa_register_case \
         party::email
         party::get_by_email
         acs::test::user::create
+
+        db_1row
     } \
     community_cc_procs \
     {
@@ -47,6 +49,8 @@ aa_register_case \
         person::new
         person::person_p
         person::update
+
+        db_1row
     } \
     person_procs_test \
     {
@@ -117,6 +121,8 @@ aa_register_case \
         auth::create_user
         party::get_by_email
         party::update
+
+        db_1row
     } \
     party_procs_test \
     {

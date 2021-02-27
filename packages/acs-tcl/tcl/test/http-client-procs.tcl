@@ -11,6 +11,8 @@ aa_register_case \
         util::http::post
         ad_tmpnam
         ad_url
+
+        db_1row
     } \
     util_http_json_encoding {
         Test that JSON is encoded as expected
