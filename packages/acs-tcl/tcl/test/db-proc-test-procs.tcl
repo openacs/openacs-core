@@ -490,14 +490,14 @@ aa_register_case \
                 set dml "INSERT INTO test_tbl1 (value) values('val1') RETURNING id;"
                 set row_id [db_string noxql $dml]
                 set sql_row_id "SELECT value FROM test_tbl1 where id = :row_id"
-                
+
                 #
                 # Retrieve it once.
                 #
                 set sql "SELECT value FROM test_tbl1 where id = :row_id"
                 set res1 [db_string noxql $sql -default "None"]
                 aa_equals "New row exists before db_multirow call" $res1 "val1"
-                
+
                 #
                 # Run a query returning more than one row in a
                 # "db_foreach" loop, performing as well SQL queries
@@ -510,7 +510,7 @@ aa_register_case \
                 }
                 set res2 [db_string noxql $sql_row_id -default "None"]
                 aa_equals "New row exists after db_foreach" $res2 "val1"
-                
+
                 #
                 # Run a query returning a single row in a
                 # "db_multirow" loop, performing as well SQL queries
@@ -523,7 +523,7 @@ aa_register_case \
                 }
                 set res2 [db_string noxql $sql_row_id -default "None"]
                 aa_equals "New row exists after db_multirow with 1 tuple" $res2 "val1"
-                
+
                 #
                 # Run a query returning more than a row in a
                 # "db_multirow" loop, performing as well SQL queries
@@ -540,10 +540,10 @@ aa_register_case \
                 # If the db_multirow has more than 1 row, it fails.
                 set res2 [db_string noxql $sql_row_id -default "None"]
                 aa_equals "New row exists after db_multirow with 2 tuples" $res2 "val1"
-                
+
             }
             aa_log "Start test section 2"
-            
+
             #
             # Create a multirow woth 0 entries and append a row "manually"
             # For details, see # https://openacs.org/bugtracker/openacs/bug?bug_number=3441
