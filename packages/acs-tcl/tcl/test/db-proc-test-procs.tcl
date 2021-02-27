@@ -607,13 +607,42 @@ aa_register_case -error_level warning -cats {
        }
     }
     foreach {type query} $queries {
-       set status [catch {
-           db_string noxql $query
-       } value copts]
-       aa_equals [list $type {SQL executed successfully?}] $status 0
+        set status [catch {
+            db_string noxql $query
+        } value copts]
+        aa_equals [list $type {SQL executed successfully?}] $status 0
         aa_true [list $type {Value is the null character?}] {$value eq "\x00"}
     }
 }
+
+aa_register_case \
+    -cats {api db smoke} \
+    -error_level "error" \
+    -procs {
+        db_string
+    } \
+    db__string {
+        
+        This tests db_string with various arguments.
+        
+    } {        
+        set r [db_string x {select object_id from acs_objects where object_id = -1}]
+        aa_true "constant query" {$r == -1}
+
+        set x -1
+        set r [db_string x {select object_id from acs_objects where object_id = :x}]
+        aa_true "query with bind variable from environment" {$r == -1}
+
+        set r [db_string x {select object_id from acs_objects where object_id = :a} -bind {a -1}]
+        aa_true "query with provided bind variable from var list" {$r == -1}
+
+        set s [ns_set create binds b -1]
+        set r [db_string x {select object_id from acs_objects where object_id = :b} -bind $s]
+        aa_true "query with provided bind variable from ns_set" {$r == -1}
+        
+        set r [db_string x {select object_id from acs_objects where object_id = -4711} -default -1]
+        aa_true "failing query with default" {$r == -1}
+    }
 
 # Local variables:
 #    mode: tcl
