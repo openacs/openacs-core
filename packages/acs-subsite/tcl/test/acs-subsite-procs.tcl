@@ -424,9 +424,6 @@ aa_register_case -cats {
 } {
     aa_run_with_teardown -rollback -test_code {
         #
-        # Create user to be the creator of the
-        #
-        #
         # Create new dynamic object_type
         #
         set pretty_name "foo_type"
