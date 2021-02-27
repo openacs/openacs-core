@@ -854,6 +854,13 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
     Switch values are placed in corresponding variable names in the calling
     environment.
 
+    GN: This function is a hack to overcome shortcomings of argument
+    parsing at the first place, since the old-style argument parser of
+    OpenACS does NOT support non-positional arguments after the
+    positional ones. Since the advent of XOTcl2, this limitation is
+    gone and just used for installations without XOTcl.... but since
+    XOTcl is required since many years, this is not an issue anymore.
+    
     @param allowed_args a list of allowable switch names.
     @param argv a list of command-line options. May end with <code>args</code> to
         indicate that extra values should be tolerated after switches and placed in
@@ -861,6 +868,8 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
     @error if the list of command-line options is not valid.
 
 } {
+    #ns_log notice "ad_arg_parser '$allowed_args' <$argv>"
+
     if {[lindex $allowed_args end] eq "args"} {
         set varargs_p 1
         set allowed_args [lrange $allowed_args 0 [llength $allowed_args]-2]
