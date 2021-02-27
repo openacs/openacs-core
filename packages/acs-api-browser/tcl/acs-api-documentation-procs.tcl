@@ -360,6 +360,33 @@ ad_proc -deprecated -public api_type_documentation {
     return $out
 }
 
+
+ad_proc -private api_proc_format_switch {xotclArgs flags switch} {
+    if {$xotclArgs} {
+        if {"boolean" in $flags} {
+            set value "<i>on|off</i> "
+        } elseif {"switch" in $flags} {
+            set value ""
+        } else {
+            set value "</i>$switch</i> "
+        }
+        if {"required" in $flags} {
+            set result "-$switch $value"
+        } else {
+            set result "\[ -$switch $value\]"
+        }
+    } else {
+        if {"boolean" in $flags} {
+            set result "\[ -$switch \]"
+        } elseif {"required" in $flags} {
+            set result "-$switch <i>$switch</i>"
+        } else {
+            set result "\[ -$switch <i>$switch</i> \]"
+        }
+    }
+    return $result
+}
+
 ad_proc -public api_proc_documentation {
     -format
     -script:boolean
@@ -397,7 +424,8 @@ ad_proc -public api_proc_documentation {
     array set doc_elements {
         flags ""
         default_values ""
-        switches ""
+        switches0 ""
+        switches1 ""        
         positionals ""
         varargs_p 0
         script ""
@@ -459,29 +487,8 @@ ad_proc -public api_proc_documentation {
     }
 
     lappend command_line $pretty_proc_name
-    foreach switch $doc_elements(switches) {
-        if {$xotclArgs} {
-            if {"boolean" in $flags($switch)} {
-                set value "<i>on|off</i> "
-            } elseif {"switch" in $flags($switch)} {
-                set value ""
-            } else {
-                set value "</i>$switch</i> "
-            }
-            if {"required" in $flags($switch)} {
-                lappend command_line "-$switch $value"
-            } else {
-                lappend command_line "\[ -$switch $value\]"
-            }
-        } else {
-            if {"boolean" in $flags($switch)} {
-                lappend command_line "\[ -$switch \]"
-            } elseif {"required" in $flags($switch)} {
-                lappend command_line "-$switch <i>$switch</i>"
-            } else {
-                lappend command_line "\[ -$switch <i>$switch</i> \]"
-            }
-        }
+    foreach switch $doc_elements(switches0) {
+        lappend command_line [api_proc_format_switch $xotclArgs $flags($switch) $switch]
     }
 
     set counter 0
@@ -495,6 +502,10 @@ ad_proc -public api_proc_documentation {
     if { $doc_elements(varargs_p) } {
         lappend command_line "\[ <i>args</i>... \]"
     }
+    foreach switch $doc_elements(switches1) {
+        lappend command_line [api_proc_format_switch $xotclArgs $flags($switch) $switch]
+    }
+
     append out [util_wrap_list $command_line]
 
     set intro_out ""
@@ -527,9 +538,10 @@ ad_proc -public api_proc_documentation {
         }
     }
 
-    if { [llength $doc_elements(switches)] > 0 } {
+    set switches [concat $doc_elements(switches0) $doc_elements(switches1)]
+    if { [llength $switches] > 0 } {
         append blocks_out "<dt><b>Switches:</b></dt><dd><dl>\n"
-        foreach switch $doc_elements(switches) {
+        foreach switch $switches {
             append blocks_out "<dt><b>-$switch</b>"
             if {"boolean" in $flags($switch)} {
                 append blocks_out " (boolean)"

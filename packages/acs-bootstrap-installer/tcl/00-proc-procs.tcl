@@ -349,7 +349,8 @@ proc ad_proc args {
     #
     #####
 
-    set switches [list]
+    set switches0 {}
+    set switches1 {}    
     set positionals [list]
     set seen_positional_with_default_p 0
     set n_positionals_with_defaults 0
@@ -424,13 +425,19 @@ proc ad_proc args {
         }
 
         if {[string index $arg 0] eq "-"} {
-            if { [llength $positionals] > 0 } {
-                return -code error "Switch -$arg specified after positional parameter"
+            if { [llength $positionals] > 0} {
+                if {$::acs::useNsfProc} {
+                    set trailing_nonpos_p 1
+                } else {
+                    return -code error "Switch -$arg specified after positional parameter"
+                }
+            } else {
+                set trailing_nonpos_p 0
             }
 
             set switch_p 1
             set arg [string range $arg 1 end]
-            lappend switches $arg
+            lappend switches$trailing_nonpos_p $arg
 
             if {"boolean" in $arg_flags} {
                 set default_values(${arg}_p) 0
@@ -478,7 +485,7 @@ proc ad_proc args {
         }
     }
 
-    foreach element { protection deprecated_p warn_p varargs_p arg_list switches positionals } {
+    foreach element { protection deprecated_p warn_p varargs_p arg_list switches0 positionals switches1} {
         set doc_elements($element) [set $element]
     }
     foreach element { default_values flags } {
@@ -572,7 +579,9 @@ proc ad_proc args {
                  "    ::callback::${callback}::contract__arg_parser\n${log_code}$code_block"]
         }
 
-    } elseif { $callback eq "" && [llength $switches] == 0 && !$seen_arg_checkers_p} {
+    } elseif { $callback eq ""
+               && [llength $switches0] + [llength $switches1] == 0
+               && !$seen_arg_checkers_p} {
         #
         # Nothing special is used in the argument definition, create a
         # plain proc

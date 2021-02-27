@@ -585,7 +585,7 @@ ad_proc -public ad_form {
     # persist flags which where specified in previous calls
     # (e.g. these global variables).
     global af_parts
-    set valid_args [dict get [nsv_get api_proc_doc [lindex [info level 0] 0]] switches]
+    set valid_args [dict get [nsv_get api_proc_doc [lindex [info level 0] 0]] switches0]
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
             if { [info exists af_parts(${form_name}__$valid_arg)]

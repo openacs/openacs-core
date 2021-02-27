@@ -248,9 +248,12 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
             #
             # Build the real parameters list
             #
+            ns_log notice "check args for '$p'"
             set real_params [list \
-                {*}[dict get $proc_doc switches] \
-                {*}[dict get $proc_doc positionals]]
+                                 {*}[dict get $proc_doc switches0] \
+                                 {*}[dict get $proc_doc positionals] \
+                                 {*}[dict get $proc_doc switches1] \                                 
+                                ]
             #
             # Check if the last parameter is 'args', as it is not included into
             # 'switches' or 'positionals', and add it to the real parameter list
@@ -265,8 +268,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
                 set param [lindex [string map $ignorechars $param_doc] 0]
                 # Allow boolean parameter name with appended '_p'
                 regsub -- _p$ $param "" param_trim_p
-                if {"$param" ni $real_params && "$param_trim_p" ni $real_params} {
+                if {$param ni $real_params && $param_trim_p ni $real_params} {
                     # Nonexistent @param found!
+                    #ns_log notice "param_docs '$param_doc' real_params '$real_params'"
                     incr param_unknown
                     aa_log_result fail "Unknown parameter '$param' in documentation of proc '$p'"
                 }

@@ -1361,10 +1361,9 @@ ad_proc -public db_string {
     {-subst all}
     statement_name
     sql
-    args
+    -default
+    -bind
 } {
-
-    Usage: <b>db_string</b> <i>statement-name sql</i> [ <tt>-default</tt> <i>default</i> ] [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
     @return the first column of the result of the SQL query <i>sql</i>.  If the query doesn't return a row, returns <i>default</i> or raises an error if no <i>default</i> is provided.
 
@@ -1372,11 +1371,11 @@ ad_proc -public db_string {
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
+    @param default Return value in case the SQL query returns no value
+    @param bind Either an ns_set id, or bind value list 
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_name [db_qd_get_fullname $statement_name]
-
-    ad_arg_parser { default bind } $args
 
     set code {
         db_with_handle -dbn $dbn db {
