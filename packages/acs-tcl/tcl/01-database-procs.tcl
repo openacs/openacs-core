@@ -289,9 +289,9 @@ ad_proc -public db_current_rdbms {} {
 
 ad_proc -public db_known_database_types {} {
     @return a list of three-element lists describing the database engines known
-    to OpenACS.  Each sublist contains the internal database name (used in file
-                                                                   paths, etc), the driver name, and a "pretty name" to be used in selection
-    forms displayed to the user.
+    to OpenACS.  Each sublist contains the internal database name
+    (used in file paths, etc), the driver name, and a "pretty name"
+    to be used in selection forms displayed to the user.
 
     The nsv containing the list is initialized by the bootstrap script and should
     never be referenced directly by user code.
@@ -1071,7 +1071,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 } {
     set start_time [expr {[clock clicks -microseconds]/1000.0}]
 
-    set sql [db_qd_replace_sql $statement_name $pre_sql]
+    set sql [db_qd_replace_sql -ulevel 3 $statement_name $pre_sql]
 
     set unique_id [db_nextval "anon_func_seq"]
 
@@ -1243,7 +1243,7 @@ ad_proc -private db_getrow { db selection } {
 }
 
 
-ad_proc -public db_exec { type db statement_name pre_sql {ulevel 2} args } {
+ad_proc -public db_exec { {-subst all} type db statement_name pre_sql {ulevel 2} args } {
 
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
@@ -1253,19 +1253,11 @@ ad_proc -public db_exec { type db statement_name pre_sql {ulevel 2} args } {
     set start_time [expr {[clock clicks -microseconds]/1000.0}]
     set driverkey [db_driverkey -handle_p 1 $db]
 
-    # Note: Although marked as private, db_exec is in fact called
-    # extensively from several other packages.  We DEFINITELY don't
-    # want to have to change all those procs to pass in the
-    # (redundant) $dbn just so we can use it in the call to
-    # db_driverkey, so db_driverkey MUST support its -handle switch.
-    # --atp@piskorski.com, 2003/04/09 12:13 EDT
-
-    set sql [db_qd_replace_sql $statement_name $pre_sql]
-
-    # insert Tcl variable values (OpenACS - Dan)
-    if {$sql ne $pre_sql } {
-        set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
-    }
+    set sql [db_qd_replace_sql \
+                 -ulevel [expr {$ulevel +1 }] \
+                 -subst $subst \
+                 $statement_name \
+                 $pre_sql]
 
     set errno [catch {
         upvar bind bind
@@ -1366,6 +1358,7 @@ ad_proc -public db_string {
     {-dbn ""}
     -cache_key
     {-cache_pool db_cache_pool}
+    {-subst all}
     statement_name
     sql
     args
@@ -1378,6 +1371,7 @@ ad_proc -public db_string {
     @param dbn The database name to use.  If empty_string, uses the default database.
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_name [db_qd_get_fullname $statement_name]
@@ -1386,7 +1380,7 @@ ad_proc -public db_string {
 
     set code {
         db_with_handle -dbn $dbn db {
-            set selection [db_exec 0or1row $db $full_name $sql]
+            set selection [db_exec -subst $subst 0or1row $db $full_name $sql]
         }
         if { $selection eq ""} {
             if { [info exists default] } {
@@ -1409,6 +1403,7 @@ ad_proc -public db_list {
     {-dbn ""}
     -cache_key
     {-cache_pool db_cache_pool}
+    {-subst all}
     statement_name
     sql
     args
@@ -1422,6 +1417,7 @@ ad_proc -public db_list {
     @param dbn The database name to use.  If empty_string, uses the default database.
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
 } {
     ad_arg_parser { bind } $args
 
@@ -1432,7 +1428,7 @@ ad_proc -public db_list {
 
     set code {
         db_with_handle -dbn $dbn db {
-            set selection [db_exec select $db $full_statement_name $sql]
+            set selection [db_exec -subst $subst select $db $full_statement_name $sql]
             set result [list]
             while { [db_getrow $db $selection] } {
                 lappend result [ns_set value $selection 0]
@@ -1453,6 +1449,7 @@ ad_proc -public db_list_of_lists {
     -cache_key
     {-cache_pool db_cache_pool}
     -with_headers:boolean
+    {-subst all}
     statement_name
     sql
     args
@@ -1477,12 +1474,13 @@ ad_proc -public db_list_of_lists {
     @param dbn The database name to use.  If empty_string, uses the default database.
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
 } {
     ad_arg_parser { bind } $args
 
     set code {
         set result [list]
-        foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn $statement_name $sql]] {
+        foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn -subst $subst $statement_name $sql]] {
             set selection_array [ns_set array $selection]
             if {[llength $result] == 0 && $with_headers_p} {
                 set headers [list]
@@ -1509,6 +1507,7 @@ ad_proc -public db_list_of_lists {
 
 ad_proc -public db_list_of_ns_sets {
     {-dbn ""}
+    {-subst all}
     {-columns_var ""}
     statement_name
     sql
@@ -1533,7 +1532,7 @@ ad_proc -public db_list_of_ns_sets {
 
     db_with_handle -dbn $dbn db {
         set result [list]
-        set selection [db_exec select $db $full_statement_name $sql]
+        set selection [db_exec -subst $subst select $db $full_statement_name $sql]
 
         while { [db_getrow $db $selection] } {
             lappend result [ns_set copy $selection]
@@ -1554,6 +1553,7 @@ ad_proc -public db_list_of_ns_sets {
 
 ad_proc -public db_foreach {
     {-dbn ""}
+    {-subst all}
     statement_name
     sql
     args
@@ -1615,7 +1615,7 @@ ad_proc -public db_foreach {
 
     set bindArg [expr {[info exists bind] ? [list -bind $bind] : ""}]
     set counter 0
-    foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn $statement_name $sql {*}${bindArg}]] {
+    foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn -subst $subst $statement_name $sql {*}${bindArg}]] {
         incr counter
         if { ![info exists column_set] } {
             set set_array [ns_set array $selection]
@@ -1690,6 +1690,7 @@ ad_proc -private db_multirow_helper {} {
         #
         upvar 1 __db_multirow__local_columns local_columns
         set __selections [uplevel 1 [list db_list_of_ns_sets -dbn $dbn \
+                                         -subst $subst \
                                          -columns_var __db_multirow__local_columns \
                                          $full_statement_name $sql]]
 
@@ -1881,6 +1882,7 @@ ad_proc -public db_multirow {
     {-dbn ""}
     -cache_key
     {-cache_pool db_cache_pool}
+    {-subst all}
     var_name
     statement_name
     sql
@@ -1889,6 +1891,7 @@ ad_proc -public db_multirow {
     @param dbn The database name to use.  If empty_string, uses the default database.
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
 
     @param unclobber If set, will cause the proc to not overwrite local variables. Actually, what happens
     is that the local variables will be overwritten, so you can access them within the code block. However,
@@ -2124,15 +2127,23 @@ ad_proc -public db_multirow_group_last_row_p {
 }
 
 
-ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
+ad_proc -public db_dml {
+    {-dbn ""}
+    {-subst all}
+    statement_name
+    sql
+    args
+} {
     Do a DML statement.
 
     <p>
 
-    args can be one of: -clobs, -blobs, -clob_files or -blob_files. See the db-api doc referenced below for more information.
+    args can be one of: -clobs, -blobs, -clob_files or -blob_files.
+    See the db-api doc referenced below for more information.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
-
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
+      
     @see <a href="/doc/db-api-detailed">/doc/db-api-detailed</a>
 } {
     ad_arg_parser { clobs blobs clob_files blob_files bind } $args
@@ -2195,9 +2206,9 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
                 for { set i 1 } { $i <= [llength $lob_argv] } { incr i } {
                     lappend bind_vars $i
                 }
-                eval [list db_exec "${command}_bind" $db $full_statement_name $sql 2 $bind_vars] $lob_argv
+                eval [list db_exec -subst $subst "${command}_bind" $db $full_statement_name $sql 2 $bind_vars] $lob_argv
             } else {
-                eval [list db_exec $command $db $full_statement_name $sql] $lob_argv
+                eval [list db_exec -subst $subst $command $db $full_statement_name $sql] $lob_argv
             }
         }
 
@@ -2223,7 +2234,7 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
             # of this routine.
             # (DanW - Openacs)
 
-            db_exec dml $db $full_statement_name $sql
+            db_exec -subst $subst dml $db $full_statement_name $sql
             if {[uplevel {info exists __lob_id}]} {
                 ns_pg blob_dml_file $db [uplevel {set __lob_id}] $blob_files
                 uplevel {unset __lob_id}
@@ -2233,7 +2244,7 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
     } else {
         # PostgreSQL:
         db_with_handle -dbn $dbn db {
-            db_exec dml $db $full_statement_name $sql
+            db_exec -subst $subst dml $db $full_statement_name $sql
         }
     }
 }
@@ -2245,6 +2256,7 @@ ad_proc -public db_0or1row {
     {-dbn ""}
     -cache_key
     {-cache_pool db_cache_pool}
+    {-subst all}
     statement_name
     sql
     args
@@ -2267,6 +2279,7 @@ ad_proc -public db_0or1row {
     @param dbn The database name to use.  If empty_string, uses the default database.
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
 } {
     ad_arg_parser { bind column_array column_set } $args
 
@@ -2289,7 +2302,7 @@ ad_proc -public db_0or1row {
     if { [info exists cache_key] } {
         set values [ns_cache eval $cache_pool $cache_key {
             db_with_handle -dbn $dbn db {
-                set selection [db_exec 0or1row $db $full_statement_name $sql]
+                set selection [db_exec -subst $subst 0or1row $db $full_statement_name $sql]
             }
 
             set values [list]
@@ -2314,7 +2327,7 @@ ad_proc -public db_0or1row {
         }
     } else {
         db_with_handle -dbn $dbn db {
-            set selection [db_exec 0or1row $db $full_statement_name $sql]
+            set selection [db_exec -subst $subst 0or1row $db $full_statement_name $sql]
         }
     }
 
@@ -2334,7 +2347,7 @@ ad_proc -public db_0or1row {
 }
 
 
-ad_proc -public db_1row { args } {
+ad_proc -public db_1row { {-subst all} args } {
 
     A wrapper for db_0or1row, which produces an error if no rows are returned.
 
@@ -2346,7 +2359,7 @@ ad_proc -public db_1row { args } {
     @return 1 if variables are set.
 
 } {
-    if { ![uplevel ::db_0or1row $args] } {
+    if { ![uplevel ::db_0or1row -subst $subst $args] } {
         return -code error "Query did not return any rows."
     }
 }
@@ -3359,10 +3372,12 @@ ad_proc -public db_blob_get_file {{-dbn ""} statement_name sql args } {
 }
 
 
-ad_proc -public db_blob_get {{-dbn ""} statement_name sql args } {
-    <strong>PostgreSQL only.</strong>
+ad_proc -public db_blob_get {{-dbn ""} {-subst all} statement_name sql args } {
+    PostgreSQL only.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
+
 } {
     ad_arg_parser { bind } $args
     set proc_name {db_blob_get}
@@ -3381,13 +3396,7 @@ ad_proc -public db_blob_get {{-dbn ""} statement_name sql args } {
         oracle {
             set pre_sql $sql
             set full_statement_name [db_qd_get_fullname $statement_name]
-            set sql [db_qd_replace_sql $full_statement_name $pre_sql]
-
-            # insert Tcl variable values (borrowed from Dan W - olah)
-            if {$sql ne $pre_sql } {
-                set sql [uplevel 2 [list subst -nobackslashes $sql]]
-            }
-
+            set sql [db_qd_replace_sql -ulevel 3 -subst $subst $full_statement_name $pre_sql]
             set data [db_string dummy_statement_name $sql]
             return $data
         }
@@ -3450,6 +3459,7 @@ ad_proc -private db_exec_lob {
 
 ad_proc -private db_exec_lob_oracle {
     {-ulevel 2}
+    {-subst all}
     type
     db
     statement_name
@@ -3462,12 +3472,11 @@ ad_proc -private db_exec_lob_oracle {
 } {
     set start_time [expr {[clock clicks -microseconds]/1000.0}]
 
-    set sql [db_qd_replace_sql $statement_name $pre_sql]
-
-    # insert Tcl variable values (OpenACS - Dan)
-    if {$sql ne $pre_sql } {
-        set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
-    }
+    set sql [db_qd_replace_sql \
+                 -ulevel [expr {$ulevel + 1}] \
+                 -subst $subst \
+                 $statement_name \
+                 $pre_sql]
 
     set file_storage_p 0
     upvar $ulevel storage_type storage_type
@@ -3570,6 +3579,7 @@ ad_proc -private db_exec_lob_oracle {
 
 ad_proc -private db_exec_lob_postgresql {
     {-ulevel 2}
+    {-subst all}
     type
     db
     statement_name
@@ -3586,12 +3596,12 @@ ad_proc -private db_exec_lob_postgresql {
     set start_time [expr {[clock clicks -microseconds]/1000.0}]
 
     # Query Dispatcher (OpenACS - ben)
-    set sql [db_qd_replace_sql $statement_name $pre_sql]
+    set sql [db_qd_replace_sql \
+                 -ulevel [expr {$ulevel + 1}] \
+                 -subst $subst \
+                 $statement_name \
+                 $pre_sql]
 
-    # insert Tcl variable values (OpenACS - Dan)
-    if {$sql ne $pre_sql } {
-        set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
-    }
     # create a function definition statement for the inline code
     # binding is emulated in tcl. (OpenACS - Dan)
 

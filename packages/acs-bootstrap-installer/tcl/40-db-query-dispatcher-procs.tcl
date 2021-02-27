@@ -443,15 +443,31 @@ ad_proc -public db_qd_fetch {fullquery_name {rdbms {}}} {
     return [db_qd_internal_get_cache $fullquery_name]
 }
 
-ad_proc -public db_qd_replace_sql {statement_name sql} {
+ad_proc -public db_qd_replace_sql {-ulevel {-subst all} statement_name sql} {
     @return sql for statement_name (defaulting to sql if not found)
 } {
     set fullquery [db_qd_fetch $statement_name]
 
     if {$fullquery ne ""} {
         set sql [db_fullquery_get_querytext $fullquery]
+        
+        if {[info exists ulevel]} {
+            if {$subst ne "none"} {
+                if {$subst eq "all"} {
+                    set flags -nobackslashes
+                } elseif {$subst eq "vars"} {
+                    set flags "-nobackslashes -nocommands"
+                } elseif {$subst eq "commands"} {
+                    set flags "-nobackslashes -novars"                
+                } else {
+                    ns_log warning "invalid value passed to '-subst': $subst. possible: all, none, vars, commands"
+                    set flags -nobackslashes
+                }
+                set sql [uplevel $ulevel [list subst {*}$flags $sql]]
+            }
+        }
     } else {
-        db_qd_log Debug "NO FULLQUERY FOR $statement_name --> using default SQL"
+        #db_qd_log Debug "NO FULLQUERY FOR $statement_name --> using default SQL"
         if { $sql eq "" } {
             # The default SQL is empty, that implies a bug somewhere in the code.
             error "No fullquery for $statement_name and default SQL empty - query for statement missing"
