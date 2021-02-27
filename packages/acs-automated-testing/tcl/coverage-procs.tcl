@@ -130,6 +130,26 @@ ad_proc -public aa::coverage::proc_coverage {
     }
     return "procs $procs covered $procs_covered coverage [format {%0.2f} $coverage]"
 }
+ad_proc -private aa::percentage_to_color {
+    percentage
+} {
+    Calculates a color from the percentage. 0 gives red, 100 gives
+    green.
+
+    @author Gustaf neumann
+
+    @param percentage A value between 0 and 100.0
+    @return color code in hex (three double-digit figures)
+} {
+    set red 255
+    set green 255
+    if {$percentage >= 0 && $percentage <= 50} {
+        set green [expr {510 * $percentage/100.0}]
+    } elseif {$percentage > 50.0 && $percentage <= 100.0} {
+        set red [expr {-510 * $percentage/100.0 + 510}]
+    }
+    return [format %.2x [expr {int($red)}]][format %.2x [expr {int($green)}]]00
+}
 
 ad_proc -public aa::coverage::proc_coverage_level {
     coverage
