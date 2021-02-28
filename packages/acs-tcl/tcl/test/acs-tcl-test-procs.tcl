@@ -449,47 +449,58 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         ad_page_contract_filter_invoke
-
+        ad_page_contract_filter_proc_integer
+        ad_page_contract_filter_proc_naturalnum
+        ad_page_contract_filter_proc_float
+        ad_page_contract_filter_proc_negative_float
+        ad_page_contract_filter_proc_boolean
+        ad_page_contract_filter_proc_word
+        ad_page_contract_filter_proc_token
+        ad_page_contract_filter_proc_sql_identifier
+        ad_page_contract_filter_proc_email
+        ad_page_contract_filter_proc_localurl        
+        ad_page_contract_filter_proc_html
+        ad_page_contract_filter_proc_nohtml
+        
         ad_complain
+        ad_page_contract_filter_proc
+        ad_page_contract_set_validation_passed
+        util_complete_url_p
+        util::external_url_p
     } ad_page_contract_filters {
         Test ad_page_contract_filters
-} {
-    set filter integer
-    foreach { value result } { "1" 1 "a" 0 "1.2" 0 "'" 0 } {
-        if { $result } {
-            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        } else {
-            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        }
-    }
+    } {
+        dict set cases integer { "1" 1 "a" 0 "1.2" 0 "'" 0 }
+        dict set cases naturalnum { "1" 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 }
+        dict set cases float { "1" 1 "1.0" 1 "a" 0 "-1.0" 1 "1,0" 0 }
+        dict set cases negative_float { "1" 1 "-1.0" 1 "-a" 0 "-1,0" 0 }
 
-    set filter naturalnum
-    foreach { value result } { "1" 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 } {
-        if { $result } {
-            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        } else {
-            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        dict set cases boolean {
+            "1" 1 "-1" 0 "a" 0 "0" 1 "true" 1 "f" 1 "TRUE" 1 "ok" 0 "nok" 0
         }
-    }
 
-    set filter html
-    foreach { value result } { "'" 1 "<p>" 1 } {
-        if { $result } {
-            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        } else {
-            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        }
-    }
+        dict set cases word {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
+        dict set cases token {red 1 " " 1 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1}
 
-    set filter nohtml
-    foreach { value result } { "a" 1 "<p>" 0 } {
-        if { $result } {
-            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        } else {
-            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        dict set cases sql_identifier  {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
+        dict set cases email { {philip@mit.edu} 1 {Philip Greenspun <philip@mit.edu>} 0 }
+        dict set cases localurl { . 1 ./index 1 https://o-p-e-n-a-c-s.org/ 0 }
+
+        dict set cases html { "'" 1 "<p>" 1 }
+        dict set cases nohtml { "a" 1 "<p>" 0 } 
+
+        foreach filter [dict keys $cases] {
+            foreach { value result } [dict get $cases $filter] {
+                if { $result } {
+                    aa_true "'[ns_quotehtml $value]' is $filter" \
+                        [ad_page_contract_filter_invoke $filter dummy value]
+                } else {
+                    aa_false "'[ns_quotehtml $value]' is NOT $filter" \
+                        [ad_page_contract_filter_invoke $filter dummy value]
+                }
+            }
         }
     }
-}
 
 aa_register_case \
     -cats {api smoke} \
