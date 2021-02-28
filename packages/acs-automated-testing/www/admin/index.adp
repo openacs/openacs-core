@@ -1,5 +1,6 @@
 <master>
-<property name="doc(title)">@title;literal@</property>
+<property name="&doc">doc</property>
+<property name="context">@context;literal@</property>
   <table class="main-table">
     <tr>
       <th class="main-table-header">Category</th>

@@ -10,7 +10,6 @@ ad_page_contract {
     {populator:boolean 0}
 } -properties {
     context_bar:onevalue
-    title:onevalue
     server_name:onevalue
     tests:multirow
     packages:multirow
@@ -20,18 +19,22 @@ ad_page_contract {
     view_by:onevalue
     quiet:onevalue
 }
-set title "System test cases"
+set doc(title) "System test cases"
+set context ""
+
 set return_url [ad_return_url]
 
 template::head::add_css -href /resources/acs-automated-testing/tests.css
 
 if {$by_package_key ne ""} {
-    append title " for package $by_package_key"
+    append  doc(title)  " for package $by_package_key"
+    set context "Package $by_package_key"
 }
 if {$by_category ne ""} {
-    append title ", category $by_category"
+    append  doc(title)  ", category $by_category"
+    set context "Category $by_category"
 } else {
-    append title ", all categories"
+    append  doc(title)  ", all categories"
 }
 
 # Include all enabled packages in the package view list

@@ -1,7 +1,7 @@
 <master>
-  <property name="doc(title)">@title;noquote@ (@package_key@)</property>
+  <property name="&doc">doc</property>
   <property name="context">@context;literal@</property>
-  <h1>@title@</h1>
+  <h1>@doc.title@</h1>
   <div class="description">
     <dl>
       <dt class="description-list">Description:</dt><dd>@testcase_desc@</dd>
@@ -36,24 +36,22 @@
     </dl>
   </div>
 
+  <dl>
+      <dt class="description-list">Actions:</dt><dd>
+  <ul>
+  <li>
   <if @showsource;literal@ false>
-    [<a href="testcase?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;showsource=1&amp;quiet=@quiet@">
-      show testcase source
-    </a>]
+      <a href="testcase?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;showsource=1&amp;quiet=@quiet@">
+      Display definition of this test case</a>
   </if>
   <else>
-    [<a href="testcase?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;showsource=0&amp;quiet=@quiet@">
-      hide testcase source
-    </a>]
+      <a href="testcase?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;showsource=0&amp;quiet=@quiet@">
+      Hide definition of this test case</a>
   </else>
-
-  <ul>
+  </li>
     <li><a href="@rerun_url@">Rerun this test case</a></li>
-    <li><a href="@resource_file_url@">Resource test definition file</a></li>
-    <li><a href="@return_url@">Back to testcase list</a></li>
-  </ul>
-
-  <p>
+    <li><a href="@return_url@">List all test cases of package @package_key@</a></li>
+    <li>
     <strong>Results</strong>
     [<if @quiet;literal@ true>
       <strong> quiet </strong> |
@@ -62,7 +60,10 @@
       <a href="@quiet_url@">quiet</a>
       | <strong> verbose </strong>
     </else>]
-  </p>
+    </li>
+  </ul>
+  </dd>
+  </dl>
 
   <table>
     <tr>
@@ -130,6 +131,5 @@
 
   <ul>
     <li><a href="@rerun_url@">Rerun this test case</a></li>
-    <li><a href="@resource_file_url@">Resource test definition file</a></li>
-    <li><a href="@return_url@">Back to testcase list</a></li>
+    <li><a href="@return_url@">List all test cases of package @package_key@</a></li>
   </ul>

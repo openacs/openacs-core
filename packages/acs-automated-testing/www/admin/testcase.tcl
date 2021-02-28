@@ -7,7 +7,6 @@ ad_page_contract {
     {quiet:boolean 1}
     {return_url:localurl ""}
 } -properties {
-    title:onevalue
     context_bar:onevalue
     tests:multirow
     showsource:onevalue
@@ -18,8 +17,10 @@ ad_page_contract {
     quiet:onevalue
     fails:onevalue
 }
-set title "Test case $testcase_id"
-set context [list $title]
+set doc(title) "Test case $testcase_id"
+set context [list \
+                 [list "./index?by_package_key=$package_key&view_by=testcase" "Package $package_key"] \
+                 "Test case"]
 
 template::head::add_css -href /resources/acs-automated-testing/tests.css
 
@@ -129,11 +130,6 @@ if {[llength $testcase_bodys] == 0} {
         incr body_count
     }
 }
-
-set resource_file_url [export_vars -base init-file-resource {
-    {return_url [ad_return_url]}
-    {absolute_file_path $testcase_file}
-}]
 
 set rerun_url [export_vars -base rerun {
     testcase_id package_key quiet {return_url [ad_return_url]}
