@@ -23,15 +23,15 @@ if { $xml_report_dir ne "" } {
             aa_test::parse_test_file -path $test_path -array test
             array set testcase_failure $test(testcase_failure)
             set service(num_errors) [array size testcase_failure]
-        } 
-	
-	set admin_login_url [export_vars -base "$service(url)/register/auto-login" {{email {$service(adminemail)}} {password {$service(adminpassword)}}}]
+        }
+
+        set admin_login_url [export_vars -base "$service(url)/register/auto-login" {{email {$service(adminemail)}} {password {$service(adminpassword)}}}]
 
         multirow append servers \
             $service(path) \
-	    $admin_login_url \
+            $admin_login_url \
             [export_vars -base server { path }] \
-	    $service(url) \
+            $service(url) \
             $service(name) \
             $service(description) \
             $service(install_end_timestamp) \

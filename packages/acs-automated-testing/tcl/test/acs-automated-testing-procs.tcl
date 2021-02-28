@@ -10,7 +10,7 @@ aa_register_case \
     -procs {
         aa_equals
         aa_false
-        aa_log        
+        aa_log
         aa_run_with_teardown
         aa_section
         aa_true
@@ -195,7 +195,7 @@ aa_register_case \
         aa_equals
 
         aa_runseries
-        aa_register_case                
+        aa_register_case
     } \
     aa__coverage_proc_coverage_level {
 
@@ -225,7 +225,7 @@ aa_register_case \
     } {
         dict set cases aa_test_category { stress 1 all 0 security_risk 1 }
         dict set cases aa_test_view_by {testcase 1 package 1 stress 0 " " 0}
-        
+
         foreach filter [dict keys $cases] {
             foreach { value result } [dict get $cases $filter] {
                 if { $result } {

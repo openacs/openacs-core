@@ -38,7 +38,7 @@ if { $package_key eq "" } {
     set title "Test coverage of $package_key"
     set context [list \
                      [list "./index?by_package_key=$package_key&view_by=testcase" "Package $package_key"] \
-                     "Test coverage"]    
+                     "Test coverage"]
     set proc_list     [aa::coverage::proc_list -package_key $package_key]
     set test_coverage [aa::coverage::proc_coverage -package_key $package_key]
     set list_elements [list]

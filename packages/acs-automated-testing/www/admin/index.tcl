@@ -106,7 +106,7 @@ if {$view_by eq "package"} {
     set global_test_coverage_percent    [dict get $global_test_coverage coverage]
     set global_test_coverage_level      [aa::coverage::proc_coverage_level $global_test_coverage_percent]
     set global_test_coverage_color      [aa::percentage_to_color $global_test_coverage_percent]
-    
+
     #
     # Prepare the template data for a view_by "package"
     #

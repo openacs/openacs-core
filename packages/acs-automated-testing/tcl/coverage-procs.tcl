@@ -130,6 +130,7 @@ ad_proc -public aa::coverage::proc_coverage {
     }
     return "procs $procs covered $procs_covered coverage [format {%0.2f} $coverage]"
 }
+
 ad_proc -private aa::percentage_to_color {
     percentage
 } {
