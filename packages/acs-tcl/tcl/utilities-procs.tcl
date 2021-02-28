@@ -3611,6 +3611,9 @@ ad_proc util::external_url_p { url } {
         # more valid url pairs with host_node_map
 
         foreach location $locations_list {
+            if {$location eq ""} {
+                continue
+            }
             set len [string length $location]
             #ns_log notice "util::external_url_p location match <$location/*> with <$url> sub <[string range $url 0 $len-1]>"
             if {[string range $url 0 $len-1] eq $location} {
