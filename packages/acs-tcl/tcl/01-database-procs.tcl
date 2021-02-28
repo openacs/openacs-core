@@ -319,11 +319,11 @@ ad_proc -deprecated db_null {} {
 }
 
 ad_proc -deprecated db_quote { string } {
-    
+
     Quotes a string value to be placed in a SQL statement.  Use the
     built-in ns_dbquotevalue instead, which cares also about the
     surrounding quotes.
-    
+
     @see ns_dbquotevalue
 } {
     regsub -all -- {'} "$string" {''} result
@@ -843,7 +843,7 @@ ad_proc -public db_exec_plsql {
     {-dbn ""}
     statement_name
     sql
-    args
+    -bind
 } {
 
     <strong>Oracle:</strong>
@@ -966,14 +966,9 @@ ad_proc -public db_exec_plsql {
 
     @see <a href="/doc/db-api-detailed">/doc/db-api-detailed</a>
 } {
-    ad_arg_parser { bind_output bind } $args
 
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
-
-    if { [info exists bind_output] } {
-        return -code error "the -bind_output switch is not currently supported"
-    }
 
     set driverkey [db_driverkey $dbn]
     switch -- $driverkey {
@@ -1006,19 +1001,10 @@ ad_proc -public db_exec_plsql {
         # the Postgres version of OpenACS requires the caller to perform a
         # select query that returns the value of the function.
 
-        # We are no longer calling db_string, which screws up the bind
-        # variable stuff otherwise because of calling environments. (ben)
-
-        ad_arg_parser { bind_output bind } $args
-
         # I'm not happy about having to get the fullname here, but right now
         # I can't figure out a cleaner way to do it. I will have to
         # revisit this ASAP. (ben)
         set full_statement_name [db_qd_get_fullname $statement_name]
-
-        if { [info exists bind_output] } {
-            return -code error "the -bind_output switch is not currently supported"
-        }
 
         db_with_handle -dbn $dbn db {
             # plsql calls that are simple selects bypass the plpgsql
@@ -1372,7 +1358,7 @@ ad_proc -public db_string {
     @param cache_pool Override the default db_cache_pool
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
     @param default Return value in case the SQL query returns no value
-    @param bind Either an ns_set id, or bind value list 
+    @param bind bind variables, passed either as an ns_set id, or via bind value list
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_name [db_qd_get_fullname $statement_name]
@@ -1405,10 +1391,8 @@ ad_proc -public db_list {
     {-subst all}
     statement_name
     sql
-    args
+    -bind
 } {
-
-    Usage: <b>db_list</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
     @return a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>.
     If <tt>sql</tt> doesn't return any rows, returns an empty list.
@@ -1417,8 +1401,8 @@ ad_proc -public db_list {
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
+    @param bind bind variables, passed either as an ns_set id, or via bind value list
 } {
-    ad_arg_parser { bind } $args
 
     # Query Dispatcher (OpenACS - SDW)
     set full_statement_name [db_qd_get_fullname $statement_name]
@@ -1451,10 +1435,8 @@ ad_proc -public db_list_of_lists {
     {-subst all}
     statement_name
     sql
-    args
+    -bind
 } {
-
-    Usage: <b>db_list_of_lists</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
 
     @param with_headers when specified, first line of returned list of
     lists will always be the list of column names as reported by the
@@ -1474,12 +1456,12 @@ ad_proc -public db_list_of_lists {
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
+    @param bind bind variables, passed either as an ns_set id, or via bind value list
 } {
-    ad_arg_parser { bind } $args
-
     set code {
         set result [list]
-        foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn -subst $subst $statement_name $sql]] {
+        set bindArg [expr {[info exists bind] ? [list -bind $bind] : ""}]
+        foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn -subst $subst $statement_name $sql {*}$bindArg]] {
             set selection_array [ns_set array $selection]
             if {[llength $result] == 0 && $with_headers_p} {
                 set headers [list]
@@ -1510,23 +1492,19 @@ ad_proc -public db_list_of_ns_sets {
     {-columns_var ""}
     statement_name
     sql
-    args
+    -bind
 } {
-    Usage: <b>db_list_of_ns_sets</b> <i>statement-name sql</i> [ <tt>-bind</tt> <i>bind_set_id</i> | <tt>-bind</tt> <i>bind_value_list</i> ]
-
     @return a list of ns_sets with the values of each column of each row
     returned by the SQL query specified.
 
     @param statement_name The name of the query.
     @param sql The SQL to be executed.
-    @param args Any additional arguments.
+    @param bind bind variables, passed either as an ns_set id, or via bind value list
 
     @return list of ns_sets, one per each row return by the SQL query
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    ad_arg_parser { bind } $args
-
     set full_statement_name [db_qd_get_fullname $statement_name]
 
     db_with_handle -dbn $dbn db {
@@ -2142,7 +2120,7 @@ ad_proc -public db_dml {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
-      
+
     @see <a href="/doc/db-api-detailed">/doc/db-api-detailed</a>
 } {
     ad_arg_parser { clobs blobs clob_files blob_files bind } $args
@@ -2258,30 +2236,29 @@ ad_proc -public db_0or1row {
     {-subst all}
     statement_name
     sql
-    args
+    -bind
+    -column_array
+    -column_set
 } {
 
-    Usage:
-    <blockquote>
-    db_0or1row <i>statement-name sql</i> [ -bind <i>bind_set_id</i> | -bind <i>bind_value_list</i> ] \
-        [ -column_array <i>array_name</i> | -column_set <i>set_name</i> ]
-
-    </blockquote>
 
     <p>Performs the SQL query sql. If a row is returned, sets variables
     to column values (or a set or array populated if -column_array
                       or column_set is specified) and returns 1. If no rows are returned,
     returns 0.
 
-    @return 1 if variables are set, 0 if no rows are returned.  If more than one row is returned, throws an error.
+    @return 1 if variables are set, 0 if no rows are returned.
+              If more than one row is returned, throws an error.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
-} {
-    ad_arg_parser { bind column_array column_set } $args
+    @param bind bind variables, passed either as an ns_set id, or via bind value list
+    @param column_array array to be populated with values
+    @param column_set ns_set to tbe populated with values
 
+} {
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
 
