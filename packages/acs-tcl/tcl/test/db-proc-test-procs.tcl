@@ -655,7 +655,7 @@ aa_register_case \
     } \
     db__list_variants {
 
-        This tests db_list with various arguments.
+        This tests db_list-variants with various arguments.
 
     } {
         foreach cmd {db_list db_list_of_lists} {
@@ -674,6 +674,108 @@ aa_register_case \
             aa_true "$cmd query with provided bind variable from ns_set" {$r == -1}
         }
 
+    }
+
+aa_register_case \
+    -cats {api db smoke} \
+    -error_level "error" \
+    -procs {
+        db_0or1row
+
+        db_with_handle
+        db_exec
+    } \
+    db__0or1row {
+
+        This tests db_0or1row with various arguments.
+
+    } {
+        set cmd db_0or1row
+
+        set r [$cmd x {select object_id from acs_objects where object_id = -1}]
+        aa_true "$cmd constant query" {$r == 1}
+        aa_true "$cmd returns variable" {[info exists object_id]}
+        unset object_id
+
+        set r [$cmd x {select object_id from acs_objects where object_id = -4711}]
+        aa_true "$cmd constant query" {$r == 0}
+        aa_false "$cmd returns variable" {[info exists object_id]}
+
+        set x -1
+        set r [$cmd x {select object_id from acs_objects where object_id = :x}]
+        aa_true "$cmd query with bind variable from environment" {$r == 1}
+        unset object_id
+
+        set r [$cmd x {select object_id from acs_objects where object_id = :a} -bind {a -1}]
+        aa_true "$cmd query with provided bind variable from var list" {$r == 1}
+        unset object_id
+
+        set s [ns_set create binds b -1]
+        set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s]
+        aa_true "$cmd query with provided bind variable from ns_set" {$r == 1}
+        unset object_id
+
+        set s [ns_set create binds b -1]
+        set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s -column_array arr]
+        aa_true "$cmd query with provided bind variable from ns_set" {$r == 1}
+        aa_true "$cmd returns column_array" {[array exists arr]}
+        aa_equals "$cmd returns column_array value" [array get arr] "object_id -1"
+        aa_false "$cmd returns variable" {[info exists object_id]}
+        array unset arr
+
+        set s [ns_set create binds b -1]
+        set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s -column_set n]
+        aa_true "$cmd query with provided bind variable from ns_set" {$r == 1}
+        aa_equals "$cmd returns column_ns_set value" [ns_set array $n] "object_id -1"
+        aa_false "$cmd returns variable" {[info exists object_id]}
+    }
+
+aa_register_case \
+    -cats {api db smoke} \
+    -error_level "error" \
+    -procs {
+        db_1row
+
+        db_0or1row
+        db_with_handle
+        db_exec
+    } \
+    db__1row {
+
+        This tests db_1row with various arguments.
+
+    } {
+        set cmd db_1row
+
+        set r [$cmd x {select object_id from acs_objects where object_id = -1}]
+        aa_true "$cmd returns variable" {[info exists object_id]}
+        unset object_id
+
+        set x -1
+        set r [$cmd x {select object_id from acs_objects where object_id = :x}]
+        aa_true "$cmd returns variable bind variable from environment" {[info exists object_id]}
+        unset object_id
+
+        set r [$cmd x {select object_id from acs_objects where object_id = :a} -bind {a -1}]
+        aa_true "$cmd with bind variable from var list returns variable" {[info exists object_id]}
+        unset object_id
+
+        set s [ns_set create binds b -1]
+        set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s]
+        aa_true "$cmd with provided bind variable from ns_set returns variable" {[info exists object_id]}
+        unset object_id
+
+        set s [ns_set create binds b -1]
+        set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s -column_array arr]
+        aa_true "$cmd returns column_array" {[array exists arr]}
+        aa_equals "$cmd returns column_array value" [array get arr] "object_id -1"
+        aa_false "$cmd returns variable" {[info exists object_id]}
+        array unset arr
+
+        set s [ns_set create binds b -1]
+        set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s -column_set n]
+        aa_equals "$cmd returns column_ns_set value" [ns_set array $n] "object_id -1"
+        aa_false "$cmd returns variable" {[info exists object_id]}
     }
 
 # Local variables:
