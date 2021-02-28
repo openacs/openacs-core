@@ -622,9 +622,9 @@ aa_register_case \
         db_string
     } \
     db__string {
-        
+
         This tests db_string with various arguments.
-        
+
     } {
         set r [db_string x {select object_id from acs_objects where object_id = -1}]
         aa_true "constant query" {$r == -1}
@@ -639,7 +639,7 @@ aa_register_case \
         set s [ns_set create binds b -1]
         set r [db_string x {select object_id from acs_objects where object_id = :b} -bind $s]
         aa_true "query with provided bind variable from ns_set" {$r == -1}
-        
+
         set r [db_string x {select object_id from acs_objects where object_id = -4711} -default -1]
         aa_true "failing query with default" {$r == -1}
     }
@@ -650,13 +650,13 @@ aa_register_case \
     -procs {
         db_list
         db_list_of_lists
-        
+
         db_list_of_ns_sets
     } \
     db__list_variants {
-        
+
         This tests db_list with various arguments.
-        
+
     } {
         foreach cmd {db_list db_list_of_lists} {
             set r [$cmd x {select object_id from acs_objects where object_id = -1}]
@@ -665,15 +665,15 @@ aa_register_case \
             set x -1
             set r [$cmd x {select object_id from acs_objects where object_id = :x}]
             aa_true "$cmd query with bind variable from environment" {$r == -1}
-            
+
             set r [$cmd x {select object_id from acs_objects where object_id = :a} -bind {a -1}]
             aa_true "$cmd query with provided bind variable from var list" {$r == -1}
-            
+
             set s [ns_set create binds b -1]
             set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s]
             aa_true "$cmd query with provided bind variable from ns_set" {$r == -1}
         }
-        
+
     }
 
 # Local variables:
