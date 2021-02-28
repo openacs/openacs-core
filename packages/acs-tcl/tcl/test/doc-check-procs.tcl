@@ -248,7 +248,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
             #
             # Build the real parameters list
             #
-            ns_log notice "check args for '$p'"
+            #ns_log notice "check args for '$p'"
             set real_params [list \
                                  {*}[dict get $proc_doc switches0] \
                                  {*}[dict get $proc_doc positionals] \
