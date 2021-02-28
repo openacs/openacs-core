@@ -143,6 +143,7 @@ if {$return_url eq ""} {
 
 set quiet_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=1"
 set verbose_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=0"
+set coverage_url [export_vars -base proc-coverage {package_key}]
 
 ad_return_template
 

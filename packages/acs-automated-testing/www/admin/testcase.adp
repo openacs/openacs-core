@@ -51,6 +51,7 @@
   </li>
     <li><a href="@rerun_url@">Rerun this test case</a></li>
     <li><a href="@return_url@">List all test cases of package @package_key@</a></li>
+    <li><a href="@coverage_url@">Coverage of package @package_key@</a></li>    
     <li>
     <strong>Results</strong>
     [<if @quiet;literal@ true>
@@ -132,4 +133,5 @@
   <ul>
     <li><a href="@rerun_url@">Rerun this test case</a></li>
     <li><a href="@return_url@">List all test cases of package @package_key@</a></li>
+    <li><a href="@coverage_url@">Coverage of package @package_key@</a></li>    
   </ul>

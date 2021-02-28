@@ -82,7 +82,6 @@
 
     </tr>
   </table>
-
   <if @view_by@ eq "package">
     <blockquote>
       <div><strong>&raquo;</strong>
@@ -96,6 +95,10 @@
         <div>
           <strong>&raquo;</strong>
           <a href="@record_url@"> Record a test</a>
+        </div>
+        <div>
+          <strong>&raquo;</strong>
+          <a href="@coverage_url@">Coverage of package @by_package_key@</a>
         </div>
       </if>
     </blockquote>
@@ -184,6 +187,10 @@
           <strong>&raquo;</strong>
           <a href="@record_url@"> Record a test</a>
         </div>
+        <div>
+          <strong>&raquo;</strong>
+          <a href="@coverage_url@">Coverage of package @by_package_key@</a>
+        </div>
       </if>
     </blockquote>
 </if>
@@ -201,6 +208,10 @@
          <strong>&raquo;</strong>
          <a href="@record_url@"> Record a test</a>
        </div>
+       <div>
+          <strong>&raquo;</strong>
+          <a href="@coverage_url@">Coverage of package @by_package_key@</a>
+       </div>       
      </if>
    </blockquote>
     <table width="100%">
@@ -267,7 +278,11 @@
          <strong>&raquo;</strong>
          <a href="@record_url@"> Record a test</a>
        </div>
-     </if>
+       <div>
+         <strong>&raquo;</strong>
+         <a href="@coverage_url@">Coverage of package @by_package_key@</a>
+       </div>
+      </if>
    </blockquote>
   </else>
 

@@ -23,6 +23,7 @@ set doc(title) "System test cases"
 set context ""
 
 set return_url [ad_return_url]
+set coverage_url [export_vars -base proc-coverage {{package_key $by_package_key}}]
 
 template::head::add_css -href /resources/acs-automated-testing/tests.css
 

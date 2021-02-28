@@ -16,9 +16,10 @@ if { $package_key eq "" } {
     #
     # System wide proc test coverage
     #
-    set title "Global proc test coverage"
-    set proc_list       [aa::coverage::proc_list]
-    set test_coverage   [aa::coverage::proc_coverage]
+    set title "Global Test coverage"
+    set context       [list $title]
+    set proc_list     [aa::coverage::proc_list]
+    set test_coverage [aa::coverage::proc_coverage]
     set list_elements {
         package_key {
             label "Package"
@@ -34,17 +35,19 @@ if { $package_key eq "" } {
     #
     # Proc test coverage for a particular package
     #
-    set title "Proc test coverage of $package_key"
-    set proc_list       [aa::coverage::proc_list -package_key $package_key]
-    set test_coverage   [aa::coverage::proc_coverage -package_key $package_key]
-    set list_elements   [list]
+    set title "Test coverage of $package_key"
+    set context [list \
+                     [list "./index?by_package_key=$package_key&view_by=testcase" "Package $package_key"] \
+                     "Test coverage"]    
+    set proc_list     [aa::coverage::proc_list -package_key $package_key]
+    set test_coverage [aa::coverage::proc_coverage -package_key $package_key]
+    set list_elements [list]
     set orderby_elements {
         default_value proc_name,asc
     }
 }
 
 # Set context and coverage vars
-set context [list $title]
 set test_coverage_percent   [dict get $test_coverage coverage]
 set test_coverage_procs_nr  [dict get $test_coverage procs]
 set test_coverage_procs_cv  [dict get $test_coverage covered]
