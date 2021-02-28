@@ -210,6 +210,36 @@ aa_register_case \
     }
 }
 
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_page_contract_filter_proc_aa_test_category
+        ad_page_contract_filter_proc_aa_test_view_by
+
+        ad_complain
+        ad_page_contract_filter_proc
+        ad_page_contract_set_validation_passed
+    } aa_page_contract_filters {
+        Test page_contract_filters of acs-automated testing
+    } {
+        dict set cases aa_test_category { stress 1 all 0 security_risk 1 }
+        dict set cases aa_test_view_by {testcase 1 package 1 stress 0 " " 0}
+        
+        foreach filter [dict keys $cases] {
+            foreach { value result } [dict get $cases $filter] {
+                if { $result } {
+                    aa_true "'[ns_quotehtml $value]' is $filter" \
+                        [ad_page_contract_filter_invoke $filter dummy value]
+                } else {
+                    aa_false "'[ns_quotehtml $value]' is NOT $filter" \
+                        [ad_page_contract_filter_invoke $filter dummy value]
+                }
+            }
+        }
+    }
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
