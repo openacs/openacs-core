@@ -590,8 +590,6 @@ ad_proc -private aa_runseries {
     global aa_init_class_logs
     global aa_in_init_class
 
-    aa::coverage::add_traces
-
     set aa_run_quietly_p $quiet_p
     #
     # Work out the list of initialization classes.
