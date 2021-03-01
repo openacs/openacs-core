@@ -134,7 +134,11 @@ ad_proc -private db_rdbms_compatible_p {
     return 1
 }
 
-
+ad_proc -public db_current_rdbms {} {
+    @return the current rdbms type and version.
+} {
+    return [list type [db_type] version [db_version]]
+}
 
 ##################################
 # The FullQuery Data Abstraction

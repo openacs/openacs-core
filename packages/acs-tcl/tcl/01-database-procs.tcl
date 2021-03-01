@@ -281,11 +281,6 @@ ad_proc -public db_version {} {
     return [nsv_get ad_database_version .]
 }
 
-ad_proc -public db_current_rdbms {} {
-    @return the current rdbms type and version.
-} {
-    return [list type [db_type] version [db_version]]
-}
 
 ad_proc -public db_known_database_types {} {
     @return a list of three-element lists describing the database engines known
