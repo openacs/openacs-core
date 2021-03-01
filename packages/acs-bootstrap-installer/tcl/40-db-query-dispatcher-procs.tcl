@@ -614,38 +614,66 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
     nsv_set apm_library_mtime $relative_path [file mtime $file_tag]
 }
 
+#
+# Make sure to have the array
+#
+nsv_set OACS_FULLQUERIES . .
 
+if {[ns_info name] eq "NaviServer"} {
+    #
+    # NaviServer variant: use nsv_get/3
+    # Only a single nsv array access is necessary
+    #
 
-ad_proc -private db_qd_internal_get_cache {fullquery_name} {
-    Load from Cache
-} {
-    # If we have no record
-    if {![nsv_exists OACS_FULLQUERIES $fullquery_name]} {
-        return ""
+    ad_proc -private db_qd_internal_get_cache {fullquery_name} {
+        Load from Cache
+    } {
+        #
+        # In case, nothing is stored, return empty.
+        #
+        if {![nsv_get OACS_FULLQUERIES $fullquery_name data]} {
+            return ""
+        }
+
+        return $data
+    }
+} else {
+    # AOLserver variant.
+    #
+    # Not sure, what the intention of the multiple access is, and why
+    # this was needed.
+
+    ad_proc -private db_qd_internal_get_cache {fullquery_name} {
+        Load from Cache
+    } {
+        # If we have no record
+        if {![nsv_exists OACS_FULLQUERIES $fullquery_name]} {
+            return ""
+        }
+
+        set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
+
+        # If this isn't cached!
+        if {$fullquery_array eq ""} {
+            # we need to do something
+            return ""
+        }
+
+        # See if we have the correct location for this query
+        # db_qd_log QDDebug "query $fullquery_name from [db_fullquery_get_load_location $fullquery_array]"
+
+        # reload the fullquery
+        set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
+
+        # What we get back from the cache is the FullQuery structure
+        return $fullquery_array
     }
 
-    set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
-
-    # If this isn't cached!
-    if {$fullquery_array eq ""} {
-        # we need to do something
-        return ""
-    }
-
-    # See if we have the correct location for this query
-    # db_qd_log QDDebug "query $fullquery_name from [db_fullquery_get_load_location $fullquery_array]"
-
-    # reload the fullquery
-    set fullquery_array [nsv_get OACS_FULLQUERIES $fullquery_name]
-
-    # What we get back from the cache is the FullQuery structure
-    return $fullquery_array
 }
 
 ad_proc -private db_qd_internal_store_cache {fullquery} {
     Store in Cache.  The load_location is the file where this query was found.
 } {
-
     # Check if it is compatible at all!
     set rdbms [db_fullquery_get_rdbms $fullquery]
     if {![db_rdbms_compatible_p $rdbms [db_current_rdbms]]} {
@@ -655,6 +683,10 @@ ad_proc -private db_qd_internal_store_cache {fullquery} {
         return
     }
 
+    #
+    # GN: the code below could be improved for NaviServer, but it is
+    # not performance-critical.
+    #
     set name [db_fullquery_get_name $fullquery]
 
     # db_qd_log QDDebug "Query $name is compatible! fullquery = $fullquery, name = $name"
