@@ -75,12 +75,12 @@ aa_register_case \
         db_fullquery_get_query_type
     } \
     db__database_interface {
-        Basic test of low level database interface
+        Basic test of low-level database interface
     } {
         set dbms [db_current_rdbms]
         aa_equals "dbms looks valid" [dict keys $dbms] "type version"
-        aa_true "dbms type non-empty" {[dict get $dbms type] != ""}
-        aa_true "dbms version non-empty" {[dict get $dbms version] != ""}
+        aa_true "dbms type nonempty" {[dict get $dbms type] != ""}
+        aa_true "dbms version nonempty" {[dict get $dbms version] != ""}
 
         set pools [db_available_pools ""]
         aa_true "pools '$pools' can be valid (need at least one pool)" {[llength $pools] > 0}
