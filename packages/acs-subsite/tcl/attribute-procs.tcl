@@ -291,27 +291,27 @@ namespace eval attribute {
         # attribute, but we don't do that now.
 
         if { ![db_0or1row select_last_sort_order {
-            select v.sort_order as old_sort_order
-              from acs_enum_values v
-             where v.attribute_id = :attribute_id
-               and v.enum_value = :enum_value
+            select sort_order as old_sort_order
+              from acs_enum_values
+             where attribute_id = :attribute_id
+               and enum_value = :enum_value
         }] } {
             # nothing to delete
             return
         }
 
         db_dml delete_enum_value {
-            delete from acs_enum_values v
-            where v.attribute_id = :attribute_id
-            and v.enum_value = :enum_value
+            delete from acs_enum_values
+            where attribute_id = :attribute_id
+            and enum_value = :enum_value
         }
         if { [db_resultrows] > 0 } {
             # update the sort order
             db_dml update_sort_order {
-                update acs_enum_values v
-                   set v.sort_order = v.sort_order - 1
-                 where v.attribute_id = :attribute_id
-                   and v.sort_order > :old_sort_order
+                update acs_enum_values
+                   set sort_order = sort_order - 1
+                 where attribute_id = :attribute_id
+                   and sort_order > :old_sort_order
             }
         }
 
