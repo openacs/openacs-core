@@ -416,6 +416,8 @@ aa_register_case -cats {
     attribute::add
     attribute::exists_p
     attribute::delete
+    attribute::value_add
+    attribute::value_delete
 
     db_column_exists
 } acs_subsite_attributes {
@@ -480,6 +482,30 @@ aa_register_case -cats {
                                          $attribute_name_plural]
         aa_true "New attribute exists" \
             [attribute::exists_p $object_type $attribute_name]
+        #
+        # Add value to attribute
+        #
+        set enum_value "enum_foo"
+        set sort_order "1"
+        attribute::value_add $attribute_id $enum_value $sort_order
+        set value_exists_p [db_0or1row value {
+            select 1
+              from acs_enum_values
+             where attribute_id=:attribute_id
+               and enum_value=:enum_value
+        }]
+        aa_true "Value added to attribute" "$value_exists_p"
+        #
+        # Delete value from attribute
+        #
+        attribute::value_delete $attribute_id $enum_value
+        set value_exists_p [db_0or1row value {
+            select 1
+              from acs_enum_values
+             where attribute_id=:attribute_id
+               and enum_value=:enum_value
+        }]
+        aa_false "Value exists after deletion" "$value_exists_p"
         #
         # Delete attribute
         #
