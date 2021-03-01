@@ -57,57 +57,77 @@ if { [namespace which ad_proc] ne ""} {
 # The RDBMS Data Abstraction
 ##################################
 
-ad_proc -public db_rdbms_create {type version} {
-    @return rdbms descriptor
+ad_proc -public -deprecated db_rdbms_create {type version} {
+
+    The function is not needed, since all it returns is a plain Tcl
+    dict with obvious keys (type and version)
+
+    @return rdbms descriptor in form of a dict
+    @see dict
 } {
-    return [list $type $version]
+    return [list type $type version $version]
 }
 
 ad_proc -private db_rdbms_get_type {rdbms} {
-    @param rdbms descriptor constructed by db_rdbms_create
+    Conveniance function, could be replaced there with standard Tcl
+    dict operations.
 
+    @param rdbms descriptor in form of a type version pair
     @return rdbms name
 } {
-    return [lindex $rdbms 0]
+    return [expr {[dict exists $rdbms type] ? [dict get $rdbms type] : ""}]
 }
 
 ad_proc -private db_rdbms_get_version {rdbms} {
-    @param rdbms descriptor constructed by db_rdbms_create
+    Conveniance function, could be replaced there with standard Tcl
+    dict operations.
 
+    @param rdbms descriptor constructed by db_rdbms_create
     @return version identifier
 } {
-    return [lindex $rdbms 1]
+    return [expr {[dict exists $rdbms version] ? [dict get $rdbms version] : ""}]
 }
 
-ad_proc -private db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
+ad_proc -private db_rdbms_compatible_p {
+    rdbms_test
+    rdbms_pattern
+} {
     @return 0 if test incompatible with pattern, 1 if miscible
 } {
-    #db_qd_log QDDebug "The RDBMS_TEST is [db_rdbms_get_type $rdbms_test] - " \
-    #    [db_rdbms_get_version $rdbms_test]
-    #db_qd_log QDDebug "The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - " \
-    #    [db_rdbms_get_version $rdbms_pattern]
+    #db_qd_log QDDebug "The compatible_p $rdbms_test - $rdbms_pattern"
 
-    # If the pattern is for all RDBMS, then yeah, compatible
-    if {[db_rdbms_get_type $rdbms_test] eq ""} {
+    #
+    # If the pattern is for all RDBMS (types), then yeah, compatible.
+    #
+    if {![dict exists $rdbms_test type] || [dict get $rdbms_test type] eq ""} {
         return 1
     }
 
+    #
     # If the RDBMS types are not the same, we have a problem
-    if {[db_rdbms_get_type $rdbms_test] != [db_rdbms_get_type $rdbms_pattern]} {
-        # db_qd_log QDDebug "compatibility - RDBMS types are different!"
+    #
+    if {[dict get $rdbms_test type] ne [dict get $rdbms_pattern type]} {
+        # db_qd_log QDDebug "compatibility - types of $rdbms_test and $rdbms_pattern are different!"
         return 0
     }
 
-    # If the pattern has no version
-    if {[db_rdbms_get_version $rdbms_pattern] eq ""} {
+    #
+    # If the pattern has no version or the version is empty
+    #
+    if {![dict exists $rdbms_pattern version] || [dict get $rdbms_pattern version] eq ""} {
         return 1
     }
 
-    # If the query being tested was written for a version that is older than
-    # the current RDBMS then we have compatibility. Otherwise we don't.
-    foreach t [split [db_rdbms_get_version $rdbms_test   ] "\."] \
-        p [split [db_rdbms_get_version $rdbms_pattern] "\."] {
-            if {$t != $p} {return [expr {$t < $p}]}
+    #
+    # If the query being tested was written for a version that is
+    # older than the current RDBMS then we have
+    # compatibility. Otherwise we don't.
+    #
+    foreach t [split [dict get $rdbms_test version] "\."] \
+        p [split [dict get $rdbms_pattern version] "\."] {
+            if {$t != $p} {
+                return [expr {$t < $p}]
+            }
         }
 
     # Same version (though not strictly "older") is OK
@@ -450,7 +470,7 @@ ad_proc -public db_qd_replace_sql {-ulevel {-subst all} statement_name sql} {
 
     if {$fullquery ne ""} {
         set sql [db_fullquery_get_querytext $fullquery]
-        
+
         if {[info exists ulevel]} {
             if {$subst ne "none"} {
                 if {$subst eq "all"} {
@@ -458,7 +478,7 @@ ad_proc -public db_qd_replace_sql {-ulevel {-subst all} statement_name sql} {
                 } elseif {$subst eq "vars"} {
                     set flags "-nobackslashes -nocommands"
                 } elseif {$subst eq "commands"} {
-                    set flags "-nobackslashes -novars"                
+                    set flags "-nobackslashes -novars"
                 } else {
                     ns_log warning "invalid value passed to '-subst': $subst. possible: all, none, vars, commands"
                     set flags -nobackslashes
@@ -803,7 +823,7 @@ ad_proc -private db_qd_internal_parse_one_query_from_xml_node {
 }
 
 ad_proc -private db_rdbms_parse_from_xml_node {rdbms_node} {
-    Parse and RDBMS struct from an XML fragment node
+    Parse an RDBMS struct from an XML fragment node
 } {
     #
     # Check if the DOM node refers to a RDBMS.
@@ -819,7 +839,7 @@ ad_proc -private db_rdbms_parse_from_xml_node {rdbms_node} {
 
     # db_qd_log QDDebug "PARSER = RDBMS parser - $type - $version"
 
-    return [db_rdbms_create $type $version]
+    return [list type $type version $version]
 }
 
 

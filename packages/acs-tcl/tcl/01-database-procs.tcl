@@ -284,7 +284,7 @@ ad_proc -public db_version {} {
 ad_proc -public db_current_rdbms {} {
     @return the current rdbms type and version.
 } {
-    return [db_rdbms_create [db_type] [db_version]]
+    return [list type [db_type] version [db_version]]
 }
 
 ad_proc -public db_known_database_types {} {
