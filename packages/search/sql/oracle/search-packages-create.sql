@@ -47,7 +47,22 @@ as
 	object_id 	acs_objects.object_id%TYPE,
 	event		search_observer_queue.event%TYPE
 ) is
+  l_count integer;
 begin
+    --
+    -- We see cases, where the object to be removed from the observer
+    -- queue does not exist anymore. Probably, this is due to some
+    -- race condition.
+    --
+
+    if p_event = 'DELETE' then
+      select count(*) from acs_objects into l_count
+      where object_id = p_object_id);
+      if l_count = 0 then
+         return;
+      end if;
+    end if;
+    
     insert into search_observer_queue (
 	object_id,
 	event
