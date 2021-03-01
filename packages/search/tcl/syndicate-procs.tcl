@@ -16,7 +16,10 @@ ad_proc -public -callback search::action -impl syndicate {} {
     JCD: to fix: should not just glue together XML this way, also assumes rss 2.0, no provision for
     alternate formats, assumes content:encoded will be defined in the wrapper.
 } {
-    if {![parameter::get -boolean -package_id [apm_package_id_from_key search] -parameter Syndicate -default 0]} {
+    if {![parameter::get -boolean \
+              -package_id [apm_package_id_from_key search] \
+              -parameter Syndicate \
+              -default 0]} {
         return
     }
     if {$action eq "DELETE"} {
@@ -55,7 +58,9 @@ ad_proc -public -callback search::action -impl syndicate {} {
  </item>"
 
         db_dml nuke {delete from syndication where object_id = :object_id}
-        db_dml insert {insert into syndication(object_id, rss_xml_frag, body, url) values (:object_id, :rss_xml_frag, :body, :url)}
+        db_dml insert {insert into syndication(object_id, rss_xml_frag, body, url)
+            values (:object_id, :rss_xml_frag, :body, :url)
+        }
     }
 }
 
