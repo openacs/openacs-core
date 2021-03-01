@@ -70,8 +70,8 @@ ad_proc -public -deprecated search::is_guest_p {
 
     @see :xo::db::sql::dotlrn_privacy proc guest_p
 } {
-    set user_id [ad_conn user_id]
-#    return [db_string get_is_guest_p {select dotlrn_privacy.guest_p(:user_id) from dual}]
+    # set user_id [ad_conn user_id]
+    # return [db_string get_is_guest_p {select dotlrn_privacy.guest_p(:user_id) from dual}]
     return 0
 }
 
@@ -105,7 +105,9 @@ ad_proc -private search::indexer {} {
     set driver [parameter::get -package_id [apm_package_id_from_key search] -parameter FtsEngineDriver]
 
     if { $driver eq ""
-         || (![callback::impl_exists -callback search::index -impl $driver] && ! [acs_sc_binding_exists_p FtsEngineDriver $driver])} {
+         || (![callback::impl_exists -callback search::index -impl $driver] \
+                 && ! [acs_sc_binding_exists_p FtsEngineDriver $driver])
+     } {
         # Nothing to do if no driver
         ns_log Debug "search::indexer: driver=$driver binding exists? [acs_sc_binding_exists_p FtsEngineDriver $driver]"
         return
@@ -142,7 +144,10 @@ ad_proc -private search::indexer {} {
                             # back to service contract
                             if {[callback::impl_exists -callback search::datasource -impl $object_type]} {
                                 #ns_log notice "\n-----DB-----\n SEARCH INDEX callback datasource exists for object_type '${object_type}'\n------------\n "
-                                array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
+                                array set datasource [lindex [callback \
+                                                                  -impl $object_type \
+                                                                  search::datasource \
+                                                                  -object_id $object_id] 0]
                             } else {
                                 #ns_log notice "invoke contract [list acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]"
                                 array set datasource  [acs_sc::invoke -contract FtsContentProvider \
@@ -151,13 +156,13 @@ ad_proc -private search::indexer {} {
                                     -impl $object_type]
                             }
 
-                            search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
+                            search::content_get txt $datasource(content) $datasource(mime) \
+                                $datasource(storage_type) $object_id
 
                             if {[callback::impl_exists -callback search::index -impl $driver]} {
                                 if {![info exists datasource(package_id)]} {
                                     set datasource(package_id) ""
                                 }
-                                # set datasource(community_id) [search::dotlrn::get_community_id -package_id $datasource(package_id)]
 
                                 if {![info exists datasource(relevant_date)]} {
                                     set datasource(relevant_date) ""
@@ -175,13 +180,16 @@ ad_proc -private search::indexer {} {
                             } else {
                                 #ns_log notice "acs_sc::invoke FtsEngineDriver"
                                 set r [acs_sc::invoke \
-                                    -contract FtsEngineDriver \
-                                    -operation [expr {$event eq "UPDATE" ? "update_index" : "index"}] \
-                                    -call_args [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] \
-                                    -impl $driver]
+                                           -contract FtsEngineDriver \
+                                           -operation [expr {$event eq "UPDATE" ? "update_index" : "index"}] \
+                                           -call_args [list $datasource(object_id) \
+                                                           $txt $datasource(title) \
+                                                           $datasource(keywords)] \
+                                           -impl $driver]
                             }
                         } errMsg]} {
-                            ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
+                            ns_log Error "search::indexer: error getting datasource for " \
+                                "$object_id $object_type: $errMsg\n[ad_print_stack_trace]"
                         } else {
                             # call the action so other people who do indexey things have a hook
                             callback -catch search::action \
@@ -193,16 +201,24 @@ ad_proc -private search::indexer {} {
                             # Remember seeing this object so we can avoid reindexing it later
                             set seen($object_id) 1
 
-                            search::dequeue -object_id $object_id -event_date $event_date -event $event
+                            search::dequeue \
+                                -object_id $object_id \
+                                -event_date $event_date \
+                                -event $event
                         }
                     }
                 }
             }
             DELETE {
                 if {[catch {
-                    set r [acs_sc::invoke -contract FtsEngineDriver -operation unindex -call_args [list $object_id] -impl $driver]
+                    set r [acs_sc::invoke \
+                               -contract FtsEngineDriver \
+                               -operation unindex \
+                               -call_args [list $object_id] \
+                               -impl $driver]
                 } errMsg]} {
-                    ns_log Error "search::indexer: error unindexing $object_id [acs_object_type $object_id]: $errMsg\n[ad_print_stack_trace]\n"
+                    ns_log Error "search::indexer: error unindexing $object_id " \
+                        "[acs_object_type $object_id]: $errMsg\n[ad_print_stack_trace]"
                 } else {
                     # call the search action callbacks.
                     callback -catch search::action \
@@ -214,9 +230,11 @@ ad_proc -private search::indexer {} {
                     search::dequeue -object_id $object_id -event_date $event_date -event $event
 
                 }
-
-                # unset seen since you could conceivably delete one but then subsequently
-                # reinsert it (eg when rolling back/forward the live revision).
+                #
+                # Unset "seen" element since one could conceivably
+                # delete one but then subsequently reinsert it (e.g.
+                # when rolling back/forward the live revision).
+                #
                 if {[info exists seen($object_id)]} {
                     unset seen($object_id)
                 }
@@ -414,12 +432,19 @@ ad_proc -public search::dotlrn::get_community_id {
 
     @param package_id Package to find community
 
-    @return dotLRN community_id. Empty string if package_id is not under a dotlrn package instance
+    @return dotLRN community_id. Empty string if package_id is not
+            under a dotlrn package instance
 } {
     if {[apm_package_installed_p dotlrn]} {
         set site_node [site_node::get_node_id_from_object_id -object_id $package_id]
-        set dotlrn_package_id [site_node::closest_ancestor_package -node_id $site_node -package_key dotlrn -include_self]
-        set community_id [db_string get_community_id {select community_id from dotlrn_communities_all where package_id=:dotlrn_package_id} -default ""]
+        set dotlrn_package_id [site_node::closest_ancestor_package \
+                                   -node_id $site_node \
+                                   -package_key dotlrn \
+                                   -include_self]
+        set community_id [db_string get_community_id {
+            select community_id from dotlrn_communities_all
+            where package_id = :dotlrn_package_id
+        } -default ""]
         return $community_id
     }
     return ""
@@ -429,10 +454,11 @@ ad_proc -callback search::extra_arg {
     -value
     {-object_table_alias {}}
 } {
-    Generate a query fragment for search filtering by extra argument
-    Argument name will be the implementation name called
+    Generate a query fragment for search filtering by extra argument.
+    Argument name will be the implementation name called.
 
-    Search driver should call this for every extra argument and then build the search query using the query fragments returned
+    Search driver should call this for every extra argument and then
+    build the search query using the query fragments returned.
 
     @param value value of the argument
     @param object_table_alias SQL alias of table that contains the object_id to join against
