@@ -18,6 +18,7 @@ ad_page_contract {
     by_category:onevalue
     view_by:onevalue
     quiet:onevalue
+    global_test_coverage_color
 }
 set doc(title) "System test cases"
 set context ""
@@ -105,22 +106,24 @@ if {$view_by eq "package"} {
     set global_test_coverage            [aa::coverage::proc_coverage]
     set global_test_coverage_percent    [dict get $global_test_coverage coverage]
     set global_test_coverage_level      [aa::coverage::proc_coverage_level $global_test_coverage_percent]
-    set global_test_coverage_color      [aa::percentage_to_color $global_test_coverage_percent]
+    array set global_test_coverage_color [aa::percentage_to_color $global_test_coverage_percent]
 
     #
     # Prepare the template data for a view_by "package"
     #
-    template::multirow create packageinfo key total passes fails warnings proc_coverage proc_coverage_level color
+    template::multirow create packageinfo key total passes fails warnings proc_coverage \
+        proc_coverage_level background foreground
     foreach package_key [lsort [array names packages]] {
         lassign $packages($package_key) total passes fails warnings
         set proc_coverage [dict get [aa::coverage::proc_coverage -package_key $package_key] coverage]
         set proc_coverage_level [aa::coverage::proc_coverage_level $proc_coverage]
-        set proc_coverage_color [aa::percentage_to_color $proc_coverage]
+        set color [aa::percentage_to_color $proc_coverage]
         #ns_log notice "view_by $view_by package_key=$package_key $proc_coverage_level $proc_coverage_color"
 
         template::multirow append packageinfo $package_key $total \
             $passes $fails $warnings \
-            $proc_coverage $proc_coverage_level $proc_coverage_color
+            $proc_coverage $proc_coverage_level \
+            [dict get $color background] [dict get $color foreground]
     }
 } else {
     #

@@ -134,8 +134,8 @@ ad_proc -public aa::coverage::proc_coverage {
 ad_proc -private aa::percentage_to_color {
     percentage
 } {
-    Calculates a color from the percentage. 0 gives red, 100 gives
-    green.
+    Calculates background and foreground color from an percentage. 0
+    gives red, 100 gives green.
 
     @author Gustaf neumann
 
@@ -145,11 +145,15 @@ ad_proc -private aa::percentage_to_color {
     set red 255
     set green 255
     if {$percentage >= 0 && $percentage <= 50} {
-        set green [expr {510 * $percentage/100.0}]
+        set green [expr {int(510 * $percentage/100.0)}]
     } elseif {$percentage > 50.0 && $percentage <= 100.0} {
-        set red [expr {-510 * $percentage/100.0 + 510}]
+        set red [expr {int(-510 * $percentage/100.0 + 510)}]
     }
-    return [format %.2x [expr {int($red)}]][format %.2x [expr {int($green)}]]00
+    set luminance [expr {0.2126*$red + 0.7152*$green + 0.0722*0}]
+    return [list \
+                background #[format %.2x $red][format %.2x $green]00 \
+                foreground [expr {$luminance < 120 ? "#ffffff": "#000000"}] \
+               ]
 }
 
 ad_proc -public aa::coverage::proc_coverage_level {

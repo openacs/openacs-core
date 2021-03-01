@@ -142,7 +142,8 @@
           <td class="package-table-cell">-</td>
           <td class="package-table-cell">-</td>
           <td class="package-table-cell">-</td>
-          <td class="proc_coverage_cell @packageinfo.proc_coverage_level@" style="background: #@packageinfo.color@;">
+          <td class="proc_coverage_cell @packageinfo.proc_coverage_level@"
+              style="background: @packageinfo.background@; color: @packageinfo.foreground@;" >
             <a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
         </if><else>
           <td class="package-table-cell"> @packageinfo.total@ </td>
@@ -160,14 +161,15 @@
               OK
             </else>
           </td>
-          <td class="proc_coverage_cell @packageinfo.proc_coverage_level@" style="background: #@packageinfo.color@;">
+          <td class="proc_coverage_cell @packageinfo.proc_coverage_level@"
+              style="background: @packageinfo.background@; color: @packageinfo.foreground@;">
           <a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
         </else>
       </tr>
     </multiple>
     <tr>
       <td colspan="8" class="proc_coverage_cell @global_test_coverage_level@"
-      style="background: #@global_test_coverage_color@;">
+      style="background: @global_test_coverage_color.background@; color: @global_test_coverage_color.foreground@;">
         <a href=proc-coverage>Global proc coverage: @global_test_coverage_percent@%</a>
       </td>
     </tr>
