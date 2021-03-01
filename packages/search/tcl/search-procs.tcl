@@ -24,15 +24,15 @@ ad_proc -public search::queue {
 
     @author Jeff Davis (davis@xarg.net)
 } {
-    if {$object_id ne ""
-        && $event ne ""} {
+    if {$object_id ne "" && $event ne "" } {
         package_exec_plsql \
             -var_list [list \
                            [list object_id $object_id] \
                            [list event $event] ] \
             search_observer enqueue
     } else {
-        ns_log warning "search::queue: invalid: called with object_id=$object_id event=$event\n[ad_print_stack_trace]\n"
+        ns_log warning "search::queue: invalid: called with object_id=$object_id " \
+            "event=$event\n[ad_print_stack_trace]"
     }
 }
 
@@ -58,7 +58,8 @@ ad_proc -public search::dequeue {
                                [list event $event] ] \
                 search_observer dequeue
     } else {
-        ns_log warning "search::dequeue: invalid: called with object_id=$object_id event_date=$event_date event=$event\n[ad_print_stack_trace]\n"
+        ns_log warning "search::dequeue: invalid: called with object_id=$object_id" \
+            "event_date=$event_date event=$event\n[ad_print_stack_trace]"
     }
 }
 
@@ -102,14 +103,17 @@ ad_proc -private search::indexer {} {
     @author Jeff Davis (davis@xarg.net)
 } {
 
-    set driver [parameter::get -package_id [apm_package_id_from_key search] -parameter FtsEngineDriver]
+    set driver [parameter::get \
+                    -package_id [apm_package_id_from_key search] \
+                    -parameter FtsEngineDriver]
 
     if { $driver eq ""
          || (![callback::impl_exists -callback search::index -impl $driver] \
                  && ! [acs_sc_binding_exists_p FtsEngineDriver $driver])
      } {
         # Nothing to do if no driver
-        ns_log Debug "search::indexer: driver=$driver binding exists? [acs_sc_binding_exists_p FtsEngineDriver $driver]"
+        ns_log Debug "search::indexer: driver=$driver binding exists? " \
+            "[acs_sc_binding_exists_p FtsEngineDriver $driver]"
         return
     }
     # JCD: pull out the rows all at once so we release the handle
@@ -150,10 +154,11 @@ ad_proc -private search::indexer {} {
                                                                   -object_id $object_id] 0]
                             } else {
                                 #ns_log notice "invoke contract [list acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]"
-                                array set datasource  [acs_sc::invoke -contract FtsContentProvider \
-                                    -operation datasource \
-                                    -call_args [list $object_id] \
-                                    -impl $object_type]
+                                array set datasource  [acs_sc::invoke \
+                                                           -contract FtsContentProvider \
+                                                           -operation datasource \
+                                                           -call_args [list $object_id] \
+                                                           -impl $object_type]
                             }
 
                             search::content_get txt $datasource(content) $datasource(mime) \
@@ -227,7 +232,10 @@ ad_proc -private search::indexer {} {
                         -datasource NONE \
                         -object_type {}
 
-                    search::dequeue -object_id $object_id -event_date $event_date -event $event
+                    search::dequeue \
+                        -object_id $object_id \
+                        -event_date $event_date \
+                        -event $event
 
                 }
                 #
