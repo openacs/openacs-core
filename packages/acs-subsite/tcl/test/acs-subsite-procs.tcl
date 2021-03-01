@@ -515,6 +515,55 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    production_safe
+} -procs {
+    attribute::translate_datatype
+    attribute::datatype_validator_exists_p
+} acs_subsite_attribute_datatypes {
+    Test different attribute datatype procs
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 01 March 2021
+} {
+    #
+    # Datatype validators
+    #
+    set datatype_validator {
+        boolean boolean
+        keyword keyword
+        integer integer
+          money integer
+         string string
+           text text
+            foo text
+    }
+    dict for {datatype validator} $datatype_validator {
+        aa_equals "Datatype $datatype" \
+            [attribute::translate_datatype $datatype] "$validator"
+    }
+    #
+    # Explicit validator exists for datatype?
+    #
+    set datatype_validator_p {
+        enumeration 1
+            boolean 1
+            keyword 1
+            integer 1
+             string 1
+              money 0
+               date 0
+               text 1
+                foo 0
+    }
+    dict for {datatype validator_p} $datatype_validator_p {
+        aa_equals "Datatype $datatype validator exists" \
+            [attribute::datatype_validator_exists_p $datatype] "$validator_p"
+    }
+
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
