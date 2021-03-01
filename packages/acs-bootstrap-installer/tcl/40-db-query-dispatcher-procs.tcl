@@ -155,7 +155,7 @@ ad_proc -private db_fullquery_create {queryname querytext bind_vars_lst query_ty
 
 # The Accessor procs
 
-ad_proc -public db_fullquery_get_name {fullquery} {
+ad_proc -private db_fullquery_get_name {fullquery} {
     Accessor for fullquery data abstraction
     @param fullquery datastructure constructed by db_fullquery_create
     @return name
@@ -179,7 +179,7 @@ ad_proc -private db_fullquery_get_bind_vars {fullquery} {
     return [lindex $fullquery 2]
 }
 
-ad_proc -public db_fullquery_get_query_type {fullquery} {
+ad_proc -private db_fullquery_get_query_type {fullquery} {
     Accessor for fullquery data abstraction
     @param fullquery datastructure constructed by db_fullquery_create
     @return query type
@@ -584,7 +584,7 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
             break
         }
 
-    lassign $result one_query parsing_state
+        lassign $result one_query parsing_state
 
         # db_qd_log QDDebug "loaded one query - [db_fullquery_get_name $one_query]"
 
