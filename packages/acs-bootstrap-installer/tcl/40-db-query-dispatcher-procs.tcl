@@ -69,7 +69,7 @@ ad_proc -public -deprecated db_rdbms_create {type version} {
 }
 
 ad_proc -private db_rdbms_get_type {rdbms} {
-    Conveniance function, could be replaced there with standard Tcl
+    Convenience function, could be replaced there with standard Tcl
     dict operations.
 
     @param rdbms descriptor in form of a type version pair
@@ -79,7 +79,7 @@ ad_proc -private db_rdbms_get_type {rdbms} {
 }
 
 ad_proc -private db_rdbms_get_version {rdbms} {
-    Conveniance function, could be replaced there with standard Tcl
+    Convenience function, could be replaced there with standard Tcl
     dict operations.
 
     @param rdbms descriptor constructed by db_rdbms_create
@@ -615,10 +615,15 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
 }
 
 #
-# Make sure to have the array
+# Make sure to create the nsv array.
 #
 nsv_set OACS_FULLQUERIES . .
 
+#
+# Due to bootstrapping, we can't use server specific files
+# (such as *-procs-naviserver.tcl, *-procs-aolserver.tcl)
+# here.
+#
 if {[ns_info name] eq "NaviServer"} {
     #
     # NaviServer variant: use nsv_get/3
