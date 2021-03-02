@@ -37,6 +37,7 @@ ad_proc -public template::widget {} {
     @see template::widget::menu
     @see template::widget::monthFragment
     @see template::widget::multiselect
+    @see template::widget::number
     @see template::widget::numericRange
     @see template::widget::password
     @see template::widget::party_search
@@ -1364,6 +1365,23 @@ ad_proc -public template::widget::checkbox_text {
         [template::widget::input text element $tag_attributes]
 
     return $output
+}
+
+ad_proc -public template::widget::number {
+    element_reference
+    tag_attributes
+} {
+    Render a number input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input number element $tag_attributes]
 }
 
 #
