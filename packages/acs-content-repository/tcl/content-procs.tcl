@@ -9,7 +9,7 @@ ad_library {
 }
 
 # The location for files
-ad_proc -public cr_fs_path { { location CR_FILES } } {
+ad_proc -private cr_fs_path { { location CR_FILES } } {
 
     Root path of content repository files.
 
