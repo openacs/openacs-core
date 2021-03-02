@@ -149,7 +149,10 @@ ad_proc -private aa::percentage_to_color {
     } elseif {$percentage > 50.0 && $percentage <= 100.0} {
         set red [expr {int(-510 * $percentage/100.0 + 510)}]
     }
-    set luminance [expr {0.2126*$red + 0.7152*$green + 0.0722*0}]
+    # Luminance as defined by HDTV
+    #set luminance [expr {0.2126*$red + 0.7152*$green + 0.0722*0}]
+    # luminance as defined by UHDTV, HDR
+    set luminance [expr {0.2627*$red + 0.6780*$green + 0.0593*0}]    
     return [list \
                 background #[format %.2x $red][format %.2x $green]00 \
                 foreground [expr {$luminance < 120 ? "#ffffff": "#000000"}] \
