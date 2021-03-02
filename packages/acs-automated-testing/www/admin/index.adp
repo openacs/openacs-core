@@ -91,7 +91,7 @@
         <strong>&raquo;</strong>
         <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
       </div>
-      <if @by_package_key@ ne "">
+      <if @by_package_key@ ne "" and @multiple_packages_p@ false>
         <div>
           <strong>&raquo;</strong>
           <a href="@record_url@"> Record a test</a>
@@ -184,7 +184,7 @@
         <strong>&raquo;</strong>
         <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
       </div>
-      <if @by_package_key@ ne "">
+      <if @by_package_key@ ne "" and @multiple_packages_p@ false>
         <div>
           <strong>&raquo;</strong>
           <a href="@record_url@"> Record a test</a>
@@ -205,7 +205,7 @@
        <strong>&raquo;</strong>
        <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
      </div>
-     <if @by_package_key@ ne "">
+     <if @by_package_key@ ne "" and @multiple_packages_p@ false>
        <div>
          <strong>&raquo;</strong>
          <a href="@record_url@"> Record a test</a>
@@ -275,7 +275,7 @@
        <strong>&raquo;</strong>
        <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
      </div>
-     <if @by_package_key@ ne "">
+     <if @by_package_key@ ne "" and @multiple_packages_p@ false>
        <div>
          <strong>&raquo;</strong>
          <a href="@record_url@"> Record a test</a>

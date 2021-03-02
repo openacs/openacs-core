@@ -29,8 +29,15 @@ set coverage_url [export_vars -base proc-coverage {{package_key $by_package_key}
 template::head::add_css -href /resources/acs-automated-testing/tests.css
 
 if {$by_package_key ne ""} {
-    append  doc(title)  " for package $by_package_key"
-    set context "Package $by_package_key"
+    if {[llength $by_package_key] > 1} {
+        append  doc(title)  " for multiple packages"
+        set context "Multiple Packages"
+        set multiple_packages_p 1
+    } else {
+        append  doc(title)  " for package $by_package_key"
+        set context "Package $by_package_key"
+        set multiple_packages_p 0
+    }
 }
 if {$by_category ne ""} {
     append  doc(title)  ", category $by_category"
