@@ -442,7 +442,7 @@ ad_proc cr_set_imported_content_live {
 }
 
 
-ad_proc cr_registered_type_for_mime_type {
+ad_proc -private cr_registered_type_for_mime_type {
     mime_type
 } {
     Return the type registered for this mime type.
@@ -559,7 +559,7 @@ ad_proc -public cr_filename_to_mime_type {
     }
 }
 
-ad_proc -public cr_create_mime_type {
+ad_proc -private cr_create_mime_type {
     -mime_type:required
     {-extension ""}
     {-description ""}
