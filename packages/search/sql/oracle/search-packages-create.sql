@@ -57,7 +57,7 @@ begin
 
     if p_event = 'DELETE' then
       select count(*) from acs_objects into l_count
-      where object_id = p_object_id);
+      where object_id = p_object_id;
       if l_count = 0 then
          return;
       end if;
