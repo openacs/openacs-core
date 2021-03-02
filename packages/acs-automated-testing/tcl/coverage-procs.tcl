@@ -134,7 +134,7 @@ ad_proc -public aa::coverage::proc_coverage {
 ad_proc -private aa::percentage_to_color {
     percentage
 } {
-    Calculates background and foreground color from an percentage. 0
+    Calculates background and foreground color from a percentage. 0
     gives red, 100 gives green.
 
     @author Gustaf neumann
