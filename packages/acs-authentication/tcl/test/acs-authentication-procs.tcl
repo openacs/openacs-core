@@ -880,6 +880,7 @@ aa_register_case  \
         parameter::set_value
 
         util_text_to_url
+        auth::create_local_account
     } \
     auth_use_email_for_login_p {
     Test auth::UseEmailForLoginP
@@ -921,15 +922,22 @@ aa_register_case  \
             set email [string tolower "[ad_generate_random_string]@foobar.com"]
             set password [ad_generate_random_string]
 
-            array set result [auth::create_user \
-                                  -authority_id $authority_id \
-                                  -email $email \
-                                  -password $password \
-                                  -first_names [ad_generate_random_string] \
-                                  -last_name [ad_generate_random_string] \
-                                  -secret_question [ad_generate_random_string] \
-                                  -secret_answer [ad_generate_random_string] \
-                                  -screen_name [ad_generate_random_string]]
+            ad_try {
+                array set result [auth::create_user \
+                                      -authority_id $authority_id \
+                                      -email $email \
+                                      -password $password \
+                                      -first_names [ad_generate_random_string] \
+                                      -last_name [ad_generate_random_string] \
+                                      -secret_question [ad_generate_random_string] \
+                                      -secret_answer [ad_generate_random_string] \
+                                      -screen_name [ad_generate_random_string]]
+            } on ok {r} {
+                aa_true "auth::create_user with no username succeeded" 1
+            } on error {errorMsg} {
+                aa_false  "auth::create_user with no username failed: '$errorMsg'" 1
+                set result(creation_status) "NOT OK"
+            }
 
             aa_equals "Registration OK" $result(creation_status) "ok"
 
