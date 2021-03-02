@@ -8,7 +8,7 @@
     <singleton-p>t</singleton-p>
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
-    
+
     <version name="5.10.0d4" url="http://openacs.org/repository/download/apm/search-5.10.0d4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Site wide search</summary>
