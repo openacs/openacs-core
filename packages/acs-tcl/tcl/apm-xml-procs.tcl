@@ -17,7 +17,7 @@ ad_proc -public apm_required_attribute_value { element attribute } {
 } {
     set value [apm_attribute_value $element $attribute]
     if { $value eq "" } {
-	error "Required attribute \"$attribute\" missing from <[xml_node_get_name $element]>"
+        error "Required attribute \"$attribute\" missing from <[xml_node_get_name $element]>"
     }
     return $value
 }
@@ -35,9 +35,7 @@ ad_proc -public apm_attribute_value {
 }
 
 ad_proc -private apm_tag_value {
-    {
-	-default ""
-    }
+    {-default ""}
     root property_name
 } {
     Parses the XML element and returns the associated property name if it exists.
@@ -46,7 +44,7 @@ ad_proc -private apm_tag_value {
     set node [xml_node_get_first_child_by_name $root $property_name]
 
     if { $node ne "" } {
-	return [xml_node_get_content $node]
+        return [xml_node_get_content $node]
     }
     ns_log Debug "apm_tag_value $root $property_name $default --> $default"
     return $default
@@ -79,7 +77,7 @@ ${auto_mount_tag}
     db_foreach owner_info {} {
         append spec "        <owner"
         if { $owner_uri ne "" } {
-    	append spec " url=\"[ns_quotehtml $owner_uri]\""
+            append spec " url=\"[ns_quotehtml $owner_uri]\""
         }
         append spec ">[ns_quotehtml $owner_name]</owner>\n"
     }
@@ -94,14 +92,14 @@ ${auto_mount_tag}
     if { $vendor ne "" || $vendor_uri ne "" } {
         append spec "        <vendor"
         if { $vendor_uri ne "" } {
-    	append spec " url=\"[ns_quotehtml $vendor_uri]\""
+            append spec " url=\"[ns_quotehtml $vendor_uri]\""
         }
         append spec ">[ns_quotehtml $vendor]</vendor>\n"
     }
     if { $description ne "" } {
         append spec "        <description"
         if { $description_format ne "" } {
-	    append spec " format=\"[ns_quotehtml $description_format]\""
+            append spec " format=\"[ns_quotehtml $description_format]\""
         }
         append spec ">[ns_quotehtml $description]</description>\n"
     }
@@ -132,25 +130,25 @@ ${auto_mount_tag}
     set parent_package_keys [lrange [apm_one_package_inherit_order $package_key] 0 end-1]
 
     db_foreach parameter_info {} {
-	append spec "            <parameter scope=\"[ns_quotehtml $scope]\" datatype=\"[ns_quotehtml $datatype]\" \
-		min_n_values=\"[ns_quotehtml $min_n_values]\" \
-		max_n_values=\"[ns_quotehtml $max_n_values]\" \
-		name=\"[ns_quotehtml $parameter_name]\" "
-	if { $default_value ne "" } {
-	    append spec " default=\"[ns_quotehtml $default_value]\""
-	}
+        append spec "            <parameter scope=\"[ns_quotehtml $scope]\" datatype=\"[ns_quotehtml $datatype]\" \
+            min_n_values=\"[ns_quotehtml $min_n_values]\" \
+            max_n_values=\"[ns_quotehtml $max_n_values]\" \
+            name=\"[ns_quotehtml $parameter_name]\" "
+        if { $default_value ne "" } {
+            append spec " default=\"[ns_quotehtml $default_value]\""
+        }
 
-	if { $description ne "" } {
-	    append spec " description=\"[ns_quotehtml $description]\""
-	}
+        if { $description ne "" } {
+            append spec " description=\"[ns_quotehtml $description]\""
+        }
 
-	if { $section_name ne "" } {
-	    append spec " section_name=\"[ns_quotehtml $section_name]\""
-	}
+        if { $section_name ne "" } {
+            append spec " section_name=\"[ns_quotehtml $section_name]\""
+        }
 
-	append spec "/>\n"
+        append spec "/>\n"
     } if_no_rows {
-	append spec "        <!-- No version parameters -->\n"
+        append spec "        <!-- No version parameters -->\n"
     }
 
     append spec "        </parameters>\n\n"
@@ -221,10 +219,10 @@ ad_proc -public apm_read_package_info_file { path } {
     # mtime), return the cached info list.
     set mtime [ad_file mtime $path]
     if { [nsv_exists apm_version_properties $path] } {
-	set cached_version [nsv_get apm_version_properties $path]
-	if { [lindex $cached_version 0] == $mtime } {
-	    return [lindex $cached_version 1]
-	}
+        set cached_version [nsv_get apm_version_properties $path]
+        if { [lindex $cached_version 0] == $mtime } {
+            return [lindex $cached_version 1]
+        }
     }
 
     # Set the path and mtime in the array.
@@ -253,12 +251,12 @@ ad_proc -public apm_read_package_info_file { path } {
 
     apm_log APMDebug "XML - there are [llength $root_children] child nodes"
     foreach child $root_children {
-	apm_log APMDebug "XML - one root child: [xml_node_get_name $child]"
+        apm_log APMDebug "XML - one root child: [xml_node_get_name $child]"
     }
 
     if { $root_name ne "package" } {
-	apm_log APMDebug "XML: the root name is $root_name"
-	error "Expected <package> as root node"
+        apm_log APMDebug "XML: the root name is $root_name"
+        error "Expected <package> as root node"
     }
     set properties(package.key)          [apm_required_attribute_value $package key]
     set properties(package.url)          [apm_required_attribute_value $package url]
@@ -273,7 +271,7 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set versions [xml_node_get_children_by_name $package version]
     if { [llength $versions] != 1 } {
-	error "Package must contain exactly one <version> node"
+        error "Package must contain exactly one <version> node"
     }
     set version [lindex $versions 0]
 
@@ -283,7 +281,7 @@ ad_proc -public apm_read_package_info_file { path } {
     # Set an entry in the properties array for each of these tags.
     set properties(maturity) ""
     foreach property_name { summary description release-date vendor maturity } {
-	set properties($property_name) [apm_tag_value $version $property_name]
+        set properties($property_name) [apm_tag_value $version $property_name]
     }
     set properties(maturity_text) [apm::package_version::attributes::maturity_int_to_text $properties(maturity)]
 
@@ -297,24 +295,24 @@ ad_proc -public apm_read_package_info_file { path } {
     #   <description format="...">   -> description.format
 
     foreach { property_name attribute_name } {
-	vendor url
-	license url
-	description format
+        vendor url
+        license url
+        description format
     } {
-	set node [xml_node_get_first_child_by_name $version $property_name]
-	if { $node ne "" } {
-	    set properties($property_name.$attribute_name) [apm_attribute_value $node $attribute_name]
-	} else {
-	    set properties($property_name.$attribute_name) ""
-	}
+        set node [xml_node_get_first_child_by_name $version $property_name]
+        if { $node ne "" } {
+            set properties($property_name.$attribute_name) [apm_attribute_value $node $attribute_name]
+        } else {
+            set properties($property_name.$attribute_name) ""
+        }
     }
 
     # Build a list of packages to install additionally
 
     set properties(install) [list]
     foreach node [xml_node_get_children_by_name $version install] {
-	set install [apm_attribute_value $node package]
-	lappend properties(install) $install
+        set install [apm_attribute_value $node package]
+        lappend properties(install) $install
     }
 
     # We're done constructing the properties array - save the properties into the
@@ -330,16 +328,16 @@ ad_proc -public apm_read_package_info_file { path } {
     set properties(extends) [list]
 
     foreach dependency_type { provides requires embeds extends } {
-	set dependency_types [xml_node_get_children_by_name $version $dependency_type]
+        set dependency_types [xml_node_get_children_by_name $version $dependency_type]
 
-	foreach node $dependency_types {
-	    set service_uri [apm_required_attribute_value $node url]
-	    set service_version [apm_required_attribute_value $node version]
+        foreach node $dependency_types {
+            set service_uri [apm_required_attribute_value $node url]
+            set service_version [apm_required_attribute_value $node version]
             # Package always provides itself, we'll add that below, so don't add it here
             if { $dependency_type ne "provides" || $service_uri ne $properties(package.key) } {
                 lappend properties($dependency_type) [list $service_uri $service_version]
             }
-	}
+        }
     }
     # Package provides itself always
     lappend properties(provides) [list $properties(package.key) $properties(name)]
@@ -367,8 +365,8 @@ ad_proc -public apm_read_package_info_file { path } {
             if {$type ni [apm_supported_callback_types]} {
                 # The callback type is not supported
                 ns_log Error "package info file $path contains an unsupported\
-			callback type $type - ignoring. Valid values are\
-			[apm_supported_callback_types]"
+                    callback type $type - ignoring. Valid values are\
+                    [apm_supported_callback_types]"
                 continue
             }
 
@@ -383,9 +381,9 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set properties(owners) [list]
     foreach node [xml_node_get_children_by_name $version owner] {
-	set url [apm_attribute_value $node url]
-	set name [xml_node_get_content $node]
-	lappend properties(owners) [list $name $url]
+        set url [apm_attribute_value $node url]
+        set name [xml_node_get_content $node]
+        lappend properties(owners) [list $name $url]
     }
 
     # Build a list of the packages parameters (if any)
@@ -394,26 +392,26 @@ ad_proc -public apm_read_package_info_file { path } {
     apm_log APMDebug "APM: Reading Parameters"
 
     foreach node [xml_node_get_children_by_name $version parameters] {
-	set parameter_nodes [xml_node_get_children_by_name $node parameter]
+        set parameter_nodes [xml_node_get_children_by_name $node parameter]
 
-	foreach parameter_node $parameter_nodes {
-	    set default_value [apm_attribute_value $parameter_node default]
-	    set min_n_values [apm_attribute_value $parameter_node min_n_values]
-	    set max_n_values [apm_attribute_value $parameter_node max_n_values]
-	    set description [apm_attribute_value $parameter_node description]
-	    set section_name [apm_attribute_value $parameter_node section_name]
-	    set datatype [apm_attribute_value $parameter_node datatype]
-	    set name [apm_attribute_value $parameter_node name]
-	    set scope [apm_attribute_value $parameter_node scope]
+        foreach parameter_node $parameter_nodes {
+            set default_value [apm_attribute_value $parameter_node default]
+            set min_n_values [apm_attribute_value $parameter_node min_n_values]
+            set max_n_values [apm_attribute_value $parameter_node max_n_values]
+            set description [apm_attribute_value $parameter_node description]
+            set section_name [apm_attribute_value $parameter_node section_name]
+            set datatype [apm_attribute_value $parameter_node datatype]
+            set name [apm_attribute_value $parameter_node name]
+            set scope [apm_attribute_value $parameter_node scope]
 
             if { $scope eq "" } {
                 set scope instance
             }
 
-	    apm_log APMDebug "APM: Reading parameter $name with default $default_value"
-	    lappend properties(parameters) [list $name $description $section_name $scope \
-						$datatype $min_n_values $max_n_values $default_value]
-	}
+            apm_log APMDebug "APM: Reading parameter $name with default $default_value"
+            lappend properties(parameters) [list $name $description $section_name $scope \
+                $datatype $min_n_values $max_n_values $default_value]
+        }
     }
 
     # Release the XML tree
