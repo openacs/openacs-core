@@ -1,7 +1,7 @@
 <table border="0" cellspacing="12" cellpadding="4">
  <tr style="background:#DDDDDD">
   <td>
-    <form action="@openacs_search_url@" method="get">
+    <form id="api-search" action="@openacs_search_url@" method="get">
      <table>
      <tr>
       <td valign="top">
@@ -49,7 +49,7 @@
 
   <tr style="background:#DDDDDD">
    <td colspan="2">
-    <form action="@aolserver_search_url@" method="get">
+    <form id="ns-aol-api-search" action="@aolserver_search_url@" method="get">
     <h4>NaviServer/AOLserver Tcl API Search</h4>
     <div>
     <input type="text" name="tcl_proc">
@@ -64,7 +64,7 @@
 
   <tr style="background:#DDDDDD">
    <td colspan="2">
-    <form action="@tcl_search_url@" method="get">
+    <form id="tcl-doc-search" action="@tcl_search_url@" method="get">
     <h4>Tcl Documentation Search</h4>
     <div>
     <input type="text" name="tcl_proc">
@@ -81,7 +81,7 @@
    <tr style="background:#DDDDDD">
     <td colspan="2">
      <if @db_doc_search_url@ not nil>
-     <form action="@db_doc_search_url@" method="get">
+     <form id="plsql-search" action="@db_doc_search_url@" method="get">
    	@db_doc_search_export;noquote@
        <h4>@db_pretty@ Search</h4>
        <div>
