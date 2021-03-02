@@ -375,7 +375,7 @@ ad_proc -callback search::url {
     -object_id:required
 } {
    This callback is invoked when a URL needs to be generated for an
-   object. Usually this is called from /o.vuh which defers URL
+   object. Usually, this is called from /o.vuh which defers URL
    calculation until a link is actually clicked, so generating a list
    of URLs for various object types is quick.
 } -
