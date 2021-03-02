@@ -641,7 +641,7 @@ namespace eval acs_mail_lite {
                                     -header [list Content-Disposition "attachment; filename=\"$name\""] \
                                     -header [list Content-Description $title] \
                                     -canonical $mime_type \
-                                    -file "[cr_fs_path]$filename"]
+                                    -file [content::revision::get_cr_file_path -revision_id $revision_id]]
             }
         }
 

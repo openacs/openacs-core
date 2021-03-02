@@ -283,7 +283,7 @@ ad_proc -private search::content_get {
             set data $content
         }
         file {
-            set data [cr_fs_path][db_string get_filename "select content from cr_revisions where revision_id=:object_id"]
+            set data [content::revision::get_cr_file_path -revision_id $object_id]
             set passing_style file
         }
         lob {

@@ -27,7 +27,7 @@
 
   <fullquery name="acs_mail_lite::send_immediately.get_file_info">
     <querytext>
-      select r.mime_type,r.title, r.content as filename, i.name
+      select r.mime_type, r.title, r.revision_id, i.name
       from cr_revisions r, cr_items i
       where r.revision_id = i.latest_revision
         and i.item_id in ([join $item_ids ","])
