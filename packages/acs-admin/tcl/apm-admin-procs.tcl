@@ -8,7 +8,7 @@ ad_library {
 
 }
 
-ad_proc apm_parameter_section_slider {package_key} {
+ad_proc -private apm_parameter_section_slider {package_key} {
     Build a dynamic section dimensional slider.
 } {
     set sections [db_list apm_parameter_sections {
