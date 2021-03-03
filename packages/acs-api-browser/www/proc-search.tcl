@@ -95,7 +95,8 @@ foreach proc [nsv_array names api_proc_doc] {
     ## Param Search:
     ################
     if {$param_weight} {
-        incr score [expr {$param_weight * [::apidoc::ad_keywords_score $query_string "$doc_elements(positionals) $doc_elements(switches)"]}]
+        set arglist "$doc_elements(positionals) $doc_elements(switches0) $doc_elements(switches1)"
+        incr score [expr {$param_weight * [::apidoc::ad_keywords_score $query_string $arglist]}]
     }
 
 
