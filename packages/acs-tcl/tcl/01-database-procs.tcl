@@ -2348,19 +2348,29 @@ if {[namespace which ns_cache_transaction_begin] eq ""} {
 ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     Usage: <b><i>db_transaction</i></b> <i>transaction_code</i> [ on_error { <i>error_code_block</i> } ]
 
-    Executes transaction_code with transactional semantics.  This means that either all of the database commands
-    within transaction_code are committed to the database or none of them are.  Multiple <code>db_transaction</code>s may be
-    nested (end transaction is transparently ns_db dml'ed when the outermost transaction completes).<p>
+    Executes transaction_code with transactional semantics.  This
+    means that either all of the database commands within
+    transaction_code are committed to the database or none of them
+    are.  Multiple <code>db_transaction</code>s may be nested (end
+    transaction is transparently ns_db dml'ed when the outermost
+    transaction completes).<p>
 
-    To handle errors, use <code>db_transaction {transaction_code} on_error {error_code_block}</code>.  Any error generated in
-    <code>transaction_code</code> will be caught automatically and process control will transfer to <code>error_code_block</code>
-    with a variable <code>errmsg</code> set.  The error_code block can then clean up after the error, such as presenting a usable
-    error message to the user.  Following the execution of <code>error_code_block</code> the transaction will be aborted.
-    If you want to explicitly abort the transaction, call <code>db_abort_transaction</code>
-    from within the transaction_code block or the error_code block.<p>
+    To handle errors, use <code>db_transaction {transaction_code}
+    on_error {error_code_block}</code>.  Any error generated in
+    <code>transaction_code</code> will be caught automatically and
+    process control will transfer to <code>error_code_block</code>
+    with a variable <code>errmsg</code> set.  The error_code block can
+    then clean up after the error, such as presenting a usable error
+    message to the user.  Following the execution of
+    <code>error_code_block</code> the transaction will be aborted.  If
+    you want to explicitly abort the transaction, call
+    <code>db_abort_transaction</code> from within the transaction_code
+    block or the error_code block.<p>
 
-    Example 1:<br>
-    In this example, db_dml triggers an error, so control passes to the on_error block which prints a readable error.
+    Example 1:<br> In this example, db_dml triggers an error, so
+    control passes to the on_error block which prints a readable
+    error.
+
     <pre>
     db_transaction {
         db_dml test "nonsense"
@@ -2369,9 +2379,10 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     }
     </pre>
 
-    Example 2:<br>
-    In this example, the second command, "nonsense" triggers an error.  There is no on_error block, so the
-    transaction is immediately halted and aborted.
+    Example 2:<br> In this example, the second command, "nonsense"
+    triggers an error.  There is no on_error block, so the transaction
+    is immediately halted and aborted.
+
     <pre>
     db_transaction {
         db_dml test {insert into footest values(1)}
@@ -2388,24 +2399,27 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     set arg_c [llength $args]
 
     if { $arg_c != 0 && $arg_c != 2 } {
-        # Either this is a transaction with no error handling or there must be an on_error { code } block.
+        # Either this is a transaction with no error handling or there
+        # must be an on_error { code } block.
         error $syn_err
     }  elseif { $arg_c == 2 } {
         # We think they're specifying an on_error block
         if {[lindex $args 0] ne "on_error"  } {
-            # Unexpected: they put something besides on_error as a connector.
+            # Unexpected: they put something besides on_error as a
+            # connector.
             error $syn_err
         } else {
             # Success! We got an on_error code block.
             set on_error [lindex $args 1]
         }
     }
-    # Make the error message and database handle available to the on_error block.
+    # Make the error message and database handle available to the
+    # on_error block.
     upvar errmsg errmsg
 
     db_with_handle -dbn $dbn db {
-        # Preserve the handle, since db_with_handle kills it after executing
-        # this block.
+        # Preserve the handle, since db_with_handle kills it after
+        # executing this block.
         set dbh $db
         # Remember that there's a transaction happening on this handle.
         if { ![info exists db_state(transaction_level,$dbh)] } {
@@ -2450,6 +2464,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
     if { $err_p || [db_abort_transaction_p -dbn $dbn]} {
         # An error was triggered or the transaction has been aborted.
         db_abort_transaction -dbn $dbn
+
         if { [info exists on_error] && $on_error ne "" } {
 
             if {"postgresql" eq [db_type]} {
