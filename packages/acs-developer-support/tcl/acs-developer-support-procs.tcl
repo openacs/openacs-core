@@ -14,7 +14,7 @@ ad_library {
      return [apm_package_id_from_key "acs-developer-support"]
  }
 
- ad_proc -public ds_permission_p {} {
+ ad_proc -private ds_permission_p {} {
      Do we have permission to view developer support stuff.
  } {
      set party_id [ds_ad_conn user_id]
@@ -29,7 +29,7 @@ ad_library {
      return [permission::permission_p -party_id $party_id -object_id [ds_instance_id] -privilege "admin"]
  }
 
- ad_proc -public ds_require_permission {
+ ad_proc -private ds_require_permission {
    object_id
    privilege
  } {
@@ -103,7 +103,7 @@ ad_library {
      return 0
  }
 
- ad_proc -public ds_user_switching_enabled_p {} {
+ ad_proc -private ds_user_switching_enabled_p {} {
      Returns whether user-switching is enabled.
  } {
      return [expr {[nsv_exists ds_properties user_switching_enabled_p] &&
@@ -128,13 +128,13 @@ ad_library {
      return [nsv_get ds_properties page_fragment_cache_p]
  }
 
- ad_proc -public ds_adp_reveal_enabled_p {} {
+ ad_proc -private ds_adp_reveal_enabled_p {} {
     Returns true if developer-support adp revealing facilities are enabled.
  } {
      return [nsv_get ds_properties adp_reveal_enabled_p]
  }
 
- ad_proc -public ds_adp_box_class {} {
+ ad_proc -private ds_adp_box_class {} {
     Return developer support adp box class on/off
 } {
      if { [ds_adp_reveal_enabled_p] } {
@@ -144,7 +144,7 @@ ad_library {
      }
  }
 
- ad_proc -public ds_adp_file_class {} {
+ ad_proc -private ds_adp_file_class {} {
     Return developer support adp file on/off
 } {
      if { [ds_adp_reveal_enabled_p] } {
@@ -154,7 +154,7 @@ ad_library {
      }
  }
 
- ad_proc -public ds_adp_output_class {} {
+ ad_proc -private ds_adp_output_class {} {
     Return developer support adp output on/off
 } {
      if { [ds_adp_reveal_enabled_p] } {
@@ -187,7 +187,7 @@ ad_library {
      template::adp_append_code "}"
  }
 
- ad_proc -public ds_lookup_administrator_p { user_id } { } {
+ ad_proc -private -deprecated ds_lookup_administrator_p { user_id } { } {
      return 1
  }
 
@@ -282,7 +282,7 @@ ad_library {
      return 0
  }
 
- ad_proc -public ds_get_page_serve_time_ms {} {
+ ad_proc -private ds_get_page_serve_time_ms {} {
      Returns the number of milliseconds passed since this request thread was started.
 
      Returns the empty string if this information is not available.
@@ -299,7 +299,7 @@ ad_library {
      return $result
  }
 
- ad_proc -public ds_get_db_command_info {} {
+ ad_proc -private ds_get_db_command_info {} {
 
      Get a Tcl list with { num_commands total_ms } for the database
      commands for the request.
@@ -480,7 +480,7 @@ ad_library {
      return "filter_ok"
  }
 
- ad_proc -public ds_user_select_widget {} {
+ ad_proc -private ds_user_select_widget {} {
 
      Build a select widget for  users in the system, for quick user
      switching.
@@ -572,7 +572,7 @@ ad_library {
     }
 }
 
-ad_proc -public ds_get_user_id {{original 0}} {
+ad_proc -private ds_get_user_id {{original 0}} {
     Developer support version of ad_get_user_id, used for debugging sites.
 } {
     set orig_user_id [ds_get_real_user_id]
@@ -587,7 +587,7 @@ ad_proc -public ds_get_user_id {{original 0}} {
     }
 }
 
-ad_proc -public ds_conn { args } {
+ad_proc -private ds_conn { args } {
     Developer support version of ad_conn. Overloads "ad_conn user_id",
     delegates to ad_conn in all other cases.
 } {
@@ -602,7 +602,7 @@ ad_proc -public ds_conn { args } {
     return [orig_ad_conn {*}$args]
 }
 
-ad_proc -public ds_set_user_switching_enabled { enabled_p } {
+ad_proc -private ds_set_user_switching_enabled { enabled_p } {
     Enables/disables user-switching in a safe manner.
 
     @author Lars Pind (lars@pinds.com)
@@ -612,7 +612,7 @@ ad_proc -public ds_set_user_switching_enabled { enabled_p } {
     nsv_set ds_properties user_switching_enabled_p $enabled_p
 }
 
-ad_proc -public ds_set_profiling_enabled { enabled_p } {
+ad_proc -private ds_set_profiling_enabled { enabled_p } {
     Enables/disables profiling statistics in a safe manner.
 
     @author Lars Pind (lars@pinds.com)
@@ -622,7 +622,7 @@ ad_proc -public ds_set_profiling_enabled { enabled_p } {
     nsv_set ds_properties profiling_enabled_p $enabled_p
 }
 
-ad_proc -public ds_set_database_enabled { enabled_p } {
+ad_proc -private ds_set_database_enabled { enabled_p } {
     Enables/disables database statistics in a safe manner.
 
     @author Lars Pind (lars@pinds.com)
@@ -632,7 +632,7 @@ ad_proc -public ds_set_database_enabled { enabled_p } {
     nsv_set ds_properties database_enabled_p $enabled_p
 }
 
-ad_proc -public ds_set_adp_reveal_enabled { enabled_p } {
+ad_proc -private ds_set_adp_reveal_enabled { enabled_p } {
     Enables/disables database statistics in a safe manner.
 
     @author Lars Pind (lars@pinds.com)
@@ -686,13 +686,13 @@ ad_proc -private ds_watch_packages {} {
     }
 }
 
-ad_proc -public ds_comments_p {} {
+ad_proc -private ds_comments_p {} {
     Should we show comments inline on the page?
 } {
     return [parameter::get -package_id [ds_instance_id] -parameter ShowCommentsInlineP -default 0]
 }
 
-ad_proc -public ds_get_comments {} {
+ad_proc -private ds_get_comments {} {
     Get comments for the current request.
 } {
     set comments [list]
