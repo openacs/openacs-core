@@ -923,7 +923,7 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
 }
 
 
-ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
+ad_proc -private auth::sync::process_doc::ims::GetAcknowledgementDocument {
     job_id
     document
     parameters
