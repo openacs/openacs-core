@@ -193,6 +193,24 @@ if {[namespace which ::ns_trim] eq ""} {
     }
 }
 
+if {[namespace which ::ns_uuid] eq ""} {
+    
+    ad_proc ns_uuid {} {
+        
+        Return a unique ID, based on the combination of high
+        resolution time and a random token. The result should follow
+        the syntax-requirements of the left token of Message-IDs (RFC
+        5322).
+
+        The result does not follow the format of RFC 4122 UUIDs, but
+        this is just for backwards compatiblity, when no recent
+        NaviServer is used.
+        
+    } {
+        return "[clock clicks]-[sec_random_token]"
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
