@@ -477,6 +477,64 @@ aa_register_case \
         }
     }
 
+aa_register_case -cats {
+    web
+    smoke
+} -urls {
+    /api-doc/
+    /api-doc/proc-search
+} acs_api_browser_search {
+    Simple test to search for a proc in the api-browser
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 03 March 2021
+} {
+    aa_run_with_teardown -test_code {
+        #
+        # Create a new admin user and login
+        #
+        set user_id [db_nextval acs_object_id_seq]
+        set user_info [acs::test::user::create -user_id $user_id -admin]
+        acs::test::confirm_email -user_id $user_id
+        #
+        # Go to the api-doc and check status code
+        #
+        set d [acs::test::http -depth 3 -user_info $user_info /api-doc]
+        acs::test::reply_has_status_code $d 200
+        #
+        # Get the form data
+        #
+        set form_data [::acs::test::get_form [dict get $d body] {//form[@id="api-search"]}]
+        #
+        # Fill in with the proc to search
+        #
+        set proc_to_search "ad_proc"
+        set param_weight 3
+        ns_log notice "HHHHHHHHHHHHH form_data $form_data"
+        set d [::acs::test::form_reply \
+                    -last_request $d \
+                    -url [dict get $form_data @action] \
+                    -update [subst {
+                        query_string "$proc_to_search"
+                        param_weight $param_weight
+                    }] \
+                    [dict get $form_data fields]]
+        set reply [dict get $d body]
+        ns_log notice "HHHHHHHHHHHHH d $d"
+        #
+        # Check, if the form was correctly validated.
+        #
+        acs::test::reply_contains_no $d form-error
+        acs::test::reply_has_status_code $d 302
+        #
+        # Check the proc-search page directly
+        #
+        set page "/api-doc/proc-search?query_string=$proc_to_search&param_weight=$param_weight"
+        set d [acs::test::http -user_info $user_info $page]
+        acs::test::reply_has_status_code $d 200
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
