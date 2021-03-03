@@ -13,7 +13,7 @@ ad_proc -private cr_item_search::assert_not_in_queue {
 } {
     aa_false "Revision ${revision_id} is not queued for search events $events" \
 	[db_string check_queue [subst {
-            select count(*) from search_observer_queue 
+            select count(*) from search_observer_queue
             where object_id = :revision_id
             and event in
             ([template::util::tcl_to_sql_list $events])
@@ -26,14 +26,14 @@ ad_proc -private cr_item_search::assert_in_queue {
 } {
     We use this test many times.
     Check if revision_id is in the search observer queue
-    
+
     @param events List of events to check for (INSERT,UPDATE,DELETE)
 } {
     aa_true "Revision ${revision_id} is queued for search events $events" \
 	[db_string check_queue [subst {
-            select count(*) from search_observer_queue 
+            select count(*) from search_observer_queue
             where object_id = :revision_id
-            and event in 
+            and event in
             ([template::util::tcl_to_sql_list $events])
         }] -default 0]
 }
@@ -103,10 +103,10 @@ aa_register_case \
 	    aa_true "But a revision exists" {$latest_revision ne ""}
 	    aa_false "Item is NOT queued for search indexing" \
 		[db_string check_queue {
-                    select 1 from search_observer_queue 
+                    select 1 from search_observer_queue
                     where object_id = :latest_revision
                 } -default 0]
-            
+
 	    aa_log "Update Item, still no live revision"
 	    content::item::update \
 		-item_id $item_id \
@@ -114,14 +114,14 @@ aa_register_case \
 	    cr_item_search::assert_not_in_queue \
 		-revision_id $latest_revision \
 		-events [list INSERT UPDATE]
-            
+
 	    aa_log "Set live revision no publish date"
 	    content::item::set_live_revision \
 		-revision_id $latest_revision
 	    cr_item_search::assert_in_queue \
 		-revision_id $latest_revision \
 		-events [list INSERT UPDATE]
-            
+
 	    content::item::unset_live_revision -item_id $item_id
 	    cr_item_search::assert_in_queue \
 		-revision_id $latest_revision \
