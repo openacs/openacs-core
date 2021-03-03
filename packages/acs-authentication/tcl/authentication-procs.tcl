@@ -974,12 +974,12 @@ ad_proc -public auth::create_local_account {
         }
     }
 
-    set local_test_authorities [list \
-                                    [auth::authority::local] \
-                                    [auth::authority::get_id -short_name "acs_testing"]]
+    set local_authorities [list \
+                               [auth::authority::local] \
+                               [auth::authority::get_id -short_name "acs_testing"]]
 
     # Default a local account username
-    if { $user_info(authority_id) in $local_test_authorities
+    if { $user_info(authority_id) in $local_authorities
          && [auth::UseEmailForLoginP]
          && $username eq "" } {
 
