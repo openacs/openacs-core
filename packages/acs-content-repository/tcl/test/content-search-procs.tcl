@@ -62,8 +62,11 @@ aa_register_case \
     -cats {api db} \
     -procs {
         content::item::get_id
+        content::item::get_id_by_name
+        content::item::get_parent_folder
         content::item::get_latest_revision
         content::item::get_live_revision
+        content::item::get_best_revision
         content::item::new
         content::item::set_live_revision
         content::item::unset_live_revision
@@ -96,6 +99,29 @@ aa_register_case \
 					      -item_path $item_name \
 					      -root_folder_id $folder_id] \
 					     ne ""}
+
+	    aa_equals "Item can be retrieved by name" \
+                [content::item::get_id_by_name \
+                     -name $item_name \
+                     -parent_id $folder_id] \
+                $item_id
+
+	    aa_equals "Folder is correct" \
+                [content::item::get_parent_folder \
+                     -item_id $item_id] \
+                $folder_id
+
+            aa_log "Create a child for this nonfolder item"
+            set child_item_id [content::item::new \
+                                   -name "$item_name child" \
+                                   -title "$item_name child" \
+                                   -parent_id $item_id \
+                                   -is_live f]
+            aa_equals "Folder for the child is correct" \
+                [content::item::get_parent_folder \
+                     -item_id $child_item_id] \
+                $folder_id
+
 	    aa_true "Item is NOT live" {[content::item::get_live_revision \
                                              -item_id $item_id] eq ""}
             set latest_revision [content::item::get_latest_revision \
@@ -107,6 +133,11 @@ aa_register_case \
                     where object_id = :latest_revision
                 } -default 0]
 
+            set best_revision [content::item::get_best_revision \
+                                   -item_id $item_id]
+            aa_true "Best revision exists" {$best_revision ne ""}
+            aa_true "Best revision is the latest revision" {$best_revision == $latest_revision}
+
 	    aa_log "Update Item, still no live revision"
 	    content::item::update \
 		-item_id $item_id \
@@ -115,12 +146,25 @@ aa_register_case \
 		-revision_id $latest_revision \
 		-events [list INSERT UPDATE]
 
+            aa_log "Add a new non-live revision"
+            set new_revision [content::revision::new \
+                                  -item_id $item_id \
+                                  -title "$item_name 2" \
+                                  -is_live f]
+            set best_revision [content::item::get_best_revision \
+                                   -item_id $item_id]
+            aa_true "Best revision is now the new revision" {$best_revision == $new_revision}
+
 	    aa_log "Set live revision no publish date"
 	    content::item::set_live_revision \
 		-revision_id $latest_revision
 	    cr_item_search::assert_in_queue \
 		-revision_id $latest_revision \
 		-events [list INSERT UPDATE]
+
+            set best_revision [content::item::get_best_revision \
+                                   -item_id $item_id]
+            aa_true "Best revision is now the live revision" {$best_revision == $latest_revision}
 
 	    content::item::unset_live_revision -item_id $item_id
 	    cr_item_search::assert_in_queue \
