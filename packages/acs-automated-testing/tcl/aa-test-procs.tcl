@@ -1027,7 +1027,11 @@ ad_proc -public aa_run_with_teardown {
                 aa_end_rollback_block
                 error "rollback tests"
             } on_error {
+                #
+                # Exectue the rollback block and trigger error.
+                #
                 aa_end_rollback_block
+                set errmsg [lindex [split $::errorInfo \n] 0]
             }
 
             aa_execute_rollback_tests
