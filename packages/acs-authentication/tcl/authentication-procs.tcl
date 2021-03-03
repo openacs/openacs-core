@@ -974,14 +974,25 @@ ad_proc -public auth::create_local_account {
         }
     }
 
-    set local_authorities [list \
-                               [auth::authority::local] \
-                               [auth::authority::get_id -short_name "acs_testing"]]
+    # We can generate a username ourselves when this is missing and
+    # the system is configured to do so, but only if the account is
+    # managed locally.
+    if { $username eq "" && [auth::UseEmailForLoginP] } {
+        set local_authority_id [auth::authority::local]
+        set local_auth_impl_id [auth::authority::get_element \
+                                    -authority_id $local_authority_id \
+                                    -element "auth_impl_id"]
 
-    # Default a local account username
-    if { $user_info(authority_id) in $local_authorities
-         && [auth::UseEmailForLoginP]
-         && $username eq "" } {
+        set auth_impl_id [auth::authority::get_element \
+                              -authority_id $authority_id \
+                              -element "auth_impl_id"]
+
+        set generate_username_p [expr {$local_auth_impl_id == $auth_impl_id}]
+    } else {
+        set generate_username_p false
+    }
+
+    if { $generate_username_p } {
 
         # Generate a username that is guaranteed to be unique.
         # Rather much work, but that's the best I could think of
