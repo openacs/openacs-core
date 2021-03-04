@@ -7,7 +7,7 @@
 namespace eval doc {
 
 
-    ad_proc -public package_info { package_name info_ref } {
+    ad_proc -private -deprecated package_info { package_name info_ref } {
 	Set up a data source with overall package info
 	(overview, see also, etc.)
     } {
@@ -36,7 +36,7 @@ namespace eval doc {
     }
 
 
-    ad_proc -public get_proc_header { proc_name package_name doc_ref code_ref { db "" } } {
+    ad_proc -private -deprecated get_proc_header { proc_name package_name doc_ref code_ref { db "" } } {
 	Retrieve the function header for a specific function
 	and parse out the javadoc comment.
     } {
@@ -62,7 +62,7 @@ namespace eval doc {
   }
 
  
-    ad_proc -public parse_proc_header { doc_block code_block param_ref tags_ref code_ref {level 2}} {
+    ad_proc -private -deprecated parse_proc_header { doc_block code_block param_ref tags_ref code_ref {level 2}} {
 	Parse the header block and prepare the datasources:
 	Prepare a multirow datasource for the param tags
 	Prepare a onerow datasource for all the other tags
@@ -111,7 +111,7 @@ namespace eval doc {
   }
 
 
-    ad_proc -public get_proc_doc { proc_name package_name param_ref tags_ref code_ref args } {
+    ad_proc -private -deprecated get_proc_doc { proc_name package_name param_ref tags_ref code_ref args } {
 	Query the database and prepare the datasources
 	The user should call this procedure
     } {
@@ -152,7 +152,7 @@ namespace eval doc {
 
   }
 
-    ad_proc -public package_list { {db ""} } {
+    ad_proc -private -deprecated package_list { {db ""} } {
 	Return a list of all the packages in the data model, in form
 	{ {label value} {label value} ... }
     } {
@@ -162,7 +162,7 @@ namespace eval doc {
 	return $result
     }  
 
-    ad_proc -public func_list { package_name {db ""} } {
+    ad_proc -private -deprecated func_list { package_name {db ""} } {
 	Return a list of all the function creation headers in a package, in form { value value ... }
     } {
 
@@ -182,7 +182,7 @@ namespace eval doc {
   }  
 
 
-    ad_proc -public func_multirow { package_name result_ref {db ""} } {
+    ad_proc -private -deprecated func_multirow { package_name result_ref {db ""} } {
 	Return a multirow datatsource for all the functions
 	{ value value ... }
     } {
