@@ -68,17 +68,28 @@ ad_proc -public acs_object_type { object_id } {
 
 ad_proc -public acs_object::get { 
     {-object_id:required}
-    {-array:required}
+    {-array}
+    {-element}
 } {
     Gets information about an acs_object.
 
-    Returns object_id, package_id, object_type, context_id, security_inherit_p, 
-    creation_user, creation_date_ansi, creation_ip, last_modified_ansi,
-    modifying_user, modifying_ip, tree_sortkey,  object_name
+    If called without "-element", it returns a dict containing
+    object_id, package_id, object_type, context_id,
+    security_inherit_p, creation_user, creation_date_ansi,
+    creation_ip, last_modified_ansi, modifying_user, modifying_ip,
+    tree_sortkey, object_name.
 
+    If called with "-element" it returns the denoted element (similar
+    to e.g. "party::get").
+    
     @param array An array in the caller's namespace into which the info should be delivered (upvared)
+    @param element to be returned
+    @param object_id for which the information should be retrieved
+    @error when object_id does not exist
 } {
-    upvar 1 $array row
+    if {[info exists array]} {
+        upvar 1 $array row
+    }
     db_1row select_object {
         select o.object_id,
                o.title,
@@ -96,6 +107,12 @@ ad_proc -public acs_object::get {
         from   acs_objects o
         where  o.object_id = :object_id
     } -column_array row
+
+    if {[info exists element]} {
+        return [dict get [array get row] $element]
+    } else {
+        return [array get row]
+    }
 }
 
 ad_proc -public acs_object::package_id {
@@ -142,8 +159,7 @@ ad_proc -public acs_object::get_element {
 
     @see acs_object::get
 } {
-    acs_object::get -object_id $object_id -array row
-    return $row($element)
+    return [acs_object::get -object_id $object_id -element $element]
 }
 
 ad_proc -public acs_object::object_p {
