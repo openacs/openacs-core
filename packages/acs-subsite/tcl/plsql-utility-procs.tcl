@@ -58,7 +58,7 @@ namespace eval plsql_utility {
     }
 
 
-    ad_proc -public format_pieces {
+    ad_proc -private format_pieces {
         { -indent 6 }
         { -num_spaces 3 }
         { -delim "" }

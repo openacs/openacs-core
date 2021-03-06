@@ -373,7 +373,7 @@ ad_proc -public subsite::util::object_type_pretty_name {
     }]
 }
 
-ad_proc -public subsite::util::return_url_stack {
+ad_proc -private subsite::util::return_url_stack {
     return_url_list
 } {
     Given a list of return_urls, we recursively encode them into one
@@ -894,7 +894,7 @@ ad_proc -public subsite::refresh_theme_subsites {
     }
 }
 
-ad_proc -public subsite::save_theme_parameters {
+ad_proc -private subsite::save_theme_parameters {
     -subsite_id
     -theme
     -local_p
@@ -938,7 +938,7 @@ ad_proc -public subsite::save_theme_parameters {
 
 }
 
-ad_proc -public subsite::save_theme_parameters_as {
+ad_proc -private subsite::save_theme_parameters_as {
     -subsite_id
     -theme:required
     -pretty_name:required

@@ -418,6 +418,7 @@ aa_register_case -cats {
     attribute::delete
     attribute::value_add
     attribute::value_delete
+    ad_page_contract_filter_proc_attribute_dynamic_p
 
     db_column_exists
 } acs_subsite_attributes {
@@ -495,6 +496,20 @@ aa_register_case -cats {
                and enum_value=:enum_value
         }]
         aa_true "Value added to attribute" "$value_exists_p"
+
+        dict set cases attribute_dynamic_p [list $attribute_id 1 1 0]
+        foreach filter [dict keys $cases] {
+            foreach { value result } [dict get $cases $filter] {
+                if { $result } {
+                    aa_true "'[ns_quotehtml $value]' is $filter" \
+                        [ad_page_contract_filter_invoke $filter dummy value]
+                } else {
+                    aa_false "'[ns_quotehtml $value]' is NOT $filter" \
+                        [ad_page_contract_filter_invoke $filter dummy value]
+                }
+            }
+        }
+        
         #
         # Delete value from attribute
         #
