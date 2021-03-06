@@ -367,16 +367,14 @@ ad_proc -public content::item::get_content_type {
         content_item get_content_type]
 }
 
-ad_proc -public content::item::get_context {
+ad_proc -deprecated -public content::item::get_context {
     -item_id:required
 } {
     @param item_id
 
     @return NUMBER(38)
 } {
-    return [package_exec_plsql -var_list [list \
-        [list item_id $item_id ] \
-    ] content_item get_context]
+    return [acs_object::get_element -object_id $item_id -element context_id]
 }
 
 
