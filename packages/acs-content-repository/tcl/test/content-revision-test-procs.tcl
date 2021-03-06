@@ -19,6 +19,7 @@ aa_register_case \
         content::item::new
         content::revision::new
         content::revision::get_title
+        content::revision::item_id
         cr_write_content 
     } \
     content_revision {
@@ -71,6 +72,10 @@ aa_register_case \
             && $revision_id == $revision_content(revision_id)
         }
 
+        aa_equals "content_revision is consistent" \
+            [content::revision::item_id -revision_id $revision_id] \
+            $first_item_id
+        
         aa_equals "Title of the revision should be $title" \
                   "$title" \
                   [content::revision::get_title \
