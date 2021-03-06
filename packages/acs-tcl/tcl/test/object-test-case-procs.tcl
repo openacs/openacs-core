@@ -96,36 +96,34 @@ aa_register_case \
 
             set the2_id [db_exec_plsql new_type $new_type_sql]
 
-           acs_object::get -object_id $the_id -array array
+            acs_object::get -object_id $the_id -array array
 
-           aa_true "object_id $the_id :: $array(object_id)" \
+            aa_true "object_id $the_id :: $array(object_id)" \
                 [string match $the_id $array(object_id)]
 
-           aa_true "object_type $object_type :: $array(object_type)" \
-                [string match $object_type $array(object_type)]
+            aa_true "object_type $object_type :: $array(object_type)" \
+                [string equal $object_type $array(object_type)]
 
-           aa_true "context_id $context_id :: $array(context_id)" \
-                [string match $context_id $array(context_id)]
+            aa_true "context_id $context_id :: $array(context_id)" \
+                [string equal $context_id $array(context_id)]
 
-           aa_true \
-                "creation_user $creation_user :: [acs_object::get_element -object_id $the_id -element creation_user]" \
-                [string match $creation_user [acs_object::get_element \
+            aa_true \
+                "creation_user $creation_user :: [acs_object::get -object_id $the_id -element creation_user]" \
+                [string equal $creation_user [acs_object::get_element \
                                                   -object_id $the_id \
                                                   -element creation_user]]
-           aa_true \
-                "creation_ip $creation_ip :: [acs_object::get_element -object_id $the_id -element creation_ip]" \
-           [string match $creation_ip [acs_object::get_element \
-                                            -object_id $the_id \
-                                            -element creation_ip]]
+            aa_true \
+                "creation_ip $creation_ip :: [acs_object::get -object_id $the_id -element creation_ip]" \
+                [string equal $creation_ip [acs_object::get_element \
+                                                -object_id $the_id \
+                                                -element creation_ip]]
 
             acs_object::set_context_id -object_id $the_id \
                 -context_id $context_id2
 
             aa_true \
-                "context_id $context_id2 :: [acs_object::get_element -object_id $the_id -element  context_id]" \
-            [string match $context_id2 [acs_object::get_element \
-                                            -object_id $the_id \
-                                            -element context_id]]
+                "context_id $context_id2 :: [acs_object::get_element -object_id $the_id -element context_id]" \
+                [string equal $context_id2 [acs_object::get -object_id $the_id -element context_id]]
 
 
         } -teardown_code {
