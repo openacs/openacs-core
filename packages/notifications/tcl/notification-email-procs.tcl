@@ -75,7 +75,7 @@ namespace eval notification::email {
         }
     }
 
-    ad_proc -public reply_address {
+    ad_proc -private reply_address {
         {-object_id:required}
         {-type_id:required}
     } {
@@ -88,7 +88,7 @@ namespace eval notification::email {
         }
     }
 
-    ad_proc -public parse_reply_address {
+    ad_proc -private parse_reply_address {
         {-reply_address:required}
     } {
         This takes a reply address, checks it for consistency, and returns a list of object_id and type_id
@@ -402,7 +402,7 @@ namespace eval notification::email {
         return $list_of_reply_ids
     }
 
-    ad_proc -public scan_replies {} {
+    ad_proc -private scan_replies {} {
         scan for replies
     } {
         ns_log debug "notification::email::scan_replies: about to load qmail queue"

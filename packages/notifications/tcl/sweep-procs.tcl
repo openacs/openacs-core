@@ -10,7 +10,7 @@ ad_library {
 
 namespace eval notification::sweep {
 
-    ad_proc -public cleanup_notifications {} {
+    ad_proc -private cleanup_notifications {} {
         Clean up the notifications that have been sent out (DRB: inefficiently...).
     } {
         # before the killing starts, remove invalid requests
@@ -44,7 +44,7 @@ namespace eval notification::sweep {
 
     }
 
-    ad_proc -public sweep_notifications {
+    ad_proc -private sweep_notifications {
         {-interval_id:required}
         {-batched_p 0}
     } {

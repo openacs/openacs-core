@@ -104,7 +104,7 @@ ad_proc -public notification::delivery::delete {
     db_exec_plsql delete {}
 }
 
-ad_proc -public notification::delivery::update_sc_impl_id {
+ad_proc -private notification::delivery::update_sc_impl_id {
     {-delivery_method_id ""}
     {-sc_impl_id:required}
 } {
