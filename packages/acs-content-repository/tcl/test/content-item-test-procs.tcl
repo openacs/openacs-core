@@ -12,25 +12,27 @@ aa_register_case \
     -procs {
         ad_generate_random_string
         content::folder::delete
-        content::folder::is_empty
-        content::folder::is_folder
-        content::folder::is_root
-        content::folder::new
         content::folder::get_index_page
         content::folder::get_label
+        content::folder::is_empty
+        content::folder::is_folder
         content::folder::is_registered
+        content::folder::is_root
+        content::folder::new
         content::folder::register_content_type
         content::item::delete
         content::item::get
+        content::item::get_content_type
         content::item::get_id
         content::item::get_latest_revision
         content::item::new
         content::item::rename
         content::item::update
+        content::revision::is_latest
+        content::revision::is_live
         content::type::attribute::new
         content::type::delete
         content::type::new
-        content::item::get_content_type
 
         package_object_attribute_list
     } \
@@ -119,10 +121,20 @@ aa_register_case \
 
             set content_type [content::item::get_content_type -item_id $first_item_id]
             aa_true "content_type is '$content_type'" {$content_type eq "content_revision"}
-            
+
             aa_false "First item is not a folder" [content::folder::is_folder -item_id $first_item_id]
 
             aa_true "first item exists" {[content::item::get -item_id $first_item_id] == 1}
+
+            content::item::get -item_id $first_item_id -array item_info
+            set revision_id [dict get [array get item_info] revision_id]
+
+            aa_equals "content_revision is latest" \
+                [content::revision::is_latest -revision_id $revision_id] \
+                t
+            aa_equals "content_revision is live" \
+                [content::revision::is_live -revision_id $revision_id] \
+                t
 
             aa_true "First item's revision exists" \
                 {[db_string get_revision {
@@ -252,7 +264,7 @@ aa_register_case \
 
             set content_type [content::item::get_content_type -item_id $new_type_item_id]
             aa_true "content_type is '$content_type" {$content_type eq "test_type"}
-            
+
             #########################################################
             # test update of item and attributes
             #########################################################

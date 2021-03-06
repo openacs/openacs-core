@@ -16,11 +16,15 @@ aa_register_case \
         content::folder::unregister_content_type
         content::item::delete
         content::item::get_content
+        content::item::get_revision_count
         content::item::new
-        content::revision::new
         content::revision::get_title
+        content::revision::is_latest
+        content::revision::is_live
         content::revision::item_id
-        cr_write_content 
+        content::revision::new
+        content::revision::revision_name
+        cr_write_content
     } \
     content_revision {
         content revision test
@@ -75,11 +79,40 @@ aa_register_case \
         aa_equals "content_revision is consistent" \
             [content::revision::item_id -revision_id $revision_id] \
             $first_item_id
-        
+
+        aa_equals "content_revision is latest" \
+            [content::revision::is_latest -revision_id $revision_id] \
+            t
+        aa_equals "content_revision is live" \
+            [content::revision::is_live -revision_id $revision_id] \
+            f
+
+        aa_equals "content_revision name" \
+            [content::revision::revision_name -revision_id $revision_id] \
+            "Revision 1 of 1 for item: Test Title"
+
+        aa_equals "content_revision count for first item" \
+            [content::item::get_revision_count -item_id $first_item_id] \
+            1
+
         aa_equals "Title of the revision should be $title" \
-                  "$title" \
-                  [content::revision::get_title \
-                         -revision_id $returned_revision_id]
+            $title \
+            [content::revision::get_title \
+                       -revision_id $returned_revision_id]
+
+        set revision_id2 [content::revision::new \
+                              -item_id $first_item_id \
+                              -title "rev2" \
+                              -description "Test Description2" \
+                              -content "Test Content2"]
+
+        aa_equals "content_revision count for first item" \
+            [content::item::get_revision_count -item_id $first_item_id] \
+            2
+
+        aa_equals "content_revision name" \
+            [content::revision::revision_name -revision_id $revision_id2] \
+            "Revision 2 of 2 for item: rev2"
 
         content::item::delete -item_id $first_item_id
 
