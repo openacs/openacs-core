@@ -30,6 +30,7 @@ aa_register_case \
         content::type::attribute::new
         content::type::delete
         content::type::new
+        content::item::get_content_type
 
         package_object_attribute_list
     } \
@@ -116,6 +117,9 @@ aa_register_case \
 
             aa_true "First item created" {$first_item_id == $returned_first_item_id}
 
+            set content_type [content::item::get_content_type -item_id $first_item_id]
+            aa_true "content_type is '$content_type'" {$content_type eq "content_revision"}
+            
             aa_false "First item is not a folder" [content::folder::is_folder -item_id $first_item_id]
 
             aa_true "first item exists" {[content::item::get -item_id $first_item_id] == 1}
@@ -245,6 +249,10 @@ aa_register_case \
             #########################################################
             aa_equals "Extended attribute set" "attribute_value" $new_type_item(attribute_name)
 
+
+            set content_type [content::item::get_content_type -item_id $new_type_item_id]
+            aa_true "content_type is '$content_type" {$content_type eq "test_type"}
+            
             #########################################################
             # test update of item and attributes
             #########################################################
