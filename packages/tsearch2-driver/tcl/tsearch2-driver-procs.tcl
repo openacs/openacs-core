@@ -303,7 +303,7 @@ ad_proc tsearch2::build_query_tcl { -query } {
     return $query
 }
 
-ad_proc tsearch2::build_query_postgres { -query } {
+ad_proc -private tsearch2::build_query_postgres { -query } {
     Convert conjunctions to query characters for tsearch2
     use websearch_to_tsquery which is integrated in postgres >= 11
 
@@ -337,7 +337,7 @@ ad_proc tsearch2::build_query_postgres { -query } {
     return $query
 }
 
-ad_proc tsearch2::build_query {
+ad_proc -private tsearch2::build_query {
     -query
 } {
     Build query string for tsearch2
@@ -357,7 +357,7 @@ ad_proc tsearch2::build_query {
     return $query
 }
 
-ad_proc -public tsearch2::separate_query_and_operators {
+ad_proc -private tsearch2::separate_query_and_operators {
     -query
 } {
     Separates special operators from full text query

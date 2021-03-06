@@ -10,7 +10,7 @@ ad_library {
 namespace eval tsearch2_driver::install {}
 
 
-ad_proc -public tsearch2_driver::install::preinstall_checks {
+ad_proc -private tsearch2_driver::install::preinstall_checks {
 
 } {
 
@@ -68,7 +68,7 @@ ad_proc -public tsearch2_driver::install::preinstall_checks {
 
 }
 
-ad_proc -public tsearch2_driver::install::package_install {
+ad_proc -private tsearch2_driver::install::package_install {
 } {
 
     Installation callback for tsearch2 search engine driver
