@@ -48,6 +48,7 @@ ad_proc -public template::widget {} {
     @see template::widget::submit
     @see template::widget::text
     @see template::widget::textarea
+    @see template::widget::url
     @see template::widget::block
     @see template::element::create
     @see template::widget::select_text
@@ -1382,6 +1383,23 @@ ad_proc -public template::widget::number {
     upvar $element_reference element
 
     return [input number element $tag_attributes]
+}
+
+ad_proc -public template::widget::url {
+    element_reference
+    tag_attributes
+} {
+    Render a url input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input url element $tag_attributes]
 }
 
 #
