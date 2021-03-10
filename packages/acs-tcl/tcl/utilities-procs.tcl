@@ -1486,9 +1486,10 @@ ad_proc -public ad_cache_returnredirect {
     url
     { persistent "f" }
     { excluded_vars "" }
-} {
-    An addition to ad_returnredirect.  It caches all variables in the redirect except those in excluded_vars
-    and then calls ad_returnredirect with the resultant string.
+} {    
+    An addition to ad_returnredirect.  It caches all variables in the
+    redirect except those in excluded_vars and then calls
+    ad_returnredirect with the resultant string.
 
     @author Brad Duell (bduell@ncacasi.org)
 
@@ -1525,8 +1526,7 @@ ad_proc -public ad_cache_returnredirect {
 
     set saved_list ""
     if { $vars ne "" } {
-        foreach item_value [split $vars "&"] {
-            lassign [split $item_value "="] item value
+        foreach {item value} [ns_set array [ns_parsequery $vars]] {
             if {$item ni $excluded_vars_list} {
                 # No need to save the value if it's being passed ...
                 if {$item in $saved_list} {
