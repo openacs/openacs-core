@@ -65,12 +65,12 @@ set form_widgets_full {
         {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_password]}}
     }
 
-    {forgotten_pwd_url:text,optional
+    {forgotten_pwd_url:text(url),optional
         {html {size 50}}
         {label "\#acs-admin.Recover_password_URL\#"}
         {help_text "[_ acs-admin.Recover_password_URL_help_text]"}
     }
-    {change_pwd_url:text,optional
+    {change_pwd_url:text(url),optional
         {html {size 50}}
         {label "\#acs-admin.Change_password_URL\#"}
         {help_text "[_ acs-admin.Change_password_URL_help_text]"}
@@ -83,7 +83,7 @@ set form_widgets_full {
         {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_registration]}}
     }
 
-    {register_url:text,optional
+    {register_url:text(url),optional
         {html {size 50}}
         {label "\#acs-admin.Account_registration_URL\#"}
         {help_text "[_ acs-admin.Account_reg_URL_help_text]"}
