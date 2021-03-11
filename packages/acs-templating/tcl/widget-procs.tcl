@@ -24,12 +24,16 @@ ad_proc -public template::widget {} {
     for the various input widgets.
 
     @see template::widget::ampmFragment
+    @see template::widget::block
     @see template::widget::button
     @see template::widget::checkbox
+    @see template::widget::checkbox_text
+    @see template::widget::color
     @see template::widget::comment
     @see template::widget::currency
     @see template::widget::date
     @see template::widget::dateFragment
+    @see template::widget::email
     @see template::widget::file
     @see template::widget::hidden
     @see template::widget::inform
@@ -42,18 +46,17 @@ ad_proc -public template::widget {} {
     @see template::widget::password
     @see template::widget::party_search
     @see template::widget::radio
-    @see template::util::richtext
+    @see template::wdiget::radio_text
     @see template::widget::search
     @see template::widget::select
+    @see template::widget::select_text
     @see template::widget::submit
+    @see template::widget::tel
     @see template::widget::text
     @see template::widget::textarea
     @see template::widget::url
-    @see template::widget::block
     @see template::element::create
-    @see template::widget::select_text
-    @see template::wdiget::radio_text
-    @see template::widget::checkbox_text
+    @see template::util::richtext
 } -
 
 
@@ -1400,6 +1403,74 @@ ad_proc -public template::widget::url {
     upvar $element_reference element
 
     return [input url element $tag_attributes]
+}
+
+ad_proc -public template::widget::tel {
+    element_reference
+    tag_attributes
+} {
+    Render a tel input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input tel element $tag_attributes]
+}
+
+ad_proc -public template::widget::tel {
+    element_reference
+    tag_attributes
+} {
+    Render a tel input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input tel element $tag_attributes]
+}
+
+ad_proc -public template::widget::email {
+    element_reference
+    tag_attributes
+} {
+    Render a email input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input email element $tag_attributes]
+}
+
+ad_proc -public template::widget::color {
+    element_reference
+    tag_attributes
+} {
+    Render a color input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input color element $tag_attributes]
 }
 
 #
