@@ -780,11 +780,11 @@ ad_proc -public auth::get_registration_form_elements {
 
     array set widgets {
         username text
-        email text
+        email email
         first_names text
         last_name text
         screen_name text
-        url text
+        url url
         password password
         password_confirm password
         secret_question text
