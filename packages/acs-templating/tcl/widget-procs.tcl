@@ -46,7 +46,7 @@ ad_proc -public template::widget {} {
     @see template::widget::password
     @see template::widget::party_search
     @see template::widget::radio
-    @see template::wdiget::radio_text
+    @see template::widget::radio_text
     @see template::widget::search
     @see template::widget::select
     @see template::widget::select_text
