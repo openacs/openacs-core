@@ -38,7 +38,7 @@ ad_form -name user_search -cancel_url . -form {
                                 where object_id_one = $group_id
                                   and object_id_two = u.user_id
                                   and rel_type = 'membership_rel')
-            order  by name            
+            order  by name
         }}
     }
 }

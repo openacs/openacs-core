@@ -70,10 +70,6 @@ if { [auth::UseEmailForLoginP] } {
 }
 set focus "recover.$focus"
 
-
-
-
-
 set submission_p 0
 
 ad_form -extend -name recover -on_request {}
