@@ -1422,23 +1422,6 @@ ad_proc -public template::widget::tel {
     return [input tel element $tag_attributes]
 }
 
-ad_proc -public template::widget::tel {
-    element_reference
-    tag_attributes
-} {
-    Render a tel input widget.
-
-    @param element_reference Reference variable to the form element
-    @param tag_attributes HTML attributes to add to the tag
-
-    @return Form HTML for widget
-} {
-
-    upvar $element_reference element
-
-    return [input tel element $tag_attributes]
-}
-
 ad_proc -public template::widget::email {
     element_reference
     tag_attributes
