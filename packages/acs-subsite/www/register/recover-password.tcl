@@ -37,13 +37,15 @@ ad_form -name recover \
     -form { {dummy:text(hidden),optional} }
 
 set username_widget text
+set email_widget email
 if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs_kernel_id]] } {
     set username_widget password
+    set email_widget    password
 }
 
 set focus {}
 if { [auth::UseEmailForLoginP] } {
-    ad_form -extend -name recover -form [list [list email:text($username_widget) [list label [_ acs-subsite.Email]]]]
+    ad_form -extend -name recover -form [list [list email:text($email_widget) [list label [_ acs-subsite.Email]]]]
     set user_id_widget_name email
     set focus "email"
 } else {
