@@ -118,14 +118,25 @@ ad_form \
     } -csrf_protection_p true
 
 set username_widget text
+if {[namespace which ::template::widget::email] ne ""} {
+    set email_widget email
+} else {
+    #
+    # Failover to avoid breaking the login page if the acs-templating package
+    # has not been updated to a version supporting the 'email' widget yet.
+    #
+    set email_widget text
+}
+
 if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id $::acs::kernel_id] } {
     set username_widget password
+    set email_widget    password
 }
 
 set focus {}
 if { [auth::UseEmailForLoginP] } {
     ad_form -extend -name login \
-        -form [list [list email:text($username_widget),nospell \
+        -form [list [list email:text($email_widget),nospell \
                          [list label "[_ acs-subsite.Email]"] \
                          {html {style "width: 150px"  autocomplete "email"}}]]
     set user_id_widget_name email
@@ -294,7 +305,7 @@ ad_form -extend -name login -on_request {
                                 set operation create
                             }
                             element $operation login email \
-                                -widget $username_widget \
+                                -widget $email_widget \
                                 -datatype text \
                                 -label [_ acs-subsite.Email]
                             if {[element error_p login email]} {
