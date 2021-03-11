@@ -522,18 +522,14 @@ ad_proc util::http::post {
     set this_proc [lindex [info level 0] 0]
 
     # Retrieve variables sent by the URL...
-    set vars [lindex [split $url ?] 1]
-    foreach var [split $vars &] {
-        set var [split $var =]
-        set key [lindex $var 0]
-        set urlvars($key) 1
+    set parsed [ns_parseurl $url]
+    if {[dict exists $parsed query]} {
+        array set urlvars [ns_set array [ns_parsequery [dict get $parsed query]]]
     }
 
     # Check whether we don't have multiple variable definition in url
     # and payload.
-    foreach var [split $formvars &] {
-        set var [split $var =]
-        set key [lindex $var 0]
+    foreach {key value} [ns_set array [ns_parsequery $formvars]] {
         if {[info exists urlvars($key)]} {
             return -code error "${this_proc}:  Variable '$key' already specified as url variable"
         }
@@ -662,10 +658,7 @@ ad_proc util::http::post {
         }
 
         # Translate urlencoded vars into multipart variables
-        foreach formvar [split $formvars &] {
-            set formvar [split $formvar  =]
-            set key [lindex $formvar 0]
-            set val [join [lrange $formvar 1 end] =]
+        foreach {key val} [ns_set array [ns_parsequery $formvars]] {
             set val [ad_urldecode_query $val]
 
             if {[info exists filevars($key)]} {
