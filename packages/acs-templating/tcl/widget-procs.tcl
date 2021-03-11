@@ -224,11 +224,11 @@ ad_proc -public template::widget::search {
     }
 </pre>
     Can be either a select widget initially if options supplied
-    or a text box which on submit changes to a select widget.
+    or a search box which on submit changes to a select widget.
 
     @param element_reference Reference variable to the form element
     @param tag_attributes If the "options" attribute is passed in, a select widget
-           is created, otherwise a search text box.
+           is created, otherwise a search box.
 
     @return Form HTML for widget
 
@@ -237,8 +237,8 @@ ad_proc -public template::widget::search {
 
     if { ! [info exists element(options)] } {
 
-        # initial submission or no data (no options): a text box
-        set output [input text element $tag_attributes]
+        # initial submission or no data (no options): a search box
+        set output [input search element $tag_attributes]
 
     } else {
 
