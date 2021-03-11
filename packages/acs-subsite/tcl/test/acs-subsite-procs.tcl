@@ -509,7 +509,6 @@ aa_register_case -cats {
                 }
             }
         }
-        
         #
         # Delete value from attribute
         #
