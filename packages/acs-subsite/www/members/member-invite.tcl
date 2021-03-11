@@ -85,7 +85,7 @@ ad_form -extend -name user_search -on_submit {
 
 
 ad_form -action user-new -name user_create -cancel_url . -form {
-    {email:text
+    {email:text(email)
         {label "Email"}
         {help_text "Type the email of the person you would like to add"}
         {html {size 50}}

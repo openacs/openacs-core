@@ -98,7 +98,7 @@ lappend elms_list {
     {html {size 50}}
     {mode $elm_mode(last_name)}
 } {
-    email:text
+    email:text(email)
     {label "[_ acs-subsite.Email]"}
     {html {size 50}}
     {mode $elm_mode(email)}
@@ -114,7 +114,7 @@ if {  $screen_name_display_mode ne "none" } {
 }
 
 lappend elms_list {
-    url:text,optional
+    url:text(url),optional
     {label "[_ acs-subsite.Home_page]"}
     {html {size 50}}
     {mode $elm_mode(url)}
