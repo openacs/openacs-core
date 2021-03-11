@@ -790,8 +790,7 @@ ad_proc -private export_vars_sign {
     set max_age ""
     set user_binding 0
     set secret  [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
-    foreach def [split $params &] {
-        lassign [split $def =] key val
+    foreach {key val} [ns_set array [ns_parsequery $params]] {
         switch -- $key {
             max_age -
             secret {set $key [ad_urldecode_query $val]}
