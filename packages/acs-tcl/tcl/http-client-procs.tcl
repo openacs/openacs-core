@@ -659,8 +659,6 @@ ad_proc util::http::post {
 
         # Translate urlencoded vars into multipart variables
         foreach {key val} [ns_set array [ns_parsequery $formvars]] {
-            set val [ad_urldecode_query $val]
-
             if {[info exists filevars($key)]} {
                 return -code error "${this_proc}:  Variable '$key' already specified as file variable"
             }
