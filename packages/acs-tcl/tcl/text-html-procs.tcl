@@ -358,7 +358,7 @@ ad_proc -public ad_unquotehtml {arg} {
 # Should this proc change name to something in line with the rest
 # of the library?
 #
-ad_proc -private util_close_html_tags {
+ad_proc -public util_close_html_tags {
     html_fragment
     {break_soft 0}
     {break_hard 0}
