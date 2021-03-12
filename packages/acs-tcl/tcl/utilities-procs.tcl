@@ -793,7 +793,9 @@ ad_proc -private export_vars_sign {
     foreach {key val} [ns_set array [ns_parsequery $params]] {
         switch -- $key {
             max_age -
-            secret {set $key [ad_urldecode_query $val]}
+            secret {
+                set $key $val
+            }
             user {
                 if {$user_binding == 0} {
                     set user_binding -1
