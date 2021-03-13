@@ -106,6 +106,8 @@ db_foreach acs-automated-testing.results_queryx {
     }
 }
 
+array set ::total {cases 0 passes 0 fails 0 warnings 0}
+
 if {$view_by eq "package"} {
     #
     # Calculate package proc test coverage
@@ -131,6 +133,10 @@ if {$view_by eq "package"} {
             $passes $fails $warnings \
             $proc_coverage $proc_coverage_level \
             [dict get $color background] [dict get $color foreground]
+        incr ::total(cases) $total        
+        incr ::total(passes) $passes
+        incr ::total(fails)  $fails            
+        incr ::total(warnings) $warnings            
     }
 } else {
     #

@@ -34,9 +34,13 @@
 }
 .package-table {
     border-spacing: 3px;
-    border-collapse: separate;
+    /*border-collapse: separate;*/
     width: 100%;
 }
+table.package-table tbody tr {
+    border-top: 2px solid white;
+}
+
 table.package-table td {
     padding: 3px;
 }
@@ -59,6 +63,26 @@ table.package-table td {
     background-color: yellow;
     font-weight: bold;
 }
+
+table.package-table thead tr {
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    padding: 6px;
+}
+table.package-table thead th {
+    padding: 6px;    
+}
+table.package-table body td {
+    border-top: 4px;
+}
+table.package-table tfoot tr {
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+table.package-table tfoot th {
+    padding: 6px;    
+}
+
 
 /* Testcase */
 .description h2 { 1.5em; }

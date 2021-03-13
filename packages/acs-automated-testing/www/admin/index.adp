@@ -42,6 +42,7 @@
     </else>
     Include Stress tests
 </p>
+
 <p><if @security_risk;literal@ true>
       <a href="index?stress=@stress@&amp;security_risk=0&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-on">
         <img src="/resources/acs-subsite/checkboxchecked.gif" class="checkbox-icon">
@@ -102,9 +103,11 @@
         </div>
       </if>
     </blockquote>
+
     <form id="bulk-actions-form" action="">
       @bulk_actions_vars;literal@
     <table class="package-table">
+    <thead>
     <tr class="package-table-header">
         <th>
           <input data-toggle="true" type="checkbox" checked="true" id="toggle-all"/>
@@ -120,13 +123,14 @@
           </script>
         </th>
         <th>Package key</th>
-        <th>Testcases run</th>
-        <th>Passes</th>
-        <th>Fails</th>
-        <th>Warnings</th>
-        <th>Result</th>
-        <th>Proc coverage</th>
+        <th class="package-table-cell">Executed Testcases</th>
+        <th class="package-table-cell">Passes</th>
+        <th class="package-table-cell">Fails</th>
+        <th class="package-table-cell">Warnings</th>
+        <th class="package-table-cell">Result</th>
+        <th class="proc_coverage_cell">Test coverage</th>
     </tr>
+    </thead>
     <multiple name="packageinfo">
         <if @packageinfo.rownum@ odd>
           <tr class="odd">
@@ -166,13 +170,22 @@
           <a href=proc-coverage?package_key=@packageinfo.key@>@packageinfo.proc_coverage@%</a></td>
         </else>
       </tr>
+      
     </multiple>
-    <tr>
-      <td colspan="8" class="proc_coverage_cell @global_test_coverage_level@"
-      style="background: @global_test_coverage_color.background@; color: @global_test_coverage_color.foreground@;">
-        <a href=proc-coverage>Global proc coverage: @global_test_coverage_percent@%</a>
-      </td>
-    </tr>
+
+    <tfoot>
+      <tr><td></td><th>Totals:</th>
+         <td class="package-table-cell"><strong>@::total.fails@</strong></td>
+         <td class="package-table-cell"><strong>@::total.passes@</strong></td>
+         <td class="package-table-cell"><strong>@::total.fails@</strong>
+         <td class="package-table-cell"><strong>@::total.warnings@</strong></td>
+         <td></td>
+         <td class="proc_coverage_cell @global_test_coverage_level@"
+          style="background: @global_test_coverage_color.background@; 
+                 color: @global_test_coverage_color.foreground@;">
+          <a href=proc-coverage><strong>@global_test_coverage_percent@%</a></strong></td>
+      </tr>
+    </tfoot>    
     </table>
     </form>
     <blockquote>
@@ -267,6 +280,7 @@
       </tr>
     </multiple>
     </table>
+    xaaa
    <blockquote>
      <div><strong>&raquo;</strong>
        <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
