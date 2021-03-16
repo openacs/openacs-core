@@ -409,7 +409,7 @@ aa_register_case \
         api_called_proc_names
         apidoc::get_doc_property
     } \
-    callgraph__bad_calls {
+    callgraph__bad_library_calls {
 
         Checks for calls of deprecated procs and for private calls in
         other packages. Remember: "private" means "package private", a
@@ -469,6 +469,109 @@ aa_register_case \
                         } else {
                             aa_error "$msg<br>\
                                 <small><code>[apidoc::get_doc_property $caller script]</code></small><br>\
+                                <small><code>[apidoc::get_doc_property $called script]</code></small>"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+aa_register_case \
+    -cats {smoke production_safe} \
+    -procs {
+        aa_error
+        api_called_proc_names
+        apidoc::get_doc_property
+    } \
+    callgraph__bad_page_calls {
+
+        Checks for calls of deprecated procs and for private calls in
+        other packages. Remember: "private" means "package private", a
+        "private" proc must be only directly called by a proc of the
+        same package
+
+        This test covers only calls from adp pages.
+
+        @author Gustaf Neumann
+
+        @creation-date 2020-03-12
+    } {
+
+        #
+        # iterate over all package_keys
+        #
+        set count 0
+        foreach package_key [db_list _ {select package_key from apm_package_types order by 1}] {
+            #
+            # Process the content pages of the package.
+            #
+            set processed 0
+            foreach path [apm_get_package_files -package_key $package_key -file_types content_page] {
+                set type [string range [file extension $path] 1 end]
+                if {$type in {tcl adp}} {
+                    set stub $::acs::rootdir/packages/$package_key/[file root $path]
+                    append _ $package_key/$path \n
+                    template::adp_init $type $stub
+                    incr processed
+                } else {
+                    append _ "ignore $package_key/$path (type $type)\n"
+                }
+            }
+            append _ "$package_key ($processed files)\n"
+            aa_log "$package_key ($processed files)"
+            #if {$count > 2} break
+        }
+        
+        #aa_log "<pre>[ns_quotehtml $_]</pre>"
+        set procs {}
+        lappend procs {*}[info commands ::template::code::tcl::*]
+        lappend procs {*}[info commands ::template::code::adp::*]
+        
+        foreach caller [lsort -dictionary $procs] {
+            #set caller db_transaction
+            set called_procs [api_called_proc_names -proc_name $caller]
+            set caller_deprecated_p [apidoc::get_doc_property $caller deprecated_p 0]
+            set caller_package_key [apidoc::get_doc_property $caller package_key ""]
+            set caller_name $caller            
+            if {[regexp {template::code::tcl::(.*)$} $caller _ path]} {
+                set caller_name $path.tcl
+                regexp {/packages/([^/]+)/} $path _ caller_package_key
+            }
+            if {[regexp {template::code::adp::(.*)$} $caller _ path]} {
+                set caller_name $path.adp
+                regexp {/packages/([^/]+)/} $path _ caller_package_key
+            }
+            foreach called $called_procs {
+                #ns_log notice "$caller calls $called"
+                set msg "page $caller_name calls deprecated proc: $called"
+                if {[apidoc::get_doc_property $called deprecated_p 0]} {
+                    if {$caller_deprecated_p} {
+                        aa_log_result warning "deprecated $msg"
+                    } else {
+                        aa_error "$msg<br>\
+                            <small><code>$caller_name</code></small><br>\
+                            <small><code>[apidoc::get_doc_property $called script]</code></small>"
+                    }
+                }
+                set package_key [apidoc::get_doc_property $called package_key ""]
+                if {$caller_package_key eq ""} {
+                    aa_log "caller package key '$caller_package_key' $caller_name"
+                }
+                if {$caller_package_key ne ""
+                    && $package_key ne ""
+                    && $caller_package_key ne $package_key
+                } {
+                    #aa_log "$caller from $caller_package_key calls $package_key.$called [apidoc::get_doc_property $called protection public]"
+                    if {[apidoc::get_doc_property $called protection public] eq "private"
+                        && ![string match AcsSc.* $caller]
+                    } {
+                        set msg "page $caller_name calls private $package_key.$called"
+                        if {$caller_deprecated_p} {
+                            aa_log_result warning "deprecated $msg"
+                        } else {
+                            aa_error "$msg<br>\
+                                <small><code>$caller_name</code></small><br>\
                                 <small><code>[apidoc::get_doc_property $called script]</code></small>"
                         }
                     }
