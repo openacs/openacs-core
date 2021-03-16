@@ -1361,7 +1361,7 @@ ad_proc -private template::list::prepare_for_rendering {
 }
 
 
-ad_proc -private template::list::render {
+ad_proc -public template::list::render {
     {-name:required}
     {-style ""}
 } {
@@ -1777,7 +1777,7 @@ ad_proc -private template::list::prepare_filters {
     }
 }
 
-ad_proc -private template::list::render_filters {
+ad_proc -public template::list::render_filters {
     {-name:required}
     {-style ""}
 } {

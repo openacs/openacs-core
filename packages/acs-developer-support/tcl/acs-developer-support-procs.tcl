@@ -134,7 +134,7 @@ ad_library {
      return [nsv_get ds_properties adp_reveal_enabled_p]
  }
 
- ad_proc -private ds_adp_box_class {} {
+ ad_proc -public ds_adp_box_class {} {
     Return developer support adp box class on/off
 } {
      if { [ds_adp_reveal_enabled_p] } {
@@ -144,7 +144,7 @@ ad_library {
      }
  }
 
- ad_proc -private ds_adp_file_class {} {
+ ad_proc -public ds_adp_file_class {} {
     Return developer support adp file on/off
 } {
      if { [ds_adp_reveal_enabled_p] } {
@@ -154,7 +154,7 @@ ad_library {
      }
  }
 
- ad_proc -private ds_adp_output_class {} {
+ ad_proc -public ds_adp_output_class {} {
     Return developer support adp output on/off
 } {
      if { [ds_adp_reveal_enabled_p] } {
