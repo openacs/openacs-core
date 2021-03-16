@@ -1449,7 +1449,7 @@ namespace eval ::apidoc {
         return $result
     }
 
-    ad_proc -private tcl_to_html {proc_name} {
+    ad_proc -public tcl_to_html {proc_name} {
 
         Given a proc name, formats it as HTML, including highlighting syntax in
         various colors and creating hyperlinks to other proc definitions.<BR>
