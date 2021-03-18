@@ -32,6 +32,17 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
                 [expr {[clock clicks -milliseconds] - $start_time}]ms (potential configuration issue)"
         }
 
+        # Check that encoding in the proxied interpreter is the same
+        # as in the main interpreter. If not, we set it the same and
+        # reset it after command execution.
+        set proxy_encoding [ns_proxy eval $handle [list encoding system]]
+        if {$proxy_encoding eq [encoding system]} {
+            set reset_encoding_p 0
+        } else {
+            ns_proxy eval $handle [list encoding system [encoding system]]
+            set reset_encoding_p 1
+        }
+
         ad_try {
             if {[info exists cd]} {
                 #
@@ -45,6 +56,10 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
             set exec_flags [expr {$ignorestderr_p ? "-ignorestderr --" : ""}]
             set return_string [ns_proxy eval $handle [list ::exec {*}$exec_flags {*}$call]]
         } finally {
+            if {$reset_encoding_p} {
+                ns_proxy eval $handle [list encoding system $proxy_encoding]
+            }
+
             if {[info exists pwd]} {
                 #
                 # Switch back to the previous directory.
