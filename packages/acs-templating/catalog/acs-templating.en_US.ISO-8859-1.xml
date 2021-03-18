@@ -21,7 +21,6 @@
   <msg key="Element_is_required">%label% is required</msg>
   <msg key="Element_is_too_long_Plural">%label% is %excess_no_bytes% characters too long.</msg>
   <msg key="Element_is_too_long_Singular">%label% is one character too long.</msg>
-  <msg key="Markdown_Text">Markdown Text</msg>
   <msg key="Enhanced_Text">Enhanced Text</msg>
   <msg key="Enter_your_search_text">Enter your search text here</msg>
   <msg key="filter_clear">Clear</msg>
@@ -71,14 +70,14 @@
   <msg key="Invalid_decimal_number">Invalid decimal number</msg>
   <msg key="Invalid_email_format">Invalid email format</msg>
   <msg key="Invalid_enumeration">Invalid enumeration</msg>
-  <msg key="Invalid_enumeration_duplicate_elements">Invalid enumeration. "%value%" does not contain unique values.</msg>
+  <msg key="Invalid_enumeration_duplicate_elements">Invalid enumeration. &#34;%value%&#34; does not contain unique values.</msg>
   <msg key="Invalid_filename">Invalid filename</msg>
   <msg key="Invalid_integer">Invalid integer</msg>
   <msg key="Invalid_keyword">Invalid keyword</msg>
   <msg key="Invalid_natural_number">Invalid natural number</msg>
-  <msg key="Invalid_number">Invalid number</msg>  
+  <msg key="Invalid_number">Invalid number</msg>
   <msg key="Invalid_url">Invalid url</msg>
-  <msg key="Invalid_url_element">Invalid url: "%value%". Please use only lowercase characters, numbers and hyphens, e.g. "foo-bar".</msg>
+  <msg key="Invalid_url_element">Invalid url: &#34;%value%&#34;. Please use only lowercase characters, numbers and hyphens, e.g. &#34;foo-bar&#34;.</msg>
   <msg key="Link_Title">Link Title</msg>
   <msg key="lt_Checkuncheck_all_rows">Check/uncheck all rows</msg>
   <msg key="lt_Checkuncheck_this_row">Check/uncheck this row, and select an action to perform below</msg>
@@ -87,6 +86,7 @@
   <msg key="lt_No_value_supplied_for_-field_pretty-">No value supplied for %field_pretty%</msg>
   <msg key="lt_The_-field_pretty-_must_be_non_negative">The %field_pretty% must be a non-negative integer</msg>
   <msg key="lt_When_specifying_a_non">When specifying a non-zero page_size, you must also provide either page_query or page_query_name</msg>
+  <msg key="Markdown_Text">Markdown Text</msg>
   <msg key="Meridian">Meridian</msg>
   <msg key="Minutes">Minutes</msg>
   <msg key="minutes">minutes</msg>
