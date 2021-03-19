@@ -1846,7 +1846,7 @@ if {$UseXotclSiteNodes} {
 
         @param url URL path starting with a slash.
     } {
-        set url_no_trailing [expr {"url" eq "/" ? "/" : [string trimright $url "/"]}]
+        set url_no_trailing [expr {$url eq "/" ? "/" : [string trimright $url "/"]}]
         #
         # The function "get_node_id" returns always a node_id, which
         # might be the node_id of the root. In order to check, whether
