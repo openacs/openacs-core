@@ -1449,7 +1449,7 @@ if {$UseXotclSiteNodes} {
 
             :public method get_url {-node_id:required,1..1} {
                 #
-                # I'ts a pain, but OpenACS and the its regression test
+                # It's a pain, but OpenACS and its regression test
                 # call "get_url" a few times with an empty node_id.
                 # Shortcut these calls here to avoid problems with the
                 # non-numeric partition_key.
