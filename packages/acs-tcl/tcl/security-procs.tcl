@@ -2569,12 +2569,32 @@ ad_proc -public security::validated_host_header {} {
     #
     set driverInfo [util_driver_info]
     set driverHostName [dict get $driverInfo hostname]
-    if {$hostName eq $driverHostName || $hostName in [ns_addrbyhost -all $driverHostName]} {
-        #
-        # port is currently ignored
-        #
-        set $key 1
-        return $host
+
+    #
+    # The port is currently ignored for determining the validated host
+    # header field.
+    #
+    # Validation is OK, when the provided host-header content is
+    # either the same as configured hostname in the driver
+    # configuration or one of its IP addresses.
+    #
+    set validationOk 0
+    if {$hostName eq $driverHostName} {
+        set validationOk 1
+    } else {
+        try {
+            ns_addrbyhost -all $driverHostName
+        } on error {errorMsg} {
+            #
+            # Name resolution of the hostname configured for this
+            # driver failed, we cannot validate incoming IP addresses.
+            #
+            ns_log error "security::validated_host_header: configuration error:" \
+                "name resolution for configured hostname '$driverHostName'" \
+                "of driver '[ad_conn driver]' failed"
+        } on ok {result} {
+            set validationOk [expr {$hostName in $result}]
+        }
     }
 
     #
@@ -2582,32 +2602,23 @@ ad_proc -public security::validated_host_header {} {
     # (will be used as default, but we do not want a warning in such
     # cases).
     #
-    if {[util::split_location [ns_conn location] proto locationHost locationPort]} {
-        if {$hostName eq $locationHost} {
-            #
-            # port is currently ignored
-            #
-            set $key 1
-            return $host
-        }
+    if {$validationOk == 0 && [util::split_location [ns_conn location] proto locationHost locationPort]} {
+        set validationOk [expr {$hostName eq $locationHost}]
     }
 
     #
     # Check, if the provided host is the same as in the configured
     # SystemURL.
     #
-    if {[util::split_location [ad_url] .proto systemHost systemPort]} {
-        if {$hostName eq $systemHost
-            && ($hostPort eq $systemPort || $hostPort eq "") } {
-            set $key 1
-            return $host
-        }
+    if {$validationOk == 0 && [util::split_location [ad_url] .proto systemHost systemPort]} {
+        set validationOk [expr {$hostName eq $systemHost
+                                && ($hostPort eq $systemPort || $hostPort eq "") }]
     }
 
-    #
-    # Check against the virtual server configuration of NaviServer.
-    #
-    if {[ns_info name] eq "NaviServer"} {
+    if {$validationOk == 0 && [ns_info name] eq "NaviServer"} {
+        #
+        # Check against the virtual server configuration of NaviServer.
+        #
         set s [ns_info server]
         set driverInfo [security::configured_driver_info]
         set drivers [lmap d $driverInfo {dict get $d driver}]
@@ -2626,42 +2637,42 @@ ad_proc -public security::validated_host_header {} {
                     set value
                 }]
                 if {$host in $names} {
-                    ns_log notice "security::validated_host_header: found $host via global virtual server configuration for $driver"
-                    set $key 1
-                    return $host
+                    ns_log notice "security::validated_host_header: found $host" \
+                        "in global virtual server configuration for $driver"
+                    set validationOk 1
+                    break
                 }
             }
         }
     }
 
-    #
-    # Check against host node map. Here we need as well protection
-    # against invalid utf-8 characters.
-    #
-    if {![security::provided_host_valid $hostName]} {
-        return ""
-    }
-    set result [db_list host_header_field_mapped {select 1 from host_node_map where host = :hostName}]
-    #ns_log notice "security::validated_host_header: checking entry <$hostName> from host_node_map -> $result"
+    if {$validationOk == 0} {
+        #
+        # Check against host node map. Here we need as well protection
+        # against invalid utf-8 characters.
+        #
+        if {![security::provided_host_valid $hostName]} {
+            return ""
+        }
 
-    if {$result == 1} {
-        #
-        # port is ignored
-        #
-        set $key 1
-        #ns_log notice "security::validated_host_header: checking entry <$hostName> from host_node_map return host <$host>"
-        return $host
+        set validationOk [db_0or1row host_header_field_mapped {select 1 from host_node_map where host = :hostName}]
     }
 
-    #
-    # Handle aliases for locations, which cannot be determined from
-    # config files, but which are supposed to be ok.
-    #
-    if {$hostName eq "localhost"} {
+    if {$validationOk == 0} {
         #
         # This is not an attempt, where someone tries to lure us to a
-        # different host via redirect.
+        # different host via redirect. "localhost" is always safe.
         #
+        set validationOk [expr {$hostName eq "localhost"}]
+    }
+
+    #
+    # When any of the validation attempts above were successful, we
+    # are done. We keep the logic for successful lookups
+    # centralized. Performance of the individual tests are not
+    # critical, since the lookups are cache per thread.
+    #
+    if {$validationOk} {
         set $key 1
         return $host
     }
