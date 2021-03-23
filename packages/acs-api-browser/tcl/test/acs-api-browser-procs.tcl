@@ -483,6 +483,7 @@ aa_register_case \
         aa_error
         api_called_proc_names
         apidoc::get_doc_property
+        template::adp_init
     } \
     callgraph__bad_page_calls {
 
