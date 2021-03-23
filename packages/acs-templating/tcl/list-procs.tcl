@@ -3190,7 +3190,7 @@ ad_proc -private template::list::render_form_filters {
                        -default [parameter::get \
                                      -package_id [apm_package_id_from_key "acs-templating"] \
                                      -parameter DefaultListFilterStyle \
-                                     -default "filters"]]        
+                                     -default "filters"]]
     }
     set file_stub [template::resource_path -type lists -style $style]
 
