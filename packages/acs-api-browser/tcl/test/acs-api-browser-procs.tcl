@@ -523,18 +523,18 @@ aa_register_case \
             aa_log "$package_key ($processed files)"
             #if {$count > 2} break
         }
-        
+
         #aa_log "<pre>[ns_quotehtml $_]</pre>"
         set procs {}
         lappend procs {*}[info commands ::template::code::tcl::*]
         lappend procs {*}[info commands ::template::code::adp::*]
-        
+
         foreach caller [lsort -dictionary $procs] {
             #set caller db_transaction
             set called_procs [api_called_proc_names -proc_name $caller]
             set caller_deprecated_p [apidoc::get_doc_property $caller deprecated_p 0]
             set caller_package_key [apidoc::get_doc_property $caller package_key ""]
-            set caller_name $caller            
+            set caller_name $caller
             if {[regexp {template::code::tcl::(.*)$} $caller _ path]} {
                 set caller_name $path.tcl
                 regexp {/packages/([^/]+)/} $path _ caller_package_key
