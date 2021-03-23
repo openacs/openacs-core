@@ -1516,7 +1516,7 @@ namespace eval acs::test {
     }
 
 
-    ad_proc -private ::acs::test::login {
+    ad_proc -public ::acs::test::login {
         user_info
     } {
         Login (register operation) in a web session
