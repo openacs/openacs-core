@@ -361,7 +361,7 @@ ad_proc -public template::set_file { path } {
     set file_stub $path
 }
 
-ad_proc -private template::adp_init { type file_stub } {
+ad_proc -public template::adp_init { type file_stub } {
     Ensures that both data source Tcl files and compiled ADP templates
     are wrapped in procedures in the current interpreter.  Procedures
     are cached in byte code form in the interpreter, so this is more
