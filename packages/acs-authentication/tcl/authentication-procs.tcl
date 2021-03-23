@@ -1342,15 +1342,13 @@ ad_proc -public auth::set_email_verified {
         -email_verified_p "t"
 }
 
-ad_proc -private auth::verify_account_status {} {
+ad_proc -public auth::verify_account_status {} {
     Verify the account status of the current user,
     and set [ad_conn account_status] appropriately.
 } {
     # Just recheck the authentication cookie, and it'll do the verification for us
     sec_login_handler
 }
-
-
 
 
 #####
