@@ -1781,6 +1781,13 @@ ad_proc -public template::list::render_filters {
     {-name:required}
     {-style ""}
 } {
+
+    Render template list filters
+
+    @param name  Name
+    @param style List filter style
+
+} {
     set level [template::adp_level]
 
     # Provide a reference to the list properties for use by the list
