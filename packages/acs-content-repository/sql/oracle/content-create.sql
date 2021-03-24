@@ -191,7 +191,15 @@ create table cr_items (
                       constraint cr_items_storage_type_ck
                       check (storage_type in ('lob','file')),
   storage_area_key    varchar2(100) default 'CR_FILES' not null
-);  
+);
+
+--
+-- Avoid potential loops on parent_ids. An item must not be equal to
+-- its own parent.  Note that this constraint is not guaranteed to
+-- avoid all loops; it is still possible to create indirect recursive
+-- loops but excludes some real-world problems.
+--
+ALTER TABLE cr_items ADD CONSTRAINT cr_items_parent_id_ck CHECK (item_id != parent_id);
 
 create index cr_items_by_locale on cr_items(locale);
 create index cr_items_by_content_type on cr_items(content_type);
