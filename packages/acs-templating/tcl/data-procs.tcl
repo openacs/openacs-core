@@ -523,34 +523,34 @@ ad_proc -public template::data::validate::oneof {
     value_ref
     message_ref
 } {
-  Checks whether the submitted value is contained in the list of values provided via 
-  the "-options" parameter of "::template::element::create". If it is set an 
-  error is thrown.
+    Checks whether the submitted value is contained in the list of values provided via
+    the "-options" parameter of "::template::element::create". If it is set an
+    error is thrown.
 
-  @param value_ref Reference variable to the submitted value
-  @param message_ref Reference variable for returning an error message
+    @param value_ref Reference variable to the submitted value
+    @param message_ref Reference variable for returning an error message
 
-  @see template::element::create
-  
-  @return True (1) if valid, false (0) if not
+    @see template::element::create
+
+    @return True (1) if valid, false (0) if not
 } {
 
-  upvar 2 $message_ref message $value_ref value element element values values
-  
-  # Note: Parameter "-options" is a list containing two-element lists 
-  # in the form { {label value} {label value} {label value} ...}
-  if {[info exists element(options)] } {
-    if {[lsearch -index 1 $element(options) $value] == -1} {
-          
-      set message "[_ acs-templating.Invalid_choice] \"[ns_quotehtml $value]\""
-      return 0
-    }
-  } else {
-    error "template::element::validate::oneof: No options specified for \
+    upvar 2 $message_ref message $value_ref value element element values values
+
+    # Note: Parameter "-options" is a list containing two-element lists
+    # in the form { {label value} {label value} {label value} ...}
+    if {[info exists element(options)] } {
+        if {[lsearch -index 1 $element(options) $value] == -1} {
+
+            set message "[_ acs-templating.Invalid_choice] \"[ns_quotehtml $value]\""
+            return 0
+        }
+    } else {
+        error "template::element::validate::oneof: No options specified for \
            element $element_id in form $form_id"
-  }
-  
-  return 1
+    }
+
+    return 1
 }
 
 # Local variables:
