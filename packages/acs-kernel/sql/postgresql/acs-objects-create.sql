@@ -249,6 +249,14 @@ create table acs_objects (
 	unique (context_id, object_id)
 );
 
+--
+-- Avoid potential loops on context_ids. A context_id must be
+-- different from the object_id. If no context_id should be checked, its
+-- value must be NULL. Note that this constraint is not guaranteed to
+-- avoid all loops; it is still possible to create indirect recursive
+-- loops but excludes some real-world problems.
+ALTER TABLE acs_objects ADD CONSTRAINT acs_objects_context_id_ck CHECK (context_id != object_id);
+
 -- The unique constraint above will force create of this index...
 -- create index acs_objects_context_object_idx onacs_objects (context_id, object_id);
 
@@ -261,6 +269,7 @@ create index acs_objects_package_idx on acs_objects (package_id);
 create index acs_objects_title_idx on acs_objects(title);
 
 create index acs_objects_object_type_idx on acs_objects (object_type);
+
 
 CREATE OR REPLACE FUNCTION acs_objects_mod_ip_insert_tr () RETURNS trigger AS $$
 BEGIN
