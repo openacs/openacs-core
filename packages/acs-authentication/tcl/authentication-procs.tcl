@@ -428,7 +428,7 @@ ad_proc -private auth::issue_login {
         $user_id
 }
 
-ad_proc -private auth::get_register_authority {
+ad_proc -public auth::get_register_authority {
 } {
     Get the ID of the authority in which accounts get created. Is based on the RegisterAuthority parameter
     but will default to the local authority if that parameter has an invalid value.
