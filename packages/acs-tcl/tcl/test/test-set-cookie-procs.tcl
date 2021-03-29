@@ -90,7 +90,7 @@ aa_register_case -cats {
 }
 
 aa_register_case \
-    -cats {web smoke} \
+    -cats {api smoke} \
     -procs {
         ad_get_client_property
         ad_set_client_property
@@ -99,7 +99,7 @@ aa_register_case \
     {
         Test Case client properties
     } {
-        aa_run_with_teardown -test_code {
+        aa_run_with_teardown -rollback -test_code {
             ad_set_client_property test MyName MyValue
 
             aa_equals "Obtain client property" MyValue [ad_get_client_property test MyName]
