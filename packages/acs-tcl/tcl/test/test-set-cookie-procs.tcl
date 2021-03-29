@@ -80,9 +80,7 @@ aa_register_case -cats {
         aa_section "Clear cookies"
         foreach cookie {testcookie testcookie2 testcookie3} {
             ad_set_cookie -replace t -max_age 0 $cookie ""
-            set cookie_info_d [ad_get_cookie \
-                                -include_set_cookies t \
-                                $cookie ""]
+            set cookie_info_d [ad_get_cookie -include_set_cookies t $cookie ""]
             aa_false "Check if the cookie ($cookie) was cleared" \
                 [string equal $cookie_info_d $data]
         }
@@ -102,7 +100,8 @@ aa_register_case \
         aa_run_with_teardown -rollback -test_code {
             ad_set_client_property test MyName MyValue
 
-            aa_equals "Obtain client property" MyValue [ad_get_client_property test MyName]
+            aa_equals "Obtain client property" \
+                MyValue [ad_get_client_property test MyName]
 
         }
     }
