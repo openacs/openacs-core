@@ -123,16 +123,18 @@ aa_register_case -cats {
         set n 10
         for {set i 0} {$i < $n} {incr i} {
             set random_token_id [sec_get_random_cached_token_id]
+            set token_value     [sec_get_token $random_token_id]
             #
             # Check random token in nsv
             #
             set list_of_names [nsv_array get secret_tokens]
             aa_true "Random token ($random_token_id) is contained in nsv" \
-                {[lsearch -exact $list_of_names $random_token_id]}
+                {$random_token_id in $list_of_names}
+            aa_equals "Random token ($random_token_id) value in nsv correct" \
+                "$token_value" "[dict get $list_of_names $random_token_id]"
             #
             # Check random token in DB
             #
-            set token_value     [sec_get_token $random_token_id]
             set token_value_db  [db_string get_token_value {
                 select token
                   from secret_tokens
