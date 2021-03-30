@@ -12,8 +12,8 @@ ad_proc -private navigation::test::context_bar_multirow_filter {} {
     Procedure for the context_bar_multirow test filter
 } {
     aa_run_with_teardown -rollback -test_code {
-        set testnode_1 [list "/navigation_test_node1/" "navigation_test_node1"]
-        set testnode_2 [list "[lindex $testnode_1 0]navigation_test_node2/" "navigation_test_node2"]
+        set testnode_1 [list "/navigation_test_node1/" navigation_test_node1 "GN's Sub-site"]
+        set testnode_2 [list "[lindex $testnode_1 0]navigation_test_node2/" navigation_test_node2 "navigation_test_node2"]
 
         # Create hierarchy from the random created nodes
         set root_node [site_node::get_from_url -url "/"]
@@ -21,18 +21,16 @@ ad_proc -private navigation::test::context_bar_multirow_filter {} {
 
         # Create and mount new node. We also need a subsite underneath
         # or the context bar won't display them.
-        set node_name [lindex $testnode_1 1]
         set package_id [site_node::instantiate_and_mount \
                             -parent_node_id $root_node_id \
-                            -node_name $node_name \
-                            -package_name $node_name \
+                            -node_name [lindex $testnode_1 1] \
+                            -package_name [lindex $testnode_1 2]  \
                             -package_key "acs-subsite"]
         set idr_1 [dict get [site_node::get_from_object_id -object_id $package_id] node_id]
-        set node_name [lindex $testnode_2 1]
         set package_id [site_node::instantiate_and_mount \
                             -parent_node_id $idr_1 \
-                            -node_name $node_name \
-                            -package_name $node_name \
+                            -node_name [lindex $testnode_2 1] \
+                            -package_name [lindex $testnode_2 2] \
                             -package_key "acs-subsite"]
         set idr_2 [dict get [site_node::get_from_object_id -object_id $package_id] node_id]
 
@@ -217,7 +215,7 @@ aa_register_case \
 } {
     # Setup nodes from the context bar, create two nodes to include
     set separator ""
-    set testnode_1 [list "/navigation_test_node1/" "navigation_test_node1"]
+    set testnode_1 [list "/navigation_test_node1/" "GN's Sub-site"]
     set testnode_2 [list "[lindex $testnode_1 0]navigation_test_node2/" "navigation_test_node2"]
     set main_node [site_node::get -url /]
     set root_node [list "/" [lang::util::localize [dict get $main_node instance_name] [lang::system::site_wide_locale]]]
@@ -229,7 +227,7 @@ aa_register_case \
         append context_barp "<a href=\""
         append context_barp [lindex $value 0]
         append context_barp "\">"
-        append context_barp [lindex $value 1]
+        append context_barp [ns_quotehtml [lindex $value 1]]
         append context_barp "</a>"
     }
     ns_register_proc GET /test.testf {
@@ -240,8 +238,8 @@ aa_register_case \
     ns_unregister_op GET /test.testf
 
     set response_body [dict get $d body]
-    ns_log notice "CONTEXT  BARP $context_barp"
-    ns_log notice "RESPONSE BODY $response_body"
+    #ns_log notice "CONTEXT  BARP $context_barp"
+    #ns_log notice "RESPONSE BODY $response_body"
     aa_equals "Context bar" [ns_quotehtml $response_body] [ns_quotehtml $context_barp]
 }
 
