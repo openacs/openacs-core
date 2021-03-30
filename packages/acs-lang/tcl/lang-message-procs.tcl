@@ -973,7 +973,7 @@ ad_proc -public lang::message::lookup {
     return $message
 }
 
-ad_proc -private lang::message::cache {} {
+ad_proc -public lang::message::cache {} {
     Loads the entire message catalog from the database into the cache.
 } {
     #
