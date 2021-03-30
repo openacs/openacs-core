@@ -412,7 +412,7 @@ ad_proc -public apm_mark_files_for_reload {
 
 proc ::foo0 {} {return 0}
 
-ad_proc -private apm_mark_version_for_reload {
+ad_proc -public apm_mark_version_for_reload {
     version_id
     { changed_files_var "" }
 } {
