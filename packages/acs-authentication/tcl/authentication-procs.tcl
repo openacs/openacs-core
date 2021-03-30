@@ -1764,7 +1764,7 @@ ad_proc -private auth::validate_account_info {
     }
 }
 
-ad_proc -private auth::can_admin_system_without_authority_p {
+ad_proc -public auth::can_admin_system_without_authority_p {
     {-authority_id:required}
 } {
     Before disabling or deleting an authority we need to check
