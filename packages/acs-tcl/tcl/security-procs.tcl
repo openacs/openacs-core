@@ -1619,7 +1619,7 @@ ad_proc -public sec_get_token {
     return $token
 }
 
-ad_proc -private sec_get_random_cached_token_id {} {
+ad_proc -public sec_get_random_cached_token_id {} {
 
     Randomly returns a token_id from the token cache
 
