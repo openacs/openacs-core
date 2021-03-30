@@ -54,7 +54,7 @@ ad_proc -public lang::util::lang_sort {
     }
 }
 
-ad_proc -private lang::util::get_hash_indices { multilingual_string } {
+ad_proc -public lang::util::get_hash_indices { multilingual_string } {
     Returns a list of two element lists containing
     the start and end indices of a #message_key# match in the multilingual string.
     This proc is used by the localize proc.
