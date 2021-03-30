@@ -14,6 +14,7 @@ ad_library {
 
     @author Peter Harper (peter.harper@open-msg.com)
     @creation-date 21 June 2001
+
     @cvs-id $Id$
 }
 
@@ -857,11 +858,12 @@ ad_proc -public aa_false {
 }
 
 ad_proc -public aa_section {
-        log_notes
+    log_notes
 } {
-    Writes a log message indicating a new section to the log file.
+    Writes a log message indicating a new section to the log files.
 } {
     aa_log_result "sect" $log_notes
+    ns_log notice "--------- aa_section" $log_notes
 }
 
 ad_proc -public aa_log { args } {
@@ -1692,6 +1694,25 @@ namespace eval acs::test {
 
         @author Gustaf Neumann
     } {
+        set href [find_link \
+                      -last_request $last_request \
+                      -user_id $user_id \
+                      -base $base \
+                      -label $label]
+        return [http -last_request $last_request -user_id $user_id $href]
+    }
+
+    ad_proc -public find_link {
+        -last_request:required
+        {-user_id 0}
+        {-base /}
+        {-label ""}
+    } {
+
+        Find the first link based on the provided label and return the href.
+
+        @author Gustaf Neumann
+    } {
         set href ""
         set html [dict get $last_request body]
         acs::test::dom_html root $html {
@@ -1718,9 +1739,8 @@ namespace eval acs::test {
         if {![string match "/*" $href]} {
             set href $base/$href
         }
-        return [http -last_request $last_request -user_id $user_id $href]
+        return $href
     }
-
 
     ad_proc -private detail_link {dict} {
 
@@ -1948,22 +1968,34 @@ namespace eval acs::test::user {
         @return The user_info dict returned by auth::create_user. Contains
                 the additional keys email and password.
     } {
-        if {$email ne ""} {
+        #
+        # Currently, we are not able to reuse the testing account
+        # based on email, since a later login attempt for that account
+        # fails, since we have no cookie yet, and the testing
+        # authority does not allow logins via /login.
+        #
+        if {$email ne "" && 0} {
             set party_info [party::get -email $email]
             if {[llength $party_info] > 0} {
                 #
-                # We have such a party already. For the time being,
-                # just pick the party_id for the result.
+                # We have such a party already. Return the usual
+                # elements like on new creation.
                 #
+                set d [acs_user::get -user_id [dict get $party_info party_id]]
                 dict set user_info user_id [dict get $party_info party_id]
+                dict set user_info password [dict get $d password]
+                dict set user_info email [dict get $d email]
+                dict set user_info first_names [dict get $d first_names]
+                dict set user_info last_name [dict get $d last_name]
                 return $user_info
             }
         }
         if {$password eq ""} {
             set password    [ad_generate_random_string]
         }
-        set username    "__test_user_[ad_generate_random_string]"
-        set email       "$username@test.test"
+        set username "__test_user_[ad_generate_random_string]"
+        set email "$username@test.test"
+
         set first_names [ad_generate_random_string]
         set last_name   [ad_generate_random_string]
 
@@ -1977,7 +2009,9 @@ namespace eval acs::test::user {
                            -secret_question [ad_generate_random_string] \
                            -secret_answer [ad_generate_random_string] \
                            -authority_id [auth::authority::get_id -short_name "acs_testing"]]
-
+        if {![dict exists $user_info user_id]} {
+            aa_error "invalid USER_INFO (does not contain user_id): $user_info"
+        }
         lang::user::set_locale -user_id [dict get $user_info user_id] $locale
         if { [dict get $user_info creation_status] ne "ok" } {
             # Could not create user
