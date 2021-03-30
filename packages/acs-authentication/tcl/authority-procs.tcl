@@ -474,7 +474,7 @@ ad_proc -private auth::authority::get_required_columns {} {
     }
 }
 
-ad_proc -private auth::authority::get_sc_impl_columns {} {
+ad_proc -public auth::authority::get_sc_impl_columns {} {
     Get a list of column names for storing service contract implementation ids
     of the authority.
 
