@@ -2008,7 +2008,7 @@ ad_proc -public apm_log {
     }
 }
 
-ad_proc -private apm_application_new_checkbox {} {
+ad_proc -public apm_application_new_checkbox {} {
     Return an HTML checkbox of package_key and package names
     for applications that can be mounted in the site-map. Excludes
     singletons that are already instantiated.
