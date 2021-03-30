@@ -182,7 +182,7 @@ ad_proc -private ad_user_class_description { set_id } {
 }
 
 
-ad_proc -private ad_registration_finite_state_machine_admin_links {
+ad_proc -public ad_registration_finite_state_machine_admin_links {
     -nohtml:boolean
     member_state
     email_verified_p

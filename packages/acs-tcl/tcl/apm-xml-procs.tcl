@@ -50,7 +50,7 @@ ad_proc -private apm_tag_value {
     return $default
 }
 
-ad_proc -private apm_generate_package_spec { version_id } {
+ad_proc -public apm_generate_package_spec { version_id } {
 
     Generates an XML-formatted specification for a version of a package.
 

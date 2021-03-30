@@ -118,7 +118,7 @@ ad_proc -public apm_package_info_file_path {
 }
 
 
-ad_proc -private apm_extract_tarball { version_id dir } {
+ad_proc -public apm_extract_tarball { version_id dir } {
 
     Extracts a distribution tarball into a particular directory,
     overwriting any existing files.
@@ -145,7 +145,7 @@ ad_proc -private apm_extract_tarball { version_id dir } {
 }
 
 
-ad_proc -private apm_generate_tarball { version_id } {
+ad_proc -public apm_generate_tarball { version_id } {
 
     Generates a tarball for a version, placing it in the content repository.
     DCW - 2001-05-03, change to use the content repository for tarball storage.
@@ -357,7 +357,7 @@ ad_proc -public apm_watch_all_files { package_key } {
     }
 }
 
-ad_proc -private apm_cancel_all_watches { package_key } {
+ad_proc -public apm_cancel_all_watches { package_key } {
     Cancel all watches in the given package.
 
     @param package_key The package_key of the package to stop watching.
@@ -499,7 +499,7 @@ ad_proc -private apm_transfer_file {
     }
 }
 
-ad_proc -private apm_load_apm_file {
+ad_proc -public apm_load_apm_file {
     {-callback apm_dummy_callback}
     {-url {}}
     {file_path {}}

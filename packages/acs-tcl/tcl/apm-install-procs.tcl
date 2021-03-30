@@ -124,7 +124,7 @@ ad_proc -public apm_dependency_provided_p {
     }
 }
 
-ad_proc -private pkg_info_new {
+ad_proc -public pkg_info_new {
     package_key spec_file_path embeds extends provides requires
     {dependency_p ""} {comment ""}
 } {
@@ -408,7 +408,7 @@ ad_proc -private apm_dependency_check {
     return [list 1 $install_in $extra_package_keys]
 }
 
-ad_proc -private apm_dependency_check_new {
+ad_proc -public apm_dependency_check_new {
     {-repository_array:required}
     {-package_keys:required}
 } {
@@ -1072,7 +1072,7 @@ ad_proc apm_copy_inherited_params { new_package_key dependencies } {
     }
 }
 
-ad_proc -private apm_package_install_version {
+ad_proc -public apm_package_install_version {
     {-callback apm_dummy_callback}
     {-array:required}
     {-version_id ""}
@@ -1100,7 +1100,7 @@ ad_proc -private apm_package_install_version {
 }
 
 
-ad_proc -private apm_package_deinstall {
+ad_proc -public apm_package_deinstall {
     {-callback apm_dummy_callback}
     package_key
 } {
@@ -1405,7 +1405,7 @@ ad_proc -private apm_package_install_dependencies {
     }
 }
 
-ad_proc -private apm_package_install_owners_prepare {owner_names owner_uris } {
+ad_proc -public apm_package_install_owners_prepare {owner_names owner_uris } {
 
     Prepare the owners data structure for installation.
 
@@ -1419,7 +1419,7 @@ ad_proc -private apm_package_install_owners_prepare {owner_names owner_uris } {
     return $owners
 }
 
-ad_proc -private apm_package_install_owners { {-callback apm_dummy_callback} owners version_id} {
+ad_proc -public apm_package_install_owners { {-callback apm_dummy_callback} owners version_id} {
 
     Install all of the owners of the package version.
 
@@ -1457,7 +1457,7 @@ ad_proc -private apm_package_install_callbacks {
     }
 }
 
-ad_proc -private apm_package_install_spec { version_id } {
+ad_proc -public apm_package_install_spec { version_id } {
 
     Writes the XML-formatted specification for a package to disk,
     marking it in the database as the only installed version of the package.
@@ -1602,7 +1602,7 @@ ad_proc -private apm_packages_full_install {
     }
 }
 
-ad_proc -private apm_package_upgrade_p {package_key version_name} {
+ad_proc -public apm_package_upgrade_p {package_key version_name} {
     @return 1 if a version of the indicated package_key of version lower than version_name \
         is already installed in the system, 0 otherwise.
 } {
@@ -1624,7 +1624,7 @@ ad_proc -private apm_package_upgrade_from { package_key version_name } {
 }
 
 
-ad_proc -private apm_version_upgrade {version_id} {
+ad_proc -public apm_version_upgrade {version_id} {
 
     Upgrade a package to a locally maintained later version.
 
@@ -1676,7 +1676,7 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
     }
 }
 
-ad_proc -private apm_data_model_scripts_find {
+ad_proc -public apm_data_model_scripts_find {
     {-upgrade_from_version_name ""}
     {-upgrade_to_version_name ""}
     {-package_path ""}
@@ -1982,7 +1982,7 @@ ad_proc -public apm_upgrade_logic {
 #
 #############
 
-ad_proc -private apm_get_package_repository {
+ad_proc -public apm_get_package_repository {
     {-repository_url ""}
     {-array:required}
 } {
@@ -2385,7 +2385,7 @@ ad_proc -private apm::package_version::attributes::get_instance_name { package_k
     }
 }
 
-ad_proc -private apm::package_version::attributes::get_spec {} {
+ad_proc -public apm::package_version::attributes::get_spec {} {
     Return dynamic attributes of package versions in
     an array list. The rationale for introducing the dynamic
     package version attributes is to make it easy to add
@@ -2424,7 +2424,7 @@ ad_proc -private apm::package_version::attributes::get_spec {} {
     }
 }
 
-ad_proc -private apm::package_version::attributes::get_pretty_name { attribute_name } {
+ad_proc -public apm::package_version::attributes::get_pretty_name { attribute_name } {
     Return the pretty name of attribute with given short name.
 
     @author Peter Marklund
@@ -2445,7 +2445,7 @@ ad_proc -private apm::package_version::attributes::validate_maturity { maturity 
     return $error_message
 }
 
-ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturity } {
+ad_proc -public apm::package_version::attributes::maturity_int_to_text { maturity } {
     Get the internationalized maturity description
     corresponding to the given integer package maturity level.
 
@@ -2509,7 +2509,7 @@ ad_proc -private apm::package_version::attributes::parse_xml {
     }
 }
 
-ad_proc -private apm::package_version::attributes::default_value { attribute_name } {
+ad_proc -public apm::package_version::attributes::default_value { attribute_name } {
     Return the default value for the given attribute name.
 
     @author Peter Marklund
@@ -2562,7 +2562,7 @@ ad_proc -private apm::package_version::attributes::store {
     }
 }
 
-ad_proc -private apm::package_version::attributes::get {
+ad_proc -public apm::package_version::attributes::get {
     {-version_id:required}
     {-array:required}
 } {

@@ -453,7 +453,7 @@ ad_proc -public apm_mark_version_for_reload {
     return $changed_files
 }
 
-ad_proc -private apm_version_load_status { version_id } {
+ad_proc -public apm_version_load_status { version_id } {
 
     If a version needs to be reloaded (i.e., a <code>-procs.tcl</code> has changed
                                        or been added since the version was loaded), returns "needs_reload".
@@ -724,7 +724,7 @@ ad_proc -private apm_subdirs { path } {
     return $dirs
 }
 
-ad_proc -private apm_pretty_name_for_file_type { type } {
+ad_proc -public apm_pretty_name_for_file_type { type } {
 
     Returns the pretty name corresponding to a particular file type key
 
@@ -1793,7 +1793,7 @@ ad_proc -public apm_supported_callback_types {} {
     }
 }
 
-ad_proc -private apm_callback_has_valid_args {
+ad_proc -public apm_callback_has_valid_args {
     {-type:required}
     {-proc_name:required}
 } {
