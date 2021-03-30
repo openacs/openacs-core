@@ -83,7 +83,7 @@ ad_proc -private lang::catalog::all_messages_for_package_and_locale { package_ke
     return [db_list_of_lists get_messages {}]
 }
 
-ad_proc -private lang::catalog::package_catalog_dir { package_key } {
+ad_proc -public lang::catalog::package_catalog_dir { package_key } {
     Return the catalog directory of the given package.
 
     @author Peter Marklund (peter@collaboraid.biz)
