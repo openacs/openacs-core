@@ -133,10 +133,10 @@ if {$view_by eq "package"} {
             $passes $fails $warnings \
             $proc_coverage $proc_coverage_level \
             [dict get $color background] [dict get $color foreground]
-        incr ::total(cases) $total        
+        incr ::total(cases) $total
         incr ::total(passes) $passes
-        incr ::total(fails)  $fails            
-        incr ::total(warnings) $warnings            
+        incr ::total(fails)  $fails
+        incr ::total(warnings) $warnings
     }
 } else {
     #
