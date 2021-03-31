@@ -175,7 +175,7 @@
 
     <tfoot>
       <tr><td></td><th>Totals:</th>
-         <td class="package-table-cell"><strong>@::total.fails@</strong></td>
+         <td class="package-table-cell"><strong>@::total.cases@</strong></td>
          <td class="package-table-cell"><strong>@::total.passes@</strong></td>
          <td class="package-table-cell"><strong>@::total.fails@</strong>
          <td class="package-table-cell"><strong>@::total.warnings@</strong></td>
