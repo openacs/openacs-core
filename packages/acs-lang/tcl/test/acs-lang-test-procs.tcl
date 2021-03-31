@@ -1072,6 +1072,9 @@ aa_register_case \
         lang::test::teardown_test_package
 
         apm_package_info_file_path
+        apm_package_register
+        apm_package_install_version
+        apm_package_install_owners
         apm_callback_and_log
         apm_interface_add
         apm_version_enable
