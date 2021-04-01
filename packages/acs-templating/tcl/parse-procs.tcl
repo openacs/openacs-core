@@ -731,8 +731,8 @@ ad_proc -public template::adp_append_code { code { nobreak "" } } {
     }
 }
 
-ad_proc -public template::adp_puts { text } {
-    Add text to the ADP currently being rendered.  May be used within escaped
+ad_proc -private template::adp_puts { text } {
+    Add text to the ADP currently being rendered.  Maybe used within escaped
     Tcl code in the template to add to the output.
 
     @param text A string containing text or markup.
