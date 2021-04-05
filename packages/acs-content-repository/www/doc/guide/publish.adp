@@ -116,7 +116,7 @@ the initial query for any needed attributes.</p>
 <h3>Merging Data with Templates</h3>
 <h3>Returning Output</h3>
 <ol>
-<li>Write to the file system</li><li>Service public requests directly</li>
+<li>Write to the filesystem</li><li>Service public requests directly</li>
 </ol>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>

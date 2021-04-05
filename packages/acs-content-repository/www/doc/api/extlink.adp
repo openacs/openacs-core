@@ -25,11 +25,11 @@ with keywords and related to the site&#39;s own content items.</p>
 <ul>
 <li>
 <font size="+1">Function:</font> content_extlink.is_extlink
-<p>Determines if the item is a extlink</p><table cellpadding="3" cellspacing="0" border="0">
+<p>Determines if the item is an extlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the item is a extlink, 'f'
+<th align="left">Returns:</th><td align="left">'t' if the item is an extlink, 'f'
 otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">item_id:</th><td>  </td><td>The item id</td>

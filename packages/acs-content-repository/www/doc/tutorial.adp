@@ -537,7 +537,7 @@ content?<br>
 
 The content repository also has a very useful facility for
 organizing your data into a hierarchy, very similar to a
-file-system. Just like a file system, you can have folders to store
+file-system. Just like a filesystem, you can have folders to store
 items inside of, and organize your information. The main difference
 is that every item can also contain other items. So in our case, we
 can have tasks that contain other tasks. This is a useful way for
@@ -771,13 +771,12 @@ binary object associated with the item, as well as all
 attributes.</dd>
 </dl>
 <dl>
-<dt>Content Folder</dt><dd>A folder is analogous to a folder or directory in a file
-system. It represents a level in the content item hierarchy. In the
+<dt>Content Folder</dt><dd>A folder is analogous to a folder or directory in a filesystem. It represents a level in the content item hierarchy. In the
 previous example, press-releases is a folder under the repository
 root, and products is folder within that.</dd>
 </dl>
 <dl>
-<dt>Symbolic Link</dt><dd>Analogous to a symlink, alias or shortcut in a file system.
+<dt>Symbolic Link</dt><dd>Analogous to a symlink, alias or shortcut in a filesystem.
 Allows an item to be accessed from multiple folders.</dd>
 </dl>
 <dl>

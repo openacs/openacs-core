@@ -8,14 +8,14 @@ Items</property>
 <strong>
 <a href="/doc">ACS Documentation</a> : <a href="../index">Content Repository</a> : Developer Guide</strong>
 <p>The content repository organizes content items in a hierarchical
-structure similar to a file system. You manage content items in the
-repository using the same basic operations as in a file system:</p>
+structure similar to a filesystem. You manage content items in the
+repository using the same basic operations as in a filesystem:</p>
 <ul>
 <li>A freshly installed content repository consists of a single
 "root" folder (analogous to the root directory
 <kbd>/</kbd> in UNIX or an empty partition in Windows or
 macOS).</li><li>You organize items by creating subfolders under the root.</li><li>You can move or copy items from one folder to another.</li><li>You can create "links" or "shortcuts" for
-items to make them accessible from within other directories.</li><li>Each item has a "file name" and an absolute
+items to make them accessible from within other directories.</li><li>Each item has a "filename" and an absolute
 "path" that is determined by its location on a particular
 branch of the repository tree. For example, the path to an item
 named <kbd>widget</kbd> in the folder <kbd>products</kbd> would be

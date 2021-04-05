@@ -47,7 +47,7 @@ FIELDS TERMINATED BY ','
  ext_fname FILLER CHAR(80),
  doc LOBFILE(ext_fname) TERMINATED BY EOF)</pre>
 <p>Copy any number of documents (Microsoft Word, PDF, text, HTML,
-etc.) to the file system of your database server. Create a data
+etc.) to the filesystem of your database server. Create a data
 file with an entry for each document you would like to load. This
 is simply a comma-separated text file:</p>
 <pre>word, Simple Story,sample-docs/simple.doc,

@@ -69,7 +69,7 @@ revisions).</p>
 <h3>Define a Relationship to a Target Object</h3>
 <p>The content repository implements a flexible mechanism for
 organizing data in a hierarchical fashion in a manner similar to a
-file system. This would be useful if we ever decided to allow each
+filesystem. This would be useful if we ever decided to allow each
 user to manage an entire personal photo gallery rather than a
 single portrait.</p>
 <p>In the simple case where each user is allowed a single portrait,
