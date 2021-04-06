@@ -818,6 +818,75 @@ ad_proc -public content::revision::get_cr_file_path {
     return [cr_fs_path $storage_area_key]${filename}
 }
 
+#
+# ::content::revision::export_to_filesystem
+#
+# This function was previously part of
+# fs::publish_versioned_object_to_file_system but the application
+# packages should be fully agnostic to the storage_type
+# implementation.
+
+ad_proc ::content::revision::export_to_filesystem {
+    -revision_id:required
+    -storage_type:required
+    -filename:required
+} {
+    Export the content of the provided revision to the named file in
+    the file system.
+} {
+    ::content::revision::write_to_filesystem-$storage_type \
+        -revision_id $revision_id \
+        -filename $filename
+}
+
+ad_proc -private ::content::revision::export_to_filesystem-text {
+    -revision_id:required
+    -filename:required
+} {
+    Export the content of the provided revision to the named file in
+    the file system.
+} {
+    set content [db_string select_object_content {
+        select content from cr_revisions  where revision_id = :live_revision
+    }]
+    set fp [open $filename w]
+    puts $fp $content
+    close $fp
+}
+
+ad_proc -private ::content::revision::export_to_filesystem-file {
+    -revision_id:required
+    -filename:required
+} {
+    Export the content of the provided revision to the named file in
+    the file system.
+} {
+    set cr_file_name [content::revision::get_cr_file_path -revision_id $live_revision]
+
+    #
+    # When there are multiple "unnamed files" in a directory, the
+    # constructed filename might exist already. This would lead to an
+    # error in the "file copy" operation. Therefore, generate a new
+    # name with an alternate suffix in these cases.
+    #
+    set base_name $filename
+    set count 0
+    while {[ad_file exists $filename]} {
+        set filename $base_name-[incr $count]
+    }
+
+    file copy -- $cr_file_name $filename
+}
+
+ad_proc -private ::content::revision::export_to_filesystem-lob {
+    -revision_id:required
+    -filename:required
+} {
+    Export the content of the provided revision to the named file in
+    the file system.
+} {
+    db_blob_get_file select_object_content {} -file $filename
+}
 
 # Local variables:
 #    mode: tcl

@@ -64,12 +64,19 @@
     <querytext>	
       select storage_area_key, 
           filename
-      from cr_items ci, 
-          cr_revisions cr 
+      from cr_items ci, cr_revisions cr 
       where cr.item_id=ci.item_id 
           and cr.revision_id=:revision_id
     </querytext>
   </fullquery>
+
+  <fullquery name="content::revision::export_to_filesystem-lob.select_object_content">     
+    <querytext>
+      select content
+      from cr_revisions
+      where revision_id = :revision_id
+    </querytext>
+  </fullquery>  
   
 </queryset>
 

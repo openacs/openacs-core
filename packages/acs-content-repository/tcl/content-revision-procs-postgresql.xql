@@ -51,4 +51,12 @@
         and cr.revision_id=:revision_id
     </querytext>
   </fullquery>
+
+  <fullquery name="content::revision::export_to_filesystem-lob.select_object_content">     
+    <querytext>
+      select lob
+      from cr_revisions
+      where revision_id = :revision_id
+    </querytext>
+  </fullquery>  
 </queryset>
