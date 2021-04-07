@@ -847,7 +847,7 @@ ad_proc -private ::content::revision::export_to_filesystem-text {
     the file system.
 } {
     set content [db_string select_object_content {
-        select content from cr_revisions  where revision_id = :live_revision
+        select content from cr_revisions where revision_id = :revision_id
     }]
     set fp [open $filename w]
     puts $fp $content
@@ -861,21 +861,30 @@ ad_proc -private ::content::revision::export_to_filesystem-file {
     Export the content of the provided revision to the named file in
     the file system.
 } {
-    set cr_file_name [content::revision::get_cr_file_path -revision_id $live_revision]
+    set cr_file_name [content::revision::get_cr_file_path -revision_id $revision_id]
 
     #
-    # When there are multiple "unnamed files" in a directory, the
-    # constructed filename might exist already. This would lead to an
-    # error in the "file copy" operation. Therefore, generate a new
-    # name with an alternate suffix in these cases.
+    # Check if cr_file_name is not empty, otherwise we could end up copying the
+    # whole content-repository.
     #
-    set base_name $filename
-    set count 0
-    while {[ad_file exists $filename]} {
-        set filename $base_name-[incr $count]
+    if {$cr_file_name ne ""} {
+        #
+        # When there are multiple "unnamed files" in a directory, the
+        # constructed filename might exist already. This would lead to an
+        # error in the "file copy" operation. Therefore, generate a new
+        # name with an alternate suffix in these cases.
+        #
+        set base_name $filename
+        set count 0
+        while {[ad_file exists $filename]} {
+            set filename $base_name-[incr $count]
+        }
+
+        file copy -- $cr_file_name $filename
+    } else {
+        ad_log Warning "::content::revision::export_to_filesystem-file: \
+            cr_file_name is empty (revision_id: $revision_id)"
     }
-
-    file copy -- $cr_file_name $filename
 }
 
 ad_proc -private ::content::revision::export_to_filesystem-lob {
