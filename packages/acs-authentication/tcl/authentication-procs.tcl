@@ -403,23 +403,27 @@ ad_proc -public auth::authenticate {
             set cookie_domain ""
         }
         ns_log notice "auth::authenticate receives host_node_id $host_node_id domain <$cookie_domain>"
-        auth::issue_login \
-            -user_id $result(user_id) \
-            -persistent=$persistent_p \
+        ad_user_login \
             -account_status $result(account_status) \
-            -cookie_domain $cookie_domain
+            -cookie_domain $cookie_domain \
+            -forever=$persistent_p \
+            $result(user_id)
     }
 
     return [array get result]
 }
 
-ad_proc -private auth::issue_login {
+ad_proc -deprecated auth::issue_login {
     {-user_id:required}
     {-account_status "ok"}
     {-cookie_domain ""}
     {-persistent:boolean}
 } {
     Issue the login cookie.
+
+    DEPRECATED: just a trivial wrapper of ad_user_login
+
+    @see ad_user_login
 } {
     ad_user_login \
         -account_status $account_status \
@@ -681,7 +685,7 @@ ad_proc -public auth::create_user {
 
     # Unless nologin was specified, issue login cookie if login was successful
     if { !$nologin_p && $creation_info(creation_status) eq "ok" && $creation_info(account_status) eq "ok" && [ad_conn user_id] == 0 } {
-        auth::issue_login -user_id $creation_info(user_id)
+        ad_user_login $creation_info(user_id)
     }
 
     return [array get creation_info]
