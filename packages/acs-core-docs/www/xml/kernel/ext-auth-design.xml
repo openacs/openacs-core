@@ -996,7 +996,7 @@ ad_proc -public auth::authority::batch_sync {
 </title>
         <literal>auth::authenticate
 </literal> calls
-        <literal>auth::authentication::Authenticate
+        <literal>auth::authentication::authenticate
 </literal> which invokes
         the service contract implementation for the authority. Returns:
         <itemizedlist>
@@ -1028,7 +1028,10 @@ auth_status is "ok".
         <title>Internal Design
 </title>
         <programlisting>
-ad_proc -private auth::authentication::Authenticate {
+# Note that this listing is just presented as an example and might not
+# reflect the current status of the source code, please refer to the
+# api-doc for the current version of this proc.
+ad_proc -private auth::authentication::authenticate {
     {-authority_id ""}
     {-username:required}
     {-password:required}

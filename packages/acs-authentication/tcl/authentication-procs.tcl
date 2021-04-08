@@ -252,7 +252,7 @@ ad_proc -public auth::authenticate {
     array set result {auth_status "n/a" auth_message "" account_status "n/a" account_message ""}
 
     ad_try {
-        array set result [auth::authentication::Authenticate \
+        array set result [auth::authentication::authenticate \
                               -username $username \
                               -authority_id $authority_id \
                               -password $password]
@@ -1804,7 +1804,7 @@ ad_proc -public auth::can_admin_system_without_authority_p {
 #
 #####
 
-ad_proc -private auth::authentication::Authenticate {
+ad_proc -private auth::authentication::authenticate {
     {-authority_id:required}
     {-username:required}
     {-password:required}
@@ -1848,6 +1848,23 @@ ad_proc -private auth::authentication::Authenticate {
                     -operation Authenticate \
                     -call_args [list $username $password $parameters $authority_id]]
     }
+}
+
+ad_proc -deprecated auth::authentication::Authenticate args {
+    Invoke the Authenticate service contract operation for the given authority.
+
+    DEPRECATED: this used to be a private api, however, it could be
+    made public, as it calls only public api itself and provides some
+    convenience. Unfortunately, it has been named in camelcase, so we
+    have to create a new alias and deprecate this one.
+
+    @see auth::authentication::authenticate
+
+    @param authority_id The ID of the authority to ask to verify the user.
+    @param username Username of the user.
+    @param password The password as the user entered it.
+} {
+    return [auth::authentication::authenticate {*}$args]
 }
 
 #####

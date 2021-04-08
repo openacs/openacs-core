@@ -607,7 +607,7 @@ aa_register_case  \
         acs_user::delete
         acs_user::get
         acs_user::get_by_username
-        auth::authentication::Authenticate
+        auth::authentication::authenticate
         auth::authority::local
         auth::create_user
         auth::password::reset
@@ -643,14 +643,14 @@ aa_register_case  \
             aa_true "Result contains new password" [info exists reset_result(password)]
 
             if { [info exists reset_result(password)] } {
-                array set auth_result [auth::authentication::Authenticate \
+                array set auth_result [auth::authentication::authenticate \
                                            -username $test_user(username) \
                                            -authority_id $test_user(authority_id) \
                                            -password $reset_result(password)]
                 aa_equals "can authenticate with new password" $auth_result(auth_status) "ok"
 
                 array unset auth_result
-                array set auth_result [auth::authentication::Authenticate \
+                array set auth_result [auth::authentication::authenticate \
                                            -username $test_user(username) \
                                            -authority_id $test_user(authority_id) \
                                            -password $test_user(password)]
