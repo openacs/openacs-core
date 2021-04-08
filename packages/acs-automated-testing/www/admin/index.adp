@@ -280,7 +280,6 @@
       </tr>
     </multiple>
     </table>
-    xaaa
    <blockquote>
      <div><strong>&raquo;</strong>
        <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
