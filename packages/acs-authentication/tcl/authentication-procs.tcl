@@ -1808,7 +1808,7 @@ ad_proc -public auth::can_admin_system_without_authority_p {
 #
 #####
 
-ad_proc -private auth::authentication::authenticate {
+ad_proc -public auth::authentication::authenticate {
     {-authority_id:required}
     {-username:required}
     {-password:required}
