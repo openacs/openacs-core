@@ -1854,22 +1854,22 @@ ad_proc -public auth::authentication::authenticate {
     }
 }
 
-ad_proc -deprecated auth::authentication::Authenticate args {
-    Invoke the Authenticate service contract operation for the given authority.
+# ad_proc -deprecated auth::authentication::Authenticate args {
+#     Invoke the Authenticate service contract operation for the given authority.
 
-    DEPRECATED: this used to be a private api, however, it could be
-    made public, as it calls only public api itself and provides some
-    convenience. Unfortunately, it has been named in camelcase, so we
-    have to create a new alias and deprecate this one.
+#     DEPRECATED: this used to be a private api, however, it could be
+#     made public, as it calls only public api itself and provides some
+#     convenience. Unfortunately, it has been named in camelcase, so we
+#     have to create a new alias and deprecate this one.
 
-    @see auth::authentication::authenticate
+#     @see auth::authentication::authenticate
 
-    @param authority_id The ID of the authority to ask to verify the user.
-    @param username Username of the user.
-    @param password The password as the user entered it.
-} {
-    return [auth::authentication::authenticate {*}$args]
-}
+#     @param authority_id The ID of the authority to ask to verify the user.
+#     @param username Username of the user.
+#     @param password The password as the user entered it.
+# } {
+#     return [auth::authentication::authenticate {*}$args]
+# }
 
 #####
 #
