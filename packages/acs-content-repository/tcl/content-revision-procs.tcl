@@ -32,45 +32,27 @@ ad_proc -public ::content::revision::new {
     passed in, we determine it from the content item. This is needed
     to find the attributes for the content type.
 
-
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-04
 
     @param revision_id
-
     @param item_id
-
     @param content_type
-
     @param title
-
     @param description
-
     @param content
-
     @param mime_type
-
     @param publish_date
-
     @param nls_language
-
     @param creation_date
-
     @param creation_user
-
     @param creation_ip
-
     @param package_id Package_id content belongs to
-
     @param is_live True is revision should be set live
-
     @param tmp_filename file containing content to be added to revision.
            The caller is responsible for cleaning up the temporary file.
-
     @param package_id
-
     @param is_live
-
     @param attributes A list of lists of pairs of additional attributes and
     their values to pass to the constructor. Each pair is a list of two
      elements: key => value such as

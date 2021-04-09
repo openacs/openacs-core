@@ -907,7 +907,8 @@ ad_proc -public content::item::upload_file {
                           -replace_with "_" $title]
 
         set revision_id [cr_import_content \
-                             -storage_type "file" -title $title \
+                             -storage_type "file" \
+                             -title $title \
                              -package_id $package_id \
                              $parent_id $tmp_filename $tmp_size $mime_type $filename]
 
