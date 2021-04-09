@@ -609,8 +609,13 @@ proc ad_proc args {
                     }
                 }]
             }
-            #ns_log notice "---- define nsf::proc for [::list proc $proc_name_as_passed $arg_list $code_block]"
-            uplevel [::list ::nsf::proc -ad $proc_name_as_passed $arg_list ${log_code}$code_block]
+            #ns_log notice "---- define nsf::proc for [::list proc -ad -debug=$debug_p $proc_name_as_passed $arg_list $code_block]"
+            uplevel [::list ::nsf::proc \
+                         -ad \
+                         -debug=$debug_p \
+                         $proc_name_as_passed \
+                         $arg_list \
+                         ${log_code}$code_block]
             return
         }
 
