@@ -921,7 +921,7 @@ ad_proc -public template::list::write_csv {
     set __csv_cols [list]
     set __csv_labels [list]
 
-    foreach __element_name $list_properties(elements) {
+    foreach __element_name $list_properties(display_elements) {
         template::list::element::get_reference -list_name $name -element_name $__element_name
         if {!$element_properties(hide_p)} {
             lappend __csv_cols $__element_name
