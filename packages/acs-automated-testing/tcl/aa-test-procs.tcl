@@ -930,7 +930,8 @@ ad_proc -public aa_log_result {
     # environment. Otherwise, report and return.
     #
     if {![info exists ::aa_run_quietly_p]} {
-            ns_log warning "aa_log_result: called outside the testing environment. Test result: $test_result Test notes: $test_notes"
+        ns_log warning "aa_log_result: called outside the testing environment." \
+            "Test result: $test_result Test notes: $test_notes"
             return
     }
     #
@@ -2042,6 +2043,16 @@ namespace eval acs::test::user {
     } {
         Remove a test user.
     } {
+        #
+        # Delete modifying user info, since otherwise we cannot delete
+        # the user_id. The modifying user is e.g. propagated to parent
+        # objss when modifying a page in the content reposistory.
+        #
+        db_dml unset_modifying_user {
+            UPDATE acs_objects
+            SET modifying_user = NULL
+            where modifying_user = :user_id
+        }
         acs_user::delete \
             -user_id $user_id \
             -permanent
