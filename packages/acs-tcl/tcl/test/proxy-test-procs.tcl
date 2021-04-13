@@ -27,11 +27,11 @@ aa_register_case \
             try {
                 encoding system iso8859-1
                 ::proxy::exec -call [list $tclsh - << "
-						chan configure stdin -translation binary
-						# assume tclsh now reads the rest of this script in binary mode
-						chan configure stdout -translation binary
-						puts -nonewline stdout [list $data0]
-					" >> [list $filename]]
+                    chan configure stdin -translation binary
+                    # assume tclsh now reads the rest of this script in binary mode
+                    chan configure stdout -translation binary
+                    puts -nonewline stdout [list $data0]
+                " >> [list $filename]]
             } finally {
                 encoding system $encoding
             }
@@ -52,4 +52,8 @@ aa_register_case \
     aa_equals data $data1hex $data0hex
 }
 
-
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
