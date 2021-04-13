@@ -7,6 +7,7 @@ ad_library {
 }
 
 aa_register_case \
+    -error_level warning \
     -cats {api smoke} -procs {
     proxy::exec
 } exec_binary_input {
