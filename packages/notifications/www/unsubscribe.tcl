@@ -10,12 +10,16 @@ ad_page_contract {
     return_url:localurl
 }
 
-set request_count [llength $request_id]
-for { set i 0} { $i < $request_count } { incr i } {
-    db_transaction {
-	set r_id [lindex $request_id $i]
-	db_dml remove_notify {}
-    }
+set package_id [ad_conn package_id]
+permission::require_permission -object_id $package_id -privilege create
+
+set request_ids $request_id
+foreach request_id $request_ids {
+    # Security Check
+    notification::security::require_admin_request -request_id $request_id
+
+    # Actually Delete
+    notification::request::delete -request_id $request_id
 }
 
 ad_returnredirect $return_url
