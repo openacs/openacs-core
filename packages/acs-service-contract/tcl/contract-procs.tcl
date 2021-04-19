@@ -159,7 +159,7 @@ ad_proc -public acs_sc::contract::delete {
             set contract_id [db_string get_id_by_name {
                 select contract_id
                 from acs_sc_contracts
-                where contract_name = :contract_name
+                where contract_name = :name
             }]
         }
 
