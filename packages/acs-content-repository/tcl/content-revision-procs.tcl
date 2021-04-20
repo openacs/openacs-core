@@ -816,7 +816,7 @@ ad_proc ::content::revision::export_to_filesystem {
     Export the content of the provided revision to the named file in
     the file system.
 } {
-    ::content::revision::write_to_filesystem-$storage_type \
+    ::content::revision::export_to_filesystem-$storage_type \
         -revision_id $revision_id \
         -filename $filename
 }
