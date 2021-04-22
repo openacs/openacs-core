@@ -30,7 +30,7 @@ if  { [info exists about_package_key] } {
     multirow create uninstalled_packages
 
     if { [db_0or1row get_local_package_version_id {
-        select min(version_id)
+        select min(version_id) as version_id
           from apm_package_version_info
         where installed_p = 't'
           and enabled_p = 't'
