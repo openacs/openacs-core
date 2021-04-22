@@ -3,7 +3,7 @@ ad_page_contract {
     @creation-date September 01, 2001
     @cvs-id $Id$
 } {
-    q:trim
+    q:printable,trim
     {t:trim ""}
     {offset:naturalnum,notnull 0}
     {num:range(0|200) 0}
@@ -93,8 +93,10 @@ if { $dts ne "" } {
 set urlencoded_query [ad_urlencode $q]
 
 set params [list $q $offset $limit $user_id $df]
-if {$search_package_id eq "" && [parameter::get -package_id $package_id -parameter SubsiteSearchP -default 1]
-    && [subsite::main_site_id] != [ad_conn subsite_id]} {
+if {$search_package_id eq ""
+    && [parameter::get -package_id $package_id -parameter SubsiteSearchP -default 1]
+    && [subsite::main_site_id] != [ad_conn subsite_id]
+} {
     # We are in a subsite and SubsiteSearchP is true
     set subsite_packages [concat [ad_conn subsite_id] [subsite::util::packages -node_id [ad_conn node_id]]]
     lappend params $subsite_packages
