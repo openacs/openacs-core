@@ -449,19 +449,20 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         ad_page_contract_filter_invoke
-        ad_page_contract_filter_proc_integer
-        ad_page_contract_filter_proc_naturalnum
-        ad_page_contract_filter_proc_float
-        ad_page_contract_filter_proc_negative_float
         ad_page_contract_filter_proc_boolean
-        ad_page_contract_filter_proc_word
-        ad_page_contract_filter_proc_token
-        ad_page_contract_filter_proc_sql_identifier
         ad_page_contract_filter_proc_email
-        ad_page_contract_filter_proc_localurl        
+        ad_page_contract_filter_proc_float
         ad_page_contract_filter_proc_html
+        ad_page_contract_filter_proc_integer
+        ad_page_contract_filter_proc_localurl
+        ad_page_contract_filter_proc_naturalnum
+        ad_page_contract_filter_proc_negative_float
         ad_page_contract_filter_proc_nohtml
-        
+        ad_page_contract_filter_proc_printable
+        ad_page_contract_filter_proc_sql_identifier
+        ad_page_contract_filter_proc_token
+        ad_page_contract_filter_proc_word
+
         ad_complain
         ad_page_contract_filter_proc
         ad_page_contract_set_validation_passed
@@ -487,15 +488,28 @@ aa_register_case \
         dict set cases localurl { . 1 ./index 1 https://o-p-e-n-a-c-s.org/ 0 }
 
         dict set cases html { "'" 1 "<p>" 1 }
-        dict set cases nohtml { "a" 1 "<p>" 0 } 
+        dict set cases nohtml { "a" 1 "<p>" 0 }
+
+        dict set cases printable { "a" 1 "a b" 1 "a\x00b" 0 "name\xc0\x80.jpg" 0}
 
         foreach filter [dict keys $cases] {
             foreach { value result } [dict get $cases $filter] {
+                if {[regexp {[^[:print:]]} $value]} {
+                    #
+                    # Use ns_urlencode to avoid error messages, when
+                    # invalid strings are added to the DB. We should
+                    # probably export NaviServer's
+                    # DStringAppendPrintable for such cases.
+                    #
+                    set print_value [ns_urlencode $value]
+                } else {
+                    set print_value $value
+                }
                 if { $result } {
-                    aa_true "'[ns_quotehtml $value]' is $filter" \
+                    aa_true "'[ns_quotehtml $print_value]' is $filter" \
                         [ad_page_contract_filter_invoke $filter dummy value]
                 } else {
-                    aa_false "'[ns_quotehtml $value]' is NOT $filter" \
+                    aa_false "'[ns_quotehtml $print_value]' is NOT $filter" \
                         [ad_page_contract_filter_invoke $filter dummy value]
                 }
             }

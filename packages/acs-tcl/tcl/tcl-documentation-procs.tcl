@@ -2187,6 +2187,25 @@ ad_page_contract_filter token { name value } {
     return 0
 }
 
+ad_page_contract_filter printable { name value } {
+    
+    Checks whether the value contains only characters with a printable
+    representation. This represents character class of the Tcl
+    character class "print", which consists of the characters with a
+    visible representation and space.  This filter is useful for
+    e.g. avoiding invalid byte sequences for the database.
+
+    @author Gustaf Neumann
+    @creation-date 22 April 2021
+} {
+
+    if {![regexp {[^[:print:]]} $value]} {
+        return 1
+    }
+    ad_complain [_ acs-tcl.lt_name_contains_invalid]
+    return 0
+}
+
 ad_page_contract_filter path { name value } {
     Checks whether the value is a Tcl word, or contains a few
     rather safe other characters ("-", "/", ".") used
