@@ -790,12 +790,6 @@ ad_proc -public ad_form {
 
         template::element create $form_name __refreshing_p -datatype integer -widget hidden -value 0
 
-        #
-        # Add the hidden button element.
-        #
-        template::element create $form_name "__submit_button_name" -datatype text -widget hidden -value ""
-        template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
-
         if {[info exists csrf_protection_p] && $csrf_protection_p} {
             #
             # Add CSRF value to every ad_form. Validation might be
@@ -1099,14 +1093,6 @@ ad_proc -public ad_form {
             } else {
                 set value [uplevel #$level [list template::element get_value $form_name $element_name]]
                 uplevel #$level [list set $element_name $value]
-            }
-        }
-        #
-        # Update the clicked button if it does not already exist.
-        #
-        uplevel #$level {
-            if {[info exists __submit_button_name] && $__submit_button_name ne ""} {
-                set $__submit_button_name $__submit_button_value
             }
         }
 
