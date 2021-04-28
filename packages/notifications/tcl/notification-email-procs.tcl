@@ -153,12 +153,25 @@ namespace eval notification::email {
        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
        if { $from_user_id ni {"" 0} && [person::person_p -party_id $from_user_id]} {
+           # Notification is sent on behalf of a person on the system.
            set from_email [party::email -party_id $from_user_id]
 
-           # Set the Mail-Followup-To address to the
-           # address of the notifications handler.
-           lappend extra_headers [list "Mail-Followup-To" $reply_to]
+           if {[parameter::get \
+                    -package_id [get_package_id] \
+                    -parameter EmailQmailQueueScanP -default 0] != 1} {
+               # We did not activate the processing of incoming
+               # messages: This means we do not process replies to
+               # notifications. There is no point in setting the
+               # Reply-To to something different than the Sender.
+               set reply_to ""
+           } else {
+               # We support notification replies.
+               # Set the Mail-Followup-To address to the
+               # address of the notifications handler.
+               lappend extra_headers [list "Mail-Followup-To" $reply_to]
+           }
        } else {
+           # Notification is sent by the system itself.
            set from_email $reply_to
        }
 
