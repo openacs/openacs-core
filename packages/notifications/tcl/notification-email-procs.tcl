@@ -160,7 +160,7 @@ namespace eval notification::email {
                     -package_id [get_package_id] \
                     -parameter EmailQmailQueueScanP -default 0] != 1} {
                # We did not activate the processing of incoming
-               # messages: This means we do not process replies to
+               # messages: this means we do not process replies to
                # notifications. There is no point in setting the
                # Reply-To to something different than the Sender.
                set reply_to ""
