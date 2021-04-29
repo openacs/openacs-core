@@ -639,14 +639,16 @@ ad_proc -private auth::local::search::Search {
     Implements the Search operation of the auth_search
     service contract for the local account implementation.
 } {
-
-    set results [list]
-    db_foreach user_search {} {
-        lappend results $user_id
-    }
-
-    return $results
-
+    return [db_list user_search {
+        select distinct user_id
+        from   cc_users u
+        where  upper(coalesce(u.first_names || ' ', '')  ||
+               coalesce(u.last_name || ' ', '') ||
+               u.email || ' ' ||
+               u.username || ' ' ||
+               coalesce(u.screen_name, '')) like upper('%'||:search_text||'%')
+        order  by username, email
+    }]
 }
 
 ad_proc -private auth::local::search::GetParameters {} {
