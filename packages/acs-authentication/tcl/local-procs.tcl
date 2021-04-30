@@ -639,15 +639,17 @@ ad_proc -private auth::local::search::Search {
     Implements the Search operation of the auth_search
     service contract for the local account implementation.
 } {
+    set authority_id [auth::authority::local]
     return [db_list user_search {
-        select distinct user_id
+        select distinct username
         from   cc_users u
-        where  upper(coalesce(u.first_names || ' ', '')  ||
-               coalesce(u.last_name || ' ', '') ||
-               u.email || ' ' ||
-               u.username || ' ' ||
-               coalesce(u.screen_name, '')) like upper('%'||:search_text||'%')
-        order  by username, email
+        where  authority_id = :authority_id
+               and upper(coalesce(u.first_names || ' ', '')  ||
+                         coalesce(u.last_name || ' ', '') ||
+                         u.email || ' ' ||
+                         u.username || ' ' ||
+                         coalesce(u.screen_name, '')) like upper('%'||:search_text||'%')
+        order  by username
     }]
 }
 
