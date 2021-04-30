@@ -99,7 +99,7 @@ ad_proc -private tsearch2_driver::install::register_fts_impl {
             search tsearch2::search
             index tsearch2::index
             unindex tsearch2::unindex
-            update_index tsearch2::update_index
+            update_index tsearch2::index
             summary tsearch2::summary
             info tsearch2::driver_info
         }

@@ -37,7 +37,7 @@ ad_proc -public tsearch2::index {
     title
     keywords
 } {
-    add object to full text index
+    Add or update an object in the full text index.
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
@@ -49,13 +49,8 @@ ad_proc -public tsearch2::index {
 
     @return nothing
 } {
-    set index_exists_p [db_0or1row object_exists "select 1 from txt where object_id=:object_id"]
-    if {!$index_exists_p} {
-        set txt [tsearch2::trunc_to_max $txt]
-        db_dml index {}
-    } else {
-        tsearch2::update_index $object_id $txt $title $keywords
-    }
+    set txt [tsearch2::trunc_to_max $txt]
+    db_dml index {}
 }
 
 ad_proc -public tsearch2::unindex {
@@ -73,13 +68,12 @@ ad_proc -public tsearch2::unindex {
     db_dml unindex "delete from txt where object_id=:object_id"
 }
 
-ad_proc -public tsearch2::update_index {
-    object_id
-    txt
-    title
-    keywords
-} {
+ad_proc -deprecated tsearch2::update_index args {
     update full text index
+
+    DEPRECATED: modern SQL supports upsert idioms
+
+    @see tsearch2::index
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
@@ -91,13 +85,7 @@ ad_proc -public tsearch2::update_index {
 
     @return nothing
 } {
-    set index_exists_p [db_0or1row object_exists "select 1 from txt where object_id=:object_id"]
-    if {!$index_exists_p} {
-        tsearch2::index $object_id $txt $title $keywords
-    } else {
-        set txt [tsearch2::trunc_to_max $txt]
-        db_dml update_index ""
-    }
+    tsearch2::index {*}$args
 }
 
 ad_proc -callback search::search -impl tsearch2-driver {

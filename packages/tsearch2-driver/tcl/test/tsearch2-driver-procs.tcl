@@ -141,7 +141,6 @@ aa_register_case -cats {
 } -procs {
     tsearch2::index
     tsearch2::unindex
-    tsearch2::update_index
 } index_unindex {
     Test indexing/unindexing
 } {
@@ -176,7 +175,7 @@ aa_register_case -cats {
         set txt "This is just a test object with edited text"
         set title "Test object updated"
         set keywords "test foo bar monger"
-        tsearch2::update_index $object_id $txt $title $keywords
+        tsearch2::index $object_id $txt $title $keywords
         #
         # Check if the keywords have been updated in the index
         #
