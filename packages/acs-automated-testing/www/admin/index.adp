@@ -13,7 +13,7 @@
       <if @by_category@ eq "">
          <strong> all </strong>
       </if><else>
-         <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;quiet=@quiet@">all</a>
+         <a href="@all_url@">all</a>
       </else>
       <multiple name="main_categories">
         |
@@ -31,12 +31,12 @@
                 </div>
 
 <p><if @stress;literal@ true>
-      <a href="index?stress=0&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-on">
+      <a href="@stress_url@" class="checkbox-on">
         <img src="/resources/acs-subsite/checkboxchecked.gif" class="checkbox-icon">
       </a>
     </if>
     <else>
-      <a href="index?stress=1&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-off">
+      <a href="@stress_url@" class="checkbox-off">
         <img src="/resources/acs-subsite/checkbox.gif" alt="checkbox" class="checkbox-icon">
       </a>
     </else>
@@ -44,12 +44,12 @@
 </p>
 
 <p><if @security_risk;literal@ true>
-      <a href="index?stress=@stress@&amp;security_risk=0&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-on">
+      <a href="@security_risk_url@" class="checkbox-on">
         <img src="/resources/acs-subsite/checkboxchecked.gif" class="checkbox-icon">
       </a>
     </if>
     <else>
-      <a href="index?stress=@stress@&amp;security_risk=1&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0" class="checkbox-off">
+      <a href="@security_risk_url@" class="checkbox-off">
         <img src="/resources/acs-subsite/checkbox.gif" alt="checkbox" class="checkbox-icon">
       </a>
     </else>
@@ -60,9 +60,9 @@
     <td class="main-table-modes"> [
       <if @quiet;literal@ true>
          <strong> quiet </strong> |
-         <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0">verbose</a>
+         <a href="@quiet_url@">verbose</a>
       </if><else>
-         <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=1">quiet</a>
+         <a href="@quiet_url@">quiet</a>
          | <strong> verbose </strong>
       </else>  ]
  <div class="form-help-text">
@@ -74,9 +74,9 @@
     <td class="main-table-modes"> [
       <if @view_by@ eq "" or @view_by@ eq "package">
          <strong> package </strong> |
-         <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=testcase&amp;by_category=@by_category@&amp;quiet=@quiet@">testcase</a>
+         <a href="@view_by_testcase_url@">testcase</a>
       </if><else>
-         <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;view_by=package&amp;by_category=@by_category@&amp;quiet=@quiet@">package</a>
+         <a href="@view_by_package_url@">package</a>
          | <strong> testcase </strong>
       </else>  ]
     </td>
@@ -90,7 +90,7 @@
       </div>
       <div>
         <strong>&raquo;</strong>
-        <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
+        <a href="@clear_url@"> Clear test result data</a>
       </div>
       <if @by_package_key@ ne "" and @multiple_packages_p@ false>
         <div>
@@ -195,7 +195,7 @@
       </div>
       <div>
         <strong>&raquo;</strong>
-        <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
+        <a href="@clear_url@"> Clear test result data</a>
       </div>
       <if @by_package_key@ ne "" and @multiple_packages_p@ false>
         <div>
@@ -212,11 +212,11 @@
 <else>
    <blockquote>
      <div><strong>&raquo;</strong>
-       <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
+       <a href="@rerun_url@"> Rerun displayed test cases</a>
      </div>
      <div>
        <strong>&raquo;</strong>
-       <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
+       <a href="@clear_url@"> Clear test result data</a>
      </div>
      <if @by_package_key@ ne "" and @multiple_packages_p@ false>
        <div>
@@ -282,11 +282,11 @@
     </table>
    <blockquote>
      <div><strong>&raquo;</strong>
-       <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
+       <a href="@rerun_url@"> Rerun displayed test cases</a>
      </div>
      <div>
        <strong>&raquo;</strong>
-       <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
+       <a href="@clear_url@"> Clear test result data</a>
      </div>
      <if @by_package_key@ ne "" and @multiple_packages_p@ false>
        <div>

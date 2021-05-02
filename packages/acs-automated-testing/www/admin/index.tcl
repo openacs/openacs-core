@@ -123,6 +123,7 @@ if {$view_by eq "package"} {
     template::multirow create packageinfo key url \
         total passes fails warnings proc_coverage \
         proc_coverage_level background foreground
+
     foreach package_key [lsort [array names packages]] {
         lassign $packages($package_key) total passes fails warnings
         set proc_coverage [dict get [aa::coverage::proc_coverage -package_key $package_key] coverage]
@@ -209,6 +210,50 @@ foreach category [nsv_get aa_test categories] {
 
 set record_url [export_vars -base "record-test" -url {return_url package_key}]
 set bulk_actions_vars [export_vars -form {{category $by_category} view_by quiet stress security_risk}]
+
+set flipped_stress [expr {!$stress}]
+set stress_url [export_vars -base index {
+    {quiet 0} {stress $flipped_stress} security_risk
+    by_package_key view_by by_category
+}]
+
+set flipped_security_risk [expr {!$security_risk}]
+set security_risk_url [export_vars -base index {
+    {quiet 0} stress {security_risk $flipped_security_risk}
+    by_package_key view_by by_category
+}]
+
+set flipped_quiet [expr {!$quiet}]
+set quiet_url [export_vars -base index {
+    {quiet $flipped_quiet} stress security_risk
+    by_package_key view_by by_category
+}]
+
+set view_by_testcase_url [export_vars -base index {
+    quiet stress security_risk
+    by_package_key {view_by testcase} by_category
+}]
+set view_by_package_url [export_vars -base index {
+    quiet stress security_risk
+    by_package_key {view_by package} by_category
+}]
+
+set all_url [export_vars -base index {
+    quiet stress security_risk
+    by_package_key view_by
+}]
+
+set rerun_url [export_vars -base rerun {
+    quiet stress security_risk
+    {package_key $by_package_key} view_by {category $by_category}
+}]
+
+set clear_url [export_vars -base clear {
+    quiet stress security_risk
+    {package_key $by_package_key} view_by {category $by_category}
+}]
+
+
 
 # Local variables:
 #    mode: tcl
