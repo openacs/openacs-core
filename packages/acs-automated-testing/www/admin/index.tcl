@@ -160,7 +160,7 @@ if {$view_by eq "package"} {
         # - The category is blank or it matches the specified.
         #
         if {$by_package_key in [list "" $package_key]
-            && $by_category in [list "" $categories]
+            && $by_category in [list "" {*}$categories]
         } {
             # Swap the highlight flag between packages.
             if {$old_package_key ne $package_key} {
@@ -193,9 +193,9 @@ template::multirow create exclusion_categories name
 foreach category [nsv_get aa_test categories] {
     # joel@aufrecht.org: putting in special cases for exclusionary categories
     if { $category in [nsv_get aa_test exclusion_categories] } {
-        template::multirow append main_categories $category
+        template::multirow append exclusion_categories $category        
     } else {
-        template::multirow append exclusion_categories $category
+        template::multirow append main_categories $category
     }
 }
 
