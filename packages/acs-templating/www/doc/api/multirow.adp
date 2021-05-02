@@ -10,7 +10,7 @@ Reference</strong>
 <p>Access and modify rows and columns of a multirow data
 source.</p>
 <h3>Methods</h3>
-<pre>multirow <strong>get</strong><em>name index column</em>
+<pre>multirow <strong>get</strong><em> name index column</em>
 </pre>
 <blockquote>
 <p>Get a particular column value or a reference to an entire
@@ -21,23 +21,23 @@ for the row specified by <kbd>index</kbd>.</li>
 </ul>
 </blockquote>
 <pre>
-multirow <strong>set</strong><em>name index column value</em>
+multirow <strong>set</strong><em> name index column value</em>
 </pre>
 <blockquote><p>Set the value of a column in a specified row.</p></blockquote>
-<pre>multirow <strong>size</strong><em>name</em>
+<pre>multirow <strong>size</strong><em> name</em>
 </pre>
 <blockquote><p>Get the number of rows in the data source.</p></blockquote>
 <pre>
-multirow <strong>create</strong><em>name column [column ...]</em>
+multirow <strong>create</strong><em> name column [column ...]</em>
 </pre>
 <blockquote><p>Set up a new multirow data source. This is an alternative to
 having <a href="">db_multirow</a> create the data source.</p></blockquote>
 <pre>
-multirow <strong>append</strong><em>name value [value ...]</em>
+multirow <strong>append</strong><em> name value [value ...]</em>
 </pre>
 <blockquote><p>Add a row at the end of the data source. Extra values are
 dropped, missing values default to the empty string</p></blockquote>
-<pre>multirow <strong>map</strong><em>name body</em>
+<pre>multirow <strong>map</strong><em> name body</em>
 </pre>
 <blockquote><p>Evaluate <em>body</em> for each row of the data source, and
 return a list with all results. Within the body, all columns of the
