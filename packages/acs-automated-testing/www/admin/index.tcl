@@ -112,15 +112,16 @@ if {$view_by eq "package"} {
     #
     # Calculate package proc test coverage
     #
-    set global_test_coverage            [aa::coverage::proc_coverage]
-    set global_test_coverage_percent    [dict get $global_test_coverage coverage]
-    set global_test_coverage_level      [aa::coverage::proc_coverage_level $global_test_coverage_percent]
+    set global_test_coverage             [aa::coverage::proc_coverage]
+    set global_test_coverage_percent     [dict get $global_test_coverage coverage]
+    set global_test_coverage_level       [aa::coverage::proc_coverage_level $global_test_coverage_percent]
     array set global_test_coverage_color [aa::percentage_to_color $global_test_coverage_percent]
 
     #
     # Prepare the template data for a view_by "package"
     #
-    template::multirow create packageinfo key total passes fails warnings proc_coverage \
+    template::multirow create packageinfo key url \
+        total passes fails warnings proc_coverage \
         proc_coverage_level background foreground
     foreach package_key [lsort [array names packages]] {
         lassign $packages($package_key) total passes fails warnings
@@ -129,8 +130,15 @@ if {$view_by eq "package"} {
         set color [aa::percentage_to_color $proc_coverage]
         #ns_log notice "view_by $view_by package_key=$package_key $proc_coverage_level $proc_coverage_color"
 
-        template::multirow append packageinfo $package_key $total \
-            $passes $fails $warnings \
+        set url [export_vars -base index -url {
+            stress security_risk quiet
+            by_category
+            {by_package_key $package_key}
+            {view_by testcase}
+
+        }]
+        template::multirow append packageinfo $package_key $url \
+            $total $passes $fails $warnings \
             $proc_coverage $proc_coverage_level \
             [dict get $color background] [dict get $color foreground]
         incr ::total(cases) $total
@@ -193,7 +201,7 @@ template::multirow create exclusion_categories name
 foreach category [nsv_get aa_test categories] {
     # joel@aufrecht.org: putting in special cases for exclusionary categories
     if { $category in [nsv_get aa_test exclusion_categories] } {
-        template::multirow append exclusion_categories $category        
+        template::multirow append exclusion_categories $category
     } else {
         template::multirow append main_categories $category
     }

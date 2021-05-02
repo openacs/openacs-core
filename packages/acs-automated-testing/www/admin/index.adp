@@ -139,7 +139,7 @@
           <tr class="even">
         </else>
         <td><input type="checkbox" checked="true" name="package_key" value="@packageinfo.key@"/></td>
-        <td> <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@packageinfo.key@&amp;view_by=testcase&amp;quiet=@quiet@">@packageinfo.key@</a></td>
+        <td> <a href="@packageinfo.url@">@packageinfo.key@</a></td>
         <if @packageinfo.total;literal@ eq 0>
           <td class="package-table-cell">No data</td>
           <td class="package-table-cell">-</td>
