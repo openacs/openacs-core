@@ -105,27 +105,23 @@ ad_proc -public aa_stub {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    global aa_stub_sequence
-    global aa_stub_names
-    global aa_testcase_id
-
-    if {[info exists aa_testcase_id]} {
+    if {[info exists ::aa_testcase_id]} {
         #
         # Runtime testcase stub.
         # If a stub for this procedure hasn't already been defined, take a copy
-        # of the original procedure and add it to the aa_stub_names list.
+        # of the original procedure and add it to the ::aa_stub_names list.
         #
-        if {$proc_name ni $aa_stub_names} {
-            lappend aa_stub_names $proc_name
+        if {$proc_name ni $::aa_stub_names} {
+            lappend ::aa_stub_names $proc_name
             aa_proc_copy $proc_name ${proc_name}_unstubbed
         }
-        set aa_stub_sequence($proc_name) 1
+        set ::aa_stub_sequence($proc_name) 1
 
         aa_proc_copy $proc_name $proc_name "
       global aa_stub_sequence
       global aa_testcase_id
-      set sequence_id \$aa_stub_sequence\($proc_name\)
-      incr aa_stub_sequence\($proc_name\)
+      set sequence_id \$::aa_stub_sequence\($proc_name\)
+      incr ::aa_stub_sequence\($proc_name\)
       $new_body
     "
         return
@@ -860,7 +856,6 @@ ad_proc -public aa_log { args } {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    #global aa_testcase_id
     set log_notes [join $args " "]
     #
     # When aa_run_quietly_p exists, we run inside the testing
@@ -902,11 +897,6 @@ ad_proc -public aa_log_result {
         return
     }
 
-    global aa_testcase_id
-    global aa_testcase_test_id
-    global aa_testcase_fails
-    global aa_testcase_passes
-
     #
     # When aa_run_quietly_p exists, we run inside the testing
     # environment. Otherwise, report and return.
@@ -927,32 +917,33 @@ ad_proc -public aa_log_result {
         return
     }
 
-    incr aa_testcase_test_id
+    incr ::aa_testcase_test_id
     if {$test_result eq "pass"} {
-        ns_log Debug "aa_log_result: PASSED: $aa_testcase_id, $test_notes"
-        incr aa_testcase_passes
+        ns_log Debug "aa_log_result: PASSED: $::aa_testcase_id, $test_notes"
+        incr ::aa_testcase_passes
     } elseif {$test_result eq "fail"} {
         switch $::aa_error_level {
             notice {
-                ns_log notice "aa_log_result: NOTICE: $aa_testcase_id, $test_notes"
+                ns_log notice "aa_log_result: NOTICE: $::aa_testcase_id, $test_notes"
                 set test_result "note"
             }
             warning {
-                ns_log warning "aa_log_result: WARNING: $aa_testcase_id, $test_notes"
+                ns_log warning "aa_log_result: WARNING: $::aa_testcase_id, $test_notes"
                 set test_result "warn"
             }
             error {
-                incr aa_testcase_fails
-                ns_log Bug "aa_log_result: FAILED: $aa_testcase_id, $test_notes"
+                incr ::aa_testcase_fails
+                ns_log Bug "aa_log_result: FAILED: $::aa_testcase_id, $test_notes"
             }
             default {
                 # metatest
-                incr aa_testcase_fails
-                ns_log Bug "aa_log_result: FAILED: Automated test did not function as expected: $aa_testcase_id, $test_notes"
+                incr ::aa_testcase_fails
+                ns_log Bug "aa_log_result: FAILED: Automated test did not function as expected:" \
+                    "$::aa_testcase_id, $test_notes"
             }
         }
     } elseif {$test_result ne "sect"} {
-        ns_log Debug "aa_log_result: LOG: $aa_testcase_id, $test_notes"
+        ns_log Debug "aa_log_result: LOG: $::aa_testcase_id, $test_notes"
         set test_result "log"
     }
     # Notes in database can only hold so many characters
@@ -961,6 +952,9 @@ ad_proc -public aa_log_result {
     }
 
     global aa_package_key
+    global aa_testcase_test_id
+    global aa_testcase_id
+
     db_dml test_result_insert {
         insert into aa_test_results
         (testcase_id, package_key, test_id, timestamp, result, notes)
