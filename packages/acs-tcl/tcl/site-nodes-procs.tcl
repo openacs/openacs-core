@@ -943,6 +943,7 @@ ad_proc -public site_node::closest_ancestor_package {
     # should we return the package at the passed-in node/url?
     if { $include_self_p && $package_key ne ""} {
         set node [site_node::get -url $url]
+        #ns_log notice "=== [list site_node::get -url $url] => '$node'"
 
         if {[dict get $node package_key] in $package_key} {
             return [dict get $node $element]

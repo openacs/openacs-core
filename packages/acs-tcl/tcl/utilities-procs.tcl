@@ -3717,12 +3717,12 @@ ad_proc -public util::disk_cache_eval {
             if {[ad_file readable $file_name]} {
                 set result [template::util::read_file $file_name]
             } else {
-                set result [{*}$call]
+                set result [uplevel $call]
                 template::util::write_file $file_name $result
             }
         }
     } else {
-        set result [{*}$call]
+        set result [uplevel $call]
     }
     return $result
 }
