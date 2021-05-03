@@ -591,7 +591,8 @@ ad_proc -private aa_runseries {
     global aa_init_class_logs
     global aa_in_init_class
 
-    aa::coverage::add_traces
+    # TODO: where does this command come from?
+    # aa::coverage::add_traces
 
     set aa_run_quietly_p $quiet_p
     #
