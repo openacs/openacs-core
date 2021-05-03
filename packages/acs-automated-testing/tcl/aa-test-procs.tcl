@@ -18,15 +18,20 @@ ad_library {
     @cvs-id $Id$
 }
 
-# LARS: We do this here, because if we do it in the -init file, then we cannot register
-# test cases in -procs files of packages.
+#
+# LARS: We do this here, because if we do it in the -init file, then
+# we cannot register test cases in -procs files of packages.
+#
 if { ![nsv_exists aa_test cases] } {
     nsv_set aa_test cases {}
     nsv_set aa_test components {}
     nsv_set aa_test init_classes {}
     nsv_set aa_test categories { config db api web smoke stress security_risk populator production_safe }
     nsv_set aa_test exclusion_categories { stress security_risk }
-    if {[parameter::get_from_package_key -package_key "acs-automated-testing" -parameter "SeleniumRcServer"] ne ""} {
+    if {[parameter::get_from_package_key \
+             -package_key "acs-automated-testing" \
+             -parameter "SeleniumRcServer"] ne ""
+    } {
         nsv_lappend aa_test categories "selenium"
     } else {
         nsv_lappend aa_test exclusion_categories "selenium"
@@ -297,15 +302,14 @@ ad_proc -public aa_call_component {
     @author Peter Harper
     @creation-date 28 October 2001
 } {
-    global aa_package_key
     set body ""
 
     #
     # Search for the component body
     #
     foreach component [nsv_get aa_test components] {
-        if {$component_id    == [lindex $component 0] &&
-            $aa_package_key  == [lindex $component 1]} {
+        if {$component_id == [lindex $component 0] &&
+            $::aa_package_key  == [lindex $component 1]} {
             set body [lindex $component 4]
         }
     }
@@ -316,10 +320,10 @@ ad_proc -public aa_call_component {
     #
     if {$body ne ""} {
         aa_log "Running component $component_id"
-        uplevel 1 "_${aa_package_key}__c_$component_id"
+        uplevel 1 "_${::aa_package_key}__c_$component_id"
         return
     } else {
-        error "Unknown component $component_id, package $aa_package_key"
+        error "Unknown component $component_id, package $::aa_package_key"
     }
 }
 
@@ -510,7 +514,6 @@ ad_proc -public aa_register_case {
     } else {
         set init_class_code [string map [
         list @init_classes@ [list $init_classes] @package_key@ [list $package_key]] {
-            global aa_init_class_logs
             upvar 2 _aa_exports _aa_exports
             foreach init_class @init_classes@ {
                 if {[llength $init_class] == 2} {
@@ -521,7 +524,7 @@ ad_proc -public aa_register_case {
                 foreach v $_aa_exports([list $init_package_key $init_class]) {
                     upvar 2 $v $v
                 }
-                foreach logpair $aa_init_class_logs([list $init_package_key $init_class]) {
+                foreach logpair $::aa_init_class_logs([list $init_package_key $init_class]) {
                     aa_log_result [lindex $logpair 0] [lindex $logpair 1]
                 }
             }
@@ -587,14 +590,12 @@ ad_proc -private aa_runseries {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    global aa_run_quietly_p
-    global aa_init_class_logs
-    global aa_in_init_class
+    # probably transitional code for testing purposes
+    if {[info commands ::aa::coverage::add_traces] ne ""} {
+        aa::coverage::add_traces
+    }
 
-    # TODO: where does this command come from?
-    # aa::coverage::add_traces
-
-    set aa_run_quietly_p $quiet_p
+    set ::aa_run_quietly_p $quiet_p
     #
     # Work out the list of initialization classes.
     #
@@ -655,13 +656,13 @@ ad_proc -private aa_runseries {
         foreach initpair [array names classes] {
             lassign $initpair package_key init_class
             set _aa_export {}
-            set aa_init_class_logs([list $package_key $init_class]) {}
-            set aa_in_init_class [list $package_key $init_class]
+            set ::aa_init_class_logs([list $package_key $init_class]) {}
+            set ::aa_in_init_class [list $package_key $init_class]
             _${package_key}__i_$init_class
             set _aa_exports([list $package_key $init_class]) $_aa_export
         }
     }
-    set aa_in_init_class ""
+    set ::aa_in_init_class ""
 
     #
     # Run each testcase
@@ -678,11 +679,11 @@ ad_proc -private aa_runseries {
     if {[info exists classes]} {
         foreach initpair [array names classes] {
             lassign $initpair package_key init_class
-            set aa_in_init_class [list $package_key $init_class]
+            set ::aa_in_init_class [list $package_key $init_class]
             _${package_key}__d_$init_class
         }
     }
-    set aa_in_init_class ""
+    set ::aa_in_init_class ""
 
     # Generate the XML report file
     aa_test::write_test_file
@@ -702,21 +703,13 @@ ad_proc -private aa_run_testcase {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    global aa_stub_names
-    global aa_testcase_id
-    global aa_testcase_test_id
-    global aa_testcase_fails
-    global aa_testcase_passes
-    global aa_package_key
-    global aa_init_class_logs
-    global aa_error_level
     upvar  exports exports
 
-    set aa_stub_names {}
-    set aa_testcase_id $testcase_id
-    set aa_testcase_test_id 0
-    set aa_testcase_fails 0
-    set aa_testcase_passes 0
+    set ::aa_stub_names {}
+    set ::aa_testcase_id $testcase_id
+    set ::aa_testcase_test_id 0
+    set ::aa_testcase_fails 0
+    set ::aa_testcase_passes 0
 
     #
     # Lookup the testcase definition.
@@ -730,15 +723,13 @@ ad_proc -private aa_run_testcase {
             set testcase_inits      [lindex $testcase 5]
             set testcase_on_error   [lindex $testcase 6]
             set testcase_bodys      [lindex $testcase 7]
-            set aa_error_level      [lindex $testcase 8]
-
-            set aa_package_key    $package_key
+            set ::aa_error_level    [lindex $testcase 8]
+            set ::aa_package_key    $package_key
         }
     }
     if {[llength $testcase_bodys] == 0} {
         return
     }
-
 
     #
     # Create any file-wide stubs.
@@ -752,12 +743,8 @@ ad_proc -private aa_run_testcase {
     #
     # Run the test
     #
-    set sql "delete from aa_test_results
-           where testcase_id = :testcase_id"
-    db_dml delete_testcase_results $sql
-    set sql "delete from aa_test_final_results
-           where testcase_id = :testcase_id"
-    db_dml delete_testcase_final_results $sql
+    db_dml delete_testcase_results {delete from aa_test_results where testcase_id = :testcase_id}
+    db_dml delete_testcase_final_results {delete from aa_test_final_results where testcase_id = :testcase_id}
 
     ns_log debug "aa_run_testcase: Running testcase $testcase_id"
 
@@ -769,13 +756,13 @@ ad_proc -private aa_run_testcase {
     #
     # Unstub any stubbed functions
     #
-    foreach stub_name $aa_stub_names {
+    foreach stub_name $::aa_stub_names {
         aa_unstub $stub_name
     }
-    set aa_stub_names {}
+    set ::aa_stub_names {}
 
-    aa_log_final $aa_testcase_passes $aa_testcase_fails
-    unset aa_testcase_id
+    aa_log_final $::aa_testcase_passes $::aa_testcase_fails
+    unset ::aa_testcase_id
 
     #
     # Cleanup temporary XOTcl objects
@@ -847,9 +834,6 @@ ad_proc -public aa_false {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    global aa_testcase_id
-    global aa_package_key
-
     set result [uplevel 1 [list expr $affirm_expr]]
     if {!$result} {
         aa_log_result "pass" [subst {[aa_indent] $affirm_name: "$affirm_expr" false}]
@@ -877,7 +861,6 @@ ad_proc -public aa_log { args } {
     @creation-date 24 July 2001
 } {
     #global aa_testcase_id
-    #global aa_package_key
     set log_notes [join $args " "]
     #
     # When aa_run_quietly_p exists, we run inside the testing
@@ -923,10 +906,6 @@ ad_proc -public aa_log_result {
     global aa_testcase_test_id
     global aa_testcase_fails
     global aa_testcase_passes
-    global aa_package_key
-    global aa_in_init_class
-    global aa_init_class_logs
-    global aa_error_level
 
     #
     # When aa_run_quietly_p exists, we run inside the testing
@@ -942,8 +921,8 @@ ad_proc -public aa_log_result {
     # entry, but don't write it to the database.  Individual testcase will make
     # their own copies of these log entries.
     #
-    if {$aa_in_init_class ne ""} {
-        lappend aa_init_class_logs($aa_in_init_class) \
+    if {$::aa_in_init_class ne ""} {
+        lappend ::aa_init_class_logs($::aa_in_init_class) \
             [list $test_result $test_notes]
         return
     }
@@ -953,7 +932,7 @@ ad_proc -public aa_log_result {
         ns_log Debug "aa_log_result: PASSED: $aa_testcase_id, $test_notes"
         incr aa_testcase_passes
     } elseif {$test_result eq "fail"} {
-        switch $aa_error_level {
+        switch $::aa_error_level {
             notice {
                 ns_log notice "aa_log_result: NOTICE: $aa_testcase_id, $test_notes"
                 set test_result "note"
@@ -981,7 +960,13 @@ ad_proc -public aa_log_result {
         set test_notes "[string range $test_notes 0 1996]..."
     }
 
-    db_dml test_result_insert {}
+    global aa_package_key
+    db_dml test_result_insert {
+        insert into aa_test_results
+        (testcase_id, package_key, test_id, timestamp, result, notes)
+        values (:aa_testcase_id, :aa_package_key, :aa_testcase_test_id,
+                current_timestamp, :test_result, :test_notes)
+    }
 }
 
 ad_proc -private aa_log_final {
@@ -991,17 +976,18 @@ ad_proc -private aa_log_final {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
-    global aa_testcase_id
-    global aa_testcase_fails
-    global aa_testcase_passes
-    global aa_package_key
-
-    if {$test_fails == 0} {
-    } else {
-        ns_log Bug "aa_log_final: FAILED: $aa_testcase_id, $test_fails tests failed"
+    if {$test_fails > 0} {
+        ns_log Bug "aa_log_final: FAILED: $::aa_testcase_id, $test_fails tests failed"
     }
 
-    db_dml testcase_result_insert {}
+    global aa_testcase_id
+    global aa_package_key
+
+    db_dml testcase_result_insert {
+        insert into aa_test_final_results
+               (testcase_id, package_key, timestamp, passes, fails)
+        values (:aa_testcase_id, :aa_package_key, current_timestamp, :test_passes, :test_fails)
+    }
 }
 
 ad_proc -public aa_run_with_teardown {
