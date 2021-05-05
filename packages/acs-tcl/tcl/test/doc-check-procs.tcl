@@ -16,6 +16,15 @@ aa_register_case -cats {smoke production_safe} -procs {
 } {
     set count 0
     set good 0
+    #
+    # Certain procs are defined outside of the OpenACS installation
+    # source tree, e.g. in nsf. If they fail the test, the regular
+    # OpenACS administrator cannot do much about it, so we only
+    # generate a warning for them.
+    #
+    set ignored_namespaces {
+        nx
+    }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         array set pa [nsv_get api_proc_doc $p]
         if { [info exists pa(protection)]
@@ -24,7 +33,12 @@ aa_register_case -cats {smoke production_safe} -procs {
          } {
             incr count
             if { [string is space $pa(main)] } {
-                aa_log_result fail "No documentation for public proc $p"
+                if {[regexp "^([join $ignored_namespaces |])::.*\$" $p m]} {
+                    set test_result warning
+                } else {
+                    set test_result fail
+                }
+                aa_log_result $test_result "No documentation for public proc $p"
             } else {
                 incr good
             }
