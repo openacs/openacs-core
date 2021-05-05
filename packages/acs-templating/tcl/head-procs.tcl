@@ -1214,9 +1214,7 @@ ad_proc template::add_event_listener {
         # In case, no "id" is provided, use the "CSSclass"
         #
         set script [ns_trim -delimiter | [subst {
-            | var elems = document.getElementsByClassName('$CSSclass');
-            | for (var i = 0, l = elems.length; i < l; i++) {
-            |   var e = elems\[i\];
+            | for (e of document.getElementsByClassName('$CSSclass')) {
             |   $script
             |}}]]
     }
