@@ -1135,20 +1135,36 @@ ad_proc template::add_event_listener {
     {-CSSclass "acs-listen"}
     {-id}
     {-formfield}
+    {-selector}
     {-usecapture:boolean false}
     {-preventdefault:boolean true}
     {-script:required}
 } {
-
-    Register an event handler for elements either with a specified ID,
-    CSS class, or for a formfield targeted by form id and field name.
+    Register an event handler for elements. The affected elements can
+    be specified in different ways, which will be checked in the
+    following order of precedence: id, formfield, selector and
+    CSSclass. Normally one needs to provide only one kind of
+    specification.
 
     @param event     register handler for this type of event
     @param id        register handler for this HTML ID
     @param CSSclass  register handler for this CSS class
     @param formfield register handler for this formfield, specified
                      in a list of two elements in the form
-                      <code>{ form_id field_name }</code>
+                     <code>{ form_id field_name }</code>
+    @param selector register handler for elements identified by this
+                    CSS selector. When a CSS selector contains double
+                    and single quotes, we won't add any of those
+                    around the selector automatically. Instead, the
+                    user must specify them explicity, for instance
+                    like this: ... -selector {'[name="o\'hara"]'}. If
+                    the selector does not contain any single or double
+                    quotes, we can let the user omit them, as for the
+                    case of a simple tag name selector: ... -selector
+                    "li". Quotes can also be omitted if the selector
+                    contains only one kind of them, like ... -selector
+                    {[data-property='value']} or ... -selector
+                    {[data-property="value"]}
     @param usecapture indicating whether event will be dispatched to the
                       registered listener before being dispatched to any
                       EventTarget beneath it in the DOM tree.
@@ -1178,6 +1194,21 @@ ad_proc template::add_event_listener {
             | var e = document.getElementById('$id').elements.namedItem('$name');
             | if (e !== null) {$script}
             |}]]
+    } elseif {[info exists selector]} {
+        #
+        # Find if either single or double quotes are absent from the
+        # selector and we can use them around it safely.
+        #
+        foreach q {' \"} {
+            if {[string first $q $selector] < 0} {
+                set selector ${q}${selector}${q}
+                break
+            }
+        }
+        set script [ns_trim -delimiter | [subst {
+            | for (e of document.querySelectorAll($selector)) {
+            |   $script
+            |}}]]
     } else {
         #
         # In case, no "id" is provided, use the "CSSclass"
