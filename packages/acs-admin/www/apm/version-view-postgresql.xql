@@ -11,22 +11,19 @@
     from   apm_package_versions
     where  package_key = :package_key
     and    installed_p = 't'
-    limit 1
+    fetch first 1 rows only
       </querytext>
 </fullquery>
 
  
 <fullquery name="apm_data_model_install_version">      
       <querytext>
-    select data_model_installed_version from (
         select version_name as data_model_installed_version
         from   apm_package_versions
         where  package_key = :package_key
         and    data_model_loaded_p = 't'
         order by apm_package_version__sortable_version_name(version_name) desc
-    ) as bad_postgres_needs_this
-    limit 1
-
+        fetch first 1 rows only
       </querytext>
 </fullquery>
 
