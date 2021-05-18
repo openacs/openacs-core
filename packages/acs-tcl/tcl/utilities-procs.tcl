@@ -143,6 +143,22 @@ ad_proc util::zip {
     }
 }
 
+if {[info commands ns_valid_utf8] ne ""} {
+    ad_proc -private ::util::zip_file_contains_valid_filenames {zip_fn} {
+
+        Check, if the provided zip file contains only file names with
+        valid UTF-8 characters.
+        
+        @return boolean
+    } {
+        set listing_fn [ns_mktemp]
+        exec /bin/bash -c "LANG=C unzip -l $zip_fn > $listing_fn"
+        set F [open $listing_fn rb]; set c [read $F]; close $F
+        file delete listing_fn
+        return [ns_valid_utf8 $c]
+    }
+}
+
 ad_proc util::unzip {
     -source:required
     -destination:required
@@ -156,8 +172,23 @@ ad_proc util::unzip {
     if {$unzipCmd eq ""} {
         error "unzip command not found on the system."
     }
+    set extra_options ""
+    #
+    # Check, if the zip file contains filenames which are invalid
+    # UTF-8 characters.
+    #
+    if {[info commands ::util::zip_file_contains_valid_filenames] ne ""
+        && $::tcl_platform(os) eq "Linux"
+        && ![::util::zip_file_valid_filenames $source] } {
+        #
+        # The option "-O" works apparently only under Linux and might
+        # depend on the version of "unzip". We assume here that the
+        # broken characters are from Windows (code page 850)
+        #
+        lappend extra_options -O CP850 
+    } 
     # -n means we don't overwrite existing files
-    exec $unzipCmd [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
+    exec $unzipCmd {*}$extra_options [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
 }
 
 ad_proc -private -deprecated proc_source_file_full_path {proc_name} {
