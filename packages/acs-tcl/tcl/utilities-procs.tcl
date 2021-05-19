@@ -179,7 +179,7 @@ ad_proc util::unzip {
     #
     if {[info commands ::util::zip_file_contains_valid_filenames] ne ""
         && $::tcl_platform(os) eq "Linux"
-        && ![::util::zip_file_valid_filenames $source] } {
+        && ![::util::zip_file_contains_valid_filenames $source] } {
         #
         # The option "-O" works apparently only under Linux and might
         # depend on the version of "unzip". We assume here that the
