@@ -147,15 +147,28 @@ if {[info commands ns_valid_utf8] ne ""} {
     ad_proc -private ::util::zip_file_contains_valid_filenames {zip_fn} {
 
         Check, if the provided zip file contains only file names with
-        valid UTF-8 characters.
-        
+        valid UTF-8 characters. Unfortunately, handling different
+        character sets differs between variants of unzip (also between
+        unzip between the redhat and debian families. For details
+        about file structure of zip files, consult e.g.
+        https://en.wikipedia.org/wiki/ZIP_(file_format)
+
         @return boolean
     } {
-        set listing_fn [ns_mktemp]
-        exec /bin/bash -c "LANG=C unzip -l $zip_fn > $listing_fn"
-        set F [open $listing_fn rb]; set c [read $F]; close $F
-        file delete listing_fn
-        return [ns_valid_utf8 $c]
+        # set listing_fn [ns_mktemp]
+        # exec /bin/bash -c "LANG=C unzip -l $zip_fn > $listing_fn"
+        # set F [open $listing_fn rb]; set c [read $F]; close $F
+        # file delete listing_fn
+        # return [ns_valid_utf8 $c]
+        set F [open $zip_fn rb]; set C [read $F]; close $F
+        set validUTF8 1
+        while {$validUTF8 && [binary encode hex [string range $C 0 3]] eq "504b0304"} {
+            binary scan [string range $C 26 27] s fnSize
+            binary scan [string range $C 28 29] s extraFieldSize
+            set validUTF8 [ns_valid_utf8 [string range $C 30 29+$fnSize]]
+            set C [string range $C [expr {30 + $fnSize + $extraFieldSize}] end]
+        }
+        return $validUTF8
     }
 }
 
@@ -185,8 +198,8 @@ ad_proc util::unzip {
         # depend on the version of "unzip". We assume here that the
         # broken characters are from Windows (code page 850)
         #
-        lappend extra_options -O CP850 
-    } 
+        lappend extra_options -O CP850
+    }
     # -n means we don't overwrite existing files
     exec $unzipCmd {*}$extra_options [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
 }
@@ -1518,7 +1531,7 @@ ad_proc -public ad_cache_returnredirect {
     url
     { persistent "f" }
     { excluded_vars "" }
-} {    
+} {
     An addition to ad_returnredirect.  It caches all variables in the
     redirect except those in excluded_vars and then calls
     ad_returnredirect with the resultant string.
@@ -2381,7 +2394,7 @@ ad_proc -public -deprecated ad_ns_set_keys {
     This proc can be easily replaced by a Tcl dict
     operation. Furthermore, newer versions of NaviServer have "ns_set
     keys" and "ns_set values" operations.
-    
+
     @param colon If set, will prepend all the keys with a colon; useful for bind variables
     @param exclude Optional Tcl list of key names to exclude
 
