@@ -45,7 +45,8 @@
   <msg key="lt_name_is_not_a_natural">%name% ist keine natürliche Zahl, die eine ganzzahlige Zahl größer oder gleich 0 ist.</msg>
   <msg key="lt_name_is_not_a_valid_S">%name% ist kein gültiger  SQL Identifikator</msg>
   <msg key="lt_name_is_not_a_word">%name% enthält nicht-alphabetische Zeichen</msg>
-  <msg key="lt_name_is_not_an_intege">%name% ist keine ganzzahlige Zahl</msg>
+  <msg key="lt_name_is_not_an_intege">%name% ist keine ganze Zahl</msg>
+  <msg key="lt_name_is_not_an_oid">%name% ist keine gültige Objekt-ID</msg>
   <msg key="lt_name_is_not_in_the_ra">%name% ist nicht im Bereich von [%min%, %max%]</msg>
   <msg key="lt_name_is_not_valid">%name% ist ungültig</msg>
   <msg key="lt_name_is_too_long__Ple">%name% ist zu lang. Bitte geben Sie einen Wert ein, der höchstens %max_length% Buchstaben hat. Der Wert, den Sie eingegeben haben, ist %actual_length% Buchstaben lang.</msg>

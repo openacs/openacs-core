@@ -1559,7 +1559,7 @@ ad_proc ad_page_contract_filter_rule {
 } {
     A filter rule determines what filters are applied to a given value. The code is passed the
     name of the formal argument and the list of filters currently being applied, and should
-    on that basis modify the list of filters to suit its needs. Usually a filter rule will add
+    on that basis modify the list of filters to suit its needs. Usually, a filter rule will add
     a certain filter, unless some list of filters are already present.
 
     <p>
@@ -1686,6 +1686,34 @@ ad_page_contract_filter naturalnum { name value } {
     ad_complain [_ acs-tcl.lt_name_is_not_a_natural]
     return 0
 }
+
+ad_page_contract_filter object_id { name value } {
+    
+    Checks whether the value is a valid object_id, i.e. in the range
+    defined for the SQL datatype "integer", which is the same for
+    Oracle and PostgreSQL. In case, object_types are altered in future
+    versions of OpenACS to e.g. "longinteger", this function has to be
+    adjusted as well.
+
+    The function is essentially the same as ad_page_contract_filter
+    "integer", but with the additional value range check.
+    
+    @author Gustaf Neumann
+    @creation-date May 23, 2021
+    
+} {
+    if { [regexp {^(-)?(\d+)$} $value _ sign rest] } {
+        set value $sign[util::trim_leading_zeros $rest]
+        if {[string is integer -strict $value]
+            && $value >= -2147483648
+            && $value <= 2147483647 } {
+            return 1
+        }
+    }
+    ad_complain [_ acs-tcl.lt_name_is_not_an_intege]
+    return 0
+}
+
 
 ad_page_contract_filter range { name value range } {
     Checks whether the value falls between the specified range.

@@ -464,6 +464,7 @@ aa_register_case \
         ad_page_contract_filter_proc_naturalnum
         ad_page_contract_filter_proc_negative_float
         ad_page_contract_filter_proc_nohtml
+        ad_page_contract_filter_proc_object_id
         ad_page_contract_filter_proc_printable
         ad_page_contract_filter_proc_sql_identifier
         ad_page_contract_filter_proc_token
@@ -481,7 +482,10 @@ aa_register_case \
         dict set cases naturalnum { "1" 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 }
         dict set cases float { "1" 1 "1.0" 1 "a" 0 "-1.0" 1 "1,0" 0 }
         dict set cases negative_float { "1" 1 "-1.0" 1 "-a" 0 "-1,0" 0 }
-
+        dict set cases object_id {
+            "1" 1 "a" 0 "1.2" 0 "'" 0 -1 1 "0x0" 0
+            "-2147483648" 1 "2147483647" 1 "-2147483649" 0 "2147483648" 0
+        }
         dict set cases boolean {
             "1" 1 "-1" 0 "a" 0 "0" 1 "true" 1 "f" 1 "TRUE" 1 "ok" 0 "nok" 0
         }

@@ -46,6 +46,7 @@
   <msg key="lt_name_is_not_valid">%name% is not valid</msg>
   <msg key="lt_name_is_not_a_valid_S">%name% is not a valid SQL identifier</msg>
   <msg key="lt_name_is_not_an_intege">%name% is not an integer</msg>
+  <msg key="lt_name_is_not_an_oid">%name% is not an object_id</msg>  
   <msg key="lt_name_is_not_a_word">%name% contains non-word characters</msg>
   <msg key="lt_name_contains_invalid">%name% contains invalid characters</msg>
   <msg key="lt_name_is_not_in_the_ra">%name% is not in the range [%min%, %max%]</msg>
