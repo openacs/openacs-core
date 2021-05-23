@@ -146,7 +146,7 @@ ad_proc util::zip {
 if {[info commands ns_valid_utf8] ne ""} {
     ad_proc -private ::util::zip_file_contains_valid_filenames {zip_fn} {
 
-        Check, if the provided zip file contains only file names with
+        Check, if the provided zip file contains only filenames with
         valid UTF-8 characters. Unfortunately, handling different
         character sets differs between variants of unzip (also between
         unzip between the redhat and debian families. For details

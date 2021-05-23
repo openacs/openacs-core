@@ -58,7 +58,7 @@ ad_proc -public ad_form {
 
     <p>
 
-    In general the full functionality of the form builder is exposed by ad_form, but with a
+    In general, the full functionality of the form builder is exposed by ad_form, but with a
     much more user-friendly and readable syntax and with state management handled automatically.
 
     <p>

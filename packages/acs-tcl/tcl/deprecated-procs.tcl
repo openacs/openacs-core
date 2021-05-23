@@ -2949,7 +2949,7 @@ ad_proc -public -deprecated apm_doc_body_callback { string } {
 
 ad_proc -public -deprecated pkg_home {package_key} {
 
-    @return A server-root relative path to the directory for a package.  Usually /packages/package-key
+    @return A server-root relative path to the directory for a package.  Usually, /packages/package-key
     @see acs_package_root_dir
 
 } {

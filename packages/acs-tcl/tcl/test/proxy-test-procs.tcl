@@ -16,7 +16,7 @@ ad_library {
 #     unless you are aware of all the consequences. So far, the system
 #     encoding is a global variable in C. If this is changed from
 #     e.g. one thread, it is changed at the same time for all threads
-#     (maybe in the middle of of a Tcl command). It also will effect
+#     (maybe in the middle of a Tcl command). It also will effect
 #     to communication with databases.
 #
 #  b) Since the nsproxy code is running as a different process, the

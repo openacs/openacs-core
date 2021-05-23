@@ -19,7 +19,7 @@ ad_proc -public ad_context_bar_html {
     <pre>
     [list [list url1 text1] [list url2 text2] ... "terminal text"]
     <pre>
-    and generates the HTML fragment.  In general the higher level
+    and generates the HTML fragment.  In general, the higher level
     proc ad_context_bar should be
     used, and then only in the sitewide master rather than on
     individual pages.

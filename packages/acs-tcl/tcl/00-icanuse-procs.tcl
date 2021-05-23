@@ -203,7 +203,7 @@ if {[namespace which ::ns_uuid] eq ""} {
         5322).
 
         The result does not follow the format of RFC 4122 UUIDs, but
-        this is just for backwards compatiblity, when no recent
+        this is just for backwards compatibility, when no recent
         NaviServer is used.
         
     } {
