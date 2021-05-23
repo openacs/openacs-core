@@ -576,16 +576,31 @@ ad_proc -private rp_filter { why } {
     set ad_conn_url [ad_conn url]
     ad_conn -set vhost_url $ad_conn_url
 
-    if {[regexp  {[^[:print:]]} $ad_conn_url]} {
+    #
+    # Check for invalid characters om the URL.
+    #
+    if {[regexp {[^[:print:]]} $ad_conn_url]} {
         ad_log warning "rp_filter: BAD CHAR in URL $ad_conn_url // rp_filter $why"
-        # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
+        #
+        # Reset [ad_conn url], otherwise we might run into a problem
+        # when rendering the error page.
+        #
         ad_conn -set url ${root}/
         ad_page_contract_handle_datasource_error "URL contains invalid characters"
         return filter_return
     }
+    #
+    # To test whether the URL chars are accepted by PostgreSQL, one
+    # might activate the following line.
+    #
+    # xo::dc get_value x "select 1 from cr_items where name = :ad_conn_url"
+    #
     if {[string length $ad_conn_url] > [parameter::get -package_id $::acs::kernel_id -parameter MaxUrlLength -default 2000]} {
         ad_log warning "rp_filter: URL TOO LONG: <$ad_conn_url> rp_filter $why"
-        # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
+        #
+        # Reset [ad_conn url], otherwise we might run into a problem
+        # when rendering the error page.
+        #
         ad_conn -set url ${root}/
         ad_page_contract_handle_datasource_error "URL is longer than allowed"
         return filter_return
