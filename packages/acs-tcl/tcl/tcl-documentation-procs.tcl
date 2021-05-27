@@ -1710,7 +1710,7 @@ ad_page_contract_filter object_id { name value } {
             return 1
         }
     }
-    ad_complain [_ acs-tcl.lt_name_is_not_an_intege]
+    ad_complain [_ acs-tcl.lt_name_is_not_an_oid]
     return 0
 }
 
