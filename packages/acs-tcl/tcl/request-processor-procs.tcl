@@ -538,7 +538,6 @@ ad_proc -private rp_filter { why } {
     session security.
 
 } {
-
     #####
     #
     # Initialize the environment: reset ad_conn, and populate it with
@@ -746,6 +745,7 @@ ad_proc -private rp_filter { why } {
         ad_conn -set package_url $node(url)
         ad_conn -set instance_name $node(instance_name)
         ad_conn -set extra_url [string trimleft [string range $ad_conn_url [string length $node(url)] end] /]
+        rp_debug "rp_filter: sets extra_url '[ad_conn extra_url]'"
     }
 
     #####
@@ -994,6 +994,8 @@ ad_proc -private rp_handle_request {} {
     foreach resolve_value $resolve_values {
         lassign $resolve_value root match_prefix
         set extra_url [ad_conn extra_url]
+        rp_debug "rp_handle_request: getting extra_url <$extra_url>"
+
         if { $match_prefix ne "" } {
             if { [string first $match_prefix $extra_url] == 0 } {
                 #
@@ -1131,6 +1133,8 @@ ad_proc -private rp_handle_request {} {
 
     ds_add rp [list transformation [list notfound $root/$extra_url notfound] \
                    $startclicks [clock clicks -microseconds]]
+    rp_debug "call ns_returnnotfound extra_url '$extra_url'"
+
     ns_returnnotfound
 }
 
@@ -1164,23 +1168,29 @@ ad_proc -private rp_handler {} {
         }
     }
 
+    #
+    # Determine internal redirects by comparing URL suffix.  Don't use
+    # a match operation, since this might lead to surprising results,
+    # when the URL contains match characters ('*' or '?', ...).
+    #
     if {[info exists ::ad_conn(extra_url)]
         && $::ad_conn(extra_url) ne ""
-        && ![string match "*$::ad_conn(extra_url)" [ns_conn url]]
+        && [string range [ns_conn url] end-[string length $::ad_conn(extra_url)] end] ne [ns_conn url]
     } {
         #
-        # On internal redirects, the current ::ad_conn(extra_url) might be
-        # from a previous request, which might have lead to a not-found
-        # error pointing to a new URL. This can lead to a hard-to find
-        # loop which ends with a "recursion depth exceeded". There is a
-        # similar problem with ::ad_conn(package_key) and
-        # ::ad_conn(package_url) Therefore, we refetch the url info in case,
-        # in case, and reset these values. These variables seem to be
-        # sufficient to handle request processor loops, but maybe other
-        # variables have to be reset either.
+        # On internal redirects, the current ::ad_conn(extra_url)
+        # might be from a previous request, which might have led to a
+        # not-found error pointing to a new URL. This can lead to a
+        # hard to find loop which ends with a "recursion depth
+        # exceeded". There is a similar problem with
+        # ::ad_conn(package_key) and ::ad_conn(package_url) Therefore,
+        # we refetch the url info in case, in case, and reset these
+        # values. These variables seem to be sufficient to handle
+        # request processor loops, but maybe other variables have to
+        # be reset either.
         #
         # However, also internal redirects to error pages happens the
-        # same way, but we need to deliver the current url (coming
+        # same way, but we need to deliver the current URL (coming
         # from ns_url) and not the original url before the redirect
         # (the extra_url). Similarly we have to reset the package_key
         # and package_url to point to the subsite package to deliver
@@ -1189,6 +1199,7 @@ ad_proc -private rp_handler {} {
         # mapped to /shared/404 etc.
         #
         set status [ns_conn status]
+        rp_debug "internal redirect status $status"
         if {$status < 200 || $status >= 300} {
             ad_conn -set extra_url [ns_conn url]
             ad_conn -set package_key "acs-subsite"
@@ -1196,6 +1207,7 @@ ad_proc -private rp_handler {} {
         } else {
             array set node [site_node::get -url [ad_conn url]]
             ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
+            rp_debug "reset extra_url to '[ad_conn extra_url]'"
             ad_conn -set package_key $node(package_key)
             ad_conn -set package_url $node(url)
         }
@@ -2025,6 +2037,8 @@ if {[ns_info name] eq "NaviServer"} {
     rename rp_invoke_proc   $cmd
     proc   rp_invoke_proc   { argv } "$cmd _ \$argv"
 }
+
+#ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } { ns_log notice "RP: $string"}
 
 #
 # Local variables:
