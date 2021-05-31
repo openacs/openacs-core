@@ -2266,7 +2266,7 @@ ad_proc -public template::list::element::set_properties {
 
 
 
-ad_proc -private template::list::element::render {
+ad_proc -public template::list::element::render {
     {-list_name:required}
     {-element_name:required}
 } {
