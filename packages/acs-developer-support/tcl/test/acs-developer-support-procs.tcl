@@ -104,3 +104,56 @@ aa_register_case \
             set ::ds_enabled_p $old_enabled_state
         }
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ds_add
+        ds_comment
+    } \
+    ds_add_test {
+        Check that the api to add content to the report works as
+        expected.
+    } {
+        set old_enabled_state [ds_enabled_p]
+
+        try {
+            set collection_enabled_p [ds_collection_enabled_p]
+            set enabled_p 0
+            nsv_set ds_properties enabled_p $enabled_p
+            set ::ds_enabled_p $enabled_p
+
+            set key $::ad_conn(request).comment
+            nsv_set ds_request $key ""
+            set current_size 0
+
+            ds_add comment __test
+            set size_new [llength [nsv_get ds_request $key]]
+
+            aa_true "DS is disabled, adding should not have effect" {$current_size == $size_new}
+
+            nsv_set ds_request $key [list]
+            set current_size 0
+
+            aa_log "enabling DS"
+            set enabled_p 1
+            nsv_set ds_properties enabled_p $enabled_p
+            set ::ds_enabled_p $enabled_p
+
+            aa_log "Adding stuff to the report"
+            ds_add comment __test
+            ds_comment __test
+
+            set size_new [llength [nsv_get ds_request $key]]
+
+            if {$collection_enabled_p} {
+                aa_true "Collection is enabled, adding should work" {$current_size + 2 == $size_new}
+            } else {
+                aa_true "Collection is disabled, adding should not have effect" {$current_size == $size_new}
+            }
+
+        } finally {
+            nsv_set ds_properties enabled_p $old_enabled_state
+            set ::ds_enabled_p $old_enabled_state
+        }
+    }
