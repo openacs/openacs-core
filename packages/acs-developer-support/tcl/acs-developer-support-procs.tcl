@@ -122,7 +122,7 @@ ad_proc -public ds_profiling_enabled_p {} {
     return [nsv_get ds_properties profiling_enabled_p]
 }
 
-ad_proc -public ds_page_fragment_cache_enabled_p {} { o
+ad_proc -public ds_page_fragment_cache_enabled_p {} {
     Are we populating the page fragment cache?
 } {
     return [nsv_get ds_properties page_fragment_cache_p]
