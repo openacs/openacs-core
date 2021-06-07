@@ -2497,14 +2497,6 @@ ad_proc ad_sanitize_filename {
     regsub -all -- {[\u0000-\u001f|/|?|<|>|\\:*|\"|;|\.]+} $replace_with "" replace_with
     if {$replace_with eq ""} {error "-replace_with must be a safe filesystem character"}
 
-    # dots other than in file extension are dangerous. Put inside two
-    # '#' character will be seen as message keys and file-storage is
-    # currently set to interpret them.
-    set str_ext [ad_file extension $str]
-    set str_noext [string range $str 0 end-[string length $str_ext]]
-    regsub -all -- {\.} $str_noext $replace_with str_noext
-    set str ${str_noext}${str_ext}
-
     #
     # Remove Unix reserved filenames (. and ..)
     # reserved names in windows
