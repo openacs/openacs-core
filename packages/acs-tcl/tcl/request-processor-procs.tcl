@@ -1175,7 +1175,7 @@ ad_proc -private rp_handler {} {
     #
     if {[info exists ::ad_conn(extra_url)]
         && $::ad_conn(extra_url) ne ""
-        && [string range [ns_conn url] end-[string length $::ad_conn(extra_url)] end] ne [ns_conn url]
+        && [string range $::ad_conn(extra_url) end-[string length $::ad_conn(extra_url)] end] ne [ns_conn url]
     } {
         #
         # On internal redirects, the current ::ad_conn(extra_url)
