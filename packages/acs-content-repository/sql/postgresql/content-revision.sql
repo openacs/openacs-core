@@ -506,7 +506,8 @@ BEGIN
                  and
                    o.object_id = r.revision_id
                  order by
-                   o.creation_date
+                   o.creation_date,
+                   r.revision_id
   LOOP
     v_row_count := v_row_count + 1;
     if rev_cur.revision_id = get_number__revision_id then 
