@@ -778,6 +778,24 @@ aa_register_case \
         aa_false "$cmd returns variable" {[info exists object_id]}
     }
 
+aa_register_case -cats {
+    api
+    production_safe
+} -procs {
+    db_boolean
+} db_boolean {
+    Test the db_boolean proc.
+} {
+    set bool_true {t 1 -1 true 1234 yes TRUE YES on ON}
+    set bool_false {f 0 false no FALSE NO off OFF Off}
+    foreach value $bool_true {
+        aa_equals "True" [db_boolean $value] "t"
+    }
+    foreach value $bool_false {
+        aa_equals "False" [db_boolean $value] "f"
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
