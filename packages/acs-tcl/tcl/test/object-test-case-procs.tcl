@@ -134,6 +134,28 @@ aa_register_case \
     }
 
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_object::object_p
+    package_instantiate_object
+} object_p {
+    Test the acs_object::object_p proc.
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Check with an unused object_id
+        #
+        set object_id [db_nextval acs_object_id_seq]
+        aa_false "Is $object_id an object?" [acs_object::object_p -id $object_id]
+        #
+        # Create an object and check
+        #
+        set object_id [package_instantiate_object acs_object]
+        aa_true "Is $object_id an object?" [acs_object::object_p -id $object_id]
+    }
+}
 
 # Local variables:
 #    mode: tcl
