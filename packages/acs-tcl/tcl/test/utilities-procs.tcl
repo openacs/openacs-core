@@ -92,6 +92,7 @@ aa_register_case -cats {
 } -procs {
     ad_outgoing_sender
     ad_host_administrator
+    util_email_valid_p
 } host_admin_and_outgoing_sender {
     Test the ad_outgoing_sender and ad_host_administrator procs.
 } {
@@ -104,6 +105,40 @@ aa_register_case -cats {
     set out_sender [ad_outgoing_sender]
     aa_true "OutgoingSender email ($out_sender) is valid or empty" \
         {$out_sender eq "" || [util_email_valid_p $out_sender]}
+}
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    util_email_valid_p
+} util_email_valid_p {
+    Test the util_email_valid_p proc.
+} {
+    #
+    # Valid emails
+    #
+    set valid_mails {
+        la@lala.la
+        openacs@openacs.org
+        whatever.is.this@my.mail.com
+    }
+    foreach mail $valid_mails {
+        aa_true "Is $mail valid?" [util_email_valid_p $mail]
+    }
+    #
+    # Invalid emails
+    #
+    set invalid_mails {
+        @no.valid
+        no@valid
+        no.valid
+        nope
+    }
+    foreach mail $invalid_mails {
+        aa_false "Is $mail valid?" [util_email_valid_p $mail]
+    }
 }
 
 # Local variables:
