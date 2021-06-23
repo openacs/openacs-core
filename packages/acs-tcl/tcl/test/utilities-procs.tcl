@@ -164,6 +164,62 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    util::string_length_compare
+} string_length_compare {
+    Test the util::string_length_compare proc.
+} {
+    #
+    # Equal length
+    #
+    set strings {
+        test1 test1
+        "test 2" test-2
+        test-3 test-3
+        "test 4 is actually pretty long" "test-4-is-actually-pretty-long"
+        "TEST 5" "test-5"
+        "TeSt 6" "test-6"
+        "" ""
+    }
+    dict for {s1 s2} $strings {
+        aa_equals "Strings $s1 and $s2" [util::string_length_compare $s1 $s2] 0
+    }
+    #
+    # s1 longer than s2
+    #
+    set strings {
+        test1asdf test1
+        "test 2 asdfs " test-2
+        test-3- test-3
+        "test 4 is actually pretty long !" "test-4-is-actually-pretty-long"
+        "TEST 5asd " "test-5"
+        "TeSt 6 asd" "test-6"
+        " " ""
+    }
+    dict for {s1 s2} $strings {
+        aa_equals "Strings $s1 and $s2" [util::string_length_compare $s1 $s2] 1
+    }
+    #
+    # s2 longer than s1
+    #
+    set strings {
+        test1 test1asdf
+        "test 2" test-2sdf
+        test-3 test-3ssas
+        "test 4 is actually pretty long" "test-4-is-actually-pretty-long-sadfas"
+        "TEST 5" "test-5   "
+        "TeSt 6" "test-6 sadfsda"
+        "" " "
+    }
+    dict for {s1 s2} $strings {
+        aa_equals "Strings $s1 and $s2" [util::string_length_compare $s1 $s2] -1
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
