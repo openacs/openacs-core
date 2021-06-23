@@ -141,6 +141,29 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    util::name_to_path
+} name_to_path {
+    Test the util::name_to_path proc.
+} {
+    set name_paths {
+        test1 test1
+        "test 2" test-2
+        test-3 test-3
+        "test 4 is actually pretty long" "test-4-is-actually-pretty-long"
+        "TEST 5" "test-5"
+        "TeSt 6" "test-6"
+        "   test 7    " "test-7"
+    }
+    dict for {name path} $name_paths {
+        aa_equals "Name $name" "[util::name_to_path -name $name]" $path
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
