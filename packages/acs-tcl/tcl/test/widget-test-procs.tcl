@@ -22,6 +22,25 @@ aa_register_case \
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    ad_future_years_list
+} ad_future_years_list {
+    Test the ad_future_years_list proc.
+} {
+    set future_years 25
+    set this_year [ns_fmttime [ns_time] %Y]
+    set next_years [ad_future_years_list $future_years]
+    set index 0
+    foreach year $next_years {
+        aa_equals "Next year" $year [expr {$this_year + $index}]
+        incr index
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
