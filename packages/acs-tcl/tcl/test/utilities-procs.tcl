@@ -84,6 +84,28 @@ aa_register_case \
         aa_equals "Sanitizing to an existing filename with resolving is fine" $resolved [string tolower "A_ßCoOOetcpasswdl#_f__ilename_.extension"]_2
     }
 
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    ad_outgoing_sender
+    ad_host_administrator
+} host_admin_and_outgoing_sender {
+    Test the ad_outgoing_sender and ad_host_administrator procs.
+} {
+    #
+    # HostAdministrator and OutgoingSender should be empty, or valid emails
+    #
+    set host_admin [ad_host_administrator]
+    aa_true "HostAdministrator email ($host_admin) is valid or empty" \
+        {$host_admin eq "" || [util_email_valid_p $host_admin]}
+    set out_sender [ad_outgoing_sender]
+    aa_true "OutgoingSender email ($out_sender) is valid or empty" \
+        {$out_sender eq "" || [util_email_valid_p $out_sender]}
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
