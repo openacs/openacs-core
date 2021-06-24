@@ -887,11 +887,12 @@ ad_proc -public aa_error {
 
 ad_proc -public aa_log_result {
     test_result
-    test_notes
+    args
 } {
     @author Peter Harper
     @creation-date 24 July 2001
 } {
+    set test_notes [join $args ""]
     if { [aa_in_rollback_block_p] } {
         aa_add_rollback_test [list aa_log_result $test_result $test_notes]
         return
@@ -1879,12 +1880,14 @@ namespace eval ::acs::test::xpath {
         @author Gustaf Neumann
     } {
         set d {}
-        set form [$node selectNodes $xpath]
-        if {[llength $form] > 1} {
+        set formNodes [$node selectNodes $xpath]
+        if {[llength $formNodes] > 1} {
             error "XPath expression must point to at most one HTML form"
         } else {
-            foreach form [$node selectNodes $xpath] {
+            #aa_log "xpath::get_form has form nodes '$formNodes'"
+            foreach form $formNodes {
                 foreach att [$node selectNodes $xpath/@*] {
+                    #aa_log "xpath::get_form form '$form' has attribute '$att'"
                     dict set d @[lindex $att 0] [lindex $att 1]
                 }
                 dict set d fields [::acs::test::xpath::get_form_values $node $xpath]
@@ -1893,6 +1896,14 @@ namespace eval ::acs::test::xpath {
         return $d
     }
 
+    ad_proc -private get_name_attribute {node xpath} {
+        if {![$node hasAttribute name]} {
+            aa_log_result warning "input field $xpath has no 'name' attribute (ignored): " \
+                "<pre>[ns_quotehtml [$node asHTML]]</pre>"
+            return ""
+        }
+        return [$node getAttribute name]
+    }
 
     ad_proc -public get_form_values {node xpath} {
 
@@ -1904,7 +1915,8 @@ namespace eval ::acs::test::xpath {
     } {
         set values {}
         foreach n [$node selectNodes $xpath//input] {
-            set name  [$n getAttribute name]
+            set name [get_name_attribute $n $xpath//input]
+            if {$name eq ""} continue
             #ns_log notice "aa_xpath::get_form_values from $className input node $n name $name:"
             if {[$n hasAttribute value]} {
                 set value [$n getAttribute value]
@@ -1914,13 +1926,15 @@ namespace eval ::acs::test::xpath {
             lappend values $name $value
         }
         foreach n [$node selectNodes $xpath//textarea] {
-            set name  [$n getAttribute name]
+            set name [get_name_attribute $n $xpath//textarea]
+            if {$name eq ""} continue
             #ns_log notice "aa_xpath::get_form_values from $className textarea node $n name $name:"
             set value [$n text]
             lappend values $name $value
         }
         foreach n [$node selectNodes $xpath//select/option\[@selected='selected'\]] {
-            set name  [[$n parentNode] getAttribute name]
+            set name [get_name_attribute [$n parentNode] $xpath//option/..]
+            if {$name eq ""} continue
             set value [$n getAttribute value]
             lappend values $name $value
         }
