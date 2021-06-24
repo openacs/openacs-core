@@ -119,10 +119,25 @@ aa_register_case -cats {
     #
     # Valid emails
     #
+    # See: https://en.wikipedia.org/wiki/Email_address#Examples
+    #
     set valid_mails {
         la@lala.la
         openacs@openacs.org
         whatever.is.this@my.mail.com
+        discouraged@butvalid
+        disposable.style.email.with+symbol@example.com
+        other.email-with-hyphen@example.com
+        fully-qualified-domain@example.com
+        user.name+tag+sorting@example.com
+        x@example.com
+        example-indeed@strange-example.com
+        test/test@test.com
+        example@s.example
+        john..doe@example.org
+        mailhost!username@example.org
+        user%example.com@example.org
+        user-@example.org
     }
     foreach mail $valid_mails {
         aa_true "Is $mail valid?" [util_email_valid_p $mail]
@@ -132,9 +147,15 @@ aa_register_case -cats {
     #
     set invalid_mails {
         @no.valid
-        no@valid
         no.valid
         nope
+        A@b@c@example.com
+        {a"b(c)d,e:f;g<h>i[j\k]l@example.com}
+        {just"not"right@example.com}
+        {this is"not\allowed@example.com}
+        {this\ still\"not\\allowed@example.com}
+        i_like_underscore@but_its_not_allowed_in_this_part.example.com
+        {QA[icon]CHOCOLATE[icon]@test.com}
     }
     foreach mail $invalid_mails {
         aa_false "Is $mail valid?" [util_email_valid_p $mail]

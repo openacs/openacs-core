@@ -2663,16 +2663,26 @@ ad_proc -public util_text_to_url {
 
 ad_proc util_email_valid_p { query_email } {
     Returns 1 if an email address has more or less the correct form.
-    The regexp was taken from Jeff Friedls book "Mastering Regular Expressions".
+    The initial regexp was taken from Jeff Friedls book "Mastering Regular
+    Expressions".
+
+    It was later updated with the version proposed by mozilla for the email
+    input type validation.
+    https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
 
     @author Philip Greenspun (philg@mit.edu)
     @author Jeff Friedl (jfriedl@oreilly.com)
     @author Lars Pind (lars@arsdigita.com)
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @author Günter Ernst <gernst@wu.ac.at>
 } {
     # This regexp was very kindly contributed by Jeff Friedl, author of
     # _Mastering Regular Expressions_ (O'Reilly 1997).
+    # return [regexp "^\[^@<>\"\t ]+@\[^@<>\".\t ]+(\\.\[^@<>\".\n ]+)+$" $query_email]
 
-    return [regexp "^\[^@<>\"\t ]+@\[^@<>\".\t ]+(\\.\[^@<>\".\n ]+)+$" $query_email]
+    # Improved regexp from the folks at mozilla:
+    # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
+    return [regexp {^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$} $query_email]
 }
 
 ad_proc -public util_email_unique_p { email } {
