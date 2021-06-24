@@ -2477,7 +2477,7 @@ ad_proc -private acs_mail_lite::check_bounces {} {
         set fixed_sender [parameter::get -package_id $package_id -parameter "FixedSenderEmail"]
         if { $fixed_sender ne "" } {
             set notification_sender $fixed_sender
-        } elseif { [acs_mail_lite::utils::valid_email_p [ad_system_owner]] } {
+        } elseif { [util_email_valid_p [ad_system_owner]] } {
             set notification_sender [ad_system_owner]
         } else {
             # Set to an email address that is required to exist
