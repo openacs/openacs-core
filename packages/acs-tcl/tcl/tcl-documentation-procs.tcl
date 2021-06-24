@@ -2028,7 +2028,7 @@ ad_page_contract_filter email { name value } {
 
     @author Philip Greenspun (philip@mit.edu)
     @author Randy Beggs (randyb@arsdigita.com)
-    @creation-date 22 August 20000
+    @creation-date 22 August 2000
 } {
     set valid_p [regexp "^\[^@\t ]+@\[^@.\t]+(\\.\[^@.\n ]+)+$" $value]
     if { !$valid_p } {
