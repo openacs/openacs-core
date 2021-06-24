@@ -172,24 +172,18 @@ ad_proc acs_mail_lite::utils::build_body {
     return [list $message_token]
 }
 
-ad_proc -private acs_mail_lite::utils::valid_email_p {
+ad_proc -private -deprecated acs_mail_lite::utils::valid_email_p {
     email
 } {
-    Checks if the email is valid. 
+    Checks if the email is valid.
     Uses mime::parsemail to determine this
     @return boolean success
+
+    DEPRECATED: duplicated by util_email_valid_p
+
+    @see util_email_valid_p
 } {
-    array set test [lindex [mime::parseaddress "$email"] 0]
-    if {$email ne $test(proper)} {
-        regsub "\"" $test(proper) "" proper
-        if {$email ne $proper} {
-            return 0
-        } else {
-            return 1
-        }
-    } else {
-        return 1
-    }
+    return [util_email_valid_p $email]
 }
 
 # Local variables:
