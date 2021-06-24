@@ -2030,7 +2030,7 @@ ad_page_contract_filter email { name value } {
     @author Randy Beggs (randyb@arsdigita.com)
     @creation-date 22 August 2000
 } {
-    set valid_p [regexp "^\[^@\t ]+@\[^@.\t]+(\\.\[^@.\n ]+)+$" $value]
+    set valid_p [util_email_valid_p $value]
     if { !$valid_p } {
         ad_complain [_ acs-tcl.lt_name_does_not_appear_]
         return 0
