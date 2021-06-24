@@ -578,6 +578,82 @@ aa_register_case -cats {
 
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    relation_add
+    relation_remove
+    relation::get_object_one
+    relation::get_object_two
+    relation::get_objects
+    relation::get_id
+} acs_subsite_relation_procs {
+    Test different relation procs
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 24 June 2021
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Create a couple of objects
+        #
+        set object_id_1 [package_instantiate_object acs_object]
+        set object_id_2 [package_instantiate_object acs_object]
+        set object_ids [list $object_id_1 $object_id_2]
+        #
+        # Add a new relation
+        #
+        set rel_type relationship
+        set rel_id [relation_add $rel_type $object_id_1 $object_id_2]
+        aa_equals "Check new relation $rel_id" \
+            [relation::get_id \
+                -object_id_one $object_id_1 \
+                -object_id_two $object_id_2 \
+                -rel_type $rel_type] \
+            $rel_id
+        #
+        # Check object one
+        #
+        aa_equals "Check object_one in the relation $rel_id" \
+            [relation::get_object_one \
+                -rel_type $rel_type \
+                -object_id_two $object_id_2] \
+            $object_id_1
+        #
+        # Check object two
+        #
+        aa_equals "Check object_two in the relation $rel_id" \
+            [relation::get_object_two \
+                -rel_type $rel_type \
+                -object_id_one $object_id_1] \
+            $object_id_2
+        #
+        # Check both
+        #
+        aa_equals "Check object_one in the relation $rel_id" \
+            [relation::get_objects \
+                -rel_type $rel_type \
+                -object_id_two $object_id_2] \
+            $object_id_1
+        aa_equals "Check object_two in the relation $rel_id" \
+            [relation::get_objects \
+                -rel_type $rel_type \
+                -object_id_one $object_id_1] \
+            $object_id_2
+        #
+        # Delete
+        #
+        relation_remove $rel_id
+        aa_equals "Check relation deletion $rel_id" \
+            [relation::get_id \
+                -object_id_one $object_id_1 \
+                -object_id_two $object_id_2 \
+                -rel_type $rel_type] \
+            ""
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
