@@ -690,6 +690,36 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    application_group::new
+    application_group::delete
+} acs_subsite_application_group_new {
+    Test application group creation/deletion
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 25 June 2021
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Create application group
+        #
+        set group_id [application_group::new]
+        aa_true "New application group exists" [db_0or1row group_exists_p {
+            select 1 from application_groups where group_id = :group_id
+        }]
+        #
+        # Delete application group
+        #
+        application_group::delete -group_id $group_id
+        aa_false "Group exists after deletion" [db_0or1row group_exists_p {
+            select 1 from application_groups where group_id = :group_id
+        }]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
