@@ -654,6 +654,42 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    rel_types::create_role
+    rel_types::delete_role
+} acs_subsite_rel_type_roles {
+    Test rel_type role creation/deletion
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 25 June 2021
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Create role
+        #
+        set role foo
+        set pretty_name foo
+        set pretty_plural foos
+        rel_types::create_role \
+            -pretty_name $pretty_name \
+            -pretty_plural $pretty_plural \
+            -role $role
+        aa_true "New role $role exists" [db_0or1row role_exists_p {
+            select 1 from acs_rel_roles where role = :role
+        }]
+        #
+        # Delete role
+        #
+        rel_types::delete_role -role $role
+        aa_false "New role $role exists after deletion" [db_0or1row role_p {
+            select 1 from acs_rel_roles where role = :role
+        }]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
