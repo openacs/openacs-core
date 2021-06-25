@@ -720,6 +720,47 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    rel_segment::new
+    rel_segment::delete
+    group::get_rel_segment
+    group::new
+    relation_add
+} acs_subsite_rel_segment_new {
+    Test relational segment creation/deletion
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 25 June 2021
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Create group and relational segment
+        #
+        set group_id [group::new -group_name foo]
+        set rel_id [rel_segment::new $group_id membership_rel segment_foo]
+        relation_add membership_rel $group_id 0
+
+        aa_true "New relational segment exists" [db_0or1row rel_exists_p {
+            select 1 from rel_segments where segment_id = :rel_id
+        }]
+        aa_true "Segment is among the group segments" {
+            $rel_id in [group::get_rel_segment \
+                                -group_id $group_id \
+                                -type membership_rel]
+        }
+        #
+        # Delete relational segment
+        #
+        rel_segment::delete $rel_id
+        aa_false "Segment exists after deletion" [db_0or1row rel_exists_p {
+            select 1 from rel_segments where segment_id = :rel_id
+        }]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
