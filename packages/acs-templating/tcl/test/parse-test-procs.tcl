@@ -1,13 +1,17 @@
 ad_library {
-    
+
     Tests for adp parsing
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2005-01-01
     @cvs-id $Id$
 }
 
 aa_register_case \
+    -cats {
+        api
+        production_safe
+    } \
     -procs {
         template::adp_array_variable_regexp
         template::adp_array_variable_regexp_noquote
@@ -31,7 +35,7 @@ aa_register_case \
             aa_equals "Array name is '${arr}'"  \
                 "formerror" $arr
             aa_equals "Variable name is '${var}'"  \
-                "test_array.test_key" $var            
+                "test_array.test_key" $var
 
             set code "=@test_array.test_key;noquote@"
             aa_true "Noquote array var name detected" [regexp [template::adp_array_variable_regexp_noquote] $code discard pre arr var]
@@ -48,12 +52,14 @@ aa_register_case \
                 "formerror" $arr
             aa_equals "Variable name is '${var}'"  \
                 "test_array.test_key" $var
-            
-            
         }
 }
 
-aa_register_case -cats {api smoke} tcl_to_sql_list {
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} tcl_to_sql_list {
     Tests the tcl_to_sql_list proc.
 
     @author Torben Brosten
@@ -66,13 +72,13 @@ aa_register_case -cats {api smoke} tcl_to_sql_list {
 }
 
 aa_register_case \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -procs {
         template::expand_percentage_signs
     } \
     expand_percentage_signs {
     Test expand percentage signs to make sure it substitutes correctly
-    
+
     @author Dave Bauer
     @creation-date 2005-11-20
 } {
@@ -83,7 +89,7 @@ aa_register_case \
     aa_false "Expanded square bracket text" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
     aa_log $errmsg
     aa_equals "square brackets safe" $expanded_message "Test message \[__does_not_exist__\]"
-    
+
     set one "\$__does_not_exist"
     aa_false "Expanded dollar test" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
     aa_log $errmsg
@@ -94,11 +100,11 @@ aa_register_case \
     aa_false "Square bracket in array key test" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
     aa_log $errmsg
     aa_equals "square brackets in array key safe" $expanded_message "Test message \$two(\$three(\[__does_not_exist\]))"
-   
+
 }
 
 aa_register_case \
-    -cats {api smoke} \
+    -cats {api smoke production_safe} \
     -procs {
         template::util::tcl_to_sql_list
     } \

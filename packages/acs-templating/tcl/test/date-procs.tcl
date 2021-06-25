@@ -11,7 +11,10 @@ ad_library {
 
 
 aa_register_case \
-    -procs {
+    -cats {
+        api
+        production_safe
+    } -procs {
         template::util::date::get_property
         template::util::date::now
         db_type
@@ -32,10 +35,12 @@ aa_register_case \
 }
 
 aa_register_case \
-    -procs {
+    -cats {
+        api
+        production_safe
+    } -procs {
         template::util::date::now_min_interval
-    } \
-    date_minute_interval {
+    } date_minute_interval {
         test minute interval
     } {
     aa_run_with_teardown \
@@ -55,6 +60,7 @@ aa_register_case \
 
         }
 }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
