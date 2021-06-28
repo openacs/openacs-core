@@ -318,6 +318,44 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::url_element
+} validate_url_element {
+    Test validation for url_element data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    #
+    #  URL elements may only contain lowercase characters, numbers and hyphens.
+    #
+    set url_element_true {
+        lalala
+        0
+        -1
+        -asdasaf
+    }
+    set url_element_false {
+        LALALA
+        NO
+        "la la"
+        not,valid
+        ://
+    }
+    set message ""
+    foreach value $url_element_true {
+        aa_true "Is $value a url_element?" [template::data::validate url_element value message]
+    }
+    foreach value $url_element_false {
+        aa_false "Is $value a url_element?" [template::data::validate url_element value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
