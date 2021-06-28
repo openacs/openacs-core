@@ -162,6 +162,30 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::number
+} validate_number {
+    Test validation for number data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    set number_true {0 1 -9 0.0 5.3 +0.1 .3 -9.3 34433333333333333333333333333333333333.4566666666666}
+    set number_false {lala -1,0 ,3 - .}
+    set message ""
+    foreach value $number_true {
+        aa_true "Is $value a number?" [template::data::validate number value message]
+    }
+    foreach value $number_false {
+        aa_false "Is $value a number?" [template::data::validate number value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
