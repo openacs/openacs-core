@@ -364,6 +364,7 @@ aa_register_case -cats {
     template::data::validate
     template::data::validate::date
     template::data::validate::timestamp
+    template::data::validate::time_of_day
     template::util::date::validate
 } validate_date {
     Test validation for date data types
@@ -372,7 +373,8 @@ aa_register_case -cats {
     @creation-date 28 June 2021
 } {
     #
-    #  date and timestamp are both validated by template::util::date::validate.
+    # date, time_of_day and timestamp are all validated by
+    # template::util::date::validate.
     #
     set date_true {
         "2021 06 28"
@@ -404,12 +406,14 @@ aa_register_case -cats {
     }
     set message ""
     foreach value $date_true {
-        aa_true "Is $value a date?"      [template::data::validate date value message]
-        aa_true "Is $value a timestamp?" [template::data::validate timestamp value message]
+        aa_true "Is $value a date?"         [template::data::validate date value message]
+        aa_true "Is $value a timestamp?"    [template::data::validate timestamp value message]
+        aa_true "Is $value a time_of_day?"  [template::data::validate timestamp value message]
     }
     foreach value $date_false {
-        aa_false "Is $value a date?"      [template::data::validate date value message]
-        aa_false "Is $value a timestamp?" [template::data::validate timestamp value message]
+        aa_false "Is $value a date?"        [template::data::validate date value message]
+        aa_false "Is $value a timestamp?"   [template::data::validate timestamp value message]
+        aa_false "Is $value a time_of_day?" [template::data::validate time_of_day value message]
     }
 }
 
