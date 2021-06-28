@@ -113,6 +113,31 @@ aa_register_case -cats {
         aa_false "Is $value a integer?" [template::data::validate integer value message]
     }
 }
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::naturalnum
+} validate_naturalnum {
+    Test validation for naturalnum data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    set nat_true {0 5 1 20 99999999999999999999999999999999999999999999999999999999999 08}
+    set nat_false {0.0 5,3 0,1 ,3 -1 -9.3}
+    set message ""
+    foreach value $nat_true {
+        aa_true "Is $value a naturalnum?" [template::data::validate naturalnum value message]
+    }
+    foreach value $nat_false {
+        aa_false "Is $value a naturalnum?" [template::data::validate naturalnum value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
