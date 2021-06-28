@@ -107,10 +107,10 @@ aa_register_case -cats {
     set int_false {0.0 5,3 0,1 ,3}
     set message ""
     foreach value $int_true {
-        aa_true "Is $value a integer?" [template::data::validate integer value message]
+        aa_true "Is $value an integer?" [template::data::validate integer value message]
     }
     foreach value $int_false {
-        aa_false "Is $value a integer?" [template::data::validate integer value message]
+        aa_false "Is $value an integer?" [template::data::validate integer value message]
     }
 }
 
@@ -183,6 +183,29 @@ aa_register_case -cats {
     }
     foreach value $number_false {
         aa_false "Is $value a number?" [template::data::validate number value message]
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::text
+} validate_text {
+    Test validation for text data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    #
+    # Currently, all submitted text to the validator is valid...
+    #
+    set text_true {"" "my text" "lalala"}
+    set message ""
+    foreach value $text_true {
+        aa_true "Is $value text?" [template::data::validate text value message]
     }
 }
 
