@@ -706,7 +706,8 @@ aa_register_case -cats {
         #
         # Create application group
         #
-        set group_id [application_group::new]
+        set package_id [apm_package_id_from_key "acs-automated-testing"]
+        set group_id [application_group::new -package_id $package_id ]
         aa_true "New application group exists" [db_0or1row group_exists_p {
             select 1 from application_groups where group_id = :group_id
         }]
