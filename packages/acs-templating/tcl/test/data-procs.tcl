@@ -256,6 +256,33 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::filename
+} validate_filename {
+    Test validation for filename data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    #
+    # Currently, filename must be alphanumeric, "-" or "_".
+    #
+    set filename_true {0 1 lala lala_la_la lala-la-la -yes -}
+    set filename_false {not,valid ,no . "la la la" la.la}
+    set message ""
+    foreach value $filename_true {
+        aa_true "Is $value a filename?" [template::data::validate filename value message]
+    }
+    foreach value $filename_false {
+        aa_false "Is $value a filename?" [template::data::validate filename value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
