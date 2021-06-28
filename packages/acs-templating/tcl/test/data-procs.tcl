@@ -209,6 +209,29 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::string
+} validate_string {
+    Test validation for string data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    #
+    # Currently, all submitted strings to the validator are valid...
+    #
+    set string_true {"" "my string" "lalala"}
+    set message ""
+    foreach value $string_true {
+        aa_true "Is $value a string?" [template::data::validate string value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
