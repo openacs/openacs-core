@@ -356,6 +356,63 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::date
+    template::data::validate::timestamp
+    template::util::date::validate
+} validate_date {
+    Test validation for date data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    #
+    #  date and timestamp are both validated by template::util::date::validate.
+    #
+    set date_true {
+        "2021 06 28"
+        "2021 06 28 13 01 00"
+        "2021 06 28 13 01"
+        "2021 06 28 13"
+    }
+    set date_false {
+        LALALA
+        NO
+        "2021-06-28 12:52:44"
+        "2021_06_28"
+        "2021 Jun 28"
+        "2021-06-28"
+        "-2021 06 28"
+        "2021 -06 28"
+        "2021 06 -28"
+        "2021 06 38"
+        "2021 16 28"
+        "2021 06 28 25 01 00"
+        "2021 06 28 13 71 00"
+        "2021 06 28 13 01 70"
+        "2021 06 28 13 01 -00"
+        "2021 06 28 13 -01 00"
+        "2021 06 28 -13 01 00"
+        "la la"
+        not,valid
+        ://
+    }
+    set message ""
+    foreach value $date_true {
+        aa_true "Is $value a date?"      [template::data::validate date value message]
+        aa_true "Is $value a timestamp?" [template::data::validate timestamp value message]
+    }
+    foreach value $date_false {
+        aa_false "Is $value a date?"      [template::data::validate date value message]
+        aa_false "Is $value a timestamp?" [template::data::validate timestamp value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
