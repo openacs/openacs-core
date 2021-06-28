@@ -61,6 +61,28 @@ aa_register_case \
         }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::util::negative
+} util_negative {
+    Test template::util::negative proc
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    set negative_true {-1 -0,6}
+    set negative_false {"" 0 +1 lala}
+    foreach value $negative_true {
+        aa_true "Is $value negative?" [template::util::negative $value]
+    }
+    foreach value $negative_false {
+        aa_false "Is $value negative?" [template::util::negative $value]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
