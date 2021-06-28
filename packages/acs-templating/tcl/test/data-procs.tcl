@@ -283,6 +283,41 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::url
+} validate_url {
+    Test validation for url data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    set url_true {
+        http://la.la
+        https://la.la
+        https://a.a
+        no-protocol
+        /relative
+    }
+    set url_false {
+        not,valid
+        "la la la"
+        ftp://lala.la
+        https://
+    }
+    set message ""
+    foreach value $url_true {
+        aa_true "Is $value a url?" [template::data::validate url value message]
+    }
+    foreach value $url_false {
+        aa_false "Is $value a url?" [template::data::validate url value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
