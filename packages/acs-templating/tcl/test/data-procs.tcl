@@ -138,6 +138,30 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::float
+} validate_float {
+    Test validation for float data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    set float_true {0 1 -9 0.0 5.3 +0.1 .3 -9.3 34433333333333333333333333333333333333.4566666666666}
+    set float_false {lala -1,0 ,3 - .}
+    set message ""
+    foreach value $float_true {
+        aa_true "Is $value a float?" [template::data::validate float value message]
+    }
+    foreach value $float_false {
+        aa_false "Is $value a float?" [template::data::validate float value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
