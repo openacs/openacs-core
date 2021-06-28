@@ -90,6 +90,29 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::integer
+} validate_integer {
+    Test validation for integer data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    set int_true {0 -0 -5 1 20 99999999999999999999999999999999999999999999999999999999999}
+    set int_false {0.0 5,3 0,1 ,3}
+    set message ""
+    foreach value $int_true {
+        aa_true "Is $value a integer?" [template::data::validate integer value message]
+    }
+    foreach value $int_false {
+        aa_false "Is $value a integer?" [template::data::validate integer value message]
+    }
+}
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
