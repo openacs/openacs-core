@@ -232,6 +232,30 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::keyword
+} validate_keyword {
+    Test validation for keyword data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    set keyword_true {0 1 lala lala_la_la}
+    set keyword_false {-1,0 -ojaio ,3 - . "la la la"}
+    set message ""
+    foreach value $keyword_true {
+        aa_true "Is $value a keyword?" [template::data::validate keyword value message]
+    }
+    foreach value $keyword_false {
+        aa_false "Is $value a keyword?" [template::data::validate keyword value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
