@@ -238,6 +238,29 @@ aa_register_case -cats {
     production_safe
 } -procs {
     template::data::validate
+    template::data::validate::search
+} validate_search {
+    Test validation for search data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    #
+    # Currently, all submitted search strings to the validator are valid...
+    #
+    set search_true {"" "my search" "lalala"}
+    set message ""
+    foreach value $search_true {
+        aa_true "Is $value a search?" [template::data::validate search value message]
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
     template::data::validate::keyword
 } validate_keyword {
     Test validation for keyword data types
