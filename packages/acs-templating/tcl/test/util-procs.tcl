@@ -35,6 +35,34 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::util::nvl
+} nvl {
+    Test template::util::nvl
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 30 June 2021
+} {
+    set values_result {
+        {0 5} 0
+        {"" la} la
+        {"" ""} {}
+        {this not} this
+        {this ""} this
+    }
+    dict for {values result} $values_result {
+        set value           [lindex $values 0]
+        set value_if_nil    [lindex $values 1]
+        aa_equals "Value: $value, if nil: $value_if_nil" \
+            [template::util::nvl $value $value_if_nil] \
+            $result
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
