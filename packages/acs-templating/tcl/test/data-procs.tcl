@@ -619,6 +619,50 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::currency
+} validate_currency {
+    Test validation for currency data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 30 June 2021
+} {
+    #
+    # An textdate is a date in ISO  YYYY-MM-DD.
+    #
+    set currency_true {
+        "€ 0 . 0"
+        "€ 0 , 0"
+        "€ 0"
+        "€ 11 . 01"
+        "€ 1500 , 01"
+        "€ 1 , 5"
+        {$ 2 . 03}
+        "Rs 50 . 42"
+        "L 12 . 52"
+    }
+    set currency_false {
+        lalala
+        1€
+        "not a currency"
+        ""
+    }
+    set message ""
+    foreach value $currency_true {
+        aa_true "Is $value a currency?" \
+            [template::data::validate currency value message]
+    }
+    foreach value $currency_false {
+        aa_false "Is $value a currency?" \
+            [template::data::validate currency value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
