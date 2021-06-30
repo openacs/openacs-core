@@ -239,6 +239,7 @@ aa_register_case -cats {
 } -procs {
     template::data::validate
     template::data::validate::search
+    template::data::validate::party_search
 } validate_search {
     Test validation for search data types
 
@@ -251,7 +252,8 @@ aa_register_case -cats {
     set search_true {"" "my search" "lalala"}
     set message ""
     foreach value $search_true {
-        aa_true "Is $value a search?" [template::data::validate search value message]
+        aa_true "Is $value a search?"       [template::data::validate search value message]
+        aa_true "Is $value a party_search?" [template::data::validate party_search value message]
     }
 }
 
