@@ -23,10 +23,12 @@ aa_register_case -cats {
     set bool_false {untrue asdas 1234 on ON OFF off -1}
     set message ""
     foreach value $bool_true {
-        aa_true "Is $value a boolean?" [template::data::validate boolean value message]
+        aa_true "Is $value a boolean?" \
+            [template::data::validate boolean value message]
     }
     foreach value $bool_false {
-        aa_false "Is $value a boolean?" [template::data::validate boolean value message]
+        aa_false "Is $value a boolean?" \
+            [template::data::validate boolean value message]
     }
 }
 
@@ -103,14 +105,23 @@ aa_register_case -cats {
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 28 June 2021
 } {
-    set int_true {0 -0 -5 1 20 99999999999999999999999999999999999999999999999999999999999}
+    set int_true {
+        0
+        -0
+        -5
+        1
+        20
+        99999999999999999999999999999999999999999999999999999999999
+    }
     set int_false {0.0 5,3 0,1 ,3}
     set message ""
     foreach value $int_true {
-        aa_true "Is $value an integer?" [template::data::validate integer value message]
+        aa_true "Is $value an integer?" \
+            [template::data::validate integer value message]
     }
     foreach value $int_false {
-        aa_false "Is $value an integer?" [template::data::validate integer value message]
+        aa_false "Is $value an integer?" \
+            [template::data::validate integer value message]
     }
 }
 
@@ -127,14 +138,23 @@ aa_register_case -cats {
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 28 June 2021
 } {
-    set nat_true {0 5 1 20 99999999999999999999999999999999999999999999999999999999999 08}
+    set nat_true {
+        0
+        5
+        1
+        20
+        99999999999999999999999999999999999999999999999999999999999
+        08
+    }
     set nat_false {0.0 5,3 0,1 ,3 -1 -9.3}
     set message ""
     foreach value $nat_true {
-        aa_true "Is $value a naturalnum?" [template::data::validate naturalnum value message]
+        aa_true "Is $value a naturalnum?" \
+            [template::data::validate naturalnum value message]
     }
     foreach value $nat_false {
-        aa_false "Is $value a naturalnum?" [template::data::validate naturalnum value message]
+        aa_false "Is $value a naturalnum?" \
+            [template::data::validate naturalnum value message]
     }
 }
 
@@ -151,14 +171,26 @@ aa_register_case -cats {
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 28 June 2021
 } {
-    set float_true {0 1 -9 0.0 5.3 +0.1 .3 -9.3 34433333333333333333333333333333333333.4566666666666}
+    set float_true {
+        0
+        1
+        -9
+        0.0
+        5.3
+        +0.1
+        .3
+        -9.3
+        34433333333333333333333333333333333333.4566666666666
+    }
     set float_false {lala -1,0 ,3 - .}
     set message ""
     foreach value $float_true {
-        aa_true "Is $value a float?" [template::data::validate float value message]
+        aa_true "Is $value a float?" \
+            [template::data::validate float value message]
     }
     foreach value $float_false {
-        aa_false "Is $value a float?" [template::data::validate float value message]
+        aa_false "Is $value a float?" \
+            [template::data::validate float value message]
     }
 }
 
@@ -175,14 +207,26 @@ aa_register_case -cats {
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 28 June 2021
 } {
-    set number_true {0 1 -9 0.0 5.3 +0.1 .3 -9.3 34433333333333333333333333333333333333.4566666666666}
+    set number_true {
+        0
+        1
+        -9
+        0.0
+        5.3
+        +0.1
+        .3
+        -9.3
+        34433333333333333333333333333333333333.4566666666666
+    }
     set number_false {lala -1,0 ,3 - .}
     set message ""
     foreach value $number_true {
-        aa_true "Is $value a number?" [template::data::validate number value message]
+        aa_true "Is $value a number?" \
+            [template::data::validate number value message]
     }
     foreach value $number_false {
-        aa_false "Is $value a number?" [template::data::validate number value message]
+        aa_false "Is $value a number?" \
+            [template::data::validate number value message]
     }
 }
 aa_register_case -cats {
@@ -209,11 +253,16 @@ aa_register_case -cats {
     set text_true {"" "my text" "lalala"}
     set message ""
     foreach value $text_true {
-        aa_true "Is $value text?"               [template::data::validate text value message]
-        aa_true "Is $value a string?"           [template::data::validate string value message]
-        aa_true "Is $value a checkbox_text?"    [template::data::validate checkbox_text value message]
-        aa_true "Is $value a radio_text?"       [template::data::validate radio_text value message]
-        aa_true "Is $value a select_text?"      [template::data::validate select_text value message]
+        aa_true "Is $value text?" \
+            [template::data::validate text value message]
+        aa_true "Is $value a string?" \
+            [template::data::validate string value message]
+        aa_true "Is $value a checkbox_text?" \
+            [template::data::validate checkbox_text value message]
+        aa_true "Is $value a radio_text?" \
+            [template::data::validate radio_text value message]
+        aa_true "Is $value a select_text?" \
+            [template::data::validate select_text value message]
     }
 }
 
@@ -237,8 +286,10 @@ aa_register_case -cats {
     set search_true {"" "my search" "lalala"}
     set message ""
     foreach value $search_true {
-        aa_true "Is $value a search?"       [template::data::validate search value message]
-        aa_true "Is $value a party_search?" [template::data::validate party_search value message]
+        aa_true "Is $value a search?" \
+            [template::data::validate search value message]
+        aa_true "Is $value a party_search?" \
+            [template::data::validate party_search value message]
     }
 }
 
@@ -261,7 +312,8 @@ aa_register_case -cats {
     set file_true {my_file lalala}
     set message ""
     foreach value $file_true {
-        aa_true "Is $value a file?" [template::data::validate file value message]
+        aa_true "Is $value a file?" \
+            [template::data::validate file value message]
     }
 }
 
@@ -282,10 +334,12 @@ aa_register_case -cats {
     set keyword_false {-1,0 -ojaio ,3 - . "la la la"}
     set message ""
     foreach value $keyword_true {
-        aa_true "Is $value a keyword?" [template::data::validate keyword value message]
+        aa_true "Is $value a keyword?" \
+            [template::data::validate keyword value message]
     }
     foreach value $keyword_false {
-        aa_false "Is $value a keyword?" [template::data::validate keyword value message]
+        aa_false "Is $value a keyword?" \
+            [template::data::validate keyword value message]
     }
 }
 
@@ -309,10 +363,12 @@ aa_register_case -cats {
     set filename_false {not,valid ,no . "la la la" la.la}
     set message ""
     foreach value $filename_true {
-        aa_true "Is $value a filename?" [template::data::validate filename value message]
+        aa_true "Is $value a filename?" \
+            [template::data::validate filename value message]
     }
     foreach value $filename_false {
-        aa_false "Is $value a filename?" [template::data::validate filename value message]
+        aa_false "Is $value a filename?" \
+            [template::data::validate filename value message]
     }
 }
 
@@ -382,10 +438,12 @@ aa_register_case -cats {
     }
     set message ""
     foreach value $url_element_true {
-        aa_true "Is $value a url_element?" [template::data::validate url_element value message]
+        aa_true "Is $value a url_element?" \
+            [template::data::validate url_element value message]
     }
     foreach value $url_element_false {
-        aa_false "Is $value a url_element?" [template::data::validate url_element value message]
+        aa_false "Is $value a url_element?" \
+            [template::data::validate url_element value message]
     }
 }
 
@@ -439,14 +497,20 @@ aa_register_case -cats {
     }
     set message ""
     foreach value $date_true {
-        aa_true "Is $value a date?"         [template::data::validate date value message]
-        aa_true "Is $value a timestamp?"    [template::data::validate timestamp value message]
-        aa_true "Is $value a time_of_day?"  [template::data::validate timestamp value message]
+        aa_true "Is $value a date?" \
+            [template::data::validate date value message]
+        aa_true "Is $value a timestamp?" \
+            [template::data::validate timestamp value message]
+        aa_true "Is $value a time_of_day?" \
+            [template::data::validate timestamp value message]
     }
     foreach value $date_false {
-        aa_false "Is $value a date?"        [template::data::validate date value message]
-        aa_false "Is $value a timestamp?"   [template::data::validate timestamp value message]
-        aa_false "Is $value a time_of_day?" [template::data::validate time_of_day value message]
+        aa_false "Is $value a date?" \
+            [template::data::validate date value message]
+        aa_false "Is $value a timestamp?" \
+            [template::data::validate timestamp value message]
+        aa_false "Is $value a time_of_day?" \
+            [template::data::validate time_of_day value message]
     }
 }
 
@@ -479,10 +543,12 @@ aa_register_case -cats {
     }
     set message ""
     foreach value $enumeration_true {
-        aa_true "Is $value an enumeration?" [template::data::validate enumeration value message]
+        aa_true "Is $value an enumeration?" \
+            [template::data::validate enumeration value message]
     }
     foreach value $enumeration_false {
-        aa_false "Is $value an enumeration?" [template::data::validate enumeration value message]
+        aa_false "Is $value an enumeration?" \
+            [template::data::validate enumeration value message]
     }
 }
 
@@ -516,10 +582,12 @@ aa_register_case -cats {
     }
     set message ""
     foreach value $textdate_true {
-        aa_true "Is $value a textdate?" [template::data::validate textdate value message]
+        aa_true "Is $value a textdate?" \
+            [template::data::validate textdate value message]
     }
     foreach value $textdate_false {
-        aa_false "Is $value a textdate?" [template::data::validate textdate value message]
+        aa_false "Is $value a textdate?" \
+            [template::data::validate textdate value message]
     }
 }
 
@@ -542,10 +610,12 @@ aa_register_case -cats {
     set value_true {0 1 2 3}
     set value_false {zero null nope 4 ""}
     foreach value $value_true {
-        aa_true "Is $value in the list of values?" [template::data::validate oneof value message]
+        aa_true "Is $value in the list of values?" \
+            [template::data::validate oneof value message]
     }
     foreach value $value_false {
-        aa_false "Is $value in the list of values?" [template::data::validate oneof value message]
+        aa_false "Is $value in the list of values?" \
+            [template::data::validate oneof value message]
     }
 }
 
