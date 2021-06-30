@@ -185,16 +185,20 @@ aa_register_case -cats {
         aa_false "Is $value a number?" [template::data::validate number value message]
     }
 }
-
 aa_register_case -cats {
+
     api
     smoke
     production_safe
 } -procs {
     template::data::validate
     template::data::validate::text
+    template::data::validate::string
+    template::data::validate::checkbox_text
+    template::data::validate::radio_text
+    template::data::validate::select_text
 } validate_text {
-    Test validation for text data types
+    Test validation for text related data types
 
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 28 June 2021
@@ -205,30 +209,11 @@ aa_register_case -cats {
     set text_true {"" "my text" "lalala"}
     set message ""
     foreach value $text_true {
-        aa_true "Is $value text?" [template::data::validate text value message]
-    }
-}
-
-aa_register_case -cats {
-    api
-    smoke
-    production_safe
-} -procs {
-    template::data::validate
-    template::data::validate::string
-} validate_string {
-    Test validation for string data types
-
-    @author Héctor Romojaro <hector.romojaro@gmail.com>
-    @creation-date 28 June 2021
-} {
-    #
-    # Currently, all submitted strings to the validator are valid...
-    #
-    set string_true {"" "my string" "lalala"}
-    set message ""
-    foreach value $string_true {
-        aa_true "Is $value a string?" [template::data::validate string value message]
+        aa_true "Is $value text?"               [template::data::validate text value message]
+        aa_true "Is $value a string?"           [template::data::validate string value message]
+        aa_true "Is $value a checkbox_text?"    [template::data::validate checkbox_text value message]
+        aa_true "Is $value a radio_text?"       [template::data::validate radio_text value message]
+        aa_true "Is $value a select_text?"      [template::data::validate select_text value message]
     }
 }
 
@@ -277,29 +262,6 @@ aa_register_case -cats {
     set message ""
     foreach value $file_true {
         aa_true "Is $value a file?" [template::data::validate file value message]
-    }
-}
-
-aa_register_case -cats {
-    api
-    smoke
-    production_safe
-} -procs {
-    template::data::validate
-    template::data::validate::checkbox_text
-} validate_checkbox_text {
-    Test validation for checkbox_other data types
-
-    @author Héctor Romojaro <hector.romojaro@gmail.com>
-    @creation-date 28 June 2021
-} {
-    #
-    # Currently, all submitted checkbox_text strings to the validator are valid...
-    #
-    set checkbox_text_true {"" "my checkbox_text" "lalala"}
-    set message ""
-    foreach value $checkbox_text_true {
-        aa_true "Is $value a checkbox_text?" [template::data::validate checkbox_text value message]
     }
 }
 
