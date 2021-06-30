@@ -486,6 +486,43 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::textdate
+} validate_textdate {
+    Test validation for textdate data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 30 June 2021
+} {
+    #
+    # An textdate is a date in ISO  YYYY-MM-DD.
+    #
+    set textdate_true {
+        2021-06-30
+        ""
+    }
+    set textdate_false {
+        21-06-30
+        2021-13-30
+        2021-00-30
+        2021-06-32
+        2021-06-00
+        "lala"
+    }
+    set message ""
+    foreach value $textdate_true {
+        aa_true "Is $value a textdate?" [template::data::validate textdate value message]
+    }
+    foreach value $textdate_false {
+        aa_false "Is $value a textdate?" [template::data::validate textdate value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
