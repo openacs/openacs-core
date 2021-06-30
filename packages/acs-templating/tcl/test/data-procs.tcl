@@ -523,6 +523,32 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::oneof
+} validate_oneof {
+    Test validation for oneof data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 30 June 2021
+} {
+    set message ""
+    set values ""
+    array set element {options {{zero 0} {one 1} {two 2} {three 3}}}
+    set value_true {0 1 2 3}
+    set value_false {zero null nope 4 ""}
+    foreach value $value_true {
+        aa_true "Is $value in the list of values?" [template::data::validate oneof value message]
+    }
+    foreach value $value_false {
+        aa_false "Is $value in the list of values?" [template::data::validate oneof value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
