@@ -371,7 +371,7 @@ ad_proc -public template::data::validate::textdate {
     set error_msg [list]
     if { [info exists textdate] && $textdate ne "" } {
 	if { [regexp {^[0-9]{4}-[0-9]{2}-[0-9]{2}$} $textdate match] } {
-	    if { [catch { clock scan "${textdate}" }] } {
+	    if { [catch { clock scan -format {%Y-%m-%d} "${textdate}" }] } {
 		# the textdate is formatted properly the template::data::transform::textdate proc
 		# will only return correctly formatted dates in iso format, but the date is not
                 # valid so they have entered some info incorrectly
