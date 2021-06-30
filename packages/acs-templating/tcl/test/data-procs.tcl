@@ -261,6 +261,29 @@ aa_register_case -cats {
     production_safe
 } -procs {
     template::data::validate
+    template::data::validate::file
+} validate_file {
+    Test validation for file data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    #
+    # Currently, the file widget is assumed to never fail...
+    #
+    set file_true {my_file lalala}
+    set message ""
+    foreach value $file_true {
+        aa_true "Is $value a file?" [template::data::validate file value message]
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
     template::data::validate::keyword
 } validate_keyword {
     Test validation for keyword data types
