@@ -450,6 +450,42 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
+    template::data::validate::enumeration
+} validate_enumeration {
+    Test validation for enumeration data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 30 June 2021
+} {
+    #
+    # An enumeration is a unique csv alphanumeric list.
+    #
+    set enumeration_true {
+        {1,2,3}
+        {first,second,third}
+        first
+    }
+    set enumeration_false {
+        {1 2 3}
+        {first,first}
+        {-,.}
+        ""
+    }
+    set message ""
+    foreach value $enumeration_true {
+        aa_true "Is $value an enumeration?" [template::data::validate enumeration value message]
+    }
+    foreach value $enumeration_false {
+        aa_false "Is $value an enumeration?" [template::data::validate enumeration value message]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
