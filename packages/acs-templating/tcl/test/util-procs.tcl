@@ -63,6 +63,32 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::util::get_url_directory
+} get_url_directory {
+    Test template::util::get_url_directory
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 30 June 2021
+} {
+    set url_dirs {
+        // //
+        /test /
+        /test/ /test/
+        /test/foo/bar /test/foo/
+        /test/foo/bar/ /test/foo/bar/
+    }
+    dict for {url dir} $url_dirs {
+        aa_equals "Url: $url, directory: $dir" \
+            [template::util::get_url_directory $url] \
+            $dir
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
