@@ -284,6 +284,29 @@ aa_register_case -cats {
     production_safe
 } -procs {
     template::data::validate
+    template::data::validate::checkbox_text
+} validate_checkbox_text {
+    Test validation for checkbox_other data types
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 28 June 2021
+} {
+    #
+    # Currently, all submitted checkbox_text strings to the validator are valid...
+    #
+    set checkbox_text_true {"" "my checkbox_text" "lalala"}
+    set message ""
+    foreach value $checkbox_text_true {
+        aa_true "Is $value a checkbox_text?" [template::data::validate checkbox_text value message]
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::data::validate
     template::data::validate::keyword
 } validate_keyword {
     Test validation for keyword data types
