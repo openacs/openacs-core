@@ -2696,9 +2696,12 @@ ad_proc -public util_email_unique_p { email } {
 ad_proc -public util_url_valid_p { query_url } {
     Returns 1 if a URL is a web URL (HTTP, HTTPS or FTP).
 
+    Refined regexp from https://mathiasbynens.be/demo/url-regex
+
     @author Philip Greenspun (philg@mit.edu)
+
 } {
-    return [regexp -nocase {^(http|https|ftp)://[^ ].+} [string trim $query_url]]
+    return [regexp -nocase {^(https?|ftp)://[^\s/$.?#].[^\s]*$} [string trim $query_url]]
 }
 
 ad_proc -public util::min { args } {
