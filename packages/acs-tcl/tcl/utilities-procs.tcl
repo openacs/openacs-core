@@ -2693,15 +2693,38 @@ ad_proc -public util_email_unique_p { email } {
     return [db_string email_unique_p {}]
 }
 
-ad_proc -public util_url_valid_p { query_url } {
-    Returns 1 if a URL is a web URL (HTTP, HTTPS or FTP).
+ad_proc -public util_url_valid_p {
+    {-relative:boolean}
+     query_url
+ } {
+    Check if an absolute Web URL (HTTP, HTTPS or FTP) is valid.
+
+    If the 'relative' flag is set, also relative URLs are accepted.
 
     Refined regexp from https://mathiasbynens.be/demo/url-regex
 
     @author Philip Greenspun (philg@mit.edu)
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+
+    @param relative     Boolean. If true, Accept also relative URLs.
+    @param query_url    The URL to check.
+    @return             1 if the web URL is valid, 0 otherwise.
 
 } {
-    return [regexp -nocase {^(https?|ftp)://[^\s/$.?#].[^\s]*$} [string trim $query_url]]
+    #
+    # Does the URL look absolute?
+    #
+    if {$relative_p && ![regexp -nocase {^(.*://|mailto:)(.)*$} [string trim $query_url]]} {
+        #
+        # Relative URLs
+        #
+        return [regexp -nocase {^/?($|[^\s/.?#]){1}[^\s]*$} [string trim $query_url]]
+    } else {
+        #
+        # Absolute URLs (HTTP, HTTPS or FTP)
+        #
+        return [regexp -nocase {^(https?|ftp)://[^\s/$.?#].[^\s]*$} [string trim $query_url]]
+    }
 }
 
 ad_proc -public util::min { args } {

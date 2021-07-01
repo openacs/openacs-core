@@ -895,11 +895,18 @@ aa_register_case \
     @creation-date 2004-01-10
     @author Branimir Dolicki (bdolicki@branimir.com)
 } {
+    #
+    # Valid URLs
+    #
     foreach url {
+        "http://la.la"
+        "https://la.la"
+        "https://a.a"
         "http://example.com"
         "https://example.com"
         "ftp://example.com"
         "http://example.com/"
+        "http://example.com/index.html"
         "HTTP://example.com"
         "http://example.com/foo/bar/blah"
         "http://example.com?foo=bar&bar=foo"
@@ -940,15 +947,17 @@ aa_register_case \
         "http://a.b-c.de"
         "http://223.255.255.254"
     } {
-        aa_true "Valid web URL $url" [util_url_valid_p "$url"]
+        aa_true "Valid web URL $url"                    [util_url_valid_p "$url"]
+        aa_true "Valid web URL $url (relative allowed)" [util_url_valid_p -relative "$url"]
     }
+    #
+    # Invalid URLs
+    #
     foreach url {
         "xhttp://example.com"
         "httpx://example.com"
         "wysiwyg://example.com"
         "mailto:joe@example.com"
-        "foo"
-        "/foo/bar"
         "http://"
         "http://."
         "http://.."
@@ -965,7 +974,6 @@ aa_register_case \
         "///a"
         "///"
         "http:///a"
-        "foo.com"
         "rdar://1234"
         "h://test"
         "http:// shouldfail.com"
@@ -974,8 +982,39 @@ aa_register_case \
         "ftps://foo.bar/"
         "http://.www.foo.bar/"
         "http://.www.foo.bar./"
+        "la la la"
     } {
-        aa_false "Invalid web URL $url" [util_url_valid_p "$url"]
+        aa_false "Invalid web URL $url"                     [util_url_valid_p "$url"]
+        aa_false "Invalid web URL $url (relative allowed)"   [util_url_valid_p -relative "$url"]
+    }
+    #
+    # Relative URLs
+    #
+    foreach url {
+        "/"
+        "foo"
+        "/foo/"
+        "/foo/bar"
+        "/foo/bar/"
+        "/foo/bar/lol.html"
+        "/foo.bar/?q=Test%20URL-encoded%20stuff"
+        "foo.com"
+        "foo.com/bar/lol"
+        "/foo.com/bar/lol"
+        "/مثال.إختبار"
+        "/例子.测试"
+        "/उदाहरण.परीक्षा"
+        "/-.~_!$&'()*+,;=:%40:80%2f::::::@example.com"
+        "foo.bar/?q=Test%20URL-encoded%20stuff"
+        "مثال.إختبار"
+        "例子.测试"
+        "उदाहरण.परीक्षा"
+        "-.~_!$&'()*+,;=:%40:80%2f::::::@example.com"
+        "no-protocol"
+        "/relative"
+    } {
+        aa_false "Invalid web URL $url"                 [util_url_valid_p "$url"]
+        aa_true "Valid web URL $url (relative allowed)" [util_url_valid_p -relative "$url"]
     }
 }
 
