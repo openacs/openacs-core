@@ -276,8 +276,7 @@ ad_proc -public template::data::validate::url {
 
     upvar 2 $message_ref message $value_ref value
 
-    set expr {^(https?://)?([a-zA-Z0-9_\-\.]+(:[0-9]+)?)?[a-zA-Z0-9_.%/?=&-]+$}
-    set result [regexp $expr $value]
+    set result [util_url_valid_p -relative $value]
 
     if { ! $result } {
         set message "[_ acs-templating.Invalid_url] \"[ns_quotehtml $value]\""
