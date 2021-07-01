@@ -1021,6 +1021,7 @@ aa_register_case \
         "../.."
         "../../"
         "../../g"
+        "../../g/"
         "/foo/"
         "/foo/bar"
         "/foo/bar/"
@@ -1040,7 +1041,6 @@ aa_register_case \
         "-.~_!$&'()*+,;=:%40:80%2f::::::@example.com"
         "no-protocol"
         "/relative"
-
     } {
         aa_false "Invalid web URL $url"                 [util_url_valid_p "$url"]
         aa_true "Valid web URL $url (relative allowed)" [util_url_valid_p -relative "$url"]
