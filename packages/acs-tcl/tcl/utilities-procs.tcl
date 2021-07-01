@@ -2716,12 +2716,20 @@ ad_proc -public util_url_valid_p {
     #
     if {$relative_p && ![regexp -nocase {^(.*://|mailto:)(.)*$} [string trim $query_url]]} {
         #
-        # Relative URLs
+        # Relative URLs (https://datatracker.ietf.org/doc/html/rfc1808)
         #
-        return [regexp -nocase {^/?($|[^\s/.?#]){1}[^\s]*$} [string trim $query_url]]
+        # Less restrictive (e.g. ../, ./, /, #g, ;x... and even an empty string
+        # are valid relative URLs, see RFC above).
+        #
+        # At least, we check for spaces...
+        #
+        return [regexp -nocase {^[^\s]*$} [string trim $query_url]]
     } else {
         #
         # Absolute URLs (HTTP, HTTPS or FTP)
+        #
+        # The authority part of the URL should not start with either space,
+        # /, $, ., ? or #, and should not have spaces until the end of line.
         #
         return [regexp -nocase {^(https?|ftp)://[^\s/$.?#].[^\s]*$} [string trim $query_url]]
     }

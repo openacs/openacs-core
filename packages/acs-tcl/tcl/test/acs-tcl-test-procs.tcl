@@ -969,10 +969,6 @@ aa_register_case \
         "http://##"
         "http://##/"
         "http://foo.bar?q=Spaces should be encoded"
-        "//"
-        "//a"
-        "///a"
-        "///"
         "http:///a"
         "rdar://1234"
         "h://test"
@@ -983,6 +979,13 @@ aa_register_case \
         "http://.www.foo.bar/"
         "http://.www.foo.bar./"
         "la la la"
+        "http:// la.com"
+        {http://$la.com}
+        "http:///la.com"
+        "http://.la.com"
+        "http://?la.com"
+        "http://#la.com"
+        "http://a "
     } {
         aa_false "Invalid web URL $url"                     [util_url_valid_p "$url"]
         aa_false "Invalid web URL $url (relative allowed)"   [util_url_valid_p -relative "$url"]
@@ -991,8 +994,33 @@ aa_register_case \
     # Relative URLs
     #
     foreach url {
+        ""
         "/"
+        "//"
+        "//a"
+        "///a"
+        "///"
+        "?a"
+        "a:h"
+        "./a"
+        "g?y"
+        "g?y/./x"
         "foo"
+        "#s"
+        "g#s"
+        "g#s/./x"
+        "g?y#s"
+        ";x"
+        "g;x"
+        "g;x?y#s"
+        "."
+        "./"
+        ".."
+        "../"
+        "../g"
+        "../.."
+        "../../"
+        "../../g"
         "/foo/"
         "/foo/bar"
         "/foo/bar/"
@@ -1012,6 +1040,7 @@ aa_register_case \
         "-.~_!$&'()*+,;=:%40:80%2f::::::@example.com"
         "no-protocol"
         "/relative"
+
     } {
         aa_false "Invalid web URL $url"                 [util_url_valid_p "$url"]
         aa_true "Valid web URL $url (relative allowed)" [util_url_valid_p -relative "$url"]
