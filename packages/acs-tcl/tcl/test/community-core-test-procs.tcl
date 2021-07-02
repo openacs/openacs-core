@@ -161,11 +161,24 @@ aa_register_case \
             -test_code {
 
                 aa_true "correct party_id" [string match [party::get_by_email -email $email] $user_info(user_id)]
-                party::update -party_id $user_info(user_id) -email "${email}2" -url $url
+                set updated_email [string toupper "${email}2"]
+                party::update -party_id $user_info(user_id) -email $updated_email -url $url
+                aa_equals "Email case is lower" [party::get -party_id $user_info(user_id) -element email] [string tolower "${email}2"]
                 aa_true "correct party with new mail" [string match [party::get_by_email -email "${email}2"] $user_info(user_id)]
             }
     }
 
+aa_register_case \
+    -cats {smoke} \
+    party_emails_are_lowercase \
+    {
+        Make sure all party emails are stored as lowercase
+    } {
+        aa_false "All emails are lowercase" [db_0or1row get_wrong_case {
+            select 1 from dual where exists
+            (select 1 from parties where email <> lower(email))
+        }]
+    }
 
 # Local variables:
 #    mode: tcl

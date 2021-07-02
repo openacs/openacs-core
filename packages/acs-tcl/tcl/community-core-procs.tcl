@@ -1091,10 +1091,11 @@ ad_proc -public party::update {
             lappend cols "$var = :$var"
         }
     }
-    db_dml party_update {}
     if {[info exists email]} {
+        set email [string tolower $email]
         db_dml object_title_update {}
     }
+    db_dml party_update {}
     party::flush_cache -party_id $party_id
 }
 
