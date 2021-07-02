@@ -2731,7 +2731,7 @@ ad_proc -public util_url_valid_p {
         # The authority part of the URL should not start with either space,
         # /, $, ., ? or #, and should not have spaces until the end of line.
         #
-        return [regexp -nocase {^(https?|ftp)://[^\s/$.?#].[^\s]*$} [string trim $query_url]]
+        return [regexp -nocase {^(https?|ftp)://[^\s/$.?#][^\s]+$} [string trim $query_url]]
     }
 }
 

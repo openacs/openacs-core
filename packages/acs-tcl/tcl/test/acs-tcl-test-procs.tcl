@@ -986,6 +986,7 @@ aa_register_case \
         "http://?la.com"
         "http://#la.com"
         "http://a "
+        "http://a a"
     } {
         aa_false "Invalid web URL $url"                     [util_url_valid_p "$url"]
         aa_false "Invalid web URL $url (relative allowed)"   [util_url_valid_p -relative "$url"]
