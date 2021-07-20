@@ -8,16 +8,21 @@ ad_library {
 
 namespace eval acs_admin {
 
-    ad_proc -private ::acs_admin::check_expired_certificates {} {
+    ad_proc -private ::acs_admin::check_expired_certificates {
+        {-api production}
+    } {
         Check expire-dates of certificates and send warning emails to
         the admin. In case HTTPS is not configured via the "nsssl"
         driver, or the command line tool "openssl" is not installed,
         the proc does nothing.
 
+        @param api possible values: "production" or "staging".
+            In case the certificate is expired, use this type of
+            letsencrypt environment to obtain a fresh certificate
+
         @return boolean telling whether expired certificates existed
         (true) or not (false)
     } {
-
         set openssl [util::which openssl]
         if {[namespace which ns_driver] ne "" && $openssl ne ""} {
             #
@@ -54,6 +59,7 @@ namespace eval acs_admin {
                     }
                 }
             }
+
             if {[llength $critCertInfo] > 0} {
                 set to_addr [parameter::get_from_package_key \
                                  -package_key "acs-admin" \
@@ -63,21 +69,89 @@ namespace eval acs_admin {
                     set to_addr [ad_host_administrator]
                 }
                 if {$to_addr ne ""} {
-                    set body ""
-                    if {[llength $critCertInfo] > 1} {
-                        set certLabel "certificates"
-                    } else {
-                        set certLabel "certificate"
+                    set report ""
+                    if {[info commands ::letsencrypt::Client] ne ""} {
+
+                        #
+                        # Make sure, UseCanonicalLocation is NOT set,
+                        # since otherwise the requests from
+                        # letsencrypt will be redirected. One could
+                        # think about other solution, such ignoring
+                        # mapping to the canonical location for
+                        # letsencryp URLs.
+                        #
+                        set param_exists [db_0or1row check_params {
+                            select 1 from apm_parameters
+                            where package_key = 'acs-kernel'
+                            and parameter_name = 'UseCanonicalLocation'
+                        }]
+                        if {!$param_exists} {
+                            catch {apm_parameter_register UseCanonicalLocation "Use Canonical Location" acs-kernel 0 number }
+                        }
+                        ad_parameter_cache -delete $::acs::kernel_id UseCanonicalLocation
+                        set oldValue [parameter::get \
+                                          -package_id $::acs::kernel_id \
+                                          -parameter UseCanonicalLocation \
+                                          -default 0]
+                        parameter::set_value \
+                            -package_id $::acs::kernel_id \
+                            -parameter UseCanonicalLocation \
+                            -value 0
+
+                        #
+                        # Now we are all set to create and start the ACME client
+                        #
+                        #set api staging ;# can be activated for testing purposes
+                        set report "Report of automated certificate renewal:\n[string repeat = 72]\n"
+
+                        try {
+                            #
+                            # We do not specify "-domains" here, so
+                            # get the values from the NaviServer
+                            # configuration file from section:
+                            # (ns_section ns/server/${server}/module/letsencrypt)
+                            #
+                            set c [::letsencrypt::Client new \
+                                       -API $api \
+                                       -background \
+                                       -domains {} \
+                                      ]
+                            ns_log notice "ssl: call getCertificate"
+                            $c getCertificate
+                            ns_log notice "ssl: call getCertificate DONE"
+                            append report \n[ad_html_to_text [$c cget -log]]\n
+                            $c destroy
+
+                        } on ok {result} {
+                            ns_log notice "letsencrypt: automated renew request succeeded: $result"
+                        } on error {errorMsg} {
+                            append report "Error: $errorMsg\nConsider upgrading to letsencrypt 0.6\n"
+                            ns_log notice "letsencrypt: automated renew request failed: $errorMsg"
+                        }
+
+                        parameter::set_value \
+                            -package_id $::acs::kernel_id \
+                            -parameter UseCanonicalLocation \
+                            -value $oldValue
                     }
+                    append report \n[string repeat = 72]\n
+
+                    set certLabel [expr {[llength $critCertInfo] > 1 ? "certificates" : "certificate"}]
+                    set body [ns_trim -delimiter | {
+                        |Dear Webmaster of [ad_system_name],
+                        |
+                        |The following $certLabel of your site will expire soon:
+                        |
+                        | - [join $critCertInfo "\n- "]
+                        |
+                        |${report}Your friendly daemon
+                    }]
+                    #set to_addr neumann@wu.ac.at ;# can be activated for testing purposes
                     acs_mail_lite::send -send_immediately \
                         -to_addr $to_addr \
                         -from_addr [ad_system_owner] \
                         -subject "Certificate of [ad_system_name] expires soon" \
-                        -body [append body \
-                                   "Dear Webmaster of [ad_system_name]," \n\n\
-                                   "The following $certLabel of your site will expire soon:\n\n" \
-                                   "- " [join $critCertInfo "\n- "] \n\n\
-                                   "Your friendly daemon" \n]
+                        -body [subst $body]
                 }
             }
 
