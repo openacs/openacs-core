@@ -350,7 +350,7 @@ proc ad_proc args {
     #####
 
     set switches0 {}
-    set switches1 {}    
+    set switches1 {}
     set positionals [list]
     set seen_positional_with_default_p 0
     set n_positionals_with_defaults 0
@@ -359,7 +359,7 @@ proc ad_proc args {
     set seen_arg_checkers_p 0
     set varargs_p 0
     set switch_code ""
-    
+
     #
     # If the first element contains 0 or more than 2 elements, then it must
     # be an old-style ad_proc. Mangle effective_arg_list accordingly.
@@ -874,7 +874,7 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
     positional ones. Since the advent of XOTcl2, this limitation is
     gone and just used for installations without XOTcl.... but since
     XOTcl is required since many years, this is not an issue anymore.
-    
+
     @param allowed_args a list of allowable switch names.
     @param argv a list of command-line options. May end with <code>args</code> to
         indicate that extra values should be tolerated after switches and placed in
@@ -1189,20 +1189,20 @@ ad_proc -public ad_with_deprecated_code_p {} {
 }
 
 ad_proc ad_file {subcmd arg1 args} {
-    
+
     Tcl supports csh-style tilde substitution. If a filename starts
     with a tilde, then the filename will be interpreted as if the
     first element is replaced with the location of the home directory
     for the given user. If the user does not exist, an exception is
     raised. (e.g. [file dirname ~gustafn.foo]).
-    
+
     https://www.tcl-lang.org/man/tcl/TclCmd/filename.htm#M20
 
     This little proc can be used in cases, where (a) the
     tilde-substitution is unwanted, and where the "name" argument
     (usually the first argument after the subcommand) might contain
     user provided values.
-    
+
 } {
     if {[string range $arg1 0 0] eq {~}} {
         set arg1 ./$arg1
