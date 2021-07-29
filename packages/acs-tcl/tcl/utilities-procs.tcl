@@ -1357,27 +1357,43 @@ ad_proc -public ad_urlencode_url {url} {
     (containing a location, but without query part).
     @see ad_urlencode_folder_path
 } {
-    set components [ns_parseurl $url]
-    if {[dict exists $components proto]} {
-        set result [util::join_location \
-                        -proto [dict get $components proto] \
-                        -hostname [dict get $components host] \
-                        -port [expr {[dict exists $components port] ? [dict get $components port] : ""}] \
-                       ]
-        set path [dict get $components path]
-        if {$path ne ""} {
-            set path /$path
+    ad_try {
+        #
+        # Assign the components, and check if the URL is valid
+        #
+        set components [ns_parseurl $url]
+    } on ok {r} {
+        #
+        # Assume the possibility that older ns_parseurl versions accepted a URL
+        # without a scheme.
+        #
+        if {[dict exists $components proto]} {
+            set result [util::join_location \
+                            -proto [dict get $components proto] \
+                            -hostname [dict get $components host] \
+                            -port [expr {[dict exists $components port] ? [dict get $components port] : ""}] \
+                           ]
+            set path [dict get $components path]
+            if {$path ne ""} {
+                set path /$path
+            }
+            set tail [dict get $components tail]
+            append result [ad_urlencode_folder_path $path/$tail]
+        } else {
+            #
+            # No protocol, we encode it as a path
+            #
+            set result [ad_urlencode_folder_path $url]
         }
-        set tail [dict get $components tail]
-        append result [ad_urlencode_folder_path $path/$tail]
-    } else {
+    } on error {errorMsg} {
+        #
+        # If the URL is not strictly valid, at least we try to encode it as a
+        # path.
+        #
         set result [ad_urlencode_folder_path $url]
     }
     return $result
 }
-
-
-
 
 
 ad_proc -private ad_run_scheduled_proc { proc_info } {
