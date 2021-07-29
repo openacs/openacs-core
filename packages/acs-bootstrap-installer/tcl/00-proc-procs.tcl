@@ -852,7 +852,9 @@ ad_proc -public ::foobar::new {
     @param warn specifies that the procedure should generate a warning
                 when invoked (requires that -deprecated also be set)
     @param callback the name of the callback contract being defined or
-                implemented
+                    implemented. When this flag is specified, -private
+                    and -public flags are ignored and the resulting
+                    proc will always be private.
     @param impl the name of the callback implementation for the specified
                 contract
     @param arg_list the list of switches and positional parameters which can be
