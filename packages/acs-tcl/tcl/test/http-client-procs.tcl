@@ -169,7 +169,7 @@ aa_register_case \
         foreach impl $implementations {
             foreach content_type $content_types {
                 set headers [ns_set create headers]
-                ns_set put $headers "Content-Type" $content_type
+                ns_set update $headers "Content-Type" $content_type
 
                 aa_section " - POST request - ContentType: '$content_type' - Implementation: '$impl'"
                 if {$impl ne "ns_http"} {
