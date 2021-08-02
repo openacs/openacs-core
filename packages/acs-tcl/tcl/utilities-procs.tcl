@@ -155,11 +155,6 @@ if {[info commands ns_valid_utf8] ne ""} {
 
         @return boolean
     } {
-        # set listing_fn [ns_mktemp]
-        # exec /bin/bash -c "LANG=C unzip -l $zip_fn > $listing_fn"
-        # set F [open $listing_fn rb]; set c [read $F]; close $F
-        # file delete listing_fn
-        # return [ns_valid_utf8 $c]
         set F [open $zip_fn rb]; set C [read $F]; close $F
         set validUTF8 1
         while {$validUTF8 && [binary encode hex [string range $C 0 3]] eq "504b0304"} {
@@ -3357,10 +3352,8 @@ ad_proc -public util::word_diff {
         set new [$filter_proc $new]
     }
 
-    set old_f [ad_tmpnam]
-    set new_f [ad_tmpnam]
-    set old_fd [open $old_f "w"]
-    set new_fd [open $new_f "w"]
+    set old_fd [file tempfile old_f [ad_tmpdir]/nsdiff-XXXXXX]
+    set new_fd [file tempfile new_f [ad_tmpdir]/nsdiff-XXXXXX]
     puts $old_fd [join [split $old $split_by] "\n"]
     puts $new_fd [join [split $new $split_by] "\n"]
     close $old_fd
@@ -3755,8 +3748,10 @@ ad_proc -public ad_job {
 }
 
 ad_proc ad_tmpnam {{template ""}} {
-    A stub function to replace the deprecated "ns_tmpnam",
-    which uses the deprecated C-library function "tmpnam()"
+    A stub function to replace the deprecated "ns_tmpnam", which uses
+    the deprecated C-library function "tmpnam()".  However, also
+    ns_mktemp is not recommended any more due to a potential race
+    between the name creation and the file open command.
 } {
     if {$template eq ""} {
         set template [ns_config ns/parameters tmpdir]/oacs-XXXXXX

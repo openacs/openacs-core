@@ -28,17 +28,15 @@ ad_proc -public text_templates::create_pdf_content {
 
     @return the pdf-file-name
 } {
-
-    set tmp_filename [ad_tmpnam]
+    
     # create html.file
     set html_content [create_html_content -template_id $template_id -set_var_call $set_var_call]
-    set tmp_html_filename "${tmp_filename}.html"
-    set fp [open $tmp_html_filename w]
+    set fp [file tempfile tmp_html_filename [ad_tmpdir]/pdf-XXXXXX.html]
     puts $fp $html_content
     close $fp
 
     # create pdf-file
-    set tmp_pdf_filename "${tmp_filename}.pdf"
+    set tmp_pdf_filename "${tmp_html_filename}.pdf"
     set htmldoc_bin [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"]
     if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
         ns_log Error "Error during conversion from html to pdf: $err"
@@ -61,14 +59,12 @@ ad_proc -public text_templates::create_pdf_from_html {
     @param html_content HTML Content that is transformed into PDF
     @return filename of the pdf file
 } {
-    set tmp_filename [ad_tmpnam]
-    set tmp_html_filename "${tmp_filename}.html"
-    set fp [open $tmp_html_filename w]
+    set fp [file tempfile tmp_html_filename [ad_tmpdir]/pdf-XXXXXX.html]
     puts $fp $html_content
     close $fp
 
     # create pdf-file
-    set tmp_pdf_filename "${tmp_filename}.pdf"
+    set tmp_pdf_filename "${tmp_html_filename}.pdf"
     set htmldoc_bin [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"]
     if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
         ns_log Error "Error during conversion from html to pdf: $err"

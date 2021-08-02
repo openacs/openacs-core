@@ -132,7 +132,7 @@ ad_proc -public ad_set_cookie {
     {-path "/"}
     {-discard f}
     {-scriptable t}
-    {-samesite none}    
+    {-samesite none}
     name
     {value ""}
 } {
@@ -353,8 +353,7 @@ nsf::proc ns_getcontent {{-as_file true} {-binary true}} {
         # If the file was not spooled, obtainit via [ns_conn content]
         # as write it to a file.
         #
-        set result [ad_tmpnam]
-        set F [open $result w]
+        set F [file tempfile result [ad_tmpdir]/nsspool-XXXXXX]
         if {$binary} {
             fconfigure $F -translation binary -encoding binary
         }

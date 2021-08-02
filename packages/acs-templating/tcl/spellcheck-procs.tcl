@@ -187,8 +187,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
         regsub -all -- {<[^<]*>} $text_to_spell_check "" text_to_spell_check
     }
 
-    set tmpfile [ns_mktemp "[ad_tmpdir]/webspellXXXXXX"]
-    set f [open $tmpfile w]
+    set f [file tempfile tmpfile [ad_tmpdir]/webspell-XXXXXX]
     puts $f $text_to_spell_check
     close $f
 
@@ -198,12 +197,10 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     set suffix [expr {$language ne "" ? "-$language" : ""}]
     set dictionaryfile [file join [acs_package_root_dir acs-templating] resources forms webspell-local-dict$suffix]
 
-    # The webspell wrapper is necessary because ispell requires
-    # the HOME environment set, and setting env(HOME) doesn't appear
-    # to work from AOLserver.
+    # The webspell wrapper is used to achieve independence from 
+    # nsd's env(HOME).
 
     set spelling_wrapper [file join $::acs::rootdir bin webspell]
-
     if {![file executable $spelling_wrapper]} {
         #
         # In case no_abort is given we just return the error

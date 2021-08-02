@@ -2922,15 +2922,13 @@ ad_proc -public db_load_sql_data {
 
         oracle {
             set user_pass [db_get_sql_user -dbn $dbn]
-            set tmpnam [ad_tmpnam]
 
             set fd [open $file r]
             set file_contents [read $fd]
             close $fd
-
             set file_contents [subst $file_contents]
 
-            set fd1 [open "${tmpnam}.ctl" w]
+            set fd1 [file tempfile tmpnam [ns_config ns/parameters tmpdir]/oacs-XXXXXX.ctl]
             puts $fd1 $file_contents
             close $fd1
 
@@ -2972,8 +2970,7 @@ ad_proc -public db_load_sql_data {
             set fd [open $file r]
             set copy_command [subst -nobackslashes [read $fd]]
             close $fd
-            set copy_file [ns_mktemp [ad_tmpdir]/psql-copyfile-XXXXXX]
-            set fd [open $copy_file {CREAT EXCL WRONLY} 0600]
+            set fd [file tempfile copy_file [ad_tmpdir]/psql-copyfile-XXXXXX]
             puts $fd $copy_command
             close $fd
 

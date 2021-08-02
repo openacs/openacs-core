@@ -23,9 +23,8 @@ if { [catch {
     # insist on UTF8-encoding it). So we write to a file, then dump
     # the file's contents.
 
-    set file_name [ad_tmpnam]
+    set file [file tempfile file_name]
     ns_log "Notice" "logging to $file_name"
-    set file [open $file_name w+]
     fconfigure $file -encoding binary -translation binary
     puts -nonewline $file [format "%c%c%c" $r $g $b]
     seek $file 0

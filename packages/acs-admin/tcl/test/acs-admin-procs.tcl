@@ -98,7 +98,6 @@ aa_register_case -cats {
     acs::test::user::create
     acs_user::create_portrait
     acs_user::get_portrait_id
-    ad_tmpnam
     permission::grant
     permission::permission_p
 } acs_admin_merge_MergeUserInfo {
@@ -112,8 +111,7 @@ aa_register_case -cats {
             set user_id_2 [dict get [acs::test::user::create] user_id]
 
             # Fake non-image just to have a file to save
-            set tmpnam [ad_tmpnam].png
-            set wfd [open $tmpnam w]
+            set wfd [file tempfile tmpnam [ad_tmpdir]/test-XXXXXX.png]
             puts $wfd [string repeat a 1000]
             close $wfd
             # Give a fake portrait to user_1
