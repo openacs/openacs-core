@@ -6,7 +6,7 @@ ad_page_contract {
     @creation-date 9 May 2000
     @cvs-id $Id$
 } {
-    {version_id:naturalnum,notnull}
+    {version_id:naturalnum,object_id,notnull}
     {return_url:localurl "index"}
 }
 

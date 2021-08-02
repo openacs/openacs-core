@@ -635,6 +635,21 @@ ad_proc -public ad_page_contract {
 
         # find parameterized flags
         foreach flag $pre_flag_list {
+
+            #
+            # The following statement is transitional code, and should
+            # help in the upgrading phase, when newer page_contracts
+            # with "object_id" are processed, but the
+            # page_contract_filter_proc is not yet defined.
+            #
+            if {$flag eq "object_id"
+                && [info commands ad_page_contract_filter_proc_object_id] eq ""
+            } {
+                # fall back to "integer"
+                set flag integer
+                ns_log notice "Warning: page contract contains 'object_id', but filter proc is not available"
+            }
+
             set left_paren [string first "(" $flag]
             if { $left_paren == -1 } {
                 lappend flag_list $flag
@@ -1688,7 +1703,7 @@ ad_page_contract_filter naturalnum { name value } {
 }
 
 ad_page_contract_filter object_id { name value } {
-    
+
     Checks whether the value is a valid object_id, i.e. in the range
     defined for the SQL datatype "integer", which is the same for
     Oracle and PostgreSQL. In case, object_types are altered in future
@@ -1697,10 +1712,10 @@ ad_page_contract_filter object_id { name value } {
 
     The function is essentially the same as ad_page_contract_filter
     "integer", but with the additional value range check.
-    
+
     @author Gustaf Neumann
     @creation-date May 23, 2021
-    
+
 } {
     if { [regexp {^(-)?(\d+)$} $value _ sign rest] } {
         set value $sign[util::trim_leading_zeros $rest]
@@ -2201,7 +2216,7 @@ ad_page_contract_filter token { name value } {
 }
 
 ad_page_contract_filter printable { name value } {
-    
+
     Checks whether the value contains only characters with a printable
     representation. This represents character class of the Tcl
     character class "print", which consists of the characters with a
