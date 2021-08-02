@@ -14,7 +14,7 @@ aa_register_case \
     } \
     logout_from_everywhere {
 
-        Test the use case of loggin out a user from everywhere by
+        Test the use case of logging-out a user from everywhere by
         changing its own authentication token (e.g. when password is
         changed).
 
