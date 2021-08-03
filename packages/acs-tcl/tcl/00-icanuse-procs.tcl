@@ -195,9 +195,9 @@ if {[namespace which ::ns_trim] eq ""} {
 }
 
 if {[namespace which ::ns_uuid] eq ""} {
-    
+
     ad_proc ns_uuid {} {
-        
+
         Return a unique ID, based on the combination of high
         resolution time and a random token. The result should follow
         the syntax-requirements of the left token of Message-IDs (RFC
@@ -206,9 +206,24 @@ if {[namespace which ::ns_uuid] eq ""} {
         The result does not follow the format of RFC 4122 UUIDs, but
         this is just for backwards compatibility, when no recent
         NaviServer is used.
-        
+
     } {
         return "[clock clicks]-[sec_random_token]"
+    }
+}
+
+if {[namespace which ::ns_parsehostport] eq ""} {
+    ad_proc ns_parsehostport {hostport} {
+
+        Backward compatibility function for parsing host and port.
+        Earlier versions of "ns_parseurl" accepted also "urls" of the
+        form host:port, where the input is not a proper URL according
+        to RFC 3986. So newer versions of NaviServer introduced
+        "ns_parsehostport", which can be emulated with the sloppy
+        version of "ns_parseurl" of earlier versions.
+
+    } {
+        return [ns_parseurl $hostport]
     }
 }
 
