@@ -576,7 +576,7 @@ ad_proc -public export_vars {
     # TODO: At least the parsing of the options should be transformed
     # to produce a single dict, containing the properties of all form
     # vars (probably optionally) and specified arguments. The dict
-    # should be the straightforward source for the genertion of the
+    # should be the straightforward source for the generation of the
     # output set. One should be able to speed the code significantly
     # up (at least for the standard cases).
     #
