@@ -36,22 +36,22 @@ set default_locale_label [lang::util::get_label $default_locale]
 
 set page_title "Edit $package_key.$message_key"
 set context [list [list [export_vars -base package-list { locale }] $locale_label] \
-                 [list [export_vars -base message-list { locale package_key show }] $package_key] \
+                 [list [export_vars -no_empty -base message-list { locale package_key show }] $package_key] \
                  "$package_key.$message_key"]
 
 
 # We let you create/delete messages keys if you're in the default locale
 set create_p [string equal $current_locale $default_locale]
 
-set description_edit_url [export_vars -base edit-description { locale package_key message_key show }]
+set description_edit_url [export_vars -no_empty -base edit-description { locale package_key message_key show }]
 set default_locale_edit_url [export_vars -base edit-localized-message { {locale $default_locale} package_key message_key return_url }]
 
-set usage_hide_url [export_vars -base [ad_conn url] { locale package_key message_key show return_url }]
-set usage_show_url [export_vars -base [ad_conn url] { locale package_key message_key show {usage_p 1} return_url }]
+set usage_hide_url [export_vars -no_empty -base [ad_conn url] { locale package_key message_key show return_url }]
+set usage_show_url [export_vars -no_empty -base [ad_conn url] { locale package_key message_key show {usage_p 1} return_url }]
 
-set delete_url      [export_vars -base message-delete       { locale package_key message_key show {return_url {[ad_return_url]}} }]
-set undelete_url    [export_vars -base message-undelete     { locale package_key message_key show {return_url {[ad_return_url]}} }]
-set unregister_url  [export_vars -base message-unregister   { locale package_key message_key show {return_url {[ad_return_url]}} }]
+set delete_url      [export_vars -no_empty -base message-delete       { locale package_key message_key show {return_url {[ad_return_url]}} }]
+set undelete_url    [export_vars -no_empty -base message-undelete     { locale package_key message_key show {return_url {[ad_return_url]}} }]
+set unregister_url  [export_vars -no_empty -base message-unregister   { locale package_key message_key show {return_url {[ad_return_url]}} }]
 
 set deleted_p [db_string get_deleted_p {
     select deleted_p
@@ -194,7 +194,7 @@ ad_form -extend -name message_form -form {
     lang::message::register -comment $comment $locale $package_key $message_key $message
 
     if { $return_url eq "" } {
-        set return_url [export_vars -base [ad_conn url] { locale package_key message_key show }]
+        set return_url [export_vars -no_empty -base [ad_conn url] { locale package_key message_key show }]
     }
     ad_returnredirect $return_url
     ad_script_abort
